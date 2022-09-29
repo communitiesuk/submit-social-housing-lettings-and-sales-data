@@ -1,0 +1,35 @@
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+    text: "Back",
+    href: "/schemes/#{@scheme.id}/locations",
+  ) %>
+<% end %>
+
+<%= form_for(@location, method: :patch, url: location_path(location_id: @location.id, add_another_location: params[:add_another_location])) do |f| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= f.govuk_error_summary %>
+
+      <%= render partial: "organisations/headings", locals: { main: "What is the local authority of #{@location.postcode}?", sub: @scheme.service_name } %>
+
+      <% la_list = FormHandler.instance.current_lettings_form.get_question("la", nil).answer_options.values %>
+
+      <% las = la_list.map { |la| OpenStruct.new(name: la) } %>
+
+      <%= f.govuk_collection_select :location_admin_district,
+                                    las,
+                                    :name,
+                                    :name,
+                                    label: { hidden: true },
+                                    "data-controller": %w[conditional-filter accessible-autocomplete] %>
+
+      <%= f.hidden_field :page, value: "edit-local-authority" %>
+
+      <div class="govuk-button-group">
+        <%= f.govuk_submit "Save and continue" %>
+
+        <%= govuk_link_to "Skip for now", "/schemes/#{@scheme.id}/check-answers#locations" %>
+      </div>
+    </div>
+  </div>
+<% end %>
