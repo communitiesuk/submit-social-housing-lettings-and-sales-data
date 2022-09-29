@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_29_105157) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_29_125204) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -340,6 +340,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_29_105157) do
     t.integer "buy1livein"
     t.integer "buylivein"
     t.integer "proptype"
+    t.string "relat2"
+    t.string "otherrelat2"
     t.integer "age2"
     t.integer "age2_known"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
