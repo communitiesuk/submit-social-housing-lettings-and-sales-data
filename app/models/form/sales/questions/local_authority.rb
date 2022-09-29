@@ -8,7 +8,6 @@ class Form::Sales::Questions::LocalAuthority < ::Form::Question
     @type = "select"
     @page = page
     @answer_options = ANSWER_OPTIONS
-    
   end
 
   ANSWER_OPTIONS = {
@@ -330,5 +329,5 @@ class Form::Sales::Questions::LocalAuthority < ::Form::Question
     "E07000239" => "Wyre Forest",
     "E06000014" => "York",
 
-}.freeze
+  }.freeze
 end
