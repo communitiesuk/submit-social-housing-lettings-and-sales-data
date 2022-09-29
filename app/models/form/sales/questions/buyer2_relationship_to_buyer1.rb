@@ -9,7 +9,7 @@ class Form::Sales::Questions::Buyer2RelationshipToBuyer1 < ::Form::Question
     @page = page
     @answer_options = ANSWER_OPTIONS
     @conditional_for = {
-      "otherrelat2" => ["X"],
+      "otherrelat2" => %w[X],
     }
     @hidden_in_check_answers = {
       "depends_on" => [
@@ -22,7 +22,7 @@ class Form::Sales::Questions::Buyer2RelationshipToBuyer1 < ::Form::Question
 
   ANSWER_OPTIONS = {
     "P" => { "value" => "Parent" },
-    "C" => { "value" => "Child" },
+    "C" => { "value" => "Child", "hint" => "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education." },
     "X" => { "value" => "Other" },
     "R" => { "value" => "Buyer prefers not to say" },
   }.freeze
