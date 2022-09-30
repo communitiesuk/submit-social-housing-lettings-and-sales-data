@@ -339,6 +339,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_29_125204) do
     t.string "sex1"
     t.integer "buy1livein"
     t.integer "buylivein"
+    t.integer "builtype"
     t.integer "proptype"
     t.string "relat2"
     t.string "otherrelat2"
