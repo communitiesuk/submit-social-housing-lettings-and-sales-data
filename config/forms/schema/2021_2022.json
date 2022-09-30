@@ -4,7 +4,12 @@
   "title": "Form",
   "description": "A form",
   "type": "object",
-  "required": ["form_type", "start_year", "end_year", "sections"],
+  "required": [
+    "form_type",
+    "start_year",
+    "end_year",
+    "sections"
+  ],
   "properties": {
     "form_type": {
       "description": "",
@@ -35,7 +40,9 @@
                 "[a-z_]+": {
                   "description": "",
                   "type": "object",
-                  "required": ["label"],
+                  "required": [
+                    "label"
+                  ],
                   "properties": {
                     "label": {
                       "description": "",
@@ -62,7 +69,10 @@
                                 "[a-z_]+": {
                                   "description": "",
                                   "type": "object",
-                                  "required": ["header", "check_answer_label"],
+                                  "required": [
+                                    "header",
+                                    "check_answer_label"
+                                  ],
                                   "properties": {
                                     "check_answer_label": {
                                       "description": "",

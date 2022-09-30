@@ -1,638 +1,702 @@
 {
-    "form_type": "lettings",
-    "start_date": "2021-04-01T00:00:00.000+01:00",
-    "end_date": "2022-07-01T00:00:00.000+01:00",
-    "sections": {
-      "household": {
-        "label": "About the household",
-        "description": "Make sure the tenant has seen the privacy notice.",
-        "subsections": {
-          "household_characteristics": {
-            "label": "Household characteristics",
-            "pages": {
-              "tenant_code_test": {
-                "questions": {
-                  "tenancycode": {
-                    "check_answers_card_number": 0,
-                    "check_answer_label": "Tenant code",
-                    "header": "What is the tenant code?",
-                    "hint_text": "This is how you usually refer to this tenancy on your own systems.",
-                    "type": "text",
-                    "width": 10
-                  }
-                },
-                "depends_on": [
-                  {
-                    "housingneeds_a": 1
-                  },
-                  {
-                    "housingneeds_a": null
-                  }
-                ]},
-              "person_1_age": {
-                "questions": {
-                  "age1": {
-                    "check_answers_card_number": 1,
-                    "check_answer_label": "Lead tenant’s age",
-                    "header": "What is the tenant’s age?",
-                    "type": "numeric",
-                    "min": 16,
-                    "max": 120,
-                    "step": 1,
-                    "width": 2
-                  }
-                },
-                "depends_on": [
-                  {
-                    "housingneeds_a": 1
-                  },
-                  {
-                    "housingneeds_a": null
-                  }
-                ]
+  "form_type": "lettings",
+  "start_date": "2021-04-01T00:00:00.000+01:00",
+  "end_date": "2022-07-01T00:00:00.000+01:00",
+  "sections": {
+    "household": {
+      "label": "About the household",
+      "description": "Make sure the tenant has seen the privacy notice.",
+      "subsections": {
+        "household_characteristics": {
+          "label": "Household characteristics",
+          "pages": {
+            "tenant_code_test": {
+              "questions": {
+                "tenancycode": {
+                  "check_answers_card_number": 0,
+                  "check_answer_label": "Tenant code",
+                  "header": "What is the tenant code?",
+                  "hint_text": "This is how you usually refer to this tenancy on your own systems.",
+                  "type": "text",
+                  "width": 10
+                }
               },
-              "person_1_gender": {
-                "questions": {
-                  "sex1": {
-                    "check_answers_card_number": 1,
-                    "check_answer_label": "Lead tenant’s gender identity",
-                    "header": "Which of these best describes the tenant’s gender identity?",
-                    "type": "radio",
-                    "answer_options": {
-                      "F": {
-                        "value": "Female"
-                      },
-                      "M": {
-                        "value": "Male"
-                      },
-                      "X": {
-                        "value": "Non-binary"
-                      },
-                      "R": {
-                        "value": "Prefer not to say"
-                      }
+              "depends_on": [
+                {
+                  "housingneeds_a": 1
+                },
+                {
+                  "housingneeds_a": null
+                }
+              ]
+            },
+            "person_1_age": {
+              "questions": {
+                "age1": {
+                  "check_answers_card_number": 1,
+                  "check_answer_label": "Lead tenant’s age",
+                  "header": "What is the tenant’s age?",
+                  "type": "numeric",
+                  "min": 16,
+                  "max": 120,
+                  "step": 1,
+                  "width": 2
+                }
+              },
+              "depends_on": [
+                {
+                  "housingneeds_a": 1
+                },
+                {
+                  "housingneeds_a": null
+                }
+              ]
+            },
+            "person_1_gender": {
+              "questions": {
+                "sex1": {
+                  "check_answers_card_number": 1,
+                  "check_answer_label": "Lead tenant’s gender identity",
+                  "header": "Which of these best describes the tenant’s gender identity?",
+                  "type": "radio",
+                  "answer_options": {
+                    "F": {
+                      "value": "Female"
+                    },
+                    "M": {
+                      "value": "Male"
+                    },
+                    "X": {
+                      "value": "Non-binary"
+                    },
+                    "R": {
+                      "value": "Prefer not to say"
+                    }
+                  }
+                }
+              }
+            },
+            "person_1_working_situation": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "ecstat1": {
+                  "check_answers_card_number": 1,
+                  "check_answer_label": "Lead tenant’s working situation",
+                  "header": "Which of these best describes the lead tenant’s socks?",
+                  "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Part-time – Less than 30 hours"
+                    },
+                    "1": {
+                      "value": "Full-time – 30 hours or more"
+                    },
+                    "2": {
+                      "value": "Full-time student"
+                    },
+                    "3": {
+                      "value": "In government training into work, such as New Deal"
+                    },
+                    "4": {
+                      "value": "Jobseeker"
+                    },
+                    "5": {
+                      "value": "Not seeking work"
+                    },
+                    "6": {
+                      "value": "Unable to work because of long term sick or disability"
+                    },
+                    "7": {
+                      "value": "Retired"
+                    },
+                    "8": {
+                      "value": "Child under 16"
+                    },
+                    "9": {
+                      "value": "Other"
+                    },
+                    "divider": {
+                      "value": true
+                    },
+                    "10": {
+                      "value": "Tenant prefers not to say"
+                    }
+                  }
+                }
+              }
+            },
+            "household_number_of_members": {
+              "questions": {
+                "hhmemb": {
+                  "check_answers_card_number": 0,
+                  "check_answer_label": "Number of Household Members",
+                  "header": "How many people are there in the household?",
+                  "hint_text": "The maximum number of members is 8",
+                  "type": "numeric",
+                  "min": 0,
+                  "max": 8,
+                  "step": 1,
+                  "width": 2,
+                  "conditional_for": {
+                    "relat2": ">1",
+                    "age2": ">1",
+                    "sex2": ">1"
+                  }
+                },
+                "relat2": {
+                  "check_answers_card_number": 2,
+                  "check_answer_label": "Person 2’s relationship to lead tenant",
+                  "header": "What is person 2’s relationship to lead tenant",
+                  "type": "radio",
+                  "answer_options": {
+                    "X": {
+                      "value": "Other"
+                    },
+                    "R": {
+                      "value": "Prefer not to say"
+                    }
+                  }
+                },
+                "age2": {
+                  "check_answers_card_number": 2,
+                  "check_answer_label": "Person 2’s age",
+                  "header": "Do you know person 2’s age?",
+                  "type": "numeric",
+                  "min": 1,
+                  "max": 120,
+                  "step": 1,
+                  "width": 2
+                },
+                "sex2": {
+                  "check_answers_card_number": 2,
+                  "check_answer_label": "Person 2’s gender identity",
+                  "header": "Which of these best describes person 2’s gender identity?",
+                  "type": "radio",
+                  "answer_options": {
+                    "F": {
+                      "value": "Female"
+                    },
+                    "M": {
+                      "value": "Male"
+                    },
+                    "X": {
+                      "value": "Non-binary"
+                    },
+                    "R": {
+                      "value": "Prefer not to say"
+                    }
+                  }
+                }
+              }
+            },
+            "retirement_value_check": {
+              "questions": {
+                "retirement_value_check": {
+                  "check_answer_label": "Retirement age soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this person is retired?",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
                     }
                   }
                 }
               },
-              "person_1_working_situation": {
-                "header": "",
-                "description": "",
-                "questions": {
-                  "ecstat1": {
-                    "check_answers_card_number": 1,
-                    "check_answer_label": "Lead tenant’s working situation",
-                    "header": "Which of these best describes the lead tenant’s socks?",
-                    "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
-                    "type": "radio",
-                    "answer_options": {
-                      "0": {
-                        "value": "Part-time – Less than 30 hours"
-                      },
-                      "1": {
-                        "value": "Full-time – 30 hours or more"
-                      },
-                      "2": {
-                        "value": "Full-time student"
-                      },
-                      "3": {
-                        "value": "In government training into work, such as New Deal"
-                      },
-                      "4": {
-                        "value": "Jobseeker"
-                      },
-                      "5": {
-                        "value": "Not seeking work"
-                      },
-                      "6": {
-                        "value": "Unable to work because of long term sick or disability"
-                      },
-                      "7": {
-                        "value": "Retired"
-                      },
-                      "8": {
-                        "value": "Child under 16"
-                      },
-                      "9": {
-                        "value": "Other"
-                      },
-                      "divider": {
-                        "value": true
-                      },
-                      "10": {
-                        "value": "Tenant prefers not to say"
-                      }
-                    }
-                  }
-                }
-              },
-              "household_number_of_members": {
-                "questions": {
-                  "hhmemb": {
-                    "check_answers_card_number": 0,
-                    "check_answer_label": "Number of Household Members",
-                    "header": "How many people are there in the household?",
-                    "hint_text": "The maximum number of members is 8",
-                    "type": "numeric",
-                    "min": 0,
-                    "max": 8,
-                    "step": 1,
-                    "width": 2,
-                    "conditional_for": {
-                      "relat2": ">1",
-                      "age2": ">1",
-                      "sex2": ">1"
-                    }
-                  },
-                  "relat2": {
-                    "check_answers_card_number": 2,
-                    "check_answer_label": "Person 2’s relationship to lead tenant",
-                    "header": "What is person 2’s relationship to lead tenant",
-                    "type": "radio",
-                    "answer_options": {
-                      "X": {
-                        "value":  "Other"
-                      },
-                      "R": {
-                        "value":  "Prefer not to say"
-                      }
-                    }
-                  },
+              "depends_on": [
+                {
                   "age2": {
-                    "check_answers_card_number": 2,
-                    "check_answer_label": "Person 2’s age",
-                    "header": "Do you know person 2’s age?",
-                    "type": "numeric",
-                    "min": 1,
-                    "max": 120,
-                    "step": 1,
-                    "width": 2
-                  },
-                  "sex2": {
-                    "check_answers_card_number": 2,
-                    "check_answer_label": "Person 2’s gender identity",
-                    "header": "Which of these best describes person 2’s gender identity?",
-                    "type": "radio",
-                    "answer_options": {
-                      "F": {
-                        "value": "Female"
-                      },
-                      "M": {
-                        "value": "Male"
-                      },
-                      "X": {
-                        "value": "Non-binary"
-                      },
-                      "R": {
-                        "value": "Prefer not to say"
-                      }
-                    }
+                    "operator": ">",
+                    "operand": 50
                   }
                 }
-              },
-              "retirement_value_check": {
-                "questions": {
-                  "retirement_value_check": {
-                    "check_answer_label": "Retirement age soft validation",
-                    "hidden_in_check_answers": true,
-                    "header": "Are you sure this person is retired?",
-                    "type": "radio",
-                    "answer_options": {
-                      "0": {
-                        "value": "Yes"
-                      },
-                      "1": {
-                        "value": "No"
-                      }
-                    }
-                  }
-                },
-                "depends_on": [
-                  {
-                    "age2": { "operator": ">", "operand": 50 }
-                  }
-                ]
-              },
-              "person_2_working_situation": {
-                "header": "",
-                "description": "",
-                "questions": {
-                  "ecstat2": {
-                    "check_answers_card_number": 2,
-                    "check_answer_label": "Person 2’s Work",
-                    "header": "Which of these best describes person 2’s working situation?",
-                    "type": "radio",
-                    "answer_options": {
-                      "0": {
-                        "value": "Other"
-                      },
-                      "9": {
-                        "value": "Child under 16",
-                        "depends_on": [
-                          { "age2_known": 1 },
-                          { "age2": { "operator": "<", "operand": 16 } }
-                        ]
-                      },
-                      "1": {
-                        "value": "Prefer not to say"
-                      }
-                    }
-                  }
-                },
-                "depends_on": [
-                  {
-                    "age2": { "operator": ">", "operand": 15 }
-                  }
-                ]
-              },
-              "propcode": {
-                "questions": {
-                  "propcode": {
-                    "check_answers_card_number": 0,
-                    "check_answer_label": "",
-                    "header": "property reference?",
-                    "type": "text"
-                  }
-                }
-              }
-            }
-          },
-          "household_needs": {
-            "label": "Household needs",
-            "pages": {
-              "armed_forces": {
-                "header": "Experience of the UK Armed Forces",
-                "questions": {
-                  "armedforces": {
-                    "header": "Does anybody in the household have any links to the UK armed forces?",
-                    "hint_text": "This excludes national service. If there are several people in the household with links to the UK armed forces, you should answer for the regular. If there’s no regular, answer for the reserve. If there’s no reserve, answer for the spouse or civil partner.",
-                    "type": "radio",
-                    "check_answer_label": "Household links to UK armed forces",
-                    "answer_options": {
-                      "1": {
-                        "value": "Yes, the person is a current or former regular"
-                      },
-                      "4": {
-                        "value": "Yes, the person is a current or former reserve"
-                      },
-                      "5": {
-                        "value": "Yes, the tenant is a spouse or civil partner of a UK armed forces member and has been bereaved or separated from them within the last 2 years"
-                      },
-                      "2": {
-                        "value": "No"
-                      },
-                      "3": {
-                        "value": "Person prefers not to say"
-                      }
+              ]
+            },
+            "person_2_working_situation": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "ecstat2": {
+                  "check_answers_card_number": 2,
+                  "check_answer_label": "Person 2’s Work",
+                  "header": "Which of these best describes person 2’s working situation?",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Other"
                     },
-                    "conditional_for": {
-                      "leftreg": [1]
-                    }
-                  },
-                  "leftreg": {
-                    "header": "Are they still serving?",
-                    "hint_text": "",
-                    "type": "text",
-                    "check_answer_label": "When did they leave the Armed Forces?"
-                  }
-                }
-              },
-              "medical_conditions": {
-                "questions": {
-                  "illness": {
-                    "header": "Does anyone in the household have any of the following that they expect to last for 12 months or more:<ul><li>Physical Condition</li><li>Mental Health Condition</li><li>Other Illness</li></ul>",
-                    "type": "radio",
-                    "check_answer_label": "Physical, mental health or illness in the household",
-                    "answer_options": {
-                      "1": {
-                        "value":  "Yes"
-                      },
-                      "2": {
-                        "value": "No"
-                      },
-                      "3": {
-                        "value": "Don’t know"
-                      }
-                    }
-                  }
-                }
-              },
-              "accessibility_requirements": {
-                "questions": {
-                  "accessibility_requirements": {
-                    "header": "Are any of these affected by their condition or illness?",
-                    "hint_text": "Select all that apply",
-                    "type": "checkbox",
-                    "check_answer_label": "Disability requirements",
-                    "answer_options": {
-                      "housingneeds_a": {
-                        "value": "Fully wheelchair accessible housing"
-                      },
-                      "housingneeds_b": {
-                        "value": "Wheelchair access to essential rooms"
-                      },
-                      "housingneeds_c": {
-                        "value": "Level access housing"
-                      },
-                      "divider": {
-                        "value": true
-                      },
-                      "housingneeds_h": {
-                        "value": "Don’t know"
-                      }
-                    }
-                  }
-                }
-              },
-              "accessible_select": {
-                "questions": {
-                  "prevloc": {
-                    "header": "Select options",
-                    "hint_text": "Type ahead to filter the options",
-                    "type": "select",
-                    "check_answer_label": "Accessible Select",
-                    "answer_options": {
-                      "" : "Select an option",
-                      "E07000223": "Adur",
-                      "E09000023": "Lewisham",
-                      "E08000003": "Manchester",
-                      "E07000178": "Oxford",
-                      "E07000114": "Thanet",
-                      "E09000033": "Westminster",
-                      "E06000014": "The one and only york town"
-                    }
-                  }
-                },
-                "depends_on": [
-                  {
-                    "previous_la_known": 1,
-                    "is_previous_la_inferred": false
-                  }
-                ]
-              },
-              "condition_effects": {
-                "questions": {
-                  "condition_effects": {
-                    "header": "Are any of these affected by their condition or illness?",
-                    "hint_text": "Select all that apply",
-                    "type": "checkbox",
-                    "check_answer_label": "Conditions or illnesses",
-                    "answer_options": {
-                      "illness_type_1": {
-                        "value": "Vision - such as blindness or partial sight"
-                      },
-                      "illness_type_2": {
-                        "value": "Hearing - such as deafness or partial hearing"
-                      }
-                    }
-                  }
-                },
-                "depends_on": [
-                  {
-                    "illness": 1
-                  },
-                  {
-                    "illness": 100
-                  }
-                ]
-              }
-            }
-          }
-        }
-      },
-      "tenancy_and_property": {
-        "label": "Tenancy and property information",
-        "subsections": {
-          "property_information": {
-            "label": "Property information",
-            "pages": {
-              "accessible_select_too": {
-                "questions": {
-                  "la": {
-                    "header": "Select options",
-                    "hint_text": "Type ahead to filter the options",
-                    "type": "select",
-                    "check_answer_label": "Accessible Select",
-                    "answer_options": {
-                      "" : "Select an option",
-                      "E07000223": "Adur",
-                      "E09000023": "Lewisham",
-                      "E08000003": "Manchester",
-                      "E07000178": "Oxford",
-                      "E07000114": "Thanet",
-                      "E09000033": "Westminster",
-                      "E06000014": "York"
-                    }
-                  }
-                },
-                "depends_on": [
-                  {
-                    "is_la_inferred": false
-                  }
-                ]
-              },
-              "property_postcode": {
-                "header": "",
-                "description": "",
-                "questions": {
-                  "postcode_known": {
-                    "check_answer_label": "Do you know the property postcode?",
-                    "header": "Do you know the property’s postcode?",
-                    "hint_text": "",
-                    "type": "radio",
-                    "answer_options": {
-                      "1": {
-                        "value": "Yes"
-                      },
-                      "0": {
-                        "value": "No"
-                      }
-                    },
-                    "conditional_for": {
-                      "postcode_full": [
-                        1
+                    "9": {
+                      "value": "Child under 16",
+                      "depends_on": [
+                        {
+                          "age2_known": 1
+                        },
+                        {
+                          "age2": {
+                            "operator": "<",
+                            "operand": 16
+                          }
+                        }
                       ]
                     },
-                    "hidden_in_check_answers": true
-                  },
-                  "postcode_full": {
-                    "check_answer_label": "Postcode",
-                    "header": "",
-                    "hint_text": "",
-                    "type": "text",
-                    "width": 5,
-                    "inferred_answers": { "la": { "is_la_inferred": true } },
-                    "inferred_check_answers_value": {
-                      "condition": { "postcode_known": 0 },
-                      "value": "Not known"
+                    "1": {
+                      "value": "Prefer not to say"
                     }
                   }
                 }
               },
-              "do_you_know_the_local_authority": {
-                "header": "",
-                "description": "",
-                "questions": {
-                  "previous_la_known": {
-                    "check_answer_label": "Do you know what local authority the property is located in?",
-                    "header": "Do you know what local authority the property is located in?",
-                    "hint_text": "",
-                    "type": "radio",
-                    "answer_options": {
-                      "0": {
-                        "value": "No"
-                      },
-                      "1": {
-                        "value": "Yes"
-                      }
-                    }
-                  }
-                },
-                "depends_on": [{"is_la_inferred": false}]
-              },
-              "property_wheelchair_accessible": {
-                "questions": {
-                  "wchair": {
-                    "check_answer_label": "Wheelchair adaptation",
-                    "header": "Is the property built or adapted to wheelchair-user standards?",
-                    "type": "radio",
-                    "answer_options": {
-                      "0": {
-                        "value": "Yes"
-                      },
-                      "1": {
-                        "value": "No"
-                      }
-                    }
+              "depends_on": [
+                {
+                  "age2": {
+                    "operator": ">",
+                    "operand": 15
                   }
                 }
-              }
-            }
-          },
-          "conditional_question": {
-            "label": "Conditional question",
-            "pages": {
-              "conditional_question": {
-                "questions": {
-                  "preg_occ": {
-                    "check_answer_label": "Has the condition been met?",
-                    "header": "Has the condition been met?",
-                    "type": "radio",
-                    "answer_options": {
-                      "1": {
-                        "value": "Yes"
-                      },
-                      "2": {
-                        "value": "No"
-                      }
-                    }
-                  }
+              ]
+            },
+            "propcode": {
+              "questions": {
+                "propcode": {
+                  "check_answers_card_number": 0,
+                  "check_answer_label": "",
+                  "header": "property reference?",
+                  "type": "text"
                 }
-              },
-              "conditional_question_yes_page": {
-                "questions": {
-                  "cbl": {
-                    "check_answer_label": "Has the next condition been met?",
-                    "header": "Has the next condition been met?",
-                    "type": "radio",
-                    "answer_options": {
-                      "0": {
-                        "value": "Yes"
-                      }
-                    }
-                  }
-                },
-                "depends_on": [{ "preg_occ": 1 }, { "wchair" : 1 }]
-              },
-              "conditional_question_no_page": {
-                "questions": {
-                  "cbl": {
-                    "check_answer_label": "Has the condition not been met?",
-                    "header": "Has the next condition not been met?",
-                    "type": "radio",
-                    "answer_options": {
-                      "0": {
-                        "value": "Yes"
-                      },
-                      "1": {
-                        "value": "No"
-                      }
-                    }
-                  }
-                },
-                "depends_on": [{ "preg_occ": 2 }]
-              },
-              "conditional_question_no_second_page": {
-                "questions": {
-                  "conditional_question_no_second_question": {
-                    "check_answer_label": "Has the condition not been met again?",
-                    "header": "Has the next condition not been met again?",
-                    "type": "radio",
-                    "answer_options": {
-                      "0": {
-                        "value": "Yes"
-                      },
-                      "1": {
-                        "value": "No"
-                      }
-                    }
-                  }
-                },
-                "depends_on": [{ "preg_occ": 2, "sex1": "M" }]
               }
             }
           }
-        }
-      },
-      "rent_and_charges": {
-        "label": "Rent and charges",
-        "subsections": {
-          "income_and_benefits": {
-            "label": "Income and benefits",
-            "pages": {
-              "net_income": {
-                "header": "Test header",
-                "description": "Some extra text for the page",
-                "questions": {
-                  "earnings": {
-                    "check_answer_label": "Income",
-                    "header": "What is the tenant’s /and partner’s combined income after tax?",
-                    "guidance_partial": "what_counts_as_income",
-                    "type": "numeric",
-                    "min": 0,
-                    "step": 1,
-                    "width": 5,
-                    "prefix": "£",
-                    "suffix": [
-                      { "label": " every week", "depends_on" : { "incfreq": 1 } },
-                      { "label": " every month", "depends_on" : { "incfreq": 2 } },
-                      { "label": " every year", "depends_on" : { "incfreq": 3 } }
-                    ]
+        },
+        "household_needs": {
+          "label": "Household needs",
+          "pages": {
+            "armed_forces": {
+              "header": "Experience of the UK Armed Forces",
+              "questions": {
+                "armedforces": {
+                  "header": "Does anybody in the household have any links to the UK armed forces?",
+                  "hint_text": "This excludes national service. If there are several people in the household with links to the UK armed forces, you should answer for the regular. If there’s no regular, answer for the reserve. If there’s no reserve, answer for the spouse or civil partner.",
+                  "type": "radio",
+                  "check_answer_label": "Household links to UK armed forces",
+                  "answer_options": {
+                    "1": {
+                      "value": "Yes, the person is a current or former regular"
+                    },
+                    "4": {
+                      "value": "Yes, the person is a current or former reserve"
+                    },
+                    "5": {
+                      "value": "Yes, the tenant is a spouse or civil partner of a UK armed forces member and has been bereaved or separated from them within the last 2 years"
+                    },
+                    "2": {
+                      "value": "No"
+                    },
+                    "3": {
+                      "value": "Person prefers not to say"
+                    }
                   },
-                  "incfreq": {
-                    "check_answer_label": "Income Frequency",
-                    "header": "How often do they receive this income?",
-                    "type": "radio",
-                    "answer_options": {
-                      "1": {
-                        "value": "Weekly"
-                      },
-                      "2": {
-                        "value": "Monthly"
-                      },
-                      "3": {
-                        "value": "Yearly"
-                      }
+                  "conditional_for": {
+                    "leftreg": [
+                      1
+                    ]
+                  }
+                },
+                "leftreg": {
+                  "header": "Are they still serving?",
+                  "hint_text": "",
+                  "type": "text",
+                  "check_answer_label": "When did they leave the Armed Forces?"
+                }
+              }
+            },
+            "medical_conditions": {
+              "questions": {
+                "illness": {
+                  "header": "Does anyone in the household have any of the following that they expect to last for 12 months or more:<ul><li>Physical Condition</li><li>Mental Health Condition</li><li>Other Illness</li></ul>",
+                  "type": "radio",
+                  "check_answer_label": "Physical, mental health or illness in the household",
+                  "answer_options": {
+                    "1": {
+                      "value": "Yes"
+                    },
+                    "2": {
+                      "value": "No"
+                    },
+                    "3": {
+                      "value": "Don’t know"
+                    }
+                  }
+                }
+              }
+            },
+            "accessibility_requirements": {
+              "questions": {
+                "accessibility_requirements": {
+                  "header": "Are any of these affected by their condition or illness?",
+                  "hint_text": "Select all that apply",
+                  "type": "checkbox",
+                  "check_answer_label": "Disability requirements",
+                  "answer_options": {
+                    "housingneeds_a": {
+                      "value": "Fully wheelchair accessible housing"
+                    },
+                    "housingneeds_b": {
+                      "value": "Wheelchair access to essential rooms"
+                    },
+                    "housingneeds_c": {
+                      "value": "Level access housing"
+                    },
+                    "divider": {
+                      "value": true
+                    },
+                    "housingneeds_h": {
+                      "value": "Don’t know"
+                    }
+                  }
+                }
+              }
+            },
+            "accessible_select": {
+              "questions": {
+                "prevloc": {
+                  "header": "Select options",
+                  "hint_text": "Type ahead to filter the options",
+                  "type": "select",
+                  "check_answer_label": "Accessible Select",
+                  "answer_options": {
+                    "": "Select an option",
+                    "E07000223": "Adur",
+                    "E09000023": "Lewisham",
+                    "E08000003": "Manchester",
+                    "E07000178": "Oxford",
+                    "E07000114": "Thanet",
+                    "E09000033": "Westminster",
+                    "E06000014": "The one and only york town"
+                  }
+                }
+              },
+              "depends_on": [
+                {
+                  "previous_la_known": 1,
+                  "is_previous_la_inferred": false
+                }
+              ]
+            },
+            "condition_effects": {
+              "questions": {
+                "condition_effects": {
+                  "header": "Are any of these affected by their condition or illness?",
+                  "hint_text": "Select all that apply",
+                  "type": "checkbox",
+                  "check_answer_label": "Conditions or illnesses",
+                  "answer_options": {
+                    "illness_type_1": {
+                      "value": "Vision - such as blindness or partial sight"
+                    },
+                    "illness_type_2": {
+                      "value": "Hearing - such as deafness or partial hearing"
                     }
                   }
                 }
               },
-              "net_income_value_check": {
-                "depends_on": [{ "net_income_soft_validation_triggered?": true }],
-                "title_text": { "translation": "soft_validations.net_income.title_text" },
-                "informative_text": {
-                  "translation": "soft_validations.net_income.hint_text",
-                  "arguments": [{
+              "depends_on": [
+                {
+                  "illness": 1
+                },
+                {
+                  "illness": 100
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "tenancy_and_property": {
+      "label": "Tenancy and property information",
+      "subsections": {
+        "property_information": {
+          "label": "Property information",
+          "pages": {
+            "accessible_select_too": {
+              "questions": {
+                "la": {
+                  "header": "Select options",
+                  "hint_text": "Type ahead to filter the options",
+                  "type": "select",
+                  "check_answer_label": "Accessible Select",
+                  "answer_options": {
+                    "": "Select an option",
+                    "E07000223": "Adur",
+                    "E09000023": "Lewisham",
+                    "E08000003": "Manchester",
+                    "E07000178": "Oxford",
+                    "E07000114": "Thanet",
+                    "E09000033": "Westminster",
+                    "E06000014": "York"
+                  }
+                }
+              },
+              "depends_on": [
+                {
+                  "is_la_inferred": false
+                }
+              ]
+            },
+            "property_postcode": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "postcode_known": {
+                  "check_answer_label": "Do you know the property postcode?",
+                  "header": "Do you know the property’s postcode?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "1": {
+                      "value": "Yes"
+                    },
+                    "0": {
+                      "value": "No"
+                    }
+                  },
+                  "conditional_for": {
+                    "postcode_full": [
+                      1
+                    ]
+                  },
+                  "hidden_in_check_answers": true
+                },
+                "postcode_full": {
+                  "check_answer_label": "Postcode",
+                  "header": "",
+                  "hint_text": "",
+                  "type": "text",
+                  "width": 5,
+                  "inferred_answers": {
+                    "la": {
+                      "is_la_inferred": true
+                    }
+                  },
+                  "inferred_check_answers_value": {
+                    "condition": {
+                      "postcode_known": 0
+                    },
+                    "value": "Not known"
+                  }
+                }
+              }
+            },
+            "do_you_know_the_local_authority": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "previous_la_known": {
+                  "check_answer_label": "Do you know what local authority the property is located in?",
+                  "header": "Do you know what local authority the property is located in?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "No"
+                    },
+                    "1": {
+                      "value": "Yes"
+                    }
+                  }
+                }
+              },
+              "depends_on": [
+                {
+                  "is_la_inferred": false
+                }
+              ]
+            },
+            "property_wheelchair_accessible": {
+              "questions": {
+                "wchair": {
+                  "check_answer_label": "Wheelchair adaptation",
+                  "header": "Is the property built or adapted to wheelchair-user standards?",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "conditional_question": {
+          "label": "Conditional question",
+          "pages": {
+            "conditional_question": {
+              "questions": {
+                "preg_occ": {
+                  "check_answer_label": "Has the condition been met?",
+                  "header": "Has the condition been met?",
+                  "type": "radio",
+                  "answer_options": {
+                    "1": {
+                      "value": "Yes"
+                    },
+                    "2": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
+            "conditional_question_yes_page": {
+              "questions": {
+                "cbl": {
+                  "check_answer_label": "Has the next condition been met?",
+                  "header": "Has the next condition been met?",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    }
+                  }
+                }
+              },
+              "depends_on": [
+                {
+                  "preg_occ": 1
+                },
+                {
+                  "wchair": 1
+                }
+              ]
+            },
+            "conditional_question_no_page": {
+              "questions": {
+                "cbl": {
+                  "check_answer_label": "Has the condition not been met?",
+                  "header": "Has the next condition not been met?",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              },
+              "depends_on": [
+                {
+                  "preg_occ": 2
+                }
+              ]
+            },
+            "conditional_question_no_second_page": {
+              "questions": {
+                "conditional_question_no_second_question": {
+                  "check_answer_label": "Has the condition not been met again?",
+                  "header": "Has the next condition not been met again?",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              },
+              "depends_on": [
+                {
+                  "preg_occ": 2,
+                  "sex1": "M"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "rent_and_charges": {
+      "label": "Rent and charges",
+      "subsections": {
+        "income_and_benefits": {
+          "label": "Income and benefits",
+          "pages": {
+            "net_income": {
+              "header": "Test header",
+              "description": "Some extra text for the page",
+              "questions": {
+                "earnings": {
+                  "check_answer_label": "Income",
+                  "header": "What is the tenant’s /and partner’s combined income after tax?",
+                  "guidance_partial": "what_counts_as_income",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1,
+                  "width": 5,
+                  "prefix": "£",
+                  "suffix": [
+                    {
+                      "label": " every week",
+                      "depends_on": {
+                        "incfreq": 1
+                      }
+                    },
+                    {
+                      "label": " every month",
+                      "depends_on": {
+                        "incfreq": 2
+                      }
+                    },
+                    {
+                      "label": " every year",
+                      "depends_on": {
+                        "incfreq": 3
+                      }
+                    }
+                  ]
+                },
+                "incfreq": {
+                  "check_answer_label": "Income Frequency",
+                  "header": "How often do they receive this income?",
+                  "type": "radio",
+                  "answer_options": {
+                    "1": {
+                      "value": "Weekly"
+                    },
+                    "2": {
+                      "value": "Monthly"
+                    },
+                    "3": {
+                      "value": "Yearly"
+                    }
+                  }
+                }
+              }
+            },
+            "net_income_value_check": {
+              "depends_on": [
+                {
+                  "net_income_soft_validation_triggered?": true
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.net_income.title_text"
+              },
+              "informative_text": {
+                "translation": "soft_validations.net_income.hint_text",
+                "arguments": [
+                  {
                     "key": "ecstat1",
                     "label": true,
                     "i18n_template": "ecstat1"
@@ -693,7 +757,9 @@
                     }
                   },
                   "conditional_for": {
-                    "conditional_question": [0]
+                    "conditional_question": [
+                      0
+                    ]
                   }
                 },
                 "conditional_question": {
@@ -712,7 +778,11 @@
               }
             },
             "dependent_page": {
-              "depends_on": [{ "incfreq": 1 }],
+              "depends_on": [
+                {
+                  "incfreq": 1
+                }
+              ],
               "questions": {
                 "dependent_question": {
                   "check_answer_label": "Dependent Question",
@@ -757,7 +827,12 @@
                   "min": 0,
                   "step": 1,
                   "width": 4,
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge"
                 },
                 "scharge": {
@@ -768,7 +843,12 @@
                   "min": 0,
                   "step": 1,
                   "width": 4,
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge"
                 },
                 "pscharge": {
@@ -779,7 +859,12 @@
                   "min": 0,
                   "step": 1,
                   "width": 4,
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge"
                 },
                 "supcharg": {
@@ -791,7 +876,12 @@
                   "max": 300,
                   "step": 1,
                   "width": 4,
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge"
                 },
                 "tcharge": {
@@ -836,7 +926,11 @@
                   "width": 4
                 }
               },
-              "depends_on": [{ "period": 3 }]
+              "depends_on": [
+                {
+                  "period": 3
+                }
+              ]
             },
             "care_home_charge_bi_weekly": {
               "questions": {
@@ -850,7 +944,11 @@
                   "width": 4
                 }
               },
-              "depends_on": [{ "period": 2 }]
+              "depends_on": [
+                {
+                  "period": 2
+                }
+              ]
             }
           }
         }
@@ -898,11 +996,22 @@
                     }
                   },
                   "hidden_in_check_answers": {
-                    "depends_on": [{ "layear": 0 }, { "layear": 1 }]
+                    "depends_on": [
+                      {
+                        "layear": 0
+                      },
+                      {
+                        "layear": 1
+                      }
+                    ]
                   }
                 }
               },
-              "depends_on": [{ "renewal": 0 }]
+              "depends_on": [
+                {
+                  "renewal": 0
+                }
+              ]
             },
             "time_on_la_waiting_list": {
               "questions": {
@@ -950,7 +1059,9 @@
                   "hint_text": "If the household has moved from settled accommodation immediately prior to being re-housed",
                   "type": "text",
                   "width": 5,
-                  "conditional_for": { "fake_key": "fake_condition" }
+                  "conditional_for": {
+                    "fake_key": "fake_condition"
+                  }
                 },
                 "ppostcode_full": {
                   "check_answer_label": "Postcode of previous accommodation if the household has moved from settled accommodation",

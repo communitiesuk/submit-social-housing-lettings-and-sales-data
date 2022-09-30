@@ -4,7 +4,12 @@
   "title": "Form",
   "description": "A form",
   "type": "object",
-  "required": ["form_type", "start_year", "end_year", "sections"],
+  "required": [
+    "form_type",
+    "start_year",
+    "end_year",
+    "sections"
+  ],
   "properties": {
     "form_type": {
       "description": "",
@@ -35,7 +40,9 @@
                 "[a-z_]+": {
                   "description": "SubSection Name",
                   "type": "object",
-                  "required": ["label"],
+                  "required": [
+                    "label"
+                  ],
                   "properties": {
                     "label": {
                       "description": "",
@@ -47,7 +54,10 @@
                         "^(?!(depends_on))[a-z_]+$": {
                           "description": "Page Name",
                           "type": "object",
-                          "required": ["header", "questions"],
+                          "required": [
+                            "header",
+                            "questions"
+                          ],
                           "properties": {
                             "header": {
                               "description": "",
@@ -63,7 +73,10 @@
                                 "[a-z_]+": {
                                   "description": "Question Name",
                                   "type": "object",
-                                  "required": ["header", "type"],
+                                  "required": [
+                                    "header",
+                                    "type"
+                                  ],
                                   "properties": {
                                     "header": {
                                       "description": "",
