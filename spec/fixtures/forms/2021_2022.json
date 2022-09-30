@@ -303,6 +303,12 @@
                     "leftreg": [
                       1
                     ]
+                  },
+                  "inferred_check_answers_value": {
+                    "condition": {
+                      "armedforces": 3
+                    },
+                    "value": "Prefers not to say"
                   }
                 },
                 "leftreg": {
