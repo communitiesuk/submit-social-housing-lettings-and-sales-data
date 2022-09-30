@@ -218,6 +218,7 @@ RSpec.describe FormController, type: :request do
         let(:lettings_log) do
           FactoryBot.create(
             :lettings_log,
+            :just_started,
             owning_organisation: organisation,
             managing_organisation: organisation,
           )

@@ -74,14 +74,18 @@ class Form
   def next_page_redirect_path(page, log, current_user)
     nxt_page = next_page(page, log, current_user)
     if nxt_page == :check_answers
-      "#{type}_log_#{subsection_for_page(page).id}_check_answers_path"
+      log.not_started? ? "#{type}_log_new_#{subsection_for_page(page).id}_check_answers_path" : "#{type}_log_#{subsection_for_page(page).id}_check_answers_path"
     else
-      log.id ? "#{type}_log_#{nxt_page}_path" : "#{type}_log_new_#{nxt_page}_path"
+      log.not_started? ? "#{type}_log_new_#{nxt_page}_path" : "#{type}_log_#{nxt_page}_path"
     end
   end
 
   def cancel_path(page, log)
-    "#{log.class.name.underscore}_#{page.subsection.id}_check_answers_path"
+    if log.not_started?
+      "#{log.class.name.underscore}_new_#{page.subsection.id}_check_answers_path"
+    else
+      "#{log.class.name.underscore}_#{page.subsection.id}_check_answers_path"
+    end
   end
 
   def next_incomplete_section_redirect_path(subsection, log)

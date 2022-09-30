@@ -36,6 +36,18 @@ Rails.application.routes.draw do
     end
   end
 
+  FormHandler.instance.forms.each do |_key, form|
+    form.pages.map do |page|
+      get "/lettings-log/new/#{page.id.to_s.dasherize}", to: "form#show_page"
+      get "/sales-log/new/#{page.id.to_s.dasherize}", to: "form#show_page"
+    end
+
+    form.subsections.map do |subsection|
+      get "/lettings-log/new/#{subsection.id.to_s.dasherize}/check-answers", to: "form#check_answers"
+      get "/sales-log/new/#{subsection.id.to_s.dasherize}/check-answers", to: "form#check_answers"
+    end
+  end
+
   get "/accessibility-statement", to: "content#accessibility_statement"
   get "/privacy-notice", to: "content#privacy_notice"
   get "/data-sharing-agreement", to: "content#data_sharing_agreement"

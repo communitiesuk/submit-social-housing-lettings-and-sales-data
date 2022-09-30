@@ -134,7 +134,7 @@ RSpec.describe LettingsLogsController, type: :request do
       before do
         RequestHelper.stub_http_requests
         sign_in user
-        post "/lettings-logs", headers:
+        post "/lettings-logs", headers:, params: { lettings_log: { tenancycode: "1234" } }
       end
 
       it "tracks who created the record" do

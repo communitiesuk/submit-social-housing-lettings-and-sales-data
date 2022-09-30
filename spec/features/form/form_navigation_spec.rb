@@ -16,6 +16,7 @@ RSpec.describe "Form Navigation" do
   let(:empty_lettings_log) do
     FactoryBot.create(
       :lettings_log,
+      :just_started,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
       created_by: user,

@@ -11,11 +11,13 @@ private
 
   def create
     log = yield
+    log.save! unless api_log_params.empty?
+
     raise "Caller must pass a block that implements model creation" if log.blank?
 
     respond_to do |format|
       format.html do
-        redirect_to(post_create_redirect_url)
+        redirect_to(post_create_redirect_url(log))
       end
       format.json do
         if log.save

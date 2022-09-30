@@ -9,6 +9,9 @@ FactoryBot.define do
       rent_type { 1 }
       startdate { Time.zone.local(2022, 5, 1) }
     end
+    trait :just_started do
+      rent_type { 1 }
+    end
     trait :in_progress do
       status { 1 }
       tenancycode { Faker::Name.initials(number: 10) }

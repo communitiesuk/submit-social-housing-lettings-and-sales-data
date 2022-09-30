@@ -40,8 +40,8 @@ class SalesLogsController < LogsController
     end
   end
 
-  def post_create_redirect_url
-    new_log_sales_logs_path
+  def post_create_redirect_url(log)
+    log.not_started? ? new_log_sales_logs_path : sales_log_url(log)
   end
 
   def permitted_log_params

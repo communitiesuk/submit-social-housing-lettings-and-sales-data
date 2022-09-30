@@ -10,7 +10,9 @@ class FormController < ApplicationController
       responses_for_page = responses_for_page(@page)
       mandatory_questions_with_no_response = mandatory_questions_with_no_response(responses_for_page)
 
-      if mandatory_questions_with_no_response.empty? && @log.update(responses_for_page)
+      if @log.not_started? && responses_for_page.values.all?(&:blank?) && mandatory_questions_with_no_response.empty?
+        redirect_to(successful_redirect_path)
+      elsif mandatory_questions_with_no_response.empty? && @log.update(responses_for_page)
         session[:errors] = session[:fields] = nil
         redirect_to(successful_redirect_path)
       else
@@ -124,7 +126,7 @@ private
     @log = if params[:sales_log_id].present?
              current_user.sales_logs.find_by(id: params[:sales_log_id])
            elsif new_log_request?
-              create_new_resource
+             create_new_resource
            else
              current_user.lettings_logs.find_by(id: params[:lettings_log_id])
            end
@@ -143,7 +145,7 @@ private
   end
 
   def new_log_request_referrer?
-    request.referer&.split("/").include?("new")
+    request.referer&.split("/")&.include?("new")
   end
 
   def is_referrer_check_answers?

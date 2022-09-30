@@ -32,6 +32,22 @@ module CheckAnswersHelper
     "#{log.class.name.underscore}_#{redirect_path.underscore.tr('/', '_')}_path"
   end
 
+  def log_breadcrumbs(log, subsection)
+    if log.not_started?
+      {
+        "Logs" => "/logs",
+        "New log" => send("new_log_#{@log.class.name.underscore}s_path"),
+        subsection.label => "",
+      }
+    else
+      {
+        "Logs" => "/logs",
+        "Log #{@log.id}" => send("#{@log.class.name.underscore}_path", @log),
+        subsection.label => "",
+      }
+    end
+  end
+
 private
 
   def answered_questions_count(subsection, lettings_log, current_user)

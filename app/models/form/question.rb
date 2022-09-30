@@ -122,7 +122,11 @@ class Form::Question
   end
 
   def action_href(log, page_id)
-    "/#{log.model_name.param_key.dasherize}s/#{log.id}/#{page_id.to_s.dasherize}?referrer=check_answers"
+    if log.not_started?
+      "/#{log.model_name.param_key.dasherize}/new/#{page_id.to_s.dasherize}?referrer=check_answers"
+    else
+      "/#{log.model_name.param_key.dasherize}s/#{log.id}/#{page_id.to_s.dasherize}?referrer=check_answers"
+    end
   end
 
   def completed?(log)
