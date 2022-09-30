@@ -29,6 +29,8 @@ FactoryBot.define do
       age2_known { 0 }
       age2 { 35 }
       builtype { 1 }
+      ethnic { 3 }
+      ethnic_group { 12 }
     end
   end
 end

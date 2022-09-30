@@ -36,6 +36,10 @@ class Log < ApplicationRecord
     false
   end
 
+  def ethnic_refused?
+    ethnic_group == 17
+  end
+
 private
 
   def update_status!
