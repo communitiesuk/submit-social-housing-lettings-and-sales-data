@@ -1,5 +1,10 @@
 class SalesLogValidator < ActiveModel::Validator
-  def validate(record); end
+  include Validations::SalesValidations
+
+  def validate(record)
+    validation_methods = public_methods.select { |method| method.starts_with?("validate_") }
+    validation_methods.each { |meth| public_send(meth, record) }
+  end
 end
 
 class SalesLog < Log
