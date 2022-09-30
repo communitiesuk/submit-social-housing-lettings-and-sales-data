@@ -340,6 +340,15 @@ RSpec.describe Form::Question, type: :model do
         expect(question.answer_label(lettings_log)).to eq("£500.00 every year")
       end
     end
+
+    context "with inferred_check_answers_value" do
+      let!(:sales_log) { FactoryBot.create(:sales_log, :completed, ethnic_group: 17) }
+      let(:question) { sales_log.form.get_question("ethnic_group", sales_log) }
+
+      it "returns the inferred label value" do
+        expect(question.answer_label(sales_log)).to eq("Prefers not to say")
+      end
+    end
   end
 
   describe ".completed?" do
