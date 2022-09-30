@@ -3,59 +3,23 @@ require 'json'
 
 module Imports
   class LettingsLogsImportService < ImportService
-    include Wisper::Publisher
-
     def initialize(storage_service, logger = Rails.logger)
       super
-
-      Wisper.subscribe(LettingsLogImportListener.new, prefix: :on)
     end
 
     def create_logs(folder)
-      import_from(folder, :create_log)
-      if @logs_with_discrepancies.count.positive?
-        @logger.warn("The following lettings logs had status discrepancies: [#{@logs_with_discrepancies.join(', ')}]")
-      end
+      @run_id = "LLRun-#{Time.zone.now.to_s}"
+      @logger.info("START: Importing Lettings Logs @ #{Time.zone.now.strftime('%d-%m-%Y %H:%M')}. RunId: #{@run_id}")
+      
+      import_from(folder, :enqueue_job)
+
+      @logger.info("FINISH: Importing Lettings Logs @ #{Time.zone.now.strftime('%d-%m-%Y %H:%M')}. RunId: #{@run_id}")
     end
-
-    def local_load(folder)      
-      filenames = Dir["#{folder}/**/*.xml"]
-      puts "FILENAMES (#{filenames.size}): #{filenames}"
-      
-      @run_id = SecureRandom.uuid.to_s
-      logs_import = LogsImport.create!(
-        run_id: @run_id,
-        started_at: Time.zone.now,
-        total: filenames.size,
-        discrepancies: [],
-        filenames: filenames
-      )
-
-      redis = Redis.new
-      redis.set(@run_id, Marshal.dump(logs_import))
-
-      
-      broadcast(::Import::STARTED, @run_id)
-
-      filenames.each do |filename|
-        puts "Loading filename: #{filename}"
-        Rack::MiniProfiler.step("Start Processing file #{filename}") do
-          # Generate background job to process file completely          
-          xml_document = Nokogiri::XML(File.open(filename))
-
-          LettingsLogImportJob.perform_later(@run_id, xml_document.to_s)
-          #send(:create_log, xml_document)
-        end
-      rescue StandardError => e
-        @logger.error "#{e.class} in #{filename}: #{e.message}. Caller: #{e.backtrace.first}"
-      end   
-      
-      if @logs_with_discrepancies.count.positive?
-        @logger.warn("The following lettings logs had status discrepancies: [#{@logs_with_discrepancies.join(', ')}]")
-      end      
-    end    
+    
+    def enqueue_job(xml_document)
+      LettingsLogImportJob.perform_later(@run_id, xml_document.to_s)      
+    end
   end
-
 
   class LettingsLogsImportProcessor
     FORM_NAME_INDEX = {
@@ -97,16 +61,42 @@ module Imports
       other_intermediate_rent_product: 5,
     }.freeze
 
-    attr_reader :xml_doc, :logs_with_discrepancies, :logs_overridden, :discrepancy, :old_id
+    SEX = {
+      "Male" => "M",
+      "Female" => "F",
+      "Other" => "X",
+      "Non-binary" => "X",
+      "Refused" => "R",
+    }.freeze
+
+    RELATION = {
+      "Child" => "C",
+      "Partner" => "P",
+      "Other" => "X",
+      "Non-binary" => "X",
+      "Refused" => "R",
+    }.freeze 
+
+    FIELDS_NOT_PRESENT_IN_SOFTWIRE_DATA = %w[
+      majorrepairs 
+      illness_type_0 
+      tshortfall_known 
+      pregnancy_value_check 
+      retirement_value_check 
+      rent_value_check 
+      net_income_value_check 
+      major_repairs_date_value_check void_date_value_check 
+      housingneeds_type 
+      housingneeds_other
+    ].freeze
+
+    attr_reader :xml_doc, :logs_overridden, :discrepancy, :old_id
   
-    def initialize(xml_doc)
-      @xml_doc = xml_doc
+    def initialize(xml_document)
+      @xml_doc = xml_document
       @discrepancy = false
       @old_id = ''
-      
-      @logs_with_discrepancies = Set.new
-      @logs_overridden = Set.new
-
+      @logs_overridden = false
     end    
 
     def create_log(xml_doc)
@@ -114,7 +104,6 @@ module Imports
 
       previous_status = field_value(xml_doc, "meta", "status")
 
-      Rack::MiniProfiler.step("Loading attributes") do   
       # Required fields for status complete or logic to work
       # Note: order matters when we derive from previous values (attributes parameter)
       attributes["startdate"] = compose_date(xml_doc, "DAY", "MONTH", "YEAR")
@@ -300,16 +289,13 @@ module Imports
 
         attributes["created_by"] = user
       end
-      end # ENDPROFILER
-
-      Rack::MiniProfiler.step("Saving...") do   
+ 
       apply_date_consistency!(attributes)
       apply_household_consistency!(attributes)
 
       lettings_log = save_lettings_log(attributes)
       compute_differences(lettings_log, attributes)
-      check_status_completed(lettings_log, previous_status) unless @logs_overridden.include?(lettings_log.old_id)
-      end # ENDPROFILER
+      check_status_completed(lettings_log, previous_status)
     end
 
     def save_lettings_log(attributes)
@@ -331,15 +317,16 @@ module Imports
     def rescue_validation_or_raise(lettings_log, attributes, exception)
       if lettings_log.errors.of_kind?(:referral, :internal_transfer_non_social_housing)
         @logger.warn("Log #{lettings_log.old_id}: Removing internal transfer referral since previous tenancy is a non social housing")
-        @logs_overridden << lettings_log.old_id
+        @logs_overridden = true
         attributes.delete("referral")
         save_lettings_log(attributes)
       elsif lettings_log.errors.of_kind?(:referral, :internal_transfer_fixed_or_lifetime)
         @logger.warn("Log #{lettings_log.old_id}: Removing internal transfer referral since previous tenancy is fixed terms or lifetime")
-        @logs_overridden << lettings_log.old_id
+        @logs_overridden = true
         attributes.delete("referral")
         save_lettings_log(attributes)
       else
+        @logger.error("[rescue_validation_or_raise] No actionable error for exception: #{exception.message}")
         raise exception
       end
     end
@@ -348,7 +335,7 @@ module Imports
       differences = []
       attributes.each do |key, value|
         lettings_log_value = lettings_log.send(key.to_sym)
-        next if fields_not_present_in_softwire_data.include?(key)
+        next if FIELDS_NOT_PRESENT_IN_SOFTWIRE_DATA.include?(key)
 
         if value != lettings_log_value
           differences.push("#{key} #{value.inspect} #{lettings_log_value.inspect}")
@@ -357,15 +344,15 @@ module Imports
       @logger.warn "Differences found when saving log #{lettings_log.old_id}: #{differences}" unless differences.empty?
     end
 
-    def fields_not_present_in_softwire_data
-      %w[majorrepairs illness_type_0 tshortfall_known pregnancy_value_check retirement_value_check rent_value_check net_income_value_check major_repairs_date_value_check void_date_value_check housingneeds_type housingneeds_other]
-    end
-
+    # @logs_overridden can only include?(lettings_log.old_id) if there was a
+    # validation error raised therefore no need to do @logs_overridden.include? but rather 
+    # enough to set a flag for logs_overriden  
     def check_status_completed(lettings_log, previous_status)
+      return if @logs_overridden
+
       if previous_status.include?("submitted") && lettings_log.status != "completed"
-        @logger.warn "lettings log #{lettings_log.id} is not completed"
-        @logger.warn "lettings log with old id:#{lettings_log.old_id} is incomplete but status should be complete"
-        @logs_with_discrepancies << lettings_log.old_id
+        @logger.warn "DISCREPENCY lettings log #{lettings_log.id} is not completed"
+        @logger.warn "DISCREPENCY lettings log with old id:#{lettings_log.old_id} is incomplete but status should be complete"
         @discrepancy = true
       end
     end
@@ -379,32 +366,27 @@ module Imports
     # Safe: A string that represents only a decimal (or empty/nil)
     def safe_string_as_decimal(xml_doc, attribute)
       str = string_or_nil(xml_doc, attribute)
-      if str.nil?
-        nil
-      else
-        BigDecimal(str, exception: false)
-      end
+      return if str.nil?
+      
+      BigDecimal(str, exception: false)
     end
 
     # Unsafe: A string that has more than just the integer value
     def unsafe_string_as_integer(xml_doc, attribute)
       str = string_or_nil(xml_doc, attribute)
-      if str.nil?
-        nil
-      else
-        str.to_i
-      end
+      return if str.nil?
+      
+      str.to_i
     end
 
     def compose_date(xml_doc, day_str, month_str, year_str)
       day = Integer(field_value(xml_doc, "xmlns", day_str), exception: false)
       month = Integer(field_value(xml_doc, "xmlns", month_str), exception: false)
       year = Integer(field_value(xml_doc, "xmlns", year_str), exception: false)
-      if day.nil? || month.nil? || year.nil?
-        nil
-      else
-        Time.zone.local(year, month, day)
-      end
+
+      return if [day, month, year].any?(&:nil?)
+      
+      Time.zone.local(year, month, day)      
     end
 
     def get_form_name_component(xml_doc, index)
@@ -415,6 +397,7 @@ module Imports
 
     def needs_type(xml_doc)
       gn_sh = get_form_name_component(xml_doc, FORM_NAME_INDEX[:needs_type])
+
       case gn_sh
       when "GN"
         GN_SH[:general_needs]
@@ -460,45 +443,22 @@ module Imports
     end
 
     def sex(xml_doc, index)
-      sex = string_or_nil(xml_doc, "P#{index}Sex")
-      case sex
-      when "Male"
-        "M"
-      when "Female"
-        "F"
-      when "Other", "Non-binary"
-        "X"
-      when "Refused"
-        "R"
-      end
+      unmapped_sex = string_or_nil(xml_doc, "P#{index}Sex")
+      SEX[unmapped_sex]
     end
 
     def relat(xml_doc, index)
-      relat = string_or_nil(xml_doc, "P#{index}Rel")
-      case relat
-      when "Child"
-        "C"
-      when "Partner"
-        "P"
-      when "Other", "Non-binary"
-        "X"
-      when "Refused"
-        "R"
-      end
+      unmapped_relation = string_or_nil(xml_doc, "P#{index}Rel")
+      RELATION[unmapped_relation]
     end
 
     def age_known(xml_doc, index, hhmemb)
       return nil if hhmemb.present? && index > hhmemb
 
       age_refused = string_or_nil(xml_doc, "P#{index}AR")
-      if age_refused.present?
-        if age_refused.casecmp?("AGE_REFUSED") || age_refused.casecmp?("No")
-          return 1 # No
-        else
-          return 0 # Yes
-        end
-      end
-      0
+      return 0 unless age_refused.present?
+      
+      (age_refused.casecmp?("AGE_REFUSED") || age_refused.casecmp?("No")) ? 1 : 0
     end
 
     def details_known(index, attributes)
@@ -528,30 +488,22 @@ module Imports
     def compose_postcode(xml_doc, outcode, incode)
       outcode_value = string_or_nil(xml_doc, outcode)
       incode_value = string_or_nil(xml_doc, incode)
+      
       if outcode_value.nil? || incode_value.nil? || !"#{outcode_value} #{incode_value}".match(POSTCODE_REGEXP)
         nil
       else
         "#{outcode_value} #{incode_value}"
       end
     end
-
-    def london_affordable_rent(xml_doc)
-      lar = unsafe_string_as_integer(xml_doc, "LAR")
-      if lar == 1
-        1
-      else
-        # We default to No for any other values (nil, not known)
-        2
-      end
+    
+    # Default to No (2) for any other values (nil, not known)
+    def london_affordable_rent(xml_doc)      
+      unsafe_string_as_integer(xml_doc, "LAR") == 1 ? 1 : 2
     end
 
-    def renewal(rsnvac)
-      #  Relet – renewal of fixed-term tenancy
-      if rsnvac == 14
-        1
-      else
-        0
-      end
+    #  Relet – renewal of fixed-term tenancy
+    def renewal(rsnvac)      
+      rsnvac == 14 ? 1 : 0
     end
 
     def string_or_nil(xml_doc, attribute)
@@ -584,12 +536,7 @@ module Imports
 
     # Letters should be lowercase to match case
     def housing_needs(xml_doc, letter)
-      housing_need = string_or_nil(xml_doc, "Q10-#{letter}")
-      if housing_need == "Yes"
-        1
-      else
-        0
-      end
+      string_or_nil(xml_doc, "Q10-#{letter}") == "Yes" ? 1 : 0
     end
 
     def net_income_known(xml_doc, earnings)
@@ -607,12 +554,7 @@ module Imports
     end
 
     def illness_type(xml_doc, index, illness)
-      illness_type = string_or_nil(xml_doc, "Q10ib-#{index}")
-      if illness_type == "Yes" && illness == 1
-        1
-      elsif illness == 1
-        0
-      end
+      string_or_nil(xml_doc, "Q10ib-#{index}") == "Yes" && illness == 1 ? 1 : 0
     end
 
     def first_time_let(rsnvac)
@@ -642,10 +584,12 @@ module Imports
 
     def household_members(xml_doc, previous_status)
       hhmemb = safe_string_as_integer(xml_doc, "HHMEMB")
+      
       if previous_status.include?("submitted") && hhmemb.nil?
         hhmemb = people_with_details(xml_doc).count
         return nil if hhmemb.zero?
       end
+
       hhmemb
     end
 
@@ -661,17 +605,13 @@ module Imports
       end
     end
 
-    def allocation_system(value)
-      case value
-      when 1
-        1
-      when 2
-        0
-      end
+    def allocation_system(value)     
+      value == 1 ? 1 : 0 
     end
 
     def allocation_system_unknown(cbl, chr, cap)
       allocation_values = [cbl, chr, cap]
+
       if allocation_values.all?(&:nil?)
         nil
       elsif allocation_values.all? { |att| att&.zero? }

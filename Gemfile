@@ -60,7 +60,6 @@ gem "possessive"
 gem "auto_strip_attributes"
 # Use sidekiq for background processing
 gem "sidekiq"
-gem 'wisper', '~> 2.0'
 
 group :development, :test do
   # Check gems for known vulnerabilities
@@ -93,8 +92,7 @@ group :test do
   gem "selenium-webdriver", require: false
   gem "simplecov", require: false
   gem "timecop", "~> 0.9.4"
-  gem "webmock", require: false
-  gem 'wisper-rspec', require: false  
+  gem "webmock", require: false 
 end
 
 group :development, :test do

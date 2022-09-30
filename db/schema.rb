@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_28_002015) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_27_133123) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -264,31 +264,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_28_002015) do
     t.index ["scheme_id"], name: "index_locations_on_scheme_id"
   end
 
-  create_table "log_imports", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "logs_exports", force: :cascade do |t|
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }
     t.datetime "started_at", null: false
     t.integer "base_number", default: 1, null: false
     t.integer "increment_number", default: 1, null: false
     t.boolean "empty_export", default: false, null: false
-  end
-
-  create_table "logs_imports", force: :cascade do |t|
-    t.string "run_id", null: false
-    t.datetime "started_at"
-    t.datetime "finished_at"
-    t.integer "duration_seconds", default: 0
-    t.integer "total", default: 0
-    t.integer "num_saved", default: 0
-    t.integer "num_skipped", default: 0
-    t.jsonb "discrepancies"
-    t.jsonb "filenames"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "organisation_relationships", force: :cascade do |t|
