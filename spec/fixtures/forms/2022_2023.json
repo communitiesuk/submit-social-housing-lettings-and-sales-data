@@ -1,55 +1,57 @@
 {
-    "form_type": "lettings",
-    "start_date": "2022-04-01T00:00:00.000+01:00",
-    "end_date": "2023-07-01T00:00:00.000+01:00",
-    "sections": {
-      "household": {
-        "label": "About the household",
-        "subsections": {
-          "household_characteristics": {
-            "label": "Household characteristics",
-            "pages": {
-              "tenant_code_test": {
-                "questions": {
-                  "tenancycode": {
-                    "check_answer_label": "Tenant code",
-                    "header": "Different question header text for this year - 2023",
-                    "type": "text",
-                    "width": 10
+  "form_type": "lettings",
+  "start_date": "2022-04-01T00:00:00.000+01:00",
+  "end_date": "2023-07-01T00:00:00.000+01:00",
+  "sections": {
+    "household": {
+      "label": "About the household",
+      "subsections": {
+        "household_characteristics": {
+          "label": "Household characteristics",
+          "pages": {
+            "tenant_code_test": {
+              "questions": {
+                "tenancycode": {
+                  "check_answer_label": "Tenant code",
+                  "header": "Different question header text for this year - 2023",
+                  "type": "text",
+                  "width": 10
+                }
+              }
+            },
+            "outstanding_amount_known": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "tshortfall_known": {
+                  "check_answer_label": "",
+                  "header": "",
+                  "hint_text": "",
+                  "hidden_in_check_answers": true,
+                  "type": "radio",
+                  "derived": true,
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
                   }
                 }
               },
-              "outstanding_amount_known": {
-                "header": "",
-                "description": "",
-                "questions": {
-                  "tshortfall_known": {
-                    "check_answer_label": "",
-                    "header": "",
-                    "hint_text": "",
-                    "hidden_in_check_answers": true,
-                    "type": "radio",
-                    "derived": true,
-                    "answer_options": {
-                      "0": {
-                        "value": "Yes"
-                      },
-                      "1": {
-                        "value": "No"
-                      }
-                    }
-                  }
-                },
-                "depends_on": [false]
-              }
-            },
-            "depends_on": [
-              {
-                "setup": "completed"
-              }
-            ]
-          }
+              "depends_on": [
+                false
+              ]
+            }
+          },
+          "depends_on": [
+            {
+              "setup": "completed"
+            }
+          ]
         }
       }
     }
   }
+}
