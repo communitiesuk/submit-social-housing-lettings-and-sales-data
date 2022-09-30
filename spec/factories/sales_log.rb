@@ -31,6 +31,7 @@ FactoryBot.define do
       builtype { 1 }
       ethnic { 3 }
       ethnic_group { 12 }
+      sex2 { "X" }
     end
   end
 end
