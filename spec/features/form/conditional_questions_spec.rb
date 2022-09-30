@@ -53,7 +53,7 @@ RSpec.describe "Form Conditional Questions" do
       expect(page).to have_field("lettings-log-postcode-full-field", with: "NW1 6RT")
     end
 
-    it "gets cleared if the conditinoal question is hidden after editing the answer" do
+    it "gets cleared if the conditional question is hidden after editing the answer" do
       sales_log.update!(national: 12, othernational: "other")
       visit("/sales-logs/#{sales_log.id}/buyer-1-nationality")
       expect(page).to have_field("sales-log-othernational-field", with: "other")
