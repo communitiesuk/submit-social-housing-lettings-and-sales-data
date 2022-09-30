@@ -212,11 +212,10 @@ RSpec.describe "User Features" do
 
     context "when viewing sales logs for specific organisation" do
       let(:first_log) { organisation.sales_logs.first }
-      let!(:log_to_search) { FactoryBot.create(:sales_log, owning_organisation: user.organisation, managing_organisation_id: organisation.id) }
-      let!(:other_logs) { FactoryBot.create_list(:sales_log, 4, owning_organisation_id: organisation.id, managing_organisation_id: organisation.id) }
       let(:number_of_sales_logs) { SalesLog.count }
 
       before do
+        FactoryBot.create_list(:sales_log, 4, owning_organisation_id: organisation.id, managing_organisation_id: organisation.id)
         visit("/organisations/#{org_id}/sales-logs")
       end
 
@@ -232,7 +231,7 @@ RSpec.describe "User Features" do
         end
       end
 
-      it "can filter lettings logs" do
+      it "can filter sales logs" do
         expect(page).to have_content("#{number_of_sales_logs} total logs")
         organisation.sales_logs.map(&:id).each do |sales_log_id|
           expect(page).to have_link sales_log_id.to_s, href: "/sales-logs/#{sales_log_id}"
