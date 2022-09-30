@@ -8,7 +8,6 @@ class Form::Sales::Pages::Buyer2RelationshipToBuyer1 < ::Form::Page
     @depends_on = [{
       "jointpur" => 1,
     }]
-
   end
 
   def questions
