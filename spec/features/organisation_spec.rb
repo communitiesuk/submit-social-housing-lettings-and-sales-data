@@ -134,7 +134,7 @@ RSpec.describe "User Features" do
       click_button("Submit")
     end
 
-    context "when viewing logs for specific organisation" do
+    context "when viewing lettings logs for specific organisation" do
       let(:first_log) { organisation.lettings_logs.first }
       let!(:log_to_search) { FactoryBot.create(:lettings_log, owning_organisation: user.organisation, managing_organisation_id: organisation.id) }
       let!(:other_logs) { FactoryBot.create_list(:lettings_log, 4, owning_organisation_id: organisation.id, managing_organisation_id: organisation.id) }
@@ -189,7 +189,7 @@ RSpec.describe "User Features" do
                 expect(page).to have_link("Clear search")
               end
 
-              it "displays the logs belonging to the same organisation after I clear the search result after I clear the search resultss" do
+              it "displays the logs belonging to the same organisation after I clear the search result after I clear the search results" do
                 click_link("Clear search")
                 expect(page).to have_link(log_to_search.id.to_s)
               end
@@ -207,6 +207,40 @@ RSpec.describe "User Features" do
         click_button("Apply filters")
         expect(page).to have_current_path("/organisations/#{org_id}/lettings-logs?years[]=&years[]=2021&status[]=&user=all")
         expect(page).not_to have_link first_log.id.to_s, href: "/lettings-logs/#{first_log.id}"
+      end
+    end
+
+    context "when viewing sales logs for specific organisation" do
+      let(:first_log) { organisation.sales_logs.first }
+      let!(:log_to_search) { FactoryBot.create(:sales_log, owning_organisation: user.organisation, managing_organisation_id: organisation.id) }
+      let!(:other_logs) { FactoryBot.create_list(:sales_log, 4, owning_organisation_id: organisation.id, managing_organisation_id: organisation.id) }
+      let(:number_of_sales_logs) { SalesLog.count }
+
+      before do
+        visit("/organisations/#{org_id}/sales-logs")
+      end
+
+      it "shows a create button for that organisation" do
+        expect(page).to have_button("Create a new sales log for this organisation")
+      end
+
+      context "when creating a log for that organisation" do
+        it "pre-fills the value for owning organisation for that log" do
+          click_button("Create a new sales log for this organisation")
+          click_link("Set up this sales log")
+          expect(page).to have_content(org_name)
+        end
+      end
+
+      it "can filter lettings logs" do
+        expect(page).to have_content("#{number_of_sales_logs} total logs")
+        organisation.sales_logs.map(&:id).each do |sales_log_id|
+          expect(page).to have_link sales_log_id.to_s, href: "/sales-logs/#{sales_log_id}"
+        end
+        check("years-2021-field")
+        click_button("Apply filters")
+        expect(page).to have_current_path("/organisations/#{org_id}/sales-logs?years[]=&years[]=2021&status[]=&user=all")
+        expect(page).not_to have_link first_log.id.to_s, href: "/sales-logs/#{first_log.id}"
       end
     end
 
