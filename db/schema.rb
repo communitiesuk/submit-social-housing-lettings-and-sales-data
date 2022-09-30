@@ -336,6 +336,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_27_100350) do
     t.integer "jointmore"
     t.integer "jointpur"
     t.integer "beds"
+    t.integer "companybuy"
     t.integer "age1"
     t.integer "age1_known"
     t.integer "ethnic"
