@@ -13,6 +13,9 @@
 !/log/.keep
 !/tmp/.keep
 
+# Ignore Redis dumps
+*.rdb
+
 # Ignore pidfiles, but keep the directory.
 /tmp/pids/*
 !/tmp/pids/
