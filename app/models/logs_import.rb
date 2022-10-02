@@ -1,2 +1,0 @@
-class LogsImport < ApplicationRecord
-end

@@ -75,12 +75,18 @@ group :development do
   gem "overcommit", ">= 0.37.0"
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
   gem "web-console", ">= 4.1.0"
-  # Display performance information such as SQL time and flame graphs for each request in your browser.
-  # Can be configured to work on production as well see: https://github.com/MiniProfiler/rack-mini-profiler/blob/master/README.md
-  gem "erb_lint", require: false
+
   gem "rubocop-govuk", "4.3.0", require: false
   gem "rubocop-performance", require: false
   gem "rubocop-rails", require: false
+
+  # Display performance information such as SQL time and flame graphs for each request in your browser.
+  # Can be configured to work on production as well see: https://github.com/MiniProfiler/rack-mini-profiler/blob/master/README.md
+  gem "erb_lint", require: false
+  gem "flamegraph"
+  gem "memory_profiler"
+  gem "rack-mini-profiler"
+  gem "stackprof"
 end
 
 group :test do
@@ -92,15 +98,11 @@ group :test do
   gem "selenium-webdriver", require: false
   gem "simplecov", require: false
   gem "timecop", "~> 0.9.4"
-  gem "webmock", require: false 
+  gem "webmock", require: false
 end
 
 group :development, :test do
-  gem "rack-mini-profiler"
-  gem "flamegraph"  
-  gem "stackprof"
   gem "bullet"
-  gem "memory_profiler"  
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

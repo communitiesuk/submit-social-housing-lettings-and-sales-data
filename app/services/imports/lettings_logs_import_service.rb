@@ -1,5 +1,5 @@
-require 'securerandom'
-require 'json'
+require "securerandom"
+require "json"
 
 module Imports
   class LettingsLogsImportService < ImportService
@@ -8,16 +8,16 @@ module Imports
     end
 
     def create_logs(folder)
-      @run_id = "LLRun-#{Time.zone.now.to_s}"
+      @run_id = "LLRun-#{Time.zone.now}"
       @logger.info("START: Importing Lettings Logs @ #{Time.zone.now.strftime('%d-%m-%Y %H:%M')}. RunId: #{@run_id}")
-      
+
       import_from(folder, :enqueue_job)
 
       @logger.info("FINISH: Importing Lettings Logs @ #{Time.zone.now.strftime('%d-%m-%Y %H:%M')}. RunId: #{@run_id}")
     end
-    
+
     def enqueue_job(xml_document)
-      LettingsLogImportJob.perform_later(@run_id, xml_document.to_s)      
+      LettingsLogImportJob.perform_later(@run_id, xml_document)
     end
   end
 
@@ -75,29 +75,30 @@ module Imports
       "Other" => "X",
       "Non-binary" => "X",
       "Refused" => "R",
-    }.freeze 
+    }.freeze
 
     FIELDS_NOT_PRESENT_IN_SOFTWIRE_DATA = %w[
-      majorrepairs 
-      illness_type_0 
-      tshortfall_known 
-      pregnancy_value_check 
-      retirement_value_check 
-      rent_value_check 
-      net_income_value_check 
-      major_repairs_date_value_check void_date_value_check 
-      housingneeds_type 
       housingneeds_other
+      housingneeds_type
+      illness_type_0
+      major_repairs_date_value_check
+      majorrepairs
+      net_income_value_check
+      pregnancy_value_check
+      rent_value_check
+      retirement_value_check
+      tshortfall_known
+      void_date_value_check
     ].freeze
 
     attr_reader :xml_doc, :logs_overridden, :discrepancy, :old_id
-  
+
     def initialize(xml_document)
       @xml_doc = xml_document
       @discrepancy = false
-      @old_id = ''
+      @old_id = ""
       @logs_overridden = false
-    end    
+    end
 
     def create_log(xml_doc)
       attributes = {}
@@ -289,7 +290,7 @@ module Imports
 
         attributes["created_by"] = user
       end
- 
+
       apply_date_consistency!(attributes)
       apply_household_consistency!(attributes)
 
@@ -345,8 +346,8 @@ module Imports
     end
 
     # @logs_overridden can only include?(lettings_log.old_id) if there was a
-    # validation error raised therefore no need to do @logs_overridden.include? but rather 
-    # enough to set a flag for logs_overriden  
+    # validation error raised therefore no need to do @logs_overridden.include? but rather
+    # enough to set a flag for logs_overriden
     def check_status_completed(lettings_log, previous_status)
       return if @logs_overridden
 
@@ -367,7 +368,7 @@ module Imports
     def safe_string_as_decimal(xml_doc, attribute)
       str = string_or_nil(xml_doc, attribute)
       return if str.nil?
-      
+
       BigDecimal(str, exception: false)
     end
 
@@ -375,7 +376,7 @@ module Imports
     def unsafe_string_as_integer(xml_doc, attribute)
       str = string_or_nil(xml_doc, attribute)
       return if str.nil?
-      
+
       str.to_i
     end
 
@@ -385,8 +386,8 @@ module Imports
       year = Integer(field_value(xml_doc, "xmlns", year_str), exception: false)
 
       return if [day, month, year].any?(&:nil?)
-      
-      Time.zone.local(year, month, day)      
+
+      Time.zone.local(year, month, day)
     end
 
     def get_form_name_component(xml_doc, index)
@@ -456,9 +457,9 @@ module Imports
       return nil if hhmemb.present? && index > hhmemb
 
       age_refused = string_or_nil(xml_doc, "P#{index}AR")
-      return 0 unless age_refused.present?
-      
-      (age_refused.casecmp?("AGE_REFUSED") || age_refused.casecmp?("No")) ? 1 : 0
+      return 0 if age_refused.blank?
+
+      age_refused.casecmp?("AGE_REFUSED") || age_refused.casecmp?("No") ? 1 : 0
     end
 
     def details_known(index, attributes)
@@ -488,21 +489,21 @@ module Imports
     def compose_postcode(xml_doc, outcode, incode)
       outcode_value = string_or_nil(xml_doc, outcode)
       incode_value = string_or_nil(xml_doc, incode)
-      
+
       if outcode_value.nil? || incode_value.nil? || !"#{outcode_value} #{incode_value}".match(POSTCODE_REGEXP)
         nil
       else
         "#{outcode_value} #{incode_value}"
       end
     end
-    
+
     # Default to No (2) for any other values (nil, not known)
-    def london_affordable_rent(xml_doc)      
+    def london_affordable_rent(xml_doc)
       unsafe_string_as_integer(xml_doc, "LAR") == 1 ? 1 : 2
     end
 
     #  Relet – renewal of fixed-term tenancy
-    def renewal(rsnvac)      
+    def renewal(rsnvac)
       rsnvac == 14 ? 1 : 0
     end
 
@@ -584,7 +585,7 @@ module Imports
 
     def household_members(xml_doc, previous_status)
       hhmemb = safe_string_as_integer(xml_doc, "HHMEMB")
-      
+
       if previous_status.include?("submitted") && hhmemb.nil?
         hhmemb = people_with_details(xml_doc).count
         return nil if hhmemb.zero?
@@ -605,8 +606,8 @@ module Imports
       end
     end
 
-    def allocation_system(value)     
-      value == 1 ? 1 : 0 
+    def allocation_system(value)
+      value == 1 ? 1 : 0
     end
 
     def allocation_system_unknown(cbl, chr, cap)
@@ -676,6 +677,6 @@ module Imports
 
     def discrepancy?
       !!@discrepancy
-    end    
+    end
   end
 end

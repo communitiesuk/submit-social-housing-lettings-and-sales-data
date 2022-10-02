@@ -24,12 +24,12 @@ class LettingsLog < Log
   validates_with LettingsLogValidator
   before_validation :recalculate_start_year!, if: :startdate_changed?
   before_validation :reset_scheme_location!, if: :scheme_changed?, unless: :location_changed?
-  
+
   # Warning: Postcode checks require external service request - can be slow
-  before_validation :process_postcode_changes!, if: :postcode_full_changed?  
+  before_validation :process_postcode_changes!, if: :postcode_full_changed?
   before_validation :process_previous_postcode_changes!, if: :ppostcode_full_changed?
-  
-  before_validation :reset_invalidated_dependent_fields!  
+
+  before_validation :reset_invalidated_dependent_fields!
   before_validation :reset_location_fields!, unless: :postcode_known?
   before_validation :reset_previous_location_fields!, unless: :previous_postcode_known?
   before_validation :set_derived_fields!
@@ -657,7 +657,7 @@ private
   end
 
   def upcase_and_remove_whitespace(string)
-    string&.upcase.gsub(/\s+/, "")
+    string&.upcase&.gsub(/\s+/, "")
   end
 
   def fully_wheelchair_accessible?

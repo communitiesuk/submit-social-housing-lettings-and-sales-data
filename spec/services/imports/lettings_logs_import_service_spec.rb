@@ -68,15 +68,8 @@ RSpec.describe Imports::LettingsLogsImportService do
       expect(logger).not_to receive(:error)
       expect(logger).not_to receive(:warn)
       expect(logger).not_to receive(:info)
-      #expect { lettings_log_service.create_logs(remote_folder) }
-      #  .to change(LettingsLog, :count).by(4)
-      total_logs = LettingsLog.all.size
-      Rack::MiniProfiler.config.storage = Rack::MiniProfiler::MemoryStore
-      Rack::MiniProfiler.step('Create Case Logs') do
-        puts "Creating case logs, profiling!"
-        lettings_log_service.create_logs(remote_folder)
-      end 
-      expect(LettingsLog.all.size).to eq(total_logs + 4)     
+      expect { lettings_log_service.create_logs(remote_folder) }
+       .to change(LettingsLog, :count).by(4)
     end
 
     it "only updates existing lettings logs" do
