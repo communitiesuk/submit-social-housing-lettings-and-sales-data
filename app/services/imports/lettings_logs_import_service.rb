@@ -51,6 +51,10 @@ module Imports
       other_intermediate_rent_product: 3,
     }.freeze
 
+    # TODO: RENT_TYPE enum values are referenced in lettings_log.rb
+    # but are described here. Similar situation with many other fields.
+    # Propose moving to LettingLog
+    #
     # These must match our form
     RENT_TYPE = {
       social_rent: 0,
@@ -61,7 +65,7 @@ module Imports
       other_intermediate_rent_product: 5,
     }.freeze
 
-    SEX = {
+    IMPORT_MAPPING_SEX = {
       "Male" => "M",
       "Female" => "F",
       "Other" => "X",
@@ -69,7 +73,7 @@ module Imports
       "Refused" => "R",
     }.freeze
 
-    RELATION = {
+    IMPORT_MAPPING_RELATION = {
       "Child" => "C",
       "Partner" => "P",
       "Other" => "X",
@@ -445,12 +449,12 @@ module Imports
 
     def sex(xml_doc, index)
       unmapped_sex = string_or_nil(xml_doc, "P#{index}Sex")
-      SEX[unmapped_sex]
+      IMPORT_MAPPING_SEX[unmapped_sex]
     end
 
     def relat(xml_doc, index)
       unmapped_relation = string_or_nil(xml_doc, "P#{index}Rel")
-      RELATION[unmapped_relation]
+      IMPORT_MAPPING_RELATION[unmapped_relation]
     end
 
     def age_known(xml_doc, index, hhmemb)
