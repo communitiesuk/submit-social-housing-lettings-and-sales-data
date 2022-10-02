@@ -69,7 +69,7 @@ RSpec.describe Imports::LettingsLogsImportService do
       expect(logger).not_to receive(:warn)
       expect(logger).not_to receive(:info)
       expect { lettings_log_service.create_logs(remote_folder) }
-       .to change(LettingsLog, :count).by(4)
+        .to change(LettingsLog, :count).by(4)
     end
 
     it "only updates existing lettings logs" do
