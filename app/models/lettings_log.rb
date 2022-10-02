@@ -657,7 +657,7 @@ private
   end
 
   def upcase_and_remove_whitespace(string)
-    string&.upcase&.gsub(/\s+/, "")
+    string.present? ? string.upcase.gsub(/\s+/, "") : string
   end
 
   def fully_wheelchair_accessible?
