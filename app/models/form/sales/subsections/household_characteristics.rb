@@ -20,6 +20,7 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Sales::Pages::Buyer1EthnicBackgroundMixed.new(nil, nil, self),
       Form::Sales::Pages::Buyer1EthnicBackgroundWhite.new(nil, nil, self),
       Form::Sales::Pages::Age2.new(nil, nil, self),
+      Form::Sales::Pages::GenderIdentity2.new(nil, nil, self),
     ]
   end
 end
