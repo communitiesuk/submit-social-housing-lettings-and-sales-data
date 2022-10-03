@@ -1,6 +1,22 @@
 module Imports
+  module ImportUtils
+    def field_value(xml_document, namespace, field)
+      xml_document.at_xpath("//#{namespace}:#{field}")&.text
+    end
+
+    def overridden?(xml_document, namespace, field)
+      xml_document.at_xpath("//#{namespace}:#{field}").attributes["override-field"].value
+    end
+
+    def to_boolean(input_string)
+      input_string == "true"
+    end
+  end
+
   class ImportService
-  private
+    include Imports::ImportUtils
+
+    private
 
     def initialize(storage_service, logger = Rails.logger)
       @storage_service = storage_service
@@ -17,18 +33,6 @@ module Imports
       rescue StandardError => e
         @logger.error "#{e.class} in #{filename}: #{e.message}. Caller: #{e.backtrace.first}"
       end
-    end
-
-    def field_value(xml_document, namespace, field)
-      xml_document.at_xpath("//#{namespace}:#{field}")&.text
-    end
-
-    def overridden?(xml_document, namespace, field)
-      xml_document.at_xpath("//#{namespace}:#{field}").attributes["override-field"].value
-    end
-
-    def to_boolean(input_string)
-      input_string == "true"
     end
   end
 end

@@ -1,6 +1,3 @@
-require "securerandom"
-require "json"
-
 module Imports
   class LettingsLogsImportService < ImportService
     def initialize(storage_service, logger = Rails.logger)
@@ -17,11 +14,13 @@ module Imports
     end
 
     def enqueue_job(xml_document)
-      LettingsLogImportJob.perform_later(@run_id, xml_document)
+      LettingsLogImportJob.perform_later(@run_id, xml_document.to_s)
     end
   end
 
   class LettingsLogsImportProcessor
+    include Imports::ImportUtils
+
     FORM_NAME_INDEX = {
       start_year: 0,
       rent_type: 2,
@@ -95,16 +94,19 @@ module Imports
       void_date_value_check
     ].freeze
 
-    attr_reader :xml_doc, :logs_overridden, :discrepancy, :old_id
+    attr_reader :xml_doc, :logs_overridden, :discrepancy, :old_id, :logger
 
-    def initialize(xml_document)
-      @xml_doc = xml_document
+    def initialize(xml_document_as_string, logger = Rails.logger)
+      @xml_doc = Nokogiri::XML(xml_document_as_string)
       @discrepancy = false
       @old_id = ""
       @logs_overridden = false
+      @logger = logger
+
+      create_log
     end
 
-    def create_log(xml_doc)
+    def create_log
       attributes = {}
 
       previous_status = field_value(xml_doc, "meta", "status")
@@ -338,14 +340,17 @@ module Imports
 
     def compute_differences(lettings_log, attributes)
       differences = []
+puts "DIFFERENCES: Attributes => #{attributes}"
       attributes.each do |key, value|
         lettings_log_value = lettings_log.send(key.to_sym)
+
         next if FIELDS_NOT_PRESENT_IN_SOFTWIRE_DATA.include?(key)
 
         if value != lettings_log_value
           differences.push("#{key} #{value.inspect} #{lettings_log_value.inspect}")
         end
       end
+byebug
       @logger.warn "Differences found when saving log #{lettings_log.old_id}: #{differences}" unless differences.empty?
     end
 
