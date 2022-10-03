@@ -33,6 +33,7 @@ FactoryBot.define do
       ethnic { 3 }
       ethnic_group { 12 }
       sex2 { "X" }
+      buy2livein { "1" }
     end
   end
 end
