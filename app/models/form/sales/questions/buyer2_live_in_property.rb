@@ -5,6 +5,7 @@ class Form::Sales::Questions::Buyer2LiveInProperty < ::Form::Question
     @check_answer_label = "Will buyer 2 live in the property?"
     @header = "Will buyer 2 live in the property?"
     @type = "radio"
+    @hint_text = ""
     @answer_options = ANSWER_OPTIONS
     @page = page
   end
