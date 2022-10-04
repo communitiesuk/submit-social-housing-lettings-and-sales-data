@@ -29,7 +29,6 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
         buyer_2_gender_identity
         buyer_2_working_situation
         buyer_2_live_in_property
-        buyer_2_working_situation
       ],
     )
   end
