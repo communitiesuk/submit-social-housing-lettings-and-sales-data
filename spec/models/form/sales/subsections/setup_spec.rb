@@ -26,7 +26,6 @@ RSpec.describe Form::Sales::Subsections::Setup, type: :model do
         buyer_live
         joint_purchase
         number_joint_buyers
-        builtype
       ],
     )
   end

@@ -1,7 +1,7 @@
-class Form::Sales::Pages::BuildingType < ::Form::Page
+class Form::Sales::Pages::PropertyBuildingType < ::Form::Page
   def initialize(id, hsh, subsection)
     super
-    @id = "builtype"
+    @id = "property_building_type"
     @header = ""
     @description = ""
     @subsection = subsection
@@ -9,7 +9,7 @@ class Form::Sales::Pages::BuildingType < ::Form::Page
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::BuildingType.new(nil, nil, self),
+      Form::Sales::Questions::PropertyBuildingType.new(nil, nil, self),
     ]
   end
 end

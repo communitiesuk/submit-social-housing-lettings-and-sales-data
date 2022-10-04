@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Pages::BuildingType, type: :model do
+RSpec.describe Form::Sales::Pages::PropertyBuildingType, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
   let(:page_id) { nil }
@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Pages::BuildingType, type: :model do
   end
 
   it "has the correct id" do
-    expect(page.id).to eq("builtype")
+    expect(page.id).to eq("property_building_type")
   end
 
   it "has the correct header" do

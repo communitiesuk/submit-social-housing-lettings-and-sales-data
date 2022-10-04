@@ -1,4 +1,4 @@
-class Form::Sales::Questions::BuildingType < ::Form::Question
+class Form::Sales::Questions::PropertyBuildingType < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "builtype"
