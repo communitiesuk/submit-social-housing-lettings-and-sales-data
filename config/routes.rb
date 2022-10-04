@@ -1,5 +1,8 @@
 # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 Rails.application.routes.draw do
+  mount_sidekiq = -> { mount Sidekiq::Web => "/sidekiq" }
+  authenticate(:user, :support?.to_proc, &mount_sidekiq)
+
   devise_for :users, {
     path: :account,
     controllers: {
@@ -50,6 +53,7 @@ Rails.application.routes.draw do
       resources :locations do
         get "edit-name", to: "locations#edit_name"
         get "edit", to: "locations#edit"
+        get "edit-local-authority", to: "locations#edit_local_authority"
       end
     end
   end

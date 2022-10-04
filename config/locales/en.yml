@@ -104,6 +104,7 @@ en:
       invalid_date: "Enter a date in the correct format, for example 31 1 2022"
       outside_collection_window: "Enter a date within the current collection windows"
     postcode: "Enter a postcode in the correct format, for example AA1 1AA"
+    location_admin_district: "Select a local authority"
     email:
       taken: "Enter an email address that hasn’t already been used to sign up"
       invalid: "Enter an email address in the correct format, like name@example.com"

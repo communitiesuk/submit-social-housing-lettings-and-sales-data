@@ -13,7 +13,21 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
 
   it "has correct pages" do
     expect(household_characteristics.pages.map(&:id)).to eq(
-      %w[buyer_1_age buyer_1_gender_identity buyer_1_live_in_property],
+      %w[
+        buyer_interview
+        buyer_1_age
+        buyer_1_gender_identity
+        buyer_1_live_in_property
+        buyer_2_relationship_to_buyer_1
+        buyer_1_ethnic_group
+        buyer_1_ethnic_background_black
+        buyer_1_ethnic_background_asian
+        buyer_1_ethnic_background_arab
+        buyer_1_ethnic_background_mixed
+        buyer_1_ethnic_background_white
+        buyer_2_age
+        buyer_2_gender_identity
+      ],
     )
   end
 
