@@ -14,9 +14,15 @@ RSpec.describe Imports::LettingsLogsImportService do
   let(:scheme1) { FactoryBot.create(:scheme, old_visible_id: 123, owning_organisation: organisation) }
   let(:scheme2) { FactoryBot.create(:scheme, old_visible_id: 456, owning_organisation: organisation) }
 
-  def open_file(directory, filename)
-    File.open("#{directory}/#{filename}.xml")
-  end
+  let(:remote_folder)     { "lettings_logs" }
+  let(:lettings_log_id)   { "0ead17cb-1668-442d-898c-0d52879ff592" }
+  let(:lettings_log_id2)  { "166fc004-392e-47a8-acb8-1c018734882b" }
+  let(:lettings_log_id3)  { "00d2343e-d5fa-4c89-8400-ec3854b0f2b4" }
+  let(:lettings_log_id4)  { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+  let(:lettings_log_id5)  { "893ufj2s-lq77-42m4-rty6-ej09gh585uy1" }
+  let(:lettings_log_id6)  { "5ybz29dj-l33t-k1l0-hj86-n4k4ma77xkcd" }
+  let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id5) }
+  let(:lettings_log_xml)  { Nokogiri::XML(lettings_log_file) }
 
   before do
     WebMock.stub_request(:get, /api.postcodes.io\/postcodes\/LS166FT/)
@@ -37,19 +43,7 @@ RSpec.describe Imports::LettingsLogsImportService do
     # Stub the form handler to use the real form
     allow(FormHandler.instance).to receive(:get_form).with("previous_lettings").and_return(real_2021_2022_form)
     allow(FormHandler.instance).to receive(:get_form).with("current_lettings").and_return(real_2022_2023_form)
-  end
 
-  let(:remote_folder) { "lettings_logs" }
-  let(:lettings_log_id) { "0ead17cb-1668-442d-898c-0d52879ff592" }
-  let(:lettings_log_id2) { "166fc004-392e-47a8-acb8-1c018734882b" }
-  let(:lettings_log_id3) { "00d2343e-d5fa-4c89-8400-ec3854b0f2b4" }
-  let(:lettings_log_id4) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
-  let(:lettings_log_id5) { "893ufj2s-lq77-42m4-rty6-ej09gh585uy1" }
-  let(:lettings_log_id6) { "5ybz29dj-l33t-k1l0-hj86-n4k4ma77xkcd" }
-  let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id5) }
-  let(:lettings_log_xml) { Nokogiri::XML(lettings_log_file) }
-
-  before do
     # Stub the S3 file listing and download
     allow(storage_service).to receive(:list_files)
                                 .and_return(%W[#{remote_folder}/#{lettings_log_id}.xml #{remote_folder}/#{lettings_log_id2}.xml #{remote_folder}/#{lettings_log_id3}.xml #{remote_folder}/#{lettings_log_id4}.xml])
@@ -86,12 +80,12 @@ RSpec.describe Imports::LettingsLogsImportService do
       expect(logger).not_to receive(:error)
       expect(logger).not_to receive(:warn)
 
-      expect do
+      expect {
         perform_enqueued_jobs do
           lettings_log_service.create_logs(remote_folder)
           lettings_log_service.create_logs(remote_folder)
         end
-      end.to change(LettingsLog, :count).by(4) # Rather than 8
+      }.to change(LettingsLog, :count).by(4) # Rather than 8
     end
   end
 
@@ -134,5 +128,9 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
     end
+  end
+
+  def open_file(directory, filename)
+    File.open("#{directory}/#{filename}.xml")
   end
 end

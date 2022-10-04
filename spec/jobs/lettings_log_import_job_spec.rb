@@ -7,10 +7,6 @@ RSpec.describe LettingsLogImportJob do
 
   describe "#perform" do
     context "with valid params" do
-      before do
-
-      end
-
       it "executes LettingsLogsImportProcessor" do
         expect(Imports::LettingsLogsImportProcessor).to receive(:new)
 

@@ -320,14 +320,14 @@ module Imports
     end
 
     def compute_differences(lettings_log, attributes)
-      differences = attributes.map do |key, value|
+      differences = attributes.map { |key, value|
         lettings_log_value = lettings_log.send(key.to_sym)
 
         next if FIELDS_NOT_PRESENT_IN_SOFTWIRE_DATA.include?(key)
         next if value == lettings_log_value
 
         "#{key} #{value.inspect} #{lettings_log_value.inspect}"
-      end.compact
+      }.compact
 
       if differences.any?
         @logger.warn "Differences found when saving log #{lettings_log.old_id}: #{differences}"

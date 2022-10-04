@@ -11,10 +11,9 @@ RSpec.describe Imports::LettingsLogsImportProcessor do
   let(:organisation) { FactoryBot.create(:organisation, old_visible_id: "1", provider_type: "PRP") }
   let(:scheme1) { FactoryBot.create(:scheme, old_visible_id: 123, owning_organisation: organisation) }
   let(:scheme2) { FactoryBot.create(:scheme, old_visible_id: 456, owning_organisation: organisation) }
-
-  def open_file(directory, filename)
-    File.open("#{directory}/#{filename}.xml")
-  end
+  let(:lettings_log_id) { "0ead17cb-1668-442d-898c-0d52879ff592" }
+  let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id) }
+  let(:lettings_log_xml) { Nokogiri::XML(lettings_log_file) }
 
   before do
     WebMock.stub_request(:get, /api.postcodes.io\/postcodes\/LS166FT/)
@@ -37,14 +36,10 @@ RSpec.describe Imports::LettingsLogsImportProcessor do
     allow(FormHandler.instance).to receive(:get_form).with("current_lettings").and_return(real_2022_2023_form)
   end
 
-  let(:lettings_log_id) { "0ead17cb-1668-442d-898c-0d52879ff592" }
-  let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id) }
-  let(:lettings_log_xml) { Nokogiri::XML(lettings_log_file) }
-
-  describe '#initialize' do
+  describe "#initialize" do
     context "with valid params" do
       it "sets document-id as old_id" do
-        import = Imports::LettingsLogsImportProcessor.new(lettings_log_xml.to_s, logger)
+        import = described_class.new(lettings_log_xml.to_s, logger)
 
         expect(import.old_id).to eq "0ead17cb-1668-442d-898c-0d52879ff592"
       end
@@ -57,7 +52,7 @@ RSpec.describe Imports::LettingsLogsImportProcessor do
         expect(logger).to receive(:warn).with(/is not completed/).once
         expect(logger).to receive(:warn).with(/lettings log with old id:#{lettings_log_id} is incomplete but status should be complete/).once
 
-        import = Imports::LettingsLogsImportProcessor.new(lettings_log_xml.to_s, logger)
+        import = described_class.new(lettings_log_xml.to_s, logger)
 
         lettings_log = LettingsLog.where(old_id: lettings_log_id).first
         expect(lettings_log&.voiddate).to be_nil
@@ -69,7 +64,7 @@ RSpec.describe Imports::LettingsLogsImportProcessor do
       before { lettings_log_xml.at_xpath("//xmlns:OWNINGORGID").content = 99_999 }
 
       it "raises an exception" do
-        expect { Imports::LettingsLogsImportProcessor.new(lettings_log_xml.to_s, logger) }
+        expect { described_class.new(lettings_log_xml.to_s, logger) }
           .to raise_error(RuntimeError, "Organisation not found with legacy ID 99999")
       end
     end
@@ -83,7 +78,7 @@ RSpec.describe Imports::LettingsLogsImportProcessor do
         it "sets the economic status to child under 16" do
           # The update is done when calculating derived variables
           expect(logger).to receive(:warn).with(/Differences found when saving log/)
-          Imports::LettingsLogsImportProcessor.new(lettings_log_xml.to_s, logger)
+          described_class.new(lettings_log_xml.to_s, logger)
 
           lettings_log = LettingsLog.where(old_id: lettings_log_id).first
           expect(lettings_log&.ecstat2).to be(9)
@@ -94,7 +89,7 @@ RSpec.describe Imports::LettingsLogsImportProcessor do
         before { lettings_log_xml.at_xpath("//xmlns:P2Rel").content = "Refused" }
 
         it "sets the relationship to lead tenant to child" do
-          Imports::LettingsLogsImportProcessor.new(lettings_log_xml.to_s, logger)
+          described_class.new(lettings_log_xml.to_s, logger)
 
           lettings_log = LettingsLog.where(old_id: lettings_log_id).first
           expect(lettings_log&.relat2).to eq("C")
@@ -110,14 +105,14 @@ RSpec.describe Imports::LettingsLogsImportProcessor do
 
       it "intercepts the relevant validation error" do
         expect(logger).to receive(:warn).with(/Removing internal transfer referral since previous tenancy is a non social housing/)
-        expect { Imports::LettingsLogsImportProcessor.new(lettings_log_xml.to_s, logger) }
+        expect { described_class.new(lettings_log_xml.to_s, logger) }
           .not_to raise_error
       end
 
       it "clears out the referral answer" do
         allow(logger).to receive(:warn)
 
-        Imports::LettingsLogsImportProcessor.new(lettings_log_xml.to_s, logger)
+        described_class.new(lettings_log_xml.to_s, logger)
         lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
 
         expect(lettings_log).not_to be_nil
@@ -132,14 +127,14 @@ RSpec.describe Imports::LettingsLogsImportProcessor do
 
         it "intercepts the relevant validation error" do
           expect(logger).to receive(:warn).with(/Removing internal transfer referral since previous tenancy is fixed terms or lifetime/)
-          expect { Imports::LettingsLogsImportProcessor.new(lettings_log_xml.to_s, logger) }
+          expect { described_class.new(lettings_log_xml.to_s, logger) }
             .not_to raise_error
         end
 
         it "clears out the referral answer" do
           allow(logger).to receive(:warn)
 
-          Imports::LettingsLogsImportProcessor.new(lettings_log_xml.to_s, logger)
+          described_class.new(lettings_log_xml.to_s, logger)
           lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
 
           expect(lettings_log).not_to be_nil
@@ -155,7 +150,7 @@ RSpec.describe Imports::LettingsLogsImportProcessor do
       end
 
       it "completes the log" do
-        Imports::LettingsLogsImportProcessor.new(lettings_log_xml.to_s, logger)
+        described_class.new(lettings_log_xml.to_s, logger)
         lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
         expect(lettings_log.status).to eq("completed")
       end
@@ -179,7 +174,7 @@ RSpec.describe Imports::LettingsLogsImportProcessor do
       end
 
       it "completes the log" do
-        Imports::LettingsLogsImportProcessor.new(lettings_log_xml.to_s, logger)
+        described_class.new(lettings_log_xml.to_s, logger)
         lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
         expect(lettings_log.status).to eq("completed")
       end
@@ -192,7 +187,7 @@ RSpec.describe Imports::LettingsLogsImportProcessor do
       end
 
       it "completes the log" do
-        Imports::LettingsLogsImportProcessor.new(lettings_log_xml.to_s, logger)
+        described_class.new(lettings_log_xml.to_s, logger)
         lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
         expect(lettings_log.status).to eq("completed")
       end
@@ -203,7 +198,7 @@ RSpec.describe Imports::LettingsLogsImportProcessor do
 
       it "sets the scheme and location values" do
         expect(logger).not_to receive(:warn)
-        Imports::LettingsLogsImportProcessor.new(lettings_log_xml.to_s, logger)
+        described_class.new(lettings_log_xml.to_s, logger)
         lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
 
         expect(lettings_log.scheme_id).not_to be_nil
@@ -219,7 +214,7 @@ RSpec.describe Imports::LettingsLogsImportProcessor do
 
       it "sets the scheme and location values" do
         expect(logger).not_to receive(:warn)
-        Imports::LettingsLogsImportProcessor.new(lettings_log_xml.to_s, logger)
+        described_class.new(lettings_log_xml.to_s, logger)
         lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
 
         expect(lettings_log.scheme_id).not_to be_nil
@@ -227,5 +222,9 @@ RSpec.describe Imports::LettingsLogsImportProcessor do
         expect(lettings_log.status).to eq("completed")
       end
     end
+  end
+
+  def open_file(directory, filename)
+    File.open("#{directory}/#{filename}.xml")
   end
 end

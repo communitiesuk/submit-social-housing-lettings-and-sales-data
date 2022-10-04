@@ -2,8 +2,6 @@ module Imports
   class ImportService
     include Imports::ImportUtils
 
-    private
-
     def initialize(storage_service, logger = Rails.logger)
       @storage_service = storage_service
       @logger = logger
