@@ -38,6 +38,9 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
     allow(storage_service).to receive(:get_file_io)
                                 .with("#{remote_folder}/#{lettings_log_id}.xml")
                                 .and_return(lettings_log_file)
+
+    allow(logger).to receive(:info).with(/START: Importing Lettings Logs @/)
+    allow(logger).to receive(:info).with(/FINISH: Importing Lettings Logs @/)
   end
 
   context "when updating tenant code" do
@@ -47,12 +50,16 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
       let(:lettings_log) { LettingsLog.find_by(old_id: lettings_log_id) }
 
       before do
-        Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+        perform_enqueued_jobs do
+          Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+        end
+
         lettings_log_file.rewind
       end
 
       it "logs that the tenancycode already has a value and does not update the lettings_log" do
-        expect(logger).to receive(:info).with(/lettings log \d+ has a value for tenancycode, skipping update/)
+        expect(logger).to receive(:info).with(/lettings log \d+ has a value for tenancycode, skipping update/).at_least(:once)
+
         expect { import_service.send(:update_field, field, remote_folder) }
           .not_to(change { lettings_log.reload.tenancycode })
       end
@@ -62,7 +69,10 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
       let(:lettings_log) { LettingsLog.find_by(old_id: lettings_log_id) }
 
       before do
-        Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+        perform_enqueued_jobs do
+          Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+        end
+
         lettings_log_file.rewind
         lettings_log.update!(tenancycode: nil)
       end
@@ -80,7 +90,11 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
 
     before do
       allow(logger).to receive(:warn)
-      Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+
+      perform_enqueued_jobs do
+        Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+      end
+
       lettings_log_file.rewind
     end
 
@@ -200,7 +214,10 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
       let(:lettings_log) { LettingsLog.find_by(old_id: lettings_log_id) }
 
       before do
-        Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+        perform_enqueued_jobs do
+          Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+        end
+
         lettings_log_file.rewind
         lettings_log.update!(majorrepairs: 0, mrcdate: Time.zone.local(2021, 10, 30, 10, 10, 10))
       end
@@ -222,7 +239,10 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
       let(:lettings_log) { LettingsLog.find_by(old_id: lettings_log_id) }
 
       before do
-        Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+        perform_enqueued_jobs do
+          Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+        end
+
         lettings_log_file.rewind
         lettings_log.update!(mrcdate: nil, majorrepairs: nil)
       end
