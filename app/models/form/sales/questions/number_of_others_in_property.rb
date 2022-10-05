@@ -8,5 +8,5 @@ class Form::Sales::Questions::NumberOfOthersInProperty < ::Form::Question
     @hint_text = "You can provide details for a maximum of 4 other people."
     @page = page
     @width = 2
-    end
+  end
 end
