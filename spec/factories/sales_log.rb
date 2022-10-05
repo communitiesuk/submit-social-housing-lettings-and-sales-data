@@ -36,6 +36,7 @@ FactoryBot.define do
       sex2 { "X" }
       buy2livein { "1" }
       ecstat2 { "1" }
+      hholdcount { "1" }
     end
   end
 end

@@ -26,6 +26,7 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Sales::Pages::GenderIdentity2.new(nil, nil, self),
       Form::Sales::Pages::Buyer2WorkingSituation.new(nil, nil, self),
       Form::Sales::Pages::Buyer2LiveInProperty.new(nil, nil, self),
+      Form::Sales::Pages::NumberOfOthersInProperty.new(nil, nil, self),
     ]
   end
 end
