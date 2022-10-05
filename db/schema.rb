@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_03_150610) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_04_095132) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -329,22 +329,24 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_03_150610) do
     t.string "purchid"
     t.integer "type"
     t.integer "ownershipsch"
-    t.string "othtype"
-    t.integer "jointmore"
     t.integer "jointpur"
+    t.string "othtype"
     t.integer "beds"
-    t.integer "companybuy"
+    t.integer "jointmore"
     t.integer "age1"
     t.integer "age1_known"
     t.string "sex1"
+    t.integer "national"
+    t.string "othernational"
     t.integer "buy1livein"
+    t.integer "companybuy"
     t.integer "buylivein"
     t.integer "builtype"
     t.integer "proptype"
-    t.string "relat2"
-    t.string "otherrelat2"
     t.integer "age2"
     t.integer "age2_known"
+    t.string "relat2"
+    t.string "otherrelat2"
     t.integer "ethnic"
     t.integer "ethnic_group"
     t.string "sex2"
