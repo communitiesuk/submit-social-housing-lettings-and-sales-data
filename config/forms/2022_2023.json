@@ -1178,7 +1178,7 @@
               "questions": {
                 "declaration": {
                   "header": "",
-                  "guidance_partial": "privacy_notice",
+                  "guidance_partial": "privacy_notice_tenant",
                   "check_answer_label": "Tenant has seen the privacy notice",
                   "check_answers_card_number": 0,
                   "type": "checkbox",
