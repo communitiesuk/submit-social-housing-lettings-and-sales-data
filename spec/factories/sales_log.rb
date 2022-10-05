@@ -35,6 +35,7 @@ FactoryBot.define do
       ethnic_group { 12 }
       sex2 { "X" }
       buy2livein { "1" }
+      ecstat1 { "1" }
       ecstat2 { "1" }
       hholdcount { "1" }
     end
