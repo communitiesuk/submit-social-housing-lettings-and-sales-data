@@ -50,9 +50,11 @@ class Form::Question
 
     answer = label_from_value(log[id]) if log[id].present?
     answer_label = [prefix, format_value(answer), suffix_label(log)].join("") if answer
-    return answer_label if answer_label
 
-    has_inferred_check_answers_value?(log) ? inferred_check_answers_value["value"] : ""
+    inferred = inferred_check_answers_value["value"] if inferred_check_answers_value && has_inferred_check_answers_value?(log)
+    return inferred if inferred.present?
+
+    answer_label
   end
 
   def get_inferred_answers(log)

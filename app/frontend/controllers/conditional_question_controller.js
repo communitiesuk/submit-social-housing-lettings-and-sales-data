@@ -8,14 +8,16 @@ export default class extends Controller {
   displayConditional () {
     if (this.element.checked) {
       const selectedValue = this.element.value
-      const conditionalFor = JSON.parse(this.element.dataset.info)
+      const dataInfo = JSON.parse(this.element.dataset.info)
+      const conditionalFor = dataInfo.conditional_questions
+      const logType = dataInfo.log_type
 
       Object.entries(conditionalFor).forEach(([targetQuestion, conditions]) => {
         if (!conditions.map(String).includes(String(selectedValue))) {
-          const textNumericInput = document.getElementById(`lettings-log-${targetQuestion.replaceAll('_', '-')}-field`)
+          const textNumericInput = document.getElementById(`${logType}-log-${targetQuestion.replaceAll('_', '-')}-field`)
           if (textNumericInput == null) {
             const dateInputs = [1, 2, 3].map((idx) => {
-              return document.getElementById(`lettings_log_${targetQuestion}_${idx}i`)
+              return document.getElementById(`${logType}_log_${targetQuestion}_${idx}i`)
             })
             this.clearDateInputs(dateInputs)
           } else {

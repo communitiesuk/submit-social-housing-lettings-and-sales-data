@@ -14,7 +14,12 @@
 
 <div class="app-filter-layout" data-controller="filter-layout">
   <div class="govuk-button-group app-filter-toggle">
-    <%= govuk_button_to "Create a new lettings log for this organisation", lettings_logs_path(lettings_log: { owning_organisation_id: @organisation.id }, method: :post) %>
+    <% if current_page?(controller: 'organisations', action: 'lettings_logs') %>
+      <%= govuk_button_to "Create a new lettings log for this organisation", lettings_logs_path(lettings_log: { owning_organisation_id: @organisation.id }, method: :post) %>
+    <% end %>
+    <% if current_page?(controller: 'organisations', action: 'sales_logs') %>
+      <%= govuk_button_to "Create a new sales log for this organisation", sales_logs_path(sales_log: { owning_organisation_id: @organisation.id }, method: :post) %>
+    <% end %>
   </div>
 
   <%= render partial: "logs/log_filters" %>

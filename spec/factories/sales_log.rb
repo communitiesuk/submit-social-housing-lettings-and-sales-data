@@ -16,18 +16,27 @@ FactoryBot.define do
       ownershipsch { 2 }
       type { 8 }
       saledate { Time.utc(2022, 2, 2, 10, 36, 49) }
+      companybuy { 1 }
       jointpur { 1 }
       beds { 2 }
       jointmore { 1 }
+      noint { 2 }
       age1_known { 0 }
       age1 { 30 }
       sex1 { "X" }
+      national { 18 }
       buy1livein { 1 }
       relat2 { "P" }
       proptype { 1 }
       age2_known { 0 }
       age2 { 35 }
       builtype { 1 }
+      ethnic { 3 }
+      ethnic_group { 12 }
+      sex2 { "X" }
+      buy2livein { "1" }
+      ecstat1 { "1" }
+      ecstat2 { "1" }
     end
   end
 end

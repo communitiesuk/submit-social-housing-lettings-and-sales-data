@@ -1,4 +1,5 @@
 require "rails_helper"
+require "shared/shared_examples_for_derived_fields"
 
 RSpec.describe LettingsLog do
   let(:owning_organisation) { FactoryBot.create(:organisation) }
@@ -9,6 +10,8 @@ RSpec.describe LettingsLog do
   before do
     allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
   end
+
+  include_examples "shared examples for derived fields", :lettings_log
 
   it "inherits from log" do
     expect(described_class).to be < Log

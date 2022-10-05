@@ -7,10 +7,10 @@
 
 <div class="app-filter-layout" data-controller="filter-layout">
   <div class="govuk-button-group app-filter-toggle">
-    <% if current_page?(:controller => 'lettings_logs', :action => 'index') %>
+    <% if current_page?(controller: 'lettings_logs', action: 'index') %>
       <%= govuk_button_to "Create a new lettings log", lettings_logs_path %>
     <% end %>
-    <% if FeatureToggle.sales_log_enabled? && current_page?(:controller => 'sales_logs', :action => 'index') %>
+    <% if FeatureToggle.sales_log_enabled? && current_page?(controller: 'sales_logs', action: 'index') %>
       <%= govuk_button_to "Create a new sales log", sales_logs_path %>
     <% end %>
     <%#= govuk_link_to "Upload logs", bulk_upload_lettings_logs_path %>
