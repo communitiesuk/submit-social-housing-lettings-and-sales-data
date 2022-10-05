@@ -20,6 +20,7 @@ FactoryBot.define do
       jointpur { 1 }
       beds { 2 }
       jointmore { 1 }
+      noint { 2 }
       age1_known { 0 }
       age1 { 30 }
       sex1 { "X" }
@@ -32,6 +33,9 @@ FactoryBot.define do
       builtype { 1 }
       ethnic { 3 }
       ethnic_group { 12 }
+      sex2 { "X" }
+      buy2livein { "1" }
+      ecstat2 { "1" }
     end
   end
 end
