@@ -25,6 +25,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
         buyer_1_ethnic_background_arab
         buyer_1_ethnic_background_mixed
         buyer_1_ethnic_background_white
+        buyer_1_working_situation
         buyer_2_age
         buyer_2_gender_identity
         buyer_2_working_situation
