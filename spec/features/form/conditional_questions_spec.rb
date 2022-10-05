@@ -12,6 +12,14 @@ RSpec.describe "Form Conditional Questions" do
       managing_organisation: user.organisation,
     )
   end
+  let(:sales_log) do
+    FactoryBot.create(
+      :sales_log,
+      :completed,
+      owning_organisation: user.organisation,
+      managing_organisation: user.organisation,
+    )
+  end
   let(:id) { lettings_log.id }
   let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
 
@@ -43,6 +51,16 @@ RSpec.describe "Form Conditional Questions" do
       lettings_log.update!(postcode_known: 1, postcode_full: "NW1 6RT")
       visit("/lettings-logs/#{id}/property-postcode")
       expect(page).to have_field("lettings-log-postcode-full-field", with: "NW1 6RT")
+    end
+
+    it "gets cleared if the conditional question is hidden after editing the answer" do
+      sales_log.update!(national: 12, othernational: "other")
+      visit("/sales-logs/#{sales_log.id}/buyer-1-nationality")
+      expect(page).to have_field("sales-log-othernational-field", with: "other")
+
+      choose("sales-log-national-18-field", allow_label_click: true)
+      choose("sales-log-national-12-field", allow_label_click: true)
+      expect(page).to have_field("sales-log-othernational-field", with: "")
     end
   end
 end
