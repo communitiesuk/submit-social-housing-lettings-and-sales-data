@@ -4,14 +4,15 @@ class Form::Sales::Questions::PrivacyNotice < ::Form::Question
     @id = "privacynotice"
     @check_answer_label = "Buyer has seen the privacy notice?"
     @header = "Declaration"
-    @guidance_partial = "test"
     @type = "checkbox"
     @hint_text = ""
     @page = page
     @answer_options = ANSWER_OPTIONS
+    @guidance_position = GuidancePosition::TOP
+    @guidance_partial = "privacy_notice_buyer"
   end
 
   ANSWER_OPTIONS = {
-    "privacynotice" => { "value" => "The tenant has seen the DLUHC privacy notice" },
+    "privacynotice" => { "value" => "The buyer has seen the DLUHC privacy notice" },
   }.freeze
 end

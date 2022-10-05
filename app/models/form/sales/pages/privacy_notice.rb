@@ -3,8 +3,11 @@ class Form::Sales::Pages::PrivacyNotice < ::Form::Page
     super
     @id = "privacy_notice"
     @header = "Department for Levelling Up, Housing and Communities privacy notice"
-    @description = "Make sure that the buyer has seen the Department for Levelling Up, Housing and Communities (DLUHC) privacy notice before completing this log"
+    @description = ""
     @subsection = subsection
+    @depends_on = [{
+      "noint" => 1,
+    }]
   end
 
   def questions
