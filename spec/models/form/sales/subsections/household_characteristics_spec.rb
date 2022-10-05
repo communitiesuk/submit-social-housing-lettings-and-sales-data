@@ -15,6 +15,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
     expect(household_characteristics.pages.map(&:id)).to eq(
       %w[
         buyer_interview
+        privacy_notice
         buyer_1_age
         buyer_1_gender_identity
         buyer_1_live_in_property
