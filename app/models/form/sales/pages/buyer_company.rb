@@ -5,6 +5,9 @@ class Form::Sales::Pages::BuyerCompany < ::Form::Page
     @header = ""
     @description = ""
     @subsection = subsection
+    @depends_on = [{
+      "ownershipsch" => 3,
+    }]
   end
 
   def questions
