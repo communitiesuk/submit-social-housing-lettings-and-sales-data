@@ -11,6 +11,7 @@ class Form::Sales::Subsections::PropertyInformation < ::Form::Subsection
     @pages ||= [
       Form::Sales::Pages::PropertyNumberOfBedrooms.new(nil, nil, self),
       Form::Sales::Pages::PropertyUnitType.new(nil, nil, self),
+      Form::Sales::Pages::BuildingType.new(nil, nil, self),
     ]
   end
 end

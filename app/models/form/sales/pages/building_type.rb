@@ -1,7 +1,7 @@
 class Form::Sales::Pages::BuildingType < ::Form::Page
   def initialize(id, hsh, subsection)
     super
-    @id = "builtype"
+    @id = "property_building_type"
     @header = ""
     @description = ""
     @subsection = subsection
