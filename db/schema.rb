@@ -355,6 +355,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_05_150022) do
     t.integer "privacynotice"
     t.integer "ecstat1"
     t.integer "hholdcount"
+    t.integer "wheel"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"

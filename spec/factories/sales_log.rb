@@ -38,6 +38,7 @@ FactoryBot.define do
       ecstat1 { "1" }
       ecstat2 { "1" }
       hholdcount { "1" }
+      wheel { 1 }
     end
   end
 end
