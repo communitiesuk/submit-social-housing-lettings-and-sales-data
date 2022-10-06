@@ -348,7 +348,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_05_150022) do
     t.integer "age2"
     t.integer "age2_known"
     t.string "relat2"
-    t.string "otherrelat2"
     t.string "sex2"
     t.integer "noint"
     t.integer "buy2livein"
