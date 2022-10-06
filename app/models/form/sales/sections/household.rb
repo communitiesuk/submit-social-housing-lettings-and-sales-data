@@ -5,6 +5,9 @@ class Form::Sales::Sections::Household < ::Form::Section
     @label = "About the household"
     @description = ""
     @form = form
-    @subsections = [Form::Sales::Subsections::HouseholdCharacteristics.new(nil, nil, self)] || []
+    @subsections = [
+      Form::Sales::Subsections::HouseholdCharacteristics.new(nil, nil, self),
+      Form::Sales::Subsections::HouseholdNeeds.new(nil, nil, self),
+    ]
   end
 end

@@ -32,15 +32,19 @@
                     }
                   },
                   "conditional_for": {
-                    "postcode_full": [1]
+                    "postcode_full": [
+                      1
+                    ]
                   },
                   "hidden_in_check_answers": {
-                    "depends_on": [{
-                      "postcode_known": 0
-                    },
-                    {
-                      "postcode_known": 1
-                    }]
+                    "depends_on": [
+                      {
+                        "postcode_known": 0
+                      },
+                      {
+                        "postcode_known": 1
+                      }
+                    ]
                   }
                 },
                 "postcode_full": {
@@ -772,7 +776,11 @@
               ]
             },
             "void_date_value_check": {
-              "depends_on": [{ "voiddate_in_soft_range?": true }],
+              "depends_on": [
+                {
+                  "voiddate_in_soft_range?": true
+                }
+              ],
               "title_text": {
                 "translation": "soft_validations.void_date.title_text"
               },
@@ -839,7 +847,9 @@
                     }
                   },
                   "conditional_for": {
-                    "mrcdate": [1]
+                    "mrcdate": [
+                      1
+                    ]
                   }
                 },
                 "mrcdate": {
@@ -901,7 +911,11 @@
               ]
             },
             "property_major_repairs_value_check": {
-              "depends_on": [{ "major_repairs_date_in_soft_range?": true }],
+              "depends_on": [
+                {
+                  "major_repairs_date_in_soft_range?": true
+                }
+              ],
               "title_text": {
                 "translation": "soft_validations.major_repairs_date.title_text"
               },
@@ -1018,7 +1032,9 @@
                     }
                   },
                   "conditional_for": {
-                    "tenancyother": [3]
+                    "tenancyother": [
+                      3
+                    ]
                   }
                 },
                 "tenancyother": {
@@ -1063,7 +1079,9 @@
                     }
                   },
                   "conditional_for": {
-                    "tenancyother": [3]
+                    "tenancyother": [
+                      3
+                    ]
                   }
                 },
                 "tenancyother": {
@@ -1160,7 +1178,7 @@
               "questions": {
                 "declaration": {
                   "header": "",
-                  "guidance_partial": "privacy_notice",
+                  "guidance_partial": "privacy_notice_tenant",
                   "check_answer_label": "Tenant has seen the privacy notice",
                   "check_answers_card_number": 0,
                   "type": "checkbox",
@@ -1188,10 +1206,18 @@
                   "width": 2
                 }
               },
-              "depends_on": [{ "declaration": 1 }]
+              "depends_on": [
+                {
+                  "declaration": 1
+                }
+              ]
             },
             "no_females_pregnant_household_lead_hhmemb_value_check": {
-              "depends_on": [{ "no_females_in_a_pregnant_household?": true }],
+              "depends_on": [
+                {
+                  "no_females_in_a_pregnant_household?": true
+                }
+              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -1290,7 +1316,9 @@
                     }
                   },
                   "conditional_for": {
-                    "age1": [0]
+                    "age1": [
+                      0
+                    ]
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
@@ -1320,10 +1348,18 @@
                   }
                 }
               },
-              "depends_on": [{ "declaration": 1 }]
+              "depends_on": [
+                {
+                  "declaration": 1
+                }
+              ]
             },
             "no_females_pregnant_household_lead_age_value_check": {
-              "depends_on": [{ "no_females_in_a_pregnant_household?": true }],
+              "depends_on": [
+                {
+                  "no_females_in_a_pregnant_household?": true
+                }
+              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -1433,10 +1469,18 @@
                   }
                 }
               },
-              "depends_on": [{ "declaration": 1 }]
+              "depends_on": [
+                {
+                  "declaration": 1
+                }
+              ]
             },
             "no_females_pregnant_household_lead_value_check": {
-              "depends_on": [{ "no_females_in_a_pregnant_household?": true }],
+              "depends_on": [
+                {
+                  "no_females_in_a_pregnant_household?": true
+                }
+              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -1552,7 +1596,11 @@
                   }
                 }
               },
-              "depends_on": [{ "declaration": 1 }]
+              "depends_on": [
+                {
+                  "declaration": 1
+                }
+              ]
             },
             "lead_tenant_ethnic_background_arab": {
               "header": "",
@@ -1574,7 +1622,11 @@
                   }
                 }
               },
-              "depends_on": [{ "ethnic_group": 4 }]
+              "depends_on": [
+                {
+                  "ethnic_group": 4
+                }
+              ]
             },
             "lead_tenant_ethnic_background_asian": {
               "header": "",
@@ -1605,7 +1657,11 @@
                   }
                 }
               },
-              "depends_on": [{ "ethnic_group": 2 }]
+              "depends_on": [
+                {
+                  "ethnic_group": 2
+                }
+              ]
             },
             "lead_tenant_ethnic_background_black": {
               "header": "",
@@ -1630,7 +1686,11 @@
                   }
                 }
               },
-              "depends_on": [{ "ethnic_group": 3 }]
+              "depends_on": [
+                {
+                  "ethnic_group": 3
+                }
+              ]
             },
             "lead_tenant_ethnic_background_mixed": {
               "header": "",
@@ -1658,7 +1718,11 @@
                   }
                 }
               },
-              "depends_on": [{ "ethnic_group": 1 }]
+              "depends_on": [
+                {
+                  "ethnic_group": 1
+                }
+              ]
             },
             "lead_tenant_ethnic_background_white": {
               "header": "",
@@ -1686,7 +1750,11 @@
                   }
                 }
               },
-              "depends_on": [{ "ethnic_group": 0 }]
+              "depends_on": [
+                {
+                  "ethnic_group": 0
+                }
+              ]
             },
             "lead_tenant_nationality": {
               "header": "",
@@ -1718,7 +1786,11 @@
                   }
                 }
               },
-              "depends_on": [{ "declaration": 1 }]
+              "depends_on": [
+                {
+                  "declaration": 1
+                }
+              ]
             },
             "lead_tenant_working_situation": {
               "header": "",
@@ -1767,10 +1839,18 @@
                   }
                 }
               },
-              "depends_on": [{ "declaration": 1 }]
+              "depends_on": [
+                {
+                  "declaration": 1
+                }
+              ]
             },
             "lead_tenant_under_retirement_value_check": {
-              "depends_on": [{ "person_1_retired_under_soft_min_age?": true }],
+              "depends_on": [
+                {
+                  "person_1_retired_under_soft_min_age?": true
+                }
+              ],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
@@ -1825,7 +1905,9 @@
             },
             "lead_tenant_over_retirement_value_check": {
               "depends_on": [
-                { "person_1_not_retired_over_soft_max_age?": true }
+                {
+                  "person_1_not_retired_over_soft_max_age?": true
+                }
               ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
@@ -1977,7 +2059,9 @@
                     }
                   },
                   "conditional_for": {
-                    "age2": [0]
+                    "age2": [
+                      0
+                    ]
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
@@ -2015,7 +2099,10 @@
             },
             "no_females_pregnant_household_person_2_age_value_check": {
               "depends_on": [
-                { "no_females_in_a_pregnant_household?": true, "age2_known": 0 }
+                {
+                  "no_females_in_a_pregnant_household?": true,
+                  "age2_known": 0
+                }
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -2259,8 +2346,15 @@
                     "9": {
                       "value": "Child under 16",
                       "depends_on": [
-                        { "age2_known": 1 },
-                        { "age2": { "operator": "<", "operand": 16 } }
+                        {
+                          "age2_known": 1
+                        },
+                        {
+                          "age2": {
+                            "operator": "<",
+                            "operand": 16
+                          }
+                        }
                       ]
                     },
                     "0": {
@@ -2290,7 +2384,11 @@
               ]
             },
             "person_2_under_retirement_value_check": {
-              "depends_on": [{ "person_2_retired_under_soft_min_age?": true }],
+              "depends_on": [
+                {
+                  "person_2_retired_under_soft_min_age?": true
+                }
+              ],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
@@ -2345,7 +2443,9 @@
             },
             "person_2_over_retirement_value_check": {
               "depends_on": [
-                { "person_2_not_retired_over_soft_max_age?": true }
+                {
+                  "person_2_not_retired_over_soft_max_age?": true
+                }
               ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
@@ -2494,7 +2594,9 @@
                     }
                   },
                   "conditional_for": {
-                    "age3": [0]
+                    "age3": [
+                      0
+                    ]
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
@@ -2532,7 +2634,10 @@
             },
             "no_females_pregnant_household_person_3_age_value_check": {
               "depends_on": [
-                { "no_females_in_a_pregnant_household?": true, "age3_known": 0 }
+                {
+                  "no_females_in_a_pregnant_household?": true,
+                  "age3_known": 0
+                }
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -2776,8 +2881,15 @@
                     "9": {
                       "value": "Child under 16",
                       "depends_on": [
-                        { "age3_known": 1 },
-                        { "age3": { "operator": "<", "operand": 16 } }
+                        {
+                          "age3_known": 1
+                        },
+                        {
+                          "age3": {
+                            "operator": "<",
+                            "operand": 16
+                          }
+                        }
                       ]
                     },
                     "0": {
@@ -2807,7 +2919,11 @@
               ]
             },
             "person_3_under_retirement_value_check": {
-              "depends_on": [{ "person_3_retired_under_soft_min_age?": true }],
+              "depends_on": [
+                {
+                  "person_3_retired_under_soft_min_age?": true
+                }
+              ],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
@@ -2862,7 +2978,9 @@
             },
             "person_3_over_retirement_value_check": {
               "depends_on": [
-                { "person_3_not_retired_over_soft_max_age?": true }
+                {
+                  "person_3_not_retired_over_soft_max_age?": true
+                }
               ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
@@ -3008,7 +3126,9 @@
                     }
                   },
                   "conditional_for": {
-                    "age4": [0]
+                    "age4": [
+                      0
+                    ]
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
@@ -3046,7 +3166,10 @@
             },
             "no_females_pregnant_household_person_4_age_value_check": {
               "depends_on": [
-                { "no_females_in_a_pregnant_household?": true, "age4_known": 0 }
+                {
+                  "no_females_in_a_pregnant_household?": true,
+                  "age4_known": 0
+                }
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -3290,8 +3413,15 @@
                     "9": {
                       "value": "Child under 16",
                       "depends_on": [
-                        { "age4_known": 1 },
-                        { "age4": { "operator": "<", "operand": 16 } }
+                        {
+                          "age4_known": 1
+                        },
+                        {
+                          "age4": {
+                            "operator": "<",
+                            "operand": 16
+                          }
+                        }
                       ]
                     },
                     "0": {
@@ -3321,7 +3451,11 @@
               ]
             },
             "person_4_under_retirement_value_check": {
-              "depends_on": [{ "person_4_retired_under_soft_min_age?": true }],
+              "depends_on": [
+                {
+                  "person_4_retired_under_soft_min_age?": true
+                }
+              ],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
@@ -3376,7 +3510,9 @@
             },
             "person_4_over_retirement_value_check": {
               "depends_on": [
-                { "person_4_not_retired_over_soft_max_age?": true }
+                {
+                  "person_4_not_retired_over_soft_max_age?": true
+                }
               ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
@@ -3519,7 +3655,9 @@
                     }
                   },
                   "conditional_for": {
-                    "age5": [0]
+                    "age5": [
+                      0
+                    ]
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
@@ -3557,7 +3695,10 @@
             },
             "no_females_pregnant_household_person_5_age_value_check": {
               "depends_on": [
-                { "no_females_in_a_pregnant_household?": true, "age5_known": 0 }
+                {
+                  "no_females_in_a_pregnant_household?": true,
+                  "age5_known": 0
+                }
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -3801,8 +3942,15 @@
                     "9": {
                       "value": "Child under 16",
                       "depends_on": [
-                        { "age5_known": 1 },
-                        { "age5": { "operator": "<", "operand": 16 } }
+                        {
+                          "age5_known": 1
+                        },
+                        {
+                          "age5": {
+                            "operator": "<",
+                            "operand": 16
+                          }
+                        }
                       ]
                     },
                     "0": {
@@ -3832,7 +3980,11 @@
               ]
             },
             "person_5_under_retirement_value_check": {
-              "depends_on": [{ "person_5_retired_under_soft_min_age?": true }],
+              "depends_on": [
+                {
+                  "person_5_retired_under_soft_min_age?": true
+                }
+              ],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
@@ -3887,7 +4039,9 @@
             },
             "person_5_over_retirement_value_check": {
               "depends_on": [
-                { "person_5_not_retired_over_soft_max_age?": true }
+                {
+                  "person_5_not_retired_over_soft_max_age?": true
+                }
               ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
@@ -4027,7 +4181,9 @@
                     }
                   },
                   "conditional_for": {
-                    "age6": [0]
+                    "age6": [
+                      0
+                    ]
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
@@ -4065,7 +4221,10 @@
             },
             "no_females_pregnant_household_person_6_age_value_check": {
               "depends_on": [
-                { "no_females_in_a_pregnant_household?": true, "age6_known": 0 }
+                {
+                  "no_females_in_a_pregnant_household?": true,
+                  "age6_known": 0
+                }
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -4309,8 +4468,15 @@
                     "9": {
                       "value": "Child under 16",
                       "depends_on": [
-                        { "age6_known": 1 },
-                        { "age6": { "operator": "<", "operand": 16 } }
+                        {
+                          "age6_known": 1
+                        },
+                        {
+                          "age6": {
+                            "operator": "<",
+                            "operand": 16
+                          }
+                        }
                       ]
                     },
                     "0": {
@@ -4340,7 +4506,11 @@
               ]
             },
             "person_6_under_retirement_value_check": {
-              "depends_on": [{ "person_6_retired_under_soft_min_age?": true }],
+              "depends_on": [
+                {
+                  "person_6_retired_under_soft_min_age?": true
+                }
+              ],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
@@ -4395,7 +4565,9 @@
             },
             "person_6_over_retirement_value_check": {
               "depends_on": [
-                { "person_6_not_retired_over_soft_max_age?": true }
+                {
+                  "person_6_not_retired_over_soft_max_age?": true
+                }
               ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
@@ -4532,7 +4704,9 @@
                     }
                   },
                   "conditional_for": {
-                    "age7": [0]
+                    "age7": [
+                      0
+                    ]
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
@@ -4570,7 +4744,10 @@
             },
             "no_females_pregnant_household_person_7_age_value_check": {
               "depends_on": [
-                { "no_females_in_a_pregnant_household?": true, "age7_known": 0 }
+                {
+                  "no_females_in_a_pregnant_household?": true,
+                  "age7_known": 0
+                }
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -4814,8 +4991,15 @@
                     "9": {
                       "value": "Child under 16",
                       "depends_on": [
-                        { "age7_known": 1 },
-                        { "age7": { "operator": "<", "operand": 16 } }
+                        {
+                          "age7_known": 1
+                        },
+                        {
+                          "age7": {
+                            "operator": "<",
+                            "operand": 16
+                          }
+                        }
                       ]
                     },
                     "0": {
@@ -4845,7 +5029,11 @@
               ]
             },
             "person_7_under_retirement_value_check": {
-              "depends_on": [{ "person_7_retired_under_soft_min_age?": true }],
+              "depends_on": [
+                {
+                  "person_7_retired_under_soft_min_age?": true
+                }
+              ],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
@@ -4900,7 +5088,9 @@
             },
             "person_7_over_retirement_value_check": {
               "depends_on": [
-                { "person_7_not_retired_over_soft_max_age?": true }
+                {
+                  "person_7_not_retired_over_soft_max_age?": true
+                }
               ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
@@ -5034,7 +5224,9 @@
                     }
                   },
                   "conditional_for": {
-                    "age8": [0]
+                    "age8": [
+                      0
+                    ]
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
@@ -5072,7 +5264,10 @@
             },
             "no_females_pregnant_household_person_8_age_value_check": {
               "depends_on": [
-                { "no_females_in_a_pregnant_household?": true, "age8_known": 0 }
+                {
+                  "no_females_in_a_pregnant_household?": true,
+                  "age8_known": 0
+                }
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -5316,8 +5511,15 @@
                     "9": {
                       "value": "Child under 16",
                       "depends_on": [
-                        { "age8_known": 1 },
-                        { "age8": { "operator": "<", "operand": 16 } }
+                        {
+                          "age8_known": 1
+                        },
+                        {
+                          "age8": {
+                            "operator": "<",
+                            "operand": 16
+                          }
+                        }
                       ]
                     },
                     "0": {
@@ -5347,7 +5549,11 @@
               ]
             },
             "person_8_under_retirement_value_check": {
-              "depends_on": [{ "person_8_retired_under_soft_min_age?": true }],
+              "depends_on": [
+                {
+                  "person_8_retired_under_soft_min_age?": true
+                }
+              ],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
@@ -5402,7 +5608,9 @@
             },
             "person_8_over_retirement_value_check": {
               "depends_on": [
-                { "person_8_not_retired_over_soft_max_age?": true }
+                {
+                  "person_8_not_retired_over_soft_max_age?": true
+                }
               ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
@@ -5596,7 +5804,11 @@
               }
             },
             "no_females_pregnant_household_value_check": {
-              "depends_on": [{ "no_females_in_a_pregnant_household?": true }],
+              "depends_on": [
+                {
+                  "no_females_in_a_pregnant_household?": true
+                }
+              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -5664,7 +5876,8 @@
                 "pregnancy_value_check": {
                   "check_answer_label": "Pregnancy confirmation",
                   "hidden_in_check_answers": {
-                    "depends_on": [{
+                    "depends_on": [
+                      {
                         "pregnancy_value_check": 0
                       },
                       {
@@ -6051,7 +6264,9 @@
                     }
                   },
                   "conditional_for": {
-                    "reasonother": [20]
+                    "reasonother": [
+                      20
+                    ]
                   }
                 },
                 "reasonother": {
@@ -6242,7 +6457,9 @@
                     }
                   },
                   "conditional_for": {
-                    "ppostcode_full": [1]
+                    "ppostcode_full": [
+                      1
+                    ]
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
@@ -6303,7 +6520,9 @@
                     }
                   },
                   "conditional_for": {
-                    "prevloc": [1]
+                    "prevloc": [
+                      1
+                    ]
                   }
                 },
                 "prevloc": {
@@ -7134,8 +7353,14 @@
               }
             },
             "net_income_value_check": {
-              "depends_on": [{ "net_income_soft_validation_triggered?": true }],
-              "title_text": { "translation": "soft_validations.net_income.title_text" },
+              "depends_on": [
+                {
+                  "net_income_soft_validation_triggered?": true
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.net_income.title_text"
+              },
               "informative_text": {
                 "translation": "soft_validations.net_income.hint_text",
                 "arguments": [
@@ -7330,7 +7555,9 @@
                     }
                   },
                   "conditional_for": {
-                    "chcharge": [1]
+                    "chcharge": [
+                      1
+                    ]
                   }
                 },
                 "chcharge": {
@@ -7425,7 +7652,9 @@
                     }
                   },
                   "conditional_for": {
-                    "chcharge": [1]
+                    "chcharge": [
+                      1
+                    ]
                   }
                 },
                 "chcharge": {
@@ -7470,7 +7699,9 @@
                     }
                   },
                   "conditional_for": {
-                    "chcharge": [1]
+                    "chcharge": [
+                      1
+                    ]
                   }
                 },
                 "chcharge": {
@@ -7515,7 +7746,9 @@
                     }
                   },
                   "conditional_for": {
-                    "chcharge": [1]
+                    "chcharge": [
+                      1
+                    ]
                   }
                 },
                 "chcharge": {
@@ -7556,7 +7789,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -7570,7 +7808,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -7584,7 +7827,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -7598,7 +7846,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -7614,7 +7867,12 @@
                   "suffix": " every week",
                   "readonly": true,
                   "requires_js": true,
-                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
+                  "fields_added": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ]
                 }
               },
               "depends_on": [
@@ -7754,7 +8012,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 2 weeks",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -7768,7 +8031,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 2 weeks",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -7782,7 +8050,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 2 weeks",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -7796,7 +8069,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 2 weeks",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -7812,7 +8090,12 @@
                   "suffix": " every 2 weeks",
                   "readonly": true,
                   "requires_js": true,
-                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
+                  "fields_added": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ]
                 }
               },
               "depends_on": [
@@ -7852,7 +8135,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 4 weeks",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -7866,7 +8154,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 4 weeks",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -7880,7 +8173,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 4 weeks",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -7894,7 +8192,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 4 weeks",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -7910,7 +8213,12 @@
                   "suffix": " every 4 weeks",
                   "readonly": true,
                   "requires_js": true,
-                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
+                  "fields_added": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ]
                 }
               },
               "depends_on": [
@@ -7950,7 +8258,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every month",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -7964,7 +8277,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every month",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -7978,7 +8296,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every month",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -7992,7 +8315,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every month",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -8008,7 +8336,12 @@
                   "suffix": " every month",
                   "readonly": true,
                   "requires_js": true,
-                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
+                  "fields_added": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ]
                 }
               },
               "depends_on": [
@@ -8035,7 +8368,11 @@
               ]
             },
             "min_rent_value_check": {
-              "depends_on": [{ "rent_in_soft_min_range?": true }],
+              "depends_on": [
+                {
+                  "rent_in_soft_min_range?": true
+                }
+              ],
               "title_text": {
                 "translation": "soft_validations.rent.min.title_text",
                 "arguments": [
@@ -8088,7 +8425,11 @@
               }
             },
             "max_rent_value_check": {
-              "depends_on": [{ "rent_in_soft_max_range?": true }],
+              "depends_on": [
+                {
+                  "rent_in_soft_max_range?": true
+                }
+              ],
               "title_text": {
                 "translation": "soft_validations.rent.max.title_text",
                 "arguments": [
@@ -8199,7 +8540,9 @@
                     }
                   },
                   "conditional_for": {
-                    "tshortfall": [0]
+                    "tshortfall": [
+                      0
+                    ]
                   }
                 },
                 "tshortfall": {
@@ -8213,39 +8556,57 @@
                   "suffix": [
                     {
                       "label": " every 2 weeks",
-                      "depends_on": { "period": 2 }
+                      "depends_on": {
+                        "period": 2
+                      }
                     },
                     {
                       "label": " every 4 weeks",
-                      "depends_on": { "period": 3 }
+                      "depends_on": {
+                        "period": 3
+                      }
                     },
                     {
                       "label": " every calendar month",
-                      "depends_on": { "period": 4 }
+                      "depends_on": {
+                        "period": 4
+                      }
                     },
                     {
                       "label": " every week for 50 weeks",
-                      "depends_on": { "period": 5 }
+                      "depends_on": {
+                        "period": 5
+                      }
                     },
                     {
                       "label": " every week for 49 weeks",
-                      "depends_on": { "period": 6 }
+                      "depends_on": {
+                        "period": 6
+                      }
                     },
                     {
                       "label": " every week for 48 weeks",
-                      "depends_on": { "period": 7 }
+                      "depends_on": {
+                        "period": 7
+                      }
                     },
                     {
                       "label": " every week for 47 weeks",
-                      "depends_on": { "period": 8 }
+                      "depends_on": {
+                        "period": 8
+                      }
                     },
                     {
                       "label": " every week for 46 weeks",
-                      "depends_on": { "period": 9 }
+                      "depends_on": {
+                        "period": 9
+                      }
                     },
                     {
                       "label": " every week for 52 weeks",
-                      "depends_on": { "period": 1 }
+                      "depends_on": {
+                        "period": 1
+                      }
                     }
                   ]
                 }

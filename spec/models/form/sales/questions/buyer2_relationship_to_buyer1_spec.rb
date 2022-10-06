@@ -43,20 +43,4 @@ RSpec.describe Form::Sales::Questions::Buyer2RelationshipToBuyer1, type: :model 
       "R" => { "value" => "Buyer prefers not to say" },
     })
   end
-
-  it "has correct conditional for" do
-    expect(question.conditional_for).to eq({
-      "otherrelat2" => %w[X],
-    })
-  end
-
-  it "has correct hidden in check answers" do
-    expect(question.hidden_in_check_answers).to eq({
-      "depends_on" => [
-        {
-          "relat2" => "X",
-        },
-      ],
-    })
-  end
 end

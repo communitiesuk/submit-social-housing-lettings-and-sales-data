@@ -8,16 +8,6 @@ class Form::Sales::Questions::Buyer2RelationshipToBuyer1 < ::Form::Question
     @hint_text = ""
     @page = page
     @answer_options = ANSWER_OPTIONS
-    @conditional_for = {
-      "otherrelat2" => %w[X],
-    }
-    @hidden_in_check_answers = {
-      "depends_on" => [
-        {
-          "relat2" => "X",
-        },
-      ],
-    }
   end
 
   ANSWER_OPTIONS = {

@@ -206,7 +206,7 @@ RSpec.describe Form, type: :model do
     end
   end
 
-  describe "when creating a sales log" do
+  describe "when creating a sales log", :aggregate_failures do
     it "creates a valid sales form" do
       sections = []
       form = described_class.new(nil, 2022, sections, "sales")

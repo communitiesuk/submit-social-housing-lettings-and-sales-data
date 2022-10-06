@@ -372,10 +372,6 @@ class LettingsLog < Log
     hb == 7
   end
 
-  def ethnic_refused?
-    ethnic_group == 17
-  end
-
   def receives_housing_related_benefits?
     if collection_start_year <= 2021
       receives_housing_benefit_only? || receives_uc_with_housing_element_excl_housing_benefit? ||

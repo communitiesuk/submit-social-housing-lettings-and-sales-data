@@ -22,7 +22,11 @@
                   "type": "text"
                 }
               },
-              "depends_on": [{"test": "Yes"}]
+              "depends_on": [
+                {
+                  "test": "Yes"
+                }
+              ]
             },
             "person_1_age": {
               "header": "",

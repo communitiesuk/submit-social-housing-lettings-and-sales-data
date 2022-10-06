@@ -12,7 +12,12 @@ RSpec.describe Form::Sales::Sections::Household, type: :model do
   end
 
   it "has correct subsections" do
-    expect(household.subsections.map(&:id)).to eq(%w[household_characteristics])
+    expect(household.subsections.map(&:id)).to eq(
+      %w[
+        household_characteristics
+        household_needs
+      ],
+    )
   end
 
   it "has the correct id" do
