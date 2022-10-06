@@ -12,7 +12,7 @@ RSpec.describe Form::Sales::Pages::Buyer2RelationshipToBuyer1, type: :model do
   end
 
   it "has correct questions" do
-    expect(page.questions.map(&:id)).to eq(%w[relat2 otherrelat2])
+    expect(page.questions.map(&:id)).to eq(%w[relat2])
   end
 
   it "has the correct id" do
