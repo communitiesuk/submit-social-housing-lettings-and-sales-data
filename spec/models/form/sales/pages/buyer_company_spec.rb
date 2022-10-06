@@ -26,4 +26,10 @@ RSpec.describe Form::Sales::Pages::BuyerCompany, type: :model do
   it "has the correct description" do
     expect(page.description).to eq("")
   end
+
+  it "has correct depends_on" do
+    expect(page.depends_on).to eq([{
+      "ownershipsch" => 3,
+    }])
+  end
 end
