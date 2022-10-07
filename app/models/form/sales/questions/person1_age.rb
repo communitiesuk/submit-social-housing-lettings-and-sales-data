@@ -9,4 +9,3 @@ class Form::Sales::Questions::Person1Age < ::Form::Question
     @width = 3
   end
 end
-
