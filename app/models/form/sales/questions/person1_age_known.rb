@@ -18,7 +18,6 @@ class Form::Sales::Questions::Person1AgeKnown < ::Form::Question
         },
       ],
     }
-    @hide
   end
 
   ANSWER_OPTIONS = {
