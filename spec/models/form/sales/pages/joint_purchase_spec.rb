@@ -28,14 +28,10 @@ RSpec.describe Form::Sales::Pages::JointPurchase, type: :model do
   end
 
   it "has correct depends_on" do
-    expect(page.depends_on).to eq([{
-      "ownershipsch" => 1,
-    },
-                                   {
-                                     "ownershipsch" => 2,
-                                   },
-                                   {
-                                     "companybuy" => 2,
-                                   }])
+    expect(page.depends_on).to eq([
+      { "ownershipsch" => 1 },
+      { "ownershipsch" => 2 },
+      { "companybuy" => 2 },
+    ])
   end
 end
