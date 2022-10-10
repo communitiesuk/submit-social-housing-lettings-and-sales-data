@@ -1,9 +1,9 @@
-class Form::Sales::Questions::Person2Known < ::Form::Question
+class Form::Sales::Questions::PersonXKnown < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "details_known_2"
-    @check_answer_label = "Details known for person 2"
-    @header = "Do you know the details for person 2?"
+    @check_answer_label = "Details known for person X"
+    @header = "Do you know the details for person X?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @page = page

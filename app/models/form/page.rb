@@ -41,4 +41,8 @@ private
       q.conditional_for.keys if q.type == "radio"
     }.compact
   end
+
+  def person_x_known_id
+    "person_x_known"
+  end
 end
