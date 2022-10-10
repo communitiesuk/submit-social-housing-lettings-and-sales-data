@@ -5,6 +5,11 @@ class Form::Sales::Pages::JointPurchase < ::Form::Page
     @header = ""
     @description = ""
     @subsection = subsection
+    @depends_on = [
+      { "ownershipsch" => 1 },
+      { "ownershipsch" => 2 },
+      { "companybuy" => 2 },
+    ]
   end
 
   def questions
