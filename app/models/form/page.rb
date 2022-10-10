@@ -1,5 +1,5 @@
 class Form::Page
-  attr_accessor :id, :header, :description, :questions, :depends_on, :title_text,
+  attr_accessor :id, :header, :header_partial, :description, :questions, :depends_on, :title_text,
                 :informative_text, :subsection, :hide_subsection_label
 
   def initialize(id, hsh, subsection)
@@ -7,6 +7,7 @@ class Form::Page
     @subsection = subsection
     if hsh
       @header = hsh["header"]
+      @header_partial = hsh["header_partial"]
       @description = hsh["description"]
       @questions = hsh["questions"].map { |q_id, q| Form::Question.new(q_id, q, self) }
       @depends_on = hsh["depends_on"]

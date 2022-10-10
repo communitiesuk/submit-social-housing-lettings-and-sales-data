@@ -41,6 +41,7 @@ FactoryBot.define do
       wheel { 1 }
       age3_known { 0 }
       age3 { 40 }
+      person2_known { 1 }
     end
   end
 end
