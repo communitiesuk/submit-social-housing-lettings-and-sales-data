@@ -1,5 +1,5 @@
 class Form::Question
-  attr_accessor :id, :header, :header_partial, :hint_text, :description, :questions,
+  attr_accessor :id, :header, :hint_text, :description, :questions,
                 :type, :min, :max, :step, :width, :fields_to_add, :result_field,
                 :conditional_for, :readonly, :answer_options, :page, :check_answer_label,
                 :inferred_answers, :hidden_in_check_answers, :inferred_check_answers_value,
@@ -16,7 +16,6 @@ class Form::Question
     if hsh
       @check_answer_label = hsh["check_answer_label"]
       @header = hsh["header"]
-      @header_partial = hsh["header_partial"]
       @guidance_partial = hsh["guidance_partial"]
       @guidance_position = GuidancePosition::TOP
       @hint_text = hsh["hint_text"]

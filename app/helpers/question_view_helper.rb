@@ -7,7 +7,7 @@ module QuestionViewHelper
 
   def legend(question, page_header, conditional)
     {
-      text: question.header_partial.present? ? question.header_partial.html_safe : question.header.html_safe,
+      text: question.header.html_safe,
       size: label_size(page_header, conditional),
       tag: label_tag(page_header, conditional),
     }

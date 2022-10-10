@@ -3,8 +3,7 @@ class Form::Sales::Questions::Person2Known < ::Form::Question
     super
     @id = "details_known_2"
     @check_answer_label = "Details known for person 2"
-    @header = "Do you know the details for person 2?
-"
+    @header = "Do you know the details for person 2?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @page = page
