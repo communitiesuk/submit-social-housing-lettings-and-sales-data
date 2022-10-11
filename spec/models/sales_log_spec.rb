@@ -90,4 +90,34 @@ RSpec.describe SalesLog, type: :model do
       expect(described_class.filter_by_organisation([organisation_3]).count).to eq(0)
     end
   end
+
+  # Rails helper validations only. Custom validations belong in their respective
+  # validations spec
+  describe "validations" do
+    describe "beds" do
+      context "when valid" do
+        it "is between 1 and 9" do
+          sales_log = FactoryBot.build(:sales_log, beds: 4)
+
+          expect(sales_log).to be_valid
+        end
+      end
+
+      context "when invalid" do
+        it "is not an integer" do
+          sales_log = FactoryBot.build(:sales_log, beds: "Four")
+
+          expect(sales_log).to_not be_valid
+          expect(sales_log.errors.message[:beds]).to eq ["is invalid"]
+        end
+
+        it "is a negative number" do
+          sales_log = FactoryBot.build(:sales_log, beds: -4)
+
+          expect(sales_log).to_not be_valid
+          expect(sales_log.errors.message[:beds]).to eq ["is invalid"]
+        end
+      end
+    end
+  end
 end

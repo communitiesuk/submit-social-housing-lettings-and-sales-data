@@ -8,6 +8,7 @@ class LettingsLogValidator < ActiveModel::Validator
   include Validations::TenancyValidations
   include Validations::DateValidations
   include Validations::LocalAuthorityValidations
+
   def validate(record)
     validation_methods = public_methods.select { |method| method.starts_with?("validate_") }
     validation_methods.each { |meth| public_send(meth, record) }

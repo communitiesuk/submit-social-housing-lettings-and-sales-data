@@ -5,12 +5,14 @@ FactoryBot.define do
     managing_organisation { created_by.organisation }
     created_at { Time.utc(2022, 2, 8, 16, 52, 15) }
     updated_at { Time.utc(2022, 2, 8, 16, 52, 15) }
+
     trait :in_progress do
       purchid { "PC123" }
       ownershipsch { 2 }
       type { 8 }
       saledate { Time.utc(2022, 2, 2, 10, 36, 49) }
     end
+
     trait :completed do
       purchid { "PC123" }
       ownershipsch { 2 }
@@ -41,6 +43,11 @@ FactoryBot.define do
       wheel { 1 }
       age3_known { 0 }
       age3 { 40 }
+    end
+
+    trait :bedsit do
+      proptype { 2 }
+      beds { 1 }
     end
   end
 end
