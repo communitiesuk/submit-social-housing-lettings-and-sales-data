@@ -60,8 +60,8 @@ class Form
     page_index = page_ids.index(page.id)
     page_id = if page.id.include?("value_check") && log[page.questions[0].id] == 1 && page.routed_to?(log, current_user)
                 previous_page(page_ids, page_index, log, current_user)
-              elsif page.id == ("person_x_known")
-                "person_1_age"
+              elsif page.id == ("person_2_known")
+                "person_2_age"
               else
                 page_ids[page_index + 1]
               end
