@@ -8,7 +8,7 @@ class Form::Page
     if hsh
       @header = hsh["header"]
       @description = hsh["description"]
-      @questions = hsh["questions"].map { |q_id, q| Form::Question.new(q_id, q, self) }
+      @questions = hsh["questions"].map { |q_id, q| puts "New FORM for q: #{q.inspect}"; Form::Question.new(q_id, q, self) }
       @depends_on = hsh["depends_on"]
       @title_text = hsh["title_text"]
       @informative_text = hsh["informative_text"]

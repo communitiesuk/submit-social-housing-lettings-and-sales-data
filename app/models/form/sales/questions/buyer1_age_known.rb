@@ -6,6 +6,7 @@ class Form::Sales::Questions::Buyer1AgeKnown < ::Form::Question
     @header = "Do you know buyer 1’s age?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
+    @summary_labels = SUMMARY_LABELS
     @page = page
     @hint_text = "Buyer 1 is the person in the household who does the most paid work. If it’s a joint purchase and the buyers do the same amount of paid work, buyer 1 is whoever is the oldest."
     @conditional_for = {
@@ -16,6 +17,12 @@ class Form::Sales::Questions::Buyer1AgeKnown < ::Form::Question
   ANSWER_OPTIONS = {
     "0" => { "value" => "Yes" },
     "1" => { "value" => "No" },
+    "2" => { "value" => "Buyer prefers not to say" },
+  }.freeze
+
+  SUMMARY_LABELS = {
+    "0" => { "value" => "Yes" },
+    "1" => { "value" => "Not known" },
     "2" => { "value" => "Buyer prefers not to say" },
   }.freeze
 end

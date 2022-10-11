@@ -1,7 +1,7 @@
 class Form::Question
   attr_accessor :id, :header, :hint_text, :description, :questions,
                 :type, :min, :max, :step, :width, :fields_to_add, :result_field,
-                :conditional_for, :readonly, :answer_options, :page, :check_answer_label,
+                :conditional_for, :readonly, :answer_options, :summary_labels, :page, :check_answer_label,
                 :inferred_answers, :hidden_in_check_answers, :inferred_check_answers_value,
                 :guidance_partial, :prefix, :suffix, :requires_js, :fields_added, :derived, :check_answers_card_number
 
@@ -27,7 +27,8 @@ class Form::Question
       @fields_to_add = hsh["fields-to-add"]
       @result_field = hsh["result-field"]
       @readonly = hsh["readonly"]
-      @answer_options = hsh["answer_options"]
+      @answer_options = (hsh["answer_options"] || {}).merge(hsh["summary_labels"] || {})
+      @summary_labels = hsh["summary_labels"]
       @conditional_for = hsh["conditional_for"]
       @inferred_answers = hsh["inferred_answers"]
       @inferred_check_answers_value = hsh["inferred_check_answers_value"]
@@ -44,7 +45,9 @@ class Form::Question
   delegate :subsection, to: :page
   delegate :form, to: :subsection
 
+  # Used by Summary page
   def answer_label(log)
+    puts "LOG: #{log.type}"
     return checkbox_answer_label(log) if type == "checkbox"
     return log[id]&.to_formatted_s(:govuk_date).to_s if type == "date"
 
@@ -254,6 +257,11 @@ class Form::Question
   def bottom_guidance?
     @guidance_partial && @guidance_position == GuidancePosition::BOTTOM
   end
+
+  # Override display label when showing to a summary page
+  # def answer_options
+
+  # end
 
 private
 
