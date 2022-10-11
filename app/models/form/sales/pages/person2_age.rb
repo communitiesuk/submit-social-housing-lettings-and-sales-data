@@ -6,7 +6,6 @@ class Form::Sales::Pages::Person2Age < ::Form::Page
     @description = ""
     @subsection = subsection
     @depends_on = [
-      { "hholdcount" => 1 },
       { "hholdcount" => 2 },
       { "hholdcount" => 3 },
       { "hholdcount" => 4 },
