@@ -118,6 +118,8 @@ en:
       startdate:
         later_than_14_days_after: "The tenancy start date must not be later than 14 days from today’s date"
         before_scheme_end_date: "The tenancy start date must be before the end date for this supported housing scheme"
+        after_void_date: "Enter a tenancy start date that is after the void date"
+        after_major_repair_date: "Enter a tenancy start date that is after the major repair date"
 
     property:
       mrcdate:

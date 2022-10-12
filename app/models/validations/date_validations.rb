@@ -51,6 +51,14 @@ module Validations::DateValidations
         record.errors.add :startdate, I18n.t("validations.setup.startdate.before_scheme_end_date")
       end
     end
+
+    if record["voiddate"].present? && (record.startdate < record["voiddate"])
+      record.errors.add :startdate, I18n.t("validations.setup.startdate.after_void_date")
+    end
+
+    if record["mrcdate"].present? && (record.startdate < record["mrcdate"])
+      record.errors.add :startdate, I18n.t("validations.setup.startdate.after_major_repair_date")
+    end
   end
 
 private
