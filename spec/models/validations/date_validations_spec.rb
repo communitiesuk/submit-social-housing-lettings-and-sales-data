@@ -41,6 +41,22 @@ RSpec.describe Validations::DateValidations do
         .to include(match I18n.t("validations.setup.startdate.before_scheme_end_date"))
     end
 
+    it "validates that the tenancy start date is after the void date if it has a void date" do
+      record.startdate = Time.zone.local(2022, 1, 1)
+      record.voiddate = Time.zone.local(2022, 2, 1)
+      date_validator.validate_startdate(record)
+      expect(record.errors["startdate"])
+        .to include(match I18n.t("validations.setup.startdate.after_void_date"))
+    end
+
+    it "validates that the tenancy start date is after the major repair date if it has a major repair date" do
+      record.startdate = Time.zone.local(2022, 1, 1)
+      record.mrcdate = Time.zone.local(2022, 2, 1)
+      date_validator.validate_startdate(record)
+      expect(record.errors["startdate"])
+        .to include(match I18n.t("validations.setup.startdate.after_major_repair_date"))
+    end
+
     it "produces no error when the tenancy start date is before the end date of the chosen scheme if it has an end date" do
       record.startdate = Time.zone.today - 30.days
       record.scheme = scheme
