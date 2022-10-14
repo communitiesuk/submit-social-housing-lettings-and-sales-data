@@ -2,7 +2,7 @@ class Form::Sales::Questions::Person3Known < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "details_known_3"
-    @check_answer_label = "Details known for person 3"
+    @check_answer_label = "Details known for person 3?"
     @header = "Do you know the details for person 3?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
