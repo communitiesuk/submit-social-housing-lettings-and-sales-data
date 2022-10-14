@@ -42,6 +42,14 @@ FactoryBot.define do
       age3_known { 0 }
       age3 { 40 }
       person2_known { 1 }
+      age4_known { 0 }
+      age4 { 40 }
+      person3_known { 1 }
+      age5_known { 0 }
+      age5 { 40 }
+      person4_known { 1 }
+      age6_known { 0 }
+      age6 { 40 }
     end
   end
 end
