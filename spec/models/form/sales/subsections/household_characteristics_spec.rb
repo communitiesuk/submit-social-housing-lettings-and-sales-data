@@ -34,8 +34,11 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
         buyer_2_live_in_property
         number_of_others_in_property
         person_1_age
+        person_2_known
         person_2_age
+        person_3_known
         person_3_age
+        person_4_known
         person_4_age
       ],
     )
