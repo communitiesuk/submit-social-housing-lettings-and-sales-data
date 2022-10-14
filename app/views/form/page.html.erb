@@ -16,7 +16,7 @@
           <% if !@page.hide_subsection_label %>
             <span class="govuk-caption-l"><%= @subsection.label %></span>
           <% end %>
-          <%if @page.header_partial.present? %>
+          <% if @page.header_partial.present? %>
             <% @page.header = render partial: "form/headers/#{@page.header_partial}", locals: { hholdcount: @log.hholdcount } %>
           <% end %>
           <%= @page.header %>
