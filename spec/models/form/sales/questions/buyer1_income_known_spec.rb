@@ -44,8 +44,12 @@ RSpec.describe Form::Sales::Questions::Buyer1IncomeKnown, type: :model do
     })
   end
 
-  # TODO
-  xit "has the correct hint" do
-    expect(question.hint_text).to eq("")
+  it "has the correct guidance_partial" do
+    expect(question.guidance_partial).to eq("what_counts_as_income_sales")
+  end
+
+  it "has the correct guidance position", :aggregate_failures do
+    expect(question.bottom_guidance?).to eq(true)
+    expect(question.top_guidance?).to eq(false)
   end
 end
