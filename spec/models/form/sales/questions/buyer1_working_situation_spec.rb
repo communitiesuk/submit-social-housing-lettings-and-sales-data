@@ -43,7 +43,6 @@ RSpec.describe Form::Sales::Questions::Buyer1WorkingSituation, type: :model do
       "0" => { "value" => "Other" },
       "10" => { "value" => "Buyer prefers not to say" },
       "7" => { "value" => "Full-time student" },
-      "9" => { "value" => "Child under 16" },
     })
   end
 end
