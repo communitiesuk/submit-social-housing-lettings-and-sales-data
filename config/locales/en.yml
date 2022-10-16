@@ -92,9 +92,9 @@ en:
         sales_log:
           attributes:
             beds:
-              blank: "Enter the number of bedrooms"
+              blank: "Number of bedrooms must be between 1 and 9"
               invalid: "Number of bedrooms must be between 1 and 9"
-              not_a_number: "Number of bedrooms must be between 1 and 9"
+              not_a_number: "Number of bedrooms must be a digit between 1 and 9"
               not_an_integer: "Number of bedrooms must be a whole number between 1 and 9"
               greater_than: "Number of bedrooms must be between 1 and 9"
               less_than: "Number of bedrooms must be between 1 and 9"

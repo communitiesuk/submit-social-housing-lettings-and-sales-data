@@ -131,7 +131,7 @@ RSpec.describe SalesLog, type: :model do
 
         it "fails with appropriate error message", aggregate_failures: true do
           invalid_beds_values = {
-            "Four" => ["Number of bedrooms must be between 1 and 9", "Number of bedrooms must be between 1 and 9"],
+            "Four" => ["Number of bedrooms must be a digit between 1 and 9", "Number of bedrooms must be between 1 and 9"],
             -2 => ["Number of bedrooms must be between 1 and 9"],
             2.5 => ["Number of bedrooms must be a whole number between 1 and 9"]
           }
