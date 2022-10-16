@@ -95,19 +95,16 @@ RSpec.describe SalesLog, type: :model do
   # validations spec
   describe "validations" do
     describe "#beds" do
-      before do
-        expect(sales_log).to be_valid
-      end
-
       context "when property is a bedsit" do
-        let(:sales_log) {FactoryBot.build(:sales_log, :completed, :bedsit) }
+        let(:sales_log) { FactoryBot.build(:sales_log, :completed, :bedsit) }
 
         # Set error for :beds and :proptype to ensure message is shown in
         # both bedroom number selection and property type selection
         it "must only have 1 bedroom" do
+          expect(sales_log).to be_valid
           sales_log.beds = 3
 
-          expect(sales_log).to_not be_valid
+          expect(sales_log).not_to be_valid
           expect(sales_log.errors[:beds]).to eq ["A bedsit can not have more than 1 bedroom"]
           expect(sales_log.errors[:proptype]).to eq ["A bedsit can not have more than 1 bedroom"]
         end
@@ -117,10 +114,12 @@ RSpec.describe SalesLog, type: :model do
         let(:sales_log) { FactoryBot.build(:sales_log, :completed, beds: 4, proptype: 3) }
 
         it "must have 1 to 9 bedrooms", aggregate_failures: true do
+          expect(sales_log).to be_valid
+
           [0, 10].each do |num_beds|
             sales_log.beds = num_beds
 
-            expect(sales_log).to_not be_valid
+            expect(sales_log).not_to be_valid
             expect(sales_log.errors[:beds]).to eq ["Number of bedrooms must be between 1 and 9"]
           end
         end
@@ -130,16 +129,18 @@ RSpec.describe SalesLog, type: :model do
         let(:sales_log) { FactoryBot.build(:sales_log, :completed) }
 
         it "fails with appropriate error message", aggregate_failures: true do
+          expect(sales_log).to be_valid
+
           invalid_beds_values = {
             "Four" => ["Number of bedrooms must be a digit between 1 and 9", "Number of bedrooms must be between 1 and 9"],
             -2 => ["Number of bedrooms must be between 1 and 9"],
-            2.5 => ["Number of bedrooms must be a whole number between 1 and 9"]
+            2.5 => ["Number of bedrooms must be a whole number between 1 and 9"],
           }
 
           invalid_beds_values.each do |beds_value, expected_error|
             sales_log.beds = beds_value
 
-            expect(sales_log).to_not be_valid
+            expect(sales_log).not_to be_valid
             expect(sales_log.errors[:beds]).to eq expected_error
           end
         end
