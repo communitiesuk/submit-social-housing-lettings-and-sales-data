@@ -1,0 +1,2 @@
+class LaSalesRange < ApplicationRecord
+end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_07_093606) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_16_203810) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,6 +40,18 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_07_093606) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["start_year", "lettype", "beds", "la"], name: "index_la_rent_ranges_on_start_year_and_lettype_and_beds_and_la", unique: true
+  end
+
+  create_table "la_sales_ranges", force: :cascade do |t|
+    t.string "la"
+    t.string "la_name"
+    t.integer "beds"
+    t.integer "soft_min", null: false
+    t.integer "soft_max", null: false
+    t.integer "start_year", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["start_year", "beds", "la"], name: "index_la_sales_ranges_on_start_year_and_beds_and_la", unique: true
   end
 
   create_table "legacy_users", force: :cascade do |t|
