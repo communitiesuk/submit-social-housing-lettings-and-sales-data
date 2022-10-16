@@ -98,7 +98,9 @@ en:
               not_an_integer: "Number of bedrooms must be a whole number between 1 and 9"
               greater_than: "Number of bedrooms must be between 1 and 9"
               less_than: "Number of bedrooms must be between 1 and 9"
-              non_bedsit_max: "A bedsit can not have more than 1 bedroom"
+              bedsit_max: "A bedsit can not have more than 1 bedroom"
+            proptype:
+              bedsit_max: "A bedsit can not have more than 1 bedroom"
 
   validations:
     organisation:

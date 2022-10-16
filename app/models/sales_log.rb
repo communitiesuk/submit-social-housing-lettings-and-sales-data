@@ -1,32 +1,5 @@
 class SalesLogValidator < ActiveModel::Validator
-
-  # included do
-  #   validates :beds, numericality: { only_integer: true }, presence: true, comparison: { greater_than: 0, less_than: 10 }
-  # end
-  def self.included(klass)
-    #klass.extend(ClassMethods)
-    puts "INCLUDING VALIDATIONS"
-    validates :beds, numericality: { only_integer: true }, comparison: { greater_than: 0, less_than: 10 }
-
-
-  end
-
-  SalesLogValidator.class_eval do
-    p "class_eval - self is: " + self.to_s
-    def frontend
-      p "inside a method self is: " + self.to_s
-    end
-    validates :beds, numericality: { only_integer: true }, comparison: { greater_than: 0, less_than: 10 }
-
-  end
-
-
-
-  # Validations methods need to be called 'validate_' to run on model save
-  # or form page submission
   include Validations::Sales::PropertyInformationValidations
-  #extend ActiveSupport::Concern
-
 
   def validate(record)
     validation_methods = public_methods.select { |method| method.starts_with?("validate_") }
@@ -41,7 +14,10 @@ class SalesLog < Log
 
   has_paper_trail
 
-  #validates :beds, numericality: { only_integer: true }, presence: true, comparison: { greater_than: 0, less_than: 10 }
+  ## Regular validations
+  validates :beds, numericality: { only_integer: true }, comparison: { greater_than: 0, less_than: 10 }, if: -> { beds.present? }
+
+  ## Custom validations
   validates_with SalesLogValidator
 
   before_validation :set_derived_fields!
