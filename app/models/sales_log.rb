@@ -61,4 +61,16 @@ class SalesLog < Log
   def bedsit?
     proptype == 2
   end
+
+  # num beds greater than found in db?
+  # LA not in DB then?
+  def soft_min_for_purchase_price
+    soft_min = LaSalesRange.find_by(la:, beds:).soft_min
+    "#{soft_min}"
+  end
+
+  def soft_max_for_purchase_price
+    soft_max = LaSalesRange.find_by(la:, beds:).soft_max
+    "#{soft_max}"
+  end
 end

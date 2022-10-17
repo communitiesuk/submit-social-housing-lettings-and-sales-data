@@ -6,9 +6,8 @@ class CreateLaSalesRanges < ActiveRecord::Migration[7.0]
       t.integer :beds
       t.integer :soft_min, null: false
       t.integer :soft_max, null: false
-      t.integer :start_year, null: false
 
-      t.index %i[start_year beds la], unique: true
+      t.index %i[beds la], unique: true
       t.timestamps
     end
   end
