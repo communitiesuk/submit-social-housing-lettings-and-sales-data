@@ -157,6 +157,7 @@ unless Rails.env.test?
     Dir.glob("config/rent_range_data/*.csv").each do |path|
       start_year = File.basename(path, ".csv")
       Rake::Task["data_import:rent_ranges"].invoke(start_year, path)
+      Rake::Task["data_import:rent_ranges"].reenable
     end
   end
 end
