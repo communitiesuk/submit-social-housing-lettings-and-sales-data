@@ -5,15 +5,23 @@
 
 <%= render partial: "organisations/headings", locals: { main: "Your housing providers", sub: nil } %>
 
-<p>Your organisation can submit logs for its housing providers.</p>
+<p class="govuk-body">Your organisation can submit logs for its housing providers.</p>
+
+<% if @total_count == 0 %>
+  <p class="govuk-body">You do not currently have any housing providers.</p>
+<% end %>
 
 <% if current_user.data_coordinator? || current_user.support? %>
   <%= govuk_button_link_to "Add a housing provider", new_housing_provider_path, html: { method: :get } %>
 <% end %>
 
-<%= render SearchComponent.new(current_user:, search_label: "Search for a housing provider", value: @searched) %>
+<% if @total_count != 0 %>
+  <%= render SearchComponent.new(current_user:, search_label: "Search for a housing provider", value: @searched) %>
 
-<%= govuk_section_break(visible: true, size: "m") %>
+  <%= govuk_section_break(visible: true, size: "m") %>
 
-<%= render partial: "housing_providers/housing_provider_list", locals: { organisations: @organisations, title: "Organisations", pagy: @pagy, searched: @searched, item_label:, total_count: @total_count } %>
-<%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "organisations" } %>
+  <%= render partial: "housing_providers/housing_provider_list", locals: { organisations: @organisations, title: "Organisations", pagy: @pagy, searched: @searched, item_label:, total_count: @total_count } %>
+  <%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "organisations" } %>
+<% end %>
+
+

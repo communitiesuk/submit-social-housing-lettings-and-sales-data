@@ -3,7 +3,13 @@ class HousingProvidersController < ApplicationController
   include Modules::SearchFilter
 
   def index
-    housing_providers = Organisation.order(:name)
+    housing_providers =
+      Organisation.joins(:parent_organisations)
+                  .where(organisation_relationships: {
+                    parent_organisation_id: current_user.organisation_id,
+                    relationship_type: OrganisationRelationship.relationship_types[:owning],
+                  })
+                  .order(:name)
     respond_to do |format|
       format.html do
         @pagy, @organisations = pagy(filtered_collection(housing_providers, search_term))
