@@ -3,10 +3,15 @@ class HousingProvidersController < ApplicationController
   include Modules::SearchFilter
 
   def index
-    all_organisations = Organisation.order(:name)
-    @pagy, @organisations = pagy(filtered_collection(all_organisations, search_term))
-    @searched = search_term.presence
-    @total_count = all_organisations.size
+    housing_providers = Organisation.order(:name)
+    respond_to do |format|
+      format.html do
+        @pagy, @organisations = pagy(filtered_collection(housing_providers, search_term))
+        @searched = search_term.presence
+        @total_count = housing_providers.size
+        render "housing_providers/index"
+      end
+    end
   end
 
 private

@@ -136,12 +136,12 @@ class OrganisationsController < ApplicationController
   end
 
   def housing_providers
+    housing_providers = Organisation.order(:name)
     respond_to do |format|
       format.html do
-        all_organisations = Organisation.order(:name)
-        @pagy, @organisations = pagy(filtered_collection(all_organisations, search_term))
+        @pagy, @organisations = pagy(filtered_collection(housing_providers, search_term))
         @searched = search_term.presence
-        @total_count = all_organisations.size
+        @total_count = housing_providers.size
         render "housing_providers", layout: "application"
       end
     end
