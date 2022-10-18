@@ -135,6 +135,18 @@ class OrganisationsController < ApplicationController
     end
   end
 
+  def housing_providers
+    respond_to do |format|
+      format.html do
+        all_organisations = Organisation.order(:name)
+        @pagy, @organisations = pagy(filtered_collection(all_organisations, search_term))
+        @searched = search_term.presence
+        @total_count = all_organisations.size
+        render "housing_providers", layout: "application"
+      end
+    end
+  end
+
 private
 
   def org_params
