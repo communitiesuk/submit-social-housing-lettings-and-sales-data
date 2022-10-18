@@ -9,6 +9,7 @@ module NavigationItemsHelper
         NavigationItem.new("Lettings logs", lettings_logs_path, lettings_logs_current?(path)),
         FeatureToggle.sales_log_enabled? ? NavigationItem.new("Sales logs", sales_logs_path, sales_logs_current?(path)) : nil,
         NavigationItem.new("Schemes", "/schemes", supported_housing_schemes_current?(path)),
+        NavigationItem.new("Housing providers", "/housing-providers", housing_providers_current?(path)),
       ].compact
     elsif current_user.data_coordinator? && current_user.organisation.holds_own_stock?
       [
@@ -74,6 +75,9 @@ private
 
   def organisations_current?(path)
     path == "/organisations" || path.include?("/organisations/")
+  end
+  def housing_providers_current?(path)
+    path == "/housing-providers"
   end
 
   def subnav_supported_housing_schemes_path?(path)

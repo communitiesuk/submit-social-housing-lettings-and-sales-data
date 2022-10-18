@@ -119,6 +119,9 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :housing_providers, path: "/housing-providers" do
+  end
+
   scope via: :all do
     match "/404", to: "errors#not_found"
     match "/429", to: "errors#too_many_requests", status: 429
