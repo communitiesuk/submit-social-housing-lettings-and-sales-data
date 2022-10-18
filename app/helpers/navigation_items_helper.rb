@@ -24,6 +24,7 @@ module NavigationItemsHelper
         FeatureToggle.sales_log_enabled? ? NavigationItem.new("Sales logs", sales_logs_path, sales_logs_current?(path)) : nil,
         NavigationItem.new("Users", users_organisation_path(current_user.organisation), subnav_users_path?(path)),
         NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}", subnav_details_path?(path)),
+        managing_agents_item,
       ].compact
     end
   end
@@ -90,5 +91,20 @@ private
 
   def subnav_details_path?(path)
     path.include?("/organisations") && path.include?("/details")
+  end
+
+  def managing_agents_path?(path)
+    path.include?("/managing-agents")
+  end
+
+  def managing_agents_item
+    return unless FeatureToggle.managing_agents_enabled?
+    return unless current_user.organisation.holds_own_stock?
+
+    NavigationItem.new(
+      "Managing agents",
+      "/organisations/#{current_user.organisation.id}/managing-agents",
+      managing_agents_path?(path),
+    )
   end
 end

@@ -13,7 +13,7 @@ unless Rails.env.test?
     address_line1: "2 Marsham Street",
     address_line2: "London",
     postcode: "SW1P 4DF",
-    holds_own_stock: false,
+    holds_own_stock: true,
     other_stock_owners: "None",
     managing_agents: "None",
     provider_type: "LA",
@@ -25,6 +25,19 @@ unless Rails.env.test?
       Rails.logger.info info
     end
   end
+
+  Organisation.find_or_create_by!(
+    name: "DLUHC",
+    address_line1: "2 Marsham Street",
+    address_line2: "London",
+    postcode: "SW1P 4DF",
+    holds_own_stock: true,
+    other_stock_owners: "None",
+    managing_agents: "None",
+    provider_type: "LA",
+    child_organisations: [org]
+  )
+
 
   if Rails.env.development? && User.count.zero?
     User.create!(

@@ -41,6 +41,10 @@ RSpec.describe Organisation, type: :model do
       it "has correct parent" do
         expect(child_organisation.parent_organisations.first).to eq(organisation)
       end
+
+      it "has correct managing agents" do
+        expect(child_organisation.managing_agents).to eq([organisation])
+      end
     end
 
     context "with owning association" do

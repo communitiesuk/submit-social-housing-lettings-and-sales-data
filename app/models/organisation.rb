@@ -13,6 +13,12 @@ class Organisation < ApplicationRecord
   has_many :child_organisation_relationships, foreign_key: :parent_organisation_id, class_name: "OrganisationRelationship"
   has_many :child_organisations, through: :child_organisation_relationships
 
+  has_many :managing_agents,
+           -> { joins(:parent_organisation_relationships).where({ parent_organisation_relationships: { relationship_type: OrganisationRelationship::MANAGING } }) },
+           class_name: "Organisation",
+           through: :parent_organisation_relationships,
+           source: :child_organisation
+
   scope :search_by_name, ->(name) { where("name ILIKE ?", "%#{name}%") }
   scope :search_by, ->(param) { search_by_name(param) }
 
