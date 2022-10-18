@@ -137,9 +137,9 @@ class OrganisationsController < ApplicationController
 
   def housing_providers
     housing_providers =
-      Organisation.joins(:parent_organisations)
+      Organisation.joins(:child_organisations)
                   .where(organisation_relationships: {
-                    parent_organisation_id: current_user.organisation_id,
+                    child_organisation_id: @organisation.id,
                     relationship_type: OrganisationRelationship.relationship_types[:owning],
                   })
                   .order(:name)

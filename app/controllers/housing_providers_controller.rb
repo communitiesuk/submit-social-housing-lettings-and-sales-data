@@ -4,9 +4,9 @@ class HousingProvidersController < ApplicationController
 
   def index
     housing_providers =
-      Organisation.joins(:parent_organisations)
+      Organisation.joins(:child_organisations)
                   .where(organisation_relationships: {
-                    parent_organisation_id: current_user.organisation_id,
+                    child_organisation_id: current_user.organisation_id,
                     relationship_type: OrganisationRelationship.relationship_types[:owning],
                   })
                   .order(:name)

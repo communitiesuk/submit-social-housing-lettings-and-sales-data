@@ -7,10 +7,12 @@
       <%= table.body do |body| %>
         <%= body.row do |row| %>
           <% row.cell(text: organisation.name) %>
-          <% row.cell(html_attributes: {
-            scope: "row",
-          }) do %>
-            <%= govuk_link_to("Remove", "housing-providers/#{organisation.id}") %>
+          <% if current_user.data_coordinator? || current_user.support? %>
+            <% row.cell(html_attributes: {
+              scope: "row",
+            }) do %>
+              <%= govuk_link_to("Remove", "housing-providers/#{organisation.id}") %>
+            <% end %>
           <% end %>
         <% end %>
       <% end %>
