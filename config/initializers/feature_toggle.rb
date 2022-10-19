@@ -8,10 +8,4 @@ class FeatureToggle
 
     false
   end
-
-  def self.managing_agents_enabled?
-    return true unless Rails.env.production?
-
-    false
-  end
 end
