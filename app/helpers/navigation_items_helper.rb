@@ -17,6 +17,7 @@ module NavigationItemsHelper
         NavigationItem.new("Schemes", "/schemes", subnav_supported_housing_schemes_path?(path)),
         NavigationItem.new("Users", users_organisation_path(current_user.organisation), subnav_users_path?(path)),
         NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}", subnav_details_path?(path)),
+        NavigationItem.new("Housing providers", housing_providers_organisation_path(current_user.organisation), subnav_housing_providers_path?(path)),
       ].compact
     else
       [
@@ -37,6 +38,7 @@ module NavigationItemsHelper
         NavigationItem.new("Schemes", "/organisations/#{current_organisation_id}/schemes", subnav_supported_housing_schemes_path?(path)),
         NavigationItem.new("Users", "/organisations/#{current_organisation_id}/users", subnav_users_path?(path)),
         NavigationItem.new("About this organisation", "/organisations/#{current_organisation_id}", subnav_details_path?(path)),
+        NavigationItem.new("Housing providers", housing_providers_organisation_path, subnav_housing_providers_path?(path)),
       ].compact
     else
       [
