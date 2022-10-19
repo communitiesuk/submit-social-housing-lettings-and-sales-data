@@ -15,7 +15,7 @@ unless Rails.env.test?
     postcode: "SW1P 4DF",
     holds_own_stock: true,
     other_stock_owners: "None",
-    managing_agents: "None",
+    managing_agents_label: "None",
     provider_type: "LA",
   ) do
     info = "Seeded DLUHC Organisation"
@@ -33,9 +33,9 @@ unless Rails.env.test?
     postcode: "SW1P 4DF",
     holds_own_stock: true,
     other_stock_owners: "None",
-    managing_agents: "None",
+    managing_agents_label: "None",
     provider_type: "LA",
-    child_organisations: [org]
+    child_organisations: [org],
   )
 
 
@@ -78,7 +78,7 @@ unless Rails.env.test?
       postcode: "BA21 4AT",
       holds_own_stock: false,
       other_stock_owners: "None",
-      managing_agents: "None",
+      managing_agents_label: "None",
       provider_type: "LA",
     )
 
