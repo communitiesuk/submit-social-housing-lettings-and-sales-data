@@ -8,8 +8,8 @@
 
 # rubocop:disable Rails/Output
 unless Rails.env.test?
-  managing_agent = Organisation.find_or_create_by!(
-    name: "Managing Agent",
+  housing_provider = Organisation.find_or_create_by!(
+    name: "Housing Provider",
     address_line1: "2 Marsham Street",
     address_line2: "London",
     postcode: "SW1P 4DF",
@@ -24,7 +24,7 @@ unless Rails.env.test?
     address_line1: "2 Marsham Street",
     address_line2: "London",
     postcode: "SW1P 4DF",
-    holds_own_stock: true,
+    holds_own_stock: false,
     other_stock_owners: "None",
     managing_agents_label: "None",
     provider_type: "LA",
@@ -39,8 +39,8 @@ unless Rails.env.test?
 
   OrganisationRelationship.create!(
     child_organisation: org,
-    parent_organisation: managing_agent,
-    relationship_type: OrganisationRelationship::MANAGING,
+    parent_organisation: housing_provider,
+    relationship_type: OrganisationRelationship::OWNING,
   )
 
   if Rails.env.development? && User.count.zero?

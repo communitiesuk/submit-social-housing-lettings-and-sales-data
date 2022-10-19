@@ -103,19 +103,4 @@ private
   def subnav_details_path?(path)
     path.include?("/organisations") && path.include?("/details")
   end
-
-  def managing_agents_path?(path)
-    path.include?("/managing-agents")
-  end
-
-  def managing_agents_item(path)
-    return unless FeatureToggle.managing_agents_enabled?
-    return unless current_user.organisation.holds_own_stock?
-
-    NavigationItem.new(
-      "Managing agents",
-      "/organisations/#{current_user.organisation.id}/managing-agents",
-      managing_agents_path?(path),
-    )
-  end
 end
