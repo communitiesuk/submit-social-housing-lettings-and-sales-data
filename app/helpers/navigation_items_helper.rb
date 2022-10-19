@@ -24,7 +24,7 @@ module NavigationItemsHelper
         FeatureToggle.sales_log_enabled? ? NavigationItem.new("Sales logs", sales_logs_path, sales_logs_current?(path)) : nil,
         NavigationItem.new("Users", users_organisation_path(current_user.organisation), subnav_users_path?(path)),
         NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}", subnav_details_path?(path)),
-        NavigationItem.new("Housing providers", housing_providers_path, housing_providers_current?(path)),
+        NavigationItem.new("Housing providers", housing_providers_organisation_path(current_user.organisation), housing_providers_current?(path)),
       ].compact
     end
   end
@@ -44,7 +44,7 @@ module NavigationItemsHelper
         FeatureToggle.sales_log_enabled? ? NavigationItem.new("Sales logs", "/organisations/#{current_organisation_id}/sales-logs", subnav_sales_logs_path?(path)) : nil,
         NavigationItem.new("Users", "/organisations/#{current_organisation_id}/users", subnav_users_path?(path)),
         NavigationItem.new("About this organisation", "/organisations/#{current_organisation_id}", subnav_details_path?(path)),
-        NavigationItem.new("Housing providers", "/organisations/#{current_organisation_id}/housing-providers", subnav_housing_providers_path?(path)),
+        NavigationItem.new("Housing providers", housing_providers_organisation_path, subnav_housing_providers_path?(path)),
       ].compact
     end
   end
