@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_11_094347) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_18_221143) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,6 +40,17 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_11_094347) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["start_year", "lettype", "beds", "la"], name: "index_la_rent_ranges_on_start_year_and_lettype_and_beds_and_la", unique: true
+  end
+
+  create_table "la_sales_ranges", force: :cascade do |t|
+    t.string "la"
+    t.string "la_name"
+    t.integer "beds"
+    t.integer "soft_min", null: false
+    t.integer "soft_max", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["beds", "la"], name: "index_la_sales_ranges_on_beds_and_la", unique: true
   end
 
   create_table "legacy_users", force: :cascade do |t|
@@ -245,6 +256,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_11_094347) do
     t.index ["scheme_id"], name: "index_lettings_logs_on_scheme_id"
   end
 
+  create_table "local_authorities", force: :cascade do |t|
+    t.string "ons_code", null: false
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ons_code", "name"], name: "index_local_authorities_on_ons_code_and_name", unique: true
+  end
+
   create_table "locations", force: :cascade do |t|
     t.string "location_code"
     t.string "postcode"
@@ -337,12 +356,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_11_094347) do
     t.integer "age1"
     t.integer "age1_known"
     t.string "sex1"
-    t.integer "national"
-    t.string "othernational"
-    t.integer "ethnic"
-    t.integer "ethnic_group"
     t.integer "buy1livein"
     t.integer "buylivein"
+    t.integer "ethnic"
+    t.integer "ethnic_group"
     t.integer "builtype"
     t.integer "proptype"
     t.integer "age2"
@@ -352,21 +369,28 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_11_094347) do
     t.integer "noint"
     t.integer "buy2livein"
     t.integer "ecstat2"
+    t.integer "national"
+    t.string "othernational"
     t.integer "privacynotice"
     t.integer "ecstat1"
     t.integer "wheel"
     t.integer "hholdcount"
     t.integer "age3"
     t.integer "age3_known"
+    t.string "la"
+    t.integer "purchase_price"
+    t.integer "income1"
+    t.integer "income1nk"
     t.integer "age4"
     t.integer "age4_known"
     t.integer "age5"
     t.integer "age5_known"
     t.integer "age6"
     t.integer "age6_known"
-    t.integer "proplen"
-    t.integer "income1"
-    t.integer "income1nk"
+    t.string "postcode_full"
+    t.string "pcode1"
+    t.string "pcode2"
+    t.boolean "pcodenk", default: true
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
