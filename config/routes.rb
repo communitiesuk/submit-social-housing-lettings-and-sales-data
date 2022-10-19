@@ -79,6 +79,7 @@ Rails.application.routes.draw do
       post "logs/email-csv", to: "organisations#email_csv"
       get "logs/csv-confirmation", to: "lettings_logs#csv_confirmation"
       get "schemes", to: "organisations#schemes"
+      get "managing-agents", to: "organisation_relationships#managing_agents"
       get "housing-providers", to: "organisations#housing_providers"
     end
   end

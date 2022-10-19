@@ -13,9 +13,11 @@ class Organisation < ApplicationRecord
   has_many :child_organisation_relationships, foreign_key: :parent_organisation_id, class_name: "OrganisationRelationship"
   has_many :child_organisations, through: :child_organisation_relationships
 
+  has_many :managing_agent_relationships, -> { where(relationship_type: OrganisationRelationship::MANAGING) }, foreign_key: :child_organisation_id, class_name: "OrganisationRelationship"
+  has_many :managing_agents, through: :managing_agent_relationships, source: :parent_organisation
+
   scope :search_by_name, ->(name) { where("name ILIKE ?", "%#{name}%") }
   scope :search_by, ->(param) { search_by_name(param) }
-
   has_paper_trail
 
   auto_strip_attributes :name
@@ -83,7 +85,7 @@ class Organisation < ApplicationRecord
       { name: "Rent_periods", value: rent_period_labels, editable: false, format: :bullet },
       { name: "Owns housing stock", value: holds_own_stock ? "Yes" : "No", editable: false },
       { name: "Other stock owners", value: other_stock_owners, editable: false },
-      { name: "Managing agents", value: managing_agents, editable: false },
+      { name: "Managing agents", value: managing_agents_label, editable: false },
       { name: "Data protection agreement", value: data_protection_agreement_string, editable: false },
     ]
   end
