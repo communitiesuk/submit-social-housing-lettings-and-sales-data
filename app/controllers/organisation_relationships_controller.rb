@@ -4,12 +4,9 @@ class OrganisationRelationshipsController < ApplicationController
   before_action :authenticate_user!
 
   def managing_agents
-    # kick out if org isn't the current org
+    # kick out if cannot access org
 
-    @managing_agents = OrganisationRelationships.where(
-      owning_organisation_id: organisation.id,
-      relationship_type: :managing,
-    )
+    @managing_agents = organisation.managing_agents
   end
 
 private
