@@ -4,7 +4,7 @@ class HousingProvidersController < ApplicationController
 
   def index
     housing_providers =
-      Organisation.joins(:child_organisations)
+      Organisation.joins(:child_organisation_relationships)
                   .where(organisation_relationships: {
                     child_organisation_id: current_user.organisation_id,
                     relationship_type: OrganisationRelationship.relationship_types[:owning],
@@ -12,7 +12,7 @@ class HousingProvidersController < ApplicationController
                   .order(:name)
     respond_to do |format|
       format.html do
-        @pagy, @organisations = pagy(filtered_collection(housing_providers, search_term))
+        @pagy, @housing_providers = pagy(filtered_collection(housing_providers, search_term))
         @searched = search_term.presence
         @total_count = housing_providers.size
         render "housing_providers/index"

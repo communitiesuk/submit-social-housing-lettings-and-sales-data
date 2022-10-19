@@ -24,7 +24,7 @@ module NavigationItemsHelper
         FeatureToggle.sales_log_enabled? ? NavigationItem.new("Sales logs", sales_logs_path, sales_logs_current?(path)) : nil,
         NavigationItem.new("Users", users_organisation_path(current_user.organisation), subnav_users_path?(path)),
         NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}", subnav_details_path?(path)),
-        NavigationItem.new("Housing providers", "/housing-providers", housing_providers_current?(path)),
+        NavigationItem.new("Housing providers", housing_providers_path, housing_providers_current?(path)),
       ].compact
     end
   end

@@ -1,4 +1,4 @@
-<% item_label = format_label(@pagy.count, "organisation") %>
+<% item_label = format_label(@pagy.count, "housing provider") %>
 <% title = "Housing Providers" %>
 
 <% content_for :title, title %>
@@ -20,8 +20,8 @@
 
   <%= govuk_section_break(visible: true, size: "m") %>
 
-  <%= render partial: "housing_providers/housing_provider_list", locals: { organisations: @organisations, title: "Organisations", pagy: @pagy, searched: @searched, item_label:, total_count: @total_count } %>
-  <%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "organisations" } %>
+  <%= render partial: "housing_providers/housing_provider_list", locals: { housing_providers: @housing_providers, title: "Housing providers", pagy: @pagy, searched: @searched, item_label:, total_count: @total_count } %>
+  <%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "housing providers" } %>
 <% end %>
 
 
