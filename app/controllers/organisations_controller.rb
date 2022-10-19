@@ -149,7 +149,11 @@ class OrganisationsController < ApplicationController
         @pagy, @housing_providers = pagy(unpaginated_filtered_housing_providers)
         @searched = search_term.presence
         @total_count = housing_providers.size
-        render "housing_providers", layout: "application"
+        if current_user.support?
+          render "housing_providers", layout: "application"
+        else
+          render "housing_providers/index"
+        end
       end
     end
   end
