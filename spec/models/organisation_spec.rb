@@ -27,39 +27,67 @@ RSpec.describe Organisation, type: :model do
         .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Provider type #{I18n.t('validations.organisation.provider_type_missing')}")
     end
 
-    context "with managing association" do
-      let(:child_organisation) { FactoryBot.create(:organisation, name: "DLUHC Child") }
+    context "with parent/child associations", :aggregate_failures do
+      let!(:child_organisation) { FactoryBot.create(:organisation, name: "DLUHC Child") }
+      let!(:grandchild_organisation) { FactoryBot.create(:organisation, name: "DLUHC Grandchild") }
 
       before do
-        FactoryBot.create(:organisation_relationship, child_organisation:, parent_organisation: organisation, relationship_type: 0)
+        FactoryBot.create(
+          :organisation_relationship,
+          :managing,
+          child_organisation:,
+          parent_organisation: organisation,
+        )
+
+        FactoryBot.create(
+          :organisation_relationship,
+          :managing,
+          child_organisation: grandchild_organisation,
+          parent_organisation: child_organisation,
+        )
       end
 
-      it "has correct child" do
-        expect(organisation.child_organisations.first).to eq(child_organisation)
+      it "has correct child_organisations" do
+        expect(organisation.child_organisations).to eq([child_organisation])
+        expect(child_organisation.child_organisations).to eq([grandchild_organisation])
       end
 
-      it "has correct parent" do
-        expect(child_organisation.parent_organisations.first).to eq(organisation)
-      end
-
-      it "has correct managing agents" do
-        expect(child_organisation.managing_agents).to eq([organisation])
+      it "has correct parent_organisations" do
+        expect(child_organisation.parent_organisations).to eq([organisation])
+        expect(grandchild_organisation.parent_organisations).to eq([child_organisation])
       end
     end
 
-    context "with owning association" do
-      let(:child_organisation) { FactoryBot.create(:organisation, name: "DLUHC Child") }
+    context "with managing association", :aggregate_failures do
+      let!(:child_organisation) { FactoryBot.create(:organisation, name: "DLUHC Child") }
+      let!(:grandchild_organisation) { FactoryBot.create(:organisation, name: "DLUHC Grandchild") }
 
       before do
-        FactoryBot.create(:organisation_relationship, child_organisation:, parent_organisation: organisation, relationship_type: 1)
+        FactoryBot.create(
+          :organisation_relationship,
+          :managing,
+          child_organisation:,
+          parent_organisation: organisation,
+        )
+
+        FactoryBot.create(
+          :organisation_relationship,
+          :owning,
+          child_organisation:,
+          parent_organisation: organisation,
+        )
+
+        FactoryBot.create(
+          :organisation_relationship,
+          :managing,
+          child_organisation: grandchild_organisation,
+          parent_organisation: child_organisation,
+        )
       end
 
-      it "has correct child" do
-        expect(organisation.child_organisations.first).to eq(child_organisation)
-      end
-
-      it "has correct parent" do
-        expect(child_organisation.parent_organisations.first).to eq(organisation)
+      it "has correct managing_agents" do
+        expect(child_organisation.managing_agents).to eq([organisation])
+        expect(grandchild_organisation.managing_agents).to eq([child_organisation])
       end
     end
 
