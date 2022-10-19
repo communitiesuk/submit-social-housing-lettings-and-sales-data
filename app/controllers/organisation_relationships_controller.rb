@@ -9,6 +9,10 @@ class OrganisationRelationshipsController < ApplicationController
     @managing_agents = organisation.managing_agents
   end
 
+  def housing_providers
+    @housing_providers = organisation.housing_providers
+  end
+
 private
 
   def organisation

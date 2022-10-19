@@ -2,7 +2,7 @@ module NavigationItemsHelper
   NavigationItem = Struct.new(:text, :href, :current, :classes)
 
   def primary_items(path, current_user)
-    items = if current_user.support?
+    if current_user.support?
       [
         NavigationItem.new("Organisations", organisations_path, organisations_current?(path)),
         NavigationItem.new("Users", "/users", users_current?(path)),
@@ -24,12 +24,9 @@ module NavigationItemsHelper
         FeatureToggle.sales_log_enabled? ? NavigationItem.new("Sales logs", sales_logs_path, sales_logs_current?(path)) : nil,
         NavigationItem.new("Users", users_organisation_path(current_user.organisation), subnav_users_path?(path)),
         NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}", subnav_details_path?(path)),
-        NavigationItem.new("Housing providers", housing_providers_organisation_path(current_user.organisation), housing_providers_current?(path)),
+        NavigationItem.new("Housing providers", housing_providers_organisation_path(current_user.organisation), subnav_housing_providers_path?(path)),
       ].compact
     end
-
-    # figure out correct rules
-    items << managing_agents_item(path)
   end
 
   def secondary_items(path, current_organisation_id)
@@ -79,10 +76,6 @@ private
 
   def organisations_current?(path)
     path == "/organisations" || path.include?("/organisations/")
-  end
-
-  def housing_providers_current?(path)
-    path == "/housing-providers"
   end
 
   def subnav_housing_providers_path?(path)
