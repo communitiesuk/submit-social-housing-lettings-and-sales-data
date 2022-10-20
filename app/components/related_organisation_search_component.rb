@@ -1,0 +1,2 @@
+class RelatedOrganisationSearchComponent < SearchComponent
+end

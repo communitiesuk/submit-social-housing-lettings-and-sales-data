@@ -18,6 +18,19 @@ class OrganisationRelationshipsController < ApplicationController
     end
   end
 
+  def add_housing_provider
+    housing_providers = organisation.housing_providers
+    unpaginated_filtered_housing_providers = filtered_collection(housing_providers, search_term)
+    respond_to do |format|
+      format.html do
+        @pagy, @housing_providers = pagy(unpaginated_filtered_housing_providers)
+        @searched = search_term.presence
+        @total_count = housing_providers.size
+        render "organisation_relationships/add_housing_provider", layout: "application"
+      end
+    end
+  end
+
 private
 
   def organisation
