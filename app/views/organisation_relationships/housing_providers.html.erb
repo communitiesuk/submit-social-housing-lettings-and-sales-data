@@ -1,15 +1,19 @@
 <% item_label = format_label(@pagy.count, "housing provider") %>
 <% title = "Housing Providers" %>
 <% content_for :title, title %>
-<%= render partial: "organisations/headings", locals: { main: @organisation.name, sub: nil } %>
 <% if current_user.support? %>
+  <%= render partial: "organisations/headings", locals: { main: @organisation.name, sub: nil } %>
   <%= render SubNavigationComponent.new(
     items: secondary_items(request.path, @organisation.id),
     ) %>
   <h2 class="govuk-visually-hidden">Housing Providers</h2>
+  <p class="govuk-body">This organisation can submit logs for its housing providers.</p>
+<% else %>
+  <%= render partial: "organisations/headings", locals: { main: "Your housing providers", sub: nil } %>
+
+  <p class="govuk-body">Your organisation can submit logs for its housing providers.</p>
 <% end %>
 
-<p class="govuk-body">This organisation can submit logs for its housing providers.</p>
 
 <% if @total_count == 0 %>
   <p class="govuk-body">This organisation does not currently have any housing providers.</p>
