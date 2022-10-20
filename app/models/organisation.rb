@@ -16,7 +16,6 @@ class Organisation < ApplicationRecord
   has_many :housing_provider_relationships, -> { where(relationship_type: OrganisationRelationship::OWNING) }, foreign_key: :child_organisation_id, class_name: "OrganisationRelationship"
   has_many :housing_providers, through: :housing_provider_relationships, source: :parent_organisation
 
-
   scope :search_by_name, ->(name) { where("name ILIKE ?", "%#{name}%") }
   scope :search_by, ->(param) { search_by_name(param) }
   has_paper_trail

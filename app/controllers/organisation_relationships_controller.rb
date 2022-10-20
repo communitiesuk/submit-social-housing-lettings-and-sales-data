@@ -2,7 +2,6 @@ class OrganisationRelationshipsController < ApplicationController
   include Pagy::Backend
   include Modules::SearchFilter
 
-
   before_action :authenticate_user!
   before_action :authenticate_scope!
 
