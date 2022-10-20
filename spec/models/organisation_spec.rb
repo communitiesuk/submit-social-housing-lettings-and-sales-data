@@ -34,14 +34,14 @@ RSpec.describe Organisation, type: :model do
       before do
         FactoryBot.create(
           :organisation_relationship,
-          :managing,
+          :owning,
           child_organisation:,
           parent_organisation: organisation,
         )
 
         FactoryBot.create(
           :organisation_relationship,
-          :managing,
+          :owning,
           child_organisation: grandchild_organisation,
           parent_organisation: child_organisation,
         )
@@ -58,7 +58,7 @@ RSpec.describe Organisation, type: :model do
       end
     end
 
-    context "with managing association", :aggregate_failures do
+    context "with owning association", :aggregate_failures do
       let!(:child_organisation) { FactoryBot.create(:organisation, name: "DLUHC Child") }
       let!(:grandchild_organisation) { FactoryBot.create(:organisation, name: "DLUHC Grandchild") }
 
@@ -79,15 +79,15 @@ RSpec.describe Organisation, type: :model do
 
         FactoryBot.create(
           :organisation_relationship,
-          :managing,
+          :owning,
           child_organisation: grandchild_organisation,
           parent_organisation: child_organisation,
         )
       end
 
-      it "has correct managing_agents" do
-        expect(child_organisation.managing_agents).to eq([organisation])
-        expect(grandchild_organisation.managing_agents).to eq([child_organisation])
+      it "has correct housing_providers" do
+        expect(child_organisation.housing_providers).to eq([organisation])
+        expect(grandchild_organisation.housing_providers).to eq([child_organisation])
       end
     end
 
