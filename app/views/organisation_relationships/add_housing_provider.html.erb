@@ -1,11 +1,19 @@
-<%= render partial: "organisations/headings", locals: { main: "What is the name of your housing provider?", sub: nil } %>
-<%= render RelatedOrganisationSearchComponent.new(current_user:, search_label: "Start typing to search for your housing provider", value: @searched) %>
-<%= govuk_details(summary_text: "Can't find the housing provider you're looking for?") do %>
-  <ul class="govuk-list govuk-list--bullet">
-    <li>Double check the spelling and try again</li>
-    <li>Type the first few letters to see the suggestions</li>
-    <li>If you still can't find it,
-      <%= govuk_link_to("contact the DLUHC service desk", "https://digital.dclg.gov.uk/jira/servicedesk/customer/portal/4/group/21", rel: "noreferrer noopener", target: "_blank") %>
-    </li>
-  </ul>
+
+<%= form_with model: nil, url: housing_providers_add_organisation_path, method: "post", local: true do |f| %>
+  <%# remove_other_page_errors(@log, @page) %>
+  <%#= f.govuk_error_summary %>
+  <%= render partial: "organisations/headings", locals: { main: "What is the name of your housing provider?", sub: nil } %>
+  <%#= render partial: "form/#{question.type}_question", locals: { question:, caption_text: @subsection.label, page_header: @page.header, lettings_log: @log, f:, conditional: false } %>
+  <%= f.govuk_submit "Add" %>
+  <%= govuk_details(summary_text: "Can't find the housing provider you're looking for?") do %>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>Double check the spelling and try again</li>
+      <li>Type the first few letters to see the suggestions</li>
+      <li>If you still can't find it,
+        <%= govuk_link_to("contact the DLUHC service desk", "https://digital.dclg.gov.uk/jira/servicedesk/customer/portal/4/group/21", rel: "noreferrer noopener", target: "_blank") %>
+      </li>
+    </ul>
+  <% end %>
 <% end %>
+
+
