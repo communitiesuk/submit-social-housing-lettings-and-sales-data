@@ -3,9 +3,7 @@
 <% content_for :title, title %>
 <% if current_user.support? %>
   <%= render partial: "organisations/headings", locals: { main: @organisation.name, sub: nil } %>
-  <%= render SubNavigationComponent.new(
-    items: secondary_items(request.path, @organisation.id),
-    ) %>
+  <%= render SubNavigationComponent.new(items: secondary_items(request.path, @organisation.id)) %>
   <h2 class="govuk-visually-hidden">Housing Providers</h2>
   <p class="govuk-body">This organisation can submit logs for its housing providers.</p>
 <% else %>
@@ -13,7 +11,6 @@
 
   <p class="govuk-body">Your organisation can submit logs for its housing providers.</p>
 <% end %>
-
 
 <% if @total_count == 0 %>
   <p class="govuk-body">This organisation does not currently have any housing providers.</p>
