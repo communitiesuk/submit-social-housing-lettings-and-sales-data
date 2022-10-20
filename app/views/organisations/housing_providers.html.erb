@@ -15,7 +15,7 @@
   <p class="govuk-body">This organisation does not currently have any housing providers.</p>
 <% end %>
 <% if current_user.data_coordinator? || current_user.support? %>
-  <%= govuk_button_link_to "Add a housing provider", new_housing_provider_path(organisation_id: @organisation.id), html: { method: :get } %>
+  <%= govuk_button_link_to "Add a housing provider", housing_providers_organisation_path(organisation_id: @organisation.id), html: { method: :get } %>
 <% end %>
 <% if @total_count != 0 %>
   <%= render SearchComponent.new(current_user:, search_label: "Search for a housing provider", value: @searched) %>

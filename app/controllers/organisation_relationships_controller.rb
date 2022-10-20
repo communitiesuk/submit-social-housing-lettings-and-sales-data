@@ -12,7 +12,7 @@ class OrganisationRelationshipsController < ApplicationController
   end
 
   def housing_providers
-    housing_providers = organisation.index
+    housing_providers = organisation.housing_providers
     unpaginated_filtered_housing_providers = filtered_collection(housing_providers, search_term)
     respond_to do |format|
       format.html do
