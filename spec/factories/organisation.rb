@@ -17,9 +17,4 @@ FactoryBot.define do
     created_at { Time.zone.now }
     updated_at { Time.zone.now }
   end
-
-  factory :organisation_relationship do
-    child_organisation { FactoryBot.create(:organisation) }
-    parent_organisation { FactoryBot.create(:organisation) }
-  end
 end

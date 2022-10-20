@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_17_095918) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_19_082625) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -297,7 +297,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_17_095918) do
     t.string "postcode"
     t.boolean "holds_own_stock"
     t.string "other_stock_owners"
-    t.string "managing_agents"
+    t.string "managing_agents_label"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "active"

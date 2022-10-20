@@ -8,6 +8,17 @@
 
 # rubocop:disable Rails/Output
 unless Rails.env.test?
+  housing_provider = Organisation.find_or_create_by!(
+    name: "Housing Provider",
+    address_line1: "2 Marsham Street",
+    address_line2: "London",
+    postcode: "SW1P 4DF",
+    holds_own_stock: true,
+    other_stock_owners: "None",
+    managing_agents_label: "None",
+    provider_type: "LA",
+  )
+
   org = Organisation.find_or_create_by!(
     name: "DLUHC",
     address_line1: "2 Marsham Street",
@@ -15,7 +26,7 @@ unless Rails.env.test?
     postcode: "SW1P 4DF",
     holds_own_stock: false,
     other_stock_owners: "None",
-    managing_agents: "None",
+    managing_agents_label: "None",
     provider_type: "LA",
   ) do
     info = "Seeded DLUHC Organisation"
@@ -25,6 +36,12 @@ unless Rails.env.test?
       Rails.logger.info info
     end
   end
+
+  OrganisationRelationship.create!(
+    child_organisation: org,
+    parent_organisation: housing_provider,
+    relationship_type: OrganisationRelationship::OWNING,
+  )
 
   if Rails.env.development? && User.count.zero?
     User.create!(
@@ -65,7 +82,7 @@ unless Rails.env.test?
       postcode: "BA21 4AT",
       holds_own_stock: false,
       other_stock_owners: "None",
-      managing_agents: "None",
+      managing_agents_label: "None",
       provider_type: "LA",
     )
 
