@@ -10,6 +10,7 @@
           <% if current_user.data_coordinator? || current_user.support? %>
             <% row.cell(html_attributes: {
               scope: "row",
+              class: "govuk-!-text-align-right",
             }) do %>
               <%= govuk_link_to("Remove", "housing-providers/#{housing_provider.id}") %>
             <% end %>
