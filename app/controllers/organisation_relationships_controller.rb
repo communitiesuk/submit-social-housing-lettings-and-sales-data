@@ -4,6 +4,7 @@ class OrganisationRelationshipsController < ApplicationController
 
 
   before_action :authenticate_user!
+  before_action :authenticate_scope!
 
   def housing_providers
     housing_providers = organisation.housing_providers
@@ -26,5 +27,11 @@ private
 
   def search_term
     params["search"]
+  end
+
+  def authenticate_scope!
+    if current_user.organisation != organisation
+      render_not_found
+    end
   end
 end
