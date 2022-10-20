@@ -292,7 +292,7 @@ RSpec.describe OrganisationsController, type: :request do
 
           before do
             FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: housing_provider, relationship_type: OrganisationRelationship.relationship_types[:owning])
-            FactoryBot.create(:organisation_relationship, child_organisation: other_organisation, parent_organisation: other_org_housing_rovider, relationship_type: OrganisationRelationship.relationship_types[:owning])
+            FactoryBot.create(:organisation_relationship, child_organisation: other_organisation, parent_organisation: other_org_housing_provider, relationship_type: OrganisationRelationship.relationship_types[:owning])
             get "/organisations/#{organisation.id}/housing-providers", headers:, params: {}
           end
 
