@@ -1,0 +1,21 @@
+<section class="app-table-group" tabindex="0" aria-labelledby="<%= title.dasherize %>">
+  <%= govuk_table do |table| %>
+    <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
+      <%= render(SearchResultCaptionComponent.new(searched:, count: pagy.count, item_label:, total_count:, item: "housing providers", path: request.path)) %>
+    <% end %>
+    <% @housing_providers.each do |housing_provider| %>
+      <%= table.body do |body| %>
+        <%= body.row do |row| %>
+          <% row.cell(text: housing_provider.name) %>
+          <% if current_user.data_coordinator? || current_user.support? %>
+            <% row.cell(html_attributes: {
+              scope: "row",
+            }) do %>
+              <%= govuk_link_to("Remove", "housing-providers/#{housing_provider.id}") %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+</section>

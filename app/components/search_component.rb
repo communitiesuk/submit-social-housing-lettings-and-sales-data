@@ -15,6 +15,8 @@ class SearchComponent < ViewComponent::Base
       request.path
     elsif request.path.include?("organisations") && request.path.include?("schemes")
       request.path
+    elsif request.path.include?("organisations") && request.path.include?("housing-providers")
+      request.path
     elsif request.path.include?("users")
       user_path(current_user)
     elsif request.path.include?("organisations")
