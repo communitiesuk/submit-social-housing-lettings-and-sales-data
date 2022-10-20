@@ -265,7 +265,7 @@ RSpec.describe SalesLogsController, type: :request do
 
           it "has search results in the title" do
             get "/sales-logs?search=#{log_to_search.id}", headers: headers, params: {}
-            expect(page).to have_title("Logs (1 log matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expect(page).to have_title("Logs (1 logs matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
 
           it "shows sales logs matching the id" do
