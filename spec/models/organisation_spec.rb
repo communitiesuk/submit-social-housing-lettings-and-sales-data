@@ -91,6 +91,40 @@ RSpec.describe Organisation, type: :model do
       end
     end
 
+    context "with managing association", :aggregate_failures do
+      let!(:child_organisation) { FactoryBot.create(:organisation, name: "DLUHC Child") }
+      let!(:grandchild_organisation) { FactoryBot.create(:organisation, name: "DLUHC Grandchild") }
+
+      before do
+        FactoryBot.create(
+          :organisation_relationship,
+          :managing,
+          child_organisation:,
+          parent_organisation: organisation,
+        )
+
+        FactoryBot.create(
+          :organisation_relationship,
+          :owning,
+          child_organisation:,
+          parent_organisation: organisation,
+        )
+
+        FactoryBot.create(
+          :organisation_relationship,
+          :managing,
+          child_organisation: grandchild_organisation,
+          parent_organisation: child_organisation,
+        )
+      end
+
+      it "has correct managing_agents" do
+        expect(organisation.managing_agents).to eq([child_organisation])
+        expect(child_organisation.managing_agents).to eq([grandchild_organisation])
+        expect(grandchild_organisation.managing_agents).to eq([])
+      end
+    end
+
     context "with data protection confirmations" do
       before do
         FactoryBot.create(:data_protection_confirmation, organisation:, confirmed: false, created_at: Time.utc(2018, 0o6, 0o5, 10, 36, 49))

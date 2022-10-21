@@ -18,6 +18,19 @@ class OrganisationRelationshipsController < ApplicationController
     end
   end
 
+  def managing_agents
+    managing_agents = organisation.managing_agents
+    unpaginated_filtered_managing_agents = filtered_collection(managing_agents, search_term)
+    respond_to do |format|
+      format.html do
+        @pagy, @managing_agents = pagy(unpaginated_filtered_managing_agents)
+        @searched = search_term.presence
+        @total_count = managing_agents.size
+        render "organisation_relationships/managing_agents", layout: "application"
+      end
+    end
+  end
+
 private
 
   def organisation

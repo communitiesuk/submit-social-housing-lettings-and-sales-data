@@ -35,10 +35,7 @@ class BulkUpload
           created_by: current_user,
         )
         map_row(row).each do |attr_key, attr_val|
-          update = lettings_log.update(attr_key => attr_val)
-          unless update
-            # TODO: determine what to do when a bulk upload contains field values that don't pass validations
-          end
+          _update = lettings_log.update(attr_key => attr_val)
         rescue ArgumentError
           # TODO: determine what we want to do when bulk upload contains totally invalid data for a field.
         end

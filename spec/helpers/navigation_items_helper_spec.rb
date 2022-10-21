@@ -20,7 +20,6 @@ RSpec.describe NavigationItemsHelper do
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
               NavigationItemsHelper::NavigationItem.new("Users", users_path, false),
               NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, false),
-              NavigationItemsHelper::NavigationItem.new("Housing providers", "/organisations/#{current_user.organisation.id}/housing-providers", false),
             ]
           end
 
@@ -36,7 +35,6 @@ RSpec.describe NavigationItemsHelper do
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
               NavigationItemsHelper::NavigationItem.new("Users", users_path, true),
               NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, false),
-              NavigationItemsHelper::NavigationItem.new("Housing providers", "/organisations/#{current_user.organisation.id}/housing-providers", false),
             ]
           end
 
@@ -52,7 +50,6 @@ RSpec.describe NavigationItemsHelper do
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
               NavigationItemsHelper::NavigationItem.new("Users", users_path, false),
               NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, true),
-              NavigationItemsHelper::NavigationItem.new("Housing providers", "/organisations/#{current_user.organisation.id}/housing-providers", false),
             ]
           end
 
@@ -68,7 +65,6 @@ RSpec.describe NavigationItemsHelper do
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
               NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
               NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, false),
-              NavigationItemsHelper::NavigationItem.new("Housing providers", "/organisations/#{current_user.organisation.id}/housing-providers", false),
             ]
           end
 
@@ -84,7 +80,6 @@ RSpec.describe NavigationItemsHelper do
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
               NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", true),
               NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, false),
-              NavigationItemsHelper::NavigationItem.new("Housing providers", "/organisations/#{current_user.organisation.id}/housing-providers", false),
             ]
           end
 
@@ -100,7 +95,6 @@ RSpec.describe NavigationItemsHelper do
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", true),
               NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
               NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, false),
-              NavigationItemsHelper::NavigationItem.new("Housing providers", "/organisations/#{current_user.organisation.id}/housing-providers", false),
             ]
           end
 
@@ -252,7 +246,6 @@ RSpec.describe NavigationItemsHelper do
                 NavigationItemsHelper::NavigationItem.new("Schemes", "/organisations/#{current_user.organisation.id}/schemes", false),
                 NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
                 NavigationItemsHelper::NavigationItem.new("About this organisation", "/organisations/#{current_user.organisation.id}", false),
-                NavigationItemsHelper::NavigationItem.new("Housing providers", "/organisations/#{current_user.organisation.id}/housing-providers", false),
               ]
             end
 
@@ -279,7 +272,6 @@ RSpec.describe NavigationItemsHelper do
                 NavigationItemsHelper::NavigationItem.new("Schemes", "/organisations/#{current_user.organisation.id}/schemes", false),
                 NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", true),
                 NavigationItemsHelper::NavigationItem.new("About this organisation", "/organisations/#{current_user.organisation.id}", false),
-                NavigationItemsHelper::NavigationItem.new("Housing providers", "/organisations/#{current_user.organisation.id}/housing-providers", false),
               ]
             end
 
@@ -306,7 +298,6 @@ RSpec.describe NavigationItemsHelper do
                 NavigationItemsHelper::NavigationItem.new("Schemes", "/organisations/#{current_user.organisation.id}/schemes", true),
                 NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
                 NavigationItemsHelper::NavigationItem.new("About this organisation", "/organisations/#{current_user.organisation.id}", false),
-                NavigationItemsHelper::NavigationItem.new("Housing providers", "/organisations/#{current_user.organisation.id}/housing-providers", false),
               ]
             end
 
@@ -333,7 +324,6 @@ RSpec.describe NavigationItemsHelper do
                 NavigationItemsHelper::NavigationItem.new("Schemes", "/organisations/#{current_user.organisation.id}/schemes", false),
                 NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
                 NavigationItemsHelper::NavigationItem.new("About this organisation", "/organisations/#{current_user.organisation.id}", true),
-                NavigationItemsHelper::NavigationItem.new("Housing providers", "/organisations/#{current_user.organisation.id}/housing-providers", false),
               ]
             end
 
@@ -357,6 +347,7 @@ RSpec.describe NavigationItemsHelper do
               NavigationItemsHelper::NavigationItem.new("Users", users_path, false),
               NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, false),
               NavigationItemsHelper::NavigationItem.new("Housing providers", "/organisations/#{current_user.organisation.id}/housing-providers", false),
+              NavigationItemsHelper::NavigationItem.new("Managing agents", "/organisations/#{current_user.organisation.id}/managing-agents", false),
             ]
           end
 
@@ -374,6 +365,7 @@ RSpec.describe NavigationItemsHelper do
               NavigationItemsHelper::NavigationItem.new("Users", users_path, false),
               NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, false),
               NavigationItemsHelper::NavigationItem.new("Housing providers", "/organisations/#{current_user.organisation.id}/housing-providers", false),
+              NavigationItemsHelper::NavigationItem.new("Managing agents", "/organisations/#{current_user.organisation.id}/managing-agents", false),
             ]
           end
 
@@ -391,6 +383,7 @@ RSpec.describe NavigationItemsHelper do
               NavigationItemsHelper::NavigationItem.new("Users", users_path, true),
               NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, false),
               NavigationItemsHelper::NavigationItem.new("Housing providers", "/organisations/#{current_user.organisation.id}/housing-providers", false),
+              NavigationItemsHelper::NavigationItem.new("Managing agents", "/organisations/#{current_user.organisation.id}/managing-agents", false),
             ]
           end
 
@@ -408,6 +401,7 @@ RSpec.describe NavigationItemsHelper do
               NavigationItemsHelper::NavigationItem.new("Users", users_path, false),
               NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, true),
               NavigationItemsHelper::NavigationItem.new("Housing providers", "/organisations/#{current_user.organisation.id}/housing-providers", false),
+              NavigationItemsHelper::NavigationItem.new("Managing agents", "/organisations/#{current_user.organisation.id}/managing-agents", false),
             ]
           end
 
@@ -425,6 +419,7 @@ RSpec.describe NavigationItemsHelper do
               NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
               NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, false),
               NavigationItemsHelper::NavigationItem.new("Housing providers", "/organisations/#{current_user.organisation.id}/housing-providers", false),
+              NavigationItemsHelper::NavigationItem.new("Managing agents", "/organisations/#{current_user.organisation.id}/managing-agents", false),
             ]
           end
 
@@ -442,6 +437,7 @@ RSpec.describe NavigationItemsHelper do
               NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", true),
               NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, false),
               NavigationItemsHelper::NavigationItem.new("Housing providers", "/organisations/#{current_user.organisation.id}/housing-providers", false),
+              NavigationItemsHelper::NavigationItem.new("Managing agents", "/organisations/#{current_user.organisation.id}/managing-agents", false),
             ]
           end
 
@@ -459,6 +455,7 @@ RSpec.describe NavigationItemsHelper do
               NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
               NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, false),
               NavigationItemsHelper::NavigationItem.new("Housing providers", "/organisations/#{current_user.organisation.id}/housing-providers", false),
+              NavigationItemsHelper::NavigationItem.new("Managing agents", "/organisations/#{current_user.organisation.id}/managing-agents", false),
             ]
           end
 
@@ -636,6 +633,7 @@ RSpec.describe NavigationItemsHelper do
                 NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
                 NavigationItemsHelper::NavigationItem.new("About this organisation", "/organisations/#{current_user.organisation.id}", false),
                 NavigationItemsHelper::NavigationItem.new("Housing providers", "/organisations/#{current_user.organisation.id}/housing-providers", false),
+                NavigationItemsHelper::NavigationItem.new("Managing agents", "/organisations/#{current_user.organisation.id}/managing-agents", false),
               ]
             end
 
@@ -665,6 +663,7 @@ RSpec.describe NavigationItemsHelper do
                 NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", true),
                 NavigationItemsHelper::NavigationItem.new("About this organisation", "/organisations/#{current_user.organisation.id}", false),
                 NavigationItemsHelper::NavigationItem.new("Housing providers", "/organisations/#{current_user.organisation.id}/housing-providers", false),
+                NavigationItemsHelper::NavigationItem.new("Managing agents", "/organisations/#{current_user.organisation.id}/managing-agents", false),
               ]
             end
 
@@ -694,6 +693,7 @@ RSpec.describe NavigationItemsHelper do
                 NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
                 NavigationItemsHelper::NavigationItem.new("About this organisation", "/organisations/#{current_user.organisation.id}", false),
                 NavigationItemsHelper::NavigationItem.new("Housing providers", "/organisations/#{current_user.organisation.id}/housing-providers", false),
+                NavigationItemsHelper::NavigationItem.new("Managing agents", "/organisations/#{current_user.organisation.id}/managing-agents", false),
               ]
             end
 
@@ -723,6 +723,7 @@ RSpec.describe NavigationItemsHelper do
                 NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
                 NavigationItemsHelper::NavigationItem.new("About this organisation", "/organisations/#{current_user.organisation.id}", true),
                 NavigationItemsHelper::NavigationItem.new("Housing providers", "/organisations/#{current_user.organisation.id}/housing-providers", false),
+                NavigationItemsHelper::NavigationItem.new("Managing agents", "/organisations/#{current_user.organisation.id}/managing-agents", false),
               ]
             end
 

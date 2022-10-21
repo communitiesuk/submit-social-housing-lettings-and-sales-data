@@ -158,7 +158,7 @@ RSpec.describe FormController, type: :request do
 
           before do
             Timecop.freeze(Time.zone.local(2022, 12, 1))
-            get "/lettings-logs/#{lettings_log_2022.id}/setup/check-answers", headers: headers, params: {}
+            get "/lettings-logs/#{lettings_log_2022.id}/setup/check-answers", headers:, params: {}
           end
 
           after do
@@ -267,7 +267,7 @@ RSpec.describe FormController, type: :request do
 
           it "logs that validation was triggered" do
             expect(Rails.logger).to receive(:info).with("User triggered validation(s) on: age1").once
-            post "/lettings-logs/#{lettings_log.id}/form", params: params
+            post "/lettings-logs/#{lettings_log.id}/form", params:
           end
 
           context "when the number of days is too high for the month" do

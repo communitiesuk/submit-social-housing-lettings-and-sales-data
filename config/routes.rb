@@ -80,6 +80,7 @@ Rails.application.routes.draw do
       get "logs/csv-confirmation", to: "lettings_logs#csv_confirmation"
       get "schemes", to: "organisations#schemes"
       get "housing-providers", to: "organisation_relationships#housing_providers"
+      get "managing-agents", to: "organisation_relationships#managing_agents"
     end
   end
 
