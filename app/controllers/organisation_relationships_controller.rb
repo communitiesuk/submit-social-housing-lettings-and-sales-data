@@ -23,7 +23,6 @@ class OrganisationRelationshipsController < ApplicationController
     respond_to do |format|
       format.html do
         @organisations = organisations
-        @searched = search_term.presence
         render "organisation_relationships/add_housing_provider", layout: "application"
       end
     end
