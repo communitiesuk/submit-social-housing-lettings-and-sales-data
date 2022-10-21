@@ -5,7 +5,7 @@
   <%= render partial: "organisations/headings", locals: { main: @organisation.name, sub: nil } %>
   <%= render SubNavigationComponent.new(
     items: secondary_items(request.path, @organisation.id),
-    ) %>
+  ) %>
   <h2 class="govuk-visually-hidden">managing agents</h2>
   <p class="govuk-body">A managing agent can submit logs for your organisation.</p>
 <% else %>
