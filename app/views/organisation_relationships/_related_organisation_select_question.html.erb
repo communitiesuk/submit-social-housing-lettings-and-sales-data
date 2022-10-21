@@ -1,15 +1,9 @@
-<% answers = [OpenStruct.new(id: 1, name: "test1", resource: nil), OpenStruct.new(id: 2, name: "test2", resource: nil)] %>
+<% answers = question.answer_options.map { |key, value| OpenStruct.new(id: key, name: value) } %>
 <%= f.govuk_select(question.id.to_sym,
-                   label: legend(question, page_header, conditional),
-                   "data-controller": "accessible-autocomplete",
-                   caption: caption(caption_text, page_header, conditional),
-                   hint: { text: question.hint_text&.html_safe }) do %>
+                   "data-controller": "accessible-autocomplete",) do %>
   <% answers.each do |answer| %>
-    <option value="<%= answer.id %>"
-            data-synonyms="<%= question.answer_option_synonyms(answer.resource) %>"
-            data-append="<%= question.answer_option_append(answer.resource) %>"
-            data-hint="<%= question.answer_option_hint(answer.resource) %>"
-            <%= question.answer_selected?(@log, answer) ? "selected" : "" %>
-            <%= answer.id == "" ? "disabled" : "" %>><%= answer.name || answer.resource %></option>
+    <option value="<%= answer.id %>">
+      <%= answer.name %>
+    </option>
   <% end %>
 <% end %>

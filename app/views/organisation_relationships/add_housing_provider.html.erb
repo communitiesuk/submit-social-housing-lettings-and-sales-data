@@ -1,9 +1,25 @@
-
-<%= form_with model: nil, url: housing_providers_add_organisation_path, method: "post", local: true do |f| %>
+<%= form_with model: nil, url: housing_providers_organisation_path, method: "post", local: true do |f| %>
   <%# remove_other_page_errors(@log, @page) %>
   <%#= f.govuk_error_summary %>
-  <%= render partial: "organisations/headings", locals: { main: "What is the name of your housing provider?", sub: nil } %>
-  <%#= render partial: "form/#{question.type}_question", locals: { question:, caption_text: @subsection.label, page_header: @page.header, lettings_log: @log, f:, conditional: false } %>
+  <% if current_user.support? %>
+    <%= render partial: "organisations/headings", locals: { main: @organisation.name, sub: nil } %>
+    <%= render SubNavigationComponent.new(items: secondary_items(request.path, @organisation.id)) %>
+    <h2 class="govuk-visually-hidden">Add Housing Provider</h2>
+  <% end %>
+  <% answer_options = { "" => "Select an option" } %>
+  <% @organisations.each do |organisation| %>
+    <% answer_options[organisation.id] = organisation.name unless organisation.id == @organisation.id %>
+  <% end %>
+  <% if current_user.support? %>
+    <%= render partial: "organisations/headings", locals: { main: "What is the name of this organisation's housing provider?", sub: nil } %>
+    <p class="govuk-body">Start typing to search for a housing provider</p>
+  <% else %>
+    <%= render partial: "organisations/headings", locals: { main: "What is the name of your housing provider?", sub: nil } %>
+    <p class="govuk-body">Start typing to search for your housing provider</p>
+  <% end %>
+  <%= render partial: "organisation_relationships/related_organisation_select_question", locals: {
+    question: Form::Question.new("", {"answer_options" => answer_options}, nil),
+    f: } %>
   <%= f.govuk_submit "Add" %>
   <%= govuk_details(summary_text: "Can't find the housing provider you're looking for?") do %>
     <ul class="govuk-list govuk-list--bullet">

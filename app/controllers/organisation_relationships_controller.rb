@@ -19,16 +19,20 @@ class OrganisationRelationshipsController < ApplicationController
   end
 
   def add_housing_provider
-    housing_providers = organisation.housing_providers
-    unpaginated_filtered_housing_providers = filtered_collection(housing_providers, search_term)
+    organisations = Organisation.all
     respond_to do |format|
       format.html do
-        @pagy, @housing_providers = pagy(unpaginated_filtered_housing_providers)
+        @organisations = organisations
         @searched = search_term.presence
-        @total_count = housing_providers.size
         render "organisation_relationships/add_housing_provider", layout: "application"
       end
     end
+  end
+
+  def create
+    @resource = OrganisationRelationship.new(child_organisation_id: 3, parent_organisation_id: 4, relationship_type: 0)
+    @resource.save!
+    redirect_to housing_providers_organisation_path
   end
 
 private

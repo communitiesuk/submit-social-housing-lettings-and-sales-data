@@ -81,7 +81,7 @@ Rails.application.routes.draw do
       get "schemes", to: "organisations#schemes"
       get "housing-providers", to: "organisation_relationships#housing_providers"
       get "housing-providers/add", to: "organisation_relationships#add_housing_provider"
-      post "housing-providers/add", to: "organisation_relationships#housing_providers"
+      post "housing-providers", to: "organisation_relationships#create"
     end
   end
 
