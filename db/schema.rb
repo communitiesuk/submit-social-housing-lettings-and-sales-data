@@ -14,6 +14,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_19_082625) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "collections", force: :cascade do |t|
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.string "type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "data_protection_confirmations", force: :cascade do |t|
     t.bigint "organisation_id"
     t.bigint "data_protection_officer_id"
@@ -237,12 +245,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_19_082625) do
     t.integer "void_date_value_check"
     t.integer "housingneeds_type"
     t.integer "housingneeds_other"
-    t.index ["created_by_id"], name: "index_lettings_logs_on_created_by_id"
-    t.index ["location_id"], name: "index_lettings_logs_on_location_id"
-    t.index ["managing_organisation_id"], name: "index_lettings_logs_on_managing_organisation_id"
-    t.index ["old_id"], name: "index_lettings_logs_on_old_id", unique: true
-    t.index ["owning_organisation_id"], name: "index_lettings_logs_on_owning_organisation_id"
-    t.index ["scheme_id"], name: "index_lettings_logs_on_scheme_id"
+    t.index ["created_by_id"], name: "index_case_logs_on_created_by_id"
+    t.index ["location_id"], name: "index_case_logs_on_location_id"
+    t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
+    t.index ["old_id"], name: "index_case_logs_on_old_id", unique: true
+    t.index ["owning_organisation_id"], name: "index_case_logs_on_owning_organisation_id"
+    t.index ["scheme_id"], name: "index_case_logs_on_scheme_id"
   end
 
   create_table "locations", force: :cascade do |t|
@@ -319,6 +327,26 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_19_082625) do
     t.index ["old_visible_id"], name: "index_organisations_on_old_visible_id", unique: true
   end
 
+  create_table "pages", force: :cascade do |t|
+    t.string "name"
+    t.string "header"
+    t.string "description"
+    t.integer "subsection_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "questions", force: :cascade do |t|
+    t.string "name"
+    t.string "check_answer_label"
+    t.string "header"
+    t.string "type"
+    t.integer "page_id"
+    t.integer "width"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "sales_logs", force: :cascade do |t|
     t.integer "status", default: 0
     t.datetime "saledate"
@@ -334,15 +362,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_19_082625) do
     t.integer "jointmore"
     t.integer "jointpur"
     t.integer "beds"
-    t.integer "companybuy"
     t.integer "age1"
     t.integer "age1_known"
     t.string "sex1"
+    t.integer "buy1livein"
+    t.integer "companybuy"
     t.integer "national"
     t.string "othernational"
     t.integer "ethnic"
     t.integer "ethnic_group"
-    t.integer "buy1livein"
     t.integer "buylivein"
     t.integer "builtype"
     t.integer "proptype"
@@ -355,18 +383,18 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_19_082625) do
     t.integer "ecstat2"
     t.integer "privacynotice"
     t.integer "ecstat1"
-    t.integer "wheel"
     t.integer "hholdcount"
+    t.integer "wheel"
     t.integer "age3"
     t.integer "age3_known"
-    t.integer "income1"
-    t.integer "income1nk"
     t.integer "age4"
     t.integer "age4_known"
     t.integer "age5"
     t.integer "age5_known"
     t.integer "age6"
     t.integer "age6_known"
+    t.integer "income1"
+    t.integer "income1nk"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
@@ -394,6 +422,23 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_19_082625) do
     t.boolean "confirmed"
     t.index ["managing_organisation_id"], name: "index_schemes_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_schemes_on_owning_organisation_id"
+  end
+
+  create_table "sections", force: :cascade do |t|
+    t.string "header"
+    t.string "description"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "collection_id"
+  end
+
+  create_table "subsections", force: :cascade do |t|
+    t.string "name"
+    t.string "label"
+    t.integer "section_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|

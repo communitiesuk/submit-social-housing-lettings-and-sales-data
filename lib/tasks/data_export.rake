@@ -4,13 +4,6 @@ namespace :core do
     format = args[:format]
     full_update = args[:full_update].present? && args[:full_update] == "true"
 
-    storage_service = Storage::S3Service.new(Configuration::PaasConfigurationService.new, ENV["EXPORT_PAAS_INSTANCE"])
-    export_service = Exports::LettingsLogExportService.new(storage_service)
-
-    if format.present? && format == "CSV"
-      export_service.export_csv_lettings_logs
-    else
-      export_service.export_xml_lettings_logs(full_update:)
-    end
+    DataExportJob.perform_later(format, full_update)
   end
 end
