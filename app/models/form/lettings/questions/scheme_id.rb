@@ -33,10 +33,6 @@ class Form::Lettings::Questions::SchemeId < ::Form::Question
     !supported_housing_selected?(lettings_log)
   end
 
-  def answer_selected?(lettings_log, answer)
-    lettings_log[id] == answer.name || lettings_log[id] == answer.resource
-  end
-
 private
 
   def supported_housing_selected?(lettings_log)
