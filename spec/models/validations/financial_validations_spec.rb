@@ -800,7 +800,7 @@ RSpec.describe Validations::FinancialValidations do
 
           financial_validator.validate_rent_amount(record)
           expect(record.errors["brent"])
-            .to include(match I18n.t("validations.financial.brent.not_in_range"))
+            .to include(match I18n.t("validations.financial.brent.below_hard_min"))
         end
 
         it "validates hard max" do
@@ -813,15 +813,15 @@ RSpec.describe Validations::FinancialValidations do
 
           financial_validator.validate_rent_amount(record)
           expect(record.errors["brent"])
-            .to include(match I18n.t("validations.financial.brent.not_in_range"))
+            .to include(match I18n.t("validations.financial.brent.above_hard_max"))
           expect(record.errors["beds"])
-            .to include(match I18n.t("validations.financial.brent.beds.not_in_range"))
+            .to include(match I18n.t("validations.financial.brent.beds.above_hard_max"))
           expect(record.errors["la"])
-            .to include(match I18n.t("validations.financial.brent.la.not_in_range"))
+            .to include(match I18n.t("validations.financial.brent.la.above_hard_max"))
           expect(record.errors["rent_type"])
-            .to include(match I18n.t("validations.financial.brent.rent_type.not_in_range"))
+            .to include(match I18n.t("validations.financial.brent.rent_type.above_hard_max"))
           expect(record.errors["needstype"])
-            .to include(match I18n.t("validations.financial.brent.needstype.not_in_range"))
+            .to include(match I18n.t("validations.financial.brent.needstype.above_hard_max"))
         end
 
         it "validates hard max for correct collection year" do
@@ -834,15 +834,15 @@ RSpec.describe Validations::FinancialValidations do
 
           financial_validator.validate_rent_amount(record)
           expect(record.errors["brent"])
-            .to include(match I18n.t("validations.financial.brent.not_in_range"))
+            .to include(match I18n.t("validations.financial.brent.above_hard_max"))
           expect(record.errors["beds"])
-            .to include(match I18n.t("validations.financial.brent.beds.not_in_range"))
+            .to include(match I18n.t("validations.financial.brent.beds.above_hard_max"))
           expect(record.errors["la"])
-            .to include(match I18n.t("validations.financial.brent.la.not_in_range"))
+            .to include(match I18n.t("validations.financial.brent.la.above_hard_max"))
           expect(record.errors["rent_type"])
-            .to include(match I18n.t("validations.financial.brent.rent_type.not_in_range"))
+            .to include(match I18n.t("validations.financial.brent.rent_type.above_hard_max"))
           expect(record.errors["needstype"])
-            .to include(match I18n.t("validations.financial.brent.needstype.not_in_range"))
+            .to include(match I18n.t("validations.financial.brent.needstype.above_hard_max"))
         end
 
         it "does not error if some of the fields are missing" do
