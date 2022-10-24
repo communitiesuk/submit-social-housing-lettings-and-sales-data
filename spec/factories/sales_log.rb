@@ -49,6 +49,8 @@ FactoryBot.define do
       age6 { 40 }
       income1nk { 0 }
       income1 { 10_000 }
+      la_known { "1" }
+      la { "E09000003" }
     end
   end
 end
