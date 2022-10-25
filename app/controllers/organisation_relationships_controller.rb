@@ -29,6 +29,11 @@ class OrganisationRelationshipsController < ApplicationController
   end
 
   def create
+    @resource = OrganisationRelationship.new
+    if params["related_organisation_id"] == nil
+      @resource.errors.add :housing_providers, "Select a housing provider"
+      return
+    end
     @resource = OrganisationRelationship.new(child_organisation_id: @organisation.id, parent_organisation_id: related_organisation_params, relationship_type: 0)
     @resource.save!
     redirect_to housing_providers_organisation_path
@@ -38,10 +43,6 @@ private
 
   def organisation
     @organisation ||= Organisation.find(params[:id])
-  end
-
-  def related_organisation
-    Organisation.find(params[:related_organisation_id])
   end
 
   def related_organisation_params

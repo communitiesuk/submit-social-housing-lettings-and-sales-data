@@ -1,6 +1,5 @@
-<%= form_with url: housing_providers_organisation_path, method: "post", local: true do |f| %>
-  <%# remove_other_page_errors(@log, @page) %>
-  <%#= f.govuk_error_summary %>
+<%= form_with model: @organisation, url: housing_providers_organisation_path, method: "post", local: true do |f| %>
+  <%= f.govuk_error_summary %>
   <% if current_user.support? %>
     <%= render partial: "organisations/headings", locals: { main: @organisation.name, sub: nil } %>
     <%= render SubNavigationComponent.new(items: secondary_items(request.path, @organisation.id)) %>
