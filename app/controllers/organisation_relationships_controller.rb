@@ -29,7 +29,7 @@ class OrganisationRelationshipsController < ApplicationController
   end
 
   def create
-    @resource = OrganisationRelationship.new(child_organisation_id: 3, parent_organisation_id: 4, relationship_type: 0)
+    @resource = OrganisationRelationship.new(child_organisation_id: @organisation.id, parent_organisation_id: related_organisation_params, relationship_type: 0)
     @resource.save!
     redirect_to housing_providers_organisation_path
   end
@@ -38,6 +38,14 @@ private
 
   def organisation
     @organisation ||= Organisation.find(params[:id])
+  end
+
+  def related_organisation
+    Organisation.find(params[:related_organisation_id])
+  end
+
+  def related_organisation_params
+    params.require(:related_organisation_id)
   end
 
   def search_term

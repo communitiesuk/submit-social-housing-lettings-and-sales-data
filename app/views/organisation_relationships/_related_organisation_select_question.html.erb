@@ -1,6 +1,5 @@
 <% answers = question.answer_options.map { |key, value| OpenStruct.new(id: key, name: value) } %>
-<%= f.govuk_select(question.id.to_sym,
-                   "data-controller": "accessible-autocomplete",) do %>
+<%= f.govuk_select :related_organisation_id do %>
   <% answers.each do |answer| %>
     <option value="<%= answer.id %>">
       <%= answer.name %>
