@@ -1,8 +1,3 @@
 <% answers = question.answer_options.map { |key, value| OpenStruct.new(id: key, name: value) } %>
-<%= f.govuk_select(:related_organisation_id, "data-controller": "accessible-autocomplete") do %>
-  <% answers.each do |answer| %>
-    <option value="<%= answer.id %>">
-      <%= answer.name %>
-    </option>
-  <% end %>
+<%= f.govuk_collection_select :related_organisation_id, answers, :id, :name, label: { hidden: true }, "data-controller": "accessible-autocomplete" do %>
 <% end %>
