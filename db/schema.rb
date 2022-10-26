@@ -367,6 +367,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_19_082625) do
     t.integer "age5_known"
     t.integer "age6"
     t.integer "age6_known"
+    t.string "la"
+    t.integer "la_known"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
