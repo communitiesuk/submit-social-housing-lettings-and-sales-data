@@ -321,6 +321,16 @@ RSpec.describe OrganisationsController, type: :request do
           end
         end
 
+        context "when adding a housing provider" do
+          before do
+            get "/organisations/#{organisation.id}/housing-providers/add", headers:, params: {}
+          end
+
+          it "has the correct header" do
+            expect(response.body).to include("What is the name of your housing provider?")
+          end
+        end
+
         context "with an organisation that are not in scope for the user, i.e. that they do not belong to" do
           before do
             get "/organisations/#{unauthorised_organisation.id}/housing-providers", headers:, params: {}
