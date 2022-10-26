@@ -1,4 +1,11 @@
 <% item_label = format_label(@pagy.count, "housing providers") %>
+<%= govuk_notification_banner(
+      title_text: "Success",
+      success: true, title_heading_level: 3,
+      title_id: "swanky-notifications"
+    ) do |notification_banner|
+  notification_banner.heading(text: "#{Organisation.find(params["related_organisation_id"].to_i).name} is now one of your housing providers")
+end %>
 <% if current_user.support? %>
   <%= render partial: "organisations/headings", locals: { main: @organisation.name, sub: nil } %>
   <%= render SubNavigationComponent.new(items: secondary_items(request.path, @organisation.id)) %>
@@ -8,6 +15,7 @@
   <%= render partial: "organisations/headings", locals: { main: "Your housing providers", sub: nil } %>
   <p class="govuk-body">Your organisation can submit logs for its housing providers.</p>
 <% end %>
+
 <% if @total_count == 0 %>
   <p class="govuk-body">This organisation does not currently have any housing providers.</p>
 <% end %>
