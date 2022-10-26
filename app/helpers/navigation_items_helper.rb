@@ -45,7 +45,7 @@ module NavigationItemsHelper
       ].compact
     else
       [
-        NavigationItem.new("Lettings logs", "/organisations/#{current_organisation_id}/lettings-logs", subnav_logs_path?(path)),
+        NavigationItem.new("Lettings logs", "/organisations/#{current_organisation_id}/lettings-logs", subnav_lettings_logs_path?(path)),
         FeatureToggle.sales_log_enabled? ? NavigationItem.new("Sales logs", "/organisations/#{current_organisation_id}/sales-logs", sales_logs_current?(path)) : nil,
         NavigationItem.new("Users", "/organisations/#{current_organisation_id}/users", subnav_users_path?(path)),
         NavigationItem.new("About this organisation", "/organisations/#{current_organisation_id}", subnav_details_path?(path)),
