@@ -8,7 +8,7 @@ class OrganisationRelationshipsController < ApplicationController
   def housing_providers
     housing_providers = organisation.housing_providers
     unpaginated_filtered_housing_providers = filtered_collection(housing_providers, search_term)
-    organisations = Organisation.all
+    organisations = Organisation.where.not(id: @organisation.id).pluck(:id, :name)
     respond_to do |format|
       format.html do
         @pagy, @housing_providers = pagy(unpaginated_filtered_housing_providers)
