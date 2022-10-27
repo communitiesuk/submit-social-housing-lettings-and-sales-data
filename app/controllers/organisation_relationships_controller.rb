@@ -63,7 +63,6 @@ private
   end
 
   def related_organisation_id
-    params.require(:organisation).permit(:related_organisation_id)
     params["organisation"]["related_organisation_id"]
   end
 
