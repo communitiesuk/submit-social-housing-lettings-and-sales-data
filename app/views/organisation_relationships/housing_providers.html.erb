@@ -7,8 +7,8 @@
           success: true, title_heading_level: 3,
           title_id: "swanky-notifications"
         ) do |notification_banner|
-      notification_banner.heading(text: "#{Organisation.find(params['related_organisation_id']).name} is now one of your housing providers")
-    end %>
+          notification_banner.heading(text: "#{Organisation.find(params['related_organisation_id']).name} is now one of your housing providers")
+        end %>
   <% end %>
 <% end %>
 <% if current_user.support? %>
@@ -21,8 +21,8 @@
           success: true, title_heading_level: 3,
           title_id: "swanky-notifications"
         ) do |notification_banner|
-      notification_banner.heading(text: "#{Organisation.find(params['related_organisation_id']).name} is now one of this organisation's housing providers")
-    end %>
+          notification_banner.heading(text: "#{Organisation.find(params['related_organisation_id']).name} is now one of this organisation's housing providers")
+        end %>
   <% end %>
   <p class="govuk-body">This organisation can submit logs for its housing providers.</p>
   <% if @total_count == 0 %>
