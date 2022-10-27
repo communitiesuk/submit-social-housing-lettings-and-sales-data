@@ -24,9 +24,15 @@
     end %>
   <% end %>
   <p class="govuk-body">This organisation can submit logs for its housing providers.</p>
+  <% if @total_count == 0 %>
+    <p class="govuk-body">This organisation does not currently have any housing providers.</p>
+  <% end %>
 <% else %>
   <%= render partial: "organisations/headings", locals: { main: "Your housing providers", sub: current_user.organisation.name } %>
   <p class="govuk-body">Your organisation can submit logs for its housing providers.</p>
+  <% if @total_count == 0 %>
+    <p class="govuk-body">You do not currently have any housing providers.</p>
+  <% end %>
 <% end %>
 
 
