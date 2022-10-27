@@ -20,8 +20,9 @@
     <% answer_options[organisation[0]] = organisation[1] %>
   <% end %>
   <%= render partial: "organisation_relationships/related_organisation_select_question", locals: {
-    question: Form::Question.new("", {"answer_options" => answer_options}, nil),
-    f: } %>
+    question: Form::Question.new("", { "answer_options" => answer_options }, nil),
+    f:,
+  } %>
   <%= f.govuk_submit "Add" %>
   <%= govuk_details(summary_text: "Can't find the housing provider you're looking for?") do %>
     <ul class="govuk-list govuk-list--bullet">

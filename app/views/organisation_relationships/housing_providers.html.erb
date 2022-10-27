@@ -7,9 +7,10 @@
           success: true, title_heading_level: 3,
           title_id: "swanky-notifications"
         ) do |notification_banner|
-      notification_banner.heading(text: "#{Organisation.find(params["related_organisation_id"]).name} is now one of your housing providers")
+      notification_banner.heading(text: "#{Organisation.find(params['related_organisation_id']).name} is now one of your housing providers")
     end %>
-  <% end %><% end %>
+  <% end %>
+<% end %>
 <% if current_user.support? %>
   <%= render partial: "organisations/headings", locals: { main: @organisation.name, sub: nil } %>
   <%= render SubNavigationComponent.new(items: secondary_items(request.path, @organisation.id)) %>
@@ -20,7 +21,7 @@
           success: true, title_heading_level: 3,
           title_id: "swanky-notifications"
         ) do |notification_banner|
-      notification_banner.heading(text: "#{Organisation.find(params["related_organisation_id"]).name} is now one of your housing providers")
+      notification_banner.heading(text: "#{Organisation.find(params['related_organisation_id']).name} is now one of this organisation's housing providers")
     end %>
   <% end %>
   <p class="govuk-body">This organisation can submit logs for its housing providers.</p>
@@ -34,7 +35,6 @@
     <p class="govuk-body">You do not currently have any housing providers.</p>
   <% end %>
 <% end %>
-
 
 <% if current_user.support? %>
   <%= govuk_button_link_to "Add a housing provider", housing_providers_add_organisation_path(organisation_id: @organisation.id), html: { method: :get } %>
