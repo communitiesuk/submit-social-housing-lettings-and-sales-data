@@ -23,15 +23,22 @@
       notification_banner.heading(text: "#{Organisation.find(params["related_organisation_id"]).name} is now one of your housing providers")
     end %>
   <% end %>
-  <p class="govuk-body">This organisation can submit logs for its housing providers.</p>
+  <% if @total_count == 0 %>
+    <p class="govuk-body">This organisation does not currently have any housing providers.</p>
+  <% else %>
+    <p class="govuk-body">This organisation can submit logs for its housing providers.</p>
+  <% end %>
+
 <% else %>
   <%= render partial: "organisations/headings", locals: { main: "Your housing providers", sub: nil } %>
-  <p class="govuk-body">Your organisation can submit logs for its housing providers.</p>
+  <% if @total_count == 0 %>
+    <p class="govuk-body">Your organisation does not currently have any housing providers.</p>
+  <% else %>
+    <p class="govuk-body">Your organisation can submit logs for its housing providers.</p>
+  <% end %>
 <% end %>
 
-<% if @total_count == 0 %>
-  <p class="govuk-body">This organisation does not currently have any housing providers.</p>
-<% end %>
+
 <% if current_user.support? %>
   <%= govuk_button_link_to "Add a housing provider", housing_providers_add_organisation_path(organisation_id: @organisation.id), html: { method: :get } %>
   <% elsif current_user.data_coordinator? %>

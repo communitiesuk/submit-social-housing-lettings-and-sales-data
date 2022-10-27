@@ -30,37 +30,30 @@ class OrganisationRelationshipsController < ApplicationController
   end
 
   def create_housing_provider
-    create(0)
-  end
-
-  def create_managing_agent
-    create(1)
-  end
-
-  def create(relationship_type)
+    child_organisation_id = @organisation.id
+    parent_organisation_id = related_organisation_id
     if related_organisation_id.empty?
       @organisation.errors.add :related_organisation_id, "You must choose a housing provider"
-      @organisations = Organisation.where.not(id: @organisation.id).pluck(:id, :name)
+      @organisations = Organisation.where.not(id: child_organisation_id).pluck(:id, :name)
+      render 'organisation_relationships/add_housing_provider'
+      return
+    elsif OrganisationRelationship.exists?(child_organisation_id:, parent_organisation_id:, relationship_type: 0)
+      @organisation.errors.add :related_organisation_id, "You have already added this housing provider"
+      @organisations = Organisation.where.not(id: child_organisation_id).pluck(:id, :name)
       render 'organisation_relationships/add_housing_provider'
       return
     end
-    case relationship_type
-    when 0
-      if OrganisationRelationship.exists?(child_organisation_id: @organisation.id, parent_organisation_id: related_organisation_id, relationship_type: 0)
-        @organisation.errors.add :related_organisation_id, "You have already added this housing provider"
-        @organisations = Organisation.where.not(id: @organisation.id).pluck(:id, :name)
-        render 'organisation_relationships/add_housing_provider'
-      else
-        @resource = OrganisationRelationship.new(child_organisation_id: @organisation.id, parent_organisation_id: related_organisation_id, relationship_type: 0)
-        @resource.save!
-        redirect_to housing_providers_organisation_path(related_organisation_id:)
-      end
-    when 1
-      @resource = OrganisationRelationship.new(child_organisation_id: related_organisation_id, parent_organisation_id: @organisation.id, relationship_type: 1)
-      @resource.save!
-      redirect_to managing_agents_organisation_path
-    end
+    create(child_organisation_id, parent_organisation_id, 0)
+    redirect_to housing_providers_organisation_path(related_organisation_id:)
+  end
 
+  def create_managing_agent
+    create(related_organisation_id, @organisation.id, 1)
+  end
+
+  def create(child_organisation_id, parent_organisation_id, relationship_type)
+    @resource = OrganisationRelationship.new(child_organisation_id:, parent_organisation_id:, relationship_type:)
+    @resource.save!
   end
 
 private
@@ -79,7 +72,7 @@ private
   end
 
   def authenticate_scope!
-    if current_user.organisation != organisation
+    if current_user.organisation != organisation && !current_user.support?
       render_not_found
     end
   end
