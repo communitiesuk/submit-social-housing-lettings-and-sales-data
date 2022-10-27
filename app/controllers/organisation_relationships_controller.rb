@@ -61,7 +61,7 @@ class OrganisationRelationshipsController < ApplicationController
     redirect_to housing_providers_organisation_path(related_organisation_id:)
   end
 
-  def create(child_organisation_id:, parent_organisation_id:, relationship_type:)
+  def create!(child_organisation_id:, parent_organisation_id:, relationship_type:)
     @resource = OrganisationRelationship.new(child_organisation_id:, parent_organisation_id:, relationship_type:)
     @resource.save!
   end
