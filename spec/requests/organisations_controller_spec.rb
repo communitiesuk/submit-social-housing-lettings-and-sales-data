@@ -1166,6 +1166,57 @@ RSpec.describe OrganisationsController, type: :request do
           end
         end
 
+        context "when viewing a specific organisation's housing providers" do
+          let!(:housing_provider) { FactoryBot.create(:organisation) }
+          let!(:other_org_housing_provider) { FactoryBot.create(:organisation, name: "Foobar LTD") }
+          let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD 2") }
+
+          before do
+            FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: housing_provider, relationship_type: OrganisationRelationship.relationship_types[:owning])
+            FactoryBot.create(:organisation_relationship, child_organisation: other_organisation, parent_organisation: other_org_housing_provider, relationship_type: OrganisationRelationship.relationship_types[:owning])
+            get "/organisations/#{organisation.id}/housing-providers", headers:, params: {}
+          end
+
+          it "displays the name of the organisation" do
+            expect(page).to have_content(organisation.name)
+          end
+
+          it "has a sub-navigation with correct tabs" do
+            expect(page).to have_css(".app-sub-navigation")
+            expect(page).to have_content("Users")
+          end
+
+          it "shows a table of housing providers" do
+            expected_html = "<table class=\"govuk-table\""
+            expect(response.body).to include(expected_html)
+            expect(response.body).to include(housing_provider.name)
+          end
+
+          it "shows only housing providers for this organisation" do
+            expect(page).to have_content(housing_provider.name)
+            expect(page).not_to have_content(other_org_housing_provider.name)
+          end
+
+          it "shows the pagination count" do
+            expect(page).to have_content("1 total housing providers")
+          end
+
+          context "when adding a housing provider" do
+            before do
+              get "/organisations/#{organisation.id}/housing-providers/add", headers:, params: {}
+            end
+
+            it "has the correct header" do
+              expect(response.body).to include("What is the name of this organisation&#39;s housing provider?")
+            end
+
+            it "shows an add button" do
+              expect(page).to have_button("Add")
+            end
+          end
+
+        end
+
         context "when there are more than 20 organisations" do
           let(:total_organisations_count) { Organisation.all.count }
 
