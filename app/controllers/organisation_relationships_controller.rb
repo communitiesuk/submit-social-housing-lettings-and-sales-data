@@ -45,26 +45,27 @@ class OrganisationRelationshipsController < ApplicationController
   def create_housing_provider
     child_organisation_id = @organisation.id
     parent_organisation_id = related_organisation_id
+    relationship_type = OrganisationRelationship::OWNING
     if related_organisation_id.empty?
       @organisation.errors.add :related_organisation_id, "You must choose a housing provider"
       @organisations = Organisation.where.not(id: child_organisation_id).pluck(:id, :name)
       render 'organisation_relationships/add_housing_provider'
       return
-    elsif OrganisationRelationship.exists?(child_organisation_id:, parent_organisation_id:, relationship_type: 0)
+    elsif OrganisationRelationship.exists?(child_organisation_id:, parent_organisation_id:, relationship_type:)
       @organisation.errors.add :related_organisation_id, "You have already added this housing provider"
       @organisations = Organisation.where.not(id: child_organisation_id).pluck(:id, :name)
       render 'organisation_relationships/add_housing_provider'
       return
     end
-    create(child_organisation_id, parent_organisation_id, 0)
+    create(child_organisation_id:, parent_organisation_id:, relationship_type:)
     redirect_to housing_providers_organisation_path(related_organisation_id:)
   end
 
   def create_managing_agent
-    create(related_organisation_id, @organisation.id, 1)
+    create(child_organisation_id: related_organisation_id, parent_organisation_id: @organisation.id, relationship_type: 1)
   end
 
-  def create(child_organisation_id, parent_organisation_id, relationship_type)
+  def create(child_organisation_id:, parent_organisation_id:, relationship_type:)
     @resource = OrganisationRelationship.new(child_organisation_id:, parent_organisation_id:, relationship_type:)
     @resource.save!
   end

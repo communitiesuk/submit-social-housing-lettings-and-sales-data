@@ -335,7 +335,6 @@ RSpec.describe OrganisationsController, type: :request do
           end
         end
 
-
         context "with an organisation that are not in scope for the user, i.e. that they do not belong to" do
           before do
             get "/organisations/#{unauthorised_organisation.id}/housing-providers", headers:, params: {}
