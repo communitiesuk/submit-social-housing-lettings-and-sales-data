@@ -534,6 +534,34 @@ RSpec.describe OrganisationsController, type: :request do
           expect { request }.not_to change(Organisation, :count)
         end
       end
+
+      describe "organisation_relationships#create_housing_provider" do
+        let!(:housing_provider) { FactoryBot.create(:organisation) }
+
+        let(:params) do
+          {
+            "organisation": {
+              "related_organisation_id": housing_provider.id,
+            },
+          }
+        end
+
+        let(:request) { post "/organisations/#{organisation.id}/housing-providers", headers:, params: }
+
+        it "creates a new organisation relationship" do
+          expect { request }.to change(OrganisationRelationship, :count).by(1)
+        end
+
+        it "sets the organisation relationship attributes correctly" do
+          request
+          expect(OrganisationRelationship.exists?(child_organisation_id: organisation.id, parent_organisation_id: housing_provider.id, relationship_type: OrganisationRelationship::OWNING)).to be_truthy
+        end
+
+        it "redirects to the organisation list" do
+          request
+          expect(response).to redirect_to("/organisations/#{organisation.id}/housing-providers?related_organisation_id=#{housing_provider.id}")
+        end
+      end
     end
 
     context "with a data provider user" do
@@ -1214,7 +1242,6 @@ RSpec.describe OrganisationsController, type: :request do
               expect(page).to have_button("Add")
             end
           end
-
         end
 
         context "when there are more than 20 organisations" do
@@ -1372,6 +1399,34 @@ RSpec.describe OrganisationsController, type: :request do
             expect(page).to have_content(I18n.t("validations.organisation.name_missing"))
             expect(page).to have_content(I18n.t("validations.organisation.provider_type_missing"))
           end
+        end
+      end
+
+      describe "organisation_relationships#create_housing_provider" do
+        let!(:housing_provider) { FactoryBot.create(:organisation) }
+
+        let(:params) do
+          {
+            "organisation": {
+              "related_organisation_id": housing_provider.id,
+            },
+          }
+        end
+
+        let(:request) { post "/organisations/#{organisation.id}/housing-providers", headers:, params: }
+
+        it "creates a new organisation relationship" do
+          expect { request }.to change(OrganisationRelationship, :count).by(1)
+        end
+
+        it "sets the organisation relationship attributes correctly" do
+          request
+          expect(OrganisationRelationship.exists?(child_organisation_id: organisation.id, parent_organisation_id: housing_provider.id, relationship_type: OrganisationRelationship::OWNING)).to be_truthy
+        end
+
+        it "redirects to the organisation list" do
+          request
+          expect(response).to redirect_to("/organisations/#{organisation.id}/housing-providers?related_organisation_id=#{housing_provider.id}")
         end
       end
     end
