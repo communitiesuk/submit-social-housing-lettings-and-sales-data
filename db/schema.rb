@@ -14,17 +14,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_19_082625) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "2022", id: false, force: :cascade do |t|
-    t.integer "ranges_rent_id"
-    t.integer "lettype"
-    t.text "la"
-    t.integer "beds"
-    t.decimal "soft_min"
-    t.decimal "soft_max"
-    t.decimal "hard_min"
-    t.decimal "hard_max"
-  end
-
   create_table "data_protection_confirmations", force: :cascade do |t|
     t.bigint "organisation_id"
     t.bigint "data_protection_officer_id"
