@@ -288,7 +288,7 @@ RSpec.describe OrganisationsController, type: :request do
         context "with an organisation that the user belongs to" do
           let!(:housing_provider) { FactoryBot.create(:organisation) }
           let!(:other_org_housing_provider) { FactoryBot.create(:organisation, name: "Foobar LTD") }
-          let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD") }
+          let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD 2") }
 
           before do
             FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: housing_provider, relationship_type: OrganisationRelationship.relationship_types[:owning])
@@ -319,17 +319,22 @@ RSpec.describe OrganisationsController, type: :request do
           it "shows the pagination count" do
             expect(page).to have_content("1 total housing providers")
           end
+
+          context "when adding a housing provider" do
+            before do
+              get "/organisations/#{organisation.id}/housing-providers/add", headers:, params: {}
+            end
+
+            it "has the correct header" do
+              expect(response.body).to include("What is the name of your housing provider?")
+            end
+
+            it "shows an add button" do
+              expect(page).to have_button("Add")
+            end
+          end
         end
 
-        context "when adding a housing provider" do
-          before do
-            get "/organisations/#{organisation.id}/housing-providers/add", headers:, params: {}
-          end
-
-          it "has the correct header" do
-            expect(response.body).to include("What is the name of your housing provider?")
-          end
-        end
 
         context "with an organisation that are not in scope for the user, i.e. that they do not belong to" do
           before do
