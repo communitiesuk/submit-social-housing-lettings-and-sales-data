@@ -100,7 +100,7 @@ RSpec.describe LocationsController, type: :request do
 
       before do
         sign_in user
-        post "/schemes/#{scheme.id}/locations", params: params
+        post "/schemes/#{scheme.id}/locations", params:
       end
 
       it "creates a new location for scheme with valid params and redirects to correct page" do
@@ -302,7 +302,7 @@ RSpec.describe LocationsController, type: :request do
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in user
-        post "/schemes/#{scheme.id}/locations", params: params
+        post "/schemes/#{scheme.id}/locations", params:
       end
 
       it "creates a new location for scheme with valid params and redirects to correct page" do
@@ -573,7 +573,7 @@ RSpec.describe LocationsController, type: :request do
 
       before do
         sign_in user
-        patch "/schemes/#{scheme.id}/locations/#{location.id}", params: params
+        patch "/schemes/#{scheme.id}/locations/#{location.id}", params:
       end
 
       it "updates existing location for scheme with valid params and redirects to correct page" do
@@ -714,7 +714,7 @@ RSpec.describe LocationsController, type: :request do
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in user
-        patch "/schemes/#{scheme.id}/locations/#{location.id}", params: params
+        patch "/schemes/#{scheme.id}/locations/#{location.id}", params:
       end
 
       it "updates a location for scheme with valid params and redirects to correct page" do

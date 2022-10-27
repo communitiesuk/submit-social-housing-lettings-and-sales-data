@@ -347,6 +347,54 @@ RSpec.describe OrganisationsController, type: :request do
         end
       end
 
+      context "when accessing the managing agents tab" do
+        context "with an organisation that the user belongs to" do
+          let!(:managing_agent) { FactoryBot.create(:organisation) }
+          let!(:other_org_managing_agent) { FactoryBot.create(:organisation, name: "Foobar LTD") }
+          let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD") }
+
+          before do
+            FactoryBot.create(:organisation_relationship, parent_organisation: organisation, child_organisation: managing_agent, relationship_type: OrganisationRelationship.relationship_types[:managing])
+            FactoryBot.create(:organisation_relationship, parent_organisation: other_organisation, child_organisation: other_org_managing_agent, relationship_type: OrganisationRelationship.relationship_types[:managing])
+            get "/organisations/#{organisation.id}/managing-agents", headers:, params: {}
+          end
+
+          it "shows the tab navigation" do
+            expected_html = "<nav class=\"app-primary-navigation\""
+            expect(response.body).to include(expected_html)
+          end
+
+          it "shows an add managing-agent button" do
+            expect(page).to have_link("Add a managing agent")
+          end
+
+          it "shows a table of managing-agents" do
+            expected_html = "<table class=\"govuk-table\""
+            expect(response.body).to include(expected_html)
+            expect(response.body).to include(managing_agent.name)
+          end
+
+          it "shows only managing-agents for the current user's organisation" do
+            expect(page).to have_content(managing_agent.name)
+            expect(page).not_to have_content(other_org_managing_agent.name)
+          end
+
+          it "shows the pagination count" do
+            expect(page).to have_content("1 total agents")
+          end
+        end
+
+        context "with an organisation that are not in scope for the user, i.e. that they do not belong to" do
+          before do
+            get "/organisations/#{unauthorised_organisation.id}/managing-agents", headers:, params: {}
+          end
+
+          it "returns not found 404 from users page" do
+            expect(response).to have_http_status(:not_found)
+          end
+        end
+      end
+
       describe "#edit" do
         context "with an organisation that the user belongs to" do
           before do
@@ -581,6 +629,54 @@ RSpec.describe OrganisationsController, type: :request do
         context "with an organisation that are not in scope for the user, i.e. that they do not belong to" do
           before do
             get "/organisations/#{unauthorised_organisation.id}/housing-providers", headers:, params: {}
+          end
+
+          it "returns not found 404 from users page" do
+            expect(response).to have_http_status(:not_found)
+          end
+        end
+      end
+
+      context "when accessing the managing agents tab" do
+        context "with an organisation that the user belongs to" do
+          let!(:managing_agent) { FactoryBot.create(:organisation) }
+          let!(:other_org_managing_agent) { FactoryBot.create(:organisation, name: "Foobar LTD") }
+          let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD") }
+
+          before do
+            FactoryBot.create(:organisation_relationship, parent_organisation: organisation, child_organisation: managing_agent, relationship_type: OrganisationRelationship.relationship_types[:managing])
+            FactoryBot.create(:organisation_relationship, parent_organisation: other_organisation, child_organisation: other_org_managing_agent, relationship_type: OrganisationRelationship.relationship_types[:managing])
+            get "/organisations/#{organisation.id}/managing-agents", headers:, params: {}
+          end
+
+          it "shows the tab navigation" do
+            expected_html = "<nav class=\"app-primary-navigation\""
+            expect(response.body).to include(expected_html)
+          end
+
+          it "doesn't show an add managing agent button" do
+            expect(page).not_to have_link("Add a managing agent")
+          end
+
+          it "shows a table of managing agents" do
+            expected_html = "<table class=\"govuk-table\""
+            expect(response.body).to include(expected_html)
+            expect(response.body).to include(managing_agent.name)
+          end
+
+          it "shows only managing agents for the current user's organisation" do
+            expect(page).to have_content(managing_agent.name)
+            expect(page).not_to have_content(other_org_managing_agent.name)
+          end
+
+          it "shows the pagination count" do
+            expect(page).to have_content("1 total agents")
+          end
+        end
+
+        context "with an organisation that are not in scope for the user, i.e. that they do not belong to" do
+          before do
+            get "/organisations/#{unauthorised_organisation.id}/managing-agents", headers:, params: {}
           end
 
           it "returns not found 404 from users page" do

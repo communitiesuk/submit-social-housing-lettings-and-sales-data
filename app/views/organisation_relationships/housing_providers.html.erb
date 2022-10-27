@@ -44,5 +44,5 @@
 <% if @total_count != 0 %>
   <%= render SearchComponent.new(current_user:, search_label: "Search for a housing provider", value: @searched) %>
   <%= render partial: "organisation_relationships/housing_provider_list", locals: { index: @housing_providers, title: "Housing providers", pagy: @pagy, searched: @searched, item_label:, total_count: @total_count } %>
-  <%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "housing providers" } %>
+  <%= render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "housing providers" } %>
 <% end %>
