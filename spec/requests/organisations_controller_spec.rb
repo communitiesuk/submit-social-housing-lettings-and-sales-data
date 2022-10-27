@@ -554,7 +554,7 @@ RSpec.describe OrganisationsController, type: :request do
 
         it "sets the organisation relationship attributes correctly" do
           request
-          expect(OrganisationRelationship.exists?(child_organisation_id: organisation.id, parent_organisation_id: housing_provider.id, relationship_type: OrganisationRelationship::OWNING)).to be_truthy
+          expect(OrganisationRelationship).to exist(child_organisation_id: organisation.id, parent_organisation_id: housing_provider.id, relationship_type: OrganisationRelationship::OWNING)
         end
 
         it "redirects to the organisation list" do
@@ -1421,7 +1421,7 @@ RSpec.describe OrganisationsController, type: :request do
 
         it "sets the organisation relationship attributes correctly" do
           request
-          expect(OrganisationRelationship.exists?(child_organisation_id: organisation.id, parent_organisation_id: housing_provider.id, relationship_type: OrganisationRelationship::OWNING)).to be_truthy
+          expect(OrganisationRelationship).to exist(child_organisation_id: organisation.id, parent_organisation_id: housing_provider.id, relationship_type: OrganisationRelationship::OWNING)
         end
 
         it "redirects to the organisation list" do
