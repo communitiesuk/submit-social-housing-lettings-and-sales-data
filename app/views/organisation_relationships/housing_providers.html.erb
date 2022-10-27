@@ -30,7 +30,7 @@
   <% end %>
 
 <% else %>
-  <%= render partial: "organisations/headings", locals: { main: "Your housing providers", sub: nil } %>
+  <%= render partial: "organisations/headings", locals: { main: "Your housing providers", sub: current_user.organisation.name } %>
   <% if @total_count == 0 %>
     <p class="govuk-body">Your organisation does not currently have any housing providers.</p>
   <% else %>
