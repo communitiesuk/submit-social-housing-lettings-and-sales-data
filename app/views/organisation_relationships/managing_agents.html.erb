@@ -3,11 +3,11 @@
 <% if current_user.data_coordinator? %>
   <% if params["related_organisation_id"] %>
     <%= govuk_notification_banner(
-          title_text: "Success",
-          success: true, title_heading_level: 3,
-          title_id: "swanky-notifications"
-        ) do |notification_banner|
-      notification_banner.heading(text: "#{Organisation.find(params["related_organisation_id"]).name} is now one of this organisation's managing agents")
+      title_text: "Success",
+      success: true, title_heading_level: 3,
+      title_id: "swanky-notifications"
+    ) do |notification_banner|
+      notification_banner.heading(text: "#{Organisation.find(params['related_organisation_id']).name} is now one of this organisation's managing agents")
     end %>
   <% end %>
 <% end %>
@@ -20,11 +20,11 @@
   <h2 class="govuk-visually-hidden">Managing Agents</h2>
     <% if params["related_organisation_id"] %>
       <%= govuk_notification_banner(
-            title_text: "Success",
-            success: true, title_heading_level: 3,
-            title_id: "swanky-notifications"
-          ) do |notification_banner|
-        notification_banner.heading(text: "#{Organisation.find(params["related_organisation_id"]).name} is now one of this organisation's managing agents")
+        title_text: "Success",
+        success: true, title_heading_level: 3,
+        title_id: "swanky-notifications"
+      ) do |notification_banner|
+        notification_banner.heading(text: "#{Organisation.find(params['related_organisation_id']).name} is now one of this organisation's managing agents")
       end %>
   <% end %>
   <p class="govuk-body">A managing agent can submit logs for this organisation.</p>
