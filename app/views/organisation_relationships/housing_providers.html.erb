@@ -9,8 +9,7 @@
         ) do |notification_banner|
           notification_banner.heading(text: "#{Organisation.find(params['related_organisation_id']).name} is now one of your housing providers")
         end %>
-  <% end %>
-  <% if params["removed_organisation_id"] %>
+  <% elsif params["removed_organisation_id"] %>
     <%= govuk_notification_banner(
           title_text: "Success",
           success: true, title_heading_level: 3,
@@ -32,14 +31,13 @@
         ) do |notification_banner|
           notification_banner.heading(text: "#{Organisation.find(params['related_organisation_id']).name} is now one of this organisation's housing providers")
         end %>
-  <% end %>
-  <% if params["removed_organisation_id"] %>
+  <% elsif params["removed_organisation_id"] %>
     <%= govuk_notification_banner(
           title_text: "Success",
           success: true, title_heading_level: 3,
           title_id: "swanky-notifications"
         ) do |notification_banner|
-      notification_banner.heading(text: "#{Organisation.find(params['removed_organisation_id']).name} is no longer one of this organisation housing providers")
+      notification_banner.heading(text: "#{Organisation.find(params['removed_organisation_id']).name} is no longer one of this organisation's housing providers")
     end %>
   <% end %>
   <p class="govuk-body">This organisation can submit logs for its housing providers.</p>

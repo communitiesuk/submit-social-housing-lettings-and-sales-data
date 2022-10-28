@@ -8,12 +8,12 @@
   <% @housing_provider = Organisation.find(@organisation_to_remove_id) %>
   <% if current_user.support? %>
     <%= govuk_back_link(href: :back) %>
-    <%= render partial: "organisations/headings", locals: { main: "You are removing '#{@housing_provider.name}' from this organisation's housing providers", sub: nil } %>
+    <%= render partial: "organisations/headings", locals: { main: "You are removing ‘#{@housing_provider.name}’ from this organisation's housing providers", sub: nil } %>
   <% else %>
     <% content_for :before_content do %>
       <%= govuk_back_link(href: :back) %>
     <% end %>
-    <%= render partial: "organisations/headings", locals: { main: "You are removing #{@housing_provider.name} from your organisation's housing providers", sub: nil } %>
+    <%= render partial: "organisations/headings", locals: { main: "You are removing ‘#{@housing_provider.name}’ from your organisation's housing providers", sub: nil } %>
   <% end %>
   <%= govuk_warning_text text: "You will no longer be able to submit logs for #{@housing_provider.name}" %>
   <div class="govuk-button-group">
