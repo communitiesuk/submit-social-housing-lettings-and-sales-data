@@ -3,8 +3,6 @@
     <%= render partial: "organisations/headings", locals: { main: @organisation.name, sub: nil } %>
     <%= render SubNavigationComponent.new(items: secondary_items(request.path, @organisation.id)) %>
     <h2 class="govuk-visually-hidden">Add Managing Agent</h2>
-  <% end %>
-  <% if current_user.support? %>
     <%= govuk_back_link(href: :back) %>
     <%= render partial: "organisations/headings", locals: { main: "What is the name of this organisation's managing agent?", sub: nil } %>
     <p class="govuk-body">Start typing to search for a managing agent</p>

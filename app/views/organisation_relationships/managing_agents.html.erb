@@ -7,7 +7,7 @@
           success: true, title_heading_level: 3,
           title_id: "swanky-notifications"
         ) do |notification_banner|
-      notification_banner.heading(text: "#{Organisation.find(params["related_organisation_id"]).name} is now one of your managing agents")
+      notification_banner.heading(text: "#{Organisation.find(params["related_organisation_id"]).name} is now one of this organisation's managing agents")
     end %>
   <% end %>
 <% end %>
@@ -24,18 +24,18 @@
             success: true, title_heading_level: 3,
             title_id: "swanky-notifications"
           ) do |notification_banner|
-        notification_banner.heading(text: "#{Organisation.find(params["related_organisation_id"]).name} is now one of your managing agents")
+        notification_banner.heading(text: "#{Organisation.find(params["related_organisation_id"]).name} is now one of this organisation's managing agents")
       end %>
   <% end %>
-  <p class="govuk-body">A managing agent can submit logs for your organisation.</p>
+  <p class="govuk-body">A managing agent can submit logs for this organisation.</p>
   <% if @total_count == 0 %>
-    <p class="govuk-body">You do not currently have any managing agents.</p>
+    <p class="govuk-body">This organisation does not currently have any managing agents.</p>
   <% end %>
 <% else %>
-  <%= render partial: "organisations/headings", locals: { main: "Your managing agents", sub: current_user.organisation.name } %>
-  <p class="govuk-body">A managing agent can submit logs for your organisation.</p>
+  <%= render partial: "organisations/headings", locals: { main: "This organisation managing agents", sub: current_user.organisation.name } %>
+  <p class="govuk-body">A managing agent can submit logs for this organisation.</p>
   <% if @total_count == 0 %>
-    <p class="govuk-body">You do not currently have any managing agents.</p>
+    <p class="govuk-body">This organisation does not currently have any managing agents.</p>
   <% end %>
 <% end %>
 <% if current_user.support? %>
