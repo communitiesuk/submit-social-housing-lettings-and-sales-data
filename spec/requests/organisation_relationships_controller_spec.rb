@@ -5,11 +5,10 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
   let!(:unauthorised_organisation) { FactoryBot.create(:organisation) }
   let(:headers) { { "Accept" => "text/html" } }
   let(:page) { Capybara::Node::Simple.new(response.body) }
-  let(:user) { FactoryBot.create(:user, :data_coordinator) }
-  let(:new_value) { "Test Name 35" }
-  let(:params) { { id: organisation.id, organisation: { name: new_value } } }
 
   context "when user is signed in" do
+    let(:user) { FactoryBot.create(:user, :data_coordinator) }
+
     context "with a data coordinator user" do
       before do
         sign_in user
@@ -367,6 +366,106 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         it "redirects to the organisation list" do
           request
           expect(response).to redirect_to("/organisations/#{organisation.id}/managing-agents?related_organisation_id=#{managing_agent.id}")
+        end
+      end
+
+      context "when viewing a specific organisation's housing providers" do
+        let!(:housing_provider) { FactoryBot.create(:organisation) }
+        let!(:other_org_housing_provider) { FactoryBot.create(:organisation, name: "Foobar LTD") }
+        let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD 2") }
+
+        before do
+          FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: housing_provider, relationship_type: OrganisationRelationship.relationship_types[:owning])
+          FactoryBot.create(:organisation_relationship, child_organisation: other_organisation, parent_organisation: other_org_housing_provider, relationship_type: OrganisationRelationship.relationship_types[:owning])
+          get "/organisations/#{organisation.id}/housing-providers", headers:, params: {}
+        end
+
+        it "displays the name of the organisation" do
+          expect(page).to have_content(organisation.name)
+        end
+
+        it "has a sub-navigation with correct tabs" do
+          expect(page).to have_css(".app-sub-navigation")
+          expect(page).to have_content("Users")
+        end
+
+        it "shows a table of housing providers" do
+          expected_html = "<table class=\"govuk-table\""
+          expect(response.body).to include(expected_html)
+          expect(response.body).to include(housing_provider.name)
+        end
+
+        it "shows only housing providers for this organisation" do
+          expect(page).to have_content(housing_provider.name)
+          expect(page).not_to have_content(other_org_housing_provider.name)
+        end
+
+        it "shows the pagination count" do
+          expect(page).to have_content("1 total housing providers")
+        end
+
+        context "when adding a housing provider" do
+          before do
+            get "/organisations/#{organisation.id}/housing-providers/add", headers:, params: {}
+          end
+
+          it "has the correct header" do
+            expect(response.body).to include("What is the name of this organisation&#39;s housing provider?")
+          end
+
+          it "shows an add button" do
+            expect(page).to have_button("Add")
+          end
+        end
+      end
+
+      context "when viewing a specific organisation's managing agents" do
+        let!(:managing_agent) { FactoryBot.create(:organisation) }
+        let!(:other_org_managing_agent) { FactoryBot.create(:organisation, name: "Foobar LTD") }
+        let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD 2") }
+
+        before do
+          FactoryBot.create(:organisation_relationship, parent_organisation: organisation, child_organisation: managing_agent, relationship_type: OrganisationRelationship.relationship_types[:managing])
+          FactoryBot.create(:organisation_relationship, parent_organisation: other_organisation, child_organisation: other_org_managing_agent, relationship_type: OrganisationRelationship.relationship_types[:managing])
+          get "/organisations/#{organisation.id}/managing-agents", headers:, params: {}
+        end
+
+        it "displays the name of the organisation" do
+          expect(page).to have_content(organisation.name)
+        end
+
+        it "has a sub-navigation with correct tabs" do
+          expect(page).to have_css(".app-sub-navigation")
+          expect(page).to have_content("Users")
+        end
+
+        it "shows a table of managing agents" do
+          expected_html = "<table class=\"govuk-table\""
+          expect(response.body).to include(expected_html)
+          expect(response.body).to include(managing_agent.name)
+        end
+
+        it "shows only managing agents for this organisation" do
+          expect(page).to have_content(managing_agent.name)
+          expect(page).not_to have_content(other_org_managing_agent.name)
+        end
+
+        it "shows the pagination count" do
+          expect(page).to have_content("1 total agents")
+        end
+
+        context "when adding a housing provider" do
+          before do
+            get "/organisations/#{organisation.id}/managing-agents/add", headers:, params: {}
+          end
+
+          it "has the correct header" do
+            expect(response.body).to include("What is the name of this organisation&#39;s managing agent?")
+          end
+
+          it "shows an add button" do
+            expect(page).to have_button("Add")
+          end
         end
       end
     end
