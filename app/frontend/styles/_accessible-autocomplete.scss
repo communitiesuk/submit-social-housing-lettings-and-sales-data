@@ -9,7 +9,7 @@
   background-repeat: no-repeat;
   background-size: 1em 1em;
   background-position: 7px center;
-  padding-left: govuk-spacing(6) !important;
+  text-indent: govuk-spacing(6);
 }
 
 .autocomplete__option__append {
@@ -18,7 +18,7 @@
 
 .autocomplete__hint {
   font-family: inherit;
-  padding-left: govuk-spacing(6) !important;
+  text-indent: govuk-spacing(6);
 }
 
 .autocomplete__option__hint {
