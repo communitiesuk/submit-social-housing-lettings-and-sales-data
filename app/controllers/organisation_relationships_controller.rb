@@ -66,6 +66,20 @@ class OrganisationRelationshipsController < ApplicationController
     @resource.save!
   end
 
+  def remove_housing_provider
+    render "organisation_relationships/remove_housing_provider", layout: "application"
+  end
+
+  def delete_housing_provider
+    organisation_relationship_to_remove_id = OrganisationRelationship.find_by(child_organisation_id: @organisation.id, parent_organisation_id: organisation_to_remove_id, relationship_type: OrganisationRelationship::OWNING).id
+    delete(organisation_relationship_to_remove_id)
+    redirect_to housing_providers_organisation_path(removed_organisation_id: organisation_to_remove_id)
+  end
+
+  def delete(organisation_relationship_to_remove_id)
+    OrganisationRelationship.destroy(organisation_relationship_to_remove_id)
+  end
+
 private
 
   def organisation
@@ -74,6 +88,10 @@ private
 
   def related_organisation_id
     params["organisation"]["related_organisation_id"]
+  end
+
+  def organisation_to_remove_id
+    params["organisation_to_remove_id"]
   end
 
   def search_term
