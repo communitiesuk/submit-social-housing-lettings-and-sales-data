@@ -23,9 +23,11 @@ class OrganisationRelationshipsController < ApplicationController
   def managing_agents
     managing_agents = organisation.managing_agents
     unpaginated_filtered_managing_agents = filtered_collection(managing_agents, search_term)
+    organisations = Organisation.where.not(id: @organisation.id).pluck(:id, :name)
     respond_to do |format|
       format.html do
         @pagy, @managing_agents = pagy(unpaginated_filtered_managing_agents)
+        @organisations = organisations
         @searched = search_term.presence
         @total_count = managing_agents.size
         render "organisation_relationships/managing_agents", layout: "application"
@@ -38,6 +40,15 @@ class OrganisationRelationshipsController < ApplicationController
     respond_to do |format|
       format.html do
         render "organisation_relationships/add_housing_provider", layout: "application"
+      end
+    end
+  end
+
+  def add_managing_agent
+    @organisations = Organisation.where.not(id: @organisation.id).pluck(:id, :name)
+    respond_to do |format|
+      format.html do
+        render "organisation_relationships/add_managing_agent", layout: "application"
       end
     end
   end
@@ -61,9 +72,25 @@ class OrganisationRelationshipsController < ApplicationController
     redirect_to housing_providers_organisation_path(related_organisation_id:)
   end
 
-  def create!(child_organisation_id:, parent_organisation_id:, relationship_type:)
-    @resource = OrganisationRelationship.new(child_organisation_id:, parent_organisation_id:, relationship_type:)
-    @resource.save!
+  def create_managing_agent
+    parent_organisation_id = @organisation.id
+    child_organisation_id = related_organisation_id
+    relationship_type = OrganisationRelationship::MANAGING
+
+    if related_organisation_id.empty?
+      @organisation.errors.add :related_organisation_id, "You must choose a managing agent"
+      @organisations = Organisation.where.not(id: parent_organisation_id).pluck(:id, :name)
+      render "organisation_relationships/add_managing_agent"
+      return
+    elsif OrganisationRelationship.exists?(child_organisation_id:, parent_organisation_id:, relationship_type:)
+      @organisation.errors.add :related_organisation_id, "You have already added this managing agent"
+      @organisations = Organisation.where.not(id: parent_organisation_id).pluck(:id, :name)
+      render "organisation_relationships/add_managing_agent"
+      return
+    end
+
+    create!(child_organisation_id:, parent_organisation_id:, relationship_type:)
+    redirect_to managing_agents_organisation_path(related_organisation_id:)
   end
 
   def remove_housing_provider
@@ -81,6 +108,11 @@ class OrganisationRelationshipsController < ApplicationController
   end
 
 private
+
+  def create!(child_organisation_id:, parent_organisation_id:, relationship_type:)
+    @resource = OrganisationRelationship.new(child_organisation_id:, parent_organisation_id:, relationship_type:)
+    @resource.save!
+  end
 
   def organisation
     @organisation ||= Organisation.find(params[:id])

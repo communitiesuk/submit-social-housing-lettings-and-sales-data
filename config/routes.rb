@@ -85,6 +85,8 @@ Rails.application.routes.draw do
       post "housing-providers", to: "organisation_relationships#create_housing_provider"
       delete "housing-providers", to: "organisation_relationships#delete_housing_provider"
       get "managing-agents", to: "organisation_relationships#managing_agents"
+      get "managing-agents/add", to: "organisation_relationships#add_managing_agent"
+      post "managing-agents", to: "organisation_relationships#create_managing_agent"
     end
   end
 

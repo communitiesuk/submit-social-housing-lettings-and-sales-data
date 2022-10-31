@@ -1,23 +1,47 @@
 <% item_label = format_label(@pagy.count, "managing agents") %>
-<% title = "Managing agents" %>
-<% content_for :title, title %>
+
+<% if current_user.data_coordinator? %>
+  <% if params["related_organisation_id"] %>
+    <%= govuk_notification_banner(
+      title_text: "Success",
+      success: true, title_heading_level: 3,
+      title_id: "swanky-notifications"
+    ) do |notification_banner|
+      notification_banner.heading(text: "#{Organisation.find(params['related_organisation_id']).name} is now one of this organisation's managing agents")
+    end %>
+  <% end %>
+<% end %>
+
 <% if current_user.support? %>
   <%= render partial: "organisations/headings", locals: { main: @organisation.name, sub: nil } %>
   <%= render SubNavigationComponent.new(
     items: secondary_items(request.path, @organisation.id),
   ) %>
-  <h2 class="govuk-visually-hidden">managing agents</h2>
-  <p class="govuk-body">A managing agent can submit logs for your organisation.</p>
+  <h2 class="govuk-visually-hidden">Managing Agents</h2>
+    <% if params["related_organisation_id"] %>
+      <%= govuk_notification_banner(
+        title_text: "Success",
+        success: true, title_heading_level: 3,
+        title_id: "swanky-notifications"
+      ) do |notification_banner|
+        notification_banner.heading(text: "#{Organisation.find(params['related_organisation_id']).name} is now one of this organisation's managing agents")
+      end %>
+  <% end %>
+  <p class="govuk-body">A managing agent can submit logs for this organisation.</p>
+  <% if @total_count == 0 %>
+    <p class="govuk-body">This organisation does not currently have any managing agents.</p>
+  <% end %>
 <% else %>
-  <%= render partial: "organisations/headings", locals: { main: "Your managing agents", sub: nil } %>
-
-  <p class="govuk-body">A managing agent can submit logs for your organisation.</p>
+  <%= render partial: "organisations/headings", locals: { main: "This organisation managing agents", sub: current_user.organisation.name } %>
+  <p class="govuk-body">A managing agent can submit logs for this organisation.</p>
+  <% if @total_count == 0 %>
+    <p class="govuk-body">This organisation does not currently have any managing agents.</p>
+  <% end %>
 <% end %>
-<% if @total_count == 0 %>
-  <p class="govuk-body">You do not currently have any managing agents.</p>
-<% end %>
-<% if current_user.data_coordinator? || current_user.support? %>
-  <%= govuk_button_link_to "Add a managing agent", managing_agents_organisation_path(organisation_id: @organisation.id), html: { method: :get } %>
+<% if current_user.support? %>
+  <%= govuk_button_link_to "Add a managing agent", managing_agents_add_organisation_path(organisation_id: @organisation.id), html: { method: :get } %>
+<% elsif current_user.data_coordinator? %>
+  <%= govuk_button_link_to "Add a managing agent", managing_agents_add_organisation_path, html: { method: :get } %>
 <% end %>
 <% if @total_count != 0 %>
   <%= render SearchComponent.new(current_user:, search_label: "Search for a managing agent", value: @searched) %>

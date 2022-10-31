@@ -284,116 +284,6 @@ RSpec.describe OrganisationsController, type: :request do
         end
       end
 
-      context "when accessing the housing providers tab" do
-        context "with an organisation that the user belongs to" do
-          let!(:housing_provider) { FactoryBot.create(:organisation) }
-          let!(:other_org_housing_provider) { FactoryBot.create(:organisation, name: "Foobar LTD") }
-          let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD 2") }
-
-          before do
-            FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: housing_provider, relationship_type: OrganisationRelationship.relationship_types[:owning])
-            FactoryBot.create(:organisation_relationship, child_organisation: other_organisation, parent_organisation: other_org_housing_provider, relationship_type: OrganisationRelationship.relationship_types[:owning])
-            get "/organisations/#{organisation.id}/housing-providers", headers:, params: {}
-          end
-
-          it "shows the tab navigation" do
-            expected_html = "<nav class=\"app-primary-navigation\""
-            expect(response.body).to include(expected_html)
-          end
-
-          it "shows an add housing provider button" do
-            expect(page).to have_link("Add a housing provider")
-          end
-
-          it "shows a table of housing providers" do
-            expected_html = "<table class=\"govuk-table\""
-            expect(response.body).to include(expected_html)
-            expect(response.body).to include(housing_provider.name)
-          end
-
-          it "shows only housing providers for the current user's organisation" do
-            expect(page).to have_content(housing_provider.name)
-            expect(page).not_to have_content(other_org_housing_provider.name)
-          end
-
-          it "shows the pagination count" do
-            expect(page).to have_content("1 total housing providers")
-          end
-
-          context "when adding a housing provider" do
-            before do
-              get "/organisations/#{organisation.id}/housing-providers/add", headers:, params: {}
-            end
-
-            it "has the correct header" do
-              expect(response.body).to include("What is the name of your housing provider?")
-            end
-
-            it "shows an add button" do
-              expect(page).to have_button("Add")
-            end
-          end
-        end
-
-        context "with an organisation that are not in scope for the user, i.e. that they do not belong to" do
-          before do
-            get "/organisations/#{unauthorised_organisation.id}/housing-providers", headers:, params: {}
-          end
-
-          it "returns not found 404 from users page" do
-            expect(response).to have_http_status(:not_found)
-          end
-        end
-      end
-
-      context "when accessing the managing agents tab" do
-        context "with an organisation that the user belongs to" do
-          let!(:managing_agent) { FactoryBot.create(:organisation) }
-          let!(:other_org_managing_agent) { FactoryBot.create(:organisation, name: "Foobar LTD") }
-          let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD") }
-
-          before do
-            FactoryBot.create(:organisation_relationship, parent_organisation: organisation, child_organisation: managing_agent, relationship_type: OrganisationRelationship.relationship_types[:managing])
-            FactoryBot.create(:organisation_relationship, parent_organisation: other_organisation, child_organisation: other_org_managing_agent, relationship_type: OrganisationRelationship.relationship_types[:managing])
-            get "/organisations/#{organisation.id}/managing-agents", headers:, params: {}
-          end
-
-          it "shows the tab navigation" do
-            expected_html = "<nav class=\"app-primary-navigation\""
-            expect(response.body).to include(expected_html)
-          end
-
-          it "shows an add managing-agent button" do
-            expect(page).to have_link("Add a managing agent")
-          end
-
-          it "shows a table of managing-agents" do
-            expected_html = "<table class=\"govuk-table\""
-            expect(response.body).to include(expected_html)
-            expect(response.body).to include(managing_agent.name)
-          end
-
-          it "shows only managing-agents for the current user's organisation" do
-            expect(page).to have_content(managing_agent.name)
-            expect(page).not_to have_content(other_org_managing_agent.name)
-          end
-
-          it "shows the pagination count" do
-            expect(page).to have_content("1 total agents")
-          end
-        end
-
-        context "with an organisation that are not in scope for the user, i.e. that they do not belong to" do
-          before do
-            get "/organisations/#{unauthorised_organisation.id}/managing-agents", headers:, params: {}
-          end
-
-          it "returns not found 404 from users page" do
-            expect(response).to have_http_status(:not_found)
-          end
-        end
-      end
-
       describe "#edit" do
         context "with an organisation that the user belongs to" do
           before do
@@ -534,34 +424,6 @@ RSpec.describe OrganisationsController, type: :request do
           expect { request }.not_to change(Organisation, :count)
         end
       end
-
-      describe "organisation_relationships#create_housing_provider" do
-        let!(:housing_provider) { FactoryBot.create(:organisation) }
-
-        let(:params) do
-          {
-            "organisation": {
-              "related_organisation_id": housing_provider.id,
-            },
-          }
-        end
-
-        let(:request) { post "/organisations/#{organisation.id}/housing-providers", headers:, params: }
-
-        it "creates a new organisation relationship" do
-          expect { request }.to change(OrganisationRelationship, :count).by(1)
-        end
-
-        it "sets the organisation relationship attributes correctly" do
-          request
-          expect(OrganisationRelationship).to exist(child_organisation_id: organisation.id, parent_organisation_id: housing_provider.id, relationship_type: OrganisationRelationship::OWNING)
-        end
-
-        it "redirects to the organisation list" do
-          request
-          expect(response).to redirect_to("/organisations/#{organisation.id}/housing-providers?related_organisation_id=#{housing_provider.id}")
-        end
-      end
     end
 
     context "with a data provider user" do
@@ -613,102 +475,6 @@ RSpec.describe OrganisationsController, type: :request do
 
         it "returns 200" do
           expect(response).to have_http_status(:ok)
-        end
-      end
-
-      context "when accessing the housing providers tab" do
-        context "with an organisation that the user belongs to" do
-          let!(:housing_provider) { FactoryBot.create(:organisation) }
-          let!(:other_org_housing_provider) { FactoryBot.create(:organisation, name: "Foobar LTD") }
-          let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD") }
-
-          before do
-            FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: housing_provider, relationship_type: OrganisationRelationship.relationship_types[:owning])
-            FactoryBot.create(:organisation_relationship, child_organisation: other_organisation, parent_organisation: other_org_housing_provider, relationship_type: OrganisationRelationship.relationship_types[:owning])
-            get "/organisations/#{organisation.id}/housing-providers", headers:, params: {}
-          end
-
-          it "shows the tab navigation" do
-            expected_html = "<nav class=\"app-primary-navigation\""
-            expect(response.body).to include(expected_html)
-          end
-
-          it "doesn't show an add housing provider button" do
-            expect(page).not_to have_link("Add a housing provider")
-          end
-
-          it "shows a table of housing providers" do
-            expected_html = "<table class=\"govuk-table\""
-            expect(response.body).to include(expected_html)
-            expect(response.body).to include(housing_provider.name)
-          end
-
-          it "shows only housing providers for the current user's organisation" do
-            expect(page).to have_content(housing_provider.name)
-            expect(page).not_to have_content(other_org_housing_provider.name)
-          end
-
-          it "shows the pagination count" do
-            expect(page).to have_content("1 total housing providers")
-          end
-        end
-
-        context "with an organisation that are not in scope for the user, i.e. that they do not belong to" do
-          before do
-            get "/organisations/#{unauthorised_organisation.id}/housing-providers", headers:, params: {}
-          end
-
-          it "returns not found 404 from users page" do
-            expect(response).to have_http_status(:not_found)
-          end
-        end
-      end
-
-      context "when accessing the managing agents tab" do
-        context "with an organisation that the user belongs to" do
-          let!(:managing_agent) { FactoryBot.create(:organisation) }
-          let!(:other_org_managing_agent) { FactoryBot.create(:organisation, name: "Foobar LTD") }
-          let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD") }
-
-          before do
-            FactoryBot.create(:organisation_relationship, parent_organisation: organisation, child_organisation: managing_agent, relationship_type: OrganisationRelationship.relationship_types[:managing])
-            FactoryBot.create(:organisation_relationship, parent_organisation: other_organisation, child_organisation: other_org_managing_agent, relationship_type: OrganisationRelationship.relationship_types[:managing])
-            get "/organisations/#{organisation.id}/managing-agents", headers:, params: {}
-          end
-
-          it "shows the tab navigation" do
-            expected_html = "<nav class=\"app-primary-navigation\""
-            expect(response.body).to include(expected_html)
-          end
-
-          it "doesn't show an add managing agent button" do
-            expect(page).not_to have_link("Add a managing agent")
-          end
-
-          it "shows a table of managing agents" do
-            expected_html = "<table class=\"govuk-table\""
-            expect(response.body).to include(expected_html)
-            expect(response.body).to include(managing_agent.name)
-          end
-
-          it "shows only managing agents for the current user's organisation" do
-            expect(page).to have_content(managing_agent.name)
-            expect(page).not_to have_content(other_org_managing_agent.name)
-          end
-
-          it "shows the pagination count" do
-            expect(page).to have_content("1 total agents")
-          end
-        end
-
-        context "with an organisation that are not in scope for the user, i.e. that they do not belong to" do
-          before do
-            get "/organisations/#{unauthorised_organisation.id}/managing-agents", headers:, params: {}
-          end
-
-          it "returns not found 404 from users page" do
-            expect(response).to have_http_status(:not_found)
-          end
         end
       end
 
@@ -1194,56 +960,6 @@ RSpec.describe OrganisationsController, type: :request do
           end
         end
 
-        context "when viewing a specific organisation's housing providers" do
-          let!(:housing_provider) { FactoryBot.create(:organisation) }
-          let!(:other_org_housing_provider) { FactoryBot.create(:organisation, name: "Foobar LTD") }
-          let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD 2") }
-
-          before do
-            FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: housing_provider, relationship_type: OrganisationRelationship.relationship_types[:owning])
-            FactoryBot.create(:organisation_relationship, child_organisation: other_organisation, parent_organisation: other_org_housing_provider, relationship_type: OrganisationRelationship.relationship_types[:owning])
-            get "/organisations/#{organisation.id}/housing-providers", headers:, params: {}
-          end
-
-          it "displays the name of the organisation" do
-            expect(page).to have_content(organisation.name)
-          end
-
-          it "has a sub-navigation with correct tabs" do
-            expect(page).to have_css(".app-sub-navigation")
-            expect(page).to have_content("Users")
-          end
-
-          it "shows a table of housing providers" do
-            expected_html = "<table class=\"govuk-table\""
-            expect(response.body).to include(expected_html)
-            expect(response.body).to include(housing_provider.name)
-          end
-
-          it "shows only housing providers for this organisation" do
-            expect(page).to have_content(housing_provider.name)
-            expect(page).not_to have_content(other_org_housing_provider.name)
-          end
-
-          it "shows the pagination count" do
-            expect(page).to have_content("1 total housing providers")
-          end
-
-          context "when adding a housing provider" do
-            before do
-              get "/organisations/#{organisation.id}/housing-providers/add", headers:, params: {}
-            end
-
-            it "has the correct header" do
-              expect(response.body).to include("What is the name of this organisation&#39;s housing provider?")
-            end
-
-            it "shows an add button" do
-              expect(page).to have_button("Add")
-            end
-          end
-        end
-
         context "when there are more than 20 organisations" do
           let(:total_organisations_count) { Organisation.all.count }
 
@@ -1399,34 +1115,6 @@ RSpec.describe OrganisationsController, type: :request do
             expect(page).to have_content(I18n.t("validations.organisation.name_missing"))
             expect(page).to have_content(I18n.t("validations.organisation.provider_type_missing"))
           end
-        end
-      end
-
-      describe "organisation_relationships#create_housing_provider" do
-        let!(:housing_provider) { FactoryBot.create(:organisation) }
-
-        let(:params) do
-          {
-            "organisation": {
-              "related_organisation_id": housing_provider.id,
-            },
-          }
-        end
-
-        let(:request) { post "/organisations/#{organisation.id}/housing-providers", headers:, params: }
-
-        it "creates a new organisation relationship" do
-          expect { request }.to change(OrganisationRelationship, :count).by(1)
-        end
-
-        it "sets the organisation relationship attributes correctly" do
-          request
-          expect(OrganisationRelationship).to exist(child_organisation_id: organisation.id, parent_organisation_id: housing_provider.id, relationship_type: OrganisationRelationship::OWNING)
-        end
-
-        it "redirects to the organisation list" do
-          request
-          expect(response).to redirect_to("/organisations/#{organisation.id}/housing-providers?related_organisation_id=#{housing_provider.id}")
         end
       end
     end
