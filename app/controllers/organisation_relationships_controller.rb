@@ -53,7 +53,8 @@ class OrganisationRelationshipsController < ApplicationController
       return
     end
     create!(child_organisation_id:, parent_organisation_id:, relationship_type:)
-    redirect_to housing_providers_organisation_path(related_organisation_id:)
+    flash[:notice] = "#{Organisation.find(related_organisation_id).name} is now one of #{current_user.data_coordinator? ? 'your' : "this organisation's"} housing providers"
+    redirect_to housing_providers_organisation_path
   end
 
   def create_managing_agent
@@ -84,7 +85,8 @@ class OrganisationRelationshipsController < ApplicationController
   def delete_housing_provider
     organisation_relationship_to_remove = OrganisationRelationship.find_by!(child_organisation_id: @organisation.id, parent_organisation_id: target_organisation_id, relationship_type: OrganisationRelationship::OWNING)
     organisation_relationship_to_remove.destroy!
-    redirect_to housing_providers_organisation_path(removed_organisation_id: target_organisation_id)
+    flash[:notice] = "#{Organisation.find(target_organisation_id).name} is no longer one of #{current_user.data_coordinator? ? 'your' : "this organisation's"} housing providers"
+    redirect_to housing_providers_organisation_path
   end
 
 private
