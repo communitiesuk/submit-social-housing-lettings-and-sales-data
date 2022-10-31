@@ -194,7 +194,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         let!(:housing_provider) { FactoryBot.create(:organisation) }
         let(:params) do
           {
-            "organisation_to_remove_id": housing_provider.id,
+            "target_organisation_id": housing_provider.id,
           }
         end
         let(:request) { delete "/organisations/#{organisation.id}/housing-providers", headers:, params: }
@@ -396,7 +396,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         let!(:housing_provider) { FactoryBot.create(:organisation) }
         let(:params) do
           {
-            "organisation_to_remove_id": housing_provider.id,
+            "target_organisation_id": housing_provider.id,
           }
         end
         let(:request) { delete "/organisations/#{organisation.id}/housing-providers", headers:, params: }

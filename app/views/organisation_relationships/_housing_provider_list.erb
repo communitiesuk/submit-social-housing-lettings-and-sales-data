@@ -12,7 +12,7 @@
               scope: "row",
               class: "govuk-!-text-align-right",
             }) do %>
-              <%= govuk_link_to("Remove", housing_providers_remove_organisation_path(organisation_to_remove_id: housing_provider.id)) %>
+              <%= govuk_link_to("Remove", housing_providers_remove_organisation_path(target_organisation_id: housing_provider.id)) %>
             <% end %>
           <% end %>
         <% end %>
