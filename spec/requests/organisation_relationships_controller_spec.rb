@@ -189,6 +189,31 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           expect(response).to redirect_to("/organisations/#{organisation.id}/managing-agents?related_organisation_id=#{managing_agent.id}")
         end
       end
+
+      describe "organisation_relationships#delete_housing_provider" do
+        let!(:housing_provider) { FactoryBot.create(:organisation) }
+
+        before do
+          FactoryBot.create(:organisation_relationship, :owning, child_organisation: organisation, parent_organisation: housing_provider)
+        end
+
+        let(:params) do
+          {
+            "organisation_to_remove_id": housing_provider.id,
+          }
+        end
+
+        let(:request) { delete "/organisations/#{organisation.id}/housing-providers", headers:, params: }
+
+        it "deletes the new organisation relationship" do
+          expect { request }.to change(OrganisationRelationship, :count).by(-1)
+        end
+
+        it "redirects to the organisation list" do
+          request
+          expect(response).to redirect_to("/organisations/#{organisation.id}/housing-providers?removed_organisation_id=#{housing_provider.id}")
+        end
+      end
     end
 
     context "with a data provider user" do
@@ -369,6 +394,31 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         end
       end
 
+      describe "organisation_relationships#delete_housing_provider" do
+        let!(:housing_provider) { FactoryBot.create(:organisation) }
+
+        before do
+          FactoryBot.create(:organisation_relationship, :owning, child_organisation: organisation, parent_organisation: housing_provider)
+        end
+
+        let(:params) do
+          {
+            "organisation_to_remove_id": housing_provider.id,
+          }
+        end
+
+        let(:request) { delete "/organisations/#{organisation.id}/housing-providers", headers:, params: }
+
+        it "deletes the new organisation relationship" do
+          expect { request }.to change(OrganisationRelationship, :count).by(-1)
+        end
+
+        it "redirects to the organisation list" do
+          request
+          expect(response).to redirect_to("/organisations/#{organisation.id}/housing-providers?removed_organisation_id=#{housing_provider.id}")
+        end
+      end
+
       context "when viewing a specific organisation's housing providers" do
         let!(:housing_provider) { FactoryBot.create(:organisation) }
         let!(:other_org_housing_provider) { FactoryBot.create(:organisation, name: "Foobar LTD") }
@@ -398,6 +448,10 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         it "shows only housing providers for this organisation" do
           expect(page).to have_content(housing_provider.name)
           expect(page).not_to have_content(other_org_housing_provider.name)
+        end
+
+        it "shows remove link(s)" do
+          expect(response.body).to include("Remove")
         end
 
         it "shows the pagination count" do
