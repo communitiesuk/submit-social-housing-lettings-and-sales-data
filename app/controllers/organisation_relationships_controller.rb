@@ -98,13 +98,13 @@ class OrganisationRelationshipsController < ApplicationController
   end
 
   def delete_housing_provider
-    organisation_relationship_to_remove_id = OrganisationRelationship.find_by(child_organisation_id: @organisation.id, parent_organisation_id: organisation_to_remove_id, relationship_type: OrganisationRelationship::OWNING).id
-    delete(organisation_relationship_to_remove_id)
+    organisation_relationship_to_remove = OrganisationRelationship.find_by!(child_organisation_id: @organisation.id, parent_organisation_id: organisation_to_remove_id, relationship_type: OrganisationRelationship::OWNING)
+    delete(organisation_relationship_to_remove)
     redirect_to housing_providers_organisation_path(removed_organisation_id: organisation_to_remove_id)
   end
 
-  def delete(organisation_relationship_to_remove_id)
-    OrganisationRelationship.destroy(organisation_relationship_to_remove_id)
+  def delete(organisation_relationship_to_remove)
+    organisation_relationship_to_remove.destroy!
   end
 
 private
