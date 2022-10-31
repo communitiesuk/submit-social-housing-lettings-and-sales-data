@@ -158,7 +158,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
         it "redirects to the organisation list" do
           request
-          expect(response).to redirect_to("/organisations/#{organisation.id}/housing-providers?related_organisation_id=#{housing_provider.id}")
+          expect(response).to redirect_to("/organisations/#{organisation.id}/housing-providers")
         end
       end
 
@@ -209,7 +209,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
         it "redirects to the organisation list" do
           request
-          expect(response).to redirect_to("/organisations/#{organisation.id}/housing-providers?removed_organisation_id=#{housing_provider.id}")
+          expect(response).to redirect_to("/organisations/#{organisation.id}/housing-providers")
         end
       end
     end
@@ -360,7 +360,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
         it "redirects to the organisation list" do
           request
-          expect(response).to redirect_to("/organisations/#{organisation.id}/housing-providers?related_organisation_id=#{housing_provider.id}")
+          expect(response).to redirect_to("/organisations/#{organisation.id}/housing-providers")
         end
       end
 
@@ -411,7 +411,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
         it "redirects to the organisation list" do
           request
-          expect(response).to redirect_to("/organisations/#{organisation.id}/housing-providers?removed_organisation_id=#{housing_provider.id}")
+          expect(response).to redirect_to("/organisations/#{organisation.id}/housing-providers")
         end
       end
 
