@@ -192,18 +192,16 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
       describe "organisation_relationships#delete_housing_provider" do
         let!(:housing_provider) { FactoryBot.create(:organisation) }
-
-        before do
-          FactoryBot.create(:organisation_relationship, :owning, child_organisation: organisation, parent_organisation: housing_provider)
-        end
-
         let(:params) do
           {
             "organisation_to_remove_id": housing_provider.id,
           }
         end
-
         let(:request) { delete "/organisations/#{organisation.id}/housing-providers", headers:, params: }
+
+        before do
+          FactoryBot.create(:organisation_relationship, :owning, child_organisation: organisation, parent_organisation: housing_provider)
+        end
 
         it "deletes the new organisation relationship" do
           expect { request }.to change(OrganisationRelationship, :count).by(-1)
@@ -396,18 +394,16 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
       describe "organisation_relationships#delete_housing_provider" do
         let!(:housing_provider) { FactoryBot.create(:organisation) }
-
-        before do
-          FactoryBot.create(:organisation_relationship, :owning, child_organisation: organisation, parent_organisation: housing_provider)
-        end
-
         let(:params) do
           {
             "organisation_to_remove_id": housing_provider.id,
           }
         end
-
         let(:request) { delete "/organisations/#{organisation.id}/housing-providers", headers:, params: }
+
+        before do
+          FactoryBot.create(:organisation_relationship, :owning, child_organisation: organisation, parent_organisation: housing_provider)
+        end
 
         it "deletes the new organisation relationship" do
           expect { request }.to change(OrganisationRelationship, :count).by(-1)
