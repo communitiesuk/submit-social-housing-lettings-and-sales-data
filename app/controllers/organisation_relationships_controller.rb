@@ -9,48 +9,32 @@ class OrganisationRelationshipsController < ApplicationController
     housing_providers = organisation.housing_providers
     unpaginated_filtered_housing_providers = filtered_collection(housing_providers, search_term)
     organisations = Organisation.where.not(id: @organisation.id).pluck(:id, :name)
-    respond_to do |format|
-      format.html do
-        @pagy, @housing_providers = pagy(unpaginated_filtered_housing_providers)
-        @organisations = organisations
-        @searched = search_term.presence
-        @total_count = housing_providers.size
-        render "organisation_relationships/housing_providers", layout: "application"
-      end
-    end
+    respond_to :html
+    @pagy, @housing_providers = pagy(unpaginated_filtered_housing_providers)
+    @organisations = organisations
+    @searched = search_term.presence
+    @total_count = housing_providers.size
   end
 
   def managing_agents
     managing_agents = organisation.managing_agents
     unpaginated_filtered_managing_agents = filtered_collection(managing_agents, search_term)
     organisations = Organisation.where.not(id: @organisation.id).pluck(:id, :name)
-    respond_to do |format|
-      format.html do
-        @pagy, @managing_agents = pagy(unpaginated_filtered_managing_agents)
-        @organisations = organisations
-        @searched = search_term.presence
-        @total_count = managing_agents.size
-        render "organisation_relationships/managing_agents", layout: "application"
-      end
-    end
+    respond_to :html
+    @pagy, @managing_agents = pagy(unpaginated_filtered_managing_agents)
+    @organisations = organisations
+    @searched = search_term.presence
+    @total_count = managing_agents.size
   end
 
   def add_housing_provider
     @organisations = Organisation.where.not(id: @organisation.id).pluck(:id, :name)
-    respond_to do |format|
-      format.html do
-        render "organisation_relationships/add_housing_provider", layout: "application"
-      end
-    end
+    respond_to :html
   end
 
   def add_managing_agent
     @organisations = Organisation.where.not(id: @organisation.id).pluck(:id, :name)
-    respond_to do |format|
-      format.html do
-        render "organisation_relationships/add_managing_agent", layout: "application"
-      end
-    end
+    respond_to :html
   end
 
   def create_housing_provider
@@ -95,7 +79,6 @@ class OrganisationRelationshipsController < ApplicationController
 
   def remove_housing_provider
     @target_organisation_id = target_organisation_id
-    render "organisation_relationships/remove_housing_provider", layout: "application"
   end
 
   def delete_housing_provider
