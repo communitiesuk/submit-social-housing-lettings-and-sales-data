@@ -1,17 +1,17 @@
-<%= form_with model: @organisation, url: housing_providers_organisation_path, method: "post", local: true do |f| %>
+<%= form_with model: @organisation, url: managing_agents_organisation_path, method: "post", local: true do |f| %>
   <% if current_user.support? %>
     <%= render partial: "organisations/headings", locals: { main: @organisation.name, sub: nil } %>
     <%= render SubNavigationComponent.new(items: secondary_items(request.path, @organisation.id)) %>
-    <h2 class="govuk-visually-hidden">Add Housing Provider</h2>
+    <h2 class="govuk-visually-hidden">Add Managing Agent</h2>
     <%= govuk_back_link(href: :back) %>
-    <%= render partial: "organisations/headings", locals: { main: "What is the name of this organisation's housing provider?", sub: nil } %>
-    <p class="govuk-body">Start typing to search for a housing provider</p>
+    <%= render partial: "organisations/headings", locals: { main: "What is the name of this organisation's managing agent?", sub: nil } %>
+    <p class="govuk-body">Start typing to search for a managing agent</p>
   <% else %>
     <% content_for :before_content do %>
       <%= govuk_back_link(href: :back) %>
     <% end %>
-    <%= render partial: "organisations/headings", locals: { main: "What is the name of your housing provider?", sub: nil } %>
-    <p class="govuk-body">Start typing to search for your housing provider</p>
+    <%= render partial: "organisations/headings", locals: { main: "What is the name of your managing agent?", sub: nil } %>
+    <p class="govuk-body">Start typing to search for your managing agent</p>
   <% end %>
   <% answer_options = { "" => "Select an option" } %>
   <% @organisations.each do |organisation| %>
@@ -22,7 +22,7 @@
     f:,
   } %>
   <%= f.govuk_submit "Add" %>
-  <%= govuk_details(summary_text: "Can't find the housing provider you're looking for?") do %>
+  <%= govuk_details(summary_text: "Can't find the managing agent you're looking for?") do %>
     <ul class="govuk-list govuk-list--bullet">
       <li>Double check the spelling and try again</li>
       <li>Type the first few letters to see the suggestions</li>
