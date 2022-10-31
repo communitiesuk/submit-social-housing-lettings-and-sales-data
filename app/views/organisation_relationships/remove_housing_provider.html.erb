@@ -1,4 +1,4 @@
-<% @organisation_to_remove_id = params['organisation_to_remove_id'] %>
+<% @organisation_to_remove_id = params["organisation_to_remove_id"] %>
 <%= form_with url: housing_providers_organisation_path(organisation_to_remove_id: @organisation_to_remove_id), method: "delete", local: true do |f| %>
   <% if current_user.support? %>
     <%= render partial: "organisations/headings", locals: { main: @organisation.name, sub: nil } %>
