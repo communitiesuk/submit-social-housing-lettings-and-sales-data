@@ -186,7 +186,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
         it "redirects to the organisation list" do
           request
-          expect(response).to redirect_to("/organisations/#{organisation.id}/managing-agents?related_organisation_id=#{managing_agent.id}")
+          expect(response).to redirect_to("/organisations/#{organisation.id}/managing-agents")
         end
       end
 
@@ -388,7 +388,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
         it "redirects to the organisation list" do
           request
-          expect(response).to redirect_to("/organisations/#{organisation.id}/managing-agents?related_organisation_id=#{managing_agent.id}")
+          expect(response).to redirect_to("/organisations/#{organisation.id}/managing-agents")
         end
       end
 
