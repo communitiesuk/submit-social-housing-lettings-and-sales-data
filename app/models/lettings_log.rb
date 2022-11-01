@@ -436,7 +436,11 @@ class LettingsLog < Log
   end
 
   def soft_min_for_period
-    beds = needstype == 2 ? 0 : [self.beds, 4].min
+    beds = if needstype == 2
+             0
+           else
+             self.beds.nil? ? nil : [self.beds, 4].min
+           end
     la = if needstype == 2
            defined?(self.location.location_code) ? self.location.location_code : nil
          else
@@ -448,7 +452,11 @@ class LettingsLog < Log
   end
 
   def soft_max_for_period
-    beds = needstype == 2 ? 0 : [self.beds, 4].min
+    beds = if needstype == 2
+             0
+           else
+             self.beds.nil? ? nil : [self.beds, 4].min
+           end
     la = if needstype == 2
            defined?(self.location.location_code) ? self.location.location_code : nil
          else

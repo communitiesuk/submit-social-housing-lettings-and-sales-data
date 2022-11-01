@@ -28,7 +28,11 @@ module Validations::SoftValidations
   def rent_in_soft_min_range?
     return unless brent && weekly_value(brent) && startdate
 
-    beds = needstype == 2 ? 0 : [self.beds, 4].min
+    beds = if needstype == 2
+             0
+           else
+             self.beds.nil? ? nil : [self.beds, 4].min
+           end
     la = if needstype == 2
            defined?(self.location.location_code) ? self.location.location_code : nil
          else
@@ -42,7 +46,11 @@ module Validations::SoftValidations
   def rent_in_soft_max_range?
     return unless brent && weekly_value(brent) && startdate
 
-    beds = needstype == 2 ? 0 : [self.beds, 4].min
+    beds = if needstype == 2
+             0
+           else
+             self.beds.nil? ? nil : [self.beds, 4].min
+           end
     la = if needstype == 2
            defined?(self.location.location_code) ? self.location.location_code : nil
          else

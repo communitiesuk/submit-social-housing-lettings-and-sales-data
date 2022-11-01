@@ -182,7 +182,11 @@ private
 
     collection_year = record.collection_start_year
 
-    beds = record.needstype == 2 ? 0 : [record.beds, 4].min
+    beds = if record.needstype == 2
+             0
+           else
+             record.beds.nil? ? nil : [record.beds, 4].min
+           end
     la = if record.needstype == 2
            defined?(record.location.location_code) ? record.location.location_code : nil
          else
