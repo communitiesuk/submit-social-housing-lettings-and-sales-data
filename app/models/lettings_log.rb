@@ -435,35 +435,29 @@ class LettingsLog < Log
     Csv::LettingsLogCsvService.new(user).to_csv
   end
 
-  def soft_min_for_period
-    beds = if needstype == 2
-             0
-           else
-             self.beds.nil? ? nil : [self.beds, 4].min
-           end
-    la = if needstype == 2
-           defined?(location.location_code) ? location.location_code : nil
-         else
-           self.la
-         end
+  def validation_beds
+    if needstype == 2
+      0
+    else
+      beds.nil? ? nil : [beds, 4].min
+    end
+  end
 
-    soft_min = LaRentRange.find_by(start_year: collection_start_year, la:, beds:, lettype:).soft_min
+  def validation_la
+    if needstype == 2
+      defined?(location.location_code) ? location.location_code : nil
+    else
+      la
+    end
+  end
+
+  def soft_min_for_period
+    soft_min = LaRentRange.find_by(start_year: collection_start_year, la: validation_la, beds: validation_beds, lettype:).soft_min
     "#{soft_value_for_period(soft_min)} #{SUFFIX_FROM_PERIOD[period].presence || 'every week'}"
   end
 
   def soft_max_for_period
-    beds = if needstype == 2
-             0
-           else
-             self.beds.nil? ? nil : [self.beds, 4].min
-           end
-    la = if needstype == 2
-           defined?(location.location_code) ? location.location_code : nil
-         else
-           self.la
-         end
-
-    soft_max = LaRentRange.find_by(start_year: collection_start_year, la:, beds:, lettype:).soft_max
+    soft_max = LaRentRange.find_by(start_year: collection_start_year, la: validation_la, beds: validation_beds, lettype:).soft_max
     "#{soft_value_for_period(soft_max)} #{SUFFIX_FROM_PERIOD[period].presence || 'every week'}"
   end
 
