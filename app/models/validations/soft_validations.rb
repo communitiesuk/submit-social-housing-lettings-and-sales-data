@@ -29,7 +29,11 @@ module Validations::SoftValidations
     return unless brent && weekly_value(brent) && startdate
 
     beds = needstype == 2 ? 0 : [self.beds, 4].min
-    la = needstype == 2 ? Location.find(location_id).location_code : self.la
+    la = if needstype == 2
+           defined?(self.location.location_code) ? self.location.location_code : nil
+         else
+           self.la
+         end
 
     rent_range = LaRentRange.find_by(start_year: collection_start_year, la:, beds:, lettype: get_lettype)
     rent_range.present? && weekly_value(brent).between?(rent_range.hard_min, rent_range.soft_min)
@@ -39,7 +43,11 @@ module Validations::SoftValidations
     return unless brent && weekly_value(brent) && startdate
 
     beds = needstype == 2 ? 0 : [self.beds, 4].min
-    la = needstype == 2 ? Location.find(location_id).location_code : self.la
+    la = if needstype == 2
+           defined?(self.location.location_code) ? self.location.location_code : nil
+         else
+           self.la
+         end
 
     rent_range = LaRentRange.find_by(start_year: collection_start_year, la:, beds:, lettype: get_lettype)
     rent_range.present? && weekly_value(brent).between?(rent_range.soft_max, rent_range.hard_max)

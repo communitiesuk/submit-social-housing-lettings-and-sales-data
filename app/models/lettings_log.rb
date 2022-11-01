@@ -437,7 +437,11 @@ class LettingsLog < Log
 
   def soft_min_for_period
     beds = needstype == 2 ? 0 : [self.beds, 4].min
-    la = needstype == 2 ? Location.find(location_id).location_code : self.la
+    la = if needstype == 2
+           defined?(self.location.location_code) ? self.location.location_code : nil
+         else
+           self.la
+         end
 
     soft_min = LaRentRange.find_by(start_year: collection_start_year, la:, beds:, lettype:).soft_min
     "#{soft_value_for_period(soft_min)} #{SUFFIX_FROM_PERIOD[period].presence || 'every week'}"
@@ -445,7 +449,11 @@ class LettingsLog < Log
 
   def soft_max_for_period
     beds = needstype == 2 ? 0 : [self.beds, 4].min
-    la = needstype == 2 ? Location.find(location_id).location_code : self.la
+    la = if needstype == 2
+           defined?(self.location.location_code) ? self.location.location_code : nil
+         else
+           self.la
+         end
 
     soft_max = LaRentRange.find_by(start_year: collection_start_year, la:, beds:, lettype:).soft_max
     "#{soft_value_for_period(soft_max)} #{SUFFIX_FROM_PERIOD[period].presence || 'every week'}"
