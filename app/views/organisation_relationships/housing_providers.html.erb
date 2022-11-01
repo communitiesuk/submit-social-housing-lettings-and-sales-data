@@ -1,0 +1,48 @@
+<% item_label = format_label(@pagy.count, "housing providers") %>
+
+<% if current_user.data_coordinator? %>
+  <% if params["related_organisation_id"] %>
+    <%= govuk_notification_banner(
+          title_text: "Success",
+          success: true, title_heading_level: 3,
+          title_id: "swanky-notifications"
+        ) do |notification_banner|
+          notification_banner.heading(text: "#{Organisation.find(params['related_organisation_id']).name} is now one of your housing providers")
+        end %>
+  <% end %>
+<% end %>
+<% if current_user.support? %>
+  <%= render partial: "organisations/headings", locals: { main: @organisation.name, sub: nil } %>
+  <%= render SubNavigationComponent.new(items: secondary_items(request.path, @organisation.id)) %>
+  <h2 class="govuk-visually-hidden">Housing Providers</h2>
+  <% if params["related_organisation_id"] %>
+    <%= govuk_notification_banner(
+          title_text: "Success",
+          success: true, title_heading_level: 3,
+          title_id: "swanky-notifications"
+        ) do |notification_banner|
+          notification_banner.heading(text: "#{Organisation.find(params['related_organisation_id']).name} is now one of this organisation's housing providers")
+        end %>
+  <% end %>
+  <p class="govuk-body">This organisation can submit logs for its housing providers.</p>
+  <% if @total_count == 0 %>
+    <p class="govuk-body">This organisation does not currently have any housing providers.</p>
+  <% end %>
+<% else %>
+  <%= render partial: "organisations/headings", locals: { main: "Your housing providers", sub: current_user.organisation.name } %>
+  <p class="govuk-body">Your organisation can submit logs for its housing providers.</p>
+  <% if @total_count == 0 %>
+    <p class="govuk-body">You do not currently have any housing providers.</p>
+  <% end %>
+<% end %>
+
+<% if current_user.support? %>
+  <%= govuk_button_link_to "Add a housing provider", housing_providers_add_organisation_path(organisation_id: @organisation.id), html: { method: :get } %>
+  <% elsif current_user.data_coordinator? %>
+  <%= govuk_button_link_to "Add a housing provider", housing_providers_add_organisation_path, html: { method: :get } %>
+<% end %>
+<% if @total_count != 0 %>
+  <%= render SearchComponent.new(current_user:, search_label: "Search for a housing provider", value: @searched) %>
+  <%= render partial: "organisation_relationships/housing_provider_list", locals: { index: @housing_providers, title: "Housing providers", pagy: @pagy, searched: @searched, item_label:, total_count: @total_count } %>
+  <%= render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "housing providers" } %>
+<% end %>

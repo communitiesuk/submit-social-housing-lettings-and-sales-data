@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_11_094347) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_19_082625) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -277,6 +277,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_11_094347) do
     t.integer "parent_organisation_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "relationship_type", null: false
   end
 
   create_table "organisation_rent_periods", force: :cascade do |t|
@@ -296,7 +297,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_11_094347) do
     t.string "postcode"
     t.boolean "holds_own_stock"
     t.string "other_stock_owners"
-    t.string "managing_agents"
+    t.string "managing_agents_label"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "active"
@@ -358,12 +359,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_11_094347) do
     t.integer "hholdcount"
     t.integer "age3"
     t.integer "age3_known"
+    t.integer "income1"
+    t.integer "income1nk"
     t.integer "age4"
     t.integer "age4_known"
     t.integer "age5"
     t.integer "age5_known"
     t.integer "age6"
     t.integer "age6_known"
+    t.string "la"
+    t.integer "la_known"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
