@@ -442,7 +442,7 @@ class LettingsLog < Log
              self.beds.nil? ? nil : [self.beds, 4].min
            end
     la = if needstype == 2
-           defined?(self.location.location_code) ? self.location.location_code : nil
+           defined?(location.location_code) ? location.location_code : nil
          else
            self.la
          end
@@ -458,7 +458,7 @@ class LettingsLog < Log
              self.beds.nil? ? nil : [self.beds, 4].min
            end
     la = if needstype == 2
-           defined?(self.location.location_code) ? self.location.location_code : nil
+           defined?(location.location_code) ? location.location_code : nil
          else
            self.la
          end
