@@ -83,9 +83,9 @@ class OrganisationRelationshipsController < ApplicationController
   end
 
   def delete_housing_provider
-    organisation_relationship_to_remove = OrganisationRelationship.find_by!(child_organisation_id: @organisation.id, parent_organisation_id: target_organisation_id, relationship_type: OrganisationRelationship::OWNING)
+    organisation_relationship_to_remove = OrganisationRelationship.find_by!(child_organisation: @organisation, parent_organisation: target_organisation, relationship_type: OrganisationRelationship::OWNING)
     organisation_relationship_to_remove.destroy!
-    flash[:notice] = "#{Organisation.find(target_organisation_id).name} is no longer one of #{current_user.data_coordinator? ? 'your' : "this organisation's"} housing providers"
+    flash[:notice] = "#{target_organisation.name} is no longer one of #{current_user.data_coordinator? ? 'your' : "this organisation's"} housing providers"
     redirect_to housing_providers_organisation_path
   end
 
@@ -104,8 +104,8 @@ private
     params["organisation"]["related_organisation_id"]
   end
 
-  def target_organisation_id
-    params["target_organisation_id"]
+  def target_organisation
+    @target_organisation ||= Organisation.find(params[:target_organisation_id])
   end
 
   def search_term
