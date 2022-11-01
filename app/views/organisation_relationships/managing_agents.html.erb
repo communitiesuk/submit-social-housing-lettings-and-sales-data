@@ -38,9 +38,7 @@
     <p class="govuk-body">This organisation does not currently have any managing agents.</p>
   <% end %>
 <% end %>
-<% if current_user.support? %>
-  <%= govuk_button_link_to "Add a managing agent", managing_agents_add_organisation_path(organisation_id: @organisation.id), html: { method: :get } %>
-<% elsif current_user.data_coordinator? %>
+<% if current_user.support? || current_user.data_coordinator? %>
   <%= govuk_button_link_to "Add a managing agent", managing_agents_add_organisation_path, html: { method: :get } %>
 <% end %>
 <% if @total_count != 0 %>

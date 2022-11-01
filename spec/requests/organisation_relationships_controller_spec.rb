@@ -158,7 +158,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
         it "redirects to the organisation list" do
           request
-          expect(response).to redirect_to("/organisations/#{organisation.id}/housing-providers?related_organisation_id=#{housing_provider.id}")
+          expect(response).to redirect_to("/organisations/#{organisation.id}/housing-providers")
         end
       end
 
@@ -186,7 +186,30 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
         it "redirects to the organisation list" do
           request
-          expect(response).to redirect_to("/organisations/#{organisation.id}/managing-agents?related_organisation_id=#{managing_agent.id}")
+          expect(response).to redirect_to("/organisations/#{organisation.id}/managing-agents")
+        end
+      end
+
+      describe "organisation_relationships#delete_housing_provider" do
+        let!(:housing_provider) { FactoryBot.create(:organisation) }
+        let(:params) do
+          {
+            "target_organisation_id": housing_provider.id,
+          }
+        end
+        let(:request) { delete "/organisations/#{organisation.id}/housing-providers", headers:, params: }
+
+        before do
+          FactoryBot.create(:organisation_relationship, :owning, child_organisation: organisation, parent_organisation: housing_provider)
+        end
+
+        it "deletes the new organisation relationship" do
+          expect { request }.to change(OrganisationRelationship, :count).by(-1)
+        end
+
+        it "redirects to the organisation list" do
+          request
+          expect(response).to redirect_to("/organisations/#{organisation.id}/housing-providers")
         end
       end
     end
@@ -337,7 +360,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
         it "redirects to the organisation list" do
           request
-          expect(response).to redirect_to("/organisations/#{organisation.id}/housing-providers?related_organisation_id=#{housing_provider.id}")
+          expect(response).to redirect_to("/organisations/#{organisation.id}/housing-providers")
         end
       end
 
@@ -365,7 +388,30 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
         it "redirects to the organisation list" do
           request
-          expect(response).to redirect_to("/organisations/#{organisation.id}/managing-agents?related_organisation_id=#{managing_agent.id}")
+          expect(response).to redirect_to("/organisations/#{organisation.id}/managing-agents")
+        end
+      end
+
+      describe "organisation_relationships#delete_housing_provider" do
+        let!(:housing_provider) { FactoryBot.create(:organisation) }
+        let(:params) do
+          {
+            "target_organisation_id": housing_provider.id,
+          }
+        end
+        let(:request) { delete "/organisations/#{organisation.id}/housing-providers", headers:, params: }
+
+        before do
+          FactoryBot.create(:organisation_relationship, :owning, child_organisation: organisation, parent_organisation: housing_provider)
+        end
+
+        it "deletes the new organisation relationship" do
+          expect { request }.to change(OrganisationRelationship, :count).by(-1)
+        end
+
+        it "redirects to the organisation list" do
+          request
+          expect(response).to redirect_to("/organisations/#{organisation.id}/housing-providers")
         end
       end
 
@@ -398,6 +444,10 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         it "shows only housing providers for this organisation" do
           expect(page).to have_content(housing_provider.name)
           expect(page).not_to have_content(other_org_housing_provider.name)
+        end
+
+        it "shows remove link(s)" do
+          expect(response.body).to include("Remove")
         end
 
         it "shows the pagination count" do
