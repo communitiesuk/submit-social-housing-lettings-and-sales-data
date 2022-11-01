@@ -190,6 +190,9 @@ en:
       brent:
         below_hard_min: "Rent is below the absolute minimum expected for a property of this type. Please check the rent, rent period, local authority and (if general needs) number of bedrooms"
         above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type. Please check the rent, rent period, local authority and (if general needs) number of bedrooms"
+        postcode_known:
+          below_hard_min: "Rent is below the absolute minimum expected for a property of this type. Please check the rent, rent period, local authority and number of bedrooms"
+          above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type. Please check the rent, rent period, local authority and number of bedrooms"
         la:
           below_hard_min: "Rent is below the absolute minimum expected for a property of this type based on this local authority"
           above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type based on this local authority"
