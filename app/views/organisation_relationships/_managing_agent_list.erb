@@ -12,7 +12,7 @@
               scope: "row",
               class: "govuk-!-text-align-right",
             }) do %>
-              <%= govuk_link_to("Remove", "managing-agents/#{managing_agent.id}") %>
+              <%= govuk_link_to("Remove", managing_agents_remove_organisation_path(target_organisation_id: managing_agent.id)) %>
             <% end %>
           <% end %>
         <% end %>
