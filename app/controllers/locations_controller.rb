@@ -63,8 +63,7 @@ class LocationsController < ApplicationController
       render :edit_local_authority, status: :unprocessable_entity
     else
       if page == "edit-local-authority"
-        la_list = FormHandler.instance.current_lettings_form.get_question("la", nil).answer_options
-        params[:location][:location_code] = la_list.key(params[:location][:location_admin_district])
+        params[:location][:location_code] = Location.local_authorities.key(params[:location][:location_admin_district])
       end
       if @location.update(location_params)
         case page
