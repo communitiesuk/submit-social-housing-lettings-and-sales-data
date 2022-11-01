@@ -86,9 +86,9 @@ class Organisation < ApplicationRecord
       { name: "Registration number", value: housing_registration_no || "", editable: false },
       { name: "Rent_periods", value: rent_period_labels, editable: false, format: :bullet },
       { name: "Owns housing stock", value: holds_own_stock ? "Yes" : "No", editable: false },
-      { name: "Other stock owners", value: other_stock_owners, editable: false },
-      { name: "Managing agents", value: managing_agents_label, editable: false },
+      ({ name: "Other stock owners", value: other_stock_owners, editable: false } unless FeatureToggle.managing_owning_enabled?),
+      ({ name: "Managing agents", value: managing_agents_label, editable: false } unless FeatureToggle.managing_owning_enabled?),
       { name: "Data protection agreement", value: data_protection_agreement_string, editable: false },
-    ]
+    ].compact
   end
 end
