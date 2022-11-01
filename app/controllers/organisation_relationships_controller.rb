@@ -38,44 +38,47 @@ class OrganisationRelationshipsController < ApplicationController
   end
 
   def create_housing_provider
-    child_organisation_id = @organisation.id
-    parent_organisation_id = related_organisation_id
+    child_organisation = @organisation
     relationship_type = OrganisationRelationship::OWNING
-    if related_organisation_id.empty?
+    if params[:organisation][:related_organisation_id].empty?
       @organisation.errors.add :related_organisation_id, "You must choose a housing provider"
-      @organisations = Organisation.where.not(id: child_organisation_id).pluck(:id, :name)
+      @organisations = Organisation.where.not(id: child_organisation.id).pluck(:id, :name)
       render "organisation_relationships/add_housing_provider"
       return
-    elsif OrganisationRelationship.exists?(child_organisation_id:, parent_organisation_id:, relationship_type:)
-      @organisation.errors.add :related_organisation_id, "You have already added this housing provider"
-      @organisations = Organisation.where.not(id: child_organisation_id).pluck(:id, :name)
-      render "organisation_relationships/add_housing_provider"
-      return
+    else
+      parent_organisation = related_organisation
+      if OrganisationRelationship.exists?(child_organisation:, parent_organisation:, relationship_type:)
+        @organisation.errors.add :related_organisation_id, "You have already added this housing provider"
+        @organisations = Organisation.where.not(id: child_organisation.id).pluck(:id, :name)
+        render "organisation_relationships/add_housing_provider"
+        return
+      end
     end
-    create!(child_organisation_id:, parent_organisation_id:, relationship_type:)
-    flash[:notice] = "#{Organisation.find(related_organisation_id).name} is now one of #{current_user.data_coordinator? ? 'your' : "this organisation's"} housing providers"
+    create!(child_organisation:, parent_organisation:, relationship_type:)
+    flash[:notice] = "#{related_organisation.name} is now one of #{current_user.data_coordinator? ? 'your' : "this organisation's"} housing providers"
     redirect_to housing_providers_organisation_path
   end
 
   def create_managing_agent
-    parent_organisation_id = @organisation.id
-    child_organisation_id = related_organisation_id
+    parent_organisation = @organisation
     relationship_type = OrganisationRelationship::MANAGING
-
-    if related_organisation_id.empty?
+    if params[:organisation][:related_organisation_id].empty?
       @organisation.errors.add :related_organisation_id, "You must choose a managing agent"
-      @organisations = Organisation.where.not(id: parent_organisation_id).pluck(:id, :name)
+      @organisations = Organisation.where.not(id: parent_organisation.id).pluck(:id, :name)
       render "organisation_relationships/add_managing_agent"
       return
-    elsif OrganisationRelationship.exists?(child_organisation_id:, parent_organisation_id:, relationship_type:)
-      @organisation.errors.add :related_organisation_id, "You have already added this managing agent"
-      @organisations = Organisation.where.not(id: parent_organisation_id).pluck(:id, :name)
-      render "organisation_relationships/add_managing_agent"
-      return
+    else
+      child_organisation = related_organisation
+      if OrganisationRelationship.exists?(child_organisation:, parent_organisation:, relationship_type:)
+        @organisation.errors.add :related_organisation_id, "You have already added this managing agent"
+        @organisations = Organisation.where.not(id: parent_organisation.id).pluck(:id, :name)
+        render "organisation_relationships/add_managing_agent"
+        return
+      end
     end
-
-    create!(child_organisation_id:, parent_organisation_id:, relationship_type:)
-    redirect_to managing_agents_organisation_path(related_organisation_id:)
+    create!(child_organisation:, parent_organisation:, relationship_type:)
+    flash[:notice] = "#{related_organisation.name} is now one of #{current_user.data_coordinator? ? 'your' : "this organisation's"} managing agents"
+    redirect_to managing_agents_organisation_path
   end
 
   def remove_housing_provider
@@ -91,8 +94,8 @@ class OrganisationRelationshipsController < ApplicationController
 
 private
 
-  def create!(child_organisation_id:, parent_organisation_id:, relationship_type:)
-    @resource = OrganisationRelationship.new(child_organisation_id:, parent_organisation_id:, relationship_type:)
+  def create!(child_organisation:, parent_organisation:, relationship_type:)
+    @resource = OrganisationRelationship.new(child_organisation:, parent_organisation:, relationship_type:)
     @resource.save!
   end
 
@@ -100,8 +103,8 @@ private
     @organisation ||= Organisation.find(params[:id])
   end
 
-  def related_organisation_id
-    params["organisation"]["related_organisation_id"]
+  def related_organisation
+    @related_organisation ||= Organisation.find(params[:organisation][:related_organisation_id])
   end
 
   def target_organisation
