@@ -79,7 +79,7 @@ class OrganisationRelationshipsController < ApplicationController
   end
 
   def remove_housing_provider
-    @target_organisation_id = target_organisation_id
+    @target_organisation_id = target_organisation.id
   end
 
   def delete_housing_provider
