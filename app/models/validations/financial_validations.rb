@@ -182,7 +182,7 @@ private
 
     collection_year = record.collection_start_year
 
-    beds = record.needstype == 2 ? 0 : record.beds
+    beds = record.needstype == 2 ? 0 : [record.beds, 4].min
     la = record.needstype == 2 ? Location.find(record.location_id).location_code : record.la
 
     rent_range = LaRentRange.find_by(start_year: collection_year, la:, beds:, lettype: record.lettype)
