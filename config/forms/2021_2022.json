@@ -5759,16 +5759,16 @@
                   "type": "radio",
                   "check_answer_label": "Person seriously injured or ill as result of serving in UK armed forces",
                   "answer_options": {
-                    "0": {
+                    "1": {
                       "value": "Yes"
                     },
-                    "1": {
+                    "2": {
                       "value": "No"
                     },
                     "divider": {
                       "value": true
                     },
-                    "2": {
+                    "3": {
                       "value": "Person prefers not to say"
                     }
                   }

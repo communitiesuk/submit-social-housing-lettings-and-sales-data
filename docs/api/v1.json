@@ -311,7 +311,7 @@
               "reason": 1,
               "underoccupation_benefitcap": 0,
               "leftreg": 1,
-              "reservist": 0,
+              "reservist": 1,
               "illness": 1,
               "preg_occ": 0,
               "tenancy_code": "BZ757",
