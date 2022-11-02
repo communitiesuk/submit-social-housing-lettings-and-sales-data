@@ -86,13 +86,13 @@
     <prevloc>E07000105</prevloc>
     <hb>6</hb>
     <hbrentshortfall>1</hbrentshortfall>
-    <mrcdate>2020-05-05 10:36:49 UTC</mrcdate>
+    <mrcdate>2020-05-05T10:36:49Z</mrcdate>
     <incref>0</incref>
-    <startdate>2022-02-02 10:36:49 UTC</startdate>
+    <startdate>2022-02-02T10:36:49Z</startdate>
     <armedforces>1</armedforces>
     <unitletas/>
     <builtype/>
-    <voiddate>2019-11-03 00:00:00 UTC</voiddate>
+    <voiddate>2019-11-03T00:00:00Z</voiddate>
     <renttype>2</renttype>
     <needstype>2</needstype>
     <lettype>8</lettype>
@@ -141,8 +141,8 @@
     <maningorgid>{managing_org_id}</maningorgid>
     <maningorgname>DLUHC</maningorgname>
     <manhcnum>1234</manhcnum>
-    <createddate>2022-02-08 16:52:15 UTC</createddate>
-    <uploaddate>2022-02-08 16:52:15 UTC</uploaddate>
+    <createddate>2022-02-08T16:52:15Z</createddate>
+    <uploaddate>2022-02-08T16:52:15Z</uploaddate>
     <unittype_sh>7</unittype_sh>
     <confidential>1</confidential>
     <cligrp1>G</cligrp1>
