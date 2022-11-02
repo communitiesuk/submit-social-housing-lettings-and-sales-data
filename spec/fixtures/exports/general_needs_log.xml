@@ -34,7 +34,7 @@
     <homeless>1</homeless>
     <underoccupation_benefitcap>0</underoccupation_benefitcap>
     <leftreg>1</leftreg>
-    <reservist>0</reservist>
+    <reservist>1</reservist>
     <illness>1</illness>
     <preg_occ>2</preg_occ>
     <startertenancy>1</startertenancy>

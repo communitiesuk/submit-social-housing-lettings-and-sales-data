@@ -56,7 +56,7 @@ FactoryBot.define do
       homeless { 1 }
       underoccupation_benefitcap { 0 }
       leftreg { 1 }
-      reservist { 0 }
+      reservist { 1 }
       illness { 1 }
       preg_occ { 2 }
       startertenancy { 1 }
