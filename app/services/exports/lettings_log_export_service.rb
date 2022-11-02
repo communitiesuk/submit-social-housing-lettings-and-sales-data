@@ -180,6 +180,13 @@ module Exports
       attribute_hash["createddate"] = attribute_hash["created_at"]
       attribute_hash["uploaddate"] = attribute_hash["updated_at"]
 
+      # Covert date times to ISO 8601
+      attribute_hash["createddate"] = attribute_hash["createddate"]&.iso8601
+      attribute_hash["uploaddate"] = attribute_hash["uploaddate"]&.iso8601
+      attribute_hash["mrcdate"] = attribute_hash["mrcdate"]&.iso8601
+      attribute_hash["startdate"] = attribute_hash["startdate"]&.iso8601
+      attribute_hash["voiddate"] = attribute_hash["voiddate"]&.iso8601
+
       attribute_hash["cbl"] = 2 if attribute_hash["cbl"]&.zero?
       attribute_hash["cap"] = 2 if attribute_hash["cap"]&.zero?
       attribute_hash["chr"] = 2 if attribute_hash["chr"]&.zero?
