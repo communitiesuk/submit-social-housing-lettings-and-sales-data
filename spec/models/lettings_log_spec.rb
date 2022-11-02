@@ -1431,8 +1431,8 @@ RSpec.describe LettingsLog do
 
       it "correctly derives and saves referral" do
         record_from_db = ActiveRecord::Base.connection.execute("select referral from lettings_logs where id=#{lettings_log.id}").to_a[0]
-        expect(record_from_db["referral"]).to eq(0)
-        expect(lettings_log["referral"]).to eq(0)
+        expect(record_from_db["referral"]).to eq(1)
+        expect(lettings_log["referral"]).to eq(1)
       end
 
       it "correctly derives and saves vacdays" do
