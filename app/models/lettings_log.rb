@@ -436,10 +436,11 @@ class LettingsLog < Log
   end
 
   def validation_beds
+    max_beds_in_rent_ranges = 4
     if needstype == 2
       0
     else
-      beds.nil? ? nil : [beds, 4].min
+      beds.nil? ? nil : [beds, max_beds_in_rent_ranges].min
     end
   end
 

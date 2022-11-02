@@ -36,7 +36,12 @@ module Validations::SoftValidations
     return unless brent && weekly_value(brent) && startdate
 
     rent_range = LaRentRange.find_by(start_year: collection_start_year, la: validation_la, beds: validation_beds, lettype: get_lettype)
-    rent_range.present? && weekly_value(brent).between?(rent_range.soft_max, rent_range.hard_max)
+    max_beds_in_rent_ranges = 4
+    if beds > max_beds_in_rent_ranges
+      rent_range.present? && weekly_value(brent) > rent_range.soft_max
+    else
+      rent_range.present? && weekly_value(brent).between?(rent_range.soft_max, rent_range.hard_max)
+    end
   end
 
   (1..8).each do |person_num|
