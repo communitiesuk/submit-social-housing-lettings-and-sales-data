@@ -176,9 +176,12 @@ module Exports
         attribute_hash["manhcnum"] = lettings_log.managing_organisation.housing_registration_no
       end
 
-      # Mapping which would require a change in our data model
-      attribute_hash["createddate"] = attribute_hash["created_at"]
-      attribute_hash["uploaddate"] = attribute_hash["updated_at"]
+      # Covert date times to ISO 8601
+      attribute_hash["createddate"] = lettings_log.created_at&.iso8601
+      attribute_hash["uploaddate"] = lettings_log.updated_at&.iso8601
+      attribute_hash["mrcdate"] = lettings_log.mrcdate&.iso8601
+      attribute_hash["startdate"] = lettings_log.startdate&.iso8601
+      attribute_hash["voiddate"] = lettings_log.voiddate&.iso8601
 
       attribute_hash["cbl"] = 2 if attribute_hash["cbl"]&.zero?
       attribute_hash["cap"] = 2 if attribute_hash["cap"]&.zero?

@@ -12,6 +12,11 @@ module LocationsHelper
     selection_options(Location.type_of_units)
   end
 
+  def local_authorities_selection
+    null_option = [OpenStruct.new(id: "", name: "Select an option")]
+    null_option + Location.local_authorities.map { |code, name| OpenStruct.new(code:, name:) }
+  end
+
   def selection_options(resource)
     return [] if resource.blank?
 

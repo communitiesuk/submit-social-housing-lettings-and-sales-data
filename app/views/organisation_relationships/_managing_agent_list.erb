@@ -1,0 +1,22 @@
+<section class="app-table-group" tabindex="0" aria-labelledby="<%= title.dasherize %>">
+  <%= govuk_table do |table| %>
+    <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
+      <%= render(SearchResultCaptionComponent.new(searched:, count: pagy.count, item_label:, total_count:, item: "agents", path: request.path)) %>
+    <% end %>
+    <% @managing_agents.each do |managing_agent| %>
+      <%= table.body do |body| %>
+        <%= body.row do |row| %>
+          <% row.cell(text: managing_agent.name) %>
+          <% if current_user.data_coordinator? || current_user.support? %>
+            <% row.cell(html_attributes: {
+              scope: "row",
+              class: "govuk-!-text-align-right",
+            }) do %>
+              <%= govuk_link_to("Remove", managing_agents_remove_organisation_path(target_organisation_id: managing_agent.id)) %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+</section>

@@ -952,7 +952,7 @@ RSpec.describe UsersController, type: :request do
 
       context "when the current user matches the user ID" do
         before do
-          get "/users/#{user.id}/deactivate", headers: headers, params: {}
+          get "/users/#{user.id}/deactivate", headers:, params: {}
         end
 
         it "redirects user to user page" do
@@ -962,7 +962,7 @@ RSpec.describe UsersController, type: :request do
 
       context "when the current user does not match the user ID" do
         before do
-          get "/users/#{other_user.id}/deactivate", headers: headers, params: {}
+          get "/users/#{other_user.id}/deactivate", headers:, params: {}
         end
 
         it "shows deactivation page with deactivate and cancel buttons for the user" do
@@ -983,7 +983,7 @@ RSpec.describe UsersController, type: :request do
       context "when the current user does not match the user ID" do
         before do
           other_user.update!(active: false)
-          get "/users/#{other_user.id}/reactivate", headers: headers, params: {}
+          get "/users/#{other_user.id}/reactivate", headers:, params: {}
         end
 
         it "shows reactivation page with reactivate and cancel buttons for the user" do

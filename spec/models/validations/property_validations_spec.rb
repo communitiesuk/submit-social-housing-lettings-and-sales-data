@@ -134,7 +134,7 @@ RSpec.describe Validations::PropertyValidations do
       it "adds an error" do
         record.beds = -4
         property_validator.validate_shared_housing_rooms(record)
-        expect(record.errors["beds"]).to include(I18n.t("validations.property.beds.negative"))
+        expect(record.errors["beds"]).to include(I18n.t("validations.property.beds.non_positive"))
       end
     end
 

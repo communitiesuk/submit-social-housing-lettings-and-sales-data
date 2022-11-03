@@ -12,12 +12,8 @@
 
       <%= render partial: "organisations/headings", locals: { main: "What is the local authority of #{@location.postcode}?", sub: @scheme.service_name } %>
 
-      <% la_list = FormHandler.instance.current_lettings_form.get_question("la", nil).answer_options.values %>
-
-      <% las = la_list.map { |la| OpenStruct.new(name: la) } %>
-
       <%= f.govuk_collection_select :location_admin_district,
-                                    las,
+                                    local_authorities_selection,
                                     :name,
                                     :name,
                                     label: { hidden: true },

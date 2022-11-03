@@ -45,7 +45,7 @@ module DerivedVariables::LettingsLogVariables
     self.nocharge = household_charge&.zero? ? 1 : 0
     if is_renewal?
       self.underoccupation_benefitcap = 2 if collection_start_year == 2021
-      self.referral = 0
+      self.referral = 1
       self.waityear = 2
       if is_general_needs?
         # fixed term

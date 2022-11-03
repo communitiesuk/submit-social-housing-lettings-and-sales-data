@@ -5761,16 +5761,16 @@
                   "type": "radio",
                   "check_answer_label": "Person seriously injured or ill as result of serving in UK armed forces",
                   "answer_options": {
-                    "0": {
+                    "1": {
                       "value": "Yes"
                     },
-                    "1": {
+                    "2": {
                       "value": "No"
                     },
                     "divider": {
                       "value": true
                     },
-                    "2": {
+                    "3": {
                       "value": "Person prefers not to say"
                     }
                   }
@@ -8387,11 +8387,6 @@
                 "translation": "soft_validations.rent.min.hint_text",
                 "arguments": [
                   {
-                    "key": "la",
-                    "label": true,
-                    "i18n_template": "la"
-                  },
-                  {
                     "key": "soft_min_for_period",
                     "label": false,
                     "i18n_template": "soft_min_for_period"
@@ -8443,11 +8438,6 @@
               "informative_text": {
                 "translation": "soft_validations.rent.max.hint_text",
                 "arguments": [
-                  {
-                    "key": "la",
-                    "label": true,
-                    "i18n_template": "la"
-                  },
                   {
                     "key": "soft_max_for_period",
                     "label": false,

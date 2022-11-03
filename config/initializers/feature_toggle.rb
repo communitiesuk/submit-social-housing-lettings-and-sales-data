@@ -8,4 +8,10 @@ class FeatureToggle
 
     false
   end
+
+  def self.managing_owning_enabled?
+    return true unless Rails.env.production?
+
+    false
+  end
 end
