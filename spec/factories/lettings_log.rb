@@ -132,7 +132,7 @@ FactoryBot.define do
       hbrentshortfall { 1 }
       tshortfall { 12 }
       property_relet { 0 }
-      mrcdate { Time.utc(2020, 5, 0o5, 10, 36, 49) }
+      mrcdate { Time.zone.local(2020, 5, 5, 10, 36, 49) }
       incref { 0 }
       startdate { Time.utc(2022, 2, 2, 10, 36, 49) }
       armedforces { 1 }
