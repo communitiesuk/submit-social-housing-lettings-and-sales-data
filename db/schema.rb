@@ -394,8 +394,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_18_221143) do
     t.boolean "pcodenk", default: true
     t.integer "postcode_known"
     t.integer "la_known"
-    t.integer "income1"
-    t.integer "income1nk"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
