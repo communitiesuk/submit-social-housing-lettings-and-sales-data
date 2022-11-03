@@ -51,6 +51,11 @@ FactoryBot.define do
       income1 { 10_000 }
       la_known { "1" }
       la { "E09000003" }
+      postcode_full { "SW9 8LA" }
+      pcode1 { "SW9" }
+      pcode2 { "8LA" }
+      postcode_known { 1 }
+      pcodenk { nil }
     end
   end
 end
