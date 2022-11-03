@@ -55,8 +55,8 @@ module Validations::PropertyValidations
   end
 
   def validate_shared_housing_rooms(record)
-    if record.beds.present? && record.beds.negative?
-      record.errors.add :beds, I18n.t("validations.property.beds.negative")
+    if record.beds.present? && record.beds <= 0
+      record.errors.add :beds, I18n.t("validations.property.beds.non_positive")
     end
 
     unless record.unittype_gn.nil?

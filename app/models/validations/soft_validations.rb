@@ -28,19 +28,18 @@ module Validations::SoftValidations
   def rent_in_soft_min_range?
     return unless brent && weekly_value(brent) && startdate
 
-    rent_range = LaRentRange.find_by(start_year: collection_start_year, la:, beds: validation_beds, lettype: get_lettype)
+    rent_range = LaRentRange.find_by(start_year: collection_start_year, la:, beds: beds_for_la_rent_range, lettype: get_lettype)
     rent_range.present? && weekly_value(brent).between?(rent_range.hard_min, rent_range.soft_min)
   end
 
   def rent_in_soft_max_range?
     return unless brent && weekly_value(brent) && startdate
 
-    rent_range = LaRentRange.find_by(start_year: collection_start_year, la:, beds: validation_beds, lettype: get_lettype)
-    max_beds_in_rent_ranges = 4
-    if beds.present? && beds > max_beds_in_rent_ranges
-      rent_range.present? && weekly_value(brent) > rent_range.soft_max
-    else
-      rent_range.present? && weekly_value(brent).between?(rent_range.soft_max, rent_range.hard_max)
+    rent_range = LaRentRange.find_by(start_year: collection_start_year, la:, beds: beds_for_la_rent_range, lettype: get_lettype)
+    if beds.present? && rent_range.present? && beds > LaRentRange::MAX_BEDS
+      weekly_value(brent) > rent_range.soft_max
+    elsif rent_range.present?
+      weekly_value(brent).between?(rent_range.soft_max, rent_range.hard_max)
     end
   end
 

@@ -182,14 +182,7 @@ private
 
     collection_year = record.collection_start_year
 
-    max_beds_in_rent_ranges = 4
-    validation_beds = if record.needstype == 2
-                        0
-                      else
-                        record.beds.nil? ? nil : [record.beds, max_beds_in_rent_ranges].min
-                      end
-
-    rent_range = LaRentRange.find_by(start_year: collection_year, la: record.la, beds: validation_beds, lettype: record.lettype)
+    rent_range = LaRentRange.find_by(start_year: collection_year, la: record.la, beds: record.beds_for_la_rent_range, lettype: record.lettype)
 
     if rent_range.present? && !weekly_value_in_range(record, "brent", rent_range.hard_min, rent_range.hard_max) && record.brent.present? && record.period.present?
       if record.weekly_value(record["brent"]) < rent_range.hard_min
@@ -202,7 +195,7 @@ private
         record.errors.add :rent_type, I18n.t("validations.financial.brent.rent_type.below_hard_min")
         record.errors.add :needstype, I18n.t("validations.financial.brent.needstype.below_hard_min")
         record.errors.add :period, I18n.t("validations.financial.brent.period.below_hard_min")
-      elsif !(record.beds.present? && record.beds > max_beds_in_rent_ranges)
+      elsif record.beds.blank? || record.beds < LaRentRange::MAX_BEDS
         record.errors.add :brent, I18n.t("validations.financial.brent.above_hard_max")
         record.errors.add :beds, I18n.t("validations.financial.brent.beds.above_hard_max")
         record.errors.add :la, I18n.t("validations.financial.brent.la.above_hard_max")
