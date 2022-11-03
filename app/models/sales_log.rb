@@ -1,5 +1,10 @@
 class SalesLogValidator < ActiveModel::Validator
-  def validate(record); end
+  include Validations::Sales::PropertyInformationValidations
+
+  def validate(record)
+    validation_methods = public_methods.select { |method| method.starts_with?("validate_") }
+    validation_methods.each { |meth| public_send(meth, record) }
+  end
 end
 
 class SalesLog < Log
@@ -9,9 +14,12 @@ class SalesLog < Log
 
   has_paper_trail
 
+  ## Custom validations
   validates_with SalesLogValidator
+
   before_validation :set_derived_fields!
   before_validation :reset_invalidated_dependent_fields!
+  before_validation :process_postcode_changes!, if: :postcode_full_changed?
 
   scope :filter_by_year, ->(year) { where(saledate: Time.zone.local(year.to_i, 4, 1)...Time.zone.local(year.to_i + 1, 4, 1)) }
   scope :search_by, ->(param) { filter_by_id(param) }
@@ -46,5 +54,55 @@ class SalesLog < Log
 
   def completed?
     status == "completed"
+  end
+
+  # NOTE: Assume if the postcode is not found by the
+  # Postcode service, entered value is still valid. E.g.
+  # if the Postcode service timesout/unavailable then still
+  # need to proceed
+  def process_postcode_changes!
+    return if postcode_full.blank?
+
+    self.pcodenk = nil
+    self.postcode_known = 1
+
+    if postcode_lookup&.result?
+      self.pcode1 = postcode_lookup.outcode
+      self.pcode2 = postcode_lookup.incode
+      self.la = postcode_lookup.location_admin_district
+      self.la_known = 1
+    else
+      self.pcode1 = nil
+      self.pcode2 = nil
+      self.la = nil
+      self.la_known = 0
+    end
+  end
+
+  def postcode_lookup
+    @postcode_lookup ||= PostcodeService.new.lookup(postcode_full)
+  end
+
+  # 1: Yes
+  def postcode_known?
+    postcode_known == 1
+  end
+
+  # 1: Yes
+  def la_known?
+    la_known == 1
+  end
+
+  def postcode_full=(postcode)
+    if postcode.present?
+      super UKPostcode.parse(upcase_and_remove_whitespace(postcode)).to_s
+      self.postcode_known = 1
+    else
+      super nil
+    end
+  end
+
+  def upcase_and_remove_whitespace(string)
+    string.present? ? string.upcase.gsub(/\s+/, "") : string
   end
 end

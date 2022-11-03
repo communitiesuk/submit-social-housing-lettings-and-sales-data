@@ -1,7 +1,7 @@
 class Form::Sales::Pages::PropertyPostcode < ::Form::Page
   def initialize(id, hsh, subsection)
     super
-    @id = "property_postcode"
+    @id = "postcode_known"
     @header = ""
     @description = ""
     @subsection = subsection

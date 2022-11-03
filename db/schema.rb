@@ -391,6 +391,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_18_221143) do
     t.string "pcode1"
     t.string "pcode2"
     t.boolean "pcodenk", default: true
+    t.integer "postcode_known"
+    t.integer "la_known"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"

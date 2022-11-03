@@ -1,24 +1,32 @@
 class Form::Sales::Questions::PropertyPostcode < ::Form::Question
   def initialize(id, hsh, page)
     super
-    @id = "pcodenk"
-    @check_answer_label = "Postcode"
+    @id = "postcode_known"
+    @check_answer_label = "Do you know the property's postcode?"
     @header = "Do you know the property's postcode?"
     @hint_text = ""
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @width = 10
     @page = page
+    @hidden_in_check_answers = {
+      "depends_on" => [
+        {
+          "postcode_known" => 0,
+        },
+        {
+          "postcode_known" => 1,
+        },
+      ],
+    }
 
     @conditional_for = {
-      "postcode_full" => [0],
+      "postcode_full" => [1],
     }
   end
 
   ANSWER_OPTIONS = {
-    "0" => { "value" => "Yes" },
-    "1" => { "value" => "No" },
+    "1" => { "value" => "Yes" },
+    "0" => { "value" => "No" },
   }.freeze
 end
-
-#"sales-log-postcode-full-field"

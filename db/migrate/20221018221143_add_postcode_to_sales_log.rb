@@ -5,6 +5,9 @@ class AddPostcodeToSalesLog < ActiveRecord::Migration[7.0]
       t.column :pcode1, :string, default: nil # Outcode e.g. SE27
       t.column :pcode2, :string, default: nil # Incode e.g. 0HG
       t.column :pcodenk, :boolean, default: true # Not Known
+
+      t.column :postcode_known, :integer
+      t.column :la_known, :integer
     end
   end
 end
