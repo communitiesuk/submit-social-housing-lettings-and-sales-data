@@ -1141,7 +1141,7 @@ RSpec.describe LettingsLog do
     context "when saving addresses" do
       before do
         stub_request(:get, /api.postcodes.io/)
-          .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\",\"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
+          .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\", \"outcode\": \"M13\", \"incode\": \"1AA\", \"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
       end
 
       let!(:address_lettings_log) do
@@ -1229,7 +1229,7 @@ RSpec.describe LettingsLog do
     context "when saving previous address" do
       before do
         stub_request(:get, /api.postcodes.io/)
-          .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\", \"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
+          .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\", \"outcode\": \"M13\", \"incode\": \"1AA\", \"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
       end
 
       let!(:address_lettings_log) do
@@ -1699,7 +1699,7 @@ RSpec.describe LettingsLog do
 
         before do
           stub_request(:get, /api.postcodes.io/)
-            .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\",\"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
+            .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\", \"outcode\": \"M13\", \"incode\": \"1AA\", \"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
         end
 
         it "correctly infers and saves la" do

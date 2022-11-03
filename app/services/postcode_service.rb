@@ -21,10 +21,10 @@ class PostcodeService
     if postcode_lookup && postcode_lookup.info.present?
       OpenStruct.new({
         location_code: postcode_lookup.codes["admin_district"],
-        location_admin_district: postcode_lookup&.admin_district,
-        incode: postcode_lookup&.incode,
-        outcode: postcode_lookup&.outcode,
-        result?: postcode_lookup&.outcode&.present?,
+        location_admin_district: postcode_lookup.admin_district,
+        incode: postcode_lookup.incode,
+        outcode: postcode_lookup.outcode,
+        result?: postcode_lookup.outcode.present?,
       })
     end
   end
