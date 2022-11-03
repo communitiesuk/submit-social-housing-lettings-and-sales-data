@@ -247,6 +247,8 @@ RSpec.describe Validations::FinancialValidations do
   end
 
   describe "rent and charges validations" do
+    let!(:location) { FactoryBot.create(:location, location_code: "E07000223") }
+
     context "when the owning organisation is a private registered provider" do
       before { record.owning_organisation.provider_type = 2 }
 
@@ -777,7 +779,7 @@ RSpec.describe Validations::FinancialValidations do
 
       context "when validating ranges based on LA and needstype" do
         before do
-          LaRentRange.create(
+          LaRentRange.create!(
             ranges_rent_id: "1",
             la: "E07000223",
             beds: 1,
@@ -788,9 +790,21 @@ RSpec.describe Validations::FinancialValidations do
             hard_max: 100.99,
             start_year: 2021,
           )
+          LaRentRange.create!(
+            ranges_rent_id: "2",
+            la: "E07000223",
+            beds: 0,
+            lettype: 2,
+            soft_min: 12.41,
+            soft_max: 89.54,
+            hard_min: 9.87,
+            hard_max: 100.99,
+            start_year: 2021,
+          )
         end
 
-        it "validates hard minimum" do
+        it "validates hard minimum for general needs" do
+          record.needstype = 1
           record.lettype = 1
           record.period = 1
           record.la = "E07000223"
@@ -803,7 +817,21 @@ RSpec.describe Validations::FinancialValidations do
             .to include(match I18n.t("validations.financial.brent.below_hard_min"))
         end
 
-        it "validates hard max" do
+        it "validates hard minimum for supported housing" do
+          record.needstype = 2
+          record.lettype = 2
+          record.period = 1
+          record.location = location
+          record.startdate = Time.zone.local(2021, 9, 17)
+          record.brent = 9.17
+
+          financial_validator.validate_rent_amount(record)
+          expect(record.errors["brent"])
+            .to include(match I18n.t("validations.financial.brent.below_hard_min"))
+        end
+
+        it "validates hard max for general needs" do
+          record.needstype = 1
           record.lettype = 1
           record.period = 1
           record.la = "E07000223"
@@ -818,10 +846,47 @@ RSpec.describe Validations::FinancialValidations do
             .to include(match I18n.t("validations.financial.brent.beds.above_hard_max"))
           expect(record.errors["la"])
             .to include(match I18n.t("validations.financial.brent.la.above_hard_max"))
+          expect(record.errors["postcode_known"])
+            .to include(match I18n.t("validations.financial.brent.postcode_known.above_hard_max"))
+          expect(record.errors["scheme_id"])
+            .to include(match I18n.t("validations.financial.brent.scheme_id.above_hard_max"))
+          expect(record.errors["location_id"])
+            .to include(match I18n.t("validations.financial.brent.location_id.above_hard_max"))
           expect(record.errors["rent_type"])
             .to include(match I18n.t("validations.financial.brent.rent_type.above_hard_max"))
           expect(record.errors["needstype"])
             .to include(match I18n.t("validations.financial.brent.needstype.above_hard_max"))
+          expect(record.errors["period"])
+            .to include(match I18n.t("validations.financial.brent.period.above_hard_max"))
+        end
+
+        it "validates hard max for supported housing" do
+          record.needstype = 2
+          record.lettype = 2
+          record.period = 1
+          record.location = location
+          record.startdate = Time.zone.local(2021, 9, 17)
+          record.brent = 200
+
+          financial_validator.validate_rent_amount(record)
+          expect(record.errors["brent"])
+            .to include(match I18n.t("validations.financial.brent.above_hard_max"))
+          expect(record.errors["beds"])
+            .to include(match I18n.t("validations.financial.brent.beds.above_hard_max"))
+          expect(record.errors["la"])
+            .to include(match I18n.t("validations.financial.brent.la.above_hard_max"))
+          expect(record.errors["postcode_known"])
+            .to include(match I18n.t("validations.financial.brent.postcode_known.above_hard_max"))
+          expect(record.errors["scheme_id"])
+            .to include(match I18n.t("validations.financial.brent.scheme_id.above_hard_max"))
+          expect(record.errors["location_id"])
+            .to include(match I18n.t("validations.financial.brent.location_id.above_hard_max"))
+          expect(record.errors["rent_type"])
+            .to include(match I18n.t("validations.financial.brent.rent_type.above_hard_max"))
+          expect(record.errors["needstype"])
+            .to include(match I18n.t("validations.financial.brent.needstype.above_hard_max"))
+          expect(record.errors["period"])
+            .to include(match I18n.t("validations.financial.brent.period.above_hard_max"))
         end
 
         it "validates hard max for correct collection year" do

@@ -6,11 +6,7 @@ module InterruptionScreenHelper
     informative_text["arguments"].each do |argument|
       value = if argument["label"]
                 pre_casing_value = lettings_log.form.get_question(argument["key"], lettings_log).answer_label(lettings_log)
-                if argument["key"] == "la"
-                  pre_casing_value
-                else
-                  pre_casing_value.downcase
-                end
+                pre_casing_value.downcase
               else
                 lettings_log.public_send(argument["key"])
               end

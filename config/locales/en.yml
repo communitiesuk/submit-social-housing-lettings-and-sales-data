@@ -146,7 +146,7 @@ en:
         one_seven_bedroom_shared: "A shared house must have 1 to 7 bedrooms"
         one_three_bedroom_single_tenant_shared: "A shared house with fewer than two tenants must have 1 to 3 bedrooms"
       beds:
-        negative: "Number of bedrooms has to be greater than 0"
+        non_positive: "Number of bedrooms has to be greater than 0"
         over_max: "Number of bedrooms cannot be more than 12"
 
     financial:
@@ -190,6 +190,15 @@ en:
       brent:
         below_hard_min: "Rent is below the absolute minimum expected for a property of this type. Please check the rent, rent period, local authority and (if general needs) number of bedrooms"
         above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type. Please check the rent, rent period, local authority and (if general needs) number of bedrooms"
+        scheme_id:
+          below_hard_min: "Rent is below the absolute minimum expected for a property of this type. Please check the rent, rent period and local authority"
+          above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type. Please check the rent, rent period and local authority"
+        location_id:
+          below_hard_min: "Rent is below the absolute minimum expected for a property of this type. Please check the rent, rent period and local authority"
+          above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type. Please check the rent, rent period and local authority"
+        postcode_known:
+          below_hard_min: "Rent is below the absolute minimum expected for a property of this type. Please check the rent, rent period, local authority and number of bedrooms"
+          above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type. Please check the rent, rent period, local authority and number of bedrooms"
         la:
           below_hard_min: "Rent is below the absolute minimum expected for a property of this type based on this local authority"
           above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type based on this local authority"
@@ -313,10 +322,10 @@ en:
     rent:
       min:
         title_text: "You told us the rent is %{brent}"
-        hint_text: "The minimum rent expected for this type of property in %{la} is £%{soft_min_for_period}."
+        hint_text: "The minimum rent expected for this type of property in this local authority is £%{soft_min_for_period}."
       max:
         title_text: "You told us the rent is %{brent}"
-        hint_text: "The maximum rent expected for this type of property in %{la} is £%{soft_max_for_period}."
+        hint_text: "The maximum rent expected for this type of property in this local authority is £%{soft_max_for_period}."
     retirement:
       min:
         title: "You told us this person is under %{age} and retired"
