@@ -2,7 +2,7 @@ class Form::Sales::Questions::PostcodeFull < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "postcode_full"
-    @check_answer_label = "Property postcode"
+    @check_answer_label = "Postcode"
     @header = "What is the property's postcode?"
     @type = "text"
     @page = page

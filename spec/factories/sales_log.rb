@@ -5,12 +5,25 @@ FactoryBot.define do
     managing_organisation { created_by.organisation }
     created_at { Time.utc(2022, 2, 8, 16, 52, 15) }
     updated_at { Time.utc(2022, 2, 8, 16, 52, 15) }
+
     trait :in_progress do
       purchid { "PC123" }
       ownershipsch { 2 }
       type { 8 }
       saledate { Time.utc(2022, 2, 2, 10, 36, 49) }
     end
+
+    trait :before_you_start_completed do
+      saledate { Time.utc(2022, 2, 2, 10, 36, 49) }
+      purchid { "PC123" }
+      ownershipsch { 3 }
+      type { 10 }
+      companybuy { 2 }
+      jointpur { 1 }
+      buylivein { "1" }
+      jointmore { 1 }
+    end
+
     trait :completed do
       purchid { "PC123" }
       ownershipsch { 2 }
@@ -55,7 +68,7 @@ FactoryBot.define do
       pcode1 { "SW9" }
       pcode2 { "8LA" }
       postcode_known { 1 }
-      pcodenk { nil }
+      pcodenk { false }
     end
   end
 end

@@ -61,9 +61,12 @@ class SalesLog < Log
   # if the Postcode service timesout/unavailable then still
   # need to proceed
   def process_postcode_changes!
-    return if postcode_full.blank?
+    if postcode_full.blank?
+      reset_postcode_fields
+      return
+    end
 
-    self.pcodenk = nil
+    self.pcodenk = false
     self.postcode_known = 1
 
     if postcode_lookup&.result?
@@ -77,6 +80,15 @@ class SalesLog < Log
       self.la = nil
       self.la_known = 0
     end
+  end
+
+  def reset_postcode_fields
+    self.pcodenk = true
+    self.postcode_known = 0
+    self.pcode1 = nil
+    self.pcode2 = nil
+    self.la = nil
+    self.la_known = 0
   end
 
   def postcode_lookup
