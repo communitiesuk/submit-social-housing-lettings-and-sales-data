@@ -11,7 +11,6 @@ class PostcodeService
 
     begin
       # URI encoding only supports ASCII characters
-      # Example response for postcode SE27 0AL:
       ascii_postcode = self.class.clean(postcode)
       Timeout.timeout(5) { postcode_lookup = @pio.lookup(ascii_postcode) }
     rescue Timeout::Error
