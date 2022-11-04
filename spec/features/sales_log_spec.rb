@@ -126,7 +126,7 @@ RSpec.describe "Sales Log Features" do
         expect(sales_log.la).to be nil
         expect(sales_log.la_known).to be 0
 
-        # 4. User decides they do know the password
+        # 4. User decides they do know the postcode
         visit("/sales-logs/#{sales_log.id}/postcode-known")
         choose("Yes", allow_label_click: true)
         fill_in("sales_log[postcode_full]", with: "SW9 8LA")
