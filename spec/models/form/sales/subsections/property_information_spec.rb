@@ -17,6 +17,7 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
         property_number_of_bedrooms
         property_building_type
         property_unit_type
+        postcode_known
         property_local_authority
       ],
     )

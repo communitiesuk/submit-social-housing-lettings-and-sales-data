@@ -30,7 +30,7 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
     allow(FormHandler.instance).to receive(:get_form).with("previous_lettings").and_return(real_2021_2022_form)
 
     WebMock.stub_request(:get, /api.postcodes.io\/postcodes\/LS166FT/)
-           .to_return(status: 200, body: '{"status":200,"result":{"codes":{"admin_district":"E08000035"}}}', headers: {})
+           .to_return(status: 200, body: '{"status":200,"result":{"outcode": "LS1","incode": "1AA6FT","codes":{"admin_district":"E08000035"}}}', headers: {})
 
     # Stub the S3 file listing and download
     allow(storage_service).to receive(:list_files)

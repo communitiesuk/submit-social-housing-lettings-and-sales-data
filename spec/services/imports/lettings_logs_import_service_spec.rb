@@ -20,7 +20,7 @@ RSpec.describe Imports::LettingsLogsImportService do
 
   before do
     WebMock.stub_request(:get, /api.postcodes.io\/postcodes\/LS166FT/)
-           .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Westminster","codes":{"admin_district":"E08000035"}}}', headers: {})
+           .to_return(status: 200, body: '{"status":200,"result":{"outcode": "LS1","incode": "1AA6FT","admin_district":"Westminster","codes":{"admin_district":"E08000035"}}}', headers: {})
 
     allow(Organisation).to receive(:find_by).and_return(nil)
     allow(Organisation).to receive(:find_by).with(old_visible_id: organisation.old_visible_id.to_i).and_return(organisation)
