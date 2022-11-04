@@ -22,8 +22,8 @@
     <%= javascript_include_tag "vendor/polyfill-output-value.js" %>
     <%= javascript_include_tag "vendor/outerHTML.js" %>
 
-    <% gtm_container = "GTM-M6GS7FF" %>
-    <% gtm_id = "G-1RH26G5KVP" %>
+    <% gtm_container = get_gtm_container %>
+    <% gtm_id = get_gtm_id %>
 
     <!-- Google Tag Manager (doesn't store personal info until permission given) -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
