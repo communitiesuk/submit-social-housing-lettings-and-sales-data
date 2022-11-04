@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   end
 
   get "/health", to: ->(_) { [204, {}, [nil]] }
+  resource :cookies, only: %i[show update]
 
   root to: "start#index"
 
