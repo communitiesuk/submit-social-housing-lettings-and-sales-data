@@ -17,9 +17,10 @@
             <span class="govuk-caption-l"><%= @subsection.label %></span>
           <% end %>
           <% if @page.header_partial.present? %>
-            <% @page.header = render partial: "form/headers/#{@page.header_partial}", locals: { hholdcount: @log.hholdcount } %>
+            <%= render partial: "form/headers/#{@page.header_partial}", locals: { log: @log} %>
+          <% else %>
+            <%= @page.header %>
           <% end %>
-          <%= @page.header %>
         </h1>
       <% end %>
 
@@ -35,7 +36,7 @@
           <% if question.type == "interruption_screen" %>
             <%= render partial: "form/#{question.type}_question", locals: { question:, caption_text: @subsection.label, page_header: @page.header, lettings_log: @log, title_text: @page.title_text, informative_text: @page.informative_text, form: @form, f:, conditional: false } %>
           <% else %>
-            <%= render partial: "form/#{question.type}_question", locals: { question:, caption_text: @subsection.label, page_header: @page.header, lettings_log: @log, f:, conditional: false } %>
+            <%= render partial: "form/#{question.type}_question", locals: { question:, caption_text: @page.header_partial.present? ? nil : @subsection.label, page_header: @page.header, lettings_log: @log, f:, conditional: false } %>
           <% end %>
         </div>
       <% end %>
