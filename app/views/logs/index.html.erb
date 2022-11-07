@@ -1,9 +1,13 @@
-<% item_label = format_label(@pagy.count, "log") %>
+<% item_label = format_label(@pagy.count, "logs") %>
 <% title = format_title(@searched, "Logs", current_user, item_label, @pagy.count, nil) %>
 
 <% content_for :title, title %>
 
-<%= render partial: "organisations/headings", locals: current_user.support? ? { main: "Logs", sub: nil } : { main: "Logs", sub: current_user.organisation.name } %>
+<% if current_page?(controller: 'lettings_logs', action: 'index') %>
+  <%= render partial: "organisations/headings", locals: current_user.support? ? { main: "Lettings logs", sub: nil } : { main: "Lettings logs", sub: current_user.organisation.name } %>
+<% elsif current_page?(controller: 'sales_logs', action: 'index') %>
+  <%= render partial: "organisations/headings", locals: current_user.support? ? { main: "Sales logs", sub: nil } : { main: "Sales logs", sub: current_user.organisation.name } %>
+<% end %>
 
 <div class="app-filter-layout" data-controller="filter-layout">
   <div class="govuk-button-group app-filter-toggle">

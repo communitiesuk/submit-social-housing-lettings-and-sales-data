@@ -254,7 +254,7 @@ RSpec.describe OrganisationsController, type: :request do
             expect(response.body).to include(user.email)
           end
 
-          it "shows hidden accesibility fields only for active users in the current user's organisation" do
+          it "shows hidden accessibility fields only for active users in the current user's organisation" do
             expected_case_row_log = "<span class=\"govuk-visually-hidden\">User </span><span class=\"govuk-!-font-weight-regular app-!-colour-muted\">#{user.email}</span>"
             unauthorized_case_row_log = "<span class=\"govuk-visually-hidden\">User </span><span class=\"govuk-!-font-weight-regular app-!-colour-muted\">#{other_org_user.email}</span>"
             expect(CGI.unescape_html(response.body)).to include(expected_case_row_log)
@@ -617,7 +617,7 @@ RSpec.describe OrganisationsController, type: :request do
 
             it "has search results in the title" do
               get "/organisations/#{organisation.id}/lettings-logs?search=#{log_to_search.id}", headers: headers, params: {}
-              expect(page).to have_title("#{organisation.name} (1 log matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+              expect(page).to have_title("#{organisation.name} (1 logs matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
 
             it "shows lettings logs matching the id" do
@@ -761,7 +761,7 @@ RSpec.describe OrganisationsController, type: :request do
 
             it "has search results in the title" do
               get "/organisations/#{organisation.id}/sales-logs?search=#{log_to_search.id}", headers: headers, params: {}
-              expect(page).to have_title("#{organisation.name} (1 log matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+              expect(page).to have_title("#{organisation.name} (1 logs matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
 
             it "shows sales logs matching the id" do
@@ -1025,11 +1025,11 @@ RSpec.describe OrganisationsController, type: :request do
             end
 
             it "updates the table caption" do
-              expect(page).to have_content("1 organisation found matching ‘#{search_param}’")
+              expect(page).to have_content("1 organisations found matching ‘#{search_param}’")
             end
 
             it "has search in the title" do
-              expect(page).to have_title("Organisations (1 organisation matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+              expect(page).to have_title("Organisations (1 organisations matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
 
             context "when the search term matches more than 1 result" do

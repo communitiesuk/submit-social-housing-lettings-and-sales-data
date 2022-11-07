@@ -1,0 +1,34 @@
+<%= form_with model: @organisation, url: housing_providers_organisation_path, method: "post", local: true do |f| %>
+  <% if current_user.support? %>
+    <%= render partial: "organisations/headings", locals: { main: @organisation.name, sub: nil } %>
+    <%= render SubNavigationComponent.new(items: secondary_items(request.path, @organisation.id)) %>
+    <h2 class="govuk-visually-hidden">Add Housing Provider</h2>
+    <%= govuk_back_link(href: :back) %>
+    <%= render partial: "organisations/headings", locals: { main: "What is the name of this organisation's housing provider?", sub: nil } %>
+    <p class="govuk-body">Start typing to search for a housing provider</p>
+  <% else %>
+    <% content_for :before_content do %>
+      <%= govuk_back_link(href: :back) %>
+    <% end %>
+    <%= render partial: "organisations/headings", locals: { main: "What is the name of your housing provider?", sub: nil } %>
+    <p class="govuk-body">Start typing to search for your housing provider</p>
+  <% end %>
+  <% answer_options = { "" => "Select an option" } %>
+  <% @organisations.each do |organisation| %>
+    <% answer_options[organisation[0]] = organisation[1] %>
+  <% end %>
+  <%= render partial: "organisation_relationships/related_organisation_select_question", locals: {
+    question: Form::Question.new("", { "answer_options" => answer_options }, nil),
+    f:,
+  } %>
+  <%= f.govuk_submit "Add" %>
+  <%= govuk_details(summary_text: "Can't find the housing provider you're looking for?") do %>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>Double check the spelling and try again</li>
+      <li>Type the first few letters to see the suggestions</li>
+      <li>If you still can't find it,
+        <%= govuk_link_to("contact the DLUHC service desk", "https://digital.dclg.gov.uk/jira/servicedesk/customer/portal/4/group/21", rel: "noreferrer noopener", target: "_blank") %>
+      </li>
+    </ul>
+  <% end %>
+<% end %>
