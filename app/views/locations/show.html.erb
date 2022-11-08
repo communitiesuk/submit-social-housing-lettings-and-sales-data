@@ -23,6 +23,6 @@
         <% end %>
     </div>
 </div>
-<% if !Rails.env.production? %>
+<% if FeatureToggle.location_toggle_enabled? %>
     <%= govuk_button_link_to "Deactivate this location", location_deactivate_path(location_id: @location.id, id: @scheme.id), warning: true %>
 <% end %>
