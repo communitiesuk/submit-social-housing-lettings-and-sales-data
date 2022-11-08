@@ -21,12 +21,14 @@ RSpec.describe Validations::TenancyValidations do
       end
 
       context "when type of tenancy is assured shorthold" do
-        let(:expected_error) { I18n.t(
-          "validations.tenancy.length.shorthold",
-          min_tenancy_length: 2,
-          needs_type: "General needs",
-          rent_type: "Affordable Rent"
-        ) }
+        let(:expected_error) do
+          I18n.t(
+            "validations.tenancy.length.shorthold",
+            min_tenancy_length: 2,
+            needs_type: "General needs",
+            rent_type: "Affordable Rent",
+          )
+        end
 
         before { record.tenancy = 4 }
 
@@ -69,12 +71,14 @@ RSpec.describe Validations::TenancyValidations do
 
       context "when the collection start year is before 2022" do
         context "when type of tenancy is secure" do
-          let(:expected_error) { I18n.t(
-            "validations.tenancy.length.secure",
-            min_tenancy_length: 2,
-            needs_type: "General needs",
-            rent_type: "Affordable Rent"
-          ) }
+          let(:expected_error) do
+            I18n.t(
+              "validations.tenancy.length.secure",
+              min_tenancy_length: 2,
+              needs_type: "General needs",
+              rent_type: "Affordable Rent",
+            )
+          end
 
           before { record.tenancy = 1 }
 
@@ -120,12 +124,14 @@ RSpec.describe Validations::TenancyValidations do
         let(:record) { FactoryBot.create(:lettings_log, startdate: Time.zone.local(2022, 5, 1), needstype: 1, rent_type: 1) }
 
         context "when type of tenancy is Secure - fixed term" do
-          let(:expected_error) { I18n.t(
-            "validations.tenancy.length.secure",
-            min_tenancy_length: 2,
-            needs_type: "General needs",
-            rent_type: "Affordable Rent"
-          ) }
+          let(:expected_error) do
+            I18n.t(
+              "validations.tenancy.length.secure",
+              min_tenancy_length: 2,
+              needs_type: "General needs",
+              rent_type: "Affordable Rent",
+            )
+          end
 
           before { record.tenancy = 6 }
 
@@ -167,12 +173,14 @@ RSpec.describe Validations::TenancyValidations do
         end
 
         context "when type of tenancy is Secure - lifetime" do
-          let(:expected_error) { I18n.t(
-            "validations.tenancy.length.secure",
-            min_tenancy_length: 2,
-            needs_type: "General needs",
-            rent_type: "Affordable Rent"
-          ) }
+          let(:expected_error) do
+            I18n.t(
+              "validations.tenancy.length.secure",
+              min_tenancy_length: 2,
+              needs_type: "General needs",
+              rent_type: "Affordable Rent",
+            )
+          end
 
           before { record.tenancy = 7 }
 

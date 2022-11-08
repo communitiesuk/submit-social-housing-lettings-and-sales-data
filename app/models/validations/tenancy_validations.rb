@@ -17,7 +17,7 @@ module Validations::TenancyValidations
           "validations.tenancy.length.shorthold",
           min_tenancy_length: min_tenancy_length(record),
           rent_type: rent_type_mapping(record)[record.rent_type],
-          needs_type: needs_type_mapping[record.needstype]
+          needs_type: needs_type_mapping[record.needstype],
         ),
       },
       {
@@ -26,7 +26,7 @@ module Validations::TenancyValidations
           "validations.tenancy.length.secure",
           min_tenancy_length: min_tenancy_length(record),
           rent_type: rent_type_mapping(record)[record.rent_type],
-          needs_type: needs_type_mapping[record.needstype]
+          needs_type: needs_type_mapping[record.needstype],
         ),
       },
     ]
