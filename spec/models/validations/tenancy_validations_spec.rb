@@ -25,8 +25,6 @@ RSpec.describe Validations::TenancyValidations do
           I18n.t(
             "validations.tenancy.length.shorthold",
             min_tenancy_length: 2,
-            needs_type: "General needs",
-            rent_type: "Affordable Rent",
           )
         end
 
@@ -75,8 +73,6 @@ RSpec.describe Validations::TenancyValidations do
             I18n.t(
               "validations.tenancy.length.secure",
               min_tenancy_length: 2,
-              needs_type: "General needs",
-              rent_type: "Affordable Rent",
             )
           end
 
@@ -128,8 +124,6 @@ RSpec.describe Validations::TenancyValidations do
             I18n.t(
               "validations.tenancy.length.secure",
               min_tenancy_length: 2,
-              needs_type: "General needs",
-              rent_type: "Affordable Rent",
             )
           end
 
@@ -177,8 +171,6 @@ RSpec.describe Validations::TenancyValidations do
             I18n.t(
               "validations.tenancy.length.secure",
               min_tenancy_length: 2,
-              needs_type: "General needs",
-              rent_type: "Affordable Rent",
             )
           end
 

@@ -16,8 +16,6 @@ module Validations::TenancyValidations
         error: I18n.t(
           "validations.tenancy.length.shorthold",
           min_tenancy_length: min_tenancy_length(record),
-          rent_type: rent_type_mapping(record)[record.rent_type],
-          needs_type: needs_type_mapping[record.needstype],
         ),
       },
       {
@@ -25,8 +23,6 @@ module Validations::TenancyValidations
         error: I18n.t(
           "validations.tenancy.length.secure",
           min_tenancy_length: min_tenancy_length(record),
-          rent_type: rent_type_mapping(record)[record.rent_type],
-          needs_type: needs_type_mapping[record.needstype],
         ),
       },
     ]
@@ -53,24 +49,6 @@ module Validations::TenancyValidations
   end
 
   def min_tenancy_length(record)
-    record.needstype == 2 || record.rent_type.in?([3, 5]) ? 1 : 2
-  end
-
-  def rent_type_mapping(record)
-    {
-      1 => "Affordable Rent",
-      2 => "London Affordable Rent",
-      4 => "London Living Rent",
-      3 => "Rent to Buy",
-      0 => "Social Rent",
-      5 => record.irproduct,
-    }
-  end
-
-  def needs_type_mapping
-    {
-      1 => "General needs",
-      2 => "Supported housing",
-    }
+    record.needstype == 2 || record.renttype == 3 ? 1 : 2
   end
 end
