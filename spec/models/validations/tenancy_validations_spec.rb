@@ -4,7 +4,7 @@ RSpec.describe Validations::TenancyValidations do
   subject(:tenancy_validator) { validator_class.new }
 
   let(:validator_class) { Class.new { include Validations::TenancyValidations } }
-  let(:record) { FactoryBot.create(:lettings_log, startdate: Time.zone.local(2021, 5, 1)) }
+  let(:record) { FactoryBot.create(:lettings_log, startdate: Time.zone.local(2021, 5, 1), needstype: 1, rent_type: 1) }
 
   describe "fixed term tenancy validations" do
     context "when fixed term tenancy" do
@@ -21,11 +21,16 @@ RSpec.describe Validations::TenancyValidations do
       end
 
       context "when type of tenancy is assured shorthold" do
-        let(:expected_error) { I18n.t("validations.tenancy.length.shorthold") }
+        let(:expected_error) { I18n.t(
+          "validations.tenancy.length.shorthold",
+          min_tenancy_length: 2,
+          needs_type: "General needs",
+          rent_type: "Affordable Rent"
+        ) }
 
         before { record.tenancy = 4 }
 
-        context "when tenancy length is greater than 1" do
+        context "when tenancy length is less than 2" do
           it "adds an error" do
             record.tenancylength = 1
             tenancy_validator.validate_fixed_term_tenancy(record)
@@ -34,7 +39,7 @@ RSpec.describe Validations::TenancyValidations do
           end
         end
 
-        context "when tenancy length is less than 100" do
+        context "when tenancy length is greater than 99" do
           it "adds an error" do
             record.tenancylength = 100
             tenancy_validator.validate_fixed_term_tenancy(record)
@@ -64,11 +69,16 @@ RSpec.describe Validations::TenancyValidations do
 
       context "when the collection start year is before 2022" do
         context "when type of tenancy is secure" do
-          let(:expected_error) { I18n.t("validations.tenancy.length.secure") }
+          let(:expected_error) { I18n.t(
+            "validations.tenancy.length.secure",
+            min_tenancy_length: 2,
+            needs_type: "General needs",
+            rent_type: "Affordable Rent"
+          ) }
 
           before { record.tenancy = 1 }
 
-          context "when tenancy length is greater than 1" do
+          context "when tenancy length is less than 2" do
             it "adds an error" do
               record.tenancylength = 1
               tenancy_validator.validate_fixed_term_tenancy(record)
@@ -77,7 +87,7 @@ RSpec.describe Validations::TenancyValidations do
             end
           end
 
-          context "when tenancy length is less than 100" do
+          context "when tenancy length is greater than 99" do
             it "adds an error" do
               record.tenancylength = 100
               tenancy_validator.validate_fixed_term_tenancy(record)
@@ -107,14 +117,19 @@ RSpec.describe Validations::TenancyValidations do
       end
 
       context "when the collection start year is 2022 or later" do
-        let(:record) { FactoryBot.create(:lettings_log, startdate: Time.zone.local(2022, 5, 1)) }
+        let(:record) { FactoryBot.create(:lettings_log, startdate: Time.zone.local(2022, 5, 1), needstype: 1, rent_type: 1) }
 
         context "when type of tenancy is Secure - fixed term" do
-          let(:expected_error) { I18n.t("validations.tenancy.length.secure") }
+          let(:expected_error) { I18n.t(
+            "validations.tenancy.length.secure",
+            min_tenancy_length: 2,
+            needs_type: "General needs",
+            rent_type: "Affordable Rent"
+          ) }
 
           before { record.tenancy = 6 }
 
-          context "when tenancy length is greater than 1" do
+          context "when tenancy length is less than 2" do
             it "adds an error" do
               record.tenancylength = 1
               tenancy_validator.validate_fixed_term_tenancy(record)
@@ -123,7 +138,7 @@ RSpec.describe Validations::TenancyValidations do
             end
           end
 
-          context "when tenancy length is less than 100" do
+          context "when tenancy length is greater than 99" do
             it "adds an error" do
               record.tenancylength = 100
               tenancy_validator.validate_fixed_term_tenancy(record)
@@ -152,11 +167,16 @@ RSpec.describe Validations::TenancyValidations do
         end
 
         context "when type of tenancy is Secure - lifetime" do
-          let(:expected_error) { I18n.t("validations.tenancy.length.secure") }
+          let(:expected_error) { I18n.t(
+            "validations.tenancy.length.secure",
+            min_tenancy_length: 2,
+            needs_type: "General needs",
+            rent_type: "Affordable Rent"
+          ) }
 
           before { record.tenancy = 7 }
 
-          context "when tenancy length is greater than 1" do
+          context "when tenancy length is less than 2" do
             it "adds an error" do
               record.tenancylength = 1
               tenancy_validator.validate_fixed_term_tenancy(record)
@@ -165,7 +185,7 @@ RSpec.describe Validations::TenancyValidations do
             end
           end
 
-          context "when tenancy length is less than 100" do
+          context "when tenancy length is greater than 99" do
             it "adds an error" do
               record.tenancylength = 100
               tenancy_validator.validate_fixed_term_tenancy(record)
