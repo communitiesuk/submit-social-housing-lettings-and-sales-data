@@ -11,12 +11,16 @@
       <% remove_other_page_errors(@log, @page) %>
       <%= f.govuk_error_summary %>
 
-      <% if @page.header.present? %>
+      <% if @page.header.present? || @page.header_partial.present? %>
         <h1 class="govuk-heading-l">
           <% if !@page.hide_subsection_label %>
             <span class="govuk-caption-l"><%= @subsection.label %></span>
           <% end %>
-          <%= @page.header %>
+          <% if @page.header_partial.present? %>
+            <%= render partial: "form/headers/#{@page.header_partial}", locals: { log: @log } %>
+          <% else %>
+            <%= @page.header %>
+          <% end %>
         </h1>
       <% end %>
 
@@ -32,7 +36,7 @@
           <% if question.type == "interruption_screen" %>
             <%= render partial: "form/#{question.type}_question", locals: { question:, caption_text: @subsection.label, page_header: @page.header, lettings_log: @log, title_text: @page.title_text, informative_text: @page.informative_text, form: @form, f:, conditional: false } %>
           <% else %>
-            <%= render partial: "form/#{question.type}_question", locals: { question:, caption_text: @subsection.label, page_header: @page.header, lettings_log: @log, f:, conditional: false } %>
+            <%= render partial: "form/#{question.type}_question", locals: { question:, caption_text: @page.header_partial.present? ? nil : @subsection.label, page_header: @page.header, lettings_log: @log, f:, conditional: false } %>
           <% end %>
         </div>
       <% end %>

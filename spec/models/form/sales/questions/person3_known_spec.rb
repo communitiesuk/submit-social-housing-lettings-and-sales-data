@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Questions::Person4AgeKnown, type: :model do
+RSpec.describe Form::Sales::Questions::Person3Known, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
@@ -12,15 +12,15 @@ RSpec.describe Form::Sales::Questions::Person4AgeKnown, type: :model do
   end
 
   it "has the correct id" do
-    expect(question.id).to eq("age6_known")
+    expect(question.id).to eq("details_known_3")
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Do you know person 4’s age?")
+    expect(question.header).to eq("Do you know the details for person 3?")
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Person 4’s age known?")
+    expect(question.check_answer_label).to eq("Details known for person 3?")
   end
 
   it "has the correct type" do
@@ -33,15 +33,13 @@ RSpec.describe Form::Sales::Questions::Person4AgeKnown, type: :model do
 
   it "has the correct answer_options" do
     expect(question.answer_options).to eq({
-      "0" => { "value" => "Yes" },
-      "1" => { "value" => "No" },
+      "1" => { "value" => "Yes" },
+      "2" => { "value" => "No" },
     })
   end
 
   it "has correct conditional for" do
-    expect(question.conditional_for).to eq({
-      "age6" => [0],
-    })
+    expect(question.conditional_for).to eq(nil)
   end
 
   it "has the correct hint" do
@@ -51,7 +49,11 @@ RSpec.describe Form::Sales::Questions::Person4AgeKnown, type: :model do
   it "has the correct hidden_in_check_answers" do
     expect(question.hidden_in_check_answers).to eq(
       {
-        "depends_on" => [{ "age6_known" => 0 }, { "details_known_4" => nil }, { "details_known_4" => 2 }],
+        "depends_on" => [
+          {
+            "details_known_3" => 1,
+          },
+        ],
       },
     )
   end

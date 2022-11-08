@@ -41,10 +41,13 @@ FactoryBot.define do
       wheel { 1 }
       age3_known { 0 }
       age3 { 40 }
+      details_known_2 { 1 }
       age4_known { 0 }
       age4 { 40 }
+      details_known_3 { 1 }
       age5_known { 0 }
       age5 { 40 }
+      details_known_4 { 1 }
       age6_known { 0 }
       age6 { 40 }
       income1nk { 0 }
