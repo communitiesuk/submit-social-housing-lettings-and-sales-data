@@ -17,7 +17,7 @@
                 <%= summary_list.row do |row| %>
                 <% row.key { attr[:name] } %>
                 <% row.value { attr[:name].eql?("Status") ? status_tag(attr[:value]) : details_html(attr) } %>
-                <% row.action(text: "Change", href: location_edit_name_path(location_id: @location.id, id: @scheme.id)) if attr[:edit] %>
+                <% row.action(text: "Change", href: location_edit_name_path(@scheme, location_id: @location)) if attr[:edit] %>
                 <% end %>
             <% end %>
         <% end %>
