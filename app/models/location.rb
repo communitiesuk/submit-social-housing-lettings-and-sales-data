@@ -359,26 +359,20 @@ class Location < ApplicationRecord
 
   enum type_of_unit: TYPE_OF_UNIT
 
-  def display_attributes
-    [
-      { name: "Postcode", value: postcode },
-      { name: "Local authority", value: location_admin_district },
-      { name: "Location name", value: name, edit: true  },
-      { name: "Total number of units at this location", value: units },
-      { name: "Common type of unit", value: type_of_unit },
-      { name: "Mobility type", value: mobility_type },
-      { name: "Code", value: location_code },
-      { name: "Availability", value: "Available from #{available_from.to_formatted_s(:govuk_date)}" },
-      { name: "Status", value: status },
-    ]
-  end
-
   def postcode=(postcode)
     if postcode
       super UKPostcode.parse(postcode).to_s
     else
       super nil
     end
+  end
+
+  def available_from
+    startdate || created_at
+  end
+
+  def status
+    "active"
   end
 
 private
@@ -398,13 +392,5 @@ private
       self.location_code = result[:location_code]
       self.location_admin_district = result[:location_admin_district]
     end
-  end
-
-  def available_from
-    startdate || created_at
-  end
-
-  def status
-    "active"
   end
 end

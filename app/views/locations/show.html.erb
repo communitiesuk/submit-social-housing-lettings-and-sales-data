@@ -13,7 +13,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
         <%= govuk_summary_list do |summary_list| %>
-            <% @location.display_attributes.each do |attr| %>
+            <% display_attributes(@location).each do |attr| %>
                 <%= summary_list.row do |row| %>
                 <% row.key { attr[:name] } %>
                 <% row.value { attr[:name].eql?("Status") ? status_tag(attr[:value]) : details_html(attr) } %>
