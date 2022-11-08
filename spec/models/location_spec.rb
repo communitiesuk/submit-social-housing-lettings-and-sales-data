@@ -125,6 +125,7 @@ RSpec.describe Location, type: :model do
         { name: "Mobility type", value: location.mobility_type },
         { name: "Code", value: location.location_code },
         { name: "Availability", value: "Available from 8 August 2022" },
+        { name: "Status", value: "active" },
       ]
 
       expect(location.display_attributes).to eq(attributes)

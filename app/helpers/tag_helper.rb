@@ -6,6 +6,7 @@ module TagHelper
     cannot_start_yet: "Cannot start yet",
     in_progress: "In progress",
     completed: "Completed",
+    active: "Active",
   }.freeze
 
   COLOUR = {
@@ -13,6 +14,7 @@ module TagHelper
     cannot_start_yet: "grey",
     in_progress: "blue",
     completed: "green",
+    active: "green",
   }.freeze
 
   def status_tag(status, classes = [])

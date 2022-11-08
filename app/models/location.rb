@@ -369,6 +369,7 @@ class Location < ApplicationRecord
       { name: "Mobility type", value: mobility_type },
       { name: "Code", value: location_code },
       { name: "Availability", value: "Available from #{available_from.to_formatted_s(:govuk_date)}" },
+      { name: "Status", value: status },
     ]
   end
 
@@ -401,5 +402,9 @@ private
 
   def available_from
     startdate || created_at
+  end
+
+  def status
+    "active"
   end
 end
