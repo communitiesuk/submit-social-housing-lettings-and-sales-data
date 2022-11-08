@@ -22,3 +22,7 @@
     <% end %>
   <% end %>
 <% end %>
+
+<% if !Rails.env.production? %>
+    <%= govuk_button_link_to "Deactivate this location", location_deactivate_path(location_id: @location.id, id: @scheme.id), warning: true %>
+<% end %>
