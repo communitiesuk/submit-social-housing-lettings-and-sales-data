@@ -49,6 +49,6 @@ module Validations::TenancyValidations
   end
 
   def min_tenancy_length(record)
-    record.needstype == 2 || record.renttype == 3 ? 1 : 2
+    record.is_supported_housing? || record.renttype == 3 ? 1 : 2
   end
 end
