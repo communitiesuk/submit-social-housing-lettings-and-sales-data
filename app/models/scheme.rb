@@ -168,6 +168,8 @@ class Scheme < ApplicationRecord
       { name: "Secondary client group", value: secondary_client_group },
       { name: "Level of support given", value: support_type },
       { name: "Intended length of stay", value: intended_stay },
+      { name: "Availability", value: "Available from #{available_from.to_formatted_s(:govuk_date)}" },
+      { name: "Status", value: "" },
     ]
 
     if arrangement_type_same?
@@ -229,5 +231,9 @@ class Scheme < ApplicationRecord
         end
       end
     end
+  end
+
+  def available_from
+    created_at
   end
 end
