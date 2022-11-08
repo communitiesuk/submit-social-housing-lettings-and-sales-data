@@ -247,12 +247,12 @@ module Imports
       apply_date_consistency!(attributes)
       apply_household_consistency!(attributes)
 
-      lettings_log = save_lettings_log(attributes)
+      lettings_log = save_lettings_log(attributes, previous_status)
       compute_differences(lettings_log, attributes)
       check_status_completed(lettings_log, previous_status) unless @logs_overridden.include?(lettings_log.old_id)
     end
 
-    def save_lettings_log(attributes)
+    def save_lettings_log(attributes, previous_status)
       lettings_log = LettingsLog.new(attributes)
       begin
         lettings_log.save!
@@ -264,21 +264,29 @@ module Imports
         record.update!(attributes)
         record
       rescue ActiveRecord::RecordInvalid => e
-        rescue_validation_or_raise(lettings_log, attributes, e)
+        rescue_validation_or_raise(lettings_log, attributes, previous_status, e)
       end
     end
 
-    def rescue_validation_or_raise(lettings_log, attributes, exception)
-      if lettings_log.errors.of_kind?(:referral, :internal_transfer_non_social_housing)
+    def rescue_validation_or_raise(lettings_log, attributes, previous_status, exception)
+      # Blank out all invalid fields for in-progress logs
+      if %w[saved submitted-invalid].include?(previous_status)
+        lettings_log.errors.each do |error|
+          @logger.warn("Log #{lettings_log.old_id}: Removing field #{error.attribute} from log triggering validation: #{error.type}")
+          attributes.delete(error.attribute.to_s)
+        end
+        @logs_overridden << lettings_log.old_id
+        save_lettings_log(attributes, previous_status)
+      elsif lettings_log.errors.of_kind?(:referral, :internal_transfer_non_social_housing)
         @logger.warn("Log #{lettings_log.old_id}: Removing internal transfer referral since previous tenancy is a non social housing")
         @logs_overridden << lettings_log.old_id
         attributes.delete("referral")
-        save_lettings_log(attributes)
+        save_lettings_log(attributes, previous_status)
       elsif lettings_log.errors.of_kind?(:referral, :internal_transfer_fixed_or_lifetime)
         @logger.warn("Log #{lettings_log.old_id}: Removing internal transfer referral since previous tenancy is fixed terms or lifetime")
         @logs_overridden << lettings_log.old_id
         attributes.delete("referral")
-        save_lettings_log(attributes)
+        save_lettings_log(attributes, previous_status)
       else
         raise exception
       end

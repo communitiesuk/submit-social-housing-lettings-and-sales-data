@@ -170,6 +170,32 @@ RSpec.describe Imports::LettingsLogsImportService do
       end
     end
 
+    context "and this is an internal transfer that is in-progress with invalid answers" do
+      before do
+        lettings_log_xml.at_xpath("//meta:status").content = "submitted-invalid"
+        lettings_log_xml.at_xpath("//xmlns:P2Age").content = 999
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Removing field age2 from log triggering validation: Answer cannot be over 16/)
+        expect(logger).to receive(:warn).with(/Removing field age2 from log triggering validation: Person 2’s age must be between/)
+        expect(logger).to receive(:warn).with(/Removing field ecstat2 from log triggering validation: Answer cannot be ‘child under 16’/)
+        expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers" do
+        allow(logger).to receive(:warn)
+
+        lettings_log_service.send(:create_log, lettings_log_xml)
+        lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+        expect(lettings_log).not_to be_nil
+        expect(lettings_log.age2).to be_nil
+        expect(lettings_log.ecstat2).to be_nil
+      end
+    end
+
     context "and this is an internal transfer from a non social housing" do
       before do
         lettings_log_xml.at_xpath("//xmlns:Q11").content = "9 Residential care home"
