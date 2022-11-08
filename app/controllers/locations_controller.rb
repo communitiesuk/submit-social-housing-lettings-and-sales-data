@@ -20,7 +20,7 @@ class LocationsController < ApplicationController
 
   def show; end
 
-  def deactivate; 
+  def deactivate
     render "toggle_active", locals: { action: "deactivate" }
   end
 

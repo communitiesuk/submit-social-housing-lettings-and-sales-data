@@ -10,19 +10,20 @@
 
 <%= render partial: "organisations/headings", locals: { main: @location.postcode, sub: @location.name  } %>
 
-<h2 class="govuk-visually-hidden">Location</h2>
-
-<%= govuk_summary_list do |summary_list| %>
-
-  <% @location.display_attributes.each do |attr| %>
-    <%= summary_list.row do |row| %>
-      <% row.key { attr[:name] } %>
-      <% row.value { attr[:name].eql?("Status") ? status_tag(attr[:value]) : details_html(attr) } %>
-      <% row.action(text: "Change", href: location_edit_name_path(location_id: @location.id, id: @scheme.id)) if attr[:edit] %>
+<div class="govuk-grid-row">
+ <div class="govuk-grid-column-two-thirds-from-desktop" %>
+    <%= govuk_summary_list do |summary_list| %>
+    <% @location.display_attributes.each do |attr| %>
+        <%= summary_list.row do |row| %>
+        <% row.key { attr[:name] } %>
+        <% row.value { attr[:name].eql?("Status") ? status_tag(attr[:value]) : details_html(attr) } %>
+        <% row.action(text: "Change", href: location_edit_name_path(location_id: @location.id, id: @scheme.id)) if attr[:edit] %>
+        <% end %>
     <% end %>
-  <% end %>
-<% end %>
+    <% end %>
 
+    </div>
+</div>
 <% if !Rails.env.production? %>
     <%= govuk_button_link_to "Deactivate this location", location_deactivate_path(location_id: @location.id, id: @scheme.id), warning: true %>
 <% end %>
