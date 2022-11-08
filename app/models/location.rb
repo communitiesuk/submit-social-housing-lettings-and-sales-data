@@ -361,9 +361,13 @@ class Location < ApplicationRecord
 
   def display_attributes
     [
-      { name: "Location code ", value: location_code, suffix: false },
-      { name: "Postcode", value: postcode, suffix: county },
-      { name: "Type of unit", value: type_of_unit, suffix: false },
+      { name: "Postcode", value: postcode },
+      { name: "Local authority", value: location_admin_district },
+      { name: "Location name", value: name, edit: true  },
+      { name: "Total number of units at this location", value: units },
+      { name: "Common type of unit", value: type_of_unit },
+      { name: "Mobility type", value: mobility_type },
+      { name: "Code", value: location_code },
     ]
   end
 

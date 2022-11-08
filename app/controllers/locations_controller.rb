@@ -18,6 +18,8 @@ class LocationsController < ApplicationController
     @location = Location.new
   end
 
+  def show; end
+
   def create
     if date_params_missing?(location_params) || valid_date_params?(location_params)
       @location = Location.new(location_params)
