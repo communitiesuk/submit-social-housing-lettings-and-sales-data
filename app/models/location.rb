@@ -368,6 +368,7 @@ class Location < ApplicationRecord
       { name: "Common type of unit", value: type_of_unit },
       { name: "Mobility type", value: mobility_type },
       { name: "Code", value: location_code },
+      { name: "Availability", value: "Available from #{available_from.to_formatted_s(:govuk_date)}" },
     ]
   end
 
@@ -396,5 +397,9 @@ private
       self.location_code = result[:location_code]
       self.location_admin_district = result[:location_admin_district]
     end
+  end
+
+  def available_from
+    startdate || created_at
   end
 end

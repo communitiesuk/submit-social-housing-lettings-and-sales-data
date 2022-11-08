@@ -692,7 +692,7 @@ RSpec.describe "Schemes scheme Features" do
 
         context "when I click to see individual scheme" do
           let(:scheme) { schemes.first }
-          let!(:location) { FactoryBot.create(:location, scheme:) }
+          let!(:location) { FactoryBot.create(:location, startdate: Time.zone.local(2022, 4, 4), scheme:) }
 
           before do
             click_link(scheme.service_name)
@@ -766,6 +766,7 @@ RSpec.describe "Schemes scheme Features" do
                 expect(page).to have_content(location.type_of_unit)
                 expect(page).to have_content(location.mobility_type)
                 expect(page).to have_content(location.location_code)
+                expect(page).to have_content("Available from 4 April 2022")
               end
 
               it "only allows to edit the location name" do
