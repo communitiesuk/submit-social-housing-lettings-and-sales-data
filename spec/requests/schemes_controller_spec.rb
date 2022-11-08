@@ -60,12 +60,6 @@ RSpec.describe SchemesController, type: :request do
         end
       end
 
-      it "shows incomplete tag if the scheme is not confirmed" do
-        schemes[0].update!(confirmed: nil)
-        get "/schemes"
-        assert_select ".govuk-tag", text: /Incomplete/, count: 1
-      end
-
       it "displays a link to check answers page if the scheme is incomplete" do
         scheme = schemes[0]
         scheme.update!(confirmed: nil)
