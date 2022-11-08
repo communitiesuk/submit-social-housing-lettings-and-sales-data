@@ -301,8 +301,8 @@ en:
     tenancy:
       length:
         fixed_term_not_required: "You must only answer the length of the tenancy if it's fixed-term"
-        shorthold: "Enter a tenancy length between 2 and 99 years for a Fixed Term – Assured Shorthold Tenancy (AST)"
-        secure: "Enter a tenancy length between 2 and 99 years (or don't specify the length) for a Secure (including flexible) tenancy"
+        shorthold: "Enter a tenancy length between %{min_tenancy_length} and 99 years for a tenancy of this type"
+        secure: "Enter a tenancy length between %{min_tenancy_length} and 99 years (or don't specify the length) for a tenancy of this type"
       internal_transfer: "Answer must be secure tenancy as this tenancy is an internal transfer"
       cannot_be_internal_transfer: "Answer cannot be internal transfer as this is not a secure tenancy"
       not_joint: "This cannot be a joint tenancy as you've told us there's only one person in the household"

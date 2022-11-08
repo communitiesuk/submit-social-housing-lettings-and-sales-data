@@ -5,7 +5,7 @@ module Validations::TenancyValidations
 
   def validate_fixed_term_tenancy(record)
     is_present = record.tenancylength.present?
-    is_in_range = record.tenancylength.to_i.between?(2, 99)
+    is_in_range = record.tenancylength.to_i.between?(min_tenancy_length(record), 99)
     conditions = [
       {
         condition: !(record.is_secure_tenancy? || record.is_assured_shorthold_tenancy?) && is_present,
@@ -13,11 +13,17 @@ module Validations::TenancyValidations
       },
       {
         condition: (record.is_assured_shorthold_tenancy? && !is_in_range) && is_present,
-        error: I18n.t("validations.tenancy.length.shorthold"),
+        error: I18n.t(
+          "validations.tenancy.length.shorthold",
+          min_tenancy_length: min_tenancy_length(record),
+        ),
       },
       {
         condition: record.is_secure_tenancy? && (!is_in_range && is_present),
-        error: I18n.t("validations.tenancy.length.secure"),
+        error: I18n.t(
+          "validations.tenancy.length.secure",
+          min_tenancy_length: min_tenancy_length(record),
+        ),
       },
     ]
 
@@ -40,5 +46,9 @@ module Validations::TenancyValidations
       record.errors.add :joint, I18n.t("validations.tenancy.not_joint")
       record.errors.add :hhmemb, I18n.t("validations.tenancy.joint_more_than_one_member")
     end
+  end
+
+  def min_tenancy_length(record)
+    record.is_supported_housing? || record.renttype == 3 ? 1 : 2
   end
 end
