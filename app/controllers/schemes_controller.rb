@@ -22,14 +22,14 @@ class SchemesController < ApplicationController
   end
 
   def deactivate
-    if params[:confirm] && params[:deactivation_date].present?
-      if @scheme.update!(deactivation_date: params[:deactivation_date])
+    if params[:confirm] && deactivation_date.present?
+      if @scheme.update!(deactivation_date:)
         # update the logs
       end
       redirect_to scheme_details_path(@scheme)
       return
-    elsif params[:deactivation_date].present?
-      render "toggle_active_confirm", locals: { action: "deactivate", deactivation_date: params[:deactivation_date] }
+    elsif deactivation_date.present?
+      render "toggle_active_confirm", locals: { action: "deactivate", deactivation_date: }
       return
     end
     render "toggle_active", locals: { action: "deactivate" }
@@ -139,6 +139,14 @@ class SchemesController < ApplicationController
     render_not_found and return unless @scheme
 
     render "schemes/support_services_provider"
+  end
+
+  def deactivation_date
+    if params[:deactivation_date] == "other"
+      Time.utc(params["deactivation_date(1i)"].to_i, params["deactivation_date(2i)"].to_i, params["deactivation_date(3i)"].to_i)
+    else
+      params[:deactivation_date]
+    end
   end
 
 private

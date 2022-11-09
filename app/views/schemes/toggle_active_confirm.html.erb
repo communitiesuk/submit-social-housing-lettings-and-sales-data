@@ -8,7 +8,7 @@
   </h1>
   <%= govuk_warning_text text: "Your data providers will need to review these logs and answer a few questions again. We’ll email each log creator with a list of logs that need updating." %>
   <%= f.hidden_field :confirm %>
-  <%= f.hidden_field :deactivation_date, :value => params[:deactivation_date] %>
+  <%= f.hidden_field :deactivation_date, :value => deactivation_date %>
   <div class="govuk-button-group">
     <%= f.govuk_submit "Deactivate this scheme" %>
     <%= govuk_button_link_to "Cancel", scheme_details_path, html: { method: :get }, secondary: true %>

@@ -1,20 +1,38 @@
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+        text: "Back",
+        href: :back,
+        ) %>
+<% end %>
+
 <%= form_with url: scheme_deactivate_path(@scheme), method: "get", local: true do |f| %>
-    <% content_for :before_content do %>
-      <%= govuk_back_link(href: :back) %>
-    <% end %>
+
   <h1 class="govuk-heading-l">
     <span class="govuk-caption-l"><%= @scheme.service_name %></span>
     <%= "When should this change apply?" %>
   </h1>
-  <%= govuk_warning_text text: "It will not be possible to add logs with this scheme if their tenancy start date is on or after the date you enter. Any existing logs may be affected." %>
-  <div class="govuk-hint">
-    If the date is before 5 April 2022, select 'From the start of the current collection period' because the previous period has now closed.
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <%#= f.govuk_error_summary %>
+        <%= f.govuk_radio_buttons_fieldset :deactivation_date,
+                                           legend: nil,
+                                           hint: { text: "If the date is before 5 April 2022, select ‘From the start of the current collection period’ because the previous period has now closed."} do %>
+        <%= govuk_warning_text text: "It will not be possible to add logs with this scheme if their tenancy start date is on or after the date you enter. Any existing logs may be affected." %>
+        <%= f.govuk_radio_button :deactivation_date,
+                                 Time.utc(2022, 4, 1),
+                                 label: { text: "From the start of the current collection period (5 April 2022)" } %>
+
+        <%= f.govuk_radio_button :deactivation_date,
+                                 "other",
+                                 label: { text: "For tenancies starting after a certain date" },
+                                 **basic_conditional_html_attributes({"deactivation_date" => ["other"]}, "scheme") do %>
+          <%= f.govuk_date_field :deactivation_date,
+                                 legend: { text: "Date", size: "m" },
+                                 hint: { text: "For example, 27 3 2008" },
+                                 width: 20 %>
+        <% end %>
+      <% end %>
+      <%= f.govuk_submit "Continue" %>
+    </div>
   </div>
-  <% selection = [OpenStruct.new(date: Time.zone.now, name: "From the start of the current collection period (5 April 2022)"), OpenStruct.new(date: Time.zone.now, name: "For tenancies starting after a certain date")] %>
-  <%= f.govuk_collection_radio_buttons :deactivation_date,
-                                       selection,
-                                       :date,
-                                       :name,
-                                       legend: nil %>
-  <%= f.govuk_submit "Continue" %>
 <% end %>
