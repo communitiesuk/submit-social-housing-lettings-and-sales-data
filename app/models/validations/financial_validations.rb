@@ -110,6 +110,7 @@ module Validations::FinancialValidations
     if record.is_carehome?
       period = record.form.get_question("period", record).label_from_value(record.period).downcase
       if record.chcharge.blank?
+        record.errors.add :is_carehome, I18n.t("validations.financial.carehome.not_provided", period:)
         record.errors.add :chcharge, I18n.t("validations.financial.carehome.not_provided", period:)
       elsif !weekly_value_in_range(record, "chcharge", 10, 1000)
         max_chcharge = record.weekly_to_value_per_period(1000)
