@@ -78,7 +78,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= govuk_button_link_to "Add a location", new_location_path(id: @scheme.id), secondary: true %>
+      <%= govuk_button_link_to "Add a location", new_scheme_location_path(scheme_id: @scheme.id), secondary: true %>
     <% end %>
   <% end %>
   <%= f.hidden_field :page, value: "check-answers" %>
