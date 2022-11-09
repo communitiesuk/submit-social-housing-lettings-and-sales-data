@@ -22,15 +22,24 @@ class SchemesController < ApplicationController
   end
 
   def deactivate
-    if params[:confirm] && deactivation_date.present?
+    if params[:scheme] && params[:scheme][:confirm] && deactivation_date.present?
       if @scheme.update!(deactivation_date:)
         # update the logs
+        flash[:notice] = "#{@scheme.service_name} has been deactivated"
       end
-      flash[:notice] = "#{@scheme.service_name} has been deactivated"
       redirect_to scheme_details_path(@scheme)
       return
     elsif deactivation_date.present?
-      render "toggle_active_confirm", locals: { action: "deactivate", deactivation_date: }
+      if deactivation_date == "other"
+        @scheme.errors.add(:deactivation_date, message: "Enter a date")
+        render "toggle_active", locals: { action: "deactivate", deactivation_date: }
+      else
+        render "toggle_active_confirm", locals: { action: "deactivate", deactivation_date: }
+      end
+      return
+    elsif params[:scheme]
+      @scheme.errors.add(:deactivation_date, message: "Select one of the options")
+      render "toggle_active", locals: { action: "deactivate", deactivation_date: }
       return
     end
     render "toggle_active", locals: { action: "deactivate" }
@@ -143,10 +152,12 @@ class SchemesController < ApplicationController
   end
 
   def deactivation_date
-    if params[:deactivation_date] == "other"
-      Time.utc(params["deactivation_date(1i)"].to_i, params["deactivation_date(2i)"].to_i, params["deactivation_date(3i)"].to_i)
+    if params[:scheme].blank?
+      nil
+    elsif params[:scheme][:deactivation_date] == "other" && params[:scheme]["deactivation_date(1i)"].present? && params[:scheme]["deactivation_date(2i)"].present? && params[:scheme]["deactivation_date(3i)"].present?
+      Time.utc(params[:scheme]["deactivation_date(1i)"].to_i, params[:scheme]["deactivation_date(2i)"].to_i, params[:scheme]["deactivation_date(3i)"].to_i)
     else
-      params[:deactivation_date]
+      params[:scheme][:deactivation_date]
     end
   end
 
@@ -275,7 +286,7 @@ private
   def authenticate_scope!
     head :unauthorized and return unless current_user.data_coordinator? || current_user.support?
 
-    if %w[show locations primary_client_group confirm_secondary_client_group secondary_client_group support details check_answers edit_name].include?(action_name) && !((current_user.organisation == @scheme&.owning_organisation) || current_user.support?)
+    if %w[show locations primary_client_group confirm_secondary_client_group secondary_client_group support details check_answers edit_name deactivate].include?(action_name) && !((current_user.organisation == @scheme&.owning_organisation) || current_user.support?)
       render_not_found and return
     end
   end

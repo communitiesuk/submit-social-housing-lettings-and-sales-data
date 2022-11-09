@@ -5,7 +5,7 @@
         ) %>
 <% end %>
 
-<%= form_with url: scheme_deactivate_path(@scheme), method: "get", local: true do |f| %>
+<%= form_with model: @scheme, url: scheme_deactivate_path(@scheme), method: "get", local: true do |f| %>
 
   <h1 class="govuk-heading-l">
     <span class="govuk-caption-l"><%= @scheme.service_name %></span>
@@ -13,7 +13,7 @@
   </h1>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <%#= f.govuk_error_summary %>
+        <%= f.govuk_error_summary %>
         <%= f.govuk_radio_buttons_fieldset :deactivation_date,
                                            legend: nil,
                                            hint: { text: "If the date is before 1 April 2022, select ‘From the start of the current collection period’ because the previous period has now closed."} do %>
