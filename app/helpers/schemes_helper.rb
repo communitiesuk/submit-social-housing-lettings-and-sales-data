@@ -14,7 +14,7 @@ module SchemesHelper
       { name: "Secondary client group", value: scheme.secondary_client_group },
       { name: "Level of support given", value: scheme.support_type },
       { name: "Intended length of stay", value: scheme.intended_stay },
-      { name: "Availability", value: "Available from #{scheme.available_from.to_formatted_s(:govuk_date)} \nDeactivation date #{scheme.deactivation_date.to_formatted_s(:govuk_date)}" },
+      { name: "Availability", value: availability_text(scheme)},
       { name: "Status", value: status_tag(scheme_status(scheme)) },
     ]
 
@@ -22,6 +22,14 @@ module SchemesHelper
       base_attributes.delete({ name: "Organisation providing support", value: scheme.managing_organisation&.name })
     end
     base_attributes
+  end
+
+  def availability_text(scheme)
+    base_text = "Available from #{scheme.available_from.to_formatted_s(:govuk_date)}"
+    if scheme.deactivation_date.present?
+      base_text += "\nDeactivation date #{scheme.deactivation_date.to_formatted_s(:govuk_date)}"
+    end
+    base_text
   end
 
   def scheme_status(scheme)

@@ -1,0 +1,20 @@
+<%= form_with url: scheme_details_path(@scheme), method: "get", local: true do |f| %>
+    <% content_for :before_content do %>
+      <%= govuk_back_link(href: :back) %>
+    <% end %>
+  <h1 class="govuk-heading-l">
+    <span class="govuk-caption-l"><%= @scheme.service_name %></span>
+    <%= "When should this change apply?" %>
+  </h1>
+  <%= govuk_warning_text text: "It will not be possible to add logs with this scheme if their tenancy start date is on or after the date you enter. Any existing logs may be affected." %>
+  <div class="govuk-hint">
+    If the date is before 5 April 2022, select 'From the start of the current collection period' because the previous period has now closed.
+  </div>
+  <% selection = [OpenStruct.new(date: Time.zone.now, name: "From the start of the current collection period (5 April 2022)"), OpenStruct.new(date: Time.zone.now, name: "For tenancies starting after a certain date")] %>
+  <%= f.govuk_collection_radio_buttons :deactivation_date,
+                                       selection,
+                                       :date,
+                                       :name,
+                                       legend: nil %>
+  <%= f.govuk_submit "Continue" %>
+<% end %>
