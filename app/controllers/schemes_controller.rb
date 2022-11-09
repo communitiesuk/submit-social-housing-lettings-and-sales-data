@@ -26,6 +26,7 @@ class SchemesController < ApplicationController
       if @scheme.update!(deactivation_date:)
         # update the logs
       end
+      flash[:notice] = "#{@scheme.service_name} has been deactivated"
       redirect_to scheme_details_path(@scheme)
       return
     elsif deactivation_date.present?
