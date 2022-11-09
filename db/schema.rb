@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_19_082625) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_09_122033) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -260,6 +260,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_19_082625) do
     t.datetime "startdate", precision: nil
     t.string "location_admin_district"
     t.boolean "confirmed"
+    t.datetime "deactivation_date"
     t.index ["old_id"], name: "index_locations_on_old_id", unique: true
     t.index ["scheme_id"], name: "index_locations_on_scheme_id"
   end
