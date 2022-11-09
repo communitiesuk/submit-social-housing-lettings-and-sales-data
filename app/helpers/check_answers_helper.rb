@@ -18,14 +18,14 @@ module CheckAnswersHelper
 
   def get_location_change_link_href_postcode(scheme, location)
     if location.confirmed?
-      edit_name_scheme_location_path(scheme_id: scheme.id, id: location.id)
+      scheme_location_edit_name_path(scheme_id: scheme.id, location_id: location.id)
     else
       edit_scheme_location_path(scheme_id: scheme.id, id: location.id)
     end
   end
 
   def get_location_change_link_href_location_admin_district(scheme, location)
-    edit_local_authority_scheme_location_path(scheme_id: scheme.id, id: location.id)
+    scheme_location_edit_local_authority_path(scheme_id: scheme.id, location_id: location.id)
   end
 
   def any_questions_have_summary_card_number?(subsection, lettings_log)

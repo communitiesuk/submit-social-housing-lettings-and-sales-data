@@ -51,10 +51,8 @@ Rails.application.routes.draw do
     get "support-services-provider", to: "schemes#support_services_provider"
 
     resources :locations do
-      member do
-        get "edit-name", to: "locations#edit_name"
-        get "edit-local-authority", to: "locations#edit_local_authority"
-      end
+      get "edit-name", to: "locations#edit_name"
+      get "edit-local-authority", to: "locations#edit_local_authority"
     end
   end
 

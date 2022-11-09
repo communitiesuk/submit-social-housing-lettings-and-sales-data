@@ -23,7 +23,7 @@ class LocationsController < ApplicationController
       @location = Location.new(location_params)
       if @location.save
         if @location.location_admin_district.nil?
-          redirect_to(edit_local_authority_scheme_location_path(scheme_id: @scheme.id, id: @location.id, add_another_location: location_params[:add_another_location]))
+          redirect_to(scheme_location_edit_local_authority_path(scheme_id: @scheme.id, location_id: @location.id, add_another_location: location_params[:add_another_location]))
         elsif location_params[:add_another_location] == "Yes"
           redirect_to new_scheme_location_path(@scheme)
         else
@@ -69,7 +69,7 @@ class LocationsController < ApplicationController
         case page
         when "edit"
           if @location.location_admin_district.nil?
-            redirect_to(location_edit_local_authority_path(id: @scheme.id, location_id: @location.id, add_another_location: location_params[:add_another_location]))
+            redirect_to(scheme_location_edit_local_authority_path(scheme_id: @scheme.id, location_id: @location.id, add_another_location: location_params[:add_another_location]))
           elsif location_params[:add_another_location] == "Yes"
             redirect_to(new_scheme_location_path(@location.scheme))
           else
