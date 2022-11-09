@@ -241,7 +241,7 @@ RSpec.describe Validations::PropertyValidations do
           record.rsnvac = 14
           property_validator.validate_rsnvac(record)
           expect(record.errors["rsnvac"])
-                .to include(match I18n.t("Reason for vacancy cannot be 'Renewal of fixed-term tenancy' if letting is not a renewal"))
+                .to include(match I18n.t("validations.property.rsnvac.not_a_renewal"))
         end
       end
     end
