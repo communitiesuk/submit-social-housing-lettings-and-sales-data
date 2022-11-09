@@ -4,7 +4,7 @@
 <% content_for :before_content do %>
   <%= govuk_back_link(
     text: "Back",
-    href: send("locations_path", @scheme),
+    href: locations_path(@scheme),
   ) %>
 <% end %>
 
