@@ -22,6 +22,16 @@ class SchemesController < ApplicationController
   end
 
   def deactivate
+    if params[:confirm] && params[:deactivation_date].present?
+      if @scheme.update!(deactivation_date: params[:deactivation_date])
+        # update the logs
+      end
+      redirect_to scheme_details_path(@scheme)
+      return
+    elsif params[:deactivation_date].present?
+      render "toggle_active_confirm", locals: { action: "deactivate", deactivation_date: params[:deactivation_date] }
+      return
+    end
     render "toggle_active", locals: { action: "deactivate" }
   end
 
@@ -210,7 +220,8 @@ private
                                                      :support_type,
                                                      :arrangement_type,
                                                      :intended_stay,
-                                                     :confirmed)
+                                                     :confirmed,
+                                                     :deactivation_date)
 
     if arrangement_type_changed_to_different_org?(required_params)
       required_params[:managing_organisation_id] = nil
