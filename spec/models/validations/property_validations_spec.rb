@@ -233,6 +233,17 @@ RSpec.describe Validations::PropertyValidations do
         property_validator.validate_rsnvac(record)
         expect(record.errors["rsnvac"]).to be_empty
       end
+
+      context "when the letting is not a renewal" do
+        it "validates that the reason for vacancy is not renewal" do
+          record.first_time_property_let_as_social_housing = 0 
+          record.renewal = 0
+          record.rsnvac = 14
+          property_validator.validate_rsnvac(record)
+          expect(record.errors["rsnvac"])
+                .to include(match I18n.t("Reason for vacancy cannot be 'Renewal of fixed-term tenancy' if letting is not a renewal"))
+        end
+      end
     end
 
     context "when the property has been let before" do
