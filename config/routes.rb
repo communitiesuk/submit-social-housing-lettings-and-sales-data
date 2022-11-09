@@ -50,10 +50,9 @@ Rails.application.routes.draw do
     get "edit-name", to: "schemes#edit_name"
     get "support-services-provider", to: "schemes#support_services_provider"
 
-    member do
-      resources :locations do
+    resources :locations do
+      member do
         get "edit-name", to: "locations#edit_name"
-        get "edit", to: "locations#edit"
         get "edit-local-authority", to: "locations#edit_local_authority"
       end
     end

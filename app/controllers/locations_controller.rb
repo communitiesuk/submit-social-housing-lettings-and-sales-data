@@ -23,9 +23,9 @@ class LocationsController < ApplicationController
       @location = Location.new(location_params)
       if @location.save
         if @location.location_admin_district.nil?
-          redirect_to(location_edit_local_authority_path(id: @scheme.id, location_id: @location.id, add_another_location: location_params[:add_another_location]))
+          redirect_to(edit_local_authority_scheme_location_path(scheme_id: @scheme.id, id: @location.id, add_another_location: location_params[:add_another_location]))
         elsif location_params[:add_another_location] == "Yes"
-          redirect_to new_location_path(@scheme)
+          redirect_to new_scheme_location_path(@scheme)
         else
           check_answers_path = @scheme.confirmed? ? scheme_check_answers_path(@scheme, anchor: "locations") : scheme_check_answers_path(@scheme)
           redirect_to check_answers_path
@@ -71,7 +71,7 @@ class LocationsController < ApplicationController
           if @location.location_admin_district.nil?
             redirect_to(location_edit_local_authority_path(id: @scheme.id, location_id: @location.id, add_another_location: location_params[:add_another_location]))
           elsif location_params[:add_another_location] == "Yes"
-            redirect_to(new_location_path(@location.scheme))
+            redirect_to(new_scheme_location_path(@location.scheme))
           else
             redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
           end
@@ -79,7 +79,7 @@ class LocationsController < ApplicationController
           redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
         when "edit-local-authority"
           if params[:add_another_location] == "Yes"
-            redirect_to(new_location_path(@location.scheme))
+            redirect_to(new_scheme_location_path(@location.scheme))
           else
             redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
           end
@@ -107,7 +107,7 @@ private
 
   def find_scheme
     @scheme = if %w[new create index edit_name].include?(action_name)
-                Scheme.find(params[:id])
+                Scheme.find(params[:scheme_id])
               else
                 @location&.scheme
               end
