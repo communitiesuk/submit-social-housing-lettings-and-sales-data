@@ -236,7 +236,7 @@ RSpec.describe Validations::PropertyValidations do
 
       context "when the letting is not a renewal" do
         it "validates that the reason for vacancy is not renewal" do
-          record.first_time_property_let_as_social_housing = 0 
+          record.first_time_property_let_as_social_housing = 0
           record.renewal = 0
           record.rsnvac = 14
           property_validator.validate_rsnvac(record)

@@ -39,7 +39,7 @@ module Validations::PropertyValidations
       record.errors.add :referral, I18n.t("validations.household.referral.rsnvac_non_temp")
     end
 
-    if record.renewal == 0 && record.rsnvac == 14
+    if record.renewal && record.renewal.zero? && record.rsnvac == 14
       record.errors.add :rsnvac, I18n.t("validations.property.rsnvac.not_a_renewal")
     end
   end
