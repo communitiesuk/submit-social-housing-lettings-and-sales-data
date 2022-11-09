@@ -21,6 +21,10 @@ class SchemesController < ApplicationController
     render_not_found and return unless @scheme
   end
 
+  def deactivate
+    render "toggle_active", locals: { action: "deactivate" }
+  end
+
   def new
     @scheme = Scheme.new
   end

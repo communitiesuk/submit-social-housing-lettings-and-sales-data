@@ -14,4 +14,10 @@ class FeatureToggle
 
     false
   end
+
+  def self.scheme_toggle_enabled?
+    return true unless Rails.env.production?
+
+    false
+  end
 end
