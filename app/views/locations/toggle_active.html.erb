@@ -1,0 +1,40 @@
+<% title = "Deactivate #{@location.postcode}" %>
+<% content_for :title, title %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+    text: "Back",
+        href: "/schemes/#{@scheme.id}/locations/#{@location.id}",
+  ) %>
+<% end %>
+
+
+<%= form_for(@location, method: :patch, url: location_deactivate_path(@location)) do |f| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <%= f.govuk_error_summary %>
+        <%= f.govuk_radio_buttons_fieldset :deactivation_date,
+                                            legend: { text: "When should this change apply?"},
+                                            caption: { text: "Deactivate #{@location.postcode}"},
+                                            hint: { text: "If the date is before 5 April 2022, select ‘From the start of the current collection period’ because the previous period has now closed."} do %>
+            <%= govuk_warning_text text: "It will not be possible to add logs with this scheme if their tenancy start date is on or after the date you enter. Any existing logs may be affected." %>
+            <%= f.govuk_radio_button :deactivation_date,
+                                        Time.now(),
+                                        label: { text: "From the start of the current collection period (5 April 2022)" } %>
+
+            <%= f.govuk_radio_button :deactivation_date,
+                                        "other",
+                                        label: { text: "For tenancies starting after a certain date" },
+                                         **basic_conditional_html_attributes({
+                                            "deactivation_date" => ["other"]}, "location") do %>
+                                            <%= f.govuk_date_field :deactivation_date,
+                                                        legend: { text: "Date", size: "m" },
+                                                        hint: { text: "For example, 27 3 2008" },
+                                                        width: 20 %>
+                                                        <% end %>
+        <% end %>
+
+        <%= f.govuk_submit "Continue" %>
+    </div>
+  </div>
+<% end %>
