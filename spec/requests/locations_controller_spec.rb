@@ -1212,4 +1212,59 @@ RSpec.describe LocationsController, type: :request do
       end
     end
   end
+
+  describe "#deactivate" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        patch "/schemes/1/locations/1/deactivate"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        patch "/schemes/1/locations/1/deactivate"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when signed in as a data coordinator" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:location) { FactoryBot.create(:location, scheme:) }
+      let(:startdate) { Time.utc(2021, 1, 2) }
+      let(:deactivation_date) { Time.new(2022, 10, 10) }
+
+      before do
+        Timecop.freeze(Time.utc(2022, 10, 10))
+        sign_in user
+        patch "/schemes/#{scheme.id}/locations/#{location.id}/deactivate", params:
+      end
+
+      context "default date" do
+        let(:params) { { deactivation_date: deactivation_date } } 
+
+        it "renders the confirmation page" do
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("This change will affect SOME logs")
+        end
+      end
+
+      context "other date" do
+        let(:params) { { deactivation_date: "other", "deactivation_date(3i)": "10", "deactivation_date(2i)": "10", "deactivation_date(1i)": "2022"} }
+
+        it "renders the confirmation page" do
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("This change will affect SOME logs")
+        end
+      end
+    end
+  end
 end

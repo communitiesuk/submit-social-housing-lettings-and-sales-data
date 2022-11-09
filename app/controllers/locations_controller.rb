@@ -21,7 +21,15 @@ class LocationsController < ApplicationController
   def show; end
 
   def deactivate
-    render "toggle_active", locals: { action: "deactivate" }
+    if params[:deactivation_date].blank?
+      render "toggle_active", locals: { action: "deactivate" }
+    elsif (params[:confirm])
+      # update the deactivation_date
+      # update the logs
+      # redirect to location page
+    else
+      render "toggle_active_confirm", locals: {action: "deactivate", deactivation_date: params[:deactivation_date]}
+    end
   end
 
   def create
@@ -128,7 +136,7 @@ private
   end
 
   def authenticate_action!
-    if %w[new edit update create index edit_name edit_local_authority].include?(action_name) && !((current_user.organisation == @scheme&.owning_organisation) || current_user.support?)
+    if %w[new edit update create index edit_name edit_local_authority deactivate].include?(action_name) && !((current_user.organisation == @scheme&.owning_organisation) || current_user.support?)
       render_not_found and return
     end
   end
