@@ -164,7 +164,7 @@ private
 
   def confirm_deactivation
     if @location.update(deactivation_date: params[:location][:deactivation_date])
-      # update the logs
+      @location.lettings_logs.filter_by_before_startdate( params[:location][:deactivation_date]).update(location: nil)
       flash[:notice] = "#{@location.name} has been deactivated"
     end
     redirect_to scheme_locations_path(@scheme)
