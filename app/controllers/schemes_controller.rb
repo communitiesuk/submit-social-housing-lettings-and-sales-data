@@ -25,17 +25,18 @@ class SchemesController < ApplicationController
     deactivation_date_value = deactivation_date
 
     if @scheme.errors.present?
+      @scheme.deactivation_date_type = params[:scheme][:deactivation_date_type].to_i
       render "toggle_active", locals: { action: "deactivate" }, status: :unprocessable_entity
     elsif deactivation_date_value.blank?
       render "toggle_active", locals: { action: "deactivate" }
     elsif params[:scheme][:confirm].present?
-      if @scheme.update(deactivation_date: deactivation_date_value)
+      if @scheme.update!(deactivation_date: deactivation_date_value)
         # update the logs
         flash[:notice] = "#{@scheme.service_name} has been deactivated"
       end
       redirect_to scheme_details_path(@scheme)
     else
-      render "toggle_active_confirm", locals: { action: "deactivate", deactivation_date: deactivation_date_value }
+      render "toggle_active_confirm", locals: { action: "deactivate", deactivation_date: deactivation_date_value, deactivation_date_type: params[:scheme][:deactivation_date_type].to_i }
     end
   end
 
@@ -147,15 +148,22 @@ class SchemesController < ApplicationController
 
   def deactivation_date
     return if params[:scheme].blank?
-    return @scheme.errors.add(:deactivation_date, message: I18n.t("validations.scheme.deactivation_date.not_selected")) if params[:scheme][:deactivation_date].blank?
-    return params[:scheme][:deactivation_date] unless params[:scheme][:deactivation_date] == "other"
+    return @scheme.errors.add(:deactivation_date_type, message: I18n.t("validations.scheme.deactivation_date.not_selected")) if params[:scheme][:deactivation_date_type].blank?
+    return Time.utc(2022, 4, 1) if params[:scheme][:deactivation_date_type].to_i == 1
+    return params[:scheme][:deactivation_date] if params[:scheme][:deactivation_date].present?
 
     day = params[:scheme]["deactivation_date(3i)"]
     month = params[:scheme]["deactivation_date(2i)"]
     year = params[:scheme]["deactivation_date(1i)"]
 
     if [day, month, year].all?(&:present?) && Date.valid_date?(year.to_i, month.to_i, day.to_i) && year.to_i.between?(2000, 2200)
-      Date.new(year.to_i, month.to_i, day.to_i)
+      current_collection_start_date = FormHandler.instance.current_collection_start_date
+      specified_date = Date.new(year.to_i, month.to_i, day.to_i)
+      if specified_date.before?(current_collection_start_date)
+        @scheme.errors.add(:deactivation_date, message: I18n.t("validations.scheme.deactivation_date.before_current_collection_start", date: current_collection_start_date))
+      else
+        specified_date
+      end
     else
       @scheme.errors.add(:deactivation_date, message: I18n.t("validations.scheme.deactivation_date.not_entered"))
     end

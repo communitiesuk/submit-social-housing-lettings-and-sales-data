@@ -315,6 +315,7 @@ en:
       deactivation_date:
         not_selected: "Select one of the options"
         not_entered: "Enter a date"
+        before_current_collection_start: "The date must be on or after %{date}"
 
   soft_validations:
     net_income:
