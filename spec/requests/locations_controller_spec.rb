@@ -1253,7 +1253,7 @@ RSpec.describe LocationsController, type: :request do
 
         it "renders the confirmation page" do
           expect(response).to have_http_status(:ok)
-          expect(page).to have_content("This change will affect SOME logs")
+          expect(page).to have_content("This change will affect #{location.lettings_logs.count} logs")
         end
       end
 
@@ -1262,7 +1262,7 @@ RSpec.describe LocationsController, type: :request do
 
         it "renders the confirmation page" do
           expect(response).to have_http_status(:ok)
-          expect(page).to have_content("This change will affect SOME logs")
+          expect(page).to have_content("This change will affect #{location.lettings_logs.count} logs")
         end
       end
 

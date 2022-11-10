@@ -4,7 +4,7 @@
      <% end %>
    <h1 class="govuk-heading-l">
      <span class="govuk-caption-l"><%= @scheme.service_name %></span>
-     <%= "This change will affect SOME logs" %>
+     <%= "This change will affect #{@location.lettings_logs.count} logs" %>
    </h1>
    <%= govuk_warning_text text: I18n.t("warnings.location.deactivation.review_logs") %>
    <%= f.hidden_field :confirm, :value => true %>
