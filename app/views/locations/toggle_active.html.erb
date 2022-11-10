@@ -4,14 +4,15 @@
 <% content_for :before_content do %>
   <%= govuk_back_link(
     text: "Back",
-        href: "/schemes/#{@scheme.id}/locations/#{@location.id}",
+        href: "/schemes/#{@location.scheme.id}/locations/#{@location.id}",
   ) %>
 <% end %>
 
 
-<%= form_with url: location_deactivate_path(@location), method: "patch", local: true do |f| %>
+<%= form_with model: @location, url: scheme_location_deactivate_path(scheme_id: @location.scheme.id, location_id: @location.id), method: "patch", local: true do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+    <%= f.govuk_error_summary %>
         <%= f.govuk_radio_buttons_fieldset :deactivation_date,
                                             legend: { text: "When should this change apply?"},
                                             caption: { text: "Deactivate #{@location.postcode}"},

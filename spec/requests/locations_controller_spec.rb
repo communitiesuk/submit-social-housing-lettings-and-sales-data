@@ -1249,7 +1249,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "default date" do
-        let(:params) { { deactivation_date: deactivation_date } } 
+        let(:params) { {location:{ deactivation_date: deactivation_date } } }
 
         it "renders the confirmation page" do
           expect(response).to have_http_status(:ok)
@@ -1258,11 +1258,41 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "other date" do
-        let(:params) { { deactivation_date: "other", "deactivation_date(3i)": "10", "deactivation_date(2i)": "10", "deactivation_date(1i)": "2022"} }
+        let(:params) { {location:{ deactivation_date: "other", "deactivation_date(3i)": "10", "deactivation_date(2i)": "10", "deactivation_date(1i)": "2022"} }}
 
         it "renders the confirmation page" do
           expect(response).to have_http_status(:ok)
           expect(page).to have_content("This change will affect SOME logs")
+        end
+      end
+
+      context "when confirming deactivation" do
+        let(:params) { {location:{ deactivation_date: Time.new(2022, 10, 10), confirm: true } } }
+
+        it "updates existing location with valid deactivation date and renders location page" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+          location.reload
+          expect(location.deactivation_date).to eq(deactivation_date)
+        end
+      end
+
+      context "when the date is not entered" do
+        let(:params) { { location: { "deactivation_date": "other", "deactivation_date(3i)": "", "deactivation_date(2i)": "", "deactivation_date(1i)": ""} }}
+
+        it "displays the new page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.location.deactivation_date.not_entered"))
+        end
+      end
+
+      context "when the date is not selected" do
+        let(:params) { { location: { "deactivation_date": "" } }}
+
+        it "displays the new page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.location.deactivation_date.not_selected"))
         end
       end
     end

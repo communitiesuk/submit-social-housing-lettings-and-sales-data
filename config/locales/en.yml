@@ -312,6 +312,11 @@ en:
     declaration:
       missing: "You must show the DLUHC privacy notice to the tenant before you can submit this log."
 
+    location:
+      deactivation_date:
+        not_selected: "Select one of the options"
+        not_entered: "Enter a date"
+
   soft_validations:
     net_income:
       title_text: "Net income is outside the expected range based on the lead tenant’s working situation"

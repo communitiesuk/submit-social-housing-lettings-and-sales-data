@@ -21,14 +21,22 @@ class LocationsController < ApplicationController
   def show; end
 
   def deactivate
-    if params[:deactivation_date].blank?
-      render "toggle_active", locals: { action: "deactivate" }
-    elsif (params[:confirm])
-      # update the deactivation_date
-      # update the logs
-      # redirect to location page
+    deactivation_date_value = deactivation_date
+
+    if @location.errors.present?
+      render "toggle_active", locals: { action: "deactivate" }, status: :unprocessable_entity
     else
-      render "toggle_active_confirm", locals: {action: "deactivate", deactivation_date: params[:deactivation_date]}
+      if deactivation_date_value.blank?
+        render "toggle_active", locals: { action: "deactivate" }
+      elsif (params[:location][:confirm].present?)
+        if @location.update(deactivation_date: deactivation_date_value)
+          # update the logs
+          flash[:notice] = "#{@location.name} has been deactivated"
+        end
+        redirect_to scheme_locations_path(@scheme)
+      else
+        render "toggle_active_confirm", locals: {action: "deactivate", deactivation_date: deactivation_date_value}
+      end
     end
   end
 
@@ -153,5 +161,21 @@ private
 
   def valid_location_admin_district?(location_params)
     location_params["location_admin_district"] != "Select an option"
+  end
+
+  def deactivation_date
+    return unless params[:location].present?
+    return @location.errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.not_selected")) unless params[:location][:deactivation_date].present?
+    return params[:location][:deactivation_date] unless params[:location][:deactivation_date] == "other"
+
+    day = params[:location]["deactivation_date(3i)"]
+    month = params[:location]["deactivation_date(2i)"]
+    year = params[:location]["deactivation_date(1i)"]
+
+    if [day, month, year].all?(&:present?) && Date.valid_date?(year.to_i, month.to_i, day.to_i) && year.to_i.between?(2000, 2200)
+      Date.new(year.to_i, month.to_i, day.to_i)
+    else
+      @location.errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.not_entered"))
+    end
   end
 end
