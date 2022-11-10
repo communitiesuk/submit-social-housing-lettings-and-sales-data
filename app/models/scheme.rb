@@ -22,6 +22,7 @@ class Scheme < ApplicationRecord
   auto_strip_attributes :service_name
 
   attr_accessor :deactivation_date_type
+  attr_accessor :deactivation_date
 
   SENSITIVE = {
     No: 0,

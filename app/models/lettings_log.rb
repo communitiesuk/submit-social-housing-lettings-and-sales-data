@@ -38,6 +38,7 @@ class LettingsLog < Log
   scope :filter_by_propcode, ->(propcode) { where("propcode ILIKE ?", "%#{propcode}%") }
   scope :filter_by_postcode, ->(postcode_full) { where("REPLACE(postcode_full, ' ', '') ILIKE ?", "%#{postcode_full.delete(' ')}%") }
   scope :filter_by_location_postcode, ->(postcode_full) { left_joins(:location).where("REPLACE(locations.postcode, ' ', '') ILIKE ?", "%#{postcode_full.delete(' ')}%") }
+  scope :filter_by_before_startdate, ->(date) { left_joins(:location).where("lettings_logs.startdate >= ?", date) }
   scope :search_by, lambda { |param|
                       filter_by_location_postcode(param)
                           .or(filter_by_tenant_code(param))
