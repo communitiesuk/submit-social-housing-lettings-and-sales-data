@@ -14,10 +14,10 @@
     <div class="govuk-grid-column-two-thirds">
     <%= f.govuk_error_summary %>
         <%= f.govuk_radio_buttons_fieldset :deactivation_date,
-                                            legend: { text: "When should this change apply?"},
+                                            legend: { text: I18n.t("questions.location.deactivation.apply_from")},
                                             caption: { text: "Deactivate #{@location.postcode}"},
-                                            hint: { text: "If the date is before 5 April 2022, select ‘From the start of the current collection period’ because the previous period has now closed."} do %>
-            <%= govuk_warning_text text: "It will not be possible to add logs with this scheme if their tenancy start date is on or after the date you enter. Any existing logs may be affected." %>
+                                            hint: { text: I18n.t("hints.location.deactivation")} do %>
+            <%= govuk_warning_text text: I18n.t("warnings.location.deactivation.existing_logs") %>
             <%= f.govuk_radio_button :deactivation_date,
                                         Time.now(),
                                         label: { text: "From the start of the current collection period (5 April 2022)" } %>
