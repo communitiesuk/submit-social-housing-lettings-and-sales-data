@@ -28,21 +28,27 @@ class SchemesController < ApplicationController
         flash[:notice] = "#{@scheme.service_name} has been deactivated"
       end
       redirect_to scheme_details_path(@scheme)
-      return
     elsif deactivation_date.present?
       if deactivation_date == "other"
-        @scheme.errors.add(:deactivation_date, message: "Enter a date")
-        render "toggle_active", locals: { action: "deactivate", deactivation_date: }
+        if params[:scheme]["deactivation_date(1i)"].blank? && params[:scheme]["deactivation_date(2i)"].blank? && params[:scheme]["deactivation_date(3i)"].blank?
+          @scheme.errors.add(:deactivation_date, message: "Enter a date")
+        elsif params[:scheme]["deactivation_date(3i)"].blank?
+          @scheme.errors.add(:deactivation_date, message: "Enter the day")
+        elsif params[:scheme]["deactivation_date(2i)"].blank?
+          @scheme.errors.add(:deactivation_date, message: "Enter the month")
+        elsif params[:scheme]["deactivation_date(1i)"].blank?
+          @scheme.errors.add(:deactivation_date, message: "Enter the year")
+        end
+        render "toggle_active", locals: { action: "deactivate", deactivation_date: }, status: :unprocessable_entity
       else
         render "toggle_active_confirm", locals: { action: "deactivate", deactivation_date: }
       end
-      return
     elsif params[:scheme]
       @scheme.errors.add(:deactivation_date, message: "Select one of the options")
-      render "toggle_active", locals: { action: "deactivate", deactivation_date: }
-      return
+      render "toggle_active", locals: { action: "deactivate", deactivation_date: }, status: :unprocessable_entity
+    else
+      render "toggle_active", locals: { action: "deactivate" }
     end
-    render "toggle_active", locals: { action: "deactivate" }
   end
 
   def new
