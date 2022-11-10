@@ -141,6 +141,7 @@ en:
         previous_let_social: "Property cannot have a previous let type if being let as social housing for the first time"
         non_temp_accommodation: "Answer cannot be re-let to tenant who occupied the same property as temporary accommodation as this accommodation is not temporary"
         referral_invalid: "Answer cannot be re-let to tenant who occupied the same property as temporary accommodation as a different source of referral for this letting"
+        not_a_renewal: "Reason for vacancy cannot be 'Renewal of fixed-term tenancy' if letting is not a renewal"
       unittype_gn:
         one_bedroom_bedsit: "A bedsit can only have one bedroom"
         one_seven_bedroom_shared: "A shared house must have 1 to 7 bedrooms"
