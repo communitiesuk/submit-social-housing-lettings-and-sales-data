@@ -22,32 +22,20 @@ class SchemesController < ApplicationController
   end
 
   def deactivate
-    if params[:scheme] && params[:scheme][:confirm] && deactivation_date.present?
-      if @scheme.update!(deactivation_date:)
+    deactivation_date_value = deactivation_date
+
+    if @scheme.errors.present?
+      render "toggle_active", locals: { action: "deactivate" }, status: :unprocessable_entity
+    elsif deactivation_date_value.blank?
+      render "toggle_active", locals: { action: "deactivate" }
+    elsif params[:scheme][:confirm].present?
+      if @scheme.update(deactivation_date: deactivation_date_value)
         # update the logs
         flash[:notice] = "#{@scheme.service_name} has been deactivated"
       end
       redirect_to scheme_details_path(@scheme)
-    elsif deactivation_date.present?
-      if deactivation_date == "other"
-        if params[:scheme]["deactivation_date(1i)"].blank? && params[:scheme]["deactivation_date(2i)"].blank? && params[:scheme]["deactivation_date(3i)"].blank?
-          @scheme.errors.add(:deactivation_date, message: "Enter a date")
-        elsif params[:scheme]["deactivation_date(3i)"].blank?
-          @scheme.errors.add(:deactivation_date, message: "Enter the day")
-        elsif params[:scheme]["deactivation_date(2i)"].blank?
-          @scheme.errors.add(:deactivation_date, message: "Enter the month")
-        elsif params[:scheme]["deactivation_date(1i)"].blank?
-          @scheme.errors.add(:deactivation_date, message: "Enter the year")
-        end
-        render "toggle_active", locals: { action: "deactivate", deactivation_date: }, status: :unprocessable_entity
-      else
-        render "toggle_active_confirm", locals: { action: "deactivate", deactivation_date: }
-      end
-    elsif params[:scheme]
-      @scheme.errors.add(:deactivation_date, message: "Select one of the options")
-      render "toggle_active", locals: { action: "deactivate", deactivation_date: }, status: :unprocessable_entity
     else
-      render "toggle_active", locals: { action: "deactivate" }
+      render "toggle_active_confirm", locals: { action: "deactivate", deactivation_date: deactivation_date_value }
     end
   end
 
@@ -158,12 +146,24 @@ class SchemesController < ApplicationController
   end
 
   def deactivation_date
-    if params[:scheme].blank?
-      nil
-    elsif params[:scheme][:deactivation_date] == "other" && params[:scheme]["deactivation_date(1i)"].present? && params[:scheme]["deactivation_date(2i)"].present? && params[:scheme]["deactivation_date(3i)"].present?
-      Time.utc(params[:scheme]["deactivation_date(1i)"].to_i, params[:scheme]["deactivation_date(2i)"].to_i, params[:scheme]["deactivation_date(3i)"].to_i)
+    return if params[:scheme].blank?
+    return @scheme.errors.add(:deactivation_date, message: I18n.t("validations.scheme.deactivation_date.not_selected")) if params[:scheme][:deactivation_date].blank?
+    return params[:scheme][:deactivation_date] unless params[:scheme][:deactivation_date] == "other"
+
+    day = params[:scheme]["deactivation_date(3i)"]
+    month = params[:scheme]["deactivation_date(2i)"]
+    year = params[:scheme]["deactivation_date(1i)"]
+
+    if [day, month, year].any?(&:blank?)
+      { day:, month:, year: }.each do |period, value|
+        @scheme.errors.add(:deactivation_date, message: I18n.t("validations.scheme.deactivation_date.not_entered", period: period.to_s)) if value.blank?
+      end
+    elsif !Date.valid_date?(year.to_i, month.to_i, day.to_i)
+      @scheme.errors.add(:deactivation_date, message: I18n.t("validations.scheme.deactivation_date.invalid"))
+    elsif !year.to_i.between?(2000, 2200)
+      @scheme.errors.add(:deactivation_date, message: I18n.t("validations.scheme.deactivation_date.invalid"))
     else
-      params[:scheme][:deactivation_date]
+      Date.new(year.to_i, month.to_i, day.to_i)
     end
   end
 
