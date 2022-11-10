@@ -22,15 +22,9 @@ class LocationsController < ApplicationController
 
   def deactivate
     if params[:location][:confirm].present? && params[:location][:deactivation_date].present?
-      if @location.update(deactivation_date: params[:location][:deactivation_date])
-        # update the logs
-        flash[:notice] = "#{@location.name} has been deactivated"
-      end
-      redirect_to scheme_locations_path(@scheme)
+      confirm_deactivation
     else
-
       deactivation_date_errors
-
       if @location.errors.present?
         @location.deactivation_date_type = params[:location][:deactivation_date_type]
         render "toggle_active", locals: { action: "deactivate" }, status: :unprocessable_entity
@@ -168,7 +162,14 @@ private
     location_params["location_admin_district"] != "Select an option"
   end
 
-
+  def confirm_deactivation
+    if @location.update(deactivation_date: params[:location][:deactivation_date])
+      # update the logs
+      flash[:notice] = "#{@location.name} has been deactivated"
+    end
+    redirect_to scheme_locations_path(@scheme)
+    return
+  end
 
   def deactivation_date_errors
     if params[:location][:deactivation_date].blank? && params[:location][:deactivation_date_type].blank?
@@ -193,7 +194,6 @@ private
       end
     end
   end
-
 
   def deactivation_date
     return if params[:location].blank?
