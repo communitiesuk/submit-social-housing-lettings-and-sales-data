@@ -118,6 +118,10 @@ RSpec.describe FormHandler do
       it "returns the correct next sales form name" do
         expect(form_handler.form_name_from_start_year(2023, "sales")).to eq("next_sales")
       end
+
+      it "returns the correct current start date" do
+        expect(form_handler.current_collection_start_date).to eq(Time.utc(2022, 4, 5))
+      end
     end
 
     context "with the date before 1st of April" do

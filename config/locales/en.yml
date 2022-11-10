@@ -382,7 +382,7 @@ en:
       postcode: "For example, SW1P 4DF."
       name: "This is how you refer to this location within your organisation"
       units: "A unit can be a bedroom in a shared house or flat, or a house with 4 bedrooms. Do not include bedrooms used for wardens, managers, volunteers or sleep-in staff."
-      deactivation: "If the date is before 5 April 2022, select ‘From the start of the current collection period’ because the previous period has now closed."
+      deactivation: "If the date is before %{date}, select ‘From the start of the current collection period’ because the previous period has now closed."
   
   warnings:
     location:
