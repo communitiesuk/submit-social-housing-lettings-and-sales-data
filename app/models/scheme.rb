@@ -21,6 +21,8 @@ class Scheme < ApplicationRecord
 
   auto_strip_attributes :service_name
 
+  attr_accessor :deactivation_date_type
+
   SENSITIVE = {
     No: 0,
     Yes: 1,
@@ -196,7 +198,7 @@ class Scheme < ApplicationRecord
   end
 
   def validate_confirmed
-    required_attributes = attribute_names - %w[id created_at updated_at old_id old_visible_id confirmed end_date sensitive secondary_client_group total_units has_other_client_group deactivation_date_type]
+    required_attributes = attribute_names - %w[id created_at updated_at old_id old_visible_id confirmed end_date sensitive secondary_client_group total_units has_other_client_group deactivation_date]
 
     if confirmed == true
       required_attributes.any? do |attribute|
