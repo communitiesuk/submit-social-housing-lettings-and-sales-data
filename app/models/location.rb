@@ -373,7 +373,9 @@ class Location < ApplicationRecord
   end
 
   def status
-    "active"
+    return :active if deactivation_date.blank?
+    return :deactivating_soon if Time.zone.now < deactivation_date
+    return :deactivated if Time.zone.now >= deactivation_date
   end
 
 private
