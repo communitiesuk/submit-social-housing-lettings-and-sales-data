@@ -14,4 +14,10 @@ class FeatureToggle
 
     false
   end
+
+  def self.location_toggle_enabled?
+    return true unless Rails.env.production?
+
+    false
+  end
 end

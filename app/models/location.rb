@@ -359,20 +359,20 @@ class Location < ApplicationRecord
 
   enum type_of_unit: TYPE_OF_UNIT
 
-  def display_attributes
-    [
-      { name: "Location code ", value: location_code, suffix: false },
-      { name: "Postcode", value: postcode, suffix: county },
-      { name: "Type of unit", value: type_of_unit, suffix: false },
-    ]
-  end
-
   def postcode=(postcode)
     if postcode
       super UKPostcode.parse(postcode).to_s
     else
       super nil
     end
+  end
+
+  def available_from
+    startdate || created_at
+  end
+
+  def status
+    "active"
   end
 
 private
