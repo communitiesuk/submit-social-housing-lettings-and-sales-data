@@ -25,18 +25,16 @@ class LocationsController < ApplicationController
 
     if @location.errors.present?
       render "toggle_active", locals: { action: "deactivate" }, status: :unprocessable_entity
-    else
-      if deactivation_date_value.blank?
-        render "toggle_active", locals: { action: "deactivate" }
-      elsif (params[:location][:confirm].present?)
-        if @location.update(deactivation_date: deactivation_date_value)
-          # update the logs
-          flash[:notice] = "#{@location.name} has been deactivated"
-        end
-        redirect_to scheme_locations_path(@scheme)
-      else
-        render "toggle_active_confirm", locals: {action: "deactivate", deactivation_date: deactivation_date_value}
+    elsif deactivation_date_value.blank?
+      render "toggle_active", locals: { action: "deactivate" }
+    elsif params[:location][:confirm].present?
+      if @location.update(deactivation_date: deactivation_date_value)
+        # update the logs
+        flash[:notice] = "#{@location.name} has been deactivated"
       end
+      redirect_to scheme_locations_path(@scheme)
+    else
+      render "toggle_active_confirm", locals: { action: "deactivate", deactivation_date: deactivation_date_value }
     end
   end
 
@@ -164,8 +162,8 @@ private
   end
 
   def deactivation_date
-    return unless params[:location].present?
-    return @location.errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.not_selected")) unless params[:location][:deactivation_date].present?
+    return if params[:location].blank?
+    return @location.errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.not_selected")) if params[:location][:deactivation_date].blank?
     return params[:location][:deactivation_date] unless params[:location][:deactivation_date] == "other"
 
     day = params[:location]["deactivation_date(3i)"]
@@ -182,17 +180,17 @@ private
   end
 
   def deactivation_date_valid?(day, month, year, collection_start_date)
-    [day, month, year].all?(&:present?) && Date.valid_date?(year.to_i, month.to_i, day.to_i) && Date.new(year.to_i, month.to_i, day.to_i).between?(collection_start_date, Time.new(2200,1,1))
+    [day, month, year].all?(&:present?) && Date.valid_date?(year.to_i, month.to_i, day.to_i) && Date.new(year.to_i, month.to_i, day.to_i).between?(collection_start_date, Date.new(2200, 1, 1))
   end
 
   def set_deactivation_date_errors(day, month, year, collection_start_date)
     if [day, month, year].any?(&:blank?)
-      {day:, month:, year:}.each do |period, value| 
-        @location.errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.not_entered", period: period.to_s )) if value.blank?
+      { day:, month:, year: }.each do |period, value|
+        @location.errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.not_entered", period: period.to_s)) if value.blank?
       end
     elsif !Date.valid_date?(year.to_i, month.to_i, day.to_i)
       @location.errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.invalid"))
-    elsif !Date.new(year.to_i, month.to_i, day.to_i).between?(collection_start_date, Time.new(2200,1,1))
+    elsif !Date.new(year.to_i, month.to_i, day.to_i).between?(collection_start_date, Date.new(2200, 1, 1))
       @location.errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.out_of_range", date: collection_start_date.to_formatted_s(:govuk_date)))
     end
   end

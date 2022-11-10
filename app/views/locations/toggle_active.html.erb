@@ -4,10 +4,9 @@
 <% content_for :before_content do %>
   <%= govuk_back_link(
     text: "Back",
-        href: "/schemes/#{@location.scheme.id}/locations/#{@location.id}",
+    href: "/schemes/#{@location.scheme.id}/locations/#{@location.id}",
   ) %>
 <% end %>
-
 
 <%= form_with model: @location, url: scheme_location_deactivate_path(scheme_id: @location.scheme.id, location_id: @location.id), method: "patch", local: true do |f| %>
   <div class="govuk-grid-row">
@@ -15,9 +14,9 @@
     <% collection_start_date = FormHandler.instance.current_collection_start_date %>
     <%= f.govuk_error_summary %>
         <%= f.govuk_radio_buttons_fieldset :deactivation_date,
-                                            legend: { text: I18n.t("questions.location.deactivation.apply_from")},
-                                            caption: { text: "Deactivate #{@location.postcode}"},
-                                            hint: { text: I18n.t("hints.location.deactivation", date: collection_start_date.to_formatted_s(:govuk_date))} do %>
+                                            legend: { text: I18n.t("questions.location.deactivation.apply_from") },
+                                            caption: { text: "Deactivate #{@location.postcode}" },
+                                            hint: { text: I18n.t("hints.location.deactivation", date: collection_start_date.to_formatted_s(:govuk_date)) } do %>
             <%= govuk_warning_text text: I18n.t("warnings.location.deactivation.existing_logs") %>
             <%= f.govuk_radio_button :deactivation_date,
                                         collection_start_date,
@@ -26,9 +25,8 @@
             <%= f.govuk_radio_button :deactivation_date,
                                         "other",
                                         label: { text: "For tenancies starting after a certain date" },
-                                         **basic_conditional_html_attributes({
-                                            "deactivation_date" => ["other"]}, "location") do %>
-                                            <%= f.govuk_date_field :deactivation_date,
+                                        **basic_conditional_html_attributes({ "deactivation_date" => %w[other] }, "location") do %>
+                                          <%= f.govuk_date_field :deactivation_date,
                                                         legend: { text: "Date", size: "m" },
                                                         hint: { text: "For example, 27 3 2008" },
                                                         width: 20 %>
