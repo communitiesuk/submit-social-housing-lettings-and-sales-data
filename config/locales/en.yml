@@ -317,6 +317,7 @@ en:
         not_selected: "Select one of the options"
         not_entered: "Enter a %{period}"
         invalid: "Enter a valid date"
+        out_of_range: "The date must be on or after the %{date}"
 
   soft_validations:
     net_income:

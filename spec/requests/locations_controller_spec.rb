@@ -1296,6 +1296,15 @@ RSpec.describe LocationsController, type: :request do
         end
       end
 
+      context "when the date is entered is before the beginning of current collection window" do
+        let(:params) { { location: { "deactivation_date": "other", "deactivation_date(3i)": "10", "deactivation_date(2i)": "4", "deactivation_date(1i)": "2020"} }}
+
+        it "displays the new page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.location.deactivation_date.out_of_range", date: "5 April 2022"))
+        end
+      end
+
       context "when the day is not entered" do
         let(:params) { { location: { "deactivation_date": "other", "deactivation_date(3i)": "", "deactivation_date(2i)": "2", "deactivation_date(1i)": "2022"} }}
 
