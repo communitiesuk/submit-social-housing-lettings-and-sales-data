@@ -164,11 +164,10 @@ private
 
   def deactivation_date
     return if params[:location].blank?
+    collection_start_date = FormHandler.instance.current_collection_start_date
+    return collection_start_date if params[:location][:deactivation_date_type] == "default"
 
     return @location.errors.add(:deactivation_date_type, message: I18n.t("validations.location.deactivation_date.not_selected")) if params[:location][:deactivation_date].blank? && params[:location][:deactivation_date_type].blank?
-    collection_start_date = FormHandler.instance.current_collection_start_date
-
-    return collection_start_date if params[:location][:deactivation_date_type].to_i == 1
     return params[:location][:deactivation_date] if params[:location][:deactivation_date_type].blank?
 
     day = params[:location]["deactivation_date(3i)"]
