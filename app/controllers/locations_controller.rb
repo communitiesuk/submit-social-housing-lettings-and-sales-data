@@ -24,6 +24,7 @@ class LocationsController < ApplicationController
     deactivation_date_value = deactivation_date
 
     if @location.errors.present?
+      @location.deactivation_date_type = params[:location][:deactivation_date_type].to_i
       render "toggle_active", locals: { action: "deactivate" }, status: :unprocessable_entity
     elsif deactivation_date_value.blank?
       render "toggle_active", locals: { action: "deactivate" }
@@ -163,8 +164,12 @@ private
 
   def deactivation_date
     return if params[:location].blank?
-    return @location.errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.not_selected")) if params[:location][:deactivation_date].blank?
-    return params[:location][:deactivation_date] unless params[:location][:deactivation_date] == "other"
+
+    return @location.errors.add(:deactivation_date_type, message: I18n.t("validations.location.deactivation_date.not_selected")) if params[:location][:deactivation_date].blank? && params[:location][:deactivation_date_type].blank?
+    collection_start_date = FormHandler.instance.current_collection_start_date
+
+    return collection_start_date if params[:location][:deactivation_date_type].to_i == 1
+    return params[:location][:deactivation_date] if params[:location][:deactivation_date_type].blank?
 
     day = params[:location]["deactivation_date(3i)"]
     month = params[:location]["deactivation_date(2i)"]

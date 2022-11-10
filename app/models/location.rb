@@ -18,6 +18,8 @@ class Location < ApplicationRecord
   scope :started, -> { where("startdate <= ?", Time.zone.today).or(where(startdate: nil)) }
   scope :active, -> { where(confirmed: true).and(started) }
 
+  attribute :deactivation_date_type
+
   LOCAL_AUTHORITIES = {
     "E07000223": "Adur",
     "E07000026": "Allerdale",

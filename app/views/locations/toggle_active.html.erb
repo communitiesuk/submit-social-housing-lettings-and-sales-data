@@ -18,12 +18,12 @@
                                             caption: { text: "Deactivate #{@location.postcode}" },
                                             hint: { text: I18n.t("hints.location.deactivation", date: collection_start_date.to_formatted_s(:govuk_date)) } do %>
             <%= govuk_warning_text text: I18n.t("warnings.location.deactivation.existing_logs") %>
-            <%= f.govuk_radio_button :deactivation_date,
-                                        collection_start_date,
+            <%= f.govuk_radio_button :deactivation_date_type,
+                                        1,
                                         label: { text: "From the start of the current collection period (#{collection_start_date.to_formatted_s(:govuk_date)})" } %>
 
-            <%= f.govuk_radio_button :deactivation_date,
-                                        "other",
+            <%= f.govuk_radio_button :deactivation_date_type,
+                                        2,
                                         label: { text: "For tenancies starting after a certain date" },
                                         **basic_conditional_html_attributes({ "deactivation_date" => %w[other] }, "location") do %>
                                           <%= f.govuk_date_field :deactivation_date,
