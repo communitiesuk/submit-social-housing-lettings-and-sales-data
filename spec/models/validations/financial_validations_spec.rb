@@ -1010,6 +1010,8 @@ RSpec.describe Validations::FinancialValidations do
           financial_validator.validate_care_home_charges(record)
           expect(record.errors["chcharge"])
             .to include(match I18n.t("validations.financial.carehome.not_provided", period: "every 4 weeks"))
+          expect(record.errors["is_carehome"])
+            .to include(match I18n.t("validations.financial.carehome.not_provided", period: "every 4 weeks"))
         end
       end
 
