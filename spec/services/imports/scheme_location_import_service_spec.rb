@@ -160,21 +160,6 @@ RSpec.describe Imports::SchemeLocationImportService do
       expect(location.scheme.confirmed).to be_truthy
     end
 
-    context "and the end date is before the current date" do
-      before do
-        Timecop.freeze(2022, 6, 1)
-        location_xml.at_xpath("//scheme:end-date").content = "2022-05-01"
-      end
-
-      after { Timecop.unfreeze }
-
-      it "does not create the location" do
-        expect(logger).to receive(:warn).with("Location with legacy ID 0ae7ad6dc0f1cf7ef33c18cc8c108bebc1b4923e is expired (2022-05-01 00:00:00 +0100), skipping")
-        expect { location_service.create_scheme_location(location_xml) }
-          .not_to change(Location, :count)
-      end
-    end
-
     context "and we import the same location twice" do
       before { location_service.create_scheme_location(location_xml) }
 
