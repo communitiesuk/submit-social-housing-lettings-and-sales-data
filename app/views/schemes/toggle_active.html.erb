@@ -5,7 +5,7 @@
         ) %>
 <% end %>
 
-<%= form_with model: @scheme, url: scheme_deactivate_path(@scheme), method: "get", local: true do |f| %>
+<%= form_with model: @scheme, url: scheme_deactivate_path(@scheme), method: "patch", local: true do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <%= f.govuk_error_summary %>
