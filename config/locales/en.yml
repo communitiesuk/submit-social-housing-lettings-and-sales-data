@@ -315,7 +315,8 @@ en:
     location:
       deactivation_date:
         not_selected: "Select one of the options"
-        not_entered: "Enter a date"
+        not_entered: "Enter a %{period}"
+        invalid: "Enter a valid date"
 
   soft_validations:
     net_income:

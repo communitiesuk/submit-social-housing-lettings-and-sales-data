@@ -1278,21 +1278,48 @@ RSpec.describe LocationsController, type: :request do
         end
       end
 
-      context "when the date is not entered" do
-        let(:params) { { location: { "deactivation_date": "other", "deactivation_date(3i)": "", "deactivation_date(2i)": "", "deactivation_date(1i)": ""} }}
-
-        it "displays the new page with an error message" do
-          expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content(I18n.t("validations.location.deactivation_date.not_entered"))
-        end
-      end
-
       context "when the date is not selected" do
         let(:params) { { location: { "deactivation_date": "" } }}
 
         it "displays the new page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_content(I18n.t("validations.location.deactivation_date.not_selected"))
+        end
+      end
+
+      context "when invalid date is entered" do
+        let(:params) { { location: { "deactivation_date": "other", "deactivation_date(3i)": "10", "deactivation_date(2i)": "44", "deactivation_date(1i)": "2022"} }}
+
+        it "displays the new page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.location.deactivation_date.invalid"))
+        end
+      end
+
+      context "when the day is not entered" do
+        let(:params) { { location: { "deactivation_date": "other", "deactivation_date(3i)": "", "deactivation_date(2i)": "2", "deactivation_date(1i)": "2022"} }}
+
+        it "displays page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.location.deactivation_date.not_entered", period: "day"))
+        end
+      end
+
+      context "when the month is not entered" do
+        let(:params) { { location: { "deactivation_date": "other", "deactivation_date(3i)": "2", "deactivation_date(2i)": "", "deactivation_date(1i)": "2022"} }}
+
+        it "displays page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.location.deactivation_date.not_entered", period: "month"))
+        end
+      end
+
+      context "when the year is not entered" do
+        let(:params) { { location: { "deactivation_date": "other", "deactivation_date(3i)": "2", "deactivation_date(2i)": "2", "deactivation_date(1i)": ""} }}
+
+        it "displays page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.location.deactivation_date.not_entered", period: "year"))
         end
       end
     end

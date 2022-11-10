@@ -172,10 +172,23 @@ private
     month = params[:location]["deactivation_date(2i)"]
     year = params[:location]["deactivation_date(1i)"]
 
-    if [day, month, year].all?(&:present?) && Date.valid_date?(year.to_i, month.to_i, day.to_i) && year.to_i.between?(2000, 2200)
-      Date.new(year.to_i, month.to_i, day.to_i)
+
+    if [day, month, year].any?(&:blank?) || !Date.valid_date?(year.to_i, month.to_i, day.to_i) || !year.to_i.between?(2000, 2200)
+      set_deactivation_date_errors(day, month, year)
     else
-      @location.errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.not_entered"))
+      Date.new(year.to_i, month.to_i, day.to_i)
+    end
+  end
+
+  def set_deactivation_date_errors(day, month, year)
+    if [day, month, year].any?(&:blank?)
+      {day:, month:, year:}.each do |period, value| 
+        @location.errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.not_entered", period: period.to_s )) if value.blank?
+      end
+    elsif !Date.valid_date?(year.to_i, month.to_i, day.to_i)
+      @location.errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.invalid"))
+    elsif !year.to_i.between?(2000, 2200)
+      @location.errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.invalid"))
     end
   end
 end
