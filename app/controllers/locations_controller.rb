@@ -31,7 +31,7 @@ class LocationsController < ApplicationController
         @location.deactivation_date_type = params[:location][:deactivation_date_type]
         render "toggle_active", locals: { action: "deactivate" }, status: :unprocessable_entity
       else
-        render "toggle_active_confirm", locals: { action: "deactivate", deactivation_date: deactivation_date }
+        render "toggle_active_confirm", locals: { action: "deactivate", deactivation_date: }
       end
     end
   end
@@ -168,12 +168,11 @@ private
       flash[:notice] = "#{@location.name || @location.postcode} has been deactivated"
     end
     redirect_to scheme_location_path(@scheme, @location)
-    return
   end
 
   def deactivation_date_errors
     if params[:location][:deactivation_date].blank? && params[:location][:deactivation_date_type].blank?
-      @location.errors.add(:deactivation_date_type, message: I18n.t("validations.location.deactivation_date.not_selected")) 
+      @location.errors.add(:deactivation_date_type, message: I18n.t("validations.location.deactivation_date.not_selected"))
     end
 
     if params[:location][:deactivation_date_type] == "other"
@@ -183,7 +182,7 @@ private
 
       collection_start_date = FormHandler.instance.current_collection_start_date
 
-      if [day, month, year].any?(&:blank?) 
+      if [day, month, year].any?(&:blank?)
         { day:, month:, year: }.each do |period, value|
           @location.errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.not_entered", period: period.to_s)) if value.blank?
         end
@@ -197,6 +196,7 @@ private
 
   def deactivation_date
     return if params[:location].blank?
+
     collection_start_date = FormHandler.instance.current_collection_start_date
     return collection_start_date if params[:location][:deactivation_date_type] == "default"
     return params[:location][:deactivation_date] if params[:location][:deactivation_date_type].blank?

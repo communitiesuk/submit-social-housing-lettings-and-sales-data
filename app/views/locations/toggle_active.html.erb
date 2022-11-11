@@ -13,7 +13,7 @@
     <div class="govuk-grid-column-two-thirds">
     <% collection_start_date = FormHandler.instance.current_collection_start_date %>
     <%= f.govuk_error_summary %>
-        <%= f.govuk_radio_buttons_fieldset :deactivation_date,
+        <%= f.govuk_radio_buttons_fieldset :deactivation_date_type,
                                             legend: { text: I18n.t("questions.location.deactivation.apply_from") },
                                             caption: { text: "Deactivate #{@location.postcode}" },
                                             hint: { text: I18n.t("hints.location.deactivation", date: collection_start_date.to_formatted_s(:govuk_date)) } do %>

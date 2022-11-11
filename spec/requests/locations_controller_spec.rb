@@ -1267,7 +1267,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when confirming deactivation" do
-        let(:params) { { location: { deactivation_date: deactivation_date, confirm: true } } }
+        let(:params) { { location: { deactivation_date:, confirm: true } } }
 
         it "updates existing location with valid deactivation date and renders location page" do
           follow_redirect!
@@ -1289,7 +1289,7 @@ RSpec.describe LocationsController, type: :request do
 
       context "when invalid date is entered" do
         let(:params) { { location: { deactivation_date_type: "other", "deactivation_date(3i)": "10", "deactivation_date(2i)": "44", "deactivation_date(1i)": "2022" } } }
-        
+
         it "displays the new page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_content(I18n.t("validations.location.deactivation_date.invalid"))
@@ -1298,7 +1298,7 @@ RSpec.describe LocationsController, type: :request do
 
       context "when the date is entered is before the beginning of current collection window" do
         let(:params) { { location: { deactivation_date_type: "other", "deactivation_date(3i)": "10", "deactivation_date(2i)": "4", "deactivation_date(1i)": "2020" } } }
-        
+
         it "displays the new page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_content(I18n.t("validations.location.deactivation_date.out_of_range", date: "5 April 2022"))
@@ -1307,7 +1307,7 @@ RSpec.describe LocationsController, type: :request do
 
       context "when the day is not entered" do
         let(:params) { { location: { deactivation_date_type: "other", "deactivation_date(3i)": "", "deactivation_date(2i)": "2", "deactivation_date(1i)": "2022" } } }
-        
+
         it "displays page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_content(I18n.t("validations.location.deactivation_date.not_entered", period: "day"))
@@ -1316,7 +1316,7 @@ RSpec.describe LocationsController, type: :request do
 
       context "when the month is not entered" do
         let(:params) { { location: { deactivation_date_type: "other", "deactivation_date(3i)": "2", "deactivation_date(2i)": "", "deactivation_date(1i)": "2022" } } }
-        
+
         it "displays page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_content(I18n.t("validations.location.deactivation_date.not_entered", period: "month"))
@@ -1325,7 +1325,7 @@ RSpec.describe LocationsController, type: :request do
 
       context "when the year is not entered" do
         let(:params) { { location: { deactivation_date_type: "other", "deactivation_date(3i)": "2", "deactivation_date(2i)": "2", "deactivation_date(1i)": "" } } }
-        
+
         it "displays page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_content(I18n.t("validations.location.deactivation_date.not_entered", period: "year"))
