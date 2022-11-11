@@ -31,6 +31,7 @@
       <% row.cell(header: true, text: "Postcode", html_attributes: {
         scope: "col",
       }) %>
+      <% row.cell(header: true, text: "Status", html_attributes: {
         scope: "col",
       }) %>
     <% end %>
@@ -40,6 +41,7 @@
       <%= body.row do |row| %>
         <% row.cell(text: location.id) %>
         <% row.cell(text: simple_format(location_cell_postcode(location, "/schemes/#{@scheme.id}/locations/#{location.id}"), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
+        <% row.cell(text: status_tag(location.status)) %>
         <% end %>
     <% end %>
   <% end %>
