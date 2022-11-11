@@ -19,7 +19,7 @@
     <FORM>123456</FORM>
     <Landlord source-value="2">2 Local Authority</Landlord>
     <Group>
-      <_1cmangroupcode>123</_1cmangroupcode>
+      <_1cmangroupcode>0123</_1cmangroupcode>
       <_1cschemecode>10</_1cschemecode>
       <schPC/>
       <Q1e>3 No</Q1e>
