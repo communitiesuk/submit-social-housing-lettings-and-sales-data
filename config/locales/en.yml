@@ -314,7 +314,7 @@ en:
     scheme:
       deactivation_date:
         not_selected: "Select one of the options"
-        not_entered: "Enter a %{period}"
+        not_entered: "Enter a day, month and year"
         invalid: "Enter a valid date"
         out_of_range: "The date must be on or after the %{date}"
 

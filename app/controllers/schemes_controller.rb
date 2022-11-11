@@ -30,7 +30,7 @@ class SchemesController < ApplicationController
       deactivation_date_errors
       if @scheme.errors.present?
         @scheme.deactivation_date_type = params[:scheme][:deactivation_date_type]
-        # @scheme.deactivation_date = deactivation_date_errors
+        @scheme.deactivation_date = nil
         render "toggle_active", locals: { action: "deactivate" }, status: :unprocessable_entity
       else
         render "toggle_active_confirm", locals: { action: "deactivate", deactivation_date: }
@@ -302,10 +302,7 @@ private
       collection_start_date = FormHandler.instance.current_collection_start_date
 
       if [day, month, year].any?(&:blank?)
-        { day:, month:, year: }.each do |period, value|
-          @scheme.errors.add(:deactivation_date, message: I18n.t("validations.scheme.deactivation_date.not_entered", period: period.to_s)) if value.blank?
-        end
-        # { 1 => year.to_i, 2 => month.to_i, 3 => day.to_i }
+        @scheme.errors.add(:deactivation_date, message: I18n.t("validations.scheme.deactivation_date.not_entered"))
       elsif !Date.valid_date?(year.to_i, month.to_i, day.to_i)
         @scheme.errors.add(:deactivation_date, message: I18n.t("validations.scheme.deactivation_date.invalid"))
       elsif !Date.new(year.to_i, month.to_i, day.to_i).between?(collection_start_date, Date.new(2200, 1, 1))
