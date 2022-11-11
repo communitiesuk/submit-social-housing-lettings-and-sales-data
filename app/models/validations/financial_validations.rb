@@ -34,10 +34,12 @@ module Validations::FinancialValidations
 
     if record.earnings.present? && record.incfreq.blank?
       record.errors.add :incfreq, I18n.t("validations.financial.earnings.freq_missing")
+      record.errors.add :earnings, I18n.t("validations.financial.earnings.freq_missing")
     end
 
     if record.incfreq.present? && record.earnings.blank?
       record.errors.add :earnings, I18n.t("validations.financial.earnings.earnings_missing")
+      record.errors.add :incfreq, I18n.t("validations.financial.earnings.earnings_missing")
     end
   end
 
