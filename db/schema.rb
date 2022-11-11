@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_10_163351) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_11_102656) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -255,11 +255,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_10_163351) do
     t.integer "units"
     t.integer "type_of_unit"
     t.string "old_id"
-    t.integer "old_visible_id"
+    t.string "old_visible_id"
     t.string "mobility_type"
     t.datetime "startdate", precision: nil
     t.string "location_admin_district"
     t.boolean "confirmed"
+    t.datetime "deactivation_date"
     t.index ["old_id"], name: "index_locations_on_old_id", unique: true
     t.index ["scheme_id"], name: "index_locations_on_scheme_id"
   end
@@ -315,7 +316,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_10_163351) do
     t.integer "supported_housing_units"
     t.integer "unspecified_units"
     t.string "old_org_id"
-    t.integer "old_visible_id"
+    t.string "old_visible_id"
     t.index ["old_visible_id"], name: "index_organisations_on_old_visible_id", unique: true
   end
 
@@ -394,7 +395,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_10_163351) do
     t.bigint "managing_organisation_id"
     t.string "arrangement_type"
     t.string "old_id"
-    t.integer "old_visible_id"
+    t.string "old_visible_id"
     t.integer "total_units"
     t.boolean "confirmed"
     t.datetime "deactivation_date"

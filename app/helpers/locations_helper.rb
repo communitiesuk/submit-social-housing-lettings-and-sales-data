@@ -22,4 +22,18 @@ module LocationsHelper
 
     resource.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) }
   end
+
+  def display_attributes(location)
+    [
+      { name: "Postcode", value: location.postcode },
+      { name: "Local authority", value: location.location_admin_district },
+      { name: "Location name", value: location.name, edit: true },
+      { name: "Total number of units at this location", value: location.units },
+      { name: "Common type of unit", value: location.type_of_unit },
+      { name: "Mobility type", value: location.mobility_type },
+      { name: "Code", value: location.location_code },
+      { name: "Availability", value: "Available from #{location.available_from.to_formatted_s(:govuk_date)}" },
+      { name: "Status", value: location.status },
+    ]
+  end
 end

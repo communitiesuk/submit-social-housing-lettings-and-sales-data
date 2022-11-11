@@ -19,8 +19,12 @@ module Imports
       end
     end
 
-    def field_value(xml_document, namespace, field)
-      xml_document.at_xpath("//#{namespace}:#{field}")&.text
+    def field_value(xml_document, namespace, field, *args)
+      xml_document.at_xpath("//#{namespace}:#{field}", *args)&.text
+    end
+
+    def meta_field_value(xml_document, field)
+      field_value(xml_document, "meta", field, { "meta" => "http://data.gov.uk/core/metadata" })
     end
 
     def overridden?(xml_document, namespace, field)

@@ -18,14 +18,36 @@ class LocationsController < ApplicationController
     @location = Location.new
   end
 
+  def show; end
+
+  def deactivate
+    if params[:location].blank?
+      render "toggle_active", locals: { action: "deactivate" }
+    elsif params[:location][:confirm].present? && params[:location][:deactivation_date].present?
+      confirm_deactivation
+    else
+      deactivation_date_errors
+      if @location.errors.present?
+        @location.deactivation_date_type = params[:location][:deactivation_date_type]
+        render "toggle_active", locals: { action: "deactivate" }, status: :unprocessable_entity
+      else
+        render "toggle_active_confirm", locals: { action: "deactivate", deactivation_date: }
+      end
+    end
+  end
+
+  def reactivate
+    render "toggle_active", locals: { action: "reactivate" }
+  end
+
   def create
     if date_params_missing?(location_params) || valid_date_params?(location_params)
       @location = Location.new(location_params)
       if @location.save
         if @location.location_admin_district.nil?
-          redirect_to(location_edit_local_authority_path(id: @scheme.id, location_id: @location.id, add_another_location: location_params[:add_another_location]))
+          redirect_to(scheme_location_edit_local_authority_path(scheme_id: @scheme.id, location_id: @location.id, add_another_location: location_params[:add_another_location]))
         elsif location_params[:add_another_location] == "Yes"
-          redirect_to new_location_path(@scheme)
+          redirect_to new_scheme_location_path(@scheme)
         else
           check_answers_path = @scheme.confirmed? ? scheme_check_answers_path(@scheme, anchor: "locations") : scheme_check_answers_path(@scheme)
           redirect_to check_answers_path
@@ -69,9 +91,9 @@ class LocationsController < ApplicationController
         case page
         when "edit"
           if @location.location_admin_district.nil?
-            redirect_to(location_edit_local_authority_path(id: @scheme.id, location_id: @location.id, add_another_location: location_params[:add_another_location]))
+            redirect_to(scheme_location_edit_local_authority_path(scheme_id: @scheme.id, location_id: @location.id, add_another_location: location_params[:add_another_location]))
           elsif location_params[:add_another_location] == "Yes"
-            redirect_to(new_location_path(@location.scheme))
+            redirect_to(new_scheme_location_path(@location.scheme))
           else
             redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
           end
@@ -79,7 +101,7 @@ class LocationsController < ApplicationController
           redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
         when "edit-local-authority"
           if params[:add_another_location] == "Yes"
-            redirect_to(new_location_path(@location.scheme))
+            redirect_to(new_scheme_location_path(@location.scheme))
           else
             redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
           end
@@ -107,7 +129,7 @@ private
 
   def find_scheme
     @scheme = if %w[new create index edit_name].include?(action_name)
-                Scheme.find(params[:id])
+                Scheme.find(params[:scheme_id])
               else
                 @location&.scheme
               end
@@ -122,7 +144,7 @@ private
   end
 
   def authenticate_action!
-    if %w[new edit update create index edit_name edit_local_authority].include?(action_name) && !((current_user.organisation == @scheme&.owning_organisation) || current_user.support?)
+    if %w[new edit update create index edit_name edit_local_authority deactivate].include?(action_name) && !((current_user.organisation == @scheme&.owning_organisation) || current_user.support?)
       render_not_found and return
     end
   end
@@ -139,5 +161,50 @@ private
 
   def valid_location_admin_district?(location_params)
     location_params["location_admin_district"] != "Select an option"
+  end
+
+  def confirm_deactivation
+    if @location.update(deactivation_date: params[:location][:deactivation_date])
+      flash[:notice] = "#{@location.name || @location.postcode} has been deactivated"
+    end
+    redirect_to scheme_location_path(@scheme, @location)
+  end
+
+  def deactivation_date_errors
+    if params[:location][:deactivation_date].blank? && params[:location][:deactivation_date_type].blank?
+      @location.errors.add(:deactivation_date_type, message: I18n.t("validations.location.deactivation_date.not_selected"))
+    end
+
+    if params[:location][:deactivation_date_type] == "other"
+      day = params[:location]["deactivation_date(3i)"]
+      month = params[:location]["deactivation_date(2i)"]
+      year = params[:location]["deactivation_date(1i)"]
+
+      collection_start_date = FormHandler.instance.current_collection_start_date
+
+      if [day, month, year].any?(&:blank?)
+        { day:, month:, year: }.each do |period, value|
+          @location.errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.not_entered", period: period.to_s)) if value.blank?
+        end
+      elsif !Date.valid_date?(year.to_i, month.to_i, day.to_i)
+        @location.errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.invalid"))
+      elsif !Date.new(year.to_i, month.to_i, day.to_i).between?(collection_start_date, Date.new(2200, 1, 1))
+        @location.errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.out_of_range", date: collection_start_date.to_formatted_s(:govuk_date)))
+      end
+    end
+  end
+
+  def deactivation_date
+    return if params[:location].blank?
+
+    collection_start_date = FormHandler.instance.current_collection_start_date
+    return collection_start_date if params[:location][:deactivation_date_type] == "default"
+    return params[:location][:deactivation_date] if params[:location][:deactivation_date_type].blank?
+
+    day = params[:location]["deactivation_date(3i)"]
+    month = params[:location]["deactivation_date(2i)"]
+    year = params[:location]["deactivation_date(1i)"]
+
+    Date.new(year.to_i, month.to_i, day.to_i)
   end
 end

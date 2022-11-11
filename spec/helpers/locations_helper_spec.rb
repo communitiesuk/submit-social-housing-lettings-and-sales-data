@@ -46,4 +46,31 @@ RSpec.describe LocationsHelper do
       expect(selection_options(%w[example])).to eq([OpenStruct.new(id: "example", name: "Example")])
     end
   end
+
+  describe "display_attributes" do
+    let(:location) { FactoryBot.build(:location, startdate: Time.zone.local(2022, 8, 8)) }
+
+    it "returns correct display attributes" do
+      attributes = [
+        { name: "Postcode", value: location.postcode },
+        { name: "Local authority", value: location.location_admin_district },
+        { name: "Location name", value: location.name, edit: true },
+        { name: "Total number of units at this location", value: location.units },
+        { name: "Common type of unit", value: location.type_of_unit },
+        { name: "Mobility type", value: location.mobility_type },
+        { name: "Code", value: location.location_code },
+        { name: "Availability", value: "Available from 8 August 2022" },
+        { name: "Status", value: :active },
+      ]
+
+      expect(display_attributes(location)).to eq(attributes)
+    end
+
+    it "displays created_at as availability date if startdate is not present" do
+      location.update!(startdate: nil)
+      availability_attribute = display_attributes(location).find { |x| x[:name] == "Availability" }[:value]
+
+      expect(availability_attribute).to eq("Available from #{location.created_at.to_formatted_s(:govuk_date)}")
+    end
+  end
 end

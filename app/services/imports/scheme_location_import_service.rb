@@ -91,31 +91,25 @@ module Imports
       attributes["units"] = safe_string_as_integer(xml_doc, "total-units")
       attributes["type_of_unit"] = safe_string_as_integer(xml_doc, "unit-type")
       attributes["location_old_id"] = string_or_nil(xml_doc, "id")
-      attributes["location_old_visible_id"] = safe_string_as_integer(xml_doc, "visible-id")
+      attributes["location_old_visible_id"] = string_or_nil(xml_doc, "visible-id")
       attributes["scheme_old_id"] = string_or_nil(xml_doc, "mgmtgroup")
       attributes
     end
 
     def add_location(scheme, attributes)
-      if attributes["end_date"].nil? || attributes["end_date"] >= Time.zone.now
-        begin
-          Location.create!(
-            name: attributes["location_name"],
-            postcode: attributes["postcode"],
-            mobility_type: attributes["mobility_type"],
-            units: attributes["units"],
-            type_of_unit: attributes["type_of_unit"],
-            old_visible_id: attributes["location_old_visible_id"],
-            old_id: attributes["location_old_id"],
-            startdate: attributes["start_date"],
-            scheme:,
-          )
-        rescue ActiveRecord::RecordNotUnique
-          @logger.warn("Location is already present with legacy ID #{attributes['location_old_id']}, skipping")
-        end
-      else
-        @logger.warn("Location with legacy ID #{attributes['location_old_id']} is expired (#{attributes['end_date']}), skipping")
-      end
+      Location.create!(
+        name: attributes["location_name"],
+        postcode: attributes["postcode"],
+        mobility_type: attributes["mobility_type"],
+        units: attributes["units"],
+        type_of_unit: attributes["type_of_unit"],
+        old_visible_id: attributes["location_old_visible_id"],
+        old_id: attributes["location_old_id"],
+        startdate: attributes["start_date"],
+        scheme:,
+      )
+    rescue ActiveRecord::RecordNotUnique
+      @logger.warn("Location is already present with legacy ID #{attributes['location_old_id']}, skipping")
     end
 
     def find_scheme_to_merge(attributes)

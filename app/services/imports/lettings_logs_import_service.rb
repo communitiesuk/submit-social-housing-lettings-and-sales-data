@@ -57,7 +57,7 @@ module Imports
     def create_log(xml_doc)
       attributes = {}
 
-      previous_status = field_value(xml_doc, "meta", "status")
+      previous_status = meta_field_value(xml_doc, "status")
 
       # Required fields for status complete or logic to work
       # Note: order matters when we derive from previous values (attributes parameter)
@@ -191,9 +191,9 @@ module Imports
 
       # Not specific to our form but required for consistency (present in import)
       attributes["old_form_id"] = safe_string_as_integer(xml_doc, "FORM")
-      attributes["created_at"] = Time.zone.parse(field_value(xml_doc, "meta", "created-date"))
-      attributes["updated_at"] = Time.zone.parse(field_value(xml_doc, "meta", "modified-date"))
-      attributes["old_id"] = field_value(xml_doc, "meta", "document-id")
+      attributes["created_at"] = Time.zone.parse(meta_field_value(xml_doc, "created-date"))
+      attributes["updated_at"] = Time.zone.parse(meta_field_value(xml_doc, "modified-date"))
+      attributes["old_id"] = meta_field_value(xml_doc, "document-id")
 
       # Required for our form invalidated questions (not present in import)
       attributes["previous_la_known"] = attributes["prevloc"].nil? ? 0 : 1
@@ -205,8 +205,8 @@ module Imports
 
       # Supported Housing fields
       if attributes["needstype"] == GN_SH[:supported_housing]
-        location_old_visible_id = safe_string_as_integer(xml_doc, "_1cschemecode")
-        scheme_old_visible_id = safe_string_as_integer(xml_doc, "_1cmangroupcode")
+        location_old_visible_id = string_or_nil(xml_doc, "_1cschemecode")
+        scheme_old_visible_id = string_or_nil(xml_doc, "_1cmangroupcode")
 
         schemes = Scheme.where(old_visible_id: scheme_old_visible_id, owning_organisation_id: attributes["owning_organisation_id"])
         location = Location.find_by(old_visible_id: location_old_visible_id, scheme: schemes)
@@ -236,7 +236,7 @@ module Imports
       attributes["net_income_value_check"] = 0
 
       # Sets the log creator
-      owner_id = field_value(xml_doc, "meta", "owner-user-id").strip
+      owner_id = meta_field_value(xml_doc, "owner-user-id").strip
       if owner_id.present?
         user = LegacyUser.find_by(old_user_id: owner_id)&.user
         @logger.warn "Missing user! We expected to find a legacy user with old_user_id #{owner_id}" unless user
@@ -355,7 +355,7 @@ module Imports
     end
 
     def get_form_name_component(xml_doc, index)
-      form_name = field_value(xml_doc, "meta", "form-name")
+      form_name = meta_field_value(xml_doc, "form-name")
       form_type_components = form_name.split("-")
       form_type_components[index]
     end
@@ -399,7 +399,7 @@ module Imports
     end
 
     def find_organisation_id(xml_doc, id_field)
-      old_visible_id = unsafe_string_as_integer(xml_doc, id_field)
+      old_visible_id = string_or_nil(xml_doc, id_field)
       organisation = Organisation.find_by(old_visible_id:)
       raise "Organisation not found with legacy ID #{old_visible_id}" if organisation.nil?
 

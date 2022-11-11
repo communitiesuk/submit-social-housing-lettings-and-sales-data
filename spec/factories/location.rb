@@ -17,7 +17,7 @@ FactoryBot.define do
       units { 20 }
       mobility_type { "A" }
       scheme { FactoryBot.create(:scheme, :export) }
-      old_visible_id { 111 }
+      old_visible_id { "111" }
     end
   end
 end
