@@ -50,7 +50,7 @@ class FormHandler
   end
 
   def current_collection_start_date
-    Time.utc(current_collection_start_year, 4, 5)
+    Time.utc(current_collection_start_year, 4, 1)
   end
 
   def form_name_from_start_year(year, type)

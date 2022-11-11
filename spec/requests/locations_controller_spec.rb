@@ -1301,7 +1301,7 @@ RSpec.describe LocationsController, type: :request do
 
         it "displays the new page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content(I18n.t("validations.location.deactivation_date.out_of_range", date: "5 April 2022"))
+          expect(page).to have_content(I18n.t("validations.location.deactivation_date.out_of_range", date: "1 April 2022"))
         end
       end
 
