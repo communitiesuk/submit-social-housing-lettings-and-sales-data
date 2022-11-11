@@ -867,14 +867,12 @@ RSpec.describe LocationsController, type: :request do
         end
       end
 
-      it "shows scheme" do
+      it "shows locations with correct data" do
         locations.each do |location|
           expect(page).to have_content(location.id)
           expect(page).to have_content(location.postcode)
-          expect(page).to have_content(location.type_of_unit)
-          expect(page).to have_content(location.mobility_type)
-          expect(page).to have_content(location.location_admin_district)
-          expect(page).to have_content(location.startdate.to_formatted_s(:govuk_date))
+          expect(page).to have_content(location.name)
+          expect(page).to have_content(location.status)
         end
       end
 
@@ -972,12 +970,12 @@ RSpec.describe LocationsController, type: :request do
         get "/schemes/#{scheme.id}/locations"
       end
 
-      it "shows scheme" do
+      it "shows locations with correct data" do
         locations.each do |location|
           expect(page).to have_content(location.id)
           expect(page).to have_content(location.postcode)
-          expect(page).to have_content(location.type_of_unit)
-          expect(page).to have_content(location.startdate.to_formatted_s(:govuk_date))
+          expect(page).to have_content(location.name)
+          expect(page).to have_content(location.status)
         end
       end
 
