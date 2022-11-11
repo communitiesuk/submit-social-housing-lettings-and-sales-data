@@ -52,7 +52,6 @@ Rails.application.routes.draw do
     get "deactivate", to: "schemes#deactivate"
     get "reactivate", to: "schemes#reactivate"
     patch "deactivate", to: "schemes#deactivate"
-    patch "reactivate", to: "schemes#reactivate"
 
     resources :locations do
       get "edit-name", to: "locations#edit_name"
