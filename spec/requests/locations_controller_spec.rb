@@ -1239,8 +1239,6 @@ RSpec.describe LocationsController, type: :request do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
       let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
       let!(:location) { FactoryBot.create(:location, scheme:) }
-      let!(:lettings_log_to_deactivate) { FactoryBot.create(:lettings_log, scheme:, location:, startdate: Time.utc(2022, 10, 11) ) }
-      let!(:active_lettings_log) { FactoryBot.create(:lettings_log, scheme:, location:, startdate: Time.utc(2022, 10, 9) ) }
       let(:startdate) { Time.utc(2021, 1, 2) }
       let(:deactivation_date) { Time.utc(2022, 10, 10) }
 
@@ -1277,16 +1275,6 @@ RSpec.describe LocationsController, type: :request do
           expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
           location.reload
           expect(location.deactivation_date).to eq(deactivation_date)
-        end
-
-        it "updates lettings logs with a startdate later than deactivation_date" do
-          lettings_log_to_deactivate.reload
-          expect(lettings_log_to_deactivate.location).to eq(nil)
-        end
-
-        it "does not update lettings logs with a startdate earlier than deactivation_date" do
-          active_lettings_log.reload
-          expect(active_lettings_log.location).to eq(location)
         end
       end
 
