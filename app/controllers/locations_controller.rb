@@ -21,7 +21,9 @@ class LocationsController < ApplicationController
   def show; end
 
   def deactivate
-    if params[:location][:confirm].present? && params[:location][:deactivation_date].present?
+    if params[:location].blank?
+      render "toggle_active", locals: { action: "deactivate" }
+    elsif params[:location][:confirm].present? && params[:location][:deactivation_date].present?
       confirm_deactivation
     else
       deactivation_date_errors
@@ -29,12 +31,7 @@ class LocationsController < ApplicationController
         @location.deactivation_date_type = params[:location][:deactivation_date_type]
         render "toggle_active", locals: { action: "deactivate" }, status: :unprocessable_entity
       else
-        deactivation_date_value = deactivation_date
-        if deactivation_date_value.blank?
-          render "toggle_active", locals: { action: "deactivate" }
-        else
-          render "toggle_active_confirm", locals: { action: "deactivate", deactivation_date: deactivation_date_value }
-        end
+        render "toggle_active_confirm", locals: { action: "deactivate", deactivation_date: deactivation_date }
       end
     end
   end
@@ -169,9 +166,9 @@ private
   def confirm_deactivation
     if @location.update(deactivation_date: params[:location][:deactivation_date])
       @location.lettings_logs.filter_by_before_startdate( params[:location][:deactivation_date]).update(location: nil)
-      flash[:notice] = "#{@location.name} has been deactivated"
+      flash[:notice] = "#{@location.name || @location.postcode} has been deactivated"
     end
-    redirect_to scheme_locations_path(@scheme)
+    redirect_to scheme_location_path(@scheme, @location)
     return
   end
 
