@@ -18,6 +18,8 @@ RSpec.describe Validations::FinancialValidations do
       financial_validator.validate_net_income(record)
       expect(record.errors["incfreq"])
         .to include(match I18n.t("validations.financial.earnings.freq_missing"))
+      expect(record.errors["earnings"])
+        .to include(match I18n.t("validations.financial.earnings.freq_missing"))
     end
 
     it "when income frequency is provided it validates that earnings must be provided" do
@@ -25,6 +27,8 @@ RSpec.describe Validations::FinancialValidations do
       record.incfreq = 1
       financial_validator.validate_net_income(record)
       expect(record.errors["earnings"])
+        .to include(match I18n.t("validations.financial.earnings.earnings_missing"))
+      expect(record.errors["incfreq"])
         .to include(match I18n.t("validations.financial.earnings.earnings_missing"))
     end
   end
