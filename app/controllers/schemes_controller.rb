@@ -22,7 +22,9 @@ class SchemesController < ApplicationController
   end
 
   def deactivate
-    if params[:scheme].present? && params[:scheme][:confirm].present? && params[:scheme][:deactivation_date].present?
+    if params[:scheme].blank?
+      render "toggle_active", locals: { action: "deactivate" }
+    elsif params[:scheme][:confirm].present? && params[:scheme][:deactivation_date].present?
       confirm_deactivation
     else
       deactivation_date_errors
@@ -31,14 +33,13 @@ class SchemesController < ApplicationController
         # @scheme.deactivation_date = deactivation_date_errors
         render "toggle_active", locals: { action: "deactivate" }, status: :unprocessable_entity
       else
-        deactivation_date_value = deactivation_date
-        if deactivation_date_value.blank?
-          render "toggle_active", locals: { action: "deactivate" }
-        else
-          render "toggle_active_confirm", locals: { action: "deactivate", deactivation_date: deactivation_date_value }
-        end
+        render "toggle_active_confirm", locals: { action: "deactivate", deactivation_date: }
       end
     end
+  end
+
+  def reactivate
+    render "toggle_active", locals: { action: "reactivate" }
   end
 
   def new
@@ -283,19 +284,17 @@ private
 
   def confirm_deactivation
     if @scheme.update(deactivation_date: params[:scheme][:deactivation_date])
-      @scheme.lettings_logs.filter_by_before_startdate(params[:scheme][:deactivation_date]).update!(scheme: nil)
       flash[:notice] = "#{@scheme.service_name} has been deactivated"
     end
     redirect_to scheme_details_path(@scheme)
-    nil
   end
 
   def deactivation_date_errors
-    if params[:scheme].present? && params[:scheme][:deactivation_date].blank? && params[:scheme][:deactivation_date_type].blank?
+    if params[:scheme][:deactivation_date].blank? && params[:scheme][:deactivation_date_type].blank?
       @scheme.errors.add(:deactivation_date_type, message: I18n.t("validations.scheme.deactivation_date.not_selected"))
     end
 
-    if params[:scheme].present? && params[:scheme][:deactivation_date_type] == "other"
+    if params[:scheme][:deactivation_date_type] == "other"
       day = params[:scheme]["deactivation_date(3i)"]
       month = params[:scheme]["deactivation_date(2i)"]
       year = params[:scheme]["deactivation_date(1i)"]

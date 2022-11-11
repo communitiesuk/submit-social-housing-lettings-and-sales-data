@@ -50,7 +50,9 @@ Rails.application.routes.draw do
     get "edit-name", to: "schemes#edit_name"
     get "support-services-provider", to: "schemes#support_services_provider"
     get "deactivate", to: "schemes#deactivate"
+    get "reactivate", to: "schemes#reactivate"
     patch "deactivate", to: "schemes#deactivate"
+    patch "reactivate", to: "schemes#reactivate"
 
     member do
       resources :locations do
