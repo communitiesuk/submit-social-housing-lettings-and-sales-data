@@ -39,6 +39,10 @@ class LocationsController < ApplicationController
     end
   end
 
+  def reactivate
+    render "toggle_active", locals: { action: "reactivate" }
+  end
+
   def create
     if date_params_missing?(location_params) || valid_date_params?(location_params)
       @location = Location.new(location_params)

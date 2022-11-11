@@ -54,6 +54,7 @@ Rails.application.routes.draw do
       get "edit-name", to: "locations#edit_name"
       get "edit-local-authority", to: "locations#edit_local_authority"
       get "deactivate", to: "locations#deactivate"
+      get "reactivate", to: "locations#reactivate"
       patch "deactivate", to: "locations#deactivate"
     end
   end

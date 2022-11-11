@@ -1345,4 +1345,68 @@ RSpec.describe LocationsController, type: :request do
       end
     end
   end
+
+  describe "#show" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        get "/schemes/1/locations/1"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        get "/schemes/1/locations/1"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when signed in as a data coordinator" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:location) { FactoryBot.create(:location, scheme:) }
+
+      before do
+        Timecop.freeze(Time.utc(2022, 10, 10))
+        sign_in user
+        location.deactivation_date = deactivation_date
+        location.save!
+        get "/schemes/#{scheme.id}/locations/#{location.id}"
+      end
+
+      context "with active location" do
+        let(:deactivation_date) { nil }
+
+        it "renders deactivate this location" do
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_link("Deactivate this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/deactivate")
+        end
+      end
+
+      context "with deactivated location" do
+        let(:deactivation_date) { Time.utc(2022, 10, 9) }
+
+        it "renders reactivate this location" do
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_link("Reactivate this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/reactivate")
+        end
+      end
+
+      context "with location that's deactivating soon" do
+        let(:deactivation_date) { Time.utc(2022, 10, 12) }
+
+        it "renders reactivate this location" do
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_link("Reactivate this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/reactivate")
+        end
+      end
+    end
+  end
 end
