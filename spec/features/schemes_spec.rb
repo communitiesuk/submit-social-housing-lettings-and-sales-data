@@ -204,9 +204,8 @@ RSpec.describe "Schemes scheme Features" do
                 locations.each do |location|
                   expect(page).to have_content(location.id)
                   expect(page).to have_content(location.postcode)
-                  expect(page).to have_content(location.units)
-                  expect(page).to have_content(location.type_of_unit)
-                  expect(page).to have_content(location.startdate&.to_formatted_s(:govuk_date))
+                  expect(page).to have_content(location.name)
+                  expect(page).to have_content("Active")
                 end
               end
             end
