@@ -60,7 +60,7 @@ RSpec.describe LocationsHelper do
         { name: "Mobility type", value: location.mobility_type },
         { name: "Code", value: location.location_code },
         { name: "Availability", value: "Available from 8 August 2022" },
-        { name: "Status", value: "active" },
+        { name: "Status", value: :active },
       ]
 
       expect(display_attributes(location)).to eq(attributes)

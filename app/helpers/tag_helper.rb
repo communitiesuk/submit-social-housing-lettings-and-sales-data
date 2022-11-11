@@ -7,6 +7,8 @@ module TagHelper
     in_progress: "In progress",
     completed: "Completed",
     active: "Active",
+    deactivating_soon: "Deactivating soon",
+    deactivated: "Deactivated",
   }.freeze
 
   COLOUR = {
@@ -15,6 +17,8 @@ module TagHelper
     in_progress: "blue",
     completed: "green",
     active: "green",
+    deactivating_soon: "yellow",
+    deactivated: "grey",
   }.freeze
 
   def status_tag(status, classes = [])

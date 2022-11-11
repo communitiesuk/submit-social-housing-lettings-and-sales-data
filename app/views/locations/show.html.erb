@@ -24,5 +24,9 @@
     </div>
 </div>
 <% if FeatureToggle.location_toggle_enabled? %>
-    <%= govuk_button_link_to "Deactivate this location", scheme_location_deactivate_path(scheme_id: @scheme.id, location_id: @location.id), warning: true %>
+    <% if @location.status == :active %>
+        <%= govuk_button_link_to "Deactivate this location", scheme_location_deactivate_path(scheme_id: @scheme.id, location_id: @location.id), warning: true %>
+    <% else %>
+        <%= govuk_button_link_to "Reactivate this location", scheme_location_reactivate_path(scheme_id: @scheme.id, location_id: @location.id) %>
+    <% end %>
 <% end %>

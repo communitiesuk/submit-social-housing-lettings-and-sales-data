@@ -49,6 +49,10 @@ class FormHandler
     today < window_end_date ? today.year - 1 : today.year
   end
 
+  def current_collection_start_date
+    Time.utc(current_collection_start_year, 4, 1)
+  end
+
   def form_name_from_start_year(year, type)
     form_mappings = { 0 => "current_#{type}", 1 => "previous_#{type}", -1 => "next_#{type}" }
     form_mappings[current_collection_start_year - year]
