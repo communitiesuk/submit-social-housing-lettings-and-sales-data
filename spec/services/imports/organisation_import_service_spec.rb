@@ -32,7 +32,7 @@ RSpec.describe Imports::OrganisationImportService do
     it "successfully create an organisation with the expected data" do
       import_service.create_organisations(folder_name)
 
-      organisation = Organisation.find_by(old_visible_id: 1)
+      organisation = Organisation.find_by(old_visible_id: "1")
       expect(organisation.name).to eq("HA Ltd")
       expect(organisation.provider_type).to eq("PRP")
       expect(organisation.phone).to eq("xxxxxxxx")
@@ -53,7 +53,7 @@ RSpec.describe Imports::OrganisationImportService do
       expect(organisation.unspecified_units).to eq(0)
       expect(organisation.unspecified_units).to eq(0)
       expect(organisation.old_org_id).to eq("7c5bd5fb549c09z2c55d9cb90d7ba84927e64618")
-      expect(organisation.old_visible_id).to eq(1)
+      expect(organisation.old_visible_id).to eq("1")
     end
 
     it "successfully create multiple organisations" do
@@ -62,8 +62,8 @@ RSpec.describe Imports::OrganisationImportService do
       expect(storage_service).to receive(:get_file_io).with(filenames[1]).ordered
 
       expect { import_service.create_organisations(folder_name) }.to change(Organisation, :count).by(2)
-      expect(Organisation).to exist(old_visible_id: 1)
-      expect(Organisation).to exist(old_visible_id: 2)
+      expect(Organisation).to exist(old_visible_id: "1")
+      expect(Organisation).to exist(old_visible_id: "2")
     end
   end
 
@@ -86,7 +86,7 @@ RSpec.describe Imports::OrganisationImportService do
       expect { import_service.create_organisations(folder_name) }.to change(Organisation, :count).by(1)
       expect { import_service.create_organisations(folder_name) }.to change(Organisation, :count).by(0)
 
-      expect(Organisation).to exist(old_visible_id: 1, name: "HA Ltd")
+      expect(Organisation).to exist(old_visible_id: "1", name: "HA Ltd")
     end
   end
 end

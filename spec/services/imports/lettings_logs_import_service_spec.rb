@@ -11,8 +11,8 @@ RSpec.describe Imports::LettingsLogsImportService do
   let(:fixture_directory) { "spec/fixtures/imports/logs" }
 
   let(:organisation) { FactoryBot.create(:organisation, old_visible_id: "1", provider_type: "PRP") }
-  let(:scheme1) { FactoryBot.create(:scheme, old_visible_id: 123, owning_organisation: organisation) }
-  let(:scheme2) { FactoryBot.create(:scheme, old_visible_id: 456, owning_organisation: organisation) }
+  let(:scheme1) { FactoryBot.create(:scheme, old_visible_id: "0123", owning_organisation: organisation) }
+  let(:scheme2) { FactoryBot.create(:scheme, old_visible_id: "456", owning_organisation: organisation) }
 
   def open_file(directory, filename)
     File.open("#{directory}/#{filename}.xml")
@@ -23,16 +23,16 @@ RSpec.describe Imports::LettingsLogsImportService do
            .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Westminster","codes":{"admin_district":"E08000035"}}}', headers: {})
 
     allow(Organisation).to receive(:find_by).and_return(nil)
-    allow(Organisation).to receive(:find_by).with(old_visible_id: organisation.old_visible_id.to_i).and_return(organisation)
+    allow(Organisation).to receive(:find_by).with(old_visible_id: organisation.old_visible_id).and_return(organisation)
 
     # Created by users
     FactoryBot.create(:user, old_user_id: "c3061a2e6ea0b702e6f6210d5c52d2a92612d2aa", organisation:)
     FactoryBot.create(:user, old_user_id: "e29c492473446dca4d50224f2bb7cf965a261d6f", organisation:)
 
     # Location setup
-    FactoryBot.create(:location, old_visible_id: 10, postcode: "LS166FT", scheme_id: scheme1.id, mobility_type: "W")
+    FactoryBot.create(:location, old_visible_id: "10", postcode: "LS166FT", scheme_id: scheme1.id, mobility_type: "W")
     FactoryBot.create(:location, scheme_id: scheme1.id)
-    FactoryBot.create(:location, old_visible_id: 10, postcode: "LS166FT", scheme_id: scheme2.id, mobility_type: "W")
+    FactoryBot.create(:location, old_visible_id: "10", postcode: "LS166FT", scheme_id: scheme2.id, mobility_type: "W")
 
     # Stub the form handler to use the real form
     allow(FormHandler.instance).to receive(:get_form).with("previous_lettings").and_return(real_2021_2022_form)

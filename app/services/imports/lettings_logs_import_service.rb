@@ -205,8 +205,8 @@ module Imports
 
       # Supported Housing fields
       if attributes["needstype"] == GN_SH[:supported_housing]
-        location_old_visible_id = safe_string_as_integer(xml_doc, "_1cschemecode")
-        scheme_old_visible_id = safe_string_as_integer(xml_doc, "_1cmangroupcode")
+        location_old_visible_id = string_or_nil(xml_doc, "_1cschemecode")
+        scheme_old_visible_id = string_or_nil(xml_doc, "_1cmangroupcode")
 
         schemes = Scheme.where(old_visible_id: scheme_old_visible_id, owning_organisation_id: attributes["owning_organisation_id"])
         location = Location.find_by(old_visible_id: location_old_visible_id, scheme: schemes)
@@ -399,7 +399,7 @@ module Imports
     end
 
     def find_organisation_id(xml_doc, id_field)
-      old_visible_id = unsafe_string_as_integer(xml_doc, id_field)
+      old_visible_id = string_or_nil(xml_doc, id_field)
       organisation = Organisation.find_by(old_visible_id:)
       raise "Organisation not found with legacy ID #{old_visible_id}" if organisation.nil?
 
