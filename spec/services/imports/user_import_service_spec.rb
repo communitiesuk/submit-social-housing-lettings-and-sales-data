@@ -107,6 +107,19 @@ RSpec.describe Imports::UserImportService do
       end
     end
 
+    context "when the user does not have namespace bindings" do
+      let(:old_user_id) { "80d9b73aa1c88b6e5c36ee49be9050b923b4a1bb" }
+
+      it "imports them succesfully" do
+        FactoryBot.create(:organisation, old_org_id:)
+        import_service.create_users("user_directory")
+
+        user = LegacyUser.find_by(old_user_id:)&.user
+        expect(user.name).to eq("Jane Doe")
+        expect(user.email).to eq("jane.doe@gov.uk")
+      end
+    end
+
     context "when a user has already been imported with that email" do
       let!(:org) { FactoryBot.create(:organisation, old_org_id:) }
       let!(:user) { FactoryBot.create(:user, :data_provider, organisation: org, email: "john.doe@gov.uk") }
