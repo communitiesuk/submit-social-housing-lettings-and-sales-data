@@ -27,7 +27,7 @@ class SchemesController < ApplicationController
     elsif params[:scheme][:confirm].present? && params[:scheme][:deactivation_date].present?
       confirm_deactivation
     else
-      deactivation_date_errors
+      @scheme.deactivation_date_errors(params)
       if @scheme.errors.present?
         @scheme.deactivation_date_type = params[:scheme][:deactivation_date_type]
         render "toggle_active", locals: { action: "deactivate" }, status: :unprocessable_entity
@@ -286,28 +286,6 @@ private
       flash[:notice] = "#{@scheme.service_name} has been deactivated"
     end
     redirect_to scheme_details_path(@scheme)
-  end
-
-  def deactivation_date_errors
-    if params[:scheme][:deactivation_date].blank? && params[:scheme][:deactivation_date_type].blank?
-      @scheme.errors.add(:deactivation_date_type, message: I18n.t("validations.scheme.deactivation_date.not_selected"))
-    end
-
-    if params[:scheme][:deactivation_date_type] == "other"
-      day = params[:scheme]["deactivation_date(3i)"]
-      month = params[:scheme]["deactivation_date(2i)"]
-      year = params[:scheme]["deactivation_date(1i)"]
-
-      collection_start_date = FormHandler.instance.current_collection_start_date
-
-      if [day, month, year].any?(&:blank?)
-        @scheme.errors.add(:deactivation_date, message: I18n.t("validations.scheme.deactivation_date.not_entered"))
-      elsif !Date.valid_date?(year.to_i, month.to_i, day.to_i)
-        @scheme.errors.add(:deactivation_date, message: I18n.t("validations.scheme.deactivation_date.invalid"))
-      elsif !Date.new(year.to_i, month.to_i, day.to_i).between?(collection_start_date, Date.new(2200, 1, 1))
-        @scheme.errors.add(:deactivation_date, message: I18n.t("validations.scheme.deactivation_date.out_of_range", date: collection_start_date.to_formatted_s(:govuk_date)))
-      end
-    end
   end
 
   def deactivation_date
