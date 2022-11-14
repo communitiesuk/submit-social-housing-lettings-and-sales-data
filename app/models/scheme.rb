@@ -219,4 +219,8 @@ class Scheme < ApplicationRecord
     return :deactivates_soon if Time.zone.now < deactivation_date
     return :deactivated if Time.zone.now >= deactivation_date
   end
+
+  def active?
+    status == :active
+  end
 end

@@ -378,6 +378,10 @@ class Location < ApplicationRecord
     return :deactivated if Time.zone.now >= deactivation_date
   end
 
+  def active?
+    status == :active
+  end
+
 private
 
   PIO = PostcodeService.new
