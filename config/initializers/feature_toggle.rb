@@ -20,4 +20,10 @@ class FeatureToggle
 
     false
   end
+
+  def self.managing_for_other_user_enabled?
+    return true unless Rails.env.production?
+
+    false
+  end
 end
