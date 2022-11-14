@@ -29,7 +29,6 @@ class LocationsController < ApplicationController
       deactivation_date_errors
       if @location.errors.present?
         @location.deactivation_date_type = params[:location][:deactivation_date_type]
-        @location.deactivation_date = nil
         render "toggle_active", locals: { action: "deactivate" }, status: :unprocessable_entity
       else
         render "toggle_active_confirm", locals: { action: "deactivate", deactivation_date: }
@@ -184,7 +183,7 @@ private
       collection_start_date = FormHandler.instance.current_collection_start_date
 
       if [day, month, year].any?(&:blank?)
-          @location.errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.not_entered", period: period.to_s))
+          @location.errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.not_entered"))
       elsif !Date.valid_date?(year.to_i, month.to_i, day.to_i)
         @location.errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.invalid"))
       elsif !Date.new(year.to_i, month.to_i, day.to_i).between?(collection_start_date, Date.new(2200, 1, 1))

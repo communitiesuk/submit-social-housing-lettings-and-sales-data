@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe SchemesHelper do
-  describe "display_attributes" do
+  describe "display_scheme_attributes" do
     let!(:scheme) { FactoryBot.create(:scheme, created_at: Time.zone.local(2022, 8, 8)) }
 
     it "returns correct display attributes" do
@@ -21,7 +21,7 @@ RSpec.describe SchemesHelper do
         { name: "Availability", value: "Available from 8 August 2022" },
         { name: "Status", value: :active },
       ]
-      expect(display_attributes(scheme)).to eq(attributes)
+      expect(display_scheme_attributes(scheme)).to eq(attributes)
     end
   end
 end

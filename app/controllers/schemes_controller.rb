@@ -30,7 +30,6 @@ class SchemesController < ApplicationController
       deactivation_date_errors
       if @scheme.errors.present?
         @scheme.deactivation_date_type = params[:scheme][:deactivation_date_type]
-        @scheme.deactivation_date = nil
         render "toggle_active", locals: { action: "deactivate" }, status: :unprocessable_entity
       else
         render "toggle_active_confirm", locals: { action: "deactivate", deactivation_date: }

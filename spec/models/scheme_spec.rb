@@ -108,7 +108,7 @@ RSpec.describe Scheme, type: :model do
     it "returns deactivating soon if deactivation_date is in the future" do
       scheme.deactivation_date = Time.zone.local(2022, 8, 8)
       scheme.save!
-      expect(scheme.status).to eq(:deactivating_soon)
+      expect(scheme.status).to eq(:deactivates_soon)
     end
 
     it "returns deactivated if deactivation_date is in the past" do

@@ -23,7 +23,7 @@ module LocationsHelper
     resource.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) }
   end
 
-  def display_attributes(location)
+  def display_location_attributes(location)
     [
       { name: "Postcode", value: location.postcode },
       { name: "Local authority", value: location.location_admin_district },

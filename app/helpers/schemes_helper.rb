@@ -1,5 +1,5 @@
 module SchemesHelper
-  def display_attributes(scheme)
+  def display_scheme_attributes(scheme)
     base_attributes = [
       { name: "Scheme code", value: scheme.id_to_display },
       { name: "Name", value: scheme.service_name, edit: true },
@@ -30,16 +30,5 @@ module SchemesHelper
       base_text += "\nDeactivation date #{scheme.deactivation_date.to_formatted_s(:govuk_date)}"
     end
     base_text
-  end
-
-  def scheme_status(scheme)
-    now = Time.zone.now
-    if scheme.deactivation_date.nil?
-      "active"
-    elsif scheme.deactivation_date < now
-      "deactivated"
-    elsif now < scheme.deactivation_date
-      "deactivates_soon"
-    end
   end
 end

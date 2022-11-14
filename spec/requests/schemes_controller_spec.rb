@@ -1797,7 +1797,7 @@ RSpec.describe SchemesController, type: :request do
 
         it "displays page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content(I18n.t("validations.scheme.deactivation_date.not_entered", period: "day"))
+          expect(page).to have_content(I18n.t("validations.scheme.deactivation_date.not_entered"))
         end
       end
 
@@ -1806,7 +1806,7 @@ RSpec.describe SchemesController, type: :request do
 
         it "displays page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content(I18n.t("validations.scheme.deactivation_date.not_entered", period: "month"))
+          expect(page).to have_content(I18n.t("validations.scheme.deactivation_date.not_entered"))
         end
       end
 
@@ -1815,7 +1815,7 @@ RSpec.describe SchemesController, type: :request do
 
         it "displays page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content(I18n.t("validations.scheme.deactivation_date.not_entered", period: "year"))
+          expect(page).to have_content(I18n.t("validations.scheme.deactivation_date.not_entered"))
         end
       end
     end
