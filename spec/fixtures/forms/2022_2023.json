@@ -47,7 +47,7 @@
           },
           "depends_on": [
             {
-              "setup": "completed"
+              "non_location_setup_questions_completed?": true
             }
           ]
         }

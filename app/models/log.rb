@@ -40,6 +40,10 @@ class Log < ApplicationRecord
     ethnic_group == 17
   end
 
+  def managing_organisation_provider_type
+    managing_organisation&.provider_type
+  end
+
 private
 
   def update_status!

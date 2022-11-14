@@ -10,7 +10,7 @@
           "label": "Property information",
           "depends_on": [
             {
-              "setup": "completed"
+              "non_location_setup_questions_completed?": true
             }
           ],
           "pages": {
@@ -952,7 +952,7 @@
           "label": "Tenancy information",
           "depends_on": [
             {
-              "setup": "completed"
+              "non_location_setup_questions_completed?": true
             }
           ],
           "pages": {
@@ -1133,7 +1133,7 @@
           "label": "Household characteristics",
           "depends_on": [
             {
-              "setup": "completed"
+              "non_location_setup_questions_completed?": true
             }
           ],
           "pages": {
@@ -5671,7 +5671,7 @@
           "label": "Household needs",
           "depends_on": [
             {
-              "setup": "completed"
+              "non_location_setup_questions_completed?": true
             }
           ],
           "pages": {
@@ -6060,7 +6060,7 @@
           "label": "Household situation",
           "depends_on": [
             {
-              "setup": "completed"
+              "non_location_setup_questions_completed?": true
             }
           ],
           "pages": {
@@ -7302,7 +7302,7 @@
           "label": "Income, benefits and outgoings",
           "depends_on": [
             {
-              "setup": "completed"
+              "non_location_setup_questions_completed?": true
             }
           ],
           "pages": {
