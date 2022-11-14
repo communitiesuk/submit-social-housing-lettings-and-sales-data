@@ -46,6 +46,7 @@ class Form::Lettings::Questions::HousingProvider < ::Form::Question
     @current_user = user
 
     return false unless @current_user
+    return false if @current_user.support?
 
     # Hide when less than 2 housing providers
     housing_providers.count < 2

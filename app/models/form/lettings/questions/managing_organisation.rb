@@ -52,6 +52,7 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
     @current_user = user
 
     return false unless @current_user
+    return false if @current_user.support?
 
     # Hide when less than 2 managing_agents
     managing_organisations.count < 2
