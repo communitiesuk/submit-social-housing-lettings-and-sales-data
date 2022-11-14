@@ -384,7 +384,7 @@ class Location < ApplicationRecord
 
   def deactivation_date_errors(params)
     if params[:location][:deactivation_date].blank? && params[:location][:deactivation_date_type].blank?
-      .errors.add(:deactivation_date_type, message: I18n.t("validations.location.deactivation_date.not_selected"))
+      errors.add(:deactivation_date_type, message: I18n.t("validations.location.deactivation_date.not_selected"))
     end
 
     if params[:location][:deactivation_date_type] == "other"
