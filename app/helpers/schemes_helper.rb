@@ -23,12 +23,4 @@ module SchemesHelper
     end
     base_attributes
   end
-
-  def availability_text(scheme)
-    base_text = "Available from #{scheme.available_from.to_formatted_s(:govuk_date)}"
-    if scheme.deactivation_date.present?
-      base_text += "\nDeactivation date #{scheme.deactivation_date.to_formatted_s(:govuk_date)}"
-    end
-    base_text
-  end
 end
