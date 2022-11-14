@@ -14,7 +14,7 @@ module SchemesHelper
       { name: "Secondary client group", value: scheme.secondary_client_group },
       { name: "Level of support given", value: scheme.support_type },
       { name: "Intended length of stay", value: scheme.intended_stay },
-      { name: "Availability", value: "Available from #{scheme.available_from.to_formatted_s(:govuk_date)}"},
+      { name: "Availability", value: "Available from #{scheme.available_from.to_formatted_s(:govuk_date)}" },
       { name: "Status", value: scheme.status },
     ]
 

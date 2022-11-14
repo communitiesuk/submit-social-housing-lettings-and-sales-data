@@ -183,7 +183,7 @@ private
       collection_start_date = FormHandler.instance.current_collection_start_date
 
       if [day, month, year].any?(&:blank?)
-          @location.errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.not_entered"))
+        @location.errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.not_entered"))
       elsif !Date.valid_date?(year.to_i, month.to_i, day.to_i)
         @location.errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.invalid"))
       elsif !Date.new(year.to_i, month.to_i, day.to_i).between?(collection_start_date, Date.new(2200, 1, 1))
