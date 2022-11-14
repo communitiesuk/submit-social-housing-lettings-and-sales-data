@@ -26,7 +26,7 @@ class LocationsController < ApplicationController
     elsif params[:location][:confirm].present? && params[:location][:deactivation_date].present?
       confirm_deactivation
     else
-      deactivation_date_errors
+      @location.deactivation_date_errors(params)
       if @location.errors.present?
         @location.deactivation_date_type = params[:location][:deactivation_date_type]
         render "toggle_active", locals: { action: "deactivate" }, status: :unprocessable_entity
@@ -168,28 +168,6 @@ private
       flash[:notice] = "#{@location.name || @location.postcode} has been deactivated"
     end
     redirect_to scheme_location_path(@scheme, @location)
-  end
-
-  def deactivation_date_errors
-    if params[:location][:deactivation_date].blank? && params[:location][:deactivation_date_type].blank?
-      @location.errors.add(:deactivation_date_type, message: I18n.t("validations.location.deactivation_date.not_selected"))
-    end
-
-    if params[:location][:deactivation_date_type] == "other"
-      day = params[:location]["deactivation_date(3i)"]
-      month = params[:location]["deactivation_date(2i)"]
-      year = params[:location]["deactivation_date(1i)"]
-
-      collection_start_date = FormHandler.instance.current_collection_start_date
-
-      if [day, month, year].any?(&:blank?)
-        @location.errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.not_entered"))
-      elsif !Date.valid_date?(year.to_i, month.to_i, day.to_i)
-        @location.errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.invalid"))
-      elsif !Date.new(year.to_i, month.to_i, day.to_i).between?(collection_start_date, Date.new(2200, 1, 1))
-        @location.errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.out_of_range", date: collection_start_date.to_formatted_s(:govuk_date)))
-      end
-    end
   end
 
   def deactivation_date
