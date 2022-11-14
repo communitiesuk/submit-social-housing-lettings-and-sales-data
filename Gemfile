@@ -68,6 +68,8 @@ group :development, :test do
   gem "byebug", platforms: %i[mri mingw x64_mingw]
   gem "dotenv-rails"
   gem "pry-byebug"
+
+  gem "parallel_tests"
 end
 
 group :development do
