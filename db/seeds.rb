@@ -8,8 +8,8 @@
 
 # rubocop:disable Rails/Output
 unless Rails.env.test?
-  housing_provider = Organisation.find_or_create_by!(
-    name: "Housing Provider",
+  housing_provider1 = Organisation.find_or_create_by!(
+    name: "Housing Provider 1",
     address_line1: "2 Marsham Street",
     address_line2: "London",
     postcode: "SW1P 4DF",
@@ -18,8 +18,28 @@ unless Rails.env.test?
     managing_agents_label: "None",
     provider_type: "LA",
   )
-  managing_agent = Organisation.find_or_create_by!(
-    name: "Managing Agent",
+  housing_provider2 = Organisation.find_or_create_by!(
+    name: "Housing Provider 2",
+    address_line1: "2 Marsham Street",
+    address_line2: "London",
+    postcode: "SW1P 4DF",
+    holds_own_stock: true,
+    other_stock_owners: "None",
+    managing_agents_label: "None",
+    provider_type: "LA",
+  )
+  managing_agent1 = Organisation.find_or_create_by!(
+    name: "Managing Agent 1",
+    address_line1: "2 Marsham Street",
+    address_line2: "London",
+    postcode: "SW1P 4DF",
+    holds_own_stock: true,
+    other_stock_owners: "None",
+    managing_agents_label: "None",
+    provider_type: "LA",
+  )
+  managing_agent2 = Organisation.find_or_create_by!(
+    name: "Managing Agent 1",
     address_line1: "2 Marsham Street",
     address_line2: "London",
     postcode: "SW1P 4DF",
@@ -49,11 +69,21 @@ unless Rails.env.test?
 
   OrganisationRelationship.create!(
     child_organisation: org,
-    parent_organisation: housing_provider,
+    parent_organisation: housing_provider1,
     relationship_type: OrganisationRelationship::OWNING,
   )
   OrganisationRelationship.create!(
-    child_organisation: managing_agent,
+    child_organisation: org,
+    parent_organisation: housing_provider2,
+    relationship_type: OrganisationRelationship::OWNING,
+  )
+  OrganisationRelationship.create!(
+    child_organisation: managing_agent1,
+    parent_organisation: org,
+    relationship_type: OrganisationRelationship::MANAGING,
+  )
+  OrganisationRelationship.create!(
+    child_organisation: managing_agent2,
     parent_organisation: org,
     relationship_type: OrganisationRelationship::MANAGING,
   )
