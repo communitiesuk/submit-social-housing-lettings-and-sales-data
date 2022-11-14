@@ -27,12 +27,13 @@ class SchemesController < ApplicationController
     elsif params[:scheme][:confirm].present? && params[:scheme][:deactivation_date].present?
       confirm_deactivation
     else
-      @scheme.deactivation_date_errors(params)
-      if @scheme.errors.present?
-        @scheme.deactivation_date_type = params[:scheme][:deactivation_date_type]
-        render "toggle_active", locals: { action: "deactivate" }, status: :unprocessable_entity
-      else
+      @scheme.run_validations = true
+      @scheme.deactivation_date = deactivation_date
+      @scheme.deactivation_date_type = params[:scheme][:deactivation_date_type]
+      if @scheme.valid?
         render "toggle_active_confirm", locals: { action: "deactivate", deactivation_date: }
+      else
+        render "toggle_active", locals: { action: "deactivate" }, status: :unprocessable_entity
       end
     end
   end
@@ -282,7 +283,7 @@ private
   end
 
   def confirm_deactivation
-    if @scheme.update(deactivation_date: params[:scheme][:deactivation_date])
+    if @scheme.update!(deactivation_date: @scheme.deactivation_date)
       flash[:notice] = "#{@scheme.service_name} has been deactivated"
     end
     redirect_to scheme_details_path(@scheme)
@@ -293,12 +294,13 @@ private
 
     collection_start_date = FormHandler.instance.current_collection_start_date
     return collection_start_date if params[:scheme][:deactivation_date_type] == "default"
-    return params[:scheme][:deactivation_date] if params[:scheme][:deactivation_date_type].blank?
+    return nil if params[:scheme][:deactivation_date_type].blank?
 
     day = params[:scheme]["deactivation_date(3i)"]
     month = params[:scheme]["deactivation_date(2i)"]
     year = params[:scheme]["deactivation_date(1i)"]
+    return nil if [day, month, year].any?(&:blank?)
 
-    Date.new(year.to_i, month.to_i, day.to_i)
+    Date.new(year.to_i, month.to_i, day.to_i) if Date.valid_date?(year.to_i, month.to_i, day.to_i)
   end
 end

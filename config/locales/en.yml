@@ -315,15 +315,13 @@ en:
     scheme:
       deactivation_date:
         not_selected: "Select one of the options"
-        not_entered: "Enter a day, month and year"
-        invalid: "Enter a valid date"
+        not_entered: "Enter a valid day, month and year"
         out_of_range: "The date must be on or after the %{date}"
 
     location:
       deactivation_date:
         not_selected: "Select one of the options"
-        not_entered: "Enter a day, month and year"
-        invalid: "Enter a valid date"
+        not_entered: "Enter a valid day, month and year"
         out_of_range: "The date must be on or after the %{date}"
 
   soft_validations:
