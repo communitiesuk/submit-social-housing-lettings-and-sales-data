@@ -28,6 +28,6 @@ RSpec.describe Form::Sales::Subsections::IncomeBenefitsAndOutgoings, type: :mode
   end
 
   it "has correct depends on" do
-    expect(subsection.depends_on).to eq([{ "setup" => "completed" }])
+    expect(subsection.depends_on).to eq([{ "setup_completed?" => true }])
   end
 end
