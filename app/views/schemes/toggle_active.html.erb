@@ -4,7 +4,7 @@
   <%= govuk_back_link(
         text: "Back",
         href: scheme_details_path(@scheme),
-        ) %>
+      ) %>
 <% end %>
 <%= form_with model: @scheme, url: scheme_deactivate_path(@scheme), method: "patch", local: true do |f| %>
   <div class="govuk-grid-row">
