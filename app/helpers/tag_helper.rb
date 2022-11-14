@@ -8,8 +8,8 @@ module TagHelper
     completed: "Completed",
     active: "Active",
     incomplete: "Incomplete",
-    deactivates_soon: "Deactivates soon",
-    reactivates_soon: "Reactivates soon",
+    deactivating_soon: "Deactivating soon",
+    reactivating_soon: "Reactivating soon",
     deactivated: "Deactivated",
   }.freeze
 
@@ -20,8 +20,8 @@ module TagHelper
     completed: "green",
     active: "green",
     incomplete: "red",
-    deactivates_soon: "yellow",
-    reactivates_soon: "blue",
+    deactivating_soon: "yellow",
+    reactivating_soon: "blue",
     deactivated: "grey",
   }.freeze
 
