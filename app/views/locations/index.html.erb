@@ -11,45 +11,102 @@
 
 <%= render partial: "organisations/headings", locals: { main: @scheme.service_name, sub: nil } %>
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds-from-desktop">
-    <%= render SubNavigationComponent.new(items: scheme_items(request.path, @scheme.id, "Locations")) %>
+<% if FeatureToggle.new_locations_table_layout_enabled? %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= render SubNavigationComponent.new(items: scheme_items(request.path, @scheme.id, "Locations")) %>
 
-    <h2 class="govuk-visually-hidden">Locations</h2>
+      <h2 class="govuk-visually-hidden">Locations</h2>
 
-    <%= render SearchComponent.new(current_user:, search_label: "Search by location name or postcode", value: @searched) %>
+      <%= render SearchComponent.new(current_user:, search_label: "Search by location name or postcode", value: @searched) %>
 
-    <%= govuk_section_break(visible: true, size: "m") %>
+      <%= govuk_section_break(visible: true, size: "m") %>
 
-    <%= govuk_table do |table| %>
-      <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
-        <%= render(SearchResultCaptionComponent.new(searched: @searched, count: @pagy.count, item_label:, total_count: @total_count, item: "locations", path: request.path)) %>
-      <% end %>
-      <%= table.head do |head| %>
-        <%= head.row do |row| %>
-          <% row.cell(header: true, text: "Code", html_attributes: {
-            scope: "col",
-          }) %>
-          <% row.cell(header: true, text: "Postcode", html_attributes: {
-            scope: "col",
-          }) %>
-          <% row.cell(header: true, text: "Status", html_attributes: {
-            scope: "col",
-          }) %>
+      <%= govuk_table do |table| %>
+        <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
+          <%= render(SearchResultCaptionComponent.new(searched: @searched, count: @pagy.count, item_label:, total_count: @total_count, item: "locations", path: request.path)) %>
+        <% end %>
+        <%= table.head do |head| %>
+          <%= head.row do |row| %>
+            <% row.cell(header: true, text: "Code", html_attributes: {
+              scope: "col",
+            }) %>
+            <% row.cell(header: true, text: "Postcode", html_attributes: {
+              scope: "col",
+            }) %>
+            <% row.cell(header: true, text: "Status", html_attributes: {
+              scope: "col",
+            }) %>
+          <% end %>
+        <% end %>
+        <% @locations.each do |location| %>
+          <%= table.body do |body| %>
+            <%= body.row do |row| %>
+              <% row.cell(text: location.id) %>
+              <% row.cell(text: simple_format(location_cell_postcode(location, "/schemes/#{@scheme.id}/locations/#{location.id}"), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
+              <% row.cell(text: status_tag(location.status)) %>
+              <% end %>
+          <% end %>
         <% end %>
       <% end %>
-      <% @locations.each do |location| %>
-        <%= table.body do |body| %>
-          <%= body.row do |row| %>
-            <% row.cell(text: location.id) %>
-            <% row.cell(text: simple_format(location_cell_postcode(location, "/schemes/#{@scheme.id}/locations/#{location.id}"), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
-            <% row.cell(text: status_tag(location.status)) %>
-            <% end %>
-        <% end %>
+      <%= govuk_button_link_to "Add a location", new_scheme_location_path(scheme_id: @scheme.id), secondary: true %>
+    </div>
+  </div>
+
+<% else %>
+  <%= render SubNavigationComponent.new(items: scheme_items(request.path, @scheme.id, "Locations")) %>
+
+  <h2 class="govuk-visually-hidden">Locations</h2>
+
+  <%= render SearchComponent.new(current_user:, search_label: "Search by location name or postcode", value: @searched) %>
+
+  <%= govuk_section_break(visible: true, size: "m") %>
+
+  <%= govuk_table do |table| %>
+    <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
+      <%= render(SearchResultCaptionComponent.new(searched: @searched, count: @pagy.count, item_label:, total_count: @total_count, item: "locations", path: request.path)) %>
+    <% end %>
+    <%= table.head do |head| %>
+      <%= head.row do |row| %>
+        <% row.cell(header: true, text: "Code", html_attributes: {
+          scope: "col",
+        }) %>
+        <% row.cell(header: true, text: "Postcode", html_attributes: {
+          scope: "col",
+        }) %>
+        <% row.cell(header: true, text: "Units", html_attributes: {
+          scope: "col",
+        }) %>
+        <% row.cell(header: true, text: "Common unit type", html_attributes: {
+          scope: "col",
+        }) %>
+        <% row.cell(header: true, text: "Mobility type", html_attributes: {
+          scope: "col",
+        }) %>
+        <% row.cell(header: true, text: "Local authority", html_attributes: {
+          scope: "col",
+        }) %>
+        <% row.cell(header: true, text: "Available from", html_attributes: {
+          scope: "col",
+        }) %>
       <% end %>
     <% end %>
-    <%= govuk_button_link_to "Add a location", new_scheme_location_path(scheme_id: @scheme.id), secondary: true %>
-  </div>
-</div>
+    <% @locations.each do |location| %>
+      <%= table.body do |body| %>
+        <%= body.row do |row| %>
+          <% row.cell(text: location.id) %>
+          <% row.cell(text: simple_format(location_cell_postcode(location, "/schemes/#{@scheme.id}/locations/#{location.id}"), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
+          <% row.cell(text: location.units) %>
+          <% row.cell(text: simple_format("<span>#{location.type_of_unit}</span>")) %>
+          <% row.cell(text: location.mobility_type) %>
+          <% row.cell(text: simple_format(location_cell_location_admin_district(location, "/schemes/#{@scheme.id}/locations/#{location.id}/edit-local-authority"), wrapper_tag: "div")) %>
+          <% row.cell(text: location.startdate&.to_formatted_s(:govuk_date)) %>
+          <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+  <%= govuk_button_link_to "Add a location", new_scheme_location_path(scheme_id: @scheme.id), secondary: true %>
+
+<% end %>
 
 <%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "locations" } %>
