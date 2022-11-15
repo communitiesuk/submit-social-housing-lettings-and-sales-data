@@ -25,7 +25,9 @@ class SchemesController < ApplicationController
     if params[:scheme].blank?
       render "toggle_active", locals: { action: "deactivate" }
     else
-      prepare_for_validation
+      @scheme.run_deactivation_validations = true
+      @scheme.deactivation_date = deactivation_date
+      @scheme.deactivation_date_type = params[:scheme][:deactivation_date_type]
       if @scheme.valid?
         redirect_to scheme_deactivate_confirm_path(@scheme, deactivation_date: @scheme.deactivation_date, deactivation_date_type: @scheme.deactivation_date_type)
       else
@@ -39,7 +41,9 @@ class SchemesController < ApplicationController
   end
 
   def deactivate
-    prepare_for_validation
+    @scheme.run_deactivation_validations = true
+    @scheme.deactivation_date = deactivation_date
+    @scheme.deactivation_date_type = params[:scheme][:deactivation_date_type]
     confirm_deactivation
   end
 
@@ -289,17 +293,28 @@ private
 
   def confirm_deactivation
     if @scheme.update!(deactivation_date: @scheme.deactivation_date)
-      flash[:notice] = "#{@scheme.service_name} has been deactivated"
+      flash[:notice] = success_text
     end
     redirect_to scheme_details_path(@scheme)
   end
 
-  def deactivation_date
-    return if params[:scheme].blank?
+  def success_text
+    case @scheme.status
+    when :deactivated
+      "#{@scheme.service_name} has been deactivated"
+    when :deactivating_soon
+      "#{@scheme.service_name} will deactivate on #{@scheme.deactivation_date.to_formatted_s(:govuk_date)}"
+    end
+  end
 
-    collection_start_date = FormHandler.instance.current_collection_start_date
-    return collection_start_date if params[:scheme][:deactivation_date_type] == "default"
-    return params[:scheme][:deactivation_date] if params[:scheme][:deactivation_date].present?
+  def deactivation_date
+    if params[:scheme].blank?
+      return
+    elsif params[:scheme][:deactivation_date_type] == "default"
+      return FormHandler.instance.current_collection_start_date
+    elsif params[:scheme][:deactivation_date].present?
+      return params[:scheme][:deactivation_date]
+    end
 
     day = params[:scheme]["deactivation_date(3i)"]
     month = params[:scheme]["deactivation_date(2i)"]
@@ -307,11 +322,5 @@ private
     return nil if [day, month, year].any?(&:blank?)
 
     Time.utc(year.to_i, month.to_i, day.to_i) if Date.valid_date?(year.to_i, month.to_i, day.to_i)
-  end
-
-  def prepare_for_validation
-    @scheme.run_deactivation_validations = true
-    @scheme.deactivation_date = deactivation_date
-    @scheme.deactivation_date_type = params[:scheme][:deactivation_date_type]
   end
 end
