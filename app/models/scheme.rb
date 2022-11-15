@@ -225,8 +225,12 @@ class Scheme < ApplicationRecord
     status == :active
   end
 
+  def run_deactivation_validations
+    deactivation_date.present? || @run_deactivation_validations
+  end
+
   def deactivation_date_errors
-    return unless run_deactivation_validations == true
+    return unless run_deactivation_validations
 
     collection_start_date = FormHandler.instance.current_collection_start_date
     if deactivation_date_type.blank?

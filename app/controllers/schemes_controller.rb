@@ -21,21 +21,26 @@ class SchemesController < ApplicationController
     render_not_found and return unless @scheme
   end
 
-  def deactivate
+  def new_deactivation
     if params[:scheme].blank?
       render "toggle_active", locals: { action: "deactivate" }
     else
-      @scheme.run_deactivation_validations = true
-      @scheme.deactivation_date = deactivation_date
-      @scheme.deactivation_date_type = params[:scheme][:deactivation_date_type]
-      if params[:scheme][:confirm].present?
-        confirm_deactivation
-      elsif @scheme.valid?
-        render "toggle_active_confirm", locals: { action: "deactivate", deactivation_date: @scheme.deactivation_date, deactivation_date_type: @scheme.deactivation_date_type }
+      prepare_for_validation
+      if @scheme.valid?
+        redirect_to scheme_deactivate_confirm_path(@scheme, deactivation_date: @scheme.deactivation_date, deactivation_date_type: @scheme.deactivation_date_type)
       else
         render "toggle_active", locals: { action: "deactivate" }, status: :unprocessable_entity
       end
     end
+  end
+
+  def deactivate_confirm
+    render "toggle_active_confirm", locals: { action: "deactivate", deactivation_date: params[:deactivation_date], deactivation_date_type: params[:deactivation_date_type] }
+  end
+
+  def deactivate
+    prepare_for_validation
+    confirm_deactivation
   end
 
   def reactivate
@@ -302,5 +307,11 @@ private
     return nil if [day, month, year].any?(&:blank?)
 
     Time.utc(year.to_i, month.to_i, day.to_i) if Date.valid_date?(year.to_i, month.to_i, day.to_i)
+  end
+
+  def prepare_for_validation
+    @scheme.run_deactivation_validations = true
+    @scheme.deactivation_date = deactivation_date
+    @scheme.deactivation_date_type = params[:scheme][:deactivation_date_type]
   end
 end

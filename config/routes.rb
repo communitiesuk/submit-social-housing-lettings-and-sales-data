@@ -49,8 +49,10 @@ Rails.application.routes.draw do
     get "check-answers", to: "schemes#check_answers"
     get "edit-name", to: "schemes#edit_name"
     get "support-services-provider", to: "schemes#support_services_provider"
-    get "deactivate", to: "schemes#deactivate"
+    get "new-deactivation", to: "schemes#new_deactivation"
+    get "deactivate-confirm", to: "schemes#deactivate_confirm"
     get "reactivate", to: "schemes#reactivate"
+    patch "new-deactivation", to: "schemes#new_deactivation"
     patch "deactivate", to: "schemes#deactivate"
 
     resources :locations do
