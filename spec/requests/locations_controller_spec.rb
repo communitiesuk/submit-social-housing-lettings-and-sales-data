@@ -1310,7 +1310,7 @@ RSpec.describe LocationsController, type: :request do
 
         it "displays page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content(I18n.t("validations.location.deactivation_date.not_entered"))
+          expect(page).to have_content(I18n.t("validations.location.deactivation_date.invalid"))
         end
       end
 
@@ -1319,7 +1319,7 @@ RSpec.describe LocationsController, type: :request do
 
         it "displays page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content(I18n.t("validations.location.deactivation_date.not_entered"))
+          expect(page).to have_content(I18n.t("validations.location.deactivation_date.invalid"))
         end
       end
 
@@ -1328,7 +1328,7 @@ RSpec.describe LocationsController, type: :request do
 
         it "displays page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content(I18n.t("validations.location.deactivation_date.not_entered"))
+          expect(page).to have_content(I18n.t("validations.location.deactivation_date.invalid"))
         end
       end
     end

@@ -101,24 +101,28 @@ RSpec.describe Scheme, type: :model do
 
     it "returns active if the scheme is not deactivated" do
       scheme.deactivation_date = nil
+      scheme.deactivation_date_type = nil
       scheme.save!
       expect(scheme.status).to eq(:active)
     end
 
     it "returns deactivating soon if deactivation_date is in the future" do
       scheme.deactivation_date = Time.zone.local(2022, 8, 8)
+      scheme.deactivation_date_type = "other"
       scheme.save!
       expect(scheme.status).to eq(:deactivating_soon)
     end
 
     it "returns deactivated if deactivation_date is in the past" do
       scheme.deactivation_date = Time.zone.local(2022, 4, 8)
+      scheme.deactivation_date_type = "other"
       scheme.save!
       expect(scheme.status).to eq(:deactivated)
     end
 
     it "returns deactivated if deactivation_date is today" do
       scheme.deactivation_date = Time.zone.local(2022, 6, 7)
+      scheme.deactivation_date_type = "other"
       scheme.save!
       expect(scheme.status).to eq(:deactivated)
     end

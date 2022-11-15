@@ -251,21 +251,24 @@ RSpec.describe SchemesController, type: :request do
           Timecop.freeze(Time.utc(2022, 10, 10))
           sign_in user
           scheme.deactivation_date = deactivation_date
+          scheme.deactivation_date_type = deactivation_date_type
           scheme.save!
           get "/schemes/#{scheme.id}"
         end
 
         context "with active scheme" do
           let(:deactivation_date) { nil }
+          let(:deactivation_date_type) { nil }
 
           it "renders deactivate this scheme" do
             expect(response).to have_http_status(:ok)
-            expect(page).to have_link("Deactivate this scheme", href: "/schemes/#{scheme.id}/deactivate")
+            expect(page).to have_link("Deactivate this scheme", href: "/schemes/#{scheme.id}/new-deactivation")
           end
         end
 
         context "with deactivated scheme" do
           let(:deactivation_date) { Time.utc(2022, 10, 9) }
+          let(:deactivation_date_type) { "other" }
 
           it "renders reactivate this scheme" do
             expect(response).to have_http_status(:ok)
@@ -275,6 +278,7 @@ RSpec.describe SchemesController, type: :request do
 
         context "with scheme that's deactivating soon" do
           let(:deactivation_date) { Time.utc(2022, 10, 12) }
+          let(:deactivation_date_type) { "other" }
 
           it "renders reactivate this scheme" do
             expect(response).to have_http_status(:ok)
@@ -1742,7 +1746,7 @@ RSpec.describe SchemesController, type: :request do
   describe "#deactivate" do
     context "when not signed in" do
       it "redirects to the sign in page" do
-        patch "/schemes/1/deactivate"
+        patch "/schemes/1/new-deactivation"
         expect(response).to redirect_to("/account/sign-in")
       end
     end
@@ -1752,7 +1756,7 @@ RSpec.describe SchemesController, type: :request do
 
       before do
         sign_in user
-        patch "/schemes/1/deactivate"
+        patch "/schemes/1/new-deactivation"
       end
 
       it "returns 401 unauthorized" do
@@ -1770,29 +1774,37 @@ RSpec.describe SchemesController, type: :request do
       before do
         Timecop.freeze(Time.utc(2022, 10, 10))
         sign_in user
-        patch "/schemes/#{scheme.id}/deactivate", params:
+        patch "/schemes/#{scheme.id}/new-deactivation", params:
       end
 
       context "with default date" do
-        let(:params) { { scheme: { deactivation_date_type: "default" } } }
+        let(:params) { { scheme: { deactivation_date_type: "default", deactivation_date: } } }
 
-        it "renders the confirmation page" do
+        it "redirects to the confirmation page" do
+          follow_redirect!
           expect(response).to have_http_status(:ok)
           expect(page).to have_content("This change will affect #{scheme.lettings_logs.count} logs")
         end
       end
 
       context "with other date" do
-        let(:params) { { scheme: { deactivation_date: "other", "deactivation_date(3i)": "10", "deactivation_date(2i)": "10", "deactivation_date(1i)": "2022" } } }
+        let(:params) { { scheme: { deactivation_date_type: "other", "deactivation_date(3i)": "10", "deactivation_date(2i)": "10", "deactivation_date(1i)": "2022" } } }
 
-        it "renders the confirmation page" do
+        it "redirects to the confirmation page" do
+          follow_redirect!
           expect(response).to have_http_status(:ok)
           expect(page).to have_content("This change will affect #{scheme.lettings_logs.count} logs")
         end
       end
 
       context "when confirming deactivation" do
-        let(:params) { { scheme: { deactivation_date:, confirm: true } } }
+        let(:params) { { scheme: { deactivation_date:, confirm: true, deactivation_date_type: "other" } } }
+
+        before do
+          Timecop.freeze(Time.utc(2022, 10, 10))
+          sign_in user
+          patch "/schemes/#{scheme.id}/deactivate", params:
+        end
 
         it "updates existing scheme with valid deactivation date and renders scheme page" do
           follow_redirect!
@@ -1836,7 +1848,7 @@ RSpec.describe SchemesController, type: :request do
 
         it "displays page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content(I18n.t("validations.scheme.deactivation_date.not_entered"))
+          expect(page).to have_content(I18n.t("validations.scheme.deactivation_date.invalid"))
         end
       end
 
@@ -1845,7 +1857,7 @@ RSpec.describe SchemesController, type: :request do
 
         it "displays page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content(I18n.t("validations.scheme.deactivation_date.not_entered"))
+          expect(page).to have_content(I18n.t("validations.scheme.deactivation_date.invalid"))
         end
       end
 
@@ -1854,7 +1866,7 @@ RSpec.describe SchemesController, type: :request do
 
         it "displays page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content(I18n.t("validations.scheme.deactivation_date.not_entered"))
+          expect(page).to have_content(I18n.t("validations.scheme.deactivation_date.invalid"))
         end
       end
     end

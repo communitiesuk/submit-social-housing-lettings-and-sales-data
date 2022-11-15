@@ -375,7 +375,8 @@ class Location < ApplicationRecord
   def status
     return :active if deactivation_date.blank?
     return :deactivating_soon if Time.zone.now < deactivation_date
-    return :deactivated if Time.zone.now >= deactivation_date
+
+    :deactivated
   end
 
   def active?
@@ -395,7 +396,7 @@ class Location < ApplicationRecord
       collection_start_date = FormHandler.instance.current_collection_start_date
 
       if [day, month, year].any?(&:blank?)
-        errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.not_entered"))
+        errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.invalid"))
       elsif !Date.valid_date?(year.to_i, month.to_i, day.to_i)
         errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.invalid"))
       elsif !Date.new(year.to_i, month.to_i, day.to_i).between?(collection_start_date, Date.new(2200, 1, 1))
