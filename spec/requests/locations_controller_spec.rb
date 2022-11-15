@@ -1239,8 +1239,9 @@ RSpec.describe LocationsController, type: :request do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
       let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
       let!(:location) { FactoryBot.create(:location, scheme:) }
-      let(:startdate) { Time.utc(2021, 1, 2) }
       let(:deactivation_date) { Time.utc(2022, 10, 10) }
+      let!(:lettings_log) { FactoryBot.create(:lettings_log, :completed, location:, tenancylength: nil, startdate:) }
+      let(:startdate) { Time.utc(2022, 10, 11) }
 
       before do
         Timecop.freeze(Time.utc(2022, 10, 10))
@@ -1282,7 +1283,26 @@ RSpec.describe LocationsController, type: :request do
           expect(response).to have_http_status(:ok)
           expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
           location.reload
-          expect(location.deactivation_date).to eq(deactivation_date)
+          expect(location.location_deactivations.count).to eq(1)
+          expect(location.location_deactivations.first.deactivation_date).to eq(deactivation_date)
+        end
+
+        context "and a log startdate is after location deactivation date" do
+          it "clears the location and scheme answers" do
+            expect(lettings_log.location).to eq(location)
+            lettings_log.reload
+            expect(lettings_log.location).to eq(nil)
+          end
+        end
+
+        context "and a log startdate is before location deactivation date" do
+          let(:startdate) { Time.utc(2022, 10, 9) }
+
+          it "does not update the log" do
+            expect(lettings_log.location).to eq(location)
+            lettings_log.reload
+            expect(lettings_log.location).to eq(location)
+          end
         end
       end
 
@@ -1368,19 +1388,18 @@ RSpec.describe LocationsController, type: :request do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
       let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
       let!(:location) { FactoryBot.create(:location, scheme:) }
+      let(:add_deactivations) { location.location_deactivations << location_deactivation }
 
       before do
         Timecop.freeze(Time.utc(2022, 10, 10))
         sign_in user
-        location.deactivation_date = deactivation_date
-        location.deactivation_date_type = deactivation_date_type
+        add_deactivations
         location.save!
         get "/schemes/#{scheme.id}/locations/#{location.id}"
       end
 
       context "with active location" do
-        let(:deactivation_date) { nil }
-        let(:deactivation_date_type) { nil }
+        let(:add_deactivations) { }
 
         it "renders deactivate this location" do
           expect(response).to have_http_status(:ok)
@@ -1389,8 +1408,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "with deactivated location" do
-        let(:deactivation_date) { Time.utc(2022, 10, 9) }
-        let(:deactivation_date_type) { "other" }
+        let(:location_deactivation) { LocationDeactivation.create(deactivation_date: Time.utc(2022, 10, 9)) }
 
         it "renders reactivate this location" do
           expect(response).to have_http_status(:ok)
@@ -1399,8 +1417,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "with location that's deactivating soon" do
-        let(:deactivation_date) { Time.utc(2022, 10, 12) }
-        let(:deactivation_date_type) { "other" }
+        let(:location_deactivation) { LocationDeactivation.create(deactivation_date: Time.utc(2022, 10, 12)) }
 
         it "renders reactivate this location" do
           expect(response).to have_http_status(:ok)
