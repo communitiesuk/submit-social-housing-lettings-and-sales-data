@@ -43,7 +43,7 @@
           <%= table.body do |body| %>
             <%= body.row do |row| %>
               <% row.cell(text: location.id) %>
-              <% row.cell(text: simple_format(location_cell_postcode(location, "/schemes/#{@scheme.id}/locations/#{location.id}"), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
+              <% row.cell(text: simple_format(location_cell_postcode(location, scheme_location_path(@scheme, @location)), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
               <% row.cell(text: status_tag(location.status)) %>
               <% end %>
           <% end %>
@@ -95,11 +95,11 @@
       <%= table.body do |body| %>
         <%= body.row do |row| %>
           <% row.cell(text: location.id) %>
-          <% row.cell(text: simple_format(location_cell_postcode(location, "/schemes/#{@scheme.id}/locations/#{location.id}"), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
+          <% row.cell(text: simple_format(location_cell_postcode(location, scheme_location_path(@scheme, @location)), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
           <% row.cell(text: location.units) %>
           <% row.cell(text: simple_format("<span>#{location.type_of_unit}</span>")) %>
           <% row.cell(text: location.mobility_type) %>
-          <% row.cell(text: simple_format(location_cell_location_admin_district(location, "/schemes/#{@scheme.id}/locations/#{location.id}/edit-local-authority"), wrapper_tag: "div")) %>
+          <% row.cell(text: simple_format(location_cell_location_admin_district(location, "#{scheme_location_path(@scheme, @location)}/edit-local-authority"), wrapper_tag: "div")) %>
           <% row.cell(text: location.startdate&.to_formatted_s(:govuk_date)) %>
           <% end %>
       <% end %>
