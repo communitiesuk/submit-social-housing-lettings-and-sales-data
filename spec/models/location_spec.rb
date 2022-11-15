@@ -123,7 +123,7 @@ RSpec.describe Location, type: :model do
       it "returns incomplete when the postcode is missing" do
         location.postcode = nil
         expect(location.status).to eq(:incomplete)
-        location.postcode = ' '
+        location.postcode = ""
         expect(location.status).to eq(:incomplete)
       end
 
@@ -135,14 +135,14 @@ RSpec.describe Location, type: :model do
       it "returns incomplete when the unit type is missing" do
         location.type_of_unit = nil
         expect(location.status).to eq(:incomplete)
-        location.type_of_unit = ' '
+        location.type_of_unit = ""
         expect(location.status).to eq(:incomplete)
       end
 
       it "returns incomplete when the mobility type is missing" do
         location.mobility_type = nil
         expect(location.status).to eq(:incomplete)
-        location.mobility_type = ' '
+        location.mobility_type = ""
         expect(location.status).to eq(:incomplete)
       end
     end
