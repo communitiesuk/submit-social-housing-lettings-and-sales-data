@@ -1399,7 +1399,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "with active location" do
-        let(:add_deactivations) { }
+        let(:add_deactivations) {}
 
         it "renders deactivate this location" do
           expect(response).to have_http_status(:ok)

@@ -157,7 +157,7 @@ RSpec.describe Location, type: :model do
         location.save!
         expect(location.status).to eq(:deactivating_soon)
       end
-  
+
       it "returns deactivated if deactivation_date is in the past" do
         location.location_deactivations << LocationDeactivation.create(deactivation_date: Time.zone.local(2022, 6, 6), reactivation_date: nil)
         location.save!

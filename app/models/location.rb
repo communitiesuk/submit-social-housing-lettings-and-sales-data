@@ -376,7 +376,7 @@ class Location < ApplicationRecord
 
   def status
     recent_deactivation = location_deactivations.deactivations_without_reactivation.first
-    return :active unless recent_deactivation.present?
+    return :active if recent_deactivation.blank?
     return :deactivating_soon if Time.zone.now < recent_deactivation.deactivation_date
 
     :deactivated
