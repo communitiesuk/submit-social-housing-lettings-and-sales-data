@@ -1240,7 +1240,7 @@ RSpec.describe LocationsController, type: :request do
       let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
       let!(:location) { FactoryBot.create(:location, scheme:) }
       let(:deactivation_date) { Time.utc(2022, 10, 10) }
-      let!(:lettings_log) { FactoryBot.create(:lettings_log, :completed, location:, tenancylength: nil, startdate:) }
+      let!(:lettings_log) { FactoryBot.create(:lettings_log, :sh, location:, scheme:, startdate:, owning_organisation: user.organisation) }
       let(:startdate) { Time.utc(2022, 10, 11) }
 
       before do
@@ -1290,8 +1290,10 @@ RSpec.describe LocationsController, type: :request do
         context "and a log startdate is after location deactivation date" do
           it "clears the location and scheme answers" do
             expect(lettings_log.location).to eq(location)
+            expect(lettings_log.scheme).to eq(scheme)
             lettings_log.reload
             expect(lettings_log.location).to eq(nil)
+            expect(lettings_log.scheme).to eq(nil)
           end
         end
 
@@ -1300,8 +1302,10 @@ RSpec.describe LocationsController, type: :request do
 
           it "does not update the log" do
             expect(lettings_log.location).to eq(location)
+            expect(lettings_log.scheme).to eq(scheme)
             lettings_log.reload
             expect(lettings_log.location).to eq(location)
+            expect(lettings_log.scheme).to eq(scheme)
           end
         end
       end

@@ -190,7 +190,7 @@ private
   end
 
   def update_affected_logs
-    @location.lettings_logs.filter_by_before_startdate(params[:location][:deactivation_date]).update!(location: nil)
+    @location.lettings_logs.filter_by_before_startdate(params[:location][:deactivation_date]).update!(location: nil, scheme: nil)
   end
 
   def deactivation_date
