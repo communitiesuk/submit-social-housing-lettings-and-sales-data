@@ -4,6 +4,7 @@ class Location < ApplicationRecord
   validates :units, :type_of_unit, :mobility_type, presence: true
   belongs_to :scheme
   has_many :lettings_logs, class_name: "LettingsLog"
+  has_many :location_deactivations, class_name: "LocationDeactivation"
 
   has_paper_trail
 
@@ -11,7 +12,7 @@ class Location < ApplicationRecord
 
   auto_strip_attributes :name
 
-  attr_accessor :add_another_location, :deactivation_date_type, :run_deactivation_validations
+  attr_accessor :add_another_location, :deactivation_date_type, :deactivation_date, :run_deactivation_validations
 
   scope :search_by_postcode, ->(postcode) { where("REPLACE(postcode, ' ', '') ILIKE ?", "%#{postcode.delete(' ')}%") }
   scope :search_by_name, ->(name) { where("name ILIKE ?", "%#{name}%") }
@@ -374,8 +375,9 @@ class Location < ApplicationRecord
   end
 
   def status
-    return :active if deactivation_date.blank?
-    return :deactivating_soon if Time.zone.now < deactivation_date
+    return :active if location_deactivations.count == 0
+    return :deactivating_soon if Time.zone.now < location_deactivations.first.deactivation_date
+    return :deactivated
 
     :deactivated
   end
