@@ -28,10 +28,10 @@
         <% end %>
         <%= table.head do |head| %>
           <%= head.row do |row| %>
-            <% row.cell(header: true, text: "Code", html_attributes: {
+            <% row.cell(header: true, text: "Postcode", html_attributes: {
               scope: "col",
             }) %>
-            <% row.cell(header: true, text: "Postcode", html_attributes: {
+            <% row.cell(header: true, text: "Location code", html_attributes: {
               scope: "col",
             }) %>
             <% row.cell(header: true, text: "Status", html_attributes: {
@@ -42,8 +42,8 @@
         <% @locations.each do |location| %>
           <%= table.body do |body| %>
             <%= body.row do |row| %>
-              <% row.cell(text: location.id) %>
               <% row.cell(text: simple_format(location_cell_postcode(location, scheme_location_path(@scheme, location)), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
+              <% row.cell(text: location.id) %>
               <% row.cell(text: status_tag(location.status)) %>
               <% end %>
           <% end %>
