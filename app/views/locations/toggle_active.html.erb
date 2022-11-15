@@ -8,7 +8,7 @@
   ) %>
 <% end %>
 
-<%= form_with model: @location, url: scheme_location_deactivate_path(scheme_id: @location.scheme.id, location_id: @location.id), method: "patch", local: true do |f| %>
+<%= form_with model: @location, url: scheme_location_new_deactivation_path(scheme_id: @location.scheme.id, location_id: @location.id), method: "patch", local: true do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
     <% collection_start_date = FormHandler.instance.current_collection_start_date %>

@@ -121,24 +121,28 @@ RSpec.describe Location, type: :model do
 
     it "returns active if the location is not deactivated" do
       location.deactivation_date = nil
+      location.deactivation_date_type = nil
       location.save!
       expect(location.status).to eq(:active)
     end
 
     it "returns deactivating soon if deactivation_date is in the future" do
       location.deactivation_date = Time.zone.local(2022, 8, 8)
+      location.deactivation_date_type = "other"
       location.save!
       expect(location.status).to eq(:deactivating_soon)
     end
 
     it "returns deactivated if deactivation_date is in the past" do
       location.deactivation_date = Time.zone.local(2022, 4, 8)
+      location.deactivation_date_type = "other"
       location.save!
       expect(location.status).to eq(:deactivated)
     end
 
     it "returns deactivated if deactivation_date is today" do
       location.deactivation_date = Time.zone.local(2022, 6, 7)
+      location.deactivation_date_type = "other"
       location.save!
       expect(location.status).to eq(:deactivated)
     end

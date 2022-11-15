@@ -20,20 +20,30 @@ class LocationsController < ApplicationController
 
   def show; end
 
-  def deactivate
+  def new_deactivation
     if params[:location].blank?
       render "toggle_active", locals: { action: "deactivate" }
-    elsif params[:location][:confirm].present? && params[:location][:deactivation_date].present?
-      confirm_deactivation
     else
-      @location.deactivation_date_errors(params)
-      if @location.errors.present?
-        @location.deactivation_date_type = params[:location][:deactivation_date_type]
-        render "toggle_active", locals: { action: "deactivate" }, status: :unprocessable_entity
+      @location.run_deactivation_validations = true
+      @location.deactivation_date = deactivation_date
+      @location.deactivation_date_type = params[:location][:deactivation_date_type]
+      if @location.valid?
+        redirect_to scheme_location_deactivate_confirm_path(@location, deactivation_date: @location.deactivation_date, deactivation_date_type: @location.deactivation_date_type)
       else
-        render "toggle_active_confirm", locals: { action: "deactivate", deactivation_date: }
+        render "toggle_active", locals: { action: "deactivate" }, status: :unprocessable_entity
       end
     end
+  end
+
+  def deactivate_confirm
+    render "toggle_active_confirm", locals: { action: "deactivate", deactivation_date: params[:deactivation_date], deactivation_date_type: params[:deactivation_date_type] }
+  end
+
+  def deactivate
+    @location.run_deactivation_validations = true
+    @location.deactivation_date = deactivation_date
+    @location.deactivation_date_type = params[:location][:deactivation_date_type]
+    confirm_deactivation
   end
 
   def reactivate
@@ -144,13 +154,13 @@ private
   end
 
   def authenticate_action!
-    if %w[new edit update create index edit_name edit_local_authority deactivate].include?(action_name) && !((current_user.organisation == @scheme&.owning_organisation) || current_user.support?)
+    if %w[new edit update create index edit_name edit_local_authority new_deactivation deactivate_confirm deactivate].include?(action_name) && !((current_user.organisation == @scheme&.owning_organisation) || current_user.support?)
       render_not_found and return
     end
   end
 
   def location_params
-    required_params = params.require(:location).permit(:postcode, :name, :units, :type_of_unit, :add_another_location, :startdate, :mobility_type, :location_admin_district, :location_code).merge(scheme_id: @scheme.id)
+    required_params = params.require(:location).permit(:postcode, :name, :units, :type_of_unit, :add_another_location, :startdate, :mobility_type, :location_admin_district, :location_code, :deactivation_date).merge(scheme_id: @scheme.id)
     required_params[:postcode] = PostcodeService.clean(required_params[:postcode]) if required_params[:postcode]
     required_params
   end
@@ -164,23 +174,35 @@ private
   end
 
   def confirm_deactivation
-    if @location.update(deactivation_date: params[:location][:deactivation_date])
-      flash[:notice] = "#{@location.name || @location.postcode} has been deactivated"
+    if @location.update!(deactivation_date: @location.deactivation_date)
+      flash[:notice] = success_text
     end
     redirect_to scheme_location_path(@scheme, @location)
   end
 
-  def deactivation_date
-    return if params[:location].blank?
+  def success_text
+    case @location.status
+    when :deactivated
+      "#{@location.name} has been deactivated"
+    when :deactivating_soon
+      "#{@location.name} will deactivate on #{@location.deactivation_date.to_formatted_s(:govuk_date)}"
+    end
+  end
 
-    collection_start_date = FormHandler.instance.current_collection_start_date
-    return collection_start_date if params[:location][:deactivation_date_type] == "default"
-    return params[:location][:deactivation_date] if params[:location][:deactivation_date_type].blank?
+  def deactivation_date
+    if params[:location].blank?
+      return
+    elsif params[:location][:deactivation_date_type] == "default"
+      return FormHandler.instance.current_collection_start_date
+    elsif params[:location][:deactivation_date].present?
+      return params[:location][:deactivation_date]
+    end
 
     day = params[:location]["deactivation_date(3i)"]
     month = params[:location]["deactivation_date(2i)"]
     year = params[:location]["deactivation_date(1i)"]
+    return nil if [day, month, year].any?(&:blank?)
 
-    Date.new(year.to_i, month.to_i, day.to_i)
+    Time.utc(year.to_i, month.to_i, day.to_i) if Date.valid_date?(year.to_i, month.to_i, day.to_i)
   end
 end

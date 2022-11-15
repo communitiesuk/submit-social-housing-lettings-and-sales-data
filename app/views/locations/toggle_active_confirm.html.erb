@@ -9,7 +9,8 @@
    <%= govuk_warning_text text: I18n.t("warnings.location.deactivation.review_logs") %>
    <%= f.hidden_field :confirm, value: true %>
    <%= f.hidden_field :deactivation_date, value: deactivation_date %>
-   <div class="govuk-button-group">
+   <%= f.hidden_field :deactivation_date_type, value: deactivation_date_type %>
+  <div class="govuk-button-group">
      <%= f.govuk_submit "Deactivate this location" %>
      <%= govuk_button_link_to "Cancel", scheme_location_path(scheme_id: @scheme, id: @location.id), html: { method: :get }, secondary: true %>
    </div>

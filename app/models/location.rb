@@ -1,5 +1,6 @@
 class Location < ApplicationRecord
   validate :validate_postcode
+  validate :deactivation_date_errors
   validates :units, :type_of_unit, :mobility_type, presence: true
   belongs_to :scheme
   has_many :lettings_logs, class_name: "LettingsLog"
@@ -10,7 +11,7 @@ class Location < ApplicationRecord
 
   auto_strip_attributes :name
 
-  attr_accessor :add_another_location, :deactivation_date_type
+  attr_accessor :add_another_location, :deactivation_date_type, :run_deactivation_validations
 
   scope :search_by_postcode, ->(postcode) { where("REPLACE(postcode, ' ', '') ILIKE ?", "%#{postcode.delete(' ')}%") }
   scope :search_by_name, ->(name) { where("name ILIKE ?", "%#{name}%") }
@@ -383,25 +384,20 @@ class Location < ApplicationRecord
     status == :active
   end
 
-  def deactivation_date_errors(params)
-    if params[:location][:deactivation_date].blank? && params[:location][:deactivation_date_type].blank?
+  def implicit_run_deactivation_validations
+    deactivation_date.present? || @run_deactivation_validations
+  end
+
+  def deactivation_date_errors
+    return unless implicit_run_deactivation_validations
+
+    collection_start_date = FormHandler.instance.current_collection_start_date
+    if deactivation_date_type.blank?
       errors.add(:deactivation_date_type, message: I18n.t("validations.location.deactivation_date.not_selected"))
-    end
-
-    if params[:location][:deactivation_date_type] == "other"
-      day = params[:location]["deactivation_date(3i)"]
-      month = params[:location]["deactivation_date(2i)"]
-      year = params[:location]["deactivation_date(1i)"]
-
-      collection_start_date = FormHandler.instance.current_collection_start_date
-
-      if [day, month, year].any?(&:blank?)
-        errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.invalid"))
-      elsif !Date.valid_date?(year.to_i, month.to_i, day.to_i)
-        errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.invalid"))
-      elsif !Date.new(year.to_i, month.to_i, day.to_i).between?(collection_start_date, Date.new(2200, 1, 1))
-        errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.out_of_range", date: collection_start_date.to_formatted_s(:govuk_date)))
-      end
+    elsif deactivation_date.blank?
+      errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.invalid"))
+    elsif !deactivation_date.between?(collection_start_date, Date.new(2200, 1, 1))
+      errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.out_of_range", date: collection_start_date.to_formatted_s(:govuk_date)))
     end
   end
 
