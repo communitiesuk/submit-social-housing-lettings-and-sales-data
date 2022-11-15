@@ -4,6 +4,9 @@ require "configuration/paas_configuration_service"
 if Rails.env.development? || Rails.env.test?
   Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
   Rack::Attack.enabled = false
+elsif Rails.env.review?
+  redis_url = Configuration::PaasConfigurationService.new.redis_uris.to_a[0][1]
+  Rack::Attack.cache.store = ActiveSupport::Cache::RedisCacheStore.new(url: redis_url)
 else
   redis_url = Configuration::PaasConfigurationService.new.redis_uris[:"dluhc-core-#{Rails.env}-redis"]
   Rack::Attack.cache.store = ActiveSupport::Cache::RedisCacheStore.new(url: redis_url)

@@ -31,6 +31,9 @@ development:
   database: <%= ENV['DB_DATABASE'] || 'data_collector_development' %>
   host: <%= ENV['DB_HOST'] || 'localhost' %>
 
+review:
+  <<: *default
+
 staging:
   <<: *default
 

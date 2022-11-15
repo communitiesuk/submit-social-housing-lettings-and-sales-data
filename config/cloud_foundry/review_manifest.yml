@@ -1,0 +1,21 @@
+---
+defaults: &defaults
+  buildpacks:
+    - https://github.com/cloudfoundry/ruby-buildpack.git#v1.8.59
+  processes:
+    - type: web
+      command: bundle exec rake cf:on_first_instance db:migrate db:seed && bin/rails server
+      instances: 1
+      memory: 1G
+    - type: worker
+      command: bundle exec sidekiq
+      health-check-type: process
+      instances: 1
+  health-check-type: http
+  health-check-http-endpoint: /health
+
+applications:
+  - name: dluhc-core-review
+    <<: *defaults
+    env:
+      RAILS_ENV: review

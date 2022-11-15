@@ -1,0 +1,92 @@
+name: Review app teardown pipeline
+
+on:
+  pull_request:
+    types:
+      - closed
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  app:
+    name: Teardown app
+    runs-on: ubuntu-latest
+    environment: staging
+
+    steps:
+      - name: Install Cloud Foundry CLI
+        run: |
+          wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
+          echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+          sudo apt-get update
+          sudo apt-get install cf8-cli
+
+      - name: Teardown app
+        env:
+          CF_USERNAME: ${{ secrets.CF_USERNAME }}
+          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+          CF_API_ENDPOINT: ${{ secrets.CF_API_ENDPOINT }}
+          CF_SPACE: dev
+          CF_ORG: ${{ secrets.CF_ORG }}
+        run: |
+          cf api $CF_API_ENDPOINT
+          cf auth
+          cf target -o $CF_ORG -s $CF_SPACE
+          cf delete dluhc-core-review-${{ github.event.pull_request.number }} -f -r
+
+  postgres:
+    name: Teardown postgres
+    runs-on: ubuntu-latest
+    environment: staging
+    needs: [app]
+
+    steps:
+      - name: Install Cloud Foundry CLI
+        run: |
+          wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
+          echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+          sudo apt-get update
+          sudo apt-get install cf8-cli
+
+      - name: Teardown postgres
+        env:
+          CF_USERNAME: ${{ secrets.CF_USERNAME }}
+          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+          CF_API_ENDPOINT: ${{ secrets.CF_API_ENDPOINT }}
+          CF_SPACE: dev
+          CF_ORG: ${{ secrets.CF_ORG }}
+        run: |
+          cf api $CF_API_ENDPOINT
+          cf auth
+          cf target -o $CF_ORG -s $CF_SPACE
+          cf delete-service dluhc-core-review-${{ github.event.pull_request.number }}-postgres --wait -f
+
+  redis:
+    name: Teardown redis
+    runs-on: ubuntu-latest
+    environment: staging
+    needs: [app]
+
+    steps:
+      - name: Install Cloud Foundry CLI
+        run: |
+          wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
+          echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+          sudo apt-get update
+          sudo apt-get install cf8-cli
+
+      - name: Teardown redis
+        env:
+          CF_USERNAME: ${{ secrets.CF_USERNAME }}
+          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+          CF_API_ENDPOINT: ${{ secrets.CF_API_ENDPOINT }}
+          CF_SPACE: dev
+          CF_ORG: ${{ secrets.CF_ORG }}
+        run: |
+          cf api $CF_API_ENDPOINT
+          cf auth
+          cf target -o $CF_ORG -s $CF_SPACE
+          cf delete-service dluhc-core-review-${{ github.event.pull_request.number }}-redis --wait -f
