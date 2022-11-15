@@ -11,6 +11,7 @@
   <%= govuk_warning_text text: I18n.t("warnings.scheme.deactivation.review_logs") %>
   <%= f.hidden_field :confirm, value: true %>
   <%= f.hidden_field :deactivation_date, value: deactivation_date %>
+  <%= f.hidden_field :deactivation_date_type, value: deactivation_date_type %>
   <div class="govuk-button-group">
     <%= f.govuk_submit "#{action.humanize} this scheme" %>
     <%= govuk_button_link_to "Cancel", scheme_details_path(@scheme), html: { method: :get }, secondary: true %>

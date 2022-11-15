@@ -22,7 +22,7 @@ class Scheme < ApplicationRecord
 
   auto_strip_attributes :service_name
 
-  attr_accessor :deactivation_date_type, :run_validations
+  attr_accessor :deactivation_date_type, :run_deactivation_validations
 
   SENSITIVE = {
     No: 0,
@@ -226,7 +226,7 @@ class Scheme < ApplicationRecord
   end
 
   def deactivation_date_errors
-    return unless :run_validations
+    return unless run_deactivation_validations == true
 
     collection_start_date = FormHandler.instance.current_collection_start_date
     if deactivation_date_type.blank?

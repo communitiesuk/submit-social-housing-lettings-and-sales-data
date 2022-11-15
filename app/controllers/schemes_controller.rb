@@ -24,14 +24,14 @@ class SchemesController < ApplicationController
   def deactivate
     if params[:scheme].blank?
       render "toggle_active", locals: { action: "deactivate" }
-    elsif params[:scheme][:confirm].present? && params[:scheme][:deactivation_date].present?
-      confirm_deactivation
     else
-      @scheme.run_validations = true
+      @scheme.run_deactivation_validations = true
       @scheme.deactivation_date = deactivation_date
       @scheme.deactivation_date_type = params[:scheme][:deactivation_date_type]
-      if @scheme.valid?
-        render "toggle_active_confirm", locals: { action: "deactivate", deactivation_date: }
+      if params[:scheme][:confirm].present?
+        confirm_deactivation
+      elsif @scheme.valid?
+        render "toggle_active_confirm", locals: { action: "deactivate", deactivation_date: @scheme.deactivation_date, deactivation_date_type: @scheme.deactivation_date_type }
       else
         render "toggle_active", locals: { action: "deactivate" }, status: :unprocessable_entity
       end
@@ -294,13 +294,13 @@ private
 
     collection_start_date = FormHandler.instance.current_collection_start_date
     return collection_start_date if params[:scheme][:deactivation_date_type] == "default"
-    return nil if params[:scheme][:deactivation_date_type].blank?
+    return params[:scheme][:deactivation_date] if params[:scheme][:deactivation_date].present?
 
     day = params[:scheme]["deactivation_date(3i)"]
     month = params[:scheme]["deactivation_date(2i)"]
     year = params[:scheme]["deactivation_date(1i)"]
     return nil if [day, month, year].any?(&:blank?)
 
-    Date.new(year.to_i, month.to_i, day.to_i) if Date.valid_date?(year.to_i, month.to_i, day.to_i)
+    Time.utc(year.to_i, month.to_i, day.to_i) if Date.valid_date?(year.to_i, month.to_i, day.to_i)
   end
 end
