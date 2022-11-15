@@ -49,6 +49,6 @@ class SalesLog < Log
   end
 
   def setup_completed?
-    form.setup_sections.first.subsections.first.status(self) == :completed
+    form.setup_sections.all? { |sections| sections.subsections.all? { |subsection| subsection.status(self) == :completed } }
   end
 end
