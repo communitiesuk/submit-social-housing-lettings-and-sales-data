@@ -1249,7 +1249,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "with default date" do
-        let(:params) { { location: { deactivation_date_type: "default", deactivation_date_type: "default", deactivation_date:  } } }
+        let(:params) { { location: { deactivation_date_type: "default", deactivation_date: } } }
 
         it "redirects to the confirmation page" do
           follow_redirect!
