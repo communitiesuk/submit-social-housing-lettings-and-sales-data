@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_11_102656) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_15_113437) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -245,6 +245,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_11_102656) do
     t.index ["scheme_id"], name: "index_lettings_logs_on_scheme_id"
   end
 
+  create_table "location_deactivations", force: :cascade do |t|
+    t.datetime "deactivation_date"
+    t.datetime "reactivation_date"
+    t.bigint "location_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["location_id"], name: "index_location_deactivations_on_location_id"
+  end
+
   create_table "locations", force: :cascade do |t|
     t.string "location_code"
     t.string "postcode"
@@ -260,7 +269,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_11_102656) do
     t.datetime "startdate", precision: nil
     t.string "location_admin_district"
     t.boolean "confirmed"
-    t.datetime "deactivation_date"
     t.index ["old_id"], name: "index_locations_on_old_id", unique: true
     t.index ["scheme_id"], name: "index_locations_on_scheme_id"
   end

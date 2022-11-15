@@ -1,0 +1,2 @@
+class LocationDeactivation < ApplicationRecord
+end
