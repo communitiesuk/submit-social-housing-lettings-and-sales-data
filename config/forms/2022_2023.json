@@ -10,7 +10,7 @@
           "label": "Property information",
           "depends_on": [
             {
-              "setup": "completed"
+              "non_location_setup_questions_completed?": true
             }
           ],
           "pages": {
@@ -952,7 +952,7 @@
           "label": "Tenancy information",
           "depends_on": [
             {
-              "setup": "completed"
+              "non_location_setup_questions_completed?": true
             }
           ],
           "pages": {
@@ -1168,7 +1168,7 @@
           "label": "Household characteristics",
           "depends_on": [
             {
-              "setup": "completed"
+              "non_location_setup_questions_completed?": true
             }
           ],
           "pages": {
@@ -5670,7 +5670,7 @@
           "label": "Household needs",
           "depends_on": [
             {
-              "setup": "completed"
+              "non_location_setup_questions_completed?": true
             }
           ],
           "pages": {
@@ -6062,7 +6062,7 @@
           "label": "Household situation",
           "depends_on": [
             {
-              "setup": "completed"
+              "non_location_setup_questions_completed?": true
             }
           ],
           "pages": {
@@ -7070,7 +7070,7 @@
               },
               "depends_on": [
                 {
-                  "managing_organisation.provider_type": "LA",
+                  "managing_organisation_provider_type": "LA",
                   "needstype": 1,
                   "renewal": 0
                 }
@@ -7127,7 +7127,7 @@
               },
               "depends_on": [
                 {
-                  "managing_organisation.provider_type": "PRP",
+                  "managing_organisation_provider_type": "PRP",
                   "needstype": 1,
                   "renewal": 0
                 }
@@ -7184,7 +7184,7 @@
               },
               "depends_on": [
                 {
-                  "managing_organisation.provider_type": "LA",
+                  "managing_organisation_provider_type": "LA",
                   "needstype": 2,
                   "renewal": 0
                 }
@@ -7244,7 +7244,7 @@
               },
               "depends_on": [
                 {
-                  "managing_organisation.provider_type": "PRP",
+                  "managing_organisation_provider_type": "PRP",
                   "needstype": 2,
                   "renewal": 0
                 }
@@ -7261,7 +7261,7 @@
           "label": "Income, benefits and outgoings",
           "depends_on": [
             {
-              "setup": "completed"
+              "non_location_setup_questions_completed?": true
             }
           ],
           "pages": {
