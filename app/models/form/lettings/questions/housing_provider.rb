@@ -59,10 +59,10 @@ private
   end
 
   def housing_providers_answer_options
-    @housing_providers_answer_options ||= if current_user.support?
-                                            Organisation
-                                          else
-                                            current_user.organisation.housing_providers
-                                          end.pluck(:id, :name).to_h
+    if current_user.support?
+      Organisation
+    else
+      current_user.organisation.housing_providers
+    end.pluck(:id, :name).to_h
   end
 end

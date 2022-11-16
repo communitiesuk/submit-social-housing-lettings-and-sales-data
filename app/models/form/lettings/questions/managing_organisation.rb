@@ -65,10 +65,10 @@ private
   end
 
   def managing_organisations_answer_options
-    @managing_organisations_answer_options ||= if current_user.support?
-                                                 log.owning_organisation
-                                               else
-                                                 current_user.organisation
-                                               end.managing_agents.pluck(:id, :name).to_h
+    if current_user.support?
+      log.owning_organisation
+    else
+      current_user.organisation
+    end.managing_agents.pluck(:id, :name).to_h
   end
 end

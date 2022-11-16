@@ -99,7 +99,7 @@ RSpec.describe "Lettings Log Features" do
   end
 
   context "when the signed is user is not a Support user" do
-    let(:support_user) { create(:user) }
+    let(:user) { create(:user) }
     let(:devise_notify_mailer) { DeviseNotifyMailer.new }
     let(:notify_client) { instance_double(Notifications::Client) }
 
@@ -108,8 +108,8 @@ RSpec.describe "Lettings Log Features" do
       allow(devise_notify_mailer).to receive(:notify_client).and_return(notify_client)
       allow(notify_client).to receive(:send_email).and_return(true)
       visit("/account/sign-in")
-      fill_in("user[email]", with: support_user.email)
-      fill_in("user[password]", with: support_user.password)
+      fill_in("user[email]", with: user.email)
+      fill_in("user[password]", with: user.password)
       click_button("Sign in")
     end
 
@@ -121,8 +121,8 @@ RSpec.describe "Lettings Log Features" do
         log_id = page.current_path.scan(/\d/).join
         expect(page).to have_current_path("/lettings-logs/#{log_id}/needs-type")
         visit("lettings-logs/#{log_id}/setup/check-answers")
-        expect(page).not_to have_content("Owning organisation #{support_user.organisation.name}")
-        expect(page).not_to have_content("User #{support_user.name}")
+        expect(page).not_to have_content("Owning organisation #{user.organisation.name}")
+        expect(page).not_to have_content("User #{user.name}")
         expect(page).to have_content("You have answered 0 of 6 questions")
       end
     end
