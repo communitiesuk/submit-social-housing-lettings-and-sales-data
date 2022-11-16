@@ -1,8 +1,8 @@
-class Form::Common::Questions::CreatedById < ::Form::Question
+class Form::Lettings::Questions::CreatedById < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "created_by_id"
-    @check_answer_label = "User"
+    @check_answer_label = "Log owner"
     @header = "Which user are you creating this log for?"
     @hint_text = ""
     @type = "select"
@@ -13,8 +13,8 @@ class Form::Common::Questions::CreatedById < ::Form::Question
     answer_opts = { "" => "Select an option" }
     return answer_opts unless ActiveRecord::Base.connected?
 
-    User.select(:id, :name).each_with_object(answer_opts) do |user, hsh|
-      hsh[user.id] = user.name
+    User.select(:id, :name, :email).each_with_object(answer_opts) do |user, hsh|
+      hsh[user.id] = "#{user.name} (#{user.email})"
       hsh
     end
   end
@@ -43,6 +43,6 @@ class Form::Common::Questions::CreatedById < ::Form::Question
 private
 
   def selected_answer_option_is_derived?(_log)
-    false
+    true
   end
 end

@@ -1,7 +1,7 @@
 <%= render partial: "form/guidance/#{question.guidance_partial}" if question.top_guidance? %>
 
 <% selected = @log.public_send(question.id) || "" %>
-<% answers = question.displayed_answer_options(@log).map { |key, value| OpenStruct.new(id: key, name: value.respond_to?(:service_name) ? value.service_name : nil, resource: value) } %>
+<% answers = question.displayed_answer_options(@log, current_user).map { |key, value| OpenStruct.new(id: key, name: value.respond_to?(:service_name) ? value.service_name : nil, resource: value) } %>
 <%= f.govuk_select(question.id.to_sym,
   label: legend(question, page_header, conditional),
   "data-controller": "accessible-autocomplete",

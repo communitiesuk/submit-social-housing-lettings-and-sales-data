@@ -27,13 +27,13 @@ RSpec.describe FormHandler do
     it "is able to load a current lettings form" do
       form = form_handler.get_form("current_lettings")
       expect(form).to be_a(Form)
-      expect(form.pages.count).to eq(45)
+      expect(form.pages.count).to eq(46)
     end
 
     it "is able to load a next lettings form" do
       form = form_handler.get_form("next_lettings")
       expect(form).to be_a(Form)
-      expect(form.pages.count).to eq(12)
+      expect(form.pages.count).to eq(13)
     end
   end
 
@@ -49,13 +49,13 @@ RSpec.describe FormHandler do
     it "is able to load a current lettings form" do
       form = form_handler.get_form("current_lettings")
       expect(form).to be_a(Form)
-      expect(form.pages.count).to eq(12)
+      expect(form.pages.count).to eq(13)
     end
 
     it "is able to load a previous lettings form" do
       form = form_handler.get_form("previous_lettings")
       expect(form).to be_a(Form)
-      expect(form.pages.count).to eq(45)
+      expect(form.pages.count).to eq(46)
     end
 
     it "is able to load a current sales form" do

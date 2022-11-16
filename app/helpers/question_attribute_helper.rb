@@ -11,7 +11,7 @@ module QuestionAttributeHelper
     {
       "data-controller": "conditional-question",
       "data-action": "click->conditional-question#displayConditional",
-      "data-info": { conditional_questions: conditional_for, type: type }.to_json,
+      "data-info": { conditional_questions: conditional_for, type: }.to_json,
     }
   end
 
