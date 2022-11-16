@@ -25,7 +25,7 @@
           <% row.cell(text: simple_format(scheme_cell(scheme), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
           <% row.cell(text: scheme.id_to_display) %>
           <% row.cell(text: scheme.locations&.count) %>
-          <% row.cell(text: status_tag("active")) %>
+          <% row.cell(text: status_tag(scheme.status)) %>
         <% end %>
       <% end %>
     <% end %>
