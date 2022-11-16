@@ -1,4 +1,4 @@
-<% title = "#{action.humanize} #{@scheme.service_name}" %>
+<% title = "Deactivate #{@scheme.service_name}" %>
 <% content_for :title, title %>
 <%= form_with model: @scheme, url: scheme_deactivate_path(@scheme), method: "patch", local: true do |f| %>
   <% content_for :before_content do %>
@@ -10,8 +10,8 @@
   </h1>
   <%= govuk_warning_text text: I18n.t("warnings.scheme.deactivation.review_logs") %>
   <%= f.hidden_field :confirm, value: true %>
-  <%= f.hidden_field :deactivation_date, value: deactivation_date %>
-  <%= f.hidden_field :deactivation_date_type, value: deactivation_date_type %>
+  <%= f.hidden_field :deactivation_date, value: @deactivation_date %>
+  <%= f.hidden_field :deactivation_date_type, value: @deactivation_date_type %>
   <div class="govuk-button-group">
     <%= f.govuk_submit "#{action.humanize} this scheme" %>
     <%= govuk_button_link_to "Cancel", scheme_details_path(@scheme), html: { method: :get }, secondary: true %>
