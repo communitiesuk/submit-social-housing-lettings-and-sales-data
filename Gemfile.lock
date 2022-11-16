@@ -247,6 +247,8 @@ GEM
       globalid
       paper_trail (>= 3.0.0)
     parallel (1.22.1)
+    parallel_tests (4.0.0)
+      parallel
     parser (3.1.2.1)
       ast (~> 2.4.1)
     pg (1.4.3)
@@ -430,6 +432,7 @@ PLATFORMS
   x86_64-darwin-19
   x86_64-darwin-20
   x86_64-darwin-21
+  x86_64-darwin-22
   x86_64-linux
 
 DEPENDENCIES
@@ -456,6 +459,7 @@ DEPENDENCIES
   overcommit (>= 0.37.0)
   paper_trail
   paper_trail-globalid
+  parallel_tests
   pg (~> 1.1)
   possessive
   postcodes_io
