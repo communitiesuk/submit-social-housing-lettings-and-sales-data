@@ -7,7 +7,9 @@ module TagHelper
     in_progress: "In progress",
     completed: "Completed",
     active: "Active",
+    incomplete: "Incomplete",
     deactivating_soon: "Deactivating soon",
+    reactivating_soon: "Reactivating soon",
     deactivated: "Deactivated",
   }.freeze
 
@@ -17,7 +19,9 @@ module TagHelper
     in_progress: "blue",
     completed: "green",
     active: "green",
+    incomplete: "red",
     deactivating_soon: "yellow",
+    reactivating_soon: "blue",
     deactivated: "grey",
   }.freeze
 

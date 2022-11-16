@@ -120,7 +120,7 @@ RSpec.describe FormHandler do
       end
 
       it "returns the correct current start date" do
-        expect(form_handler.current_collection_start_date).to eq(Time.utc(2022, 4, 1))
+        expect(form_handler.current_collection_start_date).to eq(Time.zone.local(2022, 4, 1))
       end
     end
 

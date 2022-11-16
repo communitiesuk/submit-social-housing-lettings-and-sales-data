@@ -312,11 +312,16 @@ en:
     declaration:
       missing: "You must show the DLUHC privacy notice to the tenant before you can submit this log."
 
+    scheme:
+      deactivation_date:
+        not_selected: "Select one of the options"
+        invalid: "Enter a valid day, month and year"
+        out_of_range: "The date must be on or after the %{date}"
+
     location:
       deactivation_date:
         not_selected: "Select one of the options"
-        not_entered: "Enter a %{period}"
-        invalid: "Enter a valid date"
+        invalid: "Enter a valid day, month and year"
         out_of_range: "The date must be on or after the %{date}"
 
   soft_validations:
@@ -371,6 +376,9 @@ en:
       mobility_type: "What are the mobility standards for the majority of units in this location?"
       deactivation:
         apply_from: "When should this change apply?"
+    scheme:
+      deactivation:
+        apply_from: "When should this change apply?"
     descriptions:
       location:
         mobility_type:
@@ -384,11 +392,17 @@ en:
       name: "This is how you refer to this location within your organisation"
       units: "A unit can be a bedroom in a shared house or flat, or a house with 4 bedrooms. Do not include bedrooms used for wardens, managers, volunteers or sleep-in staff."
       deactivation: "If the date is before %{date}, select ‘From the start of the current collection period’ because the previous period has now closed."
-  
+    scheme:
+      deactivation: "If the date is before %{date}, select ‘From the start of the current collection period’ because the previous period has now closed."
+
   warnings:
     location:
-      deactivation: 
+      deactivation:
         existing_logs: "It will not be possible to add logs with this location if their tenancy start date is on or after the date you enter. Any existing logs may be affected."
+        review_logs: "Your data providers will need to review these logs and answer a few questions again. We’ll email each log creator with a list of logs that need updating."
+    scheme:
+      deactivation:
+        existing_logs: "It will not be possible to add logs with this scheme if their tenancy start date is on or after the date you enter. Any existing logs may be affected."
         review_logs: "Your data providers will need to review these logs and answer a few questions again. We’ll email each log creator with a list of logs that need updating."
 
   test:

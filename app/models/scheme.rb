@@ -18,8 +18,11 @@ class Scheme < ApplicationRecord
                     }
 
   validate :validate_confirmed
+  validate :deactivation_date_errors
 
   auto_strip_attributes :service_name
+
+  attr_accessor :deactivation_date_type, :run_deactivation_validations
 
   SENSITIVE = {
     No: 0,
@@ -153,29 +156,6 @@ class Scheme < ApplicationRecord
     ]
   end
 
-  def display_attributes
-    base_attributes = [
-      { name: "Scheme code", value: id_to_display },
-      { name: "Name", value: service_name, edit: true },
-      { name: "Confidential information", value: sensitive, edit: true },
-      { name: "Type of scheme", value: scheme_type },
-      { name: "Registered under Care Standards Act 2000", value: registered_under_care_act },
-      { name: "Housing stock owned by", value: owning_organisation.name, edit: true },
-      { name: "Support services provided by", value: arrangement_type },
-      { name: "Organisation providing support", value: managing_organisation&.name },
-      { name: "Primary client group", value: primary_client_group },
-      { name: "Has another client group", value: has_other_client_group },
-      { name: "Secondary client group", value: secondary_client_group },
-      { name: "Level of support given", value: support_type },
-      { name: "Intended length of stay", value: intended_stay },
-    ]
-
-    if arrangement_type_same?
-      base_attributes.delete({ name: "Organisation providing support", value: managing_organisation&.name })
-    end
-    base_attributes
-  end
-
   def synonyms
     locations.map(&:postcode).join(",")
   end
@@ -219,7 +199,7 @@ class Scheme < ApplicationRecord
   end
 
   def validate_confirmed
-    required_attributes = attribute_names - %w[id created_at updated_at old_id old_visible_id confirmed end_date sensitive secondary_client_group total_units has_other_client_group]
+    required_attributes = attribute_names - %w[id created_at updated_at old_id old_visible_id confirmed end_date sensitive secondary_client_group total_units has_other_client_group deactivation_date deactivation_date_type]
 
     if confirmed == true
       required_attributes.any? do |attribute|
@@ -227,6 +207,46 @@ class Scheme < ApplicationRecord
           errors.add attribute.to_sym
           self.confirmed = false
         end
+      end
+    end
+  end
+
+  def available_from
+    created_at
+  end
+
+  def status
+    return :active if deactivation_date.blank?
+    return :deactivating_soon if Time.zone.now < deactivation_date
+
+    :deactivated
+  end
+
+  def active?
+    status == :active
+  end
+
+  def run_deactivation_validations!
+    @run_deactivation_validations = true
+  end
+
+  def implicit_run_deactivation_validations
+    deactivation_date.present? || @run_deactivation_validations
+  end
+
+  def deactivation_date_errors
+    return unless implicit_run_deactivation_validations
+
+    if deactivation_date.blank?
+      if deactivation_date_type.blank?
+        errors.add(:deactivation_date_type, message: I18n.t("validations.scheme.deactivation_date.not_selected"))
+      elsif deactivation_date_type == "other"
+        errors.add(:deactivation_date, message: I18n.t("validations.scheme.deactivation_date.invalid"))
+      end
+    else
+      collection_start_date = FormHandler.instance.current_collection_start_date
+      unless deactivation_date.between?(collection_start_date, Date.new(2200, 1, 1))
+        errors.add(:deactivation_date, message: I18n.t("validations.scheme.deactivation_date.out_of_range", date: collection_start_date.to_formatted_s(:govuk_date)))
       end
     end
   end

@@ -1245,29 +1245,37 @@ RSpec.describe LocationsController, type: :request do
       before do
         Timecop.freeze(Time.utc(2022, 10, 10))
         sign_in user
-        patch "/schemes/#{scheme.id}/locations/#{location.id}/deactivate", params:
+        patch "/schemes/#{scheme.id}/locations/#{location.id}/new-deactivation", params:
       end
 
       context "with default date" do
-        let(:params) { { location: { deactivation_date_type: "default" } } }
+        let(:params) { { location: { deactivation_date_type: "default", deactivation_date: } } }
 
-        it "renders the confirmation page" do
+        it "redirects to the confirmation page" do
+          follow_redirect!
           expect(response).to have_http_status(:ok)
           expect(page).to have_content("This change will affect #{location.lettings_logs.count} logs")
         end
       end
 
       context "with other date" do
-        let(:params) { { location: { deactivation_date: "other", "deactivation_date(3i)": "10", "deactivation_date(2i)": "10", "deactivation_date(1i)": "2022" } } }
+        let(:params) { { location: { deactivation_date_type: "other", "deactivation_date(3i)": "10", "deactivation_date(2i)": "10", "deactivation_date(1i)": "2022" } } }
 
-        it "renders the confirmation page" do
+        it "redirects to the confirmation page" do
+          follow_redirect!
           expect(response).to have_http_status(:ok)
           expect(page).to have_content("This change will affect #{location.lettings_logs.count} logs")
         end
       end
 
       context "when confirming deactivation" do
-        let(:params) { { location: { deactivation_date:, confirm: true } } }
+        let(:params) { { location: { deactivation_date:, confirm: true, deactivation_date_type: "other" } } }
+
+        before do
+          Timecop.freeze(Time.utc(2022, 10, 10))
+          sign_in user
+          patch "/schemes/#{scheme.id}/locations/#{location.id}/deactivate", params:
+        end
 
         it "updates existing location with valid deactivation date and renders location page" do
           follow_redirect!
@@ -1310,7 +1318,7 @@ RSpec.describe LocationsController, type: :request do
 
         it "displays page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content(I18n.t("validations.location.deactivation_date.not_entered", period: "day"))
+          expect(page).to have_content(I18n.t("validations.location.deactivation_date.invalid"))
         end
       end
 
@@ -1319,7 +1327,7 @@ RSpec.describe LocationsController, type: :request do
 
         it "displays page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content(I18n.t("validations.location.deactivation_date.not_entered", period: "month"))
+          expect(page).to have_content(I18n.t("validations.location.deactivation_date.invalid"))
         end
       end
 
@@ -1328,7 +1336,7 @@ RSpec.describe LocationsController, type: :request do
 
         it "displays page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content(I18n.t("validations.location.deactivation_date.not_entered", period: "year"))
+          expect(page).to have_content(I18n.t("validations.location.deactivation_date.invalid"))
         end
       end
     end
@@ -1365,21 +1373,24 @@ RSpec.describe LocationsController, type: :request do
         Timecop.freeze(Time.utc(2022, 10, 10))
         sign_in user
         location.deactivation_date = deactivation_date
+        location.deactivation_date_type = deactivation_date_type
         location.save!
         get "/schemes/#{scheme.id}/locations/#{location.id}"
       end
 
       context "with active location" do
         let(:deactivation_date) { nil }
+        let(:deactivation_date_type) { nil }
 
         it "renders deactivate this location" do
           expect(response).to have_http_status(:ok)
-          expect(page).to have_link("Deactivate this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/deactivate")
+          expect(page).to have_link("Deactivate this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/new-deactivation")
         end
       end
 
       context "with deactivated location" do
         let(:deactivation_date) { Time.utc(2022, 10, 9) }
+        let(:deactivation_date_type) { "other" }
 
         it "renders reactivate this location" do
           expect(response).to have_http_status(:ok)
@@ -1389,6 +1400,7 @@ RSpec.describe LocationsController, type: :request do
 
       context "with location that's deactivating soon" do
         let(:deactivation_date) { Time.utc(2022, 10, 12) }
+        let(:deactivation_date_type) { "other" }
 
         it "renders reactivate this location" do
           expect(response).to have_http_status(:ok)

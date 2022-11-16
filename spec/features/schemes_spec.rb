@@ -779,7 +779,7 @@ RSpec.describe "Schemes scheme Features" do
 
               it "allows to deactivate a location" do
                 click_link("Deactivate this location")
-                expect(page).to have_current_path("/schemes/#{scheme.id}/locations/#{location.id}/deactivate")
+                expect(page).to have_current_path("/schemes/#{scheme.id}/locations/#{location.id}/new-deactivation")
               end
 
               context "when I press the back button" do

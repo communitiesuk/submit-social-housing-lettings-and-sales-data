@@ -47,7 +47,7 @@ RSpec.describe LocationsHelper do
     end
   end
 
-  describe "display_attributes" do
+  describe "display_location_attributes" do
     let(:location) { FactoryBot.build(:location, startdate: Time.zone.local(2022, 8, 8)) }
 
     it "returns correct display attributes" do
@@ -63,12 +63,12 @@ RSpec.describe LocationsHelper do
         { name: "Status", value: :active },
       ]
 
-      expect(display_attributes(location)).to eq(attributes)
+      expect(display_location_attributes(location)).to eq(attributes)
     end
 
     it "displays created_at as availability date if startdate is not present" do
       location.update!(startdate: nil)
-      availability_attribute = display_attributes(location).find { |x| x[:name] == "Availability" }[:value]
+      availability_attribute = display_location_attributes(location).find { |x| x[:name] == "Availability" }[:value]
 
       expect(availability_attribute).to eq("Available from #{location.created_at.to_formatted_s(:govuk_date)}")
     end

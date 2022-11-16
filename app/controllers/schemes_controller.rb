@@ -21,6 +21,39 @@ class SchemesController < ApplicationController
     render_not_found and return unless @scheme
   end
 
+  def new_deactivation
+    if params[:scheme].blank?
+      render "toggle_active", locals: { action: "deactivate" }
+    else
+      @scheme.run_deactivation_validations = true
+      @scheme.deactivation_date = deactivation_date
+      @scheme.deactivation_date_type = params[:scheme][:deactivation_date_type]
+      if @scheme.valid?
+        redirect_to scheme_deactivate_confirm_path(@scheme, deactivation_date: @scheme.deactivation_date, deactivation_date_type: @scheme.deactivation_date_type)
+      else
+        render "toggle_active", locals: { action: "deactivate" }, status: :unprocessable_entity
+      end
+    end
+  end
+
+  def deactivate_confirm
+    @deactivation_date = params[:deactivation_date]
+    @deactivation_date_type = params[:deactivation_date_type]
+  end
+
+  def deactivate
+    @scheme.run_deactivation_validations!
+
+    if @scheme.update!(deactivation_date:)
+      flash[:notice] = deactivate_success_notice
+    end
+    redirect_to scheme_details_path(@scheme)
+  end
+
+  def reactivate
+    render "toggle_active", locals: { action: "reactivate" }
+  end
+
   def new
     @scheme = Scheme.new
   end
@@ -206,7 +239,8 @@ private
                                                      :support_type,
                                                      :arrangement_type,
                                                      :intended_stay,
-                                                     :confirmed)
+                                                     :confirmed,
+                                                     :deactivation_date)
 
     if arrangement_type_changed_to_different_org?(required_params)
       required_params[:managing_organisation_id] = nil
@@ -251,12 +285,38 @@ private
   def authenticate_scope!
     head :unauthorized and return unless current_user.data_coordinator? || current_user.support?
 
-    if %w[show locations primary_client_group confirm_secondary_client_group secondary_client_group support details check_answers edit_name].include?(action_name) && !((current_user.organisation == @scheme&.owning_organisation) || current_user.support?)
+    if %w[show locations primary_client_group confirm_secondary_client_group secondary_client_group support details check_answers edit_name deactivate].include?(action_name) && !((current_user.organisation == @scheme&.owning_organisation) || current_user.support?)
       render_not_found and return
     end
   end
 
   def redirect_if_scheme_confirmed
     redirect_to @scheme if @scheme.confirmed?
+  end
+
+  def deactivate_success_notice
+    case @scheme.status
+    when :deactivated
+      "#{@scheme.service_name} has been deactivated"
+    when :deactivating_soon
+      "#{@scheme.service_name} will deactivate on #{@scheme.deactivation_date.to_formatted_s(:govuk_date)}"
+    end
+  end
+
+  def deactivation_date
+    if params[:scheme].blank?
+      return
+    elsif params[:scheme][:deactivation_date_type] == "default"
+      return FormHandler.instance.current_collection_start_date
+    elsif params[:scheme][:deactivation_date].present?
+      return params[:scheme][:deactivation_date]
+    end
+
+    day = params[:scheme]["deactivation_date(3i)"]
+    month = params[:scheme]["deactivation_date(2i)"]
+    year = params[:scheme]["deactivation_date(1i)"]
+    return nil if [day, month, year].any?(&:blank?)
+
+    Time.zone.local(year.to_i, month.to_i, day.to_i) if Date.valid_date?(year.to_i, month.to_i, day.to_i)
   end
 end

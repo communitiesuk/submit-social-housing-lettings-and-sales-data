@@ -77,7 +77,7 @@ class Organisation < ApplicationRecord
     DISPLAY_PROVIDER_TYPE[provider_type.to_sym]
   end
 
-  def display_attributes
+  def display_organisation_attributes
     [
       { name: "Name", value: name, editable: true },
       { name: "Address", value: address_string, editable: true },

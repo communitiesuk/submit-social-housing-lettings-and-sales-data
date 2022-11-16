@@ -4,11 +4,11 @@
 <% content_for :before_content do %>
   <%= govuk_back_link(
     text: "Back",
-    href: scheme_location_path(scheme_id: @location.scheme.id, id: @location.id),
+    href: scheme_location_path(@location.scheme, @location),
   ) %>
 <% end %>
 
-<%= form_with model: @location, url: scheme_location_deactivate_path(scheme_id: @location.scheme.id, location_id: @location.id), method: "patch", local: true do |f| %>
+<%= form_with model: @location, url: scheme_location_new_deactivation_path(scheme_id: @location.scheme.id, location_id: @location.id), method: "patch", local: true do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
     <% collection_start_date = FormHandler.instance.current_collection_start_date %>
@@ -28,7 +28,7 @@
                                         **basic_conditional_html_attributes({ "deactivation_date" => %w[other] }, "location") do %>
                                           <%= f.govuk_date_field :deactivation_date,
                                                         legend: { text: "Date", size: "m" },
-                                                        hint: { text: "For example, 27 3 2008" },
+                                                        hint: { text: "For example, 27 3 2022" },
                                                         width: 20 %>
                                                         <% end %>
         <% end %>
