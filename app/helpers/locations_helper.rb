@@ -32,8 +32,17 @@ module LocationsHelper
       { name: "Common type of unit", value: location.type_of_unit },
       { name: "Mobility type", value: location.mobility_type },
       { name: "Code", value: location.location_code },
-      { name: "Availability", value: "Available from #{location.available_from.to_formatted_s(:govuk_date)}" },
+      { name: "Availability", value: location_availability(location) },
       { name: "Status", value: location.status },
     ]
+  end
+
+  def location_availability(location)
+    availability = "Active from #{location.available_from.to_formatted_s(:govuk_date)}"
+    location.location_deactivations.each do |deactivation|
+      availability << " to #{(deactivation.deactivation_date - 1.day).to_formatted_s(:govuk_date)}\nDeactivated on #{deactivation.deactivation_date.to_formatted_s(:govuk_date)}"
+      availability << "\nActive from #{deactivation.reactivation_date.to_formatted_s(:govuk_date)}" if deactivation.reactivation_date.present?
+    end
+    availability
   end
 end

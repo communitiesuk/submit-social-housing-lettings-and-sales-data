@@ -73,7 +73,7 @@
               <% row.cell(text: simple_format("<span>#{location.type_of_unit}</span>")) %>
               <% row.cell(text: location.mobility_type) %>
               <% row.cell(text: simple_format(location_cell_location_admin_district(location, get_location_change_link_href_location_admin_district(@scheme, location)), wrapper_tag: "div")) %>
-              <% row.cell(text: location.startdate&.to_formatted_s(:govuk_date)) %>
+              <% row.cell(text: location_availability(location)) %>
               <% end %>
           <% end %>
         <% end %>
