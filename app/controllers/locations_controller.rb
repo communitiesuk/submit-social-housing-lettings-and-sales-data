@@ -108,7 +108,11 @@ class LocationsController < ApplicationController
             redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
           end
         when "edit-name"
-          redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
+          if @scheme.locations.count == @scheme.locations.active.count
+            redirect_to(scheme_location_path(@scheme, @location))
+          else
+            redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
+          end
         when "edit-local-authority"
           if params[:add_another_location] == "Yes"
             redirect_to(new_scheme_location_path(@location.scheme))

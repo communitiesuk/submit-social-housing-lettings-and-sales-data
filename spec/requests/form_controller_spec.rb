@@ -2,18 +2,18 @@ require "rails_helper"
 
 RSpec.describe FormController, type: :request do
   let(:page) { Capybara::Node::Simple.new(response.body) }
-  let(:user) { FactoryBot.create(:user) }
+  let(:user) { create(:user) }
   let(:organisation) { user.organisation }
-  let(:other_organisation) { FactoryBot.create(:organisation) }
+  let(:other_organisation) { create(:organisation) }
   let!(:unauthorized_lettings_log) do
-    FactoryBot.create(
+    create(
       :lettings_log,
       owning_organisation: other_organisation,
       managing_organisation: other_organisation,
     )
   end
   let(:setup_complete_lettings_log) do
-    FactoryBot.create(
+    create(
       :lettings_log,
       :about_completed,
       status: 1,
@@ -23,7 +23,7 @@ RSpec.describe FormController, type: :request do
     )
   end
   let(:completed_lettings_log) do
-    FactoryBot.create(
+    create(
       :lettings_log,
       :completed,
       owning_organisation: organisation,
@@ -39,7 +39,7 @@ RSpec.describe FormController, type: :request do
 
   context "when a user is not signed in" do
     let!(:lettings_log) do
-      FactoryBot.create(
+      create(
         :lettings_log,
         owning_organisation: organisation,
         managing_organisation: organisation,
@@ -68,7 +68,7 @@ RSpec.describe FormController, type: :request do
 
   context "when a user is signed in" do
     let!(:lettings_log) do
-      FactoryBot.create(
+      create(
         :lettings_log,
         owning_organisation: organisation,
         managing_organisation: organisation,
@@ -83,8 +83,8 @@ RSpec.describe FormController, type: :request do
     describe "GET" do
       context "with form pages" do
         context "when forms exist for multiple years" do
-          let(:lettings_log_year_1) { FactoryBot.create(:lettings_log, startdate: Time.zone.local(2021, 5, 1), owning_organisation: organisation, created_by: user) }
-          let(:lettings_log_year_2) { FactoryBot.create(:lettings_log, :about_completed, startdate: Time.zone.local(2022, 5, 1), owning_organisation: organisation, created_by: user) }
+          let(:lettings_log_year_1) { create(:lettings_log, startdate: Time.zone.local(2021, 5, 1), owning_organisation: organisation, created_by: user) }
+          let(:lettings_log_year_2) { create(:lettings_log, :about_completed, startdate: Time.zone.local(2022, 5, 1), owning_organisation: organisation, created_by: user) }
 
           it "displays the correct question details for each lettings log based on form year" do
             get "/lettings-logs/#{lettings_log_year_1.id}/tenant-code-test", headers: headers, params: {}
@@ -110,11 +110,11 @@ RSpec.describe FormController, type: :request do
 
         context "when viewing the setup section schemes page" do
           context "when the user is support" do
-            let(:user) { FactoryBot.create(:user, :support) }
+            let(:user) { create(:user, :support) }
 
             context "when organisation and user have not been selected yet" do
               let(:lettings_log) do
-                FactoryBot.create(
+                create(
                   :lettings_log,
                   owning_organisation: nil,
                   managing_organisation: nil,
@@ -124,7 +124,7 @@ RSpec.describe FormController, type: :request do
               end
 
               before do
-                locations = FactoryBot.create_list(:location, 5)
+                locations = create_list(:location, 5)
                 locations.each { |location| location.scheme.update!(arrangement_type: "The same organisation that owns the housing stock", managing_organisation_id: location.scheme.owning_organisation_id) }
               end
 
@@ -147,7 +147,7 @@ RSpec.describe FormController, type: :request do
 
         context "when no other sections are enabled" do
           let(:lettings_log_2022) do
-            FactoryBot.create(
+            create(
               :lettings_log,
               startdate: Time.zone.local(2022, 12, 1),
               owning_organisation: organisation,
@@ -194,17 +194,17 @@ RSpec.describe FormController, type: :request do
 
       context "when viewing a user dependent page" do
         context "when the dependency is met" do
-          let(:user) { FactoryBot.create(:user, :support) }
+          let(:user) { create(:user, :support) }
 
           it "routes to the page" do
-            get "/lettings-logs/#{lettings_log.id}/organisation"
+            get "/lettings-logs/#{lettings_log.id}/created-by"
             expect(response).to have_http_status(:ok)
           end
         end
 
         context "when the dependency is not met" do
           it "redirects to the tasklist page" do
-            get "/lettings-logs/#{lettings_log.id}/organisation"
+            get "/lettings-logs/#{lettings_log.id}/created-by"
             expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}")
           end
         end
@@ -213,10 +213,10 @@ RSpec.describe FormController, type: :request do
 
     describe "Submit Form" do
       context "with a form page" do
-        let(:user) { FactoryBot.create(:user) }
+        let(:user) { create(:user) }
         let(:organisation) { user.organisation }
         let(:lettings_log) do
-          FactoryBot.create(
+          create(
             :lettings_log,
             owning_organisation: organisation,
             managing_organisation: organisation,
@@ -527,9 +527,9 @@ RSpec.describe FormController, type: :request do
 
       context "with lettings logs that are not owned or managed by your organisation" do
         let(:answer) { 25 }
-        let(:other_organisation) { FactoryBot.create(:organisation) }
+        let(:other_organisation) { create(:organisation) }
         let(:unauthorized_lettings_log) do
-          FactoryBot.create(
+          create(
             :lettings_log,
             owning_organisation: other_organisation,
             managing_organisation: other_organisation,

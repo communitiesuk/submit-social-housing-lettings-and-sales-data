@@ -8,8 +8,10 @@ class Form::Lettings::Subsections::Setup < ::Form::Subsection
 
   def pages
     @pages ||= [
-      Form::Common::Pages::Organisation.new(nil, nil, self),
-      Form::Common::Pages::CreatedBy.new(nil, nil, self),
+      organisation_page,
+      housing_provider_page,
+      managing_organisation_page,
+      created_by_page,
       Form::Lettings::Pages::NeedsType.new(nil, nil, self),
       Form::Lettings::Pages::Scheme.new(nil, nil, self),
       Form::Lettings::Pages::Location.new(nil, nil, self),
@@ -18,11 +20,7 @@ class Form::Lettings::Subsections::Setup < ::Form::Subsection
       Form::Lettings::Pages::RentType.new(nil, nil, self),
       Form::Lettings::Pages::TenantCode.new(nil, nil, self),
       Form::Lettings::Pages::PropertyReference.new(nil, nil, self),
-    ]
-  end
-
-  def applicable_questions(lettings_log)
-    questions.select { |q| support_only_questions.include?(q.id) } + super
+    ].compact
   end
 
   def enabled?(_lettings_log)
@@ -31,7 +29,29 @@ class Form::Lettings::Subsections::Setup < ::Form::Subsection
 
 private
 
-  def support_only_questions
-    %w[owning_organisation_id created_by_id].freeze
+  def organisation_page
+    return if FeatureToggle.managing_for_other_user_enabled?
+
+    Form::Common::Pages::Organisation.new(nil, nil, self)
+  end
+
+  def housing_provider_page
+    return unless FeatureToggle.managing_for_other_user_enabled?
+
+    Form::Lettings::Pages::HousingProvider.new(nil, nil, self)
+  end
+
+  def managing_organisation_page
+    return unless FeatureToggle.managing_for_other_user_enabled?
+
+    Form::Lettings::Pages::ManagingOrganisation.new(nil, nil, self)
+  end
+
+  def created_by_page
+    if FeatureToggle.managing_for_other_user_enabled?
+      Form::Lettings::Pages::CreatedBy.new(nil, nil, self)
+    else
+      Form::Common::Pages::CreatedBy.new(nil, nil, self)
+    end
   end
 end

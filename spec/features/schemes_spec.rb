@@ -801,9 +801,9 @@ RSpec.describe "Schemes scheme Features" do
                 it "returns to locations check your answers page and shows the new name" do
                   fill_in "location-name-field", with: "NewName"
                   click_button "Save and continue"
-                  expect(page).to have_content location.id
+                  expect(page).to have_content location.postcode
                   expect(page).to have_content "NewName"
-                  expect(page.current_url.split("/").last).to eq("check-answers#locations")
+                  expect(page).to have_current_path("/schemes/#{scheme.id}/locations/#{location.id}")
                 end
 
                 context "when I press the back button" do

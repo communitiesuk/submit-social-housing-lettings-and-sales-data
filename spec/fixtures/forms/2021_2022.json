@@ -1099,9 +1099,10 @@
           "label": "Declaration",
           "depends_on": [
             {
-              "household_characteristics": "completed",
-              "household_needs": "completed",
-              "property_information": "completed"
+              "armedforces": 1
+            },
+            {
+              "armedforces": 3
             }
           ],
           "pages": {

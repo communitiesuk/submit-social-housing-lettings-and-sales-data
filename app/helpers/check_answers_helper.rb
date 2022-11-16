@@ -18,7 +18,7 @@ module CheckAnswersHelper
 
   def get_location_change_link_href_postcode(scheme, location)
     if location.confirmed?
-      scheme_location_edit_name_path(scheme_id: scheme.id, location_id: location.id)
+      scheme_location_path(scheme_id: scheme.id, id: location.id)
     else
       edit_scheme_location_path(scheme_id: scheme.id, id: location.id)
     end
