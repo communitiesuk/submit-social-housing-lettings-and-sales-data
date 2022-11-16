@@ -1412,7 +1412,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "with deactivated location" do
-        let(:location_deactivation) { LocationDeactivation.create(deactivation_date: Time.utc(2022, 10, 9)) }
+        let(:location_deactivation) { FactoryBot.create(:location_deactivation, deactivation_date: Time.zone.local(2022, 10, 9)) }
 
         it "renders reactivate this location" do
           expect(response).to have_http_status(:ok)
@@ -1421,7 +1421,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "with location that's deactivating soon" do
-        let(:location_deactivation) { LocationDeactivation.create(deactivation_date: Time.utc(2022, 10, 12)) }
+        let(:location_deactivation) { FactoryBot.create(:location_deactivation, deactivation_date: Time.zone.local(2022, 10, 12)) }
 
         it "renders reactivate this location" do
           expect(response).to have_http_status(:ok)
