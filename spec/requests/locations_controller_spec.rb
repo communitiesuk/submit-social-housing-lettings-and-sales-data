@@ -871,8 +871,15 @@ RSpec.describe LocationsController, type: :request do
         locations.each do |location|
           expect(page).to have_content(location.id)
           expect(page).to have_content(location.postcode)
-          expect(page).to have_content(location.name)
-          expect(page).to have_content(location.status)
+          if FeatureToggle.new_locations_table_layout_enabled?
+            expect(page).to have_content(location.name)
+            expect(page).to have_content(location.status)
+          else
+            expect(page).to have_content(location.type_of_unit)
+            expect(page).to have_content(location.mobility_type)
+            expect(page).to have_content(location.location_admin_district)
+            expect(page).to have_content(location.startdate&.to_formatted_s(:govuk_date))
+          end
         end
       end
 
@@ -974,8 +981,13 @@ RSpec.describe LocationsController, type: :request do
         locations.each do |location|
           expect(page).to have_content(location.id)
           expect(page).to have_content(location.postcode)
-          expect(page).to have_content(location.name)
-          expect(page).to have_content(location.status)
+          if FeatureToggle.new_locations_table_layout_enabled?
+            expect(page).to have_content(location.name)
+            expect(page).to have_content(location.status)
+          else
+            expect(page).to have_content(location.type_of_unit)
+            expect(page).to have_content(location.startdate&.to_formatted_s(:govuk_date))
+          end
         end
       end
 
