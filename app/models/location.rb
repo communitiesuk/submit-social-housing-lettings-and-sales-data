@@ -4,7 +4,7 @@ class Location < ApplicationRecord
   validates :units, :type_of_unit, :mobility_type, presence: true
   belongs_to :scheme
   has_many :lettings_logs, class_name: "LettingsLog"
-  has_many :location_deactivations, class_name: "LocationDeactivation"
+  has_many :location_deactivation_periods, class_name: "LocationDeactivationPeriod"
 
   has_paper_trail
 
@@ -375,7 +375,7 @@ class Location < ApplicationRecord
   end
 
   def status
-    recent_deactivation = location_deactivations.deactivations_without_reactivation.first
+    recent_deactivation = location_deactivation_periods.deactivations_without_reactivation.first
     return :active if recent_deactivation.blank?
     return :deactivating_soon if Time.zone.now < recent_deactivation.deactivation_date
 

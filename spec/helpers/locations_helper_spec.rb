@@ -78,8 +78,8 @@ RSpec.describe LocationsHelper do
 
       context "with previous deactivations" do
         before do
-          location.location_deactivations << FactoryBot.create(:location_deactivation, deactivation_date: Time.zone.local(2022, 8, 10), reactivation_date: Time.zone.local(2022, 9, 1))
-          location.location_deactivations << FactoryBot.create(:location_deactivation, deactivation_date: Time.zone.local(2022, 9, 15), reactivation_date: nil)
+          location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 10), reactivation_date: Time.zone.local(2022, 9, 1))
+          location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 15), reactivation_date: nil)
         end
 
         it "displays the timeline of availability" do

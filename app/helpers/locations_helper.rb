@@ -39,7 +39,7 @@ module LocationsHelper
 
   def location_availability(location)
     availability = "Active from #{location.available_from.to_formatted_s(:govuk_date)}"
-    location.location_deactivations.each do |deactivation|
+    location.location_deactivation_periods.each do |deactivation|
       availability << " to #{(deactivation.deactivation_date - 1.day).to_formatted_s(:govuk_date)}\nDeactivated on #{deactivation.deactivation_date.to_formatted_s(:govuk_date)}"
       availability << "\nActive from #{deactivation.reactivation_date.to_formatted_s(:govuk_date)}" if deactivation.reactivation_date.present?
     end

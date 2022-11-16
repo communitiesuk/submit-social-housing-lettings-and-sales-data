@@ -1283,8 +1283,8 @@ RSpec.describe LocationsController, type: :request do
           expect(response).to have_http_status(:ok)
           expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
           location.reload
-          expect(location.location_deactivations.count).to eq(1)
-          expect(location.location_deactivations.first.deactivation_date).to eq(deactivation_date)
+          expect(location.location_deactivation_periods.count).to eq(1)
+          expect(location.location_deactivation_periods.first.deactivation_date).to eq(deactivation_date)
         end
 
         context "and a log startdate is after location deactivation date" do
@@ -1392,7 +1392,7 @@ RSpec.describe LocationsController, type: :request do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
       let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
       let!(:location) { FactoryBot.create(:location, scheme:) }
-      let(:add_deactivations) { location.location_deactivations << location_deactivation }
+      let(:add_deactivations) { location.location_deactivation_periods << location_deactivation_period }
 
       before do
         Timecop.freeze(Time.utc(2022, 10, 10))
@@ -1412,7 +1412,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "with deactivated location" do
-        let(:location_deactivation) { FactoryBot.create(:location_deactivation, deactivation_date: Time.zone.local(2022, 10, 9)) }
+        let(:location_deactivation_period) { FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 9)) }
 
         it "renders reactivate this location" do
           expect(response).to have_http_status(:ok)
@@ -1421,7 +1421,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "with location that's deactivating soon" do
-        let(:location_deactivation) { FactoryBot.create(:location_deactivation, deactivation_date: Time.zone.local(2022, 10, 12)) }
+        let(:location_deactivation_period) { FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 12)) }
 
         it "renders reactivate this location" do
           expect(response).to have_http_status(:ok)

@@ -245,13 +245,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_15_113437) do
     t.index ["scheme_id"], name: "index_lettings_logs_on_scheme_id"
   end
 
-  create_table "location_deactivations", force: :cascade do |t|
+  create_table "location_deactivation_periods", force: :cascade do |t|
     t.datetime "deactivation_date"
     t.datetime "reactivation_date"
     t.bigint "location_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["location_id"], name: "index_location_deactivations_on_location_id"
+    t.index ["location_id"], name: "index_location_deactivation_periods_on_location_id"
   end
 
   create_table "locations", force: :cascade do |t|
