@@ -132,7 +132,7 @@ RSpec.describe Scheme, type: :model do
     let(:scheme) { FactoryBot.create(:scheme, deactivation_date: Date.new(2022, 4, 1)) }
 
     it "is valid" do
-      expect(scheme.valid?).to be_truthy
+      expect(scheme).to be_valid
     end
   end
 end

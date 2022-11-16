@@ -152,7 +152,7 @@ RSpec.describe Location, type: :model do
     let(:location) { FactoryBot.create(:location, deactivation_date: Date.new(2022, 4, 1)) }
 
     it "is valid" do
-      expect(location.valid?).to be_truthy
+      expect(location).to be_valid
     end
   end
 end

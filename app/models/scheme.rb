@@ -245,7 +245,7 @@ class Scheme < ApplicationRecord
       end
     else
       collection_start_date = FormHandler.instance.current_collection_start_date
-      if !deactivation_date.between?(collection_start_date, Date.new(2200, 1, 1))
+      unless deactivation_date.between?(collection_start_date, Date.new(2200, 1, 1))
         errors.add(:deactivation_date, message: I18n.t("validations.scheme.deactivation_date.out_of_range", date: collection_start_date.to_formatted_s(:govuk_date)))
       end
     end
