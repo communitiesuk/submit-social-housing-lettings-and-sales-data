@@ -19,10 +19,7 @@ class Form::Lettings::Questions::HousingProvider < ::Form::Question
       answer_opts[current_user.organisation.id] = "#{current_user.organisation.name} (Your organisation)"
     end
 
-    housing_providers.select(:id, :name).each_with_object(answer_opts) do |organisation, hsh|
-      hsh[organisation.id] = organisation.name
-      hsh
-    end
+    answer_opts.merge(housing_providers_answer_options)
   end
 
   def displayed_answer_options(log, user = nil)
@@ -48,8 +45,7 @@ class Form::Lettings::Questions::HousingProvider < ::Form::Question
     return false unless @current_user
     return false if @current_user.support?
 
-    # Hide when less than 2 housing providers
-    housing_providers.count < 2
+    housing_providers_answer_options.count < 2
   end
 
   def enabled
@@ -62,11 +58,11 @@ private
     true
   end
 
-  def housing_providers
-    @housing_providers ||= if current_user.support?
-                             Organisation.all
-                           else
-                             current_user.organisation.housing_providers
-                           end
+  def housing_providers_answer_options
+    @housing_providers_answer_options ||= if current_user.support?
+                                            Organisation
+                                          else
+                                            current_user.organisation.housing_providers
+                                          end.pluck(:id, :name).to_h
   end
 end

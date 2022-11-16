@@ -39,7 +39,7 @@ unless Rails.env.test?
     provider_type: "LA",
   )
   managing_agent2 = Organisation.find_or_create_by!(
-    name: "Managing Agent 1",
+    name: "Managing Agent 2",
     address_line1: "2 Marsham Street",
     address_line2: "London",
     postcode: "SW1P 4DF",

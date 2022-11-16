@@ -25,10 +25,7 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
       opts[current_user.organisation.id] = "#{current_user.organisation.name} (Your organisation)"
     end
 
-    managing_organisations.select(:id, :name).each_with_object(opts) do |organisation, hsh|
-      hsh[organisation.id] = organisation.name
-      hsh
-    end
+    opts.merge(managing_organisations_answer_options)
   end
 
   def displayed_answer_options(log, user)
@@ -54,8 +51,7 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
     return false unless @current_user
     return false if @current_user.support?
 
-    # Hide when less than 2 managing_agents
-    managing_organisations.count < 2
+    managing_organisations_answer_options.count < 2
   end
 
   def enabled
@@ -68,11 +64,11 @@ private
     true
   end
 
-  def managing_organisations
-    @managing_organisations ||= if current_user.support?
-                                  log.owning_organisation
-                                else
-                                  current_user.organisation
-                                end.managing_agents
+  def managing_organisations_answer_options
+    @managing_organisations_answer_options ||= if current_user.support?
+                                                 log.owning_organisation
+                                               else
+                                                 current_user.organisation
+                                               end.managing_agents.pluck(:id, :name).to_h
   end
 end

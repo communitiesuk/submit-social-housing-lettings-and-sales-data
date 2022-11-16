@@ -13,8 +13,6 @@ class Form::Lettings::Pages::HousingProvider < ::Form::Page
     ]
   end
 
-  # For an organisation owns and manages ONLY their own housing stock AND NOT uses agents to manage the properties AND NOT manages housing stock of other organisations?
-  # In "set up this lettings log" no extra question should be shown
   def routed_to?(log, current_user)
     return false unless current_user
     return true if current_user.support?
