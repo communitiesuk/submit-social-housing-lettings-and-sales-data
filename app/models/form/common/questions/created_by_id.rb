@@ -19,7 +19,7 @@ class Form::Common::Questions::CreatedById < ::Form::Question
     end
   end
 
-  def displayed_answer_options(log)
+  def displayed_answer_options(log, _user = nil)
     return answer_options unless log.owning_organisation
 
     user_ids = log.owning_organisation.users.pluck(:id) + [""]

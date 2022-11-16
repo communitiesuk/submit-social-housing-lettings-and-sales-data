@@ -141,6 +141,7 @@ en:
         previous_let_social: "Property cannot have a previous let type if being let as social housing for the first time"
         non_temp_accommodation: "Answer cannot be re-let to tenant who occupied the same property as temporary accommodation as this accommodation is not temporary"
         referral_invalid: "Answer cannot be re-let to tenant who occupied the same property as temporary accommodation as a different source of referral for this letting"
+        not_a_renewal: "Reason for vacancy cannot be 'Renewal of fixed-term tenancy' if letting is not a renewal"
       unittype_gn:
         one_bedroom_bedsit: "A bedsit can only have one bedroom"
         one_seven_bedroom_shared: "A shared house must have 1 to 7 bedrooms"
@@ -301,8 +302,8 @@ en:
     tenancy:
       length:
         fixed_term_not_required: "You must only answer the length of the tenancy if it's fixed-term"
-        shorthold: "Enter a tenancy length between 2 and 99 years for a Fixed Term – Assured Shorthold Tenancy (AST)"
-        secure: "Enter a tenancy length between 2 and 99 years (or don't specify the length) for a Secure (including flexible) tenancy"
+        shorthold: "Enter a tenancy length between %{min_tenancy_length} and 99 years for a tenancy of this type"
+        secure: "Enter a tenancy length between %{min_tenancy_length} and 99 years (or don't specify the length) for a tenancy of this type"
       internal_transfer: "Answer must be secure tenancy as this tenancy is an internal transfer"
       cannot_be_internal_transfer: "Answer cannot be internal transfer as this is not a secure tenancy"
       not_joint: "This cannot be a joint tenancy as you've told us there's only one person in the household"
@@ -310,6 +311,18 @@ en:
 
     declaration:
       missing: "You must show the DLUHC privacy notice to the tenant before you can submit this log."
+
+    scheme:
+      deactivation_date:
+        not_selected: "Select one of the options"
+        invalid: "Enter a valid day, month and year"
+        out_of_range: "The date must be on or after the %{date}"
+
+    location:
+      deactivation_date:
+        not_selected: "Select one of the options"
+        invalid: "Enter a valid day, month and year"
+        out_of_range: "The date must be on or after the %{date}"
 
   soft_validations:
     net_income:
@@ -361,6 +374,11 @@ en:
       startdate: "When did the first property in this location become available under this scheme? (optional)"
       add_another_location: "Do you want to add another location?"
       mobility_type: "What are the mobility standards for the majority of units in this location?"
+      deactivation:
+        apply_from: "When should this change apply?"
+    scheme:
+      deactivation:
+        apply_from: "When should this change apply?"
     descriptions:
       location:
         mobility_type:
@@ -373,6 +391,19 @@ en:
       postcode: "For example, SW1P 4DF."
       name: "This is how you refer to this location within your organisation"
       units: "A unit can be a bedroom in a shared house or flat, or a house with 4 bedrooms. Do not include bedrooms used for wardens, managers, volunteers or sleep-in staff."
+      deactivation: "If the date is before %{date}, select ‘From the start of the current collection period’ because the previous period has now closed."
+    scheme:
+      deactivation: "If the date is before %{date}, select ‘From the start of the current collection period’ because the previous period has now closed."
+
+  warnings:
+    location:
+      deactivation:
+        existing_logs: "It will not be possible to add logs with this location if their tenancy start date is on or after the date you enter. Any existing logs may be affected."
+        review_logs: "Your data providers will need to review these logs and answer a few questions again. We’ll email each log creator with a list of logs that need updating."
+    scheme:
+      deactivation:
+        existing_logs: "It will not be possible to add logs with this scheme if their tenancy start date is on or after the date you enter. Any existing logs may be affected."
+        review_logs: "Your data providers will need to review these logs and answer a few questions again. We’ll email each log creator with a list of logs that need updating."
 
   test:
     one_argument: "This is based on the tenant’s work situation: %{ecstat1}"

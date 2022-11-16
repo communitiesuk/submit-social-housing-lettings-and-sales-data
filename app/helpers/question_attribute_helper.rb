@@ -7,6 +7,14 @@ module QuestionAttributeHelper
     merge_controller_attributes(*attribs)
   end
 
+  def basic_conditional_html_attributes(conditional_for, type)
+    {
+      "data-controller": "conditional-question",
+      "data-action": "click->conditional-question#displayConditional",
+      "data-info": { conditional_questions: conditional_for, type: }.to_json,
+    }
+  end
+
 private
 
   def numeric_question_html_attributes(question)
@@ -27,7 +35,7 @@ private
     {
       "data-controller": "conditional-question",
       "data-action": "click->conditional-question#displayConditional",
-      "data-info": { conditional_questions: question.conditional_for, log_type: question.form.type }.to_json,
+      "data-info": { conditional_questions: question.conditional_for, type: "#{question.form.type}-log" }.to_json,
     }
   end
 end

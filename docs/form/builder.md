@@ -9,7 +9,7 @@ nav_order: 1
 
 The setup this log section is treated slightly differently from the rest of the form. It is more accurately viewed as providing metadata about the form than as being part of the form itself. It also needs to know far more about the application specific context than other parts of the form such as who the current user is, what organisation they’re part of and what role they have etc.
 
-As a result it’s not modelled as part of the config but rather as code. It still uses the same [Form Runner](runner) components though.
+As a result it’s not modelled as part of the config but rather as code. It still uses the same [Form Runner](/form/runner) components though.
 
 ## Features the Form Config supports
 

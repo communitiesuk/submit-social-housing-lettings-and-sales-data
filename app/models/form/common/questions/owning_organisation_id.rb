@@ -19,7 +19,7 @@ class Form::Common::Questions::OwningOrganisationId < ::Form::Question
     end
   end
 
-  def displayed_answer_options(_log)
+  def displayed_answer_options(_log, _user = nil)
     answer_options
   end
 

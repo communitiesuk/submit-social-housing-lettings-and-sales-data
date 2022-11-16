@@ -4,7 +4,7 @@ class Form::Sales::Subsections::PropertyInformation < ::Form::Subsection
     @id = "property_information"
     @label = "Property information"
     @section = section
-    @depends_on = [{ "setup" => "completed" }]
+    @depends_on = [{ "setup_completed?" => true }]
   end
 
   def pages

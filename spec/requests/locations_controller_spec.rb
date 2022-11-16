@@ -597,7 +597,7 @@ RSpec.describe LocationsController, type: :request do
         it "updates existing location for scheme with valid params and redirects to correct page" do
           follow_redirect!
           expect(response).to have_http_status(:ok)
-          expect(page).to have_content("Locations")
+          expect(page).to have_content("Test")
         end
 
         it "updates existing location for scheme with valid params" do
@@ -736,7 +736,7 @@ RSpec.describe LocationsController, type: :request do
         it "updates existing location for scheme with valid params and redirects to correct page" do
           follow_redirect!
           expect(response).to have_http_status(:ok)
-          expect(page).to have_content("Locations")
+          expect(page).to have_content("Test")
         end
 
         it "updates existing location for scheme with valid params" do
@@ -1208,6 +1208,203 @@ RSpec.describe LocationsController, type: :request do
 
         it "returns not found" do
           expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+  end
+
+  describe "#deactivate" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        patch "/schemes/1/locations/1/deactivate"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        patch "/schemes/1/locations/1/deactivate"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when signed in as a data coordinator" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:location) { FactoryBot.create(:location, scheme:) }
+      let(:startdate) { Time.utc(2021, 1, 2) }
+      let(:deactivation_date) { Time.utc(2022, 10, 10) }
+
+      before do
+        Timecop.freeze(Time.utc(2022, 10, 10))
+        sign_in user
+        patch "/schemes/#{scheme.id}/locations/#{location.id}/new-deactivation", params:
+      end
+
+      context "with default date" do
+        let(:params) { { location: { deactivation_date_type: "default", deactivation_date: } } }
+
+        it "redirects to the confirmation page" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("This change will affect #{location.lettings_logs.count} logs")
+        end
+      end
+
+      context "with other date" do
+        let(:params) { { location: { deactivation_date_type: "other", "deactivation_date(3i)": "10", "deactivation_date(2i)": "10", "deactivation_date(1i)": "2022" } } }
+
+        it "redirects to the confirmation page" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("This change will affect #{location.lettings_logs.count} logs")
+        end
+      end
+
+      context "when confirming deactivation" do
+        let(:params) { { location: { deactivation_date:, confirm: true, deactivation_date_type: "other" } } }
+
+        before do
+          Timecop.freeze(Time.utc(2022, 10, 10))
+          sign_in user
+          patch "/schemes/#{scheme.id}/locations/#{location.id}/deactivate", params:
+        end
+
+        it "updates existing location with valid deactivation date and renders location page" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+          location.reload
+          expect(location.deactivation_date).to eq(deactivation_date)
+        end
+      end
+
+      context "when the date is not selected" do
+        let(:params) { { location: { "deactivation_date": "" } } }
+
+        it "displays the new page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.location.deactivation_date.not_selected"))
+        end
+      end
+
+      context "when invalid date is entered" do
+        let(:params) { { location: { deactivation_date_type: "other", "deactivation_date(3i)": "10", "deactivation_date(2i)": "44", "deactivation_date(1i)": "2022" } } }
+
+        it "displays the new page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.location.deactivation_date.invalid"))
+        end
+      end
+
+      context "when the date is entered is before the beginning of current collection window" do
+        let(:params) { { location: { deactivation_date_type: "other", "deactivation_date(3i)": "10", "deactivation_date(2i)": "4", "deactivation_date(1i)": "2020" } } }
+
+        it "displays the new page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.location.deactivation_date.out_of_range", date: "1 April 2022"))
+        end
+      end
+
+      context "when the day is not entered" do
+        let(:params) { { location: { deactivation_date_type: "other", "deactivation_date(3i)": "", "deactivation_date(2i)": "2", "deactivation_date(1i)": "2022" } } }
+
+        it "displays page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.location.deactivation_date.invalid"))
+        end
+      end
+
+      context "when the month is not entered" do
+        let(:params) { { location: { deactivation_date_type: "other", "deactivation_date(3i)": "2", "deactivation_date(2i)": "", "deactivation_date(1i)": "2022" } } }
+
+        it "displays page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.location.deactivation_date.invalid"))
+        end
+      end
+
+      context "when the year is not entered" do
+        let(:params) { { location: { deactivation_date_type: "other", "deactivation_date(3i)": "2", "deactivation_date(2i)": "2", "deactivation_date(1i)": "" } } }
+
+        it "displays page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.location.deactivation_date.invalid"))
+        end
+      end
+    end
+  end
+
+  describe "#show" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        get "/schemes/1/locations/1"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        get "/schemes/1/locations/1"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when signed in as a data coordinator" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:location) { FactoryBot.create(:location, scheme:) }
+
+      before do
+        Timecop.freeze(Time.utc(2022, 10, 10))
+        sign_in user
+        location.deactivation_date = deactivation_date
+        location.deactivation_date_type = deactivation_date_type
+        location.save!
+        get "/schemes/#{scheme.id}/locations/#{location.id}"
+      end
+
+      context "with active location" do
+        let(:deactivation_date) { nil }
+        let(:deactivation_date_type) { nil }
+
+        it "renders deactivate this location" do
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_link("Deactivate this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/new-deactivation")
+        end
+      end
+
+      context "with deactivated location" do
+        let(:deactivation_date) { Time.utc(2022, 10, 9) }
+        let(:deactivation_date_type) { "other" }
+
+        it "renders reactivate this location" do
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_link("Reactivate this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/reactivate")
+        end
+      end
+
+      context "with location that's deactivating soon" do
+        let(:deactivation_date) { Time.utc(2022, 10, 12) }
+        let(:deactivation_date_type) { "other" }
+
+        it "renders reactivate this location" do
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_link("Reactivate this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/reactivate")
         end
       end
     end

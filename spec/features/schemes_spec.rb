@@ -692,7 +692,7 @@ RSpec.describe "Schemes scheme Features" do
 
         context "when I click to see individual scheme" do
           let(:scheme) { schemes.first }
-          let!(:location) { FactoryBot.create(:location, scheme:) }
+          let!(:location) { FactoryBot.create(:location, startdate: Time.zone.local(2022, 4, 4), scheme:) }
 
           before do
             click_link(scheme.service_name)
@@ -757,9 +757,29 @@ RSpec.describe "Schemes scheme Features" do
                 click_link(location.postcode)
               end
 
-              it "shows available fields to edit" do
-                expect(page).to have_current_path("/schemes/#{scheme.id}/locations/#{location.id}/edit-name")
+              it "displays details about the selected location" do
+                expect(page).to have_current_path("/schemes/#{scheme.id}/locations/#{location.id}")
+                expect(page).to have_content(location.postcode)
+                expect(page).to have_content(location.location_admin_district)
+                expect(page).to have_content(location.name)
+                expect(page).to have_content(location.units)
+                expect(page).to have_content(location.type_of_unit)
+                expect(page).to have_content(location.mobility_type)
+                expect(page).to have_content(location.location_code)
+                expect(page).to have_content("Available from 4 April 2022")
+                expect(page).to have_content("Active")
+              end
+
+              it "only allows to edit the location name" do
+                assert_selector "a", text: "Change", count: 1
+
+                click_link("Change")
                 expect(page).to have_content "Location name for #{location.postcode}"
+              end
+
+              it "allows to deactivate a location" do
+                click_link("Deactivate this location")
+                expect(page).to have_current_path("/schemes/#{scheme.id}/locations/#{location.id}/new-deactivation")
               end
 
               context "when I press the back button" do
@@ -775,14 +795,26 @@ RSpec.describe "Schemes scheme Features" do
 
               context "and I change the location name" do
                 before do
-                  fill_in "location-name-field", with: "NewName"
-                  click_button "Save and continue"
+                  click_link("Change")
                 end
 
                 it "returns to locations check your answers page and shows the new name" do
-                  expect(page).to have_content location.id
+                  fill_in "location-name-field", with: "NewName"
+                  click_button "Save and continue"
+                  expect(page).to have_content location.postcode
                   expect(page).to have_content "NewName"
-                  expect(page.current_url.split("/").last).to eq("check-answers#locations")
+                  expect(page).to have_current_path("/schemes/#{scheme.id}/locations/#{location.id}")
+                end
+
+                context "when I press the back button" do
+                  before do
+                    click_link "Back"
+                  end
+
+                  it "I see location details" do
+                    expect(page).to have_content location.name
+                    expect(page).to have_current_path("/schemes/#{scheme.id}/locations/#{location.id}")
+                  end
                 end
               end
             end

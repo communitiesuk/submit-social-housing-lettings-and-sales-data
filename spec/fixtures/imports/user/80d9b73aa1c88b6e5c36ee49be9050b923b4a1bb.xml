@@ -1,0 +1,19 @@
+<user xmlns="dclg:user">
+  <id>80d9b73aa1c88b6e5c36ee49be9050b923b4a1bb</id>
+  <user-name>Jane Doe</user-name>
+  <institution>7c5bd5fb549c09a2c55d7cb90d7ba84927e64618</institution>
+  <user-stamp>1158 1158</user-stamp>
+  <active>true</active>
+  <user-type>Data Provider</user-type>
+  <association-site-id />
+  <e-core-download>false</e-core-download>
+  <raw-data-download>false</raw-data-download>
+  <licence>false</licence>
+  <contact-priority-id>None</contact-priority-id>
+  <email>jane.doe@gov.uk</email>
+  <password>REDACTED</password>
+  <full-name>Jane Doe</full-name>
+  <telephone-no>01111 000000</telephone-no>
+  <deleted>false</deleted>
+  <date-deactivated>2021-09-28Z</date-deactivated>
+</user>

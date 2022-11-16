@@ -45,7 +45,7 @@ module Imports
     end
 
     def user_field_value(xml_document, field)
-      field_value(xml_document, "user", field)
+      field_value(xml_document, "user", field, { "user" => "dclg:user" })
     end
 
     def role(field_value)

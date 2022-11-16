@@ -20,11 +20,7 @@ class Form::Subsection
   def enabled?(log)
     return true unless depends_on
 
-    depends_on.any? do |conditions_set|
-      conditions_set.all? do |subsection_id, dependent_status|
-        form.get_subsection(subsection_id).status(log) == dependent_status.to_sym
-      end
-    end
+    form.depends_on_met(depends_on, log)
   end
 
   def status(log)

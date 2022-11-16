@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_19_082625) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_11_102656) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -255,11 +255,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_19_082625) do
     t.integer "units"
     t.integer "type_of_unit"
     t.string "old_id"
-    t.integer "old_visible_id"
+    t.string "old_visible_id"
     t.string "mobility_type"
     t.datetime "startdate", precision: nil
     t.string "location_admin_district"
     t.boolean "confirmed"
+    t.datetime "deactivation_date"
     t.index ["old_id"], name: "index_locations_on_old_id", unique: true
     t.index ["scheme_id"], name: "index_locations_on_scheme_id"
   end
@@ -315,7 +316,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_19_082625) do
     t.integer "supported_housing_units"
     t.integer "unspecified_units"
     t.string "old_org_id"
-    t.integer "old_visible_id"
+    t.string "old_visible_id"
     t.index ["old_visible_id"], name: "index_organisations_on_old_visible_id", unique: true
   end
 
@@ -359,12 +360,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_19_082625) do
     t.integer "hholdcount"
     t.integer "age3"
     t.integer "age3_known"
-    t.integer "age4"
-    t.integer "age4_known"
-    t.integer "age5"
-    t.integer "age5_known"
-    t.integer "age6"
-    t.integer "age6_known"
     t.string "la"
     t.integer "la_known"
     t.integer "income1"
@@ -372,6 +367,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_19_082625) do
     t.integer "details_known_2"
     t.integer "details_known_3"
     t.integer "details_known_4"
+    t.integer "age4"
+    t.integer "age4_known"
+    t.integer "age5"
+    t.integer "age5_known"
+    t.integer "age6"
+    t.integer "age6_known"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
@@ -394,9 +395,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_19_082625) do
     t.bigint "managing_organisation_id"
     t.string "arrangement_type"
     t.string "old_id"
-    t.integer "old_visible_id"
+    t.string "old_visible_id"
     t.integer "total_units"
     t.boolean "confirmed"
+    t.datetime "deactivation_date"
     t.index ["managing_organisation_id"], name: "index_schemes_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_schemes_on_owning_organisation_id"
   end

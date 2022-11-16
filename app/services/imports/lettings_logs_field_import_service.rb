@@ -16,8 +16,8 @@ module Imports
   private
 
     def update_lettings_allocation(xml_doc)
-      old_id = field_value(xml_doc, "meta", "document-id")
-      previous_status = field_value(xml_doc, "meta", "status")
+      old_id = meta_field_value(xml_doc, "document-id")
+      previous_status = meta_field_value(xml_doc, "status")
       record = LettingsLog.find_by(old_id:)
 
       if record.present? && previous_status.include?("submitted")
@@ -46,11 +46,11 @@ module Imports
     end
 
     def update_major_repairs(xml_doc)
-      old_id = field_value(xml_doc, "meta", "document-id")
+      old_id = meta_field_value(xml_doc, "document-id")
       record = LettingsLog.find_by(old_id:)
 
       if record.present?
-        previous_status = field_value(xml_doc, "meta", "status")
+        previous_status = meta_field_value(xml_doc, "status")
         major_repairs_date = compose_date(xml_doc, "MRCDAY", "MRCMONTH", "MRCYEAR")
         major_repairs = if major_repairs_date.present? && previous_status.include?("submitted")
                           1
@@ -69,7 +69,7 @@ module Imports
     end
 
     def update_tenant_code(xml_doc)
-      old_id = field_value(xml_doc, "meta", "document-id")
+      old_id = meta_field_value(xml_doc, "document-id")
       record = LettingsLog.find_by(old_id:)
 
       if record.present?

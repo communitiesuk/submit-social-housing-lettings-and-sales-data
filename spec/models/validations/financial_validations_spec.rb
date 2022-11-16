@@ -18,6 +18,8 @@ RSpec.describe Validations::FinancialValidations do
       financial_validator.validate_net_income(record)
       expect(record.errors["incfreq"])
         .to include(match I18n.t("validations.financial.earnings.freq_missing"))
+      expect(record.errors["earnings"])
+        .to include(match I18n.t("validations.financial.earnings.freq_missing"))
     end
 
     it "when income frequency is provided it validates that earnings must be provided" do
@@ -25,6 +27,8 @@ RSpec.describe Validations::FinancialValidations do
       record.incfreq = 1
       financial_validator.validate_net_income(record)
       expect(record.errors["earnings"])
+        .to include(match I18n.t("validations.financial.earnings.earnings_missing"))
+      expect(record.errors["incfreq"])
         .to include(match I18n.t("validations.financial.earnings.earnings_missing"))
     end
   end
@@ -828,6 +832,11 @@ RSpec.describe Validations::FinancialValidations do
           financial_validator.validate_rent_amount(record)
           expect(record.errors["brent"])
             .to include(match I18n.t("validations.financial.brent.below_hard_min"))
+
+          %w[beds la postcode_known scheme_id location_id rent_type needstype period].each do |field|
+            expect(record.errors[field])
+              .to include(match I18n.t("validations.financial.brent.#{field}.below_hard_min"))
+          end
         end
 
         it "validates hard max for general needs" do
@@ -842,22 +851,11 @@ RSpec.describe Validations::FinancialValidations do
           financial_validator.validate_rent_amount(record)
           expect(record.errors["brent"])
             .to include(match I18n.t("validations.financial.brent.above_hard_max"))
-          expect(record.errors["beds"])
-            .to include(match I18n.t("validations.financial.brent.beds.above_hard_max"))
-          expect(record.errors["la"])
-            .to include(match I18n.t("validations.financial.brent.la.above_hard_max"))
-          expect(record.errors["postcode_known"])
-            .to include(match I18n.t("validations.financial.brent.postcode_known.above_hard_max"))
-          expect(record.errors["scheme_id"])
-            .to include(match I18n.t("validations.financial.brent.scheme_id.above_hard_max"))
-          expect(record.errors["location_id"])
-            .to include(match I18n.t("validations.financial.brent.location_id.above_hard_max"))
-          expect(record.errors["rent_type"])
-            .to include(match I18n.t("validations.financial.brent.rent_type.above_hard_max"))
-          expect(record.errors["needstype"])
-            .to include(match I18n.t("validations.financial.brent.needstype.above_hard_max"))
-          expect(record.errors["period"])
-            .to include(match I18n.t("validations.financial.brent.period.above_hard_max"))
+
+          %w[beds la postcode_known scheme_id location_id rent_type needstype period].each do |field|
+            expect(record.errors[field])
+              .to include(match I18n.t("validations.financial.brent.#{field}.above_hard_max"))
+          end
         end
 
         it "validates hard max for supported housing" do
@@ -871,22 +869,11 @@ RSpec.describe Validations::FinancialValidations do
           financial_validator.validate_rent_amount(record)
           expect(record.errors["brent"])
             .to include(match I18n.t("validations.financial.brent.above_hard_max"))
-          expect(record.errors["beds"])
-            .to include(match I18n.t("validations.financial.brent.beds.above_hard_max"))
-          expect(record.errors["la"])
-            .to include(match I18n.t("validations.financial.brent.la.above_hard_max"))
-          expect(record.errors["postcode_known"])
-            .to include(match I18n.t("validations.financial.brent.postcode_known.above_hard_max"))
-          expect(record.errors["scheme_id"])
-            .to include(match I18n.t("validations.financial.brent.scheme_id.above_hard_max"))
-          expect(record.errors["location_id"])
-            .to include(match I18n.t("validations.financial.brent.location_id.above_hard_max"))
-          expect(record.errors["rent_type"])
-            .to include(match I18n.t("validations.financial.brent.rent_type.above_hard_max"))
-          expect(record.errors["needstype"])
-            .to include(match I18n.t("validations.financial.brent.needstype.above_hard_max"))
-          expect(record.errors["period"])
-            .to include(match I18n.t("validations.financial.brent.period.above_hard_max"))
+
+          %w[beds la postcode_known scheme_id location_id rent_type needstype period].each do |field|
+            expect(record.errors[field])
+              .to include(match I18n.t("validations.financial.brent.#{field}.above_hard_max"))
+          end
         end
 
         it "validates hard max for correct collection year" do
@@ -900,14 +887,11 @@ RSpec.describe Validations::FinancialValidations do
           financial_validator.validate_rent_amount(record)
           expect(record.errors["brent"])
             .to include(match I18n.t("validations.financial.brent.above_hard_max"))
-          expect(record.errors["beds"])
-            .to include(match I18n.t("validations.financial.brent.beds.above_hard_max"))
-          expect(record.errors["la"])
-            .to include(match I18n.t("validations.financial.brent.la.above_hard_max"))
-          expect(record.errors["rent_type"])
-            .to include(match I18n.t("validations.financial.brent.rent_type.above_hard_max"))
-          expect(record.errors["needstype"])
-            .to include(match I18n.t("validations.financial.brent.needstype.above_hard_max"))
+
+          %w[beds la postcode_known scheme_id location_id rent_type needstype period].each do |field|
+            expect(record.errors[field])
+              .to include(match I18n.t("validations.financial.brent.#{field}.above_hard_max"))
+          end
         end
 
         it "does not error if some of the fields are missing" do
@@ -1009,6 +993,8 @@ RSpec.describe Validations::FinancialValidations do
           record.chcharge = nil
           financial_validator.validate_care_home_charges(record)
           expect(record.errors["chcharge"])
+            .to include(match I18n.t("validations.financial.carehome.not_provided", period: "every 4 weeks"))
+          expect(record.errors["is_carehome"])
             .to include(match I18n.t("validations.financial.carehome.not_provided", period: "every 4 weeks"))
         end
       end

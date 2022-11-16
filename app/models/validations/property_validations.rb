@@ -38,6 +38,10 @@ module Validations::PropertyValidations
       record.errors.add :rsnvac, I18n.t("validations.property.rsnvac.referral_invalid")
       record.errors.add :referral, I18n.t("validations.household.referral.rsnvac_non_temp")
     end
+
+    if record.renewal.present? && record.renewal.zero? && record.rsnvac == 14
+      record.errors.add :rsnvac, I18n.t("validations.property.rsnvac.not_a_renewal")
+    end
   end
 
   def validate_unitletas(record)

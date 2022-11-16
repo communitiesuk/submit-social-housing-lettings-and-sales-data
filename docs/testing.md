@@ -15,3 +15,19 @@ nav_order: 4
 - Feature specs are generally written sparingly as they’re also the slowest, where possible a request spec is preferred as this still tests a large surface area (route, controller, model, view) without the performance impact. They are not suitable for tests that need to run JavaScript or test that a specific set of interaction events that trigger a specific set of requests (with high confidence).
 
 - Test data is created with [FactoryBot](https://github.com/thoughtbot/factory_bot) where ever possible
+
+## Parallel testing
+
+- The RSpec test suite can be ran in parallel in local development for quicker turnaround times
+
+- Setup with the following:
+
+```sh
+bundle exec rake parallel:setup
+```
+
+- Run with:
+
+```sh
+RAILS_ENV=test bundle exec rake parallel:spec
+```

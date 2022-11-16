@@ -53,6 +53,6 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
   end
 
   it "has correct depends on" do
-    expect(household_characteristics.depends_on).to eq([{ "setup" => "completed" }])
+    expect(household_characteristics.depends_on).to eq([{ "setup_completed?" => true }])
   end
 end

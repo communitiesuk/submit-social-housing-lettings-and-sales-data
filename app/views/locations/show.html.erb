@@ -1,0 +1,32 @@
+<% title = @location.name %>
+<% content_for :title, title %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+    text: "Back",
+    href: scheme_locations_path(@scheme),
+  ) %>
+<% end %>
+
+<%= render partial: "organisations/headings", locals: { main: @location.postcode, sub: @location.name } %>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+        <%= govuk_summary_list do |summary_list| %>
+            <% display_location_attributes(@location).each do |attr| %>
+                <%= summary_list.row do |row| %>
+                <% row.key { attr[:name] } %>
+                <% row.value { attr[:name].eql?("Status") ? status_tag(attr[:value]) : details_html(attr) } %>
+                <% row.action(text: "Change", href: scheme_location_edit_name_path(scheme_id: @scheme.id, location_id: @location.id)) if attr[:edit] %>
+                <% end %>
+            <% end %>
+        <% end %>
+    </div>
+</div>
+<% if FeatureToggle.location_toggle_enabled? %>
+    <% if @location.active? %>
+        <%= govuk_button_link_to "Deactivate this location", scheme_location_new_deactivation_path(scheme_id: @scheme.id, location_id: @location.id), warning: true %>
+    <% else %>
+        <%= govuk_button_link_to "Reactivate this location", scheme_location_reactivate_path(scheme_id: @scheme.id, location_id: @location.id) %>
+    <% end %>
+<% end %>

@@ -236,6 +236,50 @@ RSpec.describe SchemesController, type: :request do
           expect(response).to have_http_status(:not_found)
         end
       end
+
+      context "when looking at scheme details" do
+        let(:user) { FactoryBot.create(:user, :data_coordinator) }
+        let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+
+        before do
+          Timecop.freeze(Time.utc(2022, 10, 10))
+          sign_in user
+          scheme.deactivation_date = deactivation_date
+          scheme.deactivation_date_type = deactivation_date_type
+          scheme.save!
+          get "/schemes/#{scheme.id}"
+        end
+
+        context "with active scheme" do
+          let(:deactivation_date) { nil }
+          let(:deactivation_date_type) { nil }
+
+          it "renders deactivate this scheme" do
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_link("Deactivate this scheme", href: "/schemes/#{scheme.id}/new-deactivation")
+          end
+        end
+
+        context "with deactivated scheme" do
+          let(:deactivation_date) { Time.utc(2022, 10, 9) }
+          let(:deactivation_date_type) { "other" }
+
+          it "renders reactivate this scheme" do
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_link("Reactivate this scheme", href: "/schemes/#{scheme.id}/reactivate")
+          end
+        end
+
+        context "with scheme that's deactivating soon" do
+          let(:deactivation_date) { Time.utc(2022, 10, 12) }
+          let(:deactivation_date_type) { "other" }
+
+          it "renders reactivate this scheme" do
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_link("Reactivate this scheme", href: "/schemes/#{scheme.id}/reactivate")
+          end
+        end
+      end
     end
 
     context "when signed in as a support user" do
@@ -1689,6 +1733,135 @@ RSpec.describe SchemesController, type: :request do
         expect(page).to have_content("Scheme details")
         expect(page).to have_content("This scheme contains confidential information")
         expect(page).to have_content("Which organisation owns the housing stock for this scheme?")
+      end
+    end
+  end
+
+  describe "#deactivate" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        patch "/schemes/1/new-deactivation"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        patch "/schemes/1/new-deactivation"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when signed in as a data coordinator" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let(:startdate) { Time.utc(2021, 1, 2) }
+      let(:deactivation_date) { Time.utc(2022, 10, 10) }
+
+      before do
+        Timecop.freeze(Time.utc(2022, 10, 10))
+        sign_in user
+        patch "/schemes/#{scheme.id}/new-deactivation", params:
+      end
+
+      context "with default date" do
+        let(:params) { { scheme: { deactivation_date_type: "default", deactivation_date: } } }
+
+        it "redirects to the confirmation page" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("This change will affect #{scheme.lettings_logs.count} logs")
+        end
+      end
+
+      context "with other date" do
+        let(:params) { { scheme: { deactivation_date_type: "other", "deactivation_date(3i)": "10", "deactivation_date(2i)": "10", "deactivation_date(1i)": "2022" } } }
+
+        it "redirects to the confirmation page" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("This change will affect #{scheme.lettings_logs.count} logs")
+        end
+      end
+
+      context "when confirming deactivation" do
+        let(:params) { { scheme: { deactivation_date:, confirm: true, deactivation_date_type: "other" } } }
+
+        before do
+          Timecop.freeze(Time.utc(2022, 10, 10))
+          sign_in user
+          patch "/schemes/#{scheme.id}/deactivate", params:
+        end
+
+        it "updates existing scheme with valid deactivation date and renders scheme page" do
+          follow_redirect!
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+          scheme.reload
+          expect(scheme.deactivation_date).to eq(deactivation_date)
+        end
+      end
+
+      context "when the date is not selected" do
+        let(:params) { { scheme: { "deactivation_date": "" } } }
+
+        it "displays the new page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.scheme.deactivation_date.not_selected"))
+        end
+      end
+
+      context "when invalid date is entered" do
+        let(:params) { { scheme: { deactivation_date_type: "other", "deactivation_date(3i)": "10", "deactivation_date(2i)": "44", "deactivation_date(1i)": "2022" } } }
+
+        it "displays the new page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.scheme.deactivation_date.invalid"))
+        end
+      end
+
+      context "when the date is entered is before the beginning of current collection window" do
+        let(:params) { { scheme: { deactivation_date_type: "other", "deactivation_date(3i)": "10", "deactivation_date(2i)": "4", "deactivation_date(1i)": "2020" } } }
+
+        it "displays the new page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.scheme.deactivation_date.out_of_range", date: "1 April 2022"))
+        end
+      end
+
+      context "when the day is not entered" do
+        let(:params) { { scheme: { deactivation_date_type: "other", "deactivation_date(3i)": "", "deactivation_date(2i)": "2", "deactivation_date(1i)": "2022" } } }
+
+        it "displays page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.scheme.deactivation_date.invalid"))
+        end
+      end
+
+      context "when the month is not entered" do
+        let(:params) { { scheme: { deactivation_date_type: "other", "deactivation_date(3i)": "2", "deactivation_date(2i)": "", "deactivation_date(1i)": "2022" } } }
+
+        it "displays page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.scheme.deactivation_date.invalid"))
+        end
+      end
+
+      context "when the year is not entered" do
+        let(:params) { { scheme: { deactivation_date_type: "other", "deactivation_date(3i)": "2", "deactivation_date(2i)": "2", "deactivation_date(1i)": "" } } }
+
+        it "displays page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.scheme.deactivation_date.invalid"))
+        end
       end
     end
   end
