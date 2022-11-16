@@ -127,4 +127,12 @@ RSpec.describe Scheme, type: :model do
       expect(scheme.status).to eq(:deactivated)
     end
   end
+
+  describe "with deactivation_date (but no deactivation_date_type)" do
+    let(:scheme) { FactoryBot.create(:scheme, deactivation_date: Date.new(2022, 4, 1)) }
+
+    it "is valid" do
+      expect(scheme.valid?).to be_truthy
+    end
+  end
 end

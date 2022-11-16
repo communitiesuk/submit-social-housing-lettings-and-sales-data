@@ -237,13 +237,17 @@ class Scheme < ApplicationRecord
   def deactivation_date_errors
     return unless implicit_run_deactivation_validations
 
-    collection_start_date = FormHandler.instance.current_collection_start_date
-    if deactivation_date_type.blank?
-      errors.add(:deactivation_date_type, message: I18n.t("validations.scheme.deactivation_date.not_selected"))
-    elsif deactivation_date.blank?
-      errors.add(:deactivation_date, message: I18n.t("validations.scheme.deactivation_date.invalid"))
-    elsif !deactivation_date.between?(collection_start_date, Date.new(2200, 1, 1))
-      errors.add(:deactivation_date, message: I18n.t("validations.scheme.deactivation_date.out_of_range", date: collection_start_date.to_formatted_s(:govuk_date)))
+    if deactivation_date.blank?
+      if deactivation_date_type.blank?
+        errors.add(:deactivation_date_type, message: I18n.t("validations.scheme.deactivation_date.not_selected"))
+      elsif deactivation_date_type == "other"
+        errors.add(:deactivation_date, message: I18n.t("validations.scheme.deactivation_date.invalid"))
+      end
+    else
+      collection_start_date = FormHandler.instance.current_collection_start_date
+      if !deactivation_date.between?(collection_start_date, Date.new(2200, 1, 1))
+        errors.add(:deactivation_date, message: I18n.t("validations.scheme.deactivation_date.out_of_range", date: collection_start_date.to_formatted_s(:govuk_date)))
+      end
     end
   end
 end
