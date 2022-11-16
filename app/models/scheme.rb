@@ -226,6 +226,10 @@ class Scheme < ApplicationRecord
     status == :active
   end
 
+  def run_deactivation_validations!
+    @run_deactivation_validations = true
+  end
+
   def implicit_run_deactivation_validations
     deactivation_date.present? || @run_deactivation_validations
   end

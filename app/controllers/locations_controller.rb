@@ -24,7 +24,7 @@ class LocationsController < ApplicationController
     if params[:location].blank?
       render "toggle_active", locals: { action: "deactivate" }
     else
-      @location.run_deactivation_validations = true
+      @location.run_deactivation_validations!
       @location.deactivation_date = deactivation_date
       @location.deactivation_date_type = params[:location][:deactivation_date_type]
       if @location.valid?
@@ -36,14 +36,17 @@ class LocationsController < ApplicationController
   end
 
   def deactivate_confirm
-    render "toggle_active_confirm", locals: { action: "deactivate", deactivation_date: params[:deactivation_date], deactivation_date_type: params[:deactivation_date_type] }
+    @deactivation_date = params[:deactivation_date]
+    @deactivation_date_type = params[:deactivation_date_type]
   end
 
   def deactivate
-    @location.run_deactivation_validations = true
-    @location.deactivation_date = deactivation_date
-    @location.deactivation_date_type = params[:location][:deactivation_date_type]
-    confirm_deactivation
+    @location.run_deactivation_validations!
+
+    if @location.update!(deactivation_date:)
+      flash[:notice] = deactivate_success_notice
+    end
+    redirect_to scheme_location_path(@scheme, @location)
   end
 
   def reactivate
@@ -177,14 +180,7 @@ private
     location_params["location_admin_district"] != "Select an option"
   end
 
-  def confirm_deactivation
-    if @location.update!(deactivation_date: @location.deactivation_date)
-      flash[:notice] = success_text
-    end
-    redirect_to scheme_location_path(@scheme, @location)
-  end
-
-  def success_text
+  def deactivate_success_notice
     case @location.status
     when :deactivated
       "#{@location.name} has been deactivated"
@@ -207,6 +203,6 @@ private
     year = params[:location]["deactivation_date(1i)"]
     return nil if [day, month, year].any?(&:blank?)
 
-    Time.utc(year.to_i, month.to_i, day.to_i) if Date.valid_date?(year.to_i, month.to_i, day.to_i)
+    Time.zone.local(year.to_i, month.to_i, day.to_i) if Date.valid_date?(year.to_i, month.to_i, day.to_i)
   end
 end

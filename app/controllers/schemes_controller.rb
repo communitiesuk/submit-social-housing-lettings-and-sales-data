@@ -37,14 +37,17 @@ class SchemesController < ApplicationController
   end
 
   def deactivate_confirm
-    render "toggle_active_confirm", locals: { action: "deactivate", deactivation_date: params[:deactivation_date], deactivation_date_type: params[:deactivation_date_type] }
+    @deactivation_date = params[:deactivation_date]
+    @deactivation_date_type = params[:deactivation_date_type]
   end
 
   def deactivate
-    @scheme.run_deactivation_validations = true
-    @scheme.deactivation_date = deactivation_date
-    @scheme.deactivation_date_type = params[:scheme][:deactivation_date_type]
-    confirm_deactivation
+    @scheme.run_deactivation_validations!
+
+    if @scheme.update!(deactivation_date:)
+      flash[:notice] = deactivate_success_notice
+    end
+    redirect_to scheme_details_path(@scheme)
   end
 
   def reactivate
@@ -291,14 +294,7 @@ private
     redirect_to @scheme if @scheme.confirmed?
   end
 
-  def confirm_deactivation
-    if @scheme.update!(deactivation_date: @scheme.deactivation_date)
-      flash[:notice] = success_text
-    end
-    redirect_to scheme_details_path(@scheme)
-  end
-
-  def success_text
+  def deactivate_success_notice
     case @scheme.status
     when :deactivated
       "#{@scheme.service_name} has been deactivated"
@@ -321,6 +317,6 @@ private
     year = params[:scheme]["deactivation_date(1i)"]
     return nil if [day, month, year].any?(&:blank?)
 
-    Time.utc(year.to_i, month.to_i, day.to_i) if Date.valid_date?(year.to_i, month.to_i, day.to_i)
+    Time.zone.local(year.to_i, month.to_i, day.to_i) if Date.valid_date?(year.to_i, month.to_i, day.to_i)
   end
 end
