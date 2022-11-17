@@ -199,8 +199,6 @@ class Scheme < ApplicationRecord
   end
 
   def validate_confirmed
-    required_attributes = attribute_names - %w[id created_at updated_at old_id old_visible_id confirmed end_date sensitive secondary_client_group total_units has_other_client_group deactivation_date deactivation_date_type]
-
     if confirmed == true
       required_attributes.any? do |attribute|
         if self[attribute].blank?
@@ -211,11 +209,16 @@ class Scheme < ApplicationRecord
     end
   end
 
+  def required_attributes
+    attribute_names - %w[id created_at updated_at old_id old_visible_id confirmed end_date sensitive secondary_client_group total_units has_other_client_group deactivation_date deactivation_date_type]
+  end
+
   def available_from
     created_at
   end
 
   def status
+    return :incomplete if required_attributes.any? { |attribute| self[attribute].blank? }
     return :active if deactivation_date.blank?
     return :deactivating_soon if Time.zone.now < deactivation_date
 
