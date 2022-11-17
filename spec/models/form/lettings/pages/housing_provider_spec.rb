@@ -82,12 +82,12 @@ RSpec.describe Form::Lettings::Pages::HousingProvider, type: :model do
             expect(page.routed_to?(log, user)).to eq(false)
           end
 
-          it "does not update owning_organisation_id" do
-            expect { page.routed_to?(log, user) }.not_to change(log.reload, :owning_organisation).from(nil)
+          it "updates owning_organisation_id to user organisation" do
+            expect { page.routed_to?(log, user) }.to change(log.reload, :owning_organisation).from(nil).to(user.organisation)
           end
         end
 
-        context "with >1 housing_providers" do
+        context "with >0 housing_providers" do
           before do
             create(:organisation_relationship, :owning, child_organisation: user.organisation)
             create(:organisation_relationship, :owning, child_organisation: user.organisation)
@@ -99,27 +99,6 @@ RSpec.describe Form::Lettings::Pages::HousingProvider, type: :model do
 
           it "does not update owning_organisation_id" do
             expect { page.routed_to?(log, user) }.not_to change(log.reload, :owning_organisation).from(nil)
-          end
-        end
-
-        context "with 1 housing_providers" do
-          let(:housing_provider) { create(:organisation) }
-
-          before do
-            create(
-              :organisation_relationship,
-              :owning,
-              child_organisation: user.organisation,
-              parent_organisation: housing_provider,
-            )
-          end
-
-          it "is not shown" do
-            expect(page.routed_to?(log, user)).to eq(false)
-          end
-
-          it "updates owning_organisation_id" do
-            expect { page.routed_to?(log, user) }.to change(log.reload, :owning_organisation).from(nil).to(housing_provider)
           end
         end
       end

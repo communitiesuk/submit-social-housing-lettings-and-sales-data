@@ -18,12 +18,9 @@ class Form::Lettings::Pages::HousingProvider < ::Form::Page
     return true if current_user.support?
     return true unless current_user.organisation.holds_own_stock?
 
-    housing_providers = current_user.organisation.housing_providers
+    return true if current_user.organisation.housing_providers.count.positive?
 
-    return false if housing_providers.count.zero?
-    return true if housing_providers.count > 1
-
-    log.update!(owning_organisation: housing_providers.first)
+    log.update!(owning_organisation: current_user.organisation)
 
     false
   end
