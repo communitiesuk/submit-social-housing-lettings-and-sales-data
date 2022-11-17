@@ -22,8 +22,4 @@ class FeatureToggle
   def self.managing_for_other_user_enabled?
     !Rails.env.production?
   end
-
-  def self.new_locations_table_layout_enabled?
-    !Rails.env.production?
-  end
 end

@@ -212,7 +212,7 @@ RSpec.describe "Schemes scheme Features" do
 
             context "when I click locations link and the new locations layout feature toggle is disabled" do
               before do
-                allow(FeatureToggle).to receive(:new_locations_table_layout_enabled?).and_return(false)
+                allow(FeatureToggle).to receive(:location_toggle_enabled?).and_return(false)
                 click_link("Locations")
               end
 

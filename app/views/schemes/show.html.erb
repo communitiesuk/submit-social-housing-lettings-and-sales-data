@@ -10,7 +10,7 @@
 
 <%= render partial: "organisations/headings", locals: { main: @scheme.service_name, sub: nil } %>
 
-<% if FeatureToggle.new_locations_table_layout_enabled? %>
+<% if FeatureToggle.location_toggle_enabled? %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
 <% end %>
@@ -29,7 +29,7 @@
         <% end %>
       <% end %>
 
-<% if FeatureToggle.new_locations_table_layout_enabled? %>
+<% if FeatureToggle.location_toggle_enabled? %>
     </div>
   </div>
 <% end %>

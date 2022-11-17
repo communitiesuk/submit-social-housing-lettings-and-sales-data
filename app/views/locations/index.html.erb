@@ -11,7 +11,7 @@
 
 <%= render partial: "organisations/headings", locals: { main: @scheme.service_name, sub: nil } %>
 
-<% if FeatureToggle.new_locations_table_layout_enabled? %>
+<% if FeatureToggle.location_toggle_enabled? %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
 <% end %>
@@ -22,12 +22,12 @@
   <%= render SearchComponent.new(current_user:, search_label: "Search by location name or postcode", value: @searched) %>
 
   <%= govuk_section_break(visible: true, size: "m") %>
-<% if FeatureToggle.new_locations_table_layout_enabled? %>
+<% if FeatureToggle.location_toggle_enabled? %>
     </div>
   </div>
 <% end %>
 
-<% if FeatureToggle.new_locations_table_layout_enabled? %>
+<% if FeatureToggle.location_toggle_enabled? %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= govuk_table do |table| %>

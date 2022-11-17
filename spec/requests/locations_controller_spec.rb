@@ -877,7 +877,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       it "shows locations with correct data wben the new locations layout feature toggle is disabled" do
-        allow(FeatureToggle).to receive(:new_locations_table_layout_enabled?).and_return(false)
+        allow(FeatureToggle).to receive(:location_toggle_enabled?).and_return(false)
         get "/schemes/#{scheme.id}/locations"
         locations.each do |location|
           expect(page).to have_content(location.id)
@@ -993,7 +993,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       it "shows locations with correct data wben the new locations layout feature toggle is disabled" do
-        allow(FeatureToggle).to receive(:new_locations_table_layout_enabled?).and_return(false)
+        allow(FeatureToggle).to receive(:location_toggle_enabled?).and_return(false)
         get "/schemes/#{scheme.id}/locations"
         locations.each do |location|
           expect(page).to have_content(location.id)
