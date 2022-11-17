@@ -777,6 +777,9 @@ RSpec.describe "Schemes scheme Features" do
                 it "allows to reactivate a location" do
                   click_link("Reactivate this location")
                   expect(page).to have_current_path("/schemes/#{scheme.id}/locations/#{deactivated_location.id}/new-reactivation")
+                  expect(page).to have_content("Reactivate #{deactivated_location.name}")
+                  expect(page).to have_content("You’ll be able to add logs with this location if their tenancy start date is on or after the date you enter.")
+                  expect(page).to have_content("If the date is before 1 April 2022, select ‘From the start of the current collection period’ because the previous period has now closed.")
                 end
   
                 context "when I press the back button" do
