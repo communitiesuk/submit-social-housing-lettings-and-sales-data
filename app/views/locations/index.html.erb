@@ -101,7 +101,7 @@
             <span><%= simple_format(location.type_of_unit) %></span>
           <% end %>
           <% row.cell(text: location.mobility_type) %>
-          <% row.cell(text: simple_format(location_cell_location_admin_district(location, "#{scheme_location_path(@scheme, location)}/edit-local-authority"), wrapper_tag: "div")) %>
+          <% row.cell(text: simple_format(location_cell_location_admin_district(location, scheme_location_edit_local_authority_path(@scheme, location)), wrapper_tag: "div")) %>
           <% row.cell(text: location.startdate&.to_formatted_s(:govuk_date)) %>
           <% end %>
       <% end %>
