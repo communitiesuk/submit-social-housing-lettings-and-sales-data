@@ -185,12 +185,12 @@ private
     when :deactivated
       "#{@location.name} has been deactivated"
     when :deactivating_soon
-      "#{@location.name} will deactivate on #{params[:location][:deactivation_date].to_formatted_s(:govuk_date)}"
+      "#{@location.name} will deactivate on #{deactivation_date.to_time.to_formatted_s(:govuk_date)}"
     end
   end
 
   def update_affected_logs
-    @location.lettings_logs.filter_by_before_startdate(params[:location][:deactivation_date]).update!(location: nil, scheme: nil)
+    @location.lettings_logs.filter_by_before_startdate(deactivation_date.to_time).update!(location: nil, scheme: nil)
   end
 
   def deactivation_date
