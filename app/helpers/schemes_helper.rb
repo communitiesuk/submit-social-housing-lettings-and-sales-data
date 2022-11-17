@@ -15,8 +15,11 @@ module SchemesHelper
       { name: "Level of support given", value: scheme.support_type },
       { name: "Intended length of stay", value: scheme.intended_stay },
       { name: "Availability", value: "Available from #{scheme.available_from.to_formatted_s(:govuk_date)}" },
-      { name: "Status", value: scheme.status },
     ]
+
+    if FeatureToggle.scheme_toggle_enabled?
+      base_attributes.append({ name: "Status", value: scheme.status })
+    end
 
     if scheme.arrangement_type_same?
       base_attributes.delete({ name: "Organisation providing support", value: scheme.managing_organisation&.name })
