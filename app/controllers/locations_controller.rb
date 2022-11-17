@@ -43,7 +43,7 @@ class LocationsController < ApplicationController
   def deactivate
     @location.run_deactivation_validations!
 
-    if @location.location_deactivation_periods.create!(deactivation_date: params[:location][:deactivation_date]) && update_affected_logs
+    if @location.location_deactivation_periods.create!(deactivation_date:) && update_affected_logs
       flash[:notice] = deactivate_success_notice
     end
     redirect_to scheme_location_path(@scheme, @location)
