@@ -44,7 +44,7 @@ class SchemesController < ApplicationController
   def deactivate
     @scheme.run_deactivation_validations!
 
-    if @scheme.update!(deactivation_date:)
+    if @scheme.scheme_deactivation_periods.create!(deactivation_date:) && update_affected_logs
       flash[:notice] = deactivate_success_notice
     end
     redirect_to scheme_details_path(@scheme)
@@ -318,5 +318,9 @@ private
     return nil if [day, month, year].any?(&:blank?)
 
     Time.zone.local(year.to_i, month.to_i, day.to_i) if Date.valid_date?(year.to_i, month.to_i, day.to_i)
+  end
+
+  def update_affected_logs
+    @scheme.lettings_logs.filter_by_before_startdate(deactivation_date.to_time).update!(location: nil, scheme: nil)
   end
 end
