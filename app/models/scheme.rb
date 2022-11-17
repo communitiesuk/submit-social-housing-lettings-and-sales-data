@@ -20,10 +20,11 @@ class Scheme < ApplicationRecord
 
   validate :validate_confirmed
   validate :deactivation_date_errors
+  validate :reactivation_date_errors
 
   auto_strip_attributes :service_name
 
-  attr_accessor :deactivation_date_type, :deactivation_date, :run_deactivation_validations
+  attr_accessor :deactivation_date_type, :deactivation_date, :run_deactivation_validations, :reactivation_date_type, :reactivation_date, :run_reactivation_validations
 
   SENSITIVE = {
     No: 0,
@@ -249,6 +250,27 @@ class Scheme < ApplicationRecord
       collection_start_date = FormHandler.instance.current_collection_start_date
       unless deactivation_date.between?(collection_start_date, Time.zone.local(2200, 1, 1))
         errors.add(:deactivation_date, message: I18n.t("validations.scheme.deactivation_date.out_of_range", date: collection_start_date.to_formatted_s(:govuk_date)))
+      end
+    end
+  end
+
+  def run_reactivation_validations!
+    @run_reactivation_validations = true
+  end
+
+  def reactivation_date_errors
+    return unless @run_reactivation_validations
+
+    if reactivation_date.blank?
+      if reactivation_date_type.blank?
+        errors.add(:reactivation_date_type, message: I18n.t("validations.scheme.reactivation_date.not_selected"))
+      elsif reactivation_date_type == "other"
+        errors.add(:reactivation_date, message: I18n.t("validations.scheme.reactivation_date.invalid"))
+      end
+    else
+      collection_start_date = FormHandler.instance.current_collection_start_date
+      unless reactivation_date.between?(collection_start_date, Time.zone.local(2200, 1, 1))
+        errors.add(:reactivation_date, message: I18n.t("validations.scheme.reactivation_date.out_of_range", date: collection_start_date.to_formatted_s(:govuk_date)))
       end
     end
   end

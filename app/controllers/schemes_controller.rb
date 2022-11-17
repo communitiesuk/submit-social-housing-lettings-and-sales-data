@@ -50,8 +50,21 @@ class SchemesController < ApplicationController
     redirect_to scheme_details_path(@scheme)
   end
 
-  def reactivate
+  def new_reactivation
     render "toggle_active", locals: { action: "reactivate" }
+  end
+
+  def reactivate
+    @scheme.run_reactivation_validations!
+    @scheme.reactivation_date = reactivation_date
+    @scheme.reactivation_date_type = params[:scheme][:reactivation_date_type]
+
+    if @scheme.valid? && @scheme.location_deactivation_periods.deactivations_without_reactivation.update!(reactivation_date:)
+      flash[:notice] = reactivate_success_notice
+      redirect_to scheme_details_path(@scheme)
+    else
+      render "toggle_active", locals: { action: "deactivate" }, status: :unprocessable_entity
+    end
   end
 
   def new
@@ -303,24 +316,36 @@ private
     end
   end
 
+  def reactivate_success_notice
+    "#{@scheme.service_name} has been reactivated"
+  end
+
   def deactivation_date
+    toggle_date("deactivation_date")
+  end
+
+  def reactivation_date
+    toggle_date("reactivation_date")
+  end
+
+  def toggle_date(key)
     if params[:scheme].blank?
       return
-    elsif params[:scheme][:deactivation_date_type] == "default"
+    elsif params[:scheme]["#{key}_type".to_sym] == "default"
       return FormHandler.instance.current_collection_start_date
-    elsif params[:scheme][:deactivation_date].present?
-      return params[:scheme][:deactivation_date]
+    elsif params[:scheme][key.to_sym].present?
+      return params[:scheme][key.to_sym]
     end
 
-    day = params[:scheme]["deactivation_date(3i)"]
-    month = params[:scheme]["deactivation_date(2i)"]
-    year = params[:scheme]["deactivation_date(1i)"]
+    day = params[:scheme]["#{key}(3i)"]
+    month = params[:scheme]["#{key}(2i)"]
+    year = params[:scheme]["#{key}(1i)"]
     return nil if [day, month, year].any?(&:blank?)
 
     Time.zone.local(year.to_i, month.to_i, day.to_i) if Date.valid_date?(year.to_i, month.to_i, day.to_i)
   end
 
   def update_affected_logs
-    @scheme.lettings_logs.filter_by_before_startdate(deactivation_date.to_time).update!(location: nil, scheme: nil)
+    @scheme.lettings_logs.filter_by_before_startdate(deactivation_date.to_time).update!(scheme: nil, location: nil)
   end
 end

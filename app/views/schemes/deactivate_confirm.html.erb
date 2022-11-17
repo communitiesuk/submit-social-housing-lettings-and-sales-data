@@ -8,7 +8,7 @@
     <span class="govuk-caption-l"><%= @scheme.service_name %></span>
     This change will affect <%= @scheme.lettings_logs.count %> logs
   </h1>
-  <%= govuk_warning_text text: I18n.t("warnings.scheme.deactivation.review_logs") %>
+  <%= govuk_warning_text text: I18n.t("warnings.scheme.deactivate.review_logs") %>
   <%= f.hidden_field :confirm, value: true %>
   <%= f.hidden_field :deactivation_date, value: @deactivation_date %>
   <%= f.hidden_field :deactivation_date_type, value: @deactivation_date_type %>
