@@ -37,6 +37,10 @@ RSpec.describe Exports::LettingsLogExportService do
     allow(FormHandler.instance).to receive(:get_form).with("current_lettings").and_return(real_2022_2023_form)
   end
 
+  after do
+    Timecop.unfreeze
+  end
+
   context "when exporting daily lettings logs in XML" do
     context "and no lettings logs is available for export" do
       it "generates a master manifest with the correct name" do
