@@ -766,7 +766,7 @@ RSpec.describe "Schemes scheme Features" do
                 expect(page).to have_content(location.type_of_unit)
                 expect(page).to have_content(location.mobility_type)
                 expect(page).to have_content(location.location_code)
-                expect(page).to have_content("Available from 4 April 2022")
+                expect(page).to have_content("Active from 4 April 2022")
                 expect(page).to have_content("Active")
               end
 

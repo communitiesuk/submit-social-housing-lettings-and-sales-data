@@ -23,7 +23,7 @@ class Form::Lettings::Questions::LocationId < ::Form::Question
     end
   end
 
-  def displayed_answer_options(lettings_log)
+  def displayed_answer_options(lettings_log, _user = nil)
     return {} unless lettings_log.scheme
 
     scheme_location_ids = lettings_log.scheme.locations.pluck(:id)
