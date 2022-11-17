@@ -3,6 +3,7 @@ class Scheme < ApplicationRecord
   belongs_to :managing_organisation, optional: true, class_name: "Organisation"
   has_many :locations, dependent: :delete_all
   has_many :lettings_logs, class_name: "LettingsLog", dependent: :delete_all
+  has_many :scheme_deactivation_periods, class_name: "SchemeDeactivationPeriod"
 
   has_paper_trail
 
@@ -22,7 +23,7 @@ class Scheme < ApplicationRecord
 
   auto_strip_attributes :service_name
 
-  attr_accessor :deactivation_date_type, :run_deactivation_validations
+  attr_accessor :deactivation_date_type, :deactivation_date, :run_deactivation_validations
 
   SENSITIVE = {
     No: 0,
@@ -216,8 +217,9 @@ class Scheme < ApplicationRecord
   end
 
   def status
-    return :active if deactivation_date.blank?
-    return :deactivating_soon if Time.zone.now < deactivation_date
+    recent_deactivation = scheme_deactivation_periods.deactivations_without_reactivation.first
+    return :active if recent_deactivation.blank?
+    return :deactivating_soon if Time.zone.now < recent_deactivation.deactivation_date
 
     :deactivated
   end
@@ -245,7 +247,7 @@ class Scheme < ApplicationRecord
       end
     else
       collection_start_date = FormHandler.instance.current_collection_start_date
-      unless deactivation_date.between?(collection_start_date, Date.new(2200, 1, 1))
+      unless deactivation_date.between?(collection_start_date, Time.zone.local(2200, 1, 1))
         errors.add(:deactivation_date, message: I18n.t("validations.scheme.deactivation_date.out_of_range", date: collection_start_date.to_formatted_s(:govuk_date)))
       end
     end

@@ -246,19 +246,18 @@ RSpec.describe SchemesController, type: :request do
       context "when looking at scheme details" do
         let(:user) { FactoryBot.create(:user, :data_coordinator) }
         let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+        let(:add_deactivations) { scheme.scheme_deactivation_periods << scheme_deactivation_period }
 
         before do
           Timecop.freeze(Time.utc(2022, 10, 10))
           sign_in user
-          scheme.deactivation_date = deactivation_date
-          scheme.deactivation_date_type = deactivation_date_type
+          add_deactivations
           scheme.save!
           get "/schemes/#{scheme.id}"
         end
 
         context "with active scheme" do
-          let(:deactivation_date) { nil }
-          let(:deactivation_date_type) { nil }
+          let(:add_deactivations) {}
 
           it "renders deactivate this scheme" do
             expect(response).to have_http_status(:ok)
@@ -267,8 +266,7 @@ RSpec.describe SchemesController, type: :request do
         end
 
         context "with deactivated scheme" do
-          let(:deactivation_date) { Time.utc(2022, 10, 9) }
-          let(:deactivation_date_type) { "other" }
+          let(:scheme_deactivation_period) { FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 9)) }
 
           it "renders reactivate this scheme" do
             expect(response).to have_http_status(:ok)
@@ -277,8 +275,7 @@ RSpec.describe SchemesController, type: :request do
         end
 
         context "with scheme that's deactivating soon" do
-          let(:deactivation_date) { Time.utc(2022, 10, 12) }
-          let(:deactivation_date_type) { "other" }
+          let(:scheme_deactivation_period) { FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 12)) }
 
           it "renders reactivate this scheme" do
             expect(response).to have_http_status(:ok)
@@ -1768,8 +1765,10 @@ RSpec.describe SchemesController, type: :request do
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
       let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let(:startdate) { Time.utc(2021, 1, 2) }
+      let!(:location) { FactoryBot.create(:location, scheme:) }
       let(:deactivation_date) { Time.utc(2022, 10, 10) }
+      let!(:lettings_log) { FactoryBot.create(:lettings_log, :sh, location:, scheme:, startdate:, owning_organisation: user.organisation) }
+      let(:startdate) { Time.utc(2022, 10, 11) }
 
       before do
         Timecop.freeze(Time.utc(2022, 10, 10))
@@ -1812,7 +1811,30 @@ RSpec.describe SchemesController, type: :request do
           expect(response).to have_http_status(:ok)
           expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
           scheme.reload
-          expect(scheme.deactivation_date).to eq(deactivation_date)
+          expect(scheme.scheme_deactivation_periods.count).to eq(1)
+          expect(scheme.scheme_deactivation_periods.first.deactivation_date).to eq(deactivation_date)
+        end
+
+        context "and a log startdate is after scheme deactivation date" do
+          it "clears the scheme and scheme answers" do
+            expect(lettings_log.scheme).to eq(scheme)
+            expect(lettings_log.scheme).to eq(scheme)
+            lettings_log.reload
+            expect(lettings_log.scheme).to eq(nil)
+            expect(lettings_log.scheme).to eq(nil)
+          end
+        end
+
+        context "and a log startdate is before scheme deactivation date" do
+          let(:startdate) { Time.utc(2022, 10, 9) }
+
+          it "does not update the log" do
+            expect(lettings_log.scheme).to eq(scheme)
+            expect(lettings_log.scheme).to eq(scheme)
+            lettings_log.reload
+            expect(lettings_log.scheme).to eq(scheme)
+            expect(lettings_log.scheme).to eq(scheme)
+          end
         end
       end
 
