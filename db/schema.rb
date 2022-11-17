@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_15_113437) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_17_103855) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -372,18 +372,27 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_15_113437) do
     t.integer "la_known"
     t.integer "income1"
     t.integer "income1nk"
-    t.integer "details_known_2"
-    t.integer "details_known_3"
-    t.integer "details_known_4"
     t.integer "age4"
     t.integer "age4_known"
     t.integer "age5"
     t.integer "age5_known"
     t.integer "age6"
     t.integer "age6_known"
+    t.integer "details_known_2"
+    t.integer "details_known_3"
+    t.integer "details_known_4"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
+  end
+
+  create_table "scheme_deactivation_periods", force: :cascade do |t|
+    t.datetime "deactivation_date"
+    t.datetime "reactivation_date"
+    t.bigint "scheme_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["scheme_id"], name: "index_scheme_deactivation_periods_on_scheme_id"
   end
 
   create_table "schemes", force: :cascade do |t|
@@ -406,7 +415,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_15_113437) do
     t.string "old_visible_id"
     t.integer "total_units"
     t.boolean "confirmed"
-    t.datetime "deactivation_date"
     t.index ["managing_organisation_id"], name: "index_schemes_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_schemes_on_owning_organisation_id"
   end
