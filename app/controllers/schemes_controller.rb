@@ -299,7 +299,7 @@ private
     when :deactivated
       "#{@scheme.service_name} has been deactivated"
     when :deactivating_soon
-      "#{@scheme.service_name} will deactivate on #{@scheme.deactivation_date.to_formatted_s(:govuk_date)}"
+      "#{@scheme.service_name} will deactivate on #{deactivation_date.to_time.to_formatted_s(:govuk_date)}"
     end
   end
 
