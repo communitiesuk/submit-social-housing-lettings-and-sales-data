@@ -108,6 +108,20 @@ When a commit is made to `main` the following GitHub action jobs are triggered:
 
 When a pull request is opened to `main` only the Test stage runs.
 
+## Review apps
+
+When a pull request is opened a review app will be spun up. The reviews apps connect to their own PostgreSQL and Redis instances with its own worker.
+
+The review app github pipeline is independent of any test pipeline and therefore it will attempt to deploy regardless of the state the code is in.
+
+The usual seeding process takes place when the review app boots so there will be some minimal data that can be used to login with. 2FA has been disabled in the review apps for easier access.
+
+The app boots in a new environment called `review`. As such this is the environment you should filter by for sentry errors or to change any config.
+
+After a sucessful deployment a comment will be added to the pull request with the URL to the review app for your convenience. When a pull request is updated e.g. more code is added it will re-deploy the new code.
+
+Once a pull request has been closed the review app infrastructure will be tore down to save on any costs. Should you wish to re-open a closed pull request the review app will be spun up again.
+
 ## Setting up Infrastructure for a new environment
 
 ### Staging
