@@ -38,6 +38,8 @@ module LocationsHelper
     if FeatureToggle.location_toggle_enabled?
       base_attributes.append({ name: "Status", value: location.status })
     end
+
+    base_attributes
   end
 
   def location_availability(location)
