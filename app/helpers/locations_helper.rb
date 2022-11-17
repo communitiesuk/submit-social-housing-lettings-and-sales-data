@@ -24,7 +24,7 @@ module LocationsHelper
   end
 
   def display_location_attributes(location)
-    [
+    base_attributes = [
       { name: "Postcode", value: location.postcode },
       { name: "Local authority", value: location.location_admin_district },
       { name: "Location name", value: location.name, edit: true },
@@ -33,8 +33,11 @@ module LocationsHelper
       { name: "Mobility type", value: location.mobility_type },
       { name: "Code", value: location.location_code },
       { name: "Availability", value: location_availability(location) },
-      { name: "Status", value: location.status },
     ]
+
+    if FeatureToggle.location_toggle_enabled?
+      base_attributes.append({ name: "Status", value: location.status })
+    end
   end
 
   def location_availability(location)
