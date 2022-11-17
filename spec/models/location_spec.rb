@@ -119,6 +119,10 @@ RSpec.describe Location, type: :model do
       Timecop.freeze(2022, 6, 7)
     end
 
+    after do
+      Timecop.unfreeze
+    end
+
     context "when location is missing some mandatory information" do
       it "returns incomplete when the postcode is missing" do
         location.postcode = nil
@@ -145,10 +149,6 @@ RSpec.describe Location, type: :model do
         location.mobility_type = ""
         expect(location.status).to eq(:incomplete)
       end
-    end
-
-    after do
-      Timecop.unfreeze
     end
 
     context "when there have not been any previous deactivations" do
