@@ -695,7 +695,7 @@ RSpec.describe "Schemes scheme Features" do
           let!(:location) { FactoryBot.create(:location, startdate: Time.zone.local(2022, 4, 4), scheme:) }
           let!(:deactivated_location) { FactoryBot.create(:location, startdate: Time.zone.local(2022, 4, 4), scheme:) }
 
-          before do            
+          before do
             deactivated_location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4))
             click_link(scheme.service_name)
           end
@@ -754,13 +754,12 @@ RSpec.describe "Schemes scheme Features" do
               expect(page).to have_current_path("/schemes/#{scheme.id}/locations")
             end
 
-
             context "when location is incative" do
               context "and I click to view the location" do
                 before do
                   click_link(deactivated_location.postcode)
                 end
-  
+
                 it "displays details about the selected location" do
                   expect(page).to have_current_path("/schemes/#{scheme.id}/locations/#{deactivated_location.id}")
                   expect(page).to have_content(deactivated_location.postcode)
@@ -773,7 +772,7 @@ RSpec.describe "Schemes scheme Features" do
                   expect(page).to have_content("Active from 4 April 2022 to 3 June 2022 Deactivated on 4 June 2022")
                   expect(page).to have_content("Deactivated")
                 end
-     
+
                 it "allows to reactivate a location" do
                   click_link("Reactivate this location")
                   expect(page).to have_current_path("/schemes/#{scheme.id}/locations/#{deactivated_location.id}/new-reactivation")
@@ -781,19 +780,19 @@ RSpec.describe "Schemes scheme Features" do
                   expect(page).to have_content("You’ll be able to add logs with this location if their tenancy start date is on or after the date you enter.")
                   expect(page).to have_content("If the date is before 1 April 2022, select ‘From the start of the current collection period’ because the previous period has now closed.")
                 end
-  
+
                 context "when I press the back button" do
                   before do
                     click_link "Back"
                   end
-  
+
                   it "I see location details" do
                     expect(page).to have_content scheme.locations.first.id
                     expect(page).to have_current_path("/schemes/#{scheme.id}/locations")
                   end
                 end
+              end
             end
-          end
 
             context "when I click to change location name" do
               before do

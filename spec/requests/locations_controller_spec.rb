@@ -1428,7 +1428,7 @@ RSpec.describe LocationsController, type: :request do
 
         it "renders reactivate this location" do
           expect(response).to have_http_status(:ok)
-          expect(page).to have_link("Reactivate this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/reactivate")
+          expect(page).to have_link("Reactivate this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/new-reactivation")
         end
       end
 
@@ -1437,7 +1437,7 @@ RSpec.describe LocationsController, type: :request do
 
         it "renders reactivate this location" do
           expect(response).to have_http_status(:ok)
-          expect(page).to have_link("Reactivate this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/reactivate")
+          expect(page).to have_link("Reactivate this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/new-reactivation")
         end
       end
     end
