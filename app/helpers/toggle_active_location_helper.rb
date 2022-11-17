@@ -3,7 +3,7 @@ module ToggleActiveLocationHelper
         if action == "deactivate"
             scheme_location_new_deactivation_path(scheme_id:, location_id:)
         else
-            scheme_location_new_reactivation_path(scheme_id:, location_id:)
+            scheme_location_reactivate_path(scheme_id:, location_id:)
         end
     end
 

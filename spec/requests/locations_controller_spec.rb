@@ -1442,4 +1442,73 @@ RSpec.describe LocationsController, type: :request do
       end
     end
   end
+
+
+  describe "#reactivate" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        patch "/schemes/1/locations/1/reactivate"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        patch "/schemes/1/locations/1/reactivate"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when signed in as a data coordinator" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:location) { FactoryBot.create(:location, scheme:) }
+      let(:deactivation_date) { Time.utc(2022, 10, 10) }
+      let(:reactivation_date) { Time.utc(2022, 10, 12) }
+      let!(:lettings_log) { FactoryBot.create(:lettings_log, :sh, location:, scheme:, startdate:, owning_organisation: user.organisation) }
+      let(:startdate) { Time.utc(2022, 10, 11) }
+
+      before do
+        Timecop.freeze(Time.utc(2022, 10, 10))
+        sign_in user
+        location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date:)
+        location.save!
+        patch "/schemes/#{scheme.id}/locations/#{location.id}/reactivate", params:
+      end
+
+      after do
+        Timecop.unfreeze
+      end
+
+      context "with default date" do
+        let(:params) { { location: { reactivation_date_type: "default", reactivation_date: } } }
+
+        it "redirects to the location page and displays a success banner" do
+          expect(response).to redirect_to("/schemes/#{scheme.id}/locations/#{location.id}")
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+          expect(page).to have_content("#{location.name} has been reactivated")
+        end
+      end
+
+      context "with other date" do
+        let(:params) { { location: { deactivation_date_type: "other", "deactivation_date(3i)": "10", "deactivation_date(2i)": "10", "deactivation_date(1i)": "2022" } } }
+
+        it "redirects to the location page and displays a success banner" do
+          expect(response).to redirect_to("/schemes/#{scheme.id}/locations/#{location.id}")
+          follow_redirect!
+          expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+          expect(page).to have_content("#{location.name} has been reactivated")
+        end
+      end
+    end
+  end
 end

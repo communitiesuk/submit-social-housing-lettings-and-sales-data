@@ -54,7 +54,8 @@ class LocationsController < ApplicationController
   end
 
   def reactivate
-    render "toggle_active", locals: { action: "reactivate" }
+    flash[:notice] = reactivate_success_notice
+    redirect_to scheme_location_path(@scheme, @location)
   end
 
   def create
@@ -191,6 +192,10 @@ private
     when :deactivating_soon
       "#{@location.name} will deactivate on #{deactivation_date.to_time.to_formatted_s(:govuk_date)}"
     end
+  end
+
+  def reactivate_success_notice
+    "#{@location.name} has been reactivated"
   end
 
   def update_affected_logs

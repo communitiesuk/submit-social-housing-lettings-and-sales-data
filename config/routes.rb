@@ -64,7 +64,7 @@ Rails.application.routes.draw do
       get "new-reactivation", to: "locations#new_reactivation"
       patch "new-deactivation", to: "locations#new_deactivation"
       patch "deactivate", to: "locations#deactivate"
-      patch "new-reactivation", to: "locations#new_reactivation"
+      patch "reactivate", to: "locations#reactivate"
     end
   end
 
