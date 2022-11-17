@@ -18,10 +18,33 @@ RSpec.describe SchemesHelper do
         { name: "Secondary client group", value: scheme.secondary_client_group },
         { name: "Level of support given", value: scheme.support_type },
         { name: "Intended length of stay", value: scheme.intended_stay },
-        { name: "Availability", value: "Available from 8 August 2022" },
+        { name: "Availability", value: "Active from 8 August 2022" },
         { name: "Status", value: :active },
       ]
       expect(display_scheme_attributes(scheme)).to eq(attributes)
+    end
+
+    context "when viewing availability" do
+      context "with are no deactivations" do
+        it "displays created_at as availability date" do
+          availability_attribute = display_scheme_attributes(scheme).find { |x| x[:name] == "Availability" }[:value]
+
+          expect(availability_attribute).to eq("Active from #{scheme.created_at.to_formatted_s(:govuk_date)}")
+        end
+      end
+
+      context "with previous deactivations" do
+        before do
+          scheme.scheme_deactivation_periods << FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 10), reactivation_date: Time.zone.local(2022, 9, 1))
+          scheme.scheme_deactivation_periods << FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 15), reactivation_date: nil)
+        end
+
+        it "displays the timeline of availability" do
+          availability_attribute = display_scheme_attributes(scheme).find { |x| x[:name] == "Availability" }[:value]
+
+          expect(availability_attribute).to eq("Active from 8 August 2022 to 9 August 2022\nDeactivated on 10 August 2022\nActive from 1 September 2022 to 14 September 2022\nDeactivated on 15 September 2022")
+        end
+      end
     end
   end
 end
