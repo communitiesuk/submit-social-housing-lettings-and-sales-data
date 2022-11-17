@@ -258,7 +258,7 @@ RSpec.describe SchemesController, type: :request do
 
         after do
           Timecop.unfreeze
-        end    
+        end
 
         context "with active scheme" do
           let(:add_deactivations) {}
@@ -1782,7 +1782,7 @@ RSpec.describe SchemesController, type: :request do
 
       after do
         Timecop.unfreeze
-      end  
+      end
 
       context "with default date" do
         let(:params) { { scheme: { deactivation_date_type: "default", deactivation_date: } } }
@@ -1815,7 +1815,7 @@ RSpec.describe SchemesController, type: :request do
 
         after do
           Timecop.unfreeze
-        end    
+        end
 
         it "updates existing scheme with valid deactivation date and renders scheme page" do
           follow_redirect!

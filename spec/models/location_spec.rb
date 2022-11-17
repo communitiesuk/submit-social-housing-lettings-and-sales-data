@@ -122,7 +122,7 @@ RSpec.describe Location, type: :model do
     after do
       Timecop.unfreeze
     end
-    
+
     context "when there have not been any previous deactivations" do
       it "returns active if the location has no deactivation records" do
         expect(location.status).to eq(:active)

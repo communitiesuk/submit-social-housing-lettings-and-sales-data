@@ -1251,7 +1251,7 @@ RSpec.describe LocationsController, type: :request do
 
       after do
         Timecop.unfreeze
-      end  
+      end
 
       context "with default date" do
         let(:params) { { location: { deactivation_date_type: "default", deactivation_date: } } }
@@ -1284,7 +1284,7 @@ RSpec.describe LocationsController, type: :request do
 
         after do
           Timecop.unfreeze
-        end    
+        end
 
         it "updates existing location with valid deactivation date and renders location page" do
           follow_redirect!
@@ -1412,7 +1412,7 @@ RSpec.describe LocationsController, type: :request do
 
       after do
         Timecop.unfreeze
-      end  
+      end
 
       context "with active location" do
         let(:add_deactivations) {}
