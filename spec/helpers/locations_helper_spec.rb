@@ -70,7 +70,7 @@ RSpec.describe LocationsHelper do
       context "with are no deactivations" do
         it "displays created_at as availability date if startdate is not present" do
           location.update!(startdate: nil)
-          availability_attribute = display_attributes(location).find { |x| x[:name] == "Availability" }[:value]
+          availability_attribute = display_location_attributes(location).find { |x| x[:name] == "Availability" }[:value]
 
           expect(availability_attribute).to eq("Active from #{location.created_at.to_formatted_s(:govuk_date)}")
         end
@@ -83,7 +83,7 @@ RSpec.describe LocationsHelper do
         end
 
         it "displays the timeline of availability" do
-          availability_attribute = display_attributes(location).find { |x| x[:name] == "Availability" }[:value]
+          availability_attribute = display_location_attributes(location).find { |x| x[:name] == "Availability" }[:value]
 
           expect(availability_attribute).to eq("Active from 8 August 2022 to 9 August 2022\nDeactivated on 10 August 2022\nActive from 1 September 2022 to 14 September 2022\nDeactivated on 15 September 2022")
         end

@@ -405,7 +405,7 @@ class Location < ApplicationRecord
       end
     else
       collection_start_date = FormHandler.instance.current_collection_start_date
-      unless deactivation_date.between?(collection_start_date, Date.new(2200, 1, 1))
+      unless deactivation_date.between?(collection_start_date, Time.zone.local(2200, 1, 1))
         errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.out_of_range", date: collection_start_date.to_formatted_s(:govuk_date)))
       end
     end
