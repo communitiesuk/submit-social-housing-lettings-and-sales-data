@@ -49,6 +49,10 @@ class LocationsController < ApplicationController
     redirect_to scheme_location_path(@scheme, @location)
   end
 
+  def new_reactivation
+    render "toggle_active", locals: { action: "reactivate" }
+  end
+
   def reactivate
     render "toggle_active", locals: { action: "reactivate" }
   end
