@@ -99,6 +99,10 @@ RSpec.describe Scheme, type: :model do
       Timecop.freeze(2022, 6, 7)
     end
 
+    after do
+      Timecop.unfreeze
+    end
+
     context "when there have not been any previous deactivations" do
       it "returns active if the scheme is not deactivated" do
         expect(scheme.status).to eq(:active)

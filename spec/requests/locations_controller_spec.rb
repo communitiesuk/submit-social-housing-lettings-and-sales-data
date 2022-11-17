@@ -1249,6 +1249,10 @@ RSpec.describe LocationsController, type: :request do
         patch "/schemes/#{scheme.id}/locations/#{location.id}/new-deactivation", params:
       end
 
+      after do
+        Timecop.unfreeze
+      end  
+
       context "with default date" do
         let(:params) { { location: { deactivation_date_type: "default", deactivation_date: } } }
 
@@ -1277,6 +1281,10 @@ RSpec.describe LocationsController, type: :request do
           sign_in user
           patch "/schemes/#{scheme.id}/locations/#{location.id}/deactivate", params:
         end
+
+        after do
+          Timecop.unfreeze
+        end    
 
         it "updates existing location with valid deactivation date and renders location page" do
           follow_redirect!
@@ -1401,6 +1409,10 @@ RSpec.describe LocationsController, type: :request do
         location.save!
         get "/schemes/#{scheme.id}/locations/#{location.id}"
       end
+
+      after do
+        Timecop.unfreeze
+      end  
 
       context "with active location" do
         let(:add_deactivations) {}
