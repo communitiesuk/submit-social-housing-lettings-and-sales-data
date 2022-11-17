@@ -59,18 +59,35 @@ RSpec.describe LocationsHelper do
         { name: "Common type of unit", value: location.type_of_unit },
         { name: "Mobility type", value: location.mobility_type },
         { name: "Code", value: location.location_code },
-        { name: "Availability", value: "Available from 8 August 2022" },
+        { name: "Availability", value: "Active from 8 August 2022" },
         { name: "Status", value: :active },
       ]
 
       expect(display_location_attributes(location)).to eq(attributes)
     end
 
-    it "displays created_at as availability date if startdate is not present" do
-      location.update!(startdate: nil)
-      availability_attribute = display_location_attributes(location).find { |x| x[:name] == "Availability" }[:value]
+    context "when viewing availability" do
+      context "with are no deactivations" do
+        it "displays created_at as availability date if startdate is not present" do
+          location.update!(startdate: nil)
+          availability_attribute = display_location_attributes(location).find { |x| x[:name] == "Availability" }[:value]
 
-      expect(availability_attribute).to eq("Available from #{location.created_at.to_formatted_s(:govuk_date)}")
+          expect(availability_attribute).to eq("Active from #{location.created_at.to_formatted_s(:govuk_date)}")
+        end
+      end
+
+      context "with previous deactivations" do
+        before do
+          location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 10), reactivation_date: Time.zone.local(2022, 9, 1))
+          location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 15), reactivation_date: nil)
+        end
+
+        it "displays the timeline of availability" do
+          availability_attribute = display_location_attributes(location).find { |x| x[:name] == "Availability" }[:value]
+
+          expect(availability_attribute).to eq("Active from 8 August 2022 to 9 August 2022\nDeactivated on 10 August 2022\nActive from 1 September 2022 to 14 September 2022\nDeactivated on 15 September 2022")
+        end
+      end
     end
   end
 end

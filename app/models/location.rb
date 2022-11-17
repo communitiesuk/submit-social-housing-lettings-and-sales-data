@@ -4,6 +4,7 @@ class Location < ApplicationRecord
   validates :units, :type_of_unit, :mobility_type, presence: true
   belongs_to :scheme
   has_many :lettings_logs, class_name: "LettingsLog"
+  has_many :location_deactivation_periods, class_name: "LocationDeactivationPeriod"
 
   has_paper_trail
 
@@ -11,7 +12,7 @@ class Location < ApplicationRecord
 
   auto_strip_attributes :name
 
-  attr_accessor :add_another_location, :deactivation_date_type, :run_deactivation_validations
+  attr_accessor :add_another_location, :deactivation_date_type, :deactivation_date, :run_deactivation_validations
 
   scope :search_by_postcode, ->(postcode) { where("REPLACE(postcode, ' ', '') ILIKE ?", "%#{postcode.delete(' ')}%") }
   scope :search_by_name, ->(name) { where("name ILIKE ?", "%#{name}%") }
@@ -374,8 +375,9 @@ class Location < ApplicationRecord
   end
 
   def status
-    return :active if deactivation_date.blank?
-    return :deactivating_soon if Time.zone.now < deactivation_date
+    recent_deactivation = location_deactivation_periods.deactivations_without_reactivation.first
+    return :active if recent_deactivation.blank?
+    return :deactivating_soon if Time.zone.now < recent_deactivation.deactivation_date
 
     :deactivated
   end
@@ -403,7 +405,7 @@ class Location < ApplicationRecord
       end
     else
       collection_start_date = FormHandler.instance.current_collection_start_date
-      unless deactivation_date.between?(collection_start_date, Date.new(2200, 1, 1))
+      unless deactivation_date.between?(collection_start_date, Time.zone.local(2200, 1, 1))
         errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.out_of_range", date: collection_start_date.to_formatted_s(:govuk_date)))
       end
     end

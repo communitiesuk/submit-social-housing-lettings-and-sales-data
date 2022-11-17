@@ -199,7 +199,6 @@ class Scheme < ApplicationRecord
   end
 
   def validate_confirmed
-    required_attributes = attribute_names - %w[id created_at updated_at old_id old_visible_id confirmed end_date sensitive secondary_client_group total_units has_other_client_group deactivation_date deactivation_date_type]
 
     if confirmed == true
       required_attributes.any? do |attribute|
@@ -216,6 +215,7 @@ class Scheme < ApplicationRecord
   end
 
   def status
+    return :incomplete if required_attributes.any?(&:blank?)
     return :active if deactivation_date.blank?
     return :deactivating_soon if Time.zone.now < deactivation_date
 
@@ -249,5 +249,9 @@ class Scheme < ApplicationRecord
         errors.add(:deactivation_date, message: I18n.t("validations.scheme.deactivation_date.out_of_range", date: collection_start_date.to_formatted_s(:govuk_date)))
       end
     end
+  end
+
+  def required_attributes
+    attribute_names - %w[id created_at updated_at old_id old_visible_id confirmed end_date sensitive secondary_client_group total_units has_other_client_group deactivation_date deactivation_date_type]
   end
 end

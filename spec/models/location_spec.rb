@@ -119,32 +119,56 @@ RSpec.describe Location, type: :model do
       Timecop.freeze(2022, 6, 7)
     end
 
-    it "returns active if the location is not deactivated" do
-      location.deactivation_date = nil
-      location.deactivation_date_type = nil
-      location.save!
-      expect(location.status).to eq(:active)
+    context "when there have not been any previous deactivations" do
+      it "returns active if the location has no deactivation records" do
+        expect(location.status).to eq(:active)
+      end
+
+      it "returns deactivating soon if deactivation_date is in the future" do
+        location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 8))
+        location.save!
+        expect(location.status).to eq(:deactivating_soon)
+      end
+
+      it "returns deactivated if deactivation_date is in the past" do
+        location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 6))
+        location.save!
+        expect(location.status).to eq(:deactivated)
+      end
+
+      it "returns deactivated if deactivation_date is today" do
+        location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 7))
+        location.save!
+        expect(location.status).to eq(:deactivated)
+      end
     end
 
-    it "returns deactivating soon if deactivation_date is in the future" do
-      location.deactivation_date = Time.zone.local(2022, 8, 8)
-      location.deactivation_date_type = "other"
-      location.save!
-      expect(location.status).to eq(:deactivating_soon)
-    end
+    context "when there have been previous deactivations" do
+      before do
+        location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 6, 5))
+      end
 
-    it "returns deactivated if deactivation_date is in the past" do
-      location.deactivation_date = Time.zone.local(2022, 4, 8)
-      location.deactivation_date_type = "other"
-      location.save!
-      expect(location.status).to eq(:deactivated)
-    end
+      it "returns active if the location has no relevant deactivation records" do
+        expect(location.status).to eq(:active)
+      end
 
-    it "returns deactivated if deactivation_date is today" do
-      location.deactivation_date = Time.zone.local(2022, 6, 7)
-      location.deactivation_date_type = "other"
-      location.save!
-      expect(location.status).to eq(:deactivated)
+      it "returns deactivating soon if deactivation_date is in the future" do
+        location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 8))
+        location.save!
+        expect(location.status).to eq(:deactivating_soon)
+      end
+
+      it "returns deactivated if deactivation_date is in the past" do
+        location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 6))
+        location.save!
+        expect(location.status).to eq(:deactivated)
+      end
+
+      it "returns deactivated if deactivation_date is today" do
+        location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 7))
+        location.save!
+        expect(location.status).to eq(:deactivated)
+      end
     end
   end
 
