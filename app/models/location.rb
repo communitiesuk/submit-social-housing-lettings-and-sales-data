@@ -1,6 +1,7 @@
 class Location < ApplicationRecord
   validate :validate_postcode
   validate :deactivation_date_errors
+  validate :reactivation_date_errors
   validates :units, :type_of_unit, :mobility_type, presence: true
   belongs_to :scheme
   has_many :lettings_logs, class_name: "LettingsLog"
@@ -12,7 +13,7 @@ class Location < ApplicationRecord
 
   auto_strip_attributes :name
 
-  attr_accessor :add_another_location, :deactivation_date_type, :deactivation_date, :run_deactivation_validations
+  attr_accessor :add_another_location, :deactivation_date_type, :deactivation_date, :run_deactivation_validations, :reactivation_date_type, :reactivation_date, :run_reactivation_validations
 
   scope :search_by_postcode, ->(postcode) { where("REPLACE(postcode, ' ', '') ILIKE ?", "%#{postcode.delete(' ')}%") }
   scope :search_by_name, ->(name) { where("name ILIKE ?", "%#{name}%") }
@@ -407,6 +408,27 @@ class Location < ApplicationRecord
       collection_start_date = FormHandler.instance.current_collection_start_date
       unless deactivation_date.between?(collection_start_date, Time.zone.local(2200, 1, 1))
         errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.out_of_range", date: collection_start_date.to_formatted_s(:govuk_date)))
+      end
+    end
+  end
+
+  def run_reactivation_validations!
+    @run_reactivation_validations = true
+  end
+
+  def reactivation_date_errors
+    return unless @run_reactivation_validations
+
+    if reactivation_date.blank?
+      if reactivation_date_type.blank?
+        errors.add(:reactivation_date_type, message: I18n.t("validations.location.reactivation_date.not_selected"))
+      elsif reactivation_date_type == "other"
+        errors.add(:reactivation_date, message: I18n.t("validations.location.reactivation_date.invalid"))
+      end
+    else
+      collection_start_date = FormHandler.instance.current_collection_start_date
+      unless reactivation_date.between?(collection_start_date, Time.zone.local(2200, 1, 1))
+        errors.add(:reactivation_date, message: I18n.t("validations.location.reactivation_date.out_of_range", date: collection_start_date.to_formatted_s(:govuk_date)))
       end
     end
   end

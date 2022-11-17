@@ -54,10 +54,16 @@ class LocationsController < ApplicationController
   end
 
   def reactivate
-    if @location.location_deactivation_periods.deactivations_without_reactivation.update!(reactivation_date:)
+    @location.run_reactivation_validations!
+    @location.reactivation_date = reactivation_date
+    @location.reactivation_date_type = params[:location][:reactivation_date_type]
+
+    if @location.valid? && @location.location_deactivation_periods.deactivations_without_reactivation.update!(reactivation_date:)
       flash[:notice] = reactivate_success_notice
+      redirect_to scheme_location_path(@scheme, @location)
+    else
+      render "toggle_active", locals: { action: "deactivate" }, status: :unprocessable_entity
     end
-    redirect_to scheme_location_path(@scheme, @location)
   end
 
   def create
@@ -206,7 +212,6 @@ private
 
   def deactivation_date
     toggle_date("deactivation_date")
-
   end
 
   def reactivation_date
