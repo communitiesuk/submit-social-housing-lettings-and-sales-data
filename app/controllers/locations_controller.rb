@@ -54,7 +54,9 @@ class LocationsController < ApplicationController
   end
 
   def reactivate
-    flash[:notice] = reactivate_success_notice
+    if @location.location_deactivation_periods.deactivations_without_reactivation.update!(reactivation_date:)
+      flash[:notice] = reactivate_success_notice
+    end
     redirect_to scheme_location_path(@scheme, @location)
   end
 
@@ -203,17 +205,26 @@ private
   end
 
   def deactivation_date
+    toggle_date("deactivation_date")
+
+  end
+
+  def reactivation_date
+    toggle_date("reactivation_date")
+  end
+
+  def toggle_date(key)
     if params[:location].blank?
       return
-    elsif params[:location][:deactivation_date_type] == "default"
+    elsif params[:location]["#{key}_type".to_sym] == "default"
       return FormHandler.instance.current_collection_start_date
-    elsif params[:location][:deactivation_date].present?
-      return params[:location][:deactivation_date]
+    elsif params[:location][key.to_sym].present?
+      return params[:location][key.to_sym]
     end
 
-    day = params[:location]["deactivation_date(3i)"]
-    month = params[:location]["deactivation_date(2i)"]
-    year = params[:location]["deactivation_date(1i)"]
+    day = params[:location]["#{key}(3i)"]
+    month = params[:location]["#{key}(2i)"]
+    year = params[:location]["#{key}(1i)"]
     return nil if [day, month, year].any?(&:blank?)
 
     Time.zone.local(year.to_i, month.to_i, day.to_i) if Date.valid_date?(year.to_i, month.to_i, day.to_i)

@@ -1470,8 +1470,7 @@ RSpec.describe LocationsController, type: :request do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
       let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
       let!(:location) { FactoryBot.create(:location, scheme:) }
-      let(:deactivation_date) { Time.utc(2022, 10, 10) }
-      let(:reactivation_date) { Time.utc(2022, 10, 12) }
+      let(:deactivation_date) { Time.zone.local(2022, 10, 10) }
       let!(:lettings_log) { FactoryBot.create(:lettings_log, :sh, location:, scheme:, startdate:, owning_organisation: user.organisation) }
       let(:startdate) { Time.utc(2022, 10, 11) }
 
@@ -1488,7 +1487,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "with default date" do
-        let(:params) { { location: { reactivation_date_type: "default", reactivation_date: } } }
+        let(:params) { { location: { reactivation_date_type: "default" } } }
 
         it "redirects to the location page and displays a success banner" do
           expect(response).to redirect_to("/schemes/#{scheme.id}/locations/#{location.id}")
@@ -1497,16 +1496,30 @@ RSpec.describe LocationsController, type: :request do
           expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
           expect(page).to have_content("#{location.name} has been reactivated")
         end
+
+        it "updates existing location deactivations with valid reactivation date" do
+          follow_redirect!
+          location.reload
+          expect(location.location_deactivation_periods.count).to eq(1)
+          expect(location.location_deactivation_periods.first.reactivation_date).to eq(Time.zone.local(2022, 4, 1))
+        end
       end
 
       context "with other date" do
-        let(:params) { { location: { deactivation_date_type: "other", "deactivation_date(3i)": "10", "deactivation_date(2i)": "10", "deactivation_date(1i)": "2022" } } }
+        let(:params) { { location: { reactivation_date_type: "other", "reactivation_date(3i)": "14", "reactivation_date(2i)": "10", "reactivation_date(1i)": "2022" } } }
 
         it "redirects to the location page and displays a success banner" do
           expect(response).to redirect_to("/schemes/#{scheme.id}/locations/#{location.id}")
           follow_redirect!
           expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
           expect(page).to have_content("#{location.name} has been reactivated")
+        end
+
+        it "updates existing location deactivations with valid reactivation date" do
+          follow_redirect!
+          location.reload
+          expect(location.location_deactivation_periods.count).to eq(1)
+          expect(location.location_deactivation_periods.first.reactivation_date).to eq(Time.zone.local(2022, 10, 14))
         end
       end
     end
