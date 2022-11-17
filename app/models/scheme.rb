@@ -217,8 +217,9 @@ class Scheme < ApplicationRecord
   end
 
   def status
-    return :active if deactivation_date.blank?
-    return :deactivating_soon if Time.zone.now < deactivation_date
+    recent_deactivation = scheme_deactivation_periods.deactivations_without_reactivation.first
+    return :active if recent_deactivation.blank?
+    return :deactivating_soon if Time.zone.now < recent_deactivation.deactivation_date
 
     :deactivated
   end
