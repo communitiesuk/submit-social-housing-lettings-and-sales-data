@@ -48,16 +48,16 @@ module LocationsHelper
 
     sorted_deactivation_periods = location.location_deactivation_periods.sort_by(&:deactivation_date)
     sorted_deactivation_periods.each do |deactivation|
-      active_periods.find {|x| x.to.nil?}.to = deactivation.deactivation_date
+      active_periods.find { |x| x.to.nil? }.to = deactivation.deactivation_date
       active_periods << ActivePeriod.new(deactivation.reactivation_date, nil)
     end
-    
-    filtered_active_periods = active_periods.select {|period| period.to.nil? || (period.from.present? && period.from <= period.to)}
+
+    filtered_active_periods = active_periods.select { |period| period.to.nil? || (period.from.present? && period.from <= period.to) }
     availability = ""
     filtered_active_periods.each do |period|
-      if period.from.present? 
-      availability << "\nActive from #{period.from.to_formatted_s(:govuk_date)}"
-      availability << " to #{(period.to - 1.day).to_formatted_s(:govuk_date)}\nDeactivated on #{period.to.to_formatted_s(:govuk_date)}" if period.to.present?
+      if period.from.present?
+        availability << "\nActive from #{period.from.to_formatted_s(:govuk_date)}"
+        availability << " to #{(period.to - 1.day).to_formatted_s(:govuk_date)}\nDeactivated on #{period.to.to_formatted_s(:govuk_date)}" if period.to.present?
       end
     end
     availability.strip
