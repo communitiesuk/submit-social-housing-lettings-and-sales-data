@@ -48,7 +48,7 @@ RSpec.describe LocationsHelper do
   end
 
   describe "display_location_attributes" do
-    let(:location) { FactoryBot.build(:location, startdate: Time.zone.local(2022, 8, 8)) }
+    let(:location) { FactoryBot.build(:location, startdate: Time.zone.local(2022, 4, 1)) }
 
     it "returns correct display attributes" do
       attributes = [
@@ -59,7 +59,7 @@ RSpec.describe LocationsHelper do
         { name: "Common type of unit", value: location.type_of_unit },
         { name: "Mobility type", value: location.mobility_type },
         { name: "Code", value: location.location_code },
-        { name: "Availability", value: "Active from 8 August 2022" },
+        { name: "Availability", value: "Active from 1 April 2022" },
         { name: "Status", value: :active },
       ]
 
@@ -77,15 +77,74 @@ RSpec.describe LocationsHelper do
       end
 
       context "with previous deactivations" do
-        before do
-          location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 10), reactivation_date: Time.zone.local(2022, 9, 1))
-          location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 15), reactivation_date: nil)
+        context "and all reactivated deactivations" do
+          before do
+            location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 10), reactivation_date: Time.zone.local(2022, 9, 1))
+            location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 15), reactivation_date: Time.zone.local(2022, 9, 28))
+          end
+
+          it "displays the timeline of availability" do
+            availability_attribute = display_location_attributes(location).find { |x| x[:name] == "Availability" }[:value]
+
+            expect(availability_attribute).to eq("Active from 1 April 2022 to 9 August 2022\nDeactivated on 10 August 2022\nActive from 1 September 2022 to 14 September 2022\nDeactivated on 15 September 2022\nActive from 28 September 2022")
+          end
         end
 
-        it "displays the timeline of availability" do
-          availability_attribute = display_location_attributes(location).find { |x| x[:name] == "Availability" }[:value]
+        context "and non reactivated deactivation" do
+          before do
+            location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 10), reactivation_date: Time.zone.local(2022, 9, 1))
+            location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 15), reactivation_date: nil)
+          end
 
-          expect(availability_attribute).to eq("Active from 8 August 2022 to 9 August 2022\nDeactivated on 10 August 2022\nActive from 1 September 2022 to 14 September 2022\nDeactivated on 15 September 2022")
+          it "displays the timeline of availability" do
+            availability_attribute = display_location_attributes(location).find { |x| x[:name] == "Availability" }[:value]
+
+            expect(availability_attribute).to eq("Active from 1 April 2022 to 9 August 2022\nDeactivated on 10 August 2022\nActive from 1 September 2022 to 14 September 2022\nDeactivated on 15 September 2022")
+          end
+        end
+      end
+
+      context "with out of order deactivations" do
+        context "and all reactivated deactivations" do
+          before do
+            location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 24), reactivation_date: Time.zone.local(2022, 9, 28))
+            location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 15), reactivation_date: Time.zone.local(2022, 6, 18))
+          end
+
+          it "displays the timeline of availability" do
+            availability_attribute = display_location_attributes(location).find { |x| x[:name] == "Availability" }[:value]
+
+            expect(availability_attribute).to eq("Active from 1 April 2022 to 14 June 2022\nDeactivated on 15 June 2022\nActive from 18 June 2022 to 23 September 2022\nDeactivated on 24 September 2022\nActive from 28 September 2022")
+          end
+        end
+
+        context "and one non reactivated deactivation" do
+          before do
+            location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 24), reactivation_date: Time.zone.local(2022, 9, 28))
+            location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 15), reactivation_date: nil)
+          end
+
+          it "displays the timeline of availability" do
+            availability_attribute = display_location_attributes(location).find { |x| x[:name] == "Availability" }[:value]
+
+            expect(availability_attribute).to eq("Active from 1 April 2022 to 14 June 2022\nDeactivated on 15 June 2022\nActive from 28 September 2022")
+          end
+        end
+      end
+
+      context "with multiple out of order deactivations" do
+        context "and one non reactivated deactivation" do
+          before do
+            location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 24), reactivation_date: Time.zone.local(2022, 9, 28))
+            location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 24), reactivation_date: Time.zone.local(2022, 10, 28))
+            location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 15), reactivation_date: nil)
+          end
+
+          it "displays the timeline of availability" do
+            availability_attribute = display_location_attributes(location).find { |x| x[:name] == "Availability" }[:value]
+
+            expect(availability_attribute).to eq("Active from 1 April 2022 to 14 June 2022\nDeactivated on 15 June 2022\nActive from 28 September 2022 to 23 October 2022\nDeactivated on 24 October 2022\nActive from 28 October 2022")
+          end
         end
       end
     end
