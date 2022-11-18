@@ -125,11 +125,18 @@ RSpec.describe Scheme, type: :model do
         scheme.save!
         expect(scheme.status).to eq(:deactivated)
       end
+
+      it "returns reactivating soon if the scheme has a future reactivation date" do
+        scheme.scheme_deactivation_periods << FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 7), reactivation_date: Time.zone.local(2022, 6, 8))
+        scheme.save!
+        expect(scheme.status).to eq(:reactivating_soon)
+      end
     end
 
     context "when there have been previous deactivations" do
       before do
         scheme.scheme_deactivation_periods << FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 6, 5))
+        scheme.save!
       end
 
       it "returns active if the scheme has no relevant deactivation records" do
@@ -153,6 +160,13 @@ RSpec.describe Scheme, type: :model do
         scheme.save!
         expect(scheme.status).to eq(:deactivated)
       end
+    end
+
+    it "returns reactivating soon if the scheme has a future reactivation date" do
+      Timecop.freeze(2022, 6, 8)
+      scheme.scheme_deactivation_periods << FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 7), reactivation_date: Time.zone.local(2022, 6, 9))
+      scheme.save!
+      expect(scheme.status).to eq(:reactivating_soon)
     end
   end
 

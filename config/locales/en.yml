@@ -313,7 +313,7 @@ en:
       missing: "You must show the DLUHC privacy notice to the tenant before you can submit this log."
 
     scheme:
-      deactivation_date:
+      toggle_date:
         not_selected: "Select one of the options"
         invalid: "Enter a valid day, month and year"
         out_of_range: "The date must be on or after the %{date}"

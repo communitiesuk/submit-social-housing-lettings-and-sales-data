@@ -26,7 +26,7 @@
 <% end %>
 
 <% if FeatureToggle.scheme_toggle_enabled? %>
-  <% if @scheme.active? %>
+  <% if @scheme.active? || @scheme.reactivating_soon? %>
     <%= govuk_button_link_to "Deactivate this scheme", scheme_new_deactivation_path(@scheme), warning: true %>
   <% else %>
     <%= govuk_button_link_to "Reactivate this scheme", scheme_new_reactivation_path(@scheme) %>

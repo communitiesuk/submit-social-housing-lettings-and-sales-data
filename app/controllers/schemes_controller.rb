@@ -317,7 +317,12 @@ private
   end
 
   def reactivate_success_notice
-    "#{@scheme.service_name} has been reactivated"
+    case @scheme.status
+    when :active
+      "#{@scheme.service_name} has been reactivated"
+    when :reactivating_soon
+      "#{@scheme.service_name} will reactivate on #{reactivation_date.to_time.to_formatted_s(:govuk_date)}"
+    end
   end
 
   def deactivation_date
