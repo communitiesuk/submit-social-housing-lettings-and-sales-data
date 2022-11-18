@@ -21,7 +21,8 @@
               <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= extra_value %></span>
             <% end %>
             <br>
-            <% question.get_inferred_answers(log).each do |inferred_answer| %>
+            <% answer = Answer.new(question:, log:) %>
+            <% answer.get_inferred_answers.each do |inferred_answer| %>
               <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= inferred_answer %></span>
             <% end %>
           <% end %>

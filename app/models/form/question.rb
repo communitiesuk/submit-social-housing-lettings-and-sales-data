@@ -13,6 +13,7 @@ class Form::Question
   def initialize(id, hsh, page)
     @id = id
     @page = page
+
     if hsh
       @check_answer_label = hsh["check_answer_label"]
       @header = hsh["header"]
@@ -43,32 +44,6 @@ class Form::Question
 
   delegate :subsection, to: :page
   delegate :form, to: :subsection
-
-  def answer_label(log)
-    return checkbox_answer_label(log) if type == "checkbox"
-    return log[id]&.to_formatted_s(:govuk_date).to_s if type == "date"
-
-    answer = label_from_value(log[id]) if log[id].present?
-    answer_label = [prefix, format_value(answer), suffix_label(log)].join("") if answer
-
-    inferred = inferred_check_answers_value["value"] if inferred_check_answers_value && has_inferred_check_answers_value?(log)
-    return inferred if inferred.present?
-
-    answer_label
-  end
-
-  def get_inferred_answers(log)
-    return [] unless inferred_answers
-
-    enabled_inferred_answers(inferred_answers, log).keys.map do |question_id|
-      question = form.get_question(question_id, log)
-      if question.present?
-        question.label_from_value(log[question_id])
-      else
-        Array(question_id.to_s.split(".")).inject(log) { |l, method| l.present? ? l.public_send(*method) : "" }
-      end
-    end
-  end
 
   def get_extra_check_answer_value(_log)
     nil
@@ -125,12 +100,6 @@ class Form::Question
 
   def action_href(log, page_id)
     "/#{log.model_name.param_key.dasherize}s/#{log.id}/#{page_id.to_s.dasherize}?referrer=check_answers"
-  end
-
-  def completed?(log)
-    return answer_options.keys.any? { |key| value_is_yes?(log[key]) } if type == "checkbox"
-
-    log[id].present? || !log.respond_to?(id.to_sym) || has_inferred_display_value?(log)
   end
 
   def value_from_label(label)
@@ -205,24 +174,6 @@ class Form::Question
     I18n.t("validations.not_answered", question: display_label.downcase)
   end
 
-  def suffix_label(log)
-    return "" unless suffix
-    return suffix if suffix.is_a?(String)
-
-    label = ""
-
-    suffix.each do |s|
-      condition = s["depends_on"]
-      next unless condition
-
-      answer = log.send(condition.keys.first)
-      if answer == condition.values.first
-        label = s["label"]
-      end
-    end
-    label
-  end
-
   def answer_option_synonyms(resource)
     return unless resource.respond_to?(:synonyms)
 
@@ -262,18 +213,6 @@ private
     selected_option.is_a?(Hash) && selected_option["depends_on"] && form.depends_on_met(selected_option["depends_on"], log)
   end
 
-  def has_inferred_display_value?(log)
-    inferred_check_answers_value.present? && log[inferred_check_answers_value["condition"].keys.first] == inferred_check_answers_value["condition"].values.first
-  end
-
-  def checkbox_answer_label(log)
-    answer = []
-    return "Yes" if id == "declaration" && value_is_yes?(log["declaration"])
-
-    answer_options.each { |key, options| value_is_yes?(log[key]) ? answer << options["value"] : nil }
-    answer.join(", ")
-  end
-
   def format_value(answer_label)
     prefix == "£" ? ActionController::Base.helpers.number_to_currency(answer_label, delimiter: ",", format: "%n") : answer_label
   end
@@ -295,10 +234,6 @@ private
     else
       raise "Not implemented yet"
     end
-  end
-
-  def enabled_inferred_answers(inferred_answers, log)
-    inferred_answers.filter { |_key, value| value.all? { |condition_key, condition_value| log[condition_key] == condition_value } }
   end
 
   RADIO_YES_VALUE = {

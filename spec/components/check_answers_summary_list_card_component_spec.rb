@@ -10,7 +10,8 @@ RSpec.describe CheckAnswersSummaryListCardComponent, type: :component do
 
     it "renders a summary list card for the answers to those questions" do
       result = render_inline(described_class.new(questions:, log:, user:))
-      expect(result).to have_content(questions.first.answer_label(log))
+      answer = Answer.new(log:, question: questions.first)
+      expect(result).to have_content(answer.answer_label)
     end
 
     it "applicable questions doesn't return questions that are hidden in check answers" do

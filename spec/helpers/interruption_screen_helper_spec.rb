@@ -35,8 +35,15 @@ RSpec.describe InterruptionScreenHelper do
             },
           ],
         }
+
+        ecstat_question = lettings_log.form.get_question("ecstat1", lettings_log)
+        ecstat_answer = Answer.new(log: lettings_log, question: ecstat_question)
+
+        earnings_question = lettings_log.form.get_question("earnings", lettings_log)
+        earnings_answer = Answer.new(log: lettings_log, question: earnings_question)
+
         expect(display_informative_text(informative_text, lettings_log))
-          .to eq(I18n.t("soft_validations.net_income.hint_text", ecstat1: lettings_log.form.get_question("ecstat1", lettings_log).answer_label(lettings_log).downcase, earnings: lettings_log.form.get_question("earnings", lettings_log).answer_label(lettings_log)))
+          .to eq(I18n.t("soft_validations.net_income.hint_text", ecstat1: ecstat_answer.answer_label.downcase, earnings: earnings_answer.answer_label))
       end
     end
 
@@ -52,8 +59,12 @@ RSpec.describe InterruptionScreenHelper do
             },
           ],
         }
+
+        question = lettings_log.form.get_question("ecstat1", lettings_log)
+        answer = Answer.new(question:, log: lettings_log)
+
         expect(display_informative_text(informative_text, lettings_log))
-          .to eq(I18n.t("test.one_argument", ecstat1: lettings_log.form.get_question("ecstat1", lettings_log).answer_label(lettings_log).downcase))
+          .to eq(I18n.t("test.one_argument", ecstat1: answer.answer_label.downcase))
       end
     end
 
@@ -74,8 +85,12 @@ RSpec.describe InterruptionScreenHelper do
             },
           ],
         }
+
+        question = lettings_log.form.get_question("ecstat1", lettings_log)
+        answer = Answer.new(question:, log: lettings_log)
+
         expect(display_informative_text(informative_text, lettings_log))
-          .to eq(I18n.t("test.one_argument", ecstat1: lettings_log.form.get_question("ecstat1", lettings_log).answer_label(lettings_log).downcase))
+          .to eq(I18n.t("test.one_argument", ecstat1: answer.answer_label.downcase))
       end
     end
 
@@ -118,8 +133,12 @@ RSpec.describe InterruptionScreenHelper do
             },
           ],
         }
+
+        question = lettings_log.form.get_question("ecstat1", lettings_log)
+        answer = Answer.new(log: lettings_log, question:)
+
         expect(display_title_text(title_text, lettings_log))
-          .to eq(I18n.t("test.title_text.one_argument", ecstat1: lettings_log.form.get_question("ecstat1", lettings_log).answer_label(lettings_log).downcase))
+          .to eq(I18n.t("test.title_text.one_argument", ecstat1: answer.answer_label.downcase))
       end
     end
 

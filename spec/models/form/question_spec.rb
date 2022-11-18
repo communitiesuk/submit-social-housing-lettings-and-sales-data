@@ -225,11 +225,6 @@ RSpec.describe Form::Question, type: :model do
     let(:lettings_log) { FactoryBot.build(:lettings_log, :in_progress) }
     let(:question_id) { "incfreq" }
 
-    it "has an answer label" do
-      lettings_log.incfreq = 1
-      expect(question.answer_label(lettings_log)).to eq("Weekly")
-    end
-
     it "has an update answer link text helper" do
       expect(question.action_text(lettings_log)).to match(/Answer/)
       lettings_log["incfreq"] = 0
@@ -267,37 +262,6 @@ RSpec.describe Form::Question, type: :model do
       end
     end
 
-    context "when type is date" do
-      let(:section_id) { "local_authority" }
-      let(:subsection_id) { "local_authority" }
-      let(:page_id) { "property_major_repairs" }
-      let(:question_id) { "mrcdate" }
-
-      it "displays a formatted answer label" do
-        lettings_log.mrcdate = Time.zone.local(2021, 10, 11)
-        expect(question.answer_label(lettings_log)).to eq("11 October 2021")
-      end
-
-      it "can handle nils" do
-        lettings_log.mrcdate = nil
-        expect(question.answer_label(lettings_log)).to eq("")
-      end
-    end
-
-    context "when type is checkbox" do
-      let(:section_id) { "household" }
-      let(:subsection_id) { "household_needs" }
-      let(:page_id) { "accessibility_requirements" }
-      let(:question_id) { "accessibility_requirements" }
-
-      it "has a joined answers label" do
-        lettings_log.housingneeds_a = 1
-        lettings_log.housingneeds_c = 1
-        expected_answer_label = "Fully wheelchair accessible housing, Level access housing"
-        expect(question.answer_label(lettings_log)).to eq(expected_answer_label)
-      end
-    end
-
     context "when a condition is present" do
       let(:page_id) { "housing_benefit" }
       let(:question_id) { "conditional_question" }
@@ -321,60 +285,6 @@ RSpec.describe Form::Question, type: :model do
         it "raises an exception" do
           expect { question.enabled?(lettings_log) }.to raise_error("Not implemented yet")
         end
-      end
-    end
-
-    context "when answers have a suffix dependent on another answer" do
-      let(:section_id) { "rent_and_charges" }
-      let(:subsection_id) { "income_and_benefits" }
-      let(:page_id) { "net_income" }
-      let(:question_id) { "earnings" }
-
-      it "displays the correct label for given suffix and answer the suffix depends on" do
-        lettings_log.incfreq = 1
-        lettings_log.earnings = 500
-        expect(question.answer_label(lettings_log)).to eq("£500.00 every week")
-        lettings_log.incfreq = 2
-        expect(question.answer_label(lettings_log)).to eq("£500.00 every month")
-        lettings_log.incfreq = 3
-        expect(question.answer_label(lettings_log)).to eq("£500.00 every year")
-      end
-    end
-
-    context "with inferred_check_answers_value" do
-      context "when Lettings form" do
-        let(:section_id) { "household" }
-        let(:subsection_id) { "household_needs" }
-        let(:page_id) { "armed_forces" }
-        let(:question_id) { "armedforces" }
-
-        it "returns the inferred label value" do
-          lettings_log.armedforces = 3
-          expect(question.answer_label(lettings_log)).to eq("Prefers not to say")
-        end
-      end
-
-      context "when Sales form" do
-        let(:sales_log) { FactoryBot.create(:sales_log, :completed, ethnic_group: 17) }
-        let(:question) { sales_log.form.get_question("ethnic_group", sales_log) }
-
-        it "returns the inferred label value" do
-          expect(question.answer_label(sales_log)).to eq("Prefers not to say")
-        end
-      end
-    end
-  end
-
-  describe ".completed?" do
-    context "when the question has inferred value only for check answers display" do
-      let(:section_id) { "tenancy_and_property" }
-      let(:subsection_id) { "property_information" }
-      let(:page_id) { "property_postcode" }
-      let(:question_id) { "postcode_full" }
-
-      it "returns true" do
-        lettings_log["postcode_known"] = 0
-        expect(question.completed?(lettings_log)).to be(true)
       end
     end
   end

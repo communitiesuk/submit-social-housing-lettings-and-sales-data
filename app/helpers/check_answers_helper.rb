@@ -43,7 +43,10 @@ private
   end
 
   def answered_questions(subsection, lettings_log, current_user)
-    total_applicable_questions(subsection, lettings_log, current_user).select { |q| q.completed?(lettings_log) }
+    total_applicable_questions(subsection, lettings_log, current_user).select do |question|
+      answer = Answer.new(question:, log: lettings_log)
+      answer.completed?
+    end
   end
 
   def total_count(subsection, lettings_log, current_user)
@@ -55,6 +58,7 @@ private
   end
 
   def get_answer_label(question, lettings_log)
-    question.answer_label(lettings_log).presence || "<span class=\"app-!-colour-muted\">You didn’t answer this question</span>".html_safe
+    answer = Answer.new(question:, log: lettings_log)
+    answer.answer_label.presence || "<span class=\"app-!-colour-muted\">You didn’t answer this question</span>".html_safe
   end
 end

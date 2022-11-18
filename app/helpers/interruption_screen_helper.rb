@@ -5,7 +5,9 @@ module InterruptionScreenHelper
     translation_params = {}
     informative_text["arguments"].each do |argument|
       value = if argument["label"]
-                pre_casing_value = lettings_log.form.get_question(argument["key"], lettings_log).answer_label(lettings_log)
+                question = lettings_log.form.get_question(argument["key"], lettings_log)
+                answer = Answer.new(question:, log: lettings_log)
+                pre_casing_value = answer.answer_label
                 pre_casing_value.downcase
               else
                 lettings_log.public_send(argument["key"])
@@ -29,7 +31,9 @@ module InterruptionScreenHelper
     arguments = title_text["arguments"] || {}
     arguments.each do |argument|
       value = if argument["label"]
-                lettings_log.form.get_question(argument["key"], lettings_log).answer_label(lettings_log).downcase
+                question = lettings_log.form.get_question(argument["key"], lettings_log)
+                answer = Answer.new(question:, log: lettings_log)
+                answer.answer_label.downcase
               else
                 lettings_log.public_send(argument["key"])
               end

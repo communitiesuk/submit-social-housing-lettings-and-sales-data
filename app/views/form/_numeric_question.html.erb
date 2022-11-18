@@ -1,5 +1,6 @@
 <%= render partial: "form/guidance/#{question.guidance_partial}" if question.top_guidance? %>
 
+<% answer = Answer.new(log: @log, question:) %>
 <%= f.govuk_number_field question.id.to_sym,
   caption: caption(caption_text, page_header, conditional),
   label: legend(question, page_header, conditional),
@@ -8,7 +9,7 @@
   width: question.width,
   readonly: question.read_only?,
   prefix_text: question.prefix.to_s,
-  suffix_text: question.suffix_label(@log),
+  suffix_text: answer.suffix_label,
   **stimulus_html_attributes(question) %>
 
 <%= render partial: "form/guidance/#{question.guidance_partial}" if question.bottom_guidance? %>
