@@ -403,14 +403,14 @@ class Location < ApplicationRecord
 
     if deactivation_date.blank?
       if deactivation_date_type.blank?
-        errors.add(:deactivation_date_type, message: I18n.t("validations.location.deactivation_date.not_selected"))
+        errors.add(:deactivation_date_type, message: I18n.t("validations.location.toggle_date.not_selected"))
       elsif deactivation_date_type == "other"
-        errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.invalid"))
+        errors.add(:deactivation_date, message: I18n.t("validations.location.toggle_date.invalid"))
       end
     else
       collection_start_date = FormHandler.instance.current_collection_start_date
       unless deactivation_date.between?(collection_start_date, Time.zone.local(2200, 1, 1))
-        errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.out_of_range", date: collection_start_date.to_formatted_s(:govuk_date)))
+        errors.add(:deactivation_date, message: I18n.t("validations.location.toggle_date.out_of_range", date: collection_start_date.to_formatted_s(:govuk_date)))
       end
     end
   end
@@ -424,14 +424,14 @@ class Location < ApplicationRecord
 
     if reactivation_date.blank?
       if reactivation_date_type.blank?
-        errors.add(:reactivation_date_type, message: I18n.t("validations.location.reactivation_date.not_selected"))
+        errors.add(:reactivation_date_type, message: I18n.t("validations.location.toggle_date.not_selected"))
       elsif reactivation_date_type == "other"
-        errors.add(:reactivation_date, message: I18n.t("validations.location.reactivation_date.invalid"))
+        errors.add(:reactivation_date, message: I18n.t("validations.location.toggle_date.invalid"))
       end
     else
       collection_start_date = FormHandler.instance.current_collection_start_date
       unless reactivation_date.between?(collection_start_date, Time.zone.local(2200, 1, 1))
-        errors.add(:reactivation_date, message: I18n.t("validations.location.reactivation_date.out_of_range", date: collection_start_date.to_formatted_s(:govuk_date)))
+        errors.add(:reactivation_date, message: I18n.t("validations.location.toggle_date.out_of_range", date: collection_start_date.to_formatted_s(:govuk_date)))
       end
     end
   end

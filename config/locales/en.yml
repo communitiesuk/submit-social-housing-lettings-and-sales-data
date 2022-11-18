@@ -319,7 +319,7 @@ en:
         out_of_range: "The date must be on or after the %{date}"
 
     location:
-      deactivation_date:
+      toggle_date:
         not_selected: "Select one of the options"
         invalid: "Enter a valid day, month and year"
         out_of_range: "The date must be on or after the %{date}"
