@@ -390,6 +390,10 @@ class Location < ApplicationRecord
     status == :active
   end
 
+  def reactivating_soon?
+    status == :reactivating_soon
+  end
+
   def run_deactivation_validations!
     @run_deactivation_validations = true
   end

@@ -1440,6 +1440,15 @@ RSpec.describe LocationsController, type: :request do
           expect(page).to have_link("Reactivate this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/new-reactivation")
         end
       end
+
+      context "with location that's reactivating soon" do
+        let(:location_deactivation_period) { FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 4, 12), reactivation_date: Time.zone.local(2022, 10, 12)) }
+
+        it "renders reactivate this location" do
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_link("Deactivate this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/new-deactivation")
+        end
+      end
     end
   end
 
