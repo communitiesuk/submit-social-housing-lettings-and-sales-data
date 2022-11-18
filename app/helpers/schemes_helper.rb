@@ -18,7 +18,11 @@ module SchemesHelper
     ]
 
     if FeatureToggle.scheme_toggle_enabled?
-      base_attributes.append({ name: "Status", value: scheme.status })
+      base_attributes.append({ name: "Status", value: status_tag(scheme.status) })
+    end
+
+    if current_user.data_coordinator?
+      base_attributes.delete_if {|item| item[:name] == "Housing stock owned by"}
     end
 
     if scheme.arrangement_type_same?
