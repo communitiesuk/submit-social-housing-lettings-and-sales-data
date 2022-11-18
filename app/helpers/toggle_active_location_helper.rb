@@ -1,9 +1,9 @@
 module ToggleActiveLocationHelper
-  def toggle_location_form_path(action, scheme_id, location_id)
+  def toggle_location_form_path(action, location)
     if action == "deactivate"
-      scheme_location_new_deactivation_path(scheme_id:, location_id:)
+      scheme_location_new_deactivation_path(location.scheme, location)
     else
-      scheme_location_reactivate_path(scheme_id:, location_id:)
+      scheme_location_reactivate_path(location.scheme, location)
     end
   end
 
