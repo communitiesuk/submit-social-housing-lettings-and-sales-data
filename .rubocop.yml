@@ -27,3 +27,4 @@ Rails/UnknownEnv:
     - staging
     - development
     - test
+    - review
