@@ -372,7 +372,7 @@ class Location < ApplicationRecord
   end
 
   def available_from
-    startdate || created_at
+    startdate || [created_at, FormHandler.instance.current_collection_start_date].min
   end
 
   def status
