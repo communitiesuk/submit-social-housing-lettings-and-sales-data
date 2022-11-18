@@ -62,7 +62,7 @@ class LocationsController < ApplicationController
       flash[:notice] = reactivate_success_notice
       redirect_to scheme_location_path(@scheme, @location)
     else
-      render "toggle_active", locals: { action: "deactivate" }, status: :unprocessable_entity
+      render "toggle_active", locals: { action: "reactivate" }, status: :unprocessable_entity
     end
   end
 
