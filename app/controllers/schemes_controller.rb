@@ -59,7 +59,7 @@ class SchemesController < ApplicationController
     @scheme.reactivation_date = reactivation_date
     @scheme.reactivation_date_type = params[:scheme][:reactivation_date_type]
 
-    if @scheme.valid? && @scheme.location_deactivation_periods.deactivations_without_reactivation.update!(reactivation_date:)
+    if @scheme.valid? && @scheme.scheme_deactivation_periods.deactivations_without_reactivation.update!(reactivation_date:)
       flash[:notice] = reactivate_success_notice
       redirect_to scheme_details_path(@scheme)
     else

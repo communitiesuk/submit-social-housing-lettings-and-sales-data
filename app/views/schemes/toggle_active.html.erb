@@ -12,9 +12,9 @@
       <% collection_start_date = FormHandler.instance.current_collection_start_date %>
       <%= f.govuk_error_summary %>
       <%= f.govuk_radio_buttons_fieldset date_type_question(action),
-                                         legend: { text: I18n.t("questions.scheme.deactivate.apply_from") },
+                                         legend: { text: I18n.t("questions.scheme.toggle_active.apply_from") },
                                          caption: { text: title },
-                                         hint: { text: I18n.t("hints.scheme.deactivate", date: collection_start_date.to_formatted_s(:govuk_date)) } do %>
+                                         hint: { text: I18n.t("hints.scheme.toggle_active", date: collection_start_date.to_formatted_s(:govuk_date)) } do %>
         <%= govuk_warning_text text: I18n.t("warnings.scheme.#{action}.existing_logs") %>
         <%= f.govuk_radio_button date_type_question(action),
                                  "default",
