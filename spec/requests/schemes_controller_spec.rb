@@ -274,7 +274,7 @@ RSpec.describe SchemesController, type: :request do
 
           it "renders reactivate this scheme" do
             expect(response).to have_http_status(:ok)
-            expect(page).to have_link("Reactivate this scheme", href: "/schemes/#{scheme.id}/reactivate")
+            expect(page).to have_link("Reactivate this scheme", href: "/schemes/#{scheme.id}/new-reactivation")
           end
         end
 
@@ -283,7 +283,7 @@ RSpec.describe SchemesController, type: :request do
 
           it "renders reactivate this scheme" do
             expect(response).to have_http_status(:ok)
-            expect(page).to have_link("Reactivate this scheme", href: "/schemes/#{scheme.id}/reactivate")
+            expect(page).to have_link("Reactivate this scheme", href: "/schemes/#{scheme.id}/new-reactivation")
           end
         end
       end
@@ -310,6 +310,142 @@ RSpec.describe SchemesController, type: :request do
         expect(page).to have_content(specific_scheme.secondary_client_group)
         expect(page).to have_content(specific_scheme.support_type)
         expect(page).to have_content(specific_scheme.intended_stay)
+      end
+    end
+  end
+
+  describe "#reactivate" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        patch "/schemes/1/reactivate"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        patch "/schemes/1/reactivate"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when signed in as a data coordinator" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:location) { FactoryBot.create(:location, scheme:) }
+      let(:deactivation_date) { Time.zone.local(2022, 10, 10) }
+      let(:startdate) { Time.utc(2022, 10, 11) }
+
+      before do
+        Timecop.freeze(Time.utc(2022, 10, 10))
+        sign_in user
+        scheme.scheme_deactivation_periods << FactoryBot.create(:scheme_deactivation_period, deactivation_date:)
+        scheme.save!
+        patch "/schemes/#{scheme.id}/reactivate", params:
+      end
+
+      after do
+        Timecop.unfreeze
+      end
+
+      context "with default date" do
+        let(:params) { { scheme: { reactivation_date_type: "default" } } }
+
+        it "redirects to the scheme page and displays a success banner" do
+          expect(response).to redirect_to("/schemes/#{scheme.id}/details")
+          follow_redirect!
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+          expect(page).to have_content("#{scheme.service_name} has been reactivated")
+        end
+
+        it "updates existing scheme deactivations with valid reactivation date" do
+          follow_redirect!
+          scheme.reload
+          expect(scheme.scheme_deactivation_periods.count).to eq(1)
+          expect(scheme.scheme_deactivation_periods.first.reactivation_date).to eq(Time.zone.local(2022, 4, 1))
+        end
+      end
+
+      context "with other date" do
+        let(:params) { { scheme: { reactivation_date_type: "other", "reactivation_date(3i)": "14", "reactivation_date(2i)": "10", "reactivation_date(1i)": "2022" } } }
+
+        it "redirects to the scheme page and displays a success banner" do
+          expect(response).to redirect_to("/schemes/#{scheme.id}/details")
+          follow_redirect!
+          follow_redirect!
+          expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+          expect(page).to have_content("#{scheme.service_name} has been reactivated")
+        end
+
+        it "updates existing scheme deactivations with valid reactivation date" do
+          follow_redirect!
+          scheme.reload
+          expect(scheme.scheme_deactivation_periods.count).to eq(1)
+          expect(scheme.scheme_deactivation_periods.first.reactivation_date).to eq(Time.zone.local(2022, 10, 14))
+        end
+      end
+
+      context "when the date is not selected" do
+        let(:params) { { scheme: { "reactivation_date": "" } } }
+
+        it "displays the new page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.scheme.reactivation_date.not_selected"))
+        end
+      end
+
+      context "when invalid date is entered" do
+        let(:params) { { scheme: { reactivation_date_type: "other", "reactivation_date(3i)": "10", "reactivation_date(2i)": "44", "reactivation_date(1i)": "2022" } } }
+
+        it "displays the new page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.scheme.reactivation_date.invalid"))
+        end
+      end
+
+      context "when the date is entered is before the beginning of current collection window" do
+        let(:params) { { scheme: { reactivation_date_type: "other", "reactivation_date(3i)": "10", "reactivation_date(2i)": "4", "reactivation_date(1i)": "2020" } } }
+
+        it "displays the new page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.scheme.reactivation_date.out_of_range", date: "1 April 2022"))
+        end
+      end
+
+      context "when the day is not entered" do
+        let(:params) { { scheme: { reactivation_date_type: "other", "reactivation_date(3i)": "", "reactivation_date(2i)": "2", "reactivation_date(1i)": "2022" } } }
+
+        it "displays page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.scheme.reactivation_date.invalid"))
+        end
+      end
+
+      context "when the month is not entered" do
+        let(:params) { { scheme: { reactivation_date_type: "other", "reactivation_date(3i)": "2", "reactivation_date(2i)": "", "reactivation_date(1i)": "2022" } } }
+
+        it "displays page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.scheme.reactivation_date.invalid"))
+        end
+      end
+
+      context "when the year is not entered" do
+        let(:params) { { scheme: { reactivation_date_type: "other", "reactivation_date(3i)": "2", "reactivation_date(2i)": "2", "reactivation_date(1i)": "" } } }
+
+        it "displays page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.scheme.reactivation_date.invalid"))
+        end
       end
     end
   end
