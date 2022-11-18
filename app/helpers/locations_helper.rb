@@ -42,21 +42,23 @@ module LocationsHelper
     base_attributes
   end
 
+  ActivePeriod = Struct.new(:from, :to)
   def location_availability(location)
-    availability = "Active from #{location.available_from.to_formatted_s(:govuk_date)}"
+    active_periods = [ActivePeriod.new(location.available_from, nil)]
 
     sorted_deactivation_periods = location.location_deactivation_periods.sort_by(&:deactivation_date)
-    deactivation_open = false
     sorted_deactivation_periods.each do |deactivation|
-      from = deactivation.deactivation_date == location.available_from ? deactivation.deactivation_date : deactivation.deactivation_date - 1.day
-      availability << " to #{from.to_formatted_s(:govuk_date)}\nDeactivated on #{deactivation.deactivation_date.to_formatted_s(:govuk_date)}" unless deactivation_open
-      if deactivation.reactivation_date.present?
-        availability << "\nActive from #{deactivation.reactivation_date.to_formatted_s(:govuk_date)}"
-        deactivation_open = false
-      else
-        deactivation_open = true
+      active_periods.find {|x| x.to.nil?}.to = deactivation.deactivation_date
+      active_periods << ActivePeriod.new(deactivation.reactivation_date, nil)
+    end
+
+    availability = ""
+    active_periods.each do |period|
+      if period.from.present? 
+      availability << "\nActive from #{period.from.to_formatted_s(:govuk_date)}"
+      availability << " to #{(period.to - 1.day).to_formatted_s(:govuk_date)}\nDeactivated on #{period.to.to_formatted_s(:govuk_date)}" if period.to.present?
       end
     end
-    availability
+    availability.strip
   end
 end
