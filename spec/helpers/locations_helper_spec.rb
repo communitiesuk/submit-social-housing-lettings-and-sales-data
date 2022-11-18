@@ -154,6 +154,19 @@ RSpec.describe LocationsHelper do
           end
         end
       end
+
+      context "with intersecting deactivations" do
+        before do
+          location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 10), reactivation_date: Time.zone.local(2022, 12, 1))
+          location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 11, 11), reactivation_date: Time.zone.local(2022, 12, 11))
+        end
+
+        it "displays the timeline of availability" do
+          availability_attribute = display_location_attributes(location).find { |x| x[:name] == "Availability" }[:value]
+
+          expect(availability_attribute).to eq("Active from 1 April 2022 to 9 October 2022\nDeactivated on 10 October 2022\nActive from 11 December 2022")
+        end
+      end
     end
   end
 end
