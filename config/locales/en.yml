@@ -323,6 +323,8 @@ en:
         not_selected: "Select one of the options"
         invalid: "Enter a valid day, month and year"
         out_of_range: "The date must be on or after the %{date}"
+      reactivation:
+        before_deactivation: "This location was deactivated on %{date}\nThe reactivation date must be on or after deactivation date"
 
   soft_validations:
     net_income:

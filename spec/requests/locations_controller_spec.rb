@@ -1478,7 +1478,7 @@ RSpec.describe LocationsController, type: :request do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
       let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
       let!(:location) { FactoryBot.create(:location, scheme:) }
-      let(:deactivation_date) { Time.zone.local(2022, 10, 10) }
+      let(:deactivation_date) { Time.zone.local(2022, 4, 1) }
       let(:startdate) { Time.utc(2022, 10, 11) }
 
       before do
@@ -1592,6 +1592,16 @@ RSpec.describe LocationsController, type: :request do
         it "displays page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_content(I18n.t("validations.location.toggle_date.invalid"))
+        end
+      end
+
+      context "when the reactivation date is before deactivation date" do
+        let(:deactivation_date) { Time.zone.local(2022, 10, 10) }
+        let(:params) { { location: { reactivation_date_type: "other", "reactivation_date(3i)": "8", "reactivation_date(2i)": "9", "reactivation_date(1i)": "2022" } } }
+
+        it "displays page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.location.reactivation.before_deactivation", date: "10 October 2022"))
         end
       end
     end

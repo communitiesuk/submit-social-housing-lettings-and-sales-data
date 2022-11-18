@@ -426,6 +426,7 @@ class Location < ApplicationRecord
   def reactivation_date_errors
     return unless @run_reactivation_validations
 
+    recent_deactivation = location_deactivation_periods.deactivations_without_reactivation.first
     if reactivation_date.blank?
       if reactivation_date_type.blank?
         errors.add(:reactivation_date_type, message: I18n.t("validations.location.toggle_date.not_selected"))
@@ -434,8 +435,10 @@ class Location < ApplicationRecord
       end
     else
       collection_start_date = FormHandler.instance.current_collection_start_date
-      unless reactivation_date.between?(collection_start_date, Time.zone.local(2200, 1, 1))
+      if !reactivation_date.between?(collection_start_date, Time.zone.local(2200, 1, 1))
         errors.add(:reactivation_date, message: I18n.t("validations.location.toggle_date.out_of_range", date: collection_start_date.to_formatted_s(:govuk_date)))
+      elsif reactivation_date < recent_deactivation.deactivation_date
+        errors.add(:reactivation_date, message: I18n.t("validations.location.reactivation.before_deactivation", date: recent_deactivation.deactivation_date.to_formatted_s(:govuk_date)))
       end
     end
   end
