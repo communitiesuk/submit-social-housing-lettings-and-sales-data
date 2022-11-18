@@ -1513,7 +1513,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "with other date" do
-        let(:params) { { location: { reactivation_date_type: "other", "reactivation_date(3i)": "14", "reactivation_date(2i)": "10", "reactivation_date(1i)": "2022" } } }
+        let(:params) { { location: { reactivation_date_type: "other", "reactivation_date(3i)": "10", "reactivation_date(2i)": "10", "reactivation_date(1i)": "2022" } } }
 
         it "redirects to the location page and displays a success banner" do
           expect(response).to redirect_to("/schemes/#{scheme.id}/locations/#{location.id}")
@@ -1526,7 +1526,18 @@ RSpec.describe LocationsController, type: :request do
           follow_redirect!
           location.reload
           expect(location.location_deactivation_periods.count).to eq(1)
-          expect(location.location_deactivation_periods.first.reactivation_date).to eq(Time.zone.local(2022, 10, 14))
+          expect(location.location_deactivation_periods.first.reactivation_date).to eq(Time.zone.local(2022, 10, 10))
+        end
+      end
+
+      context "with other future date" do
+        let(:params) { { location: { reactivation_date_type: "other", "reactivation_date(3i)": "14", "reactivation_date(2i)": "12", "reactivation_date(1i)": "2022" } } }
+
+        it "redirects to the location page and displays a success banner" do
+          expect(response).to redirect_to("/schemes/#{scheme.id}/locations/#{location.id}")
+          follow_redirect!
+          expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+          expect(page).to have_content("#{location.name} will reactivate on 14 December 2022")
         end
       end
 

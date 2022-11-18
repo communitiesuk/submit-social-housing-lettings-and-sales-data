@@ -203,7 +203,12 @@ private
   end
 
   def reactivate_success_notice
-    "#{@location.name} has been reactivated"
+    case @location.status
+    when :active
+      "#{@location.name} has been reactivated"
+    when :reactivating_soon
+      "#{@location.name} will reactivate on #{reactivation_date.to_time.to_formatted_s(:govuk_date)}"
+    end
   end
 
   def update_affected_logs
