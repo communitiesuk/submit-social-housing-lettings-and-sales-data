@@ -26,7 +26,7 @@ module SchemesHelper
     end
 
     if scheme.arrangement_type_same?
-      base_attributes.delete({ name: "Organisation providing support", value: scheme.managing_organisation&.name })
+      base_attributes.delete_if {|item| item[:name] == "Organisation providing support"}
     end
     base_attributes
   end
