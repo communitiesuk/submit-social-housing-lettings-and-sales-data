@@ -8,8 +8,9 @@ RSpec.describe Form::Lettings::Questions::CreatedById, type: :model do
   let(:page) { instance_double(Form::Page) }
   let(:subsection) { instance_double(Form::Subsection) }
   let(:form) { instance_double(Form) }
-  let(:user_1) { FactoryBot.create(:user, name: "first user") }
-  let(:user_2) { FactoryBot.create(:user, name: "second user") }
+  let(:user_1) { create(:user, name: "first user") }
+  let(:user_2) { create(:user, name: "second user") }
+  let(:user_3) { create(:user, name: "third user") }
   let!(:expected_answer_options) do
     {
       "" => "Select an option",
@@ -51,7 +52,7 @@ RSpec.describe Form::Lettings::Questions::CreatedById, type: :model do
   end
 
   context "when the current user is support" do
-    let(:support_user) { FactoryBot.build(:user, :support) }
+    let(:support_user) { build(:user, :support) }
 
     it "is shown in check answers" do
       expect(question.hidden_in_check_answers?(nil, support_user)).to be false
@@ -59,7 +60,7 @@ RSpec.describe Form::Lettings::Questions::CreatedById, type: :model do
   end
 
   context "when the current user is not support" do
-    let(:user) { FactoryBot.build(:user) }
+    let(:user) { build(:user) }
 
     it "is not shown in check answers" do
       expect(question.hidden_in_check_answers?(nil, user)).to be true
@@ -67,11 +68,18 @@ RSpec.describe Form::Lettings::Questions::CreatedById, type: :model do
   end
 
   context "when the owning organisation is already set" do
-    let(:lettings_log) { FactoryBot.create(:lettings_log, owning_organisation: user_2.organisation) }
+    let(:lettings_log) do
+      create(
+        :lettings_log,
+        owning_organisation: user_2.organisation,
+        managing_organisation: user_3.organisation,
+      )
+    end
     let(:expected_answer_options) do
       {
         "" => "Select an option",
         user_2.id => "#{user_2.name} (#{user_2.email})",
+        user_3.id => "#{user_3.name} (#{user_3.email})",
       }
     end
 
