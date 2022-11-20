@@ -155,7 +155,7 @@ RSpec.describe Location, type: :model do
 
     context "when there have been previous deactivations" do
       before do
-        location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 6, 5))
+        location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 5, 4), reactivation_date: Time.zone.local(2022, 6, 5))
         location.save!
       end
 
@@ -186,6 +186,81 @@ RSpec.describe Location, type: :model do
         location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 7), reactivation_date: Time.zone.local(2022, 6, 9))
         location.save!
         expect(location.status).to eq(:reactivating_soon)
+      end
+
+      it "returns if the location had a deactivation during another deactivation" do
+        Timecop.freeze(2022, 6, 4)
+        location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 5, 5), reactivation_date: Time.zone.local(2022, 6, 2))
+        location.save!
+        expect(location.status).to eq(:reactivating_soon)
+      end
+    end
+  end
+
+  describe "Active periods" do
+    let(:location) { FactoryBot.create(:location, startdate: nil) }
+
+    before do
+      Timecop.freeze(2022, 10, 10)
+    end
+
+    after do
+      Timecop.unfreeze
+    end
+
+    context "when there have not been any previous deactivations" do
+      it "returns one active period without to date" do
+        expect(location.active_periods.count).to eq(1)
+        expect(location.active_periods.first).to have_attributes(from: Time.zone.local(2022, 4, 1), to: nil)
+      end
+
+      it "returns sequential non reactivated active periods" do
+        location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 5, 5), reactivation_date: Time.zone.local(2022, 6, 4))
+        location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 7, 6))
+        location.save!
+
+        expect(location.active_periods.count).to eq(2)
+        expect(location.active_periods.first).to have_attributes(from: Time.zone.local(2022, 4, 1), to: Time.zone.local(2022, 5, 5))
+        expect(location.active_periods.second).to have_attributes(from: Time.zone.local(2022, 6, 4), to: Time.zone.local(2022, 7, 6))
+      end
+
+      it "returns sequential reactivated active periods" do
+        location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 5, 5), reactivation_date: Time.zone.local(2022, 6, 4))
+        location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 7, 6), reactivation_date: Time.zone.local(2022, 8, 5))
+        location.save!
+        expect(location.active_periods.count).to eq(3)
+        expect(location.active_periods.first).to have_attributes(from: Time.zone.local(2022, 4, 1), to: Time.zone.local(2022, 5, 5))
+        expect(location.active_periods.second).to have_attributes(from: Time.zone.local(2022, 6, 4), to: Time.zone.local(2022, 7, 6))
+        expect(location.active_periods.third).to have_attributes(from: Time.zone.local(2022, 8, 5), to: nil)
+      end
+
+      it "returns non sequential non reactivated active periods" do
+        location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 7, 6), reactivation_date: Time.zone.local(2022, 8, 5))
+        location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 5, 5), reactivation_date: nil)
+        location.save!
+
+        expect(location.active_periods.count).to eq(2)
+        expect(location.active_periods.first).to have_attributes(from: Time.zone.local(2022, 4, 1), to: Time.zone.local(2022, 5, 5))
+        expect(location.active_periods.second).to have_attributes(from: Time.zone.local(2022, 8, 5), to: nil)
+      end
+
+      it "returns non sequential reactivated active periods" do
+        location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 7, 6), reactivation_date: Time.zone.local(2022, 8, 5))
+        location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 5, 5), reactivation_date: Time.zone.local(2022, 6, 4))
+        location.save!
+        expect(location.active_periods.count).to eq(3)
+        expect(location.active_periods.first).to have_attributes(from: Time.zone.local(2022, 4, 1), to: Time.zone.local(2022, 5, 5))
+        expect(location.active_periods.second).to have_attributes(from: Time.zone.local(2022, 6, 4), to: Time.zone.local(2022, 7, 6))
+        expect(location.active_periods.third).to have_attributes(from: Time.zone.local(2022, 8, 5), to: nil)
+      end
+
+      it "returns correct active periods when reactivation happends during a deactivated period" do
+        location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 5, 5), reactivation_date: Time.zone.local(2022, 11, 11))
+        location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 4, 6), reactivation_date: Time.zone.local(2022, 7, 7))
+
+        expect(location.active_periods.count).to eq(2)
+        expect(location.active_periods.first).to have_attributes(from: Time.zone.local(2022, 4, 1), to: Time.zone.local(2022, 4, 6))
+        expect(location.active_periods.second).to have_attributes(from: Time.zone.local(2022, 11, 11), to: nil)
       end
     end
   end
