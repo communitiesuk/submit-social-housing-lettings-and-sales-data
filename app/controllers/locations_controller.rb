@@ -26,7 +26,7 @@ class LocationsController < ApplicationController
     if params[:location_deactivation_period].blank?
       render "toggle_active", locals: { action: "deactivate" }
     else
-      @location_deactivation_period.deactivation_date = deactivation_date
+      @location_deactivation_period.deactivation_date = toggle_date("deactivation_date")
       @location_deactivation_period.deactivation_date_type = params[:location_deactivation_period][:deactivation_date_type]
       @location_deactivation_period.location = @location
       if @location_deactivation_period.valid?
@@ -43,7 +43,7 @@ class LocationsController < ApplicationController
   end
 
   def deactivate
-    if LocationDeactivationPeriod.create!(location_id: @location.id, deactivation_date:) && update_affected_logs
+    if LocationDeactivationPeriod.create!(location_id: @location.id, deactivation_date: toggle_date("deactivation_date")) && update_affected_logs
       flash[:notice] = deactivate_success_notice
     end
     redirect_to scheme_location_path(@scheme, @location)
@@ -57,10 +57,10 @@ class LocationsController < ApplicationController
   def reactivate
     @location_deactivation_period = LocationDeactivationPeriod.deactivations_without_reactivation.first
 
-    @location_deactivation_period.reactivation_date = reactivation_date
+    @location_deactivation_period.reactivation_date = toggle_date("reactivation_date")
     @location_deactivation_period.reactivation_date_type = params[:location_deactivation_period][:reactivation_date_type]
 
-    if @location_deactivation_period.update(reactivation_date:)
+    if @location_deactivation_period.update(reactivation_date: toggle_date("reactivation_date"))
       flash[:notice] = reactivate_success_notice
       redirect_to scheme_location_path(@scheme, @location)
     else
@@ -200,7 +200,7 @@ private
     when :deactivated
       "#{@location.name} has been deactivated"
     when :deactivating_soon
-      "#{@location.name} will deactivate on #{deactivation_date.to_time.to_formatted_s(:govuk_date)}"
+      "#{@location.name} will deactivate on #{toggle_date('deactivation_date').to_time.to_formatted_s(:govuk_date)}"
     end
   end
 
@@ -209,20 +209,12 @@ private
     when :active
       "#{@location.name} has been reactivated"
     when :reactivating_soon
-      "#{@location.name} will reactivate on #{reactivation_date.to_time.to_formatted_s(:govuk_date)}"
+      "#{@location.name} will reactivate on #{toggle_date('reactivation_date').to_time.to_formatted_s(:govuk_date)}"
     end
   end
 
   def update_affected_logs
-    @location.lettings_logs.filter_by_before_startdate(deactivation_date.to_time).update!(location: nil, scheme: nil)
-  end
-
-  def deactivation_date
-    toggle_date("deactivation_date")
-  end
-
-  def reactivation_date
-    toggle_date("reactivation_date")
+    @location.lettings_logs.filter_by_before_startdate(toggle_date("deactivation_date").to_time).update!(location: nil, scheme: nil)
   end
 
   def toggle_date(key)
