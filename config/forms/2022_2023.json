@@ -5929,7 +5929,7 @@
               "description": "",
               "questions": {
                 "housingneeds_type": {
-                  "header": "What type of access need do they have?",
+                  "header": "What type of access needs do they have?",
                   "hint_text": "",
                   "type": "radio",
                   "check_answer_label": "Disabled access needs",
@@ -5947,7 +5947,7 @@
                       "value": true
                     },
                     "3": {
-                      "value": "None of the above"
+                      "value": "None of the listed options"
                     }
                   }
                 },
