@@ -447,12 +447,10 @@ class Location < ApplicationRecord
       elsif reactivation_date_type == "other"
         errors.add(:reactivation_date, message: I18n.t("validations.location.toggle_date.invalid"))
       end
-    else
-      if !reactivation_date.between?(available_from, Time.zone.local(2200, 1, 1))
-        errors.add(:reactivation_date, message: I18n.t("validations.location.toggle_date.out_of_range", date: available_from.to_formatted_s(:govuk_date)))
-      elsif reactivation_date < recent_deactivation.deactivation_date
-        errors.add(:reactivation_date, message: I18n.t("validations.location.reactivation.before_deactivation", date: recent_deactivation.deactivation_date.to_formatted_s(:govuk_date)))
-      end
+    elsif !reactivation_date.between?(available_from, Time.zone.local(2200, 1, 1))
+      errors.add(:reactivation_date, message: I18n.t("validations.location.toggle_date.out_of_range", date: available_from.to_formatted_s(:govuk_date)))
+    elsif reactivation_date < recent_deactivation.deactivation_date
+      errors.add(:reactivation_date, message: I18n.t("validations.location.reactivation.before_deactivation", date: recent_deactivation.deactivation_date.to_formatted_s(:govuk_date)))
     end
   end
 

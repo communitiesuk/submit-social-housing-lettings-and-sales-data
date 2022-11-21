@@ -1241,14 +1241,14 @@ RSpec.describe LocationsController, type: :request do
       let!(:location) { FactoryBot.create(:location, scheme:, startdate: nil, created_at: Time.zone.local(2022, 4, 1)) }
       let(:deactivation_date) { Time.utc(2022, 10, 10) }
       let!(:lettings_log) { FactoryBot.create(:lettings_log, :sh, location:, scheme:, startdate:, owning_organisation: user.organisation) }
-      let(:startdate) {  Time.utc(2022, 10, 11) }
+      let(:startdate) { Time.utc(2022, 10, 11) }
       let(:add_deactivations) { nil }
 
       before do
         Timecop.freeze(Time.utc(2022, 10, 10))
         sign_in user
         add_deactivations
-        location.save
+        location.save!
         patch "/schemes/#{scheme.id}/locations/#{location.id}/new-deactivation", params:
       end
 
