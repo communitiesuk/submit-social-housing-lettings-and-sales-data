@@ -1,4 +1,4 @@
-<%= form_with model: @location, url: scheme_location_deactivate_path(@location), method: "patch", local: true do |f| %>
+<%= form_with model: @location_deactivation_period, url: scheme_location_deactivate_path(@location), method: "patch", local: true do |f| %>
      <% content_for :before_content do %>
        <%= govuk_back_link(href: :back) %>
      <% end %>

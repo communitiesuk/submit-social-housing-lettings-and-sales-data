@@ -21,14 +21,16 @@ class LocationsController < ApplicationController
   def show; end
 
   def new_deactivation
-    if params[:location].blank?
+    @location_deactivation_period = LocationDeactivationPeriod.new
+
+    if params[:location_deactivation_period].blank?
       render "toggle_active", locals: { action: "deactivate" }
     else
-      @location.run_deactivation_validations!
-      @location.deactivation_date = deactivation_date
-      @location.deactivation_date_type = params[:location][:deactivation_date_type]
-      if @location.valid?
-        redirect_to scheme_location_deactivate_confirm_path(@location, deactivation_date: @location.deactivation_date, deactivation_date_type: @location.deactivation_date_type)
+      @location_deactivation_period.deactivation_date = deactivation_date
+      @location_deactivation_period.deactivation_date_type = params[:location_deactivation_period][:deactivation_date_type]
+      @location_deactivation_period.location = @location
+      if @location_deactivation_period.valid?
+        redirect_to scheme_location_deactivate_confirm_path(@location, deactivation_date: @location_deactivation_period.deactivation_date, deactivation_date_type: @location_deactivation_period.deactivation_date_type)
       else
         render "toggle_active", locals: { action: "deactivate" }, status: :unprocessable_entity
       end
@@ -41,24 +43,24 @@ class LocationsController < ApplicationController
   end
 
   def deactivate
-    @location.run_deactivation_validations!
-
-    if @location.location_deactivation_periods.create!(deactivation_date:) && update_affected_logs
+    if LocationDeactivationPeriod.create!(location_id: @location.id, deactivation_date:) && update_affected_logs
       flash[:notice] = deactivate_success_notice
     end
     redirect_to scheme_location_path(@scheme, @location)
   end
 
   def new_reactivation
+    @location_deactivation_period = LocationDeactivationPeriod.deactivations_without_reactivation.first
     render "toggle_active", locals: { action: "reactivate" }
   end
 
   def reactivate
-    @location.run_reactivation_validations!
-    @location.reactivation_date = reactivation_date
-    @location.reactivation_date_type = params[:location][:reactivation_date_type]
+    @location_deactivation_period = LocationDeactivationPeriod.deactivations_without_reactivation.first
 
-    if @location.valid? && @location.location_deactivation_periods.deactivations_without_reactivation.update!(reactivation_date:)
+    @location_deactivation_period.reactivation_date = reactivation_date
+    @location_deactivation_period.reactivation_date_type = params[:location_deactivation_period][:reactivation_date_type]
+
+    if @location_deactivation_period.update(reactivation_date:)
       flash[:notice] = reactivate_success_notice
       redirect_to scheme_location_path(@scheme, @location)
     else
@@ -180,7 +182,7 @@ private
   end
 
   def location_params
-    required_params = params.require(:location).permit(:postcode, :name, :units, :type_of_unit, :add_another_location, :startdate, :mobility_type, :location_admin_district, :location_code, :deactivation_date).merge(scheme_id: @scheme.id)
+    required_params = params.require(:location).permit(:postcode, :name, :units, :type_of_unit, :add_another_location, :startdate, :mobility_type, :location_admin_district, :location_code).merge(scheme_id: @scheme.id)
     required_params[:postcode] = PostcodeService.clean(required_params[:postcode]) if required_params[:postcode]
     required_params
   end
@@ -224,17 +226,17 @@ private
   end
 
   def toggle_date(key)
-    if params[:location].blank?
+    if params[:location_deactivation_period].blank?
       return
-    elsif params[:location]["#{key}_type".to_sym] == "default"
+    elsif params[:location_deactivation_period]["#{key}_type".to_sym] == "default"
       return FormHandler.instance.current_collection_start_date
-    elsif params[:location][key.to_sym].present?
-      return params[:location][key.to_sym]
+    elsif params[:location_deactivation_period][key.to_sym].present?
+      return params[:location_deactivation_period][key.to_sym]
     end
 
-    day = params[:location]["#{key}(3i)"]
-    month = params[:location]["#{key}(2i)"]
-    year = params[:location]["#{key}(1i)"]
+    day = params[:location_deactivation_period]["#{key}(3i)"]
+    month = params[:location_deactivation_period]["#{key}(2i)"]
+    year = params[:location_deactivation_period]["#{key}(1i)"]
     return nil if [day, month, year].any?(&:blank?)
 
     Time.zone.local(year.to_i, month.to_i, day.to_i) if Date.valid_date?(year.to_i, month.to_i, day.to_i)

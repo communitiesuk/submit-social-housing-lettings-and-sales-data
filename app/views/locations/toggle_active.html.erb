@@ -8,7 +8,7 @@
   ) %>
 <% end %>
 
-<%= form_with model: @location, url: toggle_location_form_path(action, @location), method: "patch", local: true do |f| %>
+<%= form_with model: @location_deactivation_period, url: toggle_location_form_path(action, @location), method: "patch", local: true do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
     <% collection_start_date = FormHandler.instance.current_collection_start_date %>
