@@ -77,7 +77,7 @@ private
   end
 
   def is_nested?(inner, outer)
-    return false if inner == outer 
+    return false if inner == outer
     return false if [inner.deactivation_date, inner.reactivation_date, outer.deactivation_date, outer.reactivation_date].any?(&:blank?)
 
     [inner.deactivation_date, inner.reactivation_date].all? { |date| date.between?(outer.deactivation_date, outer.reactivation_date) }
