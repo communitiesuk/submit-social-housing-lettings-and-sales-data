@@ -46,7 +46,7 @@ module LocationsHelper
   def active_periods(location)
     periods = [ActivePeriod.new(location.available_from, nil)]
 
-    sorted_deactivation_periods = location.location_deactivation_periods.sort_by(&:deactivation_date)
+    sorted_deactivation_periods = remove_nested_periods(location.location_deactivation_periods.sort_by(&:deactivation_date))
     sorted_deactivation_periods.each do |deactivation|
       periods.find { |period| period.to.nil? }.to = deactivation.deactivation_date
       periods << ActivePeriod.new(deactivation.reactivation_date, nil)
@@ -70,5 +70,15 @@ private
 
   def remove_overlapping_and_empty_periods(periods)
     periods.select { |period| ((period.to.nil? && period.from.present?) || (period.from.present? && period.from < period.to)) }
+  end
+
+  def remove_nested_periods(periods)
+    periods.select { |inner_period| periods.none? { |outer_period| is_nested?(inner_period, outer_period) } }
+  end
+
+  def is_nested?(inner, outer)
+    return false if inner == outer || [inner.deactivation_date, inner.reactivation_date, outer.deactivation_date, outer.reactivation_date].any?(&:blank?)
+
+    [inner.deactivation_date, inner.reactivation_date].all? { |date| date.between?(outer.deactivation_date, outer.reactivation_date) }
   end
 end
