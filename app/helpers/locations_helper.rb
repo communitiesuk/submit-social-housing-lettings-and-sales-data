@@ -48,7 +48,7 @@ module LocationsHelper
 
     sorted_deactivation_periods = remove_nested_periods(location.location_deactivation_periods.sort_by(&:deactivation_date))
     sorted_deactivation_periods.each do |deactivation|
-      periods.find { |period| period.to.nil? }.to = deactivation.deactivation_date
+      periods.last.to = deactivation.deactivation_date
       periods << ActivePeriod.new(deactivation.reactivation_date, nil)
     end
 
