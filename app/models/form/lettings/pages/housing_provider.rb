@@ -16,11 +16,19 @@ class Form::Lettings::Pages::HousingProvider < ::Form::Page
   def routed_to?(log, current_user)
     return false unless current_user
     return true if current_user.support?
-    return true unless current_user.organisation.holds_own_stock?
 
-    return true if current_user.organisation.housing_providers.count.positive?
+    housing_providers = current_user.organisation.housing_providers
 
-    log.update!(owning_organisation: current_user.organisation)
+    if current_user.organisation.holds_own_stock?
+      return true if housing_providers.count >= 1
+
+      log.update!(owning_organisation: current_user.organisation)
+    else
+      return false if housing_providers.count.zero?
+      return true if housing_providers.count > 1
+
+      log.update!(owning_organisation: housing_providers.first)
+    end
 
     false
   end
