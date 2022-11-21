@@ -425,9 +425,8 @@ class Location < ApplicationRecord
         errors.add(:deactivation_date, message: I18n.t("validations.location.toggle_date.invalid"))
       end
     else
-      collection_start_date = FormHandler.instance.current_collection_start_date
-      unless deactivation_date.between?(collection_start_date, Time.zone.local(2200, 1, 1))
-        errors.add(:deactivation_date, message: I18n.t("validations.location.toggle_date.out_of_range", date: collection_start_date.to_formatted_s(:govuk_date)))
+      unless deactivation_date.between?(available_from, Time.zone.local(2200, 1, 1))
+        errors.add(:deactivation_date, message: I18n.t("validations.location.toggle_date.out_of_range", date: available_from.to_formatted_s(:govuk_date)))
       end
     end
   end
@@ -447,9 +446,8 @@ class Location < ApplicationRecord
         errors.add(:reactivation_date, message: I18n.t("validations.location.toggle_date.invalid"))
       end
     else
-      collection_start_date = FormHandler.instance.current_collection_start_date
-      if !reactivation_date.between?(collection_start_date, Time.zone.local(2200, 1, 1))
-        errors.add(:reactivation_date, message: I18n.t("validations.location.toggle_date.out_of_range", date: collection_start_date.to_formatted_s(:govuk_date)))
+      if !reactivation_date.between?(available_from, Time.zone.local(2200, 1, 1))
+        errors.add(:reactivation_date, message: I18n.t("validations.location.toggle_date.out_of_range", date: available_from.to_formatted_s(:govuk_date)))
       elsif reactivation_date < recent_deactivation.deactivation_date
         errors.add(:reactivation_date, message: I18n.t("validations.location.reactivation.before_deactivation", date: recent_deactivation.deactivation_date.to_formatted_s(:govuk_date)))
       end

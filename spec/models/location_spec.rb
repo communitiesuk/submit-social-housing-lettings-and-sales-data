@@ -264,12 +264,4 @@ RSpec.describe Location, type: :model do
       end
     end
   end
-
-  describe "with deactivation_date (but no deactivation_date_type)" do
-    let(:location) { FactoryBot.create(:location, deactivation_date: Date.new(2022, 4, 1)) }
-
-    it "is valid" do
-      expect(location).to be_valid
-    end
-  end
 end
