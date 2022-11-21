@@ -67,7 +67,7 @@ RSpec.describe LocationsHelper do
     end
 
     context "when viewing availability" do
-      context "with ae no deactivations" do
+      context "with no deactivations" do
         it "displays created_at as availability date if startdate is not present" do
           location.update!(startdate: nil)
           availability_attribute = display_location_attributes(location).find { |x| x[:name] == "Availability" }[:value]
