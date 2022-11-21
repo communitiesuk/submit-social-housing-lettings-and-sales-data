@@ -15,9 +15,17 @@ class Form::Lettings::Pages::ManagingOrganisation < ::Form::Page
 
   def routed_to?(log, current_user)
     return false unless current_user
-    return true unless current_user.organisation.holds_own_stock?
 
-    managing_agents = current_user.organisation.managing_agents
+    organisation = if current_user.support?
+                     log.owning_organisation
+                   else
+                     current_user.organisation
+                   end
+
+    return false unless organisation
+    return true unless organisation.holds_own_stock?
+
+    managing_agents = organisation.managing_agents
 
     return false if managing_agents.count.zero?
     return true if managing_agents.count > 1
