@@ -1,5 +1,5 @@
 module SchemesHelper
-  def display_scheme_attributes(scheme)
+  def display_scheme_attributes(scheme, user)
     base_attributes = [
       { name: "Scheme code", value: scheme.id_to_display },
       { name: "Name", value: scheme.service_name, edit: true },
@@ -21,7 +21,7 @@ module SchemesHelper
       base_attributes.append({ name: "Status", value: status_tag(scheme.status) })
     end
 
-    if current_user.data_coordinator?
+    if user.data_coordinator?
       base_attributes.delete_if {|item| item[:name] == "Housing stock owned by"}
     end
 

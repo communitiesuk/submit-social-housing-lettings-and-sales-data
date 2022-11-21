@@ -19,7 +19,7 @@
       <h2 class="govuk-visually-hidden">Scheme</h2>
 
       <%= govuk_summary_list do |summary_list| %>
-        <% display_scheme_attributes(@scheme).each do |attr| %>
+        <% display_scheme_attributes(@scheme, current_user).each do |attr| %>
           <%= summary_list.row do |row| %>
             <% row.key { attr[:name] } %>
             <% row.value { details_html(attr) } %>
