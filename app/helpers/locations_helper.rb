@@ -69,7 +69,7 @@ module LocationsHelper
 private
 
   def remove_overlapping_and_empty_periods(periods)
-    periods.select { |period| ((period.to.nil? && period.from.present?) || (period.from.present? && period.from < period.to)) }
+    periods.select { |period| period.from.present? && (period.to.nil? || period.from < period.to) }
   end
 
   def remove_nested_periods(periods)
