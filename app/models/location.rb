@@ -396,7 +396,7 @@ class Location < ApplicationRecord
       periods << ActivePeriod.new(deactivation.reactivation_date, nil)
     end
 
-    periods.select { |period| (period.to.present? || period.from.present?) && (period.to.nil? || (period.from.present? && period.from <= period.to)) }
+    periods.select { |period| (period.from != period.to) && (period.to.nil? || (period.from.present? && period.from <= period.to)) }
   end
 
   def active?
@@ -424,7 +424,7 @@ class Location < ApplicationRecord
       elsif deactivation_date_type == "other"
         errors.add(:deactivation_date, message: I18n.t("validations.location.toggle_date.invalid"))
       end
-    elsif location_deactivation_periods.any? { |period| deactivation_date.between?(period.deactivation_date, period.reactivation_date) }
+    elsif location_deactivation_periods.any? { |period| deactivation_date.between?(period.deactivation_date, period.reactivation_date - 1.day) }
       errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation.during_deactivated_period"))
     else
       unless deactivation_date.between?(available_from, Time.zone.local(2200, 1, 1))

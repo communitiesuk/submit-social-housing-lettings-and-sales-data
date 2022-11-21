@@ -214,6 +214,15 @@ RSpec.describe Location, type: :model do
         expect(location.active_periods.first).to have_attributes(from: Time.zone.local(2022, 4, 1), to: nil)
       end
 
+      it "ignores reactivations that were deactivated on the same day" do
+        location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 5, 5), reactivation_date: Time.zone.local(2022, 6, 4))
+        location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4))
+        location.save!
+
+        expect(location.active_periods.count).to eq(1)
+        expect(location.active_periods.first).to have_attributes(from: Time.zone.local(2022, 4, 1), to: Time.zone.local(2022, 5, 5))
+      end
+
       it "returns sequential non reactivated active periods" do
         location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 5, 5), reactivation_date: Time.zone.local(2022, 6, 4))
         location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 7, 6))
