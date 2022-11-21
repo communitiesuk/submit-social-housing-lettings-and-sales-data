@@ -109,27 +109,27 @@ RSpec.describe Scheme, type: :model do
       end
 
       it "returns deactivating soon if deactivation_date is in the future" do
-        scheme.scheme_deactivation_periods << FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 8))
-        scheme.save!
+        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 8), scheme:)
+        scheme.reload
         expect(scheme.status).to eq(:deactivating_soon)
       end
 
       it "returns deactivated if deactivation_date is in the past" do
-        scheme.scheme_deactivation_periods << FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 6))
-        scheme.save!
+        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 6), scheme:)
+        scheme.reload
         expect(scheme.status).to eq(:deactivated)
       end
 
       it "returns deactivated if deactivation_date is today" do
-        scheme.scheme_deactivation_periods << FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 7))
-        scheme.save!
+        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 7), scheme:)
+        scheme.reload
         expect(scheme.status).to eq(:deactivated)
       end
     end
 
     context "when there have been previous deactivations" do
       before do
-        scheme.scheme_deactivation_periods << FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 6, 5))
+        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 6, 5), scheme:)
       end
 
       it "returns active if the scheme has no relevant deactivation records" do
@@ -137,30 +137,22 @@ RSpec.describe Scheme, type: :model do
       end
 
       it "returns deactivating soon if deactivation_date is in the future" do
-        scheme.scheme_deactivation_periods << FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 8))
-        scheme.save!
+        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 8), scheme:)
+        scheme.reload
         expect(scheme.status).to eq(:deactivating_soon)
       end
 
       it "returns deactivated if deactivation_date is in the past" do
-        scheme.scheme_deactivation_periods << FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 6))
-        scheme.save!
+        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 6), scheme:)
+        scheme.reload
         expect(scheme.status).to eq(:deactivated)
       end
 
       it "returns deactivated if deactivation_date is today" do
-        scheme.scheme_deactivation_periods << FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 7))
-        scheme.save!
+        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 7), scheme:)
+        scheme.reload
         expect(scheme.status).to eq(:deactivated)
       end
-    end
-  end
-
-  describe "with deactivation_date (but no deactivation_date_type)" do
-    let(:scheme) { FactoryBot.create(:scheme, deactivation_date: Date.new(2022, 4, 1)) }
-
-    it "is valid" do
-      expect(scheme).to be_valid
     end
   end
 end

@@ -1,6 +1,6 @@
 <% title = "Deactivate #{@scheme.service_name}" %>
 <% content_for :title, title %>
-<%= form_with model: @scheme, url: scheme_deactivate_path(@scheme), method: "patch", local: true do |f| %>
+<%= form_with model: @scheme_deactivation_period, url: scheme_deactivate_path(@scheme), method: "patch", local: true do |f| %>
   <% content_for :before_content do %>
     <%= govuk_back_link(href: :back) %>
   <% end %>

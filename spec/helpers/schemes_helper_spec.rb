@@ -35,8 +35,9 @@ RSpec.describe SchemesHelper do
 
       context "with previous deactivations" do
         before do
-          scheme.scheme_deactivation_periods << FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 10), reactivation_date: Time.zone.local(2022, 9, 1))
-          scheme.scheme_deactivation_periods << FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 15), reactivation_date: nil)
+          FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 10), reactivation_date: Time.zone.local(2022, 9, 1), scheme:)
+          FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 15), reactivation_date: nil, scheme:)
+          scheme.reload
         end
 
         it "displays the timeline of availability" do
