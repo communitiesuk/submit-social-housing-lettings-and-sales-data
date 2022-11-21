@@ -51,9 +51,23 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
         let(:user) do
           create(:user, :support, organisation: create(:organisation, holds_own_stock: false))
         end
+        let(:log) { create(:lettings_log, owning_organisation: user.organisation) }
 
         it "is shown" do
           expect(page.routed_to?(log, user)).to eq(true)
+        end
+
+        it "does not update managing_organisation_id" do
+          expect { page.routed_to?(log, user) }.not_to change(log.reload, :managing_organisation)
+        end
+      end
+
+      context "when owning_organisation not set" do
+        let(:user) { create(:user, :support) }
+        let(:log) { create(:lettings_log, owning_organisation: nil) }
+
+        it "is not shown" do
+          expect(page.routed_to?(log, user)).to eq(false)
         end
 
         it "does not update managing_organisation_id" do
@@ -78,8 +92,8 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
 
         context "with >1 managing_agents" do
           before do
-            create(:organisation_relationship, :managing, parent_organisation: user.organisation)
-            create(:organisation_relationship, :managing, parent_organisation: user.organisation)
+            create(:organisation_relationship, :managing, parent_organisation: log.owning_organisation)
+            create(:organisation_relationship, :managing, parent_organisation: log.owning_organisation)
           end
 
           it "is shown" do
@@ -99,7 +113,7 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
               :organisation_relationship,
               :managing,
               child_organisation: managing_agent,
-              parent_organisation: user.organisation,
+              parent_organisation: log.owning_organisation,
             )
           end
 
