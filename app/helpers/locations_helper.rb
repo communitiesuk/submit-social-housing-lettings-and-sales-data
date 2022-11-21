@@ -42,9 +42,22 @@ module LocationsHelper
     base_attributes
   end
 
+  ActivePeriod = Struct.new(:from, :to)
+  def active_periods(location)
+    periods = [ActivePeriod.new(location.available_from, nil)]
+
+    sorted_deactivation_periods = location.location_deactivation_periods.sort_by(&:deactivation_date)
+    sorted_deactivation_periods.each do |deactivation|
+      periods.find { |x| x.to.nil? }.to = deactivation.deactivation_date
+      periods << ActivePeriod.new(deactivation.reactivation_date, nil)
+    end
+
+    periods.select { |period| (period.from != period.to) && (period.to.nil? || (period.from.present? && period.from <= period.to)) }
+  end
+
   def location_availability(location)
     availability = ""
-    location.active_periods.each do |period|
+    active_periods(location).each do |period|
       if period.from.present?
         availability << "\nActive from #{period.from.to_formatted_s(:govuk_date)}"
         availability << " to #{(period.to - 1.day).to_formatted_s(:govuk_date)}\nDeactivated on #{period.to.to_formatted_s(:govuk_date)}" if period.to.present?

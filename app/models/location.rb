@@ -386,19 +386,6 @@ class Location < ApplicationRecord
     :active
   end
 
-  ActivePeriod = Struct.new(:from, :to)
-  def active_periods
-    periods = [ActivePeriod.new(available_from, nil)]
-
-    sorted_deactivation_periods = location_deactivation_periods.sort_by(&:deactivation_date)
-    sorted_deactivation_periods.each do |deactivation|
-      periods.find { |x| x.to.nil? }.to = deactivation.deactivation_date
-      periods << ActivePeriod.new(deactivation.reactivation_date, nil)
-    end
-
-    periods.select { |period| (period.from != period.to) && (period.to.nil? || (period.from.present? && period.from <= period.to)) }
-  end
-
   def active?
     status == :active
   end
