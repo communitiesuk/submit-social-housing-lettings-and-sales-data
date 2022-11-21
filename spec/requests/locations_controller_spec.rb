@@ -1277,7 +1277,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when confirming deactivation" do
-        let(:params) { { location_deactivation_period: { deactivation_date:, confirm: true, deactivation_date_type: "other" } } }
+        let(:params) { { deactivation_date:, confirm: true, deactivation_date_type: "other" } }
 
         before do
           Timecop.freeze(Time.utc(2022, 10, 10))
