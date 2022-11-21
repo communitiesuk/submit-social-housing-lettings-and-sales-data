@@ -28,11 +28,14 @@ module SchemesHelper
   end
 
   def scheme_availability(scheme)
-    availability = "Active from #{scheme.available_from.to_formatted_s(:govuk_date)}"
-    scheme.scheme_deactivation_periods.each do |deactivation|
-      availability << " to #{(deactivation.deactivation_date - 1.day).to_formatted_s(:govuk_date)}\nDeactivated on #{deactivation.deactivation_date.to_formatted_s(:govuk_date)}"
-      availability << "\nActive from #{deactivation.reactivation_date.to_formatted_s(:govuk_date)}" if deactivation.reactivation_date.present?
+    availability = ""
+    scheme.active_periods.each do |period|
+      if period.from.present?
+        availability << "\nActive from #{period.from.to_formatted_s(:govuk_date)}"
+        availability << " to #{(period.to - 1.day).to_formatted_s(:govuk_date)}\nDeactivated on #{period.to.to_formatted_s(:govuk_date)}" if period.to.present?
+      end
     end
-    availability
+    availability.strip
   end
 end
+

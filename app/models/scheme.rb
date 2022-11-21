@@ -214,7 +214,7 @@ class Scheme < ApplicationRecord
   end
 
   def available_from
-    created_at
+    [created_at, FormHandler.instance.current_collection_start_date].min
   end
 
   def status
@@ -225,6 +225,19 @@ class Scheme < ApplicationRecord
     return :reactivating_soon if recent_deactivation&.reactivation_date.present? && Time.zone.now < recent_deactivation.reactivation_date
 
     :active
+  end
+
+  ActivePeriod = Struct.new(:from, :to)
+  def active_periods
+    periods = [ActivePeriod.new(available_from, nil)]
+
+    sorted_deactivation_periods = scheme_deactivation_periods.sort_by(&:deactivation_date)
+    sorted_deactivation_periods.each do |deactivation|
+      periods.find { |x| x.to.nil? }.to = deactivation.deactivation_date
+      periods << ActivePeriod.new(deactivation.reactivation_date, nil)
+    end
+
+    periods.select { |period| (period.from != period.to) && (period.to.nil? || (period.from.present? && period.from <= period.to)) }
   end
 
   def active?
@@ -252,10 +265,11 @@ class Scheme < ApplicationRecord
       elsif deactivation_date_type == "other"
         errors.add(:deactivation_date, message: I18n.t("validations.scheme.toggle_date.invalid"))
       end
+    elsif scheme_deactivation_periods.any? { |period| deactivation_date.between?(period.deactivation_date, period.reactivation_date - 1.day) }
+      errors.add(:deactivation_date, message: I18n.t("validations.scheme.deactivation.during_deactivated_period"))
     else
-      collection_start_date = FormHandler.instance.current_collection_start_date
-      unless deactivation_date.between?(collection_start_date, Time.zone.local(2200, 1, 1))
-        errors.add(:deactivation_date, message: I18n.t("validations.scheme.toggle_date.out_of_range", date: collection_start_date.to_formatted_s(:govuk_date)))
+      unless deactivation_date.between?(available_from, Time.zone.local(2200, 1, 1))
+        errors.add(:deactivation_date, message: I18n.t("validations.scheme.toggle_date.out_of_range", date: available_from.to_formatted_s(:govuk_date)))
       end
     end
   end
@@ -267,17 +281,17 @@ class Scheme < ApplicationRecord
   def reactivation_date_errors
     return unless @run_reactivation_validations
 
+    recent_deactivation = scheme_deactivation_periods.deactivations_without_reactivation.first
     if reactivation_date.blank?
       if reactivation_date_type.blank?
-        errors.add(:reactivation_date_type, message: I18n.t("validations.scheme.reactivation_date.not_selected"))
+        errors.add(:reactivation_date_type, message: I18n.t("validations.scheme.toggle_date.not_selected"))
       elsif reactivation_date_type == "other"
-        errors.add(:reactivation_date, message: I18n.t("validations.scheme.reactivation_date.invalid"))
+        errors.add(:reactivation_date, message: I18n.t("validations.scheme.toggle_date.invalid"))
       end
-    else
-      collection_start_date = FormHandler.instance.current_collection_start_date
-      unless reactivation_date.between?(collection_start_date, Time.zone.local(2200, 1, 1))
-        errors.add(:reactivation_date, message: I18n.t("validations.scheme.reactivation_date.out_of_range", date: collection_start_date.to_formatted_s(:govuk_date)))
-      end
+    elsif !reactivation_date.between?(available_from, Time.zone.local(2200, 1, 1))
+      errors.add(:reactivation_date, message: I18n.t("validations.scheme.toggle_date.out_of_range", date: available_from.to_formatted_s(:govuk_date)))
+    elsif reactivation_date < recent_deactivation.deactivation_date
+      errors.add(:reactivation_date, message: I18n.t("validations.scheme.reactivation.before_deactivation", date: recent_deactivation.deactivation_date.to_formatted_s(:govuk_date)))
     end
   end
 end

@@ -1,9 +1,9 @@
 module ToggleActiveSchemeHelper
-  def toggle_scheme_form_path(action, scheme_id)
+  def toggle_scheme_form_path(action, scheme)
     if action == "deactivate"
-      scheme_new_deactivation_path(scheme_id:)
+      scheme_new_deactivation_path(scheme)
     else
-      scheme_reactivate_path(scheme_id:)
+      scheme_reactivate_path(scheme)
     end
   end
 

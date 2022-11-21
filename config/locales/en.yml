@@ -317,6 +317,11 @@ en:
         not_selected: "Select one of the options"
         invalid: "Enter a valid day, month and year"
         out_of_range: "The date must be on or after the %{date}"
+      reactivation:
+        before_deactivation: "This scheme was deactivated on %{date}\nThe reactivation date must be on or after deactivation date"
+      deactivation:
+        during_deactivated_period: "The scheme is already deactivated during this date, please enter a different date"
+
 
     location:
       deactivation_date:
