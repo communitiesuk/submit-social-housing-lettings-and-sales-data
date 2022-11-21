@@ -47,15 +47,70 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
     end
 
     context "when support" do
-      let(:organisation) { create(:organisation) }
-      let(:user) { create(:user, :support, organisation:) }
+      context "when does not hold own stock" do
+        let(:user) do
+          create(:user, :support, organisation: create(:organisation, holds_own_stock: false))
+        end
 
-      it "is shown" do
-        expect(page.routed_to?(log, user)).to eq(true)
+        it "is shown" do
+          expect(page.routed_to?(log, user)).to eq(true)
+        end
+
+        it "does not update managing_organisation_id" do
+          expect { page.routed_to?(log, user) }.not_to change(log.reload, :managing_organisation)
+        end
       end
 
-      it "does not update managing_organisation_id" do
-        expect { page.routed_to?(log, user) }.not_to change(log.reload, :managing_organisation)
+      context "when holds own stock" do
+        let(:user) do
+          create(:user, :support, organisation: create(:organisation, holds_own_stock: true))
+        end
+
+        context "with 0 managing_agents" do
+          it "is not shown" do
+            expect(page.routed_to?(log, user)).to eq(false)
+          end
+
+          it "does not update managing_organisation_id" do
+            expect { page.routed_to?(log, user) }.not_to change(log.reload, :managing_organisation)
+          end
+        end
+
+        context "with >1 managing_agents" do
+          before do
+            create(:organisation_relationship, :managing, parent_organisation: user.organisation)
+            create(:organisation_relationship, :managing, parent_organisation: user.organisation)
+          end
+
+          it "is shown" do
+            expect(page.routed_to?(log, user)).to eq(true)
+          end
+
+          it "does not update managing_organisation_id" do
+            expect { page.routed_to?(log, user) }.not_to change(log.reload, :managing_organisation)
+          end
+        end
+
+        context "with 1 managing_agents" do
+          let(:managing_agent) { create(:organisation) }
+
+          before do
+            create(
+              :organisation_relationship,
+              :managing,
+              child_organisation: managing_agent,
+              parent_organisation: user.organisation,
+            )
+          end
+
+          it "is not shown" do
+            expect(page.routed_to?(log, user)).to eq(false)
+          end
+
+          it "updates managing_organisation_id" do
+            expect { page.routed_to?(log, user) }.to change(log.reload, :managing_organisation).to(managing_agent)
+          end
+        end
       end
     end
 
