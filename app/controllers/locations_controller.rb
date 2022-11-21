@@ -43,7 +43,7 @@ class LocationsController < ApplicationController
   end
 
   def deactivate
-    if LocationDeactivationPeriod.create!(location_id: @location.id, deactivation_date: params[:deactivation_date]) && update_affected_logs
+    if @location.location_deactivation_periods.create!(location_id: @location.id, deactivation_date: params[:deactivation_date]) && reset_location_and_scheme_for_logs!
       flash[:notice] = deactivate_success_notice
     end
     redirect_to scheme_location_path(@scheme, @location)
@@ -213,7 +213,7 @@ private
     end
   end
 
-  def update_affected_logs
+  def reset_location_and_scheme_for_logs!
     @location.lettings_logs.filter_by_before_startdate(params[:deactivation_date].to_time).update!(location: nil, scheme: nil)
   end
 
