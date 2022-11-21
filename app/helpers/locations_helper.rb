@@ -48,11 +48,11 @@ module LocationsHelper
 
     sorted_deactivation_periods = location.location_deactivation_periods.sort_by(&:deactivation_date)
     sorted_deactivation_periods.each do |deactivation|
-      periods.find { |x| x.to.nil? }.to = deactivation.deactivation_date
+      periods.find { |period| period.to.nil? }.to = deactivation.deactivation_date
       periods << ActivePeriod.new(deactivation.reactivation_date, nil)
     end
 
-    periods.select { |period| (period.from != period.to) && (period.to.nil? || (period.from.present? && period.from <= period.to)) }
+    remove_overlapping_and_empty_periods(periods)
   end
 
   def location_availability(location)
@@ -64,5 +64,11 @@ module LocationsHelper
       end
     end
     availability.strip
+  end
+
+private
+
+  def remove_overlapping_and_empty_periods(periods)
+    periods.select { |period| ((period.to.nil? && period.from.present?) || (period.from.present? && period.from < period.to)) }
   end
 end
