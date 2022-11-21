@@ -325,6 +325,8 @@ en:
         out_of_range: "The date must be on or after the %{date}"
       reactivation:
         before_deactivation: "This location was deactivated on %{date}\nThe reactivation date must be on or after deactivation date"
+      deactivation: 
+        during_deactivated_period: "The location is already deactivated during this date, please enter a different date"
 
   soft_validations:
     net_income:

@@ -1242,10 +1242,13 @@ RSpec.describe LocationsController, type: :request do
       let(:deactivation_date) { Time.utc(2022, 10, 10) }
       let!(:lettings_log) { FactoryBot.create(:lettings_log, :sh, location:, scheme:, startdate:, owning_organisation: user.organisation) }
       let(:startdate) {  Time.utc(2022, 10, 11) }
+      let(:add_deactivations) { nil }
 
       before do
         Timecop.freeze(Time.utc(2022, 10, 10))
         sign_in user
+        add_deactivations
+        location.save
         patch "/schemes/#{scheme.id}/locations/#{location.id}/new-deactivation", params:
       end
 
@@ -1369,6 +1372,17 @@ RSpec.describe LocationsController, type: :request do
         it "displays page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_content(I18n.t("validations.location.toggle_date.invalid"))
+        end
+      end
+
+      context "when deactivation date is during a deactivated period" do
+        let(:deactivation_date) { Time.zone.local(2022, 10, 10) }
+        let(:params) { { location: { deactivation_date_type: "other", "deactivation_date(3i)": "8", "deactivation_date(2i)": "9", "deactivation_date(1i)": "2022" } } }
+        let(:add_deactivations) { location.location_deactivation_periods << FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 5, 5), reactivation_date: Time.zone.local(2022, 10, 12)) }
+
+        it "displays page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.location.deactivation.during_deactivated_period"))
         end
       end
     end
