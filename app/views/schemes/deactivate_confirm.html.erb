@@ -6,7 +6,7 @@
   <% end %>
   <h1 class="govuk-heading-l">
     <span class="govuk-caption-l"><%= @scheme.service_name %></span>
-    This change will affect <%= @scheme.lettings_logs.count %> logs
+    This change will affect <%= @scheme.lettings_logs.filter_by_before_startdate(@deactivation_date).count %> logs
   </h1>
   <%= govuk_warning_text text: I18n.t("warnings.scheme.deactivation.review_logs") %>
   <%= f.hidden_field :confirm, value: true %>
