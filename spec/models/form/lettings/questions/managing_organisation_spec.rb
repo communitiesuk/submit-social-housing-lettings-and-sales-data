@@ -56,8 +56,8 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
       let(:user) { create(:user, :data_coordinator, organisation: create(:organisation, holds_own_stock: true)) }
 
       let(:log) { create(:lettings_log) }
-      let!(:org_rel1) { create(:organisation_relationship, :managing, parent_organisation: user.organisation) }
-      let!(:org_rel2) { create(:organisation_relationship, :managing, parent_organisation: user.organisation) }
+      let!(:org_rel1) { create(:organisation_relationship, parent_organisation: user.organisation) }
+      let!(:org_rel2) { create(:organisation_relationship, parent_organisation: user.organisation) }
 
       let(:options) do
         {
@@ -77,8 +77,8 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
       let(:user) { create(:user, :data_coordinator, organisation: create(:organisation, holds_own_stock: false)) }
 
       let(:log) { create(:lettings_log) }
-      let!(:org_rel1) { create(:organisation_relationship, :managing, parent_organisation: user.organisation) }
-      let!(:org_rel2) { create(:organisation_relationship, :managing, parent_organisation: user.organisation) }
+      let!(:org_rel1) { create(:organisation_relationship, parent_organisation: user.organisation) }
+      let!(:org_rel2) { create(:organisation_relationship, parent_organisation: user.organisation) }
 
       let(:options) do
         {
@@ -98,8 +98,8 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
       let(:user) { create(:user, :support) }
       let(:log_owning_org) { create(:organisation, holds_own_stock: false) }
       let(:log) { create(:lettings_log, owning_organisation: log_owning_org) }
-      let!(:org_rel1) { create(:organisation_relationship, :managing, parent_organisation: log_owning_org) }
-      let!(:org_rel2) { create(:organisation_relationship, :managing, parent_organisation: log_owning_org) }
+      let!(:org_rel1) { create(:organisation_relationship, parent_organisation: log_owning_org) }
+      let!(:org_rel2) { create(:organisation_relationship, parent_organisation: log_owning_org) }
 
       let(:options) do
         {
@@ -118,8 +118,8 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
       let(:user) { create(:user, :support) }
       let(:log_owning_org) { create(:organisation, holds_own_stock: true) }
       let(:log) { create(:lettings_log, owning_organisation: log_owning_org) }
-      let!(:org_rel1) { create(:organisation_relationship, :managing, parent_organisation: log_owning_org) }
-      let!(:org_rel2) { create(:organisation_relationship, :managing, parent_organisation: log_owning_org) }
+      let!(:org_rel1) { create(:organisation_relationship, parent_organisation: log_owning_org) }
+      let!(:org_rel2) { create(:organisation_relationship, parent_organisation: log_owning_org) }
 
       let(:options) do
         {

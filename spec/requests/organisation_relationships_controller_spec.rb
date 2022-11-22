@@ -21,8 +21,8 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD 2") }
 
           before do
-            FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: housing_provider, relationship_type: OrganisationRelationship.relationship_types[:owning])
-            FactoryBot.create(:organisation_relationship, child_organisation: other_organisation, parent_organisation: other_org_housing_provider, relationship_type: OrganisationRelationship.relationship_types[:owning])
+            FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: housing_provider)
+            FactoryBot.create(:organisation_relationship, child_organisation: other_organisation, parent_organisation: other_org_housing_provider)
             get "/organisations/#{organisation.id}/housing-providers", headers:, params: {}
           end
 
@@ -83,8 +83,8 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD") }
 
           before do
-            FactoryBot.create(:organisation_relationship, parent_organisation: organisation, child_organisation: managing_agent, relationship_type: OrganisationRelationship.relationship_types[:managing])
-            FactoryBot.create(:organisation_relationship, parent_organisation: other_organisation, child_organisation: other_org_managing_agent, relationship_type: OrganisationRelationship.relationship_types[:managing])
+            FactoryBot.create(:organisation_relationship, parent_organisation: organisation, child_organisation: managing_agent)
+            FactoryBot.create(:organisation_relationship, parent_organisation: other_organisation, child_organisation: other_org_managing_agent)
             get "/organisations/#{organisation.id}/managing-agents", headers:, params: {}
           end
 
@@ -153,7 +153,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
         it "sets the organisation relationship attributes correctly" do
           request
-          expect(OrganisationRelationship).to exist(child_organisation_id: organisation.id, parent_organisation_id: housing_provider.id, relationship_type: OrganisationRelationship::OWNING)
+          expect(OrganisationRelationship).to exist(child_organisation_id: organisation.id, parent_organisation_id: housing_provider.id)
         end
 
         it "redirects to the organisation list" do
@@ -181,7 +181,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
         it "sets the organisation relationship attributes correctly" do
           request
-          expect(OrganisationRelationship).to exist(parent_organisation_id: organisation.id, child_organisation_id: managing_agent.id, relationship_type: OrganisationRelationship::MANAGING)
+          expect(OrganisationRelationship).to exist(parent_organisation_id: organisation.id, child_organisation_id: managing_agent.id)
         end
 
         it "redirects to the organisation list" do
@@ -200,7 +200,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         let(:request) { delete "/organisations/#{organisation.id}/housing-providers", headers:, params: }
 
         before do
-          FactoryBot.create(:organisation_relationship, :owning, child_organisation: organisation, parent_organisation: housing_provider)
+          FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: housing_provider)
         end
 
         it "deletes the new organisation relationship" do
@@ -225,7 +225,6 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         before do
           FactoryBot.create(
             :organisation_relationship,
-            :managing,
             parent_organisation: organisation,
             child_organisation: managing_agent,
           )
@@ -256,8 +255,8 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD") }
 
           before do
-            FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: housing_provider, relationship_type: OrganisationRelationship.relationship_types[:owning])
-            FactoryBot.create(:organisation_relationship, child_organisation: other_organisation, parent_organisation: other_org_housing_provider, relationship_type: OrganisationRelationship.relationship_types[:owning])
+            FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: housing_provider)
+            FactoryBot.create(:organisation_relationship, child_organisation: other_organisation, parent_organisation: other_org_housing_provider)
             get "/organisations/#{organisation.id}/housing-providers", headers:, params: {}
           end
 
@@ -304,8 +303,8 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD") }
 
           before do
-            FactoryBot.create(:organisation_relationship, parent_organisation: organisation, child_organisation: managing_agent, relationship_type: OrganisationRelationship.relationship_types[:managing])
-            FactoryBot.create(:organisation_relationship, parent_organisation: other_organisation, child_organisation: other_org_managing_agent, relationship_type: OrganisationRelationship.relationship_types[:managing])
+            FactoryBot.create(:organisation_relationship, parent_organisation: organisation, child_organisation: managing_agent)
+            FactoryBot.create(:organisation_relationship, parent_organisation: other_organisation, child_organisation: other_org_managing_agent)
             get "/organisations/#{organisation.id}/managing-agents", headers:, params: {}
           end
 
@@ -383,7 +382,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
         it "sets the organisation relationship attributes correctly" do
           request
-          expect(OrganisationRelationship).to exist(child_organisation_id: organisation.id, parent_organisation_id: housing_provider.id, relationship_type: OrganisationRelationship::OWNING)
+          expect(OrganisationRelationship).to exist(child_organisation_id: organisation.id, parent_organisation_id: housing_provider.id)
         end
 
         it "redirects to the organisation list" do
@@ -411,7 +410,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
         it "sets the organisation relationship attributes correctly" do
           request
-          expect(OrganisationRelationship).to exist(parent_organisation_id: organisation.id, child_organisation_id: managing_agent.id, relationship_type: OrganisationRelationship::MANAGING)
+          expect(OrganisationRelationship).to exist(parent_organisation_id: organisation.id, child_organisation_id: managing_agent.id)
         end
 
         it "redirects to the organisation list" do
@@ -430,7 +429,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         let(:request) { delete "/organisations/#{organisation.id}/housing-providers", headers:, params: }
 
         before do
-          FactoryBot.create(:organisation_relationship, :owning, child_organisation: organisation, parent_organisation: housing_provider)
+          FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: housing_provider)
         end
 
         it "deletes the new organisation relationship" do
@@ -455,7 +454,6 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         before do
           FactoryBot.create(
             :organisation_relationship,
-            :managing,
             parent_organisation: organisation,
             child_organisation: managing_agent,
           )
@@ -477,8 +475,8 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD 2") }
 
         before do
-          FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: housing_provider, relationship_type: OrganisationRelationship.relationship_types[:owning])
-          FactoryBot.create(:organisation_relationship, child_organisation: other_organisation, parent_organisation: other_org_housing_provider, relationship_type: OrganisationRelationship.relationship_types[:owning])
+          FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: housing_provider)
+          FactoryBot.create(:organisation_relationship, child_organisation: other_organisation, parent_organisation: other_org_housing_provider)
           get "/organisations/#{organisation.id}/housing-providers", headers:, params: {}
         end
 
@@ -531,8 +529,8 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD 2") }
 
         before do
-          FactoryBot.create(:organisation_relationship, parent_organisation: organisation, child_organisation: managing_agent, relationship_type: OrganisationRelationship.relationship_types[:managing])
-          FactoryBot.create(:organisation_relationship, parent_organisation: other_organisation, child_organisation: other_org_managing_agent, relationship_type: OrganisationRelationship.relationship_types[:managing])
+          FactoryBot.create(:organisation_relationship, parent_organisation: organisation, child_organisation: managing_agent)
+          FactoryBot.create(:organisation_relationship, parent_organisation: other_organisation, child_organisation: other_org_managing_agent)
           get "/organisations/#{organisation.id}/managing-agents", headers:, params: {}
         end
 
