@@ -38,8 +38,12 @@ class LocationsController < ApplicationController
   end
 
   def deactivate_confirm
-    @deactivation_date = params[:deactivation_date]
-    @deactivation_date_type = params[:deactivation_date_type]
+    if @location.lettings_logs.filter_by_before_startdate(params[:deactivation_date]).count.zero?
+      deactivate
+    else
+      @deactivation_date = params[:deactivation_date]
+      @deactivation_date_type = params[:deactivation_date_type]
+    end
   end
 
   def deactivate
