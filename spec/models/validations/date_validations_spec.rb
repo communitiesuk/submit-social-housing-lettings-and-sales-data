@@ -98,7 +98,7 @@ RSpec.describe Validations::DateValidations do
         record.location = location
         date_validator.validate_startdate(record)
         expect(record.errors["startdate"])
-        .to include(match I18n.t("validations.setup.startdate.during_deactivated_location"))
+        .to include(match I18n.t("validations.setup.startdate.during_deactivated_location", postcode: location.postcode, date: "6 April 2022"))
       end
 
       it "produces no error when tenancy start date is during an active location period" do
@@ -123,7 +123,7 @@ RSpec.describe Validations::DateValidations do
         record.location = location
         date_validator.validate_startdate(record)
         expect(record.errors["startdate"])
-        .to include(match I18n.t("validations.setup.startdate.location_reactivating_soon"))
+        .to include(match I18n.t("validations.setup.startdate.location_reactivating_soon", postcode: location.postcode, date: "4 August 2022"))
       end
 
       it "produces no error when tenancy start date is during an active location period" do
@@ -150,7 +150,7 @@ RSpec.describe Validations::DateValidations do
         record.location = location
         date_validator.validate_startdate(record)
         expect(record.errors["startdate"])
-        .to include(match I18n.t("validations.setup.startdate.location_reactivating_soon"))
+        .to include(match I18n.t("validations.setup.startdate.location_reactivating_soon", postcode: location.postcode, date: "15 September 2022"))
       end
     end
   end
