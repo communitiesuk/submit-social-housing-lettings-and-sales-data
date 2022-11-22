@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_22_122311) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_22_130928) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -286,6 +286,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_22_122311) do
     t.integer "parent_organisation_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["child_organisation_id"], name: "index_organisation_relationships_on_child_organisation_id"
+    t.index ["parent_organisation_id", "child_organisation_id"], name: "index_org_rel_parent_child_uniq", unique: true
+    t.index ["parent_organisation_id"], name: "index_organisation_relationships_on_parent_organisation_id"
   end
 
   create_table "organisation_rent_periods", force: :cascade do |t|
@@ -476,6 +479,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_22_122311) do
   add_foreign_key "lettings_logs", "organisations", column: "owning_organisation_id", on_delete: :cascade
   add_foreign_key "lettings_logs", "schemes"
   add_foreign_key "locations", "schemes"
+  add_foreign_key "organisation_relationships", "organisations", column: "child_organisation_id"
+  add_foreign_key "organisation_relationships", "organisations", column: "parent_organisation_id"
   add_foreign_key "sales_logs", "organisations", column: "owning_organisation_id", on_delete: :cascade
   add_foreign_key "schemes", "organisations", column: "managing_organisation_id"
   add_foreign_key "schemes", "organisations", column: "owning_organisation_id", on_delete: :cascade
