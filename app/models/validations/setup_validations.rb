@@ -5,6 +5,16 @@ module Validations::SetupValidations
     end
   end
 
+  def validate_location(record)
+    if record.location&.status_during(record.startdate) == :deactivated
+      record.errors.add :location_id, I18n.t("validations.setup.startdate.during_deactivated_location")
+    end
+
+    if record.location&.status_during(record.startdate) == :reactivating_soon
+      record.errors.add :location_id, I18n.t("validations.setup.startdate.location_reactivating_soon")
+    end
+  end
+  
 private
 
   def intermediate_product_rent_type?(record)

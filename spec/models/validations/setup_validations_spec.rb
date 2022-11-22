@@ -30,4 +30,76 @@ RSpec.describe Validations::SetupValidations do
       expect(record.errors["irproduct_other"]).to be_empty
     end
   end
+
+  describe "#validate_location" do
+    context "with a deactivated location" do
+      let(:scheme) { create(:scheme) }
+      let(:location) { create(:location, scheme:, startdate: nil) }
+
+      before do
+        create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), location:)
+        location.reload
+      end
+
+      it "produces error when tenancy start date is during deactivated location period" do
+        record.startdate = Time.zone.local(2022, 7, 5)
+        record.location = location
+        setup_validator.validate_location(record)
+        expect(record.errors["location_id"])
+        .to include(match I18n.t("validations.setup.startdate.during_deactivated_location"))
+      end
+
+      it "produces no error when tenancy start date is during an active location period" do
+        record.startdate = Time.zone.local(2022, 6, 1)
+        record.location = location
+        setup_validator.validate_location(record)
+        expect(record.errors["location_id"]).to be_empty
+      end
+    end
+
+    context "with a location that is reactivating soon" do
+      let(:scheme) { create(:scheme) }
+      let(:location) { create(:location, scheme:, startdate: nil) }
+
+      before do
+        create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), location:)
+        location.reload
+      end
+
+      it "produces error when tenancy start date is during deactivated location period" do
+        record.startdate = Time.zone.local(2022, 7, 5)
+        record.location = location
+        setup_validator.validate_location(record)
+        expect(record.errors["location_id"])
+        .to include(match I18n.t("validations.setup.startdate.location_reactivating_soon"))
+      end
+
+      it "produces no error when tenancy start date is during an active location period" do
+        record.startdate = Time.zone.local(2022, 9, 1)
+        record.location = location
+        setup_validator.validate_location(record)
+        expect(record.errors["location_id"]).to be_empty
+      end
+    end
+
+    context "with a location with no deactivation periods" do
+      let(:scheme) { create(:scheme) }
+      let(:location) { create(:location, scheme:, startdate: Time.zone.local(2022, 9, 15)) }
+
+      it "produces no error" do
+        record.startdate = Time.zone.local(2022, 10, 15)
+        record.location = location
+        setup_validator.validate_location(record)
+        expect(record.errors["location_id"]).to be_empty
+      end
+
+      it "produces an error when the date is before available_from date" do
+        record.startdate = Time.zone.local(2022, 8, 15)
+        record.location = location
+        setup_validator.validate_location(record)
+        expect(record.errors["location_id"])
+        .to include(match I18n.t("validations.setup.startdate.location_reactivating_soon"))
+      end
+    end
+  end
 end
