@@ -108,6 +108,7 @@ RSpec.describe SchemesHelper do
       intended_stay: "P",
       created_at: Time.zone.local(2022, 4, 1),
     ) }
+    let!(:scheme_where_managing_organisation_is_owning_organisation) { FactoryBot.create(:scheme, arrangement_type: "D") }
     let(:support_user) { FactoryBot.create(:user, :support) }
     let(:coordinator_user) { FactoryBot.create(:user, :data_coordinator) }
 
@@ -160,10 +161,9 @@ RSpec.describe SchemesHelper do
       end
     end
 
-    context "when the scheme toggle is disabled" do
-      it "doesn't show the scheme status" do
-        allow(FeatureToggle).to receive(:scheme_toggle_enabled?).and_return(false)
-        attributes = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Status" }
+    context "when the managing organisation is the owning organisation" do
+      it "doesn't show the organisation providing support" do
+        attributes = display_scheme_attributes(scheme_where_managing_organisation_is_owning_organisation, support_user).find { |x| x[:name] == "Organisation providing support" }
         expect(attributes).to be_nil
       end
     end
