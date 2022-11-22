@@ -393,6 +393,13 @@ class Location < ApplicationRecord
     status == :reactivating_soon
   end
 
+  def status_during(date)
+    return :reactivating_soon if location_deactivation_periods.any? { |period| period.reactivation_date.present? && date.between?(period.deactivation_date, period.reactivation_date) } || available_from > date
+
+    open_deactivation = location_deactivation_periods.deactivations_without_reactivation.first
+    return :deactivated if open_deactivation.present? && open_deactivation.deactivation_date < date
+  end
+
 private
 
   PIO = PostcodeService.new
