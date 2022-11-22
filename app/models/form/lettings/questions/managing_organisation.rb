@@ -21,7 +21,7 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
       if log.owning_organisation.holds_own_stock?
         opts[log.owning_organisation.id] = "#{log.owning_organisation.name} (Owning organisation)"
       end
-    elsif current_user.organisation.holds_own_stock?
+    else
       opts[current_user.organisation.id] = "#{current_user.organisation.name} (Your organisation)"
     end
 
