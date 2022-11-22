@@ -152,6 +152,14 @@
         expect(display_scheme_attributes(scheme, coordinator_user)).to eq(attributes)
       end
 
+      context "when the scheme toggle is disabled" do
+        it "doesn't show the scheme status" do
+          allow(FeatureToggle).to receive(:scheme_toggle_enabled?).and_return(false)
+          attributes = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Status" }
+          expect(attributes).to be_nil
+        end
+      end
+
     context "when viewing availability" do
       context "with no deactivations" do
         it "displays created_at as availability date" do
