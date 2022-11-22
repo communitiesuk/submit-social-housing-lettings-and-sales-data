@@ -90,30 +90,42 @@
   end
 
     describe "display_scheme_attributes" do
-      let (owning
+      let(:owning_organisation) {FactoryBot.create(:organisation, name: "Acme LTD Owning")}
+      let(:managing_organisation) {FactoryBot.create(:organisation, name: "Acme LTD Managing")}
       let!(:scheme) { FactoryBot.create(:scheme, 
-        id: 1,
+        id: 19,
+        service_name: "Test service_name",
+        sensitive: 0,
+        scheme_type: 7,
+        registered_under_care_act: 3,
+        owning_organisation: owning_organisation,
+        managing_organisation: managing_organisation,
+        arrangement_type: "V",
+        primary_client_group: "S",
+        has_other_client_group: 1,
+        secondary_client_group: "I",
+        support_type: 4,
+        intended_stay: "P",
         created_at: Time.zone.local(2022, 4, 1),
-        service_name: 'Test name'
-        owning_organisation
-        ) }
+      ) }
       let(:support_user) { FactoryBot.create(:user, :support) }
       let(:coordinator_user) { FactoryBot.create(:user, :data_coordinator) }
 
       it "returns correct display attributes for a support user" do
         attributes = [
-          { name: "Scheme code", value: "S1" },
-          { name: "Name", value: "Test name", edit: true },
-          { name: "Confidential information", value: scheme.sensitive, edit: true },
-          { name: "Type of scheme", value: scheme.scheme_type },
-          { name: "Registered under Care Standards Act 2000", value: scheme.registered_under_care_act },
-          { name: "Housing stock owned by", value: ""scheme.owning_organisation.name"", edit: true },
-          { name: "Support services provided by", value: scheme.arrangement_type },
-          { name: "Primary client group", value: scheme.primary_client_group },
-          { name: "Has another client group", value: scheme.has_other_client_group },
-          { name: "Secondary client group", value: scheme.secondary_client_group },
-          { name: "Level of support given", value: scheme.support_type },
-          { name: "Intended length of stay", value: scheme.intended_stay },
+          { name: "Scheme code", value: "S19" },
+          { name: "Name", value: "Test service_name", edit: true },
+          { name: "Confidential information", value: "No", edit: true },
+          { name: "Type of scheme", value: "Housing for older people" },
+          { name: "Registered under Care Standards Act 2000", value: "Yes – registered care home providing personal care" },
+          { name: "Housing stock owned by", value: "Acme LTD Owning", edit: true },
+          { name: "Support services provided by", value: "A registered charity or voluntary organisation" },
+          { name: "Organisation providing support", value: "Acme LTD Managing" },
+          { name: "Primary client group", value: "Rough sleepers" },
+          { name: "Has another client group", value: "Yes" },
+          { name: "Secondary client group", value: "Refugees (permanent)" },
+          { name: "Level of support given", value: "High level" },
+          { name: "Intended length of stay", value: "Permanent" },
           { name: "Availability", value: "Active from 1 April 2022" },
           { name: "Status", value: status_tag(:active) },
         ]
@@ -122,17 +134,18 @@
 
       it "returns correct display attributes for a coordinator user" do
         attributes = [
-          { name: "Scheme code", value: scheme.id_to_display },
-          { name: "Name", value: scheme.service_name, edit: true },
-          { name: "Confidential information", value: scheme.sensitive, edit: true },
-          { name: "Type of scheme", value: scheme.scheme_type },
-          { name: "Registered under Care Standards Act 2000", value: scheme.registered_under_care_act },
-          { name: "Support services provided by", value: scheme.arrangement_type },
-          { name: "Primary client group", value: scheme.primary_client_group },
-          { name: "Has another client group", value: scheme.has_other_client_group },
-          { name: "Secondary client group", value: scheme.secondary_client_group },
-          { name: "Level of support given", value: scheme.support_type },
-          { name: "Intended length of stay", value: scheme.intended_stay },
+          { name: "Scheme code", value: "S19" },
+          { name: "Name", value: "Test service_name", edit: true },
+          { name: "Confidential information", value: "No", edit: true },
+          { name: "Type of scheme", value: "Housing for older people" },
+          { name: "Registered under Care Standards Act 2000", value: "Yes – registered care home providing personal care" },
+          { name: "Support services provided by", value: "A registered charity or voluntary organisation" },
+          { name: "Organisation providing support", value: "Acme LTD Managing" },
+          { name: "Primary client group", value: "Rough sleepers" },
+          { name: "Has another client group", value: "Yes" },
+          { name: "Secondary client group", value: "Refugees (permanent)" },
+          { name: "Level of support given", value: "High level" },
+          { name: "Intended length of stay", value: "Permanent" },
           { name: "Availability", value: "Active from 1 April 2022" },
           { name: "Status", value: status_tag(:active) },
         ]
