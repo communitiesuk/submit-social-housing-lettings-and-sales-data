@@ -42,12 +42,44 @@ module LocationsHelper
     base_attributes
   end
 
-  def location_availability(location)
-    availability = "Active from #{location.available_from.to_formatted_s(:govuk_date)}"
-    location.location_deactivation_periods.each do |deactivation|
-      availability << " to #{(deactivation.deactivation_date - 1.day).to_formatted_s(:govuk_date)}\nDeactivated on #{deactivation.deactivation_date.to_formatted_s(:govuk_date)}"
-      availability << "\nActive from #{deactivation.reactivation_date.to_formatted_s(:govuk_date)}" if deactivation.reactivation_date.present?
+  ActivePeriod = Struct.new(:from, :to)
+  def active_periods(location)
+    periods = [ActivePeriod.new(location.available_from, nil)]
+
+    sorted_deactivation_periods = remove_nested_periods(location.location_deactivation_periods.sort_by(&:deactivation_date))
+    sorted_deactivation_periods.each do |deactivation|
+      periods.last.to = deactivation.deactivation_date
+      periods << ActivePeriod.new(deactivation.reactivation_date, nil)
     end
-    availability
+
+    remove_overlapping_and_empty_periods(periods)
+  end
+
+  def location_availability(location)
+    availability = ""
+    active_periods(location).each do |period|
+      if period.from.present?
+        availability << "\nActive from #{period.from.to_formatted_s(:govuk_date)}"
+        availability << " to #{(period.to - 1.day).to_formatted_s(:govuk_date)}\nDeactivated on #{period.to.to_formatted_s(:govuk_date)}" if period.to.present?
+      end
+    end
+    availability.strip
+  end
+
+private
+
+  def remove_overlapping_and_empty_periods(periods)
+    periods.select { |period| period.from.present? && (period.to.nil? || period.from < period.to) }
+  end
+
+  def remove_nested_periods(periods)
+    periods.select { |inner_period| periods.none? { |outer_period| is_nested?(inner_period, outer_period) } }
+  end
+
+  def is_nested?(inner, outer)
+    return false if inner == outer
+    return false if [inner.deactivation_date, inner.reactivation_date, outer.deactivation_date, outer.reactivation_date].any?(&:blank?)
+
+    [inner.deactivation_date, inner.reactivation_date].all? { |date| date.between?(outer.deactivation_date, outer.reactivation_date) }
   end
 end

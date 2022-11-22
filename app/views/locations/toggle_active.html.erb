@@ -1,4 +1,4 @@
-<% title = "#{action.humanize} #{@location.postcode}" %>
+<% title = "#{action.humanize} #{@location.name}" %>
 <% content_for :title, title %>
 
 <% content_for :before_content do %>
@@ -8,25 +8,25 @@
   ) %>
 <% end %>
 
-<%= form_with model: @location, url: scheme_location_new_deactivation_path(scheme_id: @location.scheme.id, location_id: @location.id), method: "patch", local: true do |f| %>
+<%= form_with model: @location_deactivation_period, url: toggle_location_form_path(action, @location), method: "patch", local: true do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
     <% collection_start_date = FormHandler.instance.current_collection_start_date %>
     <%= f.govuk_error_summary %>
-        <%= f.govuk_radio_buttons_fieldset :deactivation_date_type,
-                                            legend: { text: I18n.t("questions.location.deactivation.apply_from") },
-                                            caption: { text: "Deactivate #{@location.postcode}" },
-                                            hint: { text: I18n.t("hints.location.deactivation", date: collection_start_date.to_formatted_s(:govuk_date)) } do %>
-            <%= govuk_warning_text text: I18n.t("warnings.location.deactivation.existing_logs") %>
-            <%= f.govuk_radio_button :deactivation_date_type,
+        <%= f.govuk_radio_buttons_fieldset date_type_question(action),
+                                            legend: { text: I18n.t("questions.location.toggle_active.apply_from") },
+                                            caption: { text: title },
+                                            hint: { text: I18n.t("hints.location.toggle_active", date: collection_start_date.to_formatted_s(:govuk_date)) } do %>
+            <%= govuk_warning_text text: I18n.t("warnings.location.#{action}.existing_logs") %>
+            <%= f.govuk_radio_button date_type_question(action),
                                         "default",
                                         label: { text: "From the start of the current collection period (#{collection_start_date.to_formatted_s(:govuk_date)})" } %>
 
-            <%= f.govuk_radio_button :deactivation_date_type,
+            <%= f.govuk_radio_button date_type_question(action),
                                         "other",
                                         label: { text: "For tenancies starting after a certain date" },
                                         **basic_conditional_html_attributes({ "deactivation_date" => %w[other] }, "location") do %>
-                                          <%= f.govuk_date_field :deactivation_date,
+                                          <%= f.govuk_date_field date_question(action),
                                                         legend: { text: "Date", size: "m" },
                                                         hint: { text: "For example, 27 3 2022" },
                                                         width: 20 %>

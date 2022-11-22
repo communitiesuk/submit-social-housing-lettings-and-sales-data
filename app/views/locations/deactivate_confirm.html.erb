@@ -1,4 +1,4 @@
-<%= form_with model: @location, url: scheme_location_deactivate_path(@location), method: "patch", local: true do |f| %>
+<%= form_with model: @location_deactivation_period, url: scheme_location_deactivate_path(@location), method: "patch", local: true do |f| %>
      <% content_for :before_content do %>
        <%= govuk_back_link(href: :back) %>
      <% end %>
@@ -6,7 +6,7 @@
      <span class="govuk-caption-l"><%= @location.postcode %></span>
      This change will affect <%= @location.lettings_logs.count %> logs
    </h1>
-   <%= govuk_warning_text text: I18n.t("warnings.location.deactivation.review_logs") %>
+   <%= govuk_warning_text text: I18n.t("warnings.location.deactivate.review_logs") %>
    <%= f.hidden_field :confirm, value: true %>
    <%= f.hidden_field :deactivation_date, value: @deactivation_date %>
    <%= f.hidden_field :deactivation_date_type, value: @deactivation_date_type %>
