@@ -61,11 +61,11 @@ module Validations::DateValidations
     end
 
     if record.location&.status_during(record.startdate) == :deactivated
-      record.errors.add :startdate, I18n.t("validations.setup.startdate.during_deactivated_location")
+      record.errors.add :startdate, I18n.t("validations.setup.startdate.during_deactivated_location", postcode: record.location.postcode, date: "")
     end
 
     if record.location&.status_during(record.startdate) == :reactivating_soon
-      record.errors.add :startdate, I18n.t("validations.setup.startdate.location_reactivating_soon")
+      record.errors.add :startdate, I18n.t("validations.setup.startdate.location_reactivating_soon", postcode: record.location.postcode, date: "")
     end
   end
 
