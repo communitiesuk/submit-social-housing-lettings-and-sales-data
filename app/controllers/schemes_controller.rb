@@ -39,7 +39,8 @@ class SchemesController < ApplicationController
   end
 
   def deactivate_confirm
-    if @scheme.lettings_logs.filter_by_before_startdate(params[:deactivation_date]).count.zero?
+    @affected_logs = @scheme.lettings_logs.filter_by_before_startdate(params[:deactivation_date])
+    if @affected_logs.count.zero?
       deactivate
     else
       @deactivation_date = params[:deactivation_date]
