@@ -59,6 +59,14 @@ module Validations::DateValidations
     if record["mrcdate"].present? && record.startdate < record["mrcdate"]
       record.errors.add :startdate, I18n.t("validations.setup.startdate.after_major_repair_date")
     end
+
+    if record.location&.status_during(record.startdate) == :deactivated
+      record.errors.add :startdate, I18n.t("validations.setup.startdate.during_deactivated_location")
+    end
+
+    if record.location&.status_during(record.startdate) == :reactivating_soon
+      record.errors.add :startdate, I18n.t("validations.setup.startdate.location_reactivating_soon")
+    end
   end
 
 private
