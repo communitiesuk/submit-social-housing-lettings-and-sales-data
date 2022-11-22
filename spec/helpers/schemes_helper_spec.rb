@@ -1,7 +1,5 @@
 require "rails_helper"
 
-include TagHelper
-
 RSpec.describe SchemesHelper do
   describe "Active periods" do
     let(:scheme) { FactoryBot.create(:scheme, created_at: Time.zone.today) }
@@ -89,25 +87,27 @@ RSpec.describe SchemesHelper do
     end
   end
 
+  include TagHelper
   describe "display_scheme_attributes" do
-    let(:owning_organisation) {FactoryBot.create(:organisation, name: "Acme LTD Owning")}
-    let(:managing_organisation) {FactoryBot.create(:organisation, name: "Acme LTD Managing")}
-    let!(:scheme) { FactoryBot.create(:scheme, 
-      id: 19,
-      service_name: "Test service_name",
-      sensitive: 0,
-      scheme_type: 7,
-      registered_under_care_act: 3,
-      owning_organisation: owning_organisation,
-      managing_organisation: managing_organisation,
-      arrangement_type: "V",
-      primary_client_group: "S",
-      has_other_client_group: 1,
-      secondary_client_group: "I",
-      support_type: 4,
-      intended_stay: "P",
-      created_at: Time.zone.local(2022, 4, 1),
-    ) }
+    let(:owning_organisation) { FactoryBot.create(:organisation, name: "Acme LTD Owning") }
+    let(:managing_organisation) { FactoryBot.create(:organisation, name: "Acme LTD Managing") }
+    let!(:scheme) do
+      FactoryBot.create(:scheme,
+                        id: 19,
+                        service_name: "Test service_name",
+                        sensitive: 0,
+                        scheme_type: 7,
+                        registered_under_care_act: 3,
+                        owning_organisation:,
+                        managing_organisation:,
+                        arrangement_type: "V",
+                        primary_client_group: "S",
+                        has_other_client_group: 1,
+                        secondary_client_group: "I",
+                        support_type: 4,
+                        intended_stay: "P",
+                        created_at: Time.zone.local(2022, 4, 1))
+    end
     let!(:scheme_where_managing_organisation_is_owning_organisation) { FactoryBot.create(:scheme, arrangement_type: "D") }
     let(:support_user) { FactoryBot.create(:user, :support) }
     let(:coordinator_user) { FactoryBot.create(:user, :data_coordinator) }

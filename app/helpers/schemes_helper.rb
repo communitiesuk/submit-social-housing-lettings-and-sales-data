@@ -22,11 +22,11 @@ module SchemesHelper
     end
 
     if user.data_coordinator?
-      base_attributes.delete_if {|item| item[:name] == "Housing stock owned by"}
+      base_attributes.delete_if { |item| item[:name] == "Housing stock owned by" }
     end
 
     if scheme.arrangement_type_same?
-      base_attributes.delete_if {|item| item[:name] == "Organisation providing support"}
+      base_attributes.delete_if { |item| item[:name] == "Organisation providing support" }
     end
     base_attributes
   end
