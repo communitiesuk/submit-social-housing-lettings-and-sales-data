@@ -1,0 +1,28 @@
+<% content_for :title, "Add a location to this scheme" %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+        text: "Back",
+        href: "/schemes/#{@scheme.id}/support",
+        ) %>
+<% end %>
+
+<%= form_for(@location, method: :post, url: scheme_locations_path) do |f| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= f.govuk_error_summary %>
+
+      <%= render partial: "organisations/headings", locals: { main: "What is the postcode?", sub: "Add a location to #{@scheme.service_name}" } %>
+
+      <%= f.govuk_text_field :postcode,
+                             label: { size: "m" },
+                             hint: { text: I18n.t("hints.location.postcode") },
+                             width: 5 %>
+
+      <div class="govuk-button-group">
+          <%= f.govuk_submit "Continue" %>
+          <%= govuk_link_to "Cancel", scheme_locations_path(@scheme) %>
+      </div>
+    </div>
+  </div>
+<% end %>
