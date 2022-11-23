@@ -86,7 +86,7 @@ RSpec.describe Form::Lettings::Questions::HousingProvider, type: :model do
     context "when support" do
       let(:user) { create(:user, :support) }
 
-      it "is not hiddes in check answers" do
+      it "is not hidden in check answers" do
         expect(question.hidden_in_check_answers?(nil, user)).to be false
       end
     end
