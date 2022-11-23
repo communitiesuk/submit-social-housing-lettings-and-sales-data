@@ -25,6 +25,6 @@ class Form::Lettings::Pages::ManagingOrganisation < ::Form::Page
     return false unless organisation
     return true unless organisation.holds_own_stock?
 
-    organisation.managing_agents.count > 1
+    organisation.managing_agents.count >= 1
   end
 end

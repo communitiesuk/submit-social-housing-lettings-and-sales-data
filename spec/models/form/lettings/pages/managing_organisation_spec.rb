@@ -97,8 +97,8 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
             )
           end
 
-          it "is not shown" do
-            expect(page.routed_to?(log, user)).to eq(false)
+          it "is shown" do
+            expect(page.routed_to?(log, user)).to eq(true)
           end
         end
       end
@@ -149,8 +149,8 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
             )
           end
 
-          it "is not shown" do
-            expect(page.routed_to?(log, user)).to eq(false)
+          it "is shown" do
+            expect(page.routed_to?(log, user)).to eq(true)
           end
         end
       end
