@@ -8,15 +8,15 @@ if (cookieBannerEl) {
       return
     }
 
-    const body = new FormData(cookieFormEl)
+    const body = new window.FormData(cookieFormEl)
     body.append('cookies_form[accept_analytics_cookies]', e.target.value)
 
     fetch(cookieFormEl.action, {
       method: 'PUT',
       headers: {
-        Accept: 'application/json',
+        Accept: 'application/json'
       },
-      body,
+      body
     })
       .then((res) => {
         if (res.status >= 200 && res.status < 300) {
