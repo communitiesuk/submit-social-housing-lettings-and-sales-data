@@ -93,7 +93,6 @@ RSpec.describe SchemesHelper do
     let(:managing_organisation) { FactoryBot.create(:organisation, name: "Acme LTD Managing") }
     let!(:scheme) do
       FactoryBot.create(:scheme,
-                        id: 19,
                         service_name: "Test service_name",
                         sensitive: 0,
                         scheme_type: 7,
@@ -114,7 +113,7 @@ RSpec.describe SchemesHelper do
 
     it "returns correct display attributes for a support user" do
       attributes = [
-        { name: "Scheme code", value: "S19" },
+        { name: "Scheme code", value: "S#{scheme.id}" },
         { name: "Name", value: "Test service_name", edit: true },
         { name: "Confidential information", value: "No", edit: true },
         { name: "Type of scheme", value: "Housing for older people" },
@@ -135,7 +134,7 @@ RSpec.describe SchemesHelper do
 
     it "returns correct display attributes for a coordinator user" do
       attributes = [
-        { name: "Scheme code", value: "S19" },
+        { name: "Scheme code", value: "S#{scheme.id}" },
         { name: "Name", value: "Test service_name", edit: true },
         { name: "Confidential information", value: "No", edit: true },
         { name: "Type of scheme", value: "Housing for older people" },
