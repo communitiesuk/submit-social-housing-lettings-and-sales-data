@@ -28,6 +28,7 @@ RSpec.describe "validations" do
       managing_organisation: user.organisation,
       status: 1,
       declaration: nil,
+      startdate: Time.zone.local(2021, 5, 1),
     )
   end
   let(:id) { lettings_log.id }
