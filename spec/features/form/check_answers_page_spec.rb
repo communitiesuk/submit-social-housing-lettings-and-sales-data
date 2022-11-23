@@ -7,7 +7,7 @@ RSpec.describe "Form Check Answers Page" do
   let(:subsection) { "household-characteristics" }
   let(:conditional_subsection) { "conditional-question" }
   let(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-  let(:location) { FactoryBot.create(:location, scheme:, mobility_type: "N") }
+  let(:location) { FactoryBot.create(:location, scheme:, mobility_type: "N", startdate: Time.zone.local(2021, 4, 1)) }
 
   let(:lettings_log) do
     FactoryBot.create(
@@ -36,6 +36,7 @@ RSpec.describe "Form Check Answers Page" do
       :completed,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
+      startdate: Time.zone.local(2021, 5, 1),
     )
   end
   let(:id) { lettings_log.id }

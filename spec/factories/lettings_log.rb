@@ -60,7 +60,7 @@ FactoryBot.define do
       illness { 1 }
       preg_occ { 2 }
       startertenancy { 1 }
-      tenancylength { 5 }
+      tenancylength { nil }
       tenancy { 1 }
       ppostcode_full { Faker::Address.postcode }
       rsnvac { 6 }
@@ -134,7 +134,7 @@ FactoryBot.define do
       property_relet { 0 }
       mrcdate { Time.zone.local(2020, 5, 5, 10, 36, 49) }
       incref { 0 }
-      startdate { Time.utc(2022, 2, 2, 10, 36, 49) }
+      startdate { Time.zone.today }
       armedforces { 1 }
       builtype { 1 }
       unitletas { 2 }

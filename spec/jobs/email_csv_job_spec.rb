@@ -33,7 +33,8 @@ describe EmailCsvJob do
                         :completed,
                         owning_organisation: organisation,
                         managing_organisation: organisation,
-                        created_by: user)
+                        created_by: user,
+                        startdate: Time.zone.local(2021, 5, 1))
 
       allow(Storage::S3Service).to receive(:new).and_return(storage_service)
       allow(storage_service).to receive(:write_file)
