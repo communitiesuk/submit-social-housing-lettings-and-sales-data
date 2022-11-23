@@ -42,10 +42,15 @@ class Form::Lettings::Questions::HousingProvider < ::Form::Question
   def hidden_in_check_answers?(_log, user = nil)
     @current_user = user
 
-    return false unless @current_user
-    return false if @current_user.support?
+    return false if current_user.support?
 
-    housing_providers_answer_options.count < 2
+    housing_providers = current_user.organisation.housing_providers
+
+    if current_user.organisation.holds_own_stock?
+      housing_providers.count.zero?
+    else
+      housing_providers.count <= 1
+    end
   end
 
   def enabled

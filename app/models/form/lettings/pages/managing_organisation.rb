@@ -25,13 +25,6 @@ class Form::Lettings::Pages::ManagingOrganisation < ::Form::Page
     return false unless organisation
     return true unless organisation.holds_own_stock?
 
-    managing_agents = organisation.managing_agents
-
-    return false if managing_agents.count.zero?
-    return true if managing_agents.count > 1
-
-    log.update!(managing_organisation: managing_agents.first)
-
-    false
+    organisation.managing_agents.count >= 1
   end
 end

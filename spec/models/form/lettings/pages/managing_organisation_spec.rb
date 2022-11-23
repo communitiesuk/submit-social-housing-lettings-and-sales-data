@@ -40,10 +40,6 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
       it "is not shown" do
         expect(page.routed_to?(log, nil)).to eq(false)
       end
-
-      it "does not update managing_organisation_id" do
-        expect { page.routed_to?(log, nil) }.not_to change(log.reload, :managing_organisation)
-      end
     end
 
     context "when support" do
@@ -56,10 +52,6 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
         it "is shown" do
           expect(page.routed_to?(log, user)).to eq(true)
         end
-
-        it "does not update managing_organisation_id" do
-          expect { page.routed_to?(log, user) }.not_to change(log.reload, :managing_organisation)
-        end
       end
 
       context "when owning_organisation not set" do
@@ -68,10 +60,6 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
 
         it "is not shown" do
           expect(page.routed_to?(log, user)).to eq(false)
-        end
-
-        it "does not update managing_organisation_id" do
-          expect { page.routed_to?(log, user) }.not_to change(log.reload, :managing_organisation)
         end
       end
 
@@ -84,10 +72,6 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
           it "is not shown" do
             expect(page.routed_to?(log, user)).to eq(false)
           end
-
-          it "does not update managing_organisation_id" do
-            expect { page.routed_to?(log, user) }.not_to change(log.reload, :managing_organisation)
-          end
         end
 
         context "with >1 managing_agents" do
@@ -98,10 +82,6 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
 
           it "is shown" do
             expect(page.routed_to?(log, user)).to eq(true)
-          end
-
-          it "does not update managing_organisation_id" do
-            expect { page.routed_to?(log, user) }.not_to change(log.reload, :managing_organisation)
           end
         end
 
@@ -117,12 +97,8 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
             )
           end
 
-          it "is not shown" do
-            expect(page.routed_to?(log, user)).to eq(false)
-          end
-
-          it "updates managing_organisation_id" do
-            expect { page.routed_to?(log, user) }.to change(log.reload, :managing_organisation).to(managing_agent)
+          it "is shown" do
+            expect(page.routed_to?(log, user)).to eq(true)
           end
         end
       end
@@ -137,10 +113,6 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
         it "is shown" do
           expect(page.routed_to?(log, user)).to eq(true)
         end
-
-        it "does not update managing_organisation_id" do
-          expect { page.routed_to?(log, user) }.not_to change(log.reload, :managing_organisation)
-        end
       end
 
       context "when holds own stock" do
@@ -152,10 +124,6 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
           it "is not shown" do
             expect(page.routed_to?(log, user)).to eq(false)
           end
-
-          it "does not update managing_organisation_id" do
-            expect { page.routed_to?(log, user) }.not_to change(log.reload, :managing_organisation)
-          end
         end
 
         context "with >1 managing_agents" do
@@ -166,10 +134,6 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
 
           it "is shown" do
             expect(page.routed_to?(log, user)).to eq(true)
-          end
-
-          it "does not update managing_organisation_id" do
-            expect { page.routed_to?(log, user) }.not_to change(log.reload, :managing_organisation)
           end
         end
 
@@ -185,12 +149,8 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
             )
           end
 
-          it "is not shown" do
-            expect(page.routed_to?(log, user)).to eq(false)
-          end
-
-          it "updates managing_organisation_id" do
-            expect { page.routed_to?(log, user) }.to change(log.reload, :managing_organisation).to(managing_agent)
+          it "is shown" do
+            expect(page.routed_to?(log, user)).to eq(true)
           end
         end
       end

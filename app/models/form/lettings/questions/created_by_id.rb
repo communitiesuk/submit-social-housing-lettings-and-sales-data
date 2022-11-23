@@ -35,8 +35,8 @@ class Form::Lettings::Questions::CreatedById < ::Form::Question
     answer_options[value]
   end
 
-  def hidden_in_check_answers?(_log, current_user)
-    !current_user.support?
+  def hidden_in_check_answers?(_log, _current_user)
+    true
   end
 
   def derived?

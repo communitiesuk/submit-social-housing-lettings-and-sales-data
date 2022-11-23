@@ -51,20 +51,8 @@ RSpec.describe Form::Lettings::Questions::CreatedById, type: :model do
     expect(question.derived?).to be true
   end
 
-  context "when the current user is support" do
-    let(:support_user) { build(:user, :support) }
-
-    it "is shown in check answers" do
-      expect(question.hidden_in_check_answers?(nil, support_user)).to be false
-    end
-  end
-
-  context "when the current user is not support" do
-    let(:user) { build(:user) }
-
-    it "is not shown in check answers" do
-      expect(question.hidden_in_check_answers?(nil, user)).to be true
-    end
+  it "is not shown in check answers" do
+    expect(question.hidden_in_check_answers?(nil, user_1)).to be true
   end
 
   context "when the owning organisation is already set" do

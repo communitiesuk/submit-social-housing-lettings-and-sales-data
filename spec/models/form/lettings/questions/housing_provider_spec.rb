@@ -83,34 +83,64 @@ RSpec.describe Form::Lettings::Questions::HousingProvider, type: :model do
   end
 
   describe "#hidden_in_check_answers?" do
-    context "when housing providers < 2" do
-      context "when not support user" do
-        let(:user) { create(:user) }
+    context "when support" do
+      let(:user) { create(:user, :support) }
+
+      it "is not hidden in check answers" do
+        expect(question.hidden_in_check_answers?(nil, user)).to be false
+      end
+    end
+
+    context "when org holds own stock", :aggregate_failures do
+      let(:user) { create(:user, :data_coordinator, organisation: create(:organisation, holds_own_stock: true)) }
+
+      context "when housing providers == 0" do
+        before do
+          user.organisation.housing_providers.delete_all
+        end
 
         it "is hidden in check answers" do
+          expect(user.organisation.housing_providers.count).to eq(0)
           expect(question.hidden_in_check_answers?(nil, user)).to be true
         end
       end
 
-      context "when support" do
-        let(:user) { create(:user, :support) }
+      context "when housing providers != 0" do
+        before do
+          create(:organisation_relationship, :owning, child_organisation: user.organisation)
+        end
 
-        it "is not hiddes in check answers" do
+        it "is visible in check answers" do
+          expect(user.organisation.housing_providers.count).to eq(1)
           expect(question.hidden_in_check_answers?(nil, user)).to be false
         end
       end
     end
 
-    context "when housing providers >= 2" do
-      let(:user) { create(:user) }
+    context "when org does not hold own stock", :aggregate_failures do
+      let(:user) { create(:user, :data_coordinator, organisation: create(:organisation, holds_own_stock: false)) }
 
-      before do
-        create(:organisation_relationship, :owning, child_organisation: user.organisation)
-        create(:organisation_relationship, :owning, child_organisation: user.organisation)
+      context "when housing providers <= 1" do
+        before do
+          create(:organisation_relationship, :owning, child_organisation: user.organisation)
+        end
+
+        it "is hidden in check answers" do
+          expect(user.organisation.housing_providers.count).to eq(1)
+          expect(question.hidden_in_check_answers?(nil, user)).to be true
+        end
       end
 
-      it "is not hidden in check answers" do
-        expect(question.hidden_in_check_answers?(nil, user)).to be false
+      context "when housing providers >= 2" do
+        before do
+          create(:organisation_relationship, :owning, child_organisation: user.organisation)
+          create(:organisation_relationship, :owning, child_organisation: user.organisation)
+        end
+
+        it "is visible in check answers" do
+          expect(user.organisation.housing_providers.count).to eq(2)
+          expect(question.hidden_in_check_answers?(nil, user)).to be false
+        end
       end
     end
   end
