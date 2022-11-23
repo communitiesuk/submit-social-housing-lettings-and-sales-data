@@ -27,8 +27,21 @@ module SchemesHelper
     base_attributes
   end
 
+  def scheme_availability(scheme)
+    availability = ""
+    scheme_active_periods(scheme).each do |period|
+      if period.from.present?
+        availability << "\nActive from #{period.from.to_formatted_s(:govuk_date)}"
+        availability << " to #{(period.to - 1.day).to_formatted_s(:govuk_date)}\nDeactivated on #{period.to.to_formatted_s(:govuk_date)}" if period.to.present?
+      end
+    end
+    availability.strip
+  end
+
+  private
+
   ActivePeriod = Struct.new(:from, :to)
-  def active_periods(scheme)
+  def scheme_active_periods(scheme)
     periods = [ActivePeriod.new(scheme.available_from, nil)]
 
     sorted_deactivation_periods = remove_nested_periods(scheme.scheme_deactivation_periods.sort_by(&:deactivation_date))
@@ -39,19 +52,6 @@ module SchemesHelper
 
     remove_overlapping_and_empty_periods(periods)
   end
-
-  def scheme_availability(scheme)
-    availability = ""
-    active_periods(scheme).each do |period|
-      if period.from.present?
-        availability << "\nActive from #{period.from.to_formatted_s(:govuk_date)}"
-        availability << " to #{(period.to - 1.day).to_formatted_s(:govuk_date)}\nDeactivated on #{period.to.to_formatted_s(:govuk_date)}" if period.to.present?
-      end
-    end
-    availability.strip
-  end
-
-  private
 
   def remove_overlapping_and_empty_periods(periods)
     periods.select { |period| period.from.present? && (period.to.nil? || period.from < period.to) }
