@@ -81,6 +81,10 @@ module Validations::DateValidations
     if scheme_status_during_startdate.present? && scheme_status_during_startdate[:status] == :reactivating_soon
       record.errors.add :startdate, I18n.t("validations.setup.startdate.scheme_reactivating_soon", name: record.scheme.service_name, date: scheme_status_during_startdate[:date].to_formatted_s(:govuk_date), deactivation_date: scheme_status_during_startdate[:deactivation_date].to_formatted_s(:govuk_date))
     end
+
+    if scheme_status_during_startdate.present? && scheme_status_during_startdate[:status] == :activating_soon
+      record.errors.add :startdate, I18n.t("validations.setup.startdate.scheme_activating_soon", name: record.scheme.service_name, date: scheme_status_during_startdate[:date].to_formatted_s(:govuk_date))
+    end
   end
 
 private
