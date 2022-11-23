@@ -233,4 +233,12 @@ class Scheme < ApplicationRecord
   def reactivating_soon?
     status == :reactivating_soon
   end
+  
+  def status_during(date)
+    closest_reactivation = scheme_deactivation_periods.reverse.find { |period| period.reactivation_date.present? && date.between?(period.deactivation_date, period.reactivation_date) }
+    return { status: :reactivating_soon, date: closest_reactivation.reactivation_date } if closest_reactivation.present?
+
+    open_deactivation = scheme_deactivation_periods.deactivations_without_reactivation.first
+    return { status: :deactivated, date: open_deactivation.deactivation_date } if open_deactivation.present? && open_deactivation.deactivation_date < date
+  end
 end
