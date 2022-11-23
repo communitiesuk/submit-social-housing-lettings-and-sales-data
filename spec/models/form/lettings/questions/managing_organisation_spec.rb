@@ -142,34 +142,19 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
   end
 
   describe "#hidden_in_check_answers?" do
-    context "when housing providers < 2" do
-      context "when not support user" do
-        let(:user) { create(:user) }
+    context "when user present" do
+      let(:user) { create(:user) }
 
-        it "is hidden in check answers" do
-          expect(question.hidden_in_check_answers?(nil, user)).to be true
-        end
-      end
-
-      context "when support" do
-        let(:user) { create(:user, :support) }
-
-        it "is not hiddes in check answers" do
-          expect(question.hidden_in_check_answers?(nil, user)).to be false
-        end
+      it "is hidden in check answers" do
+        expect(question.hidden_in_check_answers?(nil, user)).to be false
       end
     end
 
-    context "when managing agents >= 2" do
-      let(:user) { create(:user) }
+    context "when user not provided" do
+      let(:user) { create(:user, :support) }
 
-      before do
-        create(:organisation_relationship, :managing, parent_organisation: user.organisation)
-        create(:organisation_relationship, :managing, parent_organisation: user.organisation)
-      end
-
-      it "is not hidden in check answers" do
-        expect(question.hidden_in_check_answers?(nil, user)).to be false
+      it "is not hiddes in check answers" do
+        expect(question.hidden_in_check_answers?(nil)).to be true
       end
     end
   end

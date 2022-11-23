@@ -47,11 +47,7 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
 
   def hidden_in_check_answers?(_log, user = nil)
     @current_user = user
-
-    return false unless @current_user
-    return false if @current_user.support?
-
-    managing_organisations_answer_options.count < 2
+    @current_user.nil?
   end
 
   def enabled
