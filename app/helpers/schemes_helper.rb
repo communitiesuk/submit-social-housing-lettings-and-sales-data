@@ -38,7 +38,7 @@ module SchemesHelper
     availability.strip
   end
 
-  private
+private
 
   ActivePeriod = Struct.new(:from, :to)
   def scheme_active_periods(scheme)
