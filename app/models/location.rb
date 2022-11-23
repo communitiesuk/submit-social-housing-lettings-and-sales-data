@@ -397,8 +397,8 @@ class Location < ApplicationRecord
     return if date.blank?
 
     closest_reactivation = location_deactivation_periods.reverse.find { |period| period.reactivation_date.present? && date.between?(period.deactivation_date, period.reactivation_date) }
-    return { status: :reactivating_soon, date: closest_reactivation.reactivation_date } if closest_reactivation.present?
-    return { status: :reactivating_soon, date: available_from } if available_from.present? && available_from > date
+    return { status: :reactivating_soon, date: closest_reactivation.reactivation_date, deactivation_date: closest_reactivation.deactivation_date } if closest_reactivation.present?
+    return { status: :activating_soon, date: available_from } if available_from.present? && available_from > date
 
     open_deactivation = location_deactivation_periods.deactivations_without_reactivation.first
     return { status: :deactivated, date: open_deactivation.deactivation_date } if open_deactivation.present? && open_deactivation.deactivation_date < date

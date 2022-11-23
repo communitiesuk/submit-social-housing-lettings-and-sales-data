@@ -66,7 +66,11 @@ module Validations::DateValidations
     end
 
     if location_status_during_startdate.present? && location_status_during_startdate[:status] == :reactivating_soon
-      record.errors.add :startdate, I18n.t("validations.setup.startdate.location_reactivating_soon", postcode: record.location.postcode, date: location_status_during_startdate[:date].to_formatted_s(:govuk_date))
+      record.errors.add :startdate, I18n.t("validations.setup.startdate.location_reactivating_soon", postcode: record.location.postcode, date: location_status_during_startdate[:date].to_formatted_s(:govuk_date), deactivation_date: location_status_during_startdate[:deactivation_date].to_formatted_s(:govuk_date))
+    end
+
+    if location_status_during_startdate.present? && location_status_during_startdate[:status] == :activating_soon
+      record.errors.add :startdate, I18n.t("validations.setup.startdate.location_activating_soon", postcode: record.location.postcode, date: location_status_during_startdate[:date].to_formatted_s(:govuk_date))
     end
 
     scheme_status_during_startdate = record.scheme&.status_during(record.startdate)
@@ -75,7 +79,7 @@ module Validations::DateValidations
     end
 
     if scheme_status_during_startdate.present? && scheme_status_during_startdate[:status] == :reactivating_soon
-      record.errors.add :startdate, I18n.t("validations.setup.startdate.scheme_reactivating_soon", name: record.scheme.service_name, date: scheme_status_during_startdate[:date].to_formatted_s(:govuk_date))
+      record.errors.add :startdate, I18n.t("validations.setup.startdate.scheme_reactivating_soon", name: record.scheme.service_name, date: scheme_status_during_startdate[:date].to_formatted_s(:govuk_date), deactivation_date: scheme_status_during_startdate[:deactivation_date].to_formatted_s(:govuk_date))
     end
   end
 
