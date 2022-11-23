@@ -223,4 +223,12 @@ class Form
       end
     end
   end
+
+  def in_crossover_period?(now: Time.zone.now)
+    ((end_date - 3.months) < now) && (now < end_date)
+  end
+
+  def inspect
+    "#<#{self.class} @type=#{type} @name=#{name}>"
+  end
 end
