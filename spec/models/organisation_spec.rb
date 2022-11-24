@@ -34,14 +34,12 @@ RSpec.describe Organisation, type: :model do
       before do
         FactoryBot.create(
           :organisation_relationship,
-          :owning,
           child_organisation:,
           parent_organisation: organisation,
         )
 
         FactoryBot.create(
           :organisation_relationship,
-          :owning,
           child_organisation: grandchild_organisation,
           parent_organisation: child_organisation,
         )
@@ -65,21 +63,12 @@ RSpec.describe Organisation, type: :model do
       before do
         FactoryBot.create(
           :organisation_relationship,
-          :managing,
           child_organisation:,
           parent_organisation: organisation,
         )
 
         FactoryBot.create(
           :organisation_relationship,
-          :owning,
-          child_organisation:,
-          parent_organisation: organisation,
-        )
-
-        FactoryBot.create(
-          :organisation_relationship,
-          :owning,
           child_organisation: grandchild_organisation,
           parent_organisation: child_organisation,
         )
@@ -98,21 +87,12 @@ RSpec.describe Organisation, type: :model do
       before do
         FactoryBot.create(
           :organisation_relationship,
-          :managing,
           child_organisation:,
           parent_organisation: organisation,
         )
 
         FactoryBot.create(
           :organisation_relationship,
-          :owning,
-          child_organisation:,
-          parent_organisation: organisation,
-        )
-
-        FactoryBot.create(
-          :organisation_relationship,
-          :managing,
           child_organisation: grandchild_organisation,
           parent_organisation: child_organisation,
         )
