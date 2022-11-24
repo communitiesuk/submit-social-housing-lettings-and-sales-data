@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Subsections::IncomeBenefitsAndOutgoings, type: :model do
+RSpec.describe Form::Sales::Subsections::IncomeBenefitsAndSavings, type: :model do
   subject(:subsection) { described_class.new(subsection_id, subsection_definition, section) }
 
   let(:subsection_id) { nil }
@@ -20,11 +20,11 @@ RSpec.describe Form::Sales::Subsections::IncomeBenefitsAndOutgoings, type: :mode
   end
 
   it "has the correct id" do
-    expect(subsection.id).to eq("income_benefits_and_outgoings")
+    expect(subsection.id).to eq("income_benefits_and_savings")
   end
 
   it "has the correct label" do
-    expect(subsection.label).to eq("Income, benefits and outgoings")
+    expect(subsection.label).to eq("Income, benefits and savings")
   end
 
   it "has correct depends on" do

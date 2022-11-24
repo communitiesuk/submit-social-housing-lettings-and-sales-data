@@ -1,8 +1,8 @@
-class Form::Sales::Subsections::IncomeBenefitsAndOutgoings < ::Form::Subsection
+class Form::Sales::Subsections::IncomeBenefitsAndSavings < ::Form::Subsection
   def initialize(id, hsh, section)
     super
-    @id = "income_benefits_and_outgoings"
-    @label = "Income, benefits and outgoings"
+    @id = "income_benefits_and_savings"
+    @label = "Income, benefits and savings"
     @section = section
     @depends_on = [{ "setup_completed?" => true }]
   end
