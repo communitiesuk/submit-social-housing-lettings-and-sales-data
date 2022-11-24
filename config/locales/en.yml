@@ -123,7 +123,7 @@ en:
         during_deactivated_location: "The location %{postcode} was deactivated on %{date} and was not available on the day you entered."
         location_reactivating_soon: "The location %{postcode} was deactivated on %{deactivation_date} and is not available on the date you entered. It reactivates on %{date}"
         location_activating_soon: "The location %{postcode} is not available until %{date}. Enter a tenancy start date after %{date}"
-        during_deactivated_scheme: "The location %{postcode} was deactivated on %{date} and was not available on the day you entered"
+        during_deactivated_scheme: "%{name} was deactivated on %{date} and was not available on the day you entered"
         scheme_reactivating_soon: "%{name} was deactivated on %{deactivation_date} and is not available on the date you entered. It reactivates on %{date}"
         scheme_activating_soon: "%{name} is not available until %{date}. Enter a tenancy start date after %{date}"
 
