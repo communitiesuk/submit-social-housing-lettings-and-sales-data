@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_17_103855) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_22_130928) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -286,7 +286,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_17_103855) do
     t.integer "parent_organisation_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "relationship_type", null: false
+    t.index ["child_organisation_id"], name: "index_organisation_relationships_on_child_organisation_id"
+    t.index ["parent_organisation_id", "child_organisation_id"], name: "index_org_rel_parent_child_uniq", unique: true
+    t.index ["parent_organisation_id"], name: "index_organisation_relationships_on_parent_organisation_id"
   end
 
   create_table "organisation_rent_periods", force: :cascade do |t|
@@ -372,15 +374,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_17_103855) do
     t.integer "la_known"
     t.integer "income1"
     t.integer "income1nk"
+    t.integer "details_known_2"
+    t.integer "details_known_3"
+    t.integer "details_known_4"
     t.integer "age4"
     t.integer "age4_known"
     t.integer "age5"
     t.integer "age5_known"
     t.integer "age6"
     t.integer "age6_known"
-    t.integer "details_known_2"
-    t.integer "details_known_3"
-    t.integer "details_known_4"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
@@ -477,6 +479,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_17_103855) do
   add_foreign_key "lettings_logs", "organisations", column: "owning_organisation_id", on_delete: :cascade
   add_foreign_key "lettings_logs", "schemes"
   add_foreign_key "locations", "schemes"
+  add_foreign_key "organisation_relationships", "organisations", column: "child_organisation_id"
+  add_foreign_key "organisation_relationships", "organisations", column: "parent_organisation_id"
   add_foreign_key "sales_logs", "organisations", column: "owning_organisation_id", on_delete: :cascade
   add_foreign_key "schemes", "organisations", column: "managing_organisation_id"
   add_foreign_key "schemes", "organisations", column: "owning_organisation_id", on_delete: :cascade

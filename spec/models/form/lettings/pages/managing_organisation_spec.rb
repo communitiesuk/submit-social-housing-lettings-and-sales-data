@@ -76,8 +76,8 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
 
         context "with >1 managing_agents" do
           before do
-            create(:organisation_relationship, :managing, parent_organisation: log.owning_organisation)
-            create(:organisation_relationship, :managing, parent_organisation: log.owning_organisation)
+            create(:organisation_relationship, parent_organisation: log.owning_organisation)
+            create(:organisation_relationship, parent_organisation: log.owning_organisation)
           end
 
           it "is shown" do
@@ -91,7 +91,6 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
           before do
             create(
               :organisation_relationship,
-              :managing,
               child_organisation: managing_agent,
               parent_organisation: log.owning_organisation,
             )
@@ -128,8 +127,8 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
 
         context "with >1 managing_agents" do
           before do
-            create(:organisation_relationship, :managing, parent_organisation: user.organisation)
-            create(:organisation_relationship, :managing, parent_organisation: user.organisation)
+            create(:organisation_relationship, parent_organisation: user.organisation)
+            create(:organisation_relationship, parent_organisation: user.organisation)
           end
 
           it "is shown" do
@@ -143,7 +142,6 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
           before do
             create(
               :organisation_relationship,
-              :managing,
               child_organisation: managing_agent,
               parent_organisation: user.organisation,
             )

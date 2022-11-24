@@ -39,7 +39,6 @@ class OrganisationRelationshipsController < ApplicationController
 
   def create_housing_provider
     child_organisation = @organisation
-    relationship_type = OrganisationRelationship::OWNING
     if params[:organisation][:related_organisation_id].empty?
       @organisation.errors.add :related_organisation_id, "You must choose a housing provider"
       @organisations = Organisation.where.not(id: child_organisation.id).pluck(:id, :name)
@@ -47,21 +46,20 @@ class OrganisationRelationshipsController < ApplicationController
       return
     else
       parent_organisation = related_organisation
-      if OrganisationRelationship.exists?(child_organisation:, parent_organisation:, relationship_type:)
+      if OrganisationRelationship.exists?(child_organisation:, parent_organisation:)
         @organisation.errors.add :related_organisation_id, "You have already added this housing provider"
         @organisations = Organisation.where.not(id: child_organisation.id).pluck(:id, :name)
         render "organisation_relationships/add_housing_provider"
         return
       end
     end
-    create!(child_organisation:, parent_organisation:, relationship_type:)
+    create!(child_organisation:, parent_organisation:)
     flash[:notice] = "#{related_organisation.name} is now one of #{current_user.data_coordinator? ? 'your' : "this organisation's"} housing providers"
     redirect_to housing_providers_organisation_path
   end
 
   def create_managing_agent
     parent_organisation = @organisation
-    relationship_type = OrganisationRelationship::MANAGING
     if params[:organisation][:related_organisation_id].empty?
       @organisation.errors.add :related_organisation_id, "You must choose a managing agent"
       @organisations = Organisation.where.not(id: parent_organisation.id).pluck(:id, :name)
@@ -69,14 +67,14 @@ class OrganisationRelationshipsController < ApplicationController
       return
     else
       child_organisation = related_organisation
-      if OrganisationRelationship.exists?(child_organisation:, parent_organisation:, relationship_type:)
+      if OrganisationRelationship.exists?(child_organisation:, parent_organisation:)
         @organisation.errors.add :related_organisation_id, "You have already added this managing agent"
         @organisations = Organisation.where.not(id: parent_organisation.id).pluck(:id, :name)
         render "organisation_relationships/add_managing_agent"
         return
       end
     end
-    create!(child_organisation:, parent_organisation:, relationship_type:)
+    create!(child_organisation:, parent_organisation:)
     flash[:notice] = "#{related_organisation.name} is now one of #{current_user.data_coordinator? ? 'your' : "this organisation's"} managing agents"
     redirect_to managing_agents_organisation_path
   end
@@ -89,7 +87,6 @@ class OrganisationRelationshipsController < ApplicationController
     relationship = OrganisationRelationship.find_by!(
       child_organisation: @organisation,
       parent_organisation: target_organisation,
-      relationship_type: OrganisationRelationship::OWNING,
     )
     relationship.destroy!
     flash[:notice] = "#{target_organisation.name} is no longer one of #{current_user.data_coordinator? ? 'your' : "this organisation's"} housing providers"
@@ -104,7 +101,6 @@ class OrganisationRelationshipsController < ApplicationController
     relationship = OrganisationRelationship.find_by!(
       parent_organisation: @organisation,
       child_organisation: target_organisation,
-      relationship_type: OrganisationRelationship::MANAGING,
     )
     relationship.destroy!
     flash[:notice] = "#{target_organisation.name} is no longer one of #{current_user.data_coordinator? ? 'your' : "this organisation's"} managing agents"
@@ -113,8 +109,8 @@ class OrganisationRelationshipsController < ApplicationController
 
 private
 
-  def create!(child_organisation:, parent_organisation:, relationship_type:)
-    @resource = OrganisationRelationship.new(child_organisation:, parent_organisation:, relationship_type:)
+  def create!(child_organisation:, parent_organisation:)
+    @resource = OrganisationRelationship.new(child_organisation:, parent_organisation:)
     @resource.save!
   end
 

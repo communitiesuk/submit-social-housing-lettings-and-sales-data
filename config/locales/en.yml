@@ -313,10 +313,16 @@ en:
       missing: "You must show the DLUHC privacy notice to the tenant before you can submit this log."
 
     scheme:
-      deactivation_date:
+      toggle_date:
         not_selected: "Select one of the options"
         invalid: "Enter a valid day, month and year"
         out_of_range: "The date must be on or after the %{date}"
+      reactivation:
+        before_deactivation: "This scheme was deactivated on %{date}. The reactivation date must be on or after deactivation date"
+      deactivation:
+        during_deactivated_period: "The scheme is already deactivated during this date, please enter a different date"
+
+
 
     location:
       toggle_date:
@@ -324,7 +330,7 @@ en:
         invalid: "Enter a valid day, month and year"
         out_of_range: "The date must be on or after the %{date}"
       reactivation:
-        before_deactivation: "This location was deactivated on %{date}\nThe reactivation date must be on or after deactivation date"
+        before_deactivation: "This location was deactivated on %{date}. The reactivation date must be on or after deactivation date"
       deactivation:
         during_deactivated_period: "The location is already deactivated during this date, please enter a different date"
 
@@ -382,7 +388,7 @@ en:
       toggle_active:
         apply_from: "When should this change apply?"
     scheme:
-      deactivation:
+      toggle_active:
         apply_from: "When should this change apply?"
     descriptions:
       location:
@@ -399,7 +405,7 @@ en:
       toggle_active: "If the date is before %{date}, select ‘From the start of the current collection period’ because the previous period has now closed."
       startdate: "For example, 27 3 2021"
     scheme:
-      deactivation: "If the date is before %{date}, select ‘From the start of the current collection period’ because the previous period has now closed."
+      toggle_active: "If the date is before %{date}, select ‘From the start of the current collection period’ because the previous period has now closed."
 
   warnings:
     location:
@@ -409,9 +415,11 @@ en:
       reactivate:
         existing_logs: "You’ll be able to add logs with this location if their tenancy start date is on or after the date you enter."
     scheme:
-      deactivation:
+      deactivate:
         existing_logs: "It will not be possible to add logs with this scheme if their tenancy start date is on or after the date you enter. Any existing logs may be affected."
         review_logs: "Your data providers will need to review these logs and answer a few questions again. We’ll email each log creator with a list of logs that need updating."
+      reactivate:
+        existing_logs: "You’ll be able to add logs with this scheme if their tenancy start date is on or after the date you enter."
 
   test:
     one_argument: "This is based on the tenant’s work situation: %{ecstat1}"

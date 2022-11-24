@@ -3,6 +3,7 @@ class UsersController < ApplicationController
   include Devise::Controllers::SignInOut
   include Helpers::Email
   include Modules::SearchFilter
+
   before_action :authenticate_user!
   before_action :find_resource, except: %i[new create]
   before_action :authenticate_scope!, except: %i[new]

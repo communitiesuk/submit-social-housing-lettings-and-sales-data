@@ -380,6 +380,7 @@ class Location < ApplicationRecord
     return :deactivated if open_deactivation&.deactivation_date.present? && Time.zone.now >= open_deactivation.deactivation_date
     return :deactivating_soon if open_deactivation&.deactivation_date.present? && Time.zone.now < open_deactivation.deactivation_date
     return :reactivating_soon if recent_deactivation&.reactivation_date.present? && Time.zone.now < recent_deactivation.reactivation_date
+    return :activating_soon if startdate.present? && Time.zone.now < startdate
 
     :active
   end

@@ -78,12 +78,12 @@ class LocationsController < ApplicationController
   end
 
   def new_reactivation
-    @location_deactivation_period = LocationDeactivationPeriod.deactivations_without_reactivation.first
+    @location_deactivation_period = @location.location_deactivation_periods.deactivations_without_reactivation.first
     render "toggle_active", locals: { action: "reactivate" }
   end
 
   def reactivate
-    @location_deactivation_period = LocationDeactivationPeriod.deactivations_without_reactivation.first
+    @location_deactivation_period = @location.location_deactivation_periods.deactivations_without_reactivation.first
 
     @location_deactivation_period.reactivation_date = toggle_date("reactivation_date")
     @location_deactivation_period.reactivation_date_type = params[:location_deactivation_period][:reactivation_date_type]

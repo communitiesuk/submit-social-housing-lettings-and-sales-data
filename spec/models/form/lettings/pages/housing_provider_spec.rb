@@ -79,7 +79,6 @@ RSpec.describe Form::Lettings::Pages::HousingProvider, type: :model do
           before do
             create(
               :organisation_relationship,
-              :owning,
               child_organisation: user.organisation,
               parent_organisation: housing_provider,
             )
@@ -101,13 +100,11 @@ RSpec.describe Form::Lettings::Pages::HousingProvider, type: :model do
           before do
             create(
               :organisation_relationship,
-              :owning,
               child_organisation: user.organisation,
               parent_organisation: housing_provider1,
             )
             create(
               :organisation_relationship,
-              :owning,
               child_organisation: user.organisation,
               parent_organisation: housing_provider2,
             )
@@ -140,8 +137,8 @@ RSpec.describe Form::Lettings::Pages::HousingProvider, type: :model do
 
         context "with >0 housing_providers" do
           before do
-            create(:organisation_relationship, :owning, child_organisation: user.organisation)
-            create(:organisation_relationship, :owning, child_organisation: user.organisation)
+            create(:organisation_relationship, child_organisation: user.organisation)
+            create(:organisation_relationship, child_organisation: user.organisation)
           end
 
           it "is shown" do
