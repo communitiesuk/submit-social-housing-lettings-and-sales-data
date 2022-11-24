@@ -214,6 +214,8 @@ class Scheme < ApplicationRecord
   end
 
   def status
+    return :incomplete unless confirmed
+
     open_deactivation = scheme_deactivation_periods.deactivations_without_reactivation.first
     recent_deactivation = scheme_deactivation_periods.order("created_at").last
 
