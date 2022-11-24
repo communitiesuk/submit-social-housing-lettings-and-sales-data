@@ -59,8 +59,8 @@ RSpec.describe LocationsHelper do
     end
 
     it "returns one active period without to date" do
-      expect(active_periods(location).count).to eq(1)
-      expect(active_periods(location).first).to have_attributes(from: Time.zone.local(2022, 4, 1), to: nil)
+      expect(location_active_periods(location).count).to eq(1)
+      expect(location_active_periods(location).first).to have_attributes(from: Time.zone.local(2022, 4, 1), to: nil)
     end
 
     it "ignores reactivations that were deactivated on the same day" do
@@ -68,8 +68,8 @@ RSpec.describe LocationsHelper do
       FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), location:)
       location.reload
 
-      expect(active_periods(location).count).to eq(1)
-      expect(active_periods(location).first).to have_attributes(from: Time.zone.local(2022, 4, 1), to: Time.zone.local(2022, 5, 5))
+      expect(location_active_periods(location).count).to eq(1)
+      expect(location_active_periods(location).first).to have_attributes(from: Time.zone.local(2022, 4, 1), to: Time.zone.local(2022, 5, 5))
     end
 
     it "returns sequential non reactivated active periods" do
@@ -77,19 +77,19 @@ RSpec.describe LocationsHelper do
       FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 7, 6), location:)
       location.reload
 
-      expect(active_periods(location).count).to eq(2)
-      expect(active_periods(location).first).to have_attributes(from: Time.zone.local(2022, 4, 1), to: Time.zone.local(2022, 5, 5))
-      expect(active_periods(location).second).to have_attributes(from: Time.zone.local(2022, 6, 4), to: Time.zone.local(2022, 7, 6))
+      expect(location_active_periods(location).count).to eq(2)
+      expect(location_active_periods(location).first).to have_attributes(from: Time.zone.local(2022, 4, 1), to: Time.zone.local(2022, 5, 5))
+      expect(location_active_periods(location).second).to have_attributes(from: Time.zone.local(2022, 6, 4), to: Time.zone.local(2022, 7, 6))
     end
 
     it "returns sequential reactivated active periods" do
       FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 5, 5), reactivation_date: Time.zone.local(2022, 6, 4), location:)
       FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 7, 6), reactivation_date: Time.zone.local(2022, 8, 5), location:)
       location.reload
-      expect(active_periods(location).count).to eq(3)
-      expect(active_periods(location).first).to have_attributes(from: Time.zone.local(2022, 4, 1), to: Time.zone.local(2022, 5, 5))
-      expect(active_periods(location).second).to have_attributes(from: Time.zone.local(2022, 6, 4), to: Time.zone.local(2022, 7, 6))
-      expect(active_periods(location).third).to have_attributes(from: Time.zone.local(2022, 8, 5), to: nil)
+      expect(location_active_periods(location).count).to eq(3)
+      expect(location_active_periods(location).first).to have_attributes(from: Time.zone.local(2022, 4, 1), to: Time.zone.local(2022, 5, 5))
+      expect(location_active_periods(location).second).to have_attributes(from: Time.zone.local(2022, 6, 4), to: Time.zone.local(2022, 7, 6))
+      expect(location_active_periods(location).third).to have_attributes(from: Time.zone.local(2022, 8, 5), to: nil)
     end
 
     it "returns non sequential non reactivated active periods" do
@@ -97,19 +97,19 @@ RSpec.describe LocationsHelper do
       FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 5, 5), reactivation_date: nil, location:)
       location.reload
 
-      expect(active_periods(location).count).to eq(2)
-      expect(active_periods(location).first).to have_attributes(from: Time.zone.local(2022, 4, 1), to: Time.zone.local(2022, 5, 5))
-      expect(active_periods(location).second).to have_attributes(from: Time.zone.local(2022, 8, 5), to: nil)
+      expect(location_active_periods(location).count).to eq(2)
+      expect(location_active_periods(location).first).to have_attributes(from: Time.zone.local(2022, 4, 1), to: Time.zone.local(2022, 5, 5))
+      expect(location_active_periods(location).second).to have_attributes(from: Time.zone.local(2022, 8, 5), to: nil)
     end
 
     it "returns non sequential reactivated active periods" do
       FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 7, 6), reactivation_date: Time.zone.local(2022, 8, 5), location:)
       FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 5, 5), reactivation_date: Time.zone.local(2022, 6, 4), location:)
       location.reload
-      expect(active_periods(location).count).to eq(3)
-      expect(active_periods(location).first).to have_attributes(from: Time.zone.local(2022, 4, 1), to: Time.zone.local(2022, 5, 5))
-      expect(active_periods(location).second).to have_attributes(from: Time.zone.local(2022, 6, 4), to: Time.zone.local(2022, 7, 6))
-      expect(active_periods(location).third).to have_attributes(from: Time.zone.local(2022, 8, 5), to: nil)
+      expect(location_active_periods(location).count).to eq(3)
+      expect(location_active_periods(location).first).to have_attributes(from: Time.zone.local(2022, 4, 1), to: Time.zone.local(2022, 5, 5))
+      expect(location_active_periods(location).second).to have_attributes(from: Time.zone.local(2022, 6, 4), to: Time.zone.local(2022, 7, 6))
+      expect(location_active_periods(location).third).to have_attributes(from: Time.zone.local(2022, 8, 5), to: nil)
     end
 
     it "returns correct active periods when reactivation happends during a deactivated period" do
@@ -117,9 +117,9 @@ RSpec.describe LocationsHelper do
       FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 4, 6), reactivation_date: Time.zone.local(2022, 7, 7), location:)
       location.reload
 
-      expect(active_periods(location).count).to eq(2)
-      expect(active_periods(location).first).to have_attributes(from: Time.zone.local(2022, 4, 1), to: Time.zone.local(2022, 4, 6))
-      expect(active_periods(location).second).to have_attributes(from: Time.zone.local(2022, 11, 11), to: nil)
+      expect(location_active_periods(location).count).to eq(2)
+      expect(location_active_periods(location).first).to have_attributes(from: Time.zone.local(2022, 4, 1), to: Time.zone.local(2022, 4, 6))
+      expect(location_active_periods(location).second).to have_attributes(from: Time.zone.local(2022, 11, 11), to: nil)
     end
 
     it "returns correct active periods when a full deactivation period happens during another deactivation period" do
@@ -127,9 +127,9 @@ RSpec.describe LocationsHelper do
       FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 4, 6), reactivation_date: Time.zone.local(2022, 7, 7), location:)
       location.reload
 
-      expect(active_periods(location).count).to eq(2)
-      expect(active_periods(location).first).to have_attributes(from: Time.zone.local(2022, 4, 1), to: Time.zone.local(2022, 4, 6))
-      expect(active_periods(location).second).to have_attributes(from: Time.zone.local(2022, 7, 7), to: nil)
+      expect(location_active_periods(location).count).to eq(2)
+      expect(location_active_periods(location).first).to have_attributes(from: Time.zone.local(2022, 4, 1), to: Time.zone.local(2022, 4, 6))
+      expect(location_active_periods(location).second).to have_attributes(from: Time.zone.local(2022, 7, 7), to: nil)
     end
   end
 

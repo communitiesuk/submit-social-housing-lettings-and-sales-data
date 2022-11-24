@@ -9,6 +9,7 @@ module TagHelper
     active: "Active",
     incomplete: "Incomplete",
     deactivating_soon: "Deactivating soon",
+    activating_soon: "Activating soon",
     reactivating_soon: "Reactivating soon",
     deactivated: "Deactivated",
   }.freeze
@@ -21,6 +22,7 @@ module TagHelper
     active: "green",
     incomplete: "red",
     deactivating_soon: "yellow",
+    activating_soon: "blue",
     reactivating_soon: "blue",
     deactivated: "grey",
   }.freeze

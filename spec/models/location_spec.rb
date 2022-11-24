@@ -151,6 +151,12 @@ RSpec.describe Location, type: :model do
         location.save!
         expect(location.status).to eq(:reactivating_soon)
       end
+
+      it "returns activating soon if the location has a future startdate" do
+        location.startdate = Time.zone.local(2022, 7, 7)
+        location.save!
+        expect(location.status).to eq(:activating_soon)
+      end
     end
 
     context "when there have been previous deactivations" do
@@ -188,11 +194,17 @@ RSpec.describe Location, type: :model do
         expect(location.status).to eq(:reactivating_soon)
       end
 
-      it "returns if the location had a deactivation during another deactivation" do
+      it "returns reactivating soon if the location had a deactivation during another deactivation" do
         Timecop.freeze(2022, 6, 4)
         FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 5, 5), reactivation_date: Time.zone.local(2022, 6, 2), location:)
         location.save!
         expect(location.status).to eq(:reactivating_soon)
+      end
+
+      it "returns activating soon if the location has a future startdate" do
+        location.startdate = Time.zone.local(2022, 7, 7)
+        location.save!
+        expect(location.status).to eq(:activating_soon)
       end
     end
   end

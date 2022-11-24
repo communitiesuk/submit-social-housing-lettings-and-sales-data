@@ -1,5 +1,3 @@
-<% title = "Deactivate #{@scheme.service_name}" %>
-<% content_for :title, title %>
 <%= form_with model: @scheme_deactivation_period, url: scheme_deactivate_path(@scheme), method: "patch", local: true do |f| %>
   <% content_for :before_content do %>
     <%= govuk_back_link(href: :back) %>
@@ -8,7 +6,7 @@
     <span class="govuk-caption-l"><%= @scheme.service_name %></span>
     This change will affect <%= @scheme.lettings_logs.count %> logs
   </h1>
-  <%= govuk_warning_text text: I18n.t("warnings.scheme.deactivation.review_logs") %>
+  <%= govuk_warning_text text: I18n.t("warnings.scheme.deactivate.review_logs") %>
   <%= f.hidden_field :confirm, value: true %>
   <%= f.hidden_field :deactivation_date, value: @deactivation_date %>
   <%= f.hidden_field :deactivation_date_type, value: @deactivation_date_type %>
