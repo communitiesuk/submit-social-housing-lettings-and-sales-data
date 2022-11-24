@@ -210,7 +210,8 @@ class Scheme < ApplicationRecord
   end
 
   def available_from
-    [created_at, FormHandler.instance.current_collection_start_date].min
+    window_end_date = Time.zone.local(created_at.year, 4, 1)
+    created_at < window_end_date ? Time.zone.local(created_at.year - 1, 4, 1) : Time.zone.local(created_at.year, 4, 1)
   end
 
   def status

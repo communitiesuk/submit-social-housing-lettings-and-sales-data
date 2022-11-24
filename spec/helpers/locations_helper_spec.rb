@@ -154,11 +154,11 @@ RSpec.describe LocationsHelper do
 
     context "when viewing availability" do
       context "with no deactivations" do
-        it "displays created_at as availability date if startdate is not present" do
+        it "displays previous collection start date as availability date if created_at is earlier than collection start date" do
           location.update!(startdate: nil)
           availability_attribute = display_location_attributes(location).find { |x| x[:name] == "Availability" }[:value]
 
-          expect(availability_attribute).to eq("Active from #{location.created_at.to_formatted_s(:govuk_date)}")
+          expect(availability_attribute).to eq("Active from 1 April 2021")
         end
 
         it "displays current collection start date as availability date if created_at is later than collection start date" do

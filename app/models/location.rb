@@ -370,7 +370,10 @@ class Location < ApplicationRecord
   end
 
   def available_from
-    startdate || [created_at, FormHandler.instance.current_collection_start_date].min
+    return startdate if startdate.present?
+
+    window_end_date = Time.zone.local(created_at.year, 4, 1)
+    created_at < window_end_date ? Time.zone.local(created_at.year - 1, 4, 1) : Time.zone.local(created_at.year, 4, 1)
   end
 
   def status
