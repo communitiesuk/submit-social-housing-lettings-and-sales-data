@@ -84,16 +84,12 @@ RSpec.describe "Lettings Log Features" do
         click_link("Set up this lettings log")
         select(support_user.organisation.name, from: "lettings-log-owning-organisation-id-field")
         click_button("Save and continue")
-        select("#{support_user.organisation.name} (Owning organisation)", from: "lettings-log-managing-organisation-id-field")
-        click_button("Save and continue")
         select(support_user.name, from: "lettings-log-created-by-id-field")
         click_button("Save and continue")
         log_id = page.current_path.scan(/\d/).join
         visit("lettings-logs/#{log_id}/setup/check-answers")
         expect(page).to have_content("Housing provider #{support_user.organisation.name}")
-        expect(page).to have_content("Managing agent #{support_user.organisation.name}")
-        expect(page).to have_content("Log owner #{support_user.name}")
-        expect(page).to have_content("You have answered 3 of 9 questions")
+        expect(page).to have_content("You have answered 2 of 8 questions")
       end
     end
   end
@@ -122,8 +118,7 @@ RSpec.describe "Lettings Log Features" do
         expect(page).to have_current_path("/lettings-logs/#{log_id}/needs-type")
         visit("lettings-logs/#{log_id}/setup/check-answers")
         expect(page).not_to have_content("Owning organisation #{user.organisation.name}")
-        expect(page).not_to have_content("User #{user.name}")
-        expect(page).to have_content("You have answered 0 of 6 questions")
+        expect(page).not_to have_content("Log owner #{user.name}")
       end
     end
 

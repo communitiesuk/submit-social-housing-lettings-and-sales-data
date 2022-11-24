@@ -21,7 +21,7 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
       if log.owning_organisation.holds_own_stock?
         opts[log.owning_organisation.id] = "#{log.owning_organisation.name} (Owning organisation)"
       end
-    elsif current_user.organisation.holds_own_stock?
+    else
       opts[current_user.organisation.id] = "#{current_user.organisation.name} (Your organisation)"
     end
 
@@ -47,11 +47,7 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
 
   def hidden_in_check_answers?(_log, user = nil)
     @current_user = user
-
-    return false unless @current_user
-    return false if @current_user.support?
-
-    managing_organisations_answer_options.count < 2
+    @current_user.nil?
   end
 
   def enabled

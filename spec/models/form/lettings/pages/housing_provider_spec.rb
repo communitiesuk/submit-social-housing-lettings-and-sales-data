@@ -63,42 +63,13 @@ RSpec.describe Form::Lettings::Pages::HousingProvider, type: :model do
           create(:user, :data_coordinator, organisation: create(:organisation, holds_own_stock: false))
         end
 
-        it "is shown" do
-          expect(page.routed_to?(log, user)).to eq(true)
-        end
-
-        it "does not update owning_organisation_id" do
-          expect { page.routed_to?(log, user) }.not_to change(log.reload, :owning_organisation).from(nil)
-        end
-      end
-
-      context "when holds own stock" do
-        let(:user) do
-          create(:user, :data_coordinator, organisation: create(:organisation, holds_own_stock: true))
-        end
-
         context "with 0 housing_providers" do
           it "is not shown" do
             expect(page.routed_to?(log, user)).to eq(false)
           end
 
           it "does not update owning_organisation_id" do
-            expect { page.routed_to?(log, user) }.not_to change(log.reload, :owning_organisation).from(nil)
-          end
-        end
-
-        context "with >1 housing_providers" do
-          before do
-            create(:organisation_relationship, :owning, child_organisation: user.organisation)
-            create(:organisation_relationship, :owning, child_organisation: user.organisation)
-          end
-
-          it "is shown" do
-            expect(page.routed_to?(log, user)).to eq(true)
-          end
-
-          it "does not update owning_organisation_id" do
-            expect { page.routed_to?(log, user) }.not_to change(log.reload, :owning_organisation).from(nil)
+            expect { page.routed_to?(log, user) }.not_to change(log.reload, :owning_organisation)
           end
         end
 
@@ -120,6 +91,65 @@ RSpec.describe Form::Lettings::Pages::HousingProvider, type: :model do
 
           it "updates owning_organisation_id" do
             expect { page.routed_to?(log, user) }.to change(log.reload, :owning_organisation).from(nil).to(housing_provider)
+          end
+        end
+
+        context "with >1 housing_providers" do
+          let(:housing_provider1) { create(:organisation) }
+          let(:housing_provider2) { create(:organisation) }
+
+          before do
+            create(
+              :organisation_relationship,
+              :owning,
+              child_organisation: user.organisation,
+              parent_organisation: housing_provider1,
+            )
+            create(
+              :organisation_relationship,
+              :owning,
+              child_organisation: user.organisation,
+              parent_organisation: housing_provider2,
+            )
+          end
+
+          it "is not shown" do
+            expect(page.routed_to?(log, user)).to eq(true)
+          end
+
+          it "updates owning_organisation_id" do
+            expect { page.routed_to?(log, user) }.not_to change(log.reload, :owning_organisation)
+          end
+        end
+      end
+
+      context "when holds own stock" do
+        let(:user) do
+          create(:user, :data_coordinator, organisation: create(:organisation, holds_own_stock: true))
+        end
+
+        context "with 0 housing_providers" do
+          it "is not shown" do
+            expect(page.routed_to?(log, user)).to eq(false)
+          end
+
+          it "updates owning_organisation_id to user organisation" do
+            expect { page.routed_to?(log, user) }.to change(log.reload, :owning_organisation).from(nil).to(user.organisation)
+          end
+        end
+
+        context "with >0 housing_providers" do
+          before do
+            create(:organisation_relationship, :owning, child_organisation: user.organisation)
+            create(:organisation_relationship, :owning, child_organisation: user.organisation)
+          end
+
+          it "is shown" do
+            expect(page.routed_to?(log, user)).to eq(true)
+          end
+
+          it "does not update owning_organisation_id" do
+            expect { page.routed_to?(log, user) }.not_to change(log.reload, :owning_organisation).from(nil)
           end
         end
       end

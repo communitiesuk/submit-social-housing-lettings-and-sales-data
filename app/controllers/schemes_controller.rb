@@ -22,14 +22,16 @@ class SchemesController < ApplicationController
   end
 
   def new_deactivation
-    if params[:scheme].blank?
+    @scheme_deactivation_period = SchemeDeactivationPeriod.new
+
+    if params[:scheme_deactivation_period].blank?
       render "toggle_active", locals: { action: "deactivate" }
     else
-      @scheme.run_deactivation_validations = true
-      @scheme.deactivation_date = deactivation_date
-      @scheme.deactivation_date_type = params[:scheme][:deactivation_date_type]
-      if @scheme.valid?
-        redirect_to scheme_deactivate_confirm_path(@scheme, deactivation_date: @scheme.deactivation_date, deactivation_date_type: @scheme.deactivation_date_type)
+      @scheme_deactivation_period.deactivation_date = toggle_date("deactivation_date")
+      @scheme_deactivation_period.deactivation_date_type = params[:scheme_deactivation_period][:deactivation_date_type]
+      @scheme_deactivation_period.scheme = @scheme
+      if @scheme_deactivation_period.valid?
+        redirect_to scheme_deactivate_confirm_path(@scheme, deactivation_date: @scheme_deactivation_period.deactivation_date, deactivation_date_type: @scheme_deactivation_period.deactivation_date_type)
       else
         render "toggle_active", locals: { action: "deactivate" }, status: :unprocessable_entity
       end
@@ -42,16 +44,29 @@ class SchemesController < ApplicationController
   end
 
   def deactivate
-    @scheme.run_deactivation_validations!
-
-    if @scheme.scheme_deactivation_periods.create!(deactivation_date:) && update_affected_logs
+    if @scheme.scheme_deactivation_periods.create!(deactivation_date: params[:deactivation_date]) && reset_location_and_scheme_for_logs!
       flash[:notice] = deactivate_success_notice
     end
     redirect_to scheme_details_path(@scheme)
   end
 
-  def reactivate
+  def new_reactivation
+    @scheme_deactivation_period = @scheme.scheme_deactivation_periods.deactivations_without_reactivation.first
     render "toggle_active", locals: { action: "reactivate" }
+  end
+
+  def reactivate
+    @scheme_deactivation_period = @scheme.scheme_deactivation_periods.deactivations_without_reactivation.first
+
+    @scheme_deactivation_period.reactivation_date = toggle_date("reactivation_date")
+    @scheme_deactivation_period.reactivation_date_type = params[:scheme_deactivation_period][:reactivation_date_type]
+
+    if @scheme_deactivation_period.update(reactivation_date: toggle_date("reactivation_date"))
+      flash[:notice] = reactivate_success_notice
+      redirect_to scheme_details_path(@scheme)
+    else
+      render "toggle_active", locals: { action: "reactivate" }, status: :unprocessable_entity
+    end
   end
 
   def new
@@ -239,8 +254,7 @@ private
                                                      :support_type,
                                                      :arrangement_type,
                                                      :intended_stay,
-                                                     :confirmed,
-                                                     :deactivation_date)
+                                                     :confirmed)
 
     if arrangement_type_changed_to_different_org?(required_params)
       required_params[:managing_organisation_id] = nil
@@ -299,28 +313,37 @@ private
     when :deactivated
       "#{@scheme.service_name} has been deactivated"
     when :deactivating_soon
-      "#{@scheme.service_name} will deactivate on #{deactivation_date.to_time.to_formatted_s(:govuk_date)}"
+      "#{@scheme.service_name} will deactivate on #{params[:deactivation_date].to_time.to_formatted_s(:govuk_date)}"
     end
   end
 
-  def deactivation_date
-    if params[:scheme].blank?
+  def reactivate_success_notice
+    case @scheme.status
+    when :active
+      "#{@scheme.service_name} has been reactivated"
+    when :reactivating_soon
+      "#{@scheme.service_name} will reactivate on #{toggle_date('reactivation_date').to_time.to_formatted_s(:govuk_date)}"
+    end
+  end
+
+  def toggle_date(key)
+    if params[:scheme_deactivation_period].blank?
       return
-    elsif params[:scheme][:deactivation_date_type] == "default"
+    elsif params[:scheme_deactivation_period]["#{key}_type".to_sym] == "default"
       return FormHandler.instance.current_collection_start_date
-    elsif params[:scheme][:deactivation_date].present?
-      return params[:scheme][:deactivation_date]
+    elsif params[:scheme_deactivation_period][key.to_sym].present?
+      return params[:scheme_deactivation_period][key.to_sym]
     end
 
-    day = params[:scheme]["deactivation_date(3i)"]
-    month = params[:scheme]["deactivation_date(2i)"]
-    year = params[:scheme]["deactivation_date(1i)"]
+    day = params[:scheme_deactivation_period]["#{key}(3i)"]
+    month = params[:scheme_deactivation_period]["#{key}(2i)"]
+    year = params[:scheme_deactivation_period]["#{key}(1i)"]
     return nil if [day, month, year].any?(&:blank?)
 
     Time.zone.local(year.to_i, month.to_i, day.to_i) if Date.valid_date?(year.to_i, month.to_i, day.to_i)
   end
 
-  def update_affected_logs
-    @scheme.lettings_logs.filter_by_before_startdate(deactivation_date.to_time).update!(location: nil, scheme: nil)
+  def reset_location_and_scheme_for_logs!
+    @scheme.lettings_logs.filter_by_before_startdate(params[:deactivation_date].to_time).update!(location: nil, scheme: nil)
   end
 end

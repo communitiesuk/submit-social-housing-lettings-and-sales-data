@@ -49,8 +49,8 @@ module DerivedVariables::LettingsLogVariables
       self.waityear = 2
       if is_general_needs?
         # fixed term
-        self.prevten = 32 if managing_organisation.provider_type == "PRP"
-        self.prevten = 30 if managing_organisation.provider_type == "LA"
+        self.prevten = 32 if managing_organisation&.provider_type == "PRP"
+        self.prevten = 30 if managing_organisation&.provider_type == "LA"
       end
     end
 

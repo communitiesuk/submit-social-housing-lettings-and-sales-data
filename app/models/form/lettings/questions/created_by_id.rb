@@ -20,9 +20,12 @@ class Form::Lettings::Questions::CreatedById < ::Form::Question
   end
 
   def displayed_answer_options(log, _user = nil)
-    return answer_options unless log.owning_organisation
+    return answer_options unless log.owning_organisation && log.managing_organisation
 
-    user_ids = log.owning_organisation.users.pluck(:id) + [""]
+    user_ids = [""]
+    user_ids += log.owning_organisation.users.pluck(:id)
+    user_ids += log.managing_organisation.users.pluck(:id)
+
     answer_options.select { |k, _v| user_ids.include?(k) }
   end
 
@@ -32,8 +35,8 @@ class Form::Lettings::Questions::CreatedById < ::Form::Question
     answer_options[value]
   end
 
-  def hidden_in_check_answers?(_log, current_user)
-    !current_user.support?
+  def hidden_in_check_answers?(_log, _current_user)
+    true
   end
 
   def derived?

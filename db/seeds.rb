@@ -88,7 +88,7 @@ unless Rails.env.test?
     relationship_type: OrganisationRelationship::MANAGING,
   )
 
-  if Rails.env.development? && User.count.zero?
+  if (Rails.env.development? || Rails.env.review?) && User.count.zero?
     User.create!(
       name: "Provider",
       email: "provider@example.com",
@@ -119,7 +119,7 @@ unless Rails.env.test?
     pp "Seeded 3 dummy users"
   end
 
-  if Rails.env.development?
+  if Rails.env.development? || Rails.env.review?
     dummy_org = Organisation.find_or_create_by!(
       name: "FooBar LTD",
       address_line1: "Higher Kingston",
@@ -134,7 +134,7 @@ unless Rails.env.test?
     pp "Seeded dummy FooBar LTD organisation"
   end
 
-  if Rails.env.development? && Scheme.count.zero?
+  if (Rails.env.development? || Rails.env.review?) && Scheme.count.zero?
     scheme1 = Scheme.create!(
       service_name: "Beulahside Care",
       sensitive: 0,

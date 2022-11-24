@@ -35,5 +35,11 @@ module DataCollector
     config.exceptions_app = routes
 
     config.active_job.queue_adapter = :sidekiq
+
+    config.session_store(
+      :cookie_store,
+      key: "_data_collector_session",
+      secure: (Rails.env.production? || Rails.env.staging? || Rails.env.review?)
+    )
   end
 end

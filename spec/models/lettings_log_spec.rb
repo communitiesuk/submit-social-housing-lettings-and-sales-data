@@ -2396,6 +2396,10 @@ RSpec.describe LettingsLog do
       expected_content.sub!(/\{location_id\}/, location["id"].to_s)
     end
 
+    after do
+      Timecop.unfreeze
+    end
+
     context "with a support user" do
       let(:csv_export_file) { File.open("spec/fixtures/files/lettings_logs_download.csv", "r:UTF-8") }
 

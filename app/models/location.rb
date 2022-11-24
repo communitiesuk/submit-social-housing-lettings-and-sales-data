@@ -1,6 +1,5 @@
 class Location < ApplicationRecord
   validate :validate_postcode
-  validate :deactivation_date_errors
   validates :units, :type_of_unit, :mobility_type, presence: true
   belongs_to :scheme
   has_many :lettings_logs, class_name: "LettingsLog"
@@ -12,7 +11,7 @@ class Location < ApplicationRecord
 
   auto_strip_attributes :name
 
-  attr_accessor :add_another_location, :deactivation_date_type, :deactivation_date, :run_deactivation_validations
+  attr_accessor :add_another_location
 
   scope :search_by_postcode, ->(postcode) { where("REPLACE(postcode, ' ', '') ILIKE ?", "%#{postcode.delete(' ')}%") }
   scope :search_by_name, ->(name) { where("name ILIKE ?", "%#{name}%") }
@@ -371,44 +370,27 @@ class Location < ApplicationRecord
   end
 
   def available_from
-    startdate || created_at
+    startdate || [created_at, FormHandler.instance.current_collection_start_date].min
   end
 
   def status
-    recent_deactivation = location_deactivation_periods.deactivations_without_reactivation.first
-    return :active if recent_deactivation.blank?
-    return :deactivating_soon if Time.zone.now < recent_deactivation.deactivation_date
+    open_deactivation = location_deactivation_periods.deactivations_without_reactivation.first
+    recent_deactivation = location_deactivation_periods.order("created_at").last
 
-    :deactivated
+    return :deactivated if open_deactivation&.deactivation_date.present? && Time.zone.now >= open_deactivation.deactivation_date
+    return :deactivating_soon if open_deactivation&.deactivation_date.present? && Time.zone.now < open_deactivation.deactivation_date
+    return :reactivating_soon if recent_deactivation&.reactivation_date.present? && Time.zone.now < recent_deactivation.reactivation_date
+    return :activating_soon if startdate.present? && Time.zone.now < startdate
+
+    :active
   end
 
   def active?
     status == :active
   end
 
-  def run_deactivation_validations!
-    @run_deactivation_validations = true
-  end
-
-  def implicit_run_deactivation_validations
-    deactivation_date.present? || @run_deactivation_validations
-  end
-
-  def deactivation_date_errors
-    return unless implicit_run_deactivation_validations
-
-    if deactivation_date.blank?
-      if deactivation_date_type.blank?
-        errors.add(:deactivation_date_type, message: I18n.t("validations.location.deactivation_date.not_selected"))
-      elsif deactivation_date_type == "other"
-        errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.invalid"))
-      end
-    else
-      collection_start_date = FormHandler.instance.current_collection_start_date
-      unless deactivation_date.between?(collection_start_date, Time.zone.local(2200, 1, 1))
-        errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation_date.out_of_range", date: collection_start_date.to_formatted_s(:govuk_date)))
-      end
-    end
+  def reactivating_soon?
+    status == :reactivating_soon
   end
 
 private

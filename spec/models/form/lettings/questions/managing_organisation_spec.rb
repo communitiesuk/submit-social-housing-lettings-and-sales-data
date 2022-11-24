@@ -73,6 +73,27 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
       end
     end
 
+    context "when user not support and does not own stock" do
+      let(:user) { create(:user, :data_coordinator, organisation: create(:organisation, holds_own_stock: false)) }
+
+      let(:log) { create(:lettings_log) }
+      let!(:org_rel1) { create(:organisation_relationship, :managing, parent_organisation: user.organisation) }
+      let!(:org_rel2) { create(:organisation_relationship, :managing, parent_organisation: user.organisation) }
+
+      let(:options) do
+        {
+          "" => "Select an option",
+          user.organisation.id => "#{user.organisation.name} (Your organisation)",
+          org_rel1.child_organisation.id => org_rel1.child_organisation.name,
+          org_rel2.child_organisation.id => org_rel2.child_organisation.name,
+        }
+      end
+
+      it "shows managing agents with own org at the top" do
+        expect(question.displayed_answer_options(log, user)).to eq(options)
+      end
+    end
+
     context "when support user and org does not own own stock" do
       let(:user) { create(:user, :support) }
       let(:log_owning_org) { create(:organisation, holds_own_stock: false) }
@@ -121,34 +142,19 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
   end
 
   describe "#hidden_in_check_answers?" do
-    context "when housing providers < 2" do
-      context "when not support user" do
-        let(:user) { create(:user) }
+    context "when user present" do
+      let(:user) { create(:user) }
 
-        it "is hidden in check answers" do
-          expect(question.hidden_in_check_answers?(nil, user)).to be true
-        end
-      end
-
-      context "when support" do
-        let(:user) { create(:user, :support) }
-
-        it "is not hiddes in check answers" do
-          expect(question.hidden_in_check_answers?(nil, user)).to be false
-        end
+      it "is hidden in check answers" do
+        expect(question.hidden_in_check_answers?(nil, user)).to be false
       end
     end
 
-    context "when managing agents >= 2" do
-      let(:user) { create(:user) }
-
-      before do
-        create(:organisation_relationship, :managing, parent_organisation: user.organisation)
-        create(:organisation_relationship, :managing, parent_organisation: user.organisation)
-      end
+    context "when user not provided" do
+      let(:user) { create(:user, :support) }
 
       it "is not hidden in check answers" do
-        expect(question.hidden_in_check_answers?(nil, user)).to be false
+        expect(question.hidden_in_check_answers?(nil)).to be true
       end
     end
   end
