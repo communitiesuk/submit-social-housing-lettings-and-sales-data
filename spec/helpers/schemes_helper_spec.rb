@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe SchemesHelper do
   describe "Active periods" do
-    let(:scheme) { FactoryBot.create(:scheme) }
+    let(:scheme) { FactoryBot.create(:scheme, created_at: Time.zone.today) }
 
     before do
       Timecop.freeze(2022, 10, 10)
