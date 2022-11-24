@@ -15,8 +15,22 @@ class LocationsController < ApplicationController
   end
 
   def new
-    @location = Location.new
+    @location = Location.new(scheme_id: @scheme.id)
+    @location.save!
+    redirect_to scheme_location_postcode_path(@scheme, @location)
   end
+
+  def postcode; end
+
+  def name; end
+
+  def type_of_unit; end
+
+  def mobility_standards; end
+
+  def startdate; end
+
+  def check_answers; end
 
   def show; end
 

@@ -1,6 +1,6 @@
 class Location < ApplicationRecord
-  validate :validate_postcode
-  validates :units, :type_of_unit, :mobility_type, presence: true
+  # validate :validate_postcode
+  # validates :units, :type_of_unit, :mobility_type, presence: true
   belongs_to :scheme
   has_many :lettings_logs, class_name: "LettingsLog"
   has_many :location_deactivation_periods, class_name: "LocationDeactivationPeriod"

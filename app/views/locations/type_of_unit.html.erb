@@ -1,0 +1,29 @@
+<% content_for :title, "Add a location to this scheme" %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+        text: "Back",
+        href: "/schemes/#{@scheme.id}/support",
+        ) %>
+<% end %>
+
+<%= form_for(@location, method: :patch, url: scheme_location_mobility_standards_path(@scheme, @location)) do |f| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= f.govuk_error_summary %>
+
+      <%= render partial: "organisations/headings", locals: { main: I18n.t("questions.location.type_of_unit"), sub: "Add a location to #{@scheme.service_name}" } %>
+
+      <%= f.govuk_collection_radio_buttons :type_of_unit,
+                                           type_of_units_selection,
+                                           :id,
+                                           :name,
+                                           legend: nil %>
+
+      <div class="govuk-button-group">
+          <%= f.govuk_submit "Continue" %>
+          <%= govuk_link_to "Cancel", new_scheme_location_path(@scheme) %>
+      </div>
+    </div>
+  </div>
+<% end %>

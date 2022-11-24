@@ -7,17 +7,18 @@
         ) %>
 <% end %>
 
-<%= form_for(@location, method: :patch, url: scheme_location_name_path(@scheme, @location)) do |f| %>
+<%= form_for(@location, method: :patch, url: scheme_location_type_of_unit_path(@scheme, @location)) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>
 
-      <%= render partial: "organisations/headings", locals: { main: I18n.t("questions.location.postcode"), sub: "Add a location to #{@scheme.service_name}" } %>
+      <%= render partial: "organisations/headings", locals: { main: I18n.t("questions.location.units"), sub: "Add a location to #{@scheme.service_name}" } %>
 
-      <%= f.govuk_text_field :postcode,
-                             label: { size: "m" },
-                             hint: { text: I18n.t("hints.location.postcode") },
-                             width: 5 %>
+      <%= f.govuk_number_field :units,
+                               label: nil,
+                               width: 2,
+                               hint: { text: I18n.t("hints.location.units") },
+                               autofocus: true %>
 
       <div class="govuk-button-group">
           <%= f.govuk_submit "Continue" %>
