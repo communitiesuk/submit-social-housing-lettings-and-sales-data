@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_22_130928) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_24_171430) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -237,6 +237,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_22_130928) do
     t.integer "void_date_value_check"
     t.integer "housingneeds_type"
     t.integer "housingneeds_other"
+    t.boolean "impacted_by_scheme_deactivation"
     t.index ["created_by_id"], name: "index_lettings_logs_on_created_by_id"
     t.index ["location_id"], name: "index_lettings_logs_on_location_id"
     t.index ["managing_organisation_id"], name: "index_lettings_logs_on_managing_organisation_id"
@@ -345,12 +346,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_22_130928) do
     t.integer "jointmore"
     t.integer "jointpur"
     t.integer "beds"
-    t.integer "companybuy"
     t.integer "age1"
     t.integer "age1_known"
+    t.integer "companybuy"
     t.string "sex1"
-    t.integer "national"
-    t.string "othernational"
     t.integer "ethnic"
     t.integer "ethnic_group"
     t.integer "buy1livein"
@@ -364,8 +363,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_22_130928) do
     t.integer "noint"
     t.integer "buy2livein"
     t.integer "ecstat2"
-    t.integer "privacynotice"
     t.integer "ecstat1"
+    t.integer "national"
+    t.string "othernational"
+    t.integer "privacynotice"
     t.integer "wheel"
     t.integer "hholdcount"
     t.integer "age3"
@@ -374,15 +375,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_22_130928) do
     t.integer "la_known"
     t.integer "income1"
     t.integer "income1nk"
-    t.integer "details_known_2"
-    t.integer "details_known_3"
-    t.integer "details_known_4"
     t.integer "age4"
     t.integer "age4_known"
     t.integer "age5"
     t.integer "age5_known"
     t.integer "age6"
     t.integer "age6_known"
+    t.integer "details_known_2"
+    t.integer "details_known_3"
+    t.integer "details_known_4"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"

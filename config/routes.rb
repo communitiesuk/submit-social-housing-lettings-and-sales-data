@@ -111,6 +111,7 @@ Rails.application.routes.draw do
       get "csv-download", to: "lettings_logs#download_csv"
       post "email-csv", to: "lettings_logs#email_csv"
       get "csv-confirmation", to: "lettings_logs#csv_confirmation"
+      get "update-logs", to: "update_logs#show"
     end
 
     member do

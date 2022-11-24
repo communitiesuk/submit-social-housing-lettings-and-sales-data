@@ -1,0 +1,38 @@
+<% content_for :title, "Update logs" %>
+
+<div class="govuk-grid-row govuk-!-margin-bottom-8">
+  <h1 class="govuk-heading-xl">You need to update <%= @logs.count %> logs</h1>
+
+  <p class="govuk-body">
+    Some scheme details have changed, and now the following <%= @logs.count %> logs need updating.
+  </p>
+  <p class="govuk-body">
+    You'll have to answer a few questions for each log.
+  </p>
+</div>
+
+<div class="govuk-grid-row">
+  <%= govuk_table do |table|
+        table.head do |head|
+          head.row do |row|
+            row.cell(header: true, text: "Log ID")
+            row.cell(header: true, text: "Tenancy code")
+            row.cell(header: true, text: "Property reference")
+            row.cell(header: true, text: "Status")
+            row.cell # "Update now" column has no heading
+          end
+        end
+
+        table.body do |body|
+          @logs.each do |log|
+            body.row do |row|
+              row.cell(header: true, text: log.id)
+              row.cell(text: log.tenancycode)
+              row.cell(text: log.propcode)
+              row.cell { status_tag(log.status) }
+              row.cell(numeric: true) { govuk_link_to("Update now", "#") } # "numeric" to right-align
+            end
+          end
+        end
+      end %>
+</div>

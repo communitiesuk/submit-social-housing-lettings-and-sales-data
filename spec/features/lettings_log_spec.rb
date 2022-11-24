@@ -134,4 +134,34 @@ RSpec.describe "Lettings Log Features" do
       end
     end
   end
+
+  context "when logs the user created have been affected by a scheme deactivation" do
+    let(:user) { create(:user, last_sign_in_at: Time.zone.now) }
+    let!(:my_impacted_logs) do
+      [
+        create(:lettings_log, created_by: user, impacted_by_scheme_deactivation: true),
+        create(:lettings_log, created_by: user, impacted_by_scheme_deactivation: true),
+      ]
+    end
+
+    before do
+      # Non-impacted log
+      create(:lettings_log, created_by: user)
+      # Impacted log for a different user user
+      create(:lettings_log, impacted_by_scheme_deactivation: true)
+
+      visit("/lettings-logs")
+      fill_in("user[email]", with: user.email)
+      fill_in("user[password]", with: user.password)
+      click_button("Sign in")
+    end
+
+    it "displays a banner" do
+      expect(page).to have_content("A scheme has changed")
+    end
+
+    it "displays the count of affected logs" do
+      expect(page).to have_content("it has affected #{my_impacted_logs.count} logs")
+    end
+  end
 end

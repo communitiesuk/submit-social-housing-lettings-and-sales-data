@@ -13,6 +13,7 @@ class LettingsLogsController < LogsController
         @pagy, @logs = pagy(unpaginated_filtered_logs)
         @searched = search_term.presence
         @total_count = all_logs.size
+        @logs_to_update = LettingsLog.where(created_by: current_user, impacted_by_scheme_deactivation: true).count
         render "logs/index"
       end
     end
