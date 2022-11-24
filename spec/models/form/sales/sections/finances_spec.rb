@@ -14,7 +14,7 @@ RSpec.describe Form::Sales::Sections::Finances, type: :model do
   it "has correct subsections" do
     expect(section.subsections.map(&:id)).to eq(
       %w[
-        income_benefits_and_outgoings
+        income_benefits_and_savings
       ],
     )
   end
