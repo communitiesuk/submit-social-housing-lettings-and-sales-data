@@ -12,9 +12,9 @@ module Validations::SetupValidations
   def validate_scheme(record)
     validate_location_during_startdate(record, :scheme_id)
 
-    scheme_status_during_startdate = status_during_startdate(record.startdate, record.scheme&.scheme_deactivation_periods, record.scheme&.available_from)
-    if scheme_status_during_startdate.present?
-      record.errors.add :scheme_id, I18n.t("validations.setup.startdate.scheme_#{scheme_status_during_startdate[:status]}", name: record.scheme.service_name, date: scheme_status_during_startdate[:date].to_formatted_s(:govuk_date), deactivation_date: scheme_status_during_startdate[:deactivation_date]&.to_formatted_s(:govuk_date))
+    scheme_inactive_status = inactive_status(record.startdate, record.scheme&.scheme_deactivation_periods, record.scheme&.available_from)
+    if scheme_inactive_status.present?
+      record.errors.add :scheme_id, I18n.t("validations.setup.startdate.scheme_#{scheme_inactive_status[:status]}", name: record.scheme.service_name, date: scheme_inactive_status[:date].to_formatted_s(:govuk_date), deactivation_date: scheme_inactive_status[:deactivation_date]&.to_formatted_s(:govuk_date))
     end
   end
 
@@ -24,7 +24,7 @@ private
     record.rent_type == 5
   end
 
-  def status_during_startdate(date, deactivation_periods, available_from)
+  def inactive_status(date, deactivation_periods, available_from)
     return if date.blank?
 
     closest_reactivation = deactivation_periods.reverse.find { |period| period.reactivation_date.present? && date.between?(period.deactivation_date, period.reactivation_date - 1.day) } if deactivation_periods.present?
@@ -36,9 +36,9 @@ private
   end
 
   def validate_location_during_startdate(record, field)
-    location_status_during_startdate = status_during_startdate(record.startdate, record.location&.location_deactivation_periods, record.location&.available_from)
-    if location_status_during_startdate.present?
-      record.errors.add field, I18n.t("validations.setup.startdate.location_#{location_status_during_startdate[:status]}", postcode: record.location.postcode, date: location_status_during_startdate[:date].to_formatted_s(:govuk_date), deactivation_date: location_status_during_startdate[:deactivation_date]&.to_formatted_s(:govuk_date))
+    location_inactive_status = inactive_status(record.startdate, record.location&.location_deactivation_periods, record.location&.available_from)
+    if location_inactive_status.present?
+      record.errors.add field, I18n.t("validations.setup.startdate.location_#{location_inactive_status[:status]}", postcode: record.location.postcode, date: location_inactive_status[:date].to_formatted_s(:govuk_date), deactivation_date: location_inactive_status[:deactivation_date]&.to_formatted_s(:govuk_date))
     end
   end
 end
