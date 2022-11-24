@@ -120,10 +120,10 @@ en:
         before_scheme_end_date: "The tenancy start date must be before the end date for this supported housing scheme"
         after_void_date: "Enter a tenancy start date that is after the void date"
         after_major_repair_date: "Enter a tenancy start date that is after the major repair date"
-        during_deactivated_location: "The location %{postcode} was deactivated on %{date} and was not available on the day you entered."
+        location_deactivated: "The location %{postcode} was deactivated on %{date} and was not available on the day you entered."
         location_reactivating_soon: "The location %{postcode} was deactivated on %{deactivation_date} and is not available on the date you entered. It reactivates on %{date}"
         location_activating_soon: "The location %{postcode} is not available until %{date}. Enter a tenancy start date after %{date}"
-        during_deactivated_scheme: "%{name} was deactivated on %{date} and was not available on the day you entered"
+        scheme_deactivated: "%{name} was deactivated on %{date} and was not available on the day you entered"
         scheme_reactivating_soon: "%{name} was deactivated on %{deactivation_date} and is not available on the date you entered. It reactivates on %{date}"
         scheme_activating_soon: "%{name} is not available until %{date}. Enter a tenancy start date after %{date}"
 
