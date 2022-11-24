@@ -21,6 +21,18 @@ class BulkUploadSalesLogsController < ApplicationController
     end
   end
 
+  def show
+    render form.view_path
+  end
+
+  def update
+    if form.valid?
+      redirect_to bulk_upload_sales_log_path(id: "prepare-your-file", form: { year: form_params[:year] })
+    else
+      render form.view_path
+    end
+  end
+
 private
 
   def current_year
