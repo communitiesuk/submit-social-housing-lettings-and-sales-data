@@ -60,7 +60,7 @@ module Validations::DateValidations
       record.errors.add :startdate, I18n.t("validations.setup.startdate.after_major_repair_date")
     end
 
-    location_status_during_startdate = record.location&.status_during(record.startdate)
+    location_status_during_startdate = status_during_startdate(record.startdate, record.location&.location_deactivation_periods, record.location&.available_from)
     if location_status_during_startdate.present? && location_status_during_startdate[:status] == :deactivated
       record.errors.add :startdate, I18n.t("validations.setup.startdate.during_deactivated_location", postcode: record.location.postcode, date: location_status_during_startdate[:date].to_formatted_s(:govuk_date))
     end
@@ -73,7 +73,7 @@ module Validations::DateValidations
       record.errors.add :startdate, I18n.t("validations.setup.startdate.location_activating_soon", postcode: record.location.postcode, date: location_status_during_startdate[:date].to_formatted_s(:govuk_date))
     end
 
-    scheme_status_during_startdate = record.scheme&.status_during(record.startdate)
+    scheme_status_during_startdate = status_during_startdate(record.startdate, record.scheme&.scheme_deactivation_periods, record.scheme&.available_from)
     if scheme_status_during_startdate.present? && scheme_status_during_startdate[:status] == :deactivated
       record.errors.add :startdate, I18n.t("validations.setup.startdate.during_deactivated_scheme", name: record.scheme.service_name, date: scheme_status_during_startdate[:date].to_formatted_s(:govuk_date))
     end
@@ -116,5 +116,16 @@ private
 
   def is_rsnvac_first_let?(record)
     [15, 16, 17].include?(record["rsnvac"])
+  end
+
+  def status_during_startdate(date, deactivation_periods, available_from)
+    return if date.blank?
+
+    closest_reactivation = deactivation_periods.reverse.find { |period| period.reactivation_date.present? && date.between?(period.deactivation_date, period.reactivation_date - 1.day) } if deactivation_periods.present?
+    return { status: :reactivating_soon, date: closest_reactivation.reactivation_date, deactivation_date: closest_reactivation.deactivation_date } if closest_reactivation.present?
+    return { status: :activating_soon, date: available_from } if available_from.present? && available_from > date
+
+    open_deactivation = deactivation_periods.deactivations_without_reactivation.first if deactivation_periods.present?
+    return { status: :deactivated, date: open_deactivation.deactivation_date } if open_deactivation.present? && open_deactivation.deactivation_date <= date
   end
 end
