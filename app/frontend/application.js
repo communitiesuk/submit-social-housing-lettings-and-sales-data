@@ -4,18 +4,19 @@
 // files to reference that code so it'll be compiled.
 
 // Polyfills for IE
+import '@stimulus/polyfills'
 import '@webcomponents/webcomponentsjs'
 import 'core-js/stable'
-import 'regenerator-runtime/runtime'
-import '@stimulus/polyfills'
 import 'custom-event-polyfill'
 import 'intersection-observer'
+import 'regenerator-runtime/runtime'
 
 //
 import { initAll as GOVUKFrontend } from 'govuk-frontend'
 import { initAll as GOVUKPrototypeComponents } from 'govuk-prototype-components'
-import './styles/application.scss'
 import './controllers'
+import './cookie-banner'
+import './styles/application.scss'
 
 require.context('govuk-frontend/govuk/assets')
 
