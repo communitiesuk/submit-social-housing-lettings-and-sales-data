@@ -2,8 +2,9 @@ module Forms
   module BulkUploadLettings
     class PrepareYourFile
       include ActiveModel::Model
+      include ActiveModel::Attributes
 
-      attr_accessor :year
+      attribute :year, :integer
 
       def view_path
         "bulk_upload_lettings_logs/forms/prepare_your_file"
@@ -15,6 +16,10 @@ module Forms
         else
           Rails.application.routes.url_helpers.lettings_logs_path
         end
+      end
+
+      def year_combo
+        "#{year}/#{year+1-2000}"
       end
 
     private

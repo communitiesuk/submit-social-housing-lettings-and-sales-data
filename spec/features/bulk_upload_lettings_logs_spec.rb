@@ -19,13 +19,14 @@ RSpec.describe "Bulk upload lettings log" do
 
         expect(page).to have_content("You must select a collection period to upload for")
         choose("2022/2023")
-
         click_button("Continue")
 
-        expect(page).to have_content("prepare file goes here")
         click_link("Back")
 
         expect(page.find_field("form-year-2022-field")).to be_checked
+        click_button("Continue")
+
+        expect(page).to have_content("Upload lettings logs in bulk (2022/23)")
       end
     end
   end

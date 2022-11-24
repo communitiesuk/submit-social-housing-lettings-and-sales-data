@@ -21,10 +21,12 @@ RSpec.describe "Bulk upload sales log" do
         choose("2022/2023")
         click_button("Continue")
 
-        expect(page).to have_content("prepare file goes here")
         click_link("Back")
 
         expect(page.find_field("form-year-2022-field")).to be_checked
+        click_button("Continue")
+
+        expect(page).to have_content("Upload sales logs in bulk (2022/23)")
       end
     end
   end

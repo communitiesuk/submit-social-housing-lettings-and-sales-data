@@ -2,8 +2,9 @@ module Forms
   module BulkUploadSales
     class PrepareYourFile
       include ActiveModel::Model
+      include ActiveModel::Attributes
 
-      attr_accessor :year
+      attribute :year, :integer
 
       def view_path
         "bulk_upload_sales_logs/forms/prepare_your_file"
@@ -16,6 +17,12 @@ module Forms
           Rails.application.routes.url_helpers.sales_logs_path
         end
       end
+
+      def year_combo
+        "#{year}/#{year+1-2000}"
+      end
+
+    private
 
       def in_crossover_period?
         FormHandler.instance.forms.values.any?(&:in_crossover_period?)
