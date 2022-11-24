@@ -23,7 +23,7 @@
 
       <div class="govuk-button-group">
           <%= f.govuk_submit "Continue" %>
-          <%= govuk_link_to "Cancel", new_scheme_location_path(@scheme) %>
+          <%= govuk_button_link_to "Cancel", scheme_locations_path(@scheme), secondary: true %>
       </div>
     </div>
   </div>

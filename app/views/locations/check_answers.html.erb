@@ -8,25 +8,23 @@
   ) %>
 <% end %>
 
-<%= render partial: "organisations/headings", locals: { main: @location.postcode, sub: @location.name } %>
+<%= render partial: "organisations/headings", locals: { main: "Check your answers", sub: "Add a location to #{@scheme.service_name}" } %>
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
         <%= govuk_summary_list do |summary_list| %>
             <% display_location_attributes(@location).each do |attr| %>
+                <% next if attr[:attribute] == "code" %>
                 <%= summary_list.row do |row| %>
                 <% row.key { attr[:name] } %>
                 <% row.value { attr[:attribute].eql?("status") ? status_tag(attr[:value]) : details_html(attr) } %>
-                <% row.action(text: "Change", href: scheme_location_name_path(@scheme, @location)) if attr[:attribute] == "name" %>
+                <% row.action(text: "Change", href: location_edit_path(@location, attr[:attribute])) unless attr[:name] == "Status" %>
                 <% end %>
             <% end %>
         <% end %>
     </div>
 </div>
-<% if FeatureToggle.location_toggle_enabled? %>
-    <% if @location.active? || @location.reactivating_soon? %>
-        <%= govuk_button_link_to "Deactivate this location", scheme_location_new_deactivation_path(@scheme, @location), warning: true %>
-    <% else %>
-        <%= govuk_button_link_to "Reactivate this location", scheme_location_new_reactivation_path(@scheme, @location) %>
-    <% end %>
-<% end %>
+<div class="govuk-button-group">
+  <%= govuk_button_to "Add this location", scheme_locations_path(@scheme) %>
+  <%= govuk_button_link_to "Cancel", new_scheme_location_path(@scheme), secondary: true %>
+</div>

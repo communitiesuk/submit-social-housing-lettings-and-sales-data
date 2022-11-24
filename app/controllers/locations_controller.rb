@@ -22,15 +22,29 @@ class LocationsController < ApplicationController
 
   def postcode; end
 
-  def name; end
+  def name
+    @location.update(location_params)
+  end
 
-  def type_of_unit; end
+  def units
+    @location.update(location_params)
+  end
 
-  def mobility_standards; end
+  def type_of_unit
+    @location.update(location_params)
+  end
 
-  def startdate; end
+  def mobility_standards
+    @location.update(location_params)
+  end
 
-  def check_answers; end
+  def startdate
+    @location.update(location_params)
+  end
+
+  def check_answers
+    @location.update(location_params)
+  end
 
   def show; end
 
