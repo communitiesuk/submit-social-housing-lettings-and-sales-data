@@ -83,6 +83,18 @@ class LettingsLogsController < LogsController
 
   def csv_confirmation; end
 
+  def update_logs
+    respond_to do |format|
+      format.html do
+        impacted_logs = current_user.lettings_logs.where(impacted_by_deactivation: true, created_by: current_user)
+
+        @pagy, @logs = pagy(impacted_logs)
+        @total_count = impacted_logs.size
+        render "logs/update_logs"
+      end
+    end
+  end
+
 private
 
   def permitted_log_params

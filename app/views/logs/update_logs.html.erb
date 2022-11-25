@@ -1,0 +1,36 @@
+<% item_label = format_label(@pagy.count, "logs") %>
+<% title = format_title(@searched, "Logs", current_user, item_label, @pagy.count, nil) %>
+
+<% content_for :title, title %>
+
+<%= render partial: "organisations/headings", locals: { main: "You need to update #{@total_count} logs", sub: "" } %>
+
+<%= govuk_table do |table| %>
+    <% table.head do |head| %>
+        <% head.row do |row| %>
+            <% row.cell(header: true, text: "Log ID") %>
+            <% row.cell(header: true, text: "Tenancy code") %>
+            <% row.cell(header: true, text: "Property reference") %>
+            <% row.cell(header: true, text: "Status") %>
+            <% row.cell(header: true, text: "") %>
+        <% end %>
+    <% end %>
+  <% @logs.each do |log| %>
+    <% table.body do |body| %>
+        <% body.row do |row| %>
+            <% row.cell(text: log.id) %>
+            <% row.cell(text: log.tenancycode) %>
+            <% row.cell(text: log.propcode) %>
+            <% row.cell(text: status_tag(log.status)) %>
+            <% row.cell(html_attributes: {
+                scope: "row",
+                class: "govuk-!-text-align-right",
+                }) do %>
+                    <%= govuk_link_to("Update now", lettings_log_tenancy_start_date_path(log)) %>
+            <% end %>
+        <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "logs" } %>

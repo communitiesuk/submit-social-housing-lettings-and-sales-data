@@ -789,6 +789,46 @@ RSpec.describe LettingsLogsController, type: :request do
         end
       end
     end
+
+    context "when viewing a collection of logs affected by deactivated location" do
+      let!(:affected_lettings_logs) { FactoryBot.create_list(:lettings_log, 3, impacted_by_deactivation: true, created_by: user) }
+      let!(:non_affected_lettings_logs) { FactoryBot.create_list(:lettings_log, 4, created_by: user) }
+      let(:other_user) { FactoryBot.create(:user, organisation: user.organisation) }
+      let(:headers) { { "Accept" => "text/html" } }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+      end
+
+      it "displays logs in a table" do
+        get "/lettings-logs/update-logs", headers:, params: {}
+        expect(page).to have_content("Log ID")
+        expect(page).to have_content("Tenancy code")
+        expect(page).to have_content("Property reference")
+        expect(page).to have_content("Status")
+
+        expect(page).to have_content(affected_lettings_logs.first.id)
+        expect(page).to have_content(affected_lettings_logs.first.tenancycode)
+        expect(page).to have_content(affected_lettings_logs.first.propcode)
+        expect(page).to have_link("Update now", href: "/lettings-logs/#{affected_lettings_logs.first.id}/tenancy-start-date")
+      end
+
+      it "only displays affected logs" do
+        get "/lettings-logs/update-logs", headers:, params: {}
+        expect(page).to have_content("You need to update 3 logs")
+        expect(page).to have_content(affected_lettings_logs.first.id)
+        expect(page).not_to have_content(non_affected_lettings_logs.first.id)
+      end
+
+      it "only displays the logs creted by the user" do
+        affected_lettings_logs.first.update!(created_by: other_user)
+        get "/lettings-logs/update-logs", headers:, params: {}
+        expect(page).to have_content(affected_lettings_logs.second.id)
+        expect(page).not_to have_content(affected_lettings_logs.first.id)
+        expect(page).to have_content("You need to update 2 logs")
+      end
+    end
   end
 
   describe "PATCH" do
