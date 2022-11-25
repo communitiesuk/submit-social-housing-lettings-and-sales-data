@@ -56,11 +56,11 @@ class LocationsController < ApplicationController
     if params[:location].present?
       @location.mobility_type = params[:location][:mobility_type]
       @location.save!
-      redirect_to scheme_location_startdate_path(@scheme, @location)
+      redirect_to scheme_location_availability_path(@scheme, @location)
     end
   end
 
-  def startdate
+  def availability
     if params[:location].present?
       day = params[:location]["startdate(3i)"]
       month = params[:location]["startdate(2i)"]
@@ -71,7 +71,14 @@ class LocationsController < ApplicationController
     end
   end
 
-  def check_answers; end
+  def check_answers
+    if params[:location].present?
+      @location.confirmed = true
+      @location.save!
+      flash[:notice] = "#{@location.postcode} #{@location.startdate < Time.zone.now ? "has been" : "will be"} added to this scheme"
+      redirect_to scheme_locations_path(@scheme, @location)
+    end
+  end
 
   def show; end
 

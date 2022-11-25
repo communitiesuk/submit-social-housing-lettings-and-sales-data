@@ -4,27 +4,30 @@
 <% content_for :before_content do %>
   <%= govuk_back_link(
     text: "Back",
-    href: scheme_location_startdate_path(@scheme, @location),
+    href: scheme_location_availability_path(@scheme, @location),
   ) %>
 <% end %>
 
-<%= render partial: "organisations/headings", locals: { main: "Check your answers", sub: "Add a location to #{@scheme.service_name}" } %>
+<%= form_for(@location, method: :patch, url: scheme_location_check_answers_path(@scheme, @location)) do |f| %>
+  <%= render partial: "organisations/headings", locals: { main: "Check your answers", sub: "Add a location to #{@scheme.service_name}" } %>
 
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds-from-desktop">
-        <%= govuk_summary_list do |summary_list| %>
-            <% display_location_attributes(@location).each do |attr| %>
-                <% next if attr[:attribute] == "code" %>
-                <%= summary_list.row do |row| %>
-                <% row.key { attr[:name] } %>
-                <% row.value { attr[:attribute].eql?("status") ? status_tag(attr[:value]) : details_html(attr) } %>
-                <% row.action(text: "Change", href: location_edit_path(@location, attr[:attribute])) unless attr[:name] == "Status" %>
-                <% end %>
-            <% end %>
-        <% end %>
-    </div>
-</div>
-<div class="govuk-button-group">
-  <%= govuk_button_to "Add this location", scheme_locations_path(@scheme) %>
-  <%= govuk_button_link_to "Cancel", scheme_locations_path(@scheme), secondary: true %>
-</div>
+  <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds-from-desktop">
+          <%= govuk_summary_list do |summary_list| %>
+              <% display_location_attributes(@location).each do |attr| %>
+                  <% next if attr[:attribute] == "code" %>
+                  <%= summary_list.row do |row| %>
+                  <% row.key { attr[:name] } %>
+                  <% row.value { attr[:attribute].eql?("status") ? status_tag(attr[:value]) : details_html(attr) } %>
+                  <% row.action(text: "Change", href: location_edit_path(@location, attr[:attribute])) unless attr[:name] == "Status" %>
+                  <% end %>
+              <% end %>
+          <% end %>
+      </div>
+  </div>
+  <%= f.hidden_field :confirmed %>
+  <div class="govuk-button-group">
+    <%= f.govuk_submit "Add this location" %>
+    <%= govuk_button_link_to "Cancel", scheme_locations_path(@scheme), secondary: true %>
+  </div>
+<% end %>

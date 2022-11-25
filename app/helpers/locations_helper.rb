@@ -32,7 +32,7 @@ module LocationsHelper
       { name: "Most common unit", value: location.type_of_unit, attribute: "type_of_unit"},
       { name: "Mobility standards", value: location.mobility_type, attribute: "mobility_standards" },
       { name: "Code", value: location.location_code, attribute: "location_code" },
-      { name: "Availability", value: location_availability(location), attribute: "startdate" },
+      { name: "Availability", value: location_availability(location), attribute: "availability" },
     ]
 
     if FeatureToggle.location_toggle_enabled?
@@ -67,8 +67,8 @@ module LocationsHelper
       scheme_location_type_of_unit_path(location.scheme, location, referrer: "check_answers")
     when "mobility_standards"
       scheme_location_mobility_standards_path(location.scheme, location, referrer: "check_answers")
-    when "startdate"
-      scheme_location_startdate_path(location.scheme, location, referrer: "check_answers")
+    when "avaliability"
+      scheme_location_availability_path(location.scheme, location, referrer: "check_answers")
     end
   end
 
