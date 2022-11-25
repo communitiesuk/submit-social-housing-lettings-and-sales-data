@@ -11,10 +11,10 @@ RSpec.describe BulkUploadLettingsLogsController, type: :request do
   describe "GET /lettings-logs/bulk-upload-logs/start" do
     context "when not in crossover period" do
       it "redirects to /prepare-your-file" do
-        Timecop.freeze(2023, 8, 1) do
+        Timecop.freeze(2022, 1, 1) do
           get "/lettings-logs/bulk-upload-logs/start", params: {}
 
-          expect(response).to redirect_to("/lettings-logs/bulk-upload-logs/prepare-your-file")
+          expect(response).to redirect_to("/lettings-logs/bulk-upload-logs/prepare-your-file?form%5Byear%5D=2022")
         end
       end
     end
