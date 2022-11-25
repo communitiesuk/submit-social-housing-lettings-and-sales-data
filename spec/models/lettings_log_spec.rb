@@ -1841,6 +1841,23 @@ RSpec.describe LettingsLog do
         expect(lettings_log["housingneeds_g"]).to eq(1)
       end
     end
+
+    context "when updating a log affected by deactivation" do
+      let(:scheme) { FactoryBot.create(:scheme, owning_organisation: lettings_log.owning_organisation) }
+      let(:location) { FactoryBot.create(:location, scheme:) }
+
+      before do
+        lettings_log.update!({ needstype: 2, location: nil, scheme: nil, unresolved: true })
+        lettings_log.reload
+      end
+
+      it "sets unresolved to false if scheme and location have been provided" do
+        lettings_log.update!({ location:, scheme: })
+        record_from_db = ActiveRecord::Base.connection.execute("select unresolved from lettings_logs where id=#{lettings_log.id}").to_a[0]
+        expect(record_from_db["unresolved"]).to eq(false)
+        expect(lettings_log["unresolved"]).to eq(false)
+      end
+    end
   end
 
   describe "optional fields" do
