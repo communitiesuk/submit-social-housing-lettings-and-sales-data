@@ -21,7 +21,6 @@ class Scheme < ApplicationRecord
   validate :validate_confirmed
 
   auto_strip_attributes :service_name
-  default_scope { order(confirmed: :asc, service_name: :asc) }
 
   SENSITIVE = {
     No: 0,

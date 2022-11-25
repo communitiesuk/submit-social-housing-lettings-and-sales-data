@@ -182,8 +182,8 @@ RSpec.describe Scheme, type: :model do
       FactoryBot.create_list(:scheme, 3, confirmed: false)
     end
 
-    it "sorts the schemes by status" do
-      all_schemes = described_class.all
+    it "can sort the schemes by status" do
+      all_schemes = described_class.all.order(confirmed: :asc, service_name: :asc)
       expect(all_schemes.count).to eq(7)
       expect(all_schemes[0].status).to eq(:incomplete)
       expect(all_schemes[1].status).to eq(:incomplete)
