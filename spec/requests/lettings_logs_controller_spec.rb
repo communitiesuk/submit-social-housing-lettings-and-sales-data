@@ -829,6 +829,21 @@ RSpec.describe LettingsLogsController, type: :request do
         expect(page).to have_content("You need to update 2 logs")
       end
     end
+
+    context "when viewing a specific log affected by deactivated location" do
+      let!(:affected_lettings_log) { FactoryBot.create(:lettings_log, impacted_by_deactivation: true, created_by: user) }
+      let(:headers) { { "Accept" => "text/html" } }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+      end
+
+      it "routes to the tenancy date question" do
+        get "/lettings-logs/#{affected_lettings_log.id}", headers:, params: {}
+        expect(response).to redirect_to("/lettings-logs/#{affected_lettings_log.id}/tenancy-start-date")
+      end
+    end
   end
 
   describe "PATCH" do
