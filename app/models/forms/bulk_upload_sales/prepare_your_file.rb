@@ -3,6 +3,7 @@ module Forms
     class PrepareYourFile
       include ActiveModel::Model
       include ActiveModel::Attributes
+      include Rails.application.routes.url_helpers
 
       attribute :year, :integer
 
@@ -18,12 +19,16 @@ module Forms
         end
       end
 
+      def next_path
+        bulk_upload_sales_log_path(id: "upload-your-file", form: { year: })
+      end
+
       def template_path
         "/files/bulk-upload-sales-template-v1.xlsx"
       end
 
       def year_combo
-        "#{year}/#{year+1-2000}"
+        "#{year}/#{year + 1 - 2000}"
       end
 
     private

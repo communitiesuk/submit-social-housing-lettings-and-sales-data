@@ -2,8 +2,10 @@ module Forms
   module BulkUploadLettings
     class Year
       include ActiveModel::Model
+      include ActiveModel::Attributes
+      include Rails.application.routes.url_helpers
 
-      attr_accessor :year
+      attribute :year, :integer
 
       validates :year, presence: true
 
@@ -18,7 +20,11 @@ module Forms
       end
 
       def back_path
-        Rails.application.routes.url_helpers.lettings_logs_path
+        lettings_logs_path
+      end
+
+      def next_path
+        bulk_upload_lettings_log_path(id: "prepare-your-file", form: { year: })
       end
 
     private

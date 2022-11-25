@@ -15,7 +15,7 @@ class BulkUploadLettingsLogsController < ApplicationController
 
   def update
     if form.valid?
-      redirect_to bulk_upload_lettings_log_path(id: "prepare-your-file", form: { year: form_params[:year] })
+      redirect_to form.next_path
     else
       render form.view_path
     end
@@ -33,6 +33,8 @@ private
                 Forms::BulkUploadLettings::Year.new(form_params)
               when "prepare-your-file"
                 Forms::BulkUploadLettings::PrepareYourFile.new(form_params)
+              when "upload-your-file"
+                Forms::BulkUploadLettings::UploadYourFile.new(form_params)
               else
                 raise "Page not found for path #{params[:id]}"
               end

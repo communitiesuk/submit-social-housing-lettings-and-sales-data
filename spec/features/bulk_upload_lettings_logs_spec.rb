@@ -27,6 +27,9 @@ RSpec.describe "Bulk upload lettings log" do
         click_button("Continue")
 
         expect(page).to have_content("Upload lettings logs in bulk (2022/23)")
+        click_button("Continue")
+
+        expect(page).to have_content("Upload your file")
       end
     end
   end

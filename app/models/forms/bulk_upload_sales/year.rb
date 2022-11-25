@@ -2,8 +2,10 @@ module Forms
   module BulkUploadSales
     class Year
       include ActiveModel::Model
+      include ActiveModel::Attributes
+      include Rails.application.routes.url_helpers
 
-      attr_accessor :year
+      attribute :year, :integer
 
       validates :year, presence: true
 
@@ -18,7 +20,11 @@ module Forms
       end
 
       def back_path
-        Rails.application.routes.url_helpers.sales_logs_path
+        sales_logs_path
+      end
+
+      def next_path
+        bulk_upload_sales_log_path(id: "prepare-your-file", form: { year: })
       end
 
     private
