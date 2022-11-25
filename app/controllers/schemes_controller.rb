@@ -349,6 +349,6 @@ private
   end
 
   def reset_location_and_scheme_for_logs!
-    @scheme.lettings_logs.filter_by_before_startdate(params[:deactivation_date].to_time).update!(location: nil, scheme: nil)
+    @scheme.lettings_logs.filter_by_before_startdate(params[:deactivation_date].to_time).update!(location: nil, scheme: nil, unresolved: true)
   end
 end

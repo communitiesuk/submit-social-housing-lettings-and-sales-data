@@ -1870,6 +1870,12 @@ RSpec.describe SchemesController, type: :request do
             expect(lettings_log.scheme).to eq(nil)
             expect(lettings_log.scheme).to eq(nil)
           end
+
+          it "marks log as needing attention" do
+            expect(lettings_log.unresolved).to eq(nil)
+            lettings_log.reload
+            expect(lettings_log.unresolved).to eq(true)
+          end
         end
 
         context "and a log startdate is before scheme deactivation date" do
@@ -1881,6 +1887,12 @@ RSpec.describe SchemesController, type: :request do
             lettings_log.reload
             expect(lettings_log.scheme).to eq(scheme)
             expect(lettings_log.scheme).to eq(scheme)
+          end
+
+          it "does not mark log as needing attention" do
+            expect(lettings_log.unresolved).to eq(nil)
+            lettings_log.reload
+            expect(lettings_log.unresolved).to eq(nil)
           end
         end
       end
