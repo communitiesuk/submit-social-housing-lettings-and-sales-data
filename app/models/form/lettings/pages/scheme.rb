@@ -6,6 +6,7 @@ class Form::Lettings::Pages::Scheme < ::Form::Page
     @depends_on = [{
       "needstype" => 2,
     }]
+    @next_unresolved_page_id = "location"
   end
 
   def questions

@@ -4,6 +4,7 @@ class Form::Lettings::Pages::TenancyStartDate < ::Form::Page
     @id = "tenancy_start_date"
     @description = ""
     @subsection = subsection
+    @next_unresolved_page_id = "scheme"
   end
 
   def questions

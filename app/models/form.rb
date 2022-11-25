@@ -56,40 +56,31 @@ class Form
   end
 
   def next_page(page, log, current_user)
-    page_ids = subsection_for_page(page).pages.map(&:id)
-    page_index = page_ids.index(page.id)
-    page_id = if page.id.include?("value_check") && log[page.questions[0].id] == 1 && page.routed_to?(log, current_user)
-                previous_page(page_ids, page_index, log, current_user)
-              else
-                page_ids[page_index + 1]
-              end
-    nxt_page = get_page(page_id)
+    if log.unresolved
+      page.next_unresolved_page_id || :check_answers
+    else
+      page_ids = subsection_for_page(page).pages.map(&:id)
+      page_index = page_ids.index(page.id)
+      page_id = if page.id.include?("value_check") && log[page.questions[0].id] == 1 && page.routed_to?(log, current_user)
+                  previous_page(page_ids, page_index, log, current_user)
+                else
+                  page_ids[page_index + 1]
+                end
+      nxt_page = get_page(page_id)
 
-    return :check_answers if nxt_page.nil?
-    return nxt_page.id if nxt_page.routed_to?(log, current_user)
+      return :check_answers if nxt_page.nil?
+      return nxt_page.id if nxt_page.routed_to?(log, current_user)
 
-    next_page(nxt_page, log, current_user)
+      next_page(nxt_page, log, current_user)
+    end
   end
 
   def next_page_redirect_path(page, log, current_user)
-    if log.unresolved
-      case page.id
-      when "tenancy_start_date"
-        "lettings_log_scheme_path"
-      when "scheme"
-        "lettings_log_location_path"
-      when "location"
-        "#{type}_log_#{subsection_for_page(page).id}_check_answers_path"
-      else
-        "lettings_log_tenancy_start_date_path"
-      end
+    nxt_page = next_page(page, log, current_user)
+    if nxt_page == :check_answers
+      "#{type}_log_#{subsection_for_page(page).id}_check_answers_path"
     else
-      nxt_page = next_page(page, log, current_user)
-      if nxt_page == :check_answers
-        "#{type}_log_#{subsection_for_page(page).id}_check_answers_path"
-      else
-        "#{type}_log_#{nxt_page}_path"
-      end
+      "#{type}_log_#{nxt_page}_path"
     end
   end
 
