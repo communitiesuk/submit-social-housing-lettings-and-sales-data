@@ -32,12 +32,6 @@ module Forms
       def possible_years
         FormHandler.instance.lettings_forms.values.map { |form| form.start_date.year }.sort.reverse
       end
-
-    private
-
-      def possible_years
-        FormHandler.instance.lettings_forms.values.map { |form| form.start_date.year }.sort.reverse
-      end
     end
   end
 end

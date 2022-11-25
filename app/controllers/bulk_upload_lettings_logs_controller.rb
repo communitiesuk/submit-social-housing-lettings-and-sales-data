@@ -27,7 +27,7 @@ class BulkUploadLettingsLogsController < ApplicationController
 
   def update
     if form.valid?
-      redirect_to bulk_upload_lettings_log_path(id: "prepare-your-file", form: { year: form_params[:year] })
+      redirect_to form.next_path
     else
       render form.view_path
     end
