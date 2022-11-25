@@ -21,18 +21,6 @@ class BulkUploadLettingsLogsController < ApplicationController
     end
   end
 
-  def show
-    render form.view_path
-  end
-
-  def update
-    if form.valid?
-      redirect_to form.next_path
-    else
-      render form.view_path
-    end
-  end
-
 private
 
   def current_year
