@@ -11,6 +11,7 @@ class Form::Sales::Subsections::IncomeBenefitsAndSavings < ::Form::Subsection
     @pages ||= [
       Form::Sales::Pages::Buyer1Income.new(nil, nil, self),
       Form::Sales::Pages::Buyer1Mortgage.new(nil, nil, self),
+      Form::Sales::Pages::Buyer2Income.new(nil, nil, self),
     ]
   end
 end
