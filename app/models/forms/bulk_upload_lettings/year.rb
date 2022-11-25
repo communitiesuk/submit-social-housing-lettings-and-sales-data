@@ -12,14 +12,19 @@ module Forms
       end
 
       def options
-        [
-          OpenStruct.new(id: "2022", name: "2022/2023"),
-          OpenStruct.new(id: "2021", name: "2021/2022"),
-        ]
+        possible_years.map do |year|
+          OpenStruct.new(id: year, name: "#{year}/#{year + 1}")
+        end
       end
 
       def back_path
         Rails.application.routes.url_helpers.lettings_logs_path
+      end
+
+    private
+
+      def possible_years
+        FormHandler.instance.lettings_forms.values.map { |form| form.start_date.year }.sort.reverse
       end
     end
   end
