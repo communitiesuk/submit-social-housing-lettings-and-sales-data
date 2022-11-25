@@ -1366,9 +1366,9 @@ RSpec.describe LocationsController, type: :request do
           end
 
           it "marks log as needing attention" do
-            expect(lettings_log.impacted_by_deactivation).to eq(nil)
+            expect(lettings_log.unresolved).to eq(nil)
             lettings_log.reload
-            expect(lettings_log.impacted_by_deactivation).to eq(true)
+            expect(lettings_log.unresolved).to eq(true)
           end
         end
 
@@ -1384,9 +1384,9 @@ RSpec.describe LocationsController, type: :request do
           end
 
           it "does not mark log as needing attention" do
-            expect(lettings_log.impacted_by_deactivation).to eq(nil)
+            expect(lettings_log.unresolved).to eq(nil)
             lettings_log.reload
-            expect(lettings_log.impacted_by_deactivation).to eq(nil)
+            expect(lettings_log.unresolved).to eq(nil)
           end
         end
       end

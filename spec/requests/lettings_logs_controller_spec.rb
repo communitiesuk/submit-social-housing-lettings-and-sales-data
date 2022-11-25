@@ -791,7 +791,7 @@ RSpec.describe LettingsLogsController, type: :request do
     end
 
     context "when viewing a collection of logs affected by deactivated location" do
-      let!(:affected_lettings_logs) { FactoryBot.create_list(:lettings_log, 3, impacted_by_deactivation: true, created_by: user) }
+      let!(:affected_lettings_logs) { FactoryBot.create_list(:lettings_log, 3, unresolved: true, created_by: user) }
       let!(:non_affected_lettings_logs) { FactoryBot.create_list(:lettings_log, 4, created_by: user) }
       let(:other_user) { FactoryBot.create(:user, organisation: user.organisation) }
       let(:headers) { { "Accept" => "text/html" } }
@@ -831,7 +831,7 @@ RSpec.describe LettingsLogsController, type: :request do
     end
 
     context "when viewing a specific log affected by deactivated location" do
-      let!(:affected_lettings_log) { FactoryBot.create(:lettings_log, impacted_by_deactivation: true, created_by: user, needstype: 2) }
+      let!(:affected_lettings_log) { FactoryBot.create(:lettings_log, unresolved: true, created_by: user, needstype: 2) }
       let(:headers) { { "Accept" => "text/html" } }
 
       before do

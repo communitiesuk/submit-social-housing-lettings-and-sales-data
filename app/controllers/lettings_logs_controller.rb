@@ -51,7 +51,7 @@ class LettingsLogsController < LogsController
   def edit
     @log = current_user.lettings_logs.find_by(id: params[:id])
     if @log
-      if @log.impacted_by_deactivation
+      if @log.unresolved
         redirect_to(send("lettings_log_#{@log.form.get_question('startdate', @log).page.id}_path", @log))
       else
         render("logs/edit", locals: { current_user: })
@@ -90,7 +90,7 @@ class LettingsLogsController < LogsController
   def update_logs
     respond_to do |format|
       format.html do
-        impacted_logs = current_user.lettings_logs.where(impacted_by_deactivation: true, created_by: current_user)
+        impacted_logs = current_user.lettings_logs.where(unresolved: true, created_by: current_user)
 
         @pagy, @logs = pagy(impacted_logs)
         @total_count = impacted_logs.size

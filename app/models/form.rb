@@ -72,7 +72,7 @@ class Form
   end
 
   def next_page_redirect_path(page, log, current_user)
-    if log.impacted_by_deactivation
+    if log.unresolved
       case page.id
       when "tenancy_start_date"
         "lettings_log_scheme_path"
