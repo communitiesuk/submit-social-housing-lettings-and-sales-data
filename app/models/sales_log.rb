@@ -56,4 +56,8 @@ class SalesLog < Log
   def setup_completed?
     form.setup_sections.all? { |sections| sections.subsections.all? { |subsection| subsection.status(self) == :completed } }
   end
+
+  def unresolved
+    false
+  end
 end
