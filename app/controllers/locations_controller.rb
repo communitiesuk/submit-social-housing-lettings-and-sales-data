@@ -20,31 +20,58 @@ class LocationsController < ApplicationController
     redirect_to scheme_location_postcode_path(@scheme, @location)
   end
 
-  def postcode; end
+  def postcode
+    if params[:location].present?
+      @location.postcode = params[:location][:postcode]
+      @location.save!
+      redirect_to scheme_location_name_path(@scheme, @location)
+    end
+  end
 
   def name
-    @location.update(location_params)
+    if params[:location].present?
+      @location.name = params[:location][:name]
+      @location.save!
+      redirect_to scheme_location_units_path(@scheme, @location)
+    end
   end
 
   def units
-    @location.update(location_params)
+    if params[:location].present?
+      @location.units = params[:location][:units]
+      @location.save!
+      redirect_to scheme_location_type_of_unit_path(@scheme, @location)
+    end
   end
 
   def type_of_unit
-    @location.update(location_params)
+    if params[:location].present?
+      @location.type_of_unit = params[:location][:type_of_unit]
+      @location.save!
+      redirect_to scheme_location_mobility_standards_path(@scheme, @location)
+    end
   end
 
   def mobility_standards
-    @location.update(location_params)
+    if params[:location].present?
+      @location.mobility_type = params[:location][:mobility_type]
+      @location.save!
+      redirect_to scheme_location_startdate_path(@scheme, @location)
+    end
   end
 
   def startdate
-    @location.update(location_params)
+    if params[:location].present?
+      day = params[:location]["startdate(3i)"]
+      month = params[:location]["startdate(2i)"]
+      year = params[:location]["startdate(1i)"]
+      @location.startdate = Time.zone.local(year.to_i, month.to_i, day.to_i)
+      @location.save!
+      redirect_to scheme_location_check_answers_path(@scheme, @location)
+    end
   end
 
-  def check_answers
-    @location.update(location_params)
-  end
+  def check_answers; end
 
   def show; end
 

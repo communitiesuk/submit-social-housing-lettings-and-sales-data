@@ -56,19 +56,19 @@ module LocationsHelper
   def location_edit_path(location, page)
     case page
     when "postcode"
-      scheme_location_postcode_path(location.scheme, location)
+      scheme_location_postcode_path(location.scheme, location, referrer: "check_answers")
     when "name"
-      scheme_location_name_path(location.scheme, location)
+      scheme_location_name_path(location.scheme, location, referrer: "check_answers")
     when "location_admin_district"
-      scheme_location_edit_local_authority_path(location.scheme, location)
+      scheme_location_edit_local_authority_path(location.scheme, location, referrer: "check_answers")
     when "units"
-      scheme_location_units_path(location.scheme, location)
+      scheme_location_units_path(location.scheme, location, referrer: "check_answers")
     when "type_of_unit"
-      scheme_location_type_of_unit_path(location.scheme, location)
+      scheme_location_type_of_unit_path(location.scheme, location, referrer: "check_answers")
     when "mobility_standards"
-      scheme_location_mobility_standards_path(location.scheme, location)
+      scheme_location_mobility_standards_path(location.scheme, location, referrer: "check_answers")
     when "startdate"
-      scheme_location_startdate_path(location.scheme, location)
+      scheme_location_startdate_path(location.scheme, location, referrer: "check_answers")
     end
   end
 

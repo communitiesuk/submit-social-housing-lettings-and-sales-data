@@ -4,7 +4,7 @@
 <% content_for :before_content do %>
   <%= govuk_back_link(
     text: "Back",
-    href: :back,
+    href: scheme_location_startdate_path(@scheme, @location),
   ) %>
 <% end %>
 
@@ -26,5 +26,5 @@
 </div>
 <div class="govuk-button-group">
   <%= govuk_button_to "Add this location", scheme_locations_path(@scheme) %>
-  <%= govuk_button_link_to "Cancel", new_scheme_location_path(@scheme), secondary: true %>
+  <%= govuk_button_link_to "Cancel", scheme_locations_path(@scheme), secondary: true %>
 </div>

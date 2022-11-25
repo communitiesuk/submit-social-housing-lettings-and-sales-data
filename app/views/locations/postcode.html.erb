@@ -3,11 +3,11 @@
 <% content_for :before_content do %>
   <%= govuk_back_link(
         text: "Back",
-        href: :back,
+        href: scheme_locations_path(@scheme),
         ) %>
 <% end %>
 
-<%= form_for(@location, method: :patch, url: scheme_location_name_path(@scheme, @location)) do |f| %>
+<%= form_for(@location, method: :patch, url: scheme_location_postcode_path(@scheme, @location)) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>
