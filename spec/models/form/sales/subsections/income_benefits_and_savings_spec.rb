@@ -16,6 +16,7 @@ RSpec.describe Form::Sales::Subsections::IncomeBenefitsAndSavings, type: :model 
       %w[
         buyer_1_income
         buyer_1_mortgage
+        buyer_2_income
       ],
     )
   end
