@@ -49,8 +49,15 @@ class SchemesController < ApplicationController
   end
 
   def deactivate
-    if @scheme.scheme_deactivation_periods.create!(deactivation_date: params[:deactivation_date]) && reset_location_and_scheme_for_logs!
+    if @scheme.scheme_deactivation_periods.create!(deactivation_date: params[:deactivation_date])
+      logs = reset_location_and_scheme_for_logs!
+
       flash[:notice] = deactivate_success_notice
+      LocationOrSchemeDeactivationMailer.new.send_deactivation_mails(
+        logs.to_a,
+        url_for(controller: "update_logs", action: "show"),
+        @scheme.service_name,
+      )
     end
     redirect_to scheme_details_path(@scheme)
   end
@@ -349,6 +356,8 @@ private
   end
 
   def reset_location_and_scheme_for_logs!
-    @scheme.lettings_logs.filter_by_before_startdate(params[:deactivation_date].to_time).update!(location: nil, scheme: nil, unresolved: true)
+    logs = @scheme.lettings_logs.filter_by_before_startdate(params[:deactivation_date].to_time)
+    logs.update!(location: nil, scheme: nil, unresolved: true)
+    logs
   end
 end

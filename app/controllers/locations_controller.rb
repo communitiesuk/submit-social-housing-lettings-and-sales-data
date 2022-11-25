@@ -48,8 +48,16 @@ class LocationsController < ApplicationController
   end
 
   def deactivate
-    if @location.location_deactivation_periods.create!(deactivation_date: params[:deactivation_date]) && reset_location_and_scheme_for_logs!
+    if @location.location_deactivation_periods.create!(deactivation_date: params[:deactivation_date])
+      logs = reset_location_and_scheme_for_logs!
+
       flash[:notice] = deactivate_success_notice
+      LocationOrSchemeDeactivationMailer.new.send_deactivation_mails(
+        logs.to_a,
+        url_for(controller: "update_logs", action: "show"),
+        @location.scheme.service_name,
+        @location.postcode,
+      )
     end
     redirect_to scheme_location_path(@scheme, @location)
   end
@@ -219,7 +227,9 @@ private
   end
 
   def reset_location_and_scheme_for_logs!
-    @location.lettings_logs.filter_by_before_startdate(params[:deactivation_date].to_time).update!(location: nil, scheme: nil, unresolved: true)
+    logs = @location.lettings_logs.filter_by_before_startdate(params[:deactivation_date].to_time)
+    logs.update!(location: nil, scheme: nil, unresolved: true)
+    logs
   end
 
   def toggle_date(key)
