@@ -33,4 +33,19 @@ RSpec.describe "Bulk upload sales log" do
       end
     end
   end
+
+  context "when not it crossover period" do
+    it "shows journey with year option" do
+      Timecop.freeze(2023, 10, 1) do
+        visit("/sales-logs")
+        expect(page).to have_link("Upload sales log in bulk")
+        click_link("Upload sales log in bulk")
+
+        expect(page).to have_content("Upload sales logs in bulk (2022/23)")
+        click_button("Continue")
+
+        expect(page).to have_content("Upload your file")
+      end
+    end
+  end
 end

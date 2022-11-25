@@ -5,7 +5,7 @@ class BulkUploadSalesLogsController < ApplicationController
     if in_crossover_period?
       redirect_to bulk_upload_sales_log_path(id: "year")
     else
-      redirect_to bulk_upload_sales_log_path(id: "prepare-your-file")
+      redirect_to bulk_upload_sales_log_path(id: "prepare-your-file", form: { year: current_year })
     end
   end
 
@@ -22,6 +22,10 @@ class BulkUploadSalesLogsController < ApplicationController
   end
 
 private
+
+  def current_year
+    FormHandler.instance.forms["current_sales"].start_date.year
+  end
 
   def in_crossover_period?
     FormHandler.instance.forms.values.any?(&:in_crossover_period?)
