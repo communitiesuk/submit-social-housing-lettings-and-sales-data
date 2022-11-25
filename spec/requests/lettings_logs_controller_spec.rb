@@ -831,7 +831,7 @@ RSpec.describe LettingsLogsController, type: :request do
     end
 
     context "when viewing a specific log affected by deactivated location" do
-      let!(:affected_lettings_log) { FactoryBot.create(:lettings_log, impacted_by_deactivation: true, created_by: user) }
+      let!(:affected_lettings_log) { FactoryBot.create(:lettings_log, impacted_by_deactivation: true, created_by: user, needstype: 2) }
       let(:headers) { { "Accept" => "text/html" } }
 
       before do
@@ -844,6 +844,16 @@ RSpec.describe LettingsLogsController, type: :request do
         expect(response).to redirect_to("/lettings-logs/#{affected_lettings_log.id}/tenancy-start-date")
         follow_redirect!
         expect(page).to have_content("What is the tenancy start date?")
+      end
+
+      it "tenancy start date page links to the scheme page" do
+        get "/lettings-logs/#{affected_lettings_log.id}/tenancy-start-date", headers:, params: {}
+        expect(page).to have_link("Skip for now", href: "/lettings-logs/#{affected_lettings_log.id}/scheme")
+      end
+
+      it "scheme page links to the locations page" do
+        get "/lettings-logs/#{affected_lettings_log.id}/scheme", headers:, params: {}
+        expect(page).to have_link("Skip for now", href: "/lettings-logs/#{affected_lettings_log.id}/location")
       end
     end
   end

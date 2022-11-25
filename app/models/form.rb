@@ -72,11 +72,24 @@ class Form
   end
 
   def next_page_redirect_path(page, log, current_user)
-    nxt_page = next_page(page, log, current_user)
-    if nxt_page == :check_answers
-      "#{type}_log_#{subsection_for_page(page).id}_check_answers_path"
+    if log.impacted_by_deactivation
+      case page.id
+      when "tenancy_start_date"
+        "lettings_log_scheme_path"
+      when "scheme"
+        "lettings_log_location_path"
+      when "location"
+        "#{type}_log_#{subsection_for_page(page).id}_check_answers_path"
+      else
+        "lettings_log_tenancy_start_date_path"
+      end
     else
-      "#{type}_log_#{nxt_page}_path"
+      nxt_page = next_page(page, log, current_user)
+      if nxt_page == :check_answers
+        "#{type}_log_#{subsection_for_page(page).id}_check_answers_path"
+      else
+        "#{type}_log_#{nxt_page}_path"
+      end
     end
   end
 
