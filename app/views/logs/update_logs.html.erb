@@ -26,7 +26,7 @@
                 scope: "row",
                 class: "govuk-!-text-align-right",
                 }) do %>
-                    <%= govuk_link_to("Update now", lettings_log_tenancy_start_date_path(log)) %>
+                    <%= govuk_link_to("Update now", send("lettings_log_#{log.form.get_question('startdate', log).page.id}_path", log)) %>
             <% end %>
         <% end %>
     <% end %>

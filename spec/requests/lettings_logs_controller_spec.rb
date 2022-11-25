@@ -842,6 +842,8 @@ RSpec.describe LettingsLogsController, type: :request do
       it "routes to the tenancy date question" do
         get "/lettings-logs/#{affected_lettings_log.id}", headers:, params: {}
         expect(response).to redirect_to("/lettings-logs/#{affected_lettings_log.id}/tenancy-start-date")
+        follow_redirect!
+        expect(page).to have_content("What is the tenancy start date?")
       end
     end
   end

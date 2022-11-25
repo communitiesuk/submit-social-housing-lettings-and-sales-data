@@ -51,7 +51,11 @@ class LettingsLogsController < LogsController
   def edit
     @log = current_user.lettings_logs.find_by(id: params[:id])
     if @log
-      @log.impacted_by_deactivation ? redirect_to(lettings_log_tenancy_start_date_path(@log)) : render("logs/edit", locals: { current_user: })
+      if @log.impacted_by_deactivation
+        redirect_to(send("lettings_log_#{@log.form.get_question('startdate', @log).page.id}_path", @log))
+      else
+        render("logs/edit", locals: { current_user: })
+      end
     else
       render_not_found
     end
