@@ -828,6 +828,14 @@ RSpec.describe LettingsLogsController, type: :request do
         expect(page).not_to have_content(affected_lettings_logs.first.id)
         expect(page).to have_content("You need to update 2 logs")
       end
+
+      it "displays correct content when there are no unresolved logs" do
+        LettingsLog.where(unresolved: true).update!(unresolved: false)
+        get "/lettings-logs/update-logs", headers:, params: {}
+        expect(page).to have_content("There are no more logs that need updating")
+        expect(page).to have_content("You’ve completed all the logs that were affected by scheme changes.")
+        page.assert_selector(".govuk-button", text: "Back to all logs")
+      end
     end
 
     context "when viewing a specific log affected by deactivated location" do
