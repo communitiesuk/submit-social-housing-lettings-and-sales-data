@@ -66,6 +66,8 @@ Rails.application.routes.draw do
       get "new-reactivation", to: "locations#new_reactivation"
       get "postcode", to: "locations#postcode"
       patch "postcode", to: "locations#postcode"
+      get "local-authority", to: "locations#local_authority"
+      patch "local-authority", to: "locations#local_authority"
       get "name", to: "locations#name"
       patch "name", to: "locations#name"
       get "units", to: "locations#units"

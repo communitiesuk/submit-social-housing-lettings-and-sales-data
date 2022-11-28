@@ -15,7 +15,7 @@
       <%= render partial: "organisations/headings", locals: { main: I18n.t("questions.location.postcode"), sub: "Add a location to #{@scheme.service_name}" } %>
 
       <%= f.govuk_text_field :postcode,
-                             label: { size: "m" },
+                             label: nil,
                              hint: { text: I18n.t("hints.location.postcode") },
                              width: 5 %>
 

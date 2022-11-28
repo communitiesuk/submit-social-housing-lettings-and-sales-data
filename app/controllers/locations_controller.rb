@@ -24,6 +24,21 @@ class LocationsController < ApplicationController
     if params[:location].present?
       @location.postcode = params[:location][:postcode]
       @location.save!
+      if @location.location_code.blank? || @location.location_admin_district.blank?
+        redirect_to scheme_location_local_authority_path(@scheme, @location, referrer: params[:referrer])
+      elsif params[:referrer] == "check_answers"
+        redirect_to scheme_location_check_answers_path(@scheme, @location)
+      else
+        redirect_to scheme_location_name_path(@scheme, @location)
+      end
+    end
+  end
+
+  def local_authority
+    if params[:location].present?
+      @location.location_admin_district = params[:location][:location_admin_district]
+      @location.location_code = Location.local_authorities.key(params[:location][:location_admin_district])
+      @location.save!
       if params[:referrer] == "check_answers"
         redirect_to scheme_location_check_answers_path(@scheme, @location)
       else
@@ -158,7 +173,7 @@ class LocationsController < ApplicationController
       @location = Location.new(location_params)
       if @location.save
         if @location.location_admin_district.nil?
-          redirect_to(scheme_location_edit_local_authority_path(scheme_id: @scheme.id, location_id: @location.id, add_another_location: location_params[:add_another_location]))
+          redirect_to(scheme_location_local_authority_path(scheme_id: @scheme.id, location_id: @location.id, add_another_location: location_params[:add_another_location]))
         elsif location_params[:add_another_location] == "Yes"
           redirect_to new_scheme_location_path(@scheme)
         else
@@ -184,10 +199,6 @@ class LocationsController < ApplicationController
     render_not_found and return unless @location && @scheme
   end
 
-  def edit_local_authority
-    render_not_found and return unless @location && @scheme
-  end
-
   def update
     render_not_found and return unless @location && @scheme
 
@@ -204,7 +215,7 @@ class LocationsController < ApplicationController
         case page
         when "edit"
           if @location.location_admin_district.nil?
-            redirect_to(scheme_location_edit_local_authority_path(scheme_id: @scheme.id, location_id: @location.id, add_another_location: location_params[:add_another_location]))
+            redirect_to(scheme_location_local_authority_path(scheme_id: @scheme.id, location_id: @location.id, add_another_location: location_params[:add_another_location]))
           elsif location_params[:add_another_location] == "Yes"
             redirect_to(new_scheme_location_path(@location.scheme))
           else

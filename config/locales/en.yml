@@ -393,9 +393,9 @@ en:
     descriptions:
       location:
         mobility_type:
-          W: "The majority of units are suitable for someone who uses a wheelchair and offer the full use of all rooms and facilities."
-          A: "For example, the majority of units have been fitted with stairlifts, ramps, level access showers or grab rails."
-          N: "The majority of units are not designed to wheelchair-user standards or fitted with any equipment and adaptations."
+          W: "Suitable for someone who uses a wheelchair and offers the full use of all rooms and facilities."
+          A: "Fitted with stairlifts, ramps, level access showers or grab rails."
+          N: "Not designed to wheelchair-user standards or fitted with any equipment or adaptations."
 
   hints:
     location:

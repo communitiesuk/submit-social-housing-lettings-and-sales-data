@@ -60,7 +60,7 @@ module LocationsHelper
     when "name"
       scheme_location_name_path(location.scheme, location, referrer: "check_answers")
     when "location_admin_district"
-      scheme_location_edit_local_authority_path(location.scheme, location, referrer: "check_answers")
+      scheme_location_local_authority_path(location.scheme, location, referrer: "check_answers")
     when "units"
       scheme_location_units_path(location.scheme, location, referrer: "check_answers")
     when "type_of_unit"
