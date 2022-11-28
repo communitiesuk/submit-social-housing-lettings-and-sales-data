@@ -65,8 +65,6 @@ module DerivedVariables::LettingsLogVariables
     self.voiddate = startdate if is_renewal?
     self.vacdays = property_vacant_days
 
-    self.unresolved = false if unresolved == true && location.present? && scheme.present?
-
     set_housingneeds_fields if housingneeds?
   end
 

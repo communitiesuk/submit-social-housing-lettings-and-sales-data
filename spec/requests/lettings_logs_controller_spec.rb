@@ -706,6 +706,27 @@ RSpec.describe LettingsLogsController, type: :request do
               expect(response).to have_http_status(:not_found)
             end
           end
+
+          context "when the log is unresolved" do
+            let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+            let!(:location) { FactoryBot.create(:location, scheme:) }
+
+            before do
+              lettings_log.update!(needstype: 2, scheme:, location:, unresolved: true)
+              sign_in user
+              get "/lettings-logs/#{lettings_log.id}", headers:, params: {}
+            end
+
+            it "marks it as resolved when both scheme and location exist" do
+              lettings_log.reload
+              expect(lettings_log.unresolved).to eq(false)
+            end
+
+            it "displays a success banner" do
+              expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+              expect(page).to have_content("This log is now complete")
+            end
+          end
         end
       end
     end

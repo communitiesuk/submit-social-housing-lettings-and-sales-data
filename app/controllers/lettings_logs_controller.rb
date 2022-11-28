@@ -37,6 +37,7 @@ class LettingsLogsController < LogsController
   def show
     respond_to do |format|
       # We don't have a dedicated non-editable show view
+      mark_logs_resolved
       format.html { edit }
       format.json do
         if @log
@@ -111,5 +112,11 @@ private
 
   def post_create_redirect_url(log)
     lettings_log_url(log)
+  end
+
+  def mark_logs_resolved
+    if @log&.unresolved == true && @log.location.present? && @log.scheme.present? && @log.update(unresolved: false)
+      flash[:notice] = "This log is now complete"
+    end
   end
 end
