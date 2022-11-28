@@ -13,6 +13,7 @@ class LettingsLogsController < LogsController
         @pagy, @logs = pagy(unpaginated_filtered_logs)
         @searched = search_term.presence
         @total_count = all_logs.size
+        @unresolved_count = all_logs.where(unresolved: true, created_by: current_user).count
         render "logs/index"
       end
     end

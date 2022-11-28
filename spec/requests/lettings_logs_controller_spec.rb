@@ -859,6 +859,13 @@ RSpec.describe LettingsLogsController, type: :request do
         expect(page).to have_content("You’ve completed all the logs that were affected by scheme changes.")
         page.assert_selector(".govuk-button", text: "Back to all logs")
       end
+
+      it "displays a banner on the lettings log page" do
+        get "/lettings-logs", headers:, params: {}
+        expect(page).to have_css(".govuk-notification-banner")
+        expect(page).to have_content("A scheme has changed and it has affected 3 logs")
+        expect(page).to have_link("Update logs", href: "/lettings-logs/update-logs")
+      end
     end
 
     context "when viewing a specific log affected by deactivated location" do
