@@ -91,6 +91,7 @@ class LettingsLogsController < LogsController
   def update_logs
     respond_to do |format|
       format.html do
+        flash[:notice] = nil
         impacted_logs = current_user.lettings_logs.where(unresolved: true, created_by: current_user)
 
         @pagy, @logs = pagy(impacted_logs)
@@ -116,7 +117,10 @@ private
 
   def mark_logs_resolved
     if @log&.unresolved == true && @log.location.present? && @log.scheme.present? && @log.update(unresolved: false)
-      flash[:notice] = "This log is now complete"
+      notice_message = "This log is now complete."
+      unresolved_logs_count_for_user = current_user.lettings_logs.where(unresolved: true, created_by: current_user).count
+      notice_message << " <a href=\"/lettings-logs/update-logs\">Update #{unresolved_logs_count_for_user} more logs</a>" if unresolved_logs_count_for_user.positive?
+      flash[:notice] = notice_message.html_safe
     end
   end
 end

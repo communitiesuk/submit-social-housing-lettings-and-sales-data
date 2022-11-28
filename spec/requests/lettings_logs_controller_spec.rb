@@ -710,6 +710,7 @@ RSpec.describe LettingsLogsController, type: :request do
           context "when the log is unresolved" do
             let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
             let!(:location) { FactoryBot.create(:location, scheme:) }
+            let!(:unresolved_lettings_logs) { FactoryBot.create_list(:lettings_log, 3, unresolved: true, created_by: user) }
 
             before do
               lettings_log.update!(needstype: 2, scheme:, location:, unresolved: true)
@@ -725,6 +726,7 @@ RSpec.describe LettingsLogsController, type: :request do
             it "displays a success banner" do
               expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
               expect(page).to have_content("This log is now complete")
+              expect(page).to have_link("Update 3 more logs", href: "/lettings-logs/update-logs")
             end
           end
         end
