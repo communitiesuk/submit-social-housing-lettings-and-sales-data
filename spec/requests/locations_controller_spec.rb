@@ -1243,11 +1243,13 @@ RSpec.describe LocationsController, type: :request do
       let!(:lettings_log) { FactoryBot.create(:lettings_log, :sh, location:, scheme:, startdate:, owning_organisation: user.organisation) }
       let(:startdate) { Time.utc(2022, 10, 11) }
       let(:add_deactivations) { nil }
+      let(:setup_locations) { nil }
 
       before do
         Timecop.freeze(Time.utc(2022, 10, 10))
         sign_in user
         add_deactivations
+        setup_locations
         location.save!
         patch "/schemes/#{scheme.id}/locations/#{location.id}/new-deactivation", params:
       end
@@ -1259,20 +1261,52 @@ RSpec.describe LocationsController, type: :request do
       context "with default date" do
         let(:params) { { location_deactivation_period: { deactivation_date_type: "default", deactivation_date: } } }
 
-        it "redirects to the confirmation page" do
-          follow_redirect!
-          expect(response).to have_http_status(:ok)
-          expect(page).to have_content("This change will affect #{location.lettings_logs.count} logs")
+        context "and affected logs" do
+          it "redirects to the confirmation page" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("This change will affect 1 logs")
+          end
+        end
+
+        context "and no affected logs" do
+          let(:setup_locations) { location.lettings_logs.update(location: nil) }
+
+          it "redirects to the location page and updates the deactivation period" do
+            follow_redirect!
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+            location.reload
+            expect(location.location_deactivation_periods.count).to eq(1)
+            expect(location.location_deactivation_periods.first.deactivation_date).to eq(Time.zone.local(2022, 4, 1))
+          end
         end
       end
 
       context "with other date" do
         let(:params) { { location_deactivation_period: { deactivation_date_type: "other", "deactivation_date(3i)": "10", "deactivation_date(2i)": "10", "deactivation_date(1i)": "2022" } } }
 
-        it "redirects to the confirmation page" do
-          follow_redirect!
-          expect(response).to have_http_status(:ok)
-          expect(page).to have_content("This change will affect #{location.lettings_logs.count} logs")
+        context "and afected logs" do
+          it "redirects to the confirmation page" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("This change will affect #{location.lettings_logs.count} logs")
+          end
+        end
+
+        context "and no affected logs" do
+          let(:setup_locations) { location.lettings_logs.update(location: nil) }
+
+          it "redirects to the location page and updates the deactivation period" do
+            follow_redirect!
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+            location.reload
+            expect(location.location_deactivation_periods.count).to eq(1)
+            expect(location.location_deactivation_periods.first.deactivation_date).to eq(Time.zone.local(2022, 10, 10))
+          end
         end
       end
 
