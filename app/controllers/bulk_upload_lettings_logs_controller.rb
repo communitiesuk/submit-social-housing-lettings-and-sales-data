@@ -39,12 +39,14 @@ private
                 Forms::BulkUploadLettings::PrepareYourFile.new(form_params)
               when "upload-your-file"
                 Forms::BulkUploadLettings::UploadYourFile.new(form_params)
+              when "checking-file"
+                Forms::BulkUploadLettings::CheckingFile.new(form_params)
               else
                 raise "Page not found for path #{params[:id]}"
               end
   end
 
   def form_params
-    params.fetch(:form, {}).permit(:year)
+    params.fetch(:form, {}).permit(:year, :file)
   end
 end

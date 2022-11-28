@@ -30,6 +30,20 @@ RSpec.describe "Bulk upload sales log" do
         click_button("Continue")
 
         expect(page).to have_content("Upload your file")
+        click_button("Upload")
+
+        expect(page).to have_content("Select which file to upload")
+        attach_file "file", file_fixture("2021_22_lettings_bulk_upload.xlsx")
+        click_button("Upload")
+
+        expect(page).to have_content("Your file must be in CSV format")
+        attach_file "file", file_fixture("blank_bulk_upload_sales.csv")
+        click_button("Upload")
+
+        expect(page).to have_content("Once this is done")
+        click_link("Back")
+
+        expect(page).to have_content("Upload sales logs in bulk")
       end
     end
   end
