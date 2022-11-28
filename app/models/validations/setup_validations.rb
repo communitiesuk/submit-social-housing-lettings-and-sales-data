@@ -11,11 +11,7 @@ module Validations::SetupValidations
 
   def validate_scheme(record)
     validate_location_during_startdate(record, :scheme_id)
-
-    scheme_inactive_status = inactive_status(record.startdate, record.scheme&.scheme_deactivation_periods, record.scheme&.available_from)
-    if scheme_inactive_status.present?
-      record.errors.add :scheme_id, I18n.t("validations.setup.startdate.scheme_#{scheme_inactive_status[:status]}", name: record.scheme.service_name, date: scheme_inactive_status[:date].to_formatted_s(:govuk_date), deactivation_date: scheme_inactive_status[:deactivation_date]&.to_formatted_s(:govuk_date))
-    end
+    validate_scheme_during_startdate(record)
   end
 
 private
@@ -39,6 +35,13 @@ private
     location_inactive_status = inactive_status(record.startdate, record.location&.location_deactivation_periods, record.location&.available_from)
     if location_inactive_status.present?
       record.errors.add field, I18n.t("validations.setup.startdate.location_#{location_inactive_status[:status]}", postcode: record.location.postcode, date: location_inactive_status[:date].to_formatted_s(:govuk_date), deactivation_date: location_inactive_status[:deactivation_date]&.to_formatted_s(:govuk_date))
+    end
+  end
+
+  def validate_scheme_during_startdate(record)
+    scheme_inactive_status = inactive_status(record.startdate, record.scheme&.scheme_deactivation_periods, record.scheme&.available_from)
+    if scheme_inactive_status.present?
+      record.errors.add :scheme_id, I18n.t("validations.setup.startdate.scheme_#{scheme_inactive_status[:status]}", name: record.scheme.service_name, date: scheme_inactive_status[:date].to_formatted_s(:govuk_date), deactivation_date: scheme_inactive_status[:deactivation_date]&.to_formatted_s(:govuk_date))
     end
   end
 end
