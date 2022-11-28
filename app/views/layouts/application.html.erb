@@ -124,7 +124,7 @@
             success: true, title_heading_level: 3,
             title_id: "swanky-notifications"
           ) do |notification_banner|
-            notification_banner.heading(text: flash.notice)
+            notification_banner.heading(text: flash.notice.html_safe)
           end %>
         <% end %>
         <%= content_for?(:content) ? yield(:content) : yield %>
