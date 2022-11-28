@@ -36,7 +36,14 @@ class LocationsController < ApplicationController
     if params[:location].present?
       @location.name = params[:location][:name]
       @location.save!
-      redirect_to scheme_location_units_path(@scheme, @location)
+      case params[:referrer]
+      when "check_answers"
+        redirect_to scheme_location_check_answers_path(@scheme, @location)
+      when "details"
+        redirect_to scheme_location_path(@scheme, @location)
+      else
+        redirect_to scheme_location_units_path(@scheme, @location)
+      end
     end
   end
 
@@ -44,7 +51,11 @@ class LocationsController < ApplicationController
     if params[:location].present?
       @location.units = params[:location][:units]
       @location.save!
-      redirect_to scheme_location_type_of_unit_path(@scheme, @location)
+      if params[:referrer] == "check_answers"
+        redirect_to scheme_location_check_answers_path(@scheme, @location)
+      else
+        redirect_to scheme_location_type_of_unit_path(@scheme, @location)
+      end
     end
   end
 
@@ -52,7 +63,11 @@ class LocationsController < ApplicationController
     if params[:location].present?
       @location.type_of_unit = params[:location][:type_of_unit]
       @location.save!
-      redirect_to scheme_location_mobility_standards_path(@scheme, @location)
+      if params[:referrer] == "check_answers"
+        redirect_to scheme_location_check_answers_path(@scheme, @location)
+      else
+        redirect_to scheme_location_mobility_standards_path(@scheme, @location)
+      end
     end
   end
 
@@ -60,7 +75,11 @@ class LocationsController < ApplicationController
     if params[:location].present?
       @location.mobility_type = params[:location][:mobility_type]
       @location.save!
-      redirect_to scheme_location_availability_path(@scheme, @location)
+      if params[:referrer] == "check_answers"
+        redirect_to scheme_location_check_answers_path(@scheme, @location)
+      else
+        redirect_to scheme_location_availability_path(@scheme, @location)
+      end
     end
   end
 
@@ -79,7 +98,7 @@ class LocationsController < ApplicationController
     if params[:location].present?
       @location.confirmed = true
       @location.save!
-      flash[:notice] = "#{@location.postcode} #{@location.startdate < Time.zone.now ? "has been" : "will be"} added to this scheme"
+      flash[:notice] = "#{@location.postcode} #{@location.startdate < Time.zone.now ? 'has been' : 'will be'} added to this scheme"
       redirect_to scheme_locations_path(@scheme, @location)
     end
   end

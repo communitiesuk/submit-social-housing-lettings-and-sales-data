@@ -3,7 +3,7 @@
 <% content_for :before_content do %>
   <%= govuk_back_link(
         text: "Back",
-        href: params[:referrer] == "check_answers" ? scheme_location_check_answers_path(@scheme, @location) : scheme_location_postcode_path(@scheme, @location),
+        href: params[:referrer] == "check_answers" ? scheme_location_check_answers_path(@scheme, @location) : params[:referrer] == "details" ? scheme_location_path(@scheme, @location) : scheme_location_postcode_path(@scheme, @location),
         ) %>
 <% end %>
 
@@ -22,6 +22,9 @@
         <% if params[:referrer] == "check_answers" %>
           <%= f.govuk_submit "Save changes" %>
           <%= govuk_button_link_to "Cancel", scheme_location_check_answers_path(@scheme, @location), secondary: true %>
+        <% elsif params[:referrer] == "details" %>
+          <%= f.govuk_submit "Save changes" %>
+          <%= govuk_button_link_to "Cancel", scheme_location_path(@scheme, @location), secondary: true %>
         <% else %>
           <%= f.govuk_submit "Save and continue" %>
           <%= govuk_button_link_to "Cancel", scheme_locations_path(@scheme), secondary: true %>
