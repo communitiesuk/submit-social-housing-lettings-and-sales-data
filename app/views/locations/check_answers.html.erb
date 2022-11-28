@@ -15,7 +15,7 @@
       <div class="govuk-grid-column-two-thirds-from-desktop">
           <%= govuk_summary_list do |summary_list| %>
               <% display_location_attributes(@location).each do |attr| %>
-                  <% next if attr[:attribute] == "code" %>
+                  <% next if %w[location_code status].include? attr[:attribute] %>
                   <%= summary_list.row do |row| %>
                   <% row.key { attr[:name] } %>
                   <% row.value { attr[:attribute].eql?("status") ? status_tag(attr[:value]) : details_html(attr) } %>

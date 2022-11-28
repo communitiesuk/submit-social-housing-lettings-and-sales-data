@@ -24,7 +24,11 @@ class LocationsController < ApplicationController
     if params[:location].present?
       @location.postcode = params[:location][:postcode]
       @location.save!
-      redirect_to scheme_location_name_path(@scheme, @location)
+      if params[:referrer] == "check_answers"
+        redirect_to scheme_location_check_answers_path(@scheme, @location)
+      else
+        redirect_to scheme_location_name_path(@scheme, @location)
+      end
     end
   end
 

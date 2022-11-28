@@ -67,7 +67,7 @@ module LocationsHelper
       scheme_location_type_of_unit_path(location.scheme, location, referrer: "check_answers")
     when "mobility_standards"
       scheme_location_mobility_standards_path(location.scheme, location, referrer: "check_answers")
-    when "avaliability"
+    when "availability"
       scheme_location_availability_path(location.scheme, location, referrer: "check_answers")
     end
   end
