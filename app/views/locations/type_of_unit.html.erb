@@ -4,7 +4,7 @@
   <%= govuk_back_link(
         text: "Back",
         href: params[:referrer] == "check_answers" ? scheme_location_check_answers_path(@scheme, @location) : scheme_location_units_path(@scheme, @location),
-        ) %>
+      ) %>
 <% end %>
 
 <%= form_for(@location, method: :patch, url: scheme_location_type_of_unit_path(@scheme, @location, referrer: params[:referrer])) do |f| %>
