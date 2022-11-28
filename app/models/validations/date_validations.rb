@@ -105,7 +105,7 @@ private
   def inactive_status(date, deactivation_periods, available_from)
     return if date.blank?
 
-    closest_reactivation = deactivation_periods.reverse.find { |period| period.reactivation_date.present? && date.between?(period.deactivation_date, period.reactivation_date - 1.day) } if deactivation_periods.present?
+    closest_reactivation = deactivation_periods.order(created_at: :desc).find { |period| period.reactivation_date.present? && date.between?(period.deactivation_date, period.reactivation_date - 1.day) } if deactivation_periods.present?
     return { status: "reactivating_soon", date: closest_reactivation.reactivation_date, deactivation_date: closest_reactivation.deactivation_date } if closest_reactivation.present?
     return { status: "activating_soon", date: available_from } if available_from.present? && available_from > date
 
