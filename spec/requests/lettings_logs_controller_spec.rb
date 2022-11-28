@@ -710,9 +710,9 @@ RSpec.describe LettingsLogsController, type: :request do
           context "when the log is unresolved" do
             let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
             let!(:location) { FactoryBot.create(:location, scheme:) }
-            let!(:unresolved_lettings_logs) { FactoryBot.create_list(:lettings_log, 3, unresolved: true, created_by: user) }
 
             before do
+              FactoryBot.create_list(:lettings_log, 3, unresolved: true, created_by: user)
               lettings_log.update!(needstype: 2, scheme:, location:, unresolved: true)
               sign_in user
               get "/lettings-logs/#{lettings_log.id}", headers:, params: {}
@@ -885,6 +885,11 @@ RSpec.describe LettingsLogsController, type: :request do
       it "scheme page links to the locations page" do
         get "/lettings-logs/#{affected_lettings_log.id}/scheme", headers:, params: {}
         expect(page).to have_link("Skip for now", href: "/lettings-logs/#{affected_lettings_log.id}/location")
+      end
+
+      it "displays inset hint text on the tenancy start date question" do
+        get "/lettings-logs/#{affected_lettings_log.id}/tenancy-start-date", headers:, params: {}
+        expect(page).to have_content("Check the tenancy start date is correct")
       end
     end
   end
