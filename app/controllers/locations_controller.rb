@@ -132,8 +132,12 @@ class LocationsController < ApplicationController
       if [day, month, year].none?(&:blank?)
         if Date.valid_date?(year.to_i, month.to_i, day.to_i)
           @location.startdate = Time.zone.local(year.to_i, month.to_i, day.to_i)
-          @location.save!
-          redirect_to scheme_location_check_answers_path(@scheme, @location)
+          if @location.valid?(:startdate)
+            @location.save!
+            redirect_to scheme_location_check_answers_path(@scheme, @location)
+          else
+            render :availability, status: :unprocessable_entity
+          end
         else
           error_message = I18n.t("validations.location.startdate_invalid")
           @location.errors.add :startdate, error_message

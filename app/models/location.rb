@@ -5,6 +5,7 @@ class Location < ApplicationRecord
   validate :validate_units, on: :units
   validate :validate_type_of_unit, on: :type_of_unit
   validate :validate_mobility_type, on: :mobility_type
+  validate :validate_startdate, on: :startdate
   belongs_to :scheme
   has_many :lettings_logs, class_name: "LettingsLog"
   has_many :location_deactivation_periods, class_name: "LocationDeactivationPeriod"
@@ -439,6 +440,13 @@ class Location < ApplicationRecord
     if mobility_type.blank?
       error_message = I18n.t("validations.location.mobility_standards")
       errors.add :mobility_type, error_message
+    end
+  end
+
+  def validate_startdate
+    unless startdate.between?(Time.zone.local(1900, 1, 1), Time.zone.local(2200, 1, 1))
+      error_message = I18n.t("validations.location.startdate_out_of_range")
+      errors.add :startdate, error_message
     end
   end
 

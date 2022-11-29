@@ -332,6 +332,7 @@ en:
       mobility_standards: "Select the mobility standard for the majority of the units at this location"
       startdate_blank: "Enter the day, month and year when the first property became available at this location"
       startdate_invalid: "Enter a valid day, month and year"
+      startdate_out_of_range: "Availability date must be between 1900 and 2200"
       toggle_date:
         not_selected: "Select one of the options"
         invalid: "Enter a valid day, month and year"
