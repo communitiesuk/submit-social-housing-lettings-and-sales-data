@@ -123,30 +123,9 @@ RSpec.describe Location, type: :model do
       Timecop.unfreeze
     end
 
-    context "when location is missing some mandatory information" do
-      it "returns incomplete when the postcode is missing" do
-        location.postcode = nil
-        expect(location.status).to eq(:incomplete)
-        location.postcode = ""
-        expect(location.status).to eq(:incomplete)
-      end
-
-      it "returns incomplete when the number of units is missing" do
-        location.units = nil
-        expect(location.status).to eq(:incomplete)
-      end
-
-      it "returns incomplete when the unit type is missing" do
-        location.type_of_unit = nil
-        expect(location.status).to eq(:incomplete)
-        location.type_of_unit = ""
-        expect(location.status).to eq(:incomplete)
-      end
-
-      it "returns incomplete when the mobility type is missing" do
-        location.mobility_type = nil
-        expect(location.status).to eq(:incomplete)
-        location.mobility_type = ""
+    context "when location is not confirmed" do
+      it "returns incomplete " do
+        location.confirmed = false
         expect(location.status).to eq(:incomplete)
       end
     end
