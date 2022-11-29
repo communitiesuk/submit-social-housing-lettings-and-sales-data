@@ -620,7 +620,7 @@ RSpec.describe LettingsLogsController, type: :request do
     end
 
     context "when requesting a specific lettings log" do
-      let(:completed_lettings_log) { FactoryBot.create(:lettings_log, :completed) }
+      let!(:completed_lettings_log) { FactoryBot.create(:lettings_log, :completed, owning_organisation: user.organisation, managing_organisation: user.organisation, created_by: user) }
       let(:id) { completed_lettings_log.id }
 
       before do
@@ -671,6 +671,26 @@ RSpec.describe LettingsLogsController, type: :request do
               assert_select ".govuk-tag", text: /In progress/, count: 2
               assert_select ".govuk-tag", text: /Completed/, count: 0
               assert_select ".govuk-tag", text: /Cannot start yet/, count: 1
+            end
+
+            it "displays a link to update the log for currently editable logs" do
+              completed_lettings_log.update!(startdate: Time.zone.local(2022, 4, 1), tenancylength: nil)
+              completed_lettings_log.reload
+
+              get "/lettings-logs/#{completed_lettings_log.id}", headers:, params: {}
+              expect(completed_lettings_log.form.end_date).to eq(Time.zone.local(2023, 7, 1))
+              expect(completed_lettings_log.status).to eq("completed")
+              expect(page).to have_link("review and make changes to this log", href: "/lettings-logs/#{completed_lettings_log.id}/review")
+            end
+
+            it "displays a closed collection window message for previous collection year logs" do
+              completed_lettings_log.update!(startdate: Time.zone.local(2021, 4, 1))
+              completed_lettings_log.reload
+
+              get "/lettings-logs/#{completed_lettings_log.id}", headers:, params: {}
+              expect(completed_lettings_log.form.end_date).to eq(Time.zone.local(2022, 7, 1))
+              expect(completed_lettings_log.status).to eq("completed")
+              expect(page).to have_content("This log is from the 2021/2022 collection window, which is now closed.")
             end
           end
 

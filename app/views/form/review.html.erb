@@ -11,7 +11,7 @@
       <%= content_for(:title) %>
     </h1>
     <p class="govuk-body">
-      You can review and make changes to this log until 2nd June <%= @log.collection_start_year.present? ? @log.collection_start_year + 1 : "" %>.
+      <%= review_log_text(@log) %>
     </p>
     <% @log.form.sections.map do |section| %>
       <h2 class="govuk-heading-m"><%= section.label %></h2>
