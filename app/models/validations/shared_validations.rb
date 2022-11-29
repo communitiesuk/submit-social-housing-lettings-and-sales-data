@@ -33,4 +33,40 @@ module Validations::SharedValidations
       end
     end
   end
+
+  def location_during_startdate_validation(record, field)
+    location_inactive_status = inactive_status(record.startdate, record.location&.available_from, record.location)
+    if location_inactive_status.present?
+      record.errors.add field, I18n.t("validations.setup.startdate.location_#{location_inactive_status[:status]}", postcode: record.location.postcode, date: location_inactive_status[:reactivation_date].to_formatted_s(:govuk_date), deactivation_date: location_inactive_status[:deactivation_date]&.to_formatted_s(:govuk_date))
+    end
+  end
+
+  def scheme_during_startdate_validation(record, field)
+    scheme_inactive_status = inactive_status(record.startdate, record.scheme&.available_from, record.scheme)
+    if scheme_inactive_status.present?
+      record.errors.add field, I18n.t("validations.setup.startdate.scheme_#{scheme_inactive_status[:status]}", name: record.scheme.service_name, date: scheme_inactive_status[:reactivation_date].to_formatted_s(:govuk_date), deactivation_date: scheme_inactive_status[:deactivation_date]&.to_formatted_s(:govuk_date))
+    end
+  end
+
+  def inactive_status(date, available_from, resource)
+    return if date.blank? || resource.blank?
+
+    status = resource.status(date)
+    return unless %i[reactivating_soon activating_soon deactivated].include?(status)
+
+    closest_reactivation = resource.recent_deactivation
+    open_deactivation = resource.open_deactivation
+
+    case status
+    when :reactivating_soon
+      reactivation_date = closest_reactivation.reactivation_date
+      deactivation_date = closest_reactivation.deactivation_date
+    when :activating_soon
+      reactivation_date = available_from
+    when :deactivated
+      reactivation_date = open_deactivation.deactivation_date
+    end
+
+    { status:, reactivation_date:, deactivation_date: }
+  end
 end
