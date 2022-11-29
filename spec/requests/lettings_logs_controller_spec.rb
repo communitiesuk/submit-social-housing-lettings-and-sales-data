@@ -896,7 +896,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
       it "displays inset hint text on the tenancy start date question" do
         get "/lettings-logs/#{affected_lettings_log.id}/tenancy-start-date", headers:, params: {}
-        expect(page).to have_content("Check the tenancy start date is correct")
+        expect(page).to have_content("Some scheme details have changed, and now this log needs updating. Check that the tenancy start date is correct.")
       end
     end
   end
