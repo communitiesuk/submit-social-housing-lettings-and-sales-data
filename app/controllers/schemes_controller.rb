@@ -9,7 +9,7 @@ class SchemesController < ApplicationController
 
   def index
     redirect_to schemes_organisation_path(current_user.organisation) unless current_user.support?
-    all_schemes = Scheme.all.order("service_name ASC")
+    all_schemes = Scheme.order(confirmed: :asc, service_name: :asc)
 
     @pagy, @schemes = pagy(filtered_collection(all_schemes, search_term))
     @searched = search_term.presence
@@ -39,8 +39,13 @@ class SchemesController < ApplicationController
   end
 
   def deactivate_confirm
-    @deactivation_date = params[:deactivation_date]
-    @deactivation_date_type = params[:deactivation_date_type]
+    @affected_logs = @scheme.lettings_logs.filter_by_before_startdate(params[:deactivation_date])
+    if @affected_logs.count.zero?
+      deactivate
+    else
+      @deactivation_date = params[:deactivation_date]
+      @deactivation_date_type = params[:deactivation_date_type]
+    end
   end
 
   def deactivate
