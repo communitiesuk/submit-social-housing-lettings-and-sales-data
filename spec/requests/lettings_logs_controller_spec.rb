@@ -782,6 +782,11 @@ RSpec.describe LettingsLogsController, type: :request do
         expect(page).not_to have_link("Change")
         expect(page).not_to have_link("Answer")
       end
+
+      it "does not let the user navigate to questions for previous collection year logs" do
+        get "/lettings-logs/#{completed_lettings_log.id}/needs-type", headers: { "Accept" => "text/html" }, params: {}
+        expect(response).to redirect_to("/lettings-logs/#{completed_lettings_log.id}")
+      end
     end
 
     context "when requesting CSV download" do

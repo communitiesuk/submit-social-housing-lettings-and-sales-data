@@ -13,7 +13,7 @@
           <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= inferred_answer %></span>
         <% end %>
       <% end %>
-      <% if @log.form.end_date > Time.zone.today %>
+      <% if @log.collection_period_open? %>
         <% row.action(
           text: question.action_text(@log),
           href: question.action_href(@log, question.page.id),

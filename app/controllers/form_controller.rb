@@ -50,7 +50,7 @@ class FormController < ApplicationController
       page_id = request.path.split("/")[-1].underscore
       @page = @log.form.get_page(page_id)
       @subsection = @log.form.subsection_for_page(@page)
-      if @page.routed_to?(@log, current_user)
+      if @page.routed_to?(@log, current_user) && @log.collection_period_open?
         render "form/page"
       else
         redirect_to lettings_log_path(@log)
