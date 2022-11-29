@@ -34,6 +34,12 @@ RSpec.describe Location, type: :model do
       expect { location.save! }
         .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Postcode #{I18n.t('validations.postcode')}")
     end
+
+    it "does add an error when the postcode is missing" do
+      location.postcode = nil
+      expect { location.save! }
+        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Postcode #{I18n.t('validations.postcode')}")
+    end
   end
 
   describe "#units" do
@@ -53,6 +59,16 @@ RSpec.describe Location, type: :model do
       location.type_of_unit = nil
       expect { location.save! }
         .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Type of unit #{I18n.t('activerecord.errors.models.location.attributes.type_of_unit.blank')}")
+    end
+  end
+
+  describe "#mobility_type" do
+    let(:location) { FactoryBot.build(:location) }
+
+    it "does add an error when the mobility type is invalid" do
+      location.mobility_type = nil
+      expect { location.save! }
+        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Mobility type #{I18n.t('activerecord.errors.models.location.attributes.mobility_type.blank')}")
     end
   end
 
