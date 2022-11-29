@@ -124,7 +124,7 @@ Once a pull request has been closed the review app infrastructure will be tore d
 
 ### How to fix review app deployment failures 
 
-One reason a review app deployment might fail is that it is attempting to run migrations which conflict with data in the database. For example you might have introduced a unique constraint, but the database associated with the review app has duplicate data in it that would violate this constaint, and so the migration cannot be run. There are 2 main ways to remedy this:
+One reason a review app deployment might fail is that it is attempting to run migrations which conflict with data in the database. For example you might have introduced a unique constraint, but the database associated with the review app has duplicate data in it that would violate this constraint, and so the migration cannot be run. There are two main ways to remedy this:
 
 **Method 1 - Edit database via console**
 1. Log in to Cloud Foundry
