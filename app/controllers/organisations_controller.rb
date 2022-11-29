@@ -19,7 +19,7 @@ class OrganisationsController < ApplicationController
   end
 
   def schemes
-    all_schemes = Scheme.where(owning_organisation: @organisation)
+    all_schemes = Scheme.where(owning_organisation: @organisation).order(confirmed: :asc, service_name: :asc)
 
     @pagy, @schemes = pagy(filtered_collection(all_schemes, search_term))
     @searched = search_term.presence
