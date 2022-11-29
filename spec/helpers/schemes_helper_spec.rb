@@ -177,7 +177,7 @@ RSpec.describe SchemesHelper do
 
         it "displays current collection start date as availability date if created_at is later than collection start date" do
           scheme.update!(created_at: Time.zone.local(2022, 4, 16))
-          availability_attribute = display_scheme_attributes(scheme).find { |x| x[:name] == "Availability" }[:value]
+          availability_attribute = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Availability" }[:value]
 
           expect(availability_attribute).to eq("Active from 1 April 2022")
         end
@@ -192,7 +192,7 @@ RSpec.describe SchemesHelper do
           end
 
           it "displays the timeline of availability" do
-            availability_attribute = display_scheme_attributes(scheme).find { |x| x[:name] == "Availability" }[:value]
+            availability_attribute = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Availability" }[:value]
 
             expect(availability_attribute).to eq("Active from 1 April 2022 to 9 August 2022\nDeactivated on 10 August 2022\nActive from 1 September 2022 to 14 September 2022\nDeactivated on 15 September 2022\nActive from 28 September 2022")
           end
@@ -206,7 +206,7 @@ RSpec.describe SchemesHelper do
           end
 
           it "displays the timeline of availability" do
-            availability_attribute = display_scheme_attributes(scheme).find { |x| x[:name] == "Availability" }[:value]
+            availability_attribute = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Availability" }[:value]
 
             expect(availability_attribute).to eq("Active from 1 April 2022 to 9 August 2022\nDeactivated on 10 August 2022\nActive from 1 September 2022 to 14 September 2022\nDeactivated on 15 September 2022")
           end
@@ -222,7 +222,7 @@ RSpec.describe SchemesHelper do
           end
 
           it "displays the timeline of availability" do
-            availability_attribute = display_scheme_attributes(scheme).find { |x| x[:name] == "Availability" }[:value]
+            availability_attribute = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Availability" }[:value]
 
             expect(availability_attribute).to eq("Active from 1 April 2022 to 14 June 2022\nDeactivated on 15 June 2022\nActive from 18 June 2022 to 23 September 2022\nDeactivated on 24 September 2022\nActive from 28 September 2022")
           end
@@ -236,7 +236,7 @@ RSpec.describe SchemesHelper do
           end
 
           it "displays the timeline of availability" do
-            availability_attribute = display_scheme_attributes(scheme).find { |x| x[:name] == "Availability" }[:value]
+            availability_attribute = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Availability" }[:value]
 
             expect(availability_attribute).to eq("Active from 1 April 2022 to 14 June 2022\nDeactivated on 15 June 2022\nActive from 28 September 2022")
           end
@@ -253,7 +253,7 @@ RSpec.describe SchemesHelper do
           end
 
           it "displays the timeline of availability" do
-            availability_attribute = display_scheme_attributes(scheme).find { |x| x[:name] == "Availability" }[:value]
+            availability_attribute = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Availability" }[:value]
 
             expect(availability_attribute).to eq("Active from 1 April 2022 to 14 June 2022\nDeactivated on 15 June 2022\nActive from 28 September 2022 to 23 October 2022\nDeactivated on 24 October 2022\nActive from 28 October 2022")
           end
