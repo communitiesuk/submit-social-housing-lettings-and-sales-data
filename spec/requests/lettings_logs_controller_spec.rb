@@ -738,6 +738,7 @@ RSpec.describe LettingsLogsController, type: :request do
                           postcode_known: "No")
       end
       let(:id) { postcode_lettings_log.id }
+      let(:completed_lettings_log) { FactoryBot.create(:lettings_log, :completed, owning_organisation: user.organisation, managing_organisation: user.organisation, created_by: user, startdate: Time.zone.local(2021, 4, 1)) }
 
       before do
         stub_request(:get, /api.postcodes.io/)
@@ -770,6 +771,16 @@ RSpec.describe LettingsLogsController, type: :request do
       it "shows `you haven't answered this question` if the question wasn't answered" do
         get "/lettings-logs/#{id}/income-and-benefits/check-answers"
         expect(CGI.unescape_html(response.body)).to include("You didn’t answer this question")
+      end
+
+      it "does not allow you to change the answers for previous collection year logs" do
+        get "/lettings-logs/#{completed_lettings_log.id}/setup/check-answers", headers: { "Accept" => "text/html" }, params: {}
+        expect(page).not_to have_link("Change")
+        expect(page).not_to have_link("Answer")
+
+        get "/lettings-logs/#{completed_lettings_log.id}/income-and-benefits/check-answers", headers: { "Accept" => "text/html" }, params: {}
+        expect(page).not_to have_link("Change")
+        expect(page).not_to have_link("Answer")
       end
     end
 
