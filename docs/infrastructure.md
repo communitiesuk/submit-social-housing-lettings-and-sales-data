@@ -122,6 +122,57 @@ After a sucessful deployment a comment will be added to the pull request with th
 
 Once a pull request has been closed the review app infrastructure will be tore down to save on any costs. Should you wish to re-open a closed pull request the review app will be spun up again.
 
+### Troubleshooting
+
+One reason a review app deployment might fail is that it is attempting to run migrations which conflict with data in the database. For example you might have introduced a unique constraint, but the database associated with the review app has duplicate data in it that would violate this constaint, and so the migration cannot be run. There are 2 main ways to remedy this:
+
+**Method 1 - Edit database via console**
+1. Log in to Cloud Foundry
+    ```bash
+    cf login -a api.london.cloud.service.gov.uk -u <your_username>
+    ```
+    * Your username should be the email address you signed up to GOVUK PaaS with.
+    * Choose the dev environment whilst logging in.
+2. If you were already logged in then Cloud Foundry, then instead just target the dev environment
+    ```bash
+    cf target -o dluhc-core -s dev
+    ```
+3. Find the name of your app
+    ```bash
+    cf apps
+    ```
+    * The app name will be in this format: `dluhc-core-review-<pull-request-number>`.
+4. Open a console for your app
+    ```bash
+    cf ssh <app-name-here> -t -c "/tmp/lifecycle/launcher /home/vcap/app 'rails console' ''"
+    ```
+5. Edit the database as appropriate, e.g. delete dodgy data and recreate correctly
+
+**Method 2 - Nuke and restart**
+
+1. Find the name of your app
+    ```bash
+    cf apps
+    ```
+    * The app name will be in this format: `dluhc-core-review-<pull-request-number>`.
+2. Delete the app
+    ```bash
+    cf delete <app-name-here>
+    ```
+3. Find the name of the matching Postgres service
+	```bash
+    cf services
+    ```
+	* The service name will be in this format: `dluhc-core-review-<pull-request-number>-postgres`.
+4. Delete the service
+	```bash
+    cf delete-service <service-name-here>
+    ```
+    * Use `cf services` or `cf service <service-name-here>` to check the operation status.
+    * There's no need to delete the Redis service.
+5. Re-run the whole review app pipeline in GitHub
+    * If it fails it's likely that the deletion from the previous step hadn't completed yet. So just wait a few minutes and re-run the pipeline again.
+
 ## Setting up Infrastructure for a new environment
 
 ### Staging
