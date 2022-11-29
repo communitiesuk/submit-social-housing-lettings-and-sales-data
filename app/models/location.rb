@@ -1,4 +1,10 @@
 class Location < ApplicationRecord
+  validate :validate_postcode, on: :postcode
+  validate :validate_location_admin_district, on: :location_admin_district
+  validate :validate_name, on: :name
+  validate :validate_units, on: :units
+  validate :validate_type_of_unit, on: :type_of_unit
+  validate :validate_mobility_type, on: :mobility_type
   belongs_to :scheme
   has_many :lettings_logs, class_name: "LettingsLog"
   has_many :location_deactivation_periods, class_name: "LocationDeactivationPeriod"
@@ -392,9 +398,47 @@ class Location < ApplicationRecord
   end
 
   def validate_postcode
-    if postcode.nil? || !postcode&.match(POSTCODE_REGEXP)
+    if postcode.blank?
+      error_message = I18n.t("validations.location.postcode_blank")
+      errors.add :postcode, error_message
+    elsif !postcode&.match(POSTCODE_REGEXP)
       error_message = I18n.t("validations.postcode")
       errors.add :postcode, error_message
+    end
+  end
+
+  def validate_location_admin_district
+    if location_admin_district == "Select an option"
+      error_message = I18n.t("validations.location_admin_district")
+      errors.add :location_admin_district, error_message
+    end
+  end
+
+  def validate_name
+    if name.blank?
+      error_message = I18n.t("validations.location.name")
+      errors.add :name, error_message
+    end
+  end
+
+  def validate_units
+    if units.blank?
+      error_message = I18n.t("validations.location.units")
+      errors.add :units, error_message
+    end
+  end
+
+  def validate_type_of_unit
+    if type_of_unit.blank?
+      error_message = I18n.t("validations.location.type_of_unit")
+      errors.add :type_of_unit, error_message
+    end
+  end
+
+  def validate_mobility_type
+    if mobility_type.blank?
+      error_message = I18n.t("validations.location.mobility_standards")
+      errors.add :mobility_type, error_message
     end
   end
 
