@@ -7470,7 +7470,7 @@
                 "household_charge": {
                   "check_answer_label": "Does the household pay rent or charges?",
                   "header": "Does the household pay rent or other charges for the accommodation?",
-                  "hint_text": "",
+                  "hint_text": "If rent is charged on the property then answer Yes to this question, even if the tenants do not pay it themselves.",
                   "type": "radio",
                   "answer_options": {
                     "0": {
