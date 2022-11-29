@@ -15,7 +15,7 @@ class LocationsController < ApplicationController
   end
 
   def new
-    @location = Location.new(scheme_id: @scheme.id)
+    @location = Location.new(scheme: @scheme)
     @location.save!
     redirect_to scheme_location_postcode_path(@scheme, @location)
   end
