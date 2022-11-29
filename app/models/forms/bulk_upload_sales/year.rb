@@ -27,6 +27,10 @@ module Forms
         bulk_upload_sales_log_path(id: "prepare-your-file", form: { year: })
       end
 
+      def save!
+        true
+      end
+
     private
 
       def possible_years

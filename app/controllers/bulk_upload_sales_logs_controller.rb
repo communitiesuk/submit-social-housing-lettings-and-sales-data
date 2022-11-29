@@ -14,7 +14,7 @@ class BulkUploadSalesLogsController < ApplicationController
   end
 
   def update
-    if form.valid?
+    if form.valid? && form.save!
       redirect_to form.next_path
     else
       render form.view_path
@@ -38,7 +38,7 @@ private
               when "prepare-your-file"
                 Forms::BulkUploadSales::PrepareYourFile.new(form_params)
               when "upload-your-file"
-                Forms::BulkUploadSales::UploadYourFile.new(form_params)
+                Forms::BulkUploadSales::UploadYourFile.new(form_params.merge(current_user:))
               when "checking-file"
                 Forms::BulkUploadSales::CheckingFile.new(form_params)
               else

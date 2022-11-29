@@ -3,7 +3,19 @@ require "rails_helper"
 RSpec.describe "Bulk upload sales log" do
   let(:user) { create(:user) }
 
+  let(:stub_file_upload) do
+    vcap_services = { "aws-s3-bucket" => {} }
+    mock_storage_service = instance_double("S3Service")
+
+    allow(ENV).to receive(:[])
+    allow(ENV).to receive(:[]).with("VCAP_SERVICES").and_return(vcap_services.to_json)
+
+    allow(Storage::S3Service).to receive(:new).and_return(mock_storage_service)
+    allow(mock_storage_service).to receive(:write_file)
+  end
+
   before do
+    stub_file_upload
     sign_in user
   end
 
@@ -38,7 +50,9 @@ RSpec.describe "Bulk upload sales log" do
 
         expect(page).to have_content("Your file must be in CSV format")
         attach_file "file", file_fixture("blank_bulk_upload_sales.csv")
-        click_button("Upload")
+        expect {
+          click_button("Upload")
+        }.to change(BulkUpload, :count).by(1)
 
         expect(page).to have_content("Once this is done")
         click_link("Back")

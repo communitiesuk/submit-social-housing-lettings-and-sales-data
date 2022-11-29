@@ -123,6 +123,7 @@ jobs:
           cf set-env $APP_NAME CSV_DOWNLOAD_PAAS_INSTANCE $CSV_DOWNLOAD_PAAS_INSTANCE
           cf set-env $APP_NAME SENTRY_DSN $SENTRY_DSN
           cf set-env $APP_NAME APP_HOST "https://dluhc-core-review-${{ github.event.pull_request.number }}.london.cloudapps.digital"
+          cf set-env $APP_NAME CSV_BUCKET "dluhc-core-review-csv-bucket"
 
       - name: Bind postgres service
         env:

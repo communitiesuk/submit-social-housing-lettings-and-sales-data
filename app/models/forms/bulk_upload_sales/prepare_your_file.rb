@@ -31,6 +31,10 @@ module Forms
         "#{year}/#{year + 1 - 2000}"
       end
 
+      def save!
+        true
+      end
+
     private
 
       def in_crossover_period?

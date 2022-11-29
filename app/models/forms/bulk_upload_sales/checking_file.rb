@@ -18,6 +18,10 @@ module Forms
       def year_combo
         "#{year}/#{year + 1 - 2000}"
       end
+
+      def save!
+        true
+      end
     end
   end
 end
