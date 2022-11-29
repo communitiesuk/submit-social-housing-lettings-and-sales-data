@@ -18,7 +18,14 @@
                   <% next if %w[location_code status].include? attr[:attribute] %>
                   <%= summary_list.row do |row| %>
                   <% row.key { attr[:name] } %>
-                  <% row.value { attr[:attribute].eql?("status") ? status_tag(attr[:value]) : details_html(attr) } %>
+                  <% row.value {
+                    if attr[:attribute].eql?("status")
+                      status_tag(attr[:value])
+                    elsif attr[:attribute].eql?("availability")
+                      details_html(name: "Availability", value: @location.startdate.to_formatted_s(:govuk_date), attribute: "startdate")
+                    else
+                      details_html(attr)
+                    end } %>
                   <% row.action(text: "Change", href: location_edit_path(@location, attr[:attribute])) unless attr[:name] == "Status" %>
                   <% end %>
               <% end %>
@@ -27,7 +34,7 @@
   </div>
   <%= f.hidden_field :confirmed %>
   <div class="govuk-button-group">
-    <%= f.govuk_submit "Add this location" %>
+    <%= f.govuk_submit "Add this location", disabled: [@location.postcode, @location.name, @location.location_admin_district, @location.units, @location.type_of_unit, @location.mobility_type, @location.startdate].any?(&:blank?) %>
     <%= govuk_button_link_to "Cancel", scheme_locations_path(@scheme), secondary: true %>
   </div>
 <% end %>
