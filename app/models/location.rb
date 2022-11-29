@@ -450,6 +450,10 @@ class Location < ApplicationRecord
     end
   end
 
+  def incomplete?
+    [postcode, name, location_admin_district, units, type_of_unit, mobility_type, startdate].any?(&:blank?)
+  end
+
 private
 
   PIO = PostcodeService.new
