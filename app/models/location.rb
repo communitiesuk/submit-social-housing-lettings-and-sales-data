@@ -389,6 +389,7 @@ class Location < ApplicationRecord
 
     :active
   end
+  alias_method :status_at, :status
 
   def active?
     status == :active
