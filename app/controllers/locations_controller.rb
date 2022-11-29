@@ -2,7 +2,7 @@ class LocationsController < ApplicationController
   include Pagy::Backend
   before_action :authenticate_user!
   before_action :authenticate_scope!
-  before_action :find_location, except: %i[new create index]
+  before_action :find_location, except: %i[new index]
   before_action :find_scheme
   before_action :authenticate_action!
 
