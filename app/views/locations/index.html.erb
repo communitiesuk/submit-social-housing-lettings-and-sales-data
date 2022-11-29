@@ -52,7 +52,7 @@
     <%= table.body do |body| %>
       <%= body.row do |row| %>
         <% row.cell(text: location.id) %>
-        <% row.cell(text: simple_format(location_cell_postcode(location, "/schemes/#{@scheme.id}/locations/#{location.id}#{"/check-answers" if location.incomplete?}"), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
+        <% row.cell(text: simple_format(location_cell_postcode(location, "/schemes/#{@scheme.id}/locations/#{location.id}#{'/check-answers' if location.incomplete?}"), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
         <% row.cell(text: location.units) %>
         <% row.cell(text: simple_format("<span>#{location.type_of_unit}</span>")) %>
         <% row.cell(text: location.mobility_type) %>

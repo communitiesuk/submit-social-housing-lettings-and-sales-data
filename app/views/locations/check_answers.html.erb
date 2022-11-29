@@ -18,14 +18,16 @@
                   <% next if %w[location_code status].include? attr[:attribute] %>
                   <%= summary_list.row do |row| %>
                   <% row.key { attr[:name] } %>
-                  <% row.value {
-                    if attr[:attribute].eql?("status")
-                      status_tag(attr[:value])
-                    elsif attr[:attribute].eql?("availability")
-                      details_html(name: "Availability", value: @location.startdate.present? ? @location.startdate.to_formatted_s(:govuk_date) : nil, attribute: "startdate")
-                    else
-                      details_html(attr)
-                    end } %>
+                  <%= row.value do %>
+                  <% case attr[:attribute]
+                     when "status"
+                       status_tag(attr[:value])
+                     when "availability"
+                       details_html(name: "Availability", value: @location.startdate.present? ? @location.startdate.to_formatted_s(:govuk_date) : nil, attribute: "startdate")
+                     else
+                       details_html(attr)
+                     end %>
+                  <% end %>
                   <% row.action(text: "Change", href: location_edit_path(@location, attr[:attribute])) unless attr[:name] == "Status" %>
                   <% end %>
               <% end %>
