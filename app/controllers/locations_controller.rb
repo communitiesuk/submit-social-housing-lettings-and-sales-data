@@ -23,77 +23,114 @@ class LocationsController < ApplicationController
   def postcode
     if params[:location].present?
       @location.postcode = params[:location][:postcode]
-      @location.save!
-      if @location.location_code.blank? || @location.location_admin_district.blank?
-        redirect_to scheme_location_local_authority_path(@scheme, @location, referrer: params[:referrer])
-      elsif params[:referrer] == "check_answers"
-        redirect_to scheme_location_check_answers_path(@scheme, @location)
+      @location.location_admin_district = nil
+      @location.location_code = nil
+      @location.validate_postcode
+      if @location.errors.blank?
+        @location.save!
+        if @location.location_code.blank? || @location.location_admin_district.blank?
+          redirect_to scheme_location_local_authority_path(@scheme, @location, referrer: params[:referrer])
+        elsif params[:referrer] == "check_answers"
+          redirect_to scheme_location_check_answers_path(@scheme, @location)
+        else
+          redirect_to scheme_location_name_path(@scheme, @location)
+        end
       else
-        redirect_to scheme_location_name_path(@scheme, @location)
+        render :postcode, status: :unprocessable_entity
       end
     end
   end
 
   def local_authority
     if params[:location].present?
-      @location.location_admin_district = params[:location][:location_admin_district]
-      @location.location_code = Location.local_authorities.key(params[:location][:location_admin_district])
-      @location.save!
-      if params[:referrer] == "check_answers"
-        redirect_to scheme_location_check_answers_path(@scheme, @location)
+      if params[:location][:location_admin_district] != "Select an option"
+        @location.location_admin_district = params[:location][:location_admin_district]
+        @location.location_code = Location.local_authorities.key(params[:location][:location_admin_district])
+        @location.save!
+        if params[:referrer] == "check_answers"
+          redirect_to scheme_location_check_answers_path(@scheme, @location)
+        else
+          redirect_to scheme_location_name_path(@scheme, @location)
+        end
       else
-        redirect_to scheme_location_name_path(@scheme, @location)
+        error_message = I18n.t("validations.location_admin_district")
+        @location.errors.add :local_authority, error_message
+        render :local_authority, status: :unprocessable_entity
       end
     end
   end
 
   def name
     if params[:location].present?
-      @location.name = params[:location][:name]
-      @location.save!
-      case params[:referrer]
-      when "check_answers"
-        redirect_to scheme_location_check_answers_path(@scheme, @location)
-      when "details"
-        redirect_to scheme_location_path(@scheme, @location)
+      if params[:location][:name].present?
+        @location.name = params[:location][:name]
+        @location.save!
+        case params[:referrer]
+        when "check_answers"
+          redirect_to scheme_location_check_answers_path(@scheme, @location)
+        when "details"
+          redirect_to scheme_location_path(@scheme, @location)
+        else
+          redirect_to scheme_location_units_path(@scheme, @location)
+        end
       else
-        redirect_to scheme_location_units_path(@scheme, @location)
+        error_message = I18n.t("validations.location.name")
+        @location.errors.add :name, error_message
+        render :name, status: :unprocessable_entity
       end
     end
   end
 
   def units
     if params[:location].present?
-      @location.units = params[:location][:units]
-      @location.save!
-      if params[:referrer] == "check_answers"
-        redirect_to scheme_location_check_answers_path(@scheme, @location)
+      if params[:location][:units].present?
+        @location.units = params[:location][:units]
+        @location.save!
+        if params[:referrer] == "check_answers"
+          redirect_to scheme_location_check_answers_path(@scheme, @location)
+        else
+          redirect_to scheme_location_type_of_unit_path(@scheme, @location)
+        end
       else
-        redirect_to scheme_location_type_of_unit_path(@scheme, @location)
+        error_message = I18n.t("validations.location.units")
+        @location.errors.add :units, error_message
+        render :units, status: :unprocessable_entity
       end
     end
   end
 
   def type_of_unit
     if params[:location].present?
-      @location.type_of_unit = params[:location][:type_of_unit]
-      @location.save!
-      if params[:referrer] == "check_answers"
-        redirect_to scheme_location_check_answers_path(@scheme, @location)
+      if params[:location][:type_of_unit].present?
+        @location.type_of_unit = params[:location][:type_of_unit]
+        @location.save!
+        if params[:referrer] == "check_answers"
+          redirect_to scheme_location_check_answers_path(@scheme, @location)
+        else
+          redirect_to scheme_location_mobility_standards_path(@scheme, @location)
+        end
       else
-        redirect_to scheme_location_mobility_standards_path(@scheme, @location)
+        error_message = I18n.t("validations.location.type_of_unit")
+        @location.errors.add :type_of_unit, error_message
+        render :type_of_unit, status: :unprocessable_entity
       end
     end
   end
 
   def mobility_standards
     if params[:location].present?
-      @location.mobility_type = params[:location][:mobility_type]
-      @location.save!
-      if params[:referrer] == "check_answers"
-        redirect_to scheme_location_check_answers_path(@scheme, @location)
+      if params[:location][:mobility_type].present?
+        @location.mobility_type = params[:location][:mobility_type]
+        @location.save!
+        if params[:referrer] == "check_answers"
+          redirect_to scheme_location_check_answers_path(@scheme, @location)
+        else
+          redirect_to scheme_location_availability_path(@scheme, @location)
+        end
       else
-        redirect_to scheme_location_availability_path(@scheme, @location)
+        error_message = I18n.t("validations.location.mobility_standards")
+        @location.errors.add :mobility_type, error_message
+        render :mobility_standards, status: :unprocessable_entity
       end
     end
   end
@@ -103,9 +140,21 @@ class LocationsController < ApplicationController
       day = params[:location]["startdate(3i)"]
       month = params[:location]["startdate(2i)"]
       year = params[:location]["startdate(1i)"]
-      @location.startdate = Time.zone.local(year.to_i, month.to_i, day.to_i)
-      @location.save!
-      redirect_to scheme_location_check_answers_path(@scheme, @location)
+      if [day, month, year].none?(&:blank?)
+        if Date.valid_date?(day.to_i, month.to_i, year.to_i)
+          @location.startdate = Time.zone.local(year.to_i, month.to_i, day.to_i)
+          @location.save!
+          redirect_to scheme_location_check_answers_path(@scheme, @location)
+        else
+          error_message = I18n.t("validations.location.availability_invalid")
+          @location.errors.add :startdate, error_message
+          render :availability, status: :unprocessable_entity
+        end
+      else
+        error_message = I18n.t("validations.location.availability_blank")
+        @location.errors.add :startdate, error_message
+        render :availability, status: :unprocessable_entity
+      end
     end
   end
 

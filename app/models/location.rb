@@ -1,6 +1,4 @@
 class Location < ApplicationRecord
-  # validate :validate_postcode
-  # validates :units, :type_of_unit, :mobility_type, presence: true
   belongs_to :scheme
   has_many :lettings_logs, class_name: "LettingsLog"
   has_many :location_deactivation_periods, class_name: "LocationDeactivationPeriod"
@@ -393,16 +391,16 @@ class Location < ApplicationRecord
     status == :reactivating_soon
   end
 
-private
-
-  PIO = PostcodeService.new
-
   def validate_postcode
     if postcode.nil? || !postcode&.match(POSTCODE_REGEXP)
       error_message = I18n.t("validations.postcode")
       errors.add :postcode, error_message
     end
   end
+
+private
+
+  PIO = PostcodeService.new
 
   def lookup_postcode!
     result = PIO.lookup(postcode)
