@@ -145,6 +145,14 @@ jobs:
         run: |
           cf bind-service $APP_NAME $SERVICE_NAME --wait
 
+      - name: Bind S3 buckets services
+        env:
+          APP_NAME: dluhc-core-review-${{ github.event.pull_request.number }}
+        run: |
+          cf bind-service $APP_NAME dluhc-core-review-csv-bucket --wait
+          cf bind-service $APP_NAME dluhc-core-review-export-bucket --wait
+          cf bind-service $APP_NAME dluhc-core-review-import-bucket --wait
+
       - name: Start review app
         env:
           APP_NAME: dluhc-core-review-${{ github.event.pull_request.number }}
