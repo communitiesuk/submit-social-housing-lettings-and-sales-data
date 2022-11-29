@@ -118,7 +118,7 @@ private
 
   def mark_logs_resolved
     if @log&.unresolved == true && @log.location.present? && @log.scheme.present? && @log.update(unresolved: false)
-      notice_message = "This log is now updated."
+      notice_message = "You’ve updated all the fields affected by the scheme change."
       unresolved_logs_count_for_user = current_user.lettings_logs.where(unresolved: true, created_by: current_user).count
       notice_message << " <a href=\"/lettings-logs/update-logs\">Update #{unresolved_logs_count_for_user} more logs</a>" if unresolved_logs_count_for_user.positive?
       flash[:notice] = notice_message.html_safe

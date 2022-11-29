@@ -725,7 +725,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
             it "displays a success banner" do
               expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
-              expect(page).to have_content("This log is now updated")
+              expect(page).to have_content("You’ve updated all the fields affected by the scheme change")
               expect(page).to have_link("Update 3 more logs", href: "/lettings-logs/update-logs")
             end
           end
