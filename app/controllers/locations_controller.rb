@@ -53,7 +53,7 @@ class LocationsController < ApplicationController
 
       flash[:notice] = deactivate_success_notice
       LocationOrSchemeDeactivationMailer.new.send_deactivation_mails(
-        logs.to_a,
+        logs,
         url_for(controller: "lettings_logs", action: "update_logs"),
         @location.scheme.service_name,
         @location.postcode,

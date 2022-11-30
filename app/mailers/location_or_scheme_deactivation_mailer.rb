@@ -15,18 +15,12 @@ class LocationOrSchemeDeactivationMailer < NotifyMailer
   end
 
   def send_deactivation_mails(logs, update_logs_url, scheme_name, postcode = nil)
-    counts_by_user(logs).each do |user, count|
-      send_deactivation_mail(user, count, update_logs_url, scheme_name, postcode) if user
+    logs.group_by(&:created_by).transform_values(&:count).compact.each do |user, count|
+      send_deactivation_mail(user, count, update_logs_url, scheme_name, postcode)
     end
   end
 
 private
-
-  def counts_by_user(logs)
-    logs.each_with_object(Hash.new(0)) do |log, counts|
-      counts[log.created_by] += 1
-    end
-  end
 
   def description(scheme_name, postcode)
     if postcode
