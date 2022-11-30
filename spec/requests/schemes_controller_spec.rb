@@ -66,6 +66,17 @@ RSpec.describe SchemesController, type: :request do
         assert_select ".govuk-tag", text: /Incomplete/, count: 1
       end
 
+      it "shows incomplete schemes at the top" do
+        schemes[0].update!(confirmed: nil)
+        schemes[2].update!(confirmed: false)
+        schemes[4].update!(confirmed: false)
+        get "/schemes"
+
+        expect(page.all(".govuk-tag")[1].text).to eq("Incomplete")
+        expect(page.all(".govuk-tag")[2].text).to eq("Incomplete")
+        expect(page.all(".govuk-tag")[3].text).to eq("Incomplete")
+      end
+
       it "displays a link to check answers page if the scheme is incomplete" do
         scheme = schemes[0]
         scheme.update!(confirmed: nil)
