@@ -57,7 +57,7 @@ class Form
   end
 
   def next_page(page, log, current_user)
-    return page.next_unresolved_page_id || :check_answers if log.unresolved?
+    return page.next_unresolved_page_id || :check_answers if log.unresolved
 
     page_ids = subsection_for_page(page).pages.map(&:id)
     page_index = page_ids.index(page.id)
