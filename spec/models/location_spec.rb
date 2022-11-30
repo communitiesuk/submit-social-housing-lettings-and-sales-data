@@ -31,28 +31,28 @@ RSpec.describe Location, type: :model do
 
     it "does add an error when the postcode is invalid" do
       location.postcode = "invalid"
-      expect { location.save! }
-        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Postcode #{I18n.t('validations.postcode')}")
+      location.valid?(:postcode)
+      expect(location.errors.count).to eq(1)
     end
   end
 
   describe "#units" do
     let(:location) { FactoryBot.build(:location) }
 
-    it "does add an error when the postcode is invalid" do
+    it "does add an error when units is nil" do
       location.units = nil
-      expect { location.save! }
-        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Units #{I18n.t('activerecord.errors.models.location.attributes.units.blank')}")
+      location.valid?(:units)
+      expect(location.errors.count).to eq(1)
     end
   end
 
   describe "#type_of_unit" do
     let(:location) { FactoryBot.build(:location) }
 
-    it "does add an error when the postcode is invalid" do
+    it "does add an error when the type_of_unit is nil" do
       location.type_of_unit = nil
-      expect { location.save! }
-        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Type of unit #{I18n.t('activerecord.errors.models.location.attributes.type_of_unit.blank')}")
+      location.valid?(:type_of_unit)
+      expect(location.errors.count).to eq(1)
     end
   end
 
