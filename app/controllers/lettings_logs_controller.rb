@@ -92,7 +92,6 @@ class LettingsLogsController < LogsController
   def update_logs
     respond_to do |format|
       format.html do
-        flash[:notice] = nil
         impacted_logs = current_user.lettings_logs.unresolved.created_by(current_user)
 
         @pagy, @logs = pagy(impacted_logs)
