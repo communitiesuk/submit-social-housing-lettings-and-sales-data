@@ -26,12 +26,12 @@ module LocationsHelper
   def display_location_attributes(location)
     base_attributes = [
       { name: "Postcode", value: location.postcode },
-      { name: "Local authority", value: location.location_admin_district },
       { name: "Location name", value: location.name, edit: true },
+      { name: "Local authority", value: location.location_admin_district },
       { name: "Total number of units at this location", value: location.units },
       { name: "Common type of unit", value: location.type_of_unit },
       { name: "Mobility type", value: location.mobility_type },
-      { name: "Code", value: location.location_code },
+      { name: "Location code", value: location.location_code },
       { name: "Availability", value: location_availability(location) },
     ]
 

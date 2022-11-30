@@ -384,6 +384,7 @@ class Location < ApplicationRecord
   end
 
   def status(date = Time.zone.now)
+    return :incomplete unless confirmed
     return :deactivated if open_deactivation&.deactivation_date.present? && date >= open_deactivation.deactivation_date
     return :deactivating_soon if open_deactivation&.deactivation_date.present? && date < open_deactivation.deactivation_date
     return :reactivating_soon if recent_deactivation&.reactivation_date.present? && date < recent_deactivation.reactivation_date

@@ -34,12 +34,18 @@ RSpec.describe Location, type: :model do
       expect { location.save! }
         .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Postcode #{I18n.t('validations.postcode')}")
     end
+
+    it "does add an error when the postcode is missing" do
+      location.postcode = nil
+      expect { location.save! }
+        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Postcode #{I18n.t('validations.postcode')}")
+    end
   end
 
   describe "#units" do
     let(:location) { FactoryBot.build(:location) }
 
-    it "does add an error when the postcode is invalid" do
+    it "does add an error when the number of units is invalid" do
       location.units = nil
       expect { location.save! }
         .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Units #{I18n.t('activerecord.errors.models.location.attributes.units.blank')}")
@@ -49,10 +55,20 @@ RSpec.describe Location, type: :model do
   describe "#type_of_unit" do
     let(:location) { FactoryBot.build(:location) }
 
-    it "does add an error when the postcode is invalid" do
+    it "does add an error when the type of unit is invalid" do
       location.type_of_unit = nil
       expect { location.save! }
         .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Type of unit #{I18n.t('activerecord.errors.models.location.attributes.type_of_unit.blank')}")
+    end
+  end
+
+  describe "#mobility_type" do
+    let(:location) { FactoryBot.build(:location) }
+
+    it "does add an error when the mobility type is invalid" do
+      location.mobility_type = nil
+      expect { location.save! }
+        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Mobility type #{I18n.t('activerecord.errors.models.location.attributes.mobility_type.blank')}")
     end
   end
 
@@ -121,6 +137,13 @@ RSpec.describe Location, type: :model do
 
     after do
       Timecop.unfreeze
+    end
+
+    context "when location is not confirmed" do
+      it "returns incomplete " do
+        location.confirmed = false
+        expect(location.status).to eq(:incomplete)
+      end
     end
 
     context "when there have not been any previous deactivations" do

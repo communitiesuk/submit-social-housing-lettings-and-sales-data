@@ -1,5 +1,5 @@
 module SchemesHelper
-  def display_scheme_attributes(scheme)
+  def display_scheme_attributes(scheme, user)
     base_attributes = [
       { name: "Scheme code", value: scheme.id_to_display },
       { name: "Name", value: scheme.service_name, edit: true },
@@ -18,11 +18,15 @@ module SchemesHelper
     ]
 
     if FeatureToggle.scheme_toggle_enabled?
-      base_attributes.append({ name: "Status", value: scheme.status })
+      base_attributes.append({ name: "Status", value: status_tag(scheme.status) })
+    end
+
+    if user.data_coordinator?
+      base_attributes.delete_if { |item| item[:name] == "Housing stock owned by" }
     end
 
     if scheme.arrangement_type_same?
-      base_attributes.delete({ name: "Organisation providing support", value: scheme.managing_organisation&.name })
+      base_attributes.delete_if { |item| item[:name] == "Organisation providing support" }
     end
     base_attributes
   end
