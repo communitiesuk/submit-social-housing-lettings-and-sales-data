@@ -13,7 +13,7 @@ class LettingsLogsController < LogsController
         @pagy, @logs = pagy(unpaginated_filtered_logs)
         @searched = search_term.presence
         @total_count = all_logs.size
-        @unresolved_count = all_logs.where(unresolved: true, created_by: current_user).count
+        @unresolved_count = all_logs.unresolved.created_by(current_user).count
         render "logs/index"
       end
     end
@@ -93,7 +93,7 @@ class LettingsLogsController < LogsController
     respond_to do |format|
       format.html do
         flash[:notice] = nil
-        impacted_logs = current_user.lettings_logs.where(unresolved: true, created_by: current_user)
+        impacted_logs = current_user.lettings_logs.unresolved.created_by(current_user)
 
         @pagy, @logs = pagy(impacted_logs)
         @total_count = impacted_logs.size
@@ -119,7 +119,7 @@ private
   def mark_logs_resolved
     if @log&.unresolved == true && @log.location.present? && @log.scheme.present? && @log.update(unresolved: false)
       notice_message = "You’ve updated all the fields affected by the scheme change."
-      unresolved_logs_count_for_user = current_user.lettings_logs.where(unresolved: true, created_by: current_user).count
+      unresolved_logs_count_for_user = current_user.lettings_logs.unresolved.created_by(current_user).count
       notice_message << " <a href=\"/lettings-logs/update-logs\">Update #{unresolved_logs_count_for_user} more logs</a>" if unresolved_logs_count_for_user.positive?
       flash[:notice] = notice_message.html_safe
     end

@@ -23,6 +23,7 @@ class Log < ApplicationRecord
       where(created_by: user)
     end
   }
+  scope :created_by, ->(user) { where(created_by: user) }
 
   def collection_start_year
     return @start_year if @start_year
