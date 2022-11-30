@@ -42,6 +42,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       it "returns a template for a new location" do
+        follow_redirect!
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("Add a location to this scheme")
       end
@@ -64,6 +65,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       it "returns a template for a new location" do
+        follow_redirect!
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("Add a location to this scheme")
       end

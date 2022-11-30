@@ -814,6 +814,7 @@ RSpec.describe SchemesController, type: :request do
 
         it "renders add location to this scheme successful update" do
           follow_redirect!
+          follow_redirect!
           expect(response).to have_http_status(:ok)
           expect(page).to have_content("Add a location to this scheme")
         end
@@ -1096,6 +1097,7 @@ RSpec.describe SchemesController, type: :request do
         let(:params) { { scheme: { intended_stay: "Medium stay", support_type: "Low level", page: "support" } } }
 
         it "renders confirm secondary group after successful update" do
+          follow_redirect!
           follow_redirect!
           expect(response).to have_http_status(:ok)
           expect(page).to have_content("Add a location to this scheme")
