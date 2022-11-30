@@ -34,6 +34,7 @@ RSpec.describe FormController, type: :request do
   let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
 
   before do
+    allow(fake_2021_2022_form).to receive(:end_date).and_return(Time.zone.today + 1.day)
     allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
   end
 
@@ -85,6 +86,10 @@ RSpec.describe FormController, type: :request do
         context "when forms exist for multiple years" do
           let(:lettings_log_year_1) { create(:lettings_log, startdate: Time.zone.local(2021, 5, 1), owning_organisation: organisation, created_by: user) }
           let(:lettings_log_year_2) { create(:lettings_log, :about_completed, startdate: Time.zone.local(2022, 5, 1), owning_organisation: organisation, created_by: user) }
+
+          before do
+            allow(lettings_log_year_1.form).to receive(:end_date).and_return(Time.zone.today + 1.day)
+          end
 
           it "displays the correct question details for each lettings log based on form year" do
             get "/lettings-logs/#{lettings_log_year_1.id}/tenant-code-test", headers: headers, params: {}
