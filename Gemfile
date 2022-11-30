@@ -61,8 +61,6 @@ gem "auto_strip_attributes"
 # Use sidekiq for background processing
 gem "sidekiq"
 
-gem "ruby-filemagic"
-
 group :development, :test do
   # Check gems for known vulnerabilities
   gem "bundler-audit"

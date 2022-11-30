@@ -1,3 +1,5 @@
+require "shellwords"
+
 module Forms
   module BulkUploadSales
     class UploadYourFile
@@ -55,7 +57,10 @@ module Forms
       def validate_file_is_csv
         return unless file
 
-        unless FileMagic.new(FileMagic::MAGIC_MIME).file(file.path).include?("text/csv")
+        argv = %W[file --mime-type -- #{file.path}]
+        output = `#{argv.shelljoin}`
+
+        unless output.include?("text/csv")
           errors.add(:file, :not_csv)
         end
       end

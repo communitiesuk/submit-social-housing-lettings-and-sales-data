@@ -370,7 +370,6 @@ GEM
       rubocop (~> 1.0)
     rubocop-rspec (2.7.0)
       rubocop (~> 1.19)
-    ruby-filemagic (0.7.3)
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
@@ -476,7 +475,6 @@ DEPENDENCIES
   rubocop-govuk (= 4.3.0)
   rubocop-performance
   rubocop-rails
-  ruby-filemagic
   selenium-webdriver
   sentry-rails
   sentry-ruby
