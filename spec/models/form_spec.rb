@@ -224,6 +224,7 @@ RSpec.describe Form, type: :model do
       expect(form.questions.first.id).to eq("owning_organisation_id")
       expect(form.start_date).to eq(Time.zone.parse("2022-04-01"))
       expect(form.end_date).to eq(Time.zone.parse("2023-07-01"))
+      expect(form.unresolved_log_redirect_page_id).to eq(nil)
     end
 
     it "can correctly define sections in the sales form" do
@@ -267,6 +268,15 @@ RSpec.describe Form, type: :model do
           end
         end
       end
+    end
+  end
+
+  describe "when creating a lettings log", :aggregate_failures do
+    it "creates a valid lettings form" do
+      form = described_class.new("spec/fixtures/forms/2021_2022.json")
+      expect(form.type).to eq("lettings")
+      expect(form.name).to eq("2021_2022_lettings")
+      expect(form.unresolved_log_redirect_page_id).to eq("tenancy_start_date")
     end
   end
 end

@@ -1,7 +1,7 @@
 class Form
   attr_reader :form_definition, :sections, :subsections, :pages, :questions,
               :start_date, :end_date, :type, :name, :setup_definition,
-              :setup_sections, :form_sections
+              :setup_sections, :form_sections, :unresolved_log_redirect_page_id
 
   def initialize(form_path, start_year = "", sections_in_form = [], type = "lettings")
     if type == "sales"
@@ -33,6 +33,7 @@ class Form
       @questions = pages.flat_map(&:questions)
       @start_date = Time.iso8601(form_definition["start_date"])
       @end_date = Time.iso8601(form_definition["end_date"])
+      @unresolved_log_redirect_page_id = form_definition["unresolved_log_redirect_page_id"]
     end
     @name = "#{start_date.year}_#{end_date.year}_#{type}"
   end

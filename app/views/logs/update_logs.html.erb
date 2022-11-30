@@ -35,7 +35,7 @@
                     scope: "row",
                     class: "govuk-!-text-align-right",
                     }) do %>
-                        <%= govuk_link_to("Update now", send("lettings_log_#{log.form.get_question('startdate', log).page.id}_path", log)) %>
+                        <%= govuk_link_to("Update now", send("lettings_log_#{log.form.unresolved_log_redirect_page_id}_path", log)) %>
                 <% end %>
             <% end %>
         <% end %>
@@ -43,4 +43,4 @@
     <% end %>
 <% end %>
 
-<%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "logs" } %>
+<%= render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "logs" } %>

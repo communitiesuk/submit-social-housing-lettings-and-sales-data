@@ -54,7 +54,7 @@ class LettingsLogsController < LogsController
     @log = current_user.lettings_logs.find_by(id: params[:id])
     if @log
       if @log.unresolved
-        redirect_to(send("lettings_log_#{@log.form.get_question('startdate', @log).page.id}_path", @log))
+        redirect_to(send("lettings_log_#{@log.form.unresolved_log_redirect_page_id}_path", @log))
       else
         render("logs/edit", locals: { current_user: })
       end
