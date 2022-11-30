@@ -28,6 +28,7 @@ RSpec.describe FormController, type: :request do
       :completed,
       owning_organisation: organisation,
       managing_organisation: organisation,
+      startdate: Time.zone.local(2021, 5, 1),
     )
   end
   let(:headers) { { "Accept" => "text/html" } }

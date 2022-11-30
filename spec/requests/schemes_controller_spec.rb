@@ -1767,7 +1767,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation, created_at: Time.zone.today) }
       let!(:location) { FactoryBot.create(:location, scheme:) }
       let(:deactivation_date) { Time.utc(2022, 10, 10) }
       let!(:lettings_log) { FactoryBot.create(:lettings_log, :sh, location:, scheme:, startdate:, owning_organisation: user.organisation) }

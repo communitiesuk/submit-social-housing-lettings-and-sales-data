@@ -12,7 +12,7 @@ FactoryBot.define do
     owning_organisation { FactoryBot.create(:organisation) }
     managing_organisation { FactoryBot.create(:organisation) }
     confirmed { true }
-    created_at { Time.zone.now }
+    created_at { Time.zone.local(2021, 4, 1) }
     trait :export do
       sensitive { 1 }
       registered_under_care_act { 1 }
