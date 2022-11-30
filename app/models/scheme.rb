@@ -210,7 +210,7 @@ class Scheme < ApplicationRecord
   end
 
   def available_from
-    [created_at, FormHandler.instance.current_collection_start_date].min
+    FormHandler.instance.collection_start_date(created_at)
   end
 
   def status
