@@ -28,7 +28,7 @@ private
   end
 
   def in_crossover_period?
-    FormHandler.instance.forms.values.any?(&:in_crossover_period?)
+    FormHandler.instance.in_crossover_period?
   end
 
   def form
