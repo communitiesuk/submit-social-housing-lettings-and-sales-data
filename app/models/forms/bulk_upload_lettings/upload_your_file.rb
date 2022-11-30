@@ -57,10 +57,10 @@ module Forms
       def validate_file_is_csv
         return unless file
 
-        argv = %W[file --mime-type -- #{file.path}]
+        argv = %W[file --brief --mime-type -- #{file.path}]
         output = `#{argv.shelljoin}`
 
-        unless output.include?("text/csv")
+        unless output.match?(/text\/csv|text\/plain/)
           errors.add(:file, :not_csv)
         end
       end
