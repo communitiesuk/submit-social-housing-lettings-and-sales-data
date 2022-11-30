@@ -11,8 +11,8 @@ RSpec.describe "Bulk upload lettings log" do
     it "shows journey with year option" do
       Timecop.freeze(2023, 6, 1) do
         visit("/lettings-logs")
-        expect(page).to have_link("Upload lettings log in bulk")
-        click_link("Upload lettings log in bulk")
+        expect(page).to have_link("Upload lettings logs in bulk")
+        click_link("Upload lettings logs in bulk")
 
         expect(page).to have_content("Which year")
         click_button("Continue")
@@ -38,8 +38,8 @@ RSpec.describe "Bulk upload lettings log" do
     it "shows journey with year option" do
       Timecop.freeze(2023, 10, 1) do
         visit("/lettings-logs")
-        expect(page).to have_link("Upload lettings log in bulk")
-        click_link("Upload lettings log in bulk")
+        expect(page).to have_link("Upload lettings logs in bulk")
+        click_link("Upload lettings logs in bulk")
 
         expect(page).to have_content("Upload lettings logs in bulk (2022/23)")
         click_button("Continue")
