@@ -4,7 +4,14 @@
 <% content_for :before_content do %>
   <%= govuk_back_link(
     text: "Back",
-    href: :back,
+    href: case params[:referrer]
+    when "new_scheme"
+      scheme_location_availability_path(@scheme, @location, referrer: params[:referrer])
+    when "locations"
+      scheme_locations_path(@scheme)
+    else
+      :back
+    end,
   ) %>
 <% end %>
 

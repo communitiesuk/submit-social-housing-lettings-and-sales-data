@@ -6,7 +6,7 @@
         href: if params[:referrer] == "check_answers"
                 scheme_location_check_answers_path(@scheme, @location)
               else
-                params[:referrer] == "details" ? scheme_location_path(@scheme, @location) : scheme_location_postcode_path(@scheme, @location)
+                params[:referrer] == "details" ? scheme_location_path(@scheme, @location) : scheme_location_postcode_path(@scheme, @location, referrer: params[:referrer])
               end,
       ) %>
 <% end %>

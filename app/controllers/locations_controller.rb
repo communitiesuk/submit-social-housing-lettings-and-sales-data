@@ -36,7 +36,7 @@ class LocationsController < ApplicationController
         elsif params[:referrer] == "check_answers"
           redirect_to scheme_location_check_answers_path(@scheme, @location)
         else
-          redirect_to scheme_location_name_path(@scheme, @location)
+          redirect_to scheme_location_name_path(@scheme, @location, referrer: params[:referrer])
         end
       else
         render :postcode, status: :unprocessable_entity
@@ -48,12 +48,12 @@ class LocationsController < ApplicationController
     if params[:location].present?
       @location.location_admin_district = params[:location][:location_admin_district]
       @location.location_code = Location.local_authorities.key(params[:location][:location_admin_district])
-      if @location.valid?(:local_authority)
+      if @location.valid?(:location_admin_district)
         @location.save!
         if params[:referrer] == "check_answers"
           redirect_to scheme_location_check_answers_path(@scheme, @location)
         else
-          redirect_to scheme_location_name_path(@scheme, @location)
+          redirect_to scheme_location_name_path(@scheme, @location, referrer: params[:referrer])
         end
       else
         render :local_authority, status: :unprocessable_entity
@@ -72,7 +72,7 @@ class LocationsController < ApplicationController
         when "details"
           redirect_to scheme_location_path(@scheme, @location)
         else
-          redirect_to scheme_location_units_path(@scheme, @location)
+          redirect_to scheme_location_units_path(@scheme, @location, referrer: params[:referrer])
         end
       else
         render :name, status: :unprocessable_entity
@@ -88,7 +88,7 @@ class LocationsController < ApplicationController
         if params[:referrer] == "check_answers"
           redirect_to scheme_location_check_answers_path(@scheme, @location)
         else
-          redirect_to scheme_location_type_of_unit_path(@scheme, @location)
+          redirect_to scheme_location_type_of_unit_path(@scheme, @location, referrer: params[:referrer])
         end
       else
         render :units, status: :unprocessable_entity
@@ -104,7 +104,7 @@ class LocationsController < ApplicationController
         if params[:referrer] == "check_answers"
           redirect_to scheme_location_check_answers_path(@scheme, @location)
         else
-          redirect_to scheme_location_mobility_standards_path(@scheme, @location)
+          redirect_to scheme_location_mobility_standards_path(@scheme, @location, referrer: params[:referrer])
         end
       else
         render :type_of_unit, status: :unprocessable_entity
@@ -120,7 +120,7 @@ class LocationsController < ApplicationController
         if params[:referrer] == "check_answers"
           redirect_to scheme_location_check_answers_path(@scheme, @location)
         else
-          redirect_to scheme_location_availability_path(@scheme, @location)
+          redirect_to scheme_location_availability_path(@scheme, @location, referrer: params[:referrer])
         end
       else
         render :mobility_standards, status: :unprocessable_entity
@@ -138,7 +138,7 @@ class LocationsController < ApplicationController
           @location.startdate = Time.zone.local(year.to_i, month.to_i, day.to_i)
           if @location.valid?(:startdate)
             @location.save!
-            redirect_to scheme_location_check_answers_path(@scheme, @location)
+            redirect_to scheme_location_check_answers_path(@scheme, @location, referrer: params[:referrer])
           else
             render :availability, status: :unprocessable_entity
           end
@@ -158,7 +158,7 @@ class LocationsController < ApplicationController
   def check_answers
     if params[:location].present?
       flash[:notice] = "#{@location.postcode} #{@location.startdate < Time.zone.now ? 'has been' : 'will be'} added to this scheme"
-      redirect_to scheme_locations_path(@scheme, @location)
+      redirect_to scheme_locations_path(@scheme)
     end
   end
 
