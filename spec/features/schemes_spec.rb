@@ -324,6 +324,7 @@ RSpec.describe "Schemes scheme Features" do
     context "when creating a new scheme" do
       let(:organisation_name) { "FooBar" }
       let(:scheme) { Scheme.first }
+      let(:location) { Location.first }
 
       before do
         FactoryBot.create(:organisation, name: organisation_name)
@@ -472,8 +473,8 @@ RSpec.describe "Schemes scheme Features" do
 
           it "lets me check my answers after adding a location" do
             fill_in_and_save_location
-            expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
-            expect(page).to have_content "Check your changes before creating this scheme"
+            expect(page).to have_current_path("/schemes/#{scheme.id}/locations/#{location.id}/check-answers")
+            expect(page).to have_content "Check your answers"
           end
 
           it "lets me check my answers after adding a second location" do
