@@ -38,7 +38,7 @@ class LettingsLogsController < LogsController
   def show
     respond_to do |format|
       # We don't have a dedicated non-editable show view
-      mark_logs_resolved
+      resolve_logs!
       format.html { edit }
       format.json do
         if @log
@@ -116,7 +116,7 @@ private
     lettings_log_url(log)
   end
 
-  def mark_logs_resolved
+  def resolve_logs!
     if @log&.unresolved == true && @log.location.present? && @log.scheme.present? && @log.update(unresolved: false)
       notice_message = "You’ve updated all the fields affected by the scheme change."
       unresolved_logs_count_for_user = current_user.lettings_logs.unresolved.created_by(current_user).count
