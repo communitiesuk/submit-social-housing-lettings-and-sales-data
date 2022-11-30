@@ -56,19 +56,19 @@ module LocationsHelper
   def location_edit_path(location, page)
     case page
     when "postcode"
-      scheme_location_postcode_path(location.scheme, location, referrer: "check_answers")
+      scheme_location_postcode_path(location.scheme, location, referrer: "check_answers", route: params[:route])
     when "name"
-      scheme_location_name_path(location.scheme, location, referrer: "check_answers")
+      scheme_location_name_path(location.scheme, location, referrer: "check_answers", route: params[:route])
     when "location_admin_district"
-      scheme_location_local_authority_path(location.scheme, location, referrer: "check_answers")
+      scheme_location_local_authority_path(location.scheme, location, referrer: "check_local_authority", route: params[:route])
     when "units"
-      scheme_location_units_path(location.scheme, location, referrer: "check_answers")
+      scheme_location_units_path(location.scheme, location, referrer: "check_answers", route: params[:route])
     when "type_of_unit"
-      scheme_location_type_of_unit_path(location.scheme, location, referrer: "check_answers")
+      scheme_location_type_of_unit_path(location.scheme, location, referrer: "check_answers", route: params[:route])
     when "mobility_standards"
-      scheme_location_mobility_standards_path(location.scheme, location, referrer: "check_answers")
+      scheme_location_mobility_standards_path(location.scheme, location, referrer: "check_answers", route: params[:route])
     when "availability"
-      scheme_location_availability_path(location.scheme, location, referrer: "check_answers")
+      scheme_location_availability_path(location.scheme, location, referrer: "check_answers", route: params[:route])
     end
   end
 

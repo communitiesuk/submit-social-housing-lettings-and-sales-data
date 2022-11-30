@@ -3,11 +3,11 @@
 <% content_for :before_content do %>
   <%= govuk_back_link(
         text: "Back",
-        href: params[:referrer] == "check_answers" ? scheme_location_check_answers_path(@scheme, @location) : scheme_location_mobility_standards_path(@scheme, @location, referrer: params[:referrer]),
+        href: params[:referrer] == "check_answers" ? scheme_location_check_answers_path(@scheme, @location, route: params[:route]) : scheme_location_mobility_standards_path(@scheme, @location, route: params[:route]),
         ) %>
 <% end %>
 
-<%= form_for(@location, method: :patch, url: scheme_location_availability_path(@scheme, @location, referrer: params[:referrer])) do |f| %>
+<%= form_for(@location, method: :patch, url: scheme_location_availability_path(@scheme, @location, route: params[:route], referrer: params[:referrer])) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>
@@ -22,7 +22,7 @@
       <div class="govuk-button-group">
         <% if params[:referrer] == "check_answers" %>
           <%= f.govuk_submit "Save changes" %>
-          <%= govuk_button_link_to "Cancel", scheme_location_check_answers_path(@scheme, @location), secondary: true %>
+          <%= govuk_button_link_to "Cancel", scheme_location_check_answers_path(@scheme, @location, route: params[:route]), secondary: true %>
         <% else %>
           <%= f.govuk_submit "Save and continue" %>
           <%= govuk_button_link_to "Cancel", scheme_locations_path(@scheme), secondary: true %>

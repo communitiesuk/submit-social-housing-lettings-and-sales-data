@@ -16,18 +16,6 @@ module CheckAnswersHelper
     !scheme.confirmed? || editable_attributes.include?(attribute_name)
   end
 
-  def get_location_change_link_href_postcode(scheme, location)
-    if location.confirmed?
-      scheme_location_path(scheme_id: scheme.id, id: location.id)
-    else
-      edit_scheme_location_path(scheme_id: scheme.id, id: location.id)
-    end
-  end
-
-  def get_location_change_link_href_location_admin_district(scheme, location)
-    scheme_location_edit_local_authority_path(scheme_id: scheme.id, location_id: location.id)
-  end
-
   def any_questions_have_summary_card_number?(subsection, lettings_log)
     subsection.applicable_questions(lettings_log).map(&:check_answers_card_number).compact.length.positive?
   end

@@ -52,11 +52,11 @@
     <%= table.body do |body| %>
       <%= body.row do |row| %>
         <% row.cell(text: location.id) %>
-        <% row.cell(text: simple_format(location_cell_postcode(location, location.confirmed ? scheme_location_path(@scheme, location) : scheme_location_check_answers_path(@scheme, location, referrer: "locations")), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
+        <% row.cell(text: simple_format(location_cell_postcode(location, location.confirmed ? scheme_location_path(@scheme, location) : scheme_location_check_answers_path(@scheme, location, route: "locations")), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
         <% row.cell(text: location.units) %>
         <% row.cell(text: simple_format("<span>#{location.type_of_unit}</span>")) %>
         <% row.cell(text: location.mobility_type) %>
-        <% row.cell(text: simple_format(location_cell_location_admin_district(location, "/schemes/#{@scheme.id}/locations/#{location.id}/edit-local-authority"), wrapper_tag: "div")) %>
+        <% row.cell(text: location.location_admin_district) %>
         <% row.cell(text: location.startdate&.to_formatted_s(:govuk_date)) %>
         <% end %>
     <% end %>

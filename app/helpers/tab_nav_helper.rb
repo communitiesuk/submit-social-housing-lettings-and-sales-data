@@ -11,17 +11,6 @@ module TabNavHelper
     [govuk_link_to(link_text, link, method: :patch), "<span class=\"govuk-visually-hidden\">Location </span><span class=\"govuk-!-font-weight-regular app-!-colour-muted\">#{location.name}</span>"].join("\n")
   end
 
-  def location_cell_location_admin_district(location, link)
-    la = location.location_admin_district
-    if location.confirmed?
-      la
-    elsif la
-      govuk_link_to(la, link, method: :patch)
-    else
-      govuk_link_to("Select local authority", link, method: :patch)
-    end
-  end
-
   def scheme_cell(scheme)
     link_text = scheme.service_name
     link = scheme.confirmed? ? scheme : scheme_check_answers_path(scheme)

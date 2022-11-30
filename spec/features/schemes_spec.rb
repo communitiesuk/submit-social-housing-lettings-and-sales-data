@@ -258,7 +258,7 @@ RSpec.describe "Schemes scheme Features" do
               end
 
               it "shows the new location form" do
-                expect(page).to have_content("Add a location to this scheme")
+                expect(page).to have_content("Add a location to #{scheme.service_name}")
               end
 
               context "when the user completes the new location form" do
@@ -456,7 +456,7 @@ RSpec.describe "Schemes scheme Features" do
           end
 
           it "lets me add location" do
-            expect(page).to have_content "Add a location to FooBar"
+            expect(page).to have_content "Add a location to #{scheme.service_name}"
           end
 
           it "lets me navigate back to support questions" do
@@ -817,7 +817,7 @@ RSpec.describe "Schemes scheme Features" do
                 assert_selector "a", text: "Change", count: 1
 
                 click_link("Change")
-                expect(page).to have_content "Location name for #{location.postcode}"
+                expect(page).to have_content "What is the name of this location?"
               end
 
               it "allows to deactivate a location" do
@@ -843,7 +843,7 @@ RSpec.describe "Schemes scheme Features" do
 
                 it "returns to locations check your answers page and shows the new name" do
                   fill_in "location-name-field", with: "NewName"
-                  click_button "Save and continue"
+                  click_button "Save changes"
                   expect(page).to have_content location.postcode
                   expect(page).to have_content "NewName"
                   expect(page).to have_current_path("/schemes/#{scheme.id}/locations/#{location.id}")
@@ -909,24 +909,32 @@ RSpec.describe "Schemes scheme Features" do
               end
 
               it "shows the new location form" do
-                expect(page).to have_content("Add a location to this scheme")
+                expect(page).to have_content("Add a location to #{scheme.service_name}")
               end
 
               context "when the user completes the new location form" do
                 let(:location_name) { "Area 42" }
 
                 before do
-                  fill_in "Postcode", with: "NW1L 5DP"
-                  fill_in "Location name (optional)", with: location_name
-                  fill_in "Total number of units at this location", with: 1
+                  fill_in with: "NW1L 5DP"
+                  click_button "Save and continue"
+                  fill_in with: location_name
+                  click_button "Save and continue"
+                  fill_in with: "Adur"
+                  fill_in with: 1
+                  click_button "Save and continue"
                   choose "Bungalow"
+                  click_button "Save and continue"
                   choose "location-mobility-type-none-field"
-                  choose "location-add-another-location-no-field"
+                  click_button "Save and continue"
+                  fill_in "Day", with: 2
+                  fill_in "Month", with: 2
+                  fill_in "Year", with: 2022
                   click_button "Save and continue"
                 end
 
                 it "shows the check answers page location tab" do
-                  expect(page.current_url.split("/").last).to eq("check-answers#locations")
+                  expect(page.current_url.split("/").last).to eq("check-answers")
                   expect(page).to have_content(location_name)
                 end
 
