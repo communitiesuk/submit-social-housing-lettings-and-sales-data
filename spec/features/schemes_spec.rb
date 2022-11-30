@@ -456,7 +456,7 @@ RSpec.describe "Schemes scheme Features" do
           end
 
           it "lets me add location" do
-            expect(page).to have_content "Add a location to this scheme"
+            expect(page).to have_content "Add a location to FooBar"
           end
 
           it "lets me navigate back to support questions" do

@@ -15,9 +15,13 @@ class LocationsController < ApplicationController
   end
 
   def new
-    @location = Location.new(scheme: @scheme)
+    @location = if params[:referrer] == "new_scheme" && @scheme.locations.present?
+                  @scheme.locations.first
+                else
+                  Location.new(scheme: @scheme)
+                end
     @location.save!
-    redirect_to scheme_location_postcode_path(@scheme, @location)
+    redirect_to scheme_location_postcode_path(@scheme, @location, referrer: params[:referrer])
   end
 
   def postcode
