@@ -180,14 +180,17 @@ RSpec.describe Scheme, type: :model do
     before do
       FactoryBot.create_list(:scheme, 4)
       FactoryBot.create_list(:scheme, 3, confirmed: false)
+      FactoryBot.create_list(:scheme, 2, confirmed: nil)
     end
 
     it "can sort the schemes by status" do
-      all_schemes = described_class.all.order(confirmed: :asc, service_name: :asc)
-      expect(all_schemes.count).to eq(7)
+      all_schemes = described_class.all.order("confirmed ASC NULLS FIRST", service_name: :asc)
+      expect(all_schemes.count).to eq(9)
       expect(all_schemes[0].status).to eq(:incomplete)
       expect(all_schemes[1].status).to eq(:incomplete)
       expect(all_schemes[2].status).to eq(:incomplete)
+      expect(all_schemes[3].status).to eq(:incomplete)
+      expect(all_schemes[4].status).to eq(:incomplete)
     end
   end
 
