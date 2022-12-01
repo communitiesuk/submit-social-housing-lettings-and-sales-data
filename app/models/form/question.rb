@@ -86,11 +86,11 @@ class Form::Question
     conditional_on.all? { |condition| evaluate_condition(condition, log) }
   end
 
-  def hidden_in_check_answers?(log, _current_user = nil)
+  def hidden_in_check_answers?(log, current_user = nil)
     if hidden_in_check_answers.is_a?(Hash)
       form.depends_on_met(hidden_in_check_answers["depends_on"], log)
     else
-      hidden_in_check_answers
+      hidden_in_check_answers || !page.routed_to?(log, current_user)
     end
   end
 
