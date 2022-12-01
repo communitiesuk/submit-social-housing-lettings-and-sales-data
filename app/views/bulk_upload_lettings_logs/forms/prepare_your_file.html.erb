@@ -1,0 +1,33 @@
+<% content_for :before_content do %>
+  <%= govuk_back_link href: @form.back_path %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, scope: :form, url: bulk_upload_lettings_log_path(id: "prepare-your-file"), method: :patch do |f| %>
+      <%= f.hidden_field :year %>
+
+      <span class="govuk-caption-l">Upload lettings logs in bulk (<%= @form.year_combo %>)</span>
+      <h1 class="govuk-heading-l">Prepare your file</h1>
+
+      <h2 class="govuk-heading-m">Create your file</h2>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>Download the <%= govuk_link_to "bulk lettings template", @form.template_path %></li>
+        <li>Export the data from your housing management system, matching the template</li>
+        <li>If you cannot export it in this format, you may have to input it manually</li>
+      </ul>
+
+      <h2 class="govuk-heading-m">Check your data</h2>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>Check data is complete and formatted correctly, using data specifications (opens in a new tab)</li>
+      </ul>
+
+      <h2 class="govuk-heading-m">Save your file</h2>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>Save the file (CSV format <strong>only</strong>)</li>
+      </ul>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

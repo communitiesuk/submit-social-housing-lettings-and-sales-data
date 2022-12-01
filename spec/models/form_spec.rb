@@ -235,4 +235,38 @@ RSpec.describe Form, type: :model do
       expect(form.sections[1].class).to eq(Form::Sales::Sections::PropertyInformation)
     end
   end
+
+  describe "#in_crossover_period?" do
+    context "when now not specified" do
+      context "when after end period" do
+        subject(:form) { described_class.new(nil, 2022, [], "sales") }
+
+        it "returns false" do
+          Timecop.freeze(2023, 8, 1) do
+            expect(form).not_to be_in_crossover_period
+          end
+        end
+      end
+
+      context "when during crossover" do
+        subject(:form) { described_class.new(nil, 2022, [], "sales") }
+
+        it "returns true" do
+          Timecop.freeze(2023, 6, 1) do
+            expect(form).to be_in_crossover_period
+          end
+        end
+      end
+
+      context "when before crossover" do
+        subject(:form) { described_class.new(nil, 2022, [], "sales") }
+
+        it "returns false" do
+          Timecop.freeze(2023, 1, 1) do
+            expect(form).not_to be_in_crossover_period
+          end
+        end
+      end
+    end
+  end
 end

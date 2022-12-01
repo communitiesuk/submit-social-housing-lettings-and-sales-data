@@ -65,11 +65,11 @@ module NavigationItemsHelper
 private
 
   def lettings_logs_current?(path)
-    path == "/lettings-logs"
+    path.starts_with?("/lettings-logs")
   end
 
   def sales_logs_current?(path)
-    path == "/sales-logs"
+    path.starts_with?("/sales-logs")
   end
 
   def users_current?(path)

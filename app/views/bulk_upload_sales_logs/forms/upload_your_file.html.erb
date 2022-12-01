@@ -1,0 +1,17 @@
+<% content_for :before_content do %>
+  <%= govuk_back_link href: @form.back_path %>
+<% end %>
+
+<%= form_with model: @form, scope: :form, url: bulk_upload_sales_log_path(id: "upload-your-file"), method: :patch do |f| %>
+  <%= f.govuk_error_summary %>
+
+  <div>
+    Upload your file goes here
+  </div>
+
+  <div>
+    year selected <%= @form.year %>
+  </div>
+
+  <%= f.govuk_submit %>
+<% end %>

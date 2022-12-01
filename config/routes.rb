@@ -111,6 +111,12 @@ Rails.application.routes.draw do
       get "csv-download", to: "lettings_logs#download_csv"
       post "email-csv", to: "lettings_logs#email_csv"
       get "csv-confirmation", to: "lettings_logs#csv_confirmation"
+
+      resources :bulk_upload_lettings_logs, path: "bulk-upload-logs" do
+        collection do
+          get :start
+        end
+      end
     end
 
     member do
@@ -130,6 +136,14 @@ Rails.application.routes.draw do
   end
 
   resources :sales_logs, path: "/sales-logs" do
+    collection do
+      resources :bulk_upload_sales_logs, path: "bulk-upload-logs" do
+        collection do
+          get :start
+        end
+      end
+    end
+
     FormHandler.instance.sales_forms.each do |_key, form|
       form.pages.map do |page|
         get page.id.to_s.dasherize, to: "form#show_page"
