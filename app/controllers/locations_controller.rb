@@ -22,6 +22,7 @@ class LocationsController < ApplicationController
 
   def postcode
     render_not_found and return unless @location && @scheme
+
     if params[:location].present?
       @location.postcode = PostcodeService.clean(params[:location][:postcode])
       @location.location_admin_district = nil
@@ -43,6 +44,7 @@ class LocationsController < ApplicationController
 
   def local_authority
     render_not_found and return unless @location && @scheme
+
     if params[:location].present?
       @location.location_admin_district = params[:location][:location_admin_district]
       @location.location_code = Location.local_authorities.key(params[:location][:location_admin_district])
@@ -61,6 +63,7 @@ class LocationsController < ApplicationController
 
   def name
     render_not_found and return unless @location && @scheme
+
     if params[:location].present?
       @location.name = params[:location][:name]
       if @location.valid?(:name)
@@ -81,6 +84,7 @@ class LocationsController < ApplicationController
 
   def units
     render_not_found and return unless @location && @scheme
+
     if params[:location].present?
       @location.units = params[:location][:units]
       if @location.valid?(:units)
@@ -98,6 +102,7 @@ class LocationsController < ApplicationController
 
   def type_of_unit
     render_not_found and return unless @location && @scheme
+
     if params[:location].present?
       @location.type_of_unit = params[:location][:type_of_unit]
       if @location.valid?(:type_of_unit)
@@ -115,6 +120,7 @@ class LocationsController < ApplicationController
 
   def mobility_standards
     render_not_found and return unless @location && @scheme
+
     if params[:location].present?
       @location.mobility_type = params[:location][:mobility_type]
       if @location.valid?(:mobility_type)
@@ -132,6 +138,7 @@ class LocationsController < ApplicationController
 
   def availability
     render_not_found and return unless @location && @scheme
+
     if params[:location].present?
       day = params[:location]["startdate(3i)"]
       month = params[:location]["startdate(2i)"]
@@ -160,6 +167,7 @@ class LocationsController < ApplicationController
 
   def check_answers
     render_not_found and return unless @location && @scheme
+
     if params[:location].present?
       @location.confirmed = true
       @location.save!

@@ -62,6 +62,6 @@
     <% end %>
   <% end %>
 <% end %>
-<%= govuk_button_link_to "Add a location", new_scheme_location_path(scheme_id: @scheme.id), secondary: true %>
+<%= govuk_button_link_to "Add a location", new_scheme_location_path(@scheme), secondary: true %>
 
 <%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "locations" } %>

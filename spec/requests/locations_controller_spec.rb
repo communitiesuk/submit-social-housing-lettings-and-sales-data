@@ -41,13 +41,21 @@ RSpec.describe LocationsController, type: :request do
         get "/schemes/#{scheme.id}/locations/new"
       end
 
-      it "returns a template for a new location" do
-        follow_redirect!
-        expect(response).to have_http_status(:ok)
-        expect(page).to have_content("Add a location to this scheme")
+      it "creates a new location for scheme and redirects to correct page" do
+        expect { get "/schemes/#{scheme.id}/locations/new" }.to change(Location, :count).by(1)
       end
 
-      context "when trying to new location to a scheme that belongs to another organisation" do
+      it "redirects to the postcode page" do
+        follow_redirect!
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("What is the postcode?")
+      end
+
+      it "creates a new location for scheme with the right owning organisation" do
+        expect(Location.last.scheme.owning_organisation_id).to eq(user.organisation_id)
+      end
+
+      context "when trying to add a new location to a scheme that belongs to another organisation" do
         let(:another_scheme)  { FactoryBot.create(:scheme) }
 
         it "displays the new page with an error message" do
@@ -58,16 +66,37 @@ RSpec.describe LocationsController, type: :request do
     end
 
     context "when signed in as a support user" do
+
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in user
         get "/schemes/#{scheme.id}/locations/new"
       end
 
-      it "returns a template for a new location" do
+      it "creates a new location for scheme and redirects to correct page" do
+        expect { get "/schemes/#{scheme.id}/locations/new" }.to change(Location, :count).by(1)
+      end
+
+      it "redirects to the postcode page" do
         follow_redirect!
         expect(response).to have_http_status(:ok)
-        expect(page).to have_content("Add a location to this scheme")
+        expect(page).to have_content("What is the postcode?")
+      end
+
+      it "creates a new location for scheme with the right owning organisation" do
+        expect(Location.last.scheme.owning_organisation_id).to eq(user.organisation_id)
+      end
+
+      context "when trying to add a new location to a scheme that belongs to another organisation" do
+        let(:another_scheme)  { FactoryBot.create(:scheme) }
+
+        it "displays the new page with an error message" do
+          get "/schemes/#{another_scheme.id}/locations/new"
+          expect(response).to have_http_status(:not_found)
+        end
       end
     end
   end
