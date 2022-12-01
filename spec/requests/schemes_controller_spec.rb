@@ -662,7 +662,6 @@ RSpec.describe SchemesController, type: :request do
           { scheme: {
             service_name: "",
             managing_organisation_id: "",
-            owning_organisation_id: "",
             primary_client_group: "",
             secondary_client_group: "",
             scheme_type: "",
