@@ -213,7 +213,7 @@ class Scheme < ApplicationRecord
   end
 
   def validate_owning_organisation
-    if !owning_organisation.holds_own_stock?
+    unless owning_organisation.holds_own_stock?
       errors.add(:owning_organisation_id, :does_not_own_stock, message: I18n.t("validations.scheme.owning_organisation.does_not_own_stock"))
     end
   end
