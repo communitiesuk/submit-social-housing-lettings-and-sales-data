@@ -142,6 +142,10 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
   end
 
   describe "#hidden_in_check_answers?" do
+    before do
+      allow(page).to receive(:routed_to?).and_return(true)
+    end
+
     context "when user present" do
       let(:user) { create(:user) }
 
@@ -151,10 +155,21 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
     end
 
     context "when user not provided" do
-      let(:user) { create(:user, :support) }
-
       it "is not hidden in check answers" do
         expect(question.hidden_in_check_answers?(nil)).to be true
+      end
+    end
+
+    context "when the page is not routed to" do
+      let(:user) { create(:user, :data_coordinator, organisation: create(:organisation, holds_own_stock: true)) }
+      let(:log) { create(:lettings_log, owning_organisation: user.organisation) }
+
+      before do
+        allow(page).to receive(:routed_to?).and_return(false)
+      end
+
+      it "is hidden in check answers" do
+        expect(question.hidden_in_check_answers?(log, user)).to be true
       end
     end
   end

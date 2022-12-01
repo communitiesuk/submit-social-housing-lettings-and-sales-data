@@ -45,9 +45,9 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
     true
   end
 
-  def hidden_in_check_answers?(_log, user = nil)
+  def hidden_in_check_answers?(log, user = nil)
     @current_user = user
-    @current_user.nil?
+    @current_user.nil? || !@page.routed_to?(log, user)
   end
 
   def enabled
