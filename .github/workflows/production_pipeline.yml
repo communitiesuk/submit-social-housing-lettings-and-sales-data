@@ -253,5 +253,4 @@ jobs:
           cf set-env $APP_NAME S3_CONFIG $S3_CONFIG
           cf set-env $APP_NAME CSV_DOWNLOAD_PAAS_INSTANCE $CSV_DOWNLOAD_PAAS_INSTANCE
           cf set-env $APP_NAME SENTRY_DSN $SENTRY_DSN
-          cf set-env $APP_NAME CSV_BUCKET "dluhc-core-production-csv-bucket"
           cf push $APP_NAME --strategy rolling

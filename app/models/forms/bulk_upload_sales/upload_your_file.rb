@@ -51,7 +51,7 @@ module Forms
       end
 
       def storage_service
-        @storage_service ||= Storage::S3Service.new(Configuration::PaasConfigurationService.new, ENV["CSV_BUCKET"])
+        @storage_service ||= Storage::S3Service.new(Configuration::PaasConfigurationService.new, ENV["CSV_DOWNLOAD_PAAS_INSTANCE"])
       end
 
       def validate_file_is_csv
