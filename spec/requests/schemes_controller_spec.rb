@@ -674,7 +674,7 @@ RSpec.describe SchemesController, type: :request do
           } }
         end
 
-        it "renders primary client group after successful update" do
+        it "renders the same page with error message" do
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_content("Create a new supported housing scheme")
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.service_name.invalid"))
@@ -970,7 +970,7 @@ RSpec.describe SchemesController, type: :request do
           } }
         end
 
-        it "renders primary client group after successful update" do
+        it "renders the same page with error message" do
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_content("Create a new supported housing scheme")
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.owning_organisation_id.invalid"))
