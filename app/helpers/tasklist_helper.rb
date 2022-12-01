@@ -39,7 +39,7 @@ module TasklistHelper
 
   def review_log_text(log)
     if log.collection_period_open?
-      "You can #{govuk_link_to 'review and make changes to this log', "/lettings-logs/#{log.id}/review"} until #{(log.form.end_date + 1.day).to_formatted_s(:govuk_date)}.".html_safe
+      "You can #{govuk_link_to 'review and make changes to this log', review_lettings_log_path(log)} until #{(log.form.end_date + 1.day).to_formatted_s(:govuk_date)}.".html_safe
     else
       "This log is from the #{log.form.start_date.year}/#{log.form.start_date.year + 1} collection window, which is now closed."
     end

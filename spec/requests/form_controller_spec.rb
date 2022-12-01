@@ -509,6 +509,7 @@ RSpec.describe FormController, type: :request do
           before do
             completed_lettings_log.update!(ecstat1: 1, earnings: 130, hhmemb: 1) # we're not routing to that page, so it gets cleared?§
             allow(completed_lettings_log).to receive(:net_income_soft_validation_triggered?).and_return(true)
+            allow(completed_lettings_log.form).to receive(:end_date).and_return(Time.zone.today + 1.day)
             post "/lettings-logs/#{completed_lettings_log.id}/form", params: interrupt_params, headers: headers.merge({ "HTTP_REFERER" => referrer })
           end
 
