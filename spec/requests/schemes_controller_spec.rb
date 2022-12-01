@@ -585,16 +585,6 @@ RSpec.describe SchemesController, type: :request do
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.owning_organisation_id.invalid"))
         end
       end
-
-      context "when required organisation id param is missing" do
-        let(:params) { { "scheme" => { "service_name" => "qweqwer", "sensitive" => "Yes", "owning_organisation_id" => "", "scheme_type" => "Foyer", "registered_under_care_act" => "Yes – part registered as a care home" } } }
-
-        it "displays the new page with an error message" do
-          post "/schemes", params: params
-          expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.owning_organisation_id.invalid"))
-        end
-      end
     end
   end
 
