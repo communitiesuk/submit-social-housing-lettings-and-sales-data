@@ -210,18 +210,32 @@ class Scheme < ApplicationRecord
   end
 
   def available_from
-    created_at
+    FormHandler.instance.collection_start_date(created_at)
   end
 
-  def status
-    recent_deactivation = scheme_deactivation_periods.deactivations_without_reactivation.first
-    return :active if recent_deactivation.blank?
-    return :deactivating_soon if Time.zone.now < recent_deactivation.deactivation_date
-
-    :deactivated
+  def open_deactivation
+    scheme_deactivation_periods.deactivations_without_reactivation.first
   end
+
+  def recent_deactivation
+    scheme_deactivation_periods.order("created_at").last
+  end
+
+  def status(date = Time.zone.now)
+    return :incomplete unless confirmed
+    return :deactivated if open_deactivation&.deactivation_date.present? && date >= open_deactivation.deactivation_date
+    return :deactivating_soon if open_deactivation&.deactivation_date.present? && date < open_deactivation.deactivation_date
+    return :reactivating_soon if recent_deactivation&.reactivation_date.present? && date < recent_deactivation.reactivation_date
+
+    :active
+  end
+  alias_method :status_at, :status
 
   def active?
     status == :active
+  end
+
+  def reactivating_soon?
+    status == :reactivating_soon
   end
 end

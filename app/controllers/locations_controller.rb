@@ -38,8 +38,13 @@ class LocationsController < ApplicationController
   end
 
   def deactivate_confirm
-    @deactivation_date = params[:deactivation_date]
-    @deactivation_date_type = params[:deactivation_date_type]
+    @affected_logs = @location.lettings_logs.filter_by_before_startdate(params[:deactivation_date])
+    if @affected_logs.count.zero?
+      deactivate
+    else
+      @deactivation_date = params[:deactivation_date]
+      @deactivation_date_type = params[:deactivation_date_type]
+    end
   end
 
   def deactivate
@@ -50,12 +55,12 @@ class LocationsController < ApplicationController
   end
 
   def new_reactivation
-    @location_deactivation_period = LocationDeactivationPeriod.deactivations_without_reactivation.first
+    @location_deactivation_period = @location.location_deactivation_periods.deactivations_without_reactivation.first
     render "toggle_active", locals: { action: "reactivate" }
   end
 
   def reactivate
-    @location_deactivation_period = LocationDeactivationPeriod.deactivations_without_reactivation.first
+    @location_deactivation_period = @location.location_deactivation_periods.deactivations_without_reactivation.first
 
     @location_deactivation_period.reactivation_date = toggle_date("reactivation_date")
     @location_deactivation_period.reactivation_date_type = params[:location_deactivation_period][:reactivation_date_type]

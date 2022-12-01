@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe CheckAnswersSummaryListCardComponent, type: :component do
   context "when given a set of questions" do
     let(:user) { FactoryBot.build(:user) }
-    let(:log) { FactoryBot.build(:lettings_log, :completed, age2: 99) }
+    let(:log) { FactoryBot.build(:lettings_log, :completed, age2: 99, startdate: Time.zone.local(2021, 5, 1)) }
     let(:subsection_id) { "household_characteristics" }
     let(:subsection) { log.form.get_subsection(subsection_id) }
     let(:questions) { subsection.applicable_questions(log) }

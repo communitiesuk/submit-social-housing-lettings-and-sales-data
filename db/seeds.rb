@@ -67,25 +67,21 @@ unless Rails.env.test?
     end
   end
 
-  OrganisationRelationship.create!(
+  OrganisationRelationship.find_or_create_by!(
     child_organisation: org,
     parent_organisation: housing_provider1,
-    relationship_type: OrganisationRelationship::OWNING,
   )
-  OrganisationRelationship.create!(
+  OrganisationRelationship.find_or_create_by!(
     child_organisation: org,
     parent_organisation: housing_provider2,
-    relationship_type: OrganisationRelationship::OWNING,
   )
-  OrganisationRelationship.create!(
+  OrganisationRelationship.find_or_create_by!(
     child_organisation: managing_agent1,
     parent_organisation: org,
-    relationship_type: OrganisationRelationship::MANAGING,
   )
-  OrganisationRelationship.create!(
+  OrganisationRelationship.find_or_create_by!(
     child_organisation: managing_agent2,
     parent_organisation: org,
-    relationship_type: OrganisationRelationship::MANAGING,
   )
 
   if (Rails.env.development? || Rails.env.review?) && User.count.zero?

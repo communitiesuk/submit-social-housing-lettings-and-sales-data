@@ -10,14 +10,18 @@
 <% end %>
 
 <div class="app-filter-layout" data-controller="filter-layout">
-  <div class="govuk-button-group app-filter-toggle">
+  <div class="govuk-button-group app-filter-toggle govuk-!-margin-bottom-6">
     <% if current_page?(controller: 'lettings_logs', action: 'index') %>
-      <%= govuk_button_to "Create a new lettings log", lettings_logs_path %>
+      <%= govuk_button_to "Create a new lettings log", lettings_logs_path, class: "govuk-!-margin-right-6" %>
     <% end %>
+
     <% if FeatureToggle.sales_log_enabled? && current_page?(controller: 'sales_logs', action: 'index') %>
-      <%= govuk_button_to "Create a new sales log", sales_logs_path %>
+      <%= govuk_button_to "Create a new sales log", sales_logs_path, class: "govuk-!-margin-right-6" %>
     <% end %>
-    <%#= govuk_link_to "Upload logs", bulk_upload_lettings_logs_path %>
+
+    <% if FeatureToggle.bulk_upload_logs? %>
+      <%= govuk_button_link_to "Upload #{log_type_for_controller(controller)} logs in bulk", bulk_upload_path_for_controller(controller, id: "start"), secondary: true %>
+    <% end %>
   </div>
 
   <%= render partial: "log_filters" %>

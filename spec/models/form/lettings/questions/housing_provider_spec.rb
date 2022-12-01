@@ -107,7 +107,7 @@ RSpec.describe Form::Lettings::Questions::HousingProvider, type: :model do
 
       context "when housing providers != 0" do
         before do
-          create(:organisation_relationship, :owning, child_organisation: user.organisation)
+          create(:organisation_relationship, child_organisation: user.organisation)
         end
 
         it "is visible in check answers" do
@@ -133,8 +133,8 @@ RSpec.describe Form::Lettings::Questions::HousingProvider, type: :model do
 
       context "when housing providers >= 2" do
         before do
-          create(:organisation_relationship, :owning, child_organisation: user.organisation)
-          create(:organisation_relationship, :owning, child_organisation: user.organisation)
+          create(:organisation_relationship, child_organisation: user.organisation)
+          create(:organisation_relationship, child_organisation: user.organisation)
         end
 
         it "is visible in check answers" do

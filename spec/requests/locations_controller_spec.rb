@@ -847,7 +847,7 @@ RSpec.describe LocationsController, type: :request do
     context "when signed in as a data coordinator user" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
       let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:locations) { FactoryBot.create_list(:location, 3, scheme:) }
+      let!(:locations) { FactoryBot.create_list(:location, 3, scheme:, startdate: Time.zone.local(2022, 4, 1)) }
 
       before do
         sign_in user
@@ -858,7 +858,7 @@ RSpec.describe LocationsController, type: :request do
         let!(:another_scheme) { FactoryBot.create(:scheme) }
 
         before do
-          FactoryBot.create(:location, scheme:)
+          FactoryBot.create(:location, scheme:, startdate: Time.zone.local(2022, 4, 1))
         end
 
         it "returns 404 not found" do
@@ -867,7 +867,18 @@ RSpec.describe LocationsController, type: :request do
         end
       end
 
-      it "shows scheme" do
+      it "shows locations with correct data wben the new locations layout feature toggle is enabled" do
+        locations.each do |location|
+          expect(page).to have_content(location.id)
+          expect(page).to have_content(location.postcode)
+          expect(page).to have_content(location.name)
+          expect(page).to have_content(location.status)
+        end
+      end
+
+      it "shows locations with correct data wben the new locations layout feature toggle is disabled" do
+        allow(FeatureToggle).to receive(:location_toggle_enabled?).and_return(false)
+        get "/schemes/#{scheme.id}/locations"
         locations.each do |location|
           expect(page).to have_content(location.id)
           expect(page).to have_content(location.postcode)
@@ -964,7 +975,7 @@ RSpec.describe LocationsController, type: :request do
     context "when signed in as a support user" do
       let(:user) { FactoryBot.create(:user, :support) }
       let!(:scheme) { FactoryBot.create(:scheme) }
-      let!(:locations) { FactoryBot.create_list(:location, 3, scheme:) }
+      let!(:locations) { FactoryBot.create_list(:location, 3, scheme:, startdate: Time.zone.local(2022, 4, 1)) }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -972,11 +983,24 @@ RSpec.describe LocationsController, type: :request do
         get "/schemes/#{scheme.id}/locations"
       end
 
-      it "shows scheme" do
+      it "shows locations with correct data wben the new locations layout feature toggle is enabled" do
+        locations.each do |location|
+          expect(page).to have_content(location.id)
+          expect(page).to have_content(location.postcode)
+          expect(page).to have_content(location.name)
+          expect(page).to have_content(location.status)
+        end
+      end
+
+      it "shows locations with correct data wben the new locations layout feature toggle is disabled" do
+        allow(FeatureToggle).to receive(:location_toggle_enabled?).and_return(false)
+        get "/schemes/#{scheme.id}/locations"
         locations.each do |location|
           expect(page).to have_content(location.id)
           expect(page).to have_content(location.postcode)
           expect(page).to have_content(location.type_of_unit)
+          expect(page).to have_content(location.mobility_type)
+          expect(page).to have_content(location.location_admin_district)
           expect(page).to have_content(location.startdate&.to_formatted_s(:govuk_date))
         end
       end
@@ -1243,11 +1267,13 @@ RSpec.describe LocationsController, type: :request do
       let!(:lettings_log) { FactoryBot.create(:lettings_log, :sh, location:, scheme:, startdate:, owning_organisation: user.organisation) }
       let(:startdate) { Time.utc(2022, 10, 11) }
       let(:add_deactivations) { nil }
+      let(:setup_locations) { nil }
 
       before do
         Timecop.freeze(Time.utc(2022, 10, 10))
         sign_in user
         add_deactivations
+        setup_locations
         location.save!
         patch "/schemes/#{scheme.id}/locations/#{location.id}/new-deactivation", params:
       end
@@ -1259,20 +1285,52 @@ RSpec.describe LocationsController, type: :request do
       context "with default date" do
         let(:params) { { location_deactivation_period: { deactivation_date_type: "default", deactivation_date: } } }
 
-        it "redirects to the confirmation page" do
-          follow_redirect!
-          expect(response).to have_http_status(:ok)
-          expect(page).to have_content("This change will affect #{location.lettings_logs.count} logs")
+        context "and affected logs" do
+          it "redirects to the confirmation page" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("This change will affect 1 logs")
+          end
+        end
+
+        context "and no affected logs" do
+          let(:setup_locations) { location.lettings_logs.update(location: nil) }
+
+          it "redirects to the location page and updates the deactivation period" do
+            follow_redirect!
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+            location.reload
+            expect(location.location_deactivation_periods.count).to eq(1)
+            expect(location.location_deactivation_periods.first.deactivation_date).to eq(Time.zone.local(2022, 4, 1))
+          end
         end
       end
 
       context "with other date" do
         let(:params) { { location_deactivation_period: { deactivation_date_type: "other", "deactivation_date(3i)": "10", "deactivation_date(2i)": "10", "deactivation_date(1i)": "2022" } } }
 
-        it "redirects to the confirmation page" do
-          follow_redirect!
-          expect(response).to have_http_status(:ok)
-          expect(page).to have_content("This change will affect #{location.lettings_logs.count} logs")
+        context "and afected logs" do
+          it "redirects to the confirmation page" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("This change will affect #{location.lettings_logs.count} logs")
+          end
+        end
+
+        context "and no affected logs" do
+          let(:setup_locations) { location.lettings_logs.update(location: nil) }
+
+          it "redirects to the location page and updates the deactivation period" do
+            follow_redirect!
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+            location.reload
+            expect(location.location_deactivation_periods.count).to eq(1)
+            expect(location.location_deactivation_periods.first.deactivation_date).to eq(Time.zone.local(2022, 10, 10))
+          end
         end
       end
 

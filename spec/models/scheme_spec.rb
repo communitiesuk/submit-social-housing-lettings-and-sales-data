@@ -125,6 +125,12 @@ RSpec.describe Scheme, type: :model do
         scheme.reload
         expect(scheme.status).to eq(:deactivated)
       end
+
+      it "returns reactivating soon if the location has a future reactivation date" do
+        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 7), reactivation_date: Time.zone.local(2022, 6, 8), scheme:)
+        scheme.save!
+        expect(scheme.status).to eq(:reactivating_soon)
+      end
     end
 
     context "when there have been previous deactivations" do
@@ -152,6 +158,69 @@ RSpec.describe Scheme, type: :model do
         FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 7), scheme:)
         scheme.reload
         expect(scheme.status).to eq(:deactivated)
+      end
+
+      it "returns reactivating soon if the scheme has a future reactivation date" do
+        Timecop.freeze(2022, 6, 8)
+        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 7), reactivation_date: Time.zone.local(2022, 6, 9), scheme:)
+        scheme.save!
+        expect(scheme.status).to eq(:reactivating_soon)
+      end
+
+      it "returns if the scheme had a deactivation during another deactivation" do
+        Timecop.freeze(2022, 6, 4)
+        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 5, 5), reactivation_date: Time.zone.local(2022, 6, 2), scheme:)
+        scheme.save!
+        expect(scheme.status).to eq(:reactivating_soon)
+      end
+    end
+  end
+
+  describe "all schemes" do
+    before do
+      FactoryBot.create_list(:scheme, 4)
+      FactoryBot.create_list(:scheme, 3, confirmed: false)
+    end
+
+    it "can sort the schemes by status" do
+      all_schemes = described_class.all.order(confirmed: :asc, service_name: :asc)
+      expect(all_schemes.count).to eq(7)
+      expect(all_schemes[0].status).to eq(:incomplete)
+      expect(all_schemes[1].status).to eq(:incomplete)
+      expect(all_schemes[2].status).to eq(:incomplete)
+    end
+  end
+
+  describe "available_from" do
+    context "when the scheme was created at the start of the 2022/23 collection window" do
+      let(:scheme) { FactoryBot.build(:scheme, created_at: Time.zone.local(2022, 4, 6)) }
+
+      it "returns the beginning of 22/23 collection window" do
+        expect(scheme.available_from).to eq(Time.zone.local(2022, 4, 1))
+      end
+    end
+
+    context "when the scheme was created at the end of the 2022/23 collection window" do
+      let(:scheme) { FactoryBot.build(:scheme, created_at: Time.zone.local(2023, 2, 6)) }
+
+      it "returns the beginning of 22/23 collection window" do
+        expect(scheme.available_from).to eq(Time.zone.local(2022, 4, 1))
+      end
+    end
+
+    context "when the scheme was created at the start of the 2021/22 collection window" do
+      let(:scheme) { FactoryBot.build(:scheme, created_at: Time.zone.local(2021, 4, 6)) }
+
+      it "returns the beginning of 21/22 collection window" do
+        expect(scheme.available_from).to eq(Time.zone.local(2021, 4, 1))
+      end
+    end
+
+    context "when the scheme was created at the end of the 2021/22 collection window" do
+      let(:scheme) { FactoryBot.build(:scheme, created_at: Time.zone.local(2022, 2, 6)) }
+
+      it "returns the beginning of 21/22 collection window" do
+        expect(scheme.available_from).to eq(Time.zone.local(2021, 4, 1))
       end
     end
   end

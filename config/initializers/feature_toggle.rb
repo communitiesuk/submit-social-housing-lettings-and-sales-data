@@ -22,4 +22,8 @@ class FeatureToggle
   def self.managing_for_other_user_enabled?
     !Rails.env.production?
   end
+
+  def self.bulk_upload_logs?
+    !Rails.env.production?
+  end
 end

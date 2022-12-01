@@ -370,19 +370,29 @@ class Location < ApplicationRecord
   end
 
   def available_from
-    startdate || [created_at, FormHandler.instance.current_collection_start_date].min
+    return startdate if startdate.present?
+
+    FormHandler.instance.collection_start_date(created_at)
   end
 
-  def status
-    open_deactivation = location_deactivation_periods.deactivations_without_reactivation.first
-    recent_deactivation = location_deactivation_periods.order("created_at").last
+  def open_deactivation
+    location_deactivation_periods.deactivations_without_reactivation.first
+  end
 
-    return :deactivated if open_deactivation&.deactivation_date.present? && Time.zone.now >= open_deactivation.deactivation_date
-    return :deactivating_soon if open_deactivation&.deactivation_date.present? && Time.zone.now < open_deactivation.deactivation_date
-    return :reactivating_soon if recent_deactivation&.reactivation_date.present? && Time.zone.now < recent_deactivation.reactivation_date
+  def recent_deactivation
+    location_deactivation_periods.order("created_at").last
+  end
+
+  def status(date = Time.zone.now)
+    return :incomplete unless confirmed
+    return :deactivated if open_deactivation&.deactivation_date.present? && date >= open_deactivation.deactivation_date
+    return :deactivating_soon if open_deactivation&.deactivation_date.present? && date < open_deactivation.deactivation_date
+    return :reactivating_soon if recent_deactivation&.reactivation_date.present? && date < recent_deactivation.reactivation_date
+    return :activating_soon if startdate.present? && date < startdate
 
     :active
   end
+  alias_method :status_at, :status
 
   def active?
     status == :active

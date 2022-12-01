@@ -34,12 +34,18 @@ RSpec.describe Location, type: :model do
       expect { location.save! }
         .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Postcode #{I18n.t('validations.postcode')}")
     end
+
+    it "does add an error when the postcode is missing" do
+      location.postcode = nil
+      expect { location.save! }
+        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Postcode #{I18n.t('validations.postcode')}")
+    end
   end
 
   describe "#units" do
     let(:location) { FactoryBot.build(:location) }
 
-    it "does add an error when the postcode is invalid" do
+    it "does add an error when the number of units is invalid" do
       location.units = nil
       expect { location.save! }
         .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Units #{I18n.t('activerecord.errors.models.location.attributes.units.blank')}")
@@ -49,10 +55,20 @@ RSpec.describe Location, type: :model do
   describe "#type_of_unit" do
     let(:location) { FactoryBot.build(:location) }
 
-    it "does add an error when the postcode is invalid" do
+    it "does add an error when the type of unit is invalid" do
       location.type_of_unit = nil
       expect { location.save! }
         .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Type of unit #{I18n.t('activerecord.errors.models.location.attributes.type_of_unit.blank')}")
+    end
+  end
+
+  describe "#mobility_type" do
+    let(:location) { FactoryBot.build(:location) }
+
+    it "does add an error when the mobility type is invalid" do
+      location.mobility_type = nil
+      expect { location.save! }
+        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Mobility type #{I18n.t('activerecord.errors.models.location.attributes.mobility_type.blank')}")
     end
   end
 
@@ -123,6 +139,13 @@ RSpec.describe Location, type: :model do
       Timecop.unfreeze
     end
 
+    context "when location is not confirmed" do
+      it "returns incomplete " do
+        location.confirmed = false
+        expect(location.status).to eq(:incomplete)
+      end
+    end
+
     context "when there have not been any previous deactivations" do
       it "returns active if the location has no deactivation records" do
         expect(location.status).to eq(:active)
@@ -150,6 +173,12 @@ RSpec.describe Location, type: :model do
         FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 7), reactivation_date: Time.zone.local(2022, 6, 8), location:)
         location.save!
         expect(location.status).to eq(:reactivating_soon)
+      end
+
+      it "returns activating soon if the location has a future startdate" do
+        location.startdate = Time.zone.local(2022, 7, 7)
+        location.save!
+        expect(location.status).to eq(:activating_soon)
       end
     end
 
@@ -188,11 +217,61 @@ RSpec.describe Location, type: :model do
         expect(location.status).to eq(:reactivating_soon)
       end
 
-      it "returns if the location had a deactivation during another deactivation" do
+      it "returns reactivating soon if the location had a deactivation during another deactivation" do
         Timecop.freeze(2022, 6, 4)
         FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 5, 5), reactivation_date: Time.zone.local(2022, 6, 2), location:)
         location.save!
         expect(location.status).to eq(:reactivating_soon)
+      end
+
+      it "returns activating soon if the location has a future startdate" do
+        location.startdate = Time.zone.local(2022, 7, 7)
+        location.save!
+        expect(location.status).to eq(:activating_soon)
+      end
+    end
+  end
+
+  describe "available_from" do
+    context "when there is a startdate" do
+      let(:location) { FactoryBot.build(:location, startdate: Time.zone.local(2022, 4, 6)) }
+
+      it "returns the startdate" do
+        expect(location.available_from).to eq(Time.zone.local(2022, 4, 6))
+      end
+    end
+
+    context "when there is no start date" do
+      context "and the location was created at the start of the 2022/23 collection window" do
+        let(:location) { FactoryBot.build(:location, created_at: Time.zone.local(2022, 4, 6), startdate: nil) }
+
+        it "returns the beginning of 22/23 collection window" do
+          expect(location.available_from).to eq(Time.zone.local(2022, 4, 1))
+        end
+      end
+
+      context "and the location was created at the end of the 2022/23 collection window" do
+        let(:location) { FactoryBot.build(:location, created_at: Time.zone.local(2023, 2, 6), startdate: nil) }
+
+        it "returns the beginning of 22/23 collection window" do
+          expect(location.available_from).to eq(Time.zone.local(2022, 4, 1))
+        end
+      end
+
+      context "and the location was created at the start of the 2021/22 collection window" do
+        let(:location) { FactoryBot.build(:location, created_at: Time.zone.local(2021, 4, 6), startdate: nil) }
+
+        it "returns the beginning of 21/22 collection window" do
+          expect(location.available_from).to eq(Time.zone.local(2021, 4, 1))
+        end
+      end
+
+      context "and the location was created at the end of the 2021/22 collection window" do
+        let(:location) { FactoryBot.build(:location, created_at: Time.zone.local(2022, 2, 6), startdate: nil) }
+
+        it "returns the beginning of 21/22 collection window" do
+          expect(location.available_from).to eq(Time.zone.local(2021, 4, 1))
+        end
       end
     end
   end
