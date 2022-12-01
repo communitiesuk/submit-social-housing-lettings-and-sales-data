@@ -585,6 +585,21 @@ RSpec.describe SchemesController, type: :request do
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.owning_organisation_id.invalid"))
         end
       end
+
+      context "when organisation id param refers to a non-stock-owning organisation" do
+        let(:organisation_which_does_not_own_stock) { FactoryBot.create(:organisation, holds_own_stock: false) }
+        let(:params) do
+          { scheme: {
+            owning_organisation_id: organisation_which_does_not_own_stock.id,
+          } }
+        end
+
+        it "displays the new page with an error message" do
+          post "/schemes", params: params
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.scheme.owning_organisation.does_not_own_stock"))
+        end
+      end
     end
   end
 
