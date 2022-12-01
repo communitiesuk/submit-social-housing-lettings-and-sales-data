@@ -72,80 +72,6 @@ RSpec.describe LocationsController, type: :request do
     end
   end
 
-  describe "#edit" do
-    context "when not signed in" do
-      it "redirects to the sign in page" do
-        get "/schemes/1/locations/1/edit"
-        expect(response).to redirect_to("/account/sign-in")
-      end
-    end
-
-    context "when signed in as a data provider" do
-      let(:user) { FactoryBot.create(:user) }
-
-      before do
-        sign_in user
-        get "/schemes/1/locations/1/edit"
-      end
-
-      it "returns 401 unauthorized" do
-        request
-        expect(response).to have_http_status(:unauthorized)
-      end
-    end
-
-    context "when signed in as a data coordinator" do
-      let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:location) { FactoryBot.create(:location, scheme:) }
-
-      before do
-        sign_in user
-        get "/schemes/#{scheme.id}/locations/#{location.id}/edit"
-      end
-
-      it "returns a template for a new location" do
-        expect(response).to have_http_status(:ok)
-        expect(page).to have_content("Add a location to this scheme")
-      end
-
-      context "when trying to edit a location that belongs to another organisation" do
-        let(:another_scheme)  { FactoryBot.create(:scheme) }
-        let(:another_location)  { FactoryBot.create(:location, scheme: another_scheme) }
-
-        it "displays the new page with an error message" do
-          get "/schemes/#{another_scheme.id}/locations/#{another_location.id}/edit"
-          expect(response).to have_http_status(:not_found)
-        end
-      end
-
-      context "when the requested location does not exist" do
-        let(:location) { OpenStruct.new(id: (Location.maximum(:id) || 0) + 1) }
-
-        it "returns not found" do
-          expect(response).to have_http_status(:not_found)
-        end
-      end
-    end
-
-    context "when signed in as a support user" do
-      let(:user) { FactoryBot.create(:user, :support) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:location) { FactoryBot.create(:location, scheme:) }
-
-      before do
-        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
-        sign_in user
-        get "/schemes/#{scheme.id}/locations/#{location.id}/edit"
-      end
-
-      it "returns a template for a new location" do
-        expect(response).to have_http_status(:ok)
-        expect(page).to have_content("Add a location to this scheme")
-      end
-    end
-  end
-
   describe "#index" do
     context "when not signed in" do
       it "redirects to the sign in page" do
@@ -389,10 +315,10 @@ RSpec.describe LocationsController, type: :request do
     end
   end
 
-  describe "#edit-name" do
+  describe "#postcode" do
     context "when not signed in" do
       it "redirects to the sign in page" do
-        get "/schemes/1/locations/1/edit-name"
+        get "/schemes/1/locations/1/postcode"
         expect(response).to redirect_to("/account/sign-in")
       end
     end
@@ -402,7 +328,7 @@ RSpec.describe LocationsController, type: :request do
 
       before do
         sign_in user
-        get "/schemes/1/locations/1/edit-name"
+        get "/schemes/1/locations/1/postcode"
       end
 
       it "returns 401 unauthorized" do
@@ -418,20 +344,20 @@ RSpec.describe LocationsController, type: :request do
 
       before do
         sign_in user
-        get "/schemes/#{scheme.id}/locations/#{location.id}/edit-name"
+        get "/schemes/#{scheme.id}/locations/#{location.id}/postcode"
       end
 
-      it "returns a template for a edit-name" do
+      it "returns a template for a postcode" do
         expect(response).to have_http_status(:ok)
-        expect(page).to have_content("Location name for #{location.postcode}")
+        expect(page).to have_content("What is the postcode?")
       end
 
-      context "when trying to edit location name of location that belongs to another organisation" do
+      context "when trying to edit postcode of location that belongs to another organisation" do
         let(:another_scheme)  { FactoryBot.create(:scheme) }
         let(:another_location)  { FactoryBot.create(:location, scheme: another_scheme) }
 
         it "displays the new page with an error message" do
-          get "/schemes/#{another_scheme.id}/locations/#{another_location.id}/edit-name"
+          get "/schemes/#{another_scheme.id}/locations/#{another_location.id}/postcode"
           expect(response).to have_http_status(:not_found)
         end
       end
@@ -445,90 +371,16 @@ RSpec.describe LocationsController, type: :request do
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in user
-        get "/schemes/#{scheme.id}/locations/#{location.id}/edit-name"
+        get "/schemes/#{scheme.id}/locations/#{location.id}/postcode"
       end
 
-      it "returns a template for a new location" do
+      it "returns a template for a postcode" do
         expect(response).to have_http_status(:ok)
-        expect(page).to have_content("Location name for #{location.postcode}")
+        expect(page).to have_content("What is the postcode?")
       end
 
       context "when the requested location does not exist" do
-        let(:location) { OpenStruct.new(id: (Location.maximum(:id) || 0) + 1) }
-
-        it "returns not found" do
-          expect(response).to have_http_status(:not_found)
-        end
-      end
-    end
-  end
-
-  describe "#edit-local-authority" do
-    context "when not signed in" do
-      it "redirects to the sign in page" do
-        get "/schemes/1/locations/1/edit-local-authority"
-        expect(response).to redirect_to("/account/sign-in")
-      end
-    end
-
-    context "when signed in as a data provider" do
-      let(:user) { FactoryBot.create(:user) }
-
-      before do
-        sign_in user
-        get "/schemes/1/locations/1/edit-local-authority"
-      end
-
-      it "returns 401 unauthorized" do
-        request
-        expect(response).to have_http_status(:unauthorized)
-      end
-    end
-
-    context "when signed in as a data coordinator" do
-      let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:location) { FactoryBot.create(:location, scheme:) }
-
-      before do
-        sign_in user
-        get "/schemes/#{scheme.id}/locations/#{location.id}/edit-local-authority"
-      end
-
-      it "returns a template for an edit-local-authority" do
-        expect(response).to have_http_status(:ok)
-        expect(page).to have_content("What is the local authority of #{location.postcode}?")
-      end
-
-      context "when trying to edit location name of location that belongs to another organisation" do
-        let(:another_scheme)  { FactoryBot.create(:scheme) }
-        let(:another_location)  { FactoryBot.create(:location, scheme: another_scheme) }
-
-        it "displays the new page with an error message" do
-          get "/schemes/#{another_scheme.id}/locations/#{another_location.id}/edit-local-authority"
-          expect(response).to have_http_status(:not_found)
-        end
-      end
-    end
-
-    context "when signed in as a support user" do
-      let(:user) { FactoryBot.create(:user, :support) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:location) { FactoryBot.create(:location, scheme:) }
-
-      before do
-        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
-        sign_in user
-        get "/schemes/#{scheme.id}/locations/#{location.id}/edit-local-authority"
-      end
-
-      it "returns a template for a new location" do
-        expect(response).to have_http_status(:ok)
-        expect(page).to have_content("What is the local authority of #{location.postcode}?")
-      end
-
-      context "when the requested location does not exist" do
-        let(:location) { OpenStruct.new(id: (Location.maximum(:id) || 0) + 1) }
+        let(:location) { OpenStruct.new(id: (Location.maximum(:id) || 0) + 1, scheme:) }
 
         it "returns not found" do
           expect(response).to have_http_status(:not_found)
@@ -611,7 +463,7 @@ RSpec.describe LocationsController, type: :request do
       context "with other date" do
         let(:params) { { location_deactivation_period: { deactivation_date_type: "other", "deactivation_date(3i)": "10", "deactivation_date(2i)": "10", "deactivation_date(1i)": "2022" } } }
 
-        context "and afected logs" do
+        context "and affected logs" do
           it "redirects to the confirmation page" do
             follow_redirect!
             expect(response).to have_http_status(:ok)
