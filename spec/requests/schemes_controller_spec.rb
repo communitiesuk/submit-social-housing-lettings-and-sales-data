@@ -941,7 +941,7 @@ RSpec.describe SchemesController, type: :request do
       end
     end
 
-    context "when signed in as a support" do
+    context "when signed in as a support user" do
       let(:user) { FactoryBot.create(:user, :support) }
       let(:scheme_to_update) { FactoryBot.create(:scheme, owning_organisation: user.organisation, confirmed: nil) }
 
