@@ -58,8 +58,6 @@ Rails.application.routes.draw do
     patch "reactivate", to: "schemes#reactivate"
 
     resources :locations do
-      get "edit-name", to: "locations#edit_name"
-      get "edit-local-authority", to: "locations#edit_local_authority"
       get "new-deactivation", to: "locations#new_deactivation"
       get "deactivate-confirm", to: "locations#deactivate_confirm"
       get "reactivate", to: "locations#reactivate"

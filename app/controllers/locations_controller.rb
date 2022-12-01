@@ -218,7 +218,7 @@ class LocationsController < ApplicationController
 private
 
   def find_scheme
-    @scheme = if %w[new create index edit_name].include?(action_name)
+    @scheme = if %w[new index].include?(action_name)
                 Scheme.find(params[:scheme_id])
               else
                 @location&.scheme
@@ -234,7 +234,7 @@ private
   end
 
   def authenticate_action!
-    if %w[new edit update create index edit_name edit_local_authority new_deactivation deactivate_confirm deactivate].include?(action_name) && !((current_user.organisation == @scheme&.owning_organisation) || current_user.support?)
+    if %w[new update index new_deactivation deactivate_confirm deactivate].include?(action_name) && !((current_user.organisation == @scheme&.owning_organisation) || current_user.support?)
       render_not_found and return
     end
   end
