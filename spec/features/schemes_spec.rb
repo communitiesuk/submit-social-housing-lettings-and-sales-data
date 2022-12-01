@@ -265,48 +265,55 @@ RSpec.describe "Schemes scheme Features" do
                 let(:location_name) { "Area 42" }
 
                 before do
-                  fill_in "Postcode", with: "NW1L 5DP"
-                  fill_in "Location name (optional)", with: location_name
-                  fill_in "Total number of units at this location", with: 1
-                  choose "Bungalow"
+                  fill_in with: "AA12AA"
+                  click_button "Save and continue"
+                  fill_in with: "Adur"
+                  fill_in with: location_name
+                  click_button "Save and continue"
+                  fill_in with: 1
+                  click_button "Save and continue"
+                  choose "Self-contained house"
+                  click_button "Save and continue"
                   choose "location-mobility-type-none-field"
-                  choose "location-add-another-location-no-field"
+                  click_button "Save and continue"
+                  fill_in "Day", with: 2
+                  fill_in "Month", with: 2
+                  fill_in "Year", with: 2022
                   click_button "Save and continue"
                 end
 
-                it "shows the check answers page location tab" do
-                  expect(page.current_url.split("/").last).to eq("check-answers#locations")
+                it "shows the location check answers page" do
+                  expect(page.current_url.split("/").last).to eq("check-answers")
                   expect(page).to have_content(location_name)
                 end
 
                 it "has the correct action button text" do
-                  expect(page).to have_button("Save")
-                  expect(page).not_to have_button("Create scheme")
+                  expect(page).to have_button("Add this location")
                 end
 
                 it "allows you to edit the newly added location" do
-                  click_link "Locations"
-                  expect(page).to have_link(nil, href: /edit/)
+                  expect(page).to have_link(href: /postcode/)
                 end
 
                 context "when you click save" do
+                  before do
+                    click_button "Add this location"
+                  end
+
                   it "displays a updated banner" do
-                    click_button "Save"
                     expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
-                    expect(page).to have_content("has been updated")
+                    expect(page).to have_content("has been added")
                   end
 
                   it "does not let you edit the saved location" do
-                    click_link "Locations"
-                    expect(page).to have_link(nil, href: /edit(?!-name)/)
-                    click_button "Save"
-                    click_link "Locations"
-                    expect(page).not_to have_link(nil, href: /edit(?!-name)/)
+                    click_link "AA1 2AA"
+                    expect(page).not_to have_link(nil, href: /postcode/)
                   end
                 end
 
                 context "when you click to view the scheme details" do
                   before do
+                    click_button "Add this location"
                     click_link("Scheme")
                   end
 
@@ -453,22 +460,12 @@ RSpec.describe "Schemes scheme Features" do
         context "when adding a location" do
           before do
             create_and_save_a_scheme
+            click_button "Create scheme"
           end
 
           it "lets me add location" do
-            expect(page).to have_content "Add a location to #{scheme.service_name}"
-          end
-
-          it "lets me navigate back to support questions" do
-            click_link "Back"
-            expect(page).to have_current_path("/schemes/#{scheme.id}/support")
-            expect(page).to have_content "What support does this scheme provide?"
-          end
-
-          it "returns to the add location page after amending the support question" do
-            click_link "Back"
-            click_button "Save and continue"
-            expect(page).to have_current_path("/schemes/#{scheme.id}/locations/new")
+            click_link "Locations"
+            expect(page).to have_content "Add a location"
           end
 
           it "lets me check my answers after adding a location" do
@@ -479,23 +476,24 @@ RSpec.describe "Schemes scheme Features" do
 
           it "lets me check my answers after adding a second location" do
             fill_in_and_save_location
-            click_link "Add a location"
+            click_button "Add this location"
             fill_in_and_save_second_location
-            expect(page).to have_content "Check your changes before creating this scheme"
+            expect(page).to have_content "Check your answers"
           end
         end
 
         context "when viewing locations" do
           before do
             create_and_save_a_scheme
-
+            click_button "Create scheme"
             fill_in_and_save_location
+            click_button "Add this location"
             click_link "Locations"
           end
 
           it "displays information about a single location" do
             expect(page).to have_content "Locations"
-            expect(page).to have_content "#{scheme.locations.count} location"
+            expect(page).to have_content "#{scheme.locations.count} total location"
           end
 
           it "displays information about the first created location" do
@@ -507,14 +505,13 @@ RSpec.describe "Schemes scheme Features" do
           end
 
           it "displays information about another location" do
-            click_link "Add a location"
             fill_in_and_save_second_location
+            click_button "Add this location"
             expect(page).to have_content "Locations"
-            expect(page).to have_content "#{scheme.locations.count} location"
+            expect(page).to have_content "#{scheme.locations.count} total location"
           end
 
           it "displays information about newly created location" do
-            click_link "Add a location"
             fill_in_and_save_second_location
             expect(page).to have_content "AA1 2AA"
             expect(page).to have_content "Other name"
@@ -525,25 +522,24 @@ RSpec.describe "Schemes scheme Features" do
         context "when changing location details" do
           before do
             create_and_save_a_scheme
+            click_button "Create scheme"
             fill_in_and_save_second_location
-            click_link "Locations"
+            click_button "Add this location"
           end
 
           it "displays changed location" do
             click_link "AA1 2AA"
-            fill_in "Postcode", with: "AA1 3AA"
-            choose "location-mobility-type-wheelchair-user-standard-field"
-            click_button "Save and continue"
-            expect(page).to have_content "Locations"
-            expect(page).to have_content "#{scheme.locations.count} location"
-            expect(page).to have_content "AA1 3AA"
+            click_link "Change"
+            fill_in with: "new name"
+            click_button "Save changes"
+            expect(page).to have_content "AA1 2AA"
+            expect(page).to have_content "new name"
           end
         end
 
         context "when changing scheme answers" do
           before do
             create_and_save_a_scheme
-            fill_in_and_save_location
           end
 
           it "displays change links" do
@@ -579,7 +575,6 @@ RSpec.describe "Schemes scheme Features" do
         context "when selecting 'create a scheme'" do
           before do
             create_and_save_a_scheme
-            fill_in_and_save_location
             click_button "Create scheme"
           end
 
@@ -635,7 +630,6 @@ RSpec.describe "Schemes scheme Features" do
               fill_in_and_save_secondary_client_group_confirmation
               fill_in_and_save_secondary_client_group
               fill_in_and_save_support
-              fill_in_and_save_location
             end
 
             it "displays change links" do
@@ -916,14 +910,14 @@ RSpec.describe "Schemes scheme Features" do
                 let(:location_name) { "Area 42" }
 
                 before do
-                  fill_in with: "NW1L 5DP"
-                  click_button "Save and continue"
-                  fill_in with: location_name
+                  fill_in with: "AA12AA"
                   click_button "Save and continue"
                   fill_in with: "Adur"
+                  fill_in with: location_name
+                  click_button "Save and continue"
                   fill_in with: 1
                   click_button "Save and continue"
-                  choose "Bungalow"
+                  choose "Self-contained house"
                   click_button "Save and continue"
                   choose "location-mobility-type-none-field"
                   click_button "Save and continue"
@@ -933,22 +927,42 @@ RSpec.describe "Schemes scheme Features" do
                   click_button "Save and continue"
                 end
 
-                it "shows the check answers page location tab" do
+                it "shows the location check answers page" do
                   expect(page.current_url.split("/").last).to eq("check-answers")
                   expect(page).to have_content(location_name)
                 end
 
                 it "has the correct action button text" do
-                  expect(page).to have_button("Save")
-                  expect(page).not_to have_button("Create scheme")
+                  expect(page).to have_button("Add this location")
+                end
+
+                it "allows you to edit the newly added location" do
+                  expect(page).to have_link(href: /postcode/)
+                end
+
+                context "when you click save" do
+                  before do
+                    click_button "Add this location"
+                  end
+
+                  it "displays a updated banner" do
+                    expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+                    expect(page).to have_content("has been added")
+                  end
+
+                  it "does not let you edit the saved location" do
+                    click_link "AA1 2AA"
+                    expect(page).not_to have_link(nil, href: /postcode/)
+                  end
                 end
 
                 context "when you click to view the scheme details" do
                   before do
+                    click_button "Add this location"
                     click_link("Scheme")
                   end
 
-                  it "does not let you change details other than the name, Confidential information	and Housing stock owned by" do
+                  it "does not let you change details other than the name, confidential information and housing stock owner" do
                     assert_selector "a", text: "Change", count: 3
                   end
                 end
