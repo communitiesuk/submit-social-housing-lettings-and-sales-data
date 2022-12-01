@@ -471,7 +471,7 @@ RSpec.describe SchemesController, type: :request do
         end
       end
 
-      context "when missing required scheme params" do
+      context "when required params are missing" do
         let(:params) do
           { scheme: { service_name: "",
                       scheme_type: "",
@@ -580,7 +580,7 @@ RSpec.describe SchemesController, type: :request do
         end
       end
 
-      context "when missing required scheme params" do
+      context "when required params are missing" do
         let(:params) do
           { scheme: { service_name: "",
                       scheme_type: "",
@@ -657,7 +657,7 @@ RSpec.describe SchemesController, type: :request do
         end
       end
 
-      context "when params are missing" do
+      context "when required params are missing" do
         let(:params) do
           { scheme: {
             service_name: "",
@@ -953,7 +953,7 @@ RSpec.describe SchemesController, type: :request do
         patch "/schemes/#{scheme_to_update.id}", params:
       end
 
-      context "when params are missing" do
+      context "when required params are missing" do
         let(:params) do
           { scheme: {
             service_name: "",
