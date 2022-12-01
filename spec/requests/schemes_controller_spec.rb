@@ -489,6 +489,20 @@ RSpec.describe SchemesController, type: :request do
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.service_name.invalid"))
         end
       end
+
+      context "when the organisation id param is included" do
+        let(:organisation) { FactoryBot.create(:organisation) }
+        let(:params) do
+          { scheme: {
+            owning_organisation_id: organisation.id,
+          } }
+        end
+
+        it "sets the owning organisation correctly" do
+          post "/schemes", params: params
+          expect(Scheme.last.owning_organisation_id).to eq(user.organisation_id)
+        end
+      end
     end
 
     context "when signed in as a support user" do
