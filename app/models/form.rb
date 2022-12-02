@@ -88,7 +88,7 @@ class Form
   end
 
   def unresolved_log_path
-    "#{form_type}_#{unresolved_log_redirect_page_id}_path"
+    "#{type}_#{unresolved_log_redirect_page_id}_path"
   end
 
   def next_incomplete_section_redirect_path(subsection, log)

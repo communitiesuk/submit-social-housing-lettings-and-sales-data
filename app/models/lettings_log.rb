@@ -513,6 +513,10 @@ class LettingsLog < Log
     [needstype, renewal, rent_type, startdate, owning_organisation_id, created_by_id].all?(&:present?)
   end
 
+  def resolve!
+    update(unresolved: false)
+  end
+
 private
 
   PIO = PostcodeService.new

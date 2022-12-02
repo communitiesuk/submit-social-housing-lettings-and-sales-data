@@ -116,7 +116,7 @@ private
   end
 
   def resolve_logs!
-    if @log&.unresolved && @log.location.present? && @log.scheme.present? && @log&.update(unresolved: false)
+    if @log&.unresolved && @log.location.present? && @log.scheme.present? && @log&.resolve!
       unresolved_logs_count_for_user = current_user.lettings_logs.unresolved.created_by(current_user).count
       flash.now[:notice] = helpers.flash_notice_for_resolved_logs(unresolved_logs_count_for_user)
     end
