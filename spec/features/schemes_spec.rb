@@ -195,8 +195,24 @@ RSpec.describe "Schemes scheme Features" do
               expect(page).to have_link("Locations")
             end
 
-            context "when I click locations link" do
+            context "when I click locations link and the new locations layout feature toggle is enabled" do
               before do
+                click_link("Locations")
+              end
+
+              it "shows details of those locations" do
+                locations.each do |location|
+                  expect(page).to have_content(location.id)
+                  expect(page).to have_content(location.postcode)
+                  expect(page).to have_content(location.name)
+                  expect(page).to have_content("Active")
+                end
+              end
+            end
+
+            context "when I click locations link and the new locations layout feature toggle is disabled" do
+              before do
+                allow(FeatureToggle).to receive(:location_toggle_enabled?).and_return(false)
                 click_link("Locations")
               end
 

@@ -30,9 +30,9 @@ RSpec.describe Imports::LettingsLogsImportService do
     FactoryBot.create(:user, old_user_id: "e29c492473446dca4d50224f2bb7cf965a261d6f", organisation:)
 
     # Location setup
-    FactoryBot.create(:location, old_visible_id: "10", postcode: "LS166FT", scheme_id: scheme1.id, mobility_type: "W")
-    FactoryBot.create(:location, scheme_id: scheme1.id)
-    FactoryBot.create(:location, old_visible_id: "10", postcode: "LS166FT", scheme_id: scheme2.id, mobility_type: "W")
+    FactoryBot.create(:location, old_visible_id: "10", postcode: "LS166FT", scheme_id: scheme1.id, mobility_type: "W", startdate: Time.zone.local(2021, 4, 1))
+    FactoryBot.create(:location, scheme_id: scheme1.id, startdate: Time.zone.local(2021, 4, 1))
+    FactoryBot.create(:location, old_visible_id: "10", postcode: "LS166FT", scheme_id: scheme2.id, mobility_type: "W", startdate: Time.zone.local(2021, 4, 1))
 
     # Stub the form handler to use the real form
     allow(FormHandler.instance).to receive(:get_form).with("previous_lettings").and_return(real_2021_2022_form)

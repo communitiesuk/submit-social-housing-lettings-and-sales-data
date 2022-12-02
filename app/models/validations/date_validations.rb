@@ -1,4 +1,6 @@
 module Validations::DateValidations
+  include Validations::SharedValidations
+
   def validate_property_major_repairs(record)
     date_valid?("mrcdate", record)
     if record["startdate"].present? && record["mrcdate"].present? && record["startdate"] < record["mrcdate"]
@@ -59,6 +61,9 @@ module Validations::DateValidations
     if record["mrcdate"].present? && record.startdate < record["mrcdate"]
       record.errors.add :startdate, I18n.t("validations.setup.startdate.after_major_repair_date")
     end
+
+    location_during_startdate_validation(record, :startdate)
+    scheme_during_startdate_validation(record, :startdate)
   end
 
 private

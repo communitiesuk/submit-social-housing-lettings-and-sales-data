@@ -125,7 +125,7 @@ RSpec.describe LocationsController, type: :request do
     context "when signed in as a data coordinator user" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
       let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:locations) { FactoryBot.create_list(:location, 3, scheme:) }
+      let!(:locations) { FactoryBot.create_list(:location, 3, scheme:, startdate: Time.zone.local(2022, 4, 1)) }
 
       before do
         sign_in user
@@ -136,7 +136,7 @@ RSpec.describe LocationsController, type: :request do
         let!(:another_scheme) { FactoryBot.create(:scheme) }
 
         before do
-          FactoryBot.create(:location, scheme:)
+          FactoryBot.create(:location, scheme:, startdate: Time.zone.local(2022, 4, 1))
         end
 
         it "returns 404 not found" do
@@ -145,7 +145,18 @@ RSpec.describe LocationsController, type: :request do
         end
       end
 
-      it "shows scheme" do
+      it "shows locations with correct data wben the new locations layout feature toggle is enabled" do
+        locations.each do |location|
+          expect(page).to have_content(location.id)
+          expect(page).to have_content(location.postcode)
+          expect(page).to have_content(location.name)
+          expect(page).to have_content(location.status)
+        end
+      end
+
+      it "shows locations with correct data wben the new locations layout feature toggle is disabled" do
+        allow(FeatureToggle).to receive(:location_toggle_enabled?).and_return(false)
+        get "/schemes/#{scheme.id}/locations"
         locations.each do |location|
           expect(page).to have_content(location.id)
           expect(page).to have_content(location.postcode)
@@ -242,7 +253,7 @@ RSpec.describe LocationsController, type: :request do
     context "when signed in as a support user" do
       let(:user) { FactoryBot.create(:user, :support) }
       let!(:scheme) { FactoryBot.create(:scheme) }
-      let!(:locations) { FactoryBot.create_list(:location, 3, scheme:) }
+      let!(:locations) { FactoryBot.create_list(:location, 3, scheme:, startdate: Time.zone.local(2022, 4, 1)) }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -250,11 +261,24 @@ RSpec.describe LocationsController, type: :request do
         get "/schemes/#{scheme.id}/locations"
       end
 
-      it "shows scheme" do
+      it "shows locations with correct data wben the new locations layout feature toggle is enabled" do
+        locations.each do |location|
+          expect(page).to have_content(location.id)
+          expect(page).to have_content(location.postcode)
+          expect(page).to have_content(location.name)
+          expect(page).to have_content(location.status)
+        end
+      end
+
+      it "shows locations with correct data wben the new locations layout feature toggle is disabled" do
+        allow(FeatureToggle).to receive(:location_toggle_enabled?).and_return(false)
+        get "/schemes/#{scheme.id}/locations"
         locations.each do |location|
           expect(page).to have_content(location.id)
           expect(page).to have_content(location.postcode)
           expect(page).to have_content(location.type_of_unit)
+          expect(page).to have_content(location.mobility_type)
+          expect(page).to have_content(location.location_admin_district)
           expect(page).to have_content(location.startdate&.to_formatted_s(:govuk_date))
         end
       end

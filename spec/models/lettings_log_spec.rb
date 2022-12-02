@@ -1672,7 +1672,7 @@ RSpec.describe LettingsLog do
         let(:scheme) { FactoryBot.create(:scheme) }
         let!(:location) { FactoryBot.create(:location, scheme:) }
 
-        before { lettings_log.update!(scheme:) }
+        before { lettings_log.update!(startdate: Time.zone.local(2022, 4, 2), scheme:) }
 
         it "derives the scheme location" do
           record_from_db = ActiveRecord::Base.connection.execute("select location_id from lettings_logs where id=#{lettings_log.id}").to_a[0]
@@ -2375,7 +2375,7 @@ RSpec.describe LettingsLog do
 
   describe "csv download" do
     let(:scheme) { FactoryBot.create(:scheme) }
-    let(:location) { FactoryBot.create(:location, :export, scheme:, type_of_unit: 6, postcode: "SE11TE") }
+    let(:location) { FactoryBot.create(:location, :export, scheme:, type_of_unit: 6, postcode: "SE11TE", startdate: Time.zone.local(2021, 10, 1)) }
     let(:user) { FactoryBot.create(:user, organisation: location.scheme.owning_organisation) }
     let(:expected_content) { csv_export_file.read }
 

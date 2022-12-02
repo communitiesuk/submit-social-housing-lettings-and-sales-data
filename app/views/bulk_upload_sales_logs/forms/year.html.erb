@@ -1,0 +1,16 @@
+<% content_for :before_content do %>
+  <%= govuk_back_link href: @form.back_path %>
+<% end %>
+
+<%= form_with model: @form, scope: :form, url: bulk_upload_sales_log_path(id: "year"), method: :patch do |f| %>
+  <%= f.govuk_error_summary %>
+
+  <%= f.govuk_collection_radio_buttons :year,
+        @form.options,
+        :id,
+        :name,
+        legend: { text: "Which year are you uploading data for?", size: "l" },
+        caption: { text: "Upload sales logs in bulk", size: "l" } %>
+
+  <%= f.govuk_submit %>
+<% end %>
