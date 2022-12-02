@@ -66,7 +66,6 @@ RSpec.describe LocationsController, type: :request do
     end
 
     context "when signed in as a support user" do
-
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
       let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
 
@@ -381,6 +380,40 @@ RSpec.describe LocationsController, type: :request do
         expect(page).to have_content("What is the postcode?")
       end
 
+      context "when postcode is submitted with lower case" do
+        let(:params) { { location: { postcode: "zz1 1zz" } } }
+
+        before do
+          patch "/schemes/#{scheme.id}/locations/#{location.id}/postcode", params:
+        end
+
+        it "adds postcode to location" do
+          expect(Location.last.postcode).to eq("ZZ1 1ZZ")
+        end
+
+        it "redirects correctly when postcodes.io does return a local authority" do
+          follow_redirect!
+          expect(page).to have_content("What is the name of this location?")
+        end
+      end
+
+      context "when postcodes.io does not return a local authority" do
+        let(:params) { { location: { postcode: "xx1 1xx" } } }
+
+        before do
+          patch "/schemes/#{scheme.id}/locations/#{location.id}/postcode", params:
+        end
+
+        it "adds postcode to location" do
+          expect(Location.last.postcode).to eq("XX11XX")
+        end
+
+        it "redirects correctly" do
+          follow_redirect!
+          expect(page).to have_content("What is the local authority")
+        end
+      end
+
       context "when trying to edit postcode of location that belongs to another organisation" do
         let(:another_scheme)  { FactoryBot.create(:scheme) }
         let(:another_location)  { FactoryBot.create(:location, scheme: another_scheme) }
@@ -406,6 +439,800 @@ RSpec.describe LocationsController, type: :request do
       it "returns a template for a postcode" do
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("What is the postcode?")
+      end
+
+      context "when postcode is submitted with lower case" do
+        let(:params) { { location: { postcode: "zz1 1zz" } } }
+
+        before do
+          patch "/schemes/#{scheme.id}/locations/#{location.id}/postcode", params:
+        end
+
+        it "adds postcode to location" do
+          expect(Location.last.postcode).to eq("ZZ1 1ZZ")
+        end
+
+        it "redirects correctly when postcodes.io does return a local authority" do
+          follow_redirect!
+          expect(page).to have_content("What is the name of this location?")
+        end
+      end
+
+      context "when postcodes.io does not return a local authority" do
+        let(:params) { { location: { postcode: "xx1 1xx" } } }
+
+        before do
+          patch "/schemes/#{scheme.id}/locations/#{location.id}/postcode", params:
+        end
+
+        it "adds postcode to location" do
+          expect(Location.last.postcode).to eq("XX11XX")
+        end
+
+        it "redirects correctly" do
+          follow_redirect!
+          expect(page).to have_content("What is the local authority")
+        end
+      end
+
+      context "when the requested location does not exist" do
+        let(:location) { OpenStruct.new(id: (Location.maximum(:id) || 0) + 1, scheme:) }
+
+        it "returns not found" do
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+  end
+
+  describe "#local_authority" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        get "/schemes/1/locations/1/local-authority"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        get "/schemes/1/locations/1/local-authority"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when signed in as a data coordinator" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:location) { FactoryBot.create(:location, scheme:) }
+
+      before do
+        sign_in user
+        get "/schemes/#{scheme.id}/locations/#{location.id}/local-authority"
+      end
+
+      it "returns a template for a local authority" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("What is the local authority")
+      end
+
+      context "when local authority is submitted" do
+        let(:params) { { location: { location_admin_district: "Adur" } } }
+
+        before do
+          patch "/schemes/#{scheme.id}/locations/#{location.id}/local-authority", params:
+        end
+
+        it "adds local authority to location " do
+          expect(Location.last.location_admin_district).to eq("Adur")
+          expect(Location.last.location_code).to eq("E07000223")
+        end
+
+        it "redirects correctly" do
+          follow_redirect!
+          expect(page).to have_content("What is the name of this location?")
+        end
+      end
+
+      context "when trying to edit local authority of location that belongs to another organisation" do
+        let(:another_scheme)  { FactoryBot.create(:scheme) }
+        let(:another_location)  { FactoryBot.create(:location, scheme: another_scheme) }
+
+        it "displays the new page with an error message" do
+          get "/schemes/#{another_scheme.id}/locations/#{another_location.id}/local-authority"
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
+    context "when signed in as a support user" do
+      let(:user) { FactoryBot.create(:user, :support) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:location) { FactoryBot.create(:location, scheme:) }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        get "/schemes/#{scheme.id}/locations/#{location.id}/local-authority"
+      end
+
+      it "returns a template for a local authority" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("What is the local authority")
+      end
+
+      context "when local authority is submitted" do
+        let(:params) { { location: { location_admin_district: "Adur" } } }
+
+        before do
+          patch "/schemes/#{scheme.id}/locations/#{location.id}/local-authority", params:
+        end
+
+        it "adds local authority to location " do
+          expect(Location.last.location_admin_district).to eq("Adur")
+          expect(Location.last.location_code).to eq("E07000223")
+        end
+
+        it "redirects correctly" do
+          follow_redirect!
+          expect(page).to have_content("What is the name of this location?")
+        end
+      end
+
+      context "when the requested location does not exist" do
+        let(:location) { OpenStruct.new(id: (Location.maximum(:id) || 0) + 1, scheme:) }
+
+        it "returns not found" do
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+  end
+
+  describe "#name" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        get "/schemes/1/locations/1/name"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        get "/schemes/1/locations/1/name"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when signed in as a data coordinator" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:location) { FactoryBot.create(:location, scheme:) }
+
+      before do
+        sign_in user
+        get "/schemes/#{scheme.id}/locations/#{location.id}/name"
+      end
+
+      it "returns a template for a name" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("What is the name of this location?")
+      end
+
+      context "when name is submitted" do
+        let(:params) { { location: { name: "a name" } } }
+
+        before do
+          patch "/schemes/#{scheme.id}/locations/#{location.id}/name", params:
+        end
+
+        it "adds name to location" do
+          expect(Location.last.name).to eq("a name")
+        end
+
+        it "redirects correctly" do
+          follow_redirect!
+          expect(page).to have_content("How many units are at this location?")
+        end
+      end
+
+      context "when trying to edit name of location that belongs to another organisation" do
+        let(:another_scheme)  { FactoryBot.create(:scheme) }
+        let(:another_location)  { FactoryBot.create(:location, scheme: another_scheme) }
+
+        it "displays the new page with an error message" do
+          get "/schemes/#{another_scheme.id}/locations/#{another_location.id}/name"
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
+    context "when signed in as a support user" do
+      let(:user) { FactoryBot.create(:user, :support) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:location) { FactoryBot.create(:location, scheme:) }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        get "/schemes/#{scheme.id}/locations/#{location.id}/name"
+      end
+
+      it "returns a template for a name" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("What is the name of this location?")
+      end
+
+      context "when name is submitted" do
+        let(:params) { { location: { name: "a name" } } }
+
+        before do
+          patch "/schemes/#{scheme.id}/locations/#{location.id}/name", params:
+        end
+
+        it "adds name to location" do
+          expect(Location.last.name).to eq("a name")
+        end
+
+        it "redirects correctly" do
+          follow_redirect!
+          expect(page).to have_content("How many units are at this location?")
+        end
+      end
+
+      context "when the requested location does not exist" do
+        let(:location) { OpenStruct.new(id: (Location.maximum(:id) || 0) + 1, scheme:) }
+
+        it "returns not found" do
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+  end
+
+  describe "#units" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        get "/schemes/1/locations/1/units"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        get "/schemes/1/locations/1/units"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when signed in as a data coordinator" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:location) { FactoryBot.create(:location, scheme:) }
+
+      before do
+        sign_in user
+        get "/schemes/#{scheme.id}/locations/#{location.id}/units"
+      end
+
+      it "returns a template for units" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("How many units are at this location?")
+      end
+
+      context "when units is submitted" do
+        let(:params) { { location: { units: 6 } } }
+
+        before do
+          patch "/schemes/#{scheme.id}/locations/#{location.id}/units", params:
+        end
+
+        it "adds units to location" do
+          expect(Location.last.units).to eq(6)
+        end
+
+        it "redirects correctly" do
+          follow_redirect!
+          expect(page).to have_content("What is the most common type of unit at this location?")
+        end
+      end
+
+      context "when trying to edit units of location that belongs to another organisation" do
+        let(:another_scheme)  { FactoryBot.create(:scheme) }
+        let(:another_location)  { FactoryBot.create(:location, scheme: another_scheme) }
+
+        it "displays the new page with an error message" do
+          get "/schemes/#{another_scheme.id}/locations/#{another_location.id}/units"
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
+    context "when signed in as a support user" do
+      let(:user) { FactoryBot.create(:user, :support) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:location) { FactoryBot.create(:location, scheme:) }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        get "/schemes/#{scheme.id}/locations/#{location.id}/units"
+      end
+
+      it "returns a template for units" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("How many units are at this location?")
+      end
+
+      context "when units is submitted" do
+        let(:params) { { location: { units: 6 } } }
+
+        before do
+          patch "/schemes/#{scheme.id}/locations/#{location.id}/units", params:
+        end
+
+        it "adds units to location" do
+          expect(Location.last.units).to eq(6)
+        end
+
+        it "redirects correctly" do
+          follow_redirect!
+          expect(page).to have_content("What is the most common type of unit at this location?")
+        end
+      end
+
+      context "when the requested location does not exist" do
+        let(:location) { OpenStruct.new(id: (Location.maximum(:id) || 0) + 1, scheme:) }
+
+        it "returns not found" do
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+  end
+
+  describe "#type_of_unit" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        get "/schemes/1/locations/1/type-of-unit"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        get "/schemes/1/locations/1/type-of-unit"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when signed in as a data coordinator" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:location) { FactoryBot.create(:location, scheme:) }
+
+      before do
+        sign_in user
+        get "/schemes/#{scheme.id}/locations/#{location.id}/type-of-unit"
+      end
+
+      it "returns a template for type of unit" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("What is the most common type of unit at this location?")
+      end
+
+      context "when type of unit is submitted" do
+        let(:params) { { location: { type_of_unit: "Bungalow" } } }
+
+        before do
+          patch "/schemes/#{scheme.id}/locations/#{location.id}/type-of-unit", params:
+        end
+
+        it "adds type of unit to location" do
+          expect(Location.last.type_of_unit).to eq("Bungalow")
+        end
+
+        it "redirects correctly" do
+          follow_redirect!
+          expect(page).to have_content("What are the mobility standards for the majority of units in this location?")
+        end
+      end
+
+      context "when trying to edit type_of_unit of location that belongs to another organisation" do
+        let(:another_scheme)  { FactoryBot.create(:scheme) }
+        let(:another_location)  { FactoryBot.create(:location, scheme: another_scheme) }
+
+        it "displays the new page with an error message" do
+          get "/schemes/#{another_scheme.id}/locations/#{another_location.id}/type-of-unit"
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
+    context "when signed in as a support user" do
+      let(:user) { FactoryBot.create(:user, :support) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:location) { FactoryBot.create(:location, scheme:) }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        get "/schemes/#{scheme.id}/locations/#{location.id}/type-of-unit"
+      end
+
+      it "returns a template for type of unit" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("What is the most common type of unit at this location?")
+      end
+
+      context "when type of unit is submitted" do
+        let(:params) { { location: { type_of_unit: "Bungalow" } } }
+
+        before do
+          patch "/schemes/#{scheme.id}/locations/#{location.id}/type-of-unit", params:
+        end
+
+        it "adds type of unit to location" do
+          expect(Location.last.type_of_unit).to eq("Bungalow")
+        end
+
+        it "redirects correctly" do
+          follow_redirect!
+          expect(page).to have_content("What are the mobility standards for the majority of units in this location?")
+        end
+      end
+
+      context "when the requested location does not exist" do
+        let(:location) { OpenStruct.new(id: (Location.maximum(:id) || 0) + 1, scheme:) }
+
+        it "returns not found" do
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+  end
+
+  describe "#mobility_standards" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        get "/schemes/1/locations/1/mobility-standards"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        get "/schemes/1/locations/1/mobility-standards"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when signed in as a data coordinator" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:location) { FactoryBot.create(:location, scheme:) }
+
+      before do
+        sign_in user
+        get "/schemes/#{scheme.id}/locations/#{location.id}/mobility-standards"
+      end
+
+      it "returns a template for mobility standards" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("What are the mobility standards for the majority of units in this location?")
+      end
+
+      context "when mobility standards is submitted" do
+        let(:params) { { location: { mobility_type: "Wheelchair-user standard" } } }
+
+        before do
+          patch "/schemes/#{scheme.id}/locations/#{location.id}/mobility-standards", params:
+        end
+
+        it "adds mobility standards to location" do
+          expect(Location.last.mobility_type).to eq("Wheelchair-user standard")
+        end
+
+        it "redirects correctly" do
+          follow_redirect!
+          expect(page).to have_content("When did the first property in this location become available under this scheme?")
+        end
+      end
+
+      context "when trying to edit mobility_standards of location that belongs to another organisation" do
+        let(:another_scheme)  { FactoryBot.create(:scheme) }
+        let(:another_location)  { FactoryBot.create(:location, scheme: another_scheme) }
+
+        it "displays the new page with an error message" do
+          get "/schemes/#{another_scheme.id}/locations/#{another_location.id}/mobility-standards"
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
+    context "when signed in as a support user" do
+      let(:user) { FactoryBot.create(:user, :support) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:location) { FactoryBot.create(:location, scheme:) }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        get "/schemes/#{scheme.id}/locations/#{location.id}/mobility-standards"
+      end
+
+      it "returns a template for mobility standards" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("What are the mobility standards for the majority of units in this location?")
+      end
+
+      context "when mobility standards is submitted" do
+        let(:params) { { location: { mobility_type: "Wheelchair-user standard" } } }
+
+        before do
+          patch "/schemes/#{scheme.id}/locations/#{location.id}/mobility-standards", params:
+        end
+
+        it "adds mobility standards to location" do
+          expect(Location.last.mobility_type).to eq("Wheelchair-user standard")
+        end
+
+        it "redirects correctly" do
+          follow_redirect!
+          expect(page).to have_content("When did the first property in this location become available under this scheme?")
+        end
+      end
+
+      context "when the requested location does not exist" do
+        let(:location) { OpenStruct.new(id: (Location.maximum(:id) || 0) + 1, scheme:) }
+
+        it "returns not found" do
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+  end
+
+  describe "#startdate" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        get "/schemes/1/locations/1/availability"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        get "/schemes/1/locations/1/availability"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when signed in as a data coordinator" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:location) { FactoryBot.create(:location, scheme:) }
+
+      before do
+        sign_in user
+        get "/schemes/#{scheme.id}/locations/#{location.id}/availability"
+      end
+
+      it "returns a template for a startdate" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("When did the first property in this location become available under this scheme?")
+      end
+
+      context "when startdate is submitted" do
+        let(:params) { { location: { "startdate(1i)": "2000", "startdate(2i)": "1", "startdate(3i)": "2" } } }
+
+        before do
+          patch "/schemes/#{scheme.id}/locations/#{location.id}/availability", params:
+        end
+
+        it "adds startdate to location" do
+          expect(Location.last.startdate).to eq(Time.zone.local(2000, 1, 2))
+        end
+
+        it "redirects correctly" do
+          follow_redirect!
+          expect(page).to have_content("Check your answers")
+        end
+      end
+
+      context "when trying to edit startdate of location that belongs to another organisation" do
+        let(:another_scheme)  { FactoryBot.create(:scheme) }
+        let(:another_location)  { FactoryBot.create(:location, scheme: another_scheme) }
+
+        it "displays the new page with an error message" do
+          get "/schemes/#{another_scheme.id}/locations/#{another_location.id}/availability"
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
+    context "when signed in as a support user" do
+      let(:user) { FactoryBot.create(:user, :support) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:location) { FactoryBot.create(:location, scheme:) }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        get "/schemes/#{scheme.id}/locations/#{location.id}/availability"
+      end
+
+      it "returns a template for a startdate" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("When did the first property in this location become available under this scheme?")
+      end
+
+      context "when startdate is submitted" do
+        let(:params) { { location: { "startdate(1i)": "2000", "startdate(2i)": "1", "startdate(3i)": "2" } } }
+
+        before do
+          patch "/schemes/#{scheme.id}/locations/#{location.id}/availability", params:
+        end
+
+        it "adds startdate to location" do
+          expect(Location.last.startdate).to eq(Time.zone.local(2000, 1, 2))
+        end
+
+        it "redirects correctly" do
+          follow_redirect!
+          expect(page).to have_content("Check your answers")
+        end
+      end
+
+      context "when the requested location does not exist" do
+        let(:location) { OpenStruct.new(id: (Location.maximum(:id) || 0) + 1, scheme:) }
+
+        it "returns not found" do
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+  end
+
+  describe "#check_answers" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        get "/schemes/1/locations/1/check-answers"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        get "/schemes/1/locations/1/check-answers"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when signed in as a data coordinator" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:location) { FactoryBot.create(:location, scheme:) }
+
+      before do
+        sign_in user
+        get "/schemes/#{scheme.id}/locations/#{location.id}/check-answers"
+      end
+
+      it "returns the check answers page" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("Check your answers")
+      end
+
+      context "when location is confirmed" do
+        let(:params) { { location: { confirmed: true } } }
+
+        before do
+          patch "/schemes/#{scheme.id}/locations/#{location.id}/check-answers", params:
+        end
+
+        it "confirms location" do
+          expect(Location.last.confirmed).to eq(true)
+        end
+
+        it "redirects correctly and displays success banner" do
+          follow_redirect!
+          expect(page).to have_content("Success")
+          expect(page).to have_content("added to this scheme")
+        end
+      end
+
+      context "when trying to edit check_answers of location that belongs to another organisation" do
+        let(:another_scheme)  { FactoryBot.create(:scheme) }
+        let(:another_location)  { FactoryBot.create(:location, scheme: another_scheme) }
+
+        it "displays the new page with an error message" do
+          get "/schemes/#{another_scheme.id}/locations/#{another_location.id}/check-answers"
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
+    context "when signed in as a support user" do
+      let(:user) { FactoryBot.create(:user, :support) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:location) { FactoryBot.create(:location, scheme:) }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        get "/schemes/#{scheme.id}/locations/#{location.id}/check-answers"
+      end
+
+      it "returns the check answers page" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("Check your answers")
+      end
+
+      context "when location is confirmed" do
+        let(:params) { { location: { confirmed: true } } }
+
+        before do
+          patch "/schemes/#{scheme.id}/locations/#{location.id}/check-answers", params:
+        end
+
+        it "confirms location" do
+          expect(Location.last.confirmed).to eq(true)
+        end
+
+        it "redirects correctly and displays success banner" do
+          follow_redirect!
+          expect(page).to have_content("Success")
+          expect(page).to have_content("added to this scheme")
+        end
       end
 
       context "when the requested location does not exist" do

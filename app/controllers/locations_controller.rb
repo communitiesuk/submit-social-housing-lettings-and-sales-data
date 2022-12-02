@@ -250,7 +250,7 @@ private
   end
 
   def authenticate_action!
-    if %w[new update index new_deactivation deactivate_confirm deactivate postcode local_authority name units type_of_unit mobility_standards availability].include?(action_name) && !((current_user.organisation == @scheme&.owning_organisation) || current_user.support?)
+    if %w[new update index new_deactivation deactivate_confirm deactivate postcode local_authority name units type_of_unit mobility_standards availability check_answers].include?(action_name) && !((current_user.organisation == @scheme&.owning_organisation) || current_user.support?)
       render_not_found and return
     end
   end
