@@ -1244,7 +1244,7 @@ RSpec.describe LocationsController, type: :request do
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
       let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:location) { FactoryBot.create(:location, scheme:) }
+      let!(:location) { FactoryBot.create(:location, scheme:, startdate: Time.zone.local(2000, 1, 1)) }
 
       before do
         sign_in user
@@ -1288,7 +1288,7 @@ RSpec.describe LocationsController, type: :request do
     context "when signed in as a support user" do
       let(:user) { FactoryBot.create(:user, :support) }
       let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:location) { FactoryBot.create(:location, scheme:) }
+      let!(:location) { FactoryBot.create(:location, scheme:, startdate: Time.zone.local(2000, 1, 1)) }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)

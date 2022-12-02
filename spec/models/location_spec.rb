@@ -20,7 +20,7 @@ RSpec.describe Location, type: :model do
     end
   end
 
-  describe "#validate_postcode" do
+  describe "#postcode" do
     let(:location) { FactoryBot.build(:location) }
 
     it "does not add an error if postcode is valid" do
@@ -37,8 +37,28 @@ RSpec.describe Location, type: :model do
 
     it "does add an error when the postcode is missing" do
       location.postcode = nil
-      expect { location.save! }
-        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Postcode #{I18n.t('validations.postcode')}")
+      location.valid?(:postcode)
+      expect(location.errors.count).to eq(1)
+    end
+  end
+
+  describe "#local_authority" do
+    let(:location) { FactoryBot.build(:location) }
+
+    it "does add an error when the local authority is invalid" do
+      location.location_admin_district = "Select an option"
+      location.valid?(:location_admin_district)
+      expect(location.errors.count).to eq(1)
+    end
+  end
+
+  describe "#name" do
+    let(:location) { FactoryBot.build(:location) }
+
+    it "does add an error when the name is invalid" do
+      location.name = nil
+      location.valid?(:name)
+      expect(location.errors.count).to eq(1)
     end
   end
 
@@ -67,8 +87,18 @@ RSpec.describe Location, type: :model do
 
     it "does add an error when the mobility type is invalid" do
       location.mobility_type = nil
-      expect { location.save! }
-        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Mobility type #{I18n.t('activerecord.errors.models.location.attributes.mobility_type.blank')}")
+      location.valid?(:mobility_type)
+      expect(location.errors.count).to eq(1)
+    end
+  end
+
+  describe "#availability" do
+    let(:location) { FactoryBot.build(:location) }
+
+    it "does add an error when the availability is invalid" do
+      location.startdate = Time.zone.local(1, 1, 1)
+      location.valid?(:startdate)
+      expect(location.errors.count).to eq(1)
     end
   end
 

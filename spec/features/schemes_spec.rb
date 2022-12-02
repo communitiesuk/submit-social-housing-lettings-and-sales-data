@@ -514,6 +514,7 @@ RSpec.describe "Schemes scheme Features" do
 
           it "displays information about the first created location" do
             expect(page).to have_content "AA1 1AA"
+            click_link "AA1 1AA"
             expect(page).to have_content "Some name"
             expect(page).to have_content "5"
             expect(page).to have_content "Self-contained house"
