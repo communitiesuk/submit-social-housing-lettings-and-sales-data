@@ -10,11 +10,13 @@ RSpec.describe BulkUploadSalesLogsController, type: :request do
 
   describe "GET /sales-logs/bulk-upload-logs/start" do
     context "when not in crossover period" do
+      let(:expected_year) { FormHandler.instance.forms["current_sales"].start_date.year }
+
       it "redirects to /prepare-your-file" do
         Timecop.freeze(2022, 1, 1) do
           get "/sales-logs/bulk-upload-logs/start", params: {}
 
-          expect(response).to redirect_to("/sales-logs/bulk-upload-logs/prepare-your-file?form%5Byear%5D=2022")
+          expect(response).to redirect_to("/sales-logs/bulk-upload-logs/prepare-your-file?form%5Byear%5D=#{expected_year}")
         end
       end
     end
