@@ -1081,6 +1081,36 @@ RSpec.describe LocationsController, type: :request do
         end
       end
 
+      context "when startdate is submitted with leading zeroes" do
+        let(:params) { { location: { "startdate(1i)": "2000", "startdate(2i)": "01", "startdate(3i)": "02" } } }
+
+        before do
+          patch "/schemes/#{scheme.id}/locations/#{location.id}/availability", params:
+        end
+
+        it "adds startdate correctly " do
+          expect(Location.last.startdate).to eq(Time.zone.local(2000, 1, 2))
+        end
+
+        it "redirects correctly" do
+          follow_redirect!
+          expect(page).to have_content("Check your answers")
+        end
+      end
+
+      context "when startdate is missing" do
+        let(:params) { { location: { "startdate(1i)": "", "startdate(2i)": "", "startdate(3i)": "" } } }
+
+        before do
+          patch "/schemes/#{scheme.id}/locations/#{location.id}/availability", params:
+        end
+
+        it "displays the new page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.location.startdate_blank"))
+        end
+      end
+
       context "when trying to edit startdate of location that belongs to another organisation" do
         let(:another_scheme)  { FactoryBot.create(:scheme) }
         let(:another_location)  { FactoryBot.create(:location, scheme: another_scheme) }
@@ -1122,6 +1152,36 @@ RSpec.describe LocationsController, type: :request do
         it "redirects correctly" do
           follow_redirect!
           expect(page).to have_content("Check your answers")
+        end
+      end
+
+      context "when startdate is submitted with leading zeroes" do
+        let(:params) { { location: { "startdate(1i)": "2000", "startdate(2i)": "01", "startdate(3i)": "02" } } }
+
+        before do
+          patch "/schemes/#{scheme.id}/locations/#{location.id}/availability", params:
+        end
+
+        it "adds startdate correctly " do
+          expect(Location.last.startdate).to eq(Time.zone.local(2000, 1, 2))
+        end
+
+        it "redirects correctly" do
+          follow_redirect!
+          expect(page).to have_content("Check your answers")
+        end
+      end
+
+      context "when startdate is missing" do
+        let(:params) { { location: { "startdate(1i)": "", "startdate(2i)": "", "startdate(3i)": "" } } }
+
+        before do
+          patch "/schemes/#{scheme.id}/locations/#{location.id}/availability", params:
+        end
+
+        it "displays the new page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.location.startdate_blank"))
         end
       end
 
