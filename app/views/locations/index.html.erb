@@ -50,7 +50,11 @@
         <% @locations.each do |location| %>
           <%= table.body do |body| %>
             <%= body.row do |row| %>
-              <% row.cell(text: simple_format(location_cell_postcode(location, location.confirmed ? scheme_location_path(@scheme, location) : location.postcode.present? ? scheme_location_check_answers_path(@scheme, location, route: "locations") : scheme_location_postcode_path(@scheme, location)), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
+              <% row.cell(text: simple_format(location_cell_postcode(location, if location.confirmed
+                                                                                 scheme_location_path(@scheme, location)
+                                                                               else
+                                                                                 location.postcode.present? ? scheme_location_check_answers_path(@scheme, location, route: "locations") : scheme_location_postcode_path(@scheme, location)
+                                                                               end), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
               <% row.cell(text: location.id) %>
               <% row.cell(text: status_tag(location.status)) %>
               <% end %>
@@ -95,7 +99,11 @@
       <%= table.body do |body| %>
         <%= body.row do |row| %>
           <% row.cell(text: location.id) %>
-          <% row.cell(text: simple_format(location_cell_postcode(location, location.confirmed ? scheme_location_path(@scheme, location) : location.postcode.present? ? scheme_location_check_answers_path(@scheme, location, route: "locations") : scheme_location_postcode_path(@scheme, location)), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
+          <% row.cell(text: simple_format(location_cell_postcode(location, if location.confirmed
+                                                                             scheme_location_path(@scheme, location)
+                                                                           else
+                                                                             location.postcode.present? ? scheme_location_check_answers_path(@scheme, location, route: "locations") : scheme_location_postcode_path(@scheme, location)
+                                                                           end), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
           <% row.cell(text: location.units) %>
           <% row.cell do %>
             <span><%= simple_format(location.type_of_unit) %></span>

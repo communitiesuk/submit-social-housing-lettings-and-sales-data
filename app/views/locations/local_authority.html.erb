@@ -8,7 +8,7 @@
                 scheme_location_check_answers_path(@scheme, @location, route: params[:route])
               else
                 scheme_location_postcode_path(@scheme, @location, route: params[:route], referrer: params[:referrer])
-              end
+              end,
       ) %>
 <% end %>
 
@@ -27,7 +27,7 @@
                                     "data-controller": %w[conditional-filter accessible-autocomplete] %>
 
       <div class="govuk-button-group">
-        <% if params[:referrer] == "check_answers" || params[:referrer] == "check_local_authority"%>
+        <% if params[:referrer] == "check_answers" || params[:referrer] == "check_local_authority" %>
           <%= f.govuk_submit "Save changes" %>
           <%= govuk_button_link_to "Cancel", scheme_location_check_answers_path(@scheme, @location, route: params[:route]), secondary: true %>
         <% else %>

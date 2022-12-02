@@ -5,11 +5,11 @@
   <%= govuk_back_link(
     text: "Back",
     href: case params[:route]
-    when "locations"
-      scheme_locations_path(@scheme)
-    else
-      :back
-    end,
+          when "locations"
+            scheme_locations_path(@scheme)
+          else
+            :back
+          end,
   ) %>
 <% end %>
 
