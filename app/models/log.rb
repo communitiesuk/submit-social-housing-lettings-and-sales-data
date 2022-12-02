@@ -48,6 +48,16 @@ class Log < ApplicationRecord
   def collection_period_open?
     form.end_date > Time.zone.today
   end
+  
+  def user_organisation_chosen?(user)
+    unless [user, managing_organisation, owning_organisation].any?(&:blank?) || user.organisation == managing_organisation || user.organisation == owning_organisation
+      errors.add :created_by, I18n.t("validations.setup.created_by.invalid")
+      errors.add :owning_organisation_id, I18n.t("validations.setup.owning_organisation.invalid")
+      errors.add :managing_organisation_id, I18n.t("validations.setup.managing_organisation.invalid")
+      return false
+    end
+    true
+  end
 
 private
 

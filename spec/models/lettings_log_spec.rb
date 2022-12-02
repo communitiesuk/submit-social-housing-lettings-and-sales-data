@@ -2527,4 +2527,51 @@ RSpec.describe LettingsLog do
       end
     end
   end
+
+  describe "non support validation" do
+    it "validates if neither managing nor owning organisation is the same as current user organisation" do
+      lettings_log = FactoryBot.build(:lettings_log, owning_organisation:, managing_organisation: owning_organisation)
+
+      lettings_log.user_organisation_chosen?(created_by_user)
+      expect(lettings_log.errors[:created_by]).to include(I18n.t("validations.setup.created_by.invalid"))
+      expect(lettings_log.errors[:owning_organisation_id]).to include(I18n.t("validations.setup.owning_organisation.invalid"))
+      expect(lettings_log.errors[:managing_organisation_id]).to include(I18n.t("validations.setup.managing_organisation.invalid"))
+    end
+
+    it "doesn not validate if either managing or owning organisation is the same as current user organisation" do
+      lettings_log = FactoryBot.build(:lettings_log, owning_organisation: created_by_user.organisation, managing_organisation: owning_organisation)
+
+      lettings_log.user_organisation_chosen?(created_by_user)
+      expect(lettings_log.errors[:created_by]).to be_empty
+      expect(lettings_log.errors[:owning_organisation_id]).to be_empty
+      expect(lettings_log.errors[:managing_organisation_id]).to be_empty
+    end
+
+    it "does not validate if current user is missing" do
+      lettings_log = FactoryBot.build(:lettings_log, created_by: nil, owning_organisation:, managing_organisation: owning_organisation)
+
+      lettings_log.user_organisation_chosen?(nil)
+      expect(lettings_log.errors[:created_by]).to be_empty
+      expect(lettings_log.errors[:owning_organisation_id]).to be_empty
+      expect(lettings_log.errors[:managing_organisation_id]).to be_empty
+    end
+
+    it "does not validate if managing organisation is missing" do
+      lettings_log = FactoryBot.build(:lettings_log, owning_organisation:, managing_organisation: nil)
+
+      lettings_log.user_organisation_chosen?(created_by_user)
+      expect(lettings_log.errors[:created_by]).to be_empty
+      expect(lettings_log.errors[:owning_organisation_id]).to be_empty
+      expect(lettings_log.errors[:managing_organisation_id]).to be_empty
+    end
+
+    it "does not validate if owning organisation is missing" do
+      lettings_log = FactoryBot.build(:lettings_log, owning_organisation: nil, managing_organisation: owning_organisation)
+
+      lettings_log.user_organisation_chosen?(created_by_user)
+      expect(lettings_log.errors[:created_by]).to be_empty
+      expect(lettings_log.errors[:owning_organisation_id]).to be_empty
+      expect(lettings_log.errors[:managing_organisation_id]).to be_empty
+    end
+  end
 end

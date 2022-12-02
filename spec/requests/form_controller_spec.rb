@@ -298,6 +298,38 @@ RSpec.describe FormController, type: :request do
           end
         end
 
+        context "with invalid organisation answers" do
+          let(:page) { Capybara::Node::Simple.new(response.body) }
+          let(:managing_organisation) { create(:organisation) }
+          let(:managing_organisation_too) { create(:organisation) }
+          let(:housing_provider) { create(:organisation) }
+          let(:params) do
+            {
+              id: lettings_log.id,
+              lettings_log: {
+                page: "managing_organisation",
+                managing_organisation_id: other_organisation.id,
+              },
+            }
+          end
+
+          before do
+            organisation.housing_providers << housing_provider
+            organisation.managing_agents << managing_organisation
+            organisation.managing_agents << managing_organisation_too
+            organisation.reload
+            lettings_log.update!(owning_organisation: housing_provider, created_by: user, managing_organisation: organisation)
+            lettings_log.reload
+          end
+
+          it "re-renders the same page with errors if validation fails" do
+            post "/lettings-logs/#{lettings_log.id}/form", params: params
+            expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/managing-organisation")
+            follow_redirect!
+            expect(page).to have_content("There is a problem")
+          end
+        end
+
         context "with valid answers" do
           let(:answer) { 20 }
           let(:params) do
