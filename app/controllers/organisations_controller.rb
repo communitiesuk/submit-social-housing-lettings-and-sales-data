@@ -19,7 +19,7 @@ class OrganisationsController < ApplicationController
   end
 
   def schemes
-    all_schemes = Scheme.where(owning_organisation: @organisation).order("confirmed ASC NULLS FIRST", service_name: :asc)
+    all_schemes = Scheme.where(owning_organisation: @organisation).order_by_completion.order_by_service_name
 
     @pagy, @schemes = pagy(filtered_collection(all_schemes, search_term))
     @searched = search_term.presence
