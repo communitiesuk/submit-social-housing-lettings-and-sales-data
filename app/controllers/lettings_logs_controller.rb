@@ -54,7 +54,7 @@ class LettingsLogsController < LogsController
     @log = current_user.lettings_logs.find_by(id: params[:id])
     if @log
       if @log.unresolved
-        redirect_to(send("lettings_log_#{@log.form.unresolved_log_redirect_page_id}_path", @log))
+        redirect_to(send(@log.form.unresolved_log_path, @log))
       else
         render("logs/edit", locals: { current_user: })
       end
@@ -116,7 +116,7 @@ private
   end
 
   def resolve_logs!
-    if @log&.unresolved == true && @log.location.present? && @log.scheme.present? && @log.update(unresolved: false)
+    if @log&.unresolved && @log.location.present? && @log.scheme.present? && @log&.update(unresolved: false)
       unresolved_logs_count_for_user = current_user.lettings_logs.unresolved.created_by(current_user).count
       flash.now[:notice] = helpers.flash_notice_for_resolved_logs(unresolved_logs_count_for_user)
     end

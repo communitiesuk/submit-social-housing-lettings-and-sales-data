@@ -12,7 +12,7 @@
     ) do |notification_banner| %>
         <% notification_banner.heading(text: "A scheme has changed and it has affected #{@unresolved_count} #{'log'.pluralize(@unresolved_count)}") %>
         <div class="govuk-notification-banner__heading">
-          <a class="govuk-notification-banner__link" href="<%= update_logs_lettings_logs_path %>">Update logs</a>
+          <%= govuk_link_to "Update logs", update_logs_lettings_logs_path, class: "govuk-notification-banner__link" %>
         </div>
       <% end %>
     <% end %>

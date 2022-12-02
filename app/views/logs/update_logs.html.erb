@@ -35,7 +35,7 @@
                     scope: "row",
                     class: "govuk-!-text-align-right",
                     }) do %>
-                        <%= govuk_link_to("Update now", send("lettings_log_#{log.form.unresolved_log_redirect_page_id}_path", log)) %>
+                        <%= govuk_link_to("Update now", send(log.form.unresolved_log_path, log)) %>
                 <% end %>
             <% end %>
         <% end %>
