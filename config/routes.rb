@@ -58,6 +58,7 @@ Rails.application.routes.draw do
     patch "reactivate", to: "schemes#reactivate"
 
     resources :locations do
+      post "locations", to: "locations#create"
       get "new-deactivation", to: "locations#new_deactivation"
       get "deactivate-confirm", to: "locations#deactivate_confirm"
       get "reactivate", to: "locations#reactivate"

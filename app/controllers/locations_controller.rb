@@ -2,9 +2,10 @@ class LocationsController < ApplicationController
   include Pagy::Backend
   before_action :authenticate_user!
   before_action :authenticate_scope!
-  before_action :find_location, except: %i[new index]
+  before_action :find_location, except: %i[create index]
   before_action :find_scheme
   before_action :authenticate_action!
+  before_action :scheme_and_location_present, only: %i[postcode local_authority name units type_of_unit mobility_standards availability check_answers]
 
   include Modules::SearchFilter
 
@@ -14,21 +15,17 @@ class LocationsController < ApplicationController
     @searched = search_term.presence
   end
 
-  def new
-    @location = Location.new(scheme: @scheme)
-    @location.save!
+  def create
+    @location = @scheme.locations.create!
     redirect_to scheme_location_postcode_path(@scheme, @location, route: params[:route])
   end
 
   def postcode
-    render_not_found and return unless @location && @scheme
-
     if params[:location].present?
       @location.postcode = PostcodeService.clean(params[:location][:postcode])
       @location.location_admin_district = nil
       @location.location_code = nil
-      if @location.valid?(:postcode)
-        @location.save!
+      if @location.save(context: :postcode)
         if @location.location_code.blank? || @location.location_admin_district.blank?
           redirect_to scheme_location_local_authority_path(@scheme, @location, route: params[:route], referrer: params[:referrer])
         elsif params[:referrer] == "check_answers"
@@ -43,13 +40,10 @@ class LocationsController < ApplicationController
   end
 
   def local_authority
-    render_not_found and return unless @location && @scheme
-
     if params[:location].present?
       @location.location_admin_district = params[:location][:location_admin_district]
       @location.location_code = Location.local_authorities.key(params[:location][:location_admin_district])
-      if @location.valid?(:location_admin_district)
-        @location.save!
+      if @location.save(context: :location_admin_district)
         if params[:referrer] == "check_answers" || params[:referrer] == "check_local_authority"
           redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
         else
@@ -62,12 +56,9 @@ class LocationsController < ApplicationController
   end
 
   def name
-    render_not_found and return unless @location && @scheme
-
     if params[:location].present?
       @location.name = params[:location][:name]
-      if @location.valid?(:name)
-        @location.save!
+      if @location.save(context: :name)
         case params[:referrer]
         when "check_answers"
           redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
@@ -83,12 +74,9 @@ class LocationsController < ApplicationController
   end
 
   def units
-    render_not_found and return unless @location && @scheme
-
     if params[:location].present?
       @location.units = params[:location][:units]
-      if @location.valid?(:units)
-        @location.save!
+      if @location.save(context: :units)
         if params[:referrer] == "check_answers"
           redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
         else
@@ -101,12 +89,9 @@ class LocationsController < ApplicationController
   end
 
   def type_of_unit
-    render_not_found and return unless @location && @scheme
-
     if params[:location].present?
       @location.type_of_unit = params[:location][:type_of_unit]
-      if @location.valid?(:type_of_unit)
-        @location.save!
+      if @location.save(context: :type_of_unit)
         if params[:referrer] == "check_answers"
           redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
         else
@@ -119,12 +104,9 @@ class LocationsController < ApplicationController
   end
 
   def mobility_standards
-    render_not_found and return unless @location && @scheme
-
     if params[:location].present?
       @location.mobility_type = params[:location][:mobility_type]
-      if @location.valid?(:mobility_type)
-        @location.save!
+      if @location.save(context: :mobility_type)
         if params[:referrer] == "check_answers"
           redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
         else
@@ -137,8 +119,6 @@ class LocationsController < ApplicationController
   end
 
   def availability
-    render_not_found and return unless @location && @scheme
-
     if params[:location].present?
       day = params[:location]["startdate(3i)"]
       month = params[:location]["startdate(2i)"]
@@ -146,8 +126,7 @@ class LocationsController < ApplicationController
       if [day, month, year].none?(&:blank?)
         if Date.valid_date?(year.to_i, month.to_i, day.to_i)
           @location.startdate = Time.zone.local(year.to_i, month.to_i, day.to_i)
-          if @location.valid?(:startdate)
-            @location.save!
+          if @location.save(context: :startdate)
             redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
           else
             render :availability, status: :unprocessable_entity
@@ -166,8 +145,6 @@ class LocationsController < ApplicationController
   end
 
   def check_answers
-    render_not_found and return unless @location && @scheme
-
     if params[:location].present?
       @location.confirmed = true
       @location.save!
@@ -233,8 +210,12 @@ class LocationsController < ApplicationController
 
 private
 
+  def scheme_and_location_present
+    render_not_found and return unless @location && @scheme
+  end
+
   def find_scheme
-    @scheme = if %w[new index].include?(action_name)
+    @scheme = if %w[create index].include?(action_name)
                 Scheme.find(params[:scheme_id])
               else
                 @location&.scheme
@@ -250,7 +231,7 @@ private
   end
 
   def authenticate_action!
-    if %w[new update index new_deactivation deactivate_confirm deactivate postcode local_authority name units type_of_unit mobility_standards availability check_answers].include?(action_name) && !((current_user.organisation == @scheme&.owning_organisation) || current_user.support?)
+    if %w[create update index new_deactivation deactivate_confirm deactivate postcode local_authority name units type_of_unit mobility_standards availability check_answers].include?(action_name) && !((current_user.organisation == @scheme&.owning_organisation) || current_user.support?)
       render_not_found and return
     end
   end

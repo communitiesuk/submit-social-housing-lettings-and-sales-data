@@ -61,7 +61,9 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= govuk_button_link_to "Add a location", new_scheme_location_path(@scheme), secondary: true %>
+      <%= form_with model: @scheme, url: scheme_locations_path(@scheme), method: "post", local: true do |f| %>
+        <%= f.govuk_submit "Add a location", secondary: true %>
+      <% end %>
     </div>
   </div>
 
@@ -115,7 +117,9 @@
       <% end %>
     <% end %>
   <% end %>
-  <%= govuk_button_link_to "Add a location", new_scheme_location_path(@scheme), secondary: true %>
+  <%= form_with model: @scheme, url: scheme_locations_path(@scheme), method: "post", local: true do |f| %>
+    <%= f.govuk_submit "Add a location", secondary: true %>
+  <% end %>
 
 <% end %>
 
