@@ -24,16 +24,13 @@
                   <%= summary_list.row do |row| %>
                   <% row.key { attr[:name] } %>
                   <%= row.value do %>
-                  <% case attr[:attribute]
-                     when "status"
-                       status_tag(attr[:value])
-                     when "availability"
+                  <% if attr[:attribute] == "availability"
                        details_html(name: "Availability", value: @location.startdate.present? ? @location.startdate.to_formatted_s(:govuk_date) : nil, attribute: "startdate")
                      else
                        details_html(attr)
                      end %>
                   <% end %>
-                  <% row.action(text: action_text_helper(attr, @location), href: location_edit_path(@location, attr[:attribute])) unless attr[:attribute] == "status" %>
+                  <% row.action(text: action_text_helper(attr, @location), href: location_edit_path(@location, attr[:attribute]))%>
                   <% end %>
               <% end %>
           <% end %>
