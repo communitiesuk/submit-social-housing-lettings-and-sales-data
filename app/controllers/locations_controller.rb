@@ -23,8 +23,10 @@ class LocationsController < ApplicationController
   def postcode
     if params[:location].present?
       @location.postcode = PostcodeService.clean(params[:location][:postcode])
-      @location.location_admin_district = nil
-      @location.location_code = nil
+      if @location.postcode_changed?
+        @location.location_admin_district = nil
+        @location.location_code = nil
+      end
       if @location.save(context: :postcode)
         if @location.location_code.blank? || @location.location_admin_district.blank?
           redirect_to scheme_location_local_authority_path(@scheme, @location, route: params[:route], referrer: params[:referrer])
