@@ -62,7 +62,11 @@ module LocationsHelper
     end
   end
 
-private
+  def action_text_helper(attr, location)
+    attr[:value].blank? || (attr[:attribute] == "availability" && location.startdate.blank?) ? "Answer" : "Change"
+  end
+
+  private
 
   ActivePeriod = Struct.new(:from, :to)
   def location_active_periods(location)

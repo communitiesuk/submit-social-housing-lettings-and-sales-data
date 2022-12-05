@@ -33,7 +33,7 @@
                        details_html(attr)
                      end %>
                   <% end %>
-                  <% row.action(text: attr[:value].blank? || (attr[:attribute] == "availability" && @location.startdate.blank?) ? "Answer" : "Change", href: location_edit_path(@location, attr[:attribute])) unless attr[:attribute] == "status" %>
+                  <% row.action(text: action_text_helper(attr, @location), href: location_edit_path(@location, attr[:attribute])) unless attr[:attribute] == "status" %>
                   <% end %>
               <% end %>
           <% end %>
