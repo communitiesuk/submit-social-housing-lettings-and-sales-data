@@ -44,21 +44,11 @@ class Log < ApplicationRecord
   def managing_organisation_provider_type
     managing_organisation&.provider_type
   end
-
+  
   def collection_period_open?
     form.end_date > Time.zone.today
   end
   
-  def user_organisation_chosen?(user)
-    unless [user, managing_organisation, owning_organisation].any?(&:blank?) || user.organisation == managing_organisation || user.organisation == owning_organisation
-      errors.add :created_by, I18n.t("validations.setup.created_by.invalid")
-      errors.add :owning_organisation_id, I18n.t("validations.setup.owning_organisation.invalid")
-      errors.add :managing_organisation_id, I18n.t("validations.setup.managing_organisation.invalid")
-      return false
-    end
-    true
-  end
-
 private
 
   def update_status!
@@ -80,12 +70,6 @@ private
     not_started_statuses = %i[not_started cannot_start_yet]
     subsection_statuses = form.subsections.map { |subsection| subsection.status(self) }.uniq
     subsection_statuses.all? { |status| not_started_statuses.include?(status) }
-  end
-
-  def reset_created_by
-    return unless created_by && owning_organisation
-
-    self.created_by = nil if created_by.organisation != owning_organisation
   end
 
   def reset_invalidated_dependent_fields!

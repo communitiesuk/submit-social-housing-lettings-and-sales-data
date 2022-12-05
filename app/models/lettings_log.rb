@@ -570,7 +570,6 @@ private
     super
 
     reset_invalid_unresolved_log_fields!
-    reset_created_by
     reset_scheme
     reset_derived_questions
   end
