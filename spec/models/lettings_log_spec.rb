@@ -2,9 +2,9 @@ require "rails_helper"
 require "shared/shared_examples_for_derived_fields"
 
 RSpec.describe LettingsLog do
-  let(:owning_organisation) { FactoryBot.create(:organisation) }
   let(:different_managing_organisation) { FactoryBot.create(:organisation) }
   let(:created_by_user) { FactoryBot.create(:user) }
+  let(:owning_organisation) { created_by_user.organisation }
   let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
 
   before do
@@ -2013,11 +2013,6 @@ RSpec.describe LettingsLog do
       let(:lettings_log) { FactoryBot.create(:lettings_log, created_by: created_by_user) }
       let(:organisation_2) { FactoryBot.create(:organisation) }
 
-      it "clears the created by user set" do
-        expect { lettings_log.update!(owning_organisation: organisation_2) }
-          .to change { lettings_log.reload.created_by }.from(created_by_user).to(nil)
-      end
-
       context "when the organisation selected doesn't match the scheme set" do
         let(:scheme) { FactoryBot.create(:scheme, owning_organisation: created_by_user.organisation) }
         let(:location) { FactoryBot.create(:location, scheme:) }
@@ -2377,10 +2372,10 @@ RSpec.describe LettingsLog do
       let(:organisation_3) { FactoryBot.create(:organisation) }
 
       before do
-        FactoryBot.create(:lettings_log, :in_progress, owning_organisation: organisation_1, managing_organisation: organisation_1)
-        FactoryBot.create(:lettings_log, :completed, owning_organisation: organisation_1, managing_organisation: organisation_2)
-        FactoryBot.create(:lettings_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_1)
-        FactoryBot.create(:lettings_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_2)
+        FactoryBot.create(:lettings_log, :in_progress, owning_organisation: organisation_1, managing_organisation: organisation_1, created_by: nil)
+        FactoryBot.create(:lettings_log, :completed, owning_organisation: organisation_1, managing_organisation: organisation_2, created_by: nil)
+        FactoryBot.create(:lettings_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_1, created_by: nil)
+        FactoryBot.create(:lettings_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_2, created_by: nil)
       end
 
       it "filters by given organisation id" do
@@ -2525,53 +2520,6 @@ RSpec.describe LettingsLog do
       it "generates a correct csv from a lettings log" do
         expect(described_class.to_csv(user)).to eq(expected_content)
       end
-    end
-  end
-
-  describe "non support validation" do
-    it "validates if neither managing nor owning organisation is the same as current user organisation" do
-      lettings_log = FactoryBot.build(:lettings_log, owning_organisation:, managing_organisation: owning_organisation)
-
-      lettings_log.user_organisation_chosen?(created_by_user)
-      expect(lettings_log.errors[:created_by]).to include(I18n.t("validations.setup.created_by.invalid"))
-      expect(lettings_log.errors[:owning_organisation_id]).to include(I18n.t("validations.setup.owning_organisation.invalid"))
-      expect(lettings_log.errors[:managing_organisation_id]).to include(I18n.t("validations.setup.managing_organisation.invalid"))
-    end
-
-    it "doesn not validate if either managing or owning organisation is the same as current user organisation" do
-      lettings_log = FactoryBot.build(:lettings_log, owning_organisation: created_by_user.organisation, managing_organisation: owning_organisation)
-
-      lettings_log.user_organisation_chosen?(created_by_user)
-      expect(lettings_log.errors[:created_by]).to be_empty
-      expect(lettings_log.errors[:owning_organisation_id]).to be_empty
-      expect(lettings_log.errors[:managing_organisation_id]).to be_empty
-    end
-
-    it "does not validate if current user is missing" do
-      lettings_log = FactoryBot.build(:lettings_log, created_by: nil, owning_organisation:, managing_organisation: owning_organisation)
-
-      lettings_log.user_organisation_chosen?(nil)
-      expect(lettings_log.errors[:created_by]).to be_empty
-      expect(lettings_log.errors[:owning_organisation_id]).to be_empty
-      expect(lettings_log.errors[:managing_organisation_id]).to be_empty
-    end
-
-    it "does not validate if managing organisation is missing" do
-      lettings_log = FactoryBot.build(:lettings_log, owning_organisation:, managing_organisation: nil)
-
-      lettings_log.user_organisation_chosen?(created_by_user)
-      expect(lettings_log.errors[:created_by]).to be_empty
-      expect(lettings_log.errors[:owning_organisation_id]).to be_empty
-      expect(lettings_log.errors[:managing_organisation_id]).to be_empty
-    end
-
-    it "does not validate if owning organisation is missing" do
-      lettings_log = FactoryBot.build(:lettings_log, owning_organisation: nil, managing_organisation: owning_organisation)
-
-      lettings_log.user_organisation_chosen?(created_by_user)
-      expect(lettings_log.errors[:created_by]).to be_empty
-      expect(lettings_log.errors[:owning_organisation_id]).to be_empty
-      expect(lettings_log.errors[:managing_organisation_id]).to be_empty
     end
   end
 end

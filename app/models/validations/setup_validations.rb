@@ -16,6 +16,15 @@ module Validations::SetupValidations
     scheme_during_startdate_validation(record, :scheme_id)
   end
 
+  def validate_organisation(record)
+    created_by, managing_organisation, owning_organisation = record.values_at("created_by", "managing_organisation", "owning_organisation")
+    unless [created_by, managing_organisation, owning_organisation].any?(&:blank?) || created_by.organisation == managing_organisation || created_by.organisation == owning_organisation
+      record.errors.add :created_by, I18n.t("validations.setup.created_by.invalid")
+      record.errors.add :owning_organisation_id, I18n.t("validations.setup.owning_organisation.invalid")
+      record.errors.add :managing_organisation_id, I18n.t("validations.setup.managing_organisation.invalid")
+    end
+  end
+
 private
 
   def intermediate_product_rent_type?(record)
