@@ -87,8 +87,8 @@ class Form
     "#{log.class.name.underscore}_#{page.subsection.id}_check_answers_path"
   end
 
-  def unresolved_log_path
-    "#{type}_#{unresolved_log_redirect_page_id}_path"
+  def unresoved_log_path
+    "#{type}_log_#{unresolved_log_redirect_page_id}_path"
   end
 
   def next_incomplete_section_redirect_path(subsection, log)
