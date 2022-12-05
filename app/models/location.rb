@@ -7,6 +7,7 @@ class Location < ApplicationRecord
   validates :type_of_unit, on: :type_of_unit, presence: { message: I18n.t("validations.location.type_of_unit") }
   validates :mobility_type, on: :mobility_type, presence: { message: I18n.t("validations.location.mobility_standards") }
   validate :validate_startdate, on: :startdate
+  validate :validate_confirmed
   belongs_to :scheme
   has_many :lettings_logs, class_name: "LettingsLog"
   has_many :location_deactivation_periods, class_name: "LocationDeactivationPeriod"
@@ -428,8 +429,18 @@ class Location < ApplicationRecord
     end
   end
 
+  def validate_confirmed
+    if confirmed == true && incomplete?
+      self.confirmed = false
+    end
+  end
+
   def incomplete?
     [postcode, name, location_admin_district, location_code, units, type_of_unit, mobility_type, startdate].any?(&:blank?)
+  end
+
+  def confirmed!
+    update!(confirmed: true)
   end
 
 private
