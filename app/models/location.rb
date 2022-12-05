@@ -1,4 +1,5 @@
 class Location < ApplicationRecord
+  validates :postcode, on: :postcode, presence: { message: I18n.t("validations.location.postcode_blank") }
   validate :validate_postcode, on: :postcode
   validate :validate_location_admin_district, on: :location_admin_district
   validates :name, on: :name, presence: { message: I18n.t("validations.location.name") }
@@ -408,10 +409,7 @@ class Location < ApplicationRecord
   end
 
   def validate_postcode
-    if postcode.blank?
-      error_message = I18n.t("validations.location.postcode_blank")
-      errors.add :postcode, error_message
-    elsif !postcode&.match(POSTCODE_REGEXP)
+    if !postcode&.match(POSTCODE_REGEXP)
       error_message = I18n.t("validations.postcode")
       errors.add :postcode, error_message
     else
