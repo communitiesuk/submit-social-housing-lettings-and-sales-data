@@ -34,6 +34,8 @@ RSpec.describe "validations" do
   let(:id) { lettings_log.id }
 
   before do
+    allow(fake_2021_2022_form).to receive(:end_date).and_return(Time.zone.today + 1.day)
+    allow(lettings_log.form).to receive(:end_date).and_return(Time.zone.today + 1.day)
     sign_in user
     allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
   end

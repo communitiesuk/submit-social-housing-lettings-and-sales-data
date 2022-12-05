@@ -2,6 +2,7 @@ class FormController < ApplicationController
   before_action :authenticate_user!
   before_action :find_resource, only: %i[submit_form review]
   before_action :find_resource_by_named_id, except: %i[submit_form review]
+  before_action :check_collection_period, only: %i[submit_form show_page]
 
   def submit_form
     if @log
@@ -175,5 +176,11 @@ private
       session["fields"][question.id] = @log[question.id] = responses_for_page[question.id]
       responses_for_page[question.id].nil? || responses_for_page[question.id].blank?
     end
+  end
+
+  def check_collection_period
+    return unless @log
+
+    redirect_to lettings_log_path(@log) unless @log.collection_period_open?
   end
 end

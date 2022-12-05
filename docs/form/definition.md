@@ -55,6 +55,9 @@ A form has the following attributes:
 - `start_date`: The start date of the form, in ISO 8601 format
 - `end_date`: The end date of the form, in ISO 8601 format
 
+Each form has an `end_date` which for JSON forms is defined in the form definition JSON file and for code defined forms it is set to 1st July, 1 year after the start year.
+Logs with a form that has `end_date` in the past can no longer be edited through the UI.
+
 ## Form views
 
 The main view used for rendering the form is the `app/views/form/page.html.erb` view as the Form contains multiple pages (which live in subsections within sections). This page view then renders the appropriate partials for the question types of the questions on the current page.
@@ -79,3 +82,6 @@ The form controller handles the form submission as well as the rendering of the 
 ## FormHandler helper class
 
 The FormHandler helper is a helper that loads all of the defined forms and initialises them as Form objects. It can also be used to get specific forms if needed.
+When the log type is chosen and the date is entered in the setup section of the form, an appropriate form for that log is selected and associated with the log.
+
+The current collection window gets incremented automatically in `FormHandler` and is determined within the `form_name_from_start_year`by looking at `current_collection_start_year` method which would increment the collection window on the 1st of April each year.

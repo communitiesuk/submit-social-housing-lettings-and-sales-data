@@ -44,6 +44,7 @@ RSpec.describe "Task List" do
   let(:status) { lettings_log.status }
 
   before do
+    allow(lettings_log.form).to receive(:end_date).and_return(Time.zone.today + 1.day)
     sign_in user
   end
 

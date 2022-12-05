@@ -620,7 +620,7 @@ RSpec.describe LettingsLogsController, type: :request do
     end
 
     context "when requesting a specific lettings log" do
-      let(:completed_lettings_log) { FactoryBot.create(:lettings_log, :completed) }
+      let!(:completed_lettings_log) { FactoryBot.create(:lettings_log, :completed, owning_organisation: user.organisation, managing_organisation: user.organisation, created_by: user) }
       let(:id) { completed_lettings_log.id }
 
       before do
@@ -671,6 +671,26 @@ RSpec.describe LettingsLogsController, type: :request do
               assert_select ".govuk-tag", text: /In progress/, count: 2
               assert_select ".govuk-tag", text: /Completed/, count: 0
               assert_select ".govuk-tag", text: /Cannot start yet/, count: 1
+            end
+
+            it "displays a link to update the log for currently editable logs" do
+              completed_lettings_log.update!(startdate: Time.zone.local(2022, 4, 1), tenancylength: nil)
+              completed_lettings_log.reload
+
+              get "/lettings-logs/#{completed_lettings_log.id}", headers:, params: {}
+              expect(completed_lettings_log.form.end_date).to eq(Time.zone.local(2023, 7, 1))
+              expect(completed_lettings_log.status).to eq("completed")
+              expect(page).to have_link("review and make changes to this log", href: "/lettings-logs/#{completed_lettings_log.id}/review")
+            end
+
+            it "displays a closed collection window message for previous collection year logs" do
+              completed_lettings_log.update!(startdate: Time.zone.local(2021, 4, 1))
+              completed_lettings_log.reload
+
+              get "/lettings-logs/#{completed_lettings_log.id}", headers:, params: {}
+              expect(completed_lettings_log.form.end_date).to eq(Time.zone.local(2022, 7, 1))
+              expect(completed_lettings_log.status).to eq("completed")
+              expect(page).to have_content("This log is from the 2021/2022 collection window, which is now closed.")
             end
           end
 
@@ -741,6 +761,7 @@ RSpec.describe LettingsLogsController, type: :request do
                           postcode_known: "No")
       end
       let(:id) { postcode_lettings_log.id }
+      let(:completed_lettings_log) { FactoryBot.create(:lettings_log, :completed, owning_organisation: user.organisation, managing_organisation: user.organisation, created_by: user, startdate: Time.zone.local(2021, 4, 1)) }
 
       before do
         stub_request(:get, /api.postcodes.io/)
@@ -773,6 +794,21 @@ RSpec.describe LettingsLogsController, type: :request do
       it "shows `you haven't answered this question` if the question wasn't answered" do
         get "/lettings-logs/#{id}/income-and-benefits/check-answers"
         expect(CGI.unescape_html(response.body)).to include("You didn’t answer this question")
+      end
+
+      it "does not allow you to change the answers for previous collection year logs" do
+        get "/lettings-logs/#{completed_lettings_log.id}/setup/check-answers", headers: { "Accept" => "text/html" }, params: {}
+        expect(page).not_to have_link("Change")
+        expect(page).not_to have_link("Answer")
+
+        get "/lettings-logs/#{completed_lettings_log.id}/income-and-benefits/check-answers", headers: { "Accept" => "text/html" }, params: {}
+        expect(page).not_to have_link("Change")
+        expect(page).not_to have_link("Answer")
+      end
+
+      it "does not let the user navigate to questions for previous collection year logs" do
+        get "/lettings-logs/#{completed_lettings_log.id}/needs-type", headers: { "Accept" => "text/html" }, params: {}
+        expect(response).to redirect_to("/lettings-logs/#{completed_lettings_log.id}")
       end
     end
 
