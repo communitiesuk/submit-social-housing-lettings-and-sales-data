@@ -1,7 +1,7 @@
 class Location < ApplicationRecord
   validates :postcode, on: :postcode, presence: { message: I18n.t("validations.location.postcode_blank") }
   validate :validate_postcode, on: :postcode
-  validate :validate_location_admin_district, on: :location_admin_district
+  validates :location_admin_district, on: :location_admin_district, presence: { message: I18n.t("validations.location_admin_district") }
   validates :name, on: :name, presence: { message: I18n.t("validations.location.name") }
   validates :units, on: :units, presence: { message: I18n.t("validations.location.units") }
   validates :type_of_unit, on: :type_of_unit, presence: { message: I18n.t("validations.location.type_of_unit") }
@@ -418,13 +418,6 @@ class Location < ApplicationRecord
         self.location_admin_district = nil
         self.location_code = nil
       end
-    end
-  end
-
-  def validate_location_admin_district
-    if location_admin_district == "Select an option"
-      error_message = I18n.t("validations.location_admin_district")
-      errors.add :location_admin_district, error_message
     end
   end
 
