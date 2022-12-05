@@ -5,7 +5,7 @@ class LocationsController < ApplicationController
   before_action :find_location, except: %i[create index]
   before_action :find_scheme
   before_action :authenticate_action!
-  before_action :scheme_and_location_present, only: %i[postcode local_authority name units type_of_unit mobility_standards availability check_answers]
+  before_action :scheme_and_location_present, only: %i[postcode update_postcode local_authority update_local_authority name update_name units update_units type_of_unit update_type_of_unit mobility_standards update_mobility_standards availability update_availability check_answers update_check_answers]
 
   include Modules::SearchFilter
 

@@ -1,10 +1,10 @@
 class Location < ApplicationRecord
   validate :validate_postcode, on: :postcode
   validate :validate_location_admin_district, on: :location_admin_district
-  validate :validate_name, on: :name
-  validate :validate_units, on: :units
-  validate :validate_type_of_unit, on: :type_of_unit
-  validate :validate_mobility_type, on: :mobility_type
+  validates :name, on: :name, presence: { message: I18n.t("validations.location.name") }
+  validates :units, on: :units, presence: { message: I18n.t("validations.location.units") }
+  validates :type_of_unit, on: :type_of_unit, presence: { message: I18n.t("validations.location.type_of_unit") }
+  validates :mobility_type, on: :mobility_type, presence: { message: I18n.t("validations.location.mobility_standards") }
   validate :validate_startdate, on: :startdate
   belongs_to :scheme
   has_many :lettings_logs, class_name: "LettingsLog"
@@ -421,34 +421,6 @@ class Location < ApplicationRecord
     if location_admin_district == "Select an option"
       error_message = I18n.t("validations.location_admin_district")
       errors.add :location_admin_district, error_message
-    end
-  end
-
-  def validate_name
-    if name.blank?
-      error_message = I18n.t("validations.location.name")
-      errors.add :name, error_message
-    end
-  end
-
-  def validate_units
-    if units.blank?
-      error_message = I18n.t("validations.location.units")
-      errors.add :units, error_message
-    end
-  end
-
-  def validate_type_of_unit
-    if type_of_unit.blank?
-      error_message = I18n.t("validations.location.type_of_unit")
-      errors.add :type_of_unit, error_message
-    end
-  end
-
-  def validate_mobility_type
-    if mobility_type.blank?
-      error_message = I18n.t("validations.location.mobility_standards")
-      errors.add :mobility_type, error_message
     end
   end
 
