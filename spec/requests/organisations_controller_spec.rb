@@ -123,6 +123,17 @@ RSpec.describe OrganisationsController, type: :request do
           end
         end
 
+        it "shows incomplete schemes at the top" do
+          schemes[0].update!(confirmed: nil, owning_organisation: user.organisation)
+          schemes[2].update!(confirmed: false, owning_organisation: user.organisation)
+          schemes[4].update!(confirmed: false, owning_organisation: user.organisation)
+          get "/organisations/#{organisation.id}/schemes", headers:, params: {}
+
+          expect(page.all(".govuk-tag")[1].text).to eq("Incomplete")
+          expect(page.all(".govuk-tag")[2].text).to eq("Incomplete")
+          expect(page.all(".govuk-tag")[3].text).to eq("Incomplete")
+        end
+
         context "with schemes that are not in scope for the user, i.e. that they do not belong to" do
           let!(:unauthorised_organisation) { FactoryBot.create(:organisation) }
 

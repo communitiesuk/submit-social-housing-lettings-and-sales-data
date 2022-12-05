@@ -176,21 +176,6 @@ RSpec.describe Scheme, type: :model do
     end
   end
 
-  describe "all schemes" do
-    before do
-      FactoryBot.create_list(:scheme, 4)
-      FactoryBot.create_list(:scheme, 3, confirmed: false)
-    end
-
-    it "can sort the schemes by status" do
-      all_schemes = described_class.all.order(confirmed: :asc, service_name: :asc)
-      expect(all_schemes.count).to eq(7)
-      expect(all_schemes[0].status).to eq(:incomplete)
-      expect(all_schemes[1].status).to eq(:incomplete)
-      expect(all_schemes[2].status).to eq(:incomplete)
-    end
-  end
-
   describe "available_from" do
     context "when the scheme was created at the start of the 2022/23 collection window" do
       let(:scheme) { FactoryBot.build(:scheme, created_at: Time.zone.local(2022, 4, 6)) }

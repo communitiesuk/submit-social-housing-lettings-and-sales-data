@@ -18,6 +18,9 @@ class Scheme < ApplicationRecord
                         .or(filter_by_id(param)).distinct
                     }
 
+  scope :order_by_completion, -> { order("confirmed ASC NULLS FIRST") }
+  scope :order_by_service_name, -> { order(service_name: :asc) }
+
   validate :validate_confirmed
 
   auto_strip_attributes :service_name

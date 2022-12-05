@@ -9,7 +9,7 @@ class SchemesController < ApplicationController
 
   def index
     redirect_to schemes_organisation_path(current_user.organisation) unless current_user.support?
-    all_schemes = Scheme.order(confirmed: :asc, service_name: :asc)
+    all_schemes = Scheme.order_by_completion.order_by_service_name
 
     @pagy, @schemes = pagy(filtered_collection(all_schemes, search_term))
     @searched = search_term.presence
