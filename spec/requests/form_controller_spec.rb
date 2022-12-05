@@ -4,12 +4,12 @@ RSpec.describe FormController, type: :request do
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:user) { create(:user) }
   let(:organisation) { user.organisation }
-  let(:other_organisation) { create(:organisation) }
+  let(:other_user) { create(:user) }
+  let(:other_organisation) { other_user.organisation }
   let!(:unauthorized_lettings_log) do
     create(
       :lettings_log,
-      owning_organisation: other_organisation,
-      managing_organisation: other_organisation,
+      created_by: other_user,
     )
   end
   let(:setup_complete_lettings_log) do
@@ -18,16 +18,14 @@ RSpec.describe FormController, type: :request do
       :about_completed,
       status: 1,
       startdate: Time.zone.local(2021, 10, 10),
-      owning_organisation: organisation,
-      managing_organisation: organisation,
+      created_by: user,
     )
   end
   let(:completed_lettings_log) do
     create(
       :lettings_log,
       :completed,
-      owning_organisation: organisation,
-      managing_organisation: organisation,
+      created_by: user,
       startdate: Time.zone.local(2021, 5, 1),
     )
   end
@@ -43,8 +41,7 @@ RSpec.describe FormController, type: :request do
     let!(:lettings_log) do
       create(
         :lettings_log,
-        owning_organisation: organisation,
-        managing_organisation: organisation,
+        created_by: user,
       )
     end
 
@@ -72,8 +69,7 @@ RSpec.describe FormController, type: :request do
     let!(:lettings_log) do
       create(
         :lettings_log,
-        owning_organisation: organisation,
-        managing_organisation: organisation,
+        created_by: user,
       )
     end
 
@@ -156,8 +152,7 @@ RSpec.describe FormController, type: :request do
             create(
               :lettings_log,
               startdate: Time.zone.local(2022, 12, 1),
-              owning_organisation: organisation,
-              managing_organisation: organisation,
+              created_by: user,
             )
           end
           let(:headers) { { "Accept" => "text/html" } }
@@ -224,8 +219,7 @@ RSpec.describe FormController, type: :request do
         let(:lettings_log) do
           create(
             :lettings_log,
-            owning_organisation: organisation,
-            managing_organisation: organisation,
+            created_by: user,
           )
         end
         let(:page_id) { "person_1_age" }
@@ -566,12 +560,11 @@ RSpec.describe FormController, type: :request do
 
       context "with lettings logs that are not owned or managed by your organisation" do
         let(:answer) { 25 }
-        let(:other_organisation) { create(:organisation) }
+        let(:other_user) { create(:user) }
         let(:unauthorized_lettings_log) do
           create(
             :lettings_log,
-            owning_organisation: other_organisation,
-            managing_organisation: other_organisation,
+            created_by: other_user,
           )
         end
 

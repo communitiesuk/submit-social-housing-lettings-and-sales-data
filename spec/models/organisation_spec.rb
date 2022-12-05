@@ -151,7 +151,6 @@ RSpec.describe Organisation, type: :model do
         FactoryBot.create(
           :lettings_log,
           :completed,
-          owning_organisation: organisation,
           managing_organisation: other_organisation,
           created_by: user,
         )
@@ -159,8 +158,7 @@ RSpec.describe Organisation, type: :model do
       let!(:managed_lettings_log) do
         FactoryBot.create(
           :lettings_log,
-          owning_organisation: other_organisation,
-          managing_organisation: organisation,
+          created_by: user,
         )
       end
 

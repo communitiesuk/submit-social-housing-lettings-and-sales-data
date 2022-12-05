@@ -8,16 +8,14 @@ RSpec.describe "Form Conditional Questions" do
     FactoryBot.create(
       :lettings_log,
       :in_progress,
-      owning_organisation: user.organisation,
-      managing_organisation: user.organisation,
+      created_by: user,
     )
   end
   let(:sales_log) do
     FactoryBot.create(
       :sales_log,
       :completed,
-      owning_organisation: user.organisation,
-      managing_organisation: user.organisation,
+      created_by: user,
     )
   end
   let(:id) { lettings_log.id }
