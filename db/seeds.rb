@@ -67,21 +67,83 @@ unless Rails.env.test?
     end
   end
 
+  standalone_owns_stock = Organisation.find_or_create_by!(
+    name: "Standalone Owns Stock 1 Ltd",
+    address_line1: "2 Marsham Street",
+    address_line2: "London",
+    postcode: "SW1P 4DF",
+    holds_own_stock: true,
+    other_stock_owners: "None",
+    managing_agents_label: "None",
+    provider_type: "LA",
+  )
+
+  User.find_or_create_by!(
+    name: "Provider Owns Stock",
+    email: "provider.owner1@example.com",
+    organisation: standalone_owns_stock,
+    role: "data_provider",
+  ) do |user|
+    user.password = "password"
+    user.confirmed_at = Time.zone.now
+  end
+
+  User.find_or_create_by!(
+    name: "Coordinator Owns Stock",
+    email: "coordinator.owner1@example.com",
+    organisation: standalone_owns_stock,
+    role: "data_coordinator",
+  ) do |user|
+    user.password = "password"
+    user.confirmed_at = Time.zone.now
+  end
+
+  standalone_no_stock = Organisation.find_or_create_by!(
+    name: "Standalone No Stock 1 Ltd",
+    address_line1: "2 Marsham Street",
+    address_line2: "London",
+    postcode: "SW1P 4DF",
+    holds_own_stock: false,
+    other_stock_owners: "None",
+    managing_agents_label: "None",
+    provider_type: "LA",
+  )
+
+  User.find_or_create_by!(
+    name: "Provider Owns Stock",
+    email: "provider.nostock1@example.com",
+    organisation: standalone_no_stock,
+    role: "data_provider",
+  ) do |user|
+    user.password = "password"
+    user.confirmed_at = Time.zone.now
+  end
+
+  User.find_or_create_by!(
+    name: "Coordinator Owns Stock",
+    email: "coordinator.nostock1@example.com",
+    organisation: standalone_no_stock,
+    role: "data_coordinator",
+  ) do |user|
+    user.password = "password"
+    user.confirmed_at = Time.zone.now
+  end
+
   OrganisationRelationship.find_or_create_by!(
-    child_organisation: org,
     parent_organisation: housing_provider1,
-  )
-  OrganisationRelationship.find_or_create_by!(
     child_organisation: org,
+  )
+  OrganisationRelationship.find_or_create_by!(
     parent_organisation: housing_provider2,
+    child_organisation: org,
   )
   OrganisationRelationship.find_or_create_by!(
+    parent_organisation: org,
     child_organisation: managing_agent1,
-    parent_organisation: org,
   )
   OrganisationRelationship.find_or_create_by!(
-    child_organisation: managing_agent2,
     parent_organisation: org,
+    child_organisation: managing_agent2,
   )
 
   if (Rails.env.development? || Rails.env.review?) && User.count.zero?
