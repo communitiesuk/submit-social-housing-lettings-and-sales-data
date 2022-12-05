@@ -414,6 +414,12 @@ class Location < ApplicationRecord
     elsif !postcode&.match(POSTCODE_REGEXP)
       error_message = I18n.t("validations.postcode")
       errors.add :postcode, error_message
+    else
+      self.postcode = PostcodeService.clean(postcode)
+      if postcode_changed?
+        self.location_admin_district = nil
+        self.location_code = nil
+      end
     end
   end
 
@@ -432,7 +438,7 @@ class Location < ApplicationRecord
   end
 
   def incomplete?
-    [postcode, name, location_admin_district, units, type_of_unit, mobility_type, startdate].any?(&:blank?)
+    [postcode, name, location_admin_district, location_code, units, type_of_unit, mobility_type, startdate].any?(&:blank?)
   end
 
 private

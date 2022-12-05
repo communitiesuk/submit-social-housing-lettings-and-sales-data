@@ -36,7 +36,6 @@
           <% end %>
       </div>
   </div>
-  <%= f.hidden_field :confirmed %>
   <div class="govuk-button-group">
     <%= f.govuk_submit "Add this location", disabled: @location.incomplete? %>
     <%= govuk_button_link_to "Cancel", scheme_locations_path(@scheme), secondary: true %>

@@ -23,11 +23,7 @@ class LocationsController < ApplicationController
   def postcode; end
 
   def update_postcode
-    @location.postcode = PostcodeService.clean(params[:location][:postcode])
-    if @location.postcode_changed?
-      @location.location_admin_district = nil
-      @location.location_code = nil
-    end
+    @location.postcode = location_params[:postcode]
     if @location.save(context: :postcode)
       if @location.location_code.blank? || @location.location_admin_district.blank?
         redirect_to scheme_location_local_authority_path(@scheme, @location, route: params[:route], referrer: params[:referrer])
@@ -44,8 +40,8 @@ class LocationsController < ApplicationController
   def local_authority; end
 
   def update_local_authority
-    @location.location_admin_district = params[:location][:location_admin_district]
-    @location.location_code = Location.local_authorities.key(params[:location][:location_admin_district])
+    @location.location_admin_district = location_params[:location_admin_district]
+    @location.location_code = Location.local_authorities.key(location_params[:location_admin_district])
     if @location.save(context: :location_admin_district)
       if params[:referrer] == "check_answers" || params[:referrer] == "check_local_authority"
         redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
@@ -60,7 +56,7 @@ class LocationsController < ApplicationController
   def name; end
 
   def update_name
-    @location.name = params[:location][:name]
+    @location.name = location_params[:name]
     if @location.save(context: :name)
       case params[:referrer]
       when "check_answers"
@@ -78,7 +74,7 @@ class LocationsController < ApplicationController
   def units; end
 
   def update_units
-    @location.units = params[:location][:units]
+    @location.units = location_params[:units]
     if @location.save(context: :units)
       if params[:referrer] == "check_answers"
         redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
@@ -93,7 +89,7 @@ class LocationsController < ApplicationController
   def type_of_unit; end
 
   def update_type_of_unit
-    @location.type_of_unit = params[:location][:type_of_unit]
+    @location.type_of_unit = location_params[:type_of_unit]
     if @location.save(context: :type_of_unit)
       if params[:referrer] == "check_answers"
         redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
@@ -108,7 +104,7 @@ class LocationsController < ApplicationController
   def mobility_standards; end
 
   def update_mobility_standards
-    @location.mobility_type = params[:location][:mobility_type]
+    @location.mobility_type = location_params[:mobility_type]
     if @location.save(context: :mobility_type)
       if params[:referrer] == "check_answers"
         redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
@@ -123,9 +119,9 @@ class LocationsController < ApplicationController
   def availability; end
 
   def update_availability
-    day = params[:location]["startdate(3i)"]
-    month = params[:location]["startdate(2i)"]
-    year = params[:location]["startdate(1i)"]
+    day = location_params["startdate(3i)"]
+    month = location_params["startdate(2i)"]
+    year = location_params["startdate(1i)"]
     if [day, month, year].none?(&:blank?)
       if Date.valid_date?(year.to_i, month.to_i, day.to_i)
         @location.startdate = Time.zone.local(year.to_i, month.to_i, day.to_i)
@@ -236,6 +232,13 @@ private
     if %w[create update index new_deactivation deactivate_confirm deactivate postcode local_authority name units type_of_unit mobility_standards availability check_answers].include?(action_name) && !((current_user.organisation == @scheme&.owning_organisation) || current_user.support?)
       render_not_found and return
     end
+  end
+
+  def location_params
+    required_params = params.require(:location).permit(:postcode, :location_admin_district, :location_code, :name, :units, :type_of_unit, :mobility_type, "startdate(1i)", "startdate(2i)", "startdate(3i)").merge(scheme_id: @scheme.id)
+    required_params[:postcode] = PostcodeService.clean(required_params[:postcode]) if required_params[:postcode]
+    required_params[:location_admin_district] = nil if required_params[:location_admin_district] == "Select an option"
+    required_params
   end
 
   def search_term
