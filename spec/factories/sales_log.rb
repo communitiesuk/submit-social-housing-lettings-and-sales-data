@@ -57,6 +57,7 @@ FactoryBot.define do
       income2 { 10_000 }
       la_known { "1" }
       la { "E09000003" }
+      savingsnk { 1 }
     end
   end
 end
