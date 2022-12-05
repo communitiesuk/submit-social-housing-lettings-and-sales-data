@@ -10,10 +10,10 @@ RSpec.describe LocationsController, type: :request do
     allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
   end
 
-  describe "#new" do
+  describe "#create" do
     context "when not signed in" do
       it "redirects to the sign in page" do
-        get "/schemes/1/locations/new"
+        post "/schemes/1/locations/create"
         expect(response).to redirect_to("/account/sign-in")
       end
     end
@@ -23,7 +23,7 @@ RSpec.describe LocationsController, type: :request do
 
       before do
         sign_in user
-        get "/schemes/1/locations/new"
+        post "/schemes/1/locations/create"
       end
 
       it "returns 401 unauthorized" do
@@ -38,11 +38,11 @@ RSpec.describe LocationsController, type: :request do
 
       before do
         sign_in user
-        get "/schemes/#{scheme.id}/locations/new"
+        post scheme_locations_path(scheme)
       end
 
       it "creates a new location for scheme and redirects to correct page" do
-        expect { get "/schemes/#{scheme.id}/locations/new" }.to change(Location, :count).by(1)
+        expect { post scheme_locations_path(scheme) }.to change(Location, :count).by(1)
       end
 
       it "redirects to the postcode page" do
@@ -59,7 +59,7 @@ RSpec.describe LocationsController, type: :request do
         let(:another_scheme)  { FactoryBot.create(:scheme) }
 
         it "displays the new page with an error message" do
-          get "/schemes/#{another_scheme.id}/locations/new"
+          post scheme_locations_path(another_scheme)
           expect(response).to have_http_status(:not_found)
         end
       end
@@ -72,11 +72,11 @@ RSpec.describe LocationsController, type: :request do
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in user
-        get "/schemes/#{scheme.id}/locations/new"
+        post scheme_locations_path(scheme)
       end
 
       it "creates a new location for scheme and redirects to correct page" do
-        expect { get "/schemes/#{scheme.id}/locations/new" }.to change(Location, :count).by(1)
+        expect { post scheme_locations_path(scheme) }.to change(Location, :count).by(1)
       end
 
       it "redirects to the postcode page" do
@@ -93,7 +93,7 @@ RSpec.describe LocationsController, type: :request do
         let(:another_scheme)  { FactoryBot.create(:scheme) }
 
         it "displays the new page with an error message" do
-          get "/schemes/#{another_scheme.id}/locations/new"
+          post scheme_locations_path(another_scheme)
           expect(response).to have_http_status(:not_found)
         end
       end

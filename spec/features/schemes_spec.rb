@@ -270,7 +270,7 @@ RSpec.describe "Schemes scheme Features" do
             context "when the user clicks add location" do
               before do
                 click_link("Locations")
-                click_link("Add a location")
+                click_button("Add a location")
               end
 
               it "shows the new location form" do
@@ -913,7 +913,7 @@ RSpec.describe "Schemes scheme Features" do
             context "when the user clicks add location" do
               before do
                 click_link("Locations")
-                click_link("Add a location")
+                click_button("Add a location")
               end
 
               it "shows the new location form" do

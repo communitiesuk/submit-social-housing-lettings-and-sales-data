@@ -20,139 +20,139 @@ class LocationsController < ApplicationController
     redirect_to scheme_location_postcode_path(@scheme, @location, route: params[:route])
   end
 
-  def postcode
-    if params[:location].present?
-      @location.postcode = PostcodeService.clean(params[:location][:postcode])
-      if @location.postcode_changed?
-        @location.location_admin_district = nil
-        @location.location_code = nil
-      end
-      if @location.save(context: :postcode)
-        if @location.location_code.blank? || @location.location_admin_district.blank?
-          redirect_to scheme_location_local_authority_path(@scheme, @location, route: params[:route], referrer: params[:referrer])
-        elsif params[:referrer] == "check_answers"
-          redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
-        else
-          redirect_to scheme_location_name_path(@scheme, @location, route: params[:route])
-        end
+  def postcode; end
+
+  def update_postcode
+    @location.postcode = PostcodeService.clean(params[:location][:postcode])
+    if @location.postcode_changed?
+      @location.location_admin_district = nil
+      @location.location_code = nil
+    end
+    if @location.save(context: :postcode)
+      if @location.location_code.blank? || @location.location_admin_district.blank?
+        redirect_to scheme_location_local_authority_path(@scheme, @location, route: params[:route], referrer: params[:referrer])
+      elsif params[:referrer] == "check_answers"
+        redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
       else
-        render :postcode, status: :unprocessable_entity
+        redirect_to scheme_location_name_path(@scheme, @location, route: params[:route])
       end
+    else
+      render :postcode, status: :unprocessable_entity
     end
   end
 
-  def local_authority
-    if params[:location].present?
-      @location.location_admin_district = params[:location][:location_admin_district]
-      @location.location_code = Location.local_authorities.key(params[:location][:location_admin_district])
-      if @location.save(context: :location_admin_district)
-        if params[:referrer] == "check_answers" || params[:referrer] == "check_local_authority"
-          redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
-        else
-          redirect_to scheme_location_name_path(@scheme, @location, route: params[:route])
-        end
+  def local_authority; end
+
+  def update_local_authority
+    @location.location_admin_district = params[:location][:location_admin_district]
+    @location.location_code = Location.local_authorities.key(params[:location][:location_admin_district])
+    if @location.save(context: :location_admin_district)
+      if params[:referrer] == "check_answers" || params[:referrer] == "check_local_authority"
+        redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
       else
-        render :local_authority, status: :unprocessable_entity
+        redirect_to scheme_location_name_path(@scheme, @location, route: params[:route])
       end
+    else
+      render :local_authority, status: :unprocessable_entity
     end
   end
 
-  def name
-    if params[:location].present?
-      @location.name = params[:location][:name]
-      if @location.save(context: :name)
-        case params[:referrer]
-        when "check_answers"
-          redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
-        when "details"
-          redirect_to scheme_location_path(@scheme, @location)
-        else
-          redirect_to scheme_location_units_path(@scheme, @location, route: params[:route])
-        end
+  def name; end
+
+  def update_name
+    @location.name = params[:location][:name]
+    if @location.save(context: :name)
+      case params[:referrer]
+      when "check_answers"
+        redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
+      when "details"
+        redirect_to scheme_location_path(@scheme, @location)
       else
-        render :name, status: :unprocessable_entity
+        redirect_to scheme_location_units_path(@scheme, @location, route: params[:route])
       end
+    else
+      render :name, status: :unprocessable_entity
     end
   end
 
-  def units
-    if params[:location].present?
-      @location.units = params[:location][:units]
-      if @location.save(context: :units)
-        if params[:referrer] == "check_answers"
-          redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
-        else
-          redirect_to scheme_location_type_of_unit_path(@scheme, @location, route: params[:route])
-        end
+  def units; end
+
+  def update_units
+    @location.units = params[:location][:units]
+    if @location.save(context: :units)
+      if params[:referrer] == "check_answers"
+        redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
       else
-        render :units, status: :unprocessable_entity
+        redirect_to scheme_location_type_of_unit_path(@scheme, @location, route: params[:route])
       end
+    else
+      render :units, status: :unprocessable_entity
     end
   end
 
-  def type_of_unit
-    if params[:location].present?
-      @location.type_of_unit = params[:location][:type_of_unit]
-      if @location.save(context: :type_of_unit)
-        if params[:referrer] == "check_answers"
-          redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
-        else
-          redirect_to scheme_location_mobility_standards_path(@scheme, @location, route: params[:route])
-        end
+  def type_of_unit; end
+
+  def update_type_of_unit
+    @location.type_of_unit = params[:location][:type_of_unit]
+    if @location.save(context: :type_of_unit)
+      if params[:referrer] == "check_answers"
+        redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
       else
-        render :type_of_unit, status: :unprocessable_entity
+        redirect_to scheme_location_mobility_standards_path(@scheme, @location, route: params[:route])
       end
+    else
+      render :type_of_unit, status: :unprocessable_entity
     end
   end
 
-  def mobility_standards
-    if params[:location].present?
-      @location.mobility_type = params[:location][:mobility_type]
-      if @location.save(context: :mobility_type)
-        if params[:referrer] == "check_answers"
-          redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
-        else
-          redirect_to scheme_location_availability_path(@scheme, @location, route: params[:route])
-        end
+  def mobility_standards; end
+
+  def update_mobility_standards
+    @location.mobility_type = params[:location][:mobility_type]
+    if @location.save(context: :mobility_type)
+      if params[:referrer] == "check_answers"
+        redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
       else
-        render :mobility_standards, status: :unprocessable_entity
+        redirect_to scheme_location_availability_path(@scheme, @location, route: params[:route])
       end
+    else
+      render :mobility_standards, status: :unprocessable_entity
     end
   end
 
-  def availability
-    if params[:location].present?
-      day = params[:location]["startdate(3i)"]
-      month = params[:location]["startdate(2i)"]
-      year = params[:location]["startdate(1i)"]
-      if [day, month, year].none?(&:blank?)
-        if Date.valid_date?(year.to_i, month.to_i, day.to_i)
-          @location.startdate = Time.zone.local(year.to_i, month.to_i, day.to_i)
-          if @location.save(context: :startdate)
-            redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
-          else
-            render :availability, status: :unprocessable_entity
-          end
+  def availability; end
+
+  def update_availability
+    day = params[:location]["startdate(3i)"]
+    month = params[:location]["startdate(2i)"]
+    year = params[:location]["startdate(1i)"]
+    if [day, month, year].none?(&:blank?)
+      if Date.valid_date?(year.to_i, month.to_i, day.to_i)
+        @location.startdate = Time.zone.local(year.to_i, month.to_i, day.to_i)
+        if @location.save(context: :startdate)
+          redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
         else
-          error_message = I18n.t("validations.location.startdate_invalid")
-          @location.errors.add :startdate, error_message
           render :availability, status: :unprocessable_entity
         end
       else
-        error_message = I18n.t("validations.location.startdate_blank")
+        error_message = I18n.t("validations.location.startdate_invalid")
         @location.errors.add :startdate, error_message
         render :availability, status: :unprocessable_entity
       end
+    else
+      error_message = I18n.t("validations.location.startdate_blank")
+      @location.errors.add :startdate, error_message
+      render :availability, status: :unprocessable_entity
     end
   end
 
-  def check_answers
-    if params[:location].present?
-      @location.confirmed = true
-      @location.save!
-      flash[:notice] = "#{@location.postcode} #{@location.startdate < Time.zone.now ? 'has been' : 'will be'} added to this scheme"
-      redirect_to scheme_locations_path(@scheme)
-    end
+  def check_answers; end
+
+  def update_check_answers
+    @location.confirmed = true
+    @location.save!
+    flash[:notice] = "#{@location.postcode} #{@location.startdate < Time.zone.now ? 'has been' : 'will be'} added to this scheme"
+    redirect_to scheme_locations_path(@scheme)
   end
 
   def show; end
