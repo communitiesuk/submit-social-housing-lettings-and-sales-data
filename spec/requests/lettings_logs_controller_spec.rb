@@ -706,6 +706,29 @@ RSpec.describe LettingsLogsController, type: :request do
               expect(response).to have_http_status(:not_found)
             end
           end
+
+          context "when the log is unresolved" do
+            let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+            let!(:location) { FactoryBot.create(:location, scheme:) }
+
+            before do
+              FactoryBot.create_list(:lettings_log, 3, unresolved: true, created_by: user)
+              lettings_log.update!(needstype: 2, scheme:, location:, unresolved: true)
+              sign_in user
+              get "/lettings-logs/#{lettings_log.id}", headers:, params: {}
+            end
+
+            it "marks it as resolved when both scheme and location exist" do
+              lettings_log.reload
+              expect(lettings_log.unresolved).to eq(false)
+            end
+
+            it "displays a success banner" do
+              expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+              expect(page).to have_content("You’ve updated all the fields affected by the scheme change")
+              expect(page).to have_link("Update 3 more logs", href: "/lettings-logs/update-logs")
+            end
+          end
         end
       end
     end
@@ -787,6 +810,93 @@ RSpec.describe LettingsLogsController, type: :request do
           get "/lettings-logs/csv-confirmation"
           expect(CGI.unescape_html(response.body)).to include("We’re sending you an email")
         end
+      end
+    end
+
+    context "when viewing a collection of logs affected by deactivated location" do
+      let!(:affected_lettings_logs) { FactoryBot.create_list(:lettings_log, 3, unresolved: true, created_by: user) }
+      let!(:non_affected_lettings_logs) { FactoryBot.create_list(:lettings_log, 4, created_by: user) }
+      let(:other_user) { FactoryBot.create(:user, organisation: user.organisation) }
+      let(:headers) { { "Accept" => "text/html" } }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+      end
+
+      it "displays logs in a table" do
+        get "/lettings-logs/update-logs", headers:, params: {}
+        expect(page).to have_content("Log ID")
+        expect(page).to have_content("Tenancy code")
+        expect(page).to have_content("Property reference")
+        expect(page).to have_content("Status")
+
+        expect(page).to have_content(affected_lettings_logs.first.id)
+        expect(page).to have_content(affected_lettings_logs.first.tenancycode)
+        expect(page).to have_content(affected_lettings_logs.first.propcode)
+        expect(page).to have_link("Update now", href: "/lettings-logs/#{affected_lettings_logs.first.id}/tenancy-start-date")
+      end
+
+      it "only displays affected logs" do
+        get "/lettings-logs/update-logs", headers:, params: {}
+        expect(page).to have_content("You need to update 3 logs")
+        expect(page).to have_content(affected_lettings_logs.first.id)
+        expect(page).not_to have_content(non_affected_lettings_logs.first.id)
+      end
+
+      it "only displays the logs creted by the user" do
+        affected_lettings_logs.first.update!(created_by: other_user)
+        get "/lettings-logs/update-logs", headers:, params: {}
+        expect(page).to have_content(affected_lettings_logs.second.id)
+        expect(page).not_to have_content(affected_lettings_logs.first.id)
+        expect(page).to have_content("You need to update 2 logs")
+      end
+
+      it "displays correct content when there are no unresolved logs" do
+        LettingsLog.where(unresolved: true).update!(unresolved: false)
+        get "/lettings-logs/update-logs", headers:, params: {}
+        expect(page).to have_content("There are no more logs that need updating")
+        expect(page).to have_content("You’ve completed all the logs that were affected by scheme changes.")
+        page.assert_selector(".govuk-button", text: "Back to all logs")
+      end
+
+      it "displays a banner on the lettings log page" do
+        get "/lettings-logs", headers:, params: {}
+        expect(page).to have_css(".govuk-notification-banner")
+        expect(page).to have_content("A scheme has changed and it has affected 3 logs")
+        expect(page).to have_link("Update logs", href: "/lettings-logs/update-logs")
+      end
+    end
+
+    context "when viewing a specific log affected by deactivated location" do
+      let!(:affected_lettings_log) { FactoryBot.create(:lettings_log, unresolved: true, created_by: user, needstype: 2) }
+      let(:headers) { { "Accept" => "text/html" } }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+      end
+
+      it "routes to the tenancy date question" do
+        get "/lettings-logs/#{affected_lettings_log.id}", headers:, params: {}
+        expect(response).to redirect_to("/lettings-logs/#{affected_lettings_log.id}/tenancy-start-date")
+        follow_redirect!
+        expect(page).to have_content("What is the tenancy start date?")
+      end
+
+      it "tenancy start date page links to the scheme page" do
+        get "/lettings-logs/#{affected_lettings_log.id}/tenancy-start-date", headers:, params: {}
+        expect(page).to have_link("Skip for now", href: "/lettings-logs/#{affected_lettings_log.id}/scheme")
+      end
+
+      it "scheme page links to the locations page" do
+        get "/lettings-logs/#{affected_lettings_log.id}/scheme", headers:, params: {}
+        expect(page).to have_link("Skip for now", href: "/lettings-logs/#{affected_lettings_log.id}/location")
+      end
+
+      it "displays inset hint text on the tenancy start date question" do
+        get "/lettings-logs/#{affected_lettings_log.id}/tenancy-start-date", headers:, params: {}
+        expect(page).to have_content("Some scheme details have changed, and now this log needs updating. Check that the tenancy start date is correct.")
       end
     end
   end

@@ -117,6 +117,7 @@ Rails.application.routes.draw do
           get :start
         end
       end
+      get "update-logs", to: "lettings_logs#update_logs"
     end
 
     member do

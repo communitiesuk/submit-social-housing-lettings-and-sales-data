@@ -1,0 +1,46 @@
+<% item_label = format_label(@pagy.count, "logs") %>
+<% title = "Update logs" %>
+
+<% content_for :title, title %>
+
+<% if @total_count < 1 %>
+    <%= render partial: "organisations/headings", locals: { main: "There are no more logs that need updating", sub: "" } %>
+    <p class="govuk-body">
+        You’ve completed all the logs that were affected by scheme changes.
+    </p>
+    <div>
+        <%= govuk_button_link_to "Back to all logs", lettings_logs_path %>
+    </div>
+<% else %>
+    <%= render partial: "organisations/headings", locals: { main: "You need to update #{@total_count} logs", sub: "" } %>
+
+    <%= govuk_table do |table| %>
+        <% table.head do |head| %>
+            <% head.row do |row| %>
+                <% row.cell(header: true, text: "Log ID") %>
+                <% row.cell(header: true, text: "Tenancy code") %>
+                <% row.cell(header: true, text: "Property reference") %>
+                <% row.cell(header: true, text: "Status") %>
+                <% row.cell(header: true, text: "") %>
+            <% end %>
+        <% end %>
+    <% @logs.each do |log| %>
+        <% table.body do |body| %>
+            <% body.row do |row| %>
+                <% row.cell(text: log.id) %>
+                <% row.cell(text: log.tenancycode) %>
+                <% row.cell(text: log.propcode) %>
+                <% row.cell(text: status_tag(log.status)) %>
+                <% row.cell(html_attributes: {
+                    scope: "row",
+                    class: "govuk-!-text-align-right",
+                    }) do %>
+                        <%= govuk_link_to("Update now", send(log.form.unresolved_log_path, log)) %>
+                <% end %>
+            <% end %>
+        <% end %>
+    <% end %>
+    <% end %>
+<% end %>
+
+<%= render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "logs" } %>

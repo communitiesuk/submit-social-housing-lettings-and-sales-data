@@ -7,6 +7,7 @@ class Form::Lettings::Pages::Location < ::Form::Page
       "needstype" => 2,
       "scheme_has_multiple_locations?" => true,
     }]
+    @next_unresolved_page_id = :check_answers
   end
 
   def questions

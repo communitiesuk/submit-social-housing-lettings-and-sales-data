@@ -219,7 +219,7 @@ private
   end
 
   def reset_location_and_scheme_for_logs!
-    @location.lettings_logs.filter_by_before_startdate(params[:deactivation_date].to_time).update!(location: nil, scheme: nil)
+    @location.lettings_logs.filter_by_before_startdate(params[:deactivation_date].to_time).update!(location: nil, scheme: nil, unresolved: true)
   end
 
   def toggle_date(key)
