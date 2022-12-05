@@ -58,6 +58,7 @@ FactoryBot.define do
       la_known { "1" }
       la { "E09000003" }
       savingsnk { 1 }
+      prevown { 1 }
     end
   end
 end
