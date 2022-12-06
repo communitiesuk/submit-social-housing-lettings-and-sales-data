@@ -909,6 +909,7 @@ RSpec.describe LettingsLogsController, type: :request do
       let(:headers) { { "Accept" => "text/html" } }
 
       before do
+        allow(affected_lettings_log.form).to receive(:end_date).and_return(Time.zone.today + 1.day)
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in user
       end
