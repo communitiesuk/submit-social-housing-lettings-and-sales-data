@@ -186,7 +186,7 @@ unless Rails.env.test?
       address_line1: "Higher Kingston",
       address_line2: "Yeovil",
       postcode: "BA21 4AT",
-      holds_own_stock: false,
+      holds_own_stock: true,
       other_stock_owners: "None",
       managing_agents_label: "None",
       provider_type: "LA",
