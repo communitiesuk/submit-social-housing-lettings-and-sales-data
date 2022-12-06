@@ -209,4 +209,16 @@ RSpec.describe Scheme, type: :model do
       end
     end
   end
+
+  describe "owning organisation" do
+    let(:stock_owning_org) { FactoryBot.create(:organisation, holds_own_stock: true) }
+    let(:non_stock_owning_org) { FactoryBot.create(:organisation, holds_own_stock: false) }
+    let(:scheme) { FactoryBot.create(:scheme, owning_organisation_id: stock_owning_org.id) }
+
+    context "when the owning organisation is set as a non-stock-owning organisation" do
+      it "throws the correct validation error" do
+        expect { scheme.update!({ owning_organisation_id: non_stock_owning_org.id }) }.to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.scheme.owning_organisation.does_not_own_stock")}/)
+      end
+    end
+  end
 end
