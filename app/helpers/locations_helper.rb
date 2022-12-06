@@ -27,12 +27,12 @@ module LocationsHelper
     base_attributes = [
       { name: "Postcode", value: location.postcode, attribute: "postcode" },
       { name: "Location name", value: location.name, attribute: "name" },
-      { name: "Local authority", value: location.location_admin_district, attribute: "location_admin_district" },
+      { name: "Local authority", value: location.location_admin_district, attribute: "local_authority" },
       { name: "Number of units", value: location.units, attribute: "units" },
       { name: "Most common unit", value: location.type_of_unit, attribute: "type_of_unit" },
       { name: "Mobility standards", value: location.mobility_type, attribute: "mobility_standards" },
       { name: "Code", value: location.location_code, attribute: "location_code" },
-      { name: "Availability", value: location_availability(location), attribute: "availability" },
+      { name: "Availability", value: location_availability(location), attribute: "startdate" },
     ]
 
     if FeatureToggle.location_toggle_enabled?
@@ -40,6 +40,18 @@ module LocationsHelper
     end
 
     base_attributes
+  end
+
+  def display_location_attributes_for_check_answers(location)
+    [
+      { name: "Postcode", value: location.postcode, attribute: "postcode" },
+      { name: "Location name", value: location.name, attribute: "name" },
+      { name: "Local authority", value: location.location_admin_district, attribute: "local_authority" },
+      { name: "Number of units", value: location.units, attribute: "units" },
+      { name: "Most common unit", value: location.type_of_unit, attribute: "type_of_unit" },
+      { name: "Mobility standards", value: location.mobility_type, attribute: "mobility_standards" },
+      { name: "Availability", value: location&.startdate&.to_formatted_s(:govuk_date), attribute: "startdate" },
+    ]
   end
 
   def location_availability(location)
@@ -54,12 +66,7 @@ module LocationsHelper
   end
 
   def location_edit_path(location, page)
-    case page
-    when "location_admin_district"
-      scheme_location_local_authority_path(location.scheme, location, referrer: "check_local_authority", route: params[:route])
-    else
-      send("scheme_location_#{page}_path", location.scheme, location, referrer: "check_answers", route: params[:route])
-    end
+    send("scheme_location_#{page}_path", location.scheme, location, referrer: "check_answers", route: params[:route])
   end
 
   def action_text_helper(attr, location)

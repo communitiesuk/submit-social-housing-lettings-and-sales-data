@@ -13,31 +13,24 @@
   ) %>
 <% end %>
 
-<%= form_for(@location, method: :patch, url: scheme_location_check_answers_path(@scheme, @location, route: params[:route])) do |f| %>
-  <%= render partial: "organisations/headings", locals: { main: "Check your answers", sub: "Add a location to #{@scheme.service_name}" } %>
+<%= render partial: "organisations/headings", locals: { main: "Check your answers", sub: "Add a location to #{@scheme.service_name}" } %>
 
-  <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds-from-desktop">
-          <%= govuk_summary_list do |summary_list| %>
-              <% display_location_attributes(@location).each do |attr| %>
-                  <% next if %w[location_code status].include? attr[:attribute] %>
-                  <%= summary_list.row do |row| %>
-                  <% row.key { attr[:name] } %>
-                  <%= row.value do %>
-                  <% if attr[:attribute] == "availability"
-                       details_html(name: "Availability", value: @location.startdate.present? ? @location.startdate.to_formatted_s(:govuk_date) : nil, attribute: "startdate")
-                     else
-                       details_html(attr)
-                     end %>
-                  <% end %>
-                  <% row.action(text: action_text_helper(attr, @location), href: location_edit_path(@location, attr[:attribute]))%>
-                  <% end %>
-              <% end %>
-          <% end %>
-      </div>
-  </div>
-  <div class="govuk-button-group">
-    <%= f.govuk_submit "Add this location", disabled: @location.incomplete? %>
-    <%= govuk_button_link_to "Cancel", scheme_locations_path(@scheme), secondary: true %>
-  </div>
-<% end %>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+        <%= govuk_summary_list do |summary_list| %>
+            <% display_location_attributes_for_check_answers(@location).each do |attr| %>
+                <%= summary_list.row do |row| %>
+                <% row.key { attr[:name] } %>
+                <% row.value { details_html(attr) } %> 
+                <% row.action(text: action_text_helper(attr, @location), href: location_edit_path(@location, attr[:attribute]))%>
+                <% end %>
+            <% end %>
+        <% end %>
+    </div>
+</div>
+<div class="govuk-button-group">
+  <% if @location.incomplete? %>
+    <%= govuk_button_to "Add this location", scheme_location_confirm_path(@scheme, @location, route: params[:route])), method: :patch %>
+  <% end %>
+  <%= govuk_button_link_to "Cancel", scheme_locations_path(@scheme), secondary: true %>
+</div>

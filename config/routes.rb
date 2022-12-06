@@ -78,7 +78,7 @@ Rails.application.routes.draw do
       get "availability", to: "locations#availability"
       patch "availability", to: "locations#update_availability"
       get "check-answers", to: "locations#check_answers"
-      patch "check-answers", to: "locations#update_check_answers"
+      patch "confirm", to: "locations#confirm"
       patch "new-deactivation", to: "locations#new_deactivation"
       patch "deactivate", to: "locations#deactivate"
       patch "reactivate", to: "locations#reactivate"

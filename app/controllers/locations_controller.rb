@@ -5,7 +5,7 @@ class LocationsController < ApplicationController
   before_action :find_location, except: %i[create index]
   before_action :find_scheme
   before_action :authenticate_action!
-  before_action :scheme_and_location_present, only: %i[postcode update_postcode local_authority update_local_authority name update_name units update_units type_of_unit update_type_of_unit mobility_standards update_mobility_standards availability update_availability check_answers update_check_answers]
+  before_action :scheme_and_location_present, except: %i[create index]
 
   include Modules::SearchFilter
 
@@ -27,7 +27,7 @@ class LocationsController < ApplicationController
     if @location.save(context: :postcode)
       if @location.location_code.blank? || @location.location_admin_district.blank?
         redirect_to scheme_location_local_authority_path(@scheme, @location, route: params[:route], referrer: params[:referrer])
-      elsif params[:referrer] == "check_answers"
+      elsif return_to_check_your_answers?
         redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
       else
         redirect_to scheme_location_name_path(@scheme, @location, route: params[:route])
@@ -43,7 +43,7 @@ class LocationsController < ApplicationController
     @location.location_admin_district = location_params[:location_admin_district]
     @location.location_code = Location.local_authorities.key(location_params[:location_admin_district])
     if @location.save(context: :location_admin_district)
-      if params[:referrer] == "check_answers" || params[:referrer] == "check_local_authority"
+      if return_to_check_your_answers? || params[:referrer] == "check_local_authority"
         redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
       else
         redirect_to scheme_location_name_path(@scheme, @location, route: params[:route])
@@ -58,10 +58,9 @@ class LocationsController < ApplicationController
   def update_name
     @location.name = location_params[:name]
     if @location.save(context: :name)
-      case params[:referrer]
-      when "check_answers"
+      if return_to_check_your_answers?
         redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
-      when "details"
+      elsif params[:referrer] == "details"
         redirect_to scheme_location_path(@scheme, @location)
       else
         redirect_to scheme_location_units_path(@scheme, @location, route: params[:route])
@@ -76,7 +75,7 @@ class LocationsController < ApplicationController
   def update_units
     @location.units = location_params[:units]
     if @location.save(context: :units)
-      if params[:referrer] == "check_answers"
+      if return_to_check_your_answers?
         redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
       else
         redirect_to scheme_location_type_of_unit_path(@scheme, @location, route: params[:route])
@@ -91,7 +90,7 @@ class LocationsController < ApplicationController
   def update_type_of_unit
     @location.type_of_unit = location_params[:type_of_unit]
     if @location.save(context: :type_of_unit)
-      if params[:referrer] == "check_answers"
+      if return_to_check_your_answers?
         redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
       else
         redirect_to scheme_location_mobility_standards_path(@scheme, @location, route: params[:route])
@@ -106,7 +105,7 @@ class LocationsController < ApplicationController
   def update_mobility_standards
     @location.mobility_type = location_params[:mobility_type]
     if @location.save(context: :mobility_type)
-      if params[:referrer] == "check_answers"
+      if return_to_check_your_answers?
         redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
       else
         redirect_to scheme_location_availability_path(@scheme, @location, route: params[:route])
@@ -144,7 +143,7 @@ class LocationsController < ApplicationController
 
   def check_answers; end
 
-  def update_check_answers
+  def confirm
     @location.confirmed!
     flash[:notice] = "#{@location.postcode} #{@location.startdate < Time.zone.now ? 'has been' : 'will be'} added to this scheme"
     redirect_to scheme_locations_path(@scheme)
@@ -282,4 +281,9 @@ private
 
     Time.zone.local(year.to_i, month.to_i, day.to_i) if Date.valid_date?(year.to_i, month.to_i, day.to_i)
   end
+
+  def return_to_check_your_answers?
+    params[:referrer] == "check_answers"
+  end
+  helper_method :return_to_check_your_answers?
 end
