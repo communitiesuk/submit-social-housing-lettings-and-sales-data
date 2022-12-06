@@ -47,7 +47,7 @@ module Forms
     private
 
       def upload_enabled?
-        !Rails.env.development?
+        FeatureToggle.upload_enabled?
       end
 
       def storage_service

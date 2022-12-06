@@ -26,4 +26,8 @@ class FeatureToggle
   def self.bulk_upload_logs?
     !Rails.env.production?
   end
+
+  def self.upload_enabled?
+    !Rails.env.development?
+  end
 end
