@@ -114,3 +114,5 @@ RSpec.configure do |config|
   config.before { RequestHelper.stub_http_requests }
   config.after { RequestHelper.real_http_requests }
 end
+
+RSpec::Matchers.define_negated_matcher :not_change, :change
