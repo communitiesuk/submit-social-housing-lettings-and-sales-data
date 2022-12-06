@@ -1519,18 +1519,20 @@ RSpec.describe LocationsController, type: :request do
       context "with location that's deactivating soon" do
         let(:location_deactivation_period) { FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 12), location:) }
 
-        it "renders reactivate this location" do
+        it "does not render toggle location link" do
           expect(response).to have_http_status(:ok)
-          expect(page).to have_link("Reactivate this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/new-reactivation")
+          expect(page).not_to have_link("Reactivate this location")
+          expect(page).not_to have_link("Deactivate this location")
         end
       end
 
       context "with location that's reactivating soon" do
         let(:location_deactivation_period) { FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 4, 12), reactivation_date: Time.zone.local(2022, 10, 12), location:) }
 
-        it "renders reactivate this location" do
+        it "does not render toggle location link" do
           expect(response).to have_http_status(:ok)
-          expect(page).to have_link("Deactivate this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/new-deactivation")
+          expect(page).not_to have_link("Reactivate this location")
+          expect(page).not_to have_link("Deactivate this location")
         end
       end
     end

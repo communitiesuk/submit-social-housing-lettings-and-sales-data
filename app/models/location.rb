@@ -398,6 +398,10 @@ class Location < ApplicationRecord
     status == :active
   end
 
+  def deactivated?
+    status == :deactivated
+  end
+
   def reactivating_soon?
     status == :reactivating_soon
   end

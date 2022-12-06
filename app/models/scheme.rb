@@ -241,4 +241,8 @@ class Scheme < ApplicationRecord
   def reactivating_soon?
     status == :reactivating_soon
   end
+
+  def deactivated?
+    status == :deactivated
+  end
 end
