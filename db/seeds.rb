@@ -146,33 +146,36 @@ unless Rails.env.test?
     child_organisation: managing_agent2,
   )
 
-  if (Rails.env.development? || Rails.env.review?) && User.count.zero?
-    User.create!(
+  if Rails.env.development? || Rails.env.review?
+    User.find_or_create_by!(
       name: "Provider",
       email: "provider@example.com",
-      password: "password",
       organisation: org,
       role: "data_provider",
-      confirmed_at: Time.zone.now,
-    )
+    ) do |user|
+      user.password = "password"
+      user.confirmed_at = Time.zone.now
+    end
 
-    User.create!(
+    User.find_or_create_by!(
       name: "Coordinator",
       email: "coordinator@example.com",
-      password: "password",
       organisation: org,
       role: "data_coordinator",
-      confirmed_at: Time.zone.now,
-    )
+    ) do |user|
+      user.password = "password"
+      user.confirmed_at = Time.zone.now
+    end
 
-    User.create!(
+    User.find_or_create_by!(
       name: "Support",
       email: "support@example.com",
-      password: "password",
       organisation: org,
       role: "support",
-      confirmed_at: Time.zone.now,
-    )
+    ) do |user|
+      user.password = "password"
+      user.confirmed_at = Time.zone.now
+    end
 
     pp "Seeded 3 dummy users"
   end
