@@ -46,7 +46,7 @@ RSpec.describe Location, type: :model do
     let(:location) { FactoryBot.build(:location) }
 
     it "does add an error when the local authority is invalid" do
-      location.location_admin_district = "Select an option"
+      location.location_admin_district = nil
       location.valid?(:location_admin_district)
       expect(location.errors.count).to eq(1)
     end
@@ -153,7 +153,7 @@ RSpec.describe Location, type: :model do
 
     context "when filtering by active locations" do
       it "returns only locations that started today or earlier and have been confirmed" do
-        expect(described_class.active.count).to eq(2)
+        expect(described_class.active.count).to eq(1)
       end
     end
   end

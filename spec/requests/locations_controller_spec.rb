@@ -1354,7 +1354,7 @@ RSpec.describe LocationsController, type: :request do
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
       let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:location) { FactoryBot.create(:location, scheme:, startdate: nil, created_at: Time.zone.local(2022, 4, 1)) }
+      let!(:location) { FactoryBot.create(:location, scheme:, created_at: Time.zone.local(2022, 4, 1)) }
       let(:deactivation_date) { Time.utc(2022, 10, 10) }
       let!(:lettings_log) { FactoryBot.create(:lettings_log, :sh, location:, scheme:, startdate:, owning_organisation: user.organisation) }
       let(:startdate) { Time.utc(2022, 10, 11) }
@@ -1563,7 +1563,7 @@ RSpec.describe LocationsController, type: :request do
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
       let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:location) { FactoryBot.create(:location, scheme:, startdate: nil) }
+      let!(:location) { FactoryBot.create(:location, scheme:) }
       let(:add_deactivations) { location.location_deactivation_periods << location_deactivation_period }
 
       before do
@@ -1641,7 +1641,7 @@ RSpec.describe LocationsController, type: :request do
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
       let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:location) { FactoryBot.create(:location, scheme:, startdate: nil) }
+      let!(:location) { FactoryBot.create(:location, scheme:) }
       let(:deactivation_date) { Time.zone.local(2022, 4, 1) }
       let(:startdate) { Time.utc(2022, 10, 11) }
 

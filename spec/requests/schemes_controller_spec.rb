@@ -978,7 +978,7 @@ RSpec.describe SchemesController, type: :request do
             expect(scheme_to_update.reload.confirmed?).to eq(true)
           end
 
-          it "marks all the scheme locations as confirmed" do
+          it "marks all the scheme locations as confirmed given they are complete" do
             expect(scheme_to_update.locations.count > 0).to eq(true)
             scheme_to_update.locations.each do |location|
               expect(location.confirmed?).to eq(true)
