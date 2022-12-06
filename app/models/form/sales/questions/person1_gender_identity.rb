@@ -1,13 +1,13 @@
-class Form::Sales::Questions::GenderIdentity3 < ::Form::Question
+class Form::Sales::Questions::Person1GenderIdentity < ::Form::Question
   def initialize(id, hsh, page)
     super
-    @id = "sex3"
+    @id = "sex2"
     @check_answer_label = "Person 1’s gender identity"
     @header = "Which of these best describes Person 1’s gender identity?"
     @type = "radio"
     @page = page
     @answer_options = ANSWER_OPTIONS
-    @check_answers_card_number = 3
+    @check_answers_card_number = 2
   end
 
   ANSWER_OPTIONS = {

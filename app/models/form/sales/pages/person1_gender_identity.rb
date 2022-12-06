@@ -1,4 +1,4 @@
-class Form::Sales::Pages::GenderIdentity2SingleBuyer < ::Form::Page
+class Form::Sales::Pages::Person1GenderIdentity < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "person_1_gender_identity"
@@ -12,7 +12,7 @@ class Form::Sales::Pages::GenderIdentity2SingleBuyer < ::Form::Page
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::GenderIdentity2SingleBuyer.new(nil, nil, self),
+      Form::Sales::Questions::Person1GenderIdentity.new(nil, nil, self),
     ]
   end
 end

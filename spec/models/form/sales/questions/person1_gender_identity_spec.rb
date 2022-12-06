@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Questions::GenderIdentity2SingleBuyer, type: :model do
+RSpec.describe Form::Sales::Questions::Person1GenderIdentity, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }

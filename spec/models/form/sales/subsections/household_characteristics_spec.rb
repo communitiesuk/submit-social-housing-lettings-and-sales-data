@@ -35,7 +35,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
         number_of_others_in_property
         person_1_age
         person_1_gender_identity
-        person_1_gender_identity
+        person_1_gender_identity_joint_purchase
         person_2_known
         person_2_age
         person_3_known
