@@ -22,7 +22,7 @@ RSpec.describe "Bulk upload lettings log" do
   # rubocop:disable RSpec/AnyInstance
   context "when during crossover period" do
     it "shows journey with year option" do
-      Timecop.freeze(2023, 6, 1) do
+      Timecop.freeze(2022, 6, 1) do
         visit("/lettings-logs")
         expect(page).to have_link("Upload lettings logs in bulk")
         click_link("Upload lettings logs in bulk")

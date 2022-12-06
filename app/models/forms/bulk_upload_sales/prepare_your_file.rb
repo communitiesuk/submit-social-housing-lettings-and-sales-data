@@ -38,7 +38,7 @@ module Forms
     private
 
       def in_crossover_period?
-        FormHandler.instance.in_crossover_period?
+        FormHandler.instance.sales_in_crossover_period?
       end
     end
   end

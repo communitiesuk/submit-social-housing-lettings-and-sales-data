@@ -67,17 +67,17 @@ class FormHandler
     lettings_in_crossover_period?(now:) || sales_in_crossover_period?(now:)
   end
 
-private
-
-  def lettings_in_crossover_period?(now:)
+  def lettings_in_crossover_period?(now: Time.zone.now)
     forms = lettings_forms.values
     forms.count { |form| form.start_date < now && now < form.end_date } > 1
   end
 
-  def sales_in_crossover_period?(now:)
+  def sales_in_crossover_period?(now: Time.zone.now)
     forms = sales_forms.values
     forms.count { |form| form.start_date < now && now < form.end_date } > 1
   end
+
+private
 
   def get_all_forms
     lettings_forms.merge(sales_forms)
