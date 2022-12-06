@@ -73,7 +73,7 @@ module LocationsHelper
     attr[:value].blank? || (attr[:attribute] == "availability" && location.startdate.blank?) ? "Answer" : "Change"
   end
 
-  private
+private
 
   ActivePeriod = Struct.new(:from, :to)
   def location_active_periods(location)

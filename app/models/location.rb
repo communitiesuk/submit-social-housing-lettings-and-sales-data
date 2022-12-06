@@ -1,6 +1,6 @@
 class Location < ApplicationRecord
   validates :postcode, on: :postcode, presence: { message: I18n.t("validations.location.postcode_blank") }
-  validate :validate_postcode, on: :postcode, if: Proc.new { |model| model.postcode.presence }
+  validate :validate_postcode, on: :postcode, if: proc { |model| model.postcode.presence }
   validates :location_admin_district, on: :location_admin_district, presence: { message: I18n.t("validations.location_admin_district") }
   validates :name, on: :name, presence: { message: I18n.t("validations.location.name") }
   validates :units, on: :units, presence: { message: I18n.t("validations.location.units") }
