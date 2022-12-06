@@ -430,13 +430,7 @@ class Location < ApplicationRecord
   end
 
   def validate_confirmed
-    if confirmed == true && incomplete?
-      self.confirmed = false
-    end
-  end
-
-  def incomplete?
-    [postcode, name, location_admin_district, location_code, units, type_of_unit, mobility_type, startdate].any?(&:blank?)
+    self.confirmed = [postcode, name, location_admin_district, location_code, units, type_of_unit, mobility_type].all?(&:present?)
   end
 
   def confirmed!

@@ -29,8 +29,6 @@
     </div>
 </div>
 <div class="govuk-button-group">
-  <% if !@location.incomplete? %>
-    <%= govuk_button_to "Add this location", scheme_location_confirm_path(@scheme, @location, route: params[:route]), method: :patch %>
-  <% end %>
+  <%= govuk_button_to "Save and return to locations", scheme_location_confirm_path(@scheme, @location, route: params[:route]), method: :patch %>
   <%= govuk_button_link_to "Cancel", scheme_locations_path(@scheme), secondary: true %>
 </div>

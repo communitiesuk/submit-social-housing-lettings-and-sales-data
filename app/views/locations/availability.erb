@@ -22,10 +22,10 @@
       <div class="govuk-button-group">
         <% if params[:referrer] == "check_answers" %>
           <%= f.govuk_submit "Save changes" %>
-          <%= govuk_button_link_to "Cancel", scheme_location_check_answers_path(@scheme, @location, route: params[:route]), secondary: true %>
+          <%= govuk_link_to "Cancel", scheme_location_check_answers_path(@scheme, @location, route: params[:route]), secondary: true %>
         <% else %>
           <%= f.govuk_submit "Save and continue" %>
-          <%= govuk_button_link_to "Cancel", scheme_locations_path(@scheme), secondary: true %>
+          <%= govuk_link_to "Skip for now", scheme_location_check_answers_path(@scheme, @location), secondary: true %>
         <% end %>
       </div>
     </div>
