@@ -140,7 +140,7 @@ RSpec.describe LocationsHelper do
       attributes = [
         { attribute: "postcode", name: "Postcode", value: location.postcode },
         { attribute: "name", name: "Location name", value: location.name },
-        { attribute: "location_admin_district", name: "Local authority", value: location.location_admin_district },
+        { attribute: "local_authority", name: "Local authority", value: location.location_admin_district },
         { attribute: "units", name: "Number of units", value: location.units },
         { attribute: "type_of_unit", name: "Most common unit", value: location.type_of_unit },
         { attribute: "mobility_standards", name: "Mobility standards", value: location.mobility_type },

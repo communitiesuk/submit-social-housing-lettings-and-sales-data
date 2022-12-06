@@ -1260,7 +1260,7 @@ RSpec.describe LocationsController, type: :request do
         let(:params) { { location: { confirmed: true } } }
 
         before do
-          patch "/schemes/#{scheme.id}/locations/#{location.id}/check-answers", params:
+          patch "/schemes/#{scheme.id}/locations/#{location.id}/confirm", params:
         end
 
         it "confirms location" do
@@ -1305,7 +1305,7 @@ RSpec.describe LocationsController, type: :request do
         let(:params) { { location: { confirmed: true } } }
 
         before do
-          patch "/schemes/#{scheme.id}/locations/#{location.id}/check-answers", params:
+          patch "/schemes/#{scheme.id}/locations/#{location.id}/confirm", params:
         end
 
         it "confirms location" do

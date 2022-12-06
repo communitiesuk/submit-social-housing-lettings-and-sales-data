@@ -32,7 +32,7 @@ module LocationsHelper
       { name: "Most common unit", value: location.type_of_unit, attribute: "type_of_unit" },
       { name: "Mobility standards", value: location.mobility_type, attribute: "mobility_standards" },
       { name: "Code", value: location.location_code, attribute: "location_code" },
-      { name: "Availability", value: location_availability(location), attribute: "startdate" },
+      { name: "Availability", value: location_availability(location), attribute: "availability" },
     ]
 
     if FeatureToggle.location_toggle_enabled?
@@ -50,7 +50,7 @@ module LocationsHelper
       { name: "Number of units", value: location.units, attribute: "units" },
       { name: "Most common unit", value: location.type_of_unit, attribute: "type_of_unit" },
       { name: "Mobility standards", value: location.mobility_type, attribute: "mobility_standards" },
-      { name: "Availability", value: location&.startdate&.to_formatted_s(:govuk_date), attribute: "startdate" },
+      { name: "Availability", value: location&.startdate&.to_formatted_s(:govuk_date), attribute: "availability" },
     ]
   end
 
@@ -65,8 +65,8 @@ module LocationsHelper
     availability.strip
   end
 
-  def location_edit_path(location, page)
-    send("scheme_location_#{page}_path", location.scheme, location, referrer: "check_answers", route: params[:route])
+  def location_edit_path(location, attribute)
+    send("scheme_location_#{attribute}_path", location.scheme, location, referrer: "check_answers", route: params[:route])
   end
 
   def action_text_helper(attr, location)

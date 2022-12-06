@@ -21,7 +21,7 @@
             <% display_location_attributes_for_check_answers(@location).each do |attr| %>
                 <%= summary_list.row do |row| %>
                 <% row.key { attr[:name] } %>
-                <% row.value { details_html(attr) } %> 
+                <% row.value { details_html(attr) } %>
                 <% row.action(text: action_text_helper(attr, @location), href: location_edit_path(@location, attr[:attribute]))%>
                 <% end %>
             <% end %>
@@ -29,8 +29,8 @@
     </div>
 </div>
 <div class="govuk-button-group">
-  <% if @location.incomplete? %>
-    <%= govuk_button_to "Add this location", scheme_location_confirm_path(@scheme, @location, route: params[:route])), method: :patch %>
+  <% if !@location.incomplete? %>
+    <%= govuk_button_to "Add this location", scheme_location_confirm_path(@scheme, @location, route: params[:route]), method: :patch %>
   <% end %>
   <%= govuk_button_link_to "Cancel", scheme_locations_path(@scheme), secondary: true %>
 </div>
