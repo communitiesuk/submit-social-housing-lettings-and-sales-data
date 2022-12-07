@@ -65,6 +65,54 @@ RSpec.describe FormController, type: :request do
     end
   end
 
+  context "when signed in as a support user" do
+    let(:support_user) { create(:user, :support) }
+
+    before do
+      allow(support_user).to receive(:need_two_factor_authentication?).and_return(false)
+      sign_in support_user
+    end
+
+    context "with invalid organisation answers" do
+      let!(:lettings_log) do
+        create(
+          :lettings_log,
+          created_by: user,
+        )
+      end
+      let(:page) { Capybara::Node::Simple.new(response.body) }
+      let(:managing_organisation) { create(:organisation) }
+      let(:managing_organisation_too) { create(:organisation) }
+      let(:housing_provider) { create(:organisation) }
+      let(:params) do
+        {
+          id: lettings_log.id,
+          lettings_log: {
+            page: "managing_organisation",
+            managing_organisation_id: other_organisation.id,
+          },
+        }
+      end
+
+      before do
+        organisation.housing_providers << housing_provider
+        organisation.managing_agents << managing_organisation
+        organisation.managing_agents << managing_organisation_too
+        organisation.reload
+        lettings_log.update!(owning_organisation: housing_provider, created_by: user, managing_organisation: organisation)
+        lettings_log.reload
+      end
+
+      it "resets created by and renders the next page" do
+        post "/lettings-logs/#{lettings_log.id}/form", params: params
+        expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/created-by")
+        follow_redirect!
+        lettings_log.reload
+        expect(lettings_log.created_by).to eq(nil)
+      end
+    end
+  end
+
   context "when a user is signed in" do
     let!(:lettings_log) do
       create(
@@ -215,6 +263,7 @@ RSpec.describe FormController, type: :request do
     describe "Submit Form" do
       context "with a form page" do
         let(:user) { create(:user) }
+        let(:support_user) { FactoryBot.create(:user, :support) }
         let(:organisation) { user.organisation }
         let(:lettings_log) do
           create(
