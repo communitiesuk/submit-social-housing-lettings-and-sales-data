@@ -1,3 +1,5 @@
+require "csv"
+
 module Imports
   class RentRangesService
     attr_reader :start_year, :path, :count

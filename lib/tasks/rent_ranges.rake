@@ -1,5 +1,3 @@
-require "csv"
-
 namespace :data_import do
   desc "Import annual rent range data"
   task :rent_ranges, %i[start_year path] => :environment do |_task, args|
