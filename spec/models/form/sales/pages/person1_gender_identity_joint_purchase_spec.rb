@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Pages::Person1GenderIdentityJointPurchase, type: :mo
   end
 
   it "has the correct id" do
-    expect(page.id).to eq("person_1_gender_identity")
+    expect(page.id).to eq("person_1_gender_identity_joint_purchase")
   end
 
   it "has the correct header" do
@@ -30,6 +30,7 @@ RSpec.describe Form::Sales::Pages::Person1GenderIdentityJointPurchase, type: :mo
   it "has correct depends_on" do
     expect(page.depends_on).to eq([{
       "jointpur" => 1,
+      "details_known_3" => 1,
     }])
   end
 end

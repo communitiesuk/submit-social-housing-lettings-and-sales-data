@@ -7,6 +7,7 @@ class Form::Sales::Pages::Person1GenderIdentityJointPurchase < ::Form::Page
     @subsection = subsection
     @depends_on = [{
       "jointpur" => 1,
+      "details_known_3" => 1,
     }]
   end
 
