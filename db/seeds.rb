@@ -279,8 +279,8 @@ unless Rails.env.test?
   if LaRentRange.count.zero?
     Dir.glob("config/rent_range_data/*.csv").each do |path|
       start_year = File.basename(path, ".csv")
-      Rake::Task["data_import:rent_ranges"].invoke(start_year, path)
-      Rake::Task["data_import:rent_ranges"].reenable
+      service = Imports::RentRangesService.new(start_year:, path:)
+      service.call
     end
   end
 end
