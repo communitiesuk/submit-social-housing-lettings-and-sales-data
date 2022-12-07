@@ -9,7 +9,7 @@ class FormController < ApplicationController
       @page = @log.form.get_page(params[@log.model_name.param_key][:page])
       responses_for_page = responses_for_page(@page)
       mandatory_questions_with_no_response = mandatory_questions_with_no_response(responses_for_page)
-      reset_created_by(responses_for_page)
+      reset_created_by
 
       if mandatory_questions_with_no_response.empty? && @log.update(responses_for_page)
         session[:errors] = session[:fields] = nil
@@ -185,9 +185,11 @@ private
     redirect_to lettings_log_path(@log) unless @log.collection_period_open?
   end
   
-  def reset_created_by(responses)
-    return unless responses["owning_organisation_id"] || responses["managing_organisation_id"]
+  def reset_created_by
+    return unless current_user.support?
+    return if @log.owning_organisation.blank? || @log.managing_organisation.blank?
+    return if log.created_by&.organisation == @log.managing_organisation || @log.created_by&.organisation == @log.owning_organisation
 
-    @log.update!(created_by: nil) if current_user.support? && @log.created_by&.organisation_id != responses["owning_organisation_id"].to_i && @log.created_by&.organisation_id != responses["managing_organisation_id"].to_i
+    @log.update!(created_by: nil)
   end
 end

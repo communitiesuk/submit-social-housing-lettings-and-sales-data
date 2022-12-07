@@ -66,24 +66,28 @@ RSpec.describe FormController, type: :request do
   end
 
   context "when signed in as a support user" do
+    let!(:lettings_log) do
+      create(
+        :lettings_log,
+        created_by: user,
+      )
+    end
+    let(:page) { Capybara::Node::Simple.new(response.body) }
+    let(:managing_organisation) { create(:organisation) }
+    let(:managing_organisation_too) { create(:organisation) }
+    let(:housing_provider) { create(:organisation) }
     let(:support_user) { create(:user, :support) }
 
     before do
+      organisation.housing_providers << housing_provider
+      organisation.managing_agents << managing_organisation
+      organisation.managing_agents << managing_organisation_too
+      organisation.reload
       allow(support_user).to receive(:need_two_factor_authentication?).and_return(false)
       sign_in support_user
     end
 
     context "with invalid organisation answers" do
-      let!(:lettings_log) do
-        create(
-          :lettings_log,
-          created_by: user,
-        )
-      end
-      let(:page) { Capybara::Node::Simple.new(response.body) }
-      let(:managing_organisation) { create(:organisation) }
-      let(:managing_organisation_too) { create(:organisation) }
-      let(:housing_provider) { create(:organisation) }
       let(:params) do
         {
           id: lettings_log.id,
@@ -95,10 +99,6 @@ RSpec.describe FormController, type: :request do
       end
 
       before do
-        organisation.housing_providers << housing_provider
-        organisation.managing_agents << managing_organisation
-        organisation.managing_agents << managing_organisation_too
-        organisation.reload
         lettings_log.update!(owning_organisation: housing_provider, created_by: user, managing_organisation: organisation)
         lettings_log.reload
       end
@@ -109,6 +109,81 @@ RSpec.describe FormController, type: :request do
         follow_redirect!
         lettings_log.reload
         expect(lettings_log.created_by).to eq(nil)
+      end
+    end
+
+    context "with valid owning organisation" do
+      let(:params) do
+        {
+          id: lettings_log.id,
+          lettings_log: {
+            page: "managing_organisation",
+            managing_organisation_id: other_organisation.id,
+          },
+        }
+      end
+
+      before do
+        lettings_log.update!(owning_organisation: organisation, created_by: user, managing_organisation: organisation)
+        lettings_log.reload
+      end
+
+      it "does not reset created by" do
+        post "/lettings-logs/#{lettings_log.id}/form", params: params
+        expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/created-by")
+        follow_redirect!
+        lettings_log.reload
+        expect(lettings_log.created_by).to eq(user)
+      end
+    end
+
+    context "with valid managing organisation" do
+      let(:params) do
+        {
+          id: lettings_log.id,
+          lettings_log: {
+            page: "housing_provider",
+            owning_organisation_id: housing_provider.id,
+          },
+        }
+      end
+
+      before do
+        lettings_log.update!(owning_organisation: organisation, created_by: user, managing_organisation: organisation)
+        lettings_log.reload
+      end
+
+      it "does not reset created by" do
+        post "/lettings-logs/#{lettings_log.id}/form", params: params
+        expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/managing-organisation")
+        follow_redirect!
+        lettings_log.reload
+        expect(lettings_log.created_by).to eq(user)
+      end
+    end
+
+    context "with only adding the housing provider" do
+      let(:params) do
+        {
+          id: lettings_log.id,
+          lettings_log: {
+            page: "housing_provider",
+            owning_organisation_id: housing_provider.id,
+          },
+        }
+      end
+
+      before do
+        lettings_log.update!(owning_organisation: nil, created_by: user, managing_organisation: nil)
+        lettings_log.reload
+      end
+
+      it "does not reset created by" do
+        post "/lettings-logs/#{lettings_log.id}/form", params: params
+        expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/managing-organisation")
+        follow_redirect!
+        lettings_log.reload
+        expect(lettings_log.created_by).to eq(user)
       end
     end
   end
