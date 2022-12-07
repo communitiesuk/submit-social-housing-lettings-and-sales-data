@@ -217,7 +217,7 @@ RSpec.describe Scheme, type: :model do
 
     context "when the owning organisation is set as a non-stock-owning organisation" do
       it "throws the correct validation error" do
-        expect { scheme.update!({ owning_organisation_id: non_stock_owning_org.id }) }.to raise_error(ActiveRecord::RecordInvalid, /Enter an organisation that owns housing stock/)
+        expect { scheme.update!({ owning_organisation: non_stock_owning_org }) }.to raise_error(ActiveRecord::RecordInvalid, /Enter an organisation that owns housing stock/)
       end
     end
   end

@@ -494,7 +494,7 @@ RSpec.describe SchemesController, type: :request do
         let(:organisation) { FactoryBot.create(:organisation) }
         let(:params) do
           { scheme: {
-            owning_organisation_id: organisation.id,
+            owning_organisation: organisation,
           } }
         end
 
