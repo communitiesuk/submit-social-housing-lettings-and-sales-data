@@ -170,6 +170,7 @@ module Exports
         attribute_hash["owningorgid"] = lettings_log.owning_organisation.old_visible_id || (lettings_log.owning_organisation.id + LOG_ID_OFFSET)
         attribute_hash["owningorgname"] = lettings_log.owning_organisation.name
         attribute_hash["hcnum"] = lettings_log.owning_organisation.housing_registration_no
+        attribute_hash["providertype"] = lettings_log.owning_organisation.read_attribute_before_type_cast(:provider_type)
       end
       if lettings_log.managing_organisation
         attribute_hash["maningorgid"] = lettings_log.managing_organisation.old_visible_id || (lettings_log.managing_organisation.id + LOG_ID_OFFSET)
@@ -242,7 +243,7 @@ module Exports
         lettings_logs.each do |lettings_log|
           attribute_hash = apply_cds_transformation(lettings_log, EXPORT_MODE[:csv])
           if attribute_keys.nil?
-            attribute_keys = attribute_hash.keys
+            attribute_keys = EXPORT_FIELDS.sort_by { |field| LettingsLog.attribute_names.index(field) || Float::INFINITY }
             filter_keys!(attribute_keys)
             csv << attribute_keys
           end

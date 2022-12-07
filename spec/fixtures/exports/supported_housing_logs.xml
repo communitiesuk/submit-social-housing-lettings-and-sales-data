@@ -138,6 +138,7 @@
     <owningorgid>{owning_org_id}</owningorgid>
     <owningorgname>DLUHC</owningorgname>
     <hcnum>1234</hcnum>
+    <providertype>1</providertype>
     <maningorgid>{managing_org_id}</maningorgid>
     <maningorgname>DLUHC</maningorgname>
     <manhcnum>1234</manhcnum>
