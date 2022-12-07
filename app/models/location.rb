@@ -433,10 +433,6 @@ class Location < ApplicationRecord
     self.confirmed = [postcode, location_admin_district, location_code, units, type_of_unit, mobility_type].all?(&:present?)
   end
 
-  def confirmed!
-    update!(confirmed: true)
-  end
-
 private
 
   PIO = PostcodeService.new
