@@ -21,7 +21,8 @@ class Scheme < ApplicationRecord
   scope :order_by_completion, -> { order("confirmed ASC NULLS FIRST") }
   scope :order_by_service_name, -> { order(service_name: :asc) }
 
-  validate :validate_confirmed, :validate_owning_organisation
+  validate :validate_confirmed
+  validate :validate_owning_organisation
 
   auto_strip_attributes :service_name
 
