@@ -224,7 +224,11 @@ class Scheme < ApplicationRecord
     scheme_deactivation_periods.order("created_at").last
   end
 
-  def status(date = Time.zone.now)
+  def status
+    @status ||= status_at(Time.zone.now)
+  end
+
+  def status_at(date)
     return :incomplete unless confirmed
     return :deactivated if open_deactivation&.deactivation_date.present? && date >= open_deactivation.deactivation_date
     return :deactivating_soon if open_deactivation&.deactivation_date.present? && date < open_deactivation.deactivation_date
@@ -232,7 +236,6 @@ class Scheme < ApplicationRecord
 
     :active
   end
-  alias_method :status_at, :status
 
   def active?
     status == :active
