@@ -31,7 +31,7 @@ module LocationsHelper
       { name: "Number of units", value: location.units, attribute: "units" },
       { name: "Most common unit", value: location.type_of_unit, attribute: "type_of_unit" },
       { name: "Mobility standards", value: location.mobility_type, attribute: "mobility_standards" },
-      { name: "Code", value: location.location_code, attribute: "location_code" },
+      { name: "Location code", value: location.location_code, attribute: "location_code" },
       { name: "Availability", value: location_availability(location), attribute: "availability" },
     ]
 

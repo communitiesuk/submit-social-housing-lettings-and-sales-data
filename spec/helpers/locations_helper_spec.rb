@@ -144,7 +144,7 @@ RSpec.describe LocationsHelper do
         { attribute: "units", name: "Number of units", value: location.units },
         { attribute: "type_of_unit", name: "Most common unit", value: location.type_of_unit },
         { attribute: "mobility_standards", name: "Mobility standards", value: location.mobility_type },
-        { attribute: "location_code", name: "Code", value: location.location_code },
+        { attribute: "location_code", name: "Location code", value: location.location_code },
         { attribute: "availability", name: "Availability", value: "Active from 1 April 2022" },
         { attribute: "status", name: "Status", value: :active },
       ]
