@@ -6,7 +6,6 @@ class Log < ApplicationRecord
   belongs_to :created_by, class_name: "User", optional: true
   belongs_to :updated_by, class_name: "User", optional: true
   before_save :update_status!
-  before_validation :reset_invalidated_dependent_fields!
 
   STATUS = { "not_started" => 0, "in_progress" => 1, "completed" => 2 }.freeze
   enum status: STATUS
@@ -84,7 +83,7 @@ private
 
   def reset_created_by!
     return unless updated_by&.support?
-    return if owning_organisation.blank? || managing_organisation.blank?
+    return if owning_organisation.blank? || managing_organisation.blank? || created_by.blank?
     return if created_by&.organisation == managing_organisation || created_by&.organisation == owning_organisation
 
     update!(created_by: nil)

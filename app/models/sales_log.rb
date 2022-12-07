@@ -19,6 +19,7 @@ class SalesLog < Log
 
   validates_with SalesLogValidator
   before_validation :set_derived_fields!
+  before_validation :reset_invalidated_dependent_fields!
 
   scope :filter_by_year, ->(year) { where(saledate: Time.zone.local(year.to_i, 4, 1)...Time.zone.local(year.to_i + 1, 4, 1)) }
   scope :search_by, ->(param) { filter_by_id(param) }
