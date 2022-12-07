@@ -188,7 +188,7 @@ private
   def reset_created_by
     return unless current_user.support?
     return if @log.owning_organisation.blank? || @log.managing_organisation.blank?
-    return if log.created_by&.organisation == @log.managing_organisation || @log.created_by&.organisation == @log.owning_organisation
+    return if @log.created_by&.organisation == @log.managing_organisation || @log.created_by&.organisation == @log.owning_organisation
 
     @log.update!(created_by: nil)
   end
