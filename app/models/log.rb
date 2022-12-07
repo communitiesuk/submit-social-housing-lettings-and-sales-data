@@ -44,11 +44,11 @@ class Log < ApplicationRecord
   def managing_organisation_provider_type
     managing_organisation&.provider_type
   end
-  
+
   def collection_period_open?
     form.end_date > Time.zone.today
   end
-  
+
 private
 
   def update_status!

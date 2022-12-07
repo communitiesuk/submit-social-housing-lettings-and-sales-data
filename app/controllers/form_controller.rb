@@ -184,7 +184,7 @@ private
 
     redirect_to lettings_log_path(@log) unless @log.collection_period_open?
   end
-  
+
   def reset_created_by
     return unless current_user.support?
     return if @log.owning_organisation.blank? || @log.managing_organisation.blank?
