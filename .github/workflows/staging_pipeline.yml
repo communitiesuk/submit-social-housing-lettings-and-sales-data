@@ -76,7 +76,6 @@ jobs:
 
   feature_test:
     name: Feature Tests
-    if: '!github.event.pull_request.draft'
     runs-on: ubuntu-latest
 
     services:
@@ -135,7 +134,6 @@ jobs:
 
   lint:
     name: Lint
-    if: '!github.event.pull_request.draft'
     runs-on: ubuntu-latest
 
     steps:
@@ -163,7 +161,6 @@ jobs:
 
   audit:
     name: Audit dependencies
-    if: '!github.event.pull_request.draft'
     runs-on: ubuntu-latest
 
     steps:
