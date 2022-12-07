@@ -492,11 +492,7 @@ RSpec.describe SchemesController, type: :request do
 
       context "when the organisation id param is included" do
         let(:organisation) { FactoryBot.create(:organisation) }
-        let(:params) do
-          { scheme: {
-            owning_organisation: organisation,
-          } }
-        end
+        let(:params) { { scheme: { owning_organisation: organisation } } }
 
         it "sets the owning organisation correctly" do
           post "/schemes", params: params
@@ -602,11 +598,7 @@ RSpec.describe SchemesController, type: :request do
 
       context "when organisation id param refers to a non-stock-owning organisation" do
         let(:organisation_which_does_not_own_stock) { FactoryBot.create(:organisation, holds_own_stock: false) }
-        let(:params) do
-          { scheme: {
-            owning_organisation_id: organisation_which_does_not_own_stock.id,
-          } }
-        end
+        let(:params) { { scheme: { owning_organisation_id: organisation_which_does_not_own_stock.id } } }
 
         it "displays the new page with an error message" do
           post "/schemes", params: params
