@@ -304,7 +304,7 @@ RSpec.describe "Schemes scheme Features" do
                 end
 
                 it "has the correct action button text" do
-                  expect(page).to have_button("Add this location")
+                  expect(page).to have_button("Save and return to locations")
                 end
 
                 it "allows you to edit the newly added location" do
@@ -313,7 +313,7 @@ RSpec.describe "Schemes scheme Features" do
 
                 context "when you click save" do
                   before do
-                    click_button "Add this location"
+                    click_button "Save and return to locations"
                   end
 
                   it "displays a updated banner" do
@@ -329,7 +329,7 @@ RSpec.describe "Schemes scheme Features" do
 
                 context "when you click to view the scheme details" do
                   before do
-                    click_button "Add this location"
+                    click_button "Save and return to locations"
                     click_link("Scheme")
                   end
 
@@ -492,7 +492,7 @@ RSpec.describe "Schemes scheme Features" do
 
           it "lets me check my answers after adding a second location" do
             fill_in_and_save_location
-            click_button "Add this location"
+            click_button "Save and return to locations"
             fill_in_and_save_second_location
             expect(page).to have_content "Check your answers"
           end
@@ -503,7 +503,7 @@ RSpec.describe "Schemes scheme Features" do
             create_and_save_a_scheme
             click_button "Create scheme"
             fill_in_and_save_location
-            click_button "Add this location"
+            click_button "Save and return to locations"
             click_link "Locations"
           end
 
@@ -520,7 +520,7 @@ RSpec.describe "Schemes scheme Features" do
 
           it "displays information about another location" do
             fill_in_and_save_second_location
-            click_button "Add this location"
+            click_button "Save and return to locations"
             expect(page).to have_content "Locations"
             expect(page).to have_content "#{scheme.locations.count} total location"
           end
@@ -538,7 +538,7 @@ RSpec.describe "Schemes scheme Features" do
             create_and_save_a_scheme
             click_button "Create scheme"
             fill_in_and_save_second_location
-            click_button "Add this location"
+            click_button "Save and return to locations"
           end
 
           it "displays changed location" do
@@ -947,7 +947,7 @@ RSpec.describe "Schemes scheme Features" do
                 end
 
                 it "has the correct action button text" do
-                  expect(page).to have_button("Add this location")
+                  expect(page).to have_button("Save and return to locations")
                 end
 
                 it "allows you to edit the newly added location" do
@@ -956,7 +956,7 @@ RSpec.describe "Schemes scheme Features" do
 
                 context "when you click save" do
                   before do
-                    click_button "Add this location"
+                    click_button "Save and return to locations"
                   end
 
                   it "displays a updated banner" do
@@ -972,7 +972,7 @@ RSpec.describe "Schemes scheme Features" do
 
                 context "when you click to view the scheme details" do
                   before do
-                    click_button "Add this location"
+                    click_button "Save and return to locations"
                     click_link("Scheme")
                   end
 

@@ -430,7 +430,7 @@ class Location < ApplicationRecord
   end
 
   def validate_confirmed
-    self.confirmed = [postcode, name, location_admin_district, location_code, units, type_of_unit, mobility_type].all?(&:present?)
+    self.confirmed = [postcode, location_admin_district, location_code, units, type_of_unit, mobility_type].all?(&:present?)
   end
 
   def confirmed!
