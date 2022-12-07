@@ -4,7 +4,9 @@ class Log < ApplicationRecord
   belongs_to :owning_organisation, class_name: "Organisation", optional: true
   belongs_to :managing_organisation, class_name: "Organisation", optional: true
   belongs_to :created_by, class_name: "User", optional: true
+  belongs_to :updated_by, class_name: "User", optional: true
   before_save :update_status!
+  before_validation :reset_invalidated_dependent_fields!
 
   STATUS = { "not_started" => 0, "in_progress" => 1, "completed" => 2 }.freeze
   enum status: STATUS
@@ -76,5 +78,15 @@ private
     return unless form
 
     form.reset_not_routed_questions(self)
+
+    reset_created_by!
+  end
+
+  def reset_created_by!
+    return unless updated_by&.support?
+    return if owning_organisation.blank? || managing_organisation.blank?
+    return if created_by&.organisation == managing_organisation || created_by&.organisation == owning_organisation
+
+    update!(created_by: nil)
   end
 end
