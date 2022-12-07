@@ -29,7 +29,7 @@ RSpec.describe Form::Sales::Pages::Person4Age, type: :model do
 
   it "has correct depends_on" do
     expect(page.depends_on).to eq(
-      [{ "details_known_4" => 1, "hholdcount" => 4 }],
+      [{ "details_known_4" => 1 }],
     )
   end
 end
