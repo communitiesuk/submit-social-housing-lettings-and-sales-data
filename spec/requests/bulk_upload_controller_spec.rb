@@ -45,7 +45,7 @@ RSpec.describe BulkUploadController, type: :request do
       end
 
       it "returns a page with a file upload form" do
-        expect(response.body).to match(/<input id="bulk-upload-lettings-log-bulk-upload-field" class="govuk-file-upload"/)
+        expect(response.body).to match(/<input id="legacy-bulk-upload-lettings-log-bulk-upload-field" class="govuk-file-upload"/)
         expect(response.body).to match(/<button type="submit" formnovalidate="formnovalidate" class="govuk-button"/)
       end
     end

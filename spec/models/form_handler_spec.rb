@@ -153,4 +153,20 @@ RSpec.describe FormHandler do
     expect(form.type).to eq("lettings")
     expect(form.start_date.year).to eq(2022)
   end
+
+  # rubocop:disable RSpec/PredicateMatcher
+  describe "#in_crossover_period?" do
+    context "when not in overlapping period" do
+      it "returns false" do
+        expect(form_handler.in_crossover_period?(now: Date.new(2022, 1, 1))).to be_falsey
+      end
+    end
+
+    context "when in overlapping period" do
+      it "returns true" do
+        expect(form_handler.in_crossover_period?(now: Date.new(2022, 6, 1))).to be_truthy
+      end
+    end
+  end
+  # rubocop:enable RSpec/PredicateMatcher
 end

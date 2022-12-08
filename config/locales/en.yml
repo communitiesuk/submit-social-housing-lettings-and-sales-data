@@ -49,6 +49,16 @@ en:
           attributes:
             year:
               blank: You must select a collection period to upload for
+        forms/bulk_upload_lettings/upload_your_file:
+          attributes:
+            file:
+              blank: Select which file to upload
+              not_csv: Your file must be in CSV format
+        forms/bulk_upload_sales/upload_your_file:
+          attributes:
+            file:
+              blank: Select which file to upload
+              not_csv: Your file must be in CSV format
 
   activerecord:
     errors:

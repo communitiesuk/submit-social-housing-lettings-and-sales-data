@@ -1,6 +1,6 @@
 <% content_for :title, "Bulk upload" %>
 
-<%= form_for @bulk_upload, url: bulk_upload_lettings_logs_path, method: "post" do |f| %>
+<%= form_for @bulk_upload, scope: :bulk_upload, url: bulk_upload_lettings_logs_path, method: "post" do |f| %>
   <%= f.govuk_error_summary %>
 
   <%= f.govuk_file_field :lettings_log_bulk_upload,

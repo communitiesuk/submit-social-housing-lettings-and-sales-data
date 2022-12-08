@@ -120,7 +120,7 @@ jobs:
           cf set-env $APP_NAME IMPORT_PAAS_INSTANCE $IMPORT_PAAS_INSTANCE
           cf set-env $APP_NAME EXPORT_PAAS_INSTANCE $EXPORT_PAAS_INSTANCE
           cf set-env $APP_NAME S3_CONFIG $S3_CONFIG
-          cf set-env $APP_NAME CSV_DOWNLOAD_PAAS_INSTANCE $CSV_DOWNLOAD_PAAS_INSTANCE
+          cf set-env $APP_NAME CSV_DOWNLOAD_PAAS_INSTANCE "dluhc-core-review-csv-bucket"
           cf set-env $APP_NAME SENTRY_DSN $SENTRY_DSN
           cf set-env $APP_NAME APP_HOST "https://dluhc-core-review-${{ github.event.pull_request.number }}.london.cloudapps.digital"
 
