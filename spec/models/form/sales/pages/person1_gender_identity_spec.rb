@@ -30,7 +30,6 @@ RSpec.describe Form::Sales::Pages::Person1GenderIdentity, type: :model do
   it "has correct depends_on" do
     expect(page.depends_on).to eq([{
       "jointpur" => 2,
-      "details_known_2" => 1,
     }])
   end
 end
