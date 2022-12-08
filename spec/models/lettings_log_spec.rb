@@ -2003,6 +2003,29 @@ RSpec.describe LettingsLog do
         end
       end
     end
+
+    context "when the log is unresolved" do
+      let(:lettings_log) do
+        FactoryBot.create(
+          :lettings_log,
+          renewal: 0,
+          rsnvac: 5,
+          first_time_property_let_as_social_housing: 0,
+          startdate: Time.zone.tomorrow,
+          voiddate: Time.zone.today,
+          unresolved: true,
+        )
+      end
+
+      context "and the new startdate triggers void date validation" do
+        it "clears void date value" do
+          lettings_log.update!(startdate: Time.zone.yesterday)
+          lettings_log.reload
+          expect(lettings_log.startdate).to eq(Time.zone.yesterday)
+          expect(lettings_log.voiddate).to eq(nil)
+        end
+      end
+    end
   end
 
   describe "tshortfall_unknown?" do
