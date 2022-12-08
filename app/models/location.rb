@@ -18,8 +18,6 @@ class Location < ApplicationRecord
 
   auto_strip_attributes :name
 
-  attr_accessor :add_another_location
-
   scope :search_by_postcode, ->(postcode) { where("REPLACE(postcode, ' ', '') ILIKE ?", "%#{postcode.delete(' ')}%") }
   scope :search_by_name, ->(name) { where("name ILIKE ?", "%#{name}%") }
   scope :search_by, ->(param) { search_by_name(param).or(search_by_postcode(param)) }

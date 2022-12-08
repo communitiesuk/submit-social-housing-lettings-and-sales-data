@@ -411,7 +411,6 @@ en:
       units: "How many units are at this location?"
       type_of_unit: "What is the most common type of unit at this location?"
       startdate: "When did the first property in this location become available under this scheme?"
-      add_another_location: "Do you want to add another location?"
       mobility_type: "What are the mobility standards for the majority of units in this location?"
       toggle_active:
         apply_from: "When should this change apply?"
