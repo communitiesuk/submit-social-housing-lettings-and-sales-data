@@ -123,6 +123,8 @@ class LocationsController < ApplicationController
     year = location_params["startdate(1i)"]
     if [day, month, year].none?(&:blank?) && Date.valid_date?(year.to_i, month.to_i, day.to_i)
       @location.startdate = Time.zone.local(year.to_i, month.to_i, day.to_i)
+    else
+      @location.startdate = nil
     end
     if @location.save(context: :startdate)
       redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])

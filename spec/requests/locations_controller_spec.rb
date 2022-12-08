@@ -1089,14 +1089,14 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when startdate is submitted" do
-        let(:params) { { location: { "startdate(1i)": "2000", "startdate(2i)": "1", "startdate(3i)": "2" } } }
+        let(:params) { { location: { "startdate(1i)": "2022", "startdate(2i)": "1", "startdate(3i)": "2" } } }
 
         before do
           patch "/schemes/#{scheme.id}/locations/#{location.id}/availability", params:
         end
 
         it "adds startdate to location" do
-          expect(Location.last.startdate).to eq(Time.zone.local(2000, 1, 2))
+          expect(Location.last.startdate).to eq(Time.zone.local(2022, 1, 2))
         end
 
         it "redirects correctly" do
@@ -1106,14 +1106,14 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when startdate is submitted with leading zeroes" do
-        let(:params) { { location: { "startdate(1i)": "2000", "startdate(2i)": "01", "startdate(3i)": "02" } } }
+        let(:params) { { location: { "startdate(1i)": "2022", "startdate(2i)": "01", "startdate(3i)": "02" } } }
 
         before do
           patch "/schemes/#{scheme.id}/locations/#{location.id}/availability", params:
         end
 
         it "adds startdate correctly " do
-          expect(Location.last.startdate).to eq(Time.zone.local(2000, 1, 2))
+          expect(Location.last.startdate).to eq(Time.zone.local(2022, 1, 2))
         end
 
         it "redirects correctly" do
@@ -1131,7 +1131,7 @@ RSpec.describe LocationsController, type: :request do
 
         it "displays the new page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content(I18n.t("validations.location.startdate_blank"))
+          expect(page).to have_content(I18n.t("validations.location.startdate_invalid"))
         end
       end
 
@@ -1163,14 +1163,14 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when startdate is submitted" do
-        let(:params) { { location: { "startdate(1i)": "2000", "startdate(2i)": "1", "startdate(3i)": "2" } } }
+        let(:params) { { location: { "startdate(1i)": "2022", "startdate(2i)": "1", "startdate(3i)": "2" } } }
 
         before do
           patch "/schemes/#{scheme.id}/locations/#{location.id}/availability", params:
         end
 
         it "adds startdate to location" do
-          expect(Location.last.startdate).to eq(Time.zone.local(2000, 1, 2))
+          expect(Location.last.startdate).to eq(Time.zone.local(2022, 1, 2))
         end
 
         it "redirects correctly" do
@@ -1180,14 +1180,14 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when startdate is submitted with leading zeroes" do
-        let(:params) { { location: { "startdate(1i)": "2000", "startdate(2i)": "01", "startdate(3i)": "02" } } }
+        let(:params) { { location: { "startdate(1i)": "2022", "startdate(2i)": "01", "startdate(3i)": "02" } } }
 
         before do
           patch "/schemes/#{scheme.id}/locations/#{location.id}/availability", params:
         end
 
         it "adds startdate correctly " do
-          expect(Location.last.startdate).to eq(Time.zone.local(2000, 1, 2))
+          expect(Location.last.startdate).to eq(Time.zone.local(2022, 1, 2))
         end
 
         it "redirects correctly" do
@@ -1205,7 +1205,7 @@ RSpec.describe LocationsController, type: :request do
 
         it "displays the new page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content(I18n.t("validations.location.startdate_blank"))
+          expect(page).to have_content(I18n.t("validations.location.startdate_invalid"))
         end
       end
 

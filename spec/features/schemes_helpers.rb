@@ -69,7 +69,7 @@ module SchemesHelpers
     choose "location-mobility-type-none-field"
     click_button "Save and continue"
     fill_in "Day", with: 2
-    fill_in "Month", with: 2
+    fill_in "Month", with: 5
     fill_in "Year", with: 2022
     click_button "Save and continue"
   end
@@ -89,7 +89,7 @@ module SchemesHelpers
     choose "location-mobility-type-none-field"
     click_button "Save and continue"
     fill_in "Day", with: 2
-    fill_in "Month", with: 2
+    fill_in "Month", with: 5
     fill_in "Year", with: 2022
     click_button "Save and continue"
   end
