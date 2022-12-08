@@ -17,11 +17,8 @@ class Form::Sales::Questions::Person3AgeKnown < ::Form::Question
           "age5_known" => 0,
         },
         {
-          "details_known_3" => nil,
-        },
-        {
-          "details_known_3" => 2,
-        },
+          "age5_known" => 1,
+        }
       ],
     }
   end

@@ -55,6 +55,9 @@ RSpec.describe Form::Sales::Questions::Person1AgeKnown, type: :model do
           {
             "age3_known" => 0,
           },
+          {
+            "age3_known" => 1,
+          },
         ],
       },
     )

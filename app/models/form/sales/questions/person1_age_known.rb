@@ -16,6 +16,9 @@ class Form::Sales::Questions::Person1AgeKnown < ::Form::Question
         {
           "age3_known" => 0,
         },
+        {
+          "age3_known" => 1,
+        }
       ],
     }
   end

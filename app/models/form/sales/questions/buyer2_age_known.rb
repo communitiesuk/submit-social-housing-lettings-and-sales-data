@@ -10,6 +10,16 @@ class Form::Sales::Questions::Buyer2AgeKnown < ::Form::Question
     @conditional_for = {
       "age2" => [0],
     }
+    @hidden_in_check_answers = {
+      "depends_on" => [
+        {
+          "age2_known" => 0,
+        },
+        {
+          "age2_known" => 1,
+        }
+      ],
+    }
   end
 
   ANSWER_OPTIONS = {
