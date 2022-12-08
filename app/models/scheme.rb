@@ -22,6 +22,7 @@ class Scheme < ApplicationRecord
   scope :order_by_service_name, -> { order(service_name: :asc) }
 
   validate :validate_confirmed
+  validate :validate_owning_organisation
 
   auto_strip_attributes :service_name
 
@@ -209,6 +210,12 @@ class Scheme < ApplicationRecord
           self.confirmed = false
         end
       end
+    end
+  end
+
+  def validate_owning_organisation
+    unless owning_organisation.holds_own_stock?
+      errors.add(:owning_organisation_id, :does_not_own_stock, message: I18n.t("validations.scheme.owning_organisation.does_not_own_stock"))
     end
   end
 

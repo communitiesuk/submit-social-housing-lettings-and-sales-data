@@ -471,7 +471,7 @@ RSpec.describe SchemesController, type: :request do
         end
       end
 
-      context "when missing required scheme params" do
+      context "when required params are missing" do
         let(:params) do
           { scheme: { service_name: "",
                       scheme_type: "",
@@ -487,6 +487,16 @@ RSpec.describe SchemesController, type: :request do
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.registered_under_care_act.invalid"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.arrangement_type.invalid"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.service_name.invalid"))
+        end
+      end
+
+      context "when the organisation id param is included" do
+        let(:organisation) { FactoryBot.create(:organisation) }
+        let(:params) { { scheme: { owning_organisation: organisation } } }
+
+        it "sets the owning organisation correctly" do
+          post "/schemes", params: params
+          expect(Scheme.last.owning_organisation_id).to eq(user.organisation_id)
         end
       end
     end
@@ -566,7 +576,7 @@ RSpec.describe SchemesController, type: :request do
         end
       end
 
-      context "when missing required scheme params" do
+      context "when required params are missing" do
         let(:params) do
           { scheme: { service_name: "",
                       scheme_type: "",
@@ -586,13 +596,14 @@ RSpec.describe SchemesController, type: :request do
         end
       end
 
-      context "when required organisation id param is missing" do
-        let(:params) { { "scheme" => { "service_name" => "qweqwer", "sensitive" => "Yes", "owning_organisation_id" => "", "scheme_type" => "Foyer", "registered_under_care_act" => "Yes – part registered as a care home" } } }
+      context "when organisation id param refers to a non-stock-owning organisation" do
+        let(:organisation_which_does_not_own_stock) { FactoryBot.create(:organisation, holds_own_stock: false) }
+        let(:params) { { scheme: { owning_organisation_id: organisation_which_does_not_own_stock.id } } }
 
         it "displays the new page with an error message" do
           post "/schemes", params: params
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.owning_organisation_id.invalid"))
+          expect(page).to have_content("Enter an organisation that owns housing stock")
         end
       end
     end
@@ -638,12 +649,11 @@ RSpec.describe SchemesController, type: :request do
         end
       end
 
-      context "when params are missing" do
+      context "when required params are missing" do
         let(:params) do
           { scheme: {
             service_name: "",
             managing_organisation_id: "",
-            owning_organisation_id: "",
             primary_client_group: "",
             secondary_client_group: "",
             scheme_type: "",
@@ -656,7 +666,7 @@ RSpec.describe SchemesController, type: :request do
           } }
         end
 
-        it "renders primary client group after successful update" do
+        it "renders the same page with error message" do
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_content("Create a new supported housing scheme")
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.service_name.invalid"))
@@ -923,7 +933,7 @@ RSpec.describe SchemesController, type: :request do
       end
     end
 
-    context "when signed in as a support" do
+    context "when signed in as a support user" do
       let(:user) { FactoryBot.create(:user, :support) }
       let(:scheme_to_update) { FactoryBot.create(:scheme, owning_organisation: user.organisation, confirmed: nil) }
 
@@ -934,7 +944,7 @@ RSpec.describe SchemesController, type: :request do
         patch "/schemes/#{scheme_to_update.id}", params:
       end
 
-      context "when params are missing" do
+      context "when required params are missing" do
         let(:params) do
           { scheme: {
             service_name: "",
@@ -952,7 +962,7 @@ RSpec.describe SchemesController, type: :request do
           } }
         end
 
-        it "renders primary client group after successful update" do
+        it "renders the same page with error message" do
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_content("Create a new supported housing scheme")
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.owning_organisation_id.invalid"))
