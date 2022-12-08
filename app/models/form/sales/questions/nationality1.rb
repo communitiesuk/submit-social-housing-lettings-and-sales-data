@@ -18,6 +18,7 @@ class Form::Sales::Questions::Nationality1 < ::Form::Question
         },
       ],
     }
+    @check_answers_card_number = 1
   end
 
   ANSWER_OPTIONS = {

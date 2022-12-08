@@ -52,4 +52,8 @@ RSpec.describe Form::Sales::Questions::Buyer2AgeKnown, type: :model do
       {"age2_known" => 1}]
     })
   end
+
+  it "has the correct check_answers_card_number" do
+    expect(question.check_answers_card_number).to eq(2)
+  end
 end

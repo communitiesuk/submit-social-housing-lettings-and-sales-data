@@ -14,6 +14,7 @@ class Form::Sales::Questions::Buyer1EthnicGroup < ::Form::Question
       },
       "value" => "Prefers not to say",
     }
+    @check_answers_card_number = 1
   end
 
   ANSWER_OPTIONS = {

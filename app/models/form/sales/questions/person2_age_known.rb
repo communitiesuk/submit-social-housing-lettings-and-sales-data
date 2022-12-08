@@ -21,6 +21,7 @@ class Form::Sales::Questions::Person2AgeKnown < ::Form::Question
         }
       ],
     }
+    @check_answers_card_number = 4
   end
 
   ANSWER_OPTIONS = {

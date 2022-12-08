@@ -13,5 +13,6 @@ class Form::Sales::Questions::Age1 < ::Form::Question
       },
       "value" => "Not known"
     }
+    @check_answers_card_number = 1
   end
 end

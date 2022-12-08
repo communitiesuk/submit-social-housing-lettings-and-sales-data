@@ -11,5 +11,6 @@ class Form::Sales::Questions::Age2 < ::Form::Question
       "condition" => { "age2_known" => 1 },
       "value" => "Not known"
     }
+    @check_answers_card_number = 2
   end
 end

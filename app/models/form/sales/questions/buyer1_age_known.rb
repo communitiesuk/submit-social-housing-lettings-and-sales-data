@@ -21,6 +21,7 @@ class Form::Sales::Questions::Buyer1AgeKnown < ::Form::Question
         }
       ],
     }
+    @check_answers_card_number = 1
   end
 
   ANSWER_OPTIONS = {
