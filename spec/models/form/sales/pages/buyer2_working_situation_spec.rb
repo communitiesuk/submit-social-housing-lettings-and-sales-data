@@ -26,4 +26,8 @@ RSpec.describe Form::Sales::Pages::Buyer2WorkingSituation, type: :model do
   it "has the correct description" do
     expect(page.description).to eq("")
   end
+
+  it "has correct depends_on" do
+    expect(page.depends_on).to eq([{ "jointpur" => 1 }])
+  end
 end
