@@ -121,22 +121,12 @@ class LocationsController < ApplicationController
     day = location_params["startdate(3i)"]
     month = location_params["startdate(2i)"]
     year = location_params["startdate(1i)"]
-    if [day, month, year].none?(&:blank?)
-      if Date.valid_date?(year.to_i, month.to_i, day.to_i)
-        @location.startdate = Time.zone.local(year.to_i, month.to_i, day.to_i)
-        if @location.save(context: :startdate)
-          redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
-        else
-          render :availability, status: :unprocessable_entity
-        end
-      else
-        error_message = I18n.t("validations.location.startdate_invalid")
-        @location.errors.add :startdate, error_message
-        render :availability, status: :unprocessable_entity
-      end
+    if [day, month, year].none?(&:blank?) && Date.valid_date?(year.to_i, month.to_i, day.to_i)
+      @location.startdate = Time.zone.local(year.to_i, month.to_i, day.to_i)
+    end
+    if @location.save(context: :startdate)
+      redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
     else
-      error_message = I18n.t("validations.location.startdate_blank")
-      @location.errors.add :startdate, error_message
       render :availability, status: :unprocessable_entity
     end
   end

@@ -350,9 +350,8 @@ en:
       units: "The units at this location must be a number"
       type_of_unit: "Select the most common type of unit at this location"
       mobility_standards: "Select the mobility standard for the majority of the units at this location"
-      startdate_blank: "Enter the day, month and year when the first property became available at this location"
-      startdate_invalid: "Enter a valid day, month and year"
-      startdate_out_of_range: "Availability date must be between 1900 and 2200"
+      startdate_invalid: "Enter a valid day, month and year when the first property became available at this location"
+      startdate_out_of_range: "Availability date must be on or after the %{date}"
       toggle_date:
         not_selected: "Select one of the options"
         invalid: "Enter a valid day, month and year"

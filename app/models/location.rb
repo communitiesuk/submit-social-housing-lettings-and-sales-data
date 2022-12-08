@@ -6,7 +6,8 @@ class Location < ApplicationRecord
   validates :units, on: :units, presence: { message: I18n.t("validations.location.units") }
   validates :type_of_unit, on: :type_of_unit, presence: { message: I18n.t("validations.location.type_of_unit") }
   validates :mobility_type, on: :mobility_type, presence: { message: I18n.t("validations.location.mobility_standards") }
-  validate :validate_startdate, on: :startdate
+  validates :startdate, on: :startdate, presence: { message: I18n.t("validations.location.startdate_invalid") }
+  validate :validate_startdate, on: :startdate, if: proc { |model| model.startdate.presence }
   validate :validate_confirmed
   belongs_to :scheme
   has_many :lettings_logs, class_name: "LettingsLog"
@@ -421,8 +422,8 @@ class Location < ApplicationRecord
   end
 
   def validate_startdate
-    unless startdate.between?(Time.zone.local(1900, 1, 1), Time.zone.local(2200, 1, 1))
-      error_message = I18n.t("validations.location.startdate_out_of_range")
+    unless startdate.between?(scheme.available_from, Time.zone.local(2200, 1, 1))
+      error_message = I18n.t("validations.location.startdate_out_of_range", date: scheme.available_from.to_formatted_s(:govuk_date))
       errors.add :startdate, error_message
     end
   end
