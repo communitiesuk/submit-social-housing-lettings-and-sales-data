@@ -57,7 +57,7 @@ RSpec.describe Form::Sales::Questions::Person2Known, type: :model do
       },
     )
   end
-  
+
   it "has the correct check_answers_card_number" do
     expect(question.check_answers_card_number).to eq(4)
   end

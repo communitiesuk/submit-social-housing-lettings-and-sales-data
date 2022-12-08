@@ -49,14 +49,14 @@ RSpec.describe Form::Sales::Questions::Buyer1AgeKnown, type: :model do
     expect(question.hint_text).to eq("Buyer 1 is the person in the household who does the most paid work. If it’s a joint purchase and the buyers do the same amount of paid work, buyer 1 is whoever is the oldest.")
   end
 
-  it "has correct conditional for" do
+  it "has correct hidden_in_check_answers for" do
     expect(question.hidden_in_check_answers).to eq({
       "depends_on" => [{
         "age1_known" => 0,
       },
-    {
-      "age1_known" => 1,
-    }],
+                       {
+                         "age1_known" => 1,
+                       }],
     })
   end
 

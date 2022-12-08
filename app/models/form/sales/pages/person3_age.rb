@@ -6,7 +6,7 @@ class Form::Sales::Pages::Person3Age < ::Form::Page
     @description = ""
     @subsection = subsection
     @depends_on = [
-      { "details_known_3" => 1}
+      { "details_known_3" => 1 },
     ]
   end
 

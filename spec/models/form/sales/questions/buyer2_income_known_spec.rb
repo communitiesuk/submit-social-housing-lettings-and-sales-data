@@ -52,7 +52,7 @@ RSpec.describe Form::Sales::Questions::Buyer2IncomeKnown, type: :model do
     expect(question.bottom_guidance?).to eq(true)
     expect(question.top_guidance?).to eq(false)
   end
-  
+
   it "has the correct check_answers_card_number" do
     expect(question.check_answers_card_number).to eq(2)
   end

@@ -18,7 +18,7 @@ class Form::Sales::Questions::Person1AgeKnown < ::Form::Question
         },
         {
           "age3_known" => 1,
-        }
+        },
       ],
     }
     @check_answers_card_number = 3

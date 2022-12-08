@@ -9,9 +9,9 @@ class Form::Sales::Questions::Age1 < ::Form::Question
     @width = 2
     @inferred_check_answers_value = {
       "condition" => {
-        "age1_known" => 1
+        "age1_known" => 1,
       },
-      "value" => "Not known"
+      "value" => "Not known",
     }
     @check_answers_card_number = 1
   end
