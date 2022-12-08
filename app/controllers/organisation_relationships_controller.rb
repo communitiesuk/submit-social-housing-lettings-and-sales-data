@@ -51,6 +51,11 @@ class OrganisationRelationshipsController < ApplicationController
         @organisations = Organisation.where.not(id: child_organisation.id).pluck(:id, :name)
         render "organisation_relationships/add_housing_provider"
         return
+      elsif !parent_organisation.holds_own_stock
+        @organisation.errors.add :related_organisation_id, I18n.t("validations.scheme.owning_organisation.does_not_own_stock")
+        @organisations = Organisation.where.not(id: child_organisation.id).pluck(:id, :name)
+        render "organisation_relationships/add_housing_provider"
+        return
       end
     end
     create!(child_organisation:, parent_organisation:)
