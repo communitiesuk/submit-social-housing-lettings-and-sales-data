@@ -12,6 +12,8 @@ module Imports
     }.freeze
 
     def create_organisation(xml_document)
+      old_visible_id = organisation_field_value(xml_document, "visible-id")
+
       Organisation.create!(
         name: organisation_field_value(xml_document, "name"),
         provider_type: PROVIDER_TYPE[organisation_field_value(xml_document, "institution-type")],
@@ -32,12 +34,14 @@ module Imports
         supported_housing_units: organisation_field_value(xml_document, "supported-housing-units"),
         unspecified_units: organisation_field_value(xml_document, "unspecified-units"),
         old_org_id: organisation_field_value(xml_document, "id"),
-        old_visible_id: organisation_field_value(xml_document, "visible-id"),
+        old_visible_id:,
       )
     rescue ActiveRecord::RecordNotUnique
       name = organisation_field_value(xml_document, "name")
-      old_visible_id = organisation_field_value(xml_document, "visible-id")
       @logger.warn("Organisation #{name} is already present with old visible ID #{old_visible_id}, skipping.")
+    rescue ActiveRecord::RecordInvalid
+      @logger.error("Organisation #{old_visible_id}: Failed to import")
+      raise
     end
 
     def organisation_field_value(xml_document, field)
