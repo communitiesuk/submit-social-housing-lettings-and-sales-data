@@ -342,12 +342,12 @@
                       1
                     ]
                   },
-                  "inferred_check_answers_value": {
+                  "inferred_check_answers_value": [{
                     "condition": {
                       "armedforces": 3
                     },
                     "value": "Prefers not to say"
-                  }
+                  }]
                 },
                 "leftreg": {
                   "header": "Are they still serving?",
@@ -526,12 +526,12 @@
                       "is_la_inferred": true
                     }
                   },
-                  "inferred_check_answers_value": {
+                  "inferred_check_answers_value": [{
                     "condition": {
                       "postcode_known": 0
                     },
                     "value": "Not known"
-                  }
+                  }]
                 }
               }
             },

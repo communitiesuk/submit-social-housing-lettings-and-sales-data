@@ -115,7 +115,7 @@
                                       "description": "fields that get inferred based on the value of the current field",
                                       "type": "object"
                                     },
-                                    "inferred_check_answers_value": {
+                                    "inferred_check_answers_value": [{
                                       "description": "value that gets displayed in the check answers for this field if the given condition is met",
                                       "type": "object",
                                       "properties": {
@@ -128,7 +128,7 @@
                                           "type": "object"
                                         }
                                       }
-                                    }
+                                    }]
                                   },
                                   "minProperties": 1
                                 }
