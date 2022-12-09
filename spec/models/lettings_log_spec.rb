@@ -2026,6 +2026,28 @@ RSpec.describe LettingsLog do
         end
       end
     end
+
+    context "when the log is resolved" do
+      let(:lettings_log) do
+        FactoryBot.create(
+          :lettings_log,
+          renewal: 0,
+          rsnvac: 5,
+          first_time_property_let_as_social_housing: 0,
+          startdate: Time.zone.tomorrow,
+          voiddate: Time.zone.today,
+          unresolved: nil,
+        )
+      end
+
+      context "and the new startdate triggers void date validation" do
+        it "doesn't clear void date value" do
+          expect { lettings_log.update!(startdate: Time.zone.yesterday) }.to raise_error(ActiveRecord::RecordInvalid, /Enter a void date that is before the tenancy start date/)
+          expect(lettings_log.startdate).to eq(Time.zone.yesterday)
+          expect(lettings_log.voiddate).to eq(Time.zone.today)
+        end
+      end
+    end
   end
 
   describe "tshortfall_unknown?" do
