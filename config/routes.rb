@@ -127,7 +127,7 @@ Rails.application.routes.draw do
       post "email-csv", to: "lettings_logs#email_csv"
       get "csv-confirmation", to: "lettings_logs#csv_confirmation"
 
-      resources :bulk_upload_lettings_logs, path: "bulk-upload-logs" do
+      resources :bulk_upload_lettings_logs, path: "bulk-upload-logs", only: %i[show update] do
         collection do
           get :start
         end
