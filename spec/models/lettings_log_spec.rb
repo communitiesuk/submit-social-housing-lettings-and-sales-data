@@ -2013,6 +2013,7 @@ RSpec.describe LettingsLog do
           first_time_property_let_as_social_housing: 0,
           startdate: Time.zone.tomorrow,
           voiddate: Time.zone.today,
+          mrcdate: Time.zone.today,
           unresolved: true,
         )
       end
@@ -2023,6 +2024,15 @@ RSpec.describe LettingsLog do
           lettings_log.reload
           expect(lettings_log.startdate).to eq(Time.zone.yesterday)
           expect(lettings_log.voiddate).to eq(nil)
+        end
+      end
+
+      context "and the new startdate triggers major repairs date validation" do
+        it "clears major repairs date value" do
+          lettings_log.update!(startdate: Time.zone.yesterday)
+          lettings_log.reload
+          expect(lettings_log.startdate).to eq(Time.zone.yesterday)
+          expect(lettings_log.mrcdate).to eq(nil)
         end
       end
     end
@@ -2036,6 +2046,7 @@ RSpec.describe LettingsLog do
           first_time_property_let_as_social_housing: 0,
           startdate: Time.zone.tomorrow,
           voiddate: Time.zone.today,
+          mrcdate: Time.zone.today,
           unresolved: nil,
         )
       end
@@ -2045,6 +2056,14 @@ RSpec.describe LettingsLog do
           expect { lettings_log.update!(startdate: Time.zone.yesterday) }.to raise_error(ActiveRecord::RecordInvalid, /Enter a void date that is before the tenancy start date/)
           expect(lettings_log.startdate).to eq(Time.zone.yesterday)
           expect(lettings_log.voiddate).to eq(Time.zone.today)
+        end
+      end
+
+      context "and the new startdate triggers major repairs date validation" do
+        it "doesn't clear major repairs date value" do
+          expect { lettings_log.update!(startdate: Time.zone.yesterday) }.to raise_error(ActiveRecord::RecordInvalid, /Enter a major repairs date that is before the tenancy start date/)
+          expect(lettings_log.startdate).to eq(Time.zone.yesterday)
+          expect(lettings_log.mrcdate).to eq(Time.zone.today)
         end
       end
     end
