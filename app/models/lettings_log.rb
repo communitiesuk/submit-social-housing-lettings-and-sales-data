@@ -17,6 +17,7 @@ end
 class LettingsLog < Log
   include Validations::SoftValidations
   include DerivedVariables::LettingsLogVariables
+  include Validations::DateValidations
 
   has_paper_trail
 
@@ -25,6 +26,7 @@ class LettingsLog < Log
   before_validation :reset_scheme_location!, if: :scheme_changed?, unless: :location_changed?
   before_validation :process_postcode_changes!, if: :postcode_full_changed?
   before_validation :process_previous_postcode_changes!, if: :ppostcode_full_changed?
+  before_validation :reset_voiddate, if: :startdate_changed?
   before_validation :reset_invalidated_dependent_fields!
   before_validation :reset_location_fields!, unless: :postcode_known?
   before_validation :reset_previous_location_fields!, unless: :previous_postcode_known?
@@ -535,6 +537,16 @@ private
         Rails.logger.debug("Cleared derived #{dependent} value")
         self[dependent] = nil
       end
+    end
+  end
+
+  def reset_voiddate
+    return unless startdate && voiddate
+
+    validate_property_void_date(self)
+    if errors[:voiddate].present?
+      self.voiddate = nil
+      errors.clear
     end
   end
 
