@@ -70,28 +70,4 @@ RSpec.describe LocationOrSchemeDeactivationMailer do
       described_class.new.send_deactivation_mail(user, 3, :update_logs_url, scheme_name, postcode)
     end
   end
-
-  describe "#send_deactivation_mails" do
-    let(:user_a) { FactoryBot.create(:user, email: "user_a@example.com") }
-    let(:user_a_logs) { FactoryBot.create_list(:lettings_log, 1, created_by: user_a) }
-
-    let(:user_b) { FactoryBot.create(:user, email: "user_b@example.com") }
-    let(:user_b_logs) { FactoryBot.create_list(:lettings_log, 3, created_by: user_b) }
-
-    let(:logs) { user_a_logs + user_b_logs }
-
-    it "sends E-mails to the creators of affected logs with counts" do
-      expect(notify_client).to receive(:send_email).with(hash_including({
-        email_address: user_a.email,
-        personalisation: hash_including({ log_count: user_a_logs.count }),
-      }))
-
-      expect(notify_client).to receive(:send_email).with(hash_including({
-        email_address: user_b.email,
-        personalisation: hash_including({ log_count: user_b_logs.count }),
-      }))
-
-      described_class.new.send_deactivation_mails(logs, :update_logs_url, "Test Scheme", "test postcode")
-    end
-  end
 end
