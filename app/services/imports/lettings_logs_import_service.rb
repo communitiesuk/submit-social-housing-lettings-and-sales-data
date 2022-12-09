@@ -288,6 +288,7 @@ module Imports
         attributes.delete("referral")
         save_lettings_log(attributes, previous_status)
       else
+        @logger.error("Log #{lettings_log.old_id}: Failed to import")
         raise exception
       end
     end

@@ -46,6 +46,9 @@ module Imports
       )
       confirm_scheme(scheme)
       scheme.save! && scheme
+    rescue ActiveRecord::RecordInvalid
+      @logger.error("Scheme #{source_scheme.old_visible_id}: Failed to import")
+      raise
     end
 
     def update_scheme(scheme, attributes)
@@ -110,6 +113,9 @@ module Imports
       )
     rescue ActiveRecord::RecordNotUnique
       @logger.warn("Location is already present with legacy ID #{attributes['location_old_id']}, skipping")
+    rescue ActiveRecord::RecordInvalid
+      @logger.error("Location #{attributes['location_old_id']}: Failed to import")
+      raise
     end
 
     def find_scheme_to_merge(attributes)
