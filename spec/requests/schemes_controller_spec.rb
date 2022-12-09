@@ -292,9 +292,10 @@ RSpec.describe SchemesController, type: :request do
         context "with scheme that's deactivating soon" do
           let(:scheme_deactivation_period) { FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 12), scheme:) }
 
-          it "renders reactivate this scheme" do
+          it "does not render toggle scheme link" do
             expect(response).to have_http_status(:ok)
-            expect(page).to have_link("Reactivate this scheme", href: "/schemes/#{scheme.id}/new-reactivation")
+            expect(page).not_to have_link("Reactivate this scheme")
+            expect(page).not_to have_link("Deactivate this scheme")
           end
         end
       end

@@ -53,6 +53,11 @@ module LocationsHelper
     availability.strip
   end
 
+  def toggle_location_link(location)
+    return govuk_button_link_to "Deactivate this location", scheme_location_new_deactivation_path(location.scheme, location), warning: true if location.active?
+    return govuk_button_link_to "Reactivate this location", scheme_location_new_reactivation_path(location.scheme, location) if location.deactivated?
+  end
+
 private
 
   ActivePeriod = Struct.new(:from, :to)
