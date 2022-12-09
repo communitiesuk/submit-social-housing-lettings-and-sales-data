@@ -541,8 +541,6 @@ private
   end
 
   def reset_voiddate
-    return unless startdate && voiddate
-
     validate_property_void_date(self)
     if errors[:voiddate].present? && unresolved?
       self.voiddate = nil
