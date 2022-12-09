@@ -27,6 +27,7 @@ class LettingsLog < Log
   before_validation :process_postcode_changes!, if: :postcode_full_changed?
   before_validation :process_previous_postcode_changes!, if: :ppostcode_full_changed?
   before_validation :reset_voiddate!, if: :startdate_changed?
+  before_validation :reset_mrcdate!, if: :startdate_changed?
   before_validation :reset_invalidated_dependent_fields!
   before_validation :reset_location_fields!, unless: :postcode_known?
   before_validation :reset_previous_location_fields!, unless: :previous_postcode_known?
@@ -544,6 +545,14 @@ private
     validate_property_void_date(self)
     if errors[:voiddate].present? && unresolved?
       self.voiddate = nil
+      errors.clear
+    end
+  end
+
+  def reset_mrcdate!
+    validate_property_major_repairs(self)
+    if errors[:mrcdate].present? && unresolved?
+      self.mrcdate = nil
       errors.clear
     end
   end
