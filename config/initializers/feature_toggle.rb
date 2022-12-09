@@ -12,11 +12,11 @@ class FeatureToggle
   end
 
   def self.scheme_toggle_enabled?
-    !Rails.env.production?
+    true
   end
 
   def self.location_toggle_enabled?
-    !Rails.env.production?
+    true
   end
 
   def self.managing_for_other_user_enabled?
