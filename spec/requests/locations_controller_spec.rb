@@ -1344,7 +1344,6 @@ RSpec.describe LocationsController, type: :request do
         before do
           FactoryBot.create_list(:lettings_log, 1, :sh, location:, scheme:, startdate:, created_by: user_a)
           FactoryBot.create_list(:lettings_log, 3, :sh, location:, scheme:, startdate:, created_by: user_b)
-          allow(LocationOrSchemeDeactivationMailer).to receive_message_chain(:send_deactivation_mail, :deliver_later).and_return(true)
 
           Timecop.freeze(Time.utc(2022, 10, 10))
           sign_in user
@@ -1385,19 +1384,9 @@ RSpec.describe LocationsController, type: :request do
 
         context "and the users need to be notified" do
           it "sends E-mails to the creators of affected logs with counts" do
-            expect(LocationOrSchemeDeactivationMailer).to receive(:send_deactivation_mail).with(user_a,
-                                                                                                1,
-                                                                                                url_for(controller: "lettings_logs", action: "update_logs"),
-                                                                                                location.scheme.service_name,
-                                                                                                location.postcode)
-
-            expect(LocationOrSchemeDeactivationMailer).to receive(:send_deactivation_mail).with(user_b,
-                                                                                                3,
-                                                                                                url_for(controller: "lettings_logs", action: "update_logs"),
-                                                                                                location.scheme.service_name,
-                                                                                                location.postcode)
-
-            patch "/schemes/#{scheme.id}/locations/#{location.id}/deactivate", params:
+            expect {
+              patch "/schemes/#{scheme.id}/locations/#{location.id}/deactivate", params:
+            }.to enqueue_job(ActionMailer::MailDeliveryJob).at_least(2).times
           end
         end
 

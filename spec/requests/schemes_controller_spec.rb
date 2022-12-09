@@ -1865,8 +1865,6 @@ RSpec.describe SchemesController, type: :request do
         let(:mailer) { instance_double(LocationOrSchemeDeactivationMailer) }
 
         before do
-          allow(LocationOrSchemeDeactivationMailer).to receive_message_chain(:send_deactivation_mail, :deliver_later).and_return(true)
-
           Timecop.freeze(Time.utc(2022, 10, 10))
           sign_in user
         end
@@ -1925,12 +1923,9 @@ RSpec.describe SchemesController, type: :request do
 
         context "and the users need to be notified" do
           it "sends E-mails to the creators of affected logs with counts" do
-            expect(LocationOrSchemeDeactivationMailer).to receive(:send_deactivation_mail).with(user,
-                                                                                                1,
-                                                                                                url_for(controller: "lettings_logs", action: "update_logs"),
-                                                                                                scheme.service_name)
-
-            patch "/schemes/#{scheme.id}/deactivate", params:
+            expect {
+              patch "/schemes/#{scheme.id}/deactivate", params:
+            }.to enqueue_job(ActionMailer::MailDeliveryJob)
           end
         end
       end
