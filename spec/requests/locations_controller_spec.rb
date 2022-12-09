@@ -1338,29 +1338,36 @@ RSpec.describe LocationsController, type: :request do
         let(:params) { { deactivation_date:, confirm: true, deactivation_date_type: "other" } }
         let(:mailer) { instance_double(LocationOrSchemeDeactivationMailer) }
 
+        let(:user_a) { FactoryBot.create(:user, email: "user_a@example.com") }
+        let(:user_b) { FactoryBot.create(:user, email: "user_b@example.com") }
+
         before do
-          allow(LocationOrSchemeDeactivationMailer).to receive(:new).and_return(mailer)
-          allow(mailer).to receive(:send_deactivation_mails)
+          FactoryBot.create_list(:lettings_log, 1, :sh, location:, scheme:, startdate:, created_by: user_a)
+          FactoryBot.create_list(:lettings_log, 3, :sh, location:, scheme:, startdate:, created_by: user_b)
+          allow(LocationOrSchemeDeactivationMailer).to receive_message_chain(:send_deactivation_mail, :deliver_later).and_return(true)
 
           Timecop.freeze(Time.utc(2022, 10, 10))
           sign_in user
-          patch "/schemes/#{scheme.id}/locations/#{location.id}/deactivate", params:
         end
 
         after do
           Timecop.unfreeze
         end
 
-        it "updates existing location with valid deactivation date and renders location page" do
-          follow_redirect!
-          expect(response).to have_http_status(:ok)
-          expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
-          location.reload
-          expect(location.location_deactivation_periods.count).to eq(1)
-          expect(location.location_deactivation_periods.first.deactivation_date).to eq(deactivation_date)
-        end
-
         context "and a log startdate is after location deactivation date" do
+          before do
+            patch "/schemes/#{scheme.id}/locations/#{location.id}/deactivate", params:
+          end
+
+          it "updates existing location with valid deactivation date and renders location page" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+            location.reload
+            expect(location.location_deactivation_periods.count).to eq(1)
+            expect(location.location_deactivation_periods.first.deactivation_date).to eq(deactivation_date)
+          end
+
           it "clears the location and scheme answers" do
             expect(lettings_log.location).to eq(location)
             expect(lettings_log.scheme).to eq(scheme)
@@ -1374,9 +1381,23 @@ RSpec.describe LocationsController, type: :request do
             lettings_log.reload
             expect(lettings_log.unresolved).to eq(true)
           end
+        end
 
-          it "sends update E-mails for affected logs" do
-            expect(mailer).to have_received(:send_deactivation_mails).with([lettings_log], "http://www.example.com/lettings-logs/update-logs", scheme.service_name, location.postcode)
+        context "and the users need to be notified" do
+          it "sends E-mails to the creators of affected logs with counts" do
+            expect(LocationOrSchemeDeactivationMailer).to receive(:send_deactivation_mail).with(user_a,
+                                                                                                1,
+                                                                                                url_for(controller: "lettings_logs", action: "update_logs"),
+                                                                                                location.scheme.service_name,
+                                                                                                location.postcode)
+
+            expect(LocationOrSchemeDeactivationMailer).to receive(:send_deactivation_mail).with(user_b,
+                                                                                                3,
+                                                                                                url_for(controller: "lettings_logs", action: "update_logs"),
+                                                                                                location.scheme.service_name,
+                                                                                                location.postcode)
+
+            patch "/schemes/#{scheme.id}/locations/#{location.id}/deactivate", params:
           end
         end
 

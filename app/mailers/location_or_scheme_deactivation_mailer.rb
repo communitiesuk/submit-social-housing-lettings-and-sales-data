@@ -14,12 +14,6 @@ class LocationOrSchemeDeactivationMailer < NotifyMailer
     )
   end
 
-  def send_deactivation_mails(logs, update_logs_url, scheme_name, postcode = nil)
-    logs.group_by(&:created_by).transform_values(&:count).compact.each do |user, count|
-      send_deactivation_mail(user, count, update_logs_url, scheme_name, postcode)
-    end
-  end
-
 private
 
   def description(scheme_name, postcode)

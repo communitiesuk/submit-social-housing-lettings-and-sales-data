@@ -53,11 +53,12 @@ class SchemesController < ApplicationController
       logs = reset_location_and_scheme_for_logs!
 
       flash[:notice] = deactivate_success_notice
-      LocationOrSchemeDeactivationMailer.new.send_deactivation_mails(
-        logs,
-        url_for(controller: "lettings_logs", action: "update_logs"),
-        @scheme.service_name,
-      )
+      logs.group_by(&:created_by).transform_values(&:count).compact.each do |user, count|
+        LocationOrSchemeDeactivationMailer.send_deactivation_mail(user,
+                                                                  count,
+                                                                  url_for(controller: "lettings_logs", action: "update_logs"),
+                                                                  @scheme.service_name).deliver_later
+      end
     end
     redirect_to scheme_details_path(@scheme)
   end
