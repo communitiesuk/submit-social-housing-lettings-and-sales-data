@@ -544,7 +544,7 @@ private
     return unless startdate && voiddate
 
     validate_property_void_date(self)
-    if errors[:voiddate].present?
+    if errors[:voiddate].present? && unresolved?
       self.voiddate = nil
       errors.clear
     end
