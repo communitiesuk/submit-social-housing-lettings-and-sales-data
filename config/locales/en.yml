@@ -144,11 +144,11 @@ en:
         after_major_repair_date: "Enter a tenancy start date that is after the major repair date"
         location:
           deactivated: "The location %{postcode} was deactivated on %{date} and was not available on the day you entered."
-          reactivating_soon: "The location %{postcode} was deactivated on %{deactivation_date} and is not available on the date you entered. It reactivates on %{date}"
+          reactivating_soon: "The location %{postcode} is not available until %{date}. Select another location or edit the tenancy start date"
           activating_soon: "The location %{postcode} is not available until %{date}. Enter a tenancy start date after %{date}"
         scheme:
           deactivated: "%{name} was deactivated on %{date} and was not available on the day you entered"
-          reactivating_soon: "%{name} was deactivated on %{deactivation_date} and is not available on the date you entered. It reactivates on %{date}"
+          reactivating_soon: "The scheme %{name} is not available until %{date}. Select another scheme or edit the tenancy start date"
           activating_soon: "%{name} is not available until %{date}. Enter a tenancy start date after %{date}"
 
     property:
