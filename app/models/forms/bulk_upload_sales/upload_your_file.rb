@@ -35,6 +35,7 @@ module Forms
           user: current_user,
           log_type: BulkUpload.log_types[:sales],
           year:,
+          filename: file.original_filename,
         )
 
         if upload_enabled?

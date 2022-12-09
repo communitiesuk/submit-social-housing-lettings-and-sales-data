@@ -5,7 +5,12 @@ RSpec.describe Forms::BulkUploadSales::UploadYourFile do
 
   let(:year) { 2022 }
   let(:actual_file) { File.open(file_fixture("blank_bulk_upload_sales.csv")) }
-  let(:file) { ActionDispatch::Http::UploadedFile.new(tempfile: actual_file) }
+  let(:file) do
+    ActionDispatch::Http::UploadedFile.new(
+      tempfile: actual_file,
+      filename: "my-file.csv",
+    )
+  end
   let(:current_user) { create(:user) }
   let(:mock_storage_service) { instance_double("S3Service") }
 
@@ -32,6 +37,7 @@ RSpec.describe Forms::BulkUploadSales::UploadYourFile do
       expect(bulk_upload.user).to eql(current_user)
       expect(bulk_upload.log_type).to eql("sales")
       expect(bulk_upload.year).to eql(year)
+      expect(bulk_upload.filename).to eql("my-file.csv")
       expect(bulk_upload.identifier).to be_present
     end
 
