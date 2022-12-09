@@ -79,7 +79,7 @@ module Imports
       attributes = {}
       attributes["scheme_type"] = safe_string_as_integer(xml_doc, "scheme-type")
       registered_under_care_act = safe_string_as_integer(xml_doc, "reg-home-type")
-      attributes["registered_under_care_act"] = registered_under_care_act.zero? ? nil : registered_under_care_act
+      attributes["registered_under_care_act"] = registered_under_care_act&.zero? ? nil : registered_under_care_act
       attributes["support_type"] = safe_string_as_integer(xml_doc, "support-type")
       attributes["intended_stay"] = string_or_nil(xml_doc, "intended-stay")
       attributes["mobility_type"] = string_or_nil(xml_doc, "mobility-type")
