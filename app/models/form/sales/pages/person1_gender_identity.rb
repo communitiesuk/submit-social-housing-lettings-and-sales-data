@@ -6,10 +6,8 @@ class Form::Sales::Pages::Person1GenderIdentity < ::Form::Page
     @description = ""
     @subsection = subsection
     @depends_on = [
-      { "hholdcount" => 1, "jointpur" => 2 },
-      { "hholdcount" => 2, "jointpur" => 2 },
-      { "hholdcount" => 3, "jointpur" => 2 },
-      { "hholdcount" => 4, "jointpur" => 2 },
+      { "details_known_1" => 1, "jointpur" => 2 },
+
     ]
   end
 
