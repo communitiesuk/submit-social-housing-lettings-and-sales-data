@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Pages::Person2Known, type: :model do
+RSpec.describe Form::Sales::Pages::Person1Known, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
   let(:page_id) { nil }
@@ -12,11 +12,11 @@ RSpec.describe Form::Sales::Pages::Person2Known, type: :model do
   end
 
   it "has correct questions" do
-    expect(page.questions.map(&:id)).to eq(%w[details_known_2])
+    expect(page.questions.map(&:id)).to eq(%w[details_known_1])
   end
 
   it "has the correct id" do
-    expect(page.id).to eq("person_2_known")
+    expect(page.id).to eq("person_1_known")
   end
 
   it "has the correct header" do
@@ -24,7 +24,7 @@ RSpec.describe Form::Sales::Pages::Person2Known, type: :model do
   end
 
   it "has the correct header_partial" do
-    expect(page.header_partial).to eq("person_2_known_page")
+    expect(page.header_partial).to eq("person_1_known_page")
   end
 
   it "has the correct description" do
@@ -34,9 +34,10 @@ RSpec.describe Form::Sales::Pages::Person2Known, type: :model do
   it "has correct depends_on" do
     expect(page.depends_on).to eq(
       [
-        { "hholdcount" => 2, "details_known_1" => 1  },
-        { "hholdcount" => 3, "details_known_1" => 1  },
-        { "hholdcount" => 4, "details_known_1" => 1  },
+        { "hholdcount" => 1 },
+        { "hholdcount" => 2 },
+        { "hholdcount" => 3 },
+        { "hholdcount" => 4 },
       ],
     )
   end
