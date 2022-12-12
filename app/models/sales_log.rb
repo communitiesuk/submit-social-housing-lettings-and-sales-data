@@ -63,10 +63,6 @@ class SalesLog < Log
     false
   end
 
-  def buyer_1_child?
-    ecstat1 == 9
-  end
-
   LONDON_BOROUGHS = %w[
     E09000001
     E09000033

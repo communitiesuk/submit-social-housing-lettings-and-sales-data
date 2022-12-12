@@ -4,9 +4,7 @@ module Validations::Sales::FinancialValidations
 
   def validate_income1(record)
     if record.ecstat1 && record.income1 && record.ownershipsch == 1
-      if record.buyer_1_child? && record.income1.positive?
-        record.errors.add :income1, I18n.t("validations.financial.income1.child_income")
-      elsif record.london_property?
+      if record.london_property?
         record.errors.add :income1, I18n.t("validations.financial.income1.over_hard_max", hard_max: 90_000) if record.income1 > 90_000
       elsif record.income1 > 80_000
         record.errors.add :income1, I18n.t("validations.financial.income1.over_hard_max", hard_max: 80_000)

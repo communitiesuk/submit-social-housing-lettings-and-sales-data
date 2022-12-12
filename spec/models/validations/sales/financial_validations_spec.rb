@@ -26,14 +26,6 @@ RSpec.describe Validations::Sales::FinancialValidations do
           financial_validator.validate_income1(record)
           expect(record.errors["income1"]).to be_empty
         end
-
-        it "validates income correctly if the ecstat is child" do
-          record.income1 = 1
-          record.ecstat1 = 9
-          financial_validator.validate_income1(record)
-          expect(record.errors["income1"])
-              .to include(match I18n.t("validations.financial.income1.child_income"))
-        end
       end
 
       context "and a london borough" do
@@ -57,14 +49,6 @@ RSpec.describe Validations::Sales::FinancialValidations do
           record.ecstat1 = 1
           financial_validator.validate_income1(record)
           expect(record.errors["income1"]).to be_empty
-        end
-
-        it "validates income correctly if the ecstat is child" do
-          record.income1 = 1
-          record.ecstat1 = 9
-          financial_validator.validate_income1(record)
-          expect(record.errors["income1"])
-              .to include(match I18n.t("validations.financial.income1.child_income"))
         end
       end
     end
