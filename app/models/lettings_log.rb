@@ -17,6 +17,8 @@ end
 class LettingsLog < Log
   include Validations::SoftValidations
   include DerivedVariables::LettingsLogVariables
+  include Validations::DateValidations
+  include Validations::FinancialValidations
 
   has_paper_trail
 
@@ -538,6 +540,26 @@ private
     end
   end
 
+  def reset_invalid_unresolved_log_fields!
+    return unless unresolved?
+
+    validate_property_void_date(self)
+    self.voiddate = nil if errors[:voiddate].present?
+
+    validate_property_major_repairs(self)
+    self.mrcdate = nil if errors[:mrcdate].present?
+
+    validate_rent_range(self)
+    if errors[:brent].present?
+      self.brent = nil
+      self.scharge = nil
+      self.pscharge = nil
+      self.supcharg = nil
+    end
+
+    errors.clear
+  end
+
   def reset_scheme
     return unless scheme && owning_organisation
 
@@ -547,6 +569,7 @@ private
   def reset_invalidated_dependent_fields!
     super
 
+    reset_invalid_unresolved_log_fields!
     reset_created_by
     reset_scheme
     reset_derived_questions
