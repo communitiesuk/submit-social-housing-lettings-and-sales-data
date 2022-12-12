@@ -124,11 +124,14 @@ RSpec.describe Organisation, type: :model do
       before do
         FactoryBot.create(:organisation_rent_period, organisation:, rent_period: 2)
         FactoryBot.create(:organisation_rent_period, organisation:, rent_period: 3)
+
+        # Unmapped and ignored by `rent_period_labels`
+        FactoryBot.create(:organisation_rent_period, organisation:, rent_period: 10)
         allow(RentPeriod).to receive(:rent_period_mappings).and_return(rent_period_mappings)
       end
 
       it "has rent periods associated" do
-        expect(organisation.rent_periods).to eq([2, 3])
+        expect(organisation.rent_periods).to eq([2, 3, 10])
       end
 
       it "maps the rent periods to display values" do
