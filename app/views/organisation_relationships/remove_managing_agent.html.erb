@@ -1,7 +1,7 @@
 <%= form_with url: managing_agents_organisation_path(target_organisation_id: @target_organisation.id), method: "delete", local: true do |f| %>
   <% if current_user.support? %>
-    <%= render partial: "organisations/headings", locals: { main: @organisation.name, sub: nil } %>
-    <%= render SubNavigationComponent.new(items: secondary_items(request.path, @organisation.id)) %>
+    <%= render partial: "organisations/headings", locals: { main: organisation.name, sub: nil } %>
+    <%= render SubNavigationComponent.new(items: secondary_items(request.path, organisation.id)) %>
     <h2 class="govuk-visually-hidden">Remove Managing Agent</h2>
   <% end %>
   <% if current_user.support? %>

@@ -18,6 +18,7 @@
     <% answer_options[organisation[0]] = organisation[1] %>
   <% end %>
   <%= render partial: "organisation_relationships/related_organisation_select_question", locals: {
+    field: :child_organisation_id,
     question: Form::Question.new("", { "answer_options" => answer_options }, nil),
     f:,
   } %>
