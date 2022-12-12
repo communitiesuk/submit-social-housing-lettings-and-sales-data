@@ -15,6 +15,7 @@ RSpec.describe Form::Sales::Subsections::IncomeBenefitsAndSavings, type: :model 
     expect(subsection.pages.map(&:id)).to eq(
       %w[
         buyer_1_income
+        buyer_1_income_value_check
         buyer_1_mortgage
         buyer_2_income
         savings

@@ -10,6 +10,7 @@ class Form::Sales::Subsections::IncomeBenefitsAndSavings < ::Form::Subsection
   def pages
     @pages ||= [
       Form::Sales::Pages::Buyer1Income.new(nil, nil, self),
+      Form::Sales::Pages::Buyer1IncomeValueCheck.new(nil, nil, self),
       Form::Sales::Pages::Buyer1Mortgage.new(nil, nil, self),
       Form::Sales::Pages::Buyer2Income.new(nil, nil, self),
       Form::Sales::Pages::Savings.new(nil, nil, self),

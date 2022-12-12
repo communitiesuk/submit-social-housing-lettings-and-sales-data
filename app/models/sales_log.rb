@@ -102,4 +102,8 @@ class SalesLog < Log
   def london_property?
     la && LONDON_BOROUGHS.include?(la)
   end
+
+  def income1_under_soft_min?
+    true
+  end
 end
