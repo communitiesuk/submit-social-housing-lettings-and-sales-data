@@ -39,6 +39,7 @@ FactoryBot.define do
       ecstat2 { "1" }
       hholdcount { "1" }
       wheel { 1 }
+      details_known_1 { 1 }
       age3_known { 0 }
       age3 { 40 }
       details_known_2 { 1 }

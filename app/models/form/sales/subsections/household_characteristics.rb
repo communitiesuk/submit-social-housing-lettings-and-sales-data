@@ -28,6 +28,7 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Sales::Pages::Buyer2WorkingSituation.new(nil, nil, self),
       Form::Sales::Pages::Buyer2LiveInProperty.new(nil, nil, self),
       Form::Sales::Pages::NumberOfOthersInProperty.new(nil, nil, self),
+      Form::Sales::Pages::Person1Known.new(nil, nil, self),
       Form::Sales::Pages::Person1Age.new(nil, nil, self),
       Form::Sales::Pages::Person1GenderIdentity.new(nil, nil, self),
       Form::Sales::Pages::Person1GenderIdentityJointPurchase.new(nil, nil, self),
