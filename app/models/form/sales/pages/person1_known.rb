@@ -2,7 +2,6 @@ class Form::Sales::Pages::Person1Known < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "person_1_known"
-    @header_partial = "person_1_known_page"
     @header = ""
     @description = ""
     @subsection = subsection
