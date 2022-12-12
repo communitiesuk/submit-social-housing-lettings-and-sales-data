@@ -7,6 +7,7 @@ class Form::Sales::Questions::GenderIdentity2 < ::Form::Question
     @type = "radio"
     @page = page
     @answer_options = ANSWER_OPTIONS
+    @check_answers_card_number = 2
   end
 
   ANSWER_OPTIONS = {

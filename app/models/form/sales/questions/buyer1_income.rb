@@ -10,5 +10,6 @@ class Form::Sales::Questions::Buyer1Income < ::Form::Question
     @step = 1
     @width = 5
     @prefix = "£"
+    @check_answers_card_number = 1
   end
 end

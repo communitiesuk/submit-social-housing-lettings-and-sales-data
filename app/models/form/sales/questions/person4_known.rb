@@ -15,6 +15,7 @@ class Form::Sales::Questions::Person4Known < ::Form::Question
         },
       ],
     }
+    @check_answers_card_number = 6
   end
 
   ANSWER_OPTIONS = {

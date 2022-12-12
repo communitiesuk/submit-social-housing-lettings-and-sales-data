@@ -51,8 +51,12 @@ RSpec.describe Form::Sales::Questions::Person3AgeKnown, type: :model do
   it "has the correct hidden_in_check_answers" do
     expect(question.hidden_in_check_answers).to eq(
       {
-        "depends_on" => [{ "age5_known" => 0 }, { "details_known_3" => nil }, { "details_known_3" => 2 }],
+        "depends_on" => [{ "age5_known" => 0 }, { "age5_known" => 1 }],
       },
     )
+  end
+
+  it "has the correct check_answers_card_number" do
+    expect(question.check_answers_card_number).to eq(5)
   end
 end

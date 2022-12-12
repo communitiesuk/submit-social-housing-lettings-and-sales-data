@@ -7,5 +7,10 @@ class Form::Sales::Questions::Person3Age < ::Form::Question
     @type = "numeric"
     @page = page
     @width = 3
+    @inferred_check_answers_value = {
+      "condition" => { "age5_known" => 1 },
+      "value" => "Not known",
+    }
+    @check_answers_card_number = 5
   end
 end

@@ -59,6 +59,7 @@ FactoryBot.define do
       la { "E09000003" }
       savingsnk { 1 }
       prevown { 1 }
+      sex3 { "X" }
     end
   end
 end

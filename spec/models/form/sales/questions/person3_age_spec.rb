@@ -38,4 +38,15 @@ RSpec.describe Form::Sales::Questions::Person3Age, type: :model do
   it "has the correct width" do
     expect(question.width).to eq(3)
   end
+
+  it "has the correct inferred check answers value" do
+    expect(question.inferred_check_answers_value).to eq({
+      "condition" => { "age5_known" => 1 },
+      "value" => "Not known",
+    })
+  end
+
+  it "has the correct check_answers_card_number" do
+    expect(question.check_answers_card_number).to eq(5)
+  end
 end

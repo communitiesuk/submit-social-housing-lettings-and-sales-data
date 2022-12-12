@@ -17,13 +17,11 @@ class Form::Sales::Questions::Person3AgeKnown < ::Form::Question
           "age5_known" => 0,
         },
         {
-          "details_known_3" => nil,
-        },
-        {
-          "details_known_3" => 2,
+          "age5_known" => 1,
         },
       ],
     }
+    @check_answers_card_number = 5
   end
 
   ANSWER_OPTIONS = {

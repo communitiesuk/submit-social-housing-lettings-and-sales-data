@@ -43,4 +43,8 @@ RSpec.describe Form::Sales::Questions::GenderIdentity1, type: :model do
       "R" => { "value" => "Prefers not to say " },
     })
   end
+
+  it "has the correct check_answers_card_number" do
+    expect(question.check_answers_card_number).to eq(1)
+  end
 end
