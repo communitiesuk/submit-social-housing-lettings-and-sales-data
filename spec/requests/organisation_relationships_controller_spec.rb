@@ -139,8 +139,8 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
         let(:params) do
           {
-            "organisation": {
-              "related_organisation_id": housing_provider.id,
+            "organisation_relationship": {
+              "parent_organisation_id": housing_provider.id,
             },
           }
         end
@@ -167,8 +167,8 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
         let(:params) do
           {
-            "organisation": {
-              "related_organisation_id": managing_agent.id,
+            "organisation_relationship": {
+              "child_organisation_id": managing_agent.id,
             },
           }
         end
@@ -369,7 +369,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         let(:params) do
           {
             "organisation_relationship": {
-              "related_organisation_id": housing_provider.id,
+              "parent_organisation_id": housing_provider.id,
             },
           }
         end
@@ -397,7 +397,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         let(:params) do
           {
             "organisation_relationship": {
-              "related_organisation_id": managing_agent.id,
+              "child_organisation_id": managing_agent.id,
             },
           }
         end
