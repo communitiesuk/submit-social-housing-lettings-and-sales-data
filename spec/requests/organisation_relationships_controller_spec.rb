@@ -368,7 +368,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
         let(:params) do
           {
-            "organisation": {
+            "organisation_relationship": {
               "related_organisation_id": housing_provider.id,
             },
           }
@@ -396,7 +396,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
         let(:params) do
           {
-            "organisation": {
+            "organisation_relationship": {
               "related_organisation_id": managing_agent.id,
             },
           }
