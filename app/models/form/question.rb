@@ -113,7 +113,7 @@ class Form::Question
     return unless inferred_check_answers_value
 
     inferred_answer = inferred_check_answers_value.find { |inferred_value| inferred_value["condition"].values[0] == log[inferred_value["condition"].keys[0]] }
-    inferred_answer.present??  inferred_answer["value"] : ""
+    inferred_answer.present? ? inferred_answer["value"] : ""
   end
 
   def displayed_answer_options(log, _current_user = nil)
@@ -278,7 +278,7 @@ private
   end
 
   def has_inferred_display_value?(log)
-    inferred_check_answers_value.present? && inferred_check_answers_value.any? { |inferred_value| log[inferred_value["condition"].keys.first] == inferred_value["condition"].values.first}
+    inferred_check_answers_value.present? && inferred_check_answers_value.any? { |inferred_value| log[inferred_value["condition"].keys.first] == inferred_value["condition"].values.first }
   end
 
   def checkbox_answer_label(log)
