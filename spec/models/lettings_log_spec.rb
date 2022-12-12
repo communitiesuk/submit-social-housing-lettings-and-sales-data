@@ -2053,6 +2053,11 @@ RSpec.describe LettingsLog do
           expect(lettings_log.startdate).to eq(Time.zone.yesterday)
           expect(lettings_log.voiddate).to eq(nil)
         end
+
+        it "does not impact other validations" do
+          expect { lettings_log.update!(startdate: Time.zone.yesterday, first_time_property_let_as_social_housing: 0, rsnvac: 16) }
+            .to raise_error(ActiveRecord::RecordInvalid, /Enter a reason for vacancy that is not 'first let' if unit has been previously let as social housing/)
+        end
       end
 
       context "and the new startdate triggers major repairs date validation" do
@@ -2073,6 +2078,11 @@ RSpec.describe LettingsLog do
           expect(lettings_log.scharge).to eq(nil)
           expect(lettings_log.pscharge).to eq(nil)
           expect(lettings_log.supcharg).to eq(nil)
+        end
+
+        it "does not impact other validations" do
+          expect { lettings_log.update!(location:, scheme:, first_time_property_let_as_social_housing: 0, rsnvac: 16) }
+            .to raise_error(ActiveRecord::RecordInvalid, /Enter a reason for vacancy that is not 'first let' if unit has been previously let as social housing/)
         end
       end
     end
