@@ -1,4 +1,4 @@
-<%= form_with model: @organisation, url: managing_agents_organisation_path, method: "post", local: true do |f| %>
+<%= form_with model: @organisation_relationship, url: managing_agents_organisation_path, method: "post", local: true do |f| %>
   <% if current_user.support? %>
     <%= render partial: "organisations/headings", locals: { main: @organisation.name, sub: nil } %>
     <%= render SubNavigationComponent.new(items: secondary_items(request.path, @organisation.id)) %>

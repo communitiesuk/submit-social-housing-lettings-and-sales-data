@@ -39,11 +39,11 @@ class OrganisationRelationshipsController < ApplicationController
 
   def create_housing_provider
     child_organisation = @organisation
-    if params[:organisation][:related_organisation_id].present?
+    if params[:organisation_relationship].present? && params[:organisation_relationship][:related_organisation_id].present?
       parent_organisation = related_organisation
     end
-    @resource = OrganisationRelationship.new(child_organisation:, parent_organisation:)
-    if @resource.save(context: :housing_provider)
+    @organisation_relationship = OrganisationRelationship.new(child_organisation:, parent_organisation:)
+    if @organisation_relationship.save(context: :housing_provider)
       flash[:notice] = "#{related_organisation.name} is now one of #{current_user.data_coordinator? ? 'your' : "this organisation's"} housing providers"
       redirect_to housing_providers_organisation_path
     else
@@ -54,11 +54,11 @@ class OrganisationRelationshipsController < ApplicationController
 
   def create_managing_agent
     parent_organisation = @organisation
-    if params[:organisation][:related_organisation_id].present?
+    if params[:organisation_relationship].present? && params[:organisation_relationship][:related_organisation_id].present?
       child_organisation = related_organisation
     end
-    @resource = OrganisationRelationship.new(child_organisation:, parent_organisation:)
-    if @resource.save(context: :managing_agent)
+    @organisation_relationship = OrganisationRelationship.new(child_organisation:, parent_organisation:)
+    if @organisation_relationship.save(context: :managing_agent)
       flash[:notice] = "#{related_organisation.name} is now one of #{current_user.data_coordinator? ? 'your' : "this organisation's"} managing agents"
       redirect_to managing_agents_organisation_path
     else
@@ -107,7 +107,7 @@ private
   end
 
   def related_organisation
-    @related_organisation ||= Organisation.find(params[:organisation][:related_organisation_id])
+    @related_organisation ||= Organisation.find(params[:organisation_relationship][:related_organisation_id])
   end
 
   def target_organisation
