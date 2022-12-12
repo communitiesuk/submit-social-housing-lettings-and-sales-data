@@ -2005,6 +2005,8 @@ RSpec.describe LettingsLog do
     end
 
     context "when the log is unresolved" do
+      let(:scheme) { FactoryBot.create(:scheme, owning_organisation: created_by_user.organisation) }
+      let(:location) { FactoryBot.create(:location, location_code: "E07000223", scheme:) }
       let(:lettings_log) do
         FactoryBot.create(
           :lettings_log,
@@ -2014,7 +2016,30 @@ RSpec.describe LettingsLog do
           startdate: Time.zone.tomorrow,
           voiddate: Time.zone.today,
           mrcdate: Time.zone.today,
+          rent_type: 2,
+          needstype: 2,
+          period: 1,
+          beds: 1,
+          brent: 7.17,
+          scharge: 1,
+          pscharge: 1,
+          supcharg: 1,
+          created_by: created_by_user,
           unresolved: true,
+        )
+      end
+
+      before do
+        LaRentRange.create!(
+          ranges_rent_id: "1",
+          la: "E07000223",
+          beds: 0,
+          lettype: 8,
+          soft_min: 12.41,
+          soft_max: 89.54,
+          hard_min: 10.87,
+          hard_max: 100.99,
+          start_year: lettings_log.startdate.year,
         )
       end
 
@@ -2035,9 +2060,23 @@ RSpec.describe LettingsLog do
           expect(lettings_log.mrcdate).to eq(nil)
         end
       end
+
+      context "and the new location triggers the rent range validation" do
+        it "clears rent values" do
+          lettings_log.update!(location:, scheme:)
+          lettings_log.reload
+          expect(lettings_log.location).to eq(location)
+          expect(lettings_log.brent).to eq(nil)
+          expect(lettings_log.scharge).to eq(nil)
+          expect(lettings_log.pscharge).to eq(nil)
+          expect(lettings_log.supcharg).to eq(nil)
+        end
+      end
     end
 
     context "when the log is resolved" do
+      let(:scheme) { FactoryBot.create(:scheme, owning_organisation: created_by_user.organisation) }
+      let(:location) { FactoryBot.create(:location, location_code: "E07000223", scheme:) }
       let(:lettings_log) do
         FactoryBot.create(
           :lettings_log,
@@ -2047,7 +2086,30 @@ RSpec.describe LettingsLog do
           startdate: Time.zone.tomorrow,
           voiddate: Time.zone.today,
           mrcdate: Time.zone.today,
+          rent_type: 2,
+          needstype: 2,
+          period: 1,
+          beds: 1,
+          brent: 7.17,
+          scharge: 1,
+          pscharge: 1,
+          supcharg: 1,
+          created_by: created_by_user,
           unresolved: nil,
+        )
+      end
+
+      before do
+        LaRentRange.create!(
+          ranges_rent_id: "1",
+          la: "E07000223",
+          beds: 0,
+          lettype: 8,
+          soft_min: 12.41,
+          soft_max: 89.54,
+          hard_min: 10.87,
+          hard_max: 100.99,
+          start_year: lettings_log.startdate.year,
         )
       end
 
@@ -2064,6 +2126,16 @@ RSpec.describe LettingsLog do
           expect { lettings_log.update!(startdate: Time.zone.yesterday) }.to raise_error(ActiveRecord::RecordInvalid, /Enter a major repairs date that is before the tenancy start date/)
           expect(lettings_log.startdate).to eq(Time.zone.yesterday)
           expect(lettings_log.mrcdate).to eq(Time.zone.today)
+        end
+      end
+
+      context "and the new location triggers brent validation" do
+        it "doesn't clear rent values" do
+          expect { lettings_log.update!(location:, scheme:) }.to raise_error(ActiveRecord::RecordInvalid, /Rent is below the absolute minimum expected/)
+          expect(lettings_log.brent).to eq(7.17)
+          expect(lettings_log.scharge).to eq(1)
+          expect(lettings_log.pscharge).to eq(1)
+          expect(lettings_log.supcharg).to eq(1)
         end
       end
     end

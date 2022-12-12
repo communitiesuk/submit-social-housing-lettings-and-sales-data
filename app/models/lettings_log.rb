@@ -18,6 +18,7 @@ class LettingsLog < Log
   include Validations::SoftValidations
   include DerivedVariables::LettingsLogVariables
   include Validations::DateValidations
+  include Validations::FinancialValidations
 
   has_paper_trail
 
@@ -547,6 +548,14 @@ private
 
     validate_property_major_repairs(self)
     self.mrcdate = nil if errors[:mrcdate].present?
+
+    validate_rent_range(self)
+    if errors[:brent].present?
+      self.brent = nil 
+      self.scharge = nil
+      self.pscharge = nil
+      self.supcharg = nil
+    end
 
     errors.clear
   end
