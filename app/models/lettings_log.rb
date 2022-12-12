@@ -26,8 +26,6 @@ class LettingsLog < Log
   before_validation :reset_scheme_location!, if: :scheme_changed?, unless: :location_changed?
   before_validation :process_postcode_changes!, if: :postcode_full_changed?
   before_validation :process_previous_postcode_changes!, if: :ppostcode_full_changed?
-  before_validation :reset_voiddate!, if: :startdate_changed?
-  before_validation :reset_mrcdate!, if: :startdate_changed?
   before_validation :reset_invalidated_dependent_fields!
   before_validation :reset_location_fields!, unless: :postcode_known?
   before_validation :reset_previous_location_fields!, unless: :previous_postcode_known?
@@ -541,20 +539,16 @@ private
     end
   end
 
-  def reset_voiddate!
-    validate_property_void_date(self)
-    if errors[:voiddate].present? && unresolved?
-      self.voiddate = nil
-      errors.clear
-    end
-  end
+  def reset_invalid_unresolved_log_fields!
+    return unless unresolved?
 
-  def reset_mrcdate!
+    validate_property_void_date(self)
+    self.voiddate = nil if errors[:voiddate].present?
+
     validate_property_major_repairs(self)
-    if errors[:mrcdate].present? && unresolved?
-      self.mrcdate = nil
-      errors.clear
-    end
+    self.mrcdate = nil if errors[:mrcdate].present?
+
+    errors.clear
   end
 
   def reset_scheme
@@ -566,6 +560,7 @@ private
   def reset_invalidated_dependent_fields!
     super
 
+    reset_invalid_unresolved_log_fields!
     reset_created_by
     reset_scheme
     reset_derived_questions
