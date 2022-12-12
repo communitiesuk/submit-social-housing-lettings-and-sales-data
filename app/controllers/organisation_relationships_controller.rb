@@ -39,49 +39,32 @@ class OrganisationRelationshipsController < ApplicationController
 
   def create_housing_provider
     child_organisation = @organisation
-    if params[:organisation][:related_organisation_id].empty?
-      @organisation.errors.add :related_organisation_id, "You must choose a housing provider"
-      @organisations = Organisation.where.not(id: child_organisation.id).pluck(:id, :name)
-      render "organisation_relationships/add_housing_provider"
-      return
-    else
+    if params[:organisation][:related_organisation_id].present?
       parent_organisation = related_organisation
-      if OrganisationRelationship.exists?(child_organisation:, parent_organisation:)
-        @organisation.errors.add :related_organisation_id, "You have already added this housing provider"
-        @organisations = Organisation.where.not(id: child_organisation.id).pluck(:id, :name)
-        render "organisation_relationships/add_housing_provider"
-        return
-      elsif !parent_organisation.holds_own_stock
-        @organisation.errors.add :related_organisation_id, I18n.t("validations.scheme.owning_organisation.does_not_own_stock")
-        @organisations = Organisation.where.not(id: child_organisation.id).pluck(:id, :name)
-        render "organisation_relationships/add_housing_provider"
-        return
-      end
     end
-    create!(child_organisation:, parent_organisation:)
-    flash[:notice] = "#{related_organisation.name} is now one of #{current_user.data_coordinator? ? 'your' : "this organisation's"} housing providers"
-    redirect_to housing_providers_organisation_path
+    @resource = OrganisationRelationship.new(child_organisation:, parent_organisation:)
+    if @resource.save(context: :housing_provider)
+      flash[:notice] = "#{related_organisation.name} is now one of #{current_user.data_coordinator? ? 'your' : "this organisation's"} housing providers"
+      redirect_to housing_providers_organisation_path
+    else
+      @organisations = Organisation.where.not(id: child_organisation.id).pluck(:id, :name)
+      render "organisation_relationships/add_housing_provider", status: :unprocessable_entity
+    end
   end
 
   def create_managing_agent
     parent_organisation = @organisation
-    if params[:organisation][:related_organisation_id].empty?
-      @organisation.errors.add :related_organisation_id, "You must choose a managing agent"
-      @organisations = Organisation.where.not(id: parent_organisation.id).pluck(:id, :name)
-      render "organisation_relationships/add_managing_agent"
-      return
-    else
+    if params[:organisation][:related_organisation_id].present?
       child_organisation = related_organisation
-      if OrganisationRelationship.exists?(child_organisation:, parent_organisation:)
-        @organisation.errors.add :related_organisation_id, "You have already added this managing agent"
-        @organisations = Organisation.where.not(id: parent_organisation.id).pluck(:id, :name)
-        render "organisation_relationships/add_managing_agent"
-        return
-      end
     end
-    create!(child_organisation:, parent_organisation:)
-    flash[:notice] = "#{related_organisation.name} is now one of #{current_user.data_coordinator? ? 'your' : "this organisation's"} managing agents"
-    redirect_to managing_agents_organisation_path
+    @resource = OrganisationRelationship.new(child_organisation:, parent_organisation:)
+    if @resource.save(context: :managing_agent)
+      flash[:notice] = "#{related_organisation.name} is now one of #{current_user.data_coordinator? ? 'your' : "this organisation's"} managing agents"
+      redirect_to managing_agents_organisation_path
+    else
+      @organisations = Organisation.where.not(id: parent_organisation.id).pluck(:id, :name)
+      render "organisation_relationships/add_managing_agent", status: :unprocessable_entity
+    end
   end
 
   def remove_housing_provider
