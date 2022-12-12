@@ -1,6 +1,7 @@
 class SalesLogValidator < ActiveModel::Validator
   include Validations::Sales::HouseholdValidations
   include Validations::SharedValidations
+  include Validations::Sales::FinancialValidations
 
   def validate(record)
     validation_methods = public_methods.select { |method| method.starts_with?("validate_") }
@@ -60,5 +61,9 @@ class SalesLog < Log
 
   def unresolved
     false
+  end
+
+  def buyer_1_child?
+    ecstat1 == 9
   end
 end
