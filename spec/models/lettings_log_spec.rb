@@ -1855,6 +1855,43 @@ RSpec.describe LettingsLog do
   end
 
   describe "resetting invalidated fields" do
+    let(:scheme) { FactoryBot.create(:scheme, owning_organisation: created_by_user.organisation) }
+    let(:location) { FactoryBot.create(:location, location_code: "E07000223", scheme:) }
+    let(:lettings_log) do
+      FactoryBot.create(
+        :lettings_log,
+        renewal: 0,
+        rsnvac: 5,
+        first_time_property_let_as_social_housing: 0,
+        startdate: Time.zone.tomorrow,
+        voiddate: Time.zone.today,
+        mrcdate: Time.zone.today,
+        rent_type: 2,
+        needstype: 2,
+        period: 1,
+        beds: 1,
+        brent: 7.17,
+        scharge: 1,
+        pscharge: 1,
+        supcharg: 1,
+        created_by: created_by_user,
+      )
+    end
+
+    before do
+      LaRentRange.create!(
+        ranges_rent_id: "1",
+        la: "E07000223",
+        beds: 0,
+        lettype: 8,
+        soft_min: 12.41,
+        soft_max: 89.54,
+        hard_min: 10.87,
+        hard_max: 100.99,
+        start_year: lettings_log.startdate&.year,
+      )
+    end
+
     context "when a question that has already been answered, no longer has met dependencies" do
       let(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress, cbl: 1, preg_occ: 2, wchair: 1) }
 
@@ -2005,42 +2042,8 @@ RSpec.describe LettingsLog do
     end
 
     context "when the log is unresolved" do
-      let(:scheme) { FactoryBot.create(:scheme, owning_organisation: created_by_user.organisation) }
-      let(:location) { FactoryBot.create(:location, location_code: "E07000223", scheme:) }
-      let(:lettings_log) do
-        FactoryBot.create(
-          :lettings_log,
-          renewal: 0,
-          rsnvac: 5,
-          first_time_property_let_as_social_housing: 0,
-          startdate: Time.zone.tomorrow,
-          voiddate: Time.zone.today,
-          mrcdate: Time.zone.today,
-          rent_type: 2,
-          needstype: 2,
-          period: 1,
-          beds: 1,
-          brent: 7.17,
-          scharge: 1,
-          pscharge: 1,
-          supcharg: 1,
-          created_by: created_by_user,
-          unresolved: true,
-        )
-      end
-
       before do
-        LaRentRange.create!(
-          ranges_rent_id: "1",
-          la: "E07000223",
-          beds: 0,
-          lettype: 8,
-          soft_min: 12.41,
-          soft_max: 89.54,
-          hard_min: 10.87,
-          hard_max: 100.99,
-          start_year: lettings_log.startdate.year,
-        )
+        lettings_log.update!(unresolved: true)
       end
 
       context "and the new startdate triggers void date validation" do
@@ -2075,44 +2078,6 @@ RSpec.describe LettingsLog do
     end
 
     context "when the log is resolved" do
-      let(:scheme) { FactoryBot.create(:scheme, owning_organisation: created_by_user.organisation) }
-      let(:location) { FactoryBot.create(:location, location_code: "E07000223", scheme:) }
-      let(:lettings_log) do
-        FactoryBot.create(
-          :lettings_log,
-          renewal: 0,
-          rsnvac: 5,
-          first_time_property_let_as_social_housing: 0,
-          startdate: Time.zone.tomorrow,
-          voiddate: Time.zone.today,
-          mrcdate: Time.zone.today,
-          rent_type: 2,
-          needstype: 2,
-          period: 1,
-          beds: 1,
-          brent: 7.17,
-          scharge: 1,
-          pscharge: 1,
-          supcharg: 1,
-          created_by: created_by_user,
-          unresolved: nil,
-        )
-      end
-
-      before do
-        LaRentRange.create!(
-          ranges_rent_id: "1",
-          la: "E07000223",
-          beds: 0,
-          lettype: 8,
-          soft_min: 12.41,
-          soft_max: 89.54,
-          hard_min: 10.87,
-          hard_max: 100.99,
-          start_year: lettings_log.startdate.year,
-        )
-      end
-
       context "and the new startdate triggers void date validation" do
         it "doesn't clear void date value" do
           expect { lettings_log.update!(startdate: Time.zone.yesterday) }.to raise_error(ActiveRecord::RecordInvalid, /Enter a void date that is before the tenancy start date/)

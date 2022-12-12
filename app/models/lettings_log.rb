@@ -551,7 +551,7 @@ private
 
     validate_rent_range(self)
     if errors[:brent].present?
-      self.brent = nil 
+      self.brent = nil
       self.scharge = nil
       self.pscharge = nil
       self.supcharg = nil
