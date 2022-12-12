@@ -157,7 +157,7 @@ jobs:
         env:
           APP_NAME: dluhc-core-review-${{ github.event.pull_request.number }}
         run: |
-          cf restage $APP_NAME --strategy rolling
+          cf restage $APP_NAME
 
       - name: Comment on PR with URL
         uses: unsplash/comment-on-pr@v1.3.0
