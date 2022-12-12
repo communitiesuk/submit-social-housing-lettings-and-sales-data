@@ -403,6 +403,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_13_085819) do
     t.integer "savings"
     t.integer "prevown"
     t.string "sex3"
+    t.integer "income1_value_check"
     t.integer "details_known_1"
     t.integer "income1_value_check"
     t.integer "mortgage"
