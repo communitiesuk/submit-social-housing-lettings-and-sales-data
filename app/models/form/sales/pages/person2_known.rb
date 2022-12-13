@@ -7,9 +7,9 @@ class Form::Sales::Pages::Person2Known < ::Form::Page
     @description = ""
     @subsection = subsection
     @depends_on = [
-      { "hholdcount" => 2, "details_known_1" => 1  },
-      { "hholdcount" => 3, "details_known_1" => 1  },
-      { "hholdcount" => 4, "details_known_1" => 1  },
+      { "hholdcount" => 2 },
+      { "hholdcount" => 3 },
+      { "hholdcount" => 4 },
     ]
   end
 
