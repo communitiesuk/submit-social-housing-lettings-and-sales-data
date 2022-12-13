@@ -1,11 +1,11 @@
 class OrganisationRelationship < ApplicationRecord
   belongs_to :child_organisation, class_name: "Organisation"
   belongs_to :parent_organisation, class_name: "Organisation"
-  validates :parent_organisation_id, presence: { message: "You must choose a housing provider" }, on: :housing_provider
-  validates :child_organisation_id, presence: { message: "You must choose a managing agent" }, on: :managing_agent
-  validates :parent_organisation_id, uniqueness: { scope: :child_organisation_id, message: "You have already added this housing provider" }, on: :housing_provider
-  validates :child_organisation_id, uniqueness: { scope: :parent_organisation_id, message: "You have already added this managing agent" }, on: :managing_agent
-  validate :validate_housing_provider_owns_stock, on: :housing_provider
+  validates :parent_organisation_id, presence: { message: "You must choose a housing provider" }
+  validates :child_organisation_id, presence: { message: "You must choose a managing agent" }
+  validates :parent_organisation_id, uniqueness: { scope: :child_organisation_id, message: "You have already added this housing provider" }
+  validates :child_organisation_id, uniqueness: { scope: :parent_organisation_id, message: "You have already added this managing agent" }
+  validate :validate_housing_provider_owns_stock
 
 private
 
