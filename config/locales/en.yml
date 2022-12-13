@@ -116,6 +116,13 @@ en:
     organisation:
       name_missing: "Enter the name of the organisation"
       provider_type_missing: "Select the organisation type"
+      housing_provider:
+        blank: "You must choose a housing provider"
+        already_added: "You have already added this housing provider"
+        does_not_own_stock: "Enter an organisation that owns housing stock"
+      managing_agent:
+        blank: "You must choose a managing agent"
+        already_added: "You have already added this managing agent"
     not_answered: "You must answer %{question}"
 
     other_field_missing: "If %{main_field_label} is other then %{other_field_label} must be provided"
