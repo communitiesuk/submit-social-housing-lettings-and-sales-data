@@ -14,6 +14,10 @@ module Validations::Sales::SoftValidations
   end
 
   def mortgage_over_soft_max?
-    true
+    return false unless mortgage && inc1mort && inc2mort
+    return false if income1_used_for_mortgage? && income1.blank? || income2_used_for_mortgage? && income2.blank?
+
+    income_used_for_mortgage = (income1_used_for_mortgage? ? income1 : 0) + (income2_used_for_mortgage? ? income2 : 0)
+    mortgage > income_used_for_mortgage * 5
   end
 end

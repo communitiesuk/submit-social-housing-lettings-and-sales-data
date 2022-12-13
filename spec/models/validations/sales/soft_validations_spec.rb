@@ -86,4 +86,119 @@ RSpec.describe Validations::Sales::SoftValidations do
       end
     end
   end
+
+  describe "mortgage amount validations" do
+    context "when validating soft max" do
+      it "returns false if no mortgage is given" do
+        record.mortgage = nil
+        expect(record)
+          .not_to be_mortgage_over_soft_max
+      end
+
+      it "returns false if no inc1mort is given" do
+        record.inc1mort = nil
+        record.mortgage = 20_000
+        expect(record)
+          .not_to be_mortgage_over_soft_max
+      end
+
+      it "returns false if no inc2mort is given" do
+        record.inc1mort = 2
+        record.inc2mort = nil
+        record.mortgage = 20_000
+        expect(record)
+          .not_to be_mortgage_over_soft_max
+      end
+
+      it "returns false if no income1 is given and inc1mort is yes" do
+        record.inc1mort = 1
+        record.inc2mort = 2
+        record.income1 = nil
+        record.mortgage = 20_000
+        expect(record)
+          .not_to be_mortgage_over_soft_max
+      end
+
+      it "returns false if no income2 is given and inc2mort is yes" do
+        record.inc1mort = 2
+        record.inc2mort = 1
+        record.income2 = nil
+        record.mortgage = 20_000
+        expect(record)
+          .not_to be_mortgage_over_soft_max
+      end
+
+      it "returns true if only income1 is used for morgage and it is less than 1/5 of the morgage" do
+        record.inc1mort = 1
+        record.income1 = 10_000
+        record.mortgage = 51_000
+        record.inc2mort = 2
+        expect(record)
+          .to be_mortgage_over_soft_max
+      end
+
+      it "returns false if only income1 is used for morgage and it is more than 1/5 of the morgage" do
+        record.inc1mort = 1
+        record.income1 = 10_000
+        record.mortgage = 44_000
+        record.inc2mort = 2
+        expect(record)
+          .not_to be_mortgage_over_soft_max
+      end
+
+      it "returns true if only income2 is used for morgage and it is less than 1/5 of the morgage" do
+        record.inc1mort = 2
+        record.inc2mort = 1
+        record.income2 = 10_000
+        record.mortgage = 51_000
+        expect(record)
+          .to be_mortgage_over_soft_max
+      end
+
+      it "returns false if only income2 is used for morgage and it is more than 1/5 of the morgage" do
+        record.inc1mort = 2
+        record.inc2mort = 1
+        record.income2 = 10_000
+        record.mortgage = 44_000
+        expect(record)
+          .not_to be_mortgage_over_soft_max
+      end
+
+      it "returns true if income1 and income2 are used for morgage and their sum is less than 1/5 of the morgage" do
+        record.inc1mort = 1
+        record.inc2mort = 1
+        record.income1 = 10_000
+        record.income2 = 10_000
+        record.mortgage = 101_000
+        expect(record)
+          .to be_mortgage_over_soft_max
+      end
+
+      it "returns false if income1 and income2 are used for morgage and their sum is more than 1/5 of the morgage" do
+        record.inc1mort = 1
+        record.inc2mort = 1
+        record.income1 = 8_000
+        record.income2 = 17_000
+        record.mortgage = 124_000
+        expect(record)
+          .not_to be_mortgage_over_soft_max
+      end
+
+      it "returns true if neither of the incomes are used for morgage and the morgage is more than 0" do
+        record.inc1mort = 2
+        record.inc2mort = 2
+        record.mortgage = 124_000
+        expect(record)
+          .to be_mortgage_over_soft_max
+      end
+
+      it "returns true if neither of the incomes are used for morgage and the morgage is 0" do
+        record.inc1mort = 2
+        record.inc2mort = 2
+        record.mortgage = 0
+        expect(record)
+          .not_to be_mortgage_over_soft_max
+      end
+    end
+  end
 end
