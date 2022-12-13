@@ -12,4 +12,8 @@ module Validations::Sales::SoftValidations
 
     income1 < ALLOWED_INCOME_RANGES[ecstat1][:soft_min]
   end
+
+  def mortgage_over_soft_max?
+    true
+  end
 end

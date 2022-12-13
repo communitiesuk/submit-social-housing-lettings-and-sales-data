@@ -18,6 +18,7 @@ RSpec.describe Form::Sales::Subsections::IncomeBenefitsAndSavings, type: :model 
         buyer_1_income_value_check
         buyer_1_mortgage
         buyer_2_income
+        mortgage_value_check
         savings
         previous_ownership
       ],
