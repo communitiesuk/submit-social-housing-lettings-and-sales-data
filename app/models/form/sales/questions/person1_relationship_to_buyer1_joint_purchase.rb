@@ -1,7 +1,7 @@
-class Form::Sales::Questions::Person1RelationshipToBuyer1 < ::Form::Question
+class Form::Sales::Questions::Person1RelationshipToBuyer1JointPurchase < ::Form::Question
   def initialize(id, hsh, page)
     super
-    @id = "relat2"
+    @id = "relat3"
     @check_answer_label = "Person 1's relationship to buyer 1"
     @header = "What is person 1's relationship to buyer 1?"
     @type = "radio"
