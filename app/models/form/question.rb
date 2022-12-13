@@ -53,7 +53,7 @@ class Form::Question
     answer = label_from_value(log[id]) if log[id].present?
     answer_label = [prefix, format_value(answer), suffix_label(log)].join("") if answer
 
-    inferred = get_inferred_answer_value(log)
+    inferred = inferred_answer_value(log)
     return inferred if inferred.present?
 
     answer_label
@@ -109,7 +109,7 @@ class Form::Question
     false
   end
 
-  def get_inferred_answer_value(log)
+  def inferred_answer_value(log)
     return unless inferred_check_answers_value
 
     inferred_answer = inferred_check_answers_value.find { |inferred_value| inferred_value["condition"].values[0] == log[inferred_value["condition"].keys[0]] }
