@@ -196,7 +196,6 @@ en:
         earnings_missing: "Enter how much income the household has in total"
       income1:
         over_hard_max: "Income must be lower than £%{hard_max}"
-        child_income: "A child‘s income must be 0"
       negative_currency: "Enter an amount above 0"
       rent:
         less_than_shortfall: "Enter an amount that is more than the shortfall in basic rent"
