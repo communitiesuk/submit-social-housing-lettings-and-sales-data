@@ -5,7 +5,7 @@ class OrganisationRelationship < ApplicationRecord
   validates :child_organisation_id, presence: { message: "You must choose a managing agent" }
   validates :parent_organisation_id, uniqueness: { scope: :child_organisation_id, message: "You have already added this housing provider" }
   validates :child_organisation_id, uniqueness: { scope: :parent_organisation_id, message: "You have already added this managing agent" }
-  validate :validate_housing_provider_owns_stock
+  validate :validate_housing_provider_owns_stock, on: :housing_provider
 
 private
 

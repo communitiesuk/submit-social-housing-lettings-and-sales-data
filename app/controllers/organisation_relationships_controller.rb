@@ -41,7 +41,7 @@ class OrganisationRelationshipsController < ApplicationController
 
   def create_housing_provider
     @organisation_relationship = organisation.parent_organisation_relationships.new(organisation_relationship_params)
-    if @organisation_relationship.save
+    if @organisation_relationship.save(context: :housing_provider)
       flash[:notice] = "#{@organisation_relationship.parent_organisation.name} is now one of #{current_user.data_coordinator? ? 'your' : "this organisation's"} housing providers"
       redirect_to housing_providers_organisation_path
     else
@@ -118,7 +118,7 @@ private
   end
 
   def authenticate_scope!
-    if current_user.organisation != organisation && !current_user.support?
+    if current_user.organisation != Organisation.find(params[:id]) && !current_user.support?
       render_not_found
     end
   end
