@@ -34,8 +34,8 @@ RSpec.describe Form::Sales::Pages::Person3Known, type: :model do
   it "has correct depends_on" do
     expect(page.depends_on).to eq(
       [
-        { "details_known_2" => 1, "hholdcount" => 3 },
-        { "details_known_2" => 1, "hholdcount" => 4 },
+        { "hholdcount" => 3 },
+        { "hholdcount" => 4 },
       ],
     )
   end

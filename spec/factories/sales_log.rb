@@ -40,6 +40,7 @@ FactoryBot.define do
       hholdcount { "1" }
       wheel { 1 }
       details_known_1 { 1 }
+      relat3 { "P" }
       age3_known { 0 }
       age3 { 40 }
       details_known_2 { 1 }

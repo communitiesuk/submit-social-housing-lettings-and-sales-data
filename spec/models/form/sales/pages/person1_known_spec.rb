@@ -24,7 +24,7 @@ RSpec.describe Form::Sales::Pages::Person1Known, type: :model do
   end
 
   it "has the correct header_partial" do
-    expect(page.header_partial).to eq("person_1_known_page")
+    expect(page.header_partial).to eq(nil)
   end
 
   it "has the correct description" do
