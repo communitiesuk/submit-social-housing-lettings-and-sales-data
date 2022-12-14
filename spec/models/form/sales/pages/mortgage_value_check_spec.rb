@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Pages::MortgageValueCheck, type: :model do
-  subject(:page) { described_class.new(page_id, page_definition, subsection) }
+  subject(:page) { described_class.new(page_id, page_definition, subsection, { id_prefix: "buyer_1_income_" }) }
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Pages::MortgageValueCheck, type: :model do
   end
 
   it "has the correct id" do
-    expect(page.id).to eq("mortgage_value_check")
+    expect(page.id).to eq("buyer_1_income_mortgage_value_check")
   end
 
   it "has the correct header" do

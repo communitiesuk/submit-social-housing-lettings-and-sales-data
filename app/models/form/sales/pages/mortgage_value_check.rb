@@ -1,7 +1,7 @@
 class Form::Sales::Pages::MortgageValueCheck < ::Form::Page
-  def initialize(id, hsh, subsection)
+  def initialize(id, hsh, subsection, dynamic_values)
     super
-    @id = "mortgage_value_check"
+    @id = "#{dynamic_values.present? ? dynamic_values[:id_prefix] : ''}mortgage_value_check"
     @header = ""
     @description = ""
     @subsection = subsection
