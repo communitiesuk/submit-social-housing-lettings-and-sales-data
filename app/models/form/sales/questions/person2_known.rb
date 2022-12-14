@@ -15,7 +15,7 @@ class Form::Sales::Questions::Person2Known < ::Form::Question
         },
       ],
     }
-    @check_answers_card_number = 4
+    @check_answers_card_number = hsh[:check_answers_card_number]
   end
 
   ANSWER_OPTIONS = {

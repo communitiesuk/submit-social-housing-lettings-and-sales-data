@@ -7,14 +7,14 @@ class Form::Sales::Pages::Person3Known < ::Form::Page
     @description = ""
     @subsection = subsection
     @depends_on = [
-      { "hholdcount" => 3 },
-      { "hholdcount" => 4 },
+      { "hholdcount" => 3, "jointpur" => 2 },
+      { "hholdcount" => 4, "jointpur" => 2 },
     ]
   end
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::Person3Known.new(nil, nil, self),
+      Form::Sales::Questions::Person3Known.new(nil, { check_answers_card_number: 4 }, self),
     ]
   end
 end

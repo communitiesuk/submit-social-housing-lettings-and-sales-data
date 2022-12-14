@@ -12,7 +12,7 @@ class Form::Sales::Pages::Person1GenderIdentity < ::Form::Page
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::Person1GenderIdentity.new(nil, nil, self),
+      Form::Sales::Questions::Person1GenderIdentity.new("sex2", { check_answers_card_number: 2 }, self),
     ]
   end
 end
