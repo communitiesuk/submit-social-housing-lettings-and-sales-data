@@ -124,8 +124,6 @@ Rails.application.routes.draw do
       post "bulk-upload", to: "bulk_upload#bulk_upload"
       get "bulk-upload", to: "bulk_upload#show"
 
-      resources :bulk_upload_lettings_results, path: "bulk-upload-results", only: [:show]
-
       get "csv-download", to: "lettings_logs#download_csv"
       post "email-csv", to: "lettings_logs#email_csv"
       get "csv-confirmation", to: "lettings_logs#csv_confirmation"
@@ -135,6 +133,9 @@ Rails.application.routes.draw do
           get :start
         end
       end
+
+      resources :bulk_upload_lettings_results, path: "bulk-upload-results", only: [:show]
+
       get "update-logs", to: "lettings_logs#update_logs"
     end
 
@@ -161,6 +162,8 @@ Rails.application.routes.draw do
           get :start
         end
       end
+
+      resources :bulk_upload_sales_results, path: "bulk-upload-results", only: [:show]
     end
 
     FormHandler.instance.sales_forms.each do |_key, form|
