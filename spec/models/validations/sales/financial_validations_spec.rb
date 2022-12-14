@@ -16,15 +16,17 @@ RSpec.describe Validations::Sales::FinancialValidations do
             record.ecstat1 = ecstat
             financial_validator.validate_income1(record)
             expect(record.errors["income1"])
-                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 80_000))
+              .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 80_000))
+            expect(record.errors["income1"])
+              .to include(match I18n.t("validations.financial.income.over_hard_max", hard_max: 80_000))
             expect(record.errors["ecstat1"])
-                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 80_000))
+              .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 80_000))
             expect(record.errors["ownershipsch"])
-                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 80_000))
+              .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 80_000))
             expect(record.errors["la"])
-                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 80_000))
+              .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 80_000))
             expect(record.errors["postcode_full"])
-                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 80_000))
+              .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 80_000))
           end
         end
 
@@ -52,15 +54,17 @@ RSpec.describe Validations::Sales::FinancialValidations do
             record.ecstat1 = ecstat
             financial_validator.validate_income1(record)
             expect(record.errors["income1"])
-                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 90_000))
+              .to include(match I18n.t("validations.financial.income.over_hard_max", hard_max: 90_000))
+            expect(record.errors["income1"])
+              .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 90_000))
             expect(record.errors["ecstat1"])
-                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 90_000))
+              .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 90_000))
             expect(record.errors["ownershipsch"])
-                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 90_000))
+              .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 90_000))
             expect(record.errors["la"])
-                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 90_000))
+              .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 90_000))
             expect(record.errors["postcode_full"])
-                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 90_000))
+              .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 90_000))
           end
         end
 

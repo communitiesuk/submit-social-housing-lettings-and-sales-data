@@ -19,6 +19,10 @@ module Validations::Sales::HouseholdValidations
     end
   end
 
+  def validate_relat2(record)
+    child_income_validation(record, :relat2)
+  end
+
 private
 
   def validate_person_age_matches_relationship(record, person_num)
