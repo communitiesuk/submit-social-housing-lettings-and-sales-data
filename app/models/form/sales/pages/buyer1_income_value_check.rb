@@ -1,7 +1,7 @@
 class Form::Sales::Pages::Buyer1IncomeValueCheck < ::Form::Page
-  def initialize(id, hsh, subsection)
+  def initialize(id, hsh, subsection, dynamic_values = {})
     super
-    @id = "buyer_1_income_value_check"
+    @id = "#{dynamic_values.present? ? dynamic_values[:id_prefix] : ''}buyer_1_income_value_check"
     @header = ""
     @description = ""
     @subsection = subsection
