@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe BulkUploadSalesResultsController, type: :request do
   let(:user) { create(:user) }
-  let(:bulk_upload) { create(:bulk_upload, user:, bulk_upload_errors:) }
+  let(:bulk_upload) { create(:bulk_upload, :sales, user:, bulk_upload_errors:) }
   let(:bulk_upload_errors) { create_list(:bulk_upload_error, 2) }
 
   before do
@@ -40,6 +40,17 @@ RSpec.describe BulkUploadSalesResultsController, type: :request do
         get "/sales-logs/bulk-upload-results/#{bulk_upload.id}"
 
         expect(response.body).to include("<table").twice
+      end
+    end
+
+    context "when viewing lettings log" do
+      let(:bulk_upload) { create(:bulk_upload, :lettings, user:, bulk_upload_errors:) }
+
+      it "renders a 404" do
+        get "/sales-logs/bulk-upload-results/#{bulk_upload.id}"
+
+        expect(response).not_to be_successful
+        expect(response).to be_not_found
       end
     end
   end
