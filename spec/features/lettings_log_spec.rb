@@ -89,7 +89,7 @@ RSpec.describe "Lettings Log Features" do
         log_id = page.current_path.scan(/\d/).join
         visit("lettings-logs/#{log_id}/setup/check-answers")
         expect(page).to have_content("Housing provider #{support_user.organisation.name}")
-        expect(page).to have_content("You have answered 3 of 9 questions")
+        expect(page).to have_content("You have answered 2 of 8 questions")
       end
     end
   end
