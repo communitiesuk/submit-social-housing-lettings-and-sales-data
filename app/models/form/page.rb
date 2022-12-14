@@ -2,7 +2,7 @@ class Form::Page
   attr_accessor :id, :header, :header_partial, :description, :questions, :depends_on, :title_text,
                 :informative_text, :subsection, :hide_subsection_label, :next_unresolved_page_id
 
-  def initialize(id, hsh, subsection, _dynamic_values = {})
+  def initialize(id, hsh, subsection)
     @id = id
     @subsection = subsection
     if hsh

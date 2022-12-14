@@ -21,7 +21,7 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Sales::Pages::Buyer1EthnicBackgroundWhite.new(nil, nil, self),
       Form::Sales::Pages::Nationality1.new(nil, nil, self),
       Form::Sales::Pages::Buyer1WorkingSituation.new(nil, nil, self),
-      Form::Sales::Pages::Buyer1IncomeValueCheck.new(nil, nil, self, { id_prefix: "working_situation_" }),
+      Form::Sales::Pages::Buyer1IncomeValueCheck.new("working_situation_buyer_1_income_value_check", nil, self),
       Form::Sales::Pages::Buyer1LiveInProperty.new(nil, nil, self),
       Form::Sales::Pages::Buyer2RelationshipToBuyer1.new(nil, nil, self),
       Form::Sales::Pages::Age2.new(nil, nil, self),

@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Pages::MortgageValueCheck, type: :model do
-  subject(:page) { described_class.new(page_id, page_definition, subsection, { id_prefix: "buyer_1_income_" }) }
+  subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
-  let(:page_id) { nil }
+  let(:page_id) { "buyer_1_income_mortgage_value_check" }
   let(:page_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection) }
 
