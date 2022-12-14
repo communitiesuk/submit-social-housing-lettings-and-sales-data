@@ -29,7 +29,7 @@ RSpec.describe BulkUpload::LettingsValidator do
     context "when incorrect headers"
   end
 
-  context do
+  context "when a valid csv" do
     let(:path) { file_fixture("2021_22_lettings_bulk_upload.csv") }
 
     it do
