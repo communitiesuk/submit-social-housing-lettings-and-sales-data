@@ -13,6 +13,8 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <%= render BulkUploadErrorRowComponent.new(bulk_upload_errors: @bulk_upload.bulk_upload_errors) %>
+    <% @bulk_upload.bulk_upload_errors.group_by(&:row).each do |_row, errors_for_row| %>
+      <%= render BulkUploadErrorRowComponent.new(bulk_upload_errors: errors_for_row) %>
+    <% end %>
   </div>
 </div>
