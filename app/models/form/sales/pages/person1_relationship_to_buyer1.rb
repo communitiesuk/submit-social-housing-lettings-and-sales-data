@@ -15,7 +15,7 @@ class Form::Sales::Pages::Person1RelationshipToBuyer1 < ::Form::Page
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::Person1RelationshipToBuyer1.new("relat2", { check_answers_card_number: 2 }, self),
+      Form::Sales::Questions::Person1RelationshipToBuyer1.new("relat2", nil, self),
     ]
   end
 end

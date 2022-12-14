@@ -12,23 +12,8 @@ class Form::Sales::Pages::Person1Age < ::Form::Page
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::Person1AgeKnown.new("age2_known", { check_answers_card_number: 2,
-                                                                  conditional_for: {
-                                                                    "age2" => [0],
-                                                                  },
-                                                                  hidden_in_check_answers: {
-                                                                    "depends_on" => [
-                                                                      {
-                                                                        "age2_known" => 0,
-                                                                      },
-                                                                      {
-                                                                        "age2_known" => 1,
-                                                                      },
-                                                                    ],
-                                                                  } }, self),
-      Form::Sales::Questions::Person1Age.new("age2", { check_answers_card_number: 2,
-                                                       hidden_in_check_answers: { "depends_on" => [{ "jointpur" => 1 }] },
-                                                       inferred_check_answers_value: { "condition" => { "age2_known" => 1 }, "value" => "Not known" } }, self),
+      Form::Sales::Questions::Person1AgeKnown.new("age2_known", nil, self),
+      Form::Sales::Questions::Person1Age.new("age2", nil, self),
     ]
   end
 end

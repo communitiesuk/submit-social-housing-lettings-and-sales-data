@@ -12,23 +12,8 @@ class Form::Sales::Pages::Person4AgeJointPurchase < ::Form::Page
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::Person4AgeKnown.new("age6_known", { check_answers_card_number: 6,
-                                                                  conditional_for: {
-                                                                    "age6" => [0],
-                                                                  },
-                                                                  hidden_in_check_answers: {
-                                                                    "depends_on" => [
-                                                                      {
-                                                                        "age6_known" => 0,
-                                                                      },
-                                                                      {
-                                                                        "age6_known" => 1,
-                                                                      },
-                                                                    ],
-                                                                  } }, self),
-      Form::Sales::Questions::Person4Age.new("age6", { check_answers_card_number: 6,
-                                                       hidden_in_check_answers: { "depends_on" => [{ "jointpur" => 2 }] },
-                                                       inferred_check_answers_value: { "condition" => { "age6_known" => 1 }, "value" => "Not known" } }, self),
+      Form::Sales::Questions::Person4AgeKnown.new("age6_known", nil, self),
+      Form::Sales::Questions::Person4Age.new("age6", nil, self),
     ]
   end
 end

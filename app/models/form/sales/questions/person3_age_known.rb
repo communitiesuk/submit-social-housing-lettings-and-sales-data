@@ -7,9 +7,39 @@ class Form::Sales::Questions::Person3AgeKnown < ::Form::Question
     @answer_options = ANSWER_OPTIONS
     @page = page
     @hint_text = ""
-    @conditional_for = hsh[:conditional_for]
-    @hidden_in_check_answers = hsh[:hidden_in_check_answers]
-    @check_answers_card_number = hsh[:check_answers_card_number]
+    @conditional_for = if id == "age4_known"
+                         {
+                           "age4" => [0],
+                         }
+                       else
+                         {
+                           "age5" => [0],
+                         }
+                       end
+    @hidden_in_check_answers = if id == "age4_known"
+                                 {
+                                   "depends_on" => [
+                                     {
+                                       "age4_known" => 0,
+                                     },
+                                     {
+                                       "age4_known" => 1,
+                                     },
+                                   ],
+                                 }
+                               else
+                                 {
+                                   "depends_on" => [
+                                     {
+                                       "age5_known" => 0,
+                                     },
+                                     {
+                                       "age5_known" => 1,
+                                     },
+                                   ],
+                                 }
+                               end
+    @check_answers_card_number = id == "age4_known" ? 4 : 5
   end
 
   ANSWER_OPTIONS = {
