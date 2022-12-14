@@ -1,4 +1,4 @@
-<%= form_with model: @organisation, url: housing_providers_organisation_path, method: "post", local: true do |f| %>
+<%= form_with model: @organisation_relationship, url: housing_providers_organisation_path, method: "post", local: true do |f| %>
   <% if current_user.support? %>
     <%= render partial: "organisations/headings", locals: { main: @organisation.name, sub: nil } %>
     <%= render SubNavigationComponent.new(items: secondary_items(request.path, @organisation.id)) %>
@@ -18,6 +18,7 @@
     <% answer_options[organisation[0]] = organisation[1] %>
   <% end %>
   <%= render partial: "organisation_relationships/related_organisation_select_question", locals: {
+    field: :parent_organisation_id,
     question: Form::Question.new("", { "answer_options" => answer_options }, nil),
     f:,
   } %>
