@@ -25,7 +25,7 @@ RSpec.describe BulkUpload::LettingsValidator do
       end
     end
 
-    context "incorrect headers"
+    context "when incorrect headers"
   end
 
   context do
