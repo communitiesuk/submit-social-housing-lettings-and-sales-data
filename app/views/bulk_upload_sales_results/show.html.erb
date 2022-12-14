@@ -1,0 +1,20 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l">Bulk Upload for sales (<%= @bulk_upload.year_combo %>)</span>
+    <h1 class="govuk-heading-l">We found <%= pluralize(@bulk_upload.bulk_upload_errors.count, "error") %> in your file</h1>
+
+    <div class="govuk-body">
+      Here’s a list of everything that you need to fix your spreadsheet. You can download the specification to help you fix the cells in your CSV file.
+    </div>
+
+    <h2 class="govuk-heading-m"><%= @bulk_upload.filename %></h2>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <% @bulk_upload.bulk_upload_errors.group_by(&:row).each do |_row, errors_for_row| %>
+      <%= render BulkUploadErrorRowComponent.new(bulk_upload_errors: errors_for_row) %>
+    <% end %>
+  </div>
+</div>
