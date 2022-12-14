@@ -28,6 +28,14 @@ RSpec.describe Validations::Sales::FinancialValidations do
             expect(record.errors["postcode_full"])
               .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 80_000))
           end
+
+          it "adds an error when buyer 2 income is over hard max for ecstat #{ecstat}" do
+            record.income1 = 85_000
+            record.ecstat1 = ecstat
+            financial_validator.validate_income2(record)
+            expect(record.errors["income2"])
+              .to include(match I18n.t("validations.financial.income.over_hard_max", hard_max: 80_000))
+          end
         end
 
         it "validates that the income is within the expected range for the tenant’s employment status" do
@@ -39,6 +47,17 @@ RSpec.describe Validations::Sales::FinancialValidations do
           expect(record.errors["ownershipsch"]).to be_empty
           expect(record.errors["la"]).to be_empty
           expect(record.errors["postcode_full"]).to be_empty
+        end
+
+        it "adds an error when combined income is over the limit" do
+          record.income1 = 45_000
+          record.income2 = 40_000
+          financial_validator.validate_income1(record)
+          financial_validator.validate_income2(record)
+          expect(record.errors["income1"])
+              .to include(match I18n.t("validations.financial.income.combined_over_hard_max", hard_max: 80_000))
+          expect(record.errors["income2"])
+            .to include(match I18n.t("validations.financial.income.combined_over_hard_max", hard_max: 80_000))
         end
       end
 
@@ -77,6 +96,17 @@ RSpec.describe Validations::Sales::FinancialValidations do
           expect(record.errors["ownershipsch"]).to be_empty
           expect(record.errors["la"]).to be_empty
           expect(record.errors["postcode_full"]).to be_empty
+        end
+
+        it "adds an error when combined income is over the limit" do
+          record.income1 = 50_000
+          record.income2 = 45_000
+          financial_validator.validate_income1(record)
+          financial_validator.validate_income2(record)
+          expect(record.errors["income1"])
+            .to include(match I18n.t("validations.financial.income.combined_over_hard_max", hard_max: 90_000))
+          expect(record.errors["income2"])
+            .to include(match I18n.t("validations.financial.income.combined_over_hard_max", hard_max: 90_000))
         end
       end
     end

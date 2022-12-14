@@ -1,5 +1,6 @@
 module Validations::Sales::HouseholdValidations
   include Validations::SharedValidations
+  include Validations::Sales::SharedValidations
 
   def validate_household_number_of_other_members(record)
     (2..6).each do |n|
