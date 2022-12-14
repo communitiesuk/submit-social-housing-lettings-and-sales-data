@@ -30,5 +30,17 @@ RSpec.describe BulkUploadLettingsResultsController, type: :request do
       expect(response).to be_successful
       expect(response.body).to include(bulk_upload.filename)
     end
+
+    context "when there are errors for more than 1 row" do
+      let(:bulk_upload_errors) { [bulk_upload_error_1, bulk_upload_error_2] }
+      let(:bulk_upload_error_1) { create(:bulk_upload_error, row: 1) }
+      let(:bulk_upload_error_2) { create(:bulk_upload_error, row: 2) }
+
+      it "renders no. of tables equal to no. of rows with errors" do
+        get "/lettings-logs/bulk-upload-results/#{bulk_upload.id}"
+
+        expect(response.body).to include("<table").twice
+      end
+    end
   end
 end
