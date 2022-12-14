@@ -23,5 +23,12 @@ RSpec.describe BulkUploadLettingsResultsController, type: :request do
       expect(response).to be_successful
       expect(response.body).to include("We found 2 errors in your file")
     end
+
+    it "renders filename of the upload" do
+      get "/lettings-logs/bulk-upload-results/#{bulk_upload.id}"
+
+      expect(response).to be_successful
+      expect(response.body).to include(bulk_upload.filename)
+    end
   end
 end
