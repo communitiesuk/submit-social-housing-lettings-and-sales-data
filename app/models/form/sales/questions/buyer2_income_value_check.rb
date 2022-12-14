@@ -7,7 +7,7 @@ class Form::Sales::Questions::Buyer2IncomeValueCheck < ::Form::Question
     @type = "interruption_screen"
     @answer_options = {
       "0" => { "value" => "Yes" },
-      "1" => { "value"=> "No" },
+      "1" => { "value" => "No" },
     }
     @hidden_in_check_answers = {
       "depends_on" => [

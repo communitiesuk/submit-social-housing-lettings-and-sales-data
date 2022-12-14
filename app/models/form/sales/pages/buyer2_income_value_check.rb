@@ -14,7 +14,7 @@ class Form::Sales::Pages::Buyer2IncomeValueCheck < ::Form::Page
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::Buyer2IncomeValueCheck.new(nil, nil, self)
+      Form::Sales::Questions::Buyer2IncomeValueCheck.new(nil, nil, self),
     ]
   end
 end
