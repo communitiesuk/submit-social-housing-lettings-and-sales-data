@@ -1,7 +1,6 @@
 class Form::Sales::Pages::MortgageValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
-    @id = "mortgage_value_check"
     @header = ""
     @description = ""
     @subsection = subsection
