@@ -17,6 +17,12 @@ module Validations::Sales::SoftValidations
     stairbought && stairbought > 50
   end
 
+  def income2_under_soft_min?
+    return false unless ecstat2 && income2 && ALLOWED_INCOME_RANGES[ecstat2]
+
+    income2 < ALLOWED_INCOME_RANGES[ecstat2][:soft_min]
+  end
+
   def mortgage_over_soft_max?
     return false unless mortgage && inc1mort && (inc2mort || not_joint_purchase?)
     return false if income1_used_for_mortgage? && income1.blank? || income2_used_for_mortgage? && income2.blank?

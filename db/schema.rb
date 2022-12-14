@@ -525,6 +525,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_03_174815) do
     t.integer "details_known_5"
     t.integer "details_known_6"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
+    t.integer "income2_value_check"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
     t.index ["updated_by_id"], name: "index_sales_logs_on_updated_by_id"
