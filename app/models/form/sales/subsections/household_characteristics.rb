@@ -37,10 +37,16 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Sales::Pages::Person1WorkingSituationJointPurchase.new(nil, nil, self),
       Form::Sales::Pages::Person2Known.new(nil, nil, self),
       Form::Sales::Pages::Person2Age.new(nil, nil, self),
+      Form::Sales::Pages::Person2WorkingSituation.new(nil, nil, self),
+      Form::Sales::Pages::Person2WorkingSituationJointPurchase.new(nil, nil, self),
       Form::Sales::Pages::Person3Known.new(nil, nil, self),
       Form::Sales::Pages::Person3Age.new(nil, nil, self),
+      Form::Sales::Pages::Person3WorkingSituation.new(nil, nil, self),
+      Form::Sales::Pages::Person3WorkingSituationJointPurchase.new(nil, nil, self),
       Form::Sales::Pages::Person4Known.new(nil, nil, self),
       Form::Sales::Pages::Person4Age.new(nil, nil, self),
+      Form::Sales::Pages::Person4WorkingSituation.new(nil, nil, self),
+      Form::Sales::Pages::Person4WorkingSituationJointPurchase.new(nil, nil, self),
     ]
   end
 end

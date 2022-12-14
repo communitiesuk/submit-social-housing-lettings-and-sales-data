@@ -42,10 +42,16 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
         person_1_working_situation_joint_purchase
         person_2_known
         person_2_age
+        person_2_working_situation
+        person_2_working_situation_joint_purchase
         person_3_known
         person_3_age
+        person_3_working_situation
+        person_3_working_situation_joint_purchase
         person_4_known
         person_4_age
+        person_4_working_situation
+        person_4_working_situation_joint_purchase
       ],
     )
   end
