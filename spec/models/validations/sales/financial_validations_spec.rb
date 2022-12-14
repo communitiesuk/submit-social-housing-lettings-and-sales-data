@@ -30,8 +30,8 @@ RSpec.describe Validations::Sales::FinancialValidations do
           end
 
           it "adds an error when buyer 2 income is over hard max for ecstat #{ecstat}" do
-            record.income1 = 85_000
-            record.ecstat1 = ecstat
+            record.income2 = 85_000
+            record.ecstat2 = ecstat
             financial_validator.validate_income2(record)
             expect(record.errors["income2"])
               .to include(match I18n.t("validations.financial.income.over_hard_max", hard_max: 80_000))
