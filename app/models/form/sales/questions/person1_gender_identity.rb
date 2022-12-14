@@ -6,7 +6,7 @@ class Form::Sales::Questions::Person1GenderIdentity < ::Form::Question
     @type = "radio"
     @page = page
     @answer_options = ANSWER_OPTIONS
-    @check_answers_card_number = hsh[:check_answers_card_number]
+    @check_answers_card_number = id == "sex2" ? 2 : 3
   end
 
   ANSWER_OPTIONS = {

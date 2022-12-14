@@ -71,6 +71,7 @@ RSpec.describe Form::Lettings::Questions::CreatedById, type: :model do
     let(:lettings_log) do
       create(
         :lettings_log,
+        created_by: user_2,
         owning_organisation: user_2.organisation,
         managing_organisation: user_3.organisation,
       )

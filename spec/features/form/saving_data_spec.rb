@@ -8,8 +8,7 @@ RSpec.describe "Form Saving Data" do
     FactoryBot.create(
       :lettings_log,
       :in_progress,
-      owning_organisation: user.organisation,
-      managing_organisation: user.organisation,
+      created_by: user,
     )
   end
   let(:id) { lettings_log.id }
@@ -17,8 +16,7 @@ RSpec.describe "Form Saving Data" do
     FactoryBot.create(
       :lettings_log, :in_progress,
       housingneeds_a: 1,
-      owning_organisation: user.organisation,
-      managing_organisation: user.organisation
+      created_by: user
     )
   end
   let(:question_answers) do

@@ -9,8 +9,6 @@ module DerivedVariables::LettingsLogVariables
   end
 
   def set_derived_fields!
-    # TODO: Remove once we support parent/child relationships
-    self.managing_organisation_id ||= owning_organisation_id
     if rsnvac.present?
       self.newprop = has_first_let_vacancy_reason? ? 1 : 2
     end

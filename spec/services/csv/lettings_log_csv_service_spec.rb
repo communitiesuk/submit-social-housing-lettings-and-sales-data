@@ -201,6 +201,7 @@ RSpec.describe Csv::LettingsLogCsvService do
                                    new_old
                                    vacdays
                                    unresolved
+                                   updated_by_id
                                    unittype_sh
                                    scheme_code
                                    scheme_service_name

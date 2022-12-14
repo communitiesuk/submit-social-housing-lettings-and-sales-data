@@ -150,20 +150,19 @@ RSpec.describe LettingsLogsController, type: :request do
     let(:page) { Capybara::Node::Simple.new(response.body) }
     let(:user) { FactoryBot.create(:user) }
     let(:organisation) { user.organisation }
-    let(:other_organisation) { FactoryBot.create(:organisation) }
+    let(:other_user) { FactoryBot.create(:user) }
+    let(:other_organisation) { other_user.organisation }
     let!(:lettings_log) do
       FactoryBot.create(
         :lettings_log,
-        owning_organisation: organisation,
-        managing_organisation: organisation,
+        created_by: user,
         tenancycode: "LC783",
       )
     end
     let!(:unauthorized_lettings_log) do
       FactoryBot.create(
         :lettings_log,
-        owning_organisation: other_organisation,
-        managing_organisation: other_organisation,
+        created_by: other_user,
         tenancycode: "UA984",
       )
     end
@@ -266,9 +265,8 @@ RSpec.describe LettingsLogsController, type: :request do
           context "with year filter" do
             let!(:lettings_log_2021) do
               FactoryBot.create(:lettings_log, :in_progress,
-                                owning_organisation: organisation,
-                                startdate: Time.zone.local(2022, 3, 1),
-                                managing_organisation: organisation)
+                                created_by: user,
+                                startdate: Time.zone.local(2022, 3, 1))
             end
             let!(:lettings_log_2022) do
               lettings_log = FactoryBot.build(:lettings_log, :completed,
@@ -567,7 +565,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
         context "when there are more than 20 logs" do
           before do
-            FactoryBot.create_list(:lettings_log, 25, owning_organisation: organisation, managing_organisation: organisation)
+            FactoryBot.create_list(:lettings_log, 25, created_by: user)
           end
 
           context "when on the first page" do
@@ -699,8 +697,7 @@ RSpec.describe LettingsLogsController, type: :request do
               FactoryBot.create(
                 :lettings_log,
                 :conditional_section_complete,
-                owning_organisation: organisation,
-                managing_organisation: organisation,
+                created_by: user,
               )
             end
 
@@ -756,8 +753,7 @@ RSpec.describe LettingsLogsController, type: :request do
     context "when accessing the check answers page" do
       let(:postcode_lettings_log) do
         FactoryBot.create(:lettings_log,
-                          owning_organisation: organisation,
-                          managing_organisation: organisation,
+                          created_by: user,
                           postcode_known: "No")
       end
       let(:id) { postcode_lettings_log.id }
@@ -771,8 +767,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
       it "shows the inferred la" do
         lettings_log = FactoryBot.create(:lettings_log,
-                                         owning_organisation: organisation,
-                                         managing_organisation: organisation,
+                                         created_by: user,
                                          postcode_known: 1,
                                          postcode_full: "PO5 3TE")
         id = lettings_log.id
@@ -1096,8 +1091,7 @@ RSpec.describe LettingsLogsController, type: :request do
       let!(:lettings_log) do
         FactoryBot.create(
           :lettings_log,
-          owning_organisation:,
-          managing_organisation: owning_organisation,
+          created_by: user,
           ecstat1: 1,
         )
       end

@@ -157,6 +157,12 @@ en:
           deactivated: "%{name} was deactivated on %{date} and was not available on the day you entered"
           reactivating_soon: "The scheme %{name} is not available until %{date}. Select another scheme or edit the tenancy start date"
           activating_soon: "%{name} is not available until %{date}. Enter a tenancy start date after %{date}"
+      owning_organisation:
+        invalid: "Please select owning organisation or managing organisation that you belong to"
+      managing_organisation:
+        invalid: "Please select owning organisation or managing organisation that you belong to"
+      created_by:
+        invalid: "Please select owning organisation or managing organisation that you belong to"
 
     property:
       mrcdate:

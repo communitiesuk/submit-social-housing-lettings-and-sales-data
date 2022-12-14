@@ -224,4 +224,64 @@ RSpec.describe Validations::SetupValidations do
       end
     end
   end
+
+  describe "#validate_organisation" do
+    let(:user) { FactoryBot.create(:user) }
+    let(:other_organisation) { FactoryBot.create(:organisation) }
+
+    it "validates if neither managing nor owning organisation is the same as created_by user organisation" do
+      record.created_by = user
+      record.owning_organisation = other_organisation
+      record.managing_organisation = other_organisation
+
+      setup_validator.validate_organisation(record)
+      expect(record.errors["created_by"]).to include(I18n.t("validations.setup.created_by.invalid"))
+      expect(record.errors["owning_organisation_id"]).to include(I18n.t("validations.setup.owning_organisation.invalid"))
+      expect(record.errors["managing_organisation_id"]).to include(I18n.t("validations.setup.managing_organisation.invalid"))
+    end
+
+    it "doesn not validate if either managing or owning organisation is the same as current user organisation" do
+      record.created_by = user
+      record.owning_organisation = user.organisation
+      record.managing_organisation = other_organisation
+
+      setup_validator.validate_organisation(record)
+      expect(record.errors["created_by"]).to be_empty
+      expect(record.errors["owning_organisation_id"]).to be_empty
+      expect(record.errors["managing_organisation_id"]).to be_empty
+    end
+
+    it "does not validate if current user is missing" do
+      record.created_by = nil
+      record.owning_organisation = other_organisation
+      record.managing_organisation = other_organisation
+
+      setup_validator.validate_organisation(record)
+      expect(record.errors["created_by"]).to be_empty
+      expect(record.errors["owning_organisation_id"]).to be_empty
+      expect(record.errors["managing_organisation_id"]).to be_empty
+    end
+
+    it "does not validate if managing organisation is missing" do
+      record.created_by = user
+      record.owning_organisation = other_organisation
+      record.managing_organisation = nil
+
+      setup_validator.validate_organisation(record)
+      expect(record.errors["created_by"]).to be_empty
+      expect(record.errors["owning_organisation_id"]).to be_empty
+      expect(record.errors["managing_organisation_id"]).to be_empty
+    end
+
+    it "does not validate if owning organisation is missing" do
+      record.created_by = user
+      record.owning_organisation = nil
+      record.managing_organisation = other_organisation
+
+      setup_validator.validate_organisation(record)
+      expect(record.errors["created_by"]).to be_empty
+      expect(record.errors["owning_organisation_id"]).to be_empty
+      expect(record.errors["managing_organisation_id"]).to be_empty
+    end
+  end
 end

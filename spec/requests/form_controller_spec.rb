@@ -4,12 +4,12 @@ RSpec.describe FormController, type: :request do
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:user) { create(:user) }
   let(:organisation) { user.organisation }
-  let(:other_organisation) { create(:organisation) }
+  let(:other_user) { create(:user) }
+  let(:other_organisation) { other_user.organisation }
   let!(:unauthorized_lettings_log) do
     create(
       :lettings_log,
-      owning_organisation: other_organisation,
-      managing_organisation: other_organisation,
+      created_by: other_user,
     )
   end
   let(:setup_complete_lettings_log) do
@@ -18,16 +18,14 @@ RSpec.describe FormController, type: :request do
       :about_completed,
       status: 1,
       startdate: Time.zone.local(2021, 10, 10),
-      owning_organisation: organisation,
-      managing_organisation: organisation,
+      created_by: user,
     )
   end
   let(:completed_lettings_log) do
     create(
       :lettings_log,
       :completed,
-      owning_organisation: organisation,
-      managing_organisation: organisation,
+      created_by: user,
       startdate: Time.zone.local(2021, 5, 1),
     )
   end
@@ -43,8 +41,7 @@ RSpec.describe FormController, type: :request do
     let!(:lettings_log) do
       create(
         :lettings_log,
-        owning_organisation: organisation,
-        managing_organisation: organisation,
+        created_by: user,
       )
     end
 
@@ -68,12 +65,134 @@ RSpec.describe FormController, type: :request do
     end
   end
 
+  context "when signed in as a support user" do
+    let!(:lettings_log) do
+      create(
+        :lettings_log,
+        created_by: user,
+      )
+    end
+    let(:page) { Capybara::Node::Simple.new(response.body) }
+    let(:managing_organisation) { create(:organisation) }
+    let(:managing_organisation_too) { create(:organisation) }
+    let(:housing_provider) { create(:organisation) }
+    let(:support_user) { create(:user, :support) }
+
+    before do
+      organisation.housing_providers << housing_provider
+      organisation.managing_agents << managing_organisation
+      organisation.managing_agents << managing_organisation_too
+      organisation.reload
+      allow(support_user).to receive(:need_two_factor_authentication?).and_return(false)
+      sign_in support_user
+    end
+
+    context "with invalid organisation answers" do
+      let(:params) do
+        {
+          id: lettings_log.id,
+          lettings_log: {
+            page: "managing_organisation",
+            managing_organisation_id: other_organisation.id,
+          },
+        }
+      end
+
+      before do
+        lettings_log.update!(owning_organisation: housing_provider, created_by: user, managing_organisation: organisation)
+        lettings_log.reload
+      end
+
+      it "resets created by and renders the next page" do
+        post "/lettings-logs/#{lettings_log.id}/form", params: params
+        expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/created-by")
+        follow_redirect!
+        lettings_log.reload
+        expect(lettings_log.created_by).to eq(nil)
+      end
+    end
+
+    context "with valid owning organisation" do
+      let(:params) do
+        {
+          id: lettings_log.id,
+          lettings_log: {
+            page: "managing_organisation",
+            managing_organisation_id: other_organisation.id,
+          },
+        }
+      end
+
+      before do
+        lettings_log.update!(owning_organisation: organisation, created_by: user, managing_organisation: organisation)
+        lettings_log.reload
+      end
+
+      it "does not reset created by" do
+        post "/lettings-logs/#{lettings_log.id}/form", params: params
+        expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/created-by")
+        follow_redirect!
+        lettings_log.reload
+        expect(lettings_log.created_by).to eq(user)
+      end
+    end
+
+    context "with valid managing organisation" do
+      let(:params) do
+        {
+          id: lettings_log.id,
+          lettings_log: {
+            page: "housing_provider",
+            owning_organisation_id: housing_provider.id,
+          },
+        }
+      end
+
+      before do
+        lettings_log.update!(owning_organisation: organisation, created_by: user, managing_organisation: organisation)
+        lettings_log.reload
+      end
+
+      it "does not reset created by" do
+        post "/lettings-logs/#{lettings_log.id}/form", params: params
+        expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/managing-organisation")
+        follow_redirect!
+        lettings_log.reload
+        expect(lettings_log.created_by).to eq(user)
+      end
+    end
+
+    context "with only adding the housing provider" do
+      let(:params) do
+        {
+          id: lettings_log.id,
+          lettings_log: {
+            page: "housing_provider",
+            owning_organisation_id: housing_provider.id,
+          },
+        }
+      end
+
+      before do
+        lettings_log.update!(owning_organisation: nil, created_by: user, managing_organisation: nil)
+        lettings_log.reload
+      end
+
+      it "does not reset created by" do
+        post "/lettings-logs/#{lettings_log.id}/form", params: params
+        expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/managing-organisation")
+        follow_redirect!
+        lettings_log.reload
+        expect(lettings_log.created_by).to eq(user)
+      end
+    end
+  end
+
   context "when a user is signed in" do
     let!(:lettings_log) do
       create(
         :lettings_log,
-        owning_organisation: organisation,
-        managing_organisation: organisation,
+        created_by: user,
       )
     end
 
@@ -156,8 +275,7 @@ RSpec.describe FormController, type: :request do
             create(
               :lettings_log,
               startdate: Time.zone.local(2022, 12, 1),
-              owning_organisation: organisation,
-              managing_organisation: organisation,
+              created_by: user,
             )
           end
           let(:headers) { { "Accept" => "text/html" } }
@@ -220,12 +338,12 @@ RSpec.describe FormController, type: :request do
     describe "Submit Form" do
       context "with a form page" do
         let(:user) { create(:user) }
+        let(:support_user) { FactoryBot.create(:user, :support) }
         let(:organisation) { user.organisation }
         let(:lettings_log) do
           create(
             :lettings_log,
-            owning_organisation: organisation,
-            managing_organisation: organisation,
+            created_by: user,
           )
         end
         let(:page_id) { "person_1_age" }
@@ -295,6 +413,38 @@ RSpec.describe FormController, type: :request do
               follow_redirect!
               expect(page).to have_content("There is a problem")
             end
+          end
+        end
+
+        context "with invalid organisation answers" do
+          let(:page) { Capybara::Node::Simple.new(response.body) }
+          let(:managing_organisation) { create(:organisation) }
+          let(:managing_organisation_too) { create(:organisation) }
+          let(:housing_provider) { create(:organisation) }
+          let(:params) do
+            {
+              id: lettings_log.id,
+              lettings_log: {
+                page: "managing_organisation",
+                managing_organisation_id: other_organisation.id,
+              },
+            }
+          end
+
+          before do
+            organisation.housing_providers << housing_provider
+            organisation.managing_agents << managing_organisation
+            organisation.managing_agents << managing_organisation_too
+            organisation.reload
+            lettings_log.update!(owning_organisation: housing_provider, created_by: user, managing_organisation: organisation)
+            lettings_log.reload
+          end
+
+          it "re-renders the same page with errors if validation fails" do
+            post "/lettings-logs/#{lettings_log.id}/form", params: params
+            expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/managing-organisation")
+            follow_redirect!
+            expect(page).to have_content("There is a problem")
           end
         end
 
@@ -534,12 +684,11 @@ RSpec.describe FormController, type: :request do
 
       context "with lettings logs that are not owned or managed by your organisation" do
         let(:answer) { 25 }
-        let(:other_organisation) { create(:organisation) }
+        let(:other_user) { create(:user) }
         let(:unauthorized_lettings_log) do
           create(
             :lettings_log,
-            owning_organisation: other_organisation,
-            managing_organisation: other_organisation,
+            created_by: other_user,
           )
         end
 
