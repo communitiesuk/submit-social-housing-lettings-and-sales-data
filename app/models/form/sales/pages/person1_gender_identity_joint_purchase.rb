@@ -12,7 +12,7 @@ class Form::Sales::Pages::Person1GenderIdentityJointPurchase < ::Form::Page
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::Person1GenderIdentityJointPurchase.new(nil, nil, self),
+      Form::Sales::Questions::Person1GenderIdentity.new("sex3", nil, self),
     ]
   end
 end
