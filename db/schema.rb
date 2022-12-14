@@ -14,6 +14,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_09_160738) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "bulk_upload_errors", force: :cascade do |t|
+    t.bigint "bulk_upload_id"
+    t.text "cell"
+    t.text "row"
+    t.text "tenant_code"
+    t.text "property_ref"
+    t.text "field"
+    t.text "error"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bulk_upload_id"], name: "index_bulk_upload_errors_on_bulk_upload_id"
+  end
+
   create_table "bulk_uploads", force: :cascade do |t|
     t.bigint "user_id"
     t.text "log_type", null: false
