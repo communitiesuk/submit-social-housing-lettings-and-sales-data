@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Form::Sales::Questions::Person1AgeKnown, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
-  let(:question_id) { nil }
+  let(:question_id) { "age2_known" }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
 
@@ -12,7 +12,7 @@ RSpec.describe Form::Sales::Questions::Person1AgeKnown, type: :model do
   end
 
   it "has the correct id" do
-    expect(question.id).to eq("age3_known")
+    expect(question.id).to eq("age2_known")
   end
 
   it "has the correct header" do
@@ -40,7 +40,7 @@ RSpec.describe Form::Sales::Questions::Person1AgeKnown, type: :model do
 
   it "has correct conditional for" do
     expect(question.conditional_for).to eq({
-      "age3" => [0],
+      "age2" => [0],
     })
   end
 
@@ -53,10 +53,10 @@ RSpec.describe Form::Sales::Questions::Person1AgeKnown, type: :model do
       {
         "depends_on" => [
           {
-            "age3_known" => 0,
+            "age2_known" => 0,
           },
           {
-            "age3_known" => 1,
+            "age2_known" => 1,
           },
         ],
       },
@@ -64,6 +64,6 @@ RSpec.describe Form::Sales::Questions::Person1AgeKnown, type: :model do
   end
 
   it "has the correct check_answers_card_number" do
-    expect(question.check_answers_card_number).to eq(3)
+    expect(question.check_answers_card_number).to eq(2)
   end
 end

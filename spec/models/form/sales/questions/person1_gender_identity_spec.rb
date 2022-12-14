@@ -32,7 +32,7 @@ RSpec.describe Form::Sales::Questions::Person1GenderIdentity, type: :model do
   end
 
   it "has expected check answers card number" do
-    expect(question.check_answers_card_number).to eq(3)
+    expect(question.check_answers_card_number).to eq(2)
   end
 
   it "has the correct answer_options" do

@@ -4,7 +4,7 @@ RSpec.describe Form::Sales::Questions::Person1Known, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
-  let(:question_definition) { nil }
+  let(:question_definition) { { check_answers_card_number: 2 } }
   let(:page) { instance_double(Form::Page) }
 
   it "has correct page" do
@@ -59,6 +59,6 @@ RSpec.describe Form::Sales::Questions::Person1Known, type: :model do
   end
 
   it "has the correct check_answers_card_number" do
-    expect(question.check_answers_card_number).to eq(3)
+    expect(question.check_answers_card_number).to eq(2)
   end
 end

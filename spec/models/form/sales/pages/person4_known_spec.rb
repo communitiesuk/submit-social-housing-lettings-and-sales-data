@@ -34,7 +34,7 @@ RSpec.describe Form::Sales::Pages::Person4Known, type: :model do
   it "has correct depends_on" do
     expect(page.depends_on).to eq(
       [
-        { "hholdcount" => 4 },
+        { "hholdcount" => 4, "jointpur" => 2 },
       ],
     )
   end

@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Form::Sales::Questions::Person2Age, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
-  let(:question_id) { nil }
+  let(:question_id) { "age3" }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
 
@@ -12,7 +12,7 @@ RSpec.describe Form::Sales::Questions::Person2Age, type: :model do
   end
 
   it "has the correct id" do
-    expect(question.id).to eq("age4")
+    expect(question.id).to eq("age3")
   end
 
   it "has the correct header" do
@@ -41,12 +41,12 @@ RSpec.describe Form::Sales::Questions::Person2Age, type: :model do
 
   it "has the correct inferred check answers value" do
     expect(question.inferred_check_answers_value).to eq({
-      "condition" => { "age4_known" => 1 },
+      "condition" => { "age3_known" => 1 },
       "value" => "Not known",
     })
   end
 
   it "has the correct check_answers_card_number" do
-    expect(question.check_answers_card_number).to eq(4)
+    expect(question.check_answers_card_number).to eq(3)
   end
 end

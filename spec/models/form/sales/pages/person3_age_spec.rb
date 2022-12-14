@@ -12,7 +12,7 @@ RSpec.describe Form::Sales::Pages::Person3Age, type: :model do
   end
 
   it "has correct questions" do
-    expect(page.questions.map(&:id)).to eq(%w[age5_known age5])
+    expect(page.questions.map(&:id)).to eq(%w[age4_known age4])
   end
 
   it "has the correct id" do
@@ -29,7 +29,7 @@ RSpec.describe Form::Sales::Pages::Person3Age, type: :model do
 
   it "has correct depends_on" do
     expect(page.depends_on).to eq(
-      [{ "details_known_3" => 1 }],
+      [{ "details_known_3" => 1, "jointpur" => 2 }],
     )
   end
 end
