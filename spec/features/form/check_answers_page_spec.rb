@@ -13,8 +13,7 @@ RSpec.describe "Form Check Answers Page" do
     FactoryBot.create(
       :lettings_log,
       :in_progress,
-      owning_organisation: user.organisation,
-      managing_organisation: user.organisation,
+      created_by: user,
       needstype: 2,
       scheme:,
       location:,
@@ -26,8 +25,7 @@ RSpec.describe "Form Check Answers Page" do
       previous_la_known: 1,
       prevloc: "E09000033",
       is_previous_la_inferred: false,
-      owning_organisation: user.organisation,
-      managing_organisation: user.organisation,
+      created_by: user,
     )
   end
   let(:completed_lettings_log) do
@@ -36,6 +34,7 @@ RSpec.describe "Form Check Answers Page" do
       :completed,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
+      created_by: user,
       startdate: Time.zone.local(2021, 5, 1),
     )
   end
@@ -190,8 +189,7 @@ RSpec.describe "Form Check Answers Page" do
         FactoryBot.create(
           :lettings_log,
           :in_progress,
-          owning_organisation: user.organisation,
-          managing_organisation: user.organisation,
+          created_by: user,
           tenancycode: "123",
           age1: 35,
           sex1: "M",
@@ -203,8 +201,7 @@ RSpec.describe "Form Check Answers Page" do
         FactoryBot.create(
           :lettings_log,
           :in_progress,
-          owning_organisation: user.organisation,
-          managing_organisation: user.organisation,
+          created_by: user,
           tenancycode: "123",
           age1: 35,
           sex1: "M",
@@ -218,8 +215,7 @@ RSpec.describe "Form Check Answers Page" do
         FactoryBot.create(
           :lettings_log,
           :in_progress,
-          owning_organisation: user.organisation,
-          managing_organisation: user.organisation,
+          created_by: user,
           tenancycode: "123",
           age1: 35,
           sex1: "M",
@@ -236,8 +232,6 @@ RSpec.describe "Form Check Answers Page" do
         FactoryBot.create(
           :lettings_log,
           :in_progress,
-          owning_organisation: user.organisation,
-          managing_organisation: user.organisation,
           created_by: user,
           needstype: 1,
           tenancycode: nil,

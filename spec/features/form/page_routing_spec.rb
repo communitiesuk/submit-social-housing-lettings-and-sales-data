@@ -8,8 +8,7 @@ RSpec.describe "Form Page Routing" do
     FactoryBot.create(
       :lettings_log,
       :in_progress,
-      owning_organisation: user.organisation,
-      managing_organisation: user.organisation,
+      created_by: user,
     )
   end
   let(:id) { lettings_log.id }
@@ -120,6 +119,7 @@ RSpec.describe "Form Page Routing" do
           :lettings_log,
           owning_organisation: user.organisation,
           managing_organisation: user.organisation,
+          created_by: user,
           needstype: 2,
         )
       end

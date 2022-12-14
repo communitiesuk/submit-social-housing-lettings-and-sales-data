@@ -250,12 +250,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_13_085819) do
     t.integer "housingneeds_type"
     t.integer "housingneeds_other"
     t.boolean "unresolved"
+    t.bigint "updated_by_id"
     t.index ["created_by_id"], name: "index_lettings_logs_on_created_by_id"
     t.index ["location_id"], name: "index_lettings_logs_on_location_id"
     t.index ["managing_organisation_id"], name: "index_lettings_logs_on_managing_organisation_id"
     t.index ["old_id"], name: "index_lettings_logs_on_old_id", unique: true
     t.index ["owning_organisation_id"], name: "index_lettings_logs_on_owning_organisation_id"
     t.index ["scheme_id"], name: "index_lettings_logs_on_scheme_id"
+    t.index ["updated_by_id"], name: "index_lettings_logs_on_updated_by_id"
   end
 
   create_table "location_deactivation_periods", force: :cascade do |t|
@@ -403,6 +405,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_13_085819) do
     t.integer "savings"
     t.integer "prevown"
     t.string "sex3"
+    t.bigint "updated_by_id"
     t.integer "details_known_1"
     t.integer "income1_value_check"
     t.integer "mortgage"
@@ -411,6 +414,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_13_085819) do
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
+    t.index ["updated_by_id"], name: "index_sales_logs_on_updated_by_id"
   end
 
   create_table "scheme_deactivation_periods", force: :cascade do |t|
