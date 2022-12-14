@@ -7,6 +7,7 @@ class Form::Sales::Questions::Buyer1Income < ::Form::Question
     @type = "numeric"
     @page = page
     @min = 0
+    @max = 999_999
     @step = 1
     @width = 5
     @prefix = "£"
