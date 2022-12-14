@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Form::Sales::Questions::Person1GenderIdentity, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
-  let(:question_id) { nil }
+  let(:question_id) { "sex2" }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
 
