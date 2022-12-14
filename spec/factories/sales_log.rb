@@ -57,11 +57,13 @@ FactoryBot.define do
       inc1mort { 1 }
       income2nk { 0 }
       income2 { 10_000 }
+      inc2mort { 1 }
       la_known { "1" }
       la { "E09000003" }
       savingsnk { 1 }
       prevown { 1 }
       sex3 { "X" }
+      mortgage { 20_000 }
     end
   end
 end
