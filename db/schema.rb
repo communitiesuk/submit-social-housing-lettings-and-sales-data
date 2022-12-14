@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_13_085819) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_13_130736) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -399,11 +399,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_13_085819) do
     t.integer "inc1mort"
     t.integer "income2"
     t.integer "income2nk"
+    t.integer "prevown"
     t.integer "savingsnk"
     t.integer "savings"
-    t.integer "prevown"
     t.string "sex3"
     t.integer "details_known_1"
+    t.string "relat3"
     t.integer "income1_value_check"
     t.integer "mortgage"
     t.integer "inc2mort"

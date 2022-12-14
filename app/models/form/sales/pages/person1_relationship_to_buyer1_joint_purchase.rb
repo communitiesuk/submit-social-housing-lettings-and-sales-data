@@ -15,7 +15,7 @@ class Form::Sales::Pages::Person1RelationshipToBuyer1JointPurchase < ::Form::Pag
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::Person1RelationshipToBuyer1JointPurchase.new(nil, nil, self),
+      Form::Sales::Questions::Person1RelationshipToBuyer1.new("relat3", { check_answers_card_number: 3 }, self),
     ]
   end
 end
