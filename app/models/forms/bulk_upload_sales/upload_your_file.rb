@@ -38,9 +38,7 @@ module Forms
           filename: file.original_filename,
         )
 
-        if upload_enabled?
-          storage_service.write_file(bulk_upload.identifier, File.read(file.path))
-        end
+        storage_service.write_file(bulk_upload.identifier, File.read(file.path))
 
         ProcessBulkUploadJob.perform_later(bulk_upload:)
 
@@ -50,11 +48,18 @@ module Forms
     private
 
       def upload_enabled?
-        !Rails.env.development?
+        FeatureToggle.upload_enabled?
       end
 
       def storage_service
-        @storage_service ||= Storage::S3Service.new(Configuration::PaasConfigurationService.new, ENV["CSV_DOWNLOAD_PAAS_INSTANCE"])
+        @storage_service ||= if upload_enabled?
+                               Storage::S3Service.new(
+                                 Configuration::PaasConfigurationService.new,
+                                 ENV["CSV_DOWNLOAD_PAAS_INSTANCE"],
+                               )
+                             else
+                               Storage::LocalDiskService.new
+                             end
       end
 
       def validate_file_is_csv
