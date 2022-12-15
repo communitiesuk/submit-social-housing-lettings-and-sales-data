@@ -11,7 +11,7 @@ class Form::Sales::Pages::PersonWorkingSituation < Form::Sales::Pages::Person
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::PersonWorkingSituation.new("ecstat#{@person_index}", nil, self, person_index: @person_index),
+      Form::Sales::Questions::PersonWorkingSituation.new(field_for_person("ecstat"), nil, self, person_index: @person_index),
     ]
   end
 end

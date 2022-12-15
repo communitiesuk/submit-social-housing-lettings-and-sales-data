@@ -22,12 +22,4 @@ class Form::Sales::Questions::PersonWorkingSituation < ::Form::Sales::Questions:
     "7" => { "value" => "Full-time student" },
     "9" => { "value" => "Child under 16" },
   }.freeze
-
-  PERSON_INDEX = {
-    "ecstat2" => 2,
-    "ecstat3" => 3,
-    "ecstat4" => 4,
-    "ecstat5" => 5,
-    "ecstat6" => 6,
-  }.freeze
 end

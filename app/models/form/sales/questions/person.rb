@@ -11,4 +11,8 @@ class Form::Sales::Questions::Person < ::Form::Question
   def joint_purchase?
     page.id.include?("_joint_purchase")
   end
+
+  def field_for_person(field, suffix = "")
+    [field, @person_index, suffix].join
+  end
 end

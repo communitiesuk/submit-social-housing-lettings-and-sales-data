@@ -9,21 +9,10 @@ class Form::Sales::Pages::PersonAge < Form::Sales::Pages::Person
     ]
   end
 
-  PERSON_INDEX = {
-    "person_1_age" => 2,
-    "person_2_age" => 3,
-    "person_3_age" => 4,
-    "person_4_age" => 5,
-    "person_1_age_joint_purchase" => 3,
-    "person_2_age_joint_purchase" => 4,
-    "person_3_age_joint_purchase" => 5,
-    "person_4_age_joint_purchase" => 6,
-  }.freeze
-
   def questions
     @questions ||= [
-      Form::Sales::Questions::PersonAgeKnown.new("age#{@person_index}_known", nil, self, person_index: @person_index),
-      Form::Sales::Questions::PersonAge.new("age#{@person_index}", nil, self, person_index: @person_index),
+      Form::Sales::Questions::PersonAgeKnown.new(field_for_person("age", "_known"), nil, self, person_index: @person_index),
+      Form::Sales::Questions::PersonAge.new(field_for_person("age"), nil, self, person_index: @person_index),
     ]
   end
 end

@@ -8,15 +8,15 @@ class Form::Sales::Questions::PersonAgeKnown < ::Form::Sales::Questions::Person
     @page = page
     @hint_text = ""
     @conditional_for = {
-      "age#{@person_index}" => [0],
+      field_for_person("age") => [0],
     }
     @hidden_in_check_answers = {
       "depends_on" => [
         {
-          "age#{@person_index}_known" => 0,
+          field_for_person("age", "_known") => 0,
         },
         {
-          "age#{@person_index}_known" => 1,
+          field_for_person("age", "_known") => 1,
         },
       ],
     }

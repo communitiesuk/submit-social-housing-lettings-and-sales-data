@@ -15,4 +15,8 @@ class Form::Sales::Pages::Person < ::Form::Page
   def details_known_question_id
     "details_known_#{person_display_number}"
   end
+
+  def field_for_person(field, suffix = "")
+    [field, @person_index, suffix].join
+  end
 end
