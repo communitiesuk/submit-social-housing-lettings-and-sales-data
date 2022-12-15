@@ -11,4 +11,8 @@ class Form::Sales::Pages::Person < ::Form::Page
   def joint_purchase?
     id.include?("_joint_purchase")
   end
+
+  def details_known_question_id
+    "details_known_#{person_display_number}"
+  end
 end

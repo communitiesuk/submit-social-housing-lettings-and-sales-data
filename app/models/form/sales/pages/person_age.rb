@@ -5,7 +5,7 @@ class Form::Sales::Pages::PersonAge < Form::Sales::Pages::Person
     @description = ""
     @subsection = subsection
     @depends_on = [
-      { "details_known_#{person_display_number}" => 1, "jointpur" => joint_purchase? ? 1 : 2 },
+      { details_known_question_id => 1, "jointpur" => joint_purchase? ? 1 : 2 },
     ]
   end
 
