@@ -2073,6 +2073,7 @@ RSpec.describe LettingsLog do
           expect(lettings_log.scharge).to eq(nil)
           expect(lettings_log.pscharge).to eq(nil)
           expect(lettings_log.supcharg).to eq(nil)
+          expect(lettings_log.tcharge).to eq(nil)
         end
 
         it "does not impact other validations" do
