@@ -1,4 +1,6 @@
 class BulkUpload::Sales::Validator
+  include ActiveModel::Validations
+
   QUESTIONS = {
     field_1: "What is the purchaser code?",
     field_2: "What is the day of the sale completion date? - DD",
@@ -129,5 +131,15 @@ class BulkUpload::Sales::Validator
 
   def self.question_for_field(field)
     QUESTIONS[field]
+  end
+
+  attr_reader :bulk_upload, :path
+
+  def initialize(bulk_upload:, path:)
+    @bulk_upload = bulk_upload
+    @path = path
+  end
+
+  def call
   end
 end

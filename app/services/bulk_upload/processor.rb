@@ -22,11 +22,21 @@ private
     downloader.call
   end
 
-  # TODO: handle sales
   def validator
-    @validator ||= BulkUpload::Lettings::Validator.new(
+    @validator ||= validator_class.new(
       bulk_upload:,
       path: downloader.path,
     )
+  end
+
+  def validator_class
+    case bulk_upload.log_type
+    when "lettings"
+      BulkUpload::Lettings::Validator
+    when "sales"
+      BulkUpload::Sales::Validator
+    else
+      raise "Validator not found for #{bulk_upload.log_type}"
+    end
   end
 end
