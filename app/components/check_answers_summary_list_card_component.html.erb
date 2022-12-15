@@ -1,39 +1,41 @@
-<div class="x-govuk-summary-card govuk-!-margin-bottom-6">
-  <% if applicable_questions.first.check_answers_card_number != 0 && applicable_questions.first.check_answers_card_number.present? %>
-    <div class="x-govuk-summary-card__header">
-      <% if applicable_questions.first.check_answers_card_number == 1 %>
-        <h3 class="x-govuk-summary-card__title">Lead tenant</h3>
-      <% end %>
-      <% if applicable_questions.first.check_answers_card_number > 1 %>
-        <h3 class="x-govuk-summary-card__title">Person <%= applicable_questions.first.check_answers_card_number %></h3>
-      <% end %>
-    </div>
-  <% end %>
-  <div class="x-govuk-summary-card__body">
-    <%= govuk_summary_list do |summary_list| %>
-      <% applicable_questions.each do |question| %>
-        <% summary_list.row do |row| %>
-          <% row.key { question.check_answer_label.to_s.presence || question.header.to_s } %>
-          <% row.value do %>
-            <span class="govuk-!-margin-right-4"><%= get_answer_label(question) %></span>
-            <% extra_value = question.get_extra_check_answer_value(log) %>
-            <% if extra_value %>
-              <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= extra_value %></span>
+<% if applicable_questions.first %>
+  <div class="x-govuk-summary-card govuk-!-margin-bottom-6">
+    <% if applicable_questions.first.check_answers_card_number != 0 && applicable_questions.first.check_answers_card_number.present? %>
+      <div class="x-govuk-summary-card__header">
+        <% if applicable_questions.first.check_answers_card_number == 1 %>
+          <h3 class="x-govuk-summary-card__title">Lead tenant</h3>
+        <% end %>
+        <% if applicable_questions.first.check_answers_card_number > 1 %>
+          <h3 class="x-govuk-summary-card__title">Person <%= applicable_questions.first.check_answers_card_number %></h3>
+        <% end %>
+      </div>
+    <% end %>
+    <div class="x-govuk-summary-card__body">
+      <%= govuk_summary_list do |summary_list| %>
+        <% applicable_questions.each do |question| %>
+          <% summary_list.row do |row| %>
+            <% row.key { question.check_answer_label.to_s.presence || question.header.to_s } %>
+            <% row.value do %>
+              <span class="govuk-!-margin-right-4"><%= get_answer_label(question) %></span>
+              <% extra_value = question.get_extra_check_answer_value(log) %>
+              <% if extra_value %>
+                <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= extra_value %></span>
+              <% end %>
+              <br>
+              <% question.get_inferred_answers(log).each do |inferred_answer| %>
+                <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= inferred_answer %></span>
+              <% end %>
             <% end %>
-            <br>
-            <% question.get_inferred_answers(log).each do |inferred_answer| %>
-              <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= inferred_answer %></span>
+            <% if @log.collection_period_open? %>
+              <% row.action(
+                text: question.action_text(log),
+                href: question.action_href(log, question.page.id),
+                visually_hidden_text: question.check_answer_label.to_s.downcase,
+              ) %>
             <% end %>
-          <% end %>
-          <% if @log.collection_period_open? %>
-            <% row.action(
-              text: question.action_text(log),
-              href: question.action_href(log, question.page.id),
-              visually_hidden_text: question.check_answer_label.to_s.downcase,
-            ) %>
           <% end %>
         <% end %>
       <% end %>
-    <% end %>
+    </div>
   </div>
-</div>
+<% end %>
