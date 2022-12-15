@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe BulkUpload::Processor do
   subject(:processor) { described_class.new(bulk_upload:) }
 
-  let(:bulk_upload) { create(:bulk_upload) }
+  let(:bulk_upload) { create(:bulk_upload, :lettings) }
 
   context "when processing a bulk upload with errors" do
     describe "#call" do
