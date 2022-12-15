@@ -33,12 +33,20 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Sales::Pages::Person1Age.new(nil, nil, self),
       Form::Sales::Pages::Person1GenderIdentity.new(nil, nil, self),
       Form::Sales::Pages::Person1GenderIdentityJointPurchase.new(nil, nil, self),
+      Form::Sales::Pages::PersonWorkingSituation.new("person_1_working_situation", nil, self),
+      Form::Sales::Pages::PersonWorkingSituation.new("person_1_working_situation_joint_purchase", nil, self),
       Form::Sales::Pages::Person2Known.new(nil, nil, self),
       Form::Sales::Pages::Person2Age.new(nil, nil, self),
+      Form::Sales::Pages::PersonWorkingSituation.new("person_2_working_situation", nil, self),
+      Form::Sales::Pages::PersonWorkingSituation.new("person_2_working_situation_joint_purchase", nil, self),
       Form::Sales::Pages::Person3Known.new(nil, nil, self),
       Form::Sales::Pages::Person3Age.new(nil, nil, self),
+      Form::Sales::Pages::PersonWorkingSituation.new("person_3_working_situation", nil, self),
+      Form::Sales::Pages::PersonWorkingSituation.new("person_3_working_situation_joint_purchase", nil, self),
       Form::Sales::Pages::Person4Known.new(nil, nil, self),
       Form::Sales::Pages::Person4Age.new(nil, nil, self),
+      Form::Sales::Pages::PersonWorkingSituation.new("person_4_working_situation", nil, self),
+      Form::Sales::Pages::PersonWorkingSituation.new("person_4_working_situation_joint_purchase", nil, self),
     ]
   end
 end

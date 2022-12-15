@@ -63,6 +63,10 @@ FactoryBot.define do
       prevown { 1 }
       sex3 { "X" }
       mortgage { 20_000 }
+      ecstat3 { 10 }
+      ecstat4 { 3 }
+      ecstat5 { 2 }
+      ecstat6 { 1 }
     end
   end
 end
