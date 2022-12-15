@@ -86,6 +86,7 @@ FactoryBot.define do
       relat4 { "P" }
       relat5 { "P" }
       relat6 { "P" }
+      hb { 4 }
     end
   end
 end

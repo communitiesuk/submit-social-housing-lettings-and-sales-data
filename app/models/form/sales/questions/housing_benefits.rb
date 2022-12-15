@@ -8,7 +8,6 @@ class Form::Sales::Questions::HousingBenefits < ::Form::Question
     @page = page
     @hint_text = ""
     @answer_options = ANSWER_OPTIONS
-    @check_answers_card_number = 1
   end
 
   ANSWER_OPTIONS = {
