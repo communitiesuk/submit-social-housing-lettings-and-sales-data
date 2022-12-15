@@ -8,6 +8,8 @@ class BulkUpload::Processor
   def call
     download
     validator.call
+  ensure
+    downloader.delete_local_file!
   end
 
 private
