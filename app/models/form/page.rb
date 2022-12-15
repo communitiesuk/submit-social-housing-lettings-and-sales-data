@@ -1,6 +1,6 @@
 class Form::Page
   attr_accessor :id, :header, :header_partial, :description, :questions, :depends_on, :title_text,
-                :informative_text, :subsection, :hide_subsection_label
+                :informative_text, :subsection, :hide_subsection_label, :next_unresolved_page_id
 
   def initialize(id, hsh, subsection)
     @id = id
@@ -14,6 +14,7 @@ class Form::Page
       @title_text = hsh["title_text"]
       @informative_text = hsh["informative_text"]
       @hide_subsection_label = hsh["hide_subsection_label"]
+      @next_unresolved_page_id = hsh["next_unresolved_page_id"]
     end
   end
 
@@ -32,6 +33,18 @@ class Form::Page
   end
 
 private
+
+  def person_database_number(person_index)
+    person_index[id]
+  end
+
+  def person_display_number(person_index)
+    joint_purchase? ? person_index[id] - 2 : person_index[id] - 1
+  end
+
+  def joint_purchase?
+    id.include?("_joint_purchase")
+  end
 
   def conditional_question_ids
     @conditional_question_ids ||= questions.flat_map { |q|

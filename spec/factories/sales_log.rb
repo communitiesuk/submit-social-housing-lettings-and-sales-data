@@ -39,6 +39,7 @@ FactoryBot.define do
       ecstat2 { "1" }
       hholdcount { "1" }
       wheel { 1 }
+      details_known_1 { 1 }
       age3_known { 0 }
       age3 { 40 }
       details_known_2 { 1 }
@@ -55,8 +56,17 @@ FactoryBot.define do
       inc1mort { 1 }
       income2nk { 0 }
       income2 { 10_000 }
+      inc2mort { 1 }
       la_known { "1" }
       la { "E09000003" }
+      savingsnk { 1 }
+      prevown { 1 }
+      sex3 { "X" }
+      mortgage { 20_000 }
+      ecstat3 { 10 }
+      ecstat4 { 3 }
+      ecstat5 { 2 }
+      ecstat6 { 1 }
     end
   end
 end

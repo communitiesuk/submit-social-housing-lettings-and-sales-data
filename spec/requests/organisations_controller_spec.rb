@@ -123,6 +123,17 @@ RSpec.describe OrganisationsController, type: :request do
           end
         end
 
+        it "shows incomplete schemes at the top" do
+          schemes[0].update!(confirmed: nil, owning_organisation: user.organisation)
+          schemes[2].update!(confirmed: false, owning_organisation: user.organisation)
+          schemes[4].update!(confirmed: false, owning_organisation: user.organisation)
+          get "/organisations/#{organisation.id}/schemes", headers:, params: {}
+
+          expect(page.all(".govuk-tag")[1].text).to eq("Incomplete")
+          expect(page.all(".govuk-tag")[2].text).to eq("Incomplete")
+          expect(page.all(".govuk-tag")[3].text).to eq("Incomplete")
+        end
+
         context "with schemes that are not in scope for the user, i.e. that they do not belong to" do
           let!(:unauthorised_organisation) { FactoryBot.create(:organisation) }
 
@@ -579,8 +590,8 @@ RSpec.describe OrganisationsController, type: :request do
           let(:number_of_org2_lettings_logs) { 4 }
 
           before do
-            FactoryBot.create_list(:lettings_log, number_of_org1_lettings_logs, owning_organisation_id: organisation.id, managing_organisation_id: organisation.id)
-            FactoryBot.create_list(:lettings_log, number_of_org2_lettings_logs, owning_organisation_id: unauthorised_organisation.id, managing_organisation_id: unauthorised_organisation.id)
+            FactoryBot.create_list(:lettings_log, number_of_org1_lettings_logs, created_by: user)
+            FactoryBot.create_list(:lettings_log, number_of_org2_lettings_logs, created_by: nil, owning_organisation_id: unauthorised_organisation.id, managing_organisation_id: unauthorised_organisation.id)
 
             get "/organisations/#{organisation.id}/lettings-logs", headers:, params: {}
           end

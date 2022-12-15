@@ -3,7 +3,8 @@ class Form::Question
                 :type, :min, :max, :step, :width, :fields_to_add, :result_field,
                 :conditional_for, :readonly, :answer_options, :page, :check_answer_label,
                 :inferred_answers, :hidden_in_check_answers, :inferred_check_answers_value,
-                :guidance_partial, :prefix, :suffix, :requires_js, :fields_added, :derived, :check_answers_card_number
+                :guidance_partial, :prefix, :suffix, :requires_js, :fields_added, :derived,
+                :check_answers_card_number, :unresolved_hint_text
 
   module GuidancePosition
     TOP = 1
@@ -38,6 +39,7 @@ class Form::Question
       @requires_js = hsh["requires_js"]
       @fields_added = hsh["fields_added"]
       @check_answers_card_number = hsh["check_answers_card_number"] || 0
+      @unresolved_hint_text = hsh["unresolved_hint_text"]
     end
   end
 
@@ -84,11 +86,11 @@ class Form::Question
     conditional_on.all? { |condition| evaluate_condition(condition, log) }
   end
 
-  def hidden_in_check_answers?(log, _current_user = nil)
+  def hidden_in_check_answers?(log, current_user = nil)
     if hidden_in_check_answers.is_a?(Hash)
       form.depends_on_met(hidden_in_check_answers["depends_on"], log)
     else
-      hidden_in_check_answers
+      hidden_in_check_answers || !page.routed_to?(log, current_user)
     end
   end
 
@@ -256,6 +258,18 @@ class Form::Question
   end
 
 private
+
+  def person_database_number(person_index)
+    person_index[id]
+  end
+
+  def person_display_number(person_index)
+    joint_purchase? ? person_index[id] - 2 : person_index[id] - 1
+  end
+
+  def joint_purchase?
+    page.id.include?("_joint_purchase")
+  end
 
   def selected_answer_option_is_derived?(log)
     selected_option = answer_options&.dig(log[id].to_s.presence)

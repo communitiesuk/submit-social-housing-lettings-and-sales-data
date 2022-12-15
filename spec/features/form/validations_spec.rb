@@ -8,24 +8,21 @@ RSpec.describe "validations" do
     FactoryBot.create(
       :lettings_log,
       :in_progress,
-      owning_organisation: user.organisation,
-      managing_organisation: user.organisation,
+      created_by: user,
       renewal: 0,
     )
   end
   let(:empty_lettings_log) do
     FactoryBot.create(
       :lettings_log,
-      owning_organisation: user.organisation,
-      managing_organisation: user.organisation,
+      created_by: user,
     )
   end
   let(:completed_without_declaration) do
     FactoryBot.create(
       :lettings_log,
       :completed,
-      owning_organisation: user.organisation,
-      managing_organisation: user.organisation,
+      created_by: user,
       status: 1,
       declaration: nil,
       startdate: Time.zone.local(2021, 5, 1),
@@ -34,6 +31,8 @@ RSpec.describe "validations" do
   let(:id) { lettings_log.id }
 
   before do
+    allow(fake_2021_2022_form).to receive(:end_date).and_return(Time.zone.today + 1.day)
+    allow(lettings_log.form).to receive(:end_date).and_return(Time.zone.today + 1.day)
     sign_in user
     allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
   end
@@ -122,8 +121,7 @@ RSpec.describe "validations" do
           :lettings_log,
           :in_progress,
           ecstat1: 1,
-          owning_organisation: user.organisation,
-          managing_organisation: user.organisation,
+          created_by: user,
         )
       end
       let(:income_over_soft_limit) { 750 }

@@ -37,4 +37,8 @@ RSpec.describe Form::Sales::Questions::Buyer1Mortgage, type: :model do
       "2" => { "value" => "No" },
     })
   end
+
+  it "has the correct check_answers_card_number" do
+    expect(question.check_answers_card_number).to eq(1)
+  end
 end

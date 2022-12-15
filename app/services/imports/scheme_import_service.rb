@@ -18,6 +18,9 @@ module Imports
       else
         @logger.warn("Scheme with legacy ID #{attributes['old_id']} is not approved (#{attributes['status']}), skipping")
       end
+    rescue ActiveRecord::RecordInvalid
+      @logger.error("Scheme #{attributes['old_visible_id']}: Failed to import")
+      raise
     end
 
   private

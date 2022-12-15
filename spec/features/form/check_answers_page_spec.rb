@@ -13,8 +13,7 @@ RSpec.describe "Form Check Answers Page" do
     FactoryBot.create(
       :lettings_log,
       :in_progress,
-      owning_organisation: user.organisation,
-      managing_organisation: user.organisation,
+      created_by: user,
       needstype: 2,
       scheme:,
       location:,
@@ -26,8 +25,7 @@ RSpec.describe "Form Check Answers Page" do
       previous_la_known: 1,
       prevloc: "E09000033",
       is_previous_la_inferred: false,
-      owning_organisation: user.organisation,
-      managing_organisation: user.organisation,
+      created_by: user,
     )
   end
   let(:completed_lettings_log) do
@@ -36,6 +34,7 @@ RSpec.describe "Form Check Answers Page" do
       :completed,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
+      created_by: user,
       startdate: Time.zone.local(2021, 5, 1),
     )
   end
@@ -43,6 +42,8 @@ RSpec.describe "Form Check Answers Page" do
   let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
 
   before do
+    allow(lettings_log.form).to receive(:end_date).and_return(Time.zone.today + 1.day)
+    allow(fake_2021_2022_form).to receive(:end_date).and_return(Time.zone.today + 1.day)
     sign_in user
     allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
   end
@@ -188,8 +189,7 @@ RSpec.describe "Form Check Answers Page" do
         FactoryBot.create(
           :lettings_log,
           :in_progress,
-          owning_organisation: user.organisation,
-          managing_organisation: user.organisation,
+          created_by: user,
           tenancycode: "123",
           age1: 35,
           sex1: "M",
@@ -201,8 +201,7 @@ RSpec.describe "Form Check Answers Page" do
         FactoryBot.create(
           :lettings_log,
           :in_progress,
-          owning_organisation: user.organisation,
-          managing_organisation: user.organisation,
+          created_by: user,
           tenancycode: "123",
           age1: 35,
           sex1: "M",
@@ -216,8 +215,7 @@ RSpec.describe "Form Check Answers Page" do
         FactoryBot.create(
           :lettings_log,
           :in_progress,
-          owning_organisation: user.organisation,
-          managing_organisation: user.organisation,
+          created_by: user,
           tenancycode: "123",
           age1: 35,
           sex1: "M",
@@ -234,8 +232,6 @@ RSpec.describe "Form Check Answers Page" do
         FactoryBot.create(
           :lettings_log,
           :in_progress,
-          owning_organisation: user.organisation,
-          managing_organisation: user.organisation,
           created_by: user,
           needstype: 1,
           tenancycode: nil,

@@ -42,6 +42,11 @@ module SchemesHelper
     availability.strip
   end
 
+  def toggle_scheme_link(scheme)
+    return govuk_button_link_to "Deactivate this scheme", scheme_new_deactivation_path(scheme), warning: true if scheme.active?
+    return govuk_button_link_to "Reactivate this scheme", scheme_new_reactivation_path(scheme) if scheme.deactivated?
+  end
+
 private
 
   ActivePeriod = Struct.new(:from, :to)

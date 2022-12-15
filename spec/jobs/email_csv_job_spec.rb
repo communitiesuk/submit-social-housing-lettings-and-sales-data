@@ -19,8 +19,7 @@ describe EmailCsvJob do
     let!(:lettings_log) do
       FactoryBot.create(
         :lettings_log,
-        owning_organisation: organisation,
-        managing_organisation: organisation,
+        created_by: user,
         ecstat1: 1,
       )
     end
@@ -31,8 +30,6 @@ describe EmailCsvJob do
     before do
       FactoryBot.create(:lettings_log,
                         :completed,
-                        owning_organisation: organisation,
-                        managing_organisation: organisation,
                         created_by: user,
                         startdate: Time.zone.local(2021, 5, 1))
 

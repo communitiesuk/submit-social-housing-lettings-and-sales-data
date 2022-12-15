@@ -224,6 +224,7 @@ RSpec.describe Form, type: :model do
       expect(form.questions.first.id).to eq("owning_organisation_id")
       expect(form.start_date).to eq(Time.zone.parse("2022-04-01"))
       expect(form.end_date).to eq(Time.zone.parse("2023-07-01"))
+      expect(form.unresolved_log_redirect_page_id).to eq(nil)
     end
 
     it "can correctly define sections in the sales form" do
@@ -236,37 +237,12 @@ RSpec.describe Form, type: :model do
     end
   end
 
-  describe "#in_crossover_period?" do
-    context "when now not specified" do
-      context "when after end period" do
-        subject(:form) { described_class.new(nil, 2022, [], "sales") }
-
-        it "returns false" do
-          Timecop.freeze(2023, 8, 1) do
-            expect(form).not_to be_in_crossover_period
-          end
-        end
-      end
-
-      context "when during crossover" do
-        subject(:form) { described_class.new(nil, 2022, [], "sales") }
-
-        it "returns true" do
-          Timecop.freeze(2023, 6, 1) do
-            expect(form).to be_in_crossover_period
-          end
-        end
-      end
-
-      context "when before crossover" do
-        subject(:form) { described_class.new(nil, 2022, [], "sales") }
-
-        it "returns false" do
-          Timecop.freeze(2023, 1, 1) do
-            expect(form).not_to be_in_crossover_period
-          end
-        end
-      end
+  describe "when creating a lettings log", :aggregate_failures do
+    it "creates a valid lettings form" do
+      form = described_class.new("spec/fixtures/forms/2021_2022.json")
+      expect(form.type).to eq("lettings")
+      expect(form.name).to eq("2021_2022_lettings")
+      expect(form.unresolved_log_redirect_page_id).to eq("tenancy_start_date")
     end
   end
 end

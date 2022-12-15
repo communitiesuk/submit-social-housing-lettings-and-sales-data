@@ -2,14 +2,14 @@ class BulkUploadController < ApplicationController
   before_action :authenticate_user!
 
   def show
-    @bulk_upload = BulkUpload.new(nil, nil)
+    @bulk_upload = LegacyBulkUpload.new(nil, nil)
     render "logs/bulk_upload"
   end
 
   def bulk_upload
     file = upload_params.tempfile
     content_type = upload_params.content_type
-    @bulk_upload = BulkUpload.new(file, content_type)
+    @bulk_upload = LegacyBulkUpload.new(file, content_type)
     @bulk_upload.process(current_user)
     if @bulk_upload.errors.present?
       render "logs/bulk_upload", status: :unprocessable_entity

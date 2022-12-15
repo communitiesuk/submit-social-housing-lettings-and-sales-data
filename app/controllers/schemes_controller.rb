@@ -9,7 +9,7 @@ class SchemesController < ApplicationController
 
   def index
     redirect_to schemes_organisation_path(current_user.organisation) unless current_user.support?
-    all_schemes = Scheme.order(confirmed: :asc, service_name: :asc)
+    all_schemes = Scheme.order_by_completion.order_by_service_name
 
     @pagy, @schemes = pagy(filtered_collection(all_schemes, search_term))
     @searched = search_term.presence
@@ -49,8 +49,16 @@ class SchemesController < ApplicationController
   end
 
   def deactivate
-    if @scheme.scheme_deactivation_periods.create!(deactivation_date: params[:deactivation_date]) && reset_location_and_scheme_for_logs!
+    if @scheme.scheme_deactivation_periods.create!(deactivation_date: params[:deactivation_date])
+      logs = reset_location_and_scheme_for_logs!
+
       flash[:notice] = deactivate_success_notice
+      logs.group_by(&:created_by).transform_values(&:count).compact.each do |user, count|
+        LocationOrSchemeDeactivationMailer.send_deactivation_mail(user,
+                                                                  count,
+                                                                  url_for(controller: "lettings_logs", action: "update_logs"),
+                                                                  @scheme.service_name).deliver_later
+      end
     end
     redirect_to scheme_details_path(@scheme)
   end
@@ -349,6 +357,8 @@ private
   end
 
   def reset_location_and_scheme_for_logs!
-    @scheme.lettings_logs.filter_by_before_startdate(params[:deactivation_date].to_time).update!(location: nil, scheme: nil)
+    logs = @scheme.lettings_logs.filter_by_before_startdate(params[:deactivation_date].to_time)
+    logs.update!(location: nil, scheme: nil, unresolved: true)
+    logs
   end
 end

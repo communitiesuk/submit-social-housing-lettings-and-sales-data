@@ -66,6 +66,17 @@ RSpec.describe SchemesController, type: :request do
         assert_select ".govuk-tag", text: /Incomplete/, count: 1
       end
 
+      it "shows incomplete schemes at the top" do
+        schemes[0].update!(confirmed: nil)
+        schemes[2].update!(confirmed: false)
+        schemes[4].update!(confirmed: false)
+        get "/schemes"
+
+        expect(page.all(".govuk-tag")[1].text).to eq("Incomplete")
+        expect(page.all(".govuk-tag")[2].text).to eq("Incomplete")
+        expect(page.all(".govuk-tag")[3].text).to eq("Incomplete")
+      end
+
       it "displays a link to check answers page if the scheme is incomplete" do
         scheme = schemes[0]
         scheme.update!(confirmed: nil)
@@ -281,9 +292,10 @@ RSpec.describe SchemesController, type: :request do
         context "with scheme that's deactivating soon" do
           let(:scheme_deactivation_period) { FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 12), scheme:) }
 
-          it "renders reactivate this scheme" do
+          it "does not render toggle scheme link" do
             expect(response).to have_http_status(:ok)
-            expect(page).to have_link("Reactivate this scheme", href: "/schemes/#{scheme.id}/new-reactivation")
+            expect(page).not_to have_link("Reactivate this scheme")
+            expect(page).not_to have_link("Deactivate this scheme")
           end
         end
       end
@@ -460,7 +472,7 @@ RSpec.describe SchemesController, type: :request do
         end
       end
 
-      context "when missing required scheme params" do
+      context "when required params are missing" do
         let(:params) do
           { scheme: { service_name: "",
                       scheme_type: "",
@@ -476,6 +488,16 @@ RSpec.describe SchemesController, type: :request do
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.registered_under_care_act.invalid"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.arrangement_type.invalid"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.service_name.invalid"))
+        end
+      end
+
+      context "when the organisation id param is included" do
+        let(:organisation) { FactoryBot.create(:organisation) }
+        let(:params) { { scheme: { owning_organisation: organisation } } }
+
+        it "sets the owning organisation correctly" do
+          post "/schemes", params: params
+          expect(Scheme.last.owning_organisation_id).to eq(user.organisation_id)
         end
       end
     end
@@ -555,7 +577,7 @@ RSpec.describe SchemesController, type: :request do
         end
       end
 
-      context "when missing required scheme params" do
+      context "when required params are missing" do
         let(:params) do
           { scheme: { service_name: "",
                       scheme_type: "",
@@ -575,13 +597,14 @@ RSpec.describe SchemesController, type: :request do
         end
       end
 
-      context "when required organisation id param is missing" do
-        let(:params) { { "scheme" => { "service_name" => "qweqwer", "sensitive" => "Yes", "owning_organisation_id" => "", "scheme_type" => "Foyer", "registered_under_care_act" => "Yes – part registered as a care home" } } }
+      context "when organisation id param refers to a non-stock-owning organisation" do
+        let(:organisation_which_does_not_own_stock) { FactoryBot.create(:organisation, holds_own_stock: false) }
+        let(:params) { { scheme: { owning_organisation_id: organisation_which_does_not_own_stock.id } } }
 
         it "displays the new page with an error message" do
           post "/schemes", params: params
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.owning_organisation_id.invalid"))
+          expect(page).to have_content("Enter an organisation that owns housing stock")
         end
       end
     end
@@ -627,12 +650,11 @@ RSpec.describe SchemesController, type: :request do
         end
       end
 
-      context "when params are missing" do
+      context "when required params are missing" do
         let(:params) do
           { scheme: {
             service_name: "",
             managing_organisation_id: "",
-            owning_organisation_id: "",
             primary_client_group: "",
             secondary_client_group: "",
             scheme_type: "",
@@ -645,7 +667,7 @@ RSpec.describe SchemesController, type: :request do
           } }
         end
 
-        it "renders primary client group after successful update" do
+        it "renders the same page with error message" do
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_content("Create a new supported housing scheme")
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.service_name.invalid"))
@@ -912,7 +934,7 @@ RSpec.describe SchemesController, type: :request do
       end
     end
 
-    context "when signed in as a support" do
+    context "when signed in as a support user" do
       let(:user) { FactoryBot.create(:user, :support) }
       let(:scheme_to_update) { FactoryBot.create(:scheme, owning_organisation: user.organisation, confirmed: nil) }
 
@@ -923,7 +945,7 @@ RSpec.describe SchemesController, type: :request do
         patch "/schemes/#{scheme_to_update.id}", params:
       end
 
-      context "when params are missing" do
+      context "when required params are missing" do
         let(:params) do
           { scheme: {
             service_name: "",
@@ -941,7 +963,7 @@ RSpec.describe SchemesController, type: :request do
           } }
         end
 
-        it "renders primary client group after successful update" do
+        it "renders the same page with error message" do
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_content("Create a new supported housing scheme")
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.owning_organisation_id.invalid"))
@@ -1770,7 +1792,7 @@ RSpec.describe SchemesController, type: :request do
       let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation, created_at: Time.zone.today) }
       let!(:location) { FactoryBot.create(:location, scheme:) }
       let(:deactivation_date) { Time.utc(2022, 10, 10) }
-      let!(:lettings_log) { FactoryBot.create(:lettings_log, :sh, location:, scheme:, startdate:, owning_organisation: user.organisation) }
+      let!(:lettings_log) { FactoryBot.create(:lettings_log, :sh, location:, scheme:, startdate:, owning_organisation: user.organisation, created_by: user) }
       let(:startdate) { Time.utc(2022, 10, 11) }
       let(:setup_schemes) { nil }
 
@@ -1841,34 +1863,44 @@ RSpec.describe SchemesController, type: :request do
 
       context "when confirming deactivation" do
         let(:params) { { deactivation_date:, confirm: true, deactivation_date_type: "other" } }
+        let(:mailer) { instance_double(LocationOrSchemeDeactivationMailer) }
 
         before do
           Timecop.freeze(Time.utc(2022, 10, 10))
           sign_in user
-          patch "/schemes/#{scheme.id}/deactivate", params:
         end
 
         after do
           Timecop.unfreeze
         end
 
-        it "updates existing scheme with valid deactivation date and renders scheme page" do
-          follow_redirect!
-          follow_redirect!
-          expect(response).to have_http_status(:ok)
-          expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
-          scheme.reload
-          expect(scheme.scheme_deactivation_periods.count).to eq(1)
-          expect(scheme.scheme_deactivation_periods.first.deactivation_date).to eq(deactivation_date)
-        end
-
         context "and a log startdate is after scheme deactivation date" do
+          before do
+            patch "/schemes/#{scheme.id}/deactivate", params:
+          end
+
+          it "updates existing scheme with valid deactivation date and renders scheme page" do
+            follow_redirect!
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+            scheme.reload
+            expect(scheme.scheme_deactivation_periods.count).to eq(1)
+            expect(scheme.scheme_deactivation_periods.first.deactivation_date).to eq(deactivation_date)
+          end
+
           it "clears the scheme and scheme answers" do
             expect(lettings_log.scheme).to eq(scheme)
             expect(lettings_log.scheme).to eq(scheme)
             lettings_log.reload
             expect(lettings_log.scheme).to eq(nil)
             expect(lettings_log.scheme).to eq(nil)
+          end
+
+          it "marks log as needing attention" do
+            expect(lettings_log.unresolved).to eq(nil)
+            lettings_log.reload
+            expect(lettings_log.unresolved).to eq(true)
           end
         end
 
@@ -1881,6 +1913,20 @@ RSpec.describe SchemesController, type: :request do
             lettings_log.reload
             expect(lettings_log.scheme).to eq(scheme)
             expect(lettings_log.scheme).to eq(scheme)
+          end
+
+          it "does not mark log as needing attention" do
+            expect(lettings_log.unresolved).to eq(nil)
+            lettings_log.reload
+            expect(lettings_log.unresolved).to eq(nil)
+          end
+        end
+
+        context "and the users need to be notified" do
+          it "sends E-mails to the creators of affected logs with counts" do
+            expect {
+              patch "/schemes/#{scheme.id}/deactivate", params:
+            }.to enqueue_job(ActionMailer::MailDeliveryJob)
           end
         end
       end

@@ -11,7 +11,7 @@
     <p class="govuk-body">This organisation does not currently have any managing agents.</p>
   <% end %>
 <% else %>
-  <%= render partial: "organisations/headings", locals: { main: "This organisation managing agents", sub: current_user.organisation.name } %>
+  <%= render partial: "organisations/headings", locals: { main: "Your managing agents", sub: current_user.organisation.name } %>
   <p class="govuk-body">A managing agent can submit logs for this organisation.</p>
   <% if @total_count == 0 %>
     <p class="govuk-body">This organisation does not currently have any managing agents.</p>

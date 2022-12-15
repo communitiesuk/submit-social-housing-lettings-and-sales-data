@@ -46,6 +46,9 @@ module Imports
       )
       confirm_scheme(scheme)
       scheme.save! && scheme
+    rescue ActiveRecord::RecordInvalid
+      @logger.error("Scheme #{source_scheme.old_visible_id}: Failed to import")
+      raise
     end
 
     def update_scheme(scheme, attributes)
@@ -76,7 +79,7 @@ module Imports
       attributes = {}
       attributes["scheme_type"] = safe_string_as_integer(xml_doc, "scheme-type")
       registered_under_care_act = safe_string_as_integer(xml_doc, "reg-home-type")
-      attributes["registered_under_care_act"] = registered_under_care_act.zero? ? nil : registered_under_care_act
+      attributes["registered_under_care_act"] = registered_under_care_act&.zero? ? nil : registered_under_care_act
       attributes["support_type"] = safe_string_as_integer(xml_doc, "support-type")
       attributes["intended_stay"] = string_or_nil(xml_doc, "intended-stay")
       attributes["mobility_type"] = string_or_nil(xml_doc, "mobility-type")
@@ -110,6 +113,9 @@ module Imports
       )
     rescue ActiveRecord::RecordNotUnique
       @logger.warn("Location is already present with legacy ID #{attributes['location_old_id']}, skipping")
+    rescue ActiveRecord::RecordInvalid
+      @logger.error("Location #{attributes['location_old_id']}: Failed to import")
+      raise
     end
 
     def find_scheme_to_merge(attributes)

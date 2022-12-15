@@ -18,7 +18,11 @@ class Scheme < ApplicationRecord
                         .or(filter_by_id(param)).distinct
                     }
 
+  scope :order_by_completion, -> { order("confirmed ASC NULLS FIRST") }
+  scope :order_by_service_name, -> { order(service_name: :asc) }
+
   validate :validate_confirmed
+  validate :validate_owning_organisation
 
   auto_strip_attributes :service_name
 
@@ -209,6 +213,12 @@ class Scheme < ApplicationRecord
     end
   end
 
+  def validate_owning_organisation
+    unless owning_organisation.holds_own_stock?
+      errors.add(:owning_organisation_id, :does_not_own_stock, message: I18n.t("validations.scheme.owning_organisation.does_not_own_stock"))
+    end
+  end
+
   def available_from
     FormHandler.instance.collection_start_date(created_at)
   end
@@ -221,7 +231,11 @@ class Scheme < ApplicationRecord
     scheme_deactivation_periods.order("created_at").last
   end
 
-  def status(date = Time.zone.now)
+  def status
+    @status ||= status_at(Time.zone.now)
+  end
+
+  def status_at(date)
     return :incomplete unless confirmed
     return :deactivated if open_deactivation&.deactivation_date.present? && date >= open_deactivation.deactivation_date
     return :deactivating_soon if open_deactivation&.deactivation_date.present? && date < open_deactivation.deactivation_date
@@ -229,7 +243,6 @@ class Scheme < ApplicationRecord
 
     :active
   end
-  alias_method :status_at, :status
 
   def active?
     status == :active
@@ -237,5 +250,9 @@ class Scheme < ApplicationRecord
 
   def reactivating_soon?
     status == :reactivating_soon
+  end
+
+  def deactivated?
+    status == :deactivated
   end
 end

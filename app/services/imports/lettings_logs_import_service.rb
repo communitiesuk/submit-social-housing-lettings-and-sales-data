@@ -288,6 +288,7 @@ module Imports
         attributes.delete("referral")
         save_lettings_log(attributes, previous_status)
       else
+        @logger.error("Log #{lettings_log.old_id}: Failed to import")
         raise exception
       end
     end
@@ -306,7 +307,7 @@ module Imports
     end
 
     def fields_not_present_in_softwire_data
-      %w[majorrepairs illness_type_0 tshortfall_known pregnancy_value_check retirement_value_check rent_value_check net_income_value_check major_repairs_date_value_check void_date_value_check housingneeds_type housingneeds_other]
+      %w[majorrepairs illness_type_0 tshortfall_known pregnancy_value_check retirement_value_check rent_value_check net_income_value_check major_repairs_date_value_check void_date_value_check housingneeds_type housingneeds_other created_by]
     end
 
     def check_status_completed(lettings_log, previous_status)

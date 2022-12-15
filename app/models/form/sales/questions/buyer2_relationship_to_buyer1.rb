@@ -8,6 +8,7 @@ class Form::Sales::Questions::Buyer2RelationshipToBuyer1 < ::Form::Question
     @hint_text = ""
     @page = page
     @answer_options = ANSWER_OPTIONS
+    @check_answers_card_number = 2
   end
 
   ANSWER_OPTIONS = {

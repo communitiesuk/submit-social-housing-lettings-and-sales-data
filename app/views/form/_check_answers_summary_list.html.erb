@@ -13,11 +13,13 @@
           <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= inferred_answer %></span>
         <% end %>
       <% end %>
-      <% row.action(
-        text: question.action_text(@log),
-        href: question.action_href(@log, question.page.id),
-        visually_hidden_text: question.check_answer_label.to_s.downcase,
-      ) %>
+      <% if @log.collection_period_open? %>
+        <% row.action(
+          text: question.action_text(@log),
+          href: question.action_href(@log, question.page.id),
+          visually_hidden_text: question.check_answer_label.to_s.downcase,
+        ) %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>

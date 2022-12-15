@@ -2,27 +2,18 @@ require "rails_helper"
 
 RSpec.describe FormHandler do
   let(:form_handler) { described_class.instance }
+  let(:now) { Time.utc(2022, 9, 20) }
 
-  before do
-    Timecop.freeze(Time.utc(2022, 9, 20))
-    Singleton.__init__(described_class)
-  end
-
-  after do
-    Timecop.unfreeze
+  around do |example|
+    Timecop.freeze(now) do
+      Singleton.__init__(described_class)
+      example.run
+    end
     Singleton.__init__(described_class)
   end
 
   context "when accessing a form in a different year" do
-    before do
-      Timecop.freeze(Time.utc(2021, 8, 3))
-      Singleton.__init__(described_class)
-    end
-
-    after do
-      Timecop.unfreeze
-      Singleton.__init__(described_class) # reload FormHandler Instance to update form definitions between runs
-    end
+    let(:now) { Time.utc(2021, 8, 3) }
 
     it "is able to load a current lettings form" do
       form = form_handler.get_form("current_lettings")
@@ -61,14 +52,14 @@ RSpec.describe FormHandler do
     it "is able to load a current sales form" do
       form = form_handler.get_form("current_sales")
       expect(form).to be_a(Form)
-      expect(form.pages.count).to eq(46)
+      expect(form.pages.count).to eq(68)
       expect(form.name).to eq("2022_2023_sales")
     end
 
     it "is able to load a previous sales form" do
       form = form_handler.get_form("previous_sales")
       expect(form).to be_a(Form)
-      expect(form.pages.count).to eq(46)
+      expect(form.pages.count).to eq(68)
       expect(form.name).to eq("2021_2022_sales")
     end
   end
@@ -83,13 +74,7 @@ RSpec.describe FormHandler do
 
   describe "Current collection start year" do
     context "when the date is after 1st of April" do
-      before do
-        Timecop.freeze(Time.utc(2022, 8, 3))
-      end
-
-      after do
-        Timecop.unfreeze
-      end
+      let(:now) { Time.utc(2022, 8, 3) }
 
       it "returns the same year as the current start year" do
         expect(form_handler.current_collection_start_year).to eq(2022)
@@ -125,13 +110,7 @@ RSpec.describe FormHandler do
     end
 
     context "with the date before 1st of April" do
-      before do
-        Timecop.freeze(Time.utc(2022, 2, 3))
-      end
-
-      after do
-        Timecop.unfreeze
-      end
+      let(:now) { Time.utc(2022, 2, 3) }
 
       it "returns the previous year as the current start year" do
         expect(form_handler.current_collection_start_year).to eq(2021)
@@ -174,4 +153,20 @@ RSpec.describe FormHandler do
     expect(form.type).to eq("lettings")
     expect(form.start_date.year).to eq(2022)
   end
+
+  # rubocop:disable RSpec/PredicateMatcher
+  describe "#in_crossover_period?" do
+    context "when not in overlapping period" do
+      it "returns false" do
+        expect(form_handler.in_crossover_period?(now: Date.new(2022, 1, 1))).to be_falsey
+      end
+    end
+
+    context "when in overlapping period" do
+      it "returns true" do
+        expect(form_handler.in_crossover_period?(now: Date.new(2022, 6, 1))).to be_truthy
+      end
+    end
+  end
+  # rubocop:enable RSpec/PredicateMatcher
 end

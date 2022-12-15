@@ -1,7 +1,7 @@
 class Form
   attr_reader :form_definition, :sections, :subsections, :pages, :questions,
               :start_date, :end_date, :type, :name, :setup_definition,
-              :setup_sections, :form_sections
+              :setup_sections, :form_sections, :unresolved_log_redirect_page_id
 
   def initialize(form_path, start_year = "", sections_in_form = [], type = "lettings")
     if type == "sales"
@@ -33,6 +33,7 @@ class Form
       @questions = pages.flat_map(&:questions)
       @start_date = Time.iso8601(form_definition["start_date"])
       @end_date = Time.iso8601(form_definition["end_date"])
+      @unresolved_log_redirect_page_id = form_definition["unresolved_log_redirect_page_id"]
     end
     @name = "#{start_date.year}_#{end_date.year}_#{type}"
   end
@@ -56,6 +57,8 @@ class Form
   end
 
   def next_page(page, log, current_user)
+    return page.next_unresolved_page_id || :check_answers if log.unresolved
+
     page_ids = subsection_for_page(page).pages.map(&:id)
     page_index = page_ids.index(page.id)
     page_id = if page.id.include?("value_check") && log[page.questions[0].id] == 1 && page.routed_to?(log, current_user)
@@ -82,6 +85,10 @@ class Form
 
   def cancel_path(page, log)
     "#{log.class.name.underscore}_#{page.subsection.id}_check_answers_path"
+  end
+
+  def unresolved_log_path
+    "#{type}_log_#{unresolved_log_redirect_page_id}_path"
   end
 
   def next_incomplete_section_redirect_path(subsection, log)
@@ -222,10 +229,6 @@ class Form
         end
       end
     end
-  end
-
-  def in_crossover_period?(now: Time.zone.now)
-    ((end_date - 3.months) < now) && (now < end_date)
   end
 
   def inspect

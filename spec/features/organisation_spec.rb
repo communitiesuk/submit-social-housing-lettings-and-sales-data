@@ -136,8 +136,8 @@ RSpec.describe "User Features" do
 
     context "when viewing lettings logs for specific organisation" do
       let(:first_log) { organisation.lettings_logs.first }
-      let!(:log_to_search) { FactoryBot.create(:lettings_log, owning_organisation: user.organisation, managing_organisation_id: organisation.id) }
-      let!(:other_logs) { FactoryBot.create_list(:lettings_log, 4, owning_organisation_id: organisation.id, managing_organisation_id: organisation.id) }
+      let!(:log_to_search) { FactoryBot.create(:lettings_log, created_by: user) }
+      let!(:other_logs) { FactoryBot.create_list(:lettings_log, 4, created_by: user) }
       let(:number_of_lettings_logs) { LettingsLog.count }
 
       before do

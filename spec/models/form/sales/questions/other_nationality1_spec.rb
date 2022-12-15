@@ -34,4 +34,8 @@ RSpec.describe Form::Sales::Questions::OtherNationality1, type: :model do
   it "has the correct hint" do
     expect(question.hint_text).to be_nil
   end
+
+  it "has the correct check_answers_card_number" do
+    expect(question.check_answers_card_number).to eq(1)
+  end
 end

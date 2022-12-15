@@ -8,16 +8,14 @@ RSpec.describe "Form Conditional Questions" do
     FactoryBot.create(
       :lettings_log,
       :in_progress,
-      owning_organisation: user.organisation,
-      managing_organisation: user.organisation,
+      created_by: user,
     )
   end
   let(:sales_log) do
     FactoryBot.create(
       :sales_log,
       :completed,
-      owning_organisation: user.organisation,
-      managing_organisation: user.organisation,
+      created_by: user,
     )
   end
   let(:id) { lettings_log.id }
@@ -25,6 +23,8 @@ RSpec.describe "Form Conditional Questions" do
 
   before do
     sign_in user
+    allow(sales_log.form).to receive(:end_date).and_return(Time.zone.today + 1.day)
+    allow(lettings_log.form).to receive(:end_date).and_return(Time.zone.today + 1.day)
     allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
   end
 

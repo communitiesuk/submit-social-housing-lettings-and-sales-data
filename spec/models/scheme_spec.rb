@@ -176,21 +176,6 @@ RSpec.describe Scheme, type: :model do
     end
   end
 
-  describe "all schemes" do
-    before do
-      FactoryBot.create_list(:scheme, 4)
-      FactoryBot.create_list(:scheme, 3, confirmed: false)
-    end
-
-    it "can sort the schemes by status" do
-      all_schemes = described_class.all.order(confirmed: :asc, service_name: :asc)
-      expect(all_schemes.count).to eq(7)
-      expect(all_schemes[0].status).to eq(:incomplete)
-      expect(all_schemes[1].status).to eq(:incomplete)
-      expect(all_schemes[2].status).to eq(:incomplete)
-    end
-  end
-
   describe "available_from" do
     context "when the scheme was created at the start of the 2022/23 collection window" do
       let(:scheme) { FactoryBot.build(:scheme, created_at: Time.zone.local(2022, 4, 6)) }
@@ -221,6 +206,18 @@ RSpec.describe Scheme, type: :model do
 
       it "returns the beginning of 21/22 collection window" do
         expect(scheme.available_from).to eq(Time.zone.local(2021, 4, 1))
+      end
+    end
+  end
+
+  describe "owning organisation" do
+    let(:stock_owning_org) { FactoryBot.create(:organisation, holds_own_stock: true) }
+    let(:non_stock_owning_org) { FactoryBot.create(:organisation, holds_own_stock: false) }
+    let(:scheme) { FactoryBot.create(:scheme, owning_organisation_id: stock_owning_org.id) }
+
+    context "when the owning organisation is set as a non-stock-owning organisation" do
+      it "throws the correct validation error" do
+        expect { scheme.update!({ owning_organisation: non_stock_owning_org }) }.to raise_error(ActiveRecord::RecordInvalid, /Enter an organisation that owns housing stock/)
       end
     end
   end

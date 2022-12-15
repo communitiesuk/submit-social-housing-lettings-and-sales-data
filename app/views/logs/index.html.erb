@@ -4,6 +4,18 @@
 <% content_for :title, title %>
 
 <% if current_page?(controller: 'lettings_logs', action: 'index') %>
+  <% if @unresolved_count > 0 %>
+    <%= govuk_notification_banner(
+      title_text: "Important",
+      title_heading_level: 3,
+      title_id: "impacted-logs-banner",
+    ) do |notification_banner| %>
+        <% notification_banner.heading(text: "A scheme has changed and it has affected #{@unresolved_count} #{'log'.pluralize(@unresolved_count)}") %>
+        <div class="govuk-notification-banner__heading">
+          <%= govuk_link_to "Update logs", update_logs_lettings_logs_path, class: "govuk-notification-banner__link" %>
+        </div>
+      <% end %>
+    <% end %>
   <%= render partial: "organisations/headings", locals: current_user.support? ? { main: "Lettings logs", sub: nil } : { main: "Lettings logs", sub: current_user.organisation.name } %>
 <% elsif current_page?(controller: 'sales_logs', action: 'index') %>
   <%= render partial: "organisations/headings", locals: current_user.support? ? { main: "Sales logs", sub: nil } : { main: "Sales logs", sub: current_user.organisation.name } %>

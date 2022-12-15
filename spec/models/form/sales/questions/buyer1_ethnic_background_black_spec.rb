@@ -42,4 +42,8 @@ RSpec.describe Form::Sales::Questions::Buyer1EthnicBackgroundBlack, type: :model
       "14" => { "value" => "Any other Black, African or Caribbean background" },
     })
   end
+
+  it "has the correct check_answers_card_number" do
+    expect(question.check_answers_card_number).to eq(1)
+  end
 end

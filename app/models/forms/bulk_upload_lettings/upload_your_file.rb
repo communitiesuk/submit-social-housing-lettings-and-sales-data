@@ -1,3 +1,5 @@
+require "shellwords"
+
 module Forms
   module BulkUploadLettings
     class UploadYourFile
@@ -6,6 +8,11 @@ module Forms
       include Rails.application.routes.url_helpers
 
       attribute :year, :integer
+      attribute :file
+      attribute :current_user
+
+      validates :file, presence: true
+      validate :validate_file_is_csv
 
       def view_path
         "bulk_upload_lettings_logs/forms/upload_your_file"
@@ -13,6 +20,50 @@ module Forms
 
       def back_path
         bulk_upload_lettings_log_path(id: "prepare-your-file", form: { year: })
+      end
+
+      def year_combo
+        "#{year}/#{year + 1 - 2000}"
+      end
+
+      def next_path
+        bulk_upload_lettings_log_path(id: "checking-file", form: { year: })
+      end
+
+      def save!
+        bulk_upload = BulkUpload.create!(
+          user: current_user,
+          log_type: BulkUpload.log_types[:lettings],
+          year:,
+          filename: file.original_filename,
+        )
+
+        if upload_enabled?
+          storage_service.write_file(bulk_upload.identifier, File.read(file.path))
+        end
+
+        true
+      end
+
+    private
+
+      def upload_enabled?
+        FeatureToggle.upload_enabled?
+      end
+
+      def storage_service
+        @storage_service ||= Storage::S3Service.new(Configuration::PaasConfigurationService.new, ENV["CSV_DOWNLOAD_PAAS_INSTANCE"])
+      end
+
+      def validate_file_is_csv
+        return unless file
+
+        argv = %W[file --brief --mime-type -- #{file.path}]
+        output = `#{argv.shelljoin}`
+
+        unless output.match?(/text\/csv|text\/plain/)
+          errors.add(:file, :not_csv)
+        end
       end
     end
   end

@@ -170,8 +170,22 @@ RSpec.describe Imports::SchemeLocationImportService do
       end
     end
 
-    context "and the registered under care act value is missing" do
+    context "and the registered under care act value is zero" do
       before { location_xml.at_xpath("//scheme:reg-home-type").content = "0" }
+
+      it "sets the registered under care act to nil" do
+        location = location_service.create_scheme_location(location_xml)
+        expect(location.scheme.registered_under_care_act).to be_nil
+      end
+
+      it "sets the confirmed status to false" do
+        location = location_service.create_scheme_location(location_xml)
+        expect(location.scheme.confirmed).to be_falsey
+      end
+    end
+
+    context "and the registered under care act value is missing" do
+      before { location_xml.at_xpath("//scheme:reg-home-type").content = "" }
 
       it "sets the registered under care act to nil" do
         location = location_service.create_scheme_location(location_xml)

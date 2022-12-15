@@ -14,7 +14,7 @@ class BulkUploadSalesLogsController < ApplicationController
   end
 
   def update
-    if form.valid?
+    if form.valid? && form.save!
       redirect_to form.next_path
     else
       render form.view_path
@@ -28,7 +28,7 @@ private
   end
 
   def in_crossover_period?
-    FormHandler.instance.forms.values.any?(&:in_crossover_period?)
+    FormHandler.instance.sales_in_crossover_period?
   end
 
   def form
@@ -38,13 +38,15 @@ private
               when "prepare-your-file"
                 Forms::BulkUploadSales::PrepareYourFile.new(form_params)
               when "upload-your-file"
-                Forms::BulkUploadSales::UploadYourFile.new(form_params)
+                Forms::BulkUploadSales::UploadYourFile.new(form_params.merge(current_user:))
+              when "checking-file"
+                Forms::BulkUploadSales::CheckingFile.new(form_params)
               else
                 raise "Page not found for path #{params[:id]}"
               end
   end
 
   def form_params
-    params.fetch(:form, {}).permit(:year)
+    params.fetch(:form, {}).permit(:year, :file)
   end
 end

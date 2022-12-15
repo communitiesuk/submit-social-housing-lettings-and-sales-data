@@ -1,0 +1,28 @@
+<% content_for :before_content do %>
+  <%= govuk_back_link href: @form.back_path %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, scope: :form, url: bulk_upload_lettings_log_path(id: "prepare-your-file"), method: :patch do |f| %>
+      <%= f.hidden_field :year %>
+
+      <span class="govuk-caption-l">Upload lettings logs in bulk (<%= @form.year_combo %>)</span>
+      <h1 class="govuk-heading-l">We’re checking the file</h1>
+
+      <h2 class="govuk-heading-m">Once this is done, we’ll email you the outcome.</h2>
+
+      <p class="govuk-body">
+        We’re checking for any missing data, issues or errors. Depending on the file size, this could take a few minutes.
+      </p>
+
+      <p class="govuk-body">
+        If there are errors we will email you a link to view all the errors.
+      </p>
+
+      <p class="govuk-body">
+        If there are no errors we will email you to let you know the upload is complete and that your logs have been created.
+      </p>
+    <% end %>
+  </div>
+</div>

@@ -5,6 +5,9 @@ class Form::Sales::Pages::Buyer2LiveInProperty < ::Form::Page
     @header = ""
     @description = ""
     @subsection = subsection
+    @depends_on = [{
+      "jointpur" => 1,
+    }]
   end
 
   def questions

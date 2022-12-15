@@ -26,6 +26,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
         buyer_1_ethnic_background_white
         buyer_1_nationality
         buyer_1_working_situation
+        working_situation_buyer_1_income_value_check
         buyer_1_live_in_property
         buyer_2_relationship_to_buyer_1
         buyer_2_age
@@ -33,13 +34,28 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
         buyer_2_working_situation
         buyer_2_live_in_property
         number_of_others_in_property
+        person_1_known
         person_1_age
+        person_1_age_joint_purchase
+        person_1_gender_identity
+        person_1_gender_identity_joint_purchase
+        person_1_working_situation
+        person_1_working_situation_joint_purchase
         person_2_known
         person_2_age
+        person_2_age_joint_purchase
+        person_2_working_situation
+        person_2_working_situation_joint_purchase
         person_3_known
         person_3_age
+        person_3_age_joint_purchase
+        person_3_working_situation
+        person_3_working_situation_joint_purchase
         person_4_known
         person_4_age
+        person_4_age_joint_purchase
+        person_4_working_situation
+        person_4_working_situation_joint_purchase
       ],
     )
   end

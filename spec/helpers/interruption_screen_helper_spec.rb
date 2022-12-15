@@ -12,8 +12,7 @@ RSpec.describe InterruptionScreenHelper do
       ecstat1: 1,
       earnings: 750,
       incfreq: 1,
-      owning_organisation: user.organisation,
-      managing_organisation: user.organisation,
+      created_by: user,
     )
   end
 

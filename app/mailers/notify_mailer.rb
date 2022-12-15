@@ -1,4 +1,4 @@
-class NotifyMailer
+class NotifyMailer < ApplicationMailer
   require "notifications/client"
 
   def notify_client

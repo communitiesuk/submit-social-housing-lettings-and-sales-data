@@ -63,6 +63,20 @@ class FormHandler
     form_mappings[current_collection_start_year - year]
   end
 
+  def in_crossover_period?(now: Time.zone.now)
+    lettings_in_crossover_period?(now:) || sales_in_crossover_period?(now:)
+  end
+
+  def lettings_in_crossover_period?(now: Time.zone.now)
+    forms = lettings_forms.values
+    forms.count { |form| form.start_date < now && now < form.end_date } > 1
+  end
+
+  def sales_in_crossover_period?(now: Time.zone.now)
+    forms = sales_forms.values
+    forms.count { |form| form.start_date < now && now < form.end_date } > 1
+  end
+
 private
 
   def get_all_forms

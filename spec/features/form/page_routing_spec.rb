@@ -8,14 +8,14 @@ RSpec.describe "Form Page Routing" do
     FactoryBot.create(
       :lettings_log,
       :in_progress,
-      owning_organisation: user.organisation,
-      managing_organisation: user.organisation,
+      created_by: user,
     )
   end
   let(:id) { lettings_log.id }
   let(:validator) { lettings_log._validators[nil].first }
 
   before do
+    allow(lettings_log.form).to receive(:end_date).and_return(Time.zone.today + 1.day)
     allow(validator).to receive(:validate_pregnancy).and_return(true)
     sign_in user
   end
@@ -119,6 +119,7 @@ RSpec.describe "Form Page Routing" do
           :lettings_log,
           owning_organisation: user.organisation,
           managing_organisation: user.organisation,
+          created_by: user,
           needstype: 2,
         )
       end

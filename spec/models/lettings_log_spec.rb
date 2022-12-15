@@ -2,9 +2,9 @@ require "rails_helper"
 require "shared/shared_examples_for_derived_fields"
 
 RSpec.describe LettingsLog do
-  let(:owning_organisation) { FactoryBot.create(:organisation) }
   let(:different_managing_organisation) { FactoryBot.create(:organisation) }
   let(:created_by_user) { FactoryBot.create(:user) }
+  let(:owning_organisation) { created_by_user.organisation }
   let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
 
   before do
@@ -1855,6 +1855,43 @@ RSpec.describe LettingsLog do
   end
 
   describe "resetting invalidated fields" do
+    let(:scheme) { FactoryBot.create(:scheme, owning_organisation: created_by_user.organisation) }
+    let(:location) { FactoryBot.create(:location, location_code: "E07000223", scheme:) }
+    let(:lettings_log) do
+      FactoryBot.create(
+        :lettings_log,
+        renewal: 0,
+        rsnvac: 5,
+        first_time_property_let_as_social_housing: 0,
+        startdate: Time.zone.tomorrow,
+        voiddate: Time.zone.today,
+        mrcdate: Time.zone.today,
+        rent_type: 2,
+        needstype: 2,
+        period: 1,
+        beds: 1,
+        brent: 7.17,
+        scharge: 1,
+        pscharge: 1,
+        supcharg: 1,
+        created_by: created_by_user,
+      )
+    end
+
+    before do
+      LaRentRange.create!(
+        ranges_rent_id: "1",
+        la: "E07000223",
+        beds: 0,
+        lettype: 8,
+        soft_min: 12.41,
+        soft_max: 89.54,
+        hard_min: 10.87,
+        hard_max: 100.99,
+        start_year: lettings_log.startdate&.year,
+      )
+    end
+
     context "when a question that has already been answered, no longer has met dependencies" do
       let(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress, cbl: 1, preg_occ: 2, wchair: 1) }
 
@@ -1976,11 +2013,6 @@ RSpec.describe LettingsLog do
       let(:lettings_log) { FactoryBot.create(:lettings_log, created_by: created_by_user) }
       let(:organisation_2) { FactoryBot.create(:organisation) }
 
-      it "clears the created by user set" do
-        expect { lettings_log.update!(owning_organisation: organisation_2) }
-          .to change { lettings_log.reload.created_by }.from(created_by_user).to(nil)
-      end
-
       context "when the organisation selected doesn't match the scheme set" do
         let(:scheme) { FactoryBot.create(:scheme, owning_organisation: created_by_user.organisation) }
         let(:location) { FactoryBot.create(:location, scheme:) }
@@ -2000,6 +2032,80 @@ RSpec.describe LettingsLog do
         it "does not clear the scheme value" do
           lettings_log.update!(owning_organisation: organisation_2)
           expect(lettings_log.reload.scheme_id).to eq(scheme.id)
+        end
+      end
+    end
+
+    context "when the log is unresolved" do
+      before do
+        lettings_log.update!(unresolved: true)
+      end
+
+      context "and the new startdate triggers void date validation" do
+        it "clears void date value" do
+          lettings_log.update!(startdate: Time.zone.yesterday)
+          lettings_log.reload
+          expect(lettings_log.startdate).to eq(Time.zone.yesterday)
+          expect(lettings_log.voiddate).to eq(nil)
+        end
+
+        it "does not impact other validations" do
+          expect { lettings_log.update!(startdate: Time.zone.yesterday, first_time_property_let_as_social_housing: 0, rsnvac: 16) }
+            .to raise_error(ActiveRecord::RecordInvalid, /Enter a reason for vacancy that is not 'first let' if unit has been previously let as social housing/)
+        end
+      end
+
+      context "and the new startdate triggers major repairs date validation" do
+        it "clears major repairs date value" do
+          lettings_log.update!(startdate: Time.zone.yesterday)
+          lettings_log.reload
+          expect(lettings_log.startdate).to eq(Time.zone.yesterday)
+          expect(lettings_log.mrcdate).to eq(nil)
+        end
+      end
+
+      context "and the new location triggers the rent range validation" do
+        it "clears rent values" do
+          lettings_log.update!(location:, scheme:)
+          lettings_log.reload
+          expect(lettings_log.location).to eq(location)
+          expect(lettings_log.brent).to eq(nil)
+          expect(lettings_log.scharge).to eq(nil)
+          expect(lettings_log.pscharge).to eq(nil)
+          expect(lettings_log.supcharg).to eq(nil)
+        end
+
+        it "does not impact other validations" do
+          expect { lettings_log.update!(location:, scheme:, first_time_property_let_as_social_housing: 0, rsnvac: 16) }
+            .to raise_error(ActiveRecord::RecordInvalid, /Enter a reason for vacancy that is not 'first let' if unit has been previously let as social housing/)
+        end
+      end
+    end
+
+    context "when the log is resolved" do
+      context "and the new startdate triggers void date validation" do
+        it "doesn't clear void date value" do
+          expect { lettings_log.update!(startdate: Time.zone.yesterday) }.to raise_error(ActiveRecord::RecordInvalid, /Enter a void date that is before the tenancy start date/)
+          expect(lettings_log.startdate).to eq(Time.zone.yesterday)
+          expect(lettings_log.voiddate).to eq(Time.zone.today)
+        end
+      end
+
+      context "and the new startdate triggers major repairs date validation" do
+        it "doesn't clear major repairs date value" do
+          expect { lettings_log.update!(startdate: Time.zone.yesterday) }.to raise_error(ActiveRecord::RecordInvalid, /Enter a major repairs date that is before the tenancy start date/)
+          expect(lettings_log.startdate).to eq(Time.zone.yesterday)
+          expect(lettings_log.mrcdate).to eq(Time.zone.today)
+        end
+      end
+
+      context "and the new location triggers brent validation" do
+        it "doesn't clear rent values" do
+          expect { lettings_log.update!(location:, scheme:) }.to raise_error(ActiveRecord::RecordInvalid, /Rent is below the absolute minimum expected/)
+          expect(lettings_log.brent).to eq(7.17)
+          expect(lettings_log.scharge).to eq(1)
+          expect(lettings_log.pscharge).to eq(1)
+          expect(lettings_log.supcharg).to eq(1)
         end
       end
     end
@@ -2266,10 +2372,10 @@ RSpec.describe LettingsLog do
       let(:organisation_3) { FactoryBot.create(:organisation) }
 
       before do
-        FactoryBot.create(:lettings_log, :in_progress, owning_organisation: organisation_1, managing_organisation: organisation_1)
-        FactoryBot.create(:lettings_log, :completed, owning_organisation: organisation_1, managing_organisation: organisation_2)
-        FactoryBot.create(:lettings_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_1)
-        FactoryBot.create(:lettings_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_2)
+        FactoryBot.create(:lettings_log, :in_progress, owning_organisation: organisation_1, managing_organisation: organisation_1, created_by: nil)
+        FactoryBot.create(:lettings_log, :completed, owning_organisation: organisation_1, managing_organisation: organisation_2, created_by: nil)
+        FactoryBot.create(:lettings_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_1, created_by: nil)
+        FactoryBot.create(:lettings_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_2, created_by: nil)
       end
 
       it "filters by given organisation id" do

@@ -23,7 +23,7 @@ RSpec.describe BulkUploadLettingsLogsController, type: :request do
 
     context "when in crossover period" do
       it "redirects to /year" do
-        Timecop.freeze(2023, 6, 1) do
+        Timecop.freeze(2022, 6, 1) do
           get "/lettings-logs/bulk-upload-logs/start", params: {}
 
           expect(response).to redirect_to("/lettings-logs/bulk-upload-logs/year")

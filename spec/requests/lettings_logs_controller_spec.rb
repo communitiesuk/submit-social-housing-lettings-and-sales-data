@@ -150,20 +150,19 @@ RSpec.describe LettingsLogsController, type: :request do
     let(:page) { Capybara::Node::Simple.new(response.body) }
     let(:user) { FactoryBot.create(:user) }
     let(:organisation) { user.organisation }
-    let(:other_organisation) { FactoryBot.create(:organisation) }
+    let(:other_user) { FactoryBot.create(:user) }
+    let(:other_organisation) { other_user.organisation }
     let!(:lettings_log) do
       FactoryBot.create(
         :lettings_log,
-        owning_organisation: organisation,
-        managing_organisation: organisation,
+        created_by: user,
         tenancycode: "LC783",
       )
     end
     let!(:unauthorized_lettings_log) do
       FactoryBot.create(
         :lettings_log,
-        owning_organisation: other_organisation,
-        managing_organisation: other_organisation,
+        created_by: other_user,
         tenancycode: "UA984",
       )
     end
@@ -266,9 +265,8 @@ RSpec.describe LettingsLogsController, type: :request do
           context "with year filter" do
             let!(:lettings_log_2021) do
               FactoryBot.create(:lettings_log, :in_progress,
-                                owning_organisation: organisation,
-                                startdate: Time.zone.local(2022, 3, 1),
-                                managing_organisation: organisation)
+                                created_by: user,
+                                startdate: Time.zone.local(2022, 3, 1))
             end
             let!(:lettings_log_2022) do
               lettings_log = FactoryBot.build(:lettings_log, :completed,
@@ -567,7 +565,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
         context "when there are more than 20 logs" do
           before do
-            FactoryBot.create_list(:lettings_log, 25, owning_organisation: organisation, managing_organisation: organisation)
+            FactoryBot.create_list(:lettings_log, 25, created_by: user)
           end
 
           context "when on the first page" do
@@ -620,7 +618,7 @@ RSpec.describe LettingsLogsController, type: :request do
     end
 
     context "when requesting a specific lettings log" do
-      let(:completed_lettings_log) { FactoryBot.create(:lettings_log, :completed) }
+      let!(:completed_lettings_log) { FactoryBot.create(:lettings_log, :completed, owning_organisation: user.organisation, managing_organisation: user.organisation, created_by: user) }
       let(:id) { completed_lettings_log.id }
 
       before do
@@ -672,6 +670,26 @@ RSpec.describe LettingsLogsController, type: :request do
               assert_select ".govuk-tag", text: /Completed/, count: 0
               assert_select ".govuk-tag", text: /Cannot start yet/, count: 1
             end
+
+            it "displays a link to update the log for currently editable logs" do
+              completed_lettings_log.update!(startdate: Time.zone.local(2022, 4, 1), tenancylength: nil)
+              completed_lettings_log.reload
+
+              get "/lettings-logs/#{completed_lettings_log.id}", headers:, params: {}
+              expect(completed_lettings_log.form.end_date).to eq(Time.zone.local(2023, 7, 1))
+              expect(completed_lettings_log.status).to eq("completed")
+              expect(page).to have_link("review and make changes to this log", href: "/lettings-logs/#{completed_lettings_log.id}/review")
+            end
+
+            it "displays a closed collection window message for previous collection year logs" do
+              completed_lettings_log.update!(startdate: Time.zone.local(2021, 4, 1))
+              completed_lettings_log.reload
+
+              get "/lettings-logs/#{completed_lettings_log.id}", headers:, params: {}
+              expect(completed_lettings_log.form.end_date).to eq(Time.zone.local(2022, 7, 1))
+              expect(completed_lettings_log.status).to eq("completed")
+              expect(page).to have_content("This log is from the 2021/2022 collection window, which is now closed.")
+            end
           end
 
           context "with a lettings log with a single section complete" do
@@ -679,8 +697,7 @@ RSpec.describe LettingsLogsController, type: :request do
               FactoryBot.create(
                 :lettings_log,
                 :conditional_section_complete,
-                owning_organisation: organisation,
-                managing_organisation: organisation,
+                created_by: user,
               )
             end
 
@@ -706,6 +723,29 @@ RSpec.describe LettingsLogsController, type: :request do
               expect(response).to have_http_status(:not_found)
             end
           end
+
+          context "when the log is unresolved" do
+            let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+            let!(:location) { FactoryBot.create(:location, scheme:) }
+
+            before do
+              FactoryBot.create_list(:lettings_log, 3, unresolved: true, created_by: user)
+              lettings_log.update!(needstype: 2, scheme:, location:, unresolved: true)
+              sign_in user
+              get "/lettings-logs/#{lettings_log.id}", headers:, params: {}
+            end
+
+            it "marks it as resolved when both scheme and location exist" do
+              lettings_log.reload
+              expect(lettings_log.unresolved).to eq(false)
+            end
+
+            it "displays a success banner" do
+              expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+              expect(page).to have_content("You’ve updated all the fields affected by the scheme change")
+              expect(page).to have_link("Update 3 more logs", href: "/lettings-logs/update-logs")
+            end
+          end
         end
       end
     end
@@ -713,11 +753,11 @@ RSpec.describe LettingsLogsController, type: :request do
     context "when accessing the check answers page" do
       let(:postcode_lettings_log) do
         FactoryBot.create(:lettings_log,
-                          owning_organisation: organisation,
-                          managing_organisation: organisation,
+                          created_by: user,
                           postcode_known: "No")
       end
       let(:id) { postcode_lettings_log.id }
+      let(:completed_lettings_log) { FactoryBot.create(:lettings_log, :completed, owning_organisation: user.organisation, managing_organisation: user.organisation, created_by: user, startdate: Time.zone.local(2021, 4, 1)) }
 
       before do
         stub_request(:get, /api.postcodes.io/)
@@ -727,8 +767,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
       it "shows the inferred la" do
         lettings_log = FactoryBot.create(:lettings_log,
-                                         owning_organisation: organisation,
-                                         managing_organisation: organisation,
+                                         created_by: user,
                                          postcode_known: 1,
                                          postcode_full: "PO5 3TE")
         id = lettings_log.id
@@ -750,6 +789,21 @@ RSpec.describe LettingsLogsController, type: :request do
       it "shows `you haven't answered this question` if the question wasn't answered" do
         get "/lettings-logs/#{id}/income-and-benefits/check-answers"
         expect(CGI.unescape_html(response.body)).to include("You didn’t answer this question")
+      end
+
+      it "does not allow you to change the answers for previous collection year logs" do
+        get "/lettings-logs/#{completed_lettings_log.id}/setup/check-answers", headers: { "Accept" => "text/html" }, params: {}
+        expect(page).not_to have_link("Change")
+        expect(page).not_to have_link("Answer")
+
+        get "/lettings-logs/#{completed_lettings_log.id}/income-and-benefits/check-answers", headers: { "Accept" => "text/html" }, params: {}
+        expect(page).not_to have_link("Change")
+        expect(page).not_to have_link("Answer")
+      end
+
+      it "does not let the user navigate to questions for previous collection year logs" do
+        get "/lettings-logs/#{completed_lettings_log.id}/needs-type", headers: { "Accept" => "text/html" }, params: {}
+        expect(response).to redirect_to("/lettings-logs/#{completed_lettings_log.id}")
       end
     end
 
@@ -787,6 +841,94 @@ RSpec.describe LettingsLogsController, type: :request do
           get "/lettings-logs/csv-confirmation"
           expect(CGI.unescape_html(response.body)).to include("We’re sending you an email")
         end
+      end
+    end
+
+    context "when viewing a collection of logs affected by deactivated location" do
+      let!(:affected_lettings_logs) { FactoryBot.create_list(:lettings_log, 3, unresolved: true, created_by: user) }
+      let!(:non_affected_lettings_logs) { FactoryBot.create_list(:lettings_log, 4, created_by: user) }
+      let(:other_user) { FactoryBot.create(:user, organisation: user.organisation) }
+      let(:headers) { { "Accept" => "text/html" } }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+      end
+
+      it "displays logs in a table" do
+        get "/lettings-logs/update-logs", headers:, params: {}
+        expect(page).to have_content("Log ID")
+        expect(page).to have_content("Tenancy code")
+        expect(page).to have_content("Property reference")
+        expect(page).to have_content("Status")
+
+        expect(page).to have_content(affected_lettings_logs.first.id)
+        expect(page).to have_content(affected_lettings_logs.first.tenancycode)
+        expect(page).to have_content(affected_lettings_logs.first.propcode)
+        expect(page).to have_link("Update now", href: "/lettings-logs/#{affected_lettings_logs.first.id}/tenancy-start-date")
+      end
+
+      it "only displays affected logs" do
+        get "/lettings-logs/update-logs", headers:, params: {}
+        expect(page).to have_content("You need to update 3 logs")
+        expect(page).to have_content(affected_lettings_logs.first.id)
+        expect(page).not_to have_content(non_affected_lettings_logs.first.id)
+      end
+
+      it "only displays the logs creted by the user" do
+        affected_lettings_logs.first.update!(created_by: other_user)
+        get "/lettings-logs/update-logs", headers:, params: {}
+        expect(page).to have_content(affected_lettings_logs.second.id)
+        expect(page).not_to have_content(affected_lettings_logs.first.id)
+        expect(page).to have_content("You need to update 2 logs")
+      end
+
+      it "displays correct content when there are no unresolved logs" do
+        LettingsLog.where(unresolved: true).update!(unresolved: false)
+        get "/lettings-logs/update-logs", headers:, params: {}
+        expect(page).to have_content("There are no more logs that need updating")
+        expect(page).to have_content("You’ve completed all the logs that were affected by scheme changes.")
+        page.assert_selector(".govuk-button", text: "Back to all logs")
+      end
+
+      it "displays a banner on the lettings log page" do
+        get "/lettings-logs", headers:, params: {}
+        expect(page).to have_css(".govuk-notification-banner")
+        expect(page).to have_content("A scheme has changed and it has affected 3 logs")
+        expect(page).to have_link("Update logs", href: "/lettings-logs/update-logs")
+      end
+    end
+
+    context "when viewing a specific log affected by deactivated location" do
+      let!(:affected_lettings_log) { FactoryBot.create(:lettings_log, unresolved: true, created_by: user, needstype: 2) }
+      let(:headers) { { "Accept" => "text/html" } }
+
+      before do
+        allow(affected_lettings_log.form).to receive(:end_date).and_return(Time.zone.today + 1.day)
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+      end
+
+      it "routes to the tenancy date question" do
+        get "/lettings-logs/#{affected_lettings_log.id}", headers:, params: {}
+        expect(response).to redirect_to("/lettings-logs/#{affected_lettings_log.id}/tenancy-start-date")
+        follow_redirect!
+        expect(page).to have_content("What is the tenancy start date?")
+      end
+
+      it "tenancy start date page links to the scheme page" do
+        get "/lettings-logs/#{affected_lettings_log.id}/tenancy-start-date", headers:, params: {}
+        expect(page).to have_link("Skip for now", href: "/lettings-logs/#{affected_lettings_log.id}/scheme")
+      end
+
+      it "scheme page links to the locations page" do
+        get "/lettings-logs/#{affected_lettings_log.id}/scheme", headers:, params: {}
+        expect(page).to have_link("Skip for now", href: "/lettings-logs/#{affected_lettings_log.id}/location")
+      end
+
+      it "displays inset hint text on the tenancy start date question" do
+        get "/lettings-logs/#{affected_lettings_log.id}/tenancy-start-date", headers:, params: {}
+        expect(page).to have_content("Some scheme details have changed, and now this log needs updating. Check that the tenancy start date is correct.")
       end
     end
   end
@@ -949,8 +1091,7 @@ RSpec.describe LettingsLogsController, type: :request do
       let!(:lettings_log) do
         FactoryBot.create(
           :lettings_log,
-          owning_organisation:,
-          managing_organisation: owning_organisation,
+          created_by: user,
           ecstat1: 1,
         )
       end

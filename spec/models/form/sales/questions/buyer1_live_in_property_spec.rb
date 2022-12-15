@@ -45,4 +45,8 @@ RSpec.describe Form::Sales::Questions::Buyer1LiveInProperty, type: :model do
   it "has the correct hint" do
     expect(question.hint_text).to eq("Buyer 1 is the person in the household who does the most paid work. If it’s a joint purchase and the buyers do the same amount of paid work, buyer 1 is whoever is the oldest.")
   end
+
+  it "has the correct check_answers_card_number" do
+    expect(question.check_answers_card_number).to eq(1)
+  end
 end

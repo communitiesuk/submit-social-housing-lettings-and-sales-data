@@ -13,6 +13,7 @@ class LettingsLogsController < LogsController
         @pagy, @logs = pagy(unpaginated_filtered_logs)
         @searched = search_term.presence
         @total_count = all_logs.size
+        @unresolved_count = all_logs.unresolved.created_by(current_user).count
         render "logs/index"
       end
     end
@@ -37,6 +38,7 @@ class LettingsLogsController < LogsController
   def show
     respond_to do |format|
       # We don't have a dedicated non-editable show view
+      resolve_logs!
       format.html { edit }
       format.json do
         if @log
@@ -51,7 +53,11 @@ class LettingsLogsController < LogsController
   def edit
     @log = current_user.lettings_logs.find_by(id: params[:id])
     if @log
-      render "logs/edit", locals: { current_user: }
+      if @log.unresolved
+        redirect_to(send(@log.form.unresolved_log_path, @log))
+      else
+        render("logs/edit", locals: { current_user: })
+      end
     else
       render_not_found
     end
@@ -83,6 +89,18 @@ class LettingsLogsController < LogsController
 
   def csv_confirmation; end
 
+  def update_logs
+    respond_to do |format|
+      format.html do
+        impacted_logs = current_user.lettings_logs.unresolved.created_by(current_user)
+
+        @pagy, @logs = pagy(impacted_logs)
+        @total_count = impacted_logs.size
+        render "logs/update_logs"
+      end
+    end
+  end
+
 private
 
   def permitted_log_params
@@ -95,5 +113,12 @@ private
 
   def post_create_redirect_url(log)
     lettings_log_url(log)
+  end
+
+  def resolve_logs!
+    if @log&.unresolved && @log.location.present? && @log.scheme.present? && @log&.resolve!
+      unresolved_logs_count_for_user = current_user.lettings_logs.unresolved.created_by(current_user).count
+      flash.now[:notice] = helpers.flash_notice_for_resolved_logs(unresolved_logs_count_for_user)
+    end
   end
 end

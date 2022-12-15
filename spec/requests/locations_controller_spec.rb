@@ -1428,33 +1428,57 @@ RSpec.describe LocationsController, type: :request do
 
       context "when confirming deactivation" do
         let(:params) { { deactivation_date:, confirm: true, deactivation_date_type: "other" } }
+        let(:mailer) { instance_double(LocationOrSchemeDeactivationMailer) }
+
+        let(:user_a) { FactoryBot.create(:user, email: "user_a@example.com") }
+        let(:user_b) { FactoryBot.create(:user, email: "user_b@example.com") }
 
         before do
+          FactoryBot.create_list(:lettings_log, 1, :sh, location:, scheme:, startdate:, created_by: user_a)
+          FactoryBot.create_list(:lettings_log, 3, :sh, location:, scheme:, startdate:, created_by: user_b)
+
           Timecop.freeze(Time.utc(2022, 10, 10))
           sign_in user
-          patch "/schemes/#{scheme.id}/locations/#{location.id}/deactivate", params:
         end
 
         after do
           Timecop.unfreeze
         end
 
-        it "updates existing location with valid deactivation date and renders location page" do
-          follow_redirect!
-          expect(response).to have_http_status(:ok)
-          expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
-          location.reload
-          expect(location.location_deactivation_periods.count).to eq(1)
-          expect(location.location_deactivation_periods.first.deactivation_date).to eq(deactivation_date)
-        end
-
         context "and a log startdate is after location deactivation date" do
+          before do
+            patch "/schemes/#{scheme.id}/locations/#{location.id}/deactivate", params:
+          end
+
+          it "updates existing location with valid deactivation date and renders location page" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+            location.reload
+            expect(location.location_deactivation_periods.count).to eq(1)
+            expect(location.location_deactivation_periods.first.deactivation_date).to eq(deactivation_date)
+          end
+
           it "clears the location and scheme answers" do
             expect(lettings_log.location).to eq(location)
             expect(lettings_log.scheme).to eq(scheme)
             lettings_log.reload
             expect(lettings_log.location).to eq(nil)
             expect(lettings_log.scheme).to eq(nil)
+          end
+
+          it "marks log as needing attention" do
+            expect(lettings_log.unresolved).to eq(nil)
+            lettings_log.reload
+            expect(lettings_log.unresolved).to eq(true)
+          end
+        end
+
+        context "and the users need to be notified" do
+          it "sends E-mails to the creators of affected logs with counts" do
+            expect {
+              patch "/schemes/#{scheme.id}/locations/#{location.id}/deactivate", params:
+            }.to enqueue_job(ActionMailer::MailDeliveryJob).at_least(2).times
           end
         end
 
@@ -1467,6 +1491,12 @@ RSpec.describe LocationsController, type: :request do
             lettings_log.reload
             expect(lettings_log.location).to eq(location)
             expect(lettings_log.scheme).to eq(scheme)
+          end
+
+          it "does not mark log as needing attention" do
+            expect(lettings_log.unresolved).to eq(nil)
+            lettings_log.reload
+            expect(lettings_log.unresolved).to eq(nil)
           end
         end
       end
@@ -1599,18 +1629,20 @@ RSpec.describe LocationsController, type: :request do
       context "with location that's deactivating soon" do
         let(:location_deactivation_period) { FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 12), location:) }
 
-        it "renders reactivate this location" do
+        it "does not render toggle location link" do
           expect(response).to have_http_status(:ok)
-          expect(page).to have_link("Reactivate this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/new-reactivation")
+          expect(page).not_to have_link("Reactivate this location")
+          expect(page).not_to have_link("Deactivate this location")
         end
       end
 
       context "with location that's reactivating soon" do
         let(:location_deactivation_period) { FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 4, 12), reactivation_date: Time.zone.local(2022, 10, 12), location:) }
 
-        it "renders reactivate this location" do
+        it "does not render toggle location link" do
           expect(response).to have_http_status(:ok)
-          expect(page).to have_link("Deactivate this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/new-deactivation")
+          expect(page).not_to have_link("Reactivate this location")
+          expect(page).not_to have_link("Deactivate this location")
         end
       end
     end

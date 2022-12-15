@@ -29,7 +29,7 @@
         <%= status_tag(@log.status) %>
       </p>
       <p class="govuk-body">
-        You can <%= govuk_link_to "review and make changes to this log", "/lettings-logs/#{@log.id}/review" %> until 2nd June <%= @log.collection_start_year.present? ? @log.collection_start_year + 1 : "" %>.
+        <%= review_log_text(@log) %>
       </p>
     <% end %>
     <%= render "tasklist" %>

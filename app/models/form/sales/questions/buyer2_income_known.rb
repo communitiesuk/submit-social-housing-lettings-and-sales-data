@@ -12,6 +12,7 @@ class Form::Sales::Questions::Buyer2IncomeKnown < ::Form::Question
     @conditional_for = {
       "income2" => [0],
     }
+    @check_answers_card_number = 2
   end
 
   ANSWER_OPTIONS = {

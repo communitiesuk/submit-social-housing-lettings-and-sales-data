@@ -50,4 +50,12 @@ RSpec.describe Form::Sales::Questions::Buyer1Income, type: :model do
   it "has correct min" do
     expect(question.min).to eq(0)
   end
+
+  it "has the correct check_answers_card_number" do
+    expect(question.check_answers_card_number).to eq(1)
+  end
+
+  it "has correct max" do
+    expect(question.max).to eq(999_999)
+  end
 end
