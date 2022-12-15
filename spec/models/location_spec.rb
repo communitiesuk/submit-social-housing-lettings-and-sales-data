@@ -57,7 +57,7 @@ RSpec.describe Location, type: :model do
 
     it "does not add an error when the name is invalid" do
       location.name = nil
-      location.valid?(:name)
+      location.valid?
       expect(location.errors.count).to eq(0)
     end
   end
