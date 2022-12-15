@@ -1,11 +1,11 @@
-class Form::Sales::Pages::PersonAge < ::Form::Page
-  def initialize(id, hsh, subsection)
-    super
+class Form::Sales::Pages::PersonAge < Form::Sales::Pages::Person
+  def initialize(id, hsh, subsection, person_index)
+    super(id, hsh, subsection, person_index)
     @header = ""
     @description = ""
     @subsection = subsection
     @depends_on = [
-      { "details_known_#{person_display_number(PERSON_INDEX)}" => 1, "jointpur" => joint_purchase? ? 1 : 2 },
+      { "details_known_#{person_display_number}" => 1, "jointpur" => joint_purchase? ? 1 : 2 },
     ]
   end
 
@@ -22,8 +22,8 @@ class Form::Sales::Pages::PersonAge < ::Form::Page
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::PersonAgeKnown.new("age#{person_database_number(PERSON_INDEX)}_known", nil, self),
-      Form::Sales::Questions::PersonAge.new("age#{person_database_number(PERSON_INDEX)}", nil, self),
+      Form::Sales::Questions::PersonAgeKnown.new("age#{@person_index}_known", nil, self, @person_index),
+      Form::Sales::Questions::PersonAge.new("age#{@person_index}", nil, self, @person_index),
     ]
   end
 end

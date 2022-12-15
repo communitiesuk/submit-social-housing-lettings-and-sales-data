@@ -1,26 +1,26 @@
-class Form::Sales::Questions::PersonAgeKnown < ::Form::Question
-  def initialize(id, hsh, page)
-    super
-    @check_answer_label = "Person #{person_display_number(PERSON_INDEX)}’s age known?"
-    @header = "Do you know person #{person_display_number(PERSON_INDEX)}’s age?"
+class Form::Sales::Questions::PersonAgeKnown < ::Form::Sales::Questions::Person
+  def initialize(id, hsh, page, person_index)
+    super(id, hsh, page, person_index)
+    @check_answer_label = "Person #{person_display_number}’s age known?"
+    @header = "Do you know person #{person_display_number}’s age?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @page = page
     @hint_text = ""
     @conditional_for = {
-      "age#{person_database_number(PERSON_INDEX)}" => [0],
+      "age#{@person_index}" => [0],
     }
     @hidden_in_check_answers = {
       "depends_on" => [
         {
-          "age#{person_database_number(PERSON_INDEX)}_known" => 0,
+          "age#{@person_index}_known" => 0,
         },
         {
-          "age#{person_database_number(PERSON_INDEX)}_known" => 1,
+          "age#{@person_index}_known" => 1,
         },
       ],
     }
-    @check_answers_card_number = person_database_number(PERSON_INDEX)
+    @check_answers_card_number = @person_index
   end
 
   ANSWER_OPTIONS = {
@@ -28,11 +28,11 @@ class Form::Sales::Questions::PersonAgeKnown < ::Form::Question
     "1" => { "value" => "No" },
   }.freeze
 
-  PERSON_INDEX = {
-    "age2_known" => 2,
-    "age3_known" => 3,
-    "age4_known" => 4,
-    "age5_known" => 5,
-    "age6_known" => 6,
-  }.freeze
+  # PERSON_INDEX = {
+  #   "age2_known" => 2,
+  #   "age3_known" => 3,
+  #   "age4_known" => 4,
+  #   "age5_known" => 5,
+  #   "age6_known" => 6,
+  # }.freeze
 end
