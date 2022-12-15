@@ -16,7 +16,9 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
     return opts unless current_user
     return opts unless log
 
-    opts = opts.merge({ log.managing_organisation.id => log.managing_organisation.name} )
+    if log.managing_organisation.present?
+      opts = opts.merge({ log.managing_organisation.id => log.managing_organisation.name} )
+    end
 
     if current_user.support?
       if log.owning_organisation.holds_own_stock?
