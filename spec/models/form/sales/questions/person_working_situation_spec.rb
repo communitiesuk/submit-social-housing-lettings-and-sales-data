@@ -1,11 +1,12 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
-  subject(:question) { described_class.new(question_id, question_definition, page) }
+  subject(:question) { described_class.new(question_id, question_definition, page, person_index) }
 
   let(:question_id) { "ecstat2" }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
+  let(:person_index) { 2 }
 
   before do
     allow(page).to receive(:id).and_return("person_1_working_situation")
@@ -46,6 +47,7 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
   context "when person 1" do
     context "and not joint purchase" do
       let(:question_id) { "ecstat2" }
+      let(:person_index) { 2 }
 
       before do
         allow(page).to receive(:id).and_return("person_1_working_situation")
@@ -69,6 +71,7 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
     end
 
     context "and joint purchase" do
+      let(:person_index) { 3 }
       let(:question_id) { "ecstat3" }
 
       before do
@@ -96,6 +99,7 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
   context "when person 2" do
     context "and not joint purchase" do
       let(:question_id) { "ecstat3" }
+      let(:person_index) { 3 }
 
       before do
         allow(page).to receive(:id).and_return("person_2_working_situation")
@@ -120,6 +124,7 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
 
     context "and joint purchase" do
       let(:question_id) { "ecstat4" }
+      let(:person_index) { 4 }
 
       before do
         allow(page).to receive(:id).and_return("person_2_working_situation_joint_purchase")
@@ -146,6 +151,7 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
   context "when person 3" do
     context "and not joint purchase" do
       let(:question_id) { "ecstat4" }
+      let(:person_index) { 4 }
 
       before do
         allow(page).to receive(:id).and_return("person_3_working_situation")
@@ -170,6 +176,7 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
 
     context "and joint purchase" do
       let(:question_id) { "ecstat5" }
+      let(:person_index) { 5 }
 
       before do
         allow(page).to receive(:id).and_return("person_3_working_situation_joint_purchase")
@@ -196,6 +203,7 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
   context "when person 4" do
     context "and not joint purchase" do
       let(:question_id) { "ecstat5" }
+      let(:person_index) { 5 }
 
       before do
         allow(page).to receive(:id).and_return("person_4_working_situation")
@@ -220,6 +228,7 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
 
     context "and joint purchase" do
       let(:question_id) { "ecstat6" }
+      let(:person_index) { 6 }
 
       before do
         allow(page).to receive(:id).and_return("person_4_working_situation_joint_purchase")

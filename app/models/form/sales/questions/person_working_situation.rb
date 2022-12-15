@@ -1,12 +1,12 @@
-class Form::Sales::Questions::PersonWorkingSituation < ::Form::Question
-  def initialize(id, hsh, page)
+class Form::Sales::Questions::PersonWorkingSituation < ::Form::Sales::Questions::Person
+  def initialize(id, hsh, page, person_index)
     super
-    @check_answer_label = "Person #{person_display_number(PERSON_INDEX)}’s working situation"
-    @header = "Which of these best describes Person #{person_display_number(PERSON_INDEX)}’s working situation?"
+    @check_answer_label = "Person #{person_display_number}’s working situation"
+    @header = "Which of these best describes Person #{person_display_number}’s working situation?"
     @type = "radio"
     @page = page
     @answer_options = ANSWER_OPTIONS
-    @check_answers_card_number = person_database_number(PERSON_INDEX)
+    @check_answers_card_number = person_index
   end
 
   ANSWER_OPTIONS = {
