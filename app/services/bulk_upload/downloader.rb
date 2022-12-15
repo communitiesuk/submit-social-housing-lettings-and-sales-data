@@ -25,9 +25,21 @@ private
   end
 
   def storage_service
-    @storage_service ||= Storage::S3Service.new(
+    @storage_service ||= if FeatureToggle.upload_enabled?
+                           s3_storage_service
+                         else
+                           local_disk_storage_service
+                         end
+  end
+
+  def s3_storage_service
+    Storage::S3Service.new(
       Configuration::PaasConfigurationService.new,
       ENV["CSV_DOWNLOAD_PAAS_INSTANCE"],
     )
+  end
+
+  def local_disk_storage_service
+    Storage::LocalDiskService.new
   end
 end
