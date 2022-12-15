@@ -1,5 +1,5 @@
 class Form::Sales::Questions::PersonWorkingSituation < ::Form::Sales::Questions::Person
-  def initialize(id, hsh, page, person_index)
+  def initialize(id, hsh, page, person_index:)
     super
     @check_answer_label = "Person #{person_display_number}’s working situation"
     @header = "Which of these best describes Person #{person_display_number}’s working situation?"

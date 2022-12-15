@@ -1,5 +1,5 @@
 class Form::Sales::Questions::PersonAge < Form::Sales::Questions::Person
-  def initialize(id, hsh, page, person_index)
+  def initialize(id, hsh, page, person_index:)
     super
     @check_answer_label = "Person #{person_display_number}’s age"
     @header = "Age"

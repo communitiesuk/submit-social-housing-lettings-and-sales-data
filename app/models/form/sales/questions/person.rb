@@ -1,5 +1,5 @@
 class Form::Sales::Questions::Person < ::Form::Question
-  def initialize(id, hsh, page, person_index)
+  def initialize(id, hsh, page, person_index:)
     super(id, hsh, page)
     @person_index = person_index
   end

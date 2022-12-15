@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Pages::PersonAge, type: :model do
-  subject(:page) { described_class.new(page_id, page_definition, subsection, person_index) }
+  subject(:page) { described_class.new(page_id, page_definition, subsection, person_index:) }
 
   let(:page_id) { "person_1_age" }
   let(:page_definition) { nil }
