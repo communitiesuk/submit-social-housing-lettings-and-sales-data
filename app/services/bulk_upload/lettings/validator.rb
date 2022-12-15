@@ -151,11 +151,23 @@ class BulkUpload::Lettings::Validator
   end
 
   def call
-    row_parsers.each do |row_parser|
+    row_offset = 6
+    col_offset = 0
+
+    row_parsers.each_with_index do |row_parser, index|
       row_parser.valid?
 
+      row = index + row_offset
+
       row_parser.errors.each do |error|
-        bulk_upload.bulk_upload_errors.create!(field: error.attribute, error: error.type)
+        bulk_upload.bulk_upload_errors.create!(
+          field: error.attribute,
+          error: error.type,
+          tenant_code: row_parser.field_7,
+          property_ref: row_parser.field_100,
+          row:,
+          cell: "#{cols[field_number_for_attribute(error.attribute) + col_offset]}#{row}",
+        )
       end
     end
   end
@@ -165,6 +177,14 @@ class BulkUpload::Lettings::Validator
   end
 
 private
+
+  def field_number_for_attribute(attribute)
+    attribute.to_s.split("_").last.to_i
+  end
+
+  def cols
+    @cols ||= ("A".."EE").to_a
+  end
 
   def row_parsers
     @row_parsers ||= body_rows.map do |row|
