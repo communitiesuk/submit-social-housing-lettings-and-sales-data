@@ -55,10 +55,10 @@ RSpec.describe Location, type: :model do
   describe "#name" do
     let(:location) { FactoryBot.build(:location) }
 
-    it "does add an error when the name is invalid" do
+    it "does not add an error when the name is invalid" do
       location.name = nil
       location.valid?(:name)
-      expect(location.errors.count).to eq(1)
+      expect(location.errors.count).to eq(0)
     end
   end
 
