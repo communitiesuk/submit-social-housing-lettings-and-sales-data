@@ -43,6 +43,8 @@ module Forms
 
         storage_service.write_file(bulk_upload.identifier, File.read(file.path))
 
+        ProcessBulkUploadJob.perform_later(bulk_upload:)
+
         true
       end
 
