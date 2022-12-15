@@ -22,9 +22,9 @@ class BulkUploadErrorRowComponent < ViewComponent::Base
   def question_for_field(field)
     case bulk_upload.log_type
     when "lettings"
-      BulkUpload::LettingsValidator.question_for_field(field.to_sym)
+      BulkUpload::Lettings::Validator.question_for_field(field.to_sym)
     when "sales"
-      BulkUpload::SalesValidator.question_for_field(field.to_sym)
+      BulkUpload::Sales::Validator.question_for_field(field.to_sym)
     else
       "Unknown question"
     end
