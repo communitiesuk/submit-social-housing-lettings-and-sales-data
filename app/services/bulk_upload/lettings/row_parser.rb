@@ -163,7 +163,7 @@ private
       possible_answers = FormHandler.instance.current_lettings_form.questions.find { |q| q.id == attribute.to_s }.answer_options.keys
 
       unless possible_answers.include?(public_send(field))
-        errors.add(field, "foo")
+        errors.add(field, "Value supplied is not one of the permitted values")
       end
     end
   end
