@@ -1,6 +1,6 @@
 class Form::Sales::Questions::PersonAge < Form::Sales::Questions::Person
   def initialize(id, hsh, page, person_index)
-    super(id, hsh, page, person_index)
+    super
     @check_answer_label = "Person #{person_display_number}’s age"
     @header = "Age"
     @type = "numeric"
@@ -12,12 +12,4 @@ class Form::Sales::Questions::PersonAge < Form::Sales::Questions::Person
     }
     @check_answers_card_number = person_index
   end
-
-  # PERSON_INDEX = {
-  #   "age2" => 2,
-  #   "age3" => 3,
-  #   "age4" => 4,
-  #   "age5" => 5,
-  #   "age6" => 6,
-  # }.freeze
 end

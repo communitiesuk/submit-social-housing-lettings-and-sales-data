@@ -1,6 +1,6 @@
 class Form::Sales::Pages::PersonAge < Form::Sales::Pages::Person
   def initialize(id, hsh, subsection, person_index)
-    super(id, hsh, subsection, person_index)
+    super
     @header = ""
     @description = ""
     @subsection = subsection

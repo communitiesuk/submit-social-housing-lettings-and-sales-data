@@ -1,6 +1,6 @@
 class Form::Sales::Questions::PersonAgeKnown < ::Form::Sales::Questions::Person
   def initialize(id, hsh, page, person_index)
-    super(id, hsh, page, person_index)
+    super
     @check_answer_label = "Person #{person_display_number}’s age known?"
     @header = "Do you know person #{person_display_number}’s age?"
     @type = "radio"
@@ -27,12 +27,4 @@ class Form::Sales::Questions::PersonAgeKnown < ::Form::Sales::Questions::Person
     "0" => { "value" => "Yes" },
     "1" => { "value" => "No" },
   }.freeze
-
-  # PERSON_INDEX = {
-  #   "age2_known" => 2,
-  #   "age3_known" => 3,
-  #   "age4_known" => 4,
-  #   "age5_known" => 5,
-  #   "age6_known" => 6,
-  # }.freeze
 end
