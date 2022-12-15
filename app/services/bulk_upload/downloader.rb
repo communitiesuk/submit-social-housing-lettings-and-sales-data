@@ -11,6 +11,10 @@ class BulkUpload::Downloader
     download
   end
 
+  def delete_local_file!
+    file.unlink
+  end
+
 private
 
   def download

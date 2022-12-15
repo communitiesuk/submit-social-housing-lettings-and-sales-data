@@ -26,4 +26,23 @@ RSpec.describe BulkUpload::Downloader do
       expect(File.read(downloader.path)).to eql("hello")
     end
   end
+
+  describe "#delete_local_file!" do
+    let(:mock_storage_service) { instance_double(Storage::S3Service, get_file_io:) }
+
+    it "deletes the local file" do
+      allow(Storage::S3Service).to receive(:new).and_return(mock_storage_service)
+
+      downloader.call
+
+      expect(File).to exist(downloader.path)
+      expect(File.read(downloader.path)).to eql("hello")
+
+      path = downloader.path
+
+      downloader.delete_local_file!
+
+      expect(File).not_to exist(path)
+    end
+  end
 end
