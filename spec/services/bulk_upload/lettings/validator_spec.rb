@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe BulkUpload::LettingsValidator do
+RSpec.describe BulkUpload::Lettings::Validator do
   subject(:validator) { described_class.new(bulk_upload:, path:) }
 
   let(:bulk_upload) { create(:bulk_upload) }

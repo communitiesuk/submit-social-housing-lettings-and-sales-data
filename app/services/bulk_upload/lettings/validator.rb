@@ -1,6 +1,6 @@
 require "csv"
 
-class BulkUpload::LettingsValidator
+class BulkUpload::Lettings::Validator
   include ActiveModel::Validations
 
   QUESTIONS = {

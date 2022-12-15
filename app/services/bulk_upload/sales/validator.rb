@@ -1,4 +1,4 @@
-class BulkUpload::SalesValidator
+class BulkUpload::Sales::Validator
   QUESTIONS = {
     field_1: "What is the purchaser code?",
     field_2: "What is the day of the sale completion date? - DD",
