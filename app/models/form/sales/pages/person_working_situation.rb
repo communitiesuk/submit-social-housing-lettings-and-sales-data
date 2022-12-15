@@ -5,26 +5,14 @@ class Form::Sales::Pages::PersonWorkingSituation < ::Form::Page
     @description = ""
     @subsection = subsection
     @depends_on = [
-      { "details_known_#{person_display_number}" => 1, "jointpur" => joint_purchase? ? 1 : 2 },
+      { "details_known_#{person_display_number(PERSON_INDEX)}" => 1, "jointpur" => joint_purchase? ? 1 : 2 },
     ]
   end
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::PersonWorkingSituation.new("ecstat#{person_database_number}", nil, self),
+      Form::Sales::Questions::PersonWorkingSituation.new("ecstat#{person_database_number(PERSON_INDEX)}", nil, self),
     ]
-  end
-
-  def person_database_number
-    PERSON_INDEX[id]
-  end
-
-  def person_display_number
-    joint_purchase? ? PERSON_INDEX[id] - 2 : PERSON_INDEX[id] - 1
-  end
-
-  def joint_purchase?
-    id.include?("_joint_purchase")
   end
 
   PERSON_INDEX = {

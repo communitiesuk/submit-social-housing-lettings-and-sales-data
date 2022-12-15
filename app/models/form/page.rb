@@ -34,6 +34,18 @@ class Form::Page
 
 private
 
+  def person_database_number(person_index)
+    person_index[id]
+  end
+
+  def person_display_number(person_index)
+    joint_purchase? ? person_index[id] - 2 : person_index[id] - 1
+  end
+
+  def joint_purchase?
+    id.include?("_joint_purchase")
+  end
+
   def conditional_question_ids
     @conditional_question_ids ||= questions.flat_map { |q|
       next if q.conditional_for.blank?

@@ -1,12 +1,12 @@
 class Form::Sales::Questions::PersonWorkingSituation < ::Form::Question
   def initialize(id, hsh, page)
     super
-    @check_answer_label = "Person #{person_display_number}’s working situation"
-    @header = "Which of these best describes Person #{person_display_number}’s working situation?"
+    @check_answer_label = "Person #{person_display_number(PERSON_INDEX)}’s working situation"
+    @header = "Which of these best describes Person #{person_display_number(PERSON_INDEX)}’s working situation?"
     @type = "radio"
     @page = page
     @answer_options = ANSWER_OPTIONS
-    @check_answers_card_number = person_database_number
+    @check_answers_card_number = person_database_number(PERSON_INDEX)
   end
 
   ANSWER_OPTIONS = {
@@ -23,10 +23,6 @@ class Form::Sales::Questions::PersonWorkingSituation < ::Form::Question
     "9" => { "value" => "Child under 16" },
   }.freeze
 
-  def person_database_number
-    PERSON_INDEX[id]
-  end
-
   PERSON_INDEX = {
     "ecstat2" => 2,
     "ecstat3" => 3,
@@ -34,12 +30,4 @@ class Form::Sales::Questions::PersonWorkingSituation < ::Form::Question
     "ecstat5" => 5,
     "ecstat6" => 6,
   }.freeze
-
-  def person_display_number
-    joint_purchase? ? PERSON_INDEX[id] - 2 : PERSON_INDEX[id] - 1
-  end
-
-  def joint_purchase?
-    page.id.include?("_joint_purchase")
-  end
 end

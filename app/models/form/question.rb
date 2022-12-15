@@ -259,6 +259,18 @@ class Form::Question
 
 private
 
+  def person_database_number(person_index)
+    person_index[id]
+  end
+
+  def person_display_number(person_index)
+    joint_purchase? ? person_index[id] - 2 : person_index[id] - 1
+  end
+
+  def joint_purchase?
+    page.id.include?("_joint_purchase")
+  end
+
   def selected_answer_option_is_derived?(log)
     selected_option = answer_options&.dig(log[id].to_s.presence)
     selected_option.is_a?(Hash) && selected_option["depends_on"] && form.depends_on_met(selected_option["depends_on"], log)
