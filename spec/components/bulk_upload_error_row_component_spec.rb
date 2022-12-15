@@ -7,10 +7,12 @@ RSpec.describe BulkUploadErrorRowComponent, type: :component do
     let(:property_ref) { SecureRandom.hex(4) }
     let(:field) { :field_134 }
     let(:error) { "some error" }
+    let(:bulk_upload) { create(:bulk_upload, :lettings) }
     let(:bulk_upload_errors) do
       [
         FactoryBot.build(
           :bulk_upload_error,
+          bulk_upload:,
           row:,
           tenant_code:,
           property_ref:,
@@ -41,10 +43,21 @@ RSpec.describe BulkUploadErrorRowComponent, type: :component do
       expect(result).to have_content(expected)
     end
 
-    it "renders the question" do
+    it "renders the question for lettings" do
       expected = "Is this letting a renewal?"
       result = render_inline(described_class.new(bulk_upload_errors:))
       expect(result).to have_content(expected)
+    end
+
+    context "when a sales bulk upload" do
+      let(:bulk_upload) { create(:bulk_upload, :sales) }
+      let(:field) { :field_87 }
+
+      it "renders the question for sales" do
+        expected = "What is the full purchase price?"
+        result = render_inline(described_class.new(bulk_upload_errors:))
+        expect(result).to have_content(expected)
+      end
     end
 
     it "renders the error" do
