@@ -346,7 +346,6 @@ en:
 
     location:
       postcode_blank: "Enter a postcode"
-      name: "Enter the name of the location"
       units: "The units at this location must be a number"
       type_of_unit: "Select the most common type of unit at this location"
       mobility_standards: "Select the mobility standard for the majority of the units at this location"
