@@ -51,5 +51,11 @@ RSpec.describe Forms::BulkUploadLettings::UploadYourFile do
       expect(Storage::S3Service).to have_received(:new)
       expect(mock_storage_service).to have_received(:write_file).with(bulk_upload.identifier, actual_file.read)
     end
+
+    it "enqueues job to process bulk upload" do
+      expect {
+        form.save!
+      }.to have_enqueued_job(ProcessBulkUploadJob)
+    end
   end
 end
