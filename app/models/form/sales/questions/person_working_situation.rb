@@ -18,7 +18,7 @@ class Form::Sales::Questions::PersonWorkingSituation < ::Form::Sales::Questions:
     "8" => { "value" => "Unable to work due to long term sick or disability" },
     "5" => { "value" => "Retired" },
     "0" => { "value" => "Other" },
-    "10" => { "value" => "Buyer prefers not to say" },
+    "10" => { "value" => "Person prefers not to say" },
     "7" => { "value" => "Full-time student" },
     "9" => { "value" => "Child under 16" },
   }.freeze
