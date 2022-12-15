@@ -126,4 +126,8 @@ class BulkUpload::SalesValidator
     field_124: "Was a mortgage used for the purchase of this property? - Discounted ownership",
     field_125: "Was a mortgage used for the purchase of this property? - Outright sale",
   }.freeze
+
+  def self.question_for_field(field)
+    QUESTIONS[field]
+  end
 end
