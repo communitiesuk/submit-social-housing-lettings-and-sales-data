@@ -555,6 +555,7 @@ private
       self.scharge = nil
       self.pscharge = nil
       self.supcharg = nil
+      self.tcharge = nil
     end
 
     errors.clear

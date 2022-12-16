@@ -1,11 +1,12 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Pages::PersonAge, type: :model do
-  subject(:page) { described_class.new(page_id, page_definition, subsection) }
+  subject(:page) { described_class.new(page_id, page_definition, subsection, person_index:) }
 
   let(:page_id) { "person_1_age" }
   let(:page_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection) }
+  let(:person_index) { 1 }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
@@ -22,6 +23,7 @@ RSpec.describe Form::Sales::Pages::PersonAge, type: :model do
   context "with a non joint purchase" do
     context "and person 1" do
       let(:page_id) { "person_1_age" }
+      let(:person_index) { 2 }
 
       it "has correct questions" do
         expect(page.questions.map(&:id)).to eq(%w[age2_known age2])
@@ -42,6 +44,7 @@ RSpec.describe Form::Sales::Pages::PersonAge, type: :model do
 
     context "and person 2" do
       let(:page_id) { "person_2_age" }
+      let(:person_index) { 3 }
 
       it "has correct questions" do
         expect(page.questions.map(&:id)).to eq(%w[age3_known age3])
@@ -62,6 +65,7 @@ RSpec.describe Form::Sales::Pages::PersonAge, type: :model do
 
     context "and person 3" do
       let(:page_id) { "person_3_age" }
+      let(:person_index) { 4 }
 
       it "has correct questions" do
         expect(page.questions.map(&:id)).to eq(%w[age4_known age4])
@@ -82,6 +86,7 @@ RSpec.describe Form::Sales::Pages::PersonAge, type: :model do
 
     context "and person 4" do
       let(:page_id) { "person_4_age" }
+      let(:person_index) { 5 }
 
       it "has correct questions" do
         expect(page.questions.map(&:id)).to eq(%w[age5_known age5])
@@ -104,6 +109,7 @@ RSpec.describe Form::Sales::Pages::PersonAge, type: :model do
   context "with joint purchase" do
     context "and person 1" do
       let(:page_id) { "person_1_age_joint_purchase" }
+      let(:person_index) { 3 }
 
       it "has correct questions" do
         expect(page.questions.map(&:id)).to eq(%w[age3_known age3])
@@ -124,6 +130,7 @@ RSpec.describe Form::Sales::Pages::PersonAge, type: :model do
 
     context "and person 2" do
       let(:page_id) { "person_2_age_joint_purchase" }
+      let(:person_index) { 4 }
 
       it "has correct questions" do
         expect(page.questions.map(&:id)).to eq(%w[age4_known age4])
@@ -144,6 +151,7 @@ RSpec.describe Form::Sales::Pages::PersonAge, type: :model do
 
     context "and person 3" do
       let(:page_id) { "person_3_age_joint_purchase" }
+      let(:person_index) { 5 }
 
       it "has correct questions" do
         expect(page.questions.map(&:id)).to eq(%w[age5_known age5])
@@ -164,6 +172,7 @@ RSpec.describe Form::Sales::Pages::PersonAge, type: :model do
 
     context "and person 4" do
       let(:page_id) { "person_4_age_joint_purchase" }
+      let(:person_index) { 6 }
 
       it "has correct questions" do
         expect(page.questions.map(&:id)).to eq(%w[age6_known age6])

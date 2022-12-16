@@ -1,11 +1,12 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Questions::PersonAgeKnown, type: :model do
-  subject(:question) { described_class.new(question_id, question_definition, page) }
+  subject(:question) { described_class.new(question_id, question_definition, page, person_index:) }
 
   let(:question_id) { "age3_known" }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
+  let(:person_index) { 2 }
 
   before do
     allow(page).to receive(:id).and_return("person_1_age")
@@ -37,6 +38,7 @@ RSpec.describe Form::Sales::Questions::PersonAgeKnown, type: :model do
   context "with a non joint purchase" do
     context "and person 1" do
       let(:question_id) { "age2_known" }
+      let(:person_index) { 2 }
 
       before do
         allow(page).to receive(:id).and_return("person_1_age")
@@ -82,6 +84,7 @@ RSpec.describe Form::Sales::Questions::PersonAgeKnown, type: :model do
 
     context "and person 2" do
       let(:question_id) { "age3_known" }
+      let(:person_index) { 3 }
 
       before do
         allow(page).to receive(:id).and_return("person_2_age")
@@ -127,6 +130,7 @@ RSpec.describe Form::Sales::Questions::PersonAgeKnown, type: :model do
 
     context "and person 3" do
       let(:question_id) { "age4_known" }
+      let(:person_index) { 4 }
 
       before do
         allow(page).to receive(:id).and_return("person_3_age")
@@ -172,6 +176,7 @@ RSpec.describe Form::Sales::Questions::PersonAgeKnown, type: :model do
 
     context "and person 4" do
       let(:question_id) { "age5_known" }
+      let(:person_index) { 5 }
 
       before do
         allow(page).to receive(:id).and_return("person_4_age")
@@ -219,6 +224,7 @@ RSpec.describe Form::Sales::Questions::PersonAgeKnown, type: :model do
   context "with a joint purchase" do
     context "and person 1" do
       let(:question_id) { "age3_known" }
+      let(:person_index) { 3 }
 
       before do
         allow(page).to receive(:id).and_return("person_1_age_joint_purchase")
@@ -264,6 +270,7 @@ RSpec.describe Form::Sales::Questions::PersonAgeKnown, type: :model do
 
     context "and person 2" do
       let(:question_id) { "age4_known" }
+      let(:person_index) { 4 }
 
       before do
         allow(page).to receive(:id).and_return("person_2_age_joint_purchase")
@@ -309,6 +316,7 @@ RSpec.describe Form::Sales::Questions::PersonAgeKnown, type: :model do
 
     context "and person 3" do
       let(:question_id) { "age5_known" }
+      let(:person_index) { 5 }
 
       before do
         allow(page).to receive(:id).and_return("person_3_age_joint_purchase")
@@ -354,6 +362,7 @@ RSpec.describe Form::Sales::Questions::PersonAgeKnown, type: :model do
 
     context "and person 4" do
       let(:question_id) { "age6_known" }
+      let(:person_index) { 6 }
 
       before do
         allow(page).to receive(:id).and_return("person_4_age_joint_purchase")

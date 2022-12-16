@@ -1,11 +1,12 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
-  subject(:question) { described_class.new(question_id, question_definition, page) }
+  subject(:question) { described_class.new(question_id, question_definition, page, person_index:) }
 
   let(:question_id) { "age3" }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
+  let(:person_index) { 2 }
 
   before do
     allow(page).to receive(:id).and_return("person_1_age")
@@ -33,6 +34,7 @@ RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
 
   context "with not a joint purchase" do
     context "and person 1" do
+      let(:person_index) { 2 }
       let(:question_id) { "age2" }
 
       before do
@@ -64,6 +66,7 @@ RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
     end
 
     context "and person 2" do
+      let(:person_index) { 3 }
       let(:question_id) { "age3" }
 
       before do
@@ -95,6 +98,7 @@ RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
     end
 
     context "and person 3" do
+      let(:person_index) { 4 }
       let(:question_id) { "age4" }
 
       before do
@@ -126,6 +130,7 @@ RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
     end
 
     context "and person 4" do
+      let(:person_index) { 5 }
       let(:question_id) { "age5" }
 
       before do
@@ -159,6 +164,7 @@ RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
 
   context "with a joint purchase" do
     context "and person 1" do
+      let(:person_index) { 3 }
       let(:question_id) { "age3" }
 
       before do
@@ -190,6 +196,7 @@ RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
     end
 
     context "and person 2" do
+      let(:person_index) { 4 }
       let(:question_id) { "age4" }
 
       before do
@@ -221,6 +228,7 @@ RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
     end
 
     context "and person 3" do
+      let(:person_index) { 5 }
       let(:question_id) { "age5" }
 
       before do
@@ -252,6 +260,7 @@ RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
     end
 
     context "and person 4" do
+      let(:person_index) { 6 }
       let(:question_id) { "age6" }
 
       before do
