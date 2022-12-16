@@ -2,6 +2,9 @@ class Form::Sales::Pages::Age1 < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "buyer_1_age"
+    @depends_on = [{
+      "privacynotice" => 1,
+    }]
   end
 
   def questions

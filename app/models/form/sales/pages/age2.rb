@@ -4,6 +4,7 @@ class Form::Sales::Pages::Age2 < ::Form::Page
     @id = "buyer_2_age"
     @depends_on = [{
       "jointpur" => 1,
+      "privacynotice" => 1,
     }]
   end
 

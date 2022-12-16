@@ -4,6 +4,7 @@ class Form::Sales::Pages::Buyer2LiveInProperty < ::Form::Page
     @id = "buyer_2_live_in_property"
     @depends_on = [{
       "jointpur" => 1,
+      "privacynotice" => 1,
     }]
   end
 
