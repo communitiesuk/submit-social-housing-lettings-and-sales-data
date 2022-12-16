@@ -28,7 +28,7 @@ class Form::Lettings::Questions::StockOwner < ::Form::Question
     answer_options
   end
 
-  def label_from_value(value)
+  def label_from_value(value, log = nil, user = nil)
     return unless value
 
     answer_options[value]

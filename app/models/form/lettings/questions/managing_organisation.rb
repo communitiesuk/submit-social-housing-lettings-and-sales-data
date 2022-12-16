@@ -10,8 +10,10 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
     @answer_options = answer_options
   end
 
+  # def answer_options(log, current_user)
   def answer_options
     opts = { "" => "Select an option" }
+
     return opts unless ActiveRecord::Base.connected?
     return opts unless current_user
     return opts unless log
@@ -38,7 +40,11 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
     answer_options
   end
 
-  def label_from_value(value)
+  def label_from_value(value, log = nil, user = nil)
+  # def label_from_value(log = nil, user = nil)
+    @current_user = user
+    @log = log
+
     return unless value
 
     answer_options[value]
