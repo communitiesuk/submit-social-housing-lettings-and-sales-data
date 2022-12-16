@@ -10,7 +10,7 @@ class Form::Sales::Questions::PersonKnown < Form::Sales::Questions::Person
     @hidden_in_check_answers = {
       "depends_on" => [
         {
-          "details_known_#{person_index}" => 1,
+          field_for_person("details_known_") => 1,
         },
       ],
     }

@@ -10,7 +10,7 @@ class Form::Sales::Pages::PersonKnown < Form::Sales::Pages::Person
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::PersonKnown.new("details_known_#{@person_index}", nil, self, person_index: @person_index),
+      Form::Sales::Questions::PersonKnown.new(field_for_person("details_known_"), nil, self, person_index: @person_index),
     ]
   end
 
