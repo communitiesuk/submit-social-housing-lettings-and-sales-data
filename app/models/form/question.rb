@@ -46,11 +46,11 @@ class Form::Question
   delegate :subsection, to: :page
   delegate :form, to: :subsection
 
-  def answer_label(log)
+  def answer_label(log, user = nil)
     return checkbox_answer_label(log) if type == "checkbox"
     return log[id]&.to_formatted_s(:govuk_date).to_s if type == "date"
 
-    answer = label_from_value(log[id]) if log[id].present?
+    answer = label_from_value(log[id], log, user) if log[id].present?
     answer_label = [prefix, format_value(answer), suffix_label(log)].join("") if answer
 
     inferred_answer_value(log) || answer_label
@@ -151,7 +151,7 @@ class Form::Question
     end
   end
 
-  def label_from_value(value)
+  def label_from_value(value, user = nil)
     return unless value
 
     label = case type
