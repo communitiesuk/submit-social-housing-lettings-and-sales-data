@@ -201,4 +201,26 @@ RSpec.describe Validations::Sales::SoftValidations do
       end
     end
   end
+
+  describe "savings amount validations" do
+    context "when validating soft max" do
+      it "returns false if no savings is given" do
+        record.savings = nil
+        expect(record)
+          .not_to be_savings_over_soft_max
+      end
+
+      it "savings is over 100_000" do
+        record.savings = 100_001
+        expect(record)
+          .to be_savings_over_soft_max
+      end
+
+      it "savings is under 100_000" do
+        record.savings = 99_999
+        expect(record)
+          .not_to be_mortgage_over_soft_max
+      end
+    end
+  end
 end

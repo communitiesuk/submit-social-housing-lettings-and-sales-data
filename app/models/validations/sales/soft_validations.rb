@@ -26,4 +26,8 @@ module Validations::Sales::SoftValidations
 
     wheel == 1
   end
+  
+  def savings_over_soft_max?
+    savings && savings > 100_000
+  end
 end
