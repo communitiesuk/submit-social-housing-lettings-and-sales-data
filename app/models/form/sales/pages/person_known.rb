@@ -15,8 +15,6 @@ class Form::Sales::Pages::PersonKnown < Form::Sales::Pages::Person
   end
 
   def page_depends_on
-    return (@person_index..4).map { |index| { "hholdcount" => index } } if @person_index == 1
-
-    (@person_index..4).map { |index| { "hholdcount" => index, "details_known_#{@person_index - 1}" => 1 } }
+    (@person_index..4).map { |index| { "hholdcount" => index } }
   end
 end
