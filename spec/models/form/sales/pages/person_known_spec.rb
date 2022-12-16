@@ -66,11 +66,7 @@ RSpec.describe Form::Sales::Pages::PersonKnown, type: :model do
 
     it "has correct depends_on" do
       expect(page.depends_on).to eq(
-        [
-          { "hholdcount" => 2, "details_known_1" => 1 },
-          { "hholdcount" => 3, "details_known_1" => 1 },
-          { "hholdcount" => 4, "details_known_1" => 1 },
-        ],
+        [{ "hholdcount" => 2 }, { "hholdcount" => 3 }, { "hholdcount" => 4 }],
       )
     end
   end
@@ -93,10 +89,7 @@ RSpec.describe Form::Sales::Pages::PersonKnown, type: :model do
 
     it "has correct depends_on" do
       expect(page.depends_on).to eq(
-        [
-          { "hholdcount" => 3, "details_known_2" => 1 },
-          { "hholdcount" => 4, "details_known_2" => 1 },
-        ],
+        [{ "hholdcount" => 3 }, { "hholdcount" => 4 }],
       )
     end
   end
@@ -119,9 +112,7 @@ RSpec.describe Form::Sales::Pages::PersonKnown, type: :model do
 
     it "has correct depends_on" do
       expect(page.depends_on).to eq(
-        [
-          { "hholdcount" => 4, "details_known_3" => 1 },
-        ],
+        [{ "hholdcount" => 4 }],
       )
     end
   end
