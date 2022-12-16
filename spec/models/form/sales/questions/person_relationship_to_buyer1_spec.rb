@@ -30,11 +30,11 @@ RSpec.describe Form::Sales::Questions::PersonRelationshipToBuyer1, type: :model 
 
   it "has the correct answer_options" do
     expect(question.answer_options).to eq({
-                                            "P" => { "value" => "Partner" },
-                                            "C" => { "value" => "Child", "hint" => "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education." },
-                                            "X" => { "value" => "Other" },
-                                            "R" => { "value" => "Person prefers not to say" },
-                                          })
+      "P" => { "value" => "Partner" },
+      "C" => { "value" => "Child", "hint" => "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education." },
+      "X" => { "value" => "Other" },
+      "R" => { "value" => "Person prefers not to say" },
+    })
   end
 
   context "when person 1" do
