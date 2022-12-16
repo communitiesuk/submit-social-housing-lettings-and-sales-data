@@ -8,6 +8,7 @@ class CreateBulkUploadErrors < ActiveRecord::Migration[7.0]
 
       t.text :tenant_code
       t.text :property_ref
+      t.text :purchase_code
 
       t.text :field
       t.text :error
