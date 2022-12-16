@@ -15,29 +15,8 @@ class Form::Sales::Pages::PersonKnown < Form::Sales::Pages::Person
   end
 
   def page_depends_on
-    case @person_index
-    when 1
-      [
-        { "hholdcount" => 1 },
-        { "hholdcount" => 2 },
-        { "hholdcount" => 3 },
-        { "hholdcount" => 4 },
-      ]
-    when 2
-      [
-        { "hholdcount" => 2, "details_known_1" => 1 },
-        { "hholdcount" => 3, "details_known_1" => 1 },
-        { "hholdcount" => 4, "details_known_1" => 1 },
-      ]
-    when 3
-      [
-        { "hholdcount" => 3, "details_known_2" => 1 },
-        { "hholdcount" => 4, "details_known_2" => 1 },
-      ]
-    when 4
-      [
-        { "hholdcount" => 4, "details_known_3" => 1 },
-      ]
-    end
+    return (@person_index..4).map { |index| { "hholdcount" => index } } if @person_index == 1
+
+    (@person_index..4).map { |index| { "hholdcount" => index, "details_known_#{@person_index - 1}" => 1 } }
   end
 end
