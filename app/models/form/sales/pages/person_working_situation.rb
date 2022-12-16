@@ -1,28 +1,17 @@
-class Form::Sales::Pages::PersonWorkingSituation < ::Form::Page
-  def initialize(id, hsh, subsection)
+class Form::Sales::Pages::PersonWorkingSituation < Form::Sales::Pages::Person
+  def initialize(id, hsh, subsection, person_index:)
     super
     @header = ""
     @description = ""
     @subsection = subsection
     @depends_on = [
-      { "details_known_#{person_display_number(PERSON_INDEX)}" => 1, "jointpur" => joint_purchase? ? 1 : 2 },
+      { details_known_question_id => 1, "jointpur" => joint_purchase? ? 1 : 2 },
     ]
   end
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::PersonWorkingSituation.new("ecstat#{person_database_number(PERSON_INDEX)}", nil, self),
+      Form::Sales::Questions::PersonWorkingSituation.new(field_for_person("ecstat"), nil, self, person_index: @person_index),
     ]
   end
-
-  PERSON_INDEX = {
-    "person_1_working_situation" => 2,
-    "person_2_working_situation" => 3,
-    "person_3_working_situation" => 4,
-    "person_4_working_situation" => 5,
-    "person_1_working_situation_joint_purchase" => 3,
-    "person_2_working_situation_joint_purchase" => 4,
-    "person_3_working_situation_joint_purchase" => 5,
-    "person_4_working_situation_joint_purchase" => 6,
-  }.freeze
 end

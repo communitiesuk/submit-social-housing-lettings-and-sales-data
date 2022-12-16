@@ -1,12 +1,12 @@
-class Form::Sales::Questions::PersonWorkingSituation < ::Form::Question
-  def initialize(id, hsh, page)
+class Form::Sales::Questions::PersonWorkingSituation < ::Form::Sales::Questions::Person
+  def initialize(id, hsh, page, person_index:)
     super
-    @check_answer_label = "Person #{person_display_number(PERSON_INDEX)}’s working situation"
-    @header = "Which of these best describes Person #{person_display_number(PERSON_INDEX)}’s working situation?"
+    @check_answer_label = "Person #{person_display_number}’s working situation"
+    @header = "Which of these best describes Person #{person_display_number}’s working situation?"
     @type = "radio"
     @page = page
     @answer_options = ANSWER_OPTIONS
-    @check_answers_card_number = person_database_number(PERSON_INDEX)
+    @check_answers_card_number = person_index
   end
 
   ANSWER_OPTIONS = {
@@ -18,16 +18,8 @@ class Form::Sales::Questions::PersonWorkingSituation < ::Form::Question
     "8" => { "value" => "Unable to work due to long term sick or disability" },
     "5" => { "value" => "Retired" },
     "0" => { "value" => "Other" },
-    "10" => { "value" => "Buyer prefers not to say" },
+    "10" => { "value" => "Person prefers not to say" },
     "7" => { "value" => "Full-time student" },
     "9" => { "value" => "Child under 16" },
-  }.freeze
-
-  PERSON_INDEX = {
-    "ecstat2" => 2,
-    "ecstat3" => 3,
-    "ecstat4" => 4,
-    "ecstat5" => 5,
-    "ecstat6" => 6,
   }.freeze
 end
