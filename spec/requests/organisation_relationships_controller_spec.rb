@@ -14,7 +14,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         sign_in user
       end
 
-      context "when accessing the housing providers tab" do
+      context "when accessing the stock owners tab" do
         context "with an organisation that the user belongs to" do
           let!(:housing_provider) { FactoryBot.create(:organisation) }
           let!(:other_org_housing_provider) { FactoryBot.create(:organisation, name: "Foobar LTD") }
@@ -31,32 +31,32 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
             expect(response.body).to include(expected_html)
           end
 
-          it "shows an add housing provider button" do
-            expect(page).to have_link("Add a housing provider")
+          it "shows an add stock owner button" do
+            expect(page).to have_link("Add a stock owner")
           end
 
-          it "shows a table of housing providers" do
+          it "shows a table of stock owners" do
             expected_html = "<table class=\"govuk-table\""
             expect(response.body).to include(expected_html)
             expect(response.body).to include(housing_provider.name)
           end
 
-          it "shows only housing providers for the current user's organisation" do
+          it "shows only stock owners for the current user's organisation" do
             expect(page).to have_content(housing_provider.name)
             expect(page).not_to have_content(other_org_housing_provider.name)
           end
 
           it "shows the pagination count" do
-            expect(page).to have_content("1 total housing providers")
+            expect(page).to have_content("1 total stock owners")
           end
 
-          context "when adding a housing provider" do
+          context "when adding a stock owner" do
             before do
               get "/organisations/#{organisation.id}/housing-providers/add", headers:, params: {}
             end
 
             it "has the correct header" do
-              expect(response.body).to include("What is the name of your housing provider?")
+              expect(response.body).to include("What is the name of your stock owner?")
             end
 
             it "shows an add button" do
@@ -248,7 +248,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         sign_in user
       end
 
-      context "when accessing the housing providers tab" do
+      context "when accessing the stock owners tab" do
         context "with an organisation that the user belongs to" do
           let!(:housing_provider) { FactoryBot.create(:organisation) }
           let!(:other_org_housing_provider) { FactoryBot.create(:organisation, name: "Foobar LTD") }
@@ -265,23 +265,23 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
             expect(response.body).to include(expected_html)
           end
 
-          it "doesn't show an add housing provider button" do
-            expect(page).not_to have_link("Add a housing provider")
+          it "doesn't show an add stock owner button" do
+            expect(page).not_to have_link("Add a stock owner")
           end
 
-          it "shows a table of housing providers" do
+          it "shows a table of stock owners" do
             expected_html = "<table class=\"govuk-table\""
             expect(response.body).to include(expected_html)
             expect(response.body).to include(housing_provider.name)
           end
 
-          it "shows only housing providers for the current user's organisation" do
+          it "shows only stock owners for the current user's organisation" do
             expect(page).to have_content(housing_provider.name)
             expect(page).not_to have_content(other_org_housing_provider.name)
           end
 
           it "shows the pagination count" do
-            expect(page).to have_content("1 total housing providers")
+            expect(page).to have_content("1 total stock owners")
           end
         end
 
@@ -469,7 +469,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         end
       end
 
-      context "when viewing a specific organisation's housing providers" do
+      context "when viewing a specific organisation's stock owners" do
         let!(:housing_provider) { FactoryBot.create(:organisation) }
         let!(:other_org_housing_provider) { FactoryBot.create(:organisation, name: "Foobar LTD") }
         let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD 2") }
@@ -489,13 +489,13 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           expect(page).to have_content("Users")
         end
 
-        it "shows a table of housing providers" do
+        it "shows a table of stock owners" do
           expected_html = "<table class=\"govuk-table\""
           expect(response.body).to include(expected_html)
           expect(response.body).to include(housing_provider.name)
         end
 
-        it "shows only housing providers for this organisation" do
+        it "shows only stock owners for this organisation" do
           expect(page).to have_content(housing_provider.name)
           expect(page).not_to have_content(other_org_housing_provider.name)
         end
@@ -505,16 +505,16 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         end
 
         it "shows the pagination count" do
-          expect(page).to have_content("1 total housing providers")
+          expect(page).to have_content("1 total stock owners")
         end
 
-        context "when adding a housing provider" do
+        context "when adding a stock owner" do
           before do
             get "/organisations/#{organisation.id}/housing-providers/add", headers:, params: {}
           end
 
           it "has the correct header" do
-            expect(response.body).to include("What is the name of this organisation&#39;s housing provider?")
+            expect(response.body).to include("What is the name of this organisation&#39;s stock owner?")
           end
 
           it "shows an add button" do
@@ -562,7 +562,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           expect(response.body).to include("Remove")
         end
 
-        context "when adding a housing provider" do
+        context "when adding a stock owner" do
           before do
             get "/organisations/#{organisation.id}/managing-agents/add", headers:, params: {}
           end

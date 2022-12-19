@@ -4,14 +4,14 @@
     <%= render SubNavigationComponent.new(items: secondary_items(request.path, @organisation.id)) %>
     <h2 class="govuk-visually-hidden">Add Housing Provider</h2>
     <%= govuk_back_link(href: :back) %>
-    <%= render partial: "organisations/headings", locals: { main: "What is the name of this organisation's housing provider?", sub: nil } %>
-    <p class="govuk-body">Start typing to search for a housing provider</p>
+    <%= render partial: "organisations/headings", locals: { main: "What is the name of this organisation's stock owner?", sub: nil } %>
+    <p class="govuk-body">Start typing to search for a stock owner</p>
   <% else %>
     <% content_for :before_content do %>
       <%= govuk_back_link(href: :back) %>
     <% end %>
-    <%= render partial: "organisations/headings", locals: { main: "What is the name of your housing provider?", sub: nil } %>
-    <p class="govuk-body">Start typing to search for your housing provider</p>
+    <%= render partial: "organisations/headings", locals: { main: "What is the name of your stock owner?", sub: nil } %>
+    <p class="govuk-body">Start typing to search for your stock owner</p>
   <% end %>
   <% answer_options = { "" => "Select an option" } %>
   <% @organisations.each do |organisation| %>
@@ -23,7 +23,7 @@
     f:,
   } %>
   <%= f.govuk_submit "Add" %>
-  <%= govuk_details(summary_text: "Can't find the housing provider you're looking for?") do %>
+  <%= govuk_details(summary_text: "Can't find the stock owner you're looking for?") do %>
     <ul class="govuk-list govuk-list--bullet">
       <li>Double check the spelling and try again</li>
       <li>Type the first few letters to see the suggestions</li>

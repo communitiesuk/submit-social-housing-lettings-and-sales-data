@@ -55,7 +55,7 @@ RSpec.describe Form::Lettings::Questions::HousingProvider, type: :model do
         question.current_user = user
       end
 
-      it "shows housing providers with own org at the top" do
+      it "shows stock owners with own org at the top" do
         expect(question.answer_options).to eq(options)
       end
     end
@@ -94,7 +94,7 @@ RSpec.describe Form::Lettings::Questions::HousingProvider, type: :model do
     context "when org holds own stock", :aggregate_failures do
       let(:user) { create(:user, :data_coordinator, organisation: create(:organisation, holds_own_stock: true)) }
 
-      context "when housing providers == 0" do
+      context "when stock owners == 0" do
         before do
           user.organisation.housing_providers.delete_all
         end
@@ -105,7 +105,7 @@ RSpec.describe Form::Lettings::Questions::HousingProvider, type: :model do
         end
       end
 
-      context "when housing providers != 0" do
+      context "when stock owners != 0" do
         before do
           create(:organisation_relationship, child_organisation: user.organisation)
         end
@@ -120,7 +120,7 @@ RSpec.describe Form::Lettings::Questions::HousingProvider, type: :model do
     context "when org does not hold own stock", :aggregate_failures do
       let(:user) { create(:user, :data_coordinator, organisation: create(:organisation, holds_own_stock: false)) }
 
-      context "when housing providers <= 1" do
+      context "when stock owners <= 1" do
         before do
           create(:organisation_relationship, child_organisation: user.organisation)
         end
@@ -131,7 +131,7 @@ RSpec.describe Form::Lettings::Questions::HousingProvider, type: :model do
         end
       end
 
-      context "when housing providers >= 2" do
+      context "when stock owners >= 2" do
         before do
           create(:organisation_relationship, child_organisation: user.organisation)
           create(:organisation_relationship, child_organisation: user.organisation)

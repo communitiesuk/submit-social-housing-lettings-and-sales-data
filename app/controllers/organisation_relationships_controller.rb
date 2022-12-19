@@ -42,7 +42,7 @@ class OrganisationRelationshipsController < ApplicationController
   def create_housing_provider
     @organisation_relationship = organisation.parent_organisation_relationships.new(organisation_relationship_params)
     if @organisation_relationship.save(context: :housing_provider)
-      flash[:notice] = "#{@organisation_relationship.parent_organisation.name} is now one of #{current_user.data_coordinator? ? 'your' : "this organisation's"} housing providers"
+      flash[:notice] = "#{@organisation_relationship.parent_organisation.name} is now one of #{current_user.data_coordinator? ? 'your' : "this organisation's"} stock owners"
       redirect_to housing_providers_organisation_path
     else
       @organisations = Organisation.where.not(id: organisation.id).pluck(:id, :name)
@@ -68,7 +68,7 @@ class OrganisationRelationshipsController < ApplicationController
       child_organisation: organisation,
       parent_organisation: target_organisation,
     ).destroy!
-    flash[:notice] = "#{target_organisation.name} is no longer one of #{current_user.data_coordinator? ? 'your' : "this organisation's"} housing providers"
+    flash[:notice] = "#{target_organisation.name} is no longer one of #{current_user.data_coordinator? ? 'your' : "this organisation's"} stock owners"
     redirect_to housing_providers_organisation_path
   end
 

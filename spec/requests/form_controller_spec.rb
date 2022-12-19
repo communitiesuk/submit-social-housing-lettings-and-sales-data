@@ -162,7 +162,7 @@ RSpec.describe FormController, type: :request do
       end
     end
 
-    context "with only adding the housing provider" do
+    context "with only adding the stock owner" do
       let(:params) do
         {
           id: lettings_log.id,
