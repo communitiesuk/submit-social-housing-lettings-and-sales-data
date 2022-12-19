@@ -223,4 +223,36 @@ RSpec.describe Validations::Sales::SoftValidations do
       end
     end
   end
+
+  describe "deposit amount validations" do
+    context "when validating soft max" do
+      it "returns false if no savings is given" do
+        record.savings = nil
+        record.deposit = 8_001
+        expect(record)
+          .not_to be_deposit_over_soft_max
+      end
+
+      it "returns false if no deposit is given" do
+        record.deposit = nil
+        record.savings = 6_000
+        expect(record)
+          .not_to be_deposit_over_soft_max
+      end
+
+      it "returns true if deposit is more than 4/3 of savings" do
+        record.deposit = 8_001
+        record.savings = 6_000
+        expect(record)
+          .to be_deposit_over_soft_max
+      end
+
+      it "returns fals if deposit is less than 4/3 of savings" do
+        record.deposit = 7_999
+        record.savings = 6_000
+        expect(record)
+          .not_to be_deposit_over_soft_max
+      end
+    end
+  end
 end
