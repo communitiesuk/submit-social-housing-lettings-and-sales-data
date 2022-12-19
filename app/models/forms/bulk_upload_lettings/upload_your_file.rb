@@ -8,6 +8,7 @@ module Forms
       include Rails.application.routes.url_helpers
 
       attribute :year, :integer
+      attribute :needstype, :integer
       attribute :file
       attribute :current_user
 
@@ -35,6 +36,7 @@ module Forms
           user: current_user,
           log_type: BulkUpload.log_types[:lettings],
           year:,
+          needstype:,
           filename: file.original_filename,
         )
 

@@ -47,6 +47,6 @@ private
   end
 
   def form_params
-    params.fetch(:form, {}).permit(:year, :file)
+    params.fetch(:form, {}).permit(:year, :needstype, :file)
   end
 end
