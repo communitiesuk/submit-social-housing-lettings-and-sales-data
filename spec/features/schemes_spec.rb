@@ -585,7 +585,7 @@ RSpec.describe "Schemes scheme Features" do
 
           it "indicates if the scheme is not complete" do
             click_link("Change", href: "/schemes/#{scheme.id}/details?check_answers=true", match: :first)
-            choose "Another registered housing provider"
+            choose "Another registered stock owner"
             click_button "Save and continue"
             expect(page).to have_content("You didn’t answer this question")
           end
@@ -613,7 +613,7 @@ RSpec.describe "Schemes scheme Features" do
           let!(:another_organisation) { FactoryBot.create(:organisation, name: "Another Org") }
 
           before do
-            fill_in_and_save_scheme_details({ "housing_stock_owners" => "Another registered housing provider" })
+            fill_in_and_save_scheme_details({ "housing_stock_owners" => "Another registered stock owner" })
           end
 
           it "lets me fill in the managing organisation details" do
