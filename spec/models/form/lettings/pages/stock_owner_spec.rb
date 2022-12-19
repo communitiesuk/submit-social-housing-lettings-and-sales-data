@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Lettings::Pages::HousingProvider, type: :model do
+RSpec.describe Form::Lettings::Pages::StockOwner, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
   let(:page_id) { nil }

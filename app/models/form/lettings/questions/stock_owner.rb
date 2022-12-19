@@ -1,4 +1,4 @@
-class Form::Lettings::Questions::HousingProvider < ::Form::Question
+class Form::Lettings::Questions::StockOwner < ::Form::Question
   attr_accessor :current_user, :log
 
   def initialize(id, hsh, page)

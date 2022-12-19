@@ -23,7 +23,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           before do
             FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: stock_owner)
             FactoryBot.create(:organisation_relationship, child_organisation: other_organisation, parent_organisation: other_org_stock_owner)
-            get "/organisations/#{organisation.id}/housing-providers", headers:, params: {}
+            get "/organisations/#{organisation.id}/stock-owners", headers:, params: {}
           end
 
           it "shows the tab navigation" do
@@ -52,7 +52,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
           context "when adding a stock owner" do
             before do
-              get "/organisations/#{organisation.id}/housing-providers/add", headers:, params: {}
+              get "/organisations/#{organisation.id}/stock-owners/add", headers:, params: {}
             end
 
             it "has the correct header" do
@@ -67,7 +67,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
         context "with an organisation that are not in scope for the user, i.e. that they do not belong to" do
           before do
-            get "/organisations/#{unauthorised_organisation.id}/housing-providers", headers:, params: {}
+            get "/organisations/#{unauthorised_organisation.id}/stock-owners", headers:, params: {}
           end
 
           it "returns not found 404 from users page" do
@@ -145,7 +145,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           }
         end
 
-        let(:request) { post "/organisations/#{organisation.id}/housing-providers", headers:, params: }
+        let(:request) { post "/organisations/#{organisation.id}/stock-owners", headers:, params: }
 
         it "creates a new organisation relationship" do
           expect { request }.to change(OrganisationRelationship, :count).by(1)
@@ -158,7 +158,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
         it "redirects to the organisation list" do
           request
-          expect(response).to redirect_to("/organisations/#{organisation.id}/housing-providers")
+          expect(response).to redirect_to("/organisations/#{organisation.id}/stock-owners")
         end
       end
 
@@ -197,7 +197,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
             "target_organisation_id": stock_owner.id,
           }
         end
-        let(:request) { delete "/organisations/#{organisation.id}/housing-providers", headers:, params: }
+        let(:request) { delete "/organisations/#{organisation.id}/stock-owners", headers:, params: }
 
         before do
           FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: stock_owner)
@@ -209,7 +209,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
         it "redirects to the organisation list" do
           request
-          expect(response).to redirect_to("/organisations/#{organisation.id}/housing-providers")
+          expect(response).to redirect_to("/organisations/#{organisation.id}/stock-owners")
         end
       end
 
@@ -257,7 +257,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           before do
             FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: stock_owner)
             FactoryBot.create(:organisation_relationship, child_organisation: other_organisation, parent_organisation: other_org_stock_owner)
-            get "/organisations/#{organisation.id}/housing-providers", headers:, params: {}
+            get "/organisations/#{organisation.id}/stock-owners", headers:, params: {}
           end
 
           it "shows the tab navigation" do
@@ -287,7 +287,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
         context "with an organisation that are not in scope for the user, i.e. that they do not belong to" do
           before do
-            get "/organisations/#{unauthorised_organisation.id}/housing-providers", headers:, params: {}
+            get "/organisations/#{unauthorised_organisation.id}/stock-owners", headers:, params: {}
           end
 
           it "returns not found 404 from users page" do
@@ -374,7 +374,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           }
         end
 
-        let(:request) { post "/organisations/#{organisation.id}/housing-providers", headers:, params: }
+        let(:request) { post "/organisations/#{organisation.id}/stock-owners", headers:, params: }
 
         it "creates a new organisation relationship" do
           expect { request }.to change(OrganisationRelationship, :count).by(1)
@@ -387,7 +387,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
         it "redirects to the organisation list" do
           request
-          expect(response).to redirect_to("/organisations/#{organisation.id}/housing-providers")
+          expect(response).to redirect_to("/organisations/#{organisation.id}/stock-owners")
         end
       end
 
@@ -426,7 +426,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
             "target_organisation_id": stock_owner.id,
           }
         end
-        let(:request) { delete "/organisations/#{organisation.id}/housing-providers", headers:, params: }
+        let(:request) { delete "/organisations/#{organisation.id}/stock-owners", headers:, params: }
 
         before do
           FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: stock_owner)
@@ -438,7 +438,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
         it "redirects to the organisation list" do
           request
-          expect(response).to redirect_to("/organisations/#{organisation.id}/housing-providers")
+          expect(response).to redirect_to("/organisations/#{organisation.id}/stock-owners")
         end
       end
 
@@ -477,7 +477,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         before do
           FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: stock_owner)
           FactoryBot.create(:organisation_relationship, child_organisation: other_organisation, parent_organisation: other_org_stock_owner)
-          get "/organisations/#{organisation.id}/housing-providers", headers:, params: {}
+          get "/organisations/#{organisation.id}/stock-owners", headers:, params: {}
         end
 
         it "displays the name of the organisation" do
@@ -510,7 +510,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
         context "when adding a stock owner" do
           before do
-            get "/organisations/#{organisation.id}/housing-providers/add", headers:, params: {}
+            get "/organisations/#{organisation.id}/stock-owners/add", headers:, params: {}
           end
 
           it "has the correct header" do

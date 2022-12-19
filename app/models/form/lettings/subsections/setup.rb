@@ -38,7 +38,7 @@ private
   def stock_owner_page
     return unless FeatureToggle.managing_for_other_user_enabled?
 
-    Form::Lettings::Pages::HousingProvider.new(nil, nil, self)
+    Form::Lettings::Pages::StockOwner.new(nil, nil, self)
   end
 
   def managing_organisation_page

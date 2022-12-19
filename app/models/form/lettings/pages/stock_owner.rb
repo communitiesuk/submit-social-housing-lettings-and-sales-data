@@ -1,4 +1,4 @@
-class Form::Lettings::Pages::HousingProvider < ::Form::Page
+class Form::Lettings::Pages::StockOwner < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "stock_owner"
@@ -9,7 +9,7 @@ class Form::Lettings::Pages::HousingProvider < ::Form::Page
 
   def questions
     @questions ||= [
-      Form::Lettings::Questions::HousingProvider.new(nil, nil, self),
+      Form::Lettings::Questions::StockOwner.new(nil, nil, self),
     ]
   end
 

@@ -105,7 +105,7 @@ private
   end
 
   def stock_owners_path?(path)
-    path.include?("/housing-providers")
+    path.include?("/stock-owners")
   end
 
   def managing_agents_path?(path)
