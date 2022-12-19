@@ -17,7 +17,7 @@ RSpec.describe Form::Lettings::Pages::HousingProvider, type: :model do
   end
 
   it "has the correct id" do
-    expect(page.id).to eq("housing_provider")
+    expect(page.id).to eq("stock_owner")
   end
 
   it "has the correct header" do
@@ -63,7 +63,7 @@ RSpec.describe Form::Lettings::Pages::HousingProvider, type: :model do
           create(:user, :data_coordinator, organisation: create(:organisation, holds_own_stock: false))
         end
 
-        context "with 0 housing_providers" do
+        context "with 0 stock_owners" do
           it "is not shown" do
             expect(page.routed_to?(log, user)).to eq(false)
           end
@@ -73,14 +73,14 @@ RSpec.describe Form::Lettings::Pages::HousingProvider, type: :model do
           end
         end
 
-        context "with 1 housing_providers" do
-          let(:housing_provider) { create(:organisation) }
+        context "with 1 stock_owners" do
+          let(:stock_owner) { create(:organisation) }
 
           before do
             create(
               :organisation_relationship,
               child_organisation: user.organisation,
-              parent_organisation: housing_provider,
+              parent_organisation: stock_owner,
             )
           end
 
@@ -89,24 +89,24 @@ RSpec.describe Form::Lettings::Pages::HousingProvider, type: :model do
           end
 
           it "updates owning_organisation_id" do
-            expect { page.routed_to?(log, user) }.to change(log.reload, :owning_organisation).from(nil).to(housing_provider)
+            expect { page.routed_to?(log, user) }.to change(log.reload, :owning_organisation).from(nil).to(stock_owner)
           end
         end
 
-        context "with >1 housing_providers" do
-          let(:housing_provider1) { create(:organisation) }
-          let(:housing_provider2) { create(:organisation) }
+        context "with >1 stock_owners" do
+          let(:stock_owner1) { create(:organisation) }
+          let(:stock_owner2) { create(:organisation) }
 
           before do
             create(
               :organisation_relationship,
               child_organisation: user.organisation,
-              parent_organisation: housing_provider1,
+              parent_organisation: stock_owner1,
             )
             create(
               :organisation_relationship,
               child_organisation: user.organisation,
-              parent_organisation: housing_provider2,
+              parent_organisation: stock_owner2,
             )
           end
 
@@ -125,7 +125,7 @@ RSpec.describe Form::Lettings::Pages::HousingProvider, type: :model do
           create(:user, :data_coordinator, organisation: create(:organisation, holds_own_stock: true))
         end
 
-        context "with 0 housing_providers" do
+        context "with 0 stock_owners" do
           it "is not shown" do
             expect(page.routed_to?(log, user)).to eq(false)
           end
@@ -135,7 +135,7 @@ RSpec.describe Form::Lettings::Pages::HousingProvider, type: :model do
           end
         end
 
-        context "with >0 housing_providers" do
+        context "with >0 stock_owners" do
           before do
             create(:organisation_relationship, child_organisation: user.organisation)
             create(:organisation_relationship, child_organisation: user.organisation)

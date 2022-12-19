@@ -16,13 +16,13 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
       context "when accessing the stock owners tab" do
         context "with an organisation that the user belongs to" do
-          let!(:housing_provider) { FactoryBot.create(:organisation) }
-          let!(:other_org_housing_provider) { FactoryBot.create(:organisation, name: "Foobar LTD") }
+          let!(:stock_owner) { FactoryBot.create(:organisation) }
+          let!(:other_org_stock_owner) { FactoryBot.create(:organisation, name: "Foobar LTD") }
           let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD 2") }
 
           before do
-            FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: housing_provider)
-            FactoryBot.create(:organisation_relationship, child_organisation: other_organisation, parent_organisation: other_org_housing_provider)
+            FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: stock_owner)
+            FactoryBot.create(:organisation_relationship, child_organisation: other_organisation, parent_organisation: other_org_stock_owner)
             get "/organisations/#{organisation.id}/housing-providers", headers:, params: {}
           end
 
@@ -38,12 +38,12 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           it "shows a table of stock owners" do
             expected_html = "<table class=\"govuk-table\""
             expect(response.body).to include(expected_html)
-            expect(response.body).to include(housing_provider.name)
+            expect(response.body).to include(stock_owner.name)
           end
 
           it "shows only stock owners for the current user's organisation" do
-            expect(page).to have_content(housing_provider.name)
-            expect(page).not_to have_content(other_org_housing_provider.name)
+            expect(page).to have_content(stock_owner.name)
+            expect(page).not_to have_content(other_org_stock_owner.name)
           end
 
           it "shows the pagination count" do
@@ -134,13 +134,13 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         end
       end
 
-      describe "organisation_relationships#create_housing_provider" do
-        let!(:housing_provider) { FactoryBot.create(:organisation) }
+      describe "organisation_relationships#create_stock_owner" do
+        let!(:stock_owner) { FactoryBot.create(:organisation) }
 
         let(:params) do
           {
             "organisation_relationship": {
-              "parent_organisation_id": housing_provider.id,
+              "parent_organisation_id": stock_owner.id,
             },
           }
         end
@@ -153,7 +153,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
         it "sets the organisation relationship attributes correctly" do
           request
-          expect(OrganisationRelationship).to exist(child_organisation_id: organisation.id, parent_organisation_id: housing_provider.id)
+          expect(OrganisationRelationship).to exist(child_organisation_id: organisation.id, parent_organisation_id: stock_owner.id)
         end
 
         it "redirects to the organisation list" do
@@ -190,17 +190,17 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         end
       end
 
-      describe "organisation_relationships#delete_housing_provider" do
-        let!(:housing_provider) { FactoryBot.create(:organisation) }
+      describe "organisation_relationships#delete_stock_owner" do
+        let!(:stock_owner) { FactoryBot.create(:organisation) }
         let(:params) do
           {
-            "target_organisation_id": housing_provider.id,
+            "target_organisation_id": stock_owner.id,
           }
         end
         let(:request) { delete "/organisations/#{organisation.id}/housing-providers", headers:, params: }
 
         before do
-          FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: housing_provider)
+          FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: stock_owner)
         end
 
         it "deletes the new organisation relationship" do
@@ -250,13 +250,13 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
       context "when accessing the stock owners tab" do
         context "with an organisation that the user belongs to" do
-          let!(:housing_provider) { FactoryBot.create(:organisation) }
-          let!(:other_org_housing_provider) { FactoryBot.create(:organisation, name: "Foobar LTD") }
+          let!(:stock_owner) { FactoryBot.create(:organisation) }
+          let!(:other_org_stock_owner) { FactoryBot.create(:organisation, name: "Foobar LTD") }
           let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD") }
 
           before do
-            FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: housing_provider)
-            FactoryBot.create(:organisation_relationship, child_organisation: other_organisation, parent_organisation: other_org_housing_provider)
+            FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: stock_owner)
+            FactoryBot.create(:organisation_relationship, child_organisation: other_organisation, parent_organisation: other_org_stock_owner)
             get "/organisations/#{organisation.id}/housing-providers", headers:, params: {}
           end
 
@@ -272,12 +272,12 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           it "shows a table of stock owners" do
             expected_html = "<table class=\"govuk-table\""
             expect(response.body).to include(expected_html)
-            expect(response.body).to include(housing_provider.name)
+            expect(response.body).to include(stock_owner.name)
           end
 
           it "shows only stock owners for the current user's organisation" do
-            expect(page).to have_content(housing_provider.name)
-            expect(page).not_to have_content(other_org_housing_provider.name)
+            expect(page).to have_content(stock_owner.name)
+            expect(page).not_to have_content(other_org_stock_owner.name)
           end
 
           it "shows the pagination count" do
@@ -363,13 +363,13 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         sign_in user
       end
 
-      describe "organisation_relationships#create_housing_provider" do
-        let!(:housing_provider) { FactoryBot.create(:organisation) }
+      describe "organisation_relationships#create_stock_owner" do
+        let!(:stock_owner) { FactoryBot.create(:organisation) }
 
         let(:params) do
           {
             "organisation_relationship": {
-              "parent_organisation_id": housing_provider.id,
+              "parent_organisation_id": stock_owner.id,
             },
           }
         end
@@ -382,7 +382,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
         it "sets the organisation relationship attributes correctly" do
           request
-          expect(OrganisationRelationship).to exist(child_organisation_id: organisation.id, parent_organisation_id: housing_provider.id)
+          expect(OrganisationRelationship).to exist(child_organisation_id: organisation.id, parent_organisation_id: stock_owner.id)
         end
 
         it "redirects to the organisation list" do
@@ -419,17 +419,17 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         end
       end
 
-      describe "organisation_relationships#delete_housing_provider" do
-        let!(:housing_provider) { FactoryBot.create(:organisation) }
+      describe "organisation_relationships#delete_stock_owner" do
+        let!(:stock_owner) { FactoryBot.create(:organisation) }
         let(:params) do
           {
-            "target_organisation_id": housing_provider.id,
+            "target_organisation_id": stock_owner.id,
           }
         end
         let(:request) { delete "/organisations/#{organisation.id}/housing-providers", headers:, params: }
 
         before do
-          FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: housing_provider)
+          FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: stock_owner)
         end
 
         it "deletes the new organisation relationship" do
@@ -470,13 +470,13 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
       end
 
       context "when viewing a specific organisation's stock owners" do
-        let!(:housing_provider) { FactoryBot.create(:organisation) }
-        let!(:other_org_housing_provider) { FactoryBot.create(:organisation, name: "Foobar LTD") }
+        let!(:stock_owner) { FactoryBot.create(:organisation) }
+        let!(:other_org_stock_owner) { FactoryBot.create(:organisation, name: "Foobar LTD") }
         let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD 2") }
 
         before do
-          FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: housing_provider)
-          FactoryBot.create(:organisation_relationship, child_organisation: other_organisation, parent_organisation: other_org_housing_provider)
+          FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: stock_owner)
+          FactoryBot.create(:organisation_relationship, child_organisation: other_organisation, parent_organisation: other_org_stock_owner)
           get "/organisations/#{organisation.id}/housing-providers", headers:, params: {}
         end
 
@@ -492,12 +492,12 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         it "shows a table of stock owners" do
           expected_html = "<table class=\"govuk-table\""
           expect(response.body).to include(expected_html)
-          expect(response.body).to include(housing_provider.name)
+          expect(response.body).to include(stock_owner.name)
         end
 
         it "shows only stock owners for this organisation" do
-          expect(page).to have_content(housing_provider.name)
-          expect(page).not_to have_content(other_org_housing_provider.name)
+          expect(page).to have_content(stock_owner.name)
+          expect(page).not_to have_content(other_org_stock_owner.name)
         end
 
         it "shows remove link(s)" do

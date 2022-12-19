@@ -22,7 +22,7 @@ RSpec.describe Form::Lettings::Questions::HousingProvider, type: :model do
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Housing provider")
+    expect(question.check_answer_label).to eq("Stock owner")
   end
 
   it "has the correct type" do
@@ -96,11 +96,11 @@ RSpec.describe Form::Lettings::Questions::HousingProvider, type: :model do
 
       context "when stock owners == 0" do
         before do
-          user.organisation.housing_providers.delete_all
+          user.organisation.stock_owners.delete_all
         end
 
         it "is hidden in check answers" do
-          expect(user.organisation.housing_providers.count).to eq(0)
+          expect(user.organisation.stock_owners.count).to eq(0)
           expect(question.hidden_in_check_answers?(nil, user)).to be true
         end
       end
@@ -111,7 +111,7 @@ RSpec.describe Form::Lettings::Questions::HousingProvider, type: :model do
         end
 
         it "is visible in check answers" do
-          expect(user.organisation.housing_providers.count).to eq(1)
+          expect(user.organisation.stock_owners.count).to eq(1)
           expect(question.hidden_in_check_answers?(nil, user)).to be false
         end
       end
@@ -126,7 +126,7 @@ RSpec.describe Form::Lettings::Questions::HousingProvider, type: :model do
         end
 
         it "is hidden in check answers" do
-          expect(user.organisation.housing_providers.count).to eq(1)
+          expect(user.organisation.stock_owners.count).to eq(1)
           expect(question.hidden_in_check_answers?(nil, user)).to be true
         end
       end
@@ -138,7 +138,7 @@ RSpec.describe Form::Lettings::Questions::HousingProvider, type: :model do
         end
 
         it "is visible in check answers" do
-          expect(user.organisation.housing_providers.count).to eq(2)
+          expect(user.organisation.stock_owners.count).to eq(2)
           expect(question.hidden_in_check_answers?(nil, user)).to be false
         end
       end

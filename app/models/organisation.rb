@@ -13,8 +13,8 @@ class Organisation < ApplicationRecord
   has_many :child_organisation_relationships, foreign_key: :parent_organisation_id, class_name: "OrganisationRelationship"
   has_many :child_organisations, through: :child_organisation_relationships
 
-  has_many :housing_provider_relationships, foreign_key: :child_organisation_id, class_name: "OrganisationRelationship"
-  has_many :housing_providers, through: :housing_provider_relationships, source: :parent_organisation
+  has_many :stock_owner_relationships, foreign_key: :child_organisation_id, class_name: "OrganisationRelationship"
+  has_many :stock_owners, through: :stock_owner_relationships, source: :parent_organisation
 
   has_many :managing_agent_relationships, foreign_key: :parent_organisation_id, class_name: "OrganisationRelationship"
   has_many :managing_agents, through: :managing_agent_relationships, source: :child_organisation

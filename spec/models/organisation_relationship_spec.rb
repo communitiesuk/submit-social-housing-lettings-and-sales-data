@@ -16,9 +16,9 @@ RSpec.describe OrganisationRelationship do
       end
     end
 
-    describe "child#housing_providers" do
+    describe "child#stock_owners" do
       it "includes parent" do
-        expect(child_organisation.housing_providers).to include(parent_organisation)
+        expect(child_organisation.stock_owners).to include(parent_organisation)
       end
     end
   end

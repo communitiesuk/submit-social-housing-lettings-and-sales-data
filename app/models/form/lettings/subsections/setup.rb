@@ -9,7 +9,7 @@ class Form::Lettings::Subsections::Setup < ::Form::Subsection
   def pages
     @pages ||= [
       organisation_page,
-      housing_provider_page,
+      stock_owner_page,
       managing_organisation_page,
       created_by_page,
       Form::Lettings::Pages::NeedsType.new(nil, nil, self),
@@ -35,7 +35,7 @@ private
     Form::Common::Pages::Organisation.new(nil, nil, self)
   end
 
-  def housing_provider_page
+  def stock_owner_page
     return unless FeatureToggle.managing_for_other_user_enabled?
 
     Form::Lettings::Pages::HousingProvider.new(nil, nil, self)
