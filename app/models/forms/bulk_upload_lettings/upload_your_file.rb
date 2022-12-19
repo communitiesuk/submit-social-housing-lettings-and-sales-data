@@ -20,7 +20,8 @@ module Forms
       end
 
       def back_path
-        bulk_upload_lettings_log_path(id: "prepare-your-file", form: { year: })
+        page_id = year == 2022 ? "needstype" : "prepare-your-file"
+        bulk_upload_lettings_log_path(id: page_id, form: { year:, needstype: })
       end
 
       def year_combo
