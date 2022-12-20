@@ -35,7 +35,7 @@ RSpec.describe Form::Sales::Pages::PersonWorkingSituation, type: :model do
       end
 
       it "has correct depends_on" do
-        expect(page.depends_on).to eq([{ "details_known_1" => 1, "jointpur" => 2 }])
+        expect(page.depends_on).to eq([{ "hholdcount" => 1, "jointpur" => 2 }, { "hholdcount" => 2, "jointpur" => 2 }, { "hholdcount" => 3, "jointpur" => 2 }, { "hholdcount" => 4, "jointpur" => 2 }])
       end
     end
 
@@ -119,7 +119,7 @@ RSpec.describe Form::Sales::Pages::PersonWorkingSituation, type: :model do
       end
 
       it "has correct depends_on" do
-        expect(page.depends_on).to eq([{ "details_known_1" => 1, "jointpur" => 1 }])
+        expect(page.depends_on).to eq([{ "hholdcount" => 1, "jointpur" => 1 }, { "hholdcount" => 2, "jointpur" => 1 }, { "hholdcount" => 3, "jointpur" => 1 }, { "hholdcount" => 4, "jointpur" => 1 }])
       end
     end
 
