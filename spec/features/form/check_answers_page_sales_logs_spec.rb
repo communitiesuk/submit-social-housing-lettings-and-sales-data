@@ -38,7 +38,7 @@ RSpec.describe "Sales Log Check Answers Page" do
     end
 
     context "when the user is checking their answers for the household characteristics subsection" do
-      context "for a joint purchase" do
+      context "and the log is for a joint purchase" do
         it "they see a seperate summary card for each member of the household" do
           visit("/sales-logs/#{completed_sales_log_joint_purchase.id}/#{subsection}/check-answers")
           assert_selector ".x-govuk-summary-card__title", text: "Buyer 1", count: 1
@@ -48,7 +48,7 @@ RSpec.describe "Sales Log Check Answers Page" do
         end
       end
 
-      context "for a non-joint purchase" do
+      context "and the log is for a non-joint purchase" do
         it "they see a seperate summary card for each member of the household" do
           visit("/sales-logs/#{completed_sales_log_non_joint_purchase.id}/#{subsection}/check-answers")
           assert_selector ".x-govuk-summary-card__title", text: "Buyer 1", count: 1
