@@ -24,12 +24,12 @@ class CheckAnswersSummaryListCardComponent < ViewComponent::Base
       when 2..8
         "Person #{question.check_answers_card_number}"
       end
-    elsif question.form.type == "sales"
+    else
       case question.check_answers_card_number
       when 1..number_of_buyers
-          "Buyer #{question.check_answers_card_number}"
+        "Buyer #{question.check_answers_card_number}"
       when (number_of_buyers + 1)..(number_of_buyers + 4)
-          "Person #{question.check_answers_card_number - number_of_buyers}"
+        "Person #{question.check_answers_card_number - number_of_buyers}"
       end
     end
   end
