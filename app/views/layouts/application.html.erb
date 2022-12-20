@@ -130,7 +130,13 @@
         <%= content_for?(:content) ? yield(:content) : yield %>
       </main>
     </div>
-
-    <%= render partial: "layouts/footer" %>
+    <div class="govuk-width-container">
+      <div class="govuk-grid-row">
+          <%= render partial: "layouts/give_feedback" %>
+      </div>
+    </div>
+    <div class="govuk-footer-body">
+      <%= render partial: "layouts/footer" %>
+    </div>
   </body>
 </html>
