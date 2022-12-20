@@ -1,7 +1,7 @@
 require "rails_helper"
 require_relative "helpers"
 
-RSpec.describe "Form Check Answers Page" do
+RSpec.describe "Lettings Log Check Answers Page" do
   include Helpers
   let(:user) { FactoryBot.create(:user) }
   let(:subsection) { "household-characteristics" }
