@@ -10,6 +10,7 @@ class Form::Sales::Subsections::SharedOwnershipScheme < ::Form::Subsection
   def pages
     @pages ||= [
       Form::Sales::Pages::Staircase.new(nil, nil, self),
+      Form::Sales::Pages::PreviousBedrooms.new(nil, nil, self),
     ]
   end
 
