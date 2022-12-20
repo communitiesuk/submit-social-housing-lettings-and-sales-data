@@ -28,8 +28,8 @@ class CheckAnswersSummaryListCardComponent < ViewComponent::Base
       case question.check_answers_card_number
       when 1..number_of_buyers
           "Buyer #{question.check_answers_card_number}"
-      when number_of_buyers..6
-          "Person #{question.person_display_number}"
+      when (number_of_buyers + 1)..(number_of_buyers + 4)
+          "Person #{question.check_answers_card_number - number_of_buyers}"
       end
     end
   end
