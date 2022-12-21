@@ -415,6 +415,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_20_174515) do
     t.integer "ecstat4"
     t.integer "ecstat5"
     t.integer "ecstat6"
+    t.integer "frombeds"
     t.integer "staircase"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
