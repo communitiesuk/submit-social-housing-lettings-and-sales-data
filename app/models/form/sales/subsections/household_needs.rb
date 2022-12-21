@@ -10,6 +10,7 @@ class Form::Sales::Subsections::HouseholdNeeds < ::Form::Subsection
   def pages
     @pages ||= [
       Form::Sales::Pages::HouseholdWheelchair.new(nil, nil, self),
+      Form::Sales::Pages::HouseholdDisability.new(nil, nil, self),
     ]
   end
 end
