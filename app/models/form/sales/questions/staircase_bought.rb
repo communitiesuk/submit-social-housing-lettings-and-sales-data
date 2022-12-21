@@ -9,6 +9,6 @@ class Form::Sales::Questions::StaircaseBought < ::Form::Question
     @width = 5
     @min = 0
     @max = 100
-    @suffix = "percent"
+    @suffix = " percent"
   end
 end
