@@ -421,6 +421,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_21_172821) do
     t.integer "stairbought"
     t.integer "stairowned"
     t.decimal "mrent", precision: 10, scale: 2
+    t.datetime "exdate", precision: nil
+    t.integer "exday"
+    t.integer "exmonth"
+    t.integer "exyear"
+    t.integer "resale"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
