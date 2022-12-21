@@ -67,6 +67,7 @@ FactoryBot.define do
       ecstat4 { 3 }
       ecstat5 { 2 }
       ecstat6 { 1 }
+      disabled { 2 }
     end
   end
 end
