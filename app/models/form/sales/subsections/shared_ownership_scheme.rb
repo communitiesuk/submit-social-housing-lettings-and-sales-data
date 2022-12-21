@@ -12,6 +12,7 @@ class Form::Sales::Subsections::SharedOwnershipScheme < ::Form::Subsection
       Form::Sales::Pages::Staircase.new(nil, nil, self),
       Form::Sales::Pages::AboutStaircase.new(nil, nil, self),
       Form::Sales::Pages::PreviousBedrooms.new(nil, nil, self),
+      Form::Sales::Pages::MonthlyRent.new(nil, nil, self),
     ]
   end
 
