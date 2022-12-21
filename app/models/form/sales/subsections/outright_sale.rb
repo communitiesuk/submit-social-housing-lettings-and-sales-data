@@ -8,7 +8,9 @@ class Form::Sales::Subsections::OutrightSale < ::Form::Subsection
   end
 
   def pages
-    @pages ||= []
+    @pages ||= [
+      Form::Sales::Pages::AboutDeposit.new(nil, nil, self),
+    ]
   end
 
   def displayed_in_tasklist?(log)
