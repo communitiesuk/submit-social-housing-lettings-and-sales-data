@@ -6,7 +6,7 @@ class Form::Sales::Pages::ExchangeDate < ::Form::Page
     @description = ""
     @subsection = subsection
     @depends_on = [{
-      "resale" => 2
+      "resale" => 2,
     }]
   end
 

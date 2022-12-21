@@ -29,7 +29,7 @@ RSpec.describe Form::Sales::Pages::ExchangeDate, type: :model do
 
   it "has the correct depends_on" do
     expect(page.depends_on).to eq([{
-      "resale" => 2
+      "resale" => 2,
     }])
   end
 end
