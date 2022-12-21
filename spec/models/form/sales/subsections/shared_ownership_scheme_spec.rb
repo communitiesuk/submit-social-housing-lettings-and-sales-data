@@ -15,6 +15,7 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
     expect(shared_ownership_scheme.pages.map(&:id)).to eq(
       %w[
         staircasing
+        about_staircasing
         previous_bedrooms
       ],
     )
