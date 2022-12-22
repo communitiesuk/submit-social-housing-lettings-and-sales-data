@@ -1,7 +1,7 @@
 class Form::Sales::Questions::BuyersOrganisations < ::Form::Question
   def initialize(id, hsh, page)
     super
-    @id="organisations_buyers"
+    @id = "organisations_buyers"
     @check_answer_label = "Organisations buyers were registered with"
     @header = "What organisations were the buyers registered with?"
     @type = "checkbox"
