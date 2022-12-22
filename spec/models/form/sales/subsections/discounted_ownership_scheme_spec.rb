@@ -13,7 +13,7 @@ RSpec.describe Form::Sales::Subsections::DiscountedOwnershipScheme, type: :model
 
   it "has correct pages" do
     expect(discounted_ownership_scheme.pages.map(&:id)).to eq(
-      %w[],
+      %w[about_deposit_discounted_ownership],
     )
   end
 
