@@ -8,7 +8,9 @@ class Form::Sales::Subsections::DiscountedOwnershipScheme < ::Form::Subsection
   end
 
   def pages
-    @pages ||= []
+    @pages ||= [
+      Form::Sales::Pages::AboutDeposit.new("about_deposit_discounted_ownership", nil, self),
+    ]
   end
 
   def displayed_in_tasklist?(log)

@@ -18,6 +18,7 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
         about_staircasing
         la_nominations
         previous_bedrooms
+        about_deposit_shared_ownership
         monthly_rent
         exchange_contracts
       ],
