@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Pages::Staircase, type: :model do
+RSpec.describe Form::Sales::Pages::LaNominations, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
   let(:page_id) { nil }
@@ -12,11 +12,11 @@ RSpec.describe Form::Sales::Pages::Staircase, type: :model do
   end
 
   it "has correct questions" do
-    expect(page.questions.map(&:id)).to eq(%w[staircase])
+    expect(page.questions.map(&:id)).to eq(%w[lanomagr])
   end
 
   it "has the correct id" do
-    expect(page.id).to eq("staircasing")
+    expect(page.id).to eq("la_nominations")
   end
 
   it "has the correct header" do

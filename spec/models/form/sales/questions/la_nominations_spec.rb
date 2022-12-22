@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Questions::Staircase, type: :model do
+RSpec.describe Form::Sales::Questions::LaNominations, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
@@ -12,15 +12,15 @@ RSpec.describe Form::Sales::Questions::Staircase, type: :model do
   end
 
   it "has the correct id" do
-    expect(question.id).to eq("staircase")
+    expect(question.id).to eq("lanomagr")
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Is this a staircasing transaction?")
+    expect(question.header).to eq("Was the household rehoused under a 'local authority nominations agreement'?")
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Staircasing transaction")
+    expect(question.check_answer_label).to eq("Household rehoused under a local authority nominations agreement?")
   end
 
   it "has the correct type" do
@@ -44,6 +44,6 @@ RSpec.describe Form::Sales::Questions::Staircase, type: :model do
   end
 
   it "has the correct hint" do
-    expect(question.hint_text).to eq("A staircasing transaction is when the household purchases more shares in their property, increasing the proportion they own and decreasing the proportion the housing association owns. Once the household purchases 100% of the shares, they own the property")
+    expect(question.hint_text).to eq("A local authority nominations agreement is a written agreement between a local authority and private registered provider (PRP) that some or all of its sales vacancies are offered to local authorities for rehousing")
   end
 end
