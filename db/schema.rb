@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_14_110208) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_22_153059) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -415,6 +415,23 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_14_110208) do
     t.integer "ecstat4"
     t.integer "ecstat5"
     t.integer "ecstat6"
+    t.integer "frombeds"
+    t.integer "staircase"
+    t.integer "stairbought"
+    t.integer "stairowned"
+    t.decimal "mrent", precision: 10, scale: 2
+    t.datetime "exdate", precision: nil
+    t.integer "exday"
+    t.integer "exmonth"
+    t.integer "exyear"
+    t.integer "resale"
+    t.decimal "deposit", precision: 10, scale: 2
+    t.decimal "cashdis", precision: 10, scale: 2
+    t.integer "lanomagr"
+    t.integer "pregyrha"
+    t.integer "pregla"
+    t.integer "pregghb"
+    t.integer "pregother"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
