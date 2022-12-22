@@ -415,19 +415,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_22_153059) do
     t.integer "ecstat4"
     t.integer "ecstat5"
     t.integer "ecstat6"
-    t.integer "frombeds"
-    t.integer "staircase"
-    t.integer "stairbought"
-    t.integer "stairowned"
-    t.decimal "mrent", precision: 10, scale: 2
-    t.datetime "exdate", precision: nil
-    t.integer "exday"
-    t.integer "exmonth"
-    t.integer "exyear"
-    t.integer "resale"
-    t.decimal "deposit", precision: 10, scale: 2
-    t.decimal "cashdis", precision: 10, scale: 2
-    t.integer "lanomagr"
     t.integer "pregyrha"
     t.integer "pregla"
     t.integer "pregghb"
