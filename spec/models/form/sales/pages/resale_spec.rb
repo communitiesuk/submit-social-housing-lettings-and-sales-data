@@ -28,12 +28,13 @@ RSpec.describe Form::Sales::Pages::Resale, type: :model do
   end
 
   it "has the correct depends_on" do
-    expec(page.depends_on).to eq(
+    expect(page.depends_on).to eq(
       [{
         "staircase" => 2,
       },
-      {
-        "staircase" => 3,
-      }]
+       {
+         "staircase" => 3,
+       }],
     )
+  end
 end

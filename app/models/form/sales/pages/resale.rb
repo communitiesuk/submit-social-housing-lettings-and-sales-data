@@ -8,9 +8,9 @@ class Form::Sales::Pages::Resale < ::Form::Page
     @depends_on = [{
       "staircase" => 2,
     },
-    {
-      "staircase" => 3,
-    }]
+                   {
+                     "staircase" => 3,
+                   }]
   end
 
   def questions
