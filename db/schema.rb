@@ -419,7 +419,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_22_081402) do
     t.integer "staircase"
     t.integer "stairbought"
     t.integer "stairowned"
-    t.decimal "mrent", precision: 10, scale: 2
     t.datetime "exdate", precision: nil
     t.integer "exday"
     t.integer "exmonth"
