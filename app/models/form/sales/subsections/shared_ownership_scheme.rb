@@ -11,6 +11,7 @@ class Form::Sales::Subsections::SharedOwnershipScheme < ::Form::Subsection
     @pages ||= [
       Form::Sales::Pages::Staircase.new(nil, nil, self),
       Form::Sales::Pages::AboutStaircase.new(nil, nil, self),
+      Form::Sales::Pages::Resale.new(nil, nil, self),
       Form::Sales::Pages::LaNominations.new(nil, nil, self),
       Form::Sales::Pages::PreviousBedrooms.new(nil, nil, self),
       Form::Sales::Pages::AboutDeposit.new("about_deposit_shared_ownership", nil, self),
