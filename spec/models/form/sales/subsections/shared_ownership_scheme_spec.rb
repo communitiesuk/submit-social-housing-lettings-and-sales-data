@@ -16,6 +16,7 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
       %w[
         staircasing
         about_staircasing
+        resale
         la_nominations
         previous_bedrooms
         about_deposit_shared_ownership
