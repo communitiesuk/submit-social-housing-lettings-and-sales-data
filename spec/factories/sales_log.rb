@@ -68,6 +68,8 @@ FactoryBot.define do
       ecstat5 { 2 }
       ecstat6 { 1 }
       disabled { 2 }
+      deposit { 10_000 }
+      cashdis { 1_000 }
     end
   end
 end

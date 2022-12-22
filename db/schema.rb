@@ -405,12 +405,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_21_172821) do
     t.integer "savings"
     t.integer "prevown"
     t.string "sex3"
-    t.bigint "updated_by_id"
     t.integer "details_known_1"
     t.integer "income1_value_check"
     t.integer "mortgage"
     t.integer "inc2mort"
     t.integer "mortgage_value_check"
+    t.bigint "updated_by_id"
     t.integer "ecstat3"
     t.integer "ecstat4"
     t.integer "ecstat5"
@@ -425,6 +425,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_21_172821) do
     t.integer "exmonth"
     t.integer "exyear"
     t.integer "resale"
+    t.decimal "deposit", precision: 10, scale: 2
+    t.decimal "cashdis", precision: 10, scale: 2
     t.decimal "mrent", precision: 10, scale: 2
     t.integer "lanomagr"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
