@@ -20,7 +20,7 @@ RSpec.describe Form::Sales::Questions::DepositDiscount, type: :model do
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Monthly rent")
+    expect(question.check_answer_label).to eq("Cash discount through SocialHomeBuy")
   end
 
   it "has the correct type" do
