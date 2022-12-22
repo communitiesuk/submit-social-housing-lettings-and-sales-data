@@ -5,12 +5,14 @@ class Form::Sales::Pages::Resale < ::Form::Page
     @header = ""
     @description = ""
     @subsection = subsection
-    @depends_on = [{
-      "staircase" => 2,
-    },
-                   {
-                     "staircase" => 3,
-                   }]
+    @depends_on = [
+      {
+        "staircase" => 2,
+      },
+      {
+        "staircase" => 3,
+      },
+    ]
   end
 
   def questions
