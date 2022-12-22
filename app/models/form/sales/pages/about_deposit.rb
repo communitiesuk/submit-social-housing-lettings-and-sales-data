@@ -1,7 +1,6 @@
 class Form::Sales::Pages::AboutDeposit < ::Form::Page
   def initialize(id, hsh, subsection)
     super
-    @id = "about_deposit"
     @header = "About the deposit"
     @description = ""
     @subsection = subsection
