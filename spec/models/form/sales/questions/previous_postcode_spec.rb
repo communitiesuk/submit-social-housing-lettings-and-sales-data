@@ -35,6 +35,10 @@ RSpec.describe Form::Sales::Questions::PreviousPostcode, type: :model do
     expect(question.hint_text).to eq("This is also known as the household’s 'last settled home'")
   end
 
+  it "has the correct width" do
+    expect(question.width).to eq(5)
+  end
+
   it "has the correct inferred_answers" do
     expect(question.inferred_answers).to eq({
       "prevloc" => {
