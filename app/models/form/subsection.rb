@@ -30,7 +30,7 @@ class Form::Subsection
 
     qs = applicable_questions(log)
     qs_optional_removed = qs.reject { |q| log.optional_fields.include?(q.id) }
-    return :not_started if qs.count.positive? && qs.all? { |question| !question.completed?(log) || question.read_only? || question.derived? }
+    return :not_started if qs.count.positive? && qs.all? { |question| question.unanswered?(log) || question.read_only? || question.derived? }
     return :completed if qs_optional_removed.all? { |question| question.completed?(log) }
 
     :in_progress
