@@ -73,6 +73,10 @@ FactoryBot.define do
       value { 110_000 }
       grant { 1_000 }
       proplen { 10 }
+      pregyrha { 1 }
+      pregla { 1 }
+      pregother { 1 }
+      pregghb { 1 }
     end
   end
 end
