@@ -67,7 +67,6 @@ FactoryBot.define do
       ecstat4 { 3 }
       ecstat5 { 2 }
       ecstat6 { 1 }
-      disabled { 2 }
       pregyrha { 1 }
       pregla { 1 }
       pregother { 1 }
