@@ -12,7 +12,7 @@ RSpec.describe Form::Sales::Pages::BuyerStillServing, type: :model do
   end
 
   it "has correct questions" do
-    expect(page.questions.map(&:id)).to eq(%w[hhregres])
+    expect(page.questions.map(&:id)).to eq(%w[hhregresstill])
   end
 
   it "has the correct id" do
