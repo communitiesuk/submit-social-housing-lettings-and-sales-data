@@ -12,7 +12,7 @@ RSpec.describe Form::Sales::Questions::BuyerStillServing, type: :model do
   end
 
   it "has the correct id" do
-    expect(question.id).to eq("hhregres")
+    expect(question.id).to eq("hhregresstill")
   end
 
   it "has the correct header" do
