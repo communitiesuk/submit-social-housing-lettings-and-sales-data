@@ -7,6 +7,7 @@ class AddPostcodeFields < ActiveRecord::Migration[7.0]
       t.column :ppostc1, :string
       t.column :ppostc2, :string
       t.column :prevloc, :string
+      t.column :previous_la_known, :boolean
     end
   end
 end
