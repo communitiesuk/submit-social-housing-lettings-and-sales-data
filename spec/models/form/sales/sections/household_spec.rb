@@ -15,6 +15,7 @@ RSpec.describe Form::Sales::Sections::Household, type: :model do
     expect(household.subsections.map(&:id)).to eq(
       %w[
         household_characteristics
+        household_situation
         household_needs
       ],
     )

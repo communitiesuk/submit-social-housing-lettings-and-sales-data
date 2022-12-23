@@ -11,8 +11,8 @@ class Form::Sales::Questions::BuyersOrganisations < ::Form::Question
   end
 
   ANSWER_OPTIONS = {
-    "pregyrha" => { "value" => "Their private registered provider (PRP)- housing association" },
-    "pregother" => { "value" => "Other private registered provider (PRP)- housing association" },
+    "pregyrha" => { "value" => "Their private registered provider (PRP) - housing association" },
+    "pregother" => { "value" => "Other private registered provider (PRP) - housing association" },
     "pregla" => { "value" => "Local Authority" },
     "pregghb" => { "value" => "Help to Buy Agent" },
   }.freeze
