@@ -15,6 +15,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdSituation, type: :model do
     expect(household_characteristics.pages.map(&:id)).to eq(
       %w[
         buyers_organisations
+        last_accommodation
       ],
     )
   end

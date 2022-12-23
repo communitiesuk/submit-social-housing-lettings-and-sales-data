@@ -77,9 +77,9 @@ FactoryBot.define do
       pregla { 1 }
       pregother { 1 }
       pregghb { 1 }
-      disabled { 1 }
       hhregres { 1 }
       hhregresstill { 4 }
+      ppcodenk { 1 }
     end
   end
 end
