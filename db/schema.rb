@@ -427,6 +427,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_04_093057) do
     t.integer "resale"
     t.decimal "deposit", precision: 10, scale: 2
     t.decimal "cashdis", precision: 10, scale: 2
+    t.integer "hhregres"
     t.integer "pregyrha"
     t.integer "pregla"
     t.integer "pregghb"

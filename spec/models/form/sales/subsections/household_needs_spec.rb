@@ -14,8 +14,10 @@ RSpec.describe Form::Sales::Subsections::HouseholdNeeds, type: :model do
   it "has correct pages" do
     expect(household_characteristics.pages.map(&:id)).to eq(
       %w[
+        armed_forces
         household_wheelchair
         household_disability
+        wheelchair_check
       ],
     )
   end
