@@ -79,6 +79,7 @@ FactoryBot.define do
       pregghb { 1 }
       disabled { 1 }
       hhregres { 1 }
+      hhregresstill { 4 }
     end
   end
 end

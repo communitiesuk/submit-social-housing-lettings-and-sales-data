@@ -15,6 +15,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdNeeds, type: :model do
     expect(household_characteristics.pages.map(&:id)).to eq(
       %w[
         armed_forces
+        buyer_still_serving
         household_wheelchair
         household_disability
         wheelchair_check
