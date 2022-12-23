@@ -17,6 +17,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdNeeds, type: :model do
         armed_forces
         household_wheelchair
         household_disability
+        wheelchair_check
       ],
     )
   end
