@@ -42,7 +42,7 @@ RSpec.describe Form::Sales::Questions::BuyersOrganisations, type: :model do
         "pregother" => { "value" => "Other private registered provider (PRP) - housing association" },
         "pregla" => { "value" => "Local Authority" },
         "pregghb" => { "value" => "Help to Buy Agent" },
-      }
+      },
     )
   end
 end

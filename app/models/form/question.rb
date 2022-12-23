@@ -131,6 +131,7 @@ class Form::Question
 
   def unanswered?(log)
     return answer_options.keys.none? { |key| value_is_yes?(log[key]) } if type == "checkbox"
+
     log[id].blank?
   end
 
