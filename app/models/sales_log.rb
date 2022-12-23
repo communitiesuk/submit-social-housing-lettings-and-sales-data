@@ -111,4 +111,8 @@ class SalesLog < Log
   def income2_used_for_mortgage?
     inc2mort == 1
   end
+
+  def right_to_buy?
+    [9, 14, 27].include?(type)
+  end
 end
