@@ -35,21 +35,20 @@ RSpec.describe Form::Sales::Questions::PreviousPostcode, type: :model do
     expect(question.hint_text).to eq("This is also known as the household’s 'last settled home'")
   end
 
-
   it "has the correct inferred_answers" do
     expect(question.inferred_answers).to eq({
       "prevloc" => {
-        "is_previous_la_inferred" => true
-      }
+        "is_previous_la_inferred" => true,
+      },
     })
   end
 
   it "has the correct inferred_check_answers_value" do
     expect(question.inferred_check_answers_value).to eq({
       "condition" => {
-        "ppcodenk" => 0
+        "ppcodenk" => 1,
       },
-      "value" => "Not known"
+      "value" => "Not known",
     })
   end
 end

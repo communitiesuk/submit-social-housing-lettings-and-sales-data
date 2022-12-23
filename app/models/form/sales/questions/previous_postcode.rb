@@ -9,7 +9,7 @@ class Form::Sales::Questions::PreviousPostcode < ::Form::Question
     @hint_text = "This is also known as the household’s 'last settled home'"
     @inferred_check_answers_value = {
       "condition" => {
-        "ppcodenk" => 0,
+        "ppcodenk" => 1,
       },
       "value" => "Not known",
     }

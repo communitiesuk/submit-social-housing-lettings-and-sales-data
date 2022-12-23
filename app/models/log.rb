@@ -88,4 +88,32 @@ private
 
     update!(created_by: nil)
   end
+
+  PIO = PostcodeService.new
+
+  def process_previous_postcode_changes!
+    self.ppostcode_full = upcase_and_remove_whitespace(ppostcode_full)
+    process_postcode(ppostcode_full, "ppcodenk", "is_previous_la_inferred", "prevloc")
+  end
+
+  def get_inferred_la(postcode)
+    result = PIO.lookup(postcode)
+    result[:location_code] if result
+  end
+
+  def upcase_and_remove_whitespace(string)
+    string.present? ? string.upcase.gsub(/\s+/, "") : string
+  end
+
+  def reset_previous_location_fields!
+    reset_location(is_previous_la_inferred, "prevloc", "is_previous_la_inferred", "ppostcode_full", previous_la_known)
+  end
+
+  def reset_location(is_inferred, la_key, is_inferred_key, postcode_key, is_la_known)
+    if is_inferred || is_la_known != 1
+      self[la_key] = nil
+    end
+    self[is_inferred_key] = false
+    self[postcode_key] = nil
+  end
 end

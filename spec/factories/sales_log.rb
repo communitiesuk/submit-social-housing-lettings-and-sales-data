@@ -74,6 +74,7 @@ FactoryBot.define do
       disabled { 1 }
       hhregres { 1 }
       hhregresstill { 4 }
+      ppcodenk { 1 }
     end
   end
 end
