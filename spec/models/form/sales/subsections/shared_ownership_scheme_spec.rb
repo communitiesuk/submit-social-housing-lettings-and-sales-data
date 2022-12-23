@@ -20,6 +20,8 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
         la_nominations
         buyer_previous
         previous_bedrooms
+        about_price
+        about_price_social_housing
         about_deposit_shared_ownership
         monthly_rent
         exchange_contracts
