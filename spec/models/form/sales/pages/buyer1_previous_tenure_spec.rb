@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Pages::Buyer1PreviousTenure, type: :model do
   end
 
   it "has the correct id" do
-    expect(page.id).to eq("buyers_organisations")
+    expect(page.id).to eq("buyer1_previous_tenure")
   end
 
   it "has the correct header" do
