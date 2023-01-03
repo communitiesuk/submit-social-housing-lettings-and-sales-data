@@ -13,9 +13,9 @@ RSpec.describe Form::Sales::Subsections::DiscountedOwnershipScheme, type: :model
 
   it "has correct pages" do
     expect(discounted_ownership_scheme.pages.map(&:id)).to eq(
-      %w[about_deposit_discounted_ownership
-         about_price_rtb
-         about_price_not_rtb],
+      %w[about_price_rtb
+         about_price_not_rtb
+         about_deposit_discounted_ownership],
     )
   end
 
