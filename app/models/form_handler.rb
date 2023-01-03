@@ -22,8 +22,8 @@ class FormHandler
     sales_sections = [
       Form::Sales::Sections::PropertyInformation,
       Form::Sales::Sections::Household,
-      Form::Sales::Sections::SaleInformation,
       Form::Sales::Sections::Finances,
+      Form::Sales::Sections::SaleInformation,
     ]
     current_form = Form.new(nil, current_collection_start_year, sales_sections, "sales")
     previous_form = Form.new(nil, current_collection_start_year - 1, sales_sections, "sales")
