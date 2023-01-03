@@ -20,6 +20,7 @@ class SalesLog < Log
   validates_with SalesLogValidator
   before_validation :set_derived_fields!
   before_validation :reset_invalidated_dependent_fields!
+  before_validation :process_mscharge_known_changes!, if: :mscharge_known_changed?
 
   scope :filter_by_year, ->(year) { where(saledate: Time.zone.local(year.to_i, 4, 1)...Time.zone.local(year.to_i + 1, 4, 1)) }
   scope :search_by, ->(param) { filter_by_id(param) }
@@ -114,5 +115,11 @@ class SalesLog < Log
 
   def right_to_buy?
     [9, 14, 27].include?(type)
+  end
+
+  def process_mscharge_known_changes!
+    return if mscharge_known.blank?
+
+    self["mscharge"] = 0 if mscharge_known.zero?
   end
 end

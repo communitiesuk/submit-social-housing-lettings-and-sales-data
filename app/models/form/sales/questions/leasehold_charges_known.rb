@@ -2,7 +2,7 @@ class Form::Sales::Questions::LeaseholdChargesKnown < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "mscharge_known"
-    @check_answer_label = "Monthly rent"
+    @check_answer_label = "Monthly leasehold charges known?"
     @header = "Does the property have any monthly leasehold charges?"
     @hint_text = "For example, service and management charges"
     @type = "radio"
@@ -13,9 +13,6 @@ class Form::Sales::Questions::LeaseholdChargesKnown < ::Form::Question
     }
     @hidden_in_check_answers = {
       "depends_on" => [
-        {
-          "mscharge_known" => 0,
-        },
         {
           "mscharge_known" => 1,
         },
