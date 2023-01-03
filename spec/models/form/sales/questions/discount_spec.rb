@@ -32,8 +32,8 @@ RSpec.describe Form::Sales::Questions::Discount, type: :model do
   end
 
   it "has the correct hint" do
-    expect(question.hint_text).to eq("For Right to Buy (RTB), Preserved Right to Buy (PRTB), and Voluntary Right to Buy (VRTB)
-    If discount capped, enter capped %
+    expect(question.hint_text).to eq("For Right to Buy (RTB), Preserved Right to Buy (PRTB), and Voluntary Right to Buy (VRTB)</br></br>
+    If discount capped, enter capped %</br></br>
     If the property is being sold to an existing tenant under the RTB, PRTB, or VRTB schemes, enter the % discount from the full market value that is being given.")
   end
 
