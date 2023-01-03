@@ -13,6 +13,7 @@ class Form::Sales::Subsections::DiscountedOwnershipScheme < ::Form::Subsection
       Form::Sales::Pages::AboutPriceRtb.new(nil, nil, self),
       Form::Sales::Pages::AboutPriceNotRtb.new(nil, nil, self),
       Form::Sales::Pages::AboutDeposit.new("about_deposit_discounted_ownership", nil, self),
+      Form::Sales::Pages::LeaseholdCharges.new("leasehold_charges_discounted_ownership", nil, self),
     ]
   end
 
