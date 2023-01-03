@@ -36,5 +36,12 @@ RSpec.describe BulkUpload::Sales::Validator do
         validator.call
       }.to change(BulkUploadError, :count).by(1)
     end
+
+    it "populates purchaser_code" do
+      validator.call
+
+      error = BulkUploadError.last
+      expect(error.purchaser_code).to eql("1")
+    end
   end
 end
