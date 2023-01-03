@@ -72,6 +72,8 @@ FactoryBot.define do
       cashdis { 1_000 }
       value { 110_000 }
       grant { 1_000 }
+      mscharge_known { 1 }
+      mscharge { 100 }
     end
   end
 end

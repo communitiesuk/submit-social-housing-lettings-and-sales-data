@@ -17,6 +17,7 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
         staircasing
         about_staircasing
         resale
+        exchange_contracts
         la_nominations
         buyer_previous
         previous_bedrooms
@@ -24,7 +25,7 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
         about_price_social_housing
         about_deposit_shared_ownership
         monthly_rent
-        exchange_contracts
+        leasehold_charges_shared_ownership
       ],
     )
   end

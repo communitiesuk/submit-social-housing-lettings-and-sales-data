@@ -15,7 +15,8 @@ RSpec.describe Form::Sales::Subsections::DiscountedOwnershipScheme, type: :model
     expect(discounted_ownership_scheme.pages.map(&:id)).to eq(
       %w[about_deposit_discounted_ownership
          about_price_rtb
-         about_price_not_rtb],
+         about_price_not_rtb
+         leasehold_charges_discounted_ownership],
     )
   end
 
