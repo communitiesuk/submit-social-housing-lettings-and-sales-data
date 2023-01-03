@@ -9,6 +9,7 @@ class Form::Sales::Subsections::DiscountedOwnershipScheme < ::Form::Subsection
 
   def pages
     @pages ||= [
+      Form::Sales::Pages::LivingBeforePurchase.new("living_before_purchase_discounted_ownership", nil, self),
       Form::Sales::Pages::AboutDeposit.new("about_deposit_discounted_ownership", nil, self),
       Form::Sales::Pages::AboutPriceRtb.new("about_deposit_discounted_ownership", nil, self),
       Form::Sales::Pages::AboutPriceNotRtb.new("about_deposit_discounted_ownership", nil, self),
