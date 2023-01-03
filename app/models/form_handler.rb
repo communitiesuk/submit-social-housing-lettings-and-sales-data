@@ -22,7 +22,6 @@ class FormHandler
     sales_sections = [
       Form::Sales::Sections::PropertyInformation,
       Form::Sales::Sections::Household,
-      Form::Sales::Sections::SaleInformation,
       Form::Sales::Sections::Finances,
       Form::Sales::Sections::SaleInformation,
     ]
