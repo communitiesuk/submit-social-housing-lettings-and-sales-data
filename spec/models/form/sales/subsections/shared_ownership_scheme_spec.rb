@@ -14,6 +14,7 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
   it "has correct pages" do
     expect(shared_ownership_scheme.pages.map(&:id)).to eq(
       %w[
+        living_before_purchase_shared_ownership
         staircasing
         about_staircasing
         resale

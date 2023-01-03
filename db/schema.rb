@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_22_133600) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_03_094948) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -434,6 +434,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_22_133600) do
     t.decimal "equity", precision: 10, scale: 2
     t.decimal "discount", precision: 10, scale: 2
     t.decimal "grant", precision: 10, scale: 2
+    t.integer "proplen"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
