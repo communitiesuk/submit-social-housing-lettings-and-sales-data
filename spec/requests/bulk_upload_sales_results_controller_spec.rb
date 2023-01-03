@@ -31,6 +31,19 @@ RSpec.describe BulkUploadSalesResultsController, type: :request do
       expect(response.body).to include(bulk_upload.filename)
     end
 
+    it "renders Purchaser code" do
+      get "/sales-logs/bulk-upload-results/#{bulk_upload.id}"
+
+      expect(response.body).to include("Purchaser code: #{bulk_upload.bulk_upload_errors.first.purchaser_code}")
+    end
+
+    it "does not render tenant code or property reference" do
+      get "/sales-logs/bulk-upload-results/#{bulk_upload.id}"
+
+      expect(response.body).not_to include("Tenant code:")
+      expect(response.body).not_to include("Property reference:")
+    end
+
     context "when there are errors for more than 1 row" do
       let(:bulk_upload_errors) { [bulk_upload_error_1, bulk_upload_error_2] }
       let(:bulk_upload_error_1) { create(:bulk_upload_error, row: 1) }
