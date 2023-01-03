@@ -20,7 +20,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_09_160738) do
     t.text "row"
     t.text "tenant_code"
     t.text "property_ref"
-    t.text "purchase_code"
+    t.text "purchaser_code"
     t.text "field"
     t.text "error"
     t.datetime "created_at", null: false

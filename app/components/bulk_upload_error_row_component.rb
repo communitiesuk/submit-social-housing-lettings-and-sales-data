@@ -15,6 +15,10 @@ class BulkUploadErrorRowComponent < ViewComponent::Base
     bulk_upload_errors.first.tenant_code
   end
 
+  def purchaser_code
+    bulk_upload_errors.first.purchaser_code
+  end
+
   def property_ref
     bulk_upload_errors.first.property_ref
   end
@@ -32,5 +36,13 @@ class BulkUploadErrorRowComponent < ViewComponent::Base
 
   def bulk_upload
     bulk_upload_errors.first.bulk_upload
+  end
+
+  def lettings?
+    bulk_upload.log_type == "lettings"
+  end
+
+  def sales?
+    bulk_upload.log_type == "sales"
   end
 end
