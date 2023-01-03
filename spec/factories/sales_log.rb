@@ -73,6 +73,8 @@ FactoryBot.define do
       value { 110_000 }
       grant { 1_000 }
       proplen { 10 }
+      mscharge_known { 1 }
+      mscharge { 100 }
     end
   end
 end

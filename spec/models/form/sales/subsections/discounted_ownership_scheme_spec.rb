@@ -16,7 +16,8 @@ RSpec.describe Form::Sales::Subsections::DiscountedOwnershipScheme, type: :model
       %w[living_before_purchase_discounted_ownership
          about_price_rtb
          about_price_not_rtb
-         about_deposit_discounted_ownership],
+         about_deposit_discounted_ownership
+         leasehold_charges_discounted_ownership],
     )
   end
 
