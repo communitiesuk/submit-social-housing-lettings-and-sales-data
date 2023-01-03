@@ -75,6 +75,7 @@ FactoryBot.define do
       hhregres { 1 }
       hhregresstill { 4 }
       ppcodenk { 1 }
+      prevten { 1 }
     end
   end
 end
