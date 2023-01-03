@@ -10,6 +10,7 @@ class Form::Sales::Subsections::OutrightSale < ::Form::Subsection
   def pages
     @pages ||= [
       Form::Sales::Pages::AboutDeposit.new("about_deposit_outright_sale", nil, self),
+      Form::Sales::Pages::LeaseholdCharges.new("leasehold_charges_outright_sale", nil, self),
     ]
   end
 
