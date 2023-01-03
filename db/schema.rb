@@ -415,14 +415,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_03_094948) do
     t.integer "ecstat4"
     t.integer "ecstat5"
     t.integer "ecstat6"
-    t.integer "pregyrha"
-    t.integer "pregla"
-    t.integer "pregghb"
-    t.integer "pregother"
-    t.integer "disabled"
-    t.integer "wheel_value_check"
-    t.integer "hhregres"
-    t.integer "hhregresstill"
     t.integer "frombeds"
     t.integer "staircase"
     t.integer "stairbought"
@@ -435,6 +427,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_03_094948) do
     t.integer "resale"
     t.decimal "deposit", precision: 10, scale: 2
     t.decimal "cashdis", precision: 10, scale: 2
+    t.integer "disabled"
     t.integer "lanomagr"
     t.integer "soctenant"
     t.decimal "value", precision: 10, scale: 2
