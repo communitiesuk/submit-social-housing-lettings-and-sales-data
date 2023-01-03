@@ -5,6 +5,9 @@ class Form::Sales::Pages::PreviousBedrooms < ::Form::Page
     @header = "About the buyers’ previous property"
     @description = ""
     @subsection = subsection
+    @depends_on = [{
+      "soctenant" => 1,
+    }]
   end
 
   def questions
