@@ -153,6 +153,7 @@ class BulkUpload::Sales::Validator
         bulk_upload.bulk_upload_errors.create!(
           field: error.attribute,
           error: error.type,
+          purchaser_code: row_parser.field_1,
           row:,
           cell: "#{cols[field_number_for_attribute(error.attribute) + col_offset - 1]}#{row}",
         )
