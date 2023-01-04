@@ -11,8 +11,14 @@ class Form::Lettings::Questions::StockOwner < ::Form::Question
 
   def answer_options
     answer_opts = { "" => "Select an option" }
+
     return answer_opts unless ActiveRecord::Base.connected?
     return answer_opts unless current_user
+    return answer_opts unless log
+
+    if log.owning_organisation_id.present?
+      answer_opts = answer_opts.merge({ log.owning_organisation.id => log.owning_organisation.name })
+    end
 
     if !current_user.support? && current_user.organisation.holds_own_stock?
       answer_opts[current_user.organisation.id] = "#{current_user.organisation.name} (Your organisation)"
