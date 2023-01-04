@@ -6,5 +6,6 @@ module DerivedVariables::SalesLogVariables
       self.exmonth = exdate.month
       self.exyear = exdate.year
     end
+    self.deposit = value if outright_sale? && mortgage_not_used?
   end
 end
