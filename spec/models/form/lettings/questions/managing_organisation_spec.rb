@@ -74,46 +74,44 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
       end
     end
 
-    context "when user is support and org does own stock" do
+    context "when user is support" do
       let(:user) { create(:user, :support) }
-      let(:log_owning_org) { create(:organisation, name: "Owning org", holds_own_stock: true) }
+      let(:log_owning_org) { create(:organisation, name: "Owning org") }
       let(:log) { create(:lettings_log, owning_organisation: log_owning_org, managing_organisation: create(:organisation, name: "Managing org 1"), created_by: nil) }
       let!(:org_rel1) { create(:organisation_relationship, parent_organisation: log_owning_org, child_organisation: create(:organisation, name: "Managing org 2")) }
       let!(:org_rel2) { create(:organisation_relationship, parent_organisation: log_owning_org, child_organisation: create(:organisation, name: "Managing org 3")) }
 
-      let(:options) do
-        {
-          "" => "Select an option",
-          log.managing_organisation.id => "Managing org 1",
-          log_owning_org.id => "Owning org (Owning organisation)",
-          org_rel1.child_organisation.id => "Managing org 2",
-          org_rel2.child_organisation.id => "Managing org 3",
-        }
-      end
+      context "when org owns stock" do
+        let(:options) do
+          {
+            "" => "Select an option",
+            log.managing_organisation.id => "Managing org 1",
+            log_owning_org.id => "Owning org (Owning organisation)",
+            org_rel1.child_organisation.id => "Managing org 2",
+            org_rel2.child_organisation.id => "Managing org 3",
+          }
+        end
 
-      it "shows current managing agent at top, followed by the current owning organisation (with hint), followed by the managing agents of the current owning organisation" do
-        expect(question.displayed_answer_options(log, user)).to eq(options)
-      end
-    end
+        it "shows current managing agent at top, followed by the current owning organisation (with hint), followed by the managing agents of the current owning organisation" do
+          log_owning_org.update(holds_own_stock: true)
+          expect(question.displayed_answer_options(log, user)).to eq(options)
+        end
+       end
 
-    context "when user is support and org does not own stock" do
-      let(:user) { create(:user, :support) }
-      let(:log_owning_org) { create(:organisation, name: "Owning org", holds_own_stock: false) }
-      let(:log) { create(:lettings_log, owning_organisation: log_owning_org, managing_organisation: create(:organisation, name: "Managing org 1"), created_by: nil) }
-      let!(:org_rel1) { create(:organisation_relationship, parent_organisation: log_owning_org, child_organisation: create(:organisation, name: "Managing org 2")) }
-      let!(:org_rel2) { create(:organisation_relationship, parent_organisation: log_owning_org, child_organisation: create(:organisation, name: "Managing org 3")) }
+      context "when org does not own stock" do
+        let(:options) do
+          {
+            "" => "Select an option",
+            log.managing_organisation.id => "Managing org 1",
+            org_rel1.child_organisation.id => "Managing org 2",
+            org_rel2.child_organisation.id => "Managing org 3",
+          }
+        end
 
-      let(:options) do
-        {
-          "" => "Select an option",
-          log.managing_organisation.id => "Managing org 1",
-          org_rel1.child_organisation.id => "Managing org 2",
-          org_rel2.child_organisation.id => "Managing org 3",
-        }
-      end
-
-      it "shows current managing agent at top, followed by the managing agents of the current owning organisation" do
-        expect(question.displayed_answer_options(log, user)).to eq(options)
+        it "shows current managing agent at top, followed by the managing agents of the current owning organisation" do
+          log_owning_org.update(holds_own_stock: false)
+          expect(question.displayed_answer_options(log, user)).to eq(options)
+        end
       end
     end
 
