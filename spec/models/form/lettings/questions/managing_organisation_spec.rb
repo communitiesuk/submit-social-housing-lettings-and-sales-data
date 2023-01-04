@@ -69,7 +69,7 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
         }
       end
 
-      it "shows current managing agent at top, followed by user's org, followed by the managing agents of the user's org" do
+      it "shows current managing agent at top, followed by user's org (with hint), followed by the managing agents of the user's org" do
         expect(question.displayed_answer_options(log, user)).to eq(options)
       end
     end
@@ -91,7 +91,7 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
         }
       end
 
-      it "shows current managing agent at top, followed by the current owning organisation, followed by the managing agents of the current owning organisation" do
+      it "shows current managing agent at top, followed by the current owning organisation (with hint), followed by the managing agents of the current owning organisation" do
         expect(question.displayed_answer_options(log, user)).to eq(options)
       end
     end
