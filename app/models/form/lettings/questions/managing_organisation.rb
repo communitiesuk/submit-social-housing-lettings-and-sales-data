@@ -10,7 +10,6 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
     @answer_options = answer_options
   end
 
-  # def answer_options(log, current_user)
   def answer_options
     opts = { "" => "Select an option" }
 
@@ -41,9 +40,8 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
   end
 
   def label_from_value(value, log = nil, user = nil)
-  # def label_from_value(log = nil, user = nil)
-    @current_user = user
     @log = log
+    @current_user = user
 
     return unless value
 
