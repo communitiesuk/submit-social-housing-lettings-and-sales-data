@@ -119,16 +119,16 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
 
     context "when the owning-managing organisation relationship is deleted" do
       let(:user) { create(:user, :support) }
-      let(:owning_org) { create(:organisation, name: "OwningOrg", holds_own_stock: true) }
-      let(:managing_org) { create(:organisation, name: "ManagingOrg", holds_own_stock: false) }
+      let(:owning_org) { create(:organisation, name: "Owning org", holds_own_stock: true) }
+      let(:managing_org) { create(:organisation, name: "Managing org", holds_own_stock: false) }
       let!(:org_rel) { create(:organisation_relationship, parent_organisation: owning_org, child_organisation: managing_org) }
-      let(:log) { create(:lettings_log, owning_organisation: owning_org, managing_organisation: managing_org) }
+      let(:log) { create(:lettings_log, owning_organisation: owning_org, managing_organisation: managing_org, created_by: nil) }
 
       let(:options) do
         {
           "" => "Select an option",
-          owning_org.id => "OwningOrg (Owning organisation)",
-          managing_org.id => "ManagingOrg",
+          owning_org.id => "Owning org (Owning organisation)",
+          managing_org.id => "Managing org",
         }
       end
 
