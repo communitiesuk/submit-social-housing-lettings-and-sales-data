@@ -9,6 +9,7 @@ class Form::Sales::Subsections::OutrightSale < ::Form::Subsection
 
   def pages
     @pages ||= [
+      Form::Sales::Pages::PurchasePrice.new(nil, nil, self),
       Form::Sales::Pages::MortgageAmount.new("mortgage_amount_outright_sale", nil, self),
       Form::Sales::Pages::AboutDeposit.new("about_deposit_outright_sale", nil, self),
     ]
