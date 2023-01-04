@@ -61,9 +61,9 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
     end
 
     context "when user support" do
-      before do
-        question.current_user = create(:user, :support)
-      end
+      let!(:user) { create(:user, :support) }
+
+      let!(:log) { create(:lettings_log) }
 
       let(:expected_opts) do
         Organisation.all.each_with_object(options) do |organisation, hsh|
@@ -73,7 +73,7 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
       end
 
       it "shows all orgs" do
-        expect(question.answer_options).to eq(expected_opts)
+        expect(question.displayed_answer_options(log, user)).to eq(expected_opts)
       end
     end
   end
