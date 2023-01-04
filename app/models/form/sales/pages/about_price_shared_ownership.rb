@@ -1,13 +1,10 @@
-class Form::Sales::Pages::AboutPriceSocialHousing < ::Form::Page
+class Form::Sales::Pages::AboutPriceSharedOwnership < ::Form::Page
   def initialize(id, hsh, subsection)
     super
-    @id = "about_price_social_housing"
+    @id = "about_price_shared_ownership"
     @header = "About the price of the property"
     @description = ""
     @subsection = subsection
-    @depends_on = [{
-      "soctenant" => 1,
-    }]
   end
 
   def questions
