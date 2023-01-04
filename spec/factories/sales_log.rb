@@ -32,7 +32,7 @@ FactoryBot.define do
       age2 { 35 }
       builtype { 1 }
       ethnic { 3 }
-      ethnic_group { 12 }
+      ethnic_group { 17 }
       sex2 { "X" }
       buy2livein { "1" }
       ecstat1 { "1" }

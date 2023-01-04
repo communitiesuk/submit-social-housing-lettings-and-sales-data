@@ -700,9 +700,8 @@ RSpec.describe LettingsLog do
             context "when tenant is in receipt of housing benefit and universal credit" do
               it "correctly derives and saves weekly total shortfall" do
                 lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 6, hb: 8)
-                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                lettings_log.reload
                 expect(lettings_log.wtshortfall).to eq(122.5)
-                expect(record_from_db["wtshortfall"]).to eq(122.5)
               end
             end
           end
@@ -1893,7 +1892,7 @@ RSpec.describe LettingsLog do
     end
 
     context "when a question that has already been answered, no longer has met dependencies" do
-      let(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress, cbl: 1, preg_occ: 2, wchair: 1) }
+      let(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress, cbl: 1, preg_occ: 2, wchair: 2) }
 
       it "clears the answer" do
         expect { lettings_log.update!(preg_occ: nil) }.to change(lettings_log, :cbl).from(1).to(nil)
@@ -1911,20 +1910,19 @@ RSpec.describe LettingsLog do
         let(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress, illness: 1, illness_type_1: 1) }
 
         it "clears the answer" do
-          expect { lettings_log.update!(illness: 0) }.to change(lettings_log, :illness_type_1).from(1).to(nil)
+          expect { lettings_log.update!(illness: 2) }.to change(lettings_log, :illness_type_1).from(1).to(nil)
         end
       end
     end
 
     context "with two pages having the same question key, only one's dependency is met" do
-      let(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress, cbl: 0, preg_occ: 2, wchair: 1) }
+      let(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress, cbl: 0, preg_occ: 2, wchair: 2) }
 
       it "does not clear the value for answers that apply to both pages" do
         expect(lettings_log.cbl).to eq(0)
       end
 
       it "does clear the value for answers that do not apply for invalidated page" do
-        lettings_log.update!({ wchair: 1, sex2: "F", age2: 33 })
         lettings_log.update!({ cbl: 1 })
         lettings_log.update!({ preg_occ: 1 })
 
