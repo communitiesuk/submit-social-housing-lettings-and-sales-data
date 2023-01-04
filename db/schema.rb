@@ -415,6 +415,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_21_172821) do
     t.integer "ecstat4"
     t.integer "ecstat5"
     t.integer "ecstat6"
+    t.string "relat3"
     t.string "relat4"
     t.string "relat5"
     t.string "relat6"
