@@ -93,10 +93,10 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
         end
 
         it "shows current managing agent at top, followed by the current owning organisation (with hint), followed by the managing agents of the current owning organisation" do
-          log_owning_org.update(holds_own_stock: true)
+          log_owning_org.update!(holds_own_stock: true)
           expect(question.displayed_answer_options(log, user)).to eq(options)
         end
-       end
+      end
 
       context "when org does not own stock" do
         let(:options) do
@@ -109,7 +109,7 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
         end
 
         it "shows current managing agent at top, followed by the managing agents of the current owning organisation" do
-          log_owning_org.update(holds_own_stock: false)
+          log_owning_org.update!(holds_own_stock: false)
           expect(question.displayed_answer_options(log, user)).to eq(options)
         end
       end
@@ -135,7 +135,6 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
         expect(question.displayed_answer_options(log, user)).to eq(options)
       end
     end
-
   end
 
   it "is marked as derived" do

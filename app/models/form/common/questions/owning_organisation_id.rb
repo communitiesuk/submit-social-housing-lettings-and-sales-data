@@ -21,7 +21,7 @@ class Form::Common::Questions::OwningOrganisationId < ::Form::Question
     answer_options
   end
 
-  def label_from_value(value, log = nil, user = nil)
+  def label_from_value(value, _log = nil, _user = nil)
     return unless value
 
     answer_options[value]
