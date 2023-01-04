@@ -9,9 +9,9 @@ class Form::Sales::Subsections::HouseholdSituation < ::Form::Subsection
 
   def pages
     @pages ||= [
-      Form::Sales::Pages::BuyersOrganisations.new(nil, nil, self),
-      Form::Sales::Pages::LastAccommodation.new(nil, nil, self),
       Form::Sales::Pages::Buyer1PreviousTenure.new(nil, nil, self),
+      Form::Sales::Pages::LastAccommodation.new(nil, nil, self),
+      Form::Sales::Pages::BuyersOrganisations.new(nil, nil, self),
     ]
   end
 end
