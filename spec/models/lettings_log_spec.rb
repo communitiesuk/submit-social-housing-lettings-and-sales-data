@@ -1888,7 +1888,7 @@ RSpec.describe LettingsLog do
         soft_max: 89.54,
         hard_min: 10.87,
         hard_max: 100.99,
-        start_year: lettings_log.startdate&.year,
+        start_year: lettings_log.collection_start_year,
       )
     end
 
