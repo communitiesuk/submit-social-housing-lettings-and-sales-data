@@ -47,12 +47,8 @@ module Forms
 
     private
 
-      def upload_enabled?
-        FeatureToggle.upload_enabled?
-      end
-
       def storage_service
-        @storage_service ||= if upload_enabled?
+        @storage_service ||= if FeatureToggle.upload_enabled?
                                Storage::S3Service.new(
                                  Configuration::PaasConfigurationService.new,
                                  ENV["CSV_DOWNLOAD_PAAS_INSTANCE"],
