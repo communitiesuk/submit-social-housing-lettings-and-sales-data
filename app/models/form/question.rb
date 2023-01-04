@@ -151,7 +151,7 @@ class Form::Question
     end
   end
 
-  def label_from_value(value, user = nil)
+  def label_from_value(value, log = nil, user = nil)
     return unless value
 
     label = case type
