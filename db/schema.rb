@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_03_094948) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_04_093057) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -408,7 +408,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_03_094948) do
     t.bigint "updated_by_id"
     t.integer "details_known_1"
     t.integer "income1_value_check"
-    t.integer "mortgage"
+    t.decimal "mortgage", precision: 10, scale: 2
     t.integer "inc2mort"
     t.integer "mortgage_value_check"
     t.integer "ecstat3"
