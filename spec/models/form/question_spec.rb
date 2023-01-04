@@ -133,7 +133,19 @@ RSpec.describe Form::Question, type: :model do
       let(:page_id) { "person_2_working_situation" }
       let(:question_id) { "ecstat2" }
       let(:expected_answer_options) do
-        { "0" => { "value" => "Other" }, "1" => { "value" => "Prefer not to say" } }
+        {
+          "0" => { "value" => "Other" },
+          "1" => { "value" => "Full-time – 30 hours or more" },
+          "10" => { "value" => "Tenant prefers not to say" },
+          "2" => { "value" => "Part-time – Less than 30 hours" },
+          "3" => { "value" => "In government training into work, such as New Deal" },
+          "4" => { "value" => "Jobseeker" },
+          "5" => { "value" => "Retired" },
+          "6" => { "value" => "Not seeking work" },
+          "7" => { "value" => "Full-time student" },
+          "8" => { "value" => "Unable to work because of long term sick or disability" },
+          "divider" => { "value" => true },
+        }
       end
 
       it "does not include those options in the displayed options" do

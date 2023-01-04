@@ -83,7 +83,7 @@ FactoryBot.define do
       postcode_known { 1 }
       postcode_full { Faker::Address.postcode }
       reasonpref { 1 }
-      cbl { 1 }
+      cbl { 0 }
       chr { 1 }
       cap { 0 }
       reasonother { nil }

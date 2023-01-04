@@ -68,4 +68,15 @@ module Validations::SharedValidations
 
     { scope: status, date: date&.to_formatted_s(:govuk_date), deactivation_date: closest_reactivation&.deactivation_date&.to_formatted_s(:govuk_date) }
   end
+
+  def validate_valid_radio_option(record)
+    record.attributes.each do |question_id, _v|
+      question = record.form.get_question(question_id, record)
+
+      next unless question&.type == "radio"
+      next unless record[question_id].present? && !question.answer_options.key?(record[question_id].to_s) && question.page.routed_to?(record, nil)
+
+      record.errors.add(question_id, I18n.t("validations.invalid_option", question: question.check_answer_label&.downcase))
+    end
+  end
 end
