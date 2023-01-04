@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Pages::AboutPrice, type: :model do
+RSpec.describe Form::Sales::Pages::PurchasePrice, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
   let(:page_id) { nil }
@@ -16,11 +16,11 @@ RSpec.describe Form::Sales::Pages::AboutPrice, type: :model do
   end
 
   it "has the correct id" do
-    expect(page.id).to eq("about_price")
+    expect(page.id).to eq("purchase_price")
   end
 
   it "has the correct header" do
-    expect(page.header).to eq("About the price of the property")
+    expect(page.header).to eq("")
   end
 
   it "has the correct description" do
@@ -28,8 +28,6 @@ RSpec.describe Form::Sales::Pages::AboutPrice, type: :model do
   end
 
   it "has correct depends_on" do
-    expect(page.depends_on).to eq([{
-      "soctenant" => 2,
-    }])
+    expect(page.depends_on).to be_nil
   end
 end
