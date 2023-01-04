@@ -12,6 +12,7 @@ class Form::Sales::Subsections::DiscountedOwnershipScheme < ::Form::Subsection
       Form::Sales::Pages::LivingBeforePurchase.new("living_before_purchase_discounted_ownership", nil, self),
       Form::Sales::Pages::AboutPriceRtb.new(nil, nil, self),
       Form::Sales::Pages::AboutPriceNotRtb.new(nil, nil, self),
+      Form::Sales::Pages::MortgageAmount.new("mortgage_amount_discounted_ownership", nil, self),
       Form::Sales::Pages::AboutDeposit.new("about_deposit_discounted_ownership", nil, self),
     ]
   end
