@@ -52,44 +52,24 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
       end
     end
 
-    context "when user not support and owns own stock" do
-      let(:user) { create(:user, :data_coordinator, organisation: create(:organisation, holds_own_stock: true)) }
+    context "when user is not support" do
+      let(:user) { create(:user, :data_coordinator, organisation: create(:organisation, name: "User org")) }
 
-      let(:log) { create(:lettings_log) }
-      let!(:org_rel1) { create(:organisation_relationship, parent_organisation: user.organisation) }
-      let!(:org_rel2) { create(:organisation_relationship, parent_organisation: user.organisation) }
-
-      let(:options) do
-        {
-          "" => "Select an option",
-          user.organisation.id => "#{user.organisation.name} (Your organisation)",
-          org_rel1.child_organisation.id => org_rel1.child_organisation.name,
-          org_rel2.child_organisation.id => org_rel2.child_organisation.name,
-        }
-      end
-
-      it "shows managing agents with own org at the top" do
-        expect(question.displayed_answer_options(log, user)).to eq(options)
-      end
-    end
-
-    context "when user not support and does not own stock" do
-      let(:user) { create(:user, :data_coordinator, organisation: create(:organisation, holds_own_stock: false)) }
-
-      let(:log) { create(:lettings_log) }
-      let!(:org_rel1) { create(:organisation_relationship, parent_organisation: user.organisation) }
-      let!(:org_rel2) { create(:organisation_relationship, parent_organisation: user.organisation) }
+      let(:log) { create(:lettings_log, managing_organisation: create(:organisation, name: "Managing org 1")) }
+      let!(:org_rel1) { create(:organisation_relationship, parent_organisation: user.organisation, child_organisation: create(:organisation, name: "Managing org 2")) }
+      let!(:org_rel2) { create(:organisation_relationship, parent_organisation: user.organisation, child_organisation: create(:organisation, name: "Managing org 3")) }
 
       let(:options) do
         {
           "" => "Select an option",
-          user.organisation.id => "#{user.organisation.name} (Your organisation)",
-          org_rel1.child_organisation.id => org_rel1.child_organisation.name,
-          org_rel2.child_organisation.id => org_rel2.child_organisation.name,
+          log.managing_organisation.id => "Managing org 1",
+          user.organisation.id => "User org (Your organisation)",
+          org_rel1.child_organisation.id => "Managing org 2",
+          org_rel2.child_organisation.id => "Managing org 3",
         }
       end
 
-      it "shows managing agents with own org at the top" do
+      it "shows current managing agent at top, followed by user's org, followed by the managing agents of the user's org" do
         expect(question.displayed_answer_options(log, user)).to eq(options)
       end
     end
