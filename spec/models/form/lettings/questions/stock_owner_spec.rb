@@ -42,21 +42,44 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
       end
     end
 
-    context "when user not support and owns own stock" do
-      let(:user) { create(:user, :data_coordinator, organisation: create(:organisation, holds_own_stock: true)) }
-      let(:options) do
-        {
-          "" => "Select an option",
-          user.organisation.id => "#{user.organisation.name} (Your organisation)",
-        }
+    context "when user is not support" do
+      let!(:user) { create(:user, :data_coordinator, organisation: create(:organisation, name: "User org")) }
+
+      let!(:log) { create(:lettings_log, owning_organisation: create(:organisation, name: "Owning org 1")) }
+      let!(:org_rel1) { create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: create(:organisation, name: "Owning org 2")) }
+      let!(:org_rel2) { create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: create(:organisation, name: "Owning org 3")) }
+
+      context "when user's org owns stock" do
+        let(:options) do
+          {
+            "" => "Select an option",
+            log.owning_organisation.id => "Owning org 1",
+            user.organisation.id => "User org (Your organisation)",
+            org_rel1.parent_organisation.id => "Owning org 2",
+            org_rel2.parent_organisation.id => "Owning org 3"
+          }
+        end
+
+        it "shows current stock owner at top, followed by user's org (with hint), followed by the stock owners of the user's org" do
+          user.organisation.update!(holds_own_stock: true)
+          expect(question.displayed_answer_options(log, user)).to eq(options)
+        end
       end
 
-      before do
-        question.current_user = user
-      end
+      context "when user's org doesn't own stock" do
+        let(:options) do
+          {
+            "" => "Select an option",
+            log.owning_organisation.id => "Owning org 1",
+            org_rel1.parent_organisation.id => "Owning org 2",
+            org_rel2.parent_organisation.id => "Owning org 3"
+          }
+        end
 
-      it "shows stock owners with own org at the top" do
-        expect(question.answer_options).to eq(options)
+        it "shows current stock owner at top, followed by the stock owners of the user's org" do
+          user.organisation.update!(holds_own_stock: false)
+          expect(question.displayed_answer_options(log, user)).to eq(options)
+        end
       end
     end
 
