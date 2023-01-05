@@ -20,7 +20,41 @@ RSpec.describe BulkUpload::Lettings::RowParser do
       end
     end
 
-    describe "field_134" do
+    describe "#field_1" do
+      context "when null" do
+        let(:attributes) { { field_1: nil } }
+
+        it "returns an error" do
+          expect(parser.errors[:field_1]).to be_present
+        end
+      end
+
+      context "when incorrect data type" do
+        let(:attributes) { { field_1: "foo" } }
+
+        it "returns an error" do
+          expect(parser.errors[:field_1]).to be_present
+        end
+      end
+
+      context "when unpermitted value" do
+        let(:attributes) { { field_1: "101" } }
+
+        it "returns an error" do
+          expect(parser.errors[:field_1]).to be_present
+        end
+      end
+
+      context "when valid" do
+        let(:attributes) { { field_1: "1" } }
+
+        it "does not return any errors" do
+          expect(parser.errors[:field_1]).to be_blank
+        end
+      end
+    end
+
+    describe "#field_134" do
       context "when an unpermitted value" do
         let(:attributes) { { field_134: 3 } }
 

@@ -137,10 +137,27 @@ class BulkUpload::Lettings::RowParser
   attribute :field_133, :integer
   attribute :field_134, :integer
 
+  validates :field_1, presence: true, inclusion: { in: (1..12).to_a }
+
+  def attribute_set
+    @attribute_set ||= instance_variable_get(:@attributes)
+  end
+
+  def validate_data_types
+    unless attribute_set["field_1"].value_before_type_cast&.match?(/\A\d+\z/)
+      errors.add(:field_1, :invalid)
+    end
+  end
+
   def valid?
+    errors.clear
+
+    super
+
+    validate_data_types
+
     log.valid?
 
-    errors.clear
 
     log.errors.each do |error|
       field = field_for_attribute(error.attribute)
@@ -160,6 +177,7 @@ private
 
   def field_mapping
     {
+      field_1: :lettype,
       field_134: :renewal,
     }
   end
