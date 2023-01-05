@@ -11,6 +11,7 @@ class Form::Sales::Subsections::HouseholdSituation < ::Form::Subsection
     @pages ||= [
       Form::Sales::Pages::Buyer1PreviousTenure.new(nil, nil, self),
       Form::Sales::Pages::LastAccommodation.new(nil, nil, self),
+      Form::Sales::Pages::LastAccommodationLa.new(nil, nil, self),
       Form::Sales::Pages::BuyersOrganisations.new(nil, nil, self),
     ]
   end

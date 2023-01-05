@@ -67,7 +67,7 @@ FactoryBot.define do
       ecstat4 { 3 }
       ecstat5 { 2 }
       ecstat6 { 1 }
-      disabled { 2 }
+      disabled { 1 }
       deposit { 10_000 }
       cashdis { 1_000 }
       value { 110_000 }
@@ -81,6 +81,7 @@ FactoryBot.define do
       hhregresstill { 4 }
       ppcodenk { 1 }
       prevten { 1 }
+      previous_la_known { 0 }
     end
   end
 end
