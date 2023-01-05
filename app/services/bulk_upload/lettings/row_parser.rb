@@ -165,6 +165,10 @@ class BulkUpload::Lettings::RowParser
     end
   end
 
+  def questions
+    log.form.subsections.flat_map { |ss| ss.applicable_questions(log) }
+  end
+
 private
 
   def log
@@ -190,6 +194,12 @@ private
       attributes[k] = public_send(v)
     end
 
+    hash[:scheme] = scheme
+
     attributes
+  end
+
+  def scheme
+    @scheme ||= Scheme.find_by(old_visible_id: field_4)
   end
 end
