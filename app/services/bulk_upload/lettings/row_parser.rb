@@ -137,35 +137,31 @@ class BulkUpload::Lettings::RowParser
   attribute :field_133, :integer
   attribute :field_134, :integer
 
-  validates :field_1, presence: true, numericality: { in: (1..12) }
-  validates :field_4, numericality: { in: (1..999), allow_blank: true }
-  validates :field_4, presence: true, if: :field_4_presence_check
+  def valid?
+    log.valid?
 
-  validate :validate_possible_answers
+    errors.clear
 
-# delegate :valid?, to: :native_object
-# delegate :errors, to: :native_object
+    log.errors.each do |error|
+      field = field_for_attribute(error.attribute)
+      errors.add(field, error.type)
+    end
+  end
 
 private
 
-  def native_object
-    @native_object ||= LettingsLog.new(attributes_for_log)
+  def log
+    @log ||= LettingsLog.new(attributes_for_log)
+  end
+
+  def field_for_attribute(attribute)
+    field_mapping.invert[attribute]
   end
 
   def field_mapping
     {
       field_134: :renewal,
     }
-  end
-
-  def validate_possible_answers
-    field_mapping.each do |field, attribute|
-      possible_answers = FormHandler.instance.current_lettings_form.questions.find { |q| q.id == attribute.to_s }.answer_options.keys
-
-      unless possible_answers.include?(public_send(field))
-        errors.add(field, "Value supplied is not one of the permitted values")
-      end
-    end
   end
 
   def attributes_for_log
@@ -177,9 +173,5 @@ private
     end
 
     attributes
-  end
-
-  def field_4_presence_check
-    [1, 3, 5, 7, 9, 11].include?(field_1)
   end
 end
