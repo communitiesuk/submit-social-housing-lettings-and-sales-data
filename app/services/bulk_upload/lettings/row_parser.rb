@@ -138,6 +138,7 @@ class BulkUpload::Lettings::RowParser
   attribute :field_134, :integer
 
   validates :field_1, presence: true, inclusion: { in: (1..12).to_a }
+  validates :field_4, presence: { if: proc { [1, 3, 5, 7, 9, 11].include?(field_1) } }
 
   def attribute_set
     @attribute_set ||= instance_variable_get(:@attributes)
@@ -157,7 +158,6 @@ class BulkUpload::Lettings::RowParser
     validate_data_types
 
     log.valid?
-
 
     log.errors.each do |error|
       field = field_for_attribute(error.attribute)
