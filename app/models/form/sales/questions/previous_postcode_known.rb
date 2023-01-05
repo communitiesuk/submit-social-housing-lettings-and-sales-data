@@ -10,6 +10,7 @@ class Form::Sales::Questions::PreviousPostcodeKnown < ::Form::Question
     @conditional_for = {
       "ppostcode_full" => [0],
     }
+    @hint_text = "This is also known as the household’s 'last settled home'"
   end
 
   ANSWER_OPTIONS = {

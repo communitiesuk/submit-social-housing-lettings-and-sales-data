@@ -7,7 +7,7 @@ class Form::Sales::Questions::Prevloc < ::Form::Question
     @type = "select"
     @answer_options = ANSWER_OPTIONS
     @page = page
-    @hint_text = "This is also known as the household’s 'last settled home'"
+    @hint_text = ""
     @inferred_check_answers_value = {
       "condition" => {
         "previous_la_known" => 0,

@@ -32,7 +32,7 @@ RSpec.describe Form::Sales::Questions::PreviousPostcode, type: :model do
   end
 
   it "has the correct hint" do
-    expect(question.hint_text).to eq("This is also known as the household’s 'last settled home'")
+    expect(question.hint_text).to eq("")
   end
 
   it "has the correct width" do

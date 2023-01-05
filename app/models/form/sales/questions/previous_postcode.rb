@@ -7,7 +7,7 @@ class Form::Sales::Questions::PreviousPostcode < ::Form::Question
     @page = page
     @type = "text"
     @width = 5
-    @hint_text = "This is also known as the household’s 'last settled home'"
+    @hint_text = ""
     @inferred_check_answers_value = {
       "condition" => {
         "ppcodenk" => 1,
