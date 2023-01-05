@@ -43,4 +43,8 @@ RSpec.describe Form::Sales::Questions::PreviousPostcodeKnown, type: :model do
       "ppostcode_full" => [0],
     })
   end
+
+  it "has the correct hint" do
+    expect(question.hint_text).to eq("This is also known as the household’s 'last settled home'")
+  end
 end
