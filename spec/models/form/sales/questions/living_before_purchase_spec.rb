@@ -20,7 +20,7 @@ RSpec.describe Form::Sales::Questions::LivingBeforePurchase, type: :model do
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Number of years buyers living in the property before purchase")
+    expect(question.check_answer_label).to eq("Number of years living in the property before purchase")
   end
 
   it "has the correct type" do
