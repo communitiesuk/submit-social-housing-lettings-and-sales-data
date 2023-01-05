@@ -5,7 +5,6 @@ class Form::Sales::Pages::AboutDepositWithoutDiscount < ::Form::Page
     @description = ""
     @subsection = subsection
     @depends_on = [{ "is_type_discount?" => false }]
-
   end
 
   def questions
