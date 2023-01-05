@@ -184,6 +184,21 @@ RSpec.describe LettingsLog do
       expect(completed_lettings_log.not_started?).to be(false)
       expect(completed_lettings_log.completed?).to be(true)
     end
+
+    context "when only a subsection that is hidden in tasklist is not completed" do
+      let(:household_characteristics_subsection) { completed_lettings_log.form.get_subsection("household_characteristics") }
+
+      before do
+        allow(household_characteristics_subsection).to receive(:displayed_in_tasklist?).and_return(false)
+        completed_lettings_log.update!(tenancycode: nil)
+      end
+
+      it "is set to completed" do
+        expect(completed_lettings_log.in_progress?).to be(false)
+        expect(completed_lettings_log.not_started?).to be(false)
+        expect(completed_lettings_log.completed?).to be(true)
+      end
+    end
   end
 
   describe "weekly_net_income" do

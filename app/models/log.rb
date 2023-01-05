@@ -63,7 +63,7 @@ private
   end
 
   def all_fields_completed?
-    subsection_statuses = form.subsections.map { |subsection| subsection.status(self) }.uniq
+    subsection_statuses = form.subsections.map { |subsection| subsection.status(self) if subsection.displayed_in_tasklist?(self) }.uniq.compact
     subsection_statuses == [:completed]
   end
 
