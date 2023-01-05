@@ -146,6 +146,36 @@ unless Rails.env.test?
     child_organisation: managing_agent2,
   )
 
+  if (Rails.env.development? || Rails.env.review?) && SalesLog.count.zero?
+    SalesLog.find_or_create_by!(
+      saledate: Date.new(1, 1, 1),
+      purchid: "1",
+      ownershipsch: 1,
+      type: 2,
+      jointpur: 1,
+      jointmore: 1,
+    )
+
+    SalesLog.find_or_create_by!(
+      saledate: Date.new(1, 1, 1),
+      purchid: "1",
+      ownershipsch: 2,
+      type: 8,
+      jointpur: 1,
+      jointmore: 1,
+    )
+
+    SalesLog.find_or_create_by!(
+      saledate: Date.new(1, 1, 1),
+      purchid: "1",
+      ownershipsch: 3,
+      type: 10,
+      companybuy: 1,
+    )
+
+    pp "Seeded a sales log of each type"
+  end
+
   if Rails.env.development? || Rails.env.review?
     User.find_or_create_by!(
       name: "Provider",
@@ -273,9 +303,9 @@ unless Rails.env.test?
       units: 1,
       mobility_type: "W",
     )
+    pp "Seeded 3 dummy schemes"
   end
 
-  pp "Seeded 3 dummy schemes"
   if LaRentRange.count.zero?
     Dir.glob("config/rent_range_data/*.csv").each do |path|
       start_year = File.basename(path, ".csv")

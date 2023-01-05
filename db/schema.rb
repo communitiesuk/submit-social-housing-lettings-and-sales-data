@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_21_172821) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_04_093057) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -408,18 +408,33 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_21_172821) do
     t.bigint "updated_by_id"
     t.integer "details_known_1"
     t.integer "income1_value_check"
-    t.integer "mortgage"
+    t.decimal "mortgage", precision: 10, scale: 2
     t.integer "inc2mort"
     t.integer "mortgage_value_check"
     t.integer "ecstat3"
     t.integer "ecstat4"
     t.integer "ecstat5"
     t.integer "ecstat6"
-    t.string "relat3"
-    t.string "relat4"
-    t.string "relat5"
-    t.string "relat6"
+    t.integer "frombeds"
+    t.integer "staircase"
+    t.integer "stairbought"
+    t.integer "stairowned"
+    t.decimal "mrent", precision: 10, scale: 2
+    t.datetime "exdate", precision: nil
+    t.integer "exday"
+    t.integer "exmonth"
+    t.integer "exyear"
+    t.integer "resale"
+    t.decimal "deposit", precision: 10, scale: 2
+    t.decimal "cashdis", precision: 10, scale: 2
     t.integer "disabled"
+    t.integer "lanomagr"
+    t.integer "soctenant"
+    t.decimal "value", precision: 10, scale: 2
+    t.decimal "equity", precision: 10, scale: 2
+    t.decimal "discount", precision: 10, scale: 2
+    t.decimal "grant", precision: 10, scale: 2
+    t.integer "proplen"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
