@@ -7,6 +7,7 @@ class Form::Sales::Sections::Household < ::Form::Section
     @form = form
     @subsections = [
       Form::Sales::Subsections::HouseholdCharacteristics.new(nil, nil, self),
+      Form::Sales::Subsections::HouseholdSituation.new(nil, nil, self),
       Form::Sales::Subsections::HouseholdNeeds.new(nil, nil, self),
     ]
   end

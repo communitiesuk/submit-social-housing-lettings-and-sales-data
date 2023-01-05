@@ -20,4 +20,10 @@ module Validations::Sales::SoftValidations
     income_used_for_mortgage = (income1_used_for_mortgage? ? income1 : 0) + (income2_used_for_mortgage? ? income2 : 0)
     mortgage > income_used_for_mortgage * 5
   end
+
+  def wheelchair_when_not_disabled?
+    return false unless disabled == 2
+
+    wheel == 1
+  end
 end
