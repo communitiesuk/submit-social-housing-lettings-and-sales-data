@@ -64,6 +64,22 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
           user.organisation.update!(holds_own_stock: true)
           expect(question.displayed_answer_options(log, user)).to eq(options)
         end
+
+        context "when the owning-managing organisation relationship is deleted" do
+          let(:options) do
+            {
+              "" => "Select an option",
+              user.organisation.id => "User org (Your organisation)",
+              owning_org_2.id => "Owning org 2"
+            }
+          end
+          it "doesn't remove the housing provider from the list of allowed housing providers" do
+            log.update!(owning_organisation: owning_org_2)
+            expect(question.displayed_answer_options(log, user)).to eq(options)
+            org_rel.destroy!
+            expect(question.displayed_answer_options(log, user)).to eq(options)
+          end
+        end
       end
 
       context "when user's org doesn't own stock" do
