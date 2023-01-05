@@ -45,18 +45,18 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
     context "when user is not support" do
       let!(:user) { create(:user, :data_coordinator, organisation: create(:organisation, name: "User org")) }
 
-      let!(:log) { create(:lettings_log, owning_organisation: create(:organisation, name: "Owning org 1")) }
-      let!(:org_rel1) { create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: create(:organisation, name: "Owning org 2")) }
-      let!(:org_rel2) { create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: create(:organisation, name: "Owning org 3")) }
+      let!(:owning_org_1) { create(:organisation, name: "Owning org 1") }
+      let!(:owning_org_2) { create(:organisation, name: "Owning org 2") }
+      let!(:org_rel) { create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: owning_org_2) }
+      let!(:log) { create(:lettings_log, owning_organisation: owning_org_1) }
 
       context "when user's org owns stock" do
         let(:options) do
           {
             "" => "Select an option",
-            log.owning_organisation.id => "Owning org 1",
+            owning_org_1.id => "Owning org 1",
             user.organisation.id => "User org (Your organisation)",
-            org_rel1.parent_organisation.id => "Owning org 2",
-            org_rel2.parent_organisation.id => "Owning org 3"
+            owning_org_2.id => "Owning org 2"
           }
         end
 
@@ -70,9 +70,8 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
         let(:options) do
           {
             "" => "Select an option",
-            log.owning_organisation.id => "Owning org 1",
-            org_rel1.parent_organisation.id => "Owning org 2",
-            org_rel2.parent_organisation.id => "Owning org 3"
+            owning_org_1.id => "Owning org 1",
+            owning_org_2.id => "Owning org 2"
           }
         end
 
