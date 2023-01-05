@@ -156,6 +156,7 @@ class BulkUpload::Lettings::RowParser
     super
 
     validate_data_types
+    validate_nulls
 
     log.valid?
 
@@ -165,11 +166,11 @@ class BulkUpload::Lettings::RowParser
     end
   end
 
+private
+
   def questions
     log.form.subsections.flat_map { |ss| ss.applicable_questions(log) }
   end
-
-private
 
   def log
     @log ||= LettingsLog.new(attributes_for_log)
@@ -179,10 +180,24 @@ private
     field_mapping.find { |h| h[:attribute] == attribute }[:name]
   end
 
+  def validate_nulls
+    field_mapping.each do |hash|
+      question = questions.find { |q| q.id == hash[:question_id] }
+
+      next unless question
+
+      completed = question.completed?(log)
+
+      unless completed
+        errors.add(hash[:name], :blank)
+      end
+    end
+  end
+
   def field_mapping
     [
       { name: :field_1, attribute: :lettype },
-      { name: :field_7, attribute: :tenancycode },
+      { name: :field_7, attribute: :tenancycode, question_id: "tenancycode" },
       { name: :field_134, attribute: :renewal },
     ]
   end

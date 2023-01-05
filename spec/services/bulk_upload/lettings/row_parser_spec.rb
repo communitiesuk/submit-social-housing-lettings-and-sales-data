@@ -92,7 +92,7 @@ RSpec.describe BulkUpload::Lettings::RowParser do
       context "when null" do
         let(:attributes) { { field_7: nil } }
 
-        xit "returns an error" do
+        it "returns an error" do
           expect(parser.errors[:field_7]).to be_present
         end
       end
