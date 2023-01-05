@@ -1,10 +1,10 @@
-class Form::Lettings::Questions::HousingProvider < ::Form::Question
+class Form::Lettings::Questions::StockOwner < ::Form::Question
   attr_accessor :current_user, :log
 
   def initialize(id, hsh, page)
     super
     @id = "owning_organisation_id"
-    @check_answer_label = "Housing provider"
+    @check_answer_label = "Stock owner"
     @header = "Which organisation owns this property?"
     @type = "select"
     @page = page
@@ -19,7 +19,7 @@ class Form::Lettings::Questions::HousingProvider < ::Form::Question
       answer_opts[current_user.organisation.id] = "#{current_user.organisation.name} (Your organisation)"
     end
 
-    answer_opts.merge(housing_providers_answer_options)
+    answer_opts.merge(stock_owners_answer_options)
   end
 
   def displayed_answer_options(log, user = nil)
@@ -44,12 +44,12 @@ class Form::Lettings::Questions::HousingProvider < ::Form::Question
 
     return false if current_user.support?
 
-    housing_providers = current_user.organisation.housing_providers
+    stock_owners = current_user.organisation.stock_owners
 
     if current_user.organisation.holds_own_stock?
-      housing_providers.count.zero?
+      stock_owners.count.zero?
     else
-      housing_providers.count <= 1
+      stock_owners.count <= 1
     end
   end
 
@@ -63,11 +63,11 @@ private
     true
   end
 
-  def housing_providers_answer_options
+  def stock_owners_answer_options
     if current_user.support?
       Organisation
     else
-      current_user.organisation.housing_providers
+      current_user.organisation.stock_owners
     end.pluck(:id, :name).to_h
   end
 end

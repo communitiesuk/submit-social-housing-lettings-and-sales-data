@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Lettings::Questions::HousingProvider, type: :model do
+RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
@@ -22,7 +22,7 @@ RSpec.describe Form::Lettings::Questions::HousingProvider, type: :model do
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Housing provider")
+    expect(question.check_answer_label).to eq("Stock owner")
   end
 
   it "has the correct type" do
@@ -55,7 +55,7 @@ RSpec.describe Form::Lettings::Questions::HousingProvider, type: :model do
         question.current_user = user
       end
 
-      it "shows housing providers with own org at the top" do
+      it "shows stock owners with own org at the top" do
         expect(question.answer_options).to eq(options)
       end
     end
@@ -94,24 +94,24 @@ RSpec.describe Form::Lettings::Questions::HousingProvider, type: :model do
     context "when org holds own stock", :aggregate_failures do
       let(:user) { create(:user, :data_coordinator, organisation: create(:organisation, holds_own_stock: true)) }
 
-      context "when housing providers == 0" do
+      context "when stock owners == 0" do
         before do
-          user.organisation.housing_providers.delete_all
+          user.organisation.stock_owners.delete_all
         end
 
         it "is hidden in check answers" do
-          expect(user.organisation.housing_providers.count).to eq(0)
+          expect(user.organisation.stock_owners.count).to eq(0)
           expect(question.hidden_in_check_answers?(nil, user)).to be true
         end
       end
 
-      context "when housing providers != 0" do
+      context "when stock owners != 0" do
         before do
           create(:organisation_relationship, child_organisation: user.organisation)
         end
 
         it "is visible in check answers" do
-          expect(user.organisation.housing_providers.count).to eq(1)
+          expect(user.organisation.stock_owners.count).to eq(1)
           expect(question.hidden_in_check_answers?(nil, user)).to be false
         end
       end
@@ -120,25 +120,25 @@ RSpec.describe Form::Lettings::Questions::HousingProvider, type: :model do
     context "when org does not hold own stock", :aggregate_failures do
       let(:user) { create(:user, :data_coordinator, organisation: create(:organisation, holds_own_stock: false)) }
 
-      context "when housing providers <= 1" do
+      context "when stock owners <= 1" do
         before do
           create(:organisation_relationship, child_organisation: user.organisation)
         end
 
         it "is hidden in check answers" do
-          expect(user.organisation.housing_providers.count).to eq(1)
+          expect(user.organisation.stock_owners.count).to eq(1)
           expect(question.hidden_in_check_answers?(nil, user)).to be true
         end
       end
 
-      context "when housing providers >= 2" do
+      context "when stock owners >= 2" do
         before do
           create(:organisation_relationship, child_organisation: user.organisation)
           create(:organisation_relationship, child_organisation: user.organisation)
         end
 
         it "is visible in check answers" do
-          expect(user.organisation.housing_providers.count).to eq(2)
+          expect(user.organisation.stock_owners.count).to eq(2)
           expect(question.hidden_in_check_answers?(nil, user)).to be false
         end
       end

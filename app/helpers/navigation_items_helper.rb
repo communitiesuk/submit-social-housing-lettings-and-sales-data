@@ -17,7 +17,7 @@ module NavigationItemsHelper
         NavigationItem.new("Schemes", "/schemes", subnav_supported_housing_schemes_path?(path)),
         NavigationItem.new("Users", users_organisation_path(current_user.organisation), subnav_users_path?(path)),
         NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}", subnav_details_path?(path)),
-        (NavigationItem.new("Housing providers", housing_providers_organisation_path(current_user.organisation), housing_providers_path?(path)) if FeatureToggle.managing_owning_enabled?),
+        (NavigationItem.new("Stock owners", stock_owners_organisation_path(current_user.organisation), stock_owners_path?(path)) if FeatureToggle.managing_owning_enabled?),
         (NavigationItem.new("Managing agents", managing_agents_organisation_path(current_user.organisation), managing_agents_path?(path)) if FeatureToggle.managing_owning_enabled?),
       ].compact
     else
@@ -26,7 +26,7 @@ module NavigationItemsHelper
         FeatureToggle.sales_log_enabled? ? NavigationItem.new("Sales logs", sales_logs_path, sales_logs_current?(path)) : nil,
         NavigationItem.new("Users", users_organisation_path(current_user.organisation), subnav_users_path?(path)),
         NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}", subnav_details_path?(path)),
-        (NavigationItem.new("Housing providers", housing_providers_organisation_path(current_user.organisation), housing_providers_path?(path)) if FeatureToggle.managing_owning_enabled?),
+        (NavigationItem.new("Stock owners", stock_owners_organisation_path(current_user.organisation), stock_owners_path?(path)) if FeatureToggle.managing_owning_enabled?),
         (NavigationItem.new("Managing agents", managing_agents_organisation_path(current_user.organisation), managing_agents_path?(path)) if FeatureToggle.managing_owning_enabled?),
       ].compact
     end
@@ -40,7 +40,7 @@ module NavigationItemsHelper
         NavigationItem.new("Schemes", "/organisations/#{current_organisation_id}/schemes", subnav_supported_housing_schemes_path?(path)),
         NavigationItem.new("Users", "/organisations/#{current_organisation_id}/users", subnav_users_path?(path)),
         NavigationItem.new("About this organisation", "/organisations/#{current_organisation_id}", subnav_details_path?(path)),
-        (NavigationItem.new("Housing providers", housing_providers_organisation_path(current_organisation_id), housing_providers_path?(path)) if FeatureToggle.managing_owning_enabled?),
+        (NavigationItem.new("Stock owners", stock_owners_organisation_path(current_organisation_id), stock_owners_path?(path)) if FeatureToggle.managing_owning_enabled?),
         (NavigationItem.new("Managing agents", managing_agents_organisation_path(current_organisation_id), managing_agents_path?(path)) if FeatureToggle.managing_owning_enabled?),
       ].compact
     else
@@ -49,7 +49,7 @@ module NavigationItemsHelper
         FeatureToggle.sales_log_enabled? ? NavigationItem.new("Sales logs", "/organisations/#{current_organisation_id}/sales-logs", sales_logs_current?(path)) : nil,
         NavigationItem.new("Users", "/organisations/#{current_organisation_id}/users", subnav_users_path?(path)),
         NavigationItem.new("About this organisation", "/organisations/#{current_organisation_id}", subnav_details_path?(path)),
-        (NavigationItem.new("Housing providers", housing_providers_organisation_path(current_organisation_id), housing_providers_path?(path)) if FeatureToggle.managing_owning_enabled?),
+        (NavigationItem.new("Stock owners", stock_owners_organisation_path(current_organisation_id), stock_owners_path?(path)) if FeatureToggle.managing_owning_enabled?),
         (NavigationItem.new("Managing agents", managing_agents_organisation_path(current_organisation_id), managing_agents_path?(path)) if FeatureToggle.managing_owning_enabled?),
       ].compact
     end
@@ -104,8 +104,8 @@ private
     path.include?("/organisations") && path.include?("/details")
   end
 
-  def housing_providers_path?(path)
-    path.include?("/housing-providers")
+  def stock_owners_path?(path)
+    path.include?("/stock-owners")
   end
 
   def managing_agents_path?(path)

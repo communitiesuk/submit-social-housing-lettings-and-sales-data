@@ -75,11 +75,11 @@ RSpec.describe FormController, type: :request do
     let(:page) { Capybara::Node::Simple.new(response.body) }
     let(:managing_organisation) { create(:organisation) }
     let(:managing_organisation_too) { create(:organisation) }
-    let(:housing_provider) { create(:organisation) }
+    let(:stock_owner) { create(:organisation) }
     let(:support_user) { create(:user, :support) }
 
     before do
-      organisation.housing_providers << housing_provider
+      organisation.stock_owners << stock_owner
       organisation.managing_agents << managing_organisation
       organisation.managing_agents << managing_organisation_too
       organisation.reload
@@ -99,7 +99,7 @@ RSpec.describe FormController, type: :request do
       end
 
       before do
-        lettings_log.update!(owning_organisation: housing_provider, created_by: user, managing_organisation: organisation)
+        lettings_log.update!(owning_organisation: stock_owner, created_by: user, managing_organisation: organisation)
         lettings_log.reload
       end
 
@@ -142,8 +142,8 @@ RSpec.describe FormController, type: :request do
         {
           id: lettings_log.id,
           lettings_log: {
-            page: "housing_provider",
-            owning_organisation_id: housing_provider.id,
+            page: "stock_owner",
+            owning_organisation_id: stock_owner.id,
           },
         }
       end
@@ -162,13 +162,13 @@ RSpec.describe FormController, type: :request do
       end
     end
 
-    context "with only adding the housing provider" do
+    context "with only adding the stock owner" do
       let(:params) do
         {
           id: lettings_log.id,
           lettings_log: {
-            page: "housing_provider",
-            owning_organisation_id: housing_provider.id,
+            page: "stock_owner",
+            owning_organisation_id: stock_owner.id,
           },
         }
       end
@@ -420,7 +420,7 @@ RSpec.describe FormController, type: :request do
           let(:page) { Capybara::Node::Simple.new(response.body) }
           let(:managing_organisation) { create(:organisation) }
           let(:managing_organisation_too) { create(:organisation) }
-          let(:housing_provider) { create(:organisation) }
+          let(:stock_owner) { create(:organisation) }
           let(:params) do
             {
               id: lettings_log.id,
@@ -432,11 +432,11 @@ RSpec.describe FormController, type: :request do
           end
 
           before do
-            organisation.housing_providers << housing_provider
+            organisation.stock_owners << stock_owner
             organisation.managing_agents << managing_organisation
             organisation.managing_agents << managing_organisation_too
             organisation.reload
-            lettings_log.update!(owning_organisation: housing_provider, created_by: user, managing_organisation: organisation)
+            lettings_log.update!(owning_organisation: stock_owner, created_by: user, managing_organisation: organisation)
             lettings_log.reload
           end
 

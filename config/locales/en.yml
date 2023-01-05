@@ -116,7 +116,7 @@ en:
     organisation:
       name_missing: "Enter the name of the organisation"
       provider_type_missing: "Select the organisation type"
-      housing_provider:
+      stock_owner:
         blank: "You must choose a stock owner"
         already_added: "You have already added this stock owner"
         does_not_own_stock: "You can only add stock owners who own stock, which this organisation does not."
