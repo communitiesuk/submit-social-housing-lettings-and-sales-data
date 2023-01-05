@@ -117,6 +117,7 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
 
     context "when the owning-managing organisation relationship is deleted" do
       let(:user) { create(:user, :support) }
+      
       let(:owning_org) { create(:organisation, name: "Owning org", holds_own_stock: true) }
       let(:managing_org) { create(:organisation, name: "Managing org", holds_own_stock: false) }
       let!(:org_rel) { create(:organisation_relationship, parent_organisation: owning_org, child_organisation: managing_org) }
