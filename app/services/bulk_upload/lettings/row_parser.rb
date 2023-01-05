@@ -176,25 +176,25 @@ private
   end
 
   def field_for_attribute(attribute)
-    field_mapping.invert[attribute]
+    field_mapping.find { |h| h[:attribute] == attribute }[:name]
   end
 
   def field_mapping
-    {
-      field_1: :lettype,
-      field_134: :renewal,
-    }
+    [
+      { name: :field_1, attribute: :lettype },
+      { name: :field_7, attribute: :tenancycode },
+      { name: :field_134, attribute: :renewal },
+    ]
   end
 
   def attributes_for_log
-    hash = field_mapping.invert
     attributes = {}
 
-    hash.map do |k, v|
-      attributes[k] = public_send(v)
+    field_mapping.map do |h|
+      attributes[h[:attribute]] = public_send(h[:name])
     end
 
-    hash[:scheme] = scheme
+    attributes[:scheme] = scheme
 
     attributes
   end
