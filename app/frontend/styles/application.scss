@@ -26,6 +26,7 @@ $govuk-breakpoints: (
 @import "button";
 @import "card";
 @import "document-list";
+@import "feedback";
 @import "filter";
 @import "filter-layout";
 @import "header";
@@ -67,4 +68,8 @@ $govuk-breakpoints: (
   @include govuk-media-query($until: tablet) {
     width: 100%;
   }
+}
+
+.govuk-footer {
+  border-top: govuk-spacing(2) solid $govuk-brand-colour;
 }
