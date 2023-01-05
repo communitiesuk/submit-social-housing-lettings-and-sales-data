@@ -16,6 +16,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdSituation, type: :model do
       %w[
         buyer1_previous_tenure
         last_accommodation
+        last_accommodation_la
         buyers_organisations
       ],
     )

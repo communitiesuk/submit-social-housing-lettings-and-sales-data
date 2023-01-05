@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_03_135135) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_04_164318) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -427,7 +427,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_03_135135) do
     t.string "ppostc1"
     t.string "ppostc2"
     t.string "prevloc"
-    t.boolean "previous_la_known"
+    t.integer "previous_la_known"
     t.integer "hhregres"
     t.integer "hhregresstill"
     t.integer "prevten"
