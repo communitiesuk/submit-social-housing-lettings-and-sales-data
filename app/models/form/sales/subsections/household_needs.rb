@@ -9,8 +9,11 @@ class Form::Sales::Subsections::HouseholdNeeds < ::Form::Subsection
 
   def pages
     @pages ||= [
-      Form::Sales::Pages::HouseholdWheelchair.new(nil, nil, self),
+      Form::Sales::Pages::ArmedForces.new(nil, nil, self),
+      Form::Sales::Pages::BuyerStillServing.new(nil, nil, self),
       Form::Sales::Pages::HouseholdDisability.new(nil, nil, self),
+      Form::Sales::Pages::HouseholdWheelchair.new(nil, nil, self),
+      Form::Sales::Pages::HouseholdWheelchairCheck.new("wheelchair_check", nil, self),
     ]
   end
 end

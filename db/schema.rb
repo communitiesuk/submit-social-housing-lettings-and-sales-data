@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_04_093057) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_04_164318) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -433,12 +433,27 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_04_093057) do
     t.decimal "cashdis", precision: 10, scale: 2
     t.integer "disabled"
     t.integer "lanomagr"
+    t.integer "wheel_value_check"
     t.integer "soctenant"
     t.decimal "value", precision: 10, scale: 2
     t.decimal "equity", precision: 10, scale: 2
     t.decimal "discount", precision: 10, scale: 2
     t.decimal "grant", precision: 10, scale: 2
+    t.integer "pregyrha"
+    t.integer "pregla"
+    t.integer "pregghb"
+    t.integer "pregother"
+    t.string "ppostcode_full"
+    t.boolean "is_previous_la_inferred"
+    t.integer "ppcodenk"
+    t.string "ppostc1"
+    t.string "ppostc2"
+    t.string "prevloc"
+    t.integer "previous_la_known"
+    t.integer "hhregres"
+    t.integer "hhregresstill"
     t.integer "proplen"
+    t.integer "prevten"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
