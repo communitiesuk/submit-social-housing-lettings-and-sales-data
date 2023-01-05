@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Questions::Buyer1Mortgage, type: :model do
+RSpec.describe Form::Sales::Questions::Buyer2Mortgage, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
@@ -12,15 +12,15 @@ RSpec.describe Form::Sales::Questions::Buyer1Mortgage, type: :model do
   end
 
   it "has the correct id" do
-    expect(question.id).to eq("inc1mort")
+    expect(question.id).to eq("inc2mort")
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Was buyer 1's income used for a mortgage application?")
+    expect(question.header).to eq("Was buyer 2's income used for a mortgage application?")
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Buyer 1's income used for mortgage application")
+    expect(question.check_answer_label).to eq("Buyer 2's income used for mortgage application")
   end
 
   it "has the correct type" do
@@ -39,6 +39,6 @@ RSpec.describe Form::Sales::Questions::Buyer1Mortgage, type: :model do
   end
 
   it "has the correct check_answers_card_number" do
-    expect(question.check_answers_card_number).to eq(1)
+    expect(question.check_answers_card_number).to eq(2)
   end
 end
