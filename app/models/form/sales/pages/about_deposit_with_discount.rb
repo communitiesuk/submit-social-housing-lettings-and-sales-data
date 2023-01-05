@@ -1,9 +1,11 @@
-class Form::Sales::Pages::AboutDeposit < ::Form::Page
+class Form::Sales::Pages::AboutDepositWithDiscount < ::Form::Page
   def initialize(id, hsh, subsection)
     super
+    @id = "about_deposit_with_discount"
     @header = "About the deposit"
     @description = ""
     @subsection = subsection
+    @depends_on = [{ "type" => 18 }]
   end
 
   def questions

@@ -19,7 +19,8 @@ class Form::Sales::Subsections::SharedOwnershipScheme < ::Form::Subsection
       Form::Sales::Pages::PreviousBedrooms.new(nil, nil, self),
       Form::Sales::Pages::AboutPriceSharedOwnership.new(nil, nil, self),
       Form::Sales::Pages::MortgageAmount.new("mortgage_amount_shared_ownership", nil, self),
-      Form::Sales::Pages::AboutDeposit.new("about_deposit_shared_ownership", nil, self),
+      Form::Sales::Pages::AboutDepositWithDiscount.new(nil, nil, self),
+      Form::Sales::Pages::AboutDepositWithoutDiscount.new("about_deposit_shared_ownership", nil, self),
       Form::Sales::Pages::MonthlyRent.new(nil, nil, self),
     ]
   end
