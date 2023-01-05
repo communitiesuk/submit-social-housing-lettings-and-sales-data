@@ -25,21 +25,33 @@ module LocationsHelper
 
   def display_location_attributes(location)
     base_attributes = [
-      { name: "Postcode", value: location.postcode },
-      { name: "Location name", value: location.name, edit: true },
-      { name: "Local authority", value: location.location_admin_district },
-      { name: "Total number of units at this location", value: location.units },
-      { name: "Common type of unit", value: location.type_of_unit },
-      { name: "Mobility type", value: location.mobility_type },
-      { name: "Location code", value: location.location_code },
-      { name: "Availability", value: location_availability(location) },
+      { name: "Postcode", value: location.postcode, attribute: "postcode" },
+      { name: "Location name", value: location.name, attribute: "name" },
+      { name: "Local authority", value: location.location_admin_district, attribute: "local_authority" },
+      { name: "Number of units", value: location.units, attribute: "units" },
+      { name: "Most common unit", value: location.type_of_unit, attribute: "type_of_unit" },
+      { name: "Mobility standards", value: location.mobility_type, attribute: "mobility_standards" },
+      { name: "Location code", value: location.location_code, attribute: "location_code" },
+      { name: "Availability", value: location_availability(location), attribute: "availability" },
     ]
 
     if FeatureToggle.location_toggle_enabled?
-      base_attributes.append({ name: "Status", value: location.status })
+      base_attributes.append({ name: "Status", value: location.status, attribute: "status" })
     end
 
     base_attributes
+  end
+
+  def display_location_attributes_for_check_answers(location)
+    [
+      { name: "Postcode", value: location.postcode, attribute: "postcode" },
+      { name: "Location name", value: location.name, attribute: "name" },
+      { name: "Local authority", value: location.location_admin_district, attribute: "local_authority" },
+      { name: "Number of units", value: location.units, attribute: "units" },
+      { name: "Most common unit", value: location.type_of_unit, attribute: "type_of_unit" },
+      { name: "Mobility standards", value: location.mobility_type, attribute: "mobility_standards" },
+      { name: "Availability", value: location&.startdate&.to_formatted_s(:govuk_date), attribute: "availability" },
+    ]
   end
 
   def location_availability(location)
@@ -51,6 +63,14 @@ module LocationsHelper
       end
     end
     availability.strip
+  end
+
+  def location_edit_path(location, attribute)
+    send("scheme_location_#{attribute}_path", location.scheme, location, referrer: "check_answers", route: params[:route])
+  end
+
+  def action_text_helper(attr, location)
+    attr[:value].blank? || (attr[:attribute] == "availability" && location.startdate.blank?) ? "Answer" : "Change"
   end
 
   def toggle_location_link(location)

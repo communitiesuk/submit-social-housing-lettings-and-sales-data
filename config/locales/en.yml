@@ -372,6 +372,12 @@ en:
 
 
     location:
+      postcode_blank: "Enter a postcode"
+      units: "The units at this location must be a number"
+      type_of_unit: "Select the most common type of unit at this location"
+      mobility_standards: "Select the mobility standard for the majority of the units at this location"
+      startdate_invalid: "Enter a valid day, month and year when the first property became available at this location"
+      startdate_out_of_range: "Availability date must be on or after the %{date}"
       toggle_date:
         not_selected: "Select one of the options"
         invalid: "Enter a valid day, month and year"
@@ -425,11 +431,11 @@ en:
 
   questions:
     location:
-      name: "Location name (optional)"
-      units: "Total number of units at this location"
+      postcode: "What is the postcode?"
+      name: "What is the name of this location?"
+      units: "How many units are at this location?"
       type_of_unit: "What is the most common type of unit at this location?"
-      startdate: "When did the first property in this location become available under this scheme? (optional)"
-      add_another_location: "Do you want to add another location?"
+      startdate: "When did the first property in this location become available under this scheme?"
       mobility_type: "What are the mobility standards for the majority of units in this location?"
       toggle_active:
         apply_from: "When should this change apply?"
@@ -439,16 +445,17 @@ en:
     descriptions:
       location:
         mobility_type:
-          W: "The majority of units are suitable for someone who uses a wheelchair and offer the full use of all rooms and facilities."
-          A: "For example, the majority of units have been fitted with stairlifts, ramps, level access showers or grab rails."
-          N: "The majority of units are not designed to wheelchair-user standards or fitted with any equipment and adaptations."
+          W: "Suitable for someone who uses a wheelchair and offers the full use of all rooms and facilities."
+          A: "Fitted with stairlifts, ramps, level access showers or grab rails."
+          N: "Not designed to wheelchair-user standards or fitted with any equipment or adaptations."
 
   hints:
     location:
       postcode: "For example, SW1P 4DF."
       name: "This is how you refer to this location within your organisation"
-      units: "A unit can be a bedroom in a shared house or flat, or a house with 4 bedrooms. Do not include bedrooms used for wardens, managers, volunteers or sleep-in staff."
+      units: "A unit is the space being let. For example, the property might be a block of flats and the unit would be the specific flat being let. A unit can also be a bedroom in a shared house or flat. Do not include spaces used for staff."
       toggle_active: "If the date is before %{date}, select ‘From the start of the current collection period’ because the previous period has now closed."
+      startdate: "For example, 27 3 2021"
     scheme:
       toggle_active: "If the date is before %{date}, select ‘From the start of the current collection period’ because the previous period has now closed."
 

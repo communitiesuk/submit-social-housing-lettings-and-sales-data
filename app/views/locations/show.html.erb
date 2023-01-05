@@ -16,8 +16,8 @@
             <% display_location_attributes(@location).each do |attr| %>
                 <%= summary_list.row do |row| %>
                 <% row.key { attr[:name] } %>
-                <% row.value { attr[:name].eql?("Status") ? status_tag(attr[:value]) : details_html(attr) } %>
-                <% row.action(text: "Change", href: scheme_location_edit_name_path(scheme_id: @scheme.id, location_id: @location.id)) if attr[:edit] %>
+                <% row.value { attr[:attribute].eql?("status") ? status_tag(attr[:value]) : details_html(attr) } %>
+                <% row.action(text: "Change", href: scheme_location_name_path(@scheme, @location, referrer: "details")) if attr[:attribute] == "name" %>
                 <% end %>
             <% end %>
         <% end %>

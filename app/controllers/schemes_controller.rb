@@ -237,7 +237,7 @@ private
     when "secondary-client-group"
       scheme_support_path(@scheme)
     when "support"
-      new_scheme_location_path(@scheme)
+      scheme_check_answers_path(@scheme)
     when "details"
       if @scheme.arrangement_type_before_type_cast == "D"
         scheme_primary_client_group_path(@scheme)

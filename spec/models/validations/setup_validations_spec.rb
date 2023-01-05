@@ -34,7 +34,7 @@ RSpec.describe Validations::SetupValidations do
   describe "#validate_scheme" do
     context "with a deactivated location" do
       let(:scheme) { create(:scheme) }
-      let(:location) { create(:location, scheme:, startdate: nil) }
+      let(:location) { create(:location, scheme:) }
 
       before do
         create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), location:)
@@ -59,7 +59,7 @@ RSpec.describe Validations::SetupValidations do
 
     context "with a location that is reactivating soon" do
       let(:scheme) { create(:scheme) }
-      let(:location) { create(:location, scheme:, startdate: nil) }
+      let(:location) { create(:location, scheme:) }
 
       before do
         create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), location:)
@@ -156,7 +156,7 @@ RSpec.describe Validations::SetupValidations do
   describe "#validate_location" do
     context "with a deactivated location" do
       let(:scheme) { create(:scheme) }
-      let(:location) { create(:location, scheme:, startdate: nil) }
+      let(:location) { create(:location, scheme:) }
 
       before do
         create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), location:)
@@ -181,7 +181,7 @@ RSpec.describe Validations::SetupValidations do
 
     context "with a location that is reactivating soon" do
       let(:scheme) { create(:scheme) }
-      let(:location) { create(:location, scheme:, startdate: nil) }
+      let(:location) { create(:location, scheme:) }
 
       before do
         create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), location:)

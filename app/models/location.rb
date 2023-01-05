@@ -1,6 +1,13 @@
 class Location < ApplicationRecord
-  validate :validate_postcode
-  validates :units, :type_of_unit, :mobility_type, presence: true
+  validates :postcode, on: :postcode, presence: { message: I18n.t("validations.location.postcode_blank") }
+  validate :validate_postcode, on: :postcode, if: proc { |model| model.postcode.presence }
+  validates :location_admin_district, on: :location_admin_district, presence: { message: I18n.t("validations.location_admin_district") }
+  validates :units, on: :units, presence: { message: I18n.t("validations.location.units") }
+  validates :type_of_unit, on: :type_of_unit, presence: { message: I18n.t("validations.location.type_of_unit") }
+  validates :mobility_type, on: :mobility_type, presence: { message: I18n.t("validations.location.mobility_standards") }
+  validates :startdate, on: :startdate, presence: { message: I18n.t("validations.location.startdate_invalid") }
+  validate :validate_startdate, on: :startdate, if: proc { |model| model.startdate.presence }
+  validate :validate_confirmed
   belongs_to :scheme
   has_many :lettings_logs, class_name: "LettingsLog"
   has_many :location_deactivation_periods, class_name: "LocationDeactivationPeriod"
@@ -10,8 +17,6 @@ class Location < ApplicationRecord
   before_save :lookup_postcode!, if: :postcode_changed?
 
   auto_strip_attributes :name
-
-  attr_accessor :add_another_location
 
   scope :search_by_postcode, ->(postcode) { where("REPLACE(postcode, ' ', '') ILIKE ?", "%#{postcode.delete(' ')}%") }
   scope :search_by_name, ->(name) { where("name ILIKE ?", "%#{name}%") }
@@ -409,16 +414,33 @@ class Location < ApplicationRecord
     status == :reactivating_soon
   end
 
+  def validate_postcode
+    if !postcode&.match(POSTCODE_REGEXP)
+      error_message = I18n.t("validations.postcode")
+      errors.add :postcode, error_message
+    else
+      self.postcode = PostcodeService.clean(postcode)
+      if postcode_changed?
+        self.location_admin_district = nil
+        self.location_code = nil
+      end
+    end
+  end
+
+  def validate_startdate
+    unless startdate.between?(scheme.available_from, Time.zone.local(2200, 1, 1))
+      error_message = I18n.t("validations.location.startdate_out_of_range", date: scheme.available_from.to_formatted_s(:govuk_date))
+      errors.add :startdate, error_message
+    end
+  end
+
+  def validate_confirmed
+    self.confirmed = [postcode, location_admin_district, location_code, units, type_of_unit, mobility_type].all?(&:present?)
+  end
+
 private
 
   PIO = PostcodeService.new
-
-  def validate_postcode
-    if postcode.nil? || !postcode&.match(POSTCODE_REGEXP)
-      error_message = I18n.t("validations.postcode")
-      errors.add :postcode, error_message
-    end
-  end
 
   def lookup_postcode!
     result = PIO.lookup(postcode)

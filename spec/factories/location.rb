@@ -7,7 +7,7 @@ FactoryBot.define do
     mobility_type { %w[A M N W X].sample }
     location_code { "E09000033" }
     location_admin_district { "Westminster" }
-    startdate { nil }
+    startdate { Time.zone.local(2022, 4, 1) }
     confirmed { true }
     scheme
     trait :export do
