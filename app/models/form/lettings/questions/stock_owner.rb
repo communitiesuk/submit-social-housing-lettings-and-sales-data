@@ -34,7 +34,10 @@ class Form::Lettings::Questions::StockOwner < ::Form::Question
     answer_options
   end
 
-  def label_from_value(value, _log = nil, _user = nil)
+  def label_from_value(value, log = nil, user = nil)
+    @log = log
+    @current_user = user
+
     return unless value
 
     answer_options[value]
