@@ -83,7 +83,7 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
       end
     end
 
-    context "when user support" do
+    context "when user is support" do
       let!(:user) { create(:user, :support) }
 
       let!(:log) { create(:lettings_log) }
