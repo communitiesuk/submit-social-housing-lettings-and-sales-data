@@ -56,7 +56,7 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
             "" => "Select an option",
             owning_org_1.id => "Owning org 1",
             user.organisation.id => "User org (Your organisation)",
-            owning_org_2.id => "Owning org 2"
+            owning_org_2.id => "Owning org 2",
           }
         end
 
@@ -70,9 +70,10 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
             {
               "" => "Select an option",
               user.organisation.id => "User org (Your organisation)",
-              owning_org_2.id => "Owning org 2"
+              owning_org_2.id => "Owning org 2",
             }
           end
+
           it "doesn't remove the housing provider from the list of allowed housing providers" do
             log.update!(owning_organisation: owning_org_2)
             expect(question.displayed_answer_options(log, user)).to eq(options)
@@ -87,7 +88,7 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
           {
             "" => "Select an option",
             owning_org_1.id => "Owning org 1",
-            owning_org_2.id => "Owning org 2"
+            owning_org_2.id => "Owning org 2",
           }
         end
 
