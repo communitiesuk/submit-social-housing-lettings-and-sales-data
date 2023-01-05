@@ -80,10 +80,12 @@ class FormHandler
 
   def use_fake_forms!
     @directories = ["spec/fixtures/forms"]
+    @forms = get_all_forms
   end
 
   def use_real_forms!
     @directories = ["config/forms"]
+    @forms = get_all_forms
   end
 
 private
