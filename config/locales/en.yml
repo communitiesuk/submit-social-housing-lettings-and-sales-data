@@ -59,6 +59,10 @@ en:
             file:
               blank: Select which file to upload
               not_csv: Your file must be in CSV format
+        forms/bulk_upload_lettings/needstype:
+          attributes:
+            needstype:
+              blank: You must answer needs type
 
   activerecord:
     errors:
@@ -458,6 +462,8 @@ en:
       startdate: "For example, 27 3 2021"
     scheme:
       toggle_active: "If the date is before %{date}, select ‘From the start of the current collection period’ because the previous period has now closed."
+    bulk_upload:
+      needstype: "General needs housing includes both self-contained and shared housing without support or specific adaptations. Supported housing can include direct access hostels, group homes, residential care and nursing homes."
 
   warnings:
     location:

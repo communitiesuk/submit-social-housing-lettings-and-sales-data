@@ -22,6 +22,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_04_164318) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "filename"
+    t.integer "needstype"
     t.index ["identifier"], name: "index_bulk_uploads_on_identifier", unique: true
     t.index ["user_id"], name: "index_bulk_uploads_on_user_id"
   end

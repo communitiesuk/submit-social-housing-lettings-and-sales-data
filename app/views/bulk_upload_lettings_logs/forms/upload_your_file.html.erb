@@ -6,6 +6,7 @@
   <div class="govuk-grid-column-two-thirds">
     <%= form_with model: @form, scope: :form, url: bulk_upload_lettings_log_path(id: "upload-your-file"), method: :patch do |f| %>
       <%= f.hidden_field :year %>
+      <%= f.hidden_field :needstype %>
 
       <%= f.govuk_error_summary %>
 
