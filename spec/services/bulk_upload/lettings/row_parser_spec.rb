@@ -5,6 +5,14 @@ RSpec.describe BulkUpload::Lettings::RowParser do
 
   let(:attributes) { {} }
 
+  around do |example|
+    FormHandler.instance.use_real_forms!
+
+    example.run
+
+    FormHandler.instance.use_fake_forms!
+  end
+
   describe "validations" do
     before do
       parser.valid?
@@ -67,6 +75,14 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         let(:attributes) { { field_1: "1", field_4: nil } }
 
         it "cannot be nulled" do
+          expect(parser.errors[:field_4]).to be_present
+        end
+      end
+
+      context "when matching scheme cannot be found" do
+        let(:attributes) { { field_1: "1", field_4: "123" } }
+
+        xit "returns an error" do
           expect(parser.errors[:field_4]).to be_present
         end
       end

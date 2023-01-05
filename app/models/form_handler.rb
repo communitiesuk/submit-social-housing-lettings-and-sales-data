@@ -78,6 +78,14 @@ class FormHandler
     forms.count { |form| form.start_date < now && now < form.end_date } > 1
   end
 
+  def use_fake_forms!
+    @directories = ["spec/fixtures/forms"]
+  end
+
+  def use_real_forms!
+    @directories = ["config/forms"]
+  end
+
 private
 
   def get_all_forms
@@ -85,6 +93,6 @@ private
   end
 
   def directories
-    Rails.env.test? ? ["spec/fixtures/forms"] : ["config/forms"]
+    @directories ||= Rails.env.test? ? ["spec/fixtures/forms"] : ["config/forms"]
   end
 end
