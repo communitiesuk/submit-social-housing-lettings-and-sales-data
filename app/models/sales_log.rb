@@ -115,4 +115,8 @@ class SalesLog < Log
   def right_to_buy?
     [9, 14, 27].include?(type)
   end
+
+  def is_type_discount?
+    type == 18
+  end
 end

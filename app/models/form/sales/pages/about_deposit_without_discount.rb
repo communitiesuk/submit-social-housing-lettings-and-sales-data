@@ -4,23 +4,8 @@ class Form::Sales::Pages::AboutDepositWithoutDiscount < ::Form::Page
     @header = "About the deposit"
     @description = ""
     @subsection = subsection
-    @depends_on = [
-      { "type" => 2 },
-      { "type" => 24 },
-      { "type" => 16 },
-      { "type" => 28 },
-      { "type" => 31 },
-      { "type" => 30 },
-      { "type" => 8 },
-      { "type" => 14 },
-      { "type" => 27 },
-      { "type" => 9 },
-      { "type" => 29 },
-      { "type" => 21 },
-      { "type" => 22 },
-      { "type" => 10 },
-      { "type" => 12 },
-    ]
+    @depends_on = [{ "is_type_discount?" => false }]
+
   end
 
   def questions

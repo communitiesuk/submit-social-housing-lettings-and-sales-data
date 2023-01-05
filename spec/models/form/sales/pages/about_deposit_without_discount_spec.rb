@@ -29,23 +29,7 @@ RSpec.describe Form::Sales::Pages::AboutDepositWithoutDiscount, type: :model do
 
   it "has correct depends_on" do
     expect(page.depends_on).to eq(
-      [
-        { "type" => 2 },
-        { "type" => 24 },
-        { "type" => 16 },
-        { "type" => 28 },
-        { "type" => 31 },
-        { "type" => 30 },
-        { "type" => 8 },
-        { "type" => 14 },
-        { "type" => 27 },
-        { "type" => 9 },
-        { "type" => 29 },
-        { "type" => 21 },
-        { "type" => 22 },
-        { "type" => 10 },
-        { "type" => 12 },
-      ],
+      [{ "is_type_discount?" => false }],
     )
   end
 end

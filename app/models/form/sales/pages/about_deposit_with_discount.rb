@@ -5,7 +5,7 @@ class Form::Sales::Pages::AboutDepositWithDiscount < ::Form::Page
     @header = "About the deposit"
     @description = ""
     @subsection = subsection
-    @depends_on = [{ "type" => 18 }]
+    @depends_on = [{ "is_type_discount?" => true }]
   end
 
   def questions
