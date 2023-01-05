@@ -24,6 +24,7 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
         previous_bedrooms
         about_price_shared_ownership
         mortgage_amount_shared_ownership
+        about_deposit_with_discount
         about_deposit_shared_ownership
         monthly_rent
       ],
