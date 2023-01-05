@@ -82,6 +82,10 @@ FactoryBot.define do
       ppcodenk { 1 }
       prevten { 1 }
       previous_la_known { 0 }
+      relat3 { "P" }
+      relat4 { "P" }
+      relat5 { "P" }
+      relat6 { "P" }
     end
   end
 end
