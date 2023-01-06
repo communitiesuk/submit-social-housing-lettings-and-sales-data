@@ -1,0 +1,40 @@
+<% content_for :title, "Add a location to this scheme" %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+        text: "Back",
+        href: case params[:referrer]
+              when "check_local_authority"
+                scheme_location_check_answers_path(@scheme, @location, route: params[:route])
+              else
+                scheme_location_postcode_path(@scheme, @location, route: params[:route], referrer: params[:referrer])
+              end,
+      ) %>
+<% end %>
+
+<%= form_for(@location, method: :patch, url: scheme_location_local_authority_path(@scheme, @location, route: params[:route], referrer: params[:referrer])) do |f| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= f.govuk_error_summary %>
+
+      <%= render partial: "organisations/headings", locals: { main: "What is the local authority of #{@location.postcode}?", sub: @scheme.service_name } %>
+
+      <%= f.govuk_collection_select :location_admin_district,
+                                    local_authorities_selection,
+                                    :name,
+                                    :name,
+                                    label: { text: "Start typing to search for your local authority" },
+                                    "data-controller": %w[conditional-filter accessible-autocomplete] %>
+
+      <div class="govuk-button-group">
+        <% if params[:referrer] == "check_answers" || params[:referrer] == "check_local_authority" %>
+          <%= f.govuk_submit "Save changes" %>
+          <%= govuk_link_to "Cancel", scheme_location_check_answers_path(@scheme, @location, route: params[:route]), secondary: true %>
+        <% else %>
+          <%= f.govuk_submit "Save and continue" %>
+          <%= govuk_link_to "Skip for now", scheme_location_name_path(@scheme, @location), secondary: true %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

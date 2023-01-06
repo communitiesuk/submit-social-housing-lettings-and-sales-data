@@ -55,25 +55,42 @@ module SchemesHelpers
   end
 
   def fill_in_and_save_location
-    fill_in "Postcode", with: "AA11AA"
-    fill_in "Location name (optional)", with: "Some name"
-    fill_in "Total number of units at this location", with: 5
-    fill_in "Day", with: 2
-    fill_in "Month", with: 2
-    fill_in "Year", with: 2022
+    click_link "Locations"
+    click_button "Add a location"
+    fill_in with: "AA11AA"
+    click_button "Save and continue"
+    fill_in with: "Adur"
+    fill_in with: "Some name"
+    click_button "Save and continue"
+    fill_in with: 5
+    click_button "Save and continue"
     choose "Self-contained house"
-    choose "location-add-another-location-no-field"
+    click_button "Save and continue"
     choose "location-mobility-type-none-field"
+    click_button "Save and continue"
+    fill_in "Day", with: 2
+    fill_in "Month", with: 5
+    fill_in "Year", with: 2022
     click_button "Save and continue"
   end
 
   def fill_in_and_save_second_location
-    fill_in "Postcode", with: "AA12AA"
-    fill_in "Location name (optional)", with: "Other name"
-    fill_in "Total number of units at this location", with: 2
+    click_link "Locations"
+    click_button "Add a location"
+    fill_in with: "AA12AA"
+    click_button "Save and continue"
+    fill_in with: "Adur"
+    fill_in with: "Other name"
+    click_button "Save and continue"
+    fill_in with: 2
+    click_button "Save and continue"
     choose "Self-contained house"
-    choose "location-add-another-location-no-field"
+    click_button "Save and continue"
     choose "location-mobility-type-none-field"
+    click_button "Save and continue"
+    fill_in "Day", with: 2
+    fill_in "Month", with: 5
+    fill_in "Year", with: 2022
     click_button "Save and continue"
   end
 

@@ -24,7 +24,7 @@ class BulkUploadLettingsLogsController < ApplicationController
 private
 
   def current_year
-    FormHandler.instance.forms["current_lettings"].start_date.year
+    FormHandler.instance.current_collection_start_year
   end
 
   def in_crossover_period?
@@ -37,6 +37,8 @@ private
                 Forms::BulkUploadLettings::Year.new(form_params)
               when "prepare-your-file"
                 Forms::BulkUploadLettings::PrepareYourFile.new(form_params)
+              when "needstype"
+                Forms::BulkUploadLettings::Needstype.new(form_params)
               when "upload-your-file"
                 Forms::BulkUploadLettings::UploadYourFile.new(form_params.merge(current_user:))
               when "checking-file"
@@ -47,6 +49,6 @@ private
   end
 
   def form_params
-    params.fetch(:form, {}).permit(:year, :file)
+    params.fetch(:form, {}).permit(:year, :needstype, :file)
   end
 end

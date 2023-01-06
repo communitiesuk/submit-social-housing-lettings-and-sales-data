@@ -1,0 +1,21 @@
+<% content_for :before_content do %>
+  <%= govuk_back_link href: @form.back_path %>
+<% end %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= form_with model: @form, scope: :form, url: bulk_upload_lettings_log_path(id: "needstype"), method: :patch do |f| %>
+      <%= f.govuk_error_summary %>
+      <%= f.hidden_field :year %>
+
+      <%= f.govuk_collection_radio_buttons :needstype,
+            @form.options,
+            :id,
+            :name,
+            hint: { text: I18n.t("hints.bulk_upload.needstype") },
+            legend: { text: "What is the needs type?", size: "l" },
+            caption: { text: "Upload lettings logs in bulk (#{@form.year_combo})", size: "l" } %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

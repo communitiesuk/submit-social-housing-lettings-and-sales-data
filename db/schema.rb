@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_16_122909) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_04_164318) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,6 +22,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_16_122909) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "filename"
+    t.integer "needstype"
     t.index ["identifier"], name: "index_bulk_uploads_on_identifier", unique: true
     t.index ["user_id"], name: "index_bulk_uploads_on_user_id"
   end
@@ -401,27 +402,63 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_16_122909) do
     t.integer "inc1mort"
     t.integer "income2"
     t.integer "income2nk"
-    t.integer "prevown"
     t.integer "savingsnk"
     t.integer "savings"
+    t.integer "prevown"
     t.string "sex3"
+    t.bigint "updated_by_id"
     t.integer "details_known_1"
-    t.string "relat3"
     t.integer "income1_value_check"
-    t.integer "mortgage"
+    t.decimal "mortgage", precision: 10, scale: 2
     t.integer "inc2mort"
     t.integer "mortgage_value_check"
-    t.bigint "updated_by_id"
     t.integer "ecstat3"
     t.integer "ecstat4"
     t.integer "ecstat5"
     t.integer "ecstat6"
+    t.string "relat3"
     t.string "relat4"
     t.string "relat5"
     t.string "relat6"
-    t.string "sex4"
-    t.string "sex5"
-    t.string "sex6"
+    t.integer "frombeds"
+    t.integer "staircase"
+    t.integer "stairbought"
+    t.integer "stairowned"
+    t.decimal "mrent", precision: 10, scale: 2
+    t.datetime "exdate", precision: nil
+    t.integer "exday"
+    t.integer "exmonth"
+    t.integer "exyear"
+    t.integer "resale"
+    t.decimal "deposit", precision: 10, scale: 2
+    t.decimal "cashdis", precision: 10, scale: 2
+    t.integer "disabled"
+    t.integer "lanomagr"
+    t.integer "wheel_value_check"
+    t.integer "soctenant"
+    t.decimal "value", precision: 10, scale: 2
+    t.decimal "equity", precision: 10, scale: 2
+    t.decimal "discount", precision: 10, scale: 2
+    t.decimal "grant", precision: 10, scale: 2
+    t.integer "pregyrha"
+    t.integer "pregla"
+    t.integer "pregghb"
+    t.integer "pregother"
+    t.string "ppostcode_full"
+    t.boolean "is_previous_la_inferred"
+    t.integer "ppcodenk"
+    t.string "ppostc1"
+    t.string "ppostc2"
+    t.string "prevloc"
+    t.integer "previous_la_known"
+    t.integer "hhregres"
+    t.integer "hhregresstill"
+    t.integer "proplen"
+    t.integer "prevten"
+    t.integer "savings_value_check"
+    t.integer "deposit_value_check"
+    t.integer "hb"
+    t.integer "mortgageused"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"

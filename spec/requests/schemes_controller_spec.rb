@@ -834,10 +834,10 @@ RSpec.describe SchemesController, type: :request do
       context "when updating support" do
         let(:params) { { scheme: { intended_stay: "Medium stay", support_type: "Low level", page: "support" } } }
 
-        it "renders add location to this scheme successful update" do
+        it "renders the check answers page" do
           follow_redirect!
           expect(response).to have_http_status(:ok)
-          expect(page).to have_content("Add a location to this scheme")
+          expect(page).to have_content("Check your answers before creating this scheme")
         end
 
         it "updates a scheme with valid params" do
@@ -1000,7 +1000,7 @@ RSpec.describe SchemesController, type: :request do
             expect(scheme_to_update.reload.confirmed?).to eq(true)
           end
 
-          it "marks all the scheme locations as confirmed" do
+          it "marks all the scheme locations as confirmed given they are complete" do
             expect(scheme_to_update.locations.count > 0).to eq(true)
             scheme_to_update.locations.each do |location|
               expect(location.confirmed?).to eq(true)
@@ -1117,10 +1117,10 @@ RSpec.describe SchemesController, type: :request do
       context "when updating support" do
         let(:params) { { scheme: { intended_stay: "Medium stay", support_type: "Low level", page: "support" } } }
 
-        it "renders confirm secondary group after successful update" do
+        it "renders scheme check your answers page after successful update" do
           follow_redirect!
           expect(response).to have_http_status(:ok)
-          expect(page).to have_content("Add a location to this scheme")
+          expect(page).to have_content("Check your answers before creating this scheme")
         end
 
         it "updates a scheme with valid params" do

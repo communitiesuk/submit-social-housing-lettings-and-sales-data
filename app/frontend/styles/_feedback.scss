@@ -1,0 +1,122 @@
+.gem-c-feedback {
+  background: govuk-colour("white");
+  margin-top: govuk-spacing(6);
+
+  @include govuk-media-query($from: desktop) {
+    margin-top: govuk-spacing(9);
+  }
+
+  // New design has the box flush with edges of smaller screens
+  // We need to compensate for `govuk-width-container` margins:
+  @include govuk-media-query($until: tablet) {
+    margin-right: govuk-spacing(-3);
+    margin-left: govuk-spacing(-3);
+  }
+  @include govuk-media-query($from: tablet, $until: desktop) {
+    margin-right: govuk-spacing(-6);
+    margin-left: govuk-spacing(-6);
+  }
+  // Scoped to the feedback component temporarily
+  [hidden] {
+    // stylelint-disable-next-line declaration-no-important
+    display: none !important;
+  }
+}
+
+.gem-c-feedback__prompt {
+  background-color: govuk-colour("light-grey");
+  color: govuk-colour("black");
+  border-top: 1px solid $govuk-border-colour;
+  outline: 0;
+}
+
+.gem-c-feedback__prompt-content {
+  display: flex;
+  flex-direction: column;
+  padding: 0 govuk-spacing(3);
+  @include govuk-media-query($from: tablet) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.gem-c-feedback__prompt-questions {
+  text-align: left;
+  padding: govuk-spacing(4) 0;
+  @include govuk-media-query($from: tablet) {
+    margin: 0 govuk-spacing(3);
+  }
+}
+
+.gem-c-feedback__prompt-question-answer {
+  display: flex;
+  align-items: center;
+  @include govuk-media-query($until: mobile) {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+.gem-c-feedback__prompt-question {
+  @include govuk-font(19, $weight: bold);
+  @include govuk-media-query($from: tablet) {
+    @include govuk-font(16, $weight: bold);
+  }
+
+  margin: 0;
+  padding-bottom: govuk-spacing(2);
+
+  &:focus {
+    outline: 0;
+  }
+  @include govuk-media-query($from: mobile) {
+    padding-bottom: 0;
+    margin-right: govuk-spacing(2);
+  }
+}
+
+.gem-c-feedback__prompt-link {
+  @include govuk-font(19);
+  background: transparent;
+  color: govuk-colour("black");
+  box-shadow: 0 3px 0 govuk-colour("black");
+  border: 1px govuk-colour("black") solid;
+  margin-bottom: 0;
+  width: 100%;
+
+  &:hover {
+    // backup style for browsers that don't support rgba
+    background: govuk-colour("mid-grey");
+    background: rgba(govuk-colour("black"), .2);
+    color: govuk-colour("black");
+  }
+
+  &:active:focus:not(:hover) {
+    background: govuk-colour("yellow");
+  }
+  @include govuk-media-query($from: tablet) {
+    @include govuk-font(16);
+  }
+
+  position: relative;
+
+  &:focus:not(:active):not(:hover) {
+    border-color: govuk-colour("black");
+  }
+
+  &:focus,
+  &:active {
+    color: $govuk-focus-text-colour;
+  }
+}
+
+.gem-c-feedback__prompt-link:link,
+.gem-c-feedback__prompt-link:visited {
+  color: govuk-colour("black");
+
+  &:focus,
+  &:active {
+    color: $govuk-focus-text-colour;
+  }
+}

@@ -9,7 +9,7 @@
       <% end %>
       <ul class="app-task-list__items">
         <% section.subsections.map do |subsection| %>
-          <% if subsection.applicable_questions(@log).count > 0 || !subsection.enabled?(@log) %>
+          <% if subsection.displayed_in_tasklist?(@log) && (subsection.applicable_questions(@log).count > 0 || !subsection.enabled?(@log)) %>
             <% subsection_status = subsection.status(@log) %>
             <li class="app-task-list__item">
               <span class="app-task-list__task-name" id="<%= subsection.id.dasherize %>">

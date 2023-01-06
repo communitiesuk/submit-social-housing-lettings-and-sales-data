@@ -7,19 +7,19 @@ class OrganisationRelationshipsController < ApplicationController
 
   before_action :organisations
   before_action :target_organisation, only: %i[
-    remove_housing_provider
+    remove_stock_owner
     remove_managing_agent
-    delete_housing_provider
+    delete_stock_owner
     delete_managing_agent
   ]
 
-  def housing_providers
-    housing_providers = organisation.housing_providers
-    unpaginated_filtered_housing_providers = filtered_collection(housing_providers, search_term)
+  def stock_owners
+    stock_owners = organisation.stock_owners
+    unpaginated_filtered_stock_owners = filtered_collection(stock_owners, search_term)
 
-    @pagy, @housing_providers = pagy(unpaginated_filtered_housing_providers)
+    @pagy, @stock_owners = pagy(unpaginated_filtered_stock_owners)
     @searched = search_term.presence
-    @total_count = housing_providers.size
+    @total_count = stock_owners.size
   end
 
   def managing_agents
@@ -31,7 +31,7 @@ class OrganisationRelationshipsController < ApplicationController
     @total_count = managing_agents.size
   end
 
-  def add_housing_provider
+  def add_stock_owner
     @organisation_relationship = organisation.parent_organisation_relationships.new
   end
 
@@ -39,14 +39,14 @@ class OrganisationRelationshipsController < ApplicationController
     @organisation_relationship = organisation.child_organisation_relationships.new
   end
 
-  def create_housing_provider
+  def create_stock_owner
     @organisation_relationship = organisation.parent_organisation_relationships.new(organisation_relationship_params)
-    if @organisation_relationship.save(context: :housing_provider)
-      flash[:notice] = "#{@organisation_relationship.parent_organisation.name} is now one of #{current_user.data_coordinator? ? 'your' : "this organisation's"} housing providers"
-      redirect_to housing_providers_organisation_path
+    if @organisation_relationship.save(context: :stock_owner)
+      flash[:notice] = "#{@organisation_relationship.parent_organisation.name} is now one of #{current_user.data_coordinator? ? 'your' : "this organisation's"} stock owners"
+      redirect_to stock_owners_organisation_path
     else
       @organisations = Organisation.where.not(id: organisation.id).pluck(:id, :name)
-      render "organisation_relationships/add_housing_provider", status: :unprocessable_entity
+      render "organisation_relationships/add_stock_owner", status: :unprocessable_entity
     end
   end
 
@@ -61,15 +61,15 @@ class OrganisationRelationshipsController < ApplicationController
     end
   end
 
-  def remove_housing_provider; end
+  def remove_stock_owner; end
 
-  def delete_housing_provider
+  def delete_stock_owner
     OrganisationRelationship.find_by!(
       child_organisation: organisation,
       parent_organisation: target_organisation,
     ).destroy!
-    flash[:notice] = "#{target_organisation.name} is no longer one of #{current_user.data_coordinator? ? 'your' : "this organisation's"} housing providers"
-    redirect_to housing_providers_organisation_path
+    flash[:notice] = "#{target_organisation.name} is no longer one of #{current_user.data_coordinator? ? 'your' : "this organisation's"} stock owners"
+    redirect_to stock_owners_organisation_path
   end
 
   def remove_managing_agent; end

@@ -1,0 +1,34 @@
+<% title = @location.name %>
+<% content_for :title, title %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+    text: "Back",
+    href: case params[:route]
+          when "locations"
+            scheme_locations_path(@scheme)
+          else
+            :back
+          end,
+  ) %>
+<% end %>
+
+<%= render partial: "organisations/headings", locals: { main: "Check your answers", sub: "Add a location to #{@scheme.service_name}" } %>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+        <%= govuk_summary_list do |summary_list| %>
+            <% display_location_attributes_for_check_answers(@location).each do |attr| %>
+                <%= summary_list.row do |row| %>
+                <% row.key { attr[:name] } %>
+                <% row.value { details_html(attr) } %>
+                <% row.action(text: action_text_helper(attr, @location), href: location_edit_path(@location, attr[:attribute])) %>
+                <% end %>
+            <% end %>
+        <% end %>
+    </div>
+</div>
+<div class="govuk-button-group">
+  <%= govuk_button_to "Save and return to locations", scheme_location_confirm_path(@scheme, @location, route: params[:route]), method: :patch %>
+  <%= govuk_button_link_to "Cancel", scheme_locations_path(@scheme), secondary: true %>
+</div>

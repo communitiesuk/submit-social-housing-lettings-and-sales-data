@@ -130,7 +130,7 @@
         <%= content_for?(:content) ? yield(:content) : yield %>
       </main>
     </div>
-
+    <%= render partial: "layouts/feedback" %>
     <%= render partial: "layouts/footer" %>
   </body>
 </html>

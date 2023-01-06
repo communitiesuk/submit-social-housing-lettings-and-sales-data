@@ -74,9 +74,9 @@ RSpec.describe Organisation, type: :model do
         )
       end
 
-      it "has correct housing_providers" do
-        expect(child_organisation.housing_providers).to eq([organisation])
-        expect(grandchild_organisation.housing_providers).to eq([child_organisation])
+      it "has correct stock_owners" do
+        expect(child_organisation.stock_owners).to eq([organisation])
+        expect(grandchild_organisation.stock_owners).to eq([child_organisation])
       end
     end
 
