@@ -229,6 +229,7 @@ private
       joint: %i[field_133],
       startertenancy: %i[field_8],
       tenancy: %i[field_9],
+      declaration: %i[field_132],
     }
   end
 
@@ -299,6 +300,7 @@ private
     attributes["joint"] = field_133
     attributes["startertenancy"] = field_8
     attributes["tenancy"] = field_9
+    attributes["declaration"] = field_132
 
     attributes
   end
