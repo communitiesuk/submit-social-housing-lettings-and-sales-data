@@ -6,7 +6,7 @@ RSpec.describe Form::Sales::Questions::PersonKnown, type: :model do
   let(:question_id) { "details_known_1" }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
-  let(:person_index) { 1 }
+  let(:person_index) { 2 }
 
   it "has correct page" do
     expect(question.page).to eq(page)

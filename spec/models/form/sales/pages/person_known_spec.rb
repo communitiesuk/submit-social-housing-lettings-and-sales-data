@@ -7,7 +7,7 @@ RSpec.describe Form::Sales::Pages::PersonKnown, type: :model do
     let(:page_id) { "person_2_known" }
     let(:page_definition) { nil }
     let(:subsection) { instance_double(Form::Subsection) }
-    let(:person_index) { 1 }
+    let(:person_index) { 3 }
 
     it "has correct subsection" do
       expect(page.subsection).to eq(subsection)
@@ -120,7 +120,7 @@ RSpec.describe Form::Sales::Pages::PersonKnown, type: :model do
     let(:page_id) { "person_2_known" }
     let(:page_definition) { nil }
     let(:subsection) { instance_double(Form::Subsection) }
-    let(:person_index) { 1 }
+    let(:person_index) { 4 }
 
     it "has correct subsection" do
       expect(page.subsection).to eq(subsection)
