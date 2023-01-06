@@ -178,6 +178,18 @@ class BulkUpload::Lettings::RowParser
 
 private
 
+  def postcode_full
+    "#{field_108} #{field_109}" if field_108 && field_109
+  end
+
+  def postcode_known
+    if postcode_full.present?
+      1
+    elsif field_107.present?
+      0
+    end
+  end
+
   def questions
     log.form.subsections.flat_map { |ss| ss.applicable_questions(log) }
   end
@@ -210,6 +222,8 @@ private
     [
       { name: :field_1, attribute: :lettype },
       { name: :field_7, attribute: :tenancycode, question_id: "tenancycode" },
+      { name: :field_108, attribute: :postcode_known, question_id: "postcode_known", value_method: :postcode_known },
+      { name: :field_108, attribute: :postcode_full, question_id: "postcode_full", value_method: :postcode_full },
       { name: :field_111, attribute: :owning_organisation_id, question_id: "owning_organisation_id", value_method: :owning_organisation_id },
       { name: :field_113, attribute: :managing_organisation_id, question_id: "managing_organisation_id", value_method: :managing_organisation_id },
       { name: :field_134, attribute: :renewal },

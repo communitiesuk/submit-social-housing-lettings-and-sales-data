@@ -40,6 +40,8 @@ RSpec.describe BulkUpload::Lettings::RowParser do
             field_96: "1",
             field_97: "1",
             field_98: "2023",
+            field_108: "EC1N",
+            field_109: "2TD",
             field_111: owning_org.old_visible_id,
             field_113: managing_org.old_visible_id,
             field_130: "1",
