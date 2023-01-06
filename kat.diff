@@ -1,0 +1,158 @@
+diff --git a/app/models/form/page.rb b/app/models/form/page.rb
+index da70464b..33e944ee 100644
+--- a/app/models/form/page.rb
++++ b/app/models/form/page.rb
+@@ -34,18 +34,6 @@ class Form::Page
+ 
+ private
+ 
+-  def person_database_number(person_index)
+-    person_index[id]
+-  end
+-
+-  def person_display_number(person_index)
+-    joint_purchase? ? person_index[id] - 2 : person_index[id] - 1
+-  end
+-
+-  def joint_purchase?
+-    id.include?("_joint_purchase")
+-  end
+-
+   def conditional_question_ids
+     @conditional_question_ids ||= questions.flat_map { |q|
+       next if q.conditional_for.blank?
+diff --git a/app/models/form/question.rb b/app/models/form/question.rb
+index c5121b12..5b4440e3 100644
+--- a/app/models/form/question.rb
++++ b/app/models/form/question.rb
+@@ -259,18 +259,6 @@ class Form::Question
+ 
+ private
+ 
+-  def person_database_number(person_index)
+-    person_index[id]
+-  end
+-
+-  def person_display_number(person_index)
+-    joint_purchase? ? person_index[id] - 2 : person_index[id] - 1
+-  end
+-
+-  def joint_purchase?
+-    page.id.include?("_joint_purchase")
+-  end
+-
+   def selected_answer_option_is_derived?(log)
+     selected_option = answer_options&.dig(log[id].to_s.presence)
+     selected_option.is_a?(Hash) && selected_option["depends_on"] && form.depends_on_met(selected_option["depends_on"], log)
+diff --git a/app/models/form/sales/pages/person_working_situation.rb b/app/models/form/sales/pages/person_working_situation.rb
+index 224ca410..46e45356 100644
+--- a/app/models/form/sales/pages/person_working_situation.rb
++++ b/app/models/form/sales/pages/person_working_situation.rb
+@@ -1,28 +1,27 @@
+ class Form::Sales::Pages::PersonWorkingSituation < ::Form::Page
+-  def initialize(id, hsh, subsection)
++  def initialize(id, hsh, subsection, person_index:)
+     super
+     @header = ""
+     @description = ""
+     @subsection = subsection
+     @depends_on = [
+-      { "details_known_#{person_display_number(PERSON_INDEX)}" => 1, "jointpur" => joint_purchase? ? 1 : 2 },
++      { field_for_person("detailed_known_", person_index) => 1, "jointpur" => joint_purchase? ? 1 : 2 },
+     ]
+   end
+ 
+   def questions
+     @questions ||= [
+-      Form::Sales::Questions::PersonWorkingSituation.new("ecstat#{person_database_number(PERSON_INDEX)}", nil, self),
++      Form::Sales::Questions::PersonWorkingSituation.new(field_for_person("ecstat")), nil, self, person_index: person_index),
+     ]
+   end
+ 
+-  PERSON_INDEX = {
+-    "person_1_working_situation" => 2,
+-    "person_2_working_situation" => 3,
+-    "person_3_working_situation" => 4,
+-    "person_4_working_situation" => 5,
+-    "person_1_working_situation_joint_purchase" => 3,
+-    "person_2_working_situation_joint_purchase" => 4,
+-    "person_3_working_situation_joint_purchase" => 5,
+-    "person_4_working_situation_joint_purchase" => 6,
+-  }.freeze
++private
++
++  def field_for_person(field, person_index)
++    [field, person_index].join
++  end
++
++  def joint_purchase?
++    id.include?("_joint_purchase")
++  end
+ end
+diff --git a/app/models/form/sales/questions/person_working_situation.rb b/app/models/form/sales/questions/person_working_situation.rb
+index 8b16a54b..3483c69a 100644
+--- a/app/models/form/sales/questions/person_working_situation.rb
++++ b/app/models/form/sales/questions/person_working_situation.rb
+@@ -1,12 +1,12 @@
+ class Form::Sales::Questions::PersonWorkingSituation < ::Form::Question
+-  def initialize(id, hsh, page)
++  def initialize(id, hsh, page, person_index:)
+     super
+-    @check_answer_label = "Person #{person_display_number(PERSON_INDEX)}’s working situation"
+-    @header = "Which of these best describes Person #{person_display_number(PERSON_INDEX)}’s working situation?"
++    @check_answer_label = "Person #{person_index}’s working situation"
++    @header = "Which of these best describes Person #{person_index}’s working situation?"
+     @type = "radio"
+     @page = page
+     @answer_options = ANSWER_OPTIONS
+-    @check_answers_card_number = person_database_number(PERSON_INDEX)
++    @check_answers_card_number = person_index
+   end
+ 
+   ANSWER_OPTIONS = {
+@@ -22,12 +22,4 @@ class Form::Sales::Questions::PersonWorkingSituation < ::Form::Question
+     "7" => { "value" => "Full-time student" },
+     "9" => { "value" => "Child under 16" },
+   }.freeze
+-
+-  PERSON_INDEX = {
+-    "ecstat2" => 2,
+-    "ecstat3" => 3,
+-    "ecstat4" => 4,
+-    "ecstat5" => 5,
+-    "ecstat6" => 6,
+-  }.freeze
+ end
+diff --git a/app/models/form/sales/subsections/household_characteristics.rb b/app/models/form/sales/subsections/household_characteristics.rb
+index 65af1044..49797a12 100644
+--- a/app/models/form/sales/subsections/household_characteristics.rb
++++ b/app/models/form/sales/subsections/household_characteristics.rb
+@@ -33,20 +33,20 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
+       Form::Sales::Pages::Person1Age.new(nil, nil, self),
+       Form::Sales::Pages::Person1GenderIdentity.new(nil, nil, self),
+       Form::Sales::Pages::Person1GenderIdentityJointPurchase.new(nil, nil, self),
+-      Form::Sales::Pages::PersonWorkingSituation.new("person_1_working_situation", nil, self),
+-      Form::Sales::Pages::PersonWorkingSituation.new("person_1_working_situation_joint_purchase", nil, self),
++      Form::Sales::Pages::PersonWorkingSituation.new("person_1_working_situation", nil, self, person_index: 2),
++      Form::Sales::Pages::PersonWorkingSituation.new("person_1_working_situation_joint_purchase", nil, self, person_index: 3, joint_purchase: true),
+       Form::Sales::Pages::Person2Known.new(nil, nil, self),
+       Form::Sales::Pages::Person2Age.new(nil, nil, self),
+-      Form::Sales::Pages::PersonWorkingSituation.new("person_2_working_situation", nil, self),
+-      Form::Sales::Pages::PersonWorkingSituation.new("person_2_working_situation_joint_purchase", nil, self),
++      Form::Sales::Pages::PersonWorkingSituation.new("person_2_working_situation", nil, self, person_index: 3),
++      Form::Sales::Pages::PersonWorkingSituation.new("person_2_working_situation_joint_purchase", nil, self, person_index: 4, joint_purchase: true),
+       Form::Sales::Pages::Person3Known.new(nil, nil, self),
+       Form::Sales::Pages::Person3Age.new(nil, nil, self),
+-      Form::Sales::Pages::PersonWorkingSituation.new("person_3_working_situation", nil, self),
+-      Form::Sales::Pages::PersonWorkingSituation.new("person_3_working_situation_joint_purchase", nil, self),
++      Form::Sales::Pages::PersonWorkingSituation.new("person_3_working_situation", nil, self, person_index: 4),
++      Form::Sales::Pages::PersonWorkingSituation.new("person_3_working_situation_joint_purchase", nil, self, person_index: 5, join_purchase: true),
+       Form::Sales::Pages::Person4Known.new(nil, nil, self),
+       Form::Sales::Pages::Person4Age.new(nil, nil, self),
+-      Form::Sales::Pages::PersonWorkingSituation.new("person_4_working_situation", nil, self),
+-      Form::Sales::Pages::PersonWorkingSituation.new("person_4_working_situation_joint_purchase", nil, self),
++      Form::Sales::Pages::PersonWorkingSituation.new("person_4_working_situation", nil, self, person_index: 5),
++      Form::Sales::Pages::PersonWorkingSituation.new("person_4_working_situation_joint_purchase", nil, self, person_index: 6),
+     ]
+   end
+ end
