@@ -89,6 +89,7 @@ FactoryBot.define do
       hb { 4 }
       mortgageused { 1 }
       wchair { 1 }
+      armedforcesspouse { 5 }
     end
   end
 end

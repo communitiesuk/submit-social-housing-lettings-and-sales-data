@@ -16,6 +16,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdNeeds, type: :model do
       %w[
         armed_forces
         buyer_still_serving
+        armed_forces_spouse
         household_disability
         household_wheelchair
         wheelchair_check
