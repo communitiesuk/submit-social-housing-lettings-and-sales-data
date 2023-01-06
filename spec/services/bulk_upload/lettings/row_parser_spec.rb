@@ -98,6 +98,18 @@ RSpec.describe BulkUpload::Lettings::RowParser do
       end
     end
 
+    describe "fields 96, 97, 98 => startdate" do
+      context "when any one of these fields is blank" do
+        let(:attributes) { { field_96: nil, field_97: nil, field_98: nil } }
+
+        it "returns an error" do
+          expect(parser.errors[:field_96]).to be_present
+          expect(parser.errors[:field_97]).to be_present
+          expect(parser.errors[:field_98]).to be_present
+        end
+      end
+    end
+
     describe "#field_134" do
       context "when an unpermitted value" do
         let(:attributes) { { field_134: 3 } }
