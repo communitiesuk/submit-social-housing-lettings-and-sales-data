@@ -54,9 +54,9 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         end
 
         it "instantiates a log with everything completed" do
-          questions = parser.send(:questions).reject { |q|
+          questions = parser.send(:questions).reject do |q|
             parser.send(:log).optional_fields.include?(q.id) || q.completed?(parser.send(:log))
-          }
+          end
 
           expect(questions.map(&:id)).to eql([])
         end

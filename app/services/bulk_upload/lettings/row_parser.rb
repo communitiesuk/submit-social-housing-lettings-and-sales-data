@@ -166,11 +166,8 @@ class BulkUpload::Lettings::RowParser
     log.valid?
 
     log.errors.each do |error|
-      field = field_for_attribute(error.attribute)
-
-      next unless field
-
-      errors.add(field, error.type)
+      fields = field_mapping_for_errors[error.attribute] || []
+      fields.each { |field| errors.add(field, error.type) }
     end
 
     errors.blank?
@@ -198,36 +195,37 @@ private
     @log ||= LettingsLog.new(attributes_for_log)
   end
 
-  def field_for_attribute(attribute)
-    mapping = field_mapping.find { |h| h[:attribute] == attribute }
-    mapping[:name] if mapping
-  end
-
   def validate_nulls
-    field_mapping.each do |hash|
-      question = questions.find { |q| q.id == hash[:question_id] }
+    field_mapping_for_errors.each do |question, fields|
+      question = questions.find { |q| q.id == question }
 
       next unless question
       next if log.optional_fields.include?(question.id)
+      next if question.completed?(log)
 
-      completed = question.completed?(log)
-
-      unless completed
-        errors.add(hash[:name], :blank)
-      end
+      fields.each { |field| errors.add(field, :blank) }
     end
   end
 
-  def field_mapping
-    [
-      { name: :field_1, attribute: :lettype },
-      { name: :field_7, attribute: :tenancycode, question_id: "tenancycode" },
-      { name: :field_108, attribute: :postcode_known, question_id: "postcode_known", value_method: :postcode_known },
-      { name: :field_108, attribute: :postcode_full, question_id: "postcode_full", value_method: :postcode_full },
-      { name: :field_111, attribute: :owning_organisation_id, question_id: "owning_organisation_id", value_method: :owning_organisation_id },
-      { name: :field_113, attribute: :managing_organisation_id, question_id: "managing_organisation_id", value_method: :managing_organisation_id },
-      { name: :field_134, attribute: :renewal },
-    ]
+  def field_mapping_for_errors
+    {
+      lettype: [:field_1],
+      tenancycode: [:field_7],
+      postcode_known: %i[field_107 field_108 field_109],
+      postcode_full: %i[field_107 field_108 field_109],
+      owning_organisation_id: [:field_111],
+      managing_organisation_id: [:field_113],
+      renewal: [:field_134],
+      scheme: %i[field_4 field_5],
+      created_by: [],
+      needstype: [],
+      rent_type: %i[field_1 field_129 field_130],
+      startdate: %i[field_98 field_97 field_96],
+    }
+  end
+
+  def startdate
+    Date.new(field_98, field_97, field_96) if field_98 && field_97 && field_96
   end
 
   def renttype
@@ -274,19 +272,18 @@ private
   def attributes_for_log
     attributes = {}
 
-    field_mapping.map do |h|
-      attributes[h[:attribute]] = if h[:value_method]
-                                    send(h[:value_method])
-                                  else
-                                    public_send(h[:name])
-                                  end
-    end
-
-    attributes[:scheme] = scheme
-    attributes[:created_by] = bulk_upload.user
-    attributes[:needstype] = bulk_upload.needstype
-    attributes[:rent_type] = rent_type
-    attributes[:startdate] = Date.new(field_98, field_97, field_96) if field_98 && field_97 && field_96
+    attributes["lettype"] = field_1
+    attributes["tenancycode"] = field_7
+    attributes["postcode_known"] = postcode_known
+    attributes["postcode_full"] = postcode_full
+    attributes["owning_organisation_id"] = owning_organisation_id
+    attributes["managing_organisation_id"] = managing_organisation_id
+    attributes["renewal"] = field_134
+    attributes["scheme"] = scheme
+    attributes["created_by"] = bulk_upload.user
+    attributes["needstype"] = bulk_upload.needstype
+    attributes["rent_type"] = rent_type
+    attributes["startdate"] = startdate
 
     attributes
   end
