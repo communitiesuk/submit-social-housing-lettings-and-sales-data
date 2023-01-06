@@ -45,7 +45,7 @@ class SalesLog < Log
   end
 
   def optional_fields
-    []
+    OPTIONAL_FIELDS
   end
 
   def not_started?
