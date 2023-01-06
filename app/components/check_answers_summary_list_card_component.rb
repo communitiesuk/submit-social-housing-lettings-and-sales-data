@@ -34,6 +34,8 @@ class CheckAnswersSummaryListCardComponent < ViewComponent::Base
     end
   end
 
+private
+
   def number_of_buyers
     log[:jointpur] == 1 ? 2 : 1
   end
