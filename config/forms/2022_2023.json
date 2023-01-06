@@ -4623,7 +4623,7 @@
               }
             },
             "person_7_known": {
-              "header": "You’ve given us the details for 7 people in the household",
+              "header": "You’ve given us the details for 6 people in the household",
               "description": "",
               "questions": {
                 "details_known_7": {

@@ -1,8 +1,8 @@
 class Form::Sales::Questions::PersonKnown < Form::Sales::Questions::Person
   def initialize(id, hsh, page, person_index:)
     super
-    @check_answer_label = "Details known for person #{person_index}?"
-    @header = "Do you know the details for person #{person_index}?"
+    @check_answer_label = "Details known for person #{person_display_number}?"
+    @header = "Do you know the details for person #{person_display_number}?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @page = page
@@ -14,7 +14,7 @@ class Form::Sales::Questions::PersonKnown < Form::Sales::Questions::Person
         },
       ],
     }
-    @check_answers_card_number = person_index + 2
+    @check_answers_card_number = person_index
   end
 
   ANSWER_OPTIONS = {
