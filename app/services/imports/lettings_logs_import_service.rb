@@ -246,7 +246,7 @@ module Imports
 
       apply_date_consistency!(attributes)
       apply_household_consistency!(attributes)
-      create_organisation_relationship(attributes)
+      create_organisation_relationship!(attributes)
 
       lettings_log = save_lettings_log(attributes, previous_status)
       compute_differences(lettings_log, attributes)
@@ -683,16 +683,12 @@ module Imports
       end
     end
 
-    def create_organisation_relationship(attributes)
+    def create_organisation_relationship!(attributes)
       parent_organisation_id = attributes["owning_organisation_id"]
       child_organisation_id = attributes["managing_organisation_id"]
-      return if parent_organisation_id == child_organisation_id || organisation_relationship_exists?(parent_organisation_id, child_organisation_id)
+      return if parent_organisation_id == child_organisation_id
 
-      OrganisationRelationship.create!(parent_organisation_id:, child_organisation_id:)
-    end
-
-    def organisation_relationship_exists?(parent_organisation_id, child_organisation_id)
-      OrganisationRelationship.find_by(parent_organisation_id:, child_organisation_id:).present?
+      OrganisationRelationship.find_or_create_by!(parent_organisation_id:, child_organisation_id:)
     end
   end
 end
