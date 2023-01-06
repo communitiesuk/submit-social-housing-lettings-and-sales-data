@@ -2,6 +2,8 @@ class BulkUpload::Lettings::RowParser
   include ActiveModel::Model
   include ActiveModel::Attributes
 
+  attribute :bulk_upload
+
   attribute :field_1, :integer
   attribute :field_2
   attribute :field_3
