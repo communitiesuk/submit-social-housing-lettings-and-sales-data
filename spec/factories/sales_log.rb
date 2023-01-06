@@ -21,6 +21,7 @@ FactoryBot.define do
       beds { 2 }
       jointmore { 1 }
       noint { 2 }
+      privacynotice { 1 }
       age1_known { 0 }
       age1 { 30 }
       sex1 { "X" }
