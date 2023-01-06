@@ -227,6 +227,7 @@ private
       wchair: %i[field_104],
       beds: %i[field_101],
       joint: %i[field_133],
+      startertenancy: %i[field_8],
     }
   end
 
@@ -295,6 +296,7 @@ private
     attributes["wchair"] = field_104
     attributes["beds"] = field_101
     attributes["joint"] = field_133
+    attributes["startertenancy"] = field_8
 
     attributes
   end
