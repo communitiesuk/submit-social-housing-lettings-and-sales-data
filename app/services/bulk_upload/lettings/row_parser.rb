@@ -249,6 +249,9 @@ private
       age8: %i[field_19],
 
       sex1: %i[field_20],
+
+      ethnic_group: %i[field_43],
+      ethnic: %i[field_43],
     }
   end
 
@@ -340,7 +343,29 @@ private
 
     attributes["sex1"] = field_20
 
+    attributes["ethnic_group"] = ethnic_group_from_ethnic
+    attributes["ethnic"] = field_43
+
     attributes
+  end
+
+  def ethnic_group_from_ethnic
+    return nil if field_43.blank?
+
+    case field_43
+    when 1, 2, 3, 18
+      0
+    when 4, 5, 6, 7
+      1
+    when 8, 9, 10, 11, 15
+      2
+    when 12, 13, 14
+      3
+    when 16, 19
+      4
+    when 17
+      17
+    end
   end
 
   def scheme
