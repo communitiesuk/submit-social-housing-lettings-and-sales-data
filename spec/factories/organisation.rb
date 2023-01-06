@@ -9,6 +9,7 @@ FactoryBot.define do
     created_at { Time.zone.now }
     updated_at { Time.zone.now }
     holds_own_stock { true }
+    old_visible_id { rand(9_999_999).to_s }
   end
 
   factory :organisation_rent_period do
