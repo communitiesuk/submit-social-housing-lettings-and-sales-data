@@ -226,6 +226,7 @@ private
       builtype: %i[field_103],
       wchair: %i[field_104],
       beds: %i[field_101],
+      joint: %i[field_133],
     }
   end
 
@@ -293,6 +294,7 @@ private
     attributes["builtype"] = field_103
     attributes["wchair"] = field_104
     attributes["beds"] = field_101
+    attributes["joint"] = field_133
 
     attributes
   end
