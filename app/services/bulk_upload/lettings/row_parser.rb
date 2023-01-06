@@ -167,8 +167,13 @@ class BulkUpload::Lettings::RowParser
 
     log.errors.each do |error|
       field = field_for_attribute(error.attribute)
+
+      next unless field
+
       errors.add(field, error.type)
     end
+
+    errors.blank?
   end
 
 private
@@ -182,7 +187,8 @@ private
   end
 
   def field_for_attribute(attribute)
-    field_mapping.find { |h| h[:attribute] == attribute }[:name]
+    mapping = field_mapping.find { |h| h[:attribute] == attribute }
+    mapping[:name] if mapping
   end
 
   def validate_nulls
@@ -190,6 +196,7 @@ private
       question = questions.find { |q| q.id == hash[:question_id] }
 
       next unless question
+      next if log.optional_fields.include?(question.id)
 
       completed = question.completed?(log)
 
@@ -203,18 +210,69 @@ private
     [
       { name: :field_1, attribute: :lettype },
       { name: :field_7, attribute: :tenancycode, question_id: "tenancycode" },
+      { name: :field_111, attribute: :owning_organisation_id, question_id: "owning_organisation_id", value_method: :owning_organisation_id },
+      { name: :field_113, attribute: :managing_organisation_id, question_id: "managing_organisation_id", value_method: :managing_organisation_id },
       { name: :field_134, attribute: :renewal },
     ]
+  end
+
+  def renttype
+    case field_1
+    when 1, 2, 3, 4
+      :social
+    when 5, 6, 7, 8
+      :affordable
+    when 9, 10, 11, 12
+      :intermediate
+    end
+  end
+
+  def rent_type
+    case renttype
+    when :social
+      Imports::LettingsLogsImportService::RENT_TYPE[:social_rent]
+    when :affordable
+      if field_129 == 1
+        Imports::LettingsLogsImportService::RENT_TYPE[:london_affordable_rent]
+      else
+        Imports::LettingsLogsImportService::RENT_TYPE[:affordable_rent]
+      end
+    when :intermediate
+      case field_130
+      when 1
+        Imports::LettingsLogsImportService::RENT_TYPE[:rent_to_buy]
+      when 2
+        Imports::LettingsLogsImportService::RENT_TYPE[:london_living_rent]
+      when 3
+        Imports::LettingsLogsImportService::RENT_TYPE[:other_intermediate_rent_product]
+      end
+    end
+  end
+
+  def owning_organisation_id
+    Organisation.find_by(old_visible_id: field_111)&.id
+  end
+
+  def managing_organisation_id
+    Organisation.find_by(old_visible_id: field_113)&.id
   end
 
   def attributes_for_log
     attributes = {}
 
     field_mapping.map do |h|
-      attributes[h[:attribute]] = public_send(h[:name])
+      attributes[h[:attribute]] = if h[:value_method]
+                                    send(h[:value_method])
+                                  else
+                                    public_send(h[:name])
+                                  end
     end
 
     attributes[:scheme] = scheme
+    attributes[:created_by] = bulk_upload.user
+    attributes[:needstype] = bulk_upload.needstype
+    attributes[:rent_type] = rent_type
+    attributes[:startdate] = Date.new(field_98, field_97, field_96) if field_98 && field_97 && field_96
 
     attributes
   end
