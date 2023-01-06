@@ -232,6 +232,20 @@ private
       declaration: %i[field_132],
       age1_known: %i[field_12],
       age1: %i[field_12],
+      age2_known: %i[field_13],
+      age2: %i[field_13],
+      age3_known: %i[field_14],
+      age3: %i[field_14],
+      age4_known: %i[field_15],
+      age4: %i[field_15],
+      age5_known: %i[field_16],
+      age5: %i[field_16],
+      age6_known: %i[field_17],
+      age6: %i[field_17],
+      age7_known: %i[field_18],
+      age7: %i[field_18],
+      age8_known: %i[field_19],
+      age8: %i[field_19],
     }
   end
 
@@ -303,8 +317,23 @@ private
     attributes["startertenancy"] = field_8
     attributes["tenancy"] = field_9
     attributes["declaration"] = field_132
+
     attributes["age1_known"] = field_12.present? ? 0 : 1
     attributes["age1"] = field_12
+    attributes["age2_known"] = field_13.present? ? 0 : 1
+    attributes["age2"] = field_13
+    attributes["age3_known"] = field_14.present? ? 0 : 1
+    attributes["age3"] = field_14
+    attributes["age4_known"] = field_15.present? ? 0 : 1
+    attributes["age4"] = field_15
+    attributes["age5_known"] = field_16.present? ? 0 : 1
+    attributes["age5"] = field_16
+    attributes["age6_known"] = field_17.present? ? 0 : 1
+    attributes["age6"] = field_17
+    attributes["age7_known"] = field_18.present? ? 0 : 1
+    attributes["age7"] = field_18
+    attributes["age8_known"] = field_19.present? ? 0 : 1
+    attributes["age8"] = field_19
 
     attributes
   end

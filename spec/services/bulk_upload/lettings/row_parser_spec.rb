@@ -69,7 +69,14 @@ RSpec.describe BulkUpload::Lettings::RowParser do
             field_8: "1",
             field_9: "2",
             field_132: "1",
-            field_12: "22"
+            field_12: "42",
+            field_13: "41",
+            field_14: "20",
+            field_15: "18",
+            field_16: "16",
+            field_17: "14",
+            field_18: "12",
+            field_19: "10",
           }
         end
 
