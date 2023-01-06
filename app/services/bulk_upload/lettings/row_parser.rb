@@ -230,6 +230,8 @@ private
       startertenancy: %i[field_8],
       tenancy: %i[field_9],
       declaration: %i[field_132],
+      age1_known: %i[field_12],
+      age1: %i[field_12],
     }
   end
 
@@ -301,6 +303,8 @@ private
     attributes["startertenancy"] = field_8
     attributes["tenancy"] = field_9
     attributes["declaration"] = field_132
+    attributes["age1_known"] = field_12.present? ? 0 : 1
+    attributes["age1"] = field_12
 
     attributes
   end
