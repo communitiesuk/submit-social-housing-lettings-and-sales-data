@@ -225,6 +225,7 @@ private
       unittype_gn: %i[field_102],
       builtype: %i[field_103],
       wchair: %i[field_104],
+      beds: %i[field_101],
     }
   end
 
@@ -291,6 +292,7 @@ private
     attributes["unittype_gn"] = field_102
     attributes["builtype"] = field_103
     attributes["wchair"] = field_104
+    attributes["beds"] = field_101
 
     attributes
   end
