@@ -2,8 +2,8 @@ require "rails_helper"
 require "shared/shared_examples_for_derived_fields"
 
 RSpec.describe SalesLog, type: :model do
-  let(:owning_organisation) { FactoryBot.create(:organisation) }
-  let(:created_by_user) { FactoryBot.create(:user) }
+  let(:owning_organisation) { create(:organisation) }
+  let(:created_by_user) { create(:user) }
 
   include_examples "shared examples for derived fields", :sales_log
 
@@ -13,7 +13,7 @@ RSpec.describe SalesLog, type: :model do
   end
 
   it "is a sales log" do
-    sales_log = FactoryBot.build(:sales_log, created_by: created_by_user)
+    sales_log = build(:sales_log, created_by: created_by_user)
     expect(sales_log.lettings?).to be false
   end
 
@@ -30,9 +30,17 @@ RSpec.describe SalesLog, type: :model do
     end
   end
 
+  describe "#optional_fields" do
+    let(:sales_log) { build(:sales_log) }
+
+    it "returns optional fields" do
+      expect(sales_log.optional_fields).to eq(%w[purchid])
+    end
+  end
+
   describe "#form" do
-    let(:sales_log) { FactoryBot.build(:sales_log, created_by: created_by_user) }
-    let(:sales_log_2) { FactoryBot.build(:sales_log, saledate: Time.zone.local(2022, 5, 1), created_by: created_by_user) }
+    let(:sales_log) { build(:sales_log, created_by: created_by_user) }
+    let(:sales_log_2) { build(:sales_log, saledate: Time.zone.local(2022, 5, 1), created_by: created_by_user) }
 
     it "has returns the correct form based on the start date" do
       expect(sales_log.form_name).to be_nil
@@ -43,9 +51,9 @@ RSpec.describe SalesLog, type: :model do
   end
 
   describe "status" do
-    let!(:empty_sales_log) { FactoryBot.create(:sales_log) }
-    let!(:in_progress_sales_log) { FactoryBot.create(:sales_log, :in_progress) }
-    let!(:completed_sales_log) { FactoryBot.create(:sales_log, :completed) }
+    let!(:empty_sales_log) { create(:sales_log) }
+    let!(:in_progress_sales_log) { create(:sales_log, :in_progress) }
+    let!(:completed_sales_log) { create(:sales_log, :completed) }
 
     it "is set to not started for an empty sales log" do
       expect(empty_sales_log.not_started?).to be(true)
@@ -67,15 +75,15 @@ RSpec.describe SalesLog, type: :model do
   end
 
   context "when filtering by organisation" do
-    let(:organisation_1) { FactoryBot.create(:organisation) }
-    let(:organisation_2) { FactoryBot.create(:organisation) }
-    let(:organisation_3) { FactoryBot.create(:organisation) }
+    let(:organisation_1) { create(:organisation) }
+    let(:organisation_2) { create(:organisation) }
+    let(:organisation_3) { create(:organisation) }
 
     before do
-      FactoryBot.create(:sales_log, :in_progress, owning_organisation: organisation_1, managing_organisation: organisation_1)
-      FactoryBot.create(:sales_log, :completed, owning_organisation: organisation_1, managing_organisation: organisation_2)
-      FactoryBot.create(:sales_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_1)
-      FactoryBot.create(:sales_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_2)
+      create(:sales_log, :in_progress, owning_organisation: organisation_1, managing_organisation: organisation_1)
+      create(:sales_log, :completed, owning_organisation: organisation_1, managing_organisation: organisation_2)
+      create(:sales_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_1)
+      create(:sales_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_2)
     end
 
     it "filters by given organisation id" do
