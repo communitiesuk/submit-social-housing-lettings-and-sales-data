@@ -1,9 +1,10 @@
 require "rails_helper"
 
 RSpec.describe Forms::BulkUploadLettings::UploadYourFile do
-  subject(:form) { described_class.new(year:, file:, current_user:) }
+  subject(:form) { described_class.new(year:, needstype:, file:, current_user:) }
 
   let(:year) { 2022 }
+  let(:needstype) { 2 }
   let(:actual_file) { File.open(file_fixture("blank_bulk_upload_sales.csv")) }
   let(:file) do
     ActionDispatch::Http::UploadedFile.new(
@@ -37,6 +38,7 @@ RSpec.describe Forms::BulkUploadLettings::UploadYourFile do
       expect(bulk_upload.user).to eql(current_user)
       expect(bulk_upload.log_type).to eql("lettings")
       expect(bulk_upload.year).to eql(year)
+      expect(bulk_upload.needstype).to eql(needstype)
       expect(bulk_upload.filename).to eql("my-file.csv")
       expect(bulk_upload.identifier).to be_present
     end

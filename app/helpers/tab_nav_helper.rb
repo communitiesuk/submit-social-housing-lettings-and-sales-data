@@ -7,19 +7,8 @@ module TabNavHelper
   end
 
   def location_cell_postcode(location, link)
-    link_text = location.postcode
+    link_text = location.postcode || "Add postcode"
     [govuk_link_to(link_text, link, method: :patch), "<span class=\"govuk-visually-hidden\">Location </span><span class=\"govuk-!-font-weight-regular app-!-colour-muted\">#{location.name}</span>"].join("\n")
-  end
-
-  def location_cell_location_admin_district(location, link)
-    la = location.location_admin_district
-    if location.confirmed?
-      la
-    elsif la
-      govuk_link_to(la, link, method: :patch)
-    else
-      govuk_link_to("Select local authority", link, method: :patch)
-    end
   end
 
   def scheme_cell(scheme)

@@ -20,7 +20,7 @@ RSpec.describe Location, type: :model do
     end
   end
 
-  describe "#validate_postcode" do
+  describe "#postcode" do
     let(:location) { FactoryBot.build(:location) }
 
     it "does not add an error if postcode is valid" do
@@ -31,14 +31,34 @@ RSpec.describe Location, type: :model do
 
     it "does add an error when the postcode is invalid" do
       location.postcode = "invalid"
-      expect { location.save! }
-        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Postcode #{I18n.t('validations.postcode')}")
+      location.valid?(:postcode)
+      expect(location.errors.count).to eq(1)
     end
 
     it "does add an error when the postcode is missing" do
       location.postcode = nil
-      expect { location.save! }
-        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Postcode #{I18n.t('validations.postcode')}")
+      location.valid?(:postcode)
+      expect(location.errors.count).to eq(1)
+    end
+  end
+
+  describe "#local_authority" do
+    let(:location) { FactoryBot.build(:location) }
+
+    it "does add an error when the local authority is invalid" do
+      location.location_admin_district = nil
+      location.valid?(:location_admin_district)
+      expect(location.errors.count).to eq(1)
+    end
+  end
+
+  describe "#name" do
+    let(:location) { FactoryBot.build(:location) }
+
+    it "does not add an error when the name is invalid" do
+      location.name = nil
+      location.valid?
+      expect(location.errors.count).to eq(0)
     end
   end
 
@@ -47,8 +67,8 @@ RSpec.describe Location, type: :model do
 
     it "does add an error when the number of units is invalid" do
       location.units = nil
-      expect { location.save! }
-        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Units #{I18n.t('activerecord.errors.models.location.attributes.units.blank')}")
+      location.valid?(:units)
+      expect(location.errors.count).to eq(1)
     end
   end
 
@@ -57,8 +77,8 @@ RSpec.describe Location, type: :model do
 
     it "does add an error when the type of unit is invalid" do
       location.type_of_unit = nil
-      expect { location.save! }
-        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Type of unit #{I18n.t('activerecord.errors.models.location.attributes.type_of_unit.blank')}")
+      location.valid?(:type_of_unit)
+      expect(location.errors.count).to eq(1)
     end
   end
 
@@ -67,8 +87,18 @@ RSpec.describe Location, type: :model do
 
     it "does add an error when the mobility type is invalid" do
       location.mobility_type = nil
-      expect { location.save! }
-        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Mobility type #{I18n.t('activerecord.errors.models.location.attributes.mobility_type.blank')}")
+      location.valid?(:mobility_type)
+      expect(location.errors.count).to eq(1)
+    end
+  end
+
+  describe "#availability" do
+    let(:location) { FactoryBot.build(:location) }
+
+    it "does add an error when the availability is invalid" do
+      location.startdate = Time.zone.local(1, 1, 1)
+      location.valid?(:startdate)
+      expect(location.errors.count).to eq(1)
     end
   end
 
@@ -90,7 +120,7 @@ RSpec.describe Location, type: :model do
     before do
       FactoryBot.create(:location, name: "ABC", postcode: "NW1 8RR", startdate: Time.zone.today)
       FactoryBot.create(:location, name: "XYZ", postcode: "SE1 6HJ", startdate: Time.zone.today + 1.day)
-      FactoryBot.create(:location, name: "GHQ", postcode: "EW1 7JK", startdate: Time.zone.today - 1.day, confirmed: false)
+      FactoryBot.create(:location, name: "GHQ", postcode: "EW1 7JK", startdate: Time.zone.today - 1.day, units: nil)
       FactoryBot.create(:location, name: "GHQ", postcode: "EW1 7JK", startdate: nil)
     end
 
@@ -122,7 +152,7 @@ RSpec.describe Location, type: :model do
     end
 
     context "when filtering by active locations" do
-      it "returns only locations that started today or earlier and have been confirmed" do
+      it "returns only locations that started today or earlier and are complete (and so confirmed)" do
         expect(described_class.active.count).to eq(2)
       end
     end

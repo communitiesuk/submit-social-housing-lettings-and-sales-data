@@ -1,0 +1,22 @@
+<section class="app-table-group" tabindex="0" aria-labelledby="<%= title.dasherize %>">
+  <%= govuk_table do |table| %>
+    <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
+      <%= render(SearchResultCaptionComponent.new(searched:, count: pagy.count, item_label:, total_count:, item: "stock owners", path: request.path)) %>
+    <% end %>
+    <% @stock_owners.each do |stock_owner| %>
+      <%= table.body do |body| %>
+        <%= body.row do |row| %>
+          <% row.cell(text: stock_owner.name) %>
+          <% if current_user.data_coordinator? || current_user.support? %>
+            <% row.cell(html_attributes: {
+              scope: "row",
+              class: "govuk-!-text-align-right",
+            }) do %>
+              <%= govuk_link_to("Remove", stock_owners_remove_organisation_path(target_organisation_id: stock_owner.id)) %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+</section>

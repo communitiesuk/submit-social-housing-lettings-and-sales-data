@@ -8,6 +8,7 @@ module Forms
       include Rails.application.routes.url_helpers
 
       attribute :year, :integer
+      attribute :needstype, :integer
       attribute :file
       attribute :current_user
 
@@ -19,7 +20,8 @@ module Forms
       end
 
       def back_path
-        bulk_upload_lettings_log_path(id: "prepare-your-file", form: { year: })
+        page_id = year == 2022 ? "needstype" : "prepare-your-file"
+        bulk_upload_lettings_log_path(id: page_id, form: { year:, needstype: })
       end
 
       def year_combo
@@ -35,6 +37,7 @@ module Forms
           user: current_user,
           log_type: BulkUpload.log_types[:lettings],
           year:,
+          needstype:,
           filename: file.original_filename,
         )
 

@@ -129,6 +129,12 @@ class Form::Question
     "/#{log.model_name.param_key.dasherize}s/#{log.id}/#{page_id.to_s.dasherize}?referrer=check_answers"
   end
 
+  def unanswered?(log)
+    return answer_options.keys.none? { |key| value_is_yes?(log[key]) } if type == "checkbox"
+
+    log[id].blank?
+  end
+
   def completed?(log)
     return answer_options.keys.any? { |key| value_is_yes?(log[key]) } if type == "checkbox"
 

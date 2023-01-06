@@ -1,0 +1,42 @@
+<% content_for :title, "Add a location to this scheme" %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+        text: "Back",
+        href: case params[:referrer]
+              when "check_answers"
+                scheme_location_check_answers_path(@scheme, @location, route: params[:route])
+              when "details"
+                scheme_location_path(@scheme, @location)
+              else
+                scheme_location_postcode_path(@scheme, @location, route: params[:route])
+              end,
+      ) %>
+<% end %>
+
+<%= form_for(@location, method: :patch, url: scheme_location_name_path(@scheme, @location, route: params[:route], referrer: params[:referrer])) do |f| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= f.govuk_error_summary %>
+
+      <%= render partial: "organisations/headings", locals: { main: I18n.t("questions.location.name"), sub: "Add a location to #{@scheme.service_name}" } %>
+
+      <%= f.govuk_text_field :name,
+                             label: nil,
+                             hint: { text: I18n.t("hints.location.name") } %>
+
+      <div class="govuk-button-group">
+        <% if params[:referrer] == "check_answers" %>
+          <%= f.govuk_submit "Save changes" %>
+          <%= govuk_link_to "Cancel", scheme_location_check_answers_path(@scheme, @location, route: params[:route]), secondary: true %>
+        <% elsif params[:referrer] == "details" %>
+          <%= f.govuk_submit "Save changes" %>
+          <%= govuk_link_to "Cancel", scheme_location_path(@scheme, @location), secondary: true %>
+        <% else %>
+          <%= f.govuk_submit "Save and continue" %>
+          <%= govuk_link_to "Skip for now", scheme_location_units_path(@scheme, @location), secondary: true %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

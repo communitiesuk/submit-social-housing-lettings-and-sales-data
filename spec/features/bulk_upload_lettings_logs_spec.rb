@@ -42,6 +42,19 @@ RSpec.describe "Bulk upload lettings log" do
         expect(page).to have_content("Upload lettings logs in bulk (2022/23)")
         click_button("Continue")
 
+        expect(page).to have_content("What is the needs type?")
+        click_button("Continue")
+
+        expect(page).to have_content("You must answer needs type")
+        choose("General needs")
+        click_button("Continue")
+
+        click_link("Back")
+
+        expect(page.find_field("form-needstype-1-field")).to be_checked
+        click_button("Continue")
+
+        expect(page).to have_content("Upload lettings logs in bulk (2022/23)")
         expect(page).to have_content("Upload your file")
         click_button("Upload")
 
@@ -75,10 +88,33 @@ RSpec.describe "Bulk upload lettings log" do
         expect(page).to have_link("Upload lettings logs in bulk")
         click_link("Upload lettings logs in bulk")
 
-        expect(page).to have_content("Upload lettings logs in bulk (2022/23)")
+        expect(page).to have_content("Upload lettings logs in bulk (2023/24)")
         click_button("Continue")
 
         expect(page).to have_content("Upload your file")
+      end
+    end
+  end
+
+  context "when the collection year isn't 22/23" do
+    it "shows journey without the needstype" do
+      Timecop.freeze(2023, 10, 1) do
+        visit("/lettings-logs")
+        expect(page).to have_link("Upload lettings logs in bulk")
+        click_link("Upload lettings logs in bulk")
+
+        expect(page).to have_content("Prepare your file")
+        click_button("Continue")
+
+        click_link("Back")
+
+        expect(page).to have_content("Prepare your file")
+        click_button("Continue")
+
+        expect(page).to have_content("Upload lettings logs in bulk (2023/24)")
+
+        expect(page).to have_content("Upload your file")
+        click_button("Upload")
       end
     end
   end

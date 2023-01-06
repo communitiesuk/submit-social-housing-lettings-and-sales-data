@@ -14,7 +14,7 @@ RSpec.describe Form::Lettings::Subsections::Setup, type: :model do
   it "has correct pages" do
     expect(setup.pages.map(&:id)).to eq(
       %w[
-        housing_provider
+        stock_owner
         managing_organisation
         created_by
         needs_type
@@ -41,7 +41,7 @@ RSpec.describe Form::Lettings::Subsections::Setup, type: :model do
     it "has correct pages" do
       expect(setup.pages.map(&:id)).to eq(
         %w[
-          housing_provider
+          stock_owner
           managing_organisation
           created_by
           needs_type

@@ -21,6 +21,7 @@ FactoryBot.define do
       beds { 2 }
       jointmore { 1 }
       noint { 2 }
+      privacynotice { 1 }
       age1_known { 0 }
       age1 { 30 }
       sex1 { "X" }
@@ -67,12 +68,27 @@ FactoryBot.define do
       ecstat4 { 3 }
       ecstat5 { 2 }
       ecstat6 { 1 }
-      disabled { 2 }
+      disabled { 1 }
       deposit { 10_000 }
       cashdis { 1_000 }
       value { 110_000 }
       grant { 1_000 }
       proplen { 10 }
+      pregyrha { 1 }
+      pregla { 1 }
+      pregother { 1 }
+      pregghb { 1 }
+      hhregres { 1 }
+      hhregresstill { 4 }
+      ppcodenk { 1 }
+      prevten { 1 }
+      previous_la_known { 0 }
+      relat3 { "P" }
+      relat4 { "P" }
+      relat5 { "P" }
+      relat6 { "P" }
+      hb { 4 }
+      mortgageused { 1 }
       mscharge_known { 1 }
       mscharge { 100 }
     end

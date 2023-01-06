@@ -22,9 +22,12 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
         la_nominations
         buyer_previous
         previous_bedrooms
-        about_price
-        about_price_social_housing
+        about_price_shared_ownership
+        mortgage_used_shared_ownership
+        mortgage_amount_shared_ownership
+        about_deposit_with_discount
         about_deposit_shared_ownership
+        shared_ownership_deposit_value_check
         monthly_rent
         leasehold_charges_shared_ownership
       ],
