@@ -224,6 +224,7 @@ private
       startdate: %i[field_98 field_97 field_96],
       unittype_gn: %i[field_102],
       builtype: %i[field_103],
+      wchair: %i[field_104],
     }
   end
 
@@ -289,6 +290,7 @@ private
     attributes["startdate"] = startdate
     attributes["unittype_gn"] = field_102
     attributes["builtype"] = field_103
+    attributes["wchair"] = field_104
 
     attributes
   end
