@@ -11,6 +11,7 @@ RSpec.describe Imports::LettingsLogsImportService do
   let(:fixture_directory) { "spec/fixtures/imports/logs" }
 
   let(:organisation) { FactoryBot.create(:organisation, old_visible_id: "1", provider_type: "PRP") }
+  let(:managing_organisation) { FactoryBot.create(:organisation, old_visible_id: "2", provider_type: "PRP") }
   let(:scheme1) { FactoryBot.create(:scheme, old_visible_id: "0123", owning_organisation: organisation) }
   let(:scheme2) { FactoryBot.create(:scheme, old_visible_id: "456", owning_organisation: organisation) }
 
@@ -24,6 +25,7 @@ RSpec.describe Imports::LettingsLogsImportService do
 
     allow(Organisation).to receive(:find_by).and_return(nil)
     allow(Organisation).to receive(:find_by).with(old_visible_id: organisation.old_visible_id).and_return(organisation)
+    allow(Organisation).to receive(:find_by).with(old_visible_id: managing_organisation.old_visible_id).and_return(managing_organisation)
 
     # Created by users
     FactoryBot.create(:user, old_user_id: "c3061a2e6ea0b702e6f6210d5c52d2a92612d2aa", organisation:)
@@ -78,6 +80,13 @@ RSpec.describe Imports::LettingsLogsImportService do
       expect(logger).to receive(:info).with(/Updating lettings log/).exactly(4).times
       expect { 2.times { lettings_log_service.create_logs(remote_folder) } }
         .to change(LettingsLog, :count).by(4)
+    end
+
+    it "creates organisation relationship once" do
+      expect(logger).not_to receive(:error)
+      expect(logger).not_to receive(:warn)
+      expect { lettings_log_service.create_logs(remote_folder) }
+        .to change(OrganisationRelationship, :count).by(1)
     end
 
     context "when there are status discrepancies" do
