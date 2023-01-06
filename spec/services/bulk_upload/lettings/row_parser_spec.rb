@@ -7,6 +7,18 @@ RSpec.describe BulkUpload::Lettings::RowParser do
   let(:bulk_upload) { create(:bulk_upload, :lettings) }
   let(:owning_org) { create(:organisation) }
   let(:managing_org) { create(:organisation) }
+  let(:setup_section_params) do
+    {
+      field_1: "1",
+      field_111: owning_org.old_visible_id,
+      field_113: managing_org.old_visible_id,
+      bulk_upload:,
+      field_96: "1",
+      field_97: "1",
+      field_98: "2023",
+      field_134: "0",
+    }
+  end
 
   around do |example|
     FormHandler.instance.use_real_forms!
@@ -50,6 +62,7 @@ RSpec.describe BulkUpload::Lettings::RowParser do
             field_130: "1",
             field_134: "0",
             field_102: "2",
+            field_103: "1",
           }
         end
 
@@ -155,6 +168,24 @@ RSpec.describe BulkUpload::Lettings::RowParser do
 
         it "has errors on the field" do
           expect(parser.errors[:field_134]).to be_present
+        end
+      end
+    end
+
+    describe "#field_103" do
+      context "when null" do
+        let(:attributes) { setup_section_params.merge({ field_103: nil }) }
+
+        it "returns an error" do
+          expect(parser.errors[:field_103]).to be_present
+        end
+      end
+
+      context "when unpermitted values" do
+        let(:attributes) { setup_section_params.merge({ field_103: "4" }) }
+
+        it "returns an error" do
+          expect(parser.errors[:field_103]).to be_present
         end
       end
     end
