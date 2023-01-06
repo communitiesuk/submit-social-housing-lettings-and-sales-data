@@ -11,7 +11,7 @@ class Form::Sales::Questions::BuyerInterview < ::Form::Question
   end
 
   ANSWER_OPTIONS = {
-    "1" => { "value" => "No" },
     "2" => { "value" => "Yes" },
+    "1" => { "value" => "No" },
   }.freeze
 end

@@ -103,7 +103,7 @@ class Scheme < ApplicationRecord
 
   ARRANGEMENT_TYPE = {
     "The same organisation that owns the housing stock": "D",
-    "Another registered housing provider": "R",
+    "Another registered stock owner": "R",
     "A registered charity or voluntary organisation": "V",
     "Another organisation": "O",
     "Missing": "X",

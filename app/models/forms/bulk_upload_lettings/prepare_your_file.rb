@@ -6,6 +6,7 @@ module Forms
       include Rails.application.routes.url_helpers
 
       attribute :year, :integer
+      attribute :needstype, :integer
 
       def view_path
         "bulk_upload_lettings_logs/forms/prepare_your_file"
@@ -20,7 +21,8 @@ module Forms
       end
 
       def next_path
-        bulk_upload_lettings_log_path(id: "upload-your-file", form: { year: })
+        page_id = year == 2022 ? "needstype" : "upload-your-file"
+        bulk_upload_lettings_log_path(id: page_id, form: { year:, needstype: })
       end
 
       def template_path

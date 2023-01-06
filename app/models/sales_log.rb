@@ -2,6 +2,7 @@ class SalesLogValidator < ActiveModel::Validator
   include Validations::Sales::HouseholdValidations
   include Validations::SharedValidations
   include Validations::Sales::FinancialValidations
+  include Validations::LocalAuthorityValidations
 
   def validate(record)
     validation_methods = public_methods.select { |method| method.starts_with?("validate_") }
@@ -20,6 +21,8 @@ class SalesLog < Log
   validates_with SalesLogValidator
   before_validation :set_derived_fields!
   before_validation :reset_invalidated_dependent_fields!
+  before_validation :process_previous_postcode_changes!, if: :ppostcode_full_changed?
+  before_validation :reset_previous_location_fields!, unless: :previous_postcode_known?
 
   scope :filter_by_year, ->(year) { where(saledate: Time.zone.local(year.to_i, 4, 1)...Time.zone.local(year.to_i + 1, 4, 1)) }
   scope :search_by, ->(param) { filter_by_id(param) }
@@ -45,7 +48,7 @@ class SalesLog < Log
   end
 
   def optional_fields
-    []
+    OPTIONAL_FIELDS
   end
 
   def not_started?
@@ -110,5 +113,42 @@ class SalesLog < Log
 
   def income2_used_for_mortgage?
     inc2mort == 1
+  end
+
+  def right_to_buy?
+    [9, 14, 27].include?(type)
+  end
+
+  def is_type_discount?
+    type == 18
+  end
+
+  def ppostcode_full=(postcode)
+    if postcode
+      super UKPostcode.parse(postcode).to_s
+    else
+      super nil
+    end
+  end
+
+  def previous_postcode_known?
+    ppcodenk&.zero?
+  end
+
+  def process_postcode(postcode, postcode_known_key, la_inferred_key, la_key)
+    return if postcode.blank?
+
+    self[postcode_known_key] = 0
+    inferred_la = get_inferred_la(postcode)
+    self[la_inferred_key] = inferred_la.present?
+    self[la_key] = inferred_la if inferred_la.present?
+  end
+
+  def outright_sale?
+    ownershipsch == 3
+  end
+
+  def mortgage_not_used?
+    mortgageused == 2
   end
 end

@@ -8,8 +8,8 @@
 
 # rubocop:disable Rails/Output
 unless Rails.env.test?
-  housing_provider1 = Organisation.find_or_create_by!(
-    name: "Housing Provider 1",
+  stock_owner1 = Organisation.find_or_create_by!(
+    name: "Stock Owner 1",
     address_line1: "2 Marsham Street",
     address_line2: "London",
     postcode: "SW1P 4DF",
@@ -18,8 +18,8 @@ unless Rails.env.test?
     managing_agents_label: "None",
     provider_type: "LA",
   )
-  housing_provider2 = Organisation.find_or_create_by!(
-    name: "Housing Provider 2",
+  stock_owner2 = Organisation.find_or_create_by!(
+    name: "Stock Owner 2",
     address_line1: "2 Marsham Street",
     address_line2: "London",
     postcode: "SW1P 4DF",
@@ -130,11 +130,11 @@ unless Rails.env.test?
   end
 
   OrganisationRelationship.find_or_create_by!(
-    parent_organisation: housing_provider1,
+    parent_organisation: stock_owner1,
     child_organisation: org,
   )
   OrganisationRelationship.find_or_create_by!(
-    parent_organisation: housing_provider2,
+    parent_organisation: stock_owner2,
     child_organisation: org,
   )
   OrganisationRelationship.find_or_create_by!(
@@ -145,6 +145,36 @@ unless Rails.env.test?
     parent_organisation: org,
     child_organisation: managing_agent2,
   )
+
+  if (Rails.env.development? || Rails.env.review?) && SalesLog.count.zero?
+    SalesLog.find_or_create_by!(
+      saledate: Date.new(1, 1, 1),
+      purchid: "1",
+      ownershipsch: 1,
+      type: 2,
+      jointpur: 1,
+      jointmore: 1,
+    )
+
+    SalesLog.find_or_create_by!(
+      saledate: Date.new(1, 1, 1),
+      purchid: "1",
+      ownershipsch: 2,
+      type: 8,
+      jointpur: 1,
+      jointmore: 1,
+    )
+
+    SalesLog.find_or_create_by!(
+      saledate: Date.new(1, 1, 1),
+      purchid: "1",
+      ownershipsch: 3,
+      type: 10,
+      companybuy: 1,
+    )
+
+    pp "Seeded a sales log of each type"
+  end
 
   if Rails.env.development? || Rails.env.review?
     User.find_or_create_by!(
@@ -273,9 +303,9 @@ unless Rails.env.test?
       units: 1,
       mobility_type: "W",
     )
+    pp "Seeded 3 dummy schemes"
   end
 
-  pp "Seeded 3 dummy schemes"
   if LaRentRange.count.zero?
     Dir.glob("config/rent_range_data/*.csv").each do |path|
       start_year = File.basename(path, ".csv")

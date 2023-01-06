@@ -24,13 +24,11 @@ class Form::Subsection
   end
 
   def status(log)
-    unless enabled?(log)
-      return :cannot_start_yet
-    end
+    return :cannot_start_yet unless enabled?(log)
 
     qs = applicable_questions(log)
     qs_optional_removed = qs.reject { |q| log.optional_fields.include?(q.id) }
-    return :not_started if qs.count.positive? && qs.all? { |question| log[question.id].blank? || question.read_only? || question.derived? }
+    return :not_started if qs.count.positive? && qs.all? { |question| question.unanswered?(log) || question.read_only? || question.derived? }
     return :completed if qs_optional_removed.all? { |question| question.completed?(log) }
 
     :in_progress
@@ -48,5 +46,9 @@ class Form::Subsection
     questions.select do |q|
       (q.displayed_to_user?(log) && !q.derived?) || q.has_inferred_check_answers_value?(log)
     end
+  end
+
+  def displayed_in_tasklist?(_log)
+    true
   end
 end

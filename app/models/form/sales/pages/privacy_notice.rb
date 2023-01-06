@@ -6,7 +6,7 @@ class Form::Sales::Pages::PrivacyNotice < ::Form::Page
     @description = ""
     @subsection = subsection
     @depends_on = [{
-      "noint" => 1,
+      "noint" => 2,
     }]
   end
 

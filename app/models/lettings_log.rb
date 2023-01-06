@@ -521,8 +521,6 @@ class LettingsLog < Log
 
 private
 
-  PIO = PostcodeService.new
-
   def reset_derived_questions
     dependent_questions = { waityear: [{ key: :renewal, value: 0 }],
                             referral: [{ key: :renewal, value: 0 }],
@@ -600,11 +598,6 @@ private
     process_postcode(postcode_full, "postcode_known", "is_la_inferred", "la")
   end
 
-  def process_previous_postcode_changes!
-    self.ppostcode_full = upcase_and_remove_whitespace(ppostcode_full)
-    process_postcode(ppostcode_full, "ppcodenk", "is_previous_la_inferred", "prevloc")
-  end
-
   def process_postcode(postcode, postcode_known_key, la_inferred_key, la_key)
     return if postcode.blank?
 
@@ -616,23 +609,6 @@ private
 
   def reset_location_fields!
     reset_location(is_la_inferred, "la", "is_la_inferred", "postcode_full", 1)
-  end
-
-  def reset_previous_location_fields!
-    reset_location(is_previous_la_inferred, "prevloc", "is_previous_la_inferred", "ppostcode_full", previous_la_known)
-  end
-
-  def reset_location(is_inferred, la_key, is_inferred_key, postcode_key, is_la_known)
-    if is_inferred || is_la_known != 1
-      self[la_key] = nil
-    end
-    self[is_inferred_key] = false
-    self[postcode_key] = nil
-  end
-
-  def get_inferred_la(postcode)
-    result = PIO.lookup(postcode)
-    result[:location_code] if result
   end
 
   def get_has_benefits
@@ -685,10 +661,6 @@ private
     return "" unless value && num_of_weeks
 
     (value * 52 / num_of_weeks).round(2)
-  end
-
-  def upcase_and_remove_whitespace(string)
-    string.present? ? string.upcase.gsub(/\s+/, "") : string
   end
 
   def fully_wheelchair_accessible?

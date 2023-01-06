@@ -37,8 +37,8 @@ RSpec.describe Form::Sales::Questions::BuyerInterview, type: :model do
 
   it "has the correct answer_options" do
     expect(question.answer_options).to eq({
-      "1" => { "value" => "No" },
       "2" => { "value" => "Yes" },
+      "1" => { "value" => "No" },
     })
   end
 end
