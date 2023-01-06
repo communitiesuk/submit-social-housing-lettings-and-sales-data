@@ -191,6 +191,7 @@ private
       stripped_row = row[1..]
       headers = ("field_1".."field_134").to_a
       hash = Hash[headers.zip(stripped_row)]
+      hash[:bulk_upload] = bulk_upload
 
       BulkUpload::Lettings::RowParser.new(hash)
     end

@@ -3,7 +3,8 @@ require "rails_helper"
 RSpec.describe BulkUpload::Lettings::RowParser do
   subject(:parser) { described_class.new(attributes) }
 
-  let(:attributes) { {} }
+  let(:attributes) { { bulk_upload: } }
+  let(:bulk_upload) { build(:bulk_upload, :lettings) }
 
   around do |example|
     FormHandler.instance.use_real_forms!
@@ -19,7 +20,7 @@ RSpec.describe BulkUpload::Lettings::RowParser do
     end
 
     describe "#valid?" do
-      let(:attributes) { { field_134: 3 } }
+      let(:attributes) { { bulk_upload:, field_134: 3 } }
 
       context "when calling the method multiple times" do
         it "does not add keep adding errors to the pile" do
@@ -30,7 +31,7 @@ RSpec.describe BulkUpload::Lettings::RowParser do
 
     describe "#field_1" do
       context "when null" do
-        let(:attributes) { { field_1: nil } }
+        let(:attributes) { { bulk_upload:, field_1: nil } }
 
         it "returns an error" do
           expect(parser.errors[:field_1]).to be_present
@@ -38,7 +39,7 @@ RSpec.describe BulkUpload::Lettings::RowParser do
       end
 
       context "when incorrect data type" do
-        let(:attributes) { { field_1: "foo" } }
+        let(:attributes) { { bulk_upload:, field_1: "foo" } }
 
         it "returns an error" do
           expect(parser.errors[:field_1]).to be_present
@@ -46,7 +47,7 @@ RSpec.describe BulkUpload::Lettings::RowParser do
       end
 
       context "when unpermitted value" do
-        let(:attributes) { { field_1: "101" } }
+        let(:attributes) { { bulk_upload:, field_1: "101" } }
 
         it "returns an error" do
           expect(parser.errors[:field_1]).to be_present
@@ -54,7 +55,7 @@ RSpec.describe BulkUpload::Lettings::RowParser do
       end
 
       context "when valid" do
-        let(:attributes) { { field_1: "1" } }
+        let(:attributes) { { bulk_upload:, field_1: "1" } }
 
         it "does not return any errors" do
           expect(parser.errors[:field_1]).to be_blank
@@ -64,7 +65,7 @@ RSpec.describe BulkUpload::Lettings::RowParser do
 
     describe "#field_4" do
       context "when nullable permitted" do
-        let(:attributes) { { field_1: "2", field_4: nil } }
+        let(:attributes) { { bulk_upload:, field_1: "2", field_4: nil } }
 
         it "can be nulled" do
           expect(parser.errors[:field_4]).to be_blank
@@ -72,7 +73,7 @@ RSpec.describe BulkUpload::Lettings::RowParser do
       end
 
       context "when nullable not permitted" do
-        let(:attributes) { { field_1: "1", field_4: nil } }
+        let(:attributes) { { bulk_upload:, field_1: "1", field_4: nil } }
 
         it "cannot be nulled" do
           expect(parser.errors[:field_4]).to be_present
@@ -80,7 +81,7 @@ RSpec.describe BulkUpload::Lettings::RowParser do
       end
 
       context "when matching scheme cannot be found" do
-        let(:attributes) { { field_1: "1", field_4: "123" } }
+        let(:attributes) { { bulk_upload:, field_1: "1", field_4: "123" } }
 
         xit "returns an error" do
           expect(parser.errors[:field_4]).to be_present
@@ -90,7 +91,7 @@ RSpec.describe BulkUpload::Lettings::RowParser do
 
     describe "#field_7" do
       context "when null" do
-        let(:attributes) { { field_7: nil } }
+        let(:attributes) { { bulk_upload:, field_7: nil } }
 
         it "returns an error" do
           expect(parser.errors[:field_7]).to be_present
@@ -100,7 +101,7 @@ RSpec.describe BulkUpload::Lettings::RowParser do
 
     describe "fields 96, 97, 98 => startdate" do
       context "when any one of these fields is blank" do
-        let(:attributes) { { field_96: nil, field_97: nil, field_98: nil } }
+        let(:attributes) { { bulk_upload:, field_96: nil, field_97: nil, field_98: nil } }
 
         it "returns an error" do
           expect(parser.errors[:field_96]).to be_present
@@ -112,7 +113,7 @@ RSpec.describe BulkUpload::Lettings::RowParser do
 
     describe "#field_134" do
       context "when an unpermitted value" do
-        let(:attributes) { { field_134: 3 } }
+        let(:attributes) { { bulk_upload:, field_134: 3 } }
 
         it "has errors on the field" do
           expect(parser.errors[:field_134]).to be_present
