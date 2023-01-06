@@ -26,4 +26,14 @@ module Validations::Sales::SoftValidations
 
     wheel == 1
   end
+
+  def savings_over_soft_max?
+    savings && savings > 100_000
+  end
+
+  def deposit_over_soft_max?
+    return unless savings && deposit
+
+    deposit > savings * 4 / 3
+  end
 end

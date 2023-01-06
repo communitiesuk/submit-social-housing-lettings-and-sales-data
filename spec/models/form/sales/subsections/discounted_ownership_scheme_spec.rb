@@ -19,6 +19,7 @@ RSpec.describe Form::Sales::Subsections::DiscountedOwnershipScheme, type: :model
         about_price_not_rtb
         mortgage_amount_discounted_ownership
         about_deposit_discounted_ownership
+        discounted_ownership_deposit_value_check
       ],
     )
   end

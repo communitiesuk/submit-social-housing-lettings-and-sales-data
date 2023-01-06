@@ -19,6 +19,8 @@ class Form::Sales::Subsections::IncomeBenefitsAndSavings < ::Form::Subsection
       Form::Sales::Pages::Buyer2Mortgage.new(nil, nil, self),
       Form::Sales::Pages::MortgageValueCheck.new("buyer_2_mortgage_value_check", nil, self),
       Form::Sales::Pages::Savings.new(nil, nil, self),
+      Form::Sales::Pages::SavingsValueCheck.new("savings_value_check", nil, self),
+      Form::Sales::Pages::DepositValueCheck.new("savings_deposit_value_check", nil, self),
       Form::Sales::Pages::PreviousOwnership.new(nil, nil, self),
     ]
   end
