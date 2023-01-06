@@ -18,6 +18,9 @@ RSpec.describe BulkUpload::Lettings::RowParser do
 
   describe "validations" do
     before do
+      stub_request(:get, /api.postcodes.io/)
+      .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\", \"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
+
       parser.valid?
     end
 
@@ -46,6 +49,7 @@ RSpec.describe BulkUpload::Lettings::RowParser do
             field_113: managing_org.old_visible_id,
             field_130: "1",
             field_134: "0",
+            field_102: "2",
           }
         end
 

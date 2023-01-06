@@ -221,6 +221,7 @@ private
       needstype: [],
       rent_type: %i[field_1 field_129 field_130],
       startdate: %i[field_98 field_97 field_96],
+      unittype_gn: %i[field_102],
     }
   end
 
@@ -284,6 +285,7 @@ private
     attributes["needstype"] = bulk_upload.needstype
     attributes["rent_type"] = rent_type
     attributes["startdate"] = startdate
+    attributes["unittype_gn"] = field_102
 
     attributes
   end
