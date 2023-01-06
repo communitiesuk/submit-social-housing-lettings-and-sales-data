@@ -87,6 +87,7 @@ FactoryBot.define do
       relat5 { "P" }
       relat6 { "P" }
       hb { 4 }
+      mortgageused { 1 }
     end
   end
 end

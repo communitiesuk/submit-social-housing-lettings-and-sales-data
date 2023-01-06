@@ -92,17 +92,32 @@ RSpec.describe SalesLog, type: :model do
   end
 
   describe "derived variables" do
-    let!(:sales_log) do
-      described_class.create({
-        exdate: Time.gm(2022, 5, 4),
-      })
-    end
+    let(:sales_log) { FactoryBot.create(:sales_log, :completed) }
 
     it "correctly derives and saves exday, exmonth and exyear" do
+      sales_log.update!(exdate: Time.gm(2022, 5, 4))
       record_from_db = ActiveRecord::Base.connection.execute("select exday, exmonth, exyear from sales_logs where id=#{sales_log.id}").to_a[0]
       expect(record_from_db["exday"]).to eq(4)
       expect(record_from_db["exmonth"]).to eq(5)
       expect(record_from_db["exyear"]).to eq(2022)
+    end
+
+    it "correctly derives and saves deposit for outright sales when no mortgage is used" do
+      sales_log.update!(value: 123_400, deposit: nil, mortgageused: 2, ownershipsch: 3, type: 10, companybuy: 1, jointpur: 1, jointmore: 1)
+      record_from_db = ActiveRecord::Base.connection.execute("select deposit from sales_logs where id=#{sales_log.id}").to_a[0]
+      expect(record_from_db["deposit"]).to eq(123_400)
+    end
+
+    it "does not derive deposit if the sale isn't outright" do
+      sales_log.update!(value: 123_400, deposit: nil, mortgageused: 2, ownershipsch: 2)
+      record_from_db = ActiveRecord::Base.connection.execute("select deposit from sales_logs where id=#{sales_log.id}").to_a[0]
+      expect(record_from_db["deposit"]).to eq(nil)
+    end
+
+    it "does not derive deposit if the mortgage is used" do
+      sales_log.update!(value: 123_400, deposit: nil, mortgageused: 1, ownershipsch: 3, type: 10, companybuy: 1, jointpur: 1, jointmore: 1)
+      record_from_db = ActiveRecord::Base.connection.execute("select deposit from sales_logs where id=#{sales_log.id}").to_a[0]
+      expect(record_from_db["deposit"]).to eq(nil)
     end
   end
 

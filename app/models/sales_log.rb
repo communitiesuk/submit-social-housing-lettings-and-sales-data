@@ -143,4 +143,12 @@ class SalesLog < Log
     self[la_inferred_key] = inferred_la.present?
     self[la_key] = inferred_la if inferred_la.present?
   end
+
+  def outright_sale?
+    ownershipsch == 3
+  end
+
+  def mortgage_not_used?
+    mortgageused == 2
+  end
 end
