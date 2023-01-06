@@ -2,6 +2,7 @@ class SalesLogValidator < ActiveModel::Validator
   include Validations::Sales::HouseholdValidations
   include Validations::SharedValidations
   include Validations::Sales::FinancialValidations
+  include Validations::LocalAuthorityValidations
 
   def validate(record)
     validation_methods = public_methods.select { |method| method.starts_with?("validate_") }
