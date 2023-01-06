@@ -196,8 +196,9 @@ private
   end
 
   def validate_nulls
-    field_mapping_for_errors.each do |question, fields|
-      question = questions.find { |q| q.id == question }
+    field_mapping_for_errors.each do |error_key, fields|
+      question_id = error_key.to_s
+      question = questions.find { |q| q.id == question_id }
 
       next unless question
       next if log.optional_fields.include?(question.id)
@@ -222,6 +223,7 @@ private
       rent_type: %i[field_1 field_129 field_130],
       startdate: %i[field_98 field_97 field_96],
       unittype_gn: %i[field_102],
+      builtype: %i[field_103],
     }
   end
 
@@ -286,6 +288,7 @@ private
     attributes["rent_type"] = rent_type
     attributes["startdate"] = startdate
     attributes["unittype_gn"] = field_102
+    attributes["builtype"] = field_103
 
     attributes
   end
