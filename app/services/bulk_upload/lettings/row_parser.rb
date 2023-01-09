@@ -436,7 +436,49 @@ private
     attributes["tshortfall_known"] = tshortfall_known
     attributes["tshortfall"] = field_88
 
+    attributes["hhmemb"] = hhmemb
+
     attributes
+  end
+
+  def hhmemb
+    [
+      person_2_present?,
+      person_3_present?,
+      person_4_present?,
+      person_5_present?,
+      person_6_present?,
+      person_7_present?,
+      person_8_present?,
+    ].count(true) + 1
+  end
+
+  def person_2_present?
+    field_13.present? && field_21.present? && field_28.present?
+  end
+
+  def person_3_present?
+    field_14.present? && field_22.present? && field_29.present?
+  end
+
+  def person_4_present?
+    field_15.present? && field_23.present? && field_30.present?
+  end
+
+  def person_5_present?
+    field_16.present? && field_24.present? && field_31.present?
+  end
+
+  def person_6_present?
+    field_17.present? && field_25.present? && field_32.present?
+  end
+
+  def person_7_present?
+    field_18.present? && field_26.present? && field_33.present?
+  end
+
+  def person_8_present?
+    field_19.present? && field_27.present? && field_34.present?
   end
 
   def tshortfall_known
