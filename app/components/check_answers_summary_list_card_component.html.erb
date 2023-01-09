@@ -2,12 +2,7 @@
   <div class="x-govuk-summary-card govuk-!-margin-bottom-6">
     <% if applicable_questions.first.check_answers_card_number != 0 && applicable_questions.first.check_answers_card_number.present? %>
       <div class="x-govuk-summary-card__header">
-        <% if applicable_questions.first.check_answers_card_number == 1 %>
-          <h3 class="x-govuk-summary-card__title">Lead tenant</h3>
-        <% end %>
-        <% if applicable_questions.first.check_answers_card_number > 1 %>
-          <h3 class="x-govuk-summary-card__title">Person <%= applicable_questions.first.check_answers_card_number %></h3>
-        <% end %>
+        <h3 class="x-govuk-summary-card__title"><%= check_answers_card_title(applicable_questions.first) %></h3>
       </div>
     <% end %>
     <div class="x-govuk-summary-card__body">
