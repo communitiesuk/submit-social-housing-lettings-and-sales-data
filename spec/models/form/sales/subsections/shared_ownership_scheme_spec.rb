@@ -19,6 +19,7 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
         about_staircasing
         resale
         exchange_contracts
+        handover_date
         la_nominations
         buyer_previous
         previous_bedrooms
