@@ -267,6 +267,7 @@ private
       illness: %i[field_118],
 
       layear: %i[field_66],
+      waityear: %i[field_67],
     }
   end
 
@@ -375,6 +376,7 @@ private
     attributes["illness"] = field_118
 
     attributes["layear"] = field_66
+    attributes["waityear"] = field_67
 
     attributes
   end
