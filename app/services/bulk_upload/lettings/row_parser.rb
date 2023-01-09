@@ -271,6 +271,9 @@ private
       reason: %i[field_52],
       prevten: %i[field_61],
       homeless: %i[field_68],
+
+      ppcodenk: %i[field_65],
+      ppostcode_full: %i[field_65 field_66],
     }
   end
 
@@ -384,7 +387,14 @@ private
     attributes["prevten"] = field_61
     attributes["homeless"] = field_68
 
+    attributes["ppcodenk"] = field_65
+    attributes["ppostcode_full"] = ppostcode_full
+
     attributes
+  end
+
+  def ppostcode_full
+    "#{field_63} #{field_64}".strip.gsub(/\s+/, " ")
   end
 
   def housingneeds
