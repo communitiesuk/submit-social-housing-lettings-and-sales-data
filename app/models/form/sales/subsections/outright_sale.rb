@@ -14,6 +14,7 @@ class Form::Sales::Subsections::OutrightSale < ::Form::Subsection
       Form::Sales::Pages::MortgageAmount.new("mortgage_amount_outright_sale", nil, self),
       Form::Sales::Pages::AboutDepositWithoutDiscount.new("about_deposit_outright_sale", nil, self),
       Form::Sales::Pages::DepositValueCheck.new("outright_sale_deposit_value_check", nil, self),
+      Form::Sales::Pages::LeaseholdCharges.new("leasehold_charges_outright_sale", nil, self),
     ]
   end
 

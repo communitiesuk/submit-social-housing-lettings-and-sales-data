@@ -7,5 +7,8 @@ module DerivedVariables::SalesLogVariables
       self.exyear = exdate.year
     end
     self.deposit = value if outright_sale? && mortgage_not_used?
+    if mscharge_known.present? && mscharge_known.zero?
+      self.mscharge = 0
+    end
   end
 end

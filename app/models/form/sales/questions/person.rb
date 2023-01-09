@@ -13,6 +13,8 @@ class Form::Sales::Questions::Person < ::Form::Question
   end
 
   def field_for_person(field, suffix = "")
+    return [field, person_display_number, suffix].join if field == "details_known_"
+
     [field, @person_index, suffix].join
   end
 end

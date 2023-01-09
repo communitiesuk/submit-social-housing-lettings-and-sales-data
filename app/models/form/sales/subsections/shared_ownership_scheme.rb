@@ -24,6 +24,7 @@ class Form::Sales::Subsections::SharedOwnershipScheme < ::Form::Subsection
       Form::Sales::Pages::AboutDepositWithoutDiscount.new("about_deposit_shared_ownership", nil, self),
       Form::Sales::Pages::DepositValueCheck.new("shared_ownership_deposit_value_check", nil, self),
       Form::Sales::Pages::MonthlyRent.new(nil, nil, self),
+      Form::Sales::Pages::LeaseholdCharges.new("leasehold_charges_shared_ownership", nil, self),
     ]
   end
 
