@@ -30,7 +30,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
   end
 
   context "when a valid csv" do
-    let(:path) { file_fixture("2021_22_lettings_bulk_upload.csv") }
+    let(:path) { file_fixture("2022_23_lettings_bulk_upload.csv") }
 
     it do
       validator.call

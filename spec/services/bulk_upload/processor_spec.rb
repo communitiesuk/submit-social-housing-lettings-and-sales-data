@@ -11,7 +11,7 @@ RSpec.describe BulkUpload::Processor do
         instance_double(
           BulkUpload::Downloader,
           call: nil,
-          path: file_fixture("2021_22_lettings_bulk_upload.csv"),
+          path: file_fixture("2022_23_lettings_bulk_upload.csv"),
           delete_local_file!: nil,
         )
       end
@@ -19,7 +19,7 @@ RSpec.describe BulkUpload::Processor do
       it "persist the validation errors" do
         allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
 
-        expect { processor.call }.to change(BulkUploadError, :count).by(9)
+        expect { processor.call }.to change(BulkUploadError, :count).by(10)
       end
 
       it "deletes the local file afterwards" do
