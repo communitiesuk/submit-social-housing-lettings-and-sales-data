@@ -259,6 +259,8 @@ private
       armedforces: %i[field_45],
       leftreg: %i[field_114],
       reservist: %i[field_46],
+
+      preg_occ: %i[field_47],
     }
   end
 
@@ -359,6 +361,8 @@ private
     attributes["armedforces"] = field_45
     attributes["leftreg"] = field_114
     attributes["reservist"] = field_46
+
+    attributes["preg_occ"] = field_47
 
     attributes
   end
