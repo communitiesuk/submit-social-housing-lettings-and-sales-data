@@ -285,6 +285,8 @@ private
       cbl: %i[field_75],
       chr: %i[field_76],
       cap: %i[field_77],
+
+      referral: %i[field_78],
     }
   end
 
@@ -412,6 +414,8 @@ private
     attributes["chr"] = chr
     attributes["cap"] = cap
     attributes["letting_allocation_unknown"] = letting_allocation_unknown
+
+    attributes["referral"] = field_78
 
     attributes
   end
