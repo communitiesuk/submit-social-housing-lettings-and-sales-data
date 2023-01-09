@@ -253,6 +253,8 @@ private
       ethnic_group: %i[field_43],
       ethnic: %i[field_43],
       national: %i[field_44],
+
+      ecstat1: %i[field_35],
     }
   end
 
@@ -347,6 +349,8 @@ private
     attributes["ethnic_group"] = ethnic_group_from_ethnic
     attributes["ethnic"] = field_43
     attributes["national"] = field_44
+
+    attributes["ecstat1"] = field_35
 
     attributes
   end
