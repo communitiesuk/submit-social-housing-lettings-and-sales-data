@@ -19,7 +19,7 @@ class Form::Sales::Questions::Buyer2IncomeValueCheck < ::Form::Question
         },
       ],
     }
-    @check_answers_card_number = 1
+    @check_answers_card_number = 2
     @page = page
   end
 end

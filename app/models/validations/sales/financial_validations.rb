@@ -70,4 +70,18 @@ module Validations::Sales::FinancialValidations
 
     child_income_validation(record, :income2)
   end
+
+  def validate_combined_income(record)
+    if record.income1 && record.income2
+      if record.london_property?
+        if record.income1 + record.income2 > 90_000
+          record.errors.add :income1, I18n.t("validations.financial.income.combined_over_hard_max", hard_max: 90_000)
+          record.errors.add :income2, I18n.t("validations.financial.income.combined_over_hard_max", hard_max: 90_000)
+        end
+      elsif record.income1 + record.income2 > 80_000
+        record.errors.add :income1, I18n.t("validations.financial.income.combined_over_hard_max", hard_max: 80_000)
+        record.errors.add :income2, I18n.t("validations.financial.income.combined_over_hard_max", hard_max: 80_000)
+      end
+    end
+  end
 end
