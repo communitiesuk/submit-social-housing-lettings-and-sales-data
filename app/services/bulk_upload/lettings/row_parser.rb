@@ -263,6 +263,8 @@ private
       preg_occ: %i[field_47],
 
       housingneeds: %i[field_47],
+
+      illness: %i[field_118],
     }
   end
 
@@ -367,6 +369,8 @@ private
     attributes["preg_occ"] = field_47
 
     attributes["housingneeds"] = housingneeds
+
+    attributes["illness"] = field_118
 
     attributes
   end
