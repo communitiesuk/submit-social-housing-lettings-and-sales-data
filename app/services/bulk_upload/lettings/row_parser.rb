@@ -287,6 +287,8 @@ private
       cap: %i[field_77],
 
       referral: %i[field_78],
+
+      net_income_known: %i[field_51],
     }
   end
 
@@ -416,6 +418,8 @@ private
     attributes["letting_allocation_unknown"] = letting_allocation_unknown
 
     attributes["referral"] = field_78
+
+    attributes["net_income_known"] = field_51
 
     attributes
   end
