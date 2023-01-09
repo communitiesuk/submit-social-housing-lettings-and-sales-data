@@ -290,6 +290,7 @@ private
 
       net_income_known: %i[field_51],
       hb: %i[field_48],
+      benefits: %i[field_49],
     }
   end
 
@@ -422,6 +423,7 @@ private
 
     attributes["net_income_known"] = field_51
     attributes["hb"] = field_48
+    attributes["benefits"] = field_49
 
     attributes
   end
