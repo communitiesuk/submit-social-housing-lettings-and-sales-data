@@ -268,6 +268,7 @@ private
 
       layear: %i[field_66],
       waityear: %i[field_67],
+      reason: %i[field_52],
     }
   end
 
@@ -377,6 +378,7 @@ private
 
     attributes["layear"] = field_66
     attributes["waityear"] = field_67
+    attributes["reason"] = field_52
 
     attributes
   end
