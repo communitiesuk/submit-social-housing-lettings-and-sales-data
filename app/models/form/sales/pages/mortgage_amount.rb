@@ -4,6 +4,9 @@ class Form::Sales::Pages::MortgageAmount < ::Form::Page
     @header = "Mortgage Amount"
     @description = ""
     @subsection = subsection
+    @depends_on = [{
+      "mortgageused" => 1,
+    }]
   end
 
   def questions
