@@ -62,6 +62,9 @@ FactoryBot.define do
       savingsnk { 1 }
       prevown { 1 }
       sex3 { "X" }
+      sex4 { "X" }
+      sex5 { "X" }
+      sex6 { "X" }
       mortgage { 20_000 }
       ecstat3 { 10 }
       ecstat4 { 3 }

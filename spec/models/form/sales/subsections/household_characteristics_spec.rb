@@ -50,6 +50,8 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
         person_2_relationship_to_buyer_1_joint_purchase
         person_2_age
         person_2_age_joint_purchase
+        person_2_gender_identity
+        person_2_gender_identity_joint_purchase
         person_2_working_situation
         person_2_working_situation_joint_purchase
         person_3_known
@@ -58,6 +60,8 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
         person_3_relationship_to_buyer_1_joint_purchase
         person_3_age
         person_3_age_joint_purchase
+        person_3_gender_identity
+        person_3_gender_identity_joint_purchase
         person_3_working_situation
         person_3_working_situation_joint_purchase
         person_4_known
@@ -66,6 +70,8 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
         person_4_relationship_to_buyer_1_joint_purchase
         person_4_age
         person_4_age_joint_purchase
+        person_4_gender_identity
+        person_4_gender_identity_joint_purchase
         person_4_working_situation
         person_4_working_situation_joint_purchase
       ],
