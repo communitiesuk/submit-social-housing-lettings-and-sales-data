@@ -20,6 +20,6 @@ RSpec.describe Form::Sales::Pages::Buyer1WorkingSituation, type: :model do
   end
 
   it "has the correct header" do
-    expect(page.header).to eq("Which of these best describes buyer 1's working situation?")
+    expect(page.header).to eq("")
   end
 end
