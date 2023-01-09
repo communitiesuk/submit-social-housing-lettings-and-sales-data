@@ -270,6 +270,7 @@ private
       waityear: %i[field_67],
       reason: %i[field_52],
       prevten: %i[field_61],
+      homeless: %i[field_68],
     }
   end
 
@@ -381,6 +382,7 @@ private
     attributes["waityear"] = field_67
     attributes["reason"] = field_52
     attributes["prevten"] = field_61
+    attributes["homeless"] = field_68
 
     attributes
   end
