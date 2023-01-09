@@ -291,6 +291,11 @@ private
       net_income_known: %i[field_51],
       hb: %i[field_48],
       benefits: %i[field_49],
+
+      period: %i[field_79],
+      brent: %i[field_80],
+      hbrentshortfall: %i[field_87],
+      tshortfall: %i[field_88],
     }
   end
 
@@ -425,7 +430,17 @@ private
     attributes["hb"] = field_48
     attributes["benefits"] = field_49
 
+    attributes["period"] = field_79
+    attributes["brent"] = field_80
+    attributes["hbrentshortfall"] = field_87
+    attributes["tshortfall_known"] = tshortfall_known
+    attributes["tshortfall"] = field_88
+
     attributes
+  end
+
+  def tshortfall_known
+    field_87 == 1 ? 0 : 1
   end
 
   def letting_allocation_unknown

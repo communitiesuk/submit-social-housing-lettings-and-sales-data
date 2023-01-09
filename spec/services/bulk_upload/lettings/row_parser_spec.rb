@@ -120,6 +120,11 @@ RSpec.describe BulkUpload::Lettings::RowParser do
             field_51: "1",
             field_48: "1",
             field_49: "1",
+
+            field_79: "4",
+            field_80: "1234.56",
+            field_87: "1",
+            field_88: "234.56",
           }
         end
 
@@ -132,7 +137,7 @@ RSpec.describe BulkUpload::Lettings::RowParser do
             parser.send(:log).optional_fields.include?(q.id) || q.completed?(parser.send(:log))
           end
 
-          expect(questions.map(&:id).size).to be(0)
+          expect(questions.map(&:id).size).to eq(0)
           expect(questions.map(&:id)).to eql([])
         end
       end
