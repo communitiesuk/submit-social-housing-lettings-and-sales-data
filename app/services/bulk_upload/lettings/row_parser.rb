@@ -261,6 +261,8 @@ private
       reservist: %i[field_46],
 
       preg_occ: %i[field_47],
+
+      housingneeds: %i[field_47],
     }
   end
 
@@ -364,7 +366,19 @@ private
 
     attributes["preg_occ"] = field_47
 
+    attributes["housingneeds"] = housingneeds
+
     attributes
+  end
+
+  def housingneeds
+    if field_59 == 1
+      1
+    elsif field_60 == 1
+      3
+    else
+      2
+    end
   end
 
   def ethnic_group_from_ethnic
