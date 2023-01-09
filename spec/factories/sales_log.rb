@@ -95,6 +95,7 @@ FactoryBot.define do
       armedforcesspouse { 5 }
       mscharge_known { 1 }
       mscharge { 100 }
+      mortlen { 10 }
     end
   end
 end
