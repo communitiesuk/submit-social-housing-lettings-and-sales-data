@@ -16,7 +16,7 @@ RSpec.describe BulkUpload::Lettings::RowParser do
       field_96: "1",
       field_97: "1",
       field_98: "2023",
-      field_134: "0",
+      field_134: "2",
     }
   end
 
@@ -38,7 +38,7 @@ RSpec.describe BulkUpload::Lettings::RowParser do
 
     describe "#valid?" do
       context "when calling the method multiple times" do
-        let(:attributes) { { bulk_upload:, field_134: 3 } }
+        let(:attributes) { { bulk_upload:, field_134: 2 } }
 
         it "does not add keep adding errors to the pile" do
           expect { parser.valid? }.not_to change(parser.errors, :count)
@@ -60,7 +60,7 @@ RSpec.describe BulkUpload::Lettings::RowParser do
             field_111: owning_org.old_visible_id,
             field_113: managing_org.old_visible_id,
             field_130: "1",
-            field_134: "0",
+            field_134: "2",
             field_102: "2",
             field_103: "1",
             field_104: "1",
@@ -323,6 +323,16 @@ RSpec.describe BulkUpload::Lettings::RowParser do
 
         it "sets value to 0" do
           expect(parser.log.letting_allocation_unknown).to be(0)
+        end
+      end
+    end
+
+    describe "#renewal" do
+      context "when field_134 is no ie 2" do
+        let(:attributes) { { bulk_upload:, field_134: 2 } }
+
+        it "sets value to 0" do
+          expect(parser.log.renewal).to eq(0)
         end
       end
     end
