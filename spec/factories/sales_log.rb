@@ -90,6 +90,8 @@ FactoryBot.define do
       mortgageused { 1 }
       wchair { 1 }
       armedforcesspouse { 5 }
+      mscharge_known { 1 }
+      mscharge { 100 }
     end
   end
 end

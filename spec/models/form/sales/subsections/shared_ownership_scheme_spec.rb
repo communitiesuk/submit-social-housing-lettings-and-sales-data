@@ -29,6 +29,7 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
         about_deposit_shared_ownership
         shared_ownership_deposit_value_check
         monthly_rent
+        leasehold_charges_shared_ownership
       ],
     )
   end

@@ -461,6 +461,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_05_103733) do
     t.integer "mortgageused"
     t.integer "wchair"
     t.integer "armedforcesspouse"
+    t.integer "mscharge_known"
+    t.decimal "mscharge", precision: 10, scale: 2
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
