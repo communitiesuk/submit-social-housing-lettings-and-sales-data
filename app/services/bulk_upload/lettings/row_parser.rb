@@ -255,6 +255,10 @@ private
       national: %i[field_44],
 
       ecstat1: %i[field_35],
+
+      armedforces: %i[field_45],
+      leftreg: %i[field_114],
+      reservist: %i[field_46],
     }
   end
 
@@ -351,6 +355,10 @@ private
     attributes["national"] = field_44
 
     attributes["ecstat1"] = field_35
+
+    attributes["armedforces"] = field_45
+    attributes["leftreg"] = field_114
+    attributes["reservist"] = field_46
 
     attributes
   end
