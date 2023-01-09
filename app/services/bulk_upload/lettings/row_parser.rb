@@ -353,7 +353,7 @@ private
     attributes["postcode_full"] = postcode_full
     attributes["owning_organisation_id"] = owning_organisation_id
     attributes["managing_organisation_id"] = managing_organisation_id
-    attributes["renewal"] = field_134
+    attributes["renewal"] = renewal
     attributes["scheme"] = scheme
     attributes["created_by"] = bulk_upload.user
     attributes["needstype"] = bulk_upload.needstype
@@ -439,6 +439,15 @@ private
     attributes["hhmemb"] = hhmemb
 
     attributes
+  end
+
+  def renewal
+    case field_134
+    when 1
+      1
+    when 2
+      0
+    end
   end
 
   def hhmemb
