@@ -110,6 +110,10 @@ RSpec.describe BulkUpload::Lettings::RowParser do
             field_72: "1",
             field_73: "",
             field_74: "",
+
+            field_75: "1",
+            field_76: "2",
+            field_77: "2",
           }
         end
 
@@ -117,11 +121,12 @@ RSpec.describe BulkUpload::Lettings::RowParser do
           expect(parser).to be_valid
         end
 
-        it "instantiates a log with everything completed" do
+        it "instantiates a log with everything completed", aggregate_failures: true do
           questions = parser.send(:questions).reject do |q|
             parser.send(:log).optional_fields.include?(q.id) || q.completed?(parser.send(:log))
           end
 
+          expect(questions.map(&:id).size).to be(0)
           expect(questions.map(&:id)).to eql([])
         end
       end
@@ -233,6 +238,80 @@ RSpec.describe BulkUpload::Lettings::RowParser do
 
         it "returns an error" do
           expect(parser.errors[:field_103]).to be_present
+        end
+      end
+    end
+  end
+
+  describe "#log" do
+    describe "#cbl" do
+      context "when field_75 is yes ie 1" do
+        let(:attributes) { { bulk_upload:, field_75: 1 } }
+
+        it "sets value to 1" do
+          expect(parser.log.cbl).to be(1)
+        end
+      end
+
+      context "when field_75 is no ie 2" do
+        let(:attributes) { { bulk_upload:, field_75: 2 } }
+
+        it "sets value to 0" do
+          expect(parser.log.cbl).to be(0)
+        end
+      end
+    end
+
+    describe "#chr" do
+      context "when field_76 is yes ie 1" do
+        let(:attributes) { { bulk_upload:, field_76: 1 } }
+
+        it "sets value to 1" do
+          expect(parser.log.chr).to be(1)
+        end
+      end
+
+      context "when field_76 is no ie 2" do
+        let(:attributes) { { bulk_upload:, field_76: 2 } }
+
+        it "sets value to 0" do
+          expect(parser.log.chr).to be(0)
+        end
+      end
+    end
+
+    describe "#cap" do
+      context "when field_77 is yes ie 1" do
+        let(:attributes) { { bulk_upload:, field_77: 1 } }
+
+        it "sets value to 1" do
+          expect(parser.log.cap).to be(1)
+        end
+      end
+
+      context "when field_77 is no ie 2" do
+        let(:attributes) { { bulk_upload:, field_77: 2 } }
+
+        it "sets value to 0" do
+          expect(parser.log.cap).to be(0)
+        end
+      end
+    end
+
+    describe "#letting_allocation_unknown" do
+      context "when field_75, 76, 77 are no ie 2" do
+        let(:attributes) { { bulk_upload:, field_75: 2, field_76: 2, field_77: 2 } }
+
+        it "sets value to 1" do
+          expect(parser.log.letting_allocation_unknown).to be(1)
+        end
+      end
+
+      context "when any one of field_75, 76, 77 is yes ie 1" do
+        let(:attributes) { { bulk_upload:, field_75: 1 } }
+
+        it "sets value to 0" do
+          expect(parser.log.letting_allocation_unknown).to be(0)
         end
       end
     end
