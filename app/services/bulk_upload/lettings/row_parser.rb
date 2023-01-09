@@ -173,6 +173,10 @@ class BulkUpload::Lettings::RowParser
     errors.blank?
   end
 
+  def log
+    @log ||= LettingsLog.new(attributes_for_log)
+  end
+
 private
 
   def postcode_full
@@ -189,10 +193,6 @@ private
 
   def questions
     log.form.subsections.flat_map { |ss| ss.applicable_questions(log) }
-  end
-
-  def log
-    @log ||= LettingsLog.new(attributes_for_log)
   end
 
   def validate_nulls
@@ -281,6 +281,10 @@ private
       rp_medwel: %i[field_72],
       rp_hardship: %i[field_73],
       rp_dontknow: %i[field_74],
+
+      cbl: %i[field_75],
+      chr: %i[field_76],
+      cap: %i[field_77],
     }
   end
 
@@ -404,7 +408,28 @@ private
     attributes["rp_hardship"] = field_73
     attributes["rp_dontknow"] = field_74
 
+    attributes["cbl"] = cbl
+    attributes["chr"] = chr
+    attributes["cap"] = cap
+    attributes["letting_allocation_unknown"] = letting_allocation_unknown
+
     attributes
+  end
+
+  def letting_allocation_unknown
+    [cbl, chr, cap].all?(0) ? 1 : 0
+  end
+
+  def cbl
+    field_75 == 2 ? 0 : field_75
+  end
+
+  def chr
+    field_76 == 2 ? 0 : field_76
+  end
+
+  def cap
+    field_77 == 2 ? 0 : field_77
   end
 
   def ppostcode_full
