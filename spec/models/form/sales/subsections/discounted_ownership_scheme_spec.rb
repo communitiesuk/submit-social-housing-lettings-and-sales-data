@@ -20,6 +20,7 @@ RSpec.describe Form::Sales::Subsections::DiscountedOwnershipScheme, type: :model
         mortgage_used_discounted_ownership
         mortgage_amount_discounted_ownership
         mortgage_length_discounted_ownership
+        extra_borrowing_discounted_ownership
         about_deposit_discounted_ownership
         discounted_ownership_deposit_value_check
         leasehold_charges_discounted_ownership

@@ -96,6 +96,7 @@ FactoryBot.define do
       mscharge_known { 1 }
       mscharge { 100 }
       mortlen { 10 }
+      extrabor { 1 }
     end
   end
 end

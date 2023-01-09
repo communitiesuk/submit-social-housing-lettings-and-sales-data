@@ -18,6 +18,7 @@ RSpec.describe Form::Sales::Subsections::OutrightSale, type: :model do
         mortgage_used_outright_sale
         mortgage_amount_outright_sale
         mortgage_length_outright_sale
+        extra_borrowing_outright_sale
         about_deposit_outright_sale
         outright_sale_deposit_value_check
         leasehold_charges_outright_sale
