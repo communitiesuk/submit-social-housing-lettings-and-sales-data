@@ -265,6 +265,8 @@ private
       housingneeds: %i[field_47],
 
       illness: %i[field_118],
+
+      layear: %i[field_66],
     }
   end
 
@@ -371,6 +373,8 @@ private
     attributes["housingneeds"] = housingneeds
 
     attributes["illness"] = field_118
+
+    attributes["layear"] = field_66
 
     attributes
   end
