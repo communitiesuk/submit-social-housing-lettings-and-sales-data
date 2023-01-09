@@ -274,6 +274,13 @@ private
 
       ppcodenk: %i[field_65],
       ppostcode_full: %i[field_65 field_66],
+
+      reasonpref: %i[field_69],
+      rp_homeless: %i[field_70],
+      rp_insan_unsat: %i[field_71],
+      rp_medwel: %i[field_72],
+      rp_hardship: %i[field_73],
+      rp_dontknow: %i[field_74],
     }
   end
 
@@ -389,6 +396,13 @@ private
 
     attributes["ppcodenk"] = field_65
     attributes["ppostcode_full"] = ppostcode_full
+
+    attributes["reasonpref"] = field_69
+    attributes["rp_homeless"] = field_70
+    attributes["rp_insan_unsat"] = field_71
+    attributes["rp_medwel"] = field_72
+    attributes["rp_hardship"] = field_73
+    attributes["rp_dontknow"] = field_74
 
     attributes
   end
