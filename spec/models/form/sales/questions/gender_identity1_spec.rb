@@ -40,7 +40,7 @@ RSpec.describe Form::Sales::Questions::GenderIdentity1, type: :model do
       "F" => { "value" => "Female" },
       "M" => { "value" => "Male" },
       "X" => { "value" => "Non-binary" },
-      "R" => { "value" => "Prefers not to say " },
+      "R" => { "value" => "Prefers not to say" },
     })
   end
 
