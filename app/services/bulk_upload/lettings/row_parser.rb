@@ -407,7 +407,7 @@ private
     attributes["waityear"] = field_67
     attributes["reason"] = field_52
     attributes["prevten"] = field_61
-    attributes["homeless"] = field_68
+    attributes["homeless"] = homeless
 
     attributes["ppcodenk"] = field_65
     attributes["ppostcode_full"] = ppostcode_full
@@ -439,6 +439,15 @@ private
     attributes["hhmemb"] = hhmemb
 
     attributes
+  end
+
+  def homeless
+    case field_68
+    when 1
+      1
+    when 12
+      11
+    end
   end
 
   def renewal
