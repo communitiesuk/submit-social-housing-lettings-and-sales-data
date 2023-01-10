@@ -95,7 +95,7 @@ RSpec.describe "Lettings Log Features" do
   end
 
   context "when the signed is user is not a Support user" do
-    let(:user) { create(:user) }
+    let!(:user) { create(:user, :data_coordinator, name: "User name", organisation: create(:organisation, name: "User org")) }
     let(:devise_notify_mailer) { DeviseNotifyMailer.new }
     let(:notify_client) { instance_double(Notifications::Client) }
 
@@ -110,15 +110,52 @@ RSpec.describe "Lettings Log Features" do
     end
 
     context "when completing the setup log section" do
-      it "does not include the organisation and created by questions" do
-        visit("/lettings-logs")
-        click_button("Create a new lettings log")
-        click_link("Set up this lettings log")
-        log_id = page.current_path.scan(/\d/).join
-        expect(page).to have_current_path("/lettings-logs/#{log_id}/needs-type")
-        visit("lettings-logs/#{log_id}/setup/check-answers")
-        expect(page).not_to have_content("Owning organisation #{user.organisation.name}")
-        expect(page).not_to have_content("Log owner #{user.name}")
+      context "if there is at most 1 potential stock owner" do
+        it "does not include the organisation and created by questions" do
+          visit("/lettings-logs")
+          click_button("Create a new lettings log")
+          click_link("Set up this lettings log")
+          log_id = page.current_path.scan(/\d/).join
+          expect(page).to have_current_path("/lettings-logs/#{log_id}/needs-type")
+          visit("lettings-logs/#{log_id}/setup/check-answers")
+          expect(page).not_to have_content("Stock owner User org")
+          expect(page).not_to have_content("Log owner User name")
+        end
+      end
+
+      context "if there is more than 1 potential stock owner" do
+        let!(:owning_org1) { create(:organisation, name: "Owning org 1") }
+        let!(:org_rel1) { create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: owning_org1) }
+        it "does include the stock owner question" do
+          visit("/lettings-logs")
+          click_button("Create a new lettings log")
+          click_link("Set up this lettings log")
+          log_id = page.current_path.scan(/\d/).join
+          expect(page).to have_current_path("/lettings-logs/#{log_id}/stock-owner")
+          visit("lettings-logs/#{log_id}/setup/check-answers")
+          expect(page).to have_content("Stock owner User org")
+        end
+
+        context "if there are more than 2 potential stock owners" do
+          let!(:owning_org2) { create(:organisation, name: "Owning org 2") }
+          let!(:org_rel2) { create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: owning_org2) }
+          context "if the organisation relationship for the selected stock owner is deleted" do
+            it "doesn't change the CYA page text to be 'You didn't answer this question'" do
+              visit("/lettings-logs")
+              click_button("Create a new lettings log")
+              click_link("Set up this lettings log")
+              log_id = page.current_path.scan(/\d/).join
+              expect(page).to have_current_path("/lettings-logs/#{log_id}/stock-owner")
+              select(owning_org1.name, from: "lettings-log-owning-organisation-id-field")
+              click_button("Save and continue")
+              visit("lettings-logs/#{log_id}/setup/check-answers")
+              expect(page).to have_content("Stock owner Owning org 1")
+              org_rel1.destroy!
+              visit("lettings-logs/#{log_id}/setup/check-answers")
+              expect(page).to have_content("Stock owner Owning org 1")
+            end
+          end
+        end
       end
     end
 
