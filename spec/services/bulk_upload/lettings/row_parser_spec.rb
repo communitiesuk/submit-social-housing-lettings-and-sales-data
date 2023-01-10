@@ -4,7 +4,8 @@ RSpec.describe BulkUpload::Lettings::RowParser do
   subject(:parser) { described_class.new(attributes) }
 
   let(:attributes) { { bulk_upload: } }
-  let(:bulk_upload) { create(:bulk_upload, :lettings) }
+  let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }
+  let(:user) { create(:user, organisation: owning_org) }
   let(:owning_org) { create(:organisation) }
   let(:managing_org) { create(:organisation) }
   let(:setup_section_params) do
