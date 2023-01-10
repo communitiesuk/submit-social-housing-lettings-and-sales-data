@@ -2,7 +2,6 @@ class Form::Sales::Pages::ArmedForces < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "armed_forces"
-    @header = ""
     @subsection = subsection
   end
 

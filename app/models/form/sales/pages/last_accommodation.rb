@@ -2,7 +2,6 @@ class Form::Sales::Pages::LastAccommodation < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "last_accommodation"
-    @header = ""
     @subsection = subsection
   end
 

@@ -2,7 +2,6 @@ class Form::Sales::Pages::NumberJointBuyers < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "number_joint_buyers"
-    @header = ""
     @subsection = subsection
     @depends_on = [{
       "jointpur" => 1,

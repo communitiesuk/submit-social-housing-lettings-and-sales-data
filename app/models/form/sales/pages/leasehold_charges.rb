@@ -1,7 +1,6 @@
 class Form::Sales::Pages::LeaseholdCharges < ::Form::Page
   def initialize(id, hsh, subsection)
     super
-    @header = ""
     @subsection = subsection
   end
 

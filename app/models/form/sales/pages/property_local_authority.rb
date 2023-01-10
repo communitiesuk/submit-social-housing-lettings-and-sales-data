@@ -2,7 +2,6 @@ class Form::Sales::Pages::PropertyLocalAuthority < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "property_local_authority"
-    @header = ""
     @subsection = subsection
   end
 

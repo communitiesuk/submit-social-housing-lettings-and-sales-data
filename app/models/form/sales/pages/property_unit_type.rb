@@ -2,7 +2,6 @@ class Form::Sales::Pages::PropertyUnitType < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "property_unit_type"
-    @header = ""
     @subsection = subsection
   end
 

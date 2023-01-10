@@ -2,7 +2,6 @@ class Form::Common::Pages::Organisation < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "organisation"
-    @header = ""
     @subsection = subsection
   end
 

@@ -2,7 +2,6 @@ class Form::Common::Pages::CreatedBy < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "created_by"
-    @header = ""
     @subsection = subsection
   end
 

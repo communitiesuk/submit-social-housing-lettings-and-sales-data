@@ -2,7 +2,6 @@ class Form::Sales::Pages::JointPurchase < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "joint_purchase"
-    @header = ""
     @subsection = subsection
     @depends_on = [
       { "ownershipsch" => 1 },

@@ -2,7 +2,6 @@ class Form::Sales::Pages::Savings < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "savings"
-    @header = ""
     @subsection = subsection
   end
 

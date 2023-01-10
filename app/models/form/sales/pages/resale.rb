@@ -2,7 +2,6 @@ class Form::Sales::Pages::Resale < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "resale"
-    @header = ""
     @subsection = subsection
     @depends_on = [
       {

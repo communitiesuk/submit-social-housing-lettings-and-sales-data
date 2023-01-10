@@ -2,7 +2,6 @@ class Form::Sales::Pages::SharedOwnershipType < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "shared_ownership_type"
-    @header = ""
     @subsection = subsection
     @depends_on = [{
       "ownershipsch" => 1,

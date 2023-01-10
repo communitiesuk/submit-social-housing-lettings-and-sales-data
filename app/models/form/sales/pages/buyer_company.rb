@@ -2,7 +2,6 @@ class Form::Sales::Pages::BuyerCompany < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "buyer_company"
-    @header = ""
     @subsection = subsection
     @depends_on = [{
       "ownershipsch" => 3,

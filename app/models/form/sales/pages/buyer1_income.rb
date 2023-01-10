@@ -2,7 +2,6 @@ class Form::Sales::Pages::Buyer1Income < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "buyer_1_income"
-    @header = ""
     @subsection = subsection
   end
 
