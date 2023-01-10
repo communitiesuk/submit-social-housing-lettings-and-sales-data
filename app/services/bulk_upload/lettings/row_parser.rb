@@ -311,6 +311,8 @@ private
       referral: %i[field_78],
 
       net_income_known: %i[field_51],
+      earnings: %i[field_50],
+      incfreq: %i[field_116],
       hb: %i[field_48],
       benefits: %i[field_49],
 
@@ -479,6 +481,8 @@ private
     attributes["referral"] = field_78
 
     attributes["net_income_known"] = net_income_known
+    attributes["earnings"] = field_50
+    attributes["incfreq"] = field_116
     attributes["hb"] = field_48
     attributes["benefits"] = field_49
 
