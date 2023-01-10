@@ -478,7 +478,7 @@ private
 
     attributes["referral"] = field_78
 
-    attributes["net_income_known"] = field_51
+    attributes["net_income_known"] = net_income_known
     attributes["hb"] = field_48
     attributes["benefits"] = field_49
 
@@ -491,6 +491,19 @@ private
     attributes["hhmemb"] = hhmemb
 
     attributes
+  end
+
+  def net_income_known
+    case field_51
+    when 1
+      0
+    when 2
+      1
+    when 3
+      1
+    when 4
+      2
+    end
   end
 
   def leftreg
