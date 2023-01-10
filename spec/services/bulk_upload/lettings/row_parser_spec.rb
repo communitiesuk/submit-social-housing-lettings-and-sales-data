@@ -213,6 +213,16 @@ RSpec.describe BulkUpload::Lettings::RowParser do
       end
     end
 
+    describe "#field_10" do
+      context "when field_9 is 3 aka other" do
+        let(:attributes) { { bulk_upload:, field_9: "3" } }
+
+        xit "returns an error" do
+          expect(parser.errors[:field_10]).to be_present
+        end
+      end
+    end
+
     describe "fields 96, 97, 98 => startdate" do
       context "when any one of these fields is blank" do
         let(:attributes) { { bulk_upload:, field_96: nil, field_97: nil, field_98: nil } }
