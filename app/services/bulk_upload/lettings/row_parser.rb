@@ -320,6 +320,8 @@ private
       brent: %i[field_80],
       hbrentshortfall: %i[field_87],
       tshortfall: %i[field_88],
+
+      unitletas: %i[field_105],
     }
   end
 
@@ -493,6 +495,8 @@ private
     attributes["tshortfall"] = field_88
 
     attributes["hhmemb"] = hhmemb
+
+    attributes["unitletas"] = field_105
 
     attributes
   end
