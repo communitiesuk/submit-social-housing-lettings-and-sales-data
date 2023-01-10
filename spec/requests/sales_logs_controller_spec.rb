@@ -119,7 +119,7 @@ RSpec.describe SalesLogsController, type: :request do
         it "does have organisation values" do
           get "/sales-logs", headers: headers, params: {}
           expect(page).to have_content("Owned by")
-          expect(page).to have_content("Managed by")
+          expect(page).not_to have_content("Managed by")
         end
 
         it "shows sales logs for all organisations" do
