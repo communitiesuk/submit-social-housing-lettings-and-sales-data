@@ -6,7 +6,6 @@ class Form::Sales::Questions::PreviousPostcode < ::Form::Question
     @header = "Postcode"
     @type = "text"
     @width = 5
-    @hint_text = ""
     @inferred_check_answers_value = {
       "condition" => {
         "ppcodenk" => 1,

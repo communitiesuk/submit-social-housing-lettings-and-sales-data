@@ -8,6 +8,5 @@ class Form::Sales::Questions::MortgageLength < ::Form::Question
     @min = 0
     @width = 5
     @suffix = " years"
-    @hint_text = ""
   end
 end

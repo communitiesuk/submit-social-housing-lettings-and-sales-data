@@ -6,7 +6,6 @@ class Form::Sales::Questions::SavingsNk < ::Form::Question
     @header = "Do you know how much the buyer had in savings before they paid any deposit for the property?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @hint_text = ""
     @conditional_for = {
       "savings" => [0],
     }

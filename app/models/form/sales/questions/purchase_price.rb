@@ -8,6 +8,5 @@ class Form::Sales::Questions::PurchasePrice < ::Form::Question
     @min = 0
     @width = 5
     @prefix = "£"
-    @hint_text = ""
   end
 end

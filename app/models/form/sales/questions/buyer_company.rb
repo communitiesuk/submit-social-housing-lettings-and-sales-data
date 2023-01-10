@@ -4,7 +4,6 @@ class Form::Sales::Questions::BuyerCompany < ::Form::Question
     @id = "companybuy"
     @check_answer_label = "Company buyer"
     @header = "Is the buyer a company?"
-    @hint_text = ""
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
   end

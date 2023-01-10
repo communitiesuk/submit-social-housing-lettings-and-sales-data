@@ -5,7 +5,6 @@ class Form::Sales::Questions::BuyerStillServing < ::Form::Question
     @check_answer_label = "Are they still serving in the UK armed forces?"
     @header = "Is the buyer still serving in the UK armed forces?"
     @type = "radio"
-    @hint_text = ""
     @answer_options = ANSWER_OPTIONS
   end
 

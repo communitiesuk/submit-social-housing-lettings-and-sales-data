@@ -6,7 +6,6 @@ class Form::Sales::Questions::Prevown < ::Form::Question
     @header = "Has the buyer previously owned a property?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @hint_text = ""
   end
 
   ANSWER_OPTIONS = {

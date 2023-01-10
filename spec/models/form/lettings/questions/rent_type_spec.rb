@@ -28,7 +28,7 @@ RSpec.describe Form::Lettings::Questions::RentType, type: :model do
   end
 
   it "has the correct hint_text" do
-    expect(question.hint_text).to eq("")
+    expect(question.hint_text).to be_nil
   end
 
   it "has the correct conditional_for" do

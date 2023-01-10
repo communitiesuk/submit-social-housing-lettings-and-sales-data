@@ -4,7 +4,6 @@ class Form::Common::Questions::OwningOrganisationId < ::Form::Question
     @id = "owning_organisation_id"
     @check_answer_label = "Owning organisation"
     @header = "Which organisation owns this log?"
-    @hint_text = ""
     @type = "select"
   end
 

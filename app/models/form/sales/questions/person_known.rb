@@ -5,7 +5,6 @@ class Form::Sales::Questions::PersonKnown < Form::Sales::Questions::Person
     @header = "Do you know the details for person #{person_display_number}?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @hint_text = ""
     @hidden_in_check_answers = {
       "depends_on" => [
         {

@@ -5,7 +5,6 @@ class Form::Sales::Questions::Buyer2RelationshipToBuyer1 < ::Form::Question
     @check_answer_label = "Buyer 2's relationship to buyer 1"
     @header = "What is buyer 2's relationship to buyer 1?"
     @type = "radio"
-    @hint_text = ""
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = 2
   end

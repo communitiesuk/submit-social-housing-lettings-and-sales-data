@@ -5,7 +5,6 @@ class Form::Sales::Questions::HousingBenefits < ::Form::Question
     @check_answer_label = "Housing-related benefits buyer received before buying this property"
     @header = "Was the buyer receiving any of these housing-related benefits immediately before buying this property?"
     @type = "radio"
-    @hint_text = ""
     @answer_options = ANSWER_OPTIONS
   end
 
