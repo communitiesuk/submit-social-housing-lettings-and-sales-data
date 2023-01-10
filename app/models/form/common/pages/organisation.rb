@@ -3,7 +3,6 @@ class Form::Common::Pages::Organisation < ::Form::Page
     super
     @id = "organisation"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

@@ -3,7 +3,6 @@ class Form::Sales::Pages::Buyer1Mortgage < ::Form::Page
     super
     @id = "buyer_1_mortgage"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

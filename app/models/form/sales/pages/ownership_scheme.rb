@@ -3,7 +3,6 @@ class Form::Sales::Pages::OwnershipScheme < ::Form::Page
     super
     @id = "ownership_scheme"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

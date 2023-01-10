@@ -3,7 +3,6 @@ class Form::Sales::Pages::NumberJointBuyers < ::Form::Page
     super
     @id = "number_joint_buyers"
     @header = ""
-    @description = ""
     @subsection = subsection
     @depends_on = [{
       "jointpur" => 1,

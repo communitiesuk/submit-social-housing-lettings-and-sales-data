@@ -3,7 +3,6 @@ class Form::Sales::Pages::PropertyWheelchairAccessible < ::Form::Page
     super
     @id = "property_wheelchair_accessible"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

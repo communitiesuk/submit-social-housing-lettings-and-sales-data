@@ -2,7 +2,6 @@ class Form::Sales::Pages::Buyer1IncomeValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @header = ""
-    @description = ""
     @subsection = subsection
     @depends_on = [
       {

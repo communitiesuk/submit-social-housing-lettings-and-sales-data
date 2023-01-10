@@ -3,7 +3,6 @@ class Form::Sales::Pages::ExchangeDate < ::Form::Page
     super
     @id = "exchange_contracts"
     @header = ""
-    @description = ""
     @subsection = subsection
     @depends_on = [{
       "resale" => 2,

@@ -3,7 +3,6 @@ class Form::Sales::Pages::GenderIdentity1 < ::Form::Page
     super
     @id = "buyer_1_gender_identity"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

@@ -3,7 +3,6 @@ class Form::Sales::Pages::DiscountedOwnershipType < ::Form::Page
     super
     @id = "discounted_ownership_type"
     @header = ""
-    @description = ""
     @subsection = subsection
     @depends_on = [{
       "ownershipsch" => 2,

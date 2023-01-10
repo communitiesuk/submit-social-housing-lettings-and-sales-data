@@ -3,7 +3,6 @@ class Form::Sales::Pages::BuyerInterview < ::Form::Page
     super
     @id = "buyer_interview"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

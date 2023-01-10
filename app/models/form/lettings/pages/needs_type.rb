@@ -3,7 +3,6 @@ class Form::Lettings::Pages::NeedsType < ::Form::Page
     super
     @id = "needs_type"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

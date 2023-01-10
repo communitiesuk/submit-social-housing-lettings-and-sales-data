@@ -3,7 +3,6 @@ class Form::Sales::Pages::PropertyLocalAuthority < ::Form::Page
     super
     @id = "property_local_authority"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

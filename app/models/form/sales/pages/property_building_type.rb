@@ -3,7 +3,6 @@ class Form::Sales::Pages::PropertyBuildingType < ::Form::Page
     super
     @id = "property_building_type"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

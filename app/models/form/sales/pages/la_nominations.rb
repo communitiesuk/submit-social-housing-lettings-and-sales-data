@@ -3,7 +3,6 @@ class Form::Sales::Pages::LaNominations < ::Form::Page
     super
     @id = "la_nominations"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

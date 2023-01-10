@@ -3,7 +3,6 @@ class Form::Sales::Pages::JointPurchase < ::Form::Page
     super
     @id = "joint_purchase"
     @header = ""
-    @description = ""
     @subsection = subsection
     @depends_on = [
       { "ownershipsch" => 1 },

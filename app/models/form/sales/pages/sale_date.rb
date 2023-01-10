@@ -3,7 +3,6 @@ class Form::Sales::Pages::SaleDate < ::Form::Page
     super
     @id = "completion_date"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

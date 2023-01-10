@@ -3,7 +3,6 @@ class Form::Lettings::Pages::TenantCode < ::Form::Page
     super
     @id = "tenant_code"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

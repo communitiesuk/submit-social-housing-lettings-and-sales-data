@@ -3,7 +3,6 @@ class Form::Sales::Pages::MonthlyRent < ::Form::Page
     super
     @id = "monthly_rent"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

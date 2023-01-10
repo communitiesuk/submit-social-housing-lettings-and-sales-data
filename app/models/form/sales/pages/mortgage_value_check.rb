@@ -2,7 +2,6 @@ class Form::Sales::Pages::MortgageValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @header = ""
-    @description = ""
     @subsection = subsection
     @depends_on = [
       {

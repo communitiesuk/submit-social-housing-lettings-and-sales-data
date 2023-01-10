@@ -24,7 +24,7 @@ RSpec.describe Form::Sales::Pages::ExchangeDate, type: :model do
   end
 
   it "has the correct description" do
-    expect(page.description).to eq("")
+    expect(page.description).to be_nil
   end
 
   it "has the correct depends_on" do

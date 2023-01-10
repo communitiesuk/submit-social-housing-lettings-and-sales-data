@@ -3,7 +3,6 @@ class Form::Sales::Pages::PurchasePrice < ::Form::Page
     super
     @id = "purchase_price"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

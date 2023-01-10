@@ -3,7 +3,6 @@ class Form::Sales::Pages::Buyer1EthnicBackgroundArab < ::Form::Page
     super
     @id = "buyer_1_ethnic_background_arab"
     @header = ""
-    @description = ""
     @subsection = subsection
     @depends_on = [{
       "ethnic_group" => 4,

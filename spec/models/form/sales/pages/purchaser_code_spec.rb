@@ -24,6 +24,6 @@ RSpec.describe Form::Sales::Pages::PurchaserCode, type: :model do
   end
 
   it "has the correct description" do
-    expect(page.description).to eq("")
+    expect(page.description).to be_nil
   end
 end

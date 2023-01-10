@@ -3,7 +3,6 @@ class Form::Sales::Pages::GenderIdentity2 < ::Form::Page
     super
     @id = "buyer_2_gender_identity"
     @header = ""
-    @description = ""
     @subsection = subsection
     @depends_on = [{
       "jointpur" => 1,

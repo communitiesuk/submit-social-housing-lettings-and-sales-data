@@ -3,7 +3,6 @@ class Form::Sales::Pages::Buyer1EthnicGroup < ::Form::Page
     super
     @id = "buyer_1_ethnic_group"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

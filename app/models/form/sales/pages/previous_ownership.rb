@@ -3,7 +3,6 @@ class Form::Sales::Pages::PreviousOwnership < ::Form::Page
     super
     @id = "previous_ownership"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

@@ -3,7 +3,6 @@ class Form::Sales::Pages::HandoverDate < ::Form::Page
     super
     @id = "handover_date"
     @header = ""
-    @description = ""
     @subsection = subsection
     @depends_on = [{
       "ownershipsch" => 1,

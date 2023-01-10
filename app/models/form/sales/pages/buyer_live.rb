@@ -3,7 +3,6 @@ class Form::Sales::Pages::BuyerLive < ::Form::Page
     super
     @id = "buyer_live"
     @header = ""
-    @description = ""
     @subsection = subsection
     @depends_on = [{
       "companybuy" => 2,

@@ -3,7 +3,6 @@ class Form::Sales::Pages::Resale < ::Form::Page
     super
     @id = "resale"
     @header = ""
-    @description = ""
     @subsection = subsection
     @depends_on = [
       {

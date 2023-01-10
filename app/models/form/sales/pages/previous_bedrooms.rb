@@ -3,7 +3,6 @@ class Form::Sales::Pages::PreviousBedrooms < ::Form::Page
     super
     @id = "previous_bedrooms"
     @header = "About the buyers’ previous property"
-    @description = ""
     @subsection = subsection
     @depends_on = [{
       "soctenant" => 1,

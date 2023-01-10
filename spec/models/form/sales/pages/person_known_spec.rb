@@ -18,7 +18,7 @@ RSpec.describe Form::Sales::Pages::PersonKnown, type: :model do
     end
 
     it "has the correct description" do
-      expect(page.description).to eq("")
+      expect(page.description).to be_nil
     end
 
     context "with person 1" do
@@ -131,7 +131,7 @@ RSpec.describe Form::Sales::Pages::PersonKnown, type: :model do
     end
 
     it "has the correct description" do
-      expect(page.description).to eq("")
+      expect(page.description).to be_nil
     end
 
     context "with person 1" do

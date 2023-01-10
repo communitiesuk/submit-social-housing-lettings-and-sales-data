@@ -3,7 +3,6 @@ class Form::Sales::Pages::Buyer1Income < ::Form::Page
     super
     @id = "buyer_1_income"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

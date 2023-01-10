@@ -3,7 +3,6 @@ class Form::Sales::Pages::HouseholdWheelchair < ::Form::Page
     super
     @id = "household_wheelchair"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

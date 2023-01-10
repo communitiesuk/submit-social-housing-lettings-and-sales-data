@@ -3,7 +3,6 @@ class Form::Lettings::Pages::Renewal < ::Form::Page
     super
     @id = "renewal"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

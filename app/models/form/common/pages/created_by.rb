@@ -3,7 +3,6 @@ class Form::Common::Pages::CreatedBy < ::Form::Page
     super
     @id = "created_by"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

@@ -3,7 +3,6 @@ class Form::Lettings::Pages::StockOwner < ::Form::Page
     super
     @id = "stock_owner"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

@@ -3,7 +3,6 @@ class Form::Sales::Pages::BuyerPrevious < ::Form::Page
     super
     @id = "buyer_previous"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

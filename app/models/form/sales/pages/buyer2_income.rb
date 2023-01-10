@@ -3,7 +3,6 @@ class Form::Sales::Pages::Buyer2Income < ::Form::Page
     super
     @id = "buyer_2_income"
     @header = ""
-    @description = ""
     @subsection = subsection
     @depends_on = [{
       "jointpur" => 1,

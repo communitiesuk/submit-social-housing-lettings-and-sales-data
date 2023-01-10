@@ -24,7 +24,7 @@ RSpec.describe Form::Sales::Pages::OutrightOwnershipType, type: :model do
   end
 
   it "has the correct description" do
-    expect(page.description).to eq("")
+    expect(page.description).to be_nil
   end
 
   it "has correct depends_on" do

@@ -3,7 +3,6 @@ class Form::Sales::Pages::BuyersOrganisations < ::Form::Page
     super
     @id = "buyers_organisations"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

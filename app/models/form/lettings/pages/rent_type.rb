@@ -2,7 +2,6 @@ class Form::Lettings::Pages::RentType < ::Form::Page
   def initialize(_id, hsh, subsection)
     super("rent_type", hsh, subsection)
     @header = ""
-    @description = ""
     @derived = true
   end
 

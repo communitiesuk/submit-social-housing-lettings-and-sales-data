@@ -3,7 +3,6 @@ class Form::Sales::Pages::BuyerCompany < ::Form::Page
     super
     @id = "buyer_company"
     @header = ""
-    @description = ""
     @subsection = subsection
     @depends_on = [{
       "ownershipsch" => 3,

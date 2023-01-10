@@ -2,7 +2,6 @@ class Form::Lettings::Pages::Scheme < ::Form::Page
   def initialize(_id, hsh, subsection)
     super("scheme", hsh, subsection)
     @header = ""
-    @description = ""
     @depends_on = [{
       "needstype" => 2,
     }]

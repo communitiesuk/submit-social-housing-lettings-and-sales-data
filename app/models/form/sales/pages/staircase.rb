@@ -3,7 +3,6 @@ class Form::Sales::Pages::Staircase < ::Form::Page
     super
     @id = "staircasing"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

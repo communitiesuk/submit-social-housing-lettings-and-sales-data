@@ -3,7 +3,6 @@ class Form::Lettings::Pages::ManagingOrganisation < ::Form::Page
     super
     @id = "managing_organisation"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

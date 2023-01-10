@@ -3,7 +3,6 @@ class Form::Sales::Pages::AboutStaircase < ::Form::Page
     super
     @id = "about_staircasing"
     @header = "About the staircasing transaction"
-    @description = ""
     @subsection = subsection
     @depends_on = [{
       "staircase" => 1,

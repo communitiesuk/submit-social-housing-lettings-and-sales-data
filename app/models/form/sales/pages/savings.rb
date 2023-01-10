@@ -3,7 +3,6 @@ class Form::Sales::Pages::Savings < ::Form::Page
     super
     @id = "savings"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

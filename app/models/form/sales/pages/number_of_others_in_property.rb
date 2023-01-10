@@ -3,7 +3,6 @@ class Form::Sales::Pages::NumberOfOthersInProperty < ::Form::Page
     super
     @id = "number_of_others_in_property"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

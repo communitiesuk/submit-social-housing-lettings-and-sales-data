@@ -3,7 +3,6 @@ class Form::Lettings::Pages::PropertyReference < ::Form::Page
     super
     @id = "property_reference"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

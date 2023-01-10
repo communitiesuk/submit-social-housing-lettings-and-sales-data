@@ -3,7 +3,6 @@ class Form::Sales::Pages::Buyer1LiveInProperty < ::Form::Page
     super
     @id = "buyer_1_live_in_property"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

@@ -3,7 +3,6 @@ class Form::Sales::Pages::PurchaserCode < ::Form::Page
     super
     @id = "purchaser_code"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

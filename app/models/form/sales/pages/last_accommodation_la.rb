@@ -3,7 +3,6 @@ class Form::Sales::Pages::LastAccommodationLa < ::Form::Page
     super
     @id = "last_accommodation_la"
     @header = ""
-    @description = ""
     @subsection = subsection
     @depends_on = [{
       "is_previous_la_inferred" => false,

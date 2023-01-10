@@ -3,7 +3,6 @@ class Form::Sales::Pages::PropertyUnitType < ::Form::Page
     super
     @id = "property_unit_type"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

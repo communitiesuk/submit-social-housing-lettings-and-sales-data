@@ -3,7 +3,6 @@ class Form::Sales::Pages::ArmedForces < ::Form::Page
     super
     @id = "armed_forces"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

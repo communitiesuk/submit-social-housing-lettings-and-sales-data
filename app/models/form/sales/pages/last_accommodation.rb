@@ -3,7 +3,6 @@ class Form::Sales::Pages::LastAccommodation < ::Form::Page
     super
     @id = "last_accommodation"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 

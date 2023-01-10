@@ -3,7 +3,6 @@ class Form::Sales::Pages::Age1 < ::Form::Page
     super
     @id = "buyer_1_age"
     @header = ""
-    @description = ""
     @subsection = subsection
   end
 
