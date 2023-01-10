@@ -448,5 +448,13 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         expect(parser.log.relat8).to eq("X")
       end
     end
+
+    describe "#net_income_known" do
+      let(:attributes) { { bulk_upload:, field_51: "1" } }
+
+      it "sets value from correct mapping" do
+        expect(parser.log.net_income_known).to eq(0)
+      end
+    end
   end
 end
