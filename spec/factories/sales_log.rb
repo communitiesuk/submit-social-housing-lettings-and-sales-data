@@ -98,6 +98,7 @@ FactoryBot.define do
       mortlen { 10 }
       pcodenk { 1 }
       is_la_inferred { false }
+      mortgagelender { 5 }
     end
   end
 end
