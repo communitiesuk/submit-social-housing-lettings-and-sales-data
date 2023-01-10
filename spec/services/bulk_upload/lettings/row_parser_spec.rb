@@ -93,6 +93,13 @@ RSpec.describe BulkUpload::Lettings::RowParser do
             field_44: "18",
 
             field_35: "1",
+            field_36: "2",
+            field_37: "6",
+            field_38: "7",
+            field_39: "8",
+            field_40: "9",
+            field_41: "0",
+            field_42: "10",
 
             field_45: "1",
             field_114: "4",
@@ -379,6 +386,33 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         expect(parser.log.sex6).to eql("M")
         expect(parser.log.sex7).to eql("X")
         expect(parser.log.sex8).to eql("R")
+      end
+    end
+
+    describe "#ecstatN fields" do
+      let(:attributes) do
+        {
+          bulk_upload:,
+          field_35: "1",
+          field_36: "2",
+          field_37: "6",
+          field_38: "7",
+          field_39: "8",
+          field_40: "9",
+          field_41: "0",
+          field_42: "10",
+        }
+      end
+
+      it "sets value from correct mapping", aggregate_failures: true do
+        expect(parser.log.ecstat1).to eq(1)
+        expect(parser.log.ecstat2).to eq(2)
+        expect(parser.log.ecstat3).to eq(6)
+        expect(parser.log.ecstat4).to eq(7)
+        expect(parser.log.ecstat5).to eq(8)
+        expect(parser.log.ecstat6).to eq(9)
+        expect(parser.log.ecstat7).to eq(0)
+        expect(parser.log.ecstat8).to eq(10)
       end
     end
   end

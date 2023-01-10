@@ -262,6 +262,13 @@ private
       national: %i[field_44],
 
       ecstat1: %i[field_35],
+      ecstat2: %i[field_36],
+      ecstat3: %i[field_37],
+      ecstat4: %i[field_38],
+      ecstat5: %i[field_39],
+      ecstat6: %i[field_40],
+      ecstat7: %i[field_41],
+      ecstat8: %i[field_42],
 
       armedforces: %i[field_45],
       leftreg: %i[field_114],
@@ -406,6 +413,13 @@ private
     attributes["national"] = field_44
 
     attributes["ecstat1"] = field_35
+    attributes["ecstat2"] = field_36
+    attributes["ecstat3"] = field_37
+    attributes["ecstat4"] = field_38
+    attributes["ecstat5"] = field_39
+    attributes["ecstat6"] = field_40
+    attributes["ecstat7"] = field_41
+    attributes["ecstat8"] = field_42
 
     attributes["armedforces"] = field_45
     attributes["leftreg"] = leftreg
