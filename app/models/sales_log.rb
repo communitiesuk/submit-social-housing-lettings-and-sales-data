@@ -26,6 +26,7 @@ class SalesLog < Log
 
   scope :filter_by_year, ->(year) { where(saledate: Time.zone.local(year.to_i, 4, 1)...Time.zone.local(year.to_i + 1, 4, 1)) }
   scope :search_by, ->(param) { filter_by_id(param) }
+  scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org) }
 
   OPTIONAL_FIELDS = %w[purchid].freeze
 
@@ -150,5 +151,13 @@ class SalesLog < Log
 
   def mortgage_not_used?
     mortgageused == 2
+  end
+
+  def reset_created_by!
+    return unless updated_by&.support?
+    return if owning_organisation.blank? || created_by.blank?
+    return if created_by&.organisation == owning_organisation
+
+    update!(created_by: nil)
   end
 end

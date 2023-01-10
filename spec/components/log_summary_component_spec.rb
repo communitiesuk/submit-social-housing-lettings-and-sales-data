@@ -19,7 +19,7 @@ RSpec.describe LogSummaryComponent, type: :component do
       expect(result).to have_text("Created 8 February 2022")
       expect(result).to have_text("by Danny Rojas")
       expect(result).to have_content("Owned by\n              DLUHC")
-      expect(result).to have_content("Managed by\n              DLUHC")
+      expect(result).not_to have_content("Managed by\n              DLUHC")
     end
   end
 

@@ -20,7 +20,9 @@ class LettingsLogsController < LogsController
   end
 
   def create
-    super { LettingsLog.new(log_params) }
+    super do
+      LettingsLog.new(log_params)
+    end
   end
 
   def update
@@ -101,6 +103,13 @@ class LettingsLogsController < LogsController
     end
   end
 
+  def org_params
+    {
+      "owning_organisation_id" => current_user.organisation.id,
+      "managing_organisation_id" => current_user.organisation.id,
+      "created_by_id" => current_user.id,
+    }
+  end
 private
 
   def permitted_log_params

@@ -3,7 +3,6 @@ require "rails_helper"
 RSpec.describe SalesLogsController, type: :request do
   let(:user) { FactoryBot.create(:user) }
   let(:owning_organisation) { user.organisation }
-  let(:managing_organisation) { owning_organisation }
   let(:api_username) { "test_user" }
   let(:api_password) { "test_password" }
   let(:basic_credentials) do
@@ -14,7 +13,6 @@ RSpec.describe SalesLogsController, type: :request do
   let(:params) do
     {
       "owning_organisation_id": owning_organisation.id,
-      "managing_organisation_id": managing_organisation.id,
       "created_by_id": user.id,
     }
   end
@@ -51,7 +49,6 @@ RSpec.describe SalesLogsController, type: :request do
       it "creates a sales log with the values passed" do
         json_response = JSON.parse(response.body)
         expect(json_response["owning_organisation_id"]).to eq(owning_organisation.id)
-        expect(json_response["managing_organisation_id"]).to eq(managing_organisation.id)
         expect(json_response["created_by_id"]).to eq(user.id)
       end
 
@@ -94,14 +91,12 @@ RSpec.describe SalesLogsController, type: :request do
       FactoryBot.create(
         :sales_log,
         owning_organisation: organisation,
-        managing_organisation: organisation,
       )
     end
     let!(:unauthorized_sales_log) do
       FactoryBot.create(
         :sales_log,
         owning_organisation: other_organisation,
-        managing_organisation: other_organisation,
       )
     end
 
@@ -146,13 +141,11 @@ RSpec.describe SalesLogsController, type: :request do
             let!(:not_started_sales_log) do
               FactoryBot.create(:sales_log,
                                 owning_organisation: organisation,
-                                managing_organisation: organisation,
                                 created_by: user)
             end
             let!(:completed_sales_log) do
               FactoryBot.create(:sales_log, :completed,
                                 owning_organisation: organisation_2,
-                                managing_organisation: organisation,
                                 created_by: user_2)
             end
 
@@ -189,14 +182,12 @@ RSpec.describe SalesLogsController, type: :request do
             let!(:sales_log_2021) do
               FactoryBot.create(:sales_log, :in_progress,
                                 owning_organisation: organisation,
-                                saledate: Time.zone.local(2022, 3, 1),
-                                managing_organisation: organisation)
+                                saledate: Time.zone.local(2022, 3, 1))
             end
             let!(:sales_log_2022) do
               sales_log = FactoryBot.build(:sales_log, :completed,
                                            owning_organisation: organisation,
-                                           saledate: Time.zone.local(2022, 12, 1),
-                                           managing_organisation: organisation)
+                                           saledate: Time.zone.local(2022, 12, 1))
               sales_log.save!(validate: false)
               sales_log
             end
@@ -227,14 +218,12 @@ RSpec.describe SalesLogsController, type: :request do
               FactoryBot.create(:sales_log, :completed,
                                 owning_organisation: organisation,
                                 saledate: Time.zone.local(2022, 3, 1),
-                                managing_organisation: organisation,
                                 created_by: user)
             end
             let!(:sales_log_2022) do
               FactoryBot.create(:sales_log,
                                 owning_organisation: organisation,
                                 saledate: Time.zone.local(2022, 12, 1),
-                                managing_organisation: organisation,
                                 created_by: user)
             end
 
@@ -362,7 +351,7 @@ RSpec.describe SalesLogsController, type: :request do
 
         context "when there are more than 20 logs" do
           before do
-            FactoryBot.create_list(:sales_log, 25, owning_organisation: organisation, managing_organisation: organisation)
+            FactoryBot.create_list(:sales_log, 25, owning_organisation: organisation)
           end
 
           context "when on the first page" do

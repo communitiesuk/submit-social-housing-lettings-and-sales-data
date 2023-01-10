@@ -17,6 +17,14 @@ class FilterService
       logs = logs.public_send("filter_by_#{category}", values, user)
     end
     logs = logs.order(created_at: :desc)
-    user.support? ? logs.all.includes(:owning_organisation, :managing_organisation) : logs
+    if user.support?
+      if logs.first.instance_of?(LettingsLog)
+        logs.all.includes(:owning_organisation, :managing_organisation)
+      else
+        logs.all.includes(:owning_organisation)
+      end
+    else
+      logs
+    end
   end
 end

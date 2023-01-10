@@ -80,21 +80,20 @@ RSpec.describe SalesLog, type: :model do
     let(:organisation_3) { create(:organisation) }
 
     before do
-      create(:sales_log, :in_progress, owning_organisation: organisation_1, managing_organisation: organisation_1)
-      create(:sales_log, :completed, owning_organisation: organisation_1, managing_organisation: organisation_2)
-      create(:sales_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_1)
-      create(:sales_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_2)
+      create(:sales_log, :in_progress, owning_organisation: organisation_1)
+      create(:sales_log, :completed, owning_organisation: organisation_1)
+      create(:sales_log, :completed, owning_organisation: organisation_2)
     end
 
     it "filters by given organisation id" do
-      expect(described_class.filter_by_organisation([organisation_1.id]).count).to eq(3)
-      expect(described_class.filter_by_organisation([organisation_1.id, organisation_2.id]).count).to eq(4)
+      expect(described_class.filter_by_organisation([organisation_1.id]).count).to eq(2)
+      expect(described_class.filter_by_organisation([organisation_1.id, organisation_2.id]).count).to eq(3)
       expect(described_class.filter_by_organisation([organisation_3.id]).count).to eq(0)
     end
 
     it "filters by given organisation" do
-      expect(described_class.filter_by_organisation([organisation_1]).count).to eq(3)
-      expect(described_class.filter_by_organisation([organisation_1, organisation_2]).count).to eq(4)
+      expect(described_class.filter_by_organisation([organisation_1]).count).to eq(2)
+      expect(described_class.filter_by_organisation([organisation_1, organisation_2]).count).to eq(3)
       expect(described_class.filter_by_organisation([organisation_3]).count).to eq(0)
     end
   end
@@ -143,7 +142,6 @@ RSpec.describe SalesLog, type: :model do
 
     let!(:address_sales_log) do
       described_class.create({
-        managing_organisation: owning_organisation,
         owning_organisation:,
         created_by: created_by_user,
         ppcodenk: 1,

@@ -200,7 +200,7 @@ RSpec.describe Organisation, type: :model do
       let!(:user) { FactoryBot.create(:user, :support, last_sign_in_at: Time.zone.now, organisation:) }
       let!(:scheme_to_delete) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
       let!(:log_to_delete) { FactoryBot.create(:lettings_log, owning_organisation: user.organisation) }
-      let!(:sales_log_to_delete) { FactoryBot.create(:sales_log, owning_organisation: user.organisation, managing_organisation: user.organisation) }
+      let!(:sales_log_to_delete) { FactoryBot.create(:sales_log, owning_organisation: user.organisation) }
 
       context "when organisation is deleted" do
         it "child relationships ie logs, schemes and users are deleted too - application" do

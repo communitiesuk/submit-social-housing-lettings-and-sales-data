@@ -43,4 +43,11 @@ class SalesLogsController < LogsController
   def permitted_log_params
     params.require(:sales_log).permit(SalesLog.editable_fields)
   end
+
+  def org_params
+    {
+      "owning_organisation_id" => current_user.organisation.id,
+      "created_by_id" => current_user.id,
+    }
+  end
 end
