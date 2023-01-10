@@ -110,6 +110,7 @@ class LettingsLogsController < LogsController
       "created_by_id" => current_user.id,
     }
   end
+
 private
 
   def permitted_log_params
