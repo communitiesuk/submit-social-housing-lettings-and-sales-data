@@ -249,6 +249,13 @@ private
       age8: %i[field_19],
 
       sex1: %i[field_20],
+      sex2: %i[field_21],
+      sex3: %i[field_22],
+      sex4: %i[field_23],
+      sex5: %i[field_24],
+      sex6: %i[field_25],
+      sex7: %i[field_26],
+      sex8: %i[field_27],
 
       ethnic_group: %i[field_43],
       ethnic: %i[field_43],
@@ -386,6 +393,13 @@ private
     attributes["age8"] = field_19
 
     attributes["sex1"] = field_20
+    attributes["sex2"] = field_21
+    attributes["sex3"] = field_22
+    attributes["sex4"] = field_23
+    attributes["sex5"] = field_24
+    attributes["sex6"] = field_25
+    attributes["sex7"] = field_26
+    attributes["sex8"] = field_27
 
     attributes["ethnic_group"] = ethnic_group_from_ethnic
     attributes["ethnic"] = field_43
