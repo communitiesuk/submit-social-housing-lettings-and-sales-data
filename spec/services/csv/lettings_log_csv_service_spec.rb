@@ -121,7 +121,6 @@ RSpec.describe Csv::LettingsLogCsvService do
                                    illness_type_8
                                    illness_type_1
                                    illness_type_10
-                                   illness_type_0
                                    layear
                                    waityear
                                    reason
@@ -197,6 +196,7 @@ RSpec.describe Csv::LettingsLogCsvService do
                                    irproduct
                                    old_id
                                    joint
+                                   illness_type_0
                                    hhtype
                                    new_old
                                    vacdays

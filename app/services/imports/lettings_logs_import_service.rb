@@ -126,7 +126,6 @@ module Imports
       (1..10).each do |index|
         attributes["illness_type_#{index}"] = illness_type(xml_doc, index, attributes["illness"])
       end
-      attributes["illness_type_0"] = 1 if (1..10).all? { |idx| attributes["illness_type_#{idx}"].nil? || attributes["illness_type_#{idx}"].zero? }
 
       attributes["prevten"] = unsafe_string_as_integer(xml_doc, "Q11")
       attributes["prevloc"] = string_or_nil(xml_doc, "Q12aONS")
