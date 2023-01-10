@@ -5,7 +5,6 @@ class Form::Sales::Questions::Equity < ::Form::Question
     @check_answer_label = "Initial percentage equity stake"
     @header = "What was the initial percentage equity stake purchased?"
     @type = "numeric"
-    @page = page
     @min = 0
     @max = 100
     @width = 5

@@ -6,7 +6,6 @@ class Form::Sales::Questions::Resale < ::Form::Question
     @header = "Is this a resale?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @page = page
     @hint_text = "If the social landlord has previously sold the property to another buyer and is now reselling the property, select 'yes'. If this is the first time the property has been sold, select 'no'."
   end
 

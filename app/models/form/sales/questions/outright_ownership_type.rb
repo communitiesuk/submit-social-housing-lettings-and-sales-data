@@ -6,7 +6,6 @@ class Form::Sales::Questions::OutrightOwnershipType < ::Form::Question
     @header = "What is the type of outright sale?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @page = page
     @conditional_for = {
       "othtype" => [12],
     }

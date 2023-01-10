@@ -7,7 +7,6 @@ class Form::Sales::Questions::LeaseholdChargesKnown < ::Form::Question
     @hint_text = "For example, service and management charges"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @page = page
     @conditional_for = {
       "mscharge" => [1],
     }

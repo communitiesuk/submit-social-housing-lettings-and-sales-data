@@ -6,7 +6,6 @@ class Form::Common::Questions::CreatedById < ::Form::Question
     @header = "Which user are you creating this log for?"
     @hint_text = ""
     @type = "select"
-    @page = page
   end
 
   def answer_options

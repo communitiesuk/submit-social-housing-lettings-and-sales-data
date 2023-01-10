@@ -7,7 +7,6 @@ class Form::Sales::Questions::BuyerCompany < ::Form::Question
     @hint_text = ""
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @page = page
   end
 
   ANSWER_OPTIONS = {

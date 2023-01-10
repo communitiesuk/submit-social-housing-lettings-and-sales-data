@@ -8,7 +8,6 @@ class Form::Lettings::Questions::RentType < ::Form::Question
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @conditional_for = { "irproduct_other" => [5] }
-    @page = page
   end
 
   ANSWER_OPTIONS = {

@@ -6,7 +6,6 @@ class Form::Sales::Questions::Buyer2WorkingSituation < ::Form::Question
     @header = "Which of these best describes buyer 2's working situation?"
     @type = "radio"
     @hint_text = ""
-    @page = page
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = 2
   end

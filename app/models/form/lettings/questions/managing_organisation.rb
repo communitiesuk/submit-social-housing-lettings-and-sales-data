@@ -8,7 +8,6 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
     @header = "Which organisation manages this letting?"
     @type = "select"
     @answer_options = answer_options
-    @page = page
   end
 
   def answer_options

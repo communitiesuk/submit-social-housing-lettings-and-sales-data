@@ -7,7 +7,6 @@ class Form::Sales::Questions::Buyer2LiveInProperty < ::Form::Question
     @type = "radio"
     @hint_text = ""
     @answer_options = ANSWER_OPTIONS
-    @page = page
     @check_answers_card_number = 2
   end
 

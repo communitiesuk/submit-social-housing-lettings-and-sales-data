@@ -6,7 +6,6 @@ class Form::Common::Questions::OwningOrganisationId < ::Form::Question
     @header = "Which organisation owns this log?"
     @hint_text = ""
     @type = "select"
-    @page = page
   end
 
   def answer_options

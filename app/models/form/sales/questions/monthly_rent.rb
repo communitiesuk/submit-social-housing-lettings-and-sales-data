@@ -5,7 +5,6 @@ class Form::Sales::Questions::MonthlyRent < ::Form::Question
     @check_answer_label = "Monthly rent"
     @header = "What is the basic monthly rent?"
     @type = "numeric"
-    @page = page
     @min = 0
     @width = 5
     @prefix = "£"

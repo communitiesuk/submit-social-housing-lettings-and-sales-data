@@ -6,6 +6,5 @@ class Form::Lettings::Questions::TenancyStartDate < ::Form::Question
     @header = "What is the tenancy start date?"
     @type = "date"
     @unresolved_hint_text = "Some scheme details have changed, and now this log needs updating. Check that the tenancy start date is correct."
-    @page = page
   end
 end

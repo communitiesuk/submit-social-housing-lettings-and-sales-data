@@ -4,7 +4,6 @@ class Form::Sales::Questions::PersonAge < Form::Sales::Questions::Person
     @check_answer_label = "Person #{person_display_number}’s age"
     @header = "Age"
     @type = "numeric"
-    @page = page
     @width = 3
     @inferred_check_answers_value = {
       "condition" => { field_for_person("age", "_known") => 1 },

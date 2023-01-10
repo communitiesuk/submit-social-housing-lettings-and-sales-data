@@ -6,7 +6,6 @@ class Form::Sales::Questions::Prevloc < ::Form::Question
     @header = "Select a local authority"
     @type = "select"
     @answer_options = ANSWER_OPTIONS
-    @page = page
     @hint_text = ""
     @inferred_check_answers_value = {
       "condition" => {

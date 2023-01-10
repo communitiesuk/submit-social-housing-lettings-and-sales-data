@@ -4,7 +4,6 @@ class Form::Sales::Questions::PreviousPostcode < ::Form::Question
     @id = "ppostcode_full"
     @check_answer_label = "Postcode of buyer 1’s last settled accommodation"
     @header = "Postcode"
-    @page = page
     @type = "text"
     @width = 5
     @hint_text = ""

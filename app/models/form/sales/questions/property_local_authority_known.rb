@@ -14,7 +14,6 @@ class Form::Sales::Questions::PropertyLocalAuthorityKnown < ::Form::Question
         },
       ],
     }
-    @page = page
   end
 
   ANSWER_OPTIONS = {

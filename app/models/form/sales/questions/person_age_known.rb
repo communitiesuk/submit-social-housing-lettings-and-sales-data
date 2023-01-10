@@ -5,7 +5,6 @@ class Form::Sales::Questions::PersonAgeKnown < ::Form::Sales::Questions::Person
     @header = "Do you know person #{person_display_number}’s age?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @page = page
     @hint_text = ""
     @conditional_for = {
       field_for_person("age") => [0],

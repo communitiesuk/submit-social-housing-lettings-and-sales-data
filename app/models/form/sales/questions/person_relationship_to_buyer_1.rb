@@ -5,7 +5,6 @@ class Form::Sales::Questions::PersonRelationshipToBuyer1 < ::Form::Sales::Questi
     @header = "What is Person #{person_display_number}’s relationship to Buyer 1?"
     @type = "radio"
     @hint_text = ""
-    @page = page
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = person_index
   end
