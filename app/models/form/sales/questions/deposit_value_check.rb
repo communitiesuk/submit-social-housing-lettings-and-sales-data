@@ -20,6 +20,5 @@ class Form::Sales::Questions::DepositValueCheck < ::Form::Question
       ],
     }
     @check_answers_card_number = 0
-    @page = page
   end
 end

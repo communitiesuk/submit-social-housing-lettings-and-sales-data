@@ -5,7 +5,6 @@ class Form::Sales::Questions::DepositDiscount < ::Form::Question
     @check_answer_label = "Cash discount through SocialHomeBuy"
     @header = "How much cash discount was given through Social HomeBuy?"
     @type = "numeric"
-    @page = page
     @min = 0
     @width = 5
     @prefix = "£"

@@ -7,6 +7,5 @@ class Form::Sales::Questions::PurchaserCode < ::Form::Question
     @hint_text = "This is how you usually refer to the purchaser on your own systems."
     @type = "text"
     @width = 10
-    @page = page
   end
 end

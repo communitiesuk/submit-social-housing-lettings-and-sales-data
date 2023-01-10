@@ -6,7 +6,6 @@ class Form::Sales::Questions::OwnershipScheme < ::Form::Question
     @header = "Was this purchase made through an ownership scheme?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @page = page
   end
 
   ANSWER_OPTIONS = {

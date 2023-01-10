@@ -4,7 +4,6 @@ class Form::Sales::Sections::Setup < ::Form::Section
     @id = "setup"
     @label = "Before you start"
     @description = ""
-    @form = form
     @subsections = [Form::Sales::Subsections::Setup.new(nil, nil, self)] || []
   end
 end

@@ -3,7 +3,6 @@ class Form::Sales::Subsections::DiscountedOwnershipScheme < ::Form::Subsection
     super
     @id = "discounted_ownership_scheme"
     @label = "Discounted ownership scheme"
-    @section = section
     @depends_on = [{ "ownershipsch" => 2, "setup_completed?" => true }]
   end
 

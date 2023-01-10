@@ -4,9 +4,7 @@ class Form::Common::Questions::CreatedById < ::Form::Question
     @id = "created_by_id"
     @check_answer_label = "User"
     @header = "Which user are you creating this log for?"
-    @hint_text = ""
     @type = "select"
-    @page = page
   end
 
   def answer_options

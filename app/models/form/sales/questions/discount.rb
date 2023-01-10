@@ -5,7 +5,6 @@ class Form::Sales::Questions::Discount < ::Form::Question
     @check_answer_label = "Percentage discount"
     @header = "What was the percentage discount?"
     @type = "numeric"
-    @page = page
     @min = 0
     @max = 100
     @width = 5

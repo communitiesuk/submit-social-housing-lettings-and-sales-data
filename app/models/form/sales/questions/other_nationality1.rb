@@ -5,7 +5,6 @@ class Form::Sales::Questions::OtherNationality1 < ::Form::Question
     @check_answer_label = "Buyer 1’s nationality"
     @header = "Nationality"
     @type = "text"
-    @page = page
     @check_answers_card_number = 1
   end
 end

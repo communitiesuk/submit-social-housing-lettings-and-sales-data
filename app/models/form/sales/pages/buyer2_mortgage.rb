@@ -2,9 +2,6 @@ class Form::Sales::Pages::Buyer2Mortgage < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "buyer_2_mortgage"
-    @header = ""
-    @description = ""
-    @subsection = subsection
     @depends_on = [{ "jointpur" => 1 }]
   end
 

@@ -6,7 +6,6 @@ class Form::Sales::Questions::Buyer1EthnicGroup < ::Form::Question
     @header = "What is buyer 1’s ethnic group?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @page = page
     @hint_text = "Buyer 1 is the person in the household who does the most paid work. If it’s a joint purchase and the buyers do the same amount of paid work, buyer 1 is whoever is the oldest."
     @inferred_check_answers_value = {
       "condition" => {

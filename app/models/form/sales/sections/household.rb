@@ -4,7 +4,6 @@ class Form::Sales::Sections::Household < ::Form::Section
     @id = "household"
     @label = "About the household"
     @description = ""
-    @form = form
     @subsections = [
       Form::Sales::Subsections::HouseholdCharacteristics.new(nil, nil, self),
       Form::Sales::Subsections::HouseholdSituation.new(nil, nil, self),

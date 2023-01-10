@@ -2,9 +2,6 @@ class Form::Sales::Pages::BuyersOrganisations < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "buyers_organisations"
-    @header = ""
-    @description = ""
-    @subsection = subsection
   end
 
   def questions

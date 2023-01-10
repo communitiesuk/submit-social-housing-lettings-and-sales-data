@@ -3,7 +3,6 @@ class Form::Sales::Subsections::OutrightSale < ::Form::Subsection
     super
     @id = "outright_sale"
     @label = "Outright sale"
-    @section = section
     @depends_on = [{ "ownershipsch" => 3, "setup_completed?" => true }]
   end
 

@@ -6,7 +6,6 @@ class Form::Sales::Questions::PropertyWheelchairAccessible < ::Form::Question
     @header = "Is the property build or adapted to wheelchair-user standards?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @page = page
   end
 
   ANSWER_OPTIONS = {

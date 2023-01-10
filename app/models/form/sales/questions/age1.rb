@@ -5,7 +5,6 @@ class Form::Sales::Questions::Age1 < ::Form::Question
     @check_answer_label = "Lead buyer’s age"
     @header = "Age"
     @type = "numeric"
-    @page = page
     @width = 2
     @inferred_check_answers_value = {
       "condition" => {
