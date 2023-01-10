@@ -261,6 +261,14 @@ private
       ethnic: %i[field_43],
       national: %i[field_44],
 
+      relat2: %i[field_28],
+      relat3: %i[field_29],
+      relat4: %i[field_30],
+      relat5: %i[field_31],
+      relat6: %i[field_32],
+      relat7: %i[field_33],
+      relat8: %i[field_34],
+
       ecstat1: %i[field_35],
       ecstat2: %i[field_36],
       ecstat3: %i[field_37],
@@ -412,6 +420,14 @@ private
     attributes["ethnic"] = field_43
     attributes["national"] = field_44
 
+    attributes["relat2"] = field_28
+    attributes["relat3"] = field_29
+    attributes["relat4"] = field_30
+    attributes["relat5"] = field_31
+    attributes["relat6"] = field_32
+    attributes["relat7"] = field_33
+    attributes["relat8"] = field_34
+
     attributes["ecstat1"] = field_35
     attributes["ecstat2"] = field_36
     attributes["ecstat3"] = field_37
@@ -420,6 +436,14 @@ private
     attributes["ecstat6"] = field_40
     attributes["ecstat7"] = field_41
     attributes["ecstat8"] = field_42
+
+    attributes["details_known_2"] = details_known(2)
+    attributes["details_known_3"] = details_known(3)
+    attributes["details_known_4"] = details_known(4)
+    attributes["details_known_5"] = details_known(5)
+    attributes["details_known_6"] = details_known(6)
+    attributes["details_known_7"] = details_known(7)
+    attributes["details_known_8"] = details_known(8)
 
     attributes["armedforces"] = field_45
     attributes["leftreg"] = leftreg
@@ -498,6 +522,10 @@ private
     when 2
       0
     end
+  end
+
+  def details_known(person_n)
+    send("person_#{person_n}_present?") ? 0 : 1
   end
 
   def hhmemb
