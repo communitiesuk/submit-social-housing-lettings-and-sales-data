@@ -20,9 +20,7 @@ class LettingsLogsController < LogsController
   end
 
   def create
-    super do
-      LettingsLog.new(log_params)
-    end
+    super { LettingsLog.new(log_params) }
   end
 
   def update
