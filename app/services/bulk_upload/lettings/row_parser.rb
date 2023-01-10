@@ -394,7 +394,7 @@ private
     attributes["ecstat1"] = field_35
 
     attributes["armedforces"] = field_45
-    attributes["leftreg"] = field_114
+    attributes["leftreg"] = leftreg
     attributes["reservist"] = field_46
 
     attributes["preg_occ"] = field_47
@@ -439,6 +439,19 @@ private
     attributes["hhmemb"] = hhmemb
 
     attributes
+  end
+
+  def leftreg
+    case field_114
+    when 3
+      3
+    when 4
+      1
+    when 5
+      2
+    when 6
+      0
+    end
   end
 
   def homeless
