@@ -2,7 +2,6 @@ class Form::Sales::Pages::PurchaserCode < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "purchaser_code"
-    @subsection = subsection
   end
 
   def questions

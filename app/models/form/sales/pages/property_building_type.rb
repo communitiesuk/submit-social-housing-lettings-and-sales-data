@@ -2,7 +2,6 @@ class Form::Sales::Pages::PropertyBuildingType < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "property_building_type"
-    @subsection = subsection
   end
 
   def questions

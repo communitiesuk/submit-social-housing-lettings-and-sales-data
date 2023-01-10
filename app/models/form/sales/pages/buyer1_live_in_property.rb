@@ -2,7 +2,6 @@ class Form::Sales::Pages::Buyer1LiveInProperty < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "buyer_1_live_in_property"
-    @subsection = subsection
   end
 
   def questions

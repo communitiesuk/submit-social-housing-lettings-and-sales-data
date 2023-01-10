@@ -2,7 +2,6 @@ class Form::Sales::Pages::MortgageAmount < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @header = "Mortgage Amount"
-    @subsection = subsection
     @depends_on = [{
       "mortgageused" => 1,
     }]

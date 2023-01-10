@@ -2,7 +2,6 @@ class Form::Lettings::Pages::PropertyReference < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "property_reference"
-    @subsection = subsection
   end
 
   def questions

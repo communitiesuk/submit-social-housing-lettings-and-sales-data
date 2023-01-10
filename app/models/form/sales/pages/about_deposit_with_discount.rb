@@ -3,7 +3,6 @@ class Form::Sales::Pages::AboutDepositWithDiscount < ::Form::Page
     super
     @id = "about_deposit_with_discount"
     @header = "About the deposit"
-    @subsection = subsection
     @depends_on = [{ "is_type_discount?" => true }]
   end
 

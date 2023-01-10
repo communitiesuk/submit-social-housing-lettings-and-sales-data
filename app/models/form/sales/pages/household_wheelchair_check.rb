@@ -1,7 +1,6 @@
 class Form::Sales::Pages::HouseholdWheelchairCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
-    @subsection = subsection
     @depends_on = [
       {
         "wheelchair_when_not_disabled?" => true,

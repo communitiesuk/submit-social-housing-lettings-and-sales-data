@@ -2,7 +2,6 @@ class Form::Sales::Pages::LastAccommodationLa < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "last_accommodation_la"
-    @subsection = subsection
     @depends_on = [{
       "is_previous_la_inferred" => false,
     }]

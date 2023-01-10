@@ -2,7 +2,6 @@ class Form::Sales::Pages::BuyerLive < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "buyer_live"
-    @subsection = subsection
     @depends_on = [{
       "companybuy" => 2,
     }]

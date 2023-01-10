@@ -1,7 +1,6 @@
 class Form::Sales::Pages::SavingsValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
-    @subsection = subsection
     @depends_on = [
       {
         "savings_over_soft_max?" => true,

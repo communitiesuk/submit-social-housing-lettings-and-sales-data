@@ -2,7 +2,6 @@ class Form::Sales::Pages::LaNominations < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "la_nominations"
-    @subsection = subsection
   end
 
   def questions

@@ -3,7 +3,6 @@ class Form::Sales::Pages::PrivacyNotice < ::Form::Page
     super
     @id = "privacy_notice"
     @header = "Department for Levelling Up, Housing and Communities privacy notice"
-    @subsection = subsection
     @depends_on = [{
       "noint" => 2,
     }]

@@ -2,7 +2,6 @@ class Form::Lettings::Pages::TenancyStartDate < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "tenancy_start_date"
-    @subsection = subsection
     @next_unresolved_page_id = "scheme"
   end
 

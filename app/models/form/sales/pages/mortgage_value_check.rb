@@ -1,7 +1,6 @@
 class Form::Sales::Pages::MortgageValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
-    @subsection = subsection
     @depends_on = [
       {
         "mortgage_over_soft_max?" => true,

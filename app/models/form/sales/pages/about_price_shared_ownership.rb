@@ -3,7 +3,6 @@ class Form::Sales::Pages::AboutPriceSharedOwnership < ::Form::Page
     super
     @id = "about_price_shared_ownership"
     @header = "About the price of the property"
-    @subsection = subsection
   end
 
   def questions

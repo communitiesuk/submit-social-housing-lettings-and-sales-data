@@ -1,7 +1,6 @@
 class Form::Sales::Pages::LivingBeforePurchase < ::Form::Page
   def initialize(id, hsh, subsection)
     super
-    @subsection = subsection
   end
 
   def questions

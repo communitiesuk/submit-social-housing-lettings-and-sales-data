@@ -2,7 +2,6 @@ class Form::Sales::Pages::HandoverDate < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "handover_date"
-    @subsection = subsection
     @depends_on = [{
       "ownershipsch" => 1,
     }]

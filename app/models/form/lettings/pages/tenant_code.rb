@@ -2,7 +2,6 @@ class Form::Lettings::Pages::TenantCode < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "tenant_code"
-    @subsection = subsection
   end
 
   def questions
