@@ -27,6 +27,8 @@ module Validations::Sales::FinancialValidations
         record.errors.add :income1, I18n.t("validations.financial.income.combined_over_hard_max", hard_max: 80_000)
       end
     end
+    validate_combined_income(record)
+  end
 
   def validate_cash_discount(record)
     return unless record.cashdis
@@ -60,13 +62,7 @@ module Validations::Sales::FinancialValidations
       end
     end
 
-    if record.income1 && record.income2
-      if record.london_property?
-        record.errors.add :income2, I18n.t("validations.financial.income.combined_over_hard_max", hard_max: 90_000) if record.income1 + record.income2 > 90_000
-      elsif record.income1 + record.income2 > 80_000
-        record.errors.add :income2, I18n.t("validations.financial.income.combined_over_hard_max", hard_max: 80_000)
-      end
-    end
+    validate_combined_income(record)
 
     child_income_validation(record, :income2)
   end
