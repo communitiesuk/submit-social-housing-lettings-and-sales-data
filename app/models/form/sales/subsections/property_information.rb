@@ -3,7 +3,6 @@ class Form::Sales::Subsections::PropertyInformation < ::Form::Subsection
     super
     @id = "property_information"
     @label = "Property information"
-    @section = section
     @depends_on = [{ "setup_completed?" => true }]
   end
 
