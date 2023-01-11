@@ -557,5 +557,13 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         expect(parser.log.earnings).to eq(105)
       end
     end
+
+    describe "#reasonother" do
+      let(:attributes) { { bulk_upload:, field_53: "some other reason" } }
+
+      it "sets value to given free text string" do
+        expect(parser.log.reasonother).to eql("some other reason")
+      end
+    end
   end
 end
