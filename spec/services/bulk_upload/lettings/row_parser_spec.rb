@@ -565,5 +565,13 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         expect(parser.log.reasonother).to eql("some other reason")
       end
     end
+
+    describe "#ppcodenk" do
+      let(:attributes) { { bulk_upload:, field_65: "2" } }
+
+      it "sets correct value from mapping" do
+        expect(parser.log.ppcodenk).to eq(0)
+      end
+    end
   end
 end
