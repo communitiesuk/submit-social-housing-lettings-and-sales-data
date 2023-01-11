@@ -14,3 +14,21 @@ namespace :core do
     end
   end
 end
+
+namespace :illness_type_0 do
+  desc "Export log data where illness_type_0 == 1"
+  task export: :environment do |_task|
+    logs = LettingsLog.where(illness_type_0: 1, status: "completed").includes(created_by: :organisation)
+    puts "log_id,created_by_id,organisation_id,organisation_name,startdate"
+
+    logs.each do |log|
+      puts [
+        log.id,
+        log.created_by_id,
+        log.created_by.organisation.id,
+        log.created_by.organisation.name,
+        log.startdate&.strftime("%d/%m/%Y"),
+      ].join(",")
+    end
+  end
+end
