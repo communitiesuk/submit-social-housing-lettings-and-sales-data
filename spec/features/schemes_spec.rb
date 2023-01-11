@@ -423,14 +423,14 @@ RSpec.describe "Schemes scheme Features" do
         it "allows selecting secondary client group if the scheme provides for it" do
           fill_in_and_save_scheme_details
           fill_in_and_save_primary_client_group
-          fill_in_and_save_secondary_client_group_confirmation
+          fill_in_and_save_secondary_client_group_confirmation_yes
           expect(page).to have_content "What is the other client group?"
         end
 
         it "allows amending secondary client group confirmation question after navigating from secondary client group question" do
           fill_in_and_save_scheme_details
           fill_in_and_save_primary_client_group
-          fill_in_and_save_secondary_client_group_confirmation
+          fill_in_and_save_secondary_client_group_confirmation_yes
           click_link "Back"
           expect(page).to have_current_path("/schemes/#{scheme.id}/confirm-secondary-client-group")
           expect(page).to have_content "Does this scheme provide for another client group?"
@@ -439,7 +439,7 @@ RSpec.describe "Schemes scheme Features" do
         it "returns to the secondary group details question after amending secondary group details confirmation" do
           fill_in_and_save_scheme_details
           fill_in_and_save_primary_client_group
-          fill_in_and_save_secondary_client_group_confirmation
+          fill_in_and_save_secondary_client_group_confirmation_yes
           click_link "Back"
           click_button "Save and continue"
           expect(page).to have_current_path("/schemes/#{scheme.id}/secondary-client-group")
@@ -448,7 +448,7 @@ RSpec.describe "Schemes scheme Features" do
         it "allows selecting the level of support" do
           fill_in_and_save_scheme_details
           fill_in_and_save_primary_client_group
-          fill_in_and_save_secondary_client_group_confirmation
+          fill_in_and_save_secondary_client_group_confirmation_yes
           fill_in_and_save_secondary_client_group
           expect(page).to have_content "What support does this scheme provide?"
         end
@@ -456,7 +456,7 @@ RSpec.describe "Schemes scheme Features" do
         it "allows amending secondary client group question after navigating from level of support" do
           fill_in_and_save_scheme_details
           fill_in_and_save_primary_client_group
-          fill_in_and_save_secondary_client_group_confirmation
+          fill_in_and_save_secondary_client_group_confirmation_yes
           fill_in_and_save_secondary_client_group
           click_link "Back"
           expect(page).to have_current_path("/schemes/#{scheme.id}/secondary-client-group")
@@ -466,7 +466,7 @@ RSpec.describe "Schemes scheme Features" do
         it "returns to the level of support question after amending secondary group details" do
           fill_in_and_save_scheme_details
           fill_in_and_save_primary_client_group
-          fill_in_and_save_secondary_client_group_confirmation
+          fill_in_and_save_secondary_client_group_confirmation_yes
           fill_in_and_save_secondary_client_group
           click_link "Back"
           click_button "Save and continue"
@@ -620,7 +620,7 @@ RSpec.describe "Schemes scheme Features" do
               select another_organisation.name, from: "scheme-managing-organisation-id-field"
               click_button "Save and continue"
               fill_in_and_save_primary_client_group
-              fill_in_and_save_secondary_client_group_confirmation
+              fill_in_and_save_secondary_client_group_confirmation_yes
               fill_in_and_save_secondary_client_group
               fill_in_and_save_support
             end
