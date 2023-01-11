@@ -474,5 +474,13 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         expect(parser.log.rsnvac).to eq(5)
       end
     end
+
+    describe "#sheltered" do
+      let(:attributes) { { bulk_upload:, field_117: "1" } }
+
+      it "sets value from correct mapping" do
+        expect(parser.log.sheltered).to eq(1)
+      end
+    end
   end
 end

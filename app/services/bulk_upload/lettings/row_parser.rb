@@ -323,6 +323,7 @@ private
 
       unitletas: %i[field_105],
       rsnvac: %i[field_106],
+      sheltered: %i[field_117],
     }
   end
 
@@ -499,6 +500,7 @@ private
 
     attributes["unitletas"] = field_105
     attributes["rsnvac"] = field_106
+    attributes["sheltered"] = field_117
 
     attributes
   end
