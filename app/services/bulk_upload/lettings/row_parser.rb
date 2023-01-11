@@ -321,6 +321,7 @@ private
 
       period: %i[field_79],
       brent: %i[field_80],
+      chcharge: %i[field_85],
       household_charge: %i[field_86],
       hbrentshortfall: %i[field_87],
       tshortfall: %i[field_88],
@@ -512,6 +513,7 @@ private
 
     attributes["period"] = field_79
     attributes["brent"] = field_80
+    attributes["chcharge"] = field_85
     attributes["household_charge"] = field_86
     attributes["hbrentshortfall"] = field_87
     attributes["tshortfall_known"] = tshortfall_known
