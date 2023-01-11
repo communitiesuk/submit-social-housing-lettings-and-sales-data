@@ -573,5 +573,13 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         expect(parser.log.ppcodenk).to eq(0)
       end
     end
+
+    describe "#household_charge" do
+      let(:attributes) { { bulk_upload:, field_86: "1" } }
+
+      it "sets correct value from mapping" do
+        expect(parser.log.household_charge).to eq(1)
+      end
+    end
   end
 end
