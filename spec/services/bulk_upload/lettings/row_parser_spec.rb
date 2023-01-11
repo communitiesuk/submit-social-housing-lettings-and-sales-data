@@ -541,5 +541,13 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         expect(parser.log.tenancyother).to eql("some other tenancy")
       end
     end
+
+    describe "#tenancylength" do
+      let(:attributes) { { bulk_upload:, field_11: "2" } }
+
+      it "sets value to given free text string" do
+        expect(parser.log.tenancylength).to eq(2)
+      end
+    end
   end
 end
