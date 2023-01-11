@@ -321,6 +321,7 @@ private
 
       period: %i[field_79],
       brent: %i[field_80],
+      scharge: %i[field_81],
       pscharge: %i[field_82],
       supcharg: %i[field_83],
       tcharge: %i[field_84],
@@ -516,6 +517,7 @@ private
 
     attributes["period"] = field_79
     attributes["brent"] = field_80
+    attributes["scharge"] = field_81
     attributes["pscharge"] = field_82
     attributes["supcharg"] = field_83
     attributes["tcharge"] = field_84
