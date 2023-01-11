@@ -605,5 +605,13 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         expect(parser.log.supcharg).to eq(123.45)
       end
     end
+
+    describe "#pscharge" do
+      let(:attributes) { { bulk_upload:, field_82: "123.45" } }
+
+      it "sets value given" do
+        expect(parser.log.pscharge).to eq(123.45)
+      end
+    end
   end
 end
