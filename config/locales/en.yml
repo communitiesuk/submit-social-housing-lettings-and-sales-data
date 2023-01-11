@@ -71,8 +71,6 @@ en:
           attributes:
             owning_organisation_id:
               invalid: "Enter the name of the organisation that owns the housing stock"
-            managing_organisation_id:
-              invalid: "Enter the name of the organisation that manages the housing stock"
             service_name:
               invalid: "Enter the name of the scheme"
             scheme_type:

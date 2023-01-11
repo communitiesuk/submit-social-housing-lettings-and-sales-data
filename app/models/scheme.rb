@@ -127,12 +127,6 @@ class Scheme < ApplicationRecord
     ]
   end
 
-  def check_support_services_provider_attributes
-    [
-      { name: "Organisation providing support", value: managing_organisation&.name, id: "managing_organisation_id" },
-    ]
-  end
-
   def check_primary_client_attributes
     [
       { name: "Primary client group", value: primary_client_group, id: "primary_client_group" },
@@ -201,7 +195,7 @@ class Scheme < ApplicationRecord
   end
 
   def validate_confirmed
-    required_attributes = attribute_names - %w[id created_at updated_at old_id old_visible_id confirmed end_date sensitive secondary_client_group total_units has_other_client_group deactivation_date deactivation_date_type]
+    required_attributes = attribute_names - %w[id created_at updated_at old_id old_visible_id confirmed end_date sensitive secondary_client_group total_units has_other_client_group deactivation_date deactivation_date_type managing_organisation_id]
 
     if confirmed == true
       required_attributes.any? do |attribute|

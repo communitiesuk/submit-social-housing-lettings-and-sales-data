@@ -92,11 +92,7 @@ class SchemesController < ApplicationController
     validation_errors scheme_params
 
     if @scheme.errors.empty? && @scheme.save
-      if @scheme.arrangement_type_before_type_cast == "D"
-        redirect_to scheme_primary_client_group_path(@scheme)
-      else
-        redirect_to scheme_support_services_provider_path(@scheme)
-      end
+      redirect_to scheme_primary_client_group_path(@scheme)
     else
       @scheme.errors.add(:owning_organisation_id, message: @scheme.errors[:organisation])
       @scheme.errors.delete(:owning_organisation)
@@ -182,12 +178,6 @@ class SchemesController < ApplicationController
     render "schemes/edit_name"
   end
 
-  def support_services_provider
-    render_not_found and return unless @scheme
-
-    render "schemes/support_services_provider"
-  end
-
 private
 
   def validation_errors(scheme_params)
@@ -195,10 +185,6 @@ private
       if scheme_params[key].to_s.empty?
         @scheme.errors.add(key.to_sym)
       end
-    end
-
-    if @scheme.arrangement_type_same? && arrangement_type_value(scheme_params[:arrangement_type]) != "D"
-      @scheme.errors.delete(:managing_organisation_id)
     end
   end
 
@@ -209,8 +195,6 @@ private
   def current_template(page)
     if page.include?("primary")
       "schemes/primary_client_group"
-    elsif page.include?("support-services-provider")
-      "schemes/support_services_provider"
     elsif page.include?("confirm")
       "schemes/confirm_secondary"
     elsif page.include?("secondary-client")
@@ -228,8 +212,6 @@ private
 
   def next_page_path(page)
     case page
-    when "support-services-provider"
-      scheme_primary_client_group_path(@scheme)
     when "primary-client-group"
       scheme_confirm_secondary_client_group_path(@scheme)
     when "confirm-secondary"
@@ -239,13 +221,7 @@ private
     when "support"
       scheme_check_answers_path(@scheme)
     when "details"
-      if @scheme.arrangement_type_before_type_cast == "D"
-        scheme_primary_client_group_path(@scheme)
-      elsif @scheme.arrangement_type.present? && @scheme.arrangement_type_before_type_cast != "D"
-        scheme_support_services_provider_path(@scheme)
-      else
-        scheme_details_path(@scheme)
-      end
+      scheme_primary_client_group_path(@scheme)
     when "edit-name"
       scheme_check_answers_path(@scheme)
     when "check-answers"
