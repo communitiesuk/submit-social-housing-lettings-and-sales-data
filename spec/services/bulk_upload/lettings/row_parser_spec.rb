@@ -482,5 +482,40 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         expect(parser.log.sheltered).to eq(1)
       end
     end
+
+    describe "illness fields" do
+      mapping = [
+        { attribute: :illness_type_1, field: :field_119 },
+        { attribute: :illness_type_2, field: :field_120 },
+        { attribute: :illness_type_3, field: :field_121 },
+        { attribute: :illness_type_4, field: :field_122 },
+        { attribute: :illness_type_5, field: :field_123 },
+        { attribute: :illness_type_6, field: :field_124 },
+        { attribute: :illness_type_7, field: :field_125 },
+        { attribute: :illness_type_8, field: :field_126 },
+        { attribute: :illness_type_9, field: :field_127 },
+        { attribute: :illness_type_10, field: :field_128 },
+      ]
+
+      mapping.each do |hash|
+        describe "##{hash[:attribute]}" do
+          context "when yes" do
+            let(:attributes) { { bulk_upload:, hash[:field] => "1" } }
+
+            it "sets value from correct mapping" do
+              expect(parser.log.public_send(hash[:attribute])).to eq(1)
+            end
+          end
+
+          context "when no" do
+            let(:attributes) { { bulk_upload:, hash[:field] => "" } }
+
+            it "sets value from correct mapping" do
+              expect(parser.log.public_send(hash[:attribute])).to be_nil
+            end
+          end
+        end
+      end
+    end
   end
 end
