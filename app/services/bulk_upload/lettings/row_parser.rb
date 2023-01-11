@@ -53,7 +53,7 @@ class BulkUpload::Lettings::RowParser
   attribute :field_47, :integer
   attribute :field_48, :integer
   attribute :field_49, :integer
-  attribute :field_50, :integer
+  attribute :field_50, :decimal
   attribute :field_51, :integer
   attribute :field_52, :integer
   attribute :field_53, :string
@@ -502,7 +502,7 @@ private
     attributes["referral"] = field_78
 
     attributes["net_income_known"] = net_income_known
-    attributes["earnings"] = field_50
+    attributes["earnings"] = earnings
     attributes["incfreq"] = field_116
     attributes["hb"] = field_48
     attributes["benefits"] = field_49
@@ -533,6 +533,10 @@ private
     attributes["irproduct_other"] = field_131
 
     attributes
+  end
+
+  def earnings
+    field_50.round if field_50.present?
   end
 
   def net_income_known
