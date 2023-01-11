@@ -533,5 +533,13 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         expect(parser.log.irproduct_other).to eql("some other product")
       end
     end
+
+    describe "#tenancyother" do
+      let(:attributes) { { bulk_upload:, field_10: "some other tenancy" } }
+
+      it "sets value to given free text string" do
+        expect(parser.log.tenancyother).to eql("some other tenancy")
+      end
+    end
   end
 end
