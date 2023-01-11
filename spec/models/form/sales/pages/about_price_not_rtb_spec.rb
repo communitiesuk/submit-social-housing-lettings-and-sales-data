@@ -30,6 +30,7 @@ RSpec.describe Form::Sales::Pages::AboutPriceNotRtb, type: :model do
   it "has correct depends_on" do
     expect(page.depends_on).to eq([{
       "right_to_buy?" => false,
+      "rent_to_buy_full_ownership?" => false,
     }])
   end
 end

@@ -1,7 +1,12 @@
 class Form::Sales::Pages::PurchasePrice < ::Form::Page
   def initialize(id, hsh, subsection)
     super
-    @id = "purchase_price"
+    @depends_on = [{
+      "ownershipsch" => 3,
+    },
+                   {
+                     "rent_to_buy_full_ownership?" => true,
+                   }]
   end
 
   def questions
