@@ -1,5 +1,4 @@
 class RemoveManagingOrganisationIdFromSchemes < ActiveRecord::Migration[7.0]
-
   def up
     change_table :schemes, bulk: true do |t|
       t.remove :managing_organisation_id
