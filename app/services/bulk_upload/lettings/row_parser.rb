@@ -324,6 +324,17 @@ private
       unitletas: %i[field_105],
       rsnvac: %i[field_106],
       sheltered: %i[field_117],
+
+      illness_type_1: %i[field_119],
+      illness_type_2: %i[field_120],
+      illness_type_3: %i[field_121],
+      illness_type_4: %i[field_122],
+      illness_type_5: %i[field_123],
+      illness_type_6: %i[field_124],
+      illness_type_7: %i[field_125],
+      illness_type_8: %i[field_126],
+      illness_type_9: %i[field_127],
+      illness_type_10: %i[field_128],
     }
   end
 
@@ -501,6 +512,17 @@ private
     attributes["unitletas"] = field_105
     attributes["rsnvac"] = field_106
     attributes["sheltered"] = field_117
+
+    attributes["illness_type_1"] = field_119
+    attributes["illness_type_2"] = field_120
+    attributes["illness_type_3"] = field_121
+    attributes["illness_type_4"] = field_122
+    attributes["illness_type_5"] = field_123
+    attributes["illness_type_6"] = field_124
+    attributes["illness_type_7"] = field_125
+    attributes["illness_type_8"] = field_126
+    attributes["illness_type_9"] = field_127
+    attributes["illness_type_10"] = field_128
 
     attributes
   end
