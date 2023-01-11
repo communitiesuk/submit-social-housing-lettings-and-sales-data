@@ -335,6 +335,8 @@ private
       illness_type_8: %i[field_126],
       illness_type_9: %i[field_127],
       illness_type_10: %i[field_128],
+
+      irproduct_other: %i[field_131],
     }
   end
 
@@ -523,6 +525,8 @@ private
     attributes["illness_type_8"] = field_126
     attributes["illness_type_9"] = field_127
     attributes["illness_type_10"] = field_128
+
+    attributes["irproduct_other"] = field_131
 
     attributes
   end
