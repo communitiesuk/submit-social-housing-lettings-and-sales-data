@@ -110,7 +110,7 @@ RSpec.describe "Lettings Log Features" do
     end
 
     context "when completing the setup log section" do
-      context "if there is at most 1 potential stock owner" do
+      context "and there is at most 1 potential stock owner" do
         it "does not include the organisation and created by questions" do
           visit("/lettings-logs")
           click_button("Create a new lettings log")
@@ -123,9 +123,10 @@ RSpec.describe "Lettings Log Features" do
         end
       end
 
-      context "if there is more than 1 potential stock owner" do
+      context "and there is more than 1 potential stock owner" do
         let!(:owning_org1) { create(:organisation, name: "Owning org 1") }
         let!(:org_rel1) { create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: owning_org1) }
+
         it "does include the stock owner question" do
           visit("/lettings-logs")
           click_button("Create a new lettings log")
@@ -136,10 +137,11 @@ RSpec.describe "Lettings Log Features" do
           expect(page).to have_content("Stock owner User org")
         end
 
-        context "if there are more than 2 potential stock owners" do
+        context "and there are more than 2 potential stock owners" do
           let!(:owning_org2) { create(:organisation, name: "Owning org 2") }
           let!(:org_rel2) { create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: owning_org2) }
-          context "if the organisation relationship for the selected stock owner is deleted" do
+
+          context "and the organisation relationship for the selected stock owner is deleted" do
             it "doesn't change the CYA page text to be 'You didn't answer this question'" do
               visit("/lettings-logs")
               click_button("Create a new lettings log")
