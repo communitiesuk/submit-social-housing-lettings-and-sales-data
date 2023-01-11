@@ -486,7 +486,7 @@ private
     attributes["prevten"] = field_61
     attributes["homeless"] = homeless
 
-    attributes["ppcodenk"] = field_65
+    attributes["ppcodenk"] = ppcodenk
     attributes["ppostcode_full"] = ppostcode_full
 
     attributes["reasonpref"] = field_69
@@ -535,6 +535,15 @@ private
     attributes["irproduct_other"] = field_131
 
     attributes
+  end
+
+  def ppcodenk
+    case field_65
+    when 1
+      1
+    when 2
+      0
+    end
   end
 
   def earnings
