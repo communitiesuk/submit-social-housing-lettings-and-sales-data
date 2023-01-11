@@ -321,6 +321,7 @@ private
 
       period: %i[field_79],
       brent: %i[field_80],
+      supcharg: %i[field_83],
       tcharge: %i[field_84],
       chcharge: %i[field_85],
       household_charge: %i[field_86],
@@ -514,6 +515,7 @@ private
 
     attributes["period"] = field_79
     attributes["brent"] = field_80
+    attributes["supcharg"] = field_83
     attributes["tcharge"] = field_84
     attributes["chcharge"] = field_85
     attributes["household_charge"] = field_86
