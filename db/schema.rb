@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_09_160738) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_11_134640) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -421,6 +421,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_09_160738) do
     t.string "relat5"
     t.string "relat6"
     t.integer "hb"
+    t.string "sex4"
+    t.string "sex5"
+    t.string "sex6"
     t.integer "savings_value_check"
     t.integer "deposit_value_check"
     t.integer "frombeds"
@@ -457,20 +460,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_09_160738) do
     t.integer "hhregres"
     t.integer "hhregresstill"
     t.integer "proplen"
+    t.integer "mscharge_known"
+    t.decimal "mscharge", precision: 10, scale: 2
     t.integer "prevten"
     t.integer "mortgageused"
     t.integer "wchair"
     t.integer "armedforcesspouse"
-    t.integer "mscharge_known"
-    t.decimal "mscharge", precision: 10, scale: 2
-    t.string "sex4"
-    t.string "sex5"
-    t.string "sex6"
-    t.integer "mortlen"
     t.datetime "hodate", precision: nil
     t.integer "hoday"
     t.integer "homonth"
     t.integer "hoyear"
+    t.integer "mortlen"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
@@ -500,13 +500,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_09_160738) do
     t.string "intended_stay"
     t.datetime "end_date"
     t.integer "has_other_client_group"
-    t.bigint "managing_organisation_id"
     t.string "arrangement_type"
     t.string "old_id"
     t.string "old_visible_id"
     t.integer "total_units"
     t.boolean "confirmed"
-    t.index ["managing_organisation_id"], name: "index_schemes_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_schemes_on_owning_organisation_id"
   end
 
@@ -571,7 +569,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_09_160738) do
   add_foreign_key "organisation_relationships", "organisations", column: "child_organisation_id"
   add_foreign_key "organisation_relationships", "organisations", column: "parent_organisation_id"
   add_foreign_key "sales_logs", "organisations", column: "owning_organisation_id", on_delete: :cascade
-  add_foreign_key "schemes", "organisations", column: "managing_organisation_id"
   add_foreign_key "schemes", "organisations", column: "owning_organisation_id", on_delete: :cascade
   add_foreign_key "users", "organisations", on_delete: :cascade
 end
