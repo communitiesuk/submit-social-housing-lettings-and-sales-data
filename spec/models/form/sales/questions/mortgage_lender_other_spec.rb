@@ -16,11 +16,11 @@ RSpec.describe Form::Sales::Questions::MortgageLenderOther, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Mortgage Lender")
+    expect(question.header).to eq("What is the other mortgage lender?")
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Mortgage Lender")
+    expect(question.check_answer_label).to eq("Other Mortgage Lender")
   end
 
   it "has the correct type" do
