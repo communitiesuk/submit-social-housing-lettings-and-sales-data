@@ -8,6 +8,8 @@ class Form::Sales::Questions::MortgageLender < ::Form::Question
     @hint_text = ""
     @page = page
     @answer_options = ANSWER_OPTIONS
+    @guidance_position = GuidancePosition::BOTTOM
+    @guidance_partial = "mortgage_lender"
   end
 
   ANSWER_OPTIONS = {

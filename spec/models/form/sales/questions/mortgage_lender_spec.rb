@@ -31,6 +31,15 @@ RSpec.describe Form::Sales::Questions::MortgageLender, type: :model do
     expect(question.derived?).to be false
   end
 
+  it "is has correct guidance_position" do
+    expect(question.top_guidance?).to be false
+    expect(question.bottom_guidance?).to be true
+  end
+
+  it "is has correct guidance_partial" do
+    expect(question.guidance_partial).to eq("mortgage_lender")
+  end
+
   it "has the correct answer_options" do
     expect(question.answer_options).to eq({
       "" => "Select an option",
