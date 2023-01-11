@@ -322,6 +322,7 @@ private
       tshortfall: %i[field_88],
 
       unitletas: %i[field_105],
+      rsnvac: %i[field_106],
     }
   end
 
@@ -497,6 +498,7 @@ private
     attributes["hhmemb"] = hhmemb
 
     attributes["unitletas"] = field_105
+    attributes["rsnvac"] = field_106
 
     attributes
   end
