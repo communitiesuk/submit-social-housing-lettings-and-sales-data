@@ -9,7 +9,6 @@ module Imports
       if attributes["status"] == "Approved"
         Scheme.create!(
           owning_organisation_id: attributes["owning_organisation_id"],
-          managing_organisation_id: attributes["managing_organisation_id"],
           service_name: attributes["service_name"],
           arrangement_type: attributes["arrangement_type"],
           old_id: attributes["old_id"],

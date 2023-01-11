@@ -1,6 +1,5 @@
 class Scheme < ApplicationRecord
   belongs_to :owning_organisation, class_name: "Organisation"
-  belongs_to :managing_organisation, optional: true, class_name: "Organisation"
   has_many :locations, dependent: :delete_all
   has_many :lettings_logs, class_name: "LettingsLog", dependent: :delete_all
   has_many :scheme_deactivation_periods, class_name: "SchemeDeactivationPeriod"
@@ -191,7 +190,7 @@ class Scheme < ApplicationRecord
   end
 
   def validate_confirmed
-    required_attributes = attribute_names - %w[id created_at updated_at old_id old_visible_id confirmed end_date sensitive secondary_client_group total_units has_other_client_group deactivation_date deactivation_date_type managing_organisation_id]
+    required_attributes = attribute_names - %w[id created_at updated_at old_id old_visible_id confirmed end_date sensitive secondary_client_group total_units has_other_client_group deactivation_date deactivation_date_type]
 
     if confirmed == true
       required_attributes.any? do |attribute|

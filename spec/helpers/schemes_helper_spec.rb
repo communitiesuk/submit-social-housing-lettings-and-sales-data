@@ -98,7 +98,6 @@ RSpec.describe SchemesHelper do
                         scheme_type: 7,
                         registered_under_care_act: 3,
                         owning_organisation:,
-                        managing_organisation:,
                         arrangement_type: "V",
                         primary_client_group: "S",
                         has_other_client_group: 1,

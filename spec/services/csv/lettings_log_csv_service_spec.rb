@@ -209,7 +209,6 @@ RSpec.describe Csv::LettingsLogCsvService do
                                    scheme_type
                                    scheme_registered_under_care_act
                                    scheme_owning_organisation_name
-                                   scheme_managing_organisation_name
                                    scheme_primary_client_group
                                    scheme_has_other_client_group
                                    scheme_secondary_client_group

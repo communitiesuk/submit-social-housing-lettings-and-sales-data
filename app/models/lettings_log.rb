@@ -423,10 +423,6 @@ class LettingsLog < Log
     scheme_owning_organisation&.name
   end
 
-  def scheme_managing_organisation_name
-    scheme_managing_organisation&.name
-  end
-
   delegate :postcode, :name, :units, :type_of_unit, :mobility_type, :startdate, prefix: "location", to: :location, allow_nil: true
   delegate :location_admin_district, to: :location, allow_nil: true
 
