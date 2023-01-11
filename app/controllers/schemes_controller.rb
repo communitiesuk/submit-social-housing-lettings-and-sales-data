@@ -94,7 +94,7 @@ class SchemesController < ApplicationController
     if @scheme.errors.empty? && @scheme.save
       redirect_to scheme_primary_client_group_path(@scheme)
     else
-      if @scheme.errors.any? { |error| error.attribute == :owning_organisation}
+      if @scheme.errors.any? { |error| error.attribute == :owning_organisation }
         @scheme.errors.add(:owning_organisation_id, message: @scheme.errors[:organisation])
         @scheme.errors.delete(:owning_organisation)
       end

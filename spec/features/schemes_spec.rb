@@ -605,7 +605,6 @@ RSpec.describe "Schemes scheme Features" do
 
         context "when I fill in scheme details indicating that supported services provided by a different organisation and I press save I see primary client group section" do
           let(:scheme) { Scheme.first }
-          let!(:another_organisation) { FactoryBot.create(:organisation, name: "Another Org") }
 
           before do
             fill_in_and_save_scheme_details({ "housing_stock_owners" => "Another registered stock owner" })

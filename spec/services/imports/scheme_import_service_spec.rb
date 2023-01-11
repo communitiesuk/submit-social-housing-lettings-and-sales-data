@@ -10,7 +10,6 @@ RSpec.describe Imports::SchemeImportService do
   let(:scheme_id) { "6d6d7618b58affe2a150a5ef2e9f4765fa6cd05d" }
 
   let!(:owning_org) { FactoryBot.create(:organisation, old_org_id: "7c5bd5fb549c09z2c55d9cb90d7ba84927e64618") }
-  let!(:managing_org) { FactoryBot.create(:organisation, old_visible_id: "456") }
 
   def open_file(directory, filename)
     File.open("#{directory}/#{filename}.xml")
