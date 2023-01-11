@@ -582,6 +582,7 @@ RSpec.describe SchemesController, type: :request do
           { scheme: { service_name: "",
                       scheme_type: "",
                       registered_under_care_act: "",
+                      owning_organisation_id: nil,
                       arrangement_type: "" } }
         end
 
