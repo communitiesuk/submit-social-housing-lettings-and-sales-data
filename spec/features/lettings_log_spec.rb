@@ -155,6 +155,7 @@ RSpec.describe "Lettings Log Features" do
               org_rel1.destroy!
               visit("lettings-logs/#{log_id}/setup/check-answers")
               expect(page).to have_content("Stock owner Owning org 1")
+              expect(user.organisation.stock_owners).to eq([org_rel2.parent_organisation])
             end
           end
         end
