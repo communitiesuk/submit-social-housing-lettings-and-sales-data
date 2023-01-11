@@ -553,11 +553,11 @@ RSpec.describe "Schemes scheme Features" do
 
         context "when changing scheme answers" do
           before do
-            create_and_save_a_scheme
+            create_and_save_a_scheme_no_secondary_client_group
           end
 
           it "displays change links" do
-            assert_selector "a", text: "Change", count: 12
+            assert_selector "a", text: "Change", count: 11
           end
 
           it "allows changing details questions" do
@@ -579,9 +579,10 @@ RSpec.describe "Schemes scheme Features" do
           end
 
           it "indicates if the scheme is not complete" do
-            click_link("Change", href: "/schemes/#{scheme.id}/details?check_answers=true", match: :first)
-            choose "Another registered stock owner"
+            click_link("Change", href: "/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true", match: :first)
+            choose "Yes"
             click_button "Save and continue"
+            visit("/schemes/#{scheme.id}/check-answers")
             expect(page).to have_content("You didn’t answer this question")
           end
         end
@@ -610,29 +611,7 @@ RSpec.describe "Schemes scheme Features" do
             fill_in_and_save_scheme_details({ "housing_stock_owners" => "Another registered stock owner" })
           end
 
-          it "lets me fill in the managing organisation details" do
-            expect(page).to have_content "Which organisation provides the support services used by this scheme?"
-          end
-
-          it "lets me fill in the scheme details after navigating back" do
-            click_link "Back"
-            expect(page).to have_current_path("/schemes/#{scheme.id}/details")
-            expect(page).to have_content "Scheme name"
-            expect(page).to have_content "This scheme contains confidential information"
-            expect(page).to have_content "What is this type of scheme?"
-            expect(page).to have_content "Who provides the support services used by this scheme?"
-            expect(page).to have_content "Is this scheme registered under the Care Standards Act 2000?"
-          end
-
-          it "returns to the support service provider after amending the question" do
-            click_link "Back"
-            click_button "Save and continue"
-            expect(page).to have_current_path("/schemes/#{scheme.id}/support-services-provider")
-          end
-
           it "lets the primary client group to be selected" do
-            select another_organisation.name, from: "scheme-managing-organisation-id-field"
-            click_button "Save and continue"
             expect(page).to have_content "What client group is this scheme intended for?"
           end
 

@@ -94,8 +94,10 @@ class SchemesController < ApplicationController
     if @scheme.errors.empty? && @scheme.save
       redirect_to scheme_primary_client_group_path(@scheme)
     else
-      @scheme.errors.add(:owning_organisation_id, message: @scheme.errors[:organisation])
-      @scheme.errors.delete(:owning_organisation)
+      if @scheme.errors.any? { |error| error.attribute == :owning_organisation}
+        @scheme.errors.add(:owning_organisation_id, message: @scheme.errors[:organisation])
+        @scheme.errors.delete(:owning_organisation)
+      end
       render :new, status: :unprocessable_entity
     end
   end
@@ -233,7 +235,6 @@ private
     required_params = params.require(:scheme).permit(:service_name,
                                                      :sensitive,
                                                      :owning_organisation_id,
-                                                     :managing_organisation_id,
                                                      :scheme_type,
                                                      :registered_under_care_act,
                                                      :id,
@@ -245,36 +246,12 @@ private
                                                      :intended_stay,
                                                      :confirmed)
 
-    if arrangement_type_changed_to_different_org?(required_params)
-      required_params[:managing_organisation_id] = nil
-    end
-
-    if arrangement_type_set_to_same_org?(required_params)
-      required_params[:managing_organisation_id] = required_params[:owning_organisation_id] || @scheme.owning_organisation_id
-    end
-
     required_params[:sensitive] = required_params[:sensitive].to_i if required_params[:sensitive]
 
     if current_user.data_coordinator?
       required_params[:owning_organisation_id] = current_user.organisation_id
     end
     required_params
-  end
-
-  def arrangement_type_set_to_same_org?(required_params)
-    return unless @scheme
-
-    arrangement_type_value(required_params[:arrangement_type]) == "D" || (required_params[:arrangement_type].blank? && @scheme.arrangement_type_same?)
-  end
-
-  def arrangement_type_changed_to_different_org?(required_params)
-    return unless @scheme
-
-    @scheme.arrangement_type_same? && arrangement_type_value(required_params[:arrangement_type]) != "D" && required_params[:managing_organisation_id].blank?
-  end
-
-  def arrangement_type_value(key)
-    key.present? ? Scheme::ARRANGEMENT_TYPE[key.to_sym] : nil
   end
 
   def search_term

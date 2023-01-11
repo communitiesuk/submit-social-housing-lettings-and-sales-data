@@ -451,7 +451,7 @@ RSpec.describe SchemesController, type: :request do
           expect { post "/schemes", params: }.to change(Scheme, :count).by(1)
           follow_redirect!
           expect(response).to have_http_status(:ok)
-          expect(page).to have_content("Which organisation provides the support services used by this scheme?")
+          expect(page).to have_content(" What client group is this scheme intended for?")
         end
 
         it "creates a new scheme for user organisation with valid params" do
@@ -557,7 +557,7 @@ RSpec.describe SchemesController, type: :request do
           expect { post "/schemes", params: }.to change(Scheme, :count).by(1)
           follow_redirect!
           expect(response).to have_http_status(:ok)
-          expect(page).to have_content("Which organisation provides the support services used by this scheme?")
+          expect(page).to have_content("What client group is this scheme intended for?")
         end
 
         it "creates a new scheme for user organisation with valid params" do
@@ -642,11 +642,11 @@ RSpec.describe SchemesController, type: :request do
       end
 
       context "when confirming unfinished scheme" do
-        let(:params) { { scheme: { owning_organisation_id: user.organisation.id, arrangement_type: "V", confirmed: true, page: "check-answers" } } }
+        let(:params) { { scheme: { owning_organisation_id: user.organisation.id, arrangement_type: nil, confirmed: true, page: "check-answers" } } }
 
         it "does not allow the scheme to be confirmed" do
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.managing_organisation_id.invalid"))
+           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.arrangement_type.invalid"))
         end
       end
 
@@ -654,7 +654,6 @@ RSpec.describe SchemesController, type: :request do
         let(:params) do
           { scheme: {
             service_name: "",
-            managing_organisation_id: "",
             primary_client_group: "",
             secondary_client_group: "",
             scheme_type: "",
@@ -678,36 +677,6 @@ RSpec.describe SchemesController, type: :request do
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.support_type.invalid"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.intended_stay.invalid"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.has_other_client_group.invalid"))
-        end
-
-        context "when updating from check answers page" do
-          let(:params) { { scheme: { primary_client_group: "Homeless families with support needs", page: "primary-client-group", check_answers: "true" } } }
-
-          it "renders check answers page after successful update" do
-            follow_redirect!
-            expect(response).to have_http_status(:ok)
-            expect(page).to have_content("Check your changes before creating this scheme")
-          end
-
-          it "updates a scheme with valid params" do
-            follow_redirect!
-            expect(scheme_to_update.reload.primary_client_group).to eq("Homeless families with support needs")
-          end
-        end
-      end
-
-      context "when updating support services provider" do
-        let(:params) { { scheme: { arrangement_type: "Another organisation", managing_organisation_id: organisation.id, page: "support-services-provider" } } }
-
-        it "renders primary client group after successful update" do
-          follow_redirect!
-          expect(response).to have_http_status(:ok)
-          expect(page).to have_content("What client group is this scheme intended for?")
-        end
-
-        it "updates a scheme with valid params" do
-          follow_redirect!
-          expect(scheme_to_update.reload.managing_organisation_id).to eq(organisation.id)
         end
 
         context "when updating from check answers page" do
@@ -871,7 +840,6 @@ RSpec.describe SchemesController, type: :request do
                       registered_under_care_act: "No",
                       page: "details",
                       owning_organisation_id: organisation.id,
-                      managing_organisation_id: organisation.id,
                       arrangement_type: "D" } }
         end
 
@@ -1171,7 +1139,6 @@ RSpec.describe SchemesController, type: :request do
           expect(scheme_to_update.reload.sensitive).to eq("Yes")
           expect(scheme_to_update.reload.registered_under_care_act).to eq("No")
           expect(scheme_to_update.reload.owning_organisation_id).to eq(another_organisation.id)
-          expect(scheme_to_update.reload.managing_organisation_id).to eq(another_organisation.id)
         end
 
         context "when updating from check answers page" do
@@ -1189,7 +1156,6 @@ RSpec.describe SchemesController, type: :request do
             expect(scheme_to_update.reload.scheme_type).to eq("Foyer")
             expect(scheme_to_update.reload.sensitive).to eq("Yes")
             expect(scheme_to_update.reload.registered_under_care_act).to eq("No")
-            expect(scheme_to_update.reload.managing_organisation_id).to eq(scheme_to_update.owning_organisation_id)
           end
         end
       end

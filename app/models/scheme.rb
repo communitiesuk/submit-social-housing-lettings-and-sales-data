@@ -190,10 +190,6 @@ class Scheme < ApplicationRecord
     Scheme.intended_stays.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize, description: hints[key.to_sym]) }
   end
 
-  def arrangement_type_same?
-    arrangement_type.present? && ARRANGEMENT_TYPE[arrangement_type.to_sym] == "D"
-  end
-
   def validate_confirmed
     required_attributes = attribute_names - %w[id created_at updated_at old_id old_visible_id confirmed end_date sensitive secondary_client_group total_units has_other_client_group deactivation_date deactivation_date_type managing_organisation_id]
 

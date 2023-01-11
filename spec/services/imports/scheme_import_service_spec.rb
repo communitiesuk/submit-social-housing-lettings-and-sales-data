@@ -44,7 +44,6 @@ RSpec.describe Imports::SchemeImportService do
     it "matches expected values" do
       scheme = scheme_service.create_scheme(scheme_xml)
       expect(scheme.owning_organisation).to eq(owning_org)
-      expect(scheme.managing_organisation).to eq(managing_org)
       expect(scheme.old_id).to eq("6d6d7618b58affe2a150a5ef2e9f4765fa6cd05d")
       expect(scheme.old_visible_id).to eq("0123")
       expect(scheme.service_name).to eq("Management Group")
@@ -67,10 +66,9 @@ RSpec.describe Imports::SchemeImportService do
         scheme_xml.at_xpath("//mgmtgroup:agent").content = ""
       end
 
-      it "assigns both owning and managing organisation to the same one" do
+      it "assigns owning organisation" do
         scheme = scheme_service.create_scheme(scheme_xml)
         expect(scheme.owning_organisation).to eq(owning_org)
-        expect(scheme.managing_organisation).to eq(owning_org)
       end
     end
   end
