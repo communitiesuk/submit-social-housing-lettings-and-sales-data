@@ -549,5 +549,13 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         expect(parser.log.tenancylength).to eq(2)
       end
     end
+
+    describe "#earnings" do
+      let(:attributes) { { bulk_upload:, field_50: "104.50" } }
+
+      it "rounds to the nearest whole pound" do
+        expect(parser.log.earnings).to eq(105)
+      end
+    end
   end
 end
