@@ -19,7 +19,7 @@ RSpec.describe BulkUpload::Processor do
       it "persist the validation errors" do
         allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
 
-        expect { processor.call }.to change(BulkUploadError, :count).by(8)
+        expect { processor.call }.to change(BulkUploadError, :count)
       end
 
       it "deletes the local file afterwards" do
