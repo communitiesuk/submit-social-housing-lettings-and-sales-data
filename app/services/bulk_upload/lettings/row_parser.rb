@@ -353,6 +353,8 @@ private
 
       majorrepairs: %i[field_92 field_93 field_94],
       mrcdate: %i[field_92 field_93 field_94],
+
+      voiddate: %i[field_89 field_90 field_91],
     }
   end
 
@@ -558,9 +560,16 @@ private
     attributes["propcode"] = field_100
 
     attributes["majorrepairs"] = majorrepairs
+
     attributes["mrcdate"] = mrcdate
 
+    attributes["voiddate"] = voiddate
+
     attributes
+  end
+
+  def voiddate
+    Date.new(field_91 + 2000, field_90, field_89) if field_91.present? && field_90.present? && field_89.present?
   end
 
   def majorrepairs
