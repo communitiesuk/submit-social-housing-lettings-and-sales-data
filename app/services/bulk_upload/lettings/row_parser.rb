@@ -661,15 +661,30 @@ private
   end
 
   def cbl
-    field_75 == 2 ? 0 : field_75
+    case field_75
+    when 2
+      0
+    when 1
+      1
+    end
   end
 
   def chr
-    field_76 == 2 ? 0 : field_76
+    case field_76
+    when 2
+      0
+    when 1
+      1
+    end
   end
 
   def cap
-    field_77 == 2 ? 0 : field_77
+    case field_77
+    when 2
+      0
+    when 1
+      1
+    end
   end
 
   def ppostcode_full
