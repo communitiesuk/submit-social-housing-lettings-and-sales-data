@@ -663,5 +663,13 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         end
       end
     end
+
+    describe "#voiddate" do
+      let(:attributes) { { bulk_upload:, field_89: "13", field_90: "12", field_91: "22" } }
+
+      it "sets value given" do
+        expect(parser.log.voiddate).to eq(Date.new(2022, 12, 13))
+      end
+    end
   end
 end
