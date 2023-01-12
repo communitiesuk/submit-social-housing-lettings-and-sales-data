@@ -99,7 +99,6 @@ FactoryBot.define do
       is_la_inferred { false }
       mortgagelender { 5 }
       extrabor { 1 }
-      privacynotice { 1 }
     end
   end
 end
