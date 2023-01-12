@@ -350,6 +350,9 @@ private
       offered: %i[field_99],
 
       propcode: %i[field_100],
+
+      majorrepairs: %i[field_92 field_93 field_94],
+      mrcdate: %i[field_92 field_93 field_94],
     }
   end
 
@@ -554,7 +557,18 @@ private
 
     attributes["propcode"] = field_100
 
+    attributes["majorrepairs"] = majorrepairs
+    attributes["mrcdate"] = mrcdate
+
     attributes
+  end
+
+  def majorrepairs
+    mrcdate.present? ? 1 : 0
+  end
+
+  def mrcdate
+    Date.new(field_94 + 2000, field_93, field_92) if field_94.present? && field_93.present? && field_92.present?
   end
 
   def ppcodenk
