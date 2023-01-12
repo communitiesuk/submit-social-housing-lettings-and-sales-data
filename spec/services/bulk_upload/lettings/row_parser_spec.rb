@@ -3,6 +3,8 @@ require "rails_helper"
 RSpec.describe BulkUpload::Lettings::RowParser do
   subject(:parser) { described_class.new(attributes) }
 
+  let(:now) { Time.zone.today }
+
   let(:attributes) { { bulk_upload: } }
   let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }
   let(:user) { create(:user, organisation: owning_org) }
@@ -10,13 +12,13 @@ RSpec.describe BulkUpload::Lettings::RowParser do
   let(:managing_org) { create(:organisation) }
   let(:setup_section_params) do
     {
+      bulk_upload:,
       field_1: "1",
       field_111: owning_org.old_visible_id,
       field_113: managing_org.old_visible_id,
-      bulk_upload:,
-      field_96: "1",
-      field_97: "1",
-      field_98: "2023",
+      field_96: now.day.to_s,
+      field_97: now.month.to_s,
+      field_98: now.strftime("%g"),
       field_134: "2",
     }
   end
@@ -53,9 +55,9 @@ RSpec.describe BulkUpload::Lettings::RowParser do
             field_1: "1",
             field_4: "1",
             field_7: "123",
-            field_96: "1",
-            field_97: "1",
-            field_98: "2023",
+            field_96: now.day.to_s,
+            field_97: now.month.to_s,
+            field_98: now.strftime("%g"),
             field_108: "EC1N",
             field_109: "2TD",
             field_111: owning_org.old_visible_id,
@@ -669,6 +671,14 @@ RSpec.describe BulkUpload::Lettings::RowParser do
 
       it "sets value given" do
         expect(parser.log.voiddate).to eq(Date.new(2022, 12, 13))
+      end
+    end
+
+    describe "#startdate" do
+      let(:attributes) { { bulk_upload:, field_96: now.day.to_s, field_97: now.month.to_s, field_98: now.strftime("%g") } }
+
+      it "sets value given" do
+        expect(parser.log.startdate).to eq(now)
       end
     end
   end
