@@ -30,4 +30,8 @@ class FeatureToggle
   def self.upload_enabled?
     !Rails.env.development?
   end
+
+  def self.validate_valid_radio_options?
+    !(Rails.env.production? || Rails.env.staging?)
+  end
 end

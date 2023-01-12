@@ -70,6 +70,8 @@ module Validations::SharedValidations
   end
 
   def validate_valid_radio_option(record)
+    return unless FeatureToggle.validate_valid_radio_options?
+
     record.attributes.each do |question_id, _v|
       question = record.form.get_question(question_id, record)
 
