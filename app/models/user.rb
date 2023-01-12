@@ -12,6 +12,7 @@ class User < ApplicationRecord
   has_many :owned_sales_logs, through: :organisation
   has_many :managed_sales_logs, through: :organisation
   has_many :legacy_users
+  has_many :bulk_uploads
 
   validates :name, presence: true
   validates :email, presence: true
