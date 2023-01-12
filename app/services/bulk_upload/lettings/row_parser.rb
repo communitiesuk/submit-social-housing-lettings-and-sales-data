@@ -298,8 +298,10 @@ private
       prevten: %i[field_61],
       homeless: %i[field_68],
 
+      prevloc: %i[field_62],
+      previous_la_known: %i[field_62],
       ppcodenk: %i[field_65],
-      ppostcode_full: %i[field_65 field_66],
+      ppostcode_full: %i[field_63 field_64],
 
       reasonpref: %i[field_69],
       rp_homeless: %i[field_70],
@@ -503,6 +505,8 @@ private
     attributes["prevten"] = field_61
     attributes["homeless"] = homeless
 
+    attributes["prevloc"] = prevloc
+    attributes["previous_la_known"] = previous_la_known
     attributes["ppcodenk"] = ppcodenk
     attributes["ppostcode_full"] = ppostcode_full
 
@@ -580,6 +584,14 @@ private
 
   def mrcdate
     Date.new(field_94 + 2000, field_93, field_92) if field_94.present? && field_93.present? && field_92.present?
+  end
+
+  def prevloc
+    field_62
+  end
+
+  def previous_la_known
+    prevloc.present? ? 1 : 0
   end
 
   def ppcodenk

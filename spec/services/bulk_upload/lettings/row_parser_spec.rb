@@ -697,5 +697,31 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         expect(parser.log.la).to eql("E07000223")
       end
     end
+
+    describe "#prevloc" do
+      let(:attributes) { { bulk_upload:, field_62: "E07000223" } }
+
+      it "sets to given value" do
+        expect(parser.log.prevloc).to eql("E07000223")
+      end
+    end
+
+    describe "#previous_la_known" do
+      context "when known" do
+        let(:attributes) { { bulk_upload:, field_62: "E07000223" } }
+
+        it "sets to 1" do
+          expect(parser.log.previous_la_known).to eq(1)
+        end
+      end
+
+      context "when not known" do
+        let(:attributes) { { bulk_upload:, field_62: "" } }
+
+        it "sets to 0" do
+          expect(parser.log.previous_la_known).to eq(0)
+        end
+      end
+    end
   end
 end
