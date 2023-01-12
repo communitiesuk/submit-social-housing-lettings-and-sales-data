@@ -1,4 +1,6 @@
 module Validations::Sales::HouseholdValidations
+  include Validations::SharedValidations
+
   def validate_number_of_other_people_living_in_the_property(record)
     return if record.hholdcount.blank?
 
@@ -8,15 +10,6 @@ module Validations::Sales::HouseholdValidations
   end
 
   def validate_partner_count(record)
-    partner_count = (2..6).count { |n| tenant_is_partner?(record["relat#{n}"]) }
-    if partner_count > 1
-      record.errors.add :base, I18n.t("validations.household.relat.one_partner")
-    end
-  end
-
-private
-
-  def tenant_is_partner?(relationship)
-    relationship == "P"
+    shared_validate_partner_count(record, 8)
   end
 end

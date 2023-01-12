@@ -68,4 +68,17 @@ module Validations::SharedValidations
 
     { scope: status, date: date&.to_formatted_s(:govuk_date), deactivation_date: closest_reactivation&.deactivation_date&.to_formatted_s(:govuk_date) }
   end
+
+  def shared_validate_partner_count(record, max_people)
+    partner_count = (2..max_people).count { |n| tenant_is_partner?(record["relat#{n}"]) }
+    if partner_count > 1
+      record.errors.add :base, I18n.t("validations.household.relat.one_partner")
+    end
+  end
+
+private
+
+  def tenant_is_partner?(relationship)
+    relationship == "P"
+  end
 end
