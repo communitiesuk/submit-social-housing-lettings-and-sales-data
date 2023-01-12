@@ -27,8 +27,8 @@ RSpec.describe Form::Sales::Questions::DepositAmount, type: :model do
     expect(question.type).to eq("numeric")
   end
 
-  it "is not marked as derived" do
-    expect(question.derived?).to be false
+  it "is marked as derived" do
+    expect(question.derived?).to be true
   end
 
   it "has the correct hint" do

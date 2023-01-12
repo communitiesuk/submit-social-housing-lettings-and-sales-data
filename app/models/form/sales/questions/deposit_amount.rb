@@ -9,5 +9,6 @@ class Form::Sales::Questions::DepositAmount < ::Form::Question
     @width = 5
     @prefix = "£"
     @hint_text = "Enter the total cash sum paid by the buyer towards the property that was not funded by the mortgage"
+    @derived = true
   end
 end
