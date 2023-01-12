@@ -126,14 +126,16 @@ RSpec.describe Validations::FinancialValidations do
 
   describe "rent period validations" do
     let(:organisation) { FactoryBot.create(:organisation) }
-    let(:record) { FactoryBot.create(:lettings_log, owning_organisation: organisation) }
+    let(:user) { FactoryBot.create(:user) }
+    let(:record) { FactoryBot.create(:lettings_log, owning_organisation: user.organisation, managing_organisation: organisation, created_by: user) }
 
     before do
+      FactoryBot.create(:organisation_relationship, parent_organisation: user.organisation, child_organisation: organisation)
       FactoryBot.create(:organisation_rent_period, organisation:, rent_period: 2)
     end
 
     context "when the organisation only uses specific rent periods" do
-      it "validates that the selected rent period is used by the organisation" do
+      it "validates that the selected rent period is used by the managing organisation" do
         record.period = 3
         financial_validator.validate_rent_period(record)
         expect(record.errors["period"])
