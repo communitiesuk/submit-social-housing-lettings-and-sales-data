@@ -6329,11 +6329,14 @@
                     "33": {
                       "value": "Lifetime private registered provider (PRP) general needs tenancy"
                     },
-                    "8": {
-                      "value": "Sheltered accommodation"
+                    "34": {
+                      "value": "Specialist retirement housing"
+                    },
+                    "35": {
+                      "value": "Extra care housing"
                     },
                     "6": {
-                      "value": "Supported housing"
+                      "value": "Other supported housing"
                     },
                     "3": {
                       "value": "Private sector tenancy"
@@ -6405,11 +6408,14 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "8": {
-                      "value": "Sheltered accommodation"
+                    "34": {
+                      "value": "Specialist retirement housing"
+                    },
+                    "35": {
+                      "value": "Extra care housing"
                     },
                     "6": {
-                      "value": "Supported housing"
+                      "value": "Other supported housing"
                     }
                   }
                 }
