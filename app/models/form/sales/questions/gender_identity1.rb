@@ -14,6 +14,6 @@ class Form::Sales::Questions::GenderIdentity1 < ::Form::Question
     "F" => { "value" => "Female" },
     "M" => { "value" => "Male" },
     "X" => { "value" => "Non-binary" },
-    "R" => { "value" => "Prefers not to say " },
+    "R" => { "value" => "Prefers not to say" },
   }.freeze
 end
