@@ -13,4 +13,10 @@ module Validations::Sales::HouseholdValidations
       record.errors.add :base, I18n.t("validations.household.relat.one_partner")
     end
   end
+
+private
+
+  def tenant_is_partner?(relationship)
+    relationship == "P"
+  end
 end

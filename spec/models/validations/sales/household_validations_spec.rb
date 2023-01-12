@@ -46,4 +46,36 @@ RSpec.describe Validations::Sales::HouseholdValidations do
       end
     end
   end
+
+  describe "#validate_partner_count" do
+    context "when one partner" do
+      let(:record) { FactoryBot.build(:sales_log, relat2: "P", relat3: nil, relat4: nil, relat5: nil, relat6: nil) }
+
+      it "does not add an error" do
+        household_validator.validate_partner_count(record)
+
+        expect(record.errors).not_to be_present
+      end
+    end
+
+    context "when blank" do
+      let(:record) { FactoryBot.build(:sales_log, relat2: nil, relat3: nil, relat4: nil, relat5: nil, relat6: nil) }
+
+      it "does not add an error" do
+        household_validator.validate_partner_count(record)
+
+        expect(record.errors).not_to be_present
+      end
+    end
+
+    context "when two partners" do
+      let(:record) { FactoryBot.build(:sales_log, relat2: "P", relat3: "P", relat4: nil, relat5: nil, relat6: nil) }
+
+      it "adds an error" do
+        household_validator.validate_partner_count(record)
+
+        expect(record.errors).to be_present
+      end
+    end
+  end
 end

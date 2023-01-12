@@ -68,8 +68,4 @@ module Validations::SharedValidations
 
     { scope: status, date: date&.to_formatted_s(:govuk_date), deactivation_date: closest_reactivation&.deactivation_date&.to_formatted_s(:govuk_date) }
   end
-
-  def tenant_is_partner?(relationship)
-    relationship == "P"
-  end
 end
