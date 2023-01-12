@@ -117,8 +117,24 @@ RSpec.describe User, type: :model do
         })
       end
 
-      it "can filter lettings logs by user, year and status" do
-        expect(user.logs_filters).to eq(%w[status years user])
+      context "and their organisation does not have managing agents" do
+        before do
+          user.organisation.update(holds_own_stock: false)
+        end
+
+        it "can filter lettings logs by user, year and status" do
+          expect(user.logs_filters).to eq(%w[status years user])
+        end
+      end
+
+      context "and their organisation has managing agents" do
+        before do
+          FactoryBot.create(:organisation_relationship, parent_organisation: user.organisation)
+        end
+
+        it "can filter lettings logs by user, year and status" do
+          expect(user.logs_filters).to eq(%w[status years user organisation])
+        end
       end
     end
 
