@@ -348,6 +348,8 @@ private
       irproduct_other: %i[field_131],
 
       offered: %i[field_99],
+
+      propcode: %i[field_100],
     }
   end
 
@@ -549,6 +551,8 @@ private
     attributes["irproduct_other"] = field_131
 
     attributes["offered"] = field_99
+
+    attributes["propcode"] = field_100
 
     attributes
   end
