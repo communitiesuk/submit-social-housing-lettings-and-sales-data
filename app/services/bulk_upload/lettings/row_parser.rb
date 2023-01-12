@@ -359,7 +359,7 @@ private
   end
 
   def startdate
-    Date.new(field_98, field_97, field_96) if field_98.present? && field_97.present? && field_96.present?
+    Date.new(field_98 + 2000, field_97, field_96) if field_98.present? && field_97.present? && field_96.present?
   end
 
   def renttype
