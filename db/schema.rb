@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_09_160738) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_12_093524) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -250,7 +250,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_09_160738) do
     t.string "old_id"
     t.integer "joint"
     t.bigint "created_by_id"
-    t.integer "illness_type_0"
     t.integer "retirement_value_check"
     t.integer "tshortfall_known"
     t.integer "sheltered"
