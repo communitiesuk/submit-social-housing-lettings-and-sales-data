@@ -123,7 +123,7 @@ RSpec.describe "Lettings Log Features" do
         end
       end
 
-      context "and there is more than 1 potential stock owner" do
+      context "and there are 2 or more potential stock owners" do
         let!(:owning_org1) { create(:organisation, name: "Owning org 1") }
         let!(:org_rel1) { create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: owning_org1) }
 
@@ -137,7 +137,7 @@ RSpec.describe "Lettings Log Features" do
           expect(page).to have_content("Stock owner User org")
         end
 
-        context "and there are more than 2 potential stock owners" do
+        context "and there are 3 or more potential stock owners" do
           let!(:owning_org2) { create(:organisation, name: "Owning org 2") }
           let!(:org_rel2) { create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: owning_org2) }
 
