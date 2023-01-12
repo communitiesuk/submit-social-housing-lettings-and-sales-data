@@ -59,7 +59,7 @@ RSpec.describe Exports::LettingsLogExportService do
     end
 
     context "and one lettings log is available for export" do
-      let!(:lettings_log) { FactoryBot.create(:lettings_log, :completed, propcode: "123", ppostcode_full: "SE2 6RT", postcode_full: "NW1 5TY", tenancycode: "BZ737", startdate: Time.utc(2022, 2, 2, 10, 36, 49), tenancylength: 5) }
+      let!(:lettings_log) { FactoryBot.create(:lettings_log, :completed, propcode: "123", ppostcode_full: "SE2 6RT", postcode_full: "NW1 5TY", tenancycode: "BZ737", startdate: Time.utc(2022, 2, 2, 10, 36, 49), tenancylength: 5, underoccupation_benefitcap: 4) }
 
       it "generates a ZIP export file with the expected filename" do
         expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)
@@ -237,7 +237,7 @@ RSpec.describe Exports::LettingsLogExportService do
     let(:csv_export_file) { File.open("spec/fixtures/exports/general_needs_log.csv", "r:UTF-8") }
     let(:expected_csv_filename) { "export_2022_05_01.csv" }
 
-    let(:lettings_log) { FactoryBot.create(:lettings_log, :completed, propcode: "123", ppostcode_full: "SE2 6RT", postcode_full: "NW1 5TY", tenancycode: "BZ737", startdate: Time.utc(2022, 2, 2, 10, 36, 49), tenancylength: 5) }
+    let(:lettings_log) { FactoryBot.create(:lettings_log, :completed, propcode: "123", ppostcode_full: "SE2 6RT", postcode_full: "NW1 5TY", tenancycode: "BZ737", startdate: Time.utc(2022, 2, 2, 10, 36, 49), tenancylength: 5, underoccupation_benefitcap: 4) }
 
     it "generates an CSV export file with the expected content" do
       expected_content = replace_entity_ids(lettings_log, csv_export_file.read)
@@ -256,7 +256,7 @@ RSpec.describe Exports::LettingsLogExportService do
     let(:scheme) { FactoryBot.create(:scheme, :export, owning_organisation: organisation) }
     let(:location) { FactoryBot.create(:location, :export, scheme:, startdate: Time.zone.local(2021, 4, 1)) }
 
-    let(:lettings_log) { FactoryBot.create(:lettings_log, :completed, :export, :sh, scheme:, location:, created_by: user, owning_organisation: organisation, startdate: Time.utc(2022, 2, 2, 10, 36, 49)) }
+    let(:lettings_log) { FactoryBot.create(:lettings_log, :completed, :export, :sh, scheme:, location:, created_by: user, owning_organisation: organisation, startdate: Time.utc(2022, 2, 2, 10, 36, 49), underoccupation_benefitcap: 4, sheltered: 1) }
 
     it "generates an XML export file with the expected content" do
       expected_content = replace_entity_ids(lettings_log, export_file.read)

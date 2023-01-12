@@ -41,7 +41,8 @@ RSpec.describe "Checkboxes" do
 
   context "when a checkbox question is submitted with invalid answers" do
     before do
-      lettings_log.update!(illness: 100)
+      lettings_log.illness = 100
+      lettings_log.save!(validate: false)
       allow(lettings_log).to receive(:update).and_return(false)
     end
 
