@@ -42,8 +42,6 @@ module Forms
 
         ProcessBulkUploadJob.perform_later(bulk_upload:)
 
-        ProcessBulkUploadJob.perform_later(bulk_upload:)
-
         true
       end
 
