@@ -681,5 +681,13 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         expect(parser.log.startdate).to eq(now)
       end
     end
+
+    describe "#postcode_full" do
+      let(:attributes) { { bulk_upload:, field_108: " EC1N ", field_109: " 2TD " } }
+
+      it "strips whitespace" do
+        expect(parser.log.postcode_full).to eql("EC1N 2TD")
+      end
+    end
   end
 end
