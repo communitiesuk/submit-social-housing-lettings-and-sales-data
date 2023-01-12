@@ -85,10 +85,10 @@ FactoryBot.define do
       ppcodenk { 1 }
       prevten { 1 }
       previous_la_known { 0 }
-      relat3 { "P" }
-      relat4 { "P" }
-      relat5 { "P" }
-      relat6 { "P" }
+      relat3 { "C" }
+      relat4 { "C" }
+      relat5 { "C" }
+      relat6 { "C" }
       hb { 4 }
       mortgageused { 1 }
       wchair { 1 }
