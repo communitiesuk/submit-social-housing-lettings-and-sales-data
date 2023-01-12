@@ -621,5 +621,13 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         expect(parser.log.scharge).to eq(123.45)
       end
     end
+
+    describe "#offered" do
+      let(:attributes) { { bulk_upload:, field_99: "3" } }
+
+      it "sets value given" do
+        expect(parser.log.offered).to eq(3)
+      end
+    end
   end
 end
