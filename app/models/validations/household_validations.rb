@@ -202,10 +202,6 @@ private
     economic_status == 10
   end
 
-  def tenant_is_partner?(relationship)
-    relationship == "P"
-  end
-
   def tenant_is_child?(relationship)
     relationship == "C"
   end
