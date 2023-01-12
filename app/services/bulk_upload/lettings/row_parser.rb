@@ -214,6 +214,7 @@ private
       tenancycode: [:field_7],
       postcode_known: %i[field_107 field_108 field_109],
       postcode_full: %i[field_107 field_108 field_109],
+      la: %i[field_107],
       owning_organisation_id: [:field_111],
       managing_organisation_id: [:field_113],
       renewal: [:field_134],
@@ -408,6 +409,7 @@ private
 
     attributes["lettype"] = field_1
     attributes["tenancycode"] = field_7
+    attributes["la"] = field_107
     attributes["postcode_known"] = postcode_known
     attributes["postcode_full"] = postcode_full
     attributes["owning_organisation_id"] = owning_organisation_id
