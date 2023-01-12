@@ -637,5 +637,31 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         expect(parser.log.propcode).to eq("abc123")
       end
     end
+
+    describe "#mrcdate" do
+      let(:attributes) { { bulk_upload:, field_92: "13", field_93: "12", field_94: "22" } }
+
+      it "sets value given" do
+        expect(parser.log.mrcdate).to eq(Date.new(2022, 12, 13))
+      end
+    end
+
+    describe "#majorrepairs" do
+      context "when mrcdate given" do
+        let(:attributes) { { bulk_upload:, field_92: "13", field_93: "12", field_94: "22" } }
+
+        it "sets #majorrepairs to 1" do
+          expect(parser.log.majorrepairs).to eq(1)
+        end
+      end
+
+      context "when mrcdate not given" do
+        let(:attributes) { { bulk_upload:, field_92: "", field_93: "", field_94: "" } }
+
+        it "sets #majorrepairs to 0" do
+          expect(parser.log.majorrepairs).to eq(0)
+        end
+      end
+    end
   end
 end
