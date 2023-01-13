@@ -58,7 +58,7 @@ RSpec.describe "Lettings Log Features" do
   end
 
   context "when the signed is user is a Support user" do
-    let(:support_user) { create(:user, :support, last_sign_in_at: Time.zone.now) }
+    let(:support_user) { create(:user, :support, last_sign_in_at: Time.zone.now, organisation: create(:organisation, name: "User org")) }
     let(:devise_notify_mailer) { DeviseNotifyMailer.new }
     let(:notify_client) { instance_double(Notifications::Client) }
     let(:mfa_template_id) { User::MFA_TEMPLATE_ID }
@@ -78,7 +78,7 @@ RSpec.describe "Lettings Log Features" do
     end
 
     context "when completing the setup lettings log section", :aggregate_failure do
-      it "includes the organisation and created by questions" do
+      it "includes the owning organisation and created by questions" do
         visit("/lettings-logs")
         click_button("Create a new lettings log")
         click_link("Set up this lettings log")
@@ -88,8 +88,109 @@ RSpec.describe "Lettings Log Features" do
         click_button("Save and continue")
         log_id = page.current_path.scan(/\d/).join
         visit("lettings-logs/#{log_id}/setup/check-answers")
-        expect(page).to have_content("Stock owner #{support_user.organisation.name}")
+        expect(page).to have_content("Stock owner User org")
         expect(page).to have_content("You have answered 2 of 8 questions")
+      end
+    end
+
+    context "when the owning organisation question isn't answered" do
+      it "doesn't show the managing agent question" do
+        visit("/lettings-logs")
+        click_button("Create a new lettings log")
+        click_link("Set up this lettings log")
+        log_id = page.current_path.scan(/\d/).join
+        click_link("Skip for now")
+        expect(page).not_to have_current_path("/lettings-logs/#{log_id}/managing-organisation")
+      end
+    end
+
+    context "when the owning organisation question is answered" do
+      context "and the owning organisation doesn't hold stock" do
+        let!(:managing_org) { create(:organisation, name: "Managing org") }
+        let!(:org_rel) { create(:organisation_relationship, parent_organisation: support_user.organisation, child_organisation: managing_org) }
+
+        before do
+          support_user.organisation.update!(holds_own_stock: false)
+        end
+
+        it "shows the managing organisation question" do
+          visit("/lettings-logs")
+          click_button("Create a new lettings log")
+          click_link("Set up this lettings log")
+          log_id = page.current_path.scan(/\d/).join
+          select(support_user.organisation.name, from: "lettings-log-owning-organisation-id-field")
+          click_button("Save and continue")
+          expect(page).to have_current_path("/lettings-logs/#{log_id}/managing-organisation")
+          select(managing_org.name, from: "lettings-log-managing-organisation-id-field")
+          click_button("Save and continue")
+          visit("lettings-logs/#{log_id}/setup/check-answers")
+          expect(page).to have_content("Managing agent Managing org")
+          expect(support_user.organisation.managing_agents).to eq([org_rel.child_organisation])
+        end
+      end
+
+      context "and the owning organisation does hold stock" do
+        before do
+          support_user.organisation.update!(holds_own_stock: true)
+        end
+
+        context "and the owning organisation has no managing agents" do
+          it "doesn't show the managing organisation question" do
+            visit("/lettings-logs")
+            click_button("Create a new lettings log")
+            click_link("Set up this lettings log")
+            log_id = page.current_path.scan(/\d/).join
+            select(support_user.organisation.name, from: "lettings-log-owning-organisation-id-field")
+            click_button("Save and continue")
+            expect(page).not_to have_current_path("/lettings-logs/#{log_id}/managing-organisation")
+            visit("lettings-logs/#{log_id}/setup/check-answers")
+            expect(page).not_to have_content("Managing agent ")
+          end
+        end
+
+        context "and the owning organisation has 1 or more managing agents" do
+          let!(:managing_org1) { create(:organisation, name: "Managing org 1") }
+          let!(:org_rel1) { create(:organisation_relationship, parent_organisation: support_user.organisation, child_organisation: managing_org1) }
+
+          it "does show the managing organisation question" do
+            visit("/lettings-logs")
+            click_button("Create a new lettings log")
+            click_link("Set up this lettings log")
+            log_id = page.current_path.scan(/\d/).join
+            select(support_user.organisation.name, from: "lettings-log-owning-organisation-id-field")
+            click_button("Save and continue")
+            expect(page).to have_current_path("/lettings-logs/#{log_id}/managing-organisation")
+            select(managing_org1.name, from: "lettings-log-managing-organisation-id-field")
+            click_button("Save and continue")
+            visit("lettings-logs/#{log_id}/setup/check-answers")
+            expect(page).to have_content("Managing agent Managing org 1")
+          end
+
+          context "and the owning organisation has 2 or more managing agents" do
+            let!(:managing_org2) { create(:organisation, name: "Managing org 2") }
+            let!(:org_rel2) { create(:organisation_relationship, parent_organisation: support_user.organisation, child_organisation: managing_org2) }
+
+            context "and the organisation relationship for the selected managing agent is deleted" do
+              it "doesn't change the CYA page text to be 'You didn't answer this question'" do
+                visit("/lettings-logs")
+                click_button("Create a new lettings log")
+                click_link("Set up this lettings log")
+                log_id = page.current_path.scan(/\d/).join
+                select(support_user.organisation.name, from: "lettings-log-owning-organisation-id-field")
+                click_button("Save and continue")
+                expect(page).to have_current_path("/lettings-logs/#{log_id}/managing-organisation")
+                select(managing_org1.name, from: "lettings-log-managing-organisation-id-field")
+                click_button("Save and continue")
+                visit("lettings-logs/#{log_id}/setup/check-answers")
+                expect(page).to have_content("Managing agent Managing org 1")
+                org_rel1.destroy!
+                visit("lettings-logs/#{log_id}/setup/check-answers")
+                expect(page).to have_content("Managing agent Managing org 1")
+                expect(support_user.organisation.managing_agents).to eq([org_rel2.child_organisation])
+              end
+            end
+          end
+        end
       end
     end
   end
@@ -111,15 +212,15 @@ RSpec.describe "Lettings Log Features" do
 
     context "when completing the setup log section" do
       context "and there is at most 1 potential stock owner" do
-        it "does not include the organisation and created by questions" do
+        it "does not include the owning organisation and created by questions" do
           visit("/lettings-logs")
           click_button("Create a new lettings log")
           click_link("Set up this lettings log")
           log_id = page.current_path.scan(/\d/).join
           expect(page).to have_current_path("/lettings-logs/#{log_id}/needs-type")
           visit("lettings-logs/#{log_id}/setup/check-answers")
-          expect(page).not_to have_content("Stock owner User org")
-          expect(page).not_to have_content("Log owner User name")
+          expect(page).not_to have_content("Stock owner ")
+          expect(page).not_to have_content("Log owner ")
         end
       end
 
@@ -127,7 +228,7 @@ RSpec.describe "Lettings Log Features" do
         let!(:owning_org1) { create(:organisation, name: "Owning org 1") }
         let!(:org_rel1) { create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: owning_org1) }
 
-        it "does include the stock owner question" do
+        it "does include the owning organisation question" do
           visit("/lettings-logs")
           click_button("Create a new lettings log")
           click_link("Set up this lettings log")
@@ -157,6 +258,66 @@ RSpec.describe "Lettings Log Features" do
               expect(page).to have_content("Stock owner Owning org 1")
               expect(user.organisation.stock_owners).to eq([org_rel2.parent_organisation])
             end
+          end
+        end
+      end
+
+      context "when the current user's organisation doesn't hold stock" do
+        it "shows the managing organisation question" do
+          user.organisation.update!(holds_own_stock: false)
+          visit("/lettings-logs")
+          click_button("Create a new lettings log")
+          click_link("Set up this lettings log")
+          log_id = page.current_path.scan(/\d/).join
+          if page.current_path == "/lettings-logs/#{log_id}/owning-organisation"
+            click_link("Skip for now")
+          end
+          expect(page).to have_current_path("/lettings-logs/#{log_id}/managing-organisation")
+          select(user.organisation.name, from: "lettings-log-managing-organisation-id-field")
+          click_button("Save and continue")
+          visit("lettings-logs/#{log_id}/setup/check-answers")
+          expect(page).to have_content("Managing agent User org")
+        end
+      end
+
+      context "when the current user's organisation does hold stock" do
+        before do
+          user.organisation.update!(holds_own_stock: true)
+        end
+
+        context "and the user's organisation has no managing agents" do
+          it "doesn't show the managing organisation question" do
+            visit("/lettings-logs")
+            click_button("Create a new lettings log")
+            click_link("Set up this lettings log")
+            log_id = page.current_path.scan(/\d/).join
+            if page.current_path == "/lettings-logs/#{log_id}/owning-organisation"
+              click_link("Skip for now")
+            end
+            expect(page).not_to have_current_path("/lettings-logs/#{log_id}/managing-organisation")
+            visit("lettings-logs/#{log_id}/setup/check-answers")
+            expect(page).not_to have_content("Managing agent ")
+          end
+        end
+
+        context "and the user's organisation has 1 or more managing agents" do
+          let!(:managing_org) { create(:organisation, name: "Managing org") }
+          let!(:org_rel) { create(:organisation_relationship, parent_organisation: user.organisation, child_organisation: managing_org) }
+
+          it "does show the managing organisation question" do
+            visit("/lettings-logs")
+            click_button("Create a new lettings log")
+            click_link("Set up this lettings log")
+            log_id = page.current_path.scan(/\d/).join
+            if page.current_path == "/lettings-logs/#{log_id}/owning-organisation"
+              click_link("Skip for now")
+            end
+            expect(page).to have_current_path("/lettings-logs/#{log_id}/managing-organisation")
+            select(managing_org.name, from: "lettings-log-managing-organisation-id-field")
+            click_button("Save and continue")
+            visit("lettings-logs/#{log_id}/setup/check-answers")
+            expect(page).to have_content("Managing agent Managing org")
+            expect(user.organisation.managing_agents).to eq([org_rel.child_organisation])
           end
         end
       end
