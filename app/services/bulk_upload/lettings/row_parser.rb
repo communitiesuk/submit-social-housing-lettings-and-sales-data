@@ -145,16 +145,6 @@ class BulkUpload::Lettings::RowParser
   validates :field_97, presence: true
   validates :field_98, presence: true
 
-  def attribute_set
-    @attribute_set ||= instance_variable_get(:@attributes)
-  end
-
-  def validate_data_types
-    unless attribute_set["field_1"].value_before_type_cast&.match?(/\A\d+\z/)
-      errors.add(:field_1, :invalid)
-    end
-  end
-
   def valid?
     errors.clear
 
@@ -178,6 +168,16 @@ class BulkUpload::Lettings::RowParser
   end
 
 private
+
+  def attribute_set
+    @attribute_set ||= instance_variable_get(:@attributes)
+  end
+
+  def validate_data_types
+    unless attribute_set["field_1"].value_before_type_cast&.match?(/\A\d+\z/)
+      errors.add(:field_1, :invalid)
+    end
+  end
 
   def postcode_full
     "#{field_108} #{field_109}" if field_108 && field_109
