@@ -13,7 +13,7 @@ RSpec.describe BulkUpload::Lettings::RowParser do
   let(:setup_section_params) do
     {
       bulk_upload:,
-      field_1: "1",
+      field_1: "2",
       field_111: owning_org.old_visible_id,
       field_113: managing_org.old_visible_id,
       field_96: now.day.to_s,
@@ -205,19 +205,19 @@ RSpec.describe BulkUpload::Lettings::RowParser do
     end
 
     describe "#field_4" do
-      context "when nullable permitted" do
-        let(:attributes) { { bulk_upload:, field_1: "2", field_4: nil } }
-
-        it "can be nulled" do
-          expect(parser.errors[:field_4]).to be_blank
-        end
-      end
-
       context "when nullable not permitted" do
-        let(:attributes) { { bulk_upload:, field_1: "1", field_4: nil } }
+        let(:attributes) { { bulk_upload:, field_1: "2", field_4: nil } }
 
         it "cannot be nulled" do
           expect(parser.errors[:field_4]).to be_present
+        end
+      end
+
+      context "when nullable permitted" do
+        let(:attributes) { { bulk_upload:, field_1: "1", field_4: nil } }
+
+        it "can be nulled" do
+          expect(parser.errors[:field_4]).to be_blank
         end
       end
 
