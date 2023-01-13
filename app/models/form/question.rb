@@ -106,13 +106,6 @@ class Form::Question
     false
   end
 
-  def inferred_answer_value(log)
-    return unless inferred_check_answers_value
-
-    inferred_answer = inferred_check_answers_value.find { |inferred_value| inferred_value["condition"].values[0] == log[inferred_value["condition"].keys[0]] }
-    inferred_answer["value"] if inferred_answer.present?
-  end
-
   def displayed_answer_options(log, _current_user = nil)
     answer_options.select do |_key, val|
       !val.is_a?(Hash) || !val["depends_on"] || form.depends_on_met(val["depends_on"], log)
@@ -311,6 +304,13 @@ private
 
   def enabled_inferred_answers(inferred_answers, log)
     inferred_answers.filter { |_key, value| value.all? { |condition_key, condition_value| log[condition_key] == condition_value } }
+  end
+
+  def inferred_answer_value(log)
+    return unless inferred_check_answers_value
+
+    inferred_answer = inferred_check_answers_value.find { |inferred_value| inferred_value["condition"].values[0] == log[inferred_value["condition"].keys[0]] }
+    inferred_answer["value"] if inferred_answer.present?
   end
 
   RADIO_YES_VALUE = {
