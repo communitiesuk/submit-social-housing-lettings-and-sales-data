@@ -486,7 +486,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_13_125117) do
     t.integer "fromprop"
     t.integer "socprevten"
     t.integer "mortlen"
-    t.integer "postcode_known"
     t.string "pcode1"
     t.string "pcode2"
     t.integer "pcodenk"
