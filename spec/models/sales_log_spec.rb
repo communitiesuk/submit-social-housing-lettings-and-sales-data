@@ -127,6 +127,13 @@ RSpec.describe SalesLog, type: :model do
       record_from_db = ActiveRecord::Base.connection.execute("select deposit from sales_logs where id=#{sales_log.id}").to_a[0]
       expect(record_from_db["deposit"]).to eq(nil)
     end
+
+    it "correctly derives and saves pcode1 and pcode1 and pcode2" do
+      sales_log.update!(postcode_full: "W6 0SP")
+      record_from_db = ActiveRecord::Base.connection.execute("select pcode1, pcode2 from sales_logs where id=#{sales_log.id}").to_a[0]
+      expect(record_from_db["pcode1"]).to eq("W6")
+      expect(record_from_db["pcode2"]).to eq("0SP")
+    end
   end
 
   context "when saving addresses" do
