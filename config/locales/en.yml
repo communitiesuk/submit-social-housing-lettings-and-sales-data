@@ -202,6 +202,7 @@ en:
       beds:
         non_positive: "Number of bedrooms has to be greater than 0"
         over_max: "Number of bedrooms cannot be more than 12"
+        bedsits_have_max_one_bedroom: "Properties with 2 or more bedrooms cannot be bedsits"
       proptype:
         bedsits_have_max_one_bedroom: "Properties with 2 or more bedrooms cannot be bedsits"
       postcode:
