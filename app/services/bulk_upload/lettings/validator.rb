@@ -151,9 +151,6 @@ class BulkUpload::Lettings::Validator
   end
 
   def call
-    row_offset = 6
-    col_offset = 0
-
     row_parsers.each_with_index do |row_parser, index|
       row_parser.valid?
 
@@ -166,7 +163,7 @@ class BulkUpload::Lettings::Validator
           tenant_code: row_parser.field_7,
           property_ref: row_parser.field_100,
           row:,
-          cell: "#{cols[field_number_for_attribute(error.attribute) + col_offset]}#{row}",
+          cell: "#{cols[field_number_for_attribute(error.attribute) - col_offset + 1]}#{row + 1}",
         )
       end
     end
@@ -177,6 +174,14 @@ class BulkUpload::Lettings::Validator
   end
 
 private
+
+  def row_offset
+    5
+  end
+
+  def col_offset
+    1
+  end
 
   def field_number_for_attribute(attribute)
     attribute.to_s.split("_").last.to_i
@@ -191,6 +196,7 @@ private
       stripped_row = row[1..]
       headers = ("field_1".."field_134").to_a
       hash = Hash[headers.zip(stripped_row)]
+      hash[:bulk_upload] = bulk_upload
 
       BulkUpload::Lettings::RowParser.new(hash)
     end
@@ -221,7 +227,7 @@ private
   end
 
   def body_rows
-    rows[6..]
+    rows[row_offset..]
   end
 
   def validate_file_not_empty
