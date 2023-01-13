@@ -132,7 +132,7 @@ RSpec.describe User, type: :model do
           FactoryBot.create(:organisation_relationship, parent_organisation: user.organisation)
         end
 
-        it "can filter lettings logs by user, year and status" do
+        it "can filter lettings logs by user, year, status and organisation" do
           expect(user.logs_filters).to eq(%w[status years user organisation])
         end
       end
