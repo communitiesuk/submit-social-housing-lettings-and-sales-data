@@ -8,7 +8,7 @@ module Validations::Sales::PropertyValidations
     end
   end
 
-  def validate_propert_unit_type(record)
+  def validate_property_unit_type(record)
     return if record.proptype.blank? || record.beds.blank?
 
     unless record.proptype != 2 || record.beds <= 1
