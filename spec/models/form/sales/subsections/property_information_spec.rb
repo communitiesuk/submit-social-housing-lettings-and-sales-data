@@ -15,8 +15,8 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
     expect(property_information.pages.map(&:id)).to eq(
       %w[
         property_number_of_bedrooms
-        property_building_type
         property_unit_type
+        property_building_type
         property_local_authority
         property_wheelchair_accessible
       ],

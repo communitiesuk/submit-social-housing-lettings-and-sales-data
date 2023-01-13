@@ -32,7 +32,7 @@
     <sex8/>
     <ecstat8/>
     <homeless>1</homeless>
-    <underoccupation_benefitcap>0</underoccupation_benefitcap>
+    <underoccupation_benefitcap>4</underoccupation_benefitcap>
     <leftreg>1</leftreg>
     <reservist>1</reservist>
     <illness>1</illness>
@@ -53,7 +53,7 @@
     <waityear>1</waityear>
     <postcode_full>SW1A 2AA</postcode_full>
     <reasonpref>1</reasonpref>
-    <cbl>1</cbl>
+    <cbl>2</cbl>
     <chr>1</chr>
     <cap>2</cap>
     <reasonother/>
@@ -130,7 +130,7 @@
     <relat8/>
     <lar/>
     <irproduct/>
-    <sheltered>0</sheltered>
+    <sheltered>1</sheltered>
     <hhtype>4</hhtype>
     <new_old>2</new_old>
     <vacdays>638</vacdays>

@@ -10,9 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_09_160738) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_12_093524) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "bulk_upload_errors", force: :cascade do |t|
+    t.bigint "bulk_upload_id"
+    t.text "cell"
+    t.text "row"
+    t.text "tenant_code"
+    t.text "property_ref"
+    t.text "purchaser_code"
+    t.text "field"
+    t.text "error"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bulk_upload_id"], name: "index_bulk_upload_errors_on_bulk_upload_id"
+  end
 
   create_table "bulk_uploads", force: :cascade do |t|
     t.bigint "user_id"
@@ -236,7 +250,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_09_160738) do
     t.string "old_id"
     t.integer "joint"
     t.bigint "created_by_id"
-    t.integer "illness_type_0"
     t.integer "retirement_value_check"
     t.integer "tshortfall_known"
     t.integer "sheltered"
@@ -421,9 +434,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_09_160738) do
     t.string "relat5"
     t.string "relat6"
     t.integer "hb"
-    t.string "sex4"
-    t.string "sex5"
-    t.string "sex6"
     t.integer "savings_value_check"
     t.integer "deposit_value_check"
     t.integer "frombeds"
@@ -460,17 +470,22 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_09_160738) do
     t.integer "hhregres"
     t.integer "hhregresstill"
     t.integer "proplen"
-    t.integer "mscharge_known"
-    t.decimal "mscharge", precision: 10, scale: 2
     t.integer "prevten"
     t.integer "mortgageused"
     t.integer "wchair"
     t.integer "armedforcesspouse"
+    t.integer "mscharge_known"
+    t.decimal "mscharge", precision: 10, scale: 2
+    t.string "sex4"
+    t.string "sex5"
+    t.string "sex6"
+    t.integer "mortlen"
     t.datetime "hodate", precision: nil
     t.integer "hoday"
     t.integer "homonth"
     t.integer "hoyear"
-    t.integer "mortlen"
+    t.integer "fromprop"
+    t.integer "socprevten"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"

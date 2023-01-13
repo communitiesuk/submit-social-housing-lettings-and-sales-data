@@ -167,10 +167,12 @@ class Form
       if %w[radio checkbox].include?(question.type)
         enabled_answer_options = enabled_question_ids.include?(question.id) ? enabled_questions.find { |q| q.id == question.id }.answer_options : {}
         current_answer_option_valid = enabled_answer_options.present? ? enabled_answer_options.key?(log.public_send(question.id).to_s) : false
+
         if !current_answer_option_valid && log.respond_to?(question.id.to_s)
           Rails.logger.debug("Cleared #{question.id} value")
           log.public_send("#{question.id}=", nil)
         else
+
           (question.answer_options.keys - enabled_answer_options.keys).map do |invalid_answer_option|
             Rails.logger.debug("Cleared #{invalid_answer_option} value")
             log.public_send("#{invalid_answer_option}=", nil) if log.respond_to?(invalid_answer_option)

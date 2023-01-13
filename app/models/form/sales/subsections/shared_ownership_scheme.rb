@@ -17,6 +17,8 @@ class Form::Sales::Subsections::SharedOwnershipScheme < ::Form::Subsection
       Form::Sales::Pages::LaNominations.new(nil, nil, self),
       Form::Sales::Pages::BuyerPrevious.new(nil, nil, self),
       Form::Sales::Pages::PreviousBedrooms.new(nil, nil, self),
+      Form::Sales::Pages::PreviousPropertyType.new(nil, nil, self),
+      Form::Sales::Pages::PreviousTenure.new(nil, nil, self),
       Form::Sales::Pages::AboutPriceSharedOwnership.new(nil, nil, self),
       Form::Sales::Pages::Mortgageused.new("mortgage_used_shared_ownership", nil, self),
       Form::Sales::Pages::MortgageAmount.new("mortgage_amount_shared_ownership", nil, self),

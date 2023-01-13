@@ -760,14 +760,6 @@
                 },
                 {
                   "renewal": 0,
-                  "rsnvac": 16
-                },
-                {
-                  "renewal": 0,
-                  "rsnvac": 17
-                },
-                {
-                  "renewal": 0,
                   "rsnvac": 18
                 },
                 {
@@ -827,6 +819,14 @@
                 {
                   "renewal": 0,
                   "rsnvac": 15
+                },
+                {
+                  "renewal": 0,
+                  "rsnvac": 16
+                },
+                {
+                  "renewal": 0,
+                  "rsnvac": 17
                 }
               ]
             },
@@ -892,14 +892,6 @@
                 {
                   "renewal": 0,
                   "rsnvac": 13
-                },
-                {
-                  "renewal": 0,
-                  "rsnvac": 16
-                },
-                {
-                  "renewal": 0,
-                  "rsnvac": 17
                 },
                 {
                   "renewal": 0,
