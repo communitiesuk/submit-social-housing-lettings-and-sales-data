@@ -8,11 +8,30 @@ class BulkUpload::Processor
   def call
     download
     validator.call
+    create_logs
   ensure
     downloader.delete_local_file!
   end
 
 private
+
+  def create_logs
+    log_creator_class.new(
+      bulk_upload:,
+      path: downloader.path,
+    ).call
+  end
+
+  def log_creator_class
+    case bulk_upload.log_type
+    when "lettings"
+      BulkUpload::Lettings::LogCreator
+    when "sales"
+      BulkUpload::Sales::LogCreator
+    else
+      raise "Log creator not found for #{bulk_upload.log_type}"
+    end
+  end
 
   def downloader
     @downloader ||= BulkUpload::Downloader.new(bulk_upload:)
