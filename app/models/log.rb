@@ -5,6 +5,8 @@ class Log < ApplicationRecord
   belongs_to :managing_organisation, class_name: "Organisation", optional: true
   belongs_to :created_by, class_name: "User", optional: true
   belongs_to :updated_by, class_name: "User", optional: true
+  belongs_to :bulk_upload, optional: true
+
   before_save :update_status!
 
   STATUS = { "not_started" => 0, "in_progress" => 1, "completed" => 2 }.freeze
