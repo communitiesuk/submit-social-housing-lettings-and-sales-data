@@ -545,7 +545,7 @@ private
     attributes["hhmemb"] = hhmemb
 
     attributes["unitletas"] = field_105
-    attributes["rsnvac"] = field_106
+    attributes["rsnvac"] = rsnvac
     attributes["sheltered"] = field_117
 
     attributes["illness_type_1"] = field_119
@@ -571,7 +571,20 @@ private
 
     attributes["voiddate"] = voiddate
 
+    attributes["first_time_property_let_as_social_housing"] = first_time_property_let_as_social_housing
+
     attributes
+  end
+
+  def first_time_property_let_as_social_housing
+    case rsnvac
+    when 15, 16, 17
+      1
+    end
+  end
+
+  def rsnvac
+    field_106
   end
 
   def voiddate

@@ -723,5 +723,15 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         end
       end
     end
+
+    describe "#first_time_property_let_as_social_housing" do
+      context "when field_106 is 15, 16, or 17" do
+        let(:attributes) { { bulk_upload:, field_106: %w[15 16 17].sample } }
+
+        it "sets to 1" do
+          expect(parser.log.first_time_property_let_as_social_housing).to eq(1)
+        end
+      end
+    end
   end
 end
