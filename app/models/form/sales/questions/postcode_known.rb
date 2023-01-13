@@ -9,6 +9,16 @@ class Form::Sales::Questions::PostcodeKnown < ::Form::Question
     @conditional_for = {
       "postcode_full" => [0],
     }
+    @hidden_in_check_answers = {
+      "depends_on" => [
+        {
+          "pcodenk" => 0,
+        },
+        {
+          "pcodenk" => 1,
+        },
+      ],
+    }
   end
 
   ANSWER_OPTIONS = {

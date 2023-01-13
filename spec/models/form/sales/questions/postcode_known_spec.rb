@@ -47,4 +47,13 @@ RSpec.describe Form::Sales::Questions::PostcodeKnown, type: :model do
   it "has the correct hint" do
     expect(question.hint_text).to be_nil
   end
+
+  it "has the correct hidden_in_check_answers" do
+    expect(question.hidden_in_check_answers).to eq({
+      "depends_on" => [
+        { "pcodenk" => 0 },
+        { "pcodenk" => 1 },
+      ],
+    })
+  end
 end
