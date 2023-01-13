@@ -9,7 +9,11 @@ module Validations::Sales::HouseholdValidations
     end
   end
 
+
   def validate_household_number_of_other_members(record)
-    shared_validate_household_number_of_other_members(record, 6)
+    (2..6).each do |n|
+
+    end
+    shared_validate_partner_count(record, 6)
   end
 end

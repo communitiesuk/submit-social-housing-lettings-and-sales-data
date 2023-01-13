@@ -82,54 +82,6 @@ module Validations::SharedValidations
     end
   end
 
-  def shared_validate_household_number_of_other_members(record, max_people)
-    (2..max_people).each do |n|
-      shared_validate_person_age_matches_economic_status(record, n)
-      shared_validate_person_age_matches_relationship(record, n)
-      shared_validate_person_age_and_relationship_matches_economic_status(record, n)
-    end
-    shared_validate_partner_count(record, max_people)
-  end
-
-  def shared_validate_person_age_matches_relationship(record, person_num)
-    age = record.public_send("age#{person_num}")
-    relationship = record.public_send("relat#{person_num}")
-    return unless age && relationship
-
-    if age < 16 && !tenant_is_child?(relationship)
-      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.child_under_16", person_num:)
-      record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_under_16_relat", person_num:)
-    end
-  end
-
-  def shared_validate_person_age_matches_economic_status(record, person_num)
-    age = record.public_send("age#{person_num}")
-    economic_status = record.public_send("ecstat#{person_num}")
-    return unless age && economic_status
-
-    if age < 16 && !tenant_is_economic_child?(economic_status)
-      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.child_under_16", person_num:)
-      record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_under_16", person_num:)
-    end
-    if tenant_is_economic_child?(economic_status) && age > 16
-      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.child_over_16", person_num:)
-      record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_over_16", person_num:)
-    end
-  end
-
-  def shared_validate_person_age_and_relationship_matches_economic_status(record, person_num)
-    age = record.public_send("age#{person_num}")
-    economic_status = record.public_send("ecstat#{person_num}")
-    relationship = record.public_send("relat#{person_num}")
-    return unless age && economic_status && relationship
-
-    if age >= 16 && age <= 19 && tenant_is_child?(relationship) && (!tenant_is_fulltime_student?(economic_status) && !tenant_economic_status_refused?(economic_status))
-      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19", person_num:)
-      record.errors.add "age#{person_num}", I18n.t("validations.household.age.student_16_19", person_num:)
-      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.student_16_19", person_num:)
-    end
-  end
-
   def shared_validate_partner_count(record, max_people)
     partner_count = (2..max_people).count { |n| tenant_is_partner?(record["relat#{n}"]) }
     if partner_count > 1
@@ -139,22 +91,6 @@ module Validations::SharedValidations
 
 
 private
-
-  def tenant_is_economic_child?(economic_status)
-    economic_status == 9
-  end
-
-  def tenant_is_fulltime_student?(economic_status)
-    economic_status == 7
-  end
-
-  def tenant_economic_status_refused?(economic_status)
-    economic_status == 10
-  end
-
-  def tenant_is_child?(relationship)
-    relationship == "C"
-  end
 
   def tenant_is_partner?(relationship)
     relationship == "P"
