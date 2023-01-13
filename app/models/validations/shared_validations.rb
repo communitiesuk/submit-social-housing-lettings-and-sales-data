@@ -89,7 +89,6 @@ module Validations::SharedValidations
     end
   end
 
-
 private
 
   def person_is_partner?(relationship)

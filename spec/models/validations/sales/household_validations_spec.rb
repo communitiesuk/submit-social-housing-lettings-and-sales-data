@@ -17,7 +17,6 @@ RSpec.describe Validations::Sales::HouseholdValidations do
     end
 
     context "when blank" do
-
       it "does not add an error" do
         record.hholdcount = nil
         household_validator.validate_number_of_other_people_living_in_the_property(record)
@@ -27,7 +26,6 @@ RSpec.describe Validations::Sales::HouseholdValidations do
     end
 
     context "when below lower bound" do
-
       it "adds an error" do
         record.hholdcount = -1
         household_validator.validate_number_of_other_people_living_in_the_property(record)
@@ -37,7 +35,6 @@ RSpec.describe Validations::Sales::HouseholdValidations do
     end
 
     context "when higher than upper bound" do
-
       it "adds an error" do
         record.hholdcount = 5
         household_validator.validate_number_of_other_people_living_in_the_property(record)
