@@ -7,6 +7,7 @@ FactoryBot.define do
     year { 2022 }
     identifier { SecureRandom.uuid }
     sequence(:filename) { |n| "bulk-upload-#{n}.csv" }
+    needstype { 1 }
 
     trait(:sales) do
       log_type { BulkUpload.log_types[:sales] }
