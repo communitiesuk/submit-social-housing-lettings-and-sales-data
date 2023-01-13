@@ -308,7 +308,9 @@ en:
         retired_male: "Answer cannot be ‘retired’ as the male tenant is under 65"
         retired_female: "Answer cannot be ‘retired’ as the female tenant is under 60"
       relat:
+        partner_under_16: "Cannot be partner if the person's age is under 16"
         child_under_16: "Person’s %{person_num}’s relationship to tenant 1 must be ‘child’ as you told us they’re under 16"
+        child_over_20: "Relationship cannot be child if the person's age is 20 or over"
         one_partner: "Number of partners cannot be greater than 1"
         student_16_19: "Answer cannot be ‘child’ as you told us the person %{person_num} is between 16 and 19 and is not a full-time student"
       housingneeds_a:

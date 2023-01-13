@@ -45,7 +45,7 @@ module Validations::HouseholdValidations
     (2..8).each do |n|
       validate_person_age_matches_economic_status(record, n)
       validate_person_age_matches_relationship(record, n)
-      validate_person_age_and_relationship_matches_economic_status(record, n)
+      shared_validate_person_age_and_relationship_matches_economic_status(record, n)
     end
     shared_validate_partner_count(record, 8)
   end
@@ -170,36 +170,8 @@ private
     end
   end
 
-  def validate_person_age_and_relationship_matches_economic_status(record, person_num)
-    age = record.public_send("age#{person_num}")
-    economic_status = record.public_send("ecstat#{person_num}")
-    relationship = record.public_send("relat#{person_num}")
-    return unless age && economic_status && relationship
-
-    if age >= 16 && age <= 19 && tenant_is_child?(relationship) && (!tenant_is_fulltime_student?(economic_status) && !tenant_economic_status_refused?(economic_status))
-      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19", person_num:)
-      record.errors.add "age#{person_num}", I18n.t("validations.household.age.student_16_19", person_num:)
-      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.student_16_19", person_num:)
-    end
-  end
-
-  def validate_partner_count(record)
-    partner_count = (2..8).count { |n| tenant_is_partner?(record["relat#{n}"]) }
-    if partner_count > 1
-      record.errors.add :base, I18n.t("validations.household.relat.one_partner")
-    end
-  end
-
   def tenant_is_economic_child?(economic_status)
     economic_status == 9
-  end
-
-  def tenant_is_fulltime_student?(economic_status)
-    economic_status == 7
-  end
-
-  def tenant_economic_status_refused?(economic_status)
-    economic_status == 10
   end
 
   def tenant_is_child?(relationship)
