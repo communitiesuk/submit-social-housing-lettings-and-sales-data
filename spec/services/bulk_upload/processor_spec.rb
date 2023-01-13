@@ -5,8 +5,8 @@ RSpec.describe BulkUpload::Processor do
 
   let(:bulk_upload) { create(:bulk_upload, :lettings) }
 
-  context "when processing a bulk upload with errors" do
-    describe "#call" do
+  describe "#call" do
+    context "when processing a bulk upload with errors" do
       let(:mock_downloader) do
         instance_double(
           BulkUpload::Downloader,
@@ -28,6 +28,36 @@ RSpec.describe BulkUpload::Processor do
         processor.call
 
         expect(mock_downloader).to have_received(:delete_local_file!)
+      end
+    end
+
+    context "when processing a bulk with perfect data" do
+      let(:path) { file_fixture("2022_23_lettings_bulk_upload.csv") }
+
+      let(:mock_downloader) do
+        instance_double(
+          BulkUpload::Downloader,
+          call: nil,
+          path:,
+          delete_local_file!: nil,
+        )
+      end
+
+      let(:mock_creator) do
+        instance_double(
+          BulkUpload::Lettings::LogCreator,
+          call: nil,
+          path:,
+        )
+      end
+
+      it "creates logs" do
+        allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
+        allow(BulkUpload::Lettings::LogCreator).to receive(:new).with(bulk_upload:, path:).and_return(mock_creator)
+
+        processor.call
+
+        expect(mock_creator).to have_received(:call)
       end
     end
   end
