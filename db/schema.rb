@@ -500,6 +500,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_13_154518) do
     t.integer "pcodenk"
     t.string "postcode_full"
     t.boolean "is_la_inferred"
+    t.bigint "bulk_upload_id"
+    t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
