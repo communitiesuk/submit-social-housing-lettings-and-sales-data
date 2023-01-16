@@ -55,4 +55,12 @@ RSpec.describe Form::Sales::Questions::Age1, type: :model do
   it "has the correct check_answers_card_number" do
     expect(question.check_answers_card_number).to eq(1)
   end
+
+  it "has the correct min" do
+    expect(question.min).to eq(16)
+  end
+
+  it "has the correct max" do
+    expect(question.max).to eq(110)
+  end
 end
