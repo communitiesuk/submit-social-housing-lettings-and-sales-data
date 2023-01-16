@@ -61,8 +61,29 @@ class Log < ApplicationRecord
       public_send("#{error.attribute}=", nil)
     end
   end
+  
+  (1..8).each do |person_num|
+    define_method("retirement_age_for_person_#{person_num}") do
+      retirement_age_for_person(person_num)
+    end
+
+    define_method("plural_gender_for_person_#{person_num}") do
+      plural_gender_for_person(person_num)
+    end
+  end
 
 private
+
+  def plural_gender_for_person(person_num)
+    gender = public_send("sex#{person_num}".to_sym)
+    return unless gender
+
+    if %w[M X].include?(gender)
+      "male and non-binary people"
+    elsif gender == "F"
+      "females"
+    end
+  end
 
   def update_status!
     self.status = if all_fields_completed? && errors.empty?

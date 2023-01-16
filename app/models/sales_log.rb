@@ -16,6 +16,7 @@ end
 class SalesLog < Log
   include DerivedVariables::SalesLogVariables
   include Validations::Sales::SoftValidations
+  include Validations::SoftValidations
 
   self.inheritance_column = :_type_disabled
 
@@ -33,6 +34,7 @@ class SalesLog < Log
   scope :search_by, ->(param) { filter_by_id(param) }
 
   OPTIONAL_FIELDS = %w[purchid].freeze
+  RETIREMENT_AGES = { "M" => 65, "F" => 60, "X" => 65 }.freeze
 
   def startdate
     saledate
@@ -180,5 +182,12 @@ class SalesLog < Log
   def process_postcode_changes!
     self.postcode_full = upcase_and_remove_whitespace(postcode_full)
     process_postcode(postcode_full, "pcodenk", "is_la_inferred", "la")
+  end
+  
+  def retirement_age_for_person(person_num)
+    gender = public_send("sex#{person_num}".to_sym)
+    return unless gender
+
+    RETIREMENT_AGES[gender]
   end
 end
