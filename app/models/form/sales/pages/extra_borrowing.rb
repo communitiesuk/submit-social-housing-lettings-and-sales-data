@@ -4,6 +4,9 @@ class Form::Sales::Pages::ExtraBorrowing < ::Form::Page
     @header = ""
     @description = ""
     @subsection = subsection
+    @depends_on = [{
+                     "mortgageused" => 1,
+                   }]
   end
 
   def questions
