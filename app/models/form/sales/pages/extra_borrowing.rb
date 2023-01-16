@@ -5,8 +5,8 @@ class Form::Sales::Pages::ExtraBorrowing < ::Form::Page
     @description = ""
     @subsection = subsection
     @depends_on = [{
-                     "mortgageused" => 1,
-                   }]
+      "mortgageused" => 1,
+    }]
   end
 
   def questions
