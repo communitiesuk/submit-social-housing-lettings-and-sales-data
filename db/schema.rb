@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_12_093524) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_13_125117) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -434,6 +434,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_12_093524) do
     t.string "relat5"
     t.string "relat6"
     t.integer "hb"
+    t.string "sex4"
+    t.string "sex5"
+    t.string "sex6"
     t.integer "savings_value_check"
     t.integer "deposit_value_check"
     t.integer "frombeds"
@@ -470,22 +473,24 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_12_093524) do
     t.integer "hhregres"
     t.integer "hhregresstill"
     t.integer "proplen"
+    t.integer "mscharge_known"
+    t.decimal "mscharge", precision: 10, scale: 2
     t.integer "prevten"
     t.integer "mortgageused"
     t.integer "wchair"
     t.integer "armedforcesspouse"
-    t.integer "mscharge_known"
-    t.decimal "mscharge", precision: 10, scale: 2
-    t.string "sex4"
-    t.string "sex5"
-    t.string "sex6"
-    t.integer "mortlen"
     t.datetime "hodate", precision: nil
     t.integer "hoday"
     t.integer "homonth"
     t.integer "hoyear"
     t.integer "fromprop"
     t.integer "socprevten"
+    t.integer "mortlen"
+    t.string "pcode1"
+    t.string "pcode2"
+    t.integer "pcodenk"
+    t.string "postcode_full"
+    t.boolean "is_la_inferred"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"

@@ -21,7 +21,9 @@ class SalesLog < Log
   validates_with SalesLogValidator
   before_validation :set_derived_fields!
   before_validation :reset_invalidated_dependent_fields!
+  before_validation :process_postcode_changes!, if: :postcode_full_changed?
   before_validation :process_previous_postcode_changes!, if: :ppostcode_full_changed?
+  before_validation :reset_location_fields!, unless: :postcode_known?
   before_validation :reset_previous_location_fields!, unless: :previous_postcode_known?
 
   scope :filter_by_year, ->(year) { where(saledate: Time.zone.local(year.to_i, 4, 1)...Time.zone.local(year.to_i + 1, 4, 1)) }
@@ -135,6 +137,18 @@ class SalesLog < Log
     ppcodenk&.zero?
   end
 
+  def postcode_known?
+    pcodenk&.zero?
+  end
+
+  def postcode_full=(postcode)
+    if postcode
+      super UKPostcode.parse(postcode).to_s
+    else
+      super nil
+    end
+  end
+
   def process_postcode(postcode, postcode_known_key, la_inferred_key, la_key)
     return if postcode.blank?
 
@@ -150,5 +164,10 @@ class SalesLog < Log
 
   def mortgage_not_used?
     mortgageused == 2
+  end
+
+  def process_postcode_changes!
+    self.postcode_full = upcase_and_remove_whitespace(postcode_full)
+    process_postcode(postcode_full, "pcodenk", "is_la_inferred", "la")
   end
 end
