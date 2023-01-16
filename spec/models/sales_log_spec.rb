@@ -237,13 +237,13 @@ RSpec.describe SalesLog, type: :model do
       described_class.create!({
         jointpur: 1,
         hholdcount: 3,
-        relat2: "X",
+        relat2: "C",
         relat3: "C",
         relat4: "X",
         relat5: "C",
         age1: 22,
-        age2: 60,
-        age3: 15,
+        age2: 40,
+        age3: 19,
         age4: 88,
         age5: 14,
       })

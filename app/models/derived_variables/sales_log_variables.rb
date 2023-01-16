@@ -26,7 +26,7 @@ private
 
   def total_elder
     ages = [age1, age2, age3, age4, age5, age6]
-    ages.count { |x| !x.nil? && x >= 60 }
+    ages.count { |age| age.present? && age >= 60 }
   end
 
   def total_child
@@ -35,11 +35,11 @@ private
   end
 
   def total_adult
-    total = !age1.nil? && age1 >= 16 && age1 < 60 ? 1 : 0
+    total = age1.present? && age1.between?(16, 59) ? 1 : 0
     total + (2..6).count do |i|
       age = public_send("age#{i}")
       relat = public_send("relat#{i}")
-      !age.nil? && ((age >= 16 && age < 18 && %w[P X].include?(relat)) || age >= 18 && age < 60)
+      age.present? && ((age.between?(16, 17) && %w[P X].include?(relat)) || age.between?(18, 59))
     end
   end
 
@@ -48,7 +48,7 @@ private
 
     if only_one_elder?
       1
-    elsif two_adults_including_elders?
+    elsif only_two_elders?
       2
     elsif only_one_adult?
       3
@@ -56,14 +56,14 @@ private
       4
     elsif one_adult_with_at_least_one_child?
       5
-    elsif two_adults_with_at_least_one_child?
+    elsif at_least_two_adults_with_at_least_one_child?
       6
     else
       9
     end
   end
 
-  def two_adults_with_at_least_one_child?
+  def at_least_two_adults_with_at_least_one_child?
     total_elder.zero? && total_adult >= 2 && totchild >= 1
   end
 
@@ -79,8 +79,8 @@ private
     total_elder.zero? && total_adult == 1 && totchild.zero?
   end
 
-  def two_adults_including_elders?
-    (total_elder + total_adult) == 2 && total_elder >= 1
+  def only_two_elders?
+    total_elder == 2 && total_adult.zero? && totchild.zero?
   end
 
   def only_one_elder?
