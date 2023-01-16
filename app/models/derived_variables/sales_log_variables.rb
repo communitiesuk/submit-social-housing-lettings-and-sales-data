@@ -30,8 +30,11 @@ private
   end
 
   def total_child
-    relationships = [relat2, relat3, relat4, relat5, relat6]
-    relationships.count("C")
+    (2..6).count do |i|
+      age = public_send("age#{i}")
+      relat = public_send("relat#{i}")
+      age.present? && ((age < 20 && %w[C].include?(relat)))
+    end
   end
 
   def total_adult
@@ -39,7 +42,7 @@ private
     total + (2..6).count do |i|
       age = public_send("age#{i}")
       relat = public_send("relat#{i}")
-      age.present? && ((age.between?(16, 17) && %w[P X].include?(relat)) || age.between?(18, 59))
+      age.present? && ((age.between?(20, 59) || age.between?(18, 19) && relat != "C"))
     end
   end
 
