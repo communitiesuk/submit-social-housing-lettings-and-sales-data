@@ -121,6 +121,10 @@ class SalesLog < Log
     [9, 14, 27].include?(type)
   end
 
+  def rent_to_buy_full_ownership?
+    type == 29
+  end
+
   def is_type_discount?
     type == 18
   end

@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Form::Sales::Pages::PurchasePrice, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
-  let(:page_id) { nil }
+  let(:page_id) { "purchase_price" }
   let(:page_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection) }
 
@@ -28,6 +28,9 @@ RSpec.describe Form::Sales::Pages::PurchasePrice, type: :model do
   end
 
   it "has correct depends_on" do
-    expect(page.depends_on).to be_nil
+    expect(page.depends_on).to eq([
+      { "ownershipsch" => 3 },
+      { "rent_to_buy_full_ownership?" => true },
+    ])
   end
 end

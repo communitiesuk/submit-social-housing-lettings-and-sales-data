@@ -17,6 +17,7 @@ RSpec.describe Form::Sales::Subsections::DiscountedOwnershipScheme, type: :model
         living_before_purchase_discounted_ownership
         about_price_rtb
         about_price_not_rtb
+        purchase_price_discounted_ownership
         mortgage_used_discounted_ownership
         mortgage_amount_discounted_ownership
         mortgage_lender_discounted_ownership
