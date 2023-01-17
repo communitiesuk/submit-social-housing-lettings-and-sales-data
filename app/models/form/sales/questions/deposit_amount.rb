@@ -7,6 +7,7 @@ class Form::Sales::Questions::DepositAmount < ::Form::Question
     @type = "numeric"
     @min = 0
     @width = 5
+    @max = 9_999_999
     @prefix = "£"
     @hint_text = "Enter the total cash sum paid by the buyer towards the property that was not funded by the mortgage"
   end
