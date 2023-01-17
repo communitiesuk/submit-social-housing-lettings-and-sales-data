@@ -6,8 +6,6 @@ class Form::Sales::Questions::PropertyBuildingType < ::Form::Question
     @header = "What type of building is the property?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @page = page
-    @hint_text = ""
   end
 
   ANSWER_OPTIONS = {

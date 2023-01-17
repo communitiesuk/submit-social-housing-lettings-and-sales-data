@@ -6,7 +6,6 @@ class Form::Sales::Questions::BuyersOrganisations < ::Form::Question
     @header = "What organisations were the buyers registered with?"
     @type = "checkbox"
     @hint_text = "Select all that apply"
-    @page = page
     @answer_options = ANSWER_OPTIONS
   end
 

@@ -3,7 +3,6 @@ class Form::Lettings::Questions::LocationId < ::Form::Question
     super("location_id", hsh, page)
     @check_answer_label = "Location"
     @header = "Which location is this log for?"
-    @hint_text = ""
     @type = "radio"
     @answer_options = answer_options
     @inferred_answers = {

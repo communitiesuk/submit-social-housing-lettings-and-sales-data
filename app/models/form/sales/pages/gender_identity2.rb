@@ -2,9 +2,6 @@ class Form::Sales::Pages::GenderIdentity2 < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "buyer_2_gender_identity"
-    @header = ""
-    @description = ""
-    @subsection = subsection
     @depends_on = [{
       "jointpur" => 1,
     }]

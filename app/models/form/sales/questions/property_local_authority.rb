@@ -6,7 +6,6 @@ class Form::Sales::Questions::PropertyLocalAuthority < ::Form::Question
     @header = "What is the local authority of the property?"
     @type = "select"
     @answer_options = ANSWER_OPTIONS
-    @page = page
   end
 
   ANSWER_OPTIONS = {

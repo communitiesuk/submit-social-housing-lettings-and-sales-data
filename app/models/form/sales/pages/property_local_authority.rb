@@ -2,9 +2,9 @@ class Form::Sales::Pages::PropertyLocalAuthority < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "property_local_authority"
-    @header = ""
-    @description = ""
-    @subsection = subsection
+    @depends_on = [{
+      "is_la_inferred" => false,
+    }]
   end
 
   def questions

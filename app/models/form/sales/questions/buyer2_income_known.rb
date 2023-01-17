@@ -6,7 +6,6 @@ class Form::Sales::Questions::Buyer2IncomeKnown < ::Form::Question
     @header = "Do you know buyer 2’s annual income?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @page = page
     @guidance_position = GuidancePosition::BOTTOM
     @guidance_partial = "what_counts_as_income_sales"
     @conditional_for = {

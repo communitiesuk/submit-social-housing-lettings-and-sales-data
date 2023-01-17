@@ -3,7 +3,6 @@ class Form::Sales::Subsections::HouseholdSituation < ::Form::Subsection
     super
     @id = "household_situation"
     @label = "Household situation"
-    @section = section
     @depends_on = [{ "setup_completed?" => true }]
   end
 

@@ -5,7 +5,6 @@ class Form::Sales::Questions::DepositAmount < ::Form::Question
     @check_answer_label = "Cash deposit"
     @header = "How much cash deposit was paid on the property?"
     @type = "numeric"
-    @page = page
     @min = 0
     @width = 5
     @prefix = "£"

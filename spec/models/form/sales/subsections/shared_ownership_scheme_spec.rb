@@ -23,9 +23,13 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
         la_nominations
         buyer_previous
         previous_bedrooms
+        previous_property_type
+        shared_ownership_previous_tenure
         about_price_shared_ownership
         mortgage_used_shared_ownership
         mortgage_amount_shared_ownership
+        mortgage_lender_shared_ownership
+        mortgage_lender_other_shared_ownership
         mortgage_length_shared_ownership
         extra_borrowing_shared_ownership
         about_deposit_with_discount

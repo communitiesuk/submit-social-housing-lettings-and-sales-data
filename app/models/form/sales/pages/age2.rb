@@ -2,9 +2,6 @@ class Form::Sales::Pages::Age2 < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "buyer_2_age"
-    @header = ""
-    @description = ""
-    @subsection = subsection
     @depends_on = [{
       "jointpur" => 1,
     }]

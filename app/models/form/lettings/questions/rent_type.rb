@@ -4,11 +4,9 @@ class Form::Lettings::Questions::RentType < ::Form::Question
     @id = "rent_type"
     @check_answer_label = "Rent type"
     @header = "What is the rent type?"
-    @hint_text = ""
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @conditional_for = { "irproduct_other" => [5] }
-    @page = page
   end
 
   ANSWER_OPTIONS = {

@@ -6,7 +6,6 @@ class Form::Sales::Questions::PropertyUnitType < ::Form::Question
     @header = "What type of unit is the property?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @page = page
   end
 
   ANSWER_OPTIONS = {

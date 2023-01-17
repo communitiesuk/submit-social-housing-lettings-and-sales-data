@@ -2,9 +2,6 @@ class Form::Sales::Pages::Buyer1EthnicBackgroundWhite < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "buyer_1_ethnic_background_white"
-    @header = ""
-    @description = ""
-    @subsection = subsection
     @depends_on = [{
       "ethnic_group" => 0,
     }]

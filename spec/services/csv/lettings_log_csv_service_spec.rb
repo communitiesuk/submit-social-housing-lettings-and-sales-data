@@ -121,7 +121,6 @@ RSpec.describe Csv::LettingsLogCsvService do
                                    illness_type_8
                                    illness_type_1
                                    illness_type_10
-                                   illness_type_0
                                    layear
                                    waityear
                                    reason

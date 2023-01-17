@@ -2,9 +2,6 @@ class Form::Lettings::Pages::CreatedBy < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "created_by"
-    @header = ""
-    @description = ""
-    @subsection = subsection
   end
 
   def questions

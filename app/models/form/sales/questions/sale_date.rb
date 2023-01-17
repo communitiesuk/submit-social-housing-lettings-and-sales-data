@@ -5,6 +5,5 @@ class Form::Sales::Questions::SaleDate < ::Form::Question
     @check_answer_label = "Sale completion date"
     @header = "What is the sale completion date?"
     @type = "date"
-    @page = page
   end
 end

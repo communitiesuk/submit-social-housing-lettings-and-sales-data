@@ -2,9 +2,6 @@ class Form::Sales::Pages::BuyerStillServing < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "buyer_still_serving"
-    @header = ""
-    @description = ""
-    @subsection = subsection
     @depends_on = [{
       "hhregres" => 1,
     }]

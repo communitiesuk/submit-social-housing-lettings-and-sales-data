@@ -2,9 +2,6 @@ class Form::Sales::Pages::PurchasePrice < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "purchase_price"
-    @header = ""
-    @description = ""
-    @subsection = subsection
   end
 
   def questions

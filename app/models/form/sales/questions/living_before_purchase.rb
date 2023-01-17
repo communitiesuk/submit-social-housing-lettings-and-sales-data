@@ -6,7 +6,6 @@ class Form::Sales::Questions::LivingBeforePurchase < ::Form::Question
     @header = "How long did the buyer(s) live in the property before purchase?"
     @hint_text = "You should round this up to the nearest year. If the buyers haven't been living in the property, enter '0'"
     @type = "numeric"
-    @page = page
     @min = 0
     @max = 80
     @step = 1

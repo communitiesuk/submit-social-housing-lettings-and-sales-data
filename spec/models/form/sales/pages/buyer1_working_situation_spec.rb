@@ -20,6 +20,6 @@ RSpec.describe Form::Sales::Pages::Buyer1WorkingSituation, type: :model do
   end
 
   it "has the correct header" do
-    expect(page.header).to eq("")
+    expect(page.header).to be_nil
   end
 end

@@ -6,7 +6,6 @@ class Form::Sales::Questions::HouseholdDisability < ::Form::Question
     @check_answer_label = "Does anyone in the household have a disability?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @page = page
     @hint_text = "This includes any long-term health condition that has an impact on the person's day-to-day life"
   end
 

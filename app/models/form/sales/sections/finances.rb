@@ -4,7 +4,6 @@ class Form::Sales::Sections::Finances < ::Form::Section
     @id = "finances"
     @label = "Finances"
     @description = ""
-    @form = form
     @subsections = [
       Form::Sales::Subsections::IncomeBenefitsAndSavings.new(nil, nil, self),
     ]

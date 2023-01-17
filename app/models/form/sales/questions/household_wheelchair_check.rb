@@ -5,7 +5,6 @@ class Form::Sales::Questions::HouseholdWheelchairCheck < ::Form::Question
     @check_answer_label = "Does anyone in the household use a wheelchair?"
     @header = "Are you sure? You said previously that somebody in household uses a wheelchair"
     @type = "interruption_screen"
-    @page = page
     @answer_options = {
       "0" => { "value" => "Yes" },
       "1" => { "value" => "No" },
@@ -20,6 +19,5 @@ class Form::Sales::Questions::HouseholdWheelchairCheck < ::Form::Question
         },
       ],
     }
-    @page = page
   end
 end

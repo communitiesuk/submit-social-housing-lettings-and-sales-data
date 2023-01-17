@@ -7,6 +7,5 @@ class Form::Sales::Questions::PropertyNumberOfBedrooms < ::Form::Question
     @hint_text = "A bedsit has 1 bedroom"
     @type = "text"
     @width = 10
-    @page = page
   end
 end

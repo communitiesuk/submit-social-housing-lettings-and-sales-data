@@ -20,6 +20,6 @@ RSpec.describe Form::Sales::Pages::Buyer1PreviousTenure, type: :model do
   end
 
   it "has the correct header" do
-    expect(page.header).to eq("What was buyer 1's previous tenure?")
+    expect(page.header).to be_nil
   end
 end
