@@ -106,7 +106,7 @@ RSpec.describe "Lettings Log Features" do
 
     context "when the owning organisation question is answered" do
       context "and the owning organisation doesn't hold stock" do
-        let!(:managing_org) { create(:organisation, name: "Managing org") }
+        let(:managing_org) { create(:organisation, name: "Managing org") }
         let!(:org_rel) { create(:organisation_relationship, parent_organisation: support_user.organisation, child_organisation: managing_org) }
 
         before do
@@ -149,7 +149,7 @@ RSpec.describe "Lettings Log Features" do
         end
 
         context "and the owning organisation has 1 or more managing agents" do
-          let!(:managing_org1) { create(:organisation, name: "Managing org 1") }
+          let(:managing_org1) { create(:organisation, name: "Managing org 1") }
           let!(:org_rel1) { create(:organisation_relationship, parent_organisation: support_user.organisation, child_organisation: managing_org1) }
 
           it "does show the managing organisation question" do
@@ -167,7 +167,7 @@ RSpec.describe "Lettings Log Features" do
           end
 
           context "and the owning organisation has 2 or more managing agents" do
-            let!(:managing_org2) { create(:organisation, name: "Managing org 2") }
+            let(:managing_org2) { create(:organisation, name: "Managing org 2") }
             let!(:org_rel2) { create(:organisation_relationship, parent_organisation: support_user.organisation, child_organisation: managing_org2) }
 
             context "and the organisation relationship for the selected managing agent is deleted" do
@@ -196,7 +196,7 @@ RSpec.describe "Lettings Log Features" do
   end
 
   context "when the signed is user is not a Support user" do
-    let!(:user) { create(:user, :data_coordinator, name: "User name", organisation: create(:organisation, name: "User org")) }
+    let(:user) { create(:user, :data_coordinator, name: "User name", organisation: create(:organisation, name: "User org")) }
     let(:devise_notify_mailer) { DeviseNotifyMailer.new }
     let(:notify_client) { instance_double(Notifications::Client) }
 
@@ -225,7 +225,7 @@ RSpec.describe "Lettings Log Features" do
       end
 
       context "and there are 2 or more potential stock owners" do
-        let!(:owning_org1) { create(:organisation, name: "Owning org 1") }
+        let(:owning_org1) { create(:organisation, name: "Owning org 1") }
         let!(:org_rel1) { create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: owning_org1) }
 
         it "does include the owning organisation question" do
@@ -239,7 +239,7 @@ RSpec.describe "Lettings Log Features" do
         end
 
         context "and there are 3 or more potential stock owners" do
-          let!(:owning_org2) { create(:organisation, name: "Owning org 2") }
+          let(:owning_org2) { create(:organisation, name: "Owning org 2") }
           let!(:org_rel2) { create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: owning_org2) }
 
           context "and the organisation relationship for the selected stock owner is deleted" do
@@ -301,7 +301,7 @@ RSpec.describe "Lettings Log Features" do
         end
 
         context "and the user's organisation has 1 or more managing agents" do
-          let!(:managing_org) { create(:organisation, name: "Managing org") }
+          let(:managing_org) { create(:organisation, name: "Managing org") }
           let!(:org_rel) { create(:organisation_relationship, parent_organisation: user.organisation, child_organisation: managing_org) }
 
           it "does show the managing organisation question" do
