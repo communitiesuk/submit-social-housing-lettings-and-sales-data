@@ -91,9 +91,11 @@ module Validations::SharedValidations
   end
 
   def shared_validate_partner_count(record, max_people)
-    partner_count = (2..max_people).count { |n| person_is_partner?(record["relat#{n}"]) }
-    if partner_count > 1
-      record.errors.add :base, I18n.t("validations.household.relat.one_partner")
+    partner_numbers = (2..max_people).select { |n| person_is_partner?(record["relat#{n}"]) }
+    if partner_numbers.count > 1
+      partner_numbers.each do |n|
+        record.errors.add "relat#{n}", I18n.t("validations.household.relat.one_partner")
+      end
     end
   end
 
