@@ -9,7 +9,6 @@ module Imports
       if attributes["status"] == "Approved"
         Scheme.create!(
           owning_organisation_id: attributes["owning_organisation_id"],
-          managing_organisation_id: attributes["managing_organisation_id"],
           service_name: attributes["service_name"],
           arrangement_type: attributes["arrangement_type"],
           old_id: attributes["old_id"],
@@ -49,12 +48,6 @@ module Imports
       attributes["arrangement_type"] = string_or_nil(xml_doc, "arrangement_type")
       attributes["owning_org_old_id"] = string_or_nil(xml_doc, "institution")
       attributes["owning_organisation_id"] = find_owning_organisation_id(attributes["owning_org_old_id"])
-      attributes["management_org_old_visible_id"] = safe_string_as_integer(xml_doc, "agent")
-      attributes["managing_organisation_id"] = find_managing_organisation_id(attributes["management_org_old_visible_id"])
-
-      if attributes["arrangement_type"] == "D" && attributes["managing_organisation_id"].nil?
-        attributes["managing_organisation_id"] = attributes["owning_organisation_id"]
-      end
 
       attributes
     end
@@ -62,15 +55,6 @@ module Imports
     def find_owning_organisation_id(old_org_id)
       organisation = Organisation.find_by(old_org_id:)
       raise "Organisation not found with legacy ID #{old_org_id}" if organisation.nil?
-
-      organisation.id
-    end
-
-    def find_managing_organisation_id(old_visible_id)
-      return unless old_visible_id
-
-      organisation = Organisation.find_by(old_visible_id:)
-      raise "Organisation not found with legacy visible ID #{old_visible_id}" if organisation.nil?
 
       organisation.id
     end

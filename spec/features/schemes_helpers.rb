@@ -38,8 +38,13 @@ module SchemesHelpers
     click_button "Save and continue"
   end
 
-  def fill_in_and_save_secondary_client_group_confirmation
+  def fill_in_and_save_secondary_client_group_confirmation_yes
     choose "Yes"
+    click_button "Save and continue"
+  end
+
+  def fill_in_and_save_secondary_client_group_confirmation_no
+    choose "No"
     click_button "Save and continue"
   end
 
@@ -97,8 +102,15 @@ module SchemesHelpers
   def create_and_save_a_scheme
     fill_in_and_save_scheme_details
     fill_in_and_save_primary_client_group
-    fill_in_and_save_secondary_client_group_confirmation
+    fill_in_and_save_secondary_client_group_confirmation_yes
     fill_in_and_save_secondary_client_group
+    fill_in_and_save_support
+  end
+
+  def create_and_save_a_scheme_no_secondary_client_group
+    fill_in_and_save_scheme_details
+    fill_in_and_save_primary_client_group
+    fill_in_and_save_secondary_client_group_confirmation_no
     fill_in_and_save_support
   end
 end
