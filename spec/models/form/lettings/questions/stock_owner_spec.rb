@@ -43,12 +43,12 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
     end
 
     context "when user is not support" do
-      let!(:user) { create(:user, :data_coordinator, organisation: create(:organisation, name: "User org")) }
+      let(:user) { create(:user, :data_coordinator, organisation: create(:organisation, name: "User org")) }
 
-      let!(:owning_org_1) { create(:organisation, name: "Owning org 1") }
-      let!(:owning_org_2) { create(:organisation, name: "Owning org 2") }
+      let(:owning_org_1) { create(:organisation, name: "Owning org 1") }
+      let(:owning_org_2) { create(:organisation, name: "Owning org 2") }
       let!(:org_rel) { create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: owning_org_2) }
-      let!(:log) { create(:lettings_log, owning_organisation: owning_org_1) }
+      let(:log) { create(:lettings_log, owning_organisation: owning_org_1) }
 
       context "when user's org owns stock" do
         let(:options) do
@@ -100,9 +100,9 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
     end
 
     context "when user is support" do
-      let!(:user) { create(:user, :support) }
+      let(:user) { create(:user, :support) }
 
-      let!(:log) { create(:lettings_log) }
+      let(:log) { create(:lettings_log) }
 
       let(:expected_opts) do
         Organisation.all.each_with_object(options) do |organisation, hsh|
