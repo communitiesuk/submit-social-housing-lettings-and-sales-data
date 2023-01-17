@@ -90,7 +90,7 @@ RSpec.describe Validations::Sales::HouseholdValidations do
         record.relat2 = "P"
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["relat2"])
-          .to include(match I18n.t("validations.household.relat.student_16_19_sales"))
+          .to include(match I18n.t("validations.household.relat.student_16_19"))
       end
     end
   end

@@ -25,8 +25,10 @@ private
     return unless age && relationship
 
     if age < 16 && person_is_partner?(relationship)
+      record.errors.add "age#{person_num}", I18n.t("validations.household.age.partner_under_16")
       record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.partner_under_16")
     elsif age >= 20 && person_is_child?(relationship)
+      record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_over_20")
       record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.child_over_20")
     end
   end
@@ -37,8 +39,10 @@ private
     relationship = record.public_send("relat#{person_num}")
     return unless age && economic_status && relationship
 
-    if age >= 16 && age <= 19 && !person_is_child?(relationship) && person_is_fulltime_student?(economic_status)
-      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.student_16_19_sales")
+    if age >= 16 && age <= 19 && person_is_fulltime_student?(economic_status) && !person_is_child?(relationship)
+      record.errors.add "age#{person_num}", I18n.t("validations.household.age.student_16_19")
+      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19")
+      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.student_16_19")
     end
   end
 

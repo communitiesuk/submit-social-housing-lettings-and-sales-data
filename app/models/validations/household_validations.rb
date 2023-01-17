@@ -177,9 +177,9 @@ private
     return unless age && economic_status && relationship
 
     if age >= 16 && age <= 19 && tenant_is_child?(relationship) && (!tenant_is_fulltime_student?(economic_status) && !tenant_economic_status_refused?(economic_status))
-      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19", person_num:)
-      record.errors.add "age#{person_num}", I18n.t("validations.household.age.student_16_19", person_num:)
-      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.student_16_19", person_num:)
+      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.not_student_16_19", person_num:)
+      record.errors.add "age#{person_num}", I18n.t("validations.household.age.not_student_16_19", person_num:)
+      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.not_student_16_19", person_num:)
     end
   end
 

@@ -297,7 +297,9 @@ en:
         child_under_16_relat: "Answer cannot be under 16 as person %{person_num} is not a child of the lead tenant"
         child_under_16: "Answer cannot be under 16 as person’s %{person_num} working situation is not ‘child under 16’"
         child_over_16: "Answer cannot be over 16 as person’s %{person_num} working situation is ‘child under 16‘"
-        student_16_19: "Answer cannot be between 16 and 19 as person %{person_num} is a child of the lead tenant but is not a full-time student"
+        child_over_20: "Answer cannot be 20 or over as the relationship is ‘child’"
+        not_student_16_19: "Answer cannot be between 16 and 19 as person %{person_num} is a child of the lead tenant but is not a full-time student"
+        student_16_19: "Person cannot be aged 16-19 if they are a student but don't have relationship ‘child’"
         partner_under_16: "Cannot be under 16 if the relationship is partner"
         lead:
           over_20: "The lead tenant must be under 20 as you told us their housing situation immediately before this letting was a children’s home or foster care"
@@ -305,16 +307,17 @@ en:
         retired_over_70: "Person %{person_num} must be retired if over 70"
         child_under_16: "Person’s %{person_num} working situation must be ’child under 16‘ as you told us they’re under 16"
         child_over_16: "Answer cannot be ‘child under 16’ as you told us the person %{person_num} is older than 16"
-        student_16_19: "Person’s %{person_num} working situation must be full-time student or prefers not to say as you told us they’re between 16 and 19."
+        not_student_16_19: "Person’s %{person_num} working situation must be full-time student or prefers not to say as you told us they’re between 16 and 19."
+        student_16_19: "Person cannot be a student if they are aged 16-19 and but don't have relationship ‘child’"
         retired_male: "Answer cannot be ‘retired’ as the male tenant is under 65"
         retired_female: "Answer cannot be ‘retired’ as the female tenant is under 60"
       relat:
-        partner_under_16: "Cannot be partner if the person's age is under 16"
+        partner_under_16: "Answer cannot be ‘partner’ if the person's age is under 16"
         child_under_16: "Person’s relationship to tenant 1 must be ‘child’ as you told us they’re under 16"
-        child_over_20: "Relationship cannot be ‘child’ if the person's age is 20 or over"
+        child_over_20: "Answer cannot be ‘child’ if the person's age is 20 or over"
         one_partner: "Number of partners cannot be greater than 1"
-        student_16_19: "Answer cannot be ‘child’ as you told us the person %{person_num} is between 16 and 19 and is not a full-time student"
-        student_16_19_sales: "Person must be a child if they are aged 16-19 and a student"
+        not_student_16_19: "Answer cannot be ‘child’ as you told us the person %{person_num} is between 16 and 19 and is not a full-time student"
+        student_16_19: "Answer must be ‘child’ if the person is aged 16-19 and a student"
       housingneeds_a:
         one_or_two_choices: "You can only select one option or ‘other disabled access needs’ plus ‘wheelchair-accessible housing’, ‘wheelchair access to essential rooms’ or ‘level access housing’"
       prevten:
