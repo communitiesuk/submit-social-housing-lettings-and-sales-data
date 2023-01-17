@@ -33,7 +33,7 @@ private
     (2..6).count do |i|
       age = public_send("age#{i}")
       relat = public_send("relat#{i}")
-      age.present? && ((age < 20 && %w[C].include?(relat)))
+      age.present? && (age < 20 && %w[C].include?(relat) || age < 18)
     end
   end
 
@@ -42,7 +42,7 @@ private
     total + (2..6).count do |i|
       age = public_send("age#{i}")
       relat = public_send("relat#{i}")
-      age.present? && ((age.between?(20, 59) || age.between?(18, 19) && relat != "C"))
+      age.present? && (age.between?(20, 59) || age.between?(18, 19) && relat != "C")
     end
   end
 
