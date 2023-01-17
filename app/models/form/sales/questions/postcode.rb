@@ -6,12 +6,12 @@ class Form::Sales::Questions::Postcode < ::Form::Question
     @header = "Postcode"
     @type = "text"
     @width = 5
-    @inferred_check_answers_value = {
+    @inferred_check_answers_value = [{
       "condition" => {
         "pcodenk" => 1,
       },
       "value" => "Not known",
-    }
+    }]
     @inferred_answers = {
       "la" => {
         "is_la_inferred" => true,
