@@ -485,14 +485,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_13_125117) do
     t.integer "hoyear"
     t.integer "fromprop"
     t.integer "socprevten"
+    t.integer "mortgagelender"
+    t.string "mortgagelenderother"
     t.integer "mortlen"
     t.string "pcode1"
     t.string "pcode2"
     t.integer "pcodenk"
     t.string "postcode_full"
     t.boolean "is_la_inferred"
-    t.integer "mortgagelender"
-    t.string "mortgagelenderother"
+    t.integer "extrabor"
+    t.integer "hhmemb"
+    t.integer "totadult"
+    t.integer "totchild"
+    t.integer "hhtype"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
@@ -522,13 +527,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_13_125117) do
     t.string "intended_stay"
     t.datetime "end_date"
     t.integer "has_other_client_group"
-    t.bigint "managing_organisation_id"
     t.string "arrangement_type"
     t.string "old_id"
     t.string "old_visible_id"
     t.integer "total_units"
     t.boolean "confirmed"
-    t.index ["managing_organisation_id"], name: "index_schemes_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_schemes_on_owning_organisation_id"
   end
 
@@ -593,7 +596,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_13_125117) do
   add_foreign_key "organisation_relationships", "organisations", column: "child_organisation_id"
   add_foreign_key "organisation_relationships", "organisations", column: "parent_organisation_id"
   add_foreign_key "sales_logs", "organisations", column: "owning_organisation_id", on_delete: :cascade
-  add_foreign_key "schemes", "organisations", column: "managing_organisation_id"
   add_foreign_key "schemes", "organisations", column: "owning_organisation_id", on_delete: :cascade
   add_foreign_key "users", "organisations", on_delete: :cascade
 end

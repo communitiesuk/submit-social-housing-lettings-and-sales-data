@@ -1,6 +1,5 @@
 class Scheme < ApplicationRecord
   belongs_to :owning_organisation, class_name: "Organisation"
-  belongs_to :managing_organisation, optional: true, class_name: "Organisation"
   has_many :locations, dependent: :delete_all
   has_many :lettings_logs, class_name: "LettingsLog", dependent: :delete_all
   has_many :scheme_deactivation_periods, class_name: "SchemeDeactivationPeriod"
@@ -127,12 +126,6 @@ class Scheme < ApplicationRecord
     ]
   end
 
-  def check_support_services_provider_attributes
-    [
-      { name: "Organisation providing support", value: managing_organisation&.name, id: "managing_organisation_id" },
-    ]
-  end
-
   def check_primary_client_attributes
     [
       { name: "Primary client group", value: primary_client_group, id: "primary_client_group" },
@@ -194,10 +187,6 @@ class Scheme < ApplicationRecord
 
     }
     Scheme.intended_stays.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize, description: hints[key.to_sym]) }
-  end
-
-  def arrangement_type_same?
-    arrangement_type.present? && ARRANGEMENT_TYPE[arrangement_type.to_sym] == "D"
   end
 
   def validate_confirmed

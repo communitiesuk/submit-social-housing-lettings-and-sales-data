@@ -99,6 +99,7 @@ FactoryBot.define do
       pcodenk { 1 }
       is_la_inferred { false }
       mortgagelender { 5 }
+      extrabor { 1 }
     end
   end
 end

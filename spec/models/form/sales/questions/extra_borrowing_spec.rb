@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Lettings::Questions::Renewal, type: :model do
+RSpec.describe Form::Sales::Questions::ExtraBorrowing, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
@@ -12,33 +12,38 @@ RSpec.describe Form::Lettings::Questions::Renewal, type: :model do
   end
 
   it "has the correct id" do
-    expect(question.id).to eq("renewal")
+    expect(question.id).to eq("extrabor")
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Is this letting a renewal?")
+    expect(question.header).to eq("Does this include any extra borrowing?")
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Property renewal")
+    expect(question.check_answer_label).to eq("Any other borrowing?")
   end
 
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
 
-  it "has the correct hint_text" do
-    expect(question.hint_text).to eq("A renewal is a letting to the same tenant in the same property")
+  it "is not marked as derived" do
+    expect(question.derived?).to be false
   end
 
   it "has the correct answer_options" do
     expect(question.answer_options).to eq({
       "1" => { "value" => "Yes" },
-      "0" => { "value" => "No" },
+      "2" => { "value" => "No" },
+      "3" => { "value" => "Don't know" },
     })
   end
 
-  it "is not marked as derived" do
-    expect(question.derived?).to be false
+  it "has correct conditional for" do
+    expect(question.conditional_for).to eq(nil)
+  end
+
+  it "has the correct hint" do
+    expect(question.hint_text).to eq("")
   end
 end
