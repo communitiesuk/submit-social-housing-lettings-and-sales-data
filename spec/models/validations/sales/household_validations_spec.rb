@@ -74,6 +74,8 @@ RSpec.describe Validations::Sales::HouseholdValidations do
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["relat2"])
           .to include(match I18n.t("validations.household.relat.partner_under_16"))
+        expect(record.errors["age2"])
+          .to include(match I18n.t("validations.household.age.partner_under_16"))
       end
 
       it "validates that a person over 20 must not be a child of the buyer" do
@@ -82,6 +84,8 @@ RSpec.describe Validations::Sales::HouseholdValidations do
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["relat2"])
           .to include(match I18n.t("validations.household.relat.child_over_20"))
+        expect(record.errors["age2"])
+          .to include(match I18n.t("validations.household.age.child_over_20"))
       end
 
       it "validates that a person aged 16-19 who is a student must be a child of the buyer" do
@@ -91,6 +95,10 @@ RSpec.describe Validations::Sales::HouseholdValidations do
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["relat2"])
           .to include(match I18n.t("validations.household.relat.student_16_19"))
+        expect(record.errors["age2"])
+          .to include(match I18n.t("validations.household.age.student_16_19"))
+        expect(record.errors["ecstat2"])
+          .to include(match I18n.t("validations.household.ecstat.student_16_19"))
       end
     end
   end
