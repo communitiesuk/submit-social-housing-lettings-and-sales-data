@@ -240,7 +240,7 @@ RSpec.describe SalesLog, type: :model do
         relat2: "C",
         relat3: "C",
         relat4: "X",
-        relat5: "C",
+        relat5: "X",
         age1: 22,
         age2: 40,
         age3: 19,
