@@ -120,7 +120,7 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
 
       let(:owning_org) { create(:organisation, name: "Owning org", holds_own_stock: true) }
       let(:managing_org) { create(:organisation, name: "Managing org", holds_own_stock: false) }
-      let!(:org_rel) { create(:organisation_relationship, parent_organisation: owning_org, child_organisation: managing_org) }
+      let(:org_rel) { create(:organisation_relationship, parent_organisation: owning_org, child_organisation: managing_org) }
       let(:log) { create(:lettings_log, owning_organisation: owning_org, managing_organisation: managing_org, created_by: nil) }
 
       let(:options) do
