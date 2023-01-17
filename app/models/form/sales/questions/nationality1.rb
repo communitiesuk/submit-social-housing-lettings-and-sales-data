@@ -18,6 +18,12 @@ class Form::Sales::Questions::Nationality1 < ::Form::Question
       ],
     }
     @check_answers_card_number = 1
+    @inferred_check_answers_value = [{
+      "condition" => {
+        "national" => 13,
+      },
+      "value" => "Prefers not to say",
+    }]
   end
 
   ANSWER_OPTIONS = {

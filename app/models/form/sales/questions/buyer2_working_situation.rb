@@ -7,6 +7,12 @@ class Form::Sales::Questions::Buyer2WorkingSituation < ::Form::Question
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = 2
+    @inferred_check_answers_value = [{
+      "condition" => {
+        "ecstat2" => 10,
+      },
+      "value" => "Prefers not to say",
+    }]
   end
 
   ANSWER_OPTIONS = {
