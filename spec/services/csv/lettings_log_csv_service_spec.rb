@@ -196,7 +196,6 @@ RSpec.describe Csv::LettingsLogCsvService do
                                    irproduct
                                    old_id
                                    joint
-                                   illness_type_0
                                    hhtype
                                    new_old
                                    vacdays

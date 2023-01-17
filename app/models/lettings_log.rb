@@ -8,6 +8,7 @@ class LettingsLogValidator < ActiveModel::Validator
   include Validations::TenancyValidations
   include Validations::DateValidations
   include Validations::LocalAuthorityValidations
+
   def validate(record)
     validation_methods = public_methods.select { |method| method.starts_with?("validate_") }
     validation_methods.each { |meth| public_send(meth, record) }
@@ -601,10 +602,6 @@ private
     inferred_la = get_inferred_la(postcode)
     self[la_inferred_key] = inferred_la.present?
     self[la_key] = inferred_la if inferred_la.present?
-  end
-
-  def reset_location_fields!
-    reset_location(is_la_inferred, "la", "is_la_inferred", "postcode_full", 1)
   end
 
   def get_has_benefits

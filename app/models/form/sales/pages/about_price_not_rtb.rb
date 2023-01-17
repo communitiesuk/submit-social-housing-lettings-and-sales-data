@@ -5,6 +5,7 @@ class Form::Sales::Pages::AboutPriceNotRtb < ::Form::Page
     @header = "About the price of the property"
     @depends_on = [{
       "right_to_buy?" => false,
+      "rent_to_buy_full_ownership?" => false,
     }]
   end
 

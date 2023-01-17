@@ -14,9 +14,11 @@ RSpec.describe Form::Sales::Subsections::OutrightSale, type: :model do
   it "has correct pages" do
     expect(outright_sale.pages.map(&:id)).to eq(
       %w[
-        purchase_price
+        purchase_price_outright_sale
         mortgage_used_outright_sale
         mortgage_amount_outright_sale
+        mortgage_lender_outright_sale
+        mortgage_lender_other_outright_sale
         mortgage_length_outright_sale
         about_deposit_outright_sale
         outright_sale_deposit_value_check

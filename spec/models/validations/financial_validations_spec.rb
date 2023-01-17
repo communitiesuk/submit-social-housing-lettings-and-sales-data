@@ -126,14 +126,16 @@ RSpec.describe Validations::FinancialValidations do
 
   describe "rent period validations" do
     let(:organisation) { FactoryBot.create(:organisation) }
-    let(:record) { FactoryBot.create(:lettings_log, owning_organisation: organisation) }
+    let(:user) { FactoryBot.create(:user) }
+    let(:record) { FactoryBot.create(:lettings_log, owning_organisation: user.organisation, managing_organisation: organisation, created_by: user) }
 
     before do
+      FactoryBot.create(:organisation_relationship, parent_organisation: user.organisation, child_organisation: organisation)
       FactoryBot.create(:organisation_rent_period, organisation:, rent_period: 2)
     end
 
     context "when the organisation only uses specific rent periods" do
-      it "validates that the selected rent period is used by the organisation" do
+      it "validates that the selected rent period is used by the managing organisation" do
         record.period = 3
         financial_validator.validate_rent_period(record)
         expect(record.errors["period"])
@@ -927,9 +929,9 @@ RSpec.describe Validations::FinancialValidations do
           record.chcharge = 4334
           financial_validator.validate_care_home_charges(record)
           expect(record.errors["chcharge"])
-            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 43, period: "4", max_chcharge: 4333))
+            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 43, period: "every calendar month", max_chcharge: 4333))
           expect(record.errors["period"])
-            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 43, period: "4", max_chcharge: 4333))
+            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 43, period: "every calendar month", max_chcharge: 4333))
         end
 
         it "validates charge when period is every 2 weeks" do
@@ -937,9 +939,9 @@ RSpec.describe Validations::FinancialValidations do
           record.chcharge = 2001
           financial_validator.validate_care_home_charges(record)
           expect(record.errors["chcharge"])
-            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 20, period: "2", max_chcharge: 2000))
+            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 20, period: "every 2 weeks", max_chcharge: 2000))
           expect(record.errors["period"])
-            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 20, period: "2", max_chcharge: 2000))
+            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 20, period: "every 2 weeks", max_chcharge: 2000))
         end
 
         it "validates charge when period is every 4 weeks" do
@@ -1015,9 +1017,9 @@ RSpec.describe Validations::FinancialValidations do
           record.chcharge = 42
           financial_validator.validate_care_home_charges(record)
           expect(record.errors["chcharge"])
-            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 43, period: "4", max_chcharge: 4333))
+            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 43, period: "every calendar month", max_chcharge: 4333))
           expect(record.errors["period"])
-            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 43, period: "4", max_chcharge: 4333))
+            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 43, period: "every calendar month", max_chcharge: 4333))
         end
 
         it "validates charge when period is every 2 weeks" do
@@ -1025,9 +1027,9 @@ RSpec.describe Validations::FinancialValidations do
           record.chcharge = 19
           financial_validator.validate_care_home_charges(record)
           expect(record.errors["chcharge"])
-            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 20, period: "2", max_chcharge: 2000))
+            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 20, period: "every 2 weeks", max_chcharge: 2000))
           expect(record.errors["period"])
-            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 20, period: "2", max_chcharge: 2000))
+            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 20, period: "every 2 weeks", max_chcharge: 2000))
         end
 
         it "validates charge when period is every 4 weeks" do

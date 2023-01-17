@@ -9,8 +9,9 @@ class Form::Sales::Subsections::PropertyInformation < ::Form::Subsection
   def pages
     @pages ||= [
       Form::Sales::Pages::PropertyNumberOfBedrooms.new(nil, nil, self),
-      Form::Sales::Pages::PropertyBuildingType.new(nil, nil, self),
       Form::Sales::Pages::PropertyUnitType.new(nil, nil, self),
+      Form::Sales::Pages::PropertyBuildingType.new(nil, nil, self),
+      Form::Sales::Pages::Postcode.new(nil, nil, self),
       Form::Sales::Pages::PropertyLocalAuthority.new(nil, nil, self),
       Form::Sales::Pages::PropertyWheelchairAccessible.new(nil, nil, self),
     ]
