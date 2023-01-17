@@ -81,4 +81,39 @@ RSpec.describe FiltersHelper do
       end
     end
   end
+
+  describe "#organisations_filter_options" do
+    let(:parent_organisation) { FactoryBot.create(:organisation, name: "Parent organisation") }
+    let(:child_organisation) { FactoryBot.create(:organisation, name: "Child organisation") }
+
+    before do
+      FactoryBot.create(:organisation_relationship, parent_organisation:, child_organisation:)
+      FactoryBot.create(:organisation, name: "Other organisation", id: 99)
+    end
+
+    context "with a support user" do
+      let(:user) { FactoryBot.create(:user, :support, organisation: parent_organisation) }
+
+      it "returns a list of all organisations" do
+        expect(organisations_filter_options(user)).to eq([
+          OpenStruct.new(id: "", name: "Select an option"),
+          OpenStruct.new(id: parent_organisation.id, name: "Parent organisation"),
+          OpenStruct.new(id: child_organisation.id, name: "Child organisation"),
+          OpenStruct.new(id: 99, name: "Other organisation"),
+        ])
+      end
+    end
+
+    context "with a data coordinator user" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator, organisation: parent_organisation) }
+
+      it "returns a list of managing agents and your own organisation" do
+        expect(organisations_filter_options(user)).to eq([
+          OpenStruct.new(id: "", name: "Select an option"),
+          OpenStruct.new(id: parent_organisation.id, name: "Parent organisation"),
+          OpenStruct.new(id: child_organisation.id, name: "Child organisation"),
+        ])
+      end
+    end
+  end
 end

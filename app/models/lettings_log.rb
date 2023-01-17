@@ -608,10 +608,6 @@ private
     self[la_key] = inferred_la if inferred_la.present?
   end
 
-  def reset_location_fields!
-    reset_location(is_la_inferred, "la", "is_la_inferred", "postcode_full", 1)
-  end
-
   def get_has_benefits
     HAS_BENEFITS_OPTIONS.include?(hb) ? 1 : 0
   end

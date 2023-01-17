@@ -36,7 +36,7 @@
         </p>
       <% end %>
 
-      <% if current_user.support? %>
+      <% if current_user.support? || current_user.organisation.has_managing_agents? %>
         <% if log.owning_organisation or log.managing_organisation %>
           <dl class="app-metadata">
             <div class="app-metadata__item">

@@ -140,6 +140,109 @@ RSpec.describe SalesLog, type: :model do
       record_from_db = ActiveRecord::Base.connection.execute("select deposit from sales_logs where id=#{sales_log.id}").to_a[0]
       expect(record_from_db["deposit"]).to eq(nil)
     end
+
+    it "correctly derives and saves pcode1 and pcode1 and pcode2" do
+      sales_log.update!(postcode_full: "W6 0SP")
+      record_from_db = ActiveRecord::Base.connection.execute("select pcode1, pcode2 from sales_logs where id=#{sales_log.id}").to_a[0]
+      expect(record_from_db["pcode1"]).to eq("W6")
+      expect(record_from_db["pcode2"]).to eq("0SP")
+    end
+  end
+
+  context "when saving addresses" do
+    before do
+      stub_request(:get, /api.postcodes.io/)
+        .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\",\"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
+    end
+
+    def check_postcode_fields(postcode_field)
+      record_from_db = ActiveRecord::Base.connection.execute("select #{postcode_field} from sales_logs where id=#{address_sales_log.id}").to_a[0]
+      expect(address_sales_log[postcode_field]).to eq("M1 1AE")
+      expect(record_from_db[postcode_field]).to eq("M1 1AE")
+    end
+
+    let!(:address_sales_log) do
+      FactoryBot.create(
+        :sales_log,
+        :completed,
+        managing_organisation: owning_organisation,
+        owning_organisation:,
+        created_by: created_by_user,
+        pcodenk: 0,
+        postcode_full: "M1 1AE",
+      )
+    end
+
+    def check_property_postcode_fields
+      check_postcode_fields("postcode_full")
+    end
+
+    it "correctly formats previous postcode" do
+      address_sales_log.update!(postcode_full: "M1 1AE")
+      check_property_postcode_fields
+
+      address_sales_log.update!(postcode_full: "m1 1ae")
+      check_property_postcode_fields
+
+      address_sales_log.update!(postcode_full: "m11Ae")
+      check_property_postcode_fields
+
+      address_sales_log.update!(postcode_full: "m11ae")
+      check_property_postcode_fields
+    end
+
+    it "correctly infers la" do
+      record_from_db = ActiveRecord::Base.connection.execute("select la from sales_logs where id=#{address_sales_log.id}").to_a[0]
+      expect(address_sales_log.la).to eq("E08000003")
+      expect(record_from_db["la"]).to eq("E08000003")
+    end
+
+    it "errors if the property postcode is emptied" do
+      expect { address_sales_log.update!({ postcode_full: "" }) }
+        .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.postcode")}/)
+    end
+
+    it "errors if the property postcode is not valid" do
+      expect { address_sales_log.update!({ postcode_full: "invalid_postcode" }) }
+        .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.postcode")}/)
+    end
+
+    context "when the local authority lookup times out" do
+      before do
+        allow(Timeout).to receive(:timeout).and_raise(Timeout::Error)
+      end
+
+      it "logs a warning" do
+        expect(Rails.logger).to receive(:warn).with("Postcodes.io lookup timed out")
+        address_sales_log.update!({ pcodenk: 1, postcode_full: "M1 1AD" })
+      end
+    end
+
+    it "correctly resets all fields if property postcode not known" do
+      address_sales_log.update!({ pcodenk: 1 })
+
+      record_from_db = ActiveRecord::Base.connection.execute("select la, postcode_full from sales_logs where id=#{address_sales_log.id}").to_a[0]
+      expect(record_from_db["postcode_full"]).to eq(nil)
+      expect(address_sales_log.la).to eq(nil)
+      expect(record_from_db["la"]).to eq(nil)
+    end
+
+    it "changes the LA if property postcode changes from not known to known and provided" do
+      address_sales_log.update!({ pcodenk: 1 })
+      address_sales_log.update!({ la: "E09000033" })
+
+      record_from_db = ActiveRecord::Base.connection.execute("select la, postcode_full from sales_logs where id=#{address_sales_log.id}").to_a[0]
+      expect(record_from_db["postcode_full"]).to eq(nil)
+      expect(address_sales_log.la).to eq("E09000033")
+      expect(record_from_db["la"]).to eq("E09000033")
+
+      address_sales_log.update!({ pcodenk: 0, postcode_full: "M1 1AD" })
+
+      record_from_db = ActiveRecord::Base.connection.execute("select la, postcode_full from sales_logs where id=#{address_sales_log.id}").to_a[0]
+      expect(record_from_db["postcode_full"]).to eq("M1 1AD")
+      expect(address_sales_log.la).to eq("E08000003")
+      expect(record_from_db["la"]).to eq("E08000003")
+    end
   end
 
   context "when saving previous address" do

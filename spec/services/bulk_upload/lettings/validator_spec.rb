@@ -32,8 +32,15 @@ RSpec.describe BulkUpload::Lettings::Validator do
   context "when a valid csv" do
     let(:path) { file_fixture("2022_23_lettings_bulk_upload.csv") }
 
-    it do
+    it "creates validation errors" do
+      expect { validator.call }.to change(BulkUploadError, :count)
+    end
+
+    it "create validation error with correct values" do
       validator.call
+
+      error = BulkUploadError.first
+      expect(error.row).to eq("6")
     end
   end
 end

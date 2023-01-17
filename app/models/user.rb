@@ -145,7 +145,7 @@ class User < ApplicationRecord
   end
 
   def logs_filters(specific_org: false)
-    if support? && !specific_org
+    if (support? && !specific_org) || organisation.has_managing_agents?
       %w[status years user organisation]
     else
       %w[status years user]

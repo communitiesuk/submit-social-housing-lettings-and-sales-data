@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Pages::PropertyLocalAuthority, type: :model do
+RSpec.describe Form::Sales::Pages::Postcode, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
   let(:page_id) { nil }
@@ -12,16 +12,11 @@ RSpec.describe Form::Sales::Pages::PropertyLocalAuthority, type: :model do
   end
 
   it "has correct questions" do
-    expect(page.questions.map(&:id)).to eq(
-      %w[
-        la_known
-        la
-      ],
-    )
+    expect(page.questions.map(&:id)).to eq(%w[pcodenk postcode_full])
   end
 
   it "has the correct id" do
-    expect(page.id).to eq("property_local_authority")
+    expect(page.id).to eq("property_postcode")
   end
 
   it "has the correct header" do
@@ -32,9 +27,7 @@ RSpec.describe Form::Sales::Pages::PropertyLocalAuthority, type: :model do
     expect(page.description).to be_nil
   end
 
-  it "has the correct depends_on" do
-    expect(page.depends_on).to eq([{
-      "is_la_inferred" => false,
-    }])
+  it "has correct depends_on" do
+    expect(page.depends_on).to be_nil
   end
 end

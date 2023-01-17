@@ -154,7 +154,7 @@ class BulkUpload::Lettings::Validator
     row_parsers.each_with_index do |row_parser, index|
       row_parser.valid?
 
-      row = index + row_offset
+      row = index + row_offset + 1
 
       row_parser.errors.each do |error|
         bulk_upload.bulk_upload_errors.create!(
@@ -163,7 +163,7 @@ class BulkUpload::Lettings::Validator
           tenant_code: row_parser.field_7,
           property_ref: row_parser.field_100,
           row:,
-          cell: "#{cols[field_number_for_attribute(error.attribute) - col_offset + 1]}#{row + 1}",
+          cell: "#{cols[field_number_for_attribute(error.attribute) - col_offset + 1]}#{row}",
         )
       end
     end
