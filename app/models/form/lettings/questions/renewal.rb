@@ -6,6 +6,7 @@ class Form::Lettings::Questions::Renewal < ::Form::Question
     @header = "Is this letting a renewal?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
+    @hint_text = "A renewal is a letting to the same tenant in the same property"
   end
 
   ANSWER_OPTIONS = {

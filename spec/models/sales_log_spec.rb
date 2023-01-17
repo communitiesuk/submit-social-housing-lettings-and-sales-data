@@ -232,6 +232,44 @@ RSpec.describe SalesLog, type: :model do
     end
   end
 
+  context "when deriving household variables" do
+    let!(:household_lettings_log) do
+      described_class.create!({
+        jointpur: 1,
+        hholdcount: 3,
+        relat2: "C",
+        relat3: "C",
+        relat4: "X",
+        relat5: "C",
+        age1: 22,
+        age2: 40,
+        age3: 19,
+        age4: 88,
+        age5: 14,
+      })
+    end
+
+    it "correctly derives and saves hhmemb" do
+      record_from_db = ActiveRecord::Base.connection.execute("select hhmemb from sales_logs where id=#{household_lettings_log.id}").to_a[0]
+      expect(record_from_db["hhmemb"]).to eq(5)
+    end
+
+    it "correctly derives and saves totchild" do
+      record_from_db = ActiveRecord::Base.connection.execute("select totchild from sales_logs where id=#{household_lettings_log.id}").to_a[0]
+      expect(record_from_db["totchild"]).to eq(2)
+    end
+
+    it "correctly derives and saves totadult" do
+      record_from_db = ActiveRecord::Base.connection.execute("select totadult from sales_logs where id=#{household_lettings_log.id}").to_a[0]
+      expect(record_from_db["totadult"]).to eq(3)
+    end
+
+    it "correctly derives and saves hhtype" do
+      record_from_db = ActiveRecord::Base.connection.execute("select hhtype from sales_logs where id=#{household_lettings_log.id}").to_a[0]
+      expect(record_from_db["hhtype"]).to eq(9)
+    end
+  end
+
   context "when saving previous address" do
     def check_previous_postcode_fields(postcode_field)
       record_from_db = ActiveRecord::Base.connection.execute("select #{postcode_field} from sales_logs where id=#{address_sales_log.id}").to_a[0]
