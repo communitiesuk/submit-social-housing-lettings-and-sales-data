@@ -145,7 +145,6 @@ RSpec.describe SalesLog, type: :model do
       FactoryBot.create(
         :sales_log,
         :completed,
-        managing_organisation: owning_organisation,
         owning_organisation:,
         created_by: created_by_user,
         pcodenk: 0,
