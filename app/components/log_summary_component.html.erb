@@ -25,7 +25,7 @@
         <% end %>
       </header>
 
-      <% if log.is_a?(LettingsLog) && (log.needstype? or log.startdate?) %>
+      <% if log.lettings? && (log.needstype? or log.startdate?) %>
         <p class="govuk-body govuk-!-margin-bottom-2">
           <% if log.needstype? %>
             <%= log.is_general_needs? ? "General needs" : "Supported housing" %><br>
@@ -37,20 +37,20 @@
       <% end %>
 
       <% if current_user.support? %>
-        <% if log.owning_organisation %>
-          <dl class="app-metadata">
+        <dl class="app-metadata">
+          <% if log.owning_organisation %>
             <div class="app-metadata__item">
               <dt class="app-metadata__term">Owned by</dt>
               <dd class="app-metadata__definition"><%= log.owning_organisation&.name %></dd>
             </div>
-            <% if log.instance_of?(LettingsLog) && log.managing_organisation %>
-              <div class="app-metadata__item">
-                <dt class="app-metadata__term">Managed by</dt>
-                <dd class="app-metadata__definition"><%= log.managing_organisation&.name %></dd>
-              </div>
-            <% end %>
-          </dl>
-        <% end %>
+          <% end %>
+          <% if log.lettings? && log.managing_organisation %>
+            <div class="app-metadata__item">
+              <dt class="app-metadata__term">Managed by</dt>
+              <dd class="app-metadata__definition"><%= log.managing_organisation&.name %></dd>
+            </div>
+          <% end %>
+        </dl>
       <% end %>
     </div>
 
