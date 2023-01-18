@@ -36,4 +36,8 @@ module Validations::Sales::SoftValidations
 
     deposit > savings * 4 / 3
   end
+
+  def extra_borrowing_expected?
+    true
+  end
 end

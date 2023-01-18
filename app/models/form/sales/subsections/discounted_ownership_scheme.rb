@@ -18,6 +18,7 @@ class Form::Sales::Subsections::DiscountedOwnershipScheme < ::Form::Subsection
       Form::Sales::Pages::MortgageLenderOther.new("mortgage_lender_other_discounted_ownership", nil, self),
       Form::Sales::Pages::MortgageLength.new("mortgage_length_discounted_ownership", nil, self),
       Form::Sales::Pages::ExtraBorrowing.new("extra_borrowing_discounted_ownership", nil, self),
+      Form::Sales::Pages::ExtraBorrowingValueCheck.new("extra_borrowing_value_check_discounted_ownership", nil, self),
       Form::Sales::Pages::AboutDepositWithoutDiscount.new("about_deposit_discounted_ownership", nil, self),
       Form::Sales::Pages::DepositValueCheck.new("discounted_ownership_deposit_value_check", nil, self),
       Form::Sales::Pages::LeaseholdCharges.new("leasehold_charges_discounted_ownership", nil, self),
