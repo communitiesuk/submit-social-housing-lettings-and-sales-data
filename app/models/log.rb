@@ -52,6 +52,16 @@ class Log < ApplicationRecord
     form.end_date > Time.zone.today
   end
 
+  def blank_invalid_non_setup_fields!
+    setup_ids = form.setup_sections.flat_map(&:subsections).flat_map(&:questions).map(&:id)
+
+    errors.each do |error|
+      next if setup_ids.include?(error.attribute.to_s)
+
+      public_send("#{error.attribute}=", nil)
+    end
+  end
+
 private
 
   def update_status!
