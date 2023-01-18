@@ -183,11 +183,23 @@ class SalesLog < Log
     self.postcode_full = upcase_and_remove_whitespace(postcode_full)
     process_postcode(postcode_full, "pcodenk", "is_la_inferred", "la")
   end
-  
+
   def retirement_age_for_person(person_num)
     gender = public_send("sex#{person_num}".to_sym)
     return unless gender
 
     RETIREMENT_AGES[gender]
+  end
+
+  def joint_purchase?
+    jointpur == 1
+  end
+
+  def not_joint_purchase?
+    jointpur == 2
+  end
+
+  def old_persons_shared_ownership?
+    type == 24
   end
 end

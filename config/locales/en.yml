@@ -367,7 +367,8 @@ en:
         not_internal_transfer: "Answer cannot be ‘permanently decanted from another property owned by this landlord’ as you told us the source of referral for this tenancy was not an internal transfer"
       condition_effects:
         no_choices: "You cannot answer this question as you told us nobody in the household has a physical or mental health condition (or other illness) expected to last 12 months or more"
-
+      old_persons_shared_ownership: "Are you sure? At least one buyer should be aged over 64 for Older persons‘ shared ownership scheme"
+      
     tenancy:
       length:
         fixed_term_not_required: "You must only answer the length of the tenancy if it's fixed-term"
