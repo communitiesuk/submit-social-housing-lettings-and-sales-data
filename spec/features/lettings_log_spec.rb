@@ -286,6 +286,9 @@ RSpec.describe "Lettings Log Features" do
       end
 
       context "when the current user's organisation does hold stock" do
+        let!(:owning_org1) { create(:organisation, name: "Owning org 1") }
+        let!(:org_rel1) { create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: owning_org1) }
+
         before do
           user.organisation.update!(holds_own_stock: true)
         end
@@ -296,12 +299,13 @@ RSpec.describe "Lettings Log Features" do
             click_button("Create a new lettings log")
             click_link("Set up this lettings log")
             log_id = page.current_path.scan(/\d/).join
-            if page.current_path == "/lettings-logs/#{log_id}/owning-organisation"
-              click_link("Skip for now")
-            end
+            expect(page).to have_current_path("/lettings-logs/#{log_id}/stock-owner")
+            select(owning_org1.name, from: "lettings-log-owning-organisation-id-field")
+            click_button("Save and continue")
             expect(page).not_to have_current_path("/lettings-logs/#{log_id}/managing-organisation")
             visit("lettings-logs/#{log_id}/setup/check-answers")
             expect(page).not_to have_content("Managing agent ")
+            expect(user.organisation.stock_owners).to eq([org_rel1.parent_organisation])
           end
         end
 
