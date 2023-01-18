@@ -58,7 +58,8 @@ RSpec.describe "Lettings Log Features" do
   end
 
   context "when the signed is user is a Support user" do
-    let(:support_user) { create(:user, :support, last_sign_in_at: Time.zone.now, organisation: create(:organisation, name: "User org")) }
+    let(:organisation) { create(:organisation, name: "User org") }
+    let(:support_user) { create(:user, :support, last_sign_in_at: Time.zone.now, organisation:) }
     let(:devise_notify_mailer) { DeviseNotifyMailer.new }
     let(:notify_client) { instance_double(Notifications::Client) }
     let(:mfa_template_id) { User::MFA_TEMPLATE_ID }
@@ -196,7 +197,8 @@ RSpec.describe "Lettings Log Features" do
   end
 
   context "when the signed is user is not a Support user" do
-    let(:user) { create(:user, :data_coordinator, name: "User name", organisation: create(:organisation, name: "User org")) }
+    let(:organisation) { create(:organisation, name: "User org") }
+    let(:user) { create(:user, :data_coordinator, name: "User name", organisation:) }
     let(:devise_notify_mailer) { DeviseNotifyMailer.new }
     let(:notify_client) { instance_double(Notifications::Client) }
 
