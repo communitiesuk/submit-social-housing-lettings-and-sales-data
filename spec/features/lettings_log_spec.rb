@@ -267,7 +267,7 @@ RSpec.describe "Lettings Log Features" do
         let(:owning_org2) { create(:organisation, name: "Owning org 2") }
         let!(:org_rel1) { create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: owning_org1) }
         let!(:org_rel2) { create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: owning_org2) }
-        
+
         it "shows the managing organisation question" do
           user.organisation.update!(holds_own_stock: false)
           visit("/lettings-logs")
@@ -282,6 +282,7 @@ RSpec.describe "Lettings Log Features" do
           click_button("Save and continue")
           visit("lettings-logs/#{log_id}/setup/check-answers")
           expect(page).to have_content("Managing agent User org")
+          expect(user.organisation.stock_owners).to eq([org_rel1.parent_organisation, org_rel2.parent_organisation])
         end
       end
 
