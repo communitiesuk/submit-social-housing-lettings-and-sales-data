@@ -8,7 +8,7 @@ class BulkUpload::Processor
   def call
     download
     validator.call
-    create_logs
+    create_logs if validator.create_logs?
   ensure
     downloader.delete_local_file!
   end

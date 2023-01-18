@@ -3,7 +3,9 @@ require "rails_helper"
 RSpec.describe BulkUpload::Lettings::Validator do
   subject(:validator) { described_class.new(bulk_upload:, path:) }
 
-  let(:bulk_upload) { create(:bulk_upload) }
+  let(:organisation) { create(:organisation, old_visible_id: "3") }
+  let(:user) { create(:user, organisation:) }
+  let(:bulk_upload) { create(:bulk_upload, user:) }
   let(:path) { file.path }
   let(:file) { Tempfile.new }
 
@@ -29,18 +31,46 @@ RSpec.describe BulkUpload::Lettings::Validator do
     context "when incorrect headers"
   end
 
-  context "when a valid csv" do
-    let(:path) { file_fixture("2022_23_lettings_bulk_upload.csv") }
+  describe "#call" do
+    context "when a valid csv" do
+      let(:path) { file_fixture("2022_23_lettings_bulk_upload.csv") }
 
-    it "creates validation errors" do
-      expect { validator.call }.to change(BulkUploadError, :count)
+      it "creates validation errors" do
+        expect { validator.call }.to change(BulkUploadError, :count)
+      end
+
+      it "create validation error with correct values" do
+        validator.call
+
+        error = BulkUploadError.first
+        expect(error.row).to eq("7")
+      end
+    end
+  end
+
+  describe "#should_create_logs?" do
+    context "when all logs are valid" do
+      let(:target_path) { file_fixture("2022_23_lettings_bulk_upload.csv") }
+
+      before do
+        target_array = File.open(target_path).readlines
+        target_array[0..71].each do |line|
+          file.write line
+        end
+        file.rewind
+      end
+
+      it "returns truthy" do
+        expect(validator).to be_create_logs
+      end
     end
 
-    it "create validation error with correct values" do
-      validator.call
+    context "when there is an invalid log" do
+      let(:path) { file_fixture("2022_23_lettings_bulk_upload.csv") }
 
-      error = BulkUploadError.first
-      expect(error.row).to eq("6")
+      it "returns falsey" do
+        expect(validator).not_to be_create_logs
+      end
     end
   end
 end
