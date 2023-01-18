@@ -53,11 +53,16 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
     end
 
     context "when user is not support" do
-      let(:user) { create(:user, :data_coordinator, organisation: create(:organisation, name: "User org")) }
+      let(:user_org) { create(:organisation, name: "User org") }
+      let(:user) { create(:user, :data_coordinator, organisation: user_org) }
 
-      let(:log) { create(:lettings_log, managing_organisation: create(:organisation, name: "Managing org 1")) }
-      let!(:org_rel1) { create(:organisation_relationship, parent_organisation: user.organisation, child_organisation: create(:organisation, name: "Managing org 2")) }
-      let!(:org_rel2) { create(:organisation_relationship, parent_organisation: user.organisation, child_organisation: create(:organisation, name: "Managing org 3")) }
+      let(:managing_org1) { create(:organisation, name: "Managing org 1") }
+      let(:managing_org2) { create(:organisation, name: "Managing org 2") }
+      let(:managing_org3) { create(:organisation, name: "Managing org 3") }
+
+      let(:log) { create(:lettings_log, managing_organisation: managing_org1) }
+      let!(:org_rel1) { create(:organisation_relationship, parent_organisation: user.organisation, child_organisation: managing_org2) }
+      let!(:org_rel2) { create(:organisation_relationship, parent_organisation: user.organisation, child_organisation: managing_org3) }
 
       let(:options) do
         {
@@ -77,9 +82,14 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
     context "when user is support" do
       let(:user) { create(:user, :support) }
       let(:log_owning_org) { create(:organisation, name: "Owning org") }
-      let(:log) { create(:lettings_log, owning_organisation: log_owning_org, managing_organisation: create(:organisation, name: "Managing org 1"), created_by: nil) }
-      let!(:org_rel1) { create(:organisation_relationship, parent_organisation: log_owning_org, child_organisation: create(:organisation, name: "Managing org 2")) }
-      let!(:org_rel2) { create(:organisation_relationship, parent_organisation: log_owning_org, child_organisation: create(:organisation, name: "Managing org 3")) }
+
+      let(:managing_org1) { create(:organisation, name: "Managing org 1") }
+      let(:managing_org2) { create(:organisation, name: "Managing org 2") }
+      let(:managing_org3) { create(:organisation, name: "Managing org 3") }
+
+      let(:log) { create(:lettings_log, owning_organisation: log_owning_org, managing_organisation: managing_org1, created_by: nil) }
+      let!(:org_rel1) { create(:organisation_relationship, parent_organisation: log_owning_org, child_organisation: managing_org2) }
+      let!(:org_rel2) { create(:organisation_relationship, parent_organisation: log_owning_org, child_organisation: managing_org3) }
 
       context "when org owns stock" do
         let(:options) do

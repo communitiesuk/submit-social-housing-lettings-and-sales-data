@@ -146,7 +146,8 @@ RSpec.describe LettingsLogsController, type: :request do
 
       context "when creating a new log" do
         context "when the user is support" do
-          let(:support_user) { FactoryBot.create(:user, :support, organisation: FactoryBot.create(:organisation)) }
+          let(:organisation) { FactoryBot.create(:organisation) }
+          let(:support_user) { FactoryBot.create(:user, :support, organisation:) }
 
           before do
             allow(support_user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -164,7 +165,8 @@ RSpec.describe LettingsLogsController, type: :request do
 
         context "when the user is not support" do
           context "when the user's org holds stock" do
-            let(:user) { FactoryBot.create(:user, :data_coordinator, organisation: FactoryBot.create(:organisation, name: "User org", holds_own_stock: true)) }
+            let(:organisation) { FactoryBot.create(:organisation, name: "User org", holds_own_stock: true) }
+            let(:user) { FactoryBot.create(:user, :data_coordinator, organisation:) }
 
             before do
               RequestHelper.stub_http_requests
@@ -181,7 +183,8 @@ RSpec.describe LettingsLogsController, type: :request do
           end
 
           context "when the user's org doesn't hold stock" do
-            let(:user) { FactoryBot.create(:user, :data_coordinator, organisation: FactoryBot.create(:organisation, name: "User org", holds_own_stock: false)) }
+            let(:organisation) { FactoryBot.create(:organisation, name: "User org", holds_own_stock: false) }
+            let(:user) { FactoryBot.create(:user, :data_coordinator, organisation:) }
 
             before do
               RequestHelper.stub_http_requests

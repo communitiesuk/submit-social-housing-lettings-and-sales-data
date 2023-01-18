@@ -43,7 +43,8 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
     end
 
     context "when user is not support" do
-      let(:user) { create(:user, :data_coordinator, organisation: create(:organisation, name: "User org")) }
+      let(:user_org) { create(:organisation, name: "User org") }
+      let(:user) { create(:user, :data_coordinator, organisation: user_org) }
 
       let(:owning_org_1) { create(:organisation, name: "Owning org 1") }
       let(:owning_org_2) { create(:organisation, name: "Owning org 2") }
