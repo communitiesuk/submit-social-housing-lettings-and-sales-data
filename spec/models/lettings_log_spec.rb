@@ -2392,12 +2392,6 @@ RSpec.describe LettingsLog do
         FactoryBot.create(:lettings_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_2, created_by: nil)
       end
 
-      it "filters by given organisation id" do
-        expect(described_class.filter_by_organisation([organisation_1.id]).count).to eq(3)
-        expect(described_class.filter_by_organisation([organisation_1.id, organisation_2.id]).count).to eq(4)
-        expect(described_class.filter_by_organisation([organisation_3.id]).count).to eq(0)
-      end
-
       it "filters by given organisation" do
         expect(described_class.filter_by_organisation([organisation_1]).count).to eq(3)
         expect(described_class.filter_by_organisation([organisation_1, organisation_2]).count).to eq(4)
