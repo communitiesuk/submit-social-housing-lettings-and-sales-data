@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_18_170602) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_13_125117) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -497,7 +497,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_18_170602) do
     t.integer "pcodenk"
     t.string "postcode_full"
     t.boolean "is_la_inferred"
-    t.integer "extrabor_value_check"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
     t.index ["updated_by_id"], name: "index_sales_logs_on_updated_by_id"

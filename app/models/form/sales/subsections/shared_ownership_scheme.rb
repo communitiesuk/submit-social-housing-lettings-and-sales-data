@@ -26,7 +26,6 @@ class Form::Sales::Subsections::SharedOwnershipScheme < ::Form::Subsection
       Form::Sales::Pages::MortgageLenderOther.new("mortgage_lender_other_shared_ownership", nil, self),
       Form::Sales::Pages::MortgageLength.new("mortgage_length_shared_ownership", nil, self),
       Form::Sales::Pages::ExtraBorrowing.new("extra_borrowing_shared_ownership", nil, self),
-      Form::Sales::Pages::ExtraBorrowingValueCheck.new("extra_borrowing_value_check_shared_ownership", nil, self),
       Form::Sales::Pages::AboutDepositWithDiscount.new(nil, nil, self),
       Form::Sales::Pages::AboutDepositWithoutDiscount.new("about_deposit_shared_ownership", nil, self),
       Form::Sales::Pages::DepositValueCheck.new("shared_ownership_deposit_value_check", nil, self),
