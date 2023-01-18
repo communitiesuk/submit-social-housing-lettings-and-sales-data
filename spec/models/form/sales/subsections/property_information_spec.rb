@@ -17,6 +17,7 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
         property_number_of_bedrooms
         property_unit_type
         property_building_type
+        property_postcode
         property_local_authority
         property_wheelchair_accessible
       ],

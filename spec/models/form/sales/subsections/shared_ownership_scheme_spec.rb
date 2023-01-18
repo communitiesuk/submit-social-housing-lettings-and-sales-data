@@ -28,7 +28,10 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
         about_price_shared_ownership
         mortgage_used_shared_ownership
         mortgage_amount_shared_ownership
+        mortgage_lender_shared_ownership
+        mortgage_lender_other_shared_ownership
         mortgage_length_shared_ownership
+        extra_borrowing_shared_ownership
         about_deposit_with_discount
         about_deposit_shared_ownership
         shared_ownership_deposit_value_check

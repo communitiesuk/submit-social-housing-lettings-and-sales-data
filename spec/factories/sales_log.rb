@@ -57,7 +57,7 @@ FactoryBot.define do
       income2nk { 0 }
       income2 { 10_000 }
       inc2mort { 1 }
-      la_known { "1" }
+      la_known { 1 }
       la { "E09000003" }
       savingsnk { 1 }
       prevown { 1 }
@@ -96,6 +96,10 @@ FactoryBot.define do
       mscharge_known { 1 }
       mscharge { 100 }
       mortlen { 10 }
+      pcodenk { 1 }
+      is_la_inferred { false }
+      mortgagelender { 5 }
+      extrabor { 1 }
     end
   end
 end

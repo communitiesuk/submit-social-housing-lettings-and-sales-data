@@ -34,6 +34,14 @@ module Validations::SharedValidations
     end
   end
 
+  def validate_property_postcode(record)
+    postcode = record.postcode_full
+    if record.postcode_known? && (postcode.blank? || !postcode.match(POSTCODE_REGEXP))
+      error_message = I18n.t("validations.postcode")
+      record.errors.add :postcode_full, error_message
+    end
+  end
+
   def location_during_startdate_validation(record, field)
     location_inactive_status = inactive_status(record.startdate, record.location)
 

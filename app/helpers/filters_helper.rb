@@ -22,4 +22,9 @@ module FiltersHelper
 
     JSON.parse(session[:logs_filters])[filter] || ""
   end
+
+  def organisations_filter_options(user)
+    organisation_options = user.support? ? Organisation.all : [user.organisation] + user.organisation.managing_agents
+    [OpenStruct.new(id: "", name: "Select an option")] + organisation_options.map { |org| OpenStruct.new(id: org.id, name: org.name) }
+  end
 end
