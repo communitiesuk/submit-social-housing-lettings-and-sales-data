@@ -1,9 +1,10 @@
-class Form::Sales::Pages::RetirementValueCheck < ::Form::Page
+class Form::Sales::Pages::RetirementValueCheck < Form::Sales::Pages::Person
   def initialize(id, hsh, subsection, person_index:)
-    super(id, hsh, subsection)
+    super
     @depends_on = [
       {
         "person_#{person_index}_retired_under_soft_min_age?" => true,
+        "jointpur" => joint_purchase? ? 1 : 2,
       },
     ]
     @person_index = person_index
