@@ -1,0 +1,33 @@
+<div class="x-govuk-summary-card govuk-!-margin-bottom-6">
+  <div class="x-govuk-summary-card__header">
+    <% if lettings? %>
+      <h3 class="x-govuk-summary-card__title"><strong>Row <%= row %></strong> <span class="govuk-!-margin-left-3">Tenant code: <%= tenant_code %></span> <span class="govuk-!-margin-left-3">Property reference: <%= property_ref %></span></h3>
+    <% else %>
+      <h3 class="x-govuk-summary-card__title"><strong>Row <%= row %></strong> <span class="govuk-!-margin-left-3">Purchaser code: <%= purchaser_code %></span></h3>
+    <% end %>
+  </div>
+
+  <div class="x-govuk-summary-card__body">
+    <%= govuk_table do |table| %>
+      <% table.head do |head| %>
+        <% head.row do |row| %>
+          <% row.cell(header: true, text: "Cell") %>
+          <% row.cell(header: true, text: "Question") %>
+          <% row.cell(header: true, text: "Error") %>
+          <% row.cell(header: true, text: "Specification") %>
+        <% end %>
+
+        <% table.body do |body| %>
+          <% bulk_upload_errors.each do |error| %>
+            <% body.row do |row| %>
+              <% row.cell(header: true, text: error.cell) %>
+              <% row.cell(text: question_for_field(error.field)) %>
+              <% row.cell(text: error.error) %>
+              <% row.cell(text: error.field.humanize) %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

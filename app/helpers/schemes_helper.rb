@@ -8,7 +8,6 @@ module SchemesHelper
       { name: "Registered under Care Standards Act 2000", value: scheme.registered_under_care_act },
       { name: "Housing stock owned by", value: scheme.owning_organisation.name, edit: true },
       { name: "Support services provided by", value: scheme.arrangement_type },
-      { name: "Organisation providing support", value: scheme.managing_organisation&.name },
       { name: "Primary client group", value: scheme.primary_client_group },
       { name: "Has another client group", value: scheme.has_other_client_group },
       { name: "Secondary client group", value: scheme.secondary_client_group },
@@ -25,9 +24,10 @@ module SchemesHelper
       base_attributes.delete_if { |item| item[:name] == "Housing stock owned by" }
     end
 
-    if scheme.arrangement_type_same?
-      base_attributes.delete_if { |item| item[:name] == "Organisation providing support" }
+    if scheme.has_other_client_group == "Yes"
+      base_attributes.append
     end
+
     base_attributes
   end
 

@@ -4,7 +4,6 @@ class Form::Sales::Questions::PersonWorkingSituation < ::Form::Sales::Questions:
     @check_answer_label = "Person #{person_display_number}’s working situation"
     @header = "Which of these best describes Person #{person_display_number}’s working situation?"
     @type = "radio"
-    @page = page
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = person_index
   end

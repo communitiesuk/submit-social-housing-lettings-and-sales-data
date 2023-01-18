@@ -3,7 +3,6 @@ class Form::Sales::Subsections::Setup < ::Form::Subsection
     super
     @id = "setup"
     @label = "Set up this sales log"
-    @section = section
   end
 
   def pages

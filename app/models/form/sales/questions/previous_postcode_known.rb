@@ -6,7 +6,6 @@ class Form::Sales::Questions::PreviousPostcodeKnown < ::Form::Question
     @header = "Do you know the postcode of buyer 1’s last settled accommodation?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @page = page
     @conditional_for = {
       "ppostcode_full" => [0],
     }

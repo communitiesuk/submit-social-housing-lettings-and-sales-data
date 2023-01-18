@@ -2,9 +2,6 @@ class Form::Lettings::Pages::ManagingOrganisation < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "managing_organisation"
-    @header = ""
-    @description = ""
-    @subsection = subsection
   end
 
   def questions

@@ -38,7 +38,6 @@ module Imports
         end_date: attributes["end_date"],
         # These values were set by the scheme import (management groups)
         owning_organisation_id: source_scheme.owning_organisation_id,
-        managing_organisation_id: source_scheme.managing_organisation_id,
         service_name: source_scheme.service_name,
         arrangement_type: source_scheme.arrangement_type,
         old_id: source_scheme.old_id,

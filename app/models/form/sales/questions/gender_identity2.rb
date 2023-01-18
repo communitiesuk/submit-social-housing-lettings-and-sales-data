@@ -5,7 +5,6 @@ class Form::Sales::Questions::GenderIdentity2 < ::Form::Question
     @check_answer_label = "Buyer 2’s gender identity"
     @header = "Which of these best describes buyer 2’s gender identity?"
     @type = "radio"
-    @page = page
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = 2
   end

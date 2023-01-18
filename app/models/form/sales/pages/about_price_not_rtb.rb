@@ -3,10 +3,9 @@ class Form::Sales::Pages::AboutPriceNotRtb < ::Form::Page
     super
     @id = "about_price_not_rtb"
     @header = "About the price of the property"
-    @description = ""
-    @subsection = subsection
     @depends_on = [{
       "right_to_buy?" => false,
+      "rent_to_buy_full_ownership?" => false,
     }]
   end
 

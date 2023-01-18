@@ -24,12 +24,14 @@ RSpec.describe Form::Sales::Pages::AboutDepositWithoutDiscount, type: :model do
   end
 
   it "has the correct description" do
-    expect(page.description).to eq("")
+    expect(page.description).to be_nil
   end
 
   it "has correct depends_on" do
     expect(page.depends_on).to eq(
-      [{ "is_type_discount?" => false }],
+      [{ "is_type_discount?" => false, "ownershipsch" => 1 },
+       { "ownershipsch" => 2 },
+       { "ownershipsch" => 3, "mortgageused" => 1 }],
     )
   end
 end

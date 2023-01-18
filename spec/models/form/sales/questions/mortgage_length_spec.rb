@@ -32,7 +32,7 @@ RSpec.describe Form::Sales::Questions::MortgageLength, type: :model do
   end
 
   it "has the correct hint" do
-    expect(question.hint_text).to eq("")
+    expect(question.hint_text).to be_nil
   end
 
   it "has correct width" do

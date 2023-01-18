@@ -6,7 +6,6 @@ class Form::Sales::Questions::BuyerPrevious < ::Form::Question
     @header = "Was the buyer a private registered provider, housing association or local authority tenant immediately before this sale?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @page = page
   end
 
   ANSWER_OPTIONS = {

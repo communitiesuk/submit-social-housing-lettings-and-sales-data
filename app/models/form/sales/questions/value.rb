@@ -5,7 +5,6 @@ class Form::Sales::Questions::Value < ::Form::Question
     @check_answer_label = "Full purchase price"
     @header = "What was the full purchase price?"
     @type = "numeric"
-    @page = page
     @min = 0
     @width = 5
     @prefix = "£"

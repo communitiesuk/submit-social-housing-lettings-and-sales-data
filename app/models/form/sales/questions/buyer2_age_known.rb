@@ -6,7 +6,6 @@ class Form::Sales::Questions::Buyer2AgeKnown < ::Form::Question
     @header = "Do you know buyer 2’s age?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @page = page
     @conditional_for = {
       "age2" => [0],
     }

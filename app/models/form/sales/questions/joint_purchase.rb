@@ -4,10 +4,8 @@ class Form::Sales::Questions::JointPurchase < ::Form::Question
     @id = "jointpur"
     @check_answer_label = "Joint purchase"
     @header = "Is this a joint purchase?"
-    @hint_text = ""
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @page = page
   end
 
   ANSWER_OPTIONS = {

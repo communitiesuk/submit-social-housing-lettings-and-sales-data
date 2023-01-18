@@ -91,4 +91,8 @@ class Organisation < ApplicationRecord
       { name: "Data protection agreement", value: data_protection_agreement_string, editable: false },
     ].compact
   end
+
+  def has_managing_agents?
+    managing_agents.count.positive?
+  end
 end

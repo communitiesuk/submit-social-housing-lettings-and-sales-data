@@ -34,6 +34,14 @@ module Validations::SharedValidations
     end
   end
 
+  def validate_property_postcode(record)
+    postcode = record.postcode_full
+    if record.postcode_known? && (postcode.blank? || !postcode.match(POSTCODE_REGEXP))
+      error_message = I18n.t("validations.postcode")
+      record.errors.add :postcode_full, error_message
+    end
+  end
+
   def location_during_startdate_validation(record, field)
     location_inactive_status = inactive_status(record.startdate, record.location)
 
@@ -67,5 +75,18 @@ module Validations::SharedValidations
            end
 
     { scope: status, date: date&.to_formatted_s(:govuk_date), deactivation_date: closest_reactivation&.deactivation_date&.to_formatted_s(:govuk_date) }
+  end
+
+  def validate_valid_radio_option(record)
+    return unless FeatureToggle.validate_valid_radio_options?
+
+    record.attributes.each do |question_id, _v|
+      question = record.form.get_question(question_id, record)
+
+      next unless question&.type == "radio"
+      next unless record[question_id].present? && !question.answer_options.key?(record[question_id].to_s) && question.page.routed_to?(record, nil)
+
+      record.errors.add(question_id, I18n.t("validations.invalid_option", question: question.check_answer_label&.downcase))
+    end
   end
 end

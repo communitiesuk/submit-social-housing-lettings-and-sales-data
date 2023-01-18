@@ -2,9 +2,6 @@ class Form::Sales::Pages::BuyerPrevious < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "buyer_previous"
-    @header = ""
-    @description = ""
-    @subsection = subsection
   end
 
   def questions

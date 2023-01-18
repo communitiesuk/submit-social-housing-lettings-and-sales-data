@@ -40,7 +40,7 @@ RSpec.describe Form::Lettings::Questions::CreatedById, type: :model do
   end
 
   it "has the correct hint_text" do
-    expect(question.hint_text).to eq("")
+    expect(question.hint_text).to be_nil
   end
 
   it "has the correct answer options" do

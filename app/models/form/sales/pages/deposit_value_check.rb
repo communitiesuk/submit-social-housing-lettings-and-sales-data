@@ -1,9 +1,6 @@
 class Form::Sales::Pages::DepositValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
-    @header = ""
-    @description = ""
-    @subsection = subsection
     @depends_on = [
       {
         "deposit_over_soft_max?" => true,

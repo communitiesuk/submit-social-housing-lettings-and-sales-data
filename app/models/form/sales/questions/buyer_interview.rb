@@ -6,7 +6,6 @@ class Form::Sales::Questions::BuyerInterview < ::Form::Question
     @header = "Was the buyer interviewed for any of the answers you will provide on this log?"
     @type = "radio"
     @hint_text = "You should still try to answer all questions even if the buyer wasn't interviewed in person"
-    @page = page
     @answer_options = ANSWER_OPTIONS
   end
 

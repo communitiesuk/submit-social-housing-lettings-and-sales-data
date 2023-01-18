@@ -6,7 +6,6 @@ class Form::Sales::Questions::PreviousLaKnown < ::Form::Question
     @header = "Do you know the local authority of buyer 1’s last settled accommodation?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @page = page
     @hint_text = "This is also known as the household’s 'last settled home'"
     @hidden_in_check_answers = {
       "depends_on" => [

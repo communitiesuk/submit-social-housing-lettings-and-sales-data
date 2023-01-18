@@ -6,7 +6,6 @@ class Form::Sales::Questions::Buyer2Mortgage < ::Form::Question
     @header = "Was buyer 2's income used for a mortgage application?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @page = page
     @check_answers_card_number = 2
   end
 

@@ -7,7 +7,6 @@ class Form::Lettings::Questions::StockOwner < ::Form::Question
     @check_answer_label = "Stock owner"
     @header = "Which organisation owns this property?"
     @type = "select"
-    @page = page
   end
 
   def answer_options

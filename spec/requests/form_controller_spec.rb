@@ -250,7 +250,7 @@ RSpec.describe FormController, type: :request do
 
               before do
                 locations = create_list(:location, 5)
-                locations.each { |location| location.scheme.update!(arrangement_type: "The same organisation that owns the housing stock", managing_organisation_id: location.scheme.owning_organisation_id) }
+                locations.each { |location| location.scheme.update!(arrangement_type: "The same organisation that owns the housing stock") }
               end
 
               it "returns an unfiltered list of schemes" do

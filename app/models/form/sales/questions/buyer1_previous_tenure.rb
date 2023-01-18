@@ -6,7 +6,6 @@ class Form::Sales::Questions::Buyer1PreviousTenure < ::Form::Question
     @header = "What was buyer 1's previous tenure?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @page = page
   end
 
   ANSWER_OPTIONS = {

@@ -6,6 +6,5 @@ class Form::Sales::Questions::OtherOwnershipType < ::Form::Question
     @header = "What type of sale is it?"
     @type = "text"
     @width = 10
-    @page = page
   end
 end

@@ -5,7 +5,6 @@ class Form::Sales::Questions::HouseholdWheelchair < ::Form::Question
     @header = "Does anyone in the household use a wheelchair?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @page = page
     @hint_text = "This can be inside or outside the home"
   end
 

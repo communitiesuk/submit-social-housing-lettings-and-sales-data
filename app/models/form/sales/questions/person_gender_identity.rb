@@ -4,7 +4,6 @@ class Form::Sales::Questions::PersonGenderIdentity < ::Form::Sales::Questions::P
     @check_answer_label = "Person #{person_display_number}’s gender identity"
     @header = "Which of these best describes Person #{person_display_number}’s gender identity?"
     @type = "radio"
-    @page = page
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = person_index
   end

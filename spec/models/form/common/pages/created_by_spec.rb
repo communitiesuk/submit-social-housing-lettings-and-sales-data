@@ -22,11 +22,11 @@ RSpec.describe Form::Common::Pages::CreatedBy, type: :model do
   end
 
   it "has the correct header" do
-    expect(page.header).to eq("")
+    expect(page.header).to be_nil
   end
 
   it "has the correct description" do
-    expect(page.description).to eq("")
+    expect(page.description).to be_nil
   end
 
   it "has the correct depends_on" do

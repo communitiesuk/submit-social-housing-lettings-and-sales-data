@@ -760,14 +760,6 @@
                 },
                 {
                   "renewal": 0,
-                  "rsnvac": 16
-                },
-                {
-                  "renewal": 0,
-                  "rsnvac": 17
-                },
-                {
-                  "renewal": 0,
                   "rsnvac": 18
                 },
                 {
@@ -827,6 +819,14 @@
                 {
                   "renewal": 0,
                   "rsnvac": 15
+                },
+                {
+                  "renewal": 0,
+                  "rsnvac": 16
+                },
+                {
+                  "renewal": 0,
+                  "rsnvac": 17
                 }
               ]
             },
@@ -892,14 +892,6 @@
                 {
                   "renewal": 0,
                   "rsnvac": 13
-                },
-                {
-                  "renewal": 0,
-                  "rsnvac": 16
-                },
-                {
-                  "renewal": 0,
-                  "rsnvac": 17
                 },
                 {
                   "renewal": 0,
@@ -6049,9 +6041,6 @@
                     },
                     "illness_type_10": {
                       "value": "Other"
-                    },
-                    "illness_type_0": {
-                      "value": "Tenant prefers not to say"
                     }
                   }
                 }
@@ -6257,6 +6246,9 @@
                     "20": {
                       "value": "Other"
                     },
+                    "47": {
+                      "value":"Tenant prefers not to say"
+                    },
                     "divider": {
                       "value": true
                     },
@@ -6329,11 +6321,14 @@
                     "33": {
                       "value": "Lifetime private registered provider (PRP) general needs tenancy"
                     },
-                    "8": {
-                      "value": "Sheltered accommodation"
+                    "34": {
+                      "value": "Specialist retirement housing"
+                    },
+                    "35": {
+                      "value": "Extra care housing"
                     },
                     "6": {
-                      "value": "Supported housing"
+                      "value": "Other supported housing"
                     },
                     "3": {
                       "value": "Private sector tenancy"
@@ -6405,11 +6400,14 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "8": {
-                      "value": "Sheltered accommodation"
+                    "34": {
+                      "value": "Specialist retirement housing"
+                    },
+                    "35": {
+                      "value": "Extra care housing"
                     },
                     "6": {
-                      "value": "Supported housing"
+                      "value": "Other supported housing"
                     }
                   }
                 }

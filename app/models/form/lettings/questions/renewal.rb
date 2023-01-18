@@ -4,10 +4,9 @@ class Form::Lettings::Questions::Renewal < ::Form::Question
     @id = "renewal"
     @check_answer_label = "Property renewal"
     @header = "Is this letting a renewal?"
-    @hint_text = ""
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @page = page
+    @hint_text = "A renewal is a letting to the same tenant in the same property"
   end
 
   ANSWER_OPTIONS = {

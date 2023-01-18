@@ -2,9 +2,6 @@ class Form::Sales::Pages::Buyer2LiveInProperty < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "buyer_2_live_in_property"
-    @header = ""
-    @description = ""
-    @subsection = subsection
     @depends_on = [{
       "jointpur" => 1,
     }]

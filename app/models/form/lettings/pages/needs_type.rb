@@ -2,9 +2,6 @@ class Form::Lettings::Pages::NeedsType < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "needs_type"
-    @header = ""
-    @description = ""
-    @subsection = subsection
   end
 
   def questions

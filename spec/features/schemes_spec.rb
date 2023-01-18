@@ -423,14 +423,14 @@ RSpec.describe "Schemes scheme Features" do
         it "allows selecting secondary client group if the scheme provides for it" do
           fill_in_and_save_scheme_details
           fill_in_and_save_primary_client_group
-          fill_in_and_save_secondary_client_group_confirmation
+          fill_in_and_save_secondary_client_group_confirmation_yes
           expect(page).to have_content "What is the other client group?"
         end
 
         it "allows amending secondary client group confirmation question after navigating from secondary client group question" do
           fill_in_and_save_scheme_details
           fill_in_and_save_primary_client_group
-          fill_in_and_save_secondary_client_group_confirmation
+          fill_in_and_save_secondary_client_group_confirmation_yes
           click_link "Back"
           expect(page).to have_current_path("/schemes/#{scheme.id}/confirm-secondary-client-group")
           expect(page).to have_content "Does this scheme provide for another client group?"
@@ -439,7 +439,7 @@ RSpec.describe "Schemes scheme Features" do
         it "returns to the secondary group details question after amending secondary group details confirmation" do
           fill_in_and_save_scheme_details
           fill_in_and_save_primary_client_group
-          fill_in_and_save_secondary_client_group_confirmation
+          fill_in_and_save_secondary_client_group_confirmation_yes
           click_link "Back"
           click_button "Save and continue"
           expect(page).to have_current_path("/schemes/#{scheme.id}/secondary-client-group")
@@ -448,7 +448,7 @@ RSpec.describe "Schemes scheme Features" do
         it "allows selecting the level of support" do
           fill_in_and_save_scheme_details
           fill_in_and_save_primary_client_group
-          fill_in_and_save_secondary_client_group_confirmation
+          fill_in_and_save_secondary_client_group_confirmation_yes
           fill_in_and_save_secondary_client_group
           expect(page).to have_content "What support does this scheme provide?"
         end
@@ -456,7 +456,7 @@ RSpec.describe "Schemes scheme Features" do
         it "allows amending secondary client group question after navigating from level of support" do
           fill_in_and_save_scheme_details
           fill_in_and_save_primary_client_group
-          fill_in_and_save_secondary_client_group_confirmation
+          fill_in_and_save_secondary_client_group_confirmation_yes
           fill_in_and_save_secondary_client_group
           click_link "Back"
           expect(page).to have_current_path("/schemes/#{scheme.id}/secondary-client-group")
@@ -466,7 +466,7 @@ RSpec.describe "Schemes scheme Features" do
         it "returns to the level of support question after amending secondary group details" do
           fill_in_and_save_scheme_details
           fill_in_and_save_primary_client_group
-          fill_in_and_save_secondary_client_group_confirmation
+          fill_in_and_save_secondary_client_group_confirmation_yes
           fill_in_and_save_secondary_client_group
           click_link "Back"
           click_button "Save and continue"
@@ -553,11 +553,11 @@ RSpec.describe "Schemes scheme Features" do
 
         context "when changing scheme answers" do
           before do
-            create_and_save_a_scheme
+            create_and_save_a_scheme_no_secondary_client_group
           end
 
           it "displays change links" do
-            assert_selector "a", text: "Change", count: 12
+            assert_selector "a", text: "Change", count: 11
           end
 
           it "allows changing details questions" do
@@ -579,9 +579,10 @@ RSpec.describe "Schemes scheme Features" do
           end
 
           it "indicates if the scheme is not complete" do
-            click_link("Change", href: "/schemes/#{scheme.id}/details?check_answers=true", match: :first)
-            choose "Another registered stock owner"
+            click_link("Change", href: "/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true", match: :first)
+            choose "Yes"
             click_button "Save and continue"
+            visit("/schemes/#{scheme.id}/check-answers")
             expect(page).to have_content("You didn’t answer this question")
           end
         end
@@ -604,50 +605,25 @@ RSpec.describe "Schemes scheme Features" do
 
         context "when I fill in scheme details indicating that supported services provided by a different organisation and I press save I see primary client group section" do
           let(:scheme) { Scheme.first }
-          let!(:another_organisation) { FactoryBot.create(:organisation, name: "Another Org") }
 
           before do
             fill_in_and_save_scheme_details({ "housing_stock_owners" => "Another registered stock owner" })
           end
 
-          it "lets me fill in the managing organisation details" do
-            expect(page).to have_content "Which organisation provides the support services used by this scheme?"
-          end
-
-          it "lets me fill in the scheme details after navigating back" do
-            click_link "Back"
-            expect(page).to have_current_path("/schemes/#{scheme.id}/details")
-            expect(page).to have_content "Scheme name"
-            expect(page).to have_content "This scheme contains confidential information"
-            expect(page).to have_content "What is this type of scheme?"
-            expect(page).to have_content "Who provides the support services used by this scheme?"
-            expect(page).to have_content "Is this scheme registered under the Care Standards Act 2000?"
-          end
-
-          it "returns to the support service provider after amending the question" do
-            click_link "Back"
-            click_button "Save and continue"
-            expect(page).to have_current_path("/schemes/#{scheme.id}/support-services-provider")
-          end
-
           it "lets the primary client group to be selected" do
-            select another_organisation.name, from: "scheme-managing-organisation-id-field"
-            click_button "Save and continue"
             expect(page).to have_content "What client group is this scheme intended for?"
           end
 
           context "when changing scheme answers" do
             before do
-              select another_organisation.name, from: "scheme-managing-organisation-id-field"
-              click_button "Save and continue"
               fill_in_and_save_primary_client_group
-              fill_in_and_save_secondary_client_group_confirmation
+              fill_in_and_save_secondary_client_group_confirmation_yes
               fill_in_and_save_secondary_client_group
               fill_in_and_save_support
             end
 
             it "displays change links" do
-              assert_selector "a", text: "Change", count: 13
+              assert_selector "a", text: "Change", count: 12
             end
 
             it "allows changing details questions" do
@@ -668,11 +644,11 @@ RSpec.describe "Schemes scheme Features" do
               expect(page).to have_content "Check your changes before creating this scheme"
             end
 
-            it "keeps the provider answer when swithing between other provider options" do
-              click_link("Change", href: "/schemes/#{scheme.id}/details?check_answers=true", match: :first)
-              choose "Another organisation"
+            it "keeps the provider answer when switching between other provider options" do
+              click_link("Change", href: "/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true", match: :first)
+              choose "Yes"
               click_button "Save and continue"
-              expect(page).to have_content(another_organisation.name)
+              expect(find_field("Offenders and people at risk of offending")).to be_checked
             end
 
             it "does not display the answer if it's changed to the same support provider" do
@@ -1039,7 +1015,7 @@ RSpec.describe "Schemes scheme Features" do
 
   context "when selecting a scheme" do
     let!(:user) { FactoryBot.create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
-    let!(:schemes) { FactoryBot.create_list(:scheme, 5, owning_organisation: user.organisation, managing_organisation: user.organisation, arrangement_type: "The same organisation that owns the housing stock") }
+    let!(:schemes) { FactoryBot.create_list(:scheme, 5, owning_organisation: user.organisation, arrangement_type: "The same organisation that owns the housing stock") }
     let(:location) { FactoryBot.create(:location, scheme: schemes[2]) }
     let!(:lettings_log) { FactoryBot.create(:lettings_log, created_by: user, needstype: 2) }
 

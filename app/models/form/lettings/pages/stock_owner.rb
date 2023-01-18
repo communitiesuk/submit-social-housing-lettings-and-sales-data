@@ -2,9 +2,6 @@ class Form::Lettings::Pages::StockOwner < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "stock_owner"
-    @header = ""
-    @description = ""
-    @subsection = subsection
   end
 
   def questions

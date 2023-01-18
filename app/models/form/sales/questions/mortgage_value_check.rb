@@ -20,6 +20,5 @@ class Form::Sales::Questions::MortgageValueCheck < ::Form::Question
       ],
     }
     @check_answers_card_number = 1
-    @page = page
   end
 end

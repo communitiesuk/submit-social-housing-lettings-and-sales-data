@@ -5,7 +5,6 @@ class Form::Sales::Questions::Buyer2Income < ::Form::Question
     @check_answer_label = "Buyer 2’s gross annual income"
     @header = "Buyer 2’s gross annual income"
     @type = "numeric"
-    @page = page
     @min = 0
     @step = 1
     @width = 5

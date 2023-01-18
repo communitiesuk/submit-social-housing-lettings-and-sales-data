@@ -2,9 +2,6 @@ class Form::Lettings::Pages::Renewal < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "renewal"
-    @header = ""
-    @description = ""
-    @subsection = subsection
   end
 
   def questions

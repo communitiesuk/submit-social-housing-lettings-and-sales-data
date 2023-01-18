@@ -6,8 +6,6 @@ class Form::Sales::Questions::Mortgageused < ::Form::Question
     @header = "Was a mortgage used for the purchase of this property?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @page = page
-    @hint_text = ""
   end
 
   ANSWER_OPTIONS = {

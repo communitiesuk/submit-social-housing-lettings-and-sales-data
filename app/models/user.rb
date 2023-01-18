@@ -11,6 +11,7 @@ class User < ApplicationRecord
   has_many :managed_lettings_logs, through: :organisation
   has_many :owned_sales_logs, through: :organisation
   has_many :legacy_users
+  has_many :bulk_uploads
 
   validates :name, presence: true
   validates :email, presence: true
@@ -143,7 +144,7 @@ class User < ApplicationRecord
   end
 
   def logs_filters(specific_org: false)
-    if support? && !specific_org
+    if (support? && !specific_org) || organisation.has_managing_agents?
       %w[status years user organisation]
     else
       %w[status years user]

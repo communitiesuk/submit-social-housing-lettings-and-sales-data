@@ -91,6 +91,10 @@ private
     string.present? ? string.upcase.gsub(/\s+/, "") : string
   end
 
+  def reset_location_fields!
+    reset_location(is_la_inferred, "la", "is_la_inferred", "postcode_full", 1)
+  end
+
   def reset_previous_location_fields!
     reset_location(is_previous_la_inferred, "prevloc", "is_previous_la_inferred", "ppostcode_full", previous_la_known)
   end
