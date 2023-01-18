@@ -101,9 +101,9 @@ RSpec.describe "Schemes scheme Features" do
 
       it "shows a list of schemes" do
         schemes.each do |scheme|
-          expect(page).to have_content(scheme.id)
           expect(page).to have_link(scheme.service_name)
-          expect(page).to have_content(scheme.primary_client_group)
+          expect(page).to have_content(scheme.id_to_display)
+          expect(page).to have_content(scheme.locations&.count)
         end
       end
 
@@ -175,7 +175,8 @@ RSpec.describe "Schemes scheme Features" do
               click_on("Back")
               schemes.each do |scheme|
                 expect(page).to have_link(scheme.service_name)
-                expect(page).to have_content(scheme.primary_client_group)
+                expect(page).to have_content(scheme.id_to_display)
+                expect(page).to have_content(scheme.locations&.count)
               end
             end
           end
@@ -671,7 +672,8 @@ RSpec.describe "Schemes scheme Features" do
         it "shows list of links to schemes" do
           schemes.each do |scheme|
             expect(page).to have_link(scheme.service_name)
-            expect(page).to have_content(scheme.primary_client_group)
+            expect(page).to have_content(scheme.id_to_display)
+            expect(page).to have_content(scheme.locations&.count)
           end
         end
 
