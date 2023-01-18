@@ -43,6 +43,14 @@ RSpec.describe BulkUpload::Processor do
         )
       end
 
+      let(:mock_validator) do
+        instance_double(
+          BulkUpload::Lettings::Validator,
+          call: nil,
+          create_logs?: true,
+        )
+      end
+
       let(:mock_creator) do
         instance_double(
           BulkUpload::Lettings::LogCreator,
@@ -53,6 +61,7 @@ RSpec.describe BulkUpload::Processor do
 
       it "creates logs" do
         allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
+        allow(BulkUpload::Lettings::Validator).to receive(:new).and_return(mock_validator)
         allow(BulkUpload::Lettings::LogCreator).to receive(:new).with(bulk_upload:, path:).and_return(mock_creator)
 
         processor.call

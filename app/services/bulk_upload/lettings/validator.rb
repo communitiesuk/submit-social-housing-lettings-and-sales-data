@@ -169,6 +169,10 @@ class BulkUpload::Lettings::Validator
     end
   end
 
+  def create_logs?
+    row_parsers.all?(&:valid?)
+  end
+
   def self.question_for_field(field)
     QUESTIONS[field]
   end
