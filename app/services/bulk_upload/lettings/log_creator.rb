@@ -12,7 +12,12 @@ class BulkUpload::Lettings::LogCreator
 
       row_parser.log.blank_invalid_non_setup_fields!
       row_parser.log.bulk_upload = bulk_upload
-      row_parser.log.save
+
+      begin
+        row_parser.log.save!
+      rescue StandardError => e
+        Sentry.capture_exception(e)
+      end
     end
   end
 
