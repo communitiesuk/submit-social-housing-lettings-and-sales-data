@@ -17,11 +17,11 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
         buyer_interview
         privacy_notice
         buyer_1_age
-        person_1_age_retirement_value_check
-        person_1_age_retirement_value_check_joint_purchase
+        age_1_retirement_value_check
+        age_1_retirement_value_check_joint_purchase
         buyer_1_gender_identity
-        person_1_gender_retirement_value_check
-        person_1_gender_retirement_value_check_joint_purchase
+        gender_1_retirement_value_check
+        gender_1_retirement_value_check_joint_purchase
         buyer_1_ethnic_group
         buyer_1_ethnic_background_black
         buyer_1_ethnic_background_asian
@@ -30,20 +30,20 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
         buyer_1_ethnic_background_white
         buyer_1_nationality
         buyer_1_working_situation
-        person_1_working_situation_retirement_value_check
-        person_1_working_situation_retirement_value_check_joint_purchase
+        working_situation_1_retirement_value_check
+        working_situation_1_retirement_value_check_joint_purchase
         working_situation_buyer_1_income_value_check
         buyer_1_live_in_property
         buyer_2_relationship_to_buyer_1
         buyer_2_age
-        person_2_age_retirement_value_check
-        person_2_age_retirement_value_check_joint_purchase
+        age_2_retirement_value_check
+        age_2_retirement_value_check_joint_purchase
         buyer_2_gender_identity
-        person_2_gender_retirement_value_check
-        person_2_gender_retirement_value_check_joint_purchase
+        gender_2_retirement_value_check
+        gender_2_retirement_value_check_joint_purchase
         buyer_2_working_situation
-        person_2_working_situation_retirement_value_check
-        person_2_working_situation_retirement_value_check_joint_purchase
+        working_situation_2_retirement_value_check
+        working_situation_2_retirement_value_check_joint_purchase
         buyer_2_live_in_property
         number_of_others_in_property
         person_1_known
@@ -51,65 +51,65 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
         person_1_relationship_to_buyer_1
         person_1_relationship_to_buyer_1_joint_purchase
         person_1_age
-        person_3_age_retirement_value_check
+        age_2_retirement_value_check
         person_1_age_joint_purchase
-        person_3_age_retirement_value_check_joint_purchase
+        age_3_retirement_value_check_joint_purchase
         person_1_gender_identity
-        person_3_gender_retirement_value_check
+        gender_2_retirement_value_check
         person_1_gender_identity_joint_purchase
-        person_3_gender_retirement_value_check_joint_purchase
+        gender_3_retirement_value_check_joint_purchase
         person_1_working_situation
-        person_3_working_situation_retirement_value_check
+        working_situation_2_retirement_value_check
         person_1_working_situation_joint_purchase
-        person_3_working_situation_retirement_value_check_joint_purchase
+        working_situation_3_retirement_value_check_joint_purchase
         person_2_known
         person_2_known_joint_purchase
         person_2_relationship_to_buyer_1
         person_2_relationship_to_buyer_1_joint_purchase
         person_2_age
-        person_4_age_retirement_value_check
+        age_3_retirement_value_check
         person_2_age_joint_purchase
-        person_4_age_retirement_value_check_joint_purchase
+        age_4_retirement_value_check_joint_purchase
         person_2_gender_identity
-        person_4_gender_retirement_value_check
+        gender_3_retirement_value_check
         person_2_gender_identity_joint_purchase
-        person_4_gender_retirement_value_check_joint_purchase
+        gender_4_retirement_value_check_joint_purchase
         person_2_working_situation
-        person_4_working_situation_retirement_value_check
+        working_situation_3_retirement_value_check
         person_2_working_situation_joint_purchase
-        person_4_working_situation_retirement_value_check_joint_purchase
+        working_situation_4_retirement_value_check_joint_purchase
         person_3_known
         person_3_known_joint_purchase
         person_3_relationship_to_buyer_1
         person_3_relationship_to_buyer_1_joint_purchase
         person_3_age
-        person_5_age_retirement_value_check
+        age_4_retirement_value_check
         person_3_age_joint_purchase
-        person_5_age_retirement_value_check_joint_purchase
+        age_5_retirement_value_check_joint_purchase
         person_3_gender_identity
-        person_5_gender_retirement_value_check
+        gender_4_retirement_value_check
         person_3_gender_identity_joint_purchase
-        person_5_gender_retirement_value_check_joint_purchase
+        gender_5_retirement_value_check_joint_purchase
         person_3_working_situation
-        person_5_working_situation_retirement_value_check
+        working_situation_4_retirement_value_check
         person_3_working_situation_joint_purchase
-        person_5_working_situation_retirement_value_check_joint_purchase
+        working_situation_5_retirement_value_check_joint_purchase
         person_4_known
         person_4_known_joint_purchase
         person_4_relationship_to_buyer_1
         person_4_relationship_to_buyer_1_joint_purchase
         person_4_age
-        person_6_age_retirement_value_check
+        age_5_retirement_value_check
         person_4_age_joint_purchase
-        person_6_age_retirement_value_check_joint_purchase
+        age_6_retirement_value_check_joint_purchase
         person_4_gender_identity
-        person_6_gender_retirement_value_check
+        gender_5_retirement_value_check
         person_4_gender_identity_joint_purchase
-        person_6_gender_retirement_value_check_joint_purchase
+        gender_6_retirement_value_check_joint_purchase
         person_4_working_situation
-        person_6_working_situation_retirement_value_check
+        working_situation_5_retirement_value_check
         person_4_working_situation_joint_purchase
-        person_6_working_situation_retirement_value_check_joint_purchase
+        working_situation_6_retirement_value_check_joint_purchase
       ],
     )
   end
