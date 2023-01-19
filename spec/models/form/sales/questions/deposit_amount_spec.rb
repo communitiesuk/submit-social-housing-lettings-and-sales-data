@@ -46,4 +46,8 @@ RSpec.describe Form::Sales::Questions::DepositAmount, type: :model do
   it "has correct min" do
     expect(question.min).to eq(0)
   end
+
+  it "has correct max" do
+    expect(question.max).to eq(9_999_999)
+  end
 end

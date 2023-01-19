@@ -3,6 +3,9 @@ class SalesLogValidator < ActiveModel::Validator
   include Validations::Sales::PropertyValidations
   include Validations::SharedValidations
   include Validations::Sales::FinancialValidations
+  include Validations::Sales::SaleInformationValidations
+
+  include Validations::SharedValidations
   include Validations::LocalAuthorityValidations
 
   def validate(record)
