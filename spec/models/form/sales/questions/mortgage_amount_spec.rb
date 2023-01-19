@@ -32,7 +32,7 @@ RSpec.describe Form::Sales::Questions::MortgageAmount, type: :model do
   end
 
   it "has the correct hint" do
-    expect(question.hint_text).to be_nil
+    expect(question.hint_text).to eq("Enter the amount of mortgage agreed with the mortgage lender. Exclude any deposits or cash payments. Numeric in pounds. Rounded to the nearest pound.")
   end
 
   it "has correct width" do
