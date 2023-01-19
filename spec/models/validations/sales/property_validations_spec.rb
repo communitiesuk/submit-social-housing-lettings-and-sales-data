@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe Validations::Sales::PropertyValidations do
   subject(:property_validator) { property_validator_class.new }
+
   let(:property_validator_class) { Class.new { include Validations::Sales::PropertyValidations } }
 
   describe "#validate_postcodes_match_if_discounted_ownership" do
