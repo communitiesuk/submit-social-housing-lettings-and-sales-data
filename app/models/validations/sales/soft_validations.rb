@@ -37,9 +37,9 @@ module Validations::Sales::SoftValidations
     deposit > savings * 4 / 3
   end
 
-  def extra_borrowing_expected?
+  def extra_borrowing_expected_but_not_reported?
     return unless extrabor && mortgage && deposit && value && discount
 
-    mortgage + deposit > value - value * discount / 100
+    extrabor != 1 && mortgage + deposit > value - value * discount / 100
   end
 end

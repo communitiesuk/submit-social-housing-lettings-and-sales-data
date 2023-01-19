@@ -3,7 +3,7 @@ class Form::Sales::Pages::ExtraBorrowingValueCheck < Form::Page
     super
     @depends_on = [
       {
-        "extra_borrowing_expected?" => true,
+        "extra_borrowing_expected_but_not_reported?" => true,
       },
     ]
     @title_text = {
