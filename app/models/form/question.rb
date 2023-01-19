@@ -309,7 +309,7 @@ private
   def inferred_answer_value(log)
     return unless inferred_check_answers_value
 
-    inferred_answer = inferred_check_answers_value.find { |inferred_value| inferred_value["condition"].values[0] == log[inferred_value["condition"].keys[0]] }
+    inferred_answer = inferred_check_answers_value.find { |inferred_value| inferred_value["condition"].values.first == log[inferred_value["condition"].keys.first] }
     inferred_answer["value"] if inferred_answer.present?
   end
 
