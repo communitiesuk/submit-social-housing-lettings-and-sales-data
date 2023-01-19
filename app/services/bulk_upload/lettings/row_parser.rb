@@ -663,7 +663,7 @@ private
     when 2
       0
     when nil
-      field_116 == 14 ? 1 : 0
+      rsnvac == 14 ? 1 : 0
     end
   end
 
