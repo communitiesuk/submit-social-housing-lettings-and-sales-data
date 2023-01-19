@@ -101,7 +101,7 @@ class Form::Question
 
   def has_inferred_check_answers_value?(log)
     return true if selected_answer_option_is_derived?(log)
-    return inferred_check_answers_value&.any? { |inferred_value| inferred_value["condition"].values[0] == log[inferred_value["condition"].keys[0]] } if inferred_check_answers_value.present?
+    return inferred_check_answers_value&.any? { |inferred_value| inferred_value["condition"].values.first == log[inferred_value["condition"].keys.first] } if inferred_check_answers_value.present?
 
     false
   end
