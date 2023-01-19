@@ -36,13 +36,10 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
         buyer_1_live_in_property
         buyer_2_relationship_to_buyer_1
         buyer_2_age
-        age_2_retirement_value_check
         age_2_retirement_value_check_joint_purchase
         buyer_2_gender_identity
-        gender_2_retirement_value_check
         gender_2_retirement_value_check_joint_purchase
         buyer_2_working_situation
-        working_situation_2_retirement_value_check
         working_situation_2_retirement_value_check_joint_purchase
         buyer_2_live_in_property
         number_of_others_in_property
