@@ -38,7 +38,7 @@ module Validations::Sales::SoftValidations
   end
 
   def extra_borrowing_expected?
-    return unless extrabor && mortgage && deposit && value && cashdis
+    return unless extrabor && mortgage && deposit && value && discount
 
     mortgage + deposit > value - value * discount / 100
   end
