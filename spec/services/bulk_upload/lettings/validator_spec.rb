@@ -46,6 +46,39 @@ RSpec.describe BulkUpload::Lettings::Validator do
         expect(error.row).to eq("7")
       end
     end
+
+    context "with unix line endings" do
+      let(:fixture_path) { file_fixture("2022_23_lettings_bulk_upload.csv") }
+      let(:file) { Tempfile.new }
+      let(:path) { file.path }
+
+      before do
+        string = File.read(fixture_path)
+        string.gsub!("\r\n", "\n")
+        file.write(string)
+        file.rewind
+      end
+
+      it "creates validation errors" do
+        expect { validator.call }.to change(BulkUploadError, :count)
+      end
+    end
+
+    context "without headers" do
+      let(:log) { build(:lettings_log, :completed) }
+      let(:file) { Tempfile.new }
+      let(:path) { file.path }
+
+      before do
+        file.write("\r\n" * 5)
+        file.write(BulkUpload::LogToCsv.new(log:, line_ending: "\r\n").to_csv_row)
+        file.rewind
+      end
+
+      it "creates validation errors" do
+        expect { validator.call }.to change(BulkUploadError, :count)
+      end
+    end
   end
 
   describe "#should_create_logs?" do

@@ -212,14 +212,10 @@ private
     contents = ""
 
     File.open(path, "r") do |f|
-      f.seek(9900)
       contents = f.read
     end
 
-    rn_count = contents.scan("\r\n").count
-    n_count = contents.scan(/[^\r]\n/).count
-
-    if rn_count > n_count
+    if contents[-2..] == "\r\n"
       "\r\n"
     else
       "\n"
