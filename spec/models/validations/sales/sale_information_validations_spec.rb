@@ -81,7 +81,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
     context "when hodate before saledate" do
       let(:record) { build(:sales_log, hodate: 2.months.ago, saledate: 1.month.ago) }
 
-      it "does not add an error" do
+      it "does not add the error" do
         sale_information_validator.validate_pratical_completion_date_before_saledate(record)
 
         expect(record.errors).not_to be_present
