@@ -110,8 +110,8 @@ unless Rails.env.test?
   )
 
   User.find_or_create_by!(
-    name: "Provider Owns Stock",
-    email: "provider.nostock1@example.com",
+    name: "Provider No Stock",
+    email: "provider.nostock@example.com",
     organisation: standalone_no_stock,
     role: "data_provider",
   ) do |user|
@@ -120,8 +120,8 @@ unless Rails.env.test?
   end
 
   User.find_or_create_by!(
-    name: "Coordinator Owns Stock",
-    email: "coordinator.nostock1@example.com",
+    name: "Coordinator No Stock",
+    email: "coordinator.nostock@example.com",
     organisation: standalone_no_stock,
     role: "data_coordinator",
   ) do |user|
