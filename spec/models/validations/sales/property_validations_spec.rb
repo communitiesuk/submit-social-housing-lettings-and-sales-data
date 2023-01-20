@@ -55,27 +55,6 @@ RSpec.describe Validations::Sales::PropertyValidations do
 
       it "does not add an error if it's a bedsit" do
         property_validator.validate_property_unit_type(record)
-
-        expect(record.errors).not_to be_present
-      end
-    end
-
-    context "when number of bedrooms is > 1" do
-      let(:record) { FactoryBot.build(:sales_log, beds: 2, proptype: 2) }
-
-      it "does add an error if it's a bedsit" do
-        property_validator.validate_property_unit_type(record)
-
-        expect(record.errors).to be_present
-      end
-    end
-  end  
-
-  describe "#validate_property_number_of_bedrooms" do
-    context "when number of bedrooms is <= 1" do
-      let(:record) { FactoryBot.build(:sales_log, beds: 1, proptype: 2) }
-
-      it "does not add an error if it's a bedsit" do
         property_validator.validate_property_number_of_bedrooms(record)
 
         expect(record.errors).not_to be_present
@@ -86,6 +65,7 @@ RSpec.describe Validations::Sales::PropertyValidations do
       let(:record) { FactoryBot.build(:sales_log, beds: 2, proptype: 2) }
 
       it "does add an error if it's a bedsit" do
+        property_validator.validate_property_unit_type(record)
         property_validator.validate_property_number_of_bedrooms(record)
 
         expect(record.errors).to be_present
