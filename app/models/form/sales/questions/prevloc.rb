@@ -6,12 +6,12 @@ class Form::Sales::Questions::Prevloc < ::Form::Question
     @header = "Select a local authority"
     @type = "select"
     @answer_options = ANSWER_OPTIONS
-    @inferred_check_answers_value = {
+    @inferred_check_answers_value = [{
       "condition" => {
         "previous_la_known" => 0,
       },
       "value" => "Not known",
-    }
+    }]
   end
 
   ANSWER_OPTIONS = {

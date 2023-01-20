@@ -74,12 +74,12 @@ The answer the data inputter provides to some questions allows us to infer the v
       "is_la_inferred": true
     }
   },
-  "inferred_check_answers_value": {
+  "inferred_check_answers_value": [{
     "condition": {
       "postcode_known": 0
     },
     "value": "Not known"
-  }
+  }]
 }
 ```
 

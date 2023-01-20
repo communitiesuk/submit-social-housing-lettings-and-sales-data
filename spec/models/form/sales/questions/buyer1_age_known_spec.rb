@@ -51,12 +51,17 @@ RSpec.describe Form::Sales::Questions::Buyer1AgeKnown, type: :model do
 
   it "has correct hidden_in_check_answers for" do
     expect(question.hidden_in_check_answers).to eq({
-      "depends_on" => [{
-        "age1_known" => 0,
-      },
-                       {
-                         "age1_known" => 1,
-                       }],
+      "depends_on" => [
+        {
+          "age1_known" => 0,
+        },
+        {
+          "age1_known" => 1,
+        },
+        {
+          "age1_known" => 2,
+        },
+      ],
     })
   end
 

@@ -50,4 +50,13 @@ RSpec.describe Form::Sales::Questions::Buyer1EthnicGroup, type: :model do
   it "has the correct check_answers_card_number" do
     expect(question.check_answers_card_number).to eq(1)
   end
+
+  it "has the correct inferred_check_answers_value" do
+    expect(question.inferred_check_answers_value).to eq([{
+      "condition" => {
+        "ethnic_group" => 17,
+      },
+      "value" => "Prefers not to say",
+    }])
+  end
 end

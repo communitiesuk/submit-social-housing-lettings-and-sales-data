@@ -47,4 +47,10 @@ RSpec.describe Form::Sales::Questions::Buyer2RelationshipToBuyer1, type: :model 
   it "has the correct check_answers_card_number" do
     expect(question.check_answers_card_number).to eq(2)
   end
+
+  it "has the correct inferred_check_answers_value" do
+    expect(question.inferred_check_answers_value).to eq([
+      { "condition" => { "relat2" => "R" }, "value" => "Prefers not to say" },
+    ])
+  end
 end
