@@ -205,7 +205,7 @@ private
       next if log.optional_fields.include?(question.id)
       next if question.completed?(log)
 
-      fields.each { |field| errors.add(field, :blank) }
+      fields.each { |field| errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase)) }
     end
   end
 
