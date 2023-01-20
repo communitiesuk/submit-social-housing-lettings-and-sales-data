@@ -24,7 +24,6 @@ class BulkUpload::Lettings::CsvParser
       stripped_row = row[1..]
       headers = ("field_1".."field_134").to_a
       hash = Hash[headers.zip(stripped_row)]
-      # hash[:bulk_upload] = bulk_upload
 
       BulkUpload::Lettings::RowParser.new(hash)
     end
@@ -35,24 +34,21 @@ class BulkUpload::Lettings::CsvParser
   end
 
   def rows
-    @rows ||= CSV.read(path, row_sep:)
+    @rows ||= CSV.parse(normalised_string, row_sep:)
   end
 
 private
 
-  # determine the row seperator from CSV
-  # Windows will use \r\n
   def row_sep
-    contents = ""
+    "\n"
+  end
 
-    File.open(path, "r") do |f|
-      contents = f.read
-    end
+  def normalised_string
+    return @normalised_string if @normalised_string
 
-    if contents[-2..] == "\r\n"
-      "\r\n"
-    else
-      "\n"
-    end
+    @normalised_string = File.read(path)
+    @normalised_string.gsub!("\r\n", "\n")
+
+    @normalised_string
   end
 end
