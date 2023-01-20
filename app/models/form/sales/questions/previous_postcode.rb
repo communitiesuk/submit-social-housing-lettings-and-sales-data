@@ -6,12 +6,12 @@ class Form::Sales::Questions::PreviousPostcode < ::Form::Question
     @header = "Postcode"
     @type = "text"
     @width = 5
-    @inferred_check_answers_value = {
+    @inferred_check_answers_value = [{
       "condition" => {
         "ppcodenk" => 1,
       },
       "value" => "Not known",
-    }
+    }]
     @inferred_answers = {
       "prevloc" => {
         "is_previous_la_inferred" => true,

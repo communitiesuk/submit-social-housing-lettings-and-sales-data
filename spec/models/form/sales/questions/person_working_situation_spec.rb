@@ -68,6 +68,12 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
       it "has expected check answers card number" do
         expect(question.check_answers_card_number).to eq(2)
       end
+
+      it "has the correct inferred_check_answers_value" do
+        expect(question.inferred_check_answers_value).to eq([
+          { "condition" => { "ecstat2" => 10 }, "value" => "Prefers not to say" },
+        ])
+      end
     end
 
     context "and joint purchase" do
@@ -92,6 +98,12 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
 
       it "has expected check answers card number" do
         expect(question.check_answers_card_number).to eq(3)
+      end
+
+      it "has the correct inferred_check_answers_value" do
+        expect(question.inferred_check_answers_value).to eq([
+          { "condition" => { "ecstat3" => 10 }, "value" => "Prefers not to say" },
+        ])
       end
     end
   end
@@ -120,6 +132,12 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
       it "has expected check answers card number" do
         expect(question.check_answers_card_number).to eq(3)
       end
+
+      it "has the correct inferred_check_answers_value" do
+        expect(question.inferred_check_answers_value).to eq([
+          { "condition" => { "ecstat3" => 10 }, "value" => "Prefers not to say" },
+        ])
+      end
     end
 
     context "and joint purchase" do
@@ -144,6 +162,12 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
 
       it "has expected check answers card number" do
         expect(question.check_answers_card_number).to eq(4)
+      end
+
+      it "has the correct inferred_check_answers_value" do
+        expect(question.inferred_check_answers_value).to eq([
+          { "condition" => { "ecstat4" => 10 }, "value" => "Prefers not to say" },
+        ])
       end
     end
   end
@@ -172,6 +196,12 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
       it "has expected check answers card number" do
         expect(question.check_answers_card_number).to eq(4)
       end
+
+      it "has the correct inferred_check_answers_value" do
+        expect(question.inferred_check_answers_value).to eq([
+          { "condition" => { "ecstat4" => 10 }, "value" => "Prefers not to say" },
+        ])
+      end
     end
 
     context "and joint purchase" do
@@ -196,6 +226,12 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
 
       it "has expected check answers card number" do
         expect(question.check_answers_card_number).to eq(5)
+      end
+
+      it "has the correct inferred_check_answers_value" do
+        expect(question.inferred_check_answers_value).to eq([
+          { "condition" => { "ecstat5" => 10 }, "value" => "Prefers not to say" },
+        ])
       end
     end
   end
@@ -224,6 +260,12 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
       it "has expected check answers card number" do
         expect(question.check_answers_card_number).to eq(5)
       end
+
+      it "has the correct inferred_check_answers_value" do
+        expect(question.inferred_check_answers_value).to eq([
+          { "condition" => { "ecstat5" => 10 }, "value" => "Prefers not to say" },
+        ])
+      end
     end
 
     context "and joint purchase" do
@@ -248,6 +290,12 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
 
       it "has expected check answers card number" do
         expect(question.check_answers_card_number).to eq(6)
+      end
+
+      it "has the correct inferred_check_answers_value" do
+        expect(question.inferred_check_answers_value).to eq([
+          { "condition" => { "ecstat6" => 10 }, "value" => "Prefers not to say" },
+        ])
       end
     end
   end

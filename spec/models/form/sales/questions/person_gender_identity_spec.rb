@@ -61,6 +61,12 @@ RSpec.describe Form::Sales::Questions::PersonGenderIdentity, type: :model do
       it "has expected check answers card number" do
         expect(question.check_answers_card_number).to eq(2)
       end
+
+      it "has the correct inferred_check_answers_value" do
+        expect(question.inferred_check_answers_value).to eq([
+          { "condition" => { "sex2" => "R" }, "value" => "Prefers not to say" },
+        ])
+      end
     end
 
     context "and joint purchase" do
@@ -85,6 +91,12 @@ RSpec.describe Form::Sales::Questions::PersonGenderIdentity, type: :model do
 
       it "has expected check answers card number" do
         expect(question.check_answers_card_number).to eq(3)
+      end
+
+      it "has the correct inferred_check_answers_value" do
+        expect(question.inferred_check_answers_value).to eq([
+          { "condition" => { "sex3" => "R" }, "value" => "Prefers not to say" },
+        ])
       end
     end
   end
@@ -113,6 +125,12 @@ RSpec.describe Form::Sales::Questions::PersonGenderIdentity, type: :model do
       it "has expected check answers card number" do
         expect(question.check_answers_card_number).to eq(3)
       end
+
+      it "has the correct inferred_check_answers_value" do
+        expect(question.inferred_check_answers_value).to eq([
+          { "condition" => { "sex3" => "R" }, "value" => "Prefers not to say" },
+        ])
+      end
     end
 
     context "and joint purchase" do
@@ -137,6 +155,12 @@ RSpec.describe Form::Sales::Questions::PersonGenderIdentity, type: :model do
 
       it "has expected check answers card number" do
         expect(question.check_answers_card_number).to eq(4)
+      end
+
+      it "has the correct inferred_check_answers_value" do
+        expect(question.inferred_check_answers_value).to eq([
+          { "condition" => { "sex4" => "R" }, "value" => "Prefers not to say" },
+        ])
       end
     end
   end
@@ -165,6 +189,12 @@ RSpec.describe Form::Sales::Questions::PersonGenderIdentity, type: :model do
       it "has expected check answers card number" do
         expect(question.check_answers_card_number).to eq(4)
       end
+
+      it "has the correct inferred_check_answers_value" do
+        expect(question.inferred_check_answers_value).to eq([
+          { "condition" => { "sex4" => "R" }, "value" => "Prefers not to say" },
+        ])
+      end
     end
 
     context "and joint purchase" do
@@ -189,6 +219,12 @@ RSpec.describe Form::Sales::Questions::PersonGenderIdentity, type: :model do
 
       it "has expected check answers card number" do
         expect(question.check_answers_card_number).to eq(5)
+      end
+
+      it "has the correct inferred_check_answers_value" do
+        expect(question.inferred_check_answers_value).to eq([
+          { "condition" => { "sex5" => "R" }, "value" => "Prefers not to say" },
+        ])
       end
     end
   end
@@ -217,6 +253,12 @@ RSpec.describe Form::Sales::Questions::PersonGenderIdentity, type: :model do
       it "has expected check answers card number" do
         expect(question.check_answers_card_number).to eq(5)
       end
+
+      it "has the correct inferred_check_answers_value" do
+        expect(question.inferred_check_answers_value).to eq([
+          { "condition" => { "sex5" => "R" }, "value" => "Prefers not to say" },
+        ])
+      end
     end
 
     context "and joint purchase" do
@@ -241,6 +283,12 @@ RSpec.describe Form::Sales::Questions::PersonGenderIdentity, type: :model do
 
       it "has expected check answers card number" do
         expect(question.check_answers_card_number).to eq(6)
+      end
+
+      it "has the correct inferred_check_answers_value" do
+        expect(question.inferred_check_answers_value).to eq([
+          { "condition" => { "sex6" => "R" }, "value" => "Prefers not to say" },
+        ])
       end
     end
   end

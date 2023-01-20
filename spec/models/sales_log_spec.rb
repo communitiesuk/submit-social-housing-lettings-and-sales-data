@@ -30,6 +30,19 @@ RSpec.describe SalesLog, type: :model do
     end
   end
 
+  describe "#update" do
+    let(:sales_log) { FactoryBot.create(:sales_log, created_by: created_by_user) }
+    let(:validator) { sales_log._validators[nil].first }
+
+    after do
+      sales_log.update(age1: 25)
+    end
+
+    it "validates other household member details" do
+      expect(validator).to receive(:validate_household_number_of_other_members)
+    end
+  end
+
   describe "#optional_fields" do
     let(:sales_log) { build(:sales_log) }
 

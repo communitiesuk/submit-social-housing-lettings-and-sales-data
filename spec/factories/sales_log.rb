@@ -41,10 +41,10 @@ FactoryBot.define do
       wheel { 1 }
       details_known_1 { 1 }
       age3_known { 0 }
-      age3 { 40 }
+      age3 { 14 }
       details_known_2 { 1 }
       age4_known { 0 }
-      age4 { 40 }
+      age4 { 18 }
       details_known_3 { 1 }
       age5_known { 0 }
       age5 { 40 }
@@ -85,10 +85,10 @@ FactoryBot.define do
       ppcodenk { 1 }
       prevten { 1 }
       previous_la_known { 0 }
-      relat3 { "P" }
-      relat4 { "P" }
-      relat5 { "P" }
-      relat6 { "P" }
+      relat3 { "C" }
+      relat4 { "X" }
+      relat5 { "R" }
+      relat6 { "R" }
       hb { 4 }
       mortgageused { 1 }
       wchair { 1 }

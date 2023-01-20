@@ -46,4 +46,66 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       end
     end
   end
+
+  describe "#validate_pratical_completion_date_before_saledate" do
+    context "when hodate blank" do
+      let(:record) { build(:sales_log, hodate: nil) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_pratical_completion_date_before_saledate(record)
+
+        expect(record.errors).not_to be_present
+      end
+    end
+
+    context "when saledate blank" do
+      let(:record) { build(:sales_log, saledate: nil) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_pratical_completion_date_before_saledate(record)
+
+        expect(record.errors).not_to be_present
+      end
+    end
+
+    context "when saledate and hodate blank" do
+      let(:record) { build(:sales_log, hodate: nil, saledate: nil) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_pratical_completion_date_before_saledate(record)
+
+        expect(record.errors).not_to be_present
+      end
+    end
+
+    context "when hodate before saledate" do
+      let(:record) { build(:sales_log, hodate: 2.months.ago, saledate: 1.month.ago) }
+
+      it "does not add the error" do
+        sale_information_validator.validate_pratical_completion_date_before_saledate(record)
+
+        expect(record.errors).not_to be_present
+      end
+    end
+
+    context "when hodate after saledate" do
+      let(:record) { build(:sales_log, hodate: 1.month.ago, saledate: 2.months.ago) }
+
+      it "adds error" do
+        sale_information_validator.validate_pratical_completion_date_before_saledate(record)
+
+        expect(record.errors[:hodate]).to be_present
+      end
+    end
+
+    context "when hodate == saledate" do
+      let(:record) { build(:sales_log, hodate: Time.zone.parse("2023-07-01"), saledate: Time.zone.parse("2023-07-01")) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_pratical_completion_date_before_saledate(record)
+
+        expect(record.errors[:hodate]).to be_present
+      end
+    end
+  end
 end

@@ -332,8 +332,12 @@ RSpec.describe Validations::HouseholdValidations do
       record.relat2 = "P"
       record.relat3 = "P"
       household_validator.validate_household_number_of_other_members(record)
-      expect(record.errors["base"])
+      expect(record.errors["relat2"])
         .to include(match I18n.t("validations.household.relat.one_partner"))
+      expect(record.errors["relat3"])
+        .to include(match I18n.t("validations.household.relat.one_partner"))
+      expect(record.errors["relat4"])
+        .not_to include(match I18n.t("validations.household.relat.one_partner"))
     end
 
     it "expects that a tenant can have a partner" do
@@ -398,11 +402,11 @@ RSpec.describe Validations::HouseholdValidations do
         record.ecstat2 = 1
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["ecstat2"])
-          .to include(match I18n.t("validations.household.ecstat.student_16_19", person_num: 2))
+          .to include(match I18n.t("validations.household.ecstat.not_student_16_19", person_num: 2))
         expect(record.errors["age2"])
-          .to include(match I18n.t("validations.household.age.student_16_19", person_num: 2))
+          .to include(match I18n.t("validations.household.age.not_student_16_19", person_num: 2))
         expect(record.errors["relat2"])
-          .to include(match I18n.t("validations.household.relat.student_16_19", person_num: 2))
+          .to include(match I18n.t("validations.household.relat.not_student_16_19", person_num: 2))
       end
 
       it "expects that person can be a full time student" do

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Validations::Sales::SoftValidations do
-  let(:record) { FactoryBot.create(:sales_log) }
+  let(:record) { create(:sales_log) }
 
   describe "income1 min validations" do
     context "when validating soft min" do
@@ -320,6 +320,43 @@ RSpec.describe Validations::Sales::SoftValidations do
         expect(record)
           .not_to be_deposit_over_soft_max
       end
+    end
+  end
+
+  describe "hodate_more_than_3_years_before_saledate" do
+    it "when hodate not set" do
+      record.saledate = Time.zone.now
+      record.hodate = nil
+
+      expect(record).not_to be_hodate_3_years_or_more_saledate
+    end
+
+    it "when saledate not set" do
+      record.saledate = nil
+      record.hodate = Time.zone.now
+
+      expect(record).not_to be_hodate_3_years_or_more_saledate
+    end
+
+    it "when saledate and hodate not set" do
+      record.saledate = nil
+      record.hodate = nil
+
+      expect(record).not_to be_hodate_3_years_or_more_saledate
+    end
+
+    it "when 3 years or more before saledate" do
+      record.saledate = Time.zone.now
+      record.hodate = record.saledate - 4.years
+
+      expect(record).to be_hodate_3_years_or_more_saledate
+    end
+
+    it "when less than 3 years before saledate" do
+      record.saledate = Time.zone.now
+      record.hodate = 2.months.ago
+
+      expect(record).not_to be_hodate_3_years_or_more_saledate
     end
   end
 end
