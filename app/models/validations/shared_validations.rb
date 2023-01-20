@@ -89,4 +89,19 @@ module Validations::SharedValidations
       record.errors.add(question_id, I18n.t("validations.invalid_option", question: question.check_answer_label&.downcase))
     end
   end
+
+  def shared_validate_partner_count(record, max_people)
+    partner_numbers = (2..max_people).select { |n| person_is_partner?(record["relat#{n}"]) }
+    if partner_numbers.count > 1
+      partner_numbers.each do |n|
+        record.errors.add "relat#{n}", I18n.t("validations.household.relat.one_partner")
+      end
+    end
+  end
+
+private
+
+  def person_is_partner?(relationship)
+    relationship == "P"
+  end
 end
