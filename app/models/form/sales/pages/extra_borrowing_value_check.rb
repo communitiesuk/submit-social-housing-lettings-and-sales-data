@@ -10,8 +10,6 @@ class Form::Sales::Pages::ExtraBorrowingValueCheck < Form::Page
       "translation" => "soft_validations.extra_borrowing.title",
     }
     @informative_text = {
-      "translation" => "soft_validations.extra_borrowing.hint_text",
-      "arguments" => [],
     }
   end
 

@@ -418,8 +418,7 @@ en:
         title: "You told us this person is %{age} or over and not retired"
         hint_text: "The minimum expected retirement age for %{gender} in England is %{age}."
     extra_borrowing:
-      title: "You told us this doesn't include any extra borrowing"
-      hint_text: "The mortgage and deposit are higher than the purchase minus the discount"
+      title: "The mortgage and deposit are higher than the purchase minus the discount"
     pregnancy:
       title: "You told us somebody in the household is pregnant"
       no_females: "You also told us there are no female tenants living at the property."

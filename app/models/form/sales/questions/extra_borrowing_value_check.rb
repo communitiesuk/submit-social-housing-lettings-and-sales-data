@@ -18,6 +18,6 @@ class Form::Sales::Questions::ExtraBorrowingValueCheck < ::Form::Question
         },
       ],
     }
-    @header = "Are you sure this there is no extra borrowing?"
+    @header = "Are you sure there is no extra borrowing?"
   end
 end
