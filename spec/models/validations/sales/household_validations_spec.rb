@@ -48,6 +48,8 @@ RSpec.describe Validations::Sales::HouseholdValidations do
   end
 
   describe "household member validations" do
+    let(:record) { build(:sales_log) }
+
     it "validates that only 1 partner exists" do
       record.relat2 = "P"
       record.relat3 = "P"
