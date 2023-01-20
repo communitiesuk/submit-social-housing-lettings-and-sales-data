@@ -2,7 +2,6 @@ class SalesLogValidator < ActiveModel::Validator
   include Validations::Sales::HouseholdValidations
   include Validations::Sales::FinancialValidations
   include Validations::Sales::SaleInformationValidations
-
   include Validations::SharedValidations
   include Validations::LocalAuthorityValidations
 
