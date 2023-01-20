@@ -126,17 +126,43 @@ RSpec.describe Validations::Sales::HouseholdValidations do
         .to include(match I18n.t("validations.household.age.child_over_20"))
     end
 
-    it "validates that a person aged 16-19 who is a student must be a child of the buyer" do
+    it "adds errors for a person aged 16-19 who is a student but not a child of the buyer" do
       record.age2 = 18
       record.ecstat2 = "7"
       record.relat2 = "P"
       household_validator.validate_household_number_of_other_members(record)
       expect(record.errors["relat2"])
-        .to include(match I18n.t("validations.household.relat.student_16_19"))
+        .to include(match I18n.t("validations.household.relat.student_16_19.must_be_child"))
       expect(record.errors["age2"])
-        .to include(match I18n.t("validations.household.age.student_16_19"))
+        .to include(match I18n.t("validations.household.age.student_16_19.cannot_be_16_19.student_not_child"))
       expect(record.errors["ecstat2"])
-        .to include(match I18n.t("validations.household.ecstat.student_16_19"))
+        .to include(match I18n.t("validations.household.ecstat.student_16_19.cannot_be_student.16_19_not_child"))
+    end
+
+    it "adds errors for a person aged 16-19 who is a child of the buyer but not a student" do
+      record.age2 = 17
+      record.ecstat2 = "1"
+      record.relat2 = "C"
+      household_validator.validate_household_number_of_other_members(record)
+      expect(record.errors["relat2"])
+        .to include(match I18n.t("validations.household.relat.student_16_19.cannot_be_child.16_19_not_student"))
+      expect(record.errors["age2"])
+        .to include(match I18n.t("validations.household.age.student_16_19.cannot_be_16_19.child_not_student"))
+      expect(record.errors["ecstat2"])
+        .to include(match I18n.t("validations.household.ecstat.student_16_19.must_be_student"))
+    end
+
+    it "adds errors for a person who is a child of the buyer and a student but not aged 16-19" do
+      record.age2 = 14
+      record.ecstat2 = "7"
+      record.relat2 = "C"
+      household_validator.validate_household_number_of_other_members(record)
+      expect(record.errors["relat2"])
+        .to include(match I18n.t("validations.household.relat.student_16_19.cannot_be_child.student_not_16_19"))
+      expect(record.errors["age2"])
+        .to include(match I18n.t("validations.household.age.student_16_19.must_be_16_19"))
+      expect(record.errors["ecstat2"])
+        .to include(match I18n.t("validations.household.ecstat.student_16_19.cannot_be_student.child_not_16_19"))
     end
   end
 end
