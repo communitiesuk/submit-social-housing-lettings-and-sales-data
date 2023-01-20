@@ -211,7 +211,7 @@ RSpec.describe Validations::Sales::SoftValidations do
           .not_to be_extra_borrowing_expected_but_not_reported
       end
 
-      it "returns false if deposit not present" do
+      it "returns false if mortgage not present" do
         record.extrabor = 2
         record.deposit = 40_000
         record.value = 100_000
