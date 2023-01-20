@@ -107,7 +107,7 @@ class Form::Question
   end
 
   def displayed_answer_options(log, _current_user = nil)
-    answer_options.select do |_key, val|
+    answer_options().select do |_key, val|
       !val.is_a?(Hash) || !val["depends_on"] || form.depends_on_met(val["depends_on"], log)
     end
   end

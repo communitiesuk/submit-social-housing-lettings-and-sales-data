@@ -1,5 +1,4 @@
 class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
-  attr_accessor :current_user, :log
 
   def initialize(id, hsh, page)
     super
@@ -10,7 +9,7 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
     @answer_options = answer_options
   end
 
-  def answer_options
+  def answer_options(log = nil, current_user = nil)
     opts = { "" => "Select an option" }
 
     return opts unless ActiveRecord::Base.connected?
@@ -33,19 +32,13 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
   end
 
   def displayed_answer_options(log, user)
-    @current_user = user
-    @log = log
-
-    answer_options
+    answer_options(log, user)
   end
 
   def label_from_value(value, log = nil, user = nil)
-    @log = log
-    @current_user = user
-
     return unless value
 
-    answer_options[value]
+    answer_options(log, user)[value]
   end
 
   def derived?
@@ -53,8 +46,7 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
   end
 
   def hidden_in_check_answers?(log, user = nil)
-    @current_user = user
-    @current_user.nil? || !@page.routed_to?(log, user)
+    user.nil? || !@page.routed_to?(log, user)
   end
 
   def enabled

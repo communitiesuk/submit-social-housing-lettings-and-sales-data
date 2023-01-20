@@ -159,7 +159,7 @@ class Form
     questions.reject { |q| q.page.routed_to?(log, current_user) || q.derived? || callback_questions.include?(q.id) } || []
   end
 
-  def reset_not_routed_questions(log)
+  def reset_not_routed_questions(log, current_user = nil)
     enabled_questions = enabled_page_questions(log)
     enabled_question_ids = enabled_questions.map(&:id)
 

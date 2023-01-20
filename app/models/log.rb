@@ -73,10 +73,10 @@ private
     subsection_statuses.all? { |status| not_started_statuses.include?(status) }
   end
 
-  def reset_invalidated_dependent_fields!
+  def reset_invalidated_dependent_fields!(user = nil)
     return unless form
 
-    form.reset_not_routed_questions(self)
+    form.reset_not_routed_questions(self, user)
 
     reset_created_by!
   end

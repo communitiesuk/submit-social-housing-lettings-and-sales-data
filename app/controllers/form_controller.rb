@@ -96,7 +96,7 @@ private
       next unless question_params
 
       if %w[checkbox validation_override].include?(question.type)
-        question.answer_options.keys.reject { |x| x.match(/divider/) }.each do |option|
+        question.answer_options(@log, current_user).keys.reject { |x| x.match(/divider/) }.each do |option|
           result[option] = question_params.include?(option) ? 1 : 0
         end
       else
@@ -167,7 +167,7 @@ private
 
   def question_missing_response?(responses_for_page, question)
     if %w[checkbox validation_override].include?(question.type)
-      answered = question.answer_options.keys.reject { |x| x.match(/divider/) }.map do |option|
+      answered = question.answer_options(@log, current_user).keys.reject { |x| x.match(/divider/) }.map do |option|
         session["fields"][option] = @log[option] = params[@log.model_name.param_key][question.id].include?(option) ? 1 : 0
         params[@log.model_name.param_key][question.id].exclude?(option)
       end
