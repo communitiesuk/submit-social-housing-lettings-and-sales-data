@@ -66,9 +66,10 @@ RSpec.describe Validations::Sales::PropertyValidations do
 
       it "does add an error if it's a bedsit" do
         property_validator.validate_property_unit_type(record)
-        property_validator.validate_property_number_of_bedrooms(record)
+        expect(record.errors.added? :proptype, "Properties with 2 or more bedrooms cannot be bedsits").to be true
 
-        expect(record.errors).to be_present
+        property_validator.validate_property_number_of_bedrooms(record)
+        expect(record.errors.added? :beds, "Bedsits have at most one bedroom").to be true
       end
     end
   end
