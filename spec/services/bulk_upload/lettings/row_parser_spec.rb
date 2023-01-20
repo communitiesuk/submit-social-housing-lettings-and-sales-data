@@ -279,6 +279,10 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         it "returns an error" do
           expect(parser.errors[:field_103]).to be_present
         end
+
+        it "populates with correct error message" do
+          expect(parser.errors[:field_103]).to eql(["You must answer type of building"])
+        end
       end
 
       context "when unpermitted values" do
