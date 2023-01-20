@@ -179,12 +179,16 @@ class BulkUpload::Lettings::Validator
 
 private
 
+  def csv_parser
+    @csv_parser ||= BulkUpload::Lettings::CsvParser.new(path:)
+  end
+
   def row_offset
-    5
+    csv_parser.row_offset
   end
 
   def col_offset
-    1
+    csv_parser.col_offset
   end
 
   def field_number_for_attribute(attribute)
@@ -192,42 +196,27 @@ private
   end
 
   def cols
-    @cols ||= ("A".."EE").to_a
+    csv_parser.cols
   end
 
   def row_parsers
-    @row_parsers ||= body_rows.map do |row|
-      stripped_row = row[1..]
-      headers = ("field_1".."field_134").to_a
-      hash = Hash[headers.zip(stripped_row)]
-      hash[:bulk_upload] = bulk_upload
+    return @row_parsers if @row_parsers
 
-      BulkUpload::Lettings::RowParser.new(hash)
-    end
-  end
+    @row_parsers = csv_parser.row_parsers
 
-  # determine the row seperator from CSV
-  # Windows will use \r\n
-  def row_sep
-    contents = ""
-
-    File.open(path, "r") do |f|
-      contents = f.read
+    @row_parsers.each do |row_parser|
+      row_parser.bulk_upload = bulk_upload
     end
 
-    if contents[-2..] == "\r\n"
-      "\r\n"
-    else
-      "\n"
-    end
+    @row_parsers
   end
 
   def rows
-    @rows ||= CSV.read(path, row_sep:)
+    csv_parser.rows
   end
 
   def body_rows
-    rows[row_offset..]
+    csv_parser.body_rows
   end
 
   def validate_file_not_empty
