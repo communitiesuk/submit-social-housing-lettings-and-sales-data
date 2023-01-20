@@ -35,6 +35,10 @@ RSpec.describe Form::Sales::Questions::BuyersOrganisations, type: :model do
     expect(question.hint_text).to eq("Select all that apply")
   end
 
+  it "has the correct unanswered_error_message" do
+    expect(question.unanswered_error_message).to eq("At least one option must be selected of these four")
+  end
+
   it "has the correct answer_options" do
     expect(question.answer_options).to eq(
       {
