@@ -1,16 +1,22 @@
 <div class="app-card">
-  <h2 class="govuk-heading-s">Collection resources</h2>
+  <p class="govuk-body-l govuk-!-margin-bottom-3">Collection resources</p>
+  <p class="govuk-body govuk-!-margin-bottom-6">For lettings starting during 1 April 2023 - 31 March 2024 and sales completing during the same period, use the 23/24 forms.</p>
 
+  <h2 class="govuk-body-l govuk-!-margin-bottom-3">Lettings 23/24</h2>
+  <%= render DocumentListComponent.new(items: [
+    {
+      name: "Lettings log for tenants (2023/24)",
+      href: "https://core.communities.gov.uk/public/download/guides-and-manuals/2023-24%20Lettings%20paper%20form.pdf?download-format=pdf",
+      metadata: "PDF, 281 KB, 8 pages",
+    },
+  ]) %>
+
+  <h2 class="govuk-body-l govuk-!-margin-bottom-3">Lettings 22/23</h2>
   <%= render DocumentListComponent.new(items: [
     {
       name: "Lettings log for tenants (2022/23)",
       href: "https://core.communities.gov.uk/public/download/guides-and-manuals/2022-23%20Lettings%20paper%20form.pdf?download-format=pdf",
       metadata: "PDF, 654 KB, 4 pages",
-    },
-    {
-      name: "Lettings log for tenants (2021/22)",
-      href: "https://core.communities.gov.uk/public/download/guides-and-manuals/2021_22%20Lettings%20Log.pdf?download-format=pdf",
-      metadata: "PDF, 302 KB, 3 pages",
     },
   ]) %>
 </div>

@@ -28,8 +28,6 @@ RSpec.describe Form::Sales::Pages::HandoverDate, type: :model do
   end
 
   it "has the correct depends_on" do
-    expect(page.depends_on).to eq([{
-      "ownershipsch" => 1,
-    }])
+    expect(page.depends_on).to eq([{ "ownershipsch" => 1, "resale" => 2 }])
   end
 end

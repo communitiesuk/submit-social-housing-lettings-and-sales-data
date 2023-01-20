@@ -39,6 +39,9 @@
             <% row.cell(header: true, text: "Postcode", html_attributes: {
               scope: "col",
             }) %>
+            <% row.cell(header: true, text: "Name", html_attributes: {
+              scope: "col",
+            }) %>
             <% row.cell(header: true, text: "Location code", html_attributes: {
               scope: "col",
             }) %>
@@ -55,6 +58,7 @@
                                                                                else
                                                                                  location.postcode.present? ? scheme_location_check_answers_path(@scheme, location, route: "locations") : scheme_location_postcode_path(@scheme, location)
                                                                                end), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
+              <% row.cell(text: location.name) %>
               <% row.cell(text: location.id) %>
               <% row.cell(text: status_tag(location.status)) %>
               <% end %>
