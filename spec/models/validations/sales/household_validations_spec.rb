@@ -107,7 +107,6 @@ RSpec.describe Validations::Sales::HouseholdValidations do
 
       it "validates that a person with economic status 'child' must be under 16" do
         record.age2 = 21
-        record.relat2 = "C"
         record.ecstat2 = 9
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["ecstat2"])
