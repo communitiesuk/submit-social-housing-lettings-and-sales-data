@@ -86,6 +86,35 @@ RSpec.describe Validations::Sales::HouseholdValidations do
         expect(record.errors["age2"])
           .to include(match I18n.t("validations.household.age.partner_under_16"))
       end
+
+      it "validates that person's economic status must be Child" do
+        record.age2 = 14
+        record.ecstat2 = 1
+        household_validator.validate_household_number_of_other_members(record)
+        expect(record.errors["ecstat2"])
+          .to include(match I18n.t("validations.household.ecstat.child_under_16", person_num: 2))
+        expect(record.errors["age2"])
+          .to include(match I18n.t("validations.household.age.child_under_16", person_num: 2))
+      end
+
+      it "expects that person's economic status is Child" do
+        record.age2 = 14
+        record.ecstat2 = 9
+        household_validator.validate_household_number_of_other_members(record)
+        expect(record.errors["ecstat2"]).to be_empty
+        expect(record.errors["age2"]).to be_empty
+      end
+
+      it "validates that a person with economic status 'child' must be under 16" do
+        record.age2 = 21
+        record.relat2 = "C"
+        record.ecstat2 = 9
+        household_validator.validate_household_number_of_other_members(record)
+        expect(record.errors["ecstat2"])
+          .to include(match I18n.t("validations.household.ecstat.child_over_16", person_num: 2))
+        expect(record.errors["age2"])
+          .to include(match I18n.t("validations.household.age.child_over_16", person_num: 2))
+      end
     end
 
     it "validates that a person over 20 must not be a child of the buyer" do

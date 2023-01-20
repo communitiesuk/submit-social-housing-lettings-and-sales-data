@@ -13,6 +13,7 @@ module Validations::Sales::HouseholdValidations
     (2..6).each do |n|
       validate_person_age_matches_relationship(record, n)
       validate_person_age_and_relationship_matches_economic_status(record, n)
+      validate_person_age_matches_economic_status(record, n)
     end
     shared_validate_partner_count(record, 6)
   end
@@ -46,6 +47,21 @@ private
     end
   end
 
+  def validate_person_age_matches_economic_status(record, person_num)
+    age = record.public_send("age#{person_num}")
+    economic_status = record.public_send("ecstat#{person_num}")
+    return unless age && economic_status
+
+    if age < 16 && !tenant_is_economic_child?(economic_status)
+      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.child_under_16", person_num:)
+      record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_under_16", person_num:)
+    end
+    if tenant_is_economic_child?(economic_status) && age > 16
+      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.child_over_16", person_num:)
+      record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_over_16", person_num:)
+    end
+  end
+
   def person_is_partner?(relationship)
     relationship == "P"
   end
@@ -60,5 +76,9 @@ private
 
   def person_is_child?(relationship)
     relationship == "C"
+  end
+
+  def tenant_is_economic_child?(economic_status)
+    economic_status == 9
   end
 end
