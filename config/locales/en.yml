@@ -202,9 +202,9 @@ en:
       beds:
         non_positive: "Number of bedrooms has to be greater than 0"
         over_max: "Number of bedrooms cannot be more than 12"
-        bedsits_have_max_one_bedroom: "Bedsits have at most one bedroom"
+        bedsits_have_max_one_bedroom: "Bedsit bedroom maximum 1"
       proptype:
-        bedsits_have_max_one_bedroom: "Properties with 2 or more bedrooms cannot be bedsits"
+        bedsits_have_max_one_bedroom: "Bedsit maximum 1 bedroom"
       postcode:
         must_match_previous: "Buyer's last accommodation and discounted ownership postcodes must match"
 
