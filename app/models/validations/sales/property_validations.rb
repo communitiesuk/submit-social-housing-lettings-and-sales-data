@@ -7,4 +7,12 @@ module Validations::Sales::PropertyValidations
       record.errors.add :ppostcode_full, I18n.t("validations.property.postcode.must_match_previous")
     end
   end
+
+  def validate_propert_unit_type(record)
+    return if record.proptype.blank? || record.beds.blank?
+
+    unless record.proptype != 2 || record.beds <= 1
+      record.errors.add :proptype, I18n.t("validations.property.proptype.bedsits_have_max_one_bedroom")
+    end
+  end
 end
