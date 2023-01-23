@@ -1,5 +1,7 @@
 class SalesLogValidator < ActiveModel::Validator
   include Validations::Sales::HouseholdValidations
+  include Validations::Sales::PropertyValidations
+  include Validations::SharedValidations
   include Validations::Sales::FinancialValidations
   include Validations::Sales::SaleInformationValidations
   include Validations::SharedValidations
@@ -165,6 +167,10 @@ class SalesLog < Log
 
   def outright_sale?
     ownershipsch == 3
+  end
+
+  def discounted_ownership_sale?
+    ownershipsch == 2
   end
 
   def mortgage_not_used?
