@@ -5,6 +5,8 @@ class Log < ApplicationRecord
   belongs_to :managing_organisation, class_name: "Organisation", optional: true
   belongs_to :created_by, class_name: "User", optional: true
   belongs_to :updated_by, class_name: "User", optional: true
+  belongs_to :bulk_upload, optional: true
+
   before_save :update_status!
 
   STATUS = { "not_started" => 0, "in_progress" => 1, "completed" => 2 }.freeze
@@ -48,6 +50,16 @@ class Log < ApplicationRecord
 
   def collection_period_open?
     form.end_date > Time.zone.today
+  end
+
+  def blank_invalid_non_setup_fields!
+    setup_ids = form.setup_sections.flat_map(&:subsections).flat_map(&:questions).map(&:id)
+
+    errors.each do |error|
+      next if setup_ids.include?(error.attribute.to_s)
+
+      public_send("#{error.attribute}=", nil)
+    end
   end
 
 private
