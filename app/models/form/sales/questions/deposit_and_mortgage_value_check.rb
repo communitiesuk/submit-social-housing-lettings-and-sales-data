@@ -2,7 +2,7 @@ class Form::Sales::Questions::DepositAndMortgageValueCheck < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "deposit_and_mortgage_value_check"
-    @check_answer_label = "Deposit and mortgage against discount confirmation" # is this meant to come from somewhere or do I just write something sensible?
+    @check_answer_label = "Deposit and mortgage against discount confirmation"
     @header = "Are you sure? Mortgage and deposit usually equal or are more than (value - discount)"
     @type = "interruption_screen"
     @answer_options = {
