@@ -12,8 +12,9 @@ class Form::Sales::Subsections::HouseholdNeeds < ::Form::Subsection
       Form::Sales::Pages::BuyerStillServing.new(nil, nil, self),
       Form::Sales::Pages::ArmedForcesSpouse.new(nil, nil, self),
       Form::Sales::Pages::HouseholdDisability.new(nil, nil, self),
+      Form::Sales::Pages::HouseholdWheelchairCheck.new("disability_wheelchair_value_check", nil, self),
       Form::Sales::Pages::HouseholdWheelchair.new(nil, nil, self),
-      Form::Sales::Pages::HouseholdWheelchairCheck.new("wheelchair_check", nil, self),
+      Form::Sales::Pages::HouseholdWheelchairCheck.new("wheelchair_value_check", nil, self),
     ]
   end
 end
