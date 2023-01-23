@@ -16,14 +16,17 @@ RSpec.describe Form::Sales::Subsections::DiscountedOwnershipScheme, type: :model
       %w[
         living_before_purchase_discounted_ownership
         about_price_rtb
+        extra_borrowing_value_check
         about_price_not_rtb
         purchase_price_discounted_ownership
         mortgage_used_discounted_ownership
         mortgage_amount_discounted_ownership
+        extra_borrowing_value_check
         mortgage_lender_discounted_ownership
         mortgage_lender_other_discounted_ownership
         mortgage_length_discounted_ownership
         extra_borrowing_discounted_ownership
+        extra_borrowing_value_check
         about_deposit_discounted_ownership
         extra_borrowing_value_check
         discounted_ownership_deposit_value_check
