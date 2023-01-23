@@ -111,7 +111,7 @@ private
   def tenant_is_economic_child?(economic_status)
     economic_status == 9
   end
-  
+
   def ages_unknown_or_under_64?(record, person_indexes)
     person_indexes.all? { |person_num| record["age#{person_num}"].present? && record["age#{person_num}"] < 64 || record["age#{person_num}_known"] == 1 }
   end
