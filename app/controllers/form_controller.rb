@@ -6,7 +6,7 @@ class FormController < ApplicationController
 
   def submit_form
     if @log
-      @page = @log.form.get_page(params[@log.model_name.param_key][:page])
+      @page = form.get_page(params[@log.model_name.param_key][:page])
       responses_for_page = responses_for_page(@page)
       mandatory_questions_with_no_response = mandatory_questions_with_no_response(responses_for_page)
 
@@ -30,7 +30,7 @@ class FormController < ApplicationController
   def check_answers
     if @log
       current_url = request.env["PATH_INFO"]
-      subsection = @log.form.get_subsection(current_url.split("/")[-2])
+      subsection = form.get_subsection(current_url.split("/")[-2])
       render "form/check_answers", locals: { subsection:, current_user: }
     else
       render_not_found
@@ -49,8 +49,8 @@ class FormController < ApplicationController
     if @log
       restore_error_field_values
       page_id = request.path.split("/")[-1].underscore
-      @page = @log.form.get_page(page_id)
-      @subsection = @log.form.subsection_for_page(@page)
+      @page = form.get_page(page_id)
+      @subsection = form.subsection_for_page(@page)
       if @page.routed_to?(@log, current_user)
         render "form/page"
       else
@@ -71,7 +71,7 @@ private
     end
     if session["fields"]
       session["fields"].each do |field, value|
-        if @log.form.get_question(field, @log)&.type != "date" && @log.respond_to?(field)
+        if form.get_question(field, @log)&.type != "date" && @log.respond_to?(field)
           @log[field] = value
         end
       end
