@@ -17,6 +17,10 @@ RSpec.describe Validations::Sales::FinancialValidations do
             financial_validator.validate_income1(record)
             expect(record.errors["income1"])
                 .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 80_000))
+            expect(record.errors["ecstat1"])
+                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 80_000))
+            expect(record.errors["ownershipsch"])
+                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 80_000))
           end
         end
 
@@ -25,6 +29,8 @@ RSpec.describe Validations::Sales::FinancialValidations do
           record.ecstat1 = 1
           financial_validator.validate_income1(record)
           expect(record.errors["income1"]).to be_empty
+          expect(record.errors["ecstat1"]).to be_empty
+          expect(record.errors["ownershipsch"]).to be_empty
         end
       end
 
@@ -41,6 +47,10 @@ RSpec.describe Validations::Sales::FinancialValidations do
             financial_validator.validate_income1(record)
             expect(record.errors["income1"])
                 .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 90_000))
+            expect(record.errors["ecstat1"])
+                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 90_000))
+            expect(record.errors["ownershipsch"])
+                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 90_000))
           end
         end
 
@@ -49,6 +59,8 @@ RSpec.describe Validations::Sales::FinancialValidations do
           record.ecstat1 = 1
           financial_validator.validate_income1(record)
           expect(record.errors["income1"]).to be_empty
+          expect(record.errors["ecstat1"]).to be_empty
+          expect(record.errors["ownershipsch"]).to be_empty
         end
       end
     end
