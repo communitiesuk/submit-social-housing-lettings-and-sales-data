@@ -159,6 +159,5 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
         expect(record.errors).to be_present
       end
     end
-
   end
 end
