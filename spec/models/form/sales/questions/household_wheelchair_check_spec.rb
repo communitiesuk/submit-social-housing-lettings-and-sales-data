@@ -43,6 +43,6 @@ RSpec.describe Form::Sales::Questions::HouseholdWheelchairCheck, type: :model do
   end
 
   it "has the correct hidden_in_check_answers" do
-    expect(question.hidden_in_check_answers).to eq({ "depends_on" => [{ "wheel_value_check" => 0 }, { "wheel_value_check" => 1 }] })
+    expect(question.hidden_in_check_answers).to be true
   end
 end
