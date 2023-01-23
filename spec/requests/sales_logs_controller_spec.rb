@@ -61,6 +61,31 @@ RSpec.describe SalesLogsController, type: :request do
           expect(response).to have_http_status(:unauthorized)
         end
       end
+
+      context "with a request containing invalid json parameters" do
+        let(:params) do
+          {
+            "saledate": Date.new(1, 1, 1),
+            "purchid": "1",
+            "ownershipsch": 1,
+            "type": 2,
+            "jointpur": 1,
+            "jointmore": 1,
+            "beds": 2,
+            "proptype": 2,
+          }
+        end
+
+        before do
+          post "/sales-logs", headers:, params: params.to_json
+        end
+
+        it "validates sales log parameters" do
+          json_response = JSON.parse(response.body)
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(json_response["errors"]).to match_array([["beds", ["Bedsit bedroom maximum 1"]], ["proptype", ["Bedsit maximum 1 bedroom"]]])
+        end
+      end
     end
 
     context "when UI" do
