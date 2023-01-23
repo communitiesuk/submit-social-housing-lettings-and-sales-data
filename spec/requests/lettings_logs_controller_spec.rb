@@ -400,6 +400,55 @@ RSpec.describe LettingsLogsController, type: :request do
               expect(page).not_to have_link(lettings_log_2022.id.to_s)
             end
           end
+
+          context "with bulk_upload_id filter" do
+            context "with bulk upload that belongs to current user" do
+              let(:organisation) { create(:organisation) }
+
+              let(:user) { create(:user, organisation:) }
+              let(:bulk_upload) { create(:bulk_upload, user:) }
+
+              let!(:included_log) { create(:lettings_log, bulk_upload:, owning_organisation: organisation) }
+              let!(:excluded_log) { create(:lettings_log, owning_organisation: organisation) }
+
+              it "returns logs only associated with the bulk upload" do
+                get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
+
+                expect(page).to have_content(included_log.id)
+                expect(page).not_to have_content(excluded_log.id)
+              end
+
+              it "displays filter" do
+                get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
+                expect(page).to have_content("With logs from bulk upload")
+              end
+            end
+
+            context "with bulk upload that belongs to another user" do
+              let(:organisation) { create(:organisation) }
+
+              let(:user) { create(:user, organisation:) }
+              let(:other_user) { create(:user, organisation:) }
+              let(:bulk_upload) { create(:bulk_upload, user: other_user) }
+
+              let!(:excluded_log) { create(:lettings_log, bulk_upload:, owning_organisation: organisation) }
+              let!(:also_excluded_log) { create(:lettings_log, owning_organisation: organisation) }
+
+              it "does not return any logs" do
+                get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
+
+                expect(page).not_to have_content(excluded_log.id)
+                expect(page).not_to have_content(also_excluded_log.id)
+              end
+            end
+          end
+
+          context "without bulk_upload_id" do
+            it "does not display filter" do
+              get "/lettings-logs"
+              expect(page).not_to have_content("With logs from bulk upload")
+            end
+          end
         end
       end
 
