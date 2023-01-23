@@ -408,6 +408,11 @@ en:
         before_deactivation: "This location was deactivated on %{date}. The reactivation date must be on or after deactivation date"
       deactivation:
         during_deactivated_period: "The location is already deactivated during this date, please enter a different date"
+    sale_information:
+      previous_property_beds: 
+        property_type_bedsit: "Bedsit bedroom maximum 1"
+      previous_property_type: 
+        property_type_bedsit: "A bedsit can not have more than 1 bedroom"
 
   soft_validations:
     net_income:
