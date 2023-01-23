@@ -129,18 +129,24 @@ private
 
   def successful_redirect_path
     if is_referrer_check_answers?
-      page_ids = @log.form.subsection_for_page(@page).pages.map(&:id)
+      page_ids = form.subsection_for_page(@page).pages.map(&:id)
       page_index = page_ids.index(@page.id)
-      next_page = @log.form.next_page(@page, @log, current_user)
-      previous_page = @log.form.previous_page(page_ids, page_index, @log, current_user)
-      if next_page.to_s.include?("value_check") || next_page == previous_page
-        return send("#{@log.class.name.underscore}_#{next_page}_path", @log, { referrer: "check_answers" })
+      next_page_id = form.next_page(@page, @log, current_user)
+      next_page = form.get_page(next_page_id)
+      previous_page = form.previous_page(page_ids, page_index, @log, current_user)
+
+      if next_page&.interruption_screen? || next_page_id == previous_page
+        return send("#{@log.class.name.underscore}_#{next_page_id}_path", @log, { referrer: "check_answers" })
       else
-        return send("#{@log.model_name.param_key}_#{@log.form.subsection_for_page(@page).id}_check_answers_path", @log)
+        return send("#{@log.model_name.param_key}_#{form.subsection_for_page(@page).id}_check_answers_path", @log)
       end
     end
-    redirect_path = @log.form.next_page_redirect_path(@page, @log, current_user)
+    redirect_path = form.next_page_redirect_path(@page, @log, current_user)
     send(redirect_path, @log)
+  end
+
+  def form
+    @log&.form
   end
 
   def mandatory_questions_with_no_response(responses_for_page)

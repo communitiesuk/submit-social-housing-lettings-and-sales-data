@@ -32,6 +32,10 @@ class Form::Page
     end
   end
 
+  def interruption_screen?
+    questions.all? { |question| question.type == "interruption_screen" }
+  end
+
 private
 
   def conditional_question_ids
