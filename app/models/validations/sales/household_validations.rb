@@ -13,6 +13,7 @@ module Validations::Sales::HouseholdValidations
     (2..6).each do |n|
       validate_person_age_matches_relationship(record, n)
       validate_person_age_and_relationship_matches_economic_status(record, n)
+      validate_person_age_matches_economic_status(record, n)
     end
     shared_validate_partner_count(record, 6)
   end
@@ -39,10 +40,41 @@ private
     relationship = record.public_send("relat#{person_num}")
     return unless age && economic_status && relationship
 
-    if age >= 16 && age <= 19 && person_is_fulltime_student?(economic_status) && !person_is_child?(relationship)
-      record.errors.add "age#{person_num}", I18n.t("validations.household.age.student_16_19")
-      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19")
-      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.student_16_19")
+    age_between_16_19 = age.between?(16, 19)
+    student = person_is_fulltime_student?(economic_status)
+    child = person_is_child?(relationship)
+
+    if age_between_16_19 && student && !child
+      record.errors.add "age#{person_num}", I18n.t("validations.household.age.student_16_19.cannot_be_16_19.student_not_child")
+      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19.cannot_be_student.16_19_not_child")
+      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.student_16_19.must_be_child")
+    end
+
+    if age_between_16_19 && !student && child
+      record.errors.add "age#{person_num}", I18n.t("validations.household.age.student_16_19.cannot_be_16_19.child_not_student")
+      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19.must_be_student")
+      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.student_16_19.cannot_be_child.16_19_not_student")
+    end
+
+    if !age_between_16_19 && student && child
+      record.errors.add "age#{person_num}", I18n.t("validations.household.age.student_16_19.must_be_16_19")
+      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19.cannot_be_student.child_not_16_19")
+      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.student_16_19.cannot_be_child.student_not_16_19")
+    end
+  end
+
+  def validate_person_age_matches_economic_status(record, person_num)
+    age = record.public_send("age#{person_num}")
+    economic_status = record.public_send("ecstat#{person_num}")
+    return unless age && economic_status
+
+    if age < 16 && !tenant_is_economic_child?(economic_status)
+      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.child_under_16", person_num:)
+      record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_under_16", person_num:)
+    end
+    if tenant_is_economic_child?(economic_status) && age > 16
+      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.child_over_16", person_num:)
+      record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_over_16", person_num:)
     end
   end
 
@@ -60,5 +92,9 @@ private
 
   def person_is_child?(relationship)
     relationship == "C"
+  end
+
+  def tenant_is_economic_child?(economic_status)
+    economic_status == 9
   end
 end

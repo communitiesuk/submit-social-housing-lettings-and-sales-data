@@ -10,5 +10,7 @@ class Form::Sales::Questions::PersonAge < Form::Sales::Questions::Person
       "value" => "Not known",
     }]
     @check_answers_card_number = person_index
+    @min = 0
+    @max = 110
   end
 end

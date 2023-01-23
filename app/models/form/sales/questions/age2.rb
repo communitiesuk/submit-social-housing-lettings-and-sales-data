@@ -11,5 +11,7 @@ class Form::Sales::Questions::Age2 < ::Form::Question
       "value" => "Not known",
     }]
     @check_answers_card_number = 2
+    @max = 110
+    @min = 0
   end
 end
