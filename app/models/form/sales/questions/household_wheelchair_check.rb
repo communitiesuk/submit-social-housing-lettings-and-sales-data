@@ -9,7 +9,16 @@ class Form::Sales::Questions::HouseholdWheelchairCheck < ::Form::Question
       "0" => { "value" => "Yes" },
       "1" => { "value" => "No" },
     }
-    @hidden_in_check_answers = true
+    @hidden_in_check_answers = {
+      "depends_on" => [
+        {
+          "wheel_value_check" => 0,
+        },
+        {
+          "wheel_value_check" => 1,
+        },
+      ],
+    }
     @page = page
   end
 end
