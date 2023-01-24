@@ -2,8 +2,8 @@ class Form::Sales::Questions::AboutPriceSharedOwnershipValueCheck < ::Form::Ques
   def initialize(id, hsh, page)
     super
     @id = "value_value_check"
-    @check_answer_label = "Deposit confirmation"
-    @header = "Are you sure? This purchase price is outside the expected range for this local authority and number of bedrooms"
+    @check_answer_label = "Purchase price confirmation"
+    @header = "Are you sure this is correct?"
     @type = "interruption_screen"
     @answer_options = {
       "0" => { "value" => "Yes" },

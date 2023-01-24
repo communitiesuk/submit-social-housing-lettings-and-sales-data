@@ -26,7 +26,7 @@ RSpec.describe Form::Sales::Pages::HandoverDateCheck, type: :model do
   it "has correct depends_on" do
     expect(page.depends_on).to eq([
       {
-        "hodate_3_years_or_more_saledate?" => true,
+        "hodate_3_years_or_more_exdate?" => true,
       },
     ])
   end

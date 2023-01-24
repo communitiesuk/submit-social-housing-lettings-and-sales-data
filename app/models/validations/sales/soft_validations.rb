@@ -43,10 +43,17 @@ module Validations::Sales::SoftValidations
     ((exdate.to_date - hodate.to_date).to_i / 365) >= 3
   end
 
-  def purchase_price_out_of_expected_range?
+  def purchase_price_below_soft_min?
     return unless value && beds && la
 
     purchase_price_range = LaPurchasePriceRange.find_by(start_year: collection_start_year, la:, bedrooms: beds)
-    purchase_price_range.present? && !value.between?(purchase_price_range.soft_min, purchase_price_range.soft_max)
+    purchase_price_range.present? && value < purchase_price_range.soft_min
+  end
+
+  def purchase_price_above_soft_max?
+    return unless value && beds && la
+
+    purchase_price_range = LaPurchasePriceRange.find_by(start_year: collection_start_year, la:, bedrooms: beds)
+    purchase_price_range.present? && value > purchase_price_range.soft_max
   end
 end
