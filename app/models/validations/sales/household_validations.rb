@@ -18,6 +18,20 @@ module Validations::Sales::HouseholdValidations
     shared_validate_partner_count(record, 6)
   end
 
+  def validate_buyers_age_for_old_persons_shared_ownership(record)
+    if record.old_persons_shared_ownership?
+      if record.joint_purchase? && ages_unknown_or_under_64?(record, [1, 2])
+        record.errors.add :age1, I18n.t("validations.household.old_persons_shared_ownership")
+        record.errors.add :age2, I18n.t("validations.household.old_persons_shared_ownership")
+        record.errors.add :type, I18n.t("validations.household.old_persons_shared_ownership")
+      end
+      if record.not_joint_purchase? && ages_unknown_or_under_64?(record, [1])
+        record.errors.add :age1, I18n.t("validations.household.old_persons_shared_ownership")
+        record.errors.add :type, I18n.t("validations.household.old_persons_shared_ownership")
+      end
+    end
+  end
+
 private
 
   def validate_person_age_matches_relationship(record, person_num)
@@ -96,5 +110,9 @@ private
 
   def tenant_is_economic_child?(economic_status)
     economic_status == 9
+  end
+
+  def ages_unknown_or_under_64?(record, person_indexes)
+    person_indexes.all? { |person_num| record["age#{person_num}"].present? && record["age#{person_num}"] < 64 || record["age#{person_num}_known"] == 1 }
   end
 end

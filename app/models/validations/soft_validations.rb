@@ -111,7 +111,7 @@ private
     gender = public_send("sex#{person_num}")
     return unless age && economic_status && gender
 
-    %w[M X].include?(gender) && tenant_is_retired?(economic_status) && age < 67 ||
+    %w[M X].include?(gender) && tenant_is_retired?(economic_status) && age < retirement_age_for_person(person_num) ||
       gender == "F" && tenant_is_retired?(economic_status) && age < 60
   end
 
@@ -122,7 +122,7 @@ private
     tenant_retired_or_prefers_not_say = tenant_is_retired?(economic_status) || tenant_prefers_not_to_say?(economic_status)
     return unless age && economic_status && gender
 
-    %w[M X].include?(gender) && !tenant_retired_or_prefers_not_say && age > 67 ||
+    %w[M X].include?(gender) && !tenant_retired_or_prefers_not_say && age > retirement_age_for_person(person_num) ||
       gender == "F" && !tenant_retired_or_prefers_not_say && age > 60
   end
 end

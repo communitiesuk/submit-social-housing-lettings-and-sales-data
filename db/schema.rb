@@ -503,6 +503,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_16_151942) do
     t.integer "hodate_check"
     t.bigint "bulk_upload_id"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
+    t.integer "retirement_value_check"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
