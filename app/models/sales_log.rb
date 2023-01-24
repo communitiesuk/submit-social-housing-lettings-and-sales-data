@@ -221,4 +221,14 @@ class SalesLog < Log
   def shared_owhership_scheme?
     ownershipsch == 1
   end
+
+  def buyers_age_for_old_persons_shared_ownership_invalid?
+    return unless old_persons_shared_ownership?
+
+    (joint_purchase? && ages_unknown_or_under_64?([1, 2])) || (not_joint_purchase? && ages_unknown_or_under_64?([1]))
+  end
+
+  def ages_unknown_or_under_64?(person_indexes)
+    person_indexes.all? { |person_num| self["age#{person_num}"].present? && self["age#{person_num}"] < 64 || self["age#{person_num}_known"] == 1 }
+  end
 end
