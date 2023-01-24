@@ -18,6 +18,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdNeeds, type: :model do
         buyer_still_serving
         armed_forces_spouse
         household_disability
+        disability_wheelchair_check
         household_wheelchair
         wheelchair_check
       ],

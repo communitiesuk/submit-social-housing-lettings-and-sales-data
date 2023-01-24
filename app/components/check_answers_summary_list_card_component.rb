@@ -13,7 +13,7 @@ class CheckAnswersSummaryListCardComponent < ViewComponent::Base
   end
 
   def get_answer_label(question)
-    question.answer_label(log).presence || "<span class=\"app-!-colour-muted\">You didn’t answer this question</span>".html_safe
+    question.answer_label(log, user).presence || "<span class=\"app-!-colour-muted\">You didn’t answer this question</span>".html_safe
   end
 
   def check_answers_card_title(question)

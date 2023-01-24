@@ -164,5 +164,178 @@ RSpec.describe Validations::Sales::HouseholdValidations do
       expect(record.errors["ecstat2"])
         .to include(match I18n.t("validations.household.ecstat.student_16_19.cannot_be_student.child_not_16_19"))
     end
+
+    context "when it is a joint purchase and both buyers are over 64" do
+      let(:record) { FactoryBot.build(:sales_log, jointpur: 1, age1: 65, age2: 66, type: 24) }
+
+      it "does not add an error" do
+        household_validator.validate_buyers_age_for_old_persons_shared_ownership(record)
+
+        expect(record.errors).not_to be_present
+      end
+    end
+
+    context "when it is a joint purchase and first buyer is over 64" do
+      let(:record) { FactoryBot.build(:sales_log, jointpur: 1, age1: 65, age2: 40, type: 24) }
+
+      it "does not add an error" do
+        household_validator.validate_buyers_age_for_old_persons_shared_ownership(record)
+
+        expect(record.errors).not_to be_present
+      end
+    end
+
+    context "when it is a joint purchase and second buyer is over 64" do
+      let(:record) { FactoryBot.build(:sales_log, jointpur: 1, age1: 43, age2: 64, type: 24) }
+
+      it "does not add an error" do
+        household_validator.validate_buyers_age_for_old_persons_shared_ownership(record)
+
+        expect(record.errors).not_to be_present
+      end
+    end
+
+    context "when it is a joint purchase and neither of the buyers are over 64" do
+      let(:record) { FactoryBot.build(:sales_log, jointpur: 1, age1: 43, age2: 33, type: 24) }
+
+      it "adds an error" do
+        household_validator.validate_buyers_age_for_old_persons_shared_ownership(record)
+
+        expect(record.errors["age1"])
+        .to include(match I18n.t("validations.household.old_persons_shared_ownership"))
+        expect(record.errors["age2"])
+        .to include(match I18n.t("validations.household.old_persons_shared_ownership"))
+        expect(record.errors["type"])
+        .to include(match I18n.t("validations.household.old_persons_shared_ownership"))
+      end
+    end
+
+    context "when it is a joint purchase and first buyer is under 64 and the second buyers' age is unknown" do
+      let(:record) { FactoryBot.build(:sales_log, jointpur: 1, age1: 43, age2_known: 1, type: 24) }
+
+      it "adds an error" do
+        household_validator.validate_buyers_age_for_old_persons_shared_ownership(record)
+
+        expect(record.errors["age1"])
+        .to include(match I18n.t("validations.household.old_persons_shared_ownership"))
+        expect(record.errors["age2"])
+        .to include(match I18n.t("validations.household.old_persons_shared_ownership"))
+        expect(record.errors["type"])
+        .to include(match I18n.t("validations.household.old_persons_shared_ownership"))
+      end
+    end
+
+    context "when it is a joint purchase and neither of the buyers ages are known" do
+      let(:record) { FactoryBot.build(:sales_log, jointpur: 1, age1_known: 1, age2_known: 1, type: 24) }
+
+      it "adds an error" do
+        household_validator.validate_buyers_age_for_old_persons_shared_ownership(record)
+
+        expect(record.errors["age1"])
+        .to include(match I18n.t("validations.household.old_persons_shared_ownership"))
+        expect(record.errors["age2"])
+        .to include(match I18n.t("validations.household.old_persons_shared_ownership"))
+        expect(record.errors["type"])
+        .to include(match I18n.t("validations.household.old_persons_shared_ownership"))
+      end
+    end
+
+    context "when it is not a joint purchase and the buyer is over 64" do
+      let(:record) { FactoryBot.build(:sales_log, jointpur: 2, age1: 70, type: 24) }
+
+      it "does not add an error" do
+        household_validator.validate_buyers_age_for_old_persons_shared_ownership(record)
+
+        expect(record.errors).not_to be_present
+      end
+    end
+
+    context "when it is not a joint purchase and the buyer is under 64" do
+      let(:record) { FactoryBot.build(:sales_log, jointpur: 2, age1: 20, type: 24) }
+
+      it "adds an error" do
+        household_validator.validate_buyers_age_for_old_persons_shared_ownership(record)
+
+        expect(record.errors["age1"])
+        .to include(match I18n.t("validations.household.old_persons_shared_ownership"))
+        expect(record.errors["age2"])
+        .to be_empty
+        expect(record.errors["type"])
+        .to include(match I18n.t("validations.household.old_persons_shared_ownership"))
+      end
+    end
+
+    context "when it is not a joint purchase and the buyers age is not known" do
+      let(:record) { FactoryBot.build(:sales_log, jointpur: 2, age1_known: 1, type: 24) }
+
+      it "adds an error" do
+        household_validator.validate_buyers_age_for_old_persons_shared_ownership(record)
+
+        expect(record.errors["age1"])
+        .to include(match I18n.t("validations.household.old_persons_shared_ownership"))
+        expect(record.errors["age2"])
+        .to be_empty
+        expect(record.errors["type"])
+        .to include(match I18n.t("validations.household.old_persons_shared_ownership"))
+      end
+    end
+  end
+
+  describe "previous postcode validations" do
+    let(:record) { build(:sales_log) }
+
+    context "with a discounted sale" do
+      before do
+        record.ownershipsch = 2
+      end
+
+      it "adds an error when previous and current postcodes are not the same" do
+        record.postcode_full = "SO32 3PT"
+        record.ppostcode_full = "DN6 7FB"
+        household_validator.validate_previous_postcode(record)
+        expect(record.errors["postcode_full"])
+          .to include(match I18n.t("validations.household.postcode.discounted_ownership"))
+        expect(record.errors["ppostcode_full"])
+          .to include(match I18n.t("validations.household.postcode.discounted_ownership"))
+      end
+
+      it "allows same postcodes" do
+        record.postcode_full = "SO32 3PT"
+        record.ppostcode_full = "SO32 3PT"
+        household_validator.validate_previous_postcode(record)
+        expect(record.errors["postcode_full"]).to be_empty
+        expect(record.errors["ppostcode_full"]).to be_empty
+      end
+
+      it "does not add an error when postcode is missing" do
+        record.postcode_full = nil
+        record.ppostcode_full = "SO32 3PT"
+        household_validator.validate_previous_postcode(record)
+        expect(record.errors["postcode_full"]).to be_empty
+        expect(record.errors["ppostcode_full"]).to be_empty
+      end
+
+      it "does not add an error when previous postcode is missing" do
+        record.postcode_full = "SO32 3PT"
+        record.ppostcode_full = nil
+        household_validator.validate_previous_postcode(record)
+        expect(record.errors["postcode_full"]).to be_empty
+        expect(record.errors["ppostcode_full"]).to be_empty
+      end
+    end
+
+    context "without a discounted sale" do
+      before do
+        record.ownershipsch = 1
+      end
+
+      it "allows different postcodes" do
+        record.postcode_full = "SO32 3PT"
+        record.ppostcode_full = "DN6 7FB"
+        household_validator.validate_previous_postcode(record)
+        expect(record.errors["postcode_full"]).to be_empty
+        expect(record.errors["ppostcode_full"]).to be_empty
+      end
+    end
   end
 end

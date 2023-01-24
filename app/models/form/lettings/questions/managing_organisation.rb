@@ -12,9 +12,14 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
 
   def answer_options
     opts = { "" => "Select an option" }
+
     return opts unless ActiveRecord::Base.connected?
     return opts unless current_user
     return opts unless log
+
+    if log.managing_organisation.present?
+      opts = opts.merge({ log.managing_organisation.id => log.managing_organisation.name })
+    end
 
     if current_user.support?
       if log.owning_organisation.holds_own_stock?
@@ -34,7 +39,10 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
     answer_options
   end
 
-  def label_from_value(value)
+  def label_from_value(value, log = nil, user = nil)
+    @log = log
+    @current_user = user
+
     return unless value
 
     answer_options[value]

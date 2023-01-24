@@ -2536,4 +2536,24 @@ RSpec.describe LettingsLog do
       end
     end
   end
+
+  describe "#blank_invalid_non_setup_fields!" do
+    context "when a setup field is invalid" do
+      subject(:model) { described_class.new(needstype: 404) }
+
+      it "does not blank it" do
+        model.valid?
+        expect { model.blank_invalid_non_setup_fields! }.not_to change(model, :needstype)
+      end
+    end
+
+    context "when a non setup field is invalid" do
+      subject(:model) { described_class.new(beds: 404) }
+
+      it "blanks it" do
+        model.valid?
+        expect { model.blank_invalid_non_setup_fields! }.to change(model, :beds)
+      end
+    end
+  end
 end

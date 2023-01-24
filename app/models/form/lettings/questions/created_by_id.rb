@@ -27,7 +27,7 @@ class Form::Lettings::Questions::CreatedById < ::Form::Question
     answer_options.select { |k, _v| user_ids.include?(k) }
   end
 
-  def label_from_value(value)
+  def label_from_value(value, _log = nil, _user = nil)
     return unless value
 
     answer_options[value]
