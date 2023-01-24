@@ -208,7 +208,7 @@
                   "check_answer_label": "Retirement age soft validation",
                   "hidden_in_check_answers": true,
                   "header": "Are you sure this person is retired?",
-                  "type": "radio",
+                  "type": "interruption_screen",
                   "answer_options": {
                     "0": {
                       "value": "Yes"
