@@ -31,6 +31,7 @@ RSpec.describe Form::Sales::Subsections::DiscountedOwnershipScheme, type: :model
         about_deposit_discounted_ownership
         extra_borrowing_deposit_value_check
         discounted_ownership_deposit_value_check
+        discounted_ownership_deposit_and_mortgage_value_check
         leasehold_charges_discounted_ownership
       ],
     )
