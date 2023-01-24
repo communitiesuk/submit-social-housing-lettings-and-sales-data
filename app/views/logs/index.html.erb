@@ -11,17 +11,22 @@
       title_id: "impacted-logs-banner",
     ) do |notification_banner| %>
         <% notification_banner.heading(text: "A scheme has changed and it has affected #{@unresolved_count} #{'log'.pluralize(@unresolved_count)}") %>
-        <div class="govuk-notification-banner__heading">
-          <%= govuk_link_to "Update logs", update_logs_lettings_logs_path, class: "govuk-notification-banner__link" %>
-        </div>
-      <% end %>
+      <div class="govuk-notification-banner__heading">
+        <%= govuk_link_to "Update logs", update_logs_lettings_logs_path, class: "govuk-notification-banner__link" %>
+      </div>
     <% end %>
-  <%= render partial: "organisations/headings", locals: current_user.support? ? { main: "Lettings logs", sub: nil } : { main: "Lettings logs", sub: current_user.organisation.name } %>
-<% elsif current_page?(controller: 'sales_logs', action: 'index') %>
-  <%= render partial: "organisations/headings", locals: current_user.support? ? { main: "Sales logs", sub: nil } : { main: "Sales logs", sub: current_user.organisation.name } %>
+  <% end %>
 <% end %>
 
-<% if @bulk_upload %>
+<% unless @bulk_upload %>
+  <%= render partial: "organisations/headings", locals: current_user.support? ? { main: "#{log_type_for_controller(controller).capitalize} logs", sub: nil } : { main: "#{log_type_for_controller(controller).capitalize} logs", sub: current_user.organisation.name } %>
+<% else %>
+  <%= render partial: "organisations/headings",
+             locals: {
+               main: "You need to fix XYZ logs from your bulk upload",
+               sub: "#{log_type_for_controller(controller).capitalize} logs (#{@bulk_upload.year_combo})",
+             } %>
+
   <div class="app-card govuk-!-margin-bottom-9">
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
