@@ -42,4 +42,10 @@ module Validations::Sales::SoftValidations
 
     ((saledate.to_date - hodate.to_date).to_i / 365) >= 3
   end
+
+  def purchase_price_out_of_expected_range?
+    return unless value
+
+    true
+  end
 end
