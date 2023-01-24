@@ -19,6 +19,5 @@ class Form::Sales::Questions::OldPersonsSharedOwnershipValueCheck < ::Form::Ques
         },
       ],
     }
-    @check_answers_card_number = 0
   end
 end
