@@ -8,11 +8,11 @@ class BulkUpload::Lettings::CsvParser
   end
 
   def row_offset
-    5
+    with_headers? ? 5 : 0
   end
 
   def col_offset
-    1
+    with_headers? ? 1 : 0
   end
 
   def cols
@@ -21,7 +21,7 @@ class BulkUpload::Lettings::CsvParser
 
   def row_parsers
     @row_parsers ||= body_rows.map do |row|
-      stripped_row = row[1..]
+      stripped_row = row[col_offset..]
       headers = ("field_1".."field_134").to_a
       hash = Hash[headers.zip(stripped_row)]
 
@@ -38,6 +38,10 @@ class BulkUpload::Lettings::CsvParser
   end
 
 private
+
+  def with_headers?
+    rows[0][0]&.match?(/\D+/)
+  end
 
   def row_sep
     "\n"

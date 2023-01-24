@@ -44,8 +44,7 @@ RSpec.describe BulkUpload::Lettings::LogCreator do
       end
 
       before do
-        5.times { file.write "\n" }
-        file.write(BulkUpload::LogToCsv.new(log:).to_csv_row)
+        file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_csv_row)
         file.rewind
       end
 

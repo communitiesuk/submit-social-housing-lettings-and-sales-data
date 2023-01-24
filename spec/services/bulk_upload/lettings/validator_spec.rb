@@ -70,8 +70,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
       let(:path) { file.path }
 
       before do
-        file.write("\r\n" * 5)
-        file.write(BulkUpload::LogToCsv.new(log:, line_ending: "\r\n").to_csv_row)
+        file.write(BulkUpload::LogToCsv.new(log:, line_ending: "\r\n", col_offset: 0).to_csv_row)
         file.rewind
       end
 

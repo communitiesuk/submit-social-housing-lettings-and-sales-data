@@ -1,14 +1,15 @@
 class BulkUpload::LogToCsv
-  attr_reader :log, :line_ending
+  attr_reader :log, :line_ending, :col_offset
 
-  def initialize(log:, line_ending: "\n")
+  def initialize(log:, line_ending: "\n", col_offset: 1)
     @log = log
     @line_ending = line_ending
+    @col_offset = col_offset
   end
 
   def to_csv_row
     [
-      nil, # 0
+      [nil] * col_offset, # 0
       log.renttype, # 1
       nil,
       nil,
@@ -154,7 +155,7 @@ class BulkUpload::LogToCsv
       log.joint,
       renewal,
       line_ending,
-    ].join(",")
+    ].flatten.join(",")
   end
 
   def renewal
