@@ -28,7 +28,6 @@ class SalesLog < Log
   before_validation :process_previous_postcode_changes!, if: :ppostcode_full_changed?
   before_validation :reset_location_fields!, unless: :postcode_known?
   before_validation :reset_previous_location_fields!, unless: :previous_postcode_known?
-  before_validation :set_mortgage_value_zero, if: :mortgage_not_used?
   before_validation :set_derived_fields!
 
   scope :filter_by_year, ->(year) { where(saledate: Time.zone.local(year.to_i, 4, 1)...Time.zone.local(year.to_i + 1, 4, 1)) }
@@ -185,10 +184,6 @@ class SalesLog < Log
 
   def mortgage_not_used?
     mortgageused == 2
-  end
-
-  def set_mortgage_value_zero
-    self.mortgage = 0
   end
 
   def process_postcode_changes!

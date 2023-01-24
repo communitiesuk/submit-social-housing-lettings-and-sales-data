@@ -140,6 +140,12 @@ RSpec.describe SalesLog, type: :model do
       expect(record_from_db["pcode1"]).to eq("W6")
       expect(record_from_db["pcode2"]).to eq("0SP")
     end
+
+    it "derives a mortgage value of 0 when mortgage is not used" do
+      sales_log.update!(mortgageused: 2)
+      record_from_db = ActiveRecord::Base.connection.execute("select mortgage from sales_logs where id=#{sales_log.id}").to_a[0]
+      expect(record_from_db["mortgage"]).to eq(0.0)
+    end
   end
 
   context "when saving addresses" do
