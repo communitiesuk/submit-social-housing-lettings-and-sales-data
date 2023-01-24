@@ -22,21 +22,24 @@
 <% end %>
 
 <div class="app-filter-layout" data-controller="filter-layout">
-  <div class="govuk-button-group app-filter-toggle govuk-!-margin-bottom-6">
-    <% if current_page?(controller: 'lettings_logs', action: 'index') %>
-      <%= govuk_button_to "Create a new lettings log", lettings_logs_path, class: "govuk-!-margin-right-6" %>
-    <% end %>
+  <% unless @bulk_upload %>
+    <div class="govuk-button-group app-filter-toggle govuk-!-margin-bottom-6">
+      <% if current_page?(controller: 'lettings_logs', action: 'index') %>
+        <%= govuk_button_to "Create a new lettings log", lettings_logs_path, class: "govuk-!-margin-right-6" %>
+      <% end %>
 
-    <% if FeatureToggle.sales_log_enabled? && current_page?(controller: 'sales_logs', action: 'index') %>
-      <%= govuk_button_to "Create a new sales log", sales_logs_path, class: "govuk-!-margin-right-6" %>
-    <% end %>
+      <% if FeatureToggle.sales_log_enabled? && current_page?(controller: 'sales_logs', action: 'index') %>
+        <%= govuk_button_to "Create a new sales log", sales_logs_path, class: "govuk-!-margin-right-6" %>
+      <% end %>
 
-    <% if FeatureToggle.bulk_upload_logs? %>
-      <%= govuk_button_link_to "Upload #{log_type_for_controller(controller)} logs in bulk", bulk_upload_path_for_controller(controller, id: "start"), secondary: true %>
-    <% end %>
-  </div>
+      <% if FeatureToggle.bulk_upload_logs? %>
+        <%= govuk_button_link_to "Upload #{log_type_for_controller(controller)} logs in bulk", bulk_upload_path_for_controller(controller, id: "start"), secondary: true %>
+      <% end %>
+    </div>
+  <% end %>
 
   <%= render partial: "log_filters" %>
+
   <div class="app-filter-layout__content">
     <%= render SearchComponent.new(current_user:, search_label: "Search by log ID, tenant code, property reference or postcode", value: @searched) %>
     <%= govuk_section_break(visible: true, size: "m") %>

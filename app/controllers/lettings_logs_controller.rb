@@ -4,6 +4,8 @@ class LettingsLogsController < LogsController
   before_action :set_session_filters, if: :current_user
 
   def index
+    extract_bulk_upload_from_session_filters
+
     respond_to do |format|
       format.html do
         all_logs = current_user.lettings_logs
@@ -108,6 +110,11 @@ class LettingsLogsController < LogsController
   end
 
 private
+
+  def extract_bulk_upload_from_session_filters
+    id = ((@session_filters["bulk_upload_id"] || []).reject(&:blank?))[0]
+    @bulk_upload = current_user.bulk_uploads.find_by(id:)
+  end
 
   def permitted_log_params
     params.require(:lettings_log).permit(LettingsLog.editable_fields)

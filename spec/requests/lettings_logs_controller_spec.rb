@@ -422,6 +422,11 @@ RSpec.describe LettingsLogsController, type: :request do
                 get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
                 expect(page).to have_content("With logs from bulk upload")
               end
+
+              it "hides button to create a new log" do
+                get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
+                expect(page).not_to have_content("Create a new lettings log")
+              end
             end
 
             context "with bulk upload that belongs to another user" do
@@ -447,6 +452,11 @@ RSpec.describe LettingsLogsController, type: :request do
             it "does not display filter" do
               get "/lettings-logs"
               expect(page).not_to have_content("With logs from bulk upload")
+            end
+
+            it "displays button to create a new log" do
+              get "/lettings-logs"
+              expect(page).to have_content("Create a new lettings log")
             end
           end
         end
