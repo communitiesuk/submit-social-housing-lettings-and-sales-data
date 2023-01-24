@@ -66,7 +66,7 @@ FactoryBot.define do
       sex5 { "X" }
       sex6 { "X" }
       mortgage { 20_000 }
-      ecstat3 { 10 }
+      ecstat3 { 9 }
       ecstat4 { 3 }
       ecstat5 { 2 }
       ecstat6 { 1 }

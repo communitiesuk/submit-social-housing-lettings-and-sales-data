@@ -32,6 +32,14 @@ RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
     expect(question.hint_text).to be_nil
   end
 
+  it "has the correct min" do
+    expect(question.min).to eq(0)
+  end
+
+  it "has the correct max" do
+    expect(question.max).to eq(110)
+  end
+
   context "with not a joint purchase" do
     context "and person 1" do
       let(:person_index) { 2 }

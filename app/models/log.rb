@@ -5,6 +5,8 @@ class Log < ApplicationRecord
   belongs_to :managing_organisation, class_name: "Organisation", optional: true
   belongs_to :created_by, class_name: "User", optional: true
   belongs_to :updated_by, class_name: "User", optional: true
+  belongs_to :bulk_upload, optional: true
+
   before_save :update_status!
 
   STATUS = { "not_started" => 0, "in_progress" => 1, "completed" => 2 }.freeze
@@ -50,7 +52,38 @@ class Log < ApplicationRecord
     form.end_date > Time.zone.today
   end
 
+  def blank_invalid_non_setup_fields!
+    setup_ids = form.setup_sections.flat_map(&:subsections).flat_map(&:questions).map(&:id)
+
+    errors.each do |error|
+      next if setup_ids.include?(error.attribute.to_s)
+
+      public_send("#{error.attribute}=", nil)
+    end
+  end
+
+  (1..8).each do |person_num|
+    define_method("retirement_age_for_person_#{person_num}") do
+      retirement_age_for_person(person_num)
+    end
+
+    define_method("plural_gender_for_person_#{person_num}") do
+      plural_gender_for_person(person_num)
+    end
+  end
+
 private
+
+  def plural_gender_for_person(person_num)
+    gender = public_send("sex#{person_num}".to_sym)
+    return unless gender
+
+    if %w[M X].include?(gender)
+      "male and non-binary people"
+    elsif gender == "F"
+      "females"
+    end
+  end
 
   def update_status!
     self.status = if all_fields_completed? && errors.empty?

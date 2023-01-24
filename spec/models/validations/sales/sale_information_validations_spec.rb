@@ -108,4 +108,26 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       end
     end
   end
+
+  describe "#validate_previous_property_unit_type" do
+    context "when number of bedrooms is <= 1" do
+      let(:record) { FactoryBot.build(:sales_log, frombeds: 1, fromprop: 2) }
+
+      it "does not add an error if it's a bedsit" do
+        sale_information_validator.validate_previous_property_unit_type(record)
+
+        expect(record.errors).to be_empty
+      end
+    end
+
+    context "when number of bedrooms is > 1" do
+      let(:record) { FactoryBot.build(:sales_log, frombeds: 2, fromprop: 2) }
+
+      it "does add an error if it's a bedsit" do
+        sale_information_validator.validate_previous_property_unit_type(record)
+        expect(record.errors["fromprop"]).to include(I18n.t("validations.sale_information.previous_property_type.property_type_bedsit"))
+        expect(record.errors["frombeds"]).to include(I18n.t("validations.sale_information.previous_property_beds.property_type_bedsit"))
+      end
+    end
+  end
 end

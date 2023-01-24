@@ -40,6 +40,10 @@ RSpec.describe Form::Sales::Questions::PreviousBedrooms, type: :model do
   end
 
   it "has correct min" do
-    expect(question.min).to eq(0)
+    expect(question.min).to eq(1)
+  end
+
+  it "has correct max" do
+    expect(question.max).to eq(6)
   end
 end

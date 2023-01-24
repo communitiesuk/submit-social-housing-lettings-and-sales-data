@@ -1,5 +1,7 @@
 class SalesLogValidator < ActiveModel::Validator
   include Validations::Sales::HouseholdValidations
+  include Validations::Sales::PropertyValidations
+  include Validations::SharedValidations
   include Validations::Sales::FinancialValidations
   include Validations::Sales::SaleInformationValidations
   include Validations::SharedValidations
@@ -14,6 +16,7 @@ end
 class SalesLog < Log
   include DerivedVariables::SalesLogVariables
   include Validations::Sales::SoftValidations
+  include Validations::SoftValidations
 
   self.inheritance_column = :_type_disabled
 
@@ -31,6 +34,7 @@ class SalesLog < Log
   scope :search_by, ->(param) { filter_by_id(param) }
 
   OPTIONAL_FIELDS = %w[purchid].freeze
+  RETIREMENT_AGES = { "M" => 65, "F" => 60, "X" => 65 }.freeze
 
   def startdate
     saledate
@@ -167,6 +171,10 @@ class SalesLog < Log
     ownershipsch == 3
   end
 
+  def discounted_ownership_sale?
+    ownershipsch == 2
+  end
+
   def mortgage_not_used?
     mortgageused == 2
   end
@@ -174,5 +182,24 @@ class SalesLog < Log
   def process_postcode_changes!
     self.postcode_full = upcase_and_remove_whitespace(postcode_full)
     process_postcode(postcode_full, "pcodenk", "is_la_inferred", "la")
+  end
+
+  def retirement_age_for_person(person_num)
+    gender = public_send("sex#{person_num}".to_sym)
+    return unless gender
+
+    RETIREMENT_AGES[gender]
+  end
+
+  def joint_purchase?
+    jointpur == 1
+  end
+
+  def not_joint_purchase?
+    jointpur == 2
+  end
+
+  def old_persons_shared_ownership?
+    type == 24
   end
 end

@@ -15,14 +15,14 @@ class BulkUpload::Lettings::RowParser
   attribute :field_9, :integer
   attribute :field_10, :string
   attribute :field_11, :integer
-  attribute :field_12, :string
-  attribute :field_13, :string
-  attribute :field_14, :string
-  attribute :field_15, :string
-  attribute :field_16, :string
-  attribute :field_17, :string
-  attribute :field_18, :string
-  attribute :field_19, :string
+  attribute :field_12, :integer
+  attribute :field_13, :integer
+  attribute :field_14, :integer
+  attribute :field_15, :integer
+  attribute :field_16, :integer
+  attribute :field_17, :integer
+  attribute :field_18, :integer
+  attribute :field_19, :integer
   attribute :field_20, :string
   attribute :field_21, :string
   attribute :field_22, :string
@@ -663,7 +663,7 @@ private
     when 2
       0
     when nil
-      field_116 == 14 ? 1 : 0
+      rsnvac == 14 ? 1 : 0
     end
   end
 

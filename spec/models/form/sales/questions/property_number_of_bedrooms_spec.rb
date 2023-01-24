@@ -24,7 +24,7 @@ RSpec.describe Form::Sales::Questions::PropertyNumberOfBedrooms, type: :model do
   end
 
   it "has the correct type" do
-    expect(question.type).to eq("text")
+    expect(question.type).to eq("numeric")
   end
 
   it "is not marked as derived" do
@@ -33,5 +33,13 @@ RSpec.describe Form::Sales::Questions::PropertyNumberOfBedrooms, type: :model do
 
   it "has the correct hint_text" do
     expect(question.hint_text).to eq("A bedsit has 1 bedroom")
+  end
+
+  it "has the correct min" do
+    expect(question.min).to eq(1)
+  end
+
+  it "has the correct max" do
+    expect(question.max).to eq(9)
   end
 end

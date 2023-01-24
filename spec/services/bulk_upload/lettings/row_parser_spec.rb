@@ -377,8 +377,8 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         end
       end
 
-      context "when field_134 is null but rsnvac/field_116 is 14" do
-        let(:attributes) { { bulk_upload:, field_134: "", field_116: "14" } }
+      context "when field_134 is null but rsnvac/field_106 is 14" do
+        let(:attributes) { { bulk_upload:, field_134: "", field_106: "14" } }
 
         it "sets renewal to 1" do
           expect(parser.log.renewal).to eq(1)
