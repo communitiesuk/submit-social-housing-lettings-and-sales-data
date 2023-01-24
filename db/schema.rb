@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_16_151942) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_24_111328) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -52,6 +52,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_16_151942) do
     t.index ["data_protection_officer_id"], name: "dpo_user_id"
     t.index ["organisation_id", "data_protection_officer_id", "confirmed"], name: "data_protection_confirmations_unique", unique: true
     t.index ["organisation_id"], name: "index_data_protection_confirmations_on_organisation_id"
+  end
+
+  create_table "la_purchase_price_ranges", force: :cascade do |t|
+    t.string "la"
+    t.integer "bedrooms"
+    t.decimal "soft_min", precision: 10, scale: 2
+    t.decimal "soft_max", precision: 10, scale: 2
+    t.integer "start_year"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["start_year", "bedrooms", "la"], name: "index_la_purchase_price_ranges_on_start_year_bedrooms_la", unique: true
   end
 
   create_table "la_rent_ranges", force: :cascade do |t|
@@ -490,20 +501,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_16_151942) do
     t.integer "mortgagelender"
     t.string "mortgagelenderother"
     t.integer "mortlen"
-    t.string "pcode1"
-    t.string "pcode2"
-    t.integer "pcodenk"
-    t.string "postcode_full"
-    t.boolean "is_la_inferred"
     t.integer "extrabor"
     t.integer "hhmemb"
     t.integer "totadult"
     t.integer "totchild"
     t.integer "hhtype"
-    t.integer "hodate_check"
+    t.string "pcode1"
+    t.string "pcode2"
+    t.integer "pcodenk"
+    t.string "postcode_full"
+    t.boolean "is_la_inferred"
     t.bigint "bulk_upload_id"
-    t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.integer "retirement_value_check"
+    t.integer "hodate_check"
+    t.integer "value_value_check"
+    t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
