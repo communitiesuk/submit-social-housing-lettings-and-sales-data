@@ -427,6 +427,17 @@ RSpec.describe LettingsLogsController, type: :request do
                 get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
                 expect(page).not_to have_content("Create a new lettings log")
               end
+
+              it "displays card with help info" do
+                get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
+                expect(page).to have_content("The following logs are from your recent bulk upload")
+              end
+
+              it "displays meta info about the bulk upload" do
+                get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
+                expect(page).to have_content(bulk_upload.filename)
+                expect(page).to have_content(bulk_upload.created_at.to_fs(:govuk_date_and_time))
+              end
             end
 
             context "with bulk upload that belongs to another user" do
@@ -457,6 +468,11 @@ RSpec.describe LettingsLogsController, type: :request do
             it "displays button to create a new log" do
               get "/lettings-logs"
               expect(page).to have_content("Create a new lettings log")
+            end
+
+            it "does not display card with help info" do
+              get "/lettings-logs"
+              expect(page).not_to have_content("The following logs are from your recent bulk upload")
             end
           end
         end

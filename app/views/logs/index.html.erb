@@ -21,6 +21,24 @@
   <%= render partial: "organisations/headings", locals: current_user.support? ? { main: "Sales logs", sub: nil } : { main: "Sales logs", sub: current_user.organisation.name } %>
 <% end %>
 
+<% if @bulk_upload %>
+  <div class="app-card govuk-!-margin-bottom-9">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <p class="govuk-body-l">
+          The following logs are from your recent bulk upload. They have some incorrect or incomplete data. You’ll need to answer a few more questions for each one to mark them as complete.
+        </p>
+
+        <p class="govuk-body">
+          <strong>Bulk Upload details:</strong><br>
+          <%= @bulk_upload.filename %><br>
+          Uploaded on <%= @bulk_upload.created_at.to_fs(:govuk_date_and_time) %><br>
+        </p>
+      </div>
+    </div>
+  </div>
+<% end %>
+
 <div class="app-filter-layout" data-controller="filter-layout">
   <% unless @bulk_upload %>
     <div class="govuk-button-group app-filter-toggle govuk-!-margin-bottom-6">
