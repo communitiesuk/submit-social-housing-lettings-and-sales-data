@@ -146,7 +146,8 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       it "adds an error" do
         sale_information_validator.validate_years_living_in_property_before_purchase(record)
 
-        expect(record.errors).to be_present
+        expect(record.errors[:type]).to include(I18n.t("validations.sale_information.proplen.rent_to_buy"))
+        expect(record.errors[:proplen]).to include(I18n.t("validations.sale_information.proplen.rent_to_buy"))
       end
     end
 
@@ -156,7 +157,8 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       it "adds an error" do
         sale_information_validator.validate_years_living_in_property_before_purchase(record)
 
-        expect(record.errors).to be_present
+        expect(record.errors[:type]).to include(I18n.t("validations.sale_information.proplen.social_homebuy"))
+        expect(record.errors[:proplen]).to include(I18n.t("validations.sale_information.proplen.social_homebuy"))
       end
     end
   end

@@ -20,11 +20,11 @@ module Validations::Sales::SaleInformationValidations
 
     case record.type
     when 18
-      record.errors.add :type, "Social HomeBuy buyers should not have lived here before"
-      record.errors.add :proplen, "Social HomeBuy or Rent to Buy buyers should not have lived here before"
+      record.errors.add :type, I18n.t("validations.sale_information.proplen.social_homebuy")
+      record.errors.add :proplen, I18n.t("validations.sale_information.proplen.social_homebuy")
     when 28, 29
-      record.errors.add :type, "Rent to Buy buyers should not have lived here before"
-      record.errors.add :proplen, "Rent to Buy buyers should not have lived here before"
+      record.errors.add :type, I18n.t("validations.sale_information.proplen.rent_to_buy")
+      record.errors.add :proplen, I18n.t("validations.sale_information.proplen.rent_to_buy")
     end
   end
 end
