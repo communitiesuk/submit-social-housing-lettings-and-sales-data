@@ -37,10 +37,10 @@ module Validations::Sales::SoftValidations
     deposit > savings * 4 / 3
   end
 
-  def hodate_3_years_or_more_saledate?
-    return unless hodate && saledate
+  def hodate_3_years_or_more_exdate?
+    return unless hodate && exdate
 
-    ((saledate.to_date - hodate.to_date).to_i / 365) >= 3
+    ((exdate.to_date - hodate.to_date).to_i / 365) >= 3
   end
 
   def purchase_price_out_of_expected_range?

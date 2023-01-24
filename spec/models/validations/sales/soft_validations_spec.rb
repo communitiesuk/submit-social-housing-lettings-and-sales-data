@@ -256,40 +256,40 @@ RSpec.describe Validations::Sales::SoftValidations do
     end
   end
 
-  describe "hodate_more_than_3_years_before_saledate" do
+  describe "hodate_more_than_3_years_before_exdate" do
     it "when hodate not set" do
-      record.saledate = Time.zone.now
+      record.exdate = Time.zone.now
       record.hodate = nil
 
-      expect(record).not_to be_hodate_3_years_or_more_saledate
+      expect(record).not_to be_hodate_3_years_or_more_exdate
     end
 
-    it "when saledate not set" do
-      record.saledate = nil
+    it "when exdate not set" do
+      record.exdate = nil
       record.hodate = Time.zone.now
 
-      expect(record).not_to be_hodate_3_years_or_more_saledate
+      expect(record).not_to be_hodate_3_years_or_more_exdate
     end
 
-    it "when saledate and hodate not set" do
-      record.saledate = nil
+    it "when exdate and hodate not set" do
+      record.exdate = nil
       record.hodate = nil
 
-      expect(record).not_to be_hodate_3_years_or_more_saledate
+      expect(record).not_to be_hodate_3_years_or_more_exdate
     end
 
-    it "when 3 years or more before saledate" do
-      record.saledate = Time.zone.now
-      record.hodate = record.saledate - 4.years
+    it "when 3 years or more before exdate" do
+      record.exdate = Time.zone.now
+      record.hodate = record.exdate - 4.years
 
-      expect(record).to be_hodate_3_years_or_more_saledate
+      expect(record).to be_hodate_3_years_or_more_exdate
     end
 
-    it "when less than 3 years before saledate" do
-      record.saledate = Time.zone.now
+    it "when less than 3 years before exdate" do
+      record.exdate = Time.zone.now
       record.hodate = 2.months.ago
 
-      expect(record).not_to be_hodate_3_years_or_more_saledate
+      expect(record).not_to be_hodate_3_years_or_more_exdate
     end
   end
 

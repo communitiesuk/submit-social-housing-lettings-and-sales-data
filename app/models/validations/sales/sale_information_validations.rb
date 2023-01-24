@@ -7,7 +7,7 @@ module Validations::Sales::SaleInformationValidations
     end
   end
 
-  def validate_pratical_completion_date_before_saledate(record)
+  def validate_pratical_completion_date_before_exdate(record)
     return if record.exdate.blank? || record.hodate.blank?
 
     unless record.exdate > record.hodate
