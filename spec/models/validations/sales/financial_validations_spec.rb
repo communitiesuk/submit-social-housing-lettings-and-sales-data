@@ -53,4 +53,26 @@ RSpec.describe Validations::Sales::FinancialValidations do
       end
     end
   end
+
+  describe "#validate_cash_discount" do
+    let(:record) { FactoryBot.create(:sales_log) }
+
+    it "adds an error if the cash discount is below zero" do
+      record.cashdis = -1
+      financial_validator.validate_cash_discount(record)
+      expect(record.errors["cashdis"]).to include(match I18n.t("validations.financial.cash_discount_invalid"))
+    end
+
+    it "adds an error if the cash discount is one million or more" do
+      record.cashdis = 1_000_000
+      financial_validator.validate_cash_discount(record)
+      expect(record.errors["cashdis"]).to include(match I18n.t("validations.financial.cash_discount_invalid"))
+    end
+
+    it "does not add an error if the cash discount is in the expected range" do
+      record.cashdis = 10_000
+      financial_validator.validate_cash_discount(record)
+      expect(record.errors["cashdis"]).to be_empty
+    end
+  end
 end
