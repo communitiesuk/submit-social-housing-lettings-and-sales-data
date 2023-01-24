@@ -11,7 +11,7 @@ module Validations::Sales::PropertyValidations
   def validate_bedsit_number_of_beds(record)
     return if record.proptype.blank? || record.beds.blank?
 
-    unless record.proptype != 2 || record.beds <= 1
+    if record.proptype == 2 && record.beds > 1
       record.errors.add :proptype, I18n.t("validations.property.proptype.bedsits_have_max_one_bedroom")
       record.errors.add :beds, I18n.t("validations.property.beds.bedsits_have_max_one_bedroom")
     end
