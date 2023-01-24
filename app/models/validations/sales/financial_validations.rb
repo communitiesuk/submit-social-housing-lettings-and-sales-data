@@ -27,4 +27,12 @@ module Validations::Sales::FinancialValidations
       record.errors.add :cashdis, I18n.t("validations.financial.cash_discount_invalid")
     end
   end
+
+  def validate_percentage(record)
+    return unless record.discount
+
+    if record.discount.negative? || record.discount > 100
+      record.errors.add :discount, I18n.t("validations.financial.percentage.invalid_percentage")
+    end
+  end
 end

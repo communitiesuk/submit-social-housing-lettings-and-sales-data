@@ -99,4 +99,31 @@ RSpec.describe Validations::Sales::FinancialValidations do
       expect(record.errors["cashdis"]).to be_empty
     end
   end
+
+  describe "#validate_percentage" do
+    let(:record) { FactoryBot.create(:sales_log, ownershipsch: 2, type: 9) }
+
+    it "does not add an error when percentage discount is not yet given" do
+      financial_validator.validate_percentage(record)
+      expect(record.errors["discount"]).to be_empty
+    end
+
+    it "does not add an error when percentage discount is in correct range" do
+      record.discount = 2
+      financial_validator.validate_percentage(record)
+      expect(record.errors["discount"]).to be_empty
+    end
+
+    it "adds an error when percentage declared is below zero" do
+      record.discount = -2
+      financial_validator.validate_percentage(record)
+      expect(record.errors["discount"]).to include(match I18n.t("validations.financial.percentage.invalid_percentage"))
+    end
+
+    it "adds an error when percentage declared is above 100" do
+      record.discount = 102
+      financial_validator.validate_percentage(record)
+      expect(record.errors["discount"]).to include(match I18n.t("validations.financial.percentage.invalid_percentage"))
+    end
+  end
 end
