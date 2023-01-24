@@ -42,28 +42,68 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
       end
     end
 
-    context "when user not support and owns own stock" do
-      let(:user) { create(:user, :data_coordinator, organisation: create(:organisation, holds_own_stock: true)) }
-      let(:options) do
-        {
-          "" => "Select an option",
-          user.organisation.id => "#{user.organisation.name} (Your organisation)",
-        }
+    context "when user is not support" do
+      let(:user_org) { create(:organisation, name: "User org") }
+      let(:user) { create(:user, :data_coordinator, organisation: user_org) }
+
+      let(:owning_org_1) { create(:organisation, name: "Owning org 1") }
+      let(:owning_org_2) { create(:organisation, name: "Owning org 2") }
+      let!(:org_rel) { create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: owning_org_2) }
+      let(:log) { create(:lettings_log, owning_organisation: owning_org_1) }
+
+      context "when user's org owns stock" do
+        let(:options) do
+          {
+            "" => "Select an option",
+            owning_org_1.id => "Owning org 1",
+            user.organisation.id => "User org (Your organisation)",
+            owning_org_2.id => "Owning org 2",
+          }
+        end
+
+        it "shows current stock owner at top, followed by user's org (with hint), followed by the stock owners of the user's org" do
+          user.organisation.update!(holds_own_stock: true)
+          expect(question.displayed_answer_options(log, user)).to eq(options)
+        end
+
+        context "when the owning-managing organisation relationship is deleted" do
+          let(:options) do
+            {
+              "" => "Select an option",
+              user.organisation.id => "User org (Your organisation)",
+              owning_org_2.id => "Owning org 2",
+            }
+          end
+
+          it "doesn't remove the housing provider from the list of allowed housing providers" do
+            log.update!(owning_organisation: owning_org_2)
+            expect(question.displayed_answer_options(log, user)).to eq(options)
+            org_rel.destroy!
+            expect(question.displayed_answer_options(log, user)).to eq(options)
+          end
+        end
       end
 
-      before do
-        question.current_user = user
-      end
+      context "when user's org doesn't own stock" do
+        let(:options) do
+          {
+            "" => "Select an option",
+            owning_org_1.id => "Owning org 1",
+            owning_org_2.id => "Owning org 2",
+          }
+        end
 
-      it "shows stock owners with own org at the top" do
-        expect(question.answer_options).to eq(options)
+        it "shows current stock owner at top, followed by the stock owners of the user's org" do
+          user.organisation.update!(holds_own_stock: false)
+          expect(question.displayed_answer_options(log, user)).to eq(options)
+        end
       end
     end
 
-    context "when user support" do
-      before do
-        question.current_user = create(:user, :support)
-      end
+    context "when user is support" do
+      let(:user) { create(:user, :support) }
+
+      let(:log) { create(:lettings_log) }
 
       let(:expected_opts) do
         Organisation.all.each_with_object(options) do |organisation, hsh|
@@ -73,7 +113,7 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
       end
 
       it "shows all orgs" do
-        expect(question.answer_options).to eq(expected_opts)
+        expect(question.displayed_answer_options(log, user)).to eq(expected_opts)
       end
     end
   end

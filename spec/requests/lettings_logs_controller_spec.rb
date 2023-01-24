@@ -143,6 +143,64 @@ RSpec.describe LettingsLogsController, type: :request do
         expect(whodunnit_actor).to be_a(User)
         expect(whodunnit_actor.id).to eq(user.id)
       end
+
+      context "when creating a new log" do
+        context "when the user is support" do
+          let(:organisation) { FactoryBot.create(:organisation) }
+          let(:support_user) { FactoryBot.create(:user, :support, organisation:) }
+
+          before do
+            allow(support_user).to receive(:need_two_factor_authentication?).and_return(false)
+            sign_in support_user
+            post "/lettings-logs", headers:
+          end
+
+          it "sets the managing org and stock-owning org as nil" do
+            created_id = response.location.match(/[0-9]+/)[0]
+            lettings_log = LettingsLog.find_by(id: created_id)
+            expect(lettings_log.owning_organisation).to eq(nil)
+            expect(lettings_log.managing_organisation).to eq(nil)
+          end
+        end
+
+        context "when the user is not support" do
+          context "when the user's org holds stock" do
+            let(:organisation) { FactoryBot.create(:organisation, name: "User org", holds_own_stock: true) }
+            let(:user) { FactoryBot.create(:user, :data_coordinator, organisation:) }
+
+            before do
+              RequestHelper.stub_http_requests
+              sign_in user
+              post "/lettings-logs", headers:
+            end
+
+            it "sets the managing org and stock-owning org as the user's org" do
+              created_id = response.location.match(/[0-9]+/)[0]
+              lettings_log = LettingsLog.find_by(id: created_id)
+              expect(lettings_log.owning_organisation.name).to eq("User org")
+              expect(lettings_log.managing_organisation.name).to eq("User org")
+            end
+          end
+
+          context "when the user's org doesn't hold stock" do
+            let(:organisation) { FactoryBot.create(:organisation, name: "User org", holds_own_stock: false) }
+            let(:user) { FactoryBot.create(:user, :data_coordinator, organisation:) }
+
+            before do
+              RequestHelper.stub_http_requests
+              sign_in user
+              post "/lettings-logs", headers:
+            end
+
+            it "sets the managing org as the user's org but the stock-owning org as nil" do
+              created_id = response.location.match(/[0-9]+/)[0]
+              lettings_log = LettingsLog.find_by(id: created_id)
+              expect(lettings_log.owning_organisation).to eq(nil)
+              expect(lettings_log.managing_organisation.name).to eq("User org")
+            end
+          end
+        end
+      end
     end
   end
 
