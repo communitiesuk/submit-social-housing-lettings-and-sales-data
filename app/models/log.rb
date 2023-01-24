@@ -28,10 +28,19 @@ class Log < ApplicationRecord
 
   def collection_start_year
     return @start_year if @start_year
-    return unless startdate
 
-    window_end_date = Time.zone.local(startdate.year, 4, 1)
-    @start_year = startdate < window_end_date ? startdate.year - 1 : startdate.year
+    if lettings?
+      return unless startdate
+
+      log_start_date = startdate
+    else
+      return unless saledate
+
+      log_start_date = saledate
+    end
+
+    window_end_date = Time.zone.local(log_start_date.year, 4, 1)
+    @start_year = log_start_date < window_end_date ? log_start_date.year - 1 : log_start_date.year
   end
 
   def lettings?

@@ -510,7 +510,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_24_111328) do
     t.string "postcode_full"
     t.boolean "is_la_inferred"
     t.integer "hodate_check"
-    t.integer "extrabor_value_check"
     t.integer "value_value_check"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"

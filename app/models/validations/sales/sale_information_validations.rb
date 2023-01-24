@@ -8,9 +8,9 @@ module Validations::Sales::SaleInformationValidations
   end
 
   def validate_pratical_completion_date_before_saledate(record)
-    return if record.saledate.blank? || record.hodate.blank?
+    return if record.exdate.blank? || record.hodate.blank?
 
-    unless record.saledate > record.hodate
+    unless record.exdate > record.hodate
       record.errors.add :hodate, "Practical completion or handover date must be before exchange date"
     end
   end

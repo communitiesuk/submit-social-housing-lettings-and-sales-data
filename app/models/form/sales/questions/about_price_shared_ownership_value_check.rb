@@ -3,7 +3,7 @@ class Form::Sales::Questions::AboutPriceSharedOwnershipValueCheck < ::Form::Ques
     super
     @id = "value_value_check"
     @check_answer_label = "Deposit confirmation"
-    @header = "Are you sure? You said purchase price was PRICE, which seems high"
+    @header = "Are you sure? This purchase price is outside the expected range for this local authority and number of bedrooms"
     @type = "interruption_screen"
     @answer_options = {
       "0" => { "value" => "Yes" },
@@ -19,9 +19,5 @@ class Form::Sales::Questions::AboutPriceSharedOwnershipValueCheck < ::Form::Ques
         },
       ],
     }
-  end
-
-  def value_is_high?(value)
-    true
   end
 end
