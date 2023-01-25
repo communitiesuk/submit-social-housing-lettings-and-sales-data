@@ -371,4 +371,61 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       end
     end
   end
+
+  describe "#validate_basic_monthly_rent" do
+    context "when within permitted bounds" do
+      let(:record) { build(:sales_log, mrent: 9998, ownershipsch: 1, type: 2) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_basic_monthly_rent(record)
+
+        expect(record.errors[:mrent]).not_to be_present
+        expect(record.errors[:type]).not_to be_present
+      end
+    end
+
+    context "when the rent is blank" do
+      let(:record) { build(:sales_log, mrent: nil, ownershipsch: 1, type: 2) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_basic_monthly_rent(record)
+
+        expect(record.errors[:mrent]).not_to be_present
+        expect(record.errors[:type]).not_to be_present
+      end
+    end
+
+    context "when the type is 24" do
+      let(:record) { build(:sales_log, mrent: 100_000, ownershipsch: 1, type: 24) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_basic_monthly_rent(record)
+
+        expect(record.errors[:mrent]).not_to be_present
+        expect(record.errors[:type]).not_to be_present
+      end
+    end
+
+    context "when the type is blank" do
+      let(:record) { build(:sales_log, mrent: 100_000, ownershipsch: 1, type: nil) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_basic_monthly_rent(record)
+
+        expect(record.errors[:mrent]).not_to be_present
+        expect(record.errors[:type]).not_to be_present
+      end
+    end
+
+    context "when higher than upper bound" do
+      let(:record) { build(:sales_log, mrent: 100_000, ownershipsch: 1, type: 2) }
+
+      it "adds an error" do
+        sale_information_validator.validate_basic_monthly_rent(record)
+
+        expect(record.errors[:mrent]).to include(I18n.t("validations.sale_information.monthly_rent.higher_than_expected"))
+        expect(record.errors[:type]).to include(I18n.t("validations.sale_information.monthly_rent.higher_than_expected"))
+      end
+    end
+  end
 end

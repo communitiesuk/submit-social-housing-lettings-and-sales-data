@@ -211,4 +211,8 @@ class SalesLog < Log
   def old_persons_shared_ownership?
     type == 24
   end
+
+  def shared_owhership_scheme?
+    ownershipsch == 1
+  end
 end
