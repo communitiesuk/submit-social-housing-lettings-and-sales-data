@@ -22,7 +22,7 @@ module Validations::Sales::SaleInformationValidations
 
     return if (record.saledate.to_date - record.exdate.to_date).to_i / 365 < 1
 
-    record.errors.add(:exdate, I18n.t("validations.sale_information.exdate.must_be_less_than_1_year_from_saledate")) if record.exdate < record.saledate
+    record.errors.add(:exdate, I18n.t("validations.sale_information.exdate.must_be_less_than_1_year_from_saledate"))
   end
 
   def validate_previous_property_unit_type(record)
