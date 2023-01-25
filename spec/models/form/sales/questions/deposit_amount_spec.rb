@@ -48,6 +48,6 @@ RSpec.describe Form::Sales::Questions::DepositAmount, type: :model do
   end
 
   it "has correct max" do
-    expect(question.max).to eq(9_999_999)
+    expect(question.max).to eq(999_999)
   end
 end

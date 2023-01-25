@@ -35,4 +35,21 @@ RSpec.describe BulkUpload::Lettings::CsvParser do
       expect(service.row_parsers[0].field_12).to eql(log.age1)
     end
   end
+
+  context "when parsing with BOM aka byte order mark" do
+    let(:file) { Tempfile.new }
+    let(:path) { file.path }
+    let(:log) { build(:lettings_log, :completed) }
+    let(:bom) { "\uFEFF" }
+
+    before do
+      file.write(bom)
+      file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_csv_row)
+      file.close
+    end
+
+    it "parses csv correctly" do
+      expect(service.row_parsers[0].field_12).to eql(log.age1)
+    end
+  end
 end
