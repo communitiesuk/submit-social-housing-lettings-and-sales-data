@@ -18,12 +18,12 @@
   <% end %>
 <% end %>
 
-<% unless @bulk_upload %>
+<% if @bulk_upload.blank? %>
   <%= render partial: "organisations/headings", locals: current_user.support? ? { main: "#{log_type_for_controller(controller).capitalize} logs", sub: nil } : { main: "#{log_type_for_controller(controller).capitalize} logs", sub: current_user.organisation.name } %>
 <% else %>
   <%= render partial: "organisations/headings",
              locals: {
-               main: "You need to fix XYZ logs from your bulk upload",
+               main: "You need to fix #{pluralize(@pagy.count, 'log')} from your bulk upload",
                sub: "#{log_type_for_controller(controller).capitalize} logs (#{@bulk_upload.year_combo})",
              } %>
 
