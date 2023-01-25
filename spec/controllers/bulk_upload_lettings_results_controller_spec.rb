@@ -13,7 +13,6 @@ RSpec.describe BulkUploadLettingsResultsController do
       render_views
 
       it "displays copy to user" do
-
         get :resume, params: { id: bulk_upload.id }
 
         expect(response.body).to include("There are no more logs that need updating")
