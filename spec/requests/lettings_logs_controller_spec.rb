@@ -458,6 +458,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
           it "includes the search on the CSV link" do
             search_term = "foo"
+            FactoryBot.create(:lettings_log, created_by: user, owning_organisation: user.organisation, tenancycode: "foo")
             get "/lettings-logs?search=#{search_term}", headers: headers, params: {}
             expect(page).to have_link("Download (CSV)", href: "/lettings-logs/csv-download?search=#{search_term}")
           end
