@@ -40,12 +40,15 @@ module Validations::Sales::SaleInformationValidations
   end
 
   def validate_discounted_ownership_value(record)
-    return unless record.mortgage && record.value && record.deposit && record.ownershipsch && (record.discount || record.grant)
+    return unless record.value && record.deposit && record.ownershipsch
+    return unless record.mortgage || record.mortgageused == 2
+    return unless record.discount || record.grant || record.type == 29
 
     discount_amount = record.discount ? record.value * record.discount / 100 : 0
     grant_amount = record.grant || 0
+    mortgage_amount = record.mortgage || 0
     value_with_discount = (record.value - discount_amount)
-    if record.mortgage + record.deposit + grant_amount != value_with_discount && record.discounted_ownership_sale?
+    if mortgage_amount + record.deposit + grant_amount != value_with_discount && record.discounted_ownership_sale?
       %i[mortgage deposit grant value discount ownershipsch].each do |field|
         record.errors.add field, I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: sprintf("%.2f", value_with_discount))
       end
