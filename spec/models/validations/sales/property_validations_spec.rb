@@ -55,7 +55,6 @@ RSpec.describe Validations::Sales::PropertyValidations do
 
       it "does not add an error if it's a bedsit" do
         property_validator.validate_bedsit_number_of_beds(record)
-
         expect(record.errors).not_to be_present
       end
     end
@@ -67,6 +66,21 @@ RSpec.describe Validations::Sales::PropertyValidations do
         property_validator.validate_bedsit_number_of_beds(record)
         expect(record.errors.added?(:proptype, "Bedsit maximum 1 bedroom")).to be true
         expect(record.errors.added?(:beds, "Bedsit bedroom maximum 1")).to be true
+      end
+
+      it "does not add an error if proptype is undefined" do
+        record.update(proptype: nil)
+        property_validator.validate_bedsit_number_of_beds(record)
+        expect(record.errors).not_to be_present
+      end
+    end
+
+    context "when number of bedrooms is undefined" do
+      let(:record) { FactoryBot.build(:sales_log, beds: nil, proptype: 2) }
+
+      it "does not add an error if it's a bedsit" do
+        property_validator.validate_bedsit_number_of_beds(record)
+        expect(record.errors).not_to be_present
       end
     end
   end
