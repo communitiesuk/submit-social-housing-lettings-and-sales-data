@@ -44,7 +44,7 @@ RSpec.describe Form::Sales::Questions::StaircaseBought, type: :model do
   end
 
   it "has correct suffix" do
-    expect(question.suffix).to eq(" percent")
+    expect(question.suffix).to eq("%")
   end
 
   it "has correct min" do
