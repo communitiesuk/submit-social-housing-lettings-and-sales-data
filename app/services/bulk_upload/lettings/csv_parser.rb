@@ -50,7 +50,7 @@ private
   def normalised_string
     return @normalised_string if @normalised_string
 
-    @normalised_string = File.read(path)
+    @normalised_string = File.read(path, encoding: "bom|utf-8")
     @normalised_string.gsub!("\r\n", "\n")
 
     @normalised_string
