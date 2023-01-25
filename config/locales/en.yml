@@ -419,6 +419,9 @@ en:
         property_type_bedsit: "Bedsit bedroom maximum 1"
       previous_property_type:
         property_type_bedsit: "A bedsit can not have more than 1 bedroom"
+      completion_exchange:
+        exchange_before_completion: "Exchange date must be before completion date"
+        completion_after_exchange: "Completion date must be after exchange date"
 
   soft_validations:
     net_income:

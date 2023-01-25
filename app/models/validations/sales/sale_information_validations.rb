@@ -19,8 +19,8 @@ module Validations::Sales::SaleInformationValidations
     return unless record.exdate && record.saledate
 
     if record.exdate > record.saledate
-      record.errors.add :exdate, "Exchange date must be before completion date"
-      record.errors.add :saledate, "Exchange date must be before completion date"
+      record.errors.add :exdate, I18n.t("validations.sale_information.completion_exchange.exchange_before_completion")
+      record.errors.add :saledate, I18n.t("validations.sale_information.completion_exchange.completion_after_exchange")
     end
   end
 
