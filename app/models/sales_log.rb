@@ -223,6 +223,12 @@ class SalesLog < Log
     type == 24
   end
 
+  def is_bedsit?
+    return if proptype.nil?
+
+    proptype == 2
+  end
+
   def shared_ownership_scheme?
     ownershipsch == 1
   end
