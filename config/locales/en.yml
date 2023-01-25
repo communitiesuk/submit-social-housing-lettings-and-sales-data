@@ -425,6 +425,7 @@ en:
         property_type_bedsit: "Bedsit bedroom maximum 1"
       previous_property_type:
         property_type_bedsit: "A bedsit can not have more than 1 bedroom"
+      discounted_ownership_value: "Mortgage, deposit, grant and cash discount total must equal £%{value_with_discount}"
 
   soft_validations:
     net_income:
