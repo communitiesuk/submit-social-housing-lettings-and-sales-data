@@ -21,11 +21,4 @@ module TabNavHelper
     role = "<span class=\"app-!-colour-muted\">#{user.role.to_s.humanize}</span>"
     [user.organisation.name, role].join("\n")
   end
-
-  def tab_items(user)
-    [
-      { name: "Details", url: details_organisation_path(user.organisation) },
-      { name: "Users", url: users_organisation_path(user.organisation) },
-    ]
-  end
 end
