@@ -1,4 +1,6 @@
 module Validations::SharedValidations
+  include ActionView::Helpers::NumberHelper
+
   def validate_other_field(record, value_other = nil, main_field = nil, other_field = nil, main_label = nil, other_label = nil)
     return unless main_field || other_field
 
@@ -19,8 +21,8 @@ module Validations::SharedValidations
       next unless record[question.id]
 
       field = question.check_answer_label || question.id
-      min = [question.prefix, question.min].join("")
-      max = [question.prefix, question.max].join("")
+      min = [question.prefix, number_with_delimiter(question.min, delimiter: ","), question.suffix].join("")
+      max = [question.prefix, number_with_delimiter(question.max, delimiter: ","), question.suffix].join("")
 
       begin
         answer = Float(record.public_send("#{question.id}_before_type_cast"))
