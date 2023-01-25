@@ -109,6 +109,82 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
     end
   end
 
+  describe "#validate_exchange_date" do
+    context "when exdate blank" do
+      let(:record) { build(:sales_log, exdate: nil) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_exchange_date(record)
+
+        expect(record.errors[:exdate]).not_to be_present
+      end
+    end
+
+    context "when saledate blank" do
+      let(:record) { build(:sales_log, saledate: nil) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_exchange_date(record)
+
+        expect(record.errors[:exdate]).not_to be_present
+      end
+    end
+
+    context "when saledate and exdate blank" do
+      let(:record) { build(:sales_log, exdate: nil, saledate: nil) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_exchange_date(record)
+
+        expect(record.errors[:exdate]).not_to be_present
+      end
+    end
+
+    context "when exdate before saledate" do
+      let(:record) { build(:sales_log, exdate: 2.months.ago, saledate: 1.month.ago) }
+
+      it "does not add the error" do
+        sale_information_validator.validate_exchange_date(record)
+
+        expect(record.errors[:exdate]).not_to be_present
+      end
+    end
+
+    context "when exdate more than 1 year before saledate" do
+      let(:record) { build(:sales_log, exdate: 2.years.ago, saledate: 1.month.ago) }
+
+      it "does not add the error" do
+        sale_information_validator.validate_exchange_date(record)
+
+        expect(record.errors[:exdate]).to eq(
+          ["Contract exchange date must be less than 1 year before completion date"],
+        )
+      end
+    end
+
+    context "when exdate after saledate" do
+      let(:record) { build(:sales_log, exdate: 1.month.ago, saledate: 2.months.ago) }
+
+      it "adds error" do
+        sale_information_validator.validate_exchange_date(record)
+
+        expect(record.errors[:exdate]).to eq(
+          ["Contract exchange date must be less than 1 year before completion date"],
+        )
+      end
+    end
+
+    context "when exdate == saledate" do
+      let(:record) { build(:sales_log, exdate: Time.zone.parse("2023-07-01"), saledate: Time.zone.parse("2023-07-01")) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_exchange_date(record)
+
+        expect(record.errors[:exdate]).not_to be_present
+      end
+    end
+  end
+
   describe "#validate_previous_property_unit_type" do
     context "when number of bedrooms is <= 1" do
       let(:record) { FactoryBot.build(:sales_log, frombeds: 1, fromprop: 2) }

@@ -301,7 +301,7 @@ en:
         child_over_20: "Answer cannot be 20 or over as the relationship is ‘child’"
         not_student_16_19: "Answer cannot be between 16 and 19 as person %{person_num} is a child of the lead tenant but is not a full-time student"
         student_16_19:
-          cannot_be_16_19: 
+          cannot_be_16_19:
             student_not_child: "Person cannot be aged 16-19 if they are a student but don't have relationship ‘child’"
             child_not_student: "Person cannot be aged 16-19 if they have relationship ‘child’ but are not a student"
           must_be_16_19: "Person must be aged 16-19 if they are a student and have relationship ‘child’"
@@ -313,8 +313,8 @@ en:
         child_under_16: "Person’s %{person_num} working situation must be ’child under 16‘ as you told us they’re under 16"
         child_over_16: "Answer cannot be ‘child under 16’ as you told us the person %{person_num} is older than 16"
         not_student_16_19: "Person’s %{person_num} working situation must be full-time student or prefers not to say as you told us they’re between 16 and 19."
-        student_16_19: 
-          cannot_be_student: 
+        student_16_19:
+          cannot_be_student:
             child_not_16_19: "Person cannot be a student if they are not aged 16-19 but have relationship ‘child’"
             16_19_not_child: "Person cannot be a student if they are aged 16-19 but don‘t have relationship ‘child’"
           must_be_student: "Person must be a student if they are aged 16-19 and have relationship ‘child’"
@@ -326,8 +326,8 @@ en:
         child_over_20: "Answer cannot be ‘child’ if the person's age is 20 or over"
         one_partner: "Number of partners cannot be greater than 1"
         not_student_16_19: "Answer cannot be ‘child’ as you told us the person %{person_num} is between 16 and 19 and is not a full-time student"
-        student_16_19: 
-          cannot_be_child: 
+        student_16_19:
+          cannot_be_child:
             student_not_16_19: "Answer cannot be ‘child’ if the person is a student but not aged 16-19"
             16_19_not_student:  "Answer cannot be ‘child’ if the person is aged 16-19 but not a student"
           must_be_child: "Answer must be ‘child’ if the person is aged 16-19 and a student"
@@ -413,9 +413,14 @@ en:
       deactivation:
         during_deactivated_period: "The location is already deactivated during this date, please enter a different date"
     sale_information:
-      previous_property_beds: 
+      exdate:
+        must_be_before_saledate:
+          Contract exchange date must be less than 1 year before completion date
+        must_be_less_than_1_year_from_saledate:
+          Contract exchange date must be less than 1 year before completion date
+      previous_property_beds:
         property_type_bedsit: "Bedsit bedroom maximum 1"
-      previous_property_type: 
+      previous_property_type:
         property_type_bedsit: "A bedsit can not have more than 1 bedroom"
 
   soft_validations:

@@ -15,6 +15,16 @@ module Validations::Sales::SaleInformationValidations
     end
   end
 
+  def validate_exchange_date(record)
+    return unless record.exdate && record.saledate
+
+    record.errors.add(:exdate, I18n.t("validations.sale_information.exdate.must_be_before_saledate")) if record.exdate > record.saledate
+
+    return if (record.saledate.to_date - record.exdate.to_date).to_i / 365 < 1
+
+    record.errors.add(:exdate, I18n.t("validations.sale_information.exdate.must_be_less_than_1_year_from_saledate")) if record.exdate < record.saledate
+  end
+
   def validate_previous_property_unit_type(record)
     return unless record.fromprop && record.frombeds
 
