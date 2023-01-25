@@ -24,8 +24,8 @@ module TabNavHelper
 
   def tab_items(user)
     [
-      { name: t("Details"), url: details_organisation_path(user.organisation) },
-      { name: t("Users"), url: users_organisation_path(user.organisation) },
+      { name: "Details", url: details_organisation_path(user.organisation) },
+      { name: "Users", url: users_organisation_path(user.organisation) },
     ]
   end
 end
