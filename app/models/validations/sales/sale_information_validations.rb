@@ -15,12 +15,17 @@ module Validations::Sales::SaleInformationValidations
     end
   end
 
-  def validate_exchange_date_before_completion_date(record)
+  def validate_exchange_and_completion_date(record)
     return unless record.exdate && record.saledate
 
     if record.exdate > record.saledate
       record.errors.add :exdate, I18n.t("validations.sale_information.completion_exchange.exchange_before_completion")
       record.errors.add :saledate, I18n.t("validations.sale_information.completion_exchange.completion_after_exchange")
+    end
+
+    if record.exdate < record.saledate - 1.year
+      record.errors.add :exdate, I18n.t("validations.sale_information.completion_exchange.exchange_after_one_year_before_completion")
+      record.errors.add :saledate, I18n.t("validations.sale_information.completion_exchange.completion_before_one_year_after_exchange")
     end
   end
 
