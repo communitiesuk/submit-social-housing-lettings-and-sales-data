@@ -47,12 +47,12 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
     end
   end
 
-  describe "#validate_pratical_completion_date_before_exdate" do
+  describe "#validate_practical_completion_date_before_exdate" do
     context "when hodate blank" do
       let(:record) { build(:sales_log, hodate: nil) }
 
       it "does not add an error" do
-        sale_information_validator.validate_pratical_completion_date_before_exdate(record)
+        sale_information_validator.validate_practical_completion_date_before_exdate(record)
 
         expect(record.errors).not_to be_present
       end
@@ -62,7 +62,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       let(:record) { build(:sales_log, exdate: nil) }
 
       it "does not add an error" do
-        sale_information_validator.validate_pratical_completion_date_before_exdate(record)
+        sale_information_validator.validate_practical_completion_date_before_exdate(record)
 
         expect(record.errors).not_to be_present
       end
@@ -72,7 +72,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       let(:record) { build(:sales_log, hodate: nil, exdate: nil) }
 
       it "does not add an error" do
-        sale_information_validator.validate_pratical_completion_date_before_exdate(record)
+        sale_information_validator.validate_practical_completion_date_before_exdate(record)
 
         expect(record.errors).not_to be_present
       end
@@ -82,7 +82,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       let(:record) { build(:sales_log, hodate: 2.months.ago, exdate: 1.month.ago) }
 
       it "does not add the error" do
-        sale_information_validator.validate_pratical_completion_date_before_exdate(record)
+        sale_information_validator.validate_practical_completion_date_before_exdate(record)
 
         expect(record.errors).not_to be_present
       end
@@ -92,7 +92,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       let(:record) { build(:sales_log, hodate: 1.month.ago, exdate: 2.months.ago) }
 
       it "adds error" do
-        sale_information_validator.validate_pratical_completion_date_before_exdate(record)
+        sale_information_validator.validate_practical_completion_date_before_exdate(record)
 
         expect(record.errors[:hodate]).to be_present
       end
@@ -102,7 +102,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       let(:record) { build(:sales_log, hodate: Time.zone.parse("2023-07-01"), exdate: Time.zone.parse("2023-07-01")) }
 
       it "does not add an error" do
-        sale_information_validator.validate_pratical_completion_date_before_exdate(record)
+        sale_information_validator.validate_practical_completion_date_before_exdate(record)
 
         expect(record.errors[:hodate]).to be_present
       end
