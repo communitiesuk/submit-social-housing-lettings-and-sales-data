@@ -148,7 +148,7 @@ unless Rails.env.test?
 
   if (Rails.env.development? || Rails.env.review?) && SalesLog.count.zero?
     SalesLog.find_or_create_by!(
-      saledate: Date.new(1, 1, 1),
+      saledate: Date.new(2023, 1, 1),
       purchid: "1",
       ownershipsch: 1,
       type: 2,
@@ -157,7 +157,7 @@ unless Rails.env.test?
     )
 
     SalesLog.find_or_create_by!(
-      saledate: Date.new(1, 1, 1),
+      saledate: Date.new(2023, 1, 1),
       purchid: "1",
       ownershipsch: 2,
       type: 8,
@@ -166,7 +166,7 @@ unless Rails.env.test?
     )
 
     SalesLog.find_or_create_by!(
-      saledate: Date.new(1, 1, 1),
+      saledate: Date.new(2023, 1, 1),
       purchid: "1",
       ownershipsch: 3,
       type: 10,
