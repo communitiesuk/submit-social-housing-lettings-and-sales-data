@@ -15,6 +15,15 @@ module Validations::Sales::SaleInformationValidations
     end
   end
 
+  def validate_exchange_date_before_completion_date(record)
+    return unless record.exdate && record.saledate
+
+    if record.exdate > record.saledate
+      record.errors.add :exdate, "Exchange date must be before completion date"
+      record.errors.add :saledate, "Exchange date must be before completion date"
+    end
+  end
+
   def validate_previous_property_unit_type(record)
     return unless record.fromprop && record.frombeds
 
