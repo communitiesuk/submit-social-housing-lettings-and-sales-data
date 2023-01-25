@@ -9,38 +9,61 @@ RSpec.describe BulkUploadLettingsResultsController do
     let(:user) { create(:user) }
     let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }
 
-    it "clears the year filter" do
-      hash = {
-        years: ["", "2022"],
-      }
+    context "when there are no logs left to resolve" do
+      render_views
 
-      session["logs_filters"] = hash.to_json
+      it "displays copy to user" do
 
-      get :resume, params: { id: bulk_upload.id }
+        get :resume, params: { id: bulk_upload.id }
 
-      expect(JSON.parse(session["logs_filters"])["years"]).to eql([""])
+        expect(response.body).to include("There are no more logs that need updating")
+      end
+
+      it "resets logs filters" do
+        get :resume, params: { id: bulk_upload.id }
+
+        expect(JSON.parse(session["logs_filters"])).to eql({})
+      end
     end
 
-    it "sets the status filter to in progress" do
-      session["logs_filters"] ||= {}.to_json
+    context "when there are logs left to resolve" do
+      before do
+        create(:lettings_log, :in_progress, bulk_upload:)
+      end
 
-      get :resume, params: { id: bulk_upload.id }
+      it "clears the year filter" do
+        hash = {
+          years: ["", "2022"],
+        }
 
-      expect(JSON.parse(session["logs_filters"])["status"]).to eql(["", "in_progress"])
-    end
+        session["logs_filters"] = hash.to_json
 
-    it "sets the user filter to all" do
-      session["logs_filters"] ||= {}.to_json
+        get :resume, params: { id: bulk_upload.id }
 
-      get :resume, params: { id: bulk_upload.id }
+        expect(JSON.parse(session["logs_filters"])["years"]).to eql([""])
+      end
 
-      expect(JSON.parse(session["logs_filters"])["user"]).to eql("all")
-    end
+      it "sets the status filter to in progress" do
+        session["logs_filters"] ||= {}.to_json
 
-    it "redirects to logs with bulk upload filter applied" do
-      get :resume, params: { id: bulk_upload.id }
+        get :resume, params: { id: bulk_upload.id }
 
-      expect(response).to redirect_to("/lettings-logs?bulk_upload_id%5B%5D=#{bulk_upload.id}")
+        expect(JSON.parse(session["logs_filters"])["status"]).to eql(["", "in_progress"])
+      end
+
+      it "sets the user filter to all" do
+        session["logs_filters"] ||= {}.to_json
+
+        get :resume, params: { id: bulk_upload.id }
+
+        expect(JSON.parse(session["logs_filters"])["user"]).to eql("all")
+      end
+
+      it "redirects to logs with bulk upload filter applied" do
+        get :resume, params: { id: bulk_upload.id }
+
+        expect(response).to redirect_to("/lettings-logs?bulk_upload_id%5B%5D=#{bulk_upload.id}")
+      end
     end
   end
 end
