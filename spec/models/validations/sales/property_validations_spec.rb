@@ -69,7 +69,7 @@ RSpec.describe Validations::Sales::PropertyValidations do
       end
 
       it "does not add an error if proptype is undefined" do
-        record.update(proptype: nil)
+        record.update!(proptype: nil)
         property_validator.validate_bedsit_number_of_beds(record)
         expect(record.errors).not_to be_present
       end
