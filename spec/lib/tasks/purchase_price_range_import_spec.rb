@@ -34,12 +34,12 @@ RSpec.describe "data_import" do
       end
 
       context "when a record already exists with a matching index of la, bedrooms and start year" do
-        let!(:purchase_price_range) { LaPurchasePriceRange.create(la: "E07000223", bedrooms: 2, soft_min: 177000, soft_max: 384000, start_year: 2022) }
+        let!(:purchase_price_range) { LaPurchasePriceRange.create(la: "E07000223", bedrooms: 2, soft_min: 177_000, soft_max: 384_000, start_year: 2022) }
 
         it "updates rent ranges if the record is matched on la, bedrooms and start year" do
           task.invoke(start_year, purchase_price_ranges_file_path)
           purchase_price_range.reload
-          expect(purchase_price_range.soft_max).to eq(384000)
+          expect(purchase_price_range.soft_max).to eq(384_000)
         end
       end
     end

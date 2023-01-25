@@ -335,11 +335,12 @@ RSpec.describe Validations::Sales::SoftValidations do
       LaPurchasePriceRange.create!(
         la: "E07000223",
         bedrooms: 2,
-        soft_min: 177000,
-        soft_max: 384000,
+        soft_min: 177_000,
+        soft_max: 384_000,
         start_year: 2022,
-        )
+      )
     end
+
     it "when value not set" do
       record.value = nil
 
@@ -360,7 +361,6 @@ RSpec.describe Validations::Sales::SoftValidations do
 
     it "when saledate not set" do
       record.saledate = nil
-
 
       expect(record).not_to be_purchase_price_out_of_soft_range
     end
