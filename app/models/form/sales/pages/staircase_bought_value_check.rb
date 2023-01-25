@@ -13,8 +13,8 @@ class Form::Sales::Pages::StaircaseBoughtValueCheck < ::Form::Page
         {
           "key" => "stairbought",
           "i18n_template" => "percentage",
-        }
-      ]
+        },
+      ],
     }
     @informative_text = {}
   end

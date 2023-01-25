@@ -99,4 +99,31 @@ RSpec.describe Validations::Sales::FinancialValidations do
       expect(record.errors["cashdis"]).to be_empty
     end
   end
+
+  describe "#validate_percentage_bought_not_greater_than_percentage_owned" do
+    let(:record) { FactoryBot.create(:sales_log) }
+
+    it "does not add an error if the percentage bought is less than the percentage owned" do
+      record.stairbought = 20
+      record.stairowned = 40
+      financial_validator.validate_percentage_bought_not_greater_than_percentage_owned(record)
+      expect(record.errors["stairbought"]).to be_empty
+      expect(record.errors["stairowned"]).to be_empty
+    end
+
+    it "does not add an error if the percentage bought is equal to the percentage owned" do
+      record.stairbought = 30
+      record.stairowned = 30
+      financial_validator.validate_percentage_bought_not_greater_than_percentage_owned(record)
+      expect(record.errors["stairbought"]).to be_empty
+      expect(record.errors["stairowned"]).to be_empty
+    end
+
+    it "adds an error to stairowned and not stairbought if the percentage bought is more than the percentage owned" do
+      record.stairbought = 50
+      record.stairowned = 40
+      financial_validator.validate_percentage_bought_not_greater_than_percentage_owned(record)
+      expect(record.errors["stairowned"]).to include(match I18n.t("validations.financial.staircasing.percentage_bought_must_be_greater_than_percentage_owned"))
+    end
+  end
 end
