@@ -423,6 +423,16 @@ RSpec.describe LettingsLogsController, type: :request do
                 expect(page).to have_content("With logs from bulk upload")
               end
 
+              it "hides collection year filter" do
+                get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
+                expect(page).not_to have_content("Collection year")
+              end
+
+              it "hides status filter" do
+                get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
+                expect(page).not_to have_content("Status")
+              end
+
               it "hides button to create a new log" do
                 get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
                 expect(page).not_to have_content("Create a new lettings log")
