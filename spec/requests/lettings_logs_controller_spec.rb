@@ -408,8 +408,8 @@ RSpec.describe LettingsLogsController, type: :request do
               let(:user) { create(:user, organisation:) }
               let(:bulk_upload) { create(:bulk_upload, user:) }
 
-              let!(:included_log) { create(:lettings_log, bulk_upload:, owning_organisation: organisation) }
-              let!(:excluded_log) { create(:lettings_log, owning_organisation: organisation) }
+              let!(:included_log) { create(:lettings_log, :in_progress, bulk_upload:, owning_organisation: organisation) }
+              let!(:excluded_log) { create(:lettings_log, :in_progress, owning_organisation: organisation) }
 
               it "returns logs only associated with the bulk upload" do
                 get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
@@ -470,6 +470,19 @@ RSpec.describe LettingsLogsController, type: :request do
 
                 expect(page).not_to have_content(excluded_log.id)
                 expect(page).not_to have_content(also_excluded_log.id)
+              end
+            end
+
+            context "when bulk upload has been resolved" do
+              let(:organisation) { create(:organisation) }
+
+              let(:user) { create(:user, organisation:) }
+              let(:bulk_upload) { create(:bulk_upload, user:) }
+
+              it "redirects to resume the bulk upload" do
+                get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
+
+                expect(response).to redirect_to(resume_bulk_upload_lettings_result_path(bulk_upload))
               end
             end
           end
