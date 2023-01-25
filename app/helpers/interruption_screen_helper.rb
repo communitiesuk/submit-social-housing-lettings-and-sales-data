@@ -10,7 +10,7 @@ module InterruptionScreenHelper
               else
                 lettings_log.public_send(argument["key"])
               end
-      translation_params[argument["i18n_template"].to_sym] = value
+      translation_params[argument["i18n_template"].to_sym] = argument["prefix"] == "£" ? "£#{ActionController::Base.helpers.number_to_currency(value, delimiter: ',', format: '%n')}" : value
     end
 
     begin
@@ -33,7 +33,7 @@ module InterruptionScreenHelper
               else
                 lettings_log.public_send(argument["key"])
               end
-      translation_params[argument["i18n_template"].to_sym] = value
+      translation_params[argument["i18n_template"].to_sym] = argument["prefix"] == "£" ? "£#{ActionController::Base.helpers.number_to_currency(value, delimiter: ',', format: '%n')}" : value
     end
     I18n.t(title_text["translation"], **translation_params).to_s
   end

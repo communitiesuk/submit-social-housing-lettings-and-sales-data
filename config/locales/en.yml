@@ -435,7 +435,7 @@ en:
         hint_text: "The maximum rent expected for this type of property in this local authority is £%{soft_max_for_period}"
     purchase_price:
       title_text: "You told us the purchase price is %{value}"
-      hint_text: "The %{min_or_max} purchase price expected for this type of property in this local authority is £%{soft_min_or_soft_max}"
+      hint_text: "The %{min_or_max} purchase price expected for this type of property in this local authority is %{soft_min_or_soft_max}"
     retirement:
       min:
         title: "You told us this person is under %{age} and retired"
