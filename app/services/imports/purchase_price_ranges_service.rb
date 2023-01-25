@@ -17,7 +17,7 @@ module Imports
             la: row["la"],
             bedrooms: row["bedrooms"],
             soft_min: row["soft_min"],
-            soft_max: row["soft_max"], },
+            soft_max: row["soft_max"] },
           unique_by: %i[start_year bedrooms la],
         )
         self.count = count + 1
