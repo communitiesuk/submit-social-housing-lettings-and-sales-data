@@ -19,17 +19,19 @@ module Validations::SharedValidations
       next unless record[question.id]
 
       field = question.check_answer_label || question.id
+      min = [question.prefix, question.min].join("")
+      max = [question.prefix, question.max].join("")
 
       begin
         answer = Float(record.public_send("#{question.id}_before_type_cast"))
       rescue ArgumentError
-        record.errors.add question.id.to_sym, I18n.t("validations.numeric.valid", field:, min: question.min, max: question.max)
+        record.errors.add question.id.to_sym, I18n.t("validations.numeric.valid", field:, min:, max:)
       end
 
       next unless answer
 
       if (question.min && question.min > answer) || (question.max && question.max < answer)
-        record.errors.add question.id.to_sym, I18n.t("validations.numeric.valid", field:, min: question.min, max: question.max)
+        record.errors.add question.id.to_sym, I18n.t("validations.numeric.valid", field:, min:, max:)
       end
     end
   end
