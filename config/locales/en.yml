@@ -417,7 +417,9 @@ en:
         property_type_bedsit: "Bedsit bedroom maximum 1"
       previous_property_type:
         property_type_bedsit: "A bedsit can not have more than 1 bedroom"
-      handover_before_exchange: "Practical completion or handover date must be before exchange date"
+      handover_exchange:
+        handover_before_exchange: "Practical completion or handover date must be before exchange date"
+        exchange_after_handover: "Exchange date must be after practical completion or handover date"
 
   soft_validations:
     net_income:

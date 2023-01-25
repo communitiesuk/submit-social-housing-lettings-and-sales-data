@@ -11,8 +11,8 @@ module Validations::Sales::SaleInformationValidations
     return if record.exdate.blank? || record.hodate.blank?
 
     unless record.exdate > record.hodate
-      record.errors.add :exdate, I18n.t("validations.sale_information.handover_before_exchange")
-      record.errors.add :hodate,I18n.t("validations.sale_information.handover_before_exchange")
+      record.errors.add :exdate, I18n.t("validations.sale_information.handover_exchange.exchange_after_handover")
+      record.errors.add :hodate,I18n.t("validations.sale_information.handover_exchange.exchange_after_handover")
     end
   end
 
