@@ -12,7 +12,7 @@ module Validations::Sales::SaleInformationValidations
 
     unless record.exdate > record.hodate
       record.errors.add :exdate, I18n.t("validations.sale_information.handover_exchange.exchange_after_handover")
-      record.errors.add :hodate,I18n.t("validations.sale_information.handover_exchange.exchange_after_handover")
+      record.errors.add :hodate, I18n.t("validations.sale_information.handover_exchange.exchange_after_handover")
     end
   end
 
