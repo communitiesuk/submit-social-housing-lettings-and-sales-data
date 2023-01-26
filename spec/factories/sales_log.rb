@@ -74,7 +74,7 @@ FactoryBot.define do
       deposit { 10_000 }
       cashdis { 1_000 }
       value { 110_000 }
-      grant { 1_000 }
+      grant { 10_000 }
       proplen { 10 }
       pregyrha { 1 }
       pregla { 1 }
