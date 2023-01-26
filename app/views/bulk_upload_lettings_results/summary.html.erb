@@ -9,29 +9,7 @@
   </div>
 </div>
 
-<%= govuk_table do |table| %>
-  <% table.caption(size: "m", text: @bulk_upload.filename) %>
-
-  <% table.head do |head| %>
-    <% head.row do |row| %>
-      <% row.cell(text: "Column", header: true) %>
-      <% row.cell(text: "Number of rows", header: true) %>
-      <% row.cell(text: "Question", header: true) %>
-      <% row.cell(text: "Error", header: true) %>
-      <% row.cell(text: "Specification", header: true) %>
-    <% end %>
-  <% end %>
-
-  <% table.body do |body| %>
-    <% body.row do |row| %>
-      <% row.cell(text: "Bulbasaur") %>
-      <% row.cell(text: "Bulbasaur") %>
-      <% row.cell(text: "Bulbasaur") %>
-      <% row.cell(text: "Bulbasaur") %>
-      <% row.cell(text: "Bulbasaur") %>
-    <% end %>
-  <% end %>
-<% end %>
+<%= render BulkUploadErrorSummaryTableComponent.new(bulk_upload: @bulk_upload) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">

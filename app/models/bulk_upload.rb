@@ -3,7 +3,8 @@ class BulkUpload < ApplicationRecord
 
   belongs_to :user
 
-  has_many :bulk_upload_errors
+  has_many :bulk_upload_errors, dependent: :destroy
+
   has_many :lettings_logs
   has_many :sales_logs
 
