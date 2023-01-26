@@ -5,6 +5,7 @@ RSpec.describe Validations::SharedValidations do
 
   let(:validator_class) { Class.new { include Validations::SharedValidations } }
   let(:record) { FactoryBot.create(:lettings_log) }
+  let(:sales_record) { FactoryBot.create(:sales_log) }
   let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
 
   describe "numeric min max validations" do
@@ -65,6 +66,24 @@ RSpec.describe Validations::SharedValidations do
         record.age6 = 45
         shared_validator.validate_numeric_min_max(record)
         expect(record.errors["age6"]).to be_empty
+      end
+    end
+
+    context "when validating percent" do
+      it "validates that % suffix is added in the error message" do
+        sales_record.stairbought = "random"
+        shared_validator.validate_numeric_min_max(sales_record)
+        expect(sales_record.errors["stairbought"])
+          .to include(match I18n.t("validations.numeric.valid", field: "Percentage bought in this staircasing transaction", min: "0 percent", max: "100 percent"))
+      end
+    end
+
+    context "when validating price" do
+      it "validates that £ prefix  and , is added in the error message" do
+        sales_record.income1 = "random"
+        shared_validator.validate_numeric_min_max(sales_record)
+        expect(sales_record.errors["income1"])
+          .to include(match I18n.t("validations.numeric.valid", field: "Buyer 1’s gross annual income", min: "£0", max: "£999,999"))
       end
     end
   end

@@ -15,4 +15,8 @@ class Form::Sales::Questions::BuyersOrganisations < ::Form::Question
     "pregla" => { "value" => "Local Authority" },
     "pregghb" => { "value" => "Help to Buy Agent" },
   }.freeze
+
+  def unanswered_error_message
+    "At least one option must be selected of these four"
+  end
 end

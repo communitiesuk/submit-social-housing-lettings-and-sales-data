@@ -6,7 +6,7 @@ class FormController < ApplicationController
 
   def submit_form
     if @log
-      @page = @log.form.get_page(params[@log.model_name.param_key][:page])
+      @page = form.get_page(params[@log.model_name.param_key][:page])
       responses_for_page = responses_for_page(@page)
       mandatory_questions_with_no_response = mandatory_questions_with_no_response(responses_for_page)
 
@@ -30,7 +30,7 @@ class FormController < ApplicationController
   def check_answers
     if @log
       current_url = request.env["PATH_INFO"]
-      subsection = @log.form.get_subsection(current_url.split("/")[-2])
+      subsection = form.get_subsection(current_url.split("/")[-2])
       render "form/check_answers", locals: { subsection:, current_user: }
     else
       render_not_found
@@ -49,8 +49,8 @@ class FormController < ApplicationController
     if @log
       restore_error_field_values
       page_id = request.path.split("/")[-1].underscore
-      @page = @log.form.get_page(page_id)
-      @subsection = @log.form.subsection_for_page(@page)
+      @page = form.get_page(page_id)
+      @subsection = form.subsection_for_page(@page)
       if @page.routed_to?(@log, current_user)
         render "form/page"
       else
@@ -71,7 +71,7 @@ private
     end
     if session["fields"]
       session["fields"].each do |field, value|
-        if @log.form.get_question(field, @log)&.type != "date" && @log.respond_to?(field)
+        if form.get_question(field, @log)&.type != "date" && @log.respond_to?(field)
           @log[field] = value
         end
       end
@@ -129,18 +129,24 @@ private
 
   def successful_redirect_path
     if is_referrer_check_answers?
-      page_ids = @log.form.subsection_for_page(@page).pages.map(&:id)
+      page_ids = form.subsection_for_page(@page).pages.map(&:id)
       page_index = page_ids.index(@page.id)
-      next_page = @log.form.next_page(@page, @log, current_user)
-      previous_page = @log.form.previous_page(page_ids, page_index, @log, current_user)
-      if next_page.to_s.include?("value_check") || next_page == previous_page
-        return send("#{@log.class.name.underscore}_#{next_page}_path", @log, { referrer: "check_answers" })
+      next_page_id = form.next_page(@page, @log, current_user)
+      next_page = form.get_page(next_page_id)
+      previous_page = form.previous_page(page_ids, page_index, @log, current_user)
+
+      if next_page&.interruption_screen? || next_page_id == previous_page
+        return send("#{@log.class.name.underscore}_#{next_page_id}_path", @log, { referrer: "check_answers" })
       else
-        return send("#{@log.model_name.param_key}_#{@log.form.subsection_for_page(@page).id}_check_answers_path", @log)
+        return send("#{@log.model_name.param_key}_#{form.subsection_for_page(@page).id}_check_answers_path", @log)
       end
     end
-    redirect_path = @log.form.next_page_redirect_path(@page, @log, current_user)
+    redirect_path = form.next_page_redirect_path(@page, @log, current_user)
     send(redirect_path, @log)
+  end
+
+  def form
+    @log&.form
   end
 
   def mandatory_questions_with_no_response(responses_for_page)

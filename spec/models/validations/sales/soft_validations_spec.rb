@@ -7,14 +7,14 @@ RSpec.describe Validations::Sales::SoftValidations do
     context "when validating soft min" do
       it "returns false if no income1 is given" do
         record.income1 = nil
-        expect(record)
-          .not_to be_income1_under_soft_min
+
+        expect(record).not_to be_income1_under_soft_min
       end
 
       it "returns false if no ecstat1 is given" do
         record.ecstat1 = nil
-        expect(record)
-          .not_to be_income1_under_soft_min
+
+        expect(record).not_to be_income1_under_soft_min
       end
 
       [
@@ -357,6 +357,43 @@ RSpec.describe Validations::Sales::SoftValidations do
       record.hodate = 2.months.ago
 
       expect(record).not_to be_hodate_3_years_or_more_saledate
+    end
+  end
+
+  describe "wheelchair_when_not_disabled" do
+    it "when hodate not set" do
+      record.disabled = 2
+      record.wheel = nil
+
+      expect(record).not_to be_wheelchair_when_not_disabled
+    end
+
+    it "when disabled not set" do
+      record.disabled = nil
+      record.wheel = 1
+
+      expect(record).not_to be_wheelchair_when_not_disabled
+    end
+
+    it "when disabled and wheel not set" do
+      record.disabled = nil
+      record.wheel = nil
+
+      expect(record).not_to be_wheelchair_when_not_disabled
+    end
+
+    it "when disabled == 2 && wheel == 1" do
+      record.disabled = 2
+      record.wheel = 1
+
+      expect(record).to be_wheelchair_when_not_disabled
+    end
+
+    it "when disabled == 2 && wheel != 1" do
+      record.disabled = 2
+      record.wheel = 2
+
+      expect(record).not_to be_wheelchair_when_not_disabled
     end
   end
 end

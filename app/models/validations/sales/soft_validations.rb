@@ -22,9 +22,9 @@ module Validations::Sales::SoftValidations
   end
 
   def wheelchair_when_not_disabled?
-    return false unless disabled == 2
+    return unless disabled && wheel
 
-    wheel == 1
+    wheel == 1 && disabled == 2
   end
 
   def savings_over_soft_max?

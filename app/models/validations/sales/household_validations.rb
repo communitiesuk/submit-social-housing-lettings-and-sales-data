@@ -32,6 +32,15 @@ module Validations::Sales::HouseholdValidations
     end
   end
 
+  def validate_previous_postcode(record)
+    return unless record.postcode_full && record.ppostcode_full && record.discounted_ownership_sale?
+
+    unless record.postcode_full == record.ppostcode_full
+      record.errors.add :postcode_full, I18n.t("validations.household.postcode.discounted_ownership")
+      record.errors.add :ppostcode_full, I18n.t("validations.household.postcode.discounted_ownership")
+    end
+  end
+
 private
 
   def validate_person_age_matches_relationship(record, person_num)

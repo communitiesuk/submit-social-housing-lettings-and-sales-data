@@ -280,4 +280,62 @@ RSpec.describe Validations::Sales::HouseholdValidations do
       end
     end
   end
+
+  describe "previous postcode validations" do
+    let(:record) { build(:sales_log) }
+
+    context "with a discounted sale" do
+      before do
+        record.ownershipsch = 2
+      end
+
+      it "adds an error when previous and current postcodes are not the same" do
+        record.postcode_full = "SO32 3PT"
+        record.ppostcode_full = "DN6 7FB"
+        household_validator.validate_previous_postcode(record)
+        expect(record.errors["postcode_full"])
+          .to include(match I18n.t("validations.household.postcode.discounted_ownership"))
+        expect(record.errors["ppostcode_full"])
+          .to include(match I18n.t("validations.household.postcode.discounted_ownership"))
+      end
+
+      it "allows same postcodes" do
+        record.postcode_full = "SO32 3PT"
+        record.ppostcode_full = "SO32 3PT"
+        household_validator.validate_previous_postcode(record)
+        expect(record.errors["postcode_full"]).to be_empty
+        expect(record.errors["ppostcode_full"]).to be_empty
+      end
+
+      it "does not add an error when postcode is missing" do
+        record.postcode_full = nil
+        record.ppostcode_full = "SO32 3PT"
+        household_validator.validate_previous_postcode(record)
+        expect(record.errors["postcode_full"]).to be_empty
+        expect(record.errors["ppostcode_full"]).to be_empty
+      end
+
+      it "does not add an error when previous postcode is missing" do
+        record.postcode_full = "SO32 3PT"
+        record.ppostcode_full = nil
+        household_validator.validate_previous_postcode(record)
+        expect(record.errors["postcode_full"]).to be_empty
+        expect(record.errors["ppostcode_full"]).to be_empty
+      end
+    end
+
+    context "without a discounted sale" do
+      before do
+        record.ownershipsch = 1
+      end
+
+      it "allows different postcodes" do
+        record.postcode_full = "SO32 3PT"
+        record.ppostcode_full = "DN6 7FB"
+        household_validator.validate_previous_postcode(record)
+        expect(record.errors["postcode_full"]).to be_empty
+        expect(record.errors["ppostcode_full"]).to be_empty
+      end
+    end
+  end
 end
