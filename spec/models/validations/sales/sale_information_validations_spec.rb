@@ -67,14 +67,14 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
     end
   end
 
-  describe "#validate_exchange_and_completion_date" do
+  describe "#validate_exchange_date" do
     context "when exdate blank" do
       let(:record) { build(:sales_log, exdate: nil) }
 
       it "does not add an error" do
-        sale_information_validator.validate_exchange_and_completion_date(record)
+        sale_information_validator.validate_exchange_date(record)
 
-        expect(record.errors).not_to be_present
+        expect(record.errors[:exdate]).not_to be_present
       end
     end
 
@@ -82,9 +82,9 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       let(:record) { build(:sales_log, saledate: nil) }
 
       it "does not add an error" do
-        sale_information_validator.validate_exchange_and_completion_date(record)
+        sale_information_validator.validate_exchange_date(record)
 
-        expect(record.errors).not_to be_present
+        expect(record.errors[:exdate]).not_to be_present
       end
     end
 
@@ -92,30 +92,31 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       let(:record) { build(:sales_log, exdate: nil, saledate: nil) }
 
       it "does not add an error" do
-        sale_information_validator.validate_exchange_and_completion_date(record)
+        sale_information_validator.validate_exchange_date(record)
 
-        expect(record.errors).not_to be_present
+        expect(record.errors[:exdate]).not_to be_present
       end
     end
 
-    context "when exdate less than a year before saledate" do
+    context "when exdate before saledate" do
       let(:record) { build(:sales_log, exdate: 2.months.ago, saledate: 1.month.ago) }
 
       it "does not add the error" do
-        sale_information_validator.validate_exchange_and_completion_date(record)
+        sale_information_validator.validate_exchange_date(record)
 
-        expect(record.errors).not_to be_present
+        expect(record.errors[:exdate]).not_to be_present
       end
     end
 
-    context "when exdate more than a year before saledate" do
+    context "when exdate more than 1 year before saledate" do
       let(:record) { build(:sales_log, exdate: 2.years.ago, saledate: 1.month.ago) }
 
-      it "adds error" do
-        sale_information_validator.validate_exchange_and_completion_date(record)
+      it "does not add the error" do
+        sale_information_validator.validate_exchange_date(record)
 
-        expect(record.errors[:exdate]).to include(I18n.t("validations.sale_information.completion_exchange.exchange_after_one_year_before_completion"))
-        expect(record.errors[:saledate]).to include(I18n.t("validations.sale_information.completion_exchange.completion_before_one_year_after_exchange"))
+        expect(record.errors[:exdate]).to eq(
+          ["Contract exchange date must be less than 1 year before completion date"],
+        )
       end
     end
 
@@ -123,10 +124,11 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       let(:record) { build(:sales_log, exdate: 1.month.ago, saledate: 2.months.ago) }
 
       it "adds error" do
-        sale_information_validator.validate_exchange_and_completion_date(record)
+        sale_information_validator.validate_exchange_date(record)
 
-        expect(record.errors[:exdate]).to include(I18n.t("validations.sale_information.completion_exchange.exchange_before_completion"))
-        expect(record.errors[:saledate]).to include(I18n.t("validations.sale_information.completion_exchange.completion_after_exchange"))
+        expect(record.errors[:exdate]).to eq(
+          ["Contract exchange date must be less than 1 year before completion date"],
+        )
       end
     end
 
@@ -134,9 +136,9 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       let(:record) { build(:sales_log, exdate: Time.zone.parse("2023-07-01"), saledate: Time.zone.parse("2023-07-01")) }
 
       it "does not add an error" do
-        sale_information_validator.validate_exchange_and_completion_date(record)
+        sale_information_validator.validate_exchange_date(record)
 
-        expect(record.errors).not_to be_present
+        expect(record.errors[:exdate]).not_to be_present
       end
     end
   end

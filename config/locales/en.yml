@@ -415,6 +415,11 @@ en:
       deactivation:
         during_deactivated_period: "The location is already deactivated during this date, please enter a different date"
     sale_information:
+      exdate:
+        must_be_before_saledate:
+          Contract exchange date must be less than 1 year before completion date
+        must_be_less_than_1_year_from_saledate:
+          Contract exchange date must be less than 1 year before completion date
       previous_property_beds:
         property_type_bedsit: "Bedsit bedroom maximum 1"
       previous_property_type:
