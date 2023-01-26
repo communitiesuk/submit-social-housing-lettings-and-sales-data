@@ -1,7 +1,10 @@
 class SalesLogValidator < ActiveModel::Validator
   include Validations::Sales::HouseholdValidations
+  include Validations::Sales::PropertyValidations
   include Validations::SharedValidations
   include Validations::Sales::FinancialValidations
+  include Validations::Sales::SaleInformationValidations
+  include Validations::SharedValidations
   include Validations::LocalAuthorityValidations
 
   def validate(record)
@@ -13,6 +16,7 @@ end
 class SalesLog < Log
   include DerivedVariables::SalesLogVariables
   include Validations::Sales::SoftValidations
+  include Validations::SoftValidations
 
   self.inheritance_column = :_type_disabled
 
@@ -31,6 +35,7 @@ class SalesLog < Log
   scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org) }
 
   OPTIONAL_FIELDS = %w[purchid].freeze
+  RETIREMENT_AGES = { "M" => 65, "F" => 60, "X" => 65 }.freeze
 
   def startdate
     saledate
@@ -167,6 +172,10 @@ class SalesLog < Log
     ownershipsch == 3
   end
 
+  def discounted_ownership_sale?
+    ownershipsch == 2
+  end
+
   def mortgage_not_used?
     mortgageused == 2
   end
@@ -182,5 +191,24 @@ class SalesLog < Log
     return if created_by&.organisation == owning_organisation
 
     update!(created_by: nil)
+  end
+
+  def retirement_age_for_person(person_num)
+    gender = public_send("sex#{person_num}".to_sym)
+    return unless gender
+
+    RETIREMENT_AGES[gender]
+  end
+
+  def joint_purchase?
+    jointpur == 1
+  end
+
+  def not_joint_purchase?
+    jointpur == 2
+  end
+
+  def old_persons_shared_ownership?
+    type == 24
   end
 end

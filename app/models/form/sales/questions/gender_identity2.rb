@@ -7,6 +7,12 @@ class Form::Sales::Questions::GenderIdentity2 < ::Form::Question
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = 2
+    @inferred_check_answers_value = [{
+      "condition" => {
+        "sex2" => "R",
+      },
+      "value" => "Prefers not to say",
+    }]
   end
 
   ANSWER_OPTIONS = {

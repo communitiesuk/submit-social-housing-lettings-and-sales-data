@@ -22,9 +22,9 @@ module Validations::Sales::SoftValidations
   end
 
   def wheelchair_when_not_disabled?
-    return false unless disabled == 2
+    return unless disabled && wheel
 
-    wheel == 1
+    wheel == 1 && disabled == 2
   end
 
   def savings_over_soft_max?
@@ -35,5 +35,17 @@ module Validations::Sales::SoftValidations
     return unless savings && deposit
 
     deposit > savings * 4 / 3
+  end
+
+  def extra_borrowing_expected_but_not_reported?
+    return unless extrabor && mortgage && deposit && value && discount
+
+    extrabor != 1 && mortgage + deposit > value - value * discount / 100
+  end
+
+  def hodate_3_years_or_more_saledate?
+    return unless hodate && saledate
+
+    ((saledate.to_date - hodate.to_date).to_i / 365) >= 3
   end
 end

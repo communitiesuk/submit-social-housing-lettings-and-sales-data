@@ -47,6 +47,22 @@ RSpec.describe Form::Page, type: :model do
     end
   end
 
+  describe "#interruption_screen?" do
+    context "when it has regular questions" do
+      it "returns false" do
+        expect(page.interruption_screen?).to be false
+      end
+    end
+
+    context "when it has interruption_screen question" do
+      let(:page) { form.get_page("retirement_value_check") }
+
+      it "returns true" do
+        expect(page.interruption_screen?).to be true
+      end
+    end
+  end
+
   context "with a lettings log" do
     let(:lettings_log) { FactoryBot.build(:lettings_log, :in_progress) }
 

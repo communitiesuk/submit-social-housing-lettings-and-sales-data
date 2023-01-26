@@ -195,6 +195,8 @@ en:
       beds:
         non_positive: "Number of bedrooms has to be greater than 0"
         over_max: "Number of bedrooms cannot be more than 12"
+      postcode:
+        must_match_previous: "Buyer's last accommodation and discounted ownership postcodes must match"
 
     financial:
       tshortfall:
@@ -272,6 +274,7 @@ en:
       carehome:
         out_of_range: "Household rent and other charges must be between %{min_chcharge} and %{max_chcharge} if paying %{period}"
         not_provided: "Enter how much rent and other charges the household pays %{period}"
+      cash_discount_invalid: "Cash discount must be £0 - £999,999"
     household:
       reasonpref:
         not_homeless: "Answer cannot be ‘homeless or about to lose their home’ as the tenant was not homeless immediately prior to this letting"
@@ -295,20 +298,39 @@ en:
         child_under_16_relat: "Answer cannot be under 16 as person %{person_num} is not a child of the lead tenant"
         child_under_16: "Answer cannot be under 16 as person’s %{person_num} working situation is not ‘child under 16’"
         child_over_16: "Answer cannot be over 16 as person’s %{person_num} working situation is ‘child under 16‘"
-        student_16_19: "Answer cannot be between 16 and 19 as person %{person_num} is a child of the lead tenant but is not a full-time student"
+        child_over_20: "Answer cannot be 20 or over as the relationship is ‘child’"
+        not_student_16_19: "Answer cannot be between 16 and 19 as person %{person_num} is a child of the lead tenant but is not a full-time student"
+        student_16_19:
+          cannot_be_16_19:
+            student_not_child: "Person cannot be aged 16-19 if they are a student but don't have relationship ‘child’"
+            child_not_student: "Person cannot be aged 16-19 if they have relationship ‘child’ but are not a student"
+          must_be_16_19: "Person must be aged 16-19 if they are a student and have relationship ‘child’"
+        partner_under_16: "Cannot be under 16 if the relationship is partner"
         lead:
           over_20: "The lead tenant must be under 20 as you told us their housing situation immediately before this letting was a children’s home or foster care"
       ecstat:
         retired_over_70: "Person %{person_num} must be retired if over 70"
         child_under_16: "Person’s %{person_num} working situation must be ’child under 16‘ as you told us they’re under 16"
         child_over_16: "Answer cannot be ‘child under 16’ as you told us the person %{person_num} is older than 16"
-        student_16_19: "Person’s %{person_num} working situation must be full-time student or prefers not to say as you told us they’re between 16 and 19."
+        not_student_16_19: "Person’s %{person_num} working situation must be full-time student or prefers not to say as you told us they’re between 16 and 19."
+        student_16_19:
+          cannot_be_student:
+            child_not_16_19: "Person cannot be a student if they are not aged 16-19 but have relationship ‘child’"
+            16_19_not_child: "Person cannot be a student if they are aged 16-19 but don‘t have relationship ‘child’"
+          must_be_student: "Person must be a student if they are aged 16-19 and have relationship ‘child’"
         retired_male: "Answer cannot be ‘retired’ as the male tenant is under 65"
         retired_female: "Answer cannot be ‘retired’ as the female tenant is under 60"
       relat:
-        child_under_16: "Person’s %{person_num}’s relationship to tenant 1 must be ‘child’ as you told us they’re under 16"
+        partner_under_16: "Answer cannot be ‘partner’ if the person's age is under 16"
+        child_under_16: "Person’s relationship to tenant 1 must be ‘child’ as you told us they’re under 16"
+        child_over_20: "Answer cannot be ‘child’ if the person's age is 20 or over"
         one_partner: "Number of partners cannot be greater than 1"
-        student_16_19: "Answer cannot be ‘child’ as you told us the person %{person_num} is between 16 and 19 and is not a full-time student"
+        not_student_16_19: "Answer cannot be ‘child’ as you told us the person %{person_num} is between 16 and 19 and is not a full-time student"
+        student_16_19:
+          cannot_be_child:
+            student_not_16_19: "Answer cannot be ‘child’ if the person is a student but not aged 16-19"
+            16_19_not_student:  "Answer cannot be ‘child’ if the person is aged 16-19 but not a student"
+          must_be_child: "Answer must be ‘child’ if the person is aged 16-19 and a student"
       housingneeds_a:
         one_or_two_choices: "You can only select one option or ‘other disabled access needs’ plus ‘wheelchair-accessible housing’, ‘wheelchair access to essential rooms’ or ‘level access housing’"
       prevten:
@@ -346,6 +368,9 @@ en:
         not_internal_transfer: "Answer cannot be ‘permanently decanted from another property owned by this landlord’ as you told us the source of referral for this tenancy was not an internal transfer"
       condition_effects:
         no_choices: "You cannot answer this question as you told us nobody in the household has a physical or mental health condition (or other illness) expected to last 12 months or more"
+      old_persons_shared_ownership: "Are you sure? At least one buyer should be aged over 64 for Older persons‘ shared ownership scheme"
+      postcode:
+        discounted_ownership: "Last settled accommodation and discounted ownership property postcodes must match"
 
     tenancy:
       length:
@@ -387,6 +412,19 @@ en:
         before_deactivation: "This location was deactivated on %{date}. The reactivation date must be on or after deactivation date"
       deactivation:
         during_deactivated_period: "The location is already deactivated during this date, please enter a different date"
+    sale_information:
+      proplen:
+        social_homebuy: "Social HomeBuy buyers should not have lived here before"
+        rent_to_buy: "Rent to Buy buyers should not have lived here before"
+      exdate:
+        must_be_before_saledate:
+          Contract exchange date must be less than 1 year before completion date
+        must_be_less_than_1_year_from_saledate:
+          Contract exchange date must be less than 1 year before completion date
+      previous_property_beds:
+        property_type_bedsit: "Bedsit bedroom maximum 1"
+      previous_property_type:
+        property_type_bedsit: "A bedsit can not have more than 1 bedroom"
 
   soft_validations:
     net_income:
@@ -410,6 +448,8 @@ en:
       max:
         title: "You told us this person is %{age} or over and not retired"
         hint_text: "The minimum expected retirement age for %{gender} in England is %{age}."
+    extra_borrowing:
+      title: "The mortgage and deposit are higher than the purchase minus the discount"
     pregnancy:
       title: "You told us somebody in the household is pregnant"
       no_females: "You also told us there are no female tenants living at the property."

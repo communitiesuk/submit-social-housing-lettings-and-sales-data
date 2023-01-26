@@ -32,6 +32,14 @@ RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
     expect(question.hint_text).to be_nil
   end
 
+  it "has the correct min" do
+    expect(question.min).to eq(0)
+  end
+
+  it "has the correct max" do
+    expect(question.max).to eq(110)
+  end
+
   context "with not a joint purchase" do
     context "and person 1" do
       let(:person_index) { 2 }
@@ -54,10 +62,10 @@ RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
       end
 
       it "has the correct inferred check answers value" do
-        expect(question.inferred_check_answers_value).to eq({
+        expect(question.inferred_check_answers_value).to eq([{
           "condition" => { "age2_known" => 1 },
           "value" => "Not known",
-        })
+        }])
       end
 
       it "has the correct check_answers_card_number" do
@@ -86,10 +94,10 @@ RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
       end
 
       it "has the correct inferred check answers value" do
-        expect(question.inferred_check_answers_value).to eq({
+        expect(question.inferred_check_answers_value).to eq([{
           "condition" => { "age3_known" => 1 },
           "value" => "Not known",
-        })
+        }])
       end
 
       it "has the correct check_answers_card_number" do
@@ -118,10 +126,10 @@ RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
       end
 
       it "has the correct inferred check answers value" do
-        expect(question.inferred_check_answers_value).to eq({
+        expect(question.inferred_check_answers_value).to eq([{
           "condition" => { "age4_known" => 1 },
           "value" => "Not known",
-        })
+        }])
       end
 
       it "has the correct check_answers_card_number" do
@@ -150,10 +158,10 @@ RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
       end
 
       it "has the correct inferred check answers value" do
-        expect(question.inferred_check_answers_value).to eq({
+        expect(question.inferred_check_answers_value).to eq([{
           "condition" => { "age5_known" => 1 },
           "value" => "Not known",
-        })
+        }])
       end
 
       it "has the correct check_answers_card_number" do
@@ -184,10 +192,10 @@ RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
       end
 
       it "has the correct inferred check answers value" do
-        expect(question.inferred_check_answers_value).to eq({
+        expect(question.inferred_check_answers_value).to eq([{
           "condition" => { "age3_known" => 1 },
           "value" => "Not known",
-        })
+        }])
       end
 
       it "has the correct check_answers_card_number" do
@@ -216,10 +224,10 @@ RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
       end
 
       it "has the correct inferred check answers value" do
-        expect(question.inferred_check_answers_value).to eq({
+        expect(question.inferred_check_answers_value).to eq([{
           "condition" => { "age4_known" => 1 },
           "value" => "Not known",
-        })
+        }])
       end
 
       it "has the correct check_answers_card_number" do
@@ -248,10 +256,10 @@ RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
       end
 
       it "has the correct inferred check answers value" do
-        expect(question.inferred_check_answers_value).to eq({
+        expect(question.inferred_check_answers_value).to eq([{
           "condition" => { "age5_known" => 1 },
           "value" => "Not known",
-        })
+        }])
       end
 
       it "has the correct check_answers_card_number" do
@@ -280,10 +288,10 @@ RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
       end
 
       it "has the correct inferred check answers value" do
-        expect(question.inferred_check_answers_value).to eq({
+        expect(question.inferred_check_answers_value).to eq([{
           "condition" => { "age6_known" => 1 },
           "value" => "Not known",
-        })
+        }])
       end
 
       it "has the correct check_answers_card_number" do

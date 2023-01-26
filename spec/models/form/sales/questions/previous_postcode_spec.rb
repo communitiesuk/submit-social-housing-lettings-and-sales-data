@@ -48,11 +48,11 @@ RSpec.describe Form::Sales::Questions::PreviousPostcode, type: :model do
   end
 
   it "has the correct inferred_check_answers_value" do
-    expect(question.inferred_check_answers_value).to eq({
+    expect(question.inferred_check_answers_value).to eq([{
       "condition" => {
         "ppcodenk" => 1,
       },
       "value" => "Not known",
-    })
+    }])
   end
 end

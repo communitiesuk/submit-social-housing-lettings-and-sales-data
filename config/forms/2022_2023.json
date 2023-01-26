@@ -59,12 +59,12 @@
                       "is_la_inferred": true
                     }
                   },
-                  "inferred_check_answers_value": {
+                  "inferred_check_answers_value": [{
                     "condition": {
                       "postcode_known": 0
                     },
                     "value": "Not known"
-                  }
+                  }]
                 }
               },
               "depends_on": [
@@ -1333,12 +1333,12 @@
                   "max": 120,
                   "step": 1,
                   "width": 2,
-                  "inferred_check_answers_value": {
+                  "inferred_check_answers_value": [{
                     "condition": {
                       "age1_known": 1
                     },
                     "value": "Not known"
-                  }
+                  }]
                 }
               },
               "depends_on": [
@@ -2076,12 +2076,12 @@
                   "max": 120,
                   "step": 1,
                   "width": 2,
-                  "inferred_check_answers_value": {
+                  "inferred_check_answers_value": [{
                     "condition": {
                       "age2_known": 1
                     },
                     "value": "Not known"
-                  }
+                  }]
                 }
               },
               "depends_on": [
@@ -2611,12 +2611,12 @@
                   "max": 120,
                   "step": 1,
                   "width": 2,
-                  "inferred_check_answers_value": {
+                  "inferred_check_answers_value": [{
                     "condition": {
                       "age3_known": 1
                     },
                     "value": "Not known"
-                  }
+                  }]
                 }
               },
               "depends_on": [
@@ -3143,12 +3143,12 @@
                   "max": 120,
                   "step": 1,
                   "width": 2,
-                  "inferred_check_answers_value": {
+                  "inferred_check_answers_value": [{
                     "condition": {
                       "age4_known": 1
                     },
                     "value": "Not known"
-                  }
+                  }]
                 }
               },
               "depends_on": [
@@ -3672,12 +3672,12 @@
                   "max": 120,
                   "step": 1,
                   "width": 2,
-                  "inferred_check_answers_value": {
+                  "inferred_check_answers_value": [{
                     "condition": {
                       "age5_known": 1
                     },
                     "value": "Not known"
-                  }
+                  }]
                 }
               },
               "depends_on": [
@@ -4198,12 +4198,12 @@
                   "max": 120,
                   "step": 1,
                   "width": 2,
-                  "inferred_check_answers_value": {
+                  "inferred_check_answers_value": [{
                     "condition": {
                       "age6_known": 1
                     },
                     "value": "Not known"
-                  }
+                  }]
                 }
               },
               "depends_on": [
@@ -4721,12 +4721,12 @@
                   "max": 120,
                   "step": 1,
                   "width": 2,
-                  "inferred_check_answers_value": {
+                  "inferred_check_answers_value": [{
                     "condition": {
                       "age7_known": 1
                     },
                     "value": "Not known"
-                  }
+                  }]
                 }
               },
               "depends_on": [
@@ -5241,12 +5241,12 @@
                   "max": 120,
                   "step": 1,
                   "width": 2,
-                  "inferred_check_answers_value": {
+                  "inferred_check_answers_value": [{
                     "condition": {
                       "age8_known": 1
                     },
                     "value": "Not known"
-                  }
+                  }]
                 }
               },
               "depends_on": [
@@ -6165,10 +6165,10 @@
                     "1": {
                       "value": "Permanently decanted from another property owned by this landlord"
                     },
-                    "45": {
+                    "46": {
                       "value": "Discharged from long-stay hospital or similar institution"
                     },
-                    "44": {
+                    "45": {
                       "value": "Discharged from prison"
                     },
                     "2": {
@@ -6180,7 +6180,7 @@
                     "9": {
                       "value": "Asked to leave by family or friends"
                     },
-                    "46": {
+                    "44": {
                       "value": "Death of household member in last settled accommodation"
                     },
                     "8": {
@@ -6482,12 +6482,12 @@
                       "is_previous_la_inferred": true
                     }
                   },
-                  "inferred_check_answers_value": {
+                  "inferred_check_answers_value": [{
                     "condition": {
                       "ppcodenk": 0
                     },
                     "value": "Not known"
-                  }
+                  }]
                 }
               }
             },
@@ -6915,12 +6915,12 @@
                     "W92000004": "Wales",
                     "9300000XX": "Outside UK"
                   },
-                  "inferred_check_answers_value": {
+                  "inferred_check_answers_value": [{
                     "condition": {
                       "previous_la_known": 0
                     },
                     "value": "Not known"
-                  }
+                  }]
                 }
               },
               "depends_on": [

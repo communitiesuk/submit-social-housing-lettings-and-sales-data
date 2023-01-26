@@ -422,12 +422,12 @@ RSpec.describe Form::Sales::Questions::Prevloc, type: :model do
 
   it "has the correct inferred_check_answers_value" do
     expect(question.inferred_check_answers_value).to eq(
-      {
+      [{
         "condition" => {
           "previous_la_known" => 0,
         },
         "value" => "Not known",
-      },
+      }],
     )
   end
 end

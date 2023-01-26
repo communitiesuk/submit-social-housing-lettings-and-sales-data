@@ -46,17 +46,14 @@ class Form::Question
   delegate :subsection, to: :page
   delegate :form, to: :subsection
 
-  def answer_label(log)
+  def answer_label(log, user = nil)
     return checkbox_answer_label(log) if type == "checkbox"
     return log[id]&.to_formatted_s(:govuk_date).to_s if type == "date"
 
-    answer = label_from_value(log[id]) if log[id].present?
+    answer = label_from_value(log[id], log, user) if log[id].present?
     answer_label = [prefix, format_value(answer), suffix_label(log)].join("") if answer
 
-    inferred = inferred_check_answers_value["value"] if inferred_check_answers_value && has_inferred_check_answers_value?(log)
-    return inferred if inferred.present?
-
-    answer_label
+    inferred_answer_value(log) || answer_label
   end
 
   def get_inferred_answers(log)
@@ -104,7 +101,7 @@ class Form::Question
 
   def has_inferred_check_answers_value?(log)
     return true if selected_answer_option_is_derived?(log)
-    return inferred_check_answers_value["condition"].values[0] == log[inferred_check_answers_value["condition"].keys[0]] if inferred_check_answers_value.present?
+    return inferred_check_answers_value&.any? { |inferred_value| inferred_value["condition"].values.first == log[inferred_value["condition"].keys.first] } if inferred_check_answers_value.present?
 
     false
   end
@@ -154,7 +151,7 @@ class Form::Question
     end
   end
 
-  def label_from_value(value)
+  def label_from_value(value, _log = nil, _user = nil)
     return unless value
 
     label = case type
@@ -271,7 +268,7 @@ private
   end
 
   def has_inferred_display_value?(log)
-    inferred_check_answers_value.present? && log[inferred_check_answers_value["condition"].keys.first] == inferred_check_answers_value["condition"].values.first
+    inferred_check_answers_value.present? && inferred_check_answers_value.any? { |inferred_value| log[inferred_value["condition"].keys.first] == inferred_value["condition"].values.first }
   end
 
   def checkbox_answer_label(log)
@@ -307,6 +304,13 @@ private
 
   def enabled_inferred_answers(inferred_answers, log)
     inferred_answers.filter { |_key, value| value.all? { |condition_key, condition_value| log[condition_key] == condition_value } }
+  end
+
+  def inferred_answer_value(log)
+    return unless inferred_check_answers_value
+
+    inferred_answer = inferred_check_answers_value.find { |inferred_value| inferred_value["condition"].values.first == log[inferred_value["condition"].keys.first] }
+    inferred_answer["value"] if inferred_answer.present?
   end
 
   RADIO_YES_VALUE = {

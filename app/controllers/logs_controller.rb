@@ -59,6 +59,15 @@ private
     permitted
   end
 
+  def org_params
+    owning_organisation_id = current_user.organisation.holds_own_stock? ? current_user.organisation.id : nil
+    {
+      "owning_organisation_id" => owning_organisation_id,
+      "managing_organisation_id" => current_user.organisation.id,
+      "created_by_id" => current_user.id,
+    }
+  end
+
   def search_term
     params["search"]
   end

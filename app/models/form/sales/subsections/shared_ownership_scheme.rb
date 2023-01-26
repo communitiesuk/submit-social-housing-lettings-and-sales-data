@@ -14,6 +14,7 @@ class Form::Sales::Subsections::SharedOwnershipScheme < ::Form::Subsection
       Form::Sales::Pages::Resale.new(nil, nil, self),
       Form::Sales::Pages::ExchangeDate.new(nil, nil, self),
       Form::Sales::Pages::HandoverDate.new(nil, nil, self),
+      Form::Sales::Pages::HandoverDateCheck.new("handover_date_check", nil, self),
       Form::Sales::Pages::LaNominations.new(nil, nil, self),
       Form::Sales::Pages::BuyerPrevious.new(nil, nil, self),
       Form::Sales::Pages::PreviousBedrooms.new(nil, nil, self),

@@ -43,4 +43,10 @@ RSpec.describe Form::Sales::Questions::GenderIdentity2, type: :model do
   it "has the correct check_answers_card_number" do
     expect(question.check_answers_card_number).to eq(2)
   end
+
+  it "has the correct inferred_check_answers_value" do
+    expect(question.inferred_check_answers_value).to eq([
+      { "condition" => { "sex2" => "R" }, "value" => "Prefers not to say" },
+    ])
+  end
 end
