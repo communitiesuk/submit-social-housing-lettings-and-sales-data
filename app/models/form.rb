@@ -61,7 +61,7 @@ class Form
 
     page_ids = subsection_for_page(page).pages.map(&:id)
     page_index = page_ids.index(page.id)
-    page_id = if page.id.include?("value_check") && log[page.questions[0].id] == 1 && page.routed_to?(log, current_user)
+    page_id = if page.interruption_screen? && log[page.questions[0].id] == 1 && page.routed_to?(log, current_user)
                 previous_page(page_ids, page_index, log, current_user)
               else
                 page_ids[page_index + 1]
