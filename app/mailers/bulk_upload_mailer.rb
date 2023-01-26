@@ -6,7 +6,14 @@ class BulkUploadMailer < NotifyMailer
     send_email(
       user.email,
       BULK_UPLOAD_FAILED_CSV_ERRORS_TEMPLATE_ID,
-      { filename: "1", upload_timestamp: "2", year_combo: "3", lettings_or_sales: "4", error_description: "5", summary_report_link: "6" },
+      {
+        filename: "[dummy filename]",
+        upload_timestamp: "[dummy upload_timestamp]",
+        year_combo: "[dummy year_combo]",
+        lettings_or_sales: "[dummy lettings_or_sales]",
+        error_description: "[dummy error_description]",
+        summary_report_link: "[dummy summary_report_link]"
+      },
     )
   end
 
@@ -14,7 +21,13 @@ class BulkUploadMailer < NotifyMailer
     send_email(
       user.email,
       BULK_UPLOAD_WITH_ERRORS_TEMPLATE_ID,
-      { title: "1", filename: "2", upload_timestamp: "3", error_description: "4", summary_report_link: "5" },
+      {
+        title: "[dummy title]",
+        filename: "[dummy filename]",
+        upload_timestamp: "[dummy upload_timestamp]",
+        error_description: "[dummy error_description]",
+        summary_report_link: "[dummy summary_report_link]"
+      },
     )
   end
 end
