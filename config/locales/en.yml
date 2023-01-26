@@ -413,6 +413,9 @@ en:
       deactivation:
         during_deactivated_period: "The location is already deactivated during this date, please enter a different date"
     sale_information:
+      proplen:
+        social_homebuy: "Social HomeBuy buyers should not have lived here before"
+        rent_to_buy: "Rent to Buy buyers should not have lived here before"
       exdate:
         must_be_before_saledate:
           Contract exchange date must be less than 1 year before completion date
