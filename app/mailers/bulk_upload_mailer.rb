@@ -1,6 +1,6 @@
 class BulkUploadMailer < NotifyMailer
   BULK_UPLOAD_FAILED_TEMPLATE_ID = "e27abcd4-5295-48c2-b127-e9ee4b781b75".freeze
-  BULK_UPLOAD_WITH_ERRORS_TEMPLATE_ID = "e27abcd4-5295-48c2-b127-e9ee4b781b75".freeze
+  BULK_UPLOAD_WITH_ERRORS_TEMPLATE_ID = "eb539005-6234-404e-812d-167728cf4274".freeze
 
   def send_bulk_upload_failed_mail(user, bulk_upload)
     send_email(
