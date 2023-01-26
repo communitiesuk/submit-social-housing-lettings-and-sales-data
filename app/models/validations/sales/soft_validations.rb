@@ -64,4 +64,10 @@ module Validations::Sales::SoftValidations
 
     !grant.between?(9_000, 16_000)
   end
+
+  def extra_borrowing_expected?
+    return unless extrabor && mortgage && deposit && value && cashdis
+
+    mortgage + deposit > value - value * discount / 100
+  end
 end
