@@ -1,7 +1,7 @@
 require "csv"
 
 module Imports
-  class PurchasePriceRangesService
+  class SaleRangesService
     attr_reader :start_year, :path, :count
 
     def initialize(start_year:, path:)
@@ -12,7 +12,7 @@ module Imports
 
     def call
       CSV.foreach(path, headers: true) do |row|
-        LaPurchasePriceRange.upsert(
+        LaSaleRange.upsert(
           { start_year:,
             la: row["la"],
             bedrooms: row["bedrooms"],

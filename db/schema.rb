@@ -54,17 +54,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_24_111328) do
     t.index ["organisation_id"], name: "index_data_protection_confirmations_on_organisation_id"
   end
 
-  create_table "la_purchase_price_ranges", force: :cascade do |t|
-    t.string "la"
-    t.integer "bedrooms"
-    t.decimal "soft_min", precision: 10, scale: 2
-    t.decimal "soft_max", precision: 10, scale: 2
-    t.integer "start_year"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["start_year", "bedrooms", "la"], name: "index_la_purchase_price_ranges_on_start_year_bedrooms_la", unique: true
-  end
-
   create_table "la_rent_ranges", force: :cascade do |t|
     t.integer "ranges_rent_id"
     t.integer "lettype"
@@ -78,6 +67,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_24_111328) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["start_year", "lettype", "beds", "la"], name: "index_la_rent_ranges_on_start_year_and_lettype_and_beds_and_la", unique: true
+  end
+
+  create_table "la_sale_ranges", force: :cascade do |t|
+    t.string "la"
+    t.integer "bedrooms"
+    t.decimal "soft_min", precision: 10, scale: 2
+    t.decimal "soft_max", precision: 10, scale: 2
+    t.integer "start_year"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["start_year", "bedrooms", "la"], name: "index_la_sale_ranges_on_start_year_bedrooms_la", unique: true
   end
 
   create_table "legacy_users", force: :cascade do |t|

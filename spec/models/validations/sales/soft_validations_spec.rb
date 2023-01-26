@@ -332,7 +332,7 @@ RSpec.describe Validations::Sales::SoftValidations do
 
   describe "purchase_price_out_of_soft_range" do
     before do
-      LaPurchasePriceRange.create!(
+      LaSaleRange.create!(
         la: "E07000223",
         bedrooms: 2,
         soft_min: 177_000,

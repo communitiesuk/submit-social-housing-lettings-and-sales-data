@@ -204,10 +204,10 @@ class SalesLog < Log
   end
 
   def purchase_price_soft_min
-    LaPurchasePriceRange.find_by(start_year: collection_start_year, la:, bedrooms: beds).soft_min
+    LaSaleRange.find_by(start_year: collection_start_year, la:, bedrooms: beds).soft_min
   end
 
   def purchase_price_soft_max
-    LaPurchasePriceRange.find_by(start_year: collection_start_year, la:, bedrooms: beds).soft_max
+    LaSaleRange.find_by(start_year: collection_start_year, la:, bedrooms: beds).soft_max
   end
 end

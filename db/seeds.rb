@@ -311,8 +311,8 @@ unless Rails.env.test?
     end
   end
 
-  if LaPurchasePriceRange.count.zero?
-    Dir.glob("config/purchase_price_range_data/*.csv").each do |path|
+  if LaSaleRange.count.zero?
+    Dir.glob("config/sale_range_data/*.csv").each do |path|
       start_year = File.basename(path, ".csv")
       service = Imports::PurchasePriceRangesService.new(start_year:, path:)
       service.call

@@ -1,2 +1,0 @@
-class LaPurchasePriceRange < ApplicationRecord
-end
