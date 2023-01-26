@@ -3,7 +3,7 @@ module Validations::Sales::SaleInformationValidations
     return if record.saledate.blank? || record.hodate.blank?
 
     unless record.saledate > record.hodate
-      record.errors.add :hodate, "Practical completion or handover date must be before exchange date"
+      record.errors.add :hodate, I18n.t("validations.sale_information.hodate.must_be_before_exdate")
     end
   end
 
@@ -11,13 +11,13 @@ module Validations::Sales::SaleInformationValidations
     return unless record.exdate && record.saledate
 
     if record.exdate > record.saledate
-      record.errors.add(:exdate, I18n.t("validations.sale_information.exdate.must_be_before_saledate"))
-      record.errors.add(:saledate, I18n.t("validations.sale_information.saledate.must_be_after_exdate"))
+      record.errors.add :exdate, I18n.t("validations.sale_information.exdate.must_be_before_saledate")
+      record.errors.add :saledate, I18n.t("validations.sale_information.saledate.must_be_after_exdate")
     end
 
-    if record.saledate.to_date - record.exdate.to_date > 1.year.in_days
-      record.errors.add(:exdate, I18n.t("validations.sale_information.exdate.must_be_less_than_1_year_from_saledate"))
-      record.errors.add(:saledate, I18n.t("validations.sale_information.saledate.must_be_less_than_1_year_from_exdate"))
+    if record.saledate - record.exdate > 1.year
+      record.errors.add :exdate, I18n.t("validations.sale_information.exdate.must_be_less_than_1_year_from_saledate")
+      record.errors.add :saledate, I18n.t("validations.sale_information.saledate.must_be_less_than_1_year_from_exdate")
     end
   end
 
