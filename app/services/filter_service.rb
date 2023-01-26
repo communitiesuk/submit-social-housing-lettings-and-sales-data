@@ -18,7 +18,7 @@ class FilterService
     end
     logs = logs.order(created_at: :desc)
     if user.support?
-      if logs.first.is_a?(LettingsLog)
+      if logs&.first.lettings?
         logs.all.includes(:owning_organisation, :managing_organisation)
       else
         logs.all.includes(:owning_organisation)
