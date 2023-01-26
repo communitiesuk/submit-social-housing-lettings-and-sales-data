@@ -10,11 +10,11 @@ class BulkUploadMailer < NotifyMailer
       user.email,
       BULK_UPLOAD_COMPLETE_TEMPLATE_ID,
       {
-        title: "[dummy title]",
-        filename: "[dummy filename]",
-        upload_timestamp: "[dummy upload_timestamp]",
-        success_description: "[dummy success_description]",
-        logs_link: "[dummy logs_link]"
+        title: "[#{bulk_upload} title]",
+        filename: "[#{bulk_upload} filename]",
+        upload_timestamp: "[#{bulk_upload} upload_timestamp]",
+        success_description: "[#{bulk_upload} success_description]",
+        logs_link: "[#{bulk_upload} logs_link]"
       },
     )
   end
@@ -24,12 +24,12 @@ class BulkUploadMailer < NotifyMailer
       user.email,
       BULK_UPLOAD_FAILED_CSV_ERRORS_TEMPLATE_ID,
       {
-        filename: "[dummy filename]",
-        upload_timestamp: "[dummy upload_timestamp]",
-        year_combo: "[dummy year_combo]",
-        lettings_or_sales: "[dummy lettings_or_sales]",
-        error_description: "[dummy error_description]",
-        summary_report_link: "[dummy summary_report_link]"
+        filename: "[#{bulk_upload} filename]",
+        upload_timestamp: "[#{bulk_upload} upload_timestamp]",
+        year_combo: "[#{bulk_upload} year_combo]",
+        lettings_or_sales: "[#{bulk_upload} lettings_or_sales]",
+        error_description: "[#{bulk_upload} error_description]",
+        summary_report_link: "[#{bulk_upload} summary_report_link]"
       },
     )
   end
@@ -39,12 +39,12 @@ class BulkUploadMailer < NotifyMailer
       user.email,
       BULK_UPLOAD_FAILED_FILE_SETUP_ERROR_TEMPLATE_ID,
       {
-        filename: "[dummy filename]",
-        upload_timestamp: "[dummy upload_timestamp]",
-        lettings_or_sales: "[dummy lettings_or_sales]",
-        year_combo: "[dummy year_combo]",
-        errors_list: "[dummy errors_list]",
-        bulk_upload_link: "[dummy bulk_upload_link]"
+        filename: "[#{bulk_upload} filename]",
+        upload_timestamp: "[#{bulk_upload} upload_timestamp]",
+        lettings_or_sales: "[#{bulk_upload} lettings_or_sales]",
+        year_combo: "[#{bulk_upload} year_combo]",
+        errors_list: "[#{bulk_upload} errors_list]",
+        bulk_upload_link: "[#{bulk_upload} bulk_upload_link]"
       },
     )
   end
@@ -54,11 +54,11 @@ class BulkUploadMailer < NotifyMailer
       user.email,
       BULK_UPLOAD_FAILED_SERVICE_ERROR_TEMPLATE_ID,
       {
-        filename: "[dummy filename]",
-        upload_timestamp: "[dummy upload_timestamp]",
-        lettings_or_sales: "[dummy lettings_or_sales]",
-        year_combo: "[dummy year_combo]",
-        bulk_upload_link: "[dummy bulk_upload_link]"
+        filename: "[#{bulk_upload} filename]",
+        upload_timestamp: "[#{bulk_upload} upload_timestamp]",
+        lettings_or_sales: "[#{bulk_upload} lettings_or_sales]",
+        year_combo: "[#{bulk_upload} year_combo]",
+        bulk_upload_link: "[#{bulk_upload} bulk_upload_link]"
       },
     )
   end
@@ -68,11 +68,11 @@ class BulkUploadMailer < NotifyMailer
       user.email,
       BULK_UPLOAD_WITH_ERRORS_TEMPLATE_ID,
       {
-        title: "[dummy title]",
-        filename: "[dummy filename]",
-        upload_timestamp: "[dummy upload_timestamp]",
-        error_description: "[dummy error_description]",
-        summary_report_link: "[dummy summary_report_link]"
+        title: "[#{bulk_upload} title]",
+        filename: "[#{bulk_upload} filename]",
+        upload_timestamp: "[#{bulk_upload} upload_timestamp]",
+        error_description: "[#{bulk_upload} error_description]",
+        summary_report_link: "[#{bulk_upload} summary_report_link]"
       },
     )
   end
