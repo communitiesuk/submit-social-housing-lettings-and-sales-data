@@ -43,6 +43,6 @@ private
   end
 
   def get_answer_label(question, lettings_log)
-    question.answer_label(lettings_log).presence || "<span class=\"app-!-colour-muted\">You didn’t answer this question</span>".html_safe
+    question.answer_label(lettings_log, current_user).presence || "<span class=\"app-!-colour-muted\">You didn’t answer this question</span>".html_safe
   end
 end

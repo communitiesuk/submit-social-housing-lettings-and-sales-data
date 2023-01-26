@@ -19,5 +19,6 @@ class Form::Sales::Questions::HouseholdWheelchairCheck < ::Form::Question
         },
       ],
     }
+    @page = page
   end
 end

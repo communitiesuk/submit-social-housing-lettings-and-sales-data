@@ -456,32 +456,11 @@ class LettingsLog < Log
     OPTIONAL_FIELDS + dynamically_not_required
   end
 
-  (1..8).each do |person_num|
-    define_method("retirement_age_for_person_#{person_num}") do
-      retirement_age_for_person(person_num)
-    end
-
-    define_method("plural_gender_for_person_#{person_num}") do
-      plural_gender_for_person(person_num)
-    end
-  end
-
   def retirement_age_for_person(person_num)
     gender = public_send("sex#{person_num}".to_sym)
     return unless gender
 
     RETIREMENT_AGES[gender]
-  end
-
-  def plural_gender_for_person(person_num)
-    gender = public_send("sex#{person_num}".to_sym)
-    return unless gender
-
-    if %w[M X].include?(gender)
-      "male and non-binary people"
-    elsif gender == "F"
-      "females"
-    end
   end
 
   def age_known?(person_num)

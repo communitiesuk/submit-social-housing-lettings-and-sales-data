@@ -1,4 +1,6 @@
 module Validations::SharedValidations
+  include ActionView::Helpers::NumberHelper
+
   def validate_other_field(record, value_other = nil, main_field = nil, other_field = nil, main_label = nil, other_label = nil)
     return unless main_field || other_field
 
@@ -19,17 +21,19 @@ module Validations::SharedValidations
       next unless record[question.id]
 
       field = question.check_answer_label || question.id
+      min = [question.prefix, number_with_delimiter(question.min, delimiter: ","), question.suffix].join("")
+      max = [question.prefix, number_with_delimiter(question.max, delimiter: ","), question.suffix].join("")
 
       begin
         answer = Float(record.public_send("#{question.id}_before_type_cast"))
       rescue ArgumentError
-        record.errors.add question.id.to_sym, I18n.t("validations.numeric.valid", field:, min: question.min, max: question.max)
+        record.errors.add question.id.to_sym, I18n.t("validations.numeric.valid", field:, min:, max:)
       end
 
       next unless answer
 
       if (question.min && question.min > answer) || (question.max && question.max < answer)
-        record.errors.add question.id.to_sym, I18n.t("validations.numeric.valid", field:, min: question.min, max: question.max)
+        record.errors.add question.id.to_sym, I18n.t("validations.numeric.valid", field:, min:, max:)
       end
     end
   end

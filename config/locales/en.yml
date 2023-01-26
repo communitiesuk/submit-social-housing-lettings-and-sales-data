@@ -274,6 +274,7 @@ en:
       carehome:
         out_of_range: "Household rent and other charges must be between %{min_chcharge} and %{max_chcharge} if paying %{period}"
         not_provided: "Enter how much rent and other charges the household pays %{period}"
+      cash_discount_invalid: "Cash discount must be £0 - £999,999"
     household:
       reasonpref:
         not_homeless: "Answer cannot be ‘homeless or about to lose their home’ as the tenant was not homeless immediately prior to this letting"
@@ -367,10 +368,9 @@ en:
         not_internal_transfer: "Answer cannot be ‘permanently decanted from another property owned by this landlord’ as you told us the source of referral for this tenancy was not an internal transfer"
       condition_effects:
         no_choices: "You cannot answer this question as you told us nobody in the household has a physical or mental health condition (or other illness) expected to last 12 months or more"
-    sale_information:
-      proplen:
-        social_homebuy: "Social HomeBuy buyers should not have lived here before"
-        rent_to_buy: "Rent to Buy buyers should not have lived here before"
+      old_persons_shared_ownership: "Are you sure? At least one buyer should be aged over 64 for Older persons‘ shared ownership scheme"
+      postcode:
+        discounted_ownership: "Last settled accommodation and discounted ownership property postcodes must match"
 
     tenancy:
       length:
@@ -412,6 +412,19 @@ en:
         before_deactivation: "This location was deactivated on %{date}. The reactivation date must be on or after deactivation date"
       deactivation:
         during_deactivated_period: "The location is already deactivated during this date, please enter a different date"
+    sale_information:
+      proplen:
+        social_homebuy: "Social HomeBuy buyers should not have lived here before"
+        rent_to_buy: "Rent to Buy buyers should not have lived here before"
+      exdate:
+        must_be_before_saledate:
+          Contract exchange date must be less than 1 year before completion date
+        must_be_less_than_1_year_from_saledate:
+          Contract exchange date must be less than 1 year before completion date
+      previous_property_beds:
+        property_type_bedsit: "Bedsit bedroom maximum 1"
+      previous_property_type:
+        property_type_bedsit: "A bedsit can not have more than 1 bedroom"
 
   soft_validations:
     net_income:

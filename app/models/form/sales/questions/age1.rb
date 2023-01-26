@@ -17,5 +17,7 @@ class Form::Sales::Questions::Age1 < ::Form::Question
       },
     ]
     @check_answers_card_number = 1
+    @min = 16
+    @max = 110
   end
 end

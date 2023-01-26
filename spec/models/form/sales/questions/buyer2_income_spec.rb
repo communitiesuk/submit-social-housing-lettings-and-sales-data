@@ -32,7 +32,7 @@ RSpec.describe Form::Sales::Questions::Buyer2Income, type: :model do
   end
 
   it "has the correct hint" do
-    expect(question.hint_text).to be_nil
+    expect(question.hint_text).to eq("Provide the gross annual income (i.e. salary before tax) plus the annual amount of benefits, Universal Credit or pensions, and income from investments.")
   end
 
   it "has correct width" do

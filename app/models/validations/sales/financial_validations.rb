@@ -11,4 +11,12 @@ module Validations::Sales::FinancialValidations
       end
     end
   end
+
+  def validate_cash_discount(record)
+    return unless record.cashdis
+
+    unless record.cashdis.between?(0, 999_999)
+      record.errors.add :cashdis, I18n.t("validations.financial.cash_discount_invalid")
+    end
+  end
 end
