@@ -44,7 +44,7 @@
       <%= f.hidden_field :page, value: @page.id %>
 
       <div class="govuk-button-group">
-        <% if !@page.id.include?("value_check") && if request.query_parameters["referrer"] != "check_answers" %>
+        <% if !@page.interruption_screen? && if request.query_parameters["referrer"] != "check_answers" %>
           <%= f.govuk_submit "Save and continue" %>
           <%= govuk_link_to "Skip for now", send(@log.form.next_page_redirect_path(@page, @log, current_user), @log) %>
           <% else %>

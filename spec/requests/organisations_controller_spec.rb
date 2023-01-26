@@ -734,8 +734,8 @@ RSpec.describe OrganisationsController, type: :request do
           let(:number_of_org2_sales_logs) { 4 }
 
           before do
-            FactoryBot.create_list(:sales_log, number_of_org1_sales_logs, owning_organisation_id: organisation.id, managing_organisation_id: organisation.id)
-            FactoryBot.create_list(:sales_log, number_of_org2_sales_logs, owning_organisation_id: unauthorised_organisation.id, managing_organisation_id: unauthorised_organisation.id)
+            FactoryBot.create_list(:sales_log, number_of_org1_sales_logs, owning_organisation_id: organisation.id)
+            FactoryBot.create_list(:sales_log, number_of_org2_sales_logs, owning_organisation_id: unauthorised_organisation.id)
 
             get "/organisations/#{organisation.id}/sales-logs", headers:, params: {}
           end

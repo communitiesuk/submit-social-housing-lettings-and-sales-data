@@ -109,10 +109,6 @@ private
     economic_status == 7
   end
 
-  def person_economic_status_refused?(economic_status)
-    economic_status == 10
-  end
-
   def person_is_child?(relationship)
     relationship == "C"
   end

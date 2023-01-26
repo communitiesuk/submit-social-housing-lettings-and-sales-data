@@ -10,7 +10,6 @@ class User < ApplicationRecord
   has_many :owned_lettings_logs, through: :organisation
   has_many :managed_lettings_logs, through: :organisation
   has_many :owned_sales_logs, through: :organisation
-  has_many :managed_sales_logs, through: :organisation
   has_many :legacy_users
   has_many :bulk_uploads
 

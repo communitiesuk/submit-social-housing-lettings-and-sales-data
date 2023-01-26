@@ -413,6 +413,9 @@ en:
       deactivation:
         during_deactivated_period: "The location is already deactivated during this date, please enter a different date"
     sale_information:
+      proplen:
+        social_homebuy: "Social HomeBuy buyers should not have lived here before"
+        rent_to_buy: "Rent to Buy buyers should not have lived here before"
       exdate:
         must_be_before_saledate:
           Contract exchange date must be less than 1 year before completion date
@@ -445,6 +448,8 @@ en:
       max:
         title: "You told us this person is %{age} or over and not retired"
         hint_text: "The minimum expected retirement age for %{gender} in England is %{age}."
+    extra_borrowing:
+      title: "The mortgage and deposit are higher than the purchase minus the discount"
     pregnancy:
       title: "You told us somebody in the household is pregnant"
       no_females: "You also told us there are no female tenants living at the property."

@@ -5,6 +5,7 @@ class Form::Sales::Questions::Buyer2Income < ::Form::Question
     @check_answer_label = "Buyer 2’s gross annual income"
     @header = "Buyer 2’s gross annual income"
     @type = "numeric"
+    @hint_text = "Provide the gross annual income (i.e. salary before tax) plus the annual amount of benefits, Universal Credit or pensions, and income from investments."
     @min = 0
     @step = 1
     @width = 5
