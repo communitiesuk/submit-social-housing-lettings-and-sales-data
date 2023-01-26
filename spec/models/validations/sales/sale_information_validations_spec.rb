@@ -5,12 +5,12 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
   let(:validator_class) { Class.new { include Validations::Sales::SaleInformationValidations } }
 
-  describe "#validate_pratical_completion_date_before_saledate" do
+  describe "#validate_practical_completion_date_before_saledate" do
     context "when hodate blank" do
       let(:record) { build(:sales_log, hodate: nil) }
 
       it "does not add an error" do
-        sale_information_validator.validate_pratical_completion_date_before_saledate(record)
+        sale_information_validator.validate_practical_completion_date_before_saledate(record)
 
         expect(record.errors).not_to be_present
       end
@@ -20,7 +20,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       let(:record) { build(:sales_log, saledate: nil) }
 
       it "does not add an error" do
-        sale_information_validator.validate_pratical_completion_date_before_saledate(record)
+        sale_information_validator.validate_practical_completion_date_before_saledate(record)
 
         expect(record.errors).not_to be_present
       end
@@ -30,7 +30,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       let(:record) { build(:sales_log, hodate: nil, saledate: nil) }
 
       it "does not add an error" do
-        sale_information_validator.validate_pratical_completion_date_before_saledate(record)
+        sale_information_validator.validate_practical_completion_date_before_saledate(record)
 
         expect(record.errors).not_to be_present
       end
@@ -40,7 +40,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       let(:record) { build(:sales_log, hodate: 2.months.ago, saledate: 1.month.ago) }
 
       it "does not add the error" do
-        sale_information_validator.validate_pratical_completion_date_before_saledate(record)
+        sale_information_validator.validate_practical_completion_date_before_saledate(record)
 
         expect(record.errors).not_to be_present
       end
@@ -50,7 +50,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       let(:record) { build(:sales_log, hodate: 1.month.ago, saledate: 2.months.ago) }
 
       it "adds error" do
-        sale_information_validator.validate_pratical_completion_date_before_saledate(record)
+        sale_information_validator.validate_practical_completion_date_before_saledate(record)
 
         expect(record.errors[:hodate]).to be_present
       end
@@ -60,7 +60,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       let(:record) { build(:sales_log, hodate: Time.zone.parse("2023-07-01"), saledate: Time.zone.parse("2023-07-01")) }
 
       it "does not add an error" do
-        sale_information_validator.validate_pratical_completion_date_before_saledate(record)
+        sale_information_validator.validate_practical_completion_date_before_saledate(record)
 
         expect(record.errors[:hodate]).to be_present
       end
@@ -167,6 +167,60 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
         sale_information_validator.validate_previous_property_unit_type(record)
         expect(record.errors["fromprop"]).to include(I18n.t("validations.sale_information.previous_property_type.property_type_bedsit"))
         expect(record.errors["frombeds"]).to include(I18n.t("validations.sale_information.previous_property_beds.property_type_bedsit"))
+      end
+    end
+  end
+
+  describe "#validate_years_living_in_property_before_purchase" do
+    context "when proplen blank" do
+      let(:record) { build(:sales_log, proplen: nil) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_years_living_in_property_before_purchase(record)
+
+        expect(record.errors).not_to be_present
+      end
+    end
+
+    context "when type blank" do
+      let(:record) { build(:sales_log, type: nil) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_years_living_in_property_before_purchase(record)
+
+        expect(record.errors).not_to be_present
+      end
+    end
+
+    context "when proplen 0" do
+      let(:record) { build(:sales_log, proplen: 0) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_years_living_in_property_before_purchase(record)
+
+        expect(record.errors).not_to be_present
+      end
+    end
+
+    context "when type Rent to Buy and proplen > 0" do
+      let(:record) { build(:sales_log, proplen: 1, type: 28) }
+
+      it "adds an error" do
+        sale_information_validator.validate_years_living_in_property_before_purchase(record)
+
+        expect(record.errors[:type]).to include(I18n.t("validations.sale_information.proplen.rent_to_buy"))
+        expect(record.errors[:proplen]).to include(I18n.t("validations.sale_information.proplen.rent_to_buy"))
+      end
+    end
+
+    context "when type Social HomeBuy and proplen > 0" do
+      let(:record) { build(:sales_log, proplen: 1, type: 18) }
+
+      it "adds an error" do
+        sale_information_validator.validate_years_living_in_property_before_purchase(record)
+
+        expect(record.errors[:type]).to include(I18n.t("validations.sale_information.proplen.social_homebuy"))
+        expect(record.errors[:proplen]).to include(I18n.t("validations.sale_information.proplen.social_homebuy"))
       end
     end
   end

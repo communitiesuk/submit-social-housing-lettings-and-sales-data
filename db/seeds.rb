@@ -160,7 +160,7 @@ unless Rails.env.test?
       saledate: Date.new(2023, 1, 1),
       purchid: "1",
       ownershipsch: 2,
-      type: 8,
+      type: 9,
       jointpur: 1,
       jointmore: 1,
     )

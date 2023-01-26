@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_16_151942) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_18_170602) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -367,7 +367,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_16_151942) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "owning_organisation_id"
-    t.bigint "managing_organisation_id"
     t.bigint "created_by_id"
     t.string "purchid"
     t.integer "type"
@@ -503,9 +502,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_16_151942) do
     t.bigint "bulk_upload_id"
     t.integer "retirement_value_check"
     t.integer "hodate_check"
+    t.integer "extrabor_value_check"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
-    t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
     t.index ["updated_by_id"], name: "index_sales_logs_on_updated_by_id"
   end

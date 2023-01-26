@@ -3,7 +3,6 @@ class Organisation < ApplicationRecord
   has_many :owned_lettings_logs, class_name: "LettingsLog", foreign_key: "owning_organisation_id", dependent: :delete_all
   has_many :managed_lettings_logs, class_name: "LettingsLog", foreign_key: "managing_organisation_id"
   has_many :owned_sales_logs, class_name: "SalesLog", foreign_key: "owning_organisation_id", dependent: :delete_all
-  has_many :managed_sales_logs, class_name: "SalesLog", foreign_key: "managing_organisation_id"
   has_many :data_protection_confirmations
   has_many :organisation_rent_periods
   has_many :owned_schemes, class_name: "Scheme", foreign_key: "owning_organisation_id", dependent: :delete_all

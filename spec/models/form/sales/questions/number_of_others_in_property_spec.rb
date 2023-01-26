@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::NumberOfOthersInProperty, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Besides the buyers, how many other people live in the property?")
+    expect(question.header).to eq("Besides the buyer(s), how many other people live or will live in the property?")
   end
 
   it "has the correct check_answer_label" do
