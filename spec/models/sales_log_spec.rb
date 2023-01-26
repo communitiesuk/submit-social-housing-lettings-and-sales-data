@@ -109,7 +109,7 @@ RSpec.describe SalesLog, type: :model do
     let(:sales_log) { FactoryBot.create(:sales_log, :completed) }
 
     it "correctly derives and saves exday, exmonth and exyear" do
-      sales_log.update!(exdate: Time.gm(2022, 5, 4), ownershipsch: 1, staircase: 2, resale: 2)
+      sales_log.update!(exdate: Time.gm(2022, 5, 4), saledate: Time.gm(2022, 7, 4), ownershipsch: 1, staircase: 2, resale: 2)
       record_from_db = ActiveRecord::Base.connection.execute("select exday, exmonth, exyear from sales_logs where id=#{sales_log.id}").to_a[0]
       expect(record_from_db["exday"]).to eq(4)
       expect(record_from_db["exmonth"]).to eq(5)
