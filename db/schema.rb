@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_16_151942) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_23_160741) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -487,9 +487,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_16_151942) do
     t.integer "hoyear"
     t.integer "fromprop"
     t.integer "socprevten"
+    t.integer "mortlen"
     t.integer "mortgagelender"
     t.string "mortgagelenderother"
-    t.integer "mortlen"
     t.string "pcode1"
     t.string "pcode2"
     t.integer "pcodenk"
@@ -504,6 +504,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_16_151942) do
     t.bigint "bulk_upload_id"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.integer "retirement_value_check"
+    t.integer "extrabor_value_check"
+    t.integer "deposit_and_mortgage_value_check"
+    t.integer "grant_value_check"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
