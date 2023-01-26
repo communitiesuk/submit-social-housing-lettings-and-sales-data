@@ -46,6 +46,6 @@ module Validations::Sales::SoftValidations
   def grant_outside_common_range?
     return unless grant
 
-    !(9_000..16_000).cover? grant
+    grant.between?(9_000,16_000)
   end
 end
