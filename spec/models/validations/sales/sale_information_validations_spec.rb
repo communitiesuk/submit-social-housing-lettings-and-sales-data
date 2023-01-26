@@ -145,7 +145,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
   describe "#validate_previous_property_unit_type" do
     context "when number of bedrooms is <= 1" do
-      let(:record) { FactoryBot.build(:sales_log, frombeds: 1, fromprop: 2) }
+      let(:record) { build(:sales_log, frombeds: 1, fromprop: 2) }
 
       it "does not add an error if it's a bedsit" do
         sale_information_validator.validate_previous_property_unit_type(record)
@@ -155,7 +155,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
     end
 
     context "when number of bedrooms is > 1" do
-      let(:record) { FactoryBot.build(:sales_log, frombeds: 2, fromprop: 2) }
+      let(:record) { build(:sales_log, frombeds: 2, fromprop: 2) }
 
       it "does add an error if it's a bedsit" do
         sale_information_validator.validate_previous_property_unit_type(record)
@@ -368,6 +368,38 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
         sale_information_validator.validate_discounted_ownership_value(record)
 
         expect(record.errors).to be_empty
+      end
+    end
+  end
+
+  describe "#validate_mortgage_length" do
+    context "when mortlen is < 0" do
+      let(:record) { build(:sales_log, mortlen: -1) }
+
+      it "does not add an error if it's a bedsit" do
+        sale_information_validator.validate_mortgage_length(record)
+
+        expect(record.errors[:mortlen]).to include(I18n.t("validations.sale_information.mortlen.range"))
+      end
+    end
+
+    context "when 0<= mortlen <= 60" do
+      let(:record) { build(:sales_log, mortlen: 20) }
+
+      it "does not add an error if it's a bedsit" do
+        sale_information_validator.validate_mortgage_length(record)
+
+        expect(record.errors).to be_empty
+      end
+    end
+
+    context "when mortlen > 60" do
+      let(:record) { build(:sales_log, mortlen: 61) }
+
+      it "does not add an error if it's a bedsit" do
+        sale_information_validator.validate_mortgage_length(record)
+
+        expect(record.errors[:mortlen]).to include(I18n.t("validations.sale_information.mortlen.range"))
       end
     end
   end

@@ -54,4 +54,12 @@ module Validations::Sales::SaleInformationValidations
       end
     end
   end
+
+  def validate_mortgage_length(record)
+    return unless record.mortlen
+
+    return if record.mortlen >= 0 && record.mortlen <= 60
+
+    record.errors.add :mortlen, I18n.t("validations.sale_information.mortlen.range")
+  end
 end
