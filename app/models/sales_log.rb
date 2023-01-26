@@ -136,10 +136,6 @@ class SalesLog < Log
     type == 18
   end
 
-  def is_older_persons_shared_ownership?
-    type == 24
-  end
-
   def ppostcode_full=(postcode)
     if postcode
       super UKPostcode.parse(postcode).to_s
