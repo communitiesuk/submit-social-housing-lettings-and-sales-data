@@ -367,7 +367,7 @@ RSpec.describe Validations::Sales::SoftValidations do
           .to be_deposit_over_soft_max
       end
 
-      it "returns fals if deposit is less than 4/3 of savings" do
+      it "returns false if deposit is less than 4/3 of savings" do
         record.deposit = 7_999
         record.savings = 6_000
         expect(record)
@@ -571,6 +571,26 @@ RSpec.describe Validations::Sales::SoftValidations do
       record.grant = 10_000
 
       expect(record).not_to be_grant_outside_common_range
+    end
+  end
+
+  describe "#staircase_bought_above_fifty" do
+    it "returns false when stairbought is not set" do
+      record.stairbought = nil
+
+      expect(record).not_to be_staircase_bought_above_fifty
+    end
+
+    it "returns false when stairbought is below fifty" do
+      record.stairbought = 40
+
+      expect(record).not_to be_staircase_bought_above_fifty
+    end
+
+    it "returns true when stairbought is above fifty" do
+      record.stairbought = 70
+
+      expect(record).to be_staircase_bought_above_fifty
     end
   end
 end
