@@ -102,11 +102,9 @@ class LettingsLogsController < LogsController
   end
 
   def org_params
-    {
-      "owning_organisation_id" => current_user.organisation.id,
-      "managing_organisation_id" => current_user.organisation.id,
-      "created_by_id" => current_user.id,
-    }
+    super.merge(
+      { "managing_organisation_id" => current_user.organisation.id },
+    )
   end
 
 private
