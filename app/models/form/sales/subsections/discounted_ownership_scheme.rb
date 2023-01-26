@@ -12,6 +12,7 @@ class Form::Sales::Subsections::DiscountedOwnershipScheme < ::Form::Subsection
       Form::Sales::Pages::AboutPriceRtb.new(nil, nil, self),
       Form::Sales::Pages::ExtraBorrowingValueCheck.new("extra_borrowing_price_value_check", nil, self),
       Form::Sales::Pages::AboutPriceNotRtb.new(nil, nil, self),
+      Form::Sales::Pages::GrantValueCheck.new(nil, nil, self),
       Form::Sales::Pages::PurchasePrice.new("purchase_price_discounted_ownership", nil, self),
       Form::Sales::Pages::Mortgageused.new("mortgage_used_discounted_ownership", nil, self),
       Form::Sales::Pages::MortgageAmount.new("mortgage_amount_discounted_ownership", nil, self),

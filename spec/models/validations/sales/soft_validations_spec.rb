@@ -396,4 +396,24 @@ RSpec.describe Validations::Sales::SoftValidations do
       expect(record).not_to be_wheelchair_when_not_disabled
     end
   end
+
+  describe "#grant_outside_common_range?" do
+    it "returns true if grant is below 9000" do
+      record.grant = 1_000
+
+      expect(record).to be_grant_outside_common_range
+    end
+
+    it "returns true if grant is above 16000" do
+      record.grant = 100_000
+
+      expect(record).to be_grant_outside_common_range
+    end
+
+    it "returns false if grant is within expected range" do
+      record.grant = 10_000
+
+      expect(record).not_to be_grant_outside_common_range
+    end
+  end
 end

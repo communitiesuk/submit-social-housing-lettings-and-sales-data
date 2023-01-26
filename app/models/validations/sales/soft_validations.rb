@@ -48,4 +48,10 @@ module Validations::Sales::SoftValidations
 
     ((saledate.to_date - hodate.to_date).to_i / 365) >= 3
   end
+
+  def grant_outside_common_range?
+    return unless grant
+
+    !grant.between?(9_000, 16_000)
+  end
 end
