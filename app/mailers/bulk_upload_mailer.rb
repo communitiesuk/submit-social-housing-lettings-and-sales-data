@@ -14,7 +14,7 @@ class BulkUploadMailer < NotifyMailer
         filename: "[#{bulk_upload} filename]",
         upload_timestamp: "[#{bulk_upload} upload_timestamp]",
         success_description: "[#{bulk_upload} success_description]",
-        logs_link: "[#{bulk_upload} logs_link]"
+        logs_link: "[#{bulk_upload} logs_link]",
       },
     )
   end
@@ -29,7 +29,7 @@ class BulkUploadMailer < NotifyMailer
         year_combo: "[#{bulk_upload} year_combo]",
         lettings_or_sales: "[#{bulk_upload} lettings_or_sales]",
         error_description: "[#{bulk_upload} error_description]",
-        summary_report_link: "[#{bulk_upload} summary_report_link]"
+        summary_report_link: "[#{bulk_upload} summary_report_link]",
       },
     )
   end
@@ -44,7 +44,7 @@ class BulkUploadMailer < NotifyMailer
         lettings_or_sales: "[#{bulk_upload} lettings_or_sales]",
         year_combo: "[#{bulk_upload} year_combo]",
         errors_list: "[#{bulk_upload} errors_list]",
-        bulk_upload_link: "[#{bulk_upload} bulk_upload_link]"
+        bulk_upload_link: "[#{bulk_upload} bulk_upload_link]",
       },
     )
   end
@@ -58,7 +58,7 @@ class BulkUploadMailer < NotifyMailer
         upload_timestamp: "[#{bulk_upload} upload_timestamp]",
         lettings_or_sales: "[#{bulk_upload} lettings_or_sales]",
         year_combo: "[#{bulk_upload} year_combo]",
-        bulk_upload_link: "[#{bulk_upload} bulk_upload_link]"
+        bulk_upload_link: "[#{bulk_upload} bulk_upload_link]",
       },
     )
   end
@@ -72,7 +72,7 @@ class BulkUploadMailer < NotifyMailer
         filename: "[#{bulk_upload} filename]",
         upload_timestamp: "[#{bulk_upload} upload_timestamp]",
         error_description: "[#{bulk_upload} error_description]",
-        summary_report_link: "[#{bulk_upload} summary_report_link]"
+        summary_report_link: "[#{bulk_upload} summary_report_link]",
       },
     )
   end
