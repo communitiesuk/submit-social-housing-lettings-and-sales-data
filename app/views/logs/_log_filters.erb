@@ -8,19 +8,18 @@
       <%= form_with html: { method: :get } do |f| %>
         <% years = { "2021": "2021/22", "2022": "2022/23" } %>
         <% all_or_yours = { "all": { label: "All" }, "yours": { label: "Yours" } } %>
-        <% bulk_upload_options = (@session_filters["bulk_upload_id"] || []).reject(&:blank?).index_with { |_bulk_upload_id| "With logs from bulk upload" } %>
 
-        <% if bulk_upload_options.present? %>
+        <% if bulk_upload_options(@bulk_upload).present? %>
           <%= render partial: "filters/checkbox_filter",
                      locals: {
                        f: f,
-                       options: bulk_upload_options,
+                       options: bulk_upload_options(@bulk_upload),
                        label: "Bulk upload",
                        category: "bulk_upload_id",
                      } %>
         <% end %>
 
-        <% if bulk_upload_options.blank? %>
+        <% if bulk_upload_options(@bulk_upload).blank? %>
           <%= render partial: "filters/checkbox_filter",
                      locals: {
                        f: f,
