@@ -201,6 +201,59 @@ RSpec.describe Validations::Sales::SoftValidations do
       end
     end
 
+    context "when validating mortgage and deposit against discounted value" do
+      [
+        {
+          nil_field: "mortgage",
+          value: 500_000,
+          deposit: 10_000,
+          discount: 10,
+        },
+        {
+          nil_field: "value",
+          mortgage: 100_000,
+          deposit: 10_000,
+          discount: 10,
+        },
+        {
+          nil_field: "deposit",
+          value: 500_000,
+          mortgage: 100_000,
+          discount: 10,
+        },
+        {
+          nil_field: "discount",
+          value: 500_000,
+          mortgage: 100_000,
+          deposit: 10_000,
+        },
+      ].each do |test_case|
+        it "returns false if #{test_case[:nil_field]} is not present" do
+          record.value = test_case[:value]
+          record.mortgage = test_case[:mortgage]
+          record.deposit = test_case[:deposit]
+          record.discount = test_case[:discount]
+          expect(record).not_to be_mortgage_plus_deposit_less_than_discounted_value
+        end
+      end
+
+      it "returns false if the deposit and mortgage add up to the discounted value or more" do
+        record.value = 500_000
+        record.discount = 20
+        record.mortgage = 200_000
+        record.deposit = 200_000
+        expect(record).not_to be_mortgage_plus_deposit_less_than_discounted_value
+      end
+
+      it "returns true if the deposit and mortgage add up to less than the discounted value" do
+        record.value = 500_000
+        record.discount = 10
+        record.mortgage = 200_000
+        record.deposit = 200_000
+        expect(record).to be_mortgage_plus_deposit_less_than_discounted_value
+      end
+    end
+
     context "when validating extra borrowing" do
       it "returns false if extrabor not present" do
         record.mortgage = 50_000
