@@ -26,8 +26,18 @@ RSpec.describe Validations::Sales::SetupValidations do
       end
     end
 
-    context "when saledate is not the 22/23 financial year" do
+    context "when saledate is before the 22/23 financial year" do
       let(:record) { FactoryBot.build(:sales_log, saledate: Time.zone.local(2022, 1, 1)) }
+
+      it "adds error" do
+        setup_validator.validate_saledate(record)
+
+        expect(record.errors[:saledate]).to include(I18n.t("validations.setup.saledate.financial_year"))
+      end
+    end
+
+    context "when saledate is after the 22/23 financial year" do
+      let(:record) { FactoryBot.build(:sales_log, saledate: Time.zone.local(2023, 4, 1)) }
 
       it "adds error" do
         setup_validator.validate_saledate(record)

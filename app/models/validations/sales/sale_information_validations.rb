@@ -15,7 +15,7 @@ module Validations::Sales::SaleInformationValidations
       record.errors.add :saledate, I18n.t("validations.sale_information.saledate.must_be_after_exdate")
     end
 
-    if record.saledate - record.exdate > 1.year
+    if record.saledate - record.exdate >= 1.year
       record.errors.add :exdate, I18n.t("validations.sale_information.exdate.must_be_less_than_1_year_from_saledate")
       record.errors.add :saledate, I18n.t("validations.sale_information.saledate.must_be_less_than_1_year_from_exdate")
     end
