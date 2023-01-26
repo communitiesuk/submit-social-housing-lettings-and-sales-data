@@ -101,6 +101,12 @@ class LettingsLogsController < LogsController
     end
   end
 
+  def org_params
+    super.merge(
+      { "managing_organisation_id" => current_user.organisation.id },
+    )
+  end
+
 private
 
   def permitted_log_params
