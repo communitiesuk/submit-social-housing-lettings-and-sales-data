@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_23_160741) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_26_145529) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -25,6 +25,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_23_160741) do
     t.text "error"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "col"
     t.index ["bulk_upload_id"], name: "index_bulk_upload_errors_on_bulk_upload_id"
   end
 
