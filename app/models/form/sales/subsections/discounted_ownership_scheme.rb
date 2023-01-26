@@ -17,11 +17,8 @@ class Form::Sales::Subsections::DiscountedOwnershipScheme < ::Form::Subsection
       Form::Sales::Pages::DepositAndMortgageValueCheck.new("discounted_ownership_deposit_and_mortgage_value_check", nil, self),
       Form::Sales::Pages::Mortgageused.new("mortgage_used_discounted_ownership", nil, self),
       Form::Sales::Pages::MortgageAmount.new("mortgage_amount_discounted_ownership", nil, self),
-<<<<<<< HEAD
       Form::Sales::Pages::ExtraBorrowingValueCheck.new("extra_borrowing_mortgage_value_check", nil, self),
-=======
       Form::Sales::Pages::DepositAndMortgageValueCheck.new("discounted_ownership_deposit_and_mortgage_value_check", nil, self),
->>>>>>> b2e8f6f5 (add soft validation page after questions about every relevant variable)
       Form::Sales::Pages::MortgageLender.new("mortgage_lender_discounted_ownership", nil, self),
       Form::Sales::Pages::MortgageLenderOther.new("mortgage_lender_other_discounted_ownership", nil, self),
       Form::Sales::Pages::MortgageLength.new("mortgage_length_discounted_ownership", nil, self),
