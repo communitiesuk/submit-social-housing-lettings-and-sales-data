@@ -334,7 +334,7 @@ RSpec.describe Validations::Sales::SoftValidations do
           .not_to be_shared_ownership_deposit_invalid
       end
 
-      it "returns false if no mortgage is given" do
+      it "returns false if mortgage is used and no mortgage is given" do
         record.mortgage = nil
         record.deposit = 1000
         record.cashdis = 1000
@@ -343,6 +343,18 @@ RSpec.describe Validations::Sales::SoftValidations do
 
         expect(record)
           .not_to be_shared_ownership_deposit_invalid
+      end
+
+      it "returns true if mortgage is not used and no mortgage is given" do
+        record.mortgage = nil
+        record.mortgageused = 2
+        record.deposit = 1000
+        record.cashdis = 1000
+        record.value = 3000
+        record.equity = 100
+
+        expect(record)
+          .to be_shared_ownership_deposit_invalid
       end
 
       it "returns false if no deposit is given" do
@@ -356,15 +368,28 @@ RSpec.describe Validations::Sales::SoftValidations do
           .not_to be_shared_ownership_deposit_invalid
       end
 
-      it "returns false if no cashdis is given" do
+      it "returns false if no cashdis is given and cashdis is routed to" do
         record.mortgage = 1000
         record.deposit = 1000
+        record.type = 18
         record.cashdis = nil
         record.value = 3000
         record.equity = 100
 
         expect(record)
           .not_to be_shared_ownership_deposit_invalid
+      end
+
+      it "returns true if no cashdis is given and cashdis is not routed to" do
+        record.mortgage = 1000
+        record.deposit = 1000
+        record.type = 2
+        record.cashdis = nil
+        record.value = 3000
+        record.equity = 100
+
+        expect(record)
+          .to be_shared_ownership_deposit_invalid
       end
 
       it "returns false if no value is given" do

@@ -44,9 +44,13 @@ module Validations::Sales::SoftValidations
   end
 
   def shared_ownership_deposit_invalid?
-    return unless mortgage && deposit && cashdis && value && equity
+    return unless mortgage || mortgageused == 2
+    return unless cashdis || !is_type_discount?
+    return unless deposit && value && equity
 
-    mortgage + deposit + cashdis != value * equity / 100
+    cash_discount = cashdis || 0
+    mortgage_value = mortgage || 0
+    mortgage_value + deposit + cash_discount != value * equity / 100
   end
 
   def hodate_3_years_or_more_saledate?
