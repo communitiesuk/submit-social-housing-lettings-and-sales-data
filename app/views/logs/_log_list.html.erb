@@ -1,6 +1,6 @@
 <h2 class="govuk-body">
   <%= render(SearchResultCaptionComponent.new(searched:, count: pagy.count, item_label:, total_count:, item: "logs", path: request.path)) %>
-  <% if logs&.first&.form&.type == "lettings" %>
+  <% if logs&.first&.lettings? %>
     <%= govuk_link_to "Download (CSV)", csv_download_url, type: "text/csv" %>
   <% end %>
 </h2>
