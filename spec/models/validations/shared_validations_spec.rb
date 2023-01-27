@@ -18,42 +18,42 @@ RSpec.describe Validations::SharedValidations do
         record.age1 = "random"
         shared_validator.validate_numeric_min_max(record)
         expect(record.errors["age1"])
-          .to include(match I18n.t("validations.numeric.valid", field: "Lead tenant’s age", min: 16, max: 120))
+          .to include(match I18n.t("validations.numeric.within_range", field: "Lead tenant’s age", min: 16, max: 120))
       end
 
       it "validates that other household member ages are a number" do
         record.age2 = "random"
         shared_validator.validate_numeric_min_max(record)
         expect(record.errors["age2"])
-          .to include(match I18n.t("validations.numeric.valid", field: "Person 2’s age", min: 1, max: 120))
+          .to include(match I18n.t("validations.numeric.within_range", field: "Person 2’s age", min: 1, max: 120))
       end
 
       it "validates that person 1's age is greater than 16" do
         record.age1 = 15
         shared_validator.validate_numeric_min_max(record)
         expect(record.errors["age1"])
-          .to include(match I18n.t("validations.numeric.valid", field: "Lead tenant’s age", min: 16, max: 120))
+          .to include(match I18n.t("validations.numeric.within_range", field: "Lead tenant’s age", min: 16, max: 120))
       end
 
       it "validates that other household member ages are greater than 1" do
         record.age2 = 0
         shared_validator.validate_numeric_min_max(record)
         expect(record.errors["age2"])
-          .to include(match I18n.t("validations.numeric.valid", field: "Person 2’s age", min: 1, max: 120))
+          .to include(match I18n.t("validations.numeric.within_range", field: "Person 2’s age", min: 1, max: 120))
       end
 
       it "validates that person 1's age is less than 121" do
         record.age1 = 121
         shared_validator.validate_numeric_min_max(record)
         expect(record.errors["age1"])
-          .to include(match I18n.t("validations.numeric.valid", field: "Lead tenant’s age", min: 16, max: 120))
+          .to include(match I18n.t("validations.numeric.within_range", field: "Lead tenant’s age", min: 16, max: 120))
       end
 
       it "validates that other household member ages are greater than 121" do
         record.age2 = 123
         shared_validator.validate_numeric_min_max(record)
         expect(record.errors["age2"])
-          .to include(match I18n.t("validations.numeric.valid", field: "Person 2’s age", min: 1, max: 120))
+          .to include(match I18n.t("validations.numeric.within_range", field: "Person 2’s age", min: 1, max: 120))
       end
 
       it "validates that person 1's age is between 16 and 120" do
@@ -74,7 +74,7 @@ RSpec.describe Validations::SharedValidations do
         sales_record.stairbought = "random"
         shared_validator.validate_numeric_min_max(sales_record)
         expect(sales_record.errors["stairbought"])
-          .to include(match I18n.t("validations.numeric.valid", field: "Percentage bought in this staircasing transaction", min: "0 percent", max: "100 percent"))
+          .to include(match I18n.t("validations.numeric.within_range", field: "Percentage bought in this staircasing transaction", min: "0 percent", max: "100 percent"))
       end
     end
 
@@ -83,7 +83,7 @@ RSpec.describe Validations::SharedValidations do
         sales_record.income1 = "random"
         shared_validator.validate_numeric_min_max(sales_record)
         expect(sales_record.errors["income1"])
-          .to include(match I18n.t("validations.numeric.valid", field: "Buyer 1’s gross annual income", min: "£0", max: "£999,999"))
+          .to include(match I18n.t("validations.numeric.within_range", field: "Buyer 1’s gross annual income", min: "£0", max: "£999,999"))
       end
     end
   end

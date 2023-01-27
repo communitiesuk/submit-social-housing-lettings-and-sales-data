@@ -5,7 +5,7 @@ module Validations::Sales::HouseholdValidations
     return if record.hholdcount.blank?
 
     unless record.hholdcount >= 0 && record.hholdcount <= 4
-      record.errors.add :hholdcount, I18n.t("validations.numeric.valid", field: "Number of other people living in the property", min: 0, max: 4)
+      record.errors.add :hholdcount, I18n.t("validations.numeric.within_range", field: "Number of other people living in the property", min: 0, max: 4)
     end
   end
 

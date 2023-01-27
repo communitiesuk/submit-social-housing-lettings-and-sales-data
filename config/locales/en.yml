@@ -131,7 +131,9 @@ en:
     other_field_missing: "If %{main_field_label} is other then %{other_field_label} must be provided"
     other_field_not_required: "%{other_field_label} must not be provided if %{main_field_label} was not other"
     numeric:
-      valid: "%{field} must be between %{min} and %{max}"
+      within_range: "%{field} must be between %{min} and %{max}"
+      above_min: "%{field} must be at least %{min}"
+      below_max: "%{field} must be at most %{max}"
     date:
       invalid_date: "Enter a date in the correct format, for example 31 1 2022"
       outside_collection_window: "Enter a date within the current collection windows"
