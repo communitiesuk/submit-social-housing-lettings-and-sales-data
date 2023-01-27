@@ -34,7 +34,7 @@ class SalesLog < Log
   scope :search_by, ->(param) { filter_by_id(param) }
   scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org) }
 
-  OPTIONAL_FIELDS = %w[purchid].freeze
+  OPTIONAL_FIELDS = %w[purchid old_persons_shared_ownership_value_check].freeze
   RETIREMENT_AGES = { "M" => 65, "F" => 60, "X" => 65 }.freeze
 
   def startdate

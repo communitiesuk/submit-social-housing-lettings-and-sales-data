@@ -47,7 +47,7 @@ RSpec.describe SalesLog, type: :model do
     let(:sales_log) { build(:sales_log) }
 
     it "returns optional fields" do
-      expect(sales_log.optional_fields).to eq(%w[purchid])
+      expect(sales_log.optional_fields).to eq(%w[purchid old_persons_shared_ownership_value_check])
     end
   end
 
