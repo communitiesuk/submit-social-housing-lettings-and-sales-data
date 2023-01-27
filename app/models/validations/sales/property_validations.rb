@@ -7,4 +7,12 @@ module Validations::Sales::PropertyValidations
       record.errors.add :ppostcode_full, I18n.t("validations.property.postcode.must_match_previous")
     end
   end
+
+  def validate_bedroom_number(record)
+    return unless record.beds
+
+    unless record.beds.between?(1, 9)
+      record.errors.add :beds, I18n.t("validations.property.beds.1_9")
+    end
+  end
 end
