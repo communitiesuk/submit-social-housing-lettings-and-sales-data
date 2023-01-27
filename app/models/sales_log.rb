@@ -211,4 +211,8 @@ class SalesLog < Log
   def old_persons_shared_ownership?
     type == 24
   end
+
+  def allowed_income_soft_min
+    ALLOWED_INCOME_RANGES[ecstat1].soft_min
+  end
 end

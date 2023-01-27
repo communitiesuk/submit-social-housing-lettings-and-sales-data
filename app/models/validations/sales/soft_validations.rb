@@ -10,7 +10,7 @@ module Validations::Sales::SoftValidations
   def income1_under_soft_min?
     return false unless ecstat1 && income1 && ALLOWED_INCOME_RANGES[ecstat1]
 
-    income1 < ALLOWED_INCOME_RANGES[ecstat1][:soft_min]
+    income1 < ALLOWED_INCOME_RANGES[ecstat1] [:soft_min]
   end
 
   def mortgage_over_soft_max?
