@@ -142,7 +142,9 @@ RSpec.describe SalesLog, type: :model do
     end
 
     it "derives a mortgage value of 0 when mortgage is not used" do
-      sales_log.update!(mortgageused: 2)
+      # to avoid log failing validations when mortgage value is removed:
+      new_grant_value = sales_log.grant + sales_log.mortgage
+      sales_log.update!(mortgageused: 2, grant: new_grant_value)
       record_from_db = ActiveRecord::Base.connection.execute("select mortgage from sales_logs where id=#{sales_log.id}").to_a[0]
       expect(record_from_db["mortgage"]).to eq(0.0)
     end
