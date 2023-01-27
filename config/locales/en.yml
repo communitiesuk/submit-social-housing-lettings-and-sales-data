@@ -434,7 +434,7 @@ en:
         message: "Net income is lower than expected based on the lead tenant’s working situation. Are you sure this is correct?"
       in_soft_max_range:
         message: "Net income is higher than expected based on the lead tenant’s working situation. Are you sure this is correct?"
-      below_soft_min: "You said income was %{income1}, which is below this working situation's minimum (%{soft_min})"
+      under_soft_min: "You said income was %{income1}, which is below this working situation's minimum (%{soft_min})"
     rent:
       min:
         title_text: "You told us the rent is %{brent}"

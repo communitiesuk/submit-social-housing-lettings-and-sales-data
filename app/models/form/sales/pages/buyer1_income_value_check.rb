@@ -7,7 +7,7 @@ class Form::Sales::Pages::Buyer1IncomeValueCheck < ::Form::Page
       },
     ]
     @title_text = {
-      "translation" => "soft_validations.net_income.below_soft_min",
+      "translation" => "soft_validations.net_income.under_soft_min",
       "arguments" => [
         {
           "key" => "income1",
@@ -18,6 +18,7 @@ class Form::Sales::Pages::Buyer1IncomeValueCheck < ::Form::Page
           "key" => "allowed_income_soft_min",
           "label" => false,
           "i18n_template" => "soft_min",
+          "currency" => true,
         },
       ],
     }
