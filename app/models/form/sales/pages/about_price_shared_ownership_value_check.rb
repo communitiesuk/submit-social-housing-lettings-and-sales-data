@@ -24,7 +24,7 @@ class Form::Sales::Pages::AboutPriceSharedOwnershipValueCheck < ::Form::Page
           "key" => "purchase_price_soft_min_or_soft_max",
           "label" => false,
           "i18n_template" => "soft_min_or_soft_max",
-          "prefix" => "£",
+          "currency" => true,
         },
         {
           "key" => "purchase_price_min_or_max_text",

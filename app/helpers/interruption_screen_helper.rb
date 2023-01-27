@@ -7,10 +7,12 @@ module InterruptionScreenHelper
       value = if argument["label"]
                 pre_casing_value = lettings_log.form.get_question(argument["key"], lettings_log).answer_label(lettings_log)
                 pre_casing_value.downcase
+              elsif argument["currency"]
+                ["£", ActionController::Base.helpers.number_to_currency(lettings_log.public_send(argument["key"]), delimiter: ",", format: "%n")].join("")
               else
                 lettings_log.public_send(argument["key"])
               end
-      translation_params[argument["i18n_template"].to_sym] = argument["prefix"] == "£" ? "£#{ActionController::Base.helpers.number_to_currency(value, delimiter: ',', format: '%n')}" : value
+      translation_params[argument["i18n_template"].to_sym] = value
     end
 
     begin
@@ -30,10 +32,12 @@ module InterruptionScreenHelper
     arguments.each do |argument|
       value = if argument["label"]
                 lettings_log.form.get_question(argument["key"], lettings_log).answer_label(lettings_log).downcase
+              elsif argument["currency"]
+                ["£", ActionController::Base.helpers.number_to_currency(lettings_log.public_send(argument["key"]), delimiter: ",", format: "%n")].join("")
               else
                 lettings_log.public_send(argument["key"])
               end
-      translation_params[argument["i18n_template"].to_sym] = argument["prefix"] == "£" ? "£#{ActionController::Base.helpers.number_to_currency(value, delimiter: ',', format: '%n')}" : value
+      translation_params[argument["i18n_template"].to_sym] = value
     end
     I18n.t(title_text["translation"], **translation_params).to_s
   end
