@@ -395,7 +395,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       end
     end
 
-    context "when the type is 24" do
+    context "when the type is old persons shared ownership" do
       let(:record) { build(:sales_log, mrent: 100_000, ownershipsch: 1, type: 24) }
 
       it "does not add an error" do
