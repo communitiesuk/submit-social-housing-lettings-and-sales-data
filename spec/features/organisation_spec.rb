@@ -215,7 +215,7 @@ RSpec.describe "User Features" do
       let(:number_of_sales_logs) { SalesLog.count }
 
       before do
-        FactoryBot.create_list(:sales_log, 4, owning_organisation_id: organisation.id, managing_organisation_id: organisation.id)
+        FactoryBot.create_list(:sales_log, 4, owning_organisation_id: organisation.id)
         visit("/organisations/#{org_id}/sales-logs")
       end
 

@@ -143,7 +143,7 @@ RSpec.describe "Lettings Log Check Answers Page" do
     end
 
     context "when the user is checking their answers for the household characteristics subsection" do
-      it "they see a seperate summary card for each member of the household" do
+      it "they see a separate summary card for each member of the household" do
         visit("/lettings-logs/#{completed_lettings_log.id}/#{subsection}/check-answers")
         assert_selector ".x-govuk-summary-card__title", text: "Lead tenant", count: 1
         assert_selector ".x-govuk-summary-card__title", text: "Person 2", count: 1

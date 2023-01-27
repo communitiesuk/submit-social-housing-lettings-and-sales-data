@@ -32,7 +32,9 @@ RSpec.describe Form::Sales::Questions::MortgageLength, type: :model do
   end
 
   it "has the correct hint" do
-    expect(question.hint_text).to be_nil
+    expect(question.hint_text).to eq(
+      "You should round up to the nearest year. Value should not exceed 60 years.",
+    )
   end
 
   it "has correct width" do

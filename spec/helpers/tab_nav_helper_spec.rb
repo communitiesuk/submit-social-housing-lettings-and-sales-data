@@ -34,26 +34,4 @@ RSpec.describe TabNavHelper do
       expect(scheme_cell(scheme)).to match(expected_html)
     end
   end
-
-  describe "#tab_items" do
-    context "when user is a data_coordinator" do
-      let(:user) { FactoryBot.build(:user, :data_coordinator, organisation:) }
-
-      it "returns details and user tabs" do
-        result = tab_items(user).map { |i| i[:name] }
-        expect(result.count).to eq(2)
-        expect(result.first).to match("Details")
-        expect(result.second).to match("Users")
-      end
-    end
-
-    context "when user is a data_provider" do
-      it "returns details and user tabs" do
-        result = tab_items(user).map { |i| i[:name] }
-        expect(result.count).to eq(2)
-        expect(result.first).to match("Details")
-        expect(result.second).to match("Users")
-      end
-    end
-  end
 end

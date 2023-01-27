@@ -2,7 +2,6 @@ class Log < ApplicationRecord
   self.abstract_class = true
 
   belongs_to :owning_organisation, class_name: "Organisation", optional: true
-  belongs_to :managing_organisation, class_name: "Organisation", optional: true
   belongs_to :created_by, class_name: "User", optional: true
   belongs_to :updated_by, class_name: "User", optional: true
   belongs_to :bulk_upload, optional: true
@@ -12,7 +11,6 @@ class Log < ApplicationRecord
   STATUS = { "not_started" => 0, "in_progress" => 1, "completed" => 2 }.freeze
   enum status: STATUS
 
-  scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org).or(where(managing_organisation: org)) }
   scope :filter_by_status, ->(status, _user = nil) { where status: }
   scope :filter_by_years, lambda { |years, _user = nil|
     first_year = years.shift
@@ -43,10 +41,6 @@ class Log < ApplicationRecord
 
   def ethnic_refused?
     ethnic_group == 17
-  end
-
-  def managing_organisation_provider_type
-    managing_organisation&.provider_type
   end
 
   def collection_period_open?
@@ -113,14 +107,6 @@ private
     form.reset_not_routed_questions(self)
 
     reset_created_by!
-  end
-
-  def reset_created_by!
-    return unless updated_by&.support?
-    return if owning_organisation.blank? || managing_organisation.blank? || created_by.blank?
-    return if created_by&.organisation == managing_organisation || created_by&.organisation == owning_organisation
-
-    update!(created_by: nil)
   end
 
   PIO = PostcodeService.new

@@ -32,6 +32,7 @@ class SalesLog < Log
 
   scope :filter_by_year, ->(year) { where(saledate: Time.zone.local(year.to_i, 4, 1)...Time.zone.local(year.to_i + 1, 4, 1)) }
   scope :search_by, ->(param) { filter_by_id(param) }
+  scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org) }
 
   OPTIONAL_FIELDS = %w[purchid].freeze
   RETIREMENT_AGES = { "M" => 65, "F" => 60, "X" => 65 }.freeze
@@ -182,6 +183,14 @@ class SalesLog < Log
   def process_postcode_changes!
     self.postcode_full = upcase_and_remove_whitespace(postcode_full)
     process_postcode(postcode_full, "pcodenk", "is_la_inferred", "la")
+  end
+
+  def reset_created_by!
+    return unless updated_by&.support?
+    return if owning_organisation.blank? || created_by.blank?
+    return if created_by&.organisation == owning_organisation
+
+    update!(created_by: nil)
   end
 
   def retirement_age_for_person(person_num)

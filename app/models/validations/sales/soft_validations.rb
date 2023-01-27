@@ -37,6 +37,13 @@ module Validations::Sales::SoftValidations
     deposit > savings * 4 / 3
   end
 
+  def extra_borrowing_expected_but_not_reported?
+    return unless extrabor && mortgage && deposit && value && discount
+
+    extrabor != 1 && mortgage + deposit > value - value * discount / 100
+  end
+
+
   def hodate_3_years_or_more_exdate?
     return unless hodate && exdate
 
@@ -55,6 +62,12 @@ module Validations::Sales::SoftValidations
 
   def purchase_price_soft_min_or_soft_max
     value < sale_range.soft_min ? sale_range.soft_min : sale_range.soft_max
+  end
+
+  def grant_outside_common_range?
+    return unless grant
+
+    !grant.between?(9_000, 16_000)
   end
 
 private
