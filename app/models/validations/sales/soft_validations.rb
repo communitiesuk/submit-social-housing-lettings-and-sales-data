@@ -43,7 +43,6 @@ module Validations::Sales::SoftValidations
     extrabor != 1 && mortgage + deposit > value - value * discount / 100
   end
 
-
   def hodate_3_years_or_more_exdate?
     return unless hodate && exdate
 
