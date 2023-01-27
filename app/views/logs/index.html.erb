@@ -11,32 +11,58 @@
       title_id: "impacted-logs-banner",
     ) do |notification_banner| %>
         <% notification_banner.heading(text: "A scheme has changed and it has affected #{@unresolved_count} #{'log'.pluralize(@unresolved_count)}") %>
-        <div class="govuk-notification-banner__heading">
-          <%= govuk_link_to "Update logs", update_logs_lettings_logs_path, class: "govuk-notification-banner__link" %>
-        </div>
-      <% end %>
+      <div class="govuk-notification-banner__heading">
+        <%= govuk_link_to "Update logs", update_logs_lettings_logs_path, class: "govuk-notification-banner__link" %>
+      </div>
     <% end %>
-  <%= render partial: "organisations/headings", locals: current_user.support? ? { main: "Lettings logs", sub: nil } : { main: "Lettings logs", sub: current_user.organisation.name } %>
-<% elsif current_page?(controller: 'sales_logs', action: 'index') %>
-  <%= render partial: "organisations/headings", locals: current_user.support? ? { main: "Sales logs", sub: nil } : { main: "Sales logs", sub: current_user.organisation.name } %>
+  <% end %>
+<% end %>
+
+<% if @bulk_upload.blank? %>
+  <%= render partial: "organisations/headings", locals: current_user.support? ? { main: "#{log_type_for_controller(controller).capitalize} logs", sub: nil } : { main: "#{log_type_for_controller(controller).capitalize} logs", sub: current_user.organisation.name } %>
+<% else %>
+  <%= render partial: "organisations/headings",
+             locals: {
+               main: "You need to fix #{pluralize(@pagy.count, 'log')} from your bulk upload",
+               sub: "#{log_type_for_controller(controller).capitalize} logs (#{@bulk_upload.year_combo})",
+             } %>
+
+  <div class="app-card govuk-!-margin-bottom-9">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <p class="govuk-body-l">
+          The following logs are from your recent bulk upload. They have some incorrect or incomplete data. You’ll need to answer a few more questions for each one to mark them as complete.
+        </p>
+
+        <p class="govuk-body">
+          <strong>Bulk Upload details:</strong><br>
+          <%= @bulk_upload.filename %><br>
+          Uploaded on <%= @bulk_upload.created_at.to_fs(:govuk_date_and_time) %><br>
+        </p>
+      </div>
+    </div>
+  </div>
 <% end %>
 
 <div class="app-filter-layout" data-controller="filter-layout">
-  <div class="govuk-button-group app-filter-toggle govuk-!-margin-bottom-6">
-    <% if current_page?(controller: 'lettings_logs', action: 'index') %>
-      <%= govuk_button_to "Create a new lettings log", lettings_logs_path, class: "govuk-!-margin-right-6" %>
-    <% end %>
+  <% unless @bulk_upload %>
+    <div class="govuk-button-group app-filter-toggle govuk-!-margin-bottom-6">
+      <% if current_page?(controller: 'lettings_logs', action: 'index') %>
+        <%= govuk_button_to "Create a new lettings log", lettings_logs_path, class: "govuk-!-margin-right-6" %>
+      <% end %>
 
-    <% if FeatureToggle.sales_log_enabled? && current_page?(controller: 'sales_logs', action: 'index') %>
-      <%= govuk_button_to "Create a new sales log", sales_logs_path, class: "govuk-!-margin-right-6" %>
-    <% end %>
+      <% if FeatureToggle.sales_log_enabled? && current_page?(controller: 'sales_logs', action: 'index') %>
+        <%= govuk_button_to "Create a new sales log", sales_logs_path, class: "govuk-!-margin-right-6" %>
+      <% end %>
 
-    <% if FeatureToggle.bulk_upload_logs? %>
-      <%= govuk_button_link_to "Upload #{log_type_for_controller(controller)} logs in bulk", bulk_upload_path_for_controller(controller, id: "start"), secondary: true %>
-    <% end %>
-  </div>
+      <% if FeatureToggle.bulk_upload_logs? %>
+        <%= govuk_button_link_to "Upload #{log_type_for_controller(controller)} logs in bulk", bulk_upload_path_for_controller(controller, id: "start"), secondary: true %>
+      <% end %>
+    </div>
+  <% end %>
 
   <%= render partial: "log_filters" %>
+
   <div class="app-filter-layout__content">
     <%= render SearchComponent.new(current_user:, search_label: "Search by log ID, tenant code, property reference or postcode", value: @searched) %>
     <%= govuk_section_break(visible: true, size: "m") %>

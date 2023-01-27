@@ -159,12 +159,7 @@ class BulkUpload::LogToCsv
   end
 
   def renewal
-    case log.renewal
-    when 1
-      1
-    when 0
-      2
-    end
+    checkbox_value(log.renewal)
   end
 
   def london_affordable_rent
@@ -210,12 +205,7 @@ class BulkUpload::LogToCsv
   end
 
   def previous_postcode_known
-    case log.ppcodenk
-    when 1
-      1
-    when 0
-      2
-    end
+    checkbox_value(log.ppcodenk)
   end
 
   def homeless
@@ -228,25 +218,19 @@ class BulkUpload::LogToCsv
   end
 
   def cbl
-    case log.cbl
-    when 0
-      2
-    when 1
-      1
-    end
+    checkbox_value(log.cbl)
   end
 
   def chr
-    case log.chr
-    when 0
-      2
-    when 1
-      1
-    end
+    checkbox_value(log.chr)
   end
 
   def cap
-    case log.cap
+    checkbox_value(log.cap)
+  end
+
+  def checkbox_value(field)
+    case field
     when 0
       2
     when 1
