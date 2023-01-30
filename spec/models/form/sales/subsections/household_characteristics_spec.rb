@@ -35,8 +35,11 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
         buyer_2_relationship_to_buyer_1
         buyer_2_age
         age_2_old_persons_shared_ownership_value_check
+        age_2_buyer_retirement_value_check
         buyer_2_gender_identity
+        gender_2_buyer_retirement_value_check
         buyer_2_working_situation
+        working_situation_2_buyer_retirement_value_check
         buyer_2_live_in_property
         number_of_others_in_property
         person_2_known
@@ -46,6 +49,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
         person_2_gender_identity
         gender_2_retirement_value_check
         person_2_working_situation
+        working_situation_2_retirement_value_check
         person_3_known
         person_3_relationship_to_buyer_1
         person_3_age
