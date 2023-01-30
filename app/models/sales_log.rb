@@ -1,4 +1,5 @@
 class SalesLogValidator < ActiveModel::Validator
+  include Validations::Sales::SetupValidations
   include Validations::Sales::HouseholdValidations
   include Validations::Sales::PropertyValidations
   include Validations::SharedValidations

@@ -147,6 +147,8 @@ en:
     setup:
       intermediate_rent_product_name:
         blank: "Enter name of other intermediate rent product"
+      saledate:
+        financial_year: "Date must be from 22/23 financial year"
       startdate:
         later_than_14_days_after: "The tenancy start date must not be later than 14 days from today’s date"
         before_scheme_end_date: "The tenancy start date must be before the end date for this supported housing scheme"
@@ -415,15 +417,16 @@ en:
       proplen:
         social_homebuy: "Social HomeBuy buyers should not have lived here before"
         rent_to_buy: "Rent to Buy buyers should not have lived here before"
+      hodate:
+        must_be_before_exdate: "Practical completion or handover date must be before exchange date"
       exdate:
-        must_be_before_saledate:
-          Contract exchange date must be less than 1 year before completion date
-        must_be_less_than_1_year_from_saledate:
-          Contract exchange date must be less than 1 year before completion date
+        must_be_before_saledate: "Contract exchange date must be less than 1 year before completion date"
+        must_be_less_than_1_year_from_saledate: "Contract exchange date must be less than 1 year before completion date"
+      saledate:
+        must_be_after_exdate: "Completion date must be less than 1 year after contract exchange date"
+        must_be_less_than_1_year_from_exdate: "Completion date must be less than 1 year after contract exchange date"
       previous_property_beds:
         property_type_bedsit: "Bedsit bedroom maximum 1"
-      previous_property_type:
-        property_type_bedsit: "A bedsit can not have more than 1 bedroom"
       discounted_ownership_value: "Mortgage, deposit, and grant total must equal £%{value_with_discount}"
       monthly_rent:
         higher_than_expected: "Basic monthly rent must be between £0 and £9,999"
