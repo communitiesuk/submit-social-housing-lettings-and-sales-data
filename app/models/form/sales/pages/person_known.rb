@@ -12,10 +12,6 @@ class Form::Sales::Pages::PersonKnown < Form::Sales::Pages::Person
   end
 
   def depends_on
-    if @person_index == 2
-      (@person_index..6).map { |index| { "hhmemb" => index, "jointpur" => 2 } }
-    else
-      (@person_index..6).map { |index| { "hhmemb" => index } }
-    end
+    { "jointpur" => 2 } if @person_index == 2
   end
 end
