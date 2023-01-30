@@ -83,7 +83,7 @@ RSpec.describe SalesLogsController, type: :request do
         it "validates sales log parameters" do
           json_response = JSON.parse(response.body)
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(json_response["errors"]).to match_array([["beds", ["Bedsit bedroom maximum 1"]], ["proptype", ["Bedsit maximum 1 bedroom"]]])
+          expect(json_response["errors"]).to match_array([["beds", ["Number of bedrooms must be 1 if the property is a bedsit"]], ["proptype", ["Answer cannot be 'Bedsit' if the property has 2 or more bedrooms"]]])
         end
       end
     end
