@@ -507,6 +507,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_26_145529) do
     t.integer "hodate_check"
     t.integer "extrabor_value_check"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
+    t.integer "shared_ownership_deposit_value_check"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
     t.index ["updated_by_id"], name: "index_sales_logs_on_updated_by_id"
