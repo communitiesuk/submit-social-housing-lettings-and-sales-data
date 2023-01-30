@@ -30,7 +30,7 @@ class CheckAnswersSummaryListCardComponent < ViewComponent::Base
       when 1..number_of_buyers
         "Buyer #{question.check_answers_card_number}"
       when (number_of_buyers + 1)..(number_of_buyers + 4)
-        "Person #{question.check_answers_card_number - number_of_buyers}"
+        "Person #{question.check_answers_card_number}"
       end
     end
   end

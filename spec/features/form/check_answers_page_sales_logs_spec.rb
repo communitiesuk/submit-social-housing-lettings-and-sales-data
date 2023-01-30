@@ -43,8 +43,10 @@ RSpec.describe "Sales Log Check Answers Page" do
           visit("/sales-logs/#{completed_sales_log_joint_purchase.id}/#{subsection}/check-answers")
           assert_selector ".x-govuk-summary-card__title", text: "Buyer 1", count: 1
           assert_selector ".x-govuk-summary-card__title", text: "Buyer 2", count: 1
-          assert_selector ".x-govuk-summary-card__title", text: "Person 1", count: 1
+          assert_selector ".x-govuk-summary-card__title", text: "Person 1", count: 0
           assert_selector ".x-govuk-summary-card__title", text: "Person 2", count: 0
+          assert_selector ".x-govuk-summary-card__title", text: "Person 3", count: 1
+          assert_selector ".x-govuk-summary-card__title", text: "Person 4", count: 1
         end
       end
 
@@ -53,8 +55,10 @@ RSpec.describe "Sales Log Check Answers Page" do
           visit("/sales-logs/#{completed_sales_log_non_joint_purchase.id}/#{subsection}/check-answers")
           assert_selector ".x-govuk-summary-card__title", text: "Buyer 1", count: 1
           assert_selector ".x-govuk-summary-card__title", text: "Buyer 2", count: 0
-          assert_selector ".x-govuk-summary-card__title", text: "Person 1", count: 1
-          assert_selector ".x-govuk-summary-card__title", text: "Person 2", count: 0
+          assert_selector ".x-govuk-summary-card__title", text: "Person 1", count: 0
+          assert_selector ".x-govuk-summary-card__title", text: "Person 2", count: 1
+          assert_selector ".x-govuk-summary-card__title", text: "Person 3", count: 1
+          assert_selector ".x-govuk-summary-card__title", text: "Person 4", count: 1
         end
       end
     end
