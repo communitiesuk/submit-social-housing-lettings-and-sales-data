@@ -18,6 +18,7 @@ RSpec.describe Form::Sales::Subsections::DiscountedOwnershipScheme, type: :model
         about_price_rtb
         extra_borrowing_price_value_check
         about_price_not_rtb
+        grant_value_check
         purchase_price_discounted_ownership
         mortgage_used_discounted_ownership
         mortgage_amount_discounted_ownership

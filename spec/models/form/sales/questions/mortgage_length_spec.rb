@@ -48,4 +48,8 @@ RSpec.describe Form::Sales::Questions::MortgageLength, type: :model do
   it "has correct min" do
     expect(question.min).to eq(0)
   end
+
+  it "has correct max" do
+    expect(question.max).to eq(60)
+  end
 end

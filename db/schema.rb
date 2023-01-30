@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_18_170602) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_26_145529) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -25,6 +25,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_18_170602) do
     t.text "error"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "col"
     t.index ["bulk_upload_id"], name: "index_bulk_upload_errors_on_bulk_upload_id"
   end
 
@@ -486,9 +487,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_18_170602) do
     t.integer "hoyear"
     t.integer "fromprop"
     t.integer "socprevten"
+    t.integer "mortlen"
     t.integer "mortgagelender"
     t.string "mortgagelenderother"
-    t.integer "mortlen"
     t.integer "extrabor"
     t.integer "hhmemb"
     t.integer "totadult"
@@ -501,9 +502,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_18_170602) do
     t.boolean "is_la_inferred"
     t.bigint "bulk_upload_id"
     t.integer "retirement_value_check"
+    t.integer "deposit_and_mortgage_value_check"
+    t.integer "grant_value_check"
     t.integer "hodate_check"
     t.integer "extrabor_value_check"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
+    t.integer "shared_ownership_deposit_value_check"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
     t.index ["updated_by_id"], name: "index_sales_logs_on_updated_by_id"

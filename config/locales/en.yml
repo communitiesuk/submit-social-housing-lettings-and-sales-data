@@ -428,8 +428,10 @@ en:
         must_be_less_than_1_year_from_exdate: "Completion date must be less than 1 year after contract exchange date"
       previous_property_beds:
         property_type_bedsit: "Bedsit bedroom maximum 1"
-      previous_property_type:
-        property_type_bedsit: "A bedsit can not have more than 1 bedroom"
+      discounted_ownership_value: "Mortgage, deposit, and grant total must equal £%{value_with_discount}"
+      monthly_rent:
+        higher_than_expected: "Basic monthly rent must be between £0 and £9,999"
+
   soft_validations:
     net_income:
       title_text: "Net income is outside the expected range based on the lead tenant’s working situation"
@@ -462,6 +464,8 @@ en:
       title_text: "You told us the time between the start of the tenancy and the major repairs completion date is more than 2 years"
     void_date:
       title_text: "You told us the time between the start of the tenancy and the void date is more than 2 years"
+    shared_owhership_deposit:
+      title_text: "Mortgage, deposit and cash discount total should equal £%{expected_shared_ownership_deposit_value}"
 
   devise:
     two_factor_authentication:

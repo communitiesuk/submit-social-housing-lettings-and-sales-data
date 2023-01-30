@@ -43,9 +43,25 @@ module Validations::Sales::SoftValidations
     extrabor != 1 && mortgage + deposit > value - value * discount / 100
   end
 
+  def shared_ownership_deposit_invalid?
+    return unless mortgage || mortgageused == 2
+    return unless cashdis || !is_type_discount?
+    return unless deposit && value && equity
+
+    cash_discount = cashdis || 0
+    mortgage_value = mortgage || 0
+    mortgage_value + deposit + cash_discount != value * equity / 100
+  end
+
   def hodate_3_years_or_more_saledate?
     return unless hodate && saledate
 
     ((saledate.to_date - hodate.to_date).to_i / 365) >= 3
+  end
+
+  def grant_outside_common_range?
+    return unless grant
+
+    !grant.between?(9_000, 16_000)
   end
 end

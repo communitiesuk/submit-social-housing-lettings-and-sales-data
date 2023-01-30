@@ -600,4 +600,8 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
       end
     end
   end
+
+  it "is interruption screen page" do
+    expect(page.interruption_screen?).to eq(true)
+  end
 end

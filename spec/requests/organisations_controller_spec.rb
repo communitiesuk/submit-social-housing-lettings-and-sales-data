@@ -1141,10 +1141,11 @@ RSpec.describe OrganisationsController, type: :request do
 
     context "when they view the logs tab" do
       before do
+        FactoryBot.create(:lettings_log, owning_organisation: organisation)
         get "/organisations/#{organisation.id}/lettings-logs"
       end
 
-      it "has a CSV download button with the correct path" do
+      it "has a CSV download button with the correct path if at least 1 log exists" do
         expect(page).to have_link("Download (CSV)", href: "/organisations/#{organisation.id}/logs/csv-download")
       end
 
@@ -1152,7 +1153,7 @@ RSpec.describe OrganisationsController, type: :request do
         let(:other_organisation) { FactoryBot.create(:organisation) }
 
         before do
-          FactoryBot.create_list(:lettings_log, 3, owning_organisation: organisation)
+          FactoryBot.create_list(:lettings_log, 2, owning_organisation: organisation)
           FactoryBot.create_list(:lettings_log, 2, owning_organisation: other_organisation)
         end
 

@@ -30,4 +30,8 @@ RSpec.describe Form::Sales::Pages::HandoverDateCheck, type: :model do
       },
     ])
   end
+
+  it "is interruption screen page" do
+    expect(page.interruption_screen?).to eq(true)
+  end
 end

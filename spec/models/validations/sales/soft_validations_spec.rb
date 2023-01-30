@@ -321,6 +321,110 @@ RSpec.describe Validations::Sales::SoftValidations do
           .not_to be_deposit_over_soft_max
       end
     end
+
+    context "when validating shared ownership deposit" do
+      it "returns false if MORTGAGE + DEPOSIT + CASHDIS are equal VALUE * EQUITY/100" do
+        record.mortgage = 1000
+        record.deposit = 1000
+        record.cashdis = 1000
+        record.value = 3000
+        record.equity = 100
+
+        expect(record)
+          .not_to be_shared_ownership_deposit_invalid
+      end
+
+      it "returns false if mortgage is used and no mortgage is given" do
+        record.mortgage = nil
+        record.deposit = 1000
+        record.cashdis = 1000
+        record.value = 3000
+        record.equity = 100
+
+        expect(record)
+          .not_to be_shared_ownership_deposit_invalid
+      end
+
+      it "returns true if mortgage is not used and no mortgage is given" do
+        record.mortgage = nil
+        record.mortgageused = 2
+        record.deposit = 1000
+        record.cashdis = 1000
+        record.value = 3000
+        record.equity = 100
+
+        expect(record)
+          .to be_shared_ownership_deposit_invalid
+      end
+
+      it "returns false if no deposit is given" do
+        record.mortgage = 1000
+        record.deposit = nil
+        record.cashdis = 1000
+        record.value = 3000
+        record.equity = 100
+
+        expect(record)
+          .not_to be_shared_ownership_deposit_invalid
+      end
+
+      it "returns false if no cashdis is given and cashdis is routed to" do
+        record.mortgage = 1000
+        record.deposit = 1000
+        record.type = 18
+        record.cashdis = nil
+        record.value = 3000
+        record.equity = 100
+
+        expect(record)
+          .not_to be_shared_ownership_deposit_invalid
+      end
+
+      it "returns true if no cashdis is given and cashdis is not routed to" do
+        record.mortgage = 1000
+        record.deposit = 1000
+        record.type = 2
+        record.cashdis = nil
+        record.value = 3000
+        record.equity = 100
+
+        expect(record)
+          .to be_shared_ownership_deposit_invalid
+      end
+
+      it "returns false if no value is given" do
+        record.mortgage = 1000
+        record.deposit = 1000
+        record.cashdis = 1000
+        record.value = nil
+        record.equity = 100
+
+        expect(record)
+          .not_to be_shared_ownership_deposit_invalid
+      end
+
+      it "returns false if no equity is given" do
+        record.mortgage = 1000
+        record.deposit = 1000
+        record.cashdis = 1000
+        record.value = 3000
+        record.equity = nil
+
+        expect(record)
+          .not_to be_shared_ownership_deposit_invalid
+      end
+
+      it "returns true if MORTGAGE + DEPOSIT + CASHDIS are not equal VALUE * EQUITY/100" do
+        record.mortgage = 1000
+        record.deposit = 1000
+        record.cashdis = 1000
+        record.value = 4323
+        record.equity = 100
+
+        expect(record)
+          .to be_shared_ownership_deposit_invalid
+      end
+    end
   end
 
   describe "hodate_more_than_3_years_before_saledate" do
@@ -394,6 +498,26 @@ RSpec.describe Validations::Sales::SoftValidations do
       record.wheel = 2
 
       expect(record).not_to be_wheelchair_when_not_disabled
+    end
+  end
+
+  describe "#grant_outside_common_range?" do
+    it "returns true if grant is below 9000" do
+      record.grant = 1_000
+
+      expect(record).to be_grant_outside_common_range
+    end
+
+    it "returns true if grant is above 16000" do
+      record.grant = 100_000
+
+      expect(record).to be_grant_outside_common_range
+    end
+
+    it "returns false if grant is within expected range" do
+      record.grant = 10_000
+
+      expect(record).not_to be_grant_outside_common_range
     end
   end
 end
