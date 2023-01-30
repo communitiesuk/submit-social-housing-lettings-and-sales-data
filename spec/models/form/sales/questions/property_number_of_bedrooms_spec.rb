@@ -36,10 +36,10 @@ RSpec.describe Form::Sales::Questions::PropertyNumberOfBedrooms, type: :model do
   end
 
   it "has the correct min" do
-    expect(question.min).to eq(1)
+    expect(question.min).to eq(nil)
   end
 
   it "has the correct max" do
-    expect(question.max).to eq(9)
+    expect(question.max).to eq(nil)
   end
 end
