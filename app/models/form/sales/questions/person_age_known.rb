@@ -1,6 +1,6 @@
-class Form::Sales::Questions::PersonAgeKnown < ::Form::Sales::Questions::Person
+class Form::Sales::Questions::PersonAgeKnown < ::Form::Question
   def initialize(id, hsh, page, person_index:)
-    super
+    super(id, hsh, page)
     @check_answer_label = "Person #{person_index}’s age known?"
     @header = "Do you know person #{person_index}’s age?"
     @type = "radio"

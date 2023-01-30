@@ -1,6 +1,6 @@
-class Form::Sales::Questions::PersonRelationshipToBuyer1 < ::Form::Sales::Questions::Person
+class Form::Sales::Questions::PersonRelationshipToBuyer1 < ::Form::Question
   def initialize(id, hsh, page, person_index:)
-    super
+    super(id, hsh, page)
     @check_answer_label = "Person #{person_index}’s relationship to Buyer 1"
     @header = "What is Person #{person_index}’s relationship to Buyer 1?"
     @type = "radio"

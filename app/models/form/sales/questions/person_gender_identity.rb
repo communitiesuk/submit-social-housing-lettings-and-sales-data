@@ -1,6 +1,6 @@
-class Form::Sales::Questions::PersonGenderIdentity < ::Form::Sales::Questions::Person
+class Form::Sales::Questions::PersonGenderIdentity < ::Form::Question
   def initialize(id, hsh, page, person_index:)
-    super
+    super(id, hsh, page)
     @check_answer_label = "Person #{person_index}’s gender identity"
     @header = "Which of these best describes Person #{person_index}’s gender identity?"
     @type = "radio"
