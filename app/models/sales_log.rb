@@ -224,8 +224,6 @@ class SalesLog < Log
   end
 
   def is_bedsit?
-    return if proptype.nil?
-
     proptype == 2
   end
 
