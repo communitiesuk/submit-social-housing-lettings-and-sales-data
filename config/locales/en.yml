@@ -424,7 +424,7 @@ en:
         must_be_less_than_1_year_from_saledate:
           Contract exchange date must be less than 1 year before completion date
       previous_property_beds:
-        property_type_bedsit: "Bedsit bedroom maximum 1"
+        property_type_bedsit: "A bedsit cannot have more than 1 bedroom"
       discounted_ownership_value: "Mortgage, deposit, and grant total must equal £%{value_with_discount}"
 
   soft_validations:

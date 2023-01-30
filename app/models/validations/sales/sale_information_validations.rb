@@ -35,7 +35,7 @@ module Validations::Sales::SaleInformationValidations
 
     if record.frombeds != 1 && record.fromprop == 2
       record.errors.add :frombeds, I18n.t("validations.sale_information.previous_property_beds.property_type_bedsit")
-      record.errors.add :fromprop, I18n.t("validations.sale_information.previous_property_type.property_type_bedsit")
+      record.errors.add :fromprop, I18n.t("validations.sale_information.previous_property_beds.property_type_bedsit")
     end
   end
 
