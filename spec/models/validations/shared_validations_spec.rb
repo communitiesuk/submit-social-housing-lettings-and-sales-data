@@ -69,6 +69,12 @@ RSpec.describe Validations::SharedValidations do
       end
     end
 
+    it "adds the correct validation text when a question has a min but not a max" do
+      sales_record.savings = -10
+      shared_validator.validate_numeric_min_max(sales_record)
+      expect(sales_record.errors["savings"]).to include(match I18n.t("validations.numeric.above_min", field: "Buyer’s total savings (to nearest £10) before any deposit paid", min: "£0"))
+    end
+
     context "when validating percent" do
       it "validates that % suffix is added in the error message" do
         sales_record.stairbought = "random"
