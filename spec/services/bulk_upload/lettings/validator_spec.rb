@@ -125,6 +125,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
       end
 
       it "returns false" do
+        validator.call
         expect(validator).not_to be_create_logs
       end
     end
@@ -140,6 +141,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
       end
 
       it "returns true" do
+        validator.call
         expect(validator).to be_create_logs
       end
     end
@@ -153,7 +155,52 @@ RSpec.describe BulkUpload::Lettings::Validator do
       end
 
       it "returns false" do
+        validator.call
         expect(validator).not_to be_create_logs
+      end
+    end
+
+    context "when a column is over 60% error threshold" do
+      let(:log_1) { build(:lettings_log, :completed, renttype: 1, created_by: user) }
+      let(:log_2) { build(:lettings_log, renttype: 2, created_by: user, builtype: nil, startdate: Time.zone.local(2022, 5, 1)) }
+      let(:log_3) { build(:lettings_log, renttype: 2, created_by: user, builtype: nil, startdate: Time.zone.local(2022, 5, 1)) }
+      let(:log_4) { build(:lettings_log, renttype: 2, created_by: user, builtype: nil, startdate: Time.zone.local(2022, 5, 1)) }
+      let(:log_5) { build(:lettings_log, renttype: 2, created_by: user, builtype: nil, startdate: Time.zone.local(2022, 5, 1)) }
+
+      before do
+        file.write(BulkUpload::LogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_csv_row)
+        file.write(BulkUpload::LogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0).to_csv_row)
+        file.write(BulkUpload::LogToCsv.new(log: log_3, line_ending: "\r\n", col_offset: 0).to_csv_row)
+        file.write(BulkUpload::LogToCsv.new(log: log_4, line_ending: "\r\n", col_offset: 0).to_csv_row)
+        file.write(BulkUpload::LogToCsv.new(log: log_5, line_ending: "\r\n", col_offset: 0).to_csv_row)
+        file.close
+      end
+
+      it "returns false" do
+        validator.call
+        expect(validator).not_to be_create_logs
+      end
+    end
+
+    context "when a column is under 60% error threshold" do
+      let(:log_1) { build(:lettings_log, :completed, renttype: 1, created_by: user) }
+      let(:log_2) { build(:lettings_log, :completed, renttype: 1, created_by: user) }
+      let(:log_3) { build(:lettings_log, renttype: 2, created_by: user, builtype: nil, startdate: Time.zone.local(2022, 5, 1)) }
+      let(:log_4) { build(:lettings_log, renttype: 2, created_by: user, builtype: nil, startdate: Time.zone.local(2022, 5, 1)) }
+      let(:log_5) { build(:lettings_log, renttype: 2, created_by: user, builtype: nil, startdate: Time.zone.local(2022, 5, 1)) }
+
+      before do
+        file.write(BulkUpload::LogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_csv_row)
+        file.write(BulkUpload::LogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0).to_csv_row)
+        file.write(BulkUpload::LogToCsv.new(log: log_3, line_ending: "\r\n", col_offset: 0).to_csv_row)
+        file.write(BulkUpload::LogToCsv.new(log: log_4, line_ending: "\r\n", col_offset: 0).to_csv_row)
+        file.write(BulkUpload::LogToCsv.new(log: log_5, line_ending: "\r\n", col_offset: 0).to_csv_row)
+        file.close
+      end
+
+      it "returns true" do
+        validator.call
+        expect(validator).to be_create_logs
       end
     end
   end

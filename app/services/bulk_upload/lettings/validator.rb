@@ -172,8 +172,18 @@ class BulkUpload::Lettings::Validator
 
   def create_logs?
     return false if row_parsers.any? { |row_parser| row_parser.log.form.setup_sections[0].subsections[0].is_incomplete?(row_parser.log) }
+    return false if over_60_percent_column_error_rate
 
     row_parsers.all? { |row_parser| row_parser.log.valid? }
+  end
+
+  def over_60_percent_column_error_rate
+    fields = ("field_1".."field_134").to_a
+    threshold = (row_parsers.size * 0.6).ceil
+
+    fields.any? do |field|
+      row_parsers.count { |row_parser| row_parser.errors[field].present? } > threshold
+    end
   end
 
   def self.question_for_field(field)
