@@ -171,6 +171,8 @@ class BulkUpload::Lettings::Validator
   end
 
   def create_logs?
+    return false if row_parsers.any? { |row_parser| row_parser.log.form.setup_sections[0].subsections[0].is_incomplete?(row_parser.log) }
+
     row_parsers.all? { |row_parser| row_parser.log.valid? }
   end
 
