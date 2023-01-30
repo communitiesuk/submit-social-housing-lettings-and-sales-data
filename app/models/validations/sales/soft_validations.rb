@@ -67,6 +67,7 @@ module Validations::Sales::SoftValidations
 
   def hodate_3_years_or_more_saledate?
     return unless hodate && saledate
+  end
 
   def purchase_price_min_or_max_text
     value < sale_range.soft_min ? "minimum" : "maximum"
