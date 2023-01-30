@@ -3,7 +3,7 @@ class Form::Sales::Questions::AboutPriceSharedOwnershipValueCheck < ::Form::Ques
     super
     @id = "value_value_check"
     @check_answer_label = "Purchase price confirmation"
-    @header = "Are you sure this is correct?"
+    @header = "Are you sure?"
     @type = "interruption_screen"
     @answer_options = {
       "0" => { "value" => "Yes" },
