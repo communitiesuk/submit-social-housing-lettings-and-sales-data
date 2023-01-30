@@ -65,7 +65,7 @@ RSpec.describe SalesLogsController, type: :request do
       context "with a request containing invalid json parameters" do
         let(:params) do
           {
-            "saledate": Date.new(1, 1, 1),
+            "saledate": Date.new(2022, 4, 1),
             "purchid": "1",
             "ownershipsch": 1,
             "type": 2,
