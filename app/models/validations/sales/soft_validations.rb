@@ -53,6 +53,13 @@ module Validations::Sales::SoftValidations
     mortgage_value + deposit + cash_discount != value * equity / 100
   end
 
+  def mortgage_plus_deposit_less_than_discounted_value?
+    return unless mortgage && deposit && value && discount
+
+    discounted_value = value * (100 - discount) / 100
+    mortgage + deposit < discounted_value
+  end
+
   def hodate_3_years_or_more_saledate?
     return unless hodate && saledate
 
