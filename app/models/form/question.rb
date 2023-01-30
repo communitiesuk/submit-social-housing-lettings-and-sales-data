@@ -100,10 +100,9 @@ class Form::Question
   end
 
   def has_inferred_check_answers_value?(log)
-    return true if selected_answer_option_is_derived?(log)
-    return inferred_check_answers_value&.any? { |inferred_value| inferred_value["condition"].values.first == log[inferred_value["condition"].keys.first] } if inferred_check_answers_value.present?
+    return false unless inferred_check_answers_value
 
-    false
+    inferred_check_answers_value&.any? { |inferred_value| inferred_value["condition"].values.first == log[inferred_value["condition"].keys.first] }
   end
 
   def displayed_answer_options(log, _current_user = nil)
@@ -113,7 +112,7 @@ class Form::Question
   end
 
   def action_text(log)
-    if has_inferred_check_answers_value?(log)
+    if has_inferred_check_answers_value?(log) || selected_answer_option_is_derived?(log)
       "Change"
     elsif type == "checkbox"
       answer_options.keys.any? { |key| value_is_yes?(log[key]) } ? "Change" : "Answer"
@@ -260,12 +259,12 @@ class Form::Question
     @guidance_partial && @guidance_position == GuidancePosition::BOTTOM
   end
 
-private
-
   def selected_answer_option_is_derived?(log)
     selected_option = answer_options&.dig(log[id].to_s.presence)
     selected_option.is_a?(Hash) && selected_option["depends_on"] && form.depends_on_met(selected_option["depends_on"], log)
   end
+
+private
 
   def has_inferred_display_value?(log)
     inferred_check_answers_value.present? && inferred_check_answers_value.any? { |inferred_value| log[inferred_value["condition"].keys.first] == inferred_value["condition"].values.first }
@@ -309,8 +308,8 @@ private
   def inferred_answer_value(log)
     return unless inferred_check_answers_value
 
-    inferred_answer = inferred_check_answers_value.find { |inferred_value| inferred_value["condition"].values.first == log[inferred_value["condition"].keys.first] }
-    inferred_answer["value"] if inferred_answer.present?
+    inferred_answer = inferred_check_answers_value.find { |inferred_value| log[inferred_value["condition"].keys.first] == inferred_value["condition"].values.first }
+    inferred_answer["value"] if inferred_answer
   end
 
   RADIO_YES_VALUE = {

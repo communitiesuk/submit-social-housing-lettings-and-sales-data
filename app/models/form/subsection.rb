@@ -44,7 +44,7 @@ class Form::Subsection
 
   def applicable_questions(log)
     questions.select do |q|
-      (q.displayed_to_user?(log) && !q.derived?) || q.has_inferred_check_answers_value?(log)
+      (q.displayed_to_user?(log) && !q.derived?) || q.has_inferred_check_answers_value?(log) || q.selected_answer_option_is_derived?(log)
     end
   end
 
