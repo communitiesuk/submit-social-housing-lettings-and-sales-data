@@ -4,7 +4,6 @@ class Form::Sales::Pages::RetirementValueCheck < Form::Sales::Pages::Person
     @depends_on = [
       {
         "person_#{person_index}_retired_under_soft_min_age?" => true,
-        "jointpur" => joint_purchase? ? 1 : 2,
       },
     ]
     @person_index = person_index

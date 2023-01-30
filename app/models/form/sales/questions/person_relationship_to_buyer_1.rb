@@ -1,8 +1,8 @@
 class Form::Sales::Questions::PersonRelationshipToBuyer1 < ::Form::Sales::Questions::Person
   def initialize(id, hsh, page, person_index:)
     super
-    @check_answer_label = "Person #{person_display_number}’s relationship to Buyer 1"
-    @header = "What is Person #{person_display_number}’s relationship to Buyer 1?"
+    @check_answer_label = "Person #{person_index}’s relationship to Buyer 1"
+    @header = "What is Person #{person_index}’s relationship to Buyer 1?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = person_index

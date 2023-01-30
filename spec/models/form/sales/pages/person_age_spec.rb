@@ -20,171 +20,85 @@ RSpec.describe Form::Sales::Pages::PersonAge, type: :model do
     expect(page.description).to be_nil
   end
 
-  context "with a non joint purchase" do
-    context "and person 1" do
-      let(:page_id) { "person_1_age" }
-      let(:person_index) { 2 }
+  context "and person 2" do
+    let(:page_id) { "person_2_age" }
+    let(:person_index) { 2 }
 
-      it "has correct questions" do
-        expect(page.questions.map(&:id)).to eq(%w[age2_known age2])
-      end
-
-      it "has the correct id" do
-        expect(page.id).to eq("person_1_age")
-      end
-
-      it "has correct depends_on" do
-        expect(page.depends_on).to eq(
-          [{ "details_known_1" => 1, "jointpur" => 2 }],
-        )
-      end
+    it "has correct questions" do
+      expect(page.questions.map(&:id)).to eq(%w[age2_known age2])
     end
 
-    context "and person 2" do
-      let(:page_id) { "person_2_age" }
-      let(:person_index) { 3 }
-
-      it "has correct questions" do
-        expect(page.questions.map(&:id)).to eq(%w[age3_known age3])
-      end
-
-      it "has the correct id" do
-        expect(page.id).to eq("person_2_age")
-      end
-
-      it "has correct depends_on" do
-        expect(page.depends_on).to eq(
-          [
-            { "details_known_2" => 1, "jointpur" => 2 },
-          ],
-        )
-      end
+    it "has the correct id" do
+      expect(page.id).to eq("person_2_age")
     end
 
-    context "and person 3" do
-      let(:page_id) { "person_3_age" }
-      let(:person_index) { 4 }
-
-      it "has correct questions" do
-        expect(page.questions.map(&:id)).to eq(%w[age4_known age4])
-      end
-
-      it "has the correct id" do
-        expect(page.id).to eq("person_3_age")
-      end
-
-      it "has correct depends_on" do
-        expect(page.depends_on).to eq(
-          [
-            { "details_known_3" => 1, "jointpur" => 2 },
-          ],
-        )
-      end
-    end
-
-    context "and person 4" do
-      let(:page_id) { "person_4_age" }
-      let(:person_index) { 5 }
-
-      it "has correct questions" do
-        expect(page.questions.map(&:id)).to eq(%w[age5_known age5])
-      end
-
-      it "has the correct id" do
-        expect(page.id).to eq("person_4_age")
-      end
-
-      it "has correct depends_on" do
-        expect(page.depends_on).to eq(
-          [
-            { "details_known_4" => 1, "jointpur" => 2 },
-          ],
-        )
-      end
+    it "has correct depends_on" do
+      expect(page.depends_on).to eq(
+        [{ "details_known_2" => 1 }],
+      )
     end
   end
 
-  context "with joint purchase" do
-    context "and person 1" do
-      let(:page_id) { "person_1_age_joint_purchase" }
-      let(:person_index) { 3 }
+  context "and person 3" do
+    let(:page_id) { "person_3_age" }
+    let(:person_index) { 3 }
 
-      it "has correct questions" do
-        expect(page.questions.map(&:id)).to eq(%w[age3_known age3])
-      end
-
-      it "has the correct id" do
-        expect(page.id).to eq("person_1_age_joint_purchase")
-      end
-
-      it "has correct depends_on" do
-        expect(page.depends_on).to eq(
-          [{ "details_known_1" => 1, "jointpur" => 1 }],
-        )
-      end
+    it "has correct questions" do
+      expect(page.questions.map(&:id)).to eq(%w[age3_known age3])
     end
 
-    context "and person 2" do
-      let(:page_id) { "person_2_age_joint_purchase" }
-      let(:person_index) { 4 }
-
-      it "has correct questions" do
-        expect(page.questions.map(&:id)).to eq(%w[age4_known age4])
-      end
-
-      it "has the correct id" do
-        expect(page.id).to eq("person_2_age_joint_purchase")
-      end
-
-      it "has correct depends_on" do
-        expect(page.depends_on).to eq(
-          [
-            { "details_known_2" => 1, "jointpur" => 1 },
-          ],
-        )
-      end
+    it "has the correct id" do
+      expect(page.id).to eq("person_3_age")
     end
 
-    context "and person 3" do
-      let(:page_id) { "person_3_age_joint_purchase" }
-      let(:person_index) { 5 }
+    it "has correct depends_on" do
+      expect(page.depends_on).to eq(
+        [
+          { "details_known_3" => 1 },
+        ],
+      )
+    end
+  end
 
-      it "has correct questions" do
-        expect(page.questions.map(&:id)).to eq(%w[age5_known age5])
-      end
+  context "and person 4" do
+    let(:page_id) { "person_4_age" }
+    let(:person_index) { 4 }
 
-      it "has the correct id" do
-        expect(page.id).to eq("person_3_age_joint_purchase")
-      end
-
-      it "has correct depends_on" do
-        expect(page.depends_on).to eq(
-          [
-            { "details_known_3" => 1, "jointpur" => 1 },
-          ],
-        )
-      end
+    it "has correct questions" do
+      expect(page.questions.map(&:id)).to eq(%w[age4_known age4])
     end
 
-    context "and person 4" do
-      let(:page_id) { "person_4_age_joint_purchase" }
-      let(:person_index) { 6 }
+    it "has the correct id" do
+      expect(page.id).to eq("person_4_age")
+    end
 
-      it "has correct questions" do
-        expect(page.questions.map(&:id)).to eq(%w[age6_known age6])
-      end
+    it "has correct depends_on" do
+      expect(page.depends_on).to eq(
+        [
+          { "details_known_4" => 1 },
+        ],
+      )
+    end
+  end
 
-      it "has the correct id" do
-        expect(page.id).to eq("person_4_age_joint_purchase")
-      end
+  context "and person 5" do
+    let(:page_id) { "person_5_age" }
+    let(:person_index) { 5 }
 
-      it "has correct depends_on" do
-        expect(page.depends_on).to eq(
-          [
-            { "details_known_4" => 1, "jointpur" => 1 },
-          ],
-        )
-      end
+    it "has correct questions" do
+      expect(page.questions.map(&:id)).to eq(%w[age5_known age5])
+    end
+
+    it "has the correct id" do
+      expect(page.id).to eq("person_5_age")
+    end
+
+    it "has correct depends_on" do
+      expect(page.depends_on).to eq(
+        [
+          { "details_known_5" => 1 },
+        ],
+      )
     end
   end
 end

@@ -2,13 +2,13 @@ class Form::Sales::Pages::PersonRelationshipToBuyer1 < ::Form::Sales::Pages::Per
   def initialize(id, hsh, subsection, person_index:)
     super
     @depends_on = [
-      { details_known_question_id => 1, "jointpur" => joint_purchase? ? 1 : 2 },
+      { "details_known_#{person_index}" => 1 },
     ]
   end
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::PersonRelationshipToBuyer1.new(field_for_person("relat"), nil, self, person_index: @person_index),
+      Form::Sales::Questions::PersonRelationshipToBuyer1.new("relat#{@person_index}", nil, self, person_index: @person_index),
     ]
   end
 end
