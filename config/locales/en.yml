@@ -195,7 +195,6 @@ en:
       beds:
         non_positive: "Number of bedrooms has to be greater than 0"
         over_max: "Number of bedrooms cannot be more than 12"
-        1_9: "Bedroom number must be 1-9"
       postcode:
         must_match_previous: "Buyer's last accommodation and discounted ownership postcodes must match"
 
