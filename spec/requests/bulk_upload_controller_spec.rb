@@ -13,6 +13,14 @@ RSpec.describe BulkUploadController, type: :request do
   end
 
   context "when a user is not signed in" do
+    describe "GET #start" do
+      before { get start_bulk_upload_lettings_logs_path, headers:, params: {} }
+
+      it "does not let you see the bulk upload page" do
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
     describe "GET #show" do
       before { get url, headers:, params: {} }
 
@@ -47,6 +55,40 @@ RSpec.describe BulkUploadController, type: :request do
       it "returns a page with a file upload form" do
         expect(response.body).to match(/<input id="legacy-bulk-upload-lettings-log-bulk-upload-field" class="govuk-file-upload"/)
         expect(response.body).to match(/<button type="submit" formnovalidate="formnovalidate" class="govuk-button"/)
+      end
+    end
+
+    describe "GET #start" do
+      before do
+        Timecop.freeze(time)
+        get start_bulk_upload_lettings_logs_path
+      end
+
+      after do
+        Timecop.unfreeze
+      end
+
+      context "when not crossover period" do
+        let(:time) { Time.utc(2022, 2, 8) }
+
+        it "redirects to bulk upload path" do
+          expect(request).to redirect_to(
+            bulk_upload_lettings_log_path(
+              id: "prepare-your-file",
+              form: { year: 2021 },
+            ),
+          )
+        end
+      end
+
+      context "when crossover period" do
+        let(:time) { Time.utc(2022, 6, 8) }
+
+        it "redirects to bulk upload path" do
+          expect(request).to redirect_to(
+            bulk_upload_lettings_log_path(id: "year"),
+          )
+        end
       end
     end
 
