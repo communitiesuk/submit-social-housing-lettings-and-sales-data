@@ -38,11 +38,7 @@ RSpec.describe Form::Sales::Pages::PersonKnown, type: :model do
       end
 
       it "has correct depends_on" do
-        expect(page.depends_on).to eq(
-          [
-            { "hhmemb" => 2, "jointpur" => 2 }, { "hhmemb" => 3, "jointpur" => 2 }, { "hhmemb" => 4, "jointpur" => 2 }, { "hhmemb" => 5, "jointpur" => 2 }, { "hhmemb" => 6, "jointpur" => 2 }
-          ],
-        )
+        expect(page.depends_on).to eq([{ "jointpur" => 2 }])
       end
     end
 
@@ -63,9 +59,7 @@ RSpec.describe Form::Sales::Pages::PersonKnown, type: :model do
       end
 
       it "has correct depends_on" do
-        expect(page.depends_on).to eq(
-          [{ "hhmemb" => 3 }, { "hhmemb" => 4 }, { "hhmemb" => 5 }, { "hhmemb" => 6 }],
-        )
+        expect(page.depends_on).to be nil
       end
     end
 
@@ -86,9 +80,7 @@ RSpec.describe Form::Sales::Pages::PersonKnown, type: :model do
       end
 
       it "has correct depends_on" do
-        expect(page.depends_on).to eq(
-          [{ "hhmemb" => 4 }, { "hhmemb" => 5 }, { "hhmemb" => 6 }],
-        )
+        expect(page.depends_on).to be nil
       end
     end
 
@@ -109,9 +101,7 @@ RSpec.describe Form::Sales::Pages::PersonKnown, type: :model do
       end
 
       it "has correct depends_on" do
-        expect(page.depends_on).to eq(
-          [{ "hhmemb" => 5 }, { "hhmemb" => 6 }],
-        )
+        expect(page.depends_on).to be nil
       end
     end
   end

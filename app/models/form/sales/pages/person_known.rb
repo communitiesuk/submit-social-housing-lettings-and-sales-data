@@ -12,6 +12,6 @@ class Form::Sales::Pages::PersonKnown < Form::Sales::Pages::Person
   end
 
   def depends_on
-    { "jointpur" => 2 } if @person_index == 2
+    [{ "jointpur" => 2 }] if @person_index == 2
   end
 end
