@@ -462,7 +462,7 @@ en:
       title_text: "You told us the time between the start of the tenancy and the void date is more than 2 years"
     shared_owhership_deposit:
       title_text: "Mortgage, deposit and cash discount total should equal £%{expected_shared_ownership_deposit_value}"
-    old_persons_shared_ownership: "At least one buyer should be aged over 64 for Older persons‘ shared ownership scheme"
+    old_persons_shared_ownership: "At least one buyer should be aged over 64 for Older persons’ shared ownership scheme"
 
   devise:
     two_factor_authentication:
