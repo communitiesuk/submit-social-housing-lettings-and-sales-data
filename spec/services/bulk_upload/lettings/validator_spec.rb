@@ -78,7 +78,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
 
       before do
         file.write(BulkUpload::LogToCsv.new(log:, line_ending: "\r\n", col_offset: 0).to_csv_row)
-        file.rewind
+        file.close
       end
 
       it "creates validation errors" do
@@ -109,6 +109,38 @@ RSpec.describe BulkUpload::Lettings::Validator do
 
       it "returns falsey" do
         expect(validator).not_to be_create_logs
+      end
+    end
+  end
+
+  describe "#create_logs?" do
+    context "when a log is not valid?" do
+      let(:log_1) { build(:lettings_log, :completed, created_by: user) }
+      let(:log_2) { build(:lettings_log, :completed, created_by: user) }
+
+      before do
+        file.write(BulkUpload::LogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_csv_row)
+        file.write(BulkUpload::LogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0, overrides: { illness: 100 }).to_csv_row)
+        file.close
+      end
+
+      it "returns false" do
+        expect(validator).not_to be_create_logs
+      end
+    end
+
+    context "when all logs valid?" do
+      let(:log_1) { build(:lettings_log, :completed, created_by: user) }
+      let(:log_2) { build(:lettings_log, :completed, created_by: user) }
+
+      before do
+        file.write(BulkUpload::LogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_csv_row)
+        file.write(BulkUpload::LogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0).to_csv_row)
+        file.close
+      end
+
+      it "returns true" do
+        expect(validator).to be_create_logs
       end
     end
   end
