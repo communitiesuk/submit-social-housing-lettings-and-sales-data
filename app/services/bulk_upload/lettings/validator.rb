@@ -174,8 +174,8 @@ class BulkUpload::Lettings::Validator
   end
 
   def create_logs?
-    return false if row_parsers.any? { |row_parser| row_parser.log.form.setup_sections[0].subsections[0].is_incomplete?(row_parser.log) }
-    return false if over_percent_column_error_threshold?
+    return false if any_setup_sections_incomplete?
+    return false if over_column_error_threshold?
 
     row_parsers.all? { |row_parser| row_parser.log.valid? }
   end
@@ -186,7 +186,11 @@ class BulkUpload::Lettings::Validator
 
 private
 
-  def over_percent_column_error_threshold?
+  def any_setup_sections_incomplete?
+    row_parsers.any? { |row_parser| row_parser.log.form.setup_sections[0].subsections[0].is_incomplete?(row_parser.log) }
+  end
+
+  def over_column_error_threshold?
     fields = ("field_1".."field_134").to_a
     percentage_threshold = (row_parsers.size * COLUMN_PERCENTAGE_ERROR_THRESHOLD).ceil
 
