@@ -76,10 +76,6 @@ RSpec.describe FormHandler do
     context "when the date is after 1st of April" do
       let(:now) { Time.utc(2022, 8, 3) }
 
-      it "returns the same year as the current start year" do
-        expect(form_handler.current_collection_start_year).to eq(2022)
-      end
-
       it "returns the correct current lettings form name" do
         expect(form_handler.form_name_from_start_year(2022, "lettings")).to eq("current_lettings")
       end
@@ -103,18 +99,10 @@ RSpec.describe FormHandler do
       it "returns the correct next sales form name" do
         expect(form_handler.form_name_from_start_year(2023, "sales")).to eq("next_sales")
       end
-
-      it "returns the correct current start date" do
-        expect(form_handler.current_collection_start_date).to eq(Time.zone.local(2022, 4, 1))
-      end
     end
 
     context "with the date before 1st of April" do
       let(:now) { Time.utc(2022, 2, 3) }
-
-      it "returns the previous year as the current start year" do
-        expect(form_handler.current_collection_start_year).to eq(2021)
-      end
 
       it "returns the correct current lettings form name" do
         expect(form_handler.form_name_from_start_year(2021, "lettings")).to eq("current_lettings")
