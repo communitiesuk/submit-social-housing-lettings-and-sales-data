@@ -2,6 +2,7 @@ require "csv"
 
 class BulkUpload::Lettings::Validator
   COLUMN_PERCENTAGE_ERROR_THRESHOLD = 0.6
+  COLUMN_ABSOLUTE_ERROR_THRESHOLD = 16
 
   include ActiveModel::Validations
 
@@ -190,7 +191,11 @@ private
     percentage_threshold = (row_parsers.size * COLUMN_PERCENTAGE_ERROR_THRESHOLD).ceil
 
     fields.any? do |field|
-      row_parsers.count { |row_parser| row_parser.errors[field].present? } > percentage_threshold
+      count = row_parsers.count { |row_parser| row_parser.errors[field].present? }
+
+      next if count < COLUMN_ABSOLUTE_ERROR_THRESHOLD
+
+      count > percentage_threshold
     end
   end
 
