@@ -47,7 +47,7 @@ RSpec.describe SalesLog, type: :model do
     let(:sales_log) { build(:sales_log) }
 
     it "returns optional fields" do
-      expect(sales_log.optional_fields).to eq(%w[purchid])
+      expect(sales_log.optional_fields).to eq(%w[purchid old_persons_shared_ownership_value_check])
     end
   end
 
@@ -337,6 +337,14 @@ RSpec.describe SalesLog, type: :model do
       expect(record_from_db["ppostcode_full"]).to eq(nil)
       expect(address_sales_log.prevloc).to eq(nil)
       expect(record_from_db["prevloc"]).to eq(nil)
+    end
+  end
+
+  describe "expected_shared_ownership_deposit_value" do
+    let!(:completed_sales_log) { create(:sales_log, :completed, ownershipsch: 1, type: 2, value: 1000, equity: 50) }
+
+    it "is set to completed for a completed sales log" do
+      expect(completed_sales_log.expected_shared_ownership_deposit_value).to eq(500)
     end
   end
 end

@@ -6,7 +6,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
   let(:validator_class) { Class.new { include Validations::Sales::FinancialValidations } }
 
   describe "income validations" do
-    let(:record) { FactoryBot.create(:sales_log, ownershipsch: 1) }
+    let(:record) { FactoryBot.create(:sales_log, ownershipsch: 1, la: "E08000035") }
 
     context "with shared ownership" do
       context "and non london borough" do
@@ -17,6 +17,14 @@ RSpec.describe Validations::Sales::FinancialValidations do
             financial_validator.validate_income1(record)
             expect(record.errors["income1"])
                 .to include(match I18n.t("validations.financial.income1.over_hard_max.outside_london"))
+            expect(record.errors["ecstat1"])
+                .to include(match I18n.t("validations.financial.income1.over_hard_max.outside_london"))
+            expect(record.errors["ownershipsch"])
+                .to include(match I18n.t("validations.financial.income1.over_hard_max.outside_london"))
+            expect(record.errors["la"])
+                .to include(match I18n.t("validations.financial.income1.over_hard_max.outside_london"))
+            expect(record.errors["postcode_full"])
+                .to include(match I18n.t("validations.financial.income1.over_hard_max.outside_london"))
           end
         end
 
@@ -25,6 +33,10 @@ RSpec.describe Validations::Sales::FinancialValidations do
           record.ecstat1 = 1
           financial_validator.validate_income1(record)
           expect(record.errors["income1"]).to be_empty
+          expect(record.errors["ecstat1"]).to be_empty
+          expect(record.errors["ownershipsch"]).to be_empty
+          expect(record.errors["la"]).to be_empty
+          expect(record.errors["postcode_full"]).to be_empty
         end
       end
 
@@ -41,6 +53,14 @@ RSpec.describe Validations::Sales::FinancialValidations do
             financial_validator.validate_income1(record)
             expect(record.errors["income1"])
                 .to include(match I18n.t("validations.financial.income1.over_hard_max.inside_london"))
+            expect(record.errors["ecstat1"])
+                .to include(match I18n.t("validations.financial.income1.over_hard_max.inside_london"))
+            expect(record.errors["ownershipsch"])
+                .to include(match I18n.t("validations.financial.income1.over_hard_max.inside_london"))
+            expect(record.errors["la"])
+                .to include(match I18n.t("validations.financial.income1.over_hard_max.inside_london"))
+            expect(record.errors["postcode_full"])
+                .to include(match I18n.t("validations.financial.income1.over_hard_max.inside_london"))
           end
         end
 
@@ -49,6 +69,10 @@ RSpec.describe Validations::Sales::FinancialValidations do
           record.ecstat1 = 1
           financial_validator.validate_income1(record)
           expect(record.errors["income1"]).to be_empty
+          expect(record.errors["ecstat1"]).to be_empty
+          expect(record.errors["ownershipsch"]).to be_empty
+          expect(record.errors["la"]).to be_empty
+          expect(record.errors["postcode_full"]).to be_empty
         end
       end
     end
