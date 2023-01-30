@@ -429,6 +429,8 @@ en:
         handover_before_exchange: "Practical completion or handover date must be before exchange date"
         exchange_after_handover: "Exchange date must be after practical completion or handover date"
       discounted_ownership_value: "Mortgage, deposit, and grant total must equal £%{value_with_discount}"
+      monthly_rent:
+        higher_than_expected: "Basic monthly rent must be between £0 and £9,999"
 
   soft_validations:
     net_income:
@@ -465,6 +467,8 @@ en:
       title_text: "You told us the time between the start of the tenancy and the major repairs completion date is more than 2 years"
     void_date:
       title_text: "You told us the time between the start of the tenancy and the void date is more than 2 years"
+    shared_owhership_deposit:
+      title_text: "Mortgage, deposit and cash discount total should equal £%{expected_shared_ownership_deposit_value}"
 
   devise:
     two_factor_authentication:

@@ -159,6 +159,12 @@ class SalesLog < Log
     end
   end
 
+  def expected_shared_ownership_deposit_value
+    return unless value && equity
+
+    (value * equity / 100).round(2)
+  end
+
   def process_postcode(postcode, postcode_known_key, la_inferred_key, la_key)
     return if postcode.blank?
 
@@ -210,6 +216,10 @@ class SalesLog < Log
 
   def old_persons_shared_ownership?
     type == 24
+  end
+
+  def shared_ownership_scheme?
+    ownershipsch == 1
   end
 
   def purchase_price_soft_min

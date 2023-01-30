@@ -55,6 +55,19 @@ module Validations::Sales::SoftValidations
     sale_range.present? && !value.between?(sale_range.soft_min, sale_range.soft_max)
   end
 
+  def shared_ownership_deposit_invalid?
+    return unless mortgage || mortgageused == 2
+    return unless cashdis || !is_type_discount?
+    return unless deposit && value && equity
+
+    cash_discount = cashdis || 0
+    mortgage_value = mortgage || 0
+    mortgage_value + deposit + cash_discount != value * equity / 100
+  end
+
+  def hodate_3_years_or_more_saledate?
+    return unless hodate && saledate
+
   def purchase_price_min_or_max_text
     value < sale_range.soft_min ? "minimum" : "maximum"
   end

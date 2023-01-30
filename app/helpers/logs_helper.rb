@@ -18,4 +18,9 @@ module LogsHelper
       bulk_upload_sales_log_path(id:)
     end
   end
+
+  def bulk_upload_options(bulk_upload)
+    array = bulk_upload ? [bulk_upload.id] : []
+    array.index_with { |_bulk_upload_id| "With logs from bulk upload" }
+  end
 end

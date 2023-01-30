@@ -43,7 +43,14 @@ RSpec.describe BulkUpload::Lettings::Validator do
         validator.call
 
         error = BulkUploadError.first
-        expect(error.row).to eq("7")
+
+        expect(error.field).to eql("field_96")
+        expect(error.error).to eql("blank")
+        expect(error.tenant_code).to eql("123")
+        expect(error.property_ref).to be_nil
+        expect(error.row).to eql("7")
+        expect(error.cell).to eql("CS7")
+        expect(error.col).to eql("CS")
       end
     end
 

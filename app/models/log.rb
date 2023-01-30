@@ -24,6 +24,10 @@ class Log < ApplicationRecord
       where(created_by: user)
     end
   }
+  scope :filter_by_bulk_upload_id, lambda { |bulk_upload_id, user|
+    joins(:bulk_upload)
+      .where(bulk_upload: { id: bulk_upload_id, user: })
+  }
   scope :created_by, ->(user) { where(created_by: user) }
 
   def collection_start_year
