@@ -3,7 +3,7 @@ class Form::Sales::Questions::HouseholdWheelchairCheck < ::Form::Question
     super
     @id = "wheel_value_check"
     @check_answer_label = "Does anyone in the household use a wheelchair?"
-    @header = "Are you sure? You said previously that somebody in household uses a wheelchair"
+    @header = "Is this right? Earlier, you said someone in the household uses a wheelchair"
     @type = "interruption_screen"
     @answer_options = {
       "0" => { "value" => "Yes" },
