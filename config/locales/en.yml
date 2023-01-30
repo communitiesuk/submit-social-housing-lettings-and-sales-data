@@ -436,12 +436,9 @@ en:
       in_soft_max_range:
         message: "Net income is higher than expected based on the lead tenant’s working situation. Are you sure this is correct?"
     rent:
-      min:
-        title_text: "You told us the rent is %{brent}"
-        hint_text: "The minimum rent expected for this type of property in this local authority is £%{soft_min_for_period}."
-      max:
-        title_text: "You told us the rent is %{brent}"
-        hint_text: "The maximum rent expected for this type of property in this local authority is £%{soft_max_for_period}."
+      outside_range_title: "You told us the rent is %{brent}"
+      min_hint_text: "The minimum rent expected for this type of property in this local authority is £%{soft_min_for_period}."
+      max_hint_text: "The maximum rent expected for this type of property in this local authority is £%{soft_max_for_period}."
     retirement:
       min:
         title: "You told us this person is under %{age} and retired"
