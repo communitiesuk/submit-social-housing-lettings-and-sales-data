@@ -30,6 +30,10 @@ RSpec.describe Form::Sales::Pages::PurchasePriceDiscountedOwnership, type: :mode
   it "has correct depends_on" do
     expect(page.depends_on).to eq([
       { "ownershipsch" => 2 },
+      { "type" => 8 },
+      { "type" => 29 },
+      { "type" => 21 },
+      { "type" => 22 },
     ])
   end
 end
