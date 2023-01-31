@@ -400,6 +400,109 @@ RSpec.describe LettingsLogsController, type: :request do
               expect(page).not_to have_link(lettings_log_2022.id.to_s)
             end
           end
+
+          context "with bulk_upload_id filter" do
+            context "with bulk upload that belongs to current user" do
+              let(:organisation) { create(:organisation) }
+
+              let(:user) { create(:user, organisation:) }
+              let(:bulk_upload) { create(:bulk_upload, user:) }
+
+              let!(:included_log) { create(:lettings_log, :in_progress, bulk_upload:, owning_organisation: organisation) }
+              let!(:excluded_log) { create(:lettings_log, :in_progress, owning_organisation: organisation) }
+
+              it "returns logs only associated with the bulk upload" do
+                get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
+
+                expect(page).to have_content(included_log.id)
+                expect(page).not_to have_content(excluded_log.id)
+              end
+
+              it "dislays how many logs remaining to fix" do
+                get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
+                expect(page).to have_content("You need to fix 1 log")
+              end
+
+              it "displays filter" do
+                get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
+                expect(page).to have_content("With logs from bulk upload")
+              end
+
+              it "hides collection year filter" do
+                get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
+                expect(page).not_to have_content("Collection year")
+              end
+
+              it "hides status filter" do
+                get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
+                expect(page).not_to have_content("Status")
+              end
+
+              it "hides button to create a new log" do
+                get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
+                expect(page).not_to have_content("Create a new lettings log")
+              end
+
+              it "displays card with help info" do
+                get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
+                expect(page).to have_content("The following logs are from your recent bulk upload")
+              end
+
+              it "displays meta info about the bulk upload" do
+                get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
+                expect(page).to have_content(bulk_upload.filename)
+                expect(page).to have_content(bulk_upload.created_at.to_fs(:govuk_date_and_time))
+              end
+            end
+
+            context "with bulk upload that belongs to another user" do
+              let(:organisation) { create(:organisation) }
+
+              let(:user) { create(:user, organisation:) }
+              let(:other_user) { create(:user, organisation:) }
+              let(:bulk_upload) { create(:bulk_upload, user: other_user) }
+
+              let!(:excluded_log) { create(:lettings_log, bulk_upload:, owning_organisation: organisation) }
+              let!(:also_excluded_log) { create(:lettings_log, owning_organisation: organisation) }
+
+              it "does not return any logs" do
+                get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
+
+                expect(page).not_to have_content(excluded_log.id)
+                expect(page).not_to have_content(also_excluded_log.id)
+              end
+            end
+
+            context "when bulk upload has been resolved" do
+              let(:organisation) { create(:organisation) }
+
+              let(:user) { create(:user, organisation:) }
+              let(:bulk_upload) { create(:bulk_upload, user:) }
+
+              it "redirects to resume the bulk upload" do
+                get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
+
+                expect(response).to redirect_to(resume_bulk_upload_lettings_result_path(bulk_upload))
+              end
+            end
+          end
+
+          context "without bulk_upload_id" do
+            it "does not display filter" do
+              get "/lettings-logs"
+              expect(page).not_to have_content("With logs from bulk upload")
+            end
+
+            it "displays button to create a new log" do
+              get "/lettings-logs"
+              expect(page).to have_content("Create a new lettings log")
+            end
+
+            it "does not display card with help info" do
+              get "/lettings-logs"
+              expect(page).not_to have_content("The following logs are from your recent bulk upload")
+            end
+          end
         end
       end
 
@@ -458,6 +561,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
           it "includes the search on the CSV link" do
             search_term = "foo"
+            FactoryBot.create(:lettings_log, created_by: user, owning_organisation: user.organisation, tenancycode: "foo")
             get "/lettings-logs?search=#{search_term}", headers: headers, params: {}
             expect(page).to have_link("Download (CSV)", href: "/lettings-logs/csv-download?search=#{search_term}")
           end

@@ -9,12 +9,27 @@ RSpec.describe BulkUploadLettingsResultsController, type: :request do
     sign_in user
   end
 
+  describe "GET /lettings-logs/bulk-upload-results/:ID/summary" do
+    it "renders year combo" do
+      get "/lettings-logs/bulk-upload-results/#{bulk_upload.id}/summary"
+
+      expect(response).to be_successful
+      expect(response.body).to include("Bulk upload for lettings (2022/23)")
+    end
+
+    it "renders the bulk upload filename" do
+      get "/lettings-logs/bulk-upload-results/#{bulk_upload.id}/summary"
+
+      expect(response.body).to include(bulk_upload.filename)
+    end
+  end
+
   describe "GET /lettings-logs/bulk-upload-results/:ID" do
     it "renders correct year" do
       get "/lettings-logs/bulk-upload-results/#{bulk_upload.id}"
 
       expect(response).to be_successful
-      expect(response.body).to include("Bulk Upload for lettings (2022/23)")
+      expect(response.body).to include("Bulk upload for lettings (2022/23)")
     end
 
     it "renders correct number of errors" do

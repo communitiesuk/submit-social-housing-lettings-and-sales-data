@@ -201,6 +201,59 @@ RSpec.describe Validations::Sales::SoftValidations do
       end
     end
 
+    context "when validating mortgage and deposit against discounted value" do
+      [
+        {
+          nil_field: "mortgage",
+          value: 500_000,
+          deposit: 10_000,
+          discount: 10,
+        },
+        {
+          nil_field: "value",
+          mortgage: 100_000,
+          deposit: 10_000,
+          discount: 10,
+        },
+        {
+          nil_field: "deposit",
+          value: 500_000,
+          mortgage: 100_000,
+          discount: 10,
+        },
+        {
+          nil_field: "discount",
+          value: 500_000,
+          mortgage: 100_000,
+          deposit: 10_000,
+        },
+      ].each do |test_case|
+        it "returns false if #{test_case[:nil_field]} is not present" do
+          record.value = test_case[:value]
+          record.mortgage = test_case[:mortgage]
+          record.deposit = test_case[:deposit]
+          record.discount = test_case[:discount]
+          expect(record).not_to be_mortgage_plus_deposit_less_than_discounted_value
+        end
+      end
+
+      it "returns false if the deposit and mortgage add up to the discounted value or more" do
+        record.value = 500_000
+        record.discount = 20
+        record.mortgage = 200_000
+        record.deposit = 200_000
+        expect(record).not_to be_mortgage_plus_deposit_less_than_discounted_value
+      end
+
+      it "returns true if the deposit and mortgage add up to less than the discounted value" do
+        record.value = 500_000
+        record.discount = 10
+        record.mortgage = 200_000
+        record.deposit = 200_000
+        expect(record).to be_mortgage_plus_deposit_less_than_discounted_value
+      end
+    end
+
     context "when validating extra borrowing" do
       it "returns false if extrabor not present" do
         record.mortgage = 50_000
@@ -314,11 +367,115 @@ RSpec.describe Validations::Sales::SoftValidations do
           .to be_deposit_over_soft_max
       end
 
-      it "returns fals if deposit is less than 4/3 of savings" do
+      it "returns false if deposit is less than 4/3 of savings" do
         record.deposit = 7_999
         record.savings = 6_000
         expect(record)
           .not_to be_deposit_over_soft_max
+      end
+    end
+
+    context "when validating shared ownership deposit" do
+      it "returns false if MORTGAGE + DEPOSIT + CASHDIS are equal VALUE * EQUITY/100" do
+        record.mortgage = 1000
+        record.deposit = 1000
+        record.cashdis = 1000
+        record.value = 3000
+        record.equity = 100
+
+        expect(record)
+          .not_to be_shared_ownership_deposit_invalid
+      end
+
+      it "returns false if mortgage is used and no mortgage is given" do
+        record.mortgage = nil
+        record.deposit = 1000
+        record.cashdis = 1000
+        record.value = 3000
+        record.equity = 100
+
+        expect(record)
+          .not_to be_shared_ownership_deposit_invalid
+      end
+
+      it "returns true if mortgage is not used and no mortgage is given" do
+        record.mortgage = nil
+        record.mortgageused = 2
+        record.deposit = 1000
+        record.cashdis = 1000
+        record.value = 3000
+        record.equity = 100
+
+        expect(record)
+          .to be_shared_ownership_deposit_invalid
+      end
+
+      it "returns false if no deposit is given" do
+        record.mortgage = 1000
+        record.deposit = nil
+        record.cashdis = 1000
+        record.value = 3000
+        record.equity = 100
+
+        expect(record)
+          .not_to be_shared_ownership_deposit_invalid
+      end
+
+      it "returns false if no cashdis is given and cashdis is routed to" do
+        record.mortgage = 1000
+        record.deposit = 1000
+        record.type = 18
+        record.cashdis = nil
+        record.value = 3000
+        record.equity = 100
+
+        expect(record)
+          .not_to be_shared_ownership_deposit_invalid
+      end
+
+      it "returns true if no cashdis is given and cashdis is not routed to" do
+        record.mortgage = 1000
+        record.deposit = 1000
+        record.type = 2
+        record.cashdis = nil
+        record.value = 3000
+        record.equity = 100
+
+        expect(record)
+          .to be_shared_ownership_deposit_invalid
+      end
+
+      it "returns false if no value is given" do
+        record.mortgage = 1000
+        record.deposit = 1000
+        record.cashdis = 1000
+        record.value = nil
+        record.equity = 100
+
+        expect(record)
+          .not_to be_shared_ownership_deposit_invalid
+      end
+
+      it "returns false if no equity is given" do
+        record.mortgage = 1000
+        record.deposit = 1000
+        record.cashdis = 1000
+        record.value = 3000
+        record.equity = nil
+
+        expect(record)
+          .not_to be_shared_ownership_deposit_invalid
+      end
+
+      it "returns true if MORTGAGE + DEPOSIT + CASHDIS are not equal VALUE * EQUITY/100" do
+        record.mortgage = 1000
+        record.deposit = 1000
+        record.cashdis = 1000
+        record.value = 4323
+        record.equity = 100
+
+        expect(record)
+          .to be_shared_ownership_deposit_invalid
       end
     end
   end
@@ -394,6 +551,46 @@ RSpec.describe Validations::Sales::SoftValidations do
       record.wheel = 2
 
       expect(record).not_to be_wheelchair_when_not_disabled
+    end
+  end
+
+  describe "#grant_outside_common_range?" do
+    it "returns true if grant is below 9000" do
+      record.grant = 1_000
+
+      expect(record).to be_grant_outside_common_range
+    end
+
+    it "returns true if grant is above 16000" do
+      record.grant = 100_000
+
+      expect(record).to be_grant_outside_common_range
+    end
+
+    it "returns false if grant is within expected range" do
+      record.grant = 10_000
+
+      expect(record).not_to be_grant_outside_common_range
+    end
+  end
+
+  describe "#staircase_bought_above_fifty" do
+    it "returns false when stairbought is not set" do
+      record.stairbought = nil
+
+      expect(record).not_to be_staircase_bought_above_fifty
+    end
+
+    it "returns false when stairbought is below fifty" do
+      record.stairbought = 40
+
+      expect(record).not_to be_staircase_bought_above_fifty
+    end
+
+    it "returns true when stairbought is above fifty" do
+      record.stairbought = 70
+
+      expect(record).to be_staircase_bought_above_fifty
     end
   end
 end

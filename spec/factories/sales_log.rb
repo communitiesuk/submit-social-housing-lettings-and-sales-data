@@ -70,10 +70,10 @@ FactoryBot.define do
       ecstat5 { 2 }
       ecstat6 { 1 }
       disabled { 1 }
-      deposit { 10_000 }
+      deposit { 80_000 }
       cashdis { 1_000 }
       value { 110_000 }
-      grant { 1_000 }
+      grant { 10_000 }
       proplen { 10 }
       pregyrha { 1 }
       pregla { 1 }

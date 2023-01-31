@@ -224,4 +224,214 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       end
     end
   end
+
+  describe "#validate_discounted_ownership_value" do
+    context "when grant is routed to" do
+      let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, deposit: 5_000, value: 30_000, ownershipsch: 2, type: 8) }
+
+      context "and not provided" do
+        before do
+          record.grant = nil
+        end
+
+        it "does not add an error" do
+          sale_information_validator.validate_discounted_ownership_value(record)
+
+          expect(record.errors).to be_empty
+        end
+      end
+
+      context "and is provided" do
+        it "adds an error if mortgage, deposit and grant total does not equal market value" do
+          record.grant = 3_000
+          sale_information_validator.validate_discounted_ownership_value(record)
+          expect(record.errors[:mortgage]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "30000.00"))
+          expect(record.errors[:deposit]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "30000.00"))
+          expect(record.errors[:grant]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "30000.00"))
+          expect(record.errors[:value]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "30000.00"))
+          expect(record.errors[:discount]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "30000.00"))
+        end
+
+        it "does not add an error if mortgage, deposit and grant total equals market value" do
+          record.grant = 15_000
+          sale_information_validator.validate_discounted_ownership_value(record)
+          expect(record.errors).to be_empty
+        end
+      end
+    end
+
+    context "when discount is routed to" do
+      let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, deposit: 5_000, value: 30_000, ownershipsch: 2, type: 9) }
+
+      context "and not provided" do
+        before do
+          record.discount = nil
+        end
+
+        it "does not add an error" do
+          sale_information_validator.validate_discounted_ownership_value(record)
+
+          expect(record.errors).to be_empty
+        end
+      end
+
+      context "and is provided" do
+        it "adds an error if mortgage and deposit total does not equal market value - discount" do
+          record.discount = 10
+          sale_information_validator.validate_discounted_ownership_value(record)
+          expect(record.errors[:mortgage]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "27000.00"))
+          expect(record.errors[:deposit]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "27000.00"))
+          expect(record.errors[:grant]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "27000.00"))
+          expect(record.errors[:value]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "27000.00"))
+          expect(record.errors[:discount]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "27000.00"))
+        end
+
+        it "does not add an error if mortgage and deposit total equals market value - discount" do
+          record.discount = 50
+          sale_information_validator.validate_discounted_ownership_value(record)
+          expect(record.errors).to be_empty
+        end
+      end
+    end
+
+    context "when neither discount nor grant is routed to" do
+      let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, value: 30_000, ownershipsch: 2, type: 29) }
+
+      it "adds an error if mortgage and deposit total does not equal market value" do
+        record.deposit = 2_000
+        sale_information_validator.validate_discounted_ownership_value(record)
+        expect(record.errors[:mortgage]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "30000.00"))
+        expect(record.errors[:deposit]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "30000.00"))
+        expect(record.errors[:grant]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "30000.00"))
+        expect(record.errors[:value]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "30000.00"))
+        expect(record.errors[:discount]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "30000.00"))
+      end
+
+      it "does not add an error if mortgage and deposit total equals market value" do
+        record.deposit = 20_000
+        sale_information_validator.validate_discounted_ownership_value(record)
+        expect(record.errors).to be_empty
+      end
+    end
+
+    context "when mortgage is routed to" do
+      let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, deposit: 5_000, grant: 3_000, value: 20_000, discount: 10, ownershipsch: 2) }
+
+      context "and not provided" do
+        before do
+          record.mortgage = nil
+        end
+
+        it "does not add an error" do
+          sale_information_validator.validate_discounted_ownership_value(record)
+
+          expect(record.errors).to be_empty
+        end
+      end
+
+      context "and is provided" do
+        it "adds an error if mortgage, grant and deposit total does not equal market value - discount" do
+          record.mortgage = 10
+          sale_information_validator.validate_discounted_ownership_value(record)
+          expect(record.errors[:mortgage]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "18000.00"))
+          expect(record.errors[:deposit]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "18000.00"))
+          expect(record.errors[:grant]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "18000.00"))
+          expect(record.errors[:value]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "18000.00"))
+          expect(record.errors[:discount]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "18000.00"))
+        end
+
+        it "does not add an error if mortgage, grant and deposit total equals market value - discount" do
+          record.mortgage = 10_000
+          sale_information_validator.validate_discounted_ownership_value(record)
+          expect(record.errors).to be_empty
+        end
+      end
+    end
+
+    context "when mortgage is not routed to" do
+      let(:record) { FactoryBot.build(:sales_log, mortgageused: 2, deposit: 5_000, grant: 3_000, value: 20_000, discount: 10, ownershipsch: 2) }
+
+      it "adds an error if grant and deposit total does not equal market value - discount" do
+        sale_information_validator.validate_discounted_ownership_value(record)
+        expect(record.errors[:mortgage]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "18000.00"))
+        expect(record.errors[:deposit]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "18000.00"))
+        expect(record.errors[:grant]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "18000.00"))
+        expect(record.errors[:value]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "18000.00"))
+        expect(record.errors[:discount]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "18000.00"))
+      end
+
+      it "does not add an error if mortgage, grant and deposit total equals market value - discount" do
+        record.grant = 13_000
+        sale_information_validator.validate_discounted_ownership_value(record)
+        expect(record.errors).to be_empty
+      end
+    end
+
+    context "when owhership is not discounted" do
+      let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, deposit: 5_000, grant: 3_000, value: 20_000, discount: 10, ownershipsch: 1) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_discounted_ownership_value(record)
+
+        expect(record.errors).to be_empty
+      end
+    end
+  end
+
+  describe "#validate_basic_monthly_rent" do
+    context "when within permitted bounds" do
+      let(:record) { build(:sales_log, mrent: 9998, ownershipsch: 1, type: 2) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_basic_monthly_rent(record)
+
+        expect(record.errors[:mrent]).not_to be_present
+        expect(record.errors[:type]).not_to be_present
+      end
+    end
+
+    context "when the rent is blank" do
+      let(:record) { build(:sales_log, mrent: nil, ownershipsch: 1, type: 2) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_basic_monthly_rent(record)
+
+        expect(record.errors[:mrent]).not_to be_present
+        expect(record.errors[:type]).not_to be_present
+      end
+    end
+
+    context "when the type is old persons shared ownership" do
+      let(:record) { build(:sales_log, mrent: 100_000, ownershipsch: 1, type: 24) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_basic_monthly_rent(record)
+
+        expect(record.errors[:mrent]).not_to be_present
+        expect(record.errors[:type]).not_to be_present
+      end
+    end
+
+    context "when the type is blank" do
+      let(:record) { build(:sales_log, mrent: 100_000, ownershipsch: 1, type: nil) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_basic_monthly_rent(record)
+
+        expect(record.errors[:mrent]).not_to be_present
+        expect(record.errors[:type]).not_to be_present
+      end
+    end
+
+    context "when higher than upper bound" do
+      let(:record) { build(:sales_log, mrent: 100_000, ownershipsch: 1, type: 2) }
+
+      it "adds an error" do
+        sale_information_validator.validate_basic_monthly_rent(record)
+
+        expect(record.errors[:mrent]).to include(I18n.t("validations.sale_information.monthly_rent.higher_than_expected"))
+        expect(record.errors[:type]).to include(I18n.t("validations.sale_information.monthly_rent.higher_than_expected"))
+      end
+    end
+  end
 end

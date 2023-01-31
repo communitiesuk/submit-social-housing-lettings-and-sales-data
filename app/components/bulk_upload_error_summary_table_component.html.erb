@@ -1,0 +1,25 @@
+<%= govuk_table do |table| %>
+  <% table.caption(size: "m", text: bulk_upload.filename) %>
+
+  <% table.head do |head| %>
+    <% head.row do |row| %>
+      <% row.cell(text: "Column", header: true) %>
+      <% row.cell(text: "Number of rows", header: true) %>
+      <% row.cell(text: "Question", header: true) %>
+      <% row.cell(text: "Error", header: true) %>
+      <% row.cell(text: "Specification", header: true) %>
+    <% end %>
+  <% end %>
+
+  <% table.body do |body| %>
+    <% sorted_errors.each do |error| %>
+      <% body.row do |row| %>
+        <% row.cell(text: error[0][0]) %>
+        <% row.cell(text: error[1]) %>
+        <% row.cell(text: BulkUpload::Lettings::Validator.question_for_field(error[0][1].to_sym)) %>
+        <% row.cell(text: error[0][2]) %>
+        <% row.cell(text: error[0][1]) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

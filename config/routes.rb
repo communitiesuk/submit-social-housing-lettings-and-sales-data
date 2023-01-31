@@ -134,7 +134,12 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :bulk_upload_lettings_results, path: "bulk-upload-results", only: [:show]
+      resources :bulk_upload_lettings_results, path: "bulk-upload-results", only: [:show] do
+        member do
+          get :resume
+          get :summary
+        end
+      end
 
       get "update-logs", to: "lettings_logs#update_logs"
     end

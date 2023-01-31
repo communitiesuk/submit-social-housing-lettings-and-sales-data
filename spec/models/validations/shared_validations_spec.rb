@@ -70,11 +70,11 @@ RSpec.describe Validations::SharedValidations do
     end
 
     context "when validating percent" do
-      it "validates that % suffix is added in the error message" do
-        sales_record.stairbought = "random"
+      it "validates that suffixes are added in the error message" do
+        sales_record.stairbought = 150
         shared_validator.validate_numeric_min_max(sales_record)
         expect(sales_record.errors["stairbought"])
-          .to include(match I18n.t("validations.numeric.valid", field: "Percentage bought in this staircasing transaction", min: "0 percent", max: "100 percent"))
+          .to include(match I18n.t("validations.numeric.valid", field: "Percentage bought in this staircasing transaction", min: "0%", max: "100%"))
       end
     end
 

@@ -6,7 +6,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
   let(:validator_class) { Class.new { include Validations::Sales::FinancialValidations } }
 
   describe "income validations" do
-    let(:record) { FactoryBot.create(:sales_log, ownershipsch: 1) }
+    let(:record) { FactoryBot.create(:sales_log, ownershipsch: 1, la: "E08000035") }
 
     context "with shared ownership" do
       context "and non london borough" do
@@ -17,6 +17,14 @@ RSpec.describe Validations::Sales::FinancialValidations do
             financial_validator.validate_income1(record)
             expect(record.errors["income1"])
                 .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 80_000))
+            expect(record.errors["ecstat1"])
+                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 80_000))
+            expect(record.errors["ownershipsch"])
+                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 80_000))
+            expect(record.errors["la"])
+                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 80_000))
+            expect(record.errors["postcode_full"])
+                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 80_000))
           end
         end
 
@@ -25,6 +33,10 @@ RSpec.describe Validations::Sales::FinancialValidations do
           record.ecstat1 = 1
           financial_validator.validate_income1(record)
           expect(record.errors["income1"]).to be_empty
+          expect(record.errors["ecstat1"]).to be_empty
+          expect(record.errors["ownershipsch"]).to be_empty
+          expect(record.errors["la"]).to be_empty
+          expect(record.errors["postcode_full"]).to be_empty
         end
       end
 
@@ -41,6 +53,14 @@ RSpec.describe Validations::Sales::FinancialValidations do
             financial_validator.validate_income1(record)
             expect(record.errors["income1"])
                 .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 90_000))
+            expect(record.errors["ecstat1"])
+                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 90_000))
+            expect(record.errors["ownershipsch"])
+                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 90_000))
+            expect(record.errors["la"])
+                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 90_000))
+            expect(record.errors["postcode_full"])
+                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 90_000))
           end
         end
 
@@ -49,6 +69,10 @@ RSpec.describe Validations::Sales::FinancialValidations do
           record.ecstat1 = 1
           financial_validator.validate_income1(record)
           expect(record.errors["income1"]).to be_empty
+          expect(record.errors["ecstat1"]).to be_empty
+          expect(record.errors["ownershipsch"]).to be_empty
+          expect(record.errors["la"]).to be_empty
+          expect(record.errors["postcode_full"]).to be_empty
         end
       end
     end
@@ -73,6 +97,65 @@ RSpec.describe Validations::Sales::FinancialValidations do
       record.cashdis = 10_000
       financial_validator.validate_cash_discount(record)
       expect(record.errors["cashdis"]).to be_empty
+    end
+  end
+
+  describe "#validate_percentage_bought_not_greater_than_percentage_owned" do
+    let(:record) { FactoryBot.create(:sales_log) }
+
+    it "does not add an error if the percentage bought is less than the percentage owned" do
+      record.stairbought = 20
+      record.stairowned = 40
+      financial_validator.validate_percentage_bought_not_greater_than_percentage_owned(record)
+      expect(record.errors["stairbought"]).to be_empty
+      expect(record.errors["stairowned"]).to be_empty
+    end
+
+    it "does not add an error if the percentage bought is equal to the percentage owned" do
+      record.stairbought = 30
+      record.stairowned = 30
+      financial_validator.validate_percentage_bought_not_greater_than_percentage_owned(record)
+      expect(record.errors["stairbought"]).to be_empty
+      expect(record.errors["stairowned"]).to be_empty
+    end
+
+    it "adds an error to stairowned and not stairbought if the percentage bought is more than the percentage owned" do
+      record.stairbought = 50
+      record.stairowned = 40
+      financial_validator.validate_percentage_bought_not_greater_than_percentage_owned(record)
+      expect(record.errors["stairowned"]).to include(match I18n.t("validations.financial.staircasing.percentage_bought_must_be_greater_than_percentage_owned"))
+    end
+  end
+
+  describe "#validate_percentage_owned_not_too_much_if_older_person" do
+    let(:record) { FactoryBot.create(:sales_log) }
+
+    context "when log type is not older persons shared ownership" do
+      it "does not add an error when percentage owned after staircasing transaction exceeds 75%" do
+        record.type = 2
+        record.stairowned = 80
+        financial_validator.validate_percentage_owned_not_too_much_if_older_person(record)
+        expect(record.errors["stairowned"]).to be_empty
+        expect(record.errors["type"]).to be_empty
+      end
+    end
+
+    context "when log type is older persons shared ownership" do
+      it "does not add an error when percentage owned after staircasing transaction is less than 75%" do
+        record.type = 24
+        record.stairowned = 50
+        financial_validator.validate_percentage_owned_not_too_much_if_older_person(record)
+        expect(record.errors["stairowned"]).to be_empty
+        expect(record.errors["type"]).to be_empty
+      end
+
+      it "adds an error when percentage owned after staircasing transaction exceeds 75%" do
+        record.type = 24
+        record.stairowned = 90
+        financial_validator.validate_percentage_owned_not_too_much_if_older_person(record)
+        expect(record.errors["stairowned"]).to include(match I18n.t("validations.financial.staircasing.older_person_percentage_owned_maximum_75"))
+        expect(record.errors["type"]).to include(match I18n.t("validations.financial.staircasing.older_person_percentage_owned_maximum_75"))
+      end
     end
   end
 end

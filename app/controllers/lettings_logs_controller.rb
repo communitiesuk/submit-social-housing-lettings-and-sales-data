@@ -3,6 +3,9 @@ class LettingsLogsController < LogsController
   before_action :session_filters, if: :current_user
   before_action :set_session_filters, if: :current_user
 
+  before_action :extract_bulk_upload_from_session_filters, only: [:index]
+  before_action :redirect_if_bulk_upload_resolved, only: [:index]
+
   def index
     respond_to do |format|
       format.html do
@@ -108,6 +111,17 @@ class LettingsLogsController < LogsController
   end
 
 private
+
+  def redirect_if_bulk_upload_resolved
+    if @bulk_upload && @bulk_upload.lettings_logs.in_progress.count.zero?
+      redirect_to resume_bulk_upload_lettings_result_path(@bulk_upload)
+    end
+  end
+
+  def extract_bulk_upload_from_session_filters
+    id = ((@session_filters["bulk_upload_id"] || []).reject(&:blank?))[0]
+    @bulk_upload = current_user.bulk_uploads.find_by(id:)
+  end
 
   def permitted_log_params
     params.require(:lettings_log).permit(LettingsLog.editable_fields)

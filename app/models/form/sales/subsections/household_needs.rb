@@ -2,7 +2,7 @@ class Form::Sales::Subsections::HouseholdNeeds < ::Form::Subsection
   def initialize(id, hsh, section)
     super
     @id = "household_needs"
-    @label = "Household needs"
+    @label = "Other household information"
     @depends_on = [{ "setup_completed?" => true }]
   end
 

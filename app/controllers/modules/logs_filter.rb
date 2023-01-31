@@ -7,7 +7,9 @@ module Modules::LogsFilter
   def load_session_filters(specific_org: false)
     current_filters = session[:logs_filters]
     new_filters = current_filters.present? ? JSON.parse(current_filters) : {}
-    current_user.logs_filters(specific_org:).each { |filter| new_filters[filter] = params[filter] if params[filter].present? }
+    current_user.logs_filters(specific_org:).each do |filter|
+      new_filters[filter] = params[filter] if params[filter].present?
+    end
     params["organisation_select"] == "all" ? new_filters.except("organisation") : new_filters
   end
 
