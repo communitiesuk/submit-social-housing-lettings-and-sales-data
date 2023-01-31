@@ -28,6 +28,6 @@ RSpec.describe Form::Sales::Pages::Nationality1, type: :model do
   end
 
   it "has correct depends_on" do
-    expect(page.depends_on).to be_nil
+    expect(page.depends_on).to eq([{ "privacynotice" => 1 }, { "noint" => 1 }])
   end
 end

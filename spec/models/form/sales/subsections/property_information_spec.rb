@@ -16,6 +16,7 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
       %w[
         property_number_of_bedrooms
         property_unit_type
+        monthly_charges_property_type_value_check
         property_building_type
         property_postcode
         property_local_authority

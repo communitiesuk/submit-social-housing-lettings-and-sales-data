@@ -29,6 +29,7 @@ class Form::Sales::Subsections::DiscountedOwnershipScheme < ::Form::Subsection
       Form::Sales::Pages::DepositValueCheck.new("discounted_ownership_deposit_value_check", nil, self),
       Form::Sales::Pages::DepositAndMortgageValueCheck.new("discounted_ownership_deposit_and_mortgage_value_check_after_deposit", nil, self),
       Form::Sales::Pages::LeaseholdCharges.new("leasehold_charges_discounted_ownership", nil, self),
+      Form::Sales::Pages::MonthlyChargesValueCheck.new("monthly_charges_discounted_ownership_value_check", nil, self),
     ]
   end
 
