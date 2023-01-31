@@ -9,11 +9,11 @@ module Spike
         section.subsections.each do |subsection|
           subsection.pages.each do |page|
             page.questions.each do |question|
-              # create_question(question)
+              create_question(question)
             end
-            # create_page(page)
+            create_page(page)
           end
-          # create_subsection(subsection)
+          create_subsection(subsection)
         end
         create_section(section)
       end
@@ -23,15 +23,15 @@ module Spike
       subsections_array = section.subsections.map { |s| "Form::Lettings::Subsections::#{section.id.camelize}::#{s.id.camelize}.new(nil, nil, self)" }
       out_file = File.new("app/models/form/lettings/sections/#{section.id}.rb", "w")
       out_file.puts("class Form::Lettings::Sections::#{section.id.camelize} < ::Form::Section
-      def initialize(id, hsh, form)
-        super
-        @id = \"#{section.id}\"
-        @label = \"#{section.id}\"
-        @description = \"#{section.description}\"
-        @form = form
-        @subsections = #{subsections_array}
-      end
-    end")
+  def initialize(id, hsh, form)
+    super
+    @id = \"#{section.id}\"")
+        out_file.puts("    @label = \"#{section.id}\"") if section.id
+        out_file.puts("    @description = \"#{section.description}\"") if section.description
+        out_file.puts("    @form = form
+    @subsections = #{subsections_array}
+  end
+end")
       out_file.close
     end
 
