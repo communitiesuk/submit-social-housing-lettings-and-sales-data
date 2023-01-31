@@ -5,48 +5,6 @@ RSpec.describe Validations::Sales::HouseholdValidations do
 
   let(:validator_class) { Class.new { include Validations::Sales::HouseholdValidations } }
 
-  describe "#validate_number_of_other_people_living_in_the_property" do
-    context "when within permitted bounds" do
-      let(:record) { build(:sales_log, hholdcount: 2) }
-
-      it "does not add an error" do
-        household_validator.validate_number_of_other_people_living_in_the_property(record)
-
-        expect(record.errors[:hholdcount]).not_to be_present
-      end
-    end
-
-    context "when blank" do
-      let(:record) { build(:sales_log, hholdcount: nil) }
-
-      it "does not add an error" do
-        household_validator.validate_number_of_other_people_living_in_the_property(record)
-
-        expect(record.errors[:hholdcount]).not_to be_present
-      end
-    end
-
-    context "when below lower bound" do
-      let(:record) { build(:sales_log, hholdcount: -1) }
-
-      it "adds an error" do
-        household_validator.validate_number_of_other_people_living_in_the_property(record)
-
-        expect(record.errors[:hholdcount]).to be_present
-      end
-    end
-
-    context "when higher than upper bound" do
-      let(:record) { build(:sales_log, hholdcount: 5) }
-
-      it "adds an error" do
-        household_validator.validate_number_of_other_people_living_in_the_property(record)
-
-        expect(record.errors[:hholdcount]).to be_present
-      end
-    end
-  end
-
   describe "household member validations" do
     let(:record) { build(:sales_log) }
 

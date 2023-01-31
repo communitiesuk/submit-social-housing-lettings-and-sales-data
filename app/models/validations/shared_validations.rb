@@ -114,8 +114,6 @@ private
       record.errors.add question.id.to_sym, I18n.t("validations.numeric.within_range", field:, min:, max:)
     elsif min
       record.errors.add question.id.to_sym, I18n.t("validations.numeric.above_min", field:, min:)
-    else
-      record.errors.add question.id.to_sym, I18n.t("validations.numeric.below_max", field:, max:)
     end
   end
 end

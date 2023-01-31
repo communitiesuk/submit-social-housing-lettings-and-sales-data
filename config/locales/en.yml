@@ -133,7 +133,6 @@ en:
     numeric:
       within_range: "%{field} must be between %{min} and %{max}"
       above_min: "%{field} must be at least %{min}"
-      below_max: "%{field} must be at most %{max}"
     date:
       invalid_date: "Enter a date in the correct format, for example 31 1 2022"
       outside_collection_window: "Enter a date within the current collection windows"

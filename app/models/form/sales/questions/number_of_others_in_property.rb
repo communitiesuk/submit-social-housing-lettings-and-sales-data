@@ -7,5 +7,7 @@ class Form::Sales::Questions::NumberOfOthersInProperty < ::Form::Question
     @type = "numeric"
     @hint_text = "You can provide details for a maximum of 4 other people."
     @width = 2
+    @min = 0
+    @max = 4
   end
 end
