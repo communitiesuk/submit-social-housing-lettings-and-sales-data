@@ -1,10 +1,11 @@
 class BulkUpload::LogToCsv
-  attr_reader :log, :line_ending, :col_offset
+  attr_reader :log, :line_ending, :col_offset, :overrides
 
-  def initialize(log:, line_ending: "\n", col_offset: 1)
+  def initialize(log:, line_ending: "\n", col_offset: 1, overrides: {})
     @log = log
     @line_ending = line_ending
     @col_offset = col_offset
+    @overrides = overrides
   end
 
   def to_csv_row
@@ -135,7 +136,7 @@ class BulkUpload::LogToCsv
       nil,
       log.incfreq,
       log.sheltered,
-      log.illness,
+      overrides[:illness] || log.illness,
       log.illness_type_1,
 
       log.illness_type_2, # 120
