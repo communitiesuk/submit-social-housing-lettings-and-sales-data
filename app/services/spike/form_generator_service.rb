@@ -9,11 +9,11 @@ module Spike
         section.subsections.each do |subsection|
           subsection.pages.each do |page|
             page.questions.each do |question|
-              create_question(question)
+              # create_question(question)
             end
-            create_page(page)
+            # create_page(page)
           end
-          create_subsection(subsection)
+          # create_subsection(subsection)
         end
         create_section(section)
       end
@@ -39,16 +39,17 @@ module Spike
       pages_array = subsection.pages.map { |page| "Form::Lettings::Pages::#{page.id.camelize}.new(nil, nil, self)" }
       out_file = File.new("app/models/form/lettings/subsections/#{subsection.id}.rb", "w")
       out_file.puts("class Form::Lettings::Subsections::#{subsection.id.camelize} < ::Form::Subsection
-        def initialize(id, hsh, section)
+  def initialize(id, hsh, section)
     super
-    @id = \"#{subsection.id}\"
-          @label = \"#{subsection.label}\"
-          @depends_on = #{subsection.depends_on}
-        end
+    @id = \"#{subsection.id}\"")
+      out_file.puts("    @label = \"#{subsection.label}\"") if subsection.label
+      out_file.puts("    @depends_on = #{subsection.depends_on}") if subsection.depends_on
+      out_file.puts("  end
 
-        def pages
-          @pages ||= #{pages_array}.compact
-        end")
+  def pages
+    @pages ||= #{pages_array}.compact
+  end
+end")
       out_file.close
     end
 
