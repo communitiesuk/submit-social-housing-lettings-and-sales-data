@@ -102,7 +102,6 @@ end")
       out_file.puts("    @conditional_for = #{question.conditional_for}") if question.conditional_for
       out_file.puts("    @inferred_answers = #{question.inferred_answers}") if question.inferred_answers
       out_file.puts("    @hidden_in_check_answers = #{question.hidden_in_check_answers}") if question.hidden_in_check_answers
-      out_file.puts("    @guidance_position = #{question.guidance_position}") if question.guidance_position
       out_file.puts("    @derived = #{question.derived}") if question.derived
       out_file.puts("    @prefix = \"#{question.prefix}\"") if question.prefix
       out_file.puts("    @suffix = \"#{question.suffix}\"") if question.suffix
