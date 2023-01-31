@@ -146,7 +146,6 @@ unless Rails.env.test?
     child_organisation: managing_agent2,
   )
 
-
   if Rails.env.development? || Rails.env.review?
     User.find_or_create_by!(
       name: "Provider",
@@ -191,7 +190,7 @@ unless Rails.env.test?
       type: 2,
       jointpur: 1,
       jointmore: 1,
-      )
+    )
 
     SalesLog.find_or_create_by!(
       created_by: support_user,
@@ -202,7 +201,7 @@ unless Rails.env.test?
       type: 9,
       jointpur: 1,
       jointmore: 1,
-      )
+    )
 
     SalesLog.find_or_create_by!(
       created_by: support_user,
@@ -212,7 +211,7 @@ unless Rails.env.test?
       ownershipsch: 3,
       type: 10,
       companybuy: 1,
-      )
+    )
 
     pp "Seeded a sales log of each type"
   end
