@@ -184,4 +184,36 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
       end
     end
   end
+
+  describe "#answer_label" do
+    context "when answered" do
+      let(:managing_organisation) { create(:organisation) }
+      let(:log) { create(:lettings_log, managing_organisation:) }
+
+      it "returns org name" do
+        expect(question.answer_label(log)).to eq(managing_organisation.name)
+      end
+    end
+
+    context "when unanswered" do
+      let(:log) { create(:lettings_log, managing_organisation: nil) }
+
+      it "returns nil" do
+        expect(question.answer_label(log)).to be_nil
+      end
+    end
+
+    context "when org does not exist" do
+      let(:managing_organisation) { create(:organisation) }
+      let(:log) { create(:lettings_log, managing_organisation:) }
+
+      before do
+        allow(Organisation).to receive(:find_by).and_return(nil)
+      end
+
+      it "returns nil" do
+        expect(question.answer_label(log)).to be_nil
+      end
+    end
+  end
 end
