@@ -8,7 +8,7 @@ class Form::Sales::Pages::SharedOwnershipDepositValueCheck < ::Form::Page
     ]
     @informative_text = {}
     @title_text = {
-      "translation" => "soft_validations.shared_owhership_deposit.title_text",
+      "translation" => "soft_validations.shared_ownership_deposit.title_text",
       "arguments" => [
         {
           "key" => "expected_shared_ownership_deposit_value",

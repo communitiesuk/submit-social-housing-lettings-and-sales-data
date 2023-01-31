@@ -86,7 +86,7 @@ RSpec.describe Validations::SharedValidations do
 
     context "when validating price" do
       it "validates that £ prefix  and , is added in the error message" do
-        sales_record.income1 = "random"
+        sales_record.income1 = -5
         shared_validator.validate_numeric_min_max(sales_record)
         expect(sales_record.errors["income1"])
           .to include(match I18n.t("validations.numeric.within_range", field: "Buyer 1’s gross annual income", min: "£0", max: "£999,999"))
