@@ -47,6 +47,7 @@ RSpec.describe "Sales Log Check Answers Page" do
           assert_selector ".x-govuk-summary-card__title", text: "Person 2", count: 0
           assert_selector ".x-govuk-summary-card__title", text: "Person 3", count: 1
           assert_selector ".x-govuk-summary-card__title", text: "Person 4", count: 1
+          assert_selector ".x-govuk-summary-card__title", text: "Person 5", count: 1
         end
       end
 
@@ -59,6 +60,7 @@ RSpec.describe "Sales Log Check Answers Page" do
           assert_selector ".x-govuk-summary-card__title", text: "Person 2", count: 1
           assert_selector ".x-govuk-summary-card__title", text: "Person 3", count: 1
           assert_selector ".x-govuk-summary-card__title", text: "Person 4", count: 1
+          assert_selector ".x-govuk-summary-card__title", text: "Person 5", count: 1
         end
       end
     end
