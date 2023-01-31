@@ -13,6 +13,7 @@ RSpec.describe "Sales Log Check Answers Page" do
       :completed,
       created_by: user,
       jointpur: 1,
+      hholdcount: 4,
     )
   end
 
@@ -22,6 +23,7 @@ RSpec.describe "Sales Log Check Answers Page" do
       :completed,
       created_by: user,
       jointpur: 2,
+      hholdcount: 4,
     )
   end
 
