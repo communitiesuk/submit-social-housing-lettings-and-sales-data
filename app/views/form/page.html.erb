@@ -43,7 +43,7 @@
               informative_text: @page.informative_text,
               form: @form,
               f:,
-              conditional: false
+              conditional: false,
             } %>
           <% else %>
             <%= render partial: "form/#{question.type}_question", locals: {
@@ -52,7 +52,7 @@
               page_header: @page.header,
               lettings_log: @log,
               f:,
-              conditional: false
+              conditional: false,
             } %>
           <% end %>
         </div>
