@@ -75,4 +75,11 @@ module Validations::Sales::SoftValidations
 
     !grant.between?(9_000, 16_000)
   end
+
+  def monthly_charges_over_soft_max?
+    return unless type && mscharge && proptype
+
+    soft_max = old_persons_shared_ownership? ? 550 : 300
+    mscharge > soft_max
+  end
 end
