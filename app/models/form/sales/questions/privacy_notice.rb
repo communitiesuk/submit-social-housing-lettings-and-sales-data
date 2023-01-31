@@ -6,7 +6,6 @@ class Form::Sales::Questions::PrivacyNotice < ::Form::Question
     @header = "Declaration"
     @type = "checkbox"
     @answer_options = ANSWER_OPTIONS
-    @guidance_position = GuidancePosition::TOP
     @guidance_partial = "privacy_notice_buyer"
   end
 

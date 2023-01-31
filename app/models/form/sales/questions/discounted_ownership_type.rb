@@ -9,7 +9,7 @@ class Form::Sales::Questions::DiscountedOwnershipType < ::Form::Question
   end
 
   ANSWER_OPTIONS = {
-    "8" => { "value" => "Right to Aquire (RTA)" },
+    "8" => { "value" => "Right to Acquire (RTA)" },
     "14" => { "value" => "Preserved Right to Buy (PRTB)" },
     "27" => { "value" => "Voluntary Right to Buy (VRTB)" },
     "9" => { "value" => "Right to Buy (RTB)" },

@@ -40,4 +40,8 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
       "privacynotice" => { "value" => "The buyer has seen the DLUHC privacy notice" },
     })
   end
+
+  it "returns correct unanswered_error_message" do
+    expect(question.unanswered_error_message).to eq("You must show the DLUHC privacy notice to the buyer before you can submit this log.")
+  end
 end
