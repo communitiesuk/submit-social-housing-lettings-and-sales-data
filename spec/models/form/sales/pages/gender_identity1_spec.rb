@@ -28,6 +28,6 @@ RSpec.describe Form::Sales::Pages::GenderIdentity1, type: :model do
   end
 
   it "has correct depends_on" do
-    expect(page.depends_on).to eq([{ "privacynotice" => 1 }])
+    expect(page.depends_on).to eq([{ "privacynotice" => 1 }, { "noint" => 1 }])
   end
 end

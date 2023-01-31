@@ -2,9 +2,14 @@ class Form::Sales::Pages::Buyer1LiveInProperty < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "buyer_1_live_in_property"
-    @depends_on = [{
-      "privacynotice" => 1,
-    }]
+    @depends_on = [
+      {
+        "privacynotice" => 1,
+      },
+      {
+        "noint" => 1,
+      },
+    ]
   end
 
   def questions

@@ -2,10 +2,16 @@ class Form::Sales::Pages::GenderIdentity2 < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "buyer_2_gender_identity"
-    @depends_on = [{
-      "jointpur" => 1,
-      "privacynotice" => 1,
-    }]
+    @depends_on = [
+      {
+        "jointpur" => 1,
+        "privacynotice" => 1,
+      },
+      {
+        "jointpur" => 1,
+        "noint" => 1,
+      },
+    ]
   end
 
   def questions
