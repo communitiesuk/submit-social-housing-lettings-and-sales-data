@@ -40,8 +40,8 @@ module Spike
       out_file = File.new("app/models/form/lettings/subsections/#{subsection.id}.rb", "w")
       out_file.puts("class Form::Lettings::Subsections::#{subsection.id.camelize} < ::Form::Subsection
         def initialize(id, hsh, section)
-          super
-          @id = \"#{subsection.id}\"
+    super
+    @id = \"#{subsection.id}\"
           @label = \"#{subsection.label}\"
           @depends_on = #{subsection.depends_on}
         end
@@ -78,39 +78,41 @@ module Spike
 
     def create_question(question)
       out_file = File.new("app/models/form/lettings/questions/#{question.id}.rb", "w")
-      out_file.puts("class Form::Lettings::Questions::#{question.id.camelize} < ::Form::Question
-        def initialize(id, hsh, page)
-          super
-          @id = \"#{question.id}\"
-          @check_answer_label = \"#{question.check_answer_label}\"
-          @header = \"#{question.header}\"
-          @type = \"#{question.type}\"
-          @width = #{question.width}
-          @inferred_check_answers_value = #{question.inferred_check_answers_value}
-          @check_answers_card_number = #{question.check_answer_label}
-          @max = #{question.max}
-          @min = #{question.min}
-          @guidance_partial = \"#{question.guidance_partial}\"
-          @guidance_position = GuidancePosition::TOP
-          @hint_text = \"#{question.hint_text}\"
-          @step = #{question.step}
-          @fields_to_add = #{question.fields_to_add}
-          @result_field = #{question.result_field}
-          @readonly = #{question.readonly}
-          @answer_options = ANSWER_OPTIONS
-          @conditional_for = #{question.conditional_for}
-          @inferred_answers = #{question.inferred_answers}
-          @hidden_in_check_answers = #{question.hidden_in_check_answers}
-          @derived = #{question.derived}
-          @prefix = \"#{question.prefix}\"
-          @suffix = \"#{question.suffix}\"
-          @requires_js = #{question.requires_js}
-          @fields_added = #{question.fields_added}
-          @unresolved_hint_text = #{question.unresolved_hint_text}
-        end
 
-        ANSWER_OPTIONS = #{question.answer_options}
-      end")
+      out_file.puts("class Form::Lettings::Questions::#{question.id.camelize} < ::Form::Question
+  def initialize(id, hsh, page)
+    super
+    @id = \"#{question.id}\"
+    @check_answer_label = \"#{question.check_answer_label}\"
+    @header = \"#{question.header}\"
+    @type = \"#{question.type}\"")
+      out_file.puts("    @width = #{question.width}") if question.width
+      out_file.puts("    @inferred_check_answers_value = #{question.inferred_check_answers_value}") if question.inferred_check_answers_value
+      out_file.puts("    @check_answers_card_number = #{question.check_answer_label}") if question.check_answer_label
+      out_file.puts("    @max = #{question.max}") if question.max
+      out_file.puts("    @min = #{question.min}") if question.min
+      out_file.puts("    @guidance_partial = \"#{question.guidance_partial}\"") if question.guidance_partial
+      out_file.puts("    @hint_text = \"#{question.hint_text}\"") if question.hint_text
+      out_file.puts("    @step = #{question.step}") if question.step
+      out_file.puts("    @fields_to_add = #{question.fields_to_add}") if question.fields_to_add
+      out_file.puts("    @result_field = #{question.result_field}") if question.result_field
+      out_file.puts("    @readonly = #{question.readonly}") if question.readonly
+      out_file.puts("    @answer_options = ANSWER_OPTIONS") if question.answer_options
+      out_file.puts("    @conditional_for = #{question.conditional_for}") if question.conditional_for
+      out_file.puts("    @inferred_answers = #{question.inferred_answers}") if question.inferred_answers
+      out_file.puts("    @hidden_in_check_answers = #{question.hidden_in_check_answers}") if question.hidden_in_check_answers
+      out_file.puts("    @guidance_position = #{question.guidance_position}") if question.guidance_position
+      out_file.puts("    @derived = #{question.derived}") if question.derived
+      out_file.puts("    @prefix = \"#{question.prefix}\"") if question.prefix
+      out_file.puts("    @suffix = \"#{question.suffix}\"") if question.suffix
+      out_file.puts("    @requires_js = #{question.requires_js}") if question.requires_js
+      out_file.puts("    @fields_added = #{question.fields_added}") if question.fields_added
+      out_file.puts("    @unresolved_hint_text = #{question.unresolved_hint_text}") if question.unresolved_hint_text
+      out_file.puts("  end")
+      out_file.puts("        
+  ANSWER_OPTIONS = #{question.answer_options}") if question.answer_options
+      out_file.puts("end")
+
       out_file.close
     end
   end
