@@ -20,7 +20,7 @@ RSpec.describe Form::Sales::Pages::PersonAge, type: :model do
     expect(page.description).to be_nil
   end
 
-  context "and person 2" do
+  context "with person 2" do
     let(:page_id) { "person_2_age" }
     let(:person_index) { 2 }
 
@@ -39,7 +39,7 @@ RSpec.describe Form::Sales::Pages::PersonAge, type: :model do
     end
   end
 
-  context "and person 3" do
+  context "with person 3" do
     let(:page_id) { "person_3_age" }
     let(:person_index) { 3 }
 
@@ -60,7 +60,7 @@ RSpec.describe Form::Sales::Pages::PersonAge, type: :model do
     end
   end
 
-  context "and person 4" do
+  context "with person 4" do
     let(:page_id) { "person_4_age" }
     let(:person_index) { 4 }
 
@@ -81,7 +81,7 @@ RSpec.describe Form::Sales::Pages::PersonAge, type: :model do
     end
   end
 
-  context "and person 5" do
+  context "with person 5" do
     let(:page_id) { "person_5_age" }
     let(:person_index) { 5 }
 
