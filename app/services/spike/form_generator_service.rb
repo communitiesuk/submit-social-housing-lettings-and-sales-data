@@ -56,23 +56,23 @@ module Spike
       questions_array = page.questions.map { |question| "Form::Lettings::Questions::#{question.id.camelize}.new(nil, nil, self)" }
       out_file = File.new("app/models/form/lettings/pages/#{page.id}.rb", "w")
       out_file.puts("class Form::Lettings::Pages::#{page.id.camelize} < ::Form::Page
-        def initialize(id, hsh, subsection)
-          super
-          @id = \"#{page.id}\"
-          @header = \"#{page.header}\"
-          @depends_on = #{page.depends_on}
-          @header_partial = #{page.header_partial}
-          @description = \"#{page.description}\"
-          @title_text = #{page.title_text}
-          @informative_text = #{page.informative_text}
-          @hide_subsection_label = #{page.hide_subsection_label}
-          @next_unresolved_page_id = \"#{page.next_unresolved_page_id}\"
-        end
+  def initialize(id, hsh, subsection)
+    super
+    @id = \"#{page.id}\"")
+      out_file.puts("    @header = \"#{page.header}\"") if page.header
+      out_file.puts("    @depends_on = #{page.depends_on}") if page.depends_on
+      out_file.puts("    @header_partial = #{page.header_partial}") if page.header_partial
+      out_file.puts("    @description = \"#{page.description}\"") if page.description
+      out_file.puts("    @title_text = #{page.title_text}") if page.title_text
+      out_file.puts("    @informative_text = #{page.informative_text}") if page.informative_text
+      out_file.puts("    @hide_subsection_label = #{page.hide_subsection_label}") if page.hide_subsection_label
+      out_file.puts("    @next_unresolved_page_id = \"#{page.next_unresolved_page_id}\"") if page.next_unresolved_page_id
+      out_file.puts("  end
 
-        def questions
-          @questions ||= #{questions_array}
-        end
-      end")
+  def questions
+    @questions ||= #{questions_array}
+  end
+end")
       out_file.close
     end
 
@@ -109,8 +109,10 @@ module Spike
       out_file.puts("    @fields_added = #{question.fields_added}") if question.fields_added
       out_file.puts("    @unresolved_hint_text = #{question.unresolved_hint_text}") if question.unresolved_hint_text
       out_file.puts("  end")
-      out_file.puts("        
-  ANSWER_OPTIONS = #{question.answer_options}") if question.answer_options
+      if question.answer_options
+        out_file.puts("
+  ANSWER_OPTIONS = #{question.answer_options}")
+      end
       out_file.puts("end")
 
       out_file.close
