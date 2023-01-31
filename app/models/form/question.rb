@@ -99,12 +99,6 @@ class Form::Question
     !!derived
   end
 
-  def has_inferred_check_answers_value?(log)
-    return false unless inferred_check_answers_value
-
-    inferred_check_answers_value&.any? { |inferred_value| inferred_value["condition"].values.first == log[inferred_value["condition"].keys.first] }
-  end
-
   def displayed_answer_options(log, _current_user = nil)
     answer_options.select do |_key, val|
       !val.is_a?(Hash) || !val["depends_on"] || form.depends_on_met(val["depends_on"], log)
@@ -112,7 +106,7 @@ class Form::Question
   end
 
   def action_text(log)
-    if has_inferred_check_answers_value?(log) || selected_answer_option_is_derived?(log)
+    if has_inferred_check_answers_value_or_is_derived?(log)
       "Change"
     elsif type == "checkbox"
       answer_options.keys.any? { |key| value_is_yes?(log[key]) } ? "Change" : "Answer"
@@ -259,12 +253,23 @@ class Form::Question
     @guidance_partial && @guidance_position == GuidancePosition::BOTTOM
   end
 
+  def has_inferred_check_answers_value_or_is_derived?(log)
+    has_inferred_check_answers_value?(log) || selected_answer_option_is_derived?(log)
+  end
+
+private
+
   def selected_answer_option_is_derived?(log)
     selected_option = answer_options&.dig(log[id].to_s.presence)
     selected_option.is_a?(Hash) && selected_option["depends_on"] && form.depends_on_met(selected_option["depends_on"], log)
   end
 
-private
+  def has_inferred_check_answers_value?(log)
+    return false unless inferred_check_answers_value
+
+    inferred_check_answers_value&.any? { |inferred_value| inferred_value["condition"].values.first == log[inferred_value["condition"].keys.first] }
+  end
+
 
   def has_inferred_display_value?(log)
     inferred_check_answers_value.present? && inferred_check_answers_value.any? { |inferred_value| log[inferred_value["condition"].keys.first] == inferred_value["condition"].values.first }
