@@ -8400,7 +8400,7 @@
                     ]
                   },
                   "header": "This rent is lower than expected for this property type, in this area. Check:",
-                  "hint_text": "<ul><li>the decimal point is not missing (£X.XX)</li><li>the frequency is correct, for example weekly, monthly</li><li>the rent type is correct, for example affordable or social rent</li></ul><p>Once checked, confirm below.</p>",
+                  "hint_text": "<ul><li>the decimal point is not missing (£X.XX)</li><li>the frequency is correct, for example weekly, monthly</li><li>the rent type is correct, for example affordable or social rent</li></ul><p>Are you sure this is correct?</p>",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
@@ -8444,7 +8444,7 @@
                     ]
                   },
                   "header": "This rent is higher than expected for this property type, in this area. Check:",
-                  "hint_text": "<ul><li>the decimal point is not missing (£X.XX)</li><li>the frequency is correct, for example weekly, monthly</li><li>the rent type is correct, for example affordable or social rent</li></ul><p>Once checked, confirm below.</p>",
+                  "hint_text": "<ul><li>the decimal point is not missing (£X.XX)</li><li>the frequency is correct, for example weekly, monthly</li><li>the rent type is correct, for example affordable or social rent</li></ul><p>Are you sure this is correct?</p>",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
