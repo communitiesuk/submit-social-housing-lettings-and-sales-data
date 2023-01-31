@@ -1037,7 +1037,7 @@ RSpec.describe LettingsLogsController, type: :request do
         expect(page).not_to have_content(non_affected_lettings_logs.first.id)
       end
 
-      it "only displays the logs creted by the user" do
+      it "only displays the logs created by the user" do
         affected_lettings_logs.first.update!(created_by: other_user)
         get "/lettings-logs/update-logs", headers:, params: {}
         expect(page).to have_content(affected_lettings_logs.second.id)
