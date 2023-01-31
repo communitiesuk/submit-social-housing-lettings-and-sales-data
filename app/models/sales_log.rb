@@ -1,4 +1,5 @@
 class SalesLogValidator < ActiveModel::Validator
+  include Validations::Sales::SetupValidations
   include Validations::Sales::HouseholdValidations
   include Validations::Sales::PropertyValidations
   include Validations::SharedValidations
@@ -23,18 +24,18 @@ class SalesLog < Log
   has_paper_trail
 
   validates_with SalesLogValidator
-  before_validation :set_derived_fields!
   before_validation :reset_invalidated_dependent_fields!
   before_validation :process_postcode_changes!, if: :postcode_full_changed?
   before_validation :process_previous_postcode_changes!, if: :ppostcode_full_changed?
   before_validation :reset_location_fields!, unless: :postcode_known?
   before_validation :reset_previous_location_fields!, unless: :previous_postcode_known?
+  before_validation :set_derived_fields!
 
   scope :filter_by_year, ->(year) { where(saledate: Time.zone.local(year.to_i, 4, 1)...Time.zone.local(year.to_i + 1, 4, 1)) }
   scope :search_by, ->(param) { filter_by_id(param) }
   scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org) }
 
-  OPTIONAL_FIELDS = %w[purchid].freeze
+  OPTIONAL_FIELDS = %w[purchid old_persons_shared_ownership_value_check].freeze
   RETIREMENT_AGES = { "M" => 65, "F" => 60, "X" => 65 }.freeze
 
   def startdate
@@ -159,6 +160,12 @@ class SalesLog < Log
     end
   end
 
+  def expected_shared_ownership_deposit_value
+    return unless value && equity
+
+    (value * equity / 100).round(2)
+  end
+
   def process_postcode(postcode, postcode_known_key, la_inferred_key, la_key)
     return if postcode.blank?
 
@@ -210,5 +217,19 @@ class SalesLog < Log
 
   def old_persons_shared_ownership?
     type == 24
+  end
+
+  def shared_owhership_scheme?
+    ownershipsch == 1
+  end
+
+  def buyers_age_for_old_persons_shared_ownership_invalid?
+    return unless old_persons_shared_ownership?
+
+    (joint_purchase? && ages_unknown_or_under_64?([1, 2])) || (not_joint_purchase? && ages_unknown_or_under_64?([1]))
+  end
+
+  def ages_unknown_or_under_64?(person_indexes)
+    person_indexes.all? { |person_num| self["age#{person_num}"].present? && self["age#{person_num}"] < 64 || self["age#{person_num}_known"] == 1 }
   end
 end

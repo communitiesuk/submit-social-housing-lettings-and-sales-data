@@ -108,7 +108,6 @@ private
     return unless form
 
     form.reset_not_routed_questions(self)
-
     reset_created_by!
   end
 

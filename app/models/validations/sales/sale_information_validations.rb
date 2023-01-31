@@ -3,7 +3,7 @@ module Validations::Sales::SaleInformationValidations
     return if record.saledate.blank? || record.hodate.blank?
 
     unless record.saledate > record.hodate
-      record.errors.add :hodate, "Practical completion or handover date must be before exchange date"
+      record.errors.add :hodate, I18n.t("validations.sale_information.hodate.must_be_before_exdate")
     end
   end
 
@@ -23,11 +23,15 @@ module Validations::Sales::SaleInformationValidations
   def validate_exchange_date(record)
     return unless record.exdate && record.saledate
 
-    record.errors.add(:exdate, I18n.t("validations.sale_information.exdate.must_be_before_saledate")) if record.exdate > record.saledate
+    if record.exdate > record.saledate
+      record.errors.add :exdate, I18n.t("validations.sale_information.exdate.must_be_before_saledate")
+      record.errors.add :saledate, I18n.t("validations.sale_information.saledate.must_be_after_exdate")
+    end
 
-    return if (record.saledate.to_date - record.exdate.to_date).to_i / 365 < 1
-
-    record.errors.add(:exdate, I18n.t("validations.sale_information.exdate.must_be_less_than_1_year_from_saledate"))
+    if record.saledate - record.exdate >= 1.year
+      record.errors.add :exdate, I18n.t("validations.sale_information.exdate.must_be_less_than_1_year_from_saledate")
+      record.errors.add :saledate, I18n.t("validations.sale_information.saledate.must_be_less_than_1_year_from_exdate")
+    end
   end
 
   def validate_previous_property_unit_type(record)
@@ -52,6 +56,15 @@ module Validations::Sales::SaleInformationValidations
       %i[mortgage deposit grant value discount ownershipsch].each do |field|
         record.errors.add field, I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: sprintf("%.2f", value_with_discount))
       end
+    end
+  end
+
+  def validate_basic_monthly_rent(record)
+    return unless record.mrent && record.ownershipsch && record.type
+
+    if record.shared_owhership_scheme? && !record.old_persons_shared_ownership? && record.mrent > 9999
+      record.errors.add :mrent, I18n.t("validations.sale_information.monthly_rent.higher_than_expected")
+      record.errors.add :type, I18n.t("validations.sale_information.monthly_rent.higher_than_expected")
     end
   end
 end

@@ -149,6 +149,8 @@ en:
     setup:
       intermediate_rent_product_name:
         blank: "Enter name of other intermediate rent product"
+      saledate:
+        financial_year: "Date must be from 22/23 financial year"
       startdate:
         later_than_14_days_after: "The tenancy start date must not be later than 14 days from today’s date"
         before_scheme_end_date: "The tenancy start date must be before the end date for this supported housing scheme"
@@ -277,6 +279,10 @@ en:
         out_of_range: "Household rent and other charges must be between %{min_chcharge} and %{max_chcharge} if paying %{period}"
         not_provided: "Enter how much rent and other charges the household pays %{period}"
       cash_discount_invalid: "Cash discount must be £0 - £999,999"
+      staircasing:
+        percentage_bought_must_be_greater_than_percentage_owned: "Total percentage buyer now owns must be more than percentage bought in this transaction"
+        older_person_percentage_owned_maximum_75: "Percentage cannot be above 75% under Older Person's Shared Ownership"
+
     household:
       reasonpref:
         not_homeless: "Answer cannot be ‘homeless or about to lose their home’ as the tenant was not homeless immediately prior to this letting"
@@ -370,10 +376,9 @@ en:
         not_internal_transfer: "Answer cannot be ‘permanently decanted from another property owned by this landlord’ as you told us the source of referral for this tenancy was not an internal transfer"
       condition_effects:
         no_choices: "You cannot answer this question as you told us nobody in the household has a physical or mental health condition (or other illness) expected to last 12 months or more"
-      old_persons_shared_ownership: "Are you sure? At least one buyer should be aged over 64 for Older persons‘ shared ownership scheme"
       postcode:
         discounted_ownership: "Last settled accommodation and discounted ownership property postcodes must match"
-
+      
     tenancy:
       length:
         fixed_term_not_required: "You must only answer the length of the tenancy if it's fixed-term"
@@ -418,16 +423,19 @@ en:
       proplen:
         social_homebuy: "Social HomeBuy buyers should not have lived here before"
         rent_to_buy: "Rent to Buy buyers should not have lived here before"
+      hodate:
+        must_be_before_exdate: "Practical completion or handover date must be before exchange date"
       exdate:
-        must_be_before_saledate:
-          Contract exchange date must be less than 1 year before completion date
-        must_be_less_than_1_year_from_saledate:
-          Contract exchange date must be less than 1 year before completion date
+        must_be_before_saledate: "Contract exchange date must be less than 1 year before completion date"
+        must_be_less_than_1_year_from_saledate: "Contract exchange date must be less than 1 year before completion date"
+      saledate:
+        must_be_after_exdate: "Completion date must be less than 1 year after contract exchange date"
+        must_be_less_than_1_year_from_exdate: "Completion date must be less than 1 year after contract exchange date"
       previous_property_beds:
         property_type_bedsit: "Bedsit bedroom maximum 1"
-      previous_property_type:
-        property_type_bedsit: "A bedsit can not have more than 1 bedroom"
       discounted_ownership_value: "Mortgage, deposit, and grant total must equal £%{value_with_discount}"
+      monthly_rent:
+        higher_than_expected: "Basic monthly rent must be between £0 and £9,999"
 
   soft_validations:
     net_income:
@@ -461,6 +469,9 @@ en:
       title_text: "You told us the time between the start of the tenancy and the major repairs completion date is more than 2 years"
     void_date:
       title_text: "You told us the time between the start of the tenancy and the void date is more than 2 years"
+    shared_owhership_deposit:
+      title_text: "Mortgage, deposit and cash discount total should equal £%{expected_shared_ownership_deposit_value}"
+    old_persons_shared_ownership: "At least one buyer should be aged over 64 for Older persons’ shared ownership scheme"
 
   devise:
     two_factor_authentication:

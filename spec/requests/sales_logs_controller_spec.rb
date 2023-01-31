@@ -179,29 +179,29 @@ RSpec.describe SalesLogsController, type: :request do
           end
 
           context "with year filter" do
-            let!(:sales_log_2021) do
+            let!(:sales_log_2022) do
               FactoryBot.create(:sales_log, :in_progress,
                                 owning_organisation: organisation,
-                                saledate: Time.zone.local(2022, 3, 1))
+                                saledate: Time.zone.local(2022, 4, 1))
             end
-            let!(:sales_log_2022) do
+            let!(:sales_log_2023) do
               sales_log = FactoryBot.build(:sales_log, :completed,
                                            owning_organisation: organisation,
-                                           saledate: Time.zone.local(2022, 12, 1))
+                                           saledate: Time.zone.local(2023, 1, 1))
               sales_log.save!(validate: false)
               sales_log
             end
 
             it "shows sales logs for multiple selected years" do
               get "/sales-logs?years[]=2021&years[]=2022", headers: headers, params: {}
-              expect(page).to have_link(sales_log_2021.id.to_s)
               expect(page).to have_link(sales_log_2022.id.to_s)
+              expect(page).to have_link(sales_log_2023.id.to_s)
             end
 
             it "shows sales logs for one selected year" do
-              get "/sales-logs?years[]=2021", headers: headers, params: {}
-              expect(page).to have_link(sales_log_2021.id.to_s)
-              expect(page).not_to have_link(sales_log_2022.id.to_s)
+              get "/sales-logs?years[]=2022", headers: headers, params: {}
+              expect(page).to have_link(sales_log_2022.id.to_s)
+              expect(page).to have_link(sales_log_2023.id.to_s)
             end
           end
 
@@ -214,23 +214,23 @@ RSpec.describe SalesLogsController, type: :request do
               Timecop.unfreeze
             end
 
-            let!(:sales_log_2021) do
+            let!(:sales_log_2022) do
               FactoryBot.create(:sales_log, :completed,
                                 owning_organisation: organisation,
-                                saledate: Time.zone.local(2022, 3, 1),
+                                saledate: Time.zone.local(2022, 4, 1),
                                 created_by: user)
             end
-            let!(:sales_log_2022) do
+            let!(:sales_log_2023) do
               FactoryBot.create(:sales_log,
                                 owning_organisation: organisation,
-                                saledate: Time.zone.local(2022, 12, 1),
+                                saledate: Time.zone.local(2023, 1, 1),
                                 created_by: user)
             end
 
             it "shows sales logs for multiple selected statuses and years" do
               get "/sales-logs?years[]=2021&years[]=2022&status[]=in_progress&status[]=completed", headers: headers, params: {}
-              expect(page).to have_link(sales_log_2021.id.to_s)
               expect(page).to have_link(sales_log_2022.id.to_s)
+              expect(page).to have_link(sales_log_2023.id.to_s)
             end
           end
         end

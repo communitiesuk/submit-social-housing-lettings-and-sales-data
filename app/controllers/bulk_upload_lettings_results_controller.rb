@@ -19,6 +19,10 @@ class BulkUploadLettingsResultsController < ApplicationController
     end
   end
 
+  def summary
+    @bulk_upload = current_user.bulk_uploads.lettings.find(params[:id])
+  end
+
 private
 
   def reset_logs_filters
