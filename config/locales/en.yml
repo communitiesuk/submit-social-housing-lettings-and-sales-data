@@ -389,6 +389,9 @@ en:
 
     declaration:
       missing: "You must show the DLUHC privacy notice to the tenant before you can submit this log."
+    
+    privacynotice:
+      missing: "You must show the DLUHC privacy notice to the buyer before you can submit this log."
 
     scheme:
       toggle_date:
@@ -470,6 +473,8 @@ en:
     shared_owhership_deposit:
       title_text: "Mortgage, deposit and cash discount total should equal £%{expected_shared_ownership_deposit_value}"
     old_persons_shared_ownership: "At least one buyer should be aged over 64 for Older persons’ shared ownership scheme"
+    monthly_charges_over_soft_max: 
+      title_text: "The amount of monthly charges is high for this type of property and sale type"
 
   devise:
     two_factor_authentication:

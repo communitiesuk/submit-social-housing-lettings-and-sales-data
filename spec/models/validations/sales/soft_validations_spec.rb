@@ -593,4 +593,66 @@ RSpec.describe Validations::Sales::SoftValidations do
       expect(record).to be_staircase_bought_above_fifty
     end
   end
+
+  describe "#monthly_charges_over_soft_max?" do
+    it "returns false if mscharge is not given" do
+      record.mscharge = nil
+      record.proptype = 4
+      record.type = 2
+
+      expect(record).not_to be_monthly_charges_over_soft_max
+    end
+
+    it "returns false if proptype is not given" do
+      record.mscharge = 999
+      record.proptype = nil
+      record.type = 2
+
+      expect(record).not_to be_monthly_charges_over_soft_max
+    end
+
+    it "returns false if type is not given" do
+      record.mscharge = 999
+      record.proptype = 4
+      record.type = nil
+
+      expect(record).not_to be_monthly_charges_over_soft_max
+    end
+
+    context "with old persons shared ownership" do
+      it "returns false if the monthly charge is under 550" do
+        record.mscharge = 540
+        record.proptype = 4
+        record.type = 24
+
+        expect(record).not_to be_monthly_charges_over_soft_max
+      end
+
+      it "returns true if the monthly charge is over 550" do
+        record.mscharge = 999
+        record.proptype = 4
+        record.type = 24
+
+        expect(record).to be_monthly_charges_over_soft_max
+      end
+    end
+
+    context "with non old persons type of ownership" do
+      it "returns false if the monthly charge is under 300" do
+        record.mscharge = 280
+        record.proptype = 4
+        record.type = 18
+
+        expect(record).not_to be_monthly_charges_over_soft_max
+      end
+
+      it "returns true if the monthly charge is over 300" do
+        record.mscharge = 400
+        record.proptype = 4
+        record.type = 18
+
+        expect(record).to be_monthly_charges_over_soft_max
+      end
+    end
+  end
 end

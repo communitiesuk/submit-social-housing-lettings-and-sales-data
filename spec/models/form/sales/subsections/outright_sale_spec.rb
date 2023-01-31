@@ -24,6 +24,7 @@ RSpec.describe Form::Sales::Subsections::OutrightSale, type: :model do
         about_deposit_outright_sale
         outright_sale_deposit_value_check
         leasehold_charges_outright_sale
+        monthly_charges_outright_sale_value_check
       ],
     )
   end
