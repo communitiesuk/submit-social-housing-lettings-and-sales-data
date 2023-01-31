@@ -22,6 +22,7 @@ RSpec.describe Form::Sales::Subsections::Setup, type: :model do
         shared_ownership_type
         discounted_ownership_type
         outright_ownership_type
+        ownership_type_old_persons_shared_ownership_value_check
         buyer_company
         buyer_live
         joint_purchase

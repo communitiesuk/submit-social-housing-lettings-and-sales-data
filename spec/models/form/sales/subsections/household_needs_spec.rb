@@ -30,7 +30,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdNeeds, type: :model do
   end
 
   it "has the correct label" do
-    expect(household_characteristics.label).to eq("Household needs")
+    expect(household_characteristics.label).to eq("Other household information")
   end
 
   it "has correct depends on" do

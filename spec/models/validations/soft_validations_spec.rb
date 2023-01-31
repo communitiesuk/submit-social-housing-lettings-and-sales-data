@@ -237,4 +237,78 @@ RSpec.describe Validations::SoftValidations do
       end
     end
   end
+
+  describe "old persons shared ownership soft validations" do
+    context "when it is a joint purchase and both buyers are over 64" do
+      let(:record) { FactoryBot.build(:sales_log, jointpur: 1, age1: 65, age2: 66, type: 24) }
+
+      it "returns false" do
+        expect(record.buyers_age_for_old_persons_shared_ownership_invalid?).to be false
+      end
+    end
+
+    context "when it is a joint purchase and first buyer is over 64" do
+      let(:record) { FactoryBot.build(:sales_log, jointpur: 1, age1: 65, age2: 40, type: 24) }
+
+      it "returns false" do
+        expect(record.buyers_age_for_old_persons_shared_ownership_invalid?).to be false
+      end
+    end
+
+    context "when it is a joint purchase and second buyer is over 64" do
+      let(:record) { FactoryBot.build(:sales_log, jointpur: 1, age1: 43, age2: 64, type: 24) }
+
+      it "returns false" do
+        expect(record.buyers_age_for_old_persons_shared_ownership_invalid?).to be false
+      end
+    end
+
+    context "when it is a joint purchase and neither of the buyers are over 64" do
+      let(:record) { FactoryBot.build(:sales_log, jointpur: 1, age1: 43, age2: 33, type: 24) }
+
+      it "returns true" do
+        expect(record.buyers_age_for_old_persons_shared_ownership_invalid?).to be true
+      end
+    end
+
+    context "when it is a joint purchase and first buyer is under 64 and the second buyers' age is unknown" do
+      let(:record) { FactoryBot.build(:sales_log, jointpur: 1, age1: 43, age2_known: 1, type: 24) }
+
+      it "returns true" do
+        expect(record.buyers_age_for_old_persons_shared_ownership_invalid?).to be true
+      end
+    end
+
+    context "when it is a joint purchase and neither of the buyers ages are known" do
+      let(:record) { FactoryBot.build(:sales_log, jointpur: 1, age1_known: 1, age2_known: 1, type: 24) }
+
+      it "returns true" do
+        expect(record.buyers_age_for_old_persons_shared_ownership_invalid?).to be true
+      end
+    end
+
+    context "when it is not a joint purchase and the buyer is over 64" do
+      let(:record) { FactoryBot.build(:sales_log, jointpur: 2, age1: 70, type: 24) }
+
+      it "returns false" do
+        expect(record.buyers_age_for_old_persons_shared_ownership_invalid?).to be false
+      end
+    end
+
+    context "when it is not a joint purchase and the buyer is under 64" do
+      let(:record) { FactoryBot.build(:sales_log, jointpur: 2, age1: 20, type: 24) }
+
+      it "returns true" do
+        expect(record.buyers_age_for_old_persons_shared_ownership_invalid?).to be true
+      end
+    end
+
+    context "when it is not a joint purchase and the buyers age is not known" do
+      let(:record) { FactoryBot.build(:sales_log, jointpur: 2, age1_known: 1, type: 24) }
+
+      it "returns true" do
+        expect(record.buyers_age_for_old_persons_shared_ownership_invalid?).to be true
+      end
+    end
+  end
 end
