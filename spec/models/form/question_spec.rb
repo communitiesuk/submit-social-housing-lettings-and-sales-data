@@ -274,8 +274,8 @@ RSpec.describe Form::Question, type: :model do
         FactoryBot.create(:lettings_log, :in_progress, hhmemb: 2, details_known_2: 0, age2_known: 0, age2: 12)
       end
 
-      it "knows it has an inferred value for check answers" do
-        expect(question.has_inferred_check_answers_value?(lettings_log)).to be true
+      it "knows it has an inferred value or is derived for check answers" do
+        expect(question.has_inferred_check_answers_value_or_is_derived?(lettings_log)).to be true
       end
     end
 
