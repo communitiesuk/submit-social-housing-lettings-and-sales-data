@@ -1,4 +1,5 @@
 module Validations::Sales::SetupValidations
+  include Validations::SharedValidations
   def validate_saledate(record)
     return unless record.saledate && date_valid?("saledate", record)
 
