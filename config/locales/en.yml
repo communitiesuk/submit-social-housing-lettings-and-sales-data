@@ -389,6 +389,9 @@ en:
 
     declaration:
       missing: "You must show the DLUHC privacy notice to the tenant before you can submit this log."
+    
+    privacynotice:
+      missing: "You must show the DLUHC privacy notice to the buyer before you can submit this log."
 
     scheme:
       toggle_date:
