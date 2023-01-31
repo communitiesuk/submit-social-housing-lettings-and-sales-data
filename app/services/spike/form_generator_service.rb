@@ -43,7 +43,7 @@ module Spike
           super
           @id = \"#{subsection.id}\"
           @label = \"#{subsection.label}\"
-          @section = section
+          @depends_on = #{subsection.depends_on}
         end
 
         def pages
@@ -61,6 +61,12 @@ module Spike
           @id = \"#{page.id}\"
           @header = \"#{page.header}\"
           @depends_on = #{page.depends_on}
+          @header_partial = #{page.header_partial}
+          @description = \"#{page.description}\"
+          @title_text = #{page.title_text}
+          @informative_text = #{page.informative_text}
+          @hide_subsection_label = #{page.hide_subsection_label}
+          @next_unresolved_page_id = \"#{page.next_unresolved_page_id}\"
         end
 
         def questions
@@ -72,7 +78,7 @@ module Spike
 
     def create_question(question)
       out_file = File.new("app/models/form/lettings/questions/#{question.id}.rb", "w")
-      out_file.puts("class Form::Sales::Questions::#{question.id.camelize} < ::Form::Question
+      out_file.puts("class Form::Lettings::Questions::#{question.id.camelize} < ::Form::Question
         def initialize(id, hsh, page)
           super
           @id = \"#{question.id}\"
@@ -84,7 +90,26 @@ module Spike
           @check_answers_card_number = #{question.check_answer_label}
           @max = #{question.max}
           @min = #{question.min}
+          @guidance_partial = \"#{question.guidance_partial}\"
+          @guidance_position = GuidancePosition::TOP
+          @hint_text = \"#{question.hint_text}\"
+          @step = #{question.step}
+          @fields_to_add = #{question.fields_to_add}
+          @result_field = #{question.result_field}
+          @readonly = #{question.readonly}
+          @answer_options = ANSWER_OPTIONS
+          @conditional_for = #{question.conditional_for}
+          @inferred_answers = #{question.inferred_answers}
+          @hidden_in_check_answers = #{question.hidden_in_check_answers}
+          @derived = #{question.derived}
+          @prefix = \"#{question.prefix}\"
+          @suffix = \"#{question.suffix}\"
+          @requires_js = #{question.requires_js}
+          @fields_added = #{question.fields_added}
+          @unresolved_hint_text = #{question.unresolved_hint_text}
         end
+
+        ANSWER_OPTIONS = #{question.answer_options}
       end")
       out_file.close
     end
