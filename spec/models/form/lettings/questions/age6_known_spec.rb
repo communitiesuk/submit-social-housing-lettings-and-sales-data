@@ -1,15 +1,11 @@
 require "rails_helper"
 
-RSpec.describe Form::Lettings::Questions::Age6Known, type: :model do
-  subject(:question) { described_class.new(question_id, question_definition, page) }
+RSpec.describe Form::Lettings::Questions::AgeKnown, type: :model do
+  subject(:question) { described_class.new(nil, question_definition, page, person_index:) }
 
-  let(:question_id) { "age6_known" }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
-
-  before do
-    allow(page).to receive(:id).and_return("age6_known")
-  end
+  let(:person_index) { 6 }
 
   it "has correct page" do
     expect(question.page).to eq(page)
