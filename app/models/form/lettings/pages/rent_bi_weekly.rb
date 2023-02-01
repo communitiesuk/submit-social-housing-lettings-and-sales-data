@@ -12,6 +12,6 @@ class Form::Lettings::Pages::RentBiWeekly < ::Form::Page
                     Form::Lettings::Questions::SchargeBiWeekly.new(nil, nil, self),
                     Form::Lettings::Questions::PschargeBiWeekly.new(nil, nil, self),
                     Form::Lettings::Questions::SupchargBiWeekly.new(nil, nil, self),
-                    Form::Lettings::Questions::Tcharge.new(nil, nil, self)]
+                    Form::Lettings::Questions::TchargeBiWeekly.new(nil, nil, self)]
   end
 end

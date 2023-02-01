@@ -12,6 +12,6 @@ class Form::Lettings::Pages::RentMonthly < ::Form::Page
                     Form::Lettings::Questions::SchargeMonthly.new(nil, nil, self),
                     Form::Lettings::Questions::PschargeMonthly.new(nil, nil, self),
                     Form::Lettings::Questions::SupchargMonthly.new(nil, nil, self),
-                    Form::Lettings::Questions::Tcharge.new(nil, nil, self)]
+                    Form::Lettings::Questions::TchargeMonthly.new(nil, nil, self)]
   end
 end

@@ -1,4 +1,4 @@
-class Form::Lettings::Questions::Tcharge < ::Form::Question
+class Form::Lettings::Questions::TchargeWeekly < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "tcharge"
@@ -12,7 +12,7 @@ class Form::Lettings::Questions::Tcharge < ::Form::Question
     @step = 0.01
     @readonly = true
     @prefix = "£"
-    @suffix = " every month"
+    @suffix = " every week"
     @requires_js = true
     @fields_added = %w[brent scharge pscharge supcharg]
   end
