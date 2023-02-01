@@ -8,6 +8,6 @@ class Form::Lettings::Pages::LeadTenantEthnicBackgroundArab < ::Form::Page
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::Ethnic.new(nil, nil, self)]
+    @questions ||= [Form::Lettings::Questions::EthnicArab.new(nil, nil, self)]
   end
 end
