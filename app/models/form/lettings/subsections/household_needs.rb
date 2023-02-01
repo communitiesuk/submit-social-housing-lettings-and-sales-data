@@ -7,6 +7,15 @@ class Form::Lettings::Subsections::HouseholdNeeds < ::Form::Subsection
   end
 
   def pages
-    @pages ||= [Form::Lettings::Pages::ArmedForces.new(nil, nil, self), Form::Lettings::Pages::ArmedForcesServing.new(nil, nil, self), Form::Lettings::Pages::ArmedForcesInjured.new(nil, nil, self), Form::Lettings::Pages::Pregnant.new(nil, nil, self), Form::Lettings::Pages::NoFemalesPregnantHouseholdValueCheck.new(nil, nil, self), Form::Lettings::Pages::FemalesInSoftAgeRangeInPregnantHouseholdValueCheck.new(nil, nil, self), Form::Lettings::Pages::AccessNeedsExist.new(nil, nil, self), Form::Lettings::Pages::TypeOfAccessNeeds.new(nil, nil, self), Form::Lettings::Pages::HealthConditions.new(nil, nil, self), Form::Lettings::Pages::HealthConditionEffects.new(nil, nil, self)].compact
+    @pages ||= [Form::Lettings::Pages::ArmedForces.new(nil, nil, self),
+                Form::Lettings::Pages::ArmedForcesServing.new(nil, nil, self),
+                Form::Lettings::Pages::ArmedForcesInjured.new(nil, nil, self),
+                Form::Lettings::Pages::Pregnant.new(nil, nil, self),
+                Form::Lettings::Pages::NoFemalesPregnantHouseholdValueCheck.new(nil, nil, self),
+                Form::Lettings::Pages::FemalesInSoftAgeRangeInPregnantHouseholdValueCheck.new(nil, nil, self),
+                Form::Lettings::Pages::AccessNeedsExist.new(nil, nil, self),
+                Form::Lettings::Pages::TypeOfAccessNeeds.new(nil, nil, self),
+                Form::Lettings::Pages::HealthConditions.new(nil, nil, self),
+                Form::Lettings::Pages::HealthConditionEffects.new(nil, nil, self)].compact
   end
 end

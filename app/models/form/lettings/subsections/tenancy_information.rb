@@ -7,6 +7,11 @@ class Form::Lettings::Subsections::TenancyInformation < ::Form::Subsection
   end
 
   def pages
-    @pages ||= [Form::Lettings::Pages::Joint.new(nil, nil, self), Form::Lettings::Pages::StarterTenancy.new(nil, nil, self), Form::Lettings::Pages::TenancyType.new(nil, nil, self), Form::Lettings::Pages::StarterTenancyType.new(nil, nil, self), Form::Lettings::Pages::TenancyLength.new(nil, nil, self), Form::Lettings::Pages::Shelteredaccom.new(nil, nil, self)].compact
+    @pages ||= [Form::Lettings::Pages::Joint.new(nil, nil, self),
+                Form::Lettings::Pages::StarterTenancy.new(nil, nil, self),
+                Form::Lettings::Pages::TenancyType.new(nil, nil, self),
+                Form::Lettings::Pages::StarterTenancyType.new(nil, nil, self),
+                Form::Lettings::Pages::TenancyLength.new(nil, nil, self),
+                Form::Lettings::Pages::Shelteredaccom.new(nil, nil, self)].compact
   end
 end
