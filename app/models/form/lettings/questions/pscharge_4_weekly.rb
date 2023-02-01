@@ -1,4 +1,4 @@
-class Form::Lettings::Questions::Pscharge < ::Form::Question
+class Form::Lettings::Questions::Pscharge4Weekly < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "pscharge"
@@ -14,6 +14,6 @@ class Form::Lettings::Questions::Pscharge < ::Form::Question
     @result_field = "tcharge"
     @hidden_in_check_answers = true
     @prefix = "£"
-    @suffix = " every month"
+    @suffix = " every 4 weeks"
   end
 end

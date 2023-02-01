@@ -10,7 +10,7 @@ class Form::Lettings::Pages::RentWeekly < ::Form::Page
   def questions
     @questions ||= [Form::Lettings::Questions::BrentWeekly.new(nil, nil, self),
                     Form::Lettings::Questions::SchargeWeekly.new(nil, nil, self),
-                    Form::Lettings::Questions::Pscharge.new(nil, nil, self),
+                    Form::Lettings::Questions::PschargeWeekly.new(nil, nil, self),
                     Form::Lettings::Questions::Supcharg.new(nil, nil, self),
                     Form::Lettings::Questions::Tcharge.new(nil, nil, self)]
   end
