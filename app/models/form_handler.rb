@@ -32,22 +32,13 @@ class FormHandler
   end
 
   def lettings_forms
-    lettings_forms = [
-      Form::Lettings::Sections::Household,
-      Form::Lettings::Sections::RentAndCharges,
-      Form::Lettings::Sections::TenancyAndProperty,
-    ]
-    current_form = Form.new(nil, current_collection_start_year, lettings_forms, "lettings")
-
-    forms = { "current_lettings" => current_form }
+    forms = {}
     directories.each do |directory|
       Dir.glob("#{directory}/*.json").each do |form_path|
         form = Form.new(form_path)
 
         form_to_set = form_name_from_start_year(form.start_date.year, "lettings")
-        if form && form.start_date.year == 2021 && forms[form_to_set].blank?
-          forms[form_to_set] = form
-        end
+        forms[form_to_set] = form if forms[form_to_set].blank?
       end
     end
     forms
