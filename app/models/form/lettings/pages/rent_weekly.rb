@@ -8,6 +8,10 @@ class Form::Lettings::Pages::RentWeekly < ::Form::Page
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::BrentWeekly.new(nil, nil, self), Form::Lettings::Questions::Scharge.new(nil, nil, self), Form::Lettings::Questions::Pscharge.new(nil, nil, self), Form::Lettings::Questions::Supcharg.new(nil, nil, self), Form::Lettings::Questions::Tcharge.new(nil, nil, self)]
+    @questions ||= [Form::Lettings::Questions::BrentWeekly.new(nil, nil, self),
+                    Form::Lettings::Questions::SchargeWeekly.new(nil, nil, self),
+                    Form::Lettings::Questions::Pscharge.new(nil, nil, self),
+                    Form::Lettings::Questions::Supcharg.new(nil, nil, self),
+                    Form::Lettings::Questions::Tcharge.new(nil, nil, self)]
   end
 end
