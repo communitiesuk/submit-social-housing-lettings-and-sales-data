@@ -8,6 +8,6 @@ class Form::Lettings::Pages::PropertyVacancyReasonFirstLet < ::Form::Page
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::Rsnvac.new(nil, nil, self)]
+    @questions ||= [Form::Lettings::Questions::RsnvacFirstLet.new(nil, nil, self)]
   end
 end
