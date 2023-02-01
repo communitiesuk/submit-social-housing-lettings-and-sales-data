@@ -8,6 +8,6 @@ class Form::Lettings::Pages::ReasonForLeavingLastSettledHomeRenewal < ::Form::Pa
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::Reason.new(nil, nil, self)]
+    @questions ||= [Form::Lettings::Questions::ReasonRenewal.new(nil, nil, self)]
   end
 end
