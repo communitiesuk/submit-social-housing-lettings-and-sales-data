@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::MortgageValueCheck, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Are you sure that the mortgage is more than 5 times the income used for the mortgage application?")
+    expect(question.header).to eq("Are you sure the mortgage is more than 5 times the income used for the mortgage application?")
   end
 
   it "has the correct check_answer_label" do

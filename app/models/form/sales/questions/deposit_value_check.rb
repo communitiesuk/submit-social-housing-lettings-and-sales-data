@@ -3,7 +3,7 @@ class Form::Sales::Questions::DepositValueCheck < ::Form::Question
     super
     @id = "deposit_value_check"
     @check_answer_label = "Deposit confirmation"
-    @header = "Are you sure that the deposit is this much higher than the buyer's savings?"
+    @header = "Are you sure the buyer's deposit is this much higher than their savings?"
     @type = "interruption_screen"
     @answer_options = {
       "0" => { "value" => "Yes" },

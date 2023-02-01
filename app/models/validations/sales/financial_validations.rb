@@ -10,7 +10,7 @@ module Validations::Sales::FinancialValidations
         record.errors.add :ownershipsch, I18n.t("validations.financial.income1.over_hard_max.inside_london")
         record.errors.add :la, I18n.t("validations.financial.income1.over_hard_max.inside_london")
         record.errors.add :postcode_full, I18n.t("validations.financial.income1.over_hard_max.inside_london")
-      elsif record.income1 > 80_000
+      elsif !record.london_property? && record.income1 > 80_000
         record.errors.add :income1, I18n.t("validations.financial.income1.over_hard_max.outside_london")
         record.errors.add :ecstat1, I18n.t("validations.financial.income1.over_hard_max.outside_london")
         record.errors.add :ownershipsch, I18n.t("validations.financial.income1.over_hard_max.outside_london")

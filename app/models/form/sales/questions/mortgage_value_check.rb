@@ -3,7 +3,7 @@ class Form::Sales::Questions::MortgageValueCheck < ::Form::Question
     super
     @id = "mortgage_value_check"
     @check_answer_label = "Mortgage confirmation"
-    @header = "Are you sure that the mortgage is more than 5 times the income used for the mortgage application?"
+    @header = "Are you sure the mortgage is more than 5 times the income used for the mortgage application?"
     @type = "interruption_screen"
     @answer_options = {
       "0" => { "value" => "Yes" },

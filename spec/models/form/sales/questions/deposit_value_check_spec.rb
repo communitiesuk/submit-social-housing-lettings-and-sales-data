@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::DepositValueCheck, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Are you sure that the deposit is this much higher than the buyer's savings?")
+    expect(question.header).to eq("Are you sure the buyer's deposit is this much higher than their savings?")
   end
 
   it "has the correct check_answer_label" do

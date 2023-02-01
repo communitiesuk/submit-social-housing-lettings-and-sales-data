@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::SavingsValueCheck, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Are you sure the savings are higher than £100,000?")
+    expect(question.header).to eq("Are you sure savings are above £100,000?")
   end
 
   it "has the correct check_answer_label" do

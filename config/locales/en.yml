@@ -214,8 +214,8 @@ en:
         earnings_missing: "Enter how much income the household has in total"
       income1:
         over_hard_max:
-          outside_london: "Income maximum under £80,000 for properties outside London local authorities"
-          inside_london: "Income maximum £90,000 for properties within London local authorities"
+          outside_london: "Income must not exceed £80,000 for properties outside London local authorities"
+          inside_london: "Income must not exceed £90,000 for properties within London local authorities"
       negative_currency: "Enter an amount above 0"
       rent:
         less_than_shortfall: "Enter an amount that is more than the shortfall in basic rent"
@@ -372,7 +372,7 @@ en:
         no_choices: "You cannot answer this question as you told us nobody in the household has a physical or mental health condition (or other illness) expected to last 12 months or more"
       postcode:
         discounted_ownership: "Last settled accommodation and discounted ownership property postcodes must match"
-      
+
     tenancy:
       length:
         fixed_term_not_required: "You must only answer the length of the tenancy if it's fixed-term"
@@ -423,7 +423,7 @@ en:
         must_be_less_than_1_year_from_saledate:
           Contract exchange date must be less than 1 year before completion date
       previous_property_beds:
-        property_type_bedsit: "A bedsit cannot have more than 1 bedroom"
+        property_type_bedsit: "Number of bedrooms must be 1 if the property is a bedsit"
       discounted_ownership_value: "Mortgage, deposit, and grant total must equal £%{value_with_discount}"
       monthly_rent:
         higher_than_expected: "Basic monthly rent must be between £0 and £9,999"

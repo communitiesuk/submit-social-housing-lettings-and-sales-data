@@ -3,7 +3,7 @@ class Form::Sales::Questions::SavingsValueCheck < ::Form::Question
     super
     @id = "savings_value_check"
     @check_answer_label = "Savings confirmation"
-    @header = "Are you sure the savings are higher than £100,000?"
+    @header = "Are you sure savings are above £100,000?"
     @type = "interruption_screen"
     @answer_options = {
       "0" => { "value" => "Yes" },
