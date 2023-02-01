@@ -8,6 +8,6 @@ class Form::Lettings::Pages::PreviousHousingSituationRenewal < ::Form::Page
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::Prevten.new(nil, nil, self)]
+    @questions ||= [Form::Lettings::Questions::PrevtenRenewal.new(nil, nil, self)]
   end
 end
