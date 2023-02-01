@@ -51,6 +51,10 @@ $govuk-breakpoints: (
   color: $govuk-secondary-text-colour !important;
 }
 
+.app-\!-colour-red {
+  color: govuk-colour("red");
+}
+
 .app-\!-font-tabular {
   @include govuk-font($size: false, $tabular: true);
 }
