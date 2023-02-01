@@ -91,6 +91,7 @@ group :test do
   gem "capybara-lockstep"
   gem "factory_bot_rails"
   gem "faker"
+  gem "rails-controller-testing"
   gem "rspec-rails", require: false
   gem "selenium-webdriver", require: false
   gem "simplecov", require: false

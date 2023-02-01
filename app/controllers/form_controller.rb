@@ -4,6 +4,8 @@ class FormController < ApplicationController
   before_action :find_resource_by_named_id, except: %i[submit_form review]
   before_action :check_collection_period, only: %i[submit_form show_page]
 
+  before_action :extract_bulk_upload_from_session_filters, only: [:check_answers]
+
   def submit_form
     if @log
       @page = form.get_page(params[@log.model_name.param_key][:page])
@@ -62,6 +64,11 @@ class FormController < ApplicationController
   end
 
 private
+
+  def extract_bulk_upload_from_session_filters
+    filter_service = FilterService.new(current_user:, session:)
+    @bulk_upload = filter_service.bulk_upload
+  end
 
   def restore_error_field_values
     if session["errors"]
