@@ -1,4 +1,4 @@
-class Form::Lettings::Questions::Sex1 < ::Form::Question
+class Form::Lettings::Questions::GenderIdentity1 < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "sex1"

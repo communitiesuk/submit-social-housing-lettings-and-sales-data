@@ -8,6 +8,6 @@ class Form::Lettings::Pages::LeadTenantGenderIdentity < ::Form::Page
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::Sex1.new(nil, nil, self)]
+    @questions ||= [Form::Lettings::Questions::GenderIdentity1.new(nil, nil, self)]
   end
 end
