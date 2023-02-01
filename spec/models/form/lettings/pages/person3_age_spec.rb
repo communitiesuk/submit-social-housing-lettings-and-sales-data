@@ -1,11 +1,11 @@
 require "rails_helper"
 
-RSpec.describe Form::Lettings::Pages::Person3Age, type: :model do
-  subject(:page) { described_class.new(page_id, page_definition, subsection) }
+RSpec.describe Form::Lettings::Pages::PersonAge, type: :model do
+  subject(:page) { described_class.new(nil, page_definition, subsection, person_index:) }
 
-  let(:page_id) { "person_3_age" }
   let(:page_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection) }
+  let(:person_index) { 3 }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
