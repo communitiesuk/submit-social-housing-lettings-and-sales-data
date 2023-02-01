@@ -1,4 +1,4 @@
-class Form::Lettings::Questions::Ecstat1 < ::Form::Question
+class Form::Lettings::Questions::WorkingSituation1 < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "ecstat1"

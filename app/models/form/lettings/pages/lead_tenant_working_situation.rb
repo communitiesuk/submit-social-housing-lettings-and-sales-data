@@ -8,6 +8,6 @@ class Form::Lettings::Pages::LeadTenantWorkingSituation < ::Form::Page
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::Ecstat1.new(nil, nil, self)]
+    @questions ||= [Form::Lettings::Questions::WorkingSituation1.new(nil, nil, self)]
   end
 end
