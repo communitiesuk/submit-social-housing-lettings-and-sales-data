@@ -1,6 +1,5 @@
 module Validations::Sales::HouseholdValidations
   include Validations::SharedValidations
-  include Validations::Sales::SharedValidations
 
   def validate_household_number_of_other_members(record)
     (2..6).each do |n|
@@ -18,10 +17,6 @@ module Validations::Sales::HouseholdValidations
       record.errors.add :postcode_full, I18n.t("validations.household.postcode.discounted_ownership")
       record.errors.add :ppostcode_full, I18n.t("validations.household.postcode.discounted_ownership")
     end
-  end
-
-  def validate_relat2(record)
-    child_income_validation(record, :relat2)
   end
 
 private

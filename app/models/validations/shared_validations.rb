@@ -108,10 +108,16 @@ module Validations::SharedValidations
     end
   end
 
-  def child_income_validation(record, field)
-    if record.relat2 && record.income2
-      if record.relat2 == "C" && record.income2 > 0
-        record.errors.add field, I18n.t("validations.financial.income.child_has_income")
+  def validate_child_income(record)
+    return unless record.income2 && (record.relat2 || record.ecstat2)
+
+    if record.income2.positive?
+      if is_relationship_child? record.relat2
+        record.errors.add :relat2, I18n.t("validations.financial.income.child_has_income")
+        record.errors.add :income2, I18n.t("validations.financial.income.child_has_income")
+      elsif is_economic_status_child? record.ecstat2
+        record.errors.add :ecstat2, I18n.t("validations.financial.income.child_has_income")
+        record.errors.add :income2, I18n.t("validations.financial.income.child_has_income")
       end
     end
   end
@@ -132,5 +138,13 @@ private
     elsif min
       record.errors.add question.id.to_sym, I18n.t("validations.numeric.above_min", field:, min:)
     end
+  end
+
+  def is_relationship_child?(relationship)
+    relationship == "C"
+  end
+
+  def is_economic_status_child?(economic_status)
+    economic_status == 9
   end
 end

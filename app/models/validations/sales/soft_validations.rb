@@ -13,15 +13,15 @@ module Validations::Sales::SoftValidations
     income1 < ALLOWED_INCOME_RANGES[ecstat1][:soft_min]
   end
 
-  def staircase_bought_above_fifty?
-    stairbought && stairbought > 50
-  end
-
   def income2_under_soft_min?
     return false unless ecstat2 && income2 && ALLOWED_INCOME_RANGES[ecstat2]
 
     income2 < ALLOWED_INCOME_RANGES[ecstat2][:soft_min]
   end
+
+  def staircase_bought_above_fifty?
+    stairbought && stairbought > 50
+  end  
 
   def mortgage_over_soft_max?
     return false unless mortgage && inc1mort && (inc2mort || not_joint_purchase?)

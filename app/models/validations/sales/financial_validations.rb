@@ -1,33 +1,39 @@
 module Validations::Sales::FinancialValidations
-  include Validations::Sales::SharedValidations
   # Validations methods need to be called 'validate_<page_name>' to run on model save
   # or 'validate_' to run on submit as well
 
   def validate_income1(record)
-    if record.ecstat1 && record.income1 && record.la && record.ownershipsch == 1
-      if record.london_property?
-        record.errors.add :income1, I18n.t("validations.financial.income1.over_hard_max", hard_max: 90_000) if record.income1 > 90_000
-        record.errors.add :ecstat1, I18n.t("validations.financial.income1.over_hard_max", hard_max: 90_000) if record.income1 > 90_000
-        record.errors.add :ownershipsch, I18n.t("validations.financial.income1.over_hard_max", hard_max: 90_000) if record.income1 > 90_000
-        record.errors.add :la, I18n.t("validations.financial.income1.over_hard_max", hard_max: 90_000) if record.income1 > 90_000
-        record.errors.add :postcode_full, I18n.t("validations.financial.income1.over_hard_max", hard_max: 90_000) if record.income1 > 90_000
-      elsif record.income1 > 80_000
-        record.errors.add :income1, I18n.t("validations.financial.income1.over_hard_max", hard_max: 80_000)
-        record.errors.add :ecstat1, I18n.t("validations.financial.income1.over_hard_max", hard_max: 80_000)
-        record.errors.add :ownershipsch, I18n.t("validations.financial.income1.over_hard_max", hard_max: 80_000)
-        record.errors.add :la, I18n.t("validations.financial.income1.over_hard_max", hard_max: 80_000) if record.income1 > 80_000
-        record.errors.add :postcode_full, I18n.t("validations.financial.income1.over_hard_max", hard_max: 80_000) if record.income1 > 80_000
-      end
-    end
+    return unless record.ecstat1 && record.income1 && record.la && record.ownershipsch == 1
 
-    if record.income1 && record.income2
-      if record.london_property?
-        record.errors.add :income1, I18n.t("validations.financial.income.combined_over_hard_max", hard_max: 90_000) if record.income1 + record.income2 > 90_000
-      elsif record.income1 + record.income2 > 80_000
-        record.errors.add :income1, I18n.t("validations.financial.income.combined_over_hard_max", hard_max: 80_000)
-      end
+    relevant_fields = %i[income1 ecstat1 ownershipsch la postcode_full]
+    if record.london_property? && record.income1 > 90_000
+      relevant_fields.each { |field| record.errors.add field, I18n.t("validations.financial.income.over_hard_max", hard_max: 90_000) }
+    elsif record.property_not_in_london? && record.income1 > 80_000
+      relevant_fields.each { |field| record.errors.add field, I18n.t("validations.financial.income.over_hard_max", hard_max: 80_000) }
     end
-    validate_combined_income(record)
+  end
+
+  def validate_income2(record)
+    return unless record.ecstat2 && record.income2 && record.la && record.ownershipsch == 1
+
+    relevant_fields = %i[income2 ecstat2 ownershipsch la postcode_full]
+    if record.london_property? && record.income2 > 90_000
+      relevant_fields.each { |field| record.errors.add field, I18n.t("validations.financial.income.over_hard_max", hard_max: 90_000) }
+    elsif record.property_not_in_london? && record.income2 > 80_000
+      relevant_fields.each { |field| record.errors.add field, I18n.t("validations.financial.income.over_hard_max", hard_max: 80_000) }
+    end
+  end
+
+  def validate_combined_income(record)
+    return unless record.ecstat1 && record.income1 && record.ecstat2 && record.income2 && record.la && record.ownershipsch == 1
+
+    combined_income = record.income1 + record.income2
+    relevant_fields = %i[income1 ecstat1 income2 ecstat2 ownershipsch la postcode_full]
+    if record.london_property? && combined_income > 90_000
+      relevant_fields.each { |field| record.errors.add field, I18n.t("validations.financial.income.combined_over_hard_max", hard_max: 90_000) }
+    elsif record.property_not_in_london? && combined_income > 80_000
+      relevant_fields.each { |field| record.errors.add field, I18n.t("validations.financial.income.combined_over_hard_max", hard_max: 80_000) }
+    end
   end
 
   def validate_cash_discount(record)
@@ -52,32 +58,6 @@ module Validations::Sales::FinancialValidations
     if record.stairowned > 75
       record.errors.add :stairowned, I18n.t("validations.financial.staircasing.older_person_percentage_owned_maximum_75")
       record.errors.add :type, I18n.t("validations.financial.staircasing.older_person_percentage_owned_maximum_75")
-    end
-  def validate_income2(record)
-    if record.ecstat2 && record.income2 && record.ownershipsch == 1
-      if record.london_property?
-        record.errors.add :income2, I18n.t("validations.financial.income.over_hard_max", hard_max: 90_000) if record.income2 > 90_000
-      elsif record.income2 > 80_000
-        record.errors.add :income2, I18n.t("validations.financial.income.over_hard_max", hard_max: 80_000)
-      end
-    end
-
-    validate_combined_income(record)
-
-    child_income_validation(record, :income2)
-  end
-
-  def validate_combined_income(record)
-    if record.income1 && record.income2
-      if record.london_property?
-        if record.income1 + record.income2 > 90_000
-          record.errors.add :income1, I18n.t("validations.financial.income.combined_over_hard_max", hard_max: 90_000)
-          record.errors.add :income2, I18n.t("validations.financial.income.combined_over_hard_max", hard_max: 90_000)
-        end
-      elsif record.income1 + record.income2 > 80_000
-        record.errors.add :income1, I18n.t("validations.financial.income.combined_over_hard_max", hard_max: 80_000)
-        record.errors.add :income2, I18n.t("validations.financial.income.combined_over_hard_max", hard_max: 80_000)
-      end
     end
   end
 end

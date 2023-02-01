@@ -116,6 +116,10 @@ class SalesLog < Log
     la && LONDON_BOROUGHS.include?(la)
   end
 
+  def property_not_in_london?
+    !london_property?
+  end
+
   def income1_used_for_mortgage?
     inc1mort == 1
   end
