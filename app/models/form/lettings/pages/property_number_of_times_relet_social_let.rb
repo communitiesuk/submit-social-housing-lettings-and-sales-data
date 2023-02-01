@@ -8,6 +8,6 @@ class Form::Lettings::Pages::PropertyNumberOfTimesReletSocialLet < ::Form::Page
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::Offered.new(nil, nil, self)]
+    @questions ||= [Form::Lettings::Questions::OfferedSocialLet.new(nil, nil, self)]
   end
 end
