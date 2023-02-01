@@ -1,4 +1,4 @@
-class Form::Lettings::Questions::Referral < ::Form::Question
+class Form::Lettings::Questions::ReferralPrp < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "referral"
@@ -15,7 +15,10 @@ class Form::Lettings::Questions::Referral < ::Form::Question
       "value" => "Internal transfer",
     },
     "2" => {
-      "value" => "Tenant applied directly (no referral or nomination)",
+      "value" => "Tenant applied directly (no nomination)",
+    },
+    "3" => {
+      "value" => "Nominated by a local housing authority",
     },
     "8" => {
       "value" => "Re-located through official housing mobility scheme",
@@ -40,9 +43,6 @@ class Form::Lettings::Questions::Referral < ::Form::Question
     },
     "13" => {
       "value" => "Youth offending team",
-    },
-    "17" => {
-      "value" => "Children’s Social Care",
     },
     "16" => {
       "value" => "Other",

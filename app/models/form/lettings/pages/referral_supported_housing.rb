@@ -8,6 +8,6 @@ class Form::Lettings::Pages::ReferralSupportedHousing < ::Form::Page
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::Referral.new(nil, nil, self)]
+    @questions ||= [Form::Lettings::Questions::ReferralSupportedHousing.new(nil, nil, self)]
   end
 end
