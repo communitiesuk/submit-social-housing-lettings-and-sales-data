@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_26_145529) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_27_102334) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -504,9 +504,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_26_145529) do
     t.integer "retirement_value_check"
     t.integer "hodate_check"
     t.integer "extrabor_value_check"
-    t.integer "shared_ownership_deposit_value_check"
     t.integer "grant_value_check"
+    t.integer "staircase_bought_value_check"
+    t.integer "deposit_and_mortgage_value_check"
+    t.integer "shared_ownership_deposit_value_check"
     t.integer "old_persons_shared_ownership_value_check"
+    t.integer "monthly_charges_value_check"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"

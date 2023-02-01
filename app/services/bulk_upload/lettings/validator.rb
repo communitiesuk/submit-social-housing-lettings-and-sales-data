@@ -1,6 +1,9 @@
 require "csv"
 
 class BulkUpload::Lettings::Validator
+  COLUMN_PERCENTAGE_ERROR_THRESHOLD = 0.6
+  COLUMN_ABSOLUTE_ERROR_THRESHOLD = 16
+
   include ActiveModel::Validations
 
   QUESTIONS = {
@@ -171,7 +174,10 @@ class BulkUpload::Lettings::Validator
   end
 
   def create_logs?
-    row_parsers.all?(&:valid?)
+    return false if any_setup_sections_incomplete?
+    return false if over_column_error_threshold?
+
+    row_parsers.all? { |row_parser| row_parser.log.valid? }
   end
 
   def self.question_for_field(field)
@@ -179,6 +185,23 @@ class BulkUpload::Lettings::Validator
   end
 
 private
+
+  def any_setup_sections_incomplete?
+    row_parsers.any? { |row_parser| row_parser.log.form.setup_sections[0].subsections[0].is_incomplete?(row_parser.log) }
+  end
+
+  def over_column_error_threshold?
+    fields = ("field_1".."field_134").to_a
+    percentage_threshold = (row_parsers.size * COLUMN_PERCENTAGE_ERROR_THRESHOLD).ceil
+
+    fields.any? do |field|
+      count = row_parsers.count { |row_parser| row_parser.errors[field].present? }
+
+      next if count < COLUMN_ABSOLUTE_ERROR_THRESHOLD
+
+      count > percentage_threshold
+    end
+  end
 
   def csv_parser
     @csv_parser ||= BulkUpload::Lettings::CsvParser.new(path:)

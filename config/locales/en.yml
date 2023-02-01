@@ -147,6 +147,8 @@ en:
     setup:
       intermediate_rent_product_name:
         blank: "Enter name of other intermediate rent product"
+      saledate:
+        financial_year: "Date must be from 22/23 financial year"
       startdate:
         later_than_14_days_after: "The tenancy start date must not be later than 14 days from today’s date"
         before_scheme_end_date: "The tenancy start date must be before the end date for this supported housing scheme"
@@ -277,6 +279,10 @@ en:
         out_of_range: "Household rent and other charges must be between %{min_chcharge} and %{max_chcharge} if paying %{period}"
         not_provided: "Enter how much rent and other charges the household pays %{period}"
       cash_discount_invalid: "Cash discount must be £0 - £999,999"
+      staircasing:
+        percentage_bought_must_be_greater_than_percentage_owned: "Total percentage buyer now owns must be more than percentage bought in this transaction"
+        older_person_percentage_owned_maximum_75: "Percentage cannot be above 75% under Older Person's Shared Ownership"
+
     household:
       reasonpref:
         not_homeless: "Answer cannot be ‘homeless or about to lose their home’ as the tenant was not homeless immediately prior to this letting"
@@ -386,6 +392,9 @@ en:
     declaration:
       missing: "You must show the DLUHC privacy notice to the tenant before you can submit this log."
 
+    privacynotice:
+      missing: "You must show the DLUHC privacy notice to the buyer before you can submit this log."
+
     scheme:
       toggle_date:
         not_selected: "Select one of the options"
@@ -417,11 +426,14 @@ en:
       proplen:
         social_homebuy: "Social HomeBuy buyers should not have lived here before"
         rent_to_buy: "Rent to Buy buyers should not have lived here before"
+      hodate:
+        must_be_before_exdate: "Practical completion or handover date must be before exchange date"
       exdate:
-        must_be_before_saledate:
-          Contract exchange date must be less than 1 year before completion date
-        must_be_less_than_1_year_from_saledate:
-          Contract exchange date must be less than 1 year before completion date
+        must_be_before_saledate: "Contract exchange date must be less than 1 year before completion date"
+        must_be_less_than_1_year_from_saledate: "Contract exchange date must be less than 1 year before completion date"
+      saledate:
+        must_be_after_exdate: "Completion date must be less than 1 year after contract exchange date"
+        must_be_less_than_1_year_from_exdate: "Completion date must be less than 1 year after contract exchange date"
       previous_property_beds:
         property_type_bedsit: "Number of bedrooms must be 1 if the property is a bedsit"
       discounted_ownership_value: "Mortgage, deposit, and grant total must equal £%{value_with_discount}"
@@ -464,6 +476,8 @@ en:
     shared_owhership_deposit:
       title_text: "Mortgage, deposit and cash discount total should equal £%{expected_shared_ownership_deposit_value}"
     old_persons_shared_ownership: "At least one buyer should be aged over 64 for Older persons’ shared ownership scheme"
+    monthly_charges_over_soft_max:
+      title_text: "The amount of monthly charges is high for this type of property and sale type"
 
   devise:
     two_factor_authentication:

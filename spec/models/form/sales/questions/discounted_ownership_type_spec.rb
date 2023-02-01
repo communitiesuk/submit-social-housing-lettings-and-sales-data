@@ -33,7 +33,7 @@ RSpec.describe Form::Sales::Questions::DiscountedOwnershipType, type: :model do
 
   it "has the correct answer_options" do
     expect(question.answer_options).to eq({
-      "8" => { "value" => "Right to Aquire (RTA)" },
+      "8" => { "value" => "Right to Acquire (RTA)" },
       "14" => { "value" => "Preserved Right to Buy (PRTB)" },
       "27" => { "value" => "Voluntary Right to Buy (VRTB)" },
       "9" => { "value" => "Right to Buy (RTB)" },

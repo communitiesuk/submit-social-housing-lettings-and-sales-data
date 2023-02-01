@@ -27,4 +27,21 @@ module Validations::Sales::FinancialValidations
       record.errors.add :cashdis, I18n.t("validations.financial.cash_discount_invalid")
     end
   end
+
+  def validate_percentage_bought_not_greater_than_percentage_owned(record)
+    return unless record.stairbought && record.stairowned
+
+    if record.stairbought > record.stairowned
+      record.errors.add :stairowned, I18n.t("validations.financial.staircasing.percentage_bought_must_be_greater_than_percentage_owned")
+    end
+  end
+
+  def validate_percentage_owned_not_too_much_if_older_person(record)
+    return unless record.old_persons_shared_ownership? && record.stairowned
+
+    if record.stairowned > 75
+      record.errors.add :stairowned, I18n.t("validations.financial.staircasing.older_person_percentage_owned_maximum_75")
+      record.errors.add :type, I18n.t("validations.financial.staircasing.older_person_percentage_owned_maximum_75")
+    end
+  end
 end
