@@ -20,23 +20,23 @@ module Spike
     end
 
     def create_section(section)
-      subsections_array = section.subsections.map { |s| "Form::Lettings::Subsections::#{section.id.camelize}::#{s.id.camelize}.new(nil, nil, self)" }
+      subsections_array = section.subsections.map { |s| "Form::Lettings::Subsections::#{s.id.camelize}.new(nil, nil, self)" }.join(", ")
       out_file = File.new("app/models/form/lettings/sections/#{section.id}.rb", "w")
       out_file.puts("class Form::Lettings::Sections::#{section.id.camelize} < ::Form::Section
   def initialize(id, hsh, form)
     super
     @id = \"#{section.id}\"")
-        out_file.puts("    @label = \"#{section.id}\"") if section.id
-        out_file.puts("    @description = \"#{section.description}\"") if section.description
-        out_file.puts("    @form = form
-    @subsections = #{subsections_array}
+      out_file.puts("    @label = \"#{section.label}\"") if section.label
+      out_file.puts("    @description = \"#{section.description}\"") if section.description
+      out_file.puts("    @form = form
+    @subsections = [#{subsections_array}]
   end
 end")
       out_file.close
     end
 
     def create_subsection(subsection)
-      pages_array = subsection.pages.map { |page| "Form::Lettings::Pages::#{page.id.camelize}.new(nil, nil, self)" }
+      pages_array = subsection.pages.map { |page| "Form::Lettings::Pages::#{page.id.camelize}.new(nil, nil, self)" }.join(", ")
       out_file = File.new("app/models/form/lettings/subsections/#{subsection.id}.rb", "w")
       out_file.puts("class Form::Lettings::Subsections::#{subsection.id.camelize} < ::Form::Subsection
   def initialize(id, hsh, section)
@@ -47,14 +47,14 @@ end")
       out_file.puts("  end
 
   def pages
-    @pages ||= #{pages_array}.compact
+    @pages ||= [#{pages_array}].compact
   end
 end")
       out_file.close
     end
 
     def create_page(page)
-      questions_array = page.questions.map { |question| "Form::Lettings::Questions::#{question.id.camelize}.new(nil, nil, self)" }
+      questions_array = page.questions.map { |question| "Form::Lettings::Questions::#{question.id.camelize}.new(nil, nil, self)" }.join(", ")
       out_file = File.new("app/models/form/lettings/pages/#{page.id}.rb", "w")
       out_file.puts("class Form::Lettings::Pages::#{page.id.camelize} < ::Form::Page
   def initialize(id, hsh, subsection)
@@ -71,7 +71,7 @@ end")
       out_file.puts("  end
 
   def questions
-    @questions ||= #{questions_array}
+    @questions ||= [#{questions_array}]
   end
 end")
       out_file.close
@@ -89,14 +89,14 @@ end")
     @type = \"#{question.type}\"")
       out_file.puts("    @width = #{question.width}") if question.width
       out_file.puts("    @inferred_check_answers_value = #{question.inferred_check_answers_value}") if question.inferred_check_answers_value
-      out_file.puts("    @check_answers_card_number = #{question.check_answer_label}") if question.check_answer_label
+      out_file.puts("    @check_answers_card_number = #{question.check_answers_card_number}") if question.check_answers_card_number
       out_file.puts("    @max = #{question.max}") if question.max
       out_file.puts("    @min = #{question.min}") if question.min
       out_file.puts("    @guidance_partial = \"#{question.guidance_partial}\"") if question.guidance_partial
       out_file.puts("    @hint_text = \"#{question.hint_text}\"") if question.hint_text
       out_file.puts("    @step = #{question.step}") if question.step
       out_file.puts("    @fields_to_add = #{question.fields_to_add}") if question.fields_to_add
-      out_file.puts("    @result_field = #{question.result_field}") if question.result_field
+      out_file.puts("    @result_field = \"#{question.result_field}\"") if question.result_field
       out_file.puts("    @readonly = #{question.readonly}") if question.readonly
       out_file.puts("    @answer_options = ANSWER_OPTIONS") if question.answer_options
       out_file.puts("    @conditional_for = #{question.conditional_for}") if question.conditional_for
@@ -104,14 +104,15 @@ end")
       out_file.puts("    @hidden_in_check_answers = #{question.hidden_in_check_answers}") if question.hidden_in_check_answers
       out_file.puts("    @derived = #{question.derived}") if question.derived
       out_file.puts("    @prefix = \"#{question.prefix}\"") if question.prefix
-      out_file.puts("    @suffix = \"#{question.suffix}\"") if question.suffix
+      out_file.puts("    @suffix = \"#{question.suffix}\"") if question.suffix && question.suffix.is_a?(String)
+      out_file.puts("    @suffix = #{question.suffix}") if question.suffix && !question.suffix.is_a?(String)
       out_file.puts("    @requires_js = #{question.requires_js}") if question.requires_js
       out_file.puts("    @fields_added = #{question.fields_added}") if question.fields_added
       out_file.puts("    @unresolved_hint_text = #{question.unresolved_hint_text}") if question.unresolved_hint_text
       out_file.puts("  end")
       if question.answer_options
         out_file.puts("
-  ANSWER_OPTIONS = #{question.answer_options}")
+  ANSWER_OPTIONS = #{question.answer_options}.freeze")
       end
       out_file.puts("end")
 
