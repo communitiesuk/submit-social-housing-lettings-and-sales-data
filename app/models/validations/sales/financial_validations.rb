@@ -25,10 +25,10 @@ module Validations::Sales::FinancialValidations
   end
 
   def validate_combined_income(record)
-    return unless record.ecstat1 && record.income1 && record.ecstat2 && record.income2 && record.la && record.ownershipsch == 1
+    return unless record.income1 && record.income2 && record.la && record.ownershipsch == 1
 
     combined_income = record.income1 + record.income2
-    relevant_fields = %i[income1 ecstat1 income2 ecstat2 ownershipsch la postcode_full]
+    relevant_fields = %i[income1 income2 ownershipsch la postcode_full]
     if record.london_property? && combined_income > 90_000
       relevant_fields.each { |field| record.errors.add field, I18n.t("validations.financial.income.combined_over_hard_max", hard_max: 90_000) }
     elsif record.property_not_in_london? && combined_income > 80_000
@@ -52,6 +52,20 @@ module Validations::Sales::FinancialValidations
     end
   end
 
+  def validate_child_income(record)
+    return unless record.income2 && (record.relat2 || record.ecstat2)
+
+    if record.income2.positive?
+      if is_relationship_child? record.relat2
+        record.errors.add :relat2, I18n.t("validations.financial.income.child_has_income")
+        record.errors.add :income2, I18n.t("validations.financial.income.child_has_income")
+      elsif is_economic_status_child? record.ecstat2
+        record.errors.add :ecstat2, I18n.t("validations.financial.income.child_has_income")
+        record.errors.add :income2, I18n.t("validations.financial.income.child_has_income")
+      end
+    end
+  end
+
   def validate_percentage_owned_not_too_much_if_older_person(record)
     return unless record.old_persons_shared_ownership? && record.stairowned
 
@@ -59,5 +73,15 @@ module Validations::Sales::FinancialValidations
       record.errors.add :stairowned, I18n.t("validations.financial.staircasing.older_person_percentage_owned_maximum_75")
       record.errors.add :type, I18n.t("validations.financial.staircasing.older_person_percentage_owned_maximum_75")
     end
+  end
+
+private
+
+  def is_relationship_child?(relationship)
+    relationship == "C"
+  end
+
+  def is_economic_status_child?(economic_status)
+    economic_status == 9
   end
 end

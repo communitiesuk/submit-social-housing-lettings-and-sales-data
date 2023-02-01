@@ -139,12 +139,4 @@ private
       record.errors.add question.id.to_sym, I18n.t("validations.numeric.above_min", field:, min:)
     end
   end
-
-  def is_relationship_child?(relationship)
-    relationship == "C"
-  end
-
-  def is_economic_status_child?(economic_status)
-    economic_status == 9
-  end
 end

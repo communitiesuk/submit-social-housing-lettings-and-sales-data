@@ -261,6 +261,7 @@ RSpec.describe SalesLog, type: :model do
         relat4: "X",
         relat5: "X",
         relat6: "P",
+        income2: 0,
         ecstat2: 9,
         ecstat3: 7,
         age1: 47,
