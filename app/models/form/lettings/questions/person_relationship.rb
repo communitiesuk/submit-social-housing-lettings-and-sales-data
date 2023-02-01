@@ -1,11 +1,11 @@
-class Form::Lettings::Questions::Relat5 < ::Form::Question
-  def initialize(id, hsh, page)
-    super
-    @id = "relat5"
-    @check_answer_label = "Person 5’s relationship to the lead tenant"
-    @header = "What is person 5’s relationship to the lead tenant?"
+class Form::Lettings::Questions::PersonRelationship < ::Form::Question
+  def initialize(id, hsh, page, person_index:)
+    super(id, hsh, page)
+    @id = "relat#{person_index}"
+    @check_answer_label = "Person #{person_index}’s relationship to the lead tenant"
+    @header = "What is person #{person_index}’s relationship to the lead tenant?"
     @type = "radio"
-    @check_answers_card_number = 5
+    @check_answers_card_number = person_index
     @hint_text = ""
     @answer_options = ANSWER_OPTIONS
   end
