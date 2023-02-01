@@ -1,7 +1,6 @@
 class Form::Sales::Pages::AboutPriceSharedOwnershipValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
-    @id = "about_price_shared_ownership_value_check"
     @depends_on = [
       {
         "purchase_price_out_of_soft_range?" => true,
