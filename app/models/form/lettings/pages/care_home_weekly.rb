@@ -8,6 +8,6 @@ class Form::Lettings::Pages::CareHomeWeekly < ::Form::Page
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::IsCarehome.new(nil, nil, self), Form::Lettings::Questions::Chcharge.new(nil, nil, self)]
+    @questions ||= [Form::Lettings::Questions::IsCarehome.new(nil, nil, self), Form::Lettings::Questions::ChchargeWeekly.new(nil, nil, self)]
   end
 end
