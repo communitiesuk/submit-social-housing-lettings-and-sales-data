@@ -8,6 +8,6 @@ class Form::Lettings::Pages::NewBuildHandoverDate < ::Form::Page
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::Voiddate.new(nil, nil, self)]
+    @questions ||= [Form::Lettings::Questions::VoiddateNewBuild.new(nil, nil, self)]
   end
 end
