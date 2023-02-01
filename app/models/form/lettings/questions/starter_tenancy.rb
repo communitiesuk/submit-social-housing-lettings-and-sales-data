@@ -1,12 +1,12 @@
-class Form::Lettings::Questions::Tenancy < ::Form::Question
+class Form::Lettings::Questions::StarterTenancy < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "tenancy"
-    @check_answer_label = "Type of main tenancy"
-    @header = "What is the type of tenancy?"
+    @check_answer_label = "Type of main tenancy after the starter period has ended?"
+    @header = "What is the type of tenancy after the starter period has ended?"
     @type = "radio"
     @check_answers_card_number = 0
-    @hint_text = ""
+    @hint_text = "This is also known as an ‘introductory period’."
     @answer_options = ANSWER_OPTIONS
     @conditional_for = { "tenancyother" => [3] }
   end
