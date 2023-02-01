@@ -16,18 +16,26 @@ RSpec.describe BulkUpload::Processor do
         )
       end
 
-      it "persist the validation errors" do
+      before do
         allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
+      end
 
+      it "persist the validation errors" do
         expect { processor.call }.to change(BulkUploadError, :count)
       end
 
       it "deletes the local file afterwards" do
-        allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
-
         processor.call
 
         expect(mock_downloader).to have_received(:delete_local_file!)
+      end
+
+      it "does not send success email" do
+        allow(BulkUploadMailer).to receive(:send_bulk_upload_complete_mail).and_call_original
+
+        processor.call
+
+        expect(BulkUploadMailer).not_to have_received(:send_bulk_upload_complete_mail)
       end
     end
 
@@ -59,14 +67,29 @@ RSpec.describe BulkUpload::Processor do
         )
       end
 
-      it "creates logs" do
+      before do
         allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
         allow(BulkUpload::Lettings::Validator).to receive(:new).and_return(mock_validator)
         allow(BulkUpload::Lettings::LogCreator).to receive(:new).with(bulk_upload:, path:).and_return(mock_creator)
+      end
 
+      it "creates logs" do
         processor.call
 
         expect(mock_creator).to have_received(:call)
+      end
+
+      it "sends success email" do
+        mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
+
+        allow(BulkUploadMailer).to receive(:send_bulk_upload_complete_mail).and_return(mail_double)
+
+        create(:lettings_log, :completed, bulk_upload:)
+
+        processor.call
+
+        expect(BulkUploadMailer).to have_received(:send_bulk_upload_complete_mail)
+        expect(mail_double).to have_received(:deliver_later)
       end
     end
   end
