@@ -21,7 +21,7 @@ module Validations::Sales::SoftValidations
 
   def staircase_bought_above_fifty?
     stairbought && stairbought > 50
-  end  
+  end
 
   def mortgage_over_soft_max?
     return false unless mortgage && inc1mort && (inc2mort || not_joint_purchase?)

@@ -8,7 +8,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
   describe "income validations for shared ownership" do
     let(:record) { FactoryBot.create(:sales_log, ownershipsch: 1) }
 
-    context "in a non london borough" do
+    context "when buying in a non london borough" do
       before do
         record.update!(la: "E08000035")
         record.reload
@@ -78,7 +78,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
       end
     end
 
-    context "in a london borough" do
+    context "when buying in a london borough" do
       before do
         record.update!(la: "E09000030")
         record.reload
@@ -167,7 +167,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
     it "does not add an error if the cash discount is in the expected range" do
       record.cashdis = 10_000
       financial_validator.validate_cash_discount(record)
-      expect(record.errors["cashdis"]).to be_empty
+      expect(record.errors).to be_empty
     end
   end
 
@@ -178,16 +178,14 @@ RSpec.describe Validations::Sales::FinancialValidations do
       record.stairbought = 20
       record.stairowned = 40
       financial_validator.validate_percentage_bought_not_greater_than_percentage_owned(record)
-      expect(record.errors["stairbought"]).to be_empty
-      expect(record.errors["stairowned"]).to be_empty
+      expect(record.errors).to be_empty
     end
 
     it "does not add an error if the percentage bought is equal to the percentage owned" do
       record.stairbought = 30
       record.stairowned = 30
       financial_validator.validate_percentage_bought_not_greater_than_percentage_owned(record)
-      expect(record.errors["stairbought"]).to be_empty
-      expect(record.errors["stairowned"]).to be_empty
+      expect(record.errors).to be_empty
     end
 
     it "adds an error to stairowned and not stairbought if the percentage bought is more than the percentage owned" do
@@ -206,8 +204,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
         record.type = 2
         record.stairowned = 80
         financial_validator.validate_percentage_owned_not_too_much_if_older_person(record)
-        expect(record.errors["stairowned"]).to be_empty
-        expect(record.errors["type"]).to be_empty
+        expect(record.errors).to be_empty
       end
     end
 
@@ -216,8 +213,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
         record.type = 24
         record.stairowned = 50
         financial_validator.validate_percentage_owned_not_too_much_if_older_person(record)
-        expect(record.errors["stairowned"]).to be_empty
-        expect(record.errors["type"]).to be_empty
+        expect(record.errors).to be_empty
       end
 
       it "adds an error when percentage owned after staircasing transaction exceeds 75%" do
@@ -232,7 +228,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
 
   describe "#validate_child_income" do
     let(:record) { FactoryBot.create(:sales_log) }
-    
+
     context "when buyer 2 is not a child" do
       before do
         record.update!(ecstat2: rand(0..8))
