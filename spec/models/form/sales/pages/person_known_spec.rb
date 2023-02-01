@@ -7,7 +7,7 @@ RSpec.describe Form::Sales::Pages::PersonKnown, type: :model do
     let(:page_id) { "person_2_known" }
     let(:page_definition) { nil }
     let(:subsection) { instance_double(Form::Subsection) }
-    let(:person_index) { 3 }
+    let(:person_index) { 2 }
 
     it "has correct subsection" do
       expect(page.subsection).to eq(subsection)
@@ -41,8 +41,8 @@ RSpec.describe Form::Sales::Pages::PersonKnown, type: :model do
         expect(page.depends_on).to eq([{
           "jointpur" => 2,
           "hholdcount" => {
-            "operand" => 1,
             "operator" => ">=",
+            "operand" => 1,
           },
         }])
       end
@@ -67,17 +67,19 @@ RSpec.describe Form::Sales::Pages::PersonKnown, type: :model do
       it "has correct depends_on" do
         expect(page.depends_on).to eq([
           {
-            "hholdcount" => {
-              "operand" => 2,
-              "operator" => ">=",
-            },
             "jointpur" => 2,
+            "hholdcount" => {
+              "operator" => ">=",
+              "operand" => 2,
+            },
           },
           {
-            "hholdcount" =>
-            { "operand" => 1,
-              "operator" => ">=" },
             "jointpur" => 1,
+            "hholdcount" => {
+              "operator" => ">=",
+              "operand" => 1,
+            },
+
           },
         ])
       end
@@ -102,18 +104,18 @@ RSpec.describe Form::Sales::Pages::PersonKnown, type: :model do
       it "has correct depends_on" do
         expect(page.depends_on).to eq([
           {
-            "hholdcount" => {
-              "operand" => 3,
-              "operator" => ">=",
-            },
             "jointpur" => 2,
+            "hholdcount" => {
+              "operator" => ">=",
+              "operand" => 3,
+            },
           },
           {
-            "hholdcount" => {
-              "operand" => 2,
-              "operator" => ">=",
-            },
             "jointpur" => 1,
+            "hholdcount" => {
+              "operator" => ">=",
+              "operand" => 2,
+            },
           },
         ])
       end
@@ -138,16 +140,18 @@ RSpec.describe Form::Sales::Pages::PersonKnown, type: :model do
       it "has correct depends_on" do
         expect(page.depends_on).to eq([
           {
-            "hholdcount" =>
-            { "operand" => 4, "operator" => ">=" },
             "jointpur" => 2,
+            "hholdcount" => {
+              "operator" => ">=",
+              "operand" => 4,
+            },
           },
           {
-            "hholdcount" => {
-              "operand" => 3,
-              "operator" => ">=",
-            },
             "jointpur" => 1,
+            "hholdcount" => {
+              "operator" => ">=",
+              "operand" => 3,
+            },
           },
         ])
       end
