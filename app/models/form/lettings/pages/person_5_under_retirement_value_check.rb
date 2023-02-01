@@ -8,6 +8,6 @@ class Form::Lettings::Pages::Person5UnderRetirementValueCheck < ::Form::Page
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::RetirementValueCheck.new(nil, nil, self)]
+    @questions ||= [Form::Lettings::Questions::NoRetirementValueCheck.new(nil, nil, self)]
   end
 end
