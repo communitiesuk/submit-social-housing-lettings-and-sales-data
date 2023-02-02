@@ -14,50 +14,32 @@ RSpec.describe Validations::Sales::FinancialValidations do
         record.reload
       end
 
-      it "adds errors if buyer 1's economic status is not child and has income over 80,000" do
+      it "adds errors if buyer 1 has income over 80,000" do
         record.income1 = 85_000
-        record.ecstat1 = rand(0..8)
         financial_validator.validate_income1(record)
         expect(record.errors["income1"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_outside_london"))
-        expect(record.errors["ecstat1"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_outside_london"))
         expect(record.errors["ownershipsch"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_outside_london"))
         expect(record.errors["la"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_outside_london"))
         expect(record.errors["postcode_full"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_outside_london"))
       end
 
-      it "adds errors if buyer 2's economic status is not child and has income over 80,000" do
+      it "adds errors if buyer 2 has income over 80,000" do
         record.income2 = 85_000
-        record.ecstat2 = rand(0..8)
         financial_validator.validate_income2(record)
         expect(record.errors["income2"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_outside_london"))
-        expect(record.errors["ecstat2"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_outside_london"))
         expect(record.errors["ownershipsch"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_outside_london"))
         expect(record.errors["la"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_outside_london"))
         expect(record.errors["postcode_full"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_outside_london"))
-      end
-
-      it "does not add errors if buyer 1 has not set economic status" do
-        record.income1 = 85_000
-        financial_validator.validate_income1(record)
-        expect(record.errors).to be_empty
       end
 
       it "does not add errors if buyer 1 has income below 80_000" do
         record.income1 = 75_000
-        record.ecstat1 = rand(0..8)
         financial_validator.validate_income1(record)
-        expect(record.errors).to be_empty
-      end
-
-      it "does not add errors if buyer 2 has not set economic status" do
-        record.income2 = 85_000
-        financial_validator.validate_income2(record)
         expect(record.errors).to be_empty
       end
 
       it "does not add errors if buyer 2 has income below 80_000" do
         record.income2 = 75_000
-        record.ecstat2 = rand(0..8)
         financial_validator.validate_income2(record)
         expect(record.errors).to be_empty
       end
@@ -84,50 +66,32 @@ RSpec.describe Validations::Sales::FinancialValidations do
         record.reload
       end
 
-      it "adds errors if buyer 1's economic status is not child and has income over 90,000" do
+      it "adds errors if buyer 1 has income over 90,000" do
         record.income1 = 95_000
-        record.ecstat1 = rand(0..8)
         financial_validator.validate_income1(record)
         expect(record.errors["income1"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_london"))
-        expect(record.errors["ecstat1"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_london"))
         expect(record.errors["ownershipsch"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_london"))
         expect(record.errors["la"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_london"))
         expect(record.errors["postcode_full"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_london"))
       end
 
-      it "adds errors if buyer 2's economic status is not child and has income over 90,000" do
+      it "adds errors if buyer 2 has income over 90,000" do
         record.income2 = 95_000
-        record.ecstat2 = rand(0..8)
         financial_validator.validate_income2(record)
         expect(record.errors["income2"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_london"))
-        expect(record.errors["ecstat2"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_london"))
         expect(record.errors["ownershipsch"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_london"))
         expect(record.errors["la"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_london"))
         expect(record.errors["postcode_full"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_london"))
-      end
-
-      it "does not add errors if buyer 1 has not set economic status" do
-        record.income1 = 95_000
-        financial_validator.validate_income1(record)
-        expect(record.errors).to be_empty
       end
 
       it "does not add errors if buyer 1 has income below 90_000" do
         record.income1 = 75_000
-        record.ecstat1 = rand(0..8)
         financial_validator.validate_income1(record)
-        expect(record.errors).to be_empty
-      end
-
-      it "does not add errors if buyer 2 has not set economic status" do
-        record.income2 = 95_000
-        financial_validator.validate_income2(record)
         expect(record.errors).to be_empty
       end
 
       it "does not add errors if buyer 2 has income below 90_000" do
         record.income2 = 75_000
-        record.ecstat2 = rand(0..8)
         financial_validator.validate_income2(record)
         expect(record.errors).to be_empty
       end
