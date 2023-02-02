@@ -1,5 +1,4 @@
 module Validations::Sales::SaleInformationValidations
-
   def validate_practical_completion_date_before_saledate(record)
     return if record.saledate.blank? || record.hodate.blank?
 
