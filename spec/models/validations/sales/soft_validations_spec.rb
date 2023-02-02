@@ -497,35 +497,35 @@ RSpec.describe Validations::Sales::SoftValidations do
       record.exdate = Time.zone.now
       record.hodate = nil
 
-      expect(record).not_to be_hodate_3_years_or_more_exdate
+      expect(record).not_to be_ownershiphodate_3_years_or_more_saledate
     end
 
     it "when exdate not set" do
       record.exdate = nil
       record.hodate = Time.zone.now
 
-      expect(record).not_to be_hodate_3_years_or_more_exdate
+      expect(record).not_to be_ownershiphodate_3_years_or_more_saledate
     end
 
     it "when exdate and hodate not set" do
       record.exdate = nil
       record.hodate = nil
 
-      expect(record).not_to be_hodate_3_years_or_more_exdate
+      expect(record).not_to be_ownershiphodate_3_years_or_more_saledate
     end
 
     it "when 3 years or more before exdate" do
       record.exdate = Time.zone.now
       record.hodate = record.exdate - 4.years
 
-      expect(record).to be_hodate_3_years_or_more_exdate
+      expect(record).to be_ownershiphodate_3_years_or_more_saledate
     end
 
     it "when less than 3 years before exdate" do
       record.exdate = Time.zone.now
       record.hodate = 2.months.ago
 
-      expect(record).not_to be_hodate_3_years_or_more_exdate
+      expect(record).not_to be_ownershiphodate_3_years_or_more_saledate
     end
   end
 
