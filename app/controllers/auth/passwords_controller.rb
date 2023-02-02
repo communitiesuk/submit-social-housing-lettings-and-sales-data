@@ -24,11 +24,13 @@ class Auth::PasswordsController < Devise::PasswordsController
 
   def edit
     super
+    minimum_password_length
     @confirmation = params["confirmation"]
     render "devise/passwords/reset_password"
   end
 
   def update
+    minimum_password_length
     self.resource = resource_class.reset_password_by_token(resource_params)
     yield resource if block_given?
 
@@ -50,6 +52,10 @@ class Auth::PasswordsController < Devise::PasswordsController
   end
 
 protected
+
+  def minimum_password_length
+    @minimum_password_length ||= Devise.password_length.min
+  end
 
   def set_2fa_required
     return unless resource.respond_to?(:need_two_factor_authentication?) &&
