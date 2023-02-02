@@ -13,6 +13,9 @@ class BulkUpload::Processor
     validator.call
     create_logs if validator.create_logs?
     send_success_mail
+  rescue StandardError => e
+    Sentry.capture_exception(e)
+    send_failure_mail
   ensure
     downloader.delete_local_file!
   end
