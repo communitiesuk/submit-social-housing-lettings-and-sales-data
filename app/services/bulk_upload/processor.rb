@@ -7,6 +7,9 @@ class BulkUpload::Processor
 
   def call
     download
+
+    return send_failure_mail if validator.invalid?
+
     validator.call
     create_logs if validator.create_logs?
     send_success_mail
@@ -20,6 +23,10 @@ private
     if validator.create_logs? && bulk_upload.logs.group(:status).count.keys == %w[completed]
       BulkUploadMailer.send_bulk_upload_complete_mail(user:, bulk_upload:).deliver_later
     end
+  end
+
+  def send_failure_mail
+    BulkUploadMailer.send_bulk_upload_failed_service_error_mail(bulk_upload:).deliver_later
   end
 
   def user

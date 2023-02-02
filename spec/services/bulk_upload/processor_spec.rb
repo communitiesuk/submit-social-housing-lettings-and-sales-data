@@ -6,6 +6,49 @@ RSpec.describe BulkUpload::Processor do
   let(:bulk_upload) { create(:bulk_upload, :lettings) }
 
   describe "#call" do
+    context "when the bulk upload itself is not considered valid" do
+      let(:mock_downloader) do
+        instance_double(
+          BulkUpload::Downloader,
+          call: nil,
+          path: file_fixture("2022_23_lettings_bulk_upload.csv"),
+          delete_local_file!: nil,
+        )
+      end
+
+      let(:mock_validator) do
+        instance_double(
+          BulkUpload::Lettings::Validator,
+          invalid?: true,
+          call: nil,
+        )
+      end
+
+      before do
+        allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
+        allow(BulkUpload::Lettings::Validator).to receive(:new).and_return(mock_validator)
+      end
+
+      it "sends failure email" do
+        mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
+
+        allow(BulkUploadMailer).to receive(:send_bulk_upload_failed_service_error_mail).and_return(mail_double)
+
+        processor.call
+
+        expect(BulkUploadMailer).to have_received(:send_bulk_upload_failed_service_error_mail)
+        expect(mail_double).to have_received(:deliver_later)
+      end
+
+      it "does not attempt to validate the contents of the file" do
+        processor.call
+
+        expect(mock_validator).not_to have_received(:call)
+      end
+    end
+
+    context "when the bulk upload processing throws an error"
+
     context "when processing a bulk upload with errors" do
       let(:mock_downloader) do
         instance_double(
@@ -56,6 +99,7 @@ RSpec.describe BulkUpload::Processor do
           BulkUpload::Lettings::Validator,
           call: nil,
           create_logs?: true,
+          invalid?: false,
         )
       end
 
