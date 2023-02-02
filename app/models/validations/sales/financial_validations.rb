@@ -7,9 +7,9 @@ module Validations::Sales::FinancialValidations
 
     relevant_fields = %i[income1 ecstat1 ownershipsch la postcode_full]
     if record.london_property? && record.income1 > 90_000
-      relevant_fields.each { |field| record.errors.add field, I18n.t("validations.financial.income.over_hard_max", hard_max: 90_000) }
+      relevant_fields.each { |field| record.errors.add field, I18n.t("validations.financial.income.over_hard_max_for_london") }
     elsif record.property_not_in_london? && record.income1 > 80_000
-      relevant_fields.each { |field| record.errors.add field, I18n.t("validations.financial.income.over_hard_max", hard_max: 80_000) }
+      relevant_fields.each { |field| record.errors.add field, I18n.t("validations.financial.income.over_hard_max_for_outside_london") }
     end
   end
 
@@ -18,9 +18,9 @@ module Validations::Sales::FinancialValidations
 
     relevant_fields = %i[income2 ecstat2 ownershipsch la postcode_full]
     if record.london_property? && record.income2 > 90_000
-      relevant_fields.each { |field| record.errors.add field, I18n.t("validations.financial.income.over_hard_max", hard_max: 90_000) }
+      relevant_fields.each { |field| record.errors.add field, I18n.t("validations.financial.income.over_hard_max_for_london") }
     elsif record.property_not_in_london? && record.income2 > 80_000
-      relevant_fields.each { |field| record.errors.add field, I18n.t("validations.financial.income.over_hard_max", hard_max: 80_000) }
+      relevant_fields.each { |field| record.errors.add field, I18n.t("validations.financial.income.over_hard_max_for_outside_london") }
     end
   end
 
@@ -30,9 +30,9 @@ module Validations::Sales::FinancialValidations
     combined_income = record.income1 + record.income2
     relevant_fields = %i[income1 income2 ownershipsch la postcode_full]
     if record.london_property? && combined_income > 90_000
-      relevant_fields.each { |field| record.errors.add field, I18n.t("validations.financial.income.combined_over_hard_max", hard_max: 90_000) }
+      relevant_fields.each { |field| record.errors.add field, I18n.t("validations.financial.income.combined_over_hard_max_for_london") }
     elsif record.property_not_in_london? && combined_income > 80_000
-      relevant_fields.each { |field| record.errors.add field, I18n.t("validations.financial.income.combined_over_hard_max", hard_max: 80_000) }
+      relevant_fields.each { |field| record.errors.add field, I18n.t("validations.financial.income.combined_over_hard_max_for_outside_london") }
     end
   end
 

@@ -34,6 +34,8 @@ module InterruptionScreenHelper
                 lettings_log.form.get_question(argument["key"], lettings_log).answer_label(lettings_log).downcase
               elsif argument["currency"]
                 number_to_currency(lettings_log.public_send(argument["key"]), delimiter: ",", format: "%n", unit: "£")
+              elsif argument["arguments_for_public_send"]
+                lettings_log.public_send(argument["key"], argument["arguments_for_public_send"])
               else
                 lettings_log.public_send(argument["key"])
               end

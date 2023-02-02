@@ -248,4 +248,12 @@ class SalesLog < Log
   def purchase_price_soft_max
     LaSaleRange.find_by(start_year: collection_start_year, la:, bedrooms: beds).soft_max
   end
+
+  def income_soft_min_for_ecstat(ecstat_field)
+    economic_status_code = public_send(ecstat_field)
+
+    return unless ALLOWED_INCOME_RANGES
+
+    ALLOWED_INCOME_RANGES[economic_status_code]&.soft_min
+  end
 end
