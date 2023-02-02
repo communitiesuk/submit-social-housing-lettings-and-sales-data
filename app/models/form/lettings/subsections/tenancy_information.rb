@@ -7,8 +7,8 @@ class Form::Lettings::Subsections::TenancyInformation < ::Form::Subsection
   end
 
   def pages
-    @pages ||= [Form::Lettings::Pages::Joint.new(nil, nil, self),
-                Form::Lettings::Pages::StarterTenancy.new(nil, nil, self),
+    @pages ||= [Form::Lettings::Pages::Joint.new("joint", nil, self),
+                Form::Lettings::Pages::StarterTenancy.new("starter_tenancy", nil, self),
                 Form::Lettings::Pages::TenancyType.new(nil, nil, self),
                 Form::Lettings::Pages::StarterTenancyType.new(nil, nil, self),
                 Form::Lettings::Pages::TenancyLength.new(nil, nil, self),

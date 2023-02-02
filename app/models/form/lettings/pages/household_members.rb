@@ -2,9 +2,7 @@ class Form::Lettings::Pages::HouseholdMembers < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "household_members"
-    @header = ""
     @depends_on = [{ "declaration" => 1 }]
-    @description = ""
   end
 
   def questions

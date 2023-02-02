@@ -4,7 +4,6 @@ class Form::Lettings::Pages::TypeOfAccessNeeds < ::Form::Page
     @id = "type_of_access_needs"
     @header = "Disabled access needs"
     @depends_on = [{ "housingneeds" => 1 }]
-    @description = ""
   end
 
   def questions

@@ -3,7 +3,6 @@ class Form::Lettings::Pages::Declaration < ::Form::Page
     super
     @id = "declaration"
     @header = "Department for Levelling Up, Housing & Communities privacy notice"
-    @description = ""
   end
 
   def questions

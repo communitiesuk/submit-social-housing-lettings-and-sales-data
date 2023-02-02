@@ -4,7 +4,6 @@ class Form::Lettings::Pages::Rent4Weekly < ::Form::Page
     @id = "rent_4_weekly"
     @header = "Household rent and charges"
     @depends_on = [{ "household_charge" => 0, "period" => 3, "is_carehome" => 0 }, { "household_charge" => nil, "period" => 3, "is_carehome" => 0 }, { "household_charge" => 0, "period" => 3, "is_carehome" => nil }, { "household_charge" => nil, "period" => 3, "is_carehome" => nil }]
-    @description = ""
   end
 
   def questions

@@ -2,9 +2,7 @@ class Form::Lettings::Pages::ReasonForLeavingLastSettledHome < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "reason_for_leaving_last_settled_home"
-    @header = ""
     @depends_on = [{ "renewal" => 0 }]
-    @description = ""
   end
 
   def questions

@@ -4,7 +4,6 @@ class Form::Lettings::Pages::IncomeAmount < ::Form::Page
     @id = "income_amount"
     @header = "Total household income"
     @depends_on = [{ "net_income_known" => 0 }]
-    @description = ""
   end
 
   def questions

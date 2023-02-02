@@ -7,18 +7,18 @@ class Form::Lettings::Subsections::HouseholdSituation < ::Form::Subsection
   end
 
   def pages
-    @pages ||= [Form::Lettings::Pages::TimeLivedInLocalAuthority.new(nil, nil, self),
+    @pages ||= [Form::Lettings::Pages::TimeLivedInLocalAuthority.new("time_lived_in_local_authority", nil, self),
                 Form::Lettings::Pages::TimeOnWaitingList.new(nil, nil, self),
                 Form::Lettings::Pages::ReasonForLeavingLastSettledHome.new(nil, nil, self),
                 Form::Lettings::Pages::ReasonForLeavingLastSettledHomeRenewal.new(nil, nil, self),
                 Form::Lettings::Pages::PreviousHousingSituation.new(nil, nil, self),
                 Form::Lettings::Pages::PreviousHousingSituationRenewal.new(nil, nil, self),
-                Form::Lettings::Pages::Homelessness.new(nil, nil, self),
-                Form::Lettings::Pages::PreviousPostcode.new(nil, nil, self),
+                Form::Lettings::Pages::Homelessness.new("homelessness", nil, self),
+                Form::Lettings::Pages::PreviousPostcode.new("previous_postcode", nil, self),
                 Form::Lettings::Pages::PreviousLocalAuthority.new(nil, nil, self),
-                Form::Lettings::Pages::ReasonablePreference.new(nil, nil, self),
+                Form::Lettings::Pages::ReasonablePreference.new("reasonable_preference", nil, self),
                 Form::Lettings::Pages::ReasonablePreferenceReason.new(nil, nil, self),
-                Form::Lettings::Pages::AllocationSystem.new(nil, nil, self),
+                Form::Lettings::Pages::AllocationSystem.new("allocation_system", nil, self),
                 Form::Lettings::Pages::Referral.new(nil, nil, self),
                 Form::Lettings::Pages::ReferralPrp.new(nil, nil, self),
                 Form::Lettings::Pages::ReferralSupportedHousing.new(nil, nil, self),

@@ -3,7 +3,6 @@ class Form::Lettings::Pages::IncomeKnown < ::Form::Page
     super
     @id = "income_known"
     @header = "Household’s combined income after tax"
-    @description = ""
   end
 
   def questions

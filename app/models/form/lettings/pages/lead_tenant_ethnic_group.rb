@@ -2,9 +2,7 @@ class Form::Lettings::Pages::LeadTenantEthnicGroup < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "lead_tenant_ethnic_group"
-    @header = ""
     @depends_on = [{ "declaration" => 1 }]
-    @description = ""
   end
 
   def questions

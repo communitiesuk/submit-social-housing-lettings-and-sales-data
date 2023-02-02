@@ -2,9 +2,7 @@ class Form::Lettings::Pages::PropertyPostcode < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "property_postcode"
-    @header = ""
     @depends_on = [{ "needstype" => 1 }]
-    @description = ""
   end
 
   def questions

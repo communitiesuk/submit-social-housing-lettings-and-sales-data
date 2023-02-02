@@ -2,9 +2,7 @@ class Form::Lettings::Pages::PropertyWheelchairAccessible < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "property_wheelchair_accessible"
-    @header = ""
     @depends_on = [{ "needstype" => 1 }]
-    @description = ""
   end
 
   def questions

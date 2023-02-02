@@ -2,9 +2,7 @@ class Form::Lettings::Pages::TenancyType < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "tenancy_type"
-    @header = ""
     @depends_on = [{ "startertenancy" => 2 }]
-    @description = ""
   end
 
   def questions
