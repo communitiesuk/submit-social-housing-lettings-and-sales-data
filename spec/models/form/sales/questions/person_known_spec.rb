@@ -27,6 +27,10 @@ RSpec.describe Form::Sales::Questions::PersonKnown, type: :model do
     })
   end
 
+  it "has correct conditional for" do
+    expect(question.conditional_for).to be_nil
+  end
+
   it "has the correct hint" do
     expect(question.hint_text).to be_nil
   end
@@ -45,10 +49,6 @@ RSpec.describe Form::Sales::Questions::PersonKnown, type: :model do
 
     it "has the correct check_answer_label" do
       expect(question.check_answer_label).to eq("Details known for person 2?")
-    end
-
-    it "has correct conditional for" do
-      expect(question.conditional_for).to be_nil
     end
 
     it "has the correct hidden_in_check_answers" do
@@ -78,10 +78,6 @@ RSpec.describe Form::Sales::Questions::PersonKnown, type: :model do
       expect(question.check_answer_label).to eq("Details known for person 3?")
     end
 
-    it "has correct conditional for" do
-      expect(question.conditional_for).to be_nil
-    end
-
     it "has the correct hidden_in_check_answers" do
       expect(question.hidden_in_check_answers).to eq(
         "depends_on" => [{ "details_known_3" => 1 }],
@@ -109,10 +105,6 @@ RSpec.describe Form::Sales::Questions::PersonKnown, type: :model do
       expect(question.check_answer_label).to eq("Details known for person 4?")
     end
 
-    it "has correct conditional for" do
-      expect(question.conditional_for).to be_nil
-    end
-
     it "has the correct hidden_in_check_answers" do
       expect(question.hidden_in_check_answers).to eq(
         "depends_on" => [{ "details_known_4" => 1 }],
@@ -138,10 +130,6 @@ RSpec.describe Form::Sales::Questions::PersonKnown, type: :model do
 
     it "has the correct check_answer_label" do
       expect(question.check_answer_label).to eq("Details known for person 5?")
-    end
-
-    it "has correct conditional for" do
-      expect(question.conditional_for).to be_nil
     end
 
     it "has the correct hidden_in_check_answers" do

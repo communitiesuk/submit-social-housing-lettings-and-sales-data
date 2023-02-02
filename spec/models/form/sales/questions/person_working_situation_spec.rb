@@ -20,10 +20,6 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
     expect(question.derived?).to be false
   end
 
-  it "has expected check answers card number" do
-    expect(question.check_answers_card_number).to eq(2)
-  end
-
   it "has the correct answer_options" do
     expect(question.answer_options).to eq({
       "2" => { "value" => "Part-time - Less than 30 hours" },

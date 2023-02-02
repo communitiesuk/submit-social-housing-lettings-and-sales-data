@@ -36,6 +36,10 @@ RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
     expect(question.max).to eq(110)
   end
 
+  it "has the correct width" do
+    expect(question.width).to eq(3)
+  end
+
   context "with person 2" do
     let(:person_index) { 2 }
     let(:question_id) { "age2" }
@@ -46,10 +50,6 @@ RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
 
     it "has the correct check_answer_label" do
       expect(question.check_answer_label).to eq("Person 2’s age")
-    end
-
-    it "has the correct width" do
-      expect(question.width).to eq(3)
     end
 
     it "has the correct inferred check answers value" do
@@ -76,10 +76,6 @@ RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
       expect(question.check_answer_label).to eq("Person 3’s age")
     end
 
-    it "has the correct width" do
-      expect(question.width).to eq(3)
-    end
-
     it "has the correct inferred check answers value" do
       expect(question.inferred_check_answers_value).to eq([{
         "condition" => { "age3_known" => 1 },
@@ -104,10 +100,6 @@ RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
       expect(question.check_answer_label).to eq("Person 4’s age")
     end
 
-    it "has the correct width" do
-      expect(question.width).to eq(3)
-    end
-
     it "has the correct inferred check answers value" do
       expect(question.inferred_check_answers_value).to eq([{
         "condition" => { "age4_known" => 1 },
@@ -130,10 +122,6 @@ RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
 
     it "has the correct check_answer_label" do
       expect(question.check_answer_label).to eq("Person 5’s age")
-    end
-
-    it "has the correct width" do
-      expect(question.width).to eq(3)
     end
 
     it "has the correct inferred check answers value" do
