@@ -70,6 +70,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_27_102334) do
     t.index ["start_year", "lettype", "beds", "la"], name: "index_la_rent_ranges_on_start_year_and_lettype_and_beds_and_la", unique: true
   end
 
+  create_table "la_sale_ranges", force: :cascade do |t|
+    t.string "la"
+    t.integer "bedrooms"
+    t.decimal "soft_min", precision: 10, scale: 2
+    t.decimal "soft_max", precision: 10, scale: 2
+    t.integer "start_year"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["start_year", "bedrooms", "la"], name: "index_la_sale_ranges_on_start_year_bedrooms_la", unique: true
+  end
+
   create_table "legacy_users", force: :cascade do |t|
     t.string "old_user_id"
     t.integer "user_id"
@@ -504,11 +515,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_27_102334) do
     t.integer "retirement_value_check"
     t.integer "hodate_check"
     t.integer "extrabor_value_check"
-    t.integer "grant_value_check"
-    t.integer "staircase_bought_value_check"
     t.integer "deposit_and_mortgage_value_check"
     t.integer "shared_ownership_deposit_value_check"
+    t.integer "grant_value_check"
+    t.integer "value_value_check"
     t.integer "old_persons_shared_ownership_value_check"
+    t.integer "staircase_bought_value_check"
     t.integer "monthly_charges_value_check"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
