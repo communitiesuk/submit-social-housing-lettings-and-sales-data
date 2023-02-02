@@ -132,6 +132,10 @@ class SalesLog < Log
     type == 29
   end
 
+  def outright_sale_or_discounted_with_full_ownership?
+    ownershipsch == 3 || (ownershipsch == 2 && rent_to_buy_full_ownership?)
+  end
+
   def is_type_discount?
     type == 18
   end
