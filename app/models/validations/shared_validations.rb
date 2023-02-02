@@ -20,20 +20,16 @@ module Validations::SharedValidations
       next unless question.min || question.max
       next unless record[question.id]
 
-      field = question.check_answer_label || question.id
-      min = [question.prefix, number_with_delimiter(question.min, delimiter: ","), question.suffix].join("")
-      max = [question.prefix, number_with_delimiter(question.max, delimiter: ","), question.suffix].join("")
-
       begin
         answer = Float(record.public_send("#{question.id}_before_type_cast"))
       rescue ArgumentError
-        record.errors.add question.id.to_sym, I18n.t("validations.numeric.valid", field:, min:, max:)
+        add_range_error(record, question)
       end
 
       next unless answer
 
       if (question.min && question.min > answer) || (question.max && question.max < answer)
-        record.errors.add question.id.to_sym, I18n.t("validations.numeric.valid", field:, min:, max:)
+        add_range_error(record, question)
       end
     end
   end
@@ -107,5 +103,17 @@ private
 
   def person_is_partner?(relationship)
     relationship == "P"
+  end
+
+  def add_range_error(record, question)
+    field = question.check_answer_label || question.id
+    min = [question.prefix, number_with_delimiter(question.min, delimiter: ","), question.suffix].join("") if question.min
+    max = [question.prefix, number_with_delimiter(question.max, delimiter: ","), question.suffix].join("") if question.max
+
+    if min && max
+      record.errors.add question.id.to_sym, I18n.t("validations.numeric.within_range", field:, min:, max:)
+    elsif min
+      record.errors.add question.id.to_sym, I18n.t("validations.numeric.above_min", field:, min:)
+    end
   end
 end

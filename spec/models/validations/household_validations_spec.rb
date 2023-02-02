@@ -463,14 +463,14 @@ RSpec.describe Validations::HouseholdValidations do
         record.hhmemb = -1
         household_validator.validate_numeric_min_max(record)
         expect(record.errors["hhmemb"])
-          .to include(match I18n.t("validations.numeric.valid", field: "Number of Household Members", min: 0, max: 8))
+          .to include(match I18n.t("validations.numeric.within_range", field: "Number of Household Members", min: 0, max: 8))
       end
 
       it "validates that the number of household members cannot be more than 8" do
         record.hhmemb = 9
         household_validator.validate_numeric_min_max(record)
         expect(record.errors["hhmemb"])
-          .to include(match I18n.t("validations.numeric.valid", field: "Number of Household Members", min: 0, max: 8))
+          .to include(match I18n.t("validations.numeric.within_range", field: "Number of Household Members", min: 0, max: 8))
       end
 
       it "expects that the number of other household members is between the min and max" do
