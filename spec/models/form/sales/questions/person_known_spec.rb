@@ -8,10 +8,6 @@ RSpec.describe Form::Sales::Questions::PersonKnown, type: :model do
   let(:page) { instance_double(Form::Page) }
   let(:person_index) { 2 }
 
-  before do
-    allow(page).to receive(:id).and_return("person_1_known")
-  end
-
   it "has correct page" do
     expect(question.page).to eq(page)
   end
@@ -38,10 +34,6 @@ RSpec.describe Form::Sales::Questions::PersonKnown, type: :model do
   context "with person 2" do
     let(:question_id) { "details_known_2" }
     let(:person_index) { 2 }
-
-    before do
-      allow(page).to receive(:id).and_return("person_2_known")
-    end
 
     it "has the correct id" do
       expect(question.id).to eq("details_known_2")
@@ -74,10 +66,6 @@ RSpec.describe Form::Sales::Questions::PersonKnown, type: :model do
     let(:question_id) { "details_known_3" }
     let(:person_index) { 3 }
 
-    before do
-      allow(page).to receive(:id).and_return("person_3_known")
-    end
-
     it "has the correct id" do
       expect(question.id).to eq("details_known_3")
     end
@@ -109,10 +97,6 @@ RSpec.describe Form::Sales::Questions::PersonKnown, type: :model do
     let(:question_id) { "details_known_4" }
     let(:person_index) { 4 }
 
-    before do
-      allow(page).to receive(:id).and_return("person_4_known")
-    end
-
     it "has the correct id" do
       expect(question.id).to eq("details_known_4")
     end
@@ -143,10 +127,6 @@ RSpec.describe Form::Sales::Questions::PersonKnown, type: :model do
   context "with person 5" do
     let(:question_id) { "details_known_5" }
     let(:person_index) { 5 }
-
-    before do
-      allow(page).to receive(:id).and_return("person_5_known")
-    end
 
     it "has the correct id" do
       expect(question.id).to eq("details_known_5")

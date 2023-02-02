@@ -8,10 +8,6 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
   let(:page) { instance_double(Form::Page) }
   let(:person_index) { 2 }
 
-  before do
-    allow(page).to receive(:id).and_return("person_2_working_situation")
-  end
-
   it "has correct page" do
     expect(question.page).to eq(page)
   end
@@ -48,10 +44,6 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
     let(:question_id) { "ecstat2" }
     let(:person_index) { 2 }
 
-    before do
-      allow(page).to receive(:id).and_return("person_2_working_situation")
-    end
-
     it "has the correct id" do
       expect(question.id).to eq("ecstat2")
     end
@@ -78,10 +70,6 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
   context "when person 3" do
     let(:question_id) { "ecstat3" }
     let(:person_index) { 3 }
-
-    before do
-      allow(page).to receive(:id).and_return("person_3_working_situation")
-    end
 
     it "has the correct id" do
       expect(question.id).to eq("ecstat3")
@@ -110,10 +98,6 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
     let(:question_id) { "ecstat4" }
     let(:person_index) { 4 }
 
-    before do
-      allow(page).to receive(:id).and_return("person_4_working_situation")
-    end
-
     it "has the correct id" do
       expect(question.id).to eq("ecstat4")
     end
@@ -140,10 +124,6 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
   context "when person 5" do
     let(:question_id) { "ecstat5" }
     let(:person_index) { 5 }
-
-    before do
-      allow(page).to receive(:id).and_return("person_5_working_situation")
-    end
 
     it "has the correct id" do
       expect(question.id).to eq("ecstat5")
