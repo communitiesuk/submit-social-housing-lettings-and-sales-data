@@ -8,7 +8,7 @@ module InterruptionScreenHelper
                 pre_casing_value = lettings_log.form.get_question(argument["key"], lettings_log).answer_label(lettings_log)
                 pre_casing_value.downcase
               elsif argument["currency"]
-                ["£", number_to_currency(lettings_log.public_send(argument["key"]), delimiter: ",", format: "%n")].join("")
+                number_to_currency(lettings_log.public_send(argument["key"]), delimiter: ",", format: "%n", unit: "£")
               else
                 lettings_log.public_send(argument["key"])
               end
@@ -33,7 +33,7 @@ module InterruptionScreenHelper
       value = if argument["label"]
                 lettings_log.form.get_question(argument["key"], lettings_log).answer_label(lettings_log).downcase
               elsif argument["currency"]
-                ["£", number_to_currency(lettings_log.public_send(argument["key"]), delimiter: ",", format: "%n")].join("")
+                number_to_currency(lettings_log.public_send(argument["key"]), delimiter: ",", format: "%n", unit: "£")
               else
                 lettings_log.public_send(argument["key"])
               end
