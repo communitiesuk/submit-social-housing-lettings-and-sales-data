@@ -137,6 +137,7 @@ Rails.application.routes.draw do
       resources :bulk_upload_lettings_results, path: "bulk-upload-results", only: [:show] do
         member do
           get :resume
+          get :summary
         end
       end
 

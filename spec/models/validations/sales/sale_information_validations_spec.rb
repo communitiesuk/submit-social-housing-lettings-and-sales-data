@@ -111,11 +111,14 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
     context "when exdate more than 1 year before saledate" do
       let(:record) { build(:sales_log, exdate: 2.years.ago, saledate: 1.month.ago) }
 
-      it "does not add the error" do
+      it "adds error" do
         sale_information_validator.validate_exchange_date(record)
 
         expect(record.errors[:exdate]).to eq(
           ["Contract exchange date must be less than 1 year before completion date"],
+        )
+        expect(record.errors[:saledate]).to eq(
+          ["Completion date must be less than 1 year after contract exchange date"],
         )
       end
     end
@@ -128,6 +131,9 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
         expect(record.errors[:exdate]).to eq(
           ["Contract exchange date must be less than 1 year before completion date"],
+        )
+        expect(record.errors[:saledate]).to eq(
+          ["Completion date must be less than 1 year after contract exchange date"],
         )
       end
     end

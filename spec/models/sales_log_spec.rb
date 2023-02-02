@@ -47,7 +47,7 @@ RSpec.describe SalesLog, type: :model do
     let(:sales_log) { build(:sales_log) }
 
     it "returns optional fields" do
-      expect(sales_log.optional_fields).to eq(%w[purchid])
+      expect(sales_log.optional_fields).to eq(%w[purchid monthly_charges_value_check old_persons_shared_ownership_value_check])
     end
   end
 
@@ -109,7 +109,7 @@ RSpec.describe SalesLog, type: :model do
     let(:sales_log) { FactoryBot.create(:sales_log, :completed) }
 
     it "correctly derives and saves exday, exmonth and exyear" do
-      sales_log.update!(exdate: Time.gm(2022, 5, 4))
+      sales_log.update!(exdate: Time.gm(2022, 5, 4), saledate: Time.gm(2022, 7, 4), ownershipsch: 1, staircase: 2, resale: 2)
       record_from_db = ActiveRecord::Base.connection.execute("select exday, exmonth, exyear from sales_logs where id=#{sales_log.id}").to_a[0]
       expect(record_from_db["exday"]).to eq(4)
       expect(record_from_db["exmonth"]).to eq(5)
@@ -139,6 +139,14 @@ RSpec.describe SalesLog, type: :model do
       record_from_db = ActiveRecord::Base.connection.execute("select pcode1, pcode2 from sales_logs where id=#{sales_log.id}").to_a[0]
       expect(record_from_db["pcode1"]).to eq("W6")
       expect(record_from_db["pcode2"]).to eq("0SP")
+    end
+
+    it "derives a mortgage value of 0 when mortgage is not used" do
+      # to avoid log failing validations when mortgage value is removed:
+      new_grant_value = sales_log.grant + sales_log.mortgage
+      sales_log.update!(mortgageused: 2, grant: new_grant_value)
+      record_from_db = ActiveRecord::Base.connection.execute("select mortgage from sales_logs where id=#{sales_log.id}").to_a[0]
+      expect(record_from_db["mortgage"]).to eq(0.0)
     end
   end
 
@@ -238,39 +246,49 @@ RSpec.describe SalesLog, type: :model do
   end
 
   context "when deriving household variables" do
-    let!(:household_lettings_log) do
-      described_class.create!({
+    let!(:sales_log) do
+      FactoryBot.create(
+        :sales_log,
+        :completed,
         jointpur: 1,
-        hholdcount: 3,
+        hholdcount: 4,
+        details_known_1: 1,
+        details_known_2: 1,
+        details_known_3: 1,
+        details_known_4: 1,
         relat2: "C",
         relat3: "C",
         relat4: "X",
         relat5: "X",
-        age1: 22,
-        age2: 40,
-        age3: 19,
+        relat6: "P",
+        ecstat2: 9,
+        ecstat3: 7,
+        age1: 47,
+        age2: 14,
+        age3: 17,
         age4: 88,
-        age5: 14,
-      })
+        age5: 19,
+        age6: 46,
+      )
     end
 
     it "correctly derives and saves hhmemb" do
-      record_from_db = ActiveRecord::Base.connection.execute("select hhmemb from sales_logs where id=#{household_lettings_log.id}").to_a[0]
-      expect(record_from_db["hhmemb"]).to eq(5)
+      record_from_db = ActiveRecord::Base.connection.execute("select hhmemb from sales_logs where id=#{sales_log.id}").to_a[0]
+      expect(record_from_db["hhmemb"]).to eq(6)
     end
 
     it "correctly derives and saves totchild" do
-      record_from_db = ActiveRecord::Base.connection.execute("select totchild from sales_logs where id=#{household_lettings_log.id}").to_a[0]
+      record_from_db = ActiveRecord::Base.connection.execute("select totchild from sales_logs where id=#{sales_log.id}").to_a[0]
       expect(record_from_db["totchild"]).to eq(2)
     end
 
     it "correctly derives and saves totadult" do
-      record_from_db = ActiveRecord::Base.connection.execute("select totadult from sales_logs where id=#{household_lettings_log.id}").to_a[0]
-      expect(record_from_db["totadult"]).to eq(3)
+      record_from_db = ActiveRecord::Base.connection.execute("select totadult from sales_logs where id=#{sales_log.id}").to_a[0]
+      expect(record_from_db["totadult"]).to eq(4)
     end
 
     it "correctly derives and saves hhtype" do
-      record_from_db = ActiveRecord::Base.connection.execute("select hhtype from sales_logs where id=#{household_lettings_log.id}").to_a[0]
+      record_from_db = ActiveRecord::Base.connection.execute("select hhtype from sales_logs where id=#{sales_log.id}").to_a[0]
       expect(record_from_db["hhtype"]).to eq(9)
     end
   end

@@ -17,6 +17,7 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
         living_before_purchase_shared_ownership
         staircasing
         about_staircasing
+        staircase_bought_value_check
         resale
         exchange_contracts
         handover_date
@@ -30,8 +31,10 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
         about_price_shared_ownership_value_check
         shared_ownership_equity_value_check
         mortgage_used_shared_ownership
+        mortgage_used_mortgage_value_check
         mortgage_amount_shared_ownership
         shared_ownership_mortgage_amount_value_check
+        mortgage_amount_mortgage_value_check
         mortgage_lender_shared_ownership
         mortgage_lender_other_shared_ownership
         mortgage_length_shared_ownership
@@ -42,6 +45,7 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
         shared_ownership_deposit_value_check
         monthly_rent
         leasehold_charges_shared_ownership
+        monthly_charges_shared_ownership_value_check
       ],
     )
   end

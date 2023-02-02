@@ -13,8 +13,12 @@ module Validations::Sales::SoftValidations
     income1 < ALLOWED_INCOME_RANGES[ecstat1][:soft_min]
   end
 
+  def staircase_bought_above_fifty?
+    stairbought && stairbought > 50
+  end
+
   def mortgage_over_soft_max?
-    return false unless mortgage && inc1mort && inc2mort
+    return false unless mortgage && inc1mort && (inc2mort || not_joint_purchase?)
     return false if income1_used_for_mortgage? && income1.blank? || income2_used_for_mortgage? && income2.blank?
 
     income_used_for_mortgage = (income1_used_for_mortgage? ? income1 : 0) + (income2_used_for_mortgage? ? income2 : 0)
@@ -65,6 +69,13 @@ module Validations::Sales::SoftValidations
     mortgage_value + deposit + cash_discount != value * equity / 100
   end
 
+  def mortgage_plus_deposit_less_than_discounted_value?
+    return unless mortgage && deposit && value && discount
+
+    discounted_value = value * (100 - discount) / 100
+    mortgage + deposit < discounted_value
+  end
+
   def hodate_3_years_or_more_saledate?
     return unless hodate && saledate
   end
@@ -81,6 +92,13 @@ module Validations::Sales::SoftValidations
     return unless grant
 
     !grant.between?(9_000, 16_000)
+  end
+
+  def monthly_charges_over_soft_max?
+    return unless type && mscharge && proptype
+
+    soft_max = old_persons_shared_ownership? ? 550 : 300
+    mscharge > soft_max
   end
 
 private

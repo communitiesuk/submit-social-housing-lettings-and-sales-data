@@ -1,10 +1,12 @@
 class Form::Lettings::Pages::Location < ::Form::Page
   def initialize(_id, hsh, subsection)
     super("location", hsh, subsection)
-    @depends_on = [{
-      "needstype" => 2,
-      "scheme_has_multiple_locations?" => true,
-    }]
+    @depends_on = [
+      {
+        "needstype" => 2,
+        "scheme_has_multiple_locations?" => true,
+      },
+    ]
     @next_unresolved_page_id = :check_answers
   end
 

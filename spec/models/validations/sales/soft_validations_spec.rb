@@ -102,12 +102,24 @@ RSpec.describe Validations::Sales::SoftValidations do
           .not_to be_mortgage_over_soft_max
       end
 
-      it "returns false if no inc2mort is given" do
-        record.inc1mort = 2
+      it "returns false if no inc2mort is given and it's a joint purchase" do
+        record.jointpur = 1
+        record.inc1mort = 1
+        record.income1 = 10
         record.inc2mort = nil
         record.mortgage = 20_000
         expect(record)
           .not_to be_mortgage_over_soft_max
+      end
+
+      it "returns true if no inc2mort is given and it's not a joint purchase" do
+        record.jointpur = 2
+        record.inc1mort = 1
+        record.income1 = 10
+        record.inc2mort = nil
+        record.mortgage = 20_000
+        expect(record)
+          .to be_mortgage_over_soft_max
       end
 
       it "returns false if no income1 is given and inc1mort is yes" do
@@ -198,6 +210,59 @@ RSpec.describe Validations::Sales::SoftValidations do
         record.mortgage = 0
         expect(record)
           .not_to be_mortgage_over_soft_max
+      end
+    end
+
+    context "when validating mortgage and deposit against discounted value" do
+      [
+        {
+          nil_field: "mortgage",
+          value: 500_000,
+          deposit: 10_000,
+          discount: 10,
+        },
+        {
+          nil_field: "value",
+          mortgage: 100_000,
+          deposit: 10_000,
+          discount: 10,
+        },
+        {
+          nil_field: "deposit",
+          value: 500_000,
+          mortgage: 100_000,
+          discount: 10,
+        },
+        {
+          nil_field: "discount",
+          value: 500_000,
+          mortgage: 100_000,
+          deposit: 10_000,
+        },
+      ].each do |test_case|
+        it "returns false if #{test_case[:nil_field]} is not present" do
+          record.value = test_case[:value]
+          record.mortgage = test_case[:mortgage]
+          record.deposit = test_case[:deposit]
+          record.discount = test_case[:discount]
+          expect(record).not_to be_mortgage_plus_deposit_less_than_discounted_value
+        end
+      end
+
+      it "returns false if the deposit and mortgage add up to the discounted value or more" do
+        record.value = 500_000
+        record.discount = 20
+        record.mortgage = 200_000
+        record.deposit = 200_000
+        expect(record).not_to be_mortgage_plus_deposit_less_than_discounted_value
+      end
+
+      it "returns true if the deposit and mortgage add up to less than the discounted value" do
+        record.value = 500_000
+        record.discount = 10
+        record.mortgage = 200_000
+        record.deposit = 200_000
+        expect(record).to be_mortgage_plus_deposit_less_than_discounted_value
       end
     end
 
@@ -314,7 +379,7 @@ RSpec.describe Validations::Sales::SoftValidations do
           .to be_deposit_over_soft_max
       end
 
-      it "returns fals if deposit is less than 4/3 of savings" do
+      it "returns false if deposit is less than 4/3 of savings" do
         record.deposit = 7_999
         record.savings = 6_000
         expect(record)
@@ -581,6 +646,88 @@ RSpec.describe Validations::Sales::SoftValidations do
       record.grant = 10_000
 
       expect(record).not_to be_grant_outside_common_range
+    end
+  end
+
+  describe "#staircase_bought_above_fifty" do
+    it "returns false when stairbought is not set" do
+      record.stairbought = nil
+
+      expect(record).not_to be_staircase_bought_above_fifty
+    end
+
+    it "returns false when stairbought is below fifty" do
+      record.stairbought = 40
+
+      expect(record).not_to be_staircase_bought_above_fifty
+    end
+
+    it "returns true when stairbought is above fifty" do
+      record.stairbought = 70
+
+      expect(record).to be_staircase_bought_above_fifty
+    end
+  end
+
+  describe "#monthly_charges_over_soft_max?" do
+    it "returns false if mscharge is not given" do
+      record.mscharge = nil
+      record.proptype = 4
+      record.type = 2
+
+      expect(record).not_to be_monthly_charges_over_soft_max
+    end
+
+    it "returns false if proptype is not given" do
+      record.mscharge = 999
+      record.proptype = nil
+      record.type = 2
+
+      expect(record).not_to be_monthly_charges_over_soft_max
+    end
+
+    it "returns false if type is not given" do
+      record.mscharge = 999
+      record.proptype = 4
+      record.type = nil
+
+      expect(record).not_to be_monthly_charges_over_soft_max
+    end
+
+    context "with old persons shared ownership" do
+      it "returns false if the monthly charge is under 550" do
+        record.mscharge = 540
+        record.proptype = 4
+        record.type = 24
+
+        expect(record).not_to be_monthly_charges_over_soft_max
+      end
+
+      it "returns true if the monthly charge is over 550" do
+        record.mscharge = 999
+        record.proptype = 4
+        record.type = 24
+
+        expect(record).to be_monthly_charges_over_soft_max
+      end
+    end
+
+    context "with non old persons type of ownership" do
+      it "returns false if the monthly charge is under 300" do
+        record.mscharge = 280
+        record.proptype = 4
+        record.type = 18
+
+        expect(record).not_to be_monthly_charges_over_soft_max
+      end
+
+      it "returns true if the monthly charge is over 300" do
+        record.mscharge = 400
+        record.proptype = 4
+        record.type = 18
+
+        expect(record).to be_monthly_charges_over_soft_max
+      end
     end
   end
 end

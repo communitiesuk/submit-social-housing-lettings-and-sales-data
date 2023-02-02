@@ -16,7 +16,9 @@ RSpec.describe Form::Sales::Subsections::OutrightSale, type: :model do
       %w[
         purchase_price_outright_sale
         mortgage_used_outright_sale
+        outright_sale_mortgage_used_mortgage_value_check
         mortgage_amount_outright_sale
+        outright_sale_mortgage_amount_mortgage_value_check
         mortgage_lender_outright_sale
         mortgage_lender_other_outright_sale
         mortgage_length_outright_sale
@@ -24,6 +26,7 @@ RSpec.describe Form::Sales::Subsections::OutrightSale, type: :model do
         about_deposit_outright_sale
         outright_sale_deposit_value_check
         leasehold_charges_outright_sale
+        monthly_charges_outright_sale_value_check
       ],
     )
   end

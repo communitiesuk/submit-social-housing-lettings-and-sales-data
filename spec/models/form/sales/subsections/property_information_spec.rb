@@ -17,6 +17,7 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
         property_number_of_bedrooms
         about_price_shared_ownership_bedrooms_value_check
         property_unit_type
+        monthly_charges_property_type_value_check
         property_building_type
         property_postcode
         property_local_authority

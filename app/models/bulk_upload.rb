@@ -3,7 +3,8 @@ class BulkUpload < ApplicationRecord
 
   belongs_to :user
 
-  has_many :bulk_upload_errors
+  has_many :bulk_upload_errors, dependent: :destroy
+
   has_many :lettings_logs
   has_many :sales_logs
 
@@ -11,6 +12,14 @@ class BulkUpload < ApplicationRecord
 
   def year_combo
     "#{year}/#{year - 2000 + 1}"
+  end
+
+  def logs
+    if lettings?
+      lettings_logs
+    else
+      sales_logs
+    end
   end
 
 private
