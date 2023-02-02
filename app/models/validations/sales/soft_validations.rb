@@ -48,9 +48,9 @@ module Validations::Sales::SoftValidations
   end
 
   def purchase_price_out_of_soft_range?
-    return unless value && beds && la
+    return unless value && beds && la && sale_range
 
-    sale_range.present? && !value.between?(sale_range.soft_min, sale_range.soft_max)
+    !value.between?(sale_range.soft_min, sale_range.soft_max)
   end
 
   def shared_ownership_deposit_invalid?
