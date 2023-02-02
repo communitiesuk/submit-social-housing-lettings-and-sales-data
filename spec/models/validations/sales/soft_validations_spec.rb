@@ -102,12 +102,24 @@ RSpec.describe Validations::Sales::SoftValidations do
           .not_to be_mortgage_over_soft_max
       end
 
-      it "returns false if no inc2mort is given" do
-        record.inc1mort = 2
+      it "returns false if no inc2mort is given and it's a joint purchase" do
+        record.jointpur = 1
+        record.inc1mort = 1
+        record.income1 = 10
         record.inc2mort = nil
         record.mortgage = 20_000
         expect(record)
           .not_to be_mortgage_over_soft_max
+      end
+
+      it "returns true if no inc2mort is given and it's not a joint purchase" do
+        record.jointpur = 2
+        record.inc1mort = 1
+        record.income1 = 10
+        record.inc2mort = nil
+        record.mortgage = 20_000
+        expect(record)
+          .to be_mortgage_over_soft_max
       end
 
       it "returns false if no income1 is given and inc1mort is yes" do
