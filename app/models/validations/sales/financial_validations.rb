@@ -3,9 +3,9 @@ module Validations::Sales::FinancialValidations
   # or 'validate_' to run on submit as well
 
   def validate_income1(record)
-    return unless record.ecstat1 && record.income1 && record.la && record.ownershipsch == 1
+    return unless record.income1 && record.la && record.shared_owhership_scheme?
 
-    relevant_fields = %i[income1 ecstat1 ownershipsch la postcode_full]
+    relevant_fields = %i[income1 ownershipsch la postcode_full]
     if record.london_property? && record.income1 > 90_000
       relevant_fields.each { |field| record.errors.add field, I18n.t("validations.financial.income.over_hard_max_for_london") }
     elsif record.property_not_in_london? && record.income1 > 80_000
@@ -14,9 +14,9 @@ module Validations::Sales::FinancialValidations
   end
 
   def validate_income2(record)
-    return unless record.ecstat2 && record.income2 && record.la && record.ownershipsch == 1
+    return unless record.income2 && record.la && record.shared_owhership_scheme?
 
-    relevant_fields = %i[income2 ecstat2 ownershipsch la postcode_full]
+    relevant_fields = %i[income2 ownershipsch la postcode_full]
     if record.london_property? && record.income2 > 90_000
       relevant_fields.each { |field| record.errors.add field, I18n.t("validations.financial.income.over_hard_max_for_london") }
     elsif record.property_not_in_london? && record.income2 > 80_000
@@ -25,7 +25,7 @@ module Validations::Sales::FinancialValidations
   end
 
   def validate_combined_income(record)
-    return unless record.income1 && record.income2 && record.la && record.ownershipsch == 1
+    return unless record.income1 && record.income2 && record.la && record.shared_owhership_scheme?
 
     combined_income = record.income1 + record.income2
     relevant_fields = %i[income1 income2 ownershipsch la postcode_full]
