@@ -318,5 +318,6 @@ unless Rails.env.test?
       service.call
     end
   end
+  puts LaSaleRange.count
 end
 # rubocop:enable Rails/Output

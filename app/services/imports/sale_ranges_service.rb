@@ -20,12 +20,8 @@ module Imports
             soft_max: row["soft_max"] },
           unique_by: %i[start_year bedrooms la],
         )
-        self.count = count + 1
+        @count += 1
       end
     end
-
-  private
-
-    attr_writer :count
   end
 end
