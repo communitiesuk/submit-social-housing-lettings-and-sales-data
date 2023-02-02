@@ -516,7 +516,7 @@ RSpec.describe Validations::Sales::SoftValidations do
 
     it "when 3 years or more before saledate" do
       record.saledate = Time.zone.now
-      record.hodate = record.exdate - 4.years
+      record.hodate = record.saledate - 4.years
 
       expect(record).to be_hodate_3_years_or_more_saledate
     end
