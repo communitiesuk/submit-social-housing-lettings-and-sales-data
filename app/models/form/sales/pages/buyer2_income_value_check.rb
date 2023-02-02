@@ -13,7 +13,8 @@ class Form::Sales::Pages::Buyer2IncomeValueCheck < ::Form::Page
       "translation" => "soft_validations.income.under_soft_min_for_economic_status",
       "arguments" => [
         {
-          "key" => "income2",
+          "key" => "field_formatted_as_currency",
+          "arguments_for_public_send" => "income2",
           "i18n_template" => "income",
         },
         {

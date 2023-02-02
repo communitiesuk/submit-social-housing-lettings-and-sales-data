@@ -254,6 +254,12 @@ class SalesLog < Log
 
     return unless ALLOWED_INCOME_RANGES_SALES
 
-    ALLOWED_INCOME_RANGES_SALES[economic_status_code]&.soft_min
+    soft_min = ALLOWED_INCOME_RANGES_SALES[economic_status_code]&.soft_min
+    format_as_currency(soft_min)
+  end
+
+  def field_formatted_as_currency(field_name)
+    field_value = public_send(field_name)
+    format_as_currency(field_value)
   end
 end

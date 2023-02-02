@@ -459,7 +459,7 @@ en:
       in_soft_max_range:
         message: "Net income is higher than expected based on the lead tenant’s working situation. Are you sure this is correct?"
     income:
-      under_soft_min_for_economic_status: "You said income was £%{income}, which is below this working situation's minimum (£%{minimum})"
+      under_soft_min_for_economic_status: "You said income was %{income}, which is below this working situation's minimum (%{minimum})"
     rent:
       outside_range_title: "You told us the rent is %{brent}"
       min_hint_text: "The minimum rent expected for this type of property in this local authority is £%{soft_min_for_period}."
