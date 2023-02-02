@@ -16,7 +16,7 @@ RSpec.describe Form::Lettings::Pages::PersonKnown, type: :model do
   end
 
   it "has the correct description" do
-    expect(page.description).to eq("")
+    expect(page.description).to be nil
   end
 
   context "with person 2" do
