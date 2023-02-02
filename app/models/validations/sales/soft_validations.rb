@@ -1,5 +1,5 @@
 module Validations::Sales::SoftValidations
-  ALLOWED_INCOME_RANGES = {
+  ALLOWED_INCOME_RANGES_SALES = {
     1 => OpenStruct.new(soft_min: 5000),
     2 => OpenStruct.new(soft_min: 1500),
     3 => OpenStruct.new(soft_min: 1000),
@@ -8,15 +8,15 @@ module Validations::Sales::SoftValidations
   }.freeze
 
   def income1_under_soft_min?
-    return false unless ecstat1 && income1 && ALLOWED_INCOME_RANGES[ecstat1]
+    return false unless ecstat1 && income1 && ALLOWED_INCOME_RANGES_SALES[ecstat1]
 
-    income1 < ALLOWED_INCOME_RANGES[ecstat1][:soft_min]
+    income1 < ALLOWED_INCOME_RANGES_SALES[ecstat1][:soft_min]
   end
 
   def income2_under_soft_min?
-    return false unless ecstat2 && income2 && ALLOWED_INCOME_RANGES[ecstat2]
+    return false unless ecstat2 && income2 && ALLOWED_INCOME_RANGES_SALES[ecstat2]
 
-    income2 < ALLOWED_INCOME_RANGES[ecstat2][:soft_min]
+    income2 < ALLOWED_INCOME_RANGES_SALES[ecstat2][:soft_min]
   end
 
   def staircase_bought_above_fifty?
