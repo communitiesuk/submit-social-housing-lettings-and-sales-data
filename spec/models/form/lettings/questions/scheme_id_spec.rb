@@ -70,7 +70,9 @@ RSpec.describe Form::Lettings::Questions::SchemeId, type: :model do
     context "when the question is not answered" do
       it "returns 'select an option' as selected answer" do
         lettings_log.update!(scheme: nil)
-        answers = question.displayed_answer_options(lettings_log).map { |key, value| OpenStruct.new(id: key, name: value.respond_to?(:service_name) ? value.service_name : nil, resource: value) }
+        answers = question.displayed_answer_options(lettings_log).map do |key, value|
+          OpenStruct.new(id: key, name: value.respond_to?(:service_name) ? value.service_name : nil, resource: value)
+        end
         answers.each do |answer|
           if answer.resource == "Select an option"
             expect(question.answer_selected?(lettings_log, answer)).to eq(true)
@@ -84,7 +86,9 @@ RSpec.describe Form::Lettings::Questions::SchemeId, type: :model do
     context "when the question is answered" do
       it "returns 'select an option' as selected answer" do
         lettings_log.update!(scheme:)
-        answers = question.displayed_answer_options(lettings_log).map { |key, value| OpenStruct.new(id: key, name: value.respond_to?(:service_name) ? value.service_name : nil, resource: value) }
+        answers = question.displayed_answer_options(lettings_log).map do |key, value|
+          OpenStruct.new(id: key, name: value.respond_to?(:service_name) ? value.service_name : nil, resource: value)
+        end
         answers.each do |answer|
           if answer.id == scheme.id
             expect(question.answer_selected?(lettings_log, answer)).to eq(true)
