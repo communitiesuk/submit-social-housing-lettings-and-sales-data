@@ -149,7 +149,7 @@ en:
       intermediate_rent_product_name:
         blank: "Enter name of other intermediate rent product"
       saledate:
-        financial_year: "Date must be from 22/23 financial year"
+        financial_year: "Date must be from 22/23 financial year, which is between 1st April 2022 and 31st March 2023"
       startdate:
         later_than_14_days_after: "The tenancy start date must not be later than 14 days from today’s date"
         before_scheme_end_date: "The tenancy start date must be before the end date for this supported housing scheme"
@@ -377,7 +377,7 @@ en:
         no_choices: "You cannot answer this question as you told us nobody in the household has a physical or mental health condition (or other illness) expected to last 12 months or more"
       postcode:
         discounted_ownership: "Last settled accommodation and discounted ownership property postcodes must match"
-      
+
     tenancy:
       length:
         fixed_term_not_required: "You must only answer the length of the tenancy if it's fixed-term"
@@ -390,7 +390,7 @@ en:
 
     declaration:
       missing: "You must show the DLUHC privacy notice to the tenant before you can submit this log."
-    
+
     privacynotice:
       missing: "You must show the DLUHC privacy notice to the buyer before you can submit this log."
 
@@ -472,7 +472,7 @@ en:
       title_text: "Mortgage, deposit and cash discount total should equal £%{expected_shared_ownership_deposit_value}"
     old_persons_shared_ownership: "At least one buyer should be aged over 64 for Older persons’ shared ownership scheme"
     staircase_bought_seems_high: "You said %{percentage}% was bought in this staircasing transaction, which seems high. Are you sure?"
-    monthly_charges_over_soft_max: 
+    monthly_charges_over_soft_max:
       title_text: "The amount of monthly charges is high for this type of property and sale type"
 
   devise:
