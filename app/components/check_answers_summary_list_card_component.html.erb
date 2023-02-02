@@ -5,6 +5,7 @@
         <h3 class="x-govuk-summary-card__title"><%= check_answers_card_title(applicable_questions.first) %></h3>
       </div>
     <% end %>
+
     <div class="x-govuk-summary-card__body">
       <%= govuk_summary_list do |summary_list| %>
         <% applicable_questions.each do |question| %>
@@ -12,15 +13,20 @@
             <% row.key { question.check_answer_label.to_s.presence || question.header.to_s } %>
             <% row.value do %>
               <span class="govuk-!-margin-right-4"><%= get_answer_label(question) %></span>
+
               <% extra_value = question.get_extra_check_answer_value(log) %>
+
               <% if extra_value %>
                 <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= extra_value %></span>
               <% end %>
+
               <br>
+
               <% question.get_inferred_answers(log).each do |inferred_answer| %>
                 <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= inferred_answer %></span>
               <% end %>
             <% end %>
+
             <% if @log.collection_period_open? %>
               <% row.action(
                 text: question.action_text(log),
