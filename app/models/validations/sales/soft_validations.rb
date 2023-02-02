@@ -73,7 +73,7 @@ module Validations::Sales::SoftValidations
   def hodate_3_years_or_more_saledate?
     return unless hodate && saledate
 
-    record.saledate - record.hodate >= 3.years
+    saledate - hodate >= 3.years
   end
 
   def purchase_price_min_or_max_text
