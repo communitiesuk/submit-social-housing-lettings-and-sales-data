@@ -19,7 +19,7 @@
 
     <% if any_questions_have_summary_card_number?(subsection, @log) %>
       <% subsection.applicable_questions(@log).group_by(&:check_answers_card_number).values.each do |question_group| %>
-        <%= render CheckAnswersSummaryListCardComponent.new(questions: question_group, log: @log, user: current_user, bulk_upload: @bulk_upload) %>
+        <%= render CheckAnswersSummaryListCardComponent.new(questions: question_group, log: @log, user: current_user) %>
       <% end %>
     <% else %>
       <%= render partial: "form/check_answers_summary_list", locals: {

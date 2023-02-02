@@ -1,11 +1,10 @@
 class CheckAnswersSummaryListCardComponent < ViewComponent::Base
-  attr_reader :questions, :log, :user, :bulk_upload
+  attr_reader :questions, :log, :user
 
-  def initialize(questions:, log:, user:, bulk_upload: nil)
+  def initialize(questions:, log:, user:)
     @questions = questions
     @log = log
     @user = user
-    @bulk_upload = bulk_upload
 
     super
   end
@@ -39,11 +38,15 @@ class CheckAnswersSummaryListCardComponent < ViewComponent::Base
 private
 
   def unanswered_value
-    if bulk_upload
+    if bulk_uploaded?
       "<span class=\"app-!-colour-red\">You still need to answer this question</span>".html_safe
     else
       "<span class=\"app-!-colour-muted\">You didn’t answer this question</span>".html_safe
     end
+  end
+
+  def bulk_uploaded?
+    log.bulk_upload
   end
 
   def number_of_buyers
