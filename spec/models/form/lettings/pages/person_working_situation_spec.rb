@@ -30,8 +30,10 @@ RSpec.describe Form::Lettings::Pages::PersonWorkingSituation, type: :model do
 
     it "has correct depends_on" do
       expect(page.depends_on).to eq(
-        [{ "age2" => { "operand" => 15, "operator" => ">" }, "details_known_2" => 0 },
-         { "age2" => nil, "details_known_2" => 0 }],
+        [
+          { "age2" => { "operand" => 15, "operator" => ">" }, "details_known_2" => 0 },
+          { "age2" => nil, "details_known_2" => 0 },
+        ],
       )
     end
   end
@@ -49,8 +51,10 @@ RSpec.describe Form::Lettings::Pages::PersonWorkingSituation, type: :model do
 
     it "has correct depends_on" do
       expect(page.depends_on).to eq(
-        [{ "age3" => { "operand" => 15, "operator" => ">" }, "details_known_3" => 0 },
-         { "age3" => nil, "details_known_3" => 0 }],
+        [
+          { "age3" => { "operand" => 15, "operator" => ">" }, "details_known_3" => 0 },
+          { "age3" => nil, "details_known_3" => 0 },
+        ],
       )
     end
   end

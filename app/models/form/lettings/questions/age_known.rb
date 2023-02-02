@@ -9,7 +9,12 @@ class Form::Lettings::Questions::AgeKnown < ::Form::Question
     @hint_text = ""
     @answer_options = ANSWER_OPTIONS
     @conditional_for = { "age#{person_index}" => [0] }
-    @hidden_in_check_answers = { "depends_on" => [{ "age#{person_index}_known" => 0 }, { "age#{person_index}_known" => 1 }] }
+    @hidden_in_check_answers = {
+      "depends_on" => [
+        { "age#{person_index}_known" => 0 },
+        { "age#{person_index}_known" => 1 },
+      ],
+    }
   end
 
   ANSWER_OPTIONS = { "0" => { "value" => "Yes" }, "1" => { "value" => "No" } }.freeze

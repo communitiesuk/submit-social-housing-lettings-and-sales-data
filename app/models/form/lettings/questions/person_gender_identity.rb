@@ -10,5 +10,11 @@ class Form::Lettings::Questions::PersonGenderIdentity < ::Form::Question
     @answer_options = ANSWER_OPTIONS
   end
 
-  ANSWER_OPTIONS = { "F" => { "value" => "Female" }, "M" => { "value" => "Male" }, "X" => { "value" => "Non-binary" }, "divider" => { "value" => true }, "R" => { "value" => "Person prefers not to say" } }.freeze
+  ANSWER_OPTIONS = {
+    "F" => { "value" => "Female" },
+    "M" => { "value" => "Male" },
+    "X" => { "value" => "Non-binary" },
+    "divider" => { "value" => true },
+    "R" => { "value" => "Person prefers not to say" },
+  }.freeze
 end

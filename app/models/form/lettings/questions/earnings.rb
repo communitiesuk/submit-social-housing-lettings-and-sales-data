@@ -12,6 +12,10 @@ class Form::Lettings::Questions::Earnings < ::Form::Question
     @hint_text = ""
     @step = 1
     @prefix = "£"
-    @suffix = [{ "label" => " every week", "depends_on" => { "incfreq" => 1 } }, { "label" => " every month", "depends_on" => { "incfreq" => 2 } }, { "label" => " every year", "depends_on" => { "incfreq" => 3 } }]
+    @suffix = [
+      { "label" => " every week", "depends_on" => { "incfreq" => 1 } },
+      { "label" => " every month", "depends_on" => { "incfreq" => 2 } },
+      { "label" => " every year", "depends_on" => { "incfreq" => 3 } },
+    ]
   end
 end

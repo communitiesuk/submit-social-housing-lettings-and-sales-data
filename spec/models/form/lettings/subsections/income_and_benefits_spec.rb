@@ -13,25 +13,27 @@ RSpec.describe Form::Lettings::Subsections::IncomeAndBenefits, type: :model do
 
   it "has correct pages" do
     expect(income_and_benefits.pages.map(&:id)).to eq(
-      %w[income_known
-         income_amount
-         net_income_value_check
-         housing_benefit
-         benefits_proportion
-         rent_or_other_charges
-         rent_period
-         care_home_weekly
-         care_home_bi_weekly
-         care_home_4_weekly
-         care_home_monthly
-         rent_weekly
-         rent_bi_weekly
-         rent_4_weekly
-         rent_monthly
-         min_rent_value_check
-         max_rent_value_check
-         outstanding
-         outstanding_amount],
+      %w[
+        income_known
+        income_amount
+        net_income_value_check
+        housing_benefit
+        benefits_proportion
+        rent_or_other_charges
+        rent_period
+        care_home_weekly
+        care_home_bi_weekly
+        care_home_4_weekly
+        care_home_monthly
+        rent_weekly
+        rent_bi_weekly
+        rent_4_weekly
+        rent_monthly
+        min_rent_value_check
+        max_rent_value_check
+        outstanding
+        outstanding_amount
+      ],
     )
   end
 

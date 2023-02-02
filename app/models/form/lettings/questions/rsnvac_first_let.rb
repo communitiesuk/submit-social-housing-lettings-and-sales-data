@@ -10,10 +10,12 @@ class Form::Lettings::Questions::RsnvacFirstLet < ::Form::Question
     @answer_options = ANSWER_OPTIONS
   end
 
-  ANSWER_OPTIONS = { "16" =>
-    { "value" => "First let of conversion, rehabilitation or acquired property" },
-                     "17" =>
+  ANSWER_OPTIONS = {
+    "16" =>
+        { "value" => "First let of conversion, rehabilitation or acquired property" },
+    "17" =>
   { "value" => "First let of leased property" },
-                     "15" =>
-  { "value" => "First let of new-build property" } }.freeze
+    "15" =>
+  { "value" => "First let of new-build property" },
+  }.freeze
 end

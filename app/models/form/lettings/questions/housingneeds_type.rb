@@ -10,5 +10,11 @@ class Form::Lettings::Questions::HousingneedsType < ::Form::Question
     @answer_options = ANSWER_OPTIONS
   end
 
-  ANSWER_OPTIONS = { "0" => { "value" => "Fully wheelchair accessible housing" }, "1" => { "value" => "Wheelchair access to essential rooms" }, "2" => { "value" => "Level access housing" }, "divider" => { "value" => true }, "3" => { "value" => "None of the listed options" } }.freeze
+  ANSWER_OPTIONS = {
+    "0" => { "value" => "Fully wheelchair accessible housing" },
+    "1" => { "value" => "Wheelchair access to essential rooms" },
+    "2" => { "value" => "Level access housing" },
+    "divider" => { "value" => true },
+    "3" => { "value" => "None of the listed options" },
+  }.freeze
 end

@@ -10,5 +10,11 @@ class Form::Lettings::Questions::Unitletas < ::Form::Question
     @answer_options = ANSWER_OPTIONS
   end
 
-  ANSWER_OPTIONS = { "1" => { "value" => "Social rent basis" }, "2" => { "value" => "Affordable rent basis" }, "4" => { "value" => "Intermediate rent basis" }, "divider" => { "value" => true }, "3" => { "value" => "Don’t know" } }.freeze
+  ANSWER_OPTIONS = {
+    "1" => { "value" => "Social rent basis" },
+    "2" => { "value" => "Affordable rent basis" },
+    "4" => { "value" => "Intermediate rent basis" },
+    "divider" => { "value" => true },
+    "3" => { "value" => "Don’t know" },
+  }.freeze
 end

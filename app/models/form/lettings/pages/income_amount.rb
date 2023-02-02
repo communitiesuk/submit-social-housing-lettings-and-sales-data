@@ -7,6 +7,9 @@ class Form::Lettings::Pages::IncomeAmount < ::Form::Page
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::Earnings.new(nil, nil, self), Form::Lettings::Questions::Incfreq.new(nil, nil, self)]
+    @questions ||= [
+      Form::Lettings::Questions::Earnings.new(nil, nil, self),
+      Form::Lettings::Questions::Incfreq.new(nil, nil, self),
+    ]
   end
 end

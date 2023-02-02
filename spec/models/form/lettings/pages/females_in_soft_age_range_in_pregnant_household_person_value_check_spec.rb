@@ -30,8 +30,12 @@ RSpec.describe Form::Lettings::Pages::FemalesInSoftAgeRangeInPregnantHouseholdPe
 
     it "has correct depends_on" do
       expect(page.depends_on).to eq(
-        [{ "details_known_2" => 0,
-           "female_in_pregnant_household_in_soft_validation_range?" => true }],
+        [
+          {
+            "details_known_2" => 0,
+            "female_in_pregnant_household_in_soft_validation_range?" => true,
+          },
+        ],
       )
     end
 
@@ -39,9 +43,11 @@ RSpec.describe Form::Lettings::Pages::FemalesInSoftAgeRangeInPregnantHouseholdPe
       expect(page.title_text).to eq({
         "translation" => "soft_validations.pregnancy.title",
         "arguments" => [
-          { "key" => "sex1",
+          {
+            "key" => "sex1",
             "label" => true,
-            "i18n_template" => "sex1" },
+            "i18n_template" => "sex1",
+          },
         ],
       })
     end
@@ -50,9 +56,11 @@ RSpec.describe Form::Lettings::Pages::FemalesInSoftAgeRangeInPregnantHouseholdPe
       expect(page.informative_text).to eq({
         "translation" => "soft_validations.pregnancy.females_not_in_soft_age_range",
         "arguments" => [
-          { "key" => "sex1",
+          {
+            "key" => "sex1",
             "label" => true,
-            "i18n_template" => "sex1" },
+            "i18n_template" => "sex1",
+          },
         ],
       })
     end
@@ -67,8 +75,12 @@ RSpec.describe Form::Lettings::Pages::FemalesInSoftAgeRangeInPregnantHouseholdPe
 
     it "has correct depends_on" do
       expect(page.depends_on).to eq(
-        [{ "details_known_3" => 0,
-           "female_in_pregnant_household_in_soft_validation_range?" => true }],
+        [
+          {
+            "details_known_3" => 0,
+            "female_in_pregnant_household_in_soft_validation_range?" => true,
+          },
+        ],
       )
     end
 
@@ -76,9 +88,11 @@ RSpec.describe Form::Lettings::Pages::FemalesInSoftAgeRangeInPregnantHouseholdPe
       expect(page.title_text).to eq({
         "translation" => "soft_validations.pregnancy.title",
         "arguments" => [
-          { "key" => "sex1",
+          {
+            "key" => "sex1",
             "label" => true,
-            "i18n_template" => "sex1" },
+            "i18n_template" => "sex1",
+          },
         ],
       })
     end
@@ -87,9 +101,11 @@ RSpec.describe Form::Lettings::Pages::FemalesInSoftAgeRangeInPregnantHouseholdPe
       expect(page.informative_text).to eq({
         "translation" => "soft_validations.pregnancy.females_not_in_soft_age_range",
         "arguments" => [
-          { "key" => "sex1",
+          {
+            "key" => "sex1",
             "label" => true,
-            "i18n_template" => "sex1" },
+            "i18n_template" => "sex1",
+          },
         ],
       })
     end

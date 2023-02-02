@@ -7,6 +7,9 @@ class Form::Lettings::Pages::TypeOfAccessNeeds < ::Form::Page
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::HousingneedsType.new(nil, nil, self), Form::Lettings::Questions::HousingneedsOther.new(nil, nil, self)]
+    @questions ||= [
+      Form::Lettings::Questions::HousingneedsType.new(nil, nil, self),
+      Form::Lettings::Questions::HousingneedsOther.new(nil, nil, self),
+    ]
   end
 end

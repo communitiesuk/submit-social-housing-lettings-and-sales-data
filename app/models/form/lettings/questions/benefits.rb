@@ -10,5 +10,11 @@ class Form::Lettings::Questions::Benefits < ::Form::Question
     @answer_options = ANSWER_OPTIONS
   end
 
-  ANSWER_OPTIONS = { "1" => { "value" => "All" }, "2" => { "value" => "Some" }, "3" => { "value" => "None" }, "divider" => { "value" => true }, "4" => { "value" => "Don’t know" } }.freeze
+  ANSWER_OPTIONS = {
+    "1" => { "value" => "All" },
+    "2" => { "value" => "Some" },
+    "3" => { "value" => "None" },
+    "divider" => { "value" => true },
+    "4" => { "value" => "Don’t know" },
+  }.freeze
 end

@@ -11,5 +11,9 @@ class Form::Lettings::Questions::Incfreq < ::Form::Question
     @hidden_in_check_answers = true
   end
 
-  ANSWER_OPTIONS = { "1" => { "value" => "Weekly" }, "2" => { "value" => "Monthly" }, "3" => { "value" => "Yearly" } }.freeze
+  ANSWER_OPTIONS = {
+    "1" => { "value" => "Weekly" },
+    "2" => { "value" => "Monthly" },
+    "3" => { "value" => "Yearly" },
+  }.freeze
 end

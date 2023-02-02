@@ -6,6 +6,9 @@ class Form::Lettings::Pages::PropertyPostcode < ::Form::Page
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::PostcodeKnown.new(nil, nil, self), Form::Lettings::Questions::PostcodeFull.new(nil, nil, self)]
+    @questions ||= [
+      Form::Lettings::Questions::PostcodeKnown.new(nil, nil, self),
+      Form::Lettings::Questions::PostcodeFull.new(nil, nil, self),
+    ]
   end
 end

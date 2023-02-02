@@ -37,11 +37,13 @@ RSpec.describe Form::Lettings::Pages::PersonUnderRetirementValueCheck, type: :mo
     it "has the correct title_text" do
       expect(page.title_text).to eq({
         "translation" => "soft_validations.retirement.min.title",
-        "arguments" => [{
-          "key" => "retirement_age_for_person_2",
-          "label" => false,
-          "i18n_template" => "age",
-        }],
+        "arguments" => [
+          {
+            "key" => "retirement_age_for_person_2",
+            "label" => false,
+            "i18n_template" => "age",
+          },
+        ],
       })
     end
 
@@ -80,11 +82,13 @@ RSpec.describe Form::Lettings::Pages::PersonUnderRetirementValueCheck, type: :mo
     it "has the correct title_text" do
       expect(page.title_text).to eq({
         "translation" => "soft_validations.retirement.min.title",
-        "arguments" => [{
-          "key" => "retirement_age_for_person_3",
-          "label" => false,
-          "i18n_template" => "age",
-        }],
+        "arguments" => [
+          {
+            "key" => "retirement_age_for_person_3",
+            "label" => false,
+            "i18n_template" => "age",
+          },
+        ],
       })
     end
 

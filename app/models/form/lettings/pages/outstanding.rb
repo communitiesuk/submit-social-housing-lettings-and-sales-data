@@ -2,7 +2,12 @@ class Form::Lettings::Pages::Outstanding < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "outstanding"
-    @depends_on = [{ "hb" => 1, "household_charge" => 0 }, { "hb" => 1, "household_charge" => nil }, { "hb" => 6, "household_charge" => 0 }, { "hb" => 6, "household_charge" => nil }]
+    @depends_on = [
+      { "hb" => 1, "household_charge" => 0 },
+      { "hb" => 1, "household_charge" => nil },
+      { "hb" => 6, "household_charge" => 0 },
+      { "hb" => 6, "household_charge" => nil },
+    ]
   end
 
   def questions

@@ -10,5 +10,11 @@ class Form::Lettings::Questions::LettingAllocation < ::Form::Question
     @answer_options = ANSWER_OPTIONS
   end
 
-  ANSWER_OPTIONS = { "cbl" => { "value" => "Choice-based lettings (CBL)" }, "cap" => { "value" => "Common Allocation Policy (CAP)" }, "chr" => { "value" => "Common housing register (CHR)" }, "divider" => { "value" => true }, "letting_allocation_unknown" => { "value" => "None of these allocation systems" } }.freeze
+  ANSWER_OPTIONS = {
+    "cbl" => { "value" => "Choice-based lettings (CBL)" },
+    "cap" => { "value" => "Common Allocation Policy (CAP)" },
+    "chr" => { "value" => "Common housing register (CHR)" },
+    "divider" => { "value" => true },
+    "letting_allocation_unknown" => { "value" => "None of these allocation systems" },
+  }.freeze
 end

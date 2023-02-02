@@ -49,10 +49,12 @@ RSpec.describe Form::Lettings::Questions::Age, type: :model do
     end
 
     it "has the correct inferred check answers value" do
-      expect(question.inferred_check_answers_value).to eq([{
-        "condition" => { "age2_known" => 1 },
-        "value" => "Not known",
-      }])
+      expect(question.inferred_check_answers_value).to eq([
+        {
+          "condition" => { "age2_known" => 1 },
+          "value" => "Not known",
+        },
+      ])
     end
 
     it "has the correct check_answers_card_number" do
@@ -72,10 +74,12 @@ RSpec.describe Form::Lettings::Questions::Age, type: :model do
     end
 
     it "has the correct inferred check answers value" do
-      expect(question.inferred_check_answers_value).to eq([{
-        "condition" => { "age3_known" => 1 },
-        "value" => "Not known",
-      }])
+      expect(question.inferred_check_answers_value).to eq([
+        {
+          "condition" => { "age3_known" => 1 },
+          "value" => "Not known",
+        },
+      ])
     end
 
     it "has the correct check_answers_card_number" do

@@ -6,6 +6,9 @@ class Form::Lettings::Pages::ReasonForLeavingLastSettledHome < ::Form::Page
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::Reason.new(nil, nil, self), Form::Lettings::Questions::Reasonother.new(nil, nil, self)]
+    @questions ||= [
+      Form::Lettings::Questions::Reason.new(nil, nil, self),
+      Form::Lettings::Questions::Reasonother.new(nil, nil, self),
+    ]
   end
 end

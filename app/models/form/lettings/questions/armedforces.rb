@@ -10,5 +10,13 @@ class Form::Lettings::Questions::Armedforces < ::Form::Question
     @answer_options = ANSWER_OPTIONS
   end
 
-  ANSWER_OPTIONS = { "1" => { "value" => "Yes – the person is a current or former regular" }, "4" => { "value" => "Yes – the person is a current or former reserve" }, "5" => { "value" => "Yes – the person is a spouse or civil partner of a UK armed forces member and has been bereaved or separated from them within the last 2 years" }, "2" => { "value" => "No" }, "divider" => { "value" => true }, "3" => { "value" => "Person prefers not to say" }, "6" => { "value" => "Don’t know" } }.freeze
+  ANSWER_OPTIONS = {
+    "1" => { "value" => "Yes – the person is a current or former regular" },
+    "4" => { "value" => "Yes – the person is a current or former reserve" },
+    "5" => { "value" => "Yes – the person is a spouse or civil partner of a UK armed forces member and has been bereaved or separated from them within the last 2 years" },
+    "2" => { "value" => "No" },
+    "divider" => { "value" => true },
+    "3" => { "value" => "Person prefers not to say" },
+    "6" => { "value" => "Don’t know" },
+  }.freeze
 end

@@ -11,17 +11,21 @@ class Form::Lettings::Pages::FemalesInSoftAgeRangeInPregnantHouseholdPersonValue
     @title_text = {
       "translation" => "soft_validations.pregnancy.title",
       "arguments" => [
-        { "key" => "sex1",
+        {
+          "key" => "sex1",
           "label" => true,
-          "i18n_template" => "sex1" },
+          "i18n_template" => "sex1",
+        },
       ],
     }
     @informative_text = {
       "translation" => "soft_validations.pregnancy.females_not_in_soft_age_range",
       "arguments" => [
-        { "key" => "sex1",
+        {
+          "key" => "sex1",
           "label" => true,
-          "i18n_template" => "sex1" },
+          "i18n_template" => "sex1",
+        },
       ],
     }
   end

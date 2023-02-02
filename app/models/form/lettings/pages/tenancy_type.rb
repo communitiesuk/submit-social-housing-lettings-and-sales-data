@@ -6,6 +6,9 @@ class Form::Lettings::Pages::TenancyType < ::Form::Page
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::Tenancy.new(nil, nil, self), Form::Lettings::Questions::Tenancyother.new(nil, nil, self)]
+    @questions ||= [
+      Form::Lettings::Questions::Tenancy.new(nil, nil, self),
+      Form::Lettings::Questions::Tenancyother.new(nil, nil, self),
+    ]
   end
 end

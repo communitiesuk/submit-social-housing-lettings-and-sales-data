@@ -7,6 +7,9 @@ class Form::Lettings::Pages::PersonAge < ::Form::Page
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::AgeKnown.new(nil, nil, self, person_index: @person_index), Form::Lettings::Questions::Age.new(nil, nil, self, person_index: @person_index)]
+    @questions ||= [
+      Form::Lettings::Questions::AgeKnown.new(nil, nil, self, person_index: @person_index),
+      Form::Lettings::Questions::Age.new(nil, nil, self, person_index: @person_index),
+    ]
   end
 end

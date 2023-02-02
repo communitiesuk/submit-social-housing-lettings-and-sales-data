@@ -10,7 +10,9 @@ class Form::Lettings::Questions::PrevtenRenewal < ::Form::Question
     @answer_options = ANSWER_OPTIONS
   end
 
-  ANSWER_OPTIONS = { "34" => { "value" => "Specialist retirement housing" },
-                     "35" => { "value" => "Extra care housing" },
-                     "6" => { "value" => "Other supported housing" } }.freeze
+  ANSWER_OPTIONS = {
+    "34" => { "value" => "Specialist retirement housing" },
+    "35" => { "value" => "Extra care housing" },
+    "6" => { "value" => "Other supported housing" },
+  }.freeze
 end

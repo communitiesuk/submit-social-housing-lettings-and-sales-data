@@ -11,5 +11,10 @@ class Form::Lettings::Questions::NetIncomeKnown < ::Form::Question
     @answer_options = ANSWER_OPTIONS
   end
 
-  ANSWER_OPTIONS = { "0" => { "value" => "Yes" }, "1" => { "value" => "No" }, "divider_a" => { "value" => true }, "2" => { "value" => "Tenant prefers not to say" } }.freeze
+  ANSWER_OPTIONS = {
+    "0" => { "value" => "Yes" },
+    "1" => { "value" => "No" },
+    "divider_a" => { "value" => true },
+    "2" => { "value" => "Tenant prefers not to say" },
+  }.freeze
 end

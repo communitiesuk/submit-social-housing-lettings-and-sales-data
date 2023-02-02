@@ -13,22 +13,24 @@ RSpec.describe Form::Lettings::Subsections::HouseholdSituation, type: :model do
 
   it "has correct pages" do
     expect(household_situation.pages.map(&:id)).to eq(
-      %w[time_lived_in_local_authority
-         time_on_waiting_list
-         reason_for_leaving_last_settled_home
-         reason_for_leaving_last_settled_home_renewal
-         previous_housing_situation
-         previous_housing_situation_renewal
-         homelessness
-         previous_postcode
-         previous_local_authority
-         reasonable_preference
-         reasonable_preference_reason
-         allocation_system
-         referral
-         referral_prp
-         referral_supported_housing
-         referral_supported_housing_prp],
+      %w[
+        time_lived_in_local_authority
+        time_on_waiting_list
+        reason_for_leaving_last_settled_home
+        reason_for_leaving_last_settled_home_renewal
+        previous_housing_situation
+        previous_housing_situation_renewal
+        homelessness
+        previous_postcode
+        previous_local_authority
+        reasonable_preference
+        reasonable_preference_reason
+        allocation_system
+        referral
+        referral_prp
+        referral_supported_housing
+        referral_supported_housing_prp
+      ],
     )
   end
 

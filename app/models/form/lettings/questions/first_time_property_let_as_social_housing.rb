@@ -10,5 +10,8 @@ class Form::Lettings::Questions::FirstTimePropertyLetAsSocialHousing < ::Form::Q
     @answer_options = ANSWER_OPTIONS
   end
 
-  ANSWER_OPTIONS = { "1" => { "value" => "Yes", "hint" => "This is a new let." }, "0" => { "value" => "No", "hint" => "This is a re-let of existing social housing." } }.freeze
+  ANSWER_OPTIONS = {
+    "1" => { "value" => "Yes", "hint" => "This is a new let." },
+    "0" => { "value" => "No", "hint" => "This is a re-let of existing social housing." },
+  }.freeze
 end

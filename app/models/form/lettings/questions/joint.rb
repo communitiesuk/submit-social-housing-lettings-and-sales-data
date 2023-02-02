@@ -10,5 +10,10 @@ class Form::Lettings::Questions::Joint < ::Form::Question
     @answer_options = ANSWER_OPTIONS
   end
 
-  ANSWER_OPTIONS = { "1" => { "value" => "Yes" }, "2" => { "value" => "No" }, "divider" => { "value" => "true" }, "3" => { "value" => "Don’t know" } }.freeze
+  ANSWER_OPTIONS = {
+    "1" => { "value" => "Yes" },
+    "2" => { "value" => "No" },
+    "divider" => { "value" => "true" },
+    "3" => { "value" => "Don’t know" },
+  }.freeze
 end

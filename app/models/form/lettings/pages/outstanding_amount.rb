@@ -6,6 +6,9 @@ class Form::Lettings::Pages::OutstandingAmount < ::Form::Page
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::TshortfallKnown.new(nil, nil, self), Form::Lettings::Questions::Tshortfall.new(nil, nil, self)]
+    @questions ||= [
+      Form::Lettings::Questions::TshortfallKnown.new(nil, nil, self),
+      Form::Lettings::Questions::Tshortfall.new(nil, nil, self),
+    ]
   end
 end

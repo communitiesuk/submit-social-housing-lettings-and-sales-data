@@ -11,10 +11,12 @@ class Form::Lettings::Questions::StarterTenancy < ::Form::Question
     @conditional_for = { "tenancyother" => [3] }
   end
 
-  ANSWER_OPTIONS = { "4" => { "value" => "Assured Shorthold Tenancy (AST) – Fixed term" },
-                     "6" => { "value" => "Secure – fixed term" },
-                     "2" => { "value" => "Assured – lifetime" },
-                     "7" => { "value" => "Secure – lifetime" },
-                     "5" => { "value" => "Licence agreement" },
-                     "3" => { "value" => "Other" } }.freeze
+  ANSWER_OPTIONS = {
+    "4" => { "value" => "Assured Shorthold Tenancy (AST) – Fixed term" },
+    "6" => { "value" => "Secure – fixed term" },
+    "2" => { "value" => "Assured – lifetime" },
+    "7" => { "value" => "Secure – lifetime" },
+    "5" => { "value" => "Licence agreement" },
+    "3" => { "value" => "Other" },
+  }.freeze
 end

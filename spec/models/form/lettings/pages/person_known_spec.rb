@@ -30,13 +30,15 @@ RSpec.describe Form::Lettings::Pages::PersonKnown, type: :model do
 
     it "has correct depends_on" do
       expect(page.depends_on).to eq(
-        [{ "hhmemb" => 2 },
-         { "hhmemb" => 3 },
-         { "hhmemb" => 4 },
-         { "hhmemb" => 5 },
-         { "hhmemb" => 6 },
-         { "hhmemb" => 7 },
-         { "hhmemb" => 8 }],
+        [
+          { "hhmemb" => 2 },
+          { "hhmemb" => 3 },
+          { "hhmemb" => 4 },
+          { "hhmemb" => 5 },
+          { "hhmemb" => 6 },
+          { "hhmemb" => 7 },
+          { "hhmemb" => 8 },
+        ],
       )
     end
   end
@@ -54,12 +56,14 @@ RSpec.describe Form::Lettings::Pages::PersonKnown, type: :model do
 
     it "has correct depends_on" do
       expect(page.depends_on).to eq(
-        [{ "hhmemb" => 3 },
-         { "hhmemb" => 4 },
-         { "hhmemb" => 5 },
-         { "hhmemb" => 6 },
-         { "hhmemb" => 7 },
-         { "hhmemb" => 8 }],
+        [
+          { "hhmemb" => 3 },
+          { "hhmemb" => 4 },
+          { "hhmemb" => 5 },
+          { "hhmemb" => 6 },
+          { "hhmemb" => 7 },
+          { "hhmemb" => 8 },
+        ],
       )
     end
   end

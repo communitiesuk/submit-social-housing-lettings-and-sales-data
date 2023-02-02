@@ -10,6 +10,8 @@ class Form::Lettings::Questions::ReasonRenewal < ::Form::Question
     @answer_options = ANSWER_OPTIONS
   end
 
-  ANSWER_OPTIONS = { "40" => { "value" => "End of assured shorthold tenancy (no fault)" },
-                     "42" => { "value" => "End of fixed term tenancy (no fault)" } }.freeze
+  ANSWER_OPTIONS = {
+    "40" => { "value" => "End of assured shorthold tenancy (no fault)" },
+    "42" => { "value" => "End of fixed term tenancy (no fault)" },
+  }.freeze
 end

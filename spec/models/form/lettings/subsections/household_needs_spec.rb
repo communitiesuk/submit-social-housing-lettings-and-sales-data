@@ -13,16 +13,18 @@ RSpec.describe Form::Lettings::Subsections::HouseholdNeeds, type: :model do
 
   it "has correct pages" do
     expect(household_needs.pages.map(&:id)).to eq(
-      %w[armed_forces
-         armed_forces_serving
-         armed_forces_injured
-         pregnant
-         no_females_pregnant_household_value_check
-         females_in_soft_age_range_in_pregnant_household_value_check
-         access_needs_exist
-         type_of_access_needs
-         health_conditions
-         health_condition_effects],
+      %w[
+        armed_forces
+        armed_forces_serving
+        armed_forces_injured
+        pregnant
+        no_females_pregnant_household_value_check
+        females_in_soft_age_range_in_pregnant_household_value_check
+        access_needs_exist
+        type_of_access_needs
+        health_conditions
+        health_condition_effects
+      ],
     )
   end
 

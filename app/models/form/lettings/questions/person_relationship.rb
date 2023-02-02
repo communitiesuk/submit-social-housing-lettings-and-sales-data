@@ -10,5 +10,14 @@ class Form::Lettings::Questions::PersonRelationship < ::Form::Question
     @answer_options = ANSWER_OPTIONS
   end
 
-  ANSWER_OPTIONS = { "P" => { "value" => "Partner" }, "C" => { "value" => "Child", "hint" => "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education." }, "X" => { "value" => "Other" }, "divider" => { "value" => true }, "R" => { "value" => "Person prefers not to say" } }.freeze
+  ANSWER_OPTIONS = {
+    "P" => { "value" => "Partner" },
+    "C" => {
+      "value" => "Child",
+      "hint" => "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education.",
+    },
+    "X" => { "value" => "Other" },
+    "divider" => { "value" => true },
+    "R" => { "value" => "Person prefers not to say" },
+  }.freeze
 end

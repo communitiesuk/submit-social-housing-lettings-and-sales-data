@@ -5,11 +5,13 @@ class Form::Lettings::Pages::PersonUnderRetirementValueCheck < ::Form::Page
     @depends_on = [{ "person_#{person_index}_retired_under_soft_min_age?" => true }]
     @title_text = {
       "translation" => "soft_validations.retirement.min.title",
-      "arguments" => [{
-        "key" => "retirement_age_for_person_#{person_index}",
-        "label" => false,
-        "i18n_template" => "age",
-      }],
+      "arguments" => [
+        {
+          "key" => "retirement_age_for_person_#{person_index}",
+          "label" => false,
+          "i18n_template" => "age",
+        },
+      ],
     }
     @informative_text = {
       "translation" => "soft_validations.retirement.min.hint_text",

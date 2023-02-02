@@ -30,30 +30,38 @@ RSpec.describe Form::Lettings::Pages::NoFemalesPregnantHouseholdPersonAgeValueCh
 
     it "has correct depends_on" do
       expect(page.depends_on).to eq(
-        [{ "age2_known" => 0,
-           "no_females_in_a_pregnant_household?" => true }],
+        [
+          {
+            "age2_known" => 0,
+            "no_females_in_a_pregnant_household?" => true,
+          },
+        ],
       )
     end
 
     it "has the correct title_text" do
       expect(page.title_text).to eq({
         "translation" => "soft_validations.pregnancy.title",
-        "arguments" => [{
-          "key" => "sex1",
-          "label" => true,
-          "i18n_template" => "sex1",
-        }],
+        "arguments" => [
+          {
+            "key" => "sex1",
+            "label" => true,
+            "i18n_template" => "sex1",
+          },
+        ],
       })
     end
 
     it "has the correct informative_text" do
       expect(page.informative_text).to eq({
         "translation" => "soft_validations.pregnancy.no_females",
-        "arguments" => [{
-          "key" => "sex1",
-          "label" => true,
-          "i18n_template" => "sex1",
-        }],
+        "arguments" => [
+          {
+            "key" => "sex1",
+            "label" => true,
+            "i18n_template" => "sex1",
+          },
+        ],
       })
     end
   end
@@ -67,30 +75,38 @@ RSpec.describe Form::Lettings::Pages::NoFemalesPregnantHouseholdPersonAgeValueCh
 
     it "has correct depends_on" do
       expect(page.depends_on).to eq(
-        [{ "age3_known" => 0,
-           "no_females_in_a_pregnant_household?" => true }],
+        [
+          {
+            "age3_known" => 0,
+            "no_females_in_a_pregnant_household?" => true,
+          },
+        ],
       )
     end
 
     it "has the correct title_text" do
       expect(page.title_text).to eq({
         "translation" => "soft_validations.pregnancy.title",
-        "arguments" => [{
-          "key" => "sex1",
-          "label" => true,
-          "i18n_template" => "sex1",
-        }],
+        "arguments" => [
+          {
+            "key" => "sex1",
+            "label" => true,
+            "i18n_template" => "sex1",
+          },
+        ],
       })
     end
 
     it "has the correct informative_text" do
       expect(page.informative_text).to eq({
         "translation" => "soft_validations.pregnancy.no_females",
-        "arguments" => [{
-          "key" => "sex1",
-          "label" => true,
-          "i18n_template" => "sex1",
-        }],
+        "arguments" => [
+          {
+            "key" => "sex1",
+            "label" => true,
+            "i18n_template" => "sex1",
+          },
+        ],
       })
     end
   end

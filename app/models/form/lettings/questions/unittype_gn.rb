@@ -10,5 +10,14 @@ class Form::Lettings::Questions::UnittypeGn < ::Form::Question
     @answer_options = ANSWER_OPTIONS
   end
 
-  ANSWER_OPTIONS = { "2" => { "value" => "Bedsit" }, "8" => { "value" => "Bungalow" }, "1" => { "value" => "Flat or maisonette" }, "7" => { "value" => "House" }, "10" => { "value" => "Shared bungalow" }, "4" => { "value" => "Shared flat or maisonette" }, "9" => { "value" => "Shared house" }, "6" => { "value" => "Other" } }.freeze
+  ANSWER_OPTIONS = {
+    "2" => { "value" => "Bedsit" },
+    "8" => { "value" => "Bungalow" },
+    "1" => { "value" => "Flat or maisonette" },
+    "7" => { "value" => "House" },
+    "10" => { "value" => "Shared bungalow" },
+    "4" => { "value" => "Shared flat or maisonette" },
+    "9" => { "value" => "Shared house" },
+    "6" => { "value" => "Other" },
+  }.freeze
 end

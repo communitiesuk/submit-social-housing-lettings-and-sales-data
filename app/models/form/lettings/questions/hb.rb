@@ -10,5 +10,12 @@ class Form::Lettings::Questions::Hb < ::Form::Question
     @answer_options = ANSWER_OPTIONS
   end
 
-  ANSWER_OPTIONS = { "1" => { "value" => "Housing benefit" }, "6" => { "value" => "Universal Credit housing element" }, "9" => { "value" => "Neither" }, "divider" => { "value" => true }, "3" => { "value" => "Don’t know" }, "10" => { "value" => "Tenant prefers not to say" } }.freeze
+  ANSWER_OPTIONS = {
+    "1" => { "value" => "Housing benefit" },
+    "6" => { "value" => "Universal Credit housing element" },
+    "9" => { "value" => "Neither" },
+    "divider" => { "value" => true },
+    "3" => { "value" => "Don’t know" },
+    "10" => { "value" => "Tenant prefers not to say" },
+  }.freeze
 end
