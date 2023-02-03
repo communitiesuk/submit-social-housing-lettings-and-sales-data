@@ -22,6 +22,7 @@ class Form::Sales::Subsections::IncomeBenefitsAndSavings < ::Form::Subsection
       Form::Sales::Pages::SavingsValueCheck.new("savings_value_check", nil, self),
       Form::Sales::Pages::DepositValueCheck.new("savings_deposit_value_check", nil, self),
       Form::Sales::Pages::PreviousOwnership.new(nil, nil, self),
+      Form::Sales::Pages::PreviousShared.new(nil, nil, self),
     ]
   end
 end

@@ -28,6 +28,7 @@ RSpec.describe Form::Sales::Subsections::IncomeBenefitsAndSavings, type: :model 
         savings_value_check
         savings_deposit_value_check
         previous_ownership
+        previous_shared
       ],
     )
   end
