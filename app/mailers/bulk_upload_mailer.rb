@@ -84,13 +84,13 @@ class BulkUploadMailer < NotifyMailer
   end
 
   def send_bulk_upload_with_errors_mail(bulk_upload:)
-    n = bulk_upload.logs.where.not(status: %w[completed]).count
+    count = bulk_upload.logs.where.not(status: %w[completed]).count
 
-    n_logs = pluralize(n, "log")
+    n_logs = pluralize(count, "log")
 
     title = "We found #{n_logs} with errors"
 
-    error_description = "We created logs from your #{bulk_upload.year_combo} #{bulk_upload.log_type} data. There was a problem with #{n} of the logs. Click the below link to fix these logs."
+    error_description = "We created logs from your #{bulk_upload.year_combo} #{bulk_upload.log_type} data. There was a problem with #{count} of the logs. Click the below link to fix these logs."
 
     send_email(
       bulk_upload.user.email,
