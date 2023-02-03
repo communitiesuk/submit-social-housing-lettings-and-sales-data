@@ -100,7 +100,7 @@ class BulkUploadMailer < NotifyMailer
         filename: bulk_upload.filename,
         upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
         error_description:,
-        summary_report_link: summary_bulk_upload_lettings_result_url(bulk_upload),
+        summary_report_link: resume_bulk_upload_lettings_result_url(bulk_upload),
       },
     )
   end

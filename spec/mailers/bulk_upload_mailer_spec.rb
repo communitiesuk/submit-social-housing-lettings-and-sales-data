@@ -67,7 +67,7 @@ RSpec.describe BulkUploadMailer do
             filename: bulk_upload.filename,
             upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
             error_description:,
-            summary_report_link: "http://localhost:3000/lettings-logs/bulk-upload-results/#{bulk_upload.id}/summary",
+            summary_report_link: "http://localhost:3000/lettings-logs/bulk-upload-results/#{bulk_upload.id}/resume",
           },
         )
 
