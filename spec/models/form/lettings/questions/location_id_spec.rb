@@ -39,7 +39,9 @@ RSpec.describe Form::Lettings::Questions::LocationId, type: :model do
 
   context "when getting available locations" do
     let(:scheme) { FactoryBot.create(:scheme) }
-    let!(:lettings_log) { FactoryBot.create(:lettings_log, owning_organisation: scheme.owning_organisation, scheme:, needstype: 2) }
+    let!(:lettings_log) do
+      FactoryBot.create(:lettings_log, owning_organisation: scheme.owning_organisation, scheme:, needstype: 2)
+    end
 
     context "when there are no locations" do
       it "the displayed_answer_options is an empty hash" do

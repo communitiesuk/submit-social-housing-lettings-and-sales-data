@@ -1,10 +1,11 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Pages::MortgageValueCheck, type: :model do
-  subject(:page) { described_class.new(page_id, page_definition, subsection) }
+  subject(:page) { described_class.new(page_id, page_definition, subsection, index) }
 
   let(:page_id) { "buyer_1_income_mortgage_value_check" }
   let(:page_definition) { nil }
+  let(:index) { 1 }
   let(:subsection) { instance_double(Form::Subsection) }
 
   it "has correct subsection" do
@@ -33,5 +34,18 @@ RSpec.describe Form::Sales::Pages::MortgageValueCheck, type: :model do
         "mortgage_over_soft_max?" => true,
       },
     ])
+  end
+
+  context "when checking buyer 2" do
+    let(:index) { 2 }
+
+    it "has correct depends_on" do
+      expect(page.depends_on).to eq([
+        {
+          "mortgage_over_soft_max?" => true,
+          "jointpur" => 1,
+        },
+      ])
+    end
   end
 end

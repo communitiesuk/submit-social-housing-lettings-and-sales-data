@@ -27,4 +27,22 @@ class FilterService
       logs
     end
   end
+
+  attr_reader :current_user, :session
+
+  def initialize(current_user:, session:)
+    @current_user = current_user
+    @session = session
+  end
+
+  def bulk_upload
+    id = ((logs_filters["bulk_upload_id"] || []).reject(&:blank?))[0]
+    @bulk_upload ||= current_user.bulk_uploads.find_by(id:)
+  end
+
+private
+
+  def logs_filters
+    JSON.parse(session[:logs_filters] || "{}") || {}
+  end
 end

@@ -48,7 +48,9 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
 
       let(:owning_org_1) { create(:organisation, name: "Owning org 1") }
       let(:owning_org_2) { create(:organisation, name: "Owning org 2") }
-      let!(:org_rel) { create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: owning_org_2) }
+      let!(:org_rel) do
+        create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: owning_org_2)
+      end
       let(:log) { create(:lettings_log, owning_organisation: owning_org_1) }
 
       context "when user's org owns stock" do
