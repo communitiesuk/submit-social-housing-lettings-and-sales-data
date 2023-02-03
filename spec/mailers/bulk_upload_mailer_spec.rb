@@ -5,7 +5,7 @@ RSpec.describe BulkUploadMailer do
 
   let(:notify_client) { instance_double(Notifications::Client) }
   let(:user) { create(:user, email: "user@example.com") }
-  let(:bulk_upload) { build(:bulk_upload, :lettings) }
+  let(:bulk_upload) { build(:bulk_upload, :lettings, user:) }
 
   before do
     allow(Notifications::Client).to receive(:new).and_return(notify_client)
@@ -27,6 +27,24 @@ RSpec.describe BulkUploadMailer do
       )
 
       mailer.send_bulk_upload_complete_mail(user:, bulk_upload:)
+    end
+  end
+
+  describe "#send_bulk_upload_failed_service_error_mail" do
+    it "sends correctly formed email" do
+      expect(notify_client).to receive(:send_email).with(
+        email_address: user.email,
+        template_id: described_class::BULK_UPLOAD_FAILED_SERVICE_ERROR_TEMPLATE_ID,
+        personalisation: {
+          filename: bulk_upload.filename,
+          upload_timestamp: bulk_upload.created_at,
+          lettings_or_sales: bulk_upload.log_type,
+          year_combo: bulk_upload.year_combo,
+          bulk_upload_link: start_bulk_upload_lettings_logs_url,
+        },
+      )
+
+      mailer.send_bulk_upload_failed_service_error_mail(bulk_upload:)
     end
   end
 end
