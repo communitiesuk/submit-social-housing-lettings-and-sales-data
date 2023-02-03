@@ -11,8 +11,10 @@ class BulkUpload::Processor
     return send_failure_mail if validator.invalid?
 
     validator.call
+
     create_logs if validator.create_logs?
-    send_success_mail
+
+    send_success_mail if created_logs_and_all_completed?
   rescue StandardError => e
     Sentry.capture_exception(e)
     send_failure_mail
@@ -23,9 +25,11 @@ class BulkUpload::Processor
 private
 
   def send_success_mail
-    if validator.create_logs? && bulk_upload.logs.group(:status).count.keys == %w[completed]
-      BulkUploadMailer.send_bulk_upload_complete_mail(user:, bulk_upload:).deliver_later
-    end
+    BulkUploadMailer.send_bulk_upload_complete_mail(user:, bulk_upload:).deliver_later
+  end
+
+  def created_logs_and_all_completed?
+    validator.create_logs? && bulk_upload.logs.group(:status).count.keys == %w[completed]
   end
 
   def send_failure_mail
