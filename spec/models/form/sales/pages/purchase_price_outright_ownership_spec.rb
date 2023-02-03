@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Pages::PurchasePrice, type: :model do
+RSpec.describe Form::Sales::Pages::PurchasePriceOutrightOwnership, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
   let(:page_id) { "purchase_price" }
@@ -29,7 +29,7 @@ RSpec.describe Form::Sales::Pages::PurchasePrice, type: :model do
 
   it "has correct depends_on" do
     expect(page.depends_on).to eq([
-      { "ownershipsch" => 2, "rent_to_buy_full_ownership?" => false },
+      { "outright_sale_or_discounted_with_full_ownership?" => true },
     ])
   end
 end
