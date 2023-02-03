@@ -17,6 +17,12 @@ class Form::Sales::Questions::HandoverDateCheck < ::Form::Question
         {
           "hodate_check" => 1,
         },
+        {
+          "saledate_check" => 0,
+        },
+        {
+          "saledate_check" => 1,
+        },
       ],
     }
   end
