@@ -47,4 +47,32 @@ RSpec.describe BulkUploadMailer do
       mailer.send_bulk_upload_failed_service_error_mail(bulk_upload:)
     end
   end
+
+  context "when bulk upload has log which is not completed" do
+    before do
+      create(:lettings_log, :in_progress, bulk_upload:)
+    end
+
+    describe "#send_bulk_upload_with_errors_mail" do
+      let(:error_description) do
+        "We created logs from your 2022/23 lettings data. There was a problem with 1 of the logs. Click the below link to fix these logs."
+      end
+
+      it "sends correctly formed email" do
+        expect(notify_client).to receive(:send_email).with(
+          email_address: bulk_upload.user.email,
+          template_id: described_class::BULK_UPLOAD_WITH_ERRORS_TEMPLATE_ID,
+          personalisation: {
+            title: "We found 1 log with errors",
+            filename: bulk_upload.filename,
+            upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
+            error_description:,
+            summary_report_link: "http://localhost:3000/lettings-logs/bulk-upload-results/#{bulk_upload.id}/resume",
+          },
+        )
+
+        mailer.send_bulk_upload_with_errors_mail(bulk_upload:)
+      end
+    end
+  end
 end

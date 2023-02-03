@@ -83,16 +83,24 @@ class BulkUploadMailer < NotifyMailer
     )
   end
 
-  def send_bulk_upload_with_errors_mail(user, bulk_upload)
+  def send_bulk_upload_with_errors_mail(bulk_upload:)
+    count = bulk_upload.logs.where.not(status: %w[completed]).count
+
+    n_logs = pluralize(count, "log")
+
+    title = "We found #{n_logs} with errors"
+
+    error_description = "We created logs from your #{bulk_upload.year_combo} #{bulk_upload.log_type} data. There was a problem with #{count} of the logs. Click the below link to fix these logs."
+
     send_email(
-      user.email,
+      bulk_upload.user.email,
       BULK_UPLOAD_WITH_ERRORS_TEMPLATE_ID,
       {
-        title: "[#{bulk_upload} title]",
-        filename: "[#{bulk_upload} filename]",
-        upload_timestamp: "[#{bulk_upload} upload_timestamp]",
-        error_description: "[#{bulk_upload} error_description]",
-        summary_report_link: "[#{bulk_upload} summary_report_link]",
+        title:,
+        filename: bulk_upload.filename,
+        upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
+        error_description:,
+        summary_report_link: resume_bulk_upload_lettings_result_url(bulk_upload),
       },
     )
   end
