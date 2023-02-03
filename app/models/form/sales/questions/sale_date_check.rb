@@ -1,7 +1,7 @@
 class Form::Sales::Questions::SaleDateCheck < ::Form::Question
   def initialize(id, hsh, page)
     super
-    @id = "hodate_check"
+    @id = "saledate_check"
     @check_answer_label = "Completion date check"
     @header = "Are you sure?"
     @type = "interruption_screen"
@@ -12,10 +12,10 @@ class Form::Sales::Questions::SaleDateCheck < ::Form::Question
     @hidden_in_check_answers = {
       "depends_on" => [
         {
-          "hodate_check" => 0,
+          "saledate_check" => 0,
         },
         {
-          "hodate_check" => 1,
+          "saledate_check" => 1,
         },
       ],
     }
