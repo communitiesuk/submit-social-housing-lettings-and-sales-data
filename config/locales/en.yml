@@ -389,7 +389,7 @@ en:
 
     declaration:
       missing: "You must show the DLUHC privacy notice to the tenant before you can submit this log."
-    
+
     privacynotice:
       missing: "You must show the DLUHC privacy notice to the buyer before you can submit this log."
 
@@ -426,12 +426,14 @@ en:
         rent_to_buy: "Rent to Buy buyers should not have lived here before"
       hodate:
         must_be_before_saledate: "Practical completion or handover date must be before exchange date"
+        must_be_less_than_3_years_from_saledate: "You told us practical completion or handover date is more than 3 years before completion date"
       exdate:
         must_be_before_saledate: "Contract exchange date must be before completion date"
         must_be_less_than_1_year_from_saledate: "Contract exchange date must be less than 1 year before completion date"
       saledate:
         must_be_after_exdate: "Completion date must be after contract exchange date"
         must_be_less_than_1_year_from_exdate: "Completion date must be less than 1 year after contract exchange date"
+        must_be_less_than_3_years_from_hodate: "You told us completion date is more than 3 years after practical completion or handover date"
         must_be_after_hodate: "Completion date must be after practical completion or handover date"
       previous_property_beds:
         property_type_bedsit: "Bedsit bedroom maximum 1"
@@ -474,7 +476,7 @@ en:
     shared_owhership_deposit:
       title_text: "Mortgage, deposit and cash discount total should equal £%{expected_shared_ownership_deposit_value}"
     old_persons_shared_ownership: "At least one buyer should be aged over 64 for Older persons’ shared ownership scheme"
-    monthly_charges_over_soft_max: 
+    monthly_charges_over_soft_max:
       title_text: "The amount of monthly charges is high for this type of property and sale type"
 
   devise:

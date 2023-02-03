@@ -1,8 +1,8 @@
-class Form::Sales::Questions::HandoverDateCheck < ::Form::Question
+class Form::Sales::Questions::SaleDateCheck < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "hodate_check"
-    @check_answer_label = "Practical completion or handover date check"
+    @check_answer_label = "Completion date check"
     @header = "Are you sure?"
     @type = "interruption_screen"
     @answer_options = {
