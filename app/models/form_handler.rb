@@ -45,6 +45,14 @@ class FormHandler
     forms
   end
 
+  def lettings_form_for_start_year(year)
+    lettings_forms.values.find { |form| form.start_date.year == year }
+  end
+
+  def sales_form_for_start_year(year)
+    sales_forms.values.find { |form| form.start_date.year == year }
+  end
+
   def form_name_from_start_year(year, type)
     form_mappings = { 0 => "current_#{type}", 1 => "previous_#{type}", -1 => "next_#{type}" }
     form_mappings[current_collection_start_year - year]

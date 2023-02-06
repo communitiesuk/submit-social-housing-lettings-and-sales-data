@@ -236,4 +236,8 @@ class Form
   def inspect
     "#<#{self.class} @type=#{type} @name=#{name}>"
   end
+
+  def valid_start_date_for_form?(start_date)
+    start_date >= self.start_date && start_date <= end_date
+  end
 end

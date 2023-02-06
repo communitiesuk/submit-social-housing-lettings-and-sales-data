@@ -150,6 +150,7 @@ class BulkUpload::Lettings::RowParser
 
     validate_data_types
     validate_nulls
+    validate_relevant_collection_window
 
     log.valid?
 
@@ -166,6 +167,23 @@ class BulkUpload::Lettings::RowParser
   end
 
 private
+
+  def validate_relevant_collection_window
+    return unless start_date
+    return unless bulk_upload.form
+
+    unless bulk_upload.form.valid_start_date_for_form?(start_date)
+      errors.add(:field_96, I18n.t("validations.date.outside_collection_window"))
+      errors.add(:field_97, I18n.t("validations.date.outside_collection_window"))
+      errors.add(:field_98, I18n.t("validations.date.outside_collection_window"))
+    end
+  end
+
+  def start_date
+    Date.parse("20#{field_98}-#{field_97}-#{field_96}")
+  rescue StandardError
+    nil
+  end
 
   def attribute_set
     @attribute_set ||= instance_variable_get(:@attributes)
