@@ -127,6 +127,7 @@ en:
         already_added: "You have already added this managing agent"
     not_answered: "You must answer %{question}"
     invalid_option: "Enter a valid value for %{question}"
+    invalid_number: "Enter a number for %{question}"
 
     other_field_missing: "If %{main_field_label} is other then %{other_field_label} must be provided"
     other_field_not_required: "%{other_field_label} must not be provided if %{main_field_label} was not other"
