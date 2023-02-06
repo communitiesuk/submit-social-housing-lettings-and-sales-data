@@ -268,7 +268,7 @@ private
   def has_inferred_check_answers_value?(log)
     return false unless inferred_check_answers_value
 
-    inferred_check_answers_value&.any? { |inferred_value| inferred_value["condition"].values.first == log[inferred_value["condition"].keys.first] }
+    inferred_check_answers_value&.any? { |inferred_value| log[inferred_value["condition"].keys.first] == inferred_value["condition"].values.first }
   end
 
   def has_inferred_display_value?(log)
