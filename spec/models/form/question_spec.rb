@@ -275,7 +275,7 @@ RSpec.describe Form::Question, type: :model do
       end
 
       it "knows it has an inferred value or is derived for check answers" do
-        expect(question.has_inferred_check_answers_value_or_is_derived?(lettings_log)).to be true
+        expect(question.is_derived_or_has_inferred_check_answers_value?(lettings_log)).to be true
       end
     end
 

@@ -106,7 +106,7 @@ class Form::Question
   end
 
   def action_text(log)
-    if has_inferred_check_answers_value_or_is_derived?(log)
+    if is_derived_or_has_inferred_check_answers_value?(log)
       "Change"
     elsif type == "checkbox"
       answer_options.keys.any? { |key| value_is_yes?(log[key]) } ? "Change" : "Answer"
@@ -254,7 +254,7 @@ class Form::Question
     @guidance_partial && @guidance_position == GuidancePosition::BOTTOM
   end
 
-  def has_inferred_check_answers_value_or_is_derived?(log)
+  def is_derived_or_has_inferred_check_answers_value?(log)
     selected_answer_option_is_derived?(log) || has_inferred_check_answers_value?(log)
   end
 
