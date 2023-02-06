@@ -11,7 +11,7 @@ class Auth::ConfirmationsController < Devise::ConfirmationsController
       else
         respond_with_navigational(resource) { redirect_to after_confirmation_path_for(resource_name, resource) }
       end
-    elsif resource.errors.map(&:type).include?(:invalid)
+    elsif %i[blank invalid].any? { |error| resource.errors.map(&:type).include?(error) }
       render "devise/confirmations/invalid"
     elsif resource.errors.map(&:type).include?(:already_confirmed)
       redirect_to user_session_path
