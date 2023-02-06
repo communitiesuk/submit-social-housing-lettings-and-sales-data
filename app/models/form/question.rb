@@ -314,7 +314,7 @@ private
     return unless inferred_check_answers_value
 
     inferred_answer = inferred_check_answers_value.find { |inferred_value| log[inferred_value["condition"].keys.first] == inferred_value["condition"].values.first }
-    inferred_answer["value"] if inferred_answer
+    inferred_answer["value"] if inferred_answer.present?
   end
 
   RADIO_YES_VALUE = {
