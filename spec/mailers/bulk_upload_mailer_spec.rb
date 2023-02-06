@@ -90,10 +90,11 @@ RSpec.describe BulkUploadMailer do
             year_combo: bulk_upload.year_combo,
             lettings_or_sales: bulk_upload.log_type,
             summary_report_link: "http://localhost:3000/lettings-logs/bulk-upload-results/#{bulk_upload.id}",
+            error_description: "Please correct your data export and upload again.\n",
           },
         )
 
-        mailer.send_correct_and_upload_again_mail(bulk_upload:)
+        mailer.send_correct_and_upload_again_mail(bulk_upload:, errors: {})
       end
     end
   end

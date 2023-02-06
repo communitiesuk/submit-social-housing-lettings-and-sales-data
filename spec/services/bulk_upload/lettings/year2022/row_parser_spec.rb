@@ -216,6 +216,35 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
           expect(questions.map(&:id).size).to eq(0)
           expect(questions.map(&:id)).to eql([])
         end
+
+        context "when the log already exists in the db" do
+          before do
+            parser.log.save!
+          end
+
+          it "is not a valid row" do
+            expect(parser).not_to be_valid
+          end
+
+          it "adds an error to all (and only) the fields used to determine duplicity" do
+            parser.valid?
+
+            error_message = "This is a duplicate log"
+
+            expected_errors = {
+              field_12: [error_message], # age1
+              field_20: [error_message], # sex1
+              field_35: [error_message], # ecstat1
+              field_84: [error_message], # tcharge
+              field_96: [error_message], # startdate
+              field_97: [error_message], # startdate
+              field_98: [error_message], # startdate
+              field_100: [error_message], # propcode
+              field_111: [error_message], # owning_organisation
+            }
+            expect(parser.errors.as_json).to eq(expected_errors)
+          end
+        end
       end
     end
 
