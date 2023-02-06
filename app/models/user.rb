@@ -113,7 +113,6 @@ class User < ApplicationRecord
       RECONFIRMABLE_TEMPLATE_ID
     else
       CONFIRMABLE_TEMPLATE_ID
-      update!(initial_confirmation_sent: true)
     end
   end
 
