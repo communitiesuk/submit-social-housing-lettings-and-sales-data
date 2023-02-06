@@ -566,6 +566,69 @@ RSpec.describe Validations::Sales::SoftValidations do
     end
   end
 
+  describe "purchase_price_out_of_soft_range" do
+    before do
+      LaSaleRange.create!(
+        la: "E07000223",
+        bedrooms: 2,
+        soft_min: 177_000,
+        soft_max: 384_000,
+        start_year: 2022,
+      )
+    end
+
+    it "when value not set" do
+      record.value = nil
+
+      expect(record).not_to be_purchase_price_out_of_soft_range
+    end
+
+    it "when beds not set" do
+      record.beds = nil
+
+      expect(record).not_to be_purchase_price_out_of_soft_range
+    end
+
+    it "when la not set" do
+      record.la = nil
+
+      expect(record).not_to be_purchase_price_out_of_soft_range
+    end
+
+    it "when saledate not set" do
+      record.saledate = nil
+
+      expect(record).not_to be_purchase_price_out_of_soft_range
+    end
+
+    it "when below soft min" do
+      record.value = 176_999
+      record.beds = 2
+      record.la = "E07000223"
+      record.saledate = Time.zone.local(2023, 1, 1)
+
+      expect(record).to be_purchase_price_out_of_soft_range
+    end
+
+    it "when above soft max" do
+      record.value = 384_001
+      record.beds = 2
+      record.la = "E07000223"
+      record.saledate = Time.zone.local(2023, 1, 1)
+
+      expect(record).to be_purchase_price_out_of_soft_range
+    end
+
+    it "when in soft range" do
+      record.value = 200_000
+      record.beds = 2
+      record.la = "E07000223"
+      record.saledate = Time.zone.local(2023, 1, 1)
+
+      expect(record).not_to be_purchase_price_out_of_soft_range
+    end
+  end
+
   describe "#grant_outside_common_range?" do
     it "returns true if grant is below 9000" do
       record.grant = 1_000

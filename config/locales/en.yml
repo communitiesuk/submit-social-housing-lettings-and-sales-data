@@ -437,8 +437,8 @@ en:
         must_be_less_than_1_year_from_exdate: "Completion date must be less than 1 year after contract exchange date"
         must_be_less_than_3_years_from_hodate: "You told us completion date is more than 3 years after practical completion or handover date"
         must_be_after_hodate: "Completion date must be after practical completion or handover date"
-      previous_property_beds:
-        property_type_bedsit: "Bedsit bedroom maximum 1"
+      previous_property_type:
+        property_type_bedsit: "A bedsit cannot have more than 1 bedroom"
       discounted_ownership_value: "Mortgage, deposit, and grant total must equal £%{value_with_discount}"
       monthly_rent:
         higher_than_expected: "Basic monthly rent must be between £0 and £9,999"
@@ -455,6 +455,9 @@ en:
       outside_range_title: "You told us the rent is %{brent}"
       min_hint_text: "The minimum rent expected for this type of property in this local authority is £%{soft_min_for_period}."
       max_hint_text: "The maximum rent expected for this type of property in this local authority is £%{soft_max_for_period}."
+    purchase_price:
+      title_text: "You told us the purchase price is %{value}"
+      hint_text: "The %{min_or_max} purchase price expected for this type of property in this local authority is %{soft_min_or_soft_max}"
     retirement:
       min:
         title: "You told us this person is under %{age} and retired"

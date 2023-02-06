@@ -166,7 +166,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       it "does add an error if it's a bedsit" do
         sale_information_validator.validate_previous_property_unit_type(record)
         expect(record.errors["fromprop"]).to include(I18n.t("validations.sale_information.previous_property_type.property_type_bedsit"))
-        expect(record.errors["frombeds"]).to include(I18n.t("validations.sale_information.previous_property_beds.property_type_bedsit"))
+        expect(record.errors["frombeds"]).to include(I18n.t("validations.sale_information.previous_property_type.property_type_bedsit"))
       end
     end
   end
@@ -367,7 +367,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       end
     end
 
-    context "when owhership is not discounted" do
+    context "when ownership is not discounted" do
       let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, deposit: 5_000, grant: 3_000, value: 20_000, discount: 10, ownershipsch: 1) }
 
       it "does not add an error" do

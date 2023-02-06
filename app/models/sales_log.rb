@@ -223,7 +223,7 @@ class SalesLog < Log
     type == 24
   end
 
-  def shared_owhership_scheme?
+  def shared_ownership_scheme?
     ownershipsch == 1
   end
 
@@ -235,5 +235,13 @@ class SalesLog < Log
 
   def ages_unknown_or_under_64?(person_indexes)
     person_indexes.all? { |person_num| self["age#{person_num}"].present? && self["age#{person_num}"] < 64 || self["age#{person_num}_known"] == 1 }
+  end
+
+  def purchase_price_soft_min
+    LaSaleRange.find_by(start_year: collection_start_year, la:, bedrooms: beds).soft_min
+  end
+
+  def purchase_price_soft_max
+    LaSaleRange.find_by(start_year: collection_start_year, la:, bedrooms: beds).soft_max
   end
 end

@@ -1,7 +1,7 @@
 require "csv"
 
 module Imports
-  class RentRangesService
+  class SaleRangesService
     attr_reader :start_year, :path, :count
 
     def initialize(start_year:, path:)
@@ -12,17 +12,13 @@ module Imports
 
     def call
       CSV.foreach(path, headers: true) do |row|
-        LaRentRange.upsert(
-          { ranges_rent_id: row["ranges_rent_id"],
-            lettype: row["lettype"],
-            beds: row["beds"],
-            start_year:,
+        LaSaleRange.upsert(
+          { start_year:,
             la: row["la"],
+            bedrooms: row["bedrooms"],
             soft_min: row["soft_min"],
-            soft_max: row["soft_max"],
-            hard_min: row["hard_min"],
-            hard_max: row["hard_max"] },
-          unique_by: %i[start_year lettype beds la],
+            soft_max: row["soft_max"] },
+          unique_by: %i[start_year bedrooms la],
         )
         @count += 1
       end

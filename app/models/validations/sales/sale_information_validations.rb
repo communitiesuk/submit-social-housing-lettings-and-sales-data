@@ -39,7 +39,7 @@ module Validations::Sales::SaleInformationValidations
     return unless record.fromprop && record.frombeds
 
     if record.frombeds != 1 && record.fromprop == 2
-      record.errors.add :frombeds, I18n.t("validations.sale_information.previous_property_beds.property_type_bedsit")
+      record.errors.add :frombeds, I18n.t("validations.sale_information.previous_property_type.property_type_bedsit")
       record.errors.add :fromprop, I18n.t("validations.sale_information.previous_property_type.property_type_bedsit")
     end
   end
@@ -63,7 +63,7 @@ module Validations::Sales::SaleInformationValidations
   def validate_basic_monthly_rent(record)
     return unless record.mrent && record.ownershipsch && record.type
 
-    if record.shared_owhership_scheme? && !record.old_persons_shared_ownership? && record.mrent > 9999
+    if record.shared_ownership_scheme? && !record.old_persons_shared_ownership? && record.mrent > 9999
       record.errors.add :mrent, I18n.t("validations.sale_information.monthly_rent.higher_than_expected")
       record.errors.add :type, I18n.t("validations.sale_information.monthly_rent.higher_than_expected")
     end

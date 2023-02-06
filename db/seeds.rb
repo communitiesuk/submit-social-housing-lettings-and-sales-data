@@ -310,5 +310,14 @@ unless Rails.env.test?
       service.call
     end
   end
+
+  if LaSaleRange.count.zero?
+    Dir.glob("config/sale_range_data/*.csv").each do |path|
+      start_year = File.basename(path, ".csv")
+      service = Imports::SaleRangesService.new(start_year:, path:)
+      service.call
+    end
+  end
+  puts LaSaleRange.count
 end
 # rubocop:enable Rails/Output
