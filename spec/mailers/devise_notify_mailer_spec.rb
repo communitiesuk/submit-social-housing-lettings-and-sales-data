@@ -64,7 +64,6 @@ RSpec.describe DeviseNotifyMailer do
     context "when a user requests a new confirmation link" do
       let(:email) { "test@example.com" }
 
-
       it "sends re-confirmation template" do
         user = User.create!(name:, organisation:, email:, password:, role:)
         expect(notify_client).to receive(:send_email).with(hash_including(template_id: User::RECONFIRMABLE_TEMPLATE_ID))
