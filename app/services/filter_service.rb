@@ -36,7 +36,7 @@ class FilterService
   end
 
   def bulk_upload
-    id = ((logs_filters["bulk_upload_id"] || []).reject(&:blank?))[0]
+    id = (logs_filters["bulk_upload_id"] || []).reject(&:blank?)[0]
     @bulk_upload ||= current_user.bulk_uploads.find_by(id:)
   end
 

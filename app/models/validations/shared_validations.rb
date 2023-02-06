@@ -99,6 +99,15 @@ module Validations::SharedValidations
     end
   end
 
+  def date_valid?(question, record)
+    if record[question].is_a?(ActiveSupport::TimeWithZone) && record[question].year.zero?
+      record.errors.add question, I18n.t("validations.date.invalid_date")
+      false
+    else
+      true
+    end
+  end
+
 private
 
   def person_is_partner?(relationship)

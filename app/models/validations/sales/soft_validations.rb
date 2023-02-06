@@ -67,7 +67,7 @@ module Validations::Sales::SoftValidations
   def hodate_3_years_or_more_saledate?
     return unless hodate && saledate
 
-    ((saledate.to_date - hodate.to_date).to_i / 365) >= 3
+    saledate - hodate >= 3.years
   end
 
   def grant_outside_common_range?

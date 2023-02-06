@@ -84,15 +84,6 @@ private
     @second_collection_end_date ||= FormHandler.instance.forms.map { |_name, form| form.end_date }.compact.max
   end
 
-  def date_valid?(question, record)
-    if record[question].is_a?(ActiveSupport::TimeWithZone) && record[question].year.zero?
-      record.errors.add question, I18n.t("validations.date.invalid_date")
-      false
-    else
-      true
-    end
-  end
-
   def is_rsnvac_first_let?(record)
     [15, 16, 17].include?(record["rsnvac"])
   end
