@@ -127,11 +127,13 @@ en:
         already_added: "You have already added this managing agent"
     not_answered: "You must answer %{question}"
     invalid_option: "Enter a valid value for %{question}"
+    invalid_number: "Enter a number for %{question}"
 
     other_field_missing: "If %{main_field_label} is other then %{other_field_label} must be provided"
     other_field_not_required: "%{other_field_label} must not be provided if %{main_field_label} was not other"
     numeric:
-      valid: "%{field} must be between %{min} and %{max}"
+      within_range: "%{field} must be between %{min} and %{max}"
+      above_min: "%{field} must be at least %{min}"
     date:
       invalid_date: "Enter a date in the correct format, for example 31 1 2022"
       outside_collection_window: "Enter a date within the current collection windows"
@@ -148,7 +150,7 @@ en:
       intermediate_rent_product_name:
         blank: "Enter name of other intermediate rent product"
       saledate:
-        financial_year: "Date must be from 22/23 financial year"
+        financial_year: "Date must be from 22/23 financial year, which is between 1st April 2022 and 31st March 2023"
       startdate:
         later_than_14_days_after: "The tenancy start date must not be later than 14 days from today’s date"
         before_scheme_end_date: "The tenancy start date must be before the end date for this supported housing scheme"
@@ -376,7 +378,7 @@ en:
         no_choices: "You cannot answer this question as you told us nobody in the household has a physical or mental health condition (or other illness) expected to last 12 months or more"
       postcode:
         discounted_ownership: "Last settled accommodation and discounted ownership property postcodes must match"
-      
+
     tenancy:
       length:
         fixed_term_not_required: "You must only answer the length of the tenancy if it's fixed-term"
@@ -389,7 +391,7 @@ en:
 
     declaration:
       missing: "You must show the DLUHC privacy notice to the tenant before you can submit this log."
-    
+
     privacynotice:
       missing: "You must show the DLUHC privacy notice to the buyer before you can submit this log."
 
@@ -425,15 +427,18 @@ en:
         social_homebuy: "Social HomeBuy buyers should not have lived here before"
         rent_to_buy: "Rent to Buy buyers should not have lived here before"
       hodate:
-        must_be_before_exdate: "Practical completion or handover date must be before exchange date"
+        must_be_before_saledate: "Practical completion or handover date must be before exchange date"
+        must_be_less_than_3_years_from_saledate: "You told us practical completion or handover date is more than 3 years before completion date"
       exdate:
-        must_be_before_saledate: "Contract exchange date must be less than 1 year before completion date"
+        must_be_before_saledate: "Contract exchange date must be before completion date"
         must_be_less_than_1_year_from_saledate: "Contract exchange date must be less than 1 year before completion date"
       saledate:
-        must_be_after_exdate: "Completion date must be less than 1 year after contract exchange date"
+        must_be_after_exdate: "Completion date must be after contract exchange date"
         must_be_less_than_1_year_from_exdate: "Completion date must be less than 1 year after contract exchange date"
-      previous_property_beds:
-        property_type_bedsit: "Bedsit bedroom maximum 1"
+        must_be_less_than_3_years_from_hodate: "You told us completion date is more than 3 years after practical completion or handover date"
+        must_be_after_hodate: "Completion date must be after practical completion or handover date"
+      previous_property_type:
+        property_type_bedsit: "A bedsit cannot have more than 1 bedroom"
       discounted_ownership_value: "Mortgage, deposit, and grant total must equal £%{value_with_discount}"
       monthly_rent:
         higher_than_expected: "Basic monthly rent must be between £0 and £9,999"
@@ -447,12 +452,12 @@ en:
       in_soft_max_range:
         message: "Net income is higher than expected based on the lead tenant’s working situation. Are you sure this is correct?"
     rent:
-      min:
-        title_text: "You told us the rent is %{brent}"
-        hint_text: "The minimum rent expected for this type of property in this local authority is £%{soft_min_for_period}."
-      max:
-        title_text: "You told us the rent is %{brent}"
-        hint_text: "The maximum rent expected for this type of property in this local authority is £%{soft_max_for_period}."
+      outside_range_title: "You told us the rent is %{brent}"
+      min_hint_text: "The minimum rent expected for this type of property in this local authority is £%{soft_min_for_period}."
+      max_hint_text: "The maximum rent expected for this type of property in this local authority is £%{soft_max_for_period}."
+    purchase_price:
+      title_text: "You told us the purchase price is %{value}"
+      hint_text: "The %{min_or_max} purchase price expected for this type of property in this local authority is %{soft_min_or_soft_max}"
     retirement:
       min:
         title: "You told us this person is under %{age} and retired"
@@ -470,10 +475,11 @@ en:
       title_text: "You told us the time between the start of the tenancy and the major repairs completion date is more than 2 years"
     void_date:
       title_text: "You told us the time between the start of the tenancy and the void date is more than 2 years"
-    shared_owhership_deposit:
+    shared_ownership_deposit:
       title_text: "Mortgage, deposit and cash discount total should equal £%{expected_shared_ownership_deposit_value}"
     old_persons_shared_ownership: "At least one buyer should be aged over 64 for Older persons’ shared ownership scheme"
-    monthly_charges_over_soft_max: 
+    staircase_bought_seems_high: "You said %{percentage}% was bought in this staircasing transaction, which seems high. Are you sure?"
+    monthly_charges_over_soft_max:
       title_text: "The amount of monthly charges is high for this type of property and sale type"
 
   devise:

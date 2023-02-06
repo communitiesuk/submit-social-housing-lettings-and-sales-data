@@ -82,7 +82,7 @@ RSpec.describe LettingsLogsController, type: :request do
         it "validates lettings log parameters" do
           json_response = JSON.parse(response.body)
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(json_response["errors"]).to match_array([["offered", [I18n.t("validations.property.offered.relet_number")]], ["age1", [I18n.t("validations.numeric.valid", field: "Lead tenant’s age", min: 16, max: 120)]]])
+          expect(json_response["errors"]).to match_array([["offered", [I18n.t("validations.property.offered.relet_number")]], ["age1", [I18n.t("validations.numeric.within_range", field: "Lead tenant’s age", min: 16, max: 120)]]])
         end
       end
 
@@ -1037,7 +1037,7 @@ RSpec.describe LettingsLogsController, type: :request do
         expect(page).not_to have_content(non_affected_lettings_logs.first.id)
       end
 
-      it "only displays the logs creted by the user" do
+      it "only displays the logs created by the user" do
         affected_lettings_logs.first.update!(created_by: other_user)
         get "/lettings-logs/update-logs", headers:, params: {}
         expect(page).to have_content(affected_lettings_logs.second.id)

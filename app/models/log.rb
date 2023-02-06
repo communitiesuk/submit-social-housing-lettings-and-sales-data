@@ -32,6 +32,7 @@ class Log < ApplicationRecord
 
   def collection_start_year
     return @start_year if @start_year
+
     return unless startdate
 
     window_end_date = Time.zone.local(startdate.year, 4, 1)

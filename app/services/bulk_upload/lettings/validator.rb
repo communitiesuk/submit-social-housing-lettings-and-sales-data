@@ -162,7 +162,7 @@ class BulkUpload::Lettings::Validator
       row_parser.errors.each do |error|
         bulk_upload.bulk_upload_errors.create!(
           field: error.attribute,
-          error: error.type,
+          error: error.message,
           tenant_code: row_parser.field_7,
           property_ref: row_parser.field_100,
           row:,

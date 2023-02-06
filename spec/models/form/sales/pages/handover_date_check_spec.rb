@@ -16,18 +16,28 @@ RSpec.describe Form::Sales::Pages::HandoverDateCheck, type: :model do
   end
 
   it "has the correct id" do
-    expect(page.id).to eq("")
+    expect(page.id).to eq("handover_date_check")
   end
 
   it "has the correct header" do
     expect(page.header).to be_nil
   end
 
+  it "has the correct title_text" do
+    expect(page.title_text).to eq({
+      "translation" => "validations.sale_information.hodate.must_be_less_than_3_years_from_saledate",
+      "arguments" => [],
+    })
+  end
+
+  it "has the correct informative_text" do
+    expect(page.informative_text).to eq({})
+  end
+
   it "has correct depends_on" do
     expect(page.depends_on).to eq([
-      {
-        "hodate_3_years_or_more_saledate?" => true,
-      },
+      { "hodate_3_years_or_more_saledate?" => true, "saledate_check" => nil },
+      { "hodate_3_years_or_more_saledate?" => true, "saledate_check" => 1 },
     ])
   end
 

@@ -24,12 +24,8 @@ module Imports
             hard_max: row["hard_max"] },
           unique_by: %i[start_year lettype beds la],
         )
-        self.count = count + 1
+        @count += 1
       end
     end
-
-  private
-
-    attr_writer :count
   end
 end

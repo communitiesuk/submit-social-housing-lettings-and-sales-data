@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::HandoverDateCheck, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Are you sure practical completion or handover date is more than 3 years before exchange date?")
+    expect(question.header).to eq("Are you sure?")
   end
 
   it "has the correct check_answer_label" do
@@ -43,6 +43,6 @@ RSpec.describe Form::Sales::Questions::HandoverDateCheck, type: :model do
   end
 
   it "has the correct hidden_in_check_answers" do
-    expect(question.hidden_in_check_answers).to eq({ "depends_on" => [{ "hodate_check" => 0 }, { "hodate_check" => 1 }] })
+    expect(question.hidden_in_check_answers).to eq({ "depends_on" => [{ "hodate_check" => 0 }, { "hodate_check" => 1 }, { "saledate_check" => 0 }, { "saledate_check" => 1 }] })
   end
 end

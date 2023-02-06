@@ -18,7 +18,7 @@ module Validations::Sales::SoftValidations
   end
 
   def mortgage_over_soft_max?
-    return false unless mortgage && inc1mort && inc2mort
+    return false unless mortgage && inc1mort && (inc2mort || not_joint_purchase?)
     return false if income1_used_for_mortgage? && income1.blank? || income2_used_for_mortgage? && income2.blank?
 
     income_used_for_mortgage = (income1_used_for_mortgage? ? income1 : 0) + (income2_used_for_mortgage? ? income2 : 0)
@@ -47,6 +47,12 @@ module Validations::Sales::SoftValidations
     extrabor != 1 && mortgage + deposit > value - value * discount / 100
   end
 
+  def purchase_price_out_of_soft_range?
+    return unless value && beds && la && sale_range
+
+    !value.between?(sale_range.soft_min, sale_range.soft_max)
+  end
+
   def shared_ownership_deposit_invalid?
     return unless mortgage || mortgageused == 2
     return unless cashdis || !is_type_discount?
@@ -67,7 +73,15 @@ module Validations::Sales::SoftValidations
   def hodate_3_years_or_more_saledate?
     return unless hodate && saledate
 
-    ((saledate.to_date - hodate.to_date).to_i / 365) >= 3
+    saledate - hodate >= 3.years
+  end
+
+  def purchase_price_min_or_max_text
+    value < sale_range.soft_min ? "minimum" : "maximum"
+  end
+
+  def purchase_price_soft_min_or_soft_max
+    value < sale_range.soft_min ? sale_range.soft_min : sale_range.soft_max
   end
 
   def grant_outside_common_range?
@@ -81,5 +95,11 @@ module Validations::Sales::SoftValidations
 
     soft_max = old_persons_shared_ownership? ? 550 : 300
     mscharge > soft_max
+  end
+
+private
+
+  def sale_range
+    LaSaleRange.find_by(start_year: collection_start_year, la:, bedrooms: beds)
   end
 end

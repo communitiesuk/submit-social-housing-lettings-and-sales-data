@@ -28,10 +28,13 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
         previous_property_type
         shared_ownership_previous_tenure
         about_price_shared_ownership
+        about_price_shared_ownership_value_check
         shared_ownership_equity_value_check
         mortgage_used_shared_ownership
+        mortgage_used_mortgage_value_check
         mortgage_amount_shared_ownership
         shared_ownership_mortgage_amount_value_check
+        mortgage_amount_mortgage_value_check
         mortgage_lender_shared_ownership
         mortgage_lender_other_shared_ownership
         mortgage_length_shared_ownership

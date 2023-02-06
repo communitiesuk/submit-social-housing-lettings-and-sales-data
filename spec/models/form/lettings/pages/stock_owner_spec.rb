@@ -131,7 +131,9 @@ RSpec.describe Form::Lettings::Pages::StockOwner, type: :model do
           end
 
           it "updates owning_organisation_id to user organisation" do
-            expect { page.routed_to?(log, user) }.to change(log.reload, :owning_organisation).from(nil).to(user.organisation)
+            expect {
+              page.routed_to?(log, user)
+            }.to change(log.reload, :owning_organisation).from(nil).to(user.organisation)
           end
         end
 

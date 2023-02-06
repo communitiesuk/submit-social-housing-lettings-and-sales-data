@@ -3,7 +3,7 @@ class Form::Sales::Questions::HandoverDateCheck < ::Form::Question
     super
     @id = "hodate_check"
     @check_answer_label = "Practical completion or handover date check"
-    @header = "Are you sure practical completion or handover date is more than 3 years before exchange date?"
+    @header = "Are you sure?"
     @type = "interruption_screen"
     @answer_options = {
       "0" => { "value" => "Yes" },
@@ -16,6 +16,12 @@ class Form::Sales::Questions::HandoverDateCheck < ::Form::Question
         },
         {
           "hodate_check" => 1,
+        },
+        {
+          "saledate_check" => 0,
+        },
+        {
+          "saledate_check" => 1,
         },
       ],
     }

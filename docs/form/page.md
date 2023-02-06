@@ -21,7 +21,28 @@ An example page might look something like this:
     {
       "needstype": 1
     }
-  ]
+  ],
+  "title_text": {
+    "translation": "translation1",
+    "arguments": [
+      {
+        "key": "some_general_field",
+        "label": true,
+        "i18n_template": "template1"
+      }
+    ]
+  },
+  "informative_text": {
+    "translation": "translation2",
+    "arguments": [
+      {
+        "key": "some_currency_method",
+        "label": false,
+        "i18n_template": "template2",
+        "currency": true,
+      }
+    ]
+  },
 }
 ```
 
