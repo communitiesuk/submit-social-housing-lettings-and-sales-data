@@ -109,10 +109,11 @@ class User < ApplicationRecord
       USER_REACTIVATED_TEMPLATE_ID
     elsif was_migrated_from_softwire? && last_sign_in_at.blank?
       BETA_ONBOARDING_TEMPLATE_ID
-    elsif confirmation_sent_at.present?
+    elsif initial_confirmation_sent
       RECONFIRMABLE_TEMPLATE_ID
     else
       CONFIRMABLE_TEMPLATE_ID
+      update!(initial_confirmation_sent: true)
     end
   end
 

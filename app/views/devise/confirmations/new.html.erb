@@ -9,7 +9,6 @@
 
       <p class="govuk-body">For security reasons, your join link expired - get another one using the button below (valid for 3 hours).</p>
 
-
       <%= f.hidden_field :email, value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %>
       <%= f.govuk_submit "Get a new join link" %>
     <% end %>
