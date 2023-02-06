@@ -10,7 +10,7 @@ class Form::Sales::Pages::AboutPriceRtb < ::Form::Page
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::Value.new(nil, nil, self),
+      Form::Sales::Questions::PurchasePrice.new(nil, nil, self),
       Form::Sales::Questions::Discount.new(nil, nil, self),
     ]
   end

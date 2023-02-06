@@ -139,12 +139,9 @@ class BulkUpload::Lettings::RowParser
   attribute :field_133, :integer
   attribute :field_134, :integer
 
-  validates :field_1, presence: true, inclusion: { in: (1..12).to_a }
+  validates :field_1, presence: { message: I18n.t("validations.not_answered", question: "letting type") },
+                      inclusion: { in: (1..12).to_a, message: I18n.t("validations.invalid_option", question: "letting type") }
   validates :field_4, presence: { if: proc { [2, 4, 6, 8, 10, 12].include?(field_1) } }
-
-  validates :field_96, presence: true
-  validates :field_97, presence: true
-  validates :field_98, presence: true
 
   def valid?
     errors.clear
@@ -176,7 +173,7 @@ private
 
   def validate_data_types
     unless attribute_set["field_1"].value_before_type_cast&.match?(/\A\d+\z/)
-      errors.add(:field_1, :invalid)
+      errors.add(:field_1, I18n.t("validations.invalid_number", question: "letting type"))
     end
   end
 

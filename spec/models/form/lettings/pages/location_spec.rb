@@ -28,9 +28,11 @@ RSpec.describe Form::Lettings::Pages::Location, type: :model do
   end
 
   it "has the correct depends_on" do
-    expect(page.depends_on).to eq([{
-      "needstype" => 2,
-      "scheme_has_multiple_locations?" => true,
-    }])
+    expect(page.depends_on).to eq([
+      {
+        "needstype" => 2,
+        "scheme_has_multiple_locations?" => true,
+      },
+    ])
   end
 end

@@ -5,6 +5,7 @@ class CheckAnswersSummaryListCardComponent < ViewComponent::Base
     @questions = questions
     @log = log
     @user = user
+
     super
   end
 
@@ -13,7 +14,7 @@ class CheckAnswersSummaryListCardComponent < ViewComponent::Base
   end
 
   def get_answer_label(question)
-    question.answer_label(log, user).presence || "<span class=\"app-!-colour-muted\">You didn’t answer this question</span>".html_safe
+    question.answer_label(log, user).presence || unanswered_value
   end
 
   def check_answers_card_title(question)
@@ -35,6 +36,18 @@ class CheckAnswersSummaryListCardComponent < ViewComponent::Base
   end
 
 private
+
+  def unanswered_value
+    if bulk_uploaded?
+      "<span class=\"app-!-colour-red\">You still need to answer this question</span>".html_safe
+    else
+      "<span class=\"app-!-colour-muted\">You didn’t answer this question</span>".html_safe
+    end
+  end
+
+  def bulk_uploaded?
+    log.bulk_upload
+  end
 
   def number_of_buyers
     log[:jointpur] == 1 ? 2 : 1

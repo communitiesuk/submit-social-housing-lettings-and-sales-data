@@ -8,9 +8,11 @@ class Form::Sales::Subsections::OutrightSale < ::Form::Subsection
 
   def pages
     @pages ||= [
-      Form::Sales::Pages::PurchasePrice.new("purchase_price_outright_sale", nil, self),
+      Form::Sales::Pages::PurchasePriceOutrightOwnership.new("purchase_price_outright_sale", nil, self),
       Form::Sales::Pages::Mortgageused.new("mortgage_used_outright_sale", nil, self),
+      Form::Sales::Pages::MortgageValueCheck.new("outright_sale_mortgage_used_mortgage_value_check", nil, self),
       Form::Sales::Pages::MortgageAmount.new("mortgage_amount_outright_sale", nil, self),
+      Form::Sales::Pages::MortgageValueCheck.new("outright_sale_mortgage_amount_mortgage_value_check", nil, self),
       Form::Sales::Pages::MortgageLender.new("mortgage_lender_outright_sale", nil, self),
       Form::Sales::Pages::MortgageLenderOther.new("mortgage_lender_other_outright_sale", nil, self),
       Form::Sales::Pages::MortgageLength.new("mortgage_length_outright_sale", nil, self),

@@ -14,6 +14,14 @@ class BulkUpload < ApplicationRecord
     "#{year}/#{year - 2000 + 1}"
   end
 
+  def logs
+    if lettings?
+      lettings_logs
+    else
+      sales_logs
+    end
+  end
+
 private
 
   def generate_identifier

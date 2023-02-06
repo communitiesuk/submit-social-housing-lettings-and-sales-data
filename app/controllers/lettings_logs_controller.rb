@@ -119,8 +119,8 @@ private
   end
 
   def extract_bulk_upload_from_session_filters
-    id = (@session_filters["bulk_upload_id"] || []).reject(&:blank?)[0]
-    @bulk_upload = current_user.bulk_uploads.find_by(id:)
+    filter_service = FilterService.new(current_user:, session:)
+    @bulk_upload = filter_service.bulk_upload
   end
 
   def permitted_log_params

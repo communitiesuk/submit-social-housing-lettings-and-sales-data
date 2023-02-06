@@ -18,7 +18,7 @@ module Validations::Sales::SoftValidations
   end
 
   def mortgage_over_soft_max?
-    return false unless mortgage && inc1mort && inc2mort
+    return false unless mortgage && inc1mort && (inc2mort || not_joint_purchase?)
     return false if income1_used_for_mortgage? && income1.blank? || income2_used_for_mortgage? && income2.blank?
 
     income_used_for_mortgage = (income1_used_for_mortgage? ? income1 : 0) + (income2_used_for_mortgage? ? income2 : 0)
@@ -67,7 +67,7 @@ module Validations::Sales::SoftValidations
   def hodate_3_years_or_more_saledate?
     return unless hodate && saledate
 
-    ((saledate.to_date - hodate.to_date).to_i / 365) >= 3
+    saledate - hodate >= 3.years
   end
 
   def grant_outside_common_range?

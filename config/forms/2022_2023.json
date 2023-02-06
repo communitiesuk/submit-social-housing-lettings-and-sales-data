@@ -8376,7 +8376,7 @@
                 }
               ],
               "title_text": {
-                "translation": "soft_validations.rent.min.title_text",
+                "translation": "soft_validations.rent.outside_range_title",
                 "arguments": [
                   {
                     "key": "brent",
@@ -8385,16 +8385,7 @@
                   }
                 ]
               },
-              "informative_text": {
-                "translation": "soft_validations.rent.min.hint_text",
-                "arguments": [
-                  {
-                    "key": "soft_min_for_period",
-                    "label": false,
-                    "i18n_template": "soft_min_for_period"
-                  }
-                ]
-              },
+              "informative_text": {},
               "questions": {
                 "rent_value_check": {
                   "check_answer_label": "Total rent confirmation",
@@ -8408,7 +8399,8 @@
                       }
                     ]
                   },
-                  "header": "Are you sure this is correct?",
+                  "header": "This rent is lower than expected for this property type, in this area. Check:",
+                  "hint_text": "<ul><li>the decimal point is not missing (£X.XX)</li><li>the frequency is correct, for example weekly, monthly</li><li>the rent type is correct, for example affordable or social rent</li></ul><p>Are you sure this is correct?</p>",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
@@ -8428,7 +8420,7 @@
                 }
               ],
               "title_text": {
-                "translation": "soft_validations.rent.max.title_text",
+                "translation": "soft_validations.rent.outside_range_title",
                 "arguments": [
                   {
                     "key": "brent",
@@ -8437,16 +8429,7 @@
                   }
                 ]
               },
-              "informative_text": {
-                "translation": "soft_validations.rent.max.hint_text",
-                "arguments": [
-                  {
-                    "key": "soft_max_for_period",
-                    "label": false,
-                    "i18n_template": "soft_max_for_period"
-                  }
-                ]
-              },
+              "informative_text": {},
               "questions": {
                 "rent_value_check": {
                   "check_answer_label": "Total rent confirmation",
@@ -8460,7 +8443,8 @@
                       }
                     ]
                   },
-                  "header": "Are you sure this is correct?",
+                  "header": "This rent is higher than expected for this property type, in this area. Check:",
+                  "hint_text": "<ul><li>the decimal point is not missing (£X.XX)</li><li>the frequency is correct, for example weekly, monthly</li><li>the rent type is correct, for example affordable or social rent</li></ul><p>Are you sure this is correct?</p>",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {

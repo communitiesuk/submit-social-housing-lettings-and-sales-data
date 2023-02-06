@@ -42,15 +42,15 @@ RSpec.describe BulkUpload::Lettings::Validator do
       it "create validation error with correct values" do
         validator.call
 
-        error = BulkUploadError.first
+        error = BulkUploadError.order(:row, :field).first
 
-        expect(error.field).to eql("field_96")
-        expect(error.error).to eql("blank")
+        expect(error.field).to eql("field_11")
+        expect(error.error).to eql("You must only answer the length of the tenancy if it's fixed-term")
         expect(error.tenant_code).to eql("123")
         expect(error.property_ref).to be_nil
         expect(error.row).to eql("7")
-        expect(error.cell).to eql("CS7")
-        expect(error.col).to eql("CS")
+        expect(error.cell).to eql("L7")
+        expect(error.col).to eql("L")
       end
     end
 

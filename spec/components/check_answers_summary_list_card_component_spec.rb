@@ -1,27 +1,49 @@
 require "rails_helper"
 
 RSpec.describe CheckAnswersSummaryListCardComponent, type: :component do
+  subject(:component) { described_class.new(questions:, log:, user:) }
+
+  let(:rendered) { render_inline(component) }
+
   context "when given a set of questions" do
-    let(:user) { FactoryBot.build(:user) }
-    let(:log) { FactoryBot.build(:lettings_log, :completed, age2: 99, startdate: Time.zone.local(2021, 5, 1)) }
+    let(:user) { build(:user) }
+    let(:log) { build(:lettings_log, :completed, age2: 99, startdate: Time.zone.local(2021, 5, 1)) }
     let(:subsection_id) { "household_characteristics" }
     let(:subsection) { log.form.get_subsection(subsection_id) }
     let(:questions) { subsection.applicable_questions(log) }
 
     it "renders a summary list card for the answers to those questions" do
-      result = render_inline(described_class.new(questions:, log:, user:))
-      expect(result).to have_content(questions.first.answer_label(log))
+      expect(rendered).to have_content(questions.first.answer_label(log))
     end
 
     it "applicable questions doesn't return questions that are hidden in check answers" do
-      summary_list = described_class.new(questions:, log:, user:)
-      expect(summary_list.applicable_questions.map(&:id).include?("retirement_value_check")).to eq(false)
+      expect(component.applicable_questions.map(&:id).include?("retirement_value_check")).to eq(false)
     end
 
     it "has the correct answer label for a question" do
-      summary_list = described_class.new(questions:, log:, user:)
       sex1_question = questions[2]
-      expect(summary_list.get_answer_label(sex1_question)).to eq("Female")
+      expect(component.get_answer_label(sex1_question)).to eq("Female")
+    end
+
+    context "when log was created via a bulk upload and has an unanswered question" do
+      subject(:component) { described_class.new(questions:, log:, user:) }
+
+      let(:bulk_upload) { build(:bulk_upload, :lettings) }
+      let(:log) { build(:lettings_log, :in_progress, bulk_upload:, age2: 99, startdate: Time.zone.local(2021, 5, 1)) }
+
+      it "displays tweaked copy in red" do
+        expect(rendered).to have_selector("span", class: "app-!-colour-red", text: "You still need to answer this question")
+      end
+    end
+
+    context "when log was not created via a bulk upload and has an unanswered question" do
+      subject(:component) { described_class.new(questions:, log:, user:) }
+
+      let(:log) { build(:lettings_log, :in_progress, age2: 99, startdate: Time.zone.local(2021, 5, 1)) }
+
+      it "displays normal copy with muted colour " do
+        expect(rendered).to have_selector("span", class: "app-!-colour-muted", text: "You didn’t answer this question")
+      end
     end
   end
 end

@@ -32,7 +32,9 @@ RSpec.describe Form::Sales::Questions::PurchasePrice, type: :model do
   end
 
   it "has the correct hint" do
-    expect(question.hint_text).to be_nil
+    expect(question.hint_text).to eq(
+      "For all schemes, including Right to Acquire (RTA), Right to Buy (RTB), Voluntary Right to Buy (VRTB) or Preserved Right to Buy (PRTB) sales, enter the full price of the property without any discount",
+    )
   end
 
   it "has correct width" do

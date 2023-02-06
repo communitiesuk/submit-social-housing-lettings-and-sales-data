@@ -34,9 +34,26 @@
             <%= govuk_section_break(visible: true, size: "m") %>
           <% end %>
           <% if question.type == "interruption_screen" %>
-            <%= render partial: "form/#{question.type}_question", locals: { question:, caption_text: @subsection.label, page_header: @page.header, lettings_log: @log, title_text: @page.title_text, informative_text: @page.informative_text, form: @form, f:, conditional: false } %>
+            <%= render partial: "form/#{question.type}_question", locals: {
+              question:,
+              caption_text: @subsection.label,
+              page_header: @page.header,
+              lettings_log: @log,
+              title_text: @page.title_text,
+              informative_text: @page.informative_text,
+              form: @form,
+              f:,
+              conditional: false,
+            } %>
           <% else %>
-            <%= render partial: "form/#{question.type}_question", locals: { question:, caption_text: @page.header_partial.present? ? nil : @subsection.label, page_header: @page.header, lettings_log: @log, f:, conditional: false } %>
+            <%= render partial: "form/#{question.type}_question", locals: {
+              question:,
+              caption_text: @page.header_partial.present? ? nil : @subsection.label,
+              page_header: @page.header,
+              lettings_log: @log,
+              f:,
+              conditional: false,
+            } %>
           <% end %>
         </div>
       <% end %>
