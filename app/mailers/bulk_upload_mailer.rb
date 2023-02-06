@@ -43,8 +43,29 @@ class BulkUploadMailer < NotifyMailer
     end
   end
 
-  def send_correct_and_upload_again_mail(bulk_upload:)
-    error_description = "We noticed that you have a lot of similar errors in column #{columns_with_errors(bulk_upload:)}. Please correct your data export and upload again."
+  def send_correct_and_upload_again_mail(bulk_upload:, errors:)
+    any_setup_sections_incomplete_error_description = "logs where the setup sections were incomplete"
+    over_column_error_threshold_error_description = "logs with a lot of similar errors in column #{columns_with_errors(bulk_upload:)}"
+    any_logs_already_exist_error_description = "logs you are trying to upload have been created previously"
+
+    errors_list = []
+
+    errors_list << if errors.size.zero?
+                     "Please correct your data export and upload again."
+                   else
+                     "We noticed the following issues with your upload:"
+                   end
+
+    errors
+      .select { |_k, v| v }
+      .each_key do |k|
+        local_var = "#{k}_error_description"
+        errors_list << "- #{binding.local_variable_get(local_var)}"
+      end
+
+    errors_list << ""
+
+    error_description = errors_list.join("\n")
 
     summary_report_link = if BulkUploadErrorSummaryTableComponent.new(bulk_upload:).errors?
                             summary_bulk_upload_lettings_result_url(bulk_upload)

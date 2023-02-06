@@ -178,8 +178,10 @@ class BulkUpload::Lettings::Validator
     return false if any_setup_sections_incomplete?
     return false if over_column_error_threshold?
     return false if row_parsers.any?(&:block_log_creation?)
+    return false if any_logs_already_exist?
+    return false if any_logs_invalid?
 
-    row_parsers.all? { |row_parser| row_parser.log.valid? }
+    true
   end
 
   def self.question_for_field(field)
@@ -189,8 +191,6 @@ class BulkUpload::Lettings::Validator
   def any_setup_sections_incomplete?
     row_parsers.any?(&:setup_section_incomplete?)
   end
-
-private
 
   def over_column_error_threshold?
     fields = ("field_1".."field_134").to_a
@@ -203,6 +203,16 @@ private
 
       count > percentage_threshold
     end
+  end
+
+  def any_logs_already_exist?
+    row_parsers.any?(&:log_already_exists?)
+  end
+
+private
+
+  def any_logs_invalid?
+    row_parsers.any? { |row_parser| row_parser.log.invalid? }
   end
 
   def csv_parser

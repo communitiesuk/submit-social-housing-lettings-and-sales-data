@@ -193,8 +193,10 @@ RSpec.describe BulkUpload::Processor do
           BulkUpload::Lettings::Validator,
           invalid?: false,
           call: nil,
-          any_setup_sections_incomplete?: false,
           create_logs?: false,
+          any_setup_sections_incomplete?: false,
+          over_column_error_threshold?: false,
+          any_logs_already_exist?: false,
         )
       end
 

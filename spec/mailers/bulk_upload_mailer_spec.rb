@@ -109,13 +109,8 @@ RSpec.describe BulkUploadMailer do
   end
 
   describe "#send_correct_and_upload_again_mail" do
-    context "when 2 columns with errors" do
-      before do
-        create(:bulk_upload_error, bulk_upload:, col: "A")
-        create(:bulk_upload_error, bulk_upload:, col: "B")
-      end
-
-      it "sends correctly formed email with A, B" do
+    context "when there are no errors" do
+      it "sends correctly formed email" do
         expect(notify_client).to receive(:send_email).with(
           email_address: user.email,
           template_id: described_class::BULK_UPLOAD_FAILED_CSV_ERRORS_TEMPLATE_ID,
@@ -124,16 +119,16 @@ RSpec.describe BulkUploadMailer do
             upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
             year_combo: bulk_upload.year_combo,
             lettings_or_sales: bulk_upload.log_type,
-            error_description: "We noticed that you have a lot of similar errors in column A, B. Please correct your data export and upload again.",
             summary_report_link: "http://localhost:3000/lettings-logs/bulk-upload-results/#{bulk_upload.id}",
+            error_description: "Please correct your data export and upload again.\n",
           },
         )
 
-        mailer.send_correct_and_upload_again_mail(bulk_upload:)
+        mailer.send_correct_and_upload_again_mail(bulk_upload:, errors: {})
       end
     end
 
-    context "when 4 columns with errors" do
+    context "when are multiple errors" do
       before do
         stub_const("BulkUploadErrorSummaryTableComponent::DISPLAY_THRESHOLD", 0)
 
@@ -144,6 +139,8 @@ RSpec.describe BulkUploadMailer do
       end
 
       it "sends correctly formed email with A, B, C and more" do
+        error_description = "We noticed the following issues with your upload:\n- logs where the setup sections were incomplete\n- logs with a lot of similar errors in column A, B, C and more\n- logs you are trying to upload have been created previously\n"
+
         expect(notify_client).to receive(:send_email).with(
           email_address: user.email,
           template_id: described_class::BULK_UPLOAD_FAILED_CSV_ERRORS_TEMPLATE_ID,
@@ -152,12 +149,18 @@ RSpec.describe BulkUploadMailer do
             upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
             year_combo: bulk_upload.year_combo,
             lettings_or_sales: bulk_upload.log_type,
-            error_description: "We noticed that you have a lot of similar errors in column A, B, C and more. Please correct your data export and upload again.",
+            error_description:,
             summary_report_link: "http://localhost:3000/lettings-logs/bulk-upload-results/#{bulk_upload.id}/summary",
           },
         )
 
-        mailer.send_correct_and_upload_again_mail(bulk_upload:)
+        errors = {
+          any_setup_sections_incomplete: true,
+          over_column_error_threshold: true,
+          any_logs_already_exist: true,
+        }
+
+        mailer.send_correct_and_upload_again_mail(bulk_upload:, errors:)
       end
     end
   end

@@ -166,6 +166,7 @@ class BulkUpload::Lettings::RowParser
   validate :validate_cannot_be_la_referral_if_general_needs_and_la
   validate :validate_leaving_reason_for_renewal
   validate :validate_lettings_type_matches_bulk_upload
+  validate :validate_if_log_already_exists
   validate :validate_only_one_housing_needs_type
   validate :validate_no_disabled_needs_conjunction
   validate :validate_dont_know_disabled_needs_conjunction
@@ -226,7 +227,23 @@ class BulkUpload::Lettings::RowParser
     log.form.setup_sections[0].subsections[0].is_incomplete?(log)
   end
 
+  def log_already_exists?
+    LettingsLog.exists?(duplicity_check_fields.index_with { |field| log.public_send(field) })
+  end
+
 private
+
+  def duplicity_check_fields
+    %w[
+      startdate
+      age1
+      sex1
+      ecstat1
+      owning_organisation
+      tcharge
+      propcode
+    ]
+  end
 
   def validate_location_related
     return if scheme.blank? || location.blank?
@@ -432,6 +449,25 @@ private
     log.form.setup_sections[0].subsections[0].questions.include?(question)
   end
 
+  def validate_if_log_already_exists
+    if log_already_exists?
+      error_message = "This is a duplicate log"
+
+      errors.add(:field_12, error_message) # age1
+      errors.add(:field_20, error_message) # sex1
+      errors.add(:field_35, error_message) # ecstat1
+
+      errors.add(:field_84, error_message) # tcharge
+
+      errors.add(:field_96, error_message) # startdate
+      errors.add(:field_97, error_message) # startdate
+      errors.add(:field_98, error_message) # startdate
+
+      errors.add(:field_100, error_message) # propcode
+      errors.add(:field_111, error_message) # owning_organisation
+    end
+  end
+
   def field_mapping_for_errors
     {
       lettype: [:field_1],
@@ -630,16 +666,8 @@ private
     Organisation.find_by_id_on_mulitple_fields(field_111)
   end
 
-  def owning_organisation_id
-    owning_organisation&.id
-  end
-
   def managing_organisation
     Organisation.find_by_id_on_mulitple_fields(field_113)
-  end
-
-  def managing_organisation_id
-    managing_organisation&.id
   end
 
   def attributes_for_log
@@ -650,8 +678,8 @@ private
     attributes["la"] = field_107
     attributes["postcode_known"] = postcode_known
     attributes["postcode_full"] = postcode_full
-    attributes["owning_organisation_id"] = owning_organisation_id
-    attributes["managing_organisation_id"] = managing_organisation_id
+    attributes["owning_organisation"] = owning_organisation
+    attributes["managing_organisation"] = managing_organisation
     attributes["renewal"] = renewal
     attributes["scheme"] = scheme
     attributes["location"] = location
