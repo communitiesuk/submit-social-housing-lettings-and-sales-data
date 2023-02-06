@@ -255,7 +255,7 @@ class Form::Question
   end
 
   def has_inferred_check_answers_value_or_is_derived?(log)
-    has_inferred_check_answers_value?(log) || selected_answer_option_is_derived?(log)
+    selected_answer_option_is_derived?(log) || has_inferred_check_answers_value?(log)
   end
 
 private
