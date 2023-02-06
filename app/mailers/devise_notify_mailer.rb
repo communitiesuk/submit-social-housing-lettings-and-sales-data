@@ -41,7 +41,6 @@ class DeviseNotifyMailer < Devise::Mailer
       send_confirmation_email(record.unconfirmed_email, record, token, username)
     end
     send_confirmation_email(record.email, record, token, username)
-    record.update!(initial_confirmation_sent: true)
   end
 
   def intercept_send?(email)

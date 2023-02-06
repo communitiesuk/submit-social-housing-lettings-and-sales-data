@@ -124,6 +124,7 @@ class User < ApplicationRecord
     return unless active?
 
     super
+    update!(initial_confirmation_sent: true)
   end
 
   def need_two_factor_authentication?(_request)
