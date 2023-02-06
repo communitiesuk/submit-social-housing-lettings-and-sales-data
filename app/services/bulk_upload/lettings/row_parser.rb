@@ -143,14 +143,14 @@ class BulkUpload::Lettings::RowParser
                       inclusion: { in: (1..12).to_a, message: I18n.t("validations.invalid_option", question: "letting type") }
   validates :field_4, presence: { if: proc { [2, 4, 6, 8, 10, 12].include?(field_1) } }
 
+  validate :validate_data_types
+  validate :validate_nulls
+  validate :validate_relevant_collection_window
+
   def valid?
     errors.clear
 
     super
-
-    validate_data_types
-    validate_nulls
-    validate_relevant_collection_window
 
     log.valid?
 
