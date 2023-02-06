@@ -176,6 +176,7 @@ class BulkUpload::Lettings::Validator
   def create_logs?
     return false if any_setup_sections_incomplete?
     return false if over_column_error_threshold?
+    return false if duplicate_log_already_exists?
 
     row_parsers.all? { |row_parser| row_parser.log.valid? }
   end
@@ -200,6 +201,17 @@ private
       next if count < COLUMN_ABSOLUTE_ERROR_THRESHOLD
 
       count > percentage_threshold
+    end
+  end
+
+  def duplicate_log_already_exists?
+    fields = ["lettype"]
+
+    fields.any? do |field|
+      # binding.pry
+      count = row_parsers.count { |row_parser| LettingsLog.where("lettype": 7).present? }
+
+      count > 0
     end
   end
 

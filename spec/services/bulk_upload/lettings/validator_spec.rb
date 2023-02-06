@@ -255,5 +255,19 @@ RSpec.describe BulkUpload::Lettings::Validator do
         end
       end
     end
+
+    context "when the file contains a log which already exists in the db" do
+      let(:log_1) { create(:lettings_log, :completed, lettype: 7, created_by: user) }
+
+      before do
+        file.write(BulkUpload::LogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_csv_row)
+        file.close
+      end
+
+      it "returns true" do
+        validator.call
+        expect(validator).not_to be_create_logs
+      end
+    end
   end
 end
