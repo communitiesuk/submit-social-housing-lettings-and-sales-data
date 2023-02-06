@@ -5,7 +5,7 @@ RSpec.describe Auth::ConfirmationsController, type: :request do
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:notify_client) { instance_double(Notifications::Client) }
   let(:devise_notify_mailer) { DeviseNotifyMailer.new }
-  let(:user) { FactoryBot.create(:user, :data_provider, sign_in_count: 0, confirmed_at: nil) }
+  let(:user) { FactoryBot.create(:user, :data_provider, sign_in_count: 0, confirmed_at: nil, initial_confirmation_sent: nil) }
 
   before do
     allow(DeviseNotifyMailer).to receive(:new).and_return(devise_notify_mailer)
@@ -39,8 +39,30 @@ RSpec.describe Auth::ConfirmationsController, type: :request do
       get "/account/confirmation?confirmation_token=#{user.confirmation_token}"
     end
 
-    it "shows the error page" do
+    it "shows the expired page" do
       expect(page).to have_content("For security reasons, your join link expired - get another one using the button below (valid for 3 hours).")
+    end
+  end
+
+  context "when the token is blank" do
+    before do
+      user.send_confirmation_instructions
+      get "/account/confirmation"
+    end
+
+    it "shows the invalid page" do
+      expect(page).to have_content("It looks like you have requested a newer join link than this one. Check your emails and follow the most recent link instead.")
+    end
+  end
+
+  context "when the token is invalid" do
+    before do
+      user.send_confirmation_instructions
+      get "/account/confirmation?confirmation_token=SOMETHING_INVALID"
+    end
+
+    it "shows the invalid page" do
+      expect(page).to have_content("It looks like you have requested a newer join link than this one. Check your emails and follow the most recent link instead.")
     end
   end
 

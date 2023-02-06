@@ -510,7 +510,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_03_174815) do
     t.integer "old_persons_shared_ownership_value_check"
     t.integer "staircase_bought_value_check"
     t.integer "monthly_charges_value_check"
-    t.integer "saledate_check"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
