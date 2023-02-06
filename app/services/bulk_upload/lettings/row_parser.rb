@@ -142,10 +142,6 @@ class BulkUpload::Lettings::RowParser
   validates :field_1, presence: true, inclusion: { in: (1..12).to_a }
   validates :field_4, presence: { if: proc { [2, 4, 6, 8, 10, 12].include?(field_1) } }
 
-  validates :field_96, presence: true
-  validates :field_97, presence: true
-  validates :field_98, presence: true
-
   def valid?
     errors.clear
 
