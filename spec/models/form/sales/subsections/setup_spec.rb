@@ -17,6 +17,7 @@ RSpec.describe Form::Sales::Subsections::Setup, type: :model do
         organisation
         created_by
         completion_date
+        completion_date_check
         purchaser_code
         ownership_scheme
         shared_ownership_type

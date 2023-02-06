@@ -35,7 +35,7 @@ class SalesLog < Log
   scope :search_by, ->(param) { filter_by_id(param) }
   scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org) }
 
-  OPTIONAL_FIELDS = %w[purchid monthly_charges_value_check old_persons_shared_ownership_value_check].freeze
+  OPTIONAL_FIELDS = %w[saledate_check purchid monthly_charges_value_check old_persons_shared_ownership_value_check].freeze
   RETIREMENT_AGES = { "M" => 65, "F" => 60, "X" => 65 }.freeze
 
   def startdate
@@ -130,6 +130,10 @@ class SalesLog < Log
 
   def rent_to_buy_full_ownership?
     type == 29
+  end
+
+  def outright_sale_or_discounted_with_full_ownership?
+    ownershipsch == 3 || (ownershipsch == 2 && rent_to_buy_full_ownership?)
   end
 
   def is_type_discount?

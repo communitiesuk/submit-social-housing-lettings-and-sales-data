@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Questions::HandoverDateCheck, type: :model do
+RSpec.describe Form::Sales::Questions::SaleDateCheck, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
@@ -12,7 +12,7 @@ RSpec.describe Form::Sales::Questions::HandoverDateCheck, type: :model do
   end
 
   it "has the correct id" do
-    expect(question.id).to eq("hodate_check")
+    expect(question.id).to eq("saledate_check")
   end
 
   it "has the correct header" do
@@ -20,7 +20,7 @@ RSpec.describe Form::Sales::Questions::HandoverDateCheck, type: :model do
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Practical completion or handover date check")
+    expect(question.check_answer_label).to eq("Sale completion date check")
   end
 
   it "has the correct type" do

@@ -62,7 +62,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       it "does not add an error" do
         sale_information_validator.validate_practical_completion_date_before_saledate(record)
 
-        expect(record.errors[:hodate]).to be_present
+        expect(record.errors[:hodate]).not_to be_present
       end
     end
   end
@@ -130,10 +130,10 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
         sale_information_validator.validate_exchange_date(record)
 
         expect(record.errors[:exdate]).to eq(
-          ["Contract exchange date must be less than 1 year before completion date"],
+          ["Contract exchange date must be before completion date"],
         )
         expect(record.errors[:saledate]).to eq(
-          ["Completion date must be less than 1 year after contract exchange date"],
+          ["Completion date must be after contract exchange date"],
         )
       end
     end

@@ -2,7 +2,7 @@ module Validations::Sales::SaleInformationValidations
   def validate_practical_completion_date_before_saledate(record)
     return if record.saledate.blank? || record.hodate.blank?
 
-    unless record.saledate > record.hodate
+    if record.hodate > record.saledate
       record.errors.add :hodate, I18n.t("validations.sale_information.hodate.must_be_before_saledate")
       record.errors.add :saledate, I18n.t("validations.sale_information.saledate.must_be_after_hodate")
     end
