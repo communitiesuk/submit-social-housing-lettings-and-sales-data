@@ -34,7 +34,7 @@ module Forms
     private
 
       def possible_years
-        [FormHandler.instance.lettings_forms["current_lettings"].start_date.year, FormHandler.instance.lettings_forms["previous_lettings"].start_date.year]
+        FormHandler.instance.lettings_forms.values.map { |form| form.start_date.year }.sort.reverse
       end
     end
   end
