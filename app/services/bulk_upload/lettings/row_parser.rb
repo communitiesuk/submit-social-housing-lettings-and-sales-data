@@ -169,8 +169,7 @@ class BulkUpload::Lettings::RowParser
 private
 
   def validate_relevant_collection_window
-    return unless start_date
-    return unless bulk_upload.form
+    return unless start_date && bulk_upload.form
 
     unless bulk_upload.form.valid_start_date_for_form?(start_date)
       errors.add(:field_96, I18n.t("validations.date.outside_collection_window"))
