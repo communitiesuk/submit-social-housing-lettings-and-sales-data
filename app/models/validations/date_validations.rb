@@ -69,19 +69,19 @@ module Validations::DateValidations
 private
 
   def first_collection_start_date
-    @first_collection_start_date ||= FormHandler.instance.forms.map { |_name, form| form.start_date }.compact.min
+    @first_collection_start_date ||= FormHandler.instance.lettings_forms["previous_lettings"].start_date
   end
 
   def first_collection_end_date
-    @first_collection_end_date ||= FormHandler.instance.forms.map { |_name, form| form.end_date }.compact.min
+    @first_collection_end_date ||= FormHandler.instance.lettings_forms["previous_lettings"].end_date
   end
 
   def second_collection_start_date
-    @second_collection_start_date ||= FormHandler.instance.forms.map { |_name, form| form.start_date }.compact.max
+    @second_collection_start_date ||= FormHandler.instance.lettings_forms["current_lettings"].start_date
   end
 
   def second_collection_end_date
-    @second_collection_end_date ||= FormHandler.instance.forms.map { |_name, form| form.end_date }.compact.max
+    @second_collection_end_date ||= FormHandler.instance.lettings_forms["current_lettings"].end_date
   end
 
   def is_rsnvac_first_let?(record)

@@ -20,7 +20,7 @@ class Form
         "end_date" => end_date,
         "sections" => sections,
       }
-      @unresolved_log_redirect_page_id = "tenancy_start_date"
+      @unresolved_log_redirect_page_id = "tenancy_start_date" if type == "lettings"
     else
       raise "No form definition file exists for given year".freeze unless File.exist?(form_path)
 

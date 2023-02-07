@@ -1,6 +1,6 @@
 class FeatureToggle
   def self.startdate_two_week_validation_enabled?
-    Rails.env.production?
+    Rails.env.production? || Rails.env.test?
   end
 
   def self.sales_log_enabled?
