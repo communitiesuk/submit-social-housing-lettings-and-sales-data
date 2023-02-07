@@ -179,7 +179,7 @@ private
   end
 
   def start_date
-    Date.parse("20#{field_98}-#{field_97}-#{field_96}")
+    Date.parse("20#{field_98.to_s.rjust(2, '0')}-#{field_97}-#{field_96}")
   rescue StandardError
     nil
   end

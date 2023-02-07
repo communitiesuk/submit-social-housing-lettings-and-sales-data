@@ -774,4 +774,14 @@ RSpec.describe BulkUpload::Lettings::RowParser do
       end
     end
   end
+
+  describe "#start_date" do
+    context "when year of 9 is passed to represent 2009" do
+      let(:attributes) { { bulk_upload:, field_96: "1", field_97: "1", field_98: "9" } }
+
+      it "uses the year 2009" do
+        expect(parser.send(:start_date)).to eql(Date.new(2009, 1, 1))
+      end
+    end
+  end
 end
