@@ -28,10 +28,10 @@ class FormHandler
     ]
     current_form = Form.new(nil, current_collection_start_year, sales_sections, "sales")
     previous_form = Form.new(nil, current_collection_start_year - 1, sales_sections, "sales")
-    {
-      "current_sales" => current_form,
+    next_form = Form.new(nil, current_collection_start_year + 1, sales_sections, "sales")
+    { "current_sales" => current_form,
       "previous_sales" => previous_form,
-    }
+      "next_sales" => next_form }
   end
 
   def lettings_forms
