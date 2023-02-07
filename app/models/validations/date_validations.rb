@@ -39,7 +39,7 @@ module Validations::DateValidations
       record.errors.add :startdate, I18n.t("validations.date.outside_collection_window")
     end
 
-    if record.startdate < first_collection_start_date || record.startdate > second_collection_end_date
+    if (record.startdate < first_collection_start_date || record.startdate > second_collection_end_date) && FeatureToggle.startdate_collection_window_validation_enabled?
       record.errors.add :startdate, I18n.t("validations.date.outside_collection_window")
     end
 
