@@ -255,6 +255,42 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         let(:attributes) { { bulk_upload:, field_96: nil, field_97: nil, field_98: nil } }
 
         it "returns an error" do
+          parser.valid?
+
+          expect(parser.errors[:field_96]).to be_present
+          expect(parser.errors[:field_97]).to be_present
+          expect(parser.errors[:field_98]).to be_present
+        end
+      end
+
+      context "when inside of collection year" do
+        let(:attributes) { { bulk_upload:, field_96: "1", field_97: "10", field_98: "22" } }
+
+        let(:bulk_upload) { create(:bulk_upload, :lettings, user:, year: 2022) }
+
+        it "does not return errors" do
+          parser.valid?
+
+          expect(parser.errors[:field_96]).not_to be_present
+          expect(parser.errors[:field_97]).not_to be_present
+          expect(parser.errors[:field_98]).not_to be_present
+        end
+      end
+
+      context "when outside of collection year" do
+        around do |example|
+          Timecop.freeze(Date.new(2022, 4, 2)) do
+            example.run
+          end
+        end
+
+        let(:attributes) { { bulk_upload:, field_96: "1", field_97: "1", field_98: "22" } }
+
+        let(:bulk_upload) { create(:bulk_upload, :lettings, user:, year: 2022) }
+
+        it "returns errors" do
+          parser.valid?
+
           expect(parser.errors[:field_96]).to be_present
           expect(parser.errors[:field_97]).to be_present
           expect(parser.errors[:field_98]).to be_present
@@ -735,6 +771,16 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         it "sets to 1" do
           expect(parser.log.first_time_property_let_as_social_housing).to eq(1)
         end
+      end
+    end
+  end
+
+  describe "#start_date" do
+    context "when year of 9 is passed to represent 2009" do
+      let(:attributes) { { bulk_upload:, field_96: "1", field_97: "1", field_98: "9" } }
+
+      it "uses the year 2009" do
+        expect(parser.send(:start_date)).to eql(Date.new(2009, 1, 1))
       end
     end
   end

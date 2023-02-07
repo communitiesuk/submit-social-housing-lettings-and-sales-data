@@ -143,13 +143,14 @@ class BulkUpload::Lettings::RowParser
                       inclusion: { in: (1..12).to_a, message: I18n.t("validations.invalid_option", question: "letting type") }
   validates :field_4, presence: { if: proc { [2, 4, 6, 8, 10, 12].include?(field_1) } }
 
+  validate :validate_data_types
+  validate :validate_nulls
+  validate :validate_relevant_collection_window
+
   def valid?
     errors.clear
 
     super
-
-    validate_data_types
-    validate_nulls
 
     log.valid?
 
@@ -166,6 +167,22 @@ class BulkUpload::Lettings::RowParser
   end
 
 private
+
+  def validate_relevant_collection_window
+    return unless start_date && bulk_upload.form
+
+    unless bulk_upload.form.valid_start_date_for_form?(start_date)
+      errors.add(:field_96, I18n.t("validations.date.outside_collection_window"))
+      errors.add(:field_97, I18n.t("validations.date.outside_collection_window"))
+      errors.add(:field_98, I18n.t("validations.date.outside_collection_window"))
+    end
+  end
+
+  def start_date
+    Date.parse("20#{field_98.to_s.rjust(2, '0')}-#{field_97}-#{field_96}")
+  rescue StandardError
+    nil
+  end
 
   def attribute_set
     @attribute_set ||= instance_variable_get(:@attributes)
