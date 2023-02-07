@@ -5,6 +5,8 @@ class Form
 
   def initialize(form_path, start_year = "", sections_in_form = [], type = "lettings")
     if sales_or_start_year_after_2022?(type, start_year)
+      @start_date = Time.zone.local(start_year, 4, 1)
+      @end_date = Time.zone.local(start_year + 1, 7, 1)
       @setup_sections = type == "sales" ? [Form::Sales::Sections::Setup.new(nil, nil, self)] : [Form::Lettings::Sections::Setup.new(nil, nil, self)]
       @form_sections = sections_in_form.map { |sec| sec.new(nil, nil, self) }
       @type = type
@@ -12,8 +14,6 @@ class Form
       @subsections = sections.flat_map(&:subsections)
       @pages = subsections.flat_map(&:pages)
       @questions = pages.flat_map(&:questions)
-      @start_date = Time.zone.local(start_year, 4, 1)
-      @end_date = Time.zone.local(start_year + 1, 7, 1)
       @form_definition = {
         "form_type" => type,
         "start_date" => start_date,
