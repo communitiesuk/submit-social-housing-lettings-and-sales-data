@@ -54,12 +54,8 @@ class FormHandler
     if forms["previous_lettings"].blank? && current_collection_start_year >= 2022
       forms["previous_lettings"] = Form.new(nil, current_collection_start_year - 1, lettings_sections, "lettings")
     end
-    if forms["current_lettings"].blank? && current_collection_start_year >= 2022
-      forms["current_lettings"] = Form.new(nil, current_collection_start_year, lettings_sections, "lettings")
-    end
-    if forms["next_lettings"].blank? && current_collection_start_year >= 2022
-      forms["next_lettings"] = Form.new(nil, current_collection_start_year + 1, lettings_sections, "lettings")
-    end
+    forms["current_lettings"] = Form.new(nil, current_collection_start_year, lettings_sections, "lettings") if forms["current_lettings"].blank?
+    forms["next_lettings"] = Form.new(nil, current_collection_start_year + 1, lettings_sections, "lettings") if forms["next_lettings"].blank?
 
     forms
   end

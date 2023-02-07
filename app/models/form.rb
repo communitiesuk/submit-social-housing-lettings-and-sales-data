@@ -7,7 +7,7 @@ class Form
     if type == "sales" || (start_year && start_year.to_i > 2022)
       @setup_sections = type == "sales" ? [Form::Sales::Sections::Setup.new(nil, nil, self)] : [Form::Lettings::Sections::Setup.new(nil, nil, self)]
       @form_sections = sections_in_form.map { |sec| sec.new(nil, nil, self) }
-      @type = type == "sales" ? "sales" : "lettings"
+      @type = type
       @sections = setup_sections + form_sections
       @subsections = sections.flat_map(&:subsections)
       @pages = subsections.flat_map(&:pages)
