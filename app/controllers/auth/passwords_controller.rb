@@ -1,6 +1,5 @@
 class Auth::PasswordsController < Devise::PasswordsController
   include Helpers::Email
-  before_action :set_minimum_password_length, only: %i[edit create]
 
   def reset_confirmation
     self.resource = resource_class.new
@@ -20,11 +19,13 @@ class Auth::PasswordsController < Devise::PasswordsController
     self.resource = resource_class.send_reset_password_instructions(resource_params)
     yield resource if block_given?
 
+    @minimum_password_length = Devise.password_length.min
     respond_with({}, location: after_sending_reset_password_instructions_path_for(resource_name))
   end
 
   def edit
     super
+    @minimum_password_length = Devise.password_length.min
     @confirmation = params["confirmation"]
     render "devise/passwords/reset_password"
   end
@@ -51,10 +52,6 @@ class Auth::PasswordsController < Devise::PasswordsController
   end
 
 protected
-
-  def set_minimum_password_length
-    @minimum_password_length = Devise.password_length.min
-  end
 
   def set_2fa_required
     return unless resource.respond_to?(:need_two_factor_authentication?) &&
