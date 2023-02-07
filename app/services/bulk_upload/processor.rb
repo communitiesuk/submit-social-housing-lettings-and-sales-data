@@ -13,6 +13,7 @@ class BulkUpload::Processor
     validator.call
 
     create_logs if validator.create_logs?
+    send_correct_and_upload_again_mail unless validator.create_logs?
 
     send_fix_errors_mail if created_logs_but_incompleted?
     send_success_mail if created_logs_and_all_completed?
@@ -24,6 +25,10 @@ class BulkUpload::Processor
   end
 
 private
+
+  def send_correct_and_upload_again_mail
+    BulkUploadMailer.send_correct_and_upload_again_mail(bulk_upload:).deliver_later
+  end
 
   def send_fix_errors_mail
     BulkUploadMailer.send_bulk_upload_with_errors_mail(bulk_upload:).deliver_later
