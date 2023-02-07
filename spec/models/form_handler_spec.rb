@@ -171,6 +171,8 @@ RSpec.describe FormHandler do
 
   describe "lettings_forms" do
     context "when current and previous forms are defined in JSON (current collection start year before 2023)" do
+      let(:now) { Time.utc(2022, 9, 20) }
+
       it "creates a next_lettings form from ruby form objects" do
         expect(form_handler.lettings_forms["previous_lettings"]).to be_present
         expect(form_handler.lettings_forms["previous_lettings"].start_date.year).to eq(2021)

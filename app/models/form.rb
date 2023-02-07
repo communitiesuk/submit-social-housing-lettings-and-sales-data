@@ -4,7 +4,7 @@ class Form
               :setup_sections, :form_sections, :unresolved_log_redirect_page_id
 
   def initialize(form_path, start_year = "", sections_in_form = [], type = "lettings")
-    if type == "sales" || (start_year && start_year.to_i > 2022)
+    if sales_or_start_year_after_2022?(type, start_year)
       @setup_sections = type == "sales" ? [Form::Sales::Sections::Setup.new(nil, nil, self)] : [Form::Lettings::Sections::Setup.new(nil, nil, self)]
       @form_sections = sections_in_form.map { |sec| sec.new(nil, nil, self) }
       @type = type
@@ -240,5 +240,9 @@ class Form
 
   def valid_start_date_for_form?(start_date)
     start_date >= self.start_date && start_date <= end_date
+  end
+
+  def sales_or_start_year_after_2022?(type, start_year)
+    type == "sales" || (start_year && start_year.to_i > 2022)
   end
 end
