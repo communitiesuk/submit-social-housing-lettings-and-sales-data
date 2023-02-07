@@ -24,7 +24,7 @@ RSpec.describe "seeding process", type: task do
   it "sets up correct data" do
     expect {
       Rails.application.load_seed
-    }.to change(User, :count).by(7)
+    }.to change(User, :count).by(8)
      .and change(Organisation, :count).by(8)
      .and change(OrganisationRelationship, :count).by(4)
      .and change(Scheme, :count).by(3)

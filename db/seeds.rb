@@ -177,6 +177,16 @@ unless Rails.env.test?
       user.confirmed_at = Time.zone.now
     end
 
+    User.find_or_create_by!(
+      name: "Arthur",
+      email: "arthur.campbell@softwire.com",
+      organisation: org,
+      role: "support",
+    ) do |user|
+      user.password = "password"
+      user.confirmed_at = Time.zone.now
+    end
+
     pp "Seeded 3 dummy users"
   end
 
