@@ -28,8 +28,10 @@ class FormHandler
     ]
     current_form = Form.new(nil, current_collection_start_year, sales_sections, "sales")
     previous_form = Form.new(nil, current_collection_start_year - 1, sales_sections, "sales")
-    { "current_sales" => current_form,
-      "previous_sales" => previous_form }
+    {
+      "current_sales" => current_form,
+      "previous_sales" => previous_form,
+    }
   end
 
   def lettings_forms
@@ -42,6 +44,19 @@ class FormHandler
         forms[form_to_set] = form if forms[form_to_set].blank?
       end
     end
+
+    lettings_sections = [
+      Form::Lettings::Sections::TenancyAndProperty,
+      Form::Lettings::Sections::Household,
+      Form::Lettings::Sections::RentAndCharges,
+    ]
+
+    if forms["previous_lettings"].blank? && current_collection_start_year >= 2022
+      forms["previous_lettings"] = Form.new(nil, current_collection_start_year - 1, lettings_sections, "lettings")
+    end
+    forms["current_lettings"] = Form.new(nil, current_collection_start_year, lettings_sections, "lettings") if forms["current_lettings"].blank?
+    forms["next_lettings"] = Form.new(nil, current_collection_start_year + 1, lettings_sections, "lettings") if forms["next_lettings"].blank?
+
     forms
   end
 

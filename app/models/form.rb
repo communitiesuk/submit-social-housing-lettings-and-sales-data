@@ -4,10 +4,10 @@ class Form
               :setup_sections, :form_sections, :unresolved_log_redirect_page_id
 
   def initialize(form_path, start_year = "", sections_in_form = [], type = "lettings")
-    if type == "sales"
-      @setup_sections = [Form::Sales::Sections::Setup.new(nil, nil, self)]
+    if sales_or_start_year_after_2022?(type, start_year)
+      @setup_sections = type == "sales" ? [Form::Sales::Sections::Setup.new(nil, nil, self)] : [Form::Lettings::Sections::Setup.new(nil, nil, self)]
       @form_sections = sections_in_form.map { |sec| sec.new(nil, nil, self) }
-      @type = "sales"
+      @type = type
       @sections = setup_sections + form_sections
       @subsections = sections.flat_map(&:subsections)
       @pages = subsections.flat_map(&:pages)
@@ -20,6 +20,7 @@ class Form
         "end_date" => end_date,
         "sections" => sections,
       }
+      @unresolved_log_redirect_page_id = "tenancy_start_date" if type == "lettings"
     else
       raise "No form definition file exists for given year".freeze unless File.exist?(form_path)
 
@@ -239,5 +240,9 @@ class Form
 
   def valid_start_date_for_form?(start_date)
     start_date >= self.start_date && start_date <= end_date
+  end
+
+  def sales_or_start_year_after_2022?(type, start_year)
+    type == "sales" || (start_year && start_year.to_i > 2022)
   end
 end
