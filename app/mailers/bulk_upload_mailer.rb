@@ -33,17 +33,29 @@ class BulkUploadMailer < NotifyMailer
     )
   end
 
-  def send_bulk_upload_failed_csv_errors_mail(user, bulk_upload)
+  def columns_with_errors(bulk_upload:)
+    array = bulk_upload.columns_with_errors
+
+    if array.size > 3
+      "#{array.take(3).join(', ')} and more"
+    else
+      array.join(", ")
+    end
+  end
+
+  def send_correct_and_upload_again_mail(bulk_upload:)
+    error_description = "We noticed that you have a lot of similar errors in column #{columns_with_errors(bulk_upload:)}. Please correct your data export and upload again."
+
     send_email(
-      user.email,
+      bulk_upload.user.email,
       BULK_UPLOAD_FAILED_CSV_ERRORS_TEMPLATE_ID,
       {
-        filename: "[#{bulk_upload} filename]",
-        upload_timestamp: "[#{bulk_upload} upload_timestamp]",
-        year_combo: "[#{bulk_upload} year_combo]",
-        lettings_or_sales: "[#{bulk_upload} lettings_or_sales]",
-        error_description: "[#{bulk_upload} error_description]",
-        summary_report_link: "[#{bulk_upload} summary_report_link]",
+        filename: bulk_upload.filename,
+        upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
+        year_combo: bulk_upload.year_combo,
+        lettings_or_sales: bulk_upload.log_type,
+        error_description:,
+        summary_report_link: summary_bulk_upload_lettings_result_url(bulk_upload),
       },
     )
   end
