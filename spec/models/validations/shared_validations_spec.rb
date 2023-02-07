@@ -69,17 +69,16 @@ RSpec.describe Validations::SharedValidations do
       end
 
       context "with sales log" do
-        it "validates that person 2's age is between 16 and 120 for non joint purchase" do
+        it "validates that person 2's age is between 0 and 110 for non joint purchase" do
           sales_record.jointpur = 2
           sales_record.hholdcount = 1
           sales_record.details_known_2 = 1
-          sales_record.jointmore = 1
           sales_record.age2 = 130
           shared_validator.validate_numeric_min_max(sales_record)
           expect(sales_record.errors["age2"].first).to eq("Person 2’s age must be between 0 and 110")
         end
 
-        it "validates that buyer 2's age is between 16 and 120 for joint purchase" do
+        it "validates that buyer 2's age is between 0 and 110 for joint purchase" do
           sales_record.jointpur = 1
           sales_record.age2 = 130
           shared_validator.validate_numeric_min_max(sales_record)
