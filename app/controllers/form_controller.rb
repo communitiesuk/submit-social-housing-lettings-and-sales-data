@@ -71,7 +71,7 @@ private
     end
     if session["fields"]
       session["fields"].each do |field, value|
-        if form.get_question(field, @log)&.type != "date" && @log.respond_to?(field)
+        if form.get_question(field, @log)&.type != "date" && @log.attributes.key?(field)
           @log[field] = value
         end
       end
