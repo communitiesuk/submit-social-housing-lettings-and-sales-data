@@ -193,6 +193,13 @@ RSpec.describe BulkUpload::Lettings::RowParser do
           expect(questions.map(&:id).size).to eq(0)
           expect(questions.map(&:id)).to eql([])
         end
+
+        context "when the log already exists in the db" do
+          it "is not a valid row" do
+            parser.log.save
+            expect(parser).not_to be_valid
+          end
+        end
       end
     end
 
