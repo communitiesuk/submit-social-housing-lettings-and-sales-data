@@ -150,6 +150,7 @@ class BulkUpload::Lettings::RowParser
   validate :validate_cannot_be_la_referral_if_general_needs
   validate :validate_leaving_reason_for_renewal
   validate :validate_lettings_type_matches_bulk_upload
+  validate :validate_if_log_already_exists
   validate :validate_only_one_housing_needs_type
   validate :validate_no_disabled_needs_conjunction
   validate :validate_dont_know_disabled_needs_conjunction
@@ -289,6 +290,18 @@ private
       next if question.completed?(log)
 
       fields.each { |field| errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase)) }
+    end
+  end
+
+  def validate_if_log_already_exists
+    fields = {
+      "beds" => field_101,
+      "joint" => field_133,
+    }
+    duplicate_log_exists = LettingsLog.where(fields).present?
+
+    if duplicate_log_exists
+      errors.add('test', "test")
     end
   end
 
