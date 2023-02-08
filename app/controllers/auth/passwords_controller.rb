@@ -46,8 +46,9 @@ class Auth::PasswordsController < Devise::PasswordsController
       end
       respond_with resource, location: after_resetting_password_path_for(resource)
     else
-      set_minimum_password_length
-      respond_with resource, status: :unprocessable_entity
+      @minimum_password_length = Devise.password_length.min
+      @confirmation = resource_params["confirmation"]
+      render "devise/passwords/reset_password", status: :unprocessable_entity
     end
   end
 
