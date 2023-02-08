@@ -266,7 +266,7 @@ module Exports
             form << doc.create_element(key, value)
           end
         end
-        form << doc.create_element("providertype", lettings_log.owning_organisation.read_attribute_before_type_cast(:provider_type))
+        form << doc.create_element("providertype", lettings_log.owning_organisation&.read_attribute_before_type_cast(:provider_type))
       end
 
       xml_doc_to_temp_file(doc)
