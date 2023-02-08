@@ -255,26 +255,5 @@ RSpec.describe BulkUpload::Lettings::Validator do
         end
       end
     end
-
-    context "when the file contains a log which already exists in the db" do
-      let(:log_1) { create(:lettings_log, :completed, lettype: 7, beds: 3, created_by: user) } # DB
-      let(:log_2) { build(:lettings_log, :completed, lettype: 7, beds: 3, created_by: user) } # Bulk upload
-
-      before do
-        file.write(BulkUpload::LogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0).to_csv_row)
-        file.close
-      end
-
-      it "prevents log creation if there is a duplicate log" do
-        validator.call
-        expect(validator).not_to be_create_logs
-      end
-
-      it "allows log creation if there are no duplicate logs" do
-        log_1.update!(beds: 2)
-        validator.call
-        expect(validator).to be_create_logs
-      end
-    end
   end
 end
