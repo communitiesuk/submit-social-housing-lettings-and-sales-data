@@ -21,21 +21,31 @@ module Csv
 
   private
 
-    def label_from_value(record, att)
+    def label_from_value(record, att, is_codes_only_export:)
       if %w[la prevloc].include? att
-        label_from_boolean_value(record.send(att))
+        record.send(att)
       elsif %w[mrcdate startdate voiddate].include? att
         record.send(att)&.to_formatted_s(:govuk_date)
+      elsif is_codes_only_export && (att.start_with?("location_", "scheme_"))
+        att = att + "_before_type_cast" unless %w[location_code scheme_code scheme_owning_organisation_name scheme_created_at location_startdate].include? att
+        value = record.send(att)
       else
-        record.form.get_question(att.remove("_label"), record)&.label_from_value(record.send(att.remove("_label"))) || label_from_boolean_value(record.send(att.remove("_label")))
+        att = att.remove("_label", "_detail") # a couple of csv column headers have suffixes for the user that are not reflected in the app domain
+        field_value = record.send(att)
+        answer_label = record.form
+                             .get_question(att, record)
+                             &.label_from_value(field_value)
+        if is_codes_only_export
+          field_value
+        else
+          answer_label || label_if_boolean_value(field_value) || field_value
+        end
       end
     end
 
-    def label_from_boolean_value(value)
+    def label_if_boolean_value(value)
       return "Yes" if value == true
       return "No" if value == false
-
-      value
     end
 
     def set_csv_attributes
