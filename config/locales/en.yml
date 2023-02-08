@@ -359,6 +359,7 @@ en:
         nominated_by_local_ha_but_la: The source of the referral cannot be Nominated by local housing authority as your organisation is a local authority
         la_general_needs:
           internal_transfer: "Answer cannot be internal transfer as it’s the same landlord on the tenancy agreement and the household had either a fixed-term or lifetime local authority general needs tenancy immediately before this letting"
+          prp_referred_by_la: "The source of the referral cannot be referred by local authority housing department for a general needs log"
         prp:
           local_housing_referral: "Answer cannot be ‘nominated by a local housing authority’ as a local authority is on the tenancy agreement"
       homeless:
