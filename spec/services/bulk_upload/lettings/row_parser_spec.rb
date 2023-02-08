@@ -202,6 +202,11 @@ RSpec.describe BulkUpload::Lettings::RowParser do
           it "is not a valid row" do
             expect(parser).not_to be_valid
           end
+
+          it "adds an error to all fields used to determine duplicity" do
+            parser.valid?
+            expect(parser.errors.added?(:field_101, "test")).to be true
+          end
         end
       end
     end
