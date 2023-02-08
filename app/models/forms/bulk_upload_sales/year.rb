@@ -34,7 +34,7 @@ module Forms
     private
 
       def possible_years
-        FormHandler.instance.sales_forms.values.map { |form| form.start_date.year }.sort.reverse
+        [FormHandler.instance.sales_forms["current_sales"].start_date.year, FormHandler.instance.sales_forms["previous_sales"].start_date.year]
       end
     end
   end
