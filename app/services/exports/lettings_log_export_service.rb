@@ -198,8 +198,8 @@ module Exports
         attribute_hash["sheltered"] = lettings_log.sheltered
         attribute_hash["nocharge"] = lettings_log.household_charge == 1 ? 1 : nil
         attribute_hash["chcharge"] = lettings_log.chcharge
-        add_scheme_fields!(lettings_log.scheme, attribute_hash)
-        add_location_fields!(lettings_log.location, attribute_hash)
+        add_scheme_fields!(lettings_log.scheme, attribute_hash) if lettings_log.scheme
+        add_location_fields!(lettings_log.location, attribute_hash) if lettings_log.location
         attribute_hash.delete("unittype_gn")
       end
       attribute_hash
