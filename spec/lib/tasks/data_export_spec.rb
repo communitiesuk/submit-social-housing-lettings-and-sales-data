@@ -2,8 +2,6 @@ require "rails_helper"
 require "rake"
 
 describe "rake core:data_export", type: task do
-  subject(:task) { Rake::Task["core:data_export"] }
-
   let(:paas_instance) { "paas_export_instance" }
   let(:storage_service) { instance_double(Storage::S3Service) }
   let(:paas_config_service) { instance_double(Configuration::PaasConfigurationService) }
@@ -22,22 +20,18 @@ describe "rake core:data_export", type: task do
   end
 
   context "when exporting lettings logs with no parameters" do
-    it "starts the XML export process" do
-      expect(Storage::S3Service).to receive(:new).with(paas_config_service, paas_instance)
-      expect(Exports::LettingsLogExportService).to receive(:new).with(storage_service)
-      expect(export_service).to receive(:export_xml_lettings_logs)
+    let(:task) { Rake::Task["core:data_export_xml"] }
 
-      task.invoke
+    it "starts the XML export process" do
+      expect { task.invoke }.to enqueue_job(DataExportXmlJob)
     end
   end
 
   context "when exporting lettings logs with CSV format" do
-    it "starts the CSV export process" do
-      expect(Storage::S3Service).to receive(:new).with(paas_config_service, paas_instance)
-      expect(Exports::LettingsLogExportService).to receive(:new).with(storage_service)
-      expect(export_service).to receive(:export_csv_lettings_logs)
+    let(:task) { Rake::Task["core:data_export_csv"] }
 
-      task.invoke("CSV", "false")
+    it "starts the CSV export process" do
+      expect { task.invoke }.to enqueue_job(DataExportCsvJob)
     end
   end
 end
