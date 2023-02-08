@@ -7,13 +7,13 @@ module Csv
       set_csv_attributes
     end
 
-    def to_csv
+    def to_csv(is_codes_only_export:)
       CSV.generate(headers: true) do |csv|
         csv << @attributes
 
         LettingsLog.all.find_each do |record|
           csv << @attributes.map do |att|
-            label_from_value(record, att)
+            label_from_value(record, att, is_codes_only_export:)
           end
         end
       end
