@@ -148,6 +148,7 @@ class BulkUpload::Lettings::RowParser
   validate :validate_relevant_collection_window
   validate :validate_la_with_local_housing_referral
   validate :validate_cannot_be_la_referral_if_general_needs
+  validate :leaving_reason_for_renewal
 
   def valid?
     errors.clear
@@ -179,6 +180,14 @@ private
   def validate_la_with_local_housing_referral
     if field_78 == 3 && owning_organisation && owning_organisation.la?
       errors.add(:field_78, I18n.t("validations.household.referral.nominated_by_local_ha_but_la"))
+    end
+  end
+
+  def leaving_reason_for_renewal
+    if field_134 == 1 && ![40, 42].include?(field_52)
+      message = 'The reason for leaving must be "End of assured shorthold tenancy - no fault" or "End of fixed term tenancy - no fault" if the letting is a renewal'
+
+      errors.add(:field_52, message)
     end
   end
 

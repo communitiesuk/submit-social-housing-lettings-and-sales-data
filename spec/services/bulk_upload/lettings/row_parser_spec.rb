@@ -250,6 +250,35 @@ RSpec.describe BulkUpload::Lettings::RowParser do
       end
     end
 
+    describe "#field_52" do # leaving reason
+      context "when field_134 is 1 meaning it is a renewal" do
+        context "when field_52 is 40" do
+          let(:attributes) { { bulk_upload:, field_52: "40", field_134: "1" } }
+
+          it "is permitted" do
+            expect(parser.errors[:field_52]).to be_blank
+          end
+        end
+
+        context "when field_52 is 42" do
+          let(:attributes) { { bulk_upload:, field_52: "42", field_134: "1" } }
+
+          it "is permitted" do
+            expect(parser.errors[:field_52]).to be_blank
+          end
+        end
+
+        context "when field_52 is not 40 or 42" do
+          let(:attributes) { { bulk_upload:, field_52: "1", field_134: "1" } }
+
+          it "is not permitted" do
+            parser.field_52 = "1"
+            expect(parser.errors[:field_52]).to be_present
+          end
+        end
+      end
+    end
+
     describe "#field_78" do # referral
       context "when 3 ie PRP nominated by LA and owning org is LA" do
         let(:attributes) { { bulk_upload:, field_78: "3", field_111: owning_org.old_visible_id } }
