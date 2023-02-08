@@ -301,7 +301,7 @@ private
     duplicate_log_exists = LettingsLog.where(fields).present?
 
     if duplicate_log_exists
-      errors.add('test', "test")
+      errors.add(:field_101, "test")
     end
   end
 
