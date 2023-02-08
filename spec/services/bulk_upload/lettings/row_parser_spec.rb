@@ -195,8 +195,11 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         end
 
         context "when the log already exists in the db" do
+          before do
+            parser.log.save!
+          end
+
           it "is not a valid row" do
-            parser.log.save
             expect(parser).not_to be_valid
           end
         end
