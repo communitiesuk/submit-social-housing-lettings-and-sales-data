@@ -1,14 +1,14 @@
-class Form::Sales::Questions::PersonKnown < Form::Sales::Questions::Person
+class Form::Sales::Questions::PersonKnown < ::Form::Question
   def initialize(id, hsh, page, person_index:)
-    super
-    @check_answer_label = "Details known for person #{person_display_number}?"
-    @header = "Do you know the details for person #{person_display_number}?"
+    super(id, hsh, page)
+    @check_answer_label = "Details known for person #{person_index}?"
+    @header = "Do you know the details for person #{person_index}?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @hidden_in_check_answers = {
       "depends_on" => [
         {
-          field_for_person("details_known_") => 1,
+          "details_known_#{person_index}" => 1,
         },
       ],
     }

@@ -5,7 +5,7 @@ RSpec.describe Validations::SharedValidations do
 
   let(:validator_class) { Class.new { include Validations::SharedValidations } }
   let(:record) { FactoryBot.create(:lettings_log) }
-  let(:sales_record) { FactoryBot.create(:sales_log) }
+  let(:sales_record) { FactoryBot.create(:sales_log, :completed) }
   let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
 
   describe "numeric min max validations" do
@@ -67,6 +67,24 @@ RSpec.describe Validations::SharedValidations do
         shared_validator.validate_numeric_min_max(record)
         expect(record.errors["age6"]).to be_empty
       end
+
+      context "with sales log" do
+        it "validates that person 2's age is between 0 and 110 for non joint purchase" do
+          sales_record.jointpur = 2
+          sales_record.hholdcount = 1
+          sales_record.details_known_2 = 1
+          sales_record.age2 = 130
+          shared_validator.validate_numeric_min_max(sales_record)
+          expect(sales_record.errors["age2"].first).to eq("Person 2’s age must be between 0 and 110")
+        end
+
+        it "validates that buyer 2's age is between 0 and 110 for joint purchase" do
+          sales_record.jointpur = 1
+          sales_record.age2 = 130
+          shared_validator.validate_numeric_min_max(sales_record)
+          expect(sales_record.errors["age2"].first).to eq("Buyer 2’s age must be between 0 and 110")
+        end
+      end
     end
 
     it "adds the correct validation text when a question has a min but not a max" do
@@ -77,6 +95,8 @@ RSpec.describe Validations::SharedValidations do
 
     context "when validating percent" do
       it "validates that suffixes are added in the error message" do
+        sales_record.ownershipsch = 1
+        sales_record.staircase = 1
         sales_record.stairbought = 150
         shared_validator.validate_numeric_min_max(sales_record)
         expect(sales_record.errors["stairbought"])

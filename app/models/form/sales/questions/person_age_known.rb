@@ -1,24 +1,24 @@
-class Form::Sales::Questions::PersonAgeKnown < ::Form::Sales::Questions::Person
+class Form::Sales::Questions::PersonAgeKnown < ::Form::Question
   def initialize(id, hsh, page, person_index:)
-    super
-    @check_answer_label = "Person #{person_display_number}’s age known?"
-    @header = "Do you know person #{person_display_number}’s age?"
+    super(id, hsh, page)
+    @check_answer_label = "Person #{person_index}’s age known?"
+    @header = "Do you know person #{person_index}’s age?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @conditional_for = {
-      field_for_person("age") => [0],
+      "age#{person_index}" => [0],
     }
     @hidden_in_check_answers = {
       "depends_on" => [
         {
-          field_for_person("age", "_known") => 0,
+          "age#{person_index}_known" => 0,
         },
         {
-          field_for_person("age", "_known") => 1,
+          "age#{person_index}_known" => 1,
         },
       ],
     }
-    @check_answers_card_number = @person_index
+    @check_answers_card_number = person_index
   end
 
   ANSWER_OPTIONS = {
