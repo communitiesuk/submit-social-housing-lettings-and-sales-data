@@ -208,20 +208,20 @@ RSpec.describe BulkUpload::Lettings::RowParser do
 
             error_message = "This is a duplicate log"
             expected_errors = {
-              :field_96 => [error_message], # startdate
-              :field_97 => [error_message], # startdate
-              :field_98 => [error_message], # startdate
-              :field_108 => [error_message], # postcode_full
-              :field_109 => [error_message], # postcode_full
-              :field_80 => [error_message], # brent
-              :field_81 => [error_message], # scharge
-              :field_82 => [error_message], # pscharge
-              :field_83 => [error_message], # supcharg
-              :field_7 => [error_message], # tenancycode
-              :field_12 => [error_message], # age1
-              :field_20 => [error_message], # sex1
-              :field_35 => [error_message], # ecstat1
-              :field_43 => [error_message], # ethnic
+              field_96: [error_message], # startdate
+              field_97: [error_message], # startdate
+              field_98: [error_message], # startdate
+              field_108: [error_message], # postcode_full
+              field_109: [error_message], # postcode_full
+              field_80: [error_message], # brent
+              field_81: [error_message], # scharge
+              field_82: [error_message], # pscharge
+              field_83: [error_message], # supcharg
+              field_7: [error_message], # tenancycode
+              field_12: [error_message], # age1
+              field_20: [error_message], # sex1
+              field_35: [error_message], # ecstat1
+              field_43: [error_message], # ethnic
             }
             expect(parser.errors.as_json).to eq(expected_errors)
           end
