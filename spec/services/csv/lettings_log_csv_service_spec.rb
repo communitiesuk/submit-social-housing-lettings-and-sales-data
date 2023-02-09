@@ -222,7 +222,7 @@ RSpec.describe Csv::LettingsLogCsvService do
                                    location_mobility_type
                                    location_admin_district
                                    location_startdate]
-      csv = CSV.parse(described_class.new(user).to_csv)
+      csv = CSV.parse(described_class.new(user).to_csv(is_codes_only_export: false))
       expect(csv.first).to eq(expected_csv_attributes)
     end
   end

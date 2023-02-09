@@ -1145,8 +1145,9 @@ RSpec.describe OrganisationsController, type: :request do
         get "/organisations/#{organisation.id}/lettings-logs"
       end
 
-      it "has a CSV download button with the correct path if at least 1 log exists" do
-        expect(page).to have_link("Download (CSV)", href: "/organisations/#{organisation.id}/logs/csv-download")
+      it "has CSV download buttons with the correct paths if at least 1 log exists" do
+        expect(page).to have_link("Download (CSV)", href: "/organisations/#{organisation.id}/logs/csv-download?codes_only=false")
+        expect(page).to have_link("Download (CSV, codes only)", href: "/organisations/#{organisation.id}/logs/csv-download?codes_only=true")
       end
 
       context "when you download the CSV" do
@@ -1158,15 +1159,15 @@ RSpec.describe OrganisationsController, type: :request do
         end
 
         it "only includes logs from that organisation" do
-          get "/organisations/#{organisation.id}/logs/csv-download"
+          get "/organisations/#{organisation.id}/logs/csv-download?codes_only=false"
 
           expect(page).to have_text("You've selected 3 logs.")
         end
 
         it "provides the organisation to the mail job" do
           expect {
-            post "/organisations/#{organisation.id}/logs/email-csv?status[]=completed", headers:, params: {}
-          }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed] }, false, organisation)
+            post "/organisations/#{organisation.id}/logs/email-csv?status[]=completed&is_codes_only_export=false", headers:, params: {}
+          }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed] }, false, organisation, false)
         end
       end
     end

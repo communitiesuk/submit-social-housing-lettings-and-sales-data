@@ -559,11 +559,16 @@ RSpec.describe LettingsLogsController, type: :request do
             end
           end
 
-          it "includes the search on the CSV link" do
+          it "includes the search on the CSV links" do
             search_term = "foo"
             FactoryBot.create(:lettings_log, created_by: user, owning_organisation: user.organisation, tenancycode: "foo")
             get "/lettings-logs?search=#{search_term}", headers: headers, params: {}
-            expect(page).to have_link("Download (CSV)", href: "/lettings-logs/csv-download?search=#{search_term}")
+            download_link = page.find_link("Download (CSV)")
+            download_link_params = CGI.parse(URI.parse(download_link[:href]).query)
+            codes_only_download_link = page.find_link("Download (CSV, codes only)")
+            codes_only_download_link_params = CGI.parse(URI.parse(codes_only_download_link[:href]).query)
+            expect(download_link_params).to include("search" => [search_term])
+            expect(codes_only_download_link_params).to include("search" => [search_term])
           end
 
           context "when more than one results with matching postcode" do
@@ -674,8 +679,9 @@ RSpec.describe LettingsLogsController, type: :request do
             expect(page).to have_title("Logs - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
 
-          it "shows the CSV download link" do
-            expect(page).to have_link("Download (CSV)", href: "/lettings-logs/csv-download")
+          it "shows the CSV download links" do
+            expect(page).to have_link("Download (CSV)", href: "/lettings-logs/csv-download?codes_only=false")
+            expect(page).to have_link("Download (CSV, codes only)", href: "/lettings-logs/csv-download?codes_only=true")
           end
 
           it "does not show the organisation filter" do
@@ -975,7 +981,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
       before do
         sign_in user
-        get "/lettings-logs/csv-download?search=#{search_term}", headers:
+        get "/lettings-logs/csv-download?search=#{search_term}&codes_only=false", headers:
       end
 
       it "returns http success" do
@@ -1270,33 +1276,33 @@ RSpec.describe LettingsLogsController, type: :request do
 
       it "creates an E-mail job" do
         expect {
-          post "/lettings-logs/email-csv", headers:, params: {}
-        }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false)
+          post "/lettings-logs/email-csv?is_codes_only_export=true", headers:, params: {}
+        }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, nil, true)
       end
 
       it "redirects to the confirmation page" do
-        post "/lettings-logs/email-csv", headers:, params: {}
+        post "/lettings-logs/email-csv?is_codes_only_export=true", headers:, params: {}
         expect(response).to redirect_to(csv_confirmation_lettings_logs_path)
       end
 
       it "passes the search term" do
         expect {
-          post "/lettings-logs/email-csv?search=#{lettings_log.id}", headers:, params: {}
-        }.to enqueue_job(EmailCsvJob).with(user, lettings_log.id.to_s, {}, false)
+          post "/lettings-logs/email-csv?search=#{lettings_log.id}&is_codes_only_export=false", headers:, params: {}
+        }.to enqueue_job(EmailCsvJob).with(user, lettings_log.id.to_s, {}, false, nil, false)
       end
 
       it "passes filter parameters" do
         expect {
-          post "/lettings-logs/email-csv?status[]=completed", headers:, params: {}
-        }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed] }, false)
+          post "/lettings-logs/email-csv?status[]=completed&is_codes_only_export=true", headers:, params: {}
+        }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed] }, false, nil, true)
       end
 
       it "passes a combination of search term and filter parameters" do
         postcode = "XX1 1TG"
 
         expect {
-          post "/lettings-logs/email-csv?status[]=completed&search=#{postcode}", headers:, params: {}
-        }.to enqueue_job(EmailCsvJob).with(user, postcode, { "status" => %w[completed] }, false)
+          post "/lettings-logs/email-csv?status[]=completed&search=#{postcode}&is_codes_only_export=false", headers:, params: {}
+        }.to enqueue_job(EmailCsvJob).with(user, postcode, { "status" => %w[completed] }, false, nil, false)
       end
     end
   end
