@@ -1,29 +1,17 @@
-<% content_for :title, "Resend invitation link" %>
+<% content_for :title, "Expired link" %>
 
-<% content_for :before_content do %>
-  <%= govuk_back_link(href: :back) %>
-<% end %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <%= content_for(:title) %>
+    </h1>
+    <%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
 
-<%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      <%= f.govuk_error_summary %>
+      <p class="govuk-body">For security reasons, your join link expired - get another one using the button below (valid for 3 hours).</p>
 
-      <h1 class="govuk-heading-l">
-        <%= content_for(:title) %>
-      </h1>
+      <%= f.hidden_field :email, value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %>
+      <%= f.govuk_submit "Get a new join link" %>
+    <% end %>
 
-      <p class="govuk-body">Enter your email address to get a new invitation link.</p>
-
-      <%= f.govuk_email_field :email,
-        label: { text: "Email address" },
-        autocomplete: "email",
-        spellcheck: "false",
-        value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %>
-
-      <%= f.govuk_submit "Send email" %>
-    </div>
   </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</div>

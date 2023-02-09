@@ -46,57 +46,28 @@ RSpec.describe UsersController, type: :request do
       end
     end
 
-    describe "reset password" do
-      it "renders the user edit password view" do
-        _raw, enc = Devise.token_generator.generate(User, :reset_password_token)
-        get "/account/password/edit?reset_password_token=#{enc}"
-        expect(page).to have_css("h1", class: "govuk-heading-l", text: "Reset your password")
-      end
-
+    describe "change password" do
       context "when updating a user password" do
-        context "when the reset token is valid" do
-          let(:params) do
-            {
-              id: user.id, user: { password: new_name, password_confirmation: "something_else" }
-            }
-          end
-
-          before do
-            sign_in user
-            put "/account", headers:, params:
-          end
-
-          it "shows an error if passwords don't match" do
-            expect(response).to have_http_status(:unprocessable_entity)
-            expect(page).to have_selector("#error-summary-title")
-            expect(page).to have_content("Password confirmation doesn’t match new password")
-          end
+        let(:params) do
+          {
+            id: user.id, user: { password: new_name, password_confirmation: "something_else" }
+          }
         end
 
-        context "when a reset token is more than 3 hours old" do
-          let(:raw) { user.send_reset_password_instructions }
-          let(:params) do
-            {
-              id: user.id,
-              user: {
-                password: new_name,
-                password_confirmation: new_name,
-                reset_password_token: raw,
-              },
-            }
-          end
+        before do
+          sign_in user
+          put "/account", headers:, params:
+        end
 
-          before do
-            allow(User).to receive(:find_or_initialize_with_error_by).and_return(user)
-            allow(user).to receive(:reset_password_sent_at).and_return(4.hours.ago)
-            put "/account/password", headers:, params:
-          end
+        it "renders the user change password view" do
+          expect(page).to have_css("h1", class: "govuk-heading-l", text: "Change your password")
+        end
 
-          it "shows an error" do
-            expect(response).to have_http_status(:unprocessable_entity)
-            expect(page).to have_selector("#error-summary-title")
-            expect(page).to have_content(I18n.t("errors.messages.expired"))
-          end
+        it "shows an error on the same page if passwords don't match" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_css("h1", class: "govuk-heading-l", text: "Change your password")
+          expect(page).to have_selector("#error-summary-title")
+          expect(page).to have_content("Password confirmation doesn’t match new password")
         end
       end
     end

@@ -49,7 +49,7 @@ class UsersController < ApplicationController
         user_name = @user.name&.possessive || @user.email.possessive
         case user_params[:active]
         when "false"
-          @user.update!(confirmed_at: nil, sign_in_count: 0)
+          @user.update!(confirmed_at: nil, sign_in_count: 0, initial_confirmation_sent: false)
           flash[:notice] = I18n.t("devise.activation.deactivated", user_name:)
         when "true"
           @user.send_confirmation_instructions
@@ -145,14 +145,14 @@ private
   def user_params
     if @user == current_user
       if current_user.data_coordinator? || current_user.support?
-        params.require(:user).permit(:email, :name, :password, :password_confirmation, :role, :is_dpo, :is_key_contact)
+        params.require(:user).permit(:email, :name, :password, :password_confirmation, :role, :is_dpo, :is_key_contact, :initial_confirmation_sent)
       else
-        params.require(:user).permit(:email, :name, :password, :password_confirmation)
+        params.require(:user).permit(:email, :name, :password, :password_confirmation, :initial_confirmation_sent)
       end
     elsif current_user.data_coordinator?
-      params.require(:user).permit(:email, :name, :role, :is_dpo, :is_key_contact, :active)
+      params.require(:user).permit(:email, :name, :role, :is_dpo, :is_key_contact, :active, :initial_confirmation_sent)
     elsif current_user.support?
-      params.require(:user).permit(:email, :name, :role, :is_dpo, :is_key_contact, :organisation_id, :active)
+      params.require(:user).permit(:email, :name, :role, :is_dpo, :is_key_contact, :organisation_id, :active, :initial_confirmation_sent)
     end
   end
 

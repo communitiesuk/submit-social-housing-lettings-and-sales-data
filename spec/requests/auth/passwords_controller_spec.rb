@@ -86,7 +86,7 @@ RSpec.describe Auth::PasswordsController, type: :request do
 
       it "renders the user edit password view" do
         _raw, enc = Devise.token_generator.generate(User, :reset_password_token)
-        get "/account/password/edit?reset_password_token=#{enc}"
+        get "/account/password/edit?reset_password_token=#{enc}?confirmation=true"
         expect(page).to have_css("h1", text: "Reset your password")
       end
 
@@ -103,9 +103,10 @@ RSpec.describe Auth::PasswordsController, type: :request do
           }
         end
 
-        it "shows an error" do
+        it "shows an error on the same page" do
           put "/account/password", headers: headers, params: params
           expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_css("h1", text: "Reset your password")
           expect(page).to have_content("doesn’t match new password")
         end
       end
