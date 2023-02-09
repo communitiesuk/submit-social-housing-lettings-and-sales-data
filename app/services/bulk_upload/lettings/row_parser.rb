@@ -146,6 +146,7 @@ class BulkUpload::Lettings::RowParser
   validate :validate_data_types
   validate :validate_nulls
   validate :validate_relevant_collection_window
+  validate :validate_la_with_local_housing_referral
 
   def valid?
     errors.clear
@@ -167,6 +168,12 @@ class BulkUpload::Lettings::RowParser
   end
 
 private
+
+  def validate_la_with_local_housing_referral
+    if field_78 == 3 && owning_organisation && owning_organisation.la?
+      errors.add(:field_78, "The source of the referral cannot be Nominated by local housing authority as your organisation is a local authority")
+    end
+  end
 
   def validate_relevant_collection_window
     return unless start_date && bulk_upload.form
@@ -413,8 +420,12 @@ private
     end
   end
 
+  def owning_organisation
+    Organisation.find_by(old_visible_id: field_111)
+  end
+
   def owning_organisation_id
-    Organisation.find_by(old_visible_id: field_111)&.id
+    owning_organisation&.id
   end
 
   def managing_organisation_id
