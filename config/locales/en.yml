@@ -136,7 +136,7 @@ en:
       above_min: "%{field} must be at least %{min}"
     date:
       invalid_date: "Enter a date in the correct format, for example 31 1 2022"
-      outside_collection_window: "Enter a date within the current collection windows"
+      outside_collection_window: Enter a date within the 22/23 financial year, which is between 1st April 2022 and 31st March 2023
     postcode: "Enter a postcode in the correct format, for example AA1 1AA"
     location_admin_district: "Select a local authority"
     email:
