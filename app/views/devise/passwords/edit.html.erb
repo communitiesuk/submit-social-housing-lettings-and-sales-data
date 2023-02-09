@@ -15,7 +15,7 @@
 
       <%= f.govuk_password_field :password,
         label: { text: "New password" },
-        hint: @minimum_password_length ? { text: "Your password must be at least #{@minimum_password_length} characters and hard to guess." } : nil,
+        hint: { text: "Your password must be at least #{@minimum_password_length} characters and hard to guess." },
         autocomplete: "new-password" %>
 
       <%= f.govuk_password_field :password_confirmation,

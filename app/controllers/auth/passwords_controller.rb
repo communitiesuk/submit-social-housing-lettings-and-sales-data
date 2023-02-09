@@ -19,11 +19,13 @@ class Auth::PasswordsController < Devise::PasswordsController
     self.resource = resource_class.send_reset_password_instructions(resource_params)
     yield resource if block_given?
 
+    @minimum_password_length = Devise.password_length.min
     respond_with({}, location: after_sending_reset_password_instructions_path_for(resource_name))
   end
 
   def edit
     super
+    @minimum_password_length = Devise.password_length.min
     @confirmation = params["confirmation"]
     render "devise/passwords/reset_password"
   end
@@ -44,8 +46,9 @@ class Auth::PasswordsController < Devise::PasswordsController
       end
       respond_with resource, location: after_resetting_password_path_for(resource)
     else
-      set_minimum_password_length
-      respond_with resource, status: :unprocessable_entity
+      @minimum_password_length = Devise.password_length.min
+      @confirmation = resource_params["confirmation"]
+      render "devise/passwords/reset_password", status: :unprocessable_entity
     end
   end
 
