@@ -200,6 +200,7 @@ RSpec.describe FormHandler do
       let(:now) { Time.utc(2024, 9, 20) }
 
       it "creates previous_lettings, current_lettings and next_lettings forms from ruby form objects" do
+        create(:sales_log)
         expect(form_handler.lettings_forms["previous_lettings"]).to be_present
         expect(form_handler.lettings_forms["previous_lettings"].start_date.year).to eq(2023)
         expect(form_handler.lettings_forms["current_lettings"]).to be_present
