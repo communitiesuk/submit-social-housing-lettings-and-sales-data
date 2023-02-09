@@ -356,6 +356,7 @@ en:
         other_homeless: "Answer cannot be internal transfer as the tenant was considered homeless by their landlord"
         prevten_invalid: "Answer cannot be internal transfer as the household situation immediately before this letting was %{prevten}"
         reason_permanently_decanted: "Answer must be internal transfer as the tenant was permanently decanted from another property owned by this landlord"
+        nominated_by_local_ha_but_la: The source of the referral cannot be Nominated by local housing authority as your organisation is a local authority
         la_general_needs:
           internal_transfer: "Answer cannot be internal transfer as it’s the same landlord on the tenancy agreement and the household had either a fixed-term or lifetime local authority general needs tenancy immediately before this letting"
         prp:

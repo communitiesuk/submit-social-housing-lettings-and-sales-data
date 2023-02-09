@@ -171,7 +171,7 @@ private
 
   def validate_la_with_local_housing_referral
     if field_78 == 3 && owning_organisation && owning_organisation.la?
-      errors.add(:field_78, "The source of the referral cannot be Nominated by local housing authority as your organisation is a local authority")
+      errors.add(:field_78, I18n.t("validations.household.referral.nominated_by_local_ha_but_la"))
     end
   end
 
