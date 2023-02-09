@@ -14,6 +14,7 @@ class Auth::ConfirmationsController < Devise::ConfirmationsController
     elsif %i[blank invalid].any? { |error| resource.errors.map(&:type).include?(error) }
       render "devise/confirmations/invalid"
     elsif resource.errors.map(&:type).include?(:already_confirmed)
+      flash[:notice] = I18n.t("errors.messages.already_confirmed")
       redirect_to user_session_path
     else
       respond_with_navigational(resource.errors, status: :unprocessable_entity) { render :new }
