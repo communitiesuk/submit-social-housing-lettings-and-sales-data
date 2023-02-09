@@ -203,9 +203,26 @@ RSpec.describe BulkUpload::Lettings::RowParser do
             expect(parser).not_to be_valid
           end
 
-          it "adds an error to all fields used to determine duplicity" do
+          it "adds an error to all (and only) the fields used to determine duplicity" do
             parser.valid?
-            expect(parser.errors.added?(:field_101, "test")).to be true
+
+            expected_errors = {
+              :field_96 => ["test"], # startdate
+              :field_97 => ["test"], # startdate
+              :field_98 => ["test"], # startdate
+              :field_108 => ["test"], # postcode_full
+              :field_109 => ["test"], # postcode_full
+              :field_80 => ["test"], # brent
+              :field_81 => ["test"], # scharge
+              :field_82 => ["test"], # pscharge
+              :field_83 => ["test"], # supcharg
+              :field_7 => ["test"], # tenancycode
+              :field_12 => ["test"], # age1
+              :field_20 => ["test"], # sex1
+              :field_35 => ["test"], # ecstat1
+              :field_43 => ["test"], # ethnic
+            }
+            expect(parser.errors.as_json).to eq(expected_errors)
           end
         end
       end
