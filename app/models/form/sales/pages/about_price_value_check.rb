@@ -1,4 +1,4 @@
-class Form::Sales::Pages::AboutPriceSharedOwnershipValueCheck < ::Form::Page
+class Form::Sales::Pages::AboutPriceValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @depends_on = [
@@ -36,7 +36,7 @@ class Form::Sales::Pages::AboutPriceSharedOwnershipValueCheck < ::Form::Page
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::AboutPriceSharedOwnershipValueCheck.new(nil, nil, self),
+      Form::Sales::Questions::AboutPriceValueCheck.new(nil, nil, self),
     ]
   end
 end
