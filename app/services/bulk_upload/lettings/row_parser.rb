@@ -895,6 +895,30 @@ private
     end
   end
 
+  def brent
+    if %i[field_80 field_81 field_82 field_83].any? { |f| public_send(f).present? }
+      self.field_80 ||= 0
+    end
+  end
+
+  def scharge
+    if %i[field_80 field_81 field_82 field_83].any? { |f| public_send(f).present? }
+      self.field_81 ||= 0
+    end
+  end
+
+  def pscharge
+    if %i[field_80 field_81 field_82 field_83].any? { |f| public_send(f).present? }
+      self.field_82 ||= 0
+    end
+  end
+
+  def supcharg
+    if %i[field_80 field_81 field_82 field_83].any? { |f| public_send(f).present? }
+      self.field_83 ||= 0
+    end
+  end
+
   def scheme
     @scheme ||= Scheme.find_by(old_visible_id: field_4)
   end
