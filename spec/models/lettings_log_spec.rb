@@ -2688,7 +2688,7 @@ RSpec.describe LettingsLog do
     after do
       Timecop.unfreeze
     end
-    
+
     context "with values represented as human readable labels" do
       before do
         Timecop.freeze(Time.utc(2022, 6, 5))
@@ -2707,18 +2707,18 @@ RSpec.describe LettingsLog do
         expected_content.sub!(/\{location_id\}/, location["id"].to_s)
         expected_content.gsub!("\r\n", "\n")
       end
-  
+
       context "with a support user" do
         let(:csv_export_file) { File.open("spec/fixtures/files/lettings_logs_download.csv", "r:UTF-8") }
-  
+
         it "generates a correct csv from a lettings log" do
           expect(described_class.to_csv(is_codes_only_export: false).strip).to eq(expected_content.strip)
         end
       end
-  
+
       context "with a non support user" do
         let(:csv_export_file) { File.open("spec/fixtures/files/lettings_logs_download_non_support.csv", "r:UTF-8") }
-  
+
         it "generates a correct csv from a lettings log" do
           expect(described_class.to_csv(user, is_codes_only_export: false).strip).to eq(expected_content.strip)
         end
@@ -2743,7 +2743,7 @@ RSpec.describe LettingsLog do
         expected_content.sub!(/\{location_id\}/, location.id.to_s)
         expected_content.gsub!("\r\n", "\n")
       end
-  
+
       let(:csv_export_file) { File.open("spec/fixtures/files/lettings_logs_download_codes_only.csv", "r:UTF-8") }
 
       it "generates a correct csv from a lettings log" do

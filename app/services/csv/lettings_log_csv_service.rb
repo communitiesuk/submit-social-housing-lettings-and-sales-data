@@ -26,9 +26,9 @@ module Csv
         record.send(att)
       elsif %w[mrcdate startdate voiddate].include? att
         record.send(att)&.to_formatted_s(:govuk_date)
-      elsif is_codes_only_export && (att.start_with?("location_", "scheme_"))
-        att = att + "_before_type_cast" unless %w[location_code scheme_code scheme_owning_organisation_name scheme_created_at location_startdate].include? att
-        value = record.send(att)
+      elsif is_codes_only_export && att.start_with?("location_", "scheme_")
+        att += "_before_type_cast" unless %w[location_code scheme_code scheme_owning_organisation_name scheme_created_at location_startdate].include? att
+        record.send(att)
       else
         att = att.remove("_label", "_detail") # a couple of csv column headers have suffixes for the user that are not reflected in the app domain
         field_value = record.send(att)
