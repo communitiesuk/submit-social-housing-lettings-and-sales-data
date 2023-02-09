@@ -8,8 +8,8 @@ RSpec.describe BulkUpload::Lettings::RowParser do
   let(:attributes) { { bulk_upload: } }
   let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }
   let(:user) { create(:user, organisation: owning_org) }
-  let(:owning_org) { create(:organisation) }
-  let(:managing_org) { create(:organisation) }
+  let(:owning_org) { create(:organisation, :with_old_visible_id) }
+  let(:managing_org) { create(:organisation, :with_old_visible_id) }
   let(:setup_section_params) do
     {
       bulk_upload:,
@@ -246,6 +246,16 @@ RSpec.describe BulkUpload::Lettings::RowParser do
 
         xit "returns an error" do
           expect(parser.errors[:field_10]).to be_present
+        end
+      end
+    end
+
+    describe "#field_78" do
+      context "when 3 ie PRP nominated by LA and owning org is LA" do
+        let(:attributes) { { bulk_upload:, field_78: "3", field_111: owning_org.old_visible_id } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_78]).to be_present
         end
       end
     end
