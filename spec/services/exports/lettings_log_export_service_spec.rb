@@ -127,8 +127,8 @@ RSpec.describe Exports::LettingsLogExportService do
 
     context "and multiple lettings logs are available for export on same quarter" do
       before do
-        FactoryBot.create(:lettings_log, startdate: Time.zone.local(2022, 2, 1))
-        FactoryBot.create(:lettings_log, startdate: Time.zone.local(2022, 3, 20))
+        FactoryBot.create(:lettings_log, startdate: Time.zone.local(2022, 2, 1), needstype: 2)
+        FactoryBot.create(:lettings_log, startdate: Time.zone.local(2022, 3, 20), owning_organisation: nil)
       end
 
       it "generates an XML manifest file with the expected content within the ZIP file" do

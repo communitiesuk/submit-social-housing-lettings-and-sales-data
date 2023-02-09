@@ -30,6 +30,8 @@ class Organisation < ApplicationRecord
 
   enum provider_type: PROVIDER_TYPE
 
+  alias_method :la?, :LA?
+
   validates :name, presence: { message: I18n.t("validations.organisation.name_missing") }
   validates :provider_type, presence: { message: I18n.t("validations.organisation.provider_type_missing") }
 

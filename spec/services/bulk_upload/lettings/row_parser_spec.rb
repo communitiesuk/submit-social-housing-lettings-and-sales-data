@@ -8,8 +8,8 @@ RSpec.describe BulkUpload::Lettings::RowParser do
   let(:attributes) { { bulk_upload: } }
   let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }
   let(:user) { create(:user, organisation: owning_org) }
-  let(:owning_org) { create(:organisation) }
-  let(:managing_org) { create(:organisation) }
+  let(:owning_org) { create(:organisation, :with_old_visible_id) }
+  let(:managing_org) { create(:organisation, :with_old_visible_id) }
   let(:setup_section_params) do
     {
       bulk_upload:,
@@ -250,11 +250,57 @@ RSpec.describe BulkUpload::Lettings::RowParser do
       end
     end
 
+    describe "#field_78" do
+      context "when 3 ie PRP nominated by LA and owning org is LA" do
+        let(:attributes) { { bulk_upload:, field_78: "3", field_111: owning_org.old_visible_id } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_78]).to be_present
+        end
+      end
+    end
+
     describe "fields 96, 97, 98 => startdate" do
       context "when any one of these fields is blank" do
         let(:attributes) { { bulk_upload:, field_96: nil, field_97: nil, field_98: nil } }
 
         it "returns an error" do
+          parser.valid?
+
+          expect(parser.errors[:field_96]).to be_present
+          expect(parser.errors[:field_97]).to be_present
+          expect(parser.errors[:field_98]).to be_present
+        end
+      end
+
+      context "when inside of collection year" do
+        let(:attributes) { { bulk_upload:, field_96: "1", field_97: "10", field_98: "22" } }
+
+        let(:bulk_upload) { create(:bulk_upload, :lettings, user:, year: 2022) }
+
+        it "does not return errors" do
+          parser.valid?
+
+          expect(parser.errors[:field_96]).not_to be_present
+          expect(parser.errors[:field_97]).not_to be_present
+          expect(parser.errors[:field_98]).not_to be_present
+        end
+      end
+
+      context "when outside of collection year" do
+        around do |example|
+          Timecop.freeze(Date.new(2022, 4, 2)) do
+            example.run
+          end
+        end
+
+        let(:attributes) { { bulk_upload:, field_96: "1", field_97: "1", field_98: "22" } }
+
+        let(:bulk_upload) { create(:bulk_upload, :lettings, user:, year: 2022) }
+
+        it "returns errors" do
+          parser.valid?
+
           expect(parser.errors[:field_96]).to be_present
           expect(parser.errors[:field_97]).to be_present
           expect(parser.errors[:field_98]).to be_present
@@ -735,6 +781,16 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         it "sets to 1" do
           expect(parser.log.first_time_property_let_as_social_housing).to eq(1)
         end
+      end
+    end
+  end
+
+  describe "#start_date" do
+    context "when year of 9 is passed to represent 2009" do
+      let(:attributes) { { bulk_upload:, field_96: "1", field_97: "1", field_98: "9" } }
+
+      it "uses the year 2009" do
+        expect(parser.send(:start_date)).to eql(Date.new(2009, 1, 1))
       end
     end
   end

@@ -50,7 +50,7 @@ gem "paper_trail"
 gem "paper_trail-globalid"
 # Request rate limiting
 gem "rack-attack"
-gem "redis"
+gem "redis", "~> 4.8"
 # Receive exceptions and configure alerts
 gem "sentry-rails"
 gem "sentry-ruby"
@@ -60,6 +60,7 @@ gem "possessive"
 gem "auto_strip_attributes"
 # Use sidekiq for background processing
 gem "sidekiq"
+gem "sidekiq-cron"
 
 group :development, :test do
   # Check gems for known vulnerabilities

@@ -18,7 +18,7 @@ module Validations::SharedValidations
   def validate_numeric_min_max(record)
     record.form.numeric_questions.each do |question|
       next unless question.min || question.max
-      next unless record[question.id]
+      next unless record[question.id] && question.page.routed_to?(record, nil)
 
       begin
         answer = Float(record.public_send("#{question.id}_before_type_cast"))

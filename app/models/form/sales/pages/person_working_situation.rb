@@ -1,12 +1,12 @@
 class Form::Sales::Pages::PersonWorkingSituation < Form::Sales::Pages::Person
   def initialize(id, hsh, subsection, person_index:)
     super
-    @depends_on = [{ details_known_question_id => 1, "jointpur" => joint_purchase? ? 1 : 2 }]
+    @depends_on = [{ "details_known_#{person_index}" => 1 }]
   end
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::PersonWorkingSituation.new(field_for_person("ecstat"), nil, self, person_index: @person_index),
+      Form::Sales::Questions::PersonWorkingSituation.new("ecstat#{@person_index}", nil, self, person_index: @person_index),
     ]
   end
 end

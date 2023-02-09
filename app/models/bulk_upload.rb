@@ -22,6 +22,14 @@ class BulkUpload < ApplicationRecord
     end
   end
 
+  def form
+    @form ||= if lettings?
+                FormHandler.instance.lettings_form_for_start_year(year)
+              else
+                FormHandler.instance.sales_form_for_start_year(year)
+              end
+  end
+
 private
 
   def generate_identifier

@@ -39,7 +39,7 @@ module Validations::DateValidations
       record.errors.add :startdate, I18n.t("validations.date.outside_collection_window")
     end
 
-    if record.startdate < first_collection_start_date || record.startdate > second_collection_end_date
+    if (record.startdate < first_collection_start_date || record.startdate > second_collection_end_date) && FeatureToggle.startdate_collection_window_validation_enabled?
       record.errors.add :startdate, I18n.t("validations.date.outside_collection_window")
     end
 
@@ -69,19 +69,19 @@ module Validations::DateValidations
 private
 
   def first_collection_start_date
-    @first_collection_start_date ||= FormHandler.instance.forms.map { |_name, form| form.start_date }.compact.min
+    @first_collection_start_date ||= FormHandler.instance.lettings_forms["previous_lettings"].start_date
   end
 
   def first_collection_end_date
-    @first_collection_end_date ||= FormHandler.instance.forms.map { |_name, form| form.end_date }.compact.min
+    @first_collection_end_date ||= FormHandler.instance.lettings_forms["previous_lettings"].end_date
   end
 
   def second_collection_start_date
-    @second_collection_start_date ||= FormHandler.instance.forms.map { |_name, form| form.start_date }.compact.max
+    @second_collection_start_date ||= FormHandler.instance.lettings_forms["current_lettings"].start_date
   end
 
   def second_collection_end_date
-    @second_collection_end_date ||= FormHandler.instance.forms.map { |_name, form| form.end_date }.compact.max
+    @second_collection_end_date ||= FormHandler.instance.lettings_forms["current_lettings"].end_date
   end
 
   def is_rsnvac_first_let?(record)

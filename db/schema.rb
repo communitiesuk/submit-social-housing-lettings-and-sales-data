@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_03_104238) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_03_174815) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -433,7 +433,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_03_104238) do
     t.integer "prevown"
     t.string "sex3"
     t.bigint "updated_by_id"
-    t.integer "details_known_1"
     t.integer "income1_value_check"
     t.decimal "mortgage", precision: 10, scale: 2
     t.integer "inc2mort"
@@ -523,6 +522,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_03_104238) do
     t.integer "staircase_bought_value_check"
     t.integer "monthly_charges_value_check"
     t.integer "saledate_check"
+    t.integer "details_known_5"
+    t.integer "details_known_6"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
@@ -595,6 +596,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_03_104238) do
     t.datetime "confirmed_at", precision: nil
     t.datetime "confirmation_sent_at", precision: nil
     t.string "unconfirmed_email"
+    t.boolean "initial_confirmation_sent"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["encrypted_otp_secret_key"], name: "index_users_on_encrypted_otp_secret_key", unique: true

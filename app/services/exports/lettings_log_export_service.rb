@@ -198,8 +198,8 @@ module Exports
         attribute_hash["sheltered"] = lettings_log.sheltered
         attribute_hash["nocharge"] = lettings_log.household_charge == 1 ? 1 : nil
         attribute_hash["chcharge"] = lettings_log.chcharge
-        add_scheme_fields!(lettings_log.scheme, attribute_hash)
-        add_location_fields!(lettings_log.location, attribute_hash)
+        add_scheme_fields!(lettings_log.scheme, attribute_hash) if lettings_log.scheme
+        add_location_fields!(lettings_log.location, attribute_hash) if lettings_log.location
         attribute_hash.delete("unittype_gn")
       end
       attribute_hash
@@ -266,7 +266,7 @@ module Exports
             form << doc.create_element(key, value)
           end
         end
-        form << doc.create_element("providertype", lettings_log.owning_organisation.read_attribute_before_type_cast(:provider_type))
+        form << doc.create_element("providertype", lettings_log.owning_organisation&.read_attribute_before_type_cast(:provider_type))
       end
 
       xml_doc_to_temp_file(doc)

@@ -1,8 +1,8 @@
-class Form::Sales::Questions::PersonWorkingSituation < ::Form::Sales::Questions::Person
+class Form::Sales::Questions::PersonWorkingSituation < ::Form::Question
   def initialize(id, hsh, page, person_index:)
-    super
-    @check_answer_label = "Person #{person_display_number}’s working situation"
-    @header = "Which of these best describes Person #{person_display_number}’s working situation?"
+    super(id, hsh, page)
+    @check_answer_label = "Person #{person_index}’s working situation"
+    @header = "Which of these best describes Person #{person_index}’s working situation?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = person_index
