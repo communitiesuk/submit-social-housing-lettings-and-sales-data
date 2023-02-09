@@ -310,20 +310,21 @@ private
     duplicate_log_exists = LettingsLog.where(field_mappings).present?
 
     if duplicate_log_exists
-      errors.add(:field_96, "test") # startdate
-      errors.add(:field_97, "test") # startdate
-      errors.add(:field_98, "test") # startdate
-      errors.add(:field_108, "test") # postcode_full
-      errors.add(:field_109, "test") # postcode_full
-      errors.add(:field_80, "test") # brent
-      errors.add(:field_81, "test") # scharge
-      errors.add(:field_82, "test") # pscharge
-      errors.add(:field_83, "test") # supcharg
-      errors.add(:field_7, "test") # tenancycode
-      errors.add(:field_12, "test") # age1
-      errors.add(:field_20, "test") # sex1
-      errors.add(:field_35, "test") # ecstat1
-      errors.add(:field_43, "test") # ethnic
+      error_message = "This is a duplicate log"
+      errors.add(:field_96, error_message) # startdate
+      errors.add(:field_97, error_message) # startdate
+      errors.add(:field_98, error_message) # startdate
+      errors.add(:field_108, error_message) # postcode_full
+      errors.add(:field_109, error_message) # postcode_full
+      errors.add(:field_80, error_message) # brent
+      errors.add(:field_81, error_message) # scharge
+      errors.add(:field_82, error_message) # pscharge
+      errors.add(:field_83, error_message) # supcharg
+      errors.add(:field_7, error_message) # tenancycode
+      errors.add(:field_12, error_message) # age1
+      errors.add(:field_20, error_message) # sex1
+      errors.add(:field_35, error_message) # ecstat1
+      errors.add(:field_43, error_message) # ethnic
     end
   end
 
