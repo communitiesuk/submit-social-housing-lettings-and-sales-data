@@ -12,7 +12,6 @@ RSpec.describe Form::Sales::Subsections::DiscountedOwnershipScheme, type: :model
   end
 
   it "has correct pages" do
-    puts discounted_ownership_scheme.pages.map(&:id)
     expect(discounted_ownership_scheme.pages.map(&:id)).to eq(
       %w[
         living_before_purchase_discounted_ownership

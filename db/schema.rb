@@ -524,6 +524,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_03_174815) do
     t.integer "details_known_5"
     t.integer "details_known_6"
     t.integer "saledate_check"
+    t.integer "prevshared"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"

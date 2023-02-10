@@ -30,6 +30,10 @@ class BulkUpload < ApplicationRecord
               end
   end
 
+  def general_needs?
+    needstype == 1
+  end
+
 private
 
   def generate_identifier
