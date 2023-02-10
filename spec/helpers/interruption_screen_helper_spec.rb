@@ -13,6 +13,7 @@ RSpec.describe InterruptionScreenHelper do
       earnings: 750,
       incfreq: 1,
       created_by: user,
+      sex1: "F",
     )
   end
 
@@ -94,6 +95,54 @@ RSpec.describe InterruptionScreenHelper do
           .to eq("")
       end
     end
+
+    context "when an argument is given not for a label" do
+      translation = "test.title_text.one_argument"
+      it "returns the correct text" do
+        informative_text_hash = {
+          "translation" => translation,
+          "arguments" => [
+            {
+              "key" => "earnings",
+              "i18n_template" => "argument",
+            }
+          ]
+        }
+        expect(display_informative_text(informative_text_hash, lettings_log)).to eq(I18n.t(translation, argument: lettings_log.earnings))
+      end
+    end
+
+    context "when and argument is given with a key and arguments for the key" do
+      it "makes the correct method call" do
+        informative_text_hash = {
+          "arguments" => [
+            {
+              "key" => "retirement_age_for_person",
+              "arguments_for_key" => 1,
+              "i18n_template" => "argument",
+            }
+          ]
+        }
+        allow(lettings_log).to receive(:retirement_age_for_person)
+        display_informative_text(informative_text_hash, lettings_log)
+        expect(lettings_log).to have_received(:retirement_age_for_person).with(1)
+      end
+
+      it "returns the correct text" do
+        translation = "test.title_text.one_argument"
+        informative_text_hash = {
+          "translation" => translation,
+          "arguments" => [
+            {
+              "key" => "retirement_age_for_person",
+              "arguments_for_key" => 1,
+              "i18n_template" => "argument",
+            }
+          ]
+        }
+        expect(display_informative_text(informative_text_hash, lettings_log)).to eq(I18n.t(translation, argument: lettings_log.retirement_age_for_person(1)))
+      end
+    end
   end
 
   describe "display_title_text" do
@@ -113,12 +162,12 @@ RSpec.describe InterruptionScreenHelper do
             {
               "key" => "ecstat1",
               "label" => true,
-              "i18n_template" => "ecstat1",
+              "i18n_template" => "argument",
             },
           ],
         }
         expect(display_title_text(title_text, lettings_log))
-          .to eq(I18n.t("test.title_text.one_argument", ecstat1: lettings_log.form.get_question("ecstat1", lettings_log).answer_label(lettings_log).downcase))
+          .to eq(I18n.t("test.title_text.one_argument", argument: lettings_log.form.get_question("ecstat1", lettings_log).answer_label(lettings_log).downcase))
       end
     end
 

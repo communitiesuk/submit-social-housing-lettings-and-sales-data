@@ -552,4 +552,4 @@ en:
     one_argument: "This is based on the tenant’s work situation: %{ecstat1}"
     title_text:
       no_argument: "Some test text"
-      one_argument: "You said this: %{ecstat1}"
+      one_argument: "You said this: %{argument}"
