@@ -148,7 +148,8 @@ class BulkUpload::Lettings::RowParser
   validate :validate_relevant_collection_window
   validate :validate_la_with_local_housing_referral
   validate :validate_cannot_be_la_referral_if_general_needs
-  validate :leaving_reason_for_renewal
+  validate :validate_leaving_reason_for_renewal
+  validate :validate_lettings_type_matches_bulk_upload
 
   def valid?
     errors.clear
@@ -171,6 +172,16 @@ class BulkUpload::Lettings::RowParser
 
 private
 
+  def validate_lettings_type_matches_bulk_upload
+    if [1, 3, 5, 7, 9, 11].include?(field_1) && bulk_upload.supported_housing?
+      errors.add(:field_1, I18n.t("validations.setup.lettype.supported_housing_mismatch"))
+    end
+
+    if [2, 4, 6, 8, 10, 12].include?(field_1) && bulk_upload.general_needs?
+      errors.add(:field_1, I18n.t("validations.setup.lettype.general_needs_mismatch"))
+    end
+  end
+
   def validate_cannot_be_la_referral_if_general_needs
     if field_78 == 4 && bulk_upload.general_needs?
       errors.add :field_78, I18n.t("validations.household.referral.la_general_needs.prp_referred_by_la")
@@ -183,7 +194,7 @@ private
     end
   end
 
-  def leaving_reason_for_renewal
+  def validate_leaving_reason_for_renewal
     if field_134 == 1 && ![40, 42].include?(field_52)
       errors.add(:field_52, I18n.t("validations.household.reason.renewal_reason_needed"))
     end

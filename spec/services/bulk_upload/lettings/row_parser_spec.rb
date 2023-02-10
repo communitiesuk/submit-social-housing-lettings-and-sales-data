@@ -202,6 +202,46 @@ RSpec.describe BulkUpload::Lettings::RowParser do
           expect(parser.errors[:field_1]).to be_blank
         end
       end
+
+      context "when bulk upload is for general needs" do
+        let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: "1") }
+
+        context "when general needs option selected" do
+          let(:attributes) { { bulk_upload:, field_1: "1" } }
+
+          it "is permitted" do
+            expect(parser.errors[:field_1]).to be_blank
+          end
+        end
+
+        context "when supported housing option selected" do
+          let(:attributes) { { bulk_upload:, field_1: "2" } }
+
+          it "is not permitted" do
+            expect(parser.errors[:field_1]).to include("Lettings type must be a general needs type")
+          end
+        end
+      end
+
+      context "when bulk upload is for supported housing" do
+        let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: "2") }
+
+        context "when general needs option selected" do
+          let(:attributes) { { bulk_upload:, field_1: "1" } }
+
+          it "is not permitted" do
+            expect(parser.errors[:field_1]).to include("Lettings type must be a supported housing type")
+          end
+        end
+
+        context "when supported housing option selected" do
+          let(:attributes) { { bulk_upload:, field_1: "2" } }
+
+          it "is permitted" do
+            expect(parser.errors[:field_1]).to be_blank
+          end
+        end
+      end
     end
 
     describe "#field_4" do
