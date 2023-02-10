@@ -272,7 +272,6 @@ RSpec.describe BulkUpload::Lettings::RowParser do
           let(:attributes) { { bulk_upload:, field_52: "1", field_134: "1" } }
 
           it "is not permitted" do
-            parser.field_52 = "1"
             expect(parser.errors[:field_52]).to be_present
           end
         end

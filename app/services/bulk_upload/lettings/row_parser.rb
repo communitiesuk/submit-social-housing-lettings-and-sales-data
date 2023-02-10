@@ -185,9 +185,7 @@ private
 
   def leaving_reason_for_renewal
     if field_134 == 1 && ![40, 42].include?(field_52)
-      message = 'The reason for leaving must be "End of assured shorthold tenancy - no fault" or "End of fixed term tenancy - no fault" if the letting is a renewal'
-
-      errors.add(:field_52, message)
+      errors.add(:field_52, I18n.t("validations.household.reason.renewal_reason_needed"))
     end
   end
 
