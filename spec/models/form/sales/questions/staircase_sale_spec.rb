@@ -27,20 +27,16 @@ RSpec.describe Form::Sales::Questions::StaircaseSale, type: :model do
     expect(question.type).to eq("radio")
   end
 
-  it "has the correct type" do
-    expect(question.type).to eq("radio")
-  end
-
   it "is not marked as derived" do
     expect(question.derived?).to be false
   end
 
   it "has the correct answer_options" do
     expect(question.answer_options).to eq({
-                                            "1" => { "value" => "Yes" },
-                                            "2" => { "value" => "No" },
-                                            "3" => { "value" => "Don't know" },
-                                          })
+      "1" => { "value" => "Yes" },
+      "2" => { "value" => "No" },
+      "3" => { "value" => "Don't know" },
+    })
   end
 
   it "has correct conditional for" do
