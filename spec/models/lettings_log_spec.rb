@@ -2705,14 +2705,13 @@ RSpec.describe LettingsLog do
         expected_content.sub!(/\{location_startdate\}/, location["startdate"].to_s)
         expected_content.sub!(/\{scheme_id\}/, scheme["service_name"].to_s)
         expected_content.sub!(/\{location_id\}/, location["id"].to_s)
-        expected_content.gsub!("\r\n", "\n")
       end
 
       context "with a support user" do
         let(:csv_export_file) { File.open("spec/fixtures/files/lettings_logs_download.csv", "r:UTF-8") }
 
         it "generates a correct csv from a lettings log" do
-          expect(described_class.to_csv(is_codes_only_export: false).strip).to eq(expected_content.strip)
+          expect(described_class.to_csv(is_codes_only_export: false)).to eq(expected_content)
         end
       end
 
@@ -2720,7 +2719,7 @@ RSpec.describe LettingsLog do
         let(:csv_export_file) { File.open("spec/fixtures/files/lettings_logs_download_non_support.csv", "r:UTF-8") }
 
         it "generates a correct csv from a lettings log" do
-          expect(described_class.to_csv(user, is_codes_only_export: false).strip).to eq(expected_content.strip)
+          expect(described_class.to_csv(user, is_codes_only_export: false)).to eq(expected_content)
         end
       end
     end
@@ -2741,13 +2740,12 @@ RSpec.describe LettingsLog do
         expected_content.sub!(/\{location_startdate\}/, location.startdate.to_s)
         expected_content.sub!(/\{scheme_id\}/, scheme.service_name.to_s)
         expected_content.sub!(/\{location_id\}/, location.id.to_s)
-        expected_content.gsub!("\r\n", "\n")
       end
 
       let(:csv_export_file) { File.open("spec/fixtures/files/lettings_logs_download_codes_only.csv", "r:UTF-8") }
 
       it "generates a correct csv from a lettings log" do
-        expect(described_class.to_csv(is_codes_only_export: true).strip).to eq(expected_content.strip)
+        expect(described_class.to_csv(is_codes_only_export: true)).to eq(expected_content)
       end
     end
   end

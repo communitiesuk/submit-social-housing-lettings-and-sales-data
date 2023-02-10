@@ -32,12 +32,12 @@ module Csv
       else
         att = att.remove("_label", "_detail") # a couple of csv column headers have suffixes for the user that are not reflected in the app domain
         field_value = record.send(att)
-        answer_label = record.form
-                             .get_question(att, record)
-                             &.label_from_value(field_value)
         if is_codes_only_export
           field_value
         else
+          answer_label = record.form
+                               .get_question(att, record)
+                               &.label_from_value(field_value)
           answer_label || label_if_boolean_value(field_value) || field_value
         end
       end
