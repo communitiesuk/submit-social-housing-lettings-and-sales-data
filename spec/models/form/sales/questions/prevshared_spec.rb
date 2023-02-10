@@ -20,7 +20,7 @@ RSpec.describe Form::Sales::Questions::Prevshared, type: :model do
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Buyers previously owned a shared property")
+    expect(question.check_answer_label).to eq("Previous property shared ownership?")
   end
 
   it "has the correct type" do

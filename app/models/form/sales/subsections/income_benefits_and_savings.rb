@@ -22,7 +22,15 @@ class Form::Sales::Subsections::IncomeBenefitsAndSavings < ::Form::Subsection
       Form::Sales::Pages::SavingsValueCheck.new("savings_value_check", nil, self),
       Form::Sales::Pages::DepositValueCheck.new("savings_deposit_value_check", nil, self),
       Form::Sales::Pages::PreviousOwnership.new(nil, nil, self),
-      Form::Sales::Pages::PreviousShared.new(nil, nil, self),
-    ]
+      previous_shared_page,
+    ].compact
+  end
+
+private
+
+  def previous_shared_page
+    if form.start_date.year >= 2023
+      Form::Sales::Pages::PreviousShared.new(nil, nil, self)
+    end
   end
 end
