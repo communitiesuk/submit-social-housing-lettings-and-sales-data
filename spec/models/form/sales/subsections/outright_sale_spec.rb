@@ -15,6 +15,7 @@ RSpec.describe Form::Sales::Subsections::OutrightSale, type: :model do
     expect(outright_sale.pages.map(&:id)).to eq(
       %w[
         purchase_price_outright_sale
+        about_price_value_check
         mortgage_used_outright_sale
         outright_sale_mortgage_used_mortgage_value_check
         mortgage_amount_outright_sale
