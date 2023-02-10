@@ -3,7 +3,7 @@ module Validations::Sales::FinancialValidations
   # or 'validate_' to run on submit as well
 
   def validate_income1(record)
-    return unless record.income1 && record.la && record.shared_owhership_scheme?
+    return unless record.income1 && record.la && record.shared_ownership_scheme?
 
     relevant_fields = %i[income1 ownershipsch la postcode_full]
     if record.london_property? && record.income1 > 90_000
@@ -14,7 +14,7 @@ module Validations::Sales::FinancialValidations
   end
 
   def validate_income2(record)
-    return unless record.income2 && record.la && record.shared_owhership_scheme?
+    return unless record.income2 && record.la && record.shared_ownership_scheme?
 
     relevant_fields = %i[income2 ownershipsch la postcode_full]
     if record.london_property? && record.income2 > 90_000
@@ -25,7 +25,7 @@ module Validations::Sales::FinancialValidations
   end
 
   def validate_combined_income(record)
-    return unless record.income1 && record.income2 && record.la && record.shared_owhership_scheme?
+    return unless record.income1 && record.income2 && record.la && record.shared_ownership_scheme?
 
     combined_income = record.income1 + record.income2
     relevant_fields = %i[income1 income2 ownershipsch la postcode_full]

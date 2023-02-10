@@ -105,8 +105,8 @@ RSpec.describe InterruptionScreenHelper do
             {
               "key" => "earnings",
               "i18n_template" => "argument",
-            }
-          ]
+            },
+          ],
         }
         expect(display_informative_text(informative_text_hash, lettings_log)).to eq(I18n.t(translation, argument: lettings_log.earnings))
       end
@@ -120,8 +120,8 @@ RSpec.describe InterruptionScreenHelper do
               "key" => "retirement_age_for_person",
               "arguments_for_key" => 1,
               "i18n_template" => "argument",
-            }
-          ]
+            },
+          ],
         }
         allow(lettings_log).to receive(:retirement_age_for_person)
         display_informative_text(informative_text_hash, lettings_log)
@@ -137,8 +137,8 @@ RSpec.describe InterruptionScreenHelper do
               "key" => "retirement_age_for_person",
               "arguments_for_key" => 1,
               "i18n_template" => "argument",
-            }
-          ]
+            },
+          ],
         }
         expect(display_informative_text(informative_text_hash, lettings_log)).to eq(I18n.t(translation, argument: lettings_log.retirement_age_for_person(1)))
       end
