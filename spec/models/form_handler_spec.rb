@@ -168,5 +168,46 @@ RSpec.describe FormHandler do
       end
     end
   end
+
+  describe "lettings_forms" do
+    context "when current and previous forms are defined in JSON (current collection start year before 2023)" do
+      let(:now) { Time.utc(2022, 9, 20) }
+
+      it "creates a next_lettings form from ruby form objects" do
+        expect(form_handler.lettings_forms["previous_lettings"]).to be_present
+        expect(form_handler.lettings_forms["previous_lettings"].start_date.year).to eq(2021)
+        expect(form_handler.lettings_forms["current_lettings"]).to be_present
+        expect(form_handler.lettings_forms["current_lettings"].start_date.year).to eq(2022)
+        expect(form_handler.lettings_forms["next_lettings"]).to be_present
+        expect(form_handler.lettings_forms["next_lettings"].start_date.year).to eq(2023)
+      end
+    end
+
+    context "when only previous form is defined in JSON (current collection start year 2023)" do
+      let(:now) { Time.utc(2023, 9, 20) }
+
+      it "creates current_lettings and next_lettings forms from ruby form objects" do
+        expect(form_handler.lettings_forms["previous_lettings"]).to be_present
+        expect(form_handler.lettings_forms["previous_lettings"].start_date.year).to eq(2022)
+        expect(form_handler.lettings_forms["current_lettings"]).to be_present
+        expect(form_handler.lettings_forms["current_lettings"].start_date.year).to eq(2023)
+        expect(form_handler.lettings_forms["next_lettings"]).to be_present
+        expect(form_handler.lettings_forms["next_lettings"].start_date.year).to eq(2024)
+      end
+    end
+
+    context "when no form is defined in JSON (current collection start year 2024 onwards)" do
+      let(:now) { Time.utc(2024, 9, 20) }
+
+      it "creates previous_lettings, current_lettings and next_lettings forms from ruby form objects" do
+        expect(form_handler.lettings_forms["previous_lettings"]).to be_present
+        expect(form_handler.lettings_forms["previous_lettings"].start_date.year).to eq(2023)
+        expect(form_handler.lettings_forms["current_lettings"]).to be_present
+        expect(form_handler.lettings_forms["current_lettings"].start_date.year).to eq(2024)
+        expect(form_handler.lettings_forms["next_lettings"]).to be_present
+        expect(form_handler.lettings_forms["next_lettings"].start_date.year).to eq(2025)
+      end
+    end
+  end
   # rubocop:enable RSpec/PredicateMatcher
 end
