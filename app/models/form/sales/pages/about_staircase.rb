@@ -12,6 +12,7 @@ class Form::Sales::Pages::AboutStaircase < ::Form::Page
     @questions ||= [
       Form::Sales::Questions::StaircaseBought.new(nil, nil, self),
       Form::Sales::Questions::StaircaseOwned.new(nil, nil, self),
+      Form::Sales::Questions::StaircaseSale.new(nil, nil, self),
     ]
   end
 end
