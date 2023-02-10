@@ -1,14 +1,14 @@
 class FeatureToggle
   def self.startdate_two_week_validation_enabled?
-    Rails.env.production? || Rails.env.test?
+    Rails.env.production? || Rails.env.test? || Rails.env.staging?
   end
 
   def self.startdate_collection_window_validation_enabled?
-    Rails.env.production? || Rails.env.test?
+    Rails.env.production? || Rails.env.test? || Rails.env.staging?
   end
 
   def self.saledate_collection_window_validation_enabled?
-    Rails.env.production? || Rails.env.test?
+    Rails.env.production? || Rails.env.test? || Rails.env.staging?
   end
 
   def self.sales_log_enabled?
