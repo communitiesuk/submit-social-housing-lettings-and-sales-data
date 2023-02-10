@@ -263,9 +263,21 @@ RSpec.describe LettingsLogsController, type: :request do
           expect(page).to have_content("UA984")
         end
 
+        it "displays CSV download links with the correct paths" do
+          get "/lettings-logs", headers:, params: {}
+          expect(page).to have_link("Download (CSV)", href: "/lettings-logs/csv-download?codes_only=false")
+          expect(page).to have_link("Download (CSV, codes only)", href: "/lettings-logs/csv-download?codes_only=true")
+        end
+
         context "when there are no logs in the database" do
           before do
             LettingsLog.destroy_all
+          end
+
+          it "does not display CSV download links" do
+            get "/lettings-logs", headers:, params: {}
+            expect(page).not_to have_link("Download (CSV)")
+            expect(page).not_to have_link("Download (CSV, codes only)")
           end
 
           it "page has correct title" do
@@ -515,6 +527,19 @@ RSpec.describe LettingsLogsController, type: :request do
           get "/lettings-logs", headers:, params: {}
           expect(page).not_to have_content("Owning organisation")
           expect(page).not_to have_content("Managing organisation")
+        end
+
+        it "displays CSV download links with the correct paths" do
+          get "/lettings-logs", headers:, params: {}
+          expect(page).to have_link("Download (CSV)", href: "/lettings-logs/csv-download?codes_only=false")
+          expect(page).to have_link("Download (CSV, codes only)", href: "/lettings-logs/csv-download?codes_only=true")
+        end
+
+        it "does not display CSV download links if there are no logs" do
+          LettingsLog.destroy_all
+          get "/lettings-logs", headers:, params: {}
+          expect(page).not_to have_link("Download (CSV)")
+          expect(page).not_to have_link("Download (CSV, codes only)")
         end
 
         context "when using a search query" do
@@ -1252,6 +1277,52 @@ RSpec.describe LettingsLogsController, type: :request do
     end
   end
 
+  describe "GET #csv-download" do
+    let(:page) { Capybara::Node::Simple.new(response.body) }
+    let(:user) { FactoryBot.create(:user) }
+    let(:headers) { { "Accept" => "text/html" } }
+
+    before do
+      allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+      sign_in user
+    end
+
+    it "renders a page with the correct header" do
+      get "/lettings-logs/csv-download?codes_only=false", headers:, params: {}
+      header = page.find_css('h1')
+      expect(header.text).to include("Download CSV")
+    end
+
+    it "renders a form with the correct target containing a button with the correct text" do
+      get "/lettings-logs/csv-download?codes_only=false", headers:, params: {}
+      form = page.find('form.button_to')
+      expect(form[:method]).to eq("post")
+      expect(form[:action]).to eq("/lettings-logs/email-csv")
+      expect(form).to have_button('Send email')
+    end
+
+    it "when codes_only query parameter is false, form contains hidden field with correct value" do
+      codes_only = false
+      get "/lettings-logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
+      hidden_field = page.find('form.button_to').find_field("is_codes_only_export", type: 'hidden')
+      expect(hidden_field.value).to eq(codes_only.to_s)
+    end
+
+    it "when codes_only query parameter is true, form contains hidden field with correct value" do
+      codes_only = true
+      get "/lettings-logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
+      hidden_field = page.find('form.button_to').find_field("is_codes_only_export", type: 'hidden')
+      expect(hidden_field.value).to eq(codes_only.to_s)
+    end
+
+    it "when query string contains search parameter, form contains hidden field with correct value" do
+      search_term = "blam"
+      get "/lettings-logs/csv-download?codes_only=true&search=#{search_term}", headers:, params: {}
+      hidden_field = page.find('form.button_to').find_field("search", type: 'hidden')
+      expect(hidden_field.value).to eq(search_term)
+    end
+  end
+
   describe "POST #email-csv" do
     let(:other_organisation) { FactoryBot.create(:organisation) }
 
@@ -1297,7 +1368,16 @@ RSpec.describe LettingsLogsController, type: :request do
         }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed] }, false, nil, true)
       end
 
-      it "passes a combination of search term and filter parameters" do
+      it "passes export type flag" do
+        expect {
+          post "/lettings-logs/email-csv?is_codes_only_export=true", headers:, params: {}
+        }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, nil, true)
+        expect {
+          post "/lettings-logs/email-csv?is_codes_only_export=false", headers:, params: {}
+        }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, nil, false)
+      end
+
+      it "passes a combination of search term, export type and filter parameters" do
         postcode = "XX1 1TG"
 
         expect {
