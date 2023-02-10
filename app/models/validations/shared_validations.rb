@@ -108,20 +108,6 @@ module Validations::SharedValidations
     end
   end
 
-  def validate_child_income(record)
-    return unless record.income2 && (record.relat2 || record.ecstat2)
-
-    if record.income2.positive?
-      if is_relationship_child? record.relat2
-        record.errors.add :relat2, I18n.t("validations.financial.income.child_has_income")
-        record.errors.add :income2, I18n.t("validations.financial.income.child_has_income")
-      elsif is_economic_status_child? record.ecstat2
-        record.errors.add :ecstat2, I18n.t("validations.financial.income.child_has_income")
-        record.errors.add :income2, I18n.t("validations.financial.income.child_has_income")
-      end
-    end
-  end
-
 private
 
   def person_is_partner?(relationship)

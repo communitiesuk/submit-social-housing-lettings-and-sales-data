@@ -14,12 +14,12 @@ class Form::Sales::Pages::Buyer2IncomeValueCheck < ::Form::Page
       "arguments" => [
         {
           "key" => "field_formatted_as_currency",
-          "arguments_for_public_send" => "income2",
+          "arguments_for_key" => "income2",
           "i18n_template" => "income",
         },
         {
           "key" => "income_soft_min_for_ecstat",
-          "arguments_for_public_send" => "ecstat2",
+          "arguments_for_key" => "ecstat2",
           "i18n_template" => "minimum",
         },
       ],

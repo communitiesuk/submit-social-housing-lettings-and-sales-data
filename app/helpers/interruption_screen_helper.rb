@@ -34,8 +34,8 @@ private
   def get_value_from_argument(log, argument)
     if argument["label"]
       log.form.get_question(argument["key"], log).answer_label(log).downcase
-    elsif argument["arguments_for_public_send"]
-      log.public_send(argument["key"], argument["arguments_for_public_send"])
+    elsif argument["arguments_for_key"]
+      log.public_send(argument["key"], argument["arguments_for_key"])
     else
       log.public_send(argument["key"])
     end
