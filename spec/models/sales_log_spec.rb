@@ -366,4 +366,26 @@ RSpec.describe SalesLog, type: :model do
       expect(completed_sales_log.expected_shared_ownership_deposit_value).to eq(500)
     end
   end
+
+  describe "#field_formatted_as_currency" do
+    let(:completed_sales_log) { FactoryBot.create(:sales_log, :completed) }
+
+    it "returns small numbers correctly formatted as currency" do
+      completed_sales_log.update!(savings: 4)
+
+      expect(completed_sales_log.field_formatted_as_currency("savings")).to eq("£4.00")
+    end
+
+    it "returns quite large numbers correctly formatted as currency" do
+      completed_sales_log.update!(savings: 40_000)
+
+      expect(completed_sales_log.field_formatted_as_currency("savings")).to eq("£40,000.00")
+    end
+
+    it "returns very large numbers correctly formatted as currency" do
+      completed_sales_log.update!(savings: 400_000_000)
+
+      expect(completed_sales_log.field_formatted_as_currency("savings")).to eq("£400,000,000.00")
+    end
+  end
 end
