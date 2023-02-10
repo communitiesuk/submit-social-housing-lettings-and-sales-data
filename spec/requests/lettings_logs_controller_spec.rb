@@ -1289,36 +1289,36 @@ RSpec.describe LettingsLogsController, type: :request do
 
     it "renders a page with the correct header" do
       get "/lettings-logs/csv-download?codes_only=false", headers:, params: {}
-      header = page.find_css('h1')
+      header = page.find_css("h1")
       expect(header.text).to include("Download CSV")
     end
 
     it "renders a form with the correct target containing a button with the correct text" do
       get "/lettings-logs/csv-download?codes_only=false", headers:, params: {}
-      form = page.find('form.button_to')
+      form = page.find("form.button_to")
       expect(form[:method]).to eq("post")
       expect(form[:action]).to eq("/lettings-logs/email-csv")
-      expect(form).to have_button('Send email')
+      expect(form).to have_button("Send email")
     end
 
     it "when codes_only query parameter is false, form contains hidden field with correct value" do
       codes_only = false
       get "/lettings-logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
-      hidden_field = page.find('form.button_to').find_field("is_codes_only_export", type: 'hidden')
+      hidden_field = page.find("form.button_to").find_field("is_codes_only_export", type: "hidden")
       expect(hidden_field.value).to eq(codes_only.to_s)
     end
 
     it "when codes_only query parameter is true, form contains hidden field with correct value" do
       codes_only = true
       get "/lettings-logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
-      hidden_field = page.find('form.button_to').find_field("is_codes_only_export", type: 'hidden')
+      hidden_field = page.find("form.button_to").find_field("is_codes_only_export", type: "hidden")
       expect(hidden_field.value).to eq(codes_only.to_s)
     end
 
     it "when query string contains search parameter, form contains hidden field with correct value" do
       search_term = "blam"
       get "/lettings-logs/csv-download?codes_only=true&search=#{search_term}", headers:, params: {}
-      hidden_field = page.find('form.button_to').find_field("search", type: 'hidden')
+      hidden_field = page.find("form.button_to").find_field("search", type: "hidden")
       expect(hidden_field.value).to eq(search_term)
     end
   end
