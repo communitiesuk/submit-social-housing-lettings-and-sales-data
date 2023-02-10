@@ -173,11 +173,11 @@ class BulkUpload::Lettings::RowParser
 private
 
   def validate_lettings_type_matches_bulk_upload
-    if [1, 3, 5, 7, 9, 11].include?(field_1) && bulk_upload.supported_housing?
+    if [1, 3, 5, 7, 9, 11].include?(field_1) && !bulk_upload.general_needs?
       errors.add(:field_1, I18n.t("validations.setup.lettype.supported_housing_mismatch"))
     end
 
-    if [2, 4, 6, 8, 10, 12].include?(field_1) && bulk_upload.general_needs?
+    if [2, 4, 6, 8, 10, 12].include?(field_1) && !bulk_upload.supported_housing?
       errors.add(:field_1, I18n.t("validations.setup.lettype.general_needs_mismatch"))
     end
   end
