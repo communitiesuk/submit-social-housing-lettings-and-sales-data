@@ -31,6 +31,24 @@ RSpec.describe BulkUpload::Lettings::RowParser do
     FormHandler.instance.use_fake_forms!
   end
 
+  describe "#blank_row?" do
+    context "when a new object" do
+      it "returns true" do
+        expect(parser).to be_blank_row
+      end
+    end
+
+    context "when any field is populated" do
+      before do
+        parser.field_1 = "1"
+      end
+
+      it "returns false" do
+        expect(parser).not_to be_blank_row
+      end
+    end
+  end
+
   describe "validations" do
     before do
       stub_request(:get, /api.postcodes.io/)
@@ -40,6 +58,14 @@ RSpec.describe BulkUpload::Lettings::RowParser do
     end
 
     describe "#valid?" do
+      context "when the row is blank" do
+        let(:attributes) { { bulk_upload: } }
+
+        it "returns true" do
+          expect(parser).to be_valid
+        end
+      end
+
       context "when calling the method multiple times" do
         let(:attributes) { { bulk_upload:, field_134: 2 } }
 
@@ -172,7 +198,7 @@ RSpec.describe BulkUpload::Lettings::RowParser do
 
     describe "#field_1" do
       context "when null" do
-        let(:attributes) { { bulk_upload:, field_1: nil } }
+        let(:attributes) { { bulk_upload:, field_1: nil, field_4: "1" } }
 
         it "returns an error" do
           expect(parser.errors[:field_1]).to be_present
@@ -347,7 +373,7 @@ RSpec.describe BulkUpload::Lettings::RowParser do
 
     describe "fields 96, 97, 98 => startdate" do
       context "when any one of these fields is blank" do
-        let(:attributes) { { bulk_upload:, field_96: nil, field_97: nil, field_98: nil } }
+        let(:attributes) { { bulk_upload:, field_1: "1", field_96: nil, field_97: nil, field_98: nil } }
 
         it "returns an error" do
           parser.valid?
