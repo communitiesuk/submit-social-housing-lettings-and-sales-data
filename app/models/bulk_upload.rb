@@ -42,6 +42,10 @@ class BulkUpload < ApplicationRecord
     needstype == 1
   end
 
+  def supported_housing?
+    needstype == 2
+  end
+
 private
 
   def generate_identifier
