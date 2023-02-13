@@ -68,6 +68,7 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem "byebug", platforms: %i[mri mingw x64_mingw]
   gem "dotenv-rails"
+  gem "factory_bot_rails"
   gem "pry-byebug"
 
   gem "parallel_tests"
@@ -90,7 +91,6 @@ end
 group :test do
   gem "capybara", require: false
   gem "capybara-lockstep"
-  gem "factory_bot_rails"
   gem "faker"
   gem "rspec-rails", require: false
   gem "selenium-webdriver", require: false

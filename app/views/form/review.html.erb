@@ -1,9 +1,18 @@
-<% content_for :title, "Review lettings log" %>
-<% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
-  "Logs" => "/logs",
-  "Log #{@log.id}" => "/lettings-logs/#{@log.id}",
-  "Review lettings log" => "",
-}) %>
+<% if @log.is_a? SalesLog %>
+  <% content_for :title, "Review sales log" %>
+  <% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
+    "Logs" => "/logs",
+    "Log #{@log.id}" => "/sales-logs/#{@log.id}",
+    "Review sales log" => "",
+  }) %>
+<% else %>
+  <% content_for :title, "Review lettings log" %>
+  <% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
+    "Logs" => "/logs",
+    "Log #{@log.id}" => "/lettings-logs/#{@log.id}",
+    "Review lettings log" => "",
+  }) %>
+<% end %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
@@ -16,17 +25,16 @@
     <% @log.form.sections.map do |section| %>
       <h2 class="govuk-heading-m"><%= section.label %></h2>
       <% section.subsections.map do |subsection| %>
-        <div class="x-govuk-summary-card govuk-!-margin-bottom-6">
-          <div class="x-govuk-summary-card__header">
-            <h3 class="x-govuk-summary-card__title"><%= subsection.label %></h3>
+        <% if total_applicable_questions(subsection, @log, current_user).any? %>
+          <div class="x-govuk-summary-card govuk-!-margin-bottom-6">
+            <div class="x-govuk-summary-card__header">
+              <h3 class="x-govuk-summary-card__title"><%= subsection.label %></h3>
+            </div>
+            <div class="x-govuk-summary-card__body">
+              <%= render partial: "form/check_answers_summary_list", locals: { subsection: } %>
+            </div>
           </div>
-          <div class="x-govuk-summary-card__body">
-            <%= render partial: "form/check_answers_summary_list", locals: {
-              subsection:,
-              lettings_log: @log,
-            } %>
-          </div>
-        </div>
+        <% end %>
       <% end %>
     <% end %>
   </div>
