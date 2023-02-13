@@ -15,9 +15,6 @@ class Form::Sales::Questions::LivingBeforePurchase < ::Form::Question
         {
           "proplen_asked" => 0,
         },
-        {
-          "proplen_asked" => 1,
-        },
       ],
     }
   end
