@@ -894,6 +894,60 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         end
       end
     end
+
+    describe "#housingneeds" do
+      context "when no disabled needs" do
+        let(:attributes) { { bulk_upload:, field_59: "1" } }
+
+        it "sets to 2" do
+          expect(parser.log.housingneeds).to eq(2)
+        end
+      end
+
+      context "when dont know about disabled needs" do
+        let(:attributes) { { bulk_upload:, field_60: "1" } }
+
+        it "sets to 3" do
+          expect(parser.log.housingneeds).to eq(3)
+        end
+      end
+    end
+
+    describe "#housingneeds_type" do
+      context "when field_55 is 1" do
+        let(:attributes) { { bulk_upload:, field_55: "1" } }
+
+        it "set to 0" do
+          expect(parser.log.housingneeds_type).to eq(0)
+        end
+      end
+
+      context "when field_56 is 1" do
+        let(:attributes) { { bulk_upload:, field_56: "1" } }
+
+        it "set to 1" do
+          expect(parser.log.housingneeds_type).to eq(1)
+        end
+      end
+
+      context "when field_57 is 1" do
+        let(:attributes) { { bulk_upload:, field_57: "1" } }
+
+        it "set to 2" do
+          expect(parser.log.housingneeds_type).to eq(2)
+        end
+      end
+    end
+
+    describe "#housingneeds_other" do
+      context "when field_58 is 1" do
+        let(:attributes) { { bulk_upload:, field_58: "1" } }
+
+        it "sets to 1" do
+          expect(parser.log.housingneeds_other).to eq(1)
+        end
+      end
+    end
   end
 
   describe "#start_date" do

@@ -552,6 +552,8 @@ private
     attributes["preg_occ"] = field_47
 
     attributes["housingneeds"] = housingneeds
+    attributes["housingneeds_type"] = housingneeds_type
+    attributes["housingneeds_other"] = housingneeds_other
 
     attributes["illness"] = field_118
 
@@ -808,12 +810,26 @@ private
 
   def housingneeds
     if field_59 == 1
-      1
+      2
     elsif field_60 == 1
       3
     else
       2
     end
+  end
+
+  def housingneeds_type
+    if field_55 == 1
+      0
+    elsif field_56 == 1
+      1
+    elsif field_57 == 1
+      2
+    end
+  end
+
+  def housingneeds_other
+    return 1 if field_58 == 1
   end
 
   def ethnic_group_from_ethnic
