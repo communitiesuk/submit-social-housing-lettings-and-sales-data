@@ -6,6 +6,12 @@ RSpec.describe Form::Lettings::Pages::Location, type: :model do
   let(:page_id) { nil }
   let(:page_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection) }
+  let(:form) { instance_double(Form) }
+
+  before do
+    allow(form).to receive(:start_date).and_return(Time.zone.local(2022, 4, 1))
+    allow(subsection).to receive(:form).and_return(form)
+  end
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
