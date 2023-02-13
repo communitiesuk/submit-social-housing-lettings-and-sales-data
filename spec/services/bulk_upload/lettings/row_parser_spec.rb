@@ -218,7 +218,7 @@ RSpec.describe BulkUpload::Lettings::RowParser do
           let(:attributes) { { bulk_upload:, field_1: "2" } }
 
           it "is not permitted" do
-            expect(parser.errors[:field_1]).to include("Lettings type must be a general needs type")
+            expect(parser.errors[:field_1]).to include("Lettings type must be a general needs type because you selected general needs when uploading the file")
           end
         end
       end
@@ -230,7 +230,7 @@ RSpec.describe BulkUpload::Lettings::RowParser do
           let(:attributes) { { bulk_upload:, field_1: "1" } }
 
           it "is not permitted" do
-            expect(parser.errors[:field_1]).to include("Lettings type must be a supported housing type")
+            expect(parser.errors[:field_1]).to include("Lettings type must be a supported housing type because you selected supported housing when uploading the file")
           end
         end
 
