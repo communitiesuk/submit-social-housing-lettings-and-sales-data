@@ -524,7 +524,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_13_140932) do
     t.integer "details_known_5"
     t.integer "details_known_6"
     t.integer "saledate_check"
-    t.integer "staircasesale"
     t.integer "prevshared"
     t.integer "proplen_asked"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"

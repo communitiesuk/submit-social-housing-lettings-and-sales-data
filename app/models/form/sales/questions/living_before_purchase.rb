@@ -2,7 +2,7 @@ class Form::Sales::Questions::LivingBeforePurchase < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "proplen_asked"
-    @check_answer_label = "Did the buyer live in the property before purchasing it?"
+    @check_answer_label = "Buyer lived in the property before purchasing"
     @header = "Did the buyer live in the property before purchasing it?"
     @hint_text = nil
     @type = "radio"
