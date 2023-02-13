@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Pages::NumberOfOthersInProperty, type: :model do
+RSpec.describe Form::Sales::Pages::NumberOfOthersInPropertyJointPurchase, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
   let(:page_id) { nil }
@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Pages::NumberOfOthersInProperty, type: :model do
   end
 
   it "has the correct id" do
-    expect(page.id).to eq("number_of_others_in_property")
+    expect(page.id).to eq("number_of_others_in_property_joint_purchase")
   end
 
   it "has the correct header" do
@@ -31,11 +31,11 @@ RSpec.describe Form::Sales::Pages::NumberOfOthersInProperty, type: :model do
     expect(page.depends_on).to eq([
       {
         "privacynotice" => 1,
-        "jointpur" => 2,
+        "jointpur" => 1,
       },
       {
         "noint" => 1,
-        "jointpur" => 2,
+        "jointpur" => 1,
       },
     ])
   end

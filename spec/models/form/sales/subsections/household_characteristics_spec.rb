@@ -45,6 +45,12 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
           age_2_buyer_retirement_value_check
           buyer_2_gender_identity
           gender_2_buyer_retirement_value_check
+          buyer_2_ethnic_group
+          buyer_2_ethnic_background_black
+          buyer_2_ethnic_background_asian
+          buyer_2_ethnic_background_arab
+          buyer_2_ethnic_background_mixed
+          buyer_2_ethnic_background_white
           buyer_2_working_situation
           working_situation_2_retirement_value_check_joint_purchase
           working_situation_buyer_2_income_value_check

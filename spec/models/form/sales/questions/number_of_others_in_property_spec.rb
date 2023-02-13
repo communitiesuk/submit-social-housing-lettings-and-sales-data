@@ -1,11 +1,12 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Questions::NumberOfOthersInProperty, type: :model do
-  subject(:question) { described_class.new(question_id, question_definition, page) }
+  subject(:question) { described_class.new(question_id, question_definition, page, joint_purchase:) }
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
+  let(:joint_purchase) { true }
 
   it "has correct page" do
     expect(question.page).to eq(page)
@@ -33,5 +34,13 @@ RSpec.describe Form::Sales::Questions::NumberOfOthersInProperty, type: :model do
 
   it "has the correct hint" do
     expect(question.hint_text).to eq("You can provide details for a maximum of 4 other people.")
+  end
+
+  context "with non joint purchase" do
+    let(:joint_purchase) { false }
+
+    it "has the correct hint" do
+      expect(question.hint_text).to eq("You can provide details for a maximum of 5 other people.")
+    end
   end
 end

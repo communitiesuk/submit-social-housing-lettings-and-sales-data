@@ -38,6 +38,7 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Sales::Pages::Buyer2IncomeValueCheck.new("working_situation_buyer_2_income_value_check", nil, self),
       Form::Sales::Pages::Buyer2LiveInProperty.new(nil, nil, self),
       Form::Sales::Pages::NumberOfOthersInProperty.new(nil, nil, self),
+      Form::Sales::Pages::NumberOfOthersInPropertyJointPurchase.new(nil, nil, self),
       Form::Sales::Pages::PersonKnown.new("person_2_known", nil, self, person_index: 2),
       Form::Sales::Pages::PersonRelationshipToBuyer1.new("person_2_relationship_to_buyer_1", nil, self, person_index: 2),
       Form::Sales::Pages::PersonAge.new("person_2_age", nil, self, person_index: 2),
