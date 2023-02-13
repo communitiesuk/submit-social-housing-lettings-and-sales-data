@@ -153,6 +153,8 @@ class BulkUpload::Lettings::RowParser
   def valid?
     errors.clear
 
+    return true if blank_row?
+
     super
 
     log.valid?
@@ -163,6 +165,10 @@ class BulkUpload::Lettings::RowParser
     end
 
     errors.blank?
+  end
+
+  def blank_row?
+    attribute_set.to_hash.reject { |k, _| %w[bulk_upload].include?(k) }.values.compact.empty?
   end
 
   def log
