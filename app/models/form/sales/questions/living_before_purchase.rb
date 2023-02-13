@@ -1,15 +1,29 @@
 class Form::Sales::Questions::LivingBeforePurchase < ::Form::Question
   def initialize(id, hsh, page)
     super
-    @id = "proplen"
-    @check_answer_label = "Number of years living in the property before purchase"
-    @header = "How long did the buyer(s) live in the property before purchase?"
-    @hint_text = "You should round this up to the nearest year. If the buyers haven't been living in the property, enter '0'"
-    @type = "numeric"
-    @min = 0
-    @max = 80
-    @step = 1
-    @width = 5
-    @suffix = " years"
+    @id = "proplen_asked"
+    @check_answer_label = "Did the buyer live in the property before purchasing it?"
+    @header = "Did the buyer live in the property before purchasing it?"
+    @hint_text = nil
+    @type = "radio"
+    @answer_options = ANSWER_OPTIONS
+    @conditional_for = {
+      "proplen" => [0],
+    }
+    @hidden_in_check_answers = {
+      "depends_on" => [
+        {
+          "proplen_asked" => 0,
+        },
+        {
+          "proplen_asked" => 1,
+        },
+      ],
+    }
   end
+
+  ANSWER_OPTIONS = {
+    "0" => { "value" => "Yes" },
+    "1" => { "value" => "No" },
+  }.freeze
 end
