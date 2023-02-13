@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_03_174815) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_10_122037) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -524,6 +524,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_03_174815) do
     t.integer "details_known_5"
     t.integer "details_known_6"
     t.integer "saledate_check"
+    t.integer "staircasesale"
     t.integer "prevshared"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
