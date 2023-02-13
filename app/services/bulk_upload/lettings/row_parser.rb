@@ -150,6 +150,7 @@ class BulkUpload::Lettings::RowParser
   validate :validate_cannot_be_la_referral_if_general_needs
   validate :validate_leaving_reason_for_renewal
   validate :validate_lettings_type_matches_bulk_upload
+  validate :validate_only_one_housing_needs_type
 
   def valid?
     errors.clear
@@ -177,6 +178,14 @@ class BulkUpload::Lettings::RowParser
   end
 
 private
+
+  def validate_only_one_housing_needs_type
+    if [field_55, field_56, field_57].compact.count.positive?
+      errors.add(:field_55, I18n.t("validations.household.housingneeds_type.only_one_option_permitted"))
+      errors.add(:field_56, I18n.t("validations.household.housingneeds_type.only_one_option_permitted"))
+      errors.add(:field_57, I18n.t("validations.household.housingneeds_type.only_one_option_permitted"))
+    end
+  end
 
   def validate_lettings_type_matches_bulk_upload
     if [1, 3, 5, 7, 9, 11].include?(field_1) && !bulk_upload.general_needs?

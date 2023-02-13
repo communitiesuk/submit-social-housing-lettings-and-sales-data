@@ -344,6 +344,18 @@ RSpec.describe BulkUpload::Lettings::RowParser do
       end
     end
 
+    describe "#field_55, #field_56, #field_57" do
+      context "when more than one item selected" do
+        let(:attributes) { { bulk_upload:, field_55: "1", field_56: "1" } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_55]).to be_present
+          expect(parser.errors[:field_56]).to be_present
+          expect(parser.errors[:field_57]).to be_present
+        end
+      end
+    end
+
     describe "#field_78" do # referral
       context "when 3 ie PRP nominated by LA and owning org is LA" do
         let(:attributes) { { bulk_upload:, field_78: "3", field_111: owning_org.old_visible_id } }

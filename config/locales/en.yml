@@ -344,6 +344,8 @@ en:
           must_be_child: "Answer must be ‘child’ if the person is aged 16-19 and a student"
       housingneeds_a:
         one_or_two_choices: "You can only select one option or ‘other disabled access needs’ plus ‘wheelchair-accessible housing’, ‘wheelchair access to essential rooms’ or ‘level access housing’"
+      housingneeds_type:
+        only_one_option_permitted: "Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected"
       prevten:
         non_temp_accommodation: "Answer cannot be non-temporary accommodation as this is a re-let to a tenant who occupied the same property as temporary accommodation"
         over_20_foster_care: "Answer cannot be a children’s home or foster care as the lead tenant is 20 or older"
