@@ -258,6 +258,10 @@ RSpec.describe Exports::LettingsLogExportService do
 
     let(:lettings_log) { FactoryBot.create(:lettings_log, :completed, :export, :sh, scheme:, location:, created_by: user, owning_organisation: organisation, startdate: Time.utc(2022, 2, 2, 10, 36, 49), underoccupation_benefitcap: 4, sheltered: 1) }
 
+    before do
+      FactoryBot.create(:location, scheme:, startdate: Time.zone.local(2021, 4, 1), units: nil)
+    end
+
     it "generates an XML export file with the expected content" do
       expected_content = replace_entity_ids(lettings_log, export_file.read)
       expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
