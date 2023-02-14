@@ -33,7 +33,7 @@ RSpec.describe Form::Sales::Questions::NumberOfOthersInProperty, type: :model do
   end
 
   it "has the correct hint" do
-    expect(question.hint_text).to eq("You can provide details for a maximum of 4 other people.")
+    expect(question.hint_text).to eq("You can provide details for a maximum of 4 other people for a joint purchase.")
   end
 
   it "has the correct min" do
@@ -48,7 +48,7 @@ RSpec.describe Form::Sales::Questions::NumberOfOthersInProperty, type: :model do
     let(:joint_purchase) { false }
 
     it "has the correct hint" do
-      expect(question.hint_text).to eq("You can provide details for a maximum of 5 other people.")
+      expect(question.hint_text).to eq("You can provide details for a maximum of 5 other people if there is only one buyer.")
     end
 
     it "has the correct max" do
