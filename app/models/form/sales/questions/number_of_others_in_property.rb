@@ -8,6 +8,6 @@ class Form::Sales::Questions::NumberOfOthersInProperty < ::Form::Question
     @hint_text = "You can provide details for a maximum of #{joint_purchase ? '4' : '5'} other people."
     @width = 2
     @min = 0
-    @max = 4
+    @max = joint_purchase ? 4 : 5
   end
 end
