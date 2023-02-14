@@ -71,6 +71,14 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Sales::Pages::RetirementValueCheck.new("gender_5_retirement_value_check", nil, self, person_index: 5),
       Form::Sales::Pages::PersonWorkingSituation.new("person_5_working_situation", nil, self, person_index: 5),
       Form::Sales::Pages::RetirementValueCheck.new("working_situation_5_retirement_value_check", nil, self, person_index: 5),
+      Form::Sales::Pages::PersonKnown.new("person_6_known", nil, self, person_index: 6),
+      Form::Sales::Pages::PersonRelationshipToBuyer1.new("person_6_relationship_to_buyer_1", nil, self, person_index: 6),
+      Form::Sales::Pages::PersonAge.new("person_6_age", nil, self, person_index: 6),
+      Form::Sales::Pages::RetirementValueCheck.new("age_6_retirement_value_check", nil, self, person_index: 6),
+      Form::Sales::Pages::PersonGenderIdentity.new("person_6_gender_identity", nil, self, person_index: 6),
+      Form::Sales::Pages::RetirementValueCheck.new("gender_6_retirement_value_check", nil, self, person_index: 6),
+      Form::Sales::Pages::PersonWorkingSituation.new("person_6_working_situation", nil, self, person_index: 6),
+      Form::Sales::Pages::RetirementValueCheck.new("working_situation_6_retirement_value_check", nil, self, person_index: 6),
     ].flatten.compact
   end
 
