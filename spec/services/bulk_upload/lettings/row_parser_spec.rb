@@ -353,11 +353,21 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         end
       end
 
-      context "when 4 ie referred by LA and is general needs" do
-        let(:attributes) { { bulk_upload:, field_78: "4" } }
+      context "when 4 ie referred by LA and is general needs and owning org is LA" do
+        let(:attributes) { { bulk_upload:, field_78: "4", field_111: owning_org.old_visible_id.to_s } }
 
         it "is not permitted" do
           expect(parser.errors[:field_78]).to be_present
+        end
+      end
+
+      context "when 4 ie referred by LA and is general needs and owning org is PRP" do
+        let(:owning_org) { create(:organisation, :prp, :with_old_visible_id) }
+
+        let(:attributes) { { bulk_upload:, field_78: "4", field_111: owning_org.old_visible_id.to_s } }
+
+        it "is permitted" do
+          expect(parser.errors[:field_78]).to be_blank
         end
       end
 
