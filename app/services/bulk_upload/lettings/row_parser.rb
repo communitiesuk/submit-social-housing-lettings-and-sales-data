@@ -151,6 +151,7 @@ class BulkUpload::Lettings::RowParser
   validate :validate_leaving_reason_for_renewal
   validate :validate_lettings_type_matches_bulk_upload
   validate :validate_only_one_housing_needs_type
+  validate :validate_no_disabled_needs_conjunction
 
   def valid?
     errors.clear
@@ -178,6 +179,12 @@ class BulkUpload::Lettings::RowParser
   end
 
 private
+
+  def validate_no_disabled_needs_conjunction
+    if field_59 == 1 && [field_55, field_56, field_57, field_58].compact.count.positive?
+      errors.add(:field_59, I18n.t("validations.household.housingneeds.validate_no_disabled_needs_conjunction"))
+    end
+  end
 
   def validate_only_one_housing_needs_type
     if [field_55, field_56, field_57].compact.count.positive?
