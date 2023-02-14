@@ -1946,12 +1946,12 @@ RSpec.describe LettingsLog do
     end
 
     context "when a non select question associated with several pages is routed to" do
-      let(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress, period: 2) }
+      let(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress, period: 2, needstype: 1) }
 
       it "does not clear the answer value" do
-        lettings_log.update!({ offered: 4 })
+        lettings_log.update!({ unitletas: 1 })
         lettings_log.reload
-        expect(lettings_log.offered).to eq(4)
+        expect(lettings_log.unitletas).to eq(1)
       end
     end
 
