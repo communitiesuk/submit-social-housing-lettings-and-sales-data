@@ -176,6 +176,7 @@ class BulkUpload::Lettings::Validator
   def create_logs?
     return false if any_setup_sections_incomplete?
     return false if over_column_error_threshold?
+    return false if any_logs_already_exist?
 
     row_parsers.all? { |row_parser| row_parser.log.valid? }
   end
@@ -201,6 +202,10 @@ private
 
       count > percentage_threshold
     end
+  end
+
+  def any_logs_already_exist?
+    row_parsers.any? { |row_parser| row_parser.log_already_exists? }
   end
 
   def csv_parser
