@@ -347,8 +347,9 @@ en:
       housingneeds_type:
         only_one_option_permitted: "Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected"
       housingneeds:
-        no_disabled_needs_conjunction: "No disabled needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs"
-        dont_know_disabled_needs_conjunction: "Don’t know disabled needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs"
+        no_disabled_needs_conjunction: "No disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs"
+        dont_know_disabled_needs_conjunction: "Don’t know disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs"
+        no_and_dont_know_disabled_needs_conjunction: "No disabled access needs and don’t know disabled access needs cannot be selected together"
       prevten:
         non_temp_accommodation: "Answer cannot be non-temporary accommodation as this is a re-let to a tenant who occupied the same property as temporary accommodation"
         over_20_foster_care: "Answer cannot be a children’s home or foster care as the lead tenant is 20 or older"
