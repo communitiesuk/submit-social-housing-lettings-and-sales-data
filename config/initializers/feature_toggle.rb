@@ -3,10 +3,6 @@ class FeatureToggle
     Rails.env.production? || Rails.env.test?
   end
 
-  def self.startdate_collection_window_validation_enabled?
-    Rails.env.production? || Rails.env.test?
-  end
-
   def self.saledate_collection_window_validation_enabled?
     Rails.env.production? || Rails.env.test?
   end

@@ -35,11 +35,11 @@ module Validations::DateValidations
 
     created_at = record.created_at || Time.zone.now
 
-    if created_at > first_collection_end_date && record.startdate < second_collection_start_date
+    if created_at > previous_collection_end_date && record.startdate < current_collection_start_date
       record.errors.add :startdate, I18n.t("validations.date.outside_collection_window")
     end
 
-    if (record.startdate < first_collection_start_date || record.startdate > second_collection_end_date) && FeatureToggle.startdate_collection_window_validation_enabled?
+    if (record.startdate < previous_collection_start_date || record.startdate > next_collection_end_date)
       record.errors.add :startdate, I18n.t("validations.date.outside_collection_window")
     end
 
@@ -68,20 +68,28 @@ module Validations::DateValidations
 
 private
 
-  def first_collection_start_date
-    @first_collection_start_date ||= FormHandler.instance.lettings_forms["previous_lettings"].start_date
+  def previous_collection_start_date
+    @previous_collection_start_date ||= FormHandler.instance.lettings_forms["previous_lettings"].start_date
   end
 
-  def first_collection_end_date
-    @first_collection_end_date ||= FormHandler.instance.lettings_forms["previous_lettings"].end_date
+  def previous_collection_end_date
+    @previous_collection_end_date ||= FormHandler.instance.lettings_forms["previous_lettings"].end_date
   end
 
-  def second_collection_start_date
-    @second_collection_start_date ||= FormHandler.instance.lettings_forms["current_lettings"].start_date
+  def current_collection_start_date
+    @current_collection_start_date ||= FormHandler.instance.lettings_forms["current_lettings"].start_date
   end
 
-  def second_collection_end_date
-    @second_collection_end_date ||= FormHandler.instance.lettings_forms["current_lettings"].end_date
+  def current_collection_end_date
+    @current_collection_end_date ||= FormHandler.instance.lettings_forms["current_lettings"].end_date
+  end
+
+  def next_collection_start_date
+    @next_collection_start_date ||= FormHandler.instance.lettings_forms["next_lettings"].start_date
+  end
+
+  def next_collection_end_date
+    @next_collection_end_date ||= FormHandler.instance.lettings_forms["next_lettings"].end_date
   end
 
   def is_rsnvac_first_let?(record)
