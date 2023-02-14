@@ -329,7 +329,7 @@ private
       "ethnic" => field_43,
     }
 
-    LettingsLog.where(field_mappings).present?
+    LettingsLog.exists?(field_mappings)
   end
 
   def field_mapping_for_errors
