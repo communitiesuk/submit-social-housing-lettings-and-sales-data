@@ -152,6 +152,7 @@ class BulkUpload::Lettings::RowParser
   validate :validate_lettings_type_matches_bulk_upload
   validate :validate_only_one_housing_needs_type
   validate :validate_no_disabled_needs_conjunction
+  validate :validate_dont_know_disabled_needs_conjunction
 
   def valid?
     errors.clear
@@ -180,9 +181,15 @@ class BulkUpload::Lettings::RowParser
 
 private
 
+  def validate_dont_know_disabled_needs_conjunction
+    if field_60 == 1 && [field_55, field_56, field_57, field_58].compact.count.positive?
+      errors.add(:field_60, I18n.t("validations.household.housingneeds.dont_know_disabled_needs_conjunction"))
+    end
+  end
+
   def validate_no_disabled_needs_conjunction
     if field_59 == 1 && [field_55, field_56, field_57, field_58].compact.count.positive?
-      errors.add(:field_59, I18n.t("validations.household.housingneeds.validate_no_disabled_needs_conjunction"))
+      errors.add(:field_59, I18n.t("validations.household.housingneeds.no_disabled_needs_conjunction"))
     end
   end
 
