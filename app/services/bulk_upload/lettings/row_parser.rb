@@ -294,23 +294,9 @@ private
   end
 
   def validate_if_log_already_exists
-    field_mappings = {
-      "startdate" => startdate,
-      "postcode_full" => postcode_full,
-      "brent" => brent,
-      "scharge" => scharge,
-      "pscharge" => pscharge,
-      "supcharg" => supcharg,
-      "tenancycode" => field_7,
-      "age1" => field_12,
-      "sex1" => field_20,
-      "ecstat1" => field_35,
-      "ethnic" => field_43,
-    }
-    duplicate_log_exists = LettingsLog.where(field_mappings).present?
-
-    if duplicate_log_exists
+    if log_already_exists?
       error_message = "This is a duplicate log"
+
       errors.add(:field_96, error_message) # startdate
       errors.add(:field_97, error_message) # startdate
       errors.add(:field_98, error_message) # startdate
@@ -326,6 +312,24 @@ private
       errors.add(:field_35, error_message) # ecstat1
       errors.add(:field_43, error_message) # ethnic
     end
+  end
+
+  def log_already_exists?
+    field_mappings = {
+      "startdate" => startdate,
+      "postcode_full" => postcode_full,
+      "brent" => brent,
+      "scharge" => scharge,
+      "pscharge" => pscharge,
+      "supcharg" => supcharg,
+      "tenancycode" => field_7,
+      "age1" => field_12,
+      "sex1" => field_20,
+      "ecstat1" => field_35,
+      "ethnic" => field_43,
+    }
+
+    LettingsLog.where(field_mappings).present?
   end
 
   def field_mapping_for_errors
