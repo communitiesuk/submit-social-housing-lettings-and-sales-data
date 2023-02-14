@@ -70,6 +70,14 @@ class LettingsLog < Log
     collection_start_year
   end
 
+  def lettings?
+    true
+  end
+
+  def sales?
+    false
+  end
+
   def form_name
     return unless startdate
 
