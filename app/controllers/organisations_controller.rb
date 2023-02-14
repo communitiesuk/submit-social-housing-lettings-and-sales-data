@@ -6,8 +6,8 @@ class OrganisationsController < ApplicationController
   before_action :authenticate_user!
   before_action :find_resource, except: %i[index new create]
   before_action :authenticate_scope!, except: [:index]
-  before_action -> { session_filters(specific_org: true) }, if: -> { current_user.support? || current_user.organisation.has_managing_agents? }
-  before_action :set_session_filters, if: -> { current_user.support? || current_user.organisation.has_managing_agents? }
+  before_action -> { session_filters(specific_org: true) }, if: -> { current_user.support? || current_user.organisation.has_managing_agents? }, only: %i[lettings_logs sales_logs email_csv download_csv]
+  before_action :set_session_filters, if: -> { current_user.support? || current_user.organisation.has_managing_agents? }, only: %i[lettings_logs sales_logs email_csv download_csv]
 
   def index
     redirect_to organisation_path(current_user.organisation) unless current_user.support?

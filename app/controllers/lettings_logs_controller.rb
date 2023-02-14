@@ -1,7 +1,7 @@
 class LettingsLogsController < LogsController
   before_action :find_resource, except: %i[create index edit]
-  before_action :session_filters, if: :current_user
-  before_action :set_session_filters, if: :current_user
+  before_action :session_filters, if: :current_user, only: %i[index email_csv download_csv]
+  before_action :set_session_filters, if: :current_user, only: %i[index email_csv download_csv]
 
   before_action :extract_bulk_upload_from_session_filters, only: [:index]
   before_action :redirect_if_bulk_upload_resolved, only: [:index]
