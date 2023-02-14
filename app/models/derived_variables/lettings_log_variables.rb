@@ -45,6 +45,7 @@ module DerivedVariables::LettingsLogVariables
       self.underoccupation_benefitcap = 2 if collection_start_year == 2021
       self.referral = 1
       self.waityear = 2
+      self.offered = 0
       if is_general_needs?
         # fixed term
         self.prevten = 32 if managing_organisation&.provider_type == "PRP"
