@@ -18,6 +18,11 @@ RSpec.describe LettingsLog do
     expect(described_class).to be < ApplicationRecord
   end
 
+  it "is a not a sales log" do
+    lettings_log = FactoryBot.build(:lettings_log, created_by: created_by_user)
+    expect(lettings_log.sales?).to be false
+  end
+
   it "is a lettings log" do
     lettings_log = FactoryBot.build(:lettings_log, created_by: created_by_user)
     expect(lettings_log).to be_lettings

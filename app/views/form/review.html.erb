@@ -1,4 +1,4 @@
-<% if @log.is_a? SalesLog %>
+<% if @log.sales? %>
   <% content_for :title, "Review sales log" %>
   <% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
     "Logs" => "/logs",

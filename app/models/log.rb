@@ -40,7 +40,11 @@ class Log < ApplicationRecord
   end
 
   def lettings?
-    false
+    is_a? LettingsLog
+  end
+
+  def sales?
+    is_a? SalesLog
   end
 
   def ethnic_refused?
