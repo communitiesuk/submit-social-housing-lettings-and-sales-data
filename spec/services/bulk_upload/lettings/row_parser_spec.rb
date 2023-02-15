@@ -462,6 +462,36 @@ RSpec.describe BulkUpload::Lettings::RowParser do
       end
     end
 
+    describe "#field_111" do # owning org
+      context "when cannot find owning org" do
+        let(:attributes) { { bulk_upload:, field_111: "donotexist" } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_111]).to eql(["The owning organisation code is incorrect"])
+        end
+      end
+
+      context "when org is not stock owning" do
+        let(:owning_org) { create(:organisation, :with_old_visible_id, :does_not_own_stock) }
+
+        let(:attributes) { { bulk_upload:, field_111: owning_org.old_visible_id } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_111]).to eql(["The owning organisation code provided is for an organisation that does not own stock"])
+        end
+      end
+
+      context "when not affiliated with owning org" do
+        let(:unaffiliated_org) { create(:organisation, :with_old_visible_id) }
+
+        let(:attributes) { { bulk_upload:, field_111: unaffiliated_org.old_visible_id } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_111]).to eql(["You do not have permission to add logs for this owning organisation"])
+        end
+      end
+    end
+
     describe "#field_134" do
       context "when an unpermitted value" do
         let(:attributes) { { bulk_upload:, field_134: 3 } }

@@ -154,6 +154,9 @@ class BulkUpload::Lettings::RowParser
   validate :validate_no_disabled_needs_conjunction
   validate :validate_dont_know_disabled_needs_conjunction
   validate :validate_no_and_dont_know_disabled_needs_conjunction
+  validate :validate_owning_org_permitted
+  validate :validate_owning_org_owns_stock
+  validate :validate_owning_org_exists
 
   def valid?
     errors.clear
@@ -181,6 +184,27 @@ class BulkUpload::Lettings::RowParser
   end
 
 private
+
+  def validate_owning_org_owns_stock
+    if owning_organisation && !owning_organisation.holds_own_stock?
+      errors.delete(:field_111)
+      errors.add(:field_111, "The owning organisation code provided is for an organisation that does not own stock")
+    end
+  end
+
+  def validate_owning_org_exists
+    if owning_organisation.nil?
+      errors.delete(:field_111)
+      errors.add(:field_111, "The owning organisation code is incorrect")
+    end
+  end
+
+  def validate_owning_org_permitted
+    if owning_organisation && !bulk_upload.user.organisation.affiliated_stock_owners.include?(owning_organisation)
+      errors.delete(:field_111)
+      errors.add(:field_111, "You do not have permission to add logs for this owning organisation")
+    end
+  end
 
   def validate_no_and_dont_know_disabled_needs_conjunction
     if field_59 == 1 && field_60 == 1
