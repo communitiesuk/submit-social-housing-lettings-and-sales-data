@@ -136,7 +136,9 @@ en:
       above_min: "%{field} must be at least %{min}"
     date:
       invalid_date: "Enter a date in the correct format, for example 31 1 2022"
-      outside_collection_window: "Enter a date within the 22/23 or 23/24 financial years, which is between 1st April 2022 and 31st March 2024"
+      outside_collection_window:
+        crossover_period: "Enter a date within the %{previous_collection} or %{current_collection} financial years, which is between 1st April %{previous_collection_start_year} and 31st March %{current_collection_end_year}"
+        not_crossover_period: "Enter a date within the %{current_collection} financial year, which is between 1st April %{current_collection_start_year} and 31st March %{current_collection_end_year}"
     postcode: "Enter a postcode in the correct format, for example AA1 1AA"
     location_admin_district: "Select a local authority"
     email:
