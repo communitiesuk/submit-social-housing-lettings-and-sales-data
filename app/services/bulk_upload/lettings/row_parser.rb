@@ -315,21 +315,21 @@ private
   end
 
   def log_already_exists?
-    field_mappings = {
-      "startdate" => startdate,
-      "postcode_full" => postcode_full,
-      "brent" => brent,
-      "scharge" => scharge,
-      "pscharge" => pscharge,
-      "supcharg" => supcharg,
-      "tenancycode" => field_7,
-      "age1" => field_12,
-      "sex1" => field_20,
-      "ecstat1" => field_35,
-      "ethnic" => field_43,
-    }
+    fields_for_duplicity_check = %w(
+      startdate
+      postcode_full
+      brent
+      scharge
+      pscharge
+      supcharg
+      tenancycode
+      age1
+      sex1
+      ecstat1
+      ethnic
+    )
 
-    LettingsLog.exists?(field_mappings)
+    LettingsLog.exists?(Hash[fields_for_duplicity_check.collect { |field| [field, log[field]] }])
   end
 
   def field_mapping_for_errors
@@ -919,30 +919,6 @@ private
       4
     when 17
       17
-    end
-  end
-
-  def brent
-    if %i[field_80 field_81 field_82 field_83].any? { |f| public_send(f).present? }
-      self.field_80 ||= 0
-    end
-  end
-
-  def scharge
-    if %i[field_80 field_81 field_82 field_83].any? { |f| public_send(f).present? }
-      self.field_81 ||= 0
-    end
-  end
-
-  def pscharge
-    if %i[field_80 field_81 field_82 field_83].any? { |f| public_send(f).present? }
-      self.field_82 ||= 0
-    end
-  end
-
-  def supcharg
-    if %i[field_80 field_81 field_82 field_83].any? { |f| public_send(f).present? }
-      self.field_83 ||= 0
     end
   end
 
