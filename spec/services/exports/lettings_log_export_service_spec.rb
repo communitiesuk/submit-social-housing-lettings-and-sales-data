@@ -20,8 +20,8 @@ RSpec.describe Exports::LettingsLogExportService do
 
   def replace_entity_ids(lettings_log, export_template)
     export_template.sub!(/\{id\}/, (lettings_log["id"] + Exports::LettingsLogExportService::LOG_ID_OFFSET).to_s)
-    export_template.sub!(/\{owning_org_id\}/, (lettings_log["owning_organisation_id"] + Exports::LettingsLogExportService::LOG_ID_OFFSET).to_s)
-    export_template.sub!(/\{managing_org_id\}/, (lettings_log["managing_organisation_id"] + Exports::LettingsLogExportService::LOG_ID_OFFSET).to_s)
+    export_template.sub!(/\{owning_org_id\}/, "ORG#{lettings_log['owning_organisation_id']}")
+    export_template.sub!(/\{managing_org_id\}/, "ORG#{lettings_log['managing_organisation_id']}")
   end
 
   def replace_record_number(export_template, record_number)

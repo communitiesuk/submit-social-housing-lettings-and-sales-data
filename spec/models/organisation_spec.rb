@@ -239,4 +239,26 @@ RSpec.describe Organisation, type: :model do
       end
     end
   end
+
+  describe "callbacks" do
+    describe "after create" do
+      context "when old_visible_id present" do
+        subject(:model) { described_class.new(name: "foo", provider_type: "LA", old_visible_id: "123") }
+
+        it "keeps old_visible_id" do
+          model.save!
+          expect(model.old_visible_id).to eql("123")
+        end
+      end
+
+      context "when old_visible_id not present" do
+        subject(:model) { described_class.new(name: "foo", provider_type: "LA") }
+
+        it "generates an old_visible_id" do
+          model.save!
+          expect(model.old_visible_id).to eql("ORG#{model.id}")
+        end
+      end
+    end
+  end
 end

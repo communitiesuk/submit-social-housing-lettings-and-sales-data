@@ -35,6 +35,8 @@ class Organisation < ApplicationRecord
   validates :name, presence: { message: I18n.t("validations.organisation.name_missing") }
   validates :provider_type, presence: { message: I18n.t("validations.organisation.provider_type_missing") }
 
+  after_create :persist_missing_old_visible_id
+
   def lettings_logs
     LettingsLog.filter_by_organisation(self)
   end
@@ -95,5 +97,14 @@ class Organisation < ApplicationRecord
 
   def has_managing_agents?
     managing_agents.count.positive?
+  end
+
+private
+
+  def persist_missing_old_visible_id
+    if old_visible_id.blank?
+      self.old_visible_id ||= "ORG#{id}"
+      update_column(:old_visible_id, old_visible_id)
+    end
   end
 end
