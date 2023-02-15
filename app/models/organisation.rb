@@ -17,8 +17,21 @@ class Organisation < ApplicationRecord
   has_many :managing_agent_relationships, foreign_key: :parent_organisation_id, class_name: "OrganisationRelationship"
   has_many :managing_agents, through: :managing_agent_relationships, source: :child_organisation
 
+  def affiliated_stock_owners
+    ids = []
+
+    if holds_own_stock? && persisted?
+      ids << id
+    end
+
+    ids.concat(stock_owners.pluck(:id))
+
+    Organisation.where(id: ids)
+  end
+
   scope :search_by_name, ->(name) { where("name ILIKE ?", "%#{name}%") }
   scope :search_by, ->(param) { search_by_name(param) }
+
   has_paper_trail
 
   auto_strip_attributes :name
