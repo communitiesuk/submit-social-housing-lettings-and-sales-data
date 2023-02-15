@@ -532,7 +532,7 @@ RSpec.describe LettingsLogsController, type: :request do
         it "displays CSV download links with the correct paths" do
           get "/lettings-logs", headers:, params: {}
           expect(page).to have_link("Download (CSV)", href: "/lettings-logs/csv-download?codes_only=false")
-          expect(page).to have_link("Download (CSV, codes only)", href: "/lettings-logs/csv-download?codes_only=true")
+          expect(page).not_to have_link("Download (CSV, codes only)")
         end
 
         it "does not display CSV download links if there are no logs" do
@@ -590,10 +590,7 @@ RSpec.describe LettingsLogsController, type: :request do
             get "/lettings-logs?search=#{search_term}", headers:, params: {}
             download_link = page.find_link("Download (CSV)")
             download_link_params = CGI.parse(URI.parse(download_link[:href]).query)
-            codes_only_download_link = page.find_link("Download (CSV, codes only)")
-            codes_only_download_link_params = CGI.parse(URI.parse(codes_only_download_link[:href]).query)
             expect(download_link_params).to include("search" => [search_term])
-            expect(codes_only_download_link_params).to include("search" => [search_term])
           end
 
           context "when more than one results with matching postcode" do
@@ -661,7 +658,7 @@ RSpec.describe LettingsLogsController, type: :request do
           end
         end
 
-        context "when there are less than 20 logs" do
+        context "when there are fewer than 20 logs" do
           before do
             get "/lettings-logs", headers:, params: {}
           end
@@ -704,9 +701,8 @@ RSpec.describe LettingsLogsController, type: :request do
             expect(page).to have_title("Logs - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
 
-          it "shows the CSV download links" do
+          it "shows the CSV download link" do
             expect(page).to have_link("Download (CSV)", href: "/lettings-logs/csv-download?codes_only=false")
-            expect(page).to have_link("Download (CSV, codes only)", href: "/lettings-logs/csv-download?codes_only=true")
           end
 
           it "does not show the organisation filter" do
@@ -1304,14 +1300,14 @@ RSpec.describe LettingsLogsController, type: :request do
     it "when codes_only query parameter is false, form contains hidden field with correct value" do
       codes_only = false
       get "/lettings-logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
-      hidden_field = page.find("form.button_to").find_field("is_codes_only_export", type: "hidden")
+      hidden_field = page.find("form.button_to").find_field("codes_only_export", type: "hidden")
       expect(hidden_field.value).to eq(codes_only.to_s)
     end
 
     it "when codes_only query parameter is true, form contains hidden field with correct value" do
       codes_only = true
       get "/lettings-logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
-      hidden_field = page.find("form.button_to").find_field("is_codes_only_export", type: "hidden")
+      hidden_field = page.find("form.button_to").find_field("codes_only_export", type: "hidden")
       expect(hidden_field.value).to eq(codes_only.to_s)
     end
 
@@ -1347,33 +1343,33 @@ RSpec.describe LettingsLogsController, type: :request do
 
       it "creates an E-mail job" do
         expect {
-          post "/lettings-logs/email-csv?is_codes_only_export=true", headers:, params: {}
+          post "/lettings-logs/email-csv?codes_only_export=true", headers:, params: {}
         }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, nil, true)
       end
 
       it "redirects to the confirmation page" do
-        post "/lettings-logs/email-csv?is_codes_only_export=true", headers:, params: {}
+        post "/lettings-logs/email-csv?codes_only_export=true", headers:, params: {}
         expect(response).to redirect_to(csv_confirmation_lettings_logs_path)
       end
 
       it "passes the search term" do
         expect {
-          post "/lettings-logs/email-csv?search=#{lettings_log.id}&is_codes_only_export=false", headers:, params: {}
+          post "/lettings-logs/email-csv?search=#{lettings_log.id}&codes_only_export=false", headers:, params: {}
         }.to enqueue_job(EmailCsvJob).with(user, lettings_log.id.to_s, {}, false, nil, false)
       end
 
       it "passes filter parameters" do
         expect {
-          post "/lettings-logs/email-csv?status[]=completed&is_codes_only_export=true", headers:, params: {}
+          post "/lettings-logs/email-csv?status[]=completed&codes_only_export=true", headers:, params: {}
         }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed] }, false, nil, true)
       end
 
       it "passes export type flag" do
         expect {
-          post "/lettings-logs/email-csv?is_codes_only_export=true", headers:, params: {}
+          post "/lettings-logs/email-csv?codes_only_export=true", headers:, params: {}
         }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, nil, true)
         expect {
-          post "/lettings-logs/email-csv?is_codes_only_export=false", headers:, params: {}
+          post "/lettings-logs/email-csv?codes_only_export=false", headers:, params: {}
         }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, nil, false)
       end
 
@@ -1381,7 +1377,7 @@ RSpec.describe LettingsLogsController, type: :request do
         postcode = "XX1 1TG"
 
         expect {
-          post "/lettings-logs/email-csv?status[]=completed&search=#{postcode}&is_codes_only_export=false", headers:, params: {}
+          post "/lettings-logs/email-csv?status[]=completed&search=#{postcode}&codes_only_export=false", headers:, params: {}
         }.to enqueue_job(EmailCsvJob).with(user, postcode, { "status" => %w[completed] }, false, nil, false)
       end
     end

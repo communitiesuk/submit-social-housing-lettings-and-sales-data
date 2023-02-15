@@ -2711,7 +2711,7 @@ RSpec.describe LettingsLog do
         let(:csv_export_file) { File.open("spec/fixtures/files/lettings_logs_download.csv", "r:UTF-8") }
 
         it "generates a correct csv from a lettings log" do
-          expect(described_class.to_csv(is_codes_only_export: false)).to eq(expected_content)
+          expect(described_class.to_csv(codes_only_export: false)).to eq(expected_content)
         end
       end
 
@@ -2719,7 +2719,7 @@ RSpec.describe LettingsLog do
         let(:csv_export_file) { File.open("spec/fixtures/files/lettings_logs_download_non_support.csv", "r:UTF-8") }
 
         it "generates a correct csv from a lettings log" do
-          expect(described_class.to_csv(user, is_codes_only_export: false)).to eq(expected_content)
+          expect(described_class.to_csv(user, codes_only_export: false)).to eq(expected_content)
         end
       end
     end
@@ -2745,7 +2745,7 @@ RSpec.describe LettingsLog do
       let(:csv_export_file) { File.open("spec/fixtures/files/lettings_logs_download_codes_only.csv", "r:UTF-8") }
 
       it "generates a correct csv from a lettings log" do
-        expect(described_class.to_csv(is_codes_only_export: true)).to eq(expected_content)
+        expect(described_class.to_csv(codes_only_export: true)).to eq(expected_content)
       end
     end
   end

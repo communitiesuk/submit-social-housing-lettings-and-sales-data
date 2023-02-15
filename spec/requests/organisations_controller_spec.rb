@@ -1166,18 +1166,18 @@ RSpec.describe OrganisationsController, type: :request do
 
         it "provides the organisation to the mail job" do
           expect {
-            post "/organisations/#{organisation.id}/logs/email-csv?status[]=completed&is_codes_only_export=false", headers:, params: {}
+            post "/organisations/#{organisation.id}/logs/email-csv?status[]=completed&codes_only_export=false", headers:, params: {}
           }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed] }, false, organisation, false)
         end
 
         it "provides the export type to the mail job" do
           codes_only_export_type = false
           expect {
-            post "/organisations/#{organisation.id}/logs/email-csv?is_codes_only_export=#{codes_only_export_type}", headers:, params: {}
+            post "/organisations/#{organisation.id}/logs/email-csv?codes_only_export=#{codes_only_export_type}", headers:, params: {}
           }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, organisation, codes_only_export_type)
           codes_only_export_type = true
           expect {
-            post "/organisations/#{organisation.id}/logs/email-csv?is_codes_only_export=#{codes_only_export_type}", headers:, params: {}
+            post "/organisations/#{organisation.id}/logs/email-csv?codes_only_export=#{codes_only_export_type}", headers:, params: {}
           }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, organisation, codes_only_export_type)
         end
       end
@@ -1201,14 +1201,14 @@ RSpec.describe OrganisationsController, type: :request do
       it "when codes_only query parameter is false, form contains hidden field with correct value" do
         codes_only = false
         get "/organisations/#{organisation.id}/logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
-        hidden_field = page.find("form.button_to").find_field("is_codes_only_export", type: "hidden")
+        hidden_field = page.find("form.button_to").find_field("codes_only_export", type: "hidden")
         expect(hidden_field.value).to eq(codes_only.to_s)
       end
 
       it "when codes_only query parameter is true, form contains hidden field with correct value" do
         codes_only = true
         get "/organisations/#{organisation.id}/logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
-        hidden_field = page.find("form.button_to").find_field("is_codes_only_export", type: "hidden")
+        hidden_field = page.find("form.button_to").find_field("codes_only_export", type: "hidden")
         expect(hidden_field.value).to eq(codes_only.to_s)
       end
 

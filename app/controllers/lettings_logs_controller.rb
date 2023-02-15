@@ -80,15 +80,15 @@ class LettingsLogsController < LogsController
 
   def download_csv
     unpaginated_filtered_logs = filtered_logs(current_user.lettings_logs, search_term, @session_filters)
-    is_codes_only_export = params.require(:codes_only) == "true"
+    codes_only_export = params.require(:codes_only) == "true"
 
-    render "download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: email_csv_lettings_logs_path, is_codes_only_export: }
+    render "download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: email_csv_lettings_logs_path, codes_only_export: }
   end
 
   def email_csv
     all_orgs = params["organisation_select"] == "all"
-    is_codes_only_export = params.require(:is_codes_only_export) == "true"
-    EmailCsvJob.perform_later(current_user, search_term, @session_filters, all_orgs, nil, is_codes_only_export)
+    codes_only_export = params.require(:codes_only_export) == "true"
+    EmailCsvJob.perform_later(current_user, search_term, @session_filters, all_orgs, nil, codes_only_export)
     redirect_to csv_confirmation_lettings_logs_path
   end
 

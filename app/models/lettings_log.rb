@@ -448,8 +448,8 @@ class LettingsLog < Log
     location&.id
   end
 
-  def self.to_csv(user = nil, is_codes_only_export:)
-    Csv::LettingsLogCsvService.new(user).to_csv(is_codes_only_export:)
+  def self.to_csv(user = nil, codes_only_export:)
+    Csv::LettingsLogCsvService.new(user).to_csv(codes_only_export:)
   end
 
   def beds_for_la_rent_range

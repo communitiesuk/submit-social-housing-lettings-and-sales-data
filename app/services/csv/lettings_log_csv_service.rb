@@ -7,13 +7,13 @@ module Csv
       set_csv_attributes
     end
 
-    def to_csv(is_codes_only_export:)
+    def to_csv(codes_only_export:)
       CSV.generate(headers: true) do |csv|
         csv << @attributes
 
         LettingsLog.all.find_each do |record|
           csv << @attributes.map do |att|
-            label_from_value(record, att, is_codes_only_export:)
+            label_from_value(record, att, codes_only_export:)
           end
         end
       end
@@ -21,18 +21,18 @@ module Csv
 
   private
 
-    def label_from_value(record, att, is_codes_only_export:)
+    def label_from_value(record, att, codes_only_export:)
       if %w[la prevloc].include? att
         record.send(att)
       elsif %w[mrcdate startdate voiddate].include? att
         record.send(att)&.to_formatted_s(:govuk_date)
-      elsif is_codes_only_export && att.start_with?("location_", "scheme_")
+      elsif codes_only_export && att.start_with?("location_", "scheme_")
         att += "_before_type_cast" unless %w[location_code scheme_code scheme_owning_organisation_name scheme_created_at location_startdate].include? att
         record.send(att)
       else
         att = att.remove("_label", "_detail") # a couple of csv column headers have suffixes for the user that are not reflected in the app domain
         field_value = record.send(att)
-        if is_codes_only_export
+        if codes_only_export
           field_value
         else
           answer_label = record.form
