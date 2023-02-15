@@ -3,6 +3,7 @@ class BulkUpload::Lettings::RowParser
   include ActiveModel::Attributes
 
   attribute :bulk_upload
+  attribute :block_log_creation, :boolean, default: -> { false }
 
   attribute :field_1, :integer
   attribute :field_2
@@ -176,17 +177,26 @@ class BulkUpload::Lettings::RowParser
   end
 
   def blank_row?
-    attribute_set.to_hash.reject { |k, _| %w[bulk_upload].include?(k) }.values.compact.empty?
+    attribute_set.to_hash.reject { |k, _| %w[bulk_upload block_log_creation].include?(k) }.values.compact.empty?
   end
 
   def log
     @log ||= LettingsLog.new(attributes_for_log)
   end
 
+  def block_log_creation!
+    self.block_log_creation = true
+  end
+
+  def block_log_creation?
+    block_log_creation
+  end
+
 private
 
   def validate_owning_org_owns_stock
     if owning_organisation && !owning_organisation.holds_own_stock?
+      block_log_creation!
       errors.delete(:field_111)
       errors.add(:field_111, "The owning organisation code provided is for an organisation that does not own stock")
     end
@@ -201,6 +211,7 @@ private
 
   def validate_owning_org_permitted
     if owning_organisation && !bulk_upload.user.organisation.affiliated_stock_owners.include?(owning_organisation)
+      block_log_creation!
       errors.delete(:field_111)
       errors.add(:field_111, "You do not have permission to add logs for this owning organisation")
     end
