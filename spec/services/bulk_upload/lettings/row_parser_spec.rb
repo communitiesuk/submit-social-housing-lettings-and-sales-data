@@ -489,6 +489,10 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         it "is not permitted" do
           expect(parser.errors[:field_111]).to eql(["The owning organisation code provided is for an organisation that does not own stock"])
         end
+
+        it "blocks log creation" do
+          expect(parser).to be_block_log_creation
+        end
       end
 
       context "when not affiliated with owning org" do
@@ -498,6 +502,10 @@ RSpec.describe BulkUpload::Lettings::RowParser do
 
         it "is not permitted" do
           expect(parser.errors[:field_111]).to eql(["You do not have permission to add logs for this owning organisation"])
+        end
+
+        it "blocks log creation" do
+          expect(parser).to be_block_log_creation
         end
       end
     end
