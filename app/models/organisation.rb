@@ -58,6 +58,10 @@ class Organisation < ApplicationRecord
     end
   end
 
+  def can_be_managed_by?(organisation:)
+    organisation == self || managing_agents.include?(organisation)
+  end
+
   def lettings_logs
     LettingsLog.filter_by_organisation(self)
   end
