@@ -544,6 +544,16 @@ RSpec.describe BulkUpload::Lettings::RowParser do
   end
 
   describe "#log" do
+    describe "#owning_organisation" do
+      context "when lookup is via id prefixed with ORG" do
+        let(:attributes) { { bulk_upload:, field_111: "ORG#{owning_org.id}" } }
+
+        it "assigns the correct org" do
+          expect(parser.log.owning_organisation).to eql(owning_org)
+        end
+      end
+    end
+
     describe "#cbl" do
       context "when field_75 is yes ie 1" do
         let(:attributes) { { bulk_upload:, field_75: 1 } }

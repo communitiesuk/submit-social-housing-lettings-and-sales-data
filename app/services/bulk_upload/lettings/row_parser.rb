@@ -115,7 +115,7 @@ class BulkUpload::Lettings::RowParser
   attribute :field_108, :string
   attribute :field_109, :string
   attribute :field_110
-  attribute :field_111, :integer
+  attribute :field_111, :string
   attribute :field_112, :string
   attribute :field_113, :integer
   attribute :field_114, :integer
@@ -518,7 +518,7 @@ private
   end
 
   def owning_organisation
-    Organisation.find_by(old_visible_id: field_111)
+    Organisation.find_by_id_on_mulitple_fields(field_111)
   end
 
   def owning_organisation_id

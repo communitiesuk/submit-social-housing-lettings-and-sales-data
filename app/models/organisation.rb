@@ -48,6 +48,16 @@ class Organisation < ApplicationRecord
   validates :name, presence: { message: I18n.t("validations.organisation.name_missing") }
   validates :provider_type, presence: { message: I18n.t("validations.organisation.provider_type_missing") }
 
+  def self.find_by_id_on_mulitple_fields(id)
+    return if id.nil?
+
+    if id.start_with?("ORG")
+      where(id: id[3..]).first
+    else
+      where(old_visible_id: id).first
+    end
+  end
+
   def lettings_logs
     LettingsLog.filter_by_organisation(self)
   end
