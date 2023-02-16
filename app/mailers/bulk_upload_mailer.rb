@@ -64,10 +64,10 @@ class BulkUploadMailer < NotifyMailer
 
     correct_and_reupload_description = "Please correct your data export and upload again."
 
-    if errors.size == 0
+    if errors.size.zero?
       error_description = correct_and_reupload_description
     else
-      error_description = "We noticed the following issues with your upload:\n\n" #{"s" if errors.size > 1}
+      error_description = "We noticed the following issues with your upload:\n\n" # {"s" if errors.size > 1}
       errors.each { |error| error_description << "- #{error}\n" }
       error_description << "\n"
     end

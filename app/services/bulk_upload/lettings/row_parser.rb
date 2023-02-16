@@ -182,7 +182,7 @@ class BulkUpload::Lettings::RowParser
   end
 
   def log_already_exists?
-    fields_for_duplicity_check = %w(
+    fields_for_duplicity_check = %w[
       startdate
       postcode_full
       brent
@@ -194,9 +194,9 @@ class BulkUpload::Lettings::RowParser
       sex1
       ecstat1
       ethnic
-    )
+    ]
 
-    LettingsLog.exists?(Hash[fields_for_duplicity_check.collect { |field| [field, log[field]] }])
+    LettingsLog.exists?(fields_for_duplicity_check.index_with { |field| log[field] })
   end
 
 private

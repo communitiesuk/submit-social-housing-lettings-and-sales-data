@@ -21,10 +21,9 @@ class BulkUpload::Processor
         validator.any_setup_sections_incomplete?,
         validator.over_column_error_threshold?,
         validator.any_logs_already_exist?,
-        validator.any_logs_invalid?
+        validator.any_logs_invalid?,
       )
     end
-
   rescue StandardError => e
     Sentry.capture_exception(e)
     send_failure_mail
@@ -45,7 +44,7 @@ private
       over_column_error_threshold,
       any_logs_already_exist,
       any_logs_invalid,
-      bulk_upload:
+      bulk_upload:,
     ).deliver_later
   end
 

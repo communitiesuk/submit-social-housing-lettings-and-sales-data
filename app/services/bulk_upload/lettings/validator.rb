@@ -204,14 +204,14 @@ class BulkUpload::Lettings::Validator
   end
 
   def any_logs_already_exist?
-    row_parsers.any? { |row_parser| row_parser.log_already_exists? }
+    row_parsers.any?(&:log_already_exists?)
   end
 
   def any_logs_invalid?
     row_parsers.any? { |row_parser| row_parser.log.invalid? }
   end
 
-  private
+private
 
   def csv_parser
     @csv_parser ||= BulkUpload::Lettings::CsvParser.new(path:)
