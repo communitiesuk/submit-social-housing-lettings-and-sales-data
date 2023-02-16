@@ -425,31 +425,13 @@ class LettingsLog < Log
     created_by&.is_dpo
   end
 
-  delegate :service_name, :sensitive, :registered_under_care_act, :primary_client_group, :has_other_client_group, :secondary_client_group, :owning_organisation, :managing_organisation, :support_type, :intended_stay, :created_at, prefix: "scheme", to: :scheme, allow_nil: true
-  delegate :service_name_before_type_cast, :sensitive_before_type_cast, :registered_under_care_act_before_type_cast, :primary_client_group_before_type_cast, :has_other_client_group_before_type_cast, :secondary_client_group_before_type_cast, :owning_organisation_before_type_cast, :managing_organisation_before_type_cast, :support_type_before_type_cast, :intended_stay_before_type_cast, :created_at_before_type_cast, prefix: "scheme", to: :scheme, allow_nil: true
-  delegate :scheme_type, to: :scheme, allow_nil: true
-  delegate :scheme_type_before_type_cast, to: :scheme, allow_nil: true
-
   def scheme_code
     scheme&.id ? "S#{scheme.id}" : nil
   end
 
-  def scheme_owning_organisation_name
-    scheme_owning_organisation&.name
-  end
-
-  delegate :postcode, :name, :units, :type_of_unit, :mobility_type, :startdate, prefix: "location", to: :location, allow_nil: true
-  delegate :postcode_before_type_cast, :name_before_type_cast, :units_before_type_cast, :type_of_unit_before_type_cast, :mobility_type_before_type_cast, :startdate_before_type_cast, prefix: "location", to: :location, allow_nil: true
-  delegate :location_admin_district, to: :location, allow_nil: true
-  delegate :location_admin_district_before_type_cast, to: :location, allow_nil: true
-
-  # This is not the location_code in the db, location.id is just called code in the UI
-  def location_code
-    location&.id
-  end
-
   def self.to_csv(user = nil, codes_only_export:)
-    Csv::LettingsLogCsvService.new(user).to_csv(codes_only_export:)
+    export_type = codes_only_export ? "codes" : "labels"
+    Csv::LettingsLogCsvService.new(user, export_type:).to_csv
   end
 
   def beds_for_la_rent_range
