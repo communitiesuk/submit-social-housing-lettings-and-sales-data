@@ -46,6 +46,8 @@ module DerivedVariables::LettingsLogVariables
       self.referral = 1
       self.waityear = 2
       self.offered = 0
+      self.voiddate = startdate
+      self.first_time_property_let_as_social_housing = 0
       if is_general_needs?
         # fixed term
         self.prevten = 32 if managing_organisation&.provider_type == "PRP"
@@ -61,7 +63,6 @@ module DerivedVariables::LettingsLogVariables
     if is_supported_housing? && location
       self.wchair = location.mobility_type_before_type_cast == "W" ? 1 : 2
     end
-    self.voiddate = startdate if is_renewal?
     self.vacdays = property_vacant_days
 
     set_housingneeds_fields if housingneeds?

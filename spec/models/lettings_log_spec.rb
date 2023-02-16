@@ -1459,6 +1459,15 @@ RSpec.describe LettingsLog do
         expect(record_from_db["vacdays"]).to eq(0)
         expect(lettings_log["vacdays"]).to eq(0)
       end
+
+      it "correctly derives and saves first_time_property_let_as_social_housing" do
+        record_from_db = ActiveRecord::Base.connection.execute(
+          "select first_time_property_let_as_social_housing" \
+          " from lettings_logs where id=#{lettings_log.id}",
+        ).to_a[0]
+        expect(record_from_db["first_time_property_let_as_social_housing"]).to eq(0)
+        expect(lettings_log["first_time_property_let_as_social_housing"]).to eq(0)
+      end
     end
 
     context "when answering the household characteristics questions" do
