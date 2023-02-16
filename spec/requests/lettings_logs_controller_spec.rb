@@ -529,7 +529,7 @@ RSpec.describe LettingsLogsController, type: :request do
           expect(page).not_to have_content("Managing organisation")
         end
 
-        it "displays CSV download links with the correct paths" do
+        it "displays standard CSV download link only, with the correct path" do
           get "/lettings-logs", headers:, params: {}
           expect(page).to have_link("Download (CSV)", href: "/lettings-logs/csv-download?codes_only=false")
           expect(page).not_to have_link("Download (CSV, codes only)")
