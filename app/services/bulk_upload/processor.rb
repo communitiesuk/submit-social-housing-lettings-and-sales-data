@@ -8,7 +8,6 @@ class BulkUpload::Processor
   def call
     download
 
-    # binding.pry
     return send_failure_mail if validator.invalid?
 
     validator.call
