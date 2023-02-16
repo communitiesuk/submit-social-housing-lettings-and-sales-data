@@ -344,6 +344,49 @@ RSpec.describe BulkUpload::Lettings::RowParser do
       end
     end
 
+    describe "#field_55, #field_56, #field_57" do
+      context "when more than one item selected" do
+        let(:attributes) { { bulk_upload:, field_55: "1", field_56: "1" } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_55]).to be_present
+          expect(parser.errors[:field_56]).to be_present
+          expect(parser.errors[:field_57]).to be_present
+        end
+      end
+    end
+
+    describe "#field_59" do
+      context "when 1 and another disability field selected" do
+        let(:attributes) { { bulk_upload:, field_59: "1", field_58: "1" } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_59]).to be_present
+        end
+      end
+    end
+
+    describe "#field_60" do
+      context "when 1 and another disability field selected" do
+        let(:attributes) { { bulk_upload:, field_60: "1", field_58: "1" } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_60]).to be_present
+        end
+      end
+    end
+
+    describe "#field_59, #field_60" do
+      context "when both 1" do
+        let(:attributes) { { bulk_upload:, field_59: "1", field_60: "1" } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_59]).to be_present
+          expect(parser.errors[:field_60]).to be_present
+        end
+      end
+    end
+
     describe "#field_78" do # referral
       context "when 3 ie PRP nominated by LA and owning org is LA" do
         let(:attributes) { { bulk_upload:, field_78: "3", field_111: owning_org.old_visible_id } }
@@ -891,6 +934,60 @@ RSpec.describe BulkUpload::Lettings::RowParser do
 
         it "sets to 1" do
           expect(parser.log.first_time_property_let_as_social_housing).to eq(1)
+        end
+      end
+    end
+
+    describe "#housingneeds" do
+      context "when no disabled needs" do
+        let(:attributes) { { bulk_upload:, field_59: "1" } }
+
+        it "sets to 2" do
+          expect(parser.log.housingneeds).to eq(2)
+        end
+      end
+
+      context "when dont know about disabled needs" do
+        let(:attributes) { { bulk_upload:, field_60: "1" } }
+
+        it "sets to 3" do
+          expect(parser.log.housingneeds).to eq(3)
+        end
+      end
+    end
+
+    describe "#housingneeds_type" do
+      context "when field_55 is 1" do
+        let(:attributes) { { bulk_upload:, field_55: "1" } }
+
+        it "set to 0" do
+          expect(parser.log.housingneeds_type).to eq(0)
+        end
+      end
+
+      context "when field_56 is 1" do
+        let(:attributes) { { bulk_upload:, field_56: "1" } }
+
+        it "set to 1" do
+          expect(parser.log.housingneeds_type).to eq(1)
+        end
+      end
+
+      context "when field_57 is 1" do
+        let(:attributes) { { bulk_upload:, field_57: "1" } }
+
+        it "set to 2" do
+          expect(parser.log.housingneeds_type).to eq(2)
+        end
+      end
+    end
+
+    describe "#housingneeds_other" do
+      context "when field_58 is 1" do
+        let(:attributes) { { bulk_upload:, field_58: "1" } }
+
+        it "sets to 1" do
+          expect(parser.log.housingneeds_other).to eq(1)
         end
       end
     end
