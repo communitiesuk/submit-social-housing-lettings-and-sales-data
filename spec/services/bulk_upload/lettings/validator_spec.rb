@@ -87,7 +87,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
     end
   end
 
-  describe "#should_create_logs?" do
+  describe "#create_logs?" do
     context "when all logs are valid" do
       let(:target_path) { file_fixture("2022_23_lettings_bulk_upload.csv") }
 
@@ -111,9 +111,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
         expect(validator).not_to be_create_logs
       end
     end
-  end
 
-  describe "#create_logs?" do
     context "when a log is not valid?" do
       let(:log_1) { build(:lettings_log, :completed, created_by: user) }
       let(:log_2) { build(:lettings_log, :completed, created_by: user) }
@@ -143,6 +141,22 @@ RSpec.describe BulkUpload::Lettings::Validator do
       it "returns true" do
         validator.call
         expect(validator).to be_create_logs
+      end
+    end
+
+    context "when a single log wants to block log creation" do
+      let(:unaffiliated_org) { create(:organisation) }
+
+      let(:log_1) { build(:lettings_log, :completed, renttype: 1, created_by: user, owning_organisation: unaffiliated_org) }
+
+      before do
+        file.write(BulkUpload::LogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_csv_row)
+        file.close
+      end
+
+      it "will not create logs" do
+        validator.call
+        expect(validator).not_to be_create_logs
       end
     end
 
