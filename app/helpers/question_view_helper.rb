@@ -13,18 +13,6 @@ module QuestionViewHelper
     }
   end
 
-  def example_date_in_tax_year_of(date)
-    return Time.zone.today if date.nil?
-
-    year = if date.month > 4 || (date.month == 4 && date.day > 5)
-             date.year
-           else
-             date.year - 1
-           end
-
-    Date.new(year, 9, 1)
-  end
-
 private
 
   def label_size(page_header, conditional)
