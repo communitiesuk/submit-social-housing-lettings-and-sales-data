@@ -481,10 +481,6 @@ class LettingsLog < Log
     form.get_question("rent_type", self)&.label_from_value(rent_type)
   end
 
-  def lettings?
-    true
-  end
-
   def non_location_setup_questions_completed?
     [needstype, renewal, rent_type, startdate, owning_organisation_id, created_by_id].all?(&:present?)
   end
