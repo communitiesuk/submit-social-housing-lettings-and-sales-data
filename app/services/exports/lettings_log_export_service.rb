@@ -152,7 +152,7 @@ module Exports
 
     def apply_cds_transformation(lettings_log, export_mode)
       attribute_hash = lettings_log.attributes_before_type_cast
-      attribute_hash["form"] = attribute_hash["old_form_id"] || (attribute_hash["id"] + LOG_ID_OFFSET)
+      attribute_hash["formid"] = attribute_hash["old_form_id"] || (attribute_hash["id"] + LOG_ID_OFFSET)
 
       # We can't have a variable number of columns in CSV
       unless export_mode == EXPORT_MODE[:csv]

@@ -30,7 +30,7 @@ module Exports::LettingsLogExportConstants
     "confidential",
     "earnings",
     "ethnic",
-    "form",
+    "formid",
     "has_benefits",
     "hb",
     "hbrentshortfall",
