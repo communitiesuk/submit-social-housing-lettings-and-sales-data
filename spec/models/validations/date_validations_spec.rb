@@ -12,13 +12,13 @@ RSpec.describe Validations::DateValidations do
     it "cannot be before the first collection window start date" do
       record.startdate = Time.zone.local(2020, 1, 1)
       date_validator.validate_startdate(record)
-      expect(record.errors["startdate"]).to include(match I18n.t("validations.date.outside_collection_window"))
+      expect(record.errors["startdate"]).to include(match I18n.t("validations.date.outside_collection_window.crossover_period", previous_collection: "21/22", current_collection: "22/23", previous_collection_start_year: "2021", current_collection_end_year: "2023"))
     end
 
     it "cannot be after the second collection window end date" do
       record.startdate = Time.zone.local(2023, 7, 1, 6)
       date_validator.validate_startdate(record)
-      expect(record.errors["startdate"]).to include(match I18n.t("validations.date.outside_collection_window"))
+      expect(record.errors["startdate"]).to include(match I18n.t("validations.date.outside_collection_window.crossover_period", previous_collection: "21/22", current_collection: "22/23", previous_collection_start_year: "2021", current_collection_end_year: "2023"))
     end
 
     it "must be a valid date" do
