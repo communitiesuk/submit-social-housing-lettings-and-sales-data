@@ -43,8 +43,25 @@ class BulkUploadMailer < NotifyMailer
     end
   end
 
-  def send_correct_and_upload_again_mail(bulk_upload:)
-    error_description = "We noticed that you have a lot of similar errors in column #{columns_with_errors(bulk_upload:)}. Please correct your data export and upload again."
+  def send_correct_and_upload_again_mail(
+    any_setup_sections_incomplete,
+    over_column_error_threshold,
+    any_logs_already_exist,
+    any_logs_invalid,
+    bulk_upload:
+  )
+
+    any_setup_sections_incomplete_error_description = "Placeholder text for setup sections incomplete case. "
+    over_column_error_threshold_error_description = "We noticed that you have a lot of similar errors in column #{columns_with_errors(bulk_upload:)}. "
+    any_logs_already_exist_error_description = "We noticed that one of the logs you are trying has been created previously. "
+    any_logs_invalid_error_description = "Placeholder text for invalid logs case. "
+
+    error_description = ""
+    error_description << any_setup_sections_incomplete_error_description if any_setup_sections_incomplete
+    error_description << over_column_error_threshold_error_description if over_column_error_threshold
+    error_description << any_logs_already_exist_error_description if any_logs_already_exist
+    error_description << any_logs_invalid_error_description if any_logs_invalid
+    error_description << "Please correct your data export and upload again."
 
     send_email(
       bulk_upload.user.email,

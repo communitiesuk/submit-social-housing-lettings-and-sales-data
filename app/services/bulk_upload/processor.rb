@@ -8,15 +8,24 @@ class BulkUpload::Processor
   def call
     download
 
+    # binding.pry
     return send_failure_mail if validator.invalid?
 
     validator.call
 
-    create_logs if validator.create_logs?
-    send_correct_and_upload_again_mail unless validator.create_logs?
+    if validator.create_logs?
+      create_logs
+      send_fix_errors_mail if created_logs_but_incompleted?
+      send_success_mail if created_logs_and_all_completed?
+    else
+      send_correct_and_upload_again_mail(
+        validator.any_setup_sections_incomplete?,
+        validator.over_column_error_threshold?,
+        validator.any_logs_already_exist?,
+        validator.any_logs_invalid?
+      )
+    end
 
-    send_fix_errors_mail if created_logs_but_incompleted?
-    send_success_mail if created_logs_and_all_completed?
   rescue StandardError => e
     Sentry.capture_exception(e)
     send_failure_mail
@@ -26,8 +35,19 @@ class BulkUpload::Processor
 
 private
 
-  def send_correct_and_upload_again_mail
-    BulkUploadMailer.send_correct_and_upload_again_mail(bulk_upload:).deliver_later
+  def send_correct_and_upload_again_mail(
+    any_setup_sections_incomplete,
+    over_column_error_threshold,
+    any_logs_already_exist,
+    any_logs_invalid
+  )
+    BulkUploadMailer.send_correct_and_upload_again_mail(
+      any_setup_sections_incomplete,
+      over_column_error_threshold,
+      any_logs_already_exist,
+      any_logs_invalid,
+      bulk_upload:
+    ).deliver_later
   end
 
   def send_fix_errors_mail

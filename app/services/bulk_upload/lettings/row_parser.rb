@@ -181,6 +181,24 @@ class BulkUpload::Lettings::RowParser
     @log ||= LettingsLog.new(attributes_for_log)
   end
 
+  def log_already_exists?
+    fields_for_duplicity_check = %w(
+      startdate
+      postcode_full
+      brent
+      scharge
+      pscharge
+      supcharg
+      tenancycode
+      age1
+      sex1
+      ecstat1
+      ethnic
+    )
+
+    LettingsLog.exists?(Hash[fields_for_duplicity_check.collect { |field| [field, log[field]] }])
+  end
+
 private
 
   def validate_no_and_dont_know_disabled_needs_conjunction
@@ -312,24 +330,6 @@ private
       errors.add(:field_35, error_message) # ecstat1
       errors.add(:field_43, error_message) # ethnic
     end
-  end
-
-  def log_already_exists?
-    fields_for_duplicity_check = %w(
-      startdate
-      postcode_full
-      brent
-      scharge
-      pscharge
-      supcharg
-      tenancycode
-      age1
-      sex1
-      ecstat1
-      ethnic
-    )
-
-    LettingsLog.exists?(Hash[fields_for_duplicity_check.collect { |field| [field, log[field]] }])
   end
 
   def field_mapping_for_errors

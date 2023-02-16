@@ -177,15 +177,14 @@ class BulkUpload::Lettings::Validator
     return false if any_setup_sections_incomplete?
     return false if over_column_error_threshold?
     return false if any_logs_already_exist?
+    return false if any_logs_invalid?
 
-    row_parsers.all? { |row_parser| row_parser.log.valid? }
+    true
   end
 
   def self.question_for_field(field)
     QUESTIONS[field]
   end
-
-private
 
   def any_setup_sections_incomplete?
     row_parsers.any? { |row_parser| row_parser.log.form.setup_sections[0].subsections[0].is_incomplete?(row_parser.log) }
@@ -207,6 +206,12 @@ private
   def any_logs_already_exist?
     row_parsers.any? { |row_parser| row_parser.log_already_exists? }
   end
+
+  def any_logs_invalid?
+    row_parsers.any? { |row_parser| row_parser.log.invalid? }
+  end
+
+  private
 
   def csv_parser
     @csv_parser ||= BulkUpload::Lettings::CsvParser.new(path:)
