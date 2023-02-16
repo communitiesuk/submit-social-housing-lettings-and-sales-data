@@ -314,6 +314,12 @@ RSpec.describe FormController, type: :request do
           get "/lettings-logs/#{setup_complete_lettings_log.id}/review", headers: headers, params: {}
           expect(response.body).to match("Review lettings log")
         end
+
+        it "renders the review page for the sales log" do
+          log = create(:sales_log, :completed, created_by: user)
+          get "/sales-logs/#{log.id}/review", headers: headers, params: { sales_log: true }
+          expect(response.body).to match("Review sales log")
+        end
       end
 
       context "when viewing a user dependent page" do
