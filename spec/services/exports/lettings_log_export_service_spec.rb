@@ -13,8 +13,8 @@ RSpec.describe Exports::LettingsLogExportService do
 
   let(:expected_master_manifest_filename) { "Manifest_2022_05_01_0001.csv" }
   let(:expected_master_manifest_rerun) { "Manifest_2022_05_01_0002.csv" }
-  let(:expected_zip_filename) { "core_2021_2022_jan_mar_f0001_inc0001.zip" }
-  let(:expected_data_filename) { "core_2021_2022_jan_mar_f0001_inc0001_pt001.xml" }
+  let(:expected_zip_filename) { "core_2021_2022_apr_mar_f0001_inc0001.zip" }
+  let(:expected_data_filename) { "core_2021_2022_apr_mar_f0001_inc0001_pt001.xml" }
   let(:expected_manifest_filename) { "manifest.xml" }
   let(:start_time) { Time.zone.local(2022, 5, 1) }
 
@@ -108,7 +108,7 @@ RSpec.describe Exports::LettingsLogExportService do
     end
 
     context "and multiple lettings logs are available for export on different periods" do
-      let(:expected_zip_filename2) { "core_2022_2023_apr_jun_f0001_inc0001.zip" }
+      let(:expected_zip_filename2) { "core_2022_2023_apr_mar_f0001_inc0001.zip" }
 
       before do
         FactoryBot.create(:lettings_log, startdate: Time.zone.local(2022, 2, 1))
@@ -206,7 +206,7 @@ RSpec.describe Exports::LettingsLogExportService do
         end
 
         it "generates a ZIP export file with the expected filename" do
-          expect(storage_service).to receive(:write_file).with("core_2021_2022_jan_mar_f0002_inc0001.zip", any_args)
+          expect(storage_service).to receive(:write_file).with("core_2021_2022_apr_mar_f0002_inc0001.zip", any_args)
           export_service.export_xml_lettings_logs(full_update: true)
         end
       end
