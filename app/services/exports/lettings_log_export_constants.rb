@@ -7,13 +7,6 @@ module Exports::LettingsLogExportConstants
     csv: 2,
   }.freeze
 
-  QUARTERS = {
-    0 => "jan_mar",
-    1 => "apr_jun",
-    2 => "jul_sep",
-    3 => "oct_dec",
-  }.freeze
-
   EXPORT_FIELDS = Set[
     "armedforces",
     "beds",
