@@ -51,17 +51,26 @@ class BulkUploadMailer < NotifyMailer
     bulk_upload:
   )
 
-    any_setup_sections_incomplete_error_description = "Placeholder text for setup sections incomplete case. "
-    over_column_error_threshold_error_description = "We noticed that you have a lot of similar errors in column #{columns_with_errors(bulk_upload:)}. "
-    any_logs_already_exist_error_description = "We noticed that one of the logs you are trying has been created previously. "
-    any_logs_invalid_error_description = "Placeholder text for invalid logs case. "
+    any_setup_sections_incomplete_error_description = "Placeholder text for setup sections incomplete case."
+    over_column_error_threshold_error_description = "You have a lot of similar errors in column #{columns_with_errors(bulk_upload:)}."
+    any_logs_already_exist_error_description = "One of the logs you are trying to upload has been created previously."
+    any_logs_invalid_error_description = "Placeholder text for invalid logs case."
 
-    error_description = ""
-    error_description << any_setup_sections_incomplete_error_description if any_setup_sections_incomplete
-    error_description << over_column_error_threshold_error_description if over_column_error_threshold
-    error_description << any_logs_already_exist_error_description if any_logs_already_exist
-    error_description << any_logs_invalid_error_description if any_logs_invalid
-    error_description << "Please correct your data export and upload again."
+    errors = []
+    errors << any_setup_sections_incomplete_error_description if any_setup_sections_incomplete
+    errors << over_column_error_threshold_error_description if over_column_error_threshold
+    errors << any_logs_already_exist_error_description if any_logs_already_exist
+    errors << any_logs_invalid_error_description if any_logs_invalid
+
+    correct_and_reupload_description = "Please correct your data export and upload again."
+
+    if errors.size == 0
+      error_description = correct_and_reupload_description
+    else
+      error_description = "We noticed the following issues with your upload:\n\n" #{"s" if errors.size > 1}
+      errors.each { |error| error_description << "- #{error}\n" }
+      error_description << "\n"
+    end
 
     send_email(
       bulk_upload.user.email,
