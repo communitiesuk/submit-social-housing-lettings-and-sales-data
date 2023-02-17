@@ -9,20 +9,83 @@ RSpec.describe Validations::DateValidations do
   let(:scheme_no_end_date) { FactoryBot.create(:scheme, end_date: nil) }
 
   describe "tenancy start date" do
-    context "when in the crossover period" do
-      it "cannot be before the first collection window start date" do
-        allow(Time).to receive(:now).and_return(Time.zone.local(2023, 4, 1))
+    context "in 22/23 collection" do
+      context "when in the crossover period" do
+        before do
+          allow(Time).to receive(:now).and_return(Time.zone.local(2022, 4, 1))
+          record.created_at = Time.zone.local(2022, 4, 1)
+        end
 
-        record.created_at = Time.zone.local(2022, 4, 1)
-        record.startdate = Time.zone.local(2021, 1, 1)
-        date_validator.validate_startdate(record)
-        expect(record.errors["startdate"]).to include(match "Enter a date within the 21/22 or 22/23 financial years, which is between 1st April 2021 and 31st March 2023")
+        it "cannot be before the first collection window start date" do
+          record.startdate = Time.zone.local(2021, 1, 1)
+          date_validator.validate_startdate(record)
+          expect(record.errors["startdate"]).to include(match "Enter a date within the 21/22 or 22/23 financial years, which is between 1st April 2021 and 31st March 2023")
+        end
+
+        it "cannot be after the second collection window end date" do
+          record.startdate = Time.zone.local(2023, 7, 1, 6)
+          date_validator.validate_startdate(record)
+          expect(record.errors["startdate"]).to include(match "Enter a date within the 21/22 or 22/23 financial years, which is between 1st April 2021 and 31st March 2023")
+        end
       end
 
-      it "cannot be after the second collection window end date" do
-        record.startdate = Time.zone.local(2023, 7, 1, 6)
-        date_validator.validate_startdate(record)
-        expect(record.errors["startdate"]).to include(match "Enter a date within the 21/22 or 22/23 financial years, which is between 1st April 2021 and 31st March 2023")
+      context "when after the crossover period" do
+        before do
+          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 1, 1))
+          record.created_at = Time.zone.local(2023, 1, 1)
+        end
+
+        it "cannot be before the first collection window start date" do
+          record.startdate = Time.zone.local(2022, 1, 1)
+          date_validator.validate_startdate(record)
+          expect(record.errors["startdate"]).to include(match "Enter a date within the 22/23 financial year, which is between 1st April 2022 and 31st March 2023")
+        end
+
+        it "cannot be after the second collection window end date" do
+          record.startdate = Time.zone.local(2023, 7, 1, 6)
+          date_validator.validate_startdate(record)
+          expect(record.errors["startdate"]).to include(match "Enter a date within the 22/23 financial year, which is between 1st April 2022 and 31st March 2023")
+        end
+      end
+    end
+
+    context "in 23/24 collection" do
+      context "when in the crossover period" do
+        before do
+          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 4, 1))
+          record.created_at = Time.zone.local(2023, 4, 1)
+        end
+
+        it "cannot be before the first collection window start date" do
+          record.startdate = Time.zone.local(2022, 1, 1)
+          date_validator.validate_startdate(record)
+          expect(record.errors["startdate"]).to include(match "Enter a date within the 22/23 or 23/24 financial years, which is between 1st April 2022 and 31st March 2024")
+        end
+
+        it "cannot be after the second collection window end date" do
+          record.startdate = Time.zone.local(2024, 7, 1, 6)
+          date_validator.validate_startdate(record)
+          expect(record.errors["startdate"]).to include(match "Enter a date within the 22/23 or 23/24 financial years, which is between 1st April 2022 and 31st March 2024")
+        end
+      end
+
+      context "when after the crossover period" do
+        before do
+          allow(Time).to receive(:now).and_return(Time.zone.local(2024, 1, 1))
+          record.created_at = Time.zone.local(2024, 1, 1)
+        end
+
+        it "cannot be before the first collection window start date" do
+          record.startdate = Time.zone.local(2023, 1, 1)
+          date_validator.validate_startdate(record)
+          expect(record.errors["startdate"]).to include(match "Enter a date within the 23/24 financial year, which is between 1st April 2023 and 31st March 2024")
+        end
+
+        it "cannot be after the second collection window end date" do
+          record.startdate = Time.zone.local(2024, 7, 1, 6)
+          date_validator.validate_startdate(record)
+          expect(record.errors["startdate"]).to include(match "Enter a date within the 23/24 financial year, which is between 1st April 2023 and 31st March 2024")
+        end
       end
     end
 
