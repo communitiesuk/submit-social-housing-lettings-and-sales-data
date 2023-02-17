@@ -147,7 +147,7 @@ class BulkUpload::Lettings::RowParser
   validate :validate_nulls
   validate :validate_relevant_collection_window
   validate :validate_la_with_local_housing_referral
-  validate :validate_cannot_be_la_referral_if_general_needs
+  validate :validate_cannot_be_la_referral_if_general_needs_and_la
   validate :validate_leaving_reason_for_renewal
   validate :validate_lettings_type_matches_bulk_upload
   validate :validate_only_one_housing_needs_type
@@ -219,8 +219,8 @@ private
     end
   end
 
-  def validate_cannot_be_la_referral_if_general_needs
-    if field_78 == 4 && bulk_upload.general_needs?
+  def validate_cannot_be_la_referral_if_general_needs_and_la
+    if field_78 == 4 && bulk_upload.general_needs? && owning_organisation && owning_organisation.la?
       errors.add :field_78, I18n.t("validations.household.referral.la_general_needs.prp_referred_by_la")
     end
   end

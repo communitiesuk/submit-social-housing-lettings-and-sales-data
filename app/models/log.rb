@@ -43,6 +43,10 @@ class Log < ApplicationRecord
     false
   end
 
+  def sales?
+    false
+  end
+
   def ethnic_refused?
     ethnic_group == 17
   end
