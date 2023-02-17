@@ -35,7 +35,7 @@ module Validations::DateValidations
 
     created_at = record.created_at || Time.zone.now
 
-    if created_at > previous_collection_end_date && !record.startdate.between?(current_collection_start_date, current_collection_end_date)
+    if created_at >= previous_collection_end_date && !record.startdate.between?(current_collection_start_date, current_collection_end_date)
       record.errors.add :startdate, I18n.t("validations.date.outside_collection_window.not_crossover_period", current_collection: "#{current_collection_start_suffix}/#{current_collection_start_suffix + 1}", current_collection_start_year: current_collection_start_date.year, current_collection_end_year: current_collection_end_date.year)
     end
 
