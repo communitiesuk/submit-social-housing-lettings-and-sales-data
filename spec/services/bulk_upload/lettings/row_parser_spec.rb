@@ -443,6 +443,24 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         end
       end
 
+      context "when field 98 is 4 digits instead of 2" do
+        let(:attributes) { { bulk_upload:, field_98: "2022" } }
+
+        it "returns an error" do
+          parser.valid?
+
+          expect(parser.errors[:field_98]).to include("Tenancy start year must be 2 digits")
+        end
+      end
+
+      context "when invalid date given" do
+        let(:attributes) { { bulk_upload:, field_1: "1", field_96: "a", field_97: "12", field_98: "2022" } }
+
+        it "does not raise an error" do
+          expect { parser.valid? }.not_to raise_error
+        end
+      end
+
       context "when inside of collection year" do
         let(:attributes) { { bulk_upload:, field_96: "1", field_97: "10", field_98: "22" } }
 
