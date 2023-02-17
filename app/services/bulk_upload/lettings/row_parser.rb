@@ -143,6 +143,7 @@ class BulkUpload::Lettings::RowParser
   validates :field_1, presence: { message: I18n.t("validations.not_answered", question: "letting type") },
                       inclusion: { in: (1..12).to_a, message: I18n.t("validations.invalid_option", question: "letting type") }
   validates :field_4, presence: { if: proc { [2, 4, 6, 8, 10, 12].include?(field_1) } }
+  validates :field_98, format: { with: /\A\d{2}\z/, message: I18n.t("validations.setup.startdate.year_not_two_digits") }
 
   validate :validate_data_types
   validate :validate_nulls
@@ -500,6 +501,8 @@ private
 
   def startdate
     Date.new(field_98 + 2000, field_97, field_96) if field_98.present? && field_97.present? && field_96.present?
+  rescue Date::Error
+    Date.new
   end
 
   def renttype
