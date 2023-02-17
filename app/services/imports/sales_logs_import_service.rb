@@ -75,8 +75,8 @@ module Imports
       attributes["hb"] = unsafe_string_as_integer(xml_doc, "Q2A")
       attributes["frombeds"] = safe_string_as_integer(xml_doc, "Q20BEDROOMS")
       attributes["staircase"] = unsafe_string_as_integer(xml_doc, "Q17ASTAIRCASE")
-      attributes["stairbought"] = nil # ?
-      attributes["stairowned"] = nil # ?
+      attributes["stairbought"] = safe_string_as_integer(xml_doc, "PERCENTBOUGHT") # ?
+      attributes["stairowned"] = safe_string_as_integer(xml_doc, "PERCENTOWNS") # ?
       attributes["mrent"] = safe_string_as_decimal(xml_doc, "Q28MONTHLYRENT")
       attributes["exdate"] = compose_date(xml_doc, "EXDAY", "EXMONTH", "EXYEAR")
       attributes["exday"] = safe_string_as_integer(xml_doc, "EXDAY")
@@ -87,7 +87,6 @@ module Imports
       attributes["cashdis"] = safe_string_as_decimal(xml_doc, "Q27SOCIALHOMEBUY")
       attributes["disabled"] = unsafe_string_as_integer(xml_doc, "DISABILITY")
       attributes["lanomagr"] = unsafe_string_as_integer(xml_doc, "Q19REHOUSED")
-      attributes["soctenant"] = nil # ?
       attributes["value"] = safe_string_as_decimal(xml_doc, "Q22PURCHASEPRICE")
       attributes["equity"] = safe_string_as_decimal(xml_doc, "Q23EQUITY")
       attributes["discount"] = safe_string_as_decimal(xml_doc, "Q33DISCOUNT")
@@ -136,7 +135,8 @@ module Imports
       attributes["ethnicbuy2"] = nil
       attributes["prevshared"] = nil
       attributes["staircasesale"] = nil
-      
+      attributes["soctenant"] = soctenant(attributes)
+
       # Required for our form invalidated questions (not present in import)
       attributes["previous_la_known"] = attributes["prevloc"].nil? ? 0 : 1
       attributes["is_la_inferred"] = attributes["postcode_full"].present?
@@ -392,6 +392,17 @@ module Imports
       when 2 # unknown
         1
       end
+    end
+
+    def soctenant(attributes)
+      return nil unless attributes["ownershipsch"] == 1
+
+      if attributes["frombeds"].blank? && attributes["fromprop"].blank? && attributes["socprevten"].blank?
+        2
+      else
+        1
+      end
+      # NO (2) if FROMBEDS, FROMPROP and socprevten are blank, and YES(1) if they are completed
     end
   end
 end
