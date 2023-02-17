@@ -9,7 +9,7 @@ RSpec.describe Validations::DateValidations do
   let(:scheme_no_end_date) { FactoryBot.create(:scheme, end_date: nil) }
 
   describe "tenancy start date" do
-    context "in 22/23 collection" do
+    context "when in 22/23 collection" do
       context "when in the crossover period" do
         before do
           allow(Time).to receive(:now).and_return(Time.zone.local(2022, 4, 1))
@@ -49,7 +49,7 @@ RSpec.describe Validations::DateValidations do
       end
     end
 
-    context "in 23/24 collection" do
+    context "when in 23/24 collection" do
       context "when in the crossover period" do
         before do
           allow(Time).to receive(:now).and_return(Time.zone.local(2023, 4, 1))
@@ -88,7 +88,6 @@ RSpec.describe Validations::DateValidations do
         end
       end
     end
-
 
     it "must be a valid date" do
       record.startdate = Time.zone.local(0, 7, 1)
