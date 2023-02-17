@@ -1468,6 +1468,12 @@ RSpec.describe LettingsLog do
         expect(record_from_db["first_time_property_let_as_social_housing"]).to eq(0)
         expect(lettings_log["first_time_property_let_as_social_housing"]).to eq(0)
       end
+
+      it "derives vacancy reason as relet" do
+        record_from_db = ActiveRecord::Base.connection.execute("select rsnvac from lettings_logs where id=#{lettings_log.id}").to_a[0]
+        expect(record_from_db["rsnvac"]).to eq(14)
+        expect(lettings_log["rsnvac"]).to eq(14)
+      end
     end
 
     context "when answering the household characteristics questions" do
