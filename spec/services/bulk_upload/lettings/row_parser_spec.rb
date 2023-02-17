@@ -8,8 +8,10 @@ RSpec.describe BulkUpload::Lettings::RowParser do
   let(:attributes) { { bulk_upload: } }
   let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }
   let(:user) { create(:user, organisation: owning_org) }
+
   let(:owning_org) { create(:organisation, :with_old_visible_id) }
   let(:managing_org) { create(:organisation, :with_old_visible_id) }
+
   let(:setup_section_params) do
     {
       bulk_upload:,
@@ -21,6 +23,10 @@ RSpec.describe BulkUpload::Lettings::RowParser do
       field_98: now.strftime("%g"),
       field_134: "2",
     }
+  end
+
+  before do
+    create(:organisation_relationship, parent_organisation: owning_org, child_organisation: managing_org)
   end
 
   around do |example|
@@ -472,6 +478,68 @@ RSpec.describe BulkUpload::Lettings::RowParser do
       end
     end
 
+    describe "#field_111" do # owning org
+      context "when cannot find owning org" do
+        let(:attributes) { { bulk_upload:, field_111: "donotexist" } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_111]).to eql(["The owning organisation code is incorrect"])
+        end
+      end
+
+      context "when org is not stock owning" do
+        let(:owning_org) { create(:organisation, :with_old_visible_id, :does_not_own_stock) }
+
+        let(:attributes) { { bulk_upload:, field_111: owning_org.old_visible_id } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_111]).to eql(["The owning organisation code provided is for an organisation that does not own stock"])
+        end
+
+        it "blocks log creation" do
+          expect(parser).to be_block_log_creation
+        end
+      end
+
+      context "when not affiliated with owning org" do
+        let(:unaffiliated_org) { create(:organisation, :with_old_visible_id) }
+
+        let(:attributes) { { bulk_upload:, field_111: unaffiliated_org.old_visible_id } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_111]).to eql(["You do not have permission to add logs for this owning organisation"])
+        end
+
+        it "blocks log creation" do
+          expect(parser).to be_block_log_creation
+        end
+      end
+    end
+
+    describe "#field_113" do # managing org
+      context "when cannot find managing org" do
+        let(:attributes) { { bulk_upload:, field_113: "donotexist" } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_113]).to eql(["The managing organisation code is incorrect"])
+        end
+      end
+
+      context "when not affiliated with managing org" do
+        let(:unaffiliated_org) { create(:organisation, :with_old_visible_id) }
+
+        let(:attributes) { { bulk_upload:, field_111: owning_org.old_visible_id, field_113: unaffiliated_org.old_visible_id } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_113]).to eql(["This managing organisation does not have a relationship with the owning organisation"])
+        end
+
+        it "blocks log creation" do
+          expect(parser).to be_block_log_creation
+        end
+      end
+    end
+
     describe "#field_134" do
       context "when an unpermitted value" do
         let(:attributes) { { bulk_upload:, field_134: 3 } }
@@ -506,6 +574,26 @@ RSpec.describe BulkUpload::Lettings::RowParser do
   end
 
   describe "#log" do
+    describe "#owning_organisation" do
+      context "when lookup is via id prefixed with ORG" do
+        let(:attributes) { { bulk_upload:, field_111: "ORG#{owning_org.id}" } }
+
+        it "assigns the correct org" do
+          expect(parser.log.owning_organisation).to eql(owning_org)
+        end
+      end
+    end
+
+    describe "#managing_organisation" do
+      context "when lookup is via id prefixed with ORG" do
+        let(:attributes) { { bulk_upload:, field_113: "ORG#{managing_org.id}" } }
+
+        it "assigns the correct org" do
+          expect(parser.log.managing_organisation).to eql(managing_org)
+        end
+      end
+    end
+
     describe "#cbl" do
       context "when field_75 is yes ie 1" do
         let(:attributes) { { bulk_upload:, field_75: 1 } }
