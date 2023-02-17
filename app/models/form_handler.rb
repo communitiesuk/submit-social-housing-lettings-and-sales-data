@@ -35,8 +35,8 @@ class FormHandler
   def sales_forms
     {
       "current_sales" => Form.new(nil, current_collection_start_year, SALES_SECTIONS, "sales"),
-      "previous_sales" => Form.new(nil, current_collection_start_year - 1, SALES_SECTIONS, "sales"),
-      "next_sales" => Form.new(nil, current_collection_start_year + 1, SALES_SECTIONS, "sales"),
+      "previous_sales" => Form.new(nil, previous_collection_start_year, SALES_SECTIONS, "sales"),
+      "next_sales" => Form.new(nil, next_collection_start_year, SALES_SECTIONS, "sales"),
     }
   end
 
@@ -52,10 +52,10 @@ class FormHandler
     end
 
     if forms["previous_lettings"].blank? && current_collection_start_year >= 2022
-      forms["previous_lettings"] = Form.new(nil, current_collection_start_year - 1, LETTINGS_SECTIONS, "lettings")
+      forms["previous_lettings"] = Form.new(nil, previous_collection_start_year, LETTINGS_SECTIONS, "lettings")
     end
     forms["current_lettings"] = Form.new(nil, current_collection_start_year, LETTINGS_SECTIONS, "lettings") if forms["current_lettings"].blank?
-    forms["next_lettings"] = Form.new(nil, current_collection_start_year + 1, LETTINGS_SECTIONS, "lettings") if forms["next_lettings"].blank?
+    forms["next_lettings"] = Form.new(nil, next_collection_start_year, LETTINGS_SECTIONS, "lettings") if forms["next_lettings"].blank?
 
     forms
   end
