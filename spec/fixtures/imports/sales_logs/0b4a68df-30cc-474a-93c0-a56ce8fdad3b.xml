@@ -1,0 +1,104 @@
+<Group xmlns="http://data.gov.uk/core/logs/2021-CORE-SR-SH" xmlns:app="http://www.w3.org/2007/app" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:meta="http://data.gov.uk/core/metadata" xmlns:svc="http://www.w3.org/2007/app" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xfimpl="http://www.w3.org/2002/xforms/implementation" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xxf="http://orbeon.org/oxf/xml/xforms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <!-- check metadata fields /-->
+  <meta:metadata xmlns:es="http://www.ecmascript.org/" xmlns:xqx="http://www.w3.org/2005/XQueryX" xmlns:XSLT="http://www.w3.org/1999/XSL/Transform/compile">
+    <meta:form-name>2022-CORE</meta:form-name>
+    <meta:document-id>0b4a68df-30cc-474a-93c0-a56ce8fdad3b</meta:document-id>
+    <meta:owner-user-id>c3061a2e6ea0b702e6f6210d5c52d2a92612d2aa</meta:owner-user-id>
+    <meta:owner-institution-id>7c5bd5fb549c09z2c55d9cb90d7ba84927e64618</meta:owner-institution-id>
+    <meta:managing-institution-id>7c5bd5fb549c09z2c55d9cb90d7ba84927e64618</meta:managing-institution-id>
+    <meta:created-date>2022-01-05T12:50:20.39153Z</meta:created-date>
+    <meta:modified-date>2022-01-05T12:50:20.39153Z</meta:modified-date>
+    <meta:status>submitted-valid</meta:status>
+    <meta:reporting-year>2022</meta:reporting-year>
+    <meta:upload-method>Manual Entry</meta:upload-method>
+    <meta:schema assert-valid="true"/>
+    <meta:rules assert-valid="true"/>
+  </meta:metadata>
+  <Group>
+    <OWNINGORGID>1</OWNINGORGID>
+  </Group>
+  <Group>
+    <DAY>5</DAY>
+    <MONTH>11</MONTH>
+    <YEAR>2022</YEAR>
+    <OWNERSHIP>2 Yes - a discount ownership scheme</OWNERSHIP>
+    <DERSALETYPE>8 Right to Acquire (RTA)</DERSALETYPE>
+    <COMPANY></COMPANY>
+    <JOINT>1 Yes</JOINT>
+    <Q11BEDROOMS>2</Q11BEDROOMS>
+    <JOINTMORE>1 Yes</JOINTMORE>
+    <NOINT>1</NOINT>
+    <!-- <privacynotice>1<privacynotice> /-->
+    <P1AGE>30</P1AGE>
+    <P1SEX>Non-binary</P1SEX>
+    <P1NAT>17 Republic of Ireland</P1NAT>
+    <LIVEINBUYER1>1 Yes</LIVEINBUYER1>
+    <P2REL>Partner</P2REL>
+    <Q12PROPERTYTYPE>1 Flat or maisonette</Q12PROPERTYTYPE>
+    <P2AGE>35</P2AGE>
+    <Q13BUILDINGTYPE>1 Purpose built</Q13BUILDINGTYPE>
+    <P1ETH>3 White: Other</P1ETH>
+    <P2SEX>Non-binary</P2SEX>
+    <LIVEINBUYER2>1 Yes</LIVEINBUYER2>
+    <P1ECO>1 Full Time - 30 hours or more a week</P1ECO>
+    <P2ECO>1 Full Time - 30 hours or more a week</P2ECO>
+    <Q10WHEELCHAIR>1 Yes</Q10WHEELCHAIR>
+    <P3AGE>14</P3AGE>
+    <P4AGE>18</P4AGE>
+    <P5AGE>40</P5AGE>
+    <P6AGE>40</P6AGE>
+    <Q2PERSON1INCOME>10_000</Q2PERSON1INCOME>
+    <Q2PERSON1MORTGAGE>1 Yes</Q2PERSON1MORTGAGE>
+    <Q2PERSON2INCOME>10_000</Q2PERSON2INCOME>
+    <Q2PERSON2MORTAPPLICATION>1 Yes</Q2PERSON2MORTAPPLICATION>
+    <Q14ONSLACODE>E09000003</Q14ONSLACODE>
+    <!-- <savingsnk>1<savingsnk> /-->
+    <Q4PREVOWNEDPROPERTY>1 Yes</Q4PREVOWNEDPROPERTY>
+    <P3SEX>Non-binary</P3SEX>
+    <P4SEX>Non-binary</P4SEX>
+    <P5SEX>Non-binary</P5SEX>
+    <P6SEX>Non-binary</P6SEX>
+    <CALCMORT>20_000</CALCMORT>
+    <P3ECO>9 Child under 16</P3ECO>
+    <P4ECO>3 In government training into work such as New Deal</P4ECO>
+    <P5ECO>5 Retired</P5ECO>
+    <P6ECO>1 Full Time - 30 hours or more a week</P6ECO>
+    <DISABILITY>1 Yes</DISABILITY>
+    <Q26CASHDEPOSIT>80_000</Q26CASHDEPOSIT>
+    <Q27SOCIALHOMEBUY>1_000</Q27SOCIALHOMEBUY>
+    <Q22PURCHASEPRICE>110_000</Q22PURCHASEPRICE>
+    <Q32REDUCTIONS>10_000</Q32REDUCTIONS>
+    <!-- not sure about q30a format /-->
+    <Q30A>10</Q30A>
+    <PREGYRHA>Yes</PREGYRHA>
+    <PREGLA>Yes</PREGLA>
+    <PREGOTHER>Yes</PREGOTHER>
+    <PREGHBA>Yes</PREGHBA>
+    <ARMEDF>1 Yes</ARMEDF>
+    <HHMEMB>6</HHMEMB>
+    <HHTYPE>6 = 2 or more adults and 1 or more children</HHTYPE>
+    <Q7UNKNOWNPOSTCODE>If postcode not known tick</Q7UNKNOWNPOSTCODE>
+    <Q6PREVTENURE>1 Local authority tenant</Q6PREVTENURE>
+    <P3REL>Child</P3REL>
+    <P4REL>Other</P4REL>
+    <P5REL>Buyer prefers not to say</P5REL>
+    <P6REL>Buyer prefers not to say</P6REL>
+    <Q2A>4 Don’t know</Q2A>
+    <!-- not sure about q30a format /-->
+    <MORTGAGEUSED>1 Yes</MORTGAGEUSED>
+    <Q15WHEELCHAIR>1 Yes</Q15WHEELCHAIR>
+    <ARMEDFORCESSPOUSE>5 No</ARMEDFORCESSPOUSE>
+    <Q29MONTHLYCHARGES>100</Q29MONTHLYCHARGES>
+    <Q24B></Q24B>
+    <Q34B>10</Q34B>
+    <Q41B></Q41B>
+    <Q7UNKNOWNPOSTCODE>If postcode not known tick</Q7UNKNOWNPOSTCODE>
+    <Q24AMORTGAGELENDER></Q24AMORTGAGELENDER>
+    <Q34AMORTGAGELENDER>5</Q34AMORTGAGELENDER>
+    <Q41AMORTGAGELENDER></Q41AMORTGAGELENDER>
+    <Q24AMORTGAGELENDEROTHER></Q24AMORTGAGELENDEROTHER>
+    <Q34AMORTGAGELENDEROTHER></Q34AMORTGAGELENDEROTHER>
+    <Q41AMORTGAGELENDEROTHER></Q41AMORTGAGELENDEROTHER>
+    <Q25BORROWING>1 Yes</Q25BORROWING>
+  </Group>
+</Group>
