@@ -113,7 +113,7 @@ RSpec.describe TasklistHelper do
 
           it "returns relevant text" do
             expect(review_log_text(lettings_log)).to eq(
-              "You can #{govuk_link_to 'review and make changes to this log', review_lettings_log_path(lettings_log)} until 1 July 2024.".html_safe,
+              "You can #{govuk_link_to 'review and make changes to this log', review_lettings_log_path(lettings_log)} until 9 July 2024.".html_safe,
             )
           end
         end
@@ -136,7 +136,7 @@ RSpec.describe TasklistHelper do
 
         it "returns relevant text" do
           expect(review_log_text(sales_log)).to eq(
-            "You can #{govuk_link_to 'review and make changes to this log', review_sales_log_path(id: sales_log, sales_log: true)} until 1 July 2023.".html_safe,
+            "You can #{govuk_link_to 'review and make changes to this log', review_sales_log_path(id: sales_log, sales_log: true)} until 7 July 2023.".html_safe,
           )
         end
       end
