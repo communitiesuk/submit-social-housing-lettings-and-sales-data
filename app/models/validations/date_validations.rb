@@ -35,12 +35,12 @@ module Validations::DateValidations
 
     created_at = record.created_at || Time.zone.now
 
-    if created_at >= previous_collection_end_date && !record.startdate.between?(current_collection_start_date, current_collection_end_date)
+    if created_at >= previous_collection_end_date && !record.startdate.between?(current_collection_start_date, next_collection_start_date)
       record.errors.add :startdate, I18n.t("validations.date.outside_collection_window.not_crossover_period", current_collection: "#{current_collection_start_suffix}/#{current_collection_start_suffix + 1}", current_collection_start_year: current_collection_start_date.year, current_collection_end_year: current_collection_end_date.year)
     end
 
-    if created_at < previous_collection_end_date && !record.startdate.between?(previous_collection_start_date, current_collection_end_date)
-      record.errors.add :startdate, I18n.t("validations.date.outside_collection_window.crossover_period", previous_collection: "#{current_collection_start_suffix - 1}/#{current_collection_start_suffix}", current_collection: "#{current_collection_start_suffix}/#{current_collection_start_suffix + 1}", previous_collection_start_year: previous_collection_start_date.year, current_collection_end_year: current_collection_end_date.year)
+    if created_at < previous_collection_end_date && !record.startdate.between?(previous_collection_start_date, next_collection_start_date)
+      record.errors.add :startdate, I18n.t("validations.date.outside_collection_window.crossover_period", previous_collection: "#{previous_collection_start_suffix}/#{previous_collection_start_suffix + 1}", current_collection: "#{current_collection_start_suffix}/#{current_collection_start_suffix + 1}", previous_collection_start_year: previous_collection_start_date.year, current_collection_end_year: current_collection_end_date.year)
     end
 
     if FeatureToggle.startdate_two_week_validation_enabled? && record.startdate > Time.zone.today + 14
@@ -68,6 +68,10 @@ module Validations::DateValidations
 
 private
 
+  def previous_collection_start_suffix
+    previous_collection_start_date.strftime("%y").to_i
+  end
+
   def current_collection_start_suffix
     current_collection_start_date.strftime("%y").to_i
   end
@@ -86,6 +90,10 @@ private
 
   def current_collection_end_date
     @current_collection_end_date ||= FormHandler.instance.lettings_forms["current_lettings"].end_date
+  end
+
+  def next_collection_start_date
+    @next_collection_start_date ||= FormHandler.instance.lettings_forms["next_lettings"].start_date
   end
 
   def is_rsnvac_first_let?(record)
