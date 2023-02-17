@@ -72,6 +72,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: staging
     needs: [postgres, redis]
+    permissions:
+      issues: write
+      pull-requests: write
 
     steps:
       - name: Checkout code

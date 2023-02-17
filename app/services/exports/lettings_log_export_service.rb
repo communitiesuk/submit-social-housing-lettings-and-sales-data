@@ -1,6 +1,7 @@
 module Exports
   class LettingsLogExportService
     include Exports::LettingsLogExportConstants
+    include CollectionTimeHelper
 
     def initialize(storage_service, logger = Rails.logger)
       @storage_service = storage_service
@@ -66,11 +67,11 @@ module Exports
       return unless lettings_log.startdate
 
       collection_start = lettings_log.collection_start_year
-      month = lettings_log.startdate.month
-      quarter = QUARTERS[(month - 1) / 3]
+      start_month = collection_start_date(lettings_log.startdate).strftime("%b")
+      end_month = collection_end_date(lettings_log.startdate).strftime("%b")
       base_number_str = "f#{base_number.to_s.rjust(4, '0')}"
       increment_str = "inc#{increment.to_s.rjust(4, '0')}"
-      "core_#{collection_start}_#{collection_start + 1}_#{quarter}_#{base_number_str}_#{increment_str}"
+      "core_#{collection_start}_#{collection_start + 1}_#{start_month}_#{end_month}_#{base_number_str}_#{increment_str}".downcase
     end
 
     def write_export_archive(export, lettings_logs)
