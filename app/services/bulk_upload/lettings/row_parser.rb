@@ -150,6 +150,10 @@ class BulkUpload::Lettings::RowParser
   validate :validate_cannot_be_la_referral_if_general_needs
   validate :validate_leaving_reason_for_renewal
   validate :validate_lettings_type_matches_bulk_upload
+  validate :validate_only_one_housing_needs_type
+  validate :validate_no_disabled_needs_conjunction
+  validate :validate_dont_know_disabled_needs_conjunction
+  validate :validate_no_and_dont_know_disabled_needs_conjunction
 
   def valid?
     errors.clear
@@ -177,6 +181,33 @@ class BulkUpload::Lettings::RowParser
   end
 
 private
+
+  def validate_no_and_dont_know_disabled_needs_conjunction
+    if field_59 == 1 && field_60 == 1
+      errors.add(:field_59, I18n.t("validations.household.housingneeds.no_and_dont_know_disabled_needs_conjunction"))
+      errors.add(:field_60, I18n.t("validations.household.housingneeds.no_and_dont_know_disabled_needs_conjunction"))
+    end
+  end
+
+  def validate_dont_know_disabled_needs_conjunction
+    if field_60 == 1 && [field_55, field_56, field_57, field_58].compact.count.positive?
+      errors.add(:field_60, I18n.t("validations.household.housingneeds.dont_know_disabled_needs_conjunction"))
+    end
+  end
+
+  def validate_no_disabled_needs_conjunction
+    if field_59 == 1 && [field_55, field_56, field_57, field_58].compact.count.positive?
+      errors.add(:field_59, I18n.t("validations.household.housingneeds.no_disabled_needs_conjunction"))
+    end
+  end
+
+  def validate_only_one_housing_needs_type
+    if [field_55, field_56, field_57].compact.count.positive?
+      errors.add(:field_55, I18n.t("validations.household.housingneeds_type.only_one_option_permitted"))
+      errors.add(:field_56, I18n.t("validations.household.housingneeds_type.only_one_option_permitted"))
+      errors.add(:field_57, I18n.t("validations.household.housingneeds_type.only_one_option_permitted"))
+    end
+  end
 
   def validate_lettings_type_matches_bulk_upload
     if [1, 3, 5, 7, 9, 11].include?(field_1) && !bulk_upload.general_needs?
@@ -552,6 +583,8 @@ private
     attributes["preg_occ"] = field_47
 
     attributes["housingneeds"] = housingneeds
+    attributes["housingneeds_type"] = housingneeds_type
+    attributes["housingneeds_other"] = housingneeds_other
 
     attributes["illness"] = field_118
 
@@ -808,12 +841,26 @@ private
 
   def housingneeds
     if field_59 == 1
-      1
+      2
     elsif field_60 == 1
       3
     else
       2
     end
+  end
+
+  def housingneeds_type
+    if field_55 == 1
+      0
+    elsif field_56 == 1
+      1
+    elsif field_57 == 1
+      2
+    end
+  end
+
+  def housingneeds_other
+    return 1 if field_58 == 1
   end
 
   def ethnic_group_from_ethnic
