@@ -69,31 +69,31 @@ module Validations::DateValidations
 private
 
   def previous_collection_start_suffix
-    @previous_collection_start_suffix ||= previous_collection_start_date.strftime("%y").to_i
+    previous_collection_start_date.strftime("%y").to_i
   end
 
   def current_collection_start_suffix
-    @current_collection_start_suffix ||= current_collection_start_date.strftime("%y").to_i
+    current_collection_start_date.strftime("%y").to_i
   end
 
   def previous_collection_start_date
-    @previous_collection_start_date ||= FormHandler.instance.lettings_forms["previous_lettings"].start_date
+    FormHandler.instance.lettings_forms["previous_lettings"].start_date
   end
 
   def previous_collection_end_date
-    @previous_collection_end_date ||= FormHandler.instance.lettings_forms["previous_lettings"].end_date
+    FormHandler.instance.lettings_forms["previous_lettings"].end_date
   end
 
   def current_collection_start_date
-    @current_collection_start_date ||= FormHandler.instance.lettings_forms["current_lettings"].start_date
+    FormHandler.instance.lettings_forms["current_lettings"].start_date
   end
 
   def current_collection_end_date
-    @current_collection_end_date ||= FormHandler.instance.lettings_forms["current_lettings"].end_date
+    FormHandler.instance.lettings_forms["current_lettings"].end_date
   end
 
   def next_collection_start_date
-    @next_collection_start_date ||= FormHandler.instance.lettings_forms["next_lettings"].start_date
+    FormHandler.instance.lettings_forms["next_lettings"].start_date
   end
 
   def is_rsnvac_first_let?(record)
