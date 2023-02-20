@@ -5,7 +5,7 @@ class Form::Sales::Pages::AboutStaircase < ::Form::Page
     @header = "About the staircasing transaction"
     @depends_on = [{
       "staircase" => 1,
-      "joint_purchase?" => joint_purchase
+      "joint_purchase?" => joint_purchase,
     }]
   end
 
