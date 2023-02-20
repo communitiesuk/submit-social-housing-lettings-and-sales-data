@@ -7,8 +7,8 @@ class FeatureToggle
     Rails.env.production? || Rails.env.test? || Rails.env.staging?
   end
 
-  def self.saledate_collection_window_validation_enabled?
-    Rails.env.production? || Rails.env.test? || Rails.env.staging?
+  def self.saledate_next_collection_year_validation_enabled?
+    !Rails.env.production?
   end
 
   def self.sales_log_enabled?
