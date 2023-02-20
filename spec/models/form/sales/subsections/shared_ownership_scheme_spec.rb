@@ -16,7 +16,8 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
       %w[
         living_before_purchase_shared_ownership
         staircasing
-        about_staircasing
+        about_staircasing_joint_purchase
+        about_staircasing_not_joint_purchase
         staircase_bought_value_check
         resale
         exchange_contracts

@@ -10,7 +10,8 @@ class Form::Sales::Subsections::SharedOwnershipScheme < ::Form::Subsection
     @pages ||= [
       Form::Sales::Pages::LivingBeforePurchase.new("living_before_purchase_shared_ownership", nil, self),
       Form::Sales::Pages::Staircase.new(nil, nil, self),
-      Form::Sales::Pages::AboutStaircase.new(nil, nil, self),
+      Form::Sales::Pages::AboutStaircase.new("about_staircasing_joint_purchase", nil, self, joint_purchase: true),
+      Form::Sales::Pages::AboutStaircase.new("about_staircasing_not_joint_purchase", nil, self, joint_purchase: false),
       Form::Sales::Pages::StaircaseBoughtValueCheck.new(nil, nil, self),
       Form::Sales::Pages::Resale.new(nil, nil, self),
       Form::Sales::Pages::ExchangeDate.new(nil, nil, self),
