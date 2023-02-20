@@ -24,7 +24,8 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
         handover_date
         handover_date_check
         la_nominations
-        buyer_previous
+        buyer_previous_joint_purchase
+        buyer_previous_not_joint_purchase
         previous_bedrooms
         previous_property_type
         shared_ownership_previous_tenure
