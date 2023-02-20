@@ -1998,6 +1998,21 @@ RSpec.describe LettingsLog do
         expect(record_from_db["waityear"]).to eq(nil)
         expect(lettings_log["waityear"]).to eq(nil)
       end
+
+      it "resets inferred vacancy reason value" do
+        vacancy_reason = "rsnvac"
+
+        lettings_log.update!({ renewal: 1 })
+
+        record_from_db = ActiveRecord::Base.connection.execute("select #{vacancy_reason} from lettings_logs where id=#{lettings_log.id}").to_a[0]
+        expect(record_from_db[vacancy_reason]).to eq(14)
+        expect(lettings_log[vacancy_reason]).to eq(14)
+
+        lettings_log.update!({ renewal: 0 })
+        record_from_db = ActiveRecord::Base.connection.execute("select #{vacancy_reason} from lettings_logs where id=#{lettings_log.id}").to_a[0]
+        expect(record_from_db[vacancy_reason]).to eq(nil)
+        expect(lettings_log[vacancy_reason]).to eq(nil)
+      end
     end
 
     context "when it changes from a supported housing to not a supported housing" do
