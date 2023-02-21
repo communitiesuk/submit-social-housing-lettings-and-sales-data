@@ -91,6 +91,7 @@ end
 group :test do
   gem "capybara", require: false
   gem "capybara-lockstep"
+  gem "capybara-screenshot"
   gem "faker"
   gem "rspec-rails", require: false
   gem "selenium-webdriver", require: false
