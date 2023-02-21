@@ -8,7 +8,7 @@ class BulkUpload::Lettings::RowParser
   attribute :field_1, :integer
   attribute :field_2
   attribute :field_3
-  attribute :field_4, :integer
+  attribute :field_4, :string
   attribute :field_5, :integer
   attribute :field_6
   attribute :field_7, :string
@@ -964,6 +964,6 @@ private
   end
 
   def scheme
-    @scheme ||= Scheme.find_by(old_visible_id: field_4)
+    @scheme ||= Scheme.find_by_id_on_mulitple_fields(field_4)
   end
 end

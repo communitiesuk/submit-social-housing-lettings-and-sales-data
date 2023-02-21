@@ -620,6 +620,16 @@ RSpec.describe BulkUpload::Lettings::RowParser do
   end
 
   describe "#log" do
+    describe "#scheme" do
+      context "when lookup is via id prefixed with S" do
+        let(:attributes) { { bulk_upload:, field_4: "S#{scheme.id}", field_111: owning_org } }
+
+        it "assigns the correct scheme" do
+          expect(parser.log.scheme).to eql(scheme)
+        end
+      end
+    end
+
     describe "#owning_organisation" do
       context "when lookup is via id prefixed with ORG" do
         let(:attributes) { { bulk_upload:, field_111: "ORG#{owning_org.id}" } }
