@@ -27,4 +27,12 @@ module FiltersHelper
     organisation_options = user.support? ? Organisation.all : [user.organisation] + user.organisation.managing_agents
     [OpenStruct.new(id: "", name: "Select an option")] + organisation_options.map { |org| OpenStruct.new(id: org.id, name: org.name) }
   end
+
+  def collection_year_options
+    if FeatureToggle.collection_2023_2024_year_enabled?
+      { "2023": "2023/24", "2022": "2022/23", "2021": "2021/22" }
+    else
+      { "2022": "2022/23", "2021": "2021/22" }
+    end
+  end
 end

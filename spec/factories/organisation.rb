@@ -13,6 +13,14 @@ FactoryBot.define do
     trait :with_old_visible_id do
       old_visible_id { rand(9_999_999).to_s }
     end
+
+    trait :prp do
+      provider_type { "PRP" }
+    end
+
+    trait :does_not_own_stock do
+      holds_own_stock { false }
+    end
   end
 
   factory :organisation_rent_period do

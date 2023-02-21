@@ -156,6 +156,7 @@ en:
         before_scheme_end_date: "The tenancy start date must be before the end date for this supported housing scheme"
         after_void_date: "Enter a tenancy start date that is after the void date"
         after_major_repair_date: "Enter a tenancy start date that is after the major repair date"
+        year_not_two_digits: Tenancy start year must be 2 digits
         location:
           deactivated: "The location %{postcode} was deactivated on %{date} and was not available on the day you entered."
           reactivating_soon: "The location %{postcode} is not available until %{date}. Select another location or edit the tenancy start date"
@@ -170,6 +171,9 @@ en:
         invalid: "Please select owning organisation or managing organisation that you belong to"
       created_by:
         invalid: "Please select owning organisation or managing organisation that you belong to"
+      lettype:
+        general_needs_mismatch: Lettings type must be a general needs type because you selected general needs when uploading the file
+        supported_housing_mismatch: Lettings type must be a supported housing type because you selected supported housing when uploading the file
 
     property:
       mrcdate:
@@ -199,6 +203,9 @@ en:
       beds:
         non_positive: "Number of bedrooms has to be greater than 0"
         over_max: "Number of bedrooms cannot be more than 12"
+        bedsits_have_max_one_bedroom: "Number of bedrooms must be 1 if the property is a bedsit"
+      proptype:
+        bedsits_have_max_one_bedroom: "Answer cannot be 'Bedsit' if the property has 2 or more bedrooms"
       postcode:
         must_match_previous: "Buyer's last accommodation and discounted ownership postcodes must match"
 
@@ -345,6 +352,12 @@ en:
           must_be_child: "Answer must be ‘child’ if the person is aged 16-19 and a student"
       housingneeds_a:
         one_or_two_choices: "You can only select one option or ‘other disabled access needs’ plus ‘wheelchair-accessible housing’, ‘wheelchair access to essential rooms’ or ‘level access housing’"
+      housingneeds_type:
+        only_one_option_permitted: "Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected"
+      housingneeds:
+        no_disabled_needs_conjunction: "No disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs"
+        dont_know_disabled_needs_conjunction: "Don’t know disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs"
+        no_and_dont_know_disabled_needs_conjunction: "No disabled access needs and don’t know disabled access needs cannot be selected together"
       prevten:
         non_temp_accommodation: "Answer cannot be non-temporary accommodation as this is a re-let to a tenant who occupied the same property as temporary accommodation"
         over_20_foster_care: "Answer cannot be a children’s home or foster care as the lead tenant is 20 or older"

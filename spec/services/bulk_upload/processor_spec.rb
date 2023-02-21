@@ -171,6 +171,17 @@ RSpec.describe BulkUpload::Processor do
         expect(mock_downloader).to have_received(:delete_local_file!)
       end
 
+      it "sends correct and upload again mail" do
+        mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
+
+        allow(BulkUploadMailer).to receive(:send_correct_and_upload_again_mail).and_return(mail_double)
+
+        processor.call
+
+        expect(BulkUploadMailer).to have_received(:send_correct_and_upload_again_mail)
+        expect(mail_double).to have_received(:deliver_later)
+      end
+
       it "does not send fix errors email" do
         allow(BulkUploadMailer).to receive(:send_bulk_upload_with_errors_mail).and_call_original
 

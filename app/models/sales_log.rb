@@ -38,6 +38,14 @@ class SalesLog < Log
   OPTIONAL_FIELDS = %w[saledate_check purchid monthly_charges_value_check old_persons_shared_ownership_value_check].freeze
   RETIREMENT_AGES = { "M" => 65, "F" => 60, "X" => 65 }.freeze
 
+  def lettings?
+    false
+  end
+
+  def sales?
+    true
+  end
+
   def startdate
     saledate
   end
@@ -225,6 +233,10 @@ class SalesLog < Log
 
   def old_persons_shared_ownership?
     type == 24
+  end
+
+  def is_bedsit?
+    proptype == 2
   end
 
   def shared_ownership_scheme?

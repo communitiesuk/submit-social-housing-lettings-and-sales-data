@@ -171,6 +171,10 @@ Rails.application.routes.draw do
       resources :bulk_upload_sales_results, path: "bulk-upload-results", only: [:show]
     end
 
+    member do
+      get "review", to: "form#review"
+    end
+
     FormHandler.instance.sales_forms.each do |_key, form|
       form.pages.map do |page|
         get page.id.to_s.dasherize, to: "form#show_page"

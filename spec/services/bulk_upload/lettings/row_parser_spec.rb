@@ -8,8 +8,10 @@ RSpec.describe BulkUpload::Lettings::RowParser do
   let(:attributes) { { bulk_upload: } }
   let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }
   let(:user) { create(:user, organisation: owning_org) }
+
   let(:owning_org) { create(:organisation, :with_old_visible_id) }
   let(:managing_org) { create(:organisation, :with_old_visible_id) }
+
   let(:setup_section_params) do
     {
       bulk_upload:,
@@ -23,12 +25,34 @@ RSpec.describe BulkUpload::Lettings::RowParser do
     }
   end
 
+  before do
+    create(:organisation_relationship, parent_organisation: owning_org, child_organisation: managing_org)
+  end
+
   around do |example|
     FormHandler.instance.use_real_forms!
 
     example.run
 
     FormHandler.instance.use_fake_forms!
+  end
+
+  describe "#blank_row?" do
+    context "when a new object" do
+      it "returns true" do
+        expect(parser).to be_blank_row
+      end
+    end
+
+    context "when any field is populated" do
+      before do
+        parser.field_1 = "1"
+      end
+
+      it "returns false" do
+        expect(parser).not_to be_blank_row
+      end
+    end
   end
 
   describe "validations" do
@@ -40,6 +64,14 @@ RSpec.describe BulkUpload::Lettings::RowParser do
     end
 
     describe "#valid?" do
+      context "when the row is blank" do
+        let(:attributes) { { bulk_upload: } }
+
+        it "returns true" do
+          expect(parser).to be_valid
+        end
+      end
+
       context "when calling the method multiple times" do
         let(:attributes) { { bulk_upload:, field_134: 2 } }
 
@@ -172,7 +204,7 @@ RSpec.describe BulkUpload::Lettings::RowParser do
 
     describe "#field_1" do
       context "when null" do
-        let(:attributes) { { bulk_upload:, field_1: nil } }
+        let(:attributes) { { bulk_upload:, field_1: nil, field_4: "1" } }
 
         it "returns an error" do
           expect(parser.errors[:field_1]).to be_present
@@ -200,6 +232,46 @@ RSpec.describe BulkUpload::Lettings::RowParser do
 
         it "does not return any errors" do
           expect(parser.errors[:field_1]).to be_blank
+        end
+      end
+
+      context "when bulk upload is for general needs" do
+        let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: "1") }
+
+        context "when general needs option selected" do
+          let(:attributes) { { bulk_upload:, field_1: "1" } }
+
+          it "is permitted" do
+            expect(parser.errors[:field_1]).to be_blank
+          end
+        end
+
+        context "when supported housing option selected" do
+          let(:attributes) { { bulk_upload:, field_1: "2" } }
+
+          it "is not permitted" do
+            expect(parser.errors[:field_1]).to include("Lettings type must be a general needs type because you selected general needs when uploading the file")
+          end
+        end
+      end
+
+      context "when bulk upload is for supported housing" do
+        let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: "2") }
+
+        context "when general needs option selected" do
+          let(:attributes) { { bulk_upload:, field_1: "1" } }
+
+          it "is not permitted" do
+            expect(parser.errors[:field_1]).to include("Lettings type must be a supported housing type because you selected supported housing when uploading the file")
+          end
+        end
+
+        context "when supported housing option selected" do
+          let(:attributes) { { bulk_upload:, field_1: "2" } }
+
+          it "is permitted" do
+            expect(parser.errors[:field_1]).to be_blank
+          end
         end
       end
     end
@@ -278,6 +350,49 @@ RSpec.describe BulkUpload::Lettings::RowParser do
       end
     end
 
+    describe "#field_55, #field_56, #field_57" do
+      context "when more than one item selected" do
+        let(:attributes) { { bulk_upload:, field_55: "1", field_56: "1" } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_55]).to be_present
+          expect(parser.errors[:field_56]).to be_present
+          expect(parser.errors[:field_57]).to be_present
+        end
+      end
+    end
+
+    describe "#field_59" do
+      context "when 1 and another disability field selected" do
+        let(:attributes) { { bulk_upload:, field_59: "1", field_58: "1" } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_59]).to be_present
+        end
+      end
+    end
+
+    describe "#field_60" do
+      context "when 1 and another disability field selected" do
+        let(:attributes) { { bulk_upload:, field_60: "1", field_58: "1" } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_60]).to be_present
+        end
+      end
+    end
+
+    describe "#field_59, #field_60" do
+      context "when both 1" do
+        let(:attributes) { { bulk_upload:, field_59: "1", field_60: "1" } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_59]).to be_present
+          expect(parser.errors[:field_60]).to be_present
+        end
+      end
+    end
+
     describe "#field_78" do # referral
       context "when 3 ie PRP nominated by LA and owning org is LA" do
         let(:attributes) { { bulk_upload:, field_78: "3", field_111: owning_org.old_visible_id } }
@@ -287,11 +402,21 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         end
       end
 
-      context "when 4 ie referred by LA and is general needs" do
-        let(:attributes) { { bulk_upload:, field_78: "4" } }
+      context "when 4 ie referred by LA and is general needs and owning org is LA" do
+        let(:attributes) { { bulk_upload:, field_78: "4", field_111: owning_org.old_visible_id.to_s } }
 
         it "is not permitted" do
           expect(parser.errors[:field_78]).to be_present
+        end
+      end
+
+      context "when 4 ie referred by LA and is general needs and owning org is PRP" do
+        let(:owning_org) { create(:organisation, :prp, :with_old_visible_id) }
+
+        let(:attributes) { { bulk_upload:, field_78: "4", field_111: owning_org.old_visible_id.to_s } }
+
+        it "is permitted" do
+          expect(parser.errors[:field_78]).to be_blank
         end
       end
 
@@ -307,7 +432,7 @@ RSpec.describe BulkUpload::Lettings::RowParser do
 
     describe "fields 96, 97, 98 => startdate" do
       context "when any one of these fields is blank" do
-        let(:attributes) { { bulk_upload:, field_96: nil, field_97: nil, field_98: nil } }
+        let(:attributes) { { bulk_upload:, field_1: "1", field_96: nil, field_97: nil, field_98: nil } }
 
         it "returns an error" do
           parser.valid?
@@ -315,6 +440,24 @@ RSpec.describe BulkUpload::Lettings::RowParser do
           expect(parser.errors[:field_96]).to be_present
           expect(parser.errors[:field_97]).to be_present
           expect(parser.errors[:field_98]).to be_present
+        end
+      end
+
+      context "when field 98 is 4 digits instead of 2" do
+        let(:attributes) { { bulk_upload:, field_98: "2022" } }
+
+        it "returns an error" do
+          parser.valid?
+
+          expect(parser.errors[:field_98]).to include("Tenancy start year must be 2 digits")
+        end
+      end
+
+      context "when invalid date given" do
+        let(:attributes) { { bulk_upload:, field_1: "1", field_96: "a", field_97: "12", field_98: "2022" } }
+
+        it "does not raise an error" do
+          expect { parser.valid? }.not_to raise_error
         end
       end
 
@@ -353,6 +496,68 @@ RSpec.describe BulkUpload::Lettings::RowParser do
       end
     end
 
+    describe "#field_111" do # owning org
+      context "when cannot find owning org" do
+        let(:attributes) { { bulk_upload:, field_111: "donotexist" } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_111]).to eql(["The owning organisation code is incorrect"])
+        end
+      end
+
+      context "when org is not stock owning" do
+        let(:owning_org) { create(:organisation, :with_old_visible_id, :does_not_own_stock) }
+
+        let(:attributes) { { bulk_upload:, field_111: owning_org.old_visible_id } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_111]).to eql(["The owning organisation code provided is for an organisation that does not own stock"])
+        end
+
+        it "blocks log creation" do
+          expect(parser).to be_block_log_creation
+        end
+      end
+
+      context "when not affiliated with owning org" do
+        let(:unaffiliated_org) { create(:organisation, :with_old_visible_id) }
+
+        let(:attributes) { { bulk_upload:, field_111: unaffiliated_org.old_visible_id } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_111]).to eql(["You do not have permission to add logs for this owning organisation"])
+        end
+
+        it "blocks log creation" do
+          expect(parser).to be_block_log_creation
+        end
+      end
+    end
+
+    describe "#field_113" do # managing org
+      context "when cannot find managing org" do
+        let(:attributes) { { bulk_upload:, field_113: "donotexist" } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_113]).to eql(["The managing organisation code is incorrect"])
+        end
+      end
+
+      context "when not affiliated with managing org" do
+        let(:unaffiliated_org) { create(:organisation, :with_old_visible_id) }
+
+        let(:attributes) { { bulk_upload:, field_111: owning_org.old_visible_id, field_113: unaffiliated_org.old_visible_id } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_113]).to eql(["This managing organisation does not have a relationship with the owning organisation"])
+        end
+
+        it "blocks log creation" do
+          expect(parser).to be_block_log_creation
+        end
+      end
+    end
+
     describe "#field_134" do
       context "when an unpermitted value" do
         let(:attributes) { { bulk_upload:, field_134: 3 } }
@@ -387,6 +592,26 @@ RSpec.describe BulkUpload::Lettings::RowParser do
   end
 
   describe "#log" do
+    describe "#owning_organisation" do
+      context "when lookup is via id prefixed with ORG" do
+        let(:attributes) { { bulk_upload:, field_111: "ORG#{owning_org.id}" } }
+
+        it "assigns the correct org" do
+          expect(parser.log.owning_organisation).to eql(owning_org)
+        end
+      end
+    end
+
+    describe "#managing_organisation" do
+      context "when lookup is via id prefixed with ORG" do
+        let(:attributes) { { bulk_upload:, field_113: "ORG#{managing_org.id}" } }
+
+        it "assigns the correct org" do
+          expect(parser.log.managing_organisation).to eql(managing_org)
+        end
+      end
+    end
+
     describe "#cbl" do
       context "when field_75 is yes ie 1" do
         let(:attributes) { { bulk_upload:, field_75: 1 } }
@@ -825,6 +1050,60 @@ RSpec.describe BulkUpload::Lettings::RowParser do
 
         it "sets to 1" do
           expect(parser.log.first_time_property_let_as_social_housing).to eq(1)
+        end
+      end
+    end
+
+    describe "#housingneeds" do
+      context "when no disabled needs" do
+        let(:attributes) { { bulk_upload:, field_59: "1" } }
+
+        it "sets to 2" do
+          expect(parser.log.housingneeds).to eq(2)
+        end
+      end
+
+      context "when dont know about disabled needs" do
+        let(:attributes) { { bulk_upload:, field_60: "1" } }
+
+        it "sets to 3" do
+          expect(parser.log.housingneeds).to eq(3)
+        end
+      end
+    end
+
+    describe "#housingneeds_type" do
+      context "when field_55 is 1" do
+        let(:attributes) { { bulk_upload:, field_55: "1" } }
+
+        it "set to 0" do
+          expect(parser.log.housingneeds_type).to eq(0)
+        end
+      end
+
+      context "when field_56 is 1" do
+        let(:attributes) { { bulk_upload:, field_56: "1" } }
+
+        it "set to 1" do
+          expect(parser.log.housingneeds_type).to eq(1)
+        end
+      end
+
+      context "when field_57 is 1" do
+        let(:attributes) { { bulk_upload:, field_57: "1" } }
+
+        it "set to 2" do
+          expect(parser.log.housingneeds_type).to eq(2)
+        end
+      end
+    end
+
+    describe "#housingneeds_other" do
+      context "when field_58 is 1" do
+        let(:attributes) { { bulk_upload:, field_58: "1" } }
+
+        it "sets to 1" do
+          expect(parser.log.housingneeds_other).to eq(1)
         end
       end
     end

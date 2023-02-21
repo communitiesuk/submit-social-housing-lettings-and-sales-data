@@ -12,9 +12,14 @@ RSpec.describe SalesLog, type: :model do
     expect(described_class).to be < ApplicationRecord
   end
 
-  it "is a sales log" do
+  it "is a not a lettings log" do
     sales_log = build(:sales_log, created_by: created_by_user)
     expect(sales_log.lettings?).to be false
+  end
+
+  it "is a sales log" do
+    sales_log = build(:sales_log, created_by: created_by_user)
+    expect(sales_log.sales?).to be true
   end
 
   describe "#new" do
