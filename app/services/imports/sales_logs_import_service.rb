@@ -75,8 +75,8 @@ module Imports
       attributes["hb"] = unsafe_string_as_integer(xml_doc, "Q2A")
       attributes["frombeds"] = safe_string_as_integer(xml_doc, "Q20BEDROOMS")
       attributes["staircase"] = unsafe_string_as_integer(xml_doc, "Q17ASTAIRCASE")
-      attributes["stairbought"] = safe_string_as_integer(xml_doc, "PERCENTBOUGHT") # ?
-      attributes["stairowned"] = safe_string_as_integer(xml_doc, "PERCENTOWNS") # ?
+      attributes["stairbought"] = safe_string_as_integer(xml_doc, "PERCENTBOUGHT")
+      attributes["stairowned"] = safe_string_as_integer(xml_doc, "PERCENTOWNS")
       attributes["mrent"] = safe_string_as_decimal(xml_doc, "Q28MONTHLYRENT")
       attributes["exdate"] = compose_date(xml_doc, "EXDAY", "EXMONTH", "EXYEAR")
       attributes["exday"] = safe_string_as_integer(xml_doc, "EXDAY")
@@ -103,7 +103,7 @@ module Imports
       attributes["ppostc2"] = string_or_nil(xml_doc, "PPOSTC2")
       attributes["previous_la_known"] = nil
       attributes["hhregres"] = unsafe_string_as_integer(xml_doc, "ARMEDF")
-      attributes["hhregresstill"] = 7 # are we not collecting this? 7 == don't know
+      attributes["hhregresstill"] = still_serving(xml_doc)
       attributes["proplen"] = safe_string_as_integer(xml_doc, "Q30A")
       attributes["mscharge"] = safe_string_as_decimal(xml_doc, "Q29MONTHLYCHARGES")
       attributes["mscharge_known"] = 1 if attributes["mscharge"].present?
@@ -403,6 +403,15 @@ module Imports
         1
       end
       # NO (2) if FROMBEDS, FROMPROP and socprevten are blank, and YES(1) if they are completed
+    end
+
+    def still_serving(xml_doc)
+      case unsafe_string_as_integer(xml_doc, "LEFTARMEDF")
+      when 4
+        4
+      when 5, 6
+        5
+      end
     end
   end
 end
