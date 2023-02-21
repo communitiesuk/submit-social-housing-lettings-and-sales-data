@@ -167,6 +167,9 @@ class BulkUpload::Lettings::RowParser
   validate :validate_scheme_related
   validate :validate_scheme_exists
 
+  validate :validate_location_related
+  validate :validate_location_exists
+
   def valid?
     errors.clear
 
@@ -201,6 +204,27 @@ class BulkUpload::Lettings::RowParser
   end
 
 private
+
+  def validate_location_related
+    return if scheme.blank? || location.blank?
+
+    unless location.scheme == scheme
+      block_log_creation!
+      errors.add(:field_5, "Scheme code must relate to a location that is owned by owning organisation or managing organisation")
+    end
+  end
+
+  def location
+    return if scheme.nil?
+
+    @location ||= scheme.locations.find_by_id_on_mulitple_fields(field_5)
+  end
+
+  def validate_location_exists
+    if scheme && field_5.present? && location.nil?
+      errors.add(:field_5, "Location could be found with provided scheme code")
+    end
+  end
 
   def validate_scheme_related
     return unless field_4.present? && scheme.present?
@@ -587,6 +611,7 @@ private
     attributes["managing_organisation_id"] = managing_organisation_id
     attributes["renewal"] = renewal
     attributes["scheme"] = scheme
+    attributes["location"] = location
     attributes["created_by"] = bulk_upload.user
     attributes["needstype"] = bulk_upload.needstype
     attributes["rent_type"] = rent_type
