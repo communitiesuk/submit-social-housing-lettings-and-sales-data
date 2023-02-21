@@ -28,7 +28,7 @@
     <Q11BEDROOMS>2</Q11BEDROOMS>
     <JOINTMORE>1 Yes</JOINTMORE>
     <NOINT>1</NOINT>
-    <!-- <privacynotice>1<privacynotice> /-->
+    <QDP></QDP>
     <P1AGE>30</P1AGE>
     <P1SEX>Non-binary</P1SEX>
     <P1NAT>17 Republic of Ireland</P1NAT>
@@ -77,6 +77,7 @@
     <PREGHBA>Yes</PREGHBA>
     <ARMEDF>1 Yes</ARMEDF>
     <HHMEMB>6</HHMEMB>
+    <LIVEINOTHER>4</LIVEINOTHER>
     <!-- <PCODE1>LS16</PCODE1>
     <PCODE2>6FT</PCODE2> -->
     <HHTYPE>9 = other</HHTYPE>

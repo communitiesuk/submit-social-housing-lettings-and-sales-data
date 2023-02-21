@@ -52,15 +52,15 @@ module Imports
       attributes["othernational"] = nil
       attributes["ethnic"] = unsafe_string_as_integer(xml_doc, "P1ETH")
       attributes["ethnic_group"] = ethnic_group(attributes["ethnic"]) # check numbers
-      attributes["buy1livein"] = unsafe_string_as_integer(xml_doc, "LIVEINBUYER1") # liveinbuyer1?
-      attributes["buylivein"] = unsafe_string_as_integer(xml_doc, "LIVEINBUYER") # liveinbuyer? liveinbuyerother?
+      attributes["buy1livein"] = unsafe_string_as_integer(xml_doc, "LIVEINBUYER1")
+      attributes["buylivein"] = unsafe_string_as_integer(xml_doc, "LIVEINBUYER")
       attributes["builtype"] = unsafe_string_as_integer(xml_doc, "Q13BUILDINGTYPE")
       attributes["proptype"] = unsafe_string_as_integer(xml_doc, "Q12PROPERTYTYPE")
       attributes["noint"] = safe_string_as_integer(xml_doc, "NOINT")
-      attributes["buy2livein"] = unsafe_string_as_integer(xml_doc, "LIVEINBUYER2") # liveinbuyer2?
-      attributes["privacynotice"] = 1 if string_or_nil(xml_doc, "QDP") == "Yes" # always yes?
+      attributes["buy2livein"] = unsafe_string_as_integer(xml_doc, "LIVEINBUYER2")
+      attributes["privacynotice"] = 1 if string_or_nil(xml_doc, "QDP") == "Yes"
       attributes["wheel"] = unsafe_string_as_integer(xml_doc, "Q10WHEELCHAIR")
-      attributes["hholdcount"] = attributes["hhmemb"] - (attributes["jointpur"] == 1 ? 2 : 1)
+      attributes["hholdcount"] = safe_string_as_integer(xml_doc, "LIVEINOTHER")
       attributes["la"] = string_or_nil(xml_doc, "Q14ONSLACODE")
       attributes["income1"] = safe_string_as_integer(xml_doc, "Q2PERSON1INCOME") # should this be decimal?
       attributes["income1nk"] = 0 if attributes["income1"].present? # known if given? there's P1IncKnown in the form should use that instead?
