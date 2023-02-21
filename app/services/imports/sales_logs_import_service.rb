@@ -93,7 +93,7 @@ module Imports
       attributes["grant"] = safe_string_as_decimal(xml_doc, "Q32REDUCTIONS")
       attributes["pregyrha"] = 1 if string_or_nil(xml_doc, "PREGYRHA") == "Yes"
       attributes["pregla"] = 1 if string_or_nil(xml_doc, "PREGLA") == "Yes"
-      attributes["pregghb"] = 1 if string_or_nil(xml_doc, "PREGHBA") == "Yes" # PREGHBA?
+      attributes["pregghb"] = 1 if string_or_nil(xml_doc, "PREGHBA") == "Yes"
       attributes["pregother"] = 1 if string_or_nil(xml_doc, "PREGOTHER") == "Yes"
       attributes["ppostcode_full"] = compose_postcode(xml_doc, "PPOSTC1", "PPOSTC2")
       attributes["prevloc"] = string_or_nil(xml_doc, "Q7ONSLACODE")
@@ -117,12 +117,12 @@ module Imports
       attributes["hoyear"] = safe_string_as_integer(xml_doc, "HOYEAR")
       attributes["fromprop"] = unsafe_string_as_integer(xml_doc, "Q21PROPERTYTYPE")
       attributes["socprevten"] = nil # ?
-      attributes["mortgagelender"] = mortgage_lender(xml_doc, attributes) # there's mortgagelender 1/2/3? Q24AMORTGAGELENDER Q34AMORTGAGELENDER Q41AMORTGAGELENDER
+      attributes["mortgagelender"] = mortgage_lender(xml_doc, attributes)
       attributes["mortgagelenderother"] = nil # Q24AMORTGAGELENDEROTHER Q34AMORTGAGELENDEROTHER Q41AMORTGAGELENDEROTHER
-      attributes["mortlen"] = mortgage_length(xml_doc, attributes) # there's mortlen 1/2/3? Q24B Q34B Q41B
+      attributes["mortlen"] = mortgage_length(xml_doc, attributes)
       attributes["extrabor"] = unsafe_string_as_integer(xml_doc, "Q25BORROWING")
-      # attributes["totadult"] = safe_string_as_integer(xml_doc, "TOTADULT") # these would get overridden anyways
-      # attributes["totchild"] = safe_string_as_integer(xml_doc, "TOTCHILD") # these would get overridden anyways
+      attributes["totadult"] = safe_string_as_integer(xml_doc, "TOTADULT") # would get overridden
+      attributes["totchild"] = safe_string_as_integer(xml_doc, "TOTCHILD") # would get overridden
       attributes["hhtype"] = unsafe_string_as_integer(xml_doc, "HHTYPE")
       attributes["pcode1"] = string_or_nil(xml_doc, "PCODE1")
       attributes["pcode2"] = string_or_nil(xml_doc, "PCODE2")
