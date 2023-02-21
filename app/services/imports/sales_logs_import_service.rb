@@ -57,8 +57,8 @@ module Imports
       attributes["builtype"] = unsafe_string_as_integer(xml_doc, "Q13BUILDINGTYPE")
       attributes["proptype"] = unsafe_string_as_integer(xml_doc, "Q12PROPERTYTYPE")
       attributes["noint"] = safe_string_as_integer(xml_doc, "NOINT")
-      attributes["buy2livein"] = unsafe_string_as_integer(xml_doc, "LIVEINBUYER2")# liveinbuyer2?
-      attributes["privacynotice"] = nil # always yes?
+      attributes["buy2livein"] = unsafe_string_as_integer(xml_doc, "LIVEINBUYER2") # liveinbuyer2?
+      attributes["privacynotice"] = 1 if string_or_nil(xml_doc, "QDP") == "Yes" # always yes?
       attributes["wheel"] = unsafe_string_as_integer(xml_doc, "Q10WHEELCHAIR")
       attributes["hholdcount"] = attributes["hhmemb"] - (attributes["jointpur"] == 1 ? 2 : 1)
       attributes["la"] = string_or_nil(xml_doc, "Q14ONSLACODE")
@@ -68,7 +68,7 @@ module Imports
       attributes["income2"] = safe_string_as_integer(xml_doc, "Q2PERSON2INCOME") # should this be decimal?
       attributes["income2nk"] = 0 if attributes["income2"].present? # known if given?
       attributes["savings"] = safe_string_as_integer(xml_doc, "Q3SAVINGS")
-      attributes["savingsnk"] = savings_known(xml_doc)# 0 -> known, 1 - not known from the sales xml form, does this actually exist?
+      attributes["savingsnk"] = savings_known(xml_doc) # 0 -> known, 1 - not known from the sales xml form, does this actually exist?
       attributes["prevown"] = unsafe_string_as_integer(xml_doc, "Q4PREVOWNEDPROPERTY")
       attributes["mortgage"] = safe_string_as_decimal(xml_doc, "CALCMORT")
       attributes["inc2mort"] = unsafe_string_as_integer(xml_doc, "Q2PERSON2MORTAPPLICATION")
@@ -363,7 +363,7 @@ module Imports
       end
     end
 
-    def mortgage_lender(xml_doc, attributes) 
+    def mortgage_lender(xml_doc, attributes)
       case attributes["ownershipsch"]
       when 1
         unsafe_string_as_integer(xml_doc, "Q24AMORTGAGELENDER")
@@ -386,9 +386,9 @@ module Imports
     end
 
     def savings_known(xml_doc)
-      case unsafe_string_as_integer(xml_doc, "savingsKnown") 
+      case unsafe_string_as_integer(xml_doc, "savingsKnown")
       when 1 # known
-        0 
+        0
       when 2 # unknown
         1
       end

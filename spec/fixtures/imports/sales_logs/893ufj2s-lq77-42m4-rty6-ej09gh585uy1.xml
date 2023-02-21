@@ -27,8 +27,8 @@
     <JOINT>1 Yes</JOINT>
     <Q11BEDROOMS>2</Q11BEDROOMS>
     <JOINTMORE>1 Yes</JOINTMORE>
-    <NOINT>1</NOINT>
-    <!-- <privacynotice>1<privacynotice> /-->
+    <NOINT>2</NOINT>
+    <QDP>Yes</QDP>
     <P1AGE>30</P1AGE>
     <P1SEX>Non-binary</P1SEX>
     <P1NAT>17 Republic of Ireland</P1NAT>
