@@ -223,8 +223,12 @@ en:
         under_hard_min: "Net income cannot be less than £%{hard_min} per week given the tenant’s working situation"
         freq_missing: "Select how often the household receives income"
         earnings_missing: "Enter how much income the household has in total"
-      income1:
-        over_hard_max: "Income must be lower than £%{hard_max}"
+      income:
+        over_hard_max_for_london: "Income must not exceed £90,000 for properties within London local authorities"
+        over_hard_max_for_outside_london: "Income must not exceed £80,000 for properties outside London local authorities"
+        combined_over_hard_max_for_london: "Combined income must not exceed £90,000 for properties within London local authorities"
+        combined_over_hard_max_for_outside_london: "Combined income must not exceed £80,000 for properties outside London local authorities"
+        child_has_income: "Child's income must be £0"
       negative_currency: "Enter an amount above 0"
       rent:
         less_than_shortfall: "Enter an amount that is more than the shortfall in basic rent"
@@ -467,6 +471,8 @@ en:
         message: "Net income is lower than expected based on the lead tenant’s working situation. Are you sure this is correct?"
       in_soft_max_range:
         message: "Net income is higher than expected based on the lead tenant’s working situation. Are you sure this is correct?"
+    income:
+      under_soft_min_for_economic_status: "You said income was %{income}, which is below this working situation's minimum (%{minimum})"
     rent:
       outside_range_title: "You told us the rent is %{brent}"
       min_hint_text: "The minimum rent expected for this type of property in this local authority is £%{soft_min_for_period}."
@@ -559,4 +565,4 @@ en:
     one_argument: "This is based on the tenant’s work situation: %{ecstat1}"
     title_text:
       no_argument: "Some test text"
-      one_argument: "You said this: %{ecstat1}"
+      one_argument: "You said this: %{argument}"

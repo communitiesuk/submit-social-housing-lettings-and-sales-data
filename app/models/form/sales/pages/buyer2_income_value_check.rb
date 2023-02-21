@@ -1,9 +1,12 @@
-class Form::Sales::Pages::Buyer1IncomeValueCheck < ::Form::Page
+class Form::Sales::Pages::Buyer2IncomeValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
+    @header = ""
+    @description = ""
+    @subsection = subsection
     @depends_on = [
       {
-        "income1_under_soft_min?" => true,
+        "income2_under_soft_min?" => true,
       },
     ]
     @title_text = {
@@ -11,12 +14,12 @@ class Form::Sales::Pages::Buyer1IncomeValueCheck < ::Form::Page
       "arguments" => [
         {
           "key" => "field_formatted_as_currency",
-          "arguments_for_key" => "income1",
+          "arguments_for_key" => "income2",
           "i18n_template" => "income",
         },
         {
           "key" => "income_soft_min_for_ecstat",
-          "arguments_for_key" => "ecstat1",
+          "arguments_for_key" => "ecstat2",
           "i18n_template" => "minimum",
         },
       ],
@@ -26,7 +29,7 @@ class Form::Sales::Pages::Buyer1IncomeValueCheck < ::Form::Page
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::Buyer1IncomeValueCheck.new(nil, nil, self),
+      Form::Sales::Questions::Buyer2IncomeValueCheck.new(nil, nil, self),
     ]
   end
 end

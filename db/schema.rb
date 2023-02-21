@@ -520,6 +520,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_10_143120) do
     t.integer "value_value_check"
     t.integer "old_persons_shared_ownership_value_check"
     t.integer "staircase_bought_value_check"
+    t.integer "income2_value_check"
     t.integer "monthly_charges_value_check"
     t.integer "details_known_5"
     t.integer "details_known_6"
