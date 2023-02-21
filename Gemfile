@@ -20,7 +20,7 @@ gem "bootsnap", ">= 1.4.4", require: false
 # GOV UK frontend components
 gem "govuk-components"
 # GOV UK component form builder DSL
-gem "govuk_design_system_formbuilder"
+gem "govuk_design_system_formbuilder", "3.1.2"
 # Convert Markdown into GOV.UK frontend-styled HTML
 gem "govuk_markdown"
 # GOV UK Notify
