@@ -151,9 +151,9 @@ en:
         blank: "Enter name of other intermediate rent product"
       saledate:
         current_financial_year:
-          Enter a date within the %{current_start_year_short}/%{current_end_year_short} financial year, which is between 1st April %{current_start_year_long} and 31st March %{current_end_year_long}
-        current_and_next_financial_year:
-          "Enter a date within the %{current_start_year_short}/%{current_end_year_short} or %{current_end_year_short}/%{next_end_year_short} financial years, which is between 1st April %{current_start_year_long} and 31st March %{next_end_year_long}"
+          Enter a date within the %{current_start_year_short}/%{current_end_year_short} financial year, which is between %{current_start_year_long} and %{current_end_year_long}
+        previous_and_current_financial_year:
+          "Enter a date within the %{previous_start_year_short}/%{previous_end_year_short} or %{previous_end_year_short}/%{current_end_year_short} financial years, which is between %{previous_start_year_long} and %{current_end_year_long}"
 
       startdate:
         later_than_14_days_after: "The tenancy start date must not be later than 14 days from today’s date"

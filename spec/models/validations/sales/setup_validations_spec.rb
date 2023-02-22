@@ -6,11 +6,7 @@ RSpec.describe Validations::Sales::SetupValidations do
   let(:validator_class) { Class.new { include Validations::Sales::SetupValidations } }
 
   describe "#validate_saledate" do
-    context "with saledate_next_collection_year_validation_enabled == true" do
-      before do
-        allow(FeatureToggle).to receive(:saledate_next_collection_year_validation_enabled?).and_return(true)
-      end
-
+    context "with sales_in_crossover_period == false" do
       context "when saledate is blank" do
         let(:record) { build(:sales_log, saledate: nil) }
 
@@ -37,7 +33,7 @@ RSpec.describe Validations::Sales::SetupValidations do
         it "adds error" do
           setup_validator.validate_saledate(record)
 
-          expect(record.errors[:saledate]).to include("Enter a date within the 22/23 or 23/24 financial years, which is between 1st April 2022 and 31st March 2024")
+          expect(record.errors[:saledate]).to include("Enter a date within the 22/23 financial year, which is between 1st April 2022 and 31st March 2023")
         end
       end
 
@@ -47,14 +43,19 @@ RSpec.describe Validations::Sales::SetupValidations do
         it "adds error" do
           setup_validator.validate_saledate(record)
 
-          expect(record.errors[:saledate]).to include("Enter a date within the 22/23 or 23/24 financial years, which is between 1st April 2022 and 31st March 2024")
+          expect(record.errors[:saledate]).to include("Enter a date within the 22/23 financial year, which is between 1st April 2022 and 31st March 2023")
         end
       end
     end
 
-    context "with saledate_next_collection_year_validation_enabled == false" do
-      before do
-        allow(FeatureToggle).to receive(:saledate_next_collection_year_validation_enabled?).and_return(false)
+    context "with sales_in_crossover_period == true" do
+      around do |example|
+        Timecop.freeze(Time.zone.local(2024, 5, 1)) do
+          Singleton.__init__(FormHandler)
+          example.run
+        end
+        Timecop.return
+        Singleton.__init__(FormHandler)
       end
 
       context "when saledate is blank" do
@@ -68,7 +69,7 @@ RSpec.describe Validations::Sales::SetupValidations do
       end
 
       context "when saledate is in the 22/23 financial year" do
-        let(:record) { build(:sales_log, saledate: Time.zone.local(2023, 1, 1)) }
+        let(:record) { build(:sales_log, saledate: Time.zone.local(2024, 1, 1)) }
 
         it "does not add an error" do
           setup_validator.validate_saledate(record)
@@ -78,12 +79,12 @@ RSpec.describe Validations::Sales::SetupValidations do
       end
 
       context "when saledate is before the 22/23 financial year" do
-        let(:record) { build(:sales_log, saledate: Time.zone.local(2020, 1, 1)) }
+        let(:record) { build(:sales_log, saledate: Time.zone.local(2020, 5, 1)) }
 
         it "adds error" do
           setup_validator.validate_saledate(record)
 
-          expect(record.errors[:saledate]).to include("Enter a date within the 22/23 financial year, which is between 1st April 2022 and 31st March 2023")
+          expect(record.errors[:saledate]).to include("Enter a date within the 23/24 or 24/25 financial years, which is between 1st April 2023 and 31st March 2025")
         end
       end
 
@@ -93,7 +94,7 @@ RSpec.describe Validations::Sales::SetupValidations do
         it "adds error" do
           setup_validator.validate_saledate(record)
 
-          expect(record.errors[:saledate]).to include("Enter a date within the 22/23 financial year, which is between 1st April 2022 and 31st March 2023")
+          expect(record.errors[:saledate]).to include("Enter a date within the 23/24 or 24/25 financial years, which is between 1st April 2023 and 31st March 2025")
         end
       end
     end

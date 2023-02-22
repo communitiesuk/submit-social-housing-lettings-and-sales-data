@@ -14,7 +14,7 @@ RSpec.describe TasklistHelper do
 
   describe "with lettings" do
     let(:empty_lettings_log) { create(:lettings_log) }
-    let(:lettings_log) { create(:lettings_log, :in_progress, needstype: 1) }
+    let(:lettings_log) { build(:lettings_log, :in_progress, needstype: 1) }
 
     describe "get next incomplete section" do
       it "returns the first subsection name if it is not completed" do
@@ -41,7 +41,7 @@ RSpec.describe TasklistHelper do
       end
 
       it "returns the number of sections in progress" do
-        expect(get_subsections_count(lettings_log, :in_progress)).to eq(3)
+        expect(get_subsections_count(lettings_log, :in_progress)).to eq(2)
       end
 
       it "returns 0 for invalid state" do
@@ -85,6 +85,7 @@ RSpec.describe TasklistHelper do
     end
 
     describe "subsection link" do
+      let(:lettings_log) { create(:lettings_log, :completed) }
       let(:subsection) { lettings_log.form.get_subsection("household_characteristics") }
       let(:user) { build(:user) }
 

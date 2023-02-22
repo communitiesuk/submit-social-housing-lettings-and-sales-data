@@ -24,8 +24,8 @@ module CollectionTimeHelper
     Time.zone.local(current_collection_start_year + 1, 3, 31)
   end
 
-  def next_collection_end_date
-    current_collection_end_date + 1.year
+  def previous_collection_end_date
+    current_collection_end_date - 1.year
   end
 
   def next_collection_start_year
@@ -34,5 +34,9 @@ module CollectionTimeHelper
 
   def previous_collection_start_year
     current_collection_start_year - 1
+  end
+
+  def previous_collection_start_date
+    current_collection_start_date - 1.year
   end
 end
