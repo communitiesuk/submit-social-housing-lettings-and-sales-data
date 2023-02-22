@@ -21,6 +21,11 @@ class BulkUploadSalesLogsController < ApplicationController
     end
   end
 
+  def guidance
+    @template_path = Forms::BulkUploadSales::PrepareYourFile.new.template_path
+    render "bulk_upload_shared/guidance"
+  end
+
 private
 
   def current_year

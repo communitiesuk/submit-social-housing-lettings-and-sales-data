@@ -1,0 +1,52 @@
+<% content_for :before_content do %>
+  <%= govuk_back_link href: :back %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">How to upload logs in bulk</h1>
+
+    <div class="govuk-!-padding-bottom-4">
+      <h2 class="govuk-heading-s">Uploading sales and lettings logs</h2>
+      <p class="govuk-body">You can upload one sales or lettings log at a time, or many at once (known as ‘bulk upload’) with a comma-separated values (CSV) spreadsheet file.</p>
+      <p class="govuk-body">Bulk upload may be easier if your organisation deals with many logs, or if you can export CSV data from your Housing Management System (HMS). If your organisation only deals with a small amount of logs, or you cannot export CSV data, it’s probably easier to enter logs individually.</p>
+      <%= govuk_warning_text text: "You cannot upload lettings and sales logs with the same template - you must export each data type separately, then upload them" %>
+    </div>
+
+    <div class="govuk-!-padding-bottom-4">
+      <h2 class="govuk-heading-s">Creating your CSV files</h2>
+      <p class="govuk-body">To bulk upload successfully, all spreadsheets must be in the correct CSV format.</p>
+      <p class="govuk-body">In most programs, you must resave files as CSV - it’s not usually the default setting. CSV files are also unformatted, so any formatting added before saving (for example colours) will automatically disappear.</p>
+      <%= govuk_details(summary_text: "More about CSV") do %>
+        <p class="govuk-body">A CSV file is a basic spreadsheet with data values in plain text, and columns separated by commas. Each data row is a new text line.</p>
+        <p class="govuk-body">CSV data is easier to process than more common advanced spreadsheet formats, for example Excel. It means CSV is well suited to upload large, or multiple data sets.</p>
+      <% end %>
+    </div>
+
+    <div class="govuk-!-padding-bottom-4">
+      <h2 class="govuk-heading-s">Exporting CSV data</h2>
+      <p class="govuk-body">Export CSV data directly from your current systems, or export then adjust it to CSV.</p>
+      <p class="govuk-body">You can then upload it via a button at the top of the lettings and sales logs pages.</p>
+      <%= govuk_details(summary_text: "My organisation has a CMS") do %>
+        <p class="govuk-body">Some HMS providers sell an add-on "eCORE" module, which exports CSV data for you.</p>
+        <p class="govuk-!-font-weight-bold">It can take HMS providers a while to update these per new collection year, so you may have to wait for updates to export, or adjust your data manually post-export.</p>
+      <% end %>
+      <%= govuk_details(summary_text: "My organisation does not have a CMS") do %>
+        <p class="govuk-body">Your organisation’s IT team may be able to export CSV data for you - find out more about data specifications. This document outlines:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>required fields</li>
+          <li>each field's valid response</li>
+          <li>if/when certain fields can be left blank</li>
+        </ul>
+        <p class="govuk-body">Fields can appear in any order, as long as you include the <%= govuk_link_to "template document", @template_path %> headers, to easily identify what each column represents. You can rearrange data columns to match your system exports, copy-pasting multiple columns at once. For data stored in multiple systems, you can copy-paste all columns for one system next to each other, repeating this for subsequent system exports.</p>
+      <% end %>
+    </div>
+
+    <div class="govuk-!-padding-bottom-4">
+      <h2 class="govuk-heading-s">Getting help</h2>
+      <p class="govuk-body">There is no step-by-step bulk upload guide like there is with single log upload. However, you can download <%= govuk_link_to "our template", @template_path %>, which you can copy-paste data into from your systems column-by-column. You can also view a post-upload report showing any data errors, and our data specification can help fix these.</p>
+      <p class="govuk-body">If you still need support mapping data in the way we need, DLUHC’s helpdesk can help. If your data is across multiple systems, or is hard to export as a single file in the correct format, you could try different exports, or copy-pasting data by hand.</p>
+    </div>
+  </div>
+</div>
