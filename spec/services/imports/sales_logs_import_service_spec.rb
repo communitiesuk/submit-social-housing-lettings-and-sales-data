@@ -104,16 +104,56 @@ RSpec.describe Imports::SalesLogsImportService do
   end
 
   context "when importing a specific log" do
-    let(:sales_log_id) { "0ead17cb-1668-442d-898c-0d52879ff592" }
     let(:sales_log_file) { open_file(fixture_directory, sales_log_id) }
     let(:sales_log_xml) { Nokogiri::XML(sales_log_file) }
 
     context "and the organisation legacy ID does not exist" do
+      let(:sales_log_id) { "0ead17cb-1668-442d-898c-0d52879ff592" }
+
       before { sales_log_xml.at_xpath("//xmlns:OWNINGORGID").content = 99_999 }
 
       it "raises an exception" do
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .to raise_error(RuntimeError, "Organisation not found with legacy ID 99999")
+      end
+    end
+
+    context "with shared ownership type" do
+      let(:sales_log_id) { "0ead17cb-1668-442d-898c-0d52879ff592" }
+
+      it "successfully creates a completed shared ownership log" do
+        allow(logger).to receive(:warn).and_return(nil)
+        sales_log_service.send(:create_log, sales_log_xml)
+
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        applicable_questions = sales_log.form.subsections.map { |s| s.applicable_questions(sales_log) }.flatten.map(&:id)
+        expect(applicable_questions.filter { |q| sales_log[q].blank? }).to be_empty
+      end
+    end
+
+    context "with discounted ownership type" do
+      let(:sales_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+
+      it "successfully creates a completed discounted ownership log" do
+        allow(logger).to receive(:warn).and_return(nil)
+        sales_log_service.send(:create_log, sales_log_xml)
+
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        applicable_questions = sales_log.form.subsections.map { |s| s.applicable_questions(sales_log) }.flatten.map(&:id)
+        expect(applicable_questions.filter { |q| sales_log[q].blank? }).to be_empty
+      end
+    end
+
+    context "with outright sale type" do
+      let(:sales_log_id) { "00d2343e-d5fa-4c89-8400-ec3854b0f2b4" }
+
+      it "successfully creates a completed outright sale log" do
+        allow(logger).to receive(:warn).and_return(nil)
+        sales_log_service.send(:create_log, sales_log_xml)
+
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        applicable_questions = sales_log.form.subsections.map { |s| s.applicable_questions(sales_log) }.flatten.map(&:id)
+        expect(applicable_questions.filter { |q| sales_log[q].blank? }).to be_empty
       end
     end
   end
