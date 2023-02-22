@@ -1,11 +1,12 @@
 require "rails_helper"
 
 RSpec.describe Form::Lettings::Questions::Age, type: :model do
-  subject(:question) { described_class.new(nil, question_definition, page, person_index:) }
+  subject(:question) { described_class.new(nil, question_definition, page, person_index:, is_child:) }
 
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
   let(:person_index) { 2 }
+  let(:is_child) { false }
 
   it "has correct page" do
     expect(question.page).to eq(page)
@@ -23,12 +24,22 @@ RSpec.describe Form::Lettings::Questions::Age, type: :model do
     expect(question.derived?).to be false
   end
 
-  it "has the correct hint" do
-    expect(question.hint_text).to be_nil
+  context "when child" do
+    let(:is_child) { true }
+
+    it "has the correct hint" do
+      expect(question.hint_text).to eq("For a child under 1, enter 1")
+    end
+  end
+
+  context "when not child" do
+    it "has no hint" do
+      expect(question.hint_text).to be nil
+    end
   end
 
   it "has the correct min" do
-    expect(question.min).to eq(0)
+    expect(question.min).to eq(1)
   end
 
   it "has the correct max" do
