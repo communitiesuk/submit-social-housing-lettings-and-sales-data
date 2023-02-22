@@ -1,10 +1,11 @@
 ## How do we use your information?
 
-If your household has purchased a social housing property, social housing providers will share your personal information with the Department for Levelling Up, Housing & Communities (DLUHC) for research and statistical purposes only.
+If your household enters a new social housing tenancy or purchases a social housing property, social housing providers will share your personal information with the Department for Levelling Up, Housing & Communities (DLUHC) for research and statistical purposes only.
 
 ## How do we get this information?
 
-The information is provided via ‘<%= t('service_name') %>’, a service funded and managed by DLUHC. It collects information on the tenants or buyers, tenancy or sale, and the dwelling itself. Some of this data is personal and sensitive, so DLUHC is responsible for ensuring it’s processed in line with data protection legislation.
+The information is provided via ‘<%= t('service_name') %>’, a service funded and managed by DLUHC. It collects information on the tenants or residents, tenancy or sale, and the dwelling itself. Some of this data is personal and sensitive, so DLUHC is responsible for ensuring it’s processed in line with data protection legislation.
+
 
 ## Why do we share this information?
 
@@ -16,13 +17,13 @@ Information sharing will not affect your benefits, services or any treatments yo
 
 ## To find out more…
 
-Social housing lettings and sales data is collected on DLUHC’s behalf. Data providers do not require the tenant’s consent to provide this information, but tenants have the right to know how and for what purpose data is being collected, held and used.
+Social housing lettings and sales data is collected on DLUHC’s behalf. Data providers do not require the tenant or buyer’s consent to provide this information, but tenants and buyers have the right to know how and for what purpose data is being collected, held and used.
 
 Data processing must have a lawful basis. In this case it’s necessary for a task carried out in the public interest meeting a function of the Crown, a Minister of the Crown, or government department.
 
 You have the right to object, and obtain confirmation that your data is being processed, as well as access your personal data, and have any incorrect personal data corrected.
 
-Information collected via CORE relates to your tenancy, the dwelling you are living in or buying, and your household. Some information may have been provided by you (as a tenant) when signing the new tenancy or buying your property. Other information has been gathered from the housing management systems of social housing providers.
+Information collected via CORE relates to your tenancy, the dwelling you are living in or buying, and your household. Some information may have been provided by you (as a tenant or buyer) when signing the new tenancy or buying your property. Other information has been gathered from the housing management systems of social housing providers.
 
 Collected data will be held for as long as necessary for research and statistical purposes. When no longer needed, data will be deleted in a safe manner. We’re aware some collected data is particularly sensitive. For example:
 
