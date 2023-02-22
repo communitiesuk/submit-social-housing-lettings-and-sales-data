@@ -21,5 +21,9 @@ FactoryBot.define do
       primary_client_group { "G" }
       secondary_client_group { "M" }
     end
+
+    trait :with_old_visible_id do
+      old_visible_id { rand(9_999_999) }
+    end
   end
 end

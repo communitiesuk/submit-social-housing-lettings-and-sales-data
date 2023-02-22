@@ -8,7 +8,7 @@ class BulkUpload::Lettings::RowParser
   attribute :field_1, :integer
   attribute :field_2
   attribute :field_3
-  attribute :field_4, :integer
+  attribute :field_4, :string
   attribute :field_5, :integer
   attribute :field_6
   attribute :field_7, :string
@@ -164,6 +164,12 @@ class BulkUpload::Lettings::RowParser
   validate :validate_managing_org_related
   validate :validate_managing_org_exists
 
+  validate :validate_scheme_related
+  validate :validate_scheme_exists
+
+  validate :validate_location_related
+  validate :validate_location_exists
+
   def valid?
     errors.clear
 
@@ -198,6 +204,45 @@ class BulkUpload::Lettings::RowParser
   end
 
 private
+
+  def validate_location_related
+    return if scheme.blank? || location.blank?
+
+    unless location.scheme == scheme
+      block_log_creation!
+      errors.add(:field_5, "Scheme code must relate to a location that is owned by owning organisation or managing organisation")
+    end
+  end
+
+  def location
+    return if scheme.nil?
+
+    @location ||= scheme.locations.find_by_id_on_mulitple_fields(field_5)
+  end
+
+  def validate_location_exists
+    if scheme && field_5.present? && location.nil?
+      errors.add(:field_5, "Location could be found with provided scheme code")
+    end
+  end
+
+  def validate_scheme_related
+    return unless field_4.present? && scheme.present?
+
+    owned_by_owning_org = owning_organisation && scheme.owning_organisation == owning_organisation
+    owned_by_managing_org = managing_organisation && scheme.owning_organisation == managing_organisation
+
+    unless owned_by_owning_org || owned_by_managing_org
+      block_log_creation!
+      errors.add(:field_4, "This management group code does not belong to your organisation, or any of your stock owners / managing agents")
+    end
+  end
+
+  def validate_scheme_exists
+    if field_4.present? && scheme.nil?
+      errors.add(:field_4, "The management group code is not correct")
+    end
+  end
 
   def validate_managing_org_related
     if owning_organisation && managing_organisation && !owning_organisation.can_be_managed_by?(organisation: managing_organisation)
@@ -566,6 +611,7 @@ private
     attributes["managing_organisation_id"] = managing_organisation_id
     attributes["renewal"] = renewal
     attributes["scheme"] = scheme
+    attributes["location"] = location
     attributes["created_by"] = bulk_upload.user
     attributes["needstype"] = bulk_upload.needstype
     attributes["rent_type"] = rent_type
@@ -943,6 +989,6 @@ private
   end
 
   def scheme
-    @scheme ||= Scheme.find_by(old_visible_id: field_4)
+    @scheme ||= Scheme.find_by_id_on_mulitple_fields(field_4)
   end
 end
