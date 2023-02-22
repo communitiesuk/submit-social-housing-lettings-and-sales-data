@@ -6,7 +6,7 @@
     <meta:owner-institution-id>7c5bd5fb549c09a2c55d7cb90d7ba84927e64618</meta:owner-institution-id>
     <meta:managing-institution-id>7c5bd5fb549c09a2c55d7cb90d7ba84927e64618</meta:managing-institution-id>
     <meta:created-date>2023-02-21T12:09:45.809134Z</meta:created-date>
-    <meta:modified-date>2023-02-21T12:09:45.809134Z</meta:modified-date>
+    <meta:modified-date>2023-02-22T10:59:01.709949Z</meta:modified-date>
     <meta:status>submitted-valid</meta:status>
     <meta:reporting-year>2022</meta:reporting-year>
     <meta:upload-method>Manual Entry</meta:upload-method>
@@ -150,7 +150,7 @@
     <IM2>0</IM2>
     <IMT>0</IMT>
     <MortMultiple>0</MortMultiple>
-    <Form>300201</Form>
+    <Form>300202</Form>
   </Group>
   <Group>
     <minmaxP11/>
@@ -198,35 +198,35 @@
     <NOINT/>
   </Group>
   <Group>
-    <Q6PrevTenure/>
+    <Q6PrevTenure>3 Private tenant</Q6PrevTenure>
     <Q7Postcode override-field="">B95 5HZ</Q7Postcode>
     <Q7UnknownPostcode/>
     <Q7PrevLocation>Stratford-on-Avon</Q7PrevLocation>
     <Q7ONSLACode>E07000221</Q7ONSLACode>
     <PREGYRHA/>
     <PREGORHA/>
-    <PREGLA/>
+    <PREGLA>Yes</PREGLA>
     <PREGHBA/>
     <PREGOTHER/>
   </Group>
   <Group>
-    <ArmedF/>
+    <ArmedF>7 No</ArmedF>
     <LeftArmedF/>
     <ARMEDFORCESSPOUSE/>
-    <Disability/>
-    <Q10Wheelchair override-field=""/>
+    <Disability>2 No</Disability>
+    <Q10Wheelchair override-field="">2 No</Q10Wheelchair>
   </Group>
   <Group>
-    <P1IncKnown/>
+    <P1IncKnown>2 No</P1IncKnown>
     <Q2Person1Income/>
     <Q2Person1Mortgage/>
     <P2IncKnown/>
     <Q2Person2Income/>
     <Q2Person2MortApplication/>
-    <Q2a/>
+    <Q2a>4 Don&#x2019;t know</Q2a>
     <savingsKnown/>
     <Q3Savings override-field=""/>
-    <Q4PrevOwnedProperty/>
+    <Q4PrevOwnedProperty>2 No</Q4PrevOwnedProperty>
   </Group>
   <Group>
     <Q16aProplen2/>
@@ -315,10 +315,10 @@
     <TCHILD>0</TCHILD>
     <Q8av>0</Q8av>
     <Q8bv>0</Q8bv>
-    <Q8cv>0</Q8cv>
+    <Q8cv>1</Q8cv>
     <Q8dv>0</Q8dv>
     <Q8ev>0</Q8ev>
-    <Q8Validate>0</Q8Validate>
+    <Q8Validate>1</Q8Validate>
   </Group>
   <Group>
     <PLOACODE/>

@@ -6,7 +6,7 @@
     <meta:owner-institution-id>7c5bd5fb549c09a2c55d7cb90d7ba84927e64618</meta:owner-institution-id>
     <meta:managing-institution-id>7c5bd5fb549c09a2c55d7cb90d7ba84927e64618</meta:managing-institution-id>
     <meta:created-date>2023-02-21T11:48:28.255968Z</meta:created-date>
-    <meta:modified-date>2023-02-21T11:49:27.630543Z</meta:modified-date>
+    <meta:modified-date>2023-02-22T11:00:06.575832Z</meta:modified-date>
     <meta:status>submitted-valid</meta:status>
     <meta:reporting-year>2022</meta:reporting-year>
     <meta:upload-method>Manual Entry</meta:upload-method>
@@ -150,7 +150,7 @@
     <IM2>0</IM2>
     <IMT>235000</IMT>
     <MortMultiple>0</MortMultiple>
-    <Form>300199</Form>
+    <Form>300204</Form>
   </Group>
   <Group>
     <minmaxP11/>
@@ -226,7 +226,7 @@
     <Q2a>4 Don&#x2019;t know</Q2a>
     <savingsKnown>1 Yes</savingsKnown>
     <Q3Savings override-field="true">89000</Q3Savings>
-    <Q4PrevOwnedProperty/>
+    <Q4PrevOwnedProperty>1 Yes</Q4PrevOwnedProperty>
   </Group>
   <Group>
     <Q16aProplen2/>

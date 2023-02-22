@@ -56,7 +56,7 @@ module Imports
       attributes["builtype"] = unsafe_string_as_integer(xml_doc, "Q13BuildingType")
       attributes["proptype"] = unsafe_string_as_integer(xml_doc, "Q12PropertyType")
       attributes["privacynotice"] = 1 if string_or_nil(xml_doc, "Qdp") == "Yes"
-      attributes["noint"] = safe_string_as_integer(xml_doc, "NOINT") || 2 if attributes["privacynotice"] == 1
+      attributes["noint"] = unsafe_string_as_integer(xml_doc, "PartAPurchaser")
       attributes["buy2livein"] = unsafe_string_as_integer(xml_doc, "LiveInBuyer2")
       attributes["wheel"] = unsafe_string_as_integer(xml_doc, "Q10Wheelchair")
       attributes["hholdcount"] = safe_string_as_integer(xml_doc, "LiveInOther") || 0
@@ -82,11 +82,11 @@ module Imports
       attributes["exmonth"] = safe_string_as_integer(xml_doc, "EXMONTH")
       attributes["exyear"] = safe_string_as_integer(xml_doc, "EXYEAR")
       attributes["resale"] = unsafe_string_as_integer(xml_doc, "Q17Resale")
-      attributes["deposit"] = safe_string_as_decimal(xml_doc, "Q26CashDeposit")
+      attributes["deposit"] = deposit(xml_doc, attributes) 
       attributes["cashdis"] = safe_string_as_decimal(xml_doc, "Q27SocialHomeBuy")
       attributes["disabled"] = unsafe_string_as_integer(xml_doc, "Disability")
       attributes["lanomagr"] = unsafe_string_as_integer(xml_doc, "Q19Rehoused")
-      attributes["value"] = safe_string_as_decimal(xml_doc, "Q22PurchasePrice")
+      attributes["value"] = purchase_price(xml_doc, attributes)
       attributes["equity"] = safe_string_as_decimal(xml_doc, "Q23Equity")
       attributes["discount"] = safe_string_as_decimal(xml_doc, "Q33Discount")
       attributes["grant"] = safe_string_as_decimal(xml_doc, "Q32Reductions")
@@ -103,7 +103,7 @@ module Imports
       attributes["hhregres"] = unsafe_string_as_integer(xml_doc, "ArmedF")
       attributes["hhregresstill"] = still_serving(xml_doc)
       attributes["proplen"] = safe_string_as_integer(xml_doc, "Q16aProplen2")
-      attributes["mscharge"] = safe_string_as_decimal(xml_doc, "Q29MonthlyCharges")
+      attributes["mscharge"] = monthly_charges(xml_doc, attributes)
       attributes["mscharge_known"] = 1 if attributes["mscharge"].present?
       attributes["prevten"] = unsafe_string_as_integer(xml_doc, "Q6PrevTenure")
       attributes["mortgageused"] = unsafe_string_as_integer(xml_doc, "MORTGAGEUSED")
@@ -118,7 +118,7 @@ module Imports
       attributes["mortgagelender"] = mortgage_lender(xml_doc, attributes)
       attributes["mortgagelenderother"] = nil # Q24AMORTGAGELENDEROTHER Q34AMORTGAGELENDEROTHER Q41AMORTGAGELENDEROTHER
       attributes["mortlen"] = mortgage_length(xml_doc, attributes)
-      attributes["extrabor"] = unsafe_string_as_integer(xml_doc, "Q25Borrowing")
+      attributes["extrabor"] = borrowing(xml_doc, attributes)
       attributes["totadult"] = safe_string_as_integer(xml_doc, "TOTADULT") # would get overridden
       attributes["totchild"] = safe_string_as_integer(xml_doc, "TOTCHILD") # would get overridden
       attributes["hhtype"] = unsafe_string_as_integer(xml_doc, "HHTYPE")
@@ -154,6 +154,7 @@ module Imports
 
     def save_sales_log(attributes, previous_status)
       sales_log = SalesLog.new(attributes)
+      binding.pry
       begin
         sales_log.save!
         sales_log
@@ -233,14 +234,14 @@ module Imports
       end
     end
 
-    def mortgage_lender(xml_doc, attributes)
+    def mortgage_lender(xml_doc, attributes) #this comes through as a string, need to map to a corresponding integer
       case attributes["ownershipsch"]
       when 1
-        unsafe_string_as_integer(xml_doc, "Q24aMortgageLender")
+        string_or_nil(xml_doc, "Q24aMortgageLender")
       when 2
-        unsafe_string_as_integer(xml_doc, "Q34aMortgageLender")
+        string_or_nil(xml_doc, "Q34a")
       when 3
-        unsafe_string_as_integer(xml_doc, "Q41aMortgageLender")
+        string_or_nil(xml_doc, "Q41aMortgageLender")
       end
     end
 
@@ -290,6 +291,51 @@ module Imports
         0
       when 2 # unknown
         1
+      end
+    end
+
+    def borrowing(xml_doc, attributes)
+      case attributes["ownershipsch"]
+      when 1
+        unsafe_string_as_integer(xml_doc, "Q25Borrowing")
+      when 2
+        unsafe_string_as_integer(xml_doc, "Q35Borrowing")
+      when 3
+        unsafe_string_as_integer(xml_doc, "Q42Borrowing")
+      end
+    end
+
+    def purchase_price(xml_doc, attributes)
+      case attributes["ownershipsch"]
+      when 1
+        safe_string_as_decimal(xml_doc, "Q22PurchasePrice")
+      when 2
+        safe_string_as_decimal(xml_doc, "Q31PurchasePrice")
+      when 3
+        safe_string_as_decimal(xml_doc, "Q40PurchasePrice")
+      end
+    end
+
+    def deposit(xml_doc, attributes)
+      case attributes["ownershipsch"]
+      when 1
+        safe_string_as_decimal(xml_doc, "Q26CashDeposit")
+      when 2
+        safe_string_as_decimal(xml_doc, "Q36CashDeposit")
+      when 3
+        safe_string_as_decimal(xml_doc, "Q43CashDeposit")
+      end
+    end
+
+    def monthly_charges(xml_doc, attributes)
+      safe_string_as_decimal(xml_doc, "Q29MonthlyCharges")
+      case attributes["ownershipsch"]
+      when 1
+        safe_string_as_decimal(xml_doc, "Q29MonthlyCharges")
+      when 2
+        safe_string_as_decimal(xml_doc, "Q37MonthlyCharges")
+      when 3
+        #what should this be?
       end
     end
   end
