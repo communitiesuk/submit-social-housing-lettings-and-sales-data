@@ -25,72 +25,71 @@ module Imports
 
       attributes["saledate"] = compose_date(xml_doc, "DAY", "MONTH", "YEAR")
       attributes["owning_organisation_id"] = find_organisation_id(xml_doc, "OWNINGORGID")
-      attributes["type"] = unsafe_string_as_integer(xml_doc, "DERSALETYPE")
+      attributes["type"] = unsafe_string_as_integer(xml_doc, "DerSaleType")
       attributes["old_id"] = meta_field_value(xml_doc, "document-id")
       attributes["created_at"] = Time.zone.parse(meta_field_value(xml_doc, "created-date"))
       attributes["updated_at"] = Time.zone.parse(meta_field_value(xml_doc, "modified-date"))
-      attributes["purchid"] = string_or_nil(xml_doc, "PURCHASERCODE")
-      attributes["ownershipsch"] = unsafe_string_as_integer(xml_doc, "OWNERSHIP")
-      attributes["othtype"] = string_or_nil(xml_doc, "Q38OTHERSALE")
-      attributes["jointmore"] = unsafe_string_as_integer(xml_doc, "JOINTMORE")
-      attributes["jointpur"] = unsafe_string_as_integer(xml_doc, "JOINT")
-      attributes["beds"] = safe_string_as_integer(xml_doc, "Q11BEDROOMS")
-      attributes["companybuy"] = unsafe_string_as_integer(xml_doc, "COMPANY")
+      attributes["purchid"] = string_or_nil(xml_doc, "PurchaserCode")
+      attributes["ownershipsch"] = unsafe_string_as_integer(xml_doc, "Ownership")
+      attributes["othtype"] = string_or_nil(xml_doc, "Q38OtherSale")
+      attributes["jointmore"] = unsafe_string_as_integer(xml_doc, "JointMore")
+      attributes["jointpur"] = unsafe_string_as_integer(xml_doc, "joint")
+      attributes["beds"] = safe_string_as_integer(xml_doc, "Q11Bedrooms")
+      attributes["companybuy"] = unsafe_string_as_integer(xml_doc, "company") if attributes["ownershipsch"] == 3
       attributes["hhmemb"] = safe_string_as_integer(xml_doc, "HHMEMB")
       (1..6).each do |index|
-        attributes["age#{index}"] = safe_string_as_integer(xml_doc, "P#{index}AGE")
+        attributes["age#{index}"] = safe_string_as_integer(xml_doc, "P#{index}Age")
         attributes["sex#{index}"] = sex(xml_doc, index)
-        attributes["ecstat#{index}"] = unsafe_string_as_integer(xml_doc, "P#{index}ECO")
+        attributes["ecstat#{index}"] = unsafe_string_as_integer(xml_doc, "P#{index}Eco")
         attributes["age#{index}_known"] = age_known(xml_doc, index, attributes["hhmemb"], attributes["age#{index}"])
       end
       (2..6).each do |index|
         attributes["relat#{index}"] = relat(xml_doc, index)
         attributes["details_known_#{index}"] = details_known(index, attributes)
       end
-
-      attributes["national"] = unsafe_string_as_integer(xml_doc, "P1NAT")
+      attributes["national"] = unsafe_string_as_integer(xml_doc, "P1Nat")
       attributes["othernational"] = nil
-      attributes["ethnic"] = unsafe_string_as_integer(xml_doc, "P1ETH")
-      attributes["ethnic_group"] = ethnic_group(attributes["ethnic"]) # check numbers
-      attributes["buy1livein"] = unsafe_string_as_integer(xml_doc, "LIVEINBUYER1")
-      attributes["buylivein"] = unsafe_string_as_integer(xml_doc, "LIVEINBUYER")
-      attributes["builtype"] = unsafe_string_as_integer(xml_doc, "Q13BUILDINGTYPE")
-      attributes["proptype"] = unsafe_string_as_integer(xml_doc, "Q12PROPERTYTYPE")
-      attributes["noint"] = safe_string_as_integer(xml_doc, "NOINT")
-      attributes["buy2livein"] = unsafe_string_as_integer(xml_doc, "LIVEINBUYER2")
-      attributes["privacynotice"] = 1 if string_or_nil(xml_doc, "QDP") == "Yes"
-      attributes["wheel"] = unsafe_string_as_integer(xml_doc, "Q10WHEELCHAIR")
-      attributes["hholdcount"] = safe_string_as_integer(xml_doc, "LIVEINOTHER")
-      attributes["la"] = string_or_nil(xml_doc, "Q14ONSLACODE")
-      attributes["income1"] = safe_string_as_integer(xml_doc, "Q2PERSON1INCOME") # should this be decimal?
-      attributes["income1nk"] = 0 if attributes["income1"].present? # known if given? there's P1IncKnown in the form should use that instead?
-      attributes["inc1mort"] = unsafe_string_as_integer(xml_doc, "Q2PERSON1MORTGAGE")
-      attributes["income2"] = safe_string_as_integer(xml_doc, "Q2PERSON2INCOME") # should this be decimal?
-      attributes["income2nk"] = 0 if attributes["income2"].present? # known if given?
-      attributes["savings"] = safe_string_as_integer(xml_doc, "Q3SAVINGS")
-      attributes["savingsnk"] = savings_known(xml_doc) # 0 -> known, 1 - not known from the sales xml form, does this actually exist?
-      attributes["prevown"] = unsafe_string_as_integer(xml_doc, "Q4PREVOWNEDPROPERTY")
+      attributes["ethnic"] = unsafe_string_as_integer(xml_doc, "P1Eth")
+      attributes["ethnic_group"] = ethnic_group(attributes["ethnic"])
+      attributes["buy1livein"] = unsafe_string_as_integer(xml_doc, "LiveInBuyer1")
+      attributes["buylivein"] = unsafe_string_as_integer(xml_doc, "LiveInBuyer") if attributes["ownershipsch"] == 3
+      attributes["builtype"] = unsafe_string_as_integer(xml_doc, "Q13BuildingType")
+      attributes["proptype"] = unsafe_string_as_integer(xml_doc, "Q12PropertyType")
+      attributes["privacynotice"] = 1 if string_or_nil(xml_doc, "Qdp") == "Yes"
+      attributes["noint"] = safe_string_as_integer(xml_doc, "NOINT") || 2 if attributes["privacynotice"] == 1
+      attributes["buy2livein"] = unsafe_string_as_integer(xml_doc, "LiveInBuyer2")
+      attributes["wheel"] = unsafe_string_as_integer(xml_doc, "Q10Wheelchair")
+      attributes["hholdcount"] = safe_string_as_integer(xml_doc, "LiveInOther") || 0
+      attributes["la"] = string_or_nil(xml_doc, "Q14ONSLACode")
+      attributes["income1"] = safe_string_as_integer(xml_doc, "Q2Person1Income")
+      attributes["income1nk"] = income_known(unsafe_string_as_integer(xml_doc, "P1IncKnown")) 
+      attributes["inc1mort"] = unsafe_string_as_integer(xml_doc, "Q2Person1Mortgage")
+      attributes["income2"] = safe_string_as_integer(xml_doc, "Q2Person2Income")
+      attributes["income2nk"] = income_known(unsafe_string_as_integer(xml_doc, "P2IncKnown"))
+      attributes["savings"] = safe_string_as_integer(xml_doc, "Q3Savings")
+      attributes["savingsnk"] = savings_known(xml_doc)
+      attributes["prevown"] = unsafe_string_as_integer(xml_doc, "Q4PrevOwnedProperty")
       attributes["mortgage"] = safe_string_as_decimal(xml_doc, "CALCMORT")
-      attributes["inc2mort"] = unsafe_string_as_integer(xml_doc, "Q2PERSON2MORTAPPLICATION")
-      attributes["hb"] = unsafe_string_as_integer(xml_doc, "Q2A")
-      attributes["frombeds"] = safe_string_as_integer(xml_doc, "Q20BEDROOMS")
-      attributes["staircase"] = unsafe_string_as_integer(xml_doc, "Q17ASTAIRCASE")
-      attributes["stairbought"] = safe_string_as_integer(xml_doc, "PERCENTBOUGHT")
-      attributes["stairowned"] = safe_string_as_integer(xml_doc, "PERCENTOWNS")
-      attributes["mrent"] = safe_string_as_decimal(xml_doc, "Q28MONTHLYRENT")
+      attributes["inc2mort"] = unsafe_string_as_integer(xml_doc, "Q2Person2MortApplication")
+      attributes["hb"] = unsafe_string_as_integer(xml_doc, "Q2a")
+      attributes["frombeds"] = safe_string_as_integer(xml_doc, "Q20Bedrooms")
+      attributes["staircase"] = unsafe_string_as_integer(xml_doc, "Q17aStaircase")
+      attributes["stairbought"] = safe_string_as_integer(xml_doc, "PercentBought")
+      attributes["stairowned"] = safe_string_as_integer(xml_doc, "PercentOwns") if attributes["staircase"] == 1
+      attributes["mrent"] = safe_string_as_decimal(xml_doc, "Q28MonthlyRent")
       attributes["exdate"] = compose_date(xml_doc, "EXDAY", "EXMONTH", "EXYEAR")
       attributes["exday"] = safe_string_as_integer(xml_doc, "EXDAY")
       attributes["exmonth"] = safe_string_as_integer(xml_doc, "EXMONTH")
       attributes["exyear"] = safe_string_as_integer(xml_doc, "EXYEAR")
-      attributes["resale"] = unsafe_string_as_integer(xml_doc, "Q17RESALE")
-      attributes["deposit"] = safe_string_as_decimal(xml_doc, "Q26CASHDEPOSIT")
-      attributes["cashdis"] = safe_string_as_decimal(xml_doc, "Q27SOCIALHOMEBUY")
-      attributes["disabled"] = unsafe_string_as_integer(xml_doc, "DISABILITY")
-      attributes["lanomagr"] = unsafe_string_as_integer(xml_doc, "Q19REHOUSED")
-      attributes["value"] = safe_string_as_decimal(xml_doc, "Q22PURCHASEPRICE")
-      attributes["equity"] = safe_string_as_decimal(xml_doc, "Q23EQUITY")
-      attributes["discount"] = safe_string_as_decimal(xml_doc, "Q33DISCOUNT")
-      attributes["grant"] = safe_string_as_decimal(xml_doc, "Q32REDUCTIONS")
+      attributes["resale"] = unsafe_string_as_integer(xml_doc, "Q17Resale")
+      attributes["deposit"] = safe_string_as_decimal(xml_doc, "Q26CashDeposit")
+      attributes["cashdis"] = safe_string_as_decimal(xml_doc, "Q27SocialHomeBuy")
+      attributes["disabled"] = unsafe_string_as_integer(xml_doc, "Disability")
+      attributes["lanomagr"] = unsafe_string_as_integer(xml_doc, "Q19Rehoused")
+      attributes["value"] = safe_string_as_decimal(xml_doc, "Q22PurchasePrice")
+      attributes["equity"] = safe_string_as_decimal(xml_doc, "Q23Equity")
+      attributes["discount"] = safe_string_as_decimal(xml_doc, "Q33Discount")
+      attributes["grant"] = safe_string_as_decimal(xml_doc, "Q32Reductions")
       attributes["pregyrha"] = 1 if string_or_nil(xml_doc, "PREGYRHA") == "Yes"
       attributes["pregla"] = 1 if string_or_nil(xml_doc, "PREGLA") == "Yes"
       attributes["pregghb"] = 1 if string_or_nil(xml_doc, "PREGHBA") == "Yes"
@@ -102,33 +101,32 @@ module Imports
       attributes["ppostc1"] = string_or_nil(xml_doc, "PPOSTC1")
       attributes["ppostc2"] = string_or_nil(xml_doc, "PPOSTC2")
       attributes["previous_la_known"] = nil
-      attributes["hhregres"] = unsafe_string_as_integer(xml_doc, "ARMEDF")
+      attributes["hhregres"] = unsafe_string_as_integer(xml_doc, "ArmedF")
       attributes["hhregresstill"] = still_serving(xml_doc)
-      attributes["proplen"] = safe_string_as_integer(xml_doc, "Q30A")
-      attributes["mscharge"] = safe_string_as_decimal(xml_doc, "Q29MONTHLYCHARGES")
+      attributes["proplen"] = safe_string_as_integer(xml_doc, "Q16aProplen2")
+      attributes["mscharge"] = safe_string_as_decimal(xml_doc, "Q29MonthlyCharges")
       attributes["mscharge_known"] = 1 if attributes["mscharge"].present?
-      attributes["prevten"] = unsafe_string_as_integer(xml_doc, "Q6PREVTENURE")
+      attributes["prevten"] = unsafe_string_as_integer(xml_doc, "Q6PrevTenure")
       attributes["mortgageused"] = unsafe_string_as_integer(xml_doc, "MORTGAGEUSED")
-      attributes["wchair"] = unsafe_string_as_integer(xml_doc, "Q15WHEELCHAIR")
+      attributes["wchair"] = unsafe_string_as_integer(xml_doc, "Q15Wheelchair")
       attributes["armedforcesspouse"] = unsafe_string_as_integer(xml_doc, "ARMEDFORCESSPOUSE")
       attributes["hodate"] = compose_date(xml_doc, "HODAY", "HOMONTH", "HOYEAR")
       attributes["hoday"] = safe_string_as_integer(xml_doc, "HODAY")
       attributes["homonth"] = safe_string_as_integer(xml_doc, "HOMONTH")
       attributes["hoyear"] = safe_string_as_integer(xml_doc, "HOYEAR")
-      attributes["fromprop"] = unsafe_string_as_integer(xml_doc, "Q21PROPERTYTYPE")
-      attributes["socprevten"] = nil # ?
+      attributes["fromprop"] = unsafe_string_as_integer(xml_doc, "Q21PropertyType")
+      attributes["socprevten"] = unsafe_string_as_integer(xml_doc, "PrevRentType")
       attributes["mortgagelender"] = mortgage_lender(xml_doc, attributes)
       attributes["mortgagelenderother"] = nil # Q24AMORTGAGELENDEROTHER Q34AMORTGAGELENDEROTHER Q41AMORTGAGELENDEROTHER
       attributes["mortlen"] = mortgage_length(xml_doc, attributes)
-      attributes["extrabor"] = unsafe_string_as_integer(xml_doc, "Q25BORROWING")
+      attributes["extrabor"] = unsafe_string_as_integer(xml_doc, "Q25Borrowing")
       attributes["totadult"] = safe_string_as_integer(xml_doc, "TOTADULT") # would get overridden
       attributes["totchild"] = safe_string_as_integer(xml_doc, "TOTCHILD") # would get overridden
       attributes["hhtype"] = unsafe_string_as_integer(xml_doc, "HHTYPE")
       attributes["pcode1"] = string_or_nil(xml_doc, "PCODE1")
       attributes["pcode2"] = string_or_nil(xml_doc, "PCODE2")
       attributes["postcode_full"] = compose_postcode(xml_doc, "PCODE1", "PCODE2")
-      attributes["pcodenk"] = postcode_known(attributes)
-      # attributes["is_la_inferred"] = nil
+      attributes["pcodenk"] = 0 if attributes["postcode_full"].present? # known if given
       attributes["bulk_upload_id"] = nil
       attributes["saledate_check"] = nil
       attributes["ethnic_group2"] = nil
@@ -138,9 +136,9 @@ module Imports
       attributes["soctenant"] = soctenant(attributes)
 
       # Required for our form invalidated questions (not present in import)
-      attributes["previous_la_known"] = attributes["prevloc"].nil? ? 0 : 1
-      attributes["is_la_inferred"] = attributes["postcode_full"].present?
-      attributes["la_known"] = attributes["la"].nil? ? 0 : 1
+      attributes["previous_la_known"] = 1 if attributes["prevloc"].present? && !attributes["ppostcode_full"].present?
+      # attributes["is_la_inferred"] = attributes["postcode_full"].present?
+      attributes["la_known"] = 1 if attributes["la"].present? && !attributes["postcode_full"].present?
 
       # Sets the log creator
       owner_id = meta_field_value(xml_doc, "owner-user-id").strip
@@ -300,7 +298,7 @@ module Imports
     end
 
     def previous_postcode_known(xml_doc, previous_postcode, prevloc)
-      previous_postcode_known = string_or_nil(xml_doc, "Q7UNKNOWNPOSTCODE")
+      previous_postcode_known = string_or_nil(xml_doc, "Q7UnknownPostcode")
       if previous_postcode_known == "If postcode not known tick" || (previous_postcode.nil? && prevloc.present?)
         1
       elsif previous_postcode.nil?
@@ -310,13 +308,8 @@ module Imports
       end
     end
 
-    def postcode_known(attributes)
-      return 0 if attributes["postcode_full"].present? # known if given
-      return 1 if attributes["la"].present? # unknown if la is given
-    end
-
     def sex(xml_doc, index)
-      sex = string_or_nil(xml_doc, "P#{index}SEX")
+      sex = string_or_nil(xml_doc, "P#{index}Sex")
       case sex
       when "Male"
         "M"
@@ -330,7 +323,7 @@ module Imports
     end
 
     def relat(xml_doc, index)
-      relat = string_or_nil(xml_doc, "P#{index}REL")
+      relat = string_or_nil(xml_doc, "P#{index}Rel")
       case relat
       when "Child"
         "C"
@@ -366,22 +359,22 @@ module Imports
     def mortgage_lender(xml_doc, attributes)
       case attributes["ownershipsch"]
       when 1
-        unsafe_string_as_integer(xml_doc, "Q24AMORTGAGELENDER")
+        unsafe_string_as_integer(xml_doc, "Q24aMortgageLender")
       when 2
-        unsafe_string_as_integer(xml_doc, "Q34AMORTGAGELENDER")
+        unsafe_string_as_integer(xml_doc, "Q34aMortgageLender")
       when 3
-        unsafe_string_as_integer(xml_doc, "Q41AMORTGAGELENDER")
+        unsafe_string_as_integer(xml_doc, "Q41aMortgageLender")
       end
     end
 
     def mortgage_length(xml_doc, attributes)
       case attributes["ownershipsch"]
       when 1
-        unsafe_string_as_integer(xml_doc, "Q24B")
+        unsafe_string_as_integer(xml_doc, "Q24b")
       when 2
-        unsafe_string_as_integer(xml_doc, "Q34B")
+        unsafe_string_as_integer(xml_doc, "Q34b")
       when 3
-        unsafe_string_as_integer(xml_doc, "Q41B")
+        unsafe_string_as_integer(xml_doc, "Q41b")
       end
     end
 
@@ -406,11 +399,20 @@ module Imports
     end
 
     def still_serving(xml_doc)
-      case unsafe_string_as_integer(xml_doc, "LEFTARMEDF")
+      case unsafe_string_as_integer(xml_doc, "LeftArmedF")
       when 4
         4
       when 5, 6
         5
+      end
+    end
+
+    def income_known(value)
+      case value
+      when 1 #known
+        0
+      when 2 #unknown
+        1
       end
     end
   end
