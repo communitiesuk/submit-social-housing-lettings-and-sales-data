@@ -10,6 +10,16 @@ class Form::Sales::Questions::PreviousPostcodeKnown < ::Form::Question
       "ppostcode_full" => [0],
     }
     @hint_text = "This is also known as the household’s 'last settled home'"
+    @hidden_in_check_answers = {
+      "depends_on" => [
+        {
+          "ppcodenk" => 0,
+        },
+        {
+          "ppcodenk" => 1,
+        },
+      ],
+    }
   end
 
   ANSWER_OPTIONS = {
