@@ -15,7 +15,7 @@ RSpec.describe Imports::SalesLogsImportService do
   let(:shared_ownership_sales_log_id2) { "166fc004-392e-47a8-acb8-1c018734882b" }
   let(:outright_sale_sales_log_id) { "00d2343e-d5fa-4c89-8400-ec3854b0f2b4" }
   let(:discounted_ownership_sales_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
-  
+
   def open_file(directory, filename)
     File.open("#{directory}/#{filename}.xml")
   end
@@ -163,6 +163,39 @@ RSpec.describe Imports::SalesLogsImportService do
 
         sales_log = SalesLog.find_by(old_id: sales_log_id)
         expect(sales_log&.armedforcesspouse).to be(7)
+      end
+    end
+
+    context "when the savings not known is not answered and savings is not given" do
+      let(:sales_log_id) { discounted_ownership_sales_log_id }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:savingsKnown").content = ""
+        allow(logger).to receive(:warn).and_return(nil)
+      end
+
+      it "sets savingsnk to not know" do
+        sales_log_service.send(:create_log, sales_log_xml)
+
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log&.savingsnk).to be(1)
+      end
+    end
+
+    context "when the savings not known is not answered and savings is given" do
+      let(:sales_log_id) { discounted_ownership_sales_log_id }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q3Savings").content = "10000"
+        sales_log_xml.at_xpath("//xmlns:savingsKnown").content = ""
+        allow(logger).to receive(:warn).and_return(nil)
+      end
+
+      it "sets savingsnk to know" do
+        sales_log_service.send(:create_log, sales_log_xml)
+
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log&.savingsnk).to be(0)
       end
     end
 
