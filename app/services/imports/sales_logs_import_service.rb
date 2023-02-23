@@ -82,7 +82,7 @@ module Imports
       attributes["exmonth"] = safe_string_as_integer(xml_doc, "EXMONTH")
       attributes["exyear"] = safe_string_as_integer(xml_doc, "EXYEAR")
       attributes["resale"] = unsafe_string_as_integer(xml_doc, "Q17Resale")
-      attributes["deposit"] = deposit(xml_doc, attributes) 
+      attributes["deposit"] = deposit(xml_doc, attributes)
       attributes["cashdis"] = safe_string_as_decimal(xml_doc, "Q27SocialHomeBuy")
       attributes["disabled"] = unsafe_string_as_integer(xml_doc, "Disability")
       attributes["lanomagr"] = unsafe_string_as_integer(xml_doc, "Q19Rehoused")
@@ -126,13 +126,11 @@ module Imports
       attributes["pcode2"] = string_or_nil(xml_doc, "PCODE2")
       attributes["postcode_full"] = compose_postcode(xml_doc, "PCODE1", "PCODE2")
       attributes["pcodenk"] = 0 if attributes["postcode_full"].present? # known if given
-      attributes["bulk_upload_id"] = nil
-      attributes["saledate_check"] = nil
-      attributes["ethnic_group2"] = nil
-      attributes["ethnicbuy2"] = nil
-      attributes["prevshared"] = nil
-      attributes["staircasesale"] = nil
       attributes["soctenant"] = soctenant(attributes)
+      attributes["ethnic_group2"] = nil # 23/24 variable
+      attributes["ethnicbuy2"] = nil # 23/24 variable
+      attributes["prevshared"] = nil # 23/24 variable
+      attributes["staircasesale"] = nil # 23/24 variable
 
       # Required for our form invalidated questions (not present in import)
       attributes["previous_la_known"] = 1 if attributes["prevloc"].present? && attributes["ppostcode_full"].blank?
@@ -154,7 +152,6 @@ module Imports
 
     def save_sales_log(attributes, previous_status)
       sales_log = SalesLog.new(attributes)
-      binding.pry
       begin
         sales_log.save!
         sales_log
@@ -203,7 +200,8 @@ module Imports
          old_persons_shared_ownership_value_check
          staircase_bought_value_check
          monthly_charges_value_check
-         hodate_check]
+         hodate_check
+         saledate_check]
     end
 
     def check_status_completed(sales_log, previous_status)
@@ -234,14 +232,15 @@ module Imports
       end
     end
 
-    def mortgage_lender(xml_doc, attributes) #this comes through as a string, need to map to a corresponding integer
+    # this comes through as a string, need to map to a corresponding integer
+    def mortgage_lender(xml_doc, attributes)
       case attributes["ownershipsch"]
       when 1
-        string_or_nil(xml_doc, "Q24aMortgageLender")
+        unsafe_string_as_integer(xml_doc, "Q24aMortgageLender")
       when 2
-        string_or_nil(xml_doc, "Q34a")
+        unsafe_string_as_integer(xml_doc, "Q34a")
       when 3
-        string_or_nil(xml_doc, "Q41aMortgageLender")
+        unsafe_string_as_integer(xml_doc, "Q41aMortgageLender")
       end
     end
 
@@ -334,8 +333,6 @@ module Imports
         safe_string_as_decimal(xml_doc, "Q29MonthlyCharges")
       when 2
         safe_string_as_decimal(xml_doc, "Q37MonthlyCharges")
-      when 3
-        #what should this be?
       end
     end
   end

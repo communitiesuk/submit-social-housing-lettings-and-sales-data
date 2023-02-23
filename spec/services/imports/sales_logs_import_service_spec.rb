@@ -16,7 +16,7 @@ RSpec.describe Imports::SalesLogsImportService do
   end
 
   before do
-    WebMock.stub_request(:get, /api.postcodes.io\/postcodes\/LS166FT/)
+    WebMock.stub_request(:get, /api.postcodes.io\/postcodes/)
            .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Westminster","codes":{"admin_district":"E08000035"}}}', headers: {})
 
     allow(Organisation).to receive(:find_by).and_return(nil)
@@ -126,8 +126,8 @@ RSpec.describe Imports::SalesLogsImportService do
         sales_log_service.send(:create_log, sales_log_xml)
 
         sales_log = SalesLog.find_by(old_id: sales_log_id)
-        applicable_questions = sales_log.form.subsections.map { |s| s.applicable_questions(sales_log) }.flatten.map(&:id)
-        expect(applicable_questions.filter { |q| sales_log[q].blank? }).to be_empty
+        applicable_questions = sales_log.form.subsections.map { |s| s.applicable_questions(sales_log) }.flatten
+        expect(applicable_questions.filter { |q| q.unanswered?(sales_log) }.map(&:id)).to be_empty
       end
     end
 
@@ -139,8 +139,8 @@ RSpec.describe Imports::SalesLogsImportService do
         sales_log_service.send(:create_log, sales_log_xml)
 
         sales_log = SalesLog.find_by(old_id: sales_log_id)
-        applicable_questions = sales_log.form.subsections.map { |s| s.applicable_questions(sales_log) }.flatten.map(&:id)
-        expect(applicable_questions.filter { |q| sales_log[q].blank? }).to be_empty
+        applicable_questions = sales_log.form.subsections.map { |s| s.applicable_questions(sales_log) }.flatten
+        expect(applicable_questions.filter { |q| q.unanswered?(sales_log) }.map(&:id)).to be_empty
       end
     end
 
@@ -152,8 +152,8 @@ RSpec.describe Imports::SalesLogsImportService do
         sales_log_service.send(:create_log, sales_log_xml)
 
         sales_log = SalesLog.find_by(old_id: sales_log_id)
-        applicable_questions = sales_log.form.subsections.map { |s| s.applicable_questions(sales_log) }.flatten.map(&:id)
-        expect(applicable_questions.filter { |q| sales_log[q].blank? }).to be_empty
+        applicable_questions = sales_log.form.subsections.map { |s| s.applicable_questions(sales_log) }.flatten
+        expect(applicable_questions.filter { |q| q.unanswered?(sales_log) }.map(&:id)).to be_empty
       end
     end
   end
