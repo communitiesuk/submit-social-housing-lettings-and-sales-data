@@ -1,46 +1,47 @@
-## How are we using your information?
+## How do we use your information?
 
-If your household has entered a new social housing tenancy, social housing providers will share your personal information with the Department for Levelling Up, Housing & Communities (DLUHC) for research and statistical purposes.
+If your household enters a new social housing tenancy or purchases a social housing property, social housing providers will share your personal information with the Department for Levelling Up, Housing & Communities (DLUHC) for research and statistical purposes only.
 
-## How is this information provided?
+## How do we get this information?
 
-The information is provided via ‘<%= t('service_name') %>’, a service funded and managed by DLUHC. It collects information on the tenants or buyers, tenancy or sale, and the dwelling itself. Some of this information is personal and sensitive, so DLUHC is responsible for ensuring that all data is processed in line with data protection legislation.
+The information is provided via ‘<%= t('service_name') %>’, a service funded and managed by DLUHC. It collects information on the tenants or residents, tenancy or sale, and the dwelling itself. Some of this data is personal and sensitive, so DLUHC is responsible for ensuring it’s processed in line with data protection legislation.
 
-## Why are we sharing this information?
 
-Information collected using this service is shared with other government departments and agencies. Data is shared with the Greater London Authority and the Regulator of Social Housing. Data providers can also access data for their organisations via the online service. Data is only shared for research and statistical purposes.
+## Why do we share this information?
+
+Information collected via CORE is shared with other government departments and agencies. It’s shared with the Greater London Authority and the Regulator of Social Housing. Data providers can also access data for their organisations via CORE. Data is only shared for research and statistical purposes.
 
 ## How does this affect you?
 
-It will not affect your benefits, services or any treatments you receive. The information shared is anonymous and handled in accordance with the law. We are collecting and sharing your information to help us better understand the social housing market and inform social housing policy.
+Information sharing will not affect your benefits, services or any treatments you receive. It’s anonymous and handled in accordance with the law. We collect and share your information to help us better understand the social housing market and inform social housing policy.
 
-## If you want to know more
+## To find out more…
 
-Social housing lettings and sales data is collected on behalf of DLUHC for research and statistical purposes only. Data providers do not require the consent of tenants to provide the information, but tenants have the right to know how and for what purpose data is being collected, held and used.
+Social housing lettings and sales data is collected on DLUHC’s behalf. Data providers do not require the tenant or buyer’s consent to provide this information, but tenants and buyers have the right to know how and for what purpose data is being collected, held and used.
 
-The processing must have a lawful basis. In this case the processing is necessary for the performance of a task carried out in the public interest to meet a function of the Crown, a Minister of the Crown, or a government department.
+Data processing must have a lawful basis. In this case it’s necessary for a task carried out in the public interest meeting a function of the Crown, a Minister of the Crown, or government department.
 
-You have the right to object and you have the right to obtain confirmation that your data is being processed, and to access your personal data. You also have the right to have any incorrect personal data corrected.
+You have the right to object, and obtain confirmation that your data is being processed, as well as access your personal data, and have any incorrect personal data corrected.
 
-The information collected via this service relates to your tenancy, the dwelling you are living in or buying, and your household. Some of the information may have been provided by you as a tenant when signing the new tenancy or buying your property. Other information has been gathered from the housing management systems of social housing providers.
+Information collected via CORE relates to your tenancy, the dwelling you are living in or buying, and your household. Some information may have been provided by you (as a tenant or buyer) when signing the new tenancy or buying your property. Other information has been gathered from the housing management systems of social housing providers.
 
-Data collected will be held for as long as necessary for research and statistical purposes. When no longer needed, data will be deleted in a safe manner. We are aware that some of the data collected is particularly sensitive. For example:
+Collected data will be held for as long as necessary for research and statistical purposes. When no longer needed, data will be deleted in a safe manner. We’re aware some collected data is particularly sensitive. For example:
 
 * ethnic group
-* if previous tenure is a hospital or prison or approved probation hostel support
+* if previous tenure is a hospital, prison or approved probation hostel support
 * if household left last settled home because discharged from prison, a long stay hospital or other institution
-* if source of referral is probation or prison, youth offending team, community mental health team or health service
+* if referral source is probation or prison, youth offending or community mental health team, or health service
 
-All the information collected via this service is treated in accordance with data protection requirements and guidelines.
+DLUHC publishes data annually, in aggregate form, as part of a report and complementary tables.
 
-Data is published by DLUHC in aggregate form on an annual basis as part of a report and complementary tables.
+* For annual lettings data, visit: [www.gov.uk/government/collections/rents-lettings-and-tenancies](www.gov.uk/government/collections/rents-lettings-and-tenancies)
 
-You can visit <www.gov.uk/government/collections/rents-lettings-and-tenancies> to access the annual publications on lettings. Or visit <gov.uk/government/collections/social-housing-sales-including-right-to-buy-and-transfers> to view the publications on sales.
+* For annual sales data, visit: [www.gov.uk/government/collections/social-housing-sales-including-right-to-buy-and-transfers](www.gov.uk/government/collections/social-housing-sales-including-right-to-buy-and-transfers)
 
-The detail level data is anonymised and protected to minimise the risk of identification and held with the UK Data Archive for research purposes.
+Detail-level data is anonymised and protected, minimising identification risk. It's held with the UK Data Archive.
 
-## Making a complaint
+## Complaints
 
-If you are unhappy with any aspect of this privacy notice, or how your personal information is being processed, contact the Department Data Protection Officer at: <dataprotection@communities.gsi.gov.uk>
+If you’re unhappy with any privacy notice aspect, or how we process your information, contact the Department Data Protection Officer: <dataprotection@communities.gsi.gov.uk>
 
-If you are still not happy, you have the right to lodge a complaint with the Information Commissioner’s Office (ICO) at [ico.org.uk/concern](https://ico.org.uk/concern).
+You also have the right to complain to the Information Commissioner’s Office (ICO): [www.ico.org.uk/concern](www.ico.org.uk/concern)

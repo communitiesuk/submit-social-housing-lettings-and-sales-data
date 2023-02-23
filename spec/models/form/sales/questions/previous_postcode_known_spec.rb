@@ -47,4 +47,13 @@ RSpec.describe Form::Sales::Questions::PreviousPostcodeKnown, type: :model do
   it "has the correct hint" do
     expect(question.hint_text).to eq("This is also known as the household’s 'last settled home'")
   end
+
+  it "has the correct hidden_in_check_answers" do
+    expect(question.hidden_in_check_answers).to eq({
+      "depends_on" => [
+        { "ppcodenk" => 0 },
+        { "ppcodenk" => 1 },
+      ],
+    })
+  end
 end

@@ -129,6 +129,10 @@ class SalesLog < Log
     la && LONDON_BOROUGHS.include?(la)
   end
 
+  def property_not_in_london?
+    !london_property?
+  end
+
   def income1_used_for_mortgage?
     inc1mort == 1
   end
@@ -260,5 +264,19 @@ class SalesLog < Log
 
   def purchase_price_soft_max
     LaSaleRange.find_by(start_year: collection_start_year, la:, bedrooms: beds).soft_max
+  end
+
+  def income_soft_min_for_ecstat(ecstat_field)
+    economic_status_code = public_send(ecstat_field)
+
+    return unless ALLOWED_INCOME_RANGES_SALES
+
+    soft_min = ALLOWED_INCOME_RANGES_SALES[economic_status_code]&.soft_min
+    format_as_currency(soft_min)
+  end
+
+  def field_formatted_as_currency(field_name)
+    field_value = public_send(field_name)
+    format_as_currency(field_value)
   end
 end

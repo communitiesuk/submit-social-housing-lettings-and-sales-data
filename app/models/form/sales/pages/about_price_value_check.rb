@@ -1,4 +1,4 @@
-class Form::Sales::Pages::AboutPriceSharedOwnershipValueCheck < ::Form::Page
+class Form::Sales::Pages::AboutPriceValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @depends_on = [
@@ -20,14 +20,12 @@ class Form::Sales::Pages::AboutPriceSharedOwnershipValueCheck < ::Form::Page
       "translation" => "soft_validations.purchase_price.hint_text",
       "arguments" => [
         {
-          "key" => "purchase_price_soft_min_or_soft_max",
-          "label" => false,
+          "key" => "field_formatted_as_currency",
+          "arguments_for_key" => "purchase_price_soft_min_or_soft_max",
           "i18n_template" => "soft_min_or_soft_max",
-          "currency" => true,
         },
         {
           "key" => "purchase_price_min_or_max_text",
-          "label" => false,
           "i18n_template" => "min_or_max",
         },
       ],
@@ -36,7 +34,7 @@ class Form::Sales::Pages::AboutPriceSharedOwnershipValueCheck < ::Form::Page
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::AboutPriceSharedOwnershipValueCheck.new(nil, nil, self),
+      Form::Sales::Questions::AboutPriceValueCheck.new(nil, nil, self),
     ]
   end
 end

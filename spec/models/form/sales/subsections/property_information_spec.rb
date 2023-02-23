@@ -15,13 +15,13 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
     expect(property_information.pages.map(&:id)).to eq(
       %w[
         property_number_of_bedrooms
-        about_price_shared_ownership_bedrooms_value_check
+        about_price_bedrooms_value_check
         property_unit_type
         monthly_charges_property_type_value_check
         property_building_type
         property_postcode
         property_local_authority
-        about_price_shared_ownership_la_value_check
+        about_price_la_value_check
         property_wheelchair_accessible
       ],
     )

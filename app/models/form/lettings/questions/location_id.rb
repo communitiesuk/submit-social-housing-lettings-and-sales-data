@@ -2,7 +2,7 @@ class Form::Lettings::Questions::LocationId < ::Form::Question
   def initialize(_id, hsh, page)
     super("location_id", hsh, page)
     @check_answer_label = "Location"
-    @header = "Which location is this log for?"
+    @header = header_text
     @type = "radio"
     @answer_options = answer_options
     @inferred_answers = {
@@ -46,5 +46,13 @@ private
 
   def selected_answer_option_is_derived?(_lettings_log)
     false
+  end
+
+  def header_text
+    if form.start_date && form.start_date.year >= 2023
+      "Which location is this letting for?"
+    else
+      "Which location is this log for?"
+    end
   end
 end

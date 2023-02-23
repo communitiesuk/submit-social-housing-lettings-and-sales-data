@@ -46,7 +46,8 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
           buyer_2_gender_identity
           gender_2_buyer_retirement_value_check
           buyer_2_working_situation
-          working_situation_2_buyer_retirement_value_check
+          working_situation_2_retirement_value_check_joint_purchase
+          working_situation_buyer_2_income_value_check
           buyer_2_live_in_property
           number_of_others_in_property
           person_2_known
@@ -126,7 +127,8 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
           buyer_2_ethnic_background_mixed
           buyer_2_ethnic_background_white
           buyer_2_working_situation
-          working_situation_2_buyer_retirement_value_check
+          working_situation_2_retirement_value_check_joint_purchase
+          working_situation_buyer_2_income_value_check
           buyer_2_live_in_property
           number_of_others_in_property
           person_2_known

@@ -148,4 +148,8 @@ private
     self[is_inferred_key] = false
     self[postcode_key] = nil
   end
+
+  def format_as_currency(num_string)
+    ActionController::Base.helpers.number_to_currency(num_string, unit: "£")
+  end
 end
