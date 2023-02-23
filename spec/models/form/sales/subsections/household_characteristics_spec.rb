@@ -177,6 +177,22 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
   end
 
   it "has correct depends on" do
-    expect(household_characteristics.depends_on).to eq([{ "setup_completed?" => true }])
+    expect(household_characteristics.depends_on).to eq([{ "setup_completed?" => true, "company_buyer?" => false }])
+  end
+
+  context "when the sale is to a company buyer" do
+    let(:log) { FactoryBot.create(:sales_log, ownershipsch: 3, companybuy: 1) }
+
+    it "is not displayed in tasklist" do
+      expect(household_characteristics.displayed_in_tasklist?(log)).to eq(false)
+    end
+  end
+
+  context "when the sale is not to a company buyer" do
+    let(:log) { FactoryBot.create(:sales_log, ownershipsch: 3, companybuy: 2) }
+
+    it "is displayed in tasklist" do
+      expect(household_characteristics.displayed_in_tasklist?(log)).to eq(true)
+    end
   end
 end
