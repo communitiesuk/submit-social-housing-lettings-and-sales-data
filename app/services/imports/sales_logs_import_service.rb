@@ -104,7 +104,7 @@ module Imports
       attributes["hhregresstill"] = still_serving(xml_doc)
       attributes["proplen"] = safe_string_as_integer(xml_doc, "Q16aProplen2")
       attributes["mscharge"] = monthly_charges(xml_doc, attributes)
-      attributes["mscharge_known"] = 1 if attributes["mscharge"].present?
+      attributes["mscharge_known"] = mscharge_known(attributes)
       attributes["prevten"] = unsafe_string_as_integer(xml_doc, "Q6PrevTenure")
       attributes["mortgageused"] = unsafe_string_as_integer(xml_doc, "MORTGAGEUSED")
       attributes["wchair"] = unsafe_string_as_integer(xml_doc, "Q15Wheelchair")
@@ -393,6 +393,12 @@ module Imports
       when 2
         safe_string_as_decimal(xml_doc, "Q37MonthlyCharges")
       end
+    end
+
+    def mscharge_known(attributes)
+      return 1 if attributes["mscharge"].present?
+
+      0 if attributes["ownershipsch"] == 3
     end
   end
 end

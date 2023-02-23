@@ -188,6 +188,14 @@ RSpec.describe Imports::SalesLogsImportService do
         applicable_questions = sales_log.form.subsections.map { |s| s.applicable_questions(sales_log) }.flatten
         expect(applicable_questions.filter { |q| q.unanswered?(sales_log) }.map(&:id)).to be_empty
       end
+
+      it "infers mscharge_known as no, if it is not given" do
+        allow(logger).to receive(:warn).and_return(nil)
+        sales_log_service.send(:create_log, sales_log_xml)
+
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log.mscharge_known).to eq(0)
+      end
     end
   end
 end
