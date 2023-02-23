@@ -27,6 +27,10 @@ module Forms
         "/files/bulk-upload-sales-template-v1.xlsx"
       end
 
+      def old_template_path
+        "/files/bulk-upload-sales-template-v1.xlsx"
+      end
+
       def year_combo
         "#{year}/#{year + 1 - 2000}"
       end

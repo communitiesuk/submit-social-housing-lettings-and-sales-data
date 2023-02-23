@@ -10,9 +10,10 @@
       <span class="govuk-caption-l">Upload lettings logs in bulk (<%= @form.year_combo %>)</span>
       <h1 class="govuk-heading-l">Prepare your file</h1>
 
+      <p class="govuk-inset-text">The new bulk upload template has been reordered to match the order of questions on the site. If your system is still exporting the old ordering then use this <%= govuk_link_to "bulk lettings template", @form.old_template_path %> instead.</p>
       <h2 class="govuk-heading-m">Create your file</h2>
       <ul class="govuk-list govuk-list--bullet">
-        <li>Download the <%= govuk_link_to "bulk lettings template", @form.template_path %></li>
+        <li>Download the <%= govuk_link_to "bulk lettings template (new ordering)", @form.template_path %></li>
         <li>Export the data from your housing management system, matching the template</li>
         <li>If you cannot export it in this format, you may have to input it manually</li>
         <li>You can not have a file with both general needs logs and supported housing logs. These must be in separate files</li>
@@ -20,7 +21,7 @@
 
       <h2 class="govuk-heading-m">Check your data</h2>
       <ul class="govuk-list govuk-list--bullet">
-        <li>Check data is complete and formatted correctly, using data specifications (opens in a new tab)</li>
+        <li>Check data is complete and formatted correctly, using <%= govuk_link_to "Lettings 2022-23 Bulk Upload Specification", @form.specification_path %></li>
       </ul>
 
       <h2 class="govuk-heading-m">Save your file</h2>
