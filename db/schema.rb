@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_10_143120) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_13_140932) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -490,6 +490,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_10_143120) do
     t.integer "prevten"
     t.integer "mortgageused"
     t.integer "wchair"
+    t.integer "income2_value_check"
     t.integer "armedforcesspouse"
     t.datetime "hodate", precision: nil
     t.integer "hoday"
@@ -520,7 +521,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_10_143120) do
     t.integer "value_value_check"
     t.integer "old_persons_shared_ownership_value_check"
     t.integer "staircase_bought_value_check"
-    t.integer "income2_value_check"
     t.integer "monthly_charges_value_check"
     t.integer "details_known_5"
     t.integer "details_known_6"
@@ -529,6 +529,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_10_143120) do
     t.integer "staircasesale"
     t.integer "ethnic_group2"
     t.integer "ethnicbuy2"
+    t.integer "proplen_asked"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
