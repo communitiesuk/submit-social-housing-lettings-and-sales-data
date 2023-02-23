@@ -69,11 +69,11 @@ module Validations::DateValidations
 private
 
   def previous_collection_start_suffix
-    previous_collection_start_date.strftime("%y").to_i
+    previous_collection_start_date.year % 100
   end
 
   def current_collection_start_suffix
-    current_collection_start_date.strftime("%y").to_i
+    current_collection_start_date.year % 100
   end
 
   def previous_collection_start_date
