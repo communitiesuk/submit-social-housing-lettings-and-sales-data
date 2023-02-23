@@ -217,7 +217,7 @@ private
   def location
     return if scheme.nil?
 
-    @location ||= scheme.locations.find_by_id_on_mulitple_fields(field_5)
+    @location ||= scheme.locations.find_by_id_on_multiple_fields(field_5)
   end
 
   def validate_location_exists
@@ -584,7 +584,7 @@ private
   end
 
   def owning_organisation
-    Organisation.find_by_id_on_mulitple_fields(field_111)
+    Organisation.find_by_id_on_multiple_fields(field_111)
   end
 
   def owning_organisation_id
@@ -592,7 +592,7 @@ private
   end
 
   def managing_organisation
-    Organisation.find_by_id_on_mulitple_fields(field_113)
+    Organisation.find_by_id_on_multiple_fields(field_113)
   end
 
   def managing_organisation_id
@@ -991,6 +991,6 @@ private
   end
 
   def scheme
-    @scheme ||= Scheme.find_by_id_on_mulitple_fields(field_4)
+    @scheme ||= Scheme.find_by_id_on_multiple_fields(field_4)
   end
 end
