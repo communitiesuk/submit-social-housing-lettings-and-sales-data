@@ -23,7 +23,7 @@ class SearchComponent < ViewComponent::Base
       user_path(current_user)
     elsif request.path.include?("organisations")
       organisations_path
-    elsif FeatureToggle.sales_log_enabled? && request.path.include?("sales-logs")
+    elsif request.path.include?("sales-logs")
       sales_logs_path
     elsif request.path.include?("logs")
       lettings_logs_path
