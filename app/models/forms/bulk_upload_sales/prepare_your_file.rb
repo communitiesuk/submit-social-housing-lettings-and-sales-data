@@ -28,7 +28,7 @@ module Forms
       end
 
       def specification_path
-        "/files/Sales 2022-23 Bulk Upload Specification.csv"
+        "/files/bulk-upload-sales-specification-2022-23.xlsx"
       end
 
       def year_combo
