@@ -1,4 +1,4 @@
-class Form::Lettings::Questions::PrevtenRenewal < ::Form::Question
+class Form::Lettings::Questions::PreviousTenureRenewal < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "prevten"

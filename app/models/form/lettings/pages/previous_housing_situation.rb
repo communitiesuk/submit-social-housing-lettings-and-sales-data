@@ -6,6 +6,6 @@ class Form::Lettings::Pages::PreviousHousingSituation < ::Form::Page
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::Prevten.new(nil, nil, self)]
+    @questions ||= [Form::Lettings::Questions::PreviousTenure.new(nil, nil, self)]
   end
 end
