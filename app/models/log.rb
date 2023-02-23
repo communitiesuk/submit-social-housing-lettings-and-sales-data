@@ -43,6 +43,10 @@ class Log < ApplicationRecord
     false
   end
 
+  def sales?
+    false
+  end
+
   def ethnic_refused?
     ethnic_group == 17
   end
@@ -142,5 +146,9 @@ private
     end
     self[is_inferred_key] = false
     self[postcode_key] = nil
+  end
+
+  def format_as_currency(num_string)
+    ActionController::Base.helpers.number_to_currency(num_string, unit: "£")
   end
 end

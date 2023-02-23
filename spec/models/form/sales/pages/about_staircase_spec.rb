@@ -11,8 +11,24 @@ RSpec.describe Form::Sales::Pages::AboutStaircase, type: :model do
     expect(page.subsection).to eq(subsection)
   end
 
-  it "has correct questions" do
-    expect(page.questions.map(&:id)).to eq(%w[stairbought stairowned])
+  describe "questions" do
+    let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date:)) }
+
+    context "when 2022" do
+      let(:start_date) { Time.utc(2022, 2, 8) }
+
+      it "has correct questions" do
+        expect(page.questions.map(&:id)).to eq(%w[stairbought stairowned])
+      end
+    end
+
+    context "when 2023" do
+      let(:start_date) { Time.utc(2023, 2, 8) }
+
+      it "has correct questions" do
+        expect(page.questions.map(&:id)).to eq(%w[stairbought stairowned staircasesale])
+      end
+    end
   end
 
   it "has the correct id" do

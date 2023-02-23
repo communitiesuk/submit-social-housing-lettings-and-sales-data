@@ -24,6 +24,23 @@ RSpec.describe BulkUpload::Lettings::LogCreator do
       end
     end
 
+    context "when a valid csv with several blank rows" do
+      let(:file) { Tempfile.new }
+      let(:path) { file.path }
+      let(:log) { LettingsLog.new }
+
+      before do
+        file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_csv_row)
+        file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_csv_row)
+        file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_csv_row)
+        file.rewind
+      end
+
+      it "ignores them and does not create the logs" do
+        expect { service.call }.not_to change(LettingsLog, :count)
+      end
+    end
+
     context "when a valid csv with row with one invalid non setup field" do
       let(:file) { Tempfile.new }
       let(:path) { file.path }
