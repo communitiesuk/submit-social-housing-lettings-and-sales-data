@@ -22,9 +22,7 @@ class BulkUploadSalesLogsController < ApplicationController
   end
 
   def guidance
-    path_form = Forms::BulkUploadSales::PrepareYourFile.new
-    @template_path = path_form.template_path
-    @specification_path = path_form.specification_path
+    @form = Forms::BulkUploadSales::PrepareYourFile.new
     render "bulk_upload_shared/guidance"
   end
 
