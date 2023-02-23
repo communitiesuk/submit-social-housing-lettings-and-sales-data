@@ -186,6 +186,12 @@ RSpec.describe BulkUpload::Lettings::RowParser do
             field_80: "1234.56",
             field_87: "1",
             field_88: "234.56",
+
+            field_106: "15",
+            field_99: "0",
+            field_89: now.day.to_s,
+            field_90: now.month.to_s,
+            field_91: now.strftime("%g"),
           }
         end
 
@@ -1152,6 +1158,14 @@ RSpec.describe BulkUpload::Lettings::RowParser do
 
         it "sets to 1" do
           expect(parser.log.first_time_property_let_as_social_housing).to eq(1)
+        end
+      end
+
+      context "when field_106 is not 15, 16, or 17" do
+        let(:attributes) { { bulk_upload:, field_106: "1" } }
+
+        it "sets to 0" do
+          expect(parser.log.first_time_property_let_as_social_housing).to eq(0)
         end
       end
     end
