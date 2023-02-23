@@ -3,11 +3,12 @@ class BulkUpload::Lettings::RowParser
   include ActiveModel::Attributes
 
   attribute :bulk_upload
+  attribute :block_log_creation, :boolean, default: -> { false }
 
   attribute :field_1, :integer
   attribute :field_2
   attribute :field_3
-  attribute :field_4, :integer
+  attribute :field_4, :string
   attribute :field_5, :integer
   attribute :field_6
   attribute :field_7, :string
@@ -114,9 +115,9 @@ class BulkUpload::Lettings::RowParser
   attribute :field_108, :string
   attribute :field_109, :string
   attribute :field_110
-  attribute :field_111, :integer
+  attribute :field_111, :string
   attribute :field_112, :string
-  attribute :field_113, :integer
+  attribute :field_113, :string
   attribute :field_114, :integer
   attribute :field_115
   attribute :field_116, :integer
@@ -142,6 +143,7 @@ class BulkUpload::Lettings::RowParser
   validates :field_1, presence: { message: I18n.t("validations.not_answered", question: "letting type") },
                       inclusion: { in: (1..12).to_a, message: I18n.t("validations.invalid_option", question: "letting type") }
   validates :field_4, presence: { if: proc { [2, 4, 6, 8, 10, 12].include?(field_1) } }
+  validates :field_98, format: { with: /\A\d{2}\z/, message: I18n.t("validations.setup.startdate.year_not_two_digits") }
 
   validate :validate_data_types
   validate :validate_nulls
@@ -154,6 +156,19 @@ class BulkUpload::Lettings::RowParser
   validate :validate_no_disabled_needs_conjunction
   validate :validate_dont_know_disabled_needs_conjunction
   validate :validate_no_and_dont_know_disabled_needs_conjunction
+
+  validate :validate_owning_org_permitted
+  validate :validate_owning_org_owns_stock
+  validate :validate_owning_org_exists
+
+  validate :validate_managing_org_related
+  validate :validate_managing_org_exists
+
+  validate :validate_scheme_related
+  validate :validate_scheme_exists
+
+  validate :validate_location_related
+  validate :validate_location_exists
 
   def valid?
     errors.clear
@@ -173,14 +188,98 @@ class BulkUpload::Lettings::RowParser
   end
 
   def blank_row?
-    attribute_set.to_hash.reject { |k, _| %w[bulk_upload].include?(k) }.values.compact.empty?
+    attribute_set.to_hash.reject { |k, _| %w[bulk_upload block_log_creation].include?(k) }.values.compact.empty?
   end
 
   def log
     @log ||= LettingsLog.new(attributes_for_log)
   end
 
+  def block_log_creation!
+    self.block_log_creation = true
+  end
+
+  def block_log_creation?
+    block_log_creation
+  end
+
 private
+
+  def validate_location_related
+    return if scheme.blank? || location.blank?
+
+    unless location.scheme == scheme
+      block_log_creation!
+      errors.add(:field_5, "Scheme code must relate to a location that is owned by owning organisation or managing organisation")
+    end
+  end
+
+  def location
+    return if scheme.nil?
+
+    @location ||= scheme.locations.find_by_id_on_mulitple_fields(field_5)
+  end
+
+  def validate_location_exists
+    if scheme && field_5.present? && location.nil?
+      errors.add(:field_5, "Location could be found with provided scheme code")
+    end
+  end
+
+  def validate_scheme_related
+    return unless field_4.present? && scheme.present?
+
+    owned_by_owning_org = owning_organisation && scheme.owning_organisation == owning_organisation
+    owned_by_managing_org = managing_organisation && scheme.owning_organisation == managing_organisation
+
+    unless owned_by_owning_org || owned_by_managing_org
+      block_log_creation!
+      errors.add(:field_4, "This management group code does not belong to your organisation, or any of your stock owners / managing agents")
+    end
+  end
+
+  def validate_scheme_exists
+    if field_4.present? && scheme.nil?
+      errors.add(:field_4, "The management group code is not correct")
+    end
+  end
+
+  def validate_managing_org_related
+    if owning_organisation && managing_organisation && !owning_organisation.can_be_managed_by?(organisation: managing_organisation)
+      block_log_creation!
+      errors.add(:field_113, "This managing organisation does not have a relationship with the owning organisation")
+    end
+  end
+
+  def validate_managing_org_exists
+    if managing_organisation.nil?
+      errors.delete(:field_113)
+      errors.add(:field_113, "The managing organisation code is incorrect")
+    end
+  end
+
+  def validate_owning_org_owns_stock
+    if owning_organisation && !owning_organisation.holds_own_stock?
+      block_log_creation!
+      errors.delete(:field_111)
+      errors.add(:field_111, "The owning organisation code provided is for an organisation that does not own stock")
+    end
+  end
+
+  def validate_owning_org_exists
+    if owning_organisation.nil?
+      errors.delete(:field_111)
+      errors.add(:field_111, "The owning organisation code is incorrect")
+    end
+  end
+
+  def validate_owning_org_permitted
+    if owning_organisation && !bulk_upload.user.organisation.affiliated_stock_owners.include?(owning_organisation)
+      block_log_creation!
+      errors.delete(:field_111)
+      errors.add(:field_111, "You do not have permission to add logs for this owning organisation")
+    end
+  end
 
   def validate_no_and_dont_know_disabled_needs_conjunction
     if field_59 == 1 && field_60 == 1
@@ -447,6 +546,8 @@ private
 
   def startdate
     Date.new(field_98 + 2000, field_97, field_96) if field_98.present? && field_97.present? && field_96.present?
+  rescue Date::Error
+    Date.new
   end
 
   def renttype
@@ -483,15 +584,19 @@ private
   end
 
   def owning_organisation
-    Organisation.find_by(old_visible_id: field_111)
+    Organisation.find_by_id_on_mulitple_fields(field_111)
   end
 
   def owning_organisation_id
     owning_organisation&.id
   end
 
+  def managing_organisation
+    Organisation.find_by_id_on_mulitple_fields(field_113)
+  end
+
   def managing_organisation_id
-    Organisation.find_by(old_visible_id: field_113)&.id
+    managing_organisation&.id
   end
 
   def attributes_for_log
@@ -506,6 +611,7 @@ private
     attributes["managing_organisation_id"] = managing_organisation_id
     attributes["renewal"] = renewal
     attributes["scheme"] = scheme
+    attributes["location"] = location
     attributes["created_by"] = bulk_upload.user
     attributes["needstype"] = bulk_upload.needstype
     attributes["rent_type"] = rent_type
@@ -670,6 +776,8 @@ private
     case rsnvac
     when 15, 16, 17
       1
+    else
+      0
     end
   end
 
@@ -883,6 +991,6 @@ private
   end
 
   def scheme
-    @scheme ||= Scheme.find_by(old_visible_id: field_4)
+    @scheme ||= Scheme.find_by_id_on_mulitple_fields(field_4)
   end
 end

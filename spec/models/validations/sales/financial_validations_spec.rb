@@ -5,75 +5,110 @@ RSpec.describe Validations::Sales::FinancialValidations do
 
   let(:validator_class) { Class.new { include Validations::Sales::FinancialValidations } }
 
-  describe "income validations" do
-    let(:record) { FactoryBot.create(:sales_log, ownershipsch: 1, la: "E08000035") }
+  describe "income validations for shared ownership" do
+    let(:record) { FactoryBot.create(:sales_log, ownershipsch: 1) }
 
-    context "with shared ownership" do
-      context "and non london borough" do
-        (0..8).each do |ecstat|
-          it "adds an error when buyer 1 income is over hard max for ecstat #{ecstat}" do
-            record.income1 = 85_000
-            record.ecstat1 = ecstat
-            financial_validator.validate_income1(record)
-            expect(record.errors["income1"])
-                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 80_000))
-            expect(record.errors["ecstat1"])
-                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 80_000))
-            expect(record.errors["ownershipsch"])
-                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 80_000))
-            expect(record.errors["la"])
-                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 80_000))
-            expect(record.errors["postcode_full"])
-                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 80_000))
-          end
-        end
-
-        it "validates that the income is within the expected range for the tenant’s employment status" do
-          record.income1 = 75_000
-          record.ecstat1 = 1
-          financial_validator.validate_income1(record)
-          expect(record.errors["income1"]).to be_empty
-          expect(record.errors["ecstat1"]).to be_empty
-          expect(record.errors["ownershipsch"]).to be_empty
-          expect(record.errors["la"]).to be_empty
-          expect(record.errors["postcode_full"]).to be_empty
-        end
+    context "when buying in a non london borough" do
+      before do
+        record.update!(la: "E08000035")
+        record.reload
       end
 
-      context "and a london borough" do
-        before do
-          record.update!(la: "E09000030")
-          record.reload
-        end
+      it "adds errors if buyer 1 has income over 80,000" do
+        record.income1 = 85_000
+        financial_validator.validate_income1(record)
+        expect(record.errors["income1"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_outside_london"))
+        expect(record.errors["ownershipsch"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_outside_london"))
+        expect(record.errors["la"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_outside_london"))
+        expect(record.errors["postcode_full"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_outside_london"))
+      end
 
-        (0..8).each do |ecstat|
-          it "adds an error when buyer 1 income is over hard max for ecstat #{ecstat}" do
-            record.income1 = 95_000
-            record.ecstat1 = ecstat
-            financial_validator.validate_income1(record)
-            expect(record.errors["income1"])
-                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 90_000))
-            expect(record.errors["ecstat1"])
-                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 90_000))
-            expect(record.errors["ownershipsch"])
-                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 90_000))
-            expect(record.errors["la"])
-                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 90_000))
-            expect(record.errors["postcode_full"])
-                .to include(match I18n.t("validations.financial.income1.over_hard_max", hard_max: 90_000))
-          end
-        end
+      it "adds errors if buyer 2 has income over 80,000" do
+        record.income2 = 85_000
+        financial_validator.validate_income2(record)
+        expect(record.errors["income2"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_outside_london"))
+        expect(record.errors["ownershipsch"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_outside_london"))
+        expect(record.errors["la"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_outside_london"))
+        expect(record.errors["postcode_full"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_outside_london"))
+      end
 
-        it "validates that the income is within the expected range for the tenant’s employment status" do
-          record.income1 = 85_000
-          record.ecstat1 = 1
-          financial_validator.validate_income1(record)
-          expect(record.errors["income1"]).to be_empty
-          expect(record.errors["ecstat1"]).to be_empty
-          expect(record.errors["ownershipsch"]).to be_empty
-          expect(record.errors["la"]).to be_empty
-          expect(record.errors["postcode_full"]).to be_empty
-        end
+      it "does not add errors if buyer 1 has income below 80_000" do
+        record.income1 = 75_000
+        financial_validator.validate_income1(record)
+        expect(record.errors).to be_empty
+      end
+
+      it "does not add errors if buyer 2 has income below 80_000" do
+        record.income2 = 75_000
+        financial_validator.validate_income2(record)
+        expect(record.errors).to be_empty
+      end
+
+      it "adds errors when combined income is over 80_000" do
+        record.income1 = 45_000
+        record.income2 = 40_000
+        financial_validator.validate_combined_income(record)
+        expect(record.errors["income1"]).to include(match I18n.t("validations.financial.income.combined_over_hard_max_for_outside_london"))
+        expect(record.errors["income2"]).to include(match I18n.t("validations.financial.income.combined_over_hard_max_for_outside_london"))
+      end
+
+      it "does not add errors when combined income is under 80_000" do
+        record.income1 = 35_000
+        record.income2 = 40_000
+        financial_validator.validate_combined_income(record)
+        expect(record.errors).to be_empty
+      end
+    end
+
+    context "when buying in a london borough" do
+      before do
+        record.update!(la: "E09000030")
+        record.reload
+      end
+
+      it "adds errors if buyer 1 has income over 90,000" do
+        record.income1 = 95_000
+        financial_validator.validate_income1(record)
+        expect(record.errors["income1"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_london"))
+        expect(record.errors["ownershipsch"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_london"))
+        expect(record.errors["la"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_london"))
+        expect(record.errors["postcode_full"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_london"))
+      end
+
+      it "adds errors if buyer 2 has income over 90,000" do
+        record.income2 = 95_000
+        financial_validator.validate_income2(record)
+        expect(record.errors["income2"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_london"))
+        expect(record.errors["ownershipsch"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_london"))
+        expect(record.errors["la"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_london"))
+        expect(record.errors["postcode_full"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_london"))
+      end
+
+      it "does not add errors if buyer 1 has income below 90_000" do
+        record.income1 = 75_000
+        financial_validator.validate_income1(record)
+        expect(record.errors).to be_empty
+      end
+
+      it "does not add errors if buyer 2 has income below 90_000" do
+        record.income2 = 75_000
+        financial_validator.validate_income2(record)
+        expect(record.errors).to be_empty
+      end
+
+      it "adds errors when combined income is over 90_000" do
+        record.income1 = 55_000
+        record.income2 = 40_000
+        financial_validator.validate_combined_income(record)
+        expect(record.errors["income1"]).to include(match I18n.t("validations.financial.income.combined_over_hard_max_for_london"))
+        expect(record.errors["income2"]).to include(match I18n.t("validations.financial.income.combined_over_hard_max_for_london"))
+      end
+
+      it "does not add errors when combined income is under 90_000" do
+        record.income1 = 35_000
+        record.income2 = 40_000
+        financial_validator.validate_combined_income(record)
+        expect(record.errors).to be_empty
       end
     end
   end
@@ -96,7 +131,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
     it "does not add an error if the cash discount is in the expected range" do
       record.cashdis = 10_000
       financial_validator.validate_cash_discount(record)
-      expect(record.errors["cashdis"]).to be_empty
+      expect(record.errors).to be_empty
     end
   end
 
@@ -107,16 +142,14 @@ RSpec.describe Validations::Sales::FinancialValidations do
       record.stairbought = 20
       record.stairowned = 40
       financial_validator.validate_percentage_bought_not_greater_than_percentage_owned(record)
-      expect(record.errors["stairbought"]).to be_empty
-      expect(record.errors["stairowned"]).to be_empty
+      expect(record.errors).to be_empty
     end
 
     it "does not add an error if the percentage bought is equal to the percentage owned" do
       record.stairbought = 30
       record.stairowned = 30
       financial_validator.validate_percentage_bought_not_greater_than_percentage_owned(record)
-      expect(record.errors["stairbought"]).to be_empty
-      expect(record.errors["stairowned"]).to be_empty
+      expect(record.errors).to be_empty
     end
 
     it "adds an error to stairowned and not stairbought if the percentage bought is more than the percentage owned" do
@@ -135,8 +168,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
         record.type = 2
         record.stairowned = 80
         financial_validator.validate_percentage_owned_not_too_much_if_older_person(record)
-        expect(record.errors["stairowned"]).to be_empty
-        expect(record.errors["type"]).to be_empty
+        expect(record.errors).to be_empty
       end
     end
 
@@ -145,8 +177,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
         record.type = 24
         record.stairowned = 50
         financial_validator.validate_percentage_owned_not_too_much_if_older_person(record)
-        expect(record.errors["stairowned"]).to be_empty
-        expect(record.errors["type"]).to be_empty
+        expect(record.errors).to be_empty
       end
 
       it "adds an error when percentage owned after staircasing transaction exceeds 75%" do
@@ -155,6 +186,41 @@ RSpec.describe Validations::Sales::FinancialValidations do
         financial_validator.validate_percentage_owned_not_too_much_if_older_person(record)
         expect(record.errors["stairowned"]).to include(match I18n.t("validations.financial.staircasing.older_person_percentage_owned_maximum_75"))
         expect(record.errors["type"]).to include(match I18n.t("validations.financial.staircasing.older_person_percentage_owned_maximum_75"))
+      end
+    end
+  end
+
+  describe "#validate_child_income" do
+    let(:record) { FactoryBot.create(:sales_log) }
+
+    context "when buyer 2 is not a child" do
+      before do
+        record.update!(ecstat2: rand(0..8))
+        record.reload
+      end
+
+      it "does not add an error if buyer 2 has an income" do
+        record.ecstat2 = rand(0..8)
+        record.income2 = 40_000
+        financial_validator.validate_child_income(record)
+        expect(record.errors).to be_empty
+      end
+    end
+
+    context "when buyer 2 is a child" do
+      it "does not add an error if buyer 2 has no income" do
+        record.ecstat2 = 9
+        record.income2 = 0
+        financial_validator.validate_child_income(record)
+        expect(record.errors).to be_empty
+      end
+
+      it "adds errors if buyer 2 has an income" do
+        record.ecstat2 = 9
+        record.income2 = 40_000
+        financial_validator.validate_child_income(record)
+        expect(record.errors["ecstat2"]).to include(match I18n.t("validations.financial.income.child_has_income"))
+        expect(record.errors["income2"]).to include(match I18n.t("validations.financial.income.child_has_income"))
       end
     end
   end
