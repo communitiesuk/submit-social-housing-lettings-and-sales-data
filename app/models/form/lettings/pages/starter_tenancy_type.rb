@@ -8,7 +8,7 @@ class Form::Lettings::Pages::StarterTenancyType < ::Form::Page
   def questions
     @questions ||= [
       Form::Lettings::Questions::StarterTenancy.new(nil, nil, self),
-      Form::Lettings::Questions::Tenancyother.new(nil, nil, self),
+      Form::Lettings::Questions::TenancyOther.new(nil, nil, self),
     ]
   end
 end

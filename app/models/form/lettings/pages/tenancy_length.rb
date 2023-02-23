@@ -6,6 +6,6 @@ class Form::Lettings::Pages::TenancyLength < ::Form::Page
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::Tenancylength.new(nil, nil, self)]
+    @questions ||= [Form::Lettings::Questions::TenancyLength.new(nil, nil, self)]
   end
 end
