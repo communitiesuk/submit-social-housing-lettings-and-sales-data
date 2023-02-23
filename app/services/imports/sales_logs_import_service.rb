@@ -223,7 +223,7 @@ module Imports
       return nil if attributes["hhmemb"].nil? || index > attributes["hhmemb"]
       return nil if attributes["jointpur"] == 1 && index == 2
 
-      if attributes["age#{index}_known"] == 1 &&
+      if attributes["age#{index}_known"] != 0 &&
           attributes["sex#{index}"] == "R" &&
           attributes["relat#{index}"] == "R" &&
           attributes["ecstat#{index}"] == 10
@@ -400,6 +400,28 @@ module Imports
       attributes["mscharge_known"] ||= 0 if attributes["ownershipsch"] == 3
       attributes["armedforcesspouse"] ||= 7
       attributes["savingsnk"] ||= attributes["savings"].present? ? 0 : 1
+
+      # buyer 1 characteristics
+      attributes["age1_known"] ||= 1
+      attributes["sex1"] ||= "R"
+      attributes["ethnic_group"] ||= 17
+      attributes["national"] ||= 13
+      attributes["ecstat1"] ||= 10
+
+      # buyer 2 characteristics
+      if attributes["jointpur"] == 1
+        attributes["age2_known"] ||= 1
+        attributes["sex2"] ||= "R"
+        attributes["ecstat2"] ||= 10
+      end
+
+      # other household members characteristics
+      (2..attributes["hhmemb"]).each do |index|
+        attributes["age#{index}_known"] ||= 1
+        attributes["sex#{index}"] ||= "R"
+        attributes["ecstat#{index}"] ||= 10
+        attributes["relat#{index}"] ||= "R"
+      end
     end
   end
 end

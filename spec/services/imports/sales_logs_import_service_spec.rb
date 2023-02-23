@@ -253,6 +253,138 @@ RSpec.describe Imports::SalesLogsImportService do
           expect(sales_log.mscharge_known).to eq(0)
         end
       end
+
+      context "when inferring age known" do
+        let(:sales_log_id) { discounted_ownership_sales_log_id }
+
+        before do
+          sales_log_xml.at_xpath("//xmlns:HHMEMB").content = "3"
+          sales_log_xml.at_xpath("//xmlns:P1Age").content = ""
+          sales_log_xml.at_xpath("//xmlns:P2Age").content = ""
+          sales_log_xml.at_xpath("//xmlns:P3Age").content = "22"
+          allow(logger).to receive(:warn).and_return(nil)
+
+          sales_log_service.send(:create_log, sales_log_xml)
+        end
+
+        it "sets age known to no if age not answered" do
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.age1_known).to be(1) # unknown
+          expect(sales_log&.age2_known).to be(1) # unknown
+        end
+
+        it "sets age known to yes if age answered" do
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.age3_known).to be(0) # known
+        end
+      end
+
+      context "when inferring gender" do
+        let(:sales_log_id) { discounted_ownership_sales_log_id }
+
+        before do
+          sales_log_xml.at_xpath("//xmlns:HHMEMB").content = "3"
+          sales_log_xml.at_xpath("//xmlns:P1Sex").content = ""
+          sales_log_xml.at_xpath("//xmlns:P2Sex").content = ""
+          sales_log_xml.at_xpath("//xmlns:P3Sex").content = "Female"
+          allow(logger).to receive(:warn).and_return(nil)
+
+          sales_log_service.send(:create_log, sales_log_xml)
+        end
+
+        it "sets gender to prefers not to say if not answered" do
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.sex1).to eq("R")
+          expect(sales_log&.sex2).to eq("R")
+        end
+
+        it "sets the gender correctly if answered" do
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.sex3).to eq("F")
+        end
+      end
+
+      context "when inferring ethnic group" do
+        let(:sales_log_id) { discounted_ownership_sales_log_id }
+
+        before do
+          sales_log_xml.at_xpath("//xmlns:HHMEMB").content = "1"
+          sales_log_xml.at_xpath("//xmlns:P1Eth").content = ""
+          allow(logger).to receive(:warn).and_return(nil)
+
+          sales_log_service.send(:create_log, sales_log_xml)
+        end
+
+        it "sets ethnic group to prefers not to say if not answered" do
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.ethnic_group).to eq(17)
+        end
+      end
+
+      context "when inferring nationality" do
+        let(:sales_log_id) { discounted_ownership_sales_log_id }
+
+        before do
+          sales_log_xml.at_xpath("//xmlns:HHMEMB").content = "1"
+          sales_log_xml.at_xpath("//xmlns:P1Nat").content = ""
+          allow(logger).to receive(:warn).and_return(nil)
+
+          sales_log_service.send(:create_log, sales_log_xml)
+        end
+
+        it "sets nationality to prefers not to say if not answered" do
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.national).to eq(13)
+        end
+      end
+
+      context "when inferring economic status" do
+        let(:sales_log_id) { discounted_ownership_sales_log_id }
+
+        before do
+          sales_log_xml.at_xpath("//xmlns:HHMEMB").content = "3"
+          sales_log_xml.at_xpath("//xmlns:P1Eco").content = ""
+          sales_log_xml.at_xpath("//xmlns:P2Eco").content = ""
+          sales_log_xml.at_xpath("//xmlns:P3Eco").content = "3"
+          allow(logger).to receive(:warn).and_return(nil)
+
+          sales_log_service.send(:create_log, sales_log_xml)
+        end
+
+        it "sets economic status to prefers not to say if not answered" do
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.ecstat1).to eq(10)
+          expect(sales_log&.ecstat2).to eq(10)
+        end
+
+        it "sets the economic status correctly if answered" do
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.ecstat3).to eq(3)
+        end
+      end
+
+      context "when inferring relationship" do
+        let(:sales_log_id) { discounted_ownership_sales_log_id }
+
+        before do
+          sales_log_xml.at_xpath("//xmlns:HHMEMB").content = "3"
+          sales_log_xml.at_xpath("//xmlns:P2Rel").content = ""
+          sales_log_xml.at_xpath("//xmlns:P3Rel").content = "Partner"
+          allow(logger).to receive(:warn).and_return(nil)
+
+          sales_log_service.send(:create_log, sales_log_xml)
+        end
+
+        it "sets relationship to prefers not to say if not answered" do
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.relat2).to eq("R")
+        end
+
+        it "sets the relationship correctly if answered" do
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.relat3).to eq("P")
+        end
+      end
     end
   end
 end
