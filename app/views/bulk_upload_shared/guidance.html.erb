@@ -33,7 +33,7 @@
         <p class="govuk-!-font-weight-bold">It can take HMS providers a while to update these per new collection year, so you may have to wait for updates to export, or adjust your data manually post-export.</p>
       <% end %>
       <%= govuk_details(summary_text: "My organisation does not have a CMS") do %>
-        <p class="govuk-body">Your organisation’s IT team may be able to export CSV data for you - find out more about data specifications. This document outlines:</p>
+        <p class="govuk-body">Your organisation’s IT team may be able to export CSV data for you - <%= govuk_link_to "find out more about data specification", @specification_path %>. This document outlines:</p>
         <ul class="govuk-list govuk-list--bullet">
           <li>required fields</li>
           <li>each field's valid response</li>
@@ -45,7 +45,7 @@
 
     <div class="govuk-!-padding-bottom-4">
       <h2 class="govuk-heading-s">Getting help</h2>
-      <p class="govuk-body">There is no step-by-step bulk upload guide like there is with single log upload. However, you can download <%= govuk_link_to "our template", @template_path %>, which you can copy-paste data into from your systems column-by-column. You can also view a post-upload report showing any data errors, and our data specification can help fix these.</p>
+      <p class="govuk-body">There is no step-by-step bulk upload guide like there is with single log upload. However, you can download <%= govuk_link_to "our template", @template_path %>, which you can copy-paste data into from your systems column-by-column. You can also view a post-upload report showing any data errors, and our <%= govuk_link_to "data specification", @specification_path %> can help fix these.</p>
       <p class="govuk-body">If you still need support mapping data in the way we need, DLUHC’s helpdesk can help. If your data is across multiple systems, or is hard to export as a single file in the correct format, you could try different exports, or copy-pasting data by hand.</p>
     </div>
   </div>
