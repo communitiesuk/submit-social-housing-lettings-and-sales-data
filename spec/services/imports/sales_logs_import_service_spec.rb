@@ -16,8 +16,8 @@ RSpec.describe Imports::SalesLogsImportService do
   end
 
   before do
-    WebMock.stub_request(:get, /api.postcodes.io\/postcodes/)
-           .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Westminster","codes":{"admin_district":"E08000035"}}}', headers: {})
+    WebMock.stub_request(:get, /api.postcodes.io\/postcodes\/GL519EX/)
+           .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Westminster","codes":{"admin_district":"E09000033"}}}', headers: {})
 
     allow(Organisation).to receive(:find_by).and_return(nil)
     allow(Organisation).to receive(:find_by).with(old_visible_id: organisation.old_visible_id).and_return(organisation)
@@ -115,6 +115,39 @@ RSpec.describe Imports::SalesLogsImportService do
       it "raises an exception" do
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .to raise_error(RuntimeError, "Organisation not found with legacy ID 99999")
+      end
+    end
+
+    context "when the mortgage lender is set to an existing option" do
+      let(:sales_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q34a").content = "halifax"
+        allow(logger).to receive(:warn).and_return(nil)
+      end
+
+      it "correctly sets mortgage lender" do
+        sales_log_service.send(:create_log, sales_log_xml)
+
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log&.mortgagelender).to be(11)
+      end
+    end
+
+    context "when the mortgage lender is set to a non existing option" do
+      let(:sales_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q34a").content = "something else"
+        allow(logger).to receive(:warn).and_return(nil)
+      end
+
+      it "correctly sets mortgage lender and mortgage lender other" do
+        sales_log_service.send(:create_log, sales_log_xml)
+
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log&.mortgagelender).to be(40)
+        expect(sales_log&.mortgagelenderother).to eq("something else")
       end
     end
 

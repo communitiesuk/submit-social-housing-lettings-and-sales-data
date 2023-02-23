@@ -116,7 +116,7 @@ module Imports
       attributes["fromprop"] = unsafe_string_as_integer(xml_doc, "Q21PropertyType")
       attributes["socprevten"] = unsafe_string_as_integer(xml_doc, "PrevRentType")
       attributes["mortgagelender"] = mortgage_lender(xml_doc, attributes)
-      attributes["mortgagelenderother"] = nil # Q24AMORTGAGELENDEROTHER Q34AMORTGAGELENDEROTHER Q41AMORTGAGELENDEROTHER
+      attributes["mortgagelenderother"] = mortgage_lender_other(xml_doc, attributes)
       attributes["mortlen"] = mortgage_length(xml_doc, attributes)
       attributes["extrabor"] = borrowing(xml_doc, attributes)
       attributes["totadult"] = safe_string_as_integer(xml_doc, "TOTADULT") # would get overridden
@@ -232,15 +232,74 @@ module Imports
       end
     end
 
+    MORNTGAGE_LENDER_OPTIONS = {
+      "atom bank" => 1,
+      "barclays bank plc" => 2,
+      "bath building society" => 3,
+      "buckinghamshire building society" => 4,
+      "cambridge building society" => 5,
+      "coventry building society" => 6,
+      "cumberland building society" => 7,
+      "darlington building society" => 8,
+      "dudley building society" => 9,
+      "ecology building society" => 10,
+      "halifax" => 11,
+      "hanley economic building society" => 12,
+      "hinckley and rugby building society" => 13,
+      "holmesdale building society" => 14,
+      "ipswich building society" => 15,
+      "leeds building society" => 16,
+      "lloyds bank" => 17,
+      "mansfield building society" => 18,
+      "market harborough building society" => 19,
+      "melton mowbray building society" => 20,
+      "nationwide building society" => 21,
+      "natwest" => 22,
+      "nedbank private wealth" => 23,
+      "newbury building society" => 24,
+      "oneSavings bank" => 25,
+      "parity trust" => 26,
+      "penrith building society" => 27,
+      "pepper homeloans" => 28,
+      "royal bank of scotland" => 29,
+      "santander" => 30,
+      "skipton building society" => 31,
+      "teachers building society" => 32,
+      "the co-operative bank" => 33,
+      "tipton & coseley building society" => 34,
+      "tss" => 35,
+      "ulster bank" => 36,
+      "virgin money" => 37,
+      "west bromwich building society" => 38,
+      "yorkshire building society" => 39,
+      "other" => 40,
+    }.freeze
+
     # this comes through as a string, need to map to a corresponding integer
     def mortgage_lender(xml_doc, attributes)
+      lender = case attributes["ownershipsch"]
+               when 1
+                 string_or_nil(xml_doc, "Q24aMortgageLender")
+               when 2
+                 string_or_nil(xml_doc, "Q34a")
+               when 3
+                 string_or_nil(xml_doc, "Q41aMortgageLender")
+               end
+      return if lender.blank?
+
+      MORNTGAGE_LENDER_OPTIONS[lender.downcase] || MORNTGAGE_LENDER_OPTIONS["other"]
+    end
+
+    def mortgage_lender_other(xml_doc, attributes)
+      return unless attributes["mortgagelender"] == MORNTGAGE_LENDER_OPTIONS["other"]
+
       case attributes["ownershipsch"]
       when 1
-        unsafe_string_as_integer(xml_doc, "Q24aMortgageLender")
+        string_or_nil(xml_doc, "Q24aMortgageLender")
       when 2
-        unsafe_string_as_integer(xml_doc, "Q34a")
+        string_or_nil(xml_doc, "Q34a")
       when 3
-        unsafe_string_as_integer(xml_doc, "Q41aMortgageLender")
+        string_or_nil(xml_doc, "Q41aMortgageLender")
       end
     end
 
