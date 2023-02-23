@@ -150,55 +150,6 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
-    context "when the armedforcesspouse is not answered" do
-      let(:sales_log_id) { discounted_ownership_sales_log_id }
-
-      before do
-        sales_log_xml.at_xpath("//xmlns:ARMEDFORCESSPOUSE").content = ""
-        allow(logger).to receive(:warn).and_return(nil)
-      end
-
-      it "sets armedforcesspouse to don't know" do
-        sales_log_service.send(:create_log, sales_log_xml)
-
-        sales_log = SalesLog.find_by(old_id: sales_log_id)
-        expect(sales_log&.armedforcesspouse).to be(7)
-      end
-    end
-
-    context "when the savings not known is not answered and savings is not given" do
-      let(:sales_log_id) { discounted_ownership_sales_log_id }
-
-      before do
-        sales_log_xml.at_xpath("//xmlns:savingsKnown").content = ""
-        allow(logger).to receive(:warn).and_return(nil)
-      end
-
-      it "sets savingsnk to not know" do
-        sales_log_service.send(:create_log, sales_log_xml)
-
-        sales_log = SalesLog.find_by(old_id: sales_log_id)
-        expect(sales_log&.savingsnk).to be(1)
-      end
-    end
-
-    context "when the savings not known is not answered and savings is given" do
-      let(:sales_log_id) { discounted_ownership_sales_log_id }
-
-      before do
-        sales_log_xml.at_xpath("//xmlns:Q3Savings").content = "10000"
-        sales_log_xml.at_xpath("//xmlns:savingsKnown").content = ""
-        allow(logger).to receive(:warn).and_return(nil)
-      end
-
-      it "sets savingsnk to know" do
-        sales_log_service.send(:create_log, sales_log_xml)
-
-        sales_log = SalesLog.find_by(old_id: sales_log_id)
-        expect(sales_log&.savingsnk).to be(0)
-      end
-    end
-
     context "with shared ownership type" do
       let(:sales_log_id) { shared_ownership_sales_log_id }
 
@@ -236,13 +187,71 @@ RSpec.describe Imports::SalesLogsImportService do
         applicable_questions = sales_log.form.subsections.map { |s| s.applicable_questions(sales_log) }.flatten
         expect(applicable_questions.filter { |q| q.unanswered?(sales_log) }.map(&:id)).to be_empty
       end
+    end
 
-      it "infers mscharge_known as no, if it is not given" do
-        allow(logger).to receive(:warn).and_return(nil)
-        sales_log_service.send(:create_log, sales_log_xml)
+    context "when inferring default answers for completed sales logs" do
+      context "when the armedforcesspouse is not answered" do
+        let(:sales_log_id) { discounted_ownership_sales_log_id }
 
-        sales_log = SalesLog.find_by(old_id: sales_log_id)
-        expect(sales_log.mscharge_known).to eq(0)
+        before do
+          sales_log_xml.at_xpath("//xmlns:ARMEDFORCESSPOUSE").content = ""
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets armedforcesspouse to don't know" do
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.armedforcesspouse).to be(7)
+        end
+      end
+
+      context "when the savings not known is not answered and savings is not given" do
+        let(:sales_log_id) { discounted_ownership_sales_log_id }
+
+        before do
+          sales_log_xml.at_xpath("//xmlns:savingsKnown").content = ""
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets savingsnk to not know" do
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.savingsnk).to be(1)
+        end
+      end
+
+      context "when the savings not known is not answered and savings is given" do
+        let(:sales_log_id) { discounted_ownership_sales_log_id }
+
+        before do
+          sales_log_xml.at_xpath("//xmlns:Q3Savings").content = "10000"
+          sales_log_xml.at_xpath("//xmlns:savingsKnown").content = ""
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets savingsnk to know" do
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.savingsnk).to be(0)
+        end
+      end
+
+      context "and it's an outright sale" do
+        let(:sales_log_id) { outright_sale_sales_log_id }
+
+        before do
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "infers mscharge_known as no" do
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log.mscharge_known).to eq(0)
+        end
       end
     end
   end
