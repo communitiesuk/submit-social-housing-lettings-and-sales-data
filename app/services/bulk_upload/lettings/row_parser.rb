@@ -776,6 +776,8 @@ private
     case rsnvac
     when 15, 16, 17
       1
+    else
+      0
     end
   end
 
