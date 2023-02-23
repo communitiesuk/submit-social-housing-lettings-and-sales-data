@@ -38,6 +38,6 @@ RSpec.describe Form::Lettings::Questions::PreviousTenureRenewal, type: :model do
       "34" => { "value" => "Specialist retirement housing" },
       "35" => { "value" => "Extra care housing" },
       "6" => { "value" => "Other supported housing" },
-      })
+    })
   end
 end
