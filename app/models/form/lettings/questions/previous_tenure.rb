@@ -16,6 +16,7 @@ class Form::Lettings::Questions::PreviousTenure < ::Form::Question
     "31" => { "value" => "Lifetime local authority general needs tenancy" },
     "33" => { "value" => "Lifetime private registered provider (PRP) general needs tenancy" },
     "34" => { "value" => "Specialist retirement housing" },
+    "36" => { "value" => "Sheltered housing for adults aged under 55 years" },
     "35" => { "value" => "Extra care housing" },
     "6" => { "value" => "Other supported housing" },
     "3" => { "value" => "Private sector tenancy" },
@@ -30,12 +31,11 @@ class Form::Lettings::Questions::PreviousTenure < ::Form::Question
     "18" => { "value" => "Any other temporary accommodation" },
     "13" => { "value" => "Children’s home or foster care" },
     "24" => { "value" => "Home Office Asylum Support" },
+    "37" => { "value" => "Host family or similar refugee accommodation" },
     "23" => { "value" => "Mobile home or caravan" },
     "21" => { "value" => "Refuge" },
     "9" => { "value" => "Residential care home" },
     "4" => { "value" => "Tied housing or rented with job" },
-    "36" => { "value" => "Sheltered housing for adults aged under 55 years" },
-    "37" => { "value" => "Host family or similar refugee accommodation" },
     "25" => { "value" => "Any other accommodation" },
   }.freeze
 end
