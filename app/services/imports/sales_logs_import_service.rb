@@ -59,7 +59,7 @@ module Imports
       attributes["noint"] = unsafe_string_as_integer(xml_doc, "PartAPurchaser")
       attributes["buy2livein"] = unsafe_string_as_integer(xml_doc, "LiveInBuyer2")
       attributes["wheel"] = unsafe_string_as_integer(xml_doc, "Q10Wheelchair")
-      attributes["hholdcount"] = safe_string_as_integer(xml_doc, "LiveInOther") || 0
+      attributes["hholdcount"] = safe_string_as_integer(xml_doc, "LiveInOther")
       attributes["la"] = string_or_nil(xml_doc, "Q14ONSLACode")
       attributes["income1"] = safe_string_as_integer(xml_doc, "Q2Person1Income")
       attributes["income1nk"] = income_known(unsafe_string_as_integer(xml_doc, "P1IncKnown"))
@@ -396,12 +396,9 @@ module Imports
       end
     end
 
-    def default_mscharge_known(attributes)
-      0 if attributes["ownershipsch"] == 3
-    end
-
     def set_default_values(attributes)
-      attributes["mscharge_known"] ||= default_mscharge_known(attributes)
+      attributes["mscharge_known"] ||= 0 if attributes["ownershipsch"] == 3
+      attributes["armedforcesspouse"] ||= 7
     end
   end
 end

@@ -151,6 +151,22 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
+    context "when the armedforcesspouse is not answered" do
+      let(:sales_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:ARMEDFORCESSPOUSE").content = ""
+        allow(logger).to receive(:warn).and_return(nil)
+      end
+
+      it "sets armedforcesspouse to don't know" do
+        sales_log_service.send(:create_log, sales_log_xml)
+
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log&.armedforcesspouse).to be(7)
+      end
+    end
+
     context "with shared ownership type" do
       let(:sales_log_id) { "0ead17cb-1668-442d-898c-0d52879ff592" }
 
