@@ -6,7 +6,11 @@ class Form
   def initialize(form_path, start_year = "", sections_in_form = [], type = "lettings")
     if sales_or_start_year_after_2022?(type, start_year)
       @start_date = Time.zone.local(start_year, 4, 1)
-      @end_date = Time.zone.local(start_year + 1, 7, 1)
+      @end_date = if start_year && start_year.to_i > 2022
+                    Time.zone.local(start_year + 1, 7, 9)
+                  else
+                    Time.zone.local(start_year + 1, 7, 7)
+                  end
       @setup_sections = type == "sales" ? [Form::Sales::Sections::Setup.new(nil, nil, self)] : [Form::Lettings::Sections::Setup.new(nil, nil, self)]
       @form_sections = sections_in_form.map { |sec| sec.new(nil, nil, self) }
       @type = type

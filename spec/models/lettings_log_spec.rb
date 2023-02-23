@@ -18,6 +18,11 @@ RSpec.describe LettingsLog do
     expect(described_class).to be < ApplicationRecord
   end
 
+  it "is a not a sales log" do
+    lettings_log = FactoryBot.build(:lettings_log, created_by: created_by_user)
+    expect(lettings_log.sales?).to be false
+  end
+
   it "is a lettings log" do
     lettings_log = FactoryBot.build(:lettings_log, created_by: created_by_user)
     expect(lettings_log).to be_lettings
@@ -1454,6 +1459,15 @@ RSpec.describe LettingsLog do
         expect(record_from_db["vacdays"]).to eq(0)
         expect(lettings_log["vacdays"]).to eq(0)
       end
+
+      it "correctly derives and saves first_time_property_let_as_social_housing" do
+        record_from_db = ActiveRecord::Base.connection.execute(
+          "select first_time_property_let_as_social_housing" \
+          " from lettings_logs where id=#{lettings_log.id}",
+        ).to_a[0]
+        expect(record_from_db["first_time_property_let_as_social_housing"]).to eq(0)
+        expect(lettings_log["first_time_property_let_as_social_housing"]).to eq(0)
+      end
     end
 
     context "when answering the household characteristics questions" do
@@ -1946,12 +1960,12 @@ RSpec.describe LettingsLog do
     end
 
     context "when a non select question associated with several pages is routed to" do
-      let(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress, period: 2) }
+      let(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress, period: 2, needstype: 1) }
 
       it "does not clear the answer value" do
-        lettings_log.update!({ offered: 4 })
+        lettings_log.update!({ unitletas: 1 })
         lettings_log.reload
-        expect(lettings_log.offered).to eq(4)
+        expect(lettings_log.unitletas).to eq(1)
       end
     end
 

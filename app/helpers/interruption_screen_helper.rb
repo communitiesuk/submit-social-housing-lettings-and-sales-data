@@ -1,17 +1,10 @@
 module InterruptionScreenHelper
-  def display_informative_text(informative_text, lettings_log)
+  def display_informative_text(informative_text, log)
     return "" unless informative_text["arguments"]
 
     translation_params = {}
     informative_text["arguments"].each do |argument|
-      value = if argument["label"]
-                pre_casing_value = lettings_log.form.get_question(argument["key"], lettings_log).answer_label(lettings_log)
-                pre_casing_value.downcase
-              elsif argument["currency"]
-                number_to_currency(lettings_log.public_send(argument["key"]), delimiter: ",", format: "%n", unit: "£")
-              else
-                lettings_log.public_send(argument["key"])
-              end
+      value = get_value_from_argument(log, argument)
       translation_params[argument["i18n_template"].to_sym] = value
     end
 
@@ -24,21 +17,27 @@ module InterruptionScreenHelper
     end
   end
 
-  def display_title_text(title_text, lettings_log)
+  def display_title_text(title_text, log)
     return "" if title_text.nil?
 
     translation_params = {}
     arguments = title_text["arguments"] || {}
     arguments.each do |argument|
-      value = if argument["label"]
-                lettings_log.form.get_question(argument["key"], lettings_log).answer_label(lettings_log).downcase
-              elsif argument["currency"]
-                number_to_currency(lettings_log.public_send(argument["key"]), delimiter: ",", format: "%n", unit: "£")
-              else
-                lettings_log.public_send(argument["key"])
-              end
+      value = get_value_from_argument(log, argument)
       translation_params[argument["i18n_template"].to_sym] = value
     end
     I18n.t(title_text["translation"], **translation_params).to_s
+  end
+
+private
+
+  def get_value_from_argument(log, argument)
+    if argument["label"]
+      log.form.get_question(argument["key"], log).answer_label(log).downcase
+    elsif argument["arguments_for_key"]
+      log.public_send(argument["key"], argument["arguments_for_key"])
+    else
+      log.public_send(argument["key"])
+    end
   end
 end

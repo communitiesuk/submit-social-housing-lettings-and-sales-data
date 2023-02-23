@@ -11,8 +11,8 @@ class Form::Lettings::Questions::WorkingSituation1 < ::Form::Question
   end
 
   ANSWER_OPTIONS = {
-    "2" => { "value" => "Part-time – Less than 30 hours" },
     "1" => { "value" => "Full-time – 30 hours or more" },
+    "2" => { "value" => "Part-time – Less than 30 hours" },
     "7" => { "value" => "Full-time student" },
     "3" => { "value" => "In government training into work, such as New Deal" },
     "4" => { "value" => "Jobseeker" },

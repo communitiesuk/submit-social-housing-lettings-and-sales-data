@@ -110,6 +110,16 @@ class Scheme < ApplicationRecord
 
   enum arrangement_type: ARRANGEMENT_TYPE, _suffix: true
 
+  def self.find_by_id_on_mulitple_fields(id)
+    return if id.nil?
+
+    if id.start_with?("S")
+      where(id: id[1..]).first
+    else
+      where(old_visible_id: id).first
+    end
+  end
+
   def id_to_display
     "S#{id}"
   end

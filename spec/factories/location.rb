@@ -10,6 +10,7 @@ FactoryBot.define do
     startdate { Time.zone.local(2022, 4, 1) }
     confirmed { true }
     scheme
+
     trait :export do
       postcode { "SW1A 2AA" }
       name { "Downing Street" }
@@ -18,6 +19,10 @@ FactoryBot.define do
       mobility_type { "A" }
       scheme { FactoryBot.create(:scheme, :export) }
       old_visible_id { "111" }
+    end
+
+    trait :with_old_visible_id do
+      old_visible_id { rand(9_999_999).to_s }
     end
   end
 end

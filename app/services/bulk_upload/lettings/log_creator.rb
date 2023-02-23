@@ -10,6 +10,8 @@ class BulkUpload::Lettings::LogCreator
     row_parsers.each do |row_parser|
       row_parser.valid?
 
+      next if row_parser.blank_row?
+
       row_parser.log.blank_invalid_non_setup_fields!
       row_parser.log.bulk_upload = bulk_upload
 

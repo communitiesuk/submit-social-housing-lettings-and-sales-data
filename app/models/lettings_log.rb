@@ -70,6 +70,14 @@ class LettingsLog < Log
     collection_start_year
   end
 
+  def lettings?
+    true
+  end
+
+  def sales?
+    false
+  end
+
   def form_name
     return unless startdate
 
@@ -479,10 +487,6 @@ class LettingsLog < Log
 
   def unittype_sh
     location.type_of_unit_before_type_cast if location
-  end
-
-  def lettings?
-    true
   end
 
   def rent_type_detail

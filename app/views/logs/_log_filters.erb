@@ -6,7 +6,6 @@
 
     <div class="app-filter__content">
       <%= form_with html: { method: :get } do |f| %>
-        <% years = { "2021": "2021/22", "2022": "2022/23" } %>
         <% all_or_yours = { "all": { label: "All" }, "yours": { label: "Yours" } } %>
 
         <% if bulk_upload_options(@bulk_upload).present? %>
@@ -23,7 +22,7 @@
           <%= render partial: "filters/checkbox_filter",
                      locals: {
                        f: f,
-                       options: years,
+                       options: collection_year_options,
                        label: "Collection year",
                        category: "years",
                      } %>

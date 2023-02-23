@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::Buyer1IncomeValueCheck, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Are you sure this income is correct?")
+    expect(question.header).to eq("Are you sure this is correct?")
   end
 
   it "has the correct check_answer_label" do

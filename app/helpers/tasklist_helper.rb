@@ -11,15 +11,6 @@ module TasklistHelper
     log.form.subsections.count { |subsection| subsection.status(log) == status && subsection.applicable_questions(log).count.positive? }
   end
 
-  def next_page_or_check_answers(subsection, log, current_user)
-    path = if subsection.is_started?(log)
-             "#{log.class.name.underscore}_#{subsection.id}_check_answers_path"
-           else
-             "#{log.class.name.underscore}_#{next_question_page(subsection, log, current_user)}_path"
-           end
-    send(path, log)
-  end
-
   def next_question_page(subsection, log, current_user)
     if subsection.pages.first.routed_to?(log, current_user)
       subsection.pages.first.id
@@ -39,9 +30,23 @@ module TasklistHelper
 
   def review_log_text(log)
     if log.collection_period_open?
-      "You can #{govuk_link_to 'review and make changes to this log', review_lettings_log_path(log)} until #{log.form.end_date.to_formatted_s(:govuk_date)}.".html_safe
+      link = log.sales? ? review_sales_log_path(id: log, sales_log: true) : review_lettings_log_path(log)
+
+      "You can #{govuk_link_to 'review and make changes to this log', link} until #{log.form.end_date.to_formatted_s(:govuk_date)}.".html_safe
     else
       "This log is from the #{log.form.start_date.year}/#{log.form.start_date.year + 1} collection window, which is now closed."
     end
+  end
+
+private
+
+  def next_page_or_check_answers(subsection, log, current_user)
+    path = if subsection.is_started?(log)
+             "#{log.class.name.underscore}_#{subsection.id}_check_answers_path"
+           else
+             "#{log.class.name.underscore}_#{next_question_page(subsection, log, current_user)}_path"
+           end
+
+    send(path, log)
   end
 end

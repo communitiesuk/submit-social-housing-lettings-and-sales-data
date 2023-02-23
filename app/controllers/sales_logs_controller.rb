@@ -1,6 +1,6 @@
 class SalesLogsController < LogsController
-  before_action :session_filters, if: :current_user
-  before_action :set_session_filters, if: :current_user
+  before_action :session_filters, if: :current_user, only: %i[index email_csv download_csv]
+  before_action :set_session_filters, if: :current_user, only: %i[index email_csv download_csv]
 
   def create
     super { SalesLog.new(log_params) }

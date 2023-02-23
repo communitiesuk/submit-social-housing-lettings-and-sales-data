@@ -116,4 +116,30 @@ RSpec.describe FiltersHelper do
       end
     end
   end
+
+  describe "#collection_year_options" do
+    context "when not production" do
+      it "includes 2023/2024 option" do
+        expect(collection_year_options).to eq(
+          {
+            "2021": "2021/22", "2022": "2022/23", "2023": "2023/24"
+          },
+        )
+      end
+    end
+
+    context "when production" do
+      before do
+        allow(Rails.env).to receive(:production?).and_return(true)
+      end
+
+      it "includes 2023/2024 option" do
+        expect(collection_year_options).to eq(
+          {
+            "2021": "2021/22", "2022": "2022/23"
+          },
+        )
+      end
+    end
+  end
 end

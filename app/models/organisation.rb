@@ -17,8 +17,21 @@ class Organisation < ApplicationRecord
   has_many :managing_agent_relationships, foreign_key: :parent_organisation_id, class_name: "OrganisationRelationship"
   has_many :managing_agents, through: :managing_agent_relationships, source: :child_organisation
 
+  def affiliated_stock_owners
+    ids = []
+
+    if holds_own_stock? && persisted?
+      ids << id
+    end
+
+    ids.concat(stock_owners.pluck(:id))
+
+    Organisation.where(id: ids)
+  end
+
   scope :search_by_name, ->(name) { where("name ILIKE ?", "%#{name}%") }
   scope :search_by, ->(param) { search_by_name(param) }
+
   has_paper_trail
 
   auto_strip_attributes :name
@@ -34,6 +47,20 @@ class Organisation < ApplicationRecord
 
   validates :name, presence: { message: I18n.t("validations.organisation.name_missing") }
   validates :provider_type, presence: { message: I18n.t("validations.organisation.provider_type_missing") }
+
+  def self.find_by_id_on_mulitple_fields(id)
+    return if id.nil?
+
+    if id.start_with?("ORG")
+      where(id: id[3..]).first
+    else
+      where(old_visible_id: id).first
+    end
+  end
+
+  def can_be_managed_by?(organisation:)
+    organisation == self || managing_agents.include?(organisation)
+  end
 
   def lettings_logs
     LettingsLog.filter_by_organisation(self)

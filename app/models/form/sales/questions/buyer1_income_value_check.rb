@@ -3,7 +3,7 @@ class Form::Sales::Questions::Buyer1IncomeValueCheck < ::Form::Question
     super
     @id = "income1_value_check"
     @check_answer_label = "Income confirmation"
-    @header = "Are you sure this income is correct?"
+    @header = "Are you sure this is correct?"
     @type = "interruption_screen"
     @answer_options = {
       "0" => { "value" => "Yes" },
