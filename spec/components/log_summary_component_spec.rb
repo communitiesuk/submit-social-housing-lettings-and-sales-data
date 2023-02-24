@@ -8,6 +8,12 @@ RSpec.describe LogSummaryComponent, type: :component do
   let(:lettings_log) { FactoryBot.create(:lettings_log, needstype: 1, startdate: Time.utc(2022, 1, 1), tenancycode:, propcode:) }
   let(:sales_log) { FactoryBot.create(:sales_log) }
 
+  around do |example|
+    Timecop.freeze(Time.zone.local(2022, 2, 8)) do
+      example.run
+    end
+  end
+
   context "when rendering lettings log for a support user" do
     it "show the log summary with organisational relationships" do
       result = render_inline(described_class.new(current_user: support_user, log: lettings_log))

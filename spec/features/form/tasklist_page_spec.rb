@@ -11,7 +11,7 @@ RSpec.describe "Task List" do
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
       created_by: user,
-    )
+      )
   end
   let(:completed_lettings_log) do
     FactoryBot.create(
@@ -20,7 +20,7 @@ RSpec.describe "Task List" do
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
       created_by: user,
-    )
+      )
   end
   let(:empty_lettings_log) do
     FactoryBot.create(
@@ -28,7 +28,7 @@ RSpec.describe "Task List" do
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
       created_by: user,
-    )
+      )
   end
   let(:setup_completed_log) do
     FactoryBot.create(
@@ -36,7 +36,6 @@ RSpec.describe "Task List" do
       :about_completed,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
-      startdate: Time.zone.local(2021, 5, 1),
       created_by: user,
     )
   end
