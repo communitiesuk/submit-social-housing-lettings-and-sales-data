@@ -11,10 +11,6 @@ RSpec.describe Imports::SalesLogsImportService do
   let(:organisation) { FactoryBot.create(:organisation, old_visible_id: "1", provider_type: "PRP") }
   let(:managing_organisation) { FactoryBot.create(:organisation, old_visible_id: "2", provider_type: "PRP") }
   let(:remote_folder) { "sales_logs" }
-  let(:shared_ownership_sales_log_id) { "0ead17cb-1668-442d-898c-0d52879ff592" }
-  let(:shared_ownership_sales_log_id2) { "166fc004-392e-47a8-acb8-1c018734882b" }
-  let(:outright_sale_sales_log_id) { "00d2343e-d5fa-4c89-8400-ec3854b0f2b4" }
-  let(:discounted_ownership_sales_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
 
   def open_file(directory, filename)
     File.open("#{directory}/#{filename}.xml")
@@ -42,19 +38,19 @@ RSpec.describe Imports::SalesLogsImportService do
     before do
       # Stub the S3 file listing and download
       allow(storage_service).to receive(:list_files)
-                                  .and_return(%W[#{remote_folder}/#{shared_ownership_sales_log_id}.xml #{remote_folder}/#{shared_ownership_sales_log_id2}.xml #{remote_folder}/#{outright_sale_sales_log_id}.xml #{remote_folder}/#{discounted_ownership_sales_log_id}.xml])
+                                  .and_return(%W[#{remote_folder}/shared_ownership_sales_log.xml #{remote_folder}/shared_ownership_sales_log2.xml #{remote_folder}/outright_sale_sales_log.xml #{remote_folder}/discounted_ownership_sales_log.xml])
       allow(storage_service).to receive(:get_file_io)
-                                  .with("#{remote_folder}/#{shared_ownership_sales_log_id}.xml")
-                                  .and_return(open_file(fixture_directory, shared_ownership_sales_log_id), open_file(fixture_directory, shared_ownership_sales_log_id))
+                                  .with("#{remote_folder}/shared_ownership_sales_log.xml")
+                                  .and_return(open_file(fixture_directory, "shared_ownership_sales_log"), open_file(fixture_directory, "shared_ownership_sales_log"))
       allow(storage_service).to receive(:get_file_io)
-                                  .with("#{remote_folder}/#{shared_ownership_sales_log_id2}.xml")
-                                  .and_return(open_file(fixture_directory, shared_ownership_sales_log_id2), open_file(fixture_directory, shared_ownership_sales_log_id2))
+                                  .with("#{remote_folder}/shared_ownership_sales_log2.xml")
+                                  .and_return(open_file(fixture_directory, "shared_ownership_sales_log2"), open_file(fixture_directory, "shared_ownership_sales_log2"))
       allow(storage_service).to receive(:get_file_io)
-                                  .with("#{remote_folder}/#{outright_sale_sales_log_id}.xml")
-                                  .and_return(open_file(fixture_directory, outright_sale_sales_log_id), open_file(fixture_directory, outright_sale_sales_log_id))
+                                  .with("#{remote_folder}/outright_sale_sales_log.xml")
+                                  .and_return(open_file(fixture_directory, "outright_sale_sales_log"), open_file(fixture_directory, "outright_sale_sales_log"))
       allow(storage_service).to receive(:get_file_io)
-                                  .with("#{remote_folder}/#{discounted_ownership_sales_log_id}.xml")
-                                  .and_return(open_file(fixture_directory, discounted_ownership_sales_log_id), open_file(fixture_directory, discounted_ownership_sales_log_id))
+                                  .with("#{remote_folder}/discounted_ownership_sales_log.xml")
+                                  .and_return(open_file(fixture_directory, "discounted_ownership_sales_log"), open_file(fixture_directory, "discounted_ownership_sales_log"))
     end
 
     it "successfully creates all sales logs" do
@@ -74,33 +70,31 @@ RSpec.describe Imports::SalesLogsImportService do
     end
 
     context "when there are status discrepancies" do
-      let(:shared_ownership_sales_log_id3) { "893ufj2s-lq77-42m4-rty6-ej09gh585uy1" }
-      let(:shared_ownership_sales_log_id4) { "5ybz29dj-l33t-k1l0-hj86-n4k4ma77xkcd" }
-      let(:sales_log_file) { open_file(fixture_directory, shared_ownership_sales_log_id3) }
+      let(:sales_log_file) { open_file(fixture_directory, "shared_ownership_sales_log3") }
       let(:sales_log_xml) { Nokogiri::XML(sales_log_file) }
 
       before do
         allow(storage_service).to receive(:get_file_io)
-          .with("#{remote_folder}/#{shared_ownership_sales_log_id3}.xml")
-          .and_return(open_file(fixture_directory, shared_ownership_sales_log_id3), open_file(fixture_directory, shared_ownership_sales_log_id3))
+          .with("#{remote_folder}/shared_ownership_sales_log3.xml")
+          .and_return(open_file(fixture_directory, "shared_ownership_sales_log3"), open_file(fixture_directory, "shared_ownership_sales_log3"))
         allow(storage_service).to receive(:get_file_io)
-          .with("#{remote_folder}/#{shared_ownership_sales_log_id4}.xml")
-          .and_return(open_file(fixture_directory, shared_ownership_sales_log_id4), open_file(fixture_directory, shared_ownership_sales_log_id4))
+          .with("#{remote_folder}/shared_ownership_sales_log4.xml")
+          .and_return(open_file(fixture_directory, "shared_ownership_sales_log4"), open_file(fixture_directory, "shared_ownership_sales_log4"))
       end
 
       it "the logger logs a warning with the sales log's old id/filename" do
         expect(logger).to receive(:warn).with(/is not completed/).once
-        expect(logger).to receive(:warn).with(/sales log with old id:#{shared_ownership_sales_log_id3} is incomplete but status should be complete/).once
+        expect(logger).to receive(:warn).with(/sales log with old id:shared_ownership_sales_log3 is incomplete but status should be complete/).once
 
         sales_log_service.send(:create_log, sales_log_xml)
       end
 
       it "on completion the ids of all logs with status discrepancies are logged in a warning" do
         allow(storage_service).to receive(:list_files)
-                                  .and_return(%W[#{remote_folder}/#{shared_ownership_sales_log_id3}.xml #{remote_folder}/#{shared_ownership_sales_log_id4}.xml])
+                                  .and_return(%W[#{remote_folder}/shared_ownership_sales_log3.xml #{remote_folder}/shared_ownership_sales_log4.xml])
         expect(logger).to receive(:warn).with(/is not completed/).twice
         expect(logger).to receive(:warn).with(/is incomplete but status should be complete/).twice
-        expect(logger).to receive(:warn).with(/The following sales logs had status discrepancies: \[893ufj2s-lq77-42m4-rty6-ej09gh585uy1, 5ybz29dj-l33t-k1l0-hj86-n4k4ma77xkcd\]/)
+        expect(logger).to receive(:warn).with(/The following sales logs had status discrepancies: \[shared_ownership_sales_log3, shared_ownership_sales_log4\]/)
 
         sales_log_service.create_logs(remote_folder)
       end
@@ -112,7 +106,7 @@ RSpec.describe Imports::SalesLogsImportService do
     let(:sales_log_xml) { Nokogiri::XML(sales_log_file) }
 
     context "and the organisation legacy ID does not exist" do
-      let(:sales_log_id) { shared_ownership_sales_log_id }
+      let(:sales_log_id) { "shared_ownership_sales_log" }
 
       before { sales_log_xml.at_xpath("//xmlns:OWNINGORGID").content = 99_999 }
 
@@ -123,7 +117,7 @@ RSpec.describe Imports::SalesLogsImportService do
     end
 
     context "when the mortgage lender is set to an existing option" do
-      let(:sales_log_id) { discounted_ownership_sales_log_id }
+      let(:sales_log_id) { "discounted_ownership_sales_log" }
 
       before do
         sales_log_xml.at_xpath("//xmlns:Q34a").content = "halifax"
@@ -139,7 +133,7 @@ RSpec.describe Imports::SalesLogsImportService do
     end
 
     context "when the mortgage lender is set to a non existing option" do
-      let(:sales_log_id) { discounted_ownership_sales_log_id }
+      let(:sales_log_id) { "discounted_ownership_sales_log" }
 
       before do
         sales_log_xml.at_xpath("//xmlns:Q34a").content = "something else"
@@ -156,7 +150,7 @@ RSpec.describe Imports::SalesLogsImportService do
     end
 
     context "with shared ownership type" do
-      let(:sales_log_id) { shared_ownership_sales_log_id }
+      let(:sales_log_id) { "shared_ownership_sales_log" }
 
       it "successfully creates a completed shared ownership log" do
         expect(logger).not_to receive(:error)
@@ -168,7 +162,7 @@ RSpec.describe Imports::SalesLogsImportService do
     end
 
     context "with discounted ownership type" do
-      let(:sales_log_id) { discounted_ownership_sales_log_id }
+      let(:sales_log_id) { "discounted_ownership_sales_log" }
 
       it "successfully creates a completed discounted ownership log" do
         expect(logger).not_to receive(:error)
@@ -180,7 +174,7 @@ RSpec.describe Imports::SalesLogsImportService do
     end
 
     context "with outright sale type" do
-      let(:sales_log_id) { outright_sale_sales_log_id }
+      let(:sales_log_id) { "outright_sale_sales_log" }
 
       it "successfully creates a completed outright sale log" do
         expect(logger).not_to receive(:error)
@@ -193,7 +187,7 @@ RSpec.describe Imports::SalesLogsImportService do
 
     context "when inferring default answers for completed sales logs" do
       context "when the armedforcesspouse is not answered" do
-        let(:sales_log_id) { discounted_ownership_sales_log_id }
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
 
         before do
           sales_log_xml.at_xpath("//xmlns:ARMEDFORCESSPOUSE").content = ""
@@ -209,7 +203,7 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       context "when the savings not known is not answered and savings is not given" do
-        let(:sales_log_id) { discounted_ownership_sales_log_id }
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
 
         before do
           sales_log_xml.at_xpath("//xmlns:savingsKnown").content = ""
@@ -225,7 +219,7 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       context "when the savings not known is not answered and savings is given" do
-        let(:sales_log_id) { discounted_ownership_sales_log_id }
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
 
         before do
           sales_log_xml.at_xpath("//xmlns:Q3Savings").content = "10000"
@@ -242,7 +236,7 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       context "and it's an outright sale" do
-        let(:sales_log_id) { outright_sale_sales_log_id }
+        let(:sales_log_id) { "outright_sale_sales_log" }
 
         before do
           allow(logger).to receive(:warn).and_return(nil)
@@ -257,7 +251,7 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       context "when inferring age known" do
-        let(:sales_log_id) { discounted_ownership_sales_log_id }
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
 
         before do
           sales_log_xml.at_xpath("//xmlns:HHMEMB").content = "3"
@@ -282,7 +276,7 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       context "when inferring gender" do
-        let(:sales_log_id) { discounted_ownership_sales_log_id }
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
 
         before do
           sales_log_xml.at_xpath("//xmlns:HHMEMB").content = "3"
@@ -307,7 +301,7 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       context "when inferring ethnic group" do
-        let(:sales_log_id) { discounted_ownership_sales_log_id }
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
 
         before do
           sales_log_xml.at_xpath("//xmlns:HHMEMB").content = "1"
@@ -324,7 +318,7 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       context "when inferring nationality" do
-        let(:sales_log_id) { discounted_ownership_sales_log_id }
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
 
         before do
           sales_log_xml.at_xpath("//xmlns:HHMEMB").content = "1"
@@ -341,7 +335,7 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       context "when inferring economic status" do
-        let(:sales_log_id) { discounted_ownership_sales_log_id }
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
 
         before do
           sales_log_xml.at_xpath("//xmlns:HHMEMB").content = "3"
@@ -366,7 +360,7 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       context "when inferring relationship" do
-        let(:sales_log_id) { discounted_ownership_sales_log_id }
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
 
         before do
           sales_log_xml.at_xpath("//xmlns:HHMEMB").content = "3"
@@ -389,7 +383,7 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       context "when inferring armed forces" do
-        let(:sales_log_id) { discounted_ownership_sales_log_id }
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
 
         before do
           allow(logger).to receive(:warn).and_return(nil)
@@ -413,7 +407,7 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       context "when inferring disability" do
-        let(:sales_log_id) { discounted_ownership_sales_log_id }
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
 
         before do
           allow(logger).to receive(:warn).and_return(nil)
@@ -437,7 +431,7 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       context "when inferring wheelchair" do
-        let(:sales_log_id) { discounted_ownership_sales_log_id }
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
 
         before do
           allow(logger).to receive(:warn).and_return(nil)
@@ -461,7 +455,7 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       context "when inferring housing benefit" do
-        let(:sales_log_id) { discounted_ownership_sales_log_id }
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
 
         before do
           allow(logger).to receive(:warn).and_return(nil)
@@ -485,7 +479,7 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       context "when inferring income not known" do
-        let(:sales_log_id) { discounted_ownership_sales_log_id }
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
 
         before do
           sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
@@ -531,7 +525,7 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       context "when inferring prevown" do
-        let(:sales_log_id) { discounted_ownership_sales_log_id }
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
 
         before do
           allow(logger).to receive(:warn).and_return(nil)
@@ -555,7 +549,7 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       context "when inferring household count" do
-        let(:sales_log_id) { discounted_ownership_sales_log_id }
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
 
         before do
           allow(logger).to receive(:warn).and_return(nil)
