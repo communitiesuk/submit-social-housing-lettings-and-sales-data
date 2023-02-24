@@ -4,7 +4,6 @@ RSpec.describe Form::Lettings::Pages::PropertyWheelchairAccessible, type: :model
   subject(:page) { described_class.new(nil, nil, subsection) }
 
   let(:subsection) { instance_double(Form::Subsection) }
-  let(:form) { instance_double(Form) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
