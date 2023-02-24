@@ -64,7 +64,7 @@ module Validations::DateValidations
 private
 
   def active_collection_end_date
-    if FeatureToggle.startdate_next_collection_year_validation_enabled?
+    if FeatureToggle.startdate_collection_window_validation_enabled?
       next_collection_end_date
 
     else
@@ -74,7 +74,7 @@ private
 
   def validation_error_message
     start_date = current_collection_start_date
-    if FeatureToggle.startdate_next_collection_year_validation_enabled?
+    if FeatureToggle.startdate_collection_window_validation_enabled?
       I18n.t(
         "validations.setup.startdate.current_and_next_financial_year",
         current_start_year_short: start_date.strftime("%y"),

@@ -4,7 +4,7 @@ class FeatureToggle
     Rails.env.production? || Rails.env.test? || Rails.env.staging?
   end
 
-  def self.startdate_next_collection_year_validation_enabled?
+  def self.startdate_collection_window_validation_enabled?
     Rails.env.production? || Rails.env.test? || Rails.env.staging?
   end
 
