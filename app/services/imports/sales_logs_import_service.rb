@@ -95,7 +95,7 @@ module Imports
       attributes["pregghb"] = 1 if string_or_nil(xml_doc, "PREGHBA") == "Yes"
       attributes["pregother"] = 1 if string_or_nil(xml_doc, "PREGOTHER") == "Yes"
       attributes["ppostcode_full"] = compose_postcode(xml_doc, "PPOSTC1", "PPOSTC2")
-      attributes["prevloc"] = string_or_nil(xml_doc, "Q7ONSLACODE")
+      attributes["prevloc"] = string_or_nil(xml_doc, "Q7ONSLACode")
       attributes["ppcodenk"] = previous_postcode_known(xml_doc, attributes["ppostcode_full"], attributes["prevloc"]) # Q7UNKNOWNPOSTCODE check mapping
       attributes["ppostc1"] = string_or_nil(xml_doc, "PPOSTC1")
       attributes["ppostc2"] = string_or_nil(xml_doc, "PPOSTC2")
@@ -207,7 +207,7 @@ module Imports
 
     def check_status_completed(sales_log, previous_status)
       if previous_status.include?("submitted") && sales_log.status != "completed"
-        @logger.warn "sales log #{sales_log.id} is not completed"
+        @logger.warn "sales log #{sales_log.id} is not completed. The following answers are missing: #{missing_answers(sales_log).join(', ')}"
         @logger.warn "sales log with old id:#{sales_log.old_id} is incomplete but status should be complete"
         @logs_with_discrepancies << sales_log.old_id
       end
@@ -398,6 +398,7 @@ module Imports
 
     def set_default_values(attributes)
       attributes["mscharge_known"] ||= 0 if attributes["ownershipsch"] == 3
+      attributes["mscharge"] ||= 0 if attributes["ownershipsch"] == 3
       attributes["armedforcesspouse"] ||= 7
       attributes["hhregres"] ||= 8
       attributes["disabled"] ||= 3
@@ -405,14 +406,17 @@ module Imports
       attributes["hb"] ||= 4
       attributes["prevown"] ||= 3
       attributes["savingsnk"] ||= attributes["savings"].present? ? 0 : 1
+      # attributes["noint"] = 1 # not interviewed
 
       # buyer 1 characteristics
       attributes["age1_known"] ||= 1
       attributes["sex1"] ||= "R"
       attributes["ethnic_group"] ||= 17
+      attributes["ethnic"] ||= 17
       attributes["national"] ||= 13
       attributes["ecstat1"] ||= 10
       attributes["income1nk"] ||= attributes["income1"].present? ? 0 : 1
+      attributes["hholdcount"] ||= 0 # just for testing, might need to change
 
       # buyer 2 characteristics
       if attributes["jointpur"] == 1
@@ -429,6 +433,11 @@ module Imports
         attributes["ecstat#{index}"] ||= 10
         attributes["relat#{index}"] ||= "R"
       end
+    end
+
+    def missing_answers(sales_log)
+      applicable_questions = sales_log.form.subsections.map { |s| s.applicable_questions(sales_log) }.flatten
+      applicable_questions.filter { |q| q.unanswered?(sales_log) }.map(&:id)
     end
   end
 end

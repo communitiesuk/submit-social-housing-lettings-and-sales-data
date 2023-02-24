@@ -21,8 +21,13 @@ RSpec.describe Imports::SalesLogsImportService do
   end
 
   before do
-    WebMock.stub_request(:get, /api.postcodes.io\/postcodes\/GL519EX/)
-           .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Westminster","codes":{"admin_district":"E09000033"}}}', headers: {})
+    { "GL519EX" => "E07000078",
+      "SW1A2AA" => "E09000033",
+      "SW1A1AA" => "E09000033",
+      "SW147QP" => "E09000027",
+      "B955HZ" => "E07000221" }.each do |postcode, district_code|
+        WebMock.stub_request(:get, /api.postcodes.io\/postcodes\/#{postcode}/).to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"#{district_code}\",\"codes\":{\"admin_district\":\"#{district_code}\"}}}", headers: {})
+      end
 
     allow(Organisation).to receive(:find_by).and_return(nil)
     allow(Organisation).to receive(:find_by).with(old_visible_id: organisation.old_visible_id).and_return(organisation)
@@ -154,12 +159,11 @@ RSpec.describe Imports::SalesLogsImportService do
       let(:sales_log_id) { shared_ownership_sales_log_id }
 
       it "successfully creates a completed shared ownership log" do
-        allow(logger).to receive(:warn).and_return(nil)
-        sales_log_service.send(:create_log, sales_log_xml)
-
-        sales_log = SalesLog.find_by(old_id: sales_log_id)
-        applicable_questions = sales_log.form.subsections.map { |s| s.applicable_questions(sales_log) }.flatten
-        expect(applicable_questions.filter { |q| q.unanswered?(sales_log) }.map(&:id)).to be_empty
+        expect(logger).not_to receive(:error)
+        expect(logger).not_to receive(:warn)
+        expect(logger).not_to receive(:info)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .to change(SalesLog, :count).by(1)
       end
     end
 
@@ -167,12 +171,11 @@ RSpec.describe Imports::SalesLogsImportService do
       let(:sales_log_id) { discounted_ownership_sales_log_id }
 
       it "successfully creates a completed discounted ownership log" do
-        allow(logger).to receive(:warn).and_return(nil)
-        sales_log_service.send(:create_log, sales_log_xml)
-
-        sales_log = SalesLog.find_by(old_id: sales_log_id)
-        applicable_questions = sales_log.form.subsections.map { |s| s.applicable_questions(sales_log) }.flatten
-        expect(applicable_questions.filter { |q| q.unanswered?(sales_log) }.map(&:id)).to be_empty
+        expect(logger).not_to receive(:error)
+        expect(logger).not_to receive(:warn)
+        expect(logger).not_to receive(:info)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .to change(SalesLog, :count).by(1)
       end
     end
 
@@ -180,12 +183,11 @@ RSpec.describe Imports::SalesLogsImportService do
       let(:sales_log_id) { outright_sale_sales_log_id }
 
       it "successfully creates a completed outright sale log" do
-        allow(logger).to receive(:warn).and_return(nil)
-        sales_log_service.send(:create_log, sales_log_xml)
-
-        sales_log = SalesLog.find_by(old_id: sales_log_id)
-        applicable_questions = sales_log.form.subsections.map { |s| s.applicable_questions(sales_log) }.flatten
-        expect(applicable_questions.filter { |q| q.unanswered?(sales_log) }.map(&:id)).to be_empty
+        expect(logger).not_to receive(:error)
+        expect(logger).not_to receive(:warn)
+        expect(logger).not_to receive(:info)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .to change(SalesLog, :count).by(1)
       end
     end
 
