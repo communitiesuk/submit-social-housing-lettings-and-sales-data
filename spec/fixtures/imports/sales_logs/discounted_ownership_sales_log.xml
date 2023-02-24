@@ -1,0 +1,351 @@
+<Group xmlns="http://data.gov.uk/core/logs/2022-CORE-Sales" xmlns:app="http://www.w3.org/2007/app" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:meta="http://data.gov.uk/core/metadata" xmlns:svc="http://www.w3.org/2007/app" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xfimpl="http://www.w3.org/2002/xforms/implementation" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xxf="http://orbeon.org/oxf/xml/xforms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <meta:metadata xmlns:es="http://www.ecmascript.org/" xmlns:xqx="http://www.w3.org/2005/XQueryX" xmlns:XSLT="http://www.w3.org/1999/XSL/Transform/compile">
+    <meta:form-name>2022-CORE-Sales</meta:form-name>
+    <meta:document-id>discounted_ownership_sales_log</meta:document-id>
+    <meta:owner-user-id>c3061a2e6ea0b702e6f6210d5c52d2a92612d2aa</meta:owner-user-id>
+    <meta:owner-institution-id>7c5bd5fb549c09z2c55d9cb90d7ba84927e64618</meta:owner-institution-id>
+    <meta:managing-institution-id>7c5bd5fb549c09z2c55d9cb90d7ba84927e64618</meta:managing-institution-id>
+    <meta:created-date>2023-02-21T11:54:51.786722Z</meta:created-date>
+    <meta:modified-date>2023-02-22T10:59:45.88188Z</meta:modified-date>
+    <meta:status>submitted-valid</meta:status>
+    <meta:reporting-year>2022</meta:reporting-year>
+    <meta:upload-method>Manual Entry</meta:upload-method>
+    <meta:schema assert-valid="true"/>
+    <meta:rules assert-valid="true"/>
+  </meta:metadata>
+  <Group>
+    <!-- replace with commented options to test in the future -->
+    <!-- <Qdp>Yes</Qdp> -->
+    <Qdp/>
+    <CompletionDate>2023-02-01</CompletionDate>
+    <PurchaserCode>Discount ownership example</PurchaserCode>
+    <Ownership>2 Yes - a discount ownership scheme</Ownership>
+    <Q16SaleType/>
+    <Q30SaleType>14 Preserved Right to Buy (PRTB)</Q30SaleType>
+    <Q38SaleType/>
+    <Q38OtherSale/>
+    <company/>
+    <LiveInBuyer/>
+    <joint>2 No</joint>
+    <JointMore/>
+    <PartAPurchaser>1 No</PartAPurchaser>
+  </Group>
+  <Group>
+    <Q11Bedrooms override-field="">3</Q11Bedrooms>
+    <Q12PropertyType>3 House</Q12PropertyType>
+    <Q13BuildingType>1 Purpose built</Q13BuildingType>
+    <Q14Postcode override-field="">SW1A 1AA</Q14Postcode>
+    <!-- replace with commented options to test in the future -->
+    <!-- <Q14PropertyLocation>Westminster</Q14PropertyLocation>
+    <Q14ONSLACode>E09000033</Q14ONSLACode> -->
+    <Q14PropertyLocation>Cheltenham</Q14PropertyLocation>
+    <Q14ONSLACode>E07000078</Q14ONSLACode>
+    <Q15Wheelchair>3 Don&#x2019;t know</Q15Wheelchair>
+  </Group>
+  <Group>
+    <P1Age/>
+    <P1Sex override-field=""/>
+    <P1Eco/>
+    <P1Eth/>
+    <P1Nat/>
+    <P2Age/>
+    <P2Sex override-field=""/>
+    <P2Rel/>
+    <P2Eco/>
+    <P3Age/>
+    <P3Sex override-field=""/>
+    <P3Rel/>
+    <P3Eco/>
+    <P4Age/>
+    <P4Sex override-field=""/>
+    <P4Rel/>
+    <P4Eco/>
+    <P5Age/>
+    <P5Sex override-field=""/>
+    <P5Rel/>
+    <P5Eco/>
+    <P6Age/>
+    <P6Sex override-field=""/>
+    <P6Rel/>
+    <P6Eco/>
+    <P7Age/>
+    <P7Sex override-field=""/>
+    <P7Rel/>
+    <P7Eco/>
+    <P8Age/>
+    <P8Sex override-field=""/>
+    <P8Rel/>
+    <P8Eco/>
+    <LiveInBuyer1>1 Yes</LiveInBuyer1>
+    <LiveInBuyer2/>
+    <LiveInOther/>
+  </Group>
+  <Group>
+    <P2Partner>0</P2Partner>
+    <P3Partner>0</P3Partner>
+    <P4Partner>0</P4Partner>
+    <P5Partner>0</P5Partner>
+    <P6Partner>0</P6Partner>
+    <P7Partner>0</P7Partner>
+    <P8Partner>0</P8Partner>
+    <Partner>0</Partner>
+    <P2AgeT>0</P2AgeT>
+    <P3AgeT>0</P3AgeT>
+    <P4AgeT>0</P4AgeT>
+    <P5AgeT>0</P5AgeT>
+    <P6AgeT>0</P6AgeT>
+    <P7AgeT>0</P7AgeT>
+    <P8AgeT>0</P8AgeT>
+    <P2SexT>0</P2SexT>
+    <P3SexT>0</P3SexT>
+    <P4SexT>0</P4SexT>
+    <P5SexT>0</P5SexT>
+    <P6SexT>0</P6SexT>
+    <P7SexT>0</P7SexT>
+    <P8SexT>0</P8SexT>
+    <P2RelT>0</P2RelT>
+    <P3RelT>0</P3RelT>
+    <P4RelT>0</P4RelT>
+    <P5RelT>0</P5RelT>
+    <P6RelT>0</P6RelT>
+    <P7RelT>0</P7RelT>
+    <P8RelT>0</P8RelT>
+    <P2EcoT>0</P2EcoT>
+    <P3EcoT>0</P3EcoT>
+    <P4EcoT>0</P4EcoT>
+    <P5EcoT>0</P5EcoT>
+    <P6EcoT>0</P6EcoT>
+    <P7EcoT>0</P7EcoT>
+    <P8EcoT>0</P8EcoT>
+    <P2HHoldT>0</P2HHoldT>
+    <P3HHoldT>0</P3HHoldT>
+    <P4HHoldT>0</P4HHoldT>
+    <P5HHoldT>0</P5HHoldT>
+    <P6HHoldT>0</P6HHoldT>
+    <P7HHoldT>0</P7HHoldT>
+    <P8HHoldT>0</P8HHoldT>
+    <P2PAge>0</P2PAge>
+    <P3PAge>0</P3PAge>
+    <P4PAge>0</P4PAge>
+    <P5PAge>0</P5PAge>
+    <P6PAge>0</P6PAge>
+    <P7PAge>0</P7PAge>
+    <P8PAge>0</P8PAge>
+    <PAGE/>
+    <Q30Answer/>
+    <P2Other>0</P2Other>
+    <P3Other>0</P3Other>
+    <P4Other>0</P4Other>
+    <P5Other>0</P5Other>
+    <P6Other>0</P6Other>
+    <P7Other>0</P7Other>
+    <P8Other>0</P8Other>
+    <Other>0</Other>
+    <P2RRefused>0</P2RRefused>
+    <P3RRefused>0</P3RRefused>
+    <P4RRefused>0</P4RRefused>
+    <P5RRefused>0</P5RRefused>
+    <P6RRefused>0</P6RRefused>
+    <P7RRefused>0</P7RRefused>
+    <P8RRefused>0</P8RRefused>
+    <TotRRefused>0</TotRRefused>
+    <CALCMORT>134750</CALCMORT>
+    <MORTGAGEUSED>1</MORTGAGEUSED>
+    <IM1>0</IM1>
+    <IM2>0</IM2>
+    <IMT>0</IMT>
+    <MortMultiple>1</MortMultiple>
+    <Form>300203</Form>
+  </Group>
+  <Group>
+    <minmaxP11/>
+    <minmaxP12/>
+    <minmaxP13/>
+    <minmaxP14/>
+    <minmaxP15/>
+    <minmaxP16/>
+    <minmaxP17/>
+    <minmaxP18/>
+    <minmaxP1T/>
+    <minmaxP19/>
+    <minmaxP10/>
+    <minmaxP21/>
+    <minmaxP22/>
+    <minmaxP23/>
+    <minmaxP24/>
+    <minmaxP25/>
+    <minmaxP26/>
+    <minmaxP27/>
+    <minmaxP28/>
+    <minmaxP2T/>
+    <minmaxP29/>
+    <minmaxP20/>
+    <Q16CHK>0</Q16CHK>
+    <Q30CHK>1</Q30CHK>
+    <Q38CHK>0</Q38CHK>
+    <SalesCHKT>1</SalesCHKT>
+    <Q23CHK>0</Q23CHK>
+    <Q16typeCHK>0</Q16typeCHK>
+    <Q16Q23>0</Q16Q23>
+    <DAY>1</DAY>
+    <MONTH>2</MONTH>
+    <YEAR>2023</YEAR>
+    <HODAY/>
+    <HOMONTH/>
+    <HOYEAR/>
+    <EXDAY/>
+    <EXMONTH/>
+    <EXYEAR/>
+    <PPOSTC1>GL51</PPOSTC1>
+    <PPOSTC2>9EX</PPOSTC2>
+    <!-- replace with commented options to test in the future -->
+    <!-- <PCODE1>SW1A</PCODE1>
+    <PCODE2>1AA</PCODE2> -->
+    <PCODE1>GL51</PCODE1>
+    <PCODE2>9EX</PCODE2>
+    <NOINT>1</NOINT>
+  </Group>
+  <Group>
+    <!-- replace with commented options to test in the future -->
+    <!-- <Q6PrevTenure/> -->
+    <Q6PrevTenure>3 Private tenant</Q6PrevTenure>
+    <Q7Postcode override-field="">GL51 9EX</Q7Postcode>
+    <Q7UnknownPostcode/>
+    <Q7PrevLocation>Cheltenham</Q7PrevLocation>
+    <Q7ONSLACode>E07000078</Q7ONSLACode>
+    <!-- replace with commented options to test in the future -->
+    <!-- <PREGYRHA/> -->
+    <PREGYRHA>Yes</PREGYRHA>
+    <PREGORHA/>
+    <PREGLA/>
+    <PREGHBA/>
+    <PREGOTHER/>
+  </Group>
+  <Group>
+    <ArmedF/>
+    <LeftArmedF/>
+    <ARMEDFORCESSPOUSE/>
+    <Disability/>
+    <Q10Wheelchair override-field=""/>
+  </Group>
+  <Group>
+    <P1IncKnown/>
+    <Q2Person1Income/>
+    <Q2Person1Mortgage>1 Yes</Q2Person1Mortgage>
+    <!-- replace with commented options to test in the future -->
+    <!-- <Q2Person1Mortgage/> -->
+    <P2IncKnown/>
+    <Q2Person2Income/>
+    <Q2Person2MortApplication/>
+    <Q2a/>
+    <savingsKnown/>
+    <Q3Savings override-field=""/>
+    <Q4PrevOwnedProperty/>
+  </Group>
+  <Group>
+    <!-- replace with commented options to test in the future -->
+    <!-- <Q16aProplen2/> -->
+    <Q16aProplen2>1</Q16aProplen2>
+    <Q17aStaircase/>
+    <PercentBought override-field=""/>
+    <PercentOwns/>
+    <Q17Resale/>
+    <Q18ContractExchange override-field=""/>
+    <Q18PracticalCompletion override-field=""/>
+    <Q19Rehoused/>
+    <Q20Bedrooms/>
+    <Q21PropertyType/>
+    <PrevRentType/>
+    <Q22PurchasePrice override-field=""/>
+    <Q23Equity override-field=""/>
+    <MortgageUsedSO/>
+    <Q24Mortgage override-field=""/>
+    <Q24aMortgageLender/>
+    <Q24b/>
+    <Q25Borrowing/>
+    <Q26CashDeposit override-field=""/>
+    <Q27SocialHomeBuy/>
+    <Q28MonthlyRent/>
+    <Q29MonthlyCharges/>
+  </Group>
+  <Group>
+    <Q16aProplensec2/>
+    <Q31PurchasePrice override-field="">275000</Q31PurchasePrice>
+    <Q32Reductions override-field=""/>
+    <Q33Discount override-field="">51</Q33Discount>
+    <MortgageUsedDO>1 Yes</MortgageUsedDO>
+    <Q34Mortgage override-field="true">134750</Q34Mortgage>
+    <Q34a>Halifax</Q34a>
+    <!-- replace with commented options to test in the future -->
+    <!-- <Q34b/> -->
+    <Q34b>33</Q34b>
+    <Q35Borrowing>2 No</Q35Borrowing>
+    <Q36CashDeposit>0</Q36CashDeposit>
+    <Q37MonthlyCharges>0.00</Q37MonthlyCharges>
+  </Group>
+  <Group>
+    <Q40PurchasePrice override-field=""/>
+    <MortgageUsedOS/>
+    <Q41Mortgage override-field=""/>
+    <Q41aMortgageLender/>
+    <Q41b/>
+    <Q42Borrowing/>
+    <Q43CashDeposit override-field=""/>
+  </Group>
+  <Group>
+    <HHMEMB>0</HHMEMB>
+    <TOTADULT>0</TOTADULT>
+    <TOTCHILD>0</TOTCHILD>
+  </Group>
+  <Group>
+    <HHTYPE>9 = other</HHTYPE>
+    <!-- replace with commented options to test in the future -->
+    <!-- <HHTYPE>3 = 1 adult</HHTYPE> -->
+  </Group>
+  <Group>
+    <DerSaleType>14 Preserved Right to Buy (PRTB)</DerSaleType>
+  </Group>
+  <Group>
+    <HHTYPEP1A>1</HHTYPEP1A>
+    <HHTYPEP2A>0</HHTYPEP2A>
+    <HHTYPEP3A>0</HHTYPEP3A>
+    <HHTYPEP4A>0</HHTYPEP4A>
+    <HHTYPEP5A>0</HHTYPEP5A>
+    <HHTYPEP6A>0</HHTYPEP6A>
+    <HHTYPEP7A>0</HHTYPEP7A>
+    <HHTYPEP8A>0</HHTYPEP8A>
+    <TADULT>1</TADULT>
+    <HHTYPEP1E>0</HHTYPEP1E>
+    <HHTYPEP2E>0</HHTYPEP2E>
+    <HHTYPEP3E>0</HHTYPEP3E>
+    <HHTYPEP4E>0</HHTYPEP4E>
+    <HHTYPEP5E>0</HHTYPEP5E>
+    <HHTYPEP6E>0</HHTYPEP6E>
+    <HHTYPEP7E>0</HHTYPEP7E>
+    <HHTYPEP8E>0</HHTYPEP8E>
+    <TELDER>0</TELDER>
+    <HHTYPEP1C>0</HHTYPEP1C>
+    <HHTYPEP2C>0</HHTYPEP2C>
+    <HHTYPEP3C>0</HHTYPEP3C>
+    <HHTYPEP4C>0</HHTYPEP4C>
+    <HHTYPEP5C>0</HHTYPEP5C>
+    <HHTYPEP6C>0</HHTYPEP6C>
+    <HHTYPEP7C>0</HHTYPEP7C>
+    <HHTYPEP8C>0</HHTYPEP8C>
+    <TCHILD>0</TCHILD>
+    <Q8av>0</Q8av>
+    <Q8bv>0</Q8bv>
+    <Q8cv>0</Q8cv>
+    <Q8dv>0</Q8dv>
+    <Q8ev>0</Q8ev>
+    <Q8Validate>0</Q8Validate>
+  </Group>
+  <Group>
+    <PLOACODE/>
+    <OACODE/>
+    <GOVREG>E12000007</GOVREG>
+    <OWNINGORGID>1</OWNINGORGID>
+    <OWNINGORGNAME>1 Test</OWNINGORGNAME>
+    <HCNUM>655</HCNUM>
+  </Group>
+</Group>

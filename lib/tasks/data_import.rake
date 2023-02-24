@@ -22,6 +22,8 @@ namespace :core do
       Imports::OrganisationRentPeriodImportService.new(storage_service).create_organisation_rent_periods(path)
     when "lettings-logs"
       Imports::LettingsLogsImportService.new(storage_service).create_logs(path)
+    when "sales-logs"
+      Imports::SalesLogsImportService.new(storage_service).create_logs(path)
     else
       raise "Type #{type} is not supported by data_import"
     end
