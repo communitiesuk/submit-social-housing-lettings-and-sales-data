@@ -41,6 +41,7 @@ RSpec.describe Form::Sales::Questions::Buyer1PreviousTenure, type: :model do
       "6" => { "value" => "Living with family or friends" },
       "7" => { "value" => "Temporary accomodation" },
       "9" => { "value" => "Other" },
+      "0" => { "value" => "Don’t know" },
     })
   end
 end
