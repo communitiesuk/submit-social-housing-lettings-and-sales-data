@@ -5,10 +5,27 @@ RSpec.describe BulkUploadErrorSummaryTableComponent, type: :component do
 
   let(:bulk_upload) { create(:bulk_upload) }
 
+  before do
+    stub_const("BulkUploadErrorSummaryTableComponent::DISPLAY_THRESHOLD", 0)
+  end
+
   context "when no errors" do
     it "does not renders any rows" do
       result = render_inline(component)
       expect(result).not_to have_selector("tbody tr")
+    end
+  end
+
+  context "when below threshold" do
+    before do
+      stub_const("BulkUploadErrorSummaryTableComponent::DISPLAY_THRESHOLD", 16)
+
+      create(:bulk_upload_error, bulk_upload:, col: "A", row: 1)
+    end
+
+    it "does not render rows" do
+      result = render_inline(component)
+      expect(result).to have_selector("tbody tr", count: 0)
     end
   end
 
