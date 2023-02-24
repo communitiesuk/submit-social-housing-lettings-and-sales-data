@@ -553,6 +553,49 @@ RSpec.describe Imports::SalesLogsImportService do
           expect(sales_log&.prevown).to eq(2)
         end
       end
+
+      context "when inferring household count" do
+        let(:sales_log_id) { discounted_ownership_sales_log_id }
+
+        before do
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets hholdcount to hhmemb - 1 if not answered and not joint purchase" do
+          sales_log_xml.at_xpath("//xmlns:HHMEMB").content = "3"
+          sales_log_xml.at_xpath("//xmlns:joint").content = "2 No"
+          sales_log_xml.at_xpath("//xmlns:LiveInOther").content = ""
+
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.hholdcount).to eq(2)
+        end
+
+        it "sets hholdcount to hhmemb - 2 if not answered and joint purchase" do
+          sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+          sales_log_xml.at_xpath("//xmlns:JointMore").content = "2 No"
+          sales_log_xml.at_xpath("//xmlns:HHMEMB").content = "3"
+          sales_log_xml.at_xpath("//xmlns:LiveInOther").content = ""
+
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.hholdcount).to eq(1)
+        end
+
+        it "sets hholdcount to 0 if HHMEMB is 0" do
+          sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+          sales_log_xml.at_xpath("//xmlns:JointMore").content = "2 No"
+          sales_log_xml.at_xpath("//xmlns:HHMEMB").content = "0"
+          sales_log_xml.at_xpath("//xmlns:LiveInOther").content = ""
+
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.hholdcount).to eq(0)
+        end
+      end
     end
   end
 end

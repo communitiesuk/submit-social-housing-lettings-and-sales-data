@@ -416,7 +416,7 @@ module Imports
       attributes["national"] ||= 13
       attributes["ecstat1"] ||= 10
       attributes["income1nk"] ||= attributes["income1"].present? ? 0 : 1
-      attributes["hholdcount"] ||= 0 # just for testing, might need to change
+      attributes["hholdcount"] ||= default_household_count(attributes) # just for testing, might need to change
 
       # buyer 2 characteristics
       if attributes["jointpur"] == 1
@@ -438,6 +438,13 @@ module Imports
     def missing_answers(sales_log)
       applicable_questions = sales_log.form.subsections.map { |s| s.applicable_questions(sales_log) }.flatten
       applicable_questions.filter { |q| q.unanswered?(sales_log) }.map(&:id)
+    end
+
+    # just for testing, logic might need to change
+    def default_household_count(attributes)
+      return 0 if attributes["hhmemb"].zero? || attributes["hhmemb"].blank?
+
+      attributes["jointpur"] == 1 ? attributes["hhmemb"] - 2 : attributes["hhmemb"] - 1
     end
   end
 end

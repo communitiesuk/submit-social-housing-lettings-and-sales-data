@@ -229,7 +229,9 @@
     <Q4PrevOwnedProperty>1 Yes</Q4PrevOwnedProperty>
   </Group>
   <Group>
-    <Q16aProplen2/>
+    <!-- replace with commented options to test in the future -->
+    <!-- <Q16aProplen2/> -->
+    <Q16aProplen2>1</Q16aProplen2>
     <Q17aStaircase>2 No</Q17aStaircase>
     <PercentBought override-field=""/>
     <PercentOwns>30</PercentOwns>

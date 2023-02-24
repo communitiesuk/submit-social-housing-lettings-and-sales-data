@@ -14,7 +14,9 @@
     <meta:rules assert-valid="true"/>
   </meta:metadata>
   <Group>
-    <Qdp>Yes</Qdp>
+    <!-- replace with commented options to test in the future -->
+    <!-- <Qdp>Yes</Qdp> -->
+    <Qdp/>
     <CompletionDate>2023-02-01</CompletionDate>
     <PurchaserCode>Discount ownership example</PurchaserCode>
     <Ownership>2 Yes - a discount ownership scheme</Ownership>
@@ -33,8 +35,11 @@
     <Q12PropertyType>3 House</Q12PropertyType>
     <Q13BuildingType>1 Purpose built</Q13BuildingType>
     <Q14Postcode override-field="">SW1A 1AA</Q14Postcode>
-    <Q14PropertyLocation>Westminster</Q14PropertyLocation>
-    <Q14ONSLACode>E09000033</Q14ONSLACode>
+    <!-- replace with commented options to test in the future -->
+    <!-- <Q14PropertyLocation>Westminster</Q14PropertyLocation>
+    <Q14ONSLACode>E09000033</Q14ONSLACode> -->
+    <Q14PropertyLocation>Cheltenham</Q14PropertyLocation>
+    <Q14ONSLACode>E07000078</Q14ONSLACode>
     <Q15Wheelchair>3 Don&#x2019;t know</Q15Wheelchair>
   </Group>
   <Group>
@@ -193,17 +198,24 @@
     <EXYEAR/>
     <PPOSTC1>GL51</PPOSTC1>
     <PPOSTC2>9EX</PPOSTC2>
-    <PCODE1>SW1A</PCODE1>
-    <PCODE2>1AA</PCODE2>
+    <!-- replace with commented options to test in the future -->
+    <!-- <PCODE1>SW1A</PCODE1>
+    <PCODE2>1AA</PCODE2> -->
+    <PCODE1>GL51</PCODE1>
+    <PCODE2>9EX</PCODE2>
     <NOINT>1</NOINT>
   </Group>
   <Group>
-    <Q6PrevTenure/>
+    <!-- replace with commented options to test in the future -->
+    <!-- <Q6PrevTenure/> -->
+    <Q6PrevTenure>3 Private tenant</Q6PrevTenure>
     <Q7Postcode override-field="">GL51 9EX</Q7Postcode>
     <Q7UnknownPostcode/>
     <Q7PrevLocation>Cheltenham</Q7PrevLocation>
     <Q7ONSLACode>E07000078</Q7ONSLACode>
-    <PREGYRHA/>
+    <!-- replace with commented options to test in the future -->
+    <!-- <PREGYRHA/> -->
+    <PREGYRHA>Yes</PREGYRHA>
     <PREGORHA/>
     <PREGLA/>
     <PREGHBA/>
@@ -219,7 +231,9 @@
   <Group>
     <P1IncKnown/>
     <Q2Person1Income/>
-    <Q2Person1Mortgage/>
+    <Q2Person1Mortgage>1 Yes</Q2Person1Mortgage>
+    <!-- replace with commented options to test in the future -->
+    <!-- <Q2Person1Mortgage/> -->
     <P2IncKnown/>
     <Q2Person2Income/>
     <Q2Person2MortApplication/>
@@ -229,7 +243,9 @@
     <Q4PrevOwnedProperty/>
   </Group>
   <Group>
-    <Q16aProplen2/>
+    <!-- replace with commented options to test in the future -->
+    <!-- <Q16aProplen2/> -->
+    <Q16aProplen2>1</Q16aProplen2>
     <Q17aStaircase/>
     <PercentBought override-field=""/>
     <PercentOwns/>
@@ -260,7 +276,9 @@
     <MortgageUsedDO>1 Yes</MortgageUsedDO>
     <Q34Mortgage override-field="true">134750</Q34Mortgage>
     <Q34a>Halifax</Q34a>
-    <Q34b/>
+    <!-- replace with commented options to test in the future -->
+    <!-- <Q34b/> -->
+    <Q34b>33</Q34b>
     <Q35Borrowing>2 No</Q35Borrowing>
     <Q36CashDeposit>0</Q36CashDeposit>
     <Q37MonthlyCharges>0.00</Q37MonthlyCharges>
@@ -280,7 +298,9 @@
     <TOTCHILD>0</TOTCHILD>
   </Group>
   <Group>
-    <HHTYPE>3 = 1 adult</HHTYPE>
+    <HHTYPE>9 = other</HHTYPE>
+    <!-- replace with commented options to test in the future -->
+    <!-- <HHTYPE>3 = 1 adult</HHTYPE> -->
   </Group>
   <Group>
     <DerSaleType>14 Preserved Right to Buy (PRTB)</DerSaleType>

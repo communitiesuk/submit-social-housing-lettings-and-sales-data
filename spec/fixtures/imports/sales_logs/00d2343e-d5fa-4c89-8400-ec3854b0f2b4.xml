@@ -219,7 +219,9 @@
   <Group>
     <P1IncKnown>2 No</P1IncKnown>
     <Q2Person1Income/>
-    <Q2Person1Mortgage/>
+    <!-- replace with commented options to test in the future -->
+    <!-- <Q2Person1Mortgage/> -->
+    <Q2Person1Mortgage>2 No</Q2Person1Mortgage>
     <P2IncKnown/>
     <Q2Person2Income/>
     <Q2Person2MortApplication/>
