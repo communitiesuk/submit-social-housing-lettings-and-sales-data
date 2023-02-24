@@ -399,6 +399,11 @@ module Imports
     def set_default_values(attributes)
       attributes["mscharge_known"] ||= 0 if attributes["ownershipsch"] == 3
       attributes["armedforcesspouse"] ||= 7
+      attributes["hhregres"] ||= 8
+      attributes["disabled"] ||= 3
+      attributes["wheel"] ||= 3
+      attributes["hb"] ||= 4
+      attributes["prevown"] ||= 3
       attributes["savingsnk"] ||= attributes["savings"].present? ? 0 : 1
 
       # buyer 1 characteristics
@@ -407,12 +412,14 @@ module Imports
       attributes["ethnic_group"] ||= 17
       attributes["national"] ||= 13
       attributes["ecstat1"] ||= 10
+      attributes["income1nk"] ||= attributes["income1"].present? ? 0 : 1
 
       # buyer 2 characteristics
       if attributes["jointpur"] == 1
         attributes["age2_known"] ||= 1
         attributes["sex2"] ||= "R"
         attributes["ecstat2"] ||= 10
+        attributes["income2nk"] ||= attributes["income2"].present? ? 0 : 1
       end
 
       # other household members characteristics

@@ -385,6 +385,172 @@ RSpec.describe Imports::SalesLogsImportService do
           expect(sales_log&.relat3).to eq("P")
         end
       end
+
+      context "when inferring armed forces" do
+        let(:sales_log_id) { discounted_ownership_sales_log_id }
+
+        before do
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets hhregres to don't know if not answered" do
+          sales_log_xml.at_xpath("//xmlns:ArmedF").content = ""
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.hhregres).to eq(8)
+        end
+
+        it "sets hhregres correctly if answered" do
+          sales_log_xml.at_xpath("//xmlns:ArmedF").content = "7 No"
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.hhregres).to eq(7)
+        end
+      end
+
+      context "when inferring disability" do
+        let(:sales_log_id) { discounted_ownership_sales_log_id }
+
+        before do
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets disabled to don't know if not answered" do
+          sales_log_xml.at_xpath("//xmlns:Disability").content = ""
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.disabled).to eq(3)
+        end
+
+        it "sets disabled correctly if answered" do
+          sales_log_xml.at_xpath("//xmlns:Disability").content = "2 No"
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.disabled).to eq(2)
+        end
+      end
+
+      context "when inferring wheelchair" do
+        let(:sales_log_id) { discounted_ownership_sales_log_id }
+
+        before do
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets wheel to don't know if not answered" do
+          sales_log_xml.at_xpath("//xmlns:Q10Wheelchair").content = ""
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.wheel).to eq(3)
+        end
+
+        it "sets wheel correctly if answered" do
+          sales_log_xml.at_xpath("//xmlns:Q10Wheelchair").content = "2 No"
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.wheel).to eq(2)
+        end
+      end
+
+      context "when inferring housing benefit" do
+        let(:sales_log_id) { discounted_ownership_sales_log_id }
+
+        before do
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets hb to don't know if not answered" do
+          sales_log_xml.at_xpath("//xmlns:Q2a").content = ""
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.hb).to eq(4)
+        end
+
+        it "sets hb correctly if answered" do
+          sales_log_xml.at_xpath("//xmlns:Q2a").content = "2 Housing Benefit"
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.hb).to eq(2)
+        end
+      end
+
+      context "when inferring income not known" do
+        let(:sales_log_id) { discounted_ownership_sales_log_id }
+
+        before do
+          sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+          sales_log_xml.at_xpath("//xmlns:JointMore").content = "2 No"
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets income to not known if not answered and income is not given" do
+          sales_log_xml.at_xpath("//xmlns:P1IncKnown").content = ""
+          sales_log_xml.at_xpath("//xmlns:Q2Person1Income").content = ""
+          sales_log_xml.at_xpath("//xmlns:P2IncKnown").content = ""
+          sales_log_xml.at_xpath("//xmlns:Q2Person2Income").content = ""
+
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.income1nk).to eq(1)
+          expect(sales_log&.income2nk).to eq(1)
+        end
+
+        it "sets income to known if not answered but the income is given" do
+          sales_log_xml.at_xpath("//xmlns:P1IncKnown").content = ""
+          sales_log_xml.at_xpath("//xmlns:Q2Person1Income").content = "30000"
+          sales_log_xml.at_xpath("//xmlns:P2IncKnown").content = ""
+          sales_log_xml.at_xpath("//xmlns:Q2Person2Income").content = "40000"
+
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.income1nk).to eq(0)
+          expect(sales_log&.income2nk).to eq(0)
+        end
+
+        it "sets income known correctly if answered" do
+          sales_log_xml.at_xpath("//xmlns:P1IncKnown").content = "1 Yes"
+          sales_log_xml.at_xpath("//xmlns:P2IncKnown").content = "2 No"
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.income1nk).to eq(0)
+          expect(sales_log&.income2nk).to eq(1)
+        end
+      end
+
+      context "when inferring prevown" do
+        let(:sales_log_id) { discounted_ownership_sales_log_id }
+
+        before do
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets prevown to don't know if not answered" do
+          sales_log_xml.at_xpath("//xmlns:Q4PrevOwnedProperty").content = ""
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.prevown).to eq(3)
+        end
+
+        it "sets prevown correctly if answered" do
+          sales_log_xml.at_xpath("//xmlns:Q4PrevOwnedProperty").content = "2 No"
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.prevown).to eq(2)
+        end
+      end
     end
   end
 end
