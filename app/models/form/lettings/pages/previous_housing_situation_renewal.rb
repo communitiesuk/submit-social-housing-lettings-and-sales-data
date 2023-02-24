@@ -2,7 +2,7 @@ class Form::Lettings::Pages::PreviousHousingSituationRenewal < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "previous_housing_situation_renewal"
-    @depends_on = [{ "renewal" => 1, "needstype" => 2 }]
+    @depends_on = [{ "is_renewal?" => true, "is_supported_housing?" => true }]
   end
 
   def questions
