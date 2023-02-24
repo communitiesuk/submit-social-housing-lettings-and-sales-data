@@ -3,7 +3,7 @@ class Form::Sales::Questions::PropertyWheelchairAccessible < ::Form::Question
     super
     @id = "wchair"
     @check_answer_label = "Property build or adapted to wheelchair-user standards"
-    @header = "Q17 -Is the property build or adapted to wheelchair-user standards?"
+    @header = "Q17 - Is the property build or adapted to wheelchair-user standards?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
   end

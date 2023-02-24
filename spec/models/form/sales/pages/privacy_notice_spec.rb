@@ -20,7 +20,7 @@ RSpec.describe Form::Sales::Pages::PrivacyNotice, type: :model do
   end
 
   it "has the correct header" do
-    expect(page.header).to eq("Department for Levelling Up, Housing and Communities privacy notice")
+    expect(page.header).to eq("Q19 - Department for Levelling Up, Housing and Communities privacy notice")
   end
 
   it "has the correct description" do
