@@ -44,25 +44,25 @@ en:
         forms/bulk_upload_lettings/year:
           attributes:
             year:
-              blank: You must select a collection period to upload for
+              blank: "You must select a collection period to upload for"
         forms/bulk_upload_sales/year:
           attributes:
             year:
-              blank: You must select a collection period to upload for
+              blank: "You must select a collection period to upload for"
         forms/bulk_upload_lettings/upload_your_file:
           attributes:
             file:
-              blank: Select which file to upload
-              not_csv: Your file must be in CSV format
+              blank: "Select which file to upload"
+              not_csv: "Your file must be in CSV format"
         forms/bulk_upload_sales/upload_your_file:
           attributes:
             file:
-              blank: Select which file to upload
-              not_csv: Your file must be in CSV format
+              blank: "Select which file to upload"
+              not_csv: "Your file must be in CSV format"
         forms/bulk_upload_lettings/needstype:
           attributes:
             needstype:
-              blank: You must answer needs type
+              blank: "You must answer needs type"
 
   activerecord:
     errors:
@@ -136,7 +136,7 @@ en:
       above_min: "%{field} must be at least %{min}"
     date:
       invalid_date: "Enter a date in the correct format, for example 31 1 2022"
-      outside_collection_window: Enter a date within the 22/23 financial year, which is between 1st April 2022 and 31st March 2023
+      outside_collection_window: "Enter a date within the 22/23 financial year, which is between 1st April 2022 and 31st March 2023"
     postcode: "Enter a postcode in the correct format, for example AA1 1AA"
     location_admin_district: "Select a local authority"
     email:
@@ -151,16 +151,20 @@ en:
         blank: "Enter name of other intermediate rent product"
       saledate:
         current_financial_year:
-          Enter a date within the %{current_start_year_short}/%{current_end_year_short} financial year, which is between %{current_start_year_long} and %{current_end_year_long}
+          "Enter a date within the %{current_start_year_short}/%{current_end_year_short} financial year, which is between %{current_start_year_long} and %{current_end_year_long}"
         previous_and_current_financial_year:
           "Enter a date within the %{previous_start_year_short}/%{previous_end_year_short} or %{previous_end_year_short}/%{current_end_year_short} financial years, which is between %{previous_start_year_long} and %{current_end_year_long}"
 
       startdate:
+        current_financial_year:
+          "Enter a date within the %{current_start_year_short}/%{current_end_year_short} financial year, which is between %{current_start_year_long} and %{current_end_year_long}"
+        previous_and_current_financial_year:
+          "Enter a date within the %{previous_start_year_short}/%{previous_end_year_short} or %{previous_end_year_short}/%{current_end_year_short} financial years, which is between %{previous_start_year_long} and %{current_end_year_long}"
         later_than_14_days_after: "The tenancy start date must not be later than 14 days from today’s date"
         before_scheme_end_date: "The tenancy start date must be before the end date for this supported housing scheme"
         after_void_date: "Enter a tenancy start date that is after the void date"
         after_major_repair_date: "Enter a tenancy start date that is after the major repair date"
-        year_not_two_digits: Tenancy start year must be 2 digits
+        year_not_two_digits: "Tenancy start year must be 2 digits"
         location:
           deactivated: "The location %{postcode} was deactivated on %{date} and was not available on the day you entered."
           reactivating_soon: "The location %{postcode} is not available until %{date}. Select another location or edit the tenancy start date"
@@ -176,8 +180,8 @@ en:
       created_by:
         invalid: "Please select owning organisation or managing organisation that you belong to"
       lettype:
-        general_needs_mismatch: Lettings type must be a general needs type because you selected general needs when uploading the file
-        supported_housing_mismatch: Lettings type must be a supported housing type because you selected supported housing when uploading the file
+        general_needs_mismatch: "Lettings type must be a general needs type because you selected general needs when uploading the file"
+        supported_housing_mismatch: "Lettings type must be a supported housing type because you selected supported housing when uploading the file"
 
     property:
       mrcdate:
@@ -377,7 +381,7 @@ en:
         other_homeless: "Answer cannot be internal transfer as the tenant was considered homeless by their landlord"
         prevten_invalid: "Answer cannot be internal transfer as the household situation immediately before this letting was %{prevten}"
         reason_permanently_decanted: "Answer must be internal transfer as the tenant was permanently decanted from another property owned by this landlord"
-        nominated_by_local_ha_but_la: The source of the referral cannot be Nominated by local housing authority as your organisation is a local authority
+        nominated_by_local_ha_but_la: "The source of the referral cannot be Nominated by local housing authority as your organisation is a local authority"
         la_general_needs:
           internal_transfer: "Answer cannot be internal transfer as it’s the same landlord on the tenancy agreement and the household had either a fixed-term or lifetime local authority general needs tenancy immediately before this letting"
           prp_referred_by_la: "The source of the referral cannot be referred by local authority housing department for a general needs log"

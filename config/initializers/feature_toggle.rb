@@ -1,6 +1,10 @@
 class FeatureToggle
-  # Disable check on preview apps to allow for testing of future forms
+  # Disable collection window checks on preview apps to allow for testing of future forms
   def self.saledate_collection_window_validation_enabled?
+    Rails.env.production? || Rails.env.test? || Rails.env.staging?
+  end
+
+  def self.startdate_collection_window_validation_enabled?
     Rails.env.production? || Rails.env.test? || Rails.env.staging?
   end
 
@@ -8,9 +12,6 @@ class FeatureToggle
     Rails.env.production? || Rails.env.test? || Rails.env.staging?
   end
 
-  def self.startdate_collection_window_validation_enabled?
-    Rails.env.production? || Rails.env.test? || Rails.env.staging?
-  end
 
   def self.sales_log_enabled?
     !Rails.env.production?
