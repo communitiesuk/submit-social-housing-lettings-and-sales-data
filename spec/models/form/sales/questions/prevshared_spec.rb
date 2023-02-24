@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::Prevshared, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Was the previous property a shared ownership property?")
+    expect(question.header).to eq("Q74 - Was the previous property a shared ownership property?")
   end
 
   it "has the correct check_answer_label" do

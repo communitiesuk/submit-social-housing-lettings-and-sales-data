@@ -3,7 +3,7 @@ class Form::Sales::Questions::Buyer2IncomeKnown < ::Form::Question
     super
     @id = "income2nk"
     @check_answer_label = "Buyer 2’s gross annual income"
-    @header = "Do you know buyer 2’s annual income?"
+    @header = "Q69 - Do you know buyer 2’s annual income?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @conditional_for = {

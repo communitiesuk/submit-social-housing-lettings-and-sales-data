@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::Buyer2RelationshipToBuyer1, type: :model 
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("What is buyer 2's relationship to buyer 1?")
+    expect(question.header).to eq("Q27 - What is buyer 2's relationship to buyer 1?")
   end
 
   it "has the correct check_answer_label" do

@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::ArmedForcesSpouse, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Are any of the buyers a spouse or civil partner of a UK armed forces regular who died in service within the last 2 years?")
+    expect(question.header).to eq("Q64 - Are any of the buyers a spouse or civil partner of a UK armed forces regular who died in service within the last 2 years?")
   end
 
   it "has the correct check_answer_label" do

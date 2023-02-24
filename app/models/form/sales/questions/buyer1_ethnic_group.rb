@@ -3,7 +3,7 @@ class Form::Sales::Questions::Buyer1EthnicGroup < ::Form::Question
     super
     @id = "ethnic_group"
     @check_answer_label = "Buyer 1’s ethnic group"
-    @header = "What is buyer 1’s ethnic group?"
+    @header = "Q22 - What is buyer 1’s ethnic group?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @hint_text = "Buyer 1 is the person in the household who does the most paid work. If it’s a joint purchase and the buyers do the same amount of paid work, buyer 1 is whoever is the oldest."

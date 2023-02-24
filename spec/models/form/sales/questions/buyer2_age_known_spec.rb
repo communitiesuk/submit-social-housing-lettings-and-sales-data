@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::Buyer2AgeKnown, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Do you know buyer 2’s age?")
+    expect(question.header).to eq("Q28 - Do you know buyer 2’s age?")
   end
 
   it "has the correct check_answer_label" do

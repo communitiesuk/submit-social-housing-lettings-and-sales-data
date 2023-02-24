@@ -3,7 +3,7 @@ class Form::Sales::Questions::Buyer2EthnicBackgroundWhite < ::Form::Question
     super
     @id = "ethnicbuy2"
     @check_answer_label = "Buyer 2’s ethnic background"
-    @header = "Which of the following best describes the buyer 2’s White background?"
+    @header = "Q31 - Which of the following best describes the buyer 2’s White background?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = 2

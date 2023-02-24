@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::ArmedForces, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Have any of the buyers ever served as a regular in the UK armed forces?")
+    expect(question.header).to eq("Q62 - Have any of the buyers ever served as a regular in the UK armed forces?")
   end
 
   it "has the correct check_answer_label" do

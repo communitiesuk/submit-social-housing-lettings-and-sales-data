@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::PropertyNumberOfBedrooms, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("How many bedrooms does the property have?")
+    expect(question.header).to eq("Q11 - How many bedrooms does the property have?")
   end
 
   it "has the correct check_answer_label" do

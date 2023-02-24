@@ -3,7 +3,7 @@ class Form::Sales::Questions::Fromprop < ::Form::Question
     super
     @id = "fromprop"
     @check_answer_label = "Previous property type"
-    @header = "What was the previous property type?"
+    @header = "Q86 - What was the previous property type?"
     @type = "radio"
     @hint_text = ""
     @page = page

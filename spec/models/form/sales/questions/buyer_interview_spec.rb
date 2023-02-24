@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::BuyerInterview, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Was the buyer interviewed for any of the answers you will provide on this log?")
+    expect(question.header).to eq("Q18 -Was the buyer interviewed for any of the answers you will provide on this log?")
   end
 
   it "has the correct check_answer_label" do

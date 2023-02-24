@@ -3,7 +3,7 @@ class Form::Sales::Questions::OwnershipScheme < ::Form::Question
     super
     @id = "ownershipsch"
     @check_answer_label = "Purchase made under ownership scheme"
-    @header = "Was this purchase made through an ownership scheme?"
+    @header = "Q3 - Was this purchase made through an ownership scheme?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
   end

@@ -3,7 +3,7 @@ class Form::Sales::Questions::Buyer2AgeKnown < ::Form::Question
     super
     @id = "age2_known"
     @check_answer_label = "Buyer 2’s age"
-    @header = "Do you know buyer 2’s age?"
+    @header = "Q28 - Do you know buyer 2’s age?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @conditional_for = {

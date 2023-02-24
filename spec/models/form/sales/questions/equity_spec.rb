@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::Equity, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("What was the initial percentage equity stake purchased?")
+    expect(question.header).to eq("Q89 - What was the initial percentage equity stake purchased?")
   end
 
   it "has the correct check_answer_label" do

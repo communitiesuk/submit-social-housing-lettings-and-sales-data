@@ -3,7 +3,7 @@ class Form::Sales::Questions::BuyerCompany < ::Form::Question
     super
     @id = "companybuy"
     @check_answer_label = "Company buyer"
-    @header = "Is the buyer a company?"
+    @header = "Q7 - Is the buyer a company?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
   end

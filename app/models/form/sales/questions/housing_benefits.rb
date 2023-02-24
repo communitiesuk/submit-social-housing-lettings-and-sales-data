@@ -3,7 +3,7 @@ class Form::Sales::Questions::HousingBenefits < ::Form::Question
     super
     @id = "hb"
     @check_answer_label = "Housing-related benefits buyer received before buying this property"
-    @header = "Was the buyer receiving any of these housing-related benefits immediately before buying this property?"
+    @header = "Q71 - Was the buyer receiving any of these housing-related benefits immediately before buying this property?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
   end

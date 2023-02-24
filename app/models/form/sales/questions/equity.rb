@@ -3,7 +3,7 @@ class Form::Sales::Questions::Equity < ::Form::Question
     super
     @id = "equity"
     @check_answer_label = "Initial percentage equity stake"
-    @header = "What was the initial percentage equity stake purchased?"
+    @header = "Q89 - What was the initial percentage equity stake purchased?"
     @type = "numeric"
     @min = 0
     @max = 100

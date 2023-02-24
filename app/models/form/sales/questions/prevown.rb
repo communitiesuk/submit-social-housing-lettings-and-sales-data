@@ -3,7 +3,7 @@ class Form::Sales::Questions::Prevown < ::Form::Question
     super
     @id = "prevown"
     @check_answer_label = "Buyers previously owned a property"
-    @header = "Has the buyer previously owned a property?"
+    @header = "Q73 - Has the buyer previously owned a property?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
   end

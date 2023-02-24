@@ -3,7 +3,7 @@ class Form::Sales::Questions::BuyerLive < ::Form::Question
     super
     @id = "buylivein"
     @check_answer_label = "Buyers living in property"
-    @header = "Will the buyers live in the property?"
+    @header = "Q8 - Will the buyers live in the property?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
   end

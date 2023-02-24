@@ -3,7 +3,7 @@ class Form::Sales::Questions::PreviousTenure < ::Form::Question
     super
     @id = "socprevten"
     @check_answer_label = "Previous property tenure"
-    @header = "What was the previous tenure of the buyer?"
+    @header = "Q87 - What was the previous tenure of the buyer?"
     @type = "radio"
     @hint_text = ""
     @page = page

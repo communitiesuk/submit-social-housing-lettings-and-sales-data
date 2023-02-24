@@ -3,7 +3,7 @@ class Form::Sales::Questions::OutrightOwnershipType < ::Form::Question
     super
     @id = "type"
     @check_answer_label = "Type of outright sale"
-    @header = "What is the type of outright sale?"
+    @header = "Q6 - What is the type of outright sale?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @conditional_for = {

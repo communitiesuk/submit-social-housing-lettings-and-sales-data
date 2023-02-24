@@ -20,7 +20,7 @@ RSpec.describe Form::Sales::Questions::ExchangeDate, type: :model do
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Exchange of contracts date")
+    expect(question.check_answer_label).to eq("Q81 - Exchange of contracts date")
   end
 
   it "has the correct type" do

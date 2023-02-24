@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::OwnershipScheme, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Was this purchase made through an ownership scheme?")
+    expect(question.header).to eq("Q3 - Was this purchase made through an ownership scheme?")
   end
 
   it "has the correct check_answer_label" do

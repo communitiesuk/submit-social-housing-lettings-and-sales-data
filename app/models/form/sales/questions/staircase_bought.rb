@@ -3,7 +3,7 @@ class Form::Sales::Questions::StaircaseBought < ::Form::Question
     super
     @id = "stairbought"
     @check_answer_label = "Percentage bought in this staircasing transaction"
-    @header = "What percentage of the property has been bought in this staircasing transaction?"
+    @header = "Q77 - What percentage of the property has been bought in this staircasing transaction?"
     @type = "numeric"
     @width = 5
     @min = 0

@@ -3,7 +3,7 @@ class Form::Sales::Questions::NumberJointBuyers < ::Form::Question
     super
     @id = "jointmore"
     @check_answer_label = "More than 2 joint buyers"
-    @header = "Are there more than 2 joint buyers of this property?"
+    @header = "Q10 - Are there more than 2 joint buyers of this property?"
     @hint_text = "You should still try to answer all questions even if the buyer wasn't interviewed in person"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS

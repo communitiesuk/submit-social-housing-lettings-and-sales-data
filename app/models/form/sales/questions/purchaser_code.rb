@@ -3,7 +3,7 @@ class Form::Sales::Questions::PurchaserCode < ::Form::Question
     super
     @id = "purchid"
     @check_answer_label = "Purchaser code"
-    @header = "What is the purchaser code?"
+    @header = "Q2 - What is the purchaser code?"
     @hint_text = "This is how you usually refer to the purchaser on your own systems."
     @type = "text"
     @width = 10

@@ -3,7 +3,7 @@ class Form::Sales::Questions::ArmedForces < ::Form::Question
     super
     @id = "hhregres"
     @check_answer_label = "Have any of the buyers ever served as a regular in the UK armed forces?"
-    @header = "Have any of the buyers ever served as a regular in the UK armed forces?"
+    @header = "Q62 - Have any of the buyers ever served as a regular in the UK armed forces?"
     @type = "radio"
     @hint_text = "A regular is somebody who has served in the Royal Navy, the Royal Marines, the Royal Airforce or Army full time and does not include reserve forces"
     @answer_options = ANSWER_OPTIONS

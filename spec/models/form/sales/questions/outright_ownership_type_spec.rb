@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::OutrightOwnershipType, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("What is the type of outright sale?")
+    expect(question.header).to eq("Q6 - What is the type of outright sale?")
   end
 
   it "has the correct check_answer_label" do

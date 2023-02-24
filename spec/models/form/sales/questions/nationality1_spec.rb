@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::Nationality1, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("What is buyer 1’s nationality?")
+    expect(question.header).to eq("Q24 - What is buyer 1’s nationality?")
   end
 
   it "has the correct check_answer_label" do

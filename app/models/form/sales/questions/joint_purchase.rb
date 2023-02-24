@@ -3,7 +3,7 @@ class Form::Sales::Questions::JointPurchase < ::Form::Question
     super
     @id = "jointpur"
     @check_answer_label = "Joint purchase"
-    @header = "Is this a joint purchase?"
+    @header = "Q9 - Is this a joint purchase?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
   end

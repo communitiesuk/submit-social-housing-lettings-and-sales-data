@@ -3,7 +3,7 @@ class Form::Sales::Questions::Buyer2Mortgage < ::Form::Question
     super
     @id = "inc2mort"
     @check_answer_label = "Buyer 2's income used for mortgage application"
-    @header = "Was buyer 2's income used for a mortgage application?"
+    @header = "Q70 - Was buyer 2's income used for a mortgage application?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = 2

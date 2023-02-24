@@ -3,7 +3,7 @@ class Form::Sales::Questions::PropertyLocalAuthority < ::Form::Question
     super
     @id = "la"
     @check_answer_label = "Local authority"
-    @header = "What is the local authority of the property?"
+    @header = "Q16 - What is the local authority of the property?"
     @type = "select"
     @answer_options = ANSWER_OPTIONS
   end

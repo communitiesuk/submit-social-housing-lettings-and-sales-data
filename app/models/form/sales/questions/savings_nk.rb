@@ -3,7 +3,7 @@ class Form::Sales::Questions::SavingsNk < ::Form::Question
     super
     @id = "savingsnk"
     @check_answer_label = "Buyer’s total savings known?"
-    @header = "Do you know how much the buyer had in savings before they paid any deposit for the property?"
+    @header = "Q72 - Do you know how much the buyer had in savings before they paid any deposit for the property?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @conditional_for = {

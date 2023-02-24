@@ -3,7 +3,7 @@ class Form::Sales::Questions::PreviousBedrooms < ::Form::Question
     super
     @id = "frombeds"
     @check_answer_label = "Number of bedrooms in previous property"
-    @header = "How many bedrooms did the property have?"
+    @header = "Q85 - How many bedrooms did the property have?"
     @type = "numeric"
     @width = 5
     @min = 1

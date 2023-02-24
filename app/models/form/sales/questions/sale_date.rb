@@ -3,7 +3,7 @@ class Form::Sales::Questions::SaleDate < ::Form::Question
     super
     @id = "saledate"
     @check_answer_label = "Sale completion date"
-    @header = "What is the sale completion date?"
+    @header = "Q1 - What is the sale completion date?"
     @type = "date"
   end
 end

@@ -3,7 +3,7 @@ class Form::Sales::Questions::DiscountedOwnershipType < ::Form::Question
     super
     @id = "type"
     @check_answer_label = "Type of discounted ownership sale"
-    @header = "What is the type of discounted ownership sale?"
+    @header = "Q5 - What is the type of discounted ownership sale?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
   end

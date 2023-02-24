@@ -3,7 +3,7 @@ class Form::Sales::Questions::Grant < ::Form::Question
     super
     @id = "grant"
     @check_answer_label = "Amount of any loan, grant or subsidy"
-    @header = "What was the amount of any loan, grant, discount or subsidy given?"
+    @header = "Q101 - What was the amount of any loan, grant, discount or subsidy given?"
     @type = "numeric"
     @min = 0
     @max = 999_999

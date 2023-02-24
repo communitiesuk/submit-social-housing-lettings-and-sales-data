@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::DepositDiscount, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("How much cash discount was given through Social HomeBuy?")
+    expect(question.header).to eq("Q96 - How much cash discount was given through Social HomeBuy?")
   end
 
   it "has the correct check_answer_label" do

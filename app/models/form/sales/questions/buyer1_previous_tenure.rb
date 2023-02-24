@@ -3,7 +3,7 @@ class Form::Sales::Questions::Buyer1PreviousTenure < ::Form::Question
     super
     @id = "prevten"
     @check_answer_label = "Buyer 1's previous tenure"
-    @header = "What was buyer 1's previous tenure?"
+    @header = "Q56 - What was buyer 1's previous tenure?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
   end

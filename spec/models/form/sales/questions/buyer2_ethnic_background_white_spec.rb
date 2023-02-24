@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::Buyer2EthnicBackgroundWhite, type: :model
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Which of the following best describes the buyer 2’s White background?")
+    expect(question.header).to eq("Q31 - Which of the following best describes the buyer 2’s White background?")
   end
 
   it "has the correct check_answer_label" do

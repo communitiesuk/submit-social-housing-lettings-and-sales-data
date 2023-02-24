@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::Buyer1Mortgage, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Was buyer 1's income used for a mortgage application?")
+    expect(question.header).to eq("Q68 - Was buyer 1's income used for a mortgage application?")
   end
 
   it "has the correct check_answer_label" do

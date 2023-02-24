@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::HousingBenefits, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Was the buyer receiving any of these housing-related benefits immediately before buying this property?")
+    expect(question.header).to eq("Q71 - Was the buyer receiving any of these housing-related benefits immediately before buying this property?")
   end
 
   it "has the correct check_answer_label" do

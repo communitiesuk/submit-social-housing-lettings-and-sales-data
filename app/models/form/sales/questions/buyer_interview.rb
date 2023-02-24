@@ -3,7 +3,7 @@ class Form::Sales::Questions::BuyerInterview < ::Form::Question
     super
     @id = "noint"
     @check_answer_label = "Buyer interviewed in person?"
-    @header = "Was the buyer interviewed for any of the answers you will provide on this log?"
+    @header = "Q18 -Was the buyer interviewed for any of the answers you will provide on this log?"
     @type = "radio"
     @hint_text = "You should still try to answer all questions even if the buyer wasn't interviewed in person"
     @answer_options = ANSWER_OPTIONS

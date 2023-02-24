@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::PropertyBuildingType, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("What type of building is the property?")
+    expect(question.header).to eq("Q13 - What type of building is the property?")
   end
 
   it "has the correct check_answer_label" do

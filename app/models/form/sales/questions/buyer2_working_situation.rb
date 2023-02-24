@@ -3,7 +3,7 @@ class Form::Sales::Questions::Buyer2WorkingSituation < ::Form::Question
     super
     @id = "ecstat2"
     @check_answer_label = "Buyer 2's working situation"
-    @header = "Which of these best describes buyer 2's working situation?"
+    @header = "Q33 - Which of these best describes buyer 2's working situation?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = 2

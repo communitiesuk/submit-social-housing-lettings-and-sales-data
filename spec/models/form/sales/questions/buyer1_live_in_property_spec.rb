@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::Buyer1LiveInProperty, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Will buyer 1 live in the property?")
+    expect(question.header).to eq("Q26 - Will buyer 1 live in the property?")
   end
 
   it "has the correct check_answer_label" do

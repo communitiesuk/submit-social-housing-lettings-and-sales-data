@@ -3,7 +3,7 @@ class Form::Sales::Questions::Discount < ::Form::Question
     super
     @id = "discount"
     @check_answer_label = "Percentage discount"
-    @header = "What was the percentage discount?"
+    @header = "Q102 - What was the percentage discount?"
     @type = "numeric"
     @min = 0
     @max = 100

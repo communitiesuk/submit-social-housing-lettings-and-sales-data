@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::StaircaseSale, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Is this transaction part of a back-to-back staircasing transaction to facilitate sale of the home on the open market?")
+    expect(question.header).to eq("Q79 - Is this transaction part of a back-to-back staircasing transaction to facilitate sale of the home on the open market?")
   end
 
   it "has the correct check_answer_label" do

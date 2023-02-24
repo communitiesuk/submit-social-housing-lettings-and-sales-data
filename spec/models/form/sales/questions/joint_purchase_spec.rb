@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::JointPurchase, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Is this a joint purchase?")
+    expect(question.header).to eq("Q9 - Is this a joint purchase?")
   end
 
   it "has the correct check_answer_label" do

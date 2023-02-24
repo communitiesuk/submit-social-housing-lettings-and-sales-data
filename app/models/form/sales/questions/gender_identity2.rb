@@ -3,7 +3,7 @@ class Form::Sales::Questions::GenderIdentity2 < ::Form::Question
     super
     @id = "sex2"
     @check_answer_label = "Buyer 2’s gender identity"
-    @header = "Which of these best describes buyer 2’s gender identity?"
+    @header = "Q29 - Which of these best describes buyer 2’s gender identity?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = 2

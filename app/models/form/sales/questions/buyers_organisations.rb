@@ -3,7 +3,7 @@ class Form::Sales::Questions::BuyersOrganisations < ::Form::Question
     super
     @id = "buyers_organisations"
     @check_answer_label = "Organisations buyers were registered with"
-    @header = "What organisations were the buyers registered with?"
+    @header = "Q59 - What organisations were the buyers registered with?"
     @type = "checkbox"
     @hint_text = "Select all that apply"
     @answer_options = ANSWER_OPTIONS

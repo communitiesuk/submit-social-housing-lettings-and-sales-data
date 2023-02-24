@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::BuyerPrevious, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Was the buyer a private registered provider, housing association or local authority tenant immediately before this sale?")
+    expect(question.header).to eq("Q84 - Was the buyer a private registered provider, housing association or local authority tenant immediately before this sale?")
   end
 
   it "has the correct check_answer_label" do

@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::LaNominations, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Was the household rehoused under a 'local authority nominations agreement'?")
+    expect(question.header).to eq("Q83 - Was the household rehoused under a 'local authority nominations agreement'?")
   end
 
   it "has the correct check_answer_label" do

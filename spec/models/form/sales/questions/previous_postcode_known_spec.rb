@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::PreviousPostcodeKnown, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Do you know the postcode of buyer 1’s last settled accommodation?")
+    expect(question.header).to eq("Q57 - Do you know the postcode of buyer 1’s last settled accommodation?")
   end
 
   it "has the correct check_answer_label" do

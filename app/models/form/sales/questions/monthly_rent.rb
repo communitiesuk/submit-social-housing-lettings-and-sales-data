@@ -3,7 +3,7 @@ class Form::Sales::Questions::MonthlyRent < ::Form::Question
     super
     @id = "mrent"
     @check_answer_label = "Monthly rent"
-    @header = "What is the basic monthly rent?"
+    @header = "Q97 - What is the basic monthly rent?"
     @type = "numeric"
     @min = 0
     @width = 5

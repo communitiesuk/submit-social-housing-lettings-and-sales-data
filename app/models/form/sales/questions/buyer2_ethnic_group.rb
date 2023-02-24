@@ -3,7 +3,7 @@ class Form::Sales::Questions::Buyer2EthnicGroup < ::Form::Question
     super
     @id = "ethnic_group2"
     @check_answer_label = "Buyer 2’s ethnic group"
-    @header = "What is buyer 2’s ethnic group?"
+    @header = "Q30 - What is buyer 2’s ethnic group?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @inferred_check_answers_value = [{

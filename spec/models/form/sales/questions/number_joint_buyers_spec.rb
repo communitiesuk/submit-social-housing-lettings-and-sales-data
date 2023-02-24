@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::NumberJointBuyers, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Are there more than 2 joint buyers of this property?")
+    expect(question.header).to eq("Q10 - Are there more than 2 joint buyers of this property?")
   end
 
   it "has the correct check_answer_label" do

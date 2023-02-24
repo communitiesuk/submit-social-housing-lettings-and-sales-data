@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::MonthlyRent, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("What is the basic monthly rent?")
+    expect(question.header).to eq("Q97 - What is the basic monthly rent?")
   end
 
   it "has the correct check_answer_label" do

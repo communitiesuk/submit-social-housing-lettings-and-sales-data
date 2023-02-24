@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::SavingsNk, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Do you know how much the buyer had in savings before they paid any deposit for the property?")
+    expect(question.header).to eq("Q72 - Do you know how much the buyer had in savings before they paid any deposit for the property?")
   end
 
   it "has the correct check_answer_label" do

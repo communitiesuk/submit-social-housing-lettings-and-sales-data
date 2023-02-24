@@ -3,7 +3,7 @@ class Form::Sales::Questions::Prevloc < ::Form::Question
     super
     @id = "prevloc"
     @check_answer_label = "Local authority of buyer 1’s last settled accommodation"
-    @header = "Select a local authority"
+    @header = "Q58 - Select a local authority"
     @type = "select"
     @answer_options = ANSWER_OPTIONS
     @inferred_check_answers_value = [{

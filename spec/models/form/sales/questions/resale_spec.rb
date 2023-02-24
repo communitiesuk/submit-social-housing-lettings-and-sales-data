@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::Resale, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Is this a resale?")
+    expect(question.header).to eq("Q80 - Is this a resale?")
   end
 
   it "has the correct check_answer_label" do

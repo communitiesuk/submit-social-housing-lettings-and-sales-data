@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::Grant, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("What was the amount of any loan, grant, discount or subsidy given?")
+    expect(question.header).to eq("Q101 - What was the amount of any loan, grant, discount or subsidy given?")
   end
 
   it "has the correct check_answer_label" do

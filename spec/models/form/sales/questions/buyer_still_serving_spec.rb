@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::BuyerStillServing, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Is the buyer still serving in the UK armed forces?")
+    expect(question.header).to eq("Q63 - Is the buyer still serving in the UK armed forces?")
   end
 
   it "has the correct check_answer_label" do

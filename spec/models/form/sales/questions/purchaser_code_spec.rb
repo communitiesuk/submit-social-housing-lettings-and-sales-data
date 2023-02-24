@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::PurchaserCode, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("What is the purchaser code?")
+    expect(question.header).to eq("Q2 - What is the purchaser code?")
   end
 
   it "has the correct hint_text" do

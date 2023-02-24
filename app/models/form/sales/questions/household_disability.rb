@@ -2,7 +2,7 @@ class Form::Sales::Questions::HouseholdDisability < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "disabled"
-    @header = "Does anyone in the household consider themselves to have a disability?"
+    @header = "Q65 - Does anyone in the household consider themselves to have a disability?"
     @check_answer_label = "Does anyone in the household have a disability?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS

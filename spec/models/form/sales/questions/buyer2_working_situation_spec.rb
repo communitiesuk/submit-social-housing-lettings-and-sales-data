@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::Buyer2WorkingSituation, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Which of these best describes buyer 2's working situation?")
+    expect(question.header).to eq("Q33 - Which of these best describes buyer 2's working situation?")
   end
 
   it "has the correct check_answer_label" do

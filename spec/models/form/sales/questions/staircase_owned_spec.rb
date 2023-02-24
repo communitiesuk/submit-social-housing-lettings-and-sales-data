@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::StaircaseOwned, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("What percentage of the property does the buyer now own in total?")
+    expect(question.header).to eq("Q78 - What percentage of the property does the buyer now own in total?")
   end
 
   it "has the correct check_answer_label" do

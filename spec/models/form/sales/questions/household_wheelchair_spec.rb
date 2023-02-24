@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::HouseholdWheelchair, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Does anyone in the household use a wheelchair?")
+    expect(question.header).to eq("Q66 - Does anyone in the household use a wheelchair?")
   end
 
   it "has the correct check_answer_label" do

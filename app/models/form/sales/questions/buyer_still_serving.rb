@@ -3,7 +3,7 @@ class Form::Sales::Questions::BuyerStillServing < ::Form::Question
     super
     @id = "hhregresstill"
     @check_answer_label = "Are they still serving in the UK armed forces?"
-    @header = "Is the buyer still serving in the UK armed forces?"
+    @header = "Q63 - Is the buyer still serving in the UK armed forces?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
   end

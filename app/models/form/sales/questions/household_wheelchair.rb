@@ -2,7 +2,7 @@ class Form::Sales::Questions::HouseholdWheelchair < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "wheel"
-    @header = "Does anyone in the household use a wheelchair?"
+    @header = "Q66 - Does anyone in the household use a wheelchair?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @hint_text = "This can be inside or outside the home"

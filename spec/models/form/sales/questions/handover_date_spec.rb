@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::HandoverDate, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("What is the practical completion or handover date?")
+    expect(question.header).to eq("Q82 - What is the practical completion or handover date?")
   end
 
   it "has the correct check_answer_label" do

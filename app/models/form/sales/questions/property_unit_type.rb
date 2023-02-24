@@ -3,7 +3,7 @@ class Form::Sales::Questions::PropertyUnitType < ::Form::Question
     super
     @id = "proptype"
     @check_answer_label = "Type of unit"
-    @header = "What type of unit is the property?"
+    @header = "Q12 - What type of unit is the property?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
   end

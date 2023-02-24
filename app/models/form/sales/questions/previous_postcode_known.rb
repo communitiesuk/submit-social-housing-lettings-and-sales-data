@@ -3,7 +3,7 @@ class Form::Sales::Questions::PreviousPostcodeKnown < ::Form::Question
     super
     @id = "ppcodenk"
     @check_answer_label = "Buyer 1’s last settled accommodation"
-    @header = "Do you know the postcode of buyer 1’s last settled accommodation?"
+    @header = "Q57 - Do you know the postcode of buyer 1’s last settled accommodation?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @conditional_for = {

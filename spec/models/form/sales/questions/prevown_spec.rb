@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::Prevown, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Has the buyer previously owned a property?")
+    expect(question.header).to eq("Q73 - Has the buyer previously owned a property?")
   end
 
   it "has the correct check_answer_label" do

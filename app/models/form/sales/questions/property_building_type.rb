@@ -3,7 +3,7 @@ class Form::Sales::Questions::PropertyBuildingType < ::Form::Question
     super
     @id = "builtype"
     @check_answer_label = "Type of building"
-    @header = "What type of building is the property?"
+    @header = "Q13 - What type of building is the property?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
   end
