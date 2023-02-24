@@ -1,4 +1,4 @@
-class Form::Sales::Questions::AboutPriceSharedOwnershipValueCheck < ::Form::Question
+class Form::Sales::Questions::AboutPriceValueCheck < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "value_value_check"
