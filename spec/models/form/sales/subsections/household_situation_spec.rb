@@ -18,6 +18,8 @@ RSpec.describe Form::Sales::Subsections::HouseholdSituation, type: :model do
         last_accommodation
         last_accommodation_la
         buyers_organisations
+        buyer_2_living_in
+        buyer_2_previous_housing_situation
       ],
     )
   end
