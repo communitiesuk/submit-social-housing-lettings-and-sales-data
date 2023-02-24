@@ -18,7 +18,7 @@ FactoryBot.define do
       age2 { 19 }
       renewal { 1 }
       rent_type { 1 }
-      startdate { Time.zone.local(2021, 5, 1) }
+      startdate { Time.zone.local(2023, 1, 1) }
     end
     trait :soft_validations_triggered do
       status { 1 }

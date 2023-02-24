@@ -4,6 +4,12 @@ RSpec.describe Validations::SoftValidations do
   let(:organisation) { FactoryBot.create(:organisation, provider_type: "PRP") }
   let(:record) { FactoryBot.create(:lettings_log, owning_organisation: organisation) }
 
+  around do |example|
+    Timecop.freeze(Time.zone.local(2022, 2, 1)) do
+      example.run
+    end
+  end
+
   describe "rent min max validations" do
     before do
       LaRentRange.create!(
