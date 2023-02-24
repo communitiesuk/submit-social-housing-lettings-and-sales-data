@@ -1,5 +1,6 @@
 module Validations::DateValidations
   include Validations::SharedValidations
+  include CollectionTimeHelper
 
   def validate_property_major_repairs(record)
     date_valid?("mrcdate", record)
@@ -33,14 +34,8 @@ module Validations::DateValidations
   def validate_startdate(record)
     return unless record.startdate && date_valid?("startdate", record)
 
-    created_at = record.created_at || Time.zone.now
-
-    if created_at >= previous_collection_end_date && !record.startdate.between?(current_collection_start_date, next_collection_start_date)
-      record.errors.add :startdate, I18n.t("validations.date.outside_collection_window.not_crossover_period", current_collection: "#{current_collection_start_suffix}/#{current_collection_start_suffix + 1}", current_collection_start_year: current_collection_start_date.year, current_collection_end_year: current_collection_end_date.year)
-    end
-
-    if created_at < previous_collection_end_date && !record.startdate.between?(previous_collection_start_date, next_collection_start_date)
-      record.errors.add :startdate, I18n.t("validations.date.outside_collection_window.crossover_period", previous_collection: "#{previous_collection_start_suffix}/#{previous_collection_start_suffix + 1}", current_collection: "#{current_collection_start_suffix}/#{current_collection_start_suffix + 1}", previous_collection_start_year: previous_collection_start_date.year, current_collection_end_year: current_collection_end_date.year)
+    unless record.startdate.between?(current_collection_start_date, active_collection_end_date)
+      record.errors.add :startdate, validation_error_message
     end
 
     if FeatureToggle.startdate_two_week_validation_enabled? && record.startdate > Time.zone.today + 14
@@ -68,32 +63,35 @@ module Validations::DateValidations
 
 private
 
-  def previous_collection_start_suffix
-    previous_collection_start_date.year % 100
+  def active_collection_end_date
+    if FeatureToggle.startdate_next_collection_year_validation_enabled?
+      next_collection_end_date
+
+    else
+      current_collection_end_date
+    end
   end
 
-  def current_collection_start_suffix
-    current_collection_start_date.year % 100
-  end
-
-  def previous_collection_start_date
-    FormHandler.instance.lettings_forms["previous_lettings"].start_date
-  end
-
-  def previous_collection_end_date
-    FormHandler.instance.lettings_forms["previous_lettings"].end_date
-  end
-
-  def current_collection_start_date
-    FormHandler.instance.lettings_forms["current_lettings"].start_date
-  end
-
-  def current_collection_end_date
-    FormHandler.instance.lettings_forms["current_lettings"].end_date
-  end
-
-  def next_collection_start_date
-    FormHandler.instance.lettings_forms["next_lettings"].start_date
+  def validation_error_message
+    start_date = current_collection_start_date
+    if FeatureToggle.startdate_next_collection_year_validation_enabled?
+      I18n.t(
+        "validations.setup.startdate.current_and_next_financial_year",
+        current_start_year_short: start_date.strftime("%y"),
+        current_end_year_short: current_collection_end_date.strftime("%y"),
+        current_start_year_long: start_date.strftime("%Y"),
+        next_end_year_short: next_collection_end_date.strftime("%y"),
+        next_end_year_long: next_collection_end_date.strftime("%Y"),
+        )
+    else
+      I18n.t(
+        "validations.setup.startdate.current_financial_year",
+        current_start_year_short: start_date.strftime("%y"),
+        current_end_year_short: current_collection_end_date.strftime("%y"),
+        current_start_year_long: start_date.strftime("%Y"),
+        current_end_year_long: current_collection_end_date.strftime("%Y"),
+        )
+    end
   end
 
   def is_rsnvac_first_let?(record)
