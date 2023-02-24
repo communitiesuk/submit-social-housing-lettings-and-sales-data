@@ -2,7 +2,7 @@ class Form::Lettings::Pages::TenancyType < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "tenancy_type"
-    @depends_on = [{ "startertenancy" => 2 }]
+    @depends_on = [{ "starter_tenancy?" => false }]
   end
 
   def questions
