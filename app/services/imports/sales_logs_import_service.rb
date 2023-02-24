@@ -233,7 +233,7 @@ module Imports
       end
     end
 
-    MORNTGAGE_LENDER_OPTIONS = {
+    MORTGAGE_LENDER_OPTIONS = {
       "atom bank" => 1,
       "barclays bank plc" => 2,
       "bath building society" => 3,
@@ -288,11 +288,11 @@ module Imports
                end
       return if lender.blank?
 
-      MORNTGAGE_LENDER_OPTIONS[lender.downcase] || MORNTGAGE_LENDER_OPTIONS["other"]
+      MORTGAGE_LENDER_OPTIONS[lender.downcase] || MORTGAGE_LENDER_OPTIONS["other"]
     end
 
     def mortgage_lender_other(xml_doc, attributes)
-      return unless attributes["mortgagelender"] == MORNTGAGE_LENDER_OPTIONS["other"]
+      return unless attributes["mortgagelender"] == MORTGAGE_LENDER_OPTIONS["other"]
 
       case attributes["ownershipsch"]
       when 1
