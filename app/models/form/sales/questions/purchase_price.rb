@@ -3,7 +3,7 @@ class Form::Sales::Questions::PurchasePrice < ::Form::Question
     super
     @id = "value"
     @check_answer_label = "Purchase price"
-    @header = "What is the full purchase price?"
+    @header = "Q100 - What is the full purchase price?"
     @type = "numeric"
     @min = 0
     @width = 5

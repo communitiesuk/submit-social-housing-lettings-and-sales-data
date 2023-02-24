@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::Value, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("What was the full purchase price?")
+    expect(question.header).to eq("Q88 - What was the full purchase price?")
   end
 
   it "has the correct check_answer_label" do
