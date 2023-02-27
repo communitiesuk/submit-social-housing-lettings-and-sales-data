@@ -397,8 +397,6 @@ module Imports
     end
 
     def set_default_values(attributes)
-      attributes["mscharge_known"] ||= 0 if attributes["ownershipsch"] == 3
-      attributes["mscharge"] ||= 0 if attributes["ownershipsch"] == 3
       attributes["armedforcesspouse"] ||= 7
       attributes["hhregres"] ||= 8
       attributes["disabled"] ||= 3

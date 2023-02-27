@@ -235,21 +235,6 @@ RSpec.describe Imports::SalesLogsImportService do
         end
       end
 
-      context "and it's an outright sale" do
-        let(:sales_log_id) { "outright_sale_sales_log" }
-
-        before do
-          allow(logger).to receive(:warn).and_return(nil)
-        end
-
-        it "infers mscharge_known as no" do
-          sales_log_service.send(:create_log, sales_log_xml)
-
-          sales_log = SalesLog.find_by(old_id: sales_log_id)
-          expect(sales_log.mscharge_known).to eq(0)
-        end
-      end
-
       context "when inferring age known" do
         let(:sales_log_id) { "discounted_ownership_sales_log" }
 
