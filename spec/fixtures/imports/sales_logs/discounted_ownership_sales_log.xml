@@ -14,8 +14,7 @@
     <meta:rules assert-valid="true"/>
   </meta:metadata>
   <Group>
-    <!-- replace with commented options to test in the future -->
-    <!-- <Qdp>Yes</Qdp> -->
+    <Qdp>Yes</Qdp>
     <Qdp/>
     <CompletionDate>2023-02-01</CompletionDate>
     <PurchaserCode>Discount ownership example</PurchaserCode>
