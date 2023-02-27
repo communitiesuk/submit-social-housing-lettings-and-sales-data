@@ -95,4 +95,22 @@ RSpec.describe BulkUploadErrorSummaryTableComponent, type: :component do
       ])
     end
   end
+
+  describe "#errors?" do
+    context "when there are no errors" do
+      it "returns false" do
+        expect(component).not_to be_errors
+      end
+    end
+
+    context "when there are errors" do
+      before do
+        create(:bulk_upload_error, bulk_upload:, col: "A", row: 2, field: "field_1")
+      end
+
+      it "returns true" do
+        expect(component).to be_errors
+      end
+    end
+  end
 end

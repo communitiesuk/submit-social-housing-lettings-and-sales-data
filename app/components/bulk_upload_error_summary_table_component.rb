@@ -18,6 +18,10 @@ class BulkUploadErrorSummaryTableComponent < ViewComponent::Base
       .sort_by { |el| el[0][0].rjust(3, "0") }
   end
 
+  def errors?
+    sorted_errors.present?
+  end
+
 private
 
   def display_threshold
