@@ -1,9 +1,9 @@
 class Form::Sales::Questions::ExtraBorrowing < ::Form::Question
-  def initialize(id, hsh, page)
-    super
+  def initialize(id, hsh, page, question_number:)
+    super(id, hsh, page)
     @id = "extrabor"
     @check_answer_label = "Any other borrowing?"
-    @header = "Does this include any extra borrowing?"
+    @header = "#{question_number} - Does this include any extra borrowing?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @page = page

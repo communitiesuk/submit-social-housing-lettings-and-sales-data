@@ -1,9 +1,9 @@
 class Form::Sales::Questions::MortgageLender < ::Form::Question
-  def initialize(id, hsh, page)
-    super
+  def initialize(id, hsh, page, question_number:)
+    super(id, hsh, page)
     @id = "mortgagelender"
     @check_answer_label = "Mortgage Lender"
-    @header = "What is the name of the mortgage lender?"
+    @header = "#{question_number} - What is the name of the mortgage lender?"
     @type = "select"
     @hint_text = ""
     @page = page

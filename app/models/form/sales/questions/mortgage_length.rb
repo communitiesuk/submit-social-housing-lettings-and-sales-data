@@ -1,9 +1,9 @@
 class Form::Sales::Questions::MortgageLength < ::Form::Question
-  def initialize(id, hsh, page)
-    super
+  def initialize(id, hsh, page, question_number:)
+    super(id, hsh, page)
     @id = "mortlen"
     @check_answer_label = "Length of mortgage"
-    @header = "What is the length of the mortgage?"
+    @header = "#{question_number} - What is the length of the mortgage?"
     @type = "numeric"
     @min = 0
     @max = 60

@@ -1,9 +1,9 @@
 class Form::Sales::Questions::MortgageAmount < ::Form::Question
-  def initialize(id, hsh, page)
-    super
+  def initialize(id, hsh, page, question_number:)
+    super(id, hsh, page)
     @id = "mortgage"
     @check_answer_label = "Mortgage amount"
-    @header = "What is the mortgage amount?"
+    @header = "#{question_number} - What is the mortgage amount?"
     @type = "numeric"
     @min = 0
     @width = 5

@@ -1,10 +1,11 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Pages::Mortgageused, type: :model do
-  subject(:page) { described_class.new(page_id, page_definition, subsection) }
+  subject(:page) { described_class.new(page_id, page_definition, subsection, question_number:) }
 
   let(:page_id) { "mortgage_used" }
   let(:page_definition) { nil }
+  let(:question_number) { "Q98" }
   let(:subsection) { instance_double(Form::Subsection) }
 
   it "has correct subsection" do
