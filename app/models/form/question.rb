@@ -4,7 +4,7 @@ class Form::Question
                 :conditional_for, :readonly, :answer_options, :page, :check_answer_label,
                 :inferred_answers, :hidden_in_check_answers, :inferred_check_answers_value,
                 :guidance_partial, :prefix, :suffix, :requires_js, :fields_added, :derived,
-                :check_answers_card_number, :unresolved_hint_text
+                :check_answers_card_number, :unresolved_hint_text, :question_number
 
   module GuidancePosition
     TOP = 1
@@ -40,6 +40,7 @@ class Form::Question
       @fields_added = hsh["fields_added"]
       @check_answers_card_number = hsh["check_answers_card_number"] || 0
       @unresolved_hint_text = hsh["unresolved_hint_text"]
+      @question_number = hsh["question_number"]
     end
   end
 
@@ -256,6 +257,14 @@ class Form::Question
 
   def is_derived_or_has_inferred_check_answers_value?(log)
     selected_answer_option_is_derived?(log) || has_inferred_check_answers_value?(log)
+  end
+
+  def question_number_string
+    if @question_number
+      "Q#{@question_number}"
+    else
+      nil
+    end
   end
 
 private
