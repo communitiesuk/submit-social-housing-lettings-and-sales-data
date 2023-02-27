@@ -38,7 +38,7 @@ RSpec.describe Imports::SalesLogsImportService do
     before do
       # Stub the S3 file listing and download
       allow(storage_service).to receive(:list_files)
-                                  .and_return(%W[#{remote_folder}/shared_ownership_sales_log.xml #{remote_folder}/shared_ownership_sales_log2.xml #{remote_folder}/outright_sale_sales_log.xml #{remote_folder}/discounted_ownership_sales_log.xml])
+                                  .and_return(%W[#{remote_folder}/shared_ownership_sales_log.xml #{remote_folder}/shared_ownership_sales_log2.xml #{remote_folder}/outright_sale_sales_log.xml #{remote_folder}/discounted_ownership_sales_log.xml #{remote_folder}/lettings_log.xml])
       allow(storage_service).to receive(:get_file_io)
                                   .with("#{remote_folder}/shared_ownership_sales_log.xml")
                                   .and_return(open_file(fixture_directory, "shared_ownership_sales_log"), open_file(fixture_directory, "shared_ownership_sales_log"))
@@ -51,6 +51,9 @@ RSpec.describe Imports::SalesLogsImportService do
       allow(storage_service).to receive(:get_file_io)
                                   .with("#{remote_folder}/discounted_ownership_sales_log.xml")
                                   .and_return(open_file(fixture_directory, "discounted_ownership_sales_log"), open_file(fixture_directory, "discounted_ownership_sales_log"))
+      allow(storage_service).to receive(:get_file_io)
+                                  .with("#{remote_folder}/lettings_log.xml")
+                                  .and_return(open_file(fixture_directory, "lettings_log"), open_file(fixture_directory, "lettings_log"))
     end
 
     it "successfully creates all sales logs" do

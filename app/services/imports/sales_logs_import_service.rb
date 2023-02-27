@@ -16,6 +16,8 @@ module Imports
   private
 
     def create_log(xml_doc)
+      return unless meta_field_value(xml_doc, "form-name").include?("Sales")
+
       attributes = {}
 
       previous_status = meta_field_value(xml_doc, "status")
