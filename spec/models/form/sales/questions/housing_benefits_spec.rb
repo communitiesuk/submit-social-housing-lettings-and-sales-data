@@ -1,11 +1,12 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Questions::HousingBenefits, type: :model do
-  subject(:question) { described_class.new(question_id, question_definition, page) }
+  subject(:question) { described_class.new(question_id, question_definition, page, joint_purchase:) }
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
+  let(:joint_purchase) { false }
 
   it "has correct page" do
     expect(question.page).to eq(page)
@@ -15,8 +16,18 @@ RSpec.describe Form::Sales::Questions::HousingBenefits, type: :model do
     expect(question.id).to eq("hb")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Was the buyer receiving any of these housing-related benefits immediately before buying this property?")
+  context "when joint purchase is false" do
+    it "has the correct header" do
+      expect(question.header).to eq("Was the buyer receiving any of these housing-related benefits immediately before buying this property?")
+    end
+  end
+
+  context "when joint purchase is true" do
+    let(:joint_purchase) { true }
+
+    it "has the correct header" do
+      expect(question.header).to eq("Were the buyers receiving any of these housing-related benefits immediately before buying this property?")
+    end
   end
 
   it "has the correct check_answer_label" do

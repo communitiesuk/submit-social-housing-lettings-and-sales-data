@@ -518,6 +518,7 @@ private
   def reset_derived_questions
     dependent_questions = { waityear: [{ key: :renewal, value: 0 }],
                             referral: [{ key: :renewal, value: 0 }],
+                            rsnvac: [{ key: :renewal, value: 0 }],
                             underoccupation_benefitcap: [{ key: :renewal, value: 0 }],
                             wchair: [{ key: :needstype, value: 1 }],
                             location_id: [{ key: :needstype, value: 1 }] }

@@ -53,9 +53,9 @@ RSpec.describe "Sales Log Features" do
         end
       end
 
-      context "when the sales log feature flag is toggled" do
+      context "when the sales log feature flag is disabled" do
         before do
-          allow(Rails.env).to receive(:production?).and_return(true)
+          allow(FeatureToggle).to receive(:sales_log_enabled?).and_return(false)
         end
 
         it "hides the create sales log button in production" do
