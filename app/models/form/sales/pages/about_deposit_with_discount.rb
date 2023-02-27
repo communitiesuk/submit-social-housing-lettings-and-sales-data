@@ -8,7 +8,7 @@ class Form::Sales::Pages::AboutDepositWithDiscount < ::Form::Page
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::DepositAmount.new(nil, nil, self),
+      Form::Sales::Questions::DepositAmount.new(nil, nil, self, question_number: "Q95"),
       Form::Sales::Questions::DepositDiscount.new(nil, nil, self),
     ]
   end

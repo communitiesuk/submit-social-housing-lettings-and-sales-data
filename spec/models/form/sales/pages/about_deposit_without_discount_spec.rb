@@ -1,10 +1,11 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Pages::AboutDepositWithoutDiscount, type: :model do
-  subject(:page) { described_class.new(page_id, page_definition, subsection) }
+  subject(:page) { described_class.new(page_id, page_definition, subsection, question_number:) }
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
+  let(:question_number) { "Q95" }
   let(:subsection) { instance_double(Form::Subsection) }
 
   it "has correct subsection" do

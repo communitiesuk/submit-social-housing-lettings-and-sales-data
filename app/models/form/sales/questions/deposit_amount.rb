@@ -1,9 +1,9 @@
 class Form::Sales::Questions::DepositAmount < ::Form::Question
-  def initialize(id, hsh, page)
-    super
+  def initialize(id, hsh, page, question_number:)
+    super(id, hsh, page)
     @id = "deposit"
     @check_answer_label = "Cash deposit"
-    @header = "How much cash deposit was paid on the property?"
+    @header = "#{question_number} - How much cash deposit was paid on the property?"
     @type = "numeric"
     @min = 0
     @width = 5

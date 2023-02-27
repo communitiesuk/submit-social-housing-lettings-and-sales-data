@@ -1,10 +1,11 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Questions::LeaseholdChargesKnown, type: :model do
-  subject(:question) { described_class.new(question_id, question_definition, page) }
+  subject(:question) { described_class.new(question_id, question_definition, page, question_number:) }
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
+  let(:question_number) { "Q96" }
   let(:page) { instance_double(Form::Page) }
 
   it "has correct page" do
@@ -16,7 +17,7 @@ RSpec.describe Form::Sales::Questions::LeaseholdChargesKnown, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Does the property have any monthly leasehold charges?")
+    expect(question.header).to eq("Q96 - Does the property have any monthly leasehold charges?")
   end
 
   it "has the correct check_answer_label" do

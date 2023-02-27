@@ -1,9 +1,9 @@
 class Form::Sales::Questions::LeaseholdChargesKnown < ::Form::Question
-  def initialize(id, hsh, page)
-    super
+  def initialize(id, hsh, page, question_number:)
+    super(id, hsh, page)
     @id = "mscharge_known"
     @check_answer_label = "Monthly leasehold charges known?"
-    @header = "Does the property have any monthly leasehold charges?"
+    @header = "#{question_number} - Does the property have any monthly leasehold charges?"
     @hint_text = "For example, service and management charges"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS

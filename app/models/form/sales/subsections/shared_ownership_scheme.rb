@@ -34,11 +34,11 @@ class Form::Sales::Subsections::SharedOwnershipScheme < ::Form::Subsection
       Form::Sales::Pages::MortgageLength.new("mortgage_length_shared_ownership", nil, self, question_number: "Q93"),
       Form::Sales::Pages::ExtraBorrowing.new("extra_borrowing_shared_ownership", nil, self, question_number: "Q94"),
       Form::Sales::Pages::AboutDepositWithDiscount.new(nil, nil, self),
-      Form::Sales::Pages::AboutDepositWithoutDiscount.new("about_deposit_shared_ownership", nil, self),
+      Form::Sales::Pages::AboutDepositWithoutDiscount.new("about_deposit_shared_ownership", nil, self, question_number: "Q95"),
       Form::Sales::Pages::DepositValueCheck.new("deposit_value_check", nil, self),
       Form::Sales::Pages::SharedOwnershipDepositValueCheck.new("shared_ownership_deposit_value_check", nil, self),
       Form::Sales::Pages::MonthlyRent.new(nil, nil, self),
-      Form::Sales::Pages::LeaseholdCharges.new("leasehold_charges_shared_ownership", nil, self),
+      Form::Sales::Pages::LeaseholdCharges.new("leasehold_charges_shared_ownership", nil, self, question_number: "Q98"),
       Form::Sales::Pages::MonthlyChargesValueCheck.new("monthly_charges_shared_ownership_value_check", nil, self),
     ]
   end
