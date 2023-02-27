@@ -3,7 +3,7 @@ class Form::Lettings::Questions::PersonRelationship < ::Form::Question
     super(id, hsh, page)
     @id = "relat#{person_index}"
     @check_answer_label = "Person #{person_index}’s relationship to the lead tenant"
-    @header = "#{question_number(person_index)} - What is person #{person_index}’s relationship to the lead tenant?"
+    @header = "What is person #{person_index}’s relationship to the lead tenant?"
     @type = "radio"
     @check_answers_card_number = person_index
     @hint_text = ""
@@ -20,19 +20,4 @@ class Form::Lettings::Questions::PersonRelationship < ::Form::Question
     "divider" => { "value" => true },
     "R" => { "value" => "Person prefers not to say" },
   }.freeze
-
-  def question_number(person_index)
-    case person_index
-    when 2
-      "Q36"
-    when 3
-      "Q40"
-    when 4
-      "Q44"
-    when 5
-      "Q48"
-    when 6
-      "Q52"
-    end
-  end
 end

@@ -42,7 +42,7 @@ RSpec.describe Form::Sales::Questions::PersonRelationshipToBuyer1, type: :model 
     end
 
     it "has the correct header" do
-      expect(question.header).to eq("What is Person 2’s relationship to Buyer 1?")
+      expect(question.header).to eq("Q36 - What is Person 2’s relationship to Buyer 1?")
     end
 
     it "has the correct check_answer_label" do
@@ -69,7 +69,7 @@ RSpec.describe Form::Sales::Questions::PersonRelationshipToBuyer1, type: :model 
     end
 
     it "has the correct header" do
-      expect(question.header).to eq("What is Person 3’s relationship to Buyer 1?")
+      expect(question.header).to eq("Q40 - What is Person 3’s relationship to Buyer 1?")
     end
 
     it "has the correct check_answer_label" do
@@ -96,7 +96,7 @@ RSpec.describe Form::Sales::Questions::PersonRelationshipToBuyer1, type: :model 
     end
 
     it "has the correct header" do
-      expect(question.header).to eq("What is Person 4’s relationship to Buyer 1?")
+      expect(question.header).to eq("Q44 - What is Person 4’s relationship to Buyer 1?")
     end
 
     it "has the correct check_answer_label" do
@@ -123,7 +123,7 @@ RSpec.describe Form::Sales::Questions::PersonRelationshipToBuyer1, type: :model 
     end
 
     it "has the correct header" do
-      expect(question.header).to eq("What is Person 5’s relationship to Buyer 1?")
+      expect(question.header).to eq("Q48 - What is Person 5’s relationship to Buyer 1?")
     end
 
     it "has the correct check_answer_label" do
