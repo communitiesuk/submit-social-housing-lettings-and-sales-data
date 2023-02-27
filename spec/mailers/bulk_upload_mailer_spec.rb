@@ -93,7 +93,7 @@ RSpec.describe BulkUploadMailer do
             year_combo: bulk_upload.year_combo,
             lettings_or_sales: bulk_upload.log_type,
             error_description: "We noticed that you have a lot of similar errors in column A, B. Please correct your data export and upload again.",
-            summary_report_link: "http://localhost:3000/lettings-logs/bulk-upload-results/#{bulk_upload.id}/summary",
+            summary_report_link: "http://localhost:3000/lettings-logs/bulk-upload-results/#{bulk_upload.id}",
           },
         )
 
@@ -103,6 +103,8 @@ RSpec.describe BulkUploadMailer do
 
     context "when 4 columns with errors" do
       before do
+        stub_const("BulkUploadErrorSummaryTableComponent::DISPLAY_THRESHOLD", 0)
+
         create(:bulk_upload_error, bulk_upload:, col: "A")
         create(:bulk_upload_error, bulk_upload:, col: "B")
         create(:bulk_upload_error, bulk_upload:, col: "C")

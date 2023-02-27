@@ -46,6 +46,12 @@ class BulkUploadMailer < NotifyMailer
   def send_correct_and_upload_again_mail(bulk_upload:)
     error_description = "We noticed that you have a lot of similar errors in column #{columns_with_errors(bulk_upload:)}. Please correct your data export and upload again."
 
+    summary_report_link = if BulkUploadErrorSummaryTableComponent.new(bulk_upload:).errors?
+                            summary_bulk_upload_lettings_result_url(bulk_upload)
+                          else
+                            bulk_upload_lettings_result_url(bulk_upload)
+                          end
+
     send_email(
       bulk_upload.user.email,
       BULK_UPLOAD_FAILED_CSV_ERRORS_TEMPLATE_ID,
@@ -55,7 +61,7 @@ class BulkUploadMailer < NotifyMailer
         year_combo: bulk_upload.year_combo,
         lettings_or_sales: bulk_upload.log_type,
         error_description:,
-        summary_report_link: summary_bulk_upload_lettings_result_url(bulk_upload),
+        summary_report_link:,
       },
     )
   end
