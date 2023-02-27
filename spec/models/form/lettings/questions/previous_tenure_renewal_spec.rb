@@ -37,6 +37,7 @@ RSpec.describe Form::Lettings::Questions::PreviousTenureRenewal, type: :model do
     expect(question.answer_options).to eq({
       "34" => { "value" => "Specialist retirement housing" },
       "35" => { "value" => "Extra care housing" },
+      "36" => { "value" => "Sheltered housing for adults aged under 55 years" },
       "6" => { "value" => "Other supported housing" },
     })
   end
