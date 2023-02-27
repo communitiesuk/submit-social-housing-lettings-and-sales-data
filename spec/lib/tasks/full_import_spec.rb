@@ -22,6 +22,7 @@ describe "rake core:full_import", type: :task do
 
   context "when starting a full import" do
     let(:lettings_logs_service) { instance_double(Imports::LettingsLogsImportService) }
+    let(:sales_logs_service) { instance_double(Imports::SalesLogsImportService) }
     let(:rent_period_service) { instance_double(Imports::OrganisationRentPeriodImportService) }
     let(:data_protection_service) { instance_double(Imports::DataProtectionConfirmationImportService) }
     let(:user_service) { instance_double(Imports::UserImportService) }
@@ -37,6 +38,7 @@ describe "rake core:full_import", type: :task do
       allow(Imports::DataProtectionConfirmationImportService).to receive(:new).and_return(data_protection_service)
       allow(Imports::OrganisationRentPeriodImportService).to receive(:new).and_return(rent_period_service)
       allow(Imports::LettingsLogsImportService).to receive(:new).and_return(lettings_logs_service)
+      allow(Imports::SalesLogsImportService).to receive(:new).and_return(sales_logs_service)
     end
 
     it "raises an exception if no parameters are provided" do
@@ -54,6 +56,7 @@ describe "rake core:full_import", type: :task do
         expect(data_protection_service).to receive(:create_data_protection_confirmations).with("dataprotect")
         expect(rent_period_service).to receive(:create_organisation_rent_periods).with("rent-period")
         expect(lettings_logs_service).to receive(:create_logs).with("logs")
+        expect(sales_logs_service).to receive(:create_logs).with("logs")
 
         task.invoke(fixture_path)
       end
@@ -73,6 +76,7 @@ describe "rake core:full_import", type: :task do
         expect(data_protection_service).to receive(:create_data_protection_confirmations)
         expect(rent_period_service).to receive(:create_organisation_rent_periods)
         expect(lettings_logs_service).to receive(:create_logs)
+        expect(sales_logs_service).to receive(:create_logs)
 
         expect(scheme_service).not_to receive(:create_schemes)
         expect(location_service).not_to receive(:create_scheme_locations)
