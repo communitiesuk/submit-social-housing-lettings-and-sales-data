@@ -54,7 +54,7 @@ class FormController < ApplicationController
       if @page.routed_to?(@log, current_user)
         render "form/page"
       else
-        redirect_to lettings_log_path(@log)
+        redirect_to @log.lettings? ? lettings_log_path(@log) : sales_log_path(@log)
       end
     else
       render_not_found
