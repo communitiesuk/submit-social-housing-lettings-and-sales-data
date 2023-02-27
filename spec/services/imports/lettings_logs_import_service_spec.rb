@@ -47,11 +47,12 @@ RSpec.describe Imports::LettingsLogsImportService do
     let(:lettings_log_id2) { "166fc004-392e-47a8-acb8-1c018734882b" }
     let(:lettings_log_id3) { "00d2343e-d5fa-4c89-8400-ec3854b0f2b4" }
     let(:lettings_log_id4) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+    let(:sales_log) { "shared_ownership_sales_log" }
 
     before do
       # Stub the S3 file listing and download
       allow(storage_service).to receive(:list_files)
-                                  .and_return(%W[#{remote_folder}/#{lettings_log_id}.xml #{remote_folder}/#{lettings_log_id2}.xml #{remote_folder}/#{lettings_log_id3}.xml #{remote_folder}/#{lettings_log_id4}.xml])
+                                  .and_return(%W[#{remote_folder}/#{lettings_log_id}.xml #{remote_folder}/#{lettings_log_id2}.xml #{remote_folder}/#{lettings_log_id3}.xml #{remote_folder}/#{lettings_log_id4}.xml #{remote_folder}/#{sales_log}.xml])
       allow(storage_service).to receive(:get_file_io)
                                   .with("#{remote_folder}/#{lettings_log_id}.xml")
                                   .and_return(open_file(fixture_directory, lettings_log_id), open_file(fixture_directory, lettings_log_id))
@@ -64,6 +65,9 @@ RSpec.describe Imports::LettingsLogsImportService do
       allow(storage_service).to receive(:get_file_io)
                                   .with("#{remote_folder}/#{lettings_log_id4}.xml")
                                   .and_return(open_file(fixture_directory, lettings_log_id4), open_file(fixture_directory, lettings_log_id4))
+      allow(storage_service).to receive(:get_file_io)
+                                  .with("#{remote_folder}/#{sales_log}.xml")
+                                  .and_return(open_file(fixture_directory, sales_log), open_file(fixture_directory, sales_log))
     end
 
     it "successfully create all lettings logs" do
