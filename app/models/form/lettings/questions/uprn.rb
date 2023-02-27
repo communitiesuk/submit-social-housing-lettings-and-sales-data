@@ -20,7 +20,7 @@ class Form::Lettings::Questions::Uprn < ::Form::Question
     return [] unless q
 
     # TODO: handle non-200 responses
-    resp = HTTParty.get("https://api.os.uk/search/places/v1/find?query=#{q}&key=#{ENV['OS_DATA_KEY']}&minmatch=0.8&maxresults=50")
+    resp = HTTParty.get("https://api.os.uk/search/places/v1/find?query=#{q}&key=#{ENV['OS_DATA_KEY']}&minmatch=0.4")
     opts = {}
 
     resp["results"]&.each do |result|
