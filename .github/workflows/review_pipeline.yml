@@ -109,6 +109,7 @@ jobs:
           API_USER: ${{ secrets.API_USER }}
           API_KEY: ${{ secrets.API_KEY }}
           GOVUK_NOTIFY_API_KEY: ${{ secrets.GOVUK_NOTIFY_API_KEY }}
+          OS_DATA_KEY: ${{ secrets.OS_DATA_KEY }}
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           IMPORT_PAAS_INSTANCE: ${{ secrets.IMPORT_PAAS_INSTANCE }}
           EXPORT_PAAS_INSTANCE: ${{ secrets.EXPORT_PAAS_INSTANCE }}
@@ -119,6 +120,7 @@ jobs:
           cf set-env $APP_NAME API_USER $API_USER
           cf set-env $APP_NAME API_KEY $API_KEY
           cf set-env $APP_NAME GOVUK_NOTIFY_API_KEY $GOVUK_NOTIFY_API_KEY
+          cf set-env $APP_NAME OS_DATA_KEY $OS_DATA_KEY
           cf set-env $APP_NAME RAILS_MASTER_KEY $RAILS_MASTER_KEY
           cf set-env $APP_NAME IMPORT_PAAS_INSTANCE $IMPORT_PAAS_INSTANCE
           cf set-env $APP_NAME EXPORT_PAAS_INSTANCE "dluhc-core-review-export-bucket"

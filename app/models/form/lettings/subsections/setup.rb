@@ -8,6 +8,9 @@ class Form::Lettings::Subsections::Setup < ::Form::Subsection
 
   def pages
     @pages ||= [
+      Form::Lettings::Pages::UprnValidation.new(nil, nil, self),
+      Form::Lettings::Pages::UprnQuery.new(nil, nil, self),
+      Form::Lettings::Pages::Uprn.new(nil, nil, self),
       organisation_page,
       stock_owner_page,
       managing_organisation_page,

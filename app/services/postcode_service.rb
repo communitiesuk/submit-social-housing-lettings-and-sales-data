@@ -1,3 +1,4 @@
+# NB
 class PostcodeService
   def initialize
     @pio = Postcodes::IO.new

@@ -25,6 +25,20 @@ module Validations::SetupValidations
     end
   end
 
+  def validate_uprn(record)
+    return if record.uprn.blank?
+
+    resp = HTTParty.get("https://api.os.uk/search/places/v1/uprn?uprn=#{record.uprn}&key=#{ENV['OS_DATA_KEY']}")
+
+    if resp.code == 200
+      if resp["results"].blank?
+        record.errors.add :uprn, "invalid UPRN"
+      end
+    else
+      record.errors.add :uprn, "invalid UPRN"
+    end
+  end
+
 private
 
   def intermediate_product_rent_type?(record)

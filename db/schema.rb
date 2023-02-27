@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_15_112932) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_23_101454) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -278,6 +278,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_15_112932) do
     t.boolean "unresolved"
     t.bigint "updated_by_id"
     t.bigint "bulk_upload_id"
+    t.string "uprn"
+    t.string "uprn_query"
     t.index ["bulk_upload_id"], name: "index_lettings_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_lettings_logs_on_created_by_id"
     t.index ["location_id"], name: "index_lettings_logs_on_location_id"
@@ -531,6 +533,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_15_112932) do
     t.integer "prevshared"
     t.integer "staircasesale"
     t.string "old_id"
+    t.integer "income2_value_check"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["old_id"], name: "index_sales_logs_on_old_id", unique: true
