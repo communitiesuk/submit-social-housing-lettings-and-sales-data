@@ -1468,6 +1468,12 @@ RSpec.describe LettingsLog do
         expect(record_from_db["first_time_property_let_as_social_housing"]).to eq(0)
         expect(lettings_log["first_time_property_let_as_social_housing"]).to eq(0)
       end
+
+      it "derives vacancy reason as relet" do
+        record_from_db = ActiveRecord::Base.connection.execute("select rsnvac from lettings_logs where id=#{lettings_log.id}").to_a[0]
+        expect(record_from_db["rsnvac"]).to eq(14)
+        expect(lettings_log["rsnvac"]).to eq(14)
+      end
     end
 
     context "when answering the household characteristics questions" do
@@ -1991,6 +1997,21 @@ RSpec.describe LettingsLog do
         record_from_db = ActiveRecord::Base.connection.execute("select waityear from lettings_logs where id=#{lettings_log.id}").to_a[0]
         expect(record_from_db["waityear"]).to eq(nil)
         expect(lettings_log["waityear"]).to eq(nil)
+      end
+
+      it "resets inferred vacancy reason value" do
+        vacancy_reason = "rsnvac"
+
+        lettings_log.update!({ renewal: 1 })
+
+        record_from_db = ActiveRecord::Base.connection.execute("select #{vacancy_reason} from lettings_logs where id=#{lettings_log.id}").to_a[0]
+        expect(record_from_db[vacancy_reason]).to eq(14)
+        expect(lettings_log[vacancy_reason]).to eq(14)
+
+        lettings_log.update!({ renewal: 0 })
+        record_from_db = ActiveRecord::Base.connection.execute("select #{vacancy_reason} from lettings_logs where id=#{lettings_log.id}").to_a[0]
+        expect(record_from_db[vacancy_reason]).to eq(nil)
+        expect(lettings_log[vacancy_reason]).to eq(nil)
       end
     end
 

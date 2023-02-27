@@ -48,6 +48,7 @@ module DerivedVariables::LettingsLogVariables
       self.offered = 0
       self.voiddate = startdate
       self.first_time_property_let_as_social_housing = 0
+      self.rsnvac = 14
       if is_general_needs?
         # fixed term
         self.prevten = 32 if managing_organisation&.provider_type == "PRP"
