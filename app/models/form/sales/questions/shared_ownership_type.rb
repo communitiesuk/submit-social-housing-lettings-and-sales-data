@@ -18,4 +18,8 @@ class Form::Sales::Questions::SharedOwnershipType < ::Form::Question
     "31" => { "value" => "Right to Shared Ownership" },
     "30" => { "value" => "Shared Ownership - 2021 model lease" },
   }.freeze
+
+  def question_number(log)
+    "Q4"
+  end
 end

@@ -6,4 +6,8 @@ class Form::Sales::Questions::SaleDate < ::Form::Question
     @header = "What is the sale completion date?"
     @type = "date"
   end
+
+  def question_number(log)
+    "Q1"
+  end
 end

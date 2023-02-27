@@ -5,9 +5,9 @@ module QuestionViewHelper
     { text: caption_text.html_safe, size: "l" }
   end
 
-  def legend(question, page_header, conditional)
+  def legend(question, page_header, conditional, log = nil)
     {
-      text: question.header.html_safe,
+      text: [question.question_number(log), question.header.html_safe].compact.join(" - "),
       size: label_size(page_header, conditional),
       tag: label_tag(page_header, conditional),
     }

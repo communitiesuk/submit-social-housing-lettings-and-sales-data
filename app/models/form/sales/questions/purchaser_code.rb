@@ -8,4 +8,8 @@ class Form::Sales::Questions::PurchaserCode < ::Form::Question
     @type = "text"
     @width = 10
   end
+
+  def question_number(log)
+    "Q2"
+  end
 end

@@ -13,4 +13,8 @@ class Form::Sales::Questions::OwnershipScheme < ::Form::Question
     "2" => { "value" => "Yes - a discounted ownership scheme" },
     "3" => { "value" => "No - this is an outright or other sale" },
   }.freeze
+
+  def question_number(log)
+    "Q3"
+  end
 end
