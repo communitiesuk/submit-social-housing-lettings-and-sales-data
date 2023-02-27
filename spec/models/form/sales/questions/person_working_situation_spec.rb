@@ -45,7 +45,7 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
     end
 
     it "has the correct header" do
-      expect(question.header).to eq("Which of these best describes Person 2’s working situation?")
+      expect(question.header).to eq("Q39 - Which of these best describes Person 2’s working situation?")
     end
 
     it "has the correct check_answer_label" do
@@ -72,7 +72,7 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
     end
 
     it "has the correct header" do
-      expect(question.header).to eq("Which of these best describes Person 3’s working situation?")
+      expect(question.header).to eq("Q43 - Which of these best describes Person 3’s working situation?")
     end
 
     it "has the correct check_answer_label" do
@@ -99,7 +99,7 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
     end
 
     it "has the correct header" do
-      expect(question.header).to eq("Which of these best describes Person 4’s working situation?")
+      expect(question.header).to eq("Q47 - Which of these best describes Person 4’s working situation?")
     end
 
     it "has the correct check_answer_label" do
@@ -126,7 +126,7 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
     end
 
     it "has the correct header" do
-      expect(question.header).to eq("Which of these best describes Person 5’s working situation?")
+      expect(question.header).to eq("Q51 - Which of these best describes Person 5’s working situation?")
     end
 
     it "has the correct check_answer_label" do

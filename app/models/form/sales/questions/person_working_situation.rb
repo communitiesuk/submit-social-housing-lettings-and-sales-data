@@ -2,7 +2,7 @@ class Form::Sales::Questions::PersonWorkingSituation < ::Form::Question
   def initialize(id, hsh, page, person_index:)
     super(id, hsh, page)
     @check_answer_label = "Person #{person_index}’s working situation"
-    @header = "Which of these best describes Person #{person_index}’s working situation?"
+    @header = "#{question_number(person_index)} - Which of these best describes Person #{person_index}’s working situation?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = person_index
@@ -27,4 +27,19 @@ class Form::Sales::Questions::PersonWorkingSituation < ::Form::Question
     "7" => { "value" => "Full-time student" },
     "9" => { "value" => "Child under 16" },
   }.freeze
+
+  def question_number(person_index)
+    case person_index
+    when 2
+      "Q39"
+    when 3
+      "Q43"
+    when 4
+      "Q47"
+    when 5
+      "Q51"
+    when 6
+      "Q55"
+    end
+  end
 end

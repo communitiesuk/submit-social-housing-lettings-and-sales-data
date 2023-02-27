@@ -38,7 +38,7 @@ RSpec.describe Form::Sales::Questions::PersonGenderIdentity, type: :model do
     end
 
     it "has the correct header" do
-      expect(question.header).to eq("Which of these best describes Person 2’s gender identity?")
+      expect(question.header).to eq("Q38 - Which of these best describes Person 2’s gender identity?")
     end
 
     it "has the correct check_answer_label" do
@@ -65,7 +65,7 @@ RSpec.describe Form::Sales::Questions::PersonGenderIdentity, type: :model do
     end
 
     it "has the correct header" do
-      expect(question.header).to eq("Which of these best describes Person 3’s gender identity?")
+      expect(question.header).to eq("Q42 - Which of these best describes Person 3’s gender identity?")
     end
 
     it "has the correct check_answer_label" do
@@ -92,7 +92,7 @@ RSpec.describe Form::Sales::Questions::PersonGenderIdentity, type: :model do
     end
 
     it "has the correct header" do
-      expect(question.header).to eq("Which of these best describes Person 4’s gender identity?")
+      expect(question.header).to eq("Q46 - Which of these best describes Person 4’s gender identity?")
     end
 
     it "has the correct check_answer_label" do
@@ -119,7 +119,7 @@ RSpec.describe Form::Sales::Questions::PersonGenderIdentity, type: :model do
     end
 
     it "has the correct header" do
-      expect(question.header).to eq("Which of these best describes Person 5’s gender identity?")
+      expect(question.header).to eq("Q50 - Which of these best describes Person 5’s gender identity?")
     end
 
     it "has the correct check_answer_label" do

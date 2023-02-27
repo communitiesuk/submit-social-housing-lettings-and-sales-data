@@ -13,7 +13,7 @@ RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Age")
+    expect(question.header).to eq("Q37 - Age")
   end
 
   it "has the correct type" do
