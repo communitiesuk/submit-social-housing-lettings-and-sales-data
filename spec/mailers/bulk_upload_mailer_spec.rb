@@ -10,6 +10,7 @@ RSpec.describe BulkUploadMailer do
   before do
     allow(Notifications::Client).to receive(:new).and_return(notify_client)
     allow(notify_client).to receive(:send_email).and_return(true)
+    allow(Time).to receive(:now).and_return(Time.zone.local(2021, 5, 1))
   end
 
   describe "#send_bulk_upload_complete_mail" do
