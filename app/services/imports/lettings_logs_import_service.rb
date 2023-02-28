@@ -289,6 +289,15 @@ module Imports
         save_lettings_log(attributes, previous_status)
       else
         @logger.error("Log #{lettings_log.old_id}: Failed to import")
+        lettings_log.errors.each do |error|
+          @logger.error("Validation error: Field #{error.attribute}:")
+          @logger.error("\tOwning Organisation: #{lettings_log.owning_organisation&.name}")
+          @logger.error("\tManaging Organisation: #{lettings_log.managing_organisation&.name}")
+          @logger.error("\tOld CORE ID: #{lettings_log.old_id}")
+          @logger.error("\tOld CORE: #{attributes[error.attribute.to_s]&.inspect}")
+          @logger.error("\tNew CORE: #{lettings_log.read_attribute(error.attribute)&.inspect}")
+          @logger.error("\tError message: #{error.type}")
+        end
         raise exception
       end
     end
