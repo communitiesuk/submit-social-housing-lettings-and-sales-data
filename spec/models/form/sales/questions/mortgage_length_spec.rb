@@ -56,7 +56,7 @@ RSpec.describe Form::Sales::Questions::MortgageLength, type: :model do
   it "has correct inferred check answers value" do
     expect(question.inferred_check_answers_value).to eq([
       {
-        "condition" => { "mortlen_known" => 1 },
+        "condition" => { "mortlen_known" => 2 },
         "value" => "Not known",
       },
     ])

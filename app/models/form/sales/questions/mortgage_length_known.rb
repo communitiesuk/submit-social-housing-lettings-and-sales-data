@@ -12,17 +12,17 @@ class Form::Sales::Questions::MortgageLengthKnown < ::Form::Question
     @hidden_in_check_answers = {
       "depends_on" => [
         {
-          "mortlen_known" => 0,
+          "mortlen_known" => 1,
         },
         {
-          "mortlen_known" => 1,
+          "mortlen_known" => 2,
         },
       ],
     }
   end
 
   ANSWER_OPTIONS = {
-    "0" => { "value" => "Yes" },
-    "1" => { "value" => "No" },
+    "1" => { "value" => "Yes" },
+    "2" => { "value" => "No" },
   }.freeze
 end

@@ -33,8 +33,8 @@ RSpec.describe Form::Sales::Questions::MortgageLengthKnown, type: :model do
 
   it "has the correct answer_options" do
     expect(question.answer_options).to eq({
-      "0" => { "value" => "Yes" },
-      "1" => { "value" => "No" },
+      "1" => { "value" => "Yes" },
+      "2" => { "value" => "No" },
     })
   end
 
@@ -47,9 +47,11 @@ RSpec.describe Form::Sales::Questions::MortgageLengthKnown, type: :model do
   it "has correct hidden in check answers" do
     expect(question.hidden_in_check_answers).to eq({
       "depends_on" => [{
-        "mortlen_known" => 0,
+        "mortlen_known" => 1,
       },
-                       { "mortlen_known" => 1 }],
+                       {
+                         "mortlen_known" => 2,
+                       }],
     })
   end
 end

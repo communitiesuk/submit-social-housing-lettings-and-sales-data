@@ -11,7 +11,7 @@ class Form::Sales::Questions::MortgageLength < ::Form::Question
     @suffix = " years"
     @hint_text = "You should round up to the nearest year. Value should not exceed 60 years."
     @inferred_check_answers_value = [{
-      "condition" => { "mortlen_known" => 1 },
+      "condition" => { "mortlen_known" => 2 },
       "value" => "Not known",
     }]
   end
