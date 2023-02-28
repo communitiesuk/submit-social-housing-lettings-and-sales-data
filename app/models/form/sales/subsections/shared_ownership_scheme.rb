@@ -22,7 +22,7 @@ class Form::Sales::Subsections::SharedOwnershipScheme < ::Form::Subsection
       Form::Sales::Pages::PreviousPropertyType.new(nil, nil, self),
       Form::Sales::Pages::PreviousTenure.new(nil, nil, self),
       Form::Sales::Pages::AboutPriceSharedOwnership.new(nil, nil, self),
-      Form::Sales::Pages::AboutPriceSharedOwnershipValueCheck.new("about_price_shared_ownership_value_check", nil, self),
+      Form::Sales::Pages::AboutPriceValueCheck.new("about_price_shared_ownership_value_check", nil, self),
       Form::Sales::Pages::SharedOwnershipDepositValueCheck.new("shared_ownership_equity_value_check", nil, self),
       Form::Sales::Pages::Mortgageused.new("mortgage_used_shared_ownership", nil, self),
       Form::Sales::Pages::MortgageValueCheck.new("mortgage_used_mortgage_value_check", nil, self),
