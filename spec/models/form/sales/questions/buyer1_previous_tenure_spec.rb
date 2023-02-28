@@ -16,11 +16,11 @@ RSpec.describe Form::Sales::Questions::Buyer1PreviousTenure, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("What was buyer 1's previous tenure?")
+    expect(question.header).to eq("What was buyer 1’s previous tenure?")
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Buyer 1's previous tenure")
+    expect(question.check_answer_label).to eq("Buyer 1’s previous tenure")
   end
 
   it "has the correct type" do
@@ -41,6 +41,7 @@ RSpec.describe Form::Sales::Questions::Buyer1PreviousTenure, type: :model do
       "6" => { "value" => "Living with family or friends" },
       "7" => { "value" => "Temporary accomodation" },
       "9" => { "value" => "Other" },
+      "0" => { "value" => "Don’t know" },
     })
   end
 end

@@ -16,11 +16,11 @@ RSpec.describe Form::Sales::Questions::Buyer2Mortgage, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Was buyer 2's income used for a mortgage application?")
+    expect(question.header).to eq("Was buyer 2’s income used for a mortgage application?")
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Buyer 2's income used for mortgage application")
+    expect(question.check_answer_label).to eq("Buyer 2’s income used for mortgage application")
   end
 
   it "has the correct type" do
@@ -35,6 +35,7 @@ RSpec.describe Form::Sales::Questions::Buyer2Mortgage, type: :model do
     expect(question.answer_options).to eq({
       "1" => { "value" => "Yes" },
       "2" => { "value" => "No" },
+      "3" => { "value" => "Don’t know" },
     })
   end
 
