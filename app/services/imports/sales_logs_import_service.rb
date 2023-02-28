@@ -34,8 +34,8 @@ module Imports
       attributes["purchid"] = string_or_nil(xml_doc, "PurchaserCode")
       attributes["ownershipsch"] = unsafe_string_as_integer(xml_doc, "Ownership")
       attributes["othtype"] = string_or_nil(xml_doc, "Q38OtherSale")
-      attributes["jointmore"] = unsafe_string_as_integer(xml_doc, "JointMore")
       attributes["jointpur"] = unsafe_string_as_integer(xml_doc, "joint")
+      attributes["jointmore"] = unsafe_string_as_integer(xml_doc, "JointMore") if attributes["joint"] == 1
       attributes["beds"] = safe_string_as_integer(xml_doc, "Q11Bedrooms")
       attributes["companybuy"] = unsafe_string_as_integer(xml_doc, "company") if attributes["ownershipsch"] == 3
       attributes["hhmemb"] = safe_string_as_integer(xml_doc, "HHMEMB")
@@ -108,7 +108,9 @@ module Imports
       attributes["mscharge"] = monthly_charges(xml_doc, attributes)
       attributes["mscharge_known"] = 1 if attributes["mscharge"].present?
       attributes["prevten"] = unsafe_string_as_integer(xml_doc, "Q6PrevTenure")
-      attributes["mortgageused"] = unsafe_string_as_integer(xml_doc, "MORTGAGEUSED")
+      attributes["mortlen"] = mortgage_length(xml_doc, attributes)
+      attributes["extrabor"] = borrowing(xml_doc, attributes)
+      attributes["mortgageused"] = mortgage_used(xml_doc, attributes)
       attributes["wchair"] = unsafe_string_as_integer(xml_doc, "Q15Wheelchair")
       attributes["armedforcesspouse"] = unsafe_string_as_integer(xml_doc, "ARMEDFORCESSPOUSE")
       attributes["hodate"] = compose_date(xml_doc, "HODAY", "HOMONTH", "HOYEAR")
@@ -119,8 +121,6 @@ module Imports
       attributes["socprevten"] = unsafe_string_as_integer(xml_doc, "PrevRentType")
       attributes["mortgagelender"] = mortgage_lender(xml_doc, attributes)
       attributes["mortgagelenderother"] = mortgage_lender_other(xml_doc, attributes)
-      attributes["mortlen"] = mortgage_length(xml_doc, attributes)
-      attributes["extrabor"] = borrowing(xml_doc, attributes)
       attributes["totadult"] = safe_string_as_integer(xml_doc, "TOTADULT") # would get overridden
       attributes["totchild"] = safe_string_as_integer(xml_doc, "TOTCHILD") # would get overridden
       attributes["hhtype"] = unsafe_string_as_integer(xml_doc, "HHTYPE")
@@ -395,6 +395,15 @@ module Imports
         safe_string_as_decimal(xml_doc, "Q29MonthlyCharges")
       when 2
         safe_string_as_decimal(xml_doc, "Q37MonthlyCharges")
+      end
+    end
+
+    def mortgage_used(xml_doc, attributes)
+      mortgage_used = unsafe_string_as_integer(xml_doc, "MORTGAGEUSED")
+      if mortgage_used == 3
+        [attributes["mortgage"], attributes["mortlen"], attributes["extrabor"]].any? { |x| x.present? } ? 1 : 2
+      else
+        mortgage_used
       end
     end
 
