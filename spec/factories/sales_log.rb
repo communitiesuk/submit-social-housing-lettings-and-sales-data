@@ -95,6 +95,7 @@ FactoryBot.define do
       armedforcesspouse { 5 }
       mscharge_known { 1 }
       mscharge { 100 }
+      mortlen_known { 0 }
       mortlen { 10 }
       pcodenk { 1 }
       is_la_inferred { false }
