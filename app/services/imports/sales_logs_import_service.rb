@@ -32,7 +32,7 @@ module Imports
       attributes["created_at"] = Time.zone.parse(meta_field_value(xml_doc, "created-date"))
       attributes["updated_at"] = Time.zone.parse(meta_field_value(xml_doc, "modified-date"))
       attributes["purchid"] = string_or_nil(xml_doc, "PurchaserCode")
-      attributes["ownershipsch"] = unsafe_string_as_integer(xml_doc, "Ownership")
+      attributes["ownershipsch"] = unsafe_string_as_integer(xml_doc, "Ownership") || 1 if attributes["type"] == 2 # someties Ownership is missing, but type is set to 2
       attributes["othtype"] = string_or_nil(xml_doc, "Q38OtherSale")
       attributes["jointpur"] = unsafe_string_as_integer(xml_doc, "joint")
       attributes["jointmore"] = unsafe_string_as_integer(xml_doc, "JointMore") if attributes["joint"] == 1
@@ -401,7 +401,7 @@ module Imports
     def mortgage_used(xml_doc, attributes)
       mortgage_used = unsafe_string_as_integer(xml_doc, "MORTGAGEUSED")
       if mortgage_used == 3
-        [attributes["mortgage"], attributes["mortlen"], attributes["extrabor"]].any? { |x| x.present? } ? 1 : 2
+        [attributes["mortgage"], attributes["mortlen"], attributes["extrabor"]].any?(&:present?) ? 1 : 2
       else
         mortgage_used
       end
@@ -415,6 +415,7 @@ module Imports
       attributes["hb"] ||= 4
       attributes["prevown"] ||= 3
       attributes["savingsnk"] ||= attributes["savings"].present? ? 0 : 1
+      attributes["jointmore"] ||= 3 if attributes["jointpur"] == 1
       # attributes["noint"] = 1 # not interviewed
 
       # buyer 1 characteristics
