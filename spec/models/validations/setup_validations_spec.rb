@@ -6,6 +6,88 @@ RSpec.describe Validations::SetupValidations do
   let(:setup_validator_class) { Class.new { include Validations::SetupValidations } }
   let(:record) { FactoryBot.create(:lettings_log) }
 
+  describe "tenancy start date" do
+    context "when in 22/23 collection" do
+      context "when in the crossover period" do
+        before do
+          allow(Time).to receive(:now).and_return(Time.zone.local(2022, 4, 1))
+          record.created_at = Time.zone.local(2022, 4, 1)
+        end
+
+        it "cannot be before the first collection window start date" do
+          record.startdate = Time.zone.local(2021, 1, 1)
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"]).to include(match "Enter a date within the 21/22 or 22/23 financial years, which is between 1st April 2021 and 1st July 2023")
+        end
+
+        it "cannot be after the second collection window end date" do
+          record.startdate = Time.zone.local(2023, 7, 1, 6)
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"]).to include(match "Enter a date within the 21/22 or 22/23 financial years, which is between 1st April 2021 and 1st July 2023")
+        end
+      end
+
+      context "when after the crossover period" do
+        before do
+          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 1, 1))
+          record.created_at = Time.zone.local(2023, 1, 1)
+        end
+
+        it "cannot be before the first collection window start date" do
+          record.startdate = Time.zone.local(2022, 1, 1)
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"]).to include(match "Enter a date within the 22/23 financial year, which is between 1st April 2022 and 1st July 2023")
+        end
+
+        it "cannot be after the second collection window end date" do
+          record.startdate = Time.zone.local(2023, 7, 1, 6)
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"]).to include(match "Enter a date within the 22/23 financial year, which is between 1st April 2022 and 1st July 2023")
+        end
+      end
+    end
+
+    context "when in 23/24 collection" do
+      context "when in the crossover period" do
+        before do
+          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 4, 1))
+          record.created_at = Time.zone.local(2023, 4, 1)
+        end
+
+        it "cannot be before the first collection window start date" do
+          record.startdate = Time.zone.local(2022, 1, 1)
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"]).to include(match "Enter a date within the 22/23 or 23/24 financial years, which is between 1st April 2022 and 9th July 2024")
+        end
+
+        it "cannot be after the second collection window end date" do
+          record.startdate = Time.zone.local(2024, 7, 1, 6)
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"]).to include(match "Enter a date within the 22/23 or 23/24 financial years, which is between 1st April 2022 and 9th July 2024")
+        end
+      end
+
+      context "when after the crossover period" do
+        before do
+          allow(Time).to receive(:now).and_return(Time.zone.local(2024, 1, 1))
+          record.created_at = Time.zone.local(2024, 1, 1)
+        end
+
+        it "cannot be before the first collection window start date" do
+          record.startdate = Time.zone.local(2023, 1, 1)
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"]).to include(match "Enter a date within the 23/24 financial year, which is between 1st April 2023 and 9th July 2024")
+        end
+
+        it "cannot be after the second collection window end date" do
+          record.startdate = Time.zone.local(2024, 7, 1, 6)
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"]).to include(match "Enter a date within the 23/24 financial year, which is between 1st April 2023 and 9th July 2024")
+        end
+      end
+    end
+  end
+
   describe "#validate_irproduct" do
     it "adds an error when the intermediate rent product name is not provided but the rent type was given as other intermediate rent product" do
       record.rent_type = 5
