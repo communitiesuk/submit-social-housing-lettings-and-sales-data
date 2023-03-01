@@ -168,6 +168,7 @@ class BulkUpload::Lettings::Validator
           row:,
           cell: "#{cols[field_number_for_attribute(error.attribute) - col_offset + 1]}#{row}",
           col: cols[field_number_for_attribute(error.attribute) - col_offset + 1],
+          category: error.options[:category],
         )
       end
     end
