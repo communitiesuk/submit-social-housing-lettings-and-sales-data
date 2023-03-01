@@ -24,11 +24,11 @@ module Validations::FinancialValidations
   def validate_net_income(record)
     if record.ecstat1 && record.weekly_net_income
       if record.weekly_net_income > record.applicable_income_range.hard_max
-        record.errors.add :earnings, I18n.t("validations.financial.earnings.over_hard_max", hard_max: record.applicable_income_range.hard_max)
+        record.errors.add :earnings, :over_hard_max, message: I18n.t("validations.financial.earnings.over_hard_max", hard_max: record.applicable_income_range.hard_max)
       end
 
       if record.weekly_net_income < record.applicable_income_range.hard_min
-        record.errors.add :earnings, I18n.t("validations.financial.earnings.under_hard_min", hard_min: record.applicable_income_range.hard_min)
+        record.errors.add :earnings, :under_hard_min, message: I18n.t("validations.financial.earnings.under_hard_min", hard_min: record.applicable_income_range.hard_min)
       end
     end
 

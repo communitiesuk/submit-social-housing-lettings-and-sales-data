@@ -67,7 +67,7 @@ module Validations::HouseholdValidations
     end
 
     if record.age1.present? && record.age1 > 19 && record.previous_tenancy_was_foster_care?
-      record.errors.add :prevten, I18n.t("validations.household.prevten.over_20_foster_care")
+      record.errors.add :prevten, :over_20_foster_care, message: I18n.t("validations.household.prevten.over_20_foster_care")
       record.errors.add :age1, I18n.t("validations.household.age.lead.over_20")
     end
 

@@ -205,6 +205,81 @@ RSpec.describe Imports::LettingsLogsImportService do
       end
     end
 
+    context "and it has zero earnings" do
+      before do
+        lettings_log_xml.at_xpath("//meta:status").content = "submitted"
+        lettings_log_xml.at_xpath("//xmlns:Q8Money").content = 0
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Where the income is 0, set earnings and income to blank and set incref to refused/)
+        expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers" do
+        allow(logger).to receive(:warn)
+
+        lettings_log_service.send(:create_log, lettings_log_xml)
+        lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+        expect(lettings_log).not_to be_nil
+        expect(lettings_log.earnings).to be_nil
+        expect(lettings_log.incref).to eq(1)
+        expect(lettings_log.net_income_known).to eq(2)
+      end
+    end
+
+    context "and an invalid tenancy length for tenancy type" do
+      before do
+        lettings_log_xml.at_xpath("//meta:status").content = "submitted"
+        lettings_log_xml.at_xpath("//xmlns:_2cYears").content = "1"
+        lettings_log_xml.at_xpath("//xmlns:Q2b").content = "4"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Removing tenancylength as invalid/)
+        expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers" do
+        allow(logger).to receive(:warn)
+
+        lettings_log_service.send(:create_log, lettings_log_xml)
+        lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+        expect(lettings_log).not_to be_nil
+        expect(lettings_log.tenancylength).to be_nil
+        expect(lettings_log.tenancy).to be_nil
+      end
+    end
+
+    context "and an lead tenant must be under 20 if childrens home or foster care" do
+      before do
+        lettings_log_xml.at_xpath("//meta:status").content = "submitted"
+        lettings_log_xml.at_xpath("//xmlns:Q11").content = "13"
+        lettings_log_xml.at_xpath("//xmlns:P1Age").content = "22"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Removing age1 and prevten as incompatible/)
+        expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers" do
+        allow(logger).to receive(:warn)
+
+        lettings_log_service.send(:create_log, lettings_log_xml)
+        lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+        expect(lettings_log).not_to be_nil
+        expect(lettings_log.age1).to be_nil
+        expect(lettings_log.prevten).to be_nil
+      end
+    end
+
     context "and this is an internal transfer from a non social housing" do
       before do
         lettings_log_xml.at_xpath("//xmlns:Q11").content = "9 Residential care home"
