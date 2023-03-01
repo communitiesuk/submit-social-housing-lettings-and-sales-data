@@ -203,6 +203,10 @@ class BulkUpload::Lettings::RowParser
     block_log_creation
   end
 
+  def setup_section_incomplete?
+    log.form.setup_sections[0].subsections[0].is_incomplete?(log)
+  end
+
 private
 
   def validate_location_related
