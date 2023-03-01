@@ -46,7 +46,7 @@ module Validations::Sales::SaleInformationValidations
 
   def validate_discounted_ownership_value(record)
     return unless record.value && record.deposit && record.ownershipsch
-    return unless record.mortgage || record.mortgageused == 2
+    return unless record.mortgage || record.mortgageused == 2 || record.mortgageused == 3
     return unless record.discount || record.grant || record.type == 29
 
     discount_amount = record.discount ? record.value * record.discount / 100 : 0

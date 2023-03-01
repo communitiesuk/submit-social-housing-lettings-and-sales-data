@@ -2,8 +2,8 @@ class Form::Sales::Questions::Buyer1PreviousTenure < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "prevten"
-    @check_answer_label = "Buyer 1's previous tenure"
-    @header = "What was buyer 1's previous tenure?"
+    @check_answer_label = "Buyer 1’s previous tenure"
+    @header = "What was buyer 1’s previous tenure?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
   end
