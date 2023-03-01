@@ -12,6 +12,25 @@ RSpec.describe BulkUploadMailer do
     allow(notify_client).to receive(:send_email).and_return(true)
   end
 
+  describe "#send_bulk_upload_failed_file_setup_error_mail" do
+    it "sends correctly formed email" do
+      expect(notify_client).to receive(:send_email).with(
+        email_address: bulk_upload.user.email,
+        template_id: described_class::BULK_UPLOAD_FAILED_FILE_SETUP_ERROR_TEMPLATE_ID,
+        personalisation: {
+          filename: bulk_upload.filename,
+          upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
+          lettings_or_sales: bulk_upload.log_type,
+          year_combo: bulk_upload.year_combo,
+          errors_list: [].join("\n"),
+          bulk_upload_link: start_bulk_upload_lettings_logs_url,
+        },
+      )
+
+      mailer.send_bulk_upload_failed_file_setup_error_mail(bulk_upload:)
+    end
+  end
+
   describe "#send_bulk_upload_complete_mail" do
     it "sends correctly formed email" do
       expect(notify_client).to receive(:send_email).with(
