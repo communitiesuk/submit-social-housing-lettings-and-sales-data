@@ -105,7 +105,7 @@ module Imports
       attributes["previous_la_known"] = nil
       attributes["hhregres"] = unsafe_string_as_integer(xml_doc, "ArmedF")
       attributes["hhregresstill"] = still_serving(xml_doc)
-      attributes["proplen"] = safe_string_as_integer(xml_doc, "Q16aProplen2")
+      attributes["proplen"] = safe_string_as_integer(xml_doc, "Q16aProplen2") || safe_string_as_integer(xml_doc, "Q16aProplensec2")
       attributes["mscharge"] = monthly_charges(xml_doc, attributes)
       attributes["mscharge_known"] = 1 if attributes["mscharge"].present?
       attributes["prevten"] = unsafe_string_as_integer(xml_doc, "Q6PrevTenure")
