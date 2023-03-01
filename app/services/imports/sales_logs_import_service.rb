@@ -459,7 +459,7 @@ module Imports
     end
 
     def missing_answers(sales_log)
-      applicable_questions = sales_log.form.subsections.map { |s| s.applicable_questions(sales_log) }.flatten
+      applicable_questions = sales_log.form.subsections.map { |s| s.applicable_questions(sales_log).select { |q| q.enabled?(sales_log) } }.flatten
       applicable_questions.filter { |q| q.unanswered?(sales_log) }.map(&:id)
     end
 
