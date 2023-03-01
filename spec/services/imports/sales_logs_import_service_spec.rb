@@ -578,6 +578,74 @@ RSpec.describe Imports::SalesLogsImportService do
           expect(sales_log&.hholdcount).to eq(0)
         end
       end
+
+      context "when inferring income used" do
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
+
+        before do
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets inc1mort and inc2mort to don't know if not answered" do
+          sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+          sales_log_xml.at_xpath("//xmlns:Q2Person1Mortgage").content = ""
+          sales_log_xml.at_xpath("//xmlns:Q2Person2MortApplication").content = ""
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.inc1mort).to eq(3)
+          expect(sales_log&.inc2mort).to eq(3)
+        end
+
+        it "sets inc1mort and inc2mort correctly if answered" do
+          sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+          sales_log_xml.at_xpath("//xmlns:Q2Person1Mortgage").content = "1 Yes"
+          sales_log_xml.at_xpath("//xmlns:Q2Person2MortApplication").content = "2 No"
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.inc1mort).to eq(1)
+          expect(sales_log&.inc2mort).to eq(2)
+        end
+      end
+
+      context "when inferring buyer organisation" do
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
+
+        before do
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets pregblank to true know if no other organisations are selected" do
+          sales_log_xml.at_xpath("//xmlns:PREGYRHA").content = ""
+          sales_log_xml.at_xpath("//xmlns:PREGLA").content = ""
+          sales_log_xml.at_xpath("//xmlns:PREGHBA").content = ""
+          sales_log_xml.at_xpath("//xmlns:PREGOTHER").content = ""
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.pregyrha).to eq(nil)
+          expect(sales_log&.pregla).to eq(nil)
+          expect(sales_log&.pregghb).to eq(nil)
+          expect(sales_log&.pregother).to eq(nil)
+          expect(sales_log&.pregblank).to eq(1)
+        end
+
+        it "sets pregblank and other organisation fields correctly if answered" do
+          sales_log_xml.at_xpath("//xmlns:PREGYRHA").content = "Yes"
+          sales_log_xml.at_xpath("//xmlns:PREGLA").content = "Yes"
+          sales_log_xml.at_xpath("//xmlns:PREGHBA").content = "Yes"
+          sales_log_xml.at_xpath("//xmlns:PREGOTHER").content = "Yes"
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.pregyrha).to eq(1)
+          expect(sales_log&.pregla).to eq(1)
+          expect(sales_log&.pregghb).to eq(1)
+          expect(sales_log&.pregother).to eq(1)
+          expect(sales_log&.pregblank).to eq(nil)
+        end
+      end
     end
   end
 end

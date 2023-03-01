@@ -419,7 +419,10 @@ module Imports
       attributes["prevown"] ||= 3
       attributes["savingsnk"] ||= attributes["savings"].present? ? 0 : 1
       attributes["jointmore"] ||= 3 if attributes["jointpur"] == 1
-      # attributes["noint"] = 1 # not interviewed
+      attributes["inc1mort"] ||= 3
+      if [attributes["pregyrha"], attributes["pregla"], attributes["pregghb"], attributes["pregother"]].all?(&:blank?)
+        attributes["pregblank"] = 1
+      end
 
       # buyer 1 characteristics
       attributes["age1_known"] ||= 1
@@ -438,6 +441,7 @@ module Imports
         attributes["ecstat2"] ||= 10
         attributes["income2nk"] ||= attributes["income2"].present? ? 0 : 1
         attributes["relat2"] ||= "R"
+        attributes["inc2mort"] ||= 3
       end
 
       # other household members characteristics
