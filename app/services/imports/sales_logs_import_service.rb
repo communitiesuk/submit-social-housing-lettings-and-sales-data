@@ -118,7 +118,6 @@ module Imports
       attributes["mortgagelender"] = mortgage_lender(xml_doc, attributes)
       attributes["mortgagelenderother"] = mortgage_lender_other(xml_doc, attributes)
       attributes["mortlen"] = mortgage_length(xml_doc, attributes)
-      attributes["mortlen_known"] = 1 if attributes["mortlen"].present?
       attributes["extrabor"] = borrowing(xml_doc, attributes)
       attributes["totadult"] = safe_string_as_integer(xml_doc, "TOTADULT") # would get overridden
       attributes["totchild"] = safe_string_as_integer(xml_doc, "TOTCHILD") # would get overridden
@@ -405,7 +404,6 @@ module Imports
       attributes["hb"] ||= 4
       attributes["prevown"] ||= 3
       attributes["savingsnk"] ||= attributes["savings"].present? ? 0 : 1
-      attributes["mortlen_known"] ||= 2 if attributes["mortgage"].blank?
       # attributes["noint"] = 1 # not interviewed
 
       # buyer 1 characteristics
