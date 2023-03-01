@@ -6,6 +6,7 @@ RSpec.describe Form::Sales::Questions::Buyer1PreviousTenure, type: :model do
   let(:question_id) { nil }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
+  let(:log) { create(:sales_log) }
 
   it "has correct page" do
     expect(question.page).to eq(page)
@@ -42,6 +43,19 @@ RSpec.describe Form::Sales::Questions::Buyer1PreviousTenure, type: :model do
       "7" => { "value" => "Temporary accomodation" },
       "9" => { "value" => "Other" },
       "0" => { "value" => "Don’t know" },
+    })
+  end
+
+  it "has the correct displayed_answer_options" do
+    expect(question.displayed_answer_options(log)).to eq({
+      "1" => { "value" => "Local Authority" },
+      "2" => { "value" => "Private registered provider or housing association tenant" },
+      "3" => { "value" => "Private tenant" },
+      "4" => { "value" => "Tied home or renting with job" },
+      "5" => { "value" => "Owner occupier" },
+      "6" => { "value" => "Living with family or friends" },
+      "7" => { "value" => "Temporary accomodation" },
+      "9" => { "value" => "Other" },
     })
   end
 end

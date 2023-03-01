@@ -14,4 +14,11 @@ class Form::Sales::Questions::Buyer2Mortgage < ::Form::Question
     "2" => { "value" => "No" },
     "3" => { "value" => "Don’t know" },
   }.freeze
+
+  def displayed_answer_options(_log, _user = nil)
+    {
+      "1" => { "value" => "Yes" },
+      "2" => { "value" => "No" },
+    }
+  end
 end
