@@ -33,7 +33,7 @@ module Imports
       attributes["updated_at"] = Time.zone.parse(meta_field_value(xml_doc, "modified-date"))
       attributes["purchid"] = string_or_nil(xml_doc, "PurchaserCode")
       attributes["ownershipsch"] = unsafe_string_as_integer(xml_doc, "Ownership")
-      attributes["ownershipsch"] = 1 if attributes["type"] == 2 && attributes["ownershipsch"].blank? # someties Ownership is missing, but type is set to 2
+      attributes["ownershipsch"] = ownership_from_type(attributes) if attributes["ownershipsch"].blank? # someties Ownership is missing, but type is set
       attributes["othtype"] = string_or_nil(xml_doc, "Q38OtherSale")
       attributes["jointpur"] = unsafe_string_as_integer(xml_doc, "joint")
       attributes["jointmore"] = unsafe_string_as_integer(xml_doc, "JointMore") if attributes["joint"] == 1
@@ -408,6 +408,17 @@ module Imports
       end
     end
 
+    def ownership_from_type(attributes)
+      case attributes["type"]
+      when 2, 24, 18, 16, 28, 31, 30
+        1 # shared ownership
+      when 8, 14, 27, 9, 29, 21, 22
+        2 # discounted ownership
+      when 10, 12
+        3 # outright sale
+      end
+    end
+
     def set_default_values(attributes)
       attributes["armedforcesspouse"] ||= 7
       attributes["hhregres"] ||= 8
@@ -457,7 +468,7 @@ module Imports
       return 0 if attributes["hhmemb"].zero? || attributes["hhmemb"].blank?
 
       household_count = attributes["jointpur"] == 1 ? attributes["hhmemb"] - 2 : attributes["hhmemb"] - 1
-      household_count.positive? ? household_count : 0    
+      household_count.positive? ? household_count : 0
     end
   end
 end
