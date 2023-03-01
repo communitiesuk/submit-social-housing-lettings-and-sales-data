@@ -32,7 +32,8 @@ module Imports
       attributes["created_at"] = Time.zone.parse(meta_field_value(xml_doc, "created-date"))
       attributes["updated_at"] = Time.zone.parse(meta_field_value(xml_doc, "modified-date"))
       attributes["purchid"] = string_or_nil(xml_doc, "PurchaserCode")
-      attributes["ownershipsch"] = unsafe_string_as_integer(xml_doc, "Ownership") || 1 if attributes["type"] == 2 # someties Ownership is missing, but type is set to 2
+      attributes["ownershipsch"] = unsafe_string_as_integer(xml_doc, "Ownership")
+      attributes["ownershipsch"] = 1 if attributes["type"] == 2 && attributes["ownershipsch"].blank? # someties Ownership is missing, but type is set to 2
       attributes["othtype"] = string_or_nil(xml_doc, "Q38OtherSale")
       attributes["jointpur"] = unsafe_string_as_integer(xml_doc, "joint")
       attributes["jointmore"] = unsafe_string_as_integer(xml_doc, "JointMore") if attributes["joint"] == 1
