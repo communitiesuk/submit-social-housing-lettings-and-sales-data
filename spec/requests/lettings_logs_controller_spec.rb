@@ -323,8 +323,7 @@ RSpec.describe LettingsLogsController, type: :request do
           context "with year filter" do
             let!(:lettings_log_2021) do
               FactoryBot.create(:lettings_log, :in_progress,
-                                created_by: user,
-                                startdate: Time.zone.local(2022, 3, 1))
+                                created_by: user)
             end
             let!(:lettings_log_2022) do
               lettings_log = FactoryBot.build(:lettings_log, :completed,
@@ -337,16 +336,24 @@ RSpec.describe LettingsLogsController, type: :request do
               lettings_log
             end
 
-            it "shows lettings logs for multiple selected years" do
-              get "/lettings-logs?years[]=2021&years[]=2022", headers: headers, params: {}
-              expect(page).to have_link(lettings_log_2021.id.to_s)
-              expect(page).to have_link(lettings_log_2022.id.to_s)
-            end
+            context "with previous logs" do
+              before do
+                Timecop.freeze(Time.zone.local(2022, 3, 1))
+                lettings_log_2021.update!(startdate: Time.zone.local(2022, 3, 1))
+                Timecop.unfreeze
+              end
 
-            it "shows lettings logs for one selected year" do
-              get "/lettings-logs?years[]=2021", headers: headers, params: {}
-              expect(page).to have_link(lettings_log_2021.id.to_s)
-              expect(page).not_to have_link(lettings_log_2022.id.to_s)
+              it "shows lettings logs for multiple selected years" do
+                get "/lettings-logs?years[]=2021&years[]=2022", headers: headers, params: {}
+                expect(page).to have_link(lettings_log_2021.id.to_s)
+                expect(page).to have_link(lettings_log_2022.id.to_s)
+              end
+
+              it "shows lettings logs for one selected year" do
+                get "/lettings-logs?years[]=2021", headers: headers, params: {}
+                expect(page).to have_link(lettings_log_2021.id.to_s)
+                expect(page).not_to have_link(lettings_log_2022.id.to_s)
+              end
             end
           end
 
@@ -362,7 +369,6 @@ RSpec.describe LettingsLogsController, type: :request do
             let!(:lettings_log_2021) do
               FactoryBot.create(:lettings_log, :in_progress,
                                 owning_organisation: organisation,
-                                startdate: Time.zone.local(2022, 3, 1),
                                 managing_organisation: organisation,
                                 created_by: user)
             end
@@ -386,18 +392,26 @@ RSpec.describe LettingsLogsController, type: :request do
                                created_by: user)
             end
 
-            it "shows lettings logs for multiple selected statuses and years" do
-              get "/lettings-logs?years[]=2021&years[]=2022&status[]=in_progress&status[]=completed", headers: headers, params: {}
-              expect(page).to have_link(lettings_log_2021.id.to_s)
-              expect(page).to have_link(lettings_log_2022.id.to_s)
-              expect(page).to have_link(lettings_log_2022_in_progress.id.to_s)
-            end
+            context "with previous logs" do
+              before do
+                Timecop.freeze(Time.zone.local(2022, 3, 1))
+                lettings_log_2021.update!(startdate: Time.zone.local(2022, 3, 1))
+                Timecop.unfreeze
+              end
 
-            it "shows lettings logs for one selected status" do
-              get "/lettings-logs?years[]=2022&status[]=in_progress", headers: headers, params: {}
-              expect(page).to have_link(lettings_log_2022_in_progress.id.to_s)
-              expect(page).not_to have_link(lettings_log_2021.id.to_s)
-              expect(page).not_to have_link(lettings_log_2022.id.to_s)
+              it "shows lettings logs for multiple selected statuses and years" do
+                get "/lettings-logs?years[]=2021&years[]=2022&status[]=in_progress&status[]=completed", headers: headers, params: {}
+                expect(page).to have_link(lettings_log_2021.id.to_s)
+                expect(page).to have_link(lettings_log_2022.id.to_s)
+                expect(page).to have_link(lettings_log_2022_in_progress.id.to_s)
+              end
+
+              it "shows lettings logs for one selected status" do
+                get "/lettings-logs?years[]=2022&status[]=in_progress", headers: headers, params: {}
+                expect(page).to have_link(lettings_log_2022_in_progress.id.to_s)
+                expect(page).not_to have_link(lettings_log_2021.id.to_s)
+                expect(page).not_to have_link(lettings_log_2022.id.to_s)
+              end
             end
           end
 
@@ -843,14 +857,21 @@ RSpec.describe LettingsLogsController, type: :request do
               expect(page).to have_link("review and make changes to this log", href: "/lettings-logs/#{completed_lettings_log.id}/review")
             end
 
-            it "displays a closed collection window message for previous collection year logs" do
-              completed_lettings_log.update!(startdate: Time.zone.local(2021, 4, 1))
-              completed_lettings_log.reload
+            context "with past lettings logs" do
+              before do
+                Timecop.freeze(Time.zone.local(2021, 4, 1))
+                completed_lettings_log.update!(startdate: Time.zone.local(2021, 4, 1))
+                Timecop.unfreeze
+              end
 
-              get "/lettings-logs/#{completed_lettings_log.id}", headers:, params: {}
-              expect(completed_lettings_log.form.end_date).to eq(Time.zone.local(2022, 7, 1))
-              expect(completed_lettings_log.status).to eq("completed")
-              expect(page).to have_content("This log is from the 2021/2022 collection window, which is now closed.")
+              it "displays a closed collection window message for previous collection year logs" do
+                completed_lettings_log.reload
+
+                get "/lettings-logs/#{completed_lettings_log.id}", headers:, params: {}
+                expect(completed_lettings_log.form.end_date).to eq(Time.zone.local(2022, 7, 1))
+                expect(completed_lettings_log.status).to eq("completed")
+                expect(page).to have_content("This log is from the 2021/2022 collection window, which is now closed.")
+              end
             end
           end
 
@@ -919,7 +940,7 @@ RSpec.describe LettingsLogsController, type: :request do
                           postcode_known: "No")
       end
       let(:id) { postcode_lettings_log.id }
-      let(:completed_lettings_log) { FactoryBot.create(:lettings_log, :completed, owning_organisation: user.organisation, managing_organisation: user.organisation, created_by: user, startdate: Time.zone.local(2021, 4, 1)) }
+      let(:completed_lettings_log) { FactoryBot.create(:lettings_log, :completed, owning_organisation: user.organisation, managing_organisation: user.organisation, created_by: user) }
 
       before do
         stub_request(:get, /api.postcodes.io/)
@@ -953,19 +974,27 @@ RSpec.describe LettingsLogsController, type: :request do
         expect(CGI.unescape_html(response.body)).to include("You didn’t answer this question")
       end
 
-      it "does not allow you to change the answers for previous collection year logs" do
-        get "/lettings-logs/#{completed_lettings_log.id}/setup/check-answers", headers: { "Accept" => "text/html" }, params: {}
-        expect(page).not_to have_link("Change")
-        expect(page).not_to have_link("Answer")
+      context "with previous logs" do
+        before do
+          Timecop.freeze(Time.zone.local(2021, 4, 1))
+          completed_lettings_log.update!(startdate: Time.zone.local(2021, 4, 1))
+          Timecop.unfreeze
+        end
 
-        get "/lettings-logs/#{completed_lettings_log.id}/income-and-benefits/check-answers", headers: { "Accept" => "text/html" }, params: {}
-        expect(page).not_to have_link("Change")
-        expect(page).not_to have_link("Answer")
-      end
+        it "does not allow you to change the answers for previous collection year logs" do
+          get "/lettings-logs/#{completed_lettings_log.id}/setup/check-answers", headers: { "Accept" => "text/html" }, params: {}
+          expect(page).not_to have_link("Change")
+          expect(page).not_to have_link("Answer")
 
-      it "does not let the user navigate to questions for previous collection year logs" do
-        get "/lettings-logs/#{completed_lettings_log.id}/needs-type", headers: { "Accept" => "text/html" }, params: {}
-        expect(response).to redirect_to("/lettings-logs/#{completed_lettings_log.id}")
+          get "/lettings-logs/#{completed_lettings_log.id}/income-and-benefits/check-answers", headers: { "Accept" => "text/html" }, params: {}
+          expect(page).not_to have_link("Change")
+          expect(page).not_to have_link("Answer")
+        end
+
+        it "does not let the user navigate to questions for previous collection year logs" do
+          get "/lettings-logs/#{completed_lettings_log.id}/needs-type", headers: { "Accept" => "text/html" }, params: {}
+          expect(response).to redirect_to("/lettings-logs/#{completed_lettings_log.id}")
+        end
       end
     end
 
@@ -1127,7 +1156,7 @@ RSpec.describe LettingsLogsController, type: :request do
     end
 
     context "with an invalid lettings log params" do
-      let(:params) { { age1: 200 } }
+      let(:params) { { beds: 200 } }
 
       it "returns 422" do
         expect(response).to have_http_status(:unprocessable_entity)
@@ -1135,7 +1164,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
       it "returns an error message" do
         json_response = JSON.parse(response.body)
-        expect(json_response["errors"]).to eq({ "age1" => ["Lead tenant’s age must be between 16 and 120"] })
+        expect(json_response["errors"]).to eq({ "beds" => ["Number of bedrooms cannot be more than 12"] })
       end
     end
 

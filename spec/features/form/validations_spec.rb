@@ -6,7 +6,7 @@ RSpec.describe "validations" do
     allow(Time.zone).to receive(:now).and_return(Time.zone.local(2022, 5, 1))
   end
 
-  context "tests" do
+  context "with logs" do
     let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
     let(:user) { FactoryBot.create(:user) }
     let(:lettings_log) do
@@ -15,13 +15,13 @@ RSpec.describe "validations" do
         :in_progress,
         created_by: user,
         renewal: 0,
-        )
+      )
     end
     let(:empty_lettings_log) do
       FactoryBot.create(
         :lettings_log,
         created_by: user,
-        )
+      )
     end
     let(:completed_without_declaration) do
       FactoryBot.create(
@@ -31,7 +31,7 @@ RSpec.describe "validations" do
         status: 1,
         declaration: nil,
         startdate: Time.zone.local(2021, 5, 1),
-        )
+      )
     end
     let(:id) { lettings_log.id }
 
@@ -127,7 +127,7 @@ RSpec.describe "validations" do
             :in_progress,
             ecstat1: 1,
             created_by: user,
-            )
+          )
         end
         let(:income_over_soft_limit) { 750 }
         let(:income_under_soft_limit) { 700 }
@@ -168,5 +168,4 @@ RSpec.describe "validations" do
       end
     end
   end
-
 end
