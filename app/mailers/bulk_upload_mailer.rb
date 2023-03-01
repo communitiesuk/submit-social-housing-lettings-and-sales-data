@@ -73,6 +73,23 @@ class BulkUploadMailer < NotifyMailer
                          start_bulk_upload_sales_logs_url
                        end
 
+    validator_class = if bulk_upload.lettings?
+                        BulkUpload::Lettings::Validator
+                      else
+                        BulkUpload::Sales::Validator
+                      end
+
+    errors = bulk_upload
+      .bulk_upload_errors
+      .where(category: "setup")
+      .group(:col, :field)
+      .count
+      .keys
+      .sort_by { |_col, field| field }
+      .map do |col, field|
+        "- Column #{col} (#{validator_class.question_for_field(field.to_sym)})"
+      end
+
     send_email(
       bulk_upload.user.email,
       BULK_UPLOAD_FAILED_FILE_SETUP_ERROR_TEMPLATE_ID,
@@ -81,7 +98,7 @@ class BulkUploadMailer < NotifyMailer
         upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
         lettings_or_sales: bulk_upload.log_type,
         year_combo: bulk_upload.year_combo,
-        errors_list: [].join("\n"),
+        errors_list: errors.join("\n"),
         bulk_upload_link:,
       },
     )
