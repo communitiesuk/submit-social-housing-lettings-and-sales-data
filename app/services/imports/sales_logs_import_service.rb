@@ -435,6 +435,7 @@ module Imports
         attributes["sex2"] ||= "R"
         attributes["ecstat2"] ||= 10
         attributes["income2nk"] ||= attributes["income2"].present? ? 0 : 1
+        attributes["relat2"] ||= "R"
       end
 
       # other household members characteristics
@@ -451,11 +452,12 @@ module Imports
       applicable_questions.filter { |q| q.unanswered?(sales_log) }.map(&:id)
     end
 
-    # just for testing, logic might need to change
+    # just for testing, logic will need to change to match the number of people details known
     def default_household_count(attributes)
       return 0 if attributes["hhmemb"].zero? || attributes["hhmemb"].blank?
 
-      attributes["jointpur"] == 1 ? attributes["hhmemb"] - 2 : attributes["hhmemb"] - 1
+      household_count = attributes["jointpur"] == 1 ? attributes["hhmemb"] - 2 : attributes["hhmemb"] - 1
+      household_count.positive? ? household_count : 0    
     end
   end
 end
