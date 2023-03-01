@@ -280,6 +280,35 @@ RSpec.describe Imports::LettingsLogsImportService do
       end
     end
 
+    context "and is a carehome but missing carehome charge" do
+      let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+
+      before do
+        lettings_log_xml.at_xpath("//meta:status").content = "submitted"
+        lettings_log_xml.at_xpath("//xmlns:_1cmangroupcode").content = scheme2.old_visible_id
+        scheme2.update!(registered_under_care_act: 2)
+        lettings_log_xml.at_xpath("//xmlns:Q18b").content = ""
+      end
+
+      it "intercepts the relevant validation error" do
+        allow(logger).to receive(:warn)
+
+        expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers" do
+        allow(logger).to receive(:warn)
+
+        lettings_log_service.send(:create_log, lettings_log_xml)
+        lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+        expect(lettings_log).not_to be_nil
+        expect(lettings_log.is_carehome).to be_truthy
+        expect(lettings_log.chcharge).to be_nil
+      end
+    end
+
     context "and this is an internal transfer from a non social housing" do
       before do
         lettings_log_xml.at_xpath("//xmlns:Q11").content = "9 Residential care home"
