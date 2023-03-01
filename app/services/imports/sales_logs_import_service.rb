@@ -111,7 +111,7 @@ module Imports
       attributes["prevten"] = unsafe_string_as_integer(xml_doc, "Q6PrevTenure")
       attributes["mortlen"] = mortgage_length(xml_doc, attributes)
       attributes["extrabor"] = borrowing(xml_doc, attributes)
-      attributes["mortgageused"] = mortgage_used(xml_doc, attributes)
+      attributes["mortgageused"] = unsafe_string_as_integer(xml_doc, "MORTGAGEUSED")
       attributes["wchair"] = unsafe_string_as_integer(xml_doc, "Q15Wheelchair")
       attributes["armedforcesspouse"] = unsafe_string_as_integer(xml_doc, "ARMEDFORCESSPOUSE")
       attributes["hodate"] = compose_date(xml_doc, "HODAY", "HOMONTH", "HOYEAR")
@@ -396,15 +396,6 @@ module Imports
         safe_string_as_decimal(xml_doc, "Q29MonthlyCharges")
       when 2
         safe_string_as_decimal(xml_doc, "Q37MonthlyCharges")
-      end
-    end
-
-    def mortgage_used(xml_doc, attributes)
-      mortgage_used = unsafe_string_as_integer(xml_doc, "MORTGAGEUSED")
-      if mortgage_used == 3
-        [attributes["mortgage"], attributes["mortlen"], attributes["extrabor"]].any?(&:present?) ? 1 : 2
-      else
-        mortgage_used
       end
     end
 
