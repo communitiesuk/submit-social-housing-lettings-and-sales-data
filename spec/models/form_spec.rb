@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Form, type: :model do
   let(:user) { FactoryBot.build(:user) }
-  let(:lettings_log) { FactoryBot.build(:lettings_log, :in_progress) }
+  let(:lettings_log) { FactoryBot.build(:lettings_log, :in_progress, startdate: Time.zone.local(2021, 5, 1)) }
   let(:form) { lettings_log.form }
   let(:completed_lettings_log) { FactoryBot.build(:lettings_log, :completed) }
   let(:conditional_section_complete_lettings_log) { FactoryBot.build(:lettings_log, :conditional_section_complete) }
@@ -75,7 +75,7 @@ RSpec.describe Form, type: :model do
   end
 
   describe "next_incomplete_section_redirect_path" do
-    let(:lettings_log) { FactoryBot.build(:lettings_log, :in_progress) }
+    let(:lettings_log) { FactoryBot.build(:lettings_log, :in_progress, startdate: Time.zone.local(2021, 5, 1)) }
     let(:subsection) { form.get_subsection("household_characteristics") }
     let(:later_subsection) { form.get_subsection("declaration") }
 
@@ -177,8 +177,17 @@ RSpec.describe Form, type: :model do
   end
 
   describe "invalidated_page_questions" do
-    let(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress, needstype: 1) }
+    let(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress, needstype: 1, startdate: Time.zone.local(2021, 5, 1)) }
     let(:expected_invalid) { %w[scheme_id retirement_value_check condition_effects cbl conditional_question_no_second_question net_income_value_check dependent_question offered layear declaration] }
+
+    around do |example|
+      Timecop.freeze(Time.zone.local(2021, 5, 1)) do
+        Singleton.__init__(FormHandler)
+        example.run
+      end
+      Timecop.return
+      Singleton.__init__(FormHandler)
+    end
 
     context "when dependencies are not met" do
       it "returns an array of question keys whose pages conditions are not met" do
