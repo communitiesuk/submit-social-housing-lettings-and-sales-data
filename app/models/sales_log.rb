@@ -24,6 +24,7 @@ class SalesLog < Log
   has_paper_trail
 
   validates_with SalesLogValidator
+  before_validation :recalculate_start_year!, if: :saledate_changed?
   before_validation :reset_invalidated_dependent_fields!
   before_validation :process_postcode_changes!, if: :postcode_full_changed?
   before_validation :process_previous_postcode_changes!, if: :ppostcode_full_changed?
@@ -65,7 +66,20 @@ class SalesLog < Log
   end
 
   def optional_fields
-    OPTIONAL_FIELDS
+    OPTIONAL_FIELDS + dynamically_not_required
+  end
+
+  def dynamically_not_required
+    not_required = []
+    not_required << "proplen" if proplen_optional?
+
+    not_required
+  end
+
+  def proplen_optional?
+    return false unless collection_start_year
+
+    collection_start_year < 2023
   end
 
   def not_started?
