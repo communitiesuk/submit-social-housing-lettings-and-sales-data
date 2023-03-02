@@ -55,6 +55,8 @@ module Imports
     }.freeze
 
     def create_log(xml_doc)
+      return if meta_field_value(xml_doc, "form-name").include?("Sales")
+
       attributes = {}
 
       previous_status = meta_field_value(xml_doc, "status")

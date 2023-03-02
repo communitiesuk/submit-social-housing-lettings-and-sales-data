@@ -16,6 +16,8 @@ module Imports
   private
 
     def create_log(xml_doc)
+      return unless meta_field_value(xml_doc, "form-name").include?("Sales")
+
       attributes = {}
 
       previous_status = meta_field_value(xml_doc, "status")
@@ -31,9 +33,10 @@ module Imports
       attributes["updated_at"] = Time.zone.parse(meta_field_value(xml_doc, "modified-date"))
       attributes["purchid"] = string_or_nil(xml_doc, "PurchaserCode")
       attributes["ownershipsch"] = unsafe_string_as_integer(xml_doc, "Ownership")
+      attributes["ownershipsch"] = ownership_from_type(attributes) if attributes["ownershipsch"].blank? # sometimes Ownership is missing, but type is set
       attributes["othtype"] = string_or_nil(xml_doc, "Q38OtherSale")
-      attributes["jointmore"] = unsafe_string_as_integer(xml_doc, "JointMore")
       attributes["jointpur"] = unsafe_string_as_integer(xml_doc, "joint")
+      attributes["jointmore"] = unsafe_string_as_integer(xml_doc, "JointMore") if attributes["jointpur"] == 1
       attributes["beds"] = safe_string_as_integer(xml_doc, "Q11Bedrooms")
       attributes["companybuy"] = unsafe_string_as_integer(xml_doc, "company") if attributes["ownershipsch"] == 3
       attributes["hhmemb"] = safe_string_as_integer(xml_doc, "HHMEMB")
@@ -102,10 +105,12 @@ module Imports
       attributes["previous_la_known"] = nil
       attributes["hhregres"] = unsafe_string_as_integer(xml_doc, "ArmedF")
       attributes["hhregresstill"] = still_serving(xml_doc)
-      attributes["proplen"] = safe_string_as_integer(xml_doc, "Q16aProplen2")
+      attributes["proplen"] = safe_string_as_integer(xml_doc, "Q16aProplen2") || safe_string_as_integer(xml_doc, "Q16aProplensec2")
       attributes["mscharge"] = monthly_charges(xml_doc, attributes)
       attributes["mscharge_known"] = 1 if attributes["mscharge"].present?
       attributes["prevten"] = unsafe_string_as_integer(xml_doc, "Q6PrevTenure")
+      attributes["mortlen"] = mortgage_length(xml_doc, attributes)
+      attributes["extrabor"] = borrowing(xml_doc, attributes)
       attributes["mortgageused"] = unsafe_string_as_integer(xml_doc, "MORTGAGEUSED")
       attributes["wchair"] = unsafe_string_as_integer(xml_doc, "Q15Wheelchair")
       attributes["armedforcesspouse"] = unsafe_string_as_integer(xml_doc, "ARMEDFORCESSPOUSE")
@@ -117,11 +122,6 @@ module Imports
       attributes["socprevten"] = unsafe_string_as_integer(xml_doc, "PrevRentType")
       attributes["mortgagelender"] = mortgage_lender(xml_doc, attributes)
       attributes["mortgagelenderother"] = mortgage_lender_other(xml_doc, attributes)
-      attributes["mortlen"] = mortgage_length(xml_doc, attributes)
-      attributes["extrabor"] = borrowing(xml_doc, attributes)
-      attributes["totadult"] = safe_string_as_integer(xml_doc, "TOTADULT") # would get overridden
-      attributes["totchild"] = safe_string_as_integer(xml_doc, "TOTCHILD") # would get overridden
-      attributes["hhtype"] = unsafe_string_as_integer(xml_doc, "HHTYPE")
       attributes["pcode1"] = string_or_nil(xml_doc, "PCODE1")
       attributes["pcode2"] = string_or_nil(xml_doc, "PCODE2")
       attributes["postcode_full"] = compose_postcode(xml_doc, "PCODE1", "PCODE2")
@@ -396,6 +396,17 @@ module Imports
       end
     end
 
+    def ownership_from_type(attributes)
+      case attributes["type"]
+      when 2, 24, 18, 16, 28, 31, 30
+        1 # shared ownership
+      when 8, 14, 27, 9, 29, 21, 22
+        2 # discounted ownership
+      when 10, 12
+        3 # outright sale
+      end
+    end
+
     def set_default_values(attributes)
       attributes["armedforcesspouse"] ||= 7
       attributes["hhregres"] ||= 8
@@ -404,7 +415,11 @@ module Imports
       attributes["hb"] ||= 4
       attributes["prevown"] ||= 3
       attributes["savingsnk"] ||= attributes["savings"].present? ? 0 : 1
-      # attributes["noint"] = 1 # not interviewed
+      attributes["jointmore"] ||= 3 if attributes["jointpur"] == 1
+      attributes["inc1mort"] ||= 3
+      if [attributes["pregyrha"], attributes["pregla"], attributes["pregghb"], attributes["pregother"]].all?(&:blank?)
+        attributes["pregblank"] = 1
+      end
 
       # buyer 1 characteristics
       attributes["age1_known"] ||= 1
@@ -422,6 +437,8 @@ module Imports
         attributes["sex2"] ||= "R"
         attributes["ecstat2"] ||= 10
         attributes["income2nk"] ||= attributes["income2"].present? ? 0 : 1
+        attributes["relat2"] ||= "R"
+        attributes["inc2mort"] ||= 3
       end
 
       # other household members characteristics
@@ -434,15 +451,16 @@ module Imports
     end
 
     def missing_answers(sales_log)
-      applicable_questions = sales_log.form.subsections.map { |s| s.applicable_questions(sales_log) }.flatten
+      applicable_questions = sales_log.form.subsections.map { |s| s.applicable_questions(sales_log).select { |q| q.enabled?(sales_log) } }.flatten
       applicable_questions.filter { |q| q.unanswered?(sales_log) }.map(&:id)
     end
 
-    # just for testing, logic might need to change
+    # just for testing, logic will need to change to match the number of people details known
     def default_household_count(attributes)
       return 0 if attributes["hhmemb"].zero? || attributes["hhmemb"].blank?
 
-      attributes["jointpur"] == 1 ? attributes["hhmemb"] - 2 : attributes["hhmemb"] - 1
+      household_count = attributes["jointpur"] == 1 ? attributes["hhmemb"] - 2 : attributes["hhmemb"] - 1
+      household_count.positive? ? household_count : 0
     end
   end
 end
