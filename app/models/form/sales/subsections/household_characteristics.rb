@@ -37,7 +37,8 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Sales::Pages::RetirementValueCheck.new("working_situation_2_retirement_value_check_joint_purchase", nil, self, person_index: 2),
       Form::Sales::Pages::Buyer2IncomeValueCheck.new("working_situation_buyer_2_income_value_check", nil, self),
       Form::Sales::Pages::Buyer2LiveInProperty.new(nil, nil, self),
-      Form::Sales::Pages::NumberOfOthersInProperty.new(nil, nil, self),
+      Form::Sales::Pages::NumberOfOthersInProperty.new("number_of_others_in_property", nil, self, joint_purchase: false),
+      Form::Sales::Pages::NumberOfOthersInProperty.new("number_of_others_in_property_joint_purchase", nil, self, joint_purchase: true),
       Form::Sales::Pages::PersonKnown.new("person_2_known", nil, self, person_index: 2),
       Form::Sales::Pages::PersonRelationshipToBuyer1.new("person_2_relationship_to_buyer_1", nil, self, person_index: 2),
       Form::Sales::Pages::PersonAge.new("person_2_age", nil, self, person_index: 2),
@@ -70,6 +71,14 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Sales::Pages::RetirementValueCheck.new("gender_5_retirement_value_check", nil, self, person_index: 5),
       Form::Sales::Pages::PersonWorkingSituation.new("person_5_working_situation", nil, self, person_index: 5),
       Form::Sales::Pages::RetirementValueCheck.new("working_situation_5_retirement_value_check", nil, self, person_index: 5),
+      Form::Sales::Pages::PersonKnown.new("person_6_known", nil, self, person_index: 6),
+      Form::Sales::Pages::PersonRelationshipToBuyer1.new("person_6_relationship_to_buyer_1", nil, self, person_index: 6),
+      Form::Sales::Pages::PersonAge.new("person_6_age", nil, self, person_index: 6),
+      Form::Sales::Pages::RetirementValueCheck.new("age_6_retirement_value_check", nil, self, person_index: 6),
+      Form::Sales::Pages::PersonGenderIdentity.new("person_6_gender_identity", nil, self, person_index: 6),
+      Form::Sales::Pages::RetirementValueCheck.new("gender_6_retirement_value_check", nil, self, person_index: 6),
+      Form::Sales::Pages::PersonWorkingSituation.new("person_6_working_situation", nil, self, person_index: 6),
+      Form::Sales::Pages::RetirementValueCheck.new("working_situation_6_retirement_value_check", nil, self, person_index: 6),
     ].flatten.compact
   end
 
