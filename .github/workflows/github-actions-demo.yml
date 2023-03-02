@@ -6,10 +6,13 @@ jobs:
     permissions: write-all
     runs-on: ubuntu-latest
     steps:
+      - run: echo ${{ github.event_name }}
+      - run: echo ${{ github.event.action }}
       - name: Create or Update Comment
         uses: peter-evans/create-or-update-comment@v2.1.1
         with:
           issue-number: 5
           body: |
             https://patch-diff.githubusercontent.com/raw/${{ github.repository }}/pull/{{ github.context.issue.number}}.diff
+
           reactions: 'rocket'
