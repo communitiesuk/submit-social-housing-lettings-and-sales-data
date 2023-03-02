@@ -2,7 +2,8 @@ name: GitHub Action
 run-name: Test action
 on: [push]
 jobs:
-  Explore-GitHub-Actions:
+  test-action:
+    permissions: write-all
     runs-on: ubuntu-latest
     steps:
       - name: Create or Update Comment
