@@ -6,6 +6,7 @@ jobs:
     permissions: write-all
     runs-on: ubuntu-latest
     steps:
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
       - name: Create or Update Comment
         uses: peter-evans/create-or-update-comment@v2.1.1
         with:
