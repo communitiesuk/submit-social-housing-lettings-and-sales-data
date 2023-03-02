@@ -33,10 +33,10 @@ module Imports
       attributes["updated_at"] = Time.zone.parse(meta_field_value(xml_doc, "modified-date"))
       attributes["purchid"] = string_or_nil(xml_doc, "PurchaserCode")
       attributes["ownershipsch"] = unsafe_string_as_integer(xml_doc, "Ownership")
-      attributes["ownershipsch"] = ownership_from_type(attributes) if attributes["ownershipsch"].blank? # someties Ownership is missing, but type is set
+      attributes["ownershipsch"] = ownership_from_type(attributes) if attributes["ownershipsch"].blank? # sometimes Ownership is missing, but type is set
       attributes["othtype"] = string_or_nil(xml_doc, "Q38OtherSale")
       attributes["jointpur"] = unsafe_string_as_integer(xml_doc, "joint")
-      attributes["jointmore"] = unsafe_string_as_integer(xml_doc, "JointMore") if attributes["joint"] == 1
+      attributes["jointmore"] = unsafe_string_as_integer(xml_doc, "JointMore") if attributes["jointpur"] == 1
       attributes["beds"] = safe_string_as_integer(xml_doc, "Q11Bedrooms")
       attributes["companybuy"] = unsafe_string_as_integer(xml_doc, "company") if attributes["ownershipsch"] == 3
       attributes["hhmemb"] = safe_string_as_integer(xml_doc, "HHMEMB")

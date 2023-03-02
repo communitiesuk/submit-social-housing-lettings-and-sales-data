@@ -120,7 +120,7 @@ jobs:
           cf set-env $APP_NAME API_KEY $API_KEY
           cf set-env $APP_NAME GOVUK_NOTIFY_API_KEY $GOVUK_NOTIFY_API_KEY
           cf set-env $APP_NAME RAILS_MASTER_KEY $RAILS_MASTER_KEY
-          cf set-env $APP_NAME IMPORT_PAAS_INSTANCE dluhc-core-review-import-bucket
+          cf set-env $APP_NAME IMPORT_PAAS_INSTANCE $IMPORT_PAAS_INSTANCE
           cf set-env $APP_NAME EXPORT_PAAS_INSTANCE "dluhc-core-review-export-bucket"
           cf set-env $APP_NAME S3_CONFIG $S3_CONFIG
           cf set-env $APP_NAME CSV_DOWNLOAD_PAAS_INSTANCE "dluhc-core-review-csv-bucket"
