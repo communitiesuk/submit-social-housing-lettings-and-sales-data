@@ -1,9 +1,10 @@
 name: GitHub Action
 run-name: Test action
 on: [push]
+permissions: write-all
+
 jobs:
   test-action:
-#    permissions: write-all, read_all
     runs-on: ubuntu-latest
     steps:
       - run: echo ${{ github.event_name }}
