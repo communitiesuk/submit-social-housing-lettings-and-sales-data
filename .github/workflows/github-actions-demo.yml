@@ -13,6 +13,6 @@ jobs:
         with:
           issue-number: 5
           body: |
-            https://patch-diff.githubusercontent.com/raw/${{ github.repository }}/pull/{{ github.context.issue.number}}.diff
+            https://patch-diff.githubusercontent.com/raw/${{ github.repository }}/pull/{{ github.event.number}}.diff
             ${{ github.event.number }}
           reactions: 'rocket'
