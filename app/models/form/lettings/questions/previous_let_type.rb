@@ -1,4 +1,4 @@
-class Form::Lettings::Questions::Unitletas < ::Form::Question
+class Form::Lettings::Questions::PreviousLetType < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "unitletas"
@@ -13,8 +13,11 @@ class Form::Lettings::Questions::Unitletas < ::Form::Question
   ANSWER_OPTIONS = {
     "1" => { "value" => "Social rent basis" },
     "2" => { "value" => "Affordable rent basis" },
-    "4" => { "value" => "Intermediate rent basis" },
+    "5" => { "value" => "A London Affordable Rent basis" },
+    "6" => { "value" => "A Rent to Buy basis" },
+    "7" => { "value" => "A London Living Rent basis" },
+    "8" => { "value" => "Another Intermediate Rent basis" },
     "divider" => { "value" => true },
     "3" => { "value" => "Don’t know" },
-  }.freeze
+  }
 end
