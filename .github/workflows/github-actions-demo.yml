@@ -14,6 +14,5 @@ jobs:
           issue-number: 5
           body: |
             https://patch-diff.githubusercontent.com/raw/${{ github.repository }}/pull/{{ github.context.issue.number}}.diff
-            ${{ github.event_name }}
-            ${{ github.event.action }}
+            ${{ github.event.number }}
           reactions: 'rocket'
