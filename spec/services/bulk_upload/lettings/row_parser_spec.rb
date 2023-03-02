@@ -680,6 +680,43 @@ RSpec.describe BulkUpload::Lettings::RowParser do
   end
 
   describe "#log" do
+    [
+      %w[age1_known age1 field_12],
+      %w[age2_known age2 field_13],
+      %w[age3_known age3 field_14],
+      %w[age4_known age4 field_15],
+      %w[age5_known age5 field_16],
+      %w[age6_known age6 field_17],
+      %w[age7_known age7 field_18],
+      %w[age8_known age8 field_19],
+    ].each do |known, age, field|
+      describe "##{known} and ##{age}" do
+        context "when #{field} is R" do
+          let(:attributes) { { bulk_upload:, field.to_s => "R" } }
+
+          it "sets ##{known} 1" do
+            expect(parser.log.public_send(known)).to be(1)
+          end
+
+          it "sets ##{age} to nil" do
+            expect(parser.log.public_send(age)).to be_nil
+          end
+        end
+
+        context "when #{field} is a number" do
+          let(:attributes) { { bulk_upload:, field.to_s => "50" } }
+
+          it "sets ##{known} to 0" do
+            expect(parser.log.public_send(known)).to be(0)
+          end
+
+          it "sets ##{age} to given age" do
+            expect(parser.log.public_send(age)).to be(50)
+          end
+        end
+      end
+    end
+
     describe "#location" do
       context "when lookup is via new core id" do
         let(:attributes) { { bulk_upload:, field_4: scheme.old_visible_id, field_5: location.id, field_111: owning_org } }

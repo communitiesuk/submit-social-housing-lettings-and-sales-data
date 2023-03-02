@@ -16,14 +16,14 @@ class BulkUpload::Lettings::RowParser
   attribute :field_9, :integer
   attribute :field_10, :string
   attribute :field_11, :integer
-  attribute :field_12, :integer
-  attribute :field_13, :integer
-  attribute :field_14, :integer
-  attribute :field_15, :integer
-  attribute :field_16, :integer
-  attribute :field_17, :integer
-  attribute :field_18, :integer
-  attribute :field_19, :integer
+  attribute :field_12, :string
+  attribute :field_13, :string
+  attribute :field_14, :string
+  attribute :field_15, :string
+  attribute :field_16, :string
+  attribute :field_17, :string
+  attribute :field_18, :string
+  attribute :field_19, :string
   attribute :field_20, :string
   attribute :field_21, :string
   attribute :field_22, :string
@@ -627,22 +627,29 @@ private
     attributes["tenancylength"] = field_11
     attributes["declaration"] = field_132
 
-    attributes["age1_known"] = field_12.present? ? 0 : 1
-    attributes["age1"] = field_12
-    attributes["age2_known"] = field_13.present? ? 0 : 1
-    attributes["age2"] = field_13
-    attributes["age3_known"] = field_14.present? ? 0 : 1
-    attributes["age3"] = field_14
-    attributes["age4_known"] = field_15.present? ? 0 : 1
-    attributes["age4"] = field_15
-    attributes["age5_known"] = field_16.present? ? 0 : 1
-    attributes["age5"] = field_16
-    attributes["age6_known"] = field_17.present? ? 0 : 1
-    attributes["age6"] = field_17
-    attributes["age7_known"] = field_18.present? ? 0 : 1
-    attributes["age7"] = field_18
-    attributes["age8_known"] = field_19.present? ? 0 : 1
-    attributes["age8"] = field_19
+    attributes["age1_known"] = field_12 == "R" ? 1 : 0
+    attributes["age1"] = field_12 if attributes["age1_known"].zero?
+
+    attributes["age2_known"] = field_13 == "R" ? 1 : 0
+    attributes["age2"] = field_13 if attributes["age2_known"].zero?
+
+    attributes["age3_known"] = field_14 == "R" ? 1 : 0
+    attributes["age3"] = field_14 if attributes["age3_known"].zero?
+
+    attributes["age4_known"] = field_15 == "R" ? 1 : 0
+    attributes["age4"] = field_15 if attributes["age4_known"].zero?
+
+    attributes["age5_known"] = field_16 == "R" ? 1 : 0
+    attributes["age5"] = field_16 if attributes["age5_known"].zero?
+
+    attributes["age6_known"] = field_17 == "R" ? 1 : 0
+    attributes["age6"] = field_17 if attributes["age6_known"].zero?
+
+    attributes["age7_known"] = field_18 == "R" ? 1 : 0
+    attributes["age7"] = field_18 if attributes["age7_known"].zero?
+
+    attributes["age8_known"] = field_19 == "R" ? 1 : 0
+    attributes["age8"] = field_19 if attributes["age8_known"].zero?
 
     attributes["sex1"] = field_20
     attributes["sex2"] = field_21
