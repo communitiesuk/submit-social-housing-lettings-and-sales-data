@@ -3,7 +3,7 @@ class Form::Lettings::Subsections::PropertyInformation < ::Form::Subsection
     super
     @id = "property_information"
     @label = "Property information"
-    @depends_on = [{ "non_location_setup_questions_completed?" => true }]
+    @depends_on = [{ "non_location_setup_questions_completed?" => true, "supported_housing_and_renewal?" => false }]
   end
 
   def pages
@@ -26,5 +26,9 @@ class Form::Lettings::Subsections::PropertyInformation < ::Form::Subsection
       Form::Lettings::Pages::PropertyMajorRepairs.new(nil, nil, self),
       Form::Lettings::Pages::PropertyMajorRepairsValueCheck.new(nil, nil, self),
     ].compact
+  end
+
+  def displayed_in_tasklist?(log)
+    !log.supported_housing_and_renewal?
   end
 end
