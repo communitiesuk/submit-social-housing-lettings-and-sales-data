@@ -2,11 +2,7 @@ class Form::Lettings::Pages::NewBuildHandoverDate < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "new_build_handover_date"
-    @depends_on = [
-      { "renewal" => 0, "rsnvac" => 15 },
-      { "renewal" => 0, "rsnvac" => 16 },
-      { "renewal" => 0, "rsnvac" => 17 },
-    ]
+    @depends_on = [{ "not_renewal?" => true, "has_first_let_vacancy_reason?" => true }]
   end
 
   def questions

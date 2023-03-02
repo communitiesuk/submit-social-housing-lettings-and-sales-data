@@ -213,6 +213,10 @@ class LettingsLog < Log
     needstype == 2
   end
 
+  def supported_housing_and_renewal?
+    is_supported_housing? && is_renewal?
+  end
+
   def has_hbrentshortfall?
     # 1: Yes
     hbrentshortfall == 1
@@ -285,6 +289,10 @@ class LettingsLog < Log
     # 16: First let of conversion, rehabilitation or acquired property
     # 17: First let of leased property
     [15, 16, 17].include?(rsnvac)
+  end
+
+  def vacancy_reason_not_renewal_or_first_let?
+    [5, 6, 8, 9, 10, 11, 12, 13, 18, 19].include? rsnvac
   end
 
   def previous_tenancy_was_temporary?
