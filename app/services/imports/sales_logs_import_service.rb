@@ -122,9 +122,6 @@ module Imports
       attributes["socprevten"] = unsafe_string_as_integer(xml_doc, "PrevRentType")
       attributes["mortgagelender"] = mortgage_lender(xml_doc, attributes)
       attributes["mortgagelenderother"] = mortgage_lender_other(xml_doc, attributes)
-      attributes["totadult"] = safe_string_as_integer(xml_doc, "TOTADULT") # would get overridden
-      attributes["totchild"] = safe_string_as_integer(xml_doc, "TOTCHILD") # would get overridden
-      attributes["hhtype"] = unsafe_string_as_integer(xml_doc, "HHTYPE")
       attributes["pcode1"] = string_or_nil(xml_doc, "PCODE1")
       attributes["pcode2"] = string_or_nil(xml_doc, "PCODE2")
       attributes["postcode_full"] = compose_postcode(xml_doc, "PCODE1", "PCODE2")
