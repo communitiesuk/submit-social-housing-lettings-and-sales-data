@@ -422,7 +422,8 @@ module Imports
         age = string_or_nil(xml_doc, "P#{person_index}Age")
         gender = string_or_nil(xml_doc, "P#{person_index}Sex")
         relationship = string_or_nil(xml_doc, "P#{person_index}Rel")
-        if gender.present? || age.present? || relationship.present?
+        economic_status = string_or_nil(xml_doc, "P#{person_index}Eco")
+        if gender.present? || age.present? || relationship.present? || economic_status.present?
           highest_person_index_with_details = person_index
         end
       end
