@@ -5,8 +5,8 @@ jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
     steps:
-      - name: Create comment
-        uses: peter-evans/create-or-update-comment@v2
+      - name: Create or Update Comment
+        uses: peter-evans/create-or-update-comment@v2.1.1
         with:
           issue-number: 1
           body: |
