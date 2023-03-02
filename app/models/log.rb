@@ -39,6 +39,11 @@ class Log < ApplicationRecord
     @start_year = startdate < window_end_date ? startdate.year - 1 : startdate.year
   end
 
+  def recalculate_start_year!
+    @start_year = nil
+    collection_start_year
+  end
+
   def lettings?
     false
   end

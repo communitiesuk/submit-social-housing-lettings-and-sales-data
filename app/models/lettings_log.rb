@@ -65,11 +65,6 @@ class LettingsLog < Log
     FormHandler.instance.get_form(form_name) || FormHandler.instance.current_lettings_form
   end
 
-  def recalculate_start_year!
-    @start_year = nil
-    collection_start_year
-  end
-
   def lettings?
     true
   end
