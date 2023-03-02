@@ -307,6 +307,12 @@ RSpec.describe SalesLog, type: :model do
       expect(record_from_db["hhmemb"]).to eq(6)
     end
 
+    it "correctly derives and saves hhmemb if it's a joint purchase" do
+      sales_log.update!(jointpur: 2, jointmore: 2)
+      record_from_db = ActiveRecord::Base.connection.execute("select hhmemb from sales_logs where id=#{sales_log.id}").to_a[0]
+      expect(record_from_db["hhmemb"]).to eq(5)
+    end
+
     it "correctly derives and saves totchild" do
       record_from_db = ActiveRecord::Base.connection.execute("select totchild from sales_logs where id=#{sales_log.id}").to_a[0]
       expect(record_from_db["totchild"]).to eq(2)

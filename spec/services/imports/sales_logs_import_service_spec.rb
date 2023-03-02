@@ -543,10 +543,26 @@ RSpec.describe Imports::SalesLogsImportService do
           allow(logger).to receive(:warn).and_return(nil)
         end
 
-        it "sets hholdcount to hhmemb - 1 if not answered and not joint purchase" do
-          sales_log_xml.at_xpath("//xmlns:HHMEMB").content = "3"
+        it "sets hholdcount to last person the information is given for if HHMEMB is not set" do
           sales_log_xml.at_xpath("//xmlns:joint").content = "2 No"
-          sales_log_xml.at_xpath("//xmlns:LiveInOther").content = ""
+          sales_log_xml.at_xpath("//xmlns:HHMEMB").content = ""
+          sales_log_xml.at_xpath("//xmlns:P2Age").content = "20"
+          sales_log_xml.at_xpath("//xmlns:P3Sex").content = "R"
+          sales_log_xml.at_xpath("//xmlns:P4Age").content = "23"
+
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.hholdcount).to eq(3)
+        end
+
+        it "sets hholdcount to last person the information is given for - buyers if HHMEMB is 0" do
+          sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+          sales_log_xml.at_xpath("//xmlns:JointMore").content = "2 No"
+          sales_log_xml.at_xpath("//xmlns:HHMEMB").content = ""
+          sales_log_xml.at_xpath("//xmlns:P2Age").content = "20"
+          sales_log_xml.at_xpath("//xmlns:P3Sex").content = "R"
+          sales_log_xml.at_xpath("//xmlns:P4Age").content = "23"
 
           sales_log_service.send(:create_log, sales_log_xml)
 
@@ -554,23 +570,34 @@ RSpec.describe Imports::SalesLogsImportService do
           expect(sales_log&.hholdcount).to eq(2)
         end
 
-        it "sets hholdcount to hhmemb - 2 if not answered and joint purchase" do
+        it "sets hholdcount to 0 no information for people is given and HHMEMB is not set" do
           sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
           sales_log_xml.at_xpath("//xmlns:JointMore").content = "2 No"
-          sales_log_xml.at_xpath("//xmlns:HHMEMB").content = "3"
+          sales_log_xml.at_xpath("//xmlns:HHMEMB").content = ""
           sales_log_xml.at_xpath("//xmlns:LiveInOther").content = ""
+          sales_log_xml.at_xpath("//xmlns:P2Age").content = ""
+          sales_log_xml.at_xpath("//xmlns:P2Sex").content = ""
+          sales_log_xml.at_xpath("//xmlns:P3Age").content = ""
+          sales_log_xml.at_xpath("//xmlns:P3Sex").content = ""
+          sales_log_xml.at_xpath("//xmlns:P4Age").content = ""
+          sales_log_xml.at_xpath("//xmlns:P4Sex").content = ""
 
           sales_log_service.send(:create_log, sales_log_xml)
 
           sales_log = SalesLog.find_by(old_id: sales_log_id)
-          expect(sales_log&.hholdcount).to eq(1)
+          expect(sales_log&.hholdcount).to eq(0)
         end
 
-        it "sets hholdcount to 0 if HHMEMB is 0" do
-          sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
-          sales_log_xml.at_xpath("//xmlns:JointMore").content = "2 No"
+        it "sets hholdcount to the 0 if no information for people is given and HHMEMB is 0" do
+          sales_log_xml.at_xpath("//xmlns:joint").content = "2 No"
           sales_log_xml.at_xpath("//xmlns:HHMEMB").content = "0"
           sales_log_xml.at_xpath("//xmlns:LiveInOther").content = ""
+          sales_log_xml.at_xpath("//xmlns:P2Age").content = ""
+          sales_log_xml.at_xpath("//xmlns:P2Sex").content = ""
+          sales_log_xml.at_xpath("//xmlns:P3Age").content = ""
+          sales_log_xml.at_xpath("//xmlns:P3Sex").content = ""
+          sales_log_xml.at_xpath("//xmlns:P4Age").content = ""
+          sales_log_xml.at_xpath("//xmlns:P4Sex").content = ""
 
           sales_log_service.send(:create_log, sales_log_xml)
 

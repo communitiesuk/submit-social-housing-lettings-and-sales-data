@@ -39,7 +39,8 @@ module Imports
       attributes["jointmore"] = unsafe_string_as_integer(xml_doc, "JointMore") if attributes["jointpur"] == 1
       attributes["beds"] = safe_string_as_integer(xml_doc, "Q11Bedrooms")
       attributes["companybuy"] = unsafe_string_as_integer(xml_doc, "company") if attributes["ownershipsch"] == 3
-      attributes["hhmemb"] = safe_string_as_integer(xml_doc, "HHMEMB")
+      attributes["hholdcount"] = other_household_members(xml_doc, attributes)
+      attributes["hhmemb"] = household_members(xml_doc, attributes)
       (1..6).each do |index|
         attributes["age#{index}"] = safe_string_as_integer(xml_doc, "P#{index}Age")
         attributes["sex#{index}"] = sex(xml_doc, index)
@@ -62,7 +63,6 @@ module Imports
       attributes["noint"] = unsafe_string_as_integer(xml_doc, "PartAPurchaser")
       attributes["buy2livein"] = unsafe_string_as_integer(xml_doc, "LiveInBuyer2")
       attributes["wheel"] = unsafe_string_as_integer(xml_doc, "Q10Wheelchair")
-      attributes["hholdcount"] = safe_string_as_integer(xml_doc, "LiveInOther")
       attributes["la"] = string_or_nil(xml_doc, "Q14ONSLACode")
       attributes["income1"] = safe_string_as_integer(xml_doc, "Q2Person1Income")
       attributes["income1nk"] = income_known(unsafe_string_as_integer(xml_doc, "P1IncKnown"))
@@ -407,6 +407,36 @@ module Imports
       end
     end
 
+    def other_household_members(xml_doc, attributes)
+      hholdcount = safe_string_as_integer(xml_doc, "LiveInOther")
+      return hholdcount if hholdcount.present?
+
+      other_people_with_details(xml_doc, attributes)
+    end
+
+    def other_people_with_details(xml_doc, attributes)
+      number_of_buyers = attributes["jointpur"] == 1 ? 2 : 1
+      highest_person_index_with_details = number_of_buyers
+
+      (2..6).each do |person_index|
+        age = string_or_nil(xml_doc, "P#{person_index}Age")
+        gender = string_or_nil(xml_doc, "P#{person_index}Sex")
+        relationship = string_or_nil(xml_doc, "P#{person_index}Rel")
+        economic_status = string_or_nil(xml_doc, "P#{person_index}Eco")
+        if gender.present? || age.present? || relationship.present? || economic_status.present?
+          highest_person_index_with_details = person_index
+        end
+      end
+
+      highest_person_index_with_details - number_of_buyers
+    end
+
+    def household_members(_xml_doc, attributes)
+      return attributes["hholdcount"] + 2 if attributes["jointpur"] == 1
+
+      attributes["hholdcount"] + 1 if attributes["jointpur"] == 2
+    end
+
     def set_default_values(attributes)
       attributes["armedforcesspouse"] ||= 7
       attributes["hhregres"] ||= 8
@@ -429,7 +459,6 @@ module Imports
       attributes["national"] ||= 13
       attributes["ecstat1"] ||= 10
       attributes["income1nk"] ||= attributes["income1"].present? ? 0 : 1
-      attributes["hholdcount"] ||= default_household_count(attributes) # just for testing, might need to change
 
       # buyer 2 characteristics
       if attributes["jointpur"] == 1
@@ -453,14 +482,6 @@ module Imports
     def missing_answers(sales_log)
       applicable_questions = sales_log.form.subsections.map { |s| s.applicable_questions(sales_log).select { |q| q.enabled?(sales_log) } }.flatten
       applicable_questions.filter { |q| q.unanswered?(sales_log) }.map(&:id)
-    end
-
-    # just for testing, logic will need to change to match the number of people details known
-    def default_household_count(attributes)
-      return 0 if attributes["hhmemb"].zero? || attributes["hhmemb"].blank?
-
-      household_count = attributes["jointpur"] == 1 ? attributes["hhmemb"] - 2 : attributes["hhmemb"] - 1
-      household_count.positive? ? household_count : 0
     end
   end
 end

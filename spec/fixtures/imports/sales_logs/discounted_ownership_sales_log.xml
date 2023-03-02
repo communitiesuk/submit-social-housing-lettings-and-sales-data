@@ -292,7 +292,7 @@
     <Q43CashDeposit override-field=""/>
   </Group>
   <Group>
-    <HHMEMB>0</HHMEMB>
+    <HHMEMB>1</HHMEMB>
     <TOTADULT>0</TOTADULT>
     <TOTCHILD>0</TOTCHILD>
   </Group>
