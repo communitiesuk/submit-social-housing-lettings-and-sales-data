@@ -21,11 +21,18 @@ module DerivedVariables::SalesLogVariables
     self.pcode1, self.pcode2 = postcode_full.split(" ") if postcode_full.present?
     self.totchild = total_child
     self.totadult = total_adult + total_elder
-    self.hhmemb = totchild + totadult
+    self.hhmemb = number_of_household_members
     self.hhtype = household_type
   end
 
 private
+
+  def number_of_household_members
+    return unless hholdcount.present? && jointpur.present?
+
+    number_of_buyers = joint_purchase? ? 2 : 1
+    hholdcount + number_of_buyers
+  end
 
   def total_elder
     ages = [age1, age2, age3, age4, age5, age6]
