@@ -643,7 +643,7 @@ RSpec.describe Imports::SalesLogsImportService do
           allow(logger).to receive(:warn).and_return(nil)
         end
 
-        it "sets pregblank to true know if no other organisations are selected" do
+        it "sets pregblank to true if no other organisations are selected" do
           sales_log_xml.at_xpath("//xmlns:PREGYRHA").content = ""
           sales_log_xml.at_xpath("//xmlns:PREGLA").content = ""
           sales_log_xml.at_xpath("//xmlns:PREGHBA").content = ""
@@ -671,6 +671,80 @@ RSpec.describe Imports::SalesLogsImportService do
           expect(sales_log&.pregghb).to eq(1)
           expect(sales_log&.pregother).to eq(1)
           expect(sales_log&.pregblank).to eq(nil)
+        end
+      end
+
+      context "when setting default buyer 2 live in for discounted ownership" do
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
+
+        before do
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets buy2livein to true if it is joint purchase and it's not answered" do
+          sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+          sales_log_xml.at_xpath("//xmlns:JointMore").content = "2 No"
+          sales_log_xml.at_xpath("//xmlns:LiveInBuyer2").content = ""
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.buy2livein).to eq(1)
+        end
+
+        it "sets buy2livein correctly if it's answered" do
+          sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+          sales_log_xml.at_xpath("//xmlns:JointMore").content = "2 No"
+          sales_log_xml.at_xpath("//xmlns:LiveInBuyer2").content = "1 Yes"
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.buy2livein).to eq(1)
+        end
+      end
+
+      context "when setting default buyer 2 live in for shared ownership" do
+        let(:sales_log_id) { "shared_ownership_sales_log" }
+
+        before do
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets buy2livein to true if it is joint purchase and it's not answered" do
+          sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+          sales_log_xml.at_xpath("//xmlns:JointMore").content = "2 No"
+          sales_log_xml.at_xpath("//xmlns:LiveInBuyer2").content = ""
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.buy2livein).to eq(1)
+        end
+
+        it "sets buy2livein correctly if it's answered" do
+          sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+          sales_log_xml.at_xpath("//xmlns:JointMore").content = "2 No"
+          sales_log_xml.at_xpath("//xmlns:LiveInBuyer2").content = "2 No"
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.buy2livein).to eq(2)
+        end
+      end
+
+      context "when setting default buyer 2 live in for outright sale" do
+        let(:sales_log_id) { "outright_sale_sales_log" }
+
+        before do
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "does not set buy2livein if it is joint purchase and it's not answered" do
+          sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+          sales_log_xml.at_xpath("//xmlns:JointMore").content = "2 No"
+          sales_log_xml.at_xpath("//xmlns:LiveInBuyer2").content = ""
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.buy2livein).to eq(nil)
         end
       end
     end

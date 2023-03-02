@@ -468,6 +468,7 @@ module Imports
         attributes["income2nk"] ||= attributes["income2"].present? ? 0 : 1
         attributes["relat2"] ||= "R"
         attributes["inc2mort"] ||= 3
+        attributes["buy2livein"] ||= 1 unless attributes["ownershipsch"] == 3
       end
 
       # other household members characteristics
