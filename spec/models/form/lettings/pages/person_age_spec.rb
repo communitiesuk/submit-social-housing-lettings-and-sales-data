@@ -1,12 +1,12 @@
 require "rails_helper"
 
 RSpec.describe Form::Lettings::Pages::PersonAge, type: :model do
-  subject(:page) { described_class.new(nil, page_definition, subsection, person_index:, is_child:) }
+  subject(:page) { described_class.new(nil, page_definition, subsection, person_index:, person_type:) }
 
   let(:page_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection) }
   let(:person_index) { 2 }
-  let(:is_child) { false }
+  let(:person_type) { "non_child" }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
@@ -26,7 +26,7 @@ RSpec.describe Form::Lettings::Pages::PersonAge, type: :model do
     end
 
     context "when child" do
-      let(:is_child) { true }
+      let(:person_type) { "child" }
 
       it "has the correct id" do
         expect(page.id).to eq("person_2_age_child")
