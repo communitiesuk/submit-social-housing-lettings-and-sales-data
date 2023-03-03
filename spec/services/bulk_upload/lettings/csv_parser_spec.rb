@@ -12,7 +12,7 @@ RSpec.describe BulkUpload::Lettings::CsvParser do
     end
 
     it "parses csv correctly" do
-      expect(service.row_parsers[0].field_12).to eq(55)
+      expect(service.row_parsers[0].field_12.to_i).to eq(55)
     end
   end
 
@@ -32,7 +32,7 @@ RSpec.describe BulkUpload::Lettings::CsvParser do
     end
 
     it "parses csv correctly" do
-      expect(service.row_parsers[0].field_12).to eql(log.age1)
+      expect(service.row_parsers[0].field_12.to_i).to eql(log.age1)
     end
   end
 
@@ -49,7 +49,7 @@ RSpec.describe BulkUpload::Lettings::CsvParser do
     end
 
     it "parses csv correctly" do
-      expect(service.row_parsers[0].field_12).to eql(log.age1)
+      expect(service.row_parsers[0].field_12.to_i).to eql(log.age1)
     end
   end
 
@@ -66,7 +66,7 @@ RSpec.describe BulkUpload::Lettings::CsvParser do
     end
 
     it "parses csv correctly" do
-      expect(service.row_parsers[0].field_12).to eql(log.age1)
+      expect(service.row_parsers[0].field_12.to_i).to eql(log.age1)
     end
   end
 end
