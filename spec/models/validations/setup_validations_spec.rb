@@ -7,7 +7,7 @@ RSpec.describe Validations::SetupValidations do
   let(:record) { FactoryBot.create(:lettings_log) }
 
   before do
-    allow(FeatureToggle).to receive(:startdate_validation_enabled?).and_return(true)
+    allow(FeatureToggle).to receive(:startdate_collection_window_validation_enabled?).and_return(true)
   end
 
   describe "tenancy start date" do
