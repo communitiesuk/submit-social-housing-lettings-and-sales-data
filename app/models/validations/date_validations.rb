@@ -56,7 +56,7 @@ module Validations::DateValidations
     scheme_during_startdate_validation(record, :startdate)
   end
 
-  private
+private
 
   def is_rsnvac_first_let?(record)
     [15, 16, 17].include?(record["rsnvac"])
