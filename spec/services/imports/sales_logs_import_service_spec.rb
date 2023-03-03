@@ -17,14 +17,6 @@ RSpec.describe Imports::SalesLogsImportService do
   end
 
   before do
-    { "GL519EX" => "E07000078",
-      "SW1A2AA" => "E09000033",
-      "SW1A1AA" => "E09000033",
-      "SW147QP" => "E09000027",
-      "B955HZ" => "E07000221" }.each do |postcode, district_code|
-        WebMock.stub_request(:get, /api.postcodes.io\/postcodes\/#{postcode}/).to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"#{district_code}\",\"codes\":{\"admin_district\":\"#{district_code}\"}}}", headers: {})
-      end
-
     allow(Organisation).to receive(:find_by).and_return(nil)
     allow(Organisation).to receive(:find_by).with(old_visible_id: organisation.old_visible_id).and_return(organisation)
     allow(Organisation).to receive(:find_by).with(old_visible_id: managing_organisation.old_visible_id).and_return(managing_organisation)
@@ -797,6 +789,19 @@ RSpec.describe Imports::SalesLogsImportService do
           sales_log = SalesLog.find_by(old_id: sales_log_id)
           expect(sales_log&.ppcodenk).to eq(0)
           expect(sales_log&.ppostcode_full).to eq("GL51 9EX")
+          expect(sales_log&.status).to eq("completed")
+        end
+
+        it "correctly sets location fields for when location cannot be inferred from postcode" do
+          sales_log_xml.at_xpath("//xmlns:Q14ONSLACode").content = "E07000142"
+          sales_log_xml.at_xpath("//xmlns:Q14Postcode").content = "A11AA"
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.pcodenk).to eq(0) # postcode known
+          # expect(sales_log&.is_la_inferred).to eq(nil)
+          expect(sales_log&.la_known).to eq(1) # la known
+          expect(sales_log&.la).to eq("E07000142")
           expect(sales_log&.status).to eq("completed")
         end
       end
