@@ -143,6 +143,11 @@ class BulkUpload::Lettings::RowParser
   validates :field_1, presence: { message: I18n.t("validations.not_answered", question: "letting type") },
                       inclusion: { in: (1..12).to_a, message: I18n.t("validations.invalid_option", question: "letting type") }
   validates :field_4, presence: { if: proc { [2, 4, 6, 8, 10, 12].include?(field_1) } }
+
+  validates :field_96, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (day)") }
+  validates :field_97, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (month)") }
+  validates :field_98, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (year)") }
+
   validates :field_98, format: { with: /\A\d{2}\z/, message: I18n.t("validations.setup.startdate.year_not_two_digits") }
 
   validate :validate_data_types
@@ -341,7 +346,7 @@ private
   end
 
   def validate_relevant_collection_window
-    return unless start_date && bulk_upload.form
+    return if start_date.blank? || bulk_upload.form.blank?
 
     unless bulk_upload.form.valid_start_date_for_form?(start_date)
       errors.add(:field_96, I18n.t("validations.date.outside_collection_window"))
@@ -351,6 +356,8 @@ private
   end
 
   def start_date
+    return if field_98.blank? || field_97.blank? || field_96.blank?
+
     Date.parse("20#{field_98.to_s.rjust(2, '0')}-#{field_97}-#{field_96}")
   rescue StandardError
     nil
@@ -392,9 +399,17 @@ private
       next if question.completed?(log)
 
       if setup_question?(question)
-        fields.each { |field| errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase), category: :setup) }
+        fields.each do |field|
+          unless errors.any? { |e| fields.include?(e.attribute) }
+            errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase), category: :setup)
+          end
+        end
       else
-        fields.each { |field| errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase)) }
+        fields.each do |field|
+          unless errors.any? { |e| fields.include?(e.attribute) }
+            errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase))
+          end
+        end
       end
     end
   end
