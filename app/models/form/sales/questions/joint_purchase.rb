@@ -6,6 +6,7 @@ class Form::Sales::Questions::JointPurchase < ::Form::Question
     @header = "Is this a joint purchase?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
+    @question_number = 9
   end
 
   ANSWER_OPTIONS = {
