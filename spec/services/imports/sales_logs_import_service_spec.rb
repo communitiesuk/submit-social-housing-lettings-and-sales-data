@@ -604,6 +604,13 @@ RSpec.describe Imports::SalesLogsImportService do
           sales_log = SalesLog.find_by(old_id: sales_log_id)
           expect(sales_log&.hholdcount).to eq(0)
         end
+
+        it "doesn't hang if jointpur is not given" do
+          sales_log_xml.at_xpath("//xmlns:joint").content = ""
+          sales_log_xml.at_xpath("//xmlns:HHMEMB").content = "0"
+
+          sales_log_service.send(:create_log, sales_log_xml)
+        end
       end
 
       context "when inferring income used" do

@@ -432,9 +432,11 @@ module Imports
     end
 
     def household_members(_xml_doc, attributes)
-      return attributes["hholdcount"] + 2 if attributes["jointpur"] == 1
-
-      attributes["hholdcount"] + 1 if attributes["jointpur"] == 2
+      if attributes["jointpur"] == 2
+        attributes["hholdcount"] + 1
+      else
+        attributes["hholdcount"] + 2
+      end
     end
 
     def set_default_values(attributes)
