@@ -541,6 +541,12 @@ en:
     soctenant:
       one: "Was the buyer a private registered provider, housing association or local authority tenant immediately before this sale?"
       other: "Were any of the buyers private registered providers, housing association or local authority tenants immediately before this sale?"
+    prevown:
+      one: "Has the buyer previously owned a property?"
+      other: "Have any of the buyers previously owned a property?"
+    stairowned:
+      one: "What percentage of the property does the buyer now own in total?"
+      other: "What percentage of the property do the buyers now own in total?"
 
   hints:
     location:
@@ -558,6 +564,12 @@ en:
     soctenant:
       one: "Buyer was a registered provider, housing association or local authority tenant immediately before this sale?"
       other: "Any buyers were registered providers, housing association or local authority tenants immediately before this sale?"
+    prevown:
+      one: "Buyer previously owned a property"
+      other: "Buyers previously owned a property"
+    stairowned:
+      one: "Percentage the buyer now owns in total"
+      other: "Percentage the buyers now own in total"
 
   warnings:
     location:
