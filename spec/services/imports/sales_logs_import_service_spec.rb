@@ -829,6 +829,59 @@ RSpec.describe Imports::SalesLogsImportService do
           expect(sales_log&.prevten).to eq(2)
         end
       end
+
+      context "when mortgage used is don't know" do
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
+
+        before do
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets mortgageused to don't know if mortlen, mortgage and extrabor are blank" do
+          sales_log_xml.at_xpath("//xmlns:MORTGAGEUSED").content = "3 Don't know"
+          sales_log_xml.at_xpath("//xmlns:Q35Borrowing").content = ""
+          sales_log_xml.at_xpath("//xmlns:Q34b").content = ""
+          sales_log_xml.at_xpath("//xmlns:CALCMORT").content = ""
+          sales_log_xml.at_xpath("//xmlns:Q36CashDeposit").content = "134750"
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.mortgageused).to eq(3)
+        end
+
+        it "sets mortgageused to yes if mortgage is given" do
+          sales_log_xml.at_xpath("//xmlns:MORTGAGEUSED").content = "3 Don't know"
+          sales_log_xml.at_xpath("//xmlns:Q35Borrowing").content = ""
+          sales_log_xml.at_xpath("//xmlns:Q34b").content = ""
+          sales_log_xml.at_xpath("//xmlns:CALCMORT").content = "134750"
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.mortgageused).to eq(1)
+        end
+
+        it "sets mortgageused to yes if mortlen is given" do
+          sales_log_xml.at_xpath("//xmlns:MORTGAGEUSED").content = "3 Don't know"
+          sales_log_xml.at_xpath("//xmlns:Q35Borrowing").content = ""
+          sales_log_xml.at_xpath("//xmlns:Q34b").content = "10"
+          sales_log_xml.at_xpath("//xmlns:CALCMORT").content = ""
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.mortgageused).to eq(1)
+        end
+
+        it "sets mortgageused to yes if extrabor is given" do
+          sales_log_xml.at_xpath("//xmlns:MORTGAGEUSED").content = "3 Don't know"
+          sales_log_xml.at_xpath("//xmlns:Q35Borrowing").content = "3000"
+          sales_log_xml.at_xpath("//xmlns:Q34b").content = ""
+          sales_log_xml.at_xpath("//xmlns:CALCMORT").content = ""
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.mortgageused).to eq(1)
+        end
+      end
     end
   end
 end

@@ -110,7 +110,7 @@ module Imports
       attributes["prevten"] = unsafe_string_as_integer(xml_doc, "Q6PrevTenure")
       attributes["mortlen"] = mortgage_length(xml_doc, attributes)
       attributes["extrabor"] = borrowing(xml_doc, attributes)
-      attributes["mortgageused"] = unsafe_string_as_integer(xml_doc, "MORTGAGEUSED")
+      attributes["mortgageused"] = mortgage_used(xml_doc, attributes)
       attributes["wchair"] = unsafe_string_as_integer(xml_doc, "Q15Wheelchair")
       attributes["armedforcesspouse"] = unsafe_string_as_integer(xml_doc, "ARMEDFORCESSPOUSE")
       attributes["hodate"] = compose_date(xml_doc, "HODAY", "HOMONTH", "HOYEAR")
@@ -442,6 +442,17 @@ module Imports
       return if postcode.blank?
 
       UKPostcode.parse(postcode).to_s
+    end
+
+    def mortgage_used(xml_doc, attributes)
+      mortgageused = unsafe_string_as_integer(xml_doc, "MORTGAGEUSED")
+      return mortgageused unless mortgageused == 3
+
+      if attributes["mortgage"].present? || attributes["mortlen"].present? || attributes["extrabor"].present?
+        1 # yes
+      else
+        3 # don't know
+      end
     end
 
     def set_default_values(attributes)
