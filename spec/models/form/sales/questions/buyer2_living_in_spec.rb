@@ -6,23 +6,23 @@ RSpec.describe Form::Sales::Questions::Buyer2LivingIn, type: :model do
   let(:page) { instance_double(Form::Page) }
 
   it "has correct page" do
-    expect(question.page).to eq(page)
+    expect(question.page).to eq page
   end
 
   it "has the correct id" do
-    expect(question.id).to eq("buy2living")
+    expect(question.id).to eq "buy2living"
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Were all buyers living at the same address at the time of purchase?")
+    expect(question.header).to eq "At the time of purchase, was buyer 2 living at the same address as buyer 1?"
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("All buyers living at the same address")
+    expect(question.check_answer_label).to eq "Buyer 2 living at the same address"
   end
 
   it "has the correct type" do
-    expect(question.type).to eq("radio")
+    expect(question.type).to eq "radio"
   end
 
   it "is not marked as derived" do
@@ -30,7 +30,7 @@ RSpec.describe Form::Sales::Questions::Buyer2LivingIn, type: :model do
   end
 
   it "has the correct hint_text" do
-    expect(question.hint_text).to eq("")
+    expect(question.hint_text).to eq ""
   end
 
   it "has the correct answer_options" do

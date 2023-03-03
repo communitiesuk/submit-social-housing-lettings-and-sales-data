@@ -155,7 +155,7 @@ class SalesLog < Log
     buy2livein == 1
   end
 
-  def buyer_two_not_already_living_in?
+  def buyer_two_not_already_living_in_property?
     buy2living == 2
   end
 

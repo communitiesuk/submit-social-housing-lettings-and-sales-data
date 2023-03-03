@@ -26,6 +26,6 @@ RSpec.describe Form::Sales::Pages::Buyer2PreviousHousingSituation, type: :model 
   end
 
   it "has correct depends_on" do
-    expect(page.depends_on).to eq([{ "buyer_two_not_already_living_in?" => true }])
+    expect(page.depends_on).to eq([{ "buyer_two_not_already_living_in_property?" => true }])
   end
 end
