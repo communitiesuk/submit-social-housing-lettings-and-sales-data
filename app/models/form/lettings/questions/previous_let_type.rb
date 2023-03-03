@@ -19,5 +19,5 @@ class Form::Lettings::Questions::PreviousLetType < ::Form::Question
     "8" => { "value" => "Another Intermediate Rent basis" },
     "divider" => { "value" => true },
     "3" => { "value" => "Don’t know" },
-  }
+  }.freeze
 end
