@@ -38,7 +38,7 @@ RSpec.describe Imports::SalesLogsImportService do
     before do
       # Stub the S3 file listing and download
       allow(storage_service).to receive(:list_files)
-                                  .and_return(%W[#{remote_folder}/shared_ownership_sales_log.xml #{remote_folder}/shared_ownership_sales_log2.xml #{remote_folder}/outright_sale_sales_log.xml #{remote_folder}/discounted_ownership_sales_log.xml])
+                                  .and_return(%W[#{remote_folder}/shared_ownership_sales_log.xml #{remote_folder}/shared_ownership_sales_log2.xml #{remote_folder}/outright_sale_sales_log.xml #{remote_folder}/discounted_ownership_sales_log.xml #{remote_folder}/lettings_log.xml])
       allow(storage_service).to receive(:get_file_io)
                                   .with("#{remote_folder}/shared_ownership_sales_log.xml")
                                   .and_return(open_file(fixture_directory, "shared_ownership_sales_log"), open_file(fixture_directory, "shared_ownership_sales_log"))
@@ -51,6 +51,9 @@ RSpec.describe Imports::SalesLogsImportService do
       allow(storage_service).to receive(:get_file_io)
                                   .with("#{remote_folder}/discounted_ownership_sales_log.xml")
                                   .and_return(open_file(fixture_directory, "discounted_ownership_sales_log"), open_file(fixture_directory, "discounted_ownership_sales_log"))
+      allow(storage_service).to receive(:get_file_io)
+                                  .with("#{remote_folder}/lettings_log.xml")
+                                  .and_return(open_file(fixture_directory, "lettings_log"), open_file(fixture_directory, "lettings_log"))
     end
 
     it "successfully creates all sales logs" do
@@ -540,10 +543,26 @@ RSpec.describe Imports::SalesLogsImportService do
           allow(logger).to receive(:warn).and_return(nil)
         end
 
-        it "sets hholdcount to hhmemb - 1 if not answered and not joint purchase" do
-          sales_log_xml.at_xpath("//xmlns:HHMEMB").content = "3"
+        it "sets hholdcount to last person the information is given for if HHMEMB is not set" do
           sales_log_xml.at_xpath("//xmlns:joint").content = "2 No"
-          sales_log_xml.at_xpath("//xmlns:LiveInOther").content = ""
+          sales_log_xml.at_xpath("//xmlns:HHMEMB").content = ""
+          sales_log_xml.at_xpath("//xmlns:P2Age").content = "20"
+          sales_log_xml.at_xpath("//xmlns:P3Sex").content = "R"
+          sales_log_xml.at_xpath("//xmlns:P4Age").content = "23"
+
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.hholdcount).to eq(3)
+        end
+
+        it "sets hholdcount to last person the information is given for - buyers if HHMEMB is 0" do
+          sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+          sales_log_xml.at_xpath("//xmlns:JointMore").content = "2 No"
+          sales_log_xml.at_xpath("//xmlns:HHMEMB").content = ""
+          sales_log_xml.at_xpath("//xmlns:P2Age").content = "20"
+          sales_log_xml.at_xpath("//xmlns:P3Sex").content = "R"
+          sales_log_xml.at_xpath("//xmlns:P4Age").content = "23"
 
           sales_log_service.send(:create_log, sales_log_xml)
 
@@ -551,28 +570,188 @@ RSpec.describe Imports::SalesLogsImportService do
           expect(sales_log&.hholdcount).to eq(2)
         end
 
-        it "sets hholdcount to hhmemb - 2 if not answered and joint purchase" do
+        it "sets hholdcount to 0 no information for people is given and HHMEMB is not set" do
           sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
           sales_log_xml.at_xpath("//xmlns:JointMore").content = "2 No"
-          sales_log_xml.at_xpath("//xmlns:HHMEMB").content = "3"
+          sales_log_xml.at_xpath("//xmlns:HHMEMB").content = ""
           sales_log_xml.at_xpath("//xmlns:LiveInOther").content = ""
-
-          sales_log_service.send(:create_log, sales_log_xml)
-
-          sales_log = SalesLog.find_by(old_id: sales_log_id)
-          expect(sales_log&.hholdcount).to eq(1)
-        end
-
-        it "sets hholdcount to 0 if HHMEMB is 0" do
-          sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
-          sales_log_xml.at_xpath("//xmlns:JointMore").content = "2 No"
-          sales_log_xml.at_xpath("//xmlns:HHMEMB").content = "0"
-          sales_log_xml.at_xpath("//xmlns:LiveInOther").content = ""
+          sales_log_xml.at_xpath("//xmlns:P2Age").content = ""
+          sales_log_xml.at_xpath("//xmlns:P2Sex").content = ""
+          sales_log_xml.at_xpath("//xmlns:P3Age").content = ""
+          sales_log_xml.at_xpath("//xmlns:P3Sex").content = ""
+          sales_log_xml.at_xpath("//xmlns:P4Age").content = ""
+          sales_log_xml.at_xpath("//xmlns:P4Sex").content = ""
 
           sales_log_service.send(:create_log, sales_log_xml)
 
           sales_log = SalesLog.find_by(old_id: sales_log_id)
           expect(sales_log&.hholdcount).to eq(0)
+        end
+
+        it "sets hholdcount to the 0 if no information for people is given and HHMEMB is 0" do
+          sales_log_xml.at_xpath("//xmlns:joint").content = "2 No"
+          sales_log_xml.at_xpath("//xmlns:HHMEMB").content = "0"
+          sales_log_xml.at_xpath("//xmlns:LiveInOther").content = ""
+          sales_log_xml.at_xpath("//xmlns:P2Age").content = ""
+          sales_log_xml.at_xpath("//xmlns:P2Sex").content = ""
+          sales_log_xml.at_xpath("//xmlns:P3Age").content = ""
+          sales_log_xml.at_xpath("//xmlns:P3Sex").content = ""
+          sales_log_xml.at_xpath("//xmlns:P4Age").content = ""
+          sales_log_xml.at_xpath("//xmlns:P4Sex").content = ""
+
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.hholdcount).to eq(0)
+        end
+
+        it "doesn't hang if jointpur is not given" do
+          sales_log_xml.at_xpath("//xmlns:joint").content = ""
+          sales_log_xml.at_xpath("//xmlns:HHMEMB").content = "0"
+
+          sales_log_service.send(:create_log, sales_log_xml)
+        end
+      end
+
+      context "when inferring income used" do
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
+
+        before do
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets inc1mort and inc2mort to don't know if not answered" do
+          sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+          sales_log_xml.at_xpath("//xmlns:Q2Person1Mortgage").content = ""
+          sales_log_xml.at_xpath("//xmlns:Q2Person2MortApplication").content = ""
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.inc1mort).to eq(3)
+          expect(sales_log&.inc2mort).to eq(3)
+        end
+
+        it "sets inc1mort and inc2mort correctly if answered" do
+          sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+          sales_log_xml.at_xpath("//xmlns:Q2Person1Mortgage").content = "1 Yes"
+          sales_log_xml.at_xpath("//xmlns:Q2Person2MortApplication").content = "2 No"
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.inc1mort).to eq(1)
+          expect(sales_log&.inc2mort).to eq(2)
+        end
+      end
+
+      context "when inferring buyer organisation" do
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
+
+        before do
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets pregblank to true if no other organisations are selected" do
+          sales_log_xml.at_xpath("//xmlns:PREGYRHA").content = ""
+          sales_log_xml.at_xpath("//xmlns:PREGLA").content = ""
+          sales_log_xml.at_xpath("//xmlns:PREGHBA").content = ""
+          sales_log_xml.at_xpath("//xmlns:PREGOTHER").content = ""
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.pregyrha).to eq(nil)
+          expect(sales_log&.pregla).to eq(nil)
+          expect(sales_log&.pregghb).to eq(nil)
+          expect(sales_log&.pregother).to eq(nil)
+          expect(sales_log&.pregblank).to eq(1)
+        end
+
+        it "sets pregblank and other organisation fields correctly if answered" do
+          sales_log_xml.at_xpath("//xmlns:PREGYRHA").content = "Yes"
+          sales_log_xml.at_xpath("//xmlns:PREGLA").content = "Yes"
+          sales_log_xml.at_xpath("//xmlns:PREGHBA").content = "Yes"
+          sales_log_xml.at_xpath("//xmlns:PREGOTHER").content = "Yes"
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.pregyrha).to eq(1)
+          expect(sales_log&.pregla).to eq(1)
+          expect(sales_log&.pregghb).to eq(1)
+          expect(sales_log&.pregother).to eq(1)
+          expect(sales_log&.pregblank).to eq(nil)
+        end
+      end
+
+      context "when setting default buyer 2 live in for discounted ownership" do
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
+
+        before do
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets buy2livein to true if it is joint purchase and it's not answered" do
+          sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+          sales_log_xml.at_xpath("//xmlns:JointMore").content = "2 No"
+          sales_log_xml.at_xpath("//xmlns:LiveInBuyer2").content = ""
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.buy2livein).to eq(1)
+        end
+
+        it "sets buy2livein correctly if it's answered" do
+          sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+          sales_log_xml.at_xpath("//xmlns:JointMore").content = "2 No"
+          sales_log_xml.at_xpath("//xmlns:LiveInBuyer2").content = "1 Yes"
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.buy2livein).to eq(1)
+        end
+      end
+
+      context "when setting default buyer 2 live in for shared ownership" do
+        let(:sales_log_id) { "shared_ownership_sales_log" }
+
+        before do
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets buy2livein to true if it is joint purchase and it's not answered" do
+          sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+          sales_log_xml.at_xpath("//xmlns:JointMore").content = "2 No"
+          sales_log_xml.at_xpath("//xmlns:LiveInBuyer2").content = ""
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.buy2livein).to eq(1)
+        end
+
+        it "sets buy2livein correctly if it's answered" do
+          sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+          sales_log_xml.at_xpath("//xmlns:JointMore").content = "2 No"
+          sales_log_xml.at_xpath("//xmlns:LiveInBuyer2").content = "2 No"
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.buy2livein).to eq(2)
+        end
+      end
+
+      context "when setting default buyer 2 live in for outright sale" do
+        let(:sales_log_id) { "outright_sale_sales_log" }
+
+        before do
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "does not set buy2livein if it is joint purchase and it's not answered" do
+          sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+          sales_log_xml.at_xpath("//xmlns:JointMore").content = "2 No"
+          sales_log_xml.at_xpath("//xmlns:LiveInBuyer2").content = ""
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.buy2livein).to eq(nil)
         end
       end
     end

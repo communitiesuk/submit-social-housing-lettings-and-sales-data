@@ -14,7 +14,17 @@ class Form::Sales::Questions::BuyersOrganisations < ::Form::Question
     "pregother" => { "value" => "Other private registered provider (PRP) - housing association" },
     "pregla" => { "value" => "Local Authority" },
     "pregghb" => { "value" => "Help to Buy Agent" },
+    "pregblank" => { "value" => "None of the above" },
   }.freeze
+
+  def displayed_answer_options(_log, _user = nil)
+    {
+      "pregyrha" => { "value" => "Their private registered provider (PRP) - housing association" },
+      "pregother" => { "value" => "Other private registered provider (PRP) - housing association" },
+      "pregla" => { "value" => "Local Authority" },
+      "pregghb" => { "value" => "Help to Buy Agent" },
+    }
+  end
 
   def unanswered_error_message
     "At least one option must be selected of these four"

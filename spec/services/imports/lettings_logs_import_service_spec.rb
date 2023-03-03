@@ -47,11 +47,12 @@ RSpec.describe Imports::LettingsLogsImportService do
     let(:lettings_log_id2) { "166fc004-392e-47a8-acb8-1c018734882b" }
     let(:lettings_log_id3) { "00d2343e-d5fa-4c89-8400-ec3854b0f2b4" }
     let(:lettings_log_id4) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+    let(:sales_log) { "shared_ownership_sales_log" }
 
     before do
       # Stub the S3 file listing and download
       allow(storage_service).to receive(:list_files)
-                                  .and_return(%W[#{remote_folder}/#{lettings_log_id}.xml #{remote_folder}/#{lettings_log_id2}.xml #{remote_folder}/#{lettings_log_id3}.xml #{remote_folder}/#{lettings_log_id4}.xml])
+                                  .and_return(%W[#{remote_folder}/#{lettings_log_id}.xml #{remote_folder}/#{lettings_log_id2}.xml #{remote_folder}/#{lettings_log_id3}.xml #{remote_folder}/#{lettings_log_id4}.xml #{remote_folder}/#{sales_log}.xml])
       allow(storage_service).to receive(:get_file_io)
                                   .with("#{remote_folder}/#{lettings_log_id}.xml")
                                   .and_return(open_file(fixture_directory, lettings_log_id), open_file(fixture_directory, lettings_log_id))
@@ -64,6 +65,9 @@ RSpec.describe Imports::LettingsLogsImportService do
       allow(storage_service).to receive(:get_file_io)
                                   .with("#{remote_folder}/#{lettings_log_id4}.xml")
                                   .and_return(open_file(fixture_directory, lettings_log_id4), open_file(fixture_directory, lettings_log_id4))
+      allow(storage_service).to receive(:get_file_io)
+                                  .with("#{remote_folder}/#{sales_log}.xml")
+                                  .and_return(open_file(fixture_directory, sales_log), open_file(fixture_directory, sales_log))
     end
 
     it "successfully create all lettings logs" do
@@ -202,6 +206,110 @@ RSpec.describe Imports::LettingsLogsImportService do
         expect(lettings_log).not_to be_nil
         expect(lettings_log.age2).to be_nil
         expect(lettings_log.ecstat2).to be_nil
+      end
+    end
+
+    context "and it has zero earnings" do
+      before do
+        lettings_log_xml.at_xpath("//meta:status").content = "submitted"
+        lettings_log_xml.at_xpath("//xmlns:Q8Money").content = 0
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Where the income is 0, set earnings and income to blank and set incref to refused/)
+        expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers" do
+        allow(logger).to receive(:warn)
+
+        lettings_log_service.send(:create_log, lettings_log_xml)
+        lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+        expect(lettings_log).not_to be_nil
+        expect(lettings_log.earnings).to be_nil
+        expect(lettings_log.incref).to eq(1)
+        expect(lettings_log.net_income_known).to eq(2)
+      end
+    end
+
+    context "and an invalid tenancy length for tenancy type" do
+      before do
+        lettings_log_xml.at_xpath("//meta:status").content = "submitted"
+        lettings_log_xml.at_xpath("//xmlns:_2cYears").content = "1"
+        lettings_log_xml.at_xpath("//xmlns:Q2b").content = "4"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Removing tenancylength as invalid/)
+        expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers" do
+        allow(logger).to receive(:warn)
+
+        lettings_log_service.send(:create_log, lettings_log_xml)
+        lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+        expect(lettings_log).not_to be_nil
+        expect(lettings_log.tenancylength).to be_nil
+        expect(lettings_log.tenancy).to be_nil
+      end
+    end
+
+    context "and an lead tenant must be under 20 if childrens home or foster care" do
+      before do
+        lettings_log_xml.at_xpath("//meta:status").content = "submitted"
+        lettings_log_xml.at_xpath("//xmlns:Q11").content = "13"
+        lettings_log_xml.at_xpath("//xmlns:P1Age").content = "22"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Removing age1 and prevten as incompatible/)
+        expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers" do
+        allow(logger).to receive(:warn)
+
+        lettings_log_service.send(:create_log, lettings_log_xml)
+        lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+        expect(lettings_log).not_to be_nil
+        expect(lettings_log.age1).to be_nil
+        expect(lettings_log.prevten).to be_nil
+      end
+    end
+
+    context "and is a carehome but missing carehome charge" do
+      let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+
+      before do
+        lettings_log_xml.at_xpath("//meta:status").content = "submitted"
+        lettings_log_xml.at_xpath("//xmlns:_1cmangroupcode").content = scheme2.old_visible_id
+        scheme2.update!(registered_under_care_act: 2)
+        lettings_log_xml.at_xpath("//xmlns:Q18b").content = ""
+      end
+
+      it "intercepts the relevant validation error" do
+        allow(logger).to receive(:warn)
+
+        expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers" do
+        allow(logger).to receive(:warn)
+
+        lettings_log_service.send(:create_log, lettings_log_xml)
+        lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+        expect(lettings_log).not_to be_nil
+        expect(lettings_log.is_carehome).to be_truthy
+        expect(lettings_log.chcharge).to be_nil
       end
     end
 

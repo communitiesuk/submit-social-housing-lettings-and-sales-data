@@ -1,12 +1,12 @@
 <Group xmlns="http://data.gov.uk/core/logs/2022-CORE-Sales" xmlns:app="http://www.w3.org/2007/app" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:meta="http://data.gov.uk/core/metadata" xmlns:svc="http://www.w3.org/2007/app" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xfimpl="http://www.w3.org/2002/xforms/implementation" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xxf="http://orbeon.org/oxf/xml/xforms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <meta:metadata xmlns:es="http://www.ecmascript.org/" xmlns:xqx="http://www.w3.org/2005/XQueryX" xmlns:XSLT="http://www.w3.org/1999/XSL/Transform/compile">
     <meta:form-name>2022-CORE-Sales</meta:form-name>
-    <meta:document-id>discounted_ownership_sales_log</meta:document-id>
+    <meta:document-id>shared_ownership_sales_log</meta:document-id>
     <meta:owner-user-id>c3061a2e6ea0b702e6f6210d5c52d2a92612d2aa</meta:owner-user-id>
-    <meta:owner-institution-id>7c5bd5fb549c09z2c55d9cb90d7ba84927e64618</meta:owner-institution-id>
-    <meta:managing-institution-id>7c5bd5fb549c09z2c55d9cb90d7ba84927e64618</meta:managing-institution-id>
-    <meta:created-date>2023-02-21T11:54:51.786722Z</meta:created-date>
-    <meta:modified-date>2023-02-22T10:59:45.88188Z</meta:modified-date>
+    <meta:owner-institution-id>7c5bd5fb549c09a2c55d7cb90d7ba84927e64618</meta:owner-institution-id>
+    <meta:managing-institution-id>7c5bd5fb549c09a2c55d7cb90d7ba84927e64618</meta:managing-institution-id>
+    <meta:created-date>2023-02-21T11:48:28.255968Z</meta:created-date>
+    <meta:modified-date>2023-02-22T11:00:06.575832Z</meta:modified-date>
     <meta:status>submitted-valid</meta:status>
     <meta:reporting-year>2022</meta:reporting-year>
     <meta:upload-method>Manual Entry</meta:upload-method>
@@ -15,38 +15,34 @@
   </meta:metadata>
   <Group>
     <Qdp>Yes</Qdp>
-    <Qdp/>
-    <CompletionDate>2023-02-01</CompletionDate>
-    <PurchaserCode>Discount ownership example</PurchaserCode>
-    <Ownership>2 Yes - a discount ownership scheme</Ownership>
-    <Q16SaleType/>
-    <Q30SaleType>14 Preserved Right to Buy (PRTB)</Q30SaleType>
+    <CompletionDate>2023-01-17</CompletionDate>
+    <PurchaserCode>Shared ownership example</PurchaserCode>
+    <Ownership>1 Yes - a shared ownership scheme</Ownership>
+    <Q16SaleType>2 Shared Ownership</Q16SaleType>
+    <Q30SaleType/>
     <Q38SaleType/>
     <Q38OtherSale/>
-    <company/>
-    <LiveInBuyer/>
+    <company>2 No</company>
+    <LiveInBuyer>1 Yes</LiveInBuyer>
     <joint>2 No</joint>
     <JointMore/>
-    <PartAPurchaser>1 No</PartAPurchaser>
+    <PartAPurchaser>2 Yes</PartAPurchaser>
   </Group>
   <Group>
-    <Q11Bedrooms override-field="">3</Q11Bedrooms>
-    <Q12PropertyType>3 House</Q12PropertyType>
+    <Q11Bedrooms override-field="">2</Q11Bedrooms>
+    <Q12PropertyType>1 Flat or maisonette</Q12PropertyType>
     <Q13BuildingType>1 Purpose built</Q13BuildingType>
     <Q14Postcode override-field="">SW1A 1AA</Q14Postcode>
-    <!-- replace with commented options to test in the future -->
-    <!-- <Q14PropertyLocation>Westminster</Q14PropertyLocation>
-    <Q14ONSLACode>E09000033</Q14ONSLACode> -->
-    <Q14PropertyLocation>Cheltenham</Q14PropertyLocation>
-    <Q14ONSLACode>E07000078</Q14ONSLACode>
+    <Q14PropertyLocation>Westminster</Q14PropertyLocation>
+    <Q14ONSLACode>E09000033</Q14ONSLACode>
     <Q15Wheelchair>3 Don&#x2019;t know</Q15Wheelchair>
   </Group>
   <Group>
-    <P1Age/>
-    <P1Sex override-field=""/>
-    <P1Eco/>
-    <P1Eth/>
-    <P1Nat/>
+    <P1Age>30</P1Age>
+    <P1Sex override-field="">Male</P1Sex>
+    <P1Eco>1 Full Time - 30 hours or more a week</P1Eco>
+    <P1Eth>2 White: Irish</P1Eth>
+    <P1Nat>18 United Kingdom</P1Nat>
     <P2Age/>
     <P2Sex override-field=""/>
     <P2Rel/>
@@ -148,13 +144,13 @@
     <P7RRefused>0</P7RRefused>
     <P8RRefused>0</P8RRefused>
     <TotRRefused>0</TotRRefused>
-    <CALCMORT>134750</CALCMORT>
+    <CALCMORT>76000</CALCMORT>
     <MORTGAGEUSED>1</MORTGAGEUSED>
-    <IM1>0</IM1>
+    <IM1>47000</IM1>
     <IM2>0</IM2>
-    <IMT>0</IMT>
-    <MortMultiple>1</MortMultiple>
-    <Form>300203</Form>
+    <IMT>235000</IMT>
+    <MortMultiple>0</MortMultiple>
+    <Form>300204</Form>
   </Group>
   <Group>
     <minmaxP11/>
@@ -179,41 +175,34 @@
     <minmaxP2T/>
     <minmaxP29/>
     <minmaxP20/>
-    <Q16CHK>0</Q16CHK>
-    <Q30CHK>1</Q30CHK>
+    <Q16CHK>1</Q16CHK>
+    <Q30CHK>0</Q30CHK>
     <Q38CHK>0</Q38CHK>
     <SalesCHKT>1</SalesCHKT>
-    <Q23CHK>0</Q23CHK>
-    <Q16typeCHK>0</Q16typeCHK>
-    <Q16Q23>0</Q16Q23>
-    <DAY>1</DAY>
-    <MONTH>2</MONTH>
+    <Q23CHK>1</Q23CHK>
+    <Q16typeCHK>2</Q16typeCHK>
+    <Q16Q23>3</Q16Q23>
+    <DAY>17</DAY>
+    <MONTH>1</MONTH>
     <YEAR>2023</YEAR>
-    <HODAY/>
-    <HOMONTH/>
-    <HOYEAR/>
-    <EXDAY/>
-    <EXMONTH/>
-    <EXYEAR/>
-    <PPOSTC1>GL51</PPOSTC1>
-    <PPOSTC2>9EX</PPOSTC2>
-    <!-- replace with commented options to test in the future -->
-    <!-- <PCODE1>SW1A</PCODE1>
-    <PCODE2>1AA</PCODE2> -->
-    <PCODE1>GL51</PCODE1>
-    <PCODE2>9EX</PCODE2>
-    <NOINT>1</NOINT>
+    <HODAY>6</HODAY>
+    <HOMONTH>9</HOMONTH>
+    <HOYEAR>2022</HOYEAR>
+    <EXDAY>8</EXDAY>
+    <EXMONTH>1</EXMONTH>
+    <EXYEAR>2023</EXYEAR>
+    <PPOSTC1>SW14</PPOSTC1>
+    <PPOSTC2>7QP</PPOSTC2>
+    <PCODE1>SW1A</PCODE1>
+    <PCODE2>1AA</PCODE2>
+    <NOINT/>
   </Group>
   <Group>
-    <!-- replace with commented options to test in the future -->
-    <!-- <Q6PrevTenure/> -->
-    <Q6PrevTenure>3 Private tenant</Q6PrevTenure>
-    <Q7Postcode override-field="">GL51 9EX</Q7Postcode>
+    <Q6PrevTenure>2 Private registered provider (PRP) or housing association tenant</Q6PrevTenure>
+    <Q7Postcode override-field="">SW14 7QP</Q7Postcode>
     <Q7UnknownPostcode/>
-    <Q7PrevLocation>Cheltenham</Q7PrevLocation>
-    <Q7ONSLACode>E07000078</Q7ONSLACode>
-    <!-- replace with commented options to test in the future -->
-    <!-- <PREGYRHA/> -->
+    <Q7PrevLocation>Richmond-upon-Thames</Q7PrevLocation>
+    <Q7ONSLACode>E09000027</Q7ONSLACode>
     <PREGYRHA>Yes</PREGYRHA>
     <PREGORHA/>
     <PREGLA/>
@@ -221,66 +210,62 @@
     <PREGOTHER/>
   </Group>
   <Group>
-    <ArmedF/>
+    <ArmedF>8 Don&#x2019;t know</ArmedF>
     <LeftArmedF/>
     <ARMEDFORCESSPOUSE/>
-    <Disability/>
-    <Q10Wheelchair override-field=""/>
+    <Disability>2 No</Disability>
+    <Q10Wheelchair override-field="">2 No</Q10Wheelchair>
   </Group>
   <Group>
-    <P1IncKnown/>
-    <Q2Person1Income/>
+    <P1IncKnown>1 Yes</P1IncKnown>
+    <Q2Person1Income>47000</Q2Person1Income>
     <Q2Person1Mortgage>1 Yes</Q2Person1Mortgage>
-    <!-- replace with commented options to test in the future -->
-    <!-- <Q2Person1Mortgage/> -->
     <P2IncKnown/>
     <Q2Person2Income/>
     <Q2Person2MortApplication/>
-    <Q2a/>
-    <savingsKnown/>
-    <Q3Savings override-field=""/>
-    <Q4PrevOwnedProperty/>
+    <Q2a>4 Don&#x2019;t know</Q2a>
+    <savingsKnown>1 Yes</savingsKnown>
+    <Q3Savings override-field="true">89000</Q3Savings>
+    <Q4PrevOwnedProperty>1 Yes</Q4PrevOwnedProperty>
   </Group>
   <Group>
     <!-- replace with commented options to test in the future -->
     <!-- <Q16aProplen2/> -->
     <Q16aProplen2>1</Q16aProplen2>
-    <Q17aStaircase/>
+    <Q17aStaircase>2 No</Q17aStaircase>
     <PercentBought override-field=""/>
-    <PercentOwns/>
-    <Q17Resale/>
-    <Q18ContractExchange override-field=""/>
-    <Q18PracticalCompletion override-field=""/>
-    <Q19Rehoused/>
+    <PercentOwns>30</PercentOwns>
+    <Q17Resale>2 No</Q17Resale>
+    <Q18ContractExchange override-field="">2023-01-08</Q18ContractExchange>
+    <Q18PracticalCompletion override-field="">2022-09-06</Q18PracticalCompletion>
+    <Q19Rehoused>2 No</Q19Rehoused>
     <Q20Bedrooms/>
     <Q21PropertyType/>
     <PrevRentType/>
-    <Q22PurchasePrice override-field=""/>
-    <Q23Equity override-field=""/>
-    <MortgageUsedSO/>
-    <Q24Mortgage override-field=""/>
-    <Q24aMortgageLender/>
-    <Q24b/>
-    <Q25Borrowing/>
-    <Q26CashDeposit override-field=""/>
+    <Q22PurchasePrice override-field="true">550000</Q22PurchasePrice>
+    <Q23Equity override-field="">30</Q23Equity>
+    <MortgageUsedSO>1 Yes</MortgageUsedSO>
+    <Q24Mortgage override-field="">76000</Q24Mortgage>
+    <Q24aMortgageLender>Nationwide</Q24aMortgageLender>
+    <Q24b>33</Q24b>
+    <Q25Borrowing>2 No</Q25Borrowing>
+    <Q26CashDeposit override-field="">89000</Q26CashDeposit>
     <Q27SocialHomeBuy/>
-    <Q28MonthlyRent/>
-    <Q29MonthlyCharges/>
+    <Q28MonthlyRent>912.00</Q28MonthlyRent>
+    <Q29MonthlyCharges>134.24</Q29MonthlyCharges>
   </Group>
   <Group>
     <Q16aProplensec2/>
-    <Q31PurchasePrice override-field="">275000</Q31PurchasePrice>
+    <Q31PurchasePrice override-field=""/>
     <Q32Reductions override-field=""/>
-    <Q33Discount override-field="">51</Q33Discount>
-    <MortgageUsedDO>1 Yes</MortgageUsedDO>
-    <Q34Mortgage override-field="true">134750</Q34Mortgage>
-    <Q34a>Halifax</Q34a>
-    <!-- replace with commented options to test in the future -->
-    <!-- <Q34b/> -->
-    <Q34b>33</Q34b>
-    <Q35Borrowing>2 No</Q35Borrowing>
-    <Q36CashDeposit>0</Q36CashDeposit>
-    <Q37MonthlyCharges>0.00</Q37MonthlyCharges>
+    <Q33Discount override-field=""/>
+    <MortgageUsedDO/>
+    <Q34Mortgage override-field=""/>
+    <Q34a/>
+    <Q34b/>
+    <Q35Borrowing/>
+    <Q36CashDeposit/>
+    <Q37MonthlyCharges/>
   </Group>
   <Group>
     <Q40PurchasePrice override-field=""/>
@@ -293,16 +278,14 @@
   </Group>
   <Group>
     <HHMEMB>1</HHMEMB>
-    <TOTADULT>0</TOTADULT>
+    <TOTADULT>1</TOTADULT>
     <TOTCHILD>0</TOTCHILD>
   </Group>
   <Group>
-    <HHTYPE>9 = other</HHTYPE>
-    <!-- replace with commented options to test in the future -->
-    <!-- <HHTYPE>3 = 1 adult</HHTYPE> -->
+    <HHTYPE>3 = 1 adult</HHTYPE>
   </Group>
   <Group>
-    <DerSaleType>14 Preserved Right to Buy (PRTB)</DerSaleType>
+    <DerSaleType>2 Shared Ownership</DerSaleType>
   </Group>
   <Group>
     <HHTYPEP1A>1</HHTYPEP1A>
@@ -332,12 +315,12 @@
     <HHTYPEP7C>0</HHTYPEP7C>
     <HHTYPEP8C>0</HHTYPEP8C>
     <TCHILD>0</TCHILD>
-    <Q8av>0</Q8av>
+    <Q8av>1</Q8av>
     <Q8bv>0</Q8bv>
     <Q8cv>0</Q8cv>
     <Q8dv>0</Q8dv>
     <Q8ev>0</Q8ev>
-    <Q8Validate>0</Q8Validate>
+    <Q8Validate>1</Q8Validate>
   </Group>
   <Group>
     <PLOACODE/>

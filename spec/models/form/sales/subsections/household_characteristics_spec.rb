@@ -50,6 +50,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
           working_situation_buyer_2_income_value_check
           buyer_2_live_in_property
           number_of_others_in_property
+          number_of_others_in_property_joint_purchase
           person_2_known
           person_2_relationship_to_buyer_1
           person_2_age
@@ -82,6 +83,14 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
           gender_5_retirement_value_check
           person_5_working_situation
           working_situation_5_retirement_value_check
+          person_6_known
+          person_6_relationship_to_buyer_1
+          person_6_age
+          age_6_retirement_value_check
+          person_6_gender_identity
+          gender_6_retirement_value_check
+          person_6_working_situation
+          working_situation_6_retirement_value_check
         ],
       )
     end
@@ -131,6 +140,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
           working_situation_buyer_2_income_value_check
           buyer_2_live_in_property
           number_of_others_in_property
+          number_of_others_in_property_joint_purchase
           person_2_known
           person_2_relationship_to_buyer_1
           person_2_age
@@ -163,6 +173,14 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
           gender_5_retirement_value_check
           person_5_working_situation
           working_situation_5_retirement_value_check
+          person_6_known
+          person_6_relationship_to_buyer_1
+          person_6_age
+          age_6_retirement_value_check
+          person_6_gender_identity
+          gender_6_retirement_value_check
+          person_6_working_situation
+          working_situation_6_retirement_value_check
         ],
       )
     end

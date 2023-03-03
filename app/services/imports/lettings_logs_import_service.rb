@@ -55,6 +55,8 @@ module Imports
     }.freeze
 
     def create_log(xml_doc)
+      return if meta_field_value(xml_doc, "form-name").include?("Sales")
+
       attributes = {}
 
       previous_status = meta_field_value(xml_doc, "status")
@@ -287,8 +289,38 @@ module Imports
         @logs_overridden << lettings_log.old_id
         attributes.delete("referral")
         save_lettings_log(attributes, previous_status)
+      elsif lettings_log.errors.of_kind?(:earnings, :under_hard_min)
+        @logger.warn("Log #{lettings_log.old_id}: Where the income is 0, set earnings and income to blank and set incref to refused")
+        @logs_overridden << lettings_log.old_id
+
+        attributes.delete("earnings")
+        attributes.delete("incfreq")
+        attributes["incref"] = 1
+        attributes["net_income_known"] = 2
+        save_lettings_log(attributes, previous_status)
+      elsif lettings_log.errors.include?(:tenancylength) && lettings_log.errors.include?(:tenancy)
+        @logger.warn("Log #{lettings_log.old_id}: Removing tenancylength as invalid")
+        @logs_overridden << lettings_log.old_id
+        attributes.delete("tenancylength")
+        attributes.delete("tenancy")
+        save_lettings_log(attributes, previous_status)
+      elsif lettings_log.errors.of_kind?(:prevten, :over_20_foster_care)
+        @logger.warn("Log #{lettings_log.old_id}: Removing age1 and prevten as incompatible")
+        @logs_overridden << lettings_log.old_id
+        attributes.delete("prevten")
+        attributes.delete("age1")
+        save_lettings_log(attributes, previous_status)
       else
         @logger.error("Log #{lettings_log.old_id}: Failed to import")
+        lettings_log.errors.each do |error|
+          @logger.error("Validation error: Field #{error.attribute}:")
+          @logger.error("\tOwning Organisation: #{lettings_log.owning_organisation&.name}")
+          @logger.error("\tManaging Organisation: #{lettings_log.managing_organisation&.name}")
+          @logger.error("\tOld CORE ID: #{lettings_log.old_id}")
+          @logger.error("\tOld CORE: #{attributes[error.attribute.to_s]&.inspect}")
+          @logger.error("\tNew CORE: #{lettings_log.read_attribute(error.attribute)&.inspect}")
+          @logger.error("\tError message: #{error.type}")
+        end
         raise exception
       end
     end

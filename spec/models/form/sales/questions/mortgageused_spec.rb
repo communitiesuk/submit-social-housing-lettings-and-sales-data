@@ -6,6 +6,7 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
   let(:question_id) { nil }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
+  let(:log) { create(:sales_log) }
 
   it "has correct page" do
     expect(question.page).to eq(page)
@@ -35,6 +36,7 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
     expect(question.answer_options).to eq({
       "1" => { "value" => "Yes" },
       "2" => { "value" => "No" },
+      "3" => { "value" => "Don’t know" },
     })
   end
 
@@ -44,5 +46,12 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
 
   it "has the correct hint" do
     expect(question.hint_text).to be_nil
+  end
+
+  it "has the correct displayed_answer_options" do
+    expect(question.displayed_answer_options(log)).to eq({
+      "1" => { "value" => "Yes" },
+      "2" => { "value" => "No" },
+    })
   end
 end
