@@ -754,6 +754,52 @@ RSpec.describe Imports::SalesLogsImportService do
           expect(sales_log&.buy2livein).to eq(nil)
         end
       end
+
+      context "when setting location fields" do
+        let(:sales_log_id) { "outright_sale_sales_log" }
+
+        before do
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "correctly sets LA if postcode is not given" do
+          sales_log_xml.at_xpath("//xmlns:Q14ONSLACode").content = "E07000142"
+          sales_log_xml.at_xpath("//xmlns:Q14Postcode").content = ""
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.pcodenk).to eq(1) # postcode not known
+          expect(sales_log&.is_la_inferred).to eq(false)
+          expect(sales_log&.la_known).to eq(1) # la known
+          expect(sales_log&.la).to eq("E07000142")
+          expect(sales_log&.status).to eq("completed")
+        end
+
+        it "correctly sets previous LA if postcode is not given" do
+          sales_log_xml.at_xpath("//xmlns:Q7ONSLACode").content = "E07000142"
+          sales_log_xml.at_xpath("//xmlns:Q7Postcode").content = ""
+          sales_log_xml.at_xpath("//xmlns:Q7UnknownPostcode").content = ""
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.ppcodenk).to eq(1) # previous postcode not known
+          expect(sales_log&.is_previous_la_inferred).to eq(false)
+          expect(sales_log&.previous_la_known).to eq(1) # la known
+          expect(sales_log&.prevloc).to eq("E07000142")
+          expect(sales_log&.status).to eq("completed")
+        end
+
+        it "correctly sets posctode if given" do
+          sales_log_xml.at_xpath("//xmlns:Q7Postcode").content = "GL519EX"
+          sales_log_xml.at_xpath("//xmlns:Q7UnknownPostcode").content = ""
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.ppcodenk).to eq(0)
+          expect(sales_log&.ppostcode_full).to eq("GL51 9EX")
+          expect(sales_log&.status).to eq("completed")
+        end
+      end
     end
   end
 end

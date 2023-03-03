@@ -97,7 +97,7 @@ module Imports
       attributes["pregla"] = 1 if string_or_nil(xml_doc, "PREGLA") == "Yes"
       attributes["pregghb"] = 1 if string_or_nil(xml_doc, "PREGHBA") == "Yes"
       attributes["pregother"] = 1 if string_or_nil(xml_doc, "PREGOTHER") == "Yes"
-      attributes["ppostcode_full"] = compose_postcode(xml_doc, "PPOSTC1", "PPOSTC2")
+      attributes["ppostcode_full"] = parse_postcode(string_or_nil(xml_doc, "Q7Postcode"))
       attributes["prevloc"] = string_or_nil(xml_doc, "Q7ONSLACode")
       attributes["ppcodenk"] = previous_postcode_known(xml_doc, attributes["ppostcode_full"], attributes["prevloc"]) # Q7UNKNOWNPOSTCODE check mapping
       attributes["ppostc1"] = string_or_nil(xml_doc, "PPOSTC1")
@@ -124,7 +124,7 @@ module Imports
       attributes["mortgagelenderother"] = mortgage_lender_other(xml_doc, attributes)
       attributes["pcode1"] = string_or_nil(xml_doc, "PCODE1")
       attributes["pcode2"] = string_or_nil(xml_doc, "PCODE2")
-      attributes["postcode_full"] = compose_postcode(xml_doc, "PCODE1", "PCODE2")
+      attributes["postcode_full"] = parse_postcode(string_or_nil(xml_doc, "Q14Postcode"))
       attributes["pcodenk"] = 0 if attributes["postcode_full"].present? # known if given
       attributes["soctenant"] = soctenant(attributes)
       attributes["ethnic_group2"] = nil # 23/24 variable
@@ -134,7 +134,10 @@ module Imports
 
       # Required for our form invalidated questions (not present in import)
       attributes["previous_la_known"] = 1 if attributes["prevloc"].present? && attributes["ppostcode_full"].blank?
-      attributes["la_known"] = 1 if attributes["la"].present? && attributes["postcode_full"].blank?
+      if attributes["la"].present? && attributes["postcode_full"].blank?
+        attributes["la_known"] = 1
+        attributes["is_la_inferred"] = false
+      end
 
       # Sets the log creator
       owner_id = meta_field_value(xml_doc, "owner-user-id").strip
@@ -439,6 +442,12 @@ module Imports
       end
     end
 
+    def parse_postcode(postcode)
+      return if postcode.blank?
+
+      UKPostcode.parse(postcode).to_s
+    end
+
     def set_default_values(attributes)
       attributes["armedforcesspouse"] ||= 7
       attributes["hhregres"] ||= 8
@@ -452,6 +461,7 @@ module Imports
       if [attributes["pregyrha"], attributes["pregla"], attributes["pregghb"], attributes["pregother"]].all?(&:blank?)
         attributes["pregblank"] = 1
       end
+      attributes["pcodenk"] ||= 1
 
       # buyer 1 characteristics
       attributes["age1_known"] ||= 1
