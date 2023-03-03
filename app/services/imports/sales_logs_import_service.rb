@@ -134,7 +134,10 @@ module Imports
 
       # Required for our form invalidated questions (not present in import)
       attributes["previous_la_known"] = 1 if attributes["prevloc"].present? && attributes["ppostcode_full"].blank?
-      attributes["la_known"] = 1 if attributes["la"].present? && attributes["postcode_full"].blank?
+      if attributes["la"].present? && attributes["postcode_full"].blank?
+        attributes["la_known"] = 1
+        attributes["is_la_inferred"] = false
+      end
 
       # Sets the log creator
       owner_id = meta_field_value(xml_doc, "owner-user-id").strip
@@ -452,6 +455,7 @@ module Imports
       if [attributes["pregyrha"], attributes["pregla"], attributes["pregghb"], attributes["pregother"]].all?(&:blank?)
         attributes["pregblank"] = 1
       end
+      attributes["pcodenk"] ||= 1
 
       # buyer 1 characteristics
       attributes["age1_known"] ||= 1
