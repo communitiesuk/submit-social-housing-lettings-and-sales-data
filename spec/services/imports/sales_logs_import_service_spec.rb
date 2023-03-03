@@ -111,6 +111,29 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
+    context "and the log startdate is before 22/23 collection period" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:DAY").content = 10
+        sales_log_xml.at_xpath("//xmlns:MONTH").content = 10
+        sales_log_xml.at_xpath("//xmlns:YEAR").content = 2021
+        sales_log_xml.at_xpath("//xmlns:HODAY").content = 9
+        sales_log_xml.at_xpath("//xmlns:HOMONTH").content = 10
+        sales_log_xml.at_xpath("//xmlns:HOYEAR").content = 2021
+        sales_log_xml.at_xpath("//xmlns:EXDAY").content = 9
+        sales_log_xml.at_xpath("//xmlns:EXMONTH").content = 10
+        sales_log_xml.at_xpath("//xmlns:EXYEAR").content = 2021
+      end
+
+      it "does not create the log" do
+        expect(logger).not_to receive(:error)
+        expect(logger).not_to receive(:warn)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+        .to change(SalesLog, :count).by(0)
+      end
+    end
+
     context "when the mortgage lender is set to an existing option" do
       let(:sales_log_id) { "discounted_ownership_sales_log" }
 
