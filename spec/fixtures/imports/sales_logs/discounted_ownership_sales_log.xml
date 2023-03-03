@@ -33,7 +33,7 @@
     <Q11Bedrooms override-field="">3</Q11Bedrooms>
     <Q12PropertyType>3 House</Q12PropertyType>
     <Q13BuildingType>1 Purpose built</Q13BuildingType>
-    <Q14Postcode override-field="">SW1A 1AA</Q14Postcode>
+    <Q14Postcode override-field="">GL519EX</Q14Postcode>
     <!-- replace with commented options to test in the future -->
     <!-- <Q14PropertyLocation>Westminster</Q14PropertyLocation>
     <Q14ONSLACode>E09000033</Q14ONSLACode> -->
@@ -208,7 +208,7 @@
     <!-- replace with commented options to test in the future -->
     <!-- <Q6PrevTenure/> -->
     <Q6PrevTenure>3 Private tenant</Q6PrevTenure>
-    <Q7Postcode override-field="">GL51 9EX</Q7Postcode>
+    <Q7Postcode override-field="">GL519EX</Q7Postcode>
     <Q7UnknownPostcode/>
     <Q7PrevLocation>Cheltenham</Q7PrevLocation>
     <Q7ONSLACode>E07000078</Q7ONSLACode>
