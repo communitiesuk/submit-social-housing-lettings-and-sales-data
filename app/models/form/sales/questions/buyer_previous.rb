@@ -1,9 +1,13 @@
 class Form::Sales::Questions::BuyerPrevious < ::Form::Question
+  include CopyHelper
+
   def initialize(id, hsh, page, joint_purchase:)
     super(id, hsh, page)
     @id = "soctenant"
-    @check_answer_label = "#{joint_purchase ? 'Any buyers were' : 'Buyer was a'} registered provider#{'s' if joint_purchase}, housing association or local authority tenant#{'s' if joint_purchase} immediately before this sale?"
-    @header = "#{joint_purchase ? 'Were any of the buyers' : 'Was the buyer a'} private registered provider#{'s' if joint_purchase}, housing association or local authority tenant#{'s' if joint_purchase} immediately before this sale?"
+    @check_answer_label = translate("check_answer_labels.soctenant", pluralise_condition: joint_purchase)
+    # @check_answer_label = I18n.t("check_answer_labels.soctenant", count: joint_purchase ? 2 : 1)
+    @header = translate("questions.soctenant", pluralise_condition: joint_purchase)
+    # @header = I18n.t("questions.soctenant", count: joint_purchase ? 2 : 1)
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
   end

@@ -538,6 +538,9 @@ en:
           W: "Suitable for someone who uses a wheelchair and offers the full use of all rooms and facilities."
           A: "Fitted with stairlifts, ramps, level access showers or grab rails."
           N: "Not designed to wheelchair-user standards or fitted with any equipment or adaptations."
+    soctenant:
+      one: "Was the buyer a private registered provider, housing association or local authority tenant immediately before this sale?"
+      other: "Were any of the buyers private registered providers, housing association or local authority tenants immediately before this sale?"
 
   hints:
     location:
@@ -550,6 +553,11 @@ en:
       toggle_active: "If the date is before %{date}, select ‘From the start of the current collection period’ because the previous period has now closed."
     bulk_upload:
       needstype: "General needs housing includes both self-contained and shared housing without support or specific adaptations. Supported housing can include direct access hostels, group homes, residential care and nursing homes."
+
+  check_answer_labels:
+    soctenant:
+      one: "Buyer was a registered provider, housing association or local authority tenant immediately before this sale?"
+      other: "Any buyers were registered providers, housing association or local authority tenants immediately before this sale?"
 
   warnings:
     location:
