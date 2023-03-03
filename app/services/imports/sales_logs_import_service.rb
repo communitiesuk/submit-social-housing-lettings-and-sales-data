@@ -122,8 +122,6 @@ module Imports
       attributes["socprevten"] = unsafe_string_as_integer(xml_doc, "PrevRentType")
       attributes["mortgagelender"] = mortgage_lender(xml_doc, attributes)
       attributes["mortgagelenderother"] = mortgage_lender_other(xml_doc, attributes)
-      attributes["pcode1"] = string_or_nil(xml_doc, "PCODE1")
-      attributes["pcode2"] = string_or_nil(xml_doc, "PCODE2")
       attributes["postcode_full"] = parse_postcode(string_or_nil(xml_doc, "Q14Postcode"))
       attributes["pcodenk"] = 0 if attributes["postcode_full"].present? # known if given
       attributes["soctenant"] = soctenant(attributes)
@@ -462,6 +460,7 @@ module Imports
         attributes["pregblank"] = 1
       end
       attributes["pcodenk"] ||= 1
+      attributes["prevten"] ||= 0
 
       # buyer 1 characteristics
       attributes["age1_known"] ||= 1
@@ -494,7 +493,7 @@ module Imports
 
     def missing_answers(sales_log)
       applicable_questions = sales_log.form.subsections.map { |s| s.applicable_questions(sales_log).select { |q| q.enabled?(sales_log) } }.flatten
-      applicable_questions.filter { |q| q.unanswered?(sales_log) }.map(&:id)
+      applicable_questions.filter { |q| q.unanswered?(sales_log) }.map(&:id) - sales_log.optional_fields
     end
   end
 end
