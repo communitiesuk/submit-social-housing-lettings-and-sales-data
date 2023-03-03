@@ -8,6 +8,10 @@ class FeatureToggle
     Rails.env.production? || Rails.env.test? || Rails.env.staging?
   end
 
+  def self.startdate_validation_enabled?
+    !Rails.env.test?
+  end
+
   def self.startdate_two_week_validation_enabled?
     Rails.env.production? || Rails.env.test? || Rails.env.staging?
   end
