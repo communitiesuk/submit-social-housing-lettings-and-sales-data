@@ -800,6 +800,30 @@ RSpec.describe Imports::SalesLogsImportService do
           expect(sales_log&.status).to eq("completed")
         end
       end
+
+      context "when setting default buyer 1 previous tenancy" do
+        let(:sales_log_id) { "outright_sale_sales_log" }
+
+        before do
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets prevten to don't know if not answered" do
+          sales_log_xml.at_xpath("//xmlns:Q6PrevTenure").content = ""
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.prevten).to eq(0) # don't know
+        end
+
+        it "sets prevten to correctly if answered" do
+          sales_log_xml.at_xpath("//xmlns:Q6PrevTenure").content = "2 Private registered provider (PRP) or housing association tenant"
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.prevten).to eq(2)
+        end
+      end
     end
   end
 end

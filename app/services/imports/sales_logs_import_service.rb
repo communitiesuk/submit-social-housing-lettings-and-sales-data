@@ -460,6 +460,7 @@ module Imports
         attributes["pregblank"] = 1
       end
       attributes["pcodenk"] ||= 1
+      attributes["prevten"] ||= 0
 
       # buyer 1 characteristics
       attributes["age1_known"] ||= 1
