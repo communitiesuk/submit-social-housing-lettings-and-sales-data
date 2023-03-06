@@ -18,7 +18,7 @@ module Imports
     def create_log(xml_doc)
       # only import sales logs from 22/23 collection period onwards
       return unless meta_field_value(xml_doc, "form-name").include?("Sales")
-      return unless compose_date(xml_doc, "DAY", "MONTH", "YEAR") > Time.zone.local(2022, 4, 1)
+      return unless compose_date(xml_doc, "DAY", "MONTH", "YEAR") >= Time.zone.local(2022, 4, 1)
 
       attributes = {}
 
