@@ -1297,30 +1297,67 @@ RSpec.describe LettingsLogsController, type: :request do
       expect(form).to have_button("Send email")
     end
 
-    it "when codes_only query parameter is false, form contains hidden field with correct value" do
-      codes_only = false
-      get "/lettings-logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
-      hidden_field = page.find("form.button_to").find_field("codes_only_export", type: "hidden")
-      expect(hidden_field.value).to eq(codes_only.to_s)
-    end
-
-    it "when codes_only query parameter is true, form contains hidden field with correct value" do
-      codes_only = true
-      get "/lettings-logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
-      hidden_field = page.find("form.button_to").find_field("codes_only_export", type: "hidden")
-      expect(hidden_field.value).to eq(codes_only.to_s)
-    end
-
     it "when query string contains search parameter, form contains hidden field with correct value" do
       search_term = "blam"
-      get "/lettings-logs/csv-download?codes_only=true&search=#{search_term}", headers:, params: {}
+      get "/lettings-logs/csv-download?codes_only=false&search=#{search_term}", headers:, params: {}
       hidden_field = page.find("form.button_to").find_field("search", type: "hidden")
       expect(hidden_field.value).to eq(search_term)
+    end
+
+    context "when the user is a data coordinator" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+
+      it "when codes_only query parameter is false, form contains hidden field with correct value" do
+        codes_only = false
+        get "/lettings-logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
+        hidden_field = page.find("form.button_to").find_field("codes_only", type: "hidden")
+        expect(hidden_field.value).to eq(codes_only.to_s)
+      end
+
+      it "when codes_only query parameter is true, user is not authorized" do
+        codes_only = true
+        get "/lettings-logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when the user is a data provider" do
+      it "when codes_only query parameter is false, form contains hidden field with correct value" do
+        codes_only = false
+        get "/lettings-logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
+        hidden_field = page.find("form.button_to").find_field("codes_only", type: "hidden")
+        expect(hidden_field.value).to eq(codes_only.to_s)
+      end
+
+      it "when codes_only query parameter is true, user is not authorized" do
+        codes_only = true
+        get "/lettings-logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when the user is a support user" do
+      let(:user) { FactoryBot.create(:user, :support) }
+
+      it "when codes_only query parameter is false, form contains hidden field with correct value" do
+        codes_only = false
+        get "/lettings-logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
+        hidden_field = page.find("form.button_to").find_field("codes_only", type: "hidden")
+        expect(hidden_field.value).to eq(codes_only.to_s)
+      end
+
+      it "when codes_only query parameter is true, form contains hidden field with correct value" do
+        codes_only = true
+        get "/lettings-logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
+        hidden_field = page.find("form.button_to").find_field("codes_only", type: "hidden")
+        expect(hidden_field.value).to eq(codes_only.to_s)
+      end
     end
   end
 
   describe "POST #email-csv" do
     let(:other_organisation) { FactoryBot.create(:organisation) }
+    let(:user) { FactoryBot.create(:user, :support) }
 
     context "when a log exists" do
       let!(:lettings_log) do
@@ -1332,6 +1369,7 @@ RSpec.describe LettingsLogsController, type: :request do
       end
 
       before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in user
         FactoryBot.create(:lettings_log)
         FactoryBot.create(:lettings_log,
@@ -1379,6 +1417,23 @@ RSpec.describe LettingsLogsController, type: :request do
         expect {
           post "/lettings-logs/email-csv?status[]=completed&search=#{postcode}&codes_only=false", headers:, params: {}
         }.to enqueue_job(EmailCsvJob).with(user, postcode, { "status" => %w[completed] }, false, nil, false)
+      end
+
+      context "when the user is not a support user" do
+        let(:user) { FactoryBot.create(:user, :data_coordinator) }
+
+        it "has permission to download human readable csv" do
+          codes_only_export = false
+          expect {
+            post "/lettings-logs/email-csv?codes_only=#{codes_only_export}", headers:, params: {}
+          }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, nil, false)
+        end
+
+        it "is not authorized to download codes only csv" do
+          codes_only_export = true
+          post "/lettings-logs/email-csv?codes_only=#{codes_only_export}", headers:, params: {}
+          expect(response).to have_http_status(:unauthorized)
+        end
       end
     end
   end
