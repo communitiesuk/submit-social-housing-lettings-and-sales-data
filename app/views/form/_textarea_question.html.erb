@@ -2,7 +2,7 @@
 
 <%= f.govuk_text_area question.id.to_sym,
   caption: caption(caption_text, page_header, conditional),
-  label: legend(question, page_header, conditional, @log),
+  label: legend(question, page_header, conditional),
   hint: { text: question.hint_text&.html_safe },
   width: question.width || nil,
   **stimulus_html_attributes(question) %>

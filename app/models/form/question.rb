@@ -259,8 +259,8 @@ class Form::Question
     selected_answer_option_is_derived?(log) || has_inferred_check_answers_value?(log)
   end
 
-  def question_number_string
-    if @question_number
+  def question_number_string(conditional)
+    if @question_number && !conditional
       "Q#{@question_number}"
     end
   end

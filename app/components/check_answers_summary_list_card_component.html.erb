@@ -10,7 +10,7 @@
       <%= govuk_summary_list do |summary_list| %>
         <% applicable_questions.each do |question| %>
           <% summary_list.row do |row| %>
-            <% row.key { question.check_answer_label.to_s.presence || question.header.to_s } %>
+            <% row.key { get_question_label(question) } %>
             <% row.value do %>
               <span class="govuk-!-margin-right-4"><%= get_answer_label(question) %></span>
 

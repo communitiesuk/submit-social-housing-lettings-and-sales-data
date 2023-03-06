@@ -7,7 +7,7 @@ module QuestionViewHelper
 
   def legend(question, page_header, conditional)
     {
-      text: [question.question_number_string, question.header.html_safe].compact.join(" - "),
+      text: [question.question_number_string(conditional), question.header.html_safe].compact.join(" - "),
       size: label_size(page_header, conditional),
       tag: label_tag(page_header, conditional),
     }
