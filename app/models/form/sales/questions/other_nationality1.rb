@@ -6,5 +6,6 @@ class Form::Sales::Questions::OtherNationality1 < ::Form::Question
     @header = "Nationality"
     @type = "text"
     @check_answers_card_number = 1
+    @question_number = 24
   end
 end
