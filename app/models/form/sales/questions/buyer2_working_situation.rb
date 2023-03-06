@@ -13,6 +13,7 @@ class Form::Sales::Questions::Buyer2WorkingSituation < ::Form::Question
       },
       "value" => "Prefers not to say",
     }]
+    @question_number = 33
   end
 
   ANSWER_OPTIONS = {

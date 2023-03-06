@@ -24,6 +24,7 @@ class Form::Sales::Questions::Nationality1 < ::Form::Question
       },
       "value" => "Prefers not to say",
     }]
+    @question_number = 24
   end
 
   ANSWER_OPTIONS = {

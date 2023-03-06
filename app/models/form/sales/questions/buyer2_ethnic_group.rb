@@ -13,6 +13,7 @@ class Form::Sales::Questions::Buyer2EthnicGroup < ::Form::Question
       "value" => "Prefers not to say",
     }]
     @check_answers_card_number = 2
+    @question_number = 30
   end
 
   ANSWER_OPTIONS = {

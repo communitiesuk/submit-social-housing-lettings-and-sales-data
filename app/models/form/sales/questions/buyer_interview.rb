@@ -7,6 +7,7 @@ class Form::Sales::Questions::BuyerInterview < ::Form::Question
     @type = "radio"
     @hint_text = "You should still try to answer all questions even if the buyer wasn't interviewed in person"
     @answer_options = ANSWER_OPTIONS
+    @question_number = 18
   end
 
   ANSWER_OPTIONS = {
