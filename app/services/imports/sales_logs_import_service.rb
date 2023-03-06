@@ -168,8 +168,16 @@ module Imports
       end
     end
 
-    def rescue_validation_or_raise(sales_log, _attributes, _previous_status, exception)
+    def rescue_validation_or_raise(sales_log, attributes, _previous_status, exception)
       @logger.error("Log #{sales_log.old_id}: Failed to import")
+      sales_log.errors.each do |error|
+        @logger.error("Validation error: Field #{error.attribute}:")
+        @logger.error("\tOwning Organisation: #{sales_log.owning_organisation&.name}")
+        @logger.error("\tOld CORE ID: #{sales_log.old_id}")
+        @logger.error("\tOld CORE: #{attributes[error.attribute.to_s]&.inspect}")
+        @logger.error("\tNew CORE: #{sales_log.read_attribute(error.attribute)&.inspect}")
+        @logger.error("\tError message: #{error.type}")
+      end
       raise exception
     end
 
