@@ -203,6 +203,65 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
+    context "and the mortgage soft validation is triggered (mortgage_value_check)" do
+      let(:sales_log_id) { "discounted_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q2Person1Income").content = "10"
+      end
+
+      it "completes the log" do
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log.status).to eq("completed")
+      end
+    end
+
+    context "and the shared ownership deposit soft validation is triggered (shared_ownership_deposit_value_check)" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:DerSaleType").content = "2"
+        sales_log_xml.at_xpath("//xmlns:CALCMORT").content = "275000"
+      end
+
+      it "completes the log" do
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log.status).to eq("completed")
+      end
+    end
+
+    context "and the purchase price soft validation is triggered (value_value_check)" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        LaSaleRange.create!(la: "E09000033", bedrooms: 2, soft_min: 177_000, soft_max: 384_000, start_year: 2022)
+        sales_log_xml.at_xpath("//xmlns:Q22PurchasePrice").content = "2750"
+        sales_log_xml.at_xpath("//xmlns:CALCMORT").content = "2750"
+      end
+
+      it "completes the log" do
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log.status).to eq("completed")
+      end
+    end
+
+    context "and the savings soft validation is triggered (savings_value_check)" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q3Savings").content = "200750"
+      end
+
+      it "completes the log" do
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log.status).to eq("completed")
+      end
+    end
+
     context "when inferring default answers for completed sales logs" do
       context "when the armedforcesspouse is not answered" do
         let(:sales_log_id) { "discounted_ownership_sales_log" }

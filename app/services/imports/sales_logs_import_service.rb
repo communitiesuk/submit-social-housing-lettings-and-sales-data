@@ -137,6 +137,12 @@ module Imports
         attributes["is_la_inferred"] = false
       end
 
+      # Soft validations can become required answers, set them to yes by default
+      attributes["mortgage_value_check"] = 0
+      attributes["shared_ownership_deposit_value_check"] = 0
+      attributes["value_value_check"] = 0
+      attributes["savings_value_check"] = 0
+
       # Sets the log creator
       owner_id = meta_field_value(xml_doc, "owner-user-id").strip
       if owner_id.present?
