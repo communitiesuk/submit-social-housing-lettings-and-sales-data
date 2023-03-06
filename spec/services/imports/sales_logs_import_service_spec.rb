@@ -822,7 +822,6 @@ RSpec.describe Imports::SalesLogsImportService do
 
           sales_log = SalesLog.find_by(old_id: sales_log_id)
           expect(sales_log&.pcodenk).to eq(0) # postcode known
-          # expect(sales_log&.is_la_inferred).to eq(nil)
           expect(sales_log&.la_known).to eq(1) # la known
           expect(sales_log&.la).to eq("E07000142")
           expect(sales_log&.status).to eq("completed")
