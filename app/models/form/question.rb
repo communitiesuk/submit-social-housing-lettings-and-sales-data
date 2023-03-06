@@ -262,8 +262,6 @@ class Form::Question
   def question_number_string
     if @question_number
       "Q#{@question_number}"
-    else
-      nil
     end
   end
 
