@@ -73,11 +73,11 @@ class BulkUploadMailer < NotifyMailer
                          start_bulk_upload_sales_logs_url
                        end
 
-    validator_class = if bulk_upload.lettings?
-                        BulkUpload::Lettings::Validator
-                      else
-                        BulkUpload::Sales::Validator
-                      end
+    row_parser_class = if bulk_upload.lettings?
+                         BulkUpload::Lettings::RowParser
+                       else
+                         BulkUpload::Sales::RowParser
+                       end
 
     errors = bulk_upload
       .bulk_upload_errors
@@ -87,7 +87,7 @@ class BulkUploadMailer < NotifyMailer
       .keys
       .sort_by { |_col, field| field }
       .map do |col, field|
-        "- Column #{col} (#{validator_class.question_for_field(field.to_sym)})"
+        "- Column #{col} (#{row_parser_class.question_for_field(field.to_sym)})"
       end
 
     send_email(
