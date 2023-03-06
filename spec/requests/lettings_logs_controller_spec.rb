@@ -1343,33 +1343,33 @@ RSpec.describe LettingsLogsController, type: :request do
 
       it "creates an E-mail job" do
         expect {
-          post "/lettings-logs/email-csv?codes_only_export=true", headers:, params: {}
+          post "/lettings-logs/email-csv?codes_only=true", headers:, params: {}
         }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, nil, true)
       end
 
       it "redirects to the confirmation page" do
-        post "/lettings-logs/email-csv?codes_only_export=true", headers:, params: {}
+        post "/lettings-logs/email-csv?codes_only=true", headers:, params: {}
         expect(response).to redirect_to(csv_confirmation_lettings_logs_path)
       end
 
       it "passes the search term" do
         expect {
-          post "/lettings-logs/email-csv?search=#{lettings_log.id}&codes_only_export=false", headers:, params: {}
+          post "/lettings-logs/email-csv?search=#{lettings_log.id}&codes_only=false", headers:, params: {}
         }.to enqueue_job(EmailCsvJob).with(user, lettings_log.id.to_s, {}, false, nil, false)
       end
 
       it "passes filter parameters" do
         expect {
-          post "/lettings-logs/email-csv?status[]=completed&codes_only_export=true", headers:, params: {}
+          post "/lettings-logs/email-csv?status[]=completed&codes_only=true", headers:, params: {}
         }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed] }, false, nil, true)
       end
 
       it "passes export type flag" do
         expect {
-          post "/lettings-logs/email-csv?codes_only_export=true", headers:, params: {}
+          post "/lettings-logs/email-csv?codes_only=true", headers:, params: {}
         }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, nil, true)
         expect {
-          post "/lettings-logs/email-csv?codes_only_export=false", headers:, params: {}
+          post "/lettings-logs/email-csv?codes_only=false", headers:, params: {}
         }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, nil, false)
       end
 
@@ -1377,7 +1377,7 @@ RSpec.describe LettingsLogsController, type: :request do
         postcode = "XX1 1TG"
 
         expect {
-          post "/lettings-logs/email-csv?status[]=completed&search=#{postcode}&codes_only_export=false", headers:, params: {}
+          post "/lettings-logs/email-csv?status[]=completed&search=#{postcode}&codes_only=false", headers:, params: {}
         }.to enqueue_job(EmailCsvJob).with(user, postcode, { "status" => %w[completed] }, false, nil, false)
       end
     end

@@ -11,6 +11,6 @@
     <p class="govuk-body">We'll send a secure download link to your email address <strong><%= @current_user.email %></strong>.</p>
     <p class="govuk-body">You've selected <%= count %> logs.</p>
 
-    <%= govuk_button_to "Send email", post_path, method: :post, params: { search: search_term, codes_only_export: } %>
+    <%= govuk_button_to "Send email", post_path, method: :post, params: { search: search_term, codes_only: } %>
   </div>
 </div>

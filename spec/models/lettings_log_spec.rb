@@ -2745,7 +2745,7 @@ RSpec.describe LettingsLog do
       let(:csv_export_file) { File.open("spec/fixtures/files/lettings_logs_download_codes_only.csv", "r:UTF-8") }
 
       it "generates a correct csv from a lettings log" do
-        expect(described_class.to_csv(codes_only_export: true)).to eq(expected_content)
+        expect(described_class.to_csv(codes_only: true)).to eq(expected_content)
       end
     end
   end
