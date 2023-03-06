@@ -1,6 +1,6 @@
 class Form::Sales::Questions::LeaseholdCharges < ::Form::Question
-  def initialize(id, hsh, page)
-    super
+  def initialize(id, hsh, subsection, ownershipsch:)
+    super(id, hsh, subsection)
     @id = "mscharge"
     @check_answer_label = "Monthly leasehold charges"
     @header = "Enter the total monthly charge"
@@ -8,6 +8,18 @@ class Form::Sales::Questions::LeaseholdCharges < ::Form::Question
     @min = 0
     @width = 5
     @prefix = "£"
-    @question_number = 98
+    @ownershipsch = ownershipsch
+    @question_number = question_number
+  end
+
+  def question_number
+    case @ownershipsch
+    when 1
+      98
+    when 2
+      109
+    when 3
+      117
+    end
   end
 end
