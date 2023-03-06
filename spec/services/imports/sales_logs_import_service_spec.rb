@@ -248,11 +248,112 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
+    context "and the purchase price soft validation is triggered (income1_value_check, income2_value_check)" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q2Person1Income").content = "20"
+        sales_log_xml.at_xpath("//xmlns:Q2Person2Income").content = "10"
+        sales_log_xml.at_xpath("//xmlns:P2Eco").content = "1"
+        sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+        sales_log_xml.at_xpath("//xmlns:JointMore").content = "2 No"
+      end
+
+      it "completes the log" do
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log.status).to eq("completed")
+      end
+    end
+
     context "and the savings soft validation is triggered (savings_value_check)" do
       let(:sales_log_id) { "shared_ownership_sales_log" }
 
       before do
         sales_log_xml.at_xpath("//xmlns:Q3Savings").content = "200750"
+      end
+
+      it "completes the log" do
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log.status).to eq("completed")
+      end
+    end
+
+    context "and the deposit soft validation is triggered (deposit_value_check)" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q3Savings").content = "10"
+      end
+
+      it "completes the log" do
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log.status).to eq("completed")
+      end
+    end
+
+    context "and the wheelchair soft validation is triggered (wheel_value_check)" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q10Wheelchair").content = "1"
+        sales_log_xml.at_xpath("//xmlns:Disability").content = "2"
+      end
+
+      it "completes the log" do
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log.status).to eq("completed")
+      end
+    end
+
+    context "and the retirement soft validation is triggered (retirement_value_check)" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:P1Eco").content = "5"
+      end
+
+      it "completes the log" do
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log.status).to eq("completed")
+      end
+    end
+
+    context "and the grant soft validation is triggered (grant_value_check)" do
+      let(:sales_log_id) { "discounted_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q32Reductions").content = "5000"
+        sales_log_xml.at_xpath("//xmlns:CALCMORT").content = "270000"
+        sales_log_xml.at_xpath("//xmlns:Q33Discount").content = ""
+        sales_log_xml.at_xpath("//xmlns:DerSaleType").content = "22"
+      end
+
+      it "completes the log" do
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log.status).to eq("completed")
+      end
+    end
+
+    context "and the stairbought soft validation is triggered (staircase_bought_value_check)" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:PercentBought").content = "51"
+        sales_log_xml.at_xpath("//xmlns:PercentOwns").content = "81"
+        sales_log_xml.at_xpath("//xmlns:Q17aStaircase").content = "1"
+        sales_log_xml.at_xpath("//xmlns:Q17Resale").content = ""
+        sales_log_xml.at_xpath("//xmlns:EXDAY").content = ""
+        sales_log_xml.at_xpath("//xmlns:EXMONTH").content = ""
+        sales_log_xml.at_xpath("//xmlns:EXYEAR").content = ""
+        sales_log_xml.at_xpath("//xmlns:HODAY").content = ""
+        sales_log_xml.at_xpath("//xmlns:HOMONTH").content = ""
+        sales_log_xml.at_xpath("//xmlns:HOYEAR").content = ""
       end
 
       it "completes the log" do

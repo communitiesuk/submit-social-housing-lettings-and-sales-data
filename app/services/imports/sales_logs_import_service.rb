@@ -142,6 +142,17 @@ module Imports
       attributes["shared_ownership_deposit_value_check"] = 0
       attributes["value_value_check"] = 0
       attributes["savings_value_check"] = 0
+      attributes["income1_value_check"] = 0
+      attributes["deposit_value_check"] = 0
+      attributes["wheel_value_check"] = 0
+      attributes["retirement_value_check"] = 0
+      attributes["extrabor_value_check"] = 0
+      attributes["grant_value_check"] = 0
+      attributes["staircase_bought_value_check"] = 0
+      attributes["deposit_and_mortgage_value_check"] = 0
+      attributes["old_persons_shared_ownership_value_check"] = 0
+      attributes["income2_value_check"] = 0
+      attributes["monthly_charges_value_check"] = 0
 
       # Sets the log creator
       owner_id = meta_field_value(xml_doc, "owner-user-id").strip
@@ -203,6 +214,7 @@ module Imports
     def fields_not_present_in_softwire_data
       %w[created_by
          income1_value_check
+         income2_value_check
          mortgage_value_check
          savings_value_check
          deposit_value_check
@@ -402,7 +414,6 @@ module Imports
     end
 
     def monthly_charges(xml_doc, attributes)
-      safe_string_as_decimal(xml_doc, "Q29MonthlyCharges")
       case attributes["ownershipsch"]
       when 1
         safe_string_as_decimal(xml_doc, "Q29MonthlyCharges")
