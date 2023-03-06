@@ -8,5 +8,6 @@ class Form::Sales::Questions::LeaseholdCharges < ::Form::Question
     @min = 0
     @width = 5
     @prefix = "£"
+    @question_number = 98
   end
 end

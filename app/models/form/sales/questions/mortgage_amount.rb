@@ -9,5 +9,6 @@ class Form::Sales::Questions::MortgageAmount < ::Form::Question
     @width = 5
     @prefix = "£"
     @hint_text = "Enter the amount of mortgage agreed with the mortgage lender. Exclude any deposits or cash payments. Numeric in pounds. Rounded to the nearest pound."
+    @question_number = 91
   end
 end

@@ -6,5 +6,6 @@ class Form::Sales::Questions::MortgageLenderOther < ::Form::Question
     @header = "What is the other mortgage lender?"
     @type = "text"
     @page = page
+    @question_number = 92
   end
 end

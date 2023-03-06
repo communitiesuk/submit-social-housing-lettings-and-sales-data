@@ -11,6 +11,7 @@ class Form::Sales::Questions::LivingBeforePurchaseYears < ::Form::Question
     @step = 1
     @width = 5
     @suffix = " years"
+    @question_number = 75
   end
 
   def header_text

@@ -8,6 +8,7 @@ class Form::Sales::Questions::ExtraBorrowing < ::Form::Question
     @answer_options = ANSWER_OPTIONS
     @page = page
     @hint_text = ""
+    @question_number = 94
   end
 
   ANSWER_OPTIONS = {

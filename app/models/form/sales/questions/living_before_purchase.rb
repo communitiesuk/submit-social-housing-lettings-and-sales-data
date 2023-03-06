@@ -17,6 +17,7 @@ class Form::Sales::Questions::LivingBeforePurchase < ::Form::Question
         },
       ],
     }
+    @question_number = 75
   end
 
   ANSWER_OPTIONS = {

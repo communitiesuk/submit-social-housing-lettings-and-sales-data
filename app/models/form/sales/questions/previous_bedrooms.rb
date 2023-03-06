@@ -9,5 +9,6 @@ class Form::Sales::Questions::PreviousBedrooms < ::Form::Question
     @min = 1
     @max = 6
     @hint_text = "For bedsits enter 1"
+    @question_number = 85
   end
 end

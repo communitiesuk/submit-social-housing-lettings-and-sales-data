@@ -11,6 +11,7 @@ class Form::Sales::Questions::DepositAmount < ::Form::Question
     @prefix = "£"
     @hint_text = "Enter the total cash sum paid by the buyer towards the property that was not funded by the mortgage"
     @derived = true
+    @question_number = 95
   end
 
   def selected_answer_option_is_derived?(_log)

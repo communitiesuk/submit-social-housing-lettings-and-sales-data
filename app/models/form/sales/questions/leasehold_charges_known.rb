@@ -17,6 +17,7 @@ class Form::Sales::Questions::LeaseholdChargesKnown < ::Form::Question
         },
       ],
     }
+    @question_number = 98
   end
 
   ANSWER_OPTIONS = {

@@ -10,6 +10,7 @@ class Form::Sales::Questions::MortgageLender < ::Form::Question
     @answer_options = ANSWER_OPTIONS
     @guidance_position = GuidancePosition::BOTTOM
     @guidance_partial = "mortgage_lender"
+    @question_number = 92
   end
 
   ANSWER_OPTIONS = {
