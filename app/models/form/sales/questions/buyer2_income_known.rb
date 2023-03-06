@@ -10,6 +10,7 @@ class Form::Sales::Questions::Buyer2IncomeKnown < ::Form::Question
       "income2" => [0],
     }
     @check_answers_card_number = 2
+    @question_number = 69
   end
 
   ANSWER_OPTIONS = {
