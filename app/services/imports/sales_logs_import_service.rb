@@ -16,7 +16,9 @@ module Imports
   private
 
     def create_log(xml_doc)
+      # only import sales logs from 22/23 collection period onwards
       return unless meta_field_value(xml_doc, "form-name").include?("Sales")
+      return unless compose_date(xml_doc, "DAY", "MONTH", "YEAR") >= Time.zone.local(2022, 4, 1)
 
       attributes = {}
 
@@ -76,7 +78,7 @@ module Imports
       attributes["inc2mort"] = unsafe_string_as_integer(xml_doc, "Q2Person2MortApplication")
       attributes["hb"] = unsafe_string_as_integer(xml_doc, "Q2a")
       attributes["frombeds"] = safe_string_as_integer(xml_doc, "Q20Bedrooms")
-      attributes["staircase"] = unsafe_string_as_integer(xml_doc, "Q17aStaircase")
+      attributes["staircase"] = unsafe_string_as_integer(xml_doc, "Q17aStaircase") if attributes["ownershipsch"] == 1
       attributes["stairbought"] = safe_string_as_integer(xml_doc, "PercentBought")
       attributes["stairowned"] = safe_string_as_integer(xml_doc, "PercentOwns") if attributes["staircase"] == 1
       attributes["mrent"] = safe_string_as_decimal(xml_doc, "Q28MonthlyRent")
@@ -102,7 +104,6 @@ module Imports
       attributes["ppcodenk"] = previous_postcode_known(xml_doc, attributes["ppostcode_full"], attributes["prevloc"]) # Q7UNKNOWNPOSTCODE check mapping
       attributes["ppostc1"] = string_or_nil(xml_doc, "PPOSTC1")
       attributes["ppostc2"] = string_or_nil(xml_doc, "PPOSTC2")
-      attributes["previous_la_known"] = nil
       attributes["hhregres"] = unsafe_string_as_integer(xml_doc, "ArmedF")
       attributes["hhregresstill"] = still_serving(xml_doc)
       attributes["proplen"] = safe_string_as_integer(xml_doc, "Q16aProplen2") || safe_string_as_integer(xml_doc, "Q16aProplensec2")
@@ -111,7 +112,7 @@ module Imports
       attributes["prevten"] = unsafe_string_as_integer(xml_doc, "Q6PrevTenure")
       attributes["mortlen"] = mortgage_length(xml_doc, attributes)
       attributes["extrabor"] = borrowing(xml_doc, attributes)
-      attributes["mortgageused"] = unsafe_string_as_integer(xml_doc, "MORTGAGEUSED")
+      attributes["mortgageused"] = mortgage_used(xml_doc, attributes)
       attributes["wchair"] = unsafe_string_as_integer(xml_doc, "Q15Wheelchair")
       attributes["armedforcesspouse"] = unsafe_string_as_integer(xml_doc, "ARMEDFORCESSPOUSE")
       attributes["hodate"] = compose_date(xml_doc, "HODAY", "HOMONTH", "HOYEAR")
@@ -130,9 +131,8 @@ module Imports
       attributes["prevshared"] = nil # 23/24 variable
       attributes["staircasesale"] = nil # 23/24 variable
 
-      # Required for our form invalidated questions (not present in import)
-      attributes["previous_la_known"] = 1 if attributes["prevloc"].present? && attributes["ppostcode_full"].blank?
-      if attributes["la"].present? && attributes["postcode_full"].blank?
+      attributes["previous_la_known"] = 1 if attributes["prevloc"].present?
+      if attributes["la"].present?
         attributes["la_known"] = 1
         attributes["is_la_inferred"] = false
       end
@@ -444,6 +444,17 @@ module Imports
       return if postcode.blank?
 
       UKPostcode.parse(postcode).to_s
+    end
+
+    def mortgage_used(xml_doc, attributes)
+      mortgageused = unsafe_string_as_integer(xml_doc, "MORTGAGEUSED")
+      return mortgageused unless mortgageused == 3
+
+      if attributes["mortgage"].present? || attributes["mortlen"].present? || attributes["extrabor"].present?
+        1 # yes
+      else
+        3 # don't know
+      end
     end
 
     def set_default_values(attributes)

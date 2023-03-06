@@ -17,14 +17,6 @@ RSpec.describe Imports::SalesLogsImportService do
   end
 
   before do
-    { "GL519EX" => "E07000078",
-      "SW1A2AA" => "E09000033",
-      "SW1A1AA" => "E09000033",
-      "SW147QP" => "E09000027",
-      "B955HZ" => "E07000221" }.each do |postcode, district_code|
-        WebMock.stub_request(:get, /api.postcodes.io\/postcodes\/#{postcode}/).to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"#{district_code}\",\"codes\":{\"admin_district\":\"#{district_code}\"}}}", headers: {})
-      end
-
     allow(Organisation).to receive(:find_by).and_return(nil)
     allow(Organisation).to receive(:find_by).with(old_visible_id: organisation.old_visible_id).and_return(organisation)
     allow(Organisation).to receive(:find_by).with(old_visible_id: managing_organisation.old_visible_id).and_return(managing_organisation)
@@ -116,6 +108,29 @@ RSpec.describe Imports::SalesLogsImportService do
       it "raises an exception" do
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .to raise_error(RuntimeError, "Organisation not found with legacy ID 99999")
+      end
+    end
+
+    context "and the log startdate is before 22/23 collection period" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:DAY").content = 10
+        sales_log_xml.at_xpath("//xmlns:MONTH").content = 10
+        sales_log_xml.at_xpath("//xmlns:YEAR").content = 2021
+        sales_log_xml.at_xpath("//xmlns:HODAY").content = 9
+        sales_log_xml.at_xpath("//xmlns:HOMONTH").content = 10
+        sales_log_xml.at_xpath("//xmlns:HOYEAR").content = 2021
+        sales_log_xml.at_xpath("//xmlns:EXDAY").content = 9
+        sales_log_xml.at_xpath("//xmlns:EXMONTH").content = 10
+        sales_log_xml.at_xpath("//xmlns:EXYEAR").content = 2021
+      end
+
+      it "does not create the log" do
+        expect(logger).not_to receive(:error)
+        expect(logger).not_to receive(:warn)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+        .to change(SalesLog, :count).by(0)
       end
     end
 
@@ -799,6 +814,18 @@ RSpec.describe Imports::SalesLogsImportService do
           expect(sales_log&.ppostcode_full).to eq("GL51 9EX")
           expect(sales_log&.status).to eq("completed")
         end
+
+        it "correctly sets location fields for when location cannot be inferred from postcode" do
+          sales_log_xml.at_xpath("//xmlns:Q14ONSLACode").content = "E07000142"
+          sales_log_xml.at_xpath("//xmlns:Q14Postcode").content = "A11AA"
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.pcodenk).to eq(0) # postcode known
+          expect(sales_log&.la_known).to eq(1) # la known
+          expect(sales_log&.la).to eq("E07000142")
+          expect(sales_log&.status).to eq("completed")
+        end
       end
 
       context "when setting default buyer 1 previous tenancy" do
@@ -822,6 +849,59 @@ RSpec.describe Imports::SalesLogsImportService do
 
           sales_log = SalesLog.find_by(old_id: sales_log_id)
           expect(sales_log&.prevten).to eq(2)
+        end
+      end
+
+      context "when mortgage used is don't know" do
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
+
+        before do
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets mortgageused to don't know if mortlen, mortgage and extrabor are blank" do
+          sales_log_xml.at_xpath("//xmlns:MORTGAGEUSED").content = "3 Don't know"
+          sales_log_xml.at_xpath("//xmlns:Q35Borrowing").content = ""
+          sales_log_xml.at_xpath("//xmlns:Q34b").content = ""
+          sales_log_xml.at_xpath("//xmlns:CALCMORT").content = ""
+          sales_log_xml.at_xpath("//xmlns:Q36CashDeposit").content = "134750"
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.mortgageused).to eq(3)
+        end
+
+        it "sets mortgageused to yes if mortgage is given" do
+          sales_log_xml.at_xpath("//xmlns:MORTGAGEUSED").content = "3 Don't know"
+          sales_log_xml.at_xpath("//xmlns:Q35Borrowing").content = ""
+          sales_log_xml.at_xpath("//xmlns:Q34b").content = ""
+          sales_log_xml.at_xpath("//xmlns:CALCMORT").content = "134750"
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.mortgageused).to eq(1)
+        end
+
+        it "sets mortgageused to yes if mortlen is given" do
+          sales_log_xml.at_xpath("//xmlns:MORTGAGEUSED").content = "3 Don't know"
+          sales_log_xml.at_xpath("//xmlns:Q35Borrowing").content = ""
+          sales_log_xml.at_xpath("//xmlns:Q34b").content = "10"
+          sales_log_xml.at_xpath("//xmlns:CALCMORT").content = ""
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.mortgageused).to eq(1)
+        end
+
+        it "sets mortgageused to yes if extrabor is given" do
+          sales_log_xml.at_xpath("//xmlns:MORTGAGEUSED").content = "3 Don't know"
+          sales_log_xml.at_xpath("//xmlns:Q35Borrowing").content = "3000"
+          sales_log_xml.at_xpath("//xmlns:Q34b").content = ""
+          sales_log_xml.at_xpath("//xmlns:CALCMORT").content = ""
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.mortgageused).to eq(1)
         end
       end
     end
