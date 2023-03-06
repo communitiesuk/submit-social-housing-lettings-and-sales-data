@@ -10,6 +10,7 @@ class Form::Lettings::Questions::LocationId < ::Form::Question
         "needstype": 2,
       },
     }
+    @question_number = 10
   end
 
   def answer_options
