@@ -210,6 +210,16 @@ RSpec.describe BulkUpload::Lettings::RowParser do
       end
     end
 
+    context "when setup section not complete" do
+      let(:attributes) { { bulk_upload:, field_7: "123" } }
+
+      it "has errors on setup fields" do
+        errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute)
+
+        expect(errors).to eql(%i[field_1 field_129 field_130 field_98 field_97 field_96 field_111 field_113])
+      end
+    end
+
     describe "#field_1" do
       context "when null" do
         let(:attributes) { { bulk_upload:, field_1: nil, field_4: "1" } }

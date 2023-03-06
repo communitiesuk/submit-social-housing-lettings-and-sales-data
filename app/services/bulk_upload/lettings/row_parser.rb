@@ -203,6 +203,10 @@ class BulkUpload::Lettings::RowParser
     block_log_creation
   end
 
+  def setup_section_incomplete?
+    log.form.setup_sections[0].subsections[0].is_incomplete?(log)
+  end
+
 private
 
   def validate_location_related
@@ -222,7 +226,7 @@ private
 
   def validate_location_exists
     if scheme && field_5.present? && location.nil?
-      errors.add(:field_5, "Location could be found with provided scheme code")
+      errors.add(:field_5, "Location could be found with provided scheme code", category: :setup)
     end
   end
 
@@ -240,7 +244,7 @@ private
 
   def validate_scheme_exists
     if field_4.present? && scheme.nil?
-      errors.add(:field_4, "The management group code is not correct")
+      errors.add(:field_4, "The management group code is not correct", category: :setup)
     end
   end
 
@@ -254,7 +258,7 @@ private
   def validate_managing_org_exists
     if managing_organisation.nil?
       errors.delete(:field_113)
-      errors.add(:field_113, "The managing organisation code is incorrect")
+      errors.add(:field_113, "The managing organisation code is incorrect", category: :setup)
     end
   end
 
@@ -269,7 +273,7 @@ private
   def validate_owning_org_exists
     if owning_organisation.nil?
       errors.delete(:field_111)
-      errors.add(:field_111, "The owning organisation code is incorrect")
+      errors.add(:field_111, "The owning organisation code is incorrect", category: :setup)
     end
   end
 
@@ -387,8 +391,16 @@ private
       next if log.optional_fields.include?(question.id)
       next if question.completed?(log)
 
-      fields.each { |field| errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase)) }
+      if setup_question?(question)
+        fields.each { |field| errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase), category: :setup) }
+      else
+        fields.each { |field| errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase)) }
+      end
     end
+  end
+
+  def setup_question?(question)
+    log.form.setup_sections[0].subsections[0].questions.include?(question)
   end
 
   def field_mapping_for_errors
@@ -398,6 +410,8 @@ private
       postcode_known: %i[field_107 field_108 field_109],
       postcode_full: %i[field_107 field_108 field_109],
       la: %i[field_107],
+      owning_organisation: [:field_111],
+      managing_organisation: [:field_113],
       owning_organisation_id: [:field_111],
       managing_organisation_id: [:field_113],
       renewal: [:field_134],
