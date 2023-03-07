@@ -203,6 +203,197 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
+    context "and the mortgage soft validation is triggered (mortgage_value_check)" do
+      let(:sales_log_id) { "discounted_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q2Person1Income").content = "10"
+      end
+
+      it "completes the log" do
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log.status).to eq("completed")
+      end
+    end
+
+    context "and the shared ownership deposit soft validation is triggered (shared_ownership_deposit_value_check)" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:DerSaleType").content = "2"
+        sales_log_xml.at_xpath("//xmlns:CALCMORT").content = "275000"
+      end
+
+      it "completes the log" do
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log.status).to eq("completed")
+      end
+    end
+
+    context "and the purchase price soft validation is triggered (value_value_check)" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        LaSaleRange.create!(la: "E09000033", bedrooms: 2, soft_min: 177_000, soft_max: 384_000, start_year: 2022)
+        sales_log_xml.at_xpath("//xmlns:Q22PurchasePrice").content = "2750"
+        sales_log_xml.at_xpath("//xmlns:CALCMORT").content = "2750"
+      end
+
+      it "completes the log" do
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log.status).to eq("completed")
+      end
+    end
+
+    context "and the purchase price soft validation is triggered (income1_value_check, income2_value_check)" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q2Person1Income").content = "20"
+        sales_log_xml.at_xpath("//xmlns:Q2Person2Income").content = "10"
+        sales_log_xml.at_xpath("//xmlns:P2Eco").content = "1"
+        sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+        sales_log_xml.at_xpath("//xmlns:JointMore").content = "2 No"
+      end
+
+      it "completes the log" do
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log.status).to eq("completed")
+      end
+    end
+
+    context "and the savings soft validation is triggered (savings_value_check)" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q3Savings").content = "200750"
+      end
+
+      it "completes the log" do
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log.status).to eq("completed")
+      end
+    end
+
+    context "and the deposit soft validation is triggered (deposit_value_check)" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q3Savings").content = "10"
+      end
+
+      it "completes the log" do
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log.status).to eq("completed")
+      end
+    end
+
+    context "and the wheelchair soft validation is triggered (wheel_value_check)" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q10Wheelchair").content = "1"
+        sales_log_xml.at_xpath("//xmlns:Disability").content = "2"
+      end
+
+      it "completes the log" do
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log.status).to eq("completed")
+      end
+    end
+
+    context "and the retirement soft validation is triggered (retirement_value_check)" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:P1Eco").content = "5"
+      end
+
+      it "completes the log" do
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log.status).to eq("completed")
+      end
+    end
+
+    context "and the grant soft validation is triggered (grant_value_check)" do
+      let(:sales_log_id) { "discounted_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q32Reductions").content = "5000"
+        sales_log_xml.at_xpath("//xmlns:CALCMORT").content = "270000"
+        sales_log_xml.at_xpath("//xmlns:Q33Discount").content = ""
+        sales_log_xml.at_xpath("//xmlns:DerSaleType").content = "22"
+      end
+
+      it "completes the log" do
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log.status).to eq("completed")
+      end
+    end
+
+    context "and the stairbought soft validation is triggered (staircase_bought_value_check)" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:PercentBought").content = "51"
+        sales_log_xml.at_xpath("//xmlns:PercentOwns").content = "81"
+        sales_log_xml.at_xpath("//xmlns:Q17aStaircase").content = "1"
+        sales_log_xml.at_xpath("//xmlns:Q17Resale").content = ""
+        sales_log_xml.at_xpath("//xmlns:EXDAY").content = ""
+        sales_log_xml.at_xpath("//xmlns:EXMONTH").content = ""
+        sales_log_xml.at_xpath("//xmlns:EXYEAR").content = ""
+        sales_log_xml.at_xpath("//xmlns:HODAY").content = ""
+        sales_log_xml.at_xpath("//xmlns:HOMONTH").content = ""
+        sales_log_xml.at_xpath("//xmlns:HOYEAR").content = ""
+      end
+
+      it "completes the log" do
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log.status).to eq("completed")
+      end
+    end
+
+    context "and it has an invalid record with invalid child, student and 16-19 age combination" do
+      let(:sales_log_id) { "discounted_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//meta:status").content = "submitted-invalid"
+        sales_log_xml.at_xpath("//xmlns:P2Age").content = 16
+        sales_log_xml.at_xpath("//xmlns:P2Eco").content = 7
+        sales_log_xml.at_xpath("//xmlns:P2Rel").content = "X"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Removing field age2 from log triggering validation: Person cannot be aged 16-19 if they are a student but don't have relationship ‘child’/)
+        expect(logger).to receive(:warn).with(/Removing field relat2 from log triggering validation: Answer must be ‘child’ if the person is aged 16-19 and a student/)
+        expect(logger).to receive(:warn).with(/Removing field ecstat2 from log triggering validation: Person cannot be a student if they are aged 16-19 but don‘t have relationship ‘child’/)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers" do
+        allow(logger).to receive(:warn)
+
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+
+        expect(sales_log).not_to be_nil
+        expect(sales_log.age2).to be_nil
+        expect(sales_log.relat2).to be_nil
+        expect(sales_log.ecstat2).to be_nil
+      end
+    end
+
     context "when inferring default answers for completed sales logs" do
       context "when the armedforcesspouse is not answered" do
         let(:sales_log_id) { "discounted_ownership_sales_log" }
