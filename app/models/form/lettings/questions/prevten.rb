@@ -8,6 +8,7 @@ class Form::Lettings::Questions::Prevten < ::Form::Question
     @check_answers_card_number = 0
     @hint_text = "This is where the household was the night before they moved."
     @answer_options = ANSWER_OPTIONS
+    @question_number = 78
   end
 
   ANSWER_OPTIONS = {
