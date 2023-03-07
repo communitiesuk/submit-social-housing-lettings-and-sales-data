@@ -3,6 +3,7 @@ class Form::Sales::Pages::LivingBeforePurchase < ::Form::Page
     super(id, hsh, subsection)
     @ownershipsch = ownershipsch
   end
+
   def questions
     @questions ||= [
       living_before_purchase,

@@ -24,4 +24,3 @@ class Form::Sales::Questions::MortgageAmount < ::Form::Question
     end
   end
 end
-
