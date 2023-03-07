@@ -406,8 +406,9 @@ RSpec.describe Imports::SalesLogsImportService do
       it "intercepts the relevant validation error" do
         expect(logger).to receive(:warn).with(/Removing field postcode_full from log triggering validation: Buyer's last accommodation and discounted ownership postcodes must match/)
         expect(logger).to receive(:warn).with(/Removing field ppostcode_full from log triggering validation: Buyer's last accommodation and discounted ownership postcodes must match/)
-        expect(logger).to receive(:warn).with(/Removing field postcode_full from log triggering validation: Last settled accommodation and discounted ownership property postcodes must match/)
-        expect(logger).to receive(:warn).with(/Removing field ppostcode_full from log triggering validation: Last settled accommodation and discounted ownership property postcodes must match/)
+        expect(logger).to receive(:warn).with(/Removing field postcode_full from log triggering validation: postcodes_not_matching/)
+        expect(logger).to receive(:warn).with(/Removing field ppostcode_full from log triggering validation: postcodes_not_matching/)
+        expect(logger).to receive(:warn).with(/Removing postcode known and previous postcode known as the postcodes are invalid/)
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .not_to raise_error
       end

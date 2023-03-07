@@ -192,7 +192,11 @@ module Imports
           attributes.delete(error.attribute.to_s)
         end
         @logs_overridden << sales_log.old_id
-        reset_postcode_known(attributes)
+        if sales_log.errors.of_kind?(:postcode_full, :postcodes_not_matching)
+          @logger.warn("Log #{sales_log.old_id}: Removing postcode known and previous postcode known as the postcodes are invalid")
+          attributes.delete("pcodenk")
+          attributes.delete("ppcodenk")
+        end
         save_sales_log(attributes, previous_status)
       else
         @logger.error("Log #{sales_log.old_id}: Failed to import")
@@ -206,11 +210,6 @@ module Imports
         end
         raise exception
       end
-    end
-
-    def reset_postcode_known(attributes)
-      attributes["pcodenk"] = attributes["postcode_full"].present? ? 0 : nil
-      attributes["ppcodenk"] = attributes["ppostcode_full"].present? ? 0 : nil
     end
 
     def compute_differences(sales_log, attributes)
