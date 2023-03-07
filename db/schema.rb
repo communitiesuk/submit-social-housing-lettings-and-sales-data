@@ -544,6 +544,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_101826) do
     t.integer "pregblank"
     t.integer "buy2living"
     t.integer "prevtenbuy2"
+    t.integer "nationalbuy2"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["old_id"], name: "index_sales_logs_on_old_id", unique: true
