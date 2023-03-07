@@ -6,6 +6,6 @@ class Form::Sales::Pages::Buyer2Nationality < ::Form::Page
   end
 
   def questions
-    @questions ||= [Form::Sales::Questions::NationalityBuyer2.new(nil, nil, self)]
+    @questions ||= [Form::Sales::Questions::Buyer2Nationality.new(nil, nil, self)]
   end
 end
