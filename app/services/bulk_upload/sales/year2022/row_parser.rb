@@ -1,4 +1,4 @@
-class BulkUpload::Sales::RowParser
+class BulkUpload::Sales::Year2022::RowParser
   include ActiveModel::Model
   include ActiveModel::Attributes
 

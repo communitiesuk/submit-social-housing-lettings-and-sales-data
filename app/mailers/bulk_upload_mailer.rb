@@ -73,11 +73,7 @@ class BulkUploadMailer < NotifyMailer
                          start_bulk_upload_sales_logs_url
                        end
 
-    row_parser_class = if bulk_upload.lettings?
-                         BulkUpload::Lettings::RowParser
-                       else
-                         BulkUpload::Sales::RowParser
-                       end
+    row_parser_class = bulk_upload.prefix_namespace::RowParser
 
     errors = bulk_upload
       .bulk_upload_errors

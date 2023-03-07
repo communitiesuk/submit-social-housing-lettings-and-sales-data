@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe BulkUpload::Lettings::RowParser do
+RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
   subject(:parser) { described_class.new(attributes) }
 
   let(:now) { Time.zone.today }

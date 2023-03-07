@@ -31,10 +31,6 @@ private
   end
 
   def row_parser_class
-    if bulk_upload.lettings?
-      BulkUpload::Lettings::RowParser
-    else
-      BulkUpload::Sales::RowParser
-    end
+    bulk_upload.prefix_namespace::RowParser
   end
 end

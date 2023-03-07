@@ -52,7 +52,7 @@ RSpec.describe BulkUploadErrorSummaryTableComponent, type: :component do
       expect(row_1).to eql([
         "A",
         "1",
-        BulkUpload::Lettings::RowParser.question_for_field(error_1.field.to_sym),
+        bulk_upload.prefix_namespace::RowParser.question_for_field(error_1.field.to_sym),
         error_1.error,
         error_1.field,
       ])
@@ -62,7 +62,7 @@ RSpec.describe BulkUploadErrorSummaryTableComponent, type: :component do
       expect(row_2).to eql([
         "B",
         "1",
-        BulkUpload::Lettings::RowParser.question_for_field(error_2.field.to_sym),
+        bulk_upload.prefix_namespace::RowParser.question_for_field(error_2.field.to_sym),
         error_2.error,
         error_2.field,
       ])
@@ -89,7 +89,7 @@ RSpec.describe BulkUploadErrorSummaryTableComponent, type: :component do
       expect(row_1).to eql([
         "A",
         "2",
-        BulkUpload::Lettings::RowParser.question_for_field(error_1.field.to_sym),
+        bulk_upload.prefix_namespace::RowParser.question_for_field(error_1.field.to_sym),
         error_1.error,
         error_1.field,
       ])

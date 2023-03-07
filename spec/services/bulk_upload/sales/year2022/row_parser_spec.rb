@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe BulkUpload::Sales::RowParser do
+RSpec.describe BulkUpload::Sales::Year2022::RowParser do
   subject(:parser) { described_class.new(attributes) }
 
   describe "validations" do

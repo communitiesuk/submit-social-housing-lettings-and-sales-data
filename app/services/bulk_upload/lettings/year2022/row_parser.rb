@@ -1,4 +1,4 @@
-class BulkUpload::Lettings::RowParser
+class BulkUpload::Lettings::Year2022::RowParser
   include ActiveModel::Model
   include ActiveModel::Attributes
 

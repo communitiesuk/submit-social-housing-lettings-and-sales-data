@@ -25,7 +25,7 @@ class BulkUpload::Lettings::Year2022::CsvParser
       headers = ("field_1".."field_134").to_a
       hash = Hash[headers.zip(stripped_row)]
 
-      BulkUpload::Lettings::RowParser.new(hash)
+      BulkUpload::Lettings::Year2022::RowParser.new(hash)
     end
   end
 
