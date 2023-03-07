@@ -11,5 +11,6 @@ class Form::Lettings::Questions::Age < ::Form::Question
     @max = 120
     @min = 0
     @step = 1
+    @question_number = 31 + 4 * person_index
   end
 end

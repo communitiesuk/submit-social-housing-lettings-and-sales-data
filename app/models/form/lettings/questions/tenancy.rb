@@ -9,6 +9,7 @@ class Form::Lettings::Questions::Tenancy < ::Form::Question
     @hint_text = ""
     @answer_options = ANSWER_OPTIONS
     @conditional_for = { "tenancyother" => [3] }
+    @question_number = 27
   end
 
   ANSWER_OPTIONS = {

@@ -8,6 +8,7 @@ class Form::Lettings::Questions::PersonGenderIdentity < ::Form::Question
     @check_answers_card_number = person_index
     @hint_text = ""
     @answer_options = ANSWER_OPTIONS
+    @question_number = 32 + 4 * person_index
   end
 
   ANSWER_OPTIONS = {

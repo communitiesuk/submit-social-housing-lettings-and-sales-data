@@ -11,5 +11,6 @@ class Form::Lettings::Questions::Tenancylength < ::Form::Question
     @min = 0
     @hint_text = "Don’t include the starter or introductory period."
     @step = 1
+    @question_number = 28
   end
 end

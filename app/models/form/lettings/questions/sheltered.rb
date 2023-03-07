@@ -8,6 +8,7 @@ class Form::Lettings::Questions::Sheltered < ::Form::Question
     @check_answers_card_number = 0
     @hint_text = ""
     @answer_options = ANSWER_OPTIONS
+    @question_number = 29
   end
 
   ANSWER_OPTIONS = {

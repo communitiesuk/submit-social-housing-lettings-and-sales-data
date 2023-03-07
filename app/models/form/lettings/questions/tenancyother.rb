@@ -7,5 +7,6 @@ class Form::Lettings::Questions::Tenancyother < ::Form::Question
     @type = "text"
     @check_answers_card_number = 0
     @hint_text = ""
+    @question_number = 27
   end
 end

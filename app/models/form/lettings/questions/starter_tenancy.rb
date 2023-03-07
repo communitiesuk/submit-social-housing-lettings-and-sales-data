@@ -9,6 +9,7 @@ class Form::Lettings::Questions::StarterTenancy < ::Form::Question
     @hint_text = "This is also known as an ‘introductory period’."
     @answer_options = ANSWER_OPTIONS
     @conditional_for = { "tenancyother" => [3] }
+    @question_number = 27
   end
 
   ANSWER_OPTIONS = {
