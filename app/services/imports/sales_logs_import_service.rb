@@ -185,17 +185,26 @@ module Imports
       end
     end
 
-    def rescue_validation_or_raise(sales_log, attributes, _previous_status, exception)
-      @logger.error("Log #{sales_log.old_id}: Failed to import")
-      sales_log.errors.each do |error|
-        @logger.error("Validation error: Field #{error.attribute}:")
-        @logger.error("\tOwning Organisation: #{sales_log.owning_organisation&.name}")
-        @logger.error("\tOld CORE ID: #{sales_log.old_id}")
-        @logger.error("\tOld CORE: #{attributes[error.attribute.to_s]&.inspect}")
-        @logger.error("\tNew CORE: #{sales_log.read_attribute(error.attribute)&.inspect}")
-        @logger.error("\tError message: #{error.type}")
+    def rescue_validation_or_raise(sales_log, attributes, previous_status, exception)
+      if %w[saved submitted-invalid].include?(previous_status)
+        sales_log.errors.each do |error|
+          @logger.warn("Log #{sales_log.old_id}: Removing field #{error.attribute} from log triggering validation: #{error.type}")
+          attributes.delete(error.attribute.to_s)
+        end
+        @logs_overridden << sales_log.old_id
+        save_sales_log(attributes, previous_status)
+      else
+        @logger.error("Log #{sales_log.old_id}: Failed to import")
+        sales_log.errors.each do |error|
+          @logger.error("Validation error: Field #{error.attribute}:")
+          @logger.error("\tOwning Organisation: #{sales_log.owning_organisation&.name}")
+          @logger.error("\tOld CORE ID: #{sales_log.old_id}")
+          @logger.error("\tOld CORE: #{attributes[error.attribute.to_s]&.inspect}")
+          @logger.error("\tNew CORE: #{sales_log.read_attribute(error.attribute)&.inspect}")
+          @logger.error("\tError message: #{error.type}")
+        end
+        raise exception
       end
-      raise exception
     end
 
     def compute_differences(sales_log, attributes)

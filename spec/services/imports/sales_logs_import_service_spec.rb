@@ -363,6 +363,37 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
+    context "and it has an invalid record with invalid child, student and 16-19 age combination" do
+      let(:sales_log_id) { "discounted_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//meta:status").content = "submitted-invalid"
+        sales_log_xml.at_xpath("//xmlns:P2Age").content = 16
+        sales_log_xml.at_xpath("//xmlns:P2Eco").content = 7
+        sales_log_xml.at_xpath("//xmlns:P2Rel").content = "X"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Removing field age2 from log triggering validation: Person cannot be aged 16-19 if they are a student but don't have relationship ‘child’/)
+        expect(logger).to receive(:warn).with(/Removing field relat2 from log triggering validation: Answer must be ‘child’ if the person is aged 16-19 and a student/)
+        expect(logger).to receive(:warn).with(/Removing field ecstat2 from log triggering validation: Person cannot be a student if they are aged 16-19 but don‘t have relationship ‘child’/)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers" do
+        allow(logger).to receive(:warn)
+
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+
+        expect(sales_log).not_to be_nil
+        expect(sales_log.age2).to be_nil
+        expect(sales_log.relat2).to be_nil
+        expect(sales_log.ecstat2).to be_nil
+      end
+    end
+
     context "when inferring default answers for completed sales logs" do
       context "when the armedforcesspouse is not answered" do
         let(:sales_log_id) { "discounted_ownership_sales_log" }
