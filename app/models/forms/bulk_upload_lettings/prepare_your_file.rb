@@ -26,11 +26,11 @@ module Forms
       end
 
       def template_path
-        "/files/bulk-upload-lettings-template-v1.xlsx"
+        "/files/bulk-upload-lettings-template-2023-24.xlsx"
       end
 
       def old_template_path
-        "/files/bulk-upload-lettings-template-v1.xlsx"
+        "/files/bulk-upload-lettings-template-2022-23.xlsx"
       end
 
       def specification_path
