@@ -210,7 +210,7 @@ module Imports
 
     def reset_postcode_known(attributes)
       attributes["pcodenk"] = attributes["postcode_full"].present? ? 0 : nil
-      attributes["ppcodenk"] =  attributes["postcode_full"].present? ? 0 : nil
+      attributes["ppcodenk"] = attributes["postcode_full"].present? ? 0 : nil
     end
 
     def compute_differences(sales_log, attributes)
