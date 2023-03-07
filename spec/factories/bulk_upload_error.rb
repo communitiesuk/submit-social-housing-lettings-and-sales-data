@@ -9,7 +9,7 @@ FactoryBot.define do
     tenant_code { SecureRandom.hex(4) }
     property_ref { SecureRandom.hex(4) }
     purchaser_code { SecureRandom.hex(4) }
-    field { "field_#{rand(134)}" }
+    field { "field_#{rand(134) + 1}" }
     error { "some error" }
   end
 end
