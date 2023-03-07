@@ -192,6 +192,7 @@ module Imports
           attributes.delete(error.attribute.to_s)
         end
         @logs_overridden << sales_log.old_id
+        reset_postcode_known(attributes)
         save_sales_log(attributes, previous_status)
       else
         @logger.error("Log #{sales_log.old_id}: Failed to import")
@@ -205,6 +206,11 @@ module Imports
         end
         raise exception
       end
+    end
+
+    def reset_postcode_known(attributes)
+      attributes["pcodenk"] = attributes["postcode_full"].present? ? 0 : nil
+      attributes["ppcodenk"] =  attributes["postcode_full"].present? ? 0 : nil
     end
 
     def compute_differences(sales_log, attributes)

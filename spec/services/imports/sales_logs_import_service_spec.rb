@@ -394,6 +394,36 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
+    context "and it has an invalid record with invalid postcodes" do
+      let(:sales_log_id) { "discounted_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//meta:status").content = "submitted-invalid"
+        sales_log_xml.at_xpath("//xmlns:Q7Postcode").content = "A1 1AA"
+        sales_log_xml.at_xpath("//xmlns:Q14Postcode").content = "A1 2AA"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Removing field postcode_full from log triggering validation: Buyer's last accommodation and discounted ownership postcodes must match/)
+        expect(logger).to receive(:warn).with(/Removing field ppostcode_full from log triggering validation: Buyer's last accommodation and discounted ownership postcodes must match/)
+        expect(logger).to receive(:warn).with(/Removing field postcode_full from log triggering validation: Last settled accommodation and discounted ownership property postcodes must match/)
+        expect(logger).to receive(:warn).with(/Removing field ppostcode_full from log triggering validation: Last settled accommodation and discounted ownership property postcodes must match/)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers" do
+        allow(logger).to receive(:warn)
+
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+
+        expect(sales_log).not_to be_nil
+        expect(sales_log.postcode_full).to be_nil
+        expect(sales_log.ppostcode_full).to be_nil
+      end
+    end
+
     context "when inferring default answers for completed sales logs" do
       context "when the armedforcesspouse is not answered" do
         let(:sales_log_id) { "discounted_ownership_sales_log" }
