@@ -1,6 +1,6 @@
 require "csv"
 
-class BulkUpload::Lettings::CsvParser
+class BulkUpload::Lettings::Year2022::CsvParser
   attr_reader :path
 
   def initialize(path:)

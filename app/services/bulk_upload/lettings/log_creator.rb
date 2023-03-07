@@ -26,7 +26,14 @@ class BulkUpload::Lettings::LogCreator
 private
 
   def csv_parser
-    @csv_parser ||= BulkUpload::Lettings::CsvParser.new(path:)
+    @csv_parser ||= case bulk_upload.year
+                    when 2022
+                      BulkUpload::Lettings::Year2022::CsvParser.new(path:)
+                    when 2023
+                      BulkUpload::Lettings::Year2023::CsvParser.new(path:)
+                    else
+                      raise "csv parser not found"
+                    end
   end
 
   def row_offset

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe BulkUpload::Lettings::CsvParser do
+RSpec.describe BulkUpload::Lettings::Year2022::CsvParser do
   subject(:service) { described_class.new(path:) }
 
   let(:path) { file_fixture("2022_23_lettings_bulk_upload.csv") }
