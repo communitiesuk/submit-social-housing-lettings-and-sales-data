@@ -450,6 +450,8 @@ private
       owning_organisation
       tcharge
       propcode
+      postcode_full
+      location
     ]
   end
 
@@ -715,6 +717,8 @@ private
     if log_already_exists?
       error_message = "This is a duplicate log"
 
+      errors.add(:field_5, error_message) # location
+
       errors.add(:field_12, error_message) # age1
       errors.add(:field_20, error_message) # sex1
       errors.add(:field_35, error_message) # ecstat1
@@ -726,6 +730,8 @@ private
       errors.add(:field_98, error_message) # startdate
 
       errors.add(:field_100, error_message) # propcode
+      errors.add(:field_108, error_message) # postcode_full
+      errors.add(:field_109, error_message) # postcode_full
       errors.add(:field_111, error_message) # owning_organisation
     end
   end

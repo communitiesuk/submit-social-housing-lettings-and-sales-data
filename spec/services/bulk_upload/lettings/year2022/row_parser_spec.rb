@@ -232,6 +232,7 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
             error_message = "This is a duplicate log"
 
             expected_errors = {
+              field_5: [error_message], # location
               field_12: [error_message], # age1
               field_20: [error_message], # sex1
               field_35: [error_message], # ecstat1
@@ -240,6 +241,8 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
               field_97: [error_message], # startdate
               field_98: [error_message], # startdate
               field_100: [error_message], # propcode
+              field_108: [error_message], # postcode_full
+              field_109: [error_message], # postcode_full
               field_111: [error_message], # owning_organisation
             }
             expect(parser.errors.as_json).to eq(expected_errors)
