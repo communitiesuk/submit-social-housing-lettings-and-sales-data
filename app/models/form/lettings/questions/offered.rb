@@ -11,5 +11,6 @@ class Form::Lettings::Questions::Offered < ::Form::Question
     @min = 0
     @hint_text = "This is after the last tenancy ended. If the property is being offered for let for the first time, enter 0."
     @step = 1
+    @question_number = 18
   end
 end

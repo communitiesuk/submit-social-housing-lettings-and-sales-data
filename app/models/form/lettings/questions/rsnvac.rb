@@ -8,6 +8,7 @@ class Form::Lettings::Questions::Rsnvac < ::Form::Question
     @check_answers_card_number = 0
     @hint_text = ""
     @answer_options = ANSWER_OPTIONS
+    @question_number = 17
   end
 
   ANSWER_OPTIONS = {

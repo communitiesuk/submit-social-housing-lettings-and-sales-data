@@ -6,5 +6,6 @@ class Form::Lettings::Questions::Voiddate < ::Form::Question
     @header = "What is the void or renewal date?"
     @type = "date"
     @check_answers_card_number = 0
+    @question_number = 23
   end
 end
