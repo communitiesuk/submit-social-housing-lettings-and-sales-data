@@ -8,7 +8,7 @@ class BulkUpload::LogToCsv
     @overrides = overrides
   end
 
-  def to_csv_row
+  def to_2022_csv_row
     [
       [nil] * col_offset, # 0
       log.renttype, # 1
@@ -158,6 +158,8 @@ class BulkUpload::LogToCsv
       line_ending,
     ].flatten.join(",")
   end
+
+private
 
   def renewal
     checkbox_value(log.renewal)
