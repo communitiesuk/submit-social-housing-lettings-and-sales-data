@@ -250,6 +250,10 @@ class SalesLog < Log
     jointpur == 2
   end
 
+  def buyer_not_interviewed?
+    noint == 1
+  end
+
   def old_persons_shared_ownership?
     type == 24
   end
