@@ -15,5 +15,6 @@ class Form::Lettings::Questions::SupchargMonthly < ::Form::Question
     @hidden_in_check_answers = true
     @prefix = "£"
     @suffix = " every month"
+    @question_number = 98
   end
 end

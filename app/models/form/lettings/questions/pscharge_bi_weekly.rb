@@ -15,5 +15,6 @@ class Form::Lettings::Questions::PschargeBiWeekly < ::Form::Question
     @hidden_in_check_answers = true
     @prefix = "£"
     @suffix = " every 2 weeks"
+    @question_number = 97
   end
 end

@@ -15,5 +15,6 @@ class Form::Lettings::Questions::SchargeMonthly < ::Form::Question
     @hidden_in_check_answers = true
     @prefix = "£"
     @suffix = " every month"
+    @question_number = 96
   end
 end

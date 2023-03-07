@@ -15,5 +15,6 @@ class Form::Lettings::Questions::Supcharg4Weekly < ::Form::Question
     @hidden_in_check_answers = true
     @prefix = "£"
     @suffix = " every 4 weeks"
+    @question_number = 98
   end
 end

@@ -15,5 +15,6 @@ class Form::Lettings::Questions::Scharge4Weekly < ::Form::Question
     @hidden_in_check_answers = true
     @prefix = "£"
     @suffix = " every 4 weeks"
+    @question_number = 96
   end
 end
