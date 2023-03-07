@@ -8,6 +8,7 @@ class Form::Lettings::Questions::HousingneedsOther < ::Form::Question
     @check_answers_card_number = 0
     @hint_text = ""
     @answer_options = ANSWER_OPTIONS
+    @question_number = 72
   end
 
   ANSWER_OPTIONS = { "1" => { "value" => "Yes" }, "0" => { "value" => "No" } }.freeze
