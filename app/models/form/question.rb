@@ -259,8 +259,8 @@ class Form::Question
     selected_answer_option_is_derived?(log) || has_inferred_check_answers_value?(log)
   end
 
-  def question_number_string(conditional)
-    if @question_number && !conditional
+  def question_number_string(conditional: false)
+    if @question_number && !conditional && form.start_date.year >= 2023
       "Q#{@question_number}"
     end
   end

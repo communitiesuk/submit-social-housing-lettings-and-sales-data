@@ -18,7 +18,7 @@ class CheckAnswersSummaryListCardComponent < ViewComponent::Base
   end
 
   def get_question_label(question)
-    [question.question_number_string(false), question.check_answer_label.to_s.presence || question.header.to_s].compact.join(" - ")
+    [question.question_number_string, question.check_answer_label.to_s.presence || question.header.to_s].compact.join(" - ")
   end
 
   def check_answers_card_title(question)
