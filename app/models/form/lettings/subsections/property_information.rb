@@ -3,7 +3,16 @@ class Form::Lettings::Subsections::PropertyInformation < ::Form::Subsection
     super
     @id = "property_information"
     @label = "Property information"
-    @depends_on = [{ "non_location_setup_questions_completed?" => true, "supported_housing_and_renewal?" => false }]
+    @depends_on = [
+      {
+        "non_location_setup_questions_completed?" => true,
+        "is_supported_housing?" => false,
+      },
+      {
+        "non_location_setup_questions_completed?" => true,
+        "is_renewal?" => false,
+      },
+    ]
   end
 
   def pages
@@ -29,6 +38,6 @@ class Form::Lettings::Subsections::PropertyInformation < ::Form::Subsection
   end
 
   def displayed_in_tasklist?(log)
-    !log.supported_housing_and_renewal?
+    !log.is_supported_housing? || !log.is_renewal?
   end
 end

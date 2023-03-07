@@ -213,10 +213,6 @@ class LettingsLog < Log
     needstype == 2
   end
 
-  def supported_housing_and_renewal?
-    is_supported_housing? && is_renewal?
-  end
-
   def has_hbrentshortfall?
     # 1: Yes
     hbrentshortfall == 1
