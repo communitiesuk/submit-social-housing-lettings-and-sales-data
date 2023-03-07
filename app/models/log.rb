@@ -18,6 +18,7 @@ class Log < ApplicationRecord
     years.each { |year| query = query.or(filter_by_year(year)) }
     query.all
   }
+  scope :filter_by_postcode, ->(postcode_full) { where("REPLACE(postcode_full, ' ', '') ILIKE ?", "%#{postcode_full.delete(' ')}%") }
   scope :filter_by_id, ->(id) { where(id:) }
   scope :filter_by_user, lambda { |selected_user, user|
     if !selected_user.include?("all") && user.present?
