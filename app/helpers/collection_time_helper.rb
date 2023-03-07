@@ -44,4 +44,16 @@ module CollectionTimeHelper
   def previous_collection_start_date
     current_collection_start_date - 1.year
   end
+
+  def currently_crossover_period?
+    # generally the crossover period ends on the first Friday in June, but there may be arbitrary exceptions such as in 2023
+    today = Time.zone.today
+    if today.year == 2023
+      today.between?(Time.zone.local(2023, 4, 1).to_date, Time.zone.local(2023, 6, 9).to_date)
+    else
+      crossover_end_date = Time.zone.local(today.year, 6, 1).to_date
+      crossover_end_date += 1 until crossover_end_date.friday?
+      today.between?(Time.zone.local(today.year, 4, 1).to_date, crossover_end_date)
+    end
+  end
 end
