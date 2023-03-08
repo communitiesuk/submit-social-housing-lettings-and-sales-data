@@ -81,6 +81,12 @@ class Log < ApplicationRecord
     end
   end
 
+  (2..8).each do |person_num|
+    define_method("person_#{person_num}_child_relation?") do
+      send("relat#{person_num}") == "C"
+    end
+  end
+
 private
 
   def plural_gender_for_person(person_num)
