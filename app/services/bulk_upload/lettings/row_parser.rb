@@ -182,6 +182,7 @@ class BulkUpload::Lettings::RowParser
 
   validate :validate_scheme_related
   validate :validate_scheme_exists
+  validate :validate_scheme_data_given
 
   validate :validate_location_related
   validate :validate_location_exists
@@ -261,7 +262,13 @@ private
 
   def validate_scheme_exists
     if field_4.present? && scheme.nil?
-      errors.add(:field_4, "The management group code is not correct", category: :setup)
+      errors.add(:field_4, "The management group code is not correct")
+    end
+  end
+
+  def validate_scheme_data_given
+    if bulk_upload.supported_housing? && field_4.blank?
+      errors.add(:field_4, "The management group code is not correct", category: "setup")
     end
   end
 

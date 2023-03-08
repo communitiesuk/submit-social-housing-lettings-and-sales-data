@@ -298,10 +298,13 @@ RSpec.describe BulkUpload::Lettings::RowParser do
 
     describe "#field_4" do
       context "when nullable not permitted" do
+        let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2) }
         let(:attributes) { { bulk_upload:, field_1: "2", field_4: nil } }
 
         it "cannot be nulled" do
-          expect(parser.errors[:field_4]).to be_present
+          setup_errors = parser.errors.select { |e| e.options[:category] == "setup" }
+
+          expect(setup_errors.find { |e| e.attribute == :field_4 }).to be_present
         end
       end
 
