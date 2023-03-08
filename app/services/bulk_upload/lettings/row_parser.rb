@@ -911,6 +911,8 @@ private
       0
     when nil
       rsnvac == 14 ? 1 : 0
+    else
+      field_134
     end
   end
 

@@ -682,7 +682,7 @@ RSpec.describe BulkUpload::Lettings::RowParser do
 
     describe "#field_134" do
       context "when an unpermitted value" do
-        let(:attributes) { { bulk_upload:, field_134: 3 } }
+        let(:attributes) { { bulk_upload:, field_134: "3" } }
 
         it "has errors on the field" do
           expect(parser.errors[:field_134]).to be_present
