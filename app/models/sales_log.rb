@@ -262,6 +262,10 @@ class SalesLog < Log
     ownershipsch == 1
   end
 
+  def company_buyer?
+    companybuy == 1
+  end
+
   def buyers_age_for_old_persons_shared_ownership_invalid?
     return unless old_persons_shared_ownership?
 
