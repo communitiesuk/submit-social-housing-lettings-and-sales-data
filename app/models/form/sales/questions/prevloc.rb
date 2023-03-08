@@ -5,7 +5,6 @@ class Form::Sales::Questions::Prevloc < ::Form::Question
     @check_answer_label = "Local authority of buyer 1’s last settled accommodation"
     @header = "Select a local authority"
     @type = "select"
-    @answer_options = answer_options
     @inferred_check_answers_value = [{
       "condition" => {
         "previous_la_known" => 0,

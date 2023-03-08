@@ -5,7 +5,6 @@ class Form::Sales::Questions::PropertyLocalAuthority < ::Form::Question
     @check_answer_label = "Local authority"
     @header = "What is the local authority of the property?"
     @type = "select"
-    @answer_options = answer_options
   end
 
   def answer_options
