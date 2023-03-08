@@ -110,7 +110,7 @@ RSpec.describe CollectionTimeHelper do
     end
   end
 
-  describe "#currently_crossover_period?", focus: true do
+  describe "#currently_crossover_period?" do
     subject(:result) { currently_crossover_period? }
 
     around do |example|
