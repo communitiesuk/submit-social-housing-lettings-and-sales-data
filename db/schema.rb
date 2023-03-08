@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_01_144555) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_08_101826) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -287,6 +287,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_01_144555) do
     t.index ["owning_organisation_id"], name: "index_lettings_logs_on_owning_organisation_id"
     t.index ["scheme_id"], name: "index_lettings_logs_on_scheme_id"
     t.index ["updated_by_id"], name: "index_lettings_logs_on_updated_by_id"
+  end
+
+  create_table "local_authorities", force: :cascade do |t|
+    t.string "code"
+    t.string "la_name"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.boolean "previous_location_only", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "location_deactivation_periods", force: :cascade do |t|
