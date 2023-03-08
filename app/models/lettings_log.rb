@@ -593,7 +593,7 @@ private
     self[postcode_known_key] = 1
     inferred_la = get_inferred_la(postcode)
     self[la_inferred_key] = inferred_la.present?
-    self[la_key] = inferred_la if inferred_la.present?
+    self[la_key] = inferred_la
   end
 
   def get_has_benefits

@@ -137,7 +137,9 @@ private
 
   def get_inferred_la(postcode)
     result = PIO.lookup(postcode)
-    result[:location_code] if result
+    if result && !(form.start_date.year < 2023 && new_2023_admin_district_codes.include?(result[:location_code]))
+      result[:location_code]
+    end
   end
 
   def upcase_and_remove_whitespace(string)
@@ -162,5 +164,9 @@ private
 
   def format_as_currency(num_string)
     ActionController::Base.helpers.number_to_currency(num_string, unit: "£")
+  end
+
+  def new_2023_admin_district_codes
+    %w[E06000063 E06000064 E06000065 E06000066]
   end
 end
