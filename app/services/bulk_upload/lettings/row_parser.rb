@@ -414,7 +414,7 @@ private
 
       if setup_question?(question)
         fields.each do |field|
-          unless errors.any? { |e| fields.include?(e.attribute) }
+          if errors[field].present?
             errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase), category: :setup)
           end
         end
