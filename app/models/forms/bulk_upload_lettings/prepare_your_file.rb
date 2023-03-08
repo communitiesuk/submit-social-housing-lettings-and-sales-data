@@ -29,6 +29,10 @@ module Forms
         "/files/bulk-upload-lettings-template-v1.xlsx"
       end
 
+      def specification_path
+        "/files/bulk-upload-lettings-specification-2022-23.xlsx"
+      end
+
       def year_combo
         "#{year}/#{year + 1 - 2000}"
       end
