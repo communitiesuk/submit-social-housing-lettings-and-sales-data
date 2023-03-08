@@ -32,7 +32,11 @@ module Forms
       end
 
       def specification_path
-        "/files/bulk-upload-sales-specification-2022-23.xlsx"
+        if year <= 2022
+          "/files/bulk-upload-sales-specification-2022-23.xlsx"
+        else
+          "/files/bulk-upload-sales-specification-2023-24.xlsx"
+        end
       end
 
       def year_combo
