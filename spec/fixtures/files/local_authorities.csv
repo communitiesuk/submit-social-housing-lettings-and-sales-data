@@ -1,6 +1,6 @@
-code,name,start_year,end_year,previous_location_only
-S12000033,Aberdeen City,2021,,true
-S12000034,Aberdeenshire,2021,,true
-E07000223,Adur,2021,,
-E07000032,Amber Valley,2021,,
-S12000041,Angus,2021,,true
+code,name,start_year,end_year
+S12000033,Aberdeen City,2021,
+S12000034,Aberdeenshire,2021,
+E07000223,Adur,2021,
+E07000032,Amber Valley,2021,
+S12000041,Angus,2021,

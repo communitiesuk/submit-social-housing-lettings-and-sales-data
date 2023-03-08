@@ -15,8 +15,7 @@ module Imports
           { code: row["code"],
             name: row["name"],
             start_date: Time.zone.local(row["start_year"], 4, 1),
-            end_date: (Time.zone.local(row["end_year"], 3, 31) if row["end_year"]),
-            previous_location_only: row["previous_location_only"] || false },
+            end_date: (Time.zone.local(row["end_year"], 3, 31) if row["end_year"]) },
           unique_by: %i[code],
         )
         @count += 1
