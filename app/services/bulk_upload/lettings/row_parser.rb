@@ -186,6 +186,7 @@ class BulkUpload::Lettings::RowParser
 
   validate :validate_location_related
   validate :validate_location_exists
+  validate :validate_location_data_given
 
   def valid?
     errors.clear
@@ -244,7 +245,13 @@ private
 
   def validate_location_exists
     if scheme && field_5.present? && location.nil?
-      errors.add(:field_5, "Location could be found with provided scheme code", category: :setup)
+      errors.add(:field_5, "Location could be found with provided scheme code")
+    end
+  end
+
+  def validate_location_data_given
+    if bulk_upload.supported_housing? && field_5.blank?
+      errors.add(:field_5, "The scheme code must be present", category: "setup")
     end
   end
 

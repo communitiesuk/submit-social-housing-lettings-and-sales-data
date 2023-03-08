@@ -353,6 +353,17 @@ RSpec.describe BulkUpload::Lettings::RowParser do
     end
 
     describe "#field_5" do
+      context "when not nullable" do
+        let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2) }
+        let(:attributes) { { bulk_upload:, field_1: "2", field_5: nil } }
+
+        it "cannot be nulled" do
+          setup_errors = parser.errors.select { |e| e.options[:category] == "setup" }
+
+          expect(setup_errors.find { |e| e.attribute == :field_5 }).to be_present
+        end
+      end
+
       context "when location does not exist" do
         let(:scheme) { create(:scheme, :with_old_visible_id, owning_organisation: owning_org) }
         let(:attributes) do
