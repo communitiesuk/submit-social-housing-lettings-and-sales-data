@@ -207,7 +207,7 @@ class SalesLog < Log
     self[postcode_known_key] = 0
     inferred_la = get_inferred_la(postcode)
     self[la_inferred_key] = inferred_la.present?
-    self[la_key] = inferred_la if inferred_la.present?
+    self[la_key] = inferred_la
   end
 
   def outright_sale?
