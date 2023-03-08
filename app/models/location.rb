@@ -94,6 +94,7 @@ class Location < ApplicationRecord
     "E07000163": "Craven",
     "E07000226": "Crawley",
     "E09000008": "Croydon",
+    "E06000063": "Cumberland",
     "E07000096": "Dacorum",
     "E06000005": "Darlington",
     "E07000107": "Dartford",
@@ -256,6 +257,7 @@ class Location < ApplicationRecord
     "E06000051": "Shropshire",
     "E06000039": "Slough",
     "E08000029": "Solihull",
+    "E06000066": "Somerset",
     "E07000246": "Somerset West and Taunton",
     "E07000012": "South Cambridgeshire",
     "E07000039": "South Derbyshire",
@@ -327,6 +329,7 @@ class Location < ApplicationRecord
     "E07000181": "West Oxfordshire",
     "E07000245": "West Suffolk",
     "E09000033": "Westminster",
+    "E06000064": "Westmorland and Furness",
     "E08000010": "Wigan",
     "E06000054": "Wiltshire",
     "E07000094": "Winchester",
@@ -341,9 +344,38 @@ class Location < ApplicationRecord
     "E07000128": "Wyre",
     "E07000239": "Wyre Forest",
     "E06000014": "York",
+    "E06000065": "North Yorkshire",
   }.freeze
 
   enum local_authorities: LOCAL_AUTHORITIES
+
+  def self.local_authorities_for_current_year
+    if Time.zone.today >= Date.new(2023, 4, 1)
+      old_local_authorities = %w[
+        E07000027
+        E07000030
+        E07000031
+        E07000026
+        E07000028
+        E07000029
+        E07000163
+        E07000164
+        E07000165
+        E07000166
+        E07000167
+        E07000168
+        E07000169
+        E07000187
+        E07000188
+        E07000246
+        E07000189
+      ]
+      local_authorities.reject { |k, _v| old_local_authorities.include?(k) }
+    else
+      new_local_authorities = %w[E06000063 E06000066 E06000064 E06000065]
+      local_authorities.reject { |k, _v| new_local_authorities.include?(k) }
+    end
+  end
 
   MOBILITY_TYPE = {
     "Wheelchair-user standard": "W",
