@@ -11,6 +11,6 @@ class Form::Lettings::Questions::Prevloc < ::Form::Question
   end
 
   def answer_options
-    { "" => "Select an option" }.merge(LocalAuthority.active(Time.zone.local(2023, 4, 1)).map { |la| [la.code, la.la_name] }.to_h)
+    { "" => "Select an option" }.merge(LocalAuthority.active(Time.zone.local(2023, 4, 1)).map { |la| [la.code, la.name] }.to_h)
   end
 end

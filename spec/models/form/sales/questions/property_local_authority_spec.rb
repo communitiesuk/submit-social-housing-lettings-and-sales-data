@@ -355,8 +355,6 @@ RSpec.describe Form::Sales::Questions::PropertyLocalAuthority, type: :model do
         "E09000031" => "Waltham Forest",
         "E09000032" => "Wandsworth",
         "E09000033" => "Westminster",
-        "S12000017" => "Highland",
-        "W06000002" => "Gwynedd",
       })
     end
   end
@@ -669,8 +667,6 @@ RSpec.describe Form::Sales::Questions::PropertyLocalAuthority, type: :model do
         "E09000032" => "Wandsworth",
         "E09000033" => "Westminster",
         "E06000064" => "Westmorland and Furness",
-        "S12000017" => "Highland",
-        "W06000002" => "Gwynedd",
         "E06000065" => "North Yorkshire",
       })
     end

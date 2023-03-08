@@ -28,7 +28,7 @@ class Location < ApplicationRecord
 
   enum local_authorities: LOCAL_AUTHORITIES
   def self.local_authorities_for_current_year
-    LocalAuthority.all.active(Time.zone.today).previous_location(false).map { |la| [la.code, la.la_name] }.to_h
+    LocalAuthority.all.active(Time.zone.today).england.map { |la| [la.code, la.name] }.to_h
   end
 
   MOBILITY_TYPE = {
