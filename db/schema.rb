@@ -297,6 +297,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_101826) do
     t.boolean "previous_location_only", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_local_authority_code", unique: true
   end
 
   create_table "location_deactivation_periods", force: :cascade do |t|
