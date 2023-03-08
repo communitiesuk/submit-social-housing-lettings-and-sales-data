@@ -1,17 +1,18 @@
 class Form::Sales::Pages::AboutStaircase < ::Form::Page
-  def initialize(id, hsh, subsection)
-    super
-    @id = "about_staircasing"
+  def initialize(id, hsh, subsection, joint_purchase:)
+    super(id, hsh, subsection)
+    @joint_purchase = joint_purchase
     @header = "About the staircasing transaction"
     @depends_on = [{
       "staircase" => 1,
+      "joint_purchase?" => joint_purchase,
     }]
   end
 
   def questions
     @questions ||= [
       Form::Sales::Questions::StaircaseBought.new(nil, nil, self),
-      Form::Sales::Questions::StaircaseOwned.new(nil, nil, self),
+      Form::Sales::Questions::StaircaseOwned.new(nil, nil, self, joint_purchase: @joint_purchase),
       staircase_sale_question,
     ].compact
   end

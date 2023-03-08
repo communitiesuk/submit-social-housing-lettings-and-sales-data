@@ -35,7 +35,8 @@ RSpec.describe Form::Sales::Subsections::IncomeBenefitsAndSavings, type: :model 
             savings
             savings_value_check
             savings_deposit_value_check
-            previous_ownership
+            previous_ownership_joint_purchase
+            previous_ownership_not_joint_purchase
           ],
         )
       end
@@ -62,7 +63,8 @@ RSpec.describe Form::Sales::Subsections::IncomeBenefitsAndSavings, type: :model 
             savings
             savings_value_check
             savings_deposit_value_check
-            previous_ownership
+            previous_ownership_joint_purchase
+            previous_ownership_not_joint_purchase
             previous_shared
           ],
         )
