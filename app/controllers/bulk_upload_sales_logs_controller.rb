@@ -21,6 +21,11 @@ class BulkUploadSalesLogsController < ApplicationController
     end
   end
 
+  def guidance
+    @form = Forms::BulkUploadSales::PrepareYourFile.new
+    render "bulk_upload_shared/guidance"
+  end
+
 private
 
   def current_year
