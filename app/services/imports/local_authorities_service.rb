@@ -13,7 +13,7 @@ module Imports
       CSV.foreach(path, headers: true) do |row|
         LocalAuthority.upsert(
           { code: row["code"],
-            la_name: row["la_name"],
+            name: row["name"],
             start_date: Time.zone.local(row["start_year"], 4, 1),
             end_date: (Time.zone.local(row["end_year"], 3, 31) if row["end_year"]),
             previous_location_only: row["previous_location_only"] || false },

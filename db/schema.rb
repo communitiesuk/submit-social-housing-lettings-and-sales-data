@@ -290,9 +290,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_101826) do
   end
 
   create_table "local_authorities", force: :cascade do |t|
-    t.string "code"
-    t.string "la_name"
-    t.datetime "start_date"
+    t.string "code", null: false
+    t.string "name", null: false
+    t.datetime "start_date", null: false
     t.datetime "end_date"
     t.boolean "previous_location_only", default: false
     t.datetime "created_at", null: false

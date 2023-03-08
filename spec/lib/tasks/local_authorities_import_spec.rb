@@ -29,7 +29,7 @@ RSpec.describe "data_import" do
       end
 
       context "when a record already exists with a matching code index" do
-        let!(:local_authority) { LocalAuthority.create(code: "S12000041", la_name: "Angus", start_date: Time.zone.local(2021, 4, 1), previous_location_only: false) }
+        let!(:local_authority) { LocalAuthority.create(code: "S12000041", name: "Angus", start_date: Time.zone.local(2021, 4, 1), previous_location_only: false) }
 
         it "updates local authority if the record is matched on code" do
           task.invoke(local_authorities_file_path)
