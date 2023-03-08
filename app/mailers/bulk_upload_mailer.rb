@@ -46,6 +46,12 @@ class BulkUploadMailer < NotifyMailer
   def send_correct_and_upload_again_mail(bulk_upload:)
     error_description = "We noticed that you have a lot of similar errors in column #{columns_with_errors(bulk_upload:)}. Please correct your data export and upload again."
 
+    summary_report_link = if BulkUploadErrorSummaryTableComponent.new(bulk_upload:).errors?
+                            summary_bulk_upload_lettings_result_url(bulk_upload)
+                          else
+                            bulk_upload_lettings_result_url(bulk_upload)
+                          end
+
     send_email(
       bulk_upload.user.email,
       BULK_UPLOAD_FAILED_CSV_ERRORS_TEMPLATE_ID,
@@ -55,22 +61,45 @@ class BulkUploadMailer < NotifyMailer
         year_combo: bulk_upload.year_combo,
         lettings_or_sales: bulk_upload.log_type,
         error_description:,
-        summary_report_link: summary_bulk_upload_lettings_result_url(bulk_upload),
+        summary_report_link:,
       },
     )
   end
 
-  def send_bulk_upload_failed_file_setup_error_mail(user, bulk_upload)
+  def send_bulk_upload_failed_file_setup_error_mail(bulk_upload:)
+    bulk_upload_link = if bulk_upload.lettings?
+                         start_bulk_upload_lettings_logs_url
+                       else
+                         start_bulk_upload_sales_logs_url
+                       end
+
+    validator_class = if bulk_upload.lettings?
+                        BulkUpload::Lettings::Validator
+                      else
+                        BulkUpload::Sales::Validator
+                      end
+
+    errors = bulk_upload
+      .bulk_upload_errors
+      .where(category: "setup")
+      .group(:col, :field)
+      .count
+      .keys
+      .sort_by { |_col, field| field }
+      .map do |col, field|
+        "- Column #{col} (#{validator_class.question_for_field(field.to_sym)})"
+      end
+
     send_email(
-      user.email,
+      bulk_upload.user.email,
       BULK_UPLOAD_FAILED_FILE_SETUP_ERROR_TEMPLATE_ID,
       {
-        filename: "[#{bulk_upload} filename]",
-        upload_timestamp: "[#{bulk_upload} upload_timestamp]",
-        lettings_or_sales: "[#{bulk_upload} lettings_or_sales]",
-        year_combo: "[#{bulk_upload} year_combo]",
-        errors_list: "[#{bulk_upload} errors_list]",
-        bulk_upload_link: "[#{bulk_upload} bulk_upload_link]",
+        filename: bulk_upload.filename,
+        upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
+        lettings_or_sales: bulk_upload.log_type,
+        year_combo: bulk_upload.year_combo,
+        errors_list: errors.join("\n"),
+        bulk_upload_link:,
       },
     )
   end

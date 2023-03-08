@@ -16,14 +16,14 @@ class BulkUpload::Lettings::RowParser
   attribute :field_9, :integer
   attribute :field_10, :string
   attribute :field_11, :integer
-  attribute :field_12, :integer
-  attribute :field_13, :integer
-  attribute :field_14, :integer
-  attribute :field_15, :integer
-  attribute :field_16, :integer
-  attribute :field_17, :integer
-  attribute :field_18, :integer
-  attribute :field_19, :integer
+  attribute :field_12, :string
+  attribute :field_13, :string
+  attribute :field_14, :string
+  attribute :field_15, :string
+  attribute :field_16, :string
+  attribute :field_17, :string
+  attribute :field_18, :string
+  attribute :field_19, :string
   attribute :field_20, :string
   attribute :field_21, :string
   attribute :field_22, :string
@@ -203,6 +203,10 @@ class BulkUpload::Lettings::RowParser
     block_log_creation
   end
 
+  def setup_section_incomplete?
+    log.form.setup_sections[0].subsections[0].is_incomplete?(log)
+  end
+
 private
 
   def validate_location_related
@@ -222,7 +226,7 @@ private
 
   def validate_location_exists
     if scheme && field_5.present? && location.nil?
-      errors.add(:field_5, "Location could be found with provided scheme code")
+      errors.add(:field_5, "Location could be found with provided scheme code", category: :setup)
     end
   end
 
@@ -240,7 +244,7 @@ private
 
   def validate_scheme_exists
     if field_4.present? && scheme.nil?
-      errors.add(:field_4, "The management group code is not correct")
+      errors.add(:field_4, "The management group code is not correct", category: :setup)
     end
   end
 
@@ -254,7 +258,7 @@ private
   def validate_managing_org_exists
     if managing_organisation.nil?
       errors.delete(:field_113)
-      errors.add(:field_113, "The managing organisation code is incorrect")
+      errors.add(:field_113, "The managing organisation code is incorrect", category: :setup)
     end
   end
 
@@ -269,7 +273,7 @@ private
   def validate_owning_org_exists
     if owning_organisation.nil?
       errors.delete(:field_111)
-      errors.add(:field_111, "The owning organisation code is incorrect")
+      errors.add(:field_111, "The owning organisation code is incorrect", category: :setup)
     end
   end
 
@@ -387,8 +391,16 @@ private
       next if log.optional_fields.include?(question.id)
       next if question.completed?(log)
 
-      fields.each { |field| errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase)) }
+      if setup_question?(question)
+        fields.each { |field| errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase), category: :setup) }
+      else
+        fields.each { |field| errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase)) }
+      end
     end
+  end
+
+  def setup_question?(question)
+    log.form.setup_sections[0].subsections[0].questions.include?(question)
   end
 
   def field_mapping_for_errors
@@ -398,6 +410,8 @@ private
       postcode_known: %i[field_107 field_108 field_109],
       postcode_full: %i[field_107 field_108 field_109],
       la: %i[field_107],
+      owning_organisation: [:field_111],
+      managing_organisation: [:field_113],
       owning_organisation_id: [:field_111],
       managing_organisation_id: [:field_113],
       renewal: [:field_134],
@@ -627,22 +641,29 @@ private
     attributes["tenancylength"] = field_11
     attributes["declaration"] = field_132
 
-    attributes["age1_known"] = field_12.present? ? 0 : 1
-    attributes["age1"] = field_12
-    attributes["age2_known"] = field_13.present? ? 0 : 1
-    attributes["age2"] = field_13
-    attributes["age3_known"] = field_14.present? ? 0 : 1
-    attributes["age3"] = field_14
-    attributes["age4_known"] = field_15.present? ? 0 : 1
-    attributes["age4"] = field_15
-    attributes["age5_known"] = field_16.present? ? 0 : 1
-    attributes["age5"] = field_16
-    attributes["age6_known"] = field_17.present? ? 0 : 1
-    attributes["age6"] = field_17
-    attributes["age7_known"] = field_18.present? ? 0 : 1
-    attributes["age7"] = field_18
-    attributes["age8_known"] = field_19.present? ? 0 : 1
-    attributes["age8"] = field_19
+    attributes["age1_known"] = field_12 == "R" ? 1 : 0
+    attributes["age1"] = field_12 if attributes["age1_known"].zero?
+
+    attributes["age2_known"] = field_13 == "R" ? 1 : 0
+    attributes["age2"] = field_13 if attributes["age2_known"].zero?
+
+    attributes["age3_known"] = field_14 == "R" ? 1 : 0
+    attributes["age3"] = field_14 if attributes["age3_known"].zero?
+
+    attributes["age4_known"] = field_15 == "R" ? 1 : 0
+    attributes["age4"] = field_15 if attributes["age4_known"].zero?
+
+    attributes["age5_known"] = field_16 == "R" ? 1 : 0
+    attributes["age5"] = field_16 if attributes["age5_known"].zero?
+
+    attributes["age6_known"] = field_17 == "R" ? 1 : 0
+    attributes["age6"] = field_17 if attributes["age6_known"].zero?
+
+    attributes["age7_known"] = field_18 == "R" ? 1 : 0
+    attributes["age7"] = field_18 if attributes["age7_known"].zero?
+
+    attributes["age8_known"] = field_19 == "R" ? 1 : 0
+    attributes["age8"] = field_19 if attributes["age8_known"].zero?
 
     attributes["sex1"] = field_20
     attributes["sex2"] = field_21

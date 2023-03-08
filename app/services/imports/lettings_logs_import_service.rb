@@ -1,5 +1,5 @@
 module Imports
-  class LettingsLogsImportService < ImportService
+  class LettingsLogsImportService < LogsImportService
     def initialize(storage_service, logger = Rails.logger)
       @logs_with_discrepancies = Set.new
       @logs_overridden = Set.new
@@ -55,6 +55,8 @@ module Imports
     }.freeze
 
     def create_log(xml_doc)
+      return if meta_field_value(xml_doc, "form-name").include?("Sales")
+
       attributes = {}
 
       previous_status = meta_field_value(xml_doc, "status")
@@ -287,8 +289,38 @@ module Imports
         @logs_overridden << lettings_log.old_id
         attributes.delete("referral")
         save_lettings_log(attributes, previous_status)
+      elsif lettings_log.errors.of_kind?(:earnings, :under_hard_min)
+        @logger.warn("Log #{lettings_log.old_id}: Where the income is 0, set earnings and income to blank and set incref to refused")
+        @logs_overridden << lettings_log.old_id
+
+        attributes.delete("earnings")
+        attributes.delete("incfreq")
+        attributes["incref"] = 1
+        attributes["net_income_known"] = 2
+        save_lettings_log(attributes, previous_status)
+      elsif lettings_log.errors.include?(:tenancylength) && lettings_log.errors.include?(:tenancy)
+        @logger.warn("Log #{lettings_log.old_id}: Removing tenancylength as invalid")
+        @logs_overridden << lettings_log.old_id
+        attributes.delete("tenancylength")
+        attributes.delete("tenancy")
+        save_lettings_log(attributes, previous_status)
+      elsif lettings_log.errors.of_kind?(:prevten, :over_20_foster_care)
+        @logger.warn("Log #{lettings_log.old_id}: Removing age1 and prevten as incompatible")
+        @logs_overridden << lettings_log.old_id
+        attributes.delete("prevten")
+        attributes.delete("age1")
+        save_lettings_log(attributes, previous_status)
       else
         @logger.error("Log #{lettings_log.old_id}: Failed to import")
+        lettings_log.errors.each do |error|
+          @logger.error("Validation error: Field #{error.attribute}:")
+          @logger.error("\tOwning Organisation: #{lettings_log.owning_organisation&.name}")
+          @logger.error("\tManaging Organisation: #{lettings_log.managing_organisation&.name}")
+          @logger.error("\tOld CORE ID: #{lettings_log.old_id}")
+          @logger.error("\tOld CORE: #{attributes[error.attribute.to_s]&.inspect}")
+          @logger.error("\tNew CORE: #{lettings_log.read_attribute(error.attribute)&.inspect}")
+          @logger.error("\tError message: #{error.type}")
+        end
         raise exception
       end
     end
@@ -315,43 +347,6 @@ module Imports
         @logger.warn "lettings log #{lettings_log.id} is not completed"
         @logger.warn "lettings log with old id:#{lettings_log.old_id} is incomplete but status should be complete"
         @logs_with_discrepancies << lettings_log.old_id
-      end
-    end
-
-    # Safe: A string that represents only an integer (or empty/nil)
-    def safe_string_as_integer(xml_doc, attribute)
-      str = field_value(xml_doc, "xmlns", attribute)
-      Integer(str, exception: false)
-    end
-
-    # Safe: A string that represents only a decimal (or empty/nil)
-    def safe_string_as_decimal(xml_doc, attribute)
-      str = string_or_nil(xml_doc, attribute)
-      if str.nil?
-        nil
-      else
-        BigDecimal(str, exception: false)
-      end
-    end
-
-    # Unsafe: A string that has more than just the integer value
-    def unsafe_string_as_integer(xml_doc, attribute)
-      str = string_or_nil(xml_doc, attribute)
-      if str.nil?
-        nil
-      else
-        str.to_i
-      end
-    end
-
-    def compose_date(xml_doc, day_str, month_str, year_str)
-      day = Integer(field_value(xml_doc, "xmlns", day_str), exception: false)
-      month = Integer(field_value(xml_doc, "xmlns", month_str), exception: false)
-      year = Integer(field_value(xml_doc, "xmlns", year_str), exception: false)
-      if day.nil? || month.nil? || year.nil?
-        nil
-      else
-        Time.zone.local(year, month, day)
       end
     end
 
@@ -399,42 +394,6 @@ module Imports
       end
     end
 
-    def find_organisation_id(xml_doc, id_field)
-      old_visible_id = string_or_nil(xml_doc, id_field)
-      organisation = Organisation.find_by(old_visible_id:)
-      raise "Organisation not found with legacy ID #{old_visible_id}" if organisation.nil?
-
-      organisation.id
-    end
-
-    def sex(xml_doc, index)
-      sex = string_or_nil(xml_doc, "P#{index}Sex")
-      case sex
-      when "Male"
-        "M"
-      when "Female"
-        "F"
-      when "Other", "Non-binary"
-        "X"
-      when "Refused"
-        "R"
-      end
-    end
-
-    def relat(xml_doc, index)
-      relat = string_or_nil(xml_doc, "P#{index}Rel")
-      case relat
-      when "Child"
-        "C"
-      when "Partner"
-        "P"
-      when "Other", "Non-binary"
-        "X"
-      when "Refused"
-        "R"
-      end
-    end
-
     def age_known(xml_doc, index, hhmemb)
       return nil if hhmemb.present? && index > hhmemb
 
@@ -473,16 +432,6 @@ module Imports
       end
     end
 
-    def compose_postcode(xml_doc, outcode, incode)
-      outcode_value = string_or_nil(xml_doc, outcode)
-      incode_value = string_or_nil(xml_doc, incode)
-      if outcode_value.nil? || incode_value.nil? || !"#{outcode_value} #{incode_value}".match(POSTCODE_REGEXP)
-        nil
-      else
-        "#{outcode_value} #{incode_value}"
-      end
-    end
-
     def london_affordable_rent(xml_doc)
       lar = unsafe_string_as_integer(xml_doc, "LAR")
       if lar == 1
@@ -499,34 +448,6 @@ module Imports
         1
       else
         0
-      end
-    end
-
-    def string_or_nil(xml_doc, attribute)
-      str = field_value(xml_doc, "xmlns", attribute)
-      str.presence
-    end
-
-    def ethnic_group(ethnic)
-      case ethnic
-      when 1, 2, 3, 18
-        # White
-        0
-      when 4, 5, 6, 7
-        # Mixed
-        1
-      when 8, 9, 10, 11, 15
-        # Asian
-        2
-      when 12, 13, 14
-        # Black
-        3
-      when 16, 19
-        # Others
-        4
-      when 17
-        # Refused
-        17
       end
     end
 

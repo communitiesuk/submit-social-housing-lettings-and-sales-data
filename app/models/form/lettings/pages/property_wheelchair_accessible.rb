@@ -2,10 +2,10 @@ class Form::Lettings::Pages::PropertyWheelchairAccessible < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "property_wheelchair_accessible"
-    @depends_on = [{ "needstype" => 1 }]
+    @depends_on = [{ "is_supported_housing?" => false }]
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::Wchair.new(nil, nil, self)]
+    @questions ||= [Form::Lettings::Questions::Wheelchair.new(nil, nil, self)]
   end
 end

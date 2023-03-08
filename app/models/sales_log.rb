@@ -24,6 +24,7 @@ class SalesLog < Log
   has_paper_trail
 
   validates_with SalesLogValidator
+  before_validation :recalculate_start_year!, if: :saledate_changed?
   before_validation :reset_invalidated_dependent_fields!
   before_validation :process_postcode_changes!, if: :postcode_full_changed?
   before_validation :process_previous_postcode_changes!, if: :ppostcode_full_changed?
@@ -32,7 +33,12 @@ class SalesLog < Log
   before_validation :set_derived_fields!
 
   scope :filter_by_year, ->(year) { where(saledate: Time.zone.local(year.to_i, 4, 1)...Time.zone.local(year.to_i + 1, 4, 1)) }
-  scope :search_by, ->(param) { filter_by_id(param) }
+  scope :filter_by_purchaser_code, ->(purchid) { where("purchid ILIKE ?", "%#{purchid}%") }
+  scope :search_by, lambda { |param|
+    filter_by_purchaser_code(param)
+      .or(filter_by_postcode(param))
+      .or(filter_by_id(param))
+  }
   scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org) }
 
   OPTIONAL_FIELDS = %w[saledate_check purchid monthly_charges_value_check old_persons_shared_ownership_value_check].freeze
@@ -65,7 +71,20 @@ class SalesLog < Log
   end
 
   def optional_fields
-    OPTIONAL_FIELDS
+    OPTIONAL_FIELDS + dynamically_not_required
+  end
+
+  def dynamically_not_required
+    not_required = []
+    not_required << "proplen" if proplen_optional?
+
+    not_required
+  end
+
+  def proplen_optional?
+    return false unless collection_start_year
+
+    collection_start_year < 2023
   end
 
   def not_started?

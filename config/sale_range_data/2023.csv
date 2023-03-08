@@ -87,10 +87,10 @@ Boston,E07000136,1,58000,258000
 Boston,E07000136,2,58000,258000
 Boston,E07000136,3,111000,308000
 Boston,E07000136,4,212000,510000
-Bournemouth, Christchurch and Poole,E06000058,1,140000,500000
-Bournemouth, Christchurch and Poole,E06000058,2,197000,500000
-Bournemouth, Christchurch and Poole,E06000058,3,285000,657000
-Bournemouth, Christchurch and Poole,E06000058,4,370000,1321000
+"Bournemouth, Christchurch and Poole",E06000058,1,140000,500000
+"Bournemouth, Christchurch and Poole",E06000058,2,197000,500000
+"Bournemouth, Christchurch and Poole",E06000058,3,285000,657000
+"Bournemouth, Christchurch and Poole",E06000058,4,370000,1321000
 Bracknell Forest,E06000036,1,95000,488000
 Bracknell Forest,E06000036,2,157000,488000
 Bracknell Forest,E06000036,3,341000,654000
@@ -119,10 +119,10 @@ Brighton and Hove,E06000043,1,185000,526000
 Brighton and Hove,E06000043,2,270000,610000
 Brighton and Hove,E06000043,3,350000,846000
 Brighton and Hove,E06000043,4,458000,1487000
-Bristol, City of,E06000023,1,145000,417000
-Bristol, City of,E06000023,2,184000,562000
-Bristol, City of,E06000023,3,242000,685000
-Bristol, City of,E06000023,4,331000,1394000
+"Bristol, City of",E06000023,1,145000,417000
+"Bristol, City of",E06000023,2,184000,562000
+"Bristol, City of",E06000023,3,242000,685000
+"Bristol, City of",E06000023,4,331000,1394000
 Broadland,E07000144,1,126000,334000
 Broadland,E07000144,2,140000,334000
 Broadland,E07000144,3,225000,433000
@@ -459,10 +459,10 @@ Havering,E09000016,1,137000,472000
 Havering,E09000016,2,204000,481000
 Havering,E09000016,3,336000,657000
 Havering,E09000016,4,412000,1232000
-Herefordshire, County of,E06000019,1,98000,419000
-Herefordshire, County of,E06000019,2,105000,419000
-Herefordshire, County of,E06000019,3,162000,499000
-Herefordshire, County of,E06000019,4,283000,885000
+"Herefordshire, County of",E06000019,1,98000,419000
+"Herefordshire, County of",E06000019,2,105000,419000
+"Herefordshire, County of",E06000019,3,162000,499000
+"Herefordshire, County of",E06000019,4,283000,885000
 Hertsmere,E07000098,1,178000,666000
 Hertsmere,E07000098,2,316000,666000
 Hertsmere,E07000098,3,440000,918000
@@ -515,10 +515,10 @@ King's Lynn and West Norfolk,E07000146,1,77000,346000
 King's Lynn and West Norfolk,E07000146,2,123000,346000
 King's Lynn and West Norfolk,E07000146,3,161000,408000
 King's Lynn and West Norfolk,E07000146,4,243000,778000
-Kingston upon Hull, City of,E06000010,1,63000,189000
-Kingston upon Hull, City of,E06000010,2,67000,189000
-Kingston upon Hull, City of,E06000010,3,84000,259000
-Kingston upon Hull, City of,E06000010,4,110000,415000
+"Kingston upon Hull, City of",E06000010,1,63000,189000
+"Kingston upon Hull, City of",E06000010,2,67000,189000
+"Kingston upon Hull, City of",E06000010,3,84000,259000
+"Kingston upon Hull, City of",E06000010,4,110000,415000
 Kingston upon Thames,E09000021,1,156000,649000
 Kingston upon Thames,E09000021,2,325000,708000
 Kingston upon Thames,E09000021,3,398000,935000

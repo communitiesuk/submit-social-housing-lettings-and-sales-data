@@ -24,11 +24,11 @@ module Validations::FinancialValidations
   def validate_net_income(record)
     if record.ecstat1 && record.weekly_net_income
       if record.weekly_net_income > record.applicable_income_range.hard_max
-        record.errors.add :earnings, I18n.t("validations.financial.earnings.over_hard_max", hard_max: record.applicable_income_range.hard_max)
+        record.errors.add :earnings, :over_hard_max, message: I18n.t("validations.financial.earnings.over_hard_max", hard_max: record.applicable_income_range.hard_max)
       end
 
       if record.weekly_net_income < record.applicable_income_range.hard_min
-        record.errors.add :earnings, I18n.t("validations.financial.earnings.under_hard_min", hard_min: record.applicable_income_range.hard_min)
+        record.errors.add :earnings, :under_hard_min, message: I18n.t("validations.financial.earnings.under_hard_min", hard_min: record.applicable_income_range.hard_min)
       end
     end
 
@@ -111,9 +111,11 @@ module Validations::FinancialValidations
   def validate_care_home_charges(record)
     if record.is_carehome?
       period = record.form.get_question("period", record).label_from_value(record.period).downcase
+      # NOTE: This is a temporary change to allow `ccharge` values despite `is_carehome` being true. This value
+      # is going to be moved to a soft validation in CLDC-2074, so we can safely do this.
       if record.chcharge.blank?
-        record.errors.add :is_carehome, I18n.t("validations.financial.carehome.not_provided", period:)
-        record.errors.add :chcharge, I18n.t("validations.financial.carehome.not_provided", period:)
+        # record.errors.add :is_carehome, I18n.t("validations.financial.carehome.not_provided", period:)
+        # record.errors.add :chcharge, I18n.t("validations.financial.carehome.not_provided", period:)
       elsif !weekly_value_in_range(record, "chcharge", 10, 1000)
         max_chcharge = record.weekly_to_value_per_period(1000)
         min_chcharge = record.weekly_to_value_per_period(10)

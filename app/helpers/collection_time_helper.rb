@@ -12,6 +12,11 @@ module CollectionTimeHelper
     Time.zone.local(collection_start_year(date), 4, 1)
   end
 
+  def date_mid_collection_year_formatted(date)
+    example_date = date.nil? ? Time.zone.today : collection_start_date(date).to_date + 5.months
+    example_date.to_formatted_s(:govuk_date_number_month)
+  end
+
   def current_collection_start_date
     Time.zone.local(current_collection_start_year, 4, 1)
   end

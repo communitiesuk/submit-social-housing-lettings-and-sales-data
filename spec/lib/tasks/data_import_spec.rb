@@ -109,6 +109,24 @@ describe "rake core:data_import", type: :task do
     end
   end
 
+  context "when importing sales logs" do
+    let(:type) { "sales-logs" }
+    let(:import_service) { instance_double(Imports::SalesLogsImportService) }
+    let(:fixture_path) { "spec/fixtures/imports/sales_logs" }
+
+    before do
+      allow(Imports::SalesLogsImportService).to receive(:new).and_return(import_service)
+    end
+
+    it "creates sales logs from the given XML file" do
+      expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+      expect(Imports::SalesLogsImportService).to receive(:new).with(storage_service)
+      expect(import_service).to receive(:create_logs).with(fixture_path)
+
+      task.invoke(type, fixture_path)
+    end
+  end
+
   context "when importing scheme data" do
     let(:type) { "scheme" }
     let(:import_service) { instance_double(Imports::SchemeImportService) }

@@ -12,6 +12,38 @@ RSpec.describe BulkUploadMailer do
     allow(notify_client).to receive(:send_email).and_return(true)
   end
 
+  describe "#send_bulk_upload_failed_file_setup_error_mail" do
+    before do
+      create(:bulk_upload_error, bulk_upload:, col: "A", field: "field_1", category: "setup")
+      create(:bulk_upload_error, bulk_upload:, col: "E", field: "field_4", category: "setup")
+      create(:bulk_upload_error, bulk_upload:, col: "F", field: "field_5")
+    end
+
+    let(:expected_errors) do
+      [
+        "- Column A (What is the letting type?)",
+        "- Column E (Management group code)",
+      ]
+    end
+
+    it "sends correctly formed email" do
+      expect(notify_client).to receive(:send_email).with(
+        email_address: bulk_upload.user.email,
+        template_id: described_class::BULK_UPLOAD_FAILED_FILE_SETUP_ERROR_TEMPLATE_ID,
+        personalisation: {
+          filename: bulk_upload.filename,
+          upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
+          lettings_or_sales: bulk_upload.log_type,
+          year_combo: bulk_upload.year_combo,
+          errors_list: expected_errors.join("\n"),
+          bulk_upload_link: start_bulk_upload_lettings_logs_url,
+        },
+      )
+
+      mailer.send_bulk_upload_failed_file_setup_error_mail(bulk_upload:)
+    end
+  end
+
   describe "#send_bulk_upload_complete_mail" do
     it "sends correctly formed email" do
       expect(notify_client).to receive(:send_email).with(
@@ -93,7 +125,7 @@ RSpec.describe BulkUploadMailer do
             year_combo: bulk_upload.year_combo,
             lettings_or_sales: bulk_upload.log_type,
             error_description: "We noticed that you have a lot of similar errors in column A, B. Please correct your data export and upload again.",
-            summary_report_link: "http://localhost:3000/lettings-logs/bulk-upload-results/#{bulk_upload.id}/summary",
+            summary_report_link: "http://localhost:3000/lettings-logs/bulk-upload-results/#{bulk_upload.id}",
           },
         )
 
@@ -103,6 +135,8 @@ RSpec.describe BulkUploadMailer do
 
     context "when 4 columns with errors" do
       before do
+        stub_const("BulkUploadErrorSummaryTableComponent::DISPLAY_THRESHOLD", 0)
+
         create(:bulk_upload_error, bulk_upload:, col: "A")
         create(:bulk_upload_error, bulk_upload:, col: "B")
         create(:bulk_upload_error, bulk_upload:, col: "C")

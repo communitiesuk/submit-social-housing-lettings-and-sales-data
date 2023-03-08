@@ -18,21 +18,10 @@ class CheckAnswersSummaryListCardComponent < ViewComponent::Base
   end
 
   def check_answers_card_title(question)
-    if question.form.type == "lettings"
-      case question.check_answers_card_number
-      when 1
-        "Lead tenant"
-      when 2..8
-        "Person #{question.check_answers_card_number}"
-      end
-    else
-      case question.check_answers_card_number
-      when 1..number_of_buyers
-        "Buyer #{question.check_answers_card_number}"
-      when (number_of_buyers + 1)..(number_of_buyers + 4)
-        "Person #{question.check_answers_card_number}"
-      end
-    end
+    return "Lead tenant" if question.form.type == "lettings" && question.check_answers_card_number == 1
+    return "Buyer #{question.check_answers_card_number}" if question.check_answers_card_number <= number_of_buyers
+
+    "Person #{question.check_answers_card_number}"
   end
 
 private

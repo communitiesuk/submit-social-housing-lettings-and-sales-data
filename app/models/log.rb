@@ -18,6 +18,7 @@ class Log < ApplicationRecord
     years.each { |year| query = query.or(filter_by_year(year)) }
     query.all
   }
+  scope :filter_by_postcode, ->(postcode_full) { where("REPLACE(postcode_full, ' ', '') ILIKE ?", "%#{postcode_full.delete(' ')}%") }
   scope :filter_by_id, ->(id) { where(id:) }
   scope :filter_by_user, lambda { |selected_user, user|
     if !selected_user.include?("all") && user.present?
@@ -37,6 +38,11 @@ class Log < ApplicationRecord
 
     window_end_date = Time.zone.local(startdate.year, 4, 1)
     @start_year = startdate < window_end_date ? startdate.year - 1 : startdate.year
+  end
+
+  def recalculate_start_year!
+    @start_year = nil
+    collection_start_year
   end
 
   def lettings?

@@ -7,9 +7,10 @@ RSpec.describe NavigationItemsHelper do
   let(:organisation_path) { "/organisations/#{current_user.organisation.id}" }
 
   describe "#primary items" do
-    context "when the sales log feature flag is enabled" do
+    context "when the sales log feature flag is disabled" do
       before do
-        allow(Rails.env).to receive(:production?).and_return(true)
+        allow(FeatureToggle).to receive(:sales_log_enabled?).and_return(false)
+        allow(FeatureToggle).to receive(:managing_owning_enabled?).and_return(false)
       end
 
       context "when the user is a data coordinator" do
@@ -336,7 +337,12 @@ RSpec.describe NavigationItemsHelper do
       end
     end
 
-    context "when the sales log feature flag is disabled" do
+    context "when the sales log feature flag is enabled" do
+      before do
+        allow(FeatureToggle).to receive(:sales_log_enabled?).and_return(true)
+        allow(FeatureToggle).to receive(:managing_owning_enabled?).and_return(true)
+      end
+
       context "when the user is a data coordinator" do
         context "when the user is on the lettings logs page" do
           let(:expected_navigation_items) do

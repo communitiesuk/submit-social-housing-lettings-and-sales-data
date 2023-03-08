@@ -1,5 +1,31 @@
 module DerivedVariables::LettingsLogVariables
-  RENT_TYPE_MAPPING = { 0 => 1, 1 => 2, 2 => 2, 3 => 3, 4 => 3, 5 => 3 }.freeze
+  # renttype and unitletas values are different for intermediate rent (3 for renttype and 4 for unitletas)
+  RENT_TYPE_MAPPING = {
+    0 => 1, # "Social Rent"  =>  "Social Rent"
+    1 => 2, # "Affordable Rent" => "Affordable Rent"
+    2 => 2, # "London Affordable Rent"  =>  "Affordable Rent"
+    3 => 3, # "Rent to Buy"  => "Intermediate Rent"
+    4 => 3, # "London Living Rent"  => "Intermediate Rent"
+    5 => 3, # "Other intermediate rent product"  => "Intermediate Rent"
+  }.freeze
+
+  UNITLETAS_MAPPING = {
+    0 => 1, # "Social Rent"  =>  "Social Rent basis"
+    1 => 2, # "Affordable Rent" => "Affordable Rent basis"
+    2 => 2, # "London Affordable Rent"  =>  "Affordable Rent basis"
+    3 => 4, # "Rent to Buy"  => "Intermediate Rent basis"
+    4 => 4, # "London Living Rent"  => "Intermediate Rent basis"
+    5 => 4, # "Other intermediate rent product"  => "Intermediate Rent basis"
+  }.freeze
+
+  UNITLETAS_MAPPING_23_24 = {
+    0 => 1, # "Social Rent"  =>  "Social Rent basis"
+    1 => 2, # "Affordable Rent" => "Affordable Rent basis"
+    2 => 5, # "London Affordable Rent"  =>  "London Affordable Rent basis"
+    3 => 6, # "Rent to Buy"  => "Rent to Buy basis"
+    4 => 7, # "London Living Rent"  => "London Living Rent basis"
+    5 => 8, # "Other intermediate rent product"  => "Another Intermediate Rent basis"
+  }.freeze
 
   def scheme_has_multiple_locations?
     return false unless scheme
@@ -48,6 +74,8 @@ module DerivedVariables::LettingsLogVariables
       self.offered = 0
       self.voiddate = startdate
       self.first_time_property_let_as_social_housing = 0
+      self.rsnvac = 14
+      self.unitletas = form.start_date.year >= 2023 ? UNITLETAS_MAPPING_23_24[rent_type] : UNITLETAS_MAPPING[rent_type]
       if is_general_needs?
         # fixed term
         self.prevten = 32 if managing_organisation&.provider_type == "PRP"
