@@ -6,6 +6,7 @@ RSpec.describe "data_import" do
     subject(:task) { Rake::Task["data_import:local_authorities"] }
 
     before do
+      LocalAuthority.destroy_all
       Rake.application.rake_require("tasks/local_authorities")
       Rake::Task.define_task(:environment)
       task.reenable
