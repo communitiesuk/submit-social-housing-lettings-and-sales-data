@@ -3,16 +3,7 @@ class Form::Lettings::Subsections::PropertyInformation < ::Form::Subsection
     super
     @id = "property_information"
     @label = "Property information"
-    @depends_on = [
-      {
-        "non_location_setup_questions_completed?" => true,
-        "is_supported_housing?" => false,
-      },
-      {
-        "non_location_setup_questions_completed?" => true,
-        "is_renewal?" => false,
-      },
-    ]
+    @depends_on = [{ "non_location_setup_questions_completed?" => true }]
   end
 
   def pages
