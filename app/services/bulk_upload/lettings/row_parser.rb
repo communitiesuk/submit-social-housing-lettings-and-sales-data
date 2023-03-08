@@ -174,9 +174,11 @@ class BulkUpload::Lettings::RowParser
   validate :validate_owning_org_permitted
   validate :validate_owning_org_owns_stock
   validate :validate_owning_org_exists
+  validate :validate_owning_org_data_given
 
   validate :validate_managing_org_related
   validate :validate_managing_org_exists
+  validate :validate_managing_org_data_given
 
   validate :validate_scheme_related
   validate :validate_scheme_exists
@@ -220,10 +222,6 @@ class BulkUpload::Lettings::RowParser
 
   def block_log_creation?
     block_log_creation
-  end
-
-  def setup_section_incomplete?
-    log.form.setup_sections[0].subsections[0].is_incomplete?(log)
   end
 
 private
@@ -277,6 +275,12 @@ private
   def validate_managing_org_exists
     if managing_organisation.nil?
       errors.delete(:field_113)
+      errors.add(:field_113, "The managing organisation code is incorrect")
+    end
+  end
+
+  def validate_managing_org_data_given
+    if field_113.blank?
       errors.add(:field_113, "The managing organisation code is incorrect", category: :setup)
     end
   end
@@ -292,6 +296,12 @@ private
   def validate_owning_org_exists
     if owning_organisation.nil?
       errors.delete(:field_111)
+      errors.add(:field_111, "The owning organisation code is incorrect")
+    end
+  end
+
+  def validate_owning_org_data_given
+    if field_111.blank?
       errors.add(:field_111, "The owning organisation code is incorrect", category: :setup)
     end
   end

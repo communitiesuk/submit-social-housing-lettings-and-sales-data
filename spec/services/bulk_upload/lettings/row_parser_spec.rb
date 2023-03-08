@@ -619,6 +619,16 @@ RSpec.describe BulkUpload::Lettings::RowParser do
     end
 
     describe "#field_111" do # owning org
+      context "when no data given" do
+        let(:attributes) { { bulk_upload:, field_1: "1", field_111: "" } }
+
+        it "is not permitted as setup error" do
+          setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
+
+          expect(setup_errors.find { |e| e.attribute == :field_111 }.message).to eql("The owning organisation code is incorrect")
+        end
+      end
+
       context "when cannot find owning org" do
         let(:attributes) { { bulk_upload:, field_111: "donotexist" } }
 

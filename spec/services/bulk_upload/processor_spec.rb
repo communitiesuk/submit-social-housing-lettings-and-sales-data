@@ -106,7 +106,7 @@ RSpec.describe BulkUpload::Processor do
           BulkUpload::Lettings::Validator,
           invalid?: false,
           call: nil,
-          any_setup_sections_incomplete?: true,
+          any_setup_errors?: true,
         )
       end
 
@@ -142,7 +142,7 @@ RSpec.describe BulkUpload::Processor do
           BulkUpload::Lettings::Validator,
           invalid?: false,
           call: nil,
-          any_setup_sections_incomplete?: false,
+          any_setup_errors?: false,
           create_logs?: true,
         )
       end
@@ -193,7 +193,7 @@ RSpec.describe BulkUpload::Processor do
           BulkUpload::Lettings::Validator,
           invalid?: false,
           call: nil,
-          any_setup_sections_incomplete?: false,
+          any_setup_errors?: false,
           create_logs?: false,
         )
       end
@@ -254,7 +254,7 @@ RSpec.describe BulkUpload::Processor do
           BulkUpload::Lettings::Validator,
           call: nil,
           create_logs?: true,
-          any_setup_sections_incomplete?: false,
+          any_setup_errors?: false,
           invalid?: false,
         )
       end

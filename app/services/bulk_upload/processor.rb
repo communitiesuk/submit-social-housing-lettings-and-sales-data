@@ -12,7 +12,7 @@ class BulkUpload::Processor
 
     validator.call
 
-    if validator.any_setup_sections_incomplete?
+    if validator.any_setup_errors?
       send_setup_errors_mail
     elsif validator.create_logs?
       create_logs
