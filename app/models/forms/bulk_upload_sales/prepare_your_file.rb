@@ -32,6 +32,8 @@ module Forms
       end
 
       def specification_path
+        return if year.blank?
+
         if year <= 2022
           "/files/bulk-upload-sales-specification-2022-23.xlsx"
         else
