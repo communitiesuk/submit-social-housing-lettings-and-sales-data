@@ -49,6 +49,7 @@ gem "paper_trail"
 # Store active record objects in version whodunnits
 gem "paper_trail-globalid"
 # Request rate limiting
+gem "rack", "~> 2.2.6"
 gem "rack-attack"
 gem "redis", "~> 4.8"
 # Receive exceptions and configure alerts
@@ -61,6 +62,7 @@ gem "auto_strip_attributes"
 # Use sidekiq for background processing
 gem "sidekiq"
 gem "sidekiq-cron"
+#R
 
 group :development, :test do
   # Check gems for known vulnerabilities
