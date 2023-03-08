@@ -8,6 +8,8 @@ RSpec.describe Form::Lettings::Questions::La, type: :model do
   let(:page) { instance_double(Form::Page) }
 
   it "has the correct answer_options" do
+    Rails.application.load_seed
+
     expect(question.answer_options).to eq({
       "" => "Select an option",
       "E06000001" => "Hartlepool",

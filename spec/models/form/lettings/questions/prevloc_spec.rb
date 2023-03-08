@@ -10,6 +10,8 @@ RSpec.describe Form::Lettings::Questions::Prevloc, type: :model do
   let(:start_date) { Time.utc(2023, 4, 1) }
 
   it "has the correct answer_options" do
+    Rails.application.load_seed
+
     expect(question.answer_options).to eq({
       "" => "Select an option",
       "S12000033" => "Aberdeen City",
