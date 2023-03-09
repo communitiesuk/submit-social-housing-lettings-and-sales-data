@@ -55,7 +55,7 @@ module Validations::Sales::FinancialValidations
   def validate_percentage_bought_at_least_threshold(record)
     return unless record.stairbought && record.type
 
-    if [2, 18, 16, 24].include? record.type
+    if [2, 16, 18, 24].include? record.type
       threshold = 10
     elsif record.type == 30
       threshold = 1
