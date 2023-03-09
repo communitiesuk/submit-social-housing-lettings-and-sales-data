@@ -186,7 +186,6 @@ RSpec.describe Validations::Sales::FinancialValidations do
       expect(record.errors["stairbought"]).to eq(["The minimum increase in equity while staircasing is 10%"])
       record.errors.clear
 
-
       record.stairbought = 0
 
       record.type = 30
@@ -217,7 +216,6 @@ RSpec.describe Validations::Sales::FinancialValidations do
       financial_validator.validate_percentage_bought_at_least_threshold(record)
       expect(record.errors["stairbought"]).to be_empty
       record.errors.clear
-
 
       record.stairbought = 1
 
