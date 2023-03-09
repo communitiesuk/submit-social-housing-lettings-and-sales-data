@@ -195,7 +195,7 @@ RSpec.describe Form, type: :model do
         FormHandler.instance.use_fake_forms!
       end
 
-      fit "finds the path to the section after" do
+      it "finds the path to the section after" do
         lettings_log.startdate = Time.zone.local(2022, 9, 1)
         lettings_log.renewal = 1
         lettings_log.needstype = 2

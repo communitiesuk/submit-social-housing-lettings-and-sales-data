@@ -29,6 +29,6 @@ class Form::Lettings::Subsections::PropertyInformation < ::Form::Subsection
   end
 
   def displayed_in_tasklist?(log)
-    !log.is_supported_housing? || !log.is_renewal?
+    !(log.is_supported_housing? && log.is_renewal?)
   end
 end
