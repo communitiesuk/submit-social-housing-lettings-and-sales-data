@@ -5,8 +5,8 @@ RSpec.describe Form::Lettings::Questions::Prevloc, type: :model do
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page) }
-
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date:)) }
+  let(:page) { instance_double(Form::Page, subsection:) }
   let(:start_date) { Time.utc(2023, 4, 1) }
 
   it "has the correct answer_options" do
