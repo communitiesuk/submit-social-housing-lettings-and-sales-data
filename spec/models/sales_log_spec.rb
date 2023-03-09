@@ -229,12 +229,12 @@ RSpec.describe SalesLog, type: :model do
     context "with 22/23 logs" do
       let(:address_sales_log_22_23) do
         described_class.create({
-                                 owning_organisation:,
-                                 created_by: created_by_user,
-                                 ppcodenk: 1,
-                                 postcode_full: "CA10 1AA",
-                                 saledate: Time.zone.local(2022, 5, 2),
-                               })
+          owning_organisation:,
+          created_by: created_by_user,
+          ppcodenk: 1,
+          postcode_full: "CA10 1AA",
+          saledate: Time.zone.local(2022, 5, 2),
+        })
       end
 
       before do
