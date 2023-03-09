@@ -160,6 +160,93 @@ RSpec.describe Validations::Sales::FinancialValidations do
     end
   end
 
+  describe "#validate_percentage_bought_at_least_threshold" do
+    let(:record) { FactoryBot.create(:sales_log) }
+
+    it "adds an error to stairbought if the percentage bought is less than the threshold (which depends on the shared ownership type)" do
+      record.stairbought = 9
+
+      record.type = 2
+      financial_validator.validate_percentage_bought_at_least_threshold(record)
+      expect(record.errors["stairbought"]).to eq(["The minimum increase in equity while staircasing is 10%"])
+      record.errors.clear
+
+      record.type = 16
+      financial_validator.validate_percentage_bought_at_least_threshold(record)
+      expect(record.errors["stairbought"]).to eq(["The minimum increase in equity while staircasing is 10%"])
+      record.errors.clear
+
+      record.type = 18
+      financial_validator.validate_percentage_bought_at_least_threshold(record)
+      expect(record.errors["stairbought"]).to eq(["The minimum increase in equity while staircasing is 10%"])
+      record.errors.clear
+
+      record.type = 24
+      financial_validator.validate_percentage_bought_at_least_threshold(record)
+      expect(record.errors["stairbought"]).to eq(["The minimum increase in equity while staircasing is 10%"])
+      record.errors.clear
+
+
+      record.stairbought = 0
+
+      record.type = 30
+      financial_validator.validate_percentage_bought_at_least_threshold(record)
+      expect(record.errors["stairbought"]).to eq(["The minimum increase in equity while staircasing is 1%"])
+      record.errors.clear
+    end
+
+    it "doesn't add an error to stairbought if the percentage bought is greater than or equal to the threshold (which depends on the shared ownership type)" do
+      record.stairbought = 10
+
+      record.type = 2
+      financial_validator.validate_percentage_bought_at_least_threshold(record)
+      expect(record.errors["stairbought"]).to be_empty
+      record.errors.clear
+
+      record.type = 16
+      financial_validator.validate_percentage_bought_at_least_threshold(record)
+      expect(record.errors["stairbought"]).to be_empty
+      record.errors.clear
+
+      record.type = 18
+      financial_validator.validate_percentage_bought_at_least_threshold(record)
+      expect(record.errors["stairbought"]).to be_empty
+      record.errors.clear
+
+      record.type = 24
+      financial_validator.validate_percentage_bought_at_least_threshold(record)
+      expect(record.errors["stairbought"]).to be_empty
+      record.errors.clear
+
+
+      record.stairbought = 1
+
+      record.type = 30
+      financial_validator.validate_percentage_bought_at_least_threshold(record)
+      expect(record.errors["stairbought"]).to be_empty
+      record.errors.clear
+    end
+
+    it "doesn't add an error to stairbought if the percentage bought is less than the smallest possible threshold and the shared ownership type is not one which should have a threshold associated with it" do
+      record.stairbought = 0
+
+      record.type = 28
+      financial_validator.validate_percentage_bought_at_least_threshold(record)
+      expect(record.errors["stairbought"]).to be_empty
+      record.errors.clear
+
+      record.type = 31
+      financial_validator.validate_percentage_bought_at_least_threshold(record)
+      expect(record.errors["stairbought"]).to be_empty
+      record.errors.clear
+
+      record.type = 32
+      financial_validator.validate_percentage_bought_at_least_threshold(record)
+      expect(record.errors["stairbought"]).to be_empty
+      record.errors.clear
+    end
+  end
+
   describe "#validate_percentage_owned_not_too_much_if_older_person" do
     let(:record) { FactoryBot.create(:sales_log) }
 
