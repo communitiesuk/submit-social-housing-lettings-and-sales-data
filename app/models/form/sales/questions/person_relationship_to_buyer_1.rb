@@ -12,7 +12,7 @@ class Form::Sales::Questions::PersonRelationshipToBuyer1 < ::Form::Question
       },
       "value" => "Prefers not to say",
     }]
-    @question_number = 28 + person_index * 4
+    @question_number = 28 + (4 * person_index)
   end
 
   ANSWER_OPTIONS = {

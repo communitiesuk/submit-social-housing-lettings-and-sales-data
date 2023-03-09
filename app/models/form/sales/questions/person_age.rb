@@ -12,6 +12,6 @@ class Form::Sales::Questions::PersonAge < ::Form::Question
     @check_answers_card_number = person_index
     @min = 0
     @max = 110
-    @question_number = 29 + person_index * 4
+    @question_number = 29 + (4 * person_index)
   end
 end
