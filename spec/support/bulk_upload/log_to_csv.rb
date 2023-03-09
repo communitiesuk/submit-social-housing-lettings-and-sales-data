@@ -9,6 +9,26 @@ class BulkUpload::LogToCsv
   end
 
   def to_2022_csv_row
+    (to_2022_row + [line_ending]).flatten.join(",")
+  end
+
+  def to_2023_csv_row
+    (to_2023_row + [line_ending]).flatten.join(",")
+  end
+
+  def to_2023_row
+    to_2022_row + [
+      # needstype,
+      # location,
+      # uprn,
+      # address_line_1,
+      # address_line_2,
+      # town_or_city,
+      # county,
+    ]
+  end
+
+  def to_2022_row
     [
       [nil] * col_offset, # 0
       log.renttype, # 1
@@ -155,8 +175,7 @@ class BulkUpload::LogToCsv
       log.declaration,
       log.joint,
       renewal,
-      line_ending,
-    ].flatten.join(",")
+    ]
   end
 
 private
