@@ -302,7 +302,7 @@ en:
       staircasing:
         percentage_bought_must_be_greater_than_percentage_owned: "Total percentage buyer now owns must be more than percentage bought in this transaction"
         older_person_percentage_owned_maximum_75: "Percentage cannot be above 75% under Older Person's Shared Ownership"
-        percentage_bought_must_be_at_least_threshold: "The minimum increase in equity while staircasing is %{percentage}%"
+        percentage_bought_must_be_at_least_threshold: "The minimum increase in equity while staircasing is %{threshold}%"
 
     household:
       reasonpref:
