@@ -188,8 +188,4 @@ private
   def format_as_currency(num_string)
     ActionController::Base.helpers.number_to_currency(num_string, unit: "£")
   end
-
-  def new_2023_admin_district_codes
-    %w[E06000063 E06000064 E06000065 E06000066]
-  end
 end
