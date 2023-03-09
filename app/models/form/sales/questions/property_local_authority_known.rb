@@ -3,7 +3,7 @@ class Form::Sales::Questions::PropertyLocalAuthorityKnown < ::Form::Question
     super
     @id = "la_known"
     @check_answer_label = "Local authority known"
-    @header = "Do you know the local authority of the property?"
+    @header = "Do you know the property’s local authority?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @conditional_for = { "la" => [1] }

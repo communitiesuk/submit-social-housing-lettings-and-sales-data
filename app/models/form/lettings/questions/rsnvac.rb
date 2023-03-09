@@ -37,6 +37,9 @@ class Form::Lettings::Questions::Rsnvac < ::Form::Question
     "18" => {
       "value" => "Tenant moved to care home",
     },
+    "20" => {
+      "value" => "Tenant moved to long-stay hospital or similar institution",
+    },
     "6" => {
       "value" => "Tenant abandoned property",
     },

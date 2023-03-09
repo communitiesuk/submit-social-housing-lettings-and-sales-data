@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_01_144555) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_08_101826) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -26,6 +26,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_01_144555) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "col"
+    t.text "category"
     t.index ["bulk_upload_id"], name: "index_bulk_upload_errors_on_bulk_upload_id"
   end
 
@@ -286,6 +287,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_01_144555) do
     t.index ["owning_organisation_id"], name: "index_lettings_logs_on_owning_organisation_id"
     t.index ["scheme_id"], name: "index_lettings_logs_on_scheme_id"
     t.index ["updated_by_id"], name: "index_lettings_logs_on_updated_by_id"
+  end
+
+  create_table "local_authorities", force: :cascade do |t|
+    t.string "code", null: false
+    t.string "name", null: false
+    t.datetime "start_date", null: false
+    t.datetime "end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_local_authority_code", unique: true
   end
 
   create_table "location_deactivation_periods", force: :cascade do |t|

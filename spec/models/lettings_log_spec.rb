@@ -1474,6 +1474,163 @@ RSpec.describe LettingsLog do
         expect(record_from_db["rsnvac"]).to eq(14)
         expect(lettings_log["rsnvac"]).to eq(14)
       end
+
+      context "when deriving renttype and unitletas" do
+        before do
+          allow(FeatureToggle).to receive(:startdate_two_week_validation_enabled?).and_return(false)
+          lettings_log.update!(rent_type:, irproduct_other: "other")
+        end
+
+        context "when the rent_type is Social Rent (0)" do
+          let(:rent_type) { 0 }
+
+          it "derives and saves renttype and unitletas as Social rent(1)" do
+            record_from_db = ActiveRecord::Base.connection.execute("select renttype from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            expect(lettings_log.renttype).to eq(1)
+            expect(record_from_db["renttype"]).to eq(1)
+          end
+
+          it "derives and saves unitletas as Social rent(1)" do
+            record_from_db = ActiveRecord::Base.connection.execute("select unitletas from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            expect(lettings_log.unitletas).to eq(1)
+            expect(record_from_db["unitletas"]).to eq(1)
+          end
+
+          context "and it is a 23/24 form" do
+            it "derives and saves unitletas as Social rent(1)" do
+              lettings_log.update!(startdate: Time.zone.local(2023, 5, 1))
+              record_from_db = ActiveRecord::Base.connection.execute("select unitletas from lettings_logs where id=#{lettings_log.id}").to_a[0]
+              expect(lettings_log.unitletas).to eq(1)
+              expect(record_from_db["unitletas"]).to eq(1)
+            end
+          end
+        end
+
+        context "when the rent_type is Affordable Rent(1)" do
+          let(:rent_type) { 1 }
+
+          it "derives and saves renttype as Affordable Rent(2)" do
+            record_from_db = ActiveRecord::Base.connection.execute("select renttype from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            expect(lettings_log.renttype).to eq(2)
+            expect(record_from_db["renttype"]).to eq(2)
+          end
+
+          it "derives and saves unitletas as Affordable Rent(2)" do
+            record_from_db = ActiveRecord::Base.connection.execute("select unitletas from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            expect(lettings_log.unitletas).to eq(2)
+            expect(record_from_db["unitletas"]).to eq(2)
+          end
+
+          context "and it is a 23/24 form" do
+            it "derives and saves unitletas as Affordable Rent basis(2)" do
+              lettings_log.update!(startdate: Time.zone.local(2023, 5, 1))
+              record_from_db = ActiveRecord::Base.connection.execute("select unitletas from lettings_logs where id=#{lettings_log.id}").to_a[0]
+              expect(lettings_log.unitletas).to eq(2)
+              expect(record_from_db["unitletas"]).to eq(2)
+            end
+          end
+        end
+
+        context "when the rent_type is London Affordable Rent(2)" do
+          let(:rent_type) { 2 }
+
+          it "derives and saves renttype as London Affordable Rent(2)" do
+            record_from_db = ActiveRecord::Base.connection.execute("select renttype from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            expect(lettings_log.renttype).to eq(2)
+            expect(record_from_db["renttype"]).to eq(2)
+          end
+
+          it "derives and saves unitletas as London Affordable Rent(2)" do
+            record_from_db = ActiveRecord::Base.connection.execute("select unitletas from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            expect(lettings_log.unitletas).to eq(2)
+            expect(record_from_db["unitletas"]).to eq(2)
+          end
+
+          context "and it is a 23/24 form" do
+            it "derives and saves unitletas as London Affordable Rent basis(5)" do
+              lettings_log.update!(startdate: Time.zone.local(2023, 5, 1))
+              record_from_db = ActiveRecord::Base.connection.execute("select unitletas from lettings_logs where id=#{lettings_log.id}").to_a[0]
+              expect(lettings_log.unitletas).to eq(5)
+              expect(record_from_db["unitletas"]).to eq(5)
+            end
+          end
+        end
+
+        context "when the rent_type is Rent to Buy(3)" do
+          let(:rent_type) { 3 }
+
+          it "derives and saves renttype as Intermediate Rent(3)" do
+            record_from_db = ActiveRecord::Base.connection.execute("select renttype from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            expect(lettings_log.renttype).to eq(3)
+            expect(record_from_db["renttype"]).to eq(3)
+          end
+
+          it "derives and saves unitletas as Intermediate Rent(4)" do
+            record_from_db = ActiveRecord::Base.connection.execute("select unitletas from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            expect(lettings_log.unitletas).to eq(4)
+            expect(record_from_db["unitletas"]).to eq(4)
+          end
+
+          context "and it is a 23/24 form" do
+            it "derives and saves unitletas as Rent to Buy basis(6)" do
+              lettings_log.update!(startdate: Time.zone.local(2023, 5, 1))
+              record_from_db = ActiveRecord::Base.connection.execute("select unitletas from lettings_logs where id=#{lettings_log.id}").to_a[0]
+              expect(lettings_log.unitletas).to eq(6)
+              expect(record_from_db["unitletas"]).to eq(6)
+            end
+          end
+        end
+
+        context "when the rent_type is London Living Rent(4)" do
+          let(:rent_type) { 4 }
+
+          it "derives and saves renttype as Intermediate Rent(3)" do
+            record_from_db = ActiveRecord::Base.connection.execute("select renttype from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            expect(lettings_log.renttype).to eq(3)
+            expect(record_from_db["renttype"]).to eq(3)
+          end
+
+          it "derives and saves unitletas as Intermediate Rent(4)" do
+            record_from_db = ActiveRecord::Base.connection.execute("select unitletas from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            expect(lettings_log.unitletas).to eq(4)
+            expect(record_from_db["unitletas"]).to eq(4)
+          end
+
+          context "and it is a 23/24 form" do
+            it "derives and saves unitletas as London Living Rent basis(7)" do
+              lettings_log.update!(startdate: Time.zone.local(2023, 5, 1))
+              record_from_db = ActiveRecord::Base.connection.execute("select unitletas from lettings_logs where id=#{lettings_log.id}").to_a[0]
+              expect(lettings_log.unitletas).to eq(7)
+              expect(record_from_db["unitletas"]).to eq(7)
+            end
+          end
+        end
+
+        context "when the rent_type is Other intermediate rent product(5)" do
+          let(:rent_type) { 5 }
+
+          it "derives and saves renttype as Intermediate Rent(3)" do
+            record_from_db = ActiveRecord::Base.connection.execute("select renttype from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            expect(lettings_log.renttype).to eq(3)
+            expect(record_from_db["renttype"]).to eq(3)
+          end
+
+          it "derives and saves unitletas as Intermediate Rent(4)" do
+            record_from_db = ActiveRecord::Base.connection.execute("select unitletas from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            expect(lettings_log.unitletas).to eq(4)
+            expect(record_from_db["unitletas"]).to eq(4)
+          end
+
+          context "and it is a 23/24 form" do
+            it "derives and saves unitletas as Other intermediate rent basis(8)" do
+              lettings_log.update!(startdate: Time.zone.local(2023, 5, 1))
+              record_from_db = ActiveRecord::Base.connection.execute("select unitletas from lettings_logs where id=#{lettings_log.id}").to_a[0]
+              expect(lettings_log.unitletas).to eq(8)
+              expect(record_from_db["unitletas"]).to eq(8)
+            end
+          end
+        end
+      end
     end
 
     context "when answering the household characteristics questions" do
@@ -1966,7 +2123,7 @@ RSpec.describe LettingsLog do
     end
 
     context "when a non select question associated with several pages is routed to" do
-      let(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress, period: 2, needstype: 1) }
+      let(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress, period: 2, needstype: 1, renewal: 0) }
 
       it "does not clear the answer value" do
         lettings_log.update!({ unitletas: 1 })

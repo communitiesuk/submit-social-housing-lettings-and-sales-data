@@ -22,14 +22,14 @@ class BulkUpload::LogToCsv
       log.tenancy,
       log.tenancyother, # 10
       log.tenancylength,
-      log.age1,
-      log.age2,
-      log.age3,
-      log.age4,
-      log.age5,
-      log.age6,
-      log.age7,
-      log.age8,
+      log.age1 || overrides[:age1],
+      log.age2 || overrides[:age2],
+      log.age3 || overrides[:age3],
+      log.age4 || overrides[:age4],
+      log.age5 || overrides[:age5],
+      log.age6 || overrides[:age6],
+      log.age7 || overrides[:age7],
+      log.age8 || overrides[:age8],
 
       log.sex1, # 20
       log.sex2,

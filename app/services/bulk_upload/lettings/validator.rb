@@ -168,6 +168,7 @@ class BulkUpload::Lettings::Validator
           row:,
           cell: "#{cols[field_number_for_attribute(error.attribute) - col_offset + 1]}#{row}",
           col: cols[field_number_for_attribute(error.attribute) - col_offset + 1],
+          category: error.options[:category],
         )
       end
     end
@@ -185,11 +186,11 @@ class BulkUpload::Lettings::Validator
     QUESTIONS[field]
   end
 
-private
-
   def any_setup_sections_incomplete?
-    row_parsers.any? { |row_parser| row_parser.log.form.setup_sections[0].subsections[0].is_incomplete?(row_parser.log) }
+    row_parsers.any?(&:setup_section_incomplete?)
   end
+
+private
 
   def over_column_error_threshold?
     fields = ("field_1".."field_134").to_a

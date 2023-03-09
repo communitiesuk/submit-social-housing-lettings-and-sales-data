@@ -36,7 +36,8 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
         lead_tenant_over_retirement_value_check
         person_2_known
         person_2_relationship_to_lead
-        person_2_age
+        person_2_age_child
+        person_2_age_non_child
         no_females_pregnant_household_person_2_age_value_check
         females_in_soft_age_range_in_pregnant_household_person_2_age_value_check
         person_2_gender_identity
@@ -47,7 +48,8 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
         person_2_over_retirement_value_check
         person_3_known
         person_3_relationship_to_lead
-        person_3_age
+        person_3_age_child
+        person_3_age_non_child
         no_females_pregnant_household_person_3_age_value_check
         females_in_soft_age_range_in_pregnant_household_person_3_age_value_check
         person_3_gender_identity
@@ -58,7 +60,8 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
         person_3_over_retirement_value_check
         person_4_known
         person_4_relationship_to_lead
-        person_4_age
+        person_4_age_child
+        person_4_age_non_child
         no_females_pregnant_household_person_4_age_value_check
         females_in_soft_age_range_in_pregnant_household_person_4_age_value_check
         person_4_gender_identity
@@ -69,7 +72,8 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
         person_4_over_retirement_value_check
         person_5_known
         person_5_relationship_to_lead
-        person_5_age
+        person_5_age_child
+        person_5_age_non_child
         no_females_pregnant_household_person_5_age_value_check
         females_in_soft_age_range_in_pregnant_household_person_5_age_value_check
         person_5_gender_identity
@@ -80,7 +84,8 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
         person_5_over_retirement_value_check
         person_6_known
         person_6_relationship_to_lead
-        person_6_age
+        person_6_age_child
+        person_6_age_non_child
         no_females_pregnant_household_person_6_age_value_check
         females_in_soft_age_range_in_pregnant_household_person_6_age_value_check
         person_6_gender_identity
@@ -91,7 +96,8 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
         person_6_over_retirement_value_check
         person_7_known
         person_7_relationship_to_lead
-        person_7_age
+        person_7_age_child
+        person_7_age_non_child
         no_females_pregnant_household_person_7_age_value_check
         females_in_soft_age_range_in_pregnant_household_person_7_age_value_check
         person_7_gender_identity
@@ -102,7 +108,8 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
         person_7_over_retirement_value_check
         person_8_known
         person_8_relationship_to_lead
-        person_8_age
+        person_8_age_child
+        person_8_age_non_child
         no_females_pregnant_household_person_8_age_value_check
         females_in_soft_age_range_in_pregnant_household_person_8_age_value_check
         person_8_gender_identity

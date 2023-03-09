@@ -27,6 +27,118 @@ RSpec.describe BulkUpload::Lettings::RowParser do
     }
   end
 
+  let(:valid_attributes) do
+    {
+      bulk_upload:,
+      field_1: "1",
+      field_4: scheme.old_visible_id,
+      field_7: "123",
+      field_96: now.day.to_s,
+      field_97: now.month.to_s,
+      field_98: now.strftime("%g"),
+      field_108: "EC1N",
+      field_109: "2TD",
+      field_111: owning_org.old_visible_id,
+      field_113: managing_org.old_visible_id,
+      field_130: "1",
+      field_134: "2",
+      field_102: "2",
+      field_103: "1",
+      field_104: "1",
+      field_101: "1",
+      field_133: "2",
+      field_8: "1",
+      field_9: "2",
+      field_132: "1",
+
+      field_12: "42",
+      field_13: "41",
+      field_14: "20",
+      field_15: "18",
+      field_16: "16",
+      field_17: "14",
+      field_18: "12",
+      field_19: "20",
+
+      field_20: "F",
+      field_21: "M",
+      field_22: "F",
+      field_23: "M",
+      field_24: "F",
+      field_25: "M",
+      field_26: "F",
+      field_27: "M",
+
+      field_43: "17",
+      field_44: "18",
+
+      field_28: "P",
+      field_29: "C",
+      field_30: "X",
+      field_31: "R",
+      field_32: "C",
+      field_33: "C",
+      field_34: "X",
+
+      field_35: "1",
+      field_36: "2",
+      field_37: "6",
+      field_38: "7",
+      field_39: "8",
+      field_40: "9",
+      field_41: "0",
+      field_42: "10",
+
+      field_45: "1",
+      field_114: "4",
+      field_46: "1",
+
+      field_47: "1",
+
+      field_118: "2",
+
+      field_66: "5",
+      field_67: "2",
+      field_52: "31",
+      field_61: "3",
+      field_68: "12",
+
+      field_65: "1",
+      field_63: "EC1N",
+      field_64: "2TD",
+
+      field_69: "1",
+      field_70: "1",
+      field_71: "",
+      field_72: "1",
+      field_73: "",
+      field_74: "",
+
+      field_75: "1",
+      field_76: "2",
+      field_77: "2",
+
+      field_78: "2",
+
+      field_51: "1",
+      field_50: "2000",
+      field_116: "2",
+      field_48: "1",
+      field_49: "1",
+
+      field_79: "4",
+      field_80: "1234.56",
+      field_87: "1",
+      field_88: "234.56",
+
+      field_106: "15",
+      field_99: "0",
+      field_89: now.day.to_s,
+      field_90: now.month.to_s,
+      field_91: now.strftime("%g"),
+    }
+  end
+
   before do
     create(:organisation_relationship, parent_organisation: owning_org, child_organisation: managing_org)
   end
@@ -83,117 +195,7 @@ RSpec.describe BulkUpload::Lettings::RowParser do
       end
 
       context "when valid row" do
-        let(:attributes) do
-          {
-            bulk_upload:,
-            field_1: "1",
-            field_4: scheme.old_visible_id,
-            field_7: "123",
-            field_96: now.day.to_s,
-            field_97: now.month.to_s,
-            field_98: now.strftime("%g"),
-            field_108: "EC1N",
-            field_109: "2TD",
-            field_111: owning_org.old_visible_id,
-            field_113: managing_org.old_visible_id,
-            field_130: "1",
-            field_134: "2",
-            field_102: "2",
-            field_103: "1",
-            field_104: "1",
-            field_101: "1",
-            field_133: "2",
-            field_8: "1",
-            field_9: "2",
-            field_132: "1",
-
-            field_12: "42",
-            field_13: "41",
-            field_14: "20",
-            field_15: "18",
-            field_16: "16",
-            field_17: "14",
-            field_18: "12",
-            field_19: "20",
-
-            field_20: "F",
-            field_21: "M",
-            field_22: "F",
-            field_23: "M",
-            field_24: "F",
-            field_25: "M",
-            field_26: "F",
-            field_27: "M",
-
-            field_43: "17",
-            field_44: "18",
-
-            field_28: "P",
-            field_29: "C",
-            field_30: "X",
-            field_31: "R",
-            field_32: "C",
-            field_33: "C",
-            field_34: "X",
-
-            field_35: "1",
-            field_36: "2",
-            field_37: "6",
-            field_38: "7",
-            field_39: "8",
-            field_40: "9",
-            field_41: "0",
-            field_42: "10",
-
-            field_45: "1",
-            field_114: "4",
-            field_46: "1",
-
-            field_47: "1",
-
-            field_118: "2",
-
-            field_66: "5",
-            field_67: "2",
-            field_52: "31",
-            field_61: "3",
-            field_68: "12",
-
-            field_65: "1",
-            field_63: "EC1N",
-            field_64: "2TD",
-
-            field_69: "1",
-            field_70: "1",
-            field_71: "",
-            field_72: "1",
-            field_73: "",
-            field_74: "",
-
-            field_75: "1",
-            field_76: "2",
-            field_77: "2",
-
-            field_78: "2",
-
-            field_51: "1",
-            field_50: "2000",
-            field_116: "2",
-            field_48: "1",
-            field_49: "1",
-
-            field_79: "4",
-            field_80: "1234.56",
-            field_87: "1",
-            field_88: "234.56",
-
-            field_106: "15",
-            field_99: "0",
-            field_89: now.day.to_s,
-            field_90: now.month.to_s,
-            field_91: now.strftime("%g"),
-          }
-        end
+        let(:attributes) { valid_attributes }
 
         it "returns true" do
           expect(parser).to be_valid
@@ -207,6 +209,16 @@ RSpec.describe BulkUpload::Lettings::RowParser do
           expect(questions.map(&:id).size).to eq(0)
           expect(questions.map(&:id)).to eql([])
         end
+      end
+    end
+
+    context "when setup section not complete" do
+      let(:attributes) { { bulk_upload:, field_7: "123" } }
+
+      it "has errors on setup fields" do
+        errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute)
+
+        expect(errors).to eql(%i[field_1 field_98 field_97 field_96 field_111 field_113])
       end
     end
 
@@ -410,6 +422,16 @@ RSpec.describe BulkUpload::Lettings::RowParser do
       end
     end
 
+    describe "#field_12" do
+      context "when set to a non-sensical value" do
+        let(:attributes) { valid_attributes.merge(field_12: "A", field_35: "1") }
+
+        it "returns only one error" do
+          expect(parser.errors[:field_12].size).to be(1)
+        end
+      end
+    end
+
     describe "#field_52" do # leaving reason
       context "when field_134 is 1 meaning it is a renewal" do
         context "when field_52 is 40" do
@@ -519,7 +541,7 @@ RSpec.describe BulkUpload::Lettings::RowParser do
     end
 
     describe "fields 96, 97, 98 => startdate" do
-      context "when any one of these fields is blank" do
+      context "when all of these fields are blank" do
         let(:attributes) { { bulk_upload:, field_1: "1", field_96: nil, field_97: nil, field_98: nil } }
 
         it "returns an error" do
@@ -527,6 +549,18 @@ RSpec.describe BulkUpload::Lettings::RowParser do
 
           expect(parser.errors[:field_96]).to be_present
           expect(parser.errors[:field_97]).to be_present
+          expect(parser.errors[:field_98]).to be_present
+        end
+      end
+
+      context "when one of these fields is blank" do
+        let(:attributes) { { bulk_upload:, field_1: "1", field_96: "1", field_97: "1", field_98: nil } }
+
+        it "returns an error only on blank field" do
+          parser.valid?
+
+          expect(parser.errors[:field_96]).to be_blank
+          expect(parser.errors[:field_97]).to be_blank
           expect(parser.errors[:field_98]).to be_present
         end
       end
@@ -648,7 +682,7 @@ RSpec.describe BulkUpload::Lettings::RowParser do
 
     describe "#field_134" do
       context "when an unpermitted value" do
-        let(:attributes) { { bulk_upload:, field_134: 3 } }
+        let(:attributes) { { bulk_upload:, field_134: "3" } }
 
         it "has errors on the field" do
           expect(parser.errors[:field_134]).to be_present
@@ -712,6 +746,18 @@ RSpec.describe BulkUpload::Lettings::RowParser do
 
           it "sets ##{age} to given age" do
             expect(parser.log.public_send(age)).to be(50)
+          end
+        end
+
+        context "when #{field} is a non-sensical value" do
+          let(:attributes) { { bulk_upload:, field.to_s => "A" } }
+
+          it "sets ##{known} to 0" do
+            expect(parser.log.public_send(known)).to be(0)
+          end
+
+          it "sets ##{age} to nil" do
+            expect(parser.log.public_send(age)).to be_nil
           end
         end
       end

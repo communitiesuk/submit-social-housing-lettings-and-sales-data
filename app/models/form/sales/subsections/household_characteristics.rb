@@ -3,7 +3,7 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
     super
     @id = "household_characteristics"
     @label = "Household characteristics"
-    @depends_on = [{ "setup_completed?" => true }]
+    @depends_on = [{ "setup_completed?" => true, "company_buyer?" => false }]
   end
 
   def pages
@@ -91,5 +91,9 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
        Form::Sales::Pages::Buyer2EthnicBackgroundMixed.new(nil, nil, self),
        Form::Sales::Pages::Buyer2EthnicBackgroundWhite.new(nil, nil, self)]
     end
+  end
+
+  def displayed_in_tasklist?(log)
+    !log.company_buyer?
   end
 end

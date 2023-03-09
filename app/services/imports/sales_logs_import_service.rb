@@ -16,7 +16,9 @@ module Imports
   private
 
     def create_log(xml_doc)
+      # only import sales logs from 22/23 collection period onwards
       return unless meta_field_value(xml_doc, "form-name").include?("Sales")
+      return unless compose_date(xml_doc, "DAY", "MONTH", "YEAR") >= Time.zone.local(2022, 4, 1)
 
       attributes = {}
 
@@ -76,7 +78,7 @@ module Imports
       attributes["inc2mort"] = unsafe_string_as_integer(xml_doc, "Q2Person2MortApplication")
       attributes["hb"] = unsafe_string_as_integer(xml_doc, "Q2a")
       attributes["frombeds"] = safe_string_as_integer(xml_doc, "Q20Bedrooms")
-      attributes["staircase"] = unsafe_string_as_integer(xml_doc, "Q17aStaircase")
+      attributes["staircase"] = unsafe_string_as_integer(xml_doc, "Q17aStaircase") if attributes["ownershipsch"] == 1
       attributes["stairbought"] = safe_string_as_integer(xml_doc, "PercentBought")
       attributes["stairowned"] = safe_string_as_integer(xml_doc, "PercentOwns") if attributes["staircase"] == 1
       attributes["mrent"] = safe_string_as_decimal(xml_doc, "Q28MonthlyRent")
@@ -102,7 +104,6 @@ module Imports
       attributes["ppcodenk"] = previous_postcode_known(xml_doc, attributes["ppostcode_full"], attributes["prevloc"]) # Q7UNKNOWNPOSTCODE check mapping
       attributes["ppostc1"] = string_or_nil(xml_doc, "PPOSTC1")
       attributes["ppostc2"] = string_or_nil(xml_doc, "PPOSTC2")
-      attributes["previous_la_known"] = nil
       attributes["hhregres"] = unsafe_string_as_integer(xml_doc, "ArmedF")
       attributes["hhregresstill"] = still_serving(xml_doc)
       attributes["proplen"] = safe_string_as_integer(xml_doc, "Q16aProplen2") || safe_string_as_integer(xml_doc, "Q16aProplensec2")
@@ -111,7 +112,7 @@ module Imports
       attributes["prevten"] = unsafe_string_as_integer(xml_doc, "Q6PrevTenure")
       attributes["mortlen"] = mortgage_length(xml_doc, attributes)
       attributes["extrabor"] = borrowing(xml_doc, attributes)
-      attributes["mortgageused"] = unsafe_string_as_integer(xml_doc, "MORTGAGEUSED")
+      attributes["mortgageused"] = mortgage_used(xml_doc, attributes)
       attributes["wchair"] = unsafe_string_as_integer(xml_doc, "Q15Wheelchair")
       attributes["armedforcesspouse"] = unsafe_string_as_integer(xml_doc, "ARMEDFORCESSPOUSE")
       attributes["hodate"] = compose_date(xml_doc, "HODAY", "HOMONTH", "HOYEAR")
@@ -130,12 +131,28 @@ module Imports
       attributes["prevshared"] = nil # 23/24 variable
       attributes["staircasesale"] = nil # 23/24 variable
 
-      # Required for our form invalidated questions (not present in import)
-      attributes["previous_la_known"] = 1 if attributes["prevloc"].present? && attributes["ppostcode_full"].blank?
-      if attributes["la"].present? && attributes["postcode_full"].blank?
+      attributes["previous_la_known"] = 1 if attributes["prevloc"].present?
+      if attributes["la"].present?
         attributes["la_known"] = 1
         attributes["is_la_inferred"] = false
       end
+
+      # Soft validations can become required answers, set them to yes by default
+      attributes["mortgage_value_check"] = 0
+      attributes["shared_ownership_deposit_value_check"] = 0
+      attributes["value_value_check"] = 0
+      attributes["savings_value_check"] = 0
+      attributes["income1_value_check"] = 0
+      attributes["deposit_value_check"] = 0
+      attributes["wheel_value_check"] = 0
+      attributes["retirement_value_check"] = 0
+      attributes["extrabor_value_check"] = 0
+      attributes["grant_value_check"] = 0
+      attributes["staircase_bought_value_check"] = 0
+      attributes["deposit_and_mortgage_value_check"] = 0
+      attributes["old_persons_shared_ownership_value_check"] = 0
+      attributes["income2_value_check"] = 0
+      attributes["monthly_charges_value_check"] = 0
 
       # Sets the log creator
       owner_id = meta_field_value(xml_doc, "owner-user-id").strip
@@ -168,9 +185,31 @@ module Imports
       end
     end
 
-    def rescue_validation_or_raise(sales_log, _attributes, _previous_status, exception)
-      @logger.error("Log #{sales_log.old_id}: Failed to import")
-      raise exception
+    def rescue_validation_or_raise(sales_log, attributes, previous_status, exception)
+      if %w[saved submitted-invalid].include?(previous_status)
+        sales_log.errors.each do |error|
+          @logger.warn("Log #{sales_log.old_id}: Removing field #{error.attribute} from log triggering validation: #{error.type}")
+          attributes.delete(error.attribute.to_s)
+        end
+        @logs_overridden << sales_log.old_id
+        if sales_log.errors.of_kind?(:postcode_full, :postcodes_not_matching)
+          @logger.warn("Log #{sales_log.old_id}: Removing postcode known and previous postcode known as the postcodes are invalid")
+          attributes.delete("pcodenk")
+          attributes.delete("ppcodenk")
+        end
+        save_sales_log(attributes, previous_status)
+      else
+        @logger.error("Log #{sales_log.old_id}: Failed to import")
+        sales_log.errors.each do |error|
+          @logger.error("Validation error: Field #{error.attribute}:")
+          @logger.error("\tOwning Organisation: #{sales_log.owning_organisation&.name}")
+          @logger.error("\tOld CORE ID: #{sales_log.old_id}")
+          @logger.error("\tOld CORE: #{attributes[error.attribute.to_s]&.inspect}")
+          @logger.error("\tNew CORE: #{sales_log.read_attribute(error.attribute)&.inspect}")
+          @logger.error("\tError message: #{error.type}")
+        end
+        raise exception
+      end
     end
 
     def compute_differences(sales_log, attributes)
@@ -189,6 +228,7 @@ module Imports
     def fields_not_present_in_softwire_data
       %w[created_by
          income1_value_check
+         income2_value_check
          mortgage_value_check
          savings_value_check
          deposit_value_check
@@ -388,7 +428,6 @@ module Imports
     end
 
     def monthly_charges(xml_doc, attributes)
-      safe_string_as_decimal(xml_doc, "Q29MonthlyCharges")
       case attributes["ownershipsch"]
       when 1
         safe_string_as_decimal(xml_doc, "Q29MonthlyCharges")
@@ -444,6 +483,17 @@ module Imports
       return if postcode.blank?
 
       UKPostcode.parse(postcode).to_s
+    end
+
+    def mortgage_used(xml_doc, attributes)
+      mortgageused = unsafe_string_as_integer(xml_doc, "MORTGAGEUSED")
+      return mortgageused unless mortgageused == 3
+
+      if attributes["mortgage"].present? || attributes["mortlen"].present? || attributes["extrabor"].present?
+        1 # yes
+      else
+        3 # don't know
+      end
     end
 
     def set_default_values(attributes)
