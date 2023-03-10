@@ -14,7 +14,7 @@ module LocationsHelper
 
   def local_authorities_selection
     null_option = [OpenStruct.new(id: "", name: "Select an option")]
-    null_option + Location.local_authorities.map { |code, name| OpenStruct.new(code:, name:) }
+    null_option + Location.local_authorities_for_current_year.map { |code, name| OpenStruct.new(code:, name:) }
   end
 
   def selection_options(resource)
