@@ -43,8 +43,11 @@ private
   end
 
   def field_numbers
-    # TODO: handle if there are no headers
-    rows[row_offset - 1][col_offset..].map { |h| h.present? ? "field_#{h}" : "field_blank" }
+    if with_headers?
+      rows[row_offset - 1][col_offset..].map { |h| h.present? ? "field_#{h}" : "field_blank" }
+    else
+      default_field_numbers
+    end
   end
 
   def with_headers?

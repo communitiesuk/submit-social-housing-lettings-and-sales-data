@@ -8,20 +8,20 @@ class BulkUpload::LogToCsv
     @overrides = overrides
   end
 
-  def prefix_offset
+  def row_prefix
     [nil] * col_offset
   end
 
   def to_2022_csv_row
-    (prefix_offset + to_2022_row).flatten.join(",") + line_ending
+    (row_prefix + to_2022_row).flatten.join(",") + line_ending
   end
 
   def to_2023_csv_row(seed: nil)
     if seed
       row = to_2023_row.shuffle(random: Random.new(seed))
-      (prefix_offset + row).flatten.join(",") + line_ending
+      (row_prefix + row).flatten.join(",") + line_ending
     else
-      (prefix_offset + to_2023_row).flatten.join(",") + line_ending
+      (row_prefix + to_2023_row).flatten.join(",") + line_ending
     end
   end
 
