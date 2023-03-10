@@ -40,7 +40,6 @@ class LettingsLog < Log
   scope :filter_by_year, ->(year) { where(startdate: Time.zone.local(year.to_i, 4, 1)...Time.zone.local(year.to_i + 1, 4, 1)) }
   scope :filter_by_tenant_code, ->(tenant_code) { where("tenancycode ILIKE ?", "%#{tenant_code}%") }
   scope :filter_by_propcode, ->(propcode) { where("propcode ILIKE ?", "%#{propcode}%") }
-  scope :filter_by_postcode, ->(postcode_full) { where("REPLACE(postcode_full, ' ', '') ILIKE ?", "%#{postcode_full.delete(' ')}%") }
   scope :filter_by_location_postcode, ->(postcode_full) { left_joins(:location).where("REPLACE(locations.postcode, ' ', '') ILIKE ?", "%#{postcode_full.delete(' ')}%") }
   scope :search_by, lambda { |param|
                       filter_by_location_postcode(param)
@@ -63,11 +62,6 @@ class LettingsLog < Log
 
   def form
     FormHandler.instance.get_form(form_name) || FormHandler.instance.current_lettings_form
-  end
-
-  def recalculate_start_year!
-    @start_year = nil
-    collection_start_year
   end
 
   def lettings?
@@ -518,6 +512,7 @@ private
   def reset_derived_questions
     dependent_questions = { waityear: [{ key: :renewal, value: 0 }],
                             referral: [{ key: :renewal, value: 0 }],
+                            rsnvac: [{ key: :renewal, value: 0 }],
                             underoccupation_benefitcap: [{ key: :renewal, value: 0 }],
                             wchair: [{ key: :needstype, value: 1 }],
                             location_id: [{ key: :needstype, value: 1 }] }

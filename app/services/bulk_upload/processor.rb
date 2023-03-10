@@ -12,11 +12,15 @@ class BulkUpload::Processor
 
     validator.call
 
-    create_logs if validator.create_logs?
-    send_correct_and_upload_again_mail unless validator.create_logs?
-
-    send_fix_errors_mail if created_logs_but_incompleted?
-    send_success_mail if created_logs_and_all_completed?
+    if validator.any_setup_errors?
+      send_setup_errors_mail
+    elsif validator.create_logs?
+      create_logs
+      send_fix_errors_mail if created_logs_but_incompleted?
+      send_success_mail if created_logs_and_all_completed?
+    else
+      send_correct_and_upload_again_mail
+    end
   rescue StandardError => e
     Sentry.capture_exception(e)
     send_failure_mail
@@ -26,16 +30,28 @@ class BulkUpload::Processor
 
 private
 
+  def send_setup_errors_mail
+    BulkUploadMailer
+      .send_bulk_upload_failed_file_setup_error_mail(bulk_upload:)
+      .deliver_later
+  end
+
   def send_correct_and_upload_again_mail
-    BulkUploadMailer.send_correct_and_upload_again_mail(bulk_upload:).deliver_later
+    BulkUploadMailer
+      .send_correct_and_upload_again_mail(bulk_upload:)
+      .deliver_later
   end
 
   def send_fix_errors_mail
-    BulkUploadMailer.send_bulk_upload_with_errors_mail(bulk_upload:).deliver_later
+    BulkUploadMailer
+      .send_bulk_upload_with_errors_mail(bulk_upload:)
+      .deliver_later
   end
 
   def send_success_mail
-    BulkUploadMailer.send_bulk_upload_complete_mail(user:, bulk_upload:).deliver_later
+    BulkUploadMailer
+      .send_bulk_upload_complete_mail(user:, bulk_upload:)
+      .deliver_later
   end
 
   def created_logs_but_incompleted?
@@ -47,7 +63,9 @@ private
   end
 
   def send_failure_mail
-    BulkUploadMailer.send_bulk_upload_failed_service_error_mail(bulk_upload:).deliver_later
+    BulkUploadMailer
+      .send_bulk_upload_failed_service_error_mail(bulk_upload:)
+      .deliver_later
   end
 
   def user

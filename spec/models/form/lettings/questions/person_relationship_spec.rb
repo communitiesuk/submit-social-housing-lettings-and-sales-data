@@ -20,7 +20,7 @@ RSpec.describe Form::Lettings::Questions::PersonRelationship, type: :model do
   end
 
   it "has the correct answer_options" do
-    expect(question.answer_options).to eq("C" => { "hint" => "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education.", "value" => "Child" },
+    expect(question.answer_options).to eq("C" => { "hint" => "Must be eligible for child benefit: under age 16 or under 20 if still in full-time education.", "value" => "Child" },
                                           "P" => { "value" => "Partner" },
                                           "R" => { "value" => "Person prefers not to say" },
                                           "X" => { "value" => "Other" },

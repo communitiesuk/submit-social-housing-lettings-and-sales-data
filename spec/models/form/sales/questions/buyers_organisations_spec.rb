@@ -46,6 +46,18 @@ RSpec.describe Form::Sales::Questions::BuyersOrganisations, type: :model do
         "pregother" => { "value" => "Other private registered provider (PRP) - housing association" },
         "pregla" => { "value" => "Local Authority" },
         "pregghb" => { "value" => "Help to Buy Agent" },
+        "pregblank" => { "value" => "None of the above" },
+      },
+    )
+  end
+
+  it "has the correct displayed_answer_options" do
+    expect(question.displayed_answer_options(FactoryBot.create(:sales_log))).to eq(
+      {
+        "pregyrha" => { "value" => "Their private registered provider (PRP) - housing association" },
+        "pregother" => { "value" => "Other private registered provider (PRP) - housing association" },
+        "pregla" => { "value" => "Local Authority" },
+        "pregghb" => { "value" => "Help to Buy Agent" },
       },
     )
   end

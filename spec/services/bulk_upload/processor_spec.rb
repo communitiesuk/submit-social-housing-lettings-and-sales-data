@@ -91,6 +91,42 @@ RSpec.describe BulkUpload::Processor do
       end
     end
 
+    context "when a log has an incomplete setup section" do
+      let(:mock_downloader) do
+        instance_double(
+          BulkUpload::Downloader,
+          call: nil,
+          path: file_fixture("2022_23_lettings_bulk_upload.csv"),
+          delete_local_file!: nil,
+        )
+      end
+
+      let(:mock_validator) do
+        instance_double(
+          BulkUpload::Lettings::Validator,
+          invalid?: false,
+          call: nil,
+          any_setup_errors?: true,
+        )
+      end
+
+      before do
+        allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
+        allow(BulkUpload::Lettings::Validator).to receive(:new).and_return(mock_validator)
+      end
+
+      it "sends setup failure email" do
+        mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
+
+        allow(BulkUploadMailer).to receive(:send_bulk_upload_failed_file_setup_error_mail).and_return(mail_double)
+
+        processor.call
+
+        expect(BulkUploadMailer).to have_received(:send_bulk_upload_failed_file_setup_error_mail)
+        expect(mail_double).to have_received(:deliver_later)
+      end
+    end
+
     context "when processing a bulk upload with errors but below threshold (therefore creates logs)" do
       let(:mock_downloader) do
         instance_double(
@@ -106,6 +142,7 @@ RSpec.describe BulkUpload::Processor do
           BulkUpload::Lettings::Validator,
           invalid?: false,
           call: nil,
+          any_setup_errors?: false,
           create_logs?: true,
         )
       end
@@ -156,6 +193,7 @@ RSpec.describe BulkUpload::Processor do
           BulkUpload::Lettings::Validator,
           invalid?: false,
           call: nil,
+          any_setup_errors?: false,
           create_logs?: false,
         )
       end
@@ -216,6 +254,7 @@ RSpec.describe BulkUpload::Processor do
           BulkUpload::Lettings::Validator,
           call: nil,
           create_logs?: true,
+          any_setup_errors?: false,
           invalid?: false,
         )
       end

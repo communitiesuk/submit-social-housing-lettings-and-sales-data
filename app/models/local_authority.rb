@@ -1,0 +1,2 @@
+class LocalAuthority < ApplicationRecord
+end

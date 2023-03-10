@@ -6,6 +6,7 @@ RSpec.describe Form::Sales::Questions::Buyer1Mortgage, type: :model do
   let(:question_id) { nil }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
+  let(:log) { create(:sales_log) }
 
   it "has correct page" do
     expect(question.page).to eq(page)
@@ -16,11 +17,11 @@ RSpec.describe Form::Sales::Questions::Buyer1Mortgage, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Was buyer 1's income used for a mortgage application?")
+    expect(question.header).to eq("Was buyer 1’s income used for a mortgage application?")
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Buyer 1's income used for mortgage application")
+    expect(question.check_answer_label).to eq("Buyer 1’s income used for mortgage application")
   end
 
   it "has the correct type" do
@@ -33,6 +34,14 @@ RSpec.describe Form::Sales::Questions::Buyer1Mortgage, type: :model do
 
   it "has the correct answer_options" do
     expect(question.answer_options).to eq({
+      "1" => { "value" => "Yes" },
+      "2" => { "value" => "No" },
+      "3" => { "value" => "Don’t know" },
+    })
+  end
+
+  it "has the correct displayed_answer_options" do
+    expect(question.displayed_answer_options(log)).to eq({
       "1" => { "value" => "Yes" },
       "2" => { "value" => "No" },
     })

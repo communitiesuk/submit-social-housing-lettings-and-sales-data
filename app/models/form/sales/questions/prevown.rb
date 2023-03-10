@@ -1,9 +1,9 @@
 class Form::Sales::Questions::Prevown < ::Form::Question
-  def initialize(id, hsh, page)
-    super
+  def initialize(id, hsh, page, joint_purchase:)
+    super(id, hsh, page)
     @id = "prevown"
-    @check_answer_label = "Buyers previously owned a property"
-    @header = "Has the buyer previously owned a property?"
+    @check_answer_label = I18n.t("check_answer_labels.prevown", count: joint_purchase ? 2 : 1)
+    @header = I18n.t("questions.prevown", count: joint_purchase ? 2 : 1)
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
   end

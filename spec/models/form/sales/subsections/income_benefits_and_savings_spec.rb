@@ -30,11 +30,13 @@ RSpec.describe Form::Sales::Subsections::IncomeBenefitsAndSavings, type: :model 
             buyer_2_income_value_check
             buyer_2_mortgage
             buyer_2_mortgage_value_check
-            housing_benefits
+            housing_benefits_joint_purchase
+            housing_benefits_not_joint_purchase
             savings
             savings_value_check
             savings_deposit_value_check
-            previous_ownership
+            previous_ownership_joint_purchase
+            previous_ownership_not_joint_purchase
           ],
         )
       end
@@ -56,11 +58,13 @@ RSpec.describe Form::Sales::Subsections::IncomeBenefitsAndSavings, type: :model 
             buyer_2_income_value_check
             buyer_2_mortgage
             buyer_2_mortgage_value_check
-            housing_benefits
+            housing_benefits_joint_purchase
+            housing_benefits_not_joint_purchase
             savings
             savings_value_check
             savings_deposit_value_check
-            previous_ownership
+            previous_ownership_joint_purchase
+            previous_ownership_not_joint_purchase
             previous_shared
           ],
         )

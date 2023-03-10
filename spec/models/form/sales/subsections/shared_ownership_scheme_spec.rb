@@ -16,14 +16,16 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
       %w[
         living_before_purchase_shared_ownership
         staircasing
-        about_staircasing
+        about_staircasing_joint_purchase
+        about_staircasing_not_joint_purchase
         staircase_bought_value_check
         resale
         exchange_contracts
         handover_date
         handover_date_check
         la_nominations
-        buyer_previous
+        buyer_previous_joint_purchase
+        buyer_previous_not_joint_purchase
         previous_bedrooms
         previous_property_type
         shared_ownership_previous_tenure

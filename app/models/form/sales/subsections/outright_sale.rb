@@ -20,12 +20,18 @@ class Form::Sales::Subsections::OutrightSale < ::Form::Subsection
       Form::Sales::Pages::ExtraBorrowing.new("extra_borrowing_outright_sale", nil, self),
       Form::Sales::Pages::AboutDepositWithoutDiscount.new("about_deposit_outright_sale", nil, self),
       Form::Sales::Pages::DepositValueCheck.new("outright_sale_deposit_value_check", nil, self),
-      Form::Sales::Pages::LeaseholdCharges.new("leasehold_charges_outright_sale", nil, self),
+      leasehold_charge_pages,
       Form::Sales::Pages::MonthlyChargesValueCheck.new("monthly_charges_outright_sale_value_check", nil, self),
-    ]
+    ].compact
   end
 
   def displayed_in_tasklist?(log)
     log.ownershipsch == 3
+  end
+
+  def leasehold_charge_pages
+    if form.start_date.year >= 2023
+      Form::Sales::Pages::LeaseholdCharges.new("leasehold_charges_outright_sale", nil, self)
+    end
   end
 end

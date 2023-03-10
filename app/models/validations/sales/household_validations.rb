@@ -14,8 +14,8 @@ module Validations::Sales::HouseholdValidations
     return unless record.postcode_full && record.ppostcode_full && record.discounted_ownership_sale?
 
     unless record.postcode_full == record.ppostcode_full
-      record.errors.add :postcode_full, I18n.t("validations.household.postcode.discounted_ownership")
-      record.errors.add :ppostcode_full, I18n.t("validations.household.postcode.discounted_ownership")
+      record.errors.add :postcode_full, :postcodes_not_matching, message: I18n.t("validations.household.postcode.discounted_ownership")
+      record.errors.add :ppostcode_full, :postcodes_not_matching, message: I18n.t("validations.household.postcode.discounted_ownership")
     end
   end
 

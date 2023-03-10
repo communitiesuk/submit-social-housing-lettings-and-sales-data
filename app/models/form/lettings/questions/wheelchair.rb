@@ -1,4 +1,4 @@
-class Form::Lettings::Questions::Wchair < ::Form::Question
+class Form::Lettings::Questions::Wheelchair < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "wchair"
@@ -10,5 +10,8 @@ class Form::Lettings::Questions::Wchair < ::Form::Question
     @answer_options = ANSWER_OPTIONS
   end
 
-  ANSWER_OPTIONS = { "1" => { "value" => "Yes" }, "2" => { "value" => "No" } }.freeze
+  ANSWER_OPTIONS = {
+    "1" => { "value" => "Yes" },
+    "2" => { "value" => "No" },
+  }.freeze
 end

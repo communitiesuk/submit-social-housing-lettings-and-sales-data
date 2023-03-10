@@ -324,6 +324,11 @@ unless Rails.env.test?
       service.call
     end
   end
-  puts LaSaleRange.count
+end
+
+if LocalAuthority.count.zero?
+  path = "config/local_authorities_data/initial_local_authorities.csv"
+  service = Imports::LocalAuthoritiesService.new(path:)
+  service.call
 end
 # rubocop:enable Rails/Output
