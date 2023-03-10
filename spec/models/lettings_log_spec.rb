@@ -1876,11 +1876,15 @@ RSpec.describe LettingsLog do
             LocalAuthorityLink.create!(local_authority_id: LocalAuthority.find_by(code: "E07000030").id, linked_local_authority_id: LocalAuthority.find_by(code: "E06000063").id)
             location.update!(location_code: "E07000030")
             Timecop.freeze(startdate)
+            Singleton.__init__(FormHandler)
             lettings_log.update!(startdate:)
             lettings_log.reload
           end
 
-          after { Timecop.unfreeze }
+          after do
+            Timecop.unfreeze
+            Singleton.__init__(FormHandler)
+          end
 
           context "with 22/23" do
             let(:startdate) { Time.zone.local(2022, 4, 2) }
