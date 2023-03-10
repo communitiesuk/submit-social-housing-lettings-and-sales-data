@@ -32,7 +32,7 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Sales::Pages::RetirementValueCheck.new("age_2_buyer_retirement_value_check", nil, self, person_index: 2),
       Form::Sales::Pages::GenderIdentity2.new(nil, nil, self),
       Form::Sales::Pages::RetirementValueCheck.new("gender_2_buyer_retirement_value_check", nil, self, person_index: 2),
-      pages_for_buyer_2,
+      buyer_2_ethnicity_nationality_pages,
       Form::Sales::Pages::Buyer2WorkingSituation.new(nil, nil, self),
       Form::Sales::Pages::RetirementValueCheck.new("working_situation_2_retirement_value_check_joint_purchase", nil, self, person_index: 2),
       Form::Sales::Pages::Buyer2IncomeValueCheck.new("working_situation_buyer_2_income_value_check", nil, self),
@@ -82,7 +82,7 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
     ].flatten.compact
   end
 
-  def pages_for_buyer_2
+  def buyer_2_ethnicity_nationality_pages
     if form.start_date.year >= 2023
       [
         Form::Sales::Pages::Buyer2EthnicGroup.new(nil, nil, self),
