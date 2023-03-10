@@ -3,7 +3,6 @@ FactoryBot.define do
     created_by { FactoryBot.create(:user) }
     owning_organisation { created_by.organisation }
     managing_organisation { created_by.organisation }
-    startdate { Time.zone.today }
     trait :about_completed do
       renewal { 0 }
       needstype { 1 }
@@ -18,6 +17,7 @@ FactoryBot.define do
       age2 { 19 }
       renewal { 1 }
       rent_type { 1 }
+      startdate { Time.zone.today }
     end
     trait :soft_validations_triggered do
       status { 1 }
@@ -35,6 +35,7 @@ FactoryBot.define do
       hhmemb { 1 }
     end
     trait :completed do
+      startdate { Time.zone.today }
       status { 2 }
       tenancycode { Faker::Name.initials(number: 10) }
       age1_known { 0 }
@@ -65,7 +66,7 @@ FactoryBot.define do
       rsnvac { 6 }
       unittype_gn { 7 }
       beds { 3 }
-      voiddate { "03/11/2019" }
+      voiddate { 2.days.ago }
       offered { 2 }
       wchair { 1 }
       earnings { 68 }
@@ -131,7 +132,7 @@ FactoryBot.define do
       hbrentshortfall { 1 }
       tshortfall { 12 }
       property_relet { 0 }
-      mrcdate { Time.zone.yesterday }
+      mrcdate { 1.day.ago }
       incref { 0 }
       armedforces { 1 }
       builtype { 1 }

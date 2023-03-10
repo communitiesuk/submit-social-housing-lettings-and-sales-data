@@ -9,6 +9,11 @@ RSpec.describe LettingsLog do
 
   before do
     allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
+    Timecop.freeze(Time.zone.local(2022, 1, 1))
+  end
+
+  after do
+    Timecop.unfreeze
   end
 
   include_examples "shared examples for derived fields", :lettings_log
@@ -2404,8 +2409,8 @@ RSpec.describe LettingsLog do
   end
 
   describe "scopes" do
-    let!(:lettings_log_1) { FactoryBot.create(:lettings_log, :in_progress, startdate: Time.utc(2021, 5, 3), created_by: created_by_user) }
-    let!(:lettings_log_2) { FactoryBot.create(:lettings_log, :completed, startdate: Time.utc(2021, 5, 3), created_by: created_by_user) }
+    let!(:lettings_log_1) { FactoryBot.create(:lettings_log, :in_progress, startdate: Time.utc(2021, 5, 3), mrcdate: Time.utc(2021, 5, 3), voiddate: Time.utc(2021, 5, 3), created_by: created_by_user) }
+    let!(:lettings_log_2) { FactoryBot.create(:lettings_log, :completed, startdate: Time.utc(2021, 5, 3), mrcdate: Time.utc(2021, 5, 3), voiddate: Time.utc(2021, 5, 3), created_by: created_by_user) }
 
     before do
       Timecop.freeze(Time.utc(2022, 6, 3))
