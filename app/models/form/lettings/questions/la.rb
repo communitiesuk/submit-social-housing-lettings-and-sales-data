@@ -3,7 +3,7 @@ class Form::Lettings::Questions::La < ::Form::Question
     super
     @id = "la"
     @check_answer_label = "Local Authority"
-    @header = "What is the local authority of the property?"
+    @header = "What is the property’s local authority?"
     @type = "select"
     @check_answers_card_number = 0
     @hint_text = ""

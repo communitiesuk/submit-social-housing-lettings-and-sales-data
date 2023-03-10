@@ -18,7 +18,7 @@ RSpec.describe Form::Sales::Questions::PropertyLocalAuthority, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("What is the local authority of the property?")
+    expect(question.header).to eq("What is the property’s local authority?")
   end
 
   it "has the correct check_answer_label" do
