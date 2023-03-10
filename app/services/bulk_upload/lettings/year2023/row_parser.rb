@@ -142,6 +142,8 @@ class BulkUpload::Lettings::Year2023::RowParser
   attribute :bulk_upload
   attribute :block_log_creation, :boolean, default: -> { false }
 
+  attribute :field_blank
+
   attribute :field_1, :string
   attribute :field_2, :string
   attribute :field_3, :string
@@ -268,14 +270,14 @@ class BulkUpload::Lettings::Year2023::RowParser
   attribute :field_124, :integer
   attribute :field_125, :integer
   attribute :field_126, :integer
-  attribute :field_127, :double
-  attribute :field_128, :double
-  attribute :field_129, :double
-  attribute :field_130, :double
-  attribute :field_131, :double
-  attribute :field_132, :double
+  attribute :field_127, :decimal
+  attribute :field_128, :decimal
+  attribute :field_129, :decimal
+  attribute :field_130, :decimal
+  attribute :field_131, :decimal
+  attribute :field_132, :decimal
   attribute :field_133, :integer
-  attribute :field_134, :double
+  attribute :field_134, :decimal
 
   def self.question_for_field(field)
     QUESTIONS[field]
