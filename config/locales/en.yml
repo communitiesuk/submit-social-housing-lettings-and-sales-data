@@ -560,7 +560,7 @@ en:
       toggle_active: "If the date is before %{date}, select ‘From the start of the current collection period’ because the previous period has now closed."
     bulk_upload:
       needstype: "General needs housing includes both self-contained and shared housing without support or specific adaptations. Supported housing can include direct access hostels, group homes, residential care and nursing homes."
-    offered: "Do not include the offer that led to this letting.This is after the last tenancy ended. If the property is being offered for let for the first time, enter 0."
+    offered: "Do not include the offer that led to this letting. This is after the last tenancy ended. If the property is being offered for let for the first time, enter 0."
 
   check_answer_labels:
     soctenant:
