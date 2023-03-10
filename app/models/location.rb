@@ -134,8 +134,8 @@ class Location < ApplicationRecord
     la = LocalAuthority.find_by(code: location_code)
     return [] unless la
 
-    all_las = [la] + la.linked_local_authorities
-    LocalAuthority.where(id: all_las.map(&:id))
+    location_local_authorities = [la] + la.linked_local_authorities
+    LocalAuthority.where(id: location_local_authorities.map(&:id))
   end
 
 private
