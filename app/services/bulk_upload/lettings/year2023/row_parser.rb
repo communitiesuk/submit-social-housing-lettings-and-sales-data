@@ -282,4 +282,19 @@ class BulkUpload::Lettings::Year2023::RowParser
   def self.question_for_field(field)
     QUESTIONS[field]
   end
+
+  def blank_row?
+    attribute_set
+      .to_hash
+      .reject { |k, _| %w[bulk_upload block_log_creation field_blank].include?(k) }
+      .values
+      .compact
+      .empty?
+  end
+
+private
+
+  def attribute_set
+    @attribute_set ||= instance_variable_get(:@attributes)
+  end
 end
