@@ -5,7 +5,7 @@ module Validations::SetupValidations
   def validate_startdate_setup(record)
     return unless record.startdate && date_valid?("startdate", record)
 
-    if FeatureToggle.startdate_collection_window_validation_enabled? && !record.startdate.between?(active_collection_start_date, current_collection_end_date)
+    unless record.startdate.between?(active_collection_start_date, current_collection_end_date)  || !FeatureToggle.startdate_collection_window_validation_enabled?
       record.errors.add :startdate, validation_error_message
     end
   end

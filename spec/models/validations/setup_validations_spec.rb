@@ -6,10 +6,6 @@ RSpec.describe Validations::SetupValidations do
   let(:setup_validator_class) { Class.new { include Validations::SetupValidations } }
   let(:record) { FactoryBot.create(:lettings_log) }
 
-  before do
-    allow(FeatureToggle).to receive(:startdate_collection_window_validation_enabled?).and_return(true)
-  end
-
   describe "tenancy start date" do
     context "when in 22/23 collection" do
       context "when in the crossover period" do
