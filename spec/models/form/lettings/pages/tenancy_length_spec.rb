@@ -26,6 +26,6 @@ RSpec.describe Form::Lettings::Pages::TenancyLength, type: :model do
   end
 
   it "has the correct depends_on" do
-    expect(page.depends_on).to eq [{ "tenancy_type_fixed_term_or_other?" => true }]
+    expect(page.depends_on).to eq [{ "tenancy_type_fixed_term?" => true }]
   end
 end
