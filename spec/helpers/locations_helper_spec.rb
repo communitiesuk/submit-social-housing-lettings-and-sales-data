@@ -152,6 +152,52 @@ RSpec.describe LocationsHelper do
       expect(display_location_attributes(location)).to eq(attributes)
     end
 
+    context "when location has different local authorities for different years" do
+      before do
+        LocalAuthorityLink.create!(local_authority_id: LocalAuthority.find_by(code: "E07000030").id, linked_local_authority_id: LocalAuthority.find_by(code: "E06000063").id)
+        location.update!(location_code: "E07000030")
+      end
+
+      it "returns correct display attributes" do
+        attributes = [
+          { attribute: "postcode", name: "Postcode", value: location.postcode },
+          { attribute: "name", name: "Location name", value: location.name },
+          { attribute: "local_authority", name: "Local authority", value: "Eden (2021), Cumberland (2023)" },
+          { attribute: "units", name: "Number of units", value: location.units },
+          { attribute: "type_of_unit", name: "Most common unit", value: location.type_of_unit },
+          { attribute: "mobility_standards", name: "Mobility standards", value: location.mobility_type },
+          { attribute: "location_code", name: "Location code", value: "E07000030 (2021), E06000063 (2023)" },
+          { attribute: "availability", name: "Availability", value: "Active from 1 April 2022" },
+          { attribute: "status", name: "Status", value: :active },
+        ]
+
+        expect(display_location_attributes(location)).to eq(attributes)
+      end
+    end
+
+    context "when location has no local authority" do
+      before do
+        LocalAuthorityLink.create!(local_authority_id: LocalAuthority.find_by(code: "E07000030").id, linked_local_authority_id: LocalAuthority.find_by(code: "E06000063").id)
+        location.update!(location_code: nil)
+      end
+
+      it "returns correct display attributes" do
+        attributes = [
+          { attribute: "postcode", name: "Postcode", value: location.postcode },
+          { attribute: "name", name: "Location name", value: location.name },
+          { attribute: "local_authority", name: "Local authority", value: "" },
+          { attribute: "units", name: "Number of units", value: location.units },
+          { attribute: "type_of_unit", name: "Most common unit", value: location.type_of_unit },
+          { attribute: "mobility_standards", name: "Mobility standards", value: location.mobility_type },
+          { attribute: "location_code", name: "Location code", value: "" },
+          { attribute: "availability", name: "Availability", value: "Active from 1 April 2022" },
+          { attribute: "status", name: "Status", value: :incomplete },
+        ]
+
+        expect(display_location_attributes(location)).to eq(attributes)
+      end
+    end
+
     context "when viewing availability" do
       context "with no deactivations" do
         it "displays previous collection start date as availability date if created_at is earlier than collection start date" do

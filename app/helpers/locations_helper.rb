@@ -27,11 +27,11 @@ module LocationsHelper
     base_attributes = [
       { name: "Postcode", value: location.postcode, attribute: "postcode" },
       { name: "Location name", value: location.name, attribute: "name" },
-      { name: "Local authority", value: location.location_admin_district, attribute: "local_authority" },
+      { name: "Local authority", value: location_admin_districts(location), attribute: "local_authority" },
       { name: "Number of units", value: location.units, attribute: "units" },
       { name: "Most common unit", value: location.type_of_unit, attribute: "type_of_unit" },
       { name: "Mobility standards", value: location.mobility_type, attribute: "mobility_standards" },
-      { name: "Location code", value: location.location_code, attribute: "location_code" },
+      { name: "Location code", value: location_codes(location), attribute: "location_code" },
       { name: "Availability", value: location_availability(location), attribute: "availability" },
     ]
 
@@ -46,7 +46,7 @@ module LocationsHelper
     [
       { name: "Postcode", value: location.postcode, attribute: "postcode" },
       { name: "Location name", value: location.name, attribute: "name" },
-      { name: "Local authority", value: location.location_admin_district, attribute: "local_authority" },
+      { name: "Local authority", value: location_admin_districts(location), attribute: "local_authority" },
       { name: "Number of units", value: location.units, attribute: "units" },
       { name: "Most common unit", value: location.type_of_unit, attribute: "type_of_unit" },
       { name: "Mobility standards", value: location.mobility_type, attribute: "mobility_standards" },
@@ -106,5 +106,23 @@ private
     return false if [inner.deactivation_date, inner.reactivation_date, outer.deactivation_date, outer.reactivation_date].any?(&:blank?)
 
     [inner.deactivation_date, inner.reactivation_date].all? { |date| date.between?(outer.deactivation_date, outer.reactivation_date) }
+  end
+
+  def location_codes(location)
+    sorted_linked_authorities = location.linked_local_authorities.sort_by(&:start_date)
+    return sorted_linked_authorities.first.code if sorted_linked_authorities.count == 1
+
+    sorted_linked_authorities.map { |linked_local_authority|
+      "#{linked_local_authority.code} (#{linked_local_authority.start_date.year})"
+    }.join(", ")
+  end
+
+  def location_admin_districts(location)
+    sorted_linked_authorities = location.linked_local_authorities.sort_by(&:start_date)
+    return sorted_linked_authorities.first.name if sorted_linked_authorities.count == 1
+
+    sorted_linked_authorities.map { |linked_local_authority|
+      "#{linked_local_authority.name} (#{linked_local_authority.start_date.year})"
+    }.join(", ")
   end
 end
