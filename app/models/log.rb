@@ -135,9 +135,34 @@ private
     process_postcode(ppostcode_full, "ppcodenk", "is_previous_la_inferred", "prevloc")
   end
 
+  LA_CHANGES = {
+    "E07000027" => "E06000063", # Barrow-in-Furness => Cumberland
+    "E07000030" => "E06000063", # Eden => Cumberland
+    "E07000031" => "E06000063", # South Lakeland => Cumberland
+    "E07000026" => "E06000064", # Allerdale => Westmorland and Furness
+    "E07000028" => "E06000064", # Carlisle => Westmorland and Furness
+    "E07000029" => "E06000064", # Copeland => Westmorland and Furness
+    "E07000163" => "E06000065", # Craven => North Yorkshire
+    "E07000164" => "E06000065", # Hambleton => North Yorkshire
+    "E07000165" => "E06000065", # Harrogate => North Yorkshire
+    "E07000166" => "E06000065", # Richmondshire => North Yorkshire
+    "E07000167" => "E06000065", # Ryedale => North Yorkshire
+    "E07000168" => "E06000065", # Scarborough => North Yorkshire
+    "E07000169" => "E06000065", # Selby => North Yorkshire
+    "E07000187" => "E06000066", # Mendip => Somerset
+    "E07000188" => "E06000066", # Sedgemoor => Somerset
+    "E07000246" => "E06000066", # Somerset West and Taunton => Somerset
+    "E07000189" => "E06000066", # South Somerset => Somerset
+  }.freeze
+
   def get_inferred_la(postcode)
     result = PIO.lookup(postcode)
-    result[:location_code] if result
+    location_code = result[:location_code] if result
+    if LA_CHANGES.key?(location_code) && form.start_date.year >= 2023
+      LA_CHANGES[location_code]
+    else
+      location_code
+    end
   end
 
   def upcase_and_remove_whitespace(string)
