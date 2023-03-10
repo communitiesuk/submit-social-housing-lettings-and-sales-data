@@ -64,9 +64,9 @@
   <%= render partial: "log_filters" %>
 
   <div class="app-filter-layout__content">
-    <%= render SearchComponent.new(current_user:, search_label: "Search by log ID, tenant code, property reference or postcode", value: @searched) %>
+    <%= render SearchComponent.new(current_user:, search_label: search_label_for_controller(controller), value: @searched) %>
     <%= govuk_section_break(visible: true, size: "m") %>
-    <%= render partial: "log_list", locals: { logs: @logs, title: "Logs", pagy: @pagy, searched: @searched, item_label:, total_count: @total_count, csv_download_url: csv_download_lettings_logs_path(search: @search_term) } %>
+    <%= render partial: "log_list", locals: { logs: @logs, title: "Logs", pagy: @pagy, searched: @searched, item_label:, total_count: @total_count, csv_download_url: csv_download_url_for_controller(controller) } %>
     <%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "logs" } %>
   </div>
 </div>

@@ -31,4 +31,28 @@ RSpec.describe BulkUploadSalesLogsController, type: :request do
       end
     end
   end
+
+  describe "GET /sales-logs/bulk-upload-logs/guidance" do
+    context "when not in crossover period" do
+      let(:expected_year) { FormHandler.instance.forms["current_sales"].start_date.year }
+
+      it "shows guidance page with correct title" do
+        Timecop.freeze(2022, 1, 1) do
+          get "/sales-logs/bulk-upload-logs/guidance", params: {}
+
+          expect(response.body).to include("How to upload logs in bulk")
+        end
+      end
+    end
+
+    context "when in crossover period" do
+      it "shows guidance page with correct title" do
+        Timecop.freeze(2023, 6, 1) do
+          get "/sales-logs/bulk-upload-logs/guidance", params: {}
+
+          expect(response.body).to include("How to upload logs in bulk")
+        end
+      end
+    end
+  end
 end

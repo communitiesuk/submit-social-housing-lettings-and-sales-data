@@ -23,7 +23,8 @@ class Form::Sales::Subsections::IncomeBenefitsAndSavings < ::Form::Subsection
       Form::Sales::Pages::Savings.new(nil, nil, self),
       Form::Sales::Pages::SavingsValueCheck.new("savings_value_check", nil, self),
       Form::Sales::Pages::DepositValueCheck.new("savings_deposit_value_check", nil, self),
-      Form::Sales::Pages::PreviousOwnership.new(nil, nil, self),
+      Form::Sales::Pages::PreviousOwnership.new("previous_ownership_joint_purchase", nil, self, joint_purchase: true),
+      Form::Sales::Pages::PreviousOwnership.new("previous_ownership_not_joint_purchase", nil, self, joint_purchase: false),
       previous_shared_page,
     ].compact
   end

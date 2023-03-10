@@ -14,7 +14,7 @@ class Form::Lettings::Questions::PersonRelationship < ::Form::Question
     "P" => { "value" => "Partner" },
     "C" => {
       "value" => "Child",
-      "hint" => "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education.",
+      "hint" => "Must be eligible for child benefit: under age 16 or under 20 if still in full-time education.",
     },
     "X" => { "value" => "Other" },
     "divider" => { "value" => true },

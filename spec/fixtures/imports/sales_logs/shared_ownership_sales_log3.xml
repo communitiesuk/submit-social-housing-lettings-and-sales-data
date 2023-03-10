@@ -144,7 +144,7 @@
     <P7RRefused>0</P7RRefused>
     <P8RRefused>0</P8RRefused>
     <TotRRefused>0</TotRRefused>
-    <CALCMORT>76000</CALCMORT>
+    <CALCMORT></CALCMORT>
     <MORTGAGEUSED>1</MORTGAGEUSED>
     <IM1>47000</IM1>
     <IM2>0</IM2>

@@ -33,7 +33,12 @@ class SalesLog < Log
   before_validation :set_derived_fields!
 
   scope :filter_by_year, ->(year) { where(saledate: Time.zone.local(year.to_i, 4, 1)...Time.zone.local(year.to_i + 1, 4, 1)) }
-  scope :search_by, ->(param) { filter_by_id(param) }
+  scope :filter_by_purchaser_code, ->(purchid) { where("purchid ILIKE ?", "%#{purchid}%") }
+  scope :search_by, lambda { |param|
+    filter_by_purchaser_code(param)
+      .or(filter_by_postcode(param))
+      .or(filter_by_id(param))
+  }
   scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org) }
 
   OPTIONAL_FIELDS = %w[saledate_check purchid monthly_charges_value_check old_persons_shared_ownership_value_check].freeze
@@ -255,6 +260,10 @@ class SalesLog < Log
 
   def shared_ownership_scheme?
     ownershipsch == 1
+  end
+
+  def company_buyer?
+    companybuy == 1
   end
 
   def buyers_age_for_old_persons_shared_ownership_invalid?

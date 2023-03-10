@@ -168,13 +168,14 @@ class BulkUpload::Lettings::Validator
           row:,
           cell: "#{cols[field_number_for_attribute(error.attribute) - col_offset + 1]}#{row}",
           col: cols[field_number_for_attribute(error.attribute) - col_offset + 1],
+          category: error.options[:category],
         )
       end
     end
   end
 
   def create_logs?
-    return false if any_setup_sections_incomplete?
+    return false if any_setup_errors?
     return false if over_column_error_threshold?
     return false if row_parsers.any?(&:block_log_creation?)
 
@@ -185,11 +186,15 @@ class BulkUpload::Lettings::Validator
     QUESTIONS[field]
   end
 
-private
-
-  def any_setup_sections_incomplete?
-    row_parsers.any? { |row_parser| row_parser.log.form.setup_sections[0].subsections[0].is_incomplete?(row_parser.log) }
+  def any_setup_errors?
+    bulk_upload
+      .bulk_upload_errors
+      .where(category: "setup")
+      .count
+      .positive?
   end
+
+private
 
   def over_column_error_threshold?
     fields = ("field_1".."field_134").to_a

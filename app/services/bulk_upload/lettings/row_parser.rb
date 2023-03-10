@@ -143,6 +143,20 @@ class BulkUpload::Lettings::RowParser
   validates :field_1, presence: { message: I18n.t("validations.not_answered", question: "letting type") },
                       inclusion: { in: (1..12).to_a, message: I18n.t("validations.invalid_option", question: "letting type") }
   validates :field_4, presence: { if: proc { [2, 4, 6, 8, 10, 12].include?(field_1) } }
+
+  validates :field_12, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 1 must be a number or the letter R" }
+  validates :field_13, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 2 must be a number or the letter R" }
+  validates :field_14, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 3 must be a number or the letter R" }
+  validates :field_15, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 4 must be a number or the letter R" }
+  validates :field_16, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 5 must be a number or the letter R" }
+  validates :field_17, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 6 must be a number or the letter R" }
+  validates :field_18, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 7 must be a number or the letter R" }
+  validates :field_19, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 8 must be a number or the letter R" }
+
+  validates :field_96, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (day)") }
+  validates :field_97, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (month)") }
+  validates :field_98, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (year)") }
+
   validates :field_98, format: { with: /\A\d{2}\z/, message: I18n.t("validations.setup.startdate.year_not_two_digits") }
 
   validate :validate_data_types
@@ -160,15 +174,19 @@ class BulkUpload::Lettings::RowParser
   validate :validate_owning_org_permitted
   validate :validate_owning_org_owns_stock
   validate :validate_owning_org_exists
+  validate :validate_owning_org_data_given
 
   validate :validate_managing_org_related
   validate :validate_managing_org_exists
+  validate :validate_managing_org_data_given
 
   validate :validate_scheme_related
   validate :validate_scheme_exists
+  validate :validate_scheme_data_given
 
   validate :validate_location_related
   validate :validate_location_exists
+  validate :validate_location_data_given
 
   def valid?
     errors.clear
@@ -181,7 +199,12 @@ class BulkUpload::Lettings::RowParser
 
     log.errors.each do |error|
       fields = field_mapping_for_errors[error.attribute] || []
-      fields.each { |field| errors.add(field, error.type) }
+
+      fields.each do |field|
+        unless errors.include?(field)
+          errors.add(field, error.type)
+        end
+      end
     end
 
     errors.blank?
@@ -226,6 +249,12 @@ private
     end
   end
 
+  def validate_location_data_given
+    if bulk_upload.supported_housing? && field_5.blank?
+      errors.add(:field_5, "The scheme code must be present", category: "setup")
+    end
+  end
+
   def validate_scheme_related
     return unless field_4.present? && scheme.present?
 
@@ -244,6 +273,12 @@ private
     end
   end
 
+  def validate_scheme_data_given
+    if bulk_upload.supported_housing? && field_4.blank?
+      errors.add(:field_4, "The management group code is not correct", category: "setup")
+    end
+  end
+
   def validate_managing_org_related
     if owning_organisation && managing_organisation && !owning_organisation.can_be_managed_by?(organisation: managing_organisation)
       block_log_creation!
@@ -255,6 +290,12 @@ private
     if managing_organisation.nil?
       errors.delete(:field_113)
       errors.add(:field_113, "The managing organisation code is incorrect")
+    end
+  end
+
+  def validate_managing_org_data_given
+    if field_113.blank?
+      errors.add(:field_113, "The managing organisation code is incorrect", category: :setup)
     end
   end
 
@@ -270,6 +311,12 @@ private
     if owning_organisation.nil?
       errors.delete(:field_111)
       errors.add(:field_111, "The owning organisation code is incorrect")
+    end
+  end
+
+  def validate_owning_org_data_given
+    if field_111.blank?
+      errors.add(:field_111, "The owning organisation code is incorrect", category: :setup)
     end
   end
 
@@ -337,7 +384,7 @@ private
   end
 
   def validate_relevant_collection_window
-    return unless start_date && bulk_upload.form
+    return if start_date.blank? || bulk_upload.form.blank?
 
     unless bulk_upload.form.valid_start_date_for_form?(start_date)
       errors.add(:field_96, I18n.t("validations.date.outside_collection_window"))
@@ -347,6 +394,8 @@ private
   end
 
   def start_date
+    return if field_98.blank? || field_97.blank? || field_96.blank?
+
     Date.parse("20#{field_98.to_s.rjust(2, '0')}-#{field_97}-#{field_96}")
   rescue StandardError
     nil
@@ -387,8 +436,24 @@ private
       next if log.optional_fields.include?(question.id)
       next if question.completed?(log)
 
-      fields.each { |field| errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase)) }
+      if setup_question?(question)
+        fields.each do |field|
+          if errors[field].present?
+            errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase), category: :setup)
+          end
+        end
+      else
+        fields.each do |field|
+          unless errors.any? { |e| fields.include?(e.attribute) }
+            errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase))
+          end
+        end
+      end
     end
+  end
+
+  def setup_question?(question)
+    log.form.setup_sections[0].subsections[0].questions.include?(question)
   end
 
   def field_mapping_for_errors
@@ -398,6 +463,8 @@ private
       postcode_known: %i[field_107 field_108 field_109],
       postcode_full: %i[field_107 field_108 field_109],
       la: %i[field_107],
+      owning_organisation: [:field_111],
+      managing_organisation: [:field_113],
       owning_organisation_id: [:field_111],
       managing_organisation_id: [:field_113],
       renewal: [:field_134],
@@ -628,28 +695,28 @@ private
     attributes["declaration"] = field_132
 
     attributes["age1_known"] = field_12 == "R" ? 1 : 0
-    attributes["age1"] = field_12 if attributes["age1_known"].zero?
+    attributes["age1"] = field_12 if attributes["age1_known"].zero? && field_12&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age2_known"] = field_13 == "R" ? 1 : 0
-    attributes["age2"] = field_13 if attributes["age2_known"].zero?
+    attributes["age2"] = field_13 if attributes["age2_known"].zero? && field_13&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age3_known"] = field_14 == "R" ? 1 : 0
-    attributes["age3"] = field_14 if attributes["age3_known"].zero?
+    attributes["age3"] = field_14 if attributes["age3_known"].zero? && field_14&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age4_known"] = field_15 == "R" ? 1 : 0
-    attributes["age4"] = field_15 if attributes["age4_known"].zero?
+    attributes["age4"] = field_15 if attributes["age4_known"].zero? && field_15&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age5_known"] = field_16 == "R" ? 1 : 0
-    attributes["age5"] = field_16 if attributes["age5_known"].zero?
+    attributes["age5"] = field_16 if attributes["age5_known"].zero? && field_16&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age6_known"] = field_17 == "R" ? 1 : 0
-    attributes["age6"] = field_17 if attributes["age6_known"].zero?
+    attributes["age6"] = field_17 if attributes["age6_known"].zero? && field_17&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age7_known"] = field_18 == "R" ? 1 : 0
-    attributes["age7"] = field_18 if attributes["age7_known"].zero?
+    attributes["age7"] = field_18 if attributes["age7_known"].zero? && field_18&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age8_known"] = field_19 == "R" ? 1 : 0
-    attributes["age8"] = field_19 if attributes["age8_known"].zero?
+    attributes["age8"] = field_19 if attributes["age8_known"].zero? && field_19&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["sex1"] = field_20
     attributes["sex2"] = field_21
@@ -868,6 +935,8 @@ private
       0
     when nil
       rsnvac == 14 ? 1 : 0
+    else
+      field_134
     end
   end
 
