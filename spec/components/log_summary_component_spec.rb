@@ -5,7 +5,7 @@ RSpec.describe LogSummaryComponent, type: :component do
   let(:coordinator_user) { FactoryBot.create(:user) }
   let(:propcode) { "P3647" }
   let(:tenancycode) { "T62863" }
-  let(:lettings_log) { FactoryBot.create(:lettings_log, needstype: 1, startdate: Time.utc(2022, 1, 1), tenancycode:, propcode:) }
+  let(:lettings_log) { FactoryBot.create(:lettings_log, needstype: 1, tenancycode:, propcode:) }
   let(:sales_log) { FactoryBot.create(:sales_log) }
 
   context "when rendering lettings log for a support user" do
@@ -16,8 +16,8 @@ RSpec.describe LogSummaryComponent, type: :component do
       expect(result).to have_text(lettings_log.tenancycode)
       expect(result).to have_text(lettings_log.propcode)
       expect(result).to have_text("General needs")
-      expect(result).to have_text("Tenancy starts 1 January 2022")
-      expect(result).to have_text("Created 8 February 2022")
+      expect(result).to have_text("Tenancy starts #{Time.zone.today.strftime("%e %B %Y")}")
+      expect(result).to have_text("Created #{Time.zone.today.strftime("%e %B %Y")}")
       expect(result).to have_text("by Danny Rojas")
       expect(result).to have_content("Owned by\n              DLUHC")
       expect(result).to have_content("Managed by\n              DLUHC")
