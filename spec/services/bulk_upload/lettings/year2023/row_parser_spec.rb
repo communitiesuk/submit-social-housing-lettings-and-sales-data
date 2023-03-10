@@ -6,7 +6,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
   let(:now) { Time.zone.today }
 
   let(:attributes) { { bulk_upload: } }
-  let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }
+  let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: nil) }
   let(:user) { create(:user, organisation: owning_org) }
 
   let(:owning_org) { create(:organisation, :with_old_visible_id) }
@@ -82,133 +82,139 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         end
       end
 
-  #     context "when valid row" do
-  #       let(:attributes) do
-  #         {
-  #           bulk_upload:,
-  #           field_1: "1",
-  #           field_4: scheme.old_visible_id,
-  #           field_7: "123",
-  #           field_96: now.day.to_s,
-  #           field_97: now.month.to_s,
-  #           field_98: now.strftime("%g"),
-  #           field_108: "EC1N",
-  #           field_109: "2TD",
-  #           field_111: owning_org.old_visible_id,
-  #           field_113: managing_org.old_visible_id,
-  #           field_130: "1",
-  #           field_134: "2",
-  #           field_102: "2",
-  #           field_103: "1",
-  #           field_104: "1",
-  #           field_101: "1",
-  #           field_133: "2",
-  #           field_8: "1",
-  #           field_9: "2",
-  #           field_132: "1",
+      context "when valid row" do
+        let(:attributes) do
+          {
+            bulk_upload:,
+            field_5: "1",
+            field_15: scheme.old_visible_id,
+            field_13: "123",
+            field_7: now.day.to_s,
+            field_8: now.month.to_s,
+            field_9: now.strftime("%g"),
+            field_23: "EC1N",
+            field_24: "2TD",
+            field_1: owning_org.old_visible_id,
+            field_2: managing_org.old_visible_id,
+            field_11: "1",
+            field_6: "2",
+            field_29: "2",
+            field_30: "1",
+            field_31: "1",
+            field_32: "1",
+            field_39: "2",
+            field_40: "1",
+            field_41: "2",
+            field_45: "1",
 
-  #           field_12: "42",
-  #           field_13: "41",
-  #           field_14: "20",
-  #           field_15: "18",
-  #           field_16: "16",
-  #           field_17: "14",
-  #           field_18: "12",
-  #           field_19: "20",
+            field_46: "42",
+            field_52: "41",
+            field_56: "20",
+            field_60: "18",
+            field_64: "16",
+            field_68: "14",
+            field_72: "12",
+            field_76: "20",
 
-  #           field_20: "F",
-  #           field_21: "M",
-  #           field_22: "F",
-  #           field_23: "M",
-  #           field_24: "F",
-  #           field_25: "M",
-  #           field_26: "F",
-  #           field_27: "M",
+            field_47: "F",
+            field_53: "M",
+            field_57: "F",
+            field_61: "M",
+            field_65: "F",
+            field_69: "M",
+            field_73: "F",
+            field_77: "M",
 
-  #           field_43: "17",
-  #           field_44: "18",
+            field_48: "17",
+            field_49: "18",
 
-  #           field_28: "P",
-  #           field_29: "C",
-  #           field_30: "X",
-  #           field_31: "R",
-  #           field_32: "C",
-  #           field_33: "C",
-  #           field_34: "X",
+            field_51: "P",
+            field_55: "C",
+            field_59: "X",
+            field_63: "R",
+            field_67: "C",
+            field_71: "C",
+            field_75: "X",
 
-  #           field_35: "1",
-  #           field_36: "2",
-  #           field_37: "6",
-  #           field_38: "7",
-  #           field_39: "8",
-  #           field_40: "9",
-  #           field_41: "0",
-  #           field_42: "10",
+            field_50: "1",
+            field_54: "2",
+            field_58: "6",
+            field_62: "7",
+            field_66: "8",
+            field_70: "9",
+            field_74: "0",
+            field_78: "10",
 
-  #           field_45: "1",
-  #           field_114: "4",
-  #           field_46: "1",
+            field_79: "1",
+            field_80: "4",
+            field_81: "1",
 
-  #           field_47: "1",
+            field_82: "1",
 
-  #           field_118: "2",
+            field_89: "2",
 
-  #           field_66: "5",
-  #           field_67: "2",
-  #           field_52: "31",
-  #           field_61: "3",
-  #           field_68: "12",
+            field_100: "5",
+            field_101: "2",
+            field_102: "31",
+            field_104: "3",
+            field_105: "12",
 
-  #           field_65: "1",
-  #           field_63: "EC1N",
-  #           field_64: "2TD",
+            field_106: "1",
+            field_107: "EC1N",
+            field_108: "2TD",
 
-  #           field_69: "1",
-  #           field_70: "1",
-  #           field_71: "",
-  #           field_72: "1",
-  #           field_73: "",
-  #           field_74: "",
+            field_110: "1",
+            field_111: "1",
+            field_112: "",
+            field_113: "1",
+            field_114: "",
+            field_115: "",
 
-  #           field_75: "1",
-  #           field_76: "2",
-  #           field_77: "2",
+            field_116: "1",
+            field_117: "2",
+            field_118: "2",
 
-  #           field_78: "2",
+            field_119: "2",
 
-  #           field_51: "1",
-  #           field_50: "2000",
-  #           field_116: "2",
-  #           field_48: "1",
-  #           field_49: "1",
+            field_120: "1",
+            field_122: "2000",
+            field_121: "2",
+            field_123: "1",
+            field_124: "1",
 
-  #           field_79: "4",
-  #           field_80: "1234.56",
-  #           field_87: "1",
-  #           field_88: "234.56",
+            field_126: "4",
+            field_128: "1234.56",
+            field_129: "321.32",
+            field_130: "13.14",
+            field_131: "101.11",
+            field_132: "1500.19",
+            field_133: "1",
+            field_134: "234.56",
 
-  #           field_106: "15",
-  #           field_99: "0",
-  #           field_89: now.day.to_s,
-  #           field_90: now.month.to_s,
-  #           field_91: now.strftime("%g"),
-  #         }
-  #       end
+            field_27: "15",
+            field_28: "0",
+            field_33: now.day.to_s,
+            field_34: now.month.to_s,
+            field_35: now.strftime("%g"),
 
-  #       it "returns true" do
-  #         expect(parser).to be_valid
-  #       end
+            field_4: "1",
+          }
+        end
 
-  #       it "instantiates a log with everything completed", aggregate_failures: true do
-  #         questions = parser.send(:questions).reject do |q|
-  #           parser.send(:log).optional_fields.include?(q.id) || q.completed?(parser.send(:log))
-  #         end
+        it "returns true" do
+          expect(parser).to be_valid
+        end
 
-  #         expect(questions.map(&:id).size).to eq(0)
-  #         expect(questions.map(&:id)).to eql([])
-  #       end
-  #     end
-  #   end
+        it "instantiates a log with everything completed", aggregate_failures: true do
+          questions = parser.send(:questions).reject do |q|
+            parser.send(:log).optional_fields.include?(q.id) || q.completed?(parser.send(:log))
+          end
+
+          expect(questions.map(&:id).size).to eq(0)
+          expect(questions.map(&:id)).to eql([])
+        end
+      end
+    end
 
   #   context "when setup section not complete" do
   #     let(:attributes) { { bulk_upload:, field_7: "123" } }
@@ -686,7 +692,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
   #         expect(parser.errors[:field_103]).to be_present
   #       end
   #     end
-    end
+  #   end
   end
 
   # describe "#log" do

@@ -292,9 +292,493 @@ class BulkUpload::Lettings::Year2023::RowParser
       .empty?
   end
 
+  def log
+    @log ||= LettingsLog.new(attributes_for_log)
+  end
+
 private
 
   def attribute_set
     @attribute_set ||= instance_variable_get(:@attributes)
+  end
+
+  def questions
+    log.form.subsections.flat_map { |ss| ss.applicable_questions(log) }
+  end
+
+  # TODO: whole method needs re-mapping
+  def attributes_for_log
+    attributes = {}
+
+    attributes["lettype"] = field_5
+    attributes["tenancycode"] = field_13
+    attributes["la"] = field_25
+    attributes["postcode_known"] = postcode_known
+    attributes["postcode_full"] = postcode_full
+    attributes["owning_organisation_id"] = owning_organisation_id
+    attributes["managing_organisation_id"] = managing_organisation_id
+    attributes["renewal"] = renewal
+    attributes["scheme"] = scheme
+    attributes["location"] = location
+    attributes["created_by"] = bulk_upload.user
+    attributes["needstype"] = field_4
+    attributes["rent_type"] = rent_type
+    attributes["startdate"] = startdate
+    attributes["unittype_gn"] = field_29
+    attributes["builtype"] = field_30
+    attributes["wchair"] = field_31
+    attributes["beds"] = field_32
+    attributes["joint"] = field_39
+    attributes["startertenancy"] = field_40
+    attributes["tenancy"] = field_41
+    attributes["tenancyother"] = field_42
+    attributes["tenancylength"] = field_43
+    attributes["declaration"] = field_45
+
+    attributes["age1_known"] = field_46 == "R" ? 1 : 0
+    attributes["age1"] = field_46 if attributes["age1_known"].zero?
+
+    attributes["age2_known"] = field_52 == "R" ? 1 : 0
+    attributes["age2"] = field_52 if attributes["age2_known"].zero?
+
+    attributes["age3_known"] = field_56 == "R" ? 1 : 0
+    attributes["age3"] = field_56 if attributes["age3_known"].zero?
+
+    attributes["age4_known"] = field_60 == "R" ? 1 : 0
+    attributes["age4"] = field_60 if attributes["age4_known"].zero?
+
+    attributes["age5_known"] = field_64 == "R" ? 1 : 0
+    attributes["age5"] = field_64 if attributes["age5_known"].zero?
+
+    attributes["age6_known"] = field_68 == "R" ? 1 : 0
+    attributes["age6"] = field_68 if attributes["age6_known"].zero?
+
+    attributes["age7_known"] = field_72 == "R" ? 1 : 0
+    attributes["age7"] = field_72 if attributes["age7_known"].zero?
+
+    attributes["age8_known"] = field_76 == "R" ? 1 : 0
+    attributes["age8"] = field_76 if attributes["age8_known"].zero?
+
+    attributes["sex1"] = field_47
+    attributes["sex2"] = field_53
+    attributes["sex3"] = field_57
+    attributes["sex4"] = field_61
+    attributes["sex5"] = field_65
+    attributes["sex6"] = field_69
+    attributes["sex7"] = field_73
+    attributes["sex8"] = field_77
+
+    attributes["ethnic_group"] = ethnic_group_from_ethnic
+    attributes["ethnic"] = field_48
+    attributes["national"] = field_49
+
+    attributes["relat2"] = field_51
+    attributes["relat3"] = field_55
+    attributes["relat4"] = field_59
+    attributes["relat5"] = field_63
+    attributes["relat6"] = field_67
+    attributes["relat7"] = field_71
+    attributes["relat8"] = field_75
+
+    attributes["ecstat1"] = field_50
+    attributes["ecstat2"] = field_54
+    attributes["ecstat3"] = field_58
+    attributes["ecstat4"] = field_62
+    attributes["ecstat5"] = field_66
+    attributes["ecstat6"] = field_70
+    attributes["ecstat7"] = field_74
+    attributes["ecstat8"] = field_78
+
+    attributes["details_known_2"] = details_known(2)
+    attributes["details_known_3"] = details_known(3)
+    attributes["details_known_4"] = details_known(4)
+    attributes["details_known_5"] = details_known(5)
+    attributes["details_known_6"] = details_known(6)
+    attributes["details_known_7"] = details_known(7)
+    attributes["details_known_8"] = details_known(8)
+
+    attributes["armedforces"] = field_79
+    attributes["leftreg"] = leftreg
+    attributes["reservist"] = field_81
+
+    attributes["preg_occ"] = field_82
+
+    attributes["housingneeds"] = housingneeds
+    attributes["housingneeds_type"] = housingneeds_type
+    attributes["housingneeds_other"] = housingneeds_other
+
+    attributes["illness"] = field_89
+
+    attributes["layear"] = field_100
+    attributes["waityear"] = field_101
+    attributes["reason"] = field_102
+    attributes["reasonother"] = field_103
+    attributes["prevten"] = field_104
+    attributes["homeless"] = homeless
+
+    attributes["prevloc"] = prevloc
+    attributes["previous_la_known"] = previous_la_known
+    attributes["ppcodenk"] = ppcodenk
+    attributes["ppostcode_full"] = ppostcode_full
+
+    attributes["reasonpref"] = field_110
+    attributes["rp_homeless"] = field_111
+    attributes["rp_insan_unsat"] = field_112
+    attributes["rp_medwel"] = field_113
+    attributes["rp_hardship"] = field_114
+    attributes["rp_dontknow"] = field_115
+
+    attributes["cbl"] = cbl
+    attributes["chr"] = chr
+    attributes["cap"] = cap
+    attributes["letting_allocation_unknown"] = letting_allocation_unknown
+
+    attributes["referral"] = field_119
+
+    attributes["net_income_known"] = net_income_known
+    attributes["earnings"] = earnings
+    attributes["incfreq"] = field_121
+    attributes["hb"] = field_123
+    attributes["benefits"] = field_124
+
+    attributes["period"] = field_126
+    attributes["brent"] = field_128
+    attributes["scharge"] = field_129
+    attributes["pscharge"] = field_130
+    attributes["supcharg"] = field_131
+    attributes["tcharge"] = field_132
+    attributes["chcharge"] = field_127
+    attributes["household_charge"] = field_125
+    attributes["hbrentshortfall"] = field_133
+    attributes["tshortfall_known"] = tshortfall_known
+    attributes["tshortfall"] = field_134
+
+    attributes["hhmemb"] = hhmemb
+
+    attributes["unitletas"] = field_26
+    attributes["rsnvac"] = rsnvac
+    attributes["sheltered"] = field_44
+
+    attributes["illness_type_1"] = field_98
+    attributes["illness_type_2"] = field_92
+    attributes["illness_type_3"] = field_95
+    attributes["illness_type_4"] = field_90
+    attributes["illness_type_5"] = field_91
+    attributes["illness_type_6"] = field_93
+    attributes["illness_type_7"] = field_94
+    attributes["illness_type_8"] = field_97
+    attributes["illness_type_9"] = field_96
+    attributes["illness_type_10"] = field_99
+
+    attributes["irproduct_other"] = field_12
+
+    attributes["offered"] = field_28
+
+    attributes["propcode"] = field_14
+
+    attributes["majorrepairs"] = majorrepairs
+
+    attributes["mrcdate"] = mrcdate
+
+    attributes["voiddate"] = voiddate
+
+    attributes["first_time_property_let_as_social_housing"] = first_time_property_let_as_social_housing
+
+    attributes
+  end
+
+  def postcode_known
+    if postcode_full.present?
+      1
+    elsif field_25.present?
+      0
+    end
+  end
+
+  def postcode_full
+    "#{field_23} #{field_24}" if field_23 && field_24
+  end
+
+  def owning_organisation
+    Organisation.find_by_id_on_mulitple_fields(field_1)
+  end
+
+  def owning_organisation_id
+    owning_organisation&.id
+  end
+
+  def managing_organisation
+    Organisation.find_by_id_on_mulitple_fields(field_2)
+  end
+
+  def managing_organisation_id
+    managing_organisation&.id
+  end
+
+  def renewal
+    case field_6
+    when 1
+      1
+    when 2
+      0
+    when nil
+      rsnvac == 14 ? 1 : 0
+    end
+  end
+
+  def rsnvac
+    field_27
+  end
+
+  def scheme
+    @scheme ||= Scheme.find_by_id_on_mulitple_fields(field_15)
+  end
+
+  def location
+    return if scheme.nil?
+
+    @location ||= scheme.locations.find_by_id_on_mulitple_fields(field_16)
+  end
+
+  def renttype
+    case field_5
+    when 1, 2, 3, 4
+      :social
+    when 5, 6, 7, 8
+      :affordable
+    when 9, 10, 11, 12
+      :intermediate
+    end
+  end
+
+  def rent_type
+    case renttype
+    when :social
+      Imports::LettingsLogsImportService::RENT_TYPE[:social_rent]
+    when :affordable
+      if field_10 == 1
+        Imports::LettingsLogsImportService::RENT_TYPE[:london_affordable_rent]
+      else
+        Imports::LettingsLogsImportService::RENT_TYPE[:affordable_rent]
+      end
+    when :intermediate
+      case field_11
+      when 1
+        Imports::LettingsLogsImportService::RENT_TYPE[:rent_to_buy]
+      when 2
+        Imports::LettingsLogsImportService::RENT_TYPE[:london_living_rent]
+      when 3
+        Imports::LettingsLogsImportService::RENT_TYPE[:other_intermediate_rent_product]
+      end
+    end
+  end
+
+  def startdate
+    Date.new(field_9 + 2000, field_8, field_7) if field_9.present? && field_8.present? && field_7.present?
+  rescue Date::Error
+    Date.new
+  end
+
+  def ethnic_group_from_ethnic
+    return nil if field_48.blank?
+
+    case field_48
+    when 1, 2, 3, 18
+      0
+    when 4, 5, 6, 7
+      1
+    when 8, 9, 10, 11, 15
+      2
+    when 12, 13, 14
+      3
+    when 16, 19
+      4
+    when 17
+      17
+    end
+  end
+
+  def details_known(person_n)
+    send("person_#{person_n}_present?") ? 0 : 1
+  end
+
+  def person_2_present?
+    field_51.present? && field_52.present? && field_53.present?
+  end
+
+  def person_3_present?
+    field_55.present? && field_56.present? && field_57.present?
+  end
+
+  def person_4_present?
+    field_59.present? && field_60.present? && field_61.present?
+  end
+
+  def person_5_present?
+    field_63.present? && field_64.present? && field_65.present?
+  end
+
+  def person_6_present?
+    field_67.present? && field_68.present? && field_69.present?
+  end
+
+  def person_7_present?
+    field_71.present? && field_72.present? && field_73.present?
+  end
+
+  def person_8_present?
+    field_75.present? && field_76.present? && field_77.present?
+  end
+
+  def leftreg
+    case field_80
+    when 3
+      3
+    when 4
+      1
+    when 5
+      2
+    when 6
+      0
+    end
+  end
+
+  def housingneeds
+    if field_87 == 1
+      2
+    elsif field_88 == 1
+      3
+    else
+      2
+    end
+  end
+
+  def housingneeds_type
+    if field_83 == 1
+      0
+    elsif field_84 == 1
+      1
+    elsif field_85 == 1
+      2
+    end
+  end
+
+  def housingneeds_other
+    return 1 if field_86 == 1
+  end
+
+  def homeless
+    case field_105
+    when 1
+      1
+    when 12
+      11
+    end
+  end
+
+  def prevloc
+    field_109
+  end
+
+  def previous_la_known
+    prevloc.present? ? 1 : 0
+  end
+
+  def ppcodenk
+    case field_106
+    when 1
+      1
+    when 2
+      0
+    end
+  end
+
+  def ppostcode_full
+    "#{field_107} #{field_108}".strip.gsub(/\s+/, " ")
+  end
+
+  def cbl
+    case field_116
+    when 2
+      0
+    when 1
+      1
+    end
+  end
+
+  def chr
+    case field_117
+    when 2
+      0
+    when 1
+      1
+    end
+  end
+
+  def cap
+    case field_118
+    when 2
+      0
+    when 1
+      1
+    end
+  end
+
+  def letting_allocation_unknown
+    [cbl, chr, cap].all?(0) ? 1 : 0
+  end
+
+  def net_income_known
+    case field_120
+    when 1
+      0
+    when 2
+      1
+    when 3
+      1
+    when 4
+      2
+    end
+  end
+
+  def earnings
+    field_122.round if field_122.present?
+  end
+
+  def tshortfall_known
+    field_133 == 1 ? 0 : 1
+  end
+
+  def hhmemb
+    [
+      person_2_present?,
+      person_3_present?,
+      person_4_present?,
+      person_5_present?,
+      person_6_present?,
+      person_7_present?,
+      person_8_present?,
+    ].count(true) + 1
+  end
+
+  def majorrepairs
+    mrcdate.present? ? 1 : 0
+  end
+
+  def mrcdate
+    Date.new(field_38 + 2000, field_37, field_36) if field_38.present? && field_37.present? && field_36.present?
+  end
+
+  def voiddate
+    Date.new(field_35 + 2000, field_34, field_33) if field_35.present? && field_34.present? && field_33.present?
+  end
+
+  def first_time_property_let_as_social_housing
+    case rsnvac
+    when 15, 16, 17
+      1
+    else
+      0
+    end
   end
 end
