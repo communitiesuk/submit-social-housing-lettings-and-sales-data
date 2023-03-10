@@ -84,7 +84,7 @@ class LettingsLog < Log
 
   def la
     if location
-      location.location_code
+      location.linked_local_authorities.active(startdate).first.code
     else
       super
     end

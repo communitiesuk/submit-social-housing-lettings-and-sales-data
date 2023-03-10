@@ -1870,6 +1870,36 @@ RSpec.describe LettingsLog do
           expect(record_from_db["location_id"]).to eq(location.id)
           expect(lettings_log["location_id"]).to eq(location.id)
         end
+
+        context "and the location has multiple local authorities for different years" do
+          before do
+            LocalAuthorityLink.create!(local_authority_id: LocalAuthority.find_by(code: "E07000030").id, linked_local_authority_id: LocalAuthority.find_by(code: "E06000063").id)
+            location.update!(location_code: "E07000030")
+            Timecop.freeze(startdate)
+            lettings_log.update!(startdate:)
+            lettings_log.reload
+          end
+
+          after { Timecop.unfreeze }
+
+          context "with 22/23" do
+            let(:startdate) { Time.zone.local(2022, 4, 2) }
+
+            it "returns the correct la" do
+              expect(lettings_log["location_id"]).to eq(location.id)
+              expect(lettings_log.la).to eq("E07000030")
+            end
+          end
+
+          context "with 23/24" do
+            let(:startdate) { Time.zone.local(2023, 4, 2) }
+
+            it "returns the correct la" do
+              expect(lettings_log["location_id"]).to eq(location.id)
+              expect(lettings_log.la).to eq("E06000063")
+            end
+          end
+        end
       end
 
       context "and not renewal" do
