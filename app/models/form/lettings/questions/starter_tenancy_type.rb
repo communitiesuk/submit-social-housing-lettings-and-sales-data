@@ -12,11 +12,26 @@ class Form::Lettings::Questions::StarterTenancyType < ::Form::Question
   end
 
   ANSWER_OPTIONS = {
-    "4" => { "value" => "Assured Shorthold Tenancy (AST) – Fixed term" },
-    "6" => { "value" => "Secure – fixed term" },
-    "2" => { "value" => "Assured – lifetime" },
-    "7" => { "value" => "Secure – lifetime" },
-    "5" => { "value" => "Licence agreement" },
-    "3" => { "value" => "Other" },
+    "4" => {
+      "value" => "Assured Shorthold Tenancy (AST) – Fixed term",
+      "hint" => "Mostly housing associations provide these. Fixed term tenancies are intended to be for a set amount of time up to 20 years.",
+    },
+    "6" => {
+      "value" => "Secure – fixed term",
+      "hint" => "Mostly local authorities provide these. Fixed term tenancies are intended to be for a set amount of time up to 20 years.",
+    },
+    "2" => {
+      "value" => "Assured – lifetime",
+    },
+    "7" => {
+      "value" => "Secure – lifetime",
+    },
+    "5" => {
+      "value" => "Licence agreement",
+      "hint" => "Licence agreements are mostly used for Supported Housing and work on a rolling basis.",
+    },
+    "3" => {
+      "value" => "Other",
+    },
   }.freeze
 end
