@@ -3,11 +3,11 @@ FactoryBot.define do
     created_by { FactoryBot.create(:user) }
     owning_organisation { created_by.organisation }
     managing_organisation { created_by.organisation }
+    startdate { Time.zone.today }
     trait :about_completed do
       renewal { 0 }
       needstype { 1 }
       rent_type { 1 }
-      startdate { Time.zone.local(2022, 5, 1) }
     end
     trait :in_progress do
       status { 1 }
@@ -18,7 +18,6 @@ FactoryBot.define do
       age2 { 19 }
       renewal { 1 }
       rent_type { 1 }
-      startdate { Time.zone.local(2021, 5, 1) }
     end
     trait :soft_validations_triggered do
       status { 1 }
@@ -132,9 +131,8 @@ FactoryBot.define do
       hbrentshortfall { 1 }
       tshortfall { 12 }
       property_relet { 0 }
-      mrcdate { Time.zone.local(2020, 5, 5, 10, 36, 49) }
+      mrcdate { Time.zone.yesterday }
       incref { 0 }
-      startdate { Time.zone.today }
       armedforces { 1 }
       builtype { 1 }
       unitletas { 2 }
@@ -155,7 +153,7 @@ FactoryBot.define do
       sheltered { 0 }
       household_charge { 0 }
     end
-    created_at { Time.utc(2022, 2, 8, 16, 52, 15) }
-    updated_at { Time.utc(2022, 2, 8, 16, 52, 15) }
+    created_at { Time.zone.today }
+    updated_at { Time.zone.today }
   end
 end
