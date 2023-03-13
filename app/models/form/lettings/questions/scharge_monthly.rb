@@ -12,7 +12,6 @@ class Form::Lettings::Questions::SchargeMonthly < ::Form::Question
     @step = 0.01
     @fields_to_add = %w[brent scharge pscharge supcharg]
     @result_field = "tcharge"
-    @hidden_in_check_answers = true
     @prefix = "£"
     @suffix = " every month"
     @question_number = 96
