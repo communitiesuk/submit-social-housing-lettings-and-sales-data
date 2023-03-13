@@ -203,23 +203,23 @@ class BulkUpload::Lettings::Year2023::RowParser
   attribute :field_57, :string
   attribute :field_58, :integer
   attribute :field_59, :string
-  attribute :field_60, :integer
+  attribute :field_60, :string
   attribute :field_61, :string
   attribute :field_62, :integer
   attribute :field_63, :string
-  attribute :field_64, :integer
+  attribute :field_64, :string
   attribute :field_65, :string
   attribute :field_66, :integer
   attribute :field_67, :string
-  attribute :field_68, :integer
+  attribute :field_68, :string
   attribute :field_69, :string
   attribute :field_70, :integer
   attribute :field_71, :string
-  attribute :field_72, :integer
+  attribute :field_72, :string
   attribute :field_73, :string
   attribute :field_74, :integer
   attribute :field_75, :string
-  attribute :field_76, :integer
+  attribute :field_76, :string
   attribute :field_77, :string
   attribute :field_78, :integer
   attribute :field_79, :integer
@@ -265,7 +265,7 @@ class BulkUpload::Lettings::Year2023::RowParser
   attribute :field_119, :integer
   attribute :field_120, :integer
   attribute :field_121, :integer
-  attribute :field_122, :integer
+  attribute :field_122, :decimal
   attribute :field_123, :integer
   attribute :field_124, :integer
   attribute :field_125, :integer
@@ -279,8 +279,78 @@ class BulkUpload::Lettings::Year2023::RowParser
   attribute :field_133, :integer
   attribute :field_134, :decimal
 
+  validates :field_5, presence: { message: I18n.t("validations.not_answered", question: "letting type") },
+                      inclusion: { in: (1..12).to_a, message: I18n.t("validations.invalid_option", question: "letting type") }
+  validates :field_15, presence: { if: proc { [2, 4, 6, 8, 10, 12].include?(field_5) } }
+
+  validates :field_46, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 1 must be a number or the letter R" }
+  validates :field_52, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 2 must be a number or the letter R" }
+  validates :field_56, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 3 must be a number or the letter R" }
+  validates :field_60, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 4 must be a number or the letter R" }
+  validates :field_64, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 5 must be a number or the letter R" }
+  validates :field_68, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 6 must be a number or the letter R" }
+  validates :field_72, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 7 must be a number or the letter R" }
+  validates :field_76, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 8 must be a number or the letter R" }
+
+  validates :field_7, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (day)") }
+  validates :field_8, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (month)") }
+  validates :field_9, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (year)") }
+
+  validates :field_9, format: { with: /\A\d{2}\z/, message: I18n.t("validations.setup.startdate.year_not_two_digits") }
+
+  validate :validate_data_types
+  validate :validate_nulls
+  validate :validate_relevant_collection_window
+  validate :validate_la_with_local_housing_referral
+  validate :validate_cannot_be_la_referral_if_general_needs_and_la
+  validate :validate_leaving_reason_for_renewal
+  validate :validate_lettings_type_matches_bulk_upload
+  validate :validate_only_one_housing_needs_type
+  validate :validate_no_disabled_needs_conjunction
+  validate :validate_dont_know_disabled_needs_conjunction
+  validate :validate_no_and_dont_know_disabled_needs_conjunction
+
+  validate :validate_owning_org_permitted
+  validate :validate_owning_org_owns_stock
+  validate :validate_owning_org_exists
+  validate :validate_owning_org_data_given
+
+  validate :validate_managing_org_related
+  validate :validate_managing_org_exists
+  validate :validate_managing_org_data_given
+
+  validate :validate_scheme_related
+  validate :validate_scheme_exists
+  validate :validate_scheme_data_given
+
+  validate :validate_location_related
+  validate :validate_location_exists
+  validate :validate_location_data_given
+
   def self.question_for_field(field)
     QUESTIONS[field]
+  end
+
+  def valid?
+    errors.clear
+
+    return true if blank_row?
+
+    super
+
+    log.valid?
+
+    log.errors.each do |error|
+      fields = field_mapping_for_errors[error.attribute] || []
+
+      fields.each do |field|
+        unless errors.include?(field)
+          errors.add(field, error.type)
+        end
+      end
+    end
+
+    errors.blank?
   end
 
   def blank_row?
@@ -296,7 +366,383 @@ class BulkUpload::Lettings::Year2023::RowParser
     @log ||= LettingsLog.new(attributes_for_log)
   end
 
+  def block_log_creation!
+    self.block_log_creation = true
+  end
+
+  def block_log_creation?
+    block_log_creation
+  end
+
 private
+
+  def start_date
+    return if field_7.blank? || field_8.blank? || field_9.blank?
+
+    Date.parse("20#{field_9.to_s.rjust(2, '0')}-#{field_8}-#{field_7}")
+  rescue StandardError
+    nil
+  end
+
+  def validate_no_and_dont_know_disabled_needs_conjunction
+    if field_87 == 1 && field_88 == 1
+      errors.add(:field_87, I18n.t("validations.household.housingneeds.no_and_dont_know_disabled_needs_conjunction"))
+      errors.add(:field_88, I18n.t("validations.household.housingneeds.no_and_dont_know_disabled_needs_conjunction"))
+    end
+  end
+
+  def validate_dont_know_disabled_needs_conjunction
+    if field_88 == 1 && [field_83, field_84, field_85, field_86].compact.count.positive?
+      errors.add(:field_88, I18n.t("validations.household.housingneeds.dont_know_disabled_needs_conjunction"))
+    end
+  end
+
+  def validate_no_disabled_needs_conjunction
+    if field_87 == 1 && [field_83, field_84, field_85, field_86].compact.count.positive?
+      errors.add(:field_87, I18n.t("validations.household.housingneeds.no_disabled_needs_conjunction"))
+    end
+  end
+
+  def validate_only_one_housing_needs_type
+    if [field_83, field_84, field_85].compact.count.positive?
+      errors.add(:field_83, I18n.t("validations.household.housingneeds_type.only_one_option_permitted"))
+      errors.add(:field_84, I18n.t("validations.household.housingneeds_type.only_one_option_permitted"))
+      errors.add(:field_85, I18n.t("validations.household.housingneeds_type.only_one_option_permitted"))
+    end
+  end
+
+  def validate_lettings_type_matches_bulk_upload
+    if [1, 3, 5, 7, 9, 11].include?(field_5) && !general_needs?
+      errors.add(:field_5, I18n.t("validations.setup.lettype.supported_housing_mismatch"))
+    end
+
+    if [2, 4, 6, 8, 10, 12].include?(field_5) && !supported_housing?
+      errors.add(:field_5, I18n.t("validations.setup.lettype.general_needs_mismatch"))
+    end
+  end
+
+  def validate_leaving_reason_for_renewal
+    if field_6 == 1 && ![40, 42].include?(field_102)
+      errors.add(:field_102, I18n.t("validations.household.reason.renewal_reason_needed"))
+    end
+  end
+
+  def general_needs?
+    field_4 == 1
+  end
+
+  def supported_housing?
+    field_4 == 2
+  end
+
+  def validate_cannot_be_la_referral_if_general_needs_and_la
+    if field_119 == 4 && general_needs? && owning_organisation && owning_organisation.la?
+      errors.add :field_119, I18n.t("validations.household.referral.la_general_needs.prp_referred_by_la")
+    end
+  end
+
+  def validate_la_with_local_housing_referral
+    if field_119 == 3 && owning_organisation && owning_organisation.la?
+      errors.add(:field_119, I18n.t("validations.household.referral.nominated_by_local_ha_but_la"))
+    end
+  end
+
+  def validate_relevant_collection_window
+    return if start_date.blank? || bulk_upload.form.blank?
+
+    unless bulk_upload.form.valid_start_date_for_form?(start_date)
+      errors.add(:field_7, I18n.t("validations.date.outside_collection_window"))
+      errors.add(:field_8, I18n.t("validations.date.outside_collection_window"))
+      errors.add(:field_9, I18n.t("validations.date.outside_collection_window"))
+    end
+  end
+
+  def validate_data_types
+    unless attribute_set["field_5"].value_before_type_cast&.match?(/\A\d+\z/)
+      errors.add(:field_5, I18n.t("validations.invalid_number", question: "letting type"))
+    end
+  end
+
+  def validate_nulls
+    field_mapping_for_errors.each do |error_key, fields|
+      question_id = error_key.to_s
+      question = questions.find { |q| q.id == question_id }
+
+      next unless question
+      next if log.optional_fields.include?(question.id)
+      next if question.completed?(log)
+
+      if setup_question?(question)
+        fields.each do |field|
+          if errors[field].present?
+            errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase), category: :setup)
+          end
+        end
+      else
+        fields.each do |field|
+          unless errors.any? { |e| fields.include?(e.attribute) }
+            errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase))
+          end
+        end
+      end
+    end
+  end
+
+  def validate_location_related
+    return if scheme.blank? || location.blank?
+
+    unless location.scheme == scheme
+      block_log_creation!
+      errors.add(:field_16, "Scheme code must relate to a location that is owned by owning organisation or managing organisation")
+    end
+  end
+
+  def location
+    return if scheme.nil?
+
+    @location ||= scheme.locations.find_by_id_on_mulitple_fields(field_16)
+  end
+
+  def validate_location_exists
+    if scheme && field_16.present? && location.nil?
+      errors.add(:field_16, "Location could be found with provided scheme code")
+    end
+  end
+
+  def validate_location_data_given
+    if bulk_upload.supported_housing? && field_16.blank?
+      errors.add(:field_16, "The scheme code must be present", category: "setup")
+    end
+  end
+
+  def validate_scheme_related
+    return unless field_15.present? && scheme.present?
+
+    owned_by_owning_org = owning_organisation && scheme.owning_organisation == owning_organisation
+    owned_by_managing_org = managing_organisation && scheme.owning_organisation == managing_organisation
+
+    unless owned_by_owning_org || owned_by_managing_org
+      block_log_creation!
+      errors.add(:field_15, "This management group code does not belong to your organisation, or any of your stock owners / managing agents")
+    end
+  end
+
+  def validate_scheme_exists
+    if field_15.present? && scheme.nil?
+      errors.add(:field_15, "The management group code is not correct")
+    end
+  end
+
+  def validate_scheme_data_given
+    if bulk_upload.supported_housing? && field_15.blank?
+      errors.add(:field_15, "The management group code is not correct", category: "setup")
+    end
+  end
+
+  def validate_managing_org_related
+    if owning_organisation && managing_organisation && !owning_organisation.can_be_managed_by?(organisation: managing_organisation)
+      block_log_creation!
+      errors.add(:field_2, "This managing organisation does not have a relationship with the owning organisation")
+    end
+  end
+
+  def validate_managing_org_exists
+    if managing_organisation.nil?
+      errors.delete(:field_2)
+      errors.add(:field_2, "The managing organisation code is incorrect")
+    end
+  end
+
+  def validate_managing_org_data_given
+    if field_2.blank?
+      errors.add(:field_2, "The managing organisation code is incorrect", category: :setup)
+    end
+  end
+
+  def validate_owning_org_owns_stock
+    if owning_organisation && !owning_organisation.holds_own_stock?
+      block_log_creation!
+      errors.delete(:field_1)
+      errors.add(:field_1, "The owning organisation code provided is for an organisation that does not own stock")
+    end
+  end
+
+  def validate_owning_org_exists
+    if owning_organisation.nil?
+      errors.delete(:field_1)
+      errors.add(:field_1, "The owning organisation code is incorrect")
+    end
+  end
+
+  def validate_owning_org_data_given
+    if field_1.blank?
+      errors.add(:field_1, "The owning organisation code is incorrect", category: :setup)
+    end
+  end
+
+  def validate_owning_org_permitted
+    if owning_organisation && !bulk_upload.user.organisation.affiliated_stock_owners.include?(owning_organisation)
+      block_log_creation!
+      errors.delete(:field_1)
+      errors.add(:field_1, "You do not have permission to add logs for this owning organisation")
+    end
+  end
+
+  def setup_question?(question)
+    log.form.setup_sections[0].subsections[0].questions.include?(question)
+  end
+
+  def field_mapping_for_errors
+    {
+      lettype: [:field_5],
+      tenancycode: [:field_13],
+      postcode_known: %i[field_25 field_23 field_24],
+      postcode_full: %i[field_25 field_23 field_24],
+      la: %i[field_25],
+      owning_organisation: [:field_1],
+      managing_organisation: [:field_2],
+      owning_organisation_id: [:field_1],
+      managing_organisation_id: [:field_2],
+      renewal: [:field_6],
+      scheme: %i[field_15 field_16],
+      created_by: [],
+      needstype: [],
+      rent_type: %i[field_5 field_10 field_11],
+      startdate: %i[field_7 field_8 field_9],
+      unittype_gn: %i[field_29],
+      builtype: %i[field_30],
+      wchair: %i[field_31],
+      beds: %i[field_32],
+      joint: %i[field_39],
+      startertenancy: %i[field_40],
+      tenancy: %i[field_41],
+      tenancyother: %i[field_42],
+      tenancylength: %i[field_43],
+      declaration: %i[field_45],
+
+      age1_known: %i[field_46],
+      age1: %i[field_46],
+      age2_known: %i[field_52],
+      age2: %i[field_52],
+      age3_known: %i[field_56],
+      age3: %i[field_56],
+      age4_known: %i[field_60],
+      age4: %i[field_60],
+      age5_known: %i[field_64],
+      age5: %i[field_64],
+      age6_known: %i[field_68],
+      age6: %i[field_68],
+      age7_known: %i[field_72],
+      age7: %i[field_72],
+      age8_known: %i[field_76],
+      age8: %i[field_76],
+
+      sex1: %i[field_47],
+      sex2: %i[field_53],
+      sex3: %i[field_57],
+      sex4: %i[field_61],
+      sex5: %i[field_65],
+      sex6: %i[field_69],
+      sex7: %i[field_73],
+      sex8: %i[field_77],
+
+      ethnic_group: %i[field_48],
+      ethnic: %i[field_48],
+      national: %i[field_49],
+
+      relat2: %i[field_51],
+      relat3: %i[field_55],
+      relat4: %i[field_59],
+      relat5: %i[field_63],
+      relat6: %i[field_67],
+      relat7: %i[field_71],
+      relat8: %i[field_75],
+
+      ecstat1: %i[field_50],
+      ecstat2: %i[field_54],
+      ecstat3: %i[field_58],
+      ecstat4: %i[field_62],
+      ecstat5: %i[field_66],
+      ecstat6: %i[field_70],
+      ecstat7: %i[field_74],
+      ecstat8: %i[field_78],
+
+      armedforces: %i[field_79],
+      leftreg: %i[field_80],
+      reservist: %i[field_81],
+      preg_occ: %i[field_82],
+      housingneeds: %i[field_82],
+
+      illness: %i[field_89],
+
+      layear: %i[field_100],
+      waityear: %i[field_101],
+      reason: %i[field_102],
+      reasonother: %i[field_103],
+      prevten: %i[field_104],
+      homeless: %i[field_105],
+
+      prevloc: %i[field_109],
+      previous_la_known: %i[field_109],
+      ppcodenk: %i[field_106],
+      ppostcode_full: %i[field_107 field_108],
+
+      reasonpref: %i[field_110],
+      rp_homeless: %i[field_111],
+      rp_insan_unsat: %i[field_112],
+      rp_medwel: %i[field_113],
+      rp_hardship: %i[field_114],
+      rp_dontknow: %i[field_115],
+
+      cbl: %i[field_116],
+      chr: %i[field_118],
+      cap: %i[field_117],
+
+      referral: %i[field_119],
+
+      net_income_known: %i[field_120],
+      earnings: %i[field_122],
+      incfreq: %i[field_121],
+      hb: %i[field_123],
+      benefits: %i[field_124],
+
+      period: %i[field_126],
+      brent: %i[field_128],
+      scharge: %i[field_129],
+      pscharge: %i[field_130],
+      supcharg: %i[field_131],
+      tcharge: %i[field_132],
+      chcharge: %i[field_127],
+      household_charge: %i[field_125],
+      hbrentshortfall: %i[field_133],
+      tshortfall: %i[field_134],
+
+      unitletas: %i[field_26],
+      rsnvac: %i[field_27],
+      sheltered: %i[field_44],
+
+      illness_type_1: %i[field_98],
+      illness_type_2: %i[field_92],
+      illness_type_3: %i[field_95],
+      illness_type_4: %i[field_90],
+      illness_type_5: %i[field_91],
+      illness_type_6: %i[field_93],
+      illness_type_7: %i[field_94],
+      illness_type_8: %i[field_97],
+      illness_type_9: %i[field_96],
+      illness_type_10: %i[field_99],
+
+      irproduct_other: %i[field_12],
+
+      offered: %i[field_28],
+      propcode: %i[field_14],
+
+      majorrepairs: %i[field_36 field_37 field_38],
+      mrcdate: %i[field_36 field_37 field_38],
+
+      voiddate: %i[field_33 field_34 field_35],
+    }
+  end
 
   def attribute_set
     @attribute_set ||= instance_variable_get(:@attributes)
@@ -336,28 +782,28 @@ private
     attributes["declaration"] = field_45
 
     attributes["age1_known"] = field_46 == "R" ? 1 : 0
-    attributes["age1"] = field_46 if attributes["age1_known"].zero?
+    attributes["age1"] = field_46 if attributes["age1_known"].zero? && field_46&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age2_known"] = field_52 == "R" ? 1 : 0
-    attributes["age2"] = field_52 if attributes["age2_known"].zero?
+    attributes["age2"] = field_52 if attributes["age2_known"].zero? && field_52&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age3_known"] = field_56 == "R" ? 1 : 0
-    attributes["age3"] = field_56 if attributes["age3_known"].zero?
+    attributes["age3"] = field_56 if attributes["age3_known"].zero? && field_56&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age4_known"] = field_60 == "R" ? 1 : 0
-    attributes["age4"] = field_60 if attributes["age4_known"].zero?
+    attributes["age4"] = field_60 if attributes["age4_known"].zero? && field_60&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age5_known"] = field_64 == "R" ? 1 : 0
-    attributes["age5"] = field_64 if attributes["age5_known"].zero?
+    attributes["age5"] = field_64 if attributes["age5_known"].zero? && field_64&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age6_known"] = field_68 == "R" ? 1 : 0
-    attributes["age6"] = field_68 if attributes["age6_known"].zero?
+    attributes["age6"] = field_68 if attributes["age6_known"].zero? && field_68&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age7_known"] = field_72 == "R" ? 1 : 0
-    attributes["age7"] = field_72 if attributes["age7_known"].zero?
+    attributes["age7"] = field_72 if attributes["age7_known"].zero? && field_72&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age8_known"] = field_76 == "R" ? 1 : 0
-    attributes["age8"] = field_76 if attributes["age8_known"].zero?
+    attributes["age8"] = field_76 if attributes["age8_known"].zero? && field_76&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["sex1"] = field_47
     attributes["sex2"] = field_53
@@ -523,6 +969,8 @@ private
       0
     when nil
       rsnvac == 14 ? 1 : 0
+    else
+      field_6
     end
   end
 
@@ -707,7 +1155,7 @@ private
   end
 
   def chr
-    case field_117
+    case field_118
     when 2
       0
     when 1
@@ -716,7 +1164,7 @@ private
   end
 
   def cap
-    case field_118
+    case field_117
     when 2
       0
     when 1

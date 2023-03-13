@@ -352,7 +352,12 @@ class BulkUpload::Lettings::Year2022::RowParser
   end
 
   def blank_row?
-    attribute_set.to_hash.reject { |k, _| %w[bulk_upload block_log_creation].include?(k) }.values.compact.empty?
+    attribute_set
+      .to_hash
+      .reject { |k, _| %w[bulk_upload block_log_creation].include?(k) }
+      .values
+      .compact
+      .empty?
   end
 
   def log
