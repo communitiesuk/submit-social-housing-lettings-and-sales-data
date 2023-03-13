@@ -36,6 +36,7 @@ Rails.application.routes.draw do
   get "/privacy-notice", to: "content#privacy_notice"
   get "/data-sharing-agreement", to: "content#data_sharing_agreement"
   get "/download-23-24-sales-form", to: "start#download_23_24_sales_form"
+  get "/download-22-23-sales-form", to: "start#download_22_23_sales_form"
 
   resource :account, only: %i[show edit], controller: "users" do
     get "edit/password", to: "users#edit_password"
