@@ -2235,6 +2235,7 @@ RSpec.describe LettingsLog do
           first_time_property_let_as_social_housing
           tenancycode
           propcode
+          chcharge
           tenancylength
         ])
       end
@@ -2248,6 +2249,7 @@ RSpec.describe LettingsLog do
           first_time_property_let_as_social_housing
           tenancycode
           propcode
+          chcharge
           tenancylength
           address_line2
           county
