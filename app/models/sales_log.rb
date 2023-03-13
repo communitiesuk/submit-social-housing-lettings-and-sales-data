@@ -151,6 +151,14 @@ class SalesLog < Log
     inc1mort == 1
   end
 
+  def buyer_two_will_live_in_property?
+    buy2livein == 1
+  end
+
+  def buyer_two_not_already_living_in_property?
+    buy2living == 2
+  end
+
   def income2_used_for_mortgage?
     inc2mort == 1
   end
@@ -248,6 +256,10 @@ class SalesLog < Log
 
   def not_joint_purchase?
     jointpur == 2
+  end
+
+  def buyer_not_interviewed?
+    noint == 1
   end
 
   def old_persons_shared_ownership?
