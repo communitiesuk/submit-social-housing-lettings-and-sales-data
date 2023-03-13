@@ -403,7 +403,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_101826) do
     t.integer "age1_known"
     t.string "sex1"
     t.integer "national"
-    t.string "othernational"
     t.integer "ethnic"
     t.integer "ethnic_group"
     t.integer "buy1livein"
