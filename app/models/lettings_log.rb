@@ -195,6 +195,14 @@ class LettingsLog < Log
     renewal == 1
   end
 
+  def starter_tenancy?
+    startertenancy == 1
+  end
+
+  def tenancy_type_fixed_term?
+    [4, 6].include? tenancy
+  end
+
   def is_general_needs?
     # 1: General Needs
     needstype == 1
