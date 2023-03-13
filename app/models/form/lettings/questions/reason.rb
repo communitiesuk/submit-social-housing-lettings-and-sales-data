@@ -58,8 +58,11 @@ class Form::Lettings::Questions::Reason < ::Form::Question
     "17" => {
       "value" => "To move nearer to work",
     },
-    "7" => {
-      "value" => "Domestic abuse",
+    "48" => {
+      "value" => "Domestic abuse - previously joint tenancy with partner",
+    },
+    "49" => {
+      "value" => "Domestic abuse - other",
     },
     "31" => {
       "value" => "Hate crime",
