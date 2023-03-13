@@ -298,10 +298,13 @@ RSpec.describe BulkUpload::Lettings::RowParser do
 
     describe "#field_4" do
       context "when nullable not permitted" do
+        let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2) }
         let(:attributes) { { bulk_upload:, field_1: "2", field_4: nil } }
 
         it "cannot be nulled" do
-          expect(parser.errors[:field_4]).to be_present
+          setup_errors = parser.errors.select { |e| e.options[:category] == "setup" }
+
+          expect(setup_errors.find { |e| e.attribute == :field_4 }).to be_present
         end
       end
 
@@ -350,6 +353,17 @@ RSpec.describe BulkUpload::Lettings::RowParser do
     end
 
     describe "#field_5" do
+      context "when not nullable" do
+        let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2) }
+        let(:attributes) { { bulk_upload:, field_1: "2", field_5: nil } }
+
+        it "cannot be nulled" do
+          setup_errors = parser.errors.select { |e| e.options[:category] == "setup" }
+
+          expect(setup_errors.find { |e| e.attribute == :field_5 }).to be_present
+        end
+      end
+
       context "when location does not exist" do
         let(:scheme) { create(:scheme, :with_old_visible_id, owning_organisation: owning_org) }
         let(:attributes) do
@@ -544,12 +558,12 @@ RSpec.describe BulkUpload::Lettings::RowParser do
       context "when all of these fields are blank" do
         let(:attributes) { { bulk_upload:, field_1: "1", field_96: nil, field_97: nil, field_98: nil } }
 
-        it "returns an error" do
-          parser.valid?
+        it "returns them as setup errors" do
+          setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
 
-          expect(parser.errors[:field_96]).to be_present
-          expect(parser.errors[:field_97]).to be_present
-          expect(parser.errors[:field_98]).to be_present
+          expect(setup_errors.find { |e| e.attribute == :field_96 }).to be_present
+          expect(setup_errors.find { |e| e.attribute == :field_97 }).to be_present
+          expect(setup_errors.find { |e| e.attribute == :field_98 }).to be_present
         end
       end
 
@@ -557,8 +571,6 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         let(:attributes) { { bulk_upload:, field_1: "1", field_96: "1", field_97: "1", field_98: nil } }
 
         it "returns an error only on blank field" do
-          parser.valid?
-
           expect(parser.errors[:field_96]).to be_blank
           expect(parser.errors[:field_97]).to be_blank
           expect(parser.errors[:field_98]).to be_present
@@ -569,8 +581,6 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         let(:attributes) { { bulk_upload:, field_98: "2022" } }
 
         it "returns an error" do
-          parser.valid?
-
           expect(parser.errors[:field_98]).to include("Tenancy start year must be 2 digits")
         end
       end
@@ -589,8 +599,6 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         let(:bulk_upload) { create(:bulk_upload, :lettings, user:, year: 2022) }
 
         it "does not return errors" do
-          parser.valid?
-
           expect(parser.errors[:field_96]).not_to be_present
           expect(parser.errors[:field_97]).not_to be_present
           expect(parser.errors[:field_98]).not_to be_present
@@ -609,8 +617,6 @@ RSpec.describe BulkUpload::Lettings::RowParser do
         let(:bulk_upload) { create(:bulk_upload, :lettings, user:, year: 2022) }
 
         it "returns errors" do
-          parser.valid?
-
           expect(parser.errors[:field_96]).to be_present
           expect(parser.errors[:field_97]).to be_present
           expect(parser.errors[:field_98]).to be_present
@@ -619,6 +625,16 @@ RSpec.describe BulkUpload::Lettings::RowParser do
     end
 
     describe "#field_111" do # owning org
+      context "when no data given" do
+        let(:attributes) { { bulk_upload:, field_1: "1", field_111: "" } }
+
+        it "is not permitted as setup error" do
+          setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
+
+          expect(setup_errors.find { |e| e.attribute == :field_111 }.message).to eql("The owning organisation code is incorrect")
+        end
+      end
+
       context "when cannot find owning org" do
         let(:attributes) { { bulk_upload:, field_111: "donotexist" } }
 

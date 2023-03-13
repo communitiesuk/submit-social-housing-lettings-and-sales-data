@@ -53,7 +53,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
         expect(error.col).to eql("L")
         expect(error.category).to be_nil
 
-        error = BulkUploadError.order(:row, :field).find_by(field: "field_111")
+        error = BulkUploadError.find_by(row: "7", category: "setup", field: "field_111")
 
         expect(error.category).to eql("setup")
       end
