@@ -188,7 +188,22 @@ RSpec.describe Validations::Sales::FinancialValidations do
 
       record.stairbought = 0
 
+      record.type = 28
+      financial_validator.validate_percentage_bought_at_least_threshold(record)
+      expect(record.errors["stairbought"]).to eq(["The minimum increase in equity while staircasing is 1%"])
+      record.errors.clear
+
       record.type = 30
+      financial_validator.validate_percentage_bought_at_least_threshold(record)
+      expect(record.errors["stairbought"]).to eq(["The minimum increase in equity while staircasing is 1%"])
+      record.errors.clear
+
+      record.type = 31
+      financial_validator.validate_percentage_bought_at_least_threshold(record)
+      expect(record.errors["stairbought"]).to eq(["The minimum increase in equity while staircasing is 1%"])
+      record.errors.clear
+
+      record.type = 32
       financial_validator.validate_percentage_bought_at_least_threshold(record)
       expect(record.errors["stairbought"]).to eq(["The minimum increase in equity while staircasing is 1%"])
       record.errors.clear
@@ -219,16 +234,12 @@ RSpec.describe Validations::Sales::FinancialValidations do
 
       record.stairbought = 1
 
-      record.type = 30
+      record.type = 28
       financial_validator.validate_percentage_bought_at_least_threshold(record)
       expect(record.errors["stairbought"]).to be_empty
       record.errors.clear
-    end
 
-    it "doesn't add an error to stairbought if the percentage bought is less than the smallest possible threshold and the shared ownership type is not one which should have a threshold associated with it" do
-      record.stairbought = 0
-
-      record.type = 28
+      record.type = 30
       financial_validator.validate_percentage_bought_at_least_threshold(record)
       expect(record.errors["stairbought"]).to be_empty
       record.errors.clear

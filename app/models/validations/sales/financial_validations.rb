@@ -57,7 +57,7 @@ module Validations::Sales::FinancialValidations
 
     if [2, 16, 18, 24].include? record.type
       threshold = 10
-    elsif record.type == 30
+    else
       threshold = 1
     end
 
