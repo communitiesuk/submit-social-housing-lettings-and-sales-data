@@ -6,6 +6,6 @@ class Form::Lettings::Pages::LeadTenantNationality < ::Form::Page
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::National.new(nil, nil, self)]
+    @questions ||= [Form::Lettings::Questions::Nationality.new(nil, nil, self)]
   end
 end
