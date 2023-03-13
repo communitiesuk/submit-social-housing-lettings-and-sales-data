@@ -16,11 +16,11 @@
         <%= f.govuk_radio_buttons_fieldset date_type_question(action),
                                             legend: { text: I18n.t("questions.location.toggle_active.apply_from") },
                                             caption: { text: title },
-                                            hint: { text: I18n.t("hints.location.toggle_active", date: collection_start_date.to_formatted_s(:govuk_date)) } do %>
+                                            hint: { text: I18n.t("hints.location.toggle_active", date: start_date.to_formatted_s(:govuk_date)) } do %>
             <%= govuk_warning_text text: I18n.t("warnings.location.#{action}.existing_logs") %>
             <%= f.govuk_radio_button date_type_question(action),
                                         "default",
-                                        label: { text: "From the start of the open collection period (#{collection_start_date.to_formatted_s(:govuk_date)})" } %>
+                                        label: { text: "From the start of the open collection period (#{start_date.to_formatted_s(:govuk_date)})" } %>
 
             <%= f.govuk_radio_button date_type_question(action),
                                         "other",
