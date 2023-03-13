@@ -35,6 +35,7 @@ Rails.application.routes.draw do
   get "/accessibility-statement", to: "content#accessibility_statement"
   get "/privacy-notice", to: "content#privacy_notice"
   get "/data-sharing-agreement", to: "content#data_sharing_agreement"
+  get "start/download_pdf"
 
   resource :account, only: %i[show edit], controller: "users" do
     get "edit/password", to: "users#edit_password"

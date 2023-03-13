@@ -19,4 +19,13 @@
       metadata: "PDF, 654 KB, 4 pages",
     },
   ]) %>
+
+  <h2 class="govuk-body-l govuk-!-margin-bottom-3">Sales 23/24</h2>
+  <%= render DocumentListComponent.new(items: [
+    {
+      name: "Sales log for buyers (2023/24)",
+      href: start_download_pdf_path,
+      metadata: "PDF, 421 KB, 8 pages",
+    },
+  ]) %>
 </div>
