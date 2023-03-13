@@ -160,7 +160,7 @@ private
     location_code = result[:location_code] if result
     if LA_CHANGES.key?(location_code) && form.start_date.year >= 2023
       LA_CHANGES[location_code]
-    else
+    elsif !(LA_CHANGES.value?(location_code) && form.start_date.year < 2023)
       location_code
     end
   end
