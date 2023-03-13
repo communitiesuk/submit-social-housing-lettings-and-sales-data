@@ -939,7 +939,15 @@
                 }
               }
             }
-          }
+          },
+          "displayed_in_tasklist": [
+            {
+              "is_supported_housing?": false
+            },
+            {
+              "is_renewal?": false
+            }
+          ]
         },
         "tenancy_information": {
           "label": "Tenancy information",
