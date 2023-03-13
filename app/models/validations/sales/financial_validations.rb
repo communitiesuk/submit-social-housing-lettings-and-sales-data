@@ -63,6 +63,7 @@ module Validations::Sales::FinancialValidations
 
     if threshold && record.stairbought < threshold
       record.errors.add :stairbought, I18n.t("validations.financial.staircasing.percentage_bought_must_be_at_least_threshold", threshold:)
+      record.errors.add :type, I18n.t("validations.setup.type.percentage_bought_must_be_at_least_threshold", threshold:)
     end
   end
 
