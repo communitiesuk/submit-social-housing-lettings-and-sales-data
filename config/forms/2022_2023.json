@@ -7774,6 +7774,42 @@
                 }
               ]
             },
+            "care_home_charges_value_check": {
+              "depends_on": [
+                {
+                  "care_home_charge_expected_not_provided?": true
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.care_home_charges.title_text"
+              },
+              "informative_text": {},
+              "questions": {
+                "carehome_charges_value_check": {
+                  "check_answer_label": "Care home charges confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "carehome_charges_value_check": 0
+                      },
+                      {
+                        "carehome_charges_value_check": 1
+                      }
+                    ]
+                  },
+                  "header": "Are you sure there are no care home charges?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
             "rent_weekly": {
               "header": "Household rent and charges",
               "description": "",
