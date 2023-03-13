@@ -12,6 +12,15 @@ RSpec.describe "Accessible Autocomplete" do
     )
   end
 
+  around do |example|
+    Timecop.freeze(Time.zone.local(2022, 1, 1)) do
+      Singleton.__init__(FormHandler)
+      example.run
+    end
+    Timecop.return
+    Singleton.__init__(FormHandler)
+  end
+
   before do
     allow(lettings_log.form).to receive(:end_date).and_return(Time.zone.today + 1.day)
     sign_in user

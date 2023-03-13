@@ -17,6 +17,15 @@ RSpec.describe "form/page" do
     end
   end
 
+  around do |example|
+    Timecop.freeze(Time.zone.local(2022, 1, 1)) do
+      Singleton.__init__(FormHandler)
+      example.run
+    end
+    Timecop.return
+    Singleton.__init__(FormHandler)
+  end
+
   before do
     assign(:log, lettings_log)
     assign(:page, page)
