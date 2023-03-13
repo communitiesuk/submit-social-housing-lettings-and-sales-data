@@ -501,6 +501,10 @@ class LettingsLog < Log
     update!(created_by: nil)
   end
 
+  def care_home_charge_expected_not_provided?
+    true
+  end
+
 private
 
   def reset_derived_questions
