@@ -1,4 +1,6 @@
 class LocationDeactivationPeriodValidator < ActiveModel::Validator
+  include CollectionTimeHelper
+
   def validate(record)
     location = record.location
     recent_deactivation = location.location_deactivation_periods.deactivations_without_reactivation.first
@@ -24,6 +26,8 @@ class LocationDeactivationPeriodValidator < ActiveModel::Validator
   end
 
   def validate_deactivation(record, location)
+    earliest_possible_deactivation = FormHandler.instance.in_crossover_period? ? previous_collection_start_date : current_collection_start_date
+
     if record.deactivation_date.blank?
       if record.deactivation_date_type.blank?
         record.errors.add(:deactivation_date_type, message: I18n.t("validations.location.toggle_date.not_selected"))
@@ -32,10 +36,10 @@ class LocationDeactivationPeriodValidator < ActiveModel::Validator
       end
     elsif location.location_deactivation_periods.any? { |period| period.reactivation_date.present? && record.deactivation_date.between?(period.deactivation_date, period.reactivation_date - 1.day) }
       record.errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation.during_deactivated_period"))
-    else
-      unless record.deactivation_date.between?(location.available_from, Time.zone.local(2200, 1, 1))
-        record.errors.add(:deactivation_date, message: I18n.t("validations.location.toggle_date.out_of_range", date: location.available_from.to_formatted_s(:govuk_date)))
-      end
+    elsif record.deactivation_date.before? earliest_possible_deactivation
+      record.errors.add(:deactivation_date, message: I18n.t("validations.location.toggle_date.out_of_range", date: earliest_possible_deactivation.to_formatted_s(:govuk_date)))
+    elsif record.deactivation_date.before? location.available_from
+      record.errors.add(:deactivation_date, message: I18n.t("validations.location.toggle_date.before_creation", date: location.available_from.to_formatted_s(:govuk_date)))
     end
   end
 end

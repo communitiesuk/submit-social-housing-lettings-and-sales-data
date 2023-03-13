@@ -20,7 +20,7 @@
             <%= govuk_warning_text text: I18n.t("warnings.location.#{action}.existing_logs") %>
             <%= f.govuk_radio_button date_type_question(action),
                                         "default",
-                                        label: { text: "From the start of the current collection period (#{collection_start_date.to_formatted_s(:govuk_date)})" } %>
+                                        label: { text: "From the start of the open collection period (#{collection_start_date.to_formatted_s(:govuk_date)})" } %>
 
             <%= f.govuk_radio_button date_type_question(action),
                                         "other",
