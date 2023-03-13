@@ -1,8 +1,8 @@
-class Form::Lettings::Pages::Shelteredaccom < ::Form::Page
+class Form::Lettings::Pages::ShelteredAccommodation < ::Form::Page
   def initialize(id, hsh, subsection)
     super
-    @id = "shelteredaccom"
-    @depends_on = [{ "needstype" => 2 }]
+    @id = "sheltered_accommodation"
+    @depends_on = [{ "is_supported_housing?" => true }]
   end
 
   def questions

@@ -39,6 +39,6 @@ RSpec.describe Form::Lettings::Questions::OfferedSocialLet, type: :model do
   end
 
   it "has the correct hint_text" do
-    expect(question.hint_text).to eq "Do not include the offer that led to this letting.This is after the last tenancy ended. If the property is being offered for let for the first time, enter 0."
+    expect(question.hint_text).to eq "Do not include the offer that led to this letting. This is after the last tenancy ended. If the property is being offered for let for the first time, enter 0."
   end
 end

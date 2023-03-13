@@ -175,7 +175,7 @@ class BulkUpload::Lettings::Validator
   end
 
   def create_logs?
-    return false if any_setup_sections_incomplete?
+    return false if any_setup_errors?
     return false if over_column_error_threshold?
     return false if row_parsers.any?(&:block_log_creation?)
 
@@ -186,8 +186,12 @@ class BulkUpload::Lettings::Validator
     QUESTIONS[field]
   end
 
-  def any_setup_sections_incomplete?
-    row_parsers.any?(&:setup_section_incomplete?)
+  def any_setup_errors?
+    bulk_upload
+      .bulk_upload_errors
+      .where(category: "setup")
+      .count
+      .positive?
   end
 
 private

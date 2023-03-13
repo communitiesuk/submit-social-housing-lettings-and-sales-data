@@ -158,7 +158,9 @@ private
   def get_inferred_la(postcode)
     result = PIO.lookup(postcode)
     location_code = result[:location_code] if result
-    unless LA_CHANGES.value?(location_code) && form.start_date.year < 2023
+    if LA_CHANGES.key?(location_code) && form.start_date.year >= 2023
+      LA_CHANGES[location_code]
+    elsif !(LA_CHANGES.value?(location_code) && form.start_date.year < 2023)
       location_code
     end
   end

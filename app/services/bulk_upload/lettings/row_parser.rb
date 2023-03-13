@@ -174,15 +174,19 @@ class BulkUpload::Lettings::RowParser
   validate :validate_owning_org_permitted
   validate :validate_owning_org_owns_stock
   validate :validate_owning_org_exists
+  validate :validate_owning_org_data_given
 
   validate :validate_managing_org_related
   validate :validate_managing_org_exists
+  validate :validate_managing_org_data_given
 
   validate :validate_scheme_related
   validate :validate_scheme_exists
+  validate :validate_scheme_data_given
 
   validate :validate_location_related
   validate :validate_location_exists
+  validate :validate_location_data_given
 
   def valid?
     errors.clear
@@ -222,10 +226,6 @@ class BulkUpload::Lettings::RowParser
     block_log_creation
   end
 
-  def setup_section_incomplete?
-    log.form.setup_sections[0].subsections[0].is_incomplete?(log)
-  end
-
 private
 
   def validate_location_related
@@ -245,7 +245,13 @@ private
 
   def validate_location_exists
     if scheme && field_5.present? && location.nil?
-      errors.add(:field_5, "Location could be found with provided scheme code", category: :setup)
+      errors.add(:field_5, "Location could be found with provided scheme code")
+    end
+  end
+
+  def validate_location_data_given
+    if bulk_upload.supported_housing? && field_5.blank?
+      errors.add(:field_5, "The scheme code must be present", category: "setup")
     end
   end
 
@@ -263,7 +269,13 @@ private
 
   def validate_scheme_exists
     if field_4.present? && scheme.nil?
-      errors.add(:field_4, "The management group code is not correct", category: :setup)
+      errors.add(:field_4, "The management group code is not correct")
+    end
+  end
+
+  def validate_scheme_data_given
+    if bulk_upload.supported_housing? && field_4.blank?
+      errors.add(:field_4, "The management group code is not correct", category: "setup")
     end
   end
 
@@ -277,6 +289,12 @@ private
   def validate_managing_org_exists
     if managing_organisation.nil?
       errors.delete(:field_113)
+      errors.add(:field_113, "The managing organisation code is incorrect")
+    end
+  end
+
+  def validate_managing_org_data_given
+    if field_113.blank?
       errors.add(:field_113, "The managing organisation code is incorrect", category: :setup)
     end
   end
@@ -292,6 +310,12 @@ private
   def validate_owning_org_exists
     if owning_organisation.nil?
       errors.delete(:field_111)
+      errors.add(:field_111, "The owning organisation code is incorrect")
+    end
+  end
+
+  def validate_owning_org_data_given
+    if field_111.blank?
       errors.add(:field_111, "The owning organisation code is incorrect", category: :setup)
     end
   end
