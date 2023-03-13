@@ -55,11 +55,11 @@ module Validations::Sales::FinancialValidations
   def validate_percentage_bought_at_least_threshold(record)
     return unless record.stairbought && record.type
 
-    if [2, 16, 18, 24].include? record.type
-      threshold = 10
-    else
-      threshold = 1
-    end
+    threshold = if [2, 16, 18, 24].include? record.type
+                  10
+                else
+                  1
+                end
 
     if threshold && record.stairbought < threshold
       record.errors.add :stairbought, I18n.t("validations.financial.staircasing.percentage_bought_must_be_at_least_threshold", threshold:)
