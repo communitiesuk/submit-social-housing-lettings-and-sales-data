@@ -11,7 +11,7 @@
 <%= form_with model: @scheme_deactivation_period, url: toggle_scheme_form_path(action, @scheme), method: "patch", local: true do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <% collection_start_date = currently_crossover_period? ? previous_collection_start_date : current_collection_start_date %>
+      <% collection_start_date = FormHandler.instance.in_crossover_period? ? previous_collection_start_date : current_collection_start_date %>
       <%= f.govuk_error_summary %>
       <%= f.govuk_radio_buttons_fieldset date_type_question(action),
                                          legend: { text: I18n.t("questions.scheme.toggle_active.apply_from") },
