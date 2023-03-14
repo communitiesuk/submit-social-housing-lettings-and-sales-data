@@ -75,7 +75,7 @@
                  item_label:,
                  total_count: @total_count,
                  csv_download_url: csv_download_url_for_controller(controller_type: controller, search: @search_term, codes_only: false),
-                 csv_codes_only_download_url: csv_download_url_for_controller(controller_type: controller, search: @search_term, codes_only: true)
+                 csv_codes_only_download_url: csv_download_url_for_controller(controller_type: controller, search: @search_term, codes_only: true),
                } %>
     <%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "logs" } %>
   </div>
