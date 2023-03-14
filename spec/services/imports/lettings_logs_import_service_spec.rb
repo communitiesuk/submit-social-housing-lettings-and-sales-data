@@ -1,7 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Imports::LettingsLogsImportService do
-  context "in 21/22" do
+  context "with 21/22 logs" do
+    subject(:lettings_log_service) { described_class.new(storage_service, logger) }
+
     around do |example|
       Timecop.freeze(Time.zone.local(2022, 1, 1)) do
         Singleton.__init__(FormHandler)
@@ -10,8 +12,6 @@ RSpec.describe Imports::LettingsLogsImportService do
       Timecop.return
       Singleton.__init__(FormHandler)
     end
-
-    subject(:lettings_log_service) { described_class.new(storage_service, logger) }
 
     let(:storage_service) { instance_double(Storage::S3Service) }
     let(:logger) { instance_double(ActiveSupport::Logger) }
@@ -393,7 +393,7 @@ RSpec.describe Imports::LettingsLogsImportService do
             hard_max: 1500,
             soft_min: 500,
             hard_min: 100,
-            )
+          )
         end
 
         it "completes the log" do
@@ -448,7 +448,9 @@ RSpec.describe Imports::LettingsLogsImportService do
     end
   end
 
-  context "in 22/23" do
+  context "with 22/23 logs" do
+    subject(:lettings_log_service) { described_class.new(storage_service, logger) }
+
     around do |example|
       Timecop.freeze(Time.zone.local(2023, 1, 1)) do
         Singleton.__init__(FormHandler)
@@ -457,8 +459,6 @@ RSpec.describe Imports::LettingsLogsImportService do
       Timecop.return
       Singleton.__init__(FormHandler)
     end
-
-    subject(:lettings_log_service) { described_class.new(storage_service, logger) }
 
     let(:storage_service) { instance_double(Storage::S3Service) }
     let(:logger) { instance_double(ActiveSupport::Logger) }
@@ -527,7 +527,7 @@ RSpec.describe Imports::LettingsLogsImportService do
       it "only updates existing lettings logs" do
         expect(logger).not_to receive(:error)
         expect(logger).not_to receive(:warn)
-        expect(logger).to receive(:info).with(/Updating lettings log/).exactly(1).times
+        expect(logger).to receive(:info).with(/Updating lettings log/).once
         expect { 2.times { lettings_log_service.create_logs(remote_folder) } }
           .to change(LettingsLog, :count).by(1)
       end
@@ -540,5 +540,4 @@ RSpec.describe Imports::LettingsLogsImportService do
       end
     end
   end
-
 end
