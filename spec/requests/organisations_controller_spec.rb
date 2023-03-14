@@ -1142,11 +1142,12 @@ RSpec.describe OrganisationsController, type: :request do
     context "when they view the logs tab" do
       before do
         FactoryBot.create(:lettings_log, owning_organisation: organisation)
-        get "/organisations/#{organisation.id}/lettings-logs"
       end
 
-      it "has a CSV download button with the correct path if at least 1 log exists" do
-        expect(page).to have_link("Download (CSV)", href: "/organisations/#{organisation.id}/logs/csv-download")
+      it "has CSV download buttons with the correct paths if at least 1 log exists" do
+        get "/organisations/#{organisation.id}/lettings-logs"
+        expect(page).to have_link("Download (CSV)", href: "/organisations/#{organisation.id}/logs/csv-download?codes_only=false")
+        expect(page).to have_link("Download (CSV, codes only)", href: "/organisations/#{organisation.id}/logs/csv-download?codes_only=true")
       end
 
       context "when you download the CSV" do
@@ -1158,16 +1159,64 @@ RSpec.describe OrganisationsController, type: :request do
         end
 
         it "only includes logs from that organisation" do
-          get "/organisations/#{organisation.id}/logs/csv-download"
+          get "/organisations/#{organisation.id}/logs/csv-download?codes_only=false"
 
           expect(page).to have_text("You've selected 3 logs.")
         end
 
         it "provides the organisation to the mail job" do
           expect {
-            post "/organisations/#{organisation.id}/logs/email-csv?status[]=completed", headers:, params: {}
-          }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed] }, false, organisation)
+            post "/organisations/#{organisation.id}/logs/email-csv?status[]=completed&codes_only=false", headers:, params: {}
+          }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed] }, false, organisation, false)
         end
+
+        it "provides the export type to the mail job" do
+          codes_only_export_type = false
+          expect {
+            post "/organisations/#{organisation.id}/logs/email-csv?codes_only=#{codes_only_export_type}", headers:, params: {}
+          }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, organisation, codes_only_export_type)
+          codes_only_export_type = true
+          expect {
+            post "/organisations/#{organisation.id}/logs/email-csv?codes_only=#{codes_only_export_type}", headers:, params: {}
+          }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, organisation, codes_only_export_type)
+        end
+      end
+    end
+
+    describe "GET #download_csv" do
+      it "renders a page with the correct header" do
+        get "/organisations/#{organisation.id}/logs/csv-download?codes_only=false", headers:, params: {}
+        header = page.find_css("h1")
+        expect(header.text).to include("Download CSV")
+      end
+
+      it "renders a form with the correct target containing a button with the correct text" do
+        get "/organisations/#{organisation.id}/logs/csv-download?codes_only=false", headers:, params: {}
+        form = page.find("form.button_to")
+        expect(form[:method]).to eq("post")
+        expect(form[:action]).to eq("/organisations/#{organisation.id}/logs/email-csv")
+        expect(form).to have_button("Send email")
+      end
+
+      it "when codes_only query parameter is false, form contains hidden field with correct value" do
+        codes_only = false
+        get "/organisations/#{organisation.id}/logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
+        hidden_field = page.find("form.button_to").find_field("codes_only", type: "hidden")
+        expect(hidden_field.value).to eq(codes_only.to_s)
+      end
+
+      it "when codes_only query parameter is true, form contains hidden field with correct value" do
+        codes_only = true
+        get "/organisations/#{organisation.id}/logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
+        hidden_field = page.find("form.button_to").find_field("codes_only", type: "hidden")
+        expect(hidden_field.value).to eq(codes_only.to_s)
+      end
+
+      it "when query string contains search parameter, form contains hidden field with correct value" do
+        search_term = "blam"
+        get "/organisations/#{organisation.id}/logs/csv-download?codes_only=true&search=#{search_term}", headers:, params: {}
+        hidden_field = page.find("form.button_to").find_field("search", type: "hidden")
+        expect(hidden_field.value).to eq(search_term)
       end
     end
 
