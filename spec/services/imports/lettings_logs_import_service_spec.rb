@@ -421,6 +421,10 @@ RSpec.describe Imports::LettingsLogsImportService do
         expect(lettings_log.location_id).not_to be_nil
         expect(lettings_log.status).to eq("completed")
       end
+
+      it "is a failing test" do
+        expect(true).to eq(false)
+      end
     end
 
     context "and this is a supported housing log with a single location under a scheme" do
