@@ -42,6 +42,7 @@ jobs:
       DB_USERNAME: postgres
       DB_PASSWORD: password
       RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+      PARALLEL_TEST_PROCESSORS: 4
 
     steps:
       - name: Get latest release with tag
