@@ -20,4 +20,12 @@ class StartController < ApplicationController
       type: "application/pdf",
     )
   end
+
+  def download_23_24_lettings_form
+    send_file(
+      Rails.root.join("public/files/2023_24_lettings_paper_form.pdf"),
+      filename: "2023-24 Lettings paper form.pdf",
+      type: "application/pdf",
+    )
+  end
 end
