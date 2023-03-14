@@ -222,52 +222,44 @@ RSpec.describe Validations::Sales::FinancialValidations do
 
       record.type = 2
       financial_validator.validate_percentage_bought_at_least_threshold(record)
-      expect(record.errors["stairbought"]).to be_empty
-      expect(record.errors["type"]).to be_empty
+      expect(record.errors).to be_empty
       record.errors.clear
 
       record.type = 16
       financial_validator.validate_percentage_bought_at_least_threshold(record)
-      expect(record.errors["stairbought"]).to be_empty
-      expect(record.errors["type"]).to be_empty
+      expect(record.errors).to be_empty
       record.errors.clear
 
       record.type = 18
       financial_validator.validate_percentage_bought_at_least_threshold(record)
-      expect(record.errors["stairbought"]).to be_empty
-      expect(record.errors["type"]).to be_empty
+      expect(record.errors).to be_empty
       record.errors.clear
 
       record.type = 24
       financial_validator.validate_percentage_bought_at_least_threshold(record)
-      expect(record.errors["stairbought"]).to be_empty
-      expect(record.errors["type"]).to be_empty
+      expect(record.errors).to be_empty
       record.errors.clear
 
       record.stairbought = 1
 
       record.type = 28
       financial_validator.validate_percentage_bought_at_least_threshold(record)
-      expect(record.errors["stairbought"]).to be_empty
-      expect(record.errors["type"]).to be_empty
+      expect(record.errors).to be_empty
       record.errors.clear
 
       record.type = 30
       financial_validator.validate_percentage_bought_at_least_threshold(record)
-      expect(record.errors["stairbought"]).to be_empty
-      expect(record.errors["type"]).to be_empty
+      expect(record.errors).to be_empty
       record.errors.clear
 
       record.type = 31
       financial_validator.validate_percentage_bought_at_least_threshold(record)
-      expect(record.errors["stairbought"]).to be_empty
-      expect(record.errors["type"]).to be_empty
+      expect(record.errors).to be_empty
       record.errors.clear
 
       record.type = 32
       financial_validator.validate_percentage_bought_at_least_threshold(record)
-      expect(record.errors["stairbought"]).to be_empty
-      expect(record.errors["type"]).to be_empty
+      expect(record.errors).to be_empty
       record.errors.clear
     end
   end
