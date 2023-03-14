@@ -416,6 +416,27 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
+      context "and the carehome charge soft validation is triggered (carehome_charge_value_check)" do
+        let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+
+        before do
+          scheme2.update!(registered_under_care_act: 2)
+          lettings_log_xml.at_xpath("//xmlns:_1cmangroupcode").content = scheme2.old_visible_id
+          lettings_log_xml.at_xpath("//xmlns:Q18b").content = ""
+          lettings_log_xml.at_xpath("//xmlns:Q18ai").content = ""
+          lettings_log_xml.at_xpath("//xmlns:Q18aii").content = ""
+          lettings_log_xml.at_xpath("//xmlns:Q18aiii").content = ""
+          lettings_log_xml.at_xpath("//xmlns:Q18aiv").content = ""
+          lettings_log_xml.at_xpath("//xmlns:Q18av").content = ""
+        end
+
+        it "completes the log" do
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+          expect(lettings_log.status).to eq("completed")
+        end
+      end
+
       context "and this is a supported housing log with multiple locations under a scheme" do
         let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
 

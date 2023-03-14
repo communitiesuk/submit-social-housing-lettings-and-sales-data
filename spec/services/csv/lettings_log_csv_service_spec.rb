@@ -155,6 +155,7 @@ RSpec.describe Csv::LettingsLogCsvService do
                                    period
                                    is_carehome
                                    chcharge
+                                   carehome_charges_value_check
                                    brent
                                    scharge
                                    pscharge
@@ -208,7 +209,6 @@ RSpec.describe Csv::LettingsLogCsvService do
                                    address_line2
                                    town_or_city
                                    county
-                                   carehome_charges_value_check
                                    unittype_sh
                                    scheme_code
                                    scheme_service_name
