@@ -1,6 +1,8 @@
 require "csv"
 
 class BulkUpload::Lettings::Year2023::CsvParser
+  MAX_COLUMNS = 143
+
   attr_reader :path
 
   def initialize(path:)

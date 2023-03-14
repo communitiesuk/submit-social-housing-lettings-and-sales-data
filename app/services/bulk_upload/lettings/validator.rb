@@ -130,9 +130,9 @@ private
   def validate_max_columns
     return if halt_validations?
 
-    max_row_size = rows.map(&:size).max
+    column_count = rows.map(&:size).max
 
-    errors.add(:file, :max_row_size) if max_row_size > 136
+    errors.add(:file, :column_count) if column_count > csv_parser.class::MAX_COLUMNS
   end
 
   def halt_validations!
