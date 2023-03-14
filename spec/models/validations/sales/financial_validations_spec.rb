@@ -165,102 +165,40 @@ RSpec.describe Validations::Sales::FinancialValidations do
 
     it "adds an error to stairbought and type if the percentage bought is less than the threshold (which is 1% by default, but higher for some shared ownership types)" do
       record.stairbought = 9
-
-      record.type = 2
-      financial_validator.validate_percentage_bought_at_least_threshold(record)
-      expect(record.errors["stairbought"]).to eq(["The minimum increase in equity while staircasing is 10%"])
-      expect(record.errors["type"]).to eq(["The minimum increase in equity while staircasing is 10% for this shared ownership type"])
-      record.errors.clear
-
-      record.type = 16
-      financial_validator.validate_percentage_bought_at_least_threshold(record)
-      expect(record.errors["stairbought"]).to eq(["The minimum increase in equity while staircasing is 10%"])
-      expect(record.errors["type"]).to eq(["The minimum increase in equity while staircasing is 10% for this shared ownership type"])
-      record.errors.clear
-
-      record.type = 18
-      financial_validator.validate_percentage_bought_at_least_threshold(record)
-      expect(record.errors["stairbought"]).to eq(["The minimum increase in equity while staircasing is 10%"])
-      expect(record.errors["type"]).to eq(["The minimum increase in equity while staircasing is 10% for this shared ownership type"])
-      record.errors.clear
-
-      record.type = 24
-      financial_validator.validate_percentage_bought_at_least_threshold(record)
-      expect(record.errors["stairbought"]).to eq(["The minimum increase in equity while staircasing is 10%"])
-      expect(record.errors["type"]).to eq(["The minimum increase in equity while staircasing is 10% for this shared ownership type"])
-      record.errors.clear
+      [2, 16, 18, 24].each do |type|
+        record.type = type
+        financial_validator.validate_percentage_bought_at_least_threshold(record)
+        expect(record.errors["stairbought"]).to eq(["The minimum increase in equity while staircasing is 10%"])
+        expect(record.errors["type"]).to eq(["The minimum increase in equity while staircasing is 10% for this shared ownership type"])
+        record.errors.clear
+      end
 
       record.stairbought = 0
-
-      record.type = 28
-      financial_validator.validate_percentage_bought_at_least_threshold(record)
-      expect(record.errors["stairbought"]).to eq(["The minimum increase in equity while staircasing is 1%"])
-      expect(record.errors["type"]).to eq(["The minimum increase in equity while staircasing is 1% for this shared ownership type"])
-      record.errors.clear
-
-      record.type = 30
-      financial_validator.validate_percentage_bought_at_least_threshold(record)
-      expect(record.errors["stairbought"]).to eq(["The minimum increase in equity while staircasing is 1%"])
-      expect(record.errors["type"]).to eq(["The minimum increase in equity while staircasing is 1% for this shared ownership type"])
-      record.errors.clear
-
-      record.type = 31
-      financial_validator.validate_percentage_bought_at_least_threshold(record)
-      expect(record.errors["stairbought"]).to eq(["The minimum increase in equity while staircasing is 1%"])
-      expect(record.errors["type"]).to eq(["The minimum increase in equity while staircasing is 1% for this shared ownership type"])
-      record.errors.clear
-
-      record.type = 32
-      financial_validator.validate_percentage_bought_at_least_threshold(record)
-      expect(record.errors["stairbought"]).to eq(["The minimum increase in equity while staircasing is 1%"])
-      expect(record.errors["type"]).to eq(["The minimum increase in equity while staircasing is 1% for this shared ownership type"])
-      record.errors.clear
+      [28, 30, 31, 32].each do |type|
+        record.type = type
+        financial_validator.validate_percentage_bought_at_least_threshold(record)
+        expect(record.errors["stairbought"]).to eq(["The minimum increase in equity while staircasing is 1%"])
+        expect(record.errors["type"]).to eq(["The minimum increase in equity while staircasing is 1% for this shared ownership type"])
+        record.errors.clear
+      end
     end
 
     it "doesn't add an error to stairbought and type if the percentage bought is less than the threshold (which is 1% by default, but higher for some shared ownership types)" do
       record.stairbought = 10
-
-      record.type = 2
-      financial_validator.validate_percentage_bought_at_least_threshold(record)
-      expect(record.errors).to be_empty
-      record.errors.clear
-
-      record.type = 16
-      financial_validator.validate_percentage_bought_at_least_threshold(record)
-      expect(record.errors).to be_empty
-      record.errors.clear
-
-      record.type = 18
-      financial_validator.validate_percentage_bought_at_least_threshold(record)
-      expect(record.errors).to be_empty
-      record.errors.clear
-
-      record.type = 24
-      financial_validator.validate_percentage_bought_at_least_threshold(record)
-      expect(record.errors).to be_empty
-      record.errors.clear
+      [2, 16, 18, 24].each do |type|
+        record.type = type
+        financial_validator.validate_percentage_bought_at_least_threshold(record)
+        expect(record.errors).to be_empty
+        record.errors.clear
+      end
 
       record.stairbought = 1
-
-      record.type = 28
-      financial_validator.validate_percentage_bought_at_least_threshold(record)
-      expect(record.errors).to be_empty
-      record.errors.clear
-
-      record.type = 30
-      financial_validator.validate_percentage_bought_at_least_threshold(record)
-      expect(record.errors).to be_empty
-      record.errors.clear
-
-      record.type = 31
-      financial_validator.validate_percentage_bought_at_least_threshold(record)
-      expect(record.errors).to be_empty
-      record.errors.clear
-
-      record.type = 32
-      financial_validator.validate_percentage_bought_at_least_threshold(record)
-      expect(record.errors).to be_empty
-      record.errors.clear
+      [28, 30, 31, 32].each do |type|
+        record.type = type
+        financial_validator.validate_percentage_bought_at_least_threshold(record)
+        expect(record.errors).to be_empty
+        record.errors.clear
+      end
     end
   end
 
