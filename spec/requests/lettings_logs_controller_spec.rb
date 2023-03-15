@@ -324,9 +324,11 @@ RSpec.describe LettingsLogsController, type: :request do
             before do
               Timecop.freeze(2022, 3, 1)
             end
+
             after do
               Timecop.unfreeze
             end
+
             let!(:lettings_log_2021) do
               FactoryBot.create(:lettings_log, :in_progress,
                                 created_by: user,
@@ -829,6 +831,13 @@ RSpec.describe LettingsLogsController, type: :request do
               get "/lettings-logs/#{lettings_log.id}", headers:, params: {}
             end
 
+            before do
+              Timecop.freeze(2021, 4, 1)
+              completed_lettings_log.update!(startdate: Time.zone.local(2021, 4, 1), voiddate: Time.zone.local(2021, 4, 1), mrcdate: Time.zone.local(2021, 4, 1))
+              completed_lettings_log.reload
+              Timecop.unfreeze
+            end
+
             it "shows the tasklist for lettings logs you have access to" do
               expect(response.body).to match("Log")
               expect(response.body).to match(lettings_log.id.to_s)
@@ -849,13 +858,6 @@ RSpec.describe LettingsLogsController, type: :request do
               expect(completed_lettings_log.form.end_date).to eq(Time.zone.local(2023, 7, 1))
               expect(completed_lettings_log.status).to eq("completed")
               expect(page).to have_link("review and make changes to this log", href: "/lettings-logs/#{completed_lettings_log.id}/review")
-            end
-
-            before do
-              Timecop.freeze(2021, 4, 1)
-              completed_lettings_log.update!(startdate: Time.zone.local(2021, 4, 1), voiddate: Time.zone.local(2021, 4, 1), mrcdate: Time.zone.local(2021, 4, 1))
-              completed_lettings_log.reload
-              Timecop.unfreeze
             end
 
             it "displays a closed collection window message for previous collection year logs" do
@@ -1153,6 +1155,7 @@ RSpec.describe LettingsLogsController, type: :request do
         Timecop.return
         Singleton.__init__(FormHandler)
       end
+
       let(:params) { { age1: 200 } }
 
       it "returns 422" do

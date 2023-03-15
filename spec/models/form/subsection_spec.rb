@@ -4,6 +4,15 @@ require_relative "../../request_helper"
 RSpec.describe Form::Subsection, type: :model do
   subject(:subsection) { described_class.new(subsection_id, subsection_definition, section) }
 
+  around do |example|
+    Timecop.freeze(Time.zone.local(2022, 1, 1)) do
+      Singleton.__init__(FormHandler)
+      example.run
+    end
+    Timecop.return
+    Singleton.__init__(FormHandler)
+  end
+
   let(:lettings_log) { FactoryBot.build(:lettings_log) }
   let(:form) { lettings_log.form }
   let(:section_id) { "household" }
