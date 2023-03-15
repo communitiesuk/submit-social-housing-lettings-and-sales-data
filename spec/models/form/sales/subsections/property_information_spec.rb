@@ -11,20 +11,51 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
     expect(property_information.section).to eq(section)
   end
 
-  it "has correct pages" do
-    expect(property_information.pages.map(&:id)).to eq(
-      %w[
-        property_number_of_bedrooms
-        about_price_bedrooms_value_check
-        property_unit_type
-        monthly_charges_property_type_value_check
-        property_building_type
-        property_postcode
-        property_local_authority
-        about_price_la_value_check
-        property_wheelchair_accessible
-      ],
-    )
+  describe "pages" do
+    let(:section) { instance_double(Form::Sales::Sections::Household, form: instance_double(Form, start_date:)) }
+
+    context "when 2022" do
+      let(:start_date) { Time.utc(2022, 2, 8) }
+
+      it "has correct pages" do
+        expect(property_information.pages.compact.map(&:id)).to eq(
+          %w[
+            property_number_of_bedrooms
+            about_price_bedrooms_value_check
+            property_unit_type
+            monthly_charges_property_type_value_check
+            property_building_type
+            property_postcode
+            property_local_authority
+            about_price_la_value_check
+            property_wheelchair_accessible
+          ],
+        )
+      end
+    end
+
+    context "when 2023" do
+      let(:start_date) { Time.utc(2023, 2, 8) }
+
+      it "has correct pages" do
+        expect(property_information.pages.map(&:id)).to eq(
+          %w[
+            uprn_known
+            uprn
+            uprn_confirmation
+            address
+            property_local_authority
+            property_number_of_bedrooms
+            about_price_bedrooms_value_check
+            property_unit_type
+            monthly_charges_property_type_value_check
+            property_building_type
+            about_price_la_value_check
+            property_wheelchair_accessible
+          ],
+        )
+      end
+    end
   end
 
   it "has the correct id" do

@@ -1,4 +1,13 @@
 <%= render partial: "form/guidance/#{question.guidance_partial}" if question.top_guidance? %>
+  <% banner = question.notification_banner(@log) %>
+  <% if banner %>
+    <%= govuk_notification_banner(
+      title_text: banner[:title],
+      title_heading_level: 3,
+    ) do
+      simple_format(banner[:heading])
+    end %>
+  <% end %>
 
 <%= f.govuk_radio_buttons_fieldset question.id.to_sym,
   caption: caption(caption_text, page_header, conditional),

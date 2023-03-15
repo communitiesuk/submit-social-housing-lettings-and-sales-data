@@ -8,14 +8,16 @@ module QuestionViewHelper
   def legend(question, page_header, conditional)
     {
       text: [question.question_number_string(conditional:), question.header.html_safe].compact.join(" - "),
-      size: label_size(page_header, conditional),
+      size: label_size(page_header, conditional, question),
       tag: label_tag(page_header, conditional),
     }
   end
 
 private
 
-  def label_size(page_header, conditional)
+  def label_size(page_header, conditional, question)
+    return if question.plain_label.present?
+
     page_header.blank? && !conditional ? "l" : "m"
   end
 

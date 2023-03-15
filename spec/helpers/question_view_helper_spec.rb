@@ -81,5 +81,10 @@ RSpec.describe QuestionViewHelper do
         expect(question_view_helper).to eq(legend_options_hash)
       end
     end
+
+    context "when viewing a question with a plain label" do
+      xit "returns an options hash with nil size" do
+      end
+    end
   end
 end

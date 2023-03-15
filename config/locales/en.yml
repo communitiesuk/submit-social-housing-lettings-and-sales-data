@@ -187,6 +187,10 @@ en:
         supported_housing_mismatch: Lettings type must be a supported housing type because you selected supported housing when uploading the file
 
     property:
+      uprn:
+        invalid: "UPRN must be 12 digits or less"
+      uprn_known:
+        invalid: "You must answer UPRN known?"
       mrcdate:
         before_tenancy_start: "Enter a major repairs date that is before the tenancy start date"
         not_first_let: "Major repairs date must not be completed if the tenancy is a first let"

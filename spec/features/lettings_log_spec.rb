@@ -89,7 +89,7 @@ RSpec.describe "Lettings Log Features" do
         click_button("Save and continue")
         log_id = page.current_path.scan(/\d/).join
         visit("lettings-logs/#{log_id}/setup/check-answers")
-        expect(page).to have_content("Stock owner User org")
+        expect(page).to have_content("Stock owner User org", normalize_ws: true)
         expect(page).to have_content("You have answered 2 of 8 questions")
       end
     end
@@ -125,7 +125,7 @@ RSpec.describe "Lettings Log Features" do
           select(managing_org.name, from: "lettings-log-managing-organisation-id-field")
           click_button("Save and continue")
           visit("lettings-logs/#{log_id}/setup/check-answers")
-          expect(page).to have_content("Managing agent Managing org")
+          expect(page).to have_content("Managing agent Managing org", normalize_ws: true)
           expect(support_user.organisation.managing_agents).to eq([org_rel.child_organisation])
         end
       end
@@ -164,7 +164,7 @@ RSpec.describe "Lettings Log Features" do
             select(managing_org1.name, from: "lettings-log-managing-organisation-id-field")
             click_button("Save and continue")
             visit("lettings-logs/#{log_id}/setup/check-answers")
-            expect(page).to have_content("Managing agent Managing org 1")
+            expect(page).to have_content("Managing agent Managing org 1", normalize_ws: true)
           end
 
           context "and the owning organisation has 2 or more managing agents" do
@@ -183,10 +183,10 @@ RSpec.describe "Lettings Log Features" do
                 select(managing_org1.name, from: "lettings-log-managing-organisation-id-field")
                 click_button("Save and continue")
                 visit("lettings-logs/#{log_id}/setup/check-answers")
-                expect(page).to have_content("Managing agent Managing org 1")
+                expect(page).to have_content("Managing agent Managing org 1", normalize_ws: true)
                 org_rel1.destroy!
                 visit("lettings-logs/#{log_id}/setup/check-answers")
-                expect(page).to have_content("Managing agent Managing org 1")
+                expect(page).to have_content("Managing agent Managing org 1", normalize_ws: true)
                 expect(support_user.organisation.managing_agents).to eq([org_rel2.child_organisation])
               end
             end
@@ -237,7 +237,7 @@ RSpec.describe "Lettings Log Features" do
           log_id = page.current_path.scan(/\d/).join
           expect(page).to have_current_path("/lettings-logs/#{log_id}/stock-owner")
           visit("lettings-logs/#{log_id}/setup/check-answers")
-          expect(page).to have_content("Stock owner User org")
+          expect(page).to have_content("Stock owner User org", normalize_ws: true)
         end
 
         context "and there are 3 or more potential stock owners" do
@@ -254,10 +254,10 @@ RSpec.describe "Lettings Log Features" do
               select(owning_org1.name, from: "lettings-log-owning-organisation-id-field")
               click_button("Save and continue")
               visit("lettings-logs/#{log_id}/setup/check-answers")
-              expect(page).to have_content("Stock owner Owning org 1")
+              expect(page).to have_content("Stock owner Owning org 1", normalize_ws: true)
               org_rel1.destroy!
               visit("lettings-logs/#{log_id}/setup/check-answers")
-              expect(page).to have_content("Stock owner Owning org 1")
+              expect(page).to have_content("Stock owner Owning org 1", normalize_ws: true)
               expect(user.organisation.stock_owners).to eq([org_rel2.parent_organisation])
             end
           end
@@ -283,7 +283,8 @@ RSpec.describe "Lettings Log Features" do
           select(user.organisation.name, from: "lettings-log-managing-organisation-id-field")
           click_button("Save and continue")
           visit("lettings-logs/#{log_id}/setup/check-answers")
-          expect(page).to have_content("Managing agent User org")
+
+          expect(page).to have_content("Managing agent User org", normalize_ws: true)
           expect(user.organisation.stock_owners).to eq([org_rel1.parent_organisation, org_rel2.parent_organisation])
         end
       end
@@ -328,7 +329,7 @@ RSpec.describe "Lettings Log Features" do
             select(managing_org.name, from: "lettings-log-managing-organisation-id-field")
             click_button("Save and continue")
             visit("lettings-logs/#{log_id}/setup/check-answers")
-            expect(page).to have_content("Managing agent Managing org")
+            expect(page).to have_content("Managing agent Managing org", normalize_ws: true)
             expect(user.organisation.managing_agents).to eq([org_rel2.child_organisation])
           end
         end

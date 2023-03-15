@@ -1,6 +1,7 @@
 class Form::Page
   attr_accessor :id, :header, :header_partial, :description, :questions, :depends_on, :title_text,
-                :informative_text, :subsection, :hide_subsection_label, :next_unresolved_page_id
+                :informative_text, :subsection, :hide_subsection_label, :next_unresolved_page_id,
+                :skip_text
 
   def initialize(id, hsh, subsection)
     @id = id
@@ -15,6 +16,7 @@ class Form::Page
       @informative_text = hsh["informative_text"]
       @hide_subsection_label = hsh["hide_subsection_label"]
       @next_unresolved_page_id = hsh["next_unresolved_page_id"]
+      @skip_text = hsh["skip_text"]
     end
   end
 
@@ -35,6 +37,8 @@ class Form::Page
   def interruption_screen?
     questions.all? { |question| question.type == "interruption_screen" }
   end
+
+  def skip_href(log = nil); end
 
 private
 

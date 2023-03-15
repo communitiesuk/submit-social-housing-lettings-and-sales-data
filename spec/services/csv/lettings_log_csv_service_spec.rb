@@ -201,6 +201,13 @@ RSpec.describe Csv::LettingsLogCsvService do
                                    vacdays
                                    unresolved
                                    updated_by_id
+                                   uprn
+                                   uprn_known
+                                   uprn_confirmed
+                                   address_line1
+                                   address_line2
+                                   town_or_city
+                                   county
                                    unittype_sh
                                    scheme_code
                                    scheme_service_name
@@ -222,7 +229,9 @@ RSpec.describe Csv::LettingsLogCsvService do
                                    location_mobility_type
                                    location_admin_district
                                    location_startdate]
+
       csv = CSV.parse(described_class.new(user, export_type: "labels").to_csv)
+
       expect(csv.first).to eq(expected_csv_attributes)
     end
   end

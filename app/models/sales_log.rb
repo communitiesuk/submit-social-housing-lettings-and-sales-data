@@ -31,6 +31,7 @@ class SalesLog < Log
   before_validation :reset_location_fields!, unless: :postcode_known?
   before_validation :reset_previous_location_fields!, unless: :previous_postcode_known?
   before_validation :set_derived_fields!
+  after_validation :process_uprn_change!, if: :should_process_uprn_change?
 
   scope :filter_by_year, ->(year) { where(saledate: Time.zone.local(year.to_i, 4, 1)...Time.zone.local(year.to_i + 1, 4, 1)) }
   scope :filter_by_purchaser_code, ->(purchid) { where("purchid ILIKE ?", "%#{purchid}%") }
@@ -310,5 +311,9 @@ class SalesLog < Log
   def field_formatted_as_currency(field_name)
     field_value = public_send(field_name)
     format_as_currency(field_value)
+  end
+
+  def should_process_uprn_change?
+    uprn_changed? && saledate && saledate.year >= 2023
   end
 end
