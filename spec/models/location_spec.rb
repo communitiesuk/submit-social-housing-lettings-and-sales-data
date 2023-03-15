@@ -1,10 +1,6 @@
 require "rails_helper"
 
 RSpec.describe Location, type: :model do
-  before do
-    Rails.application.load_seed
-  end
-
   describe "#new" do
     let(:location) { FactoryBot.build(:location) }
 
