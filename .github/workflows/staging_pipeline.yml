@@ -208,6 +208,7 @@ jobs:
           GOVUK_NOTIFY_API_KEY: ${{ secrets.GOVUK_NOTIFY_API_KEY }}
           APP_HOST: ${{ secrets.APP_HOST }}
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+          OS_DATA_KEY: ${{ secrets.OS_DATA_KEY }}
           IMPORT_PAAS_INSTANCE: ${{ secrets.IMPORT_PAAS_INSTANCE }}
           EXPORT_PAAS_INSTANCE: ${{ secrets.EXPORT_PAAS_INSTANCE }}
           S3_CONFIG: ${{ secrets.S3_CONFIG }}
@@ -222,6 +223,7 @@ jobs:
           cf set-env $APP_NAME GOVUK_NOTIFY_API_KEY $GOVUK_NOTIFY_API_KEY
           cf set-env $APP_NAME APP_HOST $APP_HOST
           cf set-env $APP_NAME RAILS_MASTER_KEY $RAILS_MASTER_KEY
+          cf set-env $APP_NAME OS_DATA_KEY $OS_DATA_KEY
           cf set-env $APP_NAME IMPORT_PAAS_INSTANCE $IMPORT_PAAS_INSTANCE
           cf set-env $APP_NAME EXPORT_PAAS_INSTANCE $EXPORT_PAAS_INSTANCE
           cf set-env $APP_NAME S3_CONFIG $S3_CONFIG
