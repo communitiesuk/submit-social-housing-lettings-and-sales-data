@@ -75,4 +75,12 @@ module Validations::PropertyValidations
       record.errors.add :beds, I18n.t("validations.property.beds.over_max")
     end
   end
+
+  def validate_uprn(record)
+    return unless record.uprn
+
+    return if record.uprn.match?(/^[0-9]{1,12}$/)
+
+    record.errors.add :uprn, I18n.t("validations.property.uprn.invalid")
+  end
 end
