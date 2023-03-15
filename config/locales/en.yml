@@ -63,6 +63,10 @@ en:
           attributes:
             needstype:
               blank: You must answer needs type
+        forms/bulk_upload_lettings/template:
+          attributes:
+            ordered_template:
+              blank: You must answer template style
 
   activerecord:
     errors:

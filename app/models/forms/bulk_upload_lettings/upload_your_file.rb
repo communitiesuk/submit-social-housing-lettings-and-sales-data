@@ -11,6 +11,7 @@ module Forms
       attribute :needstype, :integer
       attribute :file
       attribute :current_user
+      attribute :ordered_template, :boolean
 
       validates :file, presence: true
       validate :validate_file_is_csv
@@ -20,8 +21,14 @@ module Forms
       end
 
       def back_path
-        page_id = year == 2022 ? "needstype" : "prepare-your-file"
-        bulk_upload_lettings_log_path(id: page_id, form: { year:, needstype: })
+        page_id = if year == 2022
+                    "needstype"
+                  elsif year >= 2023
+                    "template"
+                  else
+                    "prepare-your-file"
+                  end
+        bulk_upload_lettings_log_path(id: page_id, form: { year:, needstype:, ordered_template: })
       end
 
       def year_combo

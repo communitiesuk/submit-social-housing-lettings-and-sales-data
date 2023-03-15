@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_08_101826) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_15_113252) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -39,6 +39,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_101826) do
     t.datetime "updated_at", null: false
     t.text "filename"
     t.integer "needstype"
+    t.boolean "ordered_template"
     t.index ["identifier"], name: "index_bulk_uploads_on_identifier", unique: true
     t.index ["user_id"], name: "index_bulk_uploads_on_user_id"
   end
@@ -279,6 +280,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_101826) do
     t.boolean "unresolved"
     t.bigint "updated_by_id"
     t.bigint "bulk_upload_id"
+    t.integer "carehome_charges_value_check"
     t.index ["bulk_upload_id"], name: "index_lettings_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_lettings_logs_on_created_by_id"
     t.index ["location_id"], name: "index_lettings_logs_on_location_id"
@@ -297,6 +299,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_101826) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["code"], name: "index_local_authority_code", unique: true
+  end
+
+  create_table "local_authority_links", force: :cascade do |t|
+    t.bigint "local_authority_id"
+    t.bigint "linked_local_authority_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["linked_local_authority_id"], name: "index_local_authority_links_on_linked_local_authority_id"
+    t.index ["local_authority_id"], name: "index_local_authority_links_on_local_authority_id"
   end
 
   create_table "location_deactivation_periods", force: :cascade do |t|
@@ -500,7 +511,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_101826) do
     t.integer "prevten"
     t.integer "mortgageused"
     t.integer "wchair"
-    t.integer "income2_value_check"
     t.integer "armedforcesspouse"
     t.datetime "hodate", precision: nil
     t.integer "hoday"
@@ -532,15 +542,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_101826) do
     t.integer "old_persons_shared_ownership_value_check"
     t.integer "staircase_bought_value_check"
     t.integer "monthly_charges_value_check"
+    t.integer "saledate_check"
     t.integer "details_known_5"
     t.integer "details_known_6"
-    t.integer "saledate_check"
-    t.integer "prevshared"
-    t.integer "staircasesale"
     t.integer "ethnic_group2"
     t.integer "ethnicbuy2"
-    t.integer "proplen_asked"
+    t.integer "prevshared"
+    t.integer "staircasesale"
     t.string "old_id"
+    t.integer "income2_value_check"
+    t.integer "proplen_asked"
+    t.integer "mortlen_known"
     t.integer "pregblank"
     t.integer "buy2living"
     t.integer "prevtenbuy2"
@@ -641,6 +653,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_101826) do
   add_foreign_key "lettings_logs", "locations"
   add_foreign_key "lettings_logs", "organisations", column: "owning_organisation_id", on_delete: :cascade
   add_foreign_key "lettings_logs", "schemes"
+  add_foreign_key "local_authority_links", "local_authorities"
+  add_foreign_key "local_authority_links", "local_authorities", column: "linked_local_authority_id"
   add_foreign_key "locations", "schemes"
   add_foreign_key "organisation_relationships", "organisations", column: "child_organisation_id"
   add_foreign_key "organisation_relationships", "organisations", column: "parent_organisation_id"

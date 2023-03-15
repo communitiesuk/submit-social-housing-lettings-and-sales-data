@@ -42,6 +42,8 @@ private
                 Forms::BulkUploadLettings::Year.new(form_params)
               when "prepare-your-file"
                 Forms::BulkUploadLettings::PrepareYourFile.new(form_params)
+              when "template"
+                Forms::BulkUploadLettings::Template.new(form_params)
               when "needstype"
                 Forms::BulkUploadLettings::Needstype.new(form_params)
               when "upload-your-file"
@@ -54,6 +56,6 @@ private
   end
 
   def form_params
-    params.fetch(:form, {}).permit(:year, :needstype, :file)
+    params.fetch(:form, {}).permit(:year, :needstype, :ordered_template, :file)
   end
 end

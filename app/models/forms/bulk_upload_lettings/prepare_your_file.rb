@@ -7,6 +7,7 @@ module Forms
 
       attribute :year, :integer
       attribute :needstype, :integer
+      attribute :ordered_template, :boolean
 
       def view_path
         "bulk_upload_lettings_logs/forms/prepare_your_file"
@@ -21,7 +22,13 @@ module Forms
       end
 
       def next_path
-        page_id = year == 2022 ? "needstype" : "upload-your-file"
+        page_id = if year == 2022
+                    "needstype"
+                  elsif year >= 2023
+                    "template"
+                  else
+                    "upload-your-file"
+                  end
         bulk_upload_lettings_log_path(id: page_id, form: { year:, needstype: })
       end
 

@@ -7,6 +7,7 @@ module Forms
 
       attribute :needstype, :integer
       attribute :year, :integer
+      attribute :ordered_template, :boolean
 
       validates :needstype, presence: true
 
@@ -19,7 +20,7 @@ module Forms
       end
 
       def back_path
-        bulk_upload_lettings_log_path(id: "prepare-your-file", form: { year:, needstype: })
+        bulk_upload_lettings_log_path(id: "prepare-your-file", form: { year:, needstype:, ordered_template: })
       end
 
       def next_path

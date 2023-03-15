@@ -6,6 +6,7 @@
     <%= form_with model: @form, scope: :form, url: bulk_upload_lettings_log_path(id: "needstype"), method: :patch do |f| %>
       <%= f.govuk_error_summary %>
       <%= f.hidden_field :year %>
+      <%= f.hidden_field :ordered_template %>
 
       <%= f.govuk_collection_radio_buttons :needstype,
             @form.options,
