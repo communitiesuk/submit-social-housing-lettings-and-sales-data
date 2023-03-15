@@ -3,6 +3,16 @@ require "rails_helper"
 RSpec.describe Form::Question, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
+
+  around do |example|
+    Timecop.freeze(Time.zone.local(2022, 1, 1)) do
+      Singleton.__init__(FormHandler)
+      example.run
+    end
+    Timecop.return
+    Singleton.__init__(FormHandler)
+  end
+
   let(:lettings_log) { FactoryBot.build(:lettings_log) }
   let(:form) { lettings_log.form }
   let(:section_id) { "rent_and_charges" }
@@ -367,7 +377,7 @@ RSpec.describe Form::Question, type: :model do
       end
 
       context "when Sales form" do
-        let(:sales_log) { FactoryBot.create(:sales_log, :completed, ethnic_group: 17) }
+        let(:sales_log) { FactoryBot.create(:sales_log, :completed, ethnic_group: 17, saledate: Time.zone.local(2022, 1, 1)) }
         let(:question) { sales_log.form.get_question("ethnic_group", sales_log) }
 
         it "returns the inferred label value" do
