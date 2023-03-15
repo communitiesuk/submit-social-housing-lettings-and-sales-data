@@ -5,7 +5,7 @@ RSpec.describe LogSummaryComponent, type: :component do
   let(:coordinator_user) { FactoryBot.create(:user) }
   let(:propcode) { "P3647" }
   let(:tenancycode) { "T62863" }
-  let(:lettings_log) { FactoryBot.create(:lettings_log, needstype: 1, tenancycode:, propcode:) }
+  let(:lettings_log) { FactoryBot.create(:lettings_log, needstype: 1, tenancycode:, propcode:, startdate: Time.zone.today) }
   let(:sales_log) { FactoryBot.create(:sales_log) }
 
   context "when rendering lettings log for a support user" do
