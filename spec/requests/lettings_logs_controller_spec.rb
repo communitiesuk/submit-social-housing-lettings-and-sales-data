@@ -892,8 +892,9 @@ RSpec.describe LettingsLogsController, type: :request do
           end
 
           context "when a lettings log is for a renewal of supported housing, so property information does not need to show" do
-            let(:lettings_log) {
-              FactoryBot.create(:lettings_log,
+            let(:lettings_log) do
+              FactoryBot.create(
+                :lettings_log,
                 owning_organisation: user.organisation,
                 managing_organisation: user.organisation,
                 created_by: user,
@@ -901,8 +902,9 @@ RSpec.describe LettingsLogsController, type: :request do
                 renewal: 1,
                 needstype: 2,
                 rent_type: 3,
-                postcode_known: 0
-              )}
+                postcode_known: 0,
+              )
+            end
 
             before do
               sign_in user

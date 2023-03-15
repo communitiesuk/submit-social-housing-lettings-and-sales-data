@@ -42,13 +42,15 @@ RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
   end
 
   it "has the correct depends_on" do
-    expect(property_information.depends_on).to eq([{
-      "non_location_setup_questions_completed?" => true,
-      "is_supported_housing?" => false,
-    },
-    {
-      "non_location_setup_questions_completed?" => true,
-      "is_renewal?" => false,
-    }])
+    expect(property_information.depends_on).to eq([
+      {
+        "non_location_setup_questions_completed?" => true,
+        "is_supported_housing?" => false,
+      },
+      {
+        "non_location_setup_questions_completed?" => true,
+        "is_renewal?" => false,
+      },
+    ])
   end
 end
