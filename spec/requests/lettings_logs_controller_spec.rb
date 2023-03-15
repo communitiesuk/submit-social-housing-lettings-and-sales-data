@@ -321,6 +321,12 @@ RSpec.describe LettingsLogsController, type: :request do
           end
 
           context "with year filter" do
+            before do
+              Timecop.freeze(2022, 3, 1)
+            end
+            after do
+              Timecop.unfreeze
+            end
             let!(:lettings_log_2021) do
               FactoryBot.create(:lettings_log, :in_progress,
                                 created_by: user,
@@ -352,6 +358,8 @@ RSpec.describe LettingsLogsController, type: :request do
 
           context "with year and status filter" do
             before do
+              Timecop.freeze(Time.zone.local(2022, 3, 1))
+              lettings_log_2021.update!(startdate: Time.zone.local(2022, 3, 1))
               Timecop.freeze(Time.zone.local(2022, 12, 1))
             end
 
@@ -362,7 +370,6 @@ RSpec.describe LettingsLogsController, type: :request do
             let!(:lettings_log_2021) do
               FactoryBot.create(:lettings_log, :in_progress,
                                 owning_organisation: organisation,
-                                startdate: Time.zone.local(2022, 3, 1),
                                 managing_organisation: organisation,
                                 created_by: user)
             end
@@ -371,6 +378,7 @@ RSpec.describe LettingsLogsController, type: :request do
                                 owning_organisation: organisation,
                                 mrcdate: Time.zone.local(2022, 2, 1),
                                 startdate: Time.zone.local(2022, 12, 1),
+                                voiddate: Time.zone.local(2022, 2, 1),
                                 tenancy: 6,
                                 managing_organisation: organisation,
                                 created_by: user)
@@ -843,10 +851,14 @@ RSpec.describe LettingsLogsController, type: :request do
               expect(page).to have_link("review and make changes to this log", href: "/lettings-logs/#{completed_lettings_log.id}/review")
             end
 
-            it "displays a closed collection window message for previous collection year logs" do
-              completed_lettings_log.update!(startdate: Time.zone.local(2021, 4, 1))
+            before do
+              Timecop.freeze(2021, 4, 1)
+              completed_lettings_log.update!(startdate: Time.zone.local(2021, 4, 1), voiddate: Time.zone.local(2021, 4, 1), mrcdate: Time.zone.local(2021, 4, 1))
               completed_lettings_log.reload
+              Timecop.unfreeze
+            end
 
+            it "displays a closed collection window message for previous collection year logs" do
               get "/lettings-logs/#{completed_lettings_log.id}", headers:, params: {}
               expect(completed_lettings_log.form.end_date).to eq(Time.zone.local(2022, 7, 1))
               expect(completed_lettings_log.status).to eq("completed")
@@ -913,13 +925,19 @@ RSpec.describe LettingsLogsController, type: :request do
     end
 
     context "when accessing the check answers page" do
+      before do
+        Timecop.freeze(2021, 4, 1)
+        completed_lettings_log.update!(startdate: Time.zone.local(2021, 4, 1), voiddate: Time.zone.local(2021, 4, 1), mrcdate: Time.zone.local(2021, 4, 1))
+        Timecop.unfreeze
+      end
+
       let(:postcode_lettings_log) do
         FactoryBot.create(:lettings_log,
                           created_by: user,
                           postcode_known: "No")
       end
       let(:id) { postcode_lettings_log.id }
-      let(:completed_lettings_log) { FactoryBot.create(:lettings_log, :completed, owning_organisation: user.organisation, managing_organisation: user.organisation, created_by: user, startdate: Time.zone.local(2021, 4, 1)) }
+      let(:completed_lettings_log) { FactoryBot.create(:lettings_log, :completed, owning_organisation: user.organisation, managing_organisation: user.organisation, created_by: user) }
 
       before do
         stub_request(:get, /api.postcodes.io/)
@@ -1127,6 +1145,14 @@ RSpec.describe LettingsLogsController, type: :request do
     end
 
     context "with an invalid lettings log params" do
+      around do |example|
+        Timecop.freeze(Time.zone.local(2022, 1, 1)) do
+          Singleton.__init__(FormHandler)
+          example.run
+        end
+        Timecop.return
+        Singleton.__init__(FormHandler)
+      end
       let(:params) { { age1: 200 } }
 
       it "returns 422" do
