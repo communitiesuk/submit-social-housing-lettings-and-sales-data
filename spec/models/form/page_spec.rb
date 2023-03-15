@@ -3,6 +3,15 @@ require "rails_helper"
 RSpec.describe Form::Page, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
+  around do |example|
+    Timecop.freeze(Time.zone.local(2022, 1, 1)) do
+      Singleton.__init__(FormHandler)
+      example.run
+    end
+    Timecop.return
+    Singleton.__init__(FormHandler)
+  end
+
   let(:user) { FactoryBot.create(:user) }
   let(:lettings_log) { FactoryBot.build(:lettings_log) }
   let(:form) { lettings_log.form }
