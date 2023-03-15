@@ -30,7 +30,7 @@ class BulkUpload::Lettings::Validator
           property_ref: row_parser.field_100,
           row:,
           cell: "#{cols[field_number_for_attribute(error.attribute) - col_offset + 1]}#{row}",
-          col: cols[field_number_for_attribute(error.attribute) - col_offset + 1],
+          col: csv_parser.column_for_field(error.attribute.to_s),
           category: error.options[:category],
         )
       end
