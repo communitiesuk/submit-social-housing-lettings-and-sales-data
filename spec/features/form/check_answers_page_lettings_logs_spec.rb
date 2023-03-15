@@ -2,6 +2,14 @@ require "rails_helper"
 require_relative "helpers"
 
 RSpec.describe "Lettings Log Check Answers Page" do
+  around do |example|
+    Timecop.freeze(Time.zone.local(2021, 5, 1)) do
+      Singleton.__init__(FormHandler)
+      example.run
+    end
+    Timecop.return
+    Singleton.__init__(FormHandler)
+  end
   include Helpers
   let(:user) { FactoryBot.create(:user) }
   let(:subsection) { "household-characteristics" }
@@ -152,7 +160,7 @@ RSpec.describe "Lettings Log Check Answers Page" do
 
     context "when viewing setup section answers" do
       before do
-        FactoryBot.create(:location, scheme:)
+        FactoryBot.create(:location, scheme:, startdate: Time.zone.local(2021, 1, 1))
       end
 
       it "displays inferred postcode with the location id" do
