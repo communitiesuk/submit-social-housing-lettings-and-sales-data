@@ -2,7 +2,7 @@ class Form::Lettings::Pages::FirstTimePropertyLetAsSocialHousing < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "first_time_property_let_as_social_housing"
-    @depends_on = [{ "not_renewal?" => true }]
+    @depends_on = [{ "is_renewal?" => false }]
   end
 
   def questions

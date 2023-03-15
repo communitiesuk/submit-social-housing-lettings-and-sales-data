@@ -2,7 +2,7 @@ class Form::Lettings::Pages::PropertyVacancyReasonNotFirstLet < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "property_vacancy_reason_not_first_let"
-    @depends_on = [{ "first_time_property_let_as_social_housing" => 0, "not_renewal?" => true }]
+    @depends_on = [{ "first_time_property_let_as_social_housing" => 0, "is_renewal?" => false }]
   end
 
   def questions
