@@ -247,7 +247,6 @@ RSpec.describe SalesLog, type: :model do
 
       after do
         Timecop.unfreeze
-        Singleton.__init__(FormHandler)
       end
 
       it "correctly sets la as nil" do
@@ -278,7 +277,6 @@ RSpec.describe SalesLog, type: :model do
 
       after do
         Timecop.unfreeze
-        Singleton.__init__(FormHandler)
       end
 
       it "correctly infers new la" do
