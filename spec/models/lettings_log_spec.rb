@@ -1982,7 +1982,13 @@ RSpec.describe LettingsLog do
       before do
         lettings_log.needstype = 2
         allow(FormHandler.instance).to receive(:get_form).and_return(real_2021_2022_form)
+        Timecop.freeze(2022, 4, 2)
       end
+
+      after do
+        Timecop.unfreeze
+      end
+
 
       context "and a scheme with a single log is selected" do
         before do
@@ -2063,15 +2069,8 @@ RSpec.describe LettingsLog do
             created_at: Time.utc(2022, 2, 8, 16, 52, 15),
           })
         end
+
         let(:location) { FactoryBot.create(:location, scheme:) }
-
-        before do
-          Timecop.freeze(2022, 4, 2)
-        end
-
-        after do
-          Timecop.unfreeze
-        end
 
         it "correctly infers and saves the renewal date" do
           record_from_db = ActiveRecord::Base.connection.execute("SELECT voiddate from lettings_logs where id=#{supported_housing_lettings_log.id}").to_a[0]
