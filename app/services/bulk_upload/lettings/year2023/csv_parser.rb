@@ -38,6 +38,10 @@ class BulkUpload::Lettings::Year2023::CsvParser
     @rows ||= CSV.parse(normalised_string, row_sep:)
   end
 
+  def column_for_field(field)
+    cols[field_numbers.find_index(field) + col_offset]
+  end
+
 private
 
   def default_field_numbers
@@ -45,11 +49,11 @@ private
   end
 
   def field_numbers
-    if with_headers?
-      rows[row_offset - 1][col_offset..].map { |h| h.present? ? "field_#{h}" : "field_blank" }
-    else
-      default_field_numbers
-    end
+    @field_numbers ||= if with_headers?
+                         rows[row_offset - 1][col_offset..].map { |h| h.present? ? "field_#{h}" : "field_blank" }
+                       else
+                         default_field_numbers
+                       end
   end
 
   def with_headers?

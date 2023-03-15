@@ -39,7 +39,15 @@ class BulkUpload::Lettings::Year2022::CsvParser
     @rows ||= CSV.parse(normalised_string, row_sep:)
   end
 
+  def column_for_field(field)
+    cols[headers.find_index(field) + col_offset]
+  end
+
 private
+
+  def headers
+    @headers ||= ("field_1".."field_134").to_a
+  end
 
   def with_headers?
     rows[0][0]&.match?(/\D+/)

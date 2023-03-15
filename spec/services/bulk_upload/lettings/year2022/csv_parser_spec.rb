@@ -69,4 +69,29 @@ RSpec.describe BulkUpload::Lettings::Year2022::CsvParser do
       expect(service.row_parsers[0].field_12.to_i).to eql(log.age1)
     end
   end
+
+  describe "#column_for_field", aggregate_failures: true do
+    context "when headers present" do
+      it "returns correct column" do
+        expect(service.column_for_field("field_1")).to eql("B")
+        expect(service.column_for_field("field_134")).to eql("EE")
+      end
+    end
+
+    context "when no headers" do
+      let(:file) { Tempfile.new }
+      let(:path) { file.path }
+      let(:log) { build(:lettings_log, :completed) }
+
+      before do
+        file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
+        file.rewind
+      end
+
+      it "returns correct column" do
+        expect(service.column_for_field("field_1")).to eql("A")
+        expect(service.column_for_field("field_134")).to eql("ED")
+      end
+    end
+  end
 end
