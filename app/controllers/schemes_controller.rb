@@ -296,7 +296,7 @@ private
     if params[:scheme_deactivation_period].blank?
       return
     elsif params[:scheme_deactivation_period]["#{key}_type".to_sym] == "default"
-      return FormHandler.instance.current_collection_start_date
+      return FormHandler.instance.start_date_of_earliest_open_collection_period
     elsif params[:scheme_deactivation_period][key.to_sym].present?
       return params[:scheme_deactivation_period][key.to_sym]
     end
