@@ -3,7 +3,6 @@ require "rails_helper"
 RSpec.describe Form::Question, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
-
   around do |example|
     Timecop.freeze(Time.zone.local(2022, 1, 1)) do
       Singleton.__init__(FormHandler)

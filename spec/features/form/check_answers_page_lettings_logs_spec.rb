@@ -10,6 +10,7 @@ RSpec.describe "Lettings Log Check Answers Page" do
     Timecop.return
     Singleton.__init__(FormHandler)
   end
+
   include Helpers
   let(:user) { FactoryBot.create(:user) }
   let(:subsection) { "household-characteristics" }

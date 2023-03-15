@@ -2,7 +2,6 @@ require "rails_helper"
 require_relative "helpers"
 
 RSpec.describe "validations" do
-
   around do |example|
     Timecop.freeze(Time.zone.local(2022, 1, 1)) do
       Singleton.__init__(FormHandler)

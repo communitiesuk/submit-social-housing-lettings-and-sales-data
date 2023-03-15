@@ -10,6 +10,7 @@ RSpec.describe "Accessible Autocomplete" do
     Timecop.return
     Singleton.__init__(FormHandler)
   end
+
   include Helpers
   let(:user) { FactoryBot.create(:user) }
   let(:lettings_log) do
