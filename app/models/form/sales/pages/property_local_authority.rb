@@ -13,4 +13,10 @@ class Form::Sales::Pages::PropertyLocalAuthority < ::Form::Page
       Form::Sales::Questions::PropertyLocalAuthority.new(nil, nil, self),
     ]
   end
+
+  def routed_to?(log, _current_user)
+    return false if log.uprn_known.nil? && form.start_date.year >= 2023
+
+    super
+  end
 end

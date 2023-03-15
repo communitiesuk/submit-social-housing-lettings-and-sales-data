@@ -38,4 +38,7 @@ RSpec.describe Form::Sales::Pages::PropertyLocalAuthority, type: :model do
       "is_la_inferred" => false,
     }])
   end
+
+  xit "it has the correct routed_to?" do
+  end
 end
