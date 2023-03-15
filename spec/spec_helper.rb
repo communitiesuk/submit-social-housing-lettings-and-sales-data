@@ -111,8 +111,15 @@ RSpec.configure do |config|
 
   config.include FactoryBot::Syntax::Methods
 
-  config.before { RequestHelper.stub_http_requests }
-  config.after { RequestHelper.real_http_requests }
+  config.before do
+    RequestHelper.stub_http_requests
+    Rails.application.load_seed
+  end
+
+  config.after do
+    RequestHelper.real_http_requests
+    Singleton.__init__(FormHandler)
+  end
 end
 
 RSpec::Matchers.define_negated_matcher :not_change, :change
