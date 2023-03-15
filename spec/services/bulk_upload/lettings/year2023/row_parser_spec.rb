@@ -88,7 +88,6 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           {
             bulk_upload:,
             field_5: "1",
-            field_15: scheme.old_visible_id,
             field_13: "123",
             field_7: now.day.to_s,
             field_8: now.month.to_s,
@@ -299,17 +298,17 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
     end
 
-    describe "#field_15" do
+    describe "#field_16" do
       context "when nullable not permitted" do
-        let(:attributes) { { bulk_upload:, field_5: "2", field_15: nil } }
+        let(:attributes) { { bulk_upload:, field_5: "2", field_16: nil } }
 
         it "cannot be nulled" do
-          expect(parser.errors[:field_15]).to be_present
+          expect(parser.errors[:field_16]).to be_present
         end
       end
 
       context "when nullable permitted" do
-        let(:attributes) { { bulk_upload:, field_5: "1", field_15: nil } }
+        let(:attributes) { { bulk_upload:, field_5: "1", field_16: nil } }
 
         it "can be nulled" do
           expect(parser.errors[:field_15]).to be_blank
@@ -317,56 +316,56 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
 
       context "when matching scheme cannot be found" do
-        let(:attributes) { { bulk_upload:, field_5: "1", field_15: "123" } }
+        let(:attributes) { { bulk_upload:, field_5: "1", field_16: "123" } }
 
         it "returns an error" do
-          expect(parser.errors[:field_15]).to be_present
+          expect(parser.errors[:field_16]).to be_present
         end
       end
 
       context "when scheme belongs to someone else" do
         let(:other_scheme) { create(:scheme, :with_old_visible_id) }
-        let(:attributes) { { bulk_upload:, field_5: "1", field_15: other_scheme.old_visible_id, field_1: owning_org.old_visible_id } }
+        let(:attributes) { { bulk_upload:, field_5: "1", field_16: other_scheme.old_visible_id, field_1: owning_org.old_visible_id } }
 
         it "returns an error" do
-          expect(parser.errors[:field_15]).to include("This management group code does not belong to your organisation, or any of your stock owners / managing agents")
+          expect(parser.errors[:field_16]).to include("This management group code does not belong to your organisation, or any of your stock owners / managing agents")
         end
       end
 
       context "when scheme belongs to owning org" do
         let(:scheme) { create(:scheme, :with_old_visible_id, owning_organisation: owning_org) }
-        let(:attributes) { { bulk_upload:, field_5: "1", field_15: scheme.old_visible_id, field_1: owning_org.old_visible_id } }
+        let(:attributes) { { bulk_upload:, field_5: "1", field_16: scheme.old_visible_id, field_1: owning_org.old_visible_id } }
 
         it "does not return an error" do
-          expect(parser.errors[:field_15]).to be_blank
+          expect(parser.errors[:field_16]).to be_blank
         end
       end
 
       context "when scheme belongs to managing org" do
         let(:scheme) { create(:scheme, :with_old_visible_id, owning_organisation: managing_org) }
-        let(:attributes) { { bulk_upload:, field_5: "1", field_15: scheme.old_visible_id, field_2: managing_org.old_visible_id } }
+        let(:attributes) { { bulk_upload:, field_5: "1", field_16: scheme.old_visible_id, field_2: managing_org.old_visible_id } }
 
         it "does not return an error" do
-          expect(parser.errors[:field_15]).to be_blank
+          expect(parser.errors[:field_16]).to be_blank
         end
       end
     end
 
-    describe "#field_16" do
+    describe "#field_17" do
       context "when location does not exist" do
         let(:scheme) { create(:scheme, :with_old_visible_id, owning_organisation: owning_org) }
         let(:attributes) do
           {
             bulk_upload:,
             field_5: "1",
-            field_15: scheme.old_visible_id,
-            field_16: "dontexist",
+            field_16: scheme.old_visible_id,
+            field_17: "dontexist",
             field_1: owning_org.old_visible_id,
           }
         end
 
         it "returns an error" do
-          expect(parser.errors[:field_16]).to be_present
+          expect(parser.errors[:field_17]).to be_present
         end
       end
 
@@ -376,14 +375,14 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           {
             bulk_upload:,
             field_5: "1",
-            field_15: scheme.old_visible_id,
-            field_16: location.old_visible_id,
+            field_16: scheme.old_visible_id,
+            field_17: location.old_visible_id,
             field_1: owning_org.old_visible_id,
           }
         end
 
         it "does not return an error" do
-          expect(parser.errors[:field_16]).to be_blank
+          expect(parser.errors[:field_17]).to be_blank
         end
       end
 
@@ -393,14 +392,14 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           {
             bulk_upload:,
             field_5: "1",
-            field_15: scheme.old_visible_id,
-            field_16: location.old_visible_id,
+            field_16: scheme.old_visible_id,
+            field_17: location.old_visible_id,
             field_1: owning_org.old_visible_id,
           }
         end
 
         it "returns an error" do
-          expect(parser.errors[:field_16]).to be_present
+          expect(parser.errors[:field_17]).to be_present
         end
       end
     end
@@ -650,7 +649,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           error = errors.find { |e| e.attribute == :field_4 }
 
           expect(error).to be_present
-          expect(error.type).to eql("You must answer what is the needs type?")
+          expect(error.type).to eql("You must answer needs type")
         end
       end
     end
@@ -728,7 +727,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
     describe "#location" do
       context "when lookup is via new core id" do
-        let(:attributes) { { bulk_upload:, field_15: scheme.old_visible_id, field_16: location.id, field_1: owning_org } }
+        let(:attributes) { { bulk_upload:, field_16: scheme.old_visible_id, field_17: location.id, field_1: owning_org } }
 
         it "assigns the correct location" do
           expect(parser.log.location).to eql(location)
@@ -738,7 +737,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
     describe "#scheme" do
       context "when lookup is via id prefixed with S" do
-        let(:attributes) { { bulk_upload:, field_15: "S#{scheme.id}", field_1: owning_org } }
+        let(:attributes) { { bulk_upload:, field_16: "S#{scheme.id}", field_1: owning_org } }
 
         it "assigns the correct scheme" do
           expect(parser.log.scheme).to eql(scheme)

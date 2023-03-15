@@ -281,7 +281,7 @@ class BulkUpload::Lettings::Year2023::RowParser
 
   validates :field_5, presence: { message: I18n.t("validations.not_answered", question: "letting type") },
                       inclusion: { in: (1..12).to_a, message: I18n.t("validations.invalid_option", question: "letting type") }
-  validates :field_15, presence: { if: proc { [2, 4, 6, 8, 10, 12].include?(field_5) } }
+  validates :field_16, presence: { if: proc { [2, 4, 6, 8, 10, 12].include?(field_5) } }
 
   validates :field_46, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 1 must be a number or the letter R" }
   validates :field_52, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 2 must be a number or the letter R" }
@@ -379,7 +379,7 @@ private
 
   def validate_needs_type_present
     if field_4.blank?
-      errors.add(:field_4, I18n.t("validations.not_answered", question: "what is the needs type?"), category: :setup)
+      errors.add(:field_4, I18n.t("validations.not_answered", question: "needs type"))
     end
   end
 
@@ -500,43 +500,43 @@ private
 
     unless location.scheme == scheme
       block_log_creation!
-      errors.add(:field_16, "Scheme code must relate to a location that is owned by owning organisation or managing organisation")
+      errors.add(:field_17, "Scheme code must relate to a location that is owned by owning organisation or managing organisation")
     end
   end
 
   def validate_location_exists
-    if scheme && field_16.present? && location.nil?
-      errors.add(:field_16, "Location could be found with provided scheme code")
+    if scheme && field_17.present? && location.nil?
+      errors.add(:field_17, "Location could be found with provided scheme code")
     end
   end
 
   def validate_location_data_given
-    if bulk_upload.supported_housing? && field_16.blank?
-      errors.add(:field_16, "The scheme code must be present", category: "setup")
+    if supported_housing? && field_17.blank?
+      errors.add(:field_17, "The scheme code must be present", category: "setup")
     end
   end
 
   def validate_scheme_related
-    return unless field_15.present? && scheme.present?
+    return unless field_16.present? && scheme.present?
 
     owned_by_owning_org = owning_organisation && scheme.owning_organisation == owning_organisation
     owned_by_managing_org = managing_organisation && scheme.owning_organisation == managing_organisation
 
     unless owned_by_owning_org || owned_by_managing_org
       block_log_creation!
-      errors.add(:field_15, "This management group code does not belong to your organisation, or any of your stock owners / managing agents")
+      errors.add(:field_16, "This management group code does not belong to your organisation, or any of your stock owners / managing agents")
     end
   end
 
   def validate_scheme_exists
-    if field_15.present? && scheme.nil?
-      errors.add(:field_15, "The management group code is not correct")
+    if field_16.present? && scheme.nil?
+      errors.add(:field_16, "The management group code is not correct")
     end
   end
 
   def validate_scheme_data_given
-    if bulk_upload.supported_housing? && field_15.blank?
-      errors.add(:field_15, "The management group code is not correct", category: "setup")
+    if supported_housing? && field_16.blank?
+      errors.add(:field_16, "The management group code is not correct", category: "setup")
     end
   end
 
@@ -605,9 +605,10 @@ private
       owning_organisation_id: [:field_1],
       managing_organisation_id: [:field_2],
       renewal: [:field_6],
-      scheme: %i[field_15 field_16],
+      scheme: %i[field_16],
+      location: %i[field_17],
       created_by: [],
-      needstype: [],
+      needstype: [:field_4],
       rent_type: %i[field_5 field_10 field_11],
       startdate: %i[field_7 field_8 field_9],
       unittype_gn: %i[field_29],
@@ -979,13 +980,13 @@ private
   end
 
   def scheme
-    @scheme ||= Scheme.find_by_id_on_mulitple_fields(field_15)
+    @scheme ||= Scheme.find_by_id_on_mulitple_fields(field_16)
   end
 
   def location
     return if scheme.nil?
 
-    @location ||= scheme.locations.find_by_id_on_mulitple_fields(field_16)
+    @location ||= scheme.locations.find_by_id_on_mulitple_fields(field_17)
   end
 
   def renttype
