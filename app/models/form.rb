@@ -160,7 +160,7 @@ class Form
 
   def invalidated_page_questions(log, current_user = nil)
     # we're already treating these fields as a special case and reset their values upon saving a log
-    callback_questions = %w[postcode_known la ppcodenk previous_la_known prevloc postcode_full ppostcode_full location_id]
+    callback_questions = %w[postcode_known la ppcodenk previous_la_known prevloc postcode_full ppostcode_full location_id address_line1 address_line2 town_or_city county]
     questions.reject { |q| q.page.routed_to?(log, current_user) || q.derived? || callback_questions.include?(q.id) } || []
   end
 

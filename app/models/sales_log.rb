@@ -78,6 +78,8 @@ class SalesLog < Log
     not_required = []
     not_required << "proplen" if proplen_optional?
 
+    not_required |= %w[address_line2 county postcode_full] if saledate && saledate.year >= 2023
+
     not_required
   end
 

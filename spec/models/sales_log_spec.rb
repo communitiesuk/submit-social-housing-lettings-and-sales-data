@@ -36,7 +36,7 @@ RSpec.describe SalesLog, type: :model do
   end
 
   describe "#update" do
-    let(:sales_log) { FactoryBot.create(:sales_log, created_by: created_by_user) }
+    let(:sales_log) { create(:sales_log, created_by: created_by_user) }
     let(:validator) { sales_log._validators[nil].first }
 
     after do
@@ -49,10 +49,34 @@ RSpec.describe SalesLog, type: :model do
   end
 
   describe "#optional_fields" do
-    let(:sales_log) { build(:sales_log) }
+    context "when saledate is before 2023" do
+      let(:sales_log) { build(:sales_log, saledate: Time.zone.parse("2022-07-01")) }
 
     it "returns optional fields" do
-      expect(sales_log.optional_fields).to eq(%w[saledate_check purchid monthly_charges_value_check old_persons_shared_ownership_value_check])
+        expect(sales_log.optional_fields).to eq(%w[
+          saledate_check
+          purchid
+          monthly_charges_value_check
+          old_persons_shared_ownership_value_check
+          proplen
+        ])
+      end
+    end
+
+    context "when saledate is after 2023" do
+      let(:sales_log) { build(:sales_log, saledate: Time.zone.parse("2023-07-01")) }
+
+      it "returns optional fields" do
+        expect(sales_log.optional_fields).to eq(%w[
+          saledate_check
+          purchid
+          monthly_charges_value_check
+          old_persons_shared_ownership_value_check
+          address_line2
+          county
+          postcode_full
+        ])
+      end
     end
   end
 
@@ -135,7 +159,7 @@ RSpec.describe SalesLog, type: :model do
   end
 
   describe "derived variables" do
-    let(:sales_log) { FactoryBot.create(:sales_log, :completed) }
+    let(:sales_log) { create(:sales_log, :completed) }
 
     it "correctly derives and saves exday, exmonth and exyear" do
       sales_log.update!(exdate: Time.gm(2022, 5, 4), saledate: Time.gm(2022, 7, 4), ownershipsch: 1, staircase: 2, resale: 2)
@@ -192,7 +216,7 @@ RSpec.describe SalesLog, type: :model do
     end
 
     let!(:address_sales_log) do
-      FactoryBot.create(
+      create(
         :sales_log,
         :completed,
         owning_organisation:,
@@ -336,7 +360,7 @@ RSpec.describe SalesLog, type: :model do
 
   context "when deriving household variables" do
     let!(:sales_log) do
-      FactoryBot.create(
+      create(
         :sales_log,
         :completed,
         jointpur: 1,
@@ -463,7 +487,7 @@ RSpec.describe SalesLog, type: :model do
   end
 
   describe "#field_formatted_as_currency" do
-    let(:completed_sales_log) { FactoryBot.create(:sales_log, :completed) }
+    let(:completed_sales_log) { create(:sales_log, :completed) }
 
     it "returns small numbers correctly formatted as currency" do
       completed_sales_log.update!(savings: 4)
