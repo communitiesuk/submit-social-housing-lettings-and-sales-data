@@ -504,12 +504,6 @@ private
     end
   end
 
-  def location
-    return if scheme.nil?
-
-    @location ||= scheme.locations.find_by_id_on_mulitple_fields(field_16)
-  end
-
   def validate_location_exists
     if scheme && field_16.present? && location.nil?
       errors.add(:field_16, "Location could be found with provided scheme code")
