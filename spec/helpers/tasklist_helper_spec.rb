@@ -9,7 +9,6 @@ RSpec.describe TasklistHelper do
       example.run
     end
     Timecop.return
-    Singleton.__init__(FormHandler)
   end
 
   describe "with lettings" do
