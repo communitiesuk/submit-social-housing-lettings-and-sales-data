@@ -223,7 +223,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       it "has errors on setup fields" do
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute)
 
-        expect(errors).to eql(%i[field_5 field_7 field_8 field_9 field_1 field_2])
+        expect(errors).to eql(%i[field_4 field_5 field_7 field_8 field_9 field_1 field_2])
       end
     end
 
@@ -637,6 +637,20 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "blocks log creation" do
           expect(parser).to be_block_log_creation
+        end
+      end
+    end
+
+    describe "#field_4" do
+      context "when blank" do
+        let(:attributes) { { bulk_upload:, field_4: nil, field_13: "123" } }
+
+        it "is reported as a setup error" do
+          errors = parser.errors.select { |e| e.options[:category] == :setup }
+          error = errors.find { |e| e.attribute == :field_4 }
+
+          expect(error).to be_present
+          expect(error.type).to eql("You must answer what is the needs type?")
         end
       end
     end

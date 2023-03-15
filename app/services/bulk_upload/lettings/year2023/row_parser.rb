@@ -298,6 +298,7 @@ class BulkUpload::Lettings::Year2023::RowParser
 
   validates :field_9, format: { with: /\A\d{2}\z/, message: I18n.t("validations.setup.startdate.year_not_two_digits") }
 
+  validate :validate_needs_type_present
   validate :validate_data_types
   validate :validate_nulls
   validate :validate_relevant_collection_window
@@ -375,6 +376,12 @@ class BulkUpload::Lettings::Year2023::RowParser
   end
 
 private
+
+  def validate_needs_type_present
+    if field_4.blank?
+      errors.add(:field_4, I18n.t("validations.not_answered", question: "what is the needs type?"), category: :setup)
+    end
+  end
 
   def start_date
     return if field_7.blank? || field_8.blank? || field_9.blank?
@@ -752,7 +759,6 @@ private
     log.form.subsections.flat_map { |ss| ss.applicable_questions(log) }
   end
 
-  # TODO: whole method needs re-mapping
   def attributes_for_log
     attributes = {}
 
