@@ -30,6 +30,30 @@ RSpec.describe BulkUpload::Lettings::Year2023::CsvParser do
     end
   end
 
+  context "when parsing csv with headers with extra rows" do
+    before do
+      file.write("Section\n")
+      file.write("Question\n")
+      file.write("Additional info\n")
+      file.write("Values\n")
+      file.write("Can be empty?\n")
+      file.write("Type of letting the question applies to\n")
+      file.write("Duplicate check field?\n")
+      file.write(BulkUpload::LogToCsv.new(log:).default_2023_field_numbers_row)
+      file.write(BulkUpload::LogToCsv.new(log:).to_2023_csv_row)
+      file.rewind
+    end
+
+    it "returns correct offsets" do
+      expect(service.row_offset).to eq(8)
+      expect(service.col_offset).to eq(1)
+    end
+
+    it "parses csv correctly" do
+      expect(service.row_parsers[0].field_13).to eql(log.tenancycode)
+    end
+  end
+
   context "when parsing csv with headers in arbitrary order" do
     let(:seed) { rand }
 

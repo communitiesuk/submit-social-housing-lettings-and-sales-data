@@ -10,7 +10,11 @@ class BulkUpload::Lettings::Year2023::CsvParser
   end
 
   def row_offset
-    with_headers? ? 7 : 0
+    if with_headers?
+      rows.find_index { |row| row[0].match(/field number/i) } + 1
+    else
+      0
+    end
   end
 
   def col_offset
@@ -57,7 +61,7 @@ private
   end
 
   def with_headers?
-    rows[0][0]&.match?(/Question/)
+    rows.map { |r| r[0] }.any? { |cell| cell&.match?(/field number/i) }
   end
 
   def row_sep
