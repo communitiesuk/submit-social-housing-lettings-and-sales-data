@@ -24,14 +24,16 @@ class BulkUpload::Lettings::Validator
       row = index + row_offset + 1
 
       row_parser.errors.each do |error|
+        col = csv_parser.column_for_field(error.attribute.to_s)
+
         bulk_upload.bulk_upload_errors.create!(
           field: error.attribute,
           error: error.message,
-          tenant_code: row_parser.field_7,
-          property_ref: row_parser.field_100,
+          tenant_code: row_parser.tenant_code,
+          property_ref: row_parser.property_ref,
           row:,
-          cell: "#{cols[field_number_for_attribute(error.attribute) - col_offset + 1]}#{row}",
-          col: csv_parser.column_for_field(error.attribute.to_s),
+          cell: "#{col}#{row}",
+          col:,
           category: error.options[:category],
         )
       end

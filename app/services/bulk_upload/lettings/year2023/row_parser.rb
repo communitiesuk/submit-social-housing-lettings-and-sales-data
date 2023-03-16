@@ -375,6 +375,14 @@ class BulkUpload::Lettings::Year2023::RowParser
     block_log_creation
   end
 
+  def tenant_code
+    field_13
+  end
+
+  def property_ref
+    field_14
+  end
+
 private
 
   def validate_needs_type_present

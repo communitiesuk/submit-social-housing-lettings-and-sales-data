@@ -71,6 +71,46 @@ RSpec.describe BulkUpload::Lettings::Validator do
       end
     end
 
+    context "with arbitrary ordered 23/24 csv" do
+      let(:bulk_upload) { create(:bulk_upload, user:, year: 2023) }
+      let(:log) { build(:lettings_log, :completed) }
+      let(:file) { Tempfile.new }
+      let(:path) { file.path }
+      let(:seed) { 321 }
+
+      around do |example|
+        FormHandler.instance.use_real_forms!
+
+        example.run
+
+        FormHandler.instance.use_fake_forms!
+      end
+
+      before do
+        file.write(BulkUpload::LogToCsv.new(log:, line_ending: "\r\n").default_2023_field_numbers_row(seed:))
+        file.write(BulkUpload::LogToCsv.new(log:, line_ending: "\r\n").to_2023_csv_row(seed:))
+        file.close
+      end
+
+      it "creates validation errors" do
+        expect { validator.call }.to change(BulkUploadError, :count)
+      end
+
+      it "create validation error with correct values" do
+        validator.call
+
+        error = BulkUploadError.find_by(field: "field_5")
+
+        expect(error.field).to eql("field_5")
+        expect(error.error).to eql("You must answer letting type")
+        expect(error.tenant_code).to eql(log.tenancycode)
+        expect(error.property_ref).to eql(log.propcode)
+        expect(error.row).to eql("2")
+        expect(error.cell).to eql("DD2")
+        expect(error.col).to eql("DD")
+      end
+    end
+
     context "with unix line endings" do
       let(:fixture_path) { file_fixture("2022_23_lettings_bulk_upload.csv") }
       let(:file) { Tempfile.new }
