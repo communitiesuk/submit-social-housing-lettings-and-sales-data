@@ -56,22 +56,16 @@ describe FilterService do
       context "when filtering sales logs" do
         before do
           puts "\n\n"
-          puts "All sales logs"
-          pp SalesLog.all
-          puts %q[Sales logs where purchid = "2"]
-          pp SalesLog.where(purchid: "2").count
+          puts "Beginning"
+          pp SalesLog.all.pluck("purchid")
           FactoryBot.create_list(:sales_log, 5)
           puts "\n\n"
-          puts "All sales logs"
-          pp SalesLog.all
-          puts %q[Sales logs where purchid = "2"]
-          pp SalesLog.where(purchid: "2").count
+          puts "After 5 created"
+          pp SalesLog.all.pluck("purchid")
           FactoryBot.create(:sales_log, purchid: "2")
           puts "\n\n"
-          puts "All sales logs"
-          pp SalesLog.all
-          puts %q[Sales logs where purchid = "2"]
-          pp SalesLog.where(purchid: "2").count
+          puts %q[After 1 created with purchid = "2"]
+          pp SalesLog.all.pluck("purchid")
         end
 
         let(:sales_log_list) { SalesLog.all }
