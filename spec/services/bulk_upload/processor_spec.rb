@@ -21,6 +21,7 @@ RSpec.describe BulkUpload::Processor do
           BulkUpload::Lettings::Validator,
           invalid?: true,
           call: nil,
+          errors: [],
         )
       end
 

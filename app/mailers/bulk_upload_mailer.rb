@@ -100,7 +100,7 @@ class BulkUploadMailer < NotifyMailer
     )
   end
 
-  def send_bulk_upload_failed_service_error_mail(bulk_upload:)
+  def send_bulk_upload_failed_service_error_mail(bulk_upload:, errors: [])
     bulk_upload_link = if bulk_upload.lettings?
                          start_bulk_upload_lettings_logs_url
                        else
@@ -115,6 +115,7 @@ class BulkUploadMailer < NotifyMailer
         upload_timestamp: bulk_upload.created_at,
         lettings_or_sales: bulk_upload.log_type,
         year_combo: bulk_upload.year_combo,
+        errors: errors.map { |e| "- #{e}" }.join("\n"),
         bulk_upload_link:,
       },
     )
