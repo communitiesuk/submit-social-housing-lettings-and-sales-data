@@ -203,6 +203,11 @@ module Imports
         @logs_overridden << sales_log.old_id
         attributes.delete("exdate")
         save_sales_log(attributes, previous_status)
+      elsif sales_log.errors.of_kind?(:income1, :over_hard_max_for_outside_london)
+        @logger.warn("Log #{sales_log.old_id}: Removing income1 as the income1 is invalid")
+        @logs_overridden << sales_log.old_id
+        attributes.delete("income1")
+        save_sales_log(attributes, previous_status)
       else
         @logger.error("Log #{sales_log.old_id}: Failed to import")
         sales_log.errors.each do |error|
