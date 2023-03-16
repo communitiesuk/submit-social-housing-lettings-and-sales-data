@@ -1982,25 +1982,17 @@ RSpec.describe LettingsLog do
       before do
         lettings_log.needstype = 2
         allow(FormHandler.instance).to receive(:get_form).and_return(real_2021_2022_form)
-        Timecop.freeze(2022, 4, 2)
-      end
-
-      after do
-        Timecop.unfreeze
       end
 
       context "and a scheme with a single log is selected" do
-        before do
-          Timecop.freeze(2022, 4, 2)
-          lettings_log.update!(startdate: Time.zone.local(2022, 4, 2), scheme:)
-        end
-
-        after do
-          Timecop.unfreeze
-        end
-
         let(:scheme) { FactoryBot.create(:scheme) }
         let!(:location) { FactoryBot.create(:location, scheme:) }
+
+        before do
+          Timecop.freeze(Time.zone.local(2022, 4, 2))
+          lettings_log.update!(startdate: Time.zone.local(2022, 4, 2), scheme:)
+          Timecop.unfreeze
+        end
 
         it "derives the scheme location" do
           record_from_db = ActiveRecord::Base.connection.execute("select location_id from lettings_logs where id=#{lettings_log.id}").to_a[0]
@@ -2053,6 +2045,12 @@ RSpec.describe LettingsLog do
       end
 
       context "and renewal" do
+        before do
+          Timecop.freeze(Time.zone.local(2022, 4, 2))
+        end
+        after do
+          Timecop.unfreeze
+        end
         let(:scheme) { FactoryBot.create(:scheme) }
         let!(:supported_housing_lettings_log) do
           described_class.create!({
@@ -2063,10 +2061,12 @@ RSpec.describe LettingsLog do
             scheme_id: scheme.id,
             location_id: location.id,
             renewal: 1,
-            startdate: Time.zone.now,
+            startdate: Time.zone.local(2022, 4, 2),
             created_at: Time.utc(2022, 2, 8, 16, 52, 15),
           })
         end
+
+
 
         let(:location) { FactoryBot.create(:location, scheme:) }
 
@@ -2835,6 +2835,7 @@ RSpec.describe LettingsLog do
       Timecop.unfreeze
     end
 
+
     context "with values represented as human readable labels" do
       before do
         Timecop.freeze(Time.utc(2022, 6, 5))
@@ -2851,6 +2852,15 @@ RSpec.describe LettingsLog do
         expected_content.sub!(/\{location_startdate\}/, location["startdate"].to_s)
         expected_content.sub!(/\{scheme_id\}/, scheme["service_name"].to_s)
         expected_content.sub!(/\{location_id\}/, location["id"].to_s)
+      end
+
+      around do |example|
+        Timecop.freeze(Time.zone.local(2022, 6, 5)) do
+          Singleton.__init__(FormHandler)
+          example.run
+        end
+        Timecop.return
+        Singleton.__init__(FormHandler)
       end
 
       context "with a support user" do
@@ -2873,7 +2883,7 @@ RSpec.describe LettingsLog do
     context "with values represented as codes" do
       before do
         Timecop.freeze(Time.utc(2022, 6, 5))
-        lettings_log = FactoryBot.create(:lettings_log, needstype: 2, scheme:, location:, owning_organisation: scheme.owning_organisation, created_by: user, rent_type: 2, startdate: Time.zone.local(2021, 10, 2))
+        lettings_log = FactoryBot.create(:lettings_log, needstype: 2, scheme:, location:, owning_organisation: scheme.owning_organisation, created_by: user, rent_type: 2, startdate: Time.zone.local(2021, 10, 2), created_at: Time.zone.local(2022, 2, 8, 16, 52, 15), updated_at: Time.zone.local(2022, 2, 8, 16, 52, 15))
         expected_content.sub!(/\{id\}/, lettings_log["id"].to_s)
         expected_content.sub!(/\{scheme_code\}/, "S#{scheme.id}")
         expected_content.sub!(/\{scheme_service_name\}/, scheme.service_name.to_s)
@@ -2889,6 +2899,15 @@ RSpec.describe LettingsLog do
       end
 
       let(:csv_export_file) { File.open("spec/fixtures/files/lettings_logs_download_codes_only.csv", "r:UTF-8") }
+
+      around do |example|
+        Timecop.freeze(Time.zone.local(2022, 6, 5)) do
+          Singleton.__init__(FormHandler)
+          example.run
+        end
+        Timecop.return
+        Singleton.__init__(FormHandler)
+      end
 
       it "generates a correct csv from a lettings log" do
         expect(described_class.to_csv(codes_only_export: true)).to eq(expected_content)
