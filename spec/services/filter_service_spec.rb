@@ -64,7 +64,7 @@ describe FilterService do
           pp SalesLog.all.pluck("purchid")
           FactoryBot.create(:sales_log, purchid: "2")
           puts "\n\n"
-          puts %q[After 1 created with purchid = "2"]
+          puts 'After 1 created with purchid = "2"'
           pp SalesLog.all.pluck("purchid")
         end
 
