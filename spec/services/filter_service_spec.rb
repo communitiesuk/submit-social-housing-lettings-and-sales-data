@@ -61,7 +61,17 @@ describe FilterService do
           puts %q[Sales logs where purchid = "2"]
           pp SalesLog.where(purchid: "2").count
           FactoryBot.create_list(:sales_log, 5)
+          puts "\n\n"
+          puts "All sales logs"
+          pp SalesLog.all
+          puts %q[Sales logs where purchid = "2"]
+          pp SalesLog.where(purchid: "2").count
           FactoryBot.create(:sales_log, purchid: "2")
+          puts "\n\n"
+          puts "All sales logs"
+          pp SalesLog.all
+          puts %q[Sales logs where purchid = "2"]
+          pp SalesLog.where(purchid: "2").count
         end
 
         let(:sales_log_list) { SalesLog.all }
