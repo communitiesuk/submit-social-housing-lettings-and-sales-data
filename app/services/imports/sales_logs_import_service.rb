@@ -198,6 +198,11 @@ module Imports
         attributes.delete("ppcodenk")
         attributes.delete("ppostcode_full")
         save_sales_log(attributes, previous_status)
+      elsif sales_log.errors.of_kind?(:exdate, :over_a_year_from_saledate)
+        @logger.warn("Log #{sales_log.old_id}: Removing exchange date as the exchange date is invalid")
+        @logs_overridden << sales_log.old_id
+        attributes.delete("exdate")
+        save_sales_log(attributes, previous_status)
       else
         @logger.error("Log #{sales_log.old_id}: Failed to import")
         sales_log.errors.each do |error|
