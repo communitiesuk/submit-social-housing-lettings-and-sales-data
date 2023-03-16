@@ -132,12 +132,12 @@ private
   CHARGE_MAXIMUMS = {
     scharge: {
       private_registered_provider: {
-        general_needs: 55,
-        supported_housing: 280,
+        general_needs: 155,
+        supported_housing: 480,
       },
       local_authority: {
-        general_needs: 45,
-        supported_housing: 165,
+        general_needs: 155,
+        supported_housing: 365,
       },
     },
     pscharge: {
