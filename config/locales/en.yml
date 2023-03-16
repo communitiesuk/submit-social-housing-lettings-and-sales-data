@@ -307,7 +307,7 @@ en:
         percentage_bought_must_be_at_least_threshold: "The minimum increase in equity while staircasing is %{threshold}%"
       equity:
         under_min: "The minimum initial equity stake for this type of shared ownership sale is %{min_equity}%"
-        over_max: "The maximum initial equity stake is 75%"
+        over_max: "The maximum initial equity stake is %{max_equity}%"
 
     household:
       reasonpref:

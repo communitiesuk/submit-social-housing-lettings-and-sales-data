@@ -88,20 +88,15 @@ module Validations::Sales::FinancialValidations
   def validate_equity_in_range_for_year_and_type(record)
     return unless record.type && record.equity && record.collection_start_year
 
-    if record.collection_start_year == 2022
-      ranges = EQUITY_RANGES_FOR_TYPES_BY_COLLECTION_START_YEAR[2022]
-    elsif record.collection_start_year >= 2023
-      ranges = EQUITY_RANGES_FOR_TYPES_BY_COLLECTION_START_YEAR[2023]
-    end
+    ranges = EQUITY_RANGES_BY_YEAR.fetch(record.collection_start_year, DEFAULT_EQUITY_RANGES)
 
-    if ranges.key?(record.type)
-      range = ranges[record.type]
-      if record.equity < range["min"]
-        record.errors.add :type, I18n.t("validations.financial.equity.under_min", min_equity: range["min"])
-        record.errors.add :equity, I18n.t("validations.financial.equity.under_min", min_equity: range["min"])
-      elsif record.equity > range["max"]
-        record.errors.add :type, I18n.t("validations.financial.equity.over_max")
-        record.errors.add :equity, I18n.t("validations.financial.equity.over_max")
+    if range = ranges[record.type]
+      if record.equity < range.min
+        record.errors.add :type, I18n.t("validations.financial.equity.under_min", min_equity: range.min)
+        record.errors.add :equity, I18n.t("validations.financial.equity.under_min", min_equity: range.min)
+      elsif record.equity > range.max
+        record.errors.add :type, I18n.t("validations.financial.equity.over_max", max_equity: range.max)
+        record.errors.add :equity, I18n.t("validations.financial.equity.over_max", max_equity: range.max)
       end
     end
   end
@@ -116,25 +111,24 @@ private
     economic_status == 9
   end
 
-  EQUITY_RANGES_FOR_TYPES_BY_COLLECTION_START_YEAR = {
+  EQUITY_RANGES_BY_YEAR = {
     2022 => {
-      2 => { "min" => 25, "max" => 75 },
-      30 => { "min" => 10, "max" => 75 },
-      18 => { "min" => 25, "max" => 75 },
-      16 => { "min" => 10, "max" => 75 },
-      24 => { "min" => 25, "max" => 75 },
-      # 28 => ranges don't apply
-      31 => { "min" => 0, "max" => 75 },
+      2 => 25..75,
+      30 => 10..75,
+      18 => 25..75,
+      16 => 10..75,
+      24 => 25..75,
+      31 => 0..75,
     },
-    2023 => {
-      2 => { "min" => 10, "max" => 75 },
-      30 => { "min" => 25, "max" => 75 },
-      18 => { "min" => 25, "max" => 75 },
-      16 => { "min" => 10, "max" => 75 },
-      24 => { "min" => 25, "max" => 75 },
-      # 28 => ranges don't apply
-      31 => { "min" => 0, "max" => 75 },
-      32 => { "min" => 0, "max" => 75 },
-    },
+  }.freeze
+
+  DEFAULT_EQUITY_RANGES = {
+    2 => 10..75,
+    30 => 25..75,
+    18 => 25..75,
+    16 => 10..75,
+    24 => 25..75,
+    31 => 0..75,
+    32 => 0..75,
   }.freeze
 end
