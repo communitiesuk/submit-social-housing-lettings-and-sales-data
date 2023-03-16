@@ -18,7 +18,7 @@ class Form::Lettings::Questions::EthnicBlack < ::Form::Question
       "value" => "Caribbean",
     },
     "14" => {
-      "value" => "Any other Black, African or Caribbean background",
+      "value" => "Any other Black, African, Caribbean or Black British background",
     },
   }.freeze
 end
