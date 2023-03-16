@@ -31,7 +31,43 @@ RSpec.describe Form::Sales::Pages::Address, type: :model do
     expect(page.depends_on).to be_nil
   end
 
-  xit "has correct routed_to" do
-    expect(page.routed_to?).to be_nil
+  describe "has correct routed_to?" do
+    context "when uprn_known == nil" do
+      let(:log) { create(:sales_log, uprn_known: nil) }
+
+      it "returns false" do
+        expect(page.routed_to?(log)).to eq(false)
+      end
+    end
+
+    context "when uprn_confirmed != 1" do
+      let(:log) do
+        create(:sales_log, uprn_known: 1, uprn_confirmed: 0)
+      end
+
+      it "returns true" do
+        expect(page.routed_to?(log)).to eq(true)
+      end
+    end
+
+    context "when uprn_known == 0" do
+      let(:log) do
+        create(:sales_log, uprn_known: 0, uprn_confirmed: 0)
+      end
+
+      it "returns true" do
+        expect(page.routed_to?(log)).to eq(true)
+      end
+    end
+
+    context "when uprn_confirmed == 1 && uprn_known != 0" do
+      let(:log) do
+        create(:sales_log, uprn_known: 1, uprn_confirmed: 1)
+      end
+
+      it "returns true" do
+        expect(page.routed_to?(log)).to eq(false)
+      end
+    end
   end
 end

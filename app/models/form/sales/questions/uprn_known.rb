@@ -3,7 +3,7 @@ class Form::Sales::Questions::UprnKnown < ::Form::Question
     super
     @id = "uprn_known"
     @check_answer_label = "UPRN known?"
-    @header = "Do you know the sale UPRN?"
+    @header = "Do you know the property UPRN?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @hint_text = "The Unique Property Reference Number (UPRN) is a unique number system created by Ordnance Survey and used by housing providers and sectors UK-wide. For example 10010457355.<br><br>

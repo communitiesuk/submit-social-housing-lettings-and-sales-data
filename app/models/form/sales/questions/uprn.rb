@@ -20,7 +20,7 @@ class Form::Sales::Questions::Uprn < ::Form::Question
       log.town_or_city,
       log.county,
       log.postcode_full,
-      (LocalAuthority.find_by(code: log.uprn)&.name if log.uprn.present?),
+      (LocalAuthority.find_by(code: log.la)&.name if log.la.present?),
     ].select(&:present?)
 
     return unless value.any?

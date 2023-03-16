@@ -83,7 +83,10 @@ RSpec.describe QuestionViewHelper do
     end
 
     context "when viewing a question with a plain label" do
-      xit "returns an options hash with nil size" do
+      let(:question) { OpenStruct.new(header: "Some question header", plain_label: true) }
+
+      it "returns an options hash with nil size" do
+        expect(question_view_helper).to eq({ size: nil, tag: "div", text: "Some question header" })
       end
     end
   end

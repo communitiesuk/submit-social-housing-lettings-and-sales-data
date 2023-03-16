@@ -10,7 +10,7 @@ class Form::Sales::Pages::Uprn < ::Form::Page
     ]
   end
 
-  def routed_to?(log, _current_user)
+  def routed_to?(log, _current_user = nil)
     log.uprn_known == 1
   end
 

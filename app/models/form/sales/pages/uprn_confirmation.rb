@@ -11,7 +11,7 @@ class Form::Sales::Pages::UprnConfirmation < ::Form::Page
     ]
   end
 
-  def routed_to?(log, _current_user)
+  def routed_to?(log, _current_user = nil)
     log.uprn.present? && log.uprn_known == 1
   end
 end

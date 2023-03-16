@@ -41,25 +41,48 @@ RSpec.describe Form::Sales::Questions::Uprn, type: :model do
 
   describe "get_extra_check_answer_value" do
     context "when address is not present" do
-      it "returns nil" do
-        log = create(:sales_log)
+      let(:log) { create(:sales_log) }
 
+      it "returns nil" do
         expect(question.get_extra_check_answer_value(log)).to be_nil
       end
     end
 
     context "when address is present" do
-      it "returns formatted value" do
-        log = create(:sales_log, address_line1: "1, Test Street", town_or_city: "Test Town", county: "Test County", postcode_full: "AA1 1AA")
+      let(:log) do
+        create(
+          :sales_log,
+          address_line1: "1, Test Street",
+          town_or_city: "Test Town",
+          county: "Test County",
+          postcode_full: "AA1 1AA",
+          la: "E09000003",
+        )
+      end
 
+      it "returns formatted value" do
         expect(question.get_extra_check_answer_value(log)).to eq(
-          "\n\n1, Test Street\nTest Town\nTest County\nAA1 1AA",
+          "\n\n1, Test Street\nTest Town\nTest County\nAA1 1AA\nWestminster",
         )
       end
     end
   end
 
-  xit "has the correct hidden_in_check_answers" do
-    expect(question.hidden_in_check_answers).to eq("UPRN must be 12 digits or less")
+  describe "has the correct hidden_in_check_answers" do
+    context "when uprn_known == 1" do
+      let(:log) { create(:sales_log, uprn_known: 1) }
+
+      it "returns false" do
+        expect(question.hidden_in_check_answers?(log)).to eq(false)
+      end
+    end
+
+    context "when uprn_known != 1" do
+      let(:log) { create(:sales_log, uprn_known: 0) }
+
+      it "returns false" do
+        expect(question.hidden_in_check_answers?(log)).to eq(true)
+      end
+    end
   end
 end

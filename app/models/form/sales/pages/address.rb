@@ -15,7 +15,7 @@ class Form::Sales::Pages::Address < ::Form::Page
     ]
   end
 
-  def routed_to?(log, _current_user)
+  def routed_to?(log, _current_user = nil)
     return false if log.uprn_known.nil?
 
     log.uprn_confirmed != 1 || log.uprn_known.zero?

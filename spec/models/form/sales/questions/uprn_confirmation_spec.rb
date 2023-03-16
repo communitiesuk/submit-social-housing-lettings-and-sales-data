@@ -62,7 +62,29 @@ RSpec.describe Form::Sales::Questions::UprnConfirmation, type: :model do
     end
   end
 
-  xit "has the correct hidden_in_check_answers" do
-    expect(question.hidden_in_check_answers).to eq("UPRN must be 12 digits or less")
+  describe "has the correct hidden_in_check_answers" do
+    context "when uprn_known != 1 && uprn_confirmed == nil" do
+      let(:log) { create(:sales_log, uprn_known: 0, uprn_confirmed: nil) }
+
+      it "returns true" do
+        expect(question.hidden_in_check_answers?(log)).to eq(true)
+      end
+    end
+
+    context "when uprn_known == 1 && uprn_confirmed == nil" do
+      let(:log) { create(:sales_log, uprn_known: 1, uprn_confirmed: nil) }
+
+      it "returns false" do
+        expect(question.hidden_in_check_answers?(log)).to eq(false)
+      end
+    end
+
+    context "when uprn_known != 1 && uprn_confirmed == 1" do
+      let(:log) { create(:sales_log, uprn_known: 1, uprn_confirmed: 1) }
+
+      it "returns true" do
+        expect(question.hidden_in_check_answers?(log)).to eq(true)
+      end
+    end
   end
 end
