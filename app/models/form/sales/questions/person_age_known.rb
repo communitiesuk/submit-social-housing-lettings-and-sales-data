@@ -19,6 +19,7 @@ class Form::Sales::Questions::PersonAgeKnown < ::Form::Question
       ],
     }
     @check_answers_card_number = person_index
+    @question_number = 29 + (4 * person_index)
   end
 
   ANSWER_OPTIONS = {

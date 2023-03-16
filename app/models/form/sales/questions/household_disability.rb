@@ -7,6 +7,7 @@ class Form::Sales::Questions::HouseholdDisability < ::Form::Question
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @hint_text = "This includes any long-term health condition that has an impact on the person's day-to-day life"
+    @question_number = 65
   end
 
   ANSWER_OPTIONS = {

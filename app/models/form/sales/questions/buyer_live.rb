@@ -6,6 +6,7 @@ class Form::Sales::Questions::BuyerLive < ::Form::Question
     @header = "Will the buyers live in the property?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
+    @question_number = 8
   end
 
   ANSWER_OPTIONS = {

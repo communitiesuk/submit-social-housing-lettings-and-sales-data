@@ -20,7 +20,7 @@ RSpec.describe Form::Sales::Questions::Buyer2IncomeKnown, type: :model do
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Buyer 2’s gross annual income")
+    expect(question.check_answer_label).to eq("Buyer 2’s gross annual income known?")
   end
 
   it "has the correct type" do

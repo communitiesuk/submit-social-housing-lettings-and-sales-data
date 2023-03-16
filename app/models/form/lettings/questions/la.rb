@@ -7,6 +7,7 @@ class Form::Lettings::Questions::La < ::Form::Question
     @type = "select"
     @check_answers_card_number = 0
     @hint_text = ""
+    @question_number = 13
   end
 
   def answer_options

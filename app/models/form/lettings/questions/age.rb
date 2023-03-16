@@ -12,5 +12,6 @@ class Form::Lettings::Questions::Age < ::Form::Question
     @min = 1
     @step = 1
     @hint_text = "For a child under 1, enter 1" if person_type == "child"
+    @question_number = 31 + (4 * person_index)
   end
 end

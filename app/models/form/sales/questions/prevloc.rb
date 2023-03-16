@@ -11,6 +11,7 @@ class Form::Sales::Questions::Prevloc < ::Form::Question
       },
       "value" => "Not known",
     }]
+    @question_number = 58
   end
 
   def answer_options

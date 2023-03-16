@@ -9,6 +9,7 @@ class Form::Sales::Questions::Grant < ::Form::Question
     @max = 999_999
     @width = 5
     @prefix = "£"
-    @hint_text = "For all schemes except Right to Buy (RTB), Preserved Right to Buy (PRTB), Voluntary Right to Buy (VRTB)"
+    @hint_text = "For all schemes except Right to Buy (RTB), Preserved Right to Buy (PRTB), Voluntary Right to Buy (VRTB) and Rent to Buy"
+    @question_number = 101
   end
 end

@@ -12,5 +12,6 @@ class Form::Sales::Questions::Buyer2Income < ::Form::Question
     @width = 5
     @prefix = "£"
     @check_answers_card_number = 2
+    @question_number = 69
   end
 end

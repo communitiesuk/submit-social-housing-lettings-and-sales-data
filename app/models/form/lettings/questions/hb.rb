@@ -8,6 +8,7 @@ class Form::Lettings::Questions::Hb < ::Form::Question
     @check_answers_card_number = 0
     @hint_text = ""
     @answer_options = ANSWER_OPTIONS
+    @question_number = 89
   end
 
   ANSWER_OPTIONS = {

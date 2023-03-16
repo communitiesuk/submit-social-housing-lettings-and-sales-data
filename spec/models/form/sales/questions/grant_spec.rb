@@ -32,7 +32,7 @@ RSpec.describe Form::Sales::Questions::Grant, type: :model do
   end
 
   it "has the correct hint" do
-    expect(question.hint_text).to eq("For all schemes except Right to Buy (RTB), Preserved Right to Buy (PRTB), Voluntary Right to Buy (VRTB)")
+    expect(question.hint_text).to eq("For all schemes except Right to Buy (RTB), Preserved Right to Buy (PRTB), Voluntary Right to Buy (VRTB) and Rent to Buy")
   end
 
   it "has correct width" do

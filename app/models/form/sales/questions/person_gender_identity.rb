@@ -12,6 +12,7 @@ class Form::Sales::Questions::PersonGenderIdentity < ::Form::Question
       },
       "value" => "Prefers not to say",
     }]
+    @question_number = 30 + (4 * person_index)
   end
 
   ANSWER_OPTIONS = {

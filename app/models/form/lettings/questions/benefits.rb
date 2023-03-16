@@ -8,6 +8,7 @@ class Form::Lettings::Questions::Benefits < ::Form::Question
     @check_answers_card_number = 0
     @hint_text = "This excludes child and housing benefit, council tax support and tax credits."
     @answer_options = ANSWER_OPTIONS
+    @question_number = 90
   end
 
   ANSWER_OPTIONS = {

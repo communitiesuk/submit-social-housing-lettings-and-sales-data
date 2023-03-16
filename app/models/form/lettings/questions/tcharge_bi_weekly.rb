@@ -15,5 +15,6 @@ class Form::Lettings::Questions::TchargeBiWeekly < ::Form::Question
     @suffix = " every 2 weeks"
     @requires_js = true
     @fields_added = %w[brent scharge pscharge supcharg]
+    @hidden_in_check_answers = true
   end
 end

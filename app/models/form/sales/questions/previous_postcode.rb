@@ -17,5 +17,6 @@ class Form::Sales::Questions::PreviousPostcode < ::Form::Question
         "is_previous_la_inferred" => true,
       },
     }
+    @question_number = 57
   end
 end

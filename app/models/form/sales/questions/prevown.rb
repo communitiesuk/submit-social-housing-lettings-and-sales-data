@@ -6,6 +6,7 @@ class Form::Sales::Questions::Prevown < ::Form::Question
     @header = I18n.t("questions.prevown", count: joint_purchase ? 2 : 1)
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
+    @question_number = 73
   end
 
   ANSWER_OPTIONS = {

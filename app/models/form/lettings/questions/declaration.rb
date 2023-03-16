@@ -3,11 +3,12 @@ class Form::Lettings::Questions::Declaration < ::Form::Question
     super
     @id = "declaration"
     @check_answer_label = "Tenant has seen the privacy notice"
-    @header = ""
+    @header = "Declaration"
     @type = "checkbox"
     @check_answers_card_number = 0
     @guidance_partial = "privacy_notice_tenant"
     @answer_options = ANSWER_OPTIONS
+    @question_number = 30
   end
 
   ANSWER_OPTIONS = { "declaration" => { "value" => "The tenant has seen the DLUHC privacy notice" } }.freeze

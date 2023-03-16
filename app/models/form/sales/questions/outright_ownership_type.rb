@@ -9,6 +9,7 @@ class Form::Sales::Questions::OutrightOwnershipType < ::Form::Question
     @conditional_for = {
       "othtype" => [12],
     }
+    @question_number = 6
   end
 
   ANSWER_OPTIONS = {

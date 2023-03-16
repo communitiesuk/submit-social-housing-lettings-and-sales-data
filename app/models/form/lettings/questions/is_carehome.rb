@@ -9,6 +9,7 @@ class Form::Lettings::Questions::IsCarehome < ::Form::Question
     @hint_text = ""
     @answer_options = ANSWER_OPTIONS
     @conditional_for = { "chcharge" => [1] }
+    @question_number = 93
   end
 
   ANSWER_OPTIONS = { "0" => { "value" => "No" }, "1" => { "value" => "Yes" } }.freeze

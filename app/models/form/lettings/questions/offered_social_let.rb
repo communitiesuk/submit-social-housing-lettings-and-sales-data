@@ -11,5 +11,6 @@ class Form::Lettings::Questions::OfferedSocialLet < ::Form::Question
     @min = 0
     @hint_text = I18n.t("hints.offered")
     @step = 1
+    @question_number = 18
   end
 end
