@@ -114,6 +114,10 @@ module Validations::Sales::SoftValidations
     end
   end
 
+  def discounted_ownership_value_invalid?
+    false
+  end
+
 private
 
   def sale_range
