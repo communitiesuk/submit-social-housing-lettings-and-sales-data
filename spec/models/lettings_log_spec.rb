@@ -2048,9 +2048,11 @@ RSpec.describe LettingsLog do
         before do
           Timecop.freeze(Time.zone.local(2022, 4, 2))
         end
+
         after do
           Timecop.unfreeze
         end
+
         let(:scheme) { FactoryBot.create(:scheme) }
         let!(:supported_housing_lettings_log) do
           described_class.create!({
@@ -2065,8 +2067,6 @@ RSpec.describe LettingsLog do
             created_at: Time.utc(2022, 2, 8, 16, 52, 15),
           })
         end
-
-
 
         let(:location) { FactoryBot.create(:location, scheme:) }
 
@@ -2834,7 +2834,6 @@ RSpec.describe LettingsLog do
     after do
       Timecop.unfreeze
     end
-
 
     context "with values represented as human readable labels" do
       before do
