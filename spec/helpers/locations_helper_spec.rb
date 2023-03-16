@@ -162,11 +162,11 @@ RSpec.describe LocationsHelper do
         attributes = [
           { attribute: "postcode", name: "Postcode", value: location.postcode },
           { attribute: "name", name: "Location name", value: location.name },
-          { attribute: "local_authority", name: "Local authority", value: "Eden (1 April 2021 - 31 March 2023)\nCumberland (1 April 2023 - present)" },
+          { attribute: "local_authority", name: "Local authority", value: "Eden (until 31 March 2023)\nCumberland (1 April 2023 - present)" },
           { attribute: "units", name: "Number of units", value: location.units },
           { attribute: "type_of_unit", name: "Most common unit", value: location.type_of_unit },
           { attribute: "mobility_standards", name: "Mobility standards", value: location.mobility_type },
-          { attribute: "location_code", name: "Location code", value: "E07000030 (1 April 2021 - 31 March 2023)\nE06000063 (1 April 2023 - present)" },
+          { attribute: "location_code", name: "Location code", value: "E07000030 (until 31 March 2023)\nE06000063 (1 April 2023 - present)" },
           { attribute: "availability", name: "Availability", value: "Active from 1 April 2022" },
           { attribute: "status", name: "Status", value: :active },
         ]

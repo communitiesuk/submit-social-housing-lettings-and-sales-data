@@ -113,9 +113,9 @@ private
     return sorted_linked_authorities.first[field] if sorted_linked_authorities.count == 1
 
     sorted_linked_authorities.map { |linked_local_authority|
-      formatted_start_date = linked_local_authority.start_date&.to_formatted_s(:govuk_date)
+      formatted_start_date = linked_local_authority.start_date.year == 2021 ? "until" : "#{linked_local_authority.start_date&.to_formatted_s(:govuk_date)} -"
       formatted_end_date = linked_local_authority.end_date&.to_formatted_s(:govuk_date) || "present"
-      "#{linked_local_authority[field]} (#{formatted_start_date} - #{formatted_end_date})"
+      "#{linked_local_authority[field]} (#{formatted_start_date} #{formatted_end_date})"
     }.join("\n")
   end
 end
