@@ -1,9 +1,10 @@
 <% content_for :title, "#{subsection.id.humanize} - Check your answers" %>
+<% class_name = @log.class.name.underscore %>
 <% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
-  "Logs" => "/logs",
-  "Log #{@log.id}" => send("#{@log.class.name.underscore}_path", @log),
+  "Logs" => send("#{class_name.pluralize}_path"),
+  "Log #{@log.id}" => send("#{class_name}_path", @log),
   subsection.label => "",
-  }) %>
+}) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-three-quarters-from-desktop">
