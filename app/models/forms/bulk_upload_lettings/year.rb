@@ -34,7 +34,10 @@ module Forms
     private
 
       def possible_years
-        [FormHandler.instance.lettings_forms["current_lettings"].start_date.year, FormHandler.instance.lettings_forms["previous_lettings"].start_date.year]
+        [
+          FormHandler.instance.lettings_forms["next_lettings"].start_date.year,
+          FormHandler.instance.lettings_forms["current_lettings"].start_date.year,
+        ]
       end
     end
   end

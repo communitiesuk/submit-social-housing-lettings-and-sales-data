@@ -2,14 +2,14 @@ class Form::Lettings::Questions::Offered < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "offered"
-    @check_answer_label = "Times previously offered since becoming available"
-    @header = "Since becoming available for re-let, how many times has the property been previously offered?"
+    @check_answer_label = I18n.t("check_answer_labels.offered")
+    @header = I18n.t("questions.offered")
     @type = "numeric"
     @width = 2
     @check_answers_card_number = 0
     @max = 150
     @min = 0
-    @hint_text = "This is after the last tenancy ended. If the property is being offered for let for the first time, enter 0."
+    @hint_text = I18n.t("hints.offered")
     @step = 1
   end
 end

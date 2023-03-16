@@ -226,6 +226,66 @@ RSpec.describe SalesLog, type: :model do
       expect(record_from_db["la"]).to eq("E08000003")
     end
 
+    context "with 22/23 logs" do
+      let(:address_sales_log_22_23) do
+        described_class.create({
+          owning_organisation:,
+          created_by: created_by_user,
+          ppcodenk: 1,
+          postcode_full: "CA10 1AA",
+          saledate: Time.zone.local(2022, 5, 2),
+        })
+      end
+
+      before do
+        WebMock.stub_request(:get, /api.postcodes.io\/postcodes\/CA101AA/)
+               .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Cumberland","codes":{"admin_district":"E06000063"}}}', headers: {})
+
+        Timecop.freeze(2023, 5, 1)
+        Singleton.__init__(FormHandler)
+      end
+
+      after do
+        Timecop.unfreeze
+      end
+
+      it "correctly sets la as nil" do
+        record_from_db = ActiveRecord::Base.connection.execute("select la from sales_logs where id=#{address_sales_log_22_23.id}").to_a[0]
+        expect(address_sales_log_22_23.la).to eq(nil)
+        expect(record_from_db["la"]).to eq(nil)
+      end
+    end
+
+    context "with 23/24 logs" do
+      let(:address_sales_log_23_24) do
+        described_class.create({
+          owning_organisation:,
+          created_by: created_by_user,
+          ppcodenk: 1,
+          postcode_full: "CA10 1AA",
+          saledate: Time.zone.local(2023, 5, 2),
+        })
+      end
+
+      before do
+        WebMock.stub_request(:get, /api.postcodes.io\/postcodes\/CA101AA/)
+        .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Eden","codes":{"admin_district":"E07000030"}}}', headers: {})
+
+        Timecop.freeze(2023, 4, 1)
+        Singleton.__init__(FormHandler)
+      end
+
+      after do
+        Timecop.unfreeze
+      end
+
+      it "correctly infers new la" do
+        record_from_db = ActiveRecord::Base.connection.execute("select la from sales_logs where id=#{address_sales_log_23_24.id}").to_a[0]
+        expect(address_sales_log_23_24.la).to eq("E06000063")
+        expect(record_from_db["la"]).to eq("E06000063")
+      end
+    end
+
     it "errors if the property postcode is emptied" do
       expect { address_sales_log.update!({ postcode_full: "" }) }
         .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.postcode")}/)

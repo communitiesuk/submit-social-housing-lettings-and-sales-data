@@ -41,7 +41,7 @@ class LocationsController < ApplicationController
 
   def update_local_authority
     @location.location_admin_district = location_params[:location_admin_district]
-    @location.location_code = Location.local_authorities.key(location_params[:location_admin_district])
+    @location.location_code = Location.local_authorities_for_current_year.key(location_params[:location_admin_district])
     if @location.save(context: :location_admin_district)
       if return_to_check_your_answers? || params[:referrer] == "check_local_authority"
         redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])

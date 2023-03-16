@@ -2,9 +2,15 @@ class LettingsLogsController < LogsController
   before_action :find_resource, except: %i[create index edit]
   before_action :session_filters, if: :current_user, only: %i[index email_csv download_csv]
   before_action :set_session_filters, if: :current_user, only: %i[index email_csv download_csv]
+  before_action :authenticate_scope!, only: %i[download_csv email_csv]
 
   before_action :extract_bulk_upload_from_session_filters, only: [:index]
   before_action :redirect_if_bulk_upload_resolved, only: [:index]
+
+  def authenticate_scope!
+    codes_only_export = codes_only_export?(params)
+    head :unauthorized and return unless current_user.support? || !codes_only_export
+  end
 
   def index
     respond_to do |format|
@@ -80,13 +86,19 @@ class LettingsLogsController < LogsController
 
   def download_csv
     unpaginated_filtered_logs = filtered_logs(current_user.lettings_logs, search_term, @session_filters)
+    codes_only = codes_only_export?(params)
 
-    render "download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: email_csv_lettings_logs_path }
+    render "download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: email_csv_lettings_logs_path, codes_only: }
+  end
+
+  def codes_only_export?(params)
+    params.require(:codes_only) == "true"
   end
 
   def email_csv
     all_orgs = params["organisation_select"] == "all"
-    EmailCsvJob.perform_later(current_user, search_term, @session_filters, all_orgs)
+    codes_only_export = params.require(:codes_only) == "true"
+    EmailCsvJob.perform_later(current_user, search_term, @session_filters, all_orgs, nil, codes_only_export)
     redirect_to csv_confirmation_lettings_logs_path
   end
 

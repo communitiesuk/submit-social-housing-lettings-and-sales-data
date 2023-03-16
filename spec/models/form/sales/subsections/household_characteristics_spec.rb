@@ -135,6 +135,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
           buyer_2_ethnic_background_arab
           buyer_2_ethnic_background_mixed
           buyer_2_ethnic_background_white
+          buyer_2_nationality
           buyer_2_working_situation
           working_situation_2_retirement_value_check_joint_purchase
           working_situation_buyer_2_income_value_check

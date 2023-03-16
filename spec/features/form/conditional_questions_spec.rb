@@ -64,13 +64,13 @@ RSpec.describe "Form Conditional Questions" do
     end
 
     it "gets cleared if the conditional question is hidden after editing the answer" do
-      sales_log.update!(national: 12, othernational: "other")
-      visit("/sales-logs/#{sales_log.id}/buyer-1-nationality")
-      expect(page).to have_field("sales-log-othernational-field", with: "other")
+      sales_log.update!(age1_known: 0, age1: 50)
+      visit("/sales-logs/#{sales_log.id}/buyer-1-age")
+      expect(page).to have_field("sales-log-age1-field", with: 50)
 
-      choose("sales-log-national-18-field", allow_label_click: true)
-      choose("sales-log-national-12-field", allow_label_click: true)
-      expect(page).to have_field("sales-log-othernational-field", with: "")
+      choose("sales-log-age1-known-1-field", allow_label_click: true)
+      choose("sales-log-age1-known-0-field", allow_label_click: true)
+      expect(page).to have_field("sales-log-age1-field", with: "")
     end
   end
 end

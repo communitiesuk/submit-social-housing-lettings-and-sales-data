@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe BulkUpload::Lettings::CsvParser do
+RSpec.describe BulkUpload::Lettings::Year2022::CsvParser do
   subject(:service) { described_class.new(path:) }
 
   let(:path) { file_fixture("2022_23_lettings_bulk_upload.csv") }
@@ -22,7 +22,7 @@ RSpec.describe BulkUpload::Lettings::CsvParser do
     let(:log) { build(:lettings_log, :completed) }
 
     before do
-      file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_csv_row)
+      file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
       file.rewind
     end
 
@@ -44,7 +44,7 @@ RSpec.describe BulkUpload::Lettings::CsvParser do
 
     before do
       file.write(bom)
-      file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_csv_row)
+      file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
       file.close
     end
 
@@ -61,12 +61,37 @@ RSpec.describe BulkUpload::Lettings::CsvParser do
 
     before do
       file.write(invalid_sequence)
-      file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_csv_row)
+      file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
       file.close
     end
 
     it "parses csv correctly" do
       expect(service.row_parsers[0].field_12.to_i).to eql(log.age1)
+    end
+  end
+
+  describe "#column_for_field", aggregate_failures: true do
+    context "when headers present" do
+      it "returns correct column" do
+        expect(service.column_for_field("field_1")).to eql("B")
+        expect(service.column_for_field("field_134")).to eql("EE")
+      end
+    end
+
+    context "when no headers" do
+      let(:file) { Tempfile.new }
+      let(:path) { file.path }
+      let(:log) { build(:lettings_log, :completed) }
+
+      before do
+        file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
+        file.rewind
+      end
+
+      it "returns correct column" do
+        expect(service.column_for_field("field_1")).to eql("A")
+        expect(service.column_for_field("field_134")).to eql("ED")
+      end
     end
   end
 end

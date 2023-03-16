@@ -30,9 +30,9 @@ RSpec.describe BulkUpload::Lettings::LogCreator do
       let(:log) { LettingsLog.new }
 
       before do
-        file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_csv_row)
-        file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_csv_row)
-        file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_csv_row)
+        file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
+        file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
+        file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
         file.rewind
       end
 
@@ -61,7 +61,7 @@ RSpec.describe BulkUpload::Lettings::LogCreator do
       end
 
       before do
-        file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_csv_row)
+        file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
         file.rewind
       end
 
