@@ -1,4 +1,4 @@
-class Form::Lettings::Questions::Tenancyother < ::Form::Question
+class Form::Lettings::Questions::TenancyOther < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "tenancyother"

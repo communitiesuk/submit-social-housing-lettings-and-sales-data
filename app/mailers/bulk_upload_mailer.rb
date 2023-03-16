@@ -73,11 +73,7 @@ class BulkUploadMailer < NotifyMailer
                          start_bulk_upload_sales_logs_url
                        end
 
-    validator_class = if bulk_upload.lettings?
-                        BulkUpload::Lettings::Validator
-                      else
-                        BulkUpload::Sales::Validator
-                      end
+    row_parser_class = bulk_upload.prefix_namespace::RowParser
 
     errors = bulk_upload
       .bulk_upload_errors
@@ -87,7 +83,7 @@ class BulkUploadMailer < NotifyMailer
       .keys
       .sort_by { |_col, field| field }
       .map do |col, field|
-        "- Column #{col} (#{validator_class.question_for_field(field.to_sym)})"
+        "- Column #{col} (#{row_parser_class.question_for_field(field.to_sym)})"
       end
 
     send_email(
@@ -104,7 +100,7 @@ class BulkUploadMailer < NotifyMailer
     )
   end
 
-  def send_bulk_upload_failed_service_error_mail(bulk_upload:)
+  def send_bulk_upload_failed_service_error_mail(bulk_upload:, errors: [])
     bulk_upload_link = if bulk_upload.lettings?
                          start_bulk_upload_lettings_logs_url
                        else
@@ -119,6 +115,7 @@ class BulkUploadMailer < NotifyMailer
         upload_timestamp: bulk_upload.created_at,
         lettings_or_sales: bulk_upload.log_type,
         year_combo: bulk_upload.year_combo,
+        errors: errors.map { |e| "- #{e}" }.join("\n"),
         bulk_upload_link:,
       },
     )

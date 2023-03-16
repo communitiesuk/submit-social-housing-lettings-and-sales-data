@@ -160,6 +160,48 @@ RSpec.describe Validations::Sales::FinancialValidations do
     end
   end
 
+  describe "#validate_percentage_bought_at_least_threshold" do
+    let(:record) { FactoryBot.create(:sales_log) }
+
+    it "adds an error to stairbought and type if the percentage bought is less than the threshold (which is 1% by default, but higher for some shared ownership types)" do
+      record.stairbought = 9
+      [2, 16, 18, 24].each do |type|
+        record.type = type
+        financial_validator.validate_percentage_bought_at_least_threshold(record)
+        expect(record.errors["stairbought"]).to eq(["The minimum increase in equity while staircasing is 10%"])
+        expect(record.errors["type"]).to eq(["The minimum increase in equity while staircasing is 10% for this shared ownership type"])
+        record.errors.clear
+      end
+
+      record.stairbought = 0
+      [28, 30, 31, 32].each do |type|
+        record.type = type
+        financial_validator.validate_percentage_bought_at_least_threshold(record)
+        expect(record.errors["stairbought"]).to eq(["The minimum increase in equity while staircasing is 1%"])
+        expect(record.errors["type"]).to eq(["The minimum increase in equity while staircasing is 1% for this shared ownership type"])
+        record.errors.clear
+      end
+    end
+
+    it "doesn't add an error to stairbought and type if the percentage bought is less than the threshold (which is 1% by default, but higher for some shared ownership types)" do
+      record.stairbought = 10
+      [2, 16, 18, 24].each do |type|
+        record.type = type
+        financial_validator.validate_percentage_bought_at_least_threshold(record)
+        expect(record.errors).to be_empty
+        record.errors.clear
+      end
+
+      record.stairbought = 1
+      [28, 30, 31, 32].each do |type|
+        record.type = type
+        financial_validator.validate_percentage_bought_at_least_threshold(record)
+        expect(record.errors).to be_empty
+        record.errors.clear
+      end
+    end
+  end
+
   describe "#validate_percentage_owned_not_too_much_if_older_person" do
     let(:record) { FactoryBot.create(:sales_log) }
 

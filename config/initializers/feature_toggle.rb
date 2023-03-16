@@ -40,6 +40,12 @@ class FeatureToggle
     !Rails.env.development?
   end
 
+  def self.force_crossover?
+    return false if Rails.env.test?
+
+    !Rails.env.production?
+  end
+
   def self.validate_valid_radio_options?
     !(Rails.env.production? || Rails.env.staging?)
   end

@@ -33,6 +33,8 @@ private
   end
 
   def in_crossover_period?
+    return true if FeatureToggle.force_crossover?
+
     FormHandler.instance.lettings_in_crossover_period?
   end
 

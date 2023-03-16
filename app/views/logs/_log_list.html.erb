@@ -1,7 +1,10 @@
 <h2 class="govuk-body">
   <%= render(SearchResultCaptionComponent.new(searched:, count: pagy.count, item_label:, total_count:, item: "logs", path: request.path)) %>
   <% if logs&.first&.lettings? %>
-    <%= govuk_link_to "Download (CSV)", csv_download_url, type: "text/csv" %>
+    <%= govuk_link_to "Download (CSV)", csv_download_url, type: "text/csv", class: "govuk-!-margin-right-4" %>
+    <% if @current_user.support? %>
+      <%= govuk_link_to "Download (CSV, codes only)", csv_codes_only_download_url, type: "text/csv" %>
+    <% end %>
   <% end %>
 </h2>
 <% logs.map do |log| %>

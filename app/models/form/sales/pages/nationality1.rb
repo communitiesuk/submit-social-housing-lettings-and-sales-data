@@ -7,15 +7,12 @@ class Form::Sales::Pages::Nationality1 < ::Form::Page
         "privacynotice" => 1,
       },
       {
-        "noint" => 1,
+        "buyer_not_interviewed?" => true,
       },
     ]
   end
 
   def questions
-    @questions ||= [
-      Form::Sales::Questions::Nationality1.new(nil, nil, self),
-      Form::Sales::Questions::OtherNationality1.new(nil, nil, self),
-    ]
+    @questions ||= [Form::Sales::Questions::Nationality1.new(nil, nil, self)]
   end
 end
