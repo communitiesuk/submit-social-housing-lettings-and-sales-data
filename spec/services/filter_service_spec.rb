@@ -55,6 +55,11 @@ describe FilterService do
 
       context "when filtering sales logs" do
         before do
+          puts "\n\n"
+          puts "All sales logs"
+          pp SalesLog.all
+          puts %q[Sales logs where purchid = "2"]
+          pp SalesLog.where(purchid: "2").count
           FactoryBot.create_list(:sales_log, 5)
           FactoryBot.create(:sales_log, purchid: "2")
         end
@@ -65,6 +70,7 @@ describe FilterService do
           let(:search_term) { "2" }
 
           it "filters the collection on search term" do
+            puts "when given a purchid"
             expect(described_class.filter_by_search(sales_log_list, search_term).count).to eq(1)
           end
         end
@@ -73,6 +79,7 @@ describe FilterService do
           let(:search_term) { nil }
 
           it "does not filter the given collection" do
+            puts "when not given a search term"
             expect(described_class.filter_by_search(sales_log_list, search_term).count).to eq(6)
           end
         end
