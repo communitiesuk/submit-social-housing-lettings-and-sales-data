@@ -1,18 +1,10 @@
-<% if @log.sales? %>
-  <% content_for :title, "Review sales log" %>
-  <% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
-    "Logs" => "/logs",
-    "Log #{@log.id}" => "/sales-logs/#{@log.id}",
-    "Review sales log" => "",
-  }) %>
-<% else %>
-  <% content_for :title, "Review lettings log" %>
-  <% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
-    "Logs" => "/logs",
-    "Log #{@log.id}" => "/lettings-logs/#{@log.id}",
-    "Review lettings log" => "",
-  }) %>
-<% end %>
+<% class_name = @log.class.name.underscore %>
+<% content_for :title, "Review #{class_name.humanize(capitalize: false)}" %>
+<% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
+  "Logs" => send("#{class_name.pluralize}_path"),
+  "Log #{@log.id}" => send("#{class_name}_path", @log.id),
+  "Review #{class_name.humanize(capitalize: false)}" => "",
+}) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
