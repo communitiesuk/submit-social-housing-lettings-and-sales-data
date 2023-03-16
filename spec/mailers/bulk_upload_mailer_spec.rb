@@ -72,11 +72,12 @@ RSpec.describe BulkUploadMailer do
           upload_timestamp: bulk_upload.created_at,
           lettings_or_sales: bulk_upload.log_type,
           year_combo: bulk_upload.year_combo,
+          errors: "- foo\n- bar",
           bulk_upload_link: start_bulk_upload_lettings_logs_url,
         },
       )
 
-      mailer.send_bulk_upload_failed_service_error_mail(bulk_upload:)
+      mailer.send_bulk_upload_failed_service_error_mail(bulk_upload:, errors: %w[foo bar])
     end
   end
 

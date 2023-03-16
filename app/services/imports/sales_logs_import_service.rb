@@ -54,7 +54,6 @@ module Imports
         attributes["details_known_#{index}"] = details_known(index, attributes)
       end
       attributes["national"] = unsafe_string_as_integer(xml_doc, "P1Nat")
-      attributes["othernational"] = nil
       attributes["ethnic"] = unsafe_string_as_integer(xml_doc, "P1Eth")
       attributes["ethnic_group"] = ethnic_group(attributes["ethnic"])
       attributes["buy1livein"] = unsafe_string_as_integer(xml_doc, "LiveInBuyer1")

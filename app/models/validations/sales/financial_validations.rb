@@ -52,6 +52,21 @@ module Validations::Sales::FinancialValidations
     end
   end
 
+  def validate_percentage_bought_at_least_threshold(record)
+    return unless record.stairbought && record.type
+
+    threshold = if [2, 16, 18, 24].include? record.type
+                  10
+                else
+                  1
+                end
+
+    if threshold && record.stairbought < threshold
+      record.errors.add :stairbought, I18n.t("validations.financial.staircasing.percentage_bought_must_be_at_least_threshold", threshold:)
+      record.errors.add :type, I18n.t("validations.setup.type.percentage_bought_must_be_at_least_threshold", threshold:)
+    end
+  end
+
   def validate_child_income(record)
     return unless record.income2 && record.ecstat2
 

@@ -16,7 +16,7 @@
       <% body.row do |row| %>
         <% row.cell(text: error[0][0]) %>
         <% row.cell(text: error[1]) %>
-        <% row.cell(text: BulkUpload::Lettings::Validator.question_for_field(error[0][1].to_sym)) %>
+        <% row.cell(text: question_for_field(error[0][1].to_sym)) %>
         <% row.cell(text: error[0][2]) %>
         <% row.cell(text: error[0][1]) %>
       <% end %>

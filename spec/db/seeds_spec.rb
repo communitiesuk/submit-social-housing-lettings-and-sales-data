@@ -29,7 +29,7 @@ RSpec.describe "seeding process", type: task do
      .and change(OrganisationRelationship, :count).by(4)
      .and change(Scheme, :count).by(3)
      .and change(Location, :count).by(3)
-     .and change(LaRentRange, :count).by(15_450)
+     .and change(LaRentRange, :count).by(22_850)
   end
 
   it "is idempotent" do

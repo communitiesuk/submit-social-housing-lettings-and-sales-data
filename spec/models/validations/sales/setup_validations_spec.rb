@@ -55,7 +55,6 @@ RSpec.describe Validations::Sales::SetupValidations do
           example.run
         end
         Timecop.return
-        Singleton.__init__(FormHandler)
       end
 
       context "when saledate is blank" do

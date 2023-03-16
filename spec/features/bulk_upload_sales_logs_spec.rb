@@ -75,7 +75,7 @@ RSpec.describe "Bulk upload sales log" do
         expect(page).to have_link("Upload sales logs in bulk")
         click_link("Upload sales logs in bulk")
 
-        expect(page).to have_content("Upload sales logs in bulk (2022/23)")
+        expect(page).to have_content("Upload sales logs in bulk (2023/24)")
         click_button("Continue")
 
         expect(page).to have_content("Upload your file")

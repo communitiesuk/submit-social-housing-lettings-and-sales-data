@@ -1,7 +1,7 @@
 require "rails_helper"
 require_relative "helpers"
 
-RSpec.describe "Accessible Automcomplete" do
+RSpec.describe "Accessible Autocomplete" do
   include Helpers
   let(:user) { FactoryBot.create(:user) }
   let(:lettings_log) do
