@@ -1,6 +1,8 @@
 require "csv"
 
-class BulkUpload::Lettings::CsvParser
+class BulkUpload::Lettings::Year2022::CsvParser
+  MAX_COLUMNS = 136
+
   attr_reader :path
 
   def initialize(path:)
@@ -25,7 +27,7 @@ class BulkUpload::Lettings::CsvParser
       headers = ("field_1".."field_134").to_a
       hash = Hash[headers.zip(stripped_row)]
 
-      BulkUpload::Lettings::RowParser.new(hash)
+      BulkUpload::Lettings::Year2022::RowParser.new(hash)
     end
   end
 
@@ -37,7 +39,15 @@ class BulkUpload::Lettings::CsvParser
     @rows ||= CSV.parse(normalised_string, row_sep:)
   end
 
+  def column_for_field(field)
+    cols[headers.find_index(field) + col_offset]
+  end
+
 private
+
+  def headers
+    @headers ||= ("field_1".."field_134").to_a
+  end
 
   def with_headers?
     rows[0][0]&.match?(/\D+/)

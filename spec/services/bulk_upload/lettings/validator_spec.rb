@@ -82,7 +82,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
       let(:path) { file.path }
 
       before do
-        file.write(BulkUpload::LogToCsv.new(log:, line_ending: "\r\n", col_offset: 0).to_csv_row)
+        file.write(BulkUpload::LogToCsv.new(log:, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
         file.close
       end
 
@@ -122,8 +122,8 @@ RSpec.describe BulkUpload::Lettings::Validator do
       let(:log_2) { build(:lettings_log, :completed, created_by: user) }
 
       before do
-        file.write(BulkUpload::LogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_csv_row)
-        file.write(BulkUpload::LogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0, overrides: { illness: 100 }).to_csv_row)
+        file.write(BulkUpload::LogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
+        file.write(BulkUpload::LogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0, overrides: { illness: 100 }).to_2022_csv_row)
         file.close
       end
 
@@ -138,8 +138,8 @@ RSpec.describe BulkUpload::Lettings::Validator do
       let(:log_2) { build(:lettings_log, :completed, renttype: 1, created_by: user) }
 
       before do
-        file.write(BulkUpload::LogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_csv_row)
-        file.write(BulkUpload::LogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0).to_csv_row)
+        file.write(BulkUpload::LogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
+        file.write(BulkUpload::LogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
         file.close
       end
 
@@ -155,7 +155,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
       let(:log_1) { build(:lettings_log, :completed, renttype: 1, created_by: user, owning_organisation: unaffiliated_org) }
 
       before do
-        file.write(BulkUpload::LogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_csv_row)
+        file.write(BulkUpload::LogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
         file.close
       end
 
@@ -169,7 +169,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
       let(:log) { build(:lettings_log, :in_progress, created_by: user, startdate: Time.zone.local(2022, 5, 1)) }
 
       before do
-        file.write(BulkUpload::LogToCsv.new(log:, line_ending: "\r\n", col_offset: 0).to_csv_row)
+        file.write(BulkUpload::LogToCsv.new(log:, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
         file.close
       end
 
@@ -188,11 +188,11 @@ RSpec.describe BulkUpload::Lettings::Validator do
         let(:log_5) { build(:lettings_log, renttype: 2, created_by: user, builtype: nil, startdate: Time.zone.local(2022, 5, 1)) }
 
         before do
-          file.write(BulkUpload::LogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_csv_row)
-          file.write(BulkUpload::LogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0).to_csv_row)
-          file.write(BulkUpload::LogToCsv.new(log: log_3, line_ending: "\r\n", col_offset: 0).to_csv_row)
-          file.write(BulkUpload::LogToCsv.new(log: log_4, line_ending: "\r\n", col_offset: 0).to_csv_row)
-          file.write(BulkUpload::LogToCsv.new(log: log_5, line_ending: "\r\n", col_offset: 0).to_csv_row)
+          file.write(BulkUpload::LogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
+          file.write(BulkUpload::LogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
+          file.write(BulkUpload::LogToCsv.new(log: log_3, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
+          file.write(BulkUpload::LogToCsv.new(log: log_4, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
+          file.write(BulkUpload::LogToCsv.new(log: log_5, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
           file.close
         end
 
@@ -210,11 +210,11 @@ RSpec.describe BulkUpload::Lettings::Validator do
         let(:log_5) { build(:lettings_log, renttype: 2, created_by: user, builtype: nil, startdate: Time.zone.local(2022, 5, 1)) }
 
         before do
-          file.write(BulkUpload::LogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_csv_row)
-          file.write(BulkUpload::LogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0).to_csv_row)
-          file.write(BulkUpload::LogToCsv.new(log: log_3, line_ending: "\r\n", col_offset: 0).to_csv_row)
-          file.write(BulkUpload::LogToCsv.new(log: log_4, line_ending: "\r\n", col_offset: 0).to_csv_row)
-          file.write(BulkUpload::LogToCsv.new(log: log_5, line_ending: "\r\n", col_offset: 0).to_csv_row)
+          file.write(BulkUpload::LogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
+          file.write(BulkUpload::LogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
+          file.write(BulkUpload::LogToCsv.new(log: log_3, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
+          file.write(BulkUpload::LogToCsv.new(log: log_4, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
+          file.write(BulkUpload::LogToCsv.new(log: log_5, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
           file.close
         end
 
@@ -238,11 +238,11 @@ RSpec.describe BulkUpload::Lettings::Validator do
         let(:log_5) { build(:lettings_log, renttype: 2, created_by: user, builtype: nil, startdate: Time.zone.local(2022, 5, 1)) }
 
         before do
-          file.write(BulkUpload::LogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_csv_row)
-          file.write(BulkUpload::LogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0).to_csv_row)
-          file.write(BulkUpload::LogToCsv.new(log: log_3, line_ending: "\r\n", col_offset: 0).to_csv_row)
-          file.write(BulkUpload::LogToCsv.new(log: log_4, line_ending: "\r\n", col_offset: 0).to_csv_row)
-          file.write(BulkUpload::LogToCsv.new(log: log_5, line_ending: "\r\n", col_offset: 0).to_csv_row)
+          file.write(BulkUpload::LogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
+          file.write(BulkUpload::LogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
+          file.write(BulkUpload::LogToCsv.new(log: log_3, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
+          file.write(BulkUpload::LogToCsv.new(log: log_4, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
+          file.write(BulkUpload::LogToCsv.new(log: log_5, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
           file.close
         end
 
@@ -262,11 +262,11 @@ RSpec.describe BulkUpload::Lettings::Validator do
         before do
           overrides = { age1: 50, age2: "R", age3: "R", age4: "4", age5: "R", age6: "R", age7: "R", age8: "R" }
 
-          file.write(BulkUpload::LogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0, overrides:).to_csv_row)
-          file.write(BulkUpload::LogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0, overrides:).to_csv_row)
-          file.write(BulkUpload::LogToCsv.new(log: log_3, line_ending: "\r\n", col_offset: 0, overrides:).to_csv_row)
-          file.write(BulkUpload::LogToCsv.new(log: log_4, line_ending: "\r\n", col_offset: 0, overrides:).to_csv_row)
-          file.write(BulkUpload::LogToCsv.new(log: log_5, line_ending: "\r\n", col_offset: 0, overrides:).to_csv_row)
+          file.write(BulkUpload::LogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0, overrides:).to_2022_csv_row)
+          file.write(BulkUpload::LogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0, overrides:).to_2022_csv_row)
+          file.write(BulkUpload::LogToCsv.new(log: log_3, line_ending: "\r\n", col_offset: 0, overrides:).to_2022_csv_row)
+          file.write(BulkUpload::LogToCsv.new(log: log_4, line_ending: "\r\n", col_offset: 0, overrides:).to_2022_csv_row)
+          file.write(BulkUpload::LogToCsv.new(log: log_5, line_ending: "\r\n", col_offset: 0, overrides:).to_2022_csv_row)
 
           file.close
         end

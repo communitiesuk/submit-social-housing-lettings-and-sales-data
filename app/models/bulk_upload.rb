@@ -46,6 +46,28 @@ class BulkUpload < ApplicationRecord
     needstype == 2
   end
 
+  def prefix_namespace
+    type_class = case log_type
+                 when "lettings"
+                   "Lettings"
+                 when "sales"
+                   "Sales"
+                 else
+                   raise "unknown log type"
+                 end
+
+    year_class = case year
+                 when 2022
+                   "Year2022"
+                 when 2023
+                   "Year2023"
+                 else
+                   raise "unknown year"
+                 end
+
+    "BulkUpload::#{type_class}::#{year_class}".constantize
+  end
+
 private
 
   def generate_identifier
