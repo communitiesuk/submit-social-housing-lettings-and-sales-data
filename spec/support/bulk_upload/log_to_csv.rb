@@ -27,8 +27,8 @@ class BulkUpload::LogToCsv
 
   def to_2023_row
     to_2022_row + [
-      nil, # needstype,
-      nil, # location,
+      log.needstype,
+      log.location&.id,
       nil, # uprn,
       nil, # address_line_1,
       nil, # address_line_2,
