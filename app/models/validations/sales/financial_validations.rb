@@ -70,7 +70,7 @@ module Validations::Sales::FinancialValidations
   def validate_child_income(record)
     return unless record.income2 && record.ecstat2
 
-    if record.income2.positive? && is_economic_status_child?(record.ecstat2)
+    if record.income2.positive? && is_economic_status_child?(record.ecstat2) && record.form.start_date.year >= 2023
       record.errors.add :ecstat2, I18n.t("validations.financial.income.child_has_income")
       record.errors.add :income2, I18n.t("validations.financial.income.child_has_income")
     end
