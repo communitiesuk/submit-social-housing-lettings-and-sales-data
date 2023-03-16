@@ -1992,6 +1992,7 @@ RSpec.describe LettingsLog do
       context "and a scheme with a single log is selected" do
         before do
           Timecop.freeze(2022, 4, 2)
+          lettings_log.update!(startdate: Time.zone.local(2022, 4, 2), scheme:)
         end
 
         after do
@@ -2000,8 +2001,6 @@ RSpec.describe LettingsLog do
 
         let(:scheme) { FactoryBot.create(:scheme) }
         let!(:location) { FactoryBot.create(:location, scheme:) }
-
-        before { lettings_log.update!(startdate: Time.zone.local(2022, 4, 2), scheme:) }
 
         it "derives the scheme location" do
           record_from_db = ActiveRecord::Base.connection.execute("select location_id from lettings_logs where id=#{lettings_log.id}").to_a[0]
