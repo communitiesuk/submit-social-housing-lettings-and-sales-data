@@ -9,6 +9,7 @@ class BulkUpload::Lettings::Validator
   attr_reader :bulk_upload, :path
 
   validate :validate_file_not_empty
+  validate :validate_min_columns
   validate :validate_max_columns
 
   def initialize(bulk_upload:, path:)
@@ -23,14 +24,16 @@ class BulkUpload::Lettings::Validator
       row = index + row_offset + 1
 
       row_parser.errors.each do |error|
+        col = csv_parser.column_for_field(error.attribute.to_s)
+
         bulk_upload.bulk_upload_errors.create!(
           field: error.attribute,
           error: error.message,
-          tenant_code: row_parser.field_7,
-          property_ref: row_parser.field_100,
+          tenant_code: row_parser.tenant_code,
+          property_ref: row_parser.property_ref,
           row:,
-          cell: "#{cols[field_number_for_attribute(error.attribute) - col_offset + 1]}#{row}",
-          col: csv_parser.column_for_field(error.attribute.to_s),
+          cell: "#{col}#{row}",
+          col:,
           category: error.options[:category],
         )
       end
@@ -127,12 +130,20 @@ private
     end
   end
 
+  def validate_min_columns
+    return if halt_validations?
+
+    column_count = rows.map(&:size).min
+
+    errors.add(:base, :under_min_column_count) if column_count < csv_parser.class::MIN_COLUMNS
+  end
+
   def validate_max_columns
     return if halt_validations?
 
     column_count = rows.map(&:size).max
 
-    errors.add(:file, :column_count) if column_count > csv_parser.class::MAX_COLUMNS
+    errors.add(:base, :over_max_column_count) if column_count > csv_parser.class::MAX_COLUMNS
   end
 
   def halt_validations!
