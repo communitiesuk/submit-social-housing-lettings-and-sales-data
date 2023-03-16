@@ -34,7 +34,6 @@ RSpec.describe TasklistHelper do
         allow(FormHandler.instance).to receive(:get_form).and_return(fake_2021_2022_form)
       end
 
-
       it "returns the total of sections if no status is given" do
         expect(get_subsections_count(empty_lettings_log)).to eq(8)
       end
@@ -112,8 +111,8 @@ RSpec.describe TasklistHelper do
 
           it "returns relevant text" do
             expect(review_log_text(lettings_log)).to eq(
-                                                       "You can #{govuk_link_to 'review and make changes to this log', review_lettings_log_path(lettings_log)} until 1 July 2023.".html_safe,
-                                                       )
+              "You can #{govuk_link_to 'review and make changes to this log', review_lettings_log_path(lettings_log)} until 1 July 2023.".html_safe,
+            )
           end
         end
 
@@ -123,8 +122,8 @@ RSpec.describe TasklistHelper do
 
           it "returns relevant text" do
             expect(review_log_text(lettings_log)).to eq(
-                                                       "You can #{govuk_link_to 'review and make changes to this log', review_lettings_log_path(lettings_log)} until 9 July 2024.".html_safe,
-                                                       )
+              "You can #{govuk_link_to 'review and make changes to this log', review_lettings_log_path(lettings_log)} until 9 July 2024.".html_safe,
+            )
           end
         end
       end

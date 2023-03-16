@@ -1989,7 +1989,6 @@ RSpec.describe LettingsLog do
         Timecop.unfreeze
       end
 
-
       context "and a scheme with a single log is selected" do
         before do
           Timecop.freeze(2022, 4, 2)

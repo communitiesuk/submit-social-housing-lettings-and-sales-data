@@ -829,9 +829,6 @@ RSpec.describe LettingsLogsController, type: :request do
             before do
               sign_in user
               get "/lettings-logs/#{lettings_log.id}", headers:, params: {}
-            end
-
-            before do
               Timecop.freeze(2021, 4, 1)
               completed_lettings_log.update!(startdate: Time.zone.local(2021, 4, 1), voiddate: Time.zone.local(2021, 4, 1), mrcdate: Time.zone.local(2021, 4, 1))
               completed_lettings_log.reload
@@ -931,6 +928,9 @@ RSpec.describe LettingsLogsController, type: :request do
         Timecop.freeze(2021, 4, 1)
         completed_lettings_log.update!(startdate: Time.zone.local(2021, 4, 1), voiddate: Time.zone.local(2021, 4, 1), mrcdate: Time.zone.local(2021, 4, 1))
         Timecop.unfreeze
+        stub_request(:get, /api.postcodes.io/)
+          .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\", \"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
+        sign_in user
       end
 
       let(:postcode_lettings_log) do
@@ -940,12 +940,6 @@ RSpec.describe LettingsLogsController, type: :request do
       end
       let(:id) { postcode_lettings_log.id }
       let(:completed_lettings_log) { FactoryBot.create(:lettings_log, :completed, owning_organisation: user.organisation, managing_organisation: user.organisation, created_by: user) }
-
-      before do
-        stub_request(:get, /api.postcodes.io/)
-          .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\", \"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
-        sign_in user
-      end
 
       it "shows the inferred la" do
         lettings_log = FactoryBot.create(:lettings_log,
