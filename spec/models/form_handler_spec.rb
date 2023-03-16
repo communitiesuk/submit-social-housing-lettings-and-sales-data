@@ -9,8 +9,6 @@ RSpec.describe FormHandler do
       Singleton.__init__(described_class)
       example.run
     end
-    Timecop.return
-    Singleton.__init__(described_class)
   end
 
   context "when accessing a form in a different year" do
@@ -44,7 +42,6 @@ RSpec.describe FormHandler do
           Singleton.__init__(described_class)
           example.run
         end
-        Singleton.__init__(described_class)
       end
 
       it "does not load outdated forms" do
