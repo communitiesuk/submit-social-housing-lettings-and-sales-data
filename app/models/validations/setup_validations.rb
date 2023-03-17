@@ -3,10 +3,10 @@ module Validations::SetupValidations
   include CollectionTimeHelper
 
   def validate_startdate_setup(record)
-    return unless record.startdate && date_valid?("startdate", record)
+    return unless record.startdate && date_valid?("startdate", record) && FeatureToggle.startdate_collection_window_validation_enabled?
 
-    unless record.startdate.between?(active_collection_start_date, current_collection_end_date) || !FeatureToggle.startdate_collection_window_validation_enabled?
-      record.errors.add :startdate, validation_error_message
+    unless record.startdate.between?(active_collection_start_date, current_collection_end_date)
+      record.errors.add :startdate, startdate_validation_error_message
     end
   end
 
@@ -44,12 +44,12 @@ private
     end
   end
 
-  def validation_error_message
+  def startdate_validation_error_message
     current_end_year_long = current_collection_end_date.strftime("#{current_collection_end_date.day.ordinalize} %B %Y")
 
     if FormHandler.instance.lettings_in_crossover_period?
       I18n.t(
-        "validations.setup.startdate.previous_and_current_financial_year",
+        "validations.setup.startdate.previous_and_current_collection_year",
         previous_start_year_short: previous_collection_start_date.strftime("%y"),
         previous_end_year_short: previous_collection_end_date.strftime("%y"),
         previous_start_year_long: previous_collection_start_date.strftime("#{previous_collection_start_date.day.ordinalize} %B %Y"),
@@ -58,7 +58,7 @@ private
       )
     else
       I18n.t(
-        "validations.setup.startdate.current_financial_year",
+        "validations.setup.startdate.current_collection_year",
         current_start_year_short: current_collection_start_date.strftime("%y"),
         current_end_year_short: current_collection_end_date.strftime("%y"),
         current_start_year_long: current_collection_start_date.strftime("#{current_collection_start_date.day.ordinalize} %B %Y"),

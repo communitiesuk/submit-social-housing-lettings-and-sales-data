@@ -155,17 +155,17 @@ en:
       intermediate_rent_product_name:
         blank: "Enter name of other intermediate rent product"
       saledate:
-        current_financial_year:
+        current_collection_year:
           Enter a date within the %{current_start_year_short}/%{current_end_year_short} collection year, which is between %{current_start_year_long} and %{current_end_year_long}
-        previous_and_current_financial_year:
+        previous_and_current_collection_year:
           "Enter a date within the %{previous_start_year_short}/%{previous_end_year_short} or %{previous_end_year_short}/%{current_end_year_short} collection years, which is between %{previous_start_year_long} and %{current_end_year_long}"
       type:
         percentage_bought_must_be_at_least_threshold: "The minimum increase in equity while staircasing is %{threshold}% for this shared ownership type"
 
       startdate:
-        current_financial_year:
+        current_collection_year:
           Enter a date within the %{current_start_year_short}/%{current_end_year_short} collection year, which is between %{current_start_year_long} and %{current_end_year_long}
-        previous_and_current_financial_year:
+        previous_and_current_collection_year:
           "Enter a date within the %{previous_start_year_short}/%{previous_end_year_short} or %{previous_end_year_short}/%{current_end_year_short} collection years, which is between %{previous_start_year_long} and %{current_end_year_long}"
         later_than_14_days_after: "The tenancy start date must not be later than 14 days from today’s date"
         before_scheme_end_date: "The tenancy start date must be before the end date for this supported housing scheme"
