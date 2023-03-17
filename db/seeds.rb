@@ -309,7 +309,7 @@ unless Rails.env.test?
     pp "Seeded 3 dummy schemes"
   end
 
-  if (Rails.env.development? || Rails.env.review?) && LocalAuthority.count.zero?
+  if (Rails.env.development? || Rails.env.review?) && LocalAuthorityLink.count.zero?
     links_data_path = "config/local_authorities_data/local_authority_links_2023.csv"
     service = Imports::LocalAuthorityLinksService.new(path: links_data_path)
     service.call
