@@ -330,4 +330,19 @@ class SalesLog < Log
   def should_process_uprn_change?
     uprn_changed? && saledate && saledate.year >= 2023
   end
+
+  def value_with_discount
+    return if value.blank?
+
+    discount_amount = discount ? value * discount / 100 : 0
+    (value - discount_amount)
+  end
+
+  def mortgage_deposit_and_grand_total
+    return if deposit.blank?
+
+    grant_amount = grant || 0
+    mortgage_amount = mortgage || 0
+    mortgage_amount + deposit + grant_amount
+  end
 end

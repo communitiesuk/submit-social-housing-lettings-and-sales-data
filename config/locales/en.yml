@@ -525,6 +525,9 @@ en:
       title_text: "The amount of monthly charges is high for this type of property and sale type"
     student_not_child:
       title_text: "You told us this person is a student aged beween 16 and 19"
+    discounted_sale_value:
+      title_text: "Mortgage, deposit, and grant total must equal £%{value_with_discount}"
+      informative_text: "Your given mortgage, deposit and grand total is £%{mortgage_deposit_and_grand_total}"
 
   devise:
     two_factor_authentication:

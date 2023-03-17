@@ -3,7 +3,7 @@ class Form::Sales::Questions::DiscountedSaleValueCheck < ::Form::Question
     super
     @id = "discounted_sale_value_check"
     @check_answer_label = "Discounted sale value confirmation"
-    @header = "Are you sure?"
+    @header = "Are you sure this is correct?"
     @type = "interruption_screen"
     @answer_options = {
       "0" => { "value" => "Yes" },

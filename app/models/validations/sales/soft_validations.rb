@@ -120,12 +120,7 @@ module Validations::Sales::SoftValidations
     return unless mortgage || mortgageused == 2
     return unless discount || grant || type == 29
 
-    discount_amount = discount ? value * discount / 100 : 0
-    grant_amount = grant || 0
-    mortgage_amount = mortgage || 0
-    value_with_discount = (value - discount_amount)
-
-    mortgage_amount + deposit + grant_amount != value_with_discount && discounted_ownership_sale?
+    mortgage_deposit_and_grand_total != value_with_discount && discounted_ownership_sale?
   end
 
 private

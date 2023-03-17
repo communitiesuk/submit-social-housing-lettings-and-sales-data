@@ -24,6 +24,20 @@ RSpec.describe Form::Sales::Pages::DiscountedSaleValueCheck, type: :model do
     expect(page.header).to be_nil
   end
 
+  it "has the correct title_text" do
+    expect(page.title_text).to eq({
+      "translation" => "soft_validations.discounted_sale_value.title_text",
+      "arguments" => [{ "key" => "value_with_discount", "label" => false, "i18n_template" => "value_with_discount" }],
+    })
+  end
+
+  it "has the correct informative_text" do
+    expect(page.informative_text).to eq({
+      "translation" => "soft_validations.discounted_sale_value.informative_text",
+      "arguments" => [{ "key" => "mortgage_deposit_and_grand_total", "label" => false, "i18n_template" => "mortgage_deposit_and_grand_total" }],
+    })
+  end
+
   it "is interruption screen page" do
     expect(page.interruption_screen?).to eq(true)
   end

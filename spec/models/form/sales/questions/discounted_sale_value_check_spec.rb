@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::DiscountedSaleValueCheck, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Are you sure?")
+    expect(question.header).to eq("Are you sure this is correct?")
   end
 
   it "has the correct check_answer_label" do
