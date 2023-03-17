@@ -235,7 +235,7 @@ RSpec.describe SalesLogsController, type: :request do
               Timecop.freeze(2022, 12, 1) do
                 example.run
               end
-              Timecop.unfreeze
+              Timecop.return
             end
 
             let!(:sales_log_2022) do
