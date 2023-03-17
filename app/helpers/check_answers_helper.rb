@@ -45,4 +45,8 @@ private
   def get_answer_label(question, lettings_log)
     question.answer_label(lettings_log, current_user).presence || "<span class=\"app-!-colour-muted\">You didn’t answer this question</span>".html_safe
   end
+
+  def get_question_label(question)
+    [question.question_number_string, question.check_answer_label.to_s.presence || question.header.to_s].compact.join(" - ")
+  end
 end

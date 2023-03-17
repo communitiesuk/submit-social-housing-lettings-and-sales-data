@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Pages::MortgageLender, type: :model do
-  subject(:page) { described_class.new(page_id, page_definition, subsection) }
+  subject(:page) { described_class.new(page_id, page_definition, subsection, ownershipsch: 1) }
 
   let(:page_id) { "mortgage_lender" }
   let(:page_definition) { nil }

@@ -6,6 +6,7 @@ class Form::Sales::Questions::StaircaseSale < ::Form::Question
     @header = "Is this transaction part of a back-to-back staircasing transaction to facilitate sale of the home on the open market?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
+    @question_number = 79
   end
 
   ANSWER_OPTIONS = {

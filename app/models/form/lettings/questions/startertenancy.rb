@@ -8,6 +8,7 @@ class Form::Lettings::Questions::Startertenancy < ::Form::Question
     @check_answers_card_number = 0
     @hint_text = ""
     @answer_options = ANSWER_OPTIONS
+    @question_number = 26
   end
 
   ANSWER_OPTIONS = { "1" => { "value" => "Yes" }, "2" => { "value" => "No" } }.freeze

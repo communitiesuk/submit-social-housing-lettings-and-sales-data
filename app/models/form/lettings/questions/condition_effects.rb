@@ -8,6 +8,7 @@ class Form::Lettings::Questions::ConditionEffects < ::Form::Question
     @check_answers_card_number = 0
     @hint_text = "Select all that apply."
     @answer_options = ANSWER_OPTIONS
+    @question_number = 74
   end
 
   ANSWER_OPTIONS = {

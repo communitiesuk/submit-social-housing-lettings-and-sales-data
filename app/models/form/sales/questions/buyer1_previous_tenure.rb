@@ -6,6 +6,7 @@ class Form::Sales::Questions::Buyer1PreviousTenure < ::Form::Question
     @header = "What was buyer 1’s previous tenure?"
     @type = "radio"
     @answer_options = answer_options
+    @question_number = 56
   end
 
   def answer_options

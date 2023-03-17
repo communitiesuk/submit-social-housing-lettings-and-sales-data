@@ -11,5 +11,6 @@ class Form::Lettings::Questions::Age1 < ::Form::Question
     @max = 120
     @min = 16
     @step = 1
+    @question_number = 32
   end
 end

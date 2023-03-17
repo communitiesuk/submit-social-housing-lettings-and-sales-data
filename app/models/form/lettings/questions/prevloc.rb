@@ -8,6 +8,7 @@ class Form::Lettings::Questions::Prevloc < ::Form::Question
     @inferred_check_answers_value = [{ "condition" => { "previous_la_known" => 0 }, "value" => "Not known" }]
     @check_answers_card_number = 0
     @hint_text = "Select ‘Northern Ireland’, ‘Scotland’, ‘Wales’ or ‘Outside the UK’ if the household’s last settled home was outside England."
+    @question_number = 81
   end
 
   def answer_options

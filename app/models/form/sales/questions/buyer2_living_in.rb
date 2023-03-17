@@ -7,6 +7,7 @@ class Form::Sales::Questions::Buyer2LivingIn < ::Form::Question
     @type = "radio"
     @hint_text = ""
     @answer_options = ANSWER_OPTIONS
+    @question_number = 60
   end
 
   ANSWER_OPTIONS = {

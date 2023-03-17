@@ -1,7 +1,7 @@
 <%= govuk_summary_list do |summary_list| %>
   <% total_applicable_questions(subsection, @log, current_user).each do |question| %>
     <% summary_list.row do |row| %>
-      <% row.key { question.check_answer_label.to_s.presence || question.header.to_s } %>
+      <% row.key { get_question_label(question) } %>
       <% row.value do %>
         <span class="govuk-!-margin-right-4"><%= get_answer_label(question, @log) %></span>
         <% extra_value = question.get_extra_check_answer_value(@log) %>

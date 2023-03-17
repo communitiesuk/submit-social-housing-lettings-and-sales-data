@@ -6,6 +6,7 @@ class Form::Sales::Questions::DiscountedOwnershipType < ::Form::Question
     @header = "What is the type of discounted ownership sale?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
+    @question_number = 5
   end
 
   ANSWER_OPTIONS = {

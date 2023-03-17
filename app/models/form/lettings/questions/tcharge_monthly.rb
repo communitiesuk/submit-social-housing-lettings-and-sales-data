@@ -15,5 +15,6 @@ class Form::Lettings::Questions::TchargeMonthly < ::Form::Question
     @suffix = " every month"
     @requires_js = true
     @fields_added = %w[brent scharge pscharge supcharg]
+    @hidden_in_check_answers = true
   end
 end

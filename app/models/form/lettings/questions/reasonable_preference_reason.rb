@@ -8,6 +8,7 @@ class Form::Lettings::Questions::ReasonablePreferenceReason < ::Form::Question
     @check_answers_card_number = 0
     @hint_text = "Select all that apply."
     @answer_options = ANSWER_OPTIONS
+    @question_number = 83
   end
 
   ANSWER_OPTIONS = {

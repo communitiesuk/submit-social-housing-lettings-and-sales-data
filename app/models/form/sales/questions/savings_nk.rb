@@ -16,6 +16,7 @@ class Form::Sales::Questions::SavingsNk < ::Form::Question
         },
       ],
     }
+    @question_number = 72
   end
 
   ANSWER_OPTIONS = {

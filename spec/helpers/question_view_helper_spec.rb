@@ -44,7 +44,13 @@ RSpec.describe QuestionViewHelper do
   describe "legend" do
     subject(:question_view_helper) { legend(question, page_header, conditional) }
 
-    let(:question) { OpenStruct.new(header: "Some question header") }
+    question_stub = Struct.new(:header) do
+      def question_number_string(_conditional)
+        nil
+      end
+    end
+
+    let(:question) { question_stub.new("Some question header") }
     let(:size) { "m" }
     let(:tag) { "div" }
     let(:legend_options_hash) do
@@ -67,7 +73,7 @@ RSpec.describe QuestionViewHelper do
       end
     end
 
-    context "when viewinng a conditional question" do
+    context "when viewing a conditional question" do
       let(:conditional) { true }
       let(:tag) { "" }
 

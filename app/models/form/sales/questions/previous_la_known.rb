@@ -20,6 +20,7 @@ class Form::Sales::Questions::PreviousLaKnown < ::Form::Question
     @conditional_for = {
       "prevloc" => [1],
     }
+    @question_number = 58
   end
 
   ANSWER_OPTIONS = {

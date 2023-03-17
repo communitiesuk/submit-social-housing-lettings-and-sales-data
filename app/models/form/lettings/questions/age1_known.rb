@@ -10,6 +10,7 @@ class Form::Lettings::Questions::Age1Known < ::Form::Question
     @answer_options = ANSWER_OPTIONS
     @conditional_for = { "age1" => [0] }
     @hidden_in_check_answers = { "depends_on" => [{ "age1_known" => 0 }, { "age1_known" => 1 }] }
+    @question_number = 32
   end
 
   ANSWER_OPTIONS = { "0" => { "value" => "Yes" }, "1" => { "value" => "No" } }.freeze

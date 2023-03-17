@@ -1,6 +1,6 @@
 class Form::Sales::Questions::LeaseholdChargesKnown < ::Form::Question
-  def initialize(id, hsh, page)
-    super
+  def initialize(id, hsh, subsection, ownershipsch:)
+    super(id, hsh, subsection)
     @id = "mscharge_known"
     @check_answer_label = "Monthly leasehold charges known?"
     @header = "Does the property have any monthly leasehold charges?"
@@ -17,10 +17,23 @@ class Form::Sales::Questions::LeaseholdChargesKnown < ::Form::Question
         },
       ],
     }
+    @ownershipsch = ownershipsch
+    @question_number = question_number
   end
 
   ANSWER_OPTIONS = {
     "1" => { "value" => "Yes" },
     "0" => { "value" => "No" },
   }.freeze
+
+  def question_number
+    case @ownershipsch
+    when 1
+      98
+    when 2
+      109
+    when 3
+      117
+    end
+  end
 end

@@ -6,6 +6,7 @@ class Form::Sales::Questions::BuyerPrevious < ::Form::Question
     @header = I18n.t("questions.soctenant", count: joint_purchase ? 2 : 1)
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
+    @question_number = 84
   end
 
   ANSWER_OPTIONS = {

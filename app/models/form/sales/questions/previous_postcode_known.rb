@@ -20,6 +20,7 @@ class Form::Sales::Questions::PreviousPostcodeKnown < ::Form::Question
         },
       ],
     }
+    @question_number = 57
   end
 
   ANSWER_OPTIONS = {

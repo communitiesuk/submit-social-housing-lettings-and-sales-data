@@ -9,6 +9,7 @@ class Form::Lettings::Questions::Incfreq < ::Form::Question
     @hint_text = ""
     @answer_options = ANSWER_OPTIONS
     @hidden_in_check_answers = true
+    @question_number = 87
   end
 
   ANSWER_OPTIONS = {

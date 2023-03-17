@@ -6,6 +6,7 @@ class Form::Sales::Questions::ArmedForcesSpouse < ::Form::Question
     @header = "Are any of the buyers a spouse or civil partner of a UK armed forces regular who died in service within the last 2 years?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
+    @question_number = 64
   end
 
   ANSWER_OPTIONS = {
