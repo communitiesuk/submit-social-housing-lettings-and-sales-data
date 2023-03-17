@@ -88,7 +88,6 @@ RSpec.describe "Sales Log Features" do
     end
 
     context "when visiting a subsection check answers page as a support user" do
-
       it "has the correct breadcrumbs with the correct links" do
         visit sales_log_setup_check_answers_path(sales_log.id)
         breadcrumbs = page.find_all(".govuk-breadcrumbs__link")
@@ -100,7 +99,6 @@ RSpec.describe "Sales Log Features" do
     end
 
     context "when reviewing a complete log" do
-
       it "has the correct breadcrumbs with the correct links" do
         visit review_sales_log_path(sales_log.id, sales_log: true)
         breadcrumbs = page.find_all(".govuk-breadcrumbs__link")

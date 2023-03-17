@@ -1,9 +1,9 @@
-<% class_name = @log.class.name.underscore %>
-<% content_for :title, "Review #{class_name.humanize(capitalize: false)}" %>
+<% class_name = @log.class.name.underscore.humanize(capitalize: false) %>
+<% content_for :title, "Review #{class_name}" %>
 <% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
-  "Logs" => send("#{class_name.pluralize}_path"),
-  "Log #{@log.id}" => send("#{class_name}_path", @log.id),
-  "Review #{class_name.humanize(capitalize: false)}" => "",
+  "Logs" => url_for(@log.class),
+  "Log #{@log.id}" => url_for(@log),
+  "Review #{class_name}" => "",
 }) %>
 
 <div class="govuk-grid-row">

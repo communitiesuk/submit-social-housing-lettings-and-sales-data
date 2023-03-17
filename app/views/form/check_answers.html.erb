@@ -1,8 +1,7 @@
 <% content_for :title, "#{subsection.id.humanize} - Check your answers" %>
-<% class_name = @log.class.name.underscore %>
 <% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
-  "Logs" => send("#{class_name.pluralize}_path"),
-  "Log #{@log.id}" => send("#{class_name}_path", @log),
+  "Logs" => url_for(@log.class),
+  "Log #{@log.id}" => url_for(@log),
   subsection.label => "",
 }) %>
 
