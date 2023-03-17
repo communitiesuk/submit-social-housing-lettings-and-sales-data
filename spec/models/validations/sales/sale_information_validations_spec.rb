@@ -228,7 +228,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
   describe "#validate_discounted_ownership_value" do
     context "when sale is on or after 24/25 collection window" do
       context "when grant is routed to" do
-        let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, deposit: 5_000, value: 30_000, ownershipsch: 2, type: 8, saledate: Time.zone.local(2023, 4, 3)) }
+        let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, deposit: 5_000, value: 30_000, ownershipsch: 2, type: 8, saledate: Time.zone.local(2024, 4, 3)) }
 
         context "and not provided" do
           before do
@@ -262,7 +262,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       end
 
       context "when discount is routed to" do
-        let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, deposit: 5_000, value: 30_000, ownershipsch: 2, type: 9, saledate: Time.zone.local(2023, 4, 3)) }
+        let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, deposit: 5_000, value: 30_000, ownershipsch: 2, type: 9, saledate: Time.zone.local(2024, 4, 3)) }
 
         context "and not provided" do
           before do
@@ -296,7 +296,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       end
 
       context "when neither discount nor grant is routed to" do
-        let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, value: 30_000, ownershipsch: 2, type: 29, saledate: Time.zone.local(2023, 4, 3)) }
+        let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, value: 30_000, ownershipsch: 2, type: 29, saledate: Time.zone.local(2024, 4, 3)) }
 
         it "adds an error if mortgage and deposit total does not equal market value" do
           record.deposit = 2_000
@@ -316,7 +316,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       end
 
       context "when mortgage is routed to" do
-        let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, deposit: 5_000, grant: 3_000, value: 20_000, discount: 10, ownershipsch: 2, saledate: Time.zone.local(2023, 4, 3)) }
+        let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, deposit: 5_000, grant: 3_000, value: 20_000, discount: 10, ownershipsch: 2, saledate: Time.zone.local(2024, 4, 3)) }
 
         context "and not provided" do
           before do
@@ -350,7 +350,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       end
 
       context "when mortgage is not routed to" do
-        let(:record) { FactoryBot.build(:sales_log, mortgageused: 2, deposit: 5_000, grant: 3_000, value: 20_000, discount: 10, ownershipsch: 2, saledate: Time.zone.local(2023, 4, 3)) }
+        let(:record) { FactoryBot.build(:sales_log, mortgageused: 2, deposit: 5_000, grant: 3_000, value: 20_000, discount: 10, ownershipsch: 2, saledate: Time.zone.local(2024, 4, 3)) }
 
         it "adds an error if grant and deposit total does not equal market value - discount" do
           sale_information_validator.validate_discounted_ownership_value(record)
@@ -369,7 +369,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       end
 
       context "when ownership is not discounted" do
-        let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, deposit: 5_000, grant: 3_000, value: 20_000, discount: 10, ownershipsch: 1, saledate: Time.zone.local(2023, 4, 3)) }
+        let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, deposit: 5_000, grant: 3_000, value: 20_000, discount: 10, ownershipsch: 1, saledate: Time.zone.local(2024, 4, 3)) }
 
         it "does not add an error" do
           sale_information_validator.validate_discounted_ownership_value(record)
@@ -380,7 +380,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
     end
 
     context "when sale is before 24/25 collection" do
-      let(:record) { FactoryBot.build(:sales_log, mortgageused: 2, deposit: 5_000, grant: 3_000, value: 20_000, discount: 10, ownershipsch: 2, saledate: Time.zone.local(2024, 4, 4)) }
+      let(:record) { FactoryBot.build(:sales_log, mortgageused: 2, deposit: 5_000, grant: 3_000, value: 20_000, discount: 10, ownershipsch: 2, saledate: Time.zone.local(2023, 4, 4)) }
 
       it "does not add an error" do
         sale_information_validator.validate_discounted_ownership_value(record)
