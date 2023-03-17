@@ -268,17 +268,18 @@ RSpec.describe Validations::Sales::FinancialValidations do
   end
 
   describe "#validate_equity_in_range_for_year_and_type" do
-    let(:record) { FactoryBot.create(:sales_log) }
+    let(:record) { FactoryBot.create(:sales_log, saledate: now) }
+
+    before do
+      Timecop.freeze(now)
+    end
+
+    after do
+      Timecop.unfreeze
+    end
 
     context "with a log in the 22/23 collection year" do
-      before do
-        Timecop.freeze(Time.zone.local(2023, 1, 1))
-        record.update!(saledate: Time.zone.local(2023, 1, 1))
-      end
-
-      after do
-        Timecop.unfreeze
-      end
+      let(:now) { Time.zone.local(2023, 1, 1) }
 
       it "adds an error for type 2, equity below min with the correct percentage" do
         record.type = 2
@@ -313,14 +314,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
     end
 
     context "with a log in 23/24 collection year" do
-      before do
-        Timecop.freeze(Time.zone.local(2024, 1, 1))
-        record.update!(saledate: Time.zone.local(2024, 1, 1))
-      end
-
-      after do
-        Timecop.unfreeze
-      end
+      let(:now) { Time.zone.local(2024, 1, 1) }
 
       it "adds an error for type 2, equity below min with the correct percentage" do
         record.type = 2
