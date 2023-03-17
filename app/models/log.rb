@@ -31,6 +31,24 @@ class Log < ApplicationRecord
   }
   scope :created_by, ->(user) { where(created_by: user) }
 
+  def process_uprn_change!
+    if uprn.present?
+      service = UprnClient.new(uprn)
+      service.call
+
+      return errors.add(:uprn, service.error) if service.error.present?
+
+      presenter = UprnDataPresenter.new(service.result)
+
+      self.uprn_confirmed = nil
+      self.address_line1 = presenter.address_line1
+      self.address_line2 = presenter.address_line2
+      self.town_or_city = presenter.town_or_city
+      self.postcode_full = presenter.postcode
+      process_postcode_changes!
+    end
+  end
+
   def collection_start_year
     return @start_year if @start_year
 

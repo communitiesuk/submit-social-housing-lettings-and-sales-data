@@ -160,7 +160,7 @@ private
   end
 
   def question_is_required?(question)
-    @log.class::OPTIONAL_FIELDS.exclude?(question.id) && required_questions.include?(question.id)
+    @log.optional_fields.exclude?(question.id) && required_questions.include?(question.id)
   end
 
   def required_questions

@@ -1,7 +1,7 @@
 <%= render partial: "form/guidance/#{question.guidance_partial}" if question.top_guidance? %>
 
 <div class="govuk-form-group">
-  <label class="govuk-label govuk-label--<%= label_size(page_header, conditional) %>" for="lettings-log-<%= question.id %>-field">
+  <label class="govuk-label govuk-label--<%= label_size(page_header, conditional, question) %>" for="lettings-log-<%= question.id %>-field">
     <%= question.header.html_safe %>
   </label>
   <div class="govuk-hint">

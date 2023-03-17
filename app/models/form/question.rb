@@ -4,7 +4,7 @@ class Form::Question
                 :conditional_for, :readonly, :answer_options, :page, :check_answer_label,
                 :inferred_answers, :hidden_in_check_answers, :inferred_check_answers_value,
                 :guidance_partial, :prefix, :suffix, :requires_js, :fields_added, :derived,
-                :check_answers_card_number, :unresolved_hint_text, :question_number
+                :check_answers_card_number, :unresolved_hint_text, :question_number, :plain_label
 
   module GuidancePosition
     TOP = 1
@@ -41,6 +41,7 @@ class Form::Question
       @check_answers_card_number = hsh["check_answers_card_number"] || 0
       @unresolved_hint_text = hsh["unresolved_hint_text"]
       @question_number = hsh["question_number"]
+      @plain_label = hsh["plain_label"]
     end
   end
 
@@ -56,6 +57,8 @@ class Form::Question
 
     inferred_answer_value(log) || answer_label
   end
+
+  def notification_banner(_log = nil); end
 
   def get_inferred_answers(log)
     return [] unless inferred_answers

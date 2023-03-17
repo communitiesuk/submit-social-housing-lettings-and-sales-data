@@ -23,6 +23,15 @@ module DerivedVariables::SalesLogVariables
     self.totadult = total_adult + total_elder
     self.hhmemb = number_of_household_members
     self.hhtype = household_type
+
+    if uprn_known&.zero?
+      self.uprn = nil
+    end
+
+    if uprn_confirmed&.zero?
+      self.uprn = nil
+      self.uprn_known = 0
+    end
   end
 
 private

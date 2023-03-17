@@ -11,4 +11,8 @@ class Form::Sales::Questions::PropertyLocalAuthority < ::Form::Question
   def answer_options
     { "" => "Select an option" }.merge(LocalAuthority.active(form.start_date).england.map { |la| [la.code, la.name] }.to_h)
   end
+
+  def hidden_in_check_answers?(log, _current_user = nil)
+    log.saledate && log.saledate.year >= 2023 && log.is_la_inferred?
+  end
 end
