@@ -14,7 +14,7 @@ class Location < ApplicationRecord
 
   has_paper_trail
 
-  before_save :lookup_postcode!, if: :postcode_changed?
+  before_validation :lookup_postcode!, if: :postcode_changed?
 
   auto_strip_attributes :name
 
