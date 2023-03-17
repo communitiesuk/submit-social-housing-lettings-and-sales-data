@@ -333,11 +333,10 @@ RSpec.describe LettingsLogsController, type: :request do
           end
 
           context "with year filter" do
-            before do
-              Timecop.freeze(2022, 3, 1)
-            end
-
-            after do
+            around do |example|
+              Timecop.freeze(2022, 3, 1) do
+                example.run
+              end
               Timecop.unfreeze
             end
 
