@@ -337,7 +337,7 @@ RSpec.describe LettingsLogsController, type: :request do
               Timecop.freeze(2022, 3, 1) do
                 example.run
               end
-              Timecop.unfreeze
+              Timecop.return
             end
 
             let!(:lettings_log_2021) do

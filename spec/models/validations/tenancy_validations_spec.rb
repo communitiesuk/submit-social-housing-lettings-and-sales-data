@@ -7,6 +7,10 @@ RSpec.describe Validations::TenancyValidations do
     Timecop.freeze(Time.zone.local(2021, 5, 1))
   end
 
+  after do
+    Timecop.unfreeze
+  end
+
   let(:validator_class) { Class.new { include Validations::TenancyValidations } }
   let(:record) { FactoryBot.create(:lettings_log, startdate: Time.zone.local(2021, 5, 1), needstype: 1, rent_type: 1) }
 

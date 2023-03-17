@@ -9,6 +9,7 @@ RSpec.describe CollectionTimeHelper do
       Timecop.freeze(now) do
         example.run
       end
+      Timecop.return
     end
 
     context "when the date is after 1st of April" do
