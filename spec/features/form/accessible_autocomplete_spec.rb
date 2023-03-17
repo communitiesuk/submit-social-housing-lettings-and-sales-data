@@ -2,6 +2,15 @@ require "rails_helper"
 require_relative "helpers"
 
 RSpec.describe "Accessible Autocomplete" do
+  around do |example|
+    Timecop.freeze(Time.zone.local(2022, 1, 1)) do
+      Singleton.__init__(FormHandler)
+      example.run
+    end
+    Timecop.return
+    Singleton.__init__(FormHandler)
+  end
+
   include Helpers
   let(:user) { FactoryBot.create(:user) }
   let(:lettings_log) do
@@ -64,8 +73,8 @@ RSpec.describe "Accessible Autocomplete" do
     let(:scheme) { FactoryBot.create(:scheme, owning_organisation_id: lettings_log.created_by.organisation_id, primary_client_group: "Q", secondary_client_group: "P") }
 
     before do
-      FactoryBot.create(:location, scheme:, postcode: "W6 0ST")
-      FactoryBot.create(:location, scheme:, postcode: "SE6 1LB")
+      FactoryBot.create(:location, scheme:, postcode: "W6 0ST", startdate: Time.zone.local(2022, 1, 1))
+      FactoryBot.create(:location, scheme:, postcode: "SE6 1LB", startdate: Time.zone.local(2022, 1, 1))
       lettings_log.update!(needstype: 2)
       visit("/lettings-logs/#{lettings_log.id}/scheme")
     end

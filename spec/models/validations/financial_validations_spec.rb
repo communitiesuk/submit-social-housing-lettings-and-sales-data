@@ -86,7 +86,7 @@ RSpec.describe Validations::FinancialValidations do
     end
 
     context "when outstanding rent or charges is yes" do
-      let(:record) { FactoryBot.create(:lettings_log, :about_completed) }
+      let(:record) { FactoryBot.create(:lettings_log, :about_completed, startdate: Time.zone.now) }
 
       it "expects that a shortfall is provided" do
         record.hbrentshortfall = 1
