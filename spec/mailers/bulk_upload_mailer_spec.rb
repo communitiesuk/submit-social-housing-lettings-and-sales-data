@@ -52,7 +52,7 @@ RSpec.describe BulkUploadMailer do
         personalisation: {
           title: "You’ve successfully uploaded 0 logs",
           filename: bulk_upload.filename,
-          upload_timestamp: bulk_upload.created_at,
+          upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
           success_description: "The lettings 2022/23 data you uploaded has been checked. The 0 logs you uploaded are now complete.",
           logs_link: lettings_logs_url,
         },
@@ -69,7 +69,7 @@ RSpec.describe BulkUploadMailer do
         template_id: described_class::BULK_UPLOAD_FAILED_SERVICE_ERROR_TEMPLATE_ID,
         personalisation: {
           filename: bulk_upload.filename,
-          upload_timestamp: bulk_upload.created_at,
+          upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
           lettings_or_sales: bulk_upload.log_type,
           year_combo: bulk_upload.year_combo,
           errors: "- foo\n- bar",

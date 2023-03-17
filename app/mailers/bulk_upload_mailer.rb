@@ -26,7 +26,7 @@ class BulkUploadMailer < NotifyMailer
       {
         title:,
         filename: bulk_upload.filename,
-        upload_timestamp: bulk_upload.created_at,
+        upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
         success_description:,
         logs_link: url,
       },
@@ -112,7 +112,7 @@ class BulkUploadMailer < NotifyMailer
       BULK_UPLOAD_FAILED_SERVICE_ERROR_TEMPLATE_ID,
       {
         filename: bulk_upload.filename,
-        upload_timestamp: bulk_upload.created_at,
+        upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
         lettings_or_sales: bulk_upload.log_type,
         year_combo: bulk_upload.year_combo,
         errors: errors.map { |e| "- #{e}" }.join("\n"),
