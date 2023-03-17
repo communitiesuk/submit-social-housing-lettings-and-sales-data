@@ -1,0 +1,44 @@
+require "rails_helper"
+
+RSpec.describe Form::Lettings::Pages::VoidDate, type: :model do
+  subject(:page) { described_class.new(page_id, page_definition, subsection) }
+
+  let(:page_id) { nil }
+  let(:page_definition) { nil }
+  let(:subsection) { instance_double(Form::Subsection) }
+
+  it "has correct subsection" do
+    expect(page.subsection).to eq(subsection)
+  end
+
+  it "has correct questions" do
+    expect(page.questions.map(&:id)).to eq(%w[voiddate])
+  end
+
+  it "has the correct id" do
+    expect(page.id).to eq("void_date")
+  end
+
+  it "has the correct header" do
+    expect(page.header).to be_nil
+  end
+
+  it "has the correct description" do
+    expect(page.description).to be_nil
+  end
+
+  it "has the correct depends_on" do
+    expect(page.depends_on).to eq([
+                                    { "renewal" => 0, "rsnvac" => 5 },
+                                    { "renewal" => 0, "rsnvac" => 6 },
+                                    { "renewal" => 0, "rsnvac" => 8 },
+                                    { "renewal" => 0, "rsnvac" => 9 },
+                                    { "renewal" => 0, "rsnvac" => 10 },
+                                    { "renewal" => 0, "rsnvac" => 11 },
+                                    { "renewal" => 0, "rsnvac" => 12 },
+                                    { "renewal" => 0, "rsnvac" => 13 },
+                                    { "renewal" => 0, "rsnvac" => 18 },
+                                    { "renewal" => 0, "rsnvac" => 19 },
+                                  ])
+  end
+end
