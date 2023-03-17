@@ -34,6 +34,10 @@ class Form::Subsection
     :in_progress
   end
 
+  def complete?(log)
+    status(log) == :completed
+  end
+
   def is_incomplete?(log)
     %i[not_started in_progress].include?(status(log))
   end
@@ -50,5 +54,9 @@ class Form::Subsection
 
   def displayed_in_tasklist?(_log)
     true
+  end
+
+  def not_displayed_in_tasklist?(log)
+    !displayed_in_tasklist?(log)
   end
 end
