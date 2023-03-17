@@ -2,15 +2,6 @@ require "rails_helper"
 require_relative "helpers"
 
 RSpec.describe "Form Navigation" do
-  around do |example|
-    Timecop.travel(Time.zone.local(2022, 1, 1)) do
-      Singleton.__init__(FormHandler)
-      example.run
-    end
-    Timecop.return
-    Singleton.__init__(FormHandler)
-  end
-
   include Helpers
   let(:user) { FactoryBot.create(:user) }
   let(:lettings_log) do

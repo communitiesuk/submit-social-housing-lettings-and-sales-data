@@ -231,10 +231,11 @@ RSpec.describe SalesLogsController, type: :request do
           end
 
           context "with year and status filter" do
-            around do |example|
-              Timecop.freeze(2022, 12, 1) do
-                example.run
-              end
+            before do
+              Timecop.freeze(Time.zone.local(2022, 12, 1))
+            end
+
+            after do
               Timecop.unfreeze
             end
 

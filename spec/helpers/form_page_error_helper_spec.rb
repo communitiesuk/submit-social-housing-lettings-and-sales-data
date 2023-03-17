@@ -3,15 +3,6 @@ require "rails_helper"
 RSpec.describe FormPageErrorHelper do
   describe "#remove_other_page_errors" do
     context "when non base other questions are removed" do
-      around do |example|
-        Timecop.freeze(Time.zone.local(2022, 1, 1)) do
-          Singleton.__init__(FormHandler)
-          example.run
-        end
-        Timecop.return
-        Singleton.__init__(FormHandler)
-      end
-
       let!(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress) }
       let!(:form) { lettings_log.form }
 

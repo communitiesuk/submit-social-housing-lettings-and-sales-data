@@ -36,30 +36,16 @@ RSpec.describe "Task List" do
       :about_completed,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
+      startdate: Time.zone.local(2021, 5, 1),
       created_by: user,
     )
   end
   let(:id) { lettings_log.id }
   let(:status) { lettings_log.status }
 
-  around do |example|
-    Timecop.freeze(Time.zone.local(2022, 1, 1)) do
-      Singleton.__init__(FormHandler)
-      example.run
-    end
-    Timecop.return
-    Singleton.__init__(FormHandler)
-  end
-
   before do
-    Timecop.freeze(Time.zone.local(2021, 5, 1))
-    setup_completed_log.update!(startdate: Time.zone.local(2021, 5, 1))
     allow(lettings_log.form).to receive(:end_date).and_return(Time.zone.today + 1.day)
     sign_in user
-  end
-
-  after do
-    Timecop.unfreeze
   end
 
   it "shows if the section has not been started" do

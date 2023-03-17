@@ -33,6 +33,16 @@ module Validations::DateValidations
   def validate_startdate(record)
     return unless record.startdate && date_valid?("startdate", record)
 
+    created_at = record.created_at || Time.zone.now
+
+    if created_at > first_collection_end_date && record.startdate < second_collection_start_date
+      record.errors.add :startdate, I18n.t("validations.date.outside_collection_window")
+    end
+
+    if (record.startdate < first_collection_start_date || record.startdate > second_collection_end_date) && FeatureToggle.startdate_collection_window_validation_enabled?
+      record.errors.add :startdate, I18n.t("validations.date.outside_collection_window")
+    end
+
     if FeatureToggle.startdate_two_week_validation_enabled? && record.startdate > Time.zone.today + 14
       record.errors.add :startdate, I18n.t("validations.setup.startdate.later_than_14_days_after")
     end
@@ -57,6 +67,22 @@ module Validations::DateValidations
   end
 
 private
+
+  def first_collection_start_date
+    @first_collection_start_date ||= FormHandler.instance.lettings_forms["previous_lettings"].start_date
+  end
+
+  def first_collection_end_date
+    @first_collection_end_date ||= FormHandler.instance.lettings_forms["previous_lettings"].end_date
+  end
+
+  def second_collection_start_date
+    @second_collection_start_date ||= FormHandler.instance.lettings_forms["current_lettings"].start_date
+  end
+
+  def second_collection_end_date
+    @second_collection_end_date ||= FormHandler.instance.lettings_forms["current_lettings"].end_date
+  end
 
   def is_rsnvac_first_let?(record)
     [15, 16, 17].include?(record["rsnvac"])

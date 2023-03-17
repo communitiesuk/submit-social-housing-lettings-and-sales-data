@@ -2,15 +2,6 @@ require "rails_helper"
 require_relative "helpers"
 
 RSpec.describe "validations" do
-  around do |example|
-    Timecop.freeze(Time.zone.local(2022, 1, 1)) do
-      Singleton.__init__(FormHandler)
-      example.run
-    end
-    Timecop.return
-    Singleton.__init__(FormHandler)
-  end
-
   let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
   let(:user) { FactoryBot.create(:user) }
   let(:lettings_log) do
@@ -35,8 +26,6 @@ RSpec.describe "validations" do
       status: 1,
       declaration: nil,
       startdate: Time.zone.local(2021, 5, 1),
-      voiddate: Time.zone.local(2021, 5, 1),
-      mrcdate: Time.zone.local(2021, 5, 1),
     )
   end
   let(:id) { lettings_log.id }

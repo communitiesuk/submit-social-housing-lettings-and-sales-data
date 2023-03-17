@@ -6,16 +6,6 @@ RSpec.describe LettingsLog do
   let(:created_by_user) { create(:user) }
   let(:owning_organisation) { created_by_user.organisation }
   let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
-  let(:fake_2022_2023_form) { Form.new("spec/fixtures/forms/2022_2023.json") }
-
-  around do |example|
-    Timecop.freeze(Time.utc(2022, 1, 1)) do
-      Singleton.__init__(FormHandler)
-      example.run
-    end
-    Timecop.return
-    Singleton.__init__(FormHandler)
-  end
 
   before do
     allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
@@ -43,15 +33,7 @@ RSpec.describe LettingsLog do
     let(:lettings_log_2) { build(:lettings_log, startdate: Time.zone.local(2022, 1, 1), created_by: created_by_user) }
     let(:lettings_log_year_2) { build(:lettings_log, startdate: Time.zone.local(2023, 5, 1), created_by: created_by_user) }
 
-    before do
-      Timecop.freeze(2023, 1, 1)
-    end
-
-    after do
-      Timecop.unfreeze
-    end
-
-    it "returns the correct form based on the start date" do
+    it "has returns the correct form based on the start date" do
       expect(lettings_log.form_name).to be_nil
       expect(lettings_log.form).to be_a(Form)
       expect(lettings_log_2.form_name).to eq("previous_lettings")
@@ -1495,13 +1477,8 @@ RSpec.describe LettingsLog do
 
       context "when deriving renttype and unitletas" do
         before do
-          Timecop.freeze(Time.zone.local(2022, 1, 1))
           allow(FeatureToggle).to receive(:startdate_two_week_validation_enabled?).and_return(false)
           lettings_log.update!(rent_type:, irproduct_other: "other")
-        end
-
-        after do
-          Timecop.unfreeze
         end
 
         context "when the rent_type is Social Rent (0)" do
@@ -1520,23 +1497,6 @@ RSpec.describe LettingsLog do
           end
 
           context "and it is a 23/24 form" do
-            before do
-              Timecop.freeze(Time.zone.local(2023, 5, 1))
-            end
-
-            after do
-              Timecop.unfreeze
-            end
-
-            around do |example|
-              Timecop.freeze(Time.zone.local(2023, 5, 1)) do
-                Singleton.__init__(FormHandler)
-                example.run
-              end
-              Timecop.return
-              Singleton.__init__(FormHandler)
-            end
-
             it "derives and saves unitletas as Social rent(1)" do
               lettings_log.update!(startdate: Time.zone.local(2023, 5, 1))
               record_from_db = ActiveRecord::Base.connection.execute("select unitletas from lettings_logs where id=#{lettings_log.id}").to_a[0]
@@ -1562,23 +1522,6 @@ RSpec.describe LettingsLog do
           end
 
           context "and it is a 23/24 form" do
-            before do
-              Timecop.freeze(Time.zone.local(2023, 5, 1))
-            end
-
-            after do
-              Timecop.unfreeze
-            end
-
-            around do |example|
-              Timecop.freeze(Time.zone.local(2023, 5, 1)) do
-                Singleton.__init__(FormHandler)
-                example.run
-              end
-              Timecop.return
-              Singleton.__init__(FormHandler)
-            end
-
             it "derives and saves unitletas as Affordable Rent basis(2)" do
               lettings_log.update!(startdate: Time.zone.local(2023, 5, 1))
               record_from_db = ActiveRecord::Base.connection.execute("select unitletas from lettings_logs where id=#{lettings_log.id}").to_a[0]
@@ -1604,23 +1547,6 @@ RSpec.describe LettingsLog do
           end
 
           context "and it is a 23/24 form" do
-            before do
-              Timecop.freeze(Time.zone.local(2023, 5, 1))
-            end
-
-            after do
-              Timecop.unfreeze
-            end
-
-            around do |example|
-              Timecop.freeze(Time.zone.local(2023, 5, 1)) do
-                Singleton.__init__(FormHandler)
-                example.run
-              end
-              Timecop.return
-              Singleton.__init__(FormHandler)
-            end
-
             it "derives and saves unitletas as London Affordable Rent basis(5)" do
               lettings_log.update!(startdate: Time.zone.local(2023, 5, 1))
               record_from_db = ActiveRecord::Base.connection.execute("select unitletas from lettings_logs where id=#{lettings_log.id}").to_a[0]
@@ -1646,23 +1572,6 @@ RSpec.describe LettingsLog do
           end
 
           context "and it is a 23/24 form" do
-            before do
-              Timecop.freeze(Time.zone.local(2023, 5, 1))
-            end
-
-            after do
-              Timecop.unfreeze
-            end
-
-            around do |example|
-              Timecop.freeze(Time.zone.local(2023, 5, 1)) do
-                Singleton.__init__(FormHandler)
-                example.run
-              end
-              Timecop.return
-              Singleton.__init__(FormHandler)
-            end
-
             it "derives and saves unitletas as Rent to Buy basis(6)" do
               lettings_log.update!(startdate: Time.zone.local(2023, 5, 1))
               record_from_db = ActiveRecord::Base.connection.execute("select unitletas from lettings_logs where id=#{lettings_log.id}").to_a[0]
@@ -1688,23 +1597,6 @@ RSpec.describe LettingsLog do
           end
 
           context "and it is a 23/24 form" do
-            before do
-              Timecop.freeze(Time.zone.local(2023, 5, 1))
-            end
-
-            after do
-              Timecop.unfreeze
-            end
-
-            around do |example|
-              Timecop.freeze(Time.zone.local(2023, 5, 1)) do
-                Singleton.__init__(FormHandler)
-                example.run
-              end
-              Timecop.return
-              Singleton.__init__(FormHandler)
-            end
-
             it "derives and saves unitletas as London Living Rent basis(7)" do
               lettings_log.update!(startdate: Time.zone.local(2023, 5, 1))
               record_from_db = ActiveRecord::Base.connection.execute("select unitletas from lettings_logs where id=#{lettings_log.id}").to_a[0]
@@ -1730,23 +1622,6 @@ RSpec.describe LettingsLog do
           end
 
           context "and it is a 23/24 form" do
-            before do
-              Timecop.freeze(Time.zone.local(2023, 5, 1))
-            end
-
-            after do
-              Timecop.unfreeze
-            end
-
-            around do |example|
-              Timecop.freeze(Time.zone.local(2023, 5, 1)) do
-                Singleton.__init__(FormHandler)
-                example.run
-              end
-              Timecop.return
-              Singleton.__init__(FormHandler)
-            end
-
             it "derives and saves unitletas as Other intermediate rent basis(8)" do
               lettings_log.update!(startdate: Time.zone.local(2023, 5, 1))
               record_from_db = ActiveRecord::Base.connection.execute("select unitletas from lettings_logs where id=#{lettings_log.id}").to_a[0]
@@ -1988,11 +1863,7 @@ RSpec.describe LettingsLog do
         let(:scheme) { create(:scheme) }
         let!(:location) { create(:location, scheme:) }
 
-        before do
-          Timecop.freeze(Time.zone.local(2022, 4, 2))
-          lettings_log.update!(startdate: Time.zone.local(2022, 4, 2), scheme:)
-          Timecop.unfreeze
-        end
+        before { lettings_log.update!(startdate: Time.zone.local(2022, 4, 2), scheme:) }
 
         it "derives the scheme location" do
           record_from_db = ActiveRecord::Base.connection.execute("select location_id from lettings_logs where id=#{lettings_log.id}").to_a[0]
@@ -2079,16 +1950,9 @@ RSpec.describe LettingsLog do
       end
 
       context "and renewal" do
-        before do
-          Timecop.freeze(Time.zone.local(2022, 4, 2))
-        end
-
-        after do
-          Timecop.unfreeze
-        end
-
         let(:scheme) { create(:scheme) }
         let(:location) { create(:location, scheme:) }
+
         let!(:supported_housing_lettings_log) do
           described_class.create!({
             managing_organisation: owning_organisation,
@@ -2098,12 +1962,12 @@ RSpec.describe LettingsLog do
             scheme_id: scheme.id,
             location_id: location.id,
             renewal: 1,
-            startdate: Time.zone.local(2022, 4, 2),
+            startdate: Time.zone.now,
             created_at: Time.utc(2022, 2, 8, 16, 52, 15),
           })
         end
 
-        it "correctly infers and saves the renewal date" do
+        it "correcly infers and saves the renewal date" do
           record_from_db = ActiveRecord::Base.connection.execute("SELECT voiddate from lettings_logs where id=#{supported_housing_lettings_log.id}").to_a[0]
           expect(record_from_db["voiddate"].to_i).to eq(supported_housing_lettings_log.startdate.to_i)
         end
@@ -2469,15 +2333,6 @@ RSpec.describe LettingsLog do
       end
 
       context "and the new location triggers the rent range validation" do
-        around do |example|
-          Timecop.freeze(Time.zone.local(2022, 4, 1)) do
-            Singleton.__init__(FormHandler)
-            example.run
-          end
-          Timecop.return
-          Singleton.__init__(FormHandler)
-        end
-
         it "clears rent values" do
           lettings_log.update!(location:, scheme:)
           lettings_log.reload
@@ -2612,8 +2467,8 @@ RSpec.describe LettingsLog do
   end
 
   describe "scopes" do
-    let!(:lettings_log_1) { create(:lettings_log, :in_progress, startdate: Time.utc(2021, 5, 3), mrcdate: Time.utc(2021, 5, 3), voiddate: Time.utc(2021, 5, 3), created_by: created_by_user) }
-    let!(:lettings_log_2) { create(:lettings_log, :completed, startdate: Time.utc(2021, 5, 3), mrcdate: Time.utc(2021, 5, 3), voiddate: Time.utc(2021, 5, 3), created_by: created_by_user) }
+    let!(:lettings_log_1) { create(:lettings_log, :in_progress, startdate: Time.utc(2021, 5, 3), created_by: created_by_user) }
+    let!(:lettings_log_2) { create(:lettings_log, :completed, startdate: Time.utc(2021, 5, 3), created_by: created_by_user) }
 
     before do
       Timecop.freeze(Time.utc(2022, 6, 3))
@@ -2900,7 +2755,7 @@ RSpec.describe LettingsLog do
     context "with values represented as human readable labels" do
       before do
         Timecop.freeze(Time.utc(2022, 6, 5))
-        lettings_log = FactoryBot.create(:lettings_log, needstype: 2, scheme:, location:, owning_organisation: scheme.owning_organisation, created_by: user, rent_type: 2, startdate: Time.zone.local(2021, 10, 2), created_at: Time.zone.local(2022, 2, 8, 16, 52, 15), updated_at: Time.zone.local(2022, 2, 8, 16, 52, 15))
+        lettings_log = FactoryBot.create(:lettings_log, needstype: 2, scheme:, location:, owning_organisation: scheme.owning_organisation, created_by: user, rent_type: 2, startdate: Time.zone.local(2021, 10, 2))
         expected_content.sub!(/\{id\}/, lettings_log["id"].to_s)
         expected_content.sub!(/\{scheme_code\}/, "S#{scheme['id']}")
         expected_content.sub!(/\{scheme_service_name\}/, scheme["service_name"].to_s)
@@ -2913,15 +2768,6 @@ RSpec.describe LettingsLog do
         expected_content.sub!(/\{location_startdate\}/, location["startdate"].to_s)
         expected_content.sub!(/\{scheme_id\}/, scheme["service_name"].to_s)
         expected_content.sub!(/\{location_id\}/, location["id"].to_s)
-      end
-
-      around do |example|
-        Timecop.freeze(Time.zone.local(2022, 6, 5)) do
-          Singleton.__init__(FormHandler)
-          example.run
-        end
-        Timecop.return
-        Singleton.__init__(FormHandler)
       end
 
       context "with a support user" do
@@ -2944,7 +2790,7 @@ RSpec.describe LettingsLog do
     context "with values represented as codes" do
       before do
         Timecop.freeze(Time.utc(2022, 6, 5))
-        lettings_log = FactoryBot.create(:lettings_log, needstype: 2, scheme:, location:, owning_organisation: scheme.owning_organisation, created_by: user, rent_type: 2, startdate: Time.zone.local(2021, 10, 2), created_at: Time.zone.local(2022, 2, 8, 16, 52, 15), updated_at: Time.zone.local(2022, 2, 8, 16, 52, 15))
+        lettings_log = FactoryBot.create(:lettings_log, needstype: 2, scheme:, location:, owning_organisation: scheme.owning_organisation, created_by: user, rent_type: 2, startdate: Time.zone.local(2021, 10, 2))
         expected_content.sub!(/\{id\}/, lettings_log["id"].to_s)
         expected_content.sub!(/\{scheme_code\}/, "S#{scheme.id}")
         expected_content.sub!(/\{scheme_service_name\}/, scheme.service_name.to_s)
@@ -2960,15 +2806,6 @@ RSpec.describe LettingsLog do
       end
 
       let(:csv_export_file) { File.open("spec/fixtures/files/lettings_logs_download_codes_only.csv", "r:UTF-8") }
-
-      around do |example|
-        Timecop.freeze(Time.zone.local(2022, 6, 5)) do
-          Singleton.__init__(FormHandler)
-          example.run
-        end
-        Timecop.return
-        Singleton.__init__(FormHandler)
-      end
 
       it "generates a correct csv from a lettings log" do
         expect(described_class.to_csv(codes_only_export: true)).to eq(expected_content)

@@ -6,15 +6,6 @@ RSpec.describe CheckAnswersHelper do
   let(:lettings_log) { FactoryBot.build(:lettings_log, :in_progress) }
   let(:current_user) { FactoryBot.build(:user) }
 
-  around do |example|
-    Timecop.freeze(Time.zone.local(2022, 1, 1)) do
-      Singleton.__init__(FormHandler)
-      example.run
-    end
-    Timecop.return
-    Singleton.__init__(FormHandler)
-  end
-
   describe "display_answered_questions_summary" do
     context "when a section hasn't been completed yet" do
       it "returns that you have unanswered questions" do

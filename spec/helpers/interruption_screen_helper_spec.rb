@@ -17,15 +17,6 @@ RSpec.describe InterruptionScreenHelper do
     )
   end
 
-  around do |example|
-    Timecop.freeze(Time.zone.local(2022, 1, 1)) do
-      Singleton.__init__(FormHandler)
-      example.run
-    end
-    Timecop.return
-    Singleton.__init__(FormHandler)
-  end
-
   describe "display_informative_text" do
     context "when 2 out of 2 arguments are given" do
       it "returns correct informative text" do

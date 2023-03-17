@@ -6,95 +6,13 @@ RSpec.describe Validations::SetupValidations do
   let(:setup_validator_class) { Class.new { include Validations::SetupValidations } }
   let(:record) { FactoryBot.create(:lettings_log) }
 
-  describe "tenancy start date" do
-    context "when in 22/23 collection" do
-      context "when in the crossover period" do
-        before do
-          allow(Time).to receive(:now).and_return(Time.zone.local(2022, 4, 1))
-          record.created_at = Time.zone.local(2022, 4, 1)
-        end
-
-        it "cannot be before the first collection window start date" do
-          record.startdate = Time.zone.local(2021, 1, 1)
-          setup_validator.validate_startdate_setup(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date within the 21/22 or 22/23 collection years, which is between 1st April 2021 and 31st March 2023")
-        end
-
-        it "cannot be after the second collection window end date" do
-          record.startdate = Time.zone.local(2023, 7, 1, 6)
-          setup_validator.validate_startdate_setup(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date within the 21/22 or 22/23 collection years, which is between 1st April 2021 and 31st March 2023")
-        end
-      end
-
-      context "when after the crossover period" do
-        before do
-          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 1, 1))
-          record.created_at = Time.zone.local(2023, 1, 1)
-        end
-
-        it "cannot be before the first collection window start date" do
-          record.startdate = Time.zone.local(2022, 1, 1)
-          setup_validator.validate_startdate_setup(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date within the 22/23 collection year, which is between 1st April 2022 and 31st March 2023")
-        end
-
-        it "cannot be after the second collection window end date" do
-          record.startdate = Time.zone.local(2023, 7, 1, 6)
-          setup_validator.validate_startdate_setup(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date within the 22/23 collection year, which is between 1st April 2022 and 31st March 2023")
-        end
-      end
-    end
-
-    context "when in 23/24 collection" do
-      context "when in the crossover period" do
-        before do
-          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 4, 1))
-          record.created_at = Time.zone.local(2023, 4, 1)
-        end
-
-        it "cannot be before the first collection window start date" do
-          record.startdate = Time.zone.local(2022, 1, 1)
-          setup_validator.validate_startdate_setup(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date within the 22/23 or 23/24 collection years, which is between 1st April 2022 and 31st March 2024")
-        end
-
-        it "cannot be after the second collection window end date" do
-          record.startdate = Time.zone.local(2024, 7, 1, 6)
-          setup_validator.validate_startdate_setup(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date within the 22/23 or 23/24 collection years, which is between 1st April 2022 and 31st March 2024")
-        end
-      end
-
-      context "when after the crossover period" do
-        before do
-          allow(Time).to receive(:now).and_return(Time.zone.local(2024, 1, 1))
-          record.created_at = Time.zone.local(2024, 1, 1)
-        end
-
-        it "cannot be before the first collection window start date" do
-          record.startdate = Time.zone.local(2023, 1, 1)
-          setup_validator.validate_startdate_setup(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date within the 23/24 collection year, which is between 1st April 2023 and 31st March 2024")
-        end
-
-        it "cannot be after the second collection window end date" do
-          record.startdate = Time.zone.local(2024, 7, 1, 6)
-          setup_validator.validate_startdate_setup(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date within the 23/24 collection year, which is between 1st April 2023 and 31st March 2024")
-        end
-      end
-    end
-  end
-
   describe "#validate_irproduct" do
     it "adds an error when the intermediate rent product name is not provided but the rent type was given as other intermediate rent product" do
       record.rent_type = 5
       record.irproduct_other = nil
       setup_validator.validate_irproduct_other(record)
       expect(record.errors["irproduct_other"])
-        .to include(match I18n.t("validations.setup.intermediate_rent_product_name.blank"))
+      .to include(match I18n.t("validations.setup.intermediate_rent_product_name.blank"))
     end
 
     it "adds an error when the intermediate rent product name is blank but the rent type was given as other intermediate rent product" do
@@ -102,7 +20,7 @@ RSpec.describe Validations::SetupValidations do
       record.irproduct_other = ""
       setup_validator.validate_irproduct_other(record)
       expect(record.errors["irproduct_other"])
-        .to include(match I18n.t("validations.setup.intermediate_rent_product_name.blank"))
+      .to include(match I18n.t("validations.setup.intermediate_rent_product_name.blank"))
     end
 
     it "Does not add an error when the intermediate rent product name is provided and the rent type was given as other intermediate rent product" do
@@ -128,7 +46,7 @@ RSpec.describe Validations::SetupValidations do
         record.location = location
         setup_validator.validate_scheme(record)
         expect(record.errors["scheme_id"])
-          .to include(match I18n.t("validations.setup.startdate.location.deactivated", postcode: location.postcode, date: "4 June 2022"))
+        .to include(match I18n.t("validations.setup.startdate.location.deactivated", postcode: location.postcode, date: "4 June 2022"))
       end
 
       it "produces no error when tenancy start date is during an active location period" do
@@ -153,7 +71,7 @@ RSpec.describe Validations::SetupValidations do
         record.location = location
         setup_validator.validate_scheme(record)
         expect(record.errors["scheme_id"])
-          .to include(match I18n.t("validations.setup.startdate.location.reactivating_soon", postcode: location.postcode, date: "4 August 2022"))
+        .to include(match I18n.t("validations.setup.startdate.location.reactivating_soon", postcode: location.postcode, date: "4 August 2022"))
       end
 
       it "produces no error when tenancy start date is during an active location period" do
@@ -180,7 +98,7 @@ RSpec.describe Validations::SetupValidations do
         record.location = location
         setup_validator.validate_scheme(record)
         expect(record.errors["scheme_id"])
-          .to include(match I18n.t("validations.setup.startdate.location.activating_soon", postcode: location.postcode, date: "15 September 2022"))
+        .to include(match I18n.t("validations.setup.startdate.location.activating_soon", postcode: location.postcode, date: "15 September 2022"))
       end
     end
 
@@ -197,7 +115,7 @@ RSpec.describe Validations::SetupValidations do
         record.scheme = scheme
         setup_validator.validate_scheme(record)
         expect(record.errors["scheme_id"])
-          .to include(match I18n.t("validations.setup.startdate.scheme.reactivating_soon", name: scheme.service_name, date: "4 August 2022"))
+        .to include(match I18n.t("validations.setup.startdate.scheme.reactivating_soon", name: scheme.service_name, date: "4 August 2022"))
       end
 
       it "produces no error when tenancy start date is during an active scheme period" do
@@ -223,7 +141,7 @@ RSpec.describe Validations::SetupValidations do
         record.scheme = scheme
         setup_validator.validate_scheme(record)
         expect(record.errors["scheme_id"])
-          .to include(match I18n.t("validations.setup.startdate.scheme.reactivating_soon", name: scheme.service_name, date: "4 September 2022"))
+        .to include(match I18n.t("validations.setup.startdate.scheme.reactivating_soon", name: scheme.service_name, date: "4 September 2022"))
       end
 
       it "produces no error when tenancy start date is during an active scheme period" do
@@ -250,7 +168,7 @@ RSpec.describe Validations::SetupValidations do
         record.location = location
         setup_validator.validate_location(record)
         expect(record.errors["location_id"])
-          .to include(match I18n.t("validations.setup.startdate.location.deactivated", postcode: location.postcode, date: "4 June 2022"))
+        .to include(match I18n.t("validations.setup.startdate.location.deactivated", postcode: location.postcode, date: "4 June 2022"))
       end
 
       it "produces no error when tenancy start date is during an active location period" do
@@ -275,7 +193,7 @@ RSpec.describe Validations::SetupValidations do
         record.location = location
         setup_validator.validate_location(record)
         expect(record.errors["location_id"])
-          .to include(match I18n.t("validations.setup.startdate.location.reactivating_soon", postcode: location.postcode, date: "4 August 2022"))
+        .to include(match I18n.t("validations.setup.startdate.location.reactivating_soon", postcode: location.postcode, date: "4 August 2022"))
       end
 
       it "produces no error when tenancy start date is during an active location period" do
@@ -302,7 +220,7 @@ RSpec.describe Validations::SetupValidations do
         record.location = location
         setup_validator.validate_location(record)
         expect(record.errors["location_id"])
-          .to include(match I18n.t("validations.setup.startdate.location.activating_soon", postcode: location.postcode, date: "15 September 2022"))
+        .to include(match I18n.t("validations.setup.startdate.location.activating_soon", postcode: location.postcode, date: "15 September 2022"))
       end
     end
   end

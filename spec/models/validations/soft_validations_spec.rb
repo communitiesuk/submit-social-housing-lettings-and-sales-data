@@ -207,14 +207,6 @@ RSpec.describe Validations::SoftValidations do
   end
 
   describe "major repairs date soft validations" do
-    before do
-      Timecop.freeze(Time.zone.local(2022, 2, 1))
-    end
-
-    after do
-      Timecop.unfreeze
-    end
-
     context "when the major repairs date is within 10 years of the tenancy start date" do
       it "shows the interruption screen" do
         record.update!(startdate: Time.zone.local(2022, 2, 1), mrcdate: Time.zone.local(2013, 2, 1))
@@ -231,14 +223,6 @@ RSpec.describe Validations::SoftValidations do
   end
 
   describe "void date soft validations" do
-    before do
-      Timecop.freeze(Time.zone.local(2022, 2, 1))
-    end
-
-    after do
-      Timecop.unfreeze
-    end
-
     context "when the void date is within 10 years of the tenancy start date" do
       it "shows the interruption screen" do
         record.update!(startdate: Time.zone.local(2022, 2, 1), voiddate: Time.zone.local(2013, 2, 1))

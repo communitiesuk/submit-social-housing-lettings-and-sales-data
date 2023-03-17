@@ -17,6 +17,7 @@ RSpec.describe FormController, type: :request do
       :lettings_log,
       :about_completed,
       status: 1,
+      startdate: Time.zone.local(2021, 10, 10),
       created_by: user,
     )
   end
@@ -25,6 +26,7 @@ RSpec.describe FormController, type: :request do
       :lettings_log,
       :completed,
       created_by: user,
+      startdate: Time.zone.local(2021, 5, 1),
     )
   end
   let(:headers) { { "Accept" => "text/html" } }
@@ -202,13 +204,10 @@ RSpec.describe FormController, type: :request do
     describe "GET" do
       context "with form pages" do
         context "when forms exist for multiple years" do
-          let(:lettings_log_year_1) { create(:lettings_log, owning_organisation: organisation, created_by: user) }
+          let(:lettings_log_year_1) { create(:lettings_log, startdate: Time.zone.local(2021, 5, 1), owning_organisation: organisation, created_by: user) }
           let(:lettings_log_year_2) { create(:lettings_log, :about_completed, startdate: Time.zone.local(2022, 5, 1), owning_organisation: organisation, created_by: user) }
 
           before do
-            Timecop.freeze(Time.zone.local(2021, 5, 1))
-            lettings_log_year_1.update!(startdate: Time.zone.local(2021, 5, 1))
-            Timecop.unfreeze
             allow(lettings_log_year_1.form).to receive(:end_date).and_return(Time.zone.today + 1.day)
           end
 
@@ -663,15 +662,6 @@ RSpec.describe FormController, type: :request do
             }
           end
           let(:referrer) { "/lettings-logs/#{completed_lettings_log.id}/net-income-value-check?referrer=check_answers" }
-
-          around do |example|
-            Timecop.freeze(Time.zone.local(2022, 1, 1)) do
-              Singleton.__init__(FormHandler)
-              example.run
-            end
-            Timecop.return
-            Singleton.__init__(FormHandler)
-          end
 
           before do
             completed_lettings_log.update!(ecstat1: 1, earnings: 130, hhmemb: 1) # we're not routing to that page, so it gets cleared?

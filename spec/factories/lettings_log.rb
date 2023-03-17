@@ -7,6 +7,7 @@ FactoryBot.define do
       renewal { 0 }
       needstype { 1 }
       rent_type { 1 }
+      startdate { Time.zone.local(2022, 5, 1) }
     end
     trait :in_progress do
       status { 1 }
@@ -17,7 +18,7 @@ FactoryBot.define do
       age2 { 19 }
       renewal { 1 }
       rent_type { 1 }
-      startdate { Time.zone.today }
+      startdate { Time.zone.local(2021, 5, 1) }
     end
     trait :soft_validations_triggered do
       status { 1 }
@@ -35,7 +36,6 @@ FactoryBot.define do
       hhmemb { 1 }
     end
     trait :completed do
-      startdate { Time.zone.today }
       status { 2 }
       tenancycode { Faker::Name.initials(number: 10) }
       age1_known { 0 }
@@ -66,7 +66,7 @@ FactoryBot.define do
       rsnvac { 6 }
       unittype_gn { 7 }
       beds { 3 }
-      voiddate { 2.days.ago }
+      voiddate { "03/11/2019" }
       offered { 2 }
       wchair { 1 }
       earnings { 68 }
@@ -132,8 +132,9 @@ FactoryBot.define do
       hbrentshortfall { 1 }
       tshortfall { 12 }
       property_relet { 0 }
-      mrcdate { 1.day.ago }
+      mrcdate { Time.zone.local(2020, 5, 5, 10, 36, 49) }
       incref { 0 }
+      startdate { Time.zone.today }
       armedforces { 1 }
       builtype { 1 }
       unitletas { 2 }
@@ -154,7 +155,7 @@ FactoryBot.define do
       sheltered { 0 }
       household_charge { 0 }
     end
-    created_at { Time.zone.today }
-    updated_at { Time.zone.today }
+    created_at { Time.utc(2022, 2, 8, 16, 52, 15) }
+    updated_at { Time.utc(2022, 2, 8, 16, 52, 15) }
   end
 end

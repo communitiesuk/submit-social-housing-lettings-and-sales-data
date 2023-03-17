@@ -16,15 +16,6 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
   let(:old_user_id) { "c3061a2e6ea0b702e6f6210d5c52d2a92612d2aa" }
   let(:organisation) { FactoryBot.create(:organisation, old_visible_id: "1", provider_type: "PRP") }
 
-  around do |example|
-    Timecop.freeze(Time.zone.local(2022, 1, 1)) do
-      Singleton.__init__(FormHandler)
-      example.run
-    end
-    Timecop.return
-    Singleton.__init__(FormHandler)
-  end
-
   def open_file(directory, filename)
     File.open("#{directory}/#{filename}.xml")
   end
@@ -36,7 +27,7 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
     FactoryBot.create(:user, old_user_id:, organisation:)
 
     # Stub the form handler to use the real form
-    allow(FormHandler.instance).to receive(:get_form).with("current_lettings").and_return(real_2021_2022_form)
+    allow(FormHandler.instance).to receive(:get_form).with("previous_lettings").and_return(real_2021_2022_form)
 
     WebMock.stub_request(:get, /api.postcodes.io\/postcodes\/LS166FT/)
            .to_return(status: 200, body: '{"status":200,"result":{"codes":{"admin_district":"E08000035"}}}', headers: {})
