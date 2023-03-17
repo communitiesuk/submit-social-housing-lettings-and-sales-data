@@ -1,12 +1,19 @@
 require "rails_helper"
 
 RSpec.describe Location, type: :model do
+  before do
+    LocalAuthorityLink.create(local_authority_id: LocalAuthority.find_by(code: "E07000030").id, linked_local_authority_id: LocalAuthority.find_by(code: "E06000063").id)
+  end
+
   describe "#new" do
     let(:location) { FactoryBot.build(:location) }
 
     before do
       stub_request(:get, /api.postcodes.io/)
         .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\",\"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
+
+      stub_request(:get, /api.postcodes.io\/postcodes\/CA101AA/)
+      .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Eden","codes":{"admin_district":"E07000030"}}}', headers: {})
     end
 
     it "belongs to an organisation" do
@@ -17,6 +24,13 @@ RSpec.describe Location, type: :model do
       location.postcode = "M1 1AE"
       location.save!
       expect(location.location_code).to eq("E08000003")
+    end
+
+    it "infers and returns the list of local authorities" do
+      location.update!(postcode: "CA10 1AA")
+      expect(location.linked_local_authorities.count).to eq(2)
+      expect(location.linked_local_authorities.active(Time.zone.local(2022, 4, 1)).first.code).to eq("E07000030")
+      expect(location.linked_local_authorities.active(Time.zone.local(2023, 4, 1)).first.code).to eq("E06000063")
     end
   end
 

@@ -154,12 +154,12 @@ private
   end
 
   LA_CHANGES = {
-    "E07000027" => "E06000063", # Barrow-in-Furness => Cumberland
-    "E07000030" => "E06000063", # Eden => Cumberland
-    "E07000031" => "E06000063", # South Lakeland => Cumberland
-    "E07000026" => "E06000064", # Allerdale => Westmorland and Furness
-    "E07000028" => "E06000064", # Carlisle => Westmorland and Furness
-    "E07000029" => "E06000064", # Copeland => Westmorland and Furness
+    "E07000027" => "E06000064", # Barrow-in-Furness => Westmorland and Furness
+    "E07000030" => "E06000064", # Eden => Westmorland and Furness
+    "E07000031" => "E06000064", # South Lakeland => Westmorland and Furness
+    "E07000026" => "E06000063", # Allerdale => Cumberland
+    "E07000028" => "E06000063", # Carlisle => Cumberland
+    "E07000029" => "E06000063", # Copeland => Cumberland
     "E07000163" => "E06000065", # Craven => North Yorkshire
     "E07000164" => "E06000065", # Hambleton => North Yorkshire
     "E07000165" => "E06000065", # Harrogate => North Yorkshire
