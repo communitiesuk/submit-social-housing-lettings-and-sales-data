@@ -2,8 +2,8 @@ require "rails_helper"
 require "shared/shared_examples_for_derived_fields"
 
 RSpec.describe LettingsLog do
-  let(:different_managing_organisation) { FactoryBot.create(:organisation) }
-  let(:created_by_user) { FactoryBot.create(:user) }
+  let(:different_managing_organisation) { create(:organisation) }
+  let(:created_by_user) { create(:user) }
   let(:owning_organisation) { created_by_user.organisation }
   let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
   let(:fake_2022_2023_form) { Form.new("spec/fixtures/forms/2022_2023.json") }
@@ -29,19 +29,19 @@ RSpec.describe LettingsLog do
   end
 
   it "is a not a sales log" do
-    lettings_log = FactoryBot.build(:lettings_log, created_by: created_by_user)
+    lettings_log = build(:lettings_log, created_by: created_by_user)
     expect(lettings_log.sales?).to be false
   end
 
   it "is a lettings log" do
-    lettings_log = FactoryBot.build(:lettings_log, created_by: created_by_user)
+    lettings_log = build(:lettings_log, created_by: created_by_user)
     expect(lettings_log).to be_lettings
   end
 
   describe "#form" do
-    let(:lettings_log) { FactoryBot.build(:lettings_log, created_by: created_by_user) }
-    let(:lettings_log_2) { FactoryBot.build(:lettings_log, startdate: Time.zone.local(2022, 1, 1), created_by: created_by_user) }
-    let(:lettings_log_year_2) { FactoryBot.build(:lettings_log, startdate: Time.zone.local(2023, 5, 1), created_by: created_by_user) }
+    let(:lettings_log) { build(:lettings_log, created_by: created_by_user) }
+    let(:lettings_log_2) { build(:lettings_log, startdate: Time.zone.local(2022, 1, 1), created_by: created_by_user) }
+    let(:lettings_log_year_2) { build(:lettings_log, startdate: Time.zone.local(2023, 5, 1), created_by: created_by_user) }
 
     before do
       Timecop.freeze(2023, 1, 1)
@@ -61,7 +61,7 @@ RSpec.describe LettingsLog do
     end
 
     context "when a date outside the collection window is passed" do
-      let(:lettings_log) { FactoryBot.build(:lettings_log, startdate: Time.zone.local(2015, 1, 1), created_by: created_by_user) }
+      let(:lettings_log) { build(:lettings_log, startdate: Time.zone.local(2015, 1, 1), created_by: created_by_user) }
 
       it "returns the first form" do
         expect(lettings_log.form).to be_a(Form)
@@ -88,7 +88,7 @@ RSpec.describe LettingsLog do
   end
 
   describe "#update" do
-    let(:lettings_log) { FactoryBot.create(:lettings_log, created_by: created_by_user) }
+    let(:lettings_log) { create(:lettings_log, created_by: created_by_user) }
     let(:validator) { lettings_log._validators[nil].first }
 
     after do
@@ -186,9 +186,9 @@ RSpec.describe LettingsLog do
   end
 
   describe "status" do
-    let!(:empty_lettings_log) { FactoryBot.create(:lettings_log) }
-    let!(:in_progress_lettings_log) { FactoryBot.create(:lettings_log, :in_progress) }
-    let!(:completed_lettings_log) { FactoryBot.create(:lettings_log, :completed) }
+    let!(:empty_lettings_log) { create(:lettings_log) }
+    let!(:in_progress_lettings_log) { create(:lettings_log, :in_progress) }
+    let!(:completed_lettings_log) { create(:lettings_log, :completed) }
 
     it "is set to not started for an empty lettings log" do
       expect(empty_lettings_log.not_started?).to be(true)
@@ -226,7 +226,7 @@ RSpec.describe LettingsLog do
 
   describe "weekly_net_income" do
     let(:net_income) { 5000 }
-    let(:lettings_log) { FactoryBot.build(:lettings_log, earnings: net_income) }
+    let(:lettings_log) { build(:lettings_log, earnings: net_income) }
 
     it "returns input income if frequency is already weekly" do
       lettings_log.incfreq = 1
@@ -1985,8 +1985,8 @@ RSpec.describe LettingsLog do
       end
 
       context "and a scheme with a single log is selected" do
-        let(:scheme) { FactoryBot.create(:scheme) }
-        let!(:location) { FactoryBot.create(:location, scheme:) }
+        let(:scheme) { create(:scheme) }
+        let!(:location) { create(:location, scheme:) }
 
         before do
           Timecop.freeze(Time.zone.local(2022, 4, 2))
@@ -2002,8 +2002,8 @@ RSpec.describe LettingsLog do
       end
 
       context "and not renewal" do
-        let(:scheme) { FactoryBot.create(:scheme) }
-        let(:location) { FactoryBot.create(:location, scheme:, postcode: "M11AE", type_of_unit: 1, mobility_type: "W") }
+        let(:scheme) { create(:scheme) }
+        let(:location) { create(:location, scheme:, postcode: "M11AE", type_of_unit: 1, mobility_type: "W") }
 
         let(:supported_housing_lettings_log) do
           described_class.create!({
@@ -2053,7 +2053,8 @@ RSpec.describe LettingsLog do
           Timecop.unfreeze
         end
 
-        let(:scheme) { FactoryBot.create(:scheme) }
+        let(:scheme) { create(:scheme) }
+        let(:location) { create(:location, scheme:) }
         let!(:supported_housing_lettings_log) do
           described_class.create!({
             managing_organisation: owning_organisation,
@@ -2067,8 +2068,6 @@ RSpec.describe LettingsLog do
             created_at: Time.utc(2022, 2, 8, 16, 52, 15),
           })
         end
-
-        let(:location) { FactoryBot.create(:location, scheme:) }
 
         it "correctly infers and saves the renewal date" do
           record_from_db = ActiveRecord::Base.connection.execute("SELECT voiddate from lettings_logs where id=#{supported_housing_lettings_log.id}").to_a[0]
@@ -2172,7 +2171,7 @@ RSpec.describe LettingsLog do
   end
 
   describe "optional fields" do
-    let(:lettings_log) { FactoryBot.create(:lettings_log) }
+    let(:lettings_log) { create(:lettings_log) }
 
     context "when tshortfall is marked as not known" do
       it "makes tshortfall optional" do
@@ -2180,13 +2179,42 @@ RSpec.describe LettingsLog do
         expect(lettings_log.optional_fields).to include("tshortfall")
       end
     end
+
+    context "when saledate is before 2023" do
+      let(:lettings_log) { build(:lettings_log, startdate: Time.zone.parse("2022-07-01")) }
+
+      it "returns optional fields" do
+        expect(lettings_log.optional_fields).to eq(%w[
+          first_time_property_let_as_social_housing
+          tenancycode
+          propcode
+          tenancylength
+        ])
+      end
+    end
+
+    context "when saledate is after 2023" do
+      let(:lettings_log) { build(:lettings_log, startdate: Time.zone.parse("2023-07-01")) }
+
+      it "returns optional fields" do
+        expect(lettings_log.optional_fields).to eq(%w[
+          first_time_property_let_as_social_housing
+          tenancycode
+          propcode
+          tenancylength
+          address_line2
+          county
+          postcode_full
+        ])
+      end
+    end
   end
 
   describe "resetting invalidated fields" do
-    let(:scheme) { FactoryBot.create(:scheme, owning_organisation: created_by_user.organisation) }
-    let(:location) { FactoryBot.create(:location, location_code: "E07000223", scheme:) }
+    let(:scheme) { create(:scheme, owning_organisation: created_by_user.organisation) }
+    let(:location) { create(:location, location_code: "E07000223", scheme:) }
     let(:lettings_log) do
-      FactoryBot.create(
+      create(
         :lettings_log,
         renewal: 0,
         rsnvac: 5,
@@ -2221,14 +2249,14 @@ RSpec.describe LettingsLog do
     end
 
     context "when a question that has already been answered, no longer has met dependencies" do
-      let(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress, cbl: 1, preg_occ: 2, wchair: 2) }
+      let(:lettings_log) { create(:lettings_log, :in_progress, cbl: 1, preg_occ: 2, wchair: 2) }
 
       it "clears the answer" do
         expect { lettings_log.update!(preg_occ: nil) }.to change(lettings_log, :cbl).from(1).to(nil)
       end
 
       context "when the question type does not have answer options" do
-        let(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress, housingneeds_a: 1, age1: 19) }
+        let(:lettings_log) { create(:lettings_log, :in_progress, housingneeds_a: 1, age1: 19) }
 
         it "clears the answer" do
           expect { lettings_log.update!(housingneeds_a: 0) }.to change(lettings_log, :age1).from(19).to(nil)
@@ -2236,7 +2264,7 @@ RSpec.describe LettingsLog do
       end
 
       context "when the question type has answer options" do
-        let(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress, illness: 1, illness_type_1: 1) }
+        let(:lettings_log) { create(:lettings_log, :in_progress, illness: 1, illness_type_1: 1) }
 
         it "clears the answer" do
           expect { lettings_log.update!(illness: 2) }.to change(lettings_log, :illness_type_1).from(1).to(nil)
@@ -2245,7 +2273,7 @@ RSpec.describe LettingsLog do
     end
 
     context "with two pages having the same question key, only one's dependency is met" do
-      let(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress, cbl: 0, preg_occ: 2, wchair: 2) }
+      let(:lettings_log) { create(:lettings_log, :in_progress, cbl: 0, preg_occ: 2, wchair: 2) }
 
       it "does not clear the value for answers that apply to both pages" do
         expect(lettings_log.cbl).to eq(0)
@@ -2260,7 +2288,7 @@ RSpec.describe LettingsLog do
     end
 
     context "when a non select question associated with several pages is routed to" do
-      let(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress, period: 2, needstype: 1, renewal: 0) }
+      let(:lettings_log) { create(:lettings_log, :in_progress, period: 2, needstype: 1, renewal: 0) }
 
       it "does not clear the answer value" do
         lettings_log.update!({ unitletas: 1 })
@@ -2270,7 +2298,7 @@ RSpec.describe LettingsLog do
     end
 
     context "when the lettings log does not have a valid form set yet" do
-      let(:lettings_log) { FactoryBot.create(:lettings_log) }
+      let(:lettings_log) { create(:lettings_log) }
 
       it "does not throw an error" do
         expect { lettings_log.update(startdate: Time.zone.local(2015, 1, 1)) }.not_to raise_error
@@ -2278,7 +2306,7 @@ RSpec.describe LettingsLog do
     end
 
     context "when it changes from a renewal to not a renewal" do
-      let(:lettings_log) { FactoryBot.create(:lettings_log) }
+      let(:lettings_log) { create(:lettings_log) }
 
       it "resets inferred waityear value" do
         lettings_log.update!({ renewal: 1 })
@@ -2310,8 +2338,8 @@ RSpec.describe LettingsLog do
     end
 
     context "when it changes from a supported housing to not a supported housing" do
-      let(:location) { FactoryBot.create(:location, mobility_type: "A", postcode: "SW1P 4DG") }
-      let(:lettings_log) { FactoryBot.create(:lettings_log, location:) }
+      let(:location) { create(:location, mobility_type: "A", postcode: "SW1P 4DG") }
+      let(:lettings_log) { create(:lettings_log, location:) }
 
       it "resets inferred wchair value" do
         lettings_log.update!({ needstype: 2 })
@@ -2340,7 +2368,7 @@ RSpec.describe LettingsLog do
     end
 
     context "when it is not a renewal" do
-      let(:lettings_log) { FactoryBot.create(:lettings_log) }
+      let(:lettings_log) { create(:lettings_log) }
 
       it "saves waityear value" do
         lettings_log.update!({ renewal: 0, waityear: 2 })
@@ -2352,13 +2380,13 @@ RSpec.describe LettingsLog do
     end
 
     context "when a support user changes the owning organisation of the log" do
-      let(:lettings_log) { FactoryBot.create(:lettings_log, created_by: created_by_user) }
-      let(:organisation_2) { FactoryBot.create(:organisation) }
+      let(:lettings_log) { create(:lettings_log, created_by: created_by_user) }
+      let(:organisation_2) { create(:organisation) }
 
       context "when the organisation selected doesn't match the scheme set" do
-        let(:scheme) { FactoryBot.create(:scheme, owning_organisation: created_by_user.organisation) }
-        let(:location) { FactoryBot.create(:location, scheme:) }
-        let(:lettings_log) { FactoryBot.create(:lettings_log, owning_organisation: nil, needstype: 2, scheme_id: scheme.id) }
+        let(:scheme) { create(:scheme, owning_organisation: created_by_user.organisation) }
+        let(:location) { create(:location, scheme:) }
+        let(:lettings_log) { create(:lettings_log, owning_organisation: nil, needstype: 2, scheme_id: scheme.id) }
 
         it "clears the scheme value" do
           lettings_log.update!(owning_organisation: organisation_2)
@@ -2367,9 +2395,9 @@ RSpec.describe LettingsLog do
       end
 
       context "when the organisation selected still matches the scheme set" do
-        let(:scheme) { FactoryBot.create(:scheme, owning_organisation: organisation_2) }
-        let(:location) { FactoryBot.create(:location, scheme:) }
-        let(:lettings_log) { FactoryBot.create(:lettings_log, owning_organisation: nil, needstype: 2, scheme_id: scheme.id) }
+        let(:scheme) { create(:scheme, owning_organisation: organisation_2) }
+        let(:location) { create(:location, scheme:) }
+        let(:lettings_log) { create(:lettings_log, owning_organisation: nil, needstype: 2, scheme_id: scheme.id) }
 
         it "does not clear the scheme value" do
           lettings_log.update!(owning_organisation: organisation_2)
@@ -2465,7 +2493,7 @@ RSpec.describe LettingsLog do
 
   describe "tshortfall_unknown?" do
     context "when tshortfall is nil" do
-      let(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress, tshortfall_known: nil) }
+      let(:lettings_log) { create(:lettings_log, :in_progress, tshortfall_known: nil) }
 
       it "returns false" do
         expect(lettings_log.tshortfall_unknown?).to be false
@@ -2473,7 +2501,7 @@ RSpec.describe LettingsLog do
     end
 
     context "when tshortfall is No" do
-      let(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress, tshortfall_known: 1) }
+      let(:lettings_log) { create(:lettings_log, :in_progress, tshortfall_known: 1) }
 
       it "returns false" do
         expect(lettings_log.tshortfall_unknown?).to be true
@@ -2481,7 +2509,7 @@ RSpec.describe LettingsLog do
     end
 
     context "when tshortfall is Yes" do
-      let(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress, tshortfall_known: 0) }
+      let(:lettings_log) { create(:lettings_log, :in_progress, tshortfall_known: 0) }
 
       it "returns false" do
         expect(lettings_log.tshortfall_unknown?).to be false
@@ -2490,7 +2518,7 @@ RSpec.describe LettingsLog do
   end
 
   describe "paper trail" do
-    let(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress) }
+    let(:lettings_log) { create(:lettings_log, :in_progress) }
 
     it "creates a record of changes to a log" do
       expect { lettings_log.update!(age1: 64) }.to change(lettings_log.versions, :count).by(1)
@@ -2503,7 +2531,7 @@ RSpec.describe LettingsLog do
   end
 
   describe "soft values for period" do
-    let(:lettings_log) { FactoryBot.create(:lettings_log) }
+    let(:lettings_log) { create(:lettings_log) }
 
     before do
       LaRentRange.create!(
@@ -2550,12 +2578,12 @@ RSpec.describe LettingsLog do
   end
 
   describe "scopes" do
-    let!(:lettings_log_1) { FactoryBot.create(:lettings_log, :in_progress, startdate: Time.utc(2021, 5, 3), mrcdate: Time.utc(2021, 5, 3), voiddate: Time.utc(2021, 5, 3), created_by: created_by_user) }
-    let!(:lettings_log_2) { FactoryBot.create(:lettings_log, :completed, startdate: Time.utc(2021, 5, 3), mrcdate: Time.utc(2021, 5, 3), voiddate: Time.utc(2021, 5, 3), created_by: created_by_user) }
+    let!(:lettings_log_1) { create(:lettings_log, :in_progress, startdate: Time.utc(2021, 5, 3), mrcdate: Time.utc(2021, 5, 3), voiddate: Time.utc(2021, 5, 3), created_by: created_by_user) }
+    let!(:lettings_log_2) { create(:lettings_log, :completed, startdate: Time.utc(2021, 5, 3), mrcdate: Time.utc(2021, 5, 3), voiddate: Time.utc(2021, 5, 3), created_by: created_by_user) }
 
     before do
       Timecop.freeze(Time.utc(2022, 6, 3))
-      FactoryBot.create(:lettings_log, startdate: Time.utc(2022, 6, 3))
+      create(:lettings_log, startdate: Time.utc(2022, 6, 3))
     end
 
     after do
@@ -2563,10 +2591,10 @@ RSpec.describe LettingsLog do
     end
 
     context "when searching logs" do
-      let!(:lettings_log_to_search) { FactoryBot.create(:lettings_log, :completed) }
+      let!(:lettings_log_to_search) { create(:lettings_log, :completed) }
 
       before do
-        FactoryBot.create_list(:lettings_log, 5, :completed)
+        create_list(:lettings_log, 5, :completed)
       end
 
       describe "#filter_by_id" do
@@ -2621,7 +2649,7 @@ RSpec.describe LettingsLog do
         end
 
         context "when lettings log is supported housing" do
-          let(:location) { FactoryBot.create(:location, postcode: "W6 0ST") }
+          let(:location) { create(:location, postcode: "W6 0ST") }
 
           before do
             lettings_log_to_search.update!(needstype: 2, location:)
@@ -2661,7 +2689,7 @@ RSpec.describe LettingsLog do
         end
 
         context "when lettings log is supported housing" do
-          let(:location) { FactoryBot.create(:location, postcode: "W6 0ST") }
+          let(:location) { create(:location, postcode: "W6 0ST") }
 
           before do
             lettings_log_to_search.update!(needstype: 2, location:)
@@ -2719,15 +2747,15 @@ RSpec.describe LettingsLog do
     end
 
     context "when filtering by organisation" do
-      let(:organisation_1) { FactoryBot.create(:organisation) }
-      let(:organisation_2) { FactoryBot.create(:organisation) }
-      let(:organisation_3) { FactoryBot.create(:organisation) }
+      let(:organisation_1) { create(:organisation) }
+      let(:organisation_2) { create(:organisation) }
+      let(:organisation_3) { create(:organisation) }
 
       before do
-        FactoryBot.create(:lettings_log, :in_progress, owning_organisation: organisation_1, managing_organisation: organisation_1, created_by: nil)
-        FactoryBot.create(:lettings_log, :completed, owning_organisation: organisation_1, managing_organisation: organisation_2, created_by: nil)
-        FactoryBot.create(:lettings_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_1, created_by: nil)
-        FactoryBot.create(:lettings_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_2, created_by: nil)
+        create(:lettings_log, :in_progress, owning_organisation: organisation_1, managing_organisation: organisation_1, created_by: nil)
+        create(:lettings_log, :completed, owning_organisation: organisation_1, managing_organisation: organisation_2, created_by: nil)
+        create(:lettings_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_1, created_by: nil)
+        create(:lettings_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_2, created_by: nil)
       end
 
       it "filters by given organisation" do
@@ -2769,7 +2797,7 @@ RSpec.describe LettingsLog do
 
   describe "#retirement_age_for_person" do
     context "when a person gender is Male" do
-      let(:lettings_log) { FactoryBot.build(:lettings_log, sex1: "M") }
+      let(:lettings_log) { build(:lettings_log, sex1: "M") }
 
       it "returns the expected retirement age" do
         expect(lettings_log.retirement_age_for_person_1).to eq(67)
@@ -2781,7 +2809,7 @@ RSpec.describe LettingsLog do
     end
 
     context "when a person gender is Female" do
-      let(:lettings_log) { FactoryBot.build(:lettings_log, sex2: "F") }
+      let(:lettings_log) { build(:lettings_log, sex2: "F") }
 
       it "returns the expected retirement age" do
         expect(lettings_log.retirement_age_for_person_2).to eq(60)
@@ -2793,7 +2821,7 @@ RSpec.describe LettingsLog do
     end
 
     context "when a person gender is Non-Binary" do
-      let(:lettings_log) { FactoryBot.build(:lettings_log, sex3: "X") }
+      let(:lettings_log) { build(:lettings_log, sex3: "X") }
 
       it "returns the expected retirement age" do
         expect(lettings_log.retirement_age_for_person_3).to eq(67)
@@ -2805,7 +2833,7 @@ RSpec.describe LettingsLog do
     end
 
     context "when the person gender is not set" do
-      let(:lettings_log) { FactoryBot.build(:lettings_log) }
+      let(:lettings_log) { build(:lettings_log) }
 
       it "returns nil" do
         expect(lettings_log.retirement_age_for_person_3).to be_nil
@@ -2817,7 +2845,7 @@ RSpec.describe LettingsLog do
     end
 
     context "when a postcode contains unicode characters" do
-      let(:lettings_log) { FactoryBot.build(:lettings_log, postcode_full: "SR81LS\u00A0") }
+      let(:lettings_log) { build(:lettings_log, postcode_full: "SR81LS\u00A0") }
 
       it "triggers a validation error" do
         expect { lettings_log.save! }.to raise_error(ActiveRecord::RecordInvalid, /Enter a postcode in the correct format/)
@@ -2826,9 +2854,9 @@ RSpec.describe LettingsLog do
   end
 
   describe "csv download" do
-    let(:scheme) { FactoryBot.create(:scheme) }
-    let(:location) { FactoryBot.create(:location, :export, scheme:, type_of_unit: 6, postcode: "SE11TE", startdate: Time.zone.local(2021, 10, 1)) }
-    let(:user) { FactoryBot.create(:user, organisation: location.scheme.owning_organisation) }
+    let(:scheme) { create(:scheme) }
+    let(:location) { create(:location, :export, scheme:, type_of_unit: 6, postcode: "SE11TE", startdate: Time.zone.local(2021, 10, 1)) }
+    let(:user) { create(:user, organisation: location.scheme.owning_organisation) }
     let(:expected_content) { csv_export_file.read }
 
     after do

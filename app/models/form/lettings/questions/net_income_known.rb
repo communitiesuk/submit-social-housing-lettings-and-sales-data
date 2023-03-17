@@ -9,6 +9,7 @@ class Form::Lettings::Questions::NetIncomeKnown < ::Form::Question
     @guidance_partial = "what_counts_as_income"
     @hint_text = ""
     @answer_options = ANSWER_OPTIONS
+    @question_number = 86
   end
 
   ANSWER_OPTIONS = {

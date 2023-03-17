@@ -1,6 +1,7 @@
 require "rails_helper"
 require "shared/shared_examples_for_derived_fields"
 
+# rubocop:disable RSpec/AnyInstance
 RSpec.describe SalesLog, type: :model do
   let(:owning_organisation) { create(:organisation) }
   let(:created_by_user) { create(:user) }
@@ -36,7 +37,7 @@ RSpec.describe SalesLog, type: :model do
   end
 
   describe "#update" do
-    let(:sales_log) { FactoryBot.create(:sales_log, created_by: created_by_user) }
+    let(:sales_log) { create(:sales_log, created_by: created_by_user) }
     let(:validator) { sales_log._validators[nil].first }
 
     after do
@@ -49,10 +50,34 @@ RSpec.describe SalesLog, type: :model do
   end
 
   describe "#optional_fields" do
-    let(:sales_log) { build(:sales_log) }
+    context "when saledate is before 2023" do
+      let(:sales_log) { build(:sales_log, saledate: Time.zone.parse("2022-07-01")) }
 
-    it "returns optional fields" do
-      expect(sales_log.optional_fields).to eq(%w[saledate_check purchid monthly_charges_value_check old_persons_shared_ownership_value_check])
+      it "returns optional fields" do
+        expect(sales_log.optional_fields).to eq(%w[
+          saledate_check
+          purchid
+          monthly_charges_value_check
+          old_persons_shared_ownership_value_check
+          proplen
+        ])
+      end
+    end
+
+    context "when saledate is after 2023" do
+      let(:sales_log) { build(:sales_log, saledate: Time.zone.parse("2023-07-01")) }
+
+      it "returns optional fields" do
+        expect(sales_log.optional_fields).to eq(%w[
+          saledate_check
+          purchid
+          monthly_charges_value_check
+          old_persons_shared_ownership_value_check
+          address_line2
+          county
+          postcode_full
+        ])
+      end
     end
   end
 
@@ -135,7 +160,7 @@ RSpec.describe SalesLog, type: :model do
   end
 
   describe "derived variables" do
-    let(:sales_log) { FactoryBot.create(:sales_log, :completed) }
+    let(:sales_log) { create(:sales_log, :completed) }
 
     it "correctly derives and saves exday, exmonth and exyear" do
       sales_log.update!(exdate: Time.gm(2022, 5, 4), saledate: Time.gm(2022, 7, 4), ownershipsch: 1, staircase: 2, resale: 2)
@@ -192,7 +217,7 @@ RSpec.describe SalesLog, type: :model do
     end
 
     let!(:address_sales_log) do
-      FactoryBot.create(
+      create(
         :sales_log,
         :completed,
         owning_organisation:,
@@ -336,7 +361,7 @@ RSpec.describe SalesLog, type: :model do
 
   context "when deriving household variables" do
     let!(:sales_log) do
-      FactoryBot.create(
+      create(
         :sales_log,
         :completed,
         jointpur: 1,
@@ -463,7 +488,7 @@ RSpec.describe SalesLog, type: :model do
   end
 
   describe "#field_formatted_as_currency" do
-    let(:completed_sales_log) { FactoryBot.create(:sales_log, :completed) }
+    let(:completed_sales_log) { create(:sales_log, :completed) }
 
     it "returns small numbers correctly formatted as currency" do
       completed_sales_log.update!(savings: 4)
@@ -483,4 +508,52 @@ RSpec.describe SalesLog, type: :model do
       expect(completed_sales_log.field_formatted_as_currency("savings")).to eq("£400,000,000.00")
     end
   end
+
+  describe "#process_uprn_change!" do
+    context "when UPRN set to a value" do
+      let(:sales_log) { create(:sales_log, uprn: "123456789", uprn_confirmed: 1) }
+
+      it "updates sales log fields" do
+        sales_log.uprn = "1111111"
+
+        allow_any_instance_of(UprnClient).to receive(:call)
+        allow_any_instance_of(UprnClient).to receive(:result).and_return({
+          "UPRN" => "UPRN",
+          "UDPRN" => "UDPRN",
+          "ADDRESS" => "full address",
+          "SUB_BUILDING_NAME" => "0",
+          "BUILDING_NAME" => "building name",
+          "THOROUGHFARE_NAME" => "thoroughfare",
+          "POST_TOWN" => "posttown",
+          "POSTCODE" => "postcode",
+        })
+
+        expect { sales_log.process_uprn_change! }.to change(sales_log, :address_line1).from(nil).to("0, Building Name, Thoroughfare")
+        .and change(sales_log, :town_or_city).from(nil).to("Posttown")
+        .and change(sales_log, :postcode_full).from(nil).to("POSTCODE")
+        .and change(sales_log, :uprn_confirmed).from(1).to(nil)
+      end
+    end
+
+    context "when UPRN nil" do
+      let(:sales_log) { create(:sales_log, uprn: nil) }
+
+      it "does not update sales log" do
+        expect { sales_log.process_uprn_change! }.not_to change(sales_log, :attributes)
+      end
+    end
+
+    context "when service errors" do
+      let(:sales_log) { create(:sales_log, uprn: "123456789", uprn_confirmed: 1) }
+      let(:error_message) { "error" }
+
+      it "adds error to sales log" do
+        allow_any_instance_of(UprnClient).to receive(:call)
+        allow_any_instance_of(UprnClient).to receive(:error).and_return(error_message)
+
+        expect { sales_log.process_uprn_change! }.to change { sales_log.errors[:uprn] }.from([]).to([error_message])
+      end
+    end
+  end
 end
+# rubocop:enable RSpec/AnyInstance

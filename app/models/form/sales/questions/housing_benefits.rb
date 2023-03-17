@@ -6,6 +6,7 @@ class Form::Sales::Questions::HousingBenefits < ::Form::Question
     @header = "#{joint_purchase ? 'Were the buyers' : 'Was the buyer'} receiving any of these housing-related benefits immediately before buying this property?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
+    @question_number = 71
   end
 
   ANSWER_OPTIONS = {

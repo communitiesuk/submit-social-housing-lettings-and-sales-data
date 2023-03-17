@@ -8,6 +8,7 @@ class Form::Sales::Questions::PreviousTenure < ::Form::Question
     @hint_text = ""
     @page = page
     @answer_options = ANSWER_OPTIONS
+    @question_number = 87
   end
 
   ANSWER_OPTIONS = {

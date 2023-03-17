@@ -14,6 +14,7 @@ class Form::Sales::Questions::PropertyLocalAuthorityKnown < ::Form::Question
         },
       ],
     }
+    @question_number = 16
   end
 
   ANSWER_OPTIONS = {

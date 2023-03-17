@@ -10,5 +10,6 @@ class Form::Sales::Questions::DepositDiscount < ::Form::Question
     @width = 5
     @prefix = "£"
     @hint_text = "Enter the total cash discount given on the property being purchased through the Social HomeBuy scheme"
+    @question_number = 96
   end
 end

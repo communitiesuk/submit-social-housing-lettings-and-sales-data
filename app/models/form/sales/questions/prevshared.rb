@@ -7,6 +7,7 @@ class Form::Sales::Questions::Prevshared < ::Form::Question
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @hint = "For any buyer"
+    @question_number = 74
   end
 
   ANSWER_OPTIONS = {

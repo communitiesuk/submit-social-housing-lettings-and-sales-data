@@ -5,6 +5,7 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
     @check_answer_label = "Managing agent"
     @header = "Which organisation manages this letting?"
     @type = "select"
+    @question_number = 2
   end
 
   def answer_options(log = nil, user = nil)

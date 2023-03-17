@@ -8,6 +8,7 @@ class Form::Lettings::Questions::Layear < ::Form::Question
     @check_answers_card_number = 0
     @hint_text = ""
     @answer_options = ANSWER_OPTIONS
+    @question_number = 75
   end
 
   ANSWER_OPTIONS = {

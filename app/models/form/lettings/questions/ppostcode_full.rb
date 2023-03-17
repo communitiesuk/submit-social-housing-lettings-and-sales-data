@@ -10,5 +10,6 @@ class Form::Lettings::Questions::PpostcodeFull < ::Form::Question
     @check_answers_card_number = 0
     @hint_text = ""
     @inferred_answers = { "prevloc" => { "is_previous_la_inferred" => true } }
+    @question_number = 80
   end
 end

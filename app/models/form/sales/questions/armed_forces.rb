@@ -7,6 +7,7 @@ class Form::Sales::Questions::ArmedForces < ::Form::Question
     @type = "radio"
     @hint_text = "A regular is somebody who has served in the Royal Navy, the Royal Marines, the Royal Airforce or Army full time and does not include reserve forces"
     @answer_options = ANSWER_OPTIONS
+    @question_number = 62
   end
 
   ANSWER_OPTIONS = {

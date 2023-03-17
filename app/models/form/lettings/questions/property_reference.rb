@@ -7,5 +7,6 @@ class Form::Lettings::Questions::PropertyReference < ::Form::Question
     @hint_text = "This is how you usually refer to this property on your own systems."
     @type = "text"
     @width = 10
+    @question_number = 8
   end
 end

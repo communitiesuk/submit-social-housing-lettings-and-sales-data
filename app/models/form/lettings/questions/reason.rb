@@ -13,6 +13,7 @@ class Form::Lettings::Questions::Reason < ::Form::Question
         20,
       ],
     }
+    @question_number = 77
   end
 
   ANSWER_OPTIONS = {

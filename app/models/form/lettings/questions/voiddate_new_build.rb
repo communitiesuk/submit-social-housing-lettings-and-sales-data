@@ -7,5 +7,6 @@ class Form::Lettings::Questions::VoiddateNewBuild < ::Form::Question
     @type = "date"
     @check_answers_card_number = 0
     @hint_text = ""
+    @question_number = 23
   end
 end

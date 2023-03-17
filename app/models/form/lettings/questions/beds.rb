@@ -11,5 +11,6 @@ class Form::Lettings::Questions::Beds < ::Form::Question
     @min = 0
     @hint_text = "If shared accommodation, enter the number of bedrooms occupied by this household. A bedsit has 1 bedroom."
     @step = 1
+    @question_number = 22
   end
 end

@@ -8,7 +8,7 @@ class Form::Sales::Subsections::SharedOwnershipScheme < ::Form::Subsection
 
   def pages
     @pages ||= [
-      Form::Sales::Pages::LivingBeforePurchase.new("living_before_purchase_shared_ownership", nil, self),
+      Form::Sales::Pages::LivingBeforePurchase.new("living_before_purchase_shared_ownership", nil, self, ownershipsch: 1),
       Form::Sales::Pages::Staircase.new(nil, nil, self),
       Form::Sales::Pages::AboutStaircase.new("about_staircasing_joint_purchase", nil, self, joint_purchase: true),
       Form::Sales::Pages::AboutStaircase.new("about_staircasing_not_joint_purchase", nil, self, joint_purchase: false),
@@ -26,21 +26,21 @@ class Form::Sales::Subsections::SharedOwnershipScheme < ::Form::Subsection
       Form::Sales::Pages::AboutPriceSharedOwnership.new(nil, nil, self),
       Form::Sales::Pages::AboutPriceValueCheck.new("about_price_shared_ownership_value_check", nil, self),
       Form::Sales::Pages::SharedOwnershipDepositValueCheck.new("shared_ownership_equity_value_check", nil, self),
-      Form::Sales::Pages::Mortgageused.new("mortgage_used_shared_ownership", nil, self),
+      Form::Sales::Pages::Mortgageused.new("mortgage_used_shared_ownership", nil, self, ownershipsch: 1),
       Form::Sales::Pages::MortgageValueCheck.new("mortgage_used_mortgage_value_check", nil, self),
-      Form::Sales::Pages::MortgageAmount.new("mortgage_amount_shared_ownership", nil, self),
+      Form::Sales::Pages::MortgageAmount.new("mortgage_amount_shared_ownership", nil, self, ownershipsch: 1),
       Form::Sales::Pages::SharedOwnershipDepositValueCheck.new("shared_ownership_mortgage_amount_value_check", nil, self),
       Form::Sales::Pages::MortgageValueCheck.new("mortgage_amount_mortgage_value_check", nil, self),
-      Form::Sales::Pages::MortgageLender.new("mortgage_lender_shared_ownership", nil, self),
-      Form::Sales::Pages::MortgageLenderOther.new("mortgage_lender_other_shared_ownership", nil, self),
-      Form::Sales::Pages::MortgageLength.new("mortgage_length_shared_ownership", nil, self),
-      Form::Sales::Pages::ExtraBorrowing.new("extra_borrowing_shared_ownership", nil, self),
+      Form::Sales::Pages::MortgageLender.new("mortgage_lender_shared_ownership", nil, self, ownershipsch: 1),
+      Form::Sales::Pages::MortgageLenderOther.new("mortgage_lender_other_shared_ownership", nil, self, ownershipsch: 1),
+      Form::Sales::Pages::MortgageLength.new("mortgage_length_shared_ownership", nil, self, ownershipsch: 1),
+      Form::Sales::Pages::ExtraBorrowing.new("extra_borrowing_shared_ownership", nil, self, ownershipsch: 1),
       Form::Sales::Pages::AboutDepositWithDiscount.new(nil, nil, self),
-      Form::Sales::Pages::AboutDepositWithoutDiscount.new("about_deposit_shared_ownership", nil, self),
+      Form::Sales::Pages::AboutDepositWithoutDiscount.new("about_deposit_shared_ownership", nil, self, ownershipsch: 1),
       Form::Sales::Pages::DepositValueCheck.new("deposit_value_check", nil, self),
       Form::Sales::Pages::SharedOwnershipDepositValueCheck.new("shared_ownership_deposit_value_check", nil, self),
       Form::Sales::Pages::MonthlyRent.new(nil, nil, self),
-      Form::Sales::Pages::LeaseholdCharges.new("leasehold_charges_shared_ownership", nil, self),
+      Form::Sales::Pages::LeaseholdCharges.new("leasehold_charges_shared_ownership", nil, self, ownershipsch: 1),
       Form::Sales::Pages::MonthlyChargesValueCheck.new("monthly_charges_shared_ownership_value_check", nil, self),
     ]
   end

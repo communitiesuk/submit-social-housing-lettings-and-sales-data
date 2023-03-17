@@ -9,5 +9,6 @@ class Form::Sales::Questions::PropertyNumberOfBedrooms < ::Form::Question
     @width = 10
     @min = 1
     @max = 9
+    @question_number = 11
   end
 end

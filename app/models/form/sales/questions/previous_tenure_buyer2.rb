@@ -7,6 +7,7 @@ class Form::Sales::Questions::PreviousTenureBuyer2 < ::Form::Question
     @type = "radio"
     @hint_text = ""
     @answer_options = ANSWER_OPTIONS
+    @question_number = 61
   end
 
   ANSWER_OPTIONS = {

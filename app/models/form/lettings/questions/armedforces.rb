@@ -8,6 +8,7 @@ class Form::Lettings::Questions::Armedforces < ::Form::Question
     @check_answers_card_number = 0
     @hint_text = "This excludes national service.<br><br>If there are several people in the household with links to the UK armed forces, you should answer for the regular. If there’s no regular, answer for the reserve. If there’s no reserve, answer for the spouse or civil partner."
     @answer_options = ANSWER_OPTIONS
+    @question_number = 66
   end
 
   ANSWER_OPTIONS = {

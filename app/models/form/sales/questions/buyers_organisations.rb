@@ -7,6 +7,7 @@ class Form::Sales::Questions::BuyersOrganisations < ::Form::Question
     @type = "checkbox"
     @hint_text = "Select all that apply"
     @answer_options = ANSWER_OPTIONS
+    @question_number = 59
   end
 
   ANSWER_OPTIONS = {
