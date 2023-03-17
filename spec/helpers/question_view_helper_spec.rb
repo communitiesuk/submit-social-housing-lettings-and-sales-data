@@ -44,9 +44,15 @@ RSpec.describe QuestionViewHelper do
   describe "legend" do
     subject(:question_view_helper) { legend(question, page_header, conditional) }
 
-    question_stub = Struct.new(:header) do
-      def question_number_string(_conditional)
-        nil
+    let(:question_stub) do
+      Struct.new(:header) do
+        def question_number_string(_conditional)
+          nil
+        end
+
+        def plain_label
+          nil
+        end
       end
     end
 
@@ -83,7 +89,17 @@ RSpec.describe QuestionViewHelper do
     end
 
     context "when viewing a question with a plain label" do
-      let(:question) { OpenStruct.new(header: "Some question header", plain_label: true) }
+      let(:question_stub) do
+        Struct.new(:header) do
+          def question_number_string(_conditional)
+            nil
+          end
+
+          def plain_label
+            true
+          end
+        end
+      end
 
       it "returns an options hash with nil size" do
         expect(question_view_helper).to eq({ size: nil, tag: "div", text: "Some question header" })

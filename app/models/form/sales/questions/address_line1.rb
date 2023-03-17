@@ -28,6 +28,8 @@ class Form::Sales::Questions::AddressLine1 < ::Form::Question
   end
 
   def get_extra_check_answer_value(log)
+    return unless log.is_la_inferred?
+
     la = LocalAuthority.find_by(code: log.la)&.name
 
     la.presence

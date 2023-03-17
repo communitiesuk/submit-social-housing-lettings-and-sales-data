@@ -681,6 +681,18 @@ RSpec.describe Form::Sales::Questions::PropertyLocalAuthority, type: :model do
       let(:log) { build(:sales_log, saledate: Time.zone.parse("2023-07-01")) }
 
       it "returns true" do
+        expect(question.hidden_in_check_answers?(log)).to eq(false)
+      end
+    end
+
+    context "when saledate.year >= 2023 and la inferred" do
+      let(:log) { build(:sales_log, saledate: Time.zone.parse("2023-07-01")) }
+
+      before do
+        allow(log).to receive(:is_la_inferred?).and_return(true)
+      end
+
+      it "returns true" do
         expect(question.hidden_in_check_answers?(log)).to eq(true)
       end
     end
