@@ -55,12 +55,12 @@ describe FilterService do
       context "when filtering sales logs" do
         let(:sales_log_list) do
           logs = FactoryBot.create_list(:sales_log, 5)
-          searched_log = FactoryBot.create(:sales_log, purchid: "2")
+          searched_log = FactoryBot.create(:sales_log, purchid: "kzmgaiFNsx323")
           SalesLog.where(id: [searched_log.id] + logs.map(&:id))
         end
 
         context "when given a purchid" do
-          let(:search_term) { "2" }
+          let(:search_term) { "kzmgaiFNsx323" }
 
           it "filters the collection on search term" do
             expect(described_class.filter_by_search(sales_log_list, search_term).count).to eq(1)
