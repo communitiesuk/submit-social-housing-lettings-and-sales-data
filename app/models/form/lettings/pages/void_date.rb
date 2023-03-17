@@ -1,7 +1,7 @@
-class Form::Lettings::Pages::VoidOrRenewalDate < ::Form::Page
+class Form::Lettings::Pages::VoidDate < ::Form::Page
   def initialize(id, hsh, subsection)
     super
-    @id = "void_or_renewal_date"
+    @id = "void_date"
     @depends_on = [
       { "renewal" => 0, "rsnvac" => 5 },
       { "renewal" => 0, "rsnvac" => 6 },
