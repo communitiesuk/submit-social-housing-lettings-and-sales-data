@@ -562,6 +562,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           Timecop.freeze(Date.new(2022, 4, 2)) do
             example.run
           end
+          Timecop.return
         end
 
         let(:attributes) { { bulk_upload:, field_7: "1", field_8: "1", field_9: "22" } }

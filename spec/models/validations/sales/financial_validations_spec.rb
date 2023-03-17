@@ -274,7 +274,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
       Timecop.freeze(now) do
         example.run
       end
-      Timecop.unfreeze
+      Timecop.return
     end
 
     context "with a log in the 22/23 collection year" do
