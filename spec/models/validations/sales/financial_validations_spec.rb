@@ -270,11 +270,10 @@ RSpec.describe Validations::Sales::FinancialValidations do
   describe "#validate_equity_in_range_for_year_and_type" do
     let(:record) { FactoryBot.create(:sales_log, saledate: now) }
 
-    before do
-      Timecop.freeze(now)
-    end
-
-    after do
+    around do |example|
+      Timecop.freeze(now) do
+        example.run
+      end
       Timecop.unfreeze
     end
 

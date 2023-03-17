@@ -90,14 +90,14 @@ module Validations::Sales::FinancialValidations
 
     ranges = EQUITY_RANGES_BY_YEAR.fetch(record.collection_start_year, DEFAULT_EQUITY_RANGES)
 
-    if (range = ranges[record.type])
-      if record.equity < range.min
-        record.errors.add :type, I18n.t("validations.financial.equity.under_min", min_equity: range.min)
-        record.errors.add :equity, I18n.t("validations.financial.equity.under_min", min_equity: range.min)
-      elsif record.equity > range.max
-        record.errors.add :type, I18n.t("validations.financial.equity.over_max", max_equity: range.max)
-        record.errors.add :equity, I18n.t("validations.financial.equity.over_max", max_equity: range.max)
-      end
+    return unless (range = ranges[record.type])
+
+    if record.equity < range.min
+      record.errors.add :type, I18n.t("validations.financial.equity.under_min", min_equity: range.min)
+      record.errors.add :equity, I18n.t("validations.financial.equity.under_min", min_equity: range.min)
+    elsif record.equity > range.max
+      record.errors.add :type, I18n.t("validations.financial.equity.over_max", max_equity: range.max)
+      record.errors.add :equity, I18n.t("validations.financial.equity.over_max", max_equity: range.max)
     end
   end
 
