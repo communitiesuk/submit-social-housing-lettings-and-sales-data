@@ -21,8 +21,8 @@ RSpec.describe BulkUploadMailer do
 
     let(:expected_errors) do
       [
-        "- Column A (What is the letting type?)",
-        "- Column E (Management group code)",
+        "- What is the letting type? (Column A)",
+        "- Management group code (Column E)",
       ]
     end
 
