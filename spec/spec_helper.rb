@@ -113,6 +113,9 @@ RSpec.configure do |config|
 
   config.before do
     RequestHelper.stub_http_requests
+  end
+
+  config.before(:suite) do
     Rails.application.load_seed
   end
 
