@@ -264,7 +264,7 @@ RSpec.describe SalesLog, type: :model do
 
       before do
         WebMock.stub_request(:get, /api.postcodes.io\/postcodes\/CA101AA/)
-               .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Cumberland","codes":{"admin_district":"E06000063"}}}', headers: {})
+               .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Cumberland","codes":{"admin_district":"E06000064"}}}', headers: {})
 
         Timecop.freeze(2023, 5, 1)
         Singleton.__init__(FormHandler)
@@ -306,8 +306,8 @@ RSpec.describe SalesLog, type: :model do
 
       it "correctly infers new la" do
         record_from_db = ActiveRecord::Base.connection.execute("select la from sales_logs where id=#{address_sales_log_23_24.id}").to_a[0]
-        expect(address_sales_log_23_24.la).to eq("E06000063")
-        expect(record_from_db["la"]).to eq("E06000063")
+        expect(address_sales_log_23_24.la).to eq("E06000064")
+        expect(record_from_db["la"]).to eq("E06000064")
       end
     end
 

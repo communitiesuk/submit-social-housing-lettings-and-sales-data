@@ -130,6 +130,13 @@ class Location < ApplicationRecord
     self.confirmed = [postcode, location_admin_district, location_code, units, type_of_unit, mobility_type].all?(&:present?)
   end
 
+  def linked_local_authorities
+    la = LocalAuthority.find_by(code: location_code)
+    return [] unless la
+
+    LocalAuthority.where(id: [la.id] + la.linked_local_authority_ids)
+  end
+
 private
 
   PIO = PostcodeService.new

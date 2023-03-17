@@ -85,6 +85,22 @@ module Validations::Sales::FinancialValidations
     end
   end
 
+  def validate_equity_in_range_for_year_and_type(record)
+    return unless record.type && record.equity && record.collection_start_year
+
+    ranges = EQUITY_RANGES_BY_YEAR.fetch(record.collection_start_year, DEFAULT_EQUITY_RANGES)
+
+    return unless (range = ranges[record.type])
+
+    if record.equity < range.min
+      record.errors.add :type, I18n.t("validations.financial.equity.under_min", min_equity: range.min)
+      record.errors.add :equity, I18n.t("validations.financial.equity.under_min", min_equity: range.min)
+    elsif record.equity > range.max
+      record.errors.add :type, I18n.t("validations.financial.equity.over_max", max_equity: range.max)
+      record.errors.add :equity, I18n.t("validations.financial.equity.over_max", max_equity: range.max)
+    end
+  end
+
 private
 
   def is_relationship_child?(relationship)
@@ -94,4 +110,25 @@ private
   def is_economic_status_child?(economic_status)
     economic_status == 9
   end
+
+  EQUITY_RANGES_BY_YEAR = {
+    2022 => {
+      2 => 25..75,
+      30 => 10..75,
+      18 => 25..75,
+      16 => 10..75,
+      24 => 25..75,
+      31 => 0..75,
+    },
+  }.freeze
+
+  DEFAULT_EQUITY_RANGES = {
+    2 => 10..75,
+    30 => 25..75,
+    18 => 25..75,
+    16 => 10..75,
+    24 => 25..75,
+    31 => 0..75,
+    32 => 0..75,
+  }.freeze
 end

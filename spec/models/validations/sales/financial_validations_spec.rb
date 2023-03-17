@@ -266,4 +266,85 @@ RSpec.describe Validations::Sales::FinancialValidations do
       end
     end
   end
+
+  describe "#validate_equity_in_range_for_year_and_type" do
+    let(:record) { FactoryBot.create(:sales_log, saledate: now) }
+
+    around do |example|
+      Timecop.freeze(now) do
+        example.run
+      end
+      Timecop.unfreeze
+    end
+
+    context "with a log in the 22/23 collection year" do
+      let(:now) { Time.zone.local(2023, 1, 1) }
+
+      it "adds an error for type 2, equity below min with the correct percentage" do
+        record.type = 2
+        record.equity = 1
+        financial_validator.validate_equity_in_range_for_year_and_type(record)
+        expect(record.errors["equity"]).to include(match I18n.t("validations.financial.equity.under_min", min_equity: 25))
+        expect(record.errors["type"]).to include(match I18n.t("validations.financial.equity.under_min", min_equity: 25))
+      end
+
+      it "adds an error for type 30, equity below min with the correct percentage" do
+        record.type = 30
+        record.equity = 1
+        financial_validator.validate_equity_in_range_for_year_and_type(record)
+        expect(record.errors["equity"]).to include(match I18n.t("validations.financial.equity.under_min", min_equity: 10))
+        expect(record.errors["type"]).to include(match I18n.t("validations.financial.equity.under_min", min_equity: 10))
+      end
+
+      it "does not add an error for equity in range with the correct percentage" do
+        record.type = 2
+        record.equity = 50
+        financial_validator.validate_equity_in_range_for_year_and_type(record)
+        expect(record.errors).to be_empty
+      end
+
+      it "adds an error for equity above max with the correct percentage" do
+        record.type = 2
+        record.equity = 90
+        financial_validator.validate_equity_in_range_for_year_and_type(record)
+        expect(record.errors["equity"]).to include(match I18n.t("validations.financial.equity.over_max", max_equity: 75))
+        expect(record.errors["type"]).to include(match I18n.t("validations.financial.equity.over_max", max_equity: 75))
+      end
+    end
+
+    context "with a log in 23/24 collection year" do
+      let(:now) { Time.zone.local(2024, 1, 1) }
+
+      it "adds an error for type 2, equity below min with the correct percentage" do
+        record.type = 2
+        record.equity = 1
+        financial_validator.validate_equity_in_range_for_year_and_type(record)
+        expect(record.errors["equity"]).to include(match I18n.t("validations.financial.equity.under_min", min_equity: 10))
+        expect(record.errors["type"]).to include(match I18n.t("validations.financial.equity.under_min", min_equity: 10))
+      end
+
+      it "adds an error for type 30, equity below min with the correct percentage" do
+        record.type = 30
+        record.equity = 1
+        financial_validator.validate_equity_in_range_for_year_and_type(record)
+        expect(record.errors["equity"]).to include(match I18n.t("validations.financial.equity.under_min", min_equity: 25))
+        expect(record.errors["type"]).to include(match I18n.t("validations.financial.equity.under_min", min_equity: 25))
+      end
+
+      it "does not add an error for equity in range with the correct percentage" do
+        record.type = 2
+        record.equity = 50
+        financial_validator.validate_equity_in_range_for_year_and_type(record)
+        expect(record.errors).to be_empty
+      end
+
+      it "adds an error for equity above max with the correct percentage" do
+        record.type = 2
+        record.equity = 90
+        financial_validator.validate_equity_in_range_for_year_and_type(record)
+        expect(record.errors["equity"]).to include(match I18n.t("validations.financial.equity.over_max", max_equity: 75))
+        expect(record.errors["type"]).to include(match I18n.t("validations.financial.equity.over_max", max_equity: 75))
+      end
+    end
+  end
 end
