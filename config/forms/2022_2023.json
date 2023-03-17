@@ -723,7 +723,8 @@
                   "header": "What is the void date?",
                   "hint_text": "For example, 27 3 2021.",
                   "type": "date",
-                  "guidance_partial": "void_date"
+                  "guidance_partial": "void_date",
+                  "guidance_position": 2
                 }
               },
               "depends_on": [
