@@ -307,8 +307,8 @@ RSpec.describe Validations::Sales::FinancialValidations do
         record.type = 2
         record.equity = 90
         financial_validator.validate_equity_in_range_for_year_and_type(record)
-        expect(record.errors["equity"]).to include(match I18n.t("validations.financial.equity.over_max"))
-        expect(record.errors["type"]).to include(match I18n.t("validations.financial.equity.over_max"))
+        expect(record.errors["equity"]).to include(match I18n.t("validations.financial.equity.over_max", max_equity: 75))
+        expect(record.errors["type"]).to include(match I18n.t("validations.financial.equity.over_max", max_equity: 75))
       end
     end
 
@@ -349,8 +349,8 @@ RSpec.describe Validations::Sales::FinancialValidations do
         record.type = 2
         record.equity = 90
         financial_validator.validate_equity_in_range_for_year_and_type(record)
-        expect(record.errors["equity"]).to include(match I18n.t("validations.financial.equity.over_max"))
-        expect(record.errors["type"]).to include(match I18n.t("validations.financial.equity.over_max"))
+        expect(record.errors["equity"]).to include(match I18n.t("validations.financial.equity.over_max", max_equity: 75))
+        expect(record.errors["type"]).to include(match I18n.t("validations.financial.equity.over_max", max_equity: 75))
       end
     end
   end
