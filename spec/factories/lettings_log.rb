@@ -43,7 +43,7 @@ FactoryBot.define do
       sex1 { "F" }
       ethnic_group { 0 }
       ethnic { 2 }
-      national { 18 }
+      national { 13 }
       prevten { 6 }
       ecstat1 { 0 }
       hhmemb { 2 }
