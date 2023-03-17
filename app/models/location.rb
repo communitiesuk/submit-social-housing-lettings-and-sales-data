@@ -132,7 +132,7 @@ class Location < ApplicationRecord
 
   def linked_local_authorities
     la = LocalAuthority.find_by(code: location_code)
-    return [] unless la
+    return LocalAuthority.none unless la
 
     LocalAuthority.where(id: [la.id] + la.linked_local_authority_ids)
   end

@@ -32,6 +32,19 @@ RSpec.describe Location, type: :model do
       expect(location.linked_local_authorities.active(Time.zone.local(2022, 4, 1)).first.code).to eq("E07000030")
       expect(location.linked_local_authorities.active(Time.zone.local(2023, 4, 1)).first.code).to eq("E06000063")
     end
+
+    context "when location_code is no in LocalAuthorities table" do
+      before do
+        stub_request(:get, /api.postcodes.io\/postcodes\/CA101AA/)
+          .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Eden","codes":{"admin_district":"E01231231"}}}', headers: {})
+      end
+
+      it "defaults for location code for la" do
+        location.update!(postcode: "CA10 1AA")
+        expect(location.linked_local_authorities.count).to eq(0)
+        expect(location.location_code).to eq("E01231231")
+      end
+    end
   end
 
   describe "#postcode" do
