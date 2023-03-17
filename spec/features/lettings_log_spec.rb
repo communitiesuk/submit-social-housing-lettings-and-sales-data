@@ -94,6 +94,32 @@ RSpec.describe "Lettings Log Features" do
       end
     end
 
+    context "when visiting a subsection check answers page" do
+      let(:lettings_log) { FactoryBot.create(:lettings_log, :about_completed) }
+
+      it "has the correct breadcrumbs with the correct links" do
+        visit lettings_log_setup_check_answers_path(lettings_log.id)
+        breadcrumbs = page.find_all(".govuk-breadcrumbs__link")
+        expect(breadcrumbs.first.text).to eq "Logs"
+        expect(breadcrumbs.first[:href]).to eq lettings_logs_path
+        expect(breadcrumbs[1].text).to eq "Log #{lettings_log.id}"
+        expect(breadcrumbs[1][:href]).to eq lettings_log_path(lettings_log.id)
+      end
+    end
+
+    context "when reviewing a complete log" do
+      let(:lettings_log) { FactoryBot.create(:lettings_log, :completed) }
+
+      it "has the correct breadcrumbs with the correct links" do
+        visit review_lettings_log_path(lettings_log.id)
+        breadcrumbs = page.find_all(".govuk-breadcrumbs__link")
+        expect(breadcrumbs.first.text).to eq "Logs"
+        expect(breadcrumbs.first[:href]).to eq lettings_logs_path
+        expect(breadcrumbs[1].text).to eq "Log #{lettings_log.id}"
+        expect(breadcrumbs[1][:href]).to eq lettings_log_path(lettings_log.id)
+      end
+    end
+
     context "when the owning organisation question isn't answered" do
       it "doesn't show the managing agent question" do
         visit("/lettings-logs")
