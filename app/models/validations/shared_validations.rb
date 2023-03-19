@@ -34,6 +34,35 @@ module Validations::SharedValidations
     end
   end
 
+  def validate_numeric_step(record)
+    record.form.numeric_questions.each do |question|
+      next unless question.step
+      next unless record[question.id] && question.page.routed_to?(record, nil)
+
+      begin
+        input = record.public_send("#{question.id}_before_type_cast")
+        answer = Float(input)
+      rescue ArgumentError
+        add_step_error(record, question)
+      end
+
+      if (answer * 100) % (question.step * 100) != 0
+        add_step_error(record, question)
+      end
+    end
+  end
+
+  def validate_numeric_normal_format(record)
+    record.form.numeric_questions.each do |question|
+      next unless record[question.id] && question.page.routed_to?(record, nil)
+
+      user_input = record.public_send("#{question.id}_before_type_cast")
+      if user_input.is_a?(String) && user_input.include?("e")
+        record.errors.add question.id.to_sym, I18n.t("validations.numeric.normal_format")
+      end
+  end
+  end
+
   def validate_property_postcode(record)
     postcode = record.postcode_full
     if record.postcode_known? && (postcode.blank? || !postcode.match(POSTCODE_REGEXP))
@@ -110,6 +139,15 @@ private
       record.errors.add question.id.to_sym, :outside_the_range, message: I18n.t("validations.numeric.within_range", field:, min:, max:)
     elsif min
       record.errors.add question.id.to_sym, :under_min, message: I18n.t("validations.numeric.above_min", field:, min:)
+    end
+  end
+
+  def add_step_error(record, question)
+    field = question.check_answer_label || question.id
+    case question.step
+    when 1 then record.errors.add question.id.to_sym, I18n.t("validations.numeric.whole_number", field:)
+    when 10 then record.errors.add question.id.to_sym, I18n.t("validations.numeric.nearest_ten", field:)
+    when 0.01 then record.errors.add question.id.to_sym, I18n.t("validations.numeric.nearest_penny", field:)
     end
   end
 end
