@@ -144,6 +144,11 @@ en:
     numeric:
       within_range: "%{field} must be between %{min} and %{max}"
       above_min: "%{field} must be at least %{min}"
+      whole_number: "%{field} must be a whole number"
+      nearest_ten: "%{field} must be given to the nearest ten"
+      nearest_penny: "%{field} must be given to the nearest penny"
+      normal_format: "Use digits only"
+
     date:
       invalid_date: "Enter a date in the correct format, for example 31 1 2022"
       outside_collection_window: Enter a date within the 22/23 collection year, which is between 1st April 2022 and 31st March 2023
