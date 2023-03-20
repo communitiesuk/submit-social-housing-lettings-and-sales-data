@@ -60,7 +60,7 @@ module Validations::SharedValidations
       if user_input.is_a?(String) && user_input.include?("e")
         record.errors.add question.id.to_sym, I18n.t("validations.numeric.normal_format")
       end
-  end
+    end
   end
 
   def validate_property_postcode(record)

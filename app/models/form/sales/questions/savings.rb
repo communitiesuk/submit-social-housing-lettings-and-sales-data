@@ -7,7 +7,7 @@ class Form::Sales::Questions::Savings < ::Form::Question
     @type = "numeric"
     @width = 5
     @prefix = "£"
-    @step = 1
+    @step = 10
     @min = 0
     @question_number = 72
   end
