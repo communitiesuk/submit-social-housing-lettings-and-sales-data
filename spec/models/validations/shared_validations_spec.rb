@@ -145,13 +145,13 @@ RSpec.describe Validations::SharedValidations do
 
     context "when validating a question with a step of 0.01" do
       it "adds an error if input has more than 2 decimal places" do
-        sales_log.deposit = 630.7418
+        sales_log.mscharge = 30.7418
         shared_validator.validate_numeric_step(sales_log)
-        expect(sales_log.errors[:deposit]).to include I18n.t("validations.numeric.nearest_penny", field: "Cash deposit")
+        expect(sales_log.errors[:mscharge]).to include I18n.t("validations.numeric.nearest_penny", field: "Monthly leasehold charges")
       end
 
       it "does not add an error if input has 2 or fewer decimal places" do
-        sales_log.deposit = 630.74
+        sales_log.mscharge = 30.74
         shared_validator.validate_numeric_step(sales_log)
         expect(sales_log.errors).to be_empty
       end

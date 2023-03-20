@@ -7,6 +7,7 @@ class Form::Sales::Questions::DepositDiscount < ::Form::Question
     @type = "numeric"
     @min = 0
     @max = 999_999
+    @step = 1
     @width = 5
     @prefix = "£"
     @hint_text = "Enter the total cash discount given on the property being purchased through the Social HomeBuy scheme"
