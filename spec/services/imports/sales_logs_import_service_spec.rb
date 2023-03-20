@@ -1126,6 +1126,22 @@ RSpec.describe Imports::SalesLogsImportService do
           expect(sales_log&.mortgageused).to eq(1)
         end
       end
+
+      context "when the extrabor is not answered" do
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
+
+        before do
+          sales_log_xml.at_xpath("//xmlns:Q35Borrowing").content = ""
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets extrabor to don't know" do
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.extrabor).to be(3)
+        end
+      end
     end
   end
 end

@@ -510,6 +510,7 @@ module Imports
       end
       attributes["pcodenk"] ||= 1
       attributes["prevten"] ||= 0
+      attributes["extrabor"] ||= 3 if attributes["mortgageused"] == 1
 
       # buyer 1 characteristics
       attributes["age1_known"] ||= 1
