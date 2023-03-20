@@ -335,7 +335,7 @@ class SalesLog < Log
     return if value.blank?
 
     discount_amount = discount ? value * discount / 100 : 0
-    (value - discount_amount)
+    value - discount_amount
   end
 
   def mortgage_deposit_and_grand_total
