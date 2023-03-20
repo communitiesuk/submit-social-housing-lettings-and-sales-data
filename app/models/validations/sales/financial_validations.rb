@@ -40,12 +40,8 @@ module Validations::Sales::FinancialValidations
     record.errors.add :mortgage, :cannot_be_0, message: I18n.t("validations.financial.mortgage") if record.mortgage_used? && record.mortgage&.zero?
   end
 
-  def validate_cash_discount(record)
-    return unless record.cashdis
-
-    unless record.cashdis.between?(0, 999_999)
-      record.errors.add :cashdis, I18n.t("validations.financial.cash_discount_invalid")
-    end
+  def validate_monthly_leasehold_charges(record)
+    record.errors.add :mscharge, I18n.t("validations.financial.monthly_leasehold_charges.not_zero") if record.mscharge == 0
   end
 
   def validate_percentage_bought_not_greater_than_percentage_owned(record)
