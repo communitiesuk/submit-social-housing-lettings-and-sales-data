@@ -42,7 +42,7 @@ class SalesLog < Log
   }
   scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org) }
 
-  OPTIONAL_FIELDS = %w[saledate_check purchid monthly_charges_value_check old_persons_shared_ownership_value_check mortgagelender othtype].freeze
+  OPTIONAL_FIELDS = %w[saledate_check purchid monthly_charges_value_check old_persons_shared_ownership_value_check mortgagelender othtype discounted_sale_value_check].freeze
   RETIREMENT_AGES = { "M" => 65, "F" => 60, "X" => 65 }.freeze
 
   def lettings?
@@ -329,5 +329,20 @@ class SalesLog < Log
 
   def should_process_uprn_change?
     uprn_changed? && saledate && saledate.year >= 2023
+  end
+
+  def value_with_discount
+    return if value.blank?
+
+    discount_amount = discount ? value * discount / 100 : 0
+    value - discount_amount
+  end
+
+  def mortgage_deposit_and_grant_total
+    return if deposit.blank?
+
+    grant_amount = grant || 0
+    mortgage_amount = mortgage || 0
+    mortgage_amount + deposit + grant_amount
   end
 end
