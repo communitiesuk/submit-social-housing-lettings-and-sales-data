@@ -52,7 +52,7 @@ module Validations::Sales::SaleInformationValidations
     return unless record.mortgage || record.mortgageused == 2
     return unless record.discount || record.grant || record.type == 29
 
-    if record.mortgage_deposit_and_grand_total != record.value_with_discount && record.discounted_ownership_sale?
+    if record.mortgage_deposit_and_grant_total != record.value_with_discount && record.discounted_ownership_sale?
       %i[mortgage deposit grant value discount ownershipsch].each do |field|
         record.errors.add field, I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: sprintf("%.2f", record.value_with_discount))
       end

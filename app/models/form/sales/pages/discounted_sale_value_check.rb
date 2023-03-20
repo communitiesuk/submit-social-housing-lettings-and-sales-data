@@ -8,7 +8,7 @@ class Form::Sales::Pages::DiscountedSaleValueCheck < ::Form::Page
     }
     @informative_text = {
       "translation" => "soft_validations.discounted_sale_value.informative_text",
-      "arguments" => [{ "key" => "mortgage_deposit_and_grand_total", "label" => false, "i18n_template" => "mortgage_deposit_and_grand_total" }],
+      "arguments" => [{ "key" => "mortgage_deposit_and_grant_total", "label" => false, "i18n_template" => "mortgage_deposit_and_grant_total" }],
     }
     @person_index = person_index
     @depends_on = [

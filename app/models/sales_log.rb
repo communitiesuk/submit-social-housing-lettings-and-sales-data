@@ -338,7 +338,7 @@ class SalesLog < Log
     value - discount_amount
   end
 
-  def mortgage_deposit_and_grand_total
+  def mortgage_deposit_and_grant_total
     return if deposit.blank?
 
     grant_amount = grant || 0

@@ -120,7 +120,7 @@ module Validations::Sales::SoftValidations
     return unless mortgage || mortgageused == 2
     return unless discount || grant || type == 29
 
-    mortgage_deposit_and_grand_total != value_with_discount && discounted_ownership_sale?
+    mortgage_deposit_and_grant_total != value_with_discount && discounted_ownership_sale?
   end
 
 private

@@ -34,7 +34,7 @@ RSpec.describe Form::Sales::Pages::DiscountedSaleValueCheck, type: :model do
   it "has the correct informative_text" do
     expect(page.informative_text).to eq({
       "translation" => "soft_validations.discounted_sale_value.informative_text",
-      "arguments" => [{ "key" => "mortgage_deposit_and_grand_total", "label" => false, "i18n_template" => "mortgage_deposit_and_grand_total" }],
+      "arguments" => [{ "key" => "mortgage_deposit_and_grant_total", "label" => false, "i18n_template" => "mortgage_deposit_and_grant_total" }],
     })
   end
 
