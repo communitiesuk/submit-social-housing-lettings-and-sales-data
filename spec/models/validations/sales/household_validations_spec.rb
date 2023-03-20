@@ -72,6 +72,29 @@ RSpec.describe Validations::Sales::HouseholdValidations do
         expect(record.errors["age2"])
           .to include(match I18n.t("validations.household.age.child_over_16", person_num: 2))
       end
+
+      it "validates the child is at least 12 years younger than buyer 1" do
+        record.age1 = 30
+        record.age2 = 19
+        record.relat2 = "C"
+        household_validator.validate_household_number_of_other_members(record)
+        expect(record.errors["age1"])
+          .to include(match I18n.t("validations.household.age.child_12_years_younger", person_num: 2))
+        expect(record.errors["age2"])
+          .to include(match I18n.t("validations.household.age.child_12_years_younger", person_num: 2))
+        expect(record.errors["relat2"])
+          .to include(match I18n.t("validations.household.age.child_12_years_younger", person_num: 2))
+      end
+
+      it "expects the child is at least 12 years younger than buyer 1" do
+        record.age1 = 30
+        record.age2 = 18
+        record.relat2 = "C"
+        household_validator.validate_household_number_of_other_members(record)
+        expect(record.errors["age1"]).to be_empty
+        expect(record.errors["age2"]).to be_empty
+        expect(record.errors["relate2"]).to be_empty
+      end
     end
 
     it "validates that a person over 20 must not be a child of the buyer" do

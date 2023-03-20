@@ -89,7 +89,7 @@ private
     if person_age > buyer_1_age - 12 && person_is_child?(relationship)
       record.errors.add "age1", I18n.t("validations.household.age.child_12_years_younger")
       record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_12_years_younger")
-      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.child_12_years_younger")
+      record.errors.add "relat#{person_num}", I18n.t("validations.household.age.child_12_years_younger")
     end
   end
 
