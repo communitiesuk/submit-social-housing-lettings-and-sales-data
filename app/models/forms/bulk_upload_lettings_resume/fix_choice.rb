@@ -5,6 +5,7 @@ module Forms
       include ActiveModel::Attributes
       include Rails.application.routes.url_helpers
 
+      attribute :bulk_upload
       attribute :choice, :string
 
       validates :choice, presence: true,
@@ -19,6 +20,19 @@ module Forms
 
       def view_path
         "bulk_upload_lettings_resume/fix_choice"
+      end
+
+      def next_path
+        case choice
+        when "upload-again"
+          if BulkUploadErrorSummaryTableComponent.new(bulk_upload:).errors?
+            summary_bulk_upload_lettings_result_path(bulk_upload)
+          else
+            bulk_upload_lettings_result_path(bulk_upload)
+          end
+        else
+          raise "invalid choice"
+        end
       end
     end
   end

@@ -26,7 +26,7 @@ class BulkUploadLettingsResumeController < ApplicationController
 private
 
   def form
-    @form ||= Forms::BulkUploadLettingsResume::FixChoice.new(form_params)
+    @form ||= Forms::BulkUploadLettingsResume::FixChoice.new(form_params.merge(bulk_upload: @bulk_upload))
   end
 
   def form_params

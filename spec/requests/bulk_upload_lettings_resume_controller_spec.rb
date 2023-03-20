@@ -40,5 +40,13 @@ RSpec.describe BulkUploadLettingsResumeController, type: :request do
         expect(response.body).to include("You must select")
       end
     end
+
+    context "when upload again selected" do
+      it "sends them to relevant report" do
+        patch "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice", params: { form: { choice: "upload-again" } }
+
+        expect(response).to redirect_to("/lettings-logs/bulk-upload-results/#{bulk_upload.id}")
+      end
+    end
   end
 end
