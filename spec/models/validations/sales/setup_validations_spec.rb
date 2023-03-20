@@ -98,4 +98,38 @@ RSpec.describe Validations::Sales::SetupValidations do
       end
     end
   end
+
+  describe "#validate_saledate_two_weeks" do
+    context "when saledate is blank" do
+      let(:record) { build(:sales_log, saledate: nil) }
+
+      it "does not add an error" do
+        setup_validator.validate_saledate_two_weeks(record)
+
+        expect(record.errors).to be_empty
+      end
+    end
+
+    context "when saledate is less than 14 days after today" do
+      let(:record) { build(:sales_log, saledate: Time.zone.today + 10.days) }
+
+      it "does not add an error" do
+        setup_validator.validate_saledate_two_weeks(record)
+
+        expect(record.errors).to be_empty
+      end
+    end
+
+    context "when saledate is more than 14 days after today" do
+      let(:record) { build(:sales_log, saledate: Time.zone.today + 15.days) }
+
+      it "adds an error" do
+        setup_validator.validate_saledate_two_weeks(record)
+
+        expect(record.errors[:saledate]).to include("Sale completion date must not be later than 14 days from today’s date")
+      end
+    end
+  end
+
+
 end
