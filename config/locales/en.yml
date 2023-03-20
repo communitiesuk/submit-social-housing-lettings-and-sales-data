@@ -142,7 +142,7 @@ en:
       whole_number: "%{field} must be a whole number"
       nearest_ten: "%{field} must be given to the nearest ten"
       nearest_penny: "%{field} must be given to the nearest penny"
-      normal_format: "Use digits only"
+      normal_format: "Enter a number"
 
     date:
       invalid_date: "Enter a date in the correct format, for example 31 1 2022"
