@@ -130,6 +130,4 @@ RSpec.describe Validations::Sales::SetupValidations do
       end
     end
   end
-
-
 end
