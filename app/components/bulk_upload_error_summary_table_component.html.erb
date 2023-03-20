@@ -1,24 +1,16 @@
-<%= govuk_table do |table| %>
-  <% table.caption(size: "m", text: bulk_upload.filename) %>
+<% sorted_errors.each do |error| %>
+  <%= govuk_table do |table| %>
+    <% table.head do |head| %>
+      <% head.row do |row| %>
+        <% row.cell(text: question_for_field(error[0][1].to_sym), header: true) %>
+        <% row.cell(text: "Column #{error[0][0]}", header: true, numeric: true) %>
+      <% end %>
 
-  <% table.head do |head| %>
-    <% head.row do |row| %>
-      <% row.cell(text: "Column", header: true) %>
-      <% row.cell(text: "Number of rows", header: true) %>
-      <% row.cell(text: "Question", header: true) %>
-      <% row.cell(text: "Error", header: true) %>
-      <% row.cell(text: "Specification", header: true) %>
-    <% end %>
-  <% end %>
-
-  <% table.body do |body| %>
-    <% sorted_errors.each do |error| %>
-      <% body.row do |row| %>
-        <% row.cell(text: error[0][0]) %>
-        <% row.cell(text: error[1]) %>
-        <% row.cell(text: question_for_field(error[0][1].to_sym)) %>
-        <% row.cell(text: error[0][2]) %>
-        <% row.cell(text: error[0][1]) %>
+      <% table.body do |body| %>
+        <% body.row do |row| %>
+          <% row.cell(text: error[0][2]) %>
+          <% row.cell(text: pluralize(error[1], "error"), numeric: true) %>
+        <% end %>
       <% end %>
     <% end %>
   <% end %>

@@ -83,7 +83,7 @@ class BulkUploadMailer < NotifyMailer
       .keys
       .sort_by { |_col, field| field }
       .map do |col, field|
-        "- Column #{col} (#{row_parser_class.question_for_field(field.to_sym)})"
+        "- #{row_parser_class.question_for_field(field.to_sym)} (Column #{col})"
       end
 
     send_email(
