@@ -1,4 +1,4 @@
-class Form::Sales::Questions::StudentNotChildValueCheck < ::Form::Question
+class Form::Sales::Questions::PersonStudentNotChildValueCheck < ::Form::Question
   def initialize(id, hsh, page, person_index:)
     super(id, hsh, page)
     @id = "student_not_child_value_check"
@@ -19,6 +19,6 @@ class Form::Sales::Questions::StudentNotChildValueCheck < ::Form::Question
       ],
     }
     @check_answers_card_number = person_index
-    @header = "Are you sure this person is not child?"
+    @header = "Are you sure this person is not a child?"
   end
 end

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Pages::StudentNotChildValueCheck, type: :model do
+RSpec.describe Form::Sales::Pages::PersonStudentNotChildValueCheck, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection, person_index:) }
 
   let(:page_definition) { nil }

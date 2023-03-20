@@ -1,4 +1,4 @@
-class Form::Sales::Pages::StudentNotChildValueCheck < Form::Sales::Pages::Person
+class Form::Sales::Pages::PersonStudentNotChildValueCheck < Form::Sales::Pages::Person
   def initialize(id, hsh, subsection, person_index:)
     super
     @depends_on = [
@@ -15,7 +15,7 @@ class Form::Sales::Pages::StudentNotChildValueCheck < Form::Sales::Pages::Person
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::StudentNotChildValueCheck.new(nil, nil, self, person_index: @person_index),
+      Form::Sales::Questions::PersonStudentNotChildValueCheck.new(nil, nil, self, person_index: @person_index),
     ]
   end
 end
