@@ -798,7 +798,7 @@ RSpec.describe Validations::Sales::SoftValidations do
       expect(record).to be_person_3_student_not_child
     end
   end
-  
+
   describe "#discounted_ownership_value_invalid?" do
     context "when grant is routed to" do
       let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, deposit: 5_000, value: 30_000, ownershipsch: 2, type: 8, saledate: Time.zone.local(2023, 4, 3)) }
