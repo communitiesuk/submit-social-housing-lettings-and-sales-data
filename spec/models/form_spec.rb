@@ -1,6 +1,15 @@
 require "rails_helper"
 
 RSpec.describe Form, type: :model do
+  around do |example|
+    Timecop.freeze(Time.zone.local(2022, 1, 1)) do
+      Singleton.__init__(FormHandler)
+      example.run
+    end
+    Timecop.return
+    Singleton.__init__(FormHandler)
+  end
+
   let(:user) { FactoryBot.build(:user) }
   let(:lettings_log) { FactoryBot.build(:lettings_log, :in_progress) }
   let(:form) { lettings_log.form }

@@ -11,5 +11,6 @@ class Form::Lettings::Questions::ChchargeMonthly < ::Form::Question
     @step = 0.01
     @prefix = "£"
     @suffix = " every month"
+    @question_number = 94
   end
 end

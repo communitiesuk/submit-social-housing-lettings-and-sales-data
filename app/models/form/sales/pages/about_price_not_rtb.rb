@@ -11,7 +11,7 @@ class Form::Sales::Pages::AboutPriceNotRtb < ::Form::Page
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::PurchasePrice.new(nil, nil, self),
+      Form::Sales::Questions::PurchasePrice.new(nil, nil, self, ownershipsch: 2),
       Form::Sales::Questions::Grant.new(nil, nil, self),
     ]
   end

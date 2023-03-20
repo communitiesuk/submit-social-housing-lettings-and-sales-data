@@ -9,6 +9,7 @@ RSpec.describe FormHandler do
       Singleton.__init__(described_class)
       example.run
     end
+    Timecop.return
     Singleton.__init__(described_class)
   end
 

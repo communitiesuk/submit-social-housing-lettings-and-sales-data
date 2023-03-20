@@ -4,11 +4,11 @@ class FeatureToggle
     Rails.env.production? || Rails.env.test? || Rails.env.staging?
   end
 
-  def self.startdate_two_week_validation_enabled?
+  def self.startdate_collection_window_validation_enabled?
     Rails.env.production? || Rails.env.test? || Rails.env.staging?
   end
 
-  def self.startdate_collection_window_validation_enabled?
+  def self.startdate_two_week_validation_enabled?
     Rails.env.production? || Rails.env.test? || Rails.env.staging?
   end
 
@@ -38,6 +38,12 @@ class FeatureToggle
 
   def self.upload_enabled?
     !Rails.env.development?
+  end
+
+  def self.force_crossover?
+    return false if Rails.env.test?
+
+    !Rails.env.production?
   end
 
   def self.validate_valid_radio_options?

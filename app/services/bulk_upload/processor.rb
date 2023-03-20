@@ -8,11 +8,11 @@ class BulkUpload::Processor
   def call
     download
 
-    return send_failure_mail if validator.invalid?
+    return send_failure_mail(errors: validator.errors.full_messages) if validator.invalid?
 
     validator.call
 
-    if validator.any_setup_sections_incomplete?
+    if validator.any_setup_errors?
       send_setup_errors_mail
     elsif validator.create_logs?
       create_logs
@@ -62,9 +62,9 @@ private
     validator.create_logs? && bulk_upload.logs.group(:status).count.keys == %w[completed]
   end
 
-  def send_failure_mail
+  def send_failure_mail(errors: [])
     BulkUploadMailer
-      .send_bulk_upload_failed_service_error_mail(bulk_upload:)
+      .send_bulk_upload_failed_service_error_mail(bulk_upload:, errors:)
       .deliver_later
   end
 

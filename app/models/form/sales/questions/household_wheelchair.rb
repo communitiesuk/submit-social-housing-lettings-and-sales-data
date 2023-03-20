@@ -6,6 +6,7 @@ class Form::Sales::Questions::HouseholdWheelchair < ::Form::Question
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @hint_text = "This can be inside or outside the home"
+    @question_number = 66
   end
 
   ANSWER_OPTIONS = {

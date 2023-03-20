@@ -3,6 +3,14 @@ require "rails_helper"
 RSpec.describe Validations::TenancyValidations do
   subject(:tenancy_validator) { validator_class.new }
 
+  before do
+    Timecop.freeze(Time.zone.local(2021, 5, 1))
+  end
+
+  after do
+    Timecop.unfreeze
+  end
+
   let(:validator_class) { Class.new { include Validations::TenancyValidations } }
   let(:record) { FactoryBot.create(:lettings_log, startdate: Time.zone.local(2021, 5, 1), needstype: 1, rent_type: 1) }
 
@@ -117,6 +125,14 @@ RSpec.describe Validations::TenancyValidations do
       end
 
       context "when the collection start year is 2022 or later" do
+        before do
+          Timecop.freeze(2022, 5, 1)
+        end
+
+        after do
+          Timecop.unfreeze
+        end
+
         let(:record) { FactoryBot.create(:lettings_log, startdate: Time.zone.local(2022, 5, 1), needstype: 1, rent_type: 1) }
 
         context "when type of tenancy is Secure - fixed term" do
@@ -260,6 +276,14 @@ RSpec.describe Validations::TenancyValidations do
 
   describe "joint tenancy validation" do
     context "when the data inputter has said that there is only one member in the household" do
+      before do
+        Timecop.freeze(2022, 5, 1)
+      end
+
+      after do
+        Timecop.unfreeze
+      end
+
       let(:record) { FactoryBot.create(:lettings_log, startdate: Time.zone.local(2022, 5, 1)) }
       let(:expected_error) { I18n.t("validations.tenancy.not_joint") }
       let(:hhmemb_expected_error) { I18n.t("validations.tenancy.joint_more_than_one_member") }

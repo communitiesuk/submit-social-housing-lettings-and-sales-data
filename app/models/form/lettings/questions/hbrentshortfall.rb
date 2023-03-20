@@ -8,6 +8,7 @@ class Form::Lettings::Questions::Hbrentshortfall < ::Form::Question
     @check_answers_card_number = 0
     @hint_text = "Also known as the ‘outstanding amount’."
     @answer_options = ANSWER_OPTIONS
+    @question_number = 99
   end
 
   ANSWER_OPTIONS = {

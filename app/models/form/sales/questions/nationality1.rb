@@ -7,16 +7,6 @@ class Form::Sales::Questions::Nationality1 < ::Form::Question
     @type = "radio"
     @hint_text = "Buyer 1 is the person in the household who does the most paid work. If it’s a joint purchase and the buyers do the same amount of paid work, buyer 1 is whoever is the oldest."
     @answer_options = ANSWER_OPTIONS
-    @conditional_for = {
-      "othernational" => [12],
-    }
-    @hidden_in_check_answers = {
-      "depends_on" => [
-        {
-          "national" => 12,
-        },
-      ],
-    }
     @check_answers_card_number = 1
     @inferred_check_answers_value = [{
       "condition" => {
@@ -24,6 +14,7 @@ class Form::Sales::Questions::Nationality1 < ::Form::Question
       },
       "value" => "Prefers not to say",
     }]
+    @question_number = 24
   end
 
   ANSWER_OPTIONS = {

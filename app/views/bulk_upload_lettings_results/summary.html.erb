@@ -1,22 +1,34 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <span class="govuk-caption-l">Bulk upload for lettings (<%= @bulk_upload.year_combo %>)</span>
-    <h1 class="govuk-heading-l">Correct data export and reupload</h1>
+    <h1 class="govuk-heading-l">Fix <%= pluralize(@bulk_upload.bulk_upload_errors.count, "error") %> and upload file again</h1>
 
     <p class="govuk-body-l">
-      We noticed that you have a lot of similar errors for some questions. You can download the specification which we reference below to understand how to correct the data. Once you have fixed these errors you can upload again.
+      We could not create logs from your bulk upload. Below is a list of everything that you need to fix your spreadsheet. You can download the specification to help you fix the cells in your CSV file.
+    </p>
+
+    <p class="govuk-body-l">
+      Filename: <%= @bulk_upload.filename %>
     </p>
   </div>
 </div>
 
-<%= render BulkUploadErrorSummaryTableComponent.new(bulk_upload: @bulk_upload) %>
-
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <p class="govuk-body">
-      You also have other errors in your file which you can either fix them in the CSV file or you can reupload and fix on CORE. <%= govuk_link_to "View the full report", bulk_upload_lettings_result_path(@bulk_upload) %>
-    </p>
-  </div>
+  <%= govuk_tabs(title: "Error reports") do |c| %>
+    <% c.with_tab(label: "Summary") do %>
+      <p class="govuk-body">
+        This summary shows questions that have at least <%= BulkUploadErrorSummaryTableComponent::DISPLAY_THRESHOLD %> errors or more. See full error report for more details.
+      </p>
+
+      <%= render BulkUploadErrorSummaryTableComponent.new(bulk_upload: @bulk_upload) %>
+    <% end %>
+
+    <% c.with_tab(label: "Full error report") do %>
+      <% @bulk_upload.bulk_upload_errors.group_by(&:row).each do |_row, errors_for_row| %>
+        <%= render BulkUploadErrorRowComponent.new(bulk_upload_errors: errors_for_row) %>
+      <% end %>
+    <% end %>
+  <% end %>
 </div>
 
 <%= govuk_button_link_to "Upload your file again", start_bulk_upload_lettings_logs_path %>

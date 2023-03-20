@@ -35,6 +35,16 @@ RSpec.describe Form::Sales::Questions::Fromprop, type: :model do
     expect(question.hint_text).to eq("")
   end
 
+  it "has the correct displayed_answer_options" do
+    expect(question.displayed_answer_options(nil)).to eq({
+      "1" => { "value" => "Flat or maisonette" },
+      "2" => { "value" => "Bedsit" },
+      "3" => { "value" => "House" },
+      "4" => { "value" => "Bungalow" },
+      "9" => { "value" => "Other" },
+    })
+  end
+
   it "has the correct answer_options" do
     expect(question.answer_options).to eq({
       "1" => { "value" => "Flat or maisonette" },
@@ -42,6 +52,7 @@ RSpec.describe Form::Sales::Questions::Fromprop, type: :model do
       "3" => { "value" => "House" },
       "4" => { "value" => "Bungalow" },
       "9" => { "value" => "Other" },
+      "0" => { "value" => "Don’t know" },
     })
   end
 end

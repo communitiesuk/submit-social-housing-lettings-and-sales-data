@@ -1,6 +1,6 @@
 class Form::Sales::Questions::MortgageLender < ::Form::Question
-  def initialize(id, hsh, page)
-    super
+  def initialize(id, hsh, subsection, ownershipsch:)
+    super(id, hsh, subsection)
     @id = "mortgagelender"
     @check_answer_label = "Mortgage Lender"
     @header = "What is the name of the mortgage lender?"
@@ -10,6 +10,8 @@ class Form::Sales::Questions::MortgageLender < ::Form::Question
     @answer_options = ANSWER_OPTIONS
     @guidance_position = GuidancePosition::BOTTOM
     @guidance_partial = "mortgage_lender"
+    @ownershipsch = ownershipsch
+    @question_number = question_number
   end
 
   ANSWER_OPTIONS = {
@@ -55,4 +57,15 @@ class Form::Sales::Questions::MortgageLender < ::Form::Question
     "39" =>	"Yorkshire Building Society",
     "40" =>	"Other",
   }.freeze
+
+  def question_number
+    case @ownershipsch
+    when 1
+      92
+    when 2
+      105
+    when 3
+      113
+    end
+  end
 end

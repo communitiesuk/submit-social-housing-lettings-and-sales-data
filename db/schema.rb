@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_01_144555) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_20_084057) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -279,6 +279,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_01_144555) do
     t.boolean "unresolved"
     t.bigint "updated_by_id"
     t.bigint "bulk_upload_id"
+    t.string "uprn"
+    t.integer "uprn_known"
+    t.integer "uprn_confirmed"
+    t.string "address_line1"
+    t.string "address_line2"
+    t.string "town_or_city"
+    t.string "county"
     t.index ["bulk_upload_id"], name: "index_lettings_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_lettings_logs_on_created_by_id"
     t.index ["location_id"], name: "index_lettings_logs_on_location_id"
@@ -287,6 +294,25 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_01_144555) do
     t.index ["owning_organisation_id"], name: "index_lettings_logs_on_owning_organisation_id"
     t.index ["scheme_id"], name: "index_lettings_logs_on_scheme_id"
     t.index ["updated_by_id"], name: "index_lettings_logs_on_updated_by_id"
+  end
+
+  create_table "local_authorities", force: :cascade do |t|
+    t.string "code", null: false
+    t.string "name", null: false
+    t.datetime "start_date", null: false
+    t.datetime "end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_local_authority_code", unique: true
+  end
+
+  create_table "local_authority_links", force: :cascade do |t|
+    t.bigint "local_authority_id"
+    t.bigint "linked_local_authority_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["linked_local_authority_id"], name: "index_local_authority_links_on_linked_local_authority_id"
+    t.index ["local_authority_id"], name: "index_local_authority_links_on_local_authority_id"
   end
 
   create_table "location_deactivation_periods", force: :cascade do |t|
@@ -393,7 +419,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_01_144555) do
     t.integer "age1_known"
     t.string "sex1"
     t.integer "national"
-    t.string "othernational"
     t.integer "ethnic"
     t.integer "ethnic_group"
     t.integer "buy1livein"
@@ -532,7 +557,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_01_144555) do
     t.integer "ethnicbuy2"
     t.integer "proplen_asked"
     t.string "old_id"
+    t.integer "buy2living"
+    t.integer "prevtenbuy2"
     t.integer "pregblank"
+    t.string "uprn"
+    t.integer "uprn_known"
+    t.integer "uprn_confirmed"
+    t.string "address_line1"
+    t.string "address_line2"
+    t.string "town_or_city"
+    t.string "county"
+    t.integer "nationalbuy2"
+    t.integer "student_not_child_value_check"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["old_id"], name: "index_sales_logs_on_old_id", unique: true
@@ -629,6 +665,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_01_144555) do
   add_foreign_key "lettings_logs", "locations"
   add_foreign_key "lettings_logs", "organisations", column: "owning_organisation_id", on_delete: :cascade
   add_foreign_key "lettings_logs", "schemes"
+  add_foreign_key "local_authority_links", "local_authorities"
+  add_foreign_key "local_authority_links", "local_authorities", column: "linked_local_authority_id"
   add_foreign_key "locations", "schemes"
   add_foreign_key "organisation_relationships", "organisations", column: "child_organisation_id"
   add_foreign_key "organisation_relationships", "organisations", column: "parent_organisation_id"

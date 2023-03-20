@@ -9,5 +9,6 @@ class Form::Sales::Questions::MonthlyRent < ::Form::Question
     @width = 5
     @prefix = "£"
     @hint_text = "Amount paid before any charges"
+    @question_number = 97
   end
 end

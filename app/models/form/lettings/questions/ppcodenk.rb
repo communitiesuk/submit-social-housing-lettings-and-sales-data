@@ -10,6 +10,7 @@ class Form::Lettings::Questions::Ppcodenk < ::Form::Question
     @answer_options = ANSWER_OPTIONS
     @conditional_for = { "ppostcode_full" => [1] }
     @hidden_in_check_answers = { "depends_on" => [{ "ppcodenk" => 0 }, { "ppcodenk" => 1 }] }
+    @question_number = 80
   end
 
   ANSWER_OPTIONS = { "1" => { "value" => "Yes" }, "0" => { "value" => "No" } }.freeze

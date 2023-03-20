@@ -8,6 +8,7 @@ class Form::Lettings::Questions::SchemeId < ::Form::Question
     @answer_options = answer_options
     @guidance_position = GuidancePosition::BOTTOM
     @guidance_partial = "scheme_selection"
+    @question_number = 9
   end
 
   def answer_options

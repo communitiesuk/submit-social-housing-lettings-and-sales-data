@@ -11,5 +11,6 @@ class Form::Lettings::Questions::ChchargeBiWeekly < ::Form::Question
     @step = 0.01
     @prefix = "£"
     @suffix = " every 2 weeks"
+    @question_number = 94
   end
 end

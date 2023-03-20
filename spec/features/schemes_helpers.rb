@@ -64,7 +64,8 @@ module SchemesHelpers
     click_button "Add a location"
     fill_in with: "AA11AA"
     click_button "Save and continue"
-    fill_in with: "Adur"
+    select "Adur"
+    click_button "Save and continue"
     fill_in with: "Some name"
     click_button "Save and continue"
     fill_in with: 5
@@ -84,7 +85,8 @@ module SchemesHelpers
     click_button "Add a location"
     fill_in with: "AA12AA"
     click_button "Save and continue"
-    fill_in with: "Adur"
+    select "Adur"
+    click_button "Save and continue"
     fill_in with: "Other name"
     click_button "Save and continue"
     fill_in with: 2

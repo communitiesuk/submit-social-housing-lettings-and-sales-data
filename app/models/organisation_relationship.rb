@@ -7,6 +7,8 @@ class OrganisationRelationship < ApplicationRecord
   validates :child_organisation_id, uniqueness: { scope: :parent_organisation_id, message: I18n.t("validations.organisation.managing_agent.already_added") }
   validate :validate_stock_owner_owns_stock, on: :stock_owner
 
+  has_paper_trail
+
 private
 
   def validate_stock_owner_owns_stock

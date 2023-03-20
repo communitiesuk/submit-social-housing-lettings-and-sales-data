@@ -3,16 +3,16 @@ require "rails_helper"
 RSpec.describe BulkUploadErrorSummaryTableComponent, type: :component do
   subject(:component) { described_class.new(bulk_upload:) }
 
-  let(:bulk_upload) { create(:bulk_upload) }
+  let(:bulk_upload) { create(:bulk_upload, :lettings) }
 
   before do
     stub_const("BulkUploadErrorSummaryTableComponent::DISPLAY_THRESHOLD", 0)
   end
 
   context "when no errors" do
-    it "does not renders any rows" do
+    it "does not renders any tables" do
       result = render_inline(component)
-      expect(result).not_to have_selector("tbody tr")
+      expect(result).not_to have_selector("table")
     end
   end
 
@@ -23,9 +23,9 @@ RSpec.describe BulkUploadErrorSummaryTableComponent, type: :component do
       create(:bulk_upload_error, bulk_upload:, col: "A", row: 1)
     end
 
-    it "does not render rows" do
+    it "does not render tables" do
       result = render_inline(component)
-      expect(result).to have_selector("tbody tr", count: 0)
+      expect(result).to have_selector("table", count: 0)
     end
   end
 
@@ -33,38 +33,36 @@ RSpec.describe BulkUploadErrorSummaryTableComponent, type: :component do
     let!(:error_2) { create(:bulk_upload_error, bulk_upload:, col: "B", row: 2) }
     let!(:error_1) { create(:bulk_upload_error, bulk_upload:, col: "A", row: 1) }
 
-    it "renders rows for each error" do
+    it "renders table for each error" do
       result = render_inline(component)
-      expect(result).to have_selector("tbody tr", count: 2)
+      expect(result).to have_selector("table", count: 2)
     end
 
-    it "renders rows by col order" do
+    it "renders by col order" do
       result = render_inline(component)
-      order = result.css("tbody tr td:nth-of-type(1)").map(&:content)
-      expect(order).to eql(%w[A B])
+      order = result.css("table thead th:nth-of-type(2)").map(&:content)
+      expect(order).to eql(["Column A", "Column B"])
     end
 
     it "render correct data" do
       result = render_inline(component)
 
-      row_1 = result.css("tbody tr:nth-of-type(1) td").map(&:content)
+      table_1 = result.css("table").first.css("th, td").map(&:content)
 
-      expect(row_1).to eql([
-        "A",
-        "1",
-        BulkUpload::Lettings::Validator.question_for_field(error_1.field.to_sym),
+      expect(table_1).to eql([
+        bulk_upload.prefix_namespace::RowParser.question_for_field(error_1.field.to_sym).to_s,
+        "Column A",
         error_1.error,
-        error_1.field,
+        "1 error",
       ])
 
-      row_2 = result.css("tbody tr:nth-of-type(2) td").map(&:content)
+      table_2 = result.css("table")[1].css("th, td").map(&:content)
 
-      expect(row_2).to eql([
-        "B",
-        "1",
-        BulkUpload::Lettings::Validator.question_for_field(error_2.field.to_sym),
+      expect(table_2).to eql([
+        bulk_upload.prefix_namespace::RowParser.question_for_field(error_2.field.to_sym).to_s,
+        "Column B",
         error_2.error,
-        error_2.field,
+        "1 error",
       ])
     end
   end
@@ -76,22 +74,21 @@ RSpec.describe BulkUploadErrorSummaryTableComponent, type: :component do
       create(:bulk_upload_error, bulk_upload:, col: "A", row: 2, field: "field_1")
     end
 
-    it "renders 1 row combining the errors" do
+    it "renders 1 table combining the errors" do
       result = render_inline(component)
-      expect(result).to have_selector("tbody tr", count: 1)
+      expect(result).to have_selector("table", count: 1)
     end
 
     it "render correct data" do
       result = render_inline(component)
 
-      row_1 = result.css("tbody tr:nth-of-type(1) td").map(&:content)
+      table_1 = result.css("table").css("th, td").map(&:content)
 
-      expect(row_1).to eql([
-        "A",
-        "2",
-        BulkUpload::Lettings::Validator.question_for_field(error_1.field.to_sym),
+      expect(table_1).to eql([
+        bulk_upload.prefix_namespace::RowParser.question_for_field(error_1.field.to_sym).to_s,
+        "Column A",
         error_1.error,
-        error_1.field,
+        "2 errors",
       ])
     end
   end

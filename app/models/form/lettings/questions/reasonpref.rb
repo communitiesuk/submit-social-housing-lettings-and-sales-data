@@ -8,6 +8,7 @@ class Form::Lettings::Questions::Reasonpref < ::Form::Question
     @check_answers_card_number = 0
     @hint_text = "Households may be given ‘reasonable preference’ for social housing, also known as ‘priority need’, by the local authority."
     @answer_options = ANSWER_OPTIONS
+    @question_number = 82
   end
 
   ANSWER_OPTIONS = {

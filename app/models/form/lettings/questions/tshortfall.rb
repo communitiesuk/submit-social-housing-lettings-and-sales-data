@@ -21,5 +21,6 @@ class Form::Lettings::Questions::Tshortfall < ::Form::Question
       { "label" => " every week for 46 weeks", "depends_on" => { "period" => 9 } },
       { "label" => " every week for 52 weeks", "depends_on" => { "period" => 1 } },
     ]
+    @question_number = 100
   end
 end

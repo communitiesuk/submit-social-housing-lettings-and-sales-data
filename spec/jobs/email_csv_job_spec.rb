@@ -31,7 +31,9 @@ describe EmailCsvJob do
       FactoryBot.create(:lettings_log,
                         :completed,
                         created_by: user,
-                        startdate: Time.zone.local(2021, 5, 1))
+                        startdate: Time.zone.local(2022, 5, 1),
+                        voiddate: Time.zone.local(2022, 5, 1),
+                        mrcdate: Time.zone.local(2022, 5, 1))
 
       allow(Storage::S3Service).to receive(:new).and_return(storage_service)
       allow(storage_service).to receive(:write_file)
@@ -104,7 +106,7 @@ describe EmailCsvJob do
 
       it "writes answer labels rather than values" do
         expect_csv do |csv|
-          expect(csv.second[16]).to eq("Full-time – 30 hours or more")
+          expect(csv.second[19]).to eq("Full-time – 30 hours or more")
         end
 
         job.perform(user)

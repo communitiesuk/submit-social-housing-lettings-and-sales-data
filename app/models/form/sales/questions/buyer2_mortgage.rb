@@ -7,6 +7,7 @@ class Form::Sales::Questions::Buyer2Mortgage < ::Form::Question
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = 2
+    @question_number = 70
   end
 
   ANSWER_OPTIONS = {

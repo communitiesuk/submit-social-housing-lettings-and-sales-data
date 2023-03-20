@@ -417,7 +417,7 @@ RSpec.describe LocationsController, type: :request do
 
         it "redirects correctly when postcodes.io does return a local authority" do
           follow_redirect!
-          expect(page).to have_content("What is the name of this location?")
+          expect(page).to have_content("What is the local authority")
         end
       end
 
@@ -478,7 +478,7 @@ RSpec.describe LocationsController, type: :request do
 
         it "redirects correctly when postcodes.io does return a local authority" do
           follow_redirect!
-          expect(page).to have_content("What is the name of this location?")
+          expect(page).to have_content("What is the local authority")
         end
       end
 

@@ -5,5 +5,6 @@ class Form::Sales::Questions::ExchangeDate < ::Form::Question
     @check_answer_label = "Exchange of contracts date"
     @header = "What is the exchange of contracts date?"
     @type = "date"
+    @question_number = 81
   end
 end

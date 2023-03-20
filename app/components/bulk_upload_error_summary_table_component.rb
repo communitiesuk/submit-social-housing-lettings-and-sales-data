@@ -3,6 +3,8 @@ class BulkUploadErrorSummaryTableComponent < ViewComponent::Base
 
   attr_reader :bulk_upload
 
+  delegate :question_for_field, to: :row_parser_class
+
   def initialize(bulk_upload:)
     @bulk_upload = bulk_upload
 
@@ -26,5 +28,9 @@ private
 
   def display_threshold
     DISPLAY_THRESHOLD
+  end
+
+  def row_parser_class
+    bulk_upload.prefix_namespace::RowParser
   end
 end

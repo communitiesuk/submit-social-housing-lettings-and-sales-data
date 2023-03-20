@@ -1,7 +1,7 @@
 require "rails_helper"
 require_relative "helpers"
 
-RSpec.describe "Accessible Automcomplete" do
+RSpec.describe "Accessible Autocomplete" do
   include Helpers
   let(:user) { FactoryBot.create(:user) }
   let(:lettings_log) do
@@ -10,6 +10,15 @@ RSpec.describe "Accessible Automcomplete" do
       :in_progress,
       created_by: user,
     )
+  end
+
+  around do |example|
+    Timecop.freeze(Time.zone.local(2022, 1, 1)) do
+      Singleton.__init__(FormHandler)
+      example.run
+    end
+    Timecop.return
+    Singleton.__init__(FormHandler)
   end
 
   before do

@@ -8,13 +8,14 @@ class Form::Lettings::Questions::PersonRelationship < ::Form::Question
     @check_answers_card_number = person_index
     @hint_text = ""
     @answer_options = ANSWER_OPTIONS
+    @question_number = 30 + (4 * person_index)
   end
 
   ANSWER_OPTIONS = {
     "P" => { "value" => "Partner" },
     "C" => {
       "value" => "Child",
-      "hint" => "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education.",
+      "hint" => "Must be eligible for child benefit: under age 16 or under 20 if still in full-time education.",
     },
     "X" => { "value" => "Other" },
     "divider" => { "value" => true },

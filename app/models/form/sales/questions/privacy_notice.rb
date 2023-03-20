@@ -7,6 +7,7 @@ class Form::Sales::Questions::PrivacyNotice < ::Form::Question
     @type = "checkbox"
     @answer_options = ANSWER_OPTIONS
     @guidance_partial = "privacy_notice_buyer"
+    @question_number = 19
   end
 
   ANSWER_OPTIONS = {

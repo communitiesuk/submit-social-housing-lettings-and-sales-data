@@ -6,7 +6,7 @@ RSpec.describe Csv::LettingsLogCsvService do
     let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json") }
 
     before do
-      LettingsLog.create!(startdate: "2021-10-10", created_at: Time.utc(2022, 2, 8, 16, 52, 15))
+      LettingsLog.create!(startdate: Time.zone.today, created_at: Time.utc(2022, 2, 8, 16, 52, 15))
       allow(FormHandler.instance).to receive(:get_form).and_return(real_2021_2022_form)
     end
 
@@ -201,6 +201,13 @@ RSpec.describe Csv::LettingsLogCsvService do
                                    vacdays
                                    unresolved
                                    updated_by_id
+                                   uprn
+                                   uprn_known
+                                   uprn_confirmed
+                                   address_line1
+                                   address_line2
+                                   town_or_city
+                                   county
                                    unittype_sh
                                    scheme_code
                                    scheme_service_name
@@ -222,7 +229,9 @@ RSpec.describe Csv::LettingsLogCsvService do
                                    location_mobility_type
                                    location_admin_district
                                    location_startdate]
-      csv = CSV.parse(described_class.new(user).to_csv)
+
+      csv = CSV.parse(described_class.new(user, export_type: "labels").to_csv)
+
       expect(csv.first).to eq(expected_csv_attributes)
     end
   end

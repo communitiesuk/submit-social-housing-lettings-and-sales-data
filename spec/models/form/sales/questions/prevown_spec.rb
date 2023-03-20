@@ -1,11 +1,12 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Questions::Prevown, type: :model do
-  subject(:question) { described_class.new(question_id, question_definition, page) }
+  subject(:question) { described_class.new(question_id, question_definition, page, joint_purchase:) }
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
+  let(:joint_purchase) { false }
 
   it "has correct page" do
     expect(question.page).to eq(page)
@@ -15,12 +16,26 @@ RSpec.describe Form::Sales::Questions::Prevown, type: :model do
     expect(question.id).to eq("prevown")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Has the buyer previously owned a property?")
+  context "when sale is not a joint purchase" do
+    it "has the correct header" do
+      expect(question.header).to eq("Has the buyer previously owned a property?")
+    end
+
+    it "has the correct check_answer_label" do
+      expect(question.check_answer_label).to eq("Buyer previously owned a property")
+    end
   end
 
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Buyers previously owned a property")
+  context "when sale is a joint purchase" do
+    let(:joint_purchase) { true }
+
+    it "has the correct header" do
+      expect(question.header).to eq("Have any of the buyers previously owned a property?")
+    end
+
+    it "has the correct check_answer_label" do
+      expect(question.check_answer_label).to eq("Buyers previously owned a property")
+    end
   end
 
   it "has the correct type" do

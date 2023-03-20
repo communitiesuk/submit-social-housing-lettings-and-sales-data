@@ -6,6 +6,6 @@ class Form::Lettings::Pages::PropertyLetType < ::Form::Page
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::Unitletas.new(nil, nil, self)]
+    @questions ||= [Form::Lettings::Questions::PreviousLetType.new(nil, nil, self)]
   end
 end

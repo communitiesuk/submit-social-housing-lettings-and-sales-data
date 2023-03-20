@@ -41,6 +41,11 @@ en:
   activemodel:
     errors:
       models:
+        bulk_upload/lettings/validator:
+          attributes:
+            base:
+              over_max_column_count: "too many columns, please ensure you have used the correct template"
+              under_min_column_count: "too few columns, please ensure you have used the correct template"
         forms/bulk_upload_lettings/year:
           attributes:
             year:
@@ -136,7 +141,7 @@ en:
       above_min: "%{field} must be at least %{min}"
     date:
       invalid_date: "Enter a date in the correct format, for example 31 1 2022"
-      outside_collection_window: Enter a date within the 22/23 financial year, which is between 1st April 2022 and 31st March 2023
+      outside_collection_window: Enter a date within the 22/23 collection year, which is between 1st April 2022 and 31st March 2023
     postcode: "Enter a postcode in the correct format, for example AA1 1AA"
     location_admin_district: "Select a local authority"
     email:
@@ -150,12 +155,18 @@ en:
       intermediate_rent_product_name:
         blank: "Enter name of other intermediate rent product"
       saledate:
-        current_financial_year:
-          Enter a date within the %{current_start_year_short}/%{current_end_year_short} financial year, which is between %{current_start_year_long} and %{current_end_year_long}
-        previous_and_current_financial_year:
-          "Enter a date within the %{previous_start_year_short}/%{previous_end_year_short} or %{previous_end_year_short}/%{current_end_year_short} financial years, which is between %{previous_start_year_long} and %{current_end_year_long}"
+        current_collection_year:
+          Enter a date within the %{current_start_year_short}/%{current_end_year_short} collection year, which is between %{current_start_year_long} and %{current_end_year_long}
+        previous_and_current_collection_year:
+          "Enter a date within the %{previous_start_year_short}/%{previous_end_year_short} or %{previous_end_year_short}/%{current_end_year_short} collection years, which is between %{previous_start_year_long} and %{current_end_year_long}"
+      type:
+        percentage_bought_must_be_at_least_threshold: "The minimum increase in equity while staircasing is %{threshold}% for this shared ownership type"
 
       startdate:
+        current_collection_year:
+          Enter a date within the %{current_start_year_short}/%{current_end_year_short} collection year, which is between %{current_start_year_long} and %{current_end_year_long}
+        previous_and_current_collection_year:
+          "Enter a date within the %{previous_start_year_short}/%{previous_end_year_short} or %{previous_end_year_short}/%{current_end_year_short} collection years, which is between %{previous_start_year_long} and %{current_end_year_long}"
         later_than_14_days_after: "The tenancy start date must not be later than 14 days from today’s date"
         before_scheme_end_date: "The tenancy start date must be before the end date for this supported housing scheme"
         after_void_date: "Enter a tenancy start date that is after the void date"
@@ -180,6 +191,10 @@ en:
         supported_housing_mismatch: Lettings type must be a supported housing type because you selected supported housing when uploading the file
 
     property:
+      uprn:
+        invalid: "UPRN must be 12 digits or less"
+      uprn_known:
+        invalid: "You must answer UPRN known?"
       mrcdate:
         before_tenancy_start: "Enter a major repairs date that is before the tenancy start date"
         not_first_let: "Major repairs date must not be completed if the tenancy is a first let"
@@ -297,6 +312,10 @@ en:
       staircasing:
         percentage_bought_must_be_greater_than_percentage_owned: "Total percentage buyer now owns must be more than percentage bought in this transaction"
         older_person_percentage_owned_maximum_75: "Percentage cannot be above 75% under Older Person's Shared Ownership"
+        percentage_bought_must_be_at_least_threshold: "The minimum increase in equity while staircasing is %{threshold}%"
+      equity:
+        under_min: "The minimum initial equity stake for this type of shared ownership sale is %{min_equity}%"
+        over_max: "The maximum initial equity stake is %{max_equity}%"
 
     household:
       reasonpref:
@@ -325,7 +344,6 @@ en:
         not_student_16_19: "Answer cannot be between 16 and 19 as person %{person_num} is a child of the lead tenant but is not a full-time student"
         student_16_19:
           cannot_be_16_19:
-            student_not_child: "Person cannot be aged 16-19 if they are a student but don't have relationship ‘child’"
             child_not_student: "Person cannot be aged 16-19 if they have relationship ‘child’ but are not a student"
           must_be_16_19: "Person must be aged 16-19 if they are a student and have relationship ‘child’"
         partner_under_16: "Cannot be under 16 if the relationship is partner"
@@ -339,7 +357,6 @@ en:
         student_16_19:
           cannot_be_student:
             child_not_16_19: "Person cannot be a student if they are not aged 16-19 but have relationship ‘child’"
-            16_19_not_child: "Person cannot be a student if they are aged 16-19 but don‘t have relationship ‘child’"
           must_be_student: "Person must be a student if they are aged 16-19 and have relationship ‘child’"
         retired_male: "Answer cannot be ‘retired’ as the male tenant is under 65"
         retired_female: "Answer cannot be ‘retired’ as the female tenant is under 60"
@@ -353,7 +370,6 @@ en:
           cannot_be_child:
             student_not_16_19: "Answer cannot be ‘child’ if the person is a student but not aged 16-19"
             16_19_not_student:  "Answer cannot be ‘child’ if the person is aged 16-19 but not a student"
-          must_be_child: "Answer must be ‘child’ if the person is aged 16-19 and a student"
       housingneeds_a:
         one_or_two_choices: "You can only select one option or ‘other disabled access needs’ plus ‘wheelchair-accessible housing’, ‘wheelchair access to essential rooms’ or ‘level access housing’"
       housingneeds_type:
@@ -507,6 +523,8 @@ en:
     staircase_bought_seems_high: "You said %{percentage}% was bought in this staircasing transaction, which seems high. Are you sure?"
     monthly_charges_over_soft_max:
       title_text: "The amount of monthly charges is high for this type of property and sale type"
+    student_not_child:
+      title_text: "You told us this person is a student aged beween 16 and 19"
 
   devise:
     two_factor_authentication:
@@ -538,6 +556,16 @@ en:
           W: "Suitable for someone who uses a wheelchair and offers the full use of all rooms and facilities."
           A: "Fitted with stairlifts, ramps, level access showers or grab rails."
           N: "Not designed to wheelchair-user standards or fitted with any equipment or adaptations."
+    soctenant:
+      one: "Was the buyer a private registered provider, housing association or local authority tenant immediately before this sale?"
+      other: "Were any of the buyers private registered providers, housing association or local authority tenants immediately before this sale?"
+    prevown:
+      one: "Has the buyer previously owned a property?"
+      other: "Have any of the buyers previously owned a property?"
+    stairowned:
+      one: "What percentage of the property does the buyer now own in total?"
+      other: "What percentage of the property do the buyers now own in total?"
+    offered: "How many times was the property offered between becoming vacant and this letting?"
 
   hints:
     location:
@@ -550,6 +578,19 @@ en:
       toggle_active: "If the date is before %{date}, select ‘From the start of the current collection period’ because the previous period has now closed."
     bulk_upload:
       needstype: "General needs housing includes both self-contained and shared housing without support or specific adaptations. Supported housing can include direct access hostels, group homes, residential care and nursing homes."
+    offered: "Do not include the offer that led to this letting. This is after the last tenancy ended. If the property is being offered for let for the first time, enter 0."
+
+  check_answer_labels:
+    soctenant:
+      one: "Buyer was a registered provider, housing association or local authority tenant immediately before this sale?"
+      other: "Any buyers were registered providers, housing association or local authority tenants immediately before this sale?"
+    prevown:
+      one: "Buyer previously owned a property"
+      other: "Buyers previously owned a property"
+    stairowned:
+      one: "Percentage the buyer now owns in total"
+      other: "Percentage the buyers now own in total"
+    offered: "Times previously offered since becoming available"
 
   warnings:
     location:

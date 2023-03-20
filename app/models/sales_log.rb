@@ -31,6 +31,7 @@ class SalesLog < Log
   before_validation :reset_location_fields!, unless: :postcode_known?
   before_validation :reset_previous_location_fields!, unless: :previous_postcode_known?
   before_validation :set_derived_fields!
+  after_validation :process_uprn_change!, if: :should_process_uprn_change?
 
   scope :filter_by_year, ->(year) { where(saledate: Time.zone.local(year.to_i, 4, 1)...Time.zone.local(year.to_i + 1, 4, 1)) }
   scope :filter_by_purchaser_code, ->(purchid) { where("purchid ILIKE ?", "%#{purchid}%") }
@@ -41,7 +42,7 @@ class SalesLog < Log
   }
   scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org) }
 
-  OPTIONAL_FIELDS = %w[saledate_check purchid monthly_charges_value_check old_persons_shared_ownership_value_check].freeze
+  OPTIONAL_FIELDS = %w[saledate_check purchid monthly_charges_value_check old_persons_shared_ownership_value_check mortgagelender othtype].freeze
   RETIREMENT_AGES = { "M" => 65, "F" => 60, "X" => 65 }.freeze
 
   def lettings?
@@ -77,11 +78,27 @@ class SalesLog < Log
   def dynamically_not_required
     not_required = []
     not_required << "proplen" if proplen_optional?
+    not_required << "mortlen" if mortlen_optional?
+    not_required << "frombeds" if frombeds_optional?
+
+    not_required |= %w[address_line2 county postcode_full] if saledate && saledate.year >= 2023
 
     not_required
   end
 
   def proplen_optional?
+    return false unless collection_start_year
+
+    collection_start_year < 2023
+  end
+
+  def mortlen_optional?
+    return false unless collection_start_year
+
+    collection_start_year < 2023
+  end
+
+  def frombeds_optional?
     return false unless collection_start_year
 
     collection_start_year < 2023
@@ -149,6 +166,14 @@ class SalesLog < Log
 
   def income1_used_for_mortgage?
     inc1mort == 1
+  end
+
+  def buyer_two_will_live_in_property?
+    buy2livein == 1
+  end
+
+  def buyer_two_not_already_living_in_property?
+    buy2living == 2
   end
 
   def income2_used_for_mortgage?
@@ -250,6 +275,10 @@ class SalesLog < Log
     jointpur == 2
   end
 
+  def buyer_not_interviewed?
+    noint == 1
+  end
+
   def old_persons_shared_ownership?
     type == 24
   end
@@ -260,6 +289,10 @@ class SalesLog < Log
 
   def shared_ownership_scheme?
     ownershipsch == 1
+  end
+
+  def company_buyer?
+    companybuy == 1
   end
 
   def buyers_age_for_old_persons_shared_ownership_invalid?
@@ -292,5 +325,9 @@ class SalesLog < Log
   def field_formatted_as_currency(field_name)
     field_value = public_send(field_name)
     format_as_currency(field_value)
+  end
+
+  def should_process_uprn_change?
+    uprn_changed? && saledate && saledate.year >= 2023
   end
 end

@@ -6,6 +6,7 @@ class Form::Sales::Questions::BuyerCompany < ::Form::Question
     @header = "Is the buyer a company?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
+    @question_number = 7
   end
 
   ANSWER_OPTIONS = {

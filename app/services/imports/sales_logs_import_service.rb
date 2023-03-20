@@ -54,7 +54,6 @@ module Imports
         attributes["details_known_#{index}"] = details_known(index, attributes)
       end
       attributes["national"] = unsafe_string_as_integer(xml_doc, "P1Nat")
-      attributes["othernational"] = nil
       attributes["ethnic"] = unsafe_string_as_integer(xml_doc, "P1Eth")
       attributes["ethnic_group"] = ethnic_group(attributes["ethnic"])
       attributes["buy1livein"] = unsafe_string_as_integer(xml_doc, "LiveInBuyer1")
@@ -125,7 +124,7 @@ module Imports
       attributes["mortgagelenderother"] = mortgage_lender_other(xml_doc, attributes)
       attributes["postcode_full"] = parse_postcode(string_or_nil(xml_doc, "Q14Postcode"))
       attributes["pcodenk"] = 0 if attributes["postcode_full"].present? # known if given
-      attributes["soctenant"] = soctenant(attributes)
+      attributes["soctenant"] = 0 if attributes["ownershipsch"] == 1
       attributes["ethnic_group2"] = nil # 23/24 variable
       attributes["ethnicbuy2"] = nil # 23/24 variable
       attributes["prevshared"] = nil # 23/24 variable
@@ -153,6 +152,7 @@ module Imports
       attributes["old_persons_shared_ownership_value_check"] = 0
       attributes["income2_value_check"] = 0
       attributes["monthly_charges_value_check"] = 0
+      attributes["student_not_child_value_check"] = 0
 
       # Sets the log creator
       owner_id = meta_field_value(xml_doc, "owner-user-id").strip
@@ -192,11 +192,22 @@ module Imports
           attributes.delete(error.attribute.to_s)
         end
         @logs_overridden << sales_log.old_id
-        if sales_log.errors.of_kind?(:postcode_full, :postcodes_not_matching)
-          @logger.warn("Log #{sales_log.old_id}: Removing postcode known and previous postcode known as the postcodes are invalid")
-          attributes.delete("pcodenk")
-          attributes.delete("ppcodenk")
-        end
+        save_sales_log(attributes, previous_status)
+      elsif sales_log.errors.of_kind?(:postcode_full, :postcodes_not_matching)
+        @logger.warn("Log #{sales_log.old_id}: Removing previous postcode known and previous postcode as the postcode is invalid")
+        @logs_overridden << sales_log.old_id
+        attributes.delete("ppcodenk")
+        attributes.delete("ppostcode_full")
+        save_sales_log(attributes, previous_status)
+      elsif sales_log.errors.of_kind?(:exdate, :over_a_year_from_saledate)
+        @logger.warn("Log #{sales_log.old_id}: Removing exchange date as the exchange date is invalid")
+        @logs_overridden << sales_log.old_id
+        attributes.delete("exdate")
+        save_sales_log(attributes, previous_status)
+      elsif sales_log.errors.of_kind?(:income1, :over_hard_max_for_outside_london)
+        @logger.warn("Log #{sales_log.old_id}: Removing income1 as the income1 is invalid")
+        @logs_overridden << sales_log.old_id
+        attributes.delete("income1")
         save_sales_log(attributes, previous_status)
       else
         @logger.error("Log #{sales_log.old_id}: Failed to import")
@@ -243,7 +254,8 @@ module Imports
          staircase_bought_value_check
          monthly_charges_value_check
          hodate_check
-         saledate_check]
+         saledate_check
+         student_not_child_value_check]
     end
 
     def check_status_completed(sales_log, previous_status)
@@ -363,17 +375,6 @@ module Imports
       when 2 # unknown
         1
       end
-    end
-
-    def soctenant(attributes)
-      return nil unless attributes["ownershipsch"] == 1
-
-      if attributes["frombeds"].blank? && attributes["fromprop"].blank? && attributes["socprevten"].blank?
-        2
-      else
-        1
-      end
-      # NO (2) if FROMBEDS, FROMPROP and socprevten are blank, and YES(1) if they are completed
     end
 
     def still_serving(xml_doc)
@@ -511,6 +512,9 @@ module Imports
       end
       attributes["pcodenk"] ||= 1
       attributes["prevten"] ||= 0
+      attributes["extrabor"] ||= 3 if attributes["mortgageused"] == 1
+      attributes["socprevten"] ||= 10 if attributes["ownershipsch"] == 1
+      attributes["fromprop"] ||= 0 if attributes["ownershipsch"] == 1
 
       # buyer 1 characteristics
       attributes["age1_known"] ||= 1

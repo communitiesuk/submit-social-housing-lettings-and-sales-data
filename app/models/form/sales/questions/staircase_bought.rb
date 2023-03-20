@@ -9,5 +9,6 @@ class Form::Sales::Questions::StaircaseBought < ::Form::Question
     @min = 0
     @max = 100
     @suffix = "%"
+    @question_number = 77
   end
 end

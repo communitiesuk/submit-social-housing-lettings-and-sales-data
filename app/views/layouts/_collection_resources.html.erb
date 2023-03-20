@@ -6,8 +6,8 @@
   <%= render DocumentListComponent.new(items: [
     {
       name: "Lettings log for tenants (2023/24)",
-      href: "https://core.communities.gov.uk/public/download/guides-and-manuals/2023-24%20Lettings%20paper%20form.pdf?download-format=pdf",
-      metadata: "PDF, 281 KB, 8 pages",
+      href: download_23_24_lettings_form_path,
+      metadata: "PDF, 278 KB, 8 pages",
     },
   ]) %>
 
@@ -17,6 +17,24 @@
       name: "Lettings log for tenants (2022/23)",
       href: "https://core.communities.gov.uk/public/download/guides-and-manuals/2022-23%20Lettings%20paper%20form.pdf?download-format=pdf",
       metadata: "PDF, 654 KB, 4 pages",
+    },
+  ]) %>
+
+  <h2 class="govuk-body-l govuk-!-margin-bottom-3">Sales 23/24</h2>
+  <%= render DocumentListComponent.new(items: [
+    {
+      name: "Sales log for buyers (2023/24)",
+      href: download_23_24_sales_form_path,
+      metadata: "PDF, 421 KB, 8 pages",
+    },
+  ]) %>
+
+  <h2 class="govuk-body-l govuk-!-margin-bottom-3">Sales 22/23</h2>
+  <%= render DocumentListComponent.new(items: [
+    {
+      name: "Sales log for buyers (2022/23)",
+      href: download_22_23_sales_form_path,
+      metadata: "PDF, 397 KB, 5 pages",
     },
   ]) %>
 </div>

@@ -29,12 +29,11 @@ describe FilterService do
 
     context "when filtering logs" do
       context "when filtering lettings logs" do
-        before do
-          FactoryBot.create_list(:lettings_log, 5)
-          FactoryBot.create(:lettings_log, postcode_full: "SW1 1AA")
+        let(:lettings_log_list) do
+          logs = FactoryBot.create_list(:lettings_log, 5)
+          searched_log = FactoryBot.create(:lettings_log, postcode_full: "SW1 1AA")
+          LettingsLog.where(id: [searched_log.id] + logs.map(&:id))
         end
-
-        let(:lettings_log_list) { LettingsLog.all }
 
         context "when given a postcode" do
           let(:search_term) { "SW1 1AA" }
@@ -54,15 +53,14 @@ describe FilterService do
       end
 
       context "when filtering sales logs" do
-        before do
-          FactoryBot.create_list(:sales_log, 5)
-          FactoryBot.create(:sales_log, purchid: "2")
+        let(:sales_log_list) do
+          logs = FactoryBot.create_list(:sales_log, 5)
+          searched_log = FactoryBot.create(:sales_log, purchid: "kzmgaiFNsx323")
+          SalesLog.where(id: [searched_log.id] + logs.map(&:id))
         end
 
-        let(:sales_log_list) { SalesLog.all }
-
         context "when given a purchid" do
-          let(:search_term) { "2" }
+          let(:search_term) { "kzmgaiFNsx323" }
 
           it "filters the collection on search term" do
             expect(described_class.filter_by_search(sales_log_list, search_term).count).to eq(1)

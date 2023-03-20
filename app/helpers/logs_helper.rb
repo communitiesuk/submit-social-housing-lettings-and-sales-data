@@ -33,10 +33,9 @@ module LogsHelper
     end
   end
 
-  def csv_download_url_for_controller(controller)
-    case log_type_for_controller(controller)
-    when "lettings"
-      csv_download_lettings_logs_path(search: params["search"])
+  def csv_download_url_for_controller(controller_type:, search:, codes_only:)
+    case log_type_for_controller(controller_type)
+    when "lettings" then csv_download_lettings_logs_path(search:, codes_only:)
     end
   end
 end

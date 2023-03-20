@@ -290,4 +290,33 @@ RSpec.describe Validations::PropertyValidations do
       end
     end
   end
+
+  describe "#validate_uprn" do
+    context "when within length limit but alphanumeric" do
+      let(:record) { build(:sales_log, uprn: "123abc") }
+
+      it "adds an error" do
+        property_validator.validate_uprn(record)
+        expect(record.errors.added?(:uprn, "UPRN must be 12 digits or less")).to be true
+      end
+    end
+
+    context "when over the length limit" do
+      let(:record) { build(:sales_log, uprn: "1234567890123") }
+
+      it "adds an error" do
+        property_validator.validate_uprn(record)
+        expect(record.errors.added?(:uprn, "UPRN must be 12 digits or less")).to be true
+      end
+    end
+
+    context "when within the limit and only numeric" do
+      let(:record) { build(:sales_log, uprn: "123456789012") }
+
+      it "does not add an error" do
+        property_validator.validate_uprn(record)
+        expect(record.errors).not_to be_present
+      end
+    end
+  end
 end

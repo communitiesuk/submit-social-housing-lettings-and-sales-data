@@ -9,5 +9,6 @@ class Form::Sales::Questions::Savings < ::Form::Question
     @prefix = "£"
     @step = 1
     @min = 0
+    @question_number = 72
   end
 end
