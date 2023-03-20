@@ -24,6 +24,8 @@ module Forms
 
       def next_path
         case choice
+        when "create-fix-inline"
+          page_bulk_upload_lettings_resume_path(bulk_upload, page: "confirm")
         when "upload-again"
           if BulkUploadErrorSummaryTableComponent.new(bulk_upload:).errors?
             summary_bulk_upload_lettings_result_path(bulk_upload)

@@ -4,7 +4,7 @@ class BulkUploadLettingsResumeController < ApplicationController
   def start
     @bulk_upload = current_user.bulk_uploads.find(params[:id])
 
-    redirect_to fix_choice_bulk_upload_lettings_resume_path(@bulk_upload)
+    redirect_to page_bulk_upload_lettings_resume_path(@bulk_upload, page: "fix-choice")
   end
 
   def show
@@ -26,7 +26,14 @@ class BulkUploadLettingsResumeController < ApplicationController
 private
 
   def form
-    @form ||= Forms::BulkUploadLettingsResume::FixChoice.new(form_params.merge(bulk_upload: @bulk_upload))
+    @form ||= case params[:page]
+              when "fix-choice"
+                Forms::BulkUploadLettingsResume::FixChoice.new(form_params.merge(bulk_upload: @bulk_upload))
+              when "confirm"
+                Forms::BulkUploadLettingsResume::Confirm.new(form_params.merge(bulk_upload: @bulk_upload))
+              else
+                raise "invalid form"
+              end
   end
 
   def form_params
