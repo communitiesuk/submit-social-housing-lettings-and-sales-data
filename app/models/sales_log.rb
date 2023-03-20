@@ -78,6 +78,7 @@ class SalesLog < Log
   def dynamically_not_required
     not_required = []
     not_required << "proplen" if proplen_optional?
+    not_required << "mortlen" if mortlen_optional?
 
     not_required |= %w[address_line2 county postcode_full] if saledate && saledate.year >= 2023
 
@@ -85,6 +86,12 @@ class SalesLog < Log
   end
 
   def proplen_optional?
+    return false unless collection_start_year
+
+    collection_start_year < 2023
+  end
+
+  def mortlen_optional?
     return false unless collection_start_year
 
     collection_start_year < 2023

@@ -60,6 +60,7 @@ RSpec.describe SalesLog, type: :model do
           monthly_charges_value_check
           old_persons_shared_ownership_value_check
           proplen
+          mortlen
         ])
       end
     end
