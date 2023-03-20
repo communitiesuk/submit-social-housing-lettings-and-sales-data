@@ -13,7 +13,7 @@ module Validations::Sales::SetupValidations
   def validate_saledate_two_weeks(record)
     return unless record.saledate && date_valid?("saledate", record) && FeatureToggle.saledate_two_week_validation_enabled?
 
-    if record.saledate > Time.zone.today + 14
+    if record.saledate > Time.zone.today + 14.days
       record.errors.add :saledate, I18n.t("validations.setup.saledate.later_than_14_days_after")
     end
   end
