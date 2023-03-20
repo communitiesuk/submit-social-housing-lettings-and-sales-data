@@ -12,5 +12,13 @@ class Form::Sales::Questions::BuyerPrevious < ::Form::Question
   ANSWER_OPTIONS = {
     "1" => { "value" => "Yes" },
     "2" => { "value" => "No" },
+    "0" => { "value" => "Don’t know" },
   }.freeze
+
+  def displayed_answer_options(_log, _user = nil)
+    {
+      "1" => { "value" => "Yes" },
+      "2" => { "value" => "No" },
+    }
+  end
 end

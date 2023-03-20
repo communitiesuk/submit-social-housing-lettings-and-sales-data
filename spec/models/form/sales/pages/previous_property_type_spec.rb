@@ -28,8 +28,13 @@ RSpec.describe Form::Sales::Pages::PreviousPropertyType, type: :model do
   end
 
   it "has correct depends_on" do
-    expect(page.depends_on).to eq([{
-      "soctenant" => 1,
-    }])
+    expect(page.depends_on).to eq([
+      {
+        "soctenant" => 1,
+      },
+      {
+        "soctenant" => 0,
+      },
+    ])
   end
 end

@@ -46,10 +46,18 @@ RSpec.describe Form::Sales::Questions::BuyerPrevious, type: :model do
     expect(question.derived?).to be false
   end
 
+  it "has the correct displayed_answer_options" do
+    expect(question.displayed_answer_options(nil)).to eq({
+      "1" => { "value" => "Yes" },
+      "2" => { "value" => "No" },
+    })
+  end
+
   it "has the correct answer_options" do
     expect(question.answer_options).to eq({
       "1" => { "value" => "Yes" },
       "2" => { "value" => "No" },
+      "0" => { "value" => "Don’t know" },
     })
   end
 
