@@ -316,6 +316,7 @@ en:
       equity:
         under_min: "The minimum initial equity stake for this type of shared ownership sale is %{min_equity}%"
         over_max: "The maximum initial equity stake is %{max_equity}%"
+      mortgage: "Mortgage value cannot be £0 if a mortgage was used for the purchase of this property"
 
     household:
       reasonpref:
