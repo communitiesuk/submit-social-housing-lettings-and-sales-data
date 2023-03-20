@@ -730,4 +730,72 @@ RSpec.describe Validations::Sales::SoftValidations do
       end
     end
   end
+
+  describe "#person_2_student_not_child?" do
+    it "returns false if age is not given" do
+      record.age2 = nil
+      record.relat2 = "P"
+      record.ecstat2 = 7
+
+      expect(record).not_to be_person_2_student_not_child
+    end
+
+    it "returns false if retaltionship is not given" do
+      record.age2 = 17
+      record.relat2 = nil
+      record.ecstat2 = 7
+
+      expect(record).not_to be_person_2_student_not_child
+    end
+
+    it "returns false if economic status is not given" do
+      record.age2 = 17
+      record.relat2 = "P"
+      record.ecstat2 = nil
+
+      expect(record).not_to be_person_2_student_not_child
+    end
+
+    it "returns true if it's a student aged 16-19 and not a child" do
+      record.age2 = 17
+      record.relat2 = "P"
+      record.ecstat2 = 7
+
+      expect(record).to be_person_2_student_not_child
+    end
+  end
+
+  describe "#person_3_student_not_child?" do
+    it "returns false if age is not given" do
+      record.age3 = nil
+      record.relat3 = "P"
+      record.ecstat3 = 7
+
+      expect(record).not_to be_person_3_student_not_child
+    end
+
+    it "returns false if retaltionship is not given" do
+      record.age3 = 17
+      record.relat3 = nil
+      record.ecstat3 = 7
+
+      expect(record).not_to be_person_3_student_not_child
+    end
+
+    it "returns false if economic status is not given" do
+      record.age3 = 17
+      record.relat3 = "P"
+      record.ecstat3 = nil
+
+      expect(record).not_to be_person_3_student_not_child
+    end
+
+    it "returns true if it's a student aged 16-19 and not a child" do
+      record.age3 = 17
+      record.relat3 = "P"
+      record.ecstat3 = 7
+
+      expect(record).to be_person_3_student_not_child
+    end
+  end
 end

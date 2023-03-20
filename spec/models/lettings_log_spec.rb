@@ -2033,6 +2033,19 @@ RSpec.describe LettingsLog do
             end
           end
         end
+
+        context "and the location no local authorities associated with the location_code" do
+          before do
+            location.update!(location_code: "E01231231")
+            lettings_log.update!(location:)
+          end
+
+          it "returns the correct la" do
+            expect(location.location_code).to eq("E01231231")
+            expect(lettings_log["location_id"]).to eq(location.id)
+            expect(lettings_log.la).to eq("E01231231")
+          end
+        end
       end
 
       context "and not renewal" do

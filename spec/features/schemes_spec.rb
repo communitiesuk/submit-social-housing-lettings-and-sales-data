@@ -284,7 +284,8 @@ RSpec.describe "Schemes scheme Features" do
                 before do
                   fill_in with: "AA12AA"
                   click_button "Save and continue"
-                  fill_in with: "Adur"
+                  select "Adur"
+                  click_button "Save and continue"
                   fill_in with: location_name
                   click_button "Save and continue"
                   fill_in with: 1
@@ -904,7 +905,8 @@ RSpec.describe "Schemes scheme Features" do
                 before do
                   fill_in with: "AA12AA"
                   click_button "Save and continue"
-                  fill_in with: "Adur"
+                  select "Adur"
+                  click_button "Save and continue"
                   fill_in with: location_name
                   click_button "Save and continue"
                   fill_in with: 1

@@ -59,7 +59,11 @@ RSpec.describe SalesLog, type: :model do
           purchid
           monthly_charges_value_check
           old_persons_shared_ownership_value_check
+          mortgagelender
+          othtype
           proplen
+          mortlen
+          frombeds
         ])
       end
     end
@@ -73,6 +77,8 @@ RSpec.describe SalesLog, type: :model do
           purchid
           monthly_charges_value_check
           old_persons_shared_ownership_value_check
+          mortgagelender
+          othtype
           address_line2
           county
           postcode_full

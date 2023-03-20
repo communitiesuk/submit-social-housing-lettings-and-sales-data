@@ -363,20 +363,34 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
-    context "and it has an invalid record with invalid child, student and 16-19 age combination" do
+    context "and the student not child soft validation is triggered (student_not_child_value_check)" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:P2Rel").content = "P"
+        sales_log_xml.at_xpath("//xmlns:P2Eco").content = "7"
+        sales_log_xml.at_xpath("//xmlns:P2Age").content = "16"
+      end
+
+      it "completes the log" do
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log.status).to eq("completed")
+      end
+    end
+
+    context "and it has an invalid record with invalid child age" do
       let(:sales_log_id) { "discounted_ownership_sales_log" }
 
       before do
         sales_log_xml.at_xpath("//meta:status").content = "submitted-invalid"
-        sales_log_xml.at_xpath("//xmlns:P2Age").content = 16
-        sales_log_xml.at_xpath("//xmlns:P2Eco").content = 7
-        sales_log_xml.at_xpath("//xmlns:P2Rel").content = "X"
+        sales_log_xml.at_xpath("//xmlns:P2Age").content = 17
+        sales_log_xml.at_xpath("//xmlns:P2Eco").content = 9
       end
 
       it "intercepts the relevant validation error" do
-        expect(logger).to receive(:warn).with(/Removing field age2 from log triggering validation: Person cannot be aged 16-19 if they are a student but don't have relationship ‘child’/)
-        expect(logger).to receive(:warn).with(/Removing field relat2 from log triggering validation: Answer must be ‘child’ if the person is aged 16-19 and a student/)
-        expect(logger).to receive(:warn).with(/Removing field ecstat2 from log triggering validation: Person cannot be a student if they are aged 16-19 but don‘t have relationship ‘child’/)
+        expect(logger).to receive(:warn).with(/Log discounted_ownership_sales_log: Removing field ecstat2 from log triggering validation: Answer cannot be ‘child under 16’ as you told us the person 2 is older than 16/)
+        expect(logger).to receive(:warn).with(/Log discounted_ownership_sales_log: Removing field age2 from log triggering validation: Answer cannot be over 16 as person’s 2 working situation is ‘child under 16‘/)
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .not_to raise_error
       end
@@ -389,7 +403,6 @@ RSpec.describe Imports::SalesLogsImportService do
 
         expect(sales_log).not_to be_nil
         expect(sales_log.age2).to be_nil
-        expect(sales_log.relat2).to be_nil
         expect(sales_log.ecstat2).to be_nil
       end
     end
@@ -398,17 +411,12 @@ RSpec.describe Imports::SalesLogsImportService do
       let(:sales_log_id) { "discounted_ownership_sales_log" }
 
       before do
-        sales_log_xml.at_xpath("//meta:status").content = "submitted-invalid"
-        sales_log_xml.at_xpath("//xmlns:Q7Postcode").content = "A1 1AA"
-        sales_log_xml.at_xpath("//xmlns:Q14Postcode").content = "A1 2AA"
+        sales_log_xml.at_xpath("//xmlns:Q7Postcode").content = "A1 1AA" # previous postcode
+        sales_log_xml.at_xpath("//xmlns:Q14Postcode").content = "A1 2AA" # postcode
       end
 
       it "intercepts the relevant validation error" do
-        expect(logger).to receive(:warn).with(/Removing field postcode_full from log triggering validation: Buyer's last accommodation and discounted ownership postcodes must match/)
-        expect(logger).to receive(:warn).with(/Removing field ppostcode_full from log triggering validation: Buyer's last accommodation and discounted ownership postcodes must match/)
-        expect(logger).to receive(:warn).with(/Removing field postcode_full from log triggering validation: postcodes_not_matching/)
-        expect(logger).to receive(:warn).with(/Removing field ppostcode_full from log triggering validation: postcodes_not_matching/)
-        expect(logger).to receive(:warn).with(/Removing postcode known and previous postcode known as the postcodes are invalid/)
+        expect(logger).to receive(:warn).with(/Removing previous postcode known and previous postcode as the postcode is invalid/)
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .not_to raise_error
       end
@@ -420,8 +428,63 @@ RSpec.describe Imports::SalesLogsImportService do
         sales_log = SalesLog.find_by(old_id: sales_log_id)
 
         expect(sales_log).not_to be_nil
-        expect(sales_log.postcode_full).to be_nil
+        expect(sales_log.postcode_full).to eq("A1 2AA")
         expect(sales_log.ppostcode_full).to be_nil
+      end
+    end
+
+    context "and it has an invalid record with invalid contracts exchange date" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:DAY").content = "1"
+        sales_log_xml.at_xpath("//xmlns:MONTH").content = "10"
+        sales_log_xml.at_xpath("//xmlns:YEAR").content = "2022"
+        sales_log_xml.at_xpath("//xmlns:EXDAY").content = "1"
+        sales_log_xml.at_xpath("//xmlns:EXMONTH").content = "4"
+        sales_log_xml.at_xpath("//xmlns:EXYEAR").content = "2020"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Removing exchange date as the exchange date is invalid/)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers" do
+        allow(logger).to receive(:warn)
+
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+
+        expect(sales_log).not_to be_nil
+        expect(sales_log.saledate).to eq(Time.zone.local(2022, 10, 1))
+        expect(sales_log.exdate).to be_nil
+      end
+    end
+
+    context "and it has an invalid income" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q2Person1Income").content = "85000"
+        sales_log_xml.at_xpath("//xmlns:Q14ONSLACode").content = "E07000223"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Removing income1 as the income1 is invalid/)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers" do
+        allow(logger).to receive(:warn)
+
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+
+        expect(sales_log).not_to be_nil
+        expect(sales_log.income1).to be_nil
       end
     end
 
@@ -1124,6 +1187,54 @@ RSpec.describe Imports::SalesLogsImportService do
 
           sales_log = SalesLog.find_by(old_id: sales_log_id)
           expect(sales_log&.mortgageused).to eq(1)
+        end
+      end
+
+      context "when the extrabor is not answered" do
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
+
+        before do
+          sales_log_xml.at_xpath("//xmlns:Q35Borrowing").content = ""
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets extrabor to don't know" do
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.extrabor).to be(3)
+        end
+      end
+
+      context "when the fromprop is not answered" do
+        let(:sales_log_id) { "shared_ownership_sales_log" }
+
+        before do
+          sales_log_xml.at_xpath("//xmlns:Q21PropertyType").content = ""
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets fromprop to don't know" do
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.fromprop).to be(0)
+        end
+      end
+
+      context "when the socprevten is not answered" do
+        let(:sales_log_id) { "shared_ownership_sales_log" }
+
+        before do
+          sales_log_xml.at_xpath("//xmlns:PrevRentType").content = ""
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets socprevten to don't know" do
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.socprevten).to be(10)
         end
       end
     end

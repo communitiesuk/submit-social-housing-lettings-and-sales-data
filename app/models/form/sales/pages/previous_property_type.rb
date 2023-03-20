@@ -5,9 +5,14 @@ class Form::Sales::Pages::PreviousPropertyType < ::Form::Page
     @header = ""
     @description = ""
     @subsection = subsection
-    @depends_on = [{
-      "soctenant" => 1,
-    }]
+    @depends_on = [
+      {
+        "soctenant" => 1,
+      },
+      {
+        "soctenant" => 0,
+      },
+    ]
   end
 
   def questions
