@@ -14,7 +14,7 @@ class Location < ApplicationRecord
 
   has_paper_trail
 
-  before_save :lookup_postcode!, if: :postcode_changed?
+  before_validation :lookup_postcode!, if: :postcode_changed?
 
   auto_strip_attributes :name
 
@@ -132,7 +132,7 @@ class Location < ApplicationRecord
 
   def linked_local_authorities
     la = LocalAuthority.find_by(code: location_code)
-    return [] unless la
+    return LocalAuthority.none unless la
 
     LocalAuthority.where(id: [la.id] + la.linked_local_authority_ids)
   end
