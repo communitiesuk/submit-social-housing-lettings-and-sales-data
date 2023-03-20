@@ -379,6 +379,21 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
+    context "and the value soft validation is triggered (discounted_sale_value_check)" do
+      let(:sales_log_id) { "discounted_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q31PurchasePrice").content = "500000"
+      end
+
+      it "completes the log" do
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log.status).to eq("completed")
+        expect(sales_log.discounted_sale_value_check).to eq(0)
+      end
+    end
+
     context "and it has an invalid record with invalid child age" do
       let(:sales_log_id) { "discounted_ownership_sales_log" }
 
