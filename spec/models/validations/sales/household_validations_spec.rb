@@ -75,7 +75,7 @@ RSpec.describe Validations::Sales::HouseholdValidations do
 
       it "validates the child is at least 12 years younger than buyer 1" do
         record.age1 = 30
-        record.age2 = record.age1 - 13
+        record.age2 = record.age1 - 11
         record.relat2 = "C"
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["age1"])
