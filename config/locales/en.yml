@@ -155,6 +155,7 @@ en:
       intermediate_rent_product_name:
         blank: "Enter name of other intermediate rent product"
       saledate:
+        later_than_14_days_after: "Sale completion date must not be later than 14 days from today’s date"
         current_collection_year:
           Enter a date within the %{current_start_year_short}/%{current_end_year_short} collection year, which is between %{current_start_year_long} and %{current_end_year_long}
         previous_and_current_collection_year:
@@ -470,16 +471,16 @@ en:
         social_homebuy: "Social HomeBuy buyers should not have lived here before"
         rent_to_buy: "Rent to Buy buyers should not have lived here before"
       hodate:
-        must_be_before_saledate: "Practical completion or handover date must be before exchange date"
-        must_be_less_than_3_years_from_saledate: "You told us practical completion or handover date is more than 3 years before completion date"
+        must_be_before_saledate: "Practical completion or handover date must be before sale completion date"
+        must_be_less_than_3_years_from_saledate: "You told us practical completion or handover date is more than 3 years before sale completion date"
       exdate:
-        must_be_before_saledate: "Contract exchange date must be before completion date"
-        must_be_less_than_1_year_from_saledate: "Contract exchange date must be less than 1 year before completion date"
+        must_be_before_saledate: "Contract exchange date must be before sale completion date"
+        must_be_less_than_1_year_from_saledate: "Contract exchange date must be less than 1 year before sale completion date"
       saledate:
-        must_be_after_exdate: "Completion date must be after contract exchange date"
-        must_be_less_than_1_year_from_exdate: "Completion date must be less than 1 year after contract exchange date"
-        must_be_less_than_3_years_from_hodate: "You told us completion date is more than 3 years after practical completion or handover date"
-        must_be_after_hodate: "Completion date must be after practical completion or handover date"
+        must_be_after_exdate: "Sale completion date must be after contract exchange date"
+        must_be_less_than_1_year_from_exdate: "Sale completion date must be less than 1 year after contract exchange date"
+        must_be_less_than_3_years_from_hodate: "You told us sale completion date is more than 3 years after practical completion or handover date"
+        must_be_after_hodate: "Sale completion date must be after practical completion or handover date"
       previous_property_type:
         property_type_bedsit: "A bedsit cannot have more than 1 bedroom"
       discounted_ownership_value: "Mortgage, deposit, and grant total must equal £%{value_with_discount}"

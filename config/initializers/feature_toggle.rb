@@ -12,6 +12,10 @@ class FeatureToggle
     Rails.env.production? || Rails.env.test? || Rails.env.staging?
   end
 
+  def self.saledate_two_week_validation_enabled?
+    Rails.env.production? || Rails.env.test? || Rails.env.staging? || true
+  end
+
   def self.sales_log_enabled?
     true
   end
