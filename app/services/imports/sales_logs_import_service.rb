@@ -124,7 +124,7 @@ module Imports
       attributes["mortgagelenderother"] = mortgage_lender_other(xml_doc, attributes)
       attributes["postcode_full"] = parse_postcode(string_or_nil(xml_doc, "Q14Postcode"))
       attributes["pcodenk"] = 0 if attributes["postcode_full"].present? # known if given
-      attributes["soctenant"] = soctenant(attributes)
+      attributes["soctenant"] = 0 if attributes["ownershipsch"] == 1
       attributes["ethnic_group2"] = nil # 23/24 variable
       attributes["ethnicbuy2"] = nil # 23/24 variable
       attributes["prevshared"] = nil # 23/24 variable
@@ -364,17 +364,6 @@ module Imports
       end
     end
 
-    def soctenant(attributes)
-      return nil unless attributes["ownershipsch"] == 1
-
-      if attributes["frombeds"].blank? && attributes["fromprop"].blank? && attributes["socprevten"].blank?
-        2
-      else
-        1
-      end
-      # NO (2) if FROMBEDS, FROMPROP and socprevten are blank, and YES(1) if they are completed
-    end
-
     def still_serving(xml_doc)
       case unsafe_string_as_integer(xml_doc, "LeftArmedF")
       when 4
@@ -511,6 +500,8 @@ module Imports
       attributes["pcodenk"] ||= 1
       attributes["prevten"] ||= 0
       attributes["extrabor"] ||= 3 if attributes["mortgageused"] == 1
+      attributes["socprevten"] ||= 10 if attributes["ownershipsch"] == 1
+      attributes["fromprop"] ||= 0 if attributes["ownershipsch"] == 1
 
       # buyer 1 characteristics
       attributes["age1_known"] ||= 1
