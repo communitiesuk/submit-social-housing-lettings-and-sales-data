@@ -191,6 +191,8 @@ module Imports
         sales_log.errors.each do |error|
           @logger.warn("Log #{sales_log.old_id}: Removing field #{error.attribute} from log triggering validation: #{error.type}")
           attributes.delete(error.attribute.to_s)
+          attributes.delete("pcodenk") if error.attribute == :postcode_full
+          attributes.delete("ppcodenk") if error.attribute == :ppostcode_full
         end
         @logs_overridden << sales_log.old_id
         save_sales_log(attributes, previous_status)
