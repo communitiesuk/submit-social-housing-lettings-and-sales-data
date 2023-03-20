@@ -45,12 +45,6 @@ private
     student = person_is_fulltime_student?(economic_status)
     child = person_is_child?(relationship)
 
-    if age_between_16_19 && student && !child
-      record.errors.add "age#{person_num}", I18n.t("validations.household.age.student_16_19.cannot_be_16_19.student_not_child")
-      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19.cannot_be_student.16_19_not_child")
-      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.student_16_19.must_be_child")
-    end
-
     if age_between_16_19 && !student && child
       record.errors.add "age#{person_num}", I18n.t("validations.household.age.student_16_19.cannot_be_16_19.child_not_student")
       record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19.must_be_student")
