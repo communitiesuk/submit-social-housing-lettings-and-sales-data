@@ -6,6 +6,7 @@ module Validations::Sales::HouseholdValidations
       validate_person_age_matches_relationship(record, n)
       validate_person_age_and_relationship_matches_economic_status(record, n)
       validate_person_age_matches_economic_status(record, n)
+      validate_child_12_years_younger(record, n)
     end
     shared_validate_partner_count(record, 6)
   end
@@ -76,6 +77,19 @@ private
     if tenant_is_economic_child?(economic_status) && age > 16
       record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.child_over_16", person_num:)
       record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_over_16", person_num:)
+    end
+  end
+
+  def validate_child_12_years_younger(record, person_num)
+    buyer_1_age = record.public_send("age1")
+    person_age = record.public_send("age#{person_num}")
+    relationship = record.public_send("relat#{person_num}")
+    return unless buyer_1_age && person_age && relationship
+
+    if person_age > buyer_1_age - 12 && person_is_child?(relationship)
+      record.errors.add "age1", I18n.t("validations.household.age.child_12_years_younger")
+      record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_12_years_younger")
+      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.child_12_years_younger")
     end
   end
 
