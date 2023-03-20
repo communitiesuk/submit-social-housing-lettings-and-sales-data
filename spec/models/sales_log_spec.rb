@@ -63,6 +63,7 @@ RSpec.describe SalesLog, type: :model do
           othtype
           proplen
           mortlen
+          frombeds
         ])
       end
     end
