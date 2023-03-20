@@ -38,6 +38,8 @@ class BulkUpload::Lettings::Validator
         )
       end
     end
+
+    update_expected_log_count
   end
 
   def create_logs?
@@ -61,6 +63,14 @@ class BulkUpload::Lettings::Validator
   end
 
 private
+
+  def update_expected_log_count
+    bulk_upload.update!(expected_log_count:)
+  end
+
+  def expected_log_count
+    row_parsers.count { |row| !row.blank_row? }
+  end
 
   def over_column_error_threshold?
     fields = ("field_1".."field_134").to_a
