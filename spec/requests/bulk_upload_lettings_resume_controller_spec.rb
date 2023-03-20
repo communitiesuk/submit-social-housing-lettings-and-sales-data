@@ -48,5 +48,25 @@ RSpec.describe BulkUploadLettingsResumeController, type: :request do
         expect(response).to redirect_to("/lettings-logs/bulk-upload-results/#{bulk_upload.id}")
       end
     end
+
+    context "when fix inline selected" do
+      it "sends them to confirm choice" do
+        patch "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice", params: { form: { choice: "create-fix-inline" } }
+
+        expect(response).to redirect_to("/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/confirm")
+      end
+    end
+  end
+
+  describe "GET /lettings-logs/bulk-upload-resume/:ID/confirm" do
+    context "without previous answer" do
+      it "renders page" do
+        get "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/confirm"
+
+        expect(response).to be_successful
+
+        expect(response.body).to include("Are you sure")
+      end
+    end
   end
 end
