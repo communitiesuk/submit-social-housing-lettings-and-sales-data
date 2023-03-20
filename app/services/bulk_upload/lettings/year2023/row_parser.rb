@@ -955,7 +955,7 @@ private
   end
 
   def owning_organisation
-    Organisation.find_by_id_on_mulitple_fields(field_1)
+    Organisation.find_by_id_on_multiple_fields(field_1)
   end
 
   def owning_organisation_id
@@ -963,7 +963,7 @@ private
   end
 
   def managing_organisation
-    Organisation.find_by_id_on_mulitple_fields(field_2)
+    Organisation.find_by_id_on_multiple_fields(field_2)
   end
 
   def managing_organisation_id
@@ -988,13 +988,13 @@ private
   end
 
   def scheme
-    @scheme ||= Scheme.find_by_id_on_mulitple_fields(field_16)
+    @scheme ||= Scheme.find_by_id_on_multiple_fields(field_16)
   end
 
   def location
     return if scheme.nil?
 
-    @location ||= scheme.locations.find_by_id_on_mulitple_fields(field_17)
+    @location ||= scheme.locations.find_by_id_on_multiple_fields(field_17)
   end
 
   def renttype
