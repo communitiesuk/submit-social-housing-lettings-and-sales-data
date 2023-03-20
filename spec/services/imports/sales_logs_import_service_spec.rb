@@ -398,17 +398,12 @@ RSpec.describe Imports::SalesLogsImportService do
       let(:sales_log_id) { "discounted_ownership_sales_log" }
 
       before do
-        sales_log_xml.at_xpath("//meta:status").content = "submitted-invalid"
-        sales_log_xml.at_xpath("//xmlns:Q7Postcode").content = "A1 1AA"
-        sales_log_xml.at_xpath("//xmlns:Q14Postcode").content = "A1 2AA"
+        sales_log_xml.at_xpath("//xmlns:Q7Postcode").content = "A1 1AA" # previous postcode
+        sales_log_xml.at_xpath("//xmlns:Q14Postcode").content = "A1 2AA" # postcode
       end
 
       it "intercepts the relevant validation error" do
-        expect(logger).to receive(:warn).with(/Removing field postcode_full from log triggering validation: Buyer's last accommodation and discounted ownership postcodes must match/)
-        expect(logger).to receive(:warn).with(/Removing field ppostcode_full from log triggering validation: Buyer's last accommodation and discounted ownership postcodes must match/)
-        expect(logger).to receive(:warn).with(/Removing field postcode_full from log triggering validation: postcodes_not_matching/)
-        expect(logger).to receive(:warn).with(/Removing field ppostcode_full from log triggering validation: postcodes_not_matching/)
-        expect(logger).to receive(:warn).with(/Removing postcode known and previous postcode known as the postcodes are invalid/)
+        expect(logger).to receive(:warn).with(/Removing previous postcode known and previous postcode as the postcode is invalid/)
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .not_to raise_error
       end
@@ -420,8 +415,63 @@ RSpec.describe Imports::SalesLogsImportService do
         sales_log = SalesLog.find_by(old_id: sales_log_id)
 
         expect(sales_log).not_to be_nil
-        expect(sales_log.postcode_full).to be_nil
+        expect(sales_log.postcode_full).to eq("A1 2AA")
         expect(sales_log.ppostcode_full).to be_nil
+      end
+    end
+
+    context "and it has an invalid record with invalid contracts exchange date" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:DAY").content = "1"
+        sales_log_xml.at_xpath("//xmlns:MONTH").content = "10"
+        sales_log_xml.at_xpath("//xmlns:YEAR").content = "2022"
+        sales_log_xml.at_xpath("//xmlns:EXDAY").content = "1"
+        sales_log_xml.at_xpath("//xmlns:EXMONTH").content = "4"
+        sales_log_xml.at_xpath("//xmlns:EXYEAR").content = "2020"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Removing exchange date as the exchange date is invalid/)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers" do
+        allow(logger).to receive(:warn)
+
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+
+        expect(sales_log).not_to be_nil
+        expect(sales_log.saledate).to eq(Time.zone.local(2022, 10, 1))
+        expect(sales_log.exdate).to be_nil
+      end
+    end
+
+    context "and it has an invalid income" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q2Person1Income").content = "85000"
+        sales_log_xml.at_xpath("//xmlns:Q14ONSLACode").content = "E07000223"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Removing income1 as the income1 is invalid/)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers" do
+        allow(logger).to receive(:warn)
+
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+
+        expect(sales_log).not_to be_nil
+        expect(sales_log.income1).to be_nil
       end
     end
 

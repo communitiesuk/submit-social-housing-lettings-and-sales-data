@@ -251,6 +251,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
 
     context "when buyer 2 is a child" do
       it "does not add an error if buyer 2 has no income" do
+        record.saledate = Time.zone.local(2023, 4, 3)
         record.ecstat2 = 9
         record.income2 = 0
         financial_validator.validate_child_income(record)
@@ -258,11 +259,20 @@ RSpec.describe Validations::Sales::FinancialValidations do
       end
 
       it "adds errors if buyer 2 has an income" do
+        record.saledate = Time.zone.local(2023, 4, 3)
         record.ecstat2 = 9
         record.income2 = 40_000
         financial_validator.validate_child_income(record)
         expect(record.errors["ecstat2"]).to include(match I18n.t("validations.financial.income.child_has_income"))
         expect(record.errors["income2"]).to include(match I18n.t("validations.financial.income.child_has_income"))
+      end
+
+      it "does not add an error if the saledate is before the 23/24 collection window" do
+        record.saledate = Time.zone.local(2022, 4, 3)
+        record.ecstat2 = 9
+        record.income2 = 40_000
+        financial_validator.validate_child_income(record)
+        expect(record.errors).to be_empty
       end
     end
   end

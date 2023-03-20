@@ -191,11 +191,22 @@ module Imports
           attributes.delete(error.attribute.to_s)
         end
         @logs_overridden << sales_log.old_id
-        if sales_log.errors.of_kind?(:postcode_full, :postcodes_not_matching)
-          @logger.warn("Log #{sales_log.old_id}: Removing postcode known and previous postcode known as the postcodes are invalid")
-          attributes.delete("pcodenk")
-          attributes.delete("ppcodenk")
-        end
+        save_sales_log(attributes, previous_status)
+      elsif sales_log.errors.of_kind?(:postcode_full, :postcodes_not_matching)
+        @logger.warn("Log #{sales_log.old_id}: Removing previous postcode known and previous postcode as the postcode is invalid")
+        @logs_overridden << sales_log.old_id
+        attributes.delete("ppcodenk")
+        attributes.delete("ppostcode_full")
+        save_sales_log(attributes, previous_status)
+      elsif sales_log.errors.of_kind?(:exdate, :over_a_year_from_saledate)
+        @logger.warn("Log #{sales_log.old_id}: Removing exchange date as the exchange date is invalid")
+        @logs_overridden << sales_log.old_id
+        attributes.delete("exdate")
+        save_sales_log(attributes, previous_status)
+      elsif sales_log.errors.of_kind?(:income1, :over_hard_max_for_outside_london)
+        @logger.warn("Log #{sales_log.old_id}: Removing income1 as the income1 is invalid")
+        @logs_overridden << sales_log.old_id
+        attributes.delete("income1")
         save_sales_log(attributes, previous_status)
       else
         @logger.error("Log #{sales_log.old_id}: Failed to import")

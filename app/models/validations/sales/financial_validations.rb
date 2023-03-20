@@ -9,7 +9,7 @@ module Validations::Sales::FinancialValidations
     if record.london_property? && record.income1 > 90_000
       relevant_fields.each { |field| record.errors.add field, I18n.t("validations.financial.income.over_hard_max_for_london") }
     elsif record.property_not_in_london? && record.income1 > 80_000
-      relevant_fields.each { |field| record.errors.add field, I18n.t("validations.financial.income.over_hard_max_for_outside_london") }
+      relevant_fields.each { |field| record.errors.add field, :over_hard_max_for_outside_london, message: I18n.t("validations.financial.income.over_hard_max_for_outside_london") }
     end
   end
 
@@ -70,7 +70,7 @@ module Validations::Sales::FinancialValidations
   def validate_child_income(record)
     return unless record.income2 && record.ecstat2
 
-    if record.income2.positive? && is_economic_status_child?(record.ecstat2)
+    if record.income2.positive? && is_economic_status_child?(record.ecstat2) && record.form.start_date.year >= 2023
       record.errors.add :ecstat2, I18n.t("validations.financial.income.child_has_income")
       record.errors.add :income2, I18n.t("validations.financial.income.child_has_income")
     end
