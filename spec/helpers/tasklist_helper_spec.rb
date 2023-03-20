@@ -81,7 +81,7 @@ RSpec.describe TasklistHelper do
     context "with sales log" do
       context "when collection_period_open? == true" do
         let(:now) { Time.utc(2022, 6, 1) }
-        let(:sales_log) { create(:sales_log, :completed) }
+        let(:sales_log) { create(:sales_log, :completed, saledate: now) }
 
         it "returns relevant text" do
           expect(review_log_text(sales_log)).to eq(
@@ -92,7 +92,7 @@ RSpec.describe TasklistHelper do
 
       context "when collection_period_open? == false" do
         let(:now) { Time.utc(2022, 6, 1) }
-        let!(:sales_log) { create(:sales_log, :completed) }
+        let!(:sales_log) { create(:sales_log, :completed, saledate: now) }
 
         it "returns relevant text" do
           Timecop.freeze(now + 1.year) do
