@@ -103,6 +103,17 @@ module Validations::Sales::SoftValidations
     mscharge > soft_max
   end
 
+  (2..6).each do |person_num|
+    define_method("person_#{person_num}_student_not_child?") do
+      relat = send("relat#{person_num}")
+      ecstat = send("ecstat#{person_num}")
+      age = send("age#{person_num}")
+      return unless age && ecstat && relat
+
+      age.between?(16, 19) && ecstat == 7 && relat != "C"
+    end
+  end
+
 private
 
   def sale_range
