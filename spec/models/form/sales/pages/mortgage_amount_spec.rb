@@ -28,8 +28,6 @@ RSpec.describe Form::Sales::Pages::MortgageAmount, type: :model do
   end
 
   it "has correct depends_on" do
-    expect(page.depends_on).to eq([{
-      "mortgageused" => 1,
-    }])
+    expect(page.depends_on).to eq([{ "mortgage_used?" => true }])
   end
 end
