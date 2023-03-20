@@ -156,7 +156,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
     end
   end
 
-  describe "#validate_monthly_leasehold_charges", focus: true do
+  describe "#validate_monthly_leasehold_charges" do
     let(:record) { FactoryBot.create(:sales_log) }
 
     it "does not add an error if monthly leasehold charges are positive" do
