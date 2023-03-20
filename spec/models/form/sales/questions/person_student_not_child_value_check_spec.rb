@@ -16,11 +16,11 @@ RSpec.describe Form::Sales::Questions::PersonStudentNotChildValueCheck, type: :m
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Are you sure this person is not child?")
+    expect(question.header).to eq("Are you sure this person is not a child?")
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Student not child confirmation")
+    expect(question.check_answer_label).to eq("Student not a child confirmation")
   end
 
   it "has the correct type" do
