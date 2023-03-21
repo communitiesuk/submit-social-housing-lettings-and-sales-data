@@ -30,14 +30,6 @@ class BulkUpload < ApplicationRecord
               end
   end
 
-  def columns_with_errors
-    bulk_upload_errors
-      .select(:col)
-      .distinct(:col)
-      .pluck(:col)
-      .sort_by { |col| col.rjust(2, "0") }
-  end
-
   def general_needs?
     needstype == 1
   end
