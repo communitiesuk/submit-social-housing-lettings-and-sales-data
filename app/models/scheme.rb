@@ -166,9 +166,7 @@ class Scheme < ApplicationRecord
   end
 
   def appended_text
-    active_count = locations.count { |location| %i[active deactivating_soon].include?(location.status) }
-    inactive_count = locations.count { |location| !%i[active deactivating_soon].include?(location.status) }
-    "#{active_count} active #{'location'.pluralize(active_count)}, #{inactive_count} inactive #{'location'.pluralize(inactive_count)}"
+    "#{completed_locations_count} completed #{'location'.pluralize(completed_locations_count)}, #{incomplete_locations_count} incomplete #{'location'.pluralize(incomplete_locations_count)}"
   end
 
   def hint
@@ -237,7 +235,7 @@ class Scheme < ApplicationRecord
   end
 
   def status_at(date)
-    return :incomplete unless confirmed && has_active_locations?
+    return :incomplete unless confirmed && has_completed_locations?
     return :deactivated if open_deactivation&.deactivation_date.present? && date >= open_deactivation.deactivation_date
     return :deactivating_soon if open_deactivation&.deactivation_date.present? && date < open_deactivation.deactivation_date
     return :reactivating_soon if recent_deactivation&.reactivation_date.present? && date < recent_deactivation.reactivation_date
@@ -257,7 +255,17 @@ class Scheme < ApplicationRecord
     status == :deactivated
   end
 
-  def has_active_locations?
-    locations.count { |location| %i[active deactivating_soon].include?(location.status) }.positive?
+  def has_completed_locations?
+    completed_locations_count.positive?
+  end
+
+private
+
+  def completed_locations_count
+    locations.count { |location| location.status != :incomplete }
+  end
+
+  def incomplete_locations_count
+    locations.count { |location| location.status == :incomplete }
   end
 end
