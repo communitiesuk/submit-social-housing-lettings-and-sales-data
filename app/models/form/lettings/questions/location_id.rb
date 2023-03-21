@@ -27,7 +27,7 @@ class Form::Lettings::Questions::LocationId < ::Form::Question
   def displayed_answer_options(lettings_log, _user = nil)
     return {} unless lettings_log.scheme
 
-    scheme_location_ids = lettings_log.scheme.locations.pluck(:id)
+    scheme_location_ids = lettings_log.scheme.locations.reject { |location| location.status_at(lettings_log.startdate || Time.zone.today) == :incomplete }.pluck(:id)
     answer_options.select { |k, _v| scheme_location_ids.include?(k.to_i) }
   end
 
