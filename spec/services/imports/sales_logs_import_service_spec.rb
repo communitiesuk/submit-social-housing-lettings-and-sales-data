@@ -735,6 +735,31 @@ RSpec.describe Imports::SalesLogsImportService do
         end
       end
 
+      context "when inferring armed forces still" do
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
+
+        before do
+          sales_log_xml.at_xpath("//xmlns:ArmedF").content = "1 Yes"
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets hhregresstill to don't know if not answered" do
+          sales_log_xml.at_xpath("//xmlns:LeftArmedF").content = ""
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.hhregresstill).to eq(7)
+        end
+
+        it "sets hhregresstill correctly if answered" do
+          sales_log_xml.at_xpath("//xmlns:LeftArmedF").content = "4"
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.hhregresstill).to eq(4)
+        end
+      end
+
       context "when inferring disability" do
         let(:sales_log_id) { "discounted_ownership_sales_log" }
 

@@ -504,6 +504,7 @@ module Imports
     def set_default_values(attributes)
       attributes["armedforcesspouse"] ||= 7
       attributes["hhregres"] ||= 8
+      attributes["hhregresstill"] ||= 7 if attributes["hhregres"] == 1
       attributes["disabled"] ||= 3
       attributes["wheel"] ||= 3
       attributes["hb"] ||= 4
