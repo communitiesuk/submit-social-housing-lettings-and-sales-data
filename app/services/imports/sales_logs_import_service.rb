@@ -189,8 +189,10 @@ module Imports
     def rescue_validation_or_raise(sales_log, attributes, previous_status, exception)
       if %w[saved submitted-invalid].include?(previous_status)
         sales_log.errors.each do |error|
-          @logger.warn("Log #{sales_log.old_id}: Removing field #{error.attribute} from log triggering validation: #{error.type}")
-          attributes.delete(error.attribute.to_s)
+          unless error.attribute == :type || error.attribute == :ownershipsch
+            @logger.warn("Log #{sales_log.old_id}: Removing field #{error.attribute} from log triggering validation: #{error.type}")
+            attributes.delete(error.attribute.to_s)
+          end
           attributes.delete("pcodenk") if error.attribute == :postcode_full
           attributes.delete("ppcodenk") if error.attribute == :ppostcode_full
         end
@@ -504,6 +506,7 @@ module Imports
     def set_default_values(attributes)
       attributes["armedforcesspouse"] ||= 7
       attributes["hhregres"] ||= 8
+      attributes["hhregresstill"] ||= 7 if attributes["hhregres"] == 1
       attributes["disabled"] ||= 3
       attributes["wheel"] ||= 3
       attributes["hb"] ||= 4
@@ -518,6 +521,7 @@ module Imports
       attributes["extrabor"] ||= 3 if attributes["mortgageused"] == 1
       attributes["socprevten"] ||= 10 if attributes["ownershipsch"] == 1
       attributes["fromprop"] ||= 0 if attributes["ownershipsch"] == 1
+      attributes["mortgagelender"] ||= 0 if attributes["mortgageused"] == 1
 
       # buyer 1 characteristics
       attributes["age1_known"] ||= 1

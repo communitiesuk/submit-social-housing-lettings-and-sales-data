@@ -167,6 +167,23 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
+    context "when the mortgage lender is not set" do
+      let(:sales_log_id) { "discounted_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q34a").content = ""
+        allow(logger).to receive(:warn).and_return(nil)
+      end
+
+      it "correctly sets mortgage lender and mortgage lender other" do
+        sales_log_service.send(:create_log, sales_log_xml)
+
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log&.mortgagelender).to be(0)
+        expect(sales_log&.mortgagelenderother).to be_nil
+      end
+    end
+
     context "with shared ownership type" do
       let(:sales_log_id) { "shared_ownership_sales_log" }
 
@@ -419,6 +436,33 @@ RSpec.describe Imports::SalesLogsImportService do
         expect(sales_log).not_to be_nil
         expect(sales_log.age2).to be_nil
         expect(sales_log.ecstat2).to be_nil
+      end
+    end
+
+    context "and setup field has validation error in incomplete log" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//meta:status").content = "saved"
+        sales_log_xml.at_xpath("//xmlns:Q17aStaircase").content = "1 Yes"
+        sales_log_xml.at_xpath("//xmlns:PercentBought").content = "5"
+        sales_log_xml.at_xpath("//xmlns:PercentOwns").content = "40"
+        sales_log_xml.at_xpath("//xmlns:Q17Resale").content = ""
+        sales_log_xml.at_xpath("//xmlns:EXDAY").content = ""
+        sales_log_xml.at_xpath("//xmlns:EXMONTH").content = ""
+        sales_log_xml.at_xpath("//xmlns:EXYEAR").content = ""
+        sales_log_xml.at_xpath("//xmlns:HODAY").content = ""
+        sales_log_xml.at_xpath("//xmlns:HOMONTH").content = ""
+        sales_log_xml.at_xpath("//xmlns:HOYEAR").content = ""
+      end
+
+      it "intercepts the relevant validation error but does not clear setup fields" do
+        expect(logger).to receive(:warn).with(/Log shared_ownership_sales_log: Removing field stairbought from log triggering validation: The minimum increase in equity while staircasing is 10%/)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .not_to raise_error
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+
+        expect(sales_log.type).to eq(2)
       end
     end
 
@@ -732,6 +776,31 @@ RSpec.describe Imports::SalesLogsImportService do
 
           sales_log = SalesLog.find_by(old_id: sales_log_id)
           expect(sales_log&.hhregres).to eq(7)
+        end
+      end
+
+      context "when inferring armed forces still" do
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
+
+        before do
+          sales_log_xml.at_xpath("//xmlns:ArmedF").content = "1 Yes"
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets hhregresstill to don't know if not answered" do
+          sales_log_xml.at_xpath("//xmlns:LeftArmedF").content = ""
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.hhregresstill).to eq(7)
+        end
+
+        it "sets hhregresstill correctly if answered" do
+          sales_log_xml.at_xpath("//xmlns:LeftArmedF").content = "4"
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.hhregresstill).to eq(4)
         end
       end
 
