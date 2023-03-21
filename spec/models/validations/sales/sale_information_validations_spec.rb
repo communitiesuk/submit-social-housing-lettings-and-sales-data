@@ -227,6 +227,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
   describe "#validate_discounted_ownership_value" do
     context "when sale is on or after 24/25 collection window" do
+      
       context "when grant is routed to" do
         let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, deposit: 5_000, value: 30_000, ownershipsch: 2, type: 8, saledate: Time.zone.local(2024, 4, 3)) }
 
