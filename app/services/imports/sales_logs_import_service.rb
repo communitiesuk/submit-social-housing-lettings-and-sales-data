@@ -38,7 +38,7 @@ module Imports
       attributes["ownershipsch"] = ownership_from_type(attributes) if attributes["ownershipsch"].blank? # sometimes Ownership is missing, but type is set
       attributes["othtype"] = string_or_nil(xml_doc, "Q38OtherSale")
       attributes["jointpur"] = unsafe_string_as_integer(xml_doc, "joint")
-      attributes["jointmore"] = unsafe_string_as_integer(xml_doc, "JointMore") if attributes["jointpur"] == 1
+      attributes["jointmore"] = unsafe_string_as_integer(xml_doc, "JointMore") || 3 if attributes["jointpur"] == 1
       attributes["beds"] = safe_string_as_integer(xml_doc, "Q11Bedrooms")
       attributes["companybuy"] = unsafe_string_as_integer(xml_doc, "company") if attributes["ownershipsch"] == 3
       attributes["hholdcount"] = other_household_members(xml_doc, attributes)
@@ -509,7 +509,6 @@ module Imports
       attributes["hb"] ||= 4
       attributes["prevown"] ||= 3
       attributes["savingsnk"] ||= attributes["savings"].present? ? 0 : 1
-      attributes["jointmore"] ||= 3 if attributes["jointpur"] == 1
       attributes["inc1mort"] ||= 3
       if [attributes["pregyrha"], attributes["pregla"], attributes["pregghb"], attributes["pregother"]].all?(&:blank?)
         attributes["pregblank"] = 1

@@ -1278,6 +1278,24 @@ RSpec.describe Imports::SalesLogsImportService do
           expect(sales_log&.socprevten).to be(10)
         end
       end
+
+      context "when it's a joint tenancy and jointmore is not answered" do
+        let(:sales_log_id) { "outright_sale_sales_log" }
+
+        before do
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets jointmore to don't know" do
+          sales_log_xml.at_xpath("//meta:status").content = "invalid"
+          sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+          sales_log_xml.at_xpath("//xmlns:JointMore").content = ""
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.jointmore).to eq(3)
+        end
+      end
     end
   end
 end
