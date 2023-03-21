@@ -167,6 +167,23 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
+    context "when the mortgage lender is not set" do
+      let(:sales_log_id) { "discounted_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q34a").content = ""
+        allow(logger).to receive(:warn).and_return(nil)
+      end
+
+      it "correctly sets mortgage lender and mortgage lender other" do
+        sales_log_service.send(:create_log, sales_log_xml)
+
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log&.mortgagelender).to be(0)
+        expect(sales_log&.mortgagelenderother).to be_nil
+      end
+    end
+
     context "with shared ownership type" do
       let(:sales_log_id) { "shared_ownership_sales_log" }
 

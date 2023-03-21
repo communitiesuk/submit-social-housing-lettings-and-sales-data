@@ -521,6 +521,7 @@ module Imports
       attributes["extrabor"] ||= 3 if attributes["mortgageused"] == 1
       attributes["socprevten"] ||= 10 if attributes["ownershipsch"] == 1
       attributes["fromprop"] ||= 0 if attributes["ownershipsch"] == 1
+      attributes["mortgagelender"] ||= 0 if attributes["mortgageused"] == 1
 
       # buyer 1 characteristics
       attributes["age1_known"] ||= 1
