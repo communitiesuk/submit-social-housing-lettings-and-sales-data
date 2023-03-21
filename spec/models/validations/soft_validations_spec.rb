@@ -327,4 +327,38 @@ RSpec.describe Validations::SoftValidations do
       end
     end
   end
+
+  describe "#care_home_charge_expected_not_provided?" do
+    it "returns false if is_carehome is 'No'" do
+      record.period = 3
+      record.is_carehome = 0
+      record.chcharge = nil
+
+      expect(record).not_to be_care_home_charge_expected_not_provided
+    end
+
+    it "returns false if is_carehome is not given" do
+      record.period = 3
+      record.is_carehome = nil
+      record.chcharge = nil
+
+      expect(record).not_to be_care_home_charge_expected_not_provided
+    end
+
+    it "returns false if chcharge is given" do
+      record.period = 3
+      record.is_carehome = 1
+      record.chcharge = 40
+
+      expect(record).not_to be_care_home_charge_expected_not_provided
+    end
+
+    it "returns true if is_carehome is 'Yes' and chcharge is not given" do
+      record.period = 3
+      record.is_carehome = 1
+      record.chcharge = nil
+
+      expect(record).to be_care_home_charge_expected_not_provided
+    end
+  end
 end
