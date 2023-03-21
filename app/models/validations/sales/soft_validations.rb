@@ -103,6 +103,26 @@ module Validations::Sales::SoftValidations
     mscharge > soft_max
   end
 
+  (2..6).each do |person_num|
+    define_method("person_#{person_num}_student_not_child?") do
+      relat = send("relat#{person_num}")
+      ecstat = send("ecstat#{person_num}")
+      age = send("age#{person_num}")
+      return unless age && ecstat && relat
+
+      age.between?(16, 19) && ecstat == 7 && relat != "C"
+    end
+  end
+
+  def discounted_ownership_value_invalid?
+    return unless saledate && collection_start_year <= 2023
+    return unless value && deposit && ownershipsch
+    return unless mortgage || mortgageused == 2
+    return unless discount || grant || type == 29
+
+    mortgage_deposit_and_grant_total != value_with_discount && discounted_ownership_sale?
+  end
+
 private
 
   def sale_range

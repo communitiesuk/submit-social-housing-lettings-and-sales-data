@@ -730,4 +730,187 @@ RSpec.describe Validations::Sales::SoftValidations do
       end
     end
   end
+
+  describe "#person_2_student_not_child?" do
+    it "returns false if age is not given" do
+      record.age2 = nil
+      record.relat2 = "P"
+      record.ecstat2 = 7
+
+      expect(record).not_to be_person_2_student_not_child
+    end
+
+    it "returns false if retaltionship is not given" do
+      record.age2 = 17
+      record.relat2 = nil
+      record.ecstat2 = 7
+
+      expect(record).not_to be_person_2_student_not_child
+    end
+
+    it "returns false if economic status is not given" do
+      record.age2 = 17
+      record.relat2 = "P"
+      record.ecstat2 = nil
+
+      expect(record).not_to be_person_2_student_not_child
+    end
+
+    it "returns true if it's a student aged 16-19 and not a child" do
+      record.age2 = 17
+      record.relat2 = "P"
+      record.ecstat2 = 7
+
+      expect(record).to be_person_2_student_not_child
+    end
+  end
+
+  describe "#person_3_student_not_child?" do
+    it "returns false if age is not given" do
+      record.age3 = nil
+      record.relat3 = "P"
+      record.ecstat3 = 7
+
+      expect(record).not_to be_person_3_student_not_child
+    end
+
+    it "returns false if retaltionship is not given" do
+      record.age3 = 17
+      record.relat3 = nil
+      record.ecstat3 = 7
+
+      expect(record).not_to be_person_3_student_not_child
+    end
+
+    it "returns false if economic status is not given" do
+      record.age3 = 17
+      record.relat3 = "P"
+      record.ecstat3 = nil
+
+      expect(record).not_to be_person_3_student_not_child
+    end
+
+    it "returns true if it's a student aged 16-19 and not a child" do
+      record.age3 = 17
+      record.relat3 = "P"
+      record.ecstat3 = 7
+
+      expect(record).to be_person_3_student_not_child
+    end
+  end
+
+  describe "#discounted_ownership_value_invalid?" do
+    context "when grant is routed to" do
+      let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, deposit: 5_000, value: 30_000, ownershipsch: 2, type: 8, saledate: Time.zone.local(2023, 4, 3)) }
+
+      context "and not provided" do
+        before do
+          record.grant = nil
+        end
+
+        it "returns false" do
+          expect(record).not_to be_discounted_ownership_value_invalid
+        end
+      end
+
+      context "and is provided" do
+        it "returns true if mortgage, deposit and grant total does not equal market value" do
+          record.grant = 3_000
+          expect(record).to be_discounted_ownership_value_invalid
+        end
+
+        it "returns false if mortgage, deposit and grant total equals market value" do
+          record.grant = 15_000
+          expect(record).not_to be_discounted_ownership_value_invalid
+        end
+      end
+    end
+
+    context "when discount is routed to" do
+      let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, deposit: 5_000, value: 30_000, ownershipsch: 2, type: 9, saledate: Time.zone.local(2023, 4, 3)) }
+
+      context "and not provided" do
+        before do
+          record.discount = nil
+        end
+
+        it "returns false" do
+          expect(record).not_to be_discounted_ownership_value_invalid
+        end
+      end
+
+      context "and is provided" do
+        it "returns true if mortgage and deposit total does not equal market value - discount" do
+          record.discount = 10
+          expect(record).to be_discounted_ownership_value_invalid
+        end
+
+        it "returns false if mortgage and deposit total equals market value - discount" do
+          record.discount = 50
+          expect(record).not_to be_discounted_ownership_value_invalid
+        end
+      end
+    end
+
+    context "when neither discount nor grant is routed to" do
+      let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, value: 30_000, ownershipsch: 2, type: 29, saledate: Time.zone.local(2023, 4, 3)) }
+
+      it "returns true if mortgage and deposit total does not equal market value" do
+        record.deposit = 2_000
+        expect(record).to be_discounted_ownership_value_invalid
+      end
+
+      it "returns false if mortgage and deposit total equals market value" do
+        record.deposit = 20_000
+        expect(record).not_to be_discounted_ownership_value_invalid
+      end
+    end
+
+    context "when mortgage is routed to" do
+      let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, deposit: 5_000, grant: 3_000, value: 20_000, discount: 10, ownershipsch: 2, saledate: Time.zone.local(2023, 4, 3)) }
+
+      context "and not provided" do
+        before do
+          record.mortgage = nil
+        end
+
+        it "returns false" do
+          expect(record).not_to be_discounted_ownership_value_invalid
+        end
+      end
+
+      context "and is provided" do
+        it "returns true if mortgage, grant and deposit total does not equal market value - discount" do
+          record.mortgage = 10
+          expect(record).to be_discounted_ownership_value_invalid
+        end
+
+        it "returns false if mortgage, grant and deposit total equals market value - discount" do
+          record.mortgage = 10_000
+          expect(record).not_to be_discounted_ownership_value_invalid
+        end
+      end
+    end
+
+    context "when mortgage is not routed to" do
+      let(:record) { FactoryBot.build(:sales_log, mortgageused: 2, deposit: 5_000, grant: 3_000, value: 20_000, discount: 10, ownershipsch: 2, saledate: Time.zone.local(2023, 4, 3)) }
+
+      it "returns true if grant and deposit total does not equal market value - discount" do
+        expect(record).to be_discounted_ownership_value_invalid
+      end
+
+      it "returns false if mortgage, grant and deposit total equals market value - discount" do
+        record.grant = 13_000
+        expect(record).not_to be_discounted_ownership_value_invalid
+      end
+    end
+
+    context "when ownership is not discounted" do
+      let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, deposit: 5_000, grant: 3_000, value: 20_000, discount: 10, ownershipsch: 1, saledate: Time.zone.local(2023, 4, 3)) }
+
+      it "returns false" do
+        expect(record).not_to be_discounted_ownership_value_invalid
+      end
+    end
+  end
 end

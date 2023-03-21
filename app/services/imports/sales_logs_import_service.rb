@@ -38,7 +38,7 @@ module Imports
       attributes["ownershipsch"] = ownership_from_type(attributes) if attributes["ownershipsch"].blank? # sometimes Ownership is missing, but type is set
       attributes["othtype"] = string_or_nil(xml_doc, "Q38OtherSale")
       attributes["jointpur"] = unsafe_string_as_integer(xml_doc, "joint")
-      attributes["jointmore"] = unsafe_string_as_integer(xml_doc, "JointMore") if attributes["jointpur"] == 1
+      attributes["jointmore"] = unsafe_string_as_integer(xml_doc, "JointMore") || 3 if attributes["jointpur"] == 1
       attributes["beds"] = safe_string_as_integer(xml_doc, "Q11Bedrooms")
       attributes["companybuy"] = unsafe_string_as_integer(xml_doc, "company") if attributes["ownershipsch"] == 3
       attributes["hholdcount"] = other_household_members(xml_doc, attributes)
@@ -124,7 +124,7 @@ module Imports
       attributes["mortgagelenderother"] = mortgage_lender_other(xml_doc, attributes)
       attributes["postcode_full"] = parse_postcode(string_or_nil(xml_doc, "Q14Postcode"))
       attributes["pcodenk"] = 0 if attributes["postcode_full"].present? # known if given
-      attributes["soctenant"] = soctenant(attributes)
+      attributes["soctenant"] = 0 if attributes["ownershipsch"] == 1
       attributes["ethnic_group2"] = nil # 23/24 variable
       attributes["ethnicbuy2"] = nil # 23/24 variable
       attributes["prevshared"] = nil # 23/24 variable
@@ -152,6 +152,8 @@ module Imports
       attributes["old_persons_shared_ownership_value_check"] = 0
       attributes["income2_value_check"] = 0
       attributes["monthly_charges_value_check"] = 0
+      attributes["student_not_child_value_check"] = 0
+      attributes["discounted_sale_value_check"] = 0
 
       # Sets the log creator
       owner_id = meta_field_value(xml_doc, "owner-user-id").strip
@@ -189,6 +191,8 @@ module Imports
         sales_log.errors.each do |error|
           @logger.warn("Log #{sales_log.old_id}: Removing field #{error.attribute} from log triggering validation: #{error.type}")
           attributes.delete(error.attribute.to_s)
+          attributes.delete("pcodenk") if error.attribute == :postcode_full
+          attributes.delete("ppcodenk") if error.attribute == :ppostcode_full
         end
         @logs_overridden << sales_log.old_id
         save_sales_log(attributes, previous_status)
@@ -253,7 +257,9 @@ module Imports
          staircase_bought_value_check
          monthly_charges_value_check
          hodate_check
-         saledate_check]
+         saledate_check
+         student_not_child_value_check
+         discounted_sale_value_check]
     end
 
     def check_status_completed(sales_log, previous_status)
@@ -373,17 +379,6 @@ module Imports
       when 2 # unknown
         1
       end
-    end
-
-    def soctenant(attributes)
-      return nil unless attributes["ownershipsch"] == 1
-
-      if attributes["frombeds"].blank? && attributes["fromprop"].blank? && attributes["socprevten"].blank?
-        2
-      else
-        1
-      end
-      # NO (2) if FROMBEDS, FROMPROP and socprevten are blank, and YES(1) if they are completed
     end
 
     def still_serving(xml_doc)
@@ -514,13 +509,15 @@ module Imports
       attributes["hb"] ||= 4
       attributes["prevown"] ||= 3
       attributes["savingsnk"] ||= attributes["savings"].present? ? 0 : 1
-      attributes["jointmore"] ||= 3 if attributes["jointpur"] == 1
       attributes["inc1mort"] ||= 3
       if [attributes["pregyrha"], attributes["pregla"], attributes["pregghb"], attributes["pregother"]].all?(&:blank?)
         attributes["pregblank"] = 1
       end
       attributes["pcodenk"] ||= 1
       attributes["prevten"] ||= 0
+      attributes["extrabor"] ||= 3 if attributes["mortgageused"] == 1
+      attributes["socprevten"] ||= 10 if attributes["ownershipsch"] == 1
+      attributes["fromprop"] ||= 0 if attributes["ownershipsch"] == 1
 
       # buyer 1 characteristics
       attributes["age1_known"] ||= 1

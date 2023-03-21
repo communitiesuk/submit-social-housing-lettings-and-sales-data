@@ -3,9 +3,14 @@ class Form::Sales::Pages::PreviousBedrooms < ::Form::Page
     super
     @id = "previous_bedrooms"
     @header = "About the buyers’ previous property"
-    @depends_on = [{
-      "soctenant" => 1,
-    }]
+    @depends_on = [
+      {
+        "soctenant" => 1,
+      },
+      {
+        "soctenant" => 0,
+      },
+    ]
   end
 
   def questions
