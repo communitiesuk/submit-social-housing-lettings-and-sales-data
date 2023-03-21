@@ -13,6 +13,6 @@ class Form::Sales::Questions::Buyer2EthnicBackgroundBlack < ::Form::Question
   ANSWER_OPTIONS = {
     "13" => { "value" => "African" },
     "12" => { "value" => "Caribbean" },
-    "14" => { "value" => "Any other Black, African or Caribbean background" },
+    "14" => { "value" => "Any other Black, African, Caribbean or Black British background" },
   }.freeze
 end
