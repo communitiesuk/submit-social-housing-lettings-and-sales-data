@@ -41,7 +41,7 @@ module Validations::Sales::FinancialValidations
   end
 
   def validate_monthly_leasehold_charges(record)
-    record.errors.add :mscharge, I18n.t("validations.financial.monthly_leasehold_charges.not_zero") if record.mscharge == 0
+    record.errors.add :mscharge, I18n.t("validations.financial.monthly_leasehold_charges.not_zero") if record.mscharge&.zero?
   end
 
   def validate_percentage_bought_not_greater_than_percentage_owned(record)
