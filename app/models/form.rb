@@ -111,8 +111,8 @@ class Form
     when :in_progress
       "#{next_subsection.id}/check_answers".dasherize
     when :not_started
-      first_question_in_subsection = next_subsection.pages.find { |page| page.routed_to?(log, nil) }.id
-      first_question_in_subsection.to_s.dasherize
+      first_question_in_subsection = next_subsection.pages.find { |page| page.routed_to?(log, nil) }
+      first_question_in_subsection ? first_question_in_subsection.id.to_s.dasherize : next_incomplete_section_redirect_path(next_subsection, log)
     else
       "error"
     end

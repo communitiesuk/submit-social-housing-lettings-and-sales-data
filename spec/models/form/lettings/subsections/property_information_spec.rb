@@ -1,10 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
-  subject(:property_information) { described_class.new(subsection_id, subsection_definition, section) }
+  subject(:property_information) { described_class.new(nil, nil, section) }
 
-  let(:subsection_id) { nil }
-  let(:subsection_definition) { nil }
   let(:section) { instance_double(Form::Lettings::Sections::TenancyAndProperty) }
 
   it "has correct section" do
@@ -44,10 +42,6 @@ RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
   end
 
   it "has the correct depends_on" do
-    expect(property_information.depends_on).to eq([
-      {
-        "non_location_setup_questions_completed?" => true,
-      },
-    ])
+    expect(property_information.depends_on).to eq([{ "non_location_setup_questions_completed?" => true }])
   end
 end

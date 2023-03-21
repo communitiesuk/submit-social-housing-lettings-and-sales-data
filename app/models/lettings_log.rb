@@ -287,6 +287,10 @@ class LettingsLog < Log
     [15, 16, 17].include?(rsnvac)
   end
 
+  def vacancy_reason_not_renewal_or_first_let?
+    [5, 6, 8, 9, 10, 11, 12, 13, 18, 19].include? rsnvac
+  end
+
   def previous_tenancy_was_temporary?
     # 4: Tied housing or renting with job
     # 6: Supported housing

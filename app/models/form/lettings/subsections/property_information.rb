@@ -27,4 +27,8 @@ class Form::Lettings::Subsections::PropertyInformation < ::Form::Subsection
       Form::Lettings::Pages::PropertyMajorRepairsValueCheck.new(nil, nil, self),
     ].compact
   end
+
+  def displayed_in_tasklist?(log)
+    !(log.is_supported_housing? && log.is_renewal?)
+  end
 end
