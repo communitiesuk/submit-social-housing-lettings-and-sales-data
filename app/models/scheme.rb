@@ -166,7 +166,7 @@ class Scheme < ApplicationRecord
   end
 
   def appended_text
-    "#{completed_locations_count} completed #{'location'.pluralize(completed_locations_count)}, #{incomplete_locations_count} incomplete #{'location'.pluralize(incomplete_locations_count)}"
+    "#{confirmed_locations_count} completed #{'location'.pluralize(confirmed_locations_count)}, #{unconfirmed_locations_count} incomplete #{'location'.pluralize(unconfirmed_locations_count)}"
   end
 
   def hint
@@ -265,7 +265,7 @@ private
     locations.confirmed.size
   end
 
-  def incomplete_locations_count
-    locations.count { |location| location.status == :incomplete }
+  def unconfirmed_locations_count
+    locations.unconfirmed.size
   end
 end
