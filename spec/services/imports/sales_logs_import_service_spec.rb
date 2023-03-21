@@ -422,6 +422,33 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
+    context "and setup field has validation error in incomplete log" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//meta:status").content = "saved"
+        sales_log_xml.at_xpath("//xmlns:Q17aStaircase").content = "1 Yes"
+        sales_log_xml.at_xpath("//xmlns:PercentBought").content = "5"
+        sales_log_xml.at_xpath("//xmlns:PercentOwns").content = "40"
+        sales_log_xml.at_xpath("//xmlns:Q17Resale").content = ""
+        sales_log_xml.at_xpath("//xmlns:EXDAY").content = ""
+        sales_log_xml.at_xpath("//xmlns:EXMONTH").content = ""
+        sales_log_xml.at_xpath("//xmlns:EXYEAR").content = ""
+        sales_log_xml.at_xpath("//xmlns:HODAY").content = ""
+        sales_log_xml.at_xpath("//xmlns:HOMONTH").content = ""
+        sales_log_xml.at_xpath("//xmlns:HOYEAR").content = ""
+      end
+
+      it "intercepts the relevant validation error but does not clear setup fields" do
+        expect(logger).to receive(:warn).with(/Log shared_ownership_sales_log: Removing field stairbought from log triggering validation: The minimum increase in equity while staircasing is 10%/)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .not_to raise_error
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+
+        expect(sales_log.type).to eq(2)
+      end
+    end
+
     context "and it has an invalid record with invalid postcodes" do
       let(:sales_log_id) { "discounted_ownership_sales_log" }
 
