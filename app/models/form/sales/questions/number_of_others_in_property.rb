@@ -3,12 +3,12 @@ class Form::Sales::Questions::NumberOfOthersInProperty < ::Form::Question
     super(id, hsh, page)
     @id = "hholdcount"
     @check_answer_label = "Number of other people living in the property"
-    @header = "Besides the buyer(s), how many other people live or will live in the property?"
+    @header = "Besides the #{"buyer".pluralize(joint_purchase ? 2 : 1)}, how many other people live or will live in the property?"
     @type = "numeric"
     @hint_text = hint(joint_purchase)
     @width = 2
     @min = 0
-    @max = joint_purchase ? 4 : 5
+    @max = 15
     @question_number = 35
   end
 
