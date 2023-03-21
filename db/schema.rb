@@ -560,7 +560,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_09_145740) do
     t.integer "buy2living"
     t.integer "prevtenbuy2"
     t.integer "pregblank"
-    t.integer "nationalbuy2"
     t.string "uprn"
     t.integer "uprn_known"
     t.integer "uprn_confirmed"
@@ -568,6 +567,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_09_145740) do
     t.string "address_line2"
     t.string "town_or_city"
     t.string "county"
+    t.integer "nationalbuy2"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["old_id"], name: "index_sales_logs_on_old_id", unique: true
