@@ -166,7 +166,9 @@ class Scheme < ApplicationRecord
   end
 
   def appended_text
-    "#{locations.count { |location| location.startdate.blank? || location.startdate <= Time.zone.today }} locations"
+    active_count = locations.count { |location| %i[active deactivating_soon].include?(location.status) }
+    inactive_count = locations.count { |location| !%i[active deactivating_soon].include?(location.status) }
+    "#{active_count} active #{'location'.pluralize(active_count)}, #{inactive_count} inactive #{'location'.pluralize(inactive_count)}"
   end
 
   def hint
