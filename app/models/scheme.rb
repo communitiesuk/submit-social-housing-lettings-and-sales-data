@@ -166,9 +166,7 @@ class Scheme < ApplicationRecord
   end
 
   def appended_text
-    active_count = locations.count { |location| %i[active deactivating_soon].include?(location.status) }
-    inactive_count = locations.count { |location| !%i[active deactivating_soon].include?(location.status) }
-    "#{active_count} active #{'location'.pluralize(active_count)}, #{inactive_count} inactive #{'location'.pluralize(inactive_count)}"
+    "#{completed_locations_count} completed #{'location'.pluralize(completed_locations_count)}, #{incomplete_locations_count} incomplete #{'location'.pluralize(incomplete_locations_count)}"
   end
 
   def hint
@@ -265,5 +263,9 @@ private
 
   def confirmed_locations_count
     locations.confirmed.size
+  end
+
+  def incomplete_locations_count
+    locations.count { |location| location.status == :incomplete }
   end
 end
