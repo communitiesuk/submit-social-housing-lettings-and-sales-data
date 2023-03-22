@@ -20,10 +20,10 @@ module Validations::SetupValidations
     location_during_startdate_validation(record, :location_id)
   end
 
-  def validate_scheme_has_completed_locations_validation(record)
+  def validate_scheme_has_confirmed_locations_validation(record)
     return unless record.scheme
 
-    unless record.scheme.has_completed_locations?
+    unless record.scheme.has_confirmed_locations?
       record.errors.add :scheme_id, I18n.t("validations.scheme.no_completed_locations")
     end
   end
