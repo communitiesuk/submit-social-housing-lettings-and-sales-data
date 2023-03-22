@@ -487,6 +487,33 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
+    context "and it has a record with postcode in invalid format" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q14Postcode").content = "L3132AF"
+        sales_log_xml.at_xpath("//xmlns:Q14ONSLACode").content = "E07000223"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Log shared_ownership_sales_log: Removing postcode as the postcode is invalid/)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers and sets correct la" do
+        allow(logger).to receive(:warn)
+
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+
+        expect(sales_log).not_to be_nil
+        expect(sales_log.postcode_full).to be_nil
+        expect(sales_log.pcodenk).to eq(1) # not known
+        expect(sales_log.la).to eq("E07000223") # not known
+      end
+    end
+
     context "and setup field has validation error in incomplete log" do
       let(:sales_log_id) { "shared_ownership_sales_log" }
 
@@ -549,7 +576,7 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       it "intercepts the relevant validation error" do
-        expect(logger).to receive(:warn).with(/Enter a postcode in the correct format, for example AA1 1AA/)
+        expect(logger).to receive(:warn).with(/Removing field postcode_full from log triggering validation: wrong_format/)
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .not_to raise_error
       end

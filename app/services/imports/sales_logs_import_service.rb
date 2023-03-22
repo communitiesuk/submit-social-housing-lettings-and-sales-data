@@ -219,6 +219,12 @@ module Imports
         @logs_overridden << sales_log.old_id
         attributes.delete("equity")
         save_sales_log(attributes, previous_status)
+      elsif sales_log.errors.of_kind?(:postcode_full, :wrong_format)
+        @logger.warn("Log #{sales_log.old_id}: Removing postcode as the postcode is invalid")
+        @logs_overridden << sales_log.old_id
+        attributes.delete("postcode_full")
+        attributes["pcodenk"] = attributes["la"].present? ? 1 : nil
+        save_sales_log(attributes, previous_status)
       else
         @logger.error("Log #{sales_log.old_id}: Failed to import")
         sales_log.errors.each do |error|
