@@ -243,6 +243,10 @@ class SalesLog < Log
     ownershipsch == 2
   end
 
+  def mortgage_used?
+    mortgageused == 1
+  end
+
   def mortgage_not_used?
     mortgageused == 2
   end
