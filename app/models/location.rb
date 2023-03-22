@@ -23,6 +23,7 @@ class Location < ApplicationRecord
   scope :started, -> { where("startdate <= ?", Time.zone.today).or(where(startdate: nil)) }
   scope :active, -> { where(confirmed: true).and(started) }
   scope :confirmed, -> { where(confirmed: true) }
+  scope :unconfirmed, -> { where.not(confirmed: true) }
 
   LOCAL_AUTHORITIES = LocalAuthority.all.map { |la| [la.name, la.code] }.to_h
 
