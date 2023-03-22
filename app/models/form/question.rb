@@ -317,7 +317,7 @@ private
   end
 
   def enabled_inferred_answers(inferred_answers, log)
-    inferred_answers.filter { |_key, value| value.all? { |condition_key, condition_value| log[condition_key] == condition_value } }
+    inferred_answers.filter { |_key, value| value.all? { |condition_key, condition_value| log.public_send(condition_key) == condition_value } }
   end
 
   def inferred_answer_value(log)
