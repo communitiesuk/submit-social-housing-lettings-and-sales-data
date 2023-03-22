@@ -159,7 +159,7 @@ RSpec.describe Validations::SharedValidations do
       it "adds an error if input has more than 2 decimal places" do
         sales_log.mscharge = 30.7418
         shared_validator.validate_numeric_step(sales_log)
-        expect(sales_log.errors[:mscharge]).to include I18n.t("validations.numeric.nearest_penny", field: "Monthly leasehold charges")
+        expect(sales_log.errors[:mscharge]).to include I18n.t("validations.numeric.nearest_hundredth", field: "Monthly leasehold charges")
       end
 
       it "does not add an error if the user attempts to input a number in exponent format" do
