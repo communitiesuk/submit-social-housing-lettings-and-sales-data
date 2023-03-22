@@ -122,6 +122,12 @@ RSpec.describe Validations::SharedValidations do
         expect(sales_log.errors[:income1]).to include I18n.t("validations.numeric.whole_number", field: "Buyer 1’s gross annual income")
       end
 
+      it "adds an error if the user attempts to input a number in exponent format" do
+        sales_log.income1 = "3e5"
+        shared_validator.validate_numeric_step(sales_log)
+        expect(sales_log.errors[:income1]).to include I18n.t("validations.numeric.whole_number", field: "Buyer 1’s gross annual income")
+      end
+
       it "does not add an error if input is an integer" do
         sales_log.income1 = 30_000
         shared_validator.validate_numeric_step(sales_log)
@@ -132,6 +138,12 @@ RSpec.describe Validations::SharedValidations do
     context "when validating a question with a step of 10" do
       it "adds an error if input is not a multiple of ten" do
         sales_log.savings = 30_005
+        shared_validator.validate_numeric_step(sales_log)
+        expect(sales_log.errors[:savings]).to include I18n.t("validations.numeric.nearest_ten", field: "Buyer’s total savings (to nearest £10) before any deposit paid")
+      end
+
+      it "adds an error if the user attempts to input a number in exponent format" do
+        sales_log.savings = "3e5"
         shared_validator.validate_numeric_step(sales_log)
         expect(sales_log.errors[:savings]).to include I18n.t("validations.numeric.nearest_ten", field: "Buyer’s total savings (to nearest £10) before any deposit paid")
       end
@@ -150,25 +162,17 @@ RSpec.describe Validations::SharedValidations do
         expect(sales_log.errors[:mscharge]).to include I18n.t("validations.numeric.nearest_penny", field: "Monthly leasehold charges")
       end
 
+      it "does not add an error if the user attempts to input a number in exponent format" do
+        sales_log.mscharge = "3e1"
+        shared_validator.validate_numeric_step(sales_log)
+        expect(sales_log.errors).to be_empty
+      end
+
       it "does not add an error if input has 2 or fewer decimal places" do
         sales_log.mscharge = 30.74
         shared_validator.validate_numeric_step(sales_log)
         expect(sales_log.errors).to be_empty
       end
-    end
-  end
-
-  describe "validating the format of inputs in numeric questions" do
-    it "adds an error if number is input in exponent notation" do
-      sales_log.age2 = "1e1"
-      shared_validator.validate_numeric_normal_format(sales_log)
-      expect(sales_log.errors[:age2]).to include I18n.t("validations.numeric.normal_format")
-    end
-
-    it "does not add an error if number is input in standard notation" do
-      sales_log.age2 = "11"
-      shared_validator.validate_numeric_normal_format(sales_log)
-      expect(sales_log.errors).to be_empty
     end
   end
 

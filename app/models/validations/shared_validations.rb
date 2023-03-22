@@ -39,26 +39,18 @@ module Validations::SharedValidations
       next unless question.step
       next unless record[question.id] && question.page.routed_to?(record, nil)
 
-      begin
-        input = record.public_send("#{question.id}_before_type_cast")
-        answer = Float(input)
-      rescue ArgumentError
-        add_step_error(record, question)
-      end
+      value = record.public_send("#{question.id}_before_type_cast")
+      field = question.check_answer_label || question.id
+      incorrect_accuracy = (value.to_d * 100) % (question.step * 100) != 0
 
-      if (answer * 100) % (question.step * 100) != 0
-        add_step_error(record, question)
-      end
-    end
-  end
-
-  def validate_numeric_normal_format(record)
-    record.form.numeric_questions.each do |question|
-      next unless record[question.id] && question.page.routed_to?(record, nil)
-
-      user_input = record.public_send("#{question.id}_before_type_cast")
-      if user_input.is_a?(String) && user_input.include?("e")
-        record.errors.add question.id.to_sym, I18n.t("validations.numeric.normal_format")
+      if question.step < 1 && incorrect_accuracy
+        record.errors.add question.id.to_sym, I18n.t("validations.numeric.nearest_penny", field:)
+      elsif incorrect_accuracy || value.to_d != value.to_i    # if the user enters a value in exponent notation (eg '4e1') the to_i method does not convert this to the correct value
+        field = question.check_answer_label || question.id
+        case question.step
+        when 1 then record.errors.add question.id.to_sym, I18n.t("validations.numeric.whole_number", field:)
+        when 10 then record.errors.add question.id.to_sym, I18n.t("validations.numeric.nearest_ten", field:)
+        end
       end
     end
   end
@@ -139,15 +131,6 @@ private
       record.errors.add question.id.to_sym, :outside_the_range, message: I18n.t("validations.numeric.within_range", field:, min:, max:)
     elsif min
       record.errors.add question.id.to_sym, :under_min, message: I18n.t("validations.numeric.above_min", field:, min:)
-    end
-  end
-
-  def add_step_error(record, question)
-    field = question.check_answer_label || question.id
-    case question.step
-    when 1 then record.errors.add question.id.to_sym, I18n.t("validations.numeric.whole_number", field:)
-    when 10 then record.errors.add question.id.to_sym, I18n.t("validations.numeric.nearest_ten", field:)
-    when 0.01 then record.errors.add question.id.to_sym, I18n.t("validations.numeric.nearest_penny", field:)
     end
   end
 end
