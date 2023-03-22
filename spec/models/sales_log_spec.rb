@@ -511,7 +511,14 @@ RSpec.describe SalesLog, type: :model do
 
   describe "#process_uprn_change!" do
     context "when UPRN set to a value" do
-      let(:sales_log) { create(:sales_log, uprn: "123456789", uprn_confirmed: 1) }
+      let(:sales_log) do
+        create(
+          :sales_log,
+          uprn: "123456789",
+          uprn_confirmed: 1,
+          county: "county",
+        )
+      end
 
       it "updates sales log fields" do
         sales_log.uprn = "1111111"
@@ -532,6 +539,7 @@ RSpec.describe SalesLog, type: :model do
         .and change(sales_log, :town_or_city).from(nil).to("Posttown")
         .and change(sales_log, :postcode_full).from(nil).to("POSTCODE")
         .and change(sales_log, :uprn_confirmed).from(1).to(nil)
+        .and change(sales_log, :county).from("county").to(nil)
       end
     end
 
