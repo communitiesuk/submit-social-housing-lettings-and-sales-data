@@ -21,6 +21,8 @@ class BulkUpload::Lettings::LogCreator
         Sentry.capture_exception(e)
       end
     end
+
+    bulk_upload.update!(processed: true)
   end
 
 private

@@ -22,6 +22,10 @@ RSpec.describe BulkUpload::Lettings::LogCreator do
         expect(log.bulk_upload).to eql(bulk_upload)
         expect(bulk_upload.lettings_logs).to include(log)
       end
+
+      it "marks bulk upload as processed" do
+        expect { service.call }.to change(bulk_upload, :processed?).from(false).to(true)
+      end
     end
 
     context "when a valid csv with several blank rows" do
