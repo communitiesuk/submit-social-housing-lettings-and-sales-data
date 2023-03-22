@@ -742,6 +742,18 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
       %w[age8_known age8 field_19],
     ].each do |known, age, field|
       describe "##{known} and ##{age}" do
+        context "when #{field} is blank" do
+          let(:attributes) { { bulk_upload:, field.to_s => nil } }
+
+          it "sets ##{known} 1" do
+            expect(parser.log.public_send(known)).to be(1)
+          end
+
+          it "sets ##{age} to nil" do
+            expect(parser.log.public_send(age)).to be_nil
+          end
+        end
+
         context "when #{field} is R" do
           let(:attributes) { { bulk_upload:, field.to_s => "R" } }
 
