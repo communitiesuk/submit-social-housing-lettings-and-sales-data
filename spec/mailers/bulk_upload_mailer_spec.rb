@@ -29,7 +29,7 @@ RSpec.describe BulkUploadMailer do
     it "sends correctly formed email" do
       expect(notify_client).to receive(:send_email).with(
         email_address: bulk_upload.user.email,
-        template_id: described_class::BULK_UPLOAD_FAILED_FILE_SETUP_ERROR_TEMPLATE_ID,
+        template_id: described_class::FAILED_FILE_SETUP_ERROR_TEMPLATE_ID,
         personalisation: {
           filename: bulk_upload.filename,
           upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
@@ -48,7 +48,7 @@ RSpec.describe BulkUploadMailer do
     it "sends correctly formed email" do
       expect(notify_client).to receive(:send_email).with(
         email_address: user.email,
-        template_id: described_class::BULK_UPLOAD_COMPLETE_TEMPLATE_ID,
+        template_id: described_class::COMPLETE_TEMPLATE_ID,
         personalisation: {
           title: "You’ve successfully uploaded 0 logs",
           filename: bulk_upload.filename,
@@ -66,7 +66,7 @@ RSpec.describe BulkUploadMailer do
     it "sends correctly formed email" do
       expect(notify_client).to receive(:send_email).with(
         email_address: user.email,
-        template_id: described_class::BULK_UPLOAD_FAILED_SERVICE_ERROR_TEMPLATE_ID,
+        template_id: described_class::FAILED_SERVICE_ERROR_TEMPLATE_ID,
         personalisation: {
           filename: bulk_upload.filename,
           upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
@@ -94,7 +94,7 @@ RSpec.describe BulkUploadMailer do
       it "sends correctly formed email" do
         expect(notify_client).to receive(:send_email).with(
           email_address: bulk_upload.user.email,
-          template_id: described_class::BULK_UPLOAD_WITH_ERRORS_TEMPLATE_ID,
+          template_id: described_class::WITH_ERRORS_TEMPLATE_ID,
           personalisation: {
             title: "We found 1 log with errors",
             filename: bulk_upload.filename,
@@ -119,7 +119,7 @@ RSpec.describe BulkUploadMailer do
       it "sends correctly formed email" do
         expect(notify_client).to receive(:send_email).with(
           email_address: user.email,
-          template_id: described_class::BULK_UPLOAD_FAILED_CSV_ERRORS_TEMPLATE_ID,
+          template_id: described_class::FAILED_CSV_ERRORS_TEMPLATE_ID,
           personalisation: {
             filename: bulk_upload.filename,
             upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
