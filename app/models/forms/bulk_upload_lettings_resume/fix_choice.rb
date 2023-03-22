@@ -44,6 +44,10 @@ module Forms
           "For this many errors we recommend to upload logs and fix errors on site as you can easily see the questions and select the appropriate answer."
         end
       end
+
+      def save!
+        true
+      end
     end
   end
 end
