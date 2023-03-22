@@ -9,7 +9,7 @@
             class: "govuk-!-margin-right-4",
           ) %>
         <% extra_value = question.get_extra_check_answer_value(@log) %>
-        <% if extra_value && question.answer_label(lettings_log, current_user).present? %>
+        <% if extra_value && question.answer_label(@log, current_user).present? %>
           <%= simple_format(
             extra_value,
             wrapper_tag: "span",
