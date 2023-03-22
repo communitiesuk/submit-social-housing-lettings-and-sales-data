@@ -44,7 +44,7 @@ module Validations::SharedValidations
       incorrect_accuracy = (value.to_d * 100) % (question.step * 100) != 0
 
       if question.step < 1 && incorrect_accuracy
-        record.errors.add question.id.to_sym, I18n.t("validations.numeric.nearest_penny", field:)
+        record.errors.add question.id.to_sym, I18n.t("validations.numeric.nearest_hundredth", field:)
       elsif incorrect_accuracy || value.to_d != value.to_i    # if the user enters a value in exponent notation (eg '4e1') the to_i method does not convert this to the correct value
         field = question.check_answer_label || question.id
         case question.step
