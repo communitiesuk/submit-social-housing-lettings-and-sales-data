@@ -555,7 +555,7 @@ module Imports
       end
 
       # other household members characteristics
-      (2..attributes["hhmemb"]).each do |index|
+      (2..[attributes["hhmemb"], 6].min).each do |index|
         attributes["age#{index}_known"] ||= 1
         attributes["sex#{index}"] ||= "R"
         attributes["ecstat#{index}"] ||= 10

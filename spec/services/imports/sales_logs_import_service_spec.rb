@@ -593,6 +593,20 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
+    xcontext "when there is information about 7 people" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:P7Age").content = "22"
+        sales_log_xml.at_xpath("//xmlns:LiveInOther").content = "10"
+      end
+
+      it "does not try to save information about person 7" do
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+        .not_to raise_error
+      end
+    end
+
     context "and it has an invalid record with invalid contracts exchange date" do
       let(:sales_log_id) { "shared_ownership_sales_log" }
 
