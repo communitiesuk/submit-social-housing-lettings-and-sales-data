@@ -506,9 +506,9 @@ RSpec.describe SalesLog, type: :model do
     let(:completed_sales_log) { create(:sales_log, :completed) }
 
     it "returns small numbers correctly formatted as currency" do
-      completed_sales_log.update!(savings: 4)
+      completed_sales_log.update!(savings: 20)
 
-      expect(completed_sales_log.field_formatted_as_currency("savings")).to eq("£4.00")
+      expect(completed_sales_log.field_formatted_as_currency("savings")).to eq("£20.00")
     end
 
     it "returns quite large numbers correctly formatted as currency" do

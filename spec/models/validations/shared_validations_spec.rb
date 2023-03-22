@@ -105,7 +105,7 @@ RSpec.describe Validations::SharedValidations do
     end
 
     context "when validating price" do
-      it "validates that £ prefix  and , is added in the error message" do
+      it "validates that prefix £ and delimeter ',' is added in the error message" do
         sales_log.income1 = -5
         shared_validator.validate_numeric_min_max(sales_log)
         expect(sales_log.errors["income1"])

@@ -40,7 +40,7 @@ RSpec.describe Form::Sales::Questions::Savings, type: :model do
   end
 
   it "has correct step" do
-    expect(question.step).to eq(1)
+    expect(question.step).to be 10
   end
 
   it "has correct prefix" do

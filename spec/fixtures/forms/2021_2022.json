@@ -905,7 +905,7 @@
                   "hint_text": "Eligible for housing benefit or Universal Credit",
                   "type": "numeric",
                   "min": 0,
-                  "step": 1,
+                  "step": 0.01,
                   "width": 4,
                   "fields-to-add": [
                     "brent",
@@ -921,7 +921,7 @@
                   "hint_text": "Eligible for housing benefit or Universal Credit",
                   "type": "numeric",
                   "min": 0,
-                  "step": 1,
+                  "step": 0.01,
                   "width": 4,
                   "fields-to-add": [
                     "brent",
@@ -937,7 +937,7 @@
                   "hint_text": "Not eligible for housing benefit or Universal Credit. For example, hot water excluding water rates.",
                   "type": "numeric",
                   "min": 0,
-                  "step": 1,
+                  "step": 0.01,
                   "width": 4,
                   "fields-to-add": [
                     "brent",
@@ -954,7 +954,7 @@
                   "type": "numeric",
                   "min": 0,
                   "max": 300,
-                  "step": 1,
+                  "step": 0.01,
                   "width": 4,
                   "fields-to-add": [
                     "brent",
@@ -970,7 +970,7 @@
                   "hint_text": "This is the total of rent and all charges",
                   "type": "numeric_output",
                   "min": 0,
-                  "step": 1,
+                  "step": 0.01,
                   "width": 4,
                   "readonly": true,
                   "requires_js": true
@@ -987,7 +987,7 @@
                   "hint_text": "",
                   "type": "numeric",
                   "min": 0,
-                  "step": "1",
+                  "step": 1,
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week"
