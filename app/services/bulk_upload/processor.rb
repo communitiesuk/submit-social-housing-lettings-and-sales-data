@@ -34,6 +34,8 @@ class BulkUpload::Processor
   end
 
   def approve
+    return if bulk_upload.processed?
+
     download
     create_logs
   ensure
