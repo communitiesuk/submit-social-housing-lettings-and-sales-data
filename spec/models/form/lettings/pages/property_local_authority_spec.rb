@@ -33,7 +33,7 @@ RSpec.describe Form::Lettings::Pages::PropertyLocalAuthority, type: :model do
   end
 
   it "has the correct depends_on" do
-    expect(page.depends_on).to match([{ "is_la_inferred" => false, "needstype" => 1 }])
+    expect(page.depends_on).to match([{ "is_general_needs?" => true, "is_la_inferred" => false }])
   end
 
   describe "has correct routed_to?" do
