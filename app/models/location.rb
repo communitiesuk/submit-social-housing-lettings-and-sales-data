@@ -7,7 +7,6 @@ class Location < ApplicationRecord
   validates :mobility_type, on: :mobility_type, presence: { message: I18n.t("validations.location.mobility_standards") }
   validates :startdate, on: :startdate, presence: { message: I18n.t("validations.location.startdate_invalid") }
   validate :validate_startdate, on: :startdate, if: proc { |model| model.startdate.presence }
-  validate :validate_confirmed
   belongs_to :scheme
   has_many :lettings_logs, class_name: "LettingsLog"
   has_many :location_deactivation_periods, class_name: "LocationDeactivationPeriod"
@@ -125,10 +124,6 @@ class Location < ApplicationRecord
       error_message = I18n.t("validations.location.startdate_out_of_range", date: scheme.available_from.to_formatted_s(:govuk_date))
       errors.add :startdate, error_message
     end
-  end
-
-  def validate_confirmed
-    self.confirmed = [postcode, location_admin_district, location_code, units, type_of_unit, mobility_type].all?(&:present?)
   end
 
   def linked_local_authorities
