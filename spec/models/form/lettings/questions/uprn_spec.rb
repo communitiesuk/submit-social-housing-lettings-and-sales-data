@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Questions::Uprn, type: :model do
+RSpec.describe Form::Lettings::Questions::Uprn, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
@@ -32,7 +32,7 @@ RSpec.describe Form::Sales::Questions::Uprn, type: :model do
   end
 
   it "has the correct question_number" do
-    expect(question.question_number).to eq(14)
+    expect(question.question_number).to eq(11)
   end
 
   it "has the correct hint" do
@@ -45,7 +45,7 @@ RSpec.describe Form::Sales::Questions::Uprn, type: :model do
 
   describe "get_extra_check_answer_value" do
     context "when address is not present" do
-      let(:log) { create(:sales_log) }
+      let(:log) { create(:lettings_log) }
 
       it "returns nil" do
         expect(question.get_extra_check_answer_value(log)).to be_nil
@@ -55,7 +55,7 @@ RSpec.describe Form::Sales::Questions::Uprn, type: :model do
     context "when address is present" do
       let(:log) do
         create(
-          :sales_log,
+          :lettings_log,
           address_line1: "1, Test Street",
           town_or_city: "Test Town",
           county: "Test County",
@@ -74,7 +74,7 @@ RSpec.describe Form::Sales::Questions::Uprn, type: :model do
 
   describe "has the correct hidden_in_check_answers" do
     context "when uprn_known == 1" do
-      let(:log) { create(:sales_log, uprn_known: 1) }
+      let(:log) { create(:lettings_log, uprn_known: 1) }
 
       it "returns false" do
         expect(question.hidden_in_check_answers?(log)).to eq(false)
@@ -82,7 +82,7 @@ RSpec.describe Form::Sales::Questions::Uprn, type: :model do
     end
 
     context "when uprn_known != 1" do
-      let(:log) { create(:sales_log, uprn_known: 0) }
+      let(:log) { create(:lettings_log, uprn_known: 0) }
 
       it "returns false" do
         expect(question.hidden_in_check_answers?(log)).to eq(true)

@@ -32,6 +32,7 @@ class LettingsLog < Log
   before_validation :reset_location_fields!, unless: :postcode_known?
   before_validation :reset_previous_location_fields!, unless: :previous_postcode_known?
   before_validation :set_derived_fields!
+  after_validation :process_uprn_change!, if: :should_process_uprn_change?
 
   belongs_to :scheme, optional: true
   belongs_to :location, optional: true
@@ -678,5 +679,9 @@ private
 
   def unknown_housingneeds?
     housingneeds == 3
+  end
+
+  def should_process_uprn_change?
+    uprn_changed? && startdate && startdate.year >= 2023
   end
 end

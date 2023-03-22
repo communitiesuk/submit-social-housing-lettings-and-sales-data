@@ -45,6 +45,7 @@ class Log < ApplicationRecord
       self.address_line2 = presenter.address_line2
       self.town_or_city = presenter.town_or_city
       self.postcode_full = presenter.postcode
+      self.county = nil
       process_postcode_changes!
     end
   end

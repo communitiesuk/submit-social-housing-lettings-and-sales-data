@@ -8,7 +8,7 @@ class Form::Lettings::Subsections::PropertyInformation < ::Form::Subsection
 
   def pages
     @pages ||= [
-      Form::Lettings::Pages::PropertyPostcode.new(nil, nil, self),
+      uprn_questions,
       Form::Lettings::Pages::PropertyLocalAuthority.new(nil, nil, self),
       Form::Lettings::Pages::FirstTimePropertyLetAsSocialHousing.new(nil, nil, self),
       Form::Lettings::Pages::PropertyLetType.new(nil, nil, self),
@@ -25,7 +25,22 @@ class Form::Lettings::Subsections::PropertyInformation < ::Form::Subsection
       Form::Lettings::Pages::NewBuildHandoverDate.new(nil, nil, self),
       Form::Lettings::Pages::PropertyMajorRepairs.new(nil, nil, self),
       Form::Lettings::Pages::PropertyMajorRepairsValueCheck.new(nil, nil, self),
-    ].compact
+    ].flatten.compact
+  end
+
+  def uprn_questions
+    if form.start_date.year >= 2023
+      [
+        Form::Lettings::Pages::UprnKnown.new(nil, nil, self),
+        Form::Lettings::Pages::Uprn.new(nil, nil, self),
+        Form::Lettings::Pages::UprnConfirmation.new(nil, nil, self),
+        Form::Lettings::Pages::Address.new(nil, nil, self),
+      ]
+    else
+      [
+        Form::Lettings::Pages::PropertyPostcode.new(nil, nil, self),
+      ]
+    end
   end
 
   def displayed_in_tasklist?(log)

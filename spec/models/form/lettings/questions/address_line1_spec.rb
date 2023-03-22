@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Questions::AddressLine1, type: :model do
+RSpec.describe Form::Lettings::Questions::AddressLine1, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
@@ -11,16 +11,16 @@ RSpec.describe Form::Sales::Questions::AddressLine1, type: :model do
     expect(question.page).to eq(page)
   end
 
-  it "has the correct question_number" do
-    expect(question.question_number).to eq(15)
-  end
-
   it "has the correct id" do
     expect(question.id).to eq("address_line1")
   end
 
   it "has the correct header" do
     expect(question.header).to eq("Address line 1")
+  end
+
+  it "has the correct question_number" do
+    expect(question.question_number).to eq(12)
   end
 
   it "has the correct check_answer_label" do
@@ -49,7 +49,7 @@ RSpec.describe Form::Sales::Questions::AddressLine1, type: :model do
 
   describe "has the correct get_extra_check_answer_value" do
     context "when la is not present" do
-      let(:log) { create(:sales_log, la: nil) }
+      let(:log) { create(:lettings_log, la: nil) }
 
       it "returns nil" do
         expect(question.get_extra_check_answer_value(log)).to be_nil
@@ -57,7 +57,7 @@ RSpec.describe Form::Sales::Questions::AddressLine1, type: :model do
     end
 
     context "when la is present but not inferred" do
-      let(:log) { create(:sales_log, la: "E09000003", is_la_inferred: false) }
+      let(:log) { create(:lettings_log, la: "E09000003", is_la_inferred: false) }
 
       it "returns nil" do
         expect(question.get_extra_check_answer_value(log)).to be_nil
@@ -65,7 +65,7 @@ RSpec.describe Form::Sales::Questions::AddressLine1, type: :model do
     end
 
     context "when la is present but inferred" do
-      let(:log) { create(:sales_log, la: "E09000003") }
+      let(:log) { create(:lettings_log, la: "E09000003") }
 
       before do
         allow(log).to receive(:is_la_inferred?).and_return(true)
