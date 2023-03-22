@@ -593,7 +593,7 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
-    xcontext "when there is information about 7 people" do
+    context "when there is information about 7 people" do
       let(:sales_log_id) { "shared_ownership_sales_log" }
 
       before do
