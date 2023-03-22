@@ -214,7 +214,7 @@ module Imports
         @logs_overridden << sales_log.old_id
         attributes.delete("income1")
         save_sales_log(attributes, previous_status)
-      elsif sales_log.errors.of_kind?(:equity, :over_max)
+      elsif sales_log.errors.of_kind?(:equity, :over_max) || sales_log.errors.of_kind?(:equity, :under_min)
         @logger.warn("Log #{sales_log.old_id}: Removing equity as the equity is invalid")
         @logs_overridden << sales_log.old_id
         attributes.delete("equity")
