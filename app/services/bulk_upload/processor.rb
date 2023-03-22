@@ -15,11 +15,16 @@ class BulkUpload::Processor
     if validator.any_setup_errors?
       send_setup_errors_mail
     elsif validator.create_logs?
-      create_logs
-      send_fix_errors_mail if created_logs_but_incompleted?
-      send_success_mail if created_logs_and_all_completed?
+      if bulk_upload.bulk_upload_errors.count.zero?
+        create_logs
+
+        send_fix_errors_mail if created_logs_but_incompleted?
+        send_success_mail if created_logs_and_all_completed?
+      else
+        send_how_fix_upload_mail
+      end
     else
-      send_correct_and_upload_again_mail
+      send_correct_and_upload_again_mail # summary/full report
     end
   rescue StandardError => e
     Sentry.capture_exception(e)
@@ -28,7 +33,20 @@ class BulkUpload::Processor
     downloader.delete_local_file!
   end
 
+  def approve
+    download
+    create_logs
+  ensure
+    downloader.delete_local_file!
+  end
+
 private
+
+  def send_how_fix_upload_mail
+    BulkUploadMailer
+      .send_how_fix_upload_mail(bulk_upload:)
+      .deliver_later
+  end
 
   def send_setup_errors_mail
     BulkUploadMailer

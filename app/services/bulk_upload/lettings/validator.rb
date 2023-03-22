@@ -44,7 +44,6 @@ class BulkUpload::Lettings::Validator
 
   def create_logs?
     return false if any_setup_errors?
-    return false if over_column_error_threshold?
     return false if row_parsers.any?(&:block_log_creation?)
 
     row_parsers.all? { |row_parser| row_parser.log.valid? }

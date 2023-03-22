@@ -59,14 +59,26 @@ RSpec.describe BulkUploadLettingsResumeController, type: :request do
   end
 
   describe "GET /lettings-logs/bulk-upload-resume/:ID/confirm" do
-    context "without previous answer" do
-      it "renders page" do
-        get "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/confirm"
+    it "renders page" do
+      get "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/confirm"
 
-        expect(response).to be_successful
+      expect(response).to be_successful
 
-        expect(response.body).to include("Are you sure")
-      end
+      expect(response.body).to include("Are you sure")
+    end
+  end
+
+  describe "PATCH /lettings-logs/bulk-upload-resume/:ID/confirm" do
+    let(:mock_processor) { instance_double(BulkUpload::Processor, approve: nil) }
+
+    it "approves logs for creation" do
+      allow(BulkUpload::Processor).to receive(:new).with(bulk_upload:).and_return(mock_processor)
+
+      patch "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/confirm"
+
+      expect(mock_processor).to have_received(:approve)
+
+      expect(response).to redirect_to("/lettings-logs/bulk-upload-results/#{bulk_upload.id}/resume")
     end
   end
 end

@@ -16,7 +16,7 @@ class BulkUploadLettingsResumeController < ApplicationController
   def update
     @bulk_upload = current_user.bulk_uploads.find(params[:id])
 
-    if form.valid? # && form.save!
+    if form.valid? && form.save!
       redirect_to form.next_path
     else
       render form.view_path
