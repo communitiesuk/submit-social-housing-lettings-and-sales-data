@@ -327,6 +327,11 @@ module Imports
         @logs_overridden << lettings_log.old_id
         attributes.delete("offered")
         save_lettings_log(attributes, previous_status)
+      elsif lettings_log.errors.of_kind?(:earnings, :over_hard_max)
+        @logger.warn("Log #{lettings_log.old_id}: Removing working situation because income is too high for it")
+        @logs_overridden << lettings_log.old_id
+        attributes.delete("ecstat1")
+        save_lettings_log(attributes, previous_status)
       else
         @logger.error("Log #{lettings_log.old_id}: Failed to import")
         lettings_log.errors.each do |error|
