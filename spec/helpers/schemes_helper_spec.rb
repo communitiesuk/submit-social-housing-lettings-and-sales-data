@@ -152,7 +152,6 @@ RSpec.describe SchemesHelper do
     end
 
     context "when scheme has a location" do
-
       before do
         FactoryBot.create(:location, scheme:)
       end
@@ -319,6 +318,5 @@ RSpec.describe SchemesHelper do
         end
       end
     end
-
   end
 end
