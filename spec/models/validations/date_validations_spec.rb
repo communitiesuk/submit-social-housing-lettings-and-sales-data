@@ -171,6 +171,7 @@ RSpec.describe Validations::DateValidations do
 
     context "with a scheme that is reactivating soon" do
       let(:scheme) { create(:scheme) }
+      let!(:location) { FactoryBot.create(:location, scheme:) }
 
       before do
         create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), scheme:)
@@ -195,6 +196,7 @@ RSpec.describe Validations::DateValidations do
 
     context "with a scheme that has many reactivations soon" do
       let(:scheme) { create(:scheme) }
+      let!(:location) { FactoryBot.create(:location, scheme:) }
 
       before do
         create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), scheme:)

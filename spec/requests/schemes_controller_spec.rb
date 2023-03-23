@@ -7,6 +7,12 @@ RSpec.describe SchemesController, type: :request do
   let(:user) { FactoryBot.create(:user, :support) }
   let!(:schemes) { FactoryBot.create_list(:scheme, 5) }
 
+  before do
+    schemes.each do |scheme|
+      FactoryBot.create(:location, scheme:)
+    end
+  end
+
   describe "#index" do
     context "when not signed in" do
       it "redirects to the sign in page" do
@@ -258,6 +264,7 @@ RSpec.describe SchemesController, type: :request do
         let(:user) { FactoryBot.create(:user, :data_coordinator) }
         let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
         let(:add_deactivations) { scheme.scheme_deactivation_periods << scheme_deactivation_period }
+        let!(:location) { FactoryBot.create(:location, scheme:) }
 
         before do
           Timecop.freeze(Time.utc(2022, 10, 10))

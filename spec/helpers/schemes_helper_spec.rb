@@ -106,6 +106,7 @@ RSpec.describe SchemesHelper do
                         intended_stay: "P",
                         created_at: Time.zone.local(2022, 4, 1))
     end
+    let!(:location) { FactoryBot.create(:location, scheme:) }
     let!(:scheme_where_managing_organisation_is_owning_organisation) { FactoryBot.create(:scheme, arrangement_type: "D") }
     let(:support_user) { FactoryBot.create(:user, :support) }
     let(:coordinator_user) { FactoryBot.create(:user, :data_coordinator) }

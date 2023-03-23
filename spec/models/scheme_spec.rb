@@ -94,6 +94,7 @@ RSpec.describe Scheme, type: :model do
 
   describe "status" do
     let(:scheme) { FactoryBot.build(:scheme) }
+    let!(:location) { FactoryBot.create(:location, scheme:) }
 
     before do
       Timecop.freeze(2022, 6, 7)
