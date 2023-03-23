@@ -322,6 +322,11 @@ module Imports
         @logs_overridden << lettings_log.old_id
         attributes.delete("joint")
         save_lettings_log(attributes, previous_status)
+      elsif lettings_log.errors.of_kind?(:offered, :over_20)
+        @logger.warn("Log #{lettings_log.old_id}: Removing offered as the value is above the maximum of 20")
+        @logs_overridden << lettings_log.old_id
+        attributes.delete("offered")
+        save_lettings_log(attributes, previous_status)
       else
         @logger.error("Log #{lettings_log.old_id}: Failed to import")
         lettings_log.errors.each do |error|

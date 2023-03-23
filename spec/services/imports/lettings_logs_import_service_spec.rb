@@ -396,6 +396,28 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
+      context "and the number the property was relet is over 20" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q20").content = "25"
+        end
+
+        it "intercepts the relevant validation error" do
+          expect(logger).to receive(:warn).with(/Removing offered as the value is above the maximum of 20/)
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the referral answer" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.offered).to be_nil
+        end
+      end
+
       context "and the net income soft validation is triggered (net_income_value_check)" do
         before do
           lettings_log_xml.at_xpath("//xmlns:Q8a").content = "1 Weekly"
