@@ -311,14 +311,14 @@ class BulkUpload::Lettings::Year2023::RowParser
   validate :validate_dont_know_disabled_needs_conjunction
   validate :validate_no_and_dont_know_disabled_needs_conjunction
 
-  validate :validate_owning_org_permitted
-  validate :validate_owning_org_owns_stock
-  validate :validate_owning_org_exists
   validate :validate_owning_org_data_given
+  validate :validate_owning_org_exists
+  validate :validate_owning_org_owns_stock
+  validate :validate_owning_org_permitted
 
-  validate :validate_managing_org_related
-  validate :validate_managing_org_exists
   validate :validate_managing_org_data_given
+  validate :validate_managing_org_exists
+  validate :validate_managing_org_related
 
   validate :validate_scheme_related
   validate :validate_scheme_exists
@@ -551,19 +551,26 @@ private
   def validate_managing_org_related
     if owning_organisation && managing_organisation && !owning_organisation.can_be_managed_by?(organisation: managing_organisation)
       block_log_creation!
-      errors.add(:field_2, "This managing organisation does not have a relationship with the owning organisation")
+
+      if errors[:field_2].blank?
+        errors.add(:field_2, "This managing organisation does not have a relationship with the owning organisation")
+      end
     end
   end
 
   def validate_managing_org_exists
     if managing_organisation.nil?
-      errors.delete(:field_2)
-      errors.add(:field_2, "The managing organisation code is incorrect")
+      block_log_creation!
+
+      if errors[:field_2].blank?
+        errors.add(:field_2, "The managing organisation code is incorrect")
+      end
     end
   end
 
   def validate_managing_org_data_given
     if field_2.blank?
+      block_log_creation!
       errors.add(:field_2, "The managing organisation code is incorrect", category: :setup)
     end
   end
@@ -571,20 +578,26 @@ private
   def validate_owning_org_owns_stock
     if owning_organisation && !owning_organisation.holds_own_stock?
       block_log_creation!
-      errors.delete(:field_1)
-      errors.add(:field_1, "The owning organisation code provided is for an organisation that does not own stock")
+
+      if errors[:field_1].blank?
+        errors.add(:field_1, "The owning organisation code provided is for an organisation that does not own stock")
+      end
     end
   end
 
   def validate_owning_org_exists
     if owning_organisation.nil?
-      errors.delete(:field_1)
-      errors.add(:field_1, "The owning organisation code is incorrect")
+      block_log_creation!
+
+      if errors[:field_1].blank?
+        errors.add(:field_1, "The owning organisation code is incorrect")
+      end
     end
   end
 
   def validate_owning_org_data_given
     if field_1.blank?
+      block_log_creation!
       errors.add(:field_1, "The owning organisation code is incorrect", category: :setup)
     end
   end
@@ -592,8 +605,10 @@ private
   def validate_owning_org_permitted
     if owning_organisation && !bulk_upload.user.organisation.affiliated_stock_owners.include?(owning_organisation)
       block_log_creation!
-      errors.delete(:field_1)
-      errors.add(:field_1, "You do not have permission to add logs for this owning organisation")
+
+      if errors[:field_1].blank?
+        errors.add(:field_1, "You do not have permission to add logs for this owning organisation")
+      end
     end
   end
 
