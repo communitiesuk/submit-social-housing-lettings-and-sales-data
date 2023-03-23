@@ -43,7 +43,7 @@ module Validations::TenancyValidations
     return unless record.collection_start_year && record.joint
 
     if record.hhmemb == 1 && record.joint != 2 && record.collection_start_year >= 2022
-      record.errors.add :joint, I18n.t("validations.tenancy.not_joint")
+      record.errors.add :joint, :not_joint_tenancy, message: I18n.t("validations.tenancy.not_joint")
       record.errors.add :hhmemb, I18n.t("validations.tenancy.joint_more_than_one_member")
     end
   end

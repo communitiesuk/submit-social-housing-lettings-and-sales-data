@@ -590,5 +590,41 @@ RSpec.describe Imports::LettingsLogsImportService do
           .to change(OrganisationRelationship, :count).by(1)
       end
     end
+
+    context "when this is a joint tenancy with 1 person in the household" do
+      let(:lettings_log_id) { "0ead17cb-1668-442d-898c-0d52879ff592" }
+      let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id) }
+      let(:lettings_log_xml) { Nokogiri::XML(lettings_log_file) }
+
+      before do
+        lettings_log_xml.at_xpath("//xmlns:joint").content = "1"
+        lettings_log_xml.at_xpath("//xmlns:HHMEMB").content = "1"
+        lettings_log_xml.at_xpath("//xmlns:P2Age").content = ""
+        lettings_log_xml.at_xpath("//xmlns:P2Rel").content = ""
+        lettings_log_xml.at_xpath("//xmlns:P2Sex").content = ""
+        lettings_log_xml.at_xpath("//xmlns:P1Nat").content = "18"
+        lettings_log_xml.at_xpath("//xmlns:P2Eco").content = ""
+        lettings_log_xml.at_xpath("//xmlns:DAY").content = "2"
+        lettings_log_xml.at_xpath("//xmlns:MONTH").content = "10"
+        lettings_log_xml.at_xpath("//xmlns:YEAR").content = "2022"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Removing joint tenancy as there is only 1 person in the household/)
+        expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the referral answer" do
+        allow(logger).to receive(:warn)
+
+        lettings_log_service.send(:create_log, lettings_log_xml)
+        lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+        expect(lettings_log).not_to be_nil
+        expect(lettings_log.joint).to be_nil
+        expect(lettings_log.hhmemb).to eq(1)
+      end
+    end
   end
 end

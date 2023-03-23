@@ -317,6 +317,11 @@ module Imports
         attributes.delete("prevten")
         attributes.delete("rsnvac")
         save_lettings_log(attributes, previous_status)
+      elsif lettings_log.errors.of_kind?(:joint, :not_joint_tenancy)
+        @logger.warn("Log #{lettings_log.old_id}: Removing joint tenancy as there is only 1 person in the household")
+        @logs_overridden << lettings_log.old_id
+        attributes.delete("joint")
+        save_lettings_log(attributes, previous_status)
       else
         @logger.error("Log #{lettings_log.old_id}: Failed to import")
         lettings_log.errors.each do |error|
