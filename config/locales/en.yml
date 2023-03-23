@@ -253,11 +253,11 @@ en:
         less_than_shortfall: "Enter an amount that is more than the shortfall in basic rent"
         scharge:
           private_registered_provider:
-            general_needs: "Enter a value for the service charge between £0 and £55 per week if the landlord is a private registered provider and it is a general needs letting"
-            supported_housing: "Enter a value for the service charge between £0 and £280 per week if the landlord is a private registered provider and it is a supported housing letting"
+            general_needs: "Enter a value for the service charge between £0 and £155 per week if the landlord is a private registered provider and it is a general needs letting"
+            supported_housing: "Enter a value for the service charge between £0 and £480 per week if the landlord is a private registered provider and it is a supported housing letting"
           local_authority:
-            general_needs: "Enter a value for the service charge between £0 and £45 per week if the landlord is a local authority and it is a general needs letting"
-            supported_housing: "Enter a value for the service charge between £0 and £165 per week if the landlord is a local authority and it is a supported housing letting"
+            general_needs: "Enter a value for the service charge between £0 and £155 per week if the landlord is a local authority and it is a general needs letting"
+            supported_housing: "Enter a value for the service charge between £0 and £365 per week if the landlord is a local authority and it is a supported housing letting"
         pscharge:
           private_registered_provider:
             general_needs: "Enter a value for the personal service charge between £0 and £30 per week if the landlord is a private registered provider and it is a general needs letting"

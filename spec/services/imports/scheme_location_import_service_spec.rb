@@ -16,6 +16,11 @@ RSpec.describe Imports::SchemeLocationImportService do
     File.open("#{directory}/#{filename}.xml")
   end
 
+  before do
+    WebMock.stub_request(:get, /api.postcodes.io\/postcodes/)
+    .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Westminster","codes":{"admin_district":"E08000035"}}}', headers: {})
+  end
+
   context "when importing scheme locations" do
     let(:remote_folder) { "schemes" }
 
@@ -145,6 +150,7 @@ RSpec.describe Imports::SchemeLocationImportService do
       expect(location.old_visible_id).to eq("10")
       expect(location.startdate).to eq("1900-01-01")
       expect(location.scheme).to eq(scheme)
+      expect(location.confirmed).to eq(true)
     end
 
     it "matches expected schemes values" do
@@ -156,8 +162,13 @@ RSpec.describe Imports::SchemeLocationImportService do
       expect(location.scheme.primary_client_group).to eq("Older people with support needs")
       expect(location.scheme.secondary_client_group).to be_nil
       expect(location.scheme.sensitive).to eq("No")
-      expect(location.scheme.end_date).to eq("2050-12-31")
       expect(location.scheme.confirmed).to be_truthy
+    end
+
+    it "creates a deactivation period" do
+      location = location_service.create_scheme_location(location_xml)
+      expect(location.location_deactivation_periods.count).to eq(1)
+      expect(location.location_deactivation_periods.first.deactivation_date).to eq(Time.zone.local(2050, 12, 31))
     end
 
     context "and we import the same location twice" do
