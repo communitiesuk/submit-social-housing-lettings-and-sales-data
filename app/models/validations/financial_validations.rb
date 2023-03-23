@@ -25,6 +25,7 @@ module Validations::FinancialValidations
     if record.ecstat1 && record.weekly_net_income
       if record.weekly_net_income > record.applicable_income_range.hard_max
         record.errors.add :earnings, :over_hard_max, message: I18n.t("validations.financial.earnings.over_hard_max", hard_max: record.applicable_income_range.hard_max)
+        record.errors.add :ecstat1, :over_hard_max, message: I18n.t("validations.financial.ecstat.over_hard_max", hard_max: record.applicable_income_range.hard_max)
       end
 
       if record.weekly_net_income < record.applicable_income_range.hard_min

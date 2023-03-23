@@ -311,6 +311,27 @@ module Imports
         attributes.delete("prevten")
         attributes.delete("age1")
         save_lettings_log(attributes, previous_status)
+      elsif lettings_log.errors.of_kind?(:prevten, :non_temp_accommodation)
+        @logger.warn("Log #{lettings_log.old_id}: Removing vacancy reason and previous tenancy since this accommodation is not temporary")
+        @logs_overridden << lettings_log.old_id
+        attributes.delete("prevten")
+        attributes.delete("rsnvac")
+        save_lettings_log(attributes, previous_status)
+      elsif lettings_log.errors.of_kind?(:joint, :not_joint_tenancy)
+        @logger.warn("Log #{lettings_log.old_id}: Removing joint tenancy as there is only 1 person in the household")
+        @logs_overridden << lettings_log.old_id
+        attributes.delete("joint")
+        save_lettings_log(attributes, previous_status)
+      elsif lettings_log.errors.of_kind?(:offered, :over_20)
+        @logger.warn("Log #{lettings_log.old_id}: Removing offered as the value is above the maximum of 20")
+        @logs_overridden << lettings_log.old_id
+        attributes.delete("offered")
+        save_lettings_log(attributes, previous_status)
+      elsif lettings_log.errors.of_kind?(:earnings, :over_hard_max)
+        @logger.warn("Log #{lettings_log.old_id}: Removing working situation because income is too high for it")
+        @logs_overridden << lettings_log.old_id
+        attributes.delete("ecstat1")
+        save_lettings_log(attributes, previous_status)
       else
         @logger.error("Log #{lettings_log.old_id}: Failed to import")
         lettings_log.errors.each do |error|
