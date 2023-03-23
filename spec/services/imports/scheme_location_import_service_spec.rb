@@ -16,6 +16,11 @@ RSpec.describe Imports::SchemeLocationImportService do
     File.open("#{directory}/#{filename}.xml")
   end
 
+  before do
+    WebMock.stub_request(:get, /api.postcodes.io\/postcodes/)
+    .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Westminster","codes":{"admin_district":"E08000035"}}}', headers: {})
+  end
+
   context "when importing scheme locations" do
     let(:remote_folder) { "schemes" }
 
@@ -145,6 +150,7 @@ RSpec.describe Imports::SchemeLocationImportService do
       expect(location.old_visible_id).to eq("10")
       expect(location.startdate).to eq("1900-01-01")
       expect(location.scheme).to eq(scheme)
+      expect(location.confirmed).to eq(true)
     end
 
     it "matches expected schemes values" do

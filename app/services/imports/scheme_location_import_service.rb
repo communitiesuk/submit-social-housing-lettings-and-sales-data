@@ -97,7 +97,7 @@ module Imports
     end
 
     def add_location(scheme, attributes)
-      location = Location.new(
+      location = Location.create!(
         name: attributes["location_name"],
         postcode: attributes["postcode"],
         mobility_type: attributes["mobility_type"],
@@ -108,8 +108,6 @@ module Imports
         startdate: attributes["start_date"],
         scheme:,
       )
-      confirm_scheme_or_location(location)
-      location.save!
       if attributes["end_date"]
         location.location_deactivation_periods.create!(deactivation_date: attributes["end_date"])
       end
