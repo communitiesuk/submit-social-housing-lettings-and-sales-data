@@ -64,7 +64,7 @@ RSpec.describe Form::Lettings::Questions::AddressLine1, type: :model do
       end
     end
 
-    context "when la is present but inferred" do
+    context "when la is present and inferred" do
       let(:log) { create(:lettings_log, la: "E09000003") }
 
       before do

@@ -7,7 +7,6 @@ RSpec.describe LettingsLog do
   let(:created_by_user) { create(:user) }
   let(:owning_organisation) { created_by_user.organisation }
   let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
-  let(:fake_2022_2023_form) { Form.new("spec/fixtures/forms/2022_2023.json") }
 
   around do |example|
     Timecop.freeze(Time.utc(2022, 1, 1)) do
