@@ -263,15 +263,15 @@ RSpec.describe Validations::FinancialValidations do
 
         [{
           period: { label: "weekly", value: 1 },
-          charge: { field: "scharge", value: 56 },
+          charge: { field: "scharge", value: 156 },
         },
          {
            period: { label: "monthly", value: 4 },
-           charge: { field: "scharge", value: 300 },
+           charge: { field: "scharge", value: 672 },
          },
          {
            period: { label: "every 2 weeks", value: 2 },
-           charge: { field: "scharge", value: 111 },
+           charge: { field: "scharge", value: 311 },
          },
          {
            period: { label: "weekly", value: 1 },
@@ -308,15 +308,15 @@ RSpec.describe Validations::FinancialValidations do
 
         [{
           period: { label: "weekly", value: 1 },
-          charge: { field: "scharge", value: 54 },
+          charge: { field: "scharge", value: 154 },
         },
          {
            period: { label: "monthly", value: 4 },
-           charge: { field: "scharge", value: 220 },
+           charge: { field: "scharge", value: 670 },
          },
          {
            period: { label: "every 2 weeks", value: 2 },
-           charge: { field: "scharge", value: 109 },
+           charge: { field: "scharge", value: 309 },
          },
          {
            period: { label: "weekly", value: 1 },
@@ -357,15 +357,15 @@ RSpec.describe Validations::FinancialValidations do
 
         [{
           period: { label: "weekly", value: 1 },
-          charge: { field: "scharge", value: 281 },
+          charge: { field: "scharge", value: 481 },
         },
          {
            period: { label: "monthly", value: 4 },
-           charge: { field: "scharge", value: 1225 },
+           charge: { field: "scharge", value: 2081 },
          },
          {
            period: { label: "every 2 weeks", value: 2 },
-           charge: { field: "scharge", value: 561 },
+           charge: { field: "scharge", value: 961 },
          },
          {
            period: { label: "weekly", value: 1 },
@@ -402,15 +402,15 @@ RSpec.describe Validations::FinancialValidations do
 
         [{
           period: { label: "weekly", value: 1 },
-          charge: { field: "scharge", value: 280 },
+          charge: { field: "scharge", value: 366 },
         },
          {
            period: { label: "monthly", value: 4 },
-           charge: { field: "scharge", value: 1200 },
+           charge: { field: "scharge", value: 1582 },
          },
          {
            period: { label: "every 2 weeks", value: 2 },
-           charge: { field: "scharge", value: 559 },
+           charge: { field: "scharge", value: 731 },
          },
          {
            period: { label: "weekly", value: 1 },
@@ -455,15 +455,15 @@ RSpec.describe Validations::FinancialValidations do
 
         [{
           period: { label: "weekly", value: 1 },
-          charge: { field: "scharge", value: 46 },
+          charge: { field: "scharge", value: 156 },
         },
          {
            period: { label: "monthly", value: 4 },
-           charge: { field: "scharge", value: 200 },
+           charge: { field: "scharge", value: 672 },
          },
          {
            period: { label: "every 2 weeks", value: 2 },
-           charge: { field: "scharge", value: 91 },
+           charge: { field: "scharge", value: 311 },
          },
          {
            period: { label: "weekly", value: 1 },
@@ -549,15 +549,15 @@ RSpec.describe Validations::FinancialValidations do
 
         [{
           period: { label: "weekly", value: 1 },
-          charge: { field: "scharge", value: 165.90 },
+          charge: { field: "scharge", value: 365.90 },
         },
          {
            period: { label: "monthly", value: 4 },
-           charge: { field: "scharge", value: 750 },
+           charge: { field: "scharge", value: 2081 },
          },
          {
            period: { label: "every 2 weeks", value: 2 },
-           charge: { field: "scharge", value: 330.50 },
+           charge: { field: "scharge", value: 961 },
          },
          {
            period: { label: "weekly", value: 1 },
@@ -617,15 +617,15 @@ RSpec.describe Validations::FinancialValidations do
 
         [{
           period: { label: "weekly", value: 1 },
-          charge: { field: "scharge", value: 120.88 },
+          charge: { field: "scharge", value: 364.88 },
         },
          {
            period: { label: "monthly", value: 4 },
-           charge: { field: "scharge", value: 608 },
+           charge: { field: "scharge", value: 1200 },
          },
          {
            period: { label: "every 2 weeks", value: 2 },
-           charge: { field: "scharge", value: 329.99 },
+           charge: { field: "scharge", value: 700.99 },
          },
          {
            period: { label: "weekly", value: 1 },
