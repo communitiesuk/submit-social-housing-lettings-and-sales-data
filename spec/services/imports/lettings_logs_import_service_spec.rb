@@ -366,6 +366,36 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
+      context "and this is a non temporary acommodation" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q27").content = "9"
+          lettings_log_xml.at_xpath("//xmlns:Q11").content = "4"
+          lettings_log_xml.at_xpath("//xmlns:VDAY").content = ""
+          lettings_log_xml.at_xpath("//xmlns:VMONTH").content = ""
+          lettings_log_xml.at_xpath("//xmlns:VYEAR").content = ""
+          lettings_log_xml.at_xpath("//xmlns:MRCDAY").content = ""
+          lettings_log_xml.at_xpath("//xmlns:MRCMONTH").content = ""
+          lettings_log_xml.at_xpath("//xmlns:MRCYEAR").content = ""
+        end
+
+        it "intercepts the relevant validation error" do
+          expect(logger).to receive(:warn).with(/Removing vacancy reason and previous tenancy since this accommodation is not temporary/)
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the referral answer" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.rsnvac).to be_nil
+          expect(lettings_log.prevten).to be_nil
+        end
+      end
+
       context "and the net income soft validation is triggered (net_income_value_check)" do
         before do
           lettings_log_xml.at_xpath("//xmlns:Q8a").content = "1 Weekly"

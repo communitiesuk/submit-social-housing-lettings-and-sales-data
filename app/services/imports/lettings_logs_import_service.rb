@@ -311,6 +311,12 @@ module Imports
         attributes.delete("prevten")
         attributes.delete("age1")
         save_lettings_log(attributes, previous_status)
+      elsif lettings_log.errors.of_kind?(:prevten, :non_temp_accommodation)
+        @logger.warn("Log #{lettings_log.old_id}: Removing vacancy reason and previous tenancy since this accommodation is not temporary")
+        @logs_overridden << lettings_log.old_id
+        attributes.delete("prevten")
+        attributes.delete("rsnvac")
+        save_lettings_log(attributes, previous_status)
       else
         @logger.error("Log #{lettings_log.old_id}: Failed to import")
         lettings_log.errors.each do |error|
