@@ -235,7 +235,7 @@ class Scheme < ApplicationRecord
   end
 
   def status_at(date)
-    return :incomplete unless confirmed && has_completed_locations?
+    return :incomplete unless confirmed && has_confirmed_locations?
     return :deactivated if open_deactivation&.deactivation_date.present? && date >= open_deactivation.deactivation_date
     return :deactivating_soon if open_deactivation&.deactivation_date.present? && date < open_deactivation.deactivation_date
     return :reactivating_soon if recent_deactivation&.reactivation_date.present? && date < recent_deactivation.reactivation_date
@@ -255,14 +255,14 @@ class Scheme < ApplicationRecord
     status == :deactivated
   end
 
-  def has_completed_locations?
-    completed_locations_count.positive?
+  def has_confirmed_locations?
+    confirmed_locations_count.positive?
   end
 
 private
 
-  def completed_locations_count
-    locations.count { |location| location.status != :incomplete }
+  def confirmed_locations_count
+    locations.confirmed.size
   end
 
   def unconfirmed_locations_count
