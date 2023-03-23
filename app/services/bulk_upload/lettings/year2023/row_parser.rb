@@ -939,6 +939,13 @@ private
 
     attributes["first_time_property_let_as_social_housing"] = first_time_property_let_as_social_housing
 
+    attributes["uprn_known"] = field_18.present? ? 1 : 0
+    attributes["uprn"] = field_18
+    attributes["address_line1"] = field_19
+    attributes["address_line2"] = field_20
+    attributes["town_or_city"] = field_21
+    attributes["county"] = field_22
+
     attributes
   end
 
