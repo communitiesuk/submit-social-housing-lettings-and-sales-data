@@ -178,7 +178,7 @@ RSpec.describe LocationsHelper do
     context "when location has no local authority" do
       before do
         LocalAuthorityLink.create!(local_authority_id: LocalAuthority.find_by(code: "E07000030").id, linked_local_authority_id: LocalAuthority.find_by(code: "E06000063").id)
-        location.update!(location_code: nil)
+        location.update!(location_code: nil, confirmed: false)
       end
 
       it "returns correct display attributes" do
