@@ -38,7 +38,7 @@ module Validations::SharedValidations
     postcode = record.postcode_full
     if record.postcode_known? && (postcode.blank? || !postcode.match(POSTCODE_REGEXP))
       error_message = I18n.t("validations.postcode")
-      record.errors.add :postcode_full, error_message
+      record.errors.add :postcode_full, :wrong_format, message: error_message
     end
   end
 
