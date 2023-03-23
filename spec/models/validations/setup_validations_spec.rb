@@ -186,6 +186,7 @@ RSpec.describe Validations::SetupValidations do
 
     context "with a scheme that is reactivating soon" do
       let(:scheme) { create(:scheme, created_at: Time.zone.local(2022, 4, 1)) }
+
       before do
         FactoryBot.create(:location, scheme:)
         create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), scheme:)
