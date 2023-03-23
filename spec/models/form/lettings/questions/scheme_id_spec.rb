@@ -44,6 +44,7 @@ RSpec.describe Form::Lettings::Questions::SchemeId, type: :model do
     let(:organisation_2) { FactoryBot.create(:organisation) }
     let(:user) { FactoryBot.create(:user, organisation:) }
     let(:scheme) { FactoryBot.create(:scheme, owning_organisation: organisation) }
+    let!(:location) { FactoryBot.create(:location, scheme:) }
     let(:lettings_log) { FactoryBot.create(:lettings_log, created_by: user, needstype: 2) }
 
     before do
@@ -84,13 +85,13 @@ RSpec.describe Form::Lettings::Questions::SchemeId, type: :model do
     end
 
     context "when the question is answered" do
-      it "returns 'select an option' as selected answer" do
+      it "returns scheme as selected answer" do
         lettings_log.update!(scheme:)
         answers = question.displayed_answer_options(lettings_log).map do |key, value|
           OpenStruct.new(id: key, name: value.respond_to?(:service_name) ? value.service_name : nil, resource: value)
         end
         answers.each do |answer|
-          if answer.id == scheme.id
+          if answer.id.to_i == scheme.id
             expect(question.answer_selected?(lettings_log, answer)).to eq(true)
           else
             expect(question.answer_selected?(lettings_log, answer)).to eq(false)

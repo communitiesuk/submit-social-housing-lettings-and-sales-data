@@ -2259,7 +2259,7 @@ RSpec.describe LettingsLog do
 
   describe "resetting invalidated fields" do
     let(:scheme) { create(:scheme, owning_organisation: created_by_user.organisation) }
-    let(:location) { create(:location, location_code: "E07000223", scheme:) }
+    let!(:location) { create(:location, location_code: "E07000223", scheme:) }
     let(:lettings_log) do
       create(
         :lettings_log,

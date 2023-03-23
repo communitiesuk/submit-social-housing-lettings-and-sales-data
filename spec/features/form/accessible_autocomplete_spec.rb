@@ -87,7 +87,7 @@ RSpec.describe "Accessible Autocomplete" do
     it "displays appended text next to the options", js: true do
       find("#lettings-log-scheme-id-field").click.native.send_keys("w", "6", :down, :enter)
       expect(find(".autocomplete__option", visible: :hidden, text: scheme.service_name)).to be_present
-      expect(find("span", visible: :hidden, text: "2 locations")).to be_present
+      expect(find("span", visible: :hidden, text: "2 completed locations, 0 incomplete locations")).to be_present
     end
 
     it "displays hint text under the options", js: true do

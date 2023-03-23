@@ -142,9 +142,7 @@ class LocationsController < ApplicationController
   end
 
   def confirm_location
-    if [@location.postcode, @location.location_admin_district, @location.location_code, @location.units, @location.type_of_unit, @location.mobility_type].all?(&:present?)
-      @location.update!(confirmed: true)
-    end
+    @location.update!(confirmed: [@location.postcode, @location.location_admin_district, @location.location_code, @location.units, @location.type_of_unit, @location.mobility_type].all?(&:present?))
   end
 
   def show; end

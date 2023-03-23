@@ -798,7 +798,7 @@ RSpec.describe Location, type: :model do
     before do
       FactoryBot.create(:location, name: "ABC", postcode: "NW1 8RR", startdate: Time.zone.today)
       FactoryBot.create(:location, name: "XYZ", postcode: "SE1 6HJ", startdate: Time.zone.today + 1.day)
-      FactoryBot.create(:location, name: "GHQ", postcode: "EW1 7JK", startdate: Time.zone.today - 1.day, units: nil)
+      FactoryBot.create(:location, name: "GHQ", postcode: "EW1 7JK", startdate: Time.zone.today - 1.day, units: nil, confirmed: false)
       FactoryBot.create(:location, name: "GHQ", postcode: "EW1 7JK", startdate: nil)
     end
 
