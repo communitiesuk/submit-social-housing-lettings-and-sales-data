@@ -51,7 +51,9 @@ RSpec.describe Form::Lettings::Questions::SchemeId, type: :model do
     end
 
     context "when a scheme with at least 1 location exists" do
-      let!(:location) { FactoryBot.create(:location, scheme:) }
+      before do
+        FactoryBot.create(:location, scheme:)
+      end
 
       it "has the correct answer_options based on the schemes the user's organisation owns or manages" do
         expected_answer = { "" => "Select an option", scheme.id.to_s => scheme }
@@ -82,7 +84,9 @@ RSpec.describe Form::Lettings::Questions::SchemeId, type: :model do
     end
 
     context "when the question is answered" do
-      let!(:location) { FactoryBot.create(:location, scheme:) }
+      before do
+        FactoryBot.create(:location, scheme:)
+      end
 
       it "returns scheme as selected answer" do
         lettings_log.update!(scheme:)
