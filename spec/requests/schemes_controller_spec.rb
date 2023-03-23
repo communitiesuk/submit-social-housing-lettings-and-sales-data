@@ -264,9 +264,9 @@ RSpec.describe SchemesController, type: :request do
         let(:user) { FactoryBot.create(:user, :data_coordinator) }
         let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
         let(:add_deactivations) { scheme.scheme_deactivation_periods << scheme_deactivation_period }
-        let!(:location) { FactoryBot.create(:location, scheme:) }
 
         before do
+          FactoryBot.create(:location, scheme:)
           Timecop.freeze(Time.utc(2022, 10, 10))
           sign_in user
           add_deactivations
