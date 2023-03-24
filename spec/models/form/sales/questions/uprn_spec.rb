@@ -31,6 +31,10 @@ RSpec.describe Form::Sales::Questions::Uprn, type: :model do
     expect(question.derived?).to be false
   end
 
+  it "has the correct question_number" do
+    expect(question.question_number).to eq(14)
+  end
+
   it "has the correct hint" do
     expect(question.hint_text).to eq("The Unique Property Reference Number (UPRN) is a unique number system created by Ordnance Survey and used by housing providers and sectors UK-wide. For example 10010457355.")
   end

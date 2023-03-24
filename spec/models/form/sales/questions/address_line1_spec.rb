@@ -11,6 +11,10 @@ RSpec.describe Form::Sales::Questions::AddressLine1, type: :model do
     expect(question.page).to eq(page)
   end
 
+  it "has the correct question_number" do
+    expect(question.question_number).to eq(15)
+  end
+
   it "has the correct id" do
     expect(question.id).to eq("address_line1")
   end

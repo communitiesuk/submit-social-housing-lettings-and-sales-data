@@ -183,6 +183,26 @@ RSpec.describe Form, type: :model do
         expect(form.next_incomplete_section_redirect_path(subsection, lettings_log)).to eq("declaration")
       end
     end
+
+    context "when no pages or questions in the next subsection are routed to" do
+      let(:subsection) { form.get_subsection("setup") }
+
+      around do |example|
+        FormHandler.instance.use_real_forms!
+
+        example.run
+
+        FormHandler.instance.use_fake_forms!
+      end
+
+      it "finds the path to the section after" do
+        lettings_log.startdate = Time.zone.local(2022, 9, 1)
+        lettings_log.renewal = 1
+        lettings_log.needstype = 2
+        lettings_log.postcode_known = 0
+        expect(form.next_incomplete_section_redirect_path(subsection, lettings_log)).to eq("joint")
+      end
+    end
   end
 
   describe "invalidated_page_questions" do
@@ -227,12 +247,12 @@ RSpec.describe Form, type: :model do
       expect(form.sections[0].class).to eq(Form::Sales::Sections::Setup)
       expect(form.subsections.count).to eq(1)
       expect(form.subsections.first.id).to eq("setup")
-      expect(form.pages.count).to eq(15)
+      expect(form.pages.count).to eq(16)
       expect(form.pages.first.id).to eq("organisation")
-      expect(form.questions.count).to eq(16)
+      expect(form.questions.count).to eq(17)
       expect(form.questions.first.id).to eq("owning_organisation_id")
       expect(form.start_date).to eq(Time.zone.parse("2022-04-01"))
-      expect(form.end_date).to eq(Time.zone.parse("2023-07-07"))
+      expect(form.end_date).to eq(Time.zone.parse("2023-06-07"))
       expect(form.unresolved_log_redirect_page_id).to eq(nil)
     end
 

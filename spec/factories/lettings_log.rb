@@ -30,7 +30,7 @@ FactoryBot.define do
       age1 { 34 }
       sex1 { "M" }
       ethnic { 2 }
-      national { 4 }
+      national { 18 }
       ecstat1 { 2 }
       hhmemb { 1 }
     end
@@ -43,7 +43,7 @@ FactoryBot.define do
       sex1 { "F" }
       ethnic_group { 0 }
       ethnic { 2 }
-      national { 4 }
+      national { 13 }
       prevten { 6 }
       ecstat1 { 0 }
       hhmemb { 2 }
@@ -79,7 +79,7 @@ FactoryBot.define do
       supcharg { 35 }
       tcharge { 325 }
       layear { 2 }
-      waityear { 1 }
+      waityear { 7 }
       postcode_known { 1 }
       postcode_full { Faker::Address.postcode }
       reasonpref { 1 }

@@ -63,6 +63,9 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       stub_request(:get, /api.postcodes.io/)
       .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\", \"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
 
+      stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=100023336956")
+        .to_return(status: 200, body: "{}", headers: {})
+
       parser.valid?
     end
 
@@ -198,6 +201,8 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             field_35: now.strftime("%g"),
 
             field_4: "1",
+
+            field_18: "100023336956",
           }
         end
 
@@ -689,6 +694,64 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
   end
 
   describe "#log" do
+    describe "#uprn" do
+      let(:attributes) { { bulk_upload:, field_18: "100023336956" } }
+
+      it "sets to given value" do
+        expect(parser.log.uprn).to eql("100023336956")
+      end
+    end
+
+    describe "#uprn_known" do
+      context "when uprn specified" do
+        let(:attributes) { { bulk_upload:, field_18: "100023336956" } }
+
+        it "sets to 1" do
+          expect(parser.log.uprn_known).to be(1)
+        end
+      end
+
+      context "when uprn blank" do
+        let(:attributes) { { bulk_upload:, field_18: "" } }
+
+        it "sets to 0" do
+          expect(parser.log.uprn_known).to be(0)
+        end
+      end
+    end
+
+    describe "#address_line1" do
+      let(:attributes) { { bulk_upload:, field_19: "123 Sesame Street" } }
+
+      it "sets to given value" do
+        expect(parser.log.address_line1).to eql("123 Sesame Street")
+      end
+    end
+
+    describe "#address_line2" do
+      let(:attributes) { { bulk_upload:, field_20: "Cookie Town" } }
+
+      it "sets to given value" do
+        expect(parser.log.address_line2).to eql("Cookie Town")
+      end
+    end
+
+    describe "#town_or_city" do
+      let(:attributes) { { bulk_upload:, field_21: "London" } }
+
+      it "sets to given value" do
+        expect(parser.log.town_or_city).to eql("London")
+      end
+    end
+
+    describe "#county" do
+      let(:attributes) { { bulk_upload:, field_22: "Greater London" } }
+
+      it "sets to given value" do
+        expect(parser.log.county).to eql("Greater London")
+      end
+    end
+
     [
       %w[age1_known age1 field_46],
       %w[age2_known age2 field_52],
@@ -700,6 +763,18 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       %w[age8_known age8 field_76],
     ].each do |known, age, field|
       describe "##{known} and ##{age}" do
+        context "when #{field} is blank" do
+          let(:attributes) { { bulk_upload:, field.to_s => nil } }
+
+          it "sets ##{known} 1" do
+            expect(parser.log.public_send(known)).to be(1)
+          end
+
+          it "sets ##{age} to nil" do
+            expect(parser.log.public_send(age)).to be_nil
+          end
+        end
+
         context "when #{field} is R" do
           let(:attributes) { { bulk_upload:, field.to_s => "R" } }
 

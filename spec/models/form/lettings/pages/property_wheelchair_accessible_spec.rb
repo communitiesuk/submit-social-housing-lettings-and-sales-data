@@ -6,7 +6,7 @@ RSpec.describe Form::Lettings::Pages::PropertyWheelchairAccessible, type: :model
   let(:subsection) { instance_double(Form::Subsection) }
 
   it "has correct subsection" do
-    expect(page.subsection).to eq(subsection)
+    expect(page.subsection).to be(subsection)
   end
 
   it "has correct questions" do
@@ -26,6 +26,6 @@ RSpec.describe Form::Lettings::Pages::PropertyWheelchairAccessible, type: :model
   end
 
   it "has the correct depends_on" do
-    expect(page.depends_on).to eq([{ "is_supported_housing?" => false }])
+    expect(page.depends_on).to eq([{ "is_general_needs?" => true }])
   end
 end

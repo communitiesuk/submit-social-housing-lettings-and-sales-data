@@ -19,6 +19,7 @@ class Form::Lettings::Subsections::IncomeAndBenefits < ::Form::Subsection
       Form::Lettings::Pages::CareHomeBiWeekly.new(nil, nil, self),
       Form::Lettings::Pages::CareHome4Weekly.new(nil, nil, self),
       Form::Lettings::Pages::CareHomeMonthly.new(nil, nil, self),
+      Form::Lettings::Pages::CareHomeChargesValueCheck.new(nil, nil, self),
       Form::Lettings::Pages::RentWeekly.new(nil, nil, self),
       Form::Lettings::Pages::RentBiWeekly.new(nil, nil, self),
       Form::Lettings::Pages::Rent4Weekly.new(nil, nil, self),

@@ -94,6 +94,17 @@ module DerivedVariables::LettingsLogVariables
     self.vacdays = property_vacant_days
 
     set_housingneeds_fields if housingneeds?
+
+    if uprn_known&.zero?
+      self.uprn = nil
+    end
+
+    if uprn_confirmed&.zero?
+      self.uprn = nil
+      self.uprn_known = 0
+    end
+
+    reset_address_fields! if is_supported_housing?
   end
 
 private
@@ -228,5 +239,15 @@ private
     self.housingneeds_f = 0
     self.housingneeds_g = 0
     self.housingneeds_h = 0
+  end
+
+  def reset_address_fields!
+    self.uprn = nil
+    self.uprn_known = nil
+    self.uprn_confirmed = nil
+    self.address_line1 = nil
+    self.address_line2 = nil
+    self.town_or_city = nil
+    self.county = nil
   end
 end
