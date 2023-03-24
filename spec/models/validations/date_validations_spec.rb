@@ -232,8 +232,11 @@ RSpec.describe Validations::DateValidations do
       record.startdate = Time.zone.local(2022, 2, 1)
       record.mrcdate = Time.zone.local(2012, 1, 1)
       date_validator.validate_property_major_repairs(record)
+      date_validator.validate_startdate(record)
       expect(record.errors["mrcdate"])
         .to include(match I18n.t("validations.property.mrcdate.ten_years_before_tenancy_start"))
+      expect(record.errors["startdate"])
+        .to include(match I18n.t("validations.setup.startdate.ten_years_after_mrc_date"))
     end
 
     it "must be within 10 years of the tenancy start date" do
@@ -241,6 +244,7 @@ RSpec.describe Validations::DateValidations do
       record.mrcdate = Time.zone.local(2012, 3, 1)
       date_validator.validate_property_major_repairs(record)
       expect(record.errors["mrcdate"]).to be_empty
+      expect(record.errors["startdate"]).to be_empty
     end
 
     context "when reason for vacancy is first let of property" do
@@ -299,8 +303,11 @@ RSpec.describe Validations::DateValidations do
       record.startdate = Time.zone.local(2022, 2, 1)
       record.voiddate = Time.zone.local(2012, 1, 1)
       date_validator.validate_property_void_date(record)
+      date_validator.validate_startdate(record)
       expect(record.errors["voiddate"])
         .to include(match I18n.t("validations.property.void_date.ten_years_before_tenancy_start"))
+      expect(record.errors["startdate"])
+        .to include(match I18n.t("validations.setup.startdate.ten_years_after_void_date"))
     end
 
     it "must be within 10 years of the tenancy start date" do
@@ -308,6 +315,7 @@ RSpec.describe Validations::DateValidations do
       record.voiddate = Time.zone.local(2012, 3, 1)
       date_validator.validate_property_void_date(record)
       expect(record.errors["voiddate"]).to be_empty
+      expect(record.errors["startdate"]).to be_empty
     end
 
     context "when major repairs have been carried out" do
