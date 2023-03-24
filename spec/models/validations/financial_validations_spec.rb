@@ -788,7 +788,7 @@ RSpec.describe Validations::FinancialValidations do
           LaRentRange.create!(
             ranges_rent_id: "1",
             la: "E07000223",
-            beds: 1,
+            beds: 4,
             lettype: 1,
             soft_min: 12.41,
             soft_max: 89.54,
@@ -814,7 +814,7 @@ RSpec.describe Validations::FinancialValidations do
           record.lettype = 1
           record.period = 1
           record.la = "E07000223"
-          record.beds = 1
+          record.beds = 4
           record.startdate = Time.zone.local(2021, 9, 17)
           record.brent = 9.17
 
@@ -846,7 +846,7 @@ RSpec.describe Validations::FinancialValidations do
           record.lettype = 1
           record.period = 1
           record.la = "E07000223"
-          record.beds = 1
+          record.beds = 4
           record.startdate = Time.zone.local(2021, 9, 17)
           record.brent = 200
 
@@ -883,7 +883,7 @@ RSpec.describe Validations::FinancialValidations do
           record.period = 1
           record.la = "E07000223"
           record.startdate = Time.zone.local(2022, 2, 5)
-          record.beds = 1
+          record.beds = 4
           record.brent = 200
 
           financial_validator.validate_rent_amount(record)
