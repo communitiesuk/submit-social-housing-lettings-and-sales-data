@@ -438,6 +438,16 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
     end
 
     describe "#field_83, #field_84, #field_85" do
+      context "when one item selected" do
+        let(:attributes) { { bulk_upload:, field_83: "1" } }
+
+        it "is permitted" do
+          expect(parser.errors[:field_83]).to be_blank
+          expect(parser.errors[:field_84]).to be_blank
+          expect(parser.errors[:field_85]).to be_blank
+        end
+      end
+
       context "when more than one item selected" do
         let(:attributes) { { bulk_upload:, field_83: "1", field_84: "1" } }
 
