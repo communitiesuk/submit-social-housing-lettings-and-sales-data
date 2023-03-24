@@ -374,7 +374,7 @@ RSpec.describe Validations::SetupValidations do
 
     context "with a scheme that has no confirmed locations" do
       before do
-        create(:location, scheme:, confirmed: false)
+        create(:location, scheme:, postcode: nil)
         scheme.reload
       end
 
@@ -388,7 +388,7 @@ RSpec.describe Validations::SetupValidations do
 
     context "with a scheme that has confirmed locations" do
       before do
-        create(:location, scheme:, confirmed: true)
+        create(:location, scheme:)
         scheme.reload
       end
 

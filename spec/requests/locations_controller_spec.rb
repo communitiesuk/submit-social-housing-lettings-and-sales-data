@@ -1278,7 +1278,7 @@ RSpec.describe LocationsController, type: :request do
         context "when location is not complete" do
           let(:location) { FactoryBot.create(:location, scheme:, startdate: Time.zone.local(2000, 1, 1), postcode: nil) }
 
-          it "confirms location" do
+          it "does not confirm location" do
             expect(Location.last.confirmed).to eq(false)
           end
 
@@ -1339,7 +1339,7 @@ RSpec.describe LocationsController, type: :request do
         context "when location is not complete" do
           let(:location) { FactoryBot.create(:location, scheme:, startdate: Time.zone.local(2000, 1, 1), postcode: nil) }
 
-          it "confirms location" do
+          it "does not confirm location" do
             expect(Location.last.confirmed).to eq(false)
           end
 
