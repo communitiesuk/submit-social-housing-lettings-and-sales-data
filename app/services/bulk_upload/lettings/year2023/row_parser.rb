@@ -419,7 +419,7 @@ private
   end
 
   def validate_only_one_housing_needs_type
-    if [field_83, field_84, field_85].compact.count.positive?
+    if [field_83, field_84, field_85].compact.count > 1
       errors.add(:field_83, I18n.t("validations.household.housingneeds_type.only_one_option_permitted"))
       errors.add(:field_84, I18n.t("validations.household.housingneeds_type.only_one_option_permitted"))
       errors.add(:field_85, I18n.t("validations.household.housingneeds_type.only_one_option_permitted"))
