@@ -63,8 +63,19 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       stub_request(:get, /api.postcodes.io/)
       .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\", \"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
 
+      body = {
+        results: [
+          {
+            DPA: {
+              "POSTCODE": "EC1N 2TD",
+              "POST_TOWN": "Newcastle",
+            },
+          },
+        ],
+      }.to_json
+
       stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=100023336956")
-        .to_return(status: 200, body: "{}", headers: {})
+        .to_return(status: 200, body:, headers: {})
 
       parser.valid?
     end
@@ -698,6 +709,16 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "has errors on the field" do
           expect(parser.errors[:field_6]).to be_present
+        end
+      end
+    end
+
+    describe "#field_18" do # UPRN
+      context "when over 12 characters" do
+        let(:attributes) { { bulk_upload:, field_18: "1234567890123" } }
+
+        it "has errors on the field" do
+          expect(parser.errors[:field_18]).to be_present
         end
       end
     end

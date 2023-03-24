@@ -766,6 +766,12 @@ private
       mrcdate: %i[field_36 field_37 field_38],
 
       voiddate: %i[field_33 field_34 field_35],
+
+      uprn: [:field_18],
+      address_line1: [:field_19],
+      address_line2: [:field_20],
+      town_or_city: [:field_21],
+      county: [:field_22],
     }
   end
 
