@@ -20,11 +20,11 @@ RSpec.describe Form::Lettings::Questions::AddressLine1, type: :model do
   end
 
   it "has the correct question_number" do
-    expect(question.question_number).to eq(12)
+    expect(question.question_number).to be_nil
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Address")
+    expect(question.check_answer_label).to eq("Q12 - Address")
   end
 
   it "has the correct type" do
