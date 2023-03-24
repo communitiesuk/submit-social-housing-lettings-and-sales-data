@@ -26,6 +26,7 @@ class LettingsLog < Log
 
   validates_with LettingsLogValidator
   before_validation :recalculate_start_year!, if: :startdate_changed?
+  before_validation :clear_invalid_radio_answers!, if: :startdate_changed?
   before_validation :reset_scheme_location!, if: :scheme_changed?, unless: :location_changed?
   before_validation :process_postcode_changes!, if: :postcode_full_changed?
   before_validation :process_previous_postcode_changes!, if: :ppostcode_full_changed?
@@ -78,6 +79,10 @@ class LettingsLog < Log
     return unless startdate
 
     FormHandler.instance.form_name_from_start_year(collection_start_year, "lettings")
+  end
+
+  def clear_invalid_radio_answers!
+    super if startdate_was && @start_year != FormHandler.instance.collection_start_year(startdate_was)
   end
 
   def self.editable_fields

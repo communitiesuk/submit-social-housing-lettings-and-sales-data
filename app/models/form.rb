@@ -230,6 +230,21 @@ class Form
     questions.select { |q| q.type == "numeric" }
   end
 
+  def radio_questions_valid_options
+    questions.select { |q| q.type == "radio" }
+             .group_by(:id)
+             .transform_values! do |q_array|
+               q_array.flat_map { |q| q.answer_options.keys }
+             end
+  end
+
+  def previous_page(page_ids, page_index, log, current_user)
+    prev_page = get_page(page_ids[page_index - 1])
+    return prev_page.id if prev_page.routed_to?(log, current_user)
+
+    previous_page(page_ids, page_index - 1, log, current_user)
+  end
+
   def send_chain(arr, log)
     Array(arr).inject(log) { |o, a| o.public_send(*a) }
   end
