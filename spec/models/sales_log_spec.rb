@@ -302,7 +302,7 @@ RSpec.describe SalesLog, type: :model do
         WebMock.stub_request(:get, /api.postcodes.io\/postcodes\/CA101AA/)
         .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Eden","codes":{"admin_district":"E07000030"}}}', headers: {})
 
-        Timecop.freeze(2023, 4, 1)
+        Timecop.freeze(2023, 5, 2)
         Singleton.__init__(FormHandler)
       end
 
