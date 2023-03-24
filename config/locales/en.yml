@@ -335,8 +335,6 @@ en:
       leftreg:
         question_required: "Tell us whether the person is still serving in the UK armed forces as you told us they’re a current or former regular"
         question_not_required: "You cannot answer whether the person is still serving in the UK armed forces as you told us they’re not a current or former regular"
-      preg_occ:
-        no_female: "Enter ‘no’ as there are no female tenants aged 11-65 in the household"
       age:
         retired_male: "A male tenant who is retired must be 65 or over"
         retired_female: "A female tenant who is retired must be 60 or over"
@@ -517,7 +515,7 @@ en:
     pregnancy:
       title: "You told us somebody in the household is pregnant"
       no_females: "You also told us there are no female tenants living at the property."
-      females_not_in_soft_age_range: "You also told us that any female tenants living at the property are in the following age ranges:<ul><li>11 to 16</li><li>50 to 65</li></ul>"
+      females_not_in_soft_age_range: "You also told us that any female tenants living at the property are in the following age ranges:<ul><li>under 16 years old</li><li>over 50 years old</li></ul>"
     major_repairs_date:
       title_text: "You told us the time between the start of the tenancy and the major repairs completion date is more than 2 years"
     void_date:
