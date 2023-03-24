@@ -232,7 +232,7 @@ class Form
 
   def radio_questions_valid_options
     questions.select { |q| q.type == "radio" }
-             .group_by(:id)
+             .group_by(&:id)
              .transform_values! do |q_array|
                q_array.flat_map { |q| q.answer_options.keys }
              end
