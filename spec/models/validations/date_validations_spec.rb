@@ -4,9 +4,9 @@ RSpec.describe Validations::DateValidations do
   subject(:date_validator) { validator_class.new }
 
   let(:validator_class) { Class.new { include Validations::DateValidations } }
-  let(:record) { FactoryBot.create(:lettings_log) }
-  let(:scheme) { FactoryBot.create(:scheme, end_date: Time.zone.today - 5.days) }
-  let(:scheme_no_end_date) { FactoryBot.create(:scheme, end_date: nil) }
+  let(:record) { create(:lettings_log) }
+  let(:scheme) { create(:scheme, end_date: Time.zone.today - 5.days) }
+  let(:scheme_no_end_date) { create(:scheme, end_date: nil) }
 
   describe "tenancy start date" do
     it "must be a valid date" do
@@ -165,7 +165,7 @@ RSpec.describe Validations::DateValidations do
       let(:scheme) { create(:scheme) }
 
       before do
-        FactoryBot.create(:location, scheme:)
+        create(:location, scheme:)
         create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), scheme:)
         scheme.reload
       end
@@ -190,7 +190,7 @@ RSpec.describe Validations::DateValidations do
       let(:scheme) { create(:scheme) }
 
       before do
-        FactoryBot.create(:location, scheme:)
+        create(:location, scheme:)
         create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), scheme:)
         create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 2), reactivation_date: Time.zone.local(2022, 8, 3), scheme:)
         create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 1), reactivation_date: Time.zone.local(2022, 9, 4), scheme:)

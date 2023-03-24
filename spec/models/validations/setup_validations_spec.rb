@@ -4,7 +4,7 @@ RSpec.describe Validations::SetupValidations do
   subject(:setup_validator) { setup_validator_class.new }
 
   let(:setup_validator_class) { Class.new { include Validations::SetupValidations } }
-  let(:record) { FactoryBot.create(:lettings_log) }
+  let(:record) { create(:lettings_log) }
 
   describe "tenancy start date" do
     context "when in 22/23 collection" do
@@ -188,7 +188,7 @@ RSpec.describe Validations::SetupValidations do
       let(:scheme) { create(:scheme, created_at: Time.zone.local(2022, 4, 1)) }
 
       before do
-        FactoryBot.create(:location, scheme:)
+        create(:location, scheme:)
         create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), scheme:)
         scheme.reload
       end
@@ -213,7 +213,7 @@ RSpec.describe Validations::SetupValidations do
       let(:scheme) { create(:scheme, created_at: Time.zone.local(2022, 4, 1)) }
 
       before do
-        FactoryBot.create(:location, scheme:)
+        create(:location, scheme:)
         create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), scheme:)
         create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 2), reactivation_date: Time.zone.local(2022, 8, 3), scheme:)
         create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 1), reactivation_date: Time.zone.local(2022, 9, 4), scheme:)
@@ -310,8 +310,8 @@ RSpec.describe Validations::SetupValidations do
   end
 
   describe "#validate_organisation" do
-    let(:user) { FactoryBot.create(:user) }
-    let(:other_organisation) { FactoryBot.create(:organisation) }
+    let(:user) { create(:user) }
+    let(:other_organisation) { create(:organisation) }
 
     it "validates if neither managing nor owning organisation is the same as created_by user organisation" do
       record.created_by = user
@@ -374,7 +374,7 @@ RSpec.describe Validations::SetupValidations do
 
     context "with a scheme that has no confirmed locations" do
       before do
-        FactoryBot.create(:location, scheme:, confirmed: false)
+        create(:location, scheme:, confirmed: false)
         scheme.reload
       end
 
@@ -388,7 +388,7 @@ RSpec.describe Validations::SetupValidations do
 
     context "with a scheme that has confirmed locations" do
       before do
-        FactoryBot.create(:location, scheme:, confirmed: true)
+        create(:location, scheme:, confirmed: true)
         scheme.reload
       end
 
