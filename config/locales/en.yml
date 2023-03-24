@@ -200,6 +200,7 @@ en:
         before_tenancy_start: "Enter a major repairs date that is before the tenancy start date"
         not_first_let: "Major repairs date must not be completed if the tenancy is a first let"
         ten_years_before_tenancy_start: "Enter a major repairs completion date that is no more than 10 years before the tenancy start date"
+        before_void_date: "Major repairs date must be after the void date if provided"
       void_date:
         ten_years_before_tenancy_start: "Enter a void date no more than 10 years before the tenancy start date"
         before_tenancy_start: "Enter a void date that is before the tenancy start date"

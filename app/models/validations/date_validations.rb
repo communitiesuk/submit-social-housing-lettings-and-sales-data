@@ -27,6 +27,7 @@ module Validations::DateValidations
 
     if record["voiddate"].present? && record["mrcdate"].present? && record["mrcdate"].to_date < record["voiddate"].to_date
       record.errors.add :voiddate, I18n.t("validations.property.void_date.after_mrcdate")
+      record.errors.add :mrcdate, I18n.t("validations.property.mrcdate.before_void_date")
     end
   end
 

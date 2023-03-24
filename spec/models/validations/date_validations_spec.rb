@@ -311,12 +311,14 @@ RSpec.describe Validations::DateValidations do
     end
 
     context "when major repairs have been carried out" do
-      it "cannot be after major repairs date" do
+      it "void_date cannot be after major repairs date" do
         record.mrcdate = Time.zone.local(2022, 1, 1)
         record.voiddate = Time.zone.local(2022, 2, 1)
         date_validator.validate_property_void_date(record)
         expect(record.errors["voiddate"])
           .to include(match I18n.t("validations.property.void_date.after_mrcdate"))
+        expect(record.errors["mrcdate"])
+          .to include(match I18n.t("validations.property.mrcdate.before_void_date"))
       end
 
       it "must be before major repairs date" do
