@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Questions::LeaseholdChargesKnown, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Does the property have any monthly leasehold charges?")
+    expect(question.header).to eq("Do you know the monthly leasehold charges for the property?")
   end
 
   it "has the correct check_answer_label" do
