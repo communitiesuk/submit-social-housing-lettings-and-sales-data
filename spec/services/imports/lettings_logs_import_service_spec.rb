@@ -366,6 +366,81 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
+      context "and this is a non temporary acommodation" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q27").content = "9"
+          lettings_log_xml.at_xpath("//xmlns:Q11").content = "4"
+          lettings_log_xml.at_xpath("//xmlns:VDAY").content = ""
+          lettings_log_xml.at_xpath("//xmlns:VMONTH").content = ""
+          lettings_log_xml.at_xpath("//xmlns:VYEAR").content = ""
+          lettings_log_xml.at_xpath("//xmlns:MRCDAY").content = ""
+          lettings_log_xml.at_xpath("//xmlns:MRCMONTH").content = ""
+          lettings_log_xml.at_xpath("//xmlns:MRCYEAR").content = ""
+        end
+
+        it "intercepts the relevant validation error" do
+          expect(logger).to receive(:warn).with(/Removing vacancy reason and previous tenancy since this accommodation is not temporary/)
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the referral answer" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.rsnvac).to be_nil
+          expect(lettings_log.prevten).to be_nil
+        end
+      end
+
+      context "and the number the property was relet is over 20" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q20").content = "25"
+        end
+
+        it "intercepts the relevant validation error" do
+          expect(logger).to receive(:warn).with(/Removing offered as the value is above the maximum of 20/)
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the referral answer" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.offered).to be_nil
+        end
+      end
+
+      context "and income over the max" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q8Money").content = "25000"
+        end
+
+        it "intercepts the relevant validation error" do
+          expect(logger).to receive(:warn).with(/Removing working situation because income is too high for it/)
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the referral answer" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.ecstat1).to be_nil
+          expect(lettings_log.earnings).to eq(25_000)
+        end
+      end
+
       context "and the net income soft validation is triggered (net_income_value_check)" do
         before do
           lettings_log_xml.at_xpath("//xmlns:Q8a").content = "1 Weekly"
@@ -407,6 +482,27 @@ RSpec.describe Imports::LettingsLogsImportService do
         before do
           lettings_log_xml.at_xpath("//xmlns:P1Age").content = 68
           lettings_log_xml.at_xpath("//xmlns:P1Eco").content = "6) Not Seeking Work"
+        end
+
+        it "completes the log" do
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+          expect(lettings_log.status).to eq("completed")
+        end
+      end
+
+      context "and the carehome charge soft validation is triggered (carehome_charge_value_check)" do
+        let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+
+        before do
+          scheme2.update!(registered_under_care_act: 2)
+          lettings_log_xml.at_xpath("//xmlns:_1cmangroupcode").content = scheme2.old_visible_id
+          lettings_log_xml.at_xpath("//xmlns:Q18b").content = ""
+          lettings_log_xml.at_xpath("//xmlns:Q18ai").content = ""
+          lettings_log_xml.at_xpath("//xmlns:Q18aii").content = ""
+          lettings_log_xml.at_xpath("//xmlns:Q18aiii").content = ""
+          lettings_log_xml.at_xpath("//xmlns:Q18aiv").content = ""
+          lettings_log_xml.at_xpath("//xmlns:Q18av").content = ""
         end
 
         it "completes the log" do
@@ -537,6 +633,42 @@ RSpec.describe Imports::LettingsLogsImportService do
         expect(logger).not_to receive(:warn)
         expect { lettings_log_service.create_logs(remote_folder) }
           .to change(OrganisationRelationship, :count).by(1)
+      end
+    end
+
+    context "when this is a joint tenancy with 1 person in the household" do
+      let(:lettings_log_id) { "0ead17cb-1668-442d-898c-0d52879ff592" }
+      let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id) }
+      let(:lettings_log_xml) { Nokogiri::XML(lettings_log_file) }
+
+      before do
+        lettings_log_xml.at_xpath("//xmlns:joint").content = "1"
+        lettings_log_xml.at_xpath("//xmlns:HHMEMB").content = "1"
+        lettings_log_xml.at_xpath("//xmlns:P2Age").content = ""
+        lettings_log_xml.at_xpath("//xmlns:P2Rel").content = ""
+        lettings_log_xml.at_xpath("//xmlns:P2Sex").content = ""
+        lettings_log_xml.at_xpath("//xmlns:P1Nat").content = "18"
+        lettings_log_xml.at_xpath("//xmlns:P2Eco").content = ""
+        lettings_log_xml.at_xpath("//xmlns:DAY").content = "2"
+        lettings_log_xml.at_xpath("//xmlns:MONTH").content = "10"
+        lettings_log_xml.at_xpath("//xmlns:YEAR").content = "2022"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Removing joint tenancy as there is only 1 person in the household/)
+        expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the referral answer" do
+        allow(logger).to receive(:warn)
+
+        lettings_log_service.send(:create_log, lettings_log_xml)
+        lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+        expect(lettings_log).not_to be_nil
+        expect(lettings_log.joint).to be_nil
+        expect(lettings_log.hhmemb).to eq(1)
       end
     end
   end

@@ -81,18 +81,18 @@ RSpec.describe TasklistHelper do
     context "with sales log" do
       context "when collection_period_open? == true" do
         let(:now) { Time.utc(2022, 6, 1) }
-        let(:sales_log) { create(:sales_log, :completed) }
+        let(:sales_log) { create(:sales_log, :completed, saledate: now) }
 
         it "returns relevant text" do
           expect(review_log_text(sales_log)).to eq(
-            "You can #{govuk_link_to 'review and make changes to this log', review_sales_log_path(id: sales_log, sales_log: true)} until 7 July 2023.".html_safe,
+            "You can #{govuk_link_to 'review and make changes to this log', review_sales_log_path(id: sales_log, sales_log: true)} until 7 June 2023.".html_safe,
           )
         end
       end
 
       context "when collection_period_open? == false" do
         let(:now) { Time.utc(2022, 6, 1) }
-        let!(:sales_log) { create(:sales_log, :completed) }
+        let!(:sales_log) { create(:sales_log, :completed, saledate: now) }
 
         it "returns relevant text" do
           Timecop.freeze(now + 1.year) do
@@ -121,7 +121,7 @@ RSpec.describe TasklistHelper do
 
           it "returns relevant text" do
             expect(review_log_text(lettings_log)).to eq(
-              "You can #{govuk_link_to 'review and make changes to this log', review_lettings_log_path(lettings_log)} until 9 July 2024.".html_safe,
+              "You can #{govuk_link_to 'review and make changes to this log', review_lettings_log_path(lettings_log)} until 9 June 2024.".html_safe,
             )
           end
         end

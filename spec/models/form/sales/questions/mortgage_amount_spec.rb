@@ -8,7 +8,7 @@ RSpec.describe Form::Sales::Questions::MortgageAmount, type: :model do
   let(:page) { instance_double(Form::Page) }
 
   it "has correct page" do
-    expect(question.page).to eq(page)
+    expect(question.page).to be(page)
   end
 
   it "has the correct id" do
@@ -36,7 +36,7 @@ RSpec.describe Form::Sales::Questions::MortgageAmount, type: :model do
   end
 
   it "has correct width" do
-    expect(question.width).to eq(5)
+    expect(question.width).to be(5)
   end
 
   it "has correct prefix" do
@@ -44,6 +44,6 @@ RSpec.describe Form::Sales::Questions::MortgageAmount, type: :model do
   end
 
   it "has correct min" do
-    expect(question.min).to eq(0)
+    expect(question.min).to be(1)
   end
 end

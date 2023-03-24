@@ -1,7 +1,7 @@
 {
   "form_type": "lettings",
   "start_date": "2022-04-01T00:00:00.000+01:00",
-  "end_date": "2023-07-09T00:00:00.000+01:00",
+  "end_date": "2023-06-09T00:00:00.000+01:00",
   "unresolved_log_redirect_page_id": "tenancy_start_date",
   "sections": {
     "tenancy_and_property": {
@@ -939,7 +939,15 @@
                 }
               }
             }
-          }
+          },
+          "displayed_in_tasklist": [
+            {
+              "is_supported_housing?": false
+            },
+            {
+              "is_renewal?": false
+            }
+          ]
         },
         "tenancy_information": {
           "label": "Tenancy information",
@@ -1671,7 +1679,7 @@
                       "value": "Caribbean"
                     },
                     "14": {
-                      "value": "Any other Black, African or Caribbean background"
+                      "value": "Any other Black, African, Caribbean or Black British background"
                     }
                   }
                 }
@@ -7773,6 +7781,42 @@
                   "household_charge": null
                 }
               ]
+            },
+            "care_home_charges_value_check": {
+              "depends_on": [
+                {
+                  "care_home_charge_expected_not_provided?": true
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.care_home_charges.title_text"
+              },
+              "informative_text": {},
+              "questions": {
+                "carehome_charges_value_check": {
+                  "check_answer_label": "Care home charges confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "carehome_charges_value_check": 0
+                      },
+                      {
+                        "carehome_charges_value_check": 1
+                      }
+                    ]
+                  },
+                  "header": "Are you sure there are no care home charges?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
             },
             "rent_weekly": {
               "header": "Household rent and charges",

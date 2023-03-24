@@ -891,6 +891,38 @@ RSpec.describe LettingsLogsController, type: :request do
             end
           end
 
+          context "when a lettings log is for a renewal of supported housing, so property information does not need to show" do
+            let(:lettings_log) do
+              FactoryBot.create(
+                :lettings_log,
+                owning_organisation: user.organisation,
+                managing_organisation: user.organisation,
+                created_by: user,
+                startdate: Time.zone.now,
+                renewal: 1,
+                needstype: 2,
+                rent_type: 3,
+                postcode_known: 0,
+              )
+            end
+
+            before do
+              sign_in user
+            end
+
+            around do |example|
+              FormHandler.instance.use_real_forms!
+              example.run
+              FormHandler.instance.use_fake_forms!
+            end
+
+            it "does not crash the app if postcode_known is not nil" do
+              expect {
+                get "/lettings-logs/#{lettings_log.id}", headers:, params: {}
+              }.not_to raise_error(ActionView::Template::Error)
+            end
+          end
+
           context "with a lettings log with a single section complete" do
             let(:section_completed_lettings_log) do
               FactoryBot.create(

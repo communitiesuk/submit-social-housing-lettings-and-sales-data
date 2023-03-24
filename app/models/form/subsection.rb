@@ -7,6 +7,7 @@ class Form::Subsection
     if hsh
       @label = hsh["label"]
       @depends_on = hsh["depends_on"]
+      @displayed_in_tasklist_from_json = hsh["displayed_in_tasklist"]
       @pages = hsh["pages"].map { |s_id, p| Form::Page.new(s_id, p, self) }
     end
   end
@@ -48,7 +49,13 @@ class Form::Subsection
     end
   end
 
-  def displayed_in_tasklist?(_log)
-    true
+  def displayed_in_tasklist?(log)
+    return true unless @displayed_in_tasklist_from_json
+
+    @displayed_in_tasklist_from_json.any? do |conditions|
+      conditions.all? do |method, expected_return_value|
+        log.send(method) == expected_return_value
+      end
+    end
   end
 end

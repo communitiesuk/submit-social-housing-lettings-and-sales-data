@@ -39,7 +39,7 @@ RSpec.describe Form::Sales::Questions::Buyer2EthnicBackgroundBlack, type: :model
     expect(question.answer_options).to eq({
       "12" => { "value" => "Caribbean" },
       "13" => { "value" => "African" },
-      "14" => { "value" => "Any other Black, African or Caribbean background" },
+      "14" => { "value" => "Any other Black, African, Caribbean or Black British background" },
     })
   end
 

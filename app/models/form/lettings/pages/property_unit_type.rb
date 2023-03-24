@@ -2,7 +2,7 @@ class Form::Lettings::Pages::PropertyUnitType < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "property_unit_type"
-    @depends_on = [{ "needstype" => 1 }]
+    @depends_on = [{ "is_general_needs?" => true }]
   end
 
   def questions

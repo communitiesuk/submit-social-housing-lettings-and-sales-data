@@ -4,11 +4,11 @@ class Form::Sales::Pages::NumberOfOthersInProperty < ::Form::Page
     @depends_on = [
       {
         "privacynotice" => 1,
-        "jointpur" => joint_purchase ? 1 : 2,
+        "joint_purchase?" => joint_purchase,
       },
       {
-        "noint" => 1,
-        "jointpur" => joint_purchase ? 1 : 2,
+        "buyer_not_interviewed?" => true,
+        "joint_purchase?" => joint_purchase,
       },
     ]
     @joint_purchase = joint_purchase

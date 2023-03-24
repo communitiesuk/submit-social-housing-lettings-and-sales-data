@@ -113,6 +113,24 @@ RSpec.describe Validations::Sales::FinancialValidations do
     end
   end
 
+  describe "#validate_mortgage" do
+    let(:record) { FactoryBot.create(:sales_log) }
+
+    it "adds an error is the mortgage is zero" do
+      record.mortgageused = 1
+      record.mortgage = 0
+      financial_validator.validate_mortgage(record)
+      expect(record.errors[:mortgage]).to include I18n.t("validations.financial.mortgage")
+    end
+
+    it "does not add an error is the mortgage is positive" do
+      record.mortgageused = 1
+      record.mortgage = 234
+      financial_validator.validate_mortgage(record)
+      expect(record.errors).to be_empty
+    end
+  end
+
   describe "#validate_cash_discount" do
     let(:record) { FactoryBot.create(:sales_log) }
 

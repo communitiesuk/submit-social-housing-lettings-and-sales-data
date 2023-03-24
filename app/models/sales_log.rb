@@ -42,7 +42,7 @@ class SalesLog < Log
   }
   scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org) }
 
-  OPTIONAL_FIELDS = %w[saledate_check purchid monthly_charges_value_check old_persons_shared_ownership_value_check mortgagelender othtype discounted_sale_value_check].freeze
+  OPTIONAL_FIELDS = %w[saledate_check purchid monthly_charges_value_check old_persons_shared_ownership_value_check othtype discounted_sale_value_check].freeze
   RETIREMENT_AGES = { "M" => 65, "F" => 60, "X" => 65 }.freeze
 
   def lettings?
@@ -241,6 +241,10 @@ class SalesLog < Log
 
   def discounted_ownership_sale?
     ownershipsch == 2
+  end
+
+  def mortgage_used?
+    mortgageused == 1
   end
 
   def mortgage_not_used?

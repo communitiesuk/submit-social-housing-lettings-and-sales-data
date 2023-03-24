@@ -63,7 +63,7 @@ module Validations::HouseholdValidations
 
   def validate_previous_housing_situation(record)
     if record.is_relet_to_temp_tenant? && !record.previous_tenancy_was_temporary?
-      record.errors.add :prevten, I18n.t("validations.household.prevten.non_temp_accommodation")
+      record.errors.add :prevten, :non_temp_accommodation, message: I18n.t("validations.household.prevten.non_temp_accommodation")
     end
 
     if record.age1.present? && record.age1 > 19 && record.previous_tenancy_was_foster_care?

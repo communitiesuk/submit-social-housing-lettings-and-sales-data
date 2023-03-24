@@ -38,7 +38,7 @@ module Imports
       attributes["ownershipsch"] = ownership_from_type(attributes) if attributes["ownershipsch"].blank? # sometimes Ownership is missing, but type is set
       attributes["othtype"] = string_or_nil(xml_doc, "Q38OtherSale")
       attributes["jointpur"] = unsafe_string_as_integer(xml_doc, "joint")
-      attributes["jointmore"] = unsafe_string_as_integer(xml_doc, "JointMore") if attributes["jointpur"] == 1
+      attributes["jointmore"] = unsafe_string_as_integer(xml_doc, "JointMore") || 3 if attributes["jointpur"] == 1
       attributes["beds"] = safe_string_as_integer(xml_doc, "Q11Bedrooms")
       attributes["companybuy"] = unsafe_string_as_integer(xml_doc, "company") if attributes["ownershipsch"] == 3
       attributes["hholdcount"] = other_household_members(xml_doc, attributes)
@@ -189,8 +189,12 @@ module Imports
     def rescue_validation_or_raise(sales_log, attributes, previous_status, exception)
       if %w[saved submitted-invalid].include?(previous_status)
         sales_log.errors.each do |error|
-          @logger.warn("Log #{sales_log.old_id}: Removing field #{error.attribute} from log triggering validation: #{error.type}")
-          attributes.delete(error.attribute.to_s)
+          unless error.attribute == :type || error.attribute == :ownershipsch
+            @logger.warn("Log #{sales_log.old_id}: Removing field #{error.attribute} from log triggering validation: #{error.type}")
+            attributes.delete(error.attribute.to_s)
+          end
+          attributes.delete("pcodenk") if error.attribute == :postcode_full
+          attributes.delete("ppcodenk") if error.attribute == :ppostcode_full
         end
         @logs_overridden << sales_log.old_id
         save_sales_log(attributes, previous_status)
@@ -209,6 +213,17 @@ module Imports
         @logger.warn("Log #{sales_log.old_id}: Removing income1 as the income1 is invalid")
         @logs_overridden << sales_log.old_id
         attributes.delete("income1")
+        save_sales_log(attributes, previous_status)
+      elsif sales_log.errors.of_kind?(:equity, :over_max) || sales_log.errors.of_kind?(:equity, :under_min)
+        @logger.warn("Log #{sales_log.old_id}: Removing equity as the equity is invalid")
+        @logs_overridden << sales_log.old_id
+        attributes.delete("equity")
+        save_sales_log(attributes, previous_status)
+      elsif sales_log.errors.of_kind?(:postcode_full, :wrong_format)
+        @logger.warn("Log #{sales_log.old_id}: Removing postcode as the postcode is invalid")
+        @logs_overridden << sales_log.old_id
+        attributes.delete("postcode_full")
+        attributes["pcodenk"] = attributes["la"].present? ? 1 : nil
         save_sales_log(attributes, previous_status)
       else
         @logger.error("Log #{sales_log.old_id}: Failed to import")
@@ -502,12 +517,12 @@ module Imports
     def set_default_values(attributes)
       attributes["armedforcesspouse"] ||= 7
       attributes["hhregres"] ||= 8
+      attributes["hhregresstill"] ||= 7 if attributes["hhregres"] == 1
       attributes["disabled"] ||= 3
       attributes["wheel"] ||= 3
       attributes["hb"] ||= 4
       attributes["prevown"] ||= 3
       attributes["savingsnk"] ||= attributes["savings"].present? ? 0 : 1
-      attributes["jointmore"] ||= 3 if attributes["jointpur"] == 1
       attributes["inc1mort"] ||= 3
       if [attributes["pregyrha"], attributes["pregla"], attributes["pregghb"], attributes["pregother"]].all?(&:blank?)
         attributes["pregblank"] = 1
@@ -517,6 +532,7 @@ module Imports
       attributes["extrabor"] ||= 3 if attributes["mortgageused"] == 1
       attributes["socprevten"] ||= 10 if attributes["ownershipsch"] == 1
       attributes["fromprop"] ||= 0 if attributes["ownershipsch"] == 1
+      attributes["mortgagelender"] ||= 0 if attributes["mortgageused"] == 1
 
       # buyer 1 characteristics
       attributes["age1_known"] ||= 1
@@ -539,7 +555,7 @@ module Imports
       end
 
       # other household members characteristics
-      (2..attributes["hhmemb"]).each do |index|
+      (2..[attributes["hhmemb"], 6].min).each do |index|
         attributes["age#{index}_known"] ||= 1
         attributes["sex#{index}"] ||= "R"
         attributes["ecstat#{index}"] ||= 10
