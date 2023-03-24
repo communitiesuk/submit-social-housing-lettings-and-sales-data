@@ -368,4 +368,36 @@ RSpec.describe Validations::SetupValidations do
       expect(record.errors["managing_organisation_id"]).to be_empty
     end
   end
+
+  describe "#validate_scheme_has_confirmed_locations_validation" do
+    let(:scheme) { create(:scheme) }
+
+    context "with a scheme that has no confirmed locations" do
+      before do
+        FactoryBot.create(:location, scheme:, confirmed: false)
+        scheme.reload
+      end
+
+      it "produces an error" do
+        record.scheme = scheme
+        setup_validator.validate_scheme_has_confirmed_locations_validation(record)
+        expect(record.errors["scheme_id"])
+          .to include(match I18n.t("validations.scheme.no_completed_locations"))
+      end
+    end
+
+    context "with a scheme that has confirmed locations" do
+      before do
+        FactoryBot.create(:location, scheme:, confirmed: true)
+        scheme.reload
+      end
+
+      it "does not produce an error" do
+        record.scheme = scheme
+        setup_validator.validate_scheme_has_confirmed_locations_validation(record)
+        expect(record.errors["scheme_id"])
+          .to be_empty
+      end
+    end
+  end
 end
