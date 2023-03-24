@@ -37,13 +37,6 @@ RSpec.describe FormHandler do
     context "when in 23/24 period or later" do
       let(:now) { Time.utc(2023, 6, 7) }
 
-      around do |example|
-        Timecop.freeze(now) do
-          Singleton.__init__(described_class)
-          example.run
-        end
-      end
-
       it "does not load outdated forms" do
         all_forms = form_handler.forms
         expect(all_forms.keys).not_to include nil
