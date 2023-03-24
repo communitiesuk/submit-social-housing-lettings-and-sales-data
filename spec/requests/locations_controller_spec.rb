@@ -1263,15 +1263,34 @@ RSpec.describe LocationsController, type: :request do
           patch "/schemes/#{scheme.id}/locations/#{location.id}/confirm", params:
         end
 
-        it "confirms location" do
-          expect(Location.last.confirmed).to eq(true)
+        context "when location is complete" do
+
+          it "confirms location" do
+            expect(Location.last.confirmed).to eq(true)
+          end
+
+          it "redirects correctly and displays success banner" do
+            follow_redirect!
+            expect(page).to have_content("Success")
+            expect(page).to have_content("added to this scheme")
+          end
         end
 
-        it "redirects correctly and displays success banner" do
-          follow_redirect!
-          expect(page).to have_content("Success")
-          expect(page).to have_content("added to this scheme")
+        context "when location is not complete" do
+          let(:location) { FactoryBot.create(:location, scheme:, startdate: Time.zone.local(2000, 1, 1), postcode: nil) }
+
+          it "confirms location" do
+            expect(Location.last.confirmed).to eq(false)
+          end
+
+          it "redirects correctly and does not display success banner" do
+            follow_redirect!
+            expect(page).not_to have_content("Success")
+            expect(page).not_to have_content("added to this scheme")
+          end
         end
+
+
       end
 
       context "when trying to edit check_answers of location that belongs to another organisation" do
@@ -1308,15 +1327,34 @@ RSpec.describe LocationsController, type: :request do
           patch "/schemes/#{scheme.id}/locations/#{location.id}/confirm", params:
         end
 
-        it "confirms location" do
-          expect(Location.last.confirmed).to eq(true)
+        context "when location is complete" do
+
+          it "confirms location" do
+            expect(Location.last.confirmed).to eq(true)
+          end
+
+          it "redirects correctly and displays success banner" do
+            follow_redirect!
+            expect(page).to have_content("Success")
+            expect(page).to have_content("added to this scheme")
+          end
         end
 
-        it "redirects correctly and displays success banner" do
-          follow_redirect!
-          expect(page).to have_content("Success")
-          expect(page).to have_content("added to this scheme")
+        context "when location is not complete" do
+          let(:location) { FactoryBot.create(:location, scheme:, startdate: Time.zone.local(2000, 1, 1), postcode: nil) }
+
+          it "confirms location" do
+            expect(Location.last.confirmed).to eq(false)
+          end
+
+          it "redirects correctly and does not display success banner" do
+            follow_redirect!
+            expect(page).not_to have_content("Success")
+            expect(page).not_to have_content("added to this scheme")
+          end
         end
+
+
       end
 
       context "when the requested location does not exist" do
