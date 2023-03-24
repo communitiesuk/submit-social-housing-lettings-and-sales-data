@@ -32,7 +32,6 @@ RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
             property_number_of_bedrooms
             void_date
             void_date_value_check
-            new_build_handover_date
             property_major_repairs
             property_major_repairs_value_check
           ],
@@ -63,7 +62,6 @@ RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
             property_number_of_bedrooms
             void_date
             void_date_value_check
-            new_build_handover_date
             property_major_repairs
             property_major_repairs_value_check
           ],
