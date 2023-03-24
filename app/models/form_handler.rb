@@ -47,7 +47,7 @@ class FormHandler
         form = Form.new(form_path)
 
         form_to_set = form_name_from_start_year(form.start_date.year, "lettings")
-        forms[form_to_set] = form if forms[form_to_set].blank?
+        forms[form_to_set] = form if form_to_set && forms[form_to_set].blank?
       end
     end
 

@@ -9,8 +9,6 @@ RSpec.describe FormHandler do
       Singleton.__init__(described_class)
       example.run
     end
-    Timecop.return
-    Singleton.__init__(described_class)
   end
 
   context "when accessing a form in a different year" do
@@ -34,6 +32,15 @@ RSpec.describe FormHandler do
       all_forms = form_handler.forms
       expect(all_forms.count).to be >= 1
       expect(all_forms["current_sales"]).to be_a(Form)
+    end
+
+    context "when in 23/24 period or later" do
+      let(:now) { Time.utc(2023, 6, 7) }
+
+      it "does not load outdated forms" do
+        all_forms = form_handler.forms
+        expect(all_forms.keys).not_to include nil
+      end
     end
   end
 
