@@ -111,7 +111,19 @@ RSpec.describe Form::Lettings::Questions::LocationId, type: :model do
           lettings_log.update!(scheme:)
         end
 
-        it "the displayed_answer_options shows the active location" do
+        it "the displayed_answer_options shows only the active location" do
+          expect(question.displayed_answer_options(lettings_log).count).to eq(1)
+        end
+      end
+
+      context "and some locations are not confirmed" do
+        before do
+          FactoryBot.create(:location, scheme:, confirmed: false)
+          FactoryBot.create(:location, scheme:, confirmed: true)
+          lettings_log.update!(scheme:)
+        end
+
+        it "the displayed_answer_options shows only the confirmed location" do
           expect(question.displayed_answer_options(lettings_log).count).to eq(1)
         end
       end
