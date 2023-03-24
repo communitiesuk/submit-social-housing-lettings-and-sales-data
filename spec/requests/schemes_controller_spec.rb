@@ -658,6 +658,26 @@ RSpec.describe SchemesController, type: :request do
         end
       end
 
+      context "when scheme is completed but not yet confirmed" do
+        let(:params) { { scheme: { page: "check-answers" } } }
+
+        it "is not confirmed" do
+          expect(scheme_to_update.confirmed).to eq(nil)
+        end
+
+        context "when confirming finished scheme" do
+          let(:params) { { scheme: { confirmed: true, page: "check-answers" } } }
+
+          before do
+            scheme_to_update.reload
+          end
+
+          it "confirms scheme" do
+            expect(scheme_to_update.confirmed).to eq(true)
+          end
+        end
+      end
+
       context "when required params are missing" do
         let(:params) do
           { scheme: {
