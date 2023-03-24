@@ -637,6 +637,30 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
+    context "when mortgage value is 0" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:CALCMORT").content = "0"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Removing mortgage because it cannot be 0/)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the referral answer" do
+        allow(logger).to receive(:warn)
+
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+
+        expect(sales_log).not_to be_nil
+        expect(sales_log.mortgage).to be_nil
+      end
+    end
+
     context "and it has an invalid income" do
       let(:sales_log_id) { "shared_ownership_sales_log" }
 

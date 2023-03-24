@@ -37,7 +37,7 @@ module Validations::Sales::FinancialValidations
   end
 
   def validate_mortgage(record)
-    record.errors.add :mortgage, I18n.t("validations.financial.mortgage") if record.mortgage_used? && record.mortgage&.zero?
+    record.errors.add :mortgage, :cannot_be_0, message: I18n.t("validations.financial.mortgage") if record.mortgage_used? && record.mortgage&.zero?
   end
 
   def validate_cash_discount(record)
