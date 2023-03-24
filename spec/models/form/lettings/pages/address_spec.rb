@@ -20,7 +20,7 @@ RSpec.describe Form::Lettings::Pages::Address, type: :model do
   end
 
   it "has the correct header" do
-    expect(page.header).to eq("What is the property's address?")
+    expect(page.header).to eq("Q12 - What is the property's address?")
   end
 
   it "has the correct description" do

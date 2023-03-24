@@ -16,7 +16,6 @@ RSpec.describe "Form Page Routing" do
 
   before do
     allow(lettings_log.form).to receive(:end_date).and_return(Time.zone.today + 1.day)
-    allow(validator).to receive(:validate_pregnancy).and_return(true)
     sign_in user
   end
 
