@@ -634,6 +634,10 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
 
           expect(setup_errors.find { |e| e.attribute == :field_111 }.message).to eql("The owning organisation code is incorrect")
         end
+
+        it "blocks log creation" do
+          expect(parser).to be_block_log_creation
+        end
       end
 
       context "when cannot find owning org" do
@@ -641,6 +645,10 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
 
         it "is not permitted" do
           expect(parser.errors[:field_111]).to eql(["The owning organisation code is incorrect"])
+        end
+
+        it "blocks log creation" do
+          expect(parser).to be_block_log_creation
         end
       end
 
@@ -674,11 +682,27 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
     end
 
     describe "#field_113" do # managing org
+      context "when blank" do
+        let(:attributes) { { bulk_upload:, field_113: "" } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_113]).to eql(["The managing organisation code is incorrect"])
+        end
+
+        it "blocks log creation" do
+          expect(parser).to be_block_log_creation
+        end
+      end
+
       context "when cannot find managing org" do
         let(:attributes) { { bulk_upload:, field_113: "donotexist" } }
 
         it "is not permitted" do
           expect(parser.errors[:field_113]).to eql(["The managing organisation code is incorrect"])
+        end
+
+        it "blocks log creation" do
+          expect(parser).to be_block_log_creation
         end
       end
 
