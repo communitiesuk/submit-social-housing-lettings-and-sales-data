@@ -446,6 +446,16 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
       end
     end
 
+    describe "#field_14" do # age3
+      context "when blank but gender given" do
+        let(:attributes) { valid_attributes.merge(field_14: "", field_22: "F") }
+
+        it "returns an error" do
+          expect(parser.errors[:field_14]).to be_present
+        end
+      end
+    end
+
     describe "#field_52" do # leaving reason
       context "when field_134 is 1 meaning it is a renewal" do
         context "when field_52 is 40" do

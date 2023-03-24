@@ -733,6 +733,16 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         end
       end
     end
+
+    describe "#field_56" do # age3
+      context "when null but gender given" do
+        let(:attributes) { setup_section_params.merge({ field_56: "", field_57: "F" }) }
+
+        it "returns an error" do
+          expect(parser.errors[:field_56]).to be_present
+        end
+      end
+    end
   end
 
   describe "#log" do
