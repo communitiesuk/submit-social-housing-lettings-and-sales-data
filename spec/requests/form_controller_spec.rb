@@ -632,10 +632,6 @@ RSpec.describe FormController, type: :request do
           }
         end
 
-        before do
-          allow(validator).to receive(:validate_pregnancy).and_return(true)
-        end
-
         it "routes to the appropriate conditional page based on the question answer of the current page" do
           post "/lettings-logs/#{lettings_log.id}/form", params: lettings_log_form_conditional_question_yes_params
           expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/conditional-question-yes-page")
