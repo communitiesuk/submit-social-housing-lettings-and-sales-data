@@ -941,6 +941,36 @@ RSpec.describe SchemesController, type: :request do
         patch "/schemes/#{scheme_to_update.id}", params:
       end
 
+
+      context "when confirming unfinished scheme" do
+        let(:params) { { scheme: { owning_organisation_id: user.organisation.id, arrangement_type: nil, confirmed: true, page: "check-answers" } } }
+
+        it "does not allow the scheme to be confirmed" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.arrangement_type.invalid"))
+        end
+      end
+
+      context "when scheme is completed but not yet confirmed" do
+        let(:params) { { scheme: { page: "check-answers" } } }
+
+        it "is not confirmed" do
+          expect(scheme_to_update.confirmed).to eq(nil)
+        end
+
+        context "when confirming finished scheme" do
+          let(:params) { { scheme: { confirmed: true, page: "check-answers" } } }
+
+          before do
+            scheme_to_update.reload
+          end
+
+          it "confirms scheme" do
+            expect(scheme_to_update.confirmed).to eq(true)
+          end
+        end
+      end
+
       context "when required params are missing" do
         let(:params) do
           { scheme: {
