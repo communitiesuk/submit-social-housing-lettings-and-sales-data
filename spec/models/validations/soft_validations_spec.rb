@@ -175,6 +175,13 @@ RSpec.describe Validations::SoftValidations do
       end
     end
 
+    context "when there are no female tenants and age of other tenants is unknown" do
+      it "shows the interruption screen" do
+        record.update!(sex1: "M", preg_occ: 1, hhmemb: 1, age1_known: 1)
+        expect(record.no_females_in_a_pregnant_household?).to be true
+      end
+    end
+
     context "when female tenants are under 16" do
       it "shows the interruption screen" do
         record.update!(age2: 14, sex2: "F", preg_occ: 1, hhmemb: 2, details_known_2: 0, age2_known: 0, age1: 18, sex1: "M", age1_known: 0)
