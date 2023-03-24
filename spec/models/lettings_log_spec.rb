@@ -2620,6 +2620,40 @@ RSpec.describe LettingsLog do
         end
       end
     end
+
+    context "when the collection year is changed" do
+      around do |example|
+        Timecop.freeze(now) do
+          Singleton.__init__(FormHandler)
+          FormHandler.instance.use_real_forms!
+          example.run
+        end
+        Timecop.return
+      end
+
+      let(:lettings_log) { FactoryBot.create(:lettings_log, :about_completed, :sheltered_housing, startdate: now, sheltered:) }
+      let(:now) { Time.zone.local(2023, 6, 1) }
+
+      context "and selected answer options are no longer valid" do
+        let(:sheltered) { 5 }
+
+        it "clears those values" do
+          expect(lettings_log.sheltered).to be 5
+          lettings_log.update!(startdate: Time.zone.local(2023, 1, 1))
+          expect(lettings_log.sheltered).to be nil
+        end
+      end
+
+      context "and selected answer options are still valid" do
+        let(:sheltered) { 2 }
+
+        it "does not clear those values" do
+          expect(lettings_log.sheltered).to be 2
+          lettings_log.update!(startdate: Time.zone.local(2023, 1, 1))
+          expect(lettings_log.sheltered).to be 2
+        end
+      end
+    end
   end
 
   describe "tshortfall_unknown?" do
