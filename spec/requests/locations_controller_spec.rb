@@ -1264,7 +1264,6 @@ RSpec.describe LocationsController, type: :request do
         end
 
         context "when location is complete" do
-
           it "confirms location" do
             expect(Location.last.confirmed).to eq(true)
           end
@@ -1289,8 +1288,6 @@ RSpec.describe LocationsController, type: :request do
             expect(page).not_to have_content("added to this scheme")
           end
         end
-
-
       end
 
       context "when trying to edit check_answers of location that belongs to another organisation" do
@@ -1328,7 +1325,6 @@ RSpec.describe LocationsController, type: :request do
         end
 
         context "when location is complete" do
-
           it "confirms location" do
             expect(Location.last.confirmed).to eq(true)
           end
@@ -1353,8 +1349,6 @@ RSpec.describe LocationsController, type: :request do
             expect(page).not_to have_content("added to this scheme")
           end
         end
-
-
       end
 
       context "when the requested location does not exist" do
