@@ -6,7 +6,7 @@
     <age1>35</age1>
     <sex1>F</sex1>
     <ethnic>2</ethnic>
-    <national>4</national>
+    <national>13</national>
     <prevten>6</prevten>
     <ecstat1>0</ecstat1>
     <hhmemb>2</hhmemb>
@@ -50,7 +50,7 @@
     <benefits>1</benefits>
     <period>2</period>
     <layear>2</layear>
-    <waityear>1</waityear>
+    <waityear>7</waityear>
     <postcode_full>SW1A 2AA</postcode_full>
     <reasonpref>1</reasonpref>
     <cbl>2</cbl>

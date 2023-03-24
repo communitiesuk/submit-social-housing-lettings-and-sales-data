@@ -7,9 +7,9 @@ class Form
     if sales_or_start_year_after_2022?(type, start_year)
       @start_date = Time.zone.local(start_year, 4, 1)
       @end_date = if start_year && start_year.to_i > 2022
-                    Time.zone.local(start_year + 1, 7, 9)
+                    Time.zone.local(start_year + 1, 6, 9)
                   else
-                    Time.zone.local(start_year + 1, 7, 7)
+                    Time.zone.local(start_year + 1, 6, 7)
                   end
       @setup_sections = type == "sales" ? [Form::Sales::Sections::Setup.new(nil, nil, self)] : [Form::Lettings::Sections::Setup.new(nil, nil, self)]
       @form_sections = sections_in_form.map { |sec| sec.new(nil, nil, self) }
@@ -111,8 +111,8 @@ class Form
     when :in_progress
       "#{next_subsection.id}/check_answers".dasherize
     when :not_started
-      first_question_in_subsection = next_subsection.pages.find { |page| page.routed_to?(log, nil) }.id
-      first_question_in_subsection.to_s.dasherize
+      first_question_in_subsection = next_subsection.pages.find { |page| page.routed_to?(log, nil) }
+      first_question_in_subsection ? first_question_in_subsection.id.to_s.dasherize : next_incomplete_section_redirect_path(next_subsection, log)
     else
       "error"
     end

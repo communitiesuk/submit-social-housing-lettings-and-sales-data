@@ -21,14 +21,6 @@ RSpec.describe Validations::DateValidations do
       expect(record.errors["startdate"]).to be_empty
     end
 
-    it "validates that the tenancy start date is before the end date of the chosen scheme if it has an end date" do
-      record.startdate = Time.zone.today - 3.days
-      record.scheme = scheme
-      date_validator.validate_startdate(record)
-      expect(record.errors["startdate"])
-        .to include(match I18n.t("validations.setup.startdate.before_scheme_end_date"))
-    end
-
     it "validates that the tenancy start date is after the void date if it has a void date" do
       record.startdate = Time.zone.local(2022, 1, 1)
       record.voiddate = Time.zone.local(2022, 2, 1)

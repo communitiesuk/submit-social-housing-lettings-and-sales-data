@@ -1,6 +1,7 @@
 require "rails_helper"
 require "shared/shared_examples_for_derived_fields"
 
+# rubocop:disable RSpec/AnyInstance
 RSpec.describe LettingsLog do
   let(:different_managing_organisation) { create(:organisation) }
   let(:created_by_user) { create(:user) }
@@ -2235,6 +2236,7 @@ RSpec.describe LettingsLog do
           first_time_property_let_as_social_housing
           tenancycode
           propcode
+          chcharge
           tenancylength
         ])
       end
@@ -2248,6 +2250,7 @@ RSpec.describe LettingsLog do
           first_time_property_let_as_social_housing
           tenancycode
           propcode
+          chcharge
           tenancylength
           address_line2
           county
@@ -3008,4 +3011,60 @@ RSpec.describe LettingsLog do
       end
     end
   end
+
+  describe "#process_uprn_change!" do
+    context "when UPRN set to a value" do
+      let(:lettings_log) do
+        create(
+          :lettings_log,
+          uprn: "123456789",
+          uprn_confirmed: 1,
+          county: "county",
+        )
+      end
+
+      it "updates sales log fields" do
+        lettings_log.uprn = "1111111"
+
+        allow_any_instance_of(UprnClient).to receive(:call)
+        allow_any_instance_of(UprnClient).to receive(:result).and_return({
+          "UPRN" => "UPRN",
+          "UDPRN" => "UDPRN",
+          "ADDRESS" => "full address",
+          "SUB_BUILDING_NAME" => "0",
+          "BUILDING_NAME" => "building name",
+          "THOROUGHFARE_NAME" => "thoroughfare",
+          "POST_TOWN" => "posttown",
+          "POSTCODE" => "postcode",
+        })
+
+        expect { lettings_log.process_uprn_change! }.to change(lettings_log, :address_line1).from(nil).to("0, Building Name, Thoroughfare")
+        .and change(lettings_log, :town_or_city).from(nil).to("Posttown")
+        .and change(lettings_log, :postcode_full).from(nil).to("POSTCODE")
+        .and change(lettings_log, :uprn_confirmed).from(1).to(nil)
+        .and change(lettings_log, :county).from("county").to(nil)
+      end
+    end
+
+    context "when UPRN nil" do
+      let(:lettings_log) { create(:lettings_log, uprn: nil) }
+
+      it "does not update sales log" do
+        expect { lettings_log.process_uprn_change! }.not_to change(lettings_log, :attributes)
+      end
+    end
+
+    context "when service errors" do
+      let(:lettings_log) { create(:lettings_log, uprn: "123456789", uprn_confirmed: 1) }
+      let(:error_message) { "error" }
+
+      it "adds error to sales log" do
+        allow_any_instance_of(UprnClient).to receive(:call)
+        allow_any_instance_of(UprnClient).to receive(:error).and_return(error_message)
+
+        expect { lettings_log.process_uprn_change! }.to change { lettings_log.errors[:uprn] }.from([]).to([error_message])
+      end
+    end
+  end
 end
+# rubocop:enable RSpec/AnyInstance

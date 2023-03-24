@@ -12,15 +12,21 @@
           <% summary_list.row do |row| %>
             <% row.key { get_question_label(question) } %>
             <% row.value do %>
-              <span class="govuk-!-margin-right-4"><%= get_answer_label(question) %></span>
+              <%= simple_format(
+                get_answer_label(question),
+                wrapper_tag: "span",
+                class: "govuk-!-margin-right-4",
+              ) %>
 
               <% extra_value = question.get_extra_check_answer_value(log) %>
 
-              <% if extra_value %>
-                <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= extra_value %></span>
+              <% if extra_value && question.answer_label(log).present? %>
+                <%= simple_format(
+                  extra_value,
+                  wrapper_tag: "span",
+                  class: "govuk-!-font-weight-regular app-!-colour-muted",
+                ) %>
               <% end %>
-
-              <br>
 
               <% question.get_inferred_answers(log).each do |inferred_answer| %>
                 <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= inferred_answer %></span>

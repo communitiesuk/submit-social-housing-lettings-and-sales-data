@@ -29,11 +29,11 @@ class BulkUpload::LogToCsv
     to_2022_row + [
       log.needstype,
       log.location&.id,
-      nil, # uprn,
-      nil, # address_line_1,
-      nil, # address_line_2,
-      nil, # town_or_city,
-      nil, # county,
+      log.uprn,
+      log.address_line1,
+      log.address_line2,
+      log.town_or_city,
+      log.county,
     ]
   end
 

@@ -25,6 +25,7 @@ RSpec.describe Form::Lettings::Subsections::IncomeAndBenefits, type: :model do
         care_home_bi_weekly
         care_home_4_weekly
         care_home_monthly
+        care_home_charges_value_check
         rent_weekly
         rent_bi_weekly
         rent_4_weekly

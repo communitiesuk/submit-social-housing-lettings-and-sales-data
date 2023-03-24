@@ -33,19 +33,7 @@ class BulkUploadMailer < NotifyMailer
     )
   end
 
-  def columns_with_errors(bulk_upload:)
-    array = bulk_upload.columns_with_errors
-
-    if array.size > 3
-      "#{array.take(3).join(', ')} and more"
-    else
-      array.join(", ")
-    end
-  end
-
   def send_correct_and_upload_again_mail(bulk_upload:)
-    error_description = "We noticed that you have a lot of similar errors in column #{columns_with_errors(bulk_upload:)}. Please correct your data export and upload again."
-
     summary_report_link = if BulkUploadErrorSummaryTableComponent.new(bulk_upload:).errors?
                             summary_bulk_upload_lettings_result_url(bulk_upload)
                           else
@@ -60,7 +48,6 @@ class BulkUploadMailer < NotifyMailer
         upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
         year_combo: bulk_upload.year_combo,
         lettings_or_sales: bulk_upload.log_type,
-        error_description:,
         summary_report_link:,
       },
     )

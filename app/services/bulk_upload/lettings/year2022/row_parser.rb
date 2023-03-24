@@ -282,13 +282,13 @@ class BulkUpload::Lettings::Year2022::RowParser
   validates :field_4, presence: { if: proc { [2, 4, 6, 8, 10, 12].include?(field_1) } }
 
   validates :field_12, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 1 must be a number or the letter R" }
-  validates :field_13, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 2 must be a number or the letter R" }
-  validates :field_14, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 3 must be a number or the letter R" }
-  validates :field_15, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 4 must be a number or the letter R" }
-  validates :field_16, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 5 must be a number or the letter R" }
-  validates :field_17, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 6 must be a number or the letter R" }
-  validates :field_18, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 7 must be a number or the letter R" }
-  validates :field_19, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 8 must be a number or the letter R" }
+  validates :field_13, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 2 must be a number or the letter R" }, allow_blank: true
+  validates :field_14, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 3 must be a number or the letter R" }, allow_blank: true
+  validates :field_15, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 4 must be a number or the letter R" }, allow_blank: true
+  validates :field_16, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 5 must be a number or the letter R" }, allow_blank: true
+  validates :field_17, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 6 must be a number or the letter R" }, allow_blank: true
+  validates :field_18, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 7 must be a number or the letter R" }, allow_blank: true
+  validates :field_19, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 8 must be a number or the letter R" }, allow_blank: true
 
   validates :field_96, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (day)") }
   validates :field_97, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (month)") }
@@ -848,28 +848,28 @@ private
     attributes["tenancylength"] = field_11
     attributes["declaration"] = field_132
 
-    attributes["age1_known"] = field_12 == "R" ? 1 : 0
+    attributes["age1_known"] = (field_12 == "R" || field_12.blank? ? 1 : 0)
     attributes["age1"] = field_12 if attributes["age1_known"].zero? && field_12&.match(/\A\d{1,3}\z|\AR\z/)
 
-    attributes["age2_known"] = field_13 == "R" ? 1 : 0
+    attributes["age2_known"] = (field_13 == "R" || field_13.blank? ? 1 : 0)
     attributes["age2"] = field_13 if attributes["age2_known"].zero? && field_13&.match(/\A\d{1,3}\z|\AR\z/)
 
-    attributes["age3_known"] = field_14 == "R" ? 1 : 0
+    attributes["age3_known"] = (field_14 == "R" || field_14.blank? ? 1 : 0)
     attributes["age3"] = field_14 if attributes["age3_known"].zero? && field_14&.match(/\A\d{1,3}\z|\AR\z/)
 
-    attributes["age4_known"] = field_15 == "R" ? 1 : 0
+    attributes["age4_known"] = (field_15 == "R" || field_15.blank? ? 1 : 0)
     attributes["age4"] = field_15 if attributes["age4_known"].zero? && field_15&.match(/\A\d{1,3}\z|\AR\z/)
 
-    attributes["age5_known"] = field_16 == "R" ? 1 : 0
+    attributes["age5_known"] = (field_16 == "R" || field_16.blank? ? 1 : 0)
     attributes["age5"] = field_16 if attributes["age5_known"].zero? && field_16&.match(/\A\d{1,3}\z|\AR\z/)
 
-    attributes["age6_known"] = field_17 == "R" ? 1 : 0
+    attributes["age6_known"] = (field_17 == "R" || field_17.blank? ? 1 : 0)
     attributes["age6"] = field_17 if attributes["age6_known"].zero? && field_17&.match(/\A\d{1,3}\z|\AR\z/)
 
-    attributes["age7_known"] = field_18 == "R" ? 1 : 0
+    attributes["age7_known"] = (field_18 == "R" || field_18.blank? ? 1 : 0)
     attributes["age7"] = field_18 if attributes["age7_known"].zero? && field_18&.match(/\A\d{1,3}\z|\AR\z/)
 
-    attributes["age8_known"] = field_19 == "R" ? 1 : 0
+    attributes["age8_known"] = (field_19 == "R" || field_19.blank? ? 1 : 0)
     attributes["age8"] = field_19 if attributes["age8_known"].zero? && field_19&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["sex1"] = field_20
