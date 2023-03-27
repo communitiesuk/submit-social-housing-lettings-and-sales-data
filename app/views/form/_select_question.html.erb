@@ -9,9 +9,9 @@
   hint: { text: question.hint_text&.html_safe }) do %>
   <% answers.each do |answer| %>
     <option value="<%= answer.id %>"
-      data-synonyms="<%= question.answer_option_synonyms(answer.resource) %>"
-      data-append="<%= question.answer_option_append(answer.resource) %>"
-      data-hint="<%= question.answer_option_hint(answer.resource) %>"
+      data-synonyms="<%= answer_option_synonyms(answer.resource) %>"
+      data-append="<%= answer_option_append(answer.resource) %>"
+      data-hint="<%= answer_option_hint(answer.resource) %>"
       <%= question.answer_selected?(@log, answer) ? "selected" : "" %>
       <%= answer.id == "" ? "disabled" : "" %>><%= answer.name || answer.resource %></option>
   <% end %>

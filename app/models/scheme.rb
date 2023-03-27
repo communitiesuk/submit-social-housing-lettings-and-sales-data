@@ -161,18 +161,6 @@ class Scheme < ApplicationRecord
     ]
   end
 
-  def synonyms
-    locations.map(&:postcode).join(",")
-  end
-
-  def appended_text
-    "#{confirmed_locations_count} completed #{'location'.pluralize(confirmed_locations_count)}, #{unconfirmed_locations_count} incomplete #{'location'.pluralize(unconfirmed_locations_count)}"
-  end
-
-  def hint
-    [primary_client_group, secondary_client_group].filter(&:present?).join(", ")
-  end
-
   def care_acts_options_with_hints
     hints = { "Yes – part registered as a care home": "A proportion of units are registered as being a care home." }
 
@@ -253,15 +241,5 @@ class Scheme < ApplicationRecord
 
   def deactivated?
     status == :deactivated
-  end
-
-private
-
-  def confirmed_locations_count
-    locations.confirmed.size
-  end
-
-  def unconfirmed_locations_count
-    locations.unconfirmed.size
   end
 end
