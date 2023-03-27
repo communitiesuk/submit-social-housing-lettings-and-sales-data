@@ -336,6 +336,7 @@ module Imports
         @logger.warn("Log #{lettings_log.old_id}: Removing tshortfall as there are no outstanding charges")
         @logs_overridden << lettings_log.old_id
         attributes.delete("tshortfall")
+        attributes.delete("hbrentshortfall")
         save_lettings_log(attributes, previous_status)
       else
         @logger.error("Log #{lettings_log.old_id}: Failed to import")

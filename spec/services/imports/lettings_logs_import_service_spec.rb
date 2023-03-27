@@ -710,7 +710,7 @@ RSpec.describe Imports::LettingsLogsImportService do
 
         expect(lettings_log).not_to be_nil
         expect(lettings_log.tshortfall).to be_nil
-        expect(lettings_log.hbrentshortfall).to eq(2)
+        expect(lettings_log.hbrentshortfall).to be_nil
       end
     end
   end
