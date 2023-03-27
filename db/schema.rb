@@ -561,7 +561,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_20_084057) do
     t.integer "buy2living"
     t.integer "prevtenbuy2"
     t.integer "pregblank"
-    t.integer "nationalbuy2"
     t.string "uprn"
     t.integer "uprn_known"
     t.integer "uprn_confirmed"

@@ -47,6 +47,12 @@ module Forms
         "#{year}/#{year + 1 - 2000}"
       end
 
+      def inset_text
+        if year == 2022
+          '<p class="govuk-inset-text">For 2022/23 data, you cannot have a CSV file with both general needs logs and supported housing logs. These must be in separate files.</p>'.html_safe
+        end
+      end
+
       def save!
         true
       end
