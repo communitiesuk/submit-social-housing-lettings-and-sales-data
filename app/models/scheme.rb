@@ -255,10 +255,6 @@ class Scheme < ApplicationRecord
     status == :deactivated
   end
 
-  def has_confirmed_locations?
-    confirmed_locations_count.positive?
-  end
-
 private
 
   def confirmed_locations_count

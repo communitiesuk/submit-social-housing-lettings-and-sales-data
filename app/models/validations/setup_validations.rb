@@ -23,7 +23,7 @@ module Validations::SetupValidations
   def validate_scheme_has_confirmed_locations_validation(record)
     return unless record.scheme
 
-    unless record.scheme.has_confirmed_locations?
+    unless record.scheme.locations.confirmed.any?
       record.errors.add :scheme_id, I18n.t("validations.scheme.no_completed_locations")
     end
   end
