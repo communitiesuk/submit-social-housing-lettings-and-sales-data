@@ -4,7 +4,7 @@
     <h1 class="govuk-heading-l">Fix <%= pluralize(@bulk_upload.bulk_upload_errors.count, "error") %> and upload file again</h1>
 
     <p class="govuk-body-l">
-      We could not create logs from your bulk upload. Below is a list of everything that you need to fix your spreadsheet. You can download the specification to help you fix the cells in your CSV file.
+      We could not create logs from your bulk upload. Below is a list of everything that you need to fix your spreadsheet. You can download the <%= govuk_link_to "specification", Forms::BulkUploadLettings::PrepareYourFile.new(year: @bulk_upload.year).specification_path, target: "_blank" %> to help you fix the cells in your CSV file.
     </p>
 
     <p class="govuk-body-l">

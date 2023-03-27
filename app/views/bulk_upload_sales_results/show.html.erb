@@ -4,7 +4,7 @@
     <h1 class="govuk-heading-l">We found <%= pluralize(@bulk_upload.bulk_upload_errors.count, "error") %> in your file</h1>
 
     <div class="govuk-body">
-      Here’s a list of everything that you need to fix your spreadsheet. You can download the specification to help you fix the cells in your CSV file.
+      Here’s a list of everything that you need to fix your spreadsheet. You can download the <%= govuk_link_to "specification", Forms::BulkUploadSales::PrepareYourFile.new(year: @bulk_upload.year).specification_path, target: "_blank" %> to help you fix the cells in your CSV file.
     </div>
 
     <h2 class="govuk-heading-m"><%= @bulk_upload.filename %></h2>
