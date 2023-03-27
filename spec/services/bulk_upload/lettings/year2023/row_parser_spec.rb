@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
   subject(:parser) { described_class.new(attributes) }
 
-  let(:now) { Time.zone.today }
+  let(:now) { Time.zone.parse("01/03/2023") }
 
   let(:attributes) { { bulk_upload: } }
   let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: nil) }
