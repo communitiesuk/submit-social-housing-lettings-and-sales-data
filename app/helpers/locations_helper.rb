@@ -78,6 +78,12 @@ module LocationsHelper
     return govuk_button_link_to "Reactivate this location", scheme_location_new_reactivation_path(location.scheme, location) if location.deactivated?
   end
 
+  def location_creation_success_notice(location)
+    if location.confirmed
+      "#{location.postcode} #{location.startdate.blank? || location.startdate < Time.zone.now ? 'has been' : 'will be'} added to this scheme"
+    end
+  end
+
 private
 
   ActivePeriod = Struct.new(:from, :to)

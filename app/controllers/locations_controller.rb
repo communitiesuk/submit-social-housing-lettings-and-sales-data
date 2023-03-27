@@ -134,9 +134,7 @@ class LocationsController < ApplicationController
   def check_answers; end
 
   def confirm
-    if @location.confirmed
-      flash[:notice] = "#{@location.postcode} #{@location.startdate.blank? || @location.startdate < Time.zone.now ? 'has been' : 'will be'} added to this scheme"
-    end
+    flash[:notice] = helpers.location_creation_success_notice(@location)
     redirect_to scheme_locations_path(@scheme)
   end
 
