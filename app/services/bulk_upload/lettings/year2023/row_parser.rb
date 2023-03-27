@@ -419,7 +419,7 @@ private
   end
 
   def validate_only_one_housing_needs_type
-    if [field_83, field_84, field_85].compact.count.positive?
+    if [field_83, field_84, field_85].compact.count > 1
       errors.add(:field_83, I18n.t("validations.household.housingneeds_type.only_one_option_permitted"))
       errors.add(:field_84, I18n.t("validations.household.housingneeds_type.only_one_option_permitted"))
       errors.add(:field_85, I18n.t("validations.household.housingneeds_type.only_one_option_permitted"))
@@ -805,28 +805,28 @@ private
     attributes["tenancylength"] = field_43
     attributes["declaration"] = field_45
 
-    attributes["age1_known"] = (field_46 == "R" || field_46.blank? ? 1 : 0)
+    attributes["age1_known"] = age1_known?
     attributes["age1"] = field_46 if attributes["age1_known"].zero? && field_46&.match(/\A\d{1,3}\z|\AR\z/)
 
-    attributes["age2_known"] = (field_52 == "R" || field_52.blank? ? 1 : 0)
+    attributes["age2_known"] = age2_known?
     attributes["age2"] = field_52 if attributes["age2_known"].zero? && field_52&.match(/\A\d{1,3}\z|\AR\z/)
 
-    attributes["age3_known"] = (field_56 == "R" || field_56.blank? ? 1 : 0)
+    attributes["age3_known"] = age3_known?
     attributes["age3"] = field_56 if attributes["age3_known"].zero? && field_56&.match(/\A\d{1,3}\z|\AR\z/)
 
-    attributes["age4_known"] = (field_60 == "R" || field_60.blank? ? 1 : 0)
+    attributes["age4_known"] = age4_known?
     attributes["age4"] = field_60 if attributes["age4_known"].zero? && field_60&.match(/\A\d{1,3}\z|\AR\z/)
 
-    attributes["age5_known"] = (field_64 == "R" || field_64.blank? ? 1 : 0)
+    attributes["age5_known"] = age5_known?
     attributes["age5"] = field_64 if attributes["age5_known"].zero? && field_64&.match(/\A\d{1,3}\z|\AR\z/)
 
-    attributes["age6_known"] = (field_68 == "R" || field_68.blank? ? 1 : 0)
+    attributes["age6_known"] = age6_known?
     attributes["age6"] = field_68 if attributes["age6_known"].zero? && field_68&.match(/\A\d{1,3}\z|\AR\z/)
 
-    attributes["age7_known"] = (field_72 == "R" || field_72.blank? ? 1 : 0)
+    attributes["age7_known"] = age7_known?
     attributes["age7"] = field_72 if attributes["age7_known"].zero? && field_72&.match(/\A\d{1,3}\z|\AR\z/)
 
-    attributes["age8_known"] = (field_76 == "R" || field_76.blank? ? 1 : 0)
+    attributes["age8_known"] = age8_known?
     attributes["age8"] = field_76 if attributes["age8_known"].zero? && field_76&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["sex1"] = field_47
@@ -859,13 +859,13 @@ private
     attributes["ecstat7"] = field_74
     attributes["ecstat8"] = field_78
 
-    attributes["details_known_2"] = details_known(2)
-    attributes["details_known_3"] = details_known(3)
-    attributes["details_known_4"] = details_known(4)
-    attributes["details_known_5"] = details_known(5)
-    attributes["details_known_6"] = details_known(6)
-    attributes["details_known_7"] = details_known(7)
-    attributes["details_known_8"] = details_known(8)
+    attributes["details_known_2"] = details_known?(2)
+    attributes["details_known_3"] = details_known?(3)
+    attributes["details_known_4"] = details_known?(4)
+    attributes["details_known_5"] = details_known?(5)
+    attributes["details_known_6"] = details_known?(6)
+    attributes["details_known_7"] = details_known?(7)
+    attributes["details_known_8"] = details_known?(8)
 
     attributes["armedforces"] = field_79
     attributes["leftreg"] = leftreg
@@ -1077,36 +1077,61 @@ private
     end
   end
 
-  def details_known(person_n)
+  def age1_known?
+    return 1 if field_46 == "R"
+    return 1 if field_46.blank?
+
+    0
+  end
+
+  [
+    { person: 2, field: :field_52 },
+    { person: 3, field: :field_56 },
+    { person: 4, field: :field_60 },
+    { person: 5, field: :field_64 },
+    { person: 6, field: :field_68 },
+    { person: 7, field: :field_72 },
+    { person: 8, field: :field_76 },
+  ].each do |hash|
+    define_method("age#{hash[:person]}_known?") do
+      return 1 if public_send(hash[:field]) == "R"
+      return 0 if send("person_#{hash[:person]}_present?")
+      return 1 if public_send(hash[:field]).blank?
+
+      0
+    end
+  end
+
+  def details_known?(person_n)
     send("person_#{person_n}_present?") ? 0 : 1
   end
 
   def person_2_present?
-    field_51.present? && field_52.present? && field_53.present?
+    field_51.present? || field_52.present? || field_53.present?
   end
 
   def person_3_present?
-    field_55.present? && field_56.present? && field_57.present?
+    field_55.present? || field_56.present? || field_57.present?
   end
 
   def person_4_present?
-    field_59.present? && field_60.present? && field_61.present?
+    field_59.present? || field_60.present? || field_61.present?
   end
 
   def person_5_present?
-    field_63.present? && field_64.present? && field_65.present?
+    field_63.present? || field_64.present? || field_65.present?
   end
 
   def person_6_present?
-    field_67.present? && field_68.present? && field_69.present?
+    field_67.present? || field_68.present? || field_69.present?
   end
 
   def person_7_present?
-    field_71.present? && field_72.present? && field_73.present?
+    field_71.present? || field_72.present? || field_73.present?
   end
 
   def person_8_present?
-    field_75.present? && field_76.present? && field_77.present?
+    field_75.present? || field_76.present? || field_77.present?
   end
 
   def leftreg
