@@ -175,14 +175,21 @@ RSpec.describe Validations::SoftValidations do
       end
     end
 
-    context "when female tenants are in 11-16 age range" do
+    context "when there are no female tenants and age of other tenants is unknown" do
+      it "shows the interruption screen" do
+        record.update!(sex1: "M", preg_occ: 1, hhmemb: 1, age1_known: 1)
+        expect(record.no_females_in_a_pregnant_household?).to be true
+      end
+    end
+
+    context "when female tenants are under 16" do
       it "shows the interruption screen" do
         record.update!(age2: 14, sex2: "F", preg_occ: 1, hhmemb: 2, details_known_2: 0, age2_known: 0, age1: 18, sex1: "M", age1_known: 0)
         expect(record.female_in_pregnant_household_in_soft_validation_range?).to be true
       end
     end
 
-    context "when female tenants are in 50-65 age range" do
+    context "when female tenants are over 50" do
       it "shows the interruption screen" do
         record.update!(age1: 54, sex1: "F", preg_occ: 1, hhmemb: 1, age1_known: 0)
         expect(record.female_in_pregnant_household_in_soft_validation_range?).to be true
@@ -325,6 +332,40 @@ RSpec.describe Validations::SoftValidations do
       it "returns true" do
         expect(record.buyers_age_for_old_persons_shared_ownership_invalid?).to be true
       end
+    end
+  end
+
+  describe "#care_home_charge_expected_not_provided?" do
+    it "returns false if is_carehome is 'No'" do
+      record.period = 3
+      record.is_carehome = 0
+      record.chcharge = nil
+
+      expect(record).not_to be_care_home_charge_expected_not_provided
+    end
+
+    it "returns false if is_carehome is not given" do
+      record.period = 3
+      record.is_carehome = nil
+      record.chcharge = nil
+
+      expect(record).not_to be_care_home_charge_expected_not_provided
+    end
+
+    it "returns false if chcharge is given" do
+      record.period = 3
+      record.is_carehome = 1
+      record.chcharge = 40
+
+      expect(record).not_to be_care_home_charge_expected_not_provided
+    end
+
+    it "returns true if is_carehome is 'Yes' and chcharge is not given" do
+      record.period = 3
+      record.is_carehome = 1
+      record.chcharge = nil
+
+      expect(record).to be_care_home_charge_expected_not_provided
     end
   end
 end

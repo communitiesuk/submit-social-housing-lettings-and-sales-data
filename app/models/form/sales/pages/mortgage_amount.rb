@@ -3,9 +3,7 @@ class Form::Sales::Pages::MortgageAmount < ::Form::Page
     super(id, hsh, subsection)
     @ownershipsch = ownershipsch
     @header = "Mortgage Amount"
-    @depends_on = [{
-      "mortgageused" => 1,
-    }]
+    @depends_on = [{ "mortgage_used?" => true }]
   end
 
   def questions

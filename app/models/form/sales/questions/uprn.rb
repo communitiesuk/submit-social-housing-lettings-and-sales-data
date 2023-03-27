@@ -7,6 +7,7 @@ class Form::Sales::Questions::Uprn < ::Form::Question
     @type = "text"
     @hint_text = "The Unique Property Reference Number (UPRN) is a unique number system created by Ordnance Survey and used by housing providers and sectors UK-wide. For example 10010457355."
     @width = 10
+    @question_number = 14
   end
 
   def unanswered_error_message

@@ -11,6 +11,10 @@ RSpec.describe Form::Sales::Questions::AddressLine1, type: :model do
     expect(question.page).to eq(page)
   end
 
+  it "has the correct question_number" do
+    expect(question.question_number).to be_nil
+  end
+
   it "has the correct id" do
     expect(question.id).to eq("address_line1")
   end
@@ -20,7 +24,7 @@ RSpec.describe Form::Sales::Questions::AddressLine1, type: :model do
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Address")
+    expect(question.check_answer_label).to eq("Q15 - Address")
   end
 
   it "has the correct type" do

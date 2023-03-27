@@ -114,6 +114,15 @@ module Validations::Sales::SoftValidations
     end
   end
 
+  def discounted_ownership_value_invalid?
+    return unless saledate && collection_start_year <= 2023
+    return unless value && deposit && ownershipsch
+    return unless mortgage || mortgageused == 2
+    return unless discount || grant || type == 29
+
+    mortgage_deposit_and_grant_total != value_with_discount && discounted_ownership_sale?
+  end
+
 private
 
   def sale_range

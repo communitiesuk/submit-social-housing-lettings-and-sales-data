@@ -9,7 +9,7 @@ RSpec.describe Form::Sales::Questions::NumberOfOthersInProperty, type: :model do
   let(:joint_purchase) { true }
 
   it "has correct page" do
-    expect(question.page).to eq(page)
+    expect(question.page).to be(page)
   end
 
   it "has the correct id" do
@@ -17,7 +17,7 @@ RSpec.describe Form::Sales::Questions::NumberOfOthersInProperty, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Besides the buyer(s), how many other people live or will live in the property?")
+    expect(question.header).to eq("Besides the buyers, how many other people live or will live in the property?")
   end
 
   it "has the correct check_answer_label" do
@@ -37,11 +37,11 @@ RSpec.describe Form::Sales::Questions::NumberOfOthersInProperty, type: :model do
   end
 
   it "has the correct min" do
-    expect(question.min).to eq(0)
+    expect(question.min).to be 0
   end
 
   it "has the correct max" do
-    expect(question.max).to eq(4)
+    expect(question.max).to be 15
   end
 
   context "with non joint purchase" do
@@ -51,8 +51,8 @@ RSpec.describe Form::Sales::Questions::NumberOfOthersInProperty, type: :model do
       expect(question.hint_text).to eq("You can provide details for a maximum of 5 other people if there is only one buyer.")
     end
 
-    it "has the correct max" do
-      expect(question.max).to eq(5)
+    it "has the correct header" do
+      expect(question.header).to eq("Besides the buyer, how many other people live or will live in the property?")
     end
   end
 end

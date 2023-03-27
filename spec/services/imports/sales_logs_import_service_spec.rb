@@ -167,6 +167,23 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
+    context "when the mortgage lender is not set" do
+      let(:sales_log_id) { "discounted_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q34a").content = ""
+        allow(logger).to receive(:warn).and_return(nil)
+      end
+
+      it "correctly sets mortgage lender and mortgage lender other" do
+        sales_log_service.send(:create_log, sales_log_xml)
+
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log&.mortgagelender).to be(0)
+        expect(sales_log&.mortgagelenderother).to be_nil
+      end
+    end
+
     context "with shared ownership type" do
       let(:sales_log_id) { "shared_ownership_sales_log" }
 
@@ -379,6 +396,21 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
+    context "and the value soft validation is triggered (discounted_sale_value_check)" do
+      let(:sales_log_id) { "discounted_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q31PurchasePrice").content = "500000"
+      end
+
+      it "completes the log" do
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log.status).to eq("completed")
+        expect(sales_log.discounted_sale_value_check).to eq(0)
+      end
+    end
+
     context "and it has an invalid record with invalid child age" do
       let(:sales_log_id) { "discounted_ownership_sales_log" }
 
@@ -407,6 +439,108 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
+    context "and it has a record with invalid equity" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q23Equity").content = "78"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Log shared_ownership_sales_log: Removing equity as the equity is invalid/)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers" do
+        allow(logger).to receive(:warn)
+
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+
+        expect(sales_log).not_to be_nil
+        expect(sales_log.equity).to be_nil
+      end
+    end
+
+    context "and it has a record with invalid equity (under_min)" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q23Equity").content = "20"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Log shared_ownership_sales_log: Removing equity as the equity is invalid/)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers" do
+        allow(logger).to receive(:warn)
+
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+
+        expect(sales_log).not_to be_nil
+        expect(sales_log.equity).to be_nil
+      end
+    end
+
+    context "and it has a record with postcode in invalid format" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q14Postcode").content = "L3132AF"
+        sales_log_xml.at_xpath("//xmlns:Q14ONSLACode").content = "E07000223"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Log shared_ownership_sales_log: Removing postcode as the postcode is invalid/)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers and sets correct la" do
+        allow(logger).to receive(:warn)
+
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+
+        expect(sales_log).not_to be_nil
+        expect(sales_log.postcode_full).to be_nil
+        expect(sales_log.pcodenk).to eq(1) # not known
+        expect(sales_log.la).to eq("E07000223") # not known
+      end
+    end
+
+    context "and setup field has validation error in incomplete log" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//meta:status").content = "saved"
+        sales_log_xml.at_xpath("//xmlns:Q17aStaircase").content = "1 Yes"
+        sales_log_xml.at_xpath("//xmlns:PercentBought").content = "5"
+        sales_log_xml.at_xpath("//xmlns:PercentOwns").content = "40"
+        sales_log_xml.at_xpath("//xmlns:Q17Resale").content = ""
+        sales_log_xml.at_xpath("//xmlns:EXDAY").content = ""
+        sales_log_xml.at_xpath("//xmlns:EXMONTH").content = ""
+        sales_log_xml.at_xpath("//xmlns:EXYEAR").content = ""
+        sales_log_xml.at_xpath("//xmlns:HODAY").content = ""
+        sales_log_xml.at_xpath("//xmlns:HOMONTH").content = ""
+        sales_log_xml.at_xpath("//xmlns:HOYEAR").content = ""
+      end
+
+      it "intercepts the relevant validation error but does not clear setup fields" do
+        expect(logger).to receive(:warn).with(/Log shared_ownership_sales_log: Removing field stairbought from log triggering validation: The minimum increase in equity while staircasing is 10%/)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .not_to raise_error
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+
+        expect(sales_log.type).to eq(2)
+      end
+    end
+
     context "and it has an invalid record with invalid postcodes" do
       let(:sales_log_id) { "discounted_ownership_sales_log" }
 
@@ -430,6 +564,46 @@ RSpec.describe Imports::SalesLogsImportService do
         expect(sales_log).not_to be_nil
         expect(sales_log.postcode_full).to eq("A1 2AA")
         expect(sales_log.ppostcode_full).to be_nil
+      end
+    end
+
+    context "and it has invalid postcodes" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//meta:status").content = "submitted-invalid"
+        sales_log_xml.at_xpath("//xmlns:Q14Postcode").content = "2AA" # postcode
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Removing field postcode_full from log triggering validation: wrong_format/)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers" do
+        allow(logger).to receive(:warn)
+
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+
+        expect(sales_log).not_to be_nil
+        expect(sales_log.postcode_full).to be_nil
+        expect(sales_log.postcode_full).to be_nil
+      end
+    end
+
+    context "when there is information about 7 people" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:P7Age").content = "22"
+        sales_log_xml.at_xpath("//xmlns:LiveInOther").content = "10"
+      end
+
+      it "does not try to save information about person 7" do
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+        .not_to raise_error
       end
     end
 
@@ -691,6 +865,31 @@ RSpec.describe Imports::SalesLogsImportService do
 
           sales_log = SalesLog.find_by(old_id: sales_log_id)
           expect(sales_log&.hhregres).to eq(7)
+        end
+      end
+
+      context "when inferring armed forces still" do
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
+
+        before do
+          sales_log_xml.at_xpath("//xmlns:ArmedF").content = "1 Yes"
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets hhregresstill to don't know if not answered" do
+          sales_log_xml.at_xpath("//xmlns:LeftArmedF").content = ""
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.hhregresstill).to eq(7)
+        end
+
+        it "sets hhregresstill correctly if answered" do
+          sales_log_xml.at_xpath("//xmlns:LeftArmedF").content = "4"
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.hhregresstill).to eq(4)
         end
       end
 
@@ -1235,6 +1434,24 @@ RSpec.describe Imports::SalesLogsImportService do
 
           sales_log = SalesLog.find_by(old_id: sales_log_id)
           expect(sales_log&.socprevten).to be(10)
+        end
+      end
+
+      context "when it's a joint tenancy and jointmore is not answered" do
+        let(:sales_log_id) { "outright_sale_sales_log" }
+
+        before do
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets jointmore to don't know" do
+          sales_log_xml.at_xpath("//meta:status").content = "invalid"
+          sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+          sales_log_xml.at_xpath("//xmlns:JointMore").content = ""
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.jointmore).to eq(3)
         end
       end
     end

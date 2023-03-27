@@ -21,14 +21,6 @@ RSpec.describe Validations::DateValidations do
       expect(record.errors["startdate"]).to be_empty
     end
 
-    it "validates that the tenancy start date is before the end date of the chosen scheme if it has an end date" do
-      record.startdate = Time.zone.today - 3.days
-      record.scheme = scheme
-      date_validator.validate_startdate(record)
-      expect(record.errors["startdate"])
-        .to include(match I18n.t("validations.setup.startdate.before_scheme_end_date"))
-    end
-
     it "validates that the tenancy start date is after the void date if it has a void date" do
       record.startdate = Time.zone.local(2022, 1, 1)
       record.voiddate = Time.zone.local(2022, 2, 1)
@@ -173,6 +165,7 @@ RSpec.describe Validations::DateValidations do
       let(:scheme) { create(:scheme) }
 
       before do
+        FactoryBot.create(:location, scheme:)
         create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), scheme:)
         scheme.reload
       end
@@ -197,6 +190,7 @@ RSpec.describe Validations::DateValidations do
       let(:scheme) { create(:scheme) }
 
       before do
+        FactoryBot.create(:location, scheme:)
         create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), scheme:)
         create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 2), reactivation_date: Time.zone.local(2022, 8, 3), scheme:)
         create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 1), reactivation_date: Time.zone.local(2022, 9, 4), scheme:)

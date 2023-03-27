@@ -53,16 +53,22 @@ module Validations::SoftValidations
   end
 
   def no_females_in_a_pregnant_household?
-    !females_in_the_household? && all_tenants_age_and_gender_information_completed? && preg_occ == 1
+    !females_in_the_household? && all_tenants_gender_information_completed? && preg_occ == 1
   end
 
   def female_in_pregnant_household_in_soft_validation_range?
-    all_tenants_age_and_gender_information_completed? && (females_in_age_range(11, 15) || females_in_age_range(51, 65)) && !females_in_age_range(16, 50) && preg_occ == 1
+    all_tenants_age_and_gender_information_completed? && females_in_the_household? && !females_in_age_range(16, 50) && preg_occ == 1
   end
 
   def all_tenants_age_and_gender_information_completed?
     (1..hhmemb).all? do |n|
       public_send("sex#{n}").present? && public_send("age#{n}").present? && details_known_or_lead_tenant?(n) && public_send("age#{n}_known").present? && public_send("age#{n}_known").zero?
+    end
+  end
+
+  def all_tenants_gender_information_completed?
+    (1..hhmemb).all? do |n|
+      public_send("sex#{n}").present? && details_known_or_lead_tenant?(n)
     end
   end
 

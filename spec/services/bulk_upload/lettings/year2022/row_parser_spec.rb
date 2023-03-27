@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
   subject(:parser) { described_class.new(attributes) }
 
-  let(:now) { Time.zone.today }
+  let(:now) { Time.zone.parse("01/03/2023") }
 
   let(:attributes) { { bulk_upload: } }
   let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }
@@ -446,6 +446,16 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
       end
     end
 
+    describe "#field_14" do # age3
+      context "when blank but gender given" do
+        let(:attributes) { valid_attributes.merge(field_14: "", field_22: "F") }
+
+        it "returns an error" do
+          expect(parser.errors[:field_14]).to be_present
+        end
+      end
+    end
+
     describe "#field_52" do # leaving reason
       context "when field_134 is 1 meaning it is a renewal" do
         context "when field_52 is 40" do
@@ -475,6 +485,16 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
     end
 
     describe "#field_55, #field_56, #field_57" do
+      context "when one item selected" do
+        let(:attributes) { { bulk_upload:, field_55: "1" } }
+
+        it "is permitted" do
+          expect(parser.errors[:field_55]).to be_blank
+          expect(parser.errors[:field_56]).to be_blank
+          expect(parser.errors[:field_57]).to be_blank
+        end
+      end
+
       context "when more than one item selected" do
         let(:attributes) { { bulk_upload:, field_55: "1", field_56: "1" } }
 
@@ -634,6 +654,10 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
 
           expect(setup_errors.find { |e| e.attribute == :field_111 }.message).to eql("The owning organisation code is incorrect")
         end
+
+        it "blocks log creation" do
+          expect(parser).to be_block_log_creation
+        end
       end
 
       context "when cannot find owning org" do
@@ -641,6 +665,10 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
 
         it "is not permitted" do
           expect(parser.errors[:field_111]).to eql(["The owning organisation code is incorrect"])
+        end
+
+        it "blocks log creation" do
+          expect(parser).to be_block_log_creation
         end
       end
 
@@ -674,11 +702,27 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
     end
 
     describe "#field_113" do # managing org
+      context "when blank" do
+        let(:attributes) { { bulk_upload:, field_113: "" } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_113]).to eql(["The managing organisation code is incorrect"])
+        end
+
+        it "blocks log creation" do
+          expect(parser).to be_block_log_creation
+        end
+      end
+
       context "when cannot find managing org" do
         let(:attributes) { { bulk_upload:, field_113: "donotexist" } }
 
         it "is not permitted" do
           expect(parser.errors[:field_113]).to eql(["The managing organisation code is incorrect"])
+        end
+
+        it "blocks log creation" do
+          expect(parser).to be_block_log_creation
         end
       end
 
@@ -742,6 +786,18 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
       %w[age8_known age8 field_19],
     ].each do |known, age, field|
       describe "##{known} and ##{age}" do
+        context "when #{field} is blank" do
+          let(:attributes) { { bulk_upload:, field.to_s => nil } }
+
+          it "sets ##{known} 1" do
+            expect(parser.log.public_send(known)).to be(1)
+          end
+
+          it "sets ##{age} to nil" do
+            expect(parser.log.public_send(age)).to be_nil
+          end
+        end
+
         context "when #{field} is R" do
           let(:attributes) { { bulk_upload:, field.to_s => "R" } }
 

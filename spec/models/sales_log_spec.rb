@@ -59,8 +59,8 @@ RSpec.describe SalesLog, type: :model do
           purchid
           monthly_charges_value_check
           old_persons_shared_ownership_value_check
-          mortgagelender
           othtype
+          discounted_sale_value_check
           proplen
           mortlen
           frombeds
@@ -77,8 +77,8 @@ RSpec.describe SalesLog, type: :model do
           purchid
           monthly_charges_value_check
           old_persons_shared_ownership_value_check
-          mortgagelender
           othtype
+          discounted_sale_value_check
           address_line2
           county
           postcode_full
@@ -302,7 +302,7 @@ RSpec.describe SalesLog, type: :model do
         WebMock.stub_request(:get, /api.postcodes.io\/postcodes\/CA101AA/)
         .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Eden","codes":{"admin_district":"E07000030"}}}', headers: {})
 
-        Timecop.freeze(2023, 4, 1)
+        Timecop.freeze(2023, 5, 2)
         Singleton.__init__(FormHandler)
       end
 
@@ -517,7 +517,14 @@ RSpec.describe SalesLog, type: :model do
 
   describe "#process_uprn_change!" do
     context "when UPRN set to a value" do
-      let(:sales_log) { create(:sales_log, uprn: "123456789", uprn_confirmed: 1) }
+      let(:sales_log) do
+        create(
+          :sales_log,
+          uprn: "123456789",
+          uprn_confirmed: 1,
+          county: "county",
+        )
+      end
 
       it "updates sales log fields" do
         sales_log.uprn = "1111111"
@@ -538,6 +545,7 @@ RSpec.describe SalesLog, type: :model do
         .and change(sales_log, :town_or_city).from(nil).to("Posttown")
         .and change(sales_log, :postcode_full).from(nil).to("POSTCODE")
         .and change(sales_log, :uprn_confirmed).from(1).to(nil)
+        .and change(sales_log, :county).from("county").to(nil)
       end
     end
 

@@ -284,13 +284,13 @@ class BulkUpload::Lettings::Year2023::RowParser
   validates :field_16, presence: { if: proc { [2, 4, 6, 8, 10, 12].include?(field_5) } }
 
   validates :field_46, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 1 must be a number or the letter R" }
-  validates :field_52, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 2 must be a number or the letter R" }
-  validates :field_56, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 3 must be a number or the letter R" }
-  validates :field_60, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 4 must be a number or the letter R" }
-  validates :field_64, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 5 must be a number or the letter R" }
-  validates :field_68, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 6 must be a number or the letter R" }
-  validates :field_72, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 7 must be a number or the letter R" }
-  validates :field_76, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 8 must be a number or the letter R" }
+  validates :field_52, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 2 must be a number or the letter R" }, allow_blank: true
+  validates :field_56, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 3 must be a number or the letter R" }, allow_blank: true
+  validates :field_60, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 4 must be a number or the letter R" }, allow_blank: true
+  validates :field_64, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 5 must be a number or the letter R" }, allow_blank: true
+  validates :field_68, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 6 must be a number or the letter R" }, allow_blank: true
+  validates :field_72, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 7 must be a number or the letter R" }, allow_blank: true
+  validates :field_76, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 8 must be a number or the letter R" }, allow_blank: true
 
   validates :field_7, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (day)") }
   validates :field_8, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (month)") }
@@ -311,14 +311,14 @@ class BulkUpload::Lettings::Year2023::RowParser
   validate :validate_dont_know_disabled_needs_conjunction
   validate :validate_no_and_dont_know_disabled_needs_conjunction
 
-  validate :validate_owning_org_permitted
-  validate :validate_owning_org_owns_stock
-  validate :validate_owning_org_exists
   validate :validate_owning_org_data_given
+  validate :validate_owning_org_exists
+  validate :validate_owning_org_owns_stock
+  validate :validate_owning_org_permitted
 
-  validate :validate_managing_org_related
-  validate :validate_managing_org_exists
   validate :validate_managing_org_data_given
+  validate :validate_managing_org_exists
+  validate :validate_managing_org_related
 
   validate :validate_scheme_related
   validate :validate_scheme_exists
@@ -419,7 +419,7 @@ private
   end
 
   def validate_only_one_housing_needs_type
-    if [field_83, field_84, field_85].compact.count.positive?
+    if [field_83, field_84, field_85].compact.count > 1
       errors.add(:field_83, I18n.t("validations.household.housingneeds_type.only_one_option_permitted"))
       errors.add(:field_84, I18n.t("validations.household.housingneeds_type.only_one_option_permitted"))
       errors.add(:field_85, I18n.t("validations.household.housingneeds_type.only_one_option_permitted"))
@@ -551,19 +551,26 @@ private
   def validate_managing_org_related
     if owning_organisation && managing_organisation && !owning_organisation.can_be_managed_by?(organisation: managing_organisation)
       block_log_creation!
-      errors.add(:field_2, "This managing organisation does not have a relationship with the owning organisation")
+
+      if errors[:field_2].blank?
+        errors.add(:field_2, "This managing organisation does not have a relationship with the owning organisation")
+      end
     end
   end
 
   def validate_managing_org_exists
     if managing_organisation.nil?
-      errors.delete(:field_2)
-      errors.add(:field_2, "The managing organisation code is incorrect")
+      block_log_creation!
+
+      if errors[:field_2].blank?
+        errors.add(:field_2, "The managing organisation code is incorrect")
+      end
     end
   end
 
   def validate_managing_org_data_given
     if field_2.blank?
+      block_log_creation!
       errors.add(:field_2, "The managing organisation code is incorrect", category: :setup)
     end
   end
@@ -571,20 +578,26 @@ private
   def validate_owning_org_owns_stock
     if owning_organisation && !owning_organisation.holds_own_stock?
       block_log_creation!
-      errors.delete(:field_1)
-      errors.add(:field_1, "The owning organisation code provided is for an organisation that does not own stock")
+
+      if errors[:field_1].blank?
+        errors.add(:field_1, "The owning organisation code provided is for an organisation that does not own stock")
+      end
     end
   end
 
   def validate_owning_org_exists
     if owning_organisation.nil?
-      errors.delete(:field_1)
-      errors.add(:field_1, "The owning organisation code is incorrect")
+      block_log_creation!
+
+      if errors[:field_1].blank?
+        errors.add(:field_1, "The owning organisation code is incorrect")
+      end
     end
   end
 
   def validate_owning_org_data_given
     if field_1.blank?
+      block_log_creation!
       errors.add(:field_1, "The owning organisation code is incorrect", category: :setup)
     end
   end
@@ -592,8 +605,10 @@ private
   def validate_owning_org_permitted
     if owning_organisation && !bulk_upload.user.organisation.affiliated_stock_owners.include?(owning_organisation)
       block_log_creation!
-      errors.delete(:field_1)
-      errors.add(:field_1, "You do not have permission to add logs for this owning organisation")
+
+      if errors[:field_1].blank?
+        errors.add(:field_1, "You do not have permission to add logs for this owning organisation")
+      end
     end
   end
 
@@ -751,6 +766,12 @@ private
       mrcdate: %i[field_36 field_37 field_38],
 
       voiddate: %i[field_33 field_34 field_35],
+
+      uprn: [:field_18],
+      address_line1: [:field_19],
+      address_line2: [:field_20],
+      town_or_city: [:field_21],
+      county: [:field_22],
     }
   end
 
@@ -790,28 +811,28 @@ private
     attributes["tenancylength"] = field_43
     attributes["declaration"] = field_45
 
-    attributes["age1_known"] = field_46 == "R" ? 1 : 0
+    attributes["age1_known"] = age1_known?
     attributes["age1"] = field_46 if attributes["age1_known"].zero? && field_46&.match(/\A\d{1,3}\z|\AR\z/)
 
-    attributes["age2_known"] = field_52 == "R" ? 1 : 0
+    attributes["age2_known"] = age2_known?
     attributes["age2"] = field_52 if attributes["age2_known"].zero? && field_52&.match(/\A\d{1,3}\z|\AR\z/)
 
-    attributes["age3_known"] = field_56 == "R" ? 1 : 0
+    attributes["age3_known"] = age3_known?
     attributes["age3"] = field_56 if attributes["age3_known"].zero? && field_56&.match(/\A\d{1,3}\z|\AR\z/)
 
-    attributes["age4_known"] = field_60 == "R" ? 1 : 0
+    attributes["age4_known"] = age4_known?
     attributes["age4"] = field_60 if attributes["age4_known"].zero? && field_60&.match(/\A\d{1,3}\z|\AR\z/)
 
-    attributes["age5_known"] = field_64 == "R" ? 1 : 0
+    attributes["age5_known"] = age5_known?
     attributes["age5"] = field_64 if attributes["age5_known"].zero? && field_64&.match(/\A\d{1,3}\z|\AR\z/)
 
-    attributes["age6_known"] = field_68 == "R" ? 1 : 0
+    attributes["age6_known"] = age6_known?
     attributes["age6"] = field_68 if attributes["age6_known"].zero? && field_68&.match(/\A\d{1,3}\z|\AR\z/)
 
-    attributes["age7_known"] = field_72 == "R" ? 1 : 0
+    attributes["age7_known"] = age7_known?
     attributes["age7"] = field_72 if attributes["age7_known"].zero? && field_72&.match(/\A\d{1,3}\z|\AR\z/)
 
-    attributes["age8_known"] = field_76 == "R" ? 1 : 0
+    attributes["age8_known"] = age8_known?
     attributes["age8"] = field_76 if attributes["age8_known"].zero? && field_76&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["sex1"] = field_47
@@ -844,13 +865,13 @@ private
     attributes["ecstat7"] = field_74
     attributes["ecstat8"] = field_78
 
-    attributes["details_known_2"] = details_known(2)
-    attributes["details_known_3"] = details_known(3)
-    attributes["details_known_4"] = details_known(4)
-    attributes["details_known_5"] = details_known(5)
-    attributes["details_known_6"] = details_known(6)
-    attributes["details_known_7"] = details_known(7)
-    attributes["details_known_8"] = details_known(8)
+    attributes["details_known_2"] = details_known?(2)
+    attributes["details_known_3"] = details_known?(3)
+    attributes["details_known_4"] = details_known?(4)
+    attributes["details_known_5"] = details_known?(5)
+    attributes["details_known_6"] = details_known?(6)
+    attributes["details_known_7"] = details_known?(7)
+    attributes["details_known_8"] = details_known?(8)
 
     attributes["armedforces"] = field_79
     attributes["leftreg"] = leftreg
@@ -938,6 +959,13 @@ private
     attributes["voiddate"] = voiddate
 
     attributes["first_time_property_let_as_social_housing"] = first_time_property_let_as_social_housing
+
+    attributes["uprn_known"] = field_18.present? ? 1 : 0
+    attributes["uprn"] = field_18
+    attributes["address_line1"] = field_19
+    attributes["address_line2"] = field_20
+    attributes["town_or_city"] = field_21
+    attributes["county"] = field_22
 
     attributes
   end
@@ -1055,36 +1083,61 @@ private
     end
   end
 
-  def details_known(person_n)
+  def age1_known?
+    return 1 if field_46 == "R"
+    return 1 if field_46.blank?
+
+    0
+  end
+
+  [
+    { person: 2, field: :field_52 },
+    { person: 3, field: :field_56 },
+    { person: 4, field: :field_60 },
+    { person: 5, field: :field_64 },
+    { person: 6, field: :field_68 },
+    { person: 7, field: :field_72 },
+    { person: 8, field: :field_76 },
+  ].each do |hash|
+    define_method("age#{hash[:person]}_known?") do
+      return 1 if public_send(hash[:field]) == "R"
+      return 0 if send("person_#{hash[:person]}_present?")
+      return 1 if public_send(hash[:field]).blank?
+
+      0
+    end
+  end
+
+  def details_known?(person_n)
     send("person_#{person_n}_present?") ? 0 : 1
   end
 
   def person_2_present?
-    field_51.present? && field_52.present? && field_53.present?
+    field_51.present? || field_52.present? || field_53.present?
   end
 
   def person_3_present?
-    field_55.present? && field_56.present? && field_57.present?
+    field_55.present? || field_56.present? || field_57.present?
   end
 
   def person_4_present?
-    field_59.present? && field_60.present? && field_61.present?
+    field_59.present? || field_60.present? || field_61.present?
   end
 
   def person_5_present?
-    field_63.present? && field_64.present? && field_65.present?
+    field_63.present? || field_64.present? || field_65.present?
   end
 
   def person_6_present?
-    field_67.present? && field_68.present? && field_69.present?
+    field_67.present? || field_68.present? || field_69.present?
   end
 
   def person_7_present?
-    field_71.present? && field_72.present? && field_73.present?
+    field_71.present? || field_72.present? || field_73.present?
   end
 
   def person_8_present?
-    field_75.present? && field_76.present? && field_77.present?
+    field_75.present? || field_76.present? || field_77.present?
   end
 
   def leftreg

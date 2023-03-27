@@ -16,7 +16,7 @@ module Validations::PropertyValidations
     end
 
     if record.offered.negative? || record.offered > 20
-      record.errors.add :offered, I18n.t("validations.property.offered.relet_number")
+      record.errors.add :offered, :over_20, message: I18n.t("validations.property.offered.relet_number")
     end
   end
 

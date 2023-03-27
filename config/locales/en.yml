@@ -155,6 +155,7 @@ en:
       intermediate_rent_product_name:
         blank: "Enter name of other intermediate rent product"
       saledate:
+        later_than_14_days_after: "Sale completion date must not be later than 14 days from today’s date"
         current_collection_year:
           Enter a date within the %{current_start_year_short}/%{current_end_year_short} collection year, which is between %{current_start_year_long} and %{current_end_year_long}
         previous_and_current_collection_year:
@@ -253,11 +254,11 @@ en:
         less_than_shortfall: "Enter an amount that is more than the shortfall in basic rent"
         scharge:
           private_registered_provider:
-            general_needs: "Enter a value for the service charge between £0 and £55 per week if the landlord is a private registered provider and it is a general needs letting"
-            supported_housing: "Enter a value for the service charge between £0 and £280 per week if the landlord is a private registered provider and it is a supported housing letting"
+            general_needs: "Enter a value for the service charge between £0 and £155 per week if the landlord is a private registered provider and it is a general needs letting"
+            supported_housing: "Enter a value for the service charge between £0 and £480 per week if the landlord is a private registered provider and it is a supported housing letting"
           local_authority:
-            general_needs: "Enter a value for the service charge between £0 and £45 per week if the landlord is a local authority and it is a general needs letting"
-            supported_housing: "Enter a value for the service charge between £0 and £165 per week if the landlord is a local authority and it is a supported housing letting"
+            general_needs: "Enter a value for the service charge between £0 and £155 per week if the landlord is a local authority and it is a general needs letting"
+            supported_housing: "Enter a value for the service charge between £0 and £365 per week if the landlord is a local authority and it is a supported housing letting"
         pscharge:
           private_registered_provider:
             general_needs: "Enter a value for the personal service charge between £0 and £30 per week if the landlord is a private registered provider and it is a general needs letting"
@@ -272,6 +273,8 @@ en:
           local_authority:
             general_needs: "Enter a value for the support charge between £0 and £60 per week if the landlord is a local authority and it is a general needs letting"
             supported_housing: "Enter a value for the support charge between £0 and £120 per week if the landlord is a local authority and it is a supported housing letting"
+      ecstat:
+        over_hard_max: "Net income of £%{hard_max} per week is too high for given the tenant’s working situation"
       brent:
         below_hard_min: "Rent is below the absolute minimum expected for a property of this type. Please check the rent, rent period, local authority and (if general needs) number of bedrooms"
         above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type. Please check the rent, rent period, local authority and (if general needs) number of bedrooms"
@@ -316,6 +319,7 @@ en:
       equity:
         under_min: "The minimum initial equity stake for this type of shared ownership sale is %{min_equity}%"
         over_max: "The maximum initial equity stake is %{max_equity}%"
+      mortgage: "Mortgage value cannot be £0 if a mortgage was used for the purchase of this property"
 
     household:
       reasonpref:
@@ -331,8 +335,6 @@ en:
       leftreg:
         question_required: "Tell us whether the person is still serving in the UK armed forces as you told us they’re a current or former regular"
         question_not_required: "You cannot answer whether the person is still serving in the UK armed forces as you told us they’re not a current or former regular"
-      preg_occ:
-        no_female: "Enter ‘no’ as there are no female tenants aged 11-65 in the household"
       age:
         retired_male: "A male tenant who is retired must be 65 or over"
         retired_female: "A female tenant who is retired must be 60 or over"
@@ -467,16 +469,16 @@ en:
         social_homebuy: "Social HomeBuy buyers should not have lived here before"
         rent_to_buy: "Rent to Buy buyers should not have lived here before"
       hodate:
-        must_be_before_saledate: "Practical completion or handover date must be before exchange date"
-        must_be_less_than_3_years_from_saledate: "You told us practical completion or handover date is more than 3 years before completion date"
+        must_be_before_saledate: "Practical completion or handover date must be before sale completion date"
+        must_be_less_than_3_years_from_saledate: "You told us practical completion or handover date is more than 3 years before sale completion date"
       exdate:
-        must_be_before_saledate: "Contract exchange date must be before completion date"
-        must_be_less_than_1_year_from_saledate: "Contract exchange date must be less than 1 year before completion date"
+        must_be_before_saledate: "Contract exchange date must be before sale completion date"
+        must_be_less_than_1_year_from_saledate: "Contract exchange date must be less than 1 year before sale completion date"
       saledate:
-        must_be_after_exdate: "Completion date must be after contract exchange date"
-        must_be_less_than_1_year_from_exdate: "Completion date must be less than 1 year after contract exchange date"
-        must_be_less_than_3_years_from_hodate: "You told us completion date is more than 3 years after practical completion or handover date"
-        must_be_after_hodate: "Completion date must be after practical completion or handover date"
+        must_be_after_exdate: "Sale completion date must be after contract exchange date"
+        must_be_less_than_1_year_from_exdate: "Sale completion date must be less than 1 year after contract exchange date"
+        must_be_less_than_3_years_from_hodate: "You told us sale completion date is more than 3 years after practical completion or handover date"
+        must_be_after_hodate: "Sale completion date must be after practical completion or handover date"
       previous_property_type:
         property_type_bedsit: "A bedsit cannot have more than 1 bedroom"
       discounted_ownership_value: "Mortgage, deposit, and grant total must equal £%{value_with_discount}"
@@ -512,7 +514,7 @@ en:
     pregnancy:
       title: "You told us somebody in the household is pregnant"
       no_females: "You also told us there are no female tenants living at the property."
-      females_not_in_soft_age_range: "You also told us that any female tenants living at the property are in the following age ranges:<ul><li>11 to 16</li><li>50 to 65</li></ul>"
+      females_not_in_soft_age_range: "You also told us that any female tenants living at the property are in the following age ranges:<ul><li>under 16 years old</li><li>over 50 years old</li></ul>"
     major_repairs_date:
       title_text: "You told us the time between the start of the tenancy and the major repairs completion date is more than 2 years"
     void_date:
@@ -525,6 +527,11 @@ en:
       title_text: "The amount of monthly charges is high for this type of property and sale type"
     student_not_child:
       title_text: "You told us this person is a student aged beween 16 and 19"
+    discounted_sale_value:
+      title_text: "Mortgage, deposit, and grant total must equal £%{value_with_discount}"
+      informative_text: "Your given mortgage, deposit and grant total is £%{mortgage_deposit_and_grant_total}"
+    care_home_charges:
+      title_text: "Care home charges should be provided if this is a care home accommodation"
 
   devise:
     two_factor_authentication:

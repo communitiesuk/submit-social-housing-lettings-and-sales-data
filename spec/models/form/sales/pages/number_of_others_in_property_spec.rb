@@ -32,11 +32,11 @@ RSpec.describe Form::Sales::Pages::NumberOfOthersInProperty, type: :model do
     expect(page.depends_on).to eq([
       {
         "privacynotice" => 1,
-        "jointpur" => 2,
+        "joint_purchase?" => joint_purchase,
       },
       {
-        "noint" => 1,
-        "jointpur" => 2,
+        "buyer_not_interviewed?" => true,
+        "joint_purchase?" => joint_purchase,
       },
     ])
   end
@@ -53,11 +53,11 @@ RSpec.describe Form::Sales::Pages::NumberOfOthersInProperty, type: :model do
       expect(page.depends_on).to eq([
         {
           "privacynotice" => 1,
-          "jointpur" => 1,
+          "joint_purchase?" => joint_purchase,
         },
         {
-          "noint" => 1,
-          "jointpur" => 1,
+          "buyer_not_interviewed?" => true,
+          "joint_purchase?" => joint_purchase,
         },
       ])
     end
