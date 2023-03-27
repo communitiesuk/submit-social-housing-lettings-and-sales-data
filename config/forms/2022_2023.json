@@ -5722,13 +5722,13 @@
                   "type": "radio",
                   "check_answer_label": "Person still serving in UK armed forces",
                   "answer_options": {
-                    "0": {
+                    "6": {
                       "value": "Yes"
                     },
-                    "1": {
+                    "4": {
                       "value": "No – they left up to and including 5 years ago"
                     },
-                    "2": {
+                    "5": {
                       "value": "No – they left more than 5 years ago"
                     },
                     "divider": {
