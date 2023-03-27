@@ -26,11 +26,21 @@ module Forms
       end
 
       def template_path
-        "/files/bulk-upload-lettings-template-v1.xlsx"
+        case year
+        when 2022
+          "/files/bulk-upload-lettings-template-2022-23.xlsx"
+        when 2023
+          "/files/bulk-upload-lettings-template-2023-24.xlsx"
+        end
       end
 
       def specification_path
-        "/files/bulk-upload-lettings-specification-2022-23.xlsx"
+        case year
+        when 2022
+          "/files/bulk-upload-lettings-specification-2022-23.xlsx"
+        when 2023
+          "/files/bulk-upload-lettings-specification-2023-24.xlsx"
+        end
       end
 
       def year_combo

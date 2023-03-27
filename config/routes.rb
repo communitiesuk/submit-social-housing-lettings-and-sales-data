@@ -134,7 +134,6 @@ Rails.application.routes.draw do
       resources :bulk_upload_lettings_logs, path: "bulk-upload-logs", only: %i[show update] do
         collection do
           get :start
-          get "guidance", to: "bulk_upload_lettings_logs#guidance"
         end
       end
 
@@ -169,7 +168,6 @@ Rails.application.routes.draw do
       resources :bulk_upload_sales_logs, path: "bulk-upload-logs" do
         collection do
           get :start
-          get "guidance", to: "bulk_upload_sales_logs#guidance"
         end
       end
 
