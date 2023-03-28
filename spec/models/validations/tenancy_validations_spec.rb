@@ -311,6 +311,16 @@ RSpec.describe Validations::TenancyValidations do
         expect(record.errors["joint"]).to be_empty
         expect(record.errors["hhmemb"]).to be_empty
       end
+
+      it "does not error when don't know answer to joint" do
+        record.hhmemb = 1
+        record.joint = 3
+
+        tenancy_validator.validate_joint_tenancy(record)
+
+        expect(record.errors["joint"]).to be_empty
+        expect(record.errors["hhmemb"]).to be_empty
+      end
     end
   end
 end

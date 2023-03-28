@@ -332,6 +332,12 @@ module Imports
         @logs_overridden << lettings_log.old_id
         attributes.delete("ecstat1")
         save_lettings_log(attributes, previous_status)
+      elsif lettings_log.errors.of_kind?(:tshortfall, :no_outstanding_charges)
+        @logger.warn("Log #{lettings_log.old_id}: Removing tshortfall as there are no outstanding charges")
+        @logs_overridden << lettings_log.old_id
+        attributes.delete("tshortfall")
+        attributes.delete("hbrentshortfall")
+        save_lettings_log(attributes, previous_status)
       else
         @logger.error("Log #{lettings_log.old_id}: Failed to import")
         lettings_log.errors.each do |error|
