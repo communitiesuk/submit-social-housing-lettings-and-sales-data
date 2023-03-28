@@ -352,20 +352,12 @@ module Imports
       elsif lettings_log.errors.of_kind?(:tcharge, :complete_1_of_3)
         @logger.warn("Log #{lettings_log.old_id}: Removing charges, because multiple household charges are selected/")
         @logs_overridden << lettings_log.old_id
-        attributes.delete("brent")
-        attributes.delete("scharge")
-        attributes.delete("pscharge")
-        attributes.delete("supcharg")
-        attributes.delete("tcharge")
+        %w[brent scharge pscharge supcharg tcharge].each { |name| attributes.delete(name) }
         save_lettings_log(attributes, previous_status)
       elsif lettings_log.errors.of_kind?(:scharge, :under_min)
         @logger.warn("Log #{lettings_log.old_id}: Removing charges, because service charge is under 0/")
         @logs_overridden << lettings_log.old_id
-        attributes.delete("brent")
-        attributes.delete("scharge")
-        attributes.delete("pscharge")
-        attributes.delete("supcharg")
-        attributes.delete("tcharge")
+        %w[brent scharge pscharge supcharg tcharge].each { |name| attributes.delete(name) }
         save_lettings_log(attributes, previous_status)
       elsif lettings_log.errors.of_kind?(:tshortfall, :must_be_positive)
         @logger.warn("Log #{lettings_log.old_id}: Removing tshortfall, because it is not positive/")
@@ -381,20 +373,12 @@ module Imports
       elsif lettings_log.errors.of_kind?(:pscharge, :outside_the_range)
         @logger.warn("Log #{lettings_log.old_id}: Removing charges, because pscharge is outside of the range/")
         @logs_overridden << lettings_log.old_id
-        attributes.delete("brent")
-        attributes.delete("scharge")
-        attributes.delete("pscharge")
-        attributes.delete("supcharg")
-        attributes.delete("tcharge")
+        %w[brent scharge pscharge supcharg tcharge].each { |name| attributes.delete(name) }
         save_lettings_log(attributes, previous_status)
       elsif lettings_log.errors.of_kind?(:supcharg, :outside_the_range)
         @logger.warn("Log #{lettings_log.old_id}: Removing charges, because supcharg is outside of the range/")
         @logs_overridden << lettings_log.old_id
-        attributes.delete("brent")
-        attributes.delete("scharge")
-        attributes.delete("pscharge")
-        attributes.delete("supcharg")
-        attributes.delete("tcharge")
+        %w[brent scharge pscharge supcharg tcharge].each { |name| attributes.delete(name) }
         save_lettings_log(attributes, previous_status)
       else
         @logger.error("Log #{lettings_log.old_id}: Failed to import")
