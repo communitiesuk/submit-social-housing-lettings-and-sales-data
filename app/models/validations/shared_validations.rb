@@ -47,7 +47,7 @@ module Validations::SharedValidations
 
     if location_inactive_status.present?
       date, scope, deactivation_date = location_inactive_status.values_at(:date, :scope, :deactivation_date)
-      record.errors.add field, I18n.t("validations.setup.startdate.location.#{scope}", postcode: record.location.postcode, date:, deactivation_date:)
+      record.errors.add field, :not_active, message: I18n.t("validations.setup.startdate.location.#{scope}", postcode: record.location.postcode, date:, deactivation_date:)
     end
   end
 

@@ -667,6 +667,33 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
+      context "and location is not active during the period" do
+        let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+
+        before do
+          location = Location.find_by(old_visible_id: "10")
+          FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2021, 10, 10), location:)
+        end
+
+        it "intercepts the relevant validation error" do
+          expect(logger).to receive(:warn).with(/Differences found when saving log/)
+          expect(logger).to receive(:warn).with(/Removing scheme and location because it was not active during the tenancy start date/)
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the location answers" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.location).to be_nil
+          expect(lettings_log.scheme).to be_nil
+        end
+      end
+
       context "and the net income soft validation is triggered (net_income_value_check)" do
         before do
           lettings_log_xml.at_xpath("//xmlns:Q8a").content = "1 Weekly"

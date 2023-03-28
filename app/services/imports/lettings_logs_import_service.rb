@@ -385,6 +385,11 @@ module Imports
         @logs_overridden << lettings_log.old_id
         %w[brent scharge pscharge supcharg tcharge].each { |name| attributes.delete(name) }
         save_lettings_log(attributes, previous_status)
+      elsif lettings_log.errors.of_kind?(:location_id, :not_active)
+        @logger.warn("Log #{lettings_log.old_id}: Removing scheme and location because it was not active during the tenancy start date/")
+        @logs_overridden << lettings_log.old_id
+        %w[location_id scheme_id].each { |name| attributes.delete(name) }
+        save_lettings_log(attributes, previous_status)
       else
         @logger.error("Log #{lettings_log.old_id}: Failed to import")
         lettings_log.errors.each do |error|
