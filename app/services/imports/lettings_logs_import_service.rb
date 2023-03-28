@@ -344,6 +344,11 @@ module Imports
         attributes.delete("age2")
         attributes.delete("age2_known")
         save_lettings_log(attributes, previous_status)
+      elsif lettings_log.errors.of_kind?(:beds, :over_max)
+        @logger.warn("Log #{lettings_log.old_id}: Removing number of bedrooms because it is over the max/")
+        @logs_overridden << lettings_log.old_id
+        attributes.delete("beds")
+        save_lettings_log(attributes, previous_status)
       else
         @logger.error("Log #{lettings_log.old_id}: Failed to import")
         lettings_log.errors.each do |error|

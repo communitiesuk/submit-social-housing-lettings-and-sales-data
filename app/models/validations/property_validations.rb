@@ -72,7 +72,7 @@ module Validations::PropertyValidations
     end
 
     if record.beds.present? && record.beds > 12
-      record.errors.add :beds, I18n.t("validations.property.beds.over_max")
+      record.errors.add :beds, :over_max, message: I18n.t("validations.property.beds.over_max")
     end
   end
 
