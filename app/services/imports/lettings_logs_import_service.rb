@@ -387,6 +387,15 @@ module Imports
         attributes.delete("supcharg")
         attributes.delete("tcharge")
         save_lettings_log(attributes, previous_status)
+      elsif lettings_log.errors.of_kind?(:supcharg, :outside_the_range)
+        @logger.warn("Log #{lettings_log.old_id}: Removing charges, because supcharg is outside of the range/")
+        @logs_overridden << lettings_log.old_id
+        attributes.delete("brent")
+        attributes.delete("scharge")
+        attributes.delete("pscharge")
+        attributes.delete("supcharg")
+        attributes.delete("tcharge")
+        save_lettings_log(attributes, previous_status)
       else
         @logger.error("Log #{lettings_log.old_id}: Failed to import")
         lettings_log.errors.each do |error|
