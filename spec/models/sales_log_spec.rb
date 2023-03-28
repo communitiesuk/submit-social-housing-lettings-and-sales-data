@@ -569,5 +569,31 @@ RSpec.describe SalesLog, type: :model do
       end
     end
   end
+
+  describe "#beds_for_la_sale_range" do
+    context "when beds nil" do
+      let(:sales_log) { build(:sales_log, beds: nil) }
+
+      it "returns nil" do
+        expect(sales_log.beds_for_la_sale_range).to be_nil
+      end
+    end
+
+    context "when beds <= 4" do
+      let(:sales_log) { build(:sales_log, beds: 4) }
+
+      it "returns number of beds" do
+        expect(sales_log.beds_for_la_sale_range).to eq(4)
+      end
+    end
+
+    context "when beds > 4" do
+      let(:sales_log) { build(:sales_log, beds: 40) }
+
+      it "returns max number of beds" do
+        expect(sales_log.beds_for_la_sale_range).to eq(4)
+      end
+    end
+  end
 end
 # rubocop:enable RSpec/AnyInstance

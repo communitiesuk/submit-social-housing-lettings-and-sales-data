@@ -3066,5 +3066,31 @@ RSpec.describe LettingsLog do
       end
     end
   end
+
+  describe "#beds_for_la_rent_range" do
+    context "when beds nil" do
+      let(:lettings_log) { build(:lettings_log, beds: nil) }
+
+      it "returns nil" do
+        expect(lettings_log.beds_for_la_rent_range).to be_nil
+      end
+    end
+
+    context "when beds <= 4" do
+      let(:lettings_log) { build(:lettings_log, beds: 4) }
+
+      it "returns number of beds" do
+        expect(lettings_log.beds_for_la_rent_range).to eq(4)
+      end
+    end
+
+    context "when beds > 4" do
+      let(:lettings_log) { build(:lettings_log, beds: 40) }
+
+      it "returns max number of beds" do
+        expect(lettings_log.beds_for_la_rent_range).to eq(4)
+      end
+    end
+  end
 end
 # rubocop:enable RSpec/AnyInstance
