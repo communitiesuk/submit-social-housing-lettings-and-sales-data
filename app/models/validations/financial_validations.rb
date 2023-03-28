@@ -123,7 +123,7 @@ module Validations::FinancialValidations
         max_chcharge = [record.form.get_question("chcharge", record).prefix, max_chcharge].join("") if record.form.get_question("chcharge", record).present?
         min_chcharge = [record.form.get_question("chcharge", record).prefix, min_chcharge].join("") if record.form.get_question("chcharge", record).present?
         record.errors.add :period, I18n.t("validations.financial.carehome.out_of_range", period:, min_chcharge:, max_chcharge:)
-        record.errors.add :chcharge, I18n.t("validations.financial.carehome.out_of_range", period:, min_chcharge:, max_chcharge:)
+        record.errors.add :chcharge, :out_of_range, message: I18n.t("validations.financial.carehome.out_of_range", period:, min_chcharge:, max_chcharge:)
       end
     end
   end

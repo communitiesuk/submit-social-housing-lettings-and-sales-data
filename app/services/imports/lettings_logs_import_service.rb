@@ -390,6 +390,11 @@ module Imports
         @logs_overridden << lettings_log.old_id
         %w[location_id scheme_id].each { |name| attributes.delete(name) }
         save_lettings_log(attributes, previous_status)
+      elsif lettings_log.errors.of_kind?(:chcharge, :out_of_range)
+        @logger.warn("Log #{lettings_log.old_id}: Removing chcharge, because it is outside the expected range/")
+        @logs_overridden << lettings_log.old_id
+        attributes.delete("chcharge")
+        save_lettings_log(attributes, previous_status)
       else
         @logger.error("Log #{lettings_log.old_id}: Failed to import")
         lettings_log.errors.each do |error|

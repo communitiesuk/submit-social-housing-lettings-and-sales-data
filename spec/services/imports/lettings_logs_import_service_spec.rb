@@ -694,6 +694,37 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
+      context "and carehome charges are out of range" do
+        let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+
+        before do
+          scheme1.update!(registered_under_care_act: 2)
+          lettings_log_xml.at_xpath("//xmlns:Q18b").content = "2000"
+          lettings_log_xml.at_xpath("//xmlns:Q17").content = "1"
+          lettings_log_xml.at_xpath("//xmlns:Q18ai").content = ""
+          lettings_log_xml.at_xpath("//xmlns:Q18aii").content = ""
+          lettings_log_xml.at_xpath("//xmlns:Q18aiii").content = ""
+          lettings_log_xml.at_xpath("//xmlns:Q18aiv").content = ""
+          lettings_log_xml.at_xpath("//xmlns:Q18av").content = ""
+        end
+
+        it "intercepts the relevant validation error" do
+          expect(logger).to receive(:warn).with(/Removing chcharge, because it is outside the expected range/)
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the chcharge answer" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.chcharge).to be_nil
+        end
+      end
+
       context "and the net income soft validation is triggered (net_income_value_check)" do
         before do
           lettings_log_xml.at_xpath("//xmlns:Q8a").content = "1 Weekly"
