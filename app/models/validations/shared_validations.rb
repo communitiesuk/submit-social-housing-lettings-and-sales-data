@@ -122,7 +122,7 @@ private
     if min && max
       record.errors.add question.id.to_sym, :outside_the_range, message: I18n.t("validations.numeric.within_range", field:, min:, max:)
     elsif min
-      record.errors.add question.id.to_sym, I18n.t("validations.numeric.above_min", field:, min:)
+      record.errors.add question.id.to_sym, :under_min, message: I18n.t("validations.numeric.above_min", field:, min:)
     end
   end
 end

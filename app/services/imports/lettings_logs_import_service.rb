@@ -356,6 +356,16 @@ module Imports
         attributes.delete("scharge")
         attributes.delete("pscharge")
         attributes.delete("supcharg")
+        attributes.delete("tcharge")
+        save_lettings_log(attributes, previous_status)
+      elsif lettings_log.errors.of_kind?(:scharge, :under_min)
+        @logger.warn("Log #{lettings_log.old_id}: Removing charges, because service charge is under 0/")
+        @logs_overridden << lettings_log.old_id
+        attributes.delete("brent")
+        attributes.delete("scharge")
+        attributes.delete("pscharge")
+        attributes.delete("supcharg")
+        attributes.delete("tcharge")
         save_lettings_log(attributes, previous_status)
       else
         @logger.error("Log #{lettings_log.old_id}: Failed to import")
