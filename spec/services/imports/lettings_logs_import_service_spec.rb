@@ -671,5 +671,47 @@ RSpec.describe Imports::LettingsLogsImportService do
         expect(lettings_log.hhmemb).to eq(1)
       end
     end
+
+    context "when there are no outstanding charges but outstanding amount is given" do
+      let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+      let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id) }
+      let(:lettings_log_xml) { Nokogiri::XML(lettings_log_file) }
+
+      before do
+        FormHandler.instance.use_fake_forms!
+        Singleton.__init__(FormHandler)
+
+        lettings_log_xml.at_xpath("//xmlns:DAY").content = "10"
+        lettings_log_xml.at_xpath("//xmlns:MONTH").content = "10"
+        lettings_log_xml.at_xpath("//xmlns:YEAR").content = "2022"
+        lettings_log_xml.at_xpath("//xmlns:P1Nat").content = "18"
+        lettings_log_xml.at_xpath("//xmlns:Q18d").content = "2"
+        lettings_log_xml.at_xpath("//xmlns:Q18dyes").content = "20"
+        lettings_log_xml.at_xpath("//xmlns:_2cYears").content = ""
+        lettings_log_xml.at_xpath("//xmlns:Inj").content = ""
+        lettings_log_xml.at_xpath("//xmlns:LeftAF").content = ""
+      end
+
+      after do
+        FormHandler.instance.use_real_forms!
+        Singleton.__init__(FormHandler)
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Removing tshortfall as there are no outstanding charges/)
+        expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the referral answer" do
+        allow(logger).to receive(:warn)
+        lettings_log_service.send(:create_log, lettings_log_xml)
+        lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+        expect(lettings_log).not_to be_nil
+        expect(lettings_log.tshortfall).to be_nil
+        expect(lettings_log.hbrentshortfall).to be_nil
+      end
+    end
   end
 end
