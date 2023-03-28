@@ -7,14 +7,14 @@
   "data-controller": "accessible-autocomplete",
   caption: caption(caption_text, page_header, conditional),
   hint: { text: question.hint_text&.html_safe }) do %>
-  <% answers.each do |answer| %>
-    <option value="<%= answer.id %>"
-      data-synonyms="<%= answer_option_synonyms(answer.resource) %>"
-      data-append="<%= answer_option_append(answer.resource) %>"
-      data-hint="<%= answer_option_hint(answer.resource) %>"
-      <%= question.answer_selected?(@log, answer) ? "selected" : "" %>
-      <%= answer.id == "" ? "disabled" : "" %>><%= answer.name || answer.resource %></option>
-  <% end %>
+    <% answers.each do |answer| %>
+      <option value="<%= answer.id %>"
+        data-synonyms="<%= answer_option_synonyms(answer.resource) %>"
+        data-append="<%= answer_option_append(answer.resource) %>"
+        data-hint="<%= answer_option_hint(answer.resource) %>"
+        <%= question.answer_selected?(@log, answer) ? "selected" : "" %>
+        <%= answer.id == "" ? "disabled" : "" %>><%= answer.name || answer.resource %></option>
+    <% end %>
   <% end %>
 
 <%= render partial: "form/guidance/#{question.guidance_partial}" if question.bottom_guidance? %>
