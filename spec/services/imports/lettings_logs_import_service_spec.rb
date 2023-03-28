@@ -572,6 +572,29 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
+      context "and it has temporary referral in non temporary accommodation" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q27").content = "9"
+          lettings_log_xml.at_xpath("//xmlns:Q16").content = "8"
+        end
+
+        it "intercepts the relevant validation error" do
+          expect(logger).to receive(:warn).with(/Removing referral, because it is not a temporary accommodation/)
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the referral answer" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.referral).to be_nil
+        end
+      end
+
       context "and the net income soft validation is triggered (net_income_value_check)" do
         before do
           lettings_log_xml.at_xpath("//xmlns:Q8a").content = "1 Weekly"

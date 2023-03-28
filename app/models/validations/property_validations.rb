@@ -36,7 +36,7 @@ module Validations::PropertyValidations
 
     if record.is_relet_to_temp_tenant? && REFERRAL_INVALID_TMP.include?(record.referral)
       record.errors.add :rsnvac, I18n.t("validations.property.rsnvac.referral_invalid")
-      record.errors.add :referral, I18n.t("validations.household.referral.rsnvac_non_temp")
+      record.errors.add :referral, :referral_invalid, message: I18n.t("validations.household.referral.rsnvac_non_temp")
     end
 
     if record.renewal.present? && record.renewal.zero? && record.rsnvac == 14
