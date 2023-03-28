@@ -120,7 +120,7 @@ private
     max = [question.prefix, number_with_delimiter(question.max, delimiter: ","), question.suffix].join("") if question.max
 
     if min && max
-      record.errors.add question.id.to_sym, I18n.t("validations.numeric.within_range", field:, min:, max:)
+      record.errors.add question.id.to_sym, :outside_the_range, message: I18n.t("validations.numeric.within_range", field:, min:, max:)
     elsif min
       record.errors.add question.id.to_sym, I18n.t("validations.numeric.above_min", field:, min:)
     end

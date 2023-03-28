@@ -441,6 +441,30 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
+      context "and age over the max" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:P2Age").content = "121"
+          lettings_log_xml.at_xpath("//xmlns:P2Eco").content = "7"
+        end
+
+        it "intercepts the relevant validation error" do
+          expect(logger).to receive(:warn).with(/Removing age2 because it is outside the allowed range/)
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the referral answer" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.age2).to be_nil
+          expect(lettings_log.age2_known).to be_nil
+        end
+      end
+
       context "and the net income soft validation is triggered (net_income_value_check)" do
         before do
           lettings_log_xml.at_xpath("//xmlns:Q8a").content = "1 Weekly"
