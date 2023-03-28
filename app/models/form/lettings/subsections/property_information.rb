@@ -20,9 +20,8 @@ class Form::Lettings::Subsections::PropertyInformation < ::Form::Subsection
       Form::Lettings::Pages::PropertyBuildingType.new(nil, nil, self),
       Form::Lettings::Pages::PropertyWheelchairAccessible.new(nil, nil, self),
       Form::Lettings::Pages::PropertyNumberOfBedrooms.new(nil, nil, self),
-      Form::Lettings::Pages::VoidOrRenewalDate.new(nil, nil, self),
+      Form::Lettings::Pages::VoidDate.new(nil, nil, self),
       Form::Lettings::Pages::VoidDateValueCheck.new(nil, nil, self),
-      Form::Lettings::Pages::NewBuildHandoverDate.new(nil, nil, self),
       Form::Lettings::Pages::PropertyMajorRepairs.new(nil, nil, self),
       Form::Lettings::Pages::PropertyMajorRepairsValueCheck.new(nil, nil, self),
     ].flatten.compact

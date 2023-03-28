@@ -14,11 +14,11 @@ class Form::Question
   def initialize(id, hsh, page)
     @id = id
     @page = page
-    @guidance_position = GuidancePosition::TOP
     if hsh
       @check_answer_label = hsh["check_answer_label"]
       @header = hsh["header"]
       @guidance_partial = hsh["guidance_partial"]
+      @guidance_position = hsh["guidance_position"] || GuidancePosition::TOP
       @hint_text = hsh["hint_text"]
       @type = hsh["type"]
       @min = hsh["min"]

@@ -173,6 +173,9 @@ en:
         after_void_date: "Enter a tenancy start date that is after the void date"
         after_major_repair_date: "Enter a tenancy start date that is after the major repair date"
         year_not_two_digits: Tenancy start year must be 2 digits
+        ten_years_after_void_date: "Enter a tenancy start date that is no more than 10 years after the void date"
+        ten_years_after_mrc_date: "Enter a tenancy start date that is no more than 10 years after the major repairs completion date"
+
         location:
           deactivated: "The location %{postcode} was deactivated on %{date} and was not available on the day you entered."
           reactivating_soon: "The location %{postcode} is not available until %{date}. Select another location or edit the tenancy start date"
@@ -200,6 +203,7 @@ en:
         before_tenancy_start: "Enter a major repairs date that is before the tenancy start date"
         not_first_let: "Major repairs date must not be completed if the tenancy is a first let"
         ten_years_before_tenancy_start: "Enter a major repairs completion date that is no more than 10 years before the tenancy start date"
+        before_void_date: "Major repairs date must be after the void date if provided"
       void_date:
         ten_years_before_tenancy_start: "Enter a void date no more than 10 years before the tenancy start date"
         before_tenancy_start: "Enter a void date that is before the tenancy start date"

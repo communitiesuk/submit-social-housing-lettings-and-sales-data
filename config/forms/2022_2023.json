@@ -714,15 +714,17 @@
                 }
               ]
             },
-            "void_or_renewal_date": {
+            "void_date": {
               "header": "",
               "description": "",
               "questions": {
                 "voiddate": {
-                  "check_answer_label": "Void or renewal date",
-                  "header": "What is the void or renewal date?",
+                  "check_answer_label": "Void date",
+                  "header": "What is the void date?",
                   "hint_text": "For example, 27 3 2021.",
-                  "type": "date"
+                  "type": "date",
+                  "guidance_partial": "void_date",
+                  "guidance_position": 2
                 }
               },
               "depends_on": [
@@ -765,6 +767,18 @@
                 {
                   "renewal": 0,
                   "rsnvac": 19
+                },
+                {
+                  "renewal": 0,
+                  "rsnvac": 15
+                },
+                {
+                  "renewal": 0,
+                  "rsnvac": 16
+                },
+                {
+                  "renewal": 0,
+                  "rsnvac": 17
                 }
               ]
             },
@@ -803,32 +817,6 @@
                   }
                 }
               }
-            },
-            "new_build_handover_date": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "voiddate": {
-                  "check_answer_label": "New-build handover date",
-                  "header": "What is the new-build handover date?",
-                  "hint_text": "",
-                  "type": "date"
-                }
-              },
-              "depends_on": [
-                {
-                  "renewal": 0,
-                  "rsnvac": 15
-                },
-                {
-                  "renewal": 0,
-                  "rsnvac": 16
-                },
-                {
-                  "renewal": 0,
-                  "rsnvac": 17
-                }
-              ]
             },
             "property_major_repairs": {
               "header": "",

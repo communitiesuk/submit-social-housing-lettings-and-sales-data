@@ -30,9 +30,8 @@ RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
             property_building_type
             property_wheelchair_accessible
             property_number_of_bedrooms
-            void_or_renewal_date
+            void_date
             void_date_value_check
-            new_build_handover_date
             property_major_repairs
             property_major_repairs_value_check
           ],
@@ -61,9 +60,8 @@ RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
             property_building_type
             property_wheelchair_accessible
             property_number_of_bedrooms
-            void_or_renewal_date
+            void_date
             void_date_value_check
-            new_build_handover_date
             property_major_repairs
             property_major_repairs_value_check
           ],
