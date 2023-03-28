@@ -392,7 +392,6 @@ private
     return if field_3.blank?
 
     unless created_by
-      block_log_creation!
       errors.add(:field_3, "User with the specified email could not be found")
     end
   end

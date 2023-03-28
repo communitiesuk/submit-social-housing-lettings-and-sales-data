@@ -257,10 +257,6 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         it "is not permitted" do
           expect(parser.errors[:field_3]).to be_present
         end
-
-        it "blocks log creation" do
-          expect(parser).to be_block_log_creation
-        end
       end
 
       context "when an unaffiliated user" do
