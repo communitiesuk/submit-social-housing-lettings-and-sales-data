@@ -24,19 +24,19 @@ module Forms
       end
 
       def template_path
-        "/files/bulk-upload-sales-template-2023-24.xlsx"
-      end
-
-      def old_template_path
-        "/files/bulk-upload-sales-template-2022-23.xlsx"
+        case year
+        when 2022
+          "/files/bulk-upload-sales-template-2022-23.xlsx"
+        when 2023
+          "/files/bulk-upload-sales-template-2023-24.xlsx"
+        end
       end
 
       def specification_path
-        return if year.blank?
-
-        if year <= 2022
+        case year
+        when 2022
           "/files/bulk-upload-sales-specification-2022-23.xlsx"
-        else
+        when 2023
           "/files/bulk-upload-sales-specification-2023-24.xlsx"
         end
       end

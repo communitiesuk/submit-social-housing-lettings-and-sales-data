@@ -21,11 +21,6 @@ class BulkUploadLettingsLogsController < ApplicationController
     end
   end
 
-  def guidance
-    @form = Forms::BulkUploadLettings::PrepareYourFile.new(form_params)
-    render "bulk_upload_shared/guidance"
-  end
-
 private
 
   def current_year
@@ -44,6 +39,8 @@ private
                 Forms::BulkUploadLettings::Year.new(form_params)
               when "prepare-your-file"
                 Forms::BulkUploadLettings::PrepareYourFile.new(form_params)
+              when "guidance"
+                Forms::BulkUploadLettings::Guidance.new(form_params)
               when "needstype"
                 Forms::BulkUploadLettings::Needstype.new(form_params)
               when "upload-your-file"

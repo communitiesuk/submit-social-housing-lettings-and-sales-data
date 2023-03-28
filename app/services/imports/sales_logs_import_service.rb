@@ -225,6 +225,11 @@ module Imports
         attributes.delete("postcode_full")
         attributes["pcodenk"] = attributes["la"].present? ? 1 : nil
         save_sales_log(attributes, previous_status)
+      elsif sales_log.errors.of_kind?(:mortgage, :cannot_be_0)
+        @logger.warn("Log #{sales_log.old_id}: Removing mortgage because it cannot be 0")
+        @logs_overridden << sales_log.old_id
+        attributes.delete("mortgage")
+        save_sales_log(attributes, previous_status)
       else
         @logger.error("Log #{sales_log.old_id}: Failed to import")
         sales_log.errors.each do |error|
