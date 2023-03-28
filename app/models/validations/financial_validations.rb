@@ -174,7 +174,7 @@ private
       maximum = CHARGE_MAXIMUMS.dig(charge, PROVIDER_TYPE[provider_type], NEEDSTYPE_VALUES[record.needstype])
 
       if maximum.present? && record[:period].present? && record[charge].present? && !weekly_value_in_range(record, charge, 0.0, maximum)
-        record.errors.add charge, I18n.t("validations.financial.rent.#{charge}.#{PROVIDER_TYPE[provider_type]}.#{NEEDSTYPE_VALUES[record.needstype]}")
+        record.errors.add charge, :outside_the_range, message: I18n.t("validations.financial.rent.#{charge}.#{PROVIDER_TYPE[provider_type]}.#{NEEDSTYPE_VALUES[record.needstype]}")
       end
     end
   end
