@@ -328,6 +328,9 @@ class BulkUpload::Lettings::Year2023::RowParser
   validate :validate_location_exists
   validate :validate_location_data_given
 
+  validate :validate_created_by_exists
+  validate :validate_created_by_related
+
   def self.question_for_field(field)
     QUESTIONS[field]
   end
@@ -384,6 +387,28 @@ class BulkUpload::Lettings::Year2023::RowParser
   end
 
 private
+
+  def validate_created_by_exists
+    return if field_3.blank?
+
+    unless created_by
+      block_log_creation!
+      errors.add(:field_3, "User with the specified email could not be found")
+    end
+  end
+
+  def validate_created_by_related
+    return unless created_by
+
+    unless (created_by.organisation == owning_organisation) || (created_by.organisation == managing_organisation)
+      block_log_creation!
+      errors.add(:field_3, "User must be related to owning organisation or managing organisation")
+    end
+  end
+
+  def created_by
+    @created_by ||= User.find_by(email: field_3)
+  end
 
   def validate_needs_type_present
     if field_4.blank?
@@ -630,7 +655,7 @@ private
       renewal: [:field_6],
       scheme: %i[field_16],
       location: %i[field_17],
-      created_by: [],
+      created_by: [:field_3],
       needstype: [:field_4],
       rent_type: %i[field_5 field_10 field_11],
       startdate: %i[field_7 field_8 field_9],
@@ -796,7 +821,7 @@ private
     attributes["renewal"] = renewal
     attributes["scheme"] = scheme
     attributes["location"] = location
-    attributes["created_by"] = bulk_upload.user
+    attributes["created_by"] = created_by || bulk_upload.user
     attributes["needstype"] = field_4
     attributes["rent_type"] = rent_type
     attributes["startdate"] = startdate
