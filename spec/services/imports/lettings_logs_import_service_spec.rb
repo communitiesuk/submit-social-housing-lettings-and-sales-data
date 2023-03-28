@@ -384,7 +384,7 @@ RSpec.describe Imports::LettingsLogsImportService do
             .not_to raise_error
         end
 
-        it "clears out the referral answer" do
+        it "clears out the vacancy reason answer" do
           allow(logger).to receive(:warn)
 
           lettings_log_service.send(:create_log, lettings_log_xml)
@@ -407,7 +407,7 @@ RSpec.describe Imports::LettingsLogsImportService do
             .not_to raise_error
         end
 
-        it "clears out the referral answer" do
+        it "clears out the number offered answer" do
           allow(logger).to receive(:warn)
 
           lettings_log_service.send(:create_log, lettings_log_xml)
@@ -429,7 +429,7 @@ RSpec.describe Imports::LettingsLogsImportService do
             .not_to raise_error
         end
 
-        it "clears out the referral answer" do
+        it "clears out the working situation answer" do
           allow(logger).to receive(:warn)
 
           lettings_log_service.send(:create_log, lettings_log_xml)
@@ -453,7 +453,7 @@ RSpec.describe Imports::LettingsLogsImportService do
             .not_to raise_error
         end
 
-        it "clears out the referral answer" do
+        it "clears out the age answer" do
           allow(logger).to receive(:warn)
 
           lettings_log_service.send(:create_log, lettings_log_xml)
@@ -476,7 +476,7 @@ RSpec.describe Imports::LettingsLogsImportService do
             .not_to raise_error
         end
 
-        it "clears out the referral answer" do
+        it "clears out the bedrooms answer" do
           allow(logger).to receive(:warn)
 
           lettings_log_service.send(:create_log, lettings_log_xml)
@@ -506,7 +506,7 @@ RSpec.describe Imports::LettingsLogsImportService do
             .not_to raise_error
         end
 
-        it "clears out the referral answer" do
+        it "clears out the charges answers" do
           allow(logger).to receive(:warn)
 
           lettings_log_service.send(:create_log, lettings_log_xml)
@@ -530,7 +530,7 @@ RSpec.describe Imports::LettingsLogsImportService do
             .not_to raise_error
         end
 
-        it "clears out the referral answer" do
+        it "clears out the charges answers" do
           allow(logger).to receive(:warn)
 
           lettings_log_service.send(:create_log, lettings_log_xml)
@@ -542,6 +542,33 @@ RSpec.describe Imports::LettingsLogsImportService do
           expect(lettings_log.pscharge).to be_nil
           expect(lettings_log.supcharg).to be_nil
           expect(lettings_log.tcharge).to be_nil
+        end
+      end
+
+      context "and tshortfall is not positive" do
+        let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q18d").content = "1"
+          lettings_log_xml.at_xpath("//xmlns:Q6Ben").content = "1"
+          lettings_log_xml.at_xpath("//xmlns:Q18dyes").content = "0"
+        end
+
+        it "intercepts the relevant validation error" do
+          expect(logger).to receive(:warn).with(/Removing tshortfall, because it is not positive/)
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the tshortfall answer" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.tshortfall).to be_nil
+          expect(lettings_log.tshortfall_known).to be_nil
         end
       end
 
