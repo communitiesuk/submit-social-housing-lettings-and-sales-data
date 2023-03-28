@@ -22,7 +22,7 @@ class BulkUploadLettingsLogsController < ApplicationController
   end
 
   def guidance
-    @form = Forms::BulkUploadLettings::PrepareYourFile.new
+    @form = Forms::BulkUploadLettings::PrepareYourFile.new(form_params)
     render "bulk_upload_shared/guidance"
   end
 

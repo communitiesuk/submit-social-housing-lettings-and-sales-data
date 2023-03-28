@@ -19,7 +19,7 @@
       <h2 class="govuk-heading-s">Create your file</h2>
       <ul class="govuk-list govuk-list--bullet">
         <li>Fill in the template with CORE data from your housing management system according to the <%= govuk_link_to "Sales #{@form.year_combo} Bulk Upload Specification", @form.specification_path %></li>
-        <li>If you have to manually enter large volumes of data into the bulk upload template, we recommend creating logs directly in the service instead. <%= govuk_link_to "Find out more about exporting your data", guidance_bulk_upload_sales_logs_path, year:%></li>
+        <li>If you have to manually enter large volumes of data into the bulk upload template, we recommend creating logs directly in the service instead. <%= govuk_link_to "Find out more about exporting your data", guidance_bulk_upload_sales_logs_path(form: { year: @form.year }) %></li>
       </ul>
 
       <h2 class="govuk-heading-s">Save your file</h2>
