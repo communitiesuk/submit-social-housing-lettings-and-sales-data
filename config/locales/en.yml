@@ -347,6 +347,7 @@ en:
         child_under_16: "Answer cannot be under 16 as person’s %{person_num} working situation is not ‘child under 16’"
         child_over_16: "Answer cannot be over 16 as person’s %{person_num} working situation is ‘child under 16‘"
         child_over_20: "Answer cannot be 20 or over as the relationship is ‘child’"
+        child_12_years_younger: "A child must be at least 12 years younger than their parent"
         not_student_16_19: "Answer cannot be between 16 and 19 as person %{person_num} is a child of the lead tenant but is not a full-time student"
         student_16_19:
           cannot_be_16_19:
