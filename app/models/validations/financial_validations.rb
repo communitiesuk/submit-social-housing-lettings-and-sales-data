@@ -89,7 +89,7 @@ module Validations::FinancialValidations
 
     answered_questions = [record.tcharge, record.chcharge].concat(record.household_charge && record.household_charge == 1 ? [record.household_charge] : [])
     if answered_questions.count(&:present?) > 1
-      record.errors.add :tcharge, I18n.t("validations.financial.charges.complete_1_of_3") if record.tcharge.present?
+      record.errors.add :tcharge, :complete_1_of_3, message: I18n.t("validations.financial.charges.complete_1_of_3") if record.tcharge.present?
       record.errors.add :chcharge, I18n.t("validations.financial.charges.complete_1_of_3") if record.chcharge.present?
       record.errors.add :household_charge, I18n.t("validations.financial.charges.complete_1_of_3") if record.household_charge.present?
     end

@@ -198,7 +198,7 @@ RSpec.describe Imports::LettingsLogsImportService do
 
         it "intercepts the relevant validation error" do
           expect(logger).to receive(:warn).with(/Removing field age2 from log triggering validation: Answer cannot be over 16/)
-          expect(logger).to receive(:warn).with(/Removing field age2 from log triggering validation: Person 2’s age must be between/)
+          expect(logger).to receive(:warn).with(/Removing field age2 from log triggering validation: outside_the_range/)
           expect(logger).to receive(:warn).with(/Removing field ecstat2 from log triggering validation: Answer cannot be ‘child under 16’/)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
@@ -484,6 +484,36 @@ RSpec.describe Imports::LettingsLogsImportService do
 
           expect(lettings_log).not_to be_nil
           expect(lettings_log.beds).to be_nil
+        end
+      end
+
+      context "and carehome charges and other charges are entered" do
+        let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q18b").content = "20"
+          lettings_log_xml.at_xpath("//xmlns:Q18c").content = ""
+          lettings_log_xml.at_xpath("//xmlns:Q18ai").content = ""
+          lettings_log_xml.at_xpath("//xmlns:Q18aii").content = "0"
+          lettings_log_xml.at_xpath("//xmlns:Q18aiii").content = ""
+          lettings_log_xml.at_xpath("//xmlns:Q18aiv").content = ""
+          lettings_log_xml.at_xpath("//xmlns:Q18av").content = ""
+        end
+
+        it "intercepts the relevant validation error" do
+          expect(logger).to receive(:warn).with(/Removing charges, because multiple household charges are selected/)
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the referral answer" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.tcharge).to be_nil
         end
       end
 

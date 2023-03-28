@@ -349,6 +349,14 @@ module Imports
         @logs_overridden << lettings_log.old_id
         attributes.delete("beds")
         save_lettings_log(attributes, previous_status)
+      elsif lettings_log.errors.of_kind?(:tcharge, :complete_1_of_3)
+        @logger.warn("Log #{lettings_log.old_id}: Removing charges, because multiple household charges are selected/")
+        @logs_overridden << lettings_log.old_id
+        attributes.delete("brent")
+        attributes.delete("scharge")
+        attributes.delete("pscharge")
+        attributes.delete("supcharg")
+        save_lettings_log(attributes, previous_status)
       else
         @logger.error("Log #{lettings_log.old_id}: Failed to import")
         lettings_log.errors.each do |error|
