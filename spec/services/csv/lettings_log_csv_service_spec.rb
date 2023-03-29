@@ -209,6 +209,7 @@ RSpec.describe Csv::LettingsLogCsvService do
                                    address_line2
                                    town_or_city
                                    county
+                                   visible
                                    unittype_sh
                                    scheme_code
                                    scheme_service_name
