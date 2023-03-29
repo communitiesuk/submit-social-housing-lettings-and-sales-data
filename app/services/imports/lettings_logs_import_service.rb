@@ -283,26 +283,26 @@ module Imports
       end
 
       errors = {
-        %i[chcharge out_of_range] => { to_delete: %w[chcharge], message: "Removing chcharge, because it is outside the expected range" },
-        %i[referral internal_transfer_non_social_housing] => { to_delete: %w[referral], message: "Removing internal transfer referral since previous tenancy is a non social housing" },
-        %i[referral internal_transfer_fixed_or_lifetime] => { to_delete: %w[referral], message: "Removing internal transfer referral since previous tenancy is fixed terms or lifetime" },
-        %i[earnings under_hard_min] => { to_delete: %w[earnings incfreq], to_set: { incref: 1, net_income_known: 2 }, message: "Where the income is 0, set earnings and income to blank and set incref to refused" },
-        %i[tenancylength tenancylength_invalid] => { to_delete: %w[tenancylength tenancy], message: "Removing tenancylength as invalid" },
-        %i[prevten over_20_foster_care] => { to_delete: %w[prevten age1], message: "Removing age1 and prevten as incompatible" },
-        %i[prevten non_temp_accommodation] => { to_delete: %w[prevten rsnvac], message: "Removing vacancy reason and previous tenancy since this accommodation is not temporary" },
-        %i[joint not_joint_tenancy] => { to_delete: %w[joint], message: "Removing joint tenancy as there is only 1 person in the household" },
-        %i[offered over_20] => { to_delete: %w[offered], message: "Removing offered as the value is above the maximum of 20" },
-        %i[earnings over_hard_max] => { to_delete: %w[ecstat1], message: "Removing working situation because income is too high for it" },
-        %i[tshortfall no_outstanding_charges] => { to_delete: %w[tshortfall hbrentshortfall], message: "Removing tshortfall as there are no outstanding charges" },
-        %i[beds over_max] => { to_delete: %w[beds], message: "Removing number of bedrooms because it is over the max" },
-        %i[tcharge complete_1_of_3] => { to_delete: %w[brent scharge pscharge supcharg tcharge], message: "Removing charges, because multiple household charges are selected" },
-        %i[scharge under_min] => { to_delete: %w[brent scharge pscharge supcharg tcharge], message: "Removing charges, because service charge is under 0" },
-        %i[tshortfall must_be_positive] => { to_delete: %w[tshortfall tshortfall_known], message: "Removing tshortfall, because it is not positive" },
-        %i[referral referral_invalid] => { to_delete: %w[referral], message: "Removing referral, because it is not a temporary accommodation" },
-        %i[pscharge outside_the_range] => { to_delete: %w[brent scharge pscharge supcharg tcharge], message: "Removing charges, because pscharge is outside of the range" },
-        %i[supcharg outside_the_range] => { to_delete: %w[brent scharge pscharge supcharg tcharge], message: "Removing charges, because supcharg is outside of the range" },
-        %i[scharge outside_the_range] => { to_delete: %w[brent scharge pscharge supcharg tcharge], message: "Removing charges, because scharge is outside of the range" },
-        %i[location_id not_active] => { to_delete: %w[location_id scheme_id], message: "Removing scheme and location because it was not active during the tenancy start date" },
+        %i[chcharge out_of_range] => { to_delete: %w[chcharge] },
+        %i[referral internal_transfer_non_social_housing] => { to_delete: %w[referral] },
+        %i[referral internal_transfer_fixed_or_lifetime] => { to_delete: %w[referral] },
+        %i[earnings under_hard_min] => { to_delete: %w[earnings incfreq], to_set: { incref: 1, net_income_known: 2 } },
+        %i[tenancylength tenancylength_invalid] => { to_delete: %w[tenancylength tenancy] },
+        %i[prevten over_20_foster_care] => { to_delete: %w[prevten age1] },
+        %i[prevten non_temp_accommodation] => { to_delete: %w[prevten rsnvac] },
+        %i[joint not_joint_tenancy] => { to_delete: %w[joint] },
+        %i[offered over_20] => { to_delete: %w[offered] },
+        %i[earnings over_hard_max] => { to_delete: %w[ecstat1] },
+        %i[tshortfall no_outstanding_charges] => { to_delete: %w[tshortfall hbrentshortfall] },
+        %i[beds over_max] => { to_delete: %w[beds] },
+        %i[tcharge complete_1_of_3] => { to_delete: %w[brent scharge pscharge supcharg tcharge] },
+        %i[scharge under_min] => { to_delete: %w[brent scharge pscharge supcharg tcharge] },
+        %i[tshortfall must_be_positive] => { to_delete: %w[tshortfall tshortfall_known] },
+        %i[referral referral_invalid] => { to_delete: %w[referral] },
+        %i[pscharge outside_the_range] => { to_delete: %w[brent scharge pscharge supcharg tcharge] },
+        %i[supcharg outside_the_range] => { to_delete: %w[brent scharge pscharge supcharg tcharge] },
+        %i[scharge outside_the_range] => { to_delete: %w[brent scharge pscharge supcharg tcharge] },
+        %i[location_id not_active] => { to_delete: %w[location_id scheme_id] },
       }
 
       (2..8).each do |person|
@@ -312,7 +312,7 @@ module Imports
       errors.each do |(error, fields)|
         next unless lettings_log.errors.of_kind?(*error)
 
-        @logger.warn("Log #{lettings_log.old_id}: #{fields[:message]}")
+        @logger.warn("Log #{lettings_log.old_id}: Removing #{fields[:to_delete].join(', ')} with error: #{lettings_log.errors[error.first].join(', ')}")
         @logs_overridden << lettings_log.old_id
         fields[:to_delete].each { |field| attributes.delete(field) }
         fields[:to_set].each { |field, value| attributes[field] = value } if fields[:to_set]
