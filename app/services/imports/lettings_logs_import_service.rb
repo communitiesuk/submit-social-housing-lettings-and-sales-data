@@ -307,7 +307,6 @@ module Imports
         %i[offered over_20] => { to_delete: %w[offered], message: "Removing offered as the value is above the maximum of 20" },
         %i[earnings over_hard_max] => { to_delete: %w[ecstat1], message: "Removing working situation because income is too high for it" },
         %i[tshortfall no_outstanding_charges] => { to_delete: %w[tshortfall hbrentshortfall], message: "Removing tshortfall as there are no outstanding charges" },
-        %i[age2 outside_the_range] => { to_delete: %w[age2 age2_known], message: "Removing age2 because it is outside the allowed range" },
         %i[beds over_max] => { to_delete: %w[beds], message: "Removing number of bedrooms because it is over the max" },
         %i[tcharge complete_1_of_3] => { to_delete: %w[brent scharge pscharge supcharg tcharge], message: "Removing charges, because multiple household charges are selected" },
         %i[scharge under_min] => { to_delete: %w[brent scharge pscharge supcharg tcharge], message: "Removing charges, because service charge is under 0" },
@@ -318,6 +317,10 @@ module Imports
         %i[scharge outside_the_range] => { to_delete: %w[brent scharge pscharge supcharg tcharge], message: "Removing charges, because scharge is outside of the range" },
         %i[location_id not_active] => { to_delete: %w[location_id scheme_id], message: "Removing scheme and location because it was not active during the tenancy start date" },
       }
+
+      (2..8).each do |person|
+        errors[["age#{person}".to_sym, :outside_the_range]] = { to_delete: ["age#{person}", "age#{person}_known"], message: "Removing age#{person} because it is outside the allowed range" }
+      end
 
       errors.each do |(error, fields)|
         next unless lettings_log.errors.of_kind?(*error)

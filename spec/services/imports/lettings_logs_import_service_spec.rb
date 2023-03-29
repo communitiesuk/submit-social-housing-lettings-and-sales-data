@@ -466,6 +466,31 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
+      context "and age 3 over the max" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:P3Age").content = "121"
+          lettings_log_xml.at_xpath("//xmlns:P3Eco").content = "7"
+          lettings_log_xml.at_xpath("//xmlns:HHMEMB").content = "3"
+        end
+
+        it "intercepts the relevant validation error" do
+          expect(logger).to receive(:warn).with(/Removing age3 because it is outside the allowed range/)
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the age answer" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.age3).to be_nil
+          expect(lettings_log.age3_known).to be_nil
+        end
+      end
+
       context "and beds over the max" do
         before do
           lettings_log_xml.at_xpath("//xmlns:Q22").content = "13"
