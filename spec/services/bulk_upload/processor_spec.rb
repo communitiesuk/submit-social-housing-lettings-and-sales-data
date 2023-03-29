@@ -130,61 +130,7 @@ RSpec.describe BulkUpload::Processor do
       end
     end
 
-    context "when processing a bulk upload with errors but below threshold (therefore creates logs)" do
-      let(:mock_downloader) do
-        instance_double(
-          BulkUpload::Downloader,
-          call: nil,
-          path: file_fixture("2022_23_lettings_bulk_upload.csv"),
-          delete_local_file!: nil,
-        )
-      end
-
-      let(:mock_validator) do
-        instance_double(
-          BulkUpload::Lettings::Validator,
-          invalid?: false,
-          call: nil,
-          any_setup_errors?: false,
-          create_logs?: true,
-        )
-      end
-
-      before do
-        allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
-        allow(BulkUpload::Lettings::Validator).to receive(:new).and_return(mock_validator)
-      end
-
-      it "deletes the local file afterwards" do
-        processor.call
-
-        expect(mock_downloader).to have_received(:delete_local_file!)
-      end
-
-      it "sends fix errors email" do
-        mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
-
-        allow(BulkUploadMailer).to receive(:send_bulk_upload_with_errors_mail).and_return(mail_double)
-
-        processor.call
-
-        expect(BulkUploadMailer).to have_received(:send_bulk_upload_with_errors_mail)
-        expect(mail_double).to have_received(:deliver_later)
-      end
-
-      it "does not send success email" do
-        allow(BulkUploadMailer).to receive(:send_bulk_upload_complete_mail).and_call_original
-
-        processor.call
-
-        expect(BulkUploadMailer).not_to have_received(:send_bulk_upload_complete_mail)
-      end
-    end
-
     context "when processing a bulk with perfect data" do
-      let(:file) { Tempfile.new }
-      let(:path) { file.path }
-
       let(:mock_downloader) do
         instance_double(
           BulkUpload::Downloader,
@@ -193,6 +139,9 @@ RSpec.describe BulkUpload::Processor do
           delete_local_file!: nil,
         )
       end
+
+      let(:file) { Tempfile.new }
+      let(:path) { file.path }
 
       let(:log) do
         build(
@@ -226,12 +175,12 @@ RSpec.describe BulkUpload::Processor do
         expect { processor.call }.to change(LettingsLog, :count).by(1)
       end
 
-      it "does not send fix errors email" do
-        allow(BulkUploadMailer).to receive(:send_bulk_upload_with_errors_mail).and_call_original
+      it "makes logs visible" do
+        allow(bulk_upload).to receive(:make_logs_visible).and_call_original
 
         processor.call
 
-        expect(BulkUploadMailer).not_to have_received(:send_bulk_upload_with_errors_mail)
+        expect(bulk_upload).to have_received(:make_logs_visible)
       end
 
       it "sends success email" do
@@ -242,6 +191,99 @@ RSpec.describe BulkUpload::Processor do
         processor.call
 
         expect(BulkUploadMailer).to have_received(:send_bulk_upload_complete_mail)
+        expect(mail_double).to have_received(:deliver_later)
+      end
+    end
+
+    context "when a bulk upload has an in progress log" do
+      let(:mock_downloader) do
+        instance_double(
+          BulkUpload::Downloader,
+          call: nil,
+          path:,
+          delete_local_file!: nil,
+        )
+      end
+
+      let(:file) { Tempfile.new }
+      let(:path) { file.path }
+
+      let(:log) do
+        LettingsLog.new(
+          lettype: 2,
+          renttype: 3,
+          owning_organisation: owning_org,
+          managing_organisation: owning_org,
+          startdate: Time.zone.local(2022, 10, 1),
+          renewal: 2,
+        )
+      end
+
+      before do
+        file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
+        file.rewind
+
+        allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
+      end
+
+      it "creates invisible log" do
+        expect { processor.call }.to change(LettingsLog.rewhere(visible: false), :count).by(1)
+      end
+
+      it "sends how_fix_upload_mail" do
+        mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
+
+        allow(BulkUploadMailer).to receive(:send_how_fix_upload_mail).and_return(mail_double)
+
+        processor.call
+
+        expect(BulkUploadMailer).to have_received(:send_how_fix_upload_mail)
+        expect(mail_double).to have_received(:deliver_later)
+      end
+    end
+
+    context "when upload has no setup errors something blocks log creation" do
+      let(:mock_downloader) do
+        instance_double(
+          BulkUpload::Downloader,
+          call: nil,
+          path:,
+          delete_local_file!: nil,
+        )
+      end
+
+      let(:file) { Tempfile.new }
+      let(:path) { file.path }
+
+      let(:other_user) { create(:user) }
+
+      let(:log) do
+        LettingsLog.new(
+          lettype: 2,
+          renttype: 3,
+          owning_organisation: owning_org,
+          managing_organisation: owning_org,
+          startdate: Time.zone.local(2022, 10, 1),
+          renewal: 2,
+          created_by: other_user, # unaffiliated user
+        )
+      end
+
+      before do
+        file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
+        file.rewind
+
+        allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
+      end
+
+      it "sends correct_and_upload_again_mail" do
+        mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
+
+        allow(BulkUploadMailer).to receive(:send_correct_and_upload_again_mail).and_return(mail_double)
+
+        processor.call
+
+        expect(BulkUploadMailer).to have_received(:send_correct_and_upload_again_mail)
         expect(mail_double).to have_received(:deliver_later)
       end
     end
