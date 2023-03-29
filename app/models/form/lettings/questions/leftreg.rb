@@ -12,9 +12,9 @@ class Form::Lettings::Questions::Leftreg < ::Form::Question
   end
 
   ANSWER_OPTIONS = {
-    "0" => { "value" => "Yes" },
-    "1" => { "value" => "No – they left up to and including 5 years ago" },
-    "2" => { "value" => "No – they left more than 5 years ago" },
+    "6" => { "value" => "Yes" },
+    "4" => { "value" => "No – they left up to and including 5 years ago" },
+    "5" => { "value" => "No – they left more than 5 years ago" },
     "divider" => { "value" => true },
     "3" => { "value" => "Person prefers not to say" },
   }.freeze
