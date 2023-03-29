@@ -224,7 +224,6 @@ RSpec.describe Imports::LettingsLogsImportService do
 
         it "intercepts the relevant validation error" do
           expect(logger).to receive(:warn).with(/Removing earnings, incfreq with error: Net income cannot be less than £10 per week given the tenant’s working situation/)
-          expect(logger).to receive(:warn).with(/Differences found when saving log/)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end

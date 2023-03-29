@@ -286,7 +286,6 @@ module Imports
         %i[chcharge out_of_range] => { to_delete: %w[chcharge] },
         %i[referral internal_transfer_non_social_housing] => { to_delete: %w[referral] },
         %i[referral internal_transfer_fixed_or_lifetime] => { to_delete: %w[referral] },
-        %i[earnings under_hard_min] => { to_delete: %w[earnings incfreq], to_set: { incref: 1, net_income_known: 2 } },
         %i[tenancylength tenancylength_invalid] => { to_delete: %w[tenancylength tenancy] },
         %i[prevten over_20_foster_care] => { to_delete: %w[prevten age1] },
         %i[prevten non_temp_accommodation] => { to_delete: %w[prevten rsnvac] },
@@ -315,7 +314,16 @@ module Imports
         @logger.warn("Log #{lettings_log.old_id}: Removing #{fields[:to_delete].join(', ')} with error: #{lettings_log.errors[error.first].join(', ')}")
         @logs_overridden << lettings_log.old_id
         fields[:to_delete].each { |field| attributes.delete(field) }
-        fields[:to_set].each { |field, value| attributes[field] = value } if fields[:to_set]
+        return save_lettings_log(attributes, previous_status)
+      end
+
+      if lettings_log.errors.of_kind?(:earnings, :under_hard_min)
+        @logger.warn("Log #{lettings_log.old_id}: Removing earnings, incfreq with error: #{lettings_log.errors[:earnings].join(', ')}")
+        @logs_overridden << lettings_log.old_id
+        attributes.delete("earnings")
+        attributes.delete("incfreq")
+        attributes["incref"] = 1
+        attributes["net_income_known"] = 2
         return save_lettings_log(attributes, previous_status)
       end
 
