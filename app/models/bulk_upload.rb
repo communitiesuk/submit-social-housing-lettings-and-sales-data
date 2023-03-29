@@ -60,6 +60,12 @@ class BulkUpload < ApplicationRecord
     "BulkUpload::#{type_class}::#{year_class}".constantize
   end
 
+  def make_logs_visible
+    logs
+      .rewhere(visible: false)
+      .update_all(visible: true)
+  end
+
 private
 
   def generate_identifier
