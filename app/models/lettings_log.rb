@@ -21,6 +21,8 @@ class LettingsLog < Log
   include Validations::DateValidations
   include Validations::FinancialValidations
 
+  default_scope { where(visible: true) }
+
   has_paper_trail
 
   validates_with LettingsLogValidator
@@ -37,6 +39,9 @@ class LettingsLog < Log
   belongs_to :scheme, optional: true
   belongs_to :location, optional: true
   belongs_to :managing_organisation, class_name: "Organisation", optional: true
+
+  scope :visible, -> { where(visible: true) }
+  scope :invisible, -> { where(visible: false) }
 
   scope :filter_by_year, ->(year) { where(startdate: Time.zone.local(year.to_i, 4, 1)...Time.zone.local(year.to_i + 1, 4, 1)) }
   scope :filter_by_tenant_code, ->(tenant_code) { where("tenancycode ILIKE ?", "%#{tenant_code}%") }

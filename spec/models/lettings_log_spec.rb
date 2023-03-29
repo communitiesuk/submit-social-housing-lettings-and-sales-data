@@ -39,6 +39,19 @@ RSpec.describe LettingsLog do
     expect(lettings_log).to be_lettings
   end
 
+  describe "default_scope" do
+    let!(:visible_log) { create(:lettings_log) }
+    let!(:invisible_log) { create(:lettings_log, visible: false) }
+
+    it "includes visible logs" do
+      expect(described_class.all).to include(visible_log)
+    end
+
+    it "excludes non visible logs" do
+      expect(described_class.all).not_to include(invisible_log)
+    end
+  end
+
   describe "#form" do
     let(:lettings_log) { build(:lettings_log, created_by: created_by_user) }
     let(:lettings_log_2) { build(:lettings_log, startdate: Time.zone.local(2022, 1, 1), created_by: created_by_user) }
