@@ -79,7 +79,7 @@ module Validations::FinancialValidations
         record.errors.add :tshortfall, I18n.t("validations.financial.tshortfall.more_than_rent")
         record.errors.add :brent, I18n.t("validations.financial.rent.less_than_shortfall")
       elsif record.wtshortfall < 0.01
-        record.errors.add :tshortfall, I18n.t("validations.financial.tshortfall.must_be_positive")
+        record.errors.add :tshortfall, :must_be_positive, message: I18n.t("validations.financial.tshortfall.must_be_positive")
       end
     end
 
@@ -89,7 +89,7 @@ module Validations::FinancialValidations
 
     answered_questions = [record.tcharge, record.chcharge].concat(record.household_charge && record.household_charge == 1 ? [record.household_charge] : [])
     if answered_questions.count(&:present?) > 1
-      record.errors.add :tcharge, I18n.t("validations.financial.charges.complete_1_of_3") if record.tcharge.present?
+      record.errors.add :tcharge, :complete_1_of_3, message: I18n.t("validations.financial.charges.complete_1_of_3") if record.tcharge.present?
       record.errors.add :chcharge, I18n.t("validations.financial.charges.complete_1_of_3") if record.chcharge.present?
       record.errors.add :household_charge, I18n.t("validations.financial.charges.complete_1_of_3") if record.household_charge.present?
     end
@@ -123,7 +123,7 @@ module Validations::FinancialValidations
         max_chcharge = [record.form.get_question("chcharge", record).prefix, max_chcharge].join("") if record.form.get_question("chcharge", record).present?
         min_chcharge = [record.form.get_question("chcharge", record).prefix, min_chcharge].join("") if record.form.get_question("chcharge", record).present?
         record.errors.add :period, I18n.t("validations.financial.carehome.out_of_range", period:, min_chcharge:, max_chcharge:)
-        record.errors.add :chcharge, I18n.t("validations.financial.carehome.out_of_range", period:, min_chcharge:, max_chcharge:)
+        record.errors.add :chcharge, :out_of_range, message: I18n.t("validations.financial.carehome.out_of_range", period:, min_chcharge:, max_chcharge:)
       end
     end
   end
@@ -174,7 +174,7 @@ private
       maximum = CHARGE_MAXIMUMS.dig(charge, PROVIDER_TYPE[provider_type], NEEDSTYPE_VALUES[record.needstype])
 
       if maximum.present? && record[:period].present? && record[charge].present? && !weekly_value_in_range(record, charge, 0.0, maximum)
-        record.errors.add charge, I18n.t("validations.financial.rent.#{charge}.#{PROVIDER_TYPE[provider_type]}.#{NEEDSTYPE_VALUES[record.needstype]}")
+        record.errors.add charge, :outside_the_range, message: I18n.t("validations.financial.rent.#{charge}.#{PROVIDER_TYPE[provider_type]}.#{NEEDSTYPE_VALUES[record.needstype]}")
       end
     end
   end

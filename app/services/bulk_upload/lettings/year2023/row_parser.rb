@@ -349,7 +349,7 @@ class BulkUpload::Lettings::Year2023::RowParser
 
       fields.each do |field|
         unless errors.include?(field)
-          errors.add(field, error.type)
+          errors.add(field, error.message)
         end
       end
     end
