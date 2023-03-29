@@ -223,7 +223,8 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
 
         it "intercepts the relevant validation error" do
-          expect(logger).to receive(:warn).with(/Removing earnings, incfreq with error: Net income cannot be less than £10 per week given the tenant’s working situation/)
+          expect(logger).to receive(:warn).with(/Removing earnings with error: Net income cannot be less than £10 per week given the tenant’s working situation/)
+          expect(logger).to receive(:warn).with(/Removing incfreq with error: Net income cannot be less than £10 per week given the tenant’s working situation/)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end
@@ -249,7 +250,8 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
 
         it "intercepts the relevant validation error" do
-          expect(logger).to receive(:warn).with(/Removing tenancylength, tenancy with error: Enter a tenancy length between 2 and 99 years for a tenancy of this type/)
+          expect(logger).to receive(:warn).with(/Removing tenancylength with error: Enter a tenancy length between 2 and 99 years for a tenancy of this type/)
+          expect(logger).to receive(:warn).with(/Removing tenancy with error: Enter a tenancy length between 2 and 99 years for a tenancy of this type/)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end
@@ -274,7 +276,8 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
 
         it "intercepts the relevant validation error" do
-          expect(logger).to receive(:warn).with(/Removing prevten, age1 with error: Answer cannot be a children’s home or foster care as the lead tenant is 20 or older/)
+          expect(logger).to receive(:warn).with(/Removing prevten with error: Answer cannot be a children’s home or foster care as the lead tenant is 20 or older/)
+          expect(logger).to receive(:warn).with(/Removing age1 with error: Answer cannot be a children’s home or foster care as the lead tenant is 20 or older/)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end
@@ -379,7 +382,8 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
 
         it "intercepts the relevant validation error" do
-          expect(logger).to receive(:warn).with(/Removing prevten, rsnvac with error: Answer cannot be non-temporary accommodation as this is a re-let to a tenant who occupied the same property as temporary accommodation/)
+          expect(logger).to receive(:warn).with(/Removing prevten with error: Answer cannot be non-temporary accommodation as this is a re-let to a tenant who occupied the same property as temporary accommodation/)
+          expect(logger).to receive(:warn).with(/Removing rsnvac with error: Answer cannot be non-temporary accommodation as this is a re-let to a tenant who occupied the same property as temporary accommodation/)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end
@@ -448,7 +452,8 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
 
         it "intercepts the relevant validation error" do
-          expect(logger).to receive(:warn).with(/Removing age2, age2_known with error: Person 2’s age must be between 0 and 120/)
+          expect(logger).to receive(:warn).with(/Removing age2 with error: Person 2’s age must be between 0 and 120/)
+          expect(logger).to receive(:warn).with(/Removing age2_known with error: Person 2’s age must be between 0 and 120/)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end
@@ -473,7 +478,8 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
 
         it "intercepts the relevant validation error" do
-          expect(logger).to receive(:warn).with(/Removing age3, age3_known with error: Person 3’s age must be between 0 and 120/)
+          expect(logger).to receive(:warn).with(/Removing age3 with error: Person 3’s age must be between 0 and 120/)
+          expect(logger).to receive(:warn).with(/Removing age3_known with error: Person 3’s age must be between 0 and 120/)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end
@@ -526,7 +532,11 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
 
         it "intercepts the relevant validation error" do
-          expect(logger).to receive(:warn).with(/Removing brent, scharge, pscharge, supcharg, tcharge with error: Enter a total charge that is at least £10 per week, Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?/)
+          expect(logger).to receive(:warn).with(/Removing brent with error: Enter a total charge that is at least £10 per week, Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?/)
+          expect(logger).to receive(:warn).with(/Removing scharge with error: Enter a total charge that is at least £10 per week, Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?/)
+          expect(logger).to receive(:warn).with(/Removing pscharge with error: Enter a total charge that is at least £10 per week, Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?/)
+          expect(logger).to receive(:warn).with(/Removing supcharg with error: Enter a total charge that is at least £10 per week, Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?/)
+          expect(logger).to receive(:warn).with(/Removing tcharge with error: Enter a total charge that is at least £10 per week, Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?/)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end
@@ -550,7 +560,11 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
 
         it "intercepts the relevant validation error" do
-          expect(logger).to receive(:warn).with(/Removing brent, scharge, pscharge, supcharg, tcharge with error: Enter an amount above 0, Enter a value for the service charge between £0 and £480 per week if the landlord is a private registered provider and it is a supported housing letting, Service charge must be at least £0 every week/)
+          expect(logger).to receive(:warn).with(/Removing brent with error: Enter an amount above 0, Enter a value for the service charge between £0 and £480 per week if the landlord is a private registered provider and it is a supported housing letting, Service charge must be at least £0 every week/)
+          expect(logger).to receive(:warn).with(/Removing scharge with error: Enter an amount above 0, Enter a value for the service charge between £0 and £480 per week if the landlord is a private registered provider and it is a supported housing letting, Service charge must be at least £0 every week/)
+          expect(logger).to receive(:warn).with(/Removing pscharge with error: Enter an amount above 0, Enter a value for the service charge between £0 and £480 per week if the landlord is a private registered provider and it is a supported housing letting, Service charge must be at least £0 every week/)
+          expect(logger).to receive(:warn).with(/Removing supcharg with error: Enter an amount above 0, Enter a value for the service charge between £0 and £480 per week if the landlord is a private registered provider and it is a supported housing letting, Service charge must be at least £0 every week/)
+          expect(logger).to receive(:warn).with(/Removing tcharge with error: Enter an amount above 0, Enter a value for the service charge between £0 and £480 per week if the landlord is a private registered provider and it is a supported housing letting, Service charge must be at least £0 every week/)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end
@@ -580,7 +594,8 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
 
         it "intercepts the relevant validation error" do
-          expect(logger).to receive(:warn).with(/Removing tshortfall, tshortfall_known with error: Enter a value over £0.01 as you told us there is an outstanding amount/)
+          expect(logger).to receive(:warn).with(/Removing tshortfall with error: Enter a value over £0.01 as you told us there is an outstanding amount/)
+          expect(logger).to receive(:warn).with(/Removing tshortfall_known with error: Enter a value over £0.01 as you told us there is an outstanding amount/)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end
@@ -627,7 +642,11 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
 
         it "intercepts the relevant validation error" do
-          expect(logger).to receive(:warn).with(/Removing brent, scharge, pscharge, supcharg, tcharge with error: Enter a value for the personal service charge between £0 and £30 per week if the landlord is a private registered provider and it is a general needs letting/)
+          expect(logger).to receive(:warn).with(/Removing brent with error: Enter a value for the personal service charge between £0 and £30 per week if the landlord is a private registered provider and it is a general needs letting/)
+          expect(logger).to receive(:warn).with(/Removing scharge with error: Enter a value for the personal service charge between £0 and £30 per week if the landlord is a private registered provider and it is a general needs letting/)
+          expect(logger).to receive(:warn).with(/Removing pscharge with error: Enter a value for the personal service charge between £0 and £30 per week if the landlord is a private registered provider and it is a general needs letting/)
+          expect(logger).to receive(:warn).with(/Removing supcharg with error: Enter a value for the personal service charge between £0 and £30 per week if the landlord is a private registered provider and it is a general needs letting/)
+          expect(logger).to receive(:warn).with(/Removing tcharge with error: Enter a value for the personal service charge between £0 and £30 per week if the landlord is a private registered provider and it is a general needs letting/)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end
@@ -651,7 +670,11 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
 
         it "intercepts the relevant validation error" do
-          expect(logger).to receive(:warn).with(/Removing brent, scharge, pscharge, supcharg, tcharge with error: Enter a value for the support charge between £0 and £40 per week if the landlord is a private registered provider and it is a general needs letting/)
+          expect(logger).to receive(:warn).with(/Removing brent with error: Enter a value for the support charge between £0 and £40 per week if the landlord is a private registered provider and it is a general needs letting/)
+          expect(logger).to receive(:warn).with(/Removing scharge with error: Enter a value for the support charge between £0 and £40 per week if the landlord is a private registered provider and it is a general needs letting/)
+          expect(logger).to receive(:warn).with(/Removing pscharge with error: Enter a value for the support charge between £0 and £40 per week if the landlord is a private registered provider and it is a general needs letting/)
+          expect(logger).to receive(:warn).with(/Removing supcharg with error: Enter a value for the support charge between £0 and £40 per week if the landlord is a private registered provider and it is a general needs letting/)
+          expect(logger).to receive(:warn).with(/Removing tcharge with error: Enter a value for the support charge between £0 and £40 per week if the landlord is a private registered provider and it is a general needs letting/)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end
@@ -675,7 +698,11 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
 
         it "intercepts the relevant validation error" do
-          expect(logger).to receive(:warn).with(/Removing brent, scharge, pscharge, supcharg, tcharge with error: Enter a value for the service charge between £0 and £155 per week if the landlord is a private registered provider and it is a general needs letting/)
+          expect(logger).to receive(:warn).with(/Removing brent with error: Enter a value for the service charge between £0 and £155 per week if the landlord is a private registered provider and it is a general needs letting/)
+          expect(logger).to receive(:warn).with(/Removing scharge with error: Enter a value for the service charge between £0 and £155 per week if the landlord is a private registered provider and it is a general needs letting/)
+          expect(logger).to receive(:warn).with(/Removing pscharge with error: Enter a value for the service charge between £0 and £155 per week if the landlord is a private registered provider and it is a general needs letting/)
+          expect(logger).to receive(:warn).with(/Removing supcharg with error: Enter a value for the service charge between £0 and £155 per week if the landlord is a private registered provider and it is a general needs letting/)
+          expect(logger).to receive(:warn).with(/Removing tcharge with error: Enter a value for the service charge between £0 and £155 per week if the landlord is a private registered provider and it is a general needs letting/)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end
@@ -702,7 +729,8 @@ RSpec.describe Imports::LettingsLogsImportService do
 
         it "intercepts the relevant validation error" do
           expect(logger).to receive(:warn).with(/Differences found when saving log/)
-          expect(logger).to receive(:warn).with(/Removing location_id, scheme_id with error: The location LS16 6FT was deactivated on 10 October 2021 and was not available on the day you entered./)
+          expect(logger).to receive(:warn).with(/Removing location_id with error: The location LS16 6FT was deactivated on 10 October 2021 and was not available on the day you entered./)
+          expect(logger).to receive(:warn).with(/Removing scheme_id with error: The location LS16 6FT was deactivated on 10 October 2021 and was not available on the day you entered./)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end
@@ -1007,7 +1035,8 @@ RSpec.describe Imports::LettingsLogsImportService do
       end
 
       it "intercepts the relevant validation error" do
-        expect(logger).to receive(:warn).with(/Removing tshortfall, hbrentshortfall with error: You cannot answer the outstanding amount question if you don’t have outstanding rent or charges/)
+        expect(logger).to receive(:warn).with(/Removing tshortfall with error: You cannot answer the outstanding amount question if you don’t have outstanding rent or charges/)
+        expect(logger).to receive(:warn).with(/Removing hbrentshortfall with error: You cannot answer the outstanding amount question if you don’t have outstanding rent or charges/)
         expect { lettings_log_service.send(:create_log, lettings_log_xml) }
           .not_to raise_error
       end

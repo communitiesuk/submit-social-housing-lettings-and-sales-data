@@ -305,20 +305,24 @@ module Imports
       }
 
       (2..8).each do |person|
-        errors[["age#{person}".to_sym, :outside_the_range]] = ["age#{person}", "age#{person}_known"]
+        errors[[:"age#{person}", :outside_the_range]] = ["age#{person}", "age#{person}_known"]
       end
 
       errors.each do |(error, fields)|
         next unless lettings_log.errors.of_kind?(*error)
 
-        @logger.warn("Log #{lettings_log.old_id}: Removing #{fields.join(', ')} with error: #{lettings_log.errors[error.first].join(', ')}")
+        attribute, _type = error
+        fields.each do |field|
+          @logger.warn("Log #{lettings_log.old_id}: Removing #{field} with error: #{lettings_log.errors[attribute].join(', ')}")
+          attributes.delete(field)
+        end
         @logs_overridden << lettings_log.old_id
-        fields.each { |field| attributes.delete(field) }
         return save_lettings_log(attributes, previous_status)
       end
 
       if lettings_log.errors.of_kind?(:earnings, :under_hard_min)
-        @logger.warn("Log #{lettings_log.old_id}: Removing earnings, incfreq with error: #{lettings_log.errors[:earnings].join(', ')}")
+        @logger.warn("Log #{lettings_log.old_id}: Removing earnings with error: #{lettings_log.errors[:earnings].join(', ')}")
+        @logger.warn("Log #{lettings_log.old_id}: Removing incfreq with error: #{lettings_log.errors[:earnings].join(', ')}")
         @logs_overridden << lettings_log.old_id
         attributes.delete("earnings")
         attributes.delete("incfreq")
