@@ -16,11 +16,12 @@ class BulkUpload::Processor
       send_setup_errors_mail
     elsif validator.create_logs?
       if bulk_upload.bulk_upload_errors.count.zero?
-        create_logs
+        create_visible_logs
 
         send_fix_errors_mail if created_logs_but_incompleted?
         send_success_mail if created_logs_and_all_completed?
       else
+        create_invisible_logs
         send_how_fix_upload_mail
       end
     else
@@ -34,15 +35,19 @@ class BulkUpload::Processor
   end
 
   def approve
-    return if bulk_upload.processed?
-
-    download
-    create_logs
+    make_logs_visible
   ensure
     downloader.delete_local_file!
   end
 
 private
+
+  def make_logs_visible
+    bulk_upload
+      .logs
+      .rewhere(visible: false)
+      .update_all(visible: true)
+  end
 
   def send_how_fix_upload_mail
     BulkUploadMailer
@@ -92,10 +97,18 @@ private
     bulk_upload.user
   end
 
-  def create_logs
+  def create_visible_logs
     log_creator_class.new(
       bulk_upload:,
       path: downloader.path,
+    ).call
+  end
+
+  def create_invisible_logs
+    log_creator_class.new(
+      bulk_upload:,
+      path: downloader.path,
+      visible: false,
     ).call
   end
 

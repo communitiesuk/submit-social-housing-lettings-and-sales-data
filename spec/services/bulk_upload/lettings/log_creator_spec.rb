@@ -15,6 +15,11 @@ RSpec.describe BulkUpload::Lettings::LogCreator do
         expect { service.call }.to change(LettingsLog, :count)
       end
 
+      it "create a log that is visbile" do
+        service.call
+        expect(LettingsLog.last).to be_visible
+      end
+
       it "associates log with bulk upload" do
         service.call
 
@@ -78,6 +83,19 @@ RSpec.describe BulkUpload::Lettings::LogCreator do
 
         record = LettingsLog.last
         expect(record.age1).to be_blank
+      end
+    end
+
+    context "when pre-creating invisible logs" do
+      subject(:service) { described_class.new(bulk_upload:, path:, visible: false) }
+
+      it "creates a new log" do
+        expect { service.call }.to change(LettingsLog.unscoped, :count)
+      end
+
+      it "create a log that is invisbile" do
+        service.call
+        expect(LettingsLog.unscoped.last).not_to be_visible
       end
     end
 
