@@ -113,24 +113,23 @@ RSpec.describe Exports::LettingsLogExportService do
         Timecop.freeze(Time.zone.local(2023, 4, 3))
         Singleton.__init__(FormHandler)
         stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=100023336956")
-         .to_return(status: 200, body: '{ "status": 200,
-          "results": [
-            { "DPA": {
-              "PO_BOX_NUMBER": "fake",
-              "ORGANISATION_NAME": "org",
-              "DEPARTMENT_NAME": "name",
-              "SUB_BUILDING_NAME": "building",
-              "BUILDING_NAME": "name",
-              "BUILDING_NUMBER": "number",
-              "DEPENDENT_THOROUGHFARE_NAME": "data",
-              "THOROUGHFARE_NAME": "thing",
-              "POST_TOWN": "London",
-            } },
-          ] }', headers: {})
+         .to_return(status: 200, body: '{"status":200,"results":[{"DPA":{
+          "PO_BOX_NUMBER": "fake",
+      "ORGANISATION_NAME": "org",
+      "DEPARTMENT_NAME": "name",
+      "SUB_BUILDING_NAME": "building",
+      "BUILDING_NAME": "name",
+      "BUILDING_NUMBER": "number",
+      "DEPENDENT_THOROUGHFARE_NAME": "data",
+      "THOROUGHFARE_NAME": "thing",
+      "POST_TOWN": "London"
+
+         }}]}', headers: {})
       end
 
       after do
         Timecop.unfreeze
+        Singleton.__init__(FormHandler)
       end
 
       context "and one lettings log is available for export" do
