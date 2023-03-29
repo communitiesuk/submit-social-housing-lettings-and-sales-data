@@ -245,24 +245,12 @@ RSpec.describe BulkUpload::Processor do
   end
 
   describe "#approve" do
-    let(:mock_creator) do
-      instance_double(
-        BulkUpload::Lettings::LogCreator,
-        call: nil,
-        path: nil,
-      )
+    before do
+      create(:lettings_log, bulk_upload:, visible: false)
     end
 
-    context "when already processed" do
-      let(:bulk_upload) { create(:bulk_upload, :lettings, processed: true) }
-
-      it "does not create logs again" do
-        allow(BulkUpload::Lettings::LogCreator).to receive(:new).with(bulk_upload:, path: nil).and_return(mock_creator)
-
-        processor.approve
-
-        expect(mock_creator).not_to have_received(:call)
-      end
+    it "makes invisible logs visible" do
+      expect { processor.approve }.to change(LettingsLog, :count)
     end
   end
 end

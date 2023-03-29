@@ -1,9 +1,10 @@
 class BulkUpload::Lettings::LogCreator
-  attr_reader :bulk_upload, :path
+  attr_reader :bulk_upload, :path, :visible
 
-  def initialize(bulk_upload:, path:)
+  def initialize(bulk_upload:, path:, visible: true)
     @bulk_upload = bulk_upload
     @path = path
+    @visible = visible
   end
 
   def call
@@ -14,6 +15,7 @@ class BulkUpload::Lettings::LogCreator
 
       row_parser.log.blank_invalid_non_setup_fields!
       row_parser.log.bulk_upload = bulk_upload
+      row_parser.log.visible = visible
 
       begin
         row_parser.log.save!
