@@ -283,37 +283,37 @@ module Imports
       end
 
       errors = {
-        %i[chcharge out_of_range] => { to_delete: %w[chcharge] },
-        %i[referral internal_transfer_non_social_housing] => { to_delete: %w[referral] },
-        %i[referral internal_transfer_fixed_or_lifetime] => { to_delete: %w[referral] },
-        %i[tenancylength tenancylength_invalid] => { to_delete: %w[tenancylength tenancy] },
-        %i[prevten over_20_foster_care] => { to_delete: %w[prevten age1] },
-        %i[prevten non_temp_accommodation] => { to_delete: %w[prevten rsnvac] },
-        %i[joint not_joint_tenancy] => { to_delete: %w[joint] },
-        %i[offered over_20] => { to_delete: %w[offered] },
-        %i[earnings over_hard_max] => { to_delete: %w[ecstat1] },
-        %i[tshortfall no_outstanding_charges] => { to_delete: %w[tshortfall hbrentshortfall] },
-        %i[beds over_max] => { to_delete: %w[beds] },
-        %i[tcharge complete_1_of_3] => { to_delete: %w[brent scharge pscharge supcharg tcharge] },
-        %i[scharge under_min] => { to_delete: %w[brent scharge pscharge supcharg tcharge] },
-        %i[tshortfall must_be_positive] => { to_delete: %w[tshortfall tshortfall_known] },
-        %i[referral referral_invalid] => { to_delete: %w[referral] },
-        %i[pscharge outside_the_range] => { to_delete: %w[brent scharge pscharge supcharg tcharge] },
-        %i[supcharg outside_the_range] => { to_delete: %w[brent scharge pscharge supcharg tcharge] },
-        %i[scharge outside_the_range] => { to_delete: %w[brent scharge pscharge supcharg tcharge] },
-        %i[location_id not_active] => { to_delete: %w[location_id scheme_id] },
+        %i[chcharge out_of_range] => %w[chcharge],
+        %i[referral internal_transfer_non_social_housing] => %w[referral],
+        %i[referral internal_transfer_fixed_or_lifetime] => %w[referral],
+        %i[tenancylength tenancylength_invalid] => %w[tenancylength tenancy],
+        %i[prevten over_20_foster_care] => %w[prevten age1],
+        %i[prevten non_temp_accommodation] => %w[prevten rsnvac],
+        %i[joint not_joint_tenancy] => %w[joint],
+        %i[offered over_20] => %w[offered],
+        %i[earnings over_hard_max] => %w[ecstat1],
+        %i[tshortfall no_outstanding_charges] => %w[tshortfall hbrentshortfall],
+        %i[beds over_max] => %w[beds],
+        %i[tcharge complete_1_of_3] => %w[brent scharge pscharge supcharg tcharge],
+        %i[scharge under_min] => %w[brent scharge pscharge supcharg tcharge],
+        %i[tshortfall must_be_positive] => %w[tshortfall tshortfall_known],
+        %i[referral referral_invalid] => %w[referral],
+        %i[pscharge outside_the_range] => %w[brent scharge pscharge supcharg tcharge],
+        %i[supcharg outside_the_range] => %w[brent scharge pscharge supcharg tcharge],
+        %i[scharge outside_the_range] => %w[brent scharge pscharge supcharg tcharge],
+        %i[location_id not_active] => %w[location_id scheme_id],
       }
 
       (2..8).each do |person|
-        errors[["age#{person}".to_sym, :outside_the_range]] = { to_delete: ["age#{person}", "age#{person}_known"], message: "Removing age#{person} because it is outside the allowed range" }
+        errors[["age#{person}".to_sym, :outside_the_range]] = ["age#{person}", "age#{person}_known"]
       end
 
       errors.each do |(error, fields)|
         next unless lettings_log.errors.of_kind?(*error)
 
-        @logger.warn("Log #{lettings_log.old_id}: Removing #{fields[:to_delete].join(', ')} with error: #{lettings_log.errors[error.first].join(', ')}")
+        @logger.warn("Log #{lettings_log.old_id}: Removing #{fields.join(', ')} with error: #{lettings_log.errors[error.first].join(', ')}")
         @logs_overridden << lettings_log.old_id
-        fields[:to_delete].each { |field| attributes.delete(field) }
+        fields.each { |field| attributes.delete(field) }
         return save_lettings_log(attributes, previous_status)
       end
 
