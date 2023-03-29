@@ -271,19 +271,6 @@ module Imports
       end
     end
 
-    ERRORS = {
-      %i[chcharge out_of_range] => { to_delete: %w[chcharge], message: "Removing chcharge, because it is outside the expected range" },
-      %i[referral internal_transfer_non_social_housing] => { to_delete: %w[referral], message: "Removing internal transfer referral since previous tenancy is a non social housing" },
-      %i[referral internal_transfer_fixed_or_lifetime] => { to_delete: %w[referral], message: "Removing internal transfer referral since previous tenancy is fixed terms or lifetime" },
-      %i[earnings under_hard_min] => {
-        to_delete: %w[earnings incfreq],
-        to_assign: { "incref" => 1, "net_income_known" => 2 },
-        message: "Where the income is 0, set earnings and income to blank and set incref to refused",
-      },
-      %i[tenancylength tenancy] => { to_delete: %w[tenancylength tenancy], message: "Removing tenancylength as invalid" },
-      %i[prevten over_20_foster_care] => { to_delete: %w[prevten age1], message: "Removing age1 and prevten as incompatible" },
-    }.freeze
-
     def rescue_validation_or_raise(lettings_log, attributes, previous_status, exception)
       # Blank out all invalid fields for in-progress logs
       if %w[saved submitted-invalid].include?(previous_status)
