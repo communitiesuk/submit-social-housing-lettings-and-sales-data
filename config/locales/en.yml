@@ -415,8 +415,8 @@ en:
           not_homeless: "Answer cannot be ‘no’ as the tenant was homeless or about to lose their home"
       previous_la_known: "Enter name of local authority"
       renewal_just_moved_to_area:
-        layear: 'For a renewal, you cannot select "just moved to local authority area"'
-        renewal: 'This cannot be a renewal as you told us the household "just moved to local authority area"'
+        layear: 'The household cannot have just moved to the local authority area if this letting is a renewal'
+        renewal: 'This letting cannot be a renewal if the household has just moved to the local authority area'
       gender:
         retired_male: "Answer cannot be ‘male’ as tenant is under 65 and retired"
         retired_female: "Answer cannot be ‘female’ as tenant is under 60 and retired"
