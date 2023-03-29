@@ -242,6 +242,58 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
     end
 
+    describe "#field_3" do # created_by
+      context "when blank" do
+        let(:attributes) { { bulk_upload:, field_3: "" } }
+
+        it "is permitted" do
+          expect(parser.errors[:field_3]).to be_blank
+        end
+      end
+
+      context "when user could not be found" do
+        let(:attributes) { { bulk_upload:, field_3: "idonotexist@example.com" } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_3]).to be_present
+        end
+      end
+
+      context "when an unaffiliated user" do
+        let(:other_user) { create(:user) }
+
+        let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_3: other_user.email, field_2: managing_org.old_visible_id } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_3]).to be_present
+        end
+
+        it "blocks log creation" do
+          expect(parser).to be_block_log_creation
+        end
+      end
+
+      context "when an user part of owning org" do
+        let(:other_user) { create(:user, organisation: owning_org) }
+
+        let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_3: other_user.email, field_2: managing_org.old_visible_id } }
+
+        it "is permitted" do
+          expect(parser.errors[:field_3]).to be_blank
+        end
+      end
+
+      context "when an user part of managing org" do
+        let(:other_user) { create(:user, organisation: managing_org) }
+
+        let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_3: other_user.email, field_2: managing_org.old_visible_id } }
+
+        it "is permitted" do
+          expect(parser.errors[:field_3]).to be_blank
+        end
+      end
+    end
+
     describe "#field_5" do
       context "when null" do
         let(:attributes) { { bulk_upload:, field_5: nil, field_15: "1" } }
@@ -767,6 +819,26 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
   end
 
   describe "#log" do
+    describe "#created_by" do
+      context "when blank" do
+        let(:attributes) { setup_section_params }
+
+        it "takes the user that is uploading" do
+          expect(parser.log.created_by).to eql(bulk_upload.user)
+        end
+      end
+
+      context "when email specified" do
+        let(:other_user) { create(:user, organisation: owning_org) }
+
+        let(:attributes) { setup_section_params.merge(field_3: other_user.email) }
+
+        it "sets to user with specified email" do
+          expect(parser.log.created_by).to eql(other_user)
+        end
+      end
+    end
+
     describe "#uprn" do
       let(:attributes) { { bulk_upload:, field_18: "100023336956" } }
 
