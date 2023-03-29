@@ -30,7 +30,7 @@ module Validations::TenancyValidations
     conditions.each do |condition|
       next unless condition[:condition]
 
-      record.errors.add :tenancylength, condition[:error]
+      record.errors.add :tenancylength, :tenancylength_invalid, message: condition[:error]
       record.errors.add :tenancy, condition[:error]
     end
   end

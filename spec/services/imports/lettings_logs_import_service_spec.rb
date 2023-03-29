@@ -224,6 +224,7 @@ RSpec.describe Imports::LettingsLogsImportService do
 
         it "intercepts the relevant validation error" do
           expect(logger).to receive(:warn).with(/Where the income is 0, set earnings and income to blank and set incref to refused/)
+          expect(logger).to receive(:warn).with(/Differences found when saving log/)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end

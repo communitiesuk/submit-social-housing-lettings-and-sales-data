@@ -271,6 +271,19 @@ module Imports
       end
     end
 
+    ERRORS = {
+      %i[chcharge out_of_range] => { to_delete: %w[chcharge], message: "Removing chcharge, because it is outside the expected range" },
+      %i[referral internal_transfer_non_social_housing] => { to_delete: %w[referral], message: "Removing internal transfer referral since previous tenancy is a non social housing" },
+      %i[referral internal_transfer_fixed_or_lifetime] => { to_delete: %w[referral], message: "Removing internal transfer referral since previous tenancy is fixed terms or lifetime" },
+      %i[earnings under_hard_min] => {
+        to_delete: %w[earnings incfreq],
+        to_assign: { "incref" => 1, "net_income_known" => 2 },
+        message: "Where the income is 0, set earnings and income to blank and set incref to refused",
+      },
+      %i[tenancylength tenancy] => { to_delete: %w[tenancylength tenancy], message: "Removing tenancylength as invalid" },
+      %i[prevten over_20_foster_care] => { to_delete: %w[prevten age1], message: "Removing age1 and prevten as incompatible" },
+    }.freeze
+
     def rescue_validation_or_raise(lettings_log, attributes, previous_status, exception)
       # Blank out all invalid fields for in-progress logs
       if %w[saved submitted-invalid].include?(previous_status)
@@ -279,135 +292,54 @@ module Imports
           attributes.delete(error.attribute.to_s)
         end
         @logs_overridden << lettings_log.old_id
-        save_lettings_log(attributes, previous_status)
-      elsif lettings_log.errors.of_kind?(:referral, :internal_transfer_non_social_housing)
-        @logger.warn("Log #{lettings_log.old_id}: Removing internal transfer referral since previous tenancy is a non social housing")
-        @logs_overridden << lettings_log.old_id
-        attributes.delete("referral")
-        save_lettings_log(attributes, previous_status)
-      elsif lettings_log.errors.of_kind?(:referral, :internal_transfer_fixed_or_lifetime)
-        @logger.warn("Log #{lettings_log.old_id}: Removing internal transfer referral since previous tenancy is fixed terms or lifetime")
-        @logs_overridden << lettings_log.old_id
-        attributes.delete("referral")
-        save_lettings_log(attributes, previous_status)
-      elsif lettings_log.errors.of_kind?(:earnings, :under_hard_min)
-        @logger.warn("Log #{lettings_log.old_id}: Where the income is 0, set earnings and income to blank and set incref to refused")
-        @logs_overridden << lettings_log.old_id
-
-        attributes.delete("earnings")
-        attributes.delete("incfreq")
-        attributes["incref"] = 1
-        attributes["net_income_known"] = 2
-        save_lettings_log(attributes, previous_status)
-      elsif lettings_log.errors.include?(:tenancylength) && lettings_log.errors.include?(:tenancy)
-        @logger.warn("Log #{lettings_log.old_id}: Removing tenancylength as invalid")
-        @logs_overridden << lettings_log.old_id
-        attributes.delete("tenancylength")
-        attributes.delete("tenancy")
-        save_lettings_log(attributes, previous_status)
-      elsif lettings_log.errors.of_kind?(:prevten, :over_20_foster_care)
-        @logger.warn("Log #{lettings_log.old_id}: Removing age1 and prevten as incompatible")
-        @logs_overridden << lettings_log.old_id
-        attributes.delete("prevten")
-        attributes.delete("age1")
-        save_lettings_log(attributes, previous_status)
-      elsif lettings_log.errors.of_kind?(:prevten, :non_temp_accommodation)
-        @logger.warn("Log #{lettings_log.old_id}: Removing vacancy reason and previous tenancy since this accommodation is not temporary")
-        @logs_overridden << lettings_log.old_id
-        attributes.delete("prevten")
-        attributes.delete("rsnvac")
-        save_lettings_log(attributes, previous_status)
-      elsif lettings_log.errors.of_kind?(:joint, :not_joint_tenancy)
-        @logger.warn("Log #{lettings_log.old_id}: Removing joint tenancy as there is only 1 person in the household")
-        @logs_overridden << lettings_log.old_id
-        attributes.delete("joint")
-        save_lettings_log(attributes, previous_status)
-      elsif lettings_log.errors.of_kind?(:offered, :over_20)
-        @logger.warn("Log #{lettings_log.old_id}: Removing offered as the value is above the maximum of 20")
-        @logs_overridden << lettings_log.old_id
-        attributes.delete("offered")
-        save_lettings_log(attributes, previous_status)
-      elsif lettings_log.errors.of_kind?(:earnings, :over_hard_max)
-        @logger.warn("Log #{lettings_log.old_id}: Removing working situation because income is too high for it")
-        @logs_overridden << lettings_log.old_id
-        attributes.delete("ecstat1")
-        save_lettings_log(attributes, previous_status)
-      elsif lettings_log.errors.of_kind?(:tshortfall, :no_outstanding_charges)
-        @logger.warn("Log #{lettings_log.old_id}: Removing tshortfall as there are no outstanding charges")
-        @logs_overridden << lettings_log.old_id
-        attributes.delete("tshortfall")
-        attributes.delete("hbrentshortfall")
-        save_lettings_log(attributes, previous_status)
-      elsif lettings_log.errors.of_kind?(:age2, :outside_the_range)
-        @logger.warn("Log #{lettings_log.old_id}: Removing age2 because it is outside the allowed range")
-        @logs_overridden << lettings_log.old_id
-        attributes.delete("age2")
-        attributes.delete("age2_known")
-        save_lettings_log(attributes, previous_status)
-      elsif lettings_log.errors.of_kind?(:beds, :over_max)
-        @logger.warn("Log #{lettings_log.old_id}: Removing number of bedrooms because it is over the max/")
-        @logs_overridden << lettings_log.old_id
-        attributes.delete("beds")
-        save_lettings_log(attributes, previous_status)
-      elsif lettings_log.errors.of_kind?(:tcharge, :complete_1_of_3)
-        @logger.warn("Log #{lettings_log.old_id}: Removing charges, because multiple household charges are selected/")
-        @logs_overridden << lettings_log.old_id
-        %w[brent scharge pscharge supcharg tcharge].each { |name| attributes.delete(name) }
-        save_lettings_log(attributes, previous_status)
-      elsif lettings_log.errors.of_kind?(:scharge, :under_min)
-        @logger.warn("Log #{lettings_log.old_id}: Removing charges, because service charge is under 0/")
-        @logs_overridden << lettings_log.old_id
-        %w[brent scharge pscharge supcharg tcharge].each { |name| attributes.delete(name) }
-        save_lettings_log(attributes, previous_status)
-      elsif lettings_log.errors.of_kind?(:tshortfall, :must_be_positive)
-        @logger.warn("Log #{lettings_log.old_id}: Removing tshortfall, because it is not positive/")
-        @logs_overridden << lettings_log.old_id
-        attributes.delete("tshortfall")
-        attributes.delete("tshortfall_known")
-        save_lettings_log(attributes, previous_status)
-      elsif lettings_log.errors.of_kind?(:referral, :referral_invalid)
-        @logger.warn("Log #{lettings_log.old_id}: Removing referral, because it is not a temporary accommodation/")
-        @logs_overridden << lettings_log.old_id
-        attributes.delete("referral")
-        save_lettings_log(attributes, previous_status)
-      elsif lettings_log.errors.of_kind?(:pscharge, :outside_the_range)
-        @logger.warn("Log #{lettings_log.old_id}: Removing charges, because pscharge is outside of the range/")
-        @logs_overridden << lettings_log.old_id
-        %w[brent scharge pscharge supcharg tcharge].each { |name| attributes.delete(name) }
-        save_lettings_log(attributes, previous_status)
-      elsif lettings_log.errors.of_kind?(:supcharg, :outside_the_range)
-        @logger.warn("Log #{lettings_log.old_id}: Removing charges, because supcharg is outside of the range/")
-        @logs_overridden << lettings_log.old_id
-        %w[brent scharge pscharge supcharg tcharge].each { |name| attributes.delete(name) }
-        save_lettings_log(attributes, previous_status)
-      elsif lettings_log.errors.of_kind?(:scharge, :outside_the_range)
-        @logger.warn("Log #{lettings_log.old_id}: Removing charges, because scharge is outside of the range/")
-        @logs_overridden << lettings_log.old_id
-        %w[brent scharge pscharge supcharg tcharge].each { |name| attributes.delete(name) }
-        save_lettings_log(attributes, previous_status)
-      elsif lettings_log.errors.of_kind?(:location_id, :not_active)
-        @logger.warn("Log #{lettings_log.old_id}: Removing scheme and location because it was not active during the tenancy start date/")
-        @logs_overridden << lettings_log.old_id
-        %w[location_id scheme_id].each { |name| attributes.delete(name) }
-        save_lettings_log(attributes, previous_status)
-      elsif lettings_log.errors.of_kind?(:chcharge, :out_of_range)
-        @logger.warn("Log #{lettings_log.old_id}: Removing chcharge, because it is outside the expected range/")
-        @logs_overridden << lettings_log.old_id
-        attributes.delete("chcharge")
-        save_lettings_log(attributes, previous_status)
-      else
-        @logger.error("Log #{lettings_log.old_id}: Failed to import")
-        lettings_log.errors.each do |error|
-          @logger.error("Validation error: Field #{error.attribute}:")
-          @logger.error("\tOwning Organisation: #{lettings_log.owning_organisation&.name}")
-          @logger.error("\tManaging Organisation: #{lettings_log.managing_organisation&.name}")
-          @logger.error("\tOld CORE ID: #{lettings_log.old_id}")
-          @logger.error("\tOld CORE: #{attributes[error.attribute.to_s]&.inspect}")
-          @logger.error("\tNew CORE: #{lettings_log.read_attribute(error.attribute)&.inspect}")
-          @logger.error("\tError message: #{error.type}")
-        end
-        raise exception
+        return save_lettings_log(attributes, previous_status)
       end
+
+      errors = {
+        %i[chcharge out_of_range] => { to_delete: %w[chcharge], message: "Removing chcharge, because it is outside the expected range" },
+        %i[referral internal_transfer_non_social_housing] => { to_delete: %w[referral], message: "Removing internal transfer referral since previous tenancy is a non social housing" },
+        %i[referral internal_transfer_fixed_or_lifetime] => { to_delete: %w[referral], message: "Removing internal transfer referral since previous tenancy is fixed terms or lifetime" },
+        %i[earnings under_hard_min] => { to_delete: %w[earnings incfreq], to_set: { incref: 1, net_income_known: 2 }, message: "Where the income is 0, set earnings and income to blank and set incref to refused" },
+        %i[tenancylength tenancylength_invalid] => { to_delete: %w[tenancylength tenancy], message: "Removing tenancylength as invalid" },
+        %i[prevten over_20_foster_care] => { to_delete: %w[prevten age1], message: "Removing age1 and prevten as incompatible" },
+        %i[prevten non_temp_accommodation] => { to_delete: %w[prevten rsnvac], message: "Removing vacancy reason and previous tenancy since this accommodation is not temporary" },
+        %i[joint not_joint_tenancy] => { to_delete: %w[joint], message: "Removing joint tenancy as there is only 1 person in the household" },
+        %i[offered over_20] => { to_delete: %w[offered], message: "Removing offered as the value is above the maximum of 20" },
+        %i[earnings over_hard_max] => { to_delete: %w[ecstat1], message: "Removing working situation because income is too high for it" },
+        %i[tshortfall no_outstanding_charges] => { to_delete: %w[tshortfall hbrentshortfall], message: "Removing tshortfall as there are no outstanding charges" },
+        %i[age2 outside_the_range] => { to_delete: %w[age2 age2_known], message: "Removing age2 because it is outside the allowed range" },
+        %i[beds over_max] => { to_delete: %w[beds], message: "Removing number of bedrooms because it is over the max" },
+        %i[tcharge complete_1_of_3] => { to_delete: %w[brent scharge pscharge supcharg tcharge], message: "Removing charges, because multiple household charges are selected" },
+        %i[scharge under_min] => { to_delete: %w[brent scharge pscharge supcharg tcharge], message: "Removing charges, because service charge is under 0" },
+        %i[tshortfall must_be_positive] => { to_delete: %w[tshortfall tshortfall_known], message: "Removing tshortfall, because it is not positive" },
+        %i[referral referral_invalid] => { to_delete: %w[referral], message: "Removing referral, because it is not a temporary accommodation" },
+        %i[pscharge outside_the_range] => { to_delete: %w[brent scharge pscharge supcharg tcharge], message: "Removing charges, because pscharge is outside of the range" },
+        %i[supcharg outside_the_range] => { to_delete: %w[brent scharge pscharge supcharg tcharge], message: "Removing charges, because supcharg is outside of the range" },
+        %i[scharge outside_the_range] => { to_delete: %w[brent scharge pscharge supcharg tcharge], message: "Removing charges, because scharge is outside of the range" },
+        %i[location_id not_active] => { to_delete: %w[location_id scheme_id], message: "Removing scheme and location because it was not active during the tenancy start date" },
+      }
+
+      errors.each do |(error, fields)|
+        next unless lettings_log.errors.of_kind?(*error)
+
+        @logger.warn("Log #{lettings_log.old_id}: #{fields[:message]}")
+        @logs_overridden << lettings_log.old_id
+        fields[:to_delete].each { |field| attributes.delete(field) }
+        fields[:to_set].each { |field, value| attributes[field] = value } if fields[:to_set]
+        return save_lettings_log(attributes, previous_status)
+      end
+
+      @logger.error("Log #{lettings_log.old_id}: Failed to import")
+      lettings_log.errors.each do |error|
+        @logger.error("Validation error: Field #{error.attribute}:")
+        @logger.error("\tOwning Organisation: #{lettings_log.owning_organisation&.name}")
+        @logger.error("\tManaging Organisation: #{lettings_log.managing_organisation&.name}")
+        @logger.error("\tOld CORE ID: #{lettings_log.old_id}")
+        @logger.error("\tOld CORE: #{attributes[error.attribute.to_s]&.inspect}")
+        @logger.error("\tNew CORE: #{lettings_log.read_attribute(error.attribute)&.inspect}")
+        @logger.error("\tError message: #{error.type}")
+      end
+      raise exception
     end
 
     def compute_differences(lettings_log, attributes)
