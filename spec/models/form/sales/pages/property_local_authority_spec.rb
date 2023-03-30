@@ -83,6 +83,16 @@ RSpec.describe Form::Sales::Pages::PropertyLocalAuthority, type: :model do
       it "returns true" do
         expect(page.routed_to?(log)).to eq(false)
       end
+
+      context "when is_la_inferred: true" do
+        before do
+          allow(log).to receive(:is_la_inferred?).and_return(true)
+        end
+
+        it "returns true" do
+          expect(page.routed_to?(log)).to eq(false)
+        end
+      end
     end
   end
 end

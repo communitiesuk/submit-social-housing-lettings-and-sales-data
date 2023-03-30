@@ -16,6 +16,7 @@ class Form::Sales::Pages::PropertyLocalAuthority < ::Form::Page
 
   def routed_to?(log, _current_user = nil)
     return false if log.uprn_known.nil? && form.start_date.year >= 2023
+    return false if log.is_la_inferred?
 
     true
   end
