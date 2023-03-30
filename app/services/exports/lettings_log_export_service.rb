@@ -10,16 +10,21 @@ module Exports
 
     def export_xml_lettings_logs(full_update: false)
       start_time = Time.zone.now
-      logs = retrieve_lettings_logs(start_time, full_update)
-      archive_datetimes = []
-      logs.group_by(&:collection_start_year).each do |collection, lettings_logs|
-        export = build_export_run(collection, start_time, full_update)
-        archive_datetimes.push(write_export_archive(collection, export, lettings_logs))
-        export.empty_export = archive_datetimes.empty?
+      logs_by_collection = retrieve_lettings_logs(start_time, full_update).group_by(&:collection_start_year)
+      daily_run_number = get_daily_run_number
+      archives_for_manifest = []
+      base_number = LogsExport.where(empty_export: false).maximum(:base_number) || 1
+      available_collection_years.each do |collection|
+        lettings_logs = logs_by_collection.fetch(collection, LettingsLog.none)
+        export = build_export_run(collection, start_time, base_number, full_update)
+        archives = write_export_archive(export, lettings_logs)
+
+        archives_for_manifest << archives if archives.any?
+        export.empty_export = archives.empty?
         export.save!
       end
-      # This is _not_ the increment number re: archives, which are independent.
-      write_master_manifest(get_daily_run_number, archive_datetimes.flatten)
+
+      write_master_manifest(daily_run_number, archives_for_manifest.flatten)
     end
 
   private
@@ -29,21 +34,20 @@ module Exports
       LogsExport.where(created_at: today.beginning_of_day..today.end_of_day).select(:started_at).distinct.count + 1
     end
 
-    def build_export_run(collection, current_time, full_update)
+    def build_export_run(collection, current_time, base_number, full_update)
       previous_exports_with_data = LogsExport.where(collection:, empty_export: false)
 
-      if previous_exports_with_data.empty?
-        return LogsExport.new(collection:, started_at: current_time)
-      end
-
-      base_number = previous_exports_with_data.maximum(:base_number)
-      increment_number = previous_exports_with_data.where(base_number:).maximum(:increment_number)
+      increment_number = previous_exports_with_data.where(base_number:).maximum(:increment_number) || 1
 
       if full_update
-        base_number += 1
+        base_number += 1 if LogsExport.any? # Only increment when it's not the first run
         increment_number = 1
       else
         increment_number += 1
+      end
+
+      if previous_exports_with_data.empty?
+        return LogsExport.new(collection:, base_number:, started_at: current_time)
       end
 
       LogsExport.new(collection:, started_at: current_time, base_number:, increment_number:)
@@ -251,6 +255,10 @@ module Exports
       end
 
       xml_doc_to_temp_file(doc)
+    end
+
+    def available_collection_years
+      FormHandler.instance.lettings_forms.values.map { |f| f.start_date.year }.uniq
     end
   end
 end

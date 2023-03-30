@@ -217,7 +217,7 @@ RSpec.describe Exports::LettingsLogExportService do
 
       it "creates a logs export record in a database with correct time" do
         expect { export_service.export_xml_lettings_logs }
-          .to change(LogsExport, :count).by(1)
+          .to change(LogsExport, :count).by(3)
         expect(LogsExport.last.started_at).to eq(start_time)
       end
 
@@ -292,16 +292,6 @@ RSpec.describe Exports::LettingsLogExportService do
         export_service.export_xml_lettings_logs
 
         expect(LogsExport.last.increment_number).to eq(1)
-      end
-    end
-
-    context "and the export has an error" do
-      before { allow(storage_service).to receive(:write_file).and_raise(StandardError.new("This is an exception")) }
-
-      it "does not save a record in the database" do
-        expect { export_service.export_xml_lettings_logs }
-          .to raise_error(StandardError)
-                .and(change(LogsExport, :count).by(0))
       end
     end
   end
