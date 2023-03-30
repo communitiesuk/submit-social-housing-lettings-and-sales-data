@@ -37,11 +37,11 @@ class FeatureToggle
   end
 
   def self.bulk_upload_logs?
-    !Rails.env.production? || true
+    !Rails.env.production?
   end
 
   def self.upload_enabled?
-    !Rails.env.development? || true
+    !Rails.env.development?
   end
 
   def self.force_crossover?
