@@ -43,7 +43,7 @@ class BulkUpload::Lettings::Validator
   def create_logs?
     return false if any_setup_errors?
     return false if row_parsers.any?(&:block_log_creation?)
-    return false if any_logs_already_exist?
+    return false if any_logs_already_exist? && FeatureToggle.bulk_upload_duplicate_log_check_enabled?
     return false if any_logs_invalid?
 
     true
