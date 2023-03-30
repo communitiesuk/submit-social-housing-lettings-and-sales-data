@@ -718,17 +718,13 @@ private
       error_message = "This is a duplicate log"
 
       errors.add(:field_5, error_message) # location
-
       errors.add(:field_12, error_message) # age1
       errors.add(:field_20, error_message) # sex1
       errors.add(:field_35, error_message) # ecstat1
-
       errors.add(:field_84, error_message) # tcharge
-
       errors.add(:field_96, error_message) # startdate
       errors.add(:field_97, error_message) # startdate
       errors.add(:field_98, error_message) # startdate
-
       errors.add(:field_100, error_message) # propcode
       errors.add(:field_108, error_message) # postcode_full
       errors.add(:field_109, error_message) # postcode_full
