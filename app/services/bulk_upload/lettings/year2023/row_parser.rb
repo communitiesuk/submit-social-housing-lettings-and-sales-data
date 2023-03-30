@@ -311,6 +311,7 @@ class BulkUpload::Lettings::Year2023::RowParser
   validate :validate_no_disabled_needs_conjunction, on: :after_log
   validate :validate_dont_know_disabled_needs_conjunction, on: :after_log
   validate :validate_no_and_dont_know_disabled_needs_conjunction, on: :after_log
+  validate :validate_if_log_already_exists, on: :after_log
 
   validate :validate_owning_org_data_given, on: :after_log
   validate :validate_owning_org_exists, on: :after_log
@@ -397,6 +398,10 @@ class BulkUpload::Lettings::Year2023::RowParser
     field_14
   end
 
+  def log_already_exists?
+    LettingsLog.exists?(duplicity_check_fields.index_with { |field| log.public_send(field) })
+  end
+
 private
 
   def validate_declaration_acceptance
@@ -444,6 +449,26 @@ private
   def validate_uprn_exists_if_any_key_adddress_fields_are_blank
     if field_18.blank? && (field_19.blank? || field_21.blank?)
       errors.add(:field_18, I18n.t("validations.not_answered", question: "UPRN"))
+    end
+  end
+
+  def duplicity_check_fields
+    %w[
+      startdate
+      age1
+      sex1
+      ecstat1
+      owning_organisation
+      tcharge
+      propcode
+      postcode_full
+      location
+    ]
+  end
+
+  def validate_needs_type_present
+    if field_4.blank?
+      errors.add(:field_4, I18n.t("validations.not_answered", question: "needs type"))
     end
   end
 
@@ -676,6 +701,26 @@ private
 
   def setup_question?(question)
     log.form.setup_sections[0].subsections[0].questions.include?(question)
+  end
+
+  def validate_if_log_already_exists
+    if log_already_exists?
+      error_message = "This is a duplicate log"
+
+      errors.add(:field_1, error_message) # owning_organisation
+      errors.add(:field_7, error_message) # startdate
+      errors.add(:field_8, error_message) # startdate
+      errors.add(:field_9, error_message) # startdate
+      errors.add(:field_14, error_message) # propcode
+      errors.add(:field_17, error_message) # location
+      errors.add(:field_23, error_message) # postcode_full
+      errors.add(:field_24, error_message) # postcode_full
+      errors.add(:field_25, error_message) # postcode_full
+      errors.add(:field_46, error_message) # age1
+      errors.add(:field_47, error_message) # sex1
+      errors.add(:field_50, error_message) # ecstat1
+      errors.add(:field_132, error_message) # tcharge
+    end
   end
 
   def field_mapping_for_errors
