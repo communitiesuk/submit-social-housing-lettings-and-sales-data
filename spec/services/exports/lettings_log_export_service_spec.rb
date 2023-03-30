@@ -35,6 +35,7 @@ RSpec.describe Exports::LettingsLogExportService do
     # Stub the form handler to use the real form
     allow(FormHandler.instance).to receive(:get_form).with("previous_lettings").and_return(real_2021_2022_form)
     allow(FormHandler.instance).to receive(:get_form).with("current_lettings").and_return(real_2022_2023_form)
+    allow(FormHandler.instance).to receive(:get_form).with("next_lettings").and_return(real_2022_2023_form)
   end
 
   after do
@@ -104,6 +105,49 @@ RSpec.describe Exports::LettingsLogExportService do
         end
 
         export_service.export_xml_lettings_logs
+      end
+    end
+
+    context "with 23/24 collection period" do
+      before do
+        Timecop.freeze(Time.zone.local(2023, 4, 3))
+        Singleton.__init__(FormHandler)
+        stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=100023336956")
+         .to_return(status: 200, body: '{"status":200,"results":[{"DPA":{
+          "PO_BOX_NUMBER": "fake",
+      "ORGANISATION_NAME": "org",
+      "DEPARTMENT_NAME": "name",
+      "SUB_BUILDING_NAME": "building",
+      "BUILDING_NAME": "name",
+      "BUILDING_NUMBER": "number",
+      "DEPENDENT_THOROUGHFARE_NAME": "data",
+      "THOROUGHFARE_NAME": "thing",
+      "POST_TOWN": "London"
+
+         }}]}', headers: {})
+      end
+
+      after do
+        Timecop.unfreeze
+        Singleton.__init__(FormHandler)
+      end
+
+      context "and one lettings log is available for export" do
+        let!(:lettings_log) { FactoryBot.create(:lettings_log, :completed, uprn_known: 1, uprn: "100023336956", propcode: "123", ppostcode_full: "SE2 6RT", tenancycode: "BZ737", startdate: Time.zone.local(2023, 4, 2, 10, 36, 49), voiddate: Time.zone.local(2021, 11, 3), mrcdate: Time.zone.local(2022, 5, 5, 10, 36, 49), tenancylength: 5, underoccupation_benefitcap: 4) }
+        let(:expected_zip_filename) { "core_2023_2024_apr_mar_f0001_inc0001.zip" }
+        let(:expected_data_filename) { "core_2023_2024_apr_mar_f0001_inc0001_pt001.xml" }
+        let(:xml_export_file) { File.open("spec/fixtures/exports/general_needs_log_23_24.xml", "r:UTF-8") }
+
+        it "generates an XML export file with the expected content within the ZIP file" do
+          expected_content = replace_entity_ids(lettings_log, xml_export_file.read)
+          expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
+            entry = Zip::File.open_buffer(content).find_entry(expected_data_filename)
+            expect(entry).not_to be_nil
+            expect(entry.get_input_stream.read).to eq(expected_content)
+          end
+
+          export_service.export_xml_lettings_logs
+        end
       end
     end
 
