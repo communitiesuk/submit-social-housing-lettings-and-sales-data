@@ -346,7 +346,7 @@ class BulkUpload::Lettings::Year2022::RowParser
 
       fields.each do |field|
         unless errors.include?(field)
-          errors.add(field, error.type)
+          errors.add(field, error.message)
         end
       end
     end
@@ -1102,16 +1102,7 @@ private
   end
 
   def leftreg
-    case field_114
-    when 3
-      3
-    when 4
-      1
-    when 5
-      2
-    when 6
-      0
-    end
+    field_114
   end
 
   def homeless
