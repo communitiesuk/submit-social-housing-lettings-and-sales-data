@@ -37,8 +37,6 @@ class BulkUpload::Processor
 
   def approve
     bulk_upload.make_logs_visible
-  ensure
-    downloader.delete_local_file!
   end
 
 private
