@@ -306,22 +306,6 @@ RSpec.describe Exports::LettingsLogExportService do
     end
   end
 
-  context "when exporting a general needs lettings logs in CSV" do
-    let(:csv_export_file) { File.open("spec/fixtures/exports/general_needs_log.csv", "r:UTF-8") }
-    let(:expected_csv_filename) { "export_2022_05_01.csv" }
-
-    let(:lettings_log) { FactoryBot.create(:lettings_log, :completed, propcode: "123", ppostcode_full: "SE2 6RT", postcode_full: "NW1 5TY", tenancycode: "BZ737", startdate: Time.zone.local(2022, 2, 2, 10, 36, 49), voiddate: Time.zone.local(2019, 11, 3), mrcdate: Time.zone.local(2020, 5, 5, 10, 36, 49), tenancylength: 5, underoccupation_benefitcap: 4) }
-
-    it "generates an CSV export file with the expected content" do
-      expected_content = replace_entity_ids(lettings_log, csv_export_file.read)
-      expect(storage_service).to receive(:write_file).with(expected_csv_filename, any_args) do |_, content|
-        expect(content).not_to be_nil
-        expect(content.read).to eq(expected_content)
-      end
-      export_service.export_csv_lettings_logs
-    end
-  end
-
   context "when exporting a supporting housing lettings logs in XML" do
     let(:export_file) { File.open("spec/fixtures/exports/supported_housing_logs.xml", "r:UTF-8") }
     let(:organisation) { FactoryBot.create(:organisation, provider_type: "LA") }

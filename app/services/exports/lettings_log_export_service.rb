@@ -8,14 +8,7 @@ module Exports
       @logger = logger
     end
 
-    def export_csv_lettings_logs
-      time_str = Time.zone.now.strftime("%F").underscore
-      lettings_logs = retrieve_lettings_logs(Time.zone.now, true)
-      csv_io = build_export_csv(lettings_logs)
-      @storage_service.write_file("export_#{time_str}.csv", csv_io)
-    end
-
-    def export_xml_lettings_logs(full_update: false)
+    def export_xml_lettings_logs(collection:, full_update: false)
       start_time = Time.zone.now
       lettings_logs = retrieve_lettings_logs(start_time, full_update)
       export = build_export_run(start_time, full_update)
@@ -235,23 +228,6 @@ module Exports
       field_name.starts_with?(details_known_prefix) ||
         pattern_age.match(field_name) ||
         !EXPORT_FIELDS.include?(field_name)
-    end
-
-    def build_export_csv(lettings_logs)
-      csv_io = CSV.generate do |csv|
-        attribute_keys = nil
-        lettings_logs.each do |lettings_log|
-          attribute_hash = apply_cds_transformation(lettings_log, EXPORT_MODE[:csv])
-          if attribute_keys.nil?
-            attribute_keys = attribute_hash.keys
-            filter_keys!(attribute_keys)
-            csv << attribute_keys
-          end
-          csv << attribute_keys.map { |attribute_key| attribute_hash[attribute_key] }
-        end
-      end
-
-      StringIO.new(csv_io)
     end
 
     def build_export_xml(lettings_logs)
