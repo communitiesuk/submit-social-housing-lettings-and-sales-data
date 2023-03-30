@@ -222,6 +222,26 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
       end
     end
 
+    context "when lettype is intermediate rent and intermediate rent type is not selected" do
+      let(:attributes) { valid_attributes.merge(field_1: "11", field_130: nil) }
+
+      it "has errors on setup field" do
+        errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute)
+
+        expect(errors).to eql(%i[field_130])
+      end
+    end
+
+    context "when lettype is affordable rent and affordable rent type is not selected" do
+      let(:attributes) { valid_attributes.merge(field_1: "5", field_130: nil) }
+
+      it "has errors on setup field" do
+        errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute)
+
+        expect(errors).to eql(%i[field_129])
+      end
+    end
+
     describe "#field_1" do
       context "when null" do
         let(:attributes) { { bulk_upload:, field_1: nil, field_4: "1" } }

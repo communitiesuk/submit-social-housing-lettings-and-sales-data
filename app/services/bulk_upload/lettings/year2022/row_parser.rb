@@ -129,7 +129,7 @@ class BulkUpload::Lettings::Year2022::RowParser
     field_124: "Memory",
     field_125: "Mental health",
     field_126: "Stamina or breathing or fatigue",
-    field_127: "Socially or behaviourally, for example  associated with autism spectral disorder (ASD) which includes Aspergers' or attention deficit hyperactivity disorder (ADHD)",
+    field_127: "Socially or behaviourally, for example  associated with autism spectral disorder (ASD) which include Aspergers' or attention deficit hyperactivity disorder (ADHD)",
     field_128: "Other",
     field_129: "Is this letting a London Affordable Rent letting?",
     field_130: "Which type of Intermediate Rent is this letting?",
@@ -327,6 +327,7 @@ class BulkUpload::Lettings::Year2022::RowParser
 
   validate :validate_created_by_exists
   validate :validate_created_by_related
+  validate :validate_rent_type
 
   def self.question_for_field(field)
     QUESTIONS[field]
@@ -604,6 +605,14 @@ private
   def validate_data_types
     unless attribute_set["field_1"].value_before_type_cast&.match?(/\A\d+\z/)
       errors.add(:field_1, I18n.t("validations.invalid_number", question: "letting type"))
+    end
+  end
+
+  def validate_rent_type
+    if [9, 10, 11, 12].include?(field_1) && field_130.blank?
+      errors.add(:field_130, I18n.t("validations.not_answered", question: "intermediate rent type"), category: :setup)
+    elsif [5, 6, 7, 8].include?(field_1) && field_129.blank?
+      errors.add(:field_129, I18n.t("validations.not_answered", question: "affordable rent type"), category: :setup)
     end
   end
 
