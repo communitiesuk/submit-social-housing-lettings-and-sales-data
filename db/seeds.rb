@@ -316,8 +316,8 @@ unless Rails.env.test?
   end
 
   if (Rails.env.development? || Rails.env.review?) && LocalAuthorityLink.count.zero?
-    links_data_paths = ["config/local_authorities_data/local_authority_links_2023.csv","config/local_authorities_data/local_authority_links_2022.csv"]
-    links_data_paths.each do |path| 
+    links_data_paths = ["config/local_authorities_data/local_authority_links_2023.csv", "config/local_authorities_data/local_authority_links_2022.csv"]
+    links_data_paths.each do |path|
       service = Imports::LocalAuthorityLinksService.new(path:)
       service.call
     end
