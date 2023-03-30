@@ -57,7 +57,6 @@ private
     BulkUploadMailer.send_correct_and_upload_again_mail(
       bulk_upload:,
       errors: {
-        any_setup_sections_incomplete: validator.any_setup_sections_incomplete?,
         over_column_error_threshold: validator.over_column_error_threshold?,
         any_logs_already_exist: validator.any_logs_already_exist?,
       },
