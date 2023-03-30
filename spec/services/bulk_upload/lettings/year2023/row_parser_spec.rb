@@ -99,6 +99,10 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
 
       context "when valid row" do
+        before do
+          allow(FeatureToggle).to receive(:bulk_upload_duplicate_log_check_enabled?).and_return(true)
+        end
+
         let(:attributes) do
           {
             bulk_upload:,

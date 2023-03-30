@@ -217,6 +217,7 @@ RSpec.describe BulkUpload::Processor do
         file.rewind
 
         allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
+        allow(FeatureToggle).to receive(:bulk_upload_duplicate_log_check_enabled?).and_return(true)
       end
 
       it "creates pending log" do
