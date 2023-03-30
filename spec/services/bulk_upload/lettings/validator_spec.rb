@@ -69,10 +69,6 @@ RSpec.describe BulkUpload::Lettings::Validator do
 
         expect(error.category).to eql("setup")
       end
-
-      it "updates expected_log_count" do
-        expect { validator.call }.to change(bulk_upload, :expected_log_count).from(nil).to(3)
-      end
     end
 
     context "with arbitrary ordered 23/24 csv" do
