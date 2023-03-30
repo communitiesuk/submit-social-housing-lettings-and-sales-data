@@ -226,7 +226,7 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
             expect(parser).not_to be_valid
           end
 
-          it "adds an error to all (and only) the fields used to determine duplicity" do
+          it "adds an error to all (and only) the fields used to determine duplicates" do
             parser.valid?
 
             error_message = "This is a duplicate log"

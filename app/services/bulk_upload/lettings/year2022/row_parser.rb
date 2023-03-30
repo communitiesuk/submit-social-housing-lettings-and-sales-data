@@ -394,7 +394,7 @@ class BulkUpload::Lettings::Year2022::RowParser
   end
 
   def log_already_exists?
-    LettingsLog.exists?(duplicity_check_fields.index_with { |field| log.public_send(field) })
+    LettingsLog.exists?(duplicate_check_fields.index_with { |field| log.public_send(field) })
   end
 
 private
@@ -441,7 +441,7 @@ private
     @created_by ||= User.find_by(email: field_112)
   end
 
-  def duplicity_check_fields
+  def duplicate_check_fields
     %w[
       startdate
       age1
