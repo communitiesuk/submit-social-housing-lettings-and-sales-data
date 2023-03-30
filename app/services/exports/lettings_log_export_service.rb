@@ -8,29 +8,32 @@ module Exports
       @logger = logger
     end
 
-    def export_xml_lettings_logs(collection:, full_update: false)
+    def export_xml_lettings_logs(full_update: false)
       start_time = Time.zone.now
-      lettings_logs = retrieve_lettings_logs(start_time, full_update)
-      export = build_export_run(start_time, full_update)
-      daily_run = get_daily_run_number
-      archive_datetimes = write_export_archive(export, lettings_logs)
-      export.empty_export = archive_datetimes.empty?
-      write_master_manifest(daily_run, archive_datetimes)
-      export.save!
+      logs = retrieve_lettings_logs(start_time, full_update)
+      archive_datetimes = []
+      logs.group_by(&:collection_start_year).each do |collection, lettings_logs|
+        export = build_export_run(collection, start_time, full_update)
+        archive_datetimes.push(write_export_archive(collection, export, lettings_logs))
+        export.empty_export = archive_datetimes.empty?
+        export.save!
+      end
+      # This is _not_ the increment number re: archives, which are independent.
+      write_master_manifest(get_daily_run_number, archive_datetimes.flatten)
     end
 
   private
 
     def get_daily_run_number
       today = Time.zone.today
-      LogsExport.where(created_at: today.beginning_of_day..today.end_of_day).count + 1
+      LogsExport.where(created_at: today.beginning_of_day..today.end_of_day).select(:started_at).distinct.count + 1
     end
 
-    def build_export_run(current_time, full_update)
-      previous_exports_with_data = LogsExport.where(empty_export: false)
+    def build_export_run(collection, current_time, full_update)
+      previous_exports_with_data = LogsExport.where(collection:, empty_export: false)
 
       if previous_exports_with_data.empty?
-        return LogsExport.new(started_at: current_time)
+        return LogsExport.new(collection:, started_at: current_time)
       end
 
       base_number = previous_exports_with_data.maximum(:base_number)
@@ -43,7 +46,7 @@ module Exports
         increment_number += 1
       end
 
-      LogsExport.new(started_at: current_time, base_number:, increment_number:)
+      LogsExport.new(collection:, started_at: current_time, base_number:, increment_number:)
     end
 
     def write_master_manifest(daily_run, archive_datetimes)
