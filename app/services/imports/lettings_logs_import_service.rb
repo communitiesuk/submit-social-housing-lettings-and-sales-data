@@ -313,7 +313,7 @@ module Imports
 
         attribute, _type = error
         fields.each do |field|
-          @logger.warn("Log #{lettings_log.old_id}: Removing #{field} with error: #{lettings_log.errors[attribute].join(', ')}")
+          @logger.warn("Log #{lettings_log.old_id}: Removing #{field} with error: #{lettings_log.errors[attribute].sort.join(', ')}")
           attributes.delete(field)
         end
         @logs_overridden << lettings_log.old_id
