@@ -899,8 +899,8 @@ private
     attributes["la"] = field_25
     attributes["postcode_known"] = postcode_known
     attributes["postcode_full"] = postcode_full
-    attributes["owning_organisation_id"] = owning_organisation_id
-    attributes["managing_organisation_id"] = managing_organisation_id
+    attributes["owning_organisation"] = owning_organisation
+    attributes["managing_organisation"] = managing_organisation
     attributes["renewal"] = renewal
     attributes["scheme"] = scheme
     attributes["location"] = location
@@ -1094,16 +1094,8 @@ private
     Organisation.find_by_id_on_multiple_fields(field_1)
   end
 
-  def owning_organisation_id
-    owning_organisation&.id
-  end
-
   def managing_organisation
     Organisation.find_by_id_on_multiple_fields(field_2)
-  end
-
-  def managing_organisation_id
-    managing_organisation&.id
   end
 
   def renewal
