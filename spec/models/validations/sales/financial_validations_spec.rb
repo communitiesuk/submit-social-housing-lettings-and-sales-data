@@ -131,28 +131,6 @@ RSpec.describe Validations::Sales::FinancialValidations do
     end
   end
 
-  describe "#validate_cash_discount" do
-    let(:record) { FactoryBot.create(:sales_log) }
-
-    it "adds an error if the cash discount is below zero" do
-      record.cashdis = -1
-      financial_validator.validate_cash_discount(record)
-      expect(record.errors["cashdis"]).to include(match I18n.t("validations.financial.cash_discount_invalid"))
-    end
-
-    it "adds an error if the cash discount is one million or more" do
-      record.cashdis = 1_000_000
-      financial_validator.validate_cash_discount(record)
-      expect(record.errors["cashdis"]).to include(match I18n.t("validations.financial.cash_discount_invalid"))
-    end
-
-    it "does not add an error if the cash discount is in the expected range" do
-      record.cashdis = 10_000
-      financial_validator.validate_cash_discount(record)
-      expect(record.errors).to be_empty
-    end
-  end
-
   describe "#validate_percentage_bought_not_greater_than_percentage_owned" do
     let(:record) { FactoryBot.create(:sales_log) }
 
@@ -175,6 +153,22 @@ RSpec.describe Validations::Sales::FinancialValidations do
       record.stairowned = 40
       financial_validator.validate_percentage_bought_not_greater_than_percentage_owned(record)
       expect(record.errors["stairowned"]).to include(match I18n.t("validations.financial.staircasing.percentage_bought_must_be_greater_than_percentage_owned"))
+    end
+  end
+
+  describe "#validate_monthly_leasehold_charges" do
+    let(:record) { FactoryBot.create(:sales_log) }
+
+    it "does not add an error if monthly leasehold charges are positive" do
+      record.mscharge = 2345
+      financial_validator.validate_monthly_leasehold_charges(record)
+      expect(record.errors).to be_empty
+    end
+
+    it "adds an error if monthly leasehold charges are zero" do
+      record.mscharge = 0
+      financial_validator.validate_monthly_leasehold_charges(record)
+      expect(record.errors[:mscharge]).to include I18n.t("validations.financial.monthly_leasehold_charges.not_zero")
     end
   end
 

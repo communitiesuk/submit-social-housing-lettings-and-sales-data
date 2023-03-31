@@ -891,14 +891,14 @@ RSpec.describe LettingsLogsController, type: :request do
             end
           end
 
-          context "when a lettings log is for a renewal of supported housing, so property information does not need to show" do
+          context "when a lettings log is for a renewal of supported housing, property information does not need to show" do
             let(:lettings_log) do
               FactoryBot.create(
                 :lettings_log,
                 owning_organisation: user.organisation,
                 managing_organisation: user.organisation,
                 created_by: user,
-                startdate: Time.zone.now,
+                startdate: Time.zone.local(2023, 1, 1),
                 renewal: 1,
                 needstype: 2,
                 rent_type: 3,

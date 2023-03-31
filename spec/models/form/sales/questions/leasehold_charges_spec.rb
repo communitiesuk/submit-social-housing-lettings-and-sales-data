@@ -36,11 +36,11 @@ RSpec.describe Form::Sales::Questions::LeaseholdCharges, type: :model do
   end
 
   it "has the correct width" do
-    expect(question.width).to eq(5)
+    expect(question.width).to be 5
   end
 
   it "has the correct min" do
-    expect(question.min).to eq(0)
+    expect(question.min).to be 1
   end
 
   it "has the correct prefix" do

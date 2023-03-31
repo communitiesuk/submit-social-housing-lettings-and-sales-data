@@ -280,7 +280,7 @@
     <Q34b>33</Q34b>
     <Q35Borrowing>2 No</Q35Borrowing>
     <Q36CashDeposit>0</Q36CashDeposit>
-    <Q37MonthlyCharges>0.00</Q37MonthlyCharges>
+    <Q37MonthlyCharges>10.00</Q37MonthlyCharges>
   </Group>
   <Group>
     <Q40PurchasePrice override-field=""/>
