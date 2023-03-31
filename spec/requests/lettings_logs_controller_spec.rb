@@ -224,6 +224,15 @@ RSpec.describe LettingsLogsController, type: :request do
         tenancycode: "UA984",
       )
     end
+    let!(:pending_lettings_log) do
+      FactoryBot.create(
+        :lettings_log,
+        created_by: user,
+        tenancycode: "LC999",
+        status: "pending",
+        skip_update_status: true,
+      )
+    end
 
     context "when displaying a collection of logs" do
       let(:headers) { { "Accept" => "text/html" } }
@@ -261,6 +270,7 @@ RSpec.describe LettingsLogsController, type: :request do
           get "/lettings-logs", headers:, params: {}
           expect(page).to have_content("LC783")
           expect(page).to have_content("UA984")
+          expect(page).not_to have_content(pending_lettings_log.tenancycode)
         end
 
         it "displays CSV download links with the correct paths" do
@@ -841,6 +851,24 @@ RSpec.describe LettingsLogsController, type: :request do
         end
       end
 
+      context "when viewing a pending log" do
+        let(:completed_lettings_log) do
+          FactoryBot.create(
+            :lettings_log,
+            :completed,
+            owning_organisation: user.organisation,
+            managing_organisation: user.organisation,
+            created_by: user,
+            status: "pending",
+            skip_update_status: true,
+          )
+        end
+
+        it "returns 404" do
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+
       context "when editing a lettings log" do
         let(:headers) { { "Accept" => "text/html" } }
 
@@ -1319,9 +1347,12 @@ RSpec.describe LettingsLogsController, type: :request do
     end
 
     context "when a lettings log deletion fails" do
+      let(:mock_scope) { instance_double("LettingsLog::ActiveRecord_Relation", find_by: lettings_log) }
+
       before do
-        allow(LettingsLog).to receive(:find_by).and_return(lettings_log)
+        allow(LettingsLog).to receive(:visible).and_return(mock_scope)
         allow(lettings_log).to receive(:delete).and_return(false)
+
         delete "/lettings-logs/#{id}", headers:
       end
 

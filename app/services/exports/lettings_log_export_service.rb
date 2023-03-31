@@ -115,12 +115,13 @@ module Exports
 
     def retrieve_lettings_logs(start_time, full_update)
       recent_export = LogsExport.order("started_at").last
+
       if !full_update && recent_export
         params = { from: recent_export.started_at, to: start_time }
-        LettingsLog.where("updated_at >= :from and updated_at <= :to", params)
+        LettingsLog.visible.where("updated_at >= :from and updated_at <= :to", params)
       else
         params = { to: start_time }
-        LettingsLog.where("updated_at <= :to", params)
+        LettingsLog.visible.where("updated_at <= :to", params)
       end
     end
 
