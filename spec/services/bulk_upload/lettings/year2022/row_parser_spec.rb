@@ -97,6 +97,12 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
 
       field_118: "2",
 
+      field_55: "1",
+      field_56: "0",
+      field_57: "0",
+      field_58: "1",
+      field_59: "0",
+
       field_66: "5",
       field_67: "2",
       field_52: "31",
@@ -1412,6 +1418,16 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
 
         it "sets to 3" do
           expect(parser.log.housingneeds).to eq(3)
+        end
+      end
+
+      context "when housingneeds are given" do
+        let(:attributes) { { bulk_upload:, field_59: "0", field_57: "1", field_58: "1" } }
+
+        it "sets correct housingneeds" do
+          expect(parser.log.housingneeds).to eq(1)
+          expect(parser.log.housingneeds_type).to eq(2)
+          expect(parser.log.housingneeds_other).to eq(1)
         end
       end
     end
