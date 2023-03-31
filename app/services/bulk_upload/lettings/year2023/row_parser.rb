@@ -431,22 +431,26 @@ private
   end
 
   def validate_dont_know_disabled_needs_conjunction
-    if field_88 == 1 && [field_83, field_84, field_85, field_86].compact.count.positive?
-      errors.add(:field_88, I18n.t("validations.household.housingneeds.dont_know_disabled_needs_conjunction"))
+    if field_88 == 1 && [field_83, field_84, field_85, field_86].count(1).positive?
+      %i[field_88 field_83 field_84 field_85 field_86].each do |field|
+        errors.add(field, I18n.t("validations.household.housingneeds.dont_know_disabled_needs_conjunction")) if send(field) == 1
+      end
     end
   end
 
   def validate_no_disabled_needs_conjunction
-    if field_87 == 1 && [field_83, field_84, field_85, field_86].compact.count.positive?
-      errors.add(:field_87, I18n.t("validations.household.housingneeds.no_disabled_needs_conjunction"))
+    if field_87 == 1 && [field_83, field_84, field_85, field_86].count(1).positive?
+      %i[field_87 field_83 field_84 field_85 field_86].each do |field|
+        errors.add(field, I18n.t("validations.household.housingneeds.no_disabled_needs_conjunction")) if send(field) == 1
+      end
     end
   end
 
   def validate_only_one_housing_needs_type
-    if [field_83, field_84, field_85].compact.count > 1
-      errors.add(:field_83, I18n.t("validations.household.housingneeds_type.only_one_option_permitted"))
-      errors.add(:field_84, I18n.t("validations.household.housingneeds_type.only_one_option_permitted"))
-      errors.add(:field_85, I18n.t("validations.household.housingneeds_type.only_one_option_permitted"))
+    if [field_83, field_84, field_85].count(1) > 1
+      %i[field_83 field_84 field_85].each do |field|
+        errors.add(field, I18n.t("validations.household.housingneeds_type.only_one_option_permitted")) if send(field) == 1
+      end
     end
   end
 
@@ -1173,8 +1177,8 @@ private
       2
     elsif field_88 == 1
       3
-    else
-      2
+    elsif field_87&.zero?
+      1
     end
   end
 
