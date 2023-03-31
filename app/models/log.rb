@@ -8,7 +8,12 @@ class Log < ApplicationRecord
 
   before_save :update_status!
 
-  STATUS = { "not_started" => 0, "in_progress" => 1, "completed" => 2 }.freeze
+  STATUS = {
+    "not_started" => 0,
+    "in_progress" => 1,
+    "completed" => 2,
+    "pending" => 3,
+  }.freeze
   enum status: STATUS
 
   scope :filter_by_status, ->(status, _user = nil) { where status: }
