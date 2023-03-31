@@ -21,7 +21,7 @@ class FeatureToggle
   end
 
   def self.managing_owning_enabled?
-    !Rails.env.production?
+    true
   end
 
   def self.scheme_toggle_enabled?
