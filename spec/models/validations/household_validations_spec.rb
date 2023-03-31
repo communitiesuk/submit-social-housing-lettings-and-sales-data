@@ -568,7 +568,7 @@ RSpec.describe Validations::HouseholdValidations do
     end
 
     context "when validating layear" do
-      it "household cannoy have just moved to area if renewal" do
+      it "household cannot have just moved to area if renewal" do
         record.layear = 1
         record.renewal = 1
         household_validator.validate_layear(record)
