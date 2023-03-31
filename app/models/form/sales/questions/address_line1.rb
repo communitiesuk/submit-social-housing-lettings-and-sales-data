@@ -9,15 +9,6 @@ class Form::Sales::Questions::AddressLine1 < ::Form::Question
     @check_answer_label = "Q15 - Address"
   end
 
-  def hidden_in_check_answers?(log, _current_user = nil)
-    return true if log.uprn_known.nil?
-    return false if log.uprn_known&.zero?
-    return true if log.uprn_confirmed.nil? && log.uprn.present?
-    return true if log.uprn_known == 1 && log.uprn.blank?
-
-    log.uprn_confirmed == 1
-  end
-
   def answer_label(log, _current_user = nil)
     [
       log.address_line1,
