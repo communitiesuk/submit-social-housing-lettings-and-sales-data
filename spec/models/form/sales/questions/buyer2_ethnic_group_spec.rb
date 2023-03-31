@@ -39,7 +39,7 @@ RSpec.describe Form::Sales::Questions::Buyer2EthnicGroup, type: :model do
     expect(question.answer_options).to eq({
       "0" => { "value" => "White" },
       "1" => { "value" => "Mixed or Multiple ethnic groups" },
-      "17" => { "value" => "Buyer 1 prefers not to say" },
+      "17" => { "value" => "Buyer 2 prefers not to say" },
       "2" => { "value" => "Asian or Asian British" },
       "3" => { "value" => "Black, African, Caribbean or Black British" },
       "4" => { "value" => "Arab or other ethnic group" },
