@@ -762,7 +762,7 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
 
         it "intercepts the relevant validation error" do
-          expect(logger).to receive(:warn).with(/Removing chcharge with error: Household rent and other charges must be between £10 and £1000 if paying weekly for 52 weeks/)
+          expect(logger).to receive(:warn).with(/Removing chcharge with error: Household rent and other charges must be between £10.00 and £1000.00 if paying weekly for 52 weeks/)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end

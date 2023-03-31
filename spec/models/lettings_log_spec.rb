@@ -2605,12 +2605,12 @@ RSpec.describe LettingsLog do
     context "when period is weekly for 52 weeks" do
       it "returns weekly soft min for 52 weeks" do
         lettings_log.period = 1
-        expect(lettings_log.soft_min_for_period).to eq("100.0 every week")
+        expect(lettings_log.soft_min_for_period).to eq("100.00 every week")
       end
 
       it "returns weekly soft max for 52 weeks" do
         lettings_log.period = 1
-        expect(lettings_log.soft_max_for_period).to eq("400.0 every week")
+        expect(lettings_log.soft_max_for_period).to eq("400.00 every week")
       end
     end
 

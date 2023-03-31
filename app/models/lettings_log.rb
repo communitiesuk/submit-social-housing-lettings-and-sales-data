@@ -149,7 +149,7 @@ class LettingsLog < Log
   def weekly_to_value_per_period(field_value)
     num_of_weeks = NUM_OF_WEEKS_FROM_PERIOD[period]
 
-    ((field_value * 52) / num_of_weeks).round(2)
+    sprintf("%.2f", (field_value * 52) / num_of_weeks)
   end
 
   def applicable_income_range
@@ -650,7 +650,7 @@ private
     num_of_weeks = NUM_OF_WEEKS_FROM_PERIOD[period]
     return "" unless value && num_of_weeks
 
-    (value * 52 / num_of_weeks).round(2)
+    sprintf("%.2f", (value * 52 / num_of_weeks))
   end
 
   def fully_wheelchair_accessible?
