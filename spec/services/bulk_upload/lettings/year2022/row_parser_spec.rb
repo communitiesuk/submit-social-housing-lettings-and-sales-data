@@ -1462,6 +1462,30 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
           expect(parser.errors[:field_55]).to be_blank
         end
       end
+
+      context "when housingneeds a and g are selected" do
+        let(:attributes) { { bulk_upload:, field_55: "1", field_59: "1" } }
+
+        it "sets error on housingneeds a and g" do
+          parser.valid?
+          expect(parser.errors[:field_59]).to include("No disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs")
+          expect(parser.errors[:field_55]).to include("No disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs")
+          expect(parser.errors[:field_56]).to be_blank
+          expect(parser.errors[:field_57]).to be_blank
+        end
+      end
+
+      context "when only housingneeds g is selected" do
+        let(:attributes) { { bulk_upload:, field_55: "0", field_59: "1" } }
+
+        it "does not add any housingneeds errors" do
+          parser.valid?
+          expect(parser.errors[:field_59]).to be_blank
+          expect(parser.errors[:field_55]).to be_blank
+          expect(parser.errors[:field_56]).to be_blank
+          expect(parser.errors[:field_57]).to be_blank
+        end
+      end
     end
 
     describe "#housingneeds_type" do
