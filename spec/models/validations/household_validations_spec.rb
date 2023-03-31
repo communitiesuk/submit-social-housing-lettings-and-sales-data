@@ -566,6 +566,18 @@ RSpec.describe Validations::HouseholdValidations do
           .to include(match I18n.t("validations.household.previous_la_known"))
       end
     end
+
+    context "when validating layear" do
+      it "household cannoy have just moved to area if renewal" do
+        record.layear = 1
+        record.renewal = 1
+        household_validator.validate_layear(record)
+        expect(record.errors["layear"])
+          .to include(match I18n.t("validations.household.renewal_just_moved_to_area.layear"))
+        expect(record.errors["renewal"])
+          .to include(match I18n.t("validations.household.renewal_just_moved_to_area.renewal"))
+      end
+    end
   end
 
   describe "previous housing situation validations" do
