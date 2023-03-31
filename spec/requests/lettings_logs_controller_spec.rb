@@ -898,7 +898,7 @@ RSpec.describe LettingsLogsController, type: :request do
                 owning_organisation: user.organisation,
                 managing_organisation: user.organisation,
                 created_by: user,
-                startdate: Time.zone.local(2023, 1, 1),
+                startdate: Time.zone.now,
                 renewal: 1,
                 needstype: 2,
                 rent_type: 3,
