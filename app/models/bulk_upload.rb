@@ -60,10 +60,12 @@ class BulkUpload < ApplicationRecord
     "BulkUpload::#{type_class}::#{year_class}".constantize
   end
 
-  def make_logs_visible
-    logs
-      .rewhere(visible: false)
-      .update_all(visible: true)
+  def unpend
+    logs.find_each do |log|
+      log.skip_update_status = true
+      log.status = log.status_cache
+      log.save!
+    end
   end
 
 private

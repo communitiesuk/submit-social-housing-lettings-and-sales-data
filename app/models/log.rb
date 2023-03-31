@@ -15,6 +15,7 @@ class Log < ApplicationRecord
     "pending" => 3,
   }.freeze
   enum status: STATUS
+  enum status_cache: STATUS, _prefix: true
 
   scope :filter_by_status, ->(status, _user = nil) { where status: }
   scope :filter_by_years, lambda { |years, _user = nil|
@@ -35,6 +36,8 @@ class Log < ApplicationRecord
       .where(bulk_upload: { id: bulk_upload_id, user: })
   }
   scope :created_by, ->(user) { where(created_by: user) }
+
+  attr_accessor :skip_update_status
 
   def process_uprn_change!
     if uprn.present?
@@ -111,6 +114,16 @@ class Log < ApplicationRecord
     end
   end
 
+  def calculate_status
+    if all_fields_completed? && errors.empty?
+      "completed"
+    elsif all_fields_nil?
+      "not_started"
+    else
+      "in_progress"
+    end
+  end
+
 private
 
   def plural_gender_for_person(person_num)
@@ -125,13 +138,9 @@ private
   end
 
   def update_status!
-    self.status = if all_fields_completed? && errors.empty?
-                    "completed"
-                  elsif all_fields_nil?
-                    "not_started"
-                  else
-                    "in_progress"
-                  end
+    return if skip_update_status
+
+    self.status = calculate_status
   end
 
   def all_fields_completed?

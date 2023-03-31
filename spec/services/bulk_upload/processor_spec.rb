@@ -171,16 +171,8 @@ RSpec.describe BulkUpload::Processor do
         allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
       end
 
-      it "creates logs" do
-        expect { processor.call }.to change(LettingsLog, :count).by(1)
-      end
-
-      it "makes logs visible" do
-        allow(bulk_upload).to receive(:make_logs_visible).and_call_original
-
-        processor.call
-
-        expect(bulk_upload).to have_received(:make_logs_visible)
+      it "creates logs as not pending" do
+        expect { processor.call }.to change(LettingsLog.completed, :count).by(1)
       end
 
       it "sends success email" do
@@ -226,8 +218,8 @@ RSpec.describe BulkUpload::Processor do
         allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
       end
 
-      it "creates invisible log" do
-        expect { processor.call }.to change(LettingsLog.rewhere(visible: false), :count).by(1)
+      it "creates pending log" do
+        expect { processor.call }.to change(LettingsLog.pending, :count).by(1)
       end
 
       it "sends how_fix_upload_mail" do
@@ -290,12 +282,12 @@ RSpec.describe BulkUpload::Processor do
   end
 
   describe "#approve" do
-    before do
-      create(:lettings_log, bulk_upload:, visible: false)
-    end
+    let!(:log) { create(:lettings_log, bulk_upload:, status: "pending", skip_update_status: true, status_cache: "not_started") }
 
-    it "makes invisible logs visible" do
-      expect { processor.approve }.to change(LettingsLog, :count)
+    it "makes pending logs no longer pending" do
+      expect(log.status).to eql("pending")
+      processor.approve
+      expect(log.reload.status).to eql("not_started")
     end
   end
 end

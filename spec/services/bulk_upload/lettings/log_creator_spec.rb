@@ -15,9 +15,9 @@ RSpec.describe BulkUpload::Lettings::LogCreator do
         expect { service.call }.to change(LettingsLog, :count)
       end
 
-      it "create a log that is visbile" do
+      it "create a log with pending status" do
         service.call
-        expect(LettingsLog.last).to be_visible
+        expect(LettingsLog.last.status).to eql("pending")
       end
 
       it "associates log with bulk upload" do
@@ -82,16 +82,20 @@ RSpec.describe BulkUpload::Lettings::LogCreator do
       end
     end
 
-    context "when pre-creating invisible logs" do
-      subject(:service) { described_class.new(bulk_upload:, path:, visible: false) }
+    context "when pre-creating logs" do
+      subject(:service) { described_class.new(bulk_upload:, path:) }
 
       it "creates a new log" do
-        expect { service.call }.to change(LettingsLog.unscoped, :count)
+        expect { service.call }.to change(LettingsLog, :count)
       end
 
-      it "create a log that is invisbile" do
+      it "creates a log with correct states" do
         service.call
-        expect(LettingsLog.unscoped.last).not_to be_visible
+
+        last_log = LettingsLog.last
+
+        expect(last_log.status).to eql("pending")
+        expect(last_log.status_cache).to eql("completed")
       end
     end
 
