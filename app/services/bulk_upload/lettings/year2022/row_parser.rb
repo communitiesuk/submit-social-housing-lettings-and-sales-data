@@ -532,8 +532,12 @@ private
   end
 
   def validate_dont_know_disabled_needs_conjunction
-    if field_60 == 1 && [field_55, field_56, field_57, field_58].compact.count.positive?
+    if field_60 == 1 && [field_55, field_56, field_57, field_58].count(1).positive?
       errors.add(:field_60, I18n.t("validations.household.housingneeds.dont_know_disabled_needs_conjunction"))
+      errors.add(:field_55, I18n.t("validations.household.housingneeds.dont_know_disabled_needs_conjunction")) if field_55 == 1
+      errors.add(:field_56, I18n.t("validations.household.housingneeds.dont_know_disabled_needs_conjunction")) if field_56 == 1
+      errors.add(:field_57, I18n.t("validations.household.housingneeds.dont_know_disabled_needs_conjunction")) if field_57 == 1
+      errors.add(:field_58, I18n.t("validations.household.housingneeds.dont_know_disabled_needs_conjunction")) if field_58 == 1
     end
   end
 
