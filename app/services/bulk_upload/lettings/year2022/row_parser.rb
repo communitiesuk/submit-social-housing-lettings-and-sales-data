@@ -545,9 +545,9 @@ private
 
   def validate_only_one_housing_needs_type
     if [field_55, field_56, field_57].count(1) > 1
-      errors.add(:field_55, I18n.t("validations.household.housingneeds_type.only_one_option_permitted"))
-      errors.add(:field_56, I18n.t("validations.household.housingneeds_type.only_one_option_permitted"))
-      errors.add(:field_57, I18n.t("validations.household.housingneeds_type.only_one_option_permitted"))
+      errors.add(:field_55, I18n.t("validations.household.housingneeds_type.only_one_option_permitted")) if field_55 == 1
+      errors.add(:field_56, I18n.t("validations.household.housingneeds_type.only_one_option_permitted")) if field_56 == 1
+      errors.add(:field_57, I18n.t("validations.household.housingneeds_type.only_one_option_permitted")) if field_57 == 1
     end
   end
 

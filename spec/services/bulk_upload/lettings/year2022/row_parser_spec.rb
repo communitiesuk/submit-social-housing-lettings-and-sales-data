@@ -507,7 +507,6 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
         it "is not permitted" do
           expect(parser.errors[:field_55]).to be_present
           expect(parser.errors[:field_56]).to be_present
-          expect(parser.errors[:field_57]).to be_present
         end
       end
     end
@@ -1428,6 +1427,39 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
           expect(parser.log.housingneeds).to eq(1)
           expect(parser.log.housingneeds_type).to eq(2)
           expect(parser.log.housingneeds_other).to eq(1)
+        end
+      end
+
+      context "when housingneeds a and b are selected" do
+        let(:attributes) { { bulk_upload:, field_55: "1", field_56: "1" } }
+
+        it "sets error on housingneeds a and b" do
+          parser.valid?
+          expect(parser.errors[:field_55]).to include("Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected")
+          expect(parser.errors[:field_56]).to include("Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected")
+          expect(parser.errors[:field_57]).to be_blank
+        end
+      end
+
+      context "when housingneeds a and c are selected" do
+        let(:attributes) { { bulk_upload:, field_55: "1", field_57: "1" } }
+
+        it "sets error on housingneeds a and c" do
+          parser.valid?
+          expect(parser.errors[:field_55]).to include("Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected")
+          expect(parser.errors[:field_57]).to include("Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected")
+          expect(parser.errors[:field_56]).to be_blank
+        end
+      end
+
+      context "when housingneeds b and c are selected" do
+        let(:attributes) { { bulk_upload:, field_56: "1", field_57: "1" } }
+
+        it "sets error on housingneeds b and c" do
+          parser.valid?
+          expect(parser.errors[:field_56]).to include("Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected")
+          expect(parser.errors[:field_57]).to include("Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected")
+          expect(parser.errors[:field_55]).to be_blank
         end
       end
     end
