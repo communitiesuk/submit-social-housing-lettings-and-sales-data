@@ -178,48 +178,80 @@ class Form
     pages.reject { |p| p.routed_to?(log, current_user) }
   end
 
-  def invalidated_questions(log)
-    invalidated_page_questions(log) + invalidated_conditional_questions(log)
+  def reset_not_routed_questions_and_invalid_answers(log)
+    reset_not_routed_checkbox_questions(log)
+
+    reset_radio_questions_if_not_routed_or_invalid_answers(log)
+
+    reset_not_routed_free_user_input_questions(log)
   end
 
-  def invalidated_page_questions(log, current_user = nil)
-    # we're already treating these fields as a special case and reset their values upon saving a log
-    callback_questions = %w[postcode_known la ppcodenk previous_la_known prevloc postcode_full ppostcode_full location_id address_line1 address_line2 town_or_city county]
-    questions.reject { |q| q.page.routed_to?(log, current_user) || q.derived? || callback_questions.include?(q.id) } || []
-  end
-
-  def reset_not_routed_questions(log)
-    enabled_questions = enabled_page_questions(log)
-    enabled_question_ids = enabled_questions.map(&:id)
-
-    invalidated_page_questions(log).each do |question|
-      if %w[radio checkbox].include?(question.type)
-        enabled_answer_options = enabled_question_ids.include?(question.id) ? enabled_questions.find { |q| q.id == question.id }.answer_options : {}
-        current_answer_option_valid = enabled_answer_options.present? ? enabled_answer_options.key?(log.public_send(question.id).to_s) : false
-
-        if !current_answer_option_valid && log.respond_to?(question.id.to_s)
-          Rails.logger.debug("Cleared #{question.id} value")
-          log.public_send("#{question.id}=", nil)
+  def reset_not_routed_checkbox_questions(log)
+    checkbox_questions = routed_and_not_routed_questions_by_type(log, type: "checkbox")
+    checkbox_questions[:invalid].each do |invalidated_question|
+      valid_options = checkbox_questions[:valid]
+                                        .select { |q| q.id == invalidated_question.id }
+                                        .flat_map { |q| q.answer_options.keys }
+      invalidated_question.answer_options.keys.each do |invalid_option|
+        if !log.respond_to?(invalid_option) || valid_options.include?(invalid_option)
+          next
         else
-
-          (question.answer_options.keys - enabled_answer_options.keys).map do |invalid_answer_option|
-            Rails.logger.debug("Cleared #{invalid_answer_option} value")
-            log.public_send("#{invalid_answer_option}=", nil) if log.respond_to?(invalid_answer_option)
-          end
+          clear_attribute(log, invalid_option)
         end
-      else
-        Rails.logger.debug("Cleared #{question.id} value")
-        log.public_send("#{question.id}=", nil) unless enabled_question_ids.include?(question.id)
       end
     end
   end
 
-  def enabled_page_questions(log)
-    questions - invalidated_page_questions(log)
+  def reset_radio_questions_if_not_routed_or_invalid_answers(log)
+    radio_questions = routed_and_not_routed_questions_by_type(log, type: "radio")
+    valid_radio_options = radio_questions[:valid]
+                                   .group_by(&:id)
+                                   .transform_values! { |q_array| q_array.flat_map { |q| q.answer_options.keys } }
+    radio_questions[:invalid].each do |invalidated_question|
+      q_id = invalidated_question.id
+      if !log.respond_to?(q_id) || log.public_send(q_id).nil? || valid_radio_options.key?(q_id)
+        next
+      else
+        clear_attribute(log, q_id)
+      end
+    end
+    valid_radio_options.each do |q_id, valid_options|
+      if !log.respond_to?(q_id) || valid_options.include?(log.public_send(q_id).to_s)
+        next
+      else
+        clear_attribute(log, q_id)
+      end
+    end
   end
 
-  def invalidated_conditional_questions(log)
-    questions.reject { |q| q.enabled?(log) } || []
+  def reset_not_routed_free_user_input_questions(log)
+    non_radio_checkbox_questions = routed_and_not_routed_questions_by_type(log)
+    enabled_question_ids = non_radio_checkbox_questions[:valid].map(&:id)
+    non_radio_checkbox_questions[:invalid].each do |invalidated_question|
+      q_id = invalidated_question.id
+      if log.public_send(q_id).nil? || enabled_question_ids.include?(q_id)
+        next
+      else
+        clear_attribute(log, q_id)
+      end
+    end
+  end
+
+  def routed_and_not_routed_questions_by_type(log, type: nil, current_user: nil)
+    # we're already treating these fields as a special case and reset their values upon saving a log
+    callback_questions = %w[postcode_known la ppcodenk previous_la_known prevloc postcode_full ppostcode_full location_id address_line1 address_line2 town_or_city county]
+    questions_to_categorise = if type
+                                questions.reject { |q| q.type != type || callback_questions.include?(q.id) }
+                              else
+                                questions.reject { |q| %w[radio checkbox].include?(q.type) || callback_questions.include?(q.id) }
+                              end
+    valid, invalid = questions_to_categorise.partition { |q| q.page.routed_to?(log, current_user) || q.derived? }
+    { valid:, invalid: }
+  end
+
+  def clear_attribute(log, attribute)
+    Rails.logger.debug("Cleared #{attribute} value")
+    log.public_send("#{attribute}=", nil)
   end
 
   def readonly_questions
