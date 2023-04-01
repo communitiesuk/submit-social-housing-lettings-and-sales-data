@@ -365,7 +365,7 @@ en:
           over_20: "The lead tenant must be under 20 as you told us their housing situation immediately before this letting was a children’s home or foster care"
       ecstat:
         retired_over_70: "Person %{person_num} must be retired if over 70"
-        child_under_16: "Person’s %{person_num} working situation must be ’child under 16‘ as you told us they’re under 16"
+        child_under_16: "Person %{person_num}’s working situation must be ‘child under 16’ as you told us they’re under 16"
         child_over_16: "Answer cannot be ‘child under 16’ as you told us the person %{person_num} is older than 16"
         not_student_16_19: "Person’s %{person_num} working situation must be full-time student or prefers not to say as you told us they’re between 16 and 19."
         student_16_19:
