@@ -63,14 +63,6 @@ class Log < ApplicationRecord
     end
   end
 
-  def clear_invalid_radio_answers!
-    form.radio_questions_valid_options.each do |question_id, valid_options|
-      next unless (value = self[question_id])
-
-      self[question_id] = nil unless valid_options.include?(value.to_s)
-    end
-  end
-
   def collection_start_year
     return @start_year if @start_year
 

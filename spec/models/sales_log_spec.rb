@@ -222,42 +222,6 @@ RSpec.describe SalesLog, type: :model do
     end
   end
 
-  describe "resetting invalidated fields" do
-    context "when the collection year is changed" do
-      around do |example|
-        Timecop.freeze(now) do
-          Singleton.__init__(FormHandler)
-          FormHandler.instance.use_real_forms!
-          example.run
-        end
-        Timecop.return
-      end
-
-      let(:sales_log) { FactoryBot.create(:sales_log, :shared_ownership, saledate: now, type:) }
-      let(:now) { Time.zone.local(2023, 6, 1) }
-
-      context "and selected answer options are no longer valid" do
-        let(:type) { 32 }
-
-        it "clears those values" do
-          expect(sales_log.type).to be 32
-          sales_log.update!(saledate: Time.zone.local(2023, 1, 1))
-          expect(sales_log.type).to be nil
-        end
-      end
-
-      context "and selected answer options are still valid" do
-        let(:type) { 24 }
-
-        it "does not clear those values" do
-          expect(sales_log.type).to be 24
-          sales_log.update!(saledate: Time.zone.local(2023, 1, 1))
-          expect(sales_log.type).to be 24
-        end
-      end
-    end
-  end
-
   context "when saving addresses" do
     before do
       stub_request(:get, /api.postcodes.io/)

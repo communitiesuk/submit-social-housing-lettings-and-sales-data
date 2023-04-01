@@ -26,7 +26,6 @@ class SalesLog < Log
 
   validates_with SalesLogValidator
   before_validation :recalculate_start_year!, if: :saledate_changed?
-  before_validation :clear_invalid_radio_answers!, if: :saledate_changed?
   before_validation :reset_invalidated_dependent_fields!
   before_validation :process_postcode_changes!, if: :postcode_full_changed?
   before_validation :process_previous_postcode_changes!, if: :ppostcode_full_changed?
@@ -75,10 +74,6 @@ class SalesLog < Log
 
   def optional_fields
     OPTIONAL_FIELDS + dynamically_not_required
-  end
-
-  def clear_invalid_radio_answers!
-    super if saledate_was && @start_year != FormHandler.instance.collection_start_year(saledate_was)
   end
 
   def dynamically_not_required
