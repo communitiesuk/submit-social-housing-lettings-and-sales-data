@@ -192,7 +192,7 @@ class Form
       valid_options = checkbox_questions[:valid]
                                         .select { |q| q.id == invalidated_question.id }
                                         .flat_map { |q| q.answer_options.keys }
-      invalidated_question.answer_options.keys.each do |invalid_option|
+      invalidated_question.answer_options.each_key do |invalid_option|
         if !log.respond_to?(invalid_option) || valid_options.include?(invalid_option)
           next
         else

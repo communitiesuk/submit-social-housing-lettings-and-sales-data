@@ -2620,6 +2620,7 @@ RSpec.describe LettingsLog do
         end
       end
     end
+  end
 
   describe "tshortfall_unknown?" do
     context "when tshortfall is nil" do
