@@ -27,26 +27,30 @@ RSpec.describe TasklistHelper do
     end
 
     describe "get sections count" do
-      let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
+      let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json") }
 
       before do
-        allow(FormHandler.instance).to receive(:get_form).and_return(fake_2021_2022_form)
+        allow(FormHandler.instance).to receive(:get_form).and_return(real_2021_2022_form)
       end
 
-      it "returns the total of sections if no status is given" do
-        expect(get_subsections_count(empty_lettings_log)).to eq(8)
+      context "with an empty lettings log" do
+        it "returns the total displayed subsections count if no status is given" do
+          expect(get_subsections_count(empty_lettings_log)).to eq(7)
+        end
+
+        it "returns 0 sections for completed sections if no sections are completed" do
+          expect(get_subsections_count(empty_lettings_log, :completed)).to eq(0)
+        end
       end
 
-      it "returns 0 sections for completed sections if no sections are completed" do
-        expect(get_subsections_count(empty_lettings_log, :completed)).to eq(0)
-      end
+      context "with a partially complete lettings log" do
+        it "returns the total displayed subsections count if no status is given" do
+          expect(get_subsections_count(lettings_log)).to eq(7)
+        end
 
-      it "returns the number of not started sections" do
-        expect(get_subsections_count(empty_lettings_log, :not_started)).to eq(8)
-      end
-
-      it "returns the number of sections in progress" do
-        expect(get_subsections_count(lettings_log, :in_progress)).to eq(2)
+        it "returns the completed sections count" do
+          expect(get_subsections_count(lettings_log, :completed)).to eq(1)
+        end
       end
 
       it "returns 0 for invalid state" do
@@ -77,6 +81,37 @@ RSpec.describe TasklistHelper do
     end
   end
 
+  describe "with sales" do
+    let(:empty_sales_log) { create(:sales_log, owning_organisation: nil) }
+    let(:completed_sales_log) { build(:sales_log, :completed) }
+
+    describe "get sections count" do
+      context "with an empty sales log" do
+        it "returns the total displayed subsections count if no status is given (includes all 3 sale information subsections)" do
+          expect(get_subsections_count(empty_sales_log)).to eq(9)
+        end
+
+        it "returns 0 sections for completed sections if no sections are completed" do
+          expect(get_subsections_count(empty_sales_log, :completed)).to eq(0)
+        end
+      end
+
+      context "with a completed sales log" do
+        it "returns the total displayed subsections count if no status is given (includes only the 1 relevant sale information subsection)" do
+          expect(get_subsections_count(completed_sales_log)).to eq(7)
+        end
+
+        it "returns the completed sections count" do
+          expect(get_subsections_count(completed_sales_log, :completed)).to eq(7)
+        end
+      end
+
+      it "returns 0 for invalid state" do
+        expect(get_subsections_count(completed_sales_log, :fake)).to eq(0)
+      end
+    end
+
+  end
   describe "#review_log_text" do
     context "with sales log" do
       context "when collection_period_open? == true" do
