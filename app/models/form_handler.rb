@@ -101,6 +101,14 @@ class FormHandler
     @forms = get_all_forms
   end
 
+  def earliest_open_collection_start_date(now: Time.zone.now)
+    if in_crossover_period?(now:)
+      collection_start_date(now) - 1.year
+    else
+      collection_start_date(now)
+    end
+  end
+
 private
 
   def get_all_forms
