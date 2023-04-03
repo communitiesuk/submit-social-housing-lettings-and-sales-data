@@ -130,14 +130,12 @@ private
   end
 
   def all_fields_completed?
-    subsection_statuses = form.subsections.map { |subsection| subsection.status(self) if subsection.displayed_in_tasklist?(self) }.uniq.compact
-    subsection_statuses == [:completed]
+    form.subsections.all? { |subsection| subsection.complete?(self) || subsection.not_displayed_in_tasklist?(self) }
   end
 
   def all_fields_nil?
     not_started_statuses = %i[not_started cannot_start_yet]
-    subsection_statuses = form.subsections.map { |subsection| subsection.status(self) }.uniq
-    subsection_statuses.all? { |status| not_started_statuses.include?(status) }
+    form.subsections.all? { |subsection| not_started_statuses.include? subsection.status(self) }
   end
 
   def reset_invalidated_dependent_fields!
