@@ -39,7 +39,7 @@
     <preg_occ>2</preg_occ>
     <startertenancy>1</startertenancy>
     <tenancylength>5</tenancylength>
-    <tenancy>1</tenancy>
+    <tenancy>4</tenancy>
     <ppostcode_full>SE2 6RT</ppostcode_full>
     <rsnvac>6</rsnvac>
     <unittype_gn>7</unittype_gn>
@@ -136,11 +136,11 @@
     <new_old>2</new_old>
     <vacdays>638</vacdays>
     <uprn/>
-    <uprn_known/>
+    <uprn_known>0</uprn_known>
     <uprn_confirmed/>
-    <address_line1/>
+    <address_line1>fake address</address_line1>
     <address_line2/>
-    <town_or_city/>
+    <town_or_city>London</town_or_city>
     <county/>
     <formid>{id}</formid>
     <owningorgid>{owning_org_id}</owningorgid>

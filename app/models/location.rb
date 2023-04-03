@@ -70,7 +70,7 @@ class Location < ApplicationRecord
   def available_from
     return startdate if startdate.present?
 
-    FormHandler.instance.collection_start_date(created_at)
+    FormHandler.instance.earliest_open_collection_start_date(now: created_at)
   end
 
   def open_deactivation

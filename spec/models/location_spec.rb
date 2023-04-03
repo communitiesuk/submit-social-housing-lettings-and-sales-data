@@ -953,8 +953,8 @@ RSpec.describe Location, type: :model do
       context "and the location was created at the start of the 2022/23 collection window" do
         let(:location) { FactoryBot.build(:location, created_at: Time.zone.local(2022, 4, 6), startdate: nil) }
 
-        it "returns the beginning of 22/23 collection window" do
-          expect(location.available_from).to eq(Time.zone.local(2022, 4, 1))
+        it "returns the beginning of 21/22 collection window" do
+          expect(location.available_from).to eq(Time.zone.local(2021, 4, 1))
         end
       end
 
@@ -969,16 +969,16 @@ RSpec.describe Location, type: :model do
       context "and the location was created at the start of the 2021/22 collection window" do
         let(:location) { FactoryBot.build(:location, created_at: Time.zone.local(2021, 4, 6), startdate: nil) }
 
-        it "returns the beginning of 21/22 collection window" do
-          expect(location.available_from).to eq(Time.zone.local(2021, 4, 1))
+        it "returns the beginning of 20/21 collection window" do
+          expect(location.available_from).to eq(Time.zone.local(2020, 4, 1))
         end
       end
 
       context "and the location was created at the end of the 2021/22 collection window" do
         let(:location) { FactoryBot.build(:location, created_at: Time.zone.local(2022, 2, 6), startdate: nil) }
 
-        it "returns the beginning of 21/22 collection window" do
-          expect(location.available_from).to eq(Time.zone.local(2021, 4, 1))
+        it "returns the beginning of 20/21 collection window" do
+          expect(location.available_from).to eq(Time.zone.local(2020, 4, 1))
         end
       end
     end

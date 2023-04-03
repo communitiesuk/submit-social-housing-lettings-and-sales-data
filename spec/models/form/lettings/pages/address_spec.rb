@@ -62,7 +62,7 @@ RSpec.describe Form::Lettings::Pages::Address, type: :model do
 
     context "when uprn_confirmed == 1 && uprn_known != 0" do
       let(:log) do
-        create(:lettings_log, uprn_known: 1, uprn_confirmed: 1)
+        create(:lettings_log, uprn_known: 1, uprn_confirmed: 1, uprn: "123456789")
       end
 
       it "returns true" do
