@@ -45,7 +45,7 @@ RSpec.describe Form::Sales::Pages::Uprn, type: :model do
     end
 
     context "when uprn_known == 1" do
-      let(:log) { create(:sales_log, uprn_known: 1) }
+      let(:log) { create(:sales_log, uprn_known: 1, uprn: "12345") }
 
       it "returns true" do
         expect(page.routed_to?(log)).to eq(true)

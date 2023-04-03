@@ -42,7 +42,7 @@ RSpec.describe Form::Sales::Pages::Address, type: :model do
 
     context "when uprn_confirmed != 1" do
       let(:log) do
-        create(:sales_log, uprn_known: 1, uprn_confirmed: 0)
+        create(:sales_log, uprn_known: 1, uprn: "12345", uprn_confirmed: 0)
       end
 
       it "returns true" do
@@ -62,7 +62,7 @@ RSpec.describe Form::Sales::Pages::Address, type: :model do
 
     context "when uprn_confirmed == 1 && uprn_known != 0" do
       let(:log) do
-        create(:sales_log, uprn_known: 1, uprn_confirmed: 1)
+        create(:sales_log, uprn_known: 1, uprn: "12345", uprn_confirmed: 1)
       end
 
       it "returns true" do

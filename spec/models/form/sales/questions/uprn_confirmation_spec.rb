@@ -72,7 +72,7 @@ RSpec.describe Form::Sales::Questions::UprnConfirmation, type: :model do
     end
 
     context "when uprn_known == 1 && uprn_confirmed == nil" do
-      let(:log) { create(:sales_log, uprn_known: 1, uprn_confirmed: nil) }
+      let(:log) { create(:sales_log, uprn_known: 1, uprn: "12345", uprn_confirmed: nil) }
 
       it "returns false" do
         expect(question.hidden_in_check_answers?(log)).to eq(false)
@@ -80,7 +80,7 @@ RSpec.describe Form::Sales::Questions::UprnConfirmation, type: :model do
     end
 
     context "when uprn_known != 1 && uprn_confirmed == 1" do
-      let(:log) { create(:sales_log, uprn_known: 1, uprn_confirmed: 1) }
+      let(:log) { create(:sales_log, uprn_known: 1, uprn: "12345", uprn_confirmed: 1) }
 
       it "returns true" do
         expect(question.hidden_in_check_answers?(log)).to eq(true)
