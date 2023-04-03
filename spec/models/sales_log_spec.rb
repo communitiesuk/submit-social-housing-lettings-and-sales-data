@@ -537,6 +537,7 @@ RSpec.describe SalesLog, type: :model do
 
       it "updates sales log fields" do
         sales_log.uprn = "1111111"
+        sales_log.uprn_confirmed = 1
 
         allow_any_instance_of(UprnClient).to receive(:call)
         allow_any_instance_of(UprnClient).to receive(:result).and_return({
@@ -567,7 +568,7 @@ RSpec.describe SalesLog, type: :model do
     end
 
     context "when service errors" do
-      let(:sales_log) { create(:sales_log, uprn: "123456789", uprn_confirmed: 1) }
+      let(:sales_log) { create(:sales_log, uprn_known: 1, uprn: "123456789", uprn_confirmed: 1) }
       let(:error_message) { "error" }
 
       it "adds error to sales log" do
