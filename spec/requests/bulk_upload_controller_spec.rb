@@ -69,13 +69,13 @@ RSpec.describe BulkUploadController, type: :request do
       end
 
       context "when not crossover period" do
-        let(:time) { Time.utc(2022, 2, 8) }
+        let(:time) { Time.utc(2023, 2, 8) }
 
         it "redirects to bulk upload path" do
           expect(request).to redirect_to(
             bulk_upload_lettings_log_path(
               id: "prepare-your-file",
-              form: { year: 2021 },
+              form: { year: 2022 },
             ),
           )
         end
