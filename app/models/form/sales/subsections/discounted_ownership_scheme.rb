@@ -41,6 +41,6 @@ class Form::Sales::Subsections::DiscountedOwnershipScheme < ::Form::Subsection
   end
 
   def displayed_in_tasklist?(log)
-    log.ownershipsch == 2
+    log.ownershipsch.nil? || log.ownershipsch == 2
   end
 end

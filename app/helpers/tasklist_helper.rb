@@ -6,7 +6,7 @@ module TasklistHelper
   end
 
   def get_subsections_count(log, status = :all)
-    return log.form.subsections.count { |subsection| subsection.applicable_questions(log).count.positive? } if status == :all
+    return log.form.subsections.count { |subsection| subsection.displayed_in_tasklist?(log) } if status == :all
 
     log.form.subsections.count { |subsection| subsection.status(log) == status && subsection.applicable_questions(log).count.positive? }
   end
