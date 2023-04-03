@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
   subject(:parser) { described_class.new(attributes) }
 
-  let(:now) { Time.zone.parse("01/03/2023") }
+  let(:now) { Time.zone.now.beginning_of_day }
 
   let(:attributes) { { bulk_upload: } }
   let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: nil) }
@@ -504,6 +504,14 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           end
         end
       end
+
+      context "when no longer a valid option from previous year" do
+        let(:attributes) { setup_section_params.merge({ field_102: "7" }) }
+
+        it "returns an error" do
+          expect(parser.errors[:field_102]).to be_present
+        end
+      end
     end
 
     describe "#field_83, #field_84, #field_85" do
@@ -786,6 +794,16 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "has errors on the field" do
           expect(parser.errors[:field_18]).to be_present
+        end
+      end
+    end
+
+    describe "#field_26" do # unitletas
+      context "when no longer a valid option from previous year" do
+        let(:attributes) { setup_section_params.merge({ field_26: "4" }) }
+
+        it "returns an error" do
+          expect(parser.errors[:field_26]).to be_present
         end
       end
     end
