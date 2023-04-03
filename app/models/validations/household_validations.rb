@@ -112,6 +112,15 @@ module Validations::HouseholdValidations
     end
   end
 
+  def validate_layear(record)
+    return unless record.layear && record.renewal
+
+    if record.is_renewal? && record.layear == 1
+      record.errors.add :layear, I18n.t("validations.household.renewal_just_moved_to_area.layear")
+      record.errors.add :renewal, I18n.t("validations.household.renewal_just_moved_to_area.renewal")
+    end
+  end
+
 private
 
   def household_no_illness?(record)
