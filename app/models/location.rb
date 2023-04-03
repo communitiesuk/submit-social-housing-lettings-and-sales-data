@@ -70,7 +70,11 @@ class Location < ApplicationRecord
   def available_from
     return startdate if startdate.present?
 
-    FormHandler.instance.collection_start_date(created_at)
+    if FormHandler.instance.in_crossover_period?(now: created_at)
+      FormHandler.instance.collection_start_date(created_at) - 1.year
+    else
+      FormHandler.instance.collection_start_date(created_at)
+    end
   end
 
   def open_deactivation
