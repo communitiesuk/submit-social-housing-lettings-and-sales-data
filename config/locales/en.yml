@@ -470,7 +470,7 @@ en:
       toggle_date:
         not_selected: "Select one of the options"
         invalid: "Enter a valid day, month and year"
-        before_creation: "The location cannot be deactivated before %{date}, the start of the collection year when it was created"
+        before_creation: "The location cannot be deactivated before %{date}, the date when it was first available"
         out_of_range: "The date must be on or after the %{date}"
       reactivation:
         before_deactivation: "This location was deactivated on %{date}. The reactivation date must be on or after deactivation date"
