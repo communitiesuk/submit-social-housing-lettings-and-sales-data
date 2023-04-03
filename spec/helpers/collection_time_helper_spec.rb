@@ -24,7 +24,7 @@ RSpec.describe CollectionTimeHelper do
       end
 
       it "returns the correct current end date" do
-        expect(current_collection_end_date).to eq(Time.zone.local(2023, 3, 31))
+        expect(current_collection_end_date).to eq(Time.zone.local(2023, 3, 31).end_of_day)
       end
     end
 
@@ -40,7 +40,7 @@ RSpec.describe CollectionTimeHelper do
       end
 
       it "returns the correct current end date" do
-        expect(current_collection_end_date).to eq(Time.zone.local(2022, 3, 31))
+        expect(current_collection_end_date).to eq(Time.zone.local(2022, 3, 31).end_of_day)
       end
     end
   end
@@ -58,7 +58,7 @@ RSpec.describe CollectionTimeHelper do
       end
 
       it "returns the correct current end date" do
-        expect(collection_end_date(now)).to eq(Time.zone.local(2023, 3, 31))
+        expect(collection_end_date(now)).to eq(Time.zone.local(2023, 3, 31).end_of_day)
       end
     end
 
@@ -74,7 +74,7 @@ RSpec.describe CollectionTimeHelper do
       end
 
       it "returns the correct current end date" do
-        expect(collection_end_date(now)).to eq(Time.zone.local(2022, 3, 31))
+        expect(collection_end_date(now)).to eq(Time.zone.local(2022, 3, 31).end_of_day)
       end
     end
   end

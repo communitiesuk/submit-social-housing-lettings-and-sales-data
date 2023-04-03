@@ -55,7 +55,7 @@ FactoryBot.define do
       ecstat2 { 6 }
       homeless { 1 }
       underoccupation_benefitcap { 0 }
-      leftreg { 1 }
+      leftreg { 4 }
       reservist { 1 }
       illness { 1 }
       preg_occ { 2 }

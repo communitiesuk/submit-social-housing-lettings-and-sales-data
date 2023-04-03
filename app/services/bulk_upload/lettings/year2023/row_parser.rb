@@ -328,6 +328,9 @@ class BulkUpload::Lettings::Year2023::RowParser
   validate :validate_location_exists
   validate :validate_location_data_given
 
+  validate :validate_created_by_exists
+  validate :validate_created_by_related
+
   def self.question_for_field(field)
     QUESTIONS[field]
   end
@@ -346,7 +349,7 @@ class BulkUpload::Lettings::Year2023::RowParser
 
       fields.each do |field|
         unless errors.include?(field)
-          errors.add(field, error.type)
+          errors.add(field, error.message)
         end
       end
     end
@@ -385,6 +388,27 @@ class BulkUpload::Lettings::Year2023::RowParser
 
 private
 
+  def validate_created_by_exists
+    return if field_3.blank?
+
+    unless created_by
+      errors.add(:field_3, "User with the specified email could not be found")
+    end
+  end
+
+  def validate_created_by_related
+    return unless created_by
+
+    unless (created_by.organisation == owning_organisation) || (created_by.organisation == managing_organisation)
+      block_log_creation!
+      errors.add(:field_3, "User must be related to owning organisation or managing organisation")
+    end
+  end
+
+  def created_by
+    @created_by ||= User.find_by(email: field_3)
+  end
+
   def validate_needs_type_present
     if field_4.blank?
       errors.add(:field_4, I18n.t("validations.not_answered", question: "needs type"))
@@ -407,22 +431,26 @@ private
   end
 
   def validate_dont_know_disabled_needs_conjunction
-    if field_88 == 1 && [field_83, field_84, field_85, field_86].compact.count.positive?
-      errors.add(:field_88, I18n.t("validations.household.housingneeds.dont_know_disabled_needs_conjunction"))
+    if field_88 == 1 && [field_83, field_84, field_85, field_86].count(1).positive?
+      %i[field_88 field_83 field_84 field_85 field_86].each do |field|
+        errors.add(field, I18n.t("validations.household.housingneeds.dont_know_disabled_needs_conjunction")) if send(field) == 1
+      end
     end
   end
 
   def validate_no_disabled_needs_conjunction
-    if field_87 == 1 && [field_83, field_84, field_85, field_86].compact.count.positive?
-      errors.add(:field_87, I18n.t("validations.household.housingneeds.no_disabled_needs_conjunction"))
+    if field_87 == 1 && [field_83, field_84, field_85, field_86].count(1).positive?
+      %i[field_87 field_83 field_84 field_85 field_86].each do |field|
+        errors.add(field, I18n.t("validations.household.housingneeds.no_disabled_needs_conjunction")) if send(field) == 1
+      end
     end
   end
 
   def validate_only_one_housing_needs_type
-    if [field_83, field_84, field_85].compact.count > 1
-      errors.add(:field_83, I18n.t("validations.household.housingneeds_type.only_one_option_permitted"))
-      errors.add(:field_84, I18n.t("validations.household.housingneeds_type.only_one_option_permitted"))
-      errors.add(:field_85, I18n.t("validations.household.housingneeds_type.only_one_option_permitted"))
+    if [field_83, field_84, field_85].count(1) > 1
+      %i[field_83 field_84 field_85].each do |field|
+        errors.add(field, I18n.t("validations.household.housingneeds_type.only_one_option_permitted")) if send(field) == 1
+      end
     end
   end
 
@@ -630,7 +658,7 @@ private
       renewal: [:field_6],
       scheme: %i[field_16],
       location: %i[field_17],
-      created_by: [],
+      created_by: [:field_3],
       needstype: [:field_4],
       rent_type: %i[field_5 field_10 field_11],
       startdate: %i[field_7 field_8 field_9],
@@ -796,7 +824,7 @@ private
     attributes["renewal"] = renewal
     attributes["scheme"] = scheme
     attributes["location"] = location
-    attributes["created_by"] = bulk_upload.user
+    attributes["created_by"] = created_by || bulk_upload.user
     attributes["needstype"] = field_4
     attributes["rent_type"] = rent_type
     attributes["startdate"] = startdate
@@ -983,7 +1011,7 @@ private
   end
 
   def owning_organisation
-    Organisation.find_by_id_on_mulitple_fields(field_1)
+    Organisation.find_by_id_on_multiple_fields(field_1)
   end
 
   def owning_organisation_id
@@ -991,7 +1019,7 @@ private
   end
 
   def managing_organisation
-    Organisation.find_by_id_on_mulitple_fields(field_2)
+    Organisation.find_by_id_on_multiple_fields(field_2)
   end
 
   def managing_organisation_id
@@ -1016,13 +1044,13 @@ private
   end
 
   def scheme
-    @scheme ||= Scheme.find_by_id_on_mulitple_fields(field_16)
+    @scheme ||= Scheme.find_by_id_on_multiple_fields(field_16)
   end
 
   def location
     return if scheme.nil?
 
-    @location ||= scheme.locations.find_by_id_on_mulitple_fields(field_17)
+    @location ||= scheme.locations.find_by_id_on_multiple_fields(field_17)
   end
 
   def renttype
@@ -1141,16 +1169,7 @@ private
   end
 
   def leftreg
-    case field_80
-    when 3
-      3
-    when 4
-      1
-    when 5
-      2
-    when 6
-      0
-    end
+    field_80
   end
 
   def housingneeds
@@ -1158,8 +1177,8 @@ private
       2
     elsif field_88 == 1
       3
-    else
-      2
+    elsif field_87&.zero?
+      1
     end
   end
 

@@ -173,6 +173,9 @@ en:
         after_void_date: "Enter a tenancy start date that is after the void date"
         after_major_repair_date: "Enter a tenancy start date that is after the major repair date"
         year_not_two_digits: Tenancy start year must be 2 digits
+        ten_years_after_void_date: "Enter a tenancy start date that is no more than 10 years after the void date"
+        ten_years_after_mrc_date: "Enter a tenancy start date that is no more than 10 years after the major repairs completion date"
+
         location:
           deactivated: "The location %{postcode} was deactivated on %{date} and was not available on the day you entered."
           reactivating_soon: "The location %{postcode} is not available until %{date}. Select another location or edit the tenancy start date"
@@ -200,6 +203,7 @@ en:
         before_tenancy_start: "Enter a major repairs date that is before the tenancy start date"
         not_first_let: "Major repairs date must not be completed if the tenancy is a first let"
         ten_years_before_tenancy_start: "Enter a major repairs completion date that is no more than 10 years before the tenancy start date"
+        before_void_date: "Major repairs date must be after the void date if provided"
       void_date:
         ten_years_before_tenancy_start: "Enter a void date no more than 10 years before the tenancy start date"
         before_tenancy_start: "Enter a void date that is before the tenancy start date"
@@ -316,6 +320,8 @@ en:
         percentage_bought_must_be_greater_than_percentage_owned: "Total percentage buyer now owns must be more than percentage bought in this transaction"
         older_person_percentage_owned_maximum_75: "Percentage cannot be above 75% under Older Person's Shared Ownership"
         percentage_bought_must_be_at_least_threshold: "The minimum increase in equity while staircasing is %{threshold}%"
+      monthly_leasehold_charges:
+        not_zero: "Monthly leasehold charges cannot be £0 if the property has monthly charges"
       equity:
         under_min: "The minimum initial equity stake for this type of shared ownership sale is %{min_equity}%"
         over_max: "The maximum initial equity stake is %{max_equity}%"
@@ -343,6 +349,7 @@ en:
         child_under_16: "Answer cannot be under 16 as person’s %{person_num} working situation is not ‘child under 16’"
         child_over_16: "Answer cannot be over 16 as person’s %{person_num} working situation is ‘child under 16‘"
         child_over_20: "Answer cannot be 20 or over as the relationship is ‘child’"
+        child_12_years_younger: "A child must be at least 12 years younger than their parent"
         not_student_16_19: "Answer cannot be between 16 and 19 as person %{person_num} is a child of the lead tenant but is not a full-time student"
         student_16_19:
           cannot_be_16_19:
@@ -409,6 +416,9 @@ en:
         reasonpref:
           not_homeless: "Answer cannot be ‘no’ as the tenant was homeless or about to lose their home"
       previous_la_known: "Enter name of local authority"
+      renewal_just_moved_to_area:
+        layear: 'The household cannot have just moved to the local authority area if this letting is a renewal'
+        renewal: 'This letting cannot be a renewal if the household has just moved to the local authority area'
       gender:
         retired_male: "Answer cannot be ‘male’ as tenant is under 65 and retired"
         retired_female: "Answer cannot be ‘female’ as tenant is under 60 and retired"

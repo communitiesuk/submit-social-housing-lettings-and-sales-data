@@ -21,7 +21,7 @@ class FeatureToggle
   end
 
   def self.managing_owning_enabled?
-    !Rails.env.production?
+    true
   end
 
   def self.scheme_toggle_enabled?
@@ -33,7 +33,7 @@ class FeatureToggle
   end
 
   def self.managing_for_other_user_enabled?
-    !Rails.env.production?
+    true
   end
 
   def self.bulk_upload_logs?
@@ -55,6 +55,6 @@ class FeatureToggle
   end
 
   def self.collection_2023_2024_year_enabled?
-    !Rails.env.production?
+    true
   end
 end

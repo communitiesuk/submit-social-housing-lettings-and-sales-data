@@ -10,22 +10,24 @@
       <span class="govuk-caption-l">Upload lettings logs in bulk (<%= @form.year_combo %>)</span>
       <h1 class="govuk-heading-l">Prepare your file</h1>
 
-      <h2 class="govuk-heading-m">Create your file</h2>
+      <h2 class="govuk-heading-s">Download template</h2>
       <ul class="govuk-list govuk-list--bullet">
-        <li>Download the <%= govuk_link_to "bulk lettings template", @form.template_path %></li>
-        <li>Export the data from your housing management system, matching the template. <%= govuk_link_to "Find out more about exporting your data", bulk_upload_lettings_log_path(id: "guidance", form: { year: @form.year }) %></li>
-        <li>If you cannot export it in this format, you may have to input it manually</li>
-        <li>You cannot have a file with both general needs logs and supported housing logs. These must be in separate files</li>
+        <li>If your organisation is new to using bulk upload or you have updated your HMS export use <%= govuk_link_to "this template (improved question ordering)", @form.template_path %></li>
+        <li>If your organisation was using bulk upload on the previous CORE website and hasn't changed its HMS to be compatible with the new CORE service, use <%= govuk_link_to "this template", @form.old_template_path %></li>
       </ul>
 
-      <h2 class="govuk-heading-m">Check your data</h2>
+      <h2 class="govuk-heading-s">Create your file</h2>
       <ul class="govuk-list govuk-list--bullet">
-        <li>Check data is complete and formatted correctly, using <%= govuk_link_to "data specifications", @form.specification_path, target: "_blank" %></li>
+        <li>Fill in the template with CORE data from your housing management system according to the <%= govuk_link_to "Lettings #{@form.year_combo} Bulk Upload Specification", @form.specification_path %></li>
+        <li>If you have to manually enter large volumes of data into the bulk upload template, we recommend creating logs directly in the service instead. <%= govuk_link_to "Find out more about exporting your data", bulk_upload_lettings_log_path(id: "guidance", form: { year: @form.year }) %></li>
       </ul>
 
-      <h2 class="govuk-heading-m">Save your file</h2>
+      <%= @form.inset_text %>
+
+      <h2 class="govuk-heading-s">Save your file</h2>
       <ul class="govuk-list govuk-list--bullet">
-        <li>Save the file (CSV format <strong>only</strong>)</li>
+        <li>Save your file as a CSV</li>
+        <li>Your file should now be ready to upload</li>
       </ul>
 
       <%= f.govuk_submit %>

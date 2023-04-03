@@ -891,7 +891,7 @@ RSpec.describe LettingsLogsController, type: :request do
             end
           end
 
-          context "when a lettings log is for a renewal of supported housing, so property information does not need to show" do
+          context "when a lettings log is for a renewal of supported housing, property information does not need to show" do
             let(:lettings_log) do
               FactoryBot.create(
                 :lettings_log,
@@ -1080,6 +1080,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
     context "when viewing a collection of logs affected by deactivated location" do
       let!(:affected_lettings_logs) { FactoryBot.create_list(:lettings_log, 3, unresolved: true, created_by: user) }
+      let!(:other_user_affected_lettings_log) { FactoryBot.create(:lettings_log, unresolved: true) }
       let!(:non_affected_lettings_logs) { FactoryBot.create_list(:lettings_log, 4, created_by: user) }
       let(:other_user) { FactoryBot.create(:user, organisation: user.organisation) }
       let(:headers) { { "Accept" => "text/html" } }
@@ -1110,11 +1111,10 @@ RSpec.describe LettingsLogsController, type: :request do
       end
 
       it "only displays the logs created by the user" do
-        affected_lettings_logs.first.update!(created_by: other_user)
         get "/lettings-logs/update-logs", headers:, params: {}
         expect(page).to have_content(affected_lettings_logs.second.id)
-        expect(page).not_to have_content(affected_lettings_logs.first.id)
-        expect(page).to have_content("You need to update 2 logs")
+        expect(page).not_to have_content(other_user_affected_lettings_log.id)
+        expect(page).to have_content("You need to update 3 logs")
       end
 
       it "displays correct content when there are no unresolved logs" do

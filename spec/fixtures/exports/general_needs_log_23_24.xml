@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <forms>
   <form>
-    <status>2</status>
+    <status>1</status>
     <tenancycode>BZ737</tenancycode>
     <age1>35</age1>
     <sex1>F</sex1>
@@ -38,8 +38,8 @@
     <illness>1</illness>
     <preg_occ>2</preg_occ>
     <startertenancy>1</startertenancy>
-    <tenancylength>5</tenancylength>
-    <tenancy>1</tenancy>
+    <tenancylength/>
+    <tenancy/>
     <ppostcode_full>SE2 6RT</ppostcode_full>
     <rsnvac>6</rsnvac>
     <unittype_gn>7</unittype_gn>
@@ -52,7 +52,7 @@
     <period>2</period>
     <layear>2</layear>
     <waityear>7</waityear>
-    <postcode_full>NW1 5TY</postcode_full>
+    <postcode_full/>
     <reasonpref>1</reasonpref>
     <cbl>2</cbl>
     <chr>1</chr>
@@ -87,13 +87,13 @@
     <prevloc>E07000105</prevloc>
     <hb>6</hb>
     <hbrentshortfall>1</hbrentshortfall>
-    <mrcdate>2020-05-05T10:36:49+01:00</mrcdate>
+    <mrcdate>2022-05-05T10:36:49+01:00</mrcdate>
     <incref>0</incref>
-    <startdate>2022-02-02T10:36:49+00:00</startdate>
+    <startdate>2023-04-02T10:36:49+01:00</startdate>
     <armedforces>1</armedforces>
     <unitletas>2</unitletas>
     <builtype>1</builtype>
-    <voiddate>2019-11-03T00:00:00+00:00</voiddate>
+    <voiddate>2021-11-03T00:00:00+00:00</voiddate>
     <renttype>2</renttype>
     <needstype>1</needstype>
     <lettype>7</lettype>
@@ -131,16 +131,17 @@
     <relat8/>
     <lar/>
     <irproduct/>
+    <joint/>
     <sheltered/>
     <hhtype>4</hhtype>
     <new_old>2</new_old>
-    <vacdays>638</vacdays>
-    <uprn/>
-    <uprn_known/>
+    <vacdays>332</vacdays>
+    <uprn>100023336956</uprn>
+    <uprn_known>1</uprn_known>
     <uprn_confirmed/>
-    <address_line1/>
+    <address_line1>Fake, Org, Name, Building, Name, Number, Data, Thing</address_line1>
     <address_line2/>
-    <town_or_city/>
+    <town_or_city>London</town_or_city>
     <county/>
     <formid>{id}</formid>
     <owningorgid>{owning_org_id}</owningorgid>
@@ -149,8 +150,8 @@
     <maningorgid>{managing_org_id}</maningorgid>
     <maningorgname>DLUHC</maningorgname>
     <manhcnum>1234</manhcnum>
-    <createddate>2022-05-01T00:00:00+01:00</createddate>
-    <uploaddate>2022-05-01T00:00:00+01:00</uploaddate>
+    <createddate>2023-04-03T00:00:00+01:00</createddate>
+    <uploaddate>2023-04-03T00:00:00+01:00</uploaddate>
     <providertype>1</providertype>
   </form>
 </forms>

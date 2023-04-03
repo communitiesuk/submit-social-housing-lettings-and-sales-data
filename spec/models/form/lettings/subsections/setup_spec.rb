@@ -56,27 +56,4 @@ RSpec.describe Form::Lettings::Subsections::Setup, type: :model do
       )
     end
   end
-
-  context "when production" do
-    before do
-      allow(Rails.env).to receive(:production?).and_return(true)
-    end
-
-    it "has the correct pages" do
-      expect(setup.pages.map(&:id)).to eq(
-        %w[
-          organisation
-          created_by
-          needs_type
-          scheme
-          location
-          renewal
-          tenancy_start_date
-          rent_type
-          tenant_code
-          property_reference
-        ],
-      )
-    end
-  end
 end
