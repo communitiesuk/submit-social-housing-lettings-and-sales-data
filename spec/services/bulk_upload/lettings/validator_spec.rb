@@ -54,20 +54,15 @@ RSpec.describe BulkUpload::Lettings::Validator do
       it "create validation error with correct values" do
         validator.call
 
-        error = BulkUploadError.find_by(field: "field_11")
+        error = BulkUploadError.find_by(row: "7", field: "field_96", category: "setup")
 
-        expect(error.field).to eql("field_11")
-        expect(error.error).to eql("You must only answer the length of the tenancy if it's fixed-term")
+        expect(error.field).to eql("field_96")
+        expect(error.error).to eql("You must answer tenancy start date")
         expect(error.tenant_code).to eql("123")
         expect(error.property_ref).to be_nil
         expect(error.row).to eql("7")
-        expect(error.cell).to eql("L7")
-        expect(error.col).to eql("L")
-        expect(error.category).to be_nil
-
-        error = BulkUploadError.find_by(row: "7", category: "setup", field: "field_111")
-
-        expect(error.category).to eql("setup")
+        expect(error.cell).to eql("CS7")
+        expect(error.col).to eql("CS")
       end
     end
 
@@ -157,6 +152,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
       end
 
       it "returns truthy" do
+        validator.call
         expect(validator).to be_create_logs
       end
     end
@@ -165,6 +161,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
       let(:path) { file_fixture("2022_23_lettings_bulk_upload.csv") }
 
       it "returns falsey" do
+        validator.call
         expect(validator).not_to be_create_logs
       end
     end
