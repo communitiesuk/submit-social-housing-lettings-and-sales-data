@@ -6,6 +6,15 @@ RSpec.describe CheckAnswersSummaryListCardComponent, type: :component do
   let(:rendered) { render_inline(component) }
 
   context "when before 23/24 collection" do
+    before do
+      Timecop.freeze(Time.zone.local(2023, 1, 10))
+      Singleton.__init__(FormHandler)
+    end
+  
+    after do
+      Timecop.return
+    end
+    
     context "when given a set of questions" do
       let(:user) { build(:user) }
       let(:log) { build(:lettings_log, :completed, age2: 99, startdate: Time.zone.local(2021, 5, 1)) }
