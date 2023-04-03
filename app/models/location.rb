@@ -53,7 +53,7 @@ class Location < ApplicationRecord
 
   enum type_of_unit: TYPE_OF_UNIT
 
-  def self.find_by_id_on_mulitple_fields(id)
+  def self.find_by_id_on_multiple_fields(id)
     return if id.nil?
 
     where(id:).or(where(old_visible_id: id)).first

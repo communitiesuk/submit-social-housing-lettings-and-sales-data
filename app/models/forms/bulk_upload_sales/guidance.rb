@@ -15,6 +15,10 @@ module Forms
         bulk_upload_sales_log_path(id: "prepare-your-file", form: { year: })
       end
 
+      def old_template_path
+        Forms::BulkUploadLettings::PrepareYourFile.new.old_template_path
+      end
+
       def template_path
         Forms::BulkUploadSales::PrepareYourFile.new(year:).template_path
       end
