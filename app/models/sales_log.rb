@@ -18,6 +18,7 @@ class SalesLog < Log
   include DerivedVariables::SalesLogVariables
   include Validations::Sales::SoftValidations
   include Validations::SoftValidations
+  include MoneyFormattingHelper
 
   self.inheritance_column = :_type_disabled
 
@@ -223,7 +224,7 @@ class SalesLog < Log
   def expected_shared_ownership_deposit_value
     return unless value && equity
 
-    sprintf("%.2f", (value * equity / 100))
+    format_as_currency(value * equity / 100)
   end
 
   def process_postcode(postcode, postcode_known_key, la_inferred_key, la_key)

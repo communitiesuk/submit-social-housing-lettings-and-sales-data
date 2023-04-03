@@ -120,10 +120,10 @@ module Validations::FinancialValidations
       elsif !weekly_value_in_range(record, "chcharge", 10, 1000)
         max_chcharge = record.weekly_to_value_per_period(1000)
         min_chcharge = record.weekly_to_value_per_period(10)
-        max_chcharge = [record.form.get_question("chcharge", record).prefix, max_chcharge].join("") if record.form.get_question("chcharge", record).present?
-        min_chcharge = [record.form.get_question("chcharge", record).prefix, min_chcharge].join("") if record.form.get_question("chcharge", record).present?
-        record.errors.add :period, I18n.t("validations.financial.carehome.out_of_range", period:, min_chcharge:, max_chcharge:)
-        record.errors.add :chcharge, :out_of_range, message: I18n.t("validations.financial.carehome.out_of_range", period:, min_chcharge:, max_chcharge:)
+        message = I18n.t("validations.financial.carehome.out_of_range", period:, min_chcharge:, max_chcharge:)
+
+        record.errors.add :period, message
+        record.errors.add :chcharge, :out_of_range, message: message
       end
     end
   end

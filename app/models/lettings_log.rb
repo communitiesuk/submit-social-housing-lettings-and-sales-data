@@ -20,6 +20,7 @@ class LettingsLog < Log
   include DerivedVariables::LettingsLogVariables
   include Validations::DateValidations
   include Validations::FinancialValidations
+  include MoneyFormattingHelper
 
   has_paper_trail
 
@@ -149,7 +150,7 @@ class LettingsLog < Log
   def weekly_to_value_per_period(field_value)
     num_of_weeks = NUM_OF_WEEKS_FROM_PERIOD[period]
 
-    sprintf("%.2f", (field_value * 52) / num_of_weeks)
+    format_as_currency((field_value * 52) / num_of_weeks)
   end
 
   def applicable_income_range
@@ -650,7 +651,7 @@ private
     num_of_weeks = NUM_OF_WEEKS_FROM_PERIOD[period]
     return "" unless value && num_of_weeks
 
-    sprintf("%.2f", (value * 52 / num_of_weeks))
+    format_as_currency((value * 52 / num_of_weeks))
   end
 
   def fully_wheelchair_accessible?
