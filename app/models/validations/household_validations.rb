@@ -121,6 +121,14 @@ module Validations::HouseholdValidations
     end
   end
 
+  def validate_housing_needs(record)
+    if record.housingneeds == 1 && record.housingneeds_type == 3 && record.housingneeds_other&.zero?
+      record.errors.add :housingneeds, I18n.t("validations.household.housingneeds.invalid")
+      record.errors.add :housingneeds_type, I18n.t("validations.household.housingneeds.invalid")
+      record.errors.add :housingneeds_other, I18n.t("validations.household.housingneeds.invalid")
+    end
+  end
+
 private
 
   def household_no_illness?(record)

@@ -637,4 +637,20 @@ RSpec.describe Validations::HouseholdValidations do
       end
     end
   end
+
+  describe "housing needs validations" do
+    it "is invalid when housingneeds == 1 && housingneeds_type == 3 && housingneeds_other == 0" do
+      record.housingneeds = 1
+      record.housingneeds_type = 3
+      record.housingneeds_other = 0
+
+      household_validator.validate_housing_needs(record)
+
+      error_message = ["If somebody in the household has disabled access needs, they must have the access needs listed, or other access needs"]
+
+      expect(record.errors["housingneeds"]).to eq(error_message)
+      expect(record.errors["housingneeds_type"]).to eq(error_message)
+      expect(record.errors["housingneeds_other"]).to eq(error_message)
+    end
+  end
 end
