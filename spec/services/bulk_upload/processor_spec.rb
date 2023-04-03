@@ -270,6 +270,7 @@ RSpec.describe BulkUpload::Processor do
           voiddate: nil,
           mrcdate: nil,
           startdate: Date.new(2022, 10, 1),
+          tenancylength: nil,
         )
       end
 
