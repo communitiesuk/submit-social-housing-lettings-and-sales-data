@@ -33,9 +33,11 @@ RSpec.describe Form::Sales::Pages::UprnConfirmation, type: :model do
 
   describe "has correct routed_to?" do
     context "when uprn present && uprn_known == 1 " do
-      let(:log) { create(:sales_log, uprn_known: 1, uprn: "123456789") }
+      let(:log) { create(:sales_log) }
 
       it "returns true" do
+        log.uprn_known = 1
+        log.uprn = "123456789"
         expect(page.routed_to?(log)).to eq(true)
       end
     end
