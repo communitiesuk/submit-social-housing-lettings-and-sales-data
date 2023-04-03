@@ -95,11 +95,11 @@ RSpec.describe SalesLog, type: :model do
       Timecop.freeze(Time.zone.local(2023, 1, 10))
       Singleton.__init__(FormHandler)
     end
-  
+
     after do
       Timecop.return
     end
-    
+
     it "has returns the correct form based on the start date" do
       expect(sales_log.form_name).to be_nil
       expect(sales_log.form).to be_a(Form)

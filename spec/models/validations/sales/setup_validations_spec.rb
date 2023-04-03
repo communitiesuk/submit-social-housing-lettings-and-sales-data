@@ -11,7 +11,7 @@ RSpec.describe Validations::Sales::SetupValidations do
         Timecop.freeze(Time.zone.local(2023, 1, 10))
         Singleton.__init__(FormHandler)
       end
-    
+
       after do
         Timecop.return
       end
