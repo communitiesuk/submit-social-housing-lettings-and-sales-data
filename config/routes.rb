@@ -161,6 +161,19 @@ Rails.application.routes.draw do
         get "#{subsection.id.to_s.dasherize}/check-answers", to: "form#check_answers"
       end
     end
+
+    if Rails.env.test?
+      [Form.new("spec/fixtures/forms/2021_2022.json"),
+      Form.new("config/forms/2021_2022.json")].each do |form|
+        form.pages.map do |page|
+          get page.id.to_s.dasherize, to: "form#show_page"
+        end
+  
+        form.subsections.map do |subsection|
+          get "#{subsection.id.to_s.dasherize}/check-answers", to: "form#check_answers"
+        end
+      end
+    end
   end
 
   resources :sales_logs, path: "/sales-logs" do
