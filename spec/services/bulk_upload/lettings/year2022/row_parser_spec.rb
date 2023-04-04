@@ -1472,6 +1472,16 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
         end
       end
 
+      context "when housingneeds are given and field_59 is nil" do
+        let(:attributes) { { bulk_upload:, field_57: "1", field_58: "1", field_59: nil } }
+
+        it "sets correct housingneeds" do
+          expect(parser.log.housingneeds).to eq(1)
+          expect(parser.log.housingneeds_type).to eq(2)
+          expect(parser.log.housingneeds_other).to eq(1)
+        end
+      end
+
       context "when housingneeds a and b are selected" do
         let(:attributes) { { bulk_upload:, field_55: "1", field_56: "1" } }
 

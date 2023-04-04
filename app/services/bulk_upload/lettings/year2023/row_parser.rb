@@ -1177,7 +1177,7 @@ private
       2
     elsif field_88 == 1
       3
-    elsif field_87&.zero?
+    elsif field_87.blank? || field_87&.zero?
       1
     end
   end
