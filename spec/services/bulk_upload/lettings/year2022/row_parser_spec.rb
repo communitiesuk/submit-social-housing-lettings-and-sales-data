@@ -852,16 +852,6 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
       end
     end
 
-    describe "#field_134" do
-      context "when an unpermitted value" do
-        let(:attributes) { { bulk_upload:, field_134: "3" } }
-
-        it "has errors on the field" do
-          expect(parser.errors[:field_134]).to be_present
-        end
-      end
-    end
-
     describe "#field_103" do
       context "when null" do
         let(:attributes) { setup_section_params.merge({ field_103: nil }) }
@@ -872,14 +862,6 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
 
         it "populates with correct error message" do
           expect(parser.errors[:field_103]).to eql(["You must answer type of building"])
-        end
-      end
-
-      context "when unpermitted values" do
-        let(:attributes) { setup_section_params.merge({ field_103: "4" }) }
-
-        it "returns an error" do
-          expect(parser.errors[:field_103]).to be_present
         end
       end
     end

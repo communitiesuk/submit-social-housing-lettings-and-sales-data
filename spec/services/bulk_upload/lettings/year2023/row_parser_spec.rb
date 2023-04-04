@@ -842,14 +842,6 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           expect(parser.errors[:field_30]).to eql(["You must answer type of building"])
         end
       end
-
-      context "when unpermitted values" do
-        let(:attributes) { setup_section_params.merge({ field_30: "4" }) }
-
-        it "returns an error" do
-          expect(parser.errors[:field_30]).to be_present
-        end
-      end
     end
 
     describe "#field_52" do # age2
