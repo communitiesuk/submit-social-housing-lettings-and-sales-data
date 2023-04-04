@@ -33,7 +33,7 @@ RSpec.describe "Task List" do
   let(:setup_completed_log) do
     FactoryBot.create(
       :lettings_log,
-      :about_completed,
+      :setup_completed,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
       created_by: user,
@@ -69,7 +69,7 @@ RSpec.describe "Task List" do
 
   it "shows number of completed sections if one section is completed" do
     visit("/lettings-logs/#{setup_completed_log.id}")
-    expect(page).to have_content("1 of 8 sections completed.")
+    expect(page).to have_content("1 of 8 subsections completed.")
   end
 
   it "show skip link for next incomplete section" do
