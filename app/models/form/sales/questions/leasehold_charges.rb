@@ -5,12 +5,8 @@ class Form::Sales::Questions::LeaseholdCharges < ::Form::Question
     @check_answer_label = "Monthly leasehold charges"
     @header = "Enter the total monthly charge"
     @type = "numeric"
-<<<<<<< HEAD
     @min = 1
-=======
-    @min = 0
     @step = 0.01
->>>>>>> a59c771e (add or alter step on numeric questions in sales, amend one test given step changes)
     @width = 5
     @prefix = "£"
     @ownershipsch = ownershipsch
