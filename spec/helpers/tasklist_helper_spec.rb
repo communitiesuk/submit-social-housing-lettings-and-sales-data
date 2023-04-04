@@ -110,8 +110,8 @@ RSpec.describe TasklistHelper do
         expect(get_subsections_count(completed_sales_log, :fake)).to eq(0)
       end
     end
-
   end
+
   describe "#review_log_text" do
     context "with sales log" do
       context "when collection_period_open? == true" do
