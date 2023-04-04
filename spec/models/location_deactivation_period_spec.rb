@@ -74,7 +74,7 @@ RSpec.describe LocationDeactivationPeriod do
             location.location_deactivation_periods.clear
             validator.validate(record)
             start_date = startdate.to_formatted_s(:govuk_date)
-            expect(record.errors[:deactivation_date]).to include "The location cannot be deactivated before #{start_date}, the start of the collection year when it was created"
+            expect(record.errors[:deactivation_date]).to include "The location cannot be deactivated before #{start_date}, the date when it was first available"
           end
         end
       end

@@ -11,7 +11,7 @@
 <%= form_with model: @location_deactivation_period, url: toggle_location_form_path(action, @location), method: "patch", local: true do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-    <% collection_start_date = FormHandler.instance.earliest_open_collection_start_date(now: @location.available_from) %>
+    <% start_date = FormHandler.instance.earliest_open_collection_start_date(now: @location.available_from) %>
     <%= f.govuk_error_summary %>
         <%= f.govuk_radio_buttons_fieldset date_type_question(action),
                                             legend: { text: I18n.t("questions.location.toggle_active.apply_from") },
