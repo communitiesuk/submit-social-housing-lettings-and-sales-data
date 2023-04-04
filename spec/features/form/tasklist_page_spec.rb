@@ -80,7 +80,6 @@ RSpec.describe "Task List" do
     end
   end
 
-
   it "show skip link for next incomplete section" do
     answer_all_questions_in_income_subsection(setup_completed_log)
     visit("/lettings-logs/#{setup_completed_log.id}")
