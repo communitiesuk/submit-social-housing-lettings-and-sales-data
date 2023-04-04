@@ -1473,7 +1473,7 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
       end
 
       context "when housingneeds are given and field_59 is nil" do
-        let(:attributes) { { bulk_upload:, field_59: "0", field_57: "1", field_58: "1", field_59: nil } }
+        let(:attributes) { { bulk_upload:, field_57: "1", field_58: "1", field_59: nil } }
 
         it "sets correct housingneeds" do
           expect(parser.log.housingneeds).to eq(1)
