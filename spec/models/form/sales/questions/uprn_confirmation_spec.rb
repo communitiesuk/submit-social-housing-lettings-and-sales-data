@@ -50,7 +50,7 @@ RSpec.describe Form::Sales::Questions::UprnConfirmation, type: :model do
 
     context "when address is present" do
       it "returns formatted value" do
-        log = create(:sales_log, address_line1: "1, Test Street", town_or_city: "Test Town", county: "Test County", postcode_full: "AA1 1AA", uprn: "1234")
+        log = create(:sales_log, address_line1: "1, Test Street", town_or_city: "Test Town", county: "Test County", postcode_full: "AA1 1AA", uprn: "1234", uprn_known: 1)
 
         expect(question.notification_banner(log)).to eq(
           {
@@ -72,15 +72,18 @@ RSpec.describe Form::Sales::Questions::UprnConfirmation, type: :model do
     end
 
     context "when uprn_known == 1 && uprn_confirmed == nil" do
-      let(:log) { create(:sales_log, uprn_known: 1, uprn_confirmed: nil) }
+      let(:log) { create(:sales_log) }
 
       it "returns false" do
+        log.uprn_known = 1
+        log.uprn = "12345"
+        log.uprn_confirmed = nil
         expect(question.hidden_in_check_answers?(log)).to eq(false)
       end
     end
 
     context "when uprn_known != 1 && uprn_confirmed == 1" do
-      let(:log) { create(:sales_log, uprn_known: 1, uprn_confirmed: 1) }
+      let(:log) { create(:sales_log, uprn_known: 1, uprn: "12345", uprn_confirmed: 1) }
 
       it "returns true" do
         expect(question.hidden_in_check_answers?(log)).to eq(true)

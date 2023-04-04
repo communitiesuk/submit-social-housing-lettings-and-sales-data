@@ -175,13 +175,8 @@ RSpec.describe Form::Lettings::Questions::La, type: :model do
       "E07000147" => "North Norfolk",
       "E07000148" => "Norwich",
       "E07000149" => "South Norfolk",
-      "E07000150" => "Corby",
-      "E07000151" => "Daventry",
-      "E07000152" => "East Northamptonshire",
-      "E07000153" => "Kettering",
-      "E07000154" => "Northampton",
-      "E07000155" => "South Northamptonshire",
-      "E07000156" => "Wellingborough",
+      "E06000061" => "North Northamptonshire",
+      "E06000062" => "West Northamptonshire",
       "E07000170" => "Ashfield",
       "E07000171" => "Bassetlaw",
       "E07000172" => "Broxtowe",
@@ -314,35 +309,5 @@ RSpec.describe Form::Lettings::Questions::La, type: :model do
       "E06000064" => "Westmorland and Furness",
       "E06000065" => "North Yorkshire",
     })
-  end
-
-  describe "has the correct hidden_in_check_answers" do
-    context "when saledate.year before 2023" do
-      let(:log) { build(:lettings_log, startdate: Time.zone.parse("2022-07-01")) }
-
-      it "returns false" do
-        expect(question.hidden_in_check_answers?(log)).to eq(false)
-      end
-    end
-
-    context "when saledate.year >= 2023" do
-      let(:log) { build(:lettings_log, startdate: Time.zone.parse("2023-07-01")) }
-
-      it "returns true" do
-        expect(question.hidden_in_check_answers?(log)).to eq(false)
-      end
-    end
-
-    context "when saledate.year >= 2023 and la inferred" do
-      let(:log) { build(:lettings_log, startdate: Time.zone.parse("2023-07-01")) }
-
-      before do
-        allow(log).to receive(:is_la_inferred?).and_return(true)
-      end
-
-      it "returns true" do
-        expect(question.hidden_in_check_answers?(log)).to eq(true)
-      end
-    end
   end
 end

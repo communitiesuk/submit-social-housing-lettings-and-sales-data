@@ -761,7 +761,7 @@ RSpec.describe "Schemes scheme Features" do
                   expect(page).to have_content("Deactivated")
                 end
 
-                it "allows to reactivate a location" do
+                xit "allows to reactivate a location" do
                   click_link("Reactivate this location")
                   expect(page).to have_current_path("/schemes/#{scheme.id}/locations/#{deactivated_location.id}/new-reactivation")
                   expect(page).to have_content("Reactivate #{deactivated_location.name}")

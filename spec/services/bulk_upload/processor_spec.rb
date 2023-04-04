@@ -3,7 +3,9 @@ require "rails_helper"
 RSpec.describe BulkUpload::Processor do
   subject(:processor) { described_class.new(bulk_upload:) }
 
-  let(:bulk_upload) { create(:bulk_upload, :lettings) }
+  let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }
+  let(:user) { create(:user, organisation: owning_org) }
+  let(:owning_org) { create(:organisation, old_visible_id: 123) }
 
   describe "#call" do
     context "when the bulk upload itself is not considered valid" do
@@ -239,7 +241,8 @@ RSpec.describe BulkUpload::Processor do
     end
 
     context "when processing a bulk with perfect data" do
-      let(:path) { file_fixture("2022_23_lettings_bulk_upload.csv") }
+      let(:file) { Tempfile.new }
+      let(:path) { file.path }
 
       let(:mock_downloader) do
         instance_double(
@@ -250,34 +253,36 @@ RSpec.describe BulkUpload::Processor do
         )
       end
 
-      let(:mock_validator) do
-        instance_double(
-          BulkUpload::Lettings::Validator,
-          call: nil,
-          create_logs?: true,
-          any_setup_errors?: false,
-          invalid?: false,
-        )
-      end
-
-      let(:mock_creator) do
-        instance_double(
-          BulkUpload::Lettings::LogCreator,
-          call: nil,
-          path:,
+      let(:log) do
+        build(
+          :lettings_log,
+          :completed,
+          renttype: 3,
+          age1: 20,
+          owning_organisation: owning_org,
+          managing_organisation: owning_org,
+          created_by: nil,
+          national: 18,
+          waityear: 9,
+          joint: 2,
+          tenancy: 9,
+          ppcodenk: 0,
+          voiddate: nil,
+          mrcdate: nil,
+          startdate: Date.new(2022, 10, 1),
+          tenancylength: nil,
         )
       end
 
       before do
+        file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
+        file.rewind
+
         allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
-        allow(BulkUpload::Lettings::Validator).to receive(:new).and_return(mock_validator)
-        allow(BulkUpload::Lettings::LogCreator).to receive(:new).with(bulk_upload:, path:).and_return(mock_creator)
       end
 
       it "creates logs" do
-        processor.call
-
-        expect(mock_creator).to have_received(:call)
+        expect { processor.call }.to change(LettingsLog, :count).by(1)
       end
 
       it "does not send fix errors email" do
@@ -292,8 +297,6 @@ RSpec.describe BulkUpload::Processor do
         mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
 
         allow(BulkUploadMailer).to receive(:send_bulk_upload_complete_mail).and_return(mail_double)
-
-        create(:lettings_log, :completed, bulk_upload:)
 
         processor.call
 

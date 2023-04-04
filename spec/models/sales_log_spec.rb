@@ -91,6 +91,15 @@ RSpec.describe SalesLog, type: :model do
     let(:sales_log) { build(:sales_log, created_by: created_by_user) }
     let(:sales_log_2) { build(:sales_log, saledate: Time.zone.local(2022, 5, 1), created_by: created_by_user) }
 
+    before do
+      Timecop.freeze(Time.zone.local(2023, 1, 10))
+      Singleton.__init__(FormHandler)
+    end
+
+    after do
+      Timecop.return
+    end
+
     it "has returns the correct form based on the start date" do
       expect(sales_log.form_name).to be_nil
       expect(sales_log.form).to be_a(Form)
@@ -528,6 +537,7 @@ RSpec.describe SalesLog, type: :model do
 
       it "updates sales log fields" do
         sales_log.uprn = "1111111"
+        sales_log.uprn_confirmed = 1
 
         allow_any_instance_of(UprnClient).to receive(:call)
         allow_any_instance_of(UprnClient).to receive(:result).and_return({
@@ -558,7 +568,7 @@ RSpec.describe SalesLog, type: :model do
     end
 
     context "when service errors" do
-      let(:sales_log) { create(:sales_log, uprn: "123456789", uprn_confirmed: 1) }
+      let(:sales_log) { create(:sales_log, uprn_known: 1, uprn: "123456789", uprn_confirmed: 1) }
       let(:error_message) { "error" }
 
       it "adds error to sales log" do
@@ -566,6 +576,32 @@ RSpec.describe SalesLog, type: :model do
         allow_any_instance_of(UprnClient).to receive(:error).and_return(error_message)
 
         expect { sales_log.process_uprn_change! }.to change { sales_log.errors[:uprn] }.from([]).to([error_message])
+      end
+    end
+  end
+
+  describe "#beds_for_la_sale_range" do
+    context "when beds nil" do
+      let(:sales_log) { build(:sales_log, beds: nil) }
+
+      it "returns nil" do
+        expect(sales_log.beds_for_la_sale_range).to be_nil
+      end
+    end
+
+    context "when beds <= 4" do
+      let(:sales_log) { build(:sales_log, beds: 4) }
+
+      it "returns number of beds" do
+        expect(sales_log.beds_for_la_sale_range).to eq(4)
+      end
+    end
+
+    context "when beds > 4" do
+      let(:sales_log) { build(:sales_log, beds: 40) }
+
+      it "returns max number of beds" do
+        expect(sales_log.beds_for_la_sale_range).to eq(4)
       end
     end
   end

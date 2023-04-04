@@ -168,7 +168,7 @@ RSpec.describe FormHandler do
   describe "#in_crossover_period?" do
     context "when not in overlapping period" do
       it "returns false" do
-        expect(form_handler.in_crossover_period?(now: Date.new(2022, 1, 1))).to be_falsey
+        expect(form_handler.in_crossover_period?(now: Date.new(2023, 1, 1))).to be_falsey
       end
     end
 
