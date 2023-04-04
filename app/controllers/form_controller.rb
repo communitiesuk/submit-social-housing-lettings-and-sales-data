@@ -11,8 +11,7 @@ class FormController < ApplicationController
       mandatory_questions_with_no_response = mandatory_questions_with_no_response(responses_for_page)
 
       if mandatory_questions_with_no_response.empty? && @log.update(responses_for_page.merge(updated_by: current_user))
-        session[:errors] = nil
-        session[:fields] = nil
+        session[:errors] = session[:fields] = nil
         redirect_to(successful_redirect_path)
       else
         redirect_path = "#{@log.model_name.param_key}_#{@page.id}_path"
