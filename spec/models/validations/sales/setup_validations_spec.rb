@@ -7,6 +7,15 @@ RSpec.describe Validations::Sales::SetupValidations do
 
   describe "#validate_saledate_collection_year" do
     context "with sales_in_crossover_period == false" do
+      before do
+        Timecop.freeze(Time.zone.local(2023, 1, 10))
+        Singleton.__init__(FormHandler)
+      end
+
+      after do
+        Timecop.return
+      end
+
       context "when saledate is blank" do
         let(:record) { build(:sales_log, saledate: nil) }
 

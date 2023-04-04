@@ -4,6 +4,15 @@ RSpec.describe Validations::SoftValidations do
   let(:organisation) { FactoryBot.create(:organisation, provider_type: "PRP") }
   let(:record) { FactoryBot.create(:lettings_log, owning_organisation: organisation) }
 
+  before do
+    Timecop.freeze(Time.zone.local(2021, 10, 10))
+    Singleton.__init__(FormHandler)
+  end
+
+  after do
+    Timecop.return
+  end
+
   describe "rent min max validations" do
     before do
       LaRentRange.create!(
@@ -23,7 +32,7 @@ RSpec.describe Validations::SoftValidations do
       record.rent_type = 0
       record.beds = 1
       record.period = 1
-      record.startdate = Time.zone.local(2021, 10, 10)
+      record.startdate = Time.zone.today
     end
 
     context "when validating soft min" do

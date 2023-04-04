@@ -38,8 +38,8 @@
     <illness>1</illness>
     <preg_occ>2</preg_occ>
     <startertenancy>1</startertenancy>
-    <tenancylength/>
-    <tenancy/>
+    <tenancylength>5</tenancylength>
+    <tenancy>4</tenancy>
     <ppostcode_full>SE2 6RT</ppostcode_full>
     <rsnvac>6</rsnvac>
     <unittype_gn>7</unittype_gn>
@@ -131,7 +131,7 @@
     <relat8/>
     <lar/>
     <irproduct/>
-    <joint/>
+    <joint>3</joint>
     <sheltered/>
     <hhtype>4</hhtype>
     <new_old>2</new_old>
