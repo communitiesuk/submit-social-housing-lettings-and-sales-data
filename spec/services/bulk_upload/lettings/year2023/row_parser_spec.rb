@@ -806,8 +806,8 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       context "when over 12 characters" do
         let(:attributes) { { bulk_upload:, field_18: "1234567890123" } }
 
-        it "has errors on the field" do
-          expect(parser.errors[:field_18]).to be_present
+        it "adds an appropriate error" do
+          expect(parser.errors[:field_18]).to eql(["UPRN must be 12 digits or less"])
         end
       end
 
