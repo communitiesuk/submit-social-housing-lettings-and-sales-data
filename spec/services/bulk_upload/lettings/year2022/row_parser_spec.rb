@@ -599,6 +599,28 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
       end
     end
 
+    describe "#field_85" do
+      let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: "2") }
+
+      context "when care home charge is given" do
+        let(:attributes) { valid_attributes.merge(field_85: "100") }
+
+        it "sets is carehome to yes and saves the charge" do
+          expect(parser.log.is_carehome).to eq(1)
+          expect(parser.log.chcharge).to eq(100)
+        end
+      end
+
+      context "when care home charge is not given" do
+        let(:attributes) { valid_attributes.merge(field_85: nil) }
+
+        it "sets is carehome to no and does not save the charge" do
+          expect(parser.log.is_carehome).to eq(0)
+          expect(parser.log.chcharge).to be_nil
+        end
+      end
+    end
+
     describe "fields 96, 97, 98 => startdate" do
       context "when all of these fields are blank" do
         let(:attributes) { { bulk_upload:, field_1: "1", field_96: nil, field_97: nil, field_98: nil } }
