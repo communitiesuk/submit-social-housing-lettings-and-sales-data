@@ -1016,6 +1016,7 @@ private
     attributes["supcharg"] = field_83
     attributes["tcharge"] = field_84
     attributes["chcharge"] = field_85
+    attributes["is_carehome"] = field_85.present? ? 1 : 0
     attributes["household_charge"] = field_86
     attributes["hbrentshortfall"] = field_87
     attributes["tshortfall_known"] = tshortfall_known
