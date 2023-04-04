@@ -41,7 +41,6 @@ RSpec.describe "Task List" do
   end
   let(:id) { lettings_log.id }
   let(:status) { lettings_log.status }
-  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
 
   around do |example|
     Timecop.freeze(Time.zone.local(2022, 1, 1)) do
@@ -56,7 +55,6 @@ RSpec.describe "Task List" do
     Timecop.freeze(Time.zone.local(2021, 5, 1))
     setup_completed_log.update!(startdate: Time.zone.local(2021, 5, 1))
     allow(lettings_log.form).to receive(:end_date).and_return(Time.zone.today + 1.day)
-    allow(FormHandler.instance).to receive(:get_form).and_return(fake_2021_2022_form)
     sign_in user
   end
 
@@ -69,10 +67,19 @@ RSpec.describe "Task List" do
     expect(page).to have_content("This log has not been started.")
   end
 
-  it "shows number of completed sections if one section is completed" do
-    visit("/lettings-logs/#{setup_completed_log.id}")
-    expect(page).to have_content("1 of 8 subsections completed.")
+  context "when testing completed subsection count" do
+    let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json") }
+
+    before do
+      allow(FormHandler.instance).to receive(:get_form).and_return(real_2021_2022_form)
+    end
+
+    it "shows number of completed sections if one section is completed" do
+      visit("/lettings-logs/#{setup_completed_log.id}")
+      expect(page).to have_content("1 of 7 subsections completed.")
+    end
   end
+
 
   it "show skip link for next incomplete section" do
     answer_all_questions_in_income_subsection(setup_completed_log)
