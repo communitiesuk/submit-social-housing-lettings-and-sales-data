@@ -126,6 +126,10 @@ module Validations::Sales::SoftValidations
 private
 
   def sale_range
-    LaSaleRange.find_by(start_year: collection_start_year, la:, bedrooms: beds)
+    LaSaleRange.find_by(
+      start_year: collection_start_year,
+      la:,
+      bedrooms: beds_for_la_sale_range,
+    )
   end
 end

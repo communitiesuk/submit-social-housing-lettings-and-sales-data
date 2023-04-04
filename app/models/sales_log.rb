@@ -353,4 +353,8 @@ class SalesLog < Log
     mortgage_amount = mortgage || 0
     mortgage_amount + deposit + grant_amount
   end
+
+  def beds_for_la_sale_range
+    beds.nil? ? nil : [beds, LaSaleRange::MAX_BEDS].min
+  end
 end
