@@ -1254,7 +1254,7 @@ private
       2
     elsif field_60 == 1
       3
-    elsif field_59&.zero?
+    elsif field_59.blank? || field_59&.zero?
       1
     end
   end
