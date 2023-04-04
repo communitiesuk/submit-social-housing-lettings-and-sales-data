@@ -810,6 +810,46 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           expect(parser.errors[:field_18]).to be_present
         end
       end
+
+      context "when neither UPRN nor address given" do
+        let(:attributes) do
+          {
+            bulk_upload:,
+            field_1: "1",
+          }
+        end
+
+        it "adds an appropriate error" do
+          expect(parser.errors[:field_18]).to eql(["You must answer UPRN known"])
+        end
+      end
+
+      context "when UPRN is given but address is not" do
+        let(:attributes) do
+          {
+            bulk_upload:,
+            field_18: "123456789012",
+          }
+        end
+
+        it "doesn't add an error" do
+          expect(parser.errors[:field_18]).to be_empty
+        end
+      end
+
+      context "when address is given but UPRN is not" do
+        let(:attributes) do
+          {
+            bulk_upload:,
+            field_19: "1 Example Rd",
+            field_21: "Example Town/City",
+          }
+        end
+
+        it "doesn't add an error" do
+          expect(parser.errors[:field_18]).to be_empty
+        end
+      end
     end
 
     describe "#field_26" do # unitletas
