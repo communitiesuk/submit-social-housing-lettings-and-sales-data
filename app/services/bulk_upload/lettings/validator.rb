@@ -9,6 +9,7 @@ class BulkUpload::Lettings::Validator
   attr_reader :bulk_upload, :path
 
   validate :validate_file_not_empty
+  validate :validate_fields_count
   validate :validate_min_columns
   validate :validate_max_columns
 
@@ -143,6 +144,12 @@ private
     column_count = rows.map(&:size).max
 
     errors.add(:base, :over_max_column_count) if column_count > csv_parser.class::MAX_COLUMNS
+  end
+
+  def validate_fields_count
+    return if halt_validations?
+
+    errors.add(:base, :wrong_field_count) if csv_parser.non_blank_fields_count != csv_parser.class::FIELDS
   end
 
   def halt_validations!
