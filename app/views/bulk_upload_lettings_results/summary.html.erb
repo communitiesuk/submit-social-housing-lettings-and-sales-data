@@ -17,7 +17,7 @@
   <%= govuk_tabs(title: "Error reports") do |c| %>
     <% c.with_tab(label: "Summary") do %>
       <p class="govuk-body">
-        This summary shows questions that have at least <%= BulkUploadErrorSummaryTableComponent::DISPLAY_THRESHOLD %> errors or more. See full error report for more details.
+        This summary shows questions that have more than <%= BulkUploadErrorSummaryTableComponent::DISPLAY_THRESHOLD - 1 %> errors. See full error report for more details.
       </p>
 
       <%= render BulkUploadErrorSummaryTableComponent.new(bulk_upload: @bulk_upload) %>

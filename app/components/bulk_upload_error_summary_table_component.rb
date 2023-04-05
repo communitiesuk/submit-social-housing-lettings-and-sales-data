@@ -15,7 +15,7 @@ class BulkUploadErrorSummaryTableComponent < ViewComponent::Base
     @sorted_errors ||= setup_errors.presence || bulk_upload
       .bulk_upload_errors
       .group(:col, :field, :error)
-      .having("count(*) > ?", display_threshold)
+      .having("count(*) >= ?", display_threshold)
       .count
       .sort_by { |el| el[0][0].rjust(3, "0") }
   end
@@ -31,7 +31,7 @@ private
       .bulk_upload_errors
       .where(category: "setup")
       .group(:col, :field, :error)
-      .having("count(*) > ?", display_threshold)
+      .having("count(*) >= ?", display_threshold)
       .count
       .sort_by { |el| el[0][0].rjust(3, "0") }
   end
