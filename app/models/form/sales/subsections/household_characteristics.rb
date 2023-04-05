@@ -24,7 +24,7 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Sales::Pages::Nationality1.new(nil, nil, self),
       Form::Sales::Pages::Buyer1WorkingSituation.new(nil, nil, self),
       Form::Sales::Pages::RetirementValueCheck.new("working_situation_1_retirement_value_check", nil, self, person_index: 1),
-      Form::Sales::Pages::Buyer1IncomeValueCheck.new("working_situation_buyer_1_income_value_check", nil, self),
+      Form::Sales::Pages::Buyer1IncomeMinValueCheck.new("working_situation_buyer_1_income_min_value_check", nil, self),
       Form::Sales::Pages::Buyer1LiveInProperty.new(nil, nil, self),
       Form::Sales::Pages::Buyer2RelationshipToBuyer1.new(nil, nil, self),
       Form::Sales::Pages::PersonStudentNotChildValueCheck.new("buyer_2_relationship_student_not_child_value_check", nil, self, person_index: 2),
