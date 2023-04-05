@@ -913,4 +913,187 @@ RSpec.describe Validations::Sales::SoftValidations do
       end
     end
   end
+
+  describe "#buyer1_not_livein?" do
+    context "when it's a shared ownership" do
+      let(:record) { FactoryBot.build(:sales_log, ownershipsch: 1) }
+
+      context "and buy1livein is no" do
+        before do
+          record.buy1livein = 2
+        end
+
+        it "returns true" do
+          expect(record).to be_buyer1_not_livein
+        end
+      end
+
+      context "and buy1livein is yes" do
+        before do
+          record.buy1livein = 1
+        end
+
+        it "returns false" do
+          expect(record).not_to be_buyer1_not_livein
+        end
+      end
+    end
+
+    context "when it's a discounted ownership" do
+      let(:record) { FactoryBot.build(:sales_log, ownershipsch: 2) }
+
+      context "and buy1livein is no" do
+        before do
+          record.buy1livein = 2
+        end
+
+        it "returns true" do
+          expect(record).to be_buyer1_not_livein
+        end
+      end
+
+      context "and buy1livein is yes" do
+        before do
+          record.buy1livein = 1
+        end
+
+        it "returns false" do
+          expect(record).not_to be_buyer1_not_livein
+        end
+      end
+    end
+
+    context "when it's a outright sale" do
+      let(:record) { FactoryBot.build(:sales_log, ownershipsch: 3) }
+
+      context "and buy1livein is no" do
+        before do
+          record.buy1livein = 2
+        end
+
+        it "returns false" do
+          expect(record).not_to be_buyer1_not_livein
+        end
+      end
+
+      context "and buy1livein is yes" do
+        before do
+          record.buy1livein = 1
+        end
+
+        it "returns false" do
+          expect(record).not_to be_buyer1_not_livein
+        end
+      end
+    end
+
+    context "when ownership is not given" do
+      let(:record) { FactoryBot.build(:sales_log, ownershipsch: 3) }
+
+      before do
+        record.ownershipsch = nil
+      end
+
+      it "returns false" do
+        expect(record).not_to be_buyer1_not_livein
+      end
+    end
+  end
+
+  describe "#buyer2_not_livein?" do
+    context "when it's a shared ownership" do
+      let(:record) { FactoryBot.build(:sales_log, ownershipsch: 1, jointpur: 1) }
+
+      context "and buy2livein is no" do
+        before do
+          record.buy2livein = 2
+        end
+
+        it "returns true" do
+          expect(record).to be_buyer2_not_livein
+        end
+      end
+
+      context "and buy2livein is yes" do
+        before do
+          record.buy2livein = 1
+        end
+
+        it "returns false" do
+          expect(record).not_to be_buyer2_not_livein
+        end
+      end
+
+      context "and not a joint purchase" do
+        before do
+          record.buy2livein = 2
+          record.jointpur = 2
+        end
+
+        it "returns false" do
+          expect(record).not_to be_buyer2_not_livein
+        end
+      end
+    end
+
+    context "when it's a discounted ownership" do
+      let(:record) { FactoryBot.build(:sales_log, ownershipsch: 2, jointpur: 1) }
+
+      context "and buy2livein is no" do
+        before do
+          record.buy2livein = 2
+        end
+
+        it "returns true" do
+          expect(record).to be_buyer2_not_livein
+        end
+      end
+
+      context "and buy2livein is yes" do
+        before do
+          record.buy2livein = 1
+        end
+
+        it "returns false" do
+          expect(record).not_to be_buyer2_not_livein
+        end
+      end
+    end
+
+    context "when it's a outright sale" do
+      let(:record) { FactoryBot.build(:sales_log, ownershipsch: 3, jointpur: 1) }
+
+      context "and buy2livein is no" do
+        before do
+          record.buy2livein = 2
+        end
+
+        it "returns false" do
+          expect(record).not_to be_buyer2_not_livein
+        end
+      end
+
+      context "and buy2livein is yes" do
+        before do
+          record.buy2livein = 1
+        end
+
+        it "returns false" do
+          expect(record).not_to be_buyer2_not_livein
+        end
+      end
+    end
+
+    context "when ownership is not given" do
+      let(:record) { FactoryBot.build(:sales_log, ownershipsch: 3, jointpur: 1) }
+
+      before do
+        record.ownershipsch = nil
+      end
+
+      it "returns false" do
+        expect(record).not_to be_buyer2_not_livein
+      end
+    end
+  end
 end

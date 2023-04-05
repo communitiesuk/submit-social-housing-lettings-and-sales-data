@@ -124,11 +124,16 @@ module Validations::Sales::SoftValidations
   end
 
   def buyer1_not_livein?
-    false
+    return unless ownershipsch && buy1livein
+
+    (discounted_ownership_sale? || shared_ownership_scheme?) && buy1livein == 2
   end
 
   def buyer2_not_livein?
-    false
+    return unless ownershipsch && buy2livein
+    return unless joint_purchase?
+
+    (discounted_ownership_sale? || shared_ownership_scheme?) && buy2livein == 2
   end
 
 private
