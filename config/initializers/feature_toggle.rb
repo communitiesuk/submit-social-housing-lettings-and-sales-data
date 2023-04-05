@@ -50,10 +50,6 @@ class FeatureToggle
     !Rails.env.production?
   end
 
-  def self.validate_valid_radio_options?
-    !(Rails.env.production? || Rails.env.staging?)
-  end
-
   def self.collection_2023_2024_year_enabled?
     true
   end
