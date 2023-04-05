@@ -61,6 +61,7 @@ RSpec.describe SalesLog, type: :model do
           old_persons_shared_ownership_value_check
           othtype
           discounted_sale_value_check
+          buyer_livein_value_check
           proplen
           mortlen
           frombeds
@@ -79,6 +80,7 @@ RSpec.describe SalesLog, type: :model do
           old_persons_shared_ownership_value_check
           othtype
           discounted_sale_value_check
+          buyer_livein_value_check
           address_line2
           county
           postcode_full
