@@ -123,6 +123,14 @@ module Validations::Sales::SoftValidations
     mortgage_deposit_and_grant_total != value_with_discount && discounted_ownership_sale?
   end
 
+  def buyer1_not_livein?
+    false
+  end
+
+  def buyer2_not_livein?
+    false
+  end
+
 private
 
   def sale_range
