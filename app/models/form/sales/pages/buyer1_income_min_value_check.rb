@@ -1,4 +1,4 @@
-class Form::Sales::Pages::Buyer1IncomeValueCheck < ::Form::Page
+class Form::Sales::Pages::Buyer1IncomeMinValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @depends_on = [

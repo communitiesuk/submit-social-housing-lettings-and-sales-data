@@ -9,7 +9,8 @@ class Form::Sales::Subsections::IncomeBenefitsAndSavings < ::Form::Subsection
   def pages
     @pages ||= [
       Form::Sales::Pages::Buyer1Income.new(nil, nil, self),
-      Form::Sales::Pages::Buyer1IncomeValueCheck.new("buyer_1_income_value_check", nil, self),
+      Form::Sales::Pages::Buyer1IncomeMinValueCheck.new("buyer_1_income_min_value_check", nil, self),
+      Form::Sales::Pages::Buyer1IncomeMaxValueCheck.new("buyer_1_income_max_value_check", nil, self),
       Form::Sales::Pages::MortgageValueCheck.new("buyer_1_income_mortgage_value_check", nil, self, 1),
       Form::Sales::Pages::Buyer1Mortgage.new(nil, nil, self),
       Form::Sales::Pages::MortgageValueCheck.new("buyer_1_mortgage_value_check", nil, self, 1),
