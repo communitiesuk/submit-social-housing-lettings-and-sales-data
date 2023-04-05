@@ -5,7 +5,6 @@ class BulkUploadMailer < NotifyMailer
   FAILED_CSV_ERRORS_TEMPLATE_ID = "e27abcd4-5295-48c2-b127-e9ee4b781b75".freeze
   FAILED_FILE_SETUP_ERROR_TEMPLATE_ID = "24c9f4c7-96ad-470a-ba31-eb51b7cbafd9".freeze
   FAILED_SERVICE_ERROR_TEMPLATE_ID = "c3f6288c-7a74-4e77-99ee-6c4a0f6e125a".freeze
-  WITH_ERRORS_TEMPLATE_ID = "eb539005-6234-404e-812d-167728cf4274".freeze
   HOW_FIX_UPLOAD_TEMPLATE_ID = "21a07b26-f625-4846-9f4d-39e30937aa24".freeze
 
   def send_how_fix_upload_mail(bulk_upload:)
@@ -123,28 +122,6 @@ class BulkUploadMailer < NotifyMailer
         year_combo: bulk_upload.year_combo,
         errors: errors.map { |e| "- #{e}" }.join("\n"),
         bulk_upload_link:,
-      },
-    )
-  end
-
-  def send_bulk_upload_with_errors_mail(bulk_upload:)
-    count = bulk_upload.logs.where.not(status: %w[completed]).count
-
-    n_logs = pluralize(count, "log")
-
-    title = "We found #{n_logs} with errors"
-
-    error_description = "We created logs from your #{bulk_upload.year_combo} #{bulk_upload.log_type} data. There was a problem with #{count} of the logs. Click the below link to fix these logs."
-
-    send_email(
-      bulk_upload.user.email,
-      WITH_ERRORS_TEMPLATE_ID,
-      {
-        title:,
-        filename: bulk_upload.filename,
-        upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
-        error_description:,
-        summary_report_link: resume_bulk_upload_lettings_result_url(bulk_upload),
       },
     )
   end
