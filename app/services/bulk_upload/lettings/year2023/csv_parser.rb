@@ -3,6 +3,7 @@ require "csv"
 class BulkUpload::Lettings::Year2023::CsvParser
   MIN_COLUMNS = 141
   MAX_COLUMNS = 143
+  FIELDS = 134
 
   attr_reader :path
 
@@ -45,6 +46,10 @@ class BulkUpload::Lettings::Year2023::CsvParser
 
   def column_for_field(field)
     cols[field_numbers.find_index(field) + col_offset]
+  end
+
+  def non_blank_fields_count
+    field_numbers.count { |f| f != "field_blank" }
   end
 
 private
