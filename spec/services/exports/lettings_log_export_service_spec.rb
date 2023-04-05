@@ -59,6 +59,35 @@ RSpec.describe Exports::LettingsLogExportService do
       end
     end
 
+    context "when one pending lettings log exists" do
+      before do
+        FactoryBot.create(
+          :lettings_log,
+          :completed,
+          status: "pending",
+          skip_update_status: true,
+          propcode: "123",
+          ppostcode_full: "SE2 6RT",
+          postcode_full: "NW1 5TY",
+          tenancycode: "BZ737",
+          startdate: Time.zone.local(2022, 2, 2, 10, 36, 49),
+          voiddate: Time.zone.local(2019, 11, 3),
+          mrcdate: Time.zone.local(2020, 5, 5, 10, 36, 49),
+          tenancylength: 5,
+          underoccupation_benefitcap: 4,
+        )
+      end
+
+      it "generates a master manifest with CSV headers but no data" do
+        actual_content = nil
+        expected_content = "zip-name,date-time zipped folder generated,zip-file-uri\n"
+        allow(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args) { |_, arg2| actual_content = arg2&.string }
+
+        export_service.export_xml_lettings_logs
+        expect(actual_content).to eq(expected_content)
+      end
+    end
+
     context "and one lettings log is available for export" do
       let!(:lettings_log) { FactoryBot.create(:lettings_log, :completed, propcode: "123", ppostcode_full: "SE2 6RT", postcode_full: "NW1 5TY", tenancycode: "BZ737", startdate: Time.zone.local(2022, 2, 2, 10, 36, 49), voiddate: Time.zone.local(2019, 11, 3), mrcdate: Time.zone.local(2020, 5, 5, 10, 36, 49), tenancylength: 5, underoccupation_benefitcap: 4) }
 

@@ -767,6 +767,7 @@ private
       cbl: %i[field_116],
       chr: %i[field_118],
       cap: %i[field_117],
+      letting_allocation: %i[field_116 field_117 field_118],
 
       referral: %i[field_119],
 

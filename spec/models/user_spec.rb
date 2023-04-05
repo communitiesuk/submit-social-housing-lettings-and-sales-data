@@ -36,11 +36,6 @@ RSpec.describe User, type: :model do
       expect(user.lettings_logs.to_a).to match_array([owned_lettings_log, managed_lettings_log])
     end
 
-    it "has lettings log status helper methods" do
-      expect(user.completed_lettings_logs.to_a).to match_array([owned_lettings_log])
-      expect(user.not_completed_lettings_logs.to_a).to match_array([managed_lettings_log])
-    end
-
     it "has a role" do
       expect(user.role).to eq("data_provider")
       expect(user.data_provider?).to be true

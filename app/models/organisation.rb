@@ -70,14 +70,6 @@ class Organisation < ApplicationRecord
     SalesLog.filter_by_organisation(self)
   end
 
-  def completed_lettings_logs
-    lettings_logs.completed
-  end
-
-  def not_completed_lettings_logs
-    lettings_logs.not_completed
-  end
-
   def address_string
     %i[address_line1 address_line2 postcode].map { |field| public_send(field) }.join("\n")
   end

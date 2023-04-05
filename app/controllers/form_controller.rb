@@ -108,17 +108,17 @@ private
 
   def find_resource
     @log = if params.key?("sales_log")
-             current_user.sales_logs.find_by(id: params[:id])
+             current_user.sales_logs.visible.find_by(id: params[:id])
            else
-             current_user.lettings_logs.find_by(id: params[:id])
+             current_user.lettings_logs.visible.find_by(id: params[:id])
            end
   end
 
   def find_resource_by_named_id
     @log = if params[:sales_log_id].present?
-             current_user.sales_logs.find_by(id: params[:sales_log_id])
+             current_user.sales_logs.visible.find_by(id: params[:sales_log_id])
            else
-             current_user.lettings_logs.find_by(id: params[:lettings_log_id])
+             current_user.lettings_logs.visible.find_by(id: params[:lettings_log_id])
            end
   end
 

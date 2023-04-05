@@ -115,18 +115,6 @@ class LettingsLog < Log
     end
   end
 
-  def completed?
-    status == "completed"
-  end
-
-  def not_started?
-    status == "not_started"
-  end
-
-  def in_progress?
-    status == "in_progress"
-  end
-
   def weekly_net_income
     return unless earnings && incfreq
 

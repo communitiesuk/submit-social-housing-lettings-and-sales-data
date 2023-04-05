@@ -170,7 +170,7 @@ class BulkUpload::LogToCsv
 
       nil, # 110
       log.owning_organisation&.old_visible_id,
-      nil,
+      log.created_by&.email,
       log.managing_organisation&.old_visible_id,
       leftreg,
       nil,

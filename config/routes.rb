@@ -144,6 +144,15 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :bulk_upload_lettings_resume, path: "bulk-upload-resume", only: %i[show update] do
+        member do
+          get :start
+
+          get "*page", to: "bulk_upload_lettings_resume#show", as: "page"
+          patch "*page", to: "bulk_upload_lettings_resume#update"
+        end
+      end
+
       get "update-logs", to: "lettings_logs#update_logs"
     end
 

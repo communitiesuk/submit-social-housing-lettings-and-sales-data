@@ -69,14 +69,6 @@ class User < ApplicationRecord
     end
   end
 
-  def completed_lettings_logs
-    lettings_logs.completed
-  end
-
-  def not_completed_lettings_logs
-    lettings_logs.not_completed
-  end
-
   def is_key_contact?
     is_key_contact
   end

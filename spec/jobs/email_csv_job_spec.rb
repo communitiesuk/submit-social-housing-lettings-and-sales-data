@@ -61,6 +61,7 @@ describe EmailCsvJob do
     context "when writing to S3" do
       before do
         FactoryBot.create_list(:lettings_log, 4, owning_organisation: other_organisation)
+        FactoryBot.create(:lettings_log, owning_organisation: other_organisation, status: "pending", skip_update_status: true)
       end
 
       def expect_csv

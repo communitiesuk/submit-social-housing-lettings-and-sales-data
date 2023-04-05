@@ -591,6 +591,7 @@ RSpec.describe OrganisationsController, type: :request do
 
           before do
             FactoryBot.create_list(:lettings_log, number_of_org1_lettings_logs, created_by: user)
+            FactoryBot.create(:lettings_log, created_by: user, status: "pending", skip_update_status: true)
             FactoryBot.create_list(:lettings_log, number_of_org2_lettings_logs, created_by: nil, owning_organisation_id: unauthorised_organisation.id, managing_organisation_id: unauthorised_organisation.id)
 
             get "/organisations/#{organisation.id}/lettings-logs", headers:, params: {}
@@ -598,7 +599,8 @@ RSpec.describe OrganisationsController, type: :request do
 
           it "only shows logs for that organisation" do
             expect(page).to have_content("#{number_of_org1_lettings_logs} total logs")
-            organisation.lettings_logs.map(&:id).each do |lettings_log_id|
+
+            organisation.lettings_logs.visible.map(&:id).each do |lettings_log_id|
               expect(page).to have_link lettings_log_id.to_s, href: "/lettings-logs/#{lettings_log_id}"
             end
 
@@ -1155,6 +1157,7 @@ RSpec.describe OrganisationsController, type: :request do
 
         before do
           FactoryBot.create_list(:lettings_log, 2, owning_organisation: organisation)
+          FactoryBot.create(:lettings_log, owning_organisation: organisation, status: "pending", skip_update_status: true)
           FactoryBot.create_list(:lettings_log, 2, owning_organisation: other_organisation)
         end
 
