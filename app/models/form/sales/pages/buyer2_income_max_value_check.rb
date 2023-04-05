@@ -1,26 +1,18 @@
-class Form::Sales::Pages::Buyer2IncomeValueCheck < ::Form::Page
+class Form::Sales::Pages::Buyer2IncomeMaxValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
-    @header = ""
-    @description = ""
-    @subsection = subsection
     @depends_on = [
       {
-        "income2_under_soft_min?" => true,
+        "income2_over_soft_max?" => true,
       },
     ]
     @title_text = {
-      "translation" => "soft_validations.income.under_soft_min_for_economic_status",
+      "translation" => "soft_validations.income.over_soft_max_for_la",
       "arguments" => [
         {
           "key" => "field_formatted_as_currency",
           "arguments_for_key" => "income2",
           "i18n_template" => "income",
-        },
-        {
-          "key" => "income_soft_min_for_ecstat",
-          "arguments_for_key" => "ecstat2",
-          "i18n_template" => "minimum",
         },
       ],
     }

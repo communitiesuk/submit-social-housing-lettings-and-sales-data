@@ -29,6 +29,7 @@ class Form::Sales::Subsections::PropertyInformation < ::Form::Subsection
         Form::Sales::Pages::Address.new(nil, nil, self),
         Form::Sales::Pages::PropertyLocalAuthority.new(nil, nil, self),
         Form::Sales::Pages::Buyer1IncomeMaxValueCheck.new("local_authority_buyer_1_income_max_value_check", nil, self),
+        Form::Sales::Pages::Buyer2IncomeMaxValueCheck.new("local_authority_buyer_2_income_max_value_check", nil, self),
       ]
     end
   end
@@ -39,6 +40,7 @@ class Form::Sales::Subsections::PropertyInformation < ::Form::Subsection
         Form::Sales::Pages::Postcode.new(nil, nil, self),
         Form::Sales::Pages::PropertyLocalAuthority.new(nil, nil, self),
         Form::Sales::Pages::Buyer1IncomeMaxValueCheck.new("local_authority_buyer_1_income_max_value_check", nil, self),
+        Form::Sales::Pages::Buyer2IncomeMaxValueCheck.new("local_authority_buyer_2_income_max_value_check", nil, self),
       ]
     end
   end

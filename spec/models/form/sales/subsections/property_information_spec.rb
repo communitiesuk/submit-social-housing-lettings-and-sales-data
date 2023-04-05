@@ -28,6 +28,7 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
             property_postcode
             property_local_authority
             local_authority_buyer_1_income_max_value_check
+            local_authority_buyer_2_income_max_value_check
             about_price_la_value_check
             property_wheelchair_accessible
           ],
@@ -47,6 +48,7 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
             address
             property_local_authority
             local_authority_buyer_1_income_max_value_check
+            local_authority_buyer_2_income_max_value_check
             property_number_of_bedrooms
             about_price_bedrooms_value_check
             property_unit_type
