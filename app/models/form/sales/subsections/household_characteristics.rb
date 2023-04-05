@@ -37,7 +37,7 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
       buyer_2_ethnicity_nationality_pages,
       Form::Sales::Pages::Buyer2WorkingSituation.new(nil, nil, self),
       Form::Sales::Pages::RetirementValueCheck.new("working_situation_2_retirement_value_check_joint_purchase", nil, self, person_index: 2),
-      Form::Sales::Pages::Buyer2IncomeValueCheck.new("working_situation_buyer_2_income_value_check", nil, self),
+      Form::Sales::Pages::Buyer2IncomeMinValueCheck.new("working_situation_buyer_2_income_min_value_check", nil, self),
       Form::Sales::Pages::PersonStudentNotChildValueCheck.new("buyer_2_working_situation_student_not_child_value_check", nil, self, person_index: 2),
       Form::Sales::Pages::Buyer2LiveInProperty.new(nil, nil, self),
       Form::Sales::Pages::NumberOfOthersInProperty.new("number_of_others_in_property", nil, self, joint_purchase: false),

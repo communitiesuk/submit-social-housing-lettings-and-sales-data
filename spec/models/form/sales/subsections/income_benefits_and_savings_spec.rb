@@ -28,7 +28,8 @@ RSpec.describe Form::Sales::Subsections::IncomeBenefitsAndSavings, type: :model 
             buyer_1_mortgage_value_check
             buyer_2_income
             buyer_2_income_mortgage_value_check
-            buyer_2_income_value_check
+            buyer_2_income_min_value_check
+            buyer_2_income_max_value_check
             buyer_2_mortgage
             buyer_2_mortgage_value_check
             housing_benefits_joint_purchase
@@ -57,7 +58,8 @@ RSpec.describe Form::Sales::Subsections::IncomeBenefitsAndSavings, type: :model 
             buyer_1_mortgage_value_check
             buyer_2_income
             buyer_2_income_mortgage_value_check
-            buyer_2_income_value_check
+            buyer_2_income_min_value_check
+            buyer_2_income_max_value_check
             buyer_2_mortgage
             buyer_2_mortgage_value_check
             housing_benefits_joint_purchase
