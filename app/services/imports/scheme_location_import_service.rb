@@ -35,7 +35,6 @@ module Imports
         primary_client_group: attributes["primary_client_group"],
         secondary_client_group: attributes["secondary_client_group"],
         sensitive: attributes["sensitive"],
-        end_date: attributes["end_date"],
         # These values were set by the scheme import (management groups)
         owning_organisation_id: source_scheme.owning_organisation_id,
         service_name: source_scheme.service_name,
@@ -43,7 +42,7 @@ module Imports
         old_id: source_scheme.old_id,
         old_visible_id: source_scheme.old_visible_id,
       )
-      confirm_scheme(scheme)
+      confirm_scheme_or_location(scheme)
       scheme.save! && scheme
     rescue ActiveRecord::RecordInvalid
       @logger.error("Scheme #{source_scheme.old_visible_id}: Failed to import")
@@ -59,18 +58,17 @@ module Imports
         primary_client_group: attributes["primary_client_group"],
         secondary_client_group: attributes["secondary_client_group"],
         sensitive: attributes["sensitive"],
-        end_date: attributes["end_date"],
       }
-      confirm_scheme(scheme)
+      confirm_scheme_or_location(scheme)
       scheme.save! && scheme
     end
 
-    def confirm_scheme(scheme)
-      scheme.confirmed = true
-      scheme.validate_confirmed
-      unless scheme.errors.empty?
-        scheme.confirmed = false
-        scheme.errors.clear
+    def confirm_scheme_or_location(obj)
+      obj.confirmed = true
+      obj.validate_confirmed
+      unless obj.errors.empty?
+        obj.confirmed = false
+        obj.errors.clear
       end
     end
 
@@ -99,7 +97,7 @@ module Imports
     end
 
     def add_location(scheme, attributes)
-      Location.create!(
+      location = Location.create!(
         name: attributes["location_name"],
         postcode: attributes["postcode"],
         mobility_type: attributes["mobility_type"],
@@ -110,6 +108,10 @@ module Imports
         startdate: attributes["start_date"],
         scheme:,
       )
+      if attributes["end_date"]
+        location.location_deactivation_periods.create!(deactivation_date: attributes["end_date"])
+      end
+      location
     rescue ActiveRecord::RecordNotUnique
       @logger.warn("Location is already present with legacy ID #{attributes['location_old_id']}, skipping")
     rescue ActiveRecord::RecordInvalid

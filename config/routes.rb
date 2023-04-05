@@ -134,7 +134,6 @@ Rails.application.routes.draw do
       resources :bulk_upload_lettings_logs, path: "bulk-upload-logs", only: %i[show update] do
         collection do
           get :start
-          get "guidance", to: "bulk_upload_lettings_logs#guidance"
         end
       end
 
@@ -142,6 +141,15 @@ Rails.application.routes.draw do
         member do
           get :resume
           get :summary
+        end
+      end
+
+      resources :bulk_upload_lettings_resume, path: "bulk-upload-resume", only: %i[show update] do
+        member do
+          get :start
+
+          get "*page", to: "bulk_upload_lettings_resume#show", as: "page"
+          patch "*page", to: "bulk_upload_lettings_resume#update"
         end
       end
 
@@ -169,7 +177,6 @@ Rails.application.routes.draw do
       resources :bulk_upload_sales_logs, path: "bulk-upload-logs" do
         collection do
           get :start
-          get "guidance", to: "bulk_upload_sales_logs#guidance"
         end
       end
 

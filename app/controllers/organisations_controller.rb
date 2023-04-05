@@ -90,7 +90,7 @@ class OrganisationsController < ApplicationController
   end
 
   def lettings_logs
-    organisation_logs = LettingsLog.where(owning_organisation_id: @organisation.id)
+    organisation_logs = LettingsLog.visible.where(owning_organisation_id: @organisation.id)
     unpaginated_filtered_logs = filtered_logs(organisation_logs, search_term, @session_filters)
 
     respond_to do |format|
@@ -105,7 +105,7 @@ class OrganisationsController < ApplicationController
   end
 
   def download_csv
-    organisation_logs = LettingsLog.all.where(owning_organisation_id: @organisation.id)
+    organisation_logs = LettingsLog.visible.where(owning_organisation_id: @organisation.id)
     unpaginated_filtered_logs = filtered_logs(organisation_logs, search_term, @session_filters)
     codes_only = params.require(:codes_only) == "true"
 

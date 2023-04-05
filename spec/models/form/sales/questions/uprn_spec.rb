@@ -74,9 +74,10 @@ RSpec.describe Form::Sales::Questions::Uprn, type: :model do
 
   describe "has the correct hidden_in_check_answers" do
     context "when uprn_known == 1" do
-      let(:log) { create(:sales_log, uprn_known: 1) }
+      let(:log) { create(:sales_log) }
 
       it "returns false" do
+        log.uprn_known = 1
         expect(question.hidden_in_check_answers?(log)).to eq(false)
       end
     end

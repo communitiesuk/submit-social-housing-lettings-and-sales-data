@@ -209,6 +209,192 @@ RSpec.describe Csv::LettingsLogCsvService do
                                    address_line2
                                    town_or_city
                                    county
+                                   status_cache
+                                   unittype_sh
+                                   scheme_code
+                                   scheme_service_name
+                                   scheme_sensitive
+                                   scheme_type
+                                   scheme_registered_under_care_act
+                                   scheme_owning_organisation_name
+                                   scheme_primary_client_group
+                                   scheme_has_other_client_group
+                                   scheme_secondary_client_group
+                                   scheme_support_type
+                                   scheme_intended_stay
+                                   scheme_created_at
+                                   location_code
+                                   location_postcode
+                                   location_name
+                                   location_units
+                                   location_type_of_unit
+                                   location_mobility_type
+                                   location_admin_district
+                                   location_startdate]
+
+      csv = CSV.parse(described_class.new(user, export_type: "labels").to_csv)
+
+      expect(csv.first).to eq(expected_csv_attributes)
+    end
+  end
+
+  context "when the user is not support" do
+    let(:user) { FactoryBot.create(:user) }
+    let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json") }
+
+    before do
+      LettingsLog.create!(startdate: Time.zone.today, created_at: Time.utc(2022, 2, 8, 16, 52, 15))
+      allow(FormHandler.instance).to receive(:get_form).and_return(real_2021_2022_form)
+    end
+
+    it "sets csv attributes in correct order and without omitted values" do
+      expected_csv_attributes = %w[id
+                                   status
+                                   created_at
+                                   updated_at
+                                   created_by_name
+                                   is_dpo
+                                   owning_organisation_name
+                                   managing_organisation_name
+                                   collection_start_year
+                                   renewal
+                                   startdate
+                                   irproduct_other
+                                   tenancycode
+                                   propcode
+                                   postcode_full
+                                   la_label
+                                   unitletas
+                                   rsnvac
+                                   offered
+                                   unittype_gn
+                                   builtype
+                                   wchair
+                                   beds
+                                   voiddate
+                                   void_date_value_check
+                                   majorrepairs
+                                   mrcdate
+                                   major_repairs_date_value_check
+                                   startertenancy
+                                   tenancy
+                                   tenancyother
+                                   tenancylength
+                                   sheltered
+                                   declaration
+                                   age1
+                                   sex1
+                                   ethnic_group
+                                   ethnic
+                                   national
+                                   ecstat1
+                                   relat2
+                                   age2
+                                   sex2
+                                   ecstat2
+                                   relat3
+                                   age3
+                                   sex3
+                                   ecstat3
+                                   relat4
+                                   age4
+                                   sex4
+                                   ecstat4
+                                   relat5
+                                   age5
+                                   sex5
+                                   ecstat5
+                                   relat6
+                                   age6
+                                   sex6
+                                   ecstat6
+                                   relat7
+                                   age7
+                                   sex7
+                                   ecstat7
+                                   relat8
+                                   age8
+                                   sex8
+                                   ecstat8
+                                   armedforces
+                                   leftreg
+                                   reservist
+                                   preg_occ
+                                   housingneeds
+                                   housingneeds_type
+                                   housingneeds_other
+                                   illness
+                                   illness_type_4
+                                   illness_type_5
+                                   illness_type_2
+                                   illness_type_6
+                                   illness_type_7
+                                   illness_type_3
+                                   illness_type_9
+                                   illness_type_8
+                                   illness_type_1
+                                   illness_type_10
+                                   layear
+                                   waityear
+                                   reason
+                                   reasonother
+                                   prevten
+                                   underoccupation_benefitcap
+                                   homeless
+                                   ppcodenk
+                                   ppostcode_full
+                                   prevloc_label
+                                   reasonpref
+                                   rp_homeless
+                                   rp_insan_unsat
+                                   rp_medwel
+                                   rp_hardship
+                                   rp_dontknow
+                                   cbl
+                                   cap
+                                   chr
+                                   referral
+                                   earnings
+                                   incfreq
+                                   hb
+                                   benefits
+                                   household_charge
+                                   period
+                                   chcharge
+                                   carehome_charges_value_check
+                                   brent
+                                   scharge
+                                   pscharge
+                                   supcharg
+                                   tcharge
+                                   hbrentshortfall
+                                   tshortfall
+                                   housingneeds_a
+                                   housingneeds_b
+                                   housingneeds_c
+                                   housingneeds_f
+                                   housingneeds_g
+                                   housingneeds_h
+                                   property_owner_organisation
+                                   property_manager_organisation
+                                   purchaser_code
+                                   property_relet
+                                   incref
+                                   lettype
+                                   nocharge
+                                   has_benefits
+                                   refused
+                                   wchchrg
+                                   newprop
+                                   lar
+                                   irproduct
+                                   joint
+                                   uprn
+                                   uprn_known
+                                   address_line1
+                                   address_line2
+                                   town_or_city
+                                   county
                                    unittype_sh
                                    scheme_code
                                    scheme_service_name

@@ -35,12 +35,6 @@ module Validations::HouseholdValidations
     end
   end
 
-  def validate_pregnancy(record)
-    if (record.has_pregnancy? || record.pregnancy_refused?) && women_in_household(record) && !women_of_child_bearing_age_in_household(record)
-      record.errors.add :preg_occ, I18n.t("validations.household.preg_occ.no_female")
-    end
-  end
-
   def validate_household_number_of_other_members(record)
     (2..8).each do |n|
       validate_person_age_matches_economic_status(record, n)
@@ -63,7 +57,7 @@ module Validations::HouseholdValidations
 
   def validate_previous_housing_situation(record)
     if record.is_relet_to_temp_tenant? && !record.previous_tenancy_was_temporary?
-      record.errors.add :prevten, I18n.t("validations.household.prevten.non_temp_accommodation")
+      record.errors.add :prevten, :non_temp_accommodation, message: I18n.t("validations.household.prevten.non_temp_accommodation")
     end
 
     if record.age1.present? && record.age1 > 19 && record.previous_tenancy_was_foster_care?
@@ -115,6 +109,15 @@ module Validations::HouseholdValidations
   def validate_prevloc(record)
     if record.previous_la_known? && record.prevloc.blank?
       record.errors.add :prevloc, I18n.t("validations.household.previous_la_known")
+    end
+  end
+
+  def validate_layear(record)
+    return unless record.layear && record.renewal
+
+    if record.is_renewal? && record.layear == 1
+      record.errors.add :layear, I18n.t("validations.household.renewal_just_moved_to_area.layear")
+      record.errors.add :renewal, I18n.t("validations.household.renewal_just_moved_to_area.renewal")
     end
   end
 

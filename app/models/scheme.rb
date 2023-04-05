@@ -110,7 +110,7 @@ class Scheme < ApplicationRecord
 
   enum arrangement_type: ARRANGEMENT_TYPE, _suffix: true
 
-  def self.find_by_id_on_mulitple_fields(id)
+  def self.find_by_id_on_multiple_fields(id)
     return if id.nil?
 
     if id.start_with?("S")
@@ -219,7 +219,7 @@ class Scheme < ApplicationRecord
   end
 
   def available_from
-    FormHandler.instance.collection_start_date(created_at)
+    FormHandler.instance.earliest_open_collection_start_date(now: created_at)
   end
 
   def open_deactivation
@@ -235,7 +235,7 @@ class Scheme < ApplicationRecord
   end
 
   def status_at(date)
-    return :incomplete unless confirmed
+    return :incomplete unless confirmed && locations.confirmed.any?
     return :deactivated if open_deactivation&.deactivation_date.present? && date >= open_deactivation.deactivation_date
     return :deactivating_soon if open_deactivation&.deactivation_date.present? && date < open_deactivation.deactivation_date
     return :reactivating_soon if recent_deactivation&.reactivation_date.present? && date < recent_deactivation.reactivation_date

@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
   subject(:parser) { described_class.new(attributes) }
 
-  let(:now) { Time.zone.today }
+  let(:now) { Time.zone.parse("01/03/2023") }
 
   let(:attributes) { { bulk_upload: } }
   let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }
@@ -96,6 +96,12 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
       field_47: "1",
 
       field_118: "2",
+
+      field_55: "1",
+      field_56: "0",
+      field_57: "0",
+      field_58: "1",
+      field_59: "0",
 
       field_66: "5",
       field_67: "2",
@@ -219,6 +225,26 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute)
 
         expect(errors).to eql(%i[field_1 field_98 field_97 field_96 field_111 field_113])
+      end
+    end
+
+    context "when lettype is intermediate rent and intermediate rent type is not selected" do
+      let(:attributes) { valid_attributes.merge(field_1: "11", field_130: nil) }
+
+      it "has errors on setup field" do
+        errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute)
+
+        expect(errors).to eql(%i[field_130])
+      end
+    end
+
+    context "when lettype is affordable rent and affordable rent type is not selected" do
+      let(:attributes) { valid_attributes.merge(field_1: "5", field_130: nil) }
+
+      it "has errors on setup field" do
+        errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute)
+
+        expect(errors).to eql(%i[field_129])
       end
     end
 
@@ -446,6 +472,16 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
       end
     end
 
+    describe "#field_14" do # age3
+      context "when blank but gender given" do
+        let(:attributes) { valid_attributes.merge(field_14: "", field_22: "F") }
+
+        it "returns an error" do
+          expect(parser.errors[:field_14]).to be_present
+        end
+      end
+    end
+
     describe "#field_52" do # leaving reason
       context "when field_134 is 1 meaning it is a renewal" do
         context "when field_52 is 40" do
@@ -475,13 +511,22 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
     end
 
     describe "#field_55, #field_56, #field_57" do
+      context "when one item selected" do
+        let(:attributes) { { bulk_upload:, field_55: "1" } }
+
+        it "is permitted" do
+          expect(parser.errors[:field_55]).to be_blank
+          expect(parser.errors[:field_56]).to be_blank
+          expect(parser.errors[:field_57]).to be_blank
+        end
+      end
+
       context "when more than one item selected" do
         let(:attributes) { { bulk_upload:, field_55: "1", field_56: "1" } }
 
         it "is not permitted" do
           expect(parser.errors[:field_55]).to be_present
           expect(parser.errors[:field_56]).to be_present
-          expect(parser.errors[:field_57]).to be_present
         end
       end
     end
@@ -550,6 +595,28 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
 
         it "is permitted" do
           expect(parser.errors[:field_78]).to be_blank
+        end
+      end
+    end
+
+    describe "#field_85" do
+      let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: "2") }
+
+      context "when care home charge is given" do
+        let(:attributes) { valid_attributes.merge(field_85: "100") }
+
+        it "sets is carehome to yes and saves the charge" do
+          expect(parser.log.is_carehome).to eq(1)
+          expect(parser.log.chcharge).to eq(100)
+        end
+      end
+
+      context "when care home charge is not given" do
+        let(:attributes) { valid_attributes.merge(field_85: nil) }
+
+        it "sets is carehome to no and does not save the charge" do
+          expect(parser.log.is_carehome).to eq(0)
+          expect(parser.log.chcharge).to be_nil
         end
       end
     end
@@ -634,6 +701,10 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
 
           expect(setup_errors.find { |e| e.attribute == :field_111 }.message).to eql("The owning organisation code is incorrect")
         end
+
+        it "blocks log creation" do
+          expect(parser).to be_block_log_creation
+        end
       end
 
       context "when cannot find owning org" do
@@ -641,6 +712,10 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
 
         it "is not permitted" do
           expect(parser.errors[:field_111]).to eql(["The owning organisation code is incorrect"])
+        end
+
+        it "blocks log creation" do
+          expect(parser).to be_block_log_creation
         end
       end
 
@@ -673,12 +748,80 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
       end
     end
 
+    describe "#field_112" do # username for created_by
+      context "when blank" do
+        let(:attributes) { { bulk_upload:, field_112: "" } }
+
+        it "is permitted" do
+          expect(parser.errors[:field_112]).to be_blank
+        end
+      end
+
+      context "when user could not be found" do
+        let(:attributes) { { bulk_upload:, field_112: "idonotexist@example.com" } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_112]).to be_present
+        end
+      end
+
+      context "when an unaffiliated user" do
+        let(:other_user) { create(:user) }
+
+        let(:attributes) { { bulk_upload:, field_111: owning_org.old_visible_id, field_112: other_user.email, field_113: managing_org.old_visible_id } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_112]).to be_present
+        end
+
+        it "blocks log creation" do
+          expect(parser).to be_block_log_creation
+        end
+      end
+
+      context "when an user part of owning org" do
+        let(:other_user) { create(:user, organisation: owning_org) }
+
+        let(:attributes) { { bulk_upload:, field_111: owning_org.old_visible_id, field_112: other_user.email, field_113: managing_org.old_visible_id } }
+
+        it "is permitted" do
+          expect(parser.errors[:field_112]).to be_blank
+        end
+      end
+
+      context "when an user part of managing org" do
+        let(:other_user) { create(:user, organisation: managing_org) }
+
+        let(:attributes) { { bulk_upload:, field_111: owning_org.old_visible_id, field_112: other_user.email, field_113: managing_org.old_visible_id } }
+
+        it "is permitted" do
+          expect(parser.errors[:field_112]).to be_blank
+        end
+      end
+    end
+
     describe "#field_113" do # managing org
+      context "when blank" do
+        let(:attributes) { { bulk_upload:, field_113: "" } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_113]).to eql(["The managing organisation code is incorrect"])
+        end
+
+        it "blocks log creation" do
+          expect(parser).to be_block_log_creation
+        end
+      end
+
       context "when cannot find managing org" do
         let(:attributes) { { bulk_upload:, field_113: "donotexist" } }
 
         it "is not permitted" do
           expect(parser.errors[:field_113]).to eql(["The managing organisation code is incorrect"])
+        end
+
+        it "blocks log creation" do
+          expect(parser).to be_block_log_creation
         end
       end
 
@@ -731,6 +874,26 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
   end
 
   describe "#log" do
+    describe "#created_by" do
+      context "when blank" do
+        let(:attributes) { setup_section_params }
+
+        it "takes the user that is uploading" do
+          expect(parser.log.created_by).to eql(bulk_upload.user)
+        end
+      end
+
+      context "when email specified" do
+        let(:other_user) { create(:user, organisation: owning_org) }
+
+        let(:attributes) { setup_section_params.merge(field_112: other_user.email) }
+
+        it "sets to user with specified email" do
+          expect(parser.log.created_by).to eql(other_user)
+        end
+      end
+    end
+
     [
       %w[age1_known age1 field_12],
       %w[age2_known age2 field_13],
@@ -742,6 +905,18 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
       %w[age8_known age8 field_19],
     ].each do |known, age, field|
       describe "##{known} and ##{age}" do
+        context "when #{field} is blank" do
+          let(:attributes) { { bulk_upload:, field.to_s => nil } }
+
+          it "sets ##{known} 1" do
+            expect(parser.log.public_send(known)).to be(1)
+          end
+
+          it "sets ##{age} to nil" do
+            expect(parser.log.public_send(age)).to be_nil
+          end
+        end
+
         context "when #{field} is R" do
           let(:attributes) { { bulk_upload:, field.to_s => "R" } }
 
@@ -1284,6 +1459,107 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
 
         it "sets to 3" do
           expect(parser.log.housingneeds).to eq(3)
+        end
+      end
+
+      context "when housingneeds are given" do
+        let(:attributes) { { bulk_upload:, field_59: "0", field_57: "1", field_58: "1" } }
+
+        it "sets correct housingneeds" do
+          expect(parser.log.housingneeds).to eq(1)
+          expect(parser.log.housingneeds_type).to eq(2)
+          expect(parser.log.housingneeds_other).to eq(1)
+        end
+      end
+
+      context "when housingneeds are given and field_59 is nil" do
+        let(:attributes) { { bulk_upload:, field_57: "1", field_58: "1", field_59: nil } }
+
+        it "sets correct housingneeds" do
+          expect(parser.log.housingneeds).to eq(1)
+          expect(parser.log.housingneeds_type).to eq(2)
+          expect(parser.log.housingneeds_other).to eq(1)
+        end
+      end
+
+      context "when housingneeds a and b are selected" do
+        let(:attributes) { { bulk_upload:, field_55: "1", field_56: "1" } }
+
+        it "sets error on housingneeds a and b" do
+          parser.valid?
+          expect(parser.errors[:field_55]).to include("Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected")
+          expect(parser.errors[:field_56]).to include("Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected")
+          expect(parser.errors[:field_57]).to be_blank
+        end
+      end
+
+      context "when housingneeds a and c are selected" do
+        let(:attributes) { { bulk_upload:, field_55: "1", field_57: "1" } }
+
+        it "sets error on housingneeds a and c" do
+          parser.valid?
+          expect(parser.errors[:field_55]).to include("Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected")
+          expect(parser.errors[:field_57]).to include("Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected")
+          expect(parser.errors[:field_56]).to be_blank
+        end
+      end
+
+      context "when housingneeds b and c are selected" do
+        let(:attributes) { { bulk_upload:, field_56: "1", field_57: "1" } }
+
+        it "sets error on housingneeds b and c" do
+          parser.valid?
+          expect(parser.errors[:field_56]).to include("Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected")
+          expect(parser.errors[:field_57]).to include("Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected")
+          expect(parser.errors[:field_55]).to be_blank
+        end
+      end
+
+      context "when housingneeds a and g are selected" do
+        let(:attributes) { { bulk_upload:, field_55: "1", field_59: "1" } }
+
+        it "sets error on housingneeds a and g" do
+          parser.valid?
+          expect(parser.errors[:field_59]).to include("No disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs")
+          expect(parser.errors[:field_55]).to include("No disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs")
+          expect(parser.errors[:field_56]).to be_blank
+          expect(parser.errors[:field_57]).to be_blank
+        end
+      end
+
+      context "when only housingneeds g is selected" do
+        let(:attributes) { { bulk_upload:, field_55: "0", field_59: "1" } }
+
+        it "does not add any housingneeds errors" do
+          parser.valid?
+          expect(parser.errors[:field_59]).to be_blank
+          expect(parser.errors[:field_55]).to be_blank
+          expect(parser.errors[:field_56]).to be_blank
+          expect(parser.errors[:field_57]).to be_blank
+        end
+      end
+
+      context "when housingneeds a and h are selected" do
+        let(:attributes) { { bulk_upload:, field_55: "1", field_60: "1" } }
+
+        it "sets error on housingneeds a and h" do
+          parser.valid?
+          expect(parser.errors[:field_60]).to include("Don’t know disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs")
+          expect(parser.errors[:field_55]).to include("Don’t know disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs")
+          expect(parser.errors[:field_56]).to be_blank
+          expect(parser.errors[:field_57]).to be_blank
+        end
+      end
+
+      context "when only housingneeds h is selected" do
+        let(:attributes) { { bulk_upload:, field_55: "0", field_60: "1" } }
+
+        it "does not add any housingneeds errors" do
+          parser.valid?
+          expect(parser.errors[:field_60]).to be_blank
+          expect(parser.errors[:field_55]).to be_blank
+          expect(parser.errors[:field_56]).to be_blank
+          expect(parser.errors[:field_57]).to be_blank
         end
       end
     end

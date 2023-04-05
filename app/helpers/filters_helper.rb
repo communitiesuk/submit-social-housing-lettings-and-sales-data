@@ -12,9 +12,11 @@ module FiltersHelper
   end
 
   def status_filters
-    statuses = {}
-    LettingsLog.statuses.keys.map { |status| statuses[status] = status.humanize }
-    statuses
+    {
+      "not_started" => "Not started",
+      "in_progress" => "In progress",
+      "completed" => "Completed",
+    }.freeze
   end
 
   def selected_option(filter)

@@ -37,15 +37,11 @@ module Validations::Sales::FinancialValidations
   end
 
   def validate_mortgage(record)
-    record.errors.add :mortgage, I18n.t("validations.financial.mortgage") if record.mortgage_used? && record.mortgage&.zero?
+    record.errors.add :mortgage, :cannot_be_0, message: I18n.t("validations.financial.mortgage") if record.mortgage_used? && record.mortgage&.zero?
   end
 
-  def validate_cash_discount(record)
-    return unless record.cashdis
-
-    unless record.cashdis.between?(0, 999_999)
-      record.errors.add :cashdis, I18n.t("validations.financial.cash_discount_invalid")
-    end
+  def validate_monthly_leasehold_charges(record)
+    record.errors.add :mscharge, I18n.t("validations.financial.monthly_leasehold_charges.not_zero") if record.mscharge&.zero?
   end
 
   def validate_percentage_bought_not_greater_than_percentage_owned(record)
@@ -98,10 +94,10 @@ module Validations::Sales::FinancialValidations
 
     if record.equity < range.min
       record.errors.add :type, I18n.t("validations.financial.equity.under_min", min_equity: range.min)
-      record.errors.add :equity, I18n.t("validations.financial.equity.under_min", min_equity: range.min)
+      record.errors.add :equity, :under_min, message: I18n.t("validations.financial.equity.under_min", min_equity: range.min)
     elsif record.equity > range.max
       record.errors.add :type, I18n.t("validations.financial.equity.over_max", max_equity: range.max)
-      record.errors.add :equity, I18n.t("validations.financial.equity.over_max", max_equity: range.max)
+      record.errors.add :equity, :over_max, message: I18n.t("validations.financial.equity.over_max", max_equity: range.max)
     end
   end
 

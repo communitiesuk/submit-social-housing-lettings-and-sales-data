@@ -198,7 +198,7 @@ RSpec.describe Imports::LettingsLogsImportService do
 
         it "intercepts the relevant validation error" do
           expect(logger).to receive(:warn).with(/Removing field age2 from log triggering validation: Answer cannot be over 16/)
-          expect(logger).to receive(:warn).with(/Removing field age2 from log triggering validation: Person 2’s age must be between/)
+          expect(logger).to receive(:warn).with(/Removing field age2 from log triggering validation: outside_the_range/)
           expect(logger).to receive(:warn).with(/Removing field ecstat2 from log triggering validation: Answer cannot be ‘child under 16’/)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
@@ -223,7 +223,8 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
 
         it "intercepts the relevant validation error" do
-          expect(logger).to receive(:warn).with(/Where the income is 0, set earnings and income to blank and set incref to refused/)
+          expect(logger).to receive(:warn).with(/Removing earnings with error: Net income cannot be less than £10 per week given the tenant’s working situation/)
+          expect(logger).to receive(:warn).with(/Removing incfreq with error: Net income cannot be less than £10 per week given the tenant’s working situation/)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end
@@ -249,7 +250,8 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
 
         it "intercepts the relevant validation error" do
-          expect(logger).to receive(:warn).with(/Removing tenancylength as invalid/)
+          expect(logger).to receive(:warn).with(/Removing tenancylength with error: Enter a tenancy length between 2 and 99 years for a tenancy of this type/)
+          expect(logger).to receive(:warn).with(/Removing tenancy with error: Enter a tenancy length between 2 and 99 years for a tenancy of this type/)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end
@@ -274,7 +276,8 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
 
         it "intercepts the relevant validation error" do
-          expect(logger).to receive(:warn).with(/Removing age1 and prevten as incompatible/)
+          expect(logger).to receive(:warn).with(/Removing prevten with error: Answer cannot be a children’s home or foster care as the lead tenant is 20 or older/)
+          expect(logger).to receive(:warn).with(/Removing age1 with error: Answer cannot be a children’s home or foster care as the lead tenant is 20 or older/)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end
@@ -327,7 +330,7 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
 
         it "intercepts the relevant validation error" do
-          expect(logger).to receive(:warn).with(/Removing internal transfer referral since previous tenancy is a non social housing/)
+          expect(logger).to receive(:warn).with(/Removing referral with error: Answer cannot be internal transfer as the household situation immediately before this letting was Residential care home/)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end
@@ -349,7 +352,7 @@ RSpec.describe Imports::LettingsLogsImportService do
           end
 
           it "intercepts the relevant validation error" do
-            expect(logger).to receive(:warn).with(/Removing internal transfer referral since previous tenancy is fixed terms or lifetime/)
+            expect(logger).to receive(:warn).with(/Removing referral with error: Answer cannot be internal transfer as it’s the same landlord on the tenancy agreement and the household had either a fixed-term or lifetime local authority general needs tenancy immediately before this letting/)
             expect { lettings_log_service.send(:create_log, lettings_log_xml) }
               .not_to raise_error
           end
@@ -363,6 +366,415 @@ RSpec.describe Imports::LettingsLogsImportService do
             expect(lettings_log).not_to be_nil
             expect(lettings_log.referral).to be_nil
           end
+        end
+      end
+
+      context "and this is a non temporary acommodation" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q27").content = "9"
+          lettings_log_xml.at_xpath("//xmlns:Q11").content = "4"
+          lettings_log_xml.at_xpath("//xmlns:VDAY").content = ""
+          lettings_log_xml.at_xpath("//xmlns:VMONTH").content = ""
+          lettings_log_xml.at_xpath("//xmlns:VYEAR").content = ""
+          lettings_log_xml.at_xpath("//xmlns:MRCDAY").content = ""
+          lettings_log_xml.at_xpath("//xmlns:MRCMONTH").content = ""
+          lettings_log_xml.at_xpath("//xmlns:MRCYEAR").content = ""
+        end
+
+        it "intercepts the relevant validation error" do
+          expect(logger).to receive(:warn).with(/Removing prevten with error: Answer cannot be non-temporary accommodation as this is a re-let to a tenant who occupied the same property as temporary accommodation/)
+          expect(logger).to receive(:warn).with(/Removing rsnvac with error: Answer cannot be non-temporary accommodation as this is a re-let to a tenant who occupied the same property as temporary accommodation/)
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the vacancy reason answer" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.rsnvac).to be_nil
+          expect(lettings_log.prevten).to be_nil
+        end
+      end
+
+      context "and the number the property was relet is over 20" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q20").content = "25"
+        end
+
+        it "intercepts the relevant validation error" do
+          expect(logger).to receive(:warn).with(/Removing offered with error: Enter a number between 0 and 20 for the amount of times the property has been re-let/)
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the number offered answer" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.offered).to be_nil
+        end
+      end
+
+      context "and income over the max" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q8Money").content = "25000"
+        end
+
+        it "intercepts the relevant validation error" do
+          expect(logger).to receive(:warn).with(/Removing ecstat1 with error: Net income cannot be greater than £890 per week given the tenant’s working situation/)
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the working situation answer" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.ecstat1).to be_nil
+          expect(lettings_log.earnings).to eq(25_000)
+        end
+      end
+
+      context "and age over the max" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:P2Age").content = "121"
+          lettings_log_xml.at_xpath("//xmlns:P2Eco").content = "7"
+        end
+
+        it "intercepts the relevant validation error" do
+          expect(logger).to receive(:warn).with(/Removing age2 with error: Person 2’s age must be between 0 and 120/)
+          expect(logger).to receive(:warn).with(/Removing age2_known with error: Person 2’s age must be between 0 and 120/)
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the age answer" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.age2).to be_nil
+          expect(lettings_log.age2_known).to be_nil
+        end
+      end
+
+      context "and age 3 over the max" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:P3Age").content = "121"
+          lettings_log_xml.at_xpath("//xmlns:P3Eco").content = "7"
+          lettings_log_xml.at_xpath("//xmlns:HHMEMB").content = "3"
+        end
+
+        it "intercepts the relevant validation error" do
+          expect(logger).to receive(:warn).with(/Removing age3 with error: Person 3’s age must be between 0 and 120/)
+          expect(logger).to receive(:warn).with(/Removing age3_known with error: Person 3’s age must be between 0 and 120/)
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the age answer" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.age3).to be_nil
+          expect(lettings_log.age3_known).to be_nil
+        end
+      end
+
+      context "and beds over the max" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q22").content = "13"
+        end
+
+        it "intercepts the relevant validation error" do
+          expect(logger).to receive(:warn).with(/Removing beds with error: Number of bedrooms cannot be more than 12/)
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the bedrooms answer" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.beds).to be_nil
+        end
+      end
+
+      context "and carehome charges and other charges are entered" do
+        let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q18b").content = "20"
+          lettings_log_xml.at_xpath("//xmlns:Q18c").content = ""
+          lettings_log_xml.at_xpath("//xmlns:Q18ai").content = ""
+          lettings_log_xml.at_xpath("//xmlns:Q18aii").content = "0"
+          lettings_log_xml.at_xpath("//xmlns:Q18aiii").content = ""
+          lettings_log_xml.at_xpath("//xmlns:Q18aiv").content = ""
+          lettings_log_xml.at_xpath("//xmlns:Q18av").content = ""
+        end
+
+        it "intercepts the relevant validation error" do
+          expect(logger).to receive(:warn).with("Log 0b4a68df-30cc-474a-93c0-a56ce8fdad3b: Removing brent with error: Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?’, Enter a total charge that is at least £10 per week")
+          expect(logger).to receive(:warn).with("Log 0b4a68df-30cc-474a-93c0-a56ce8fdad3b: Removing scharge with error: Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?’, Enter a total charge that is at least £10 per week")
+          expect(logger).to receive(:warn).with("Log 0b4a68df-30cc-474a-93c0-a56ce8fdad3b: Removing pscharge with error: Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?’, Enter a total charge that is at least £10 per week")
+          expect(logger).to receive(:warn).with("Log 0b4a68df-30cc-474a-93c0-a56ce8fdad3b: Removing supcharg with error: Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?’, Enter a total charge that is at least £10 per week")
+          expect(logger).to receive(:warn).with("Log 0b4a68df-30cc-474a-93c0-a56ce8fdad3b: Removing tcharge with error: Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?’, Enter a total charge that is at least £10 per week")
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the charges answers" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.tcharge).to be_nil
+        end
+      end
+
+      context "and scharge is under 0" do
+        let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q18aii").content = "-1"
+        end
+
+        it "intercepts the relevant validation error" do
+          expect(logger).to receive(:warn).with(/Removing brent with error: Enter a value for the service charge between £0 and £480 per week if the landlord is a private registered provider and it is a supported housing letting, Enter an amount above 0, Service charge must be at least £0 every week/)
+          expect(logger).to receive(:warn).with(/Removing scharge with error: Enter a value for the service charge between £0 and £480 per week if the landlord is a private registered provider and it is a supported housing letting, Enter an amount above 0, Service charge must be at least £0 every week/)
+          expect(logger).to receive(:warn).with(/Removing pscharge with error: Enter a value for the service charge between £0 and £480 per week if the landlord is a private registered provider and it is a supported housing letting, Enter an amount above 0, Service charge must be at least £0 every week/)
+          expect(logger).to receive(:warn).with(/Removing supcharg with error: Enter a value for the service charge between £0 and £480 per week if the landlord is a private registered provider and it is a supported housing letting, Enter an amount above 0, Service charge must be at least £0 every week/)
+          expect(logger).to receive(:warn).with(/Removing tcharge with error: Enter a value for the service charge between £0 and £480 per week if the landlord is a private registered provider and it is a supported housing letting, Enter an amount above 0, Service charge must be at least £0 every week/)
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the charges answers" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.brent).to be_nil
+          expect(lettings_log.scharge).to be_nil
+          expect(lettings_log.pscharge).to be_nil
+          expect(lettings_log.supcharg).to be_nil
+          expect(lettings_log.tcharge).to be_nil
+        end
+      end
+
+      context "and tshortfall is not positive" do
+        let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q18d").content = "1"
+          lettings_log_xml.at_xpath("//xmlns:Q6Ben").content = "1"
+          lettings_log_xml.at_xpath("//xmlns:Q18dyes").content = "0"
+        end
+
+        it "intercepts the relevant validation error" do
+          expect(logger).to receive(:warn).with(/Removing tshortfall with error: Enter a value over £0.01 as you told us there is an outstanding amount/)
+          expect(logger).to receive(:warn).with(/Removing tshortfall_known with error: Enter a value over £0.01 as you told us there is an outstanding amount/)
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the tshortfall answer" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.tshortfall).to be_nil
+          expect(lettings_log.tshortfall_known).to be_nil
+        end
+      end
+
+      context "and it has temporary referral in non temporary accommodation" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q27").content = "9"
+          lettings_log_xml.at_xpath("//xmlns:Q16").content = "8"
+        end
+
+        it "intercepts the relevant validation error" do
+          expect(logger).to receive(:warn).with(/Removing referral with error: Answer cannot be this source of referral as this is a re-let to tenant who occupied the same property as temporary accommodation/)
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the referral answer" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.referral).to be_nil
+        end
+      end
+
+      context "and pscharge is out of range" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q17").content = "1"
+          lettings_log_xml.at_xpath("//xmlns:Q18aiii").content = "36"
+        end
+
+        it "intercepts the relevant validation error" do
+          expect(logger).to receive(:warn).with(/Removing brent with error: Enter a value for the personal service charge between £0 and £30 per week if the landlord is a private registered provider and it is a general needs letting/)
+          expect(logger).to receive(:warn).with(/Removing scharge with error: Enter a value for the personal service charge between £0 and £30 per week if the landlord is a private registered provider and it is a general needs letting/)
+          expect(logger).to receive(:warn).with(/Removing pscharge with error: Enter a value for the personal service charge between £0 and £30 per week if the landlord is a private registered provider and it is a general needs letting/)
+          expect(logger).to receive(:warn).with(/Removing supcharg with error: Enter a value for the personal service charge between £0 and £30 per week if the landlord is a private registered provider and it is a general needs letting/)
+          expect(logger).to receive(:warn).with(/Removing tcharge with error: Enter a value for the personal service charge between £0 and £30 per week if the landlord is a private registered provider and it is a general needs letting/)
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the charges answers" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.pscharge).to be_nil
+          expect(lettings_log.tcharge).to be_nil
+        end
+      end
+
+      context "and supcharg is out of range" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q17").content = "1"
+          lettings_log_xml.at_xpath("//xmlns:Q18aiv").content = "46"
+        end
+
+        it "intercepts the relevant validation error" do
+          expect(logger).to receive(:warn).with(/Removing brent with error: Enter a value for the support charge between £0 and £40 per week if the landlord is a private registered provider and it is a general needs letting/)
+          expect(logger).to receive(:warn).with(/Removing scharge with error: Enter a value for the support charge between £0 and £40 per week if the landlord is a private registered provider and it is a general needs letting/)
+          expect(logger).to receive(:warn).with(/Removing pscharge with error: Enter a value for the support charge between £0 and £40 per week if the landlord is a private registered provider and it is a general needs letting/)
+          expect(logger).to receive(:warn).with(/Removing supcharg with error: Enter a value for the support charge between £0 and £40 per week if the landlord is a private registered provider and it is a general needs letting/)
+          expect(logger).to receive(:warn).with(/Removing tcharge with error: Enter a value for the support charge between £0 and £40 per week if the landlord is a private registered provider and it is a general needs letting/)
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the charges answers" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.supcharg).to be_nil
+          expect(lettings_log.tcharge).to be_nil
+        end
+      end
+
+      context "and scharge is out of range" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q17").content = "1"
+          lettings_log_xml.at_xpath("//xmlns:Q18aii").content = "156"
+        end
+
+        it "intercepts the relevant validation error" do
+          expect(logger).to receive(:warn).with(/Removing brent with error: Enter a value for the service charge between £0 and £155 per week if the landlord is a private registered provider and it is a general needs letting/)
+          expect(logger).to receive(:warn).with(/Removing scharge with error: Enter a value for the service charge between £0 and £155 per week if the landlord is a private registered provider and it is a general needs letting/)
+          expect(logger).to receive(:warn).with(/Removing pscharge with error: Enter a value for the service charge between £0 and £155 per week if the landlord is a private registered provider and it is a general needs letting/)
+          expect(logger).to receive(:warn).with(/Removing supcharg with error: Enter a value for the service charge between £0 and £155 per week if the landlord is a private registered provider and it is a general needs letting/)
+          expect(logger).to receive(:warn).with(/Removing tcharge with error: Enter a value for the service charge between £0 and £155 per week if the landlord is a private registered provider and it is a general needs letting/)
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the charges answers" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.scharge).to be_nil
+          expect(lettings_log.tcharge).to be_nil
+        end
+      end
+
+      context "and location is not active during the period" do
+        let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+
+        before do
+          location = Location.find_by(old_visible_id: "10")
+          FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2021, 10, 10), location:)
+        end
+
+        it "intercepts the relevant validation error" do
+          expect(logger).to receive(:warn).with(/Differences found when saving log/)
+          expect(logger).to receive(:warn).with(/Removing location_id with error: The location LS16 6FT was deactivated on 10 October 2021 and was not available on the day you entered./)
+          expect(logger).to receive(:warn).with(/Removing scheme_id with error: The location LS16 6FT was deactivated on 10 October 2021 and was not available on the day you entered./)
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the location answers" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.location).to be_nil
+          expect(lettings_log.scheme).to be_nil
+        end
+      end
+
+      context "and carehome charges are out of range" do
+        let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+
+        before do
+          scheme1.update!(registered_under_care_act: 2)
+          lettings_log_xml.at_xpath("//xmlns:Q18b").content = "2000"
+          lettings_log_xml.at_xpath("//xmlns:Q17").content = "1"
+          lettings_log_xml.at_xpath("//xmlns:Q18ai").content = ""
+          lettings_log_xml.at_xpath("//xmlns:Q18aii").content = ""
+          lettings_log_xml.at_xpath("//xmlns:Q18aiii").content = ""
+          lettings_log_xml.at_xpath("//xmlns:Q18aiv").content = ""
+          lettings_log_xml.at_xpath("//xmlns:Q18av").content = ""
+        end
+
+        it "intercepts the relevant validation error" do
+          expect(logger).to receive(:warn).with(/Removing chcharge with error: Household rent and other charges must be between £10 and £1000 if paying weekly for 52 weeks/)
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the chcharge answer" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.chcharge).to be_nil
         end
       end
 
@@ -558,6 +970,85 @@ RSpec.describe Imports::LettingsLogsImportService do
         expect(logger).not_to receive(:warn)
         expect { lettings_log_service.create_logs(remote_folder) }
           .to change(OrganisationRelationship, :count).by(1)
+      end
+    end
+
+    context "when this is a joint tenancy with 1 person in the household" do
+      let(:lettings_log_id) { "0ead17cb-1668-442d-898c-0d52879ff592" }
+      let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id) }
+      let(:lettings_log_xml) { Nokogiri::XML(lettings_log_file) }
+
+      before do
+        lettings_log_xml.at_xpath("//xmlns:joint").content = "1"
+        lettings_log_xml.at_xpath("//xmlns:HHMEMB").content = "1"
+        lettings_log_xml.at_xpath("//xmlns:P2Age").content = ""
+        lettings_log_xml.at_xpath("//xmlns:P2Rel").content = ""
+        lettings_log_xml.at_xpath("//xmlns:P2Sex").content = ""
+        lettings_log_xml.at_xpath("//xmlns:P1Nat").content = "18"
+        lettings_log_xml.at_xpath("//xmlns:P2Eco").content = ""
+        lettings_log_xml.at_xpath("//xmlns:DAY").content = "2"
+        lettings_log_xml.at_xpath("//xmlns:MONTH").content = "10"
+        lettings_log_xml.at_xpath("//xmlns:YEAR").content = "2022"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Removing joint with error: This cannot be a joint tenancy as you've told us there's only one person in the household/)
+        expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the referral answer" do
+        allow(logger).to receive(:warn)
+
+        lettings_log_service.send(:create_log, lettings_log_xml)
+        lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+        expect(lettings_log).not_to be_nil
+        expect(lettings_log.joint).to be_nil
+        expect(lettings_log.hhmemb).to eq(1)
+      end
+    end
+
+    context "when there are no outstanding charges but outstanding amount is given" do
+      let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+      let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id) }
+      let(:lettings_log_xml) { Nokogiri::XML(lettings_log_file) }
+
+      before do
+        FormHandler.instance.use_fake_forms!
+        Singleton.__init__(FormHandler)
+
+        lettings_log_xml.at_xpath("//xmlns:DAY").content = "10"
+        lettings_log_xml.at_xpath("//xmlns:MONTH").content = "10"
+        lettings_log_xml.at_xpath("//xmlns:YEAR").content = "2022"
+        lettings_log_xml.at_xpath("//xmlns:P1Nat").content = "18"
+        lettings_log_xml.at_xpath("//xmlns:Q18d").content = "2"
+        lettings_log_xml.at_xpath("//xmlns:Q18dyes").content = "20"
+        lettings_log_xml.at_xpath("//xmlns:_2cYears").content = ""
+        lettings_log_xml.at_xpath("//xmlns:Inj").content = ""
+        lettings_log_xml.at_xpath("//xmlns:LeftAF").content = ""
+      end
+
+      after do
+        FormHandler.instance.use_real_forms!
+        Singleton.__init__(FormHandler)
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Removing tshortfall with error: You cannot answer the outstanding amount question if you don’t have outstanding rent or charges/)
+        expect(logger).to receive(:warn).with(/Removing hbrentshortfall with error: You cannot answer the outstanding amount question if you don’t have outstanding rent or charges/)
+        expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the referral answer" do
+        allow(logger).to receive(:warn)
+        lettings_log_service.send(:create_log, lettings_log_xml)
+        lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+        expect(lettings_log).not_to be_nil
+        expect(lettings_log.tshortfall).to be_nil
+        expect(lettings_log.hbrentshortfall).to be_nil
       end
     end
   end

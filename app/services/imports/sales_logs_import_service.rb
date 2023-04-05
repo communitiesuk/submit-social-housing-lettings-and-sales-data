@@ -214,6 +214,22 @@ module Imports
         @logs_overridden << sales_log.old_id
         attributes.delete("income1")
         save_sales_log(attributes, previous_status)
+      elsif sales_log.errors.of_kind?(:equity, :over_max) || sales_log.errors.of_kind?(:equity, :under_min)
+        @logger.warn("Log #{sales_log.old_id}: Removing equity as the equity is invalid")
+        @logs_overridden << sales_log.old_id
+        attributes.delete("equity")
+        save_sales_log(attributes, previous_status)
+      elsif sales_log.errors.of_kind?(:postcode_full, :wrong_format)
+        @logger.warn("Log #{sales_log.old_id}: Removing postcode as the postcode is invalid")
+        @logs_overridden << sales_log.old_id
+        attributes.delete("postcode_full")
+        attributes["pcodenk"] = attributes["la"].present? ? 1 : nil
+        save_sales_log(attributes, previous_status)
+      elsif sales_log.errors.of_kind?(:mortgage, :cannot_be_0)
+        @logger.warn("Log #{sales_log.old_id}: Removing mortgage because it cannot be 0")
+        @logs_overridden << sales_log.old_id
+        attributes.delete("mortgage")
+        save_sales_log(attributes, previous_status)
       else
         @logger.error("Log #{sales_log.old_id}: Failed to import")
         sales_log.errors.each do |error|
@@ -544,7 +560,7 @@ module Imports
       end
 
       # other household members characteristics
-      (2..attributes["hhmemb"]).each do |index|
+      (2..[attributes["hhmemb"], 6].min).each do |index|
         attributes["age#{index}_known"] ||= 1
         attributes["sex#{index}"] ||= "R"
         attributes["ecstat#{index}"] ||= 10

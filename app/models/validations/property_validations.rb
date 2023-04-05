@@ -16,7 +16,7 @@ module Validations::PropertyValidations
     end
 
     if record.offered.negative? || record.offered > 20
-      record.errors.add :offered, I18n.t("validations.property.offered.relet_number")
+      record.errors.add :offered, :over_20, message: I18n.t("validations.property.offered.relet_number")
     end
   end
 
@@ -36,7 +36,7 @@ module Validations::PropertyValidations
 
     if record.is_relet_to_temp_tenant? && REFERRAL_INVALID_TMP.include?(record.referral)
       record.errors.add :rsnvac, I18n.t("validations.property.rsnvac.referral_invalid")
-      record.errors.add :referral, I18n.t("validations.household.referral.rsnvac_non_temp")
+      record.errors.add :referral, :referral_invalid, message: I18n.t("validations.household.referral.rsnvac_non_temp")
     end
 
     if record.renewal.present? && record.renewal.zero? && record.rsnvac == 14
@@ -72,7 +72,7 @@ module Validations::PropertyValidations
     end
 
     if record.beds.present? && record.beds > 12
-      record.errors.add :beds, I18n.t("validations.property.beds.over_max")
+      record.errors.add :beds, :over_max, message: I18n.t("validations.property.beds.over_max")
     end
   end
 

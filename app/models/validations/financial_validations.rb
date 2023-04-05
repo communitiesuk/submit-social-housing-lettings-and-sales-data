@@ -4,7 +4,7 @@ module Validations::FinancialValidations
   # or 'validate_' to run on submit as well
   def validate_outstanding_rent_amount(record)
     if !record.has_hbrentshortfall? && record.tshortfall.present?
-      record.errors.add :tshortfall, I18n.t("validations.financial.tshortfall.outstanding_amount_not_required")
+      record.errors.add :tshortfall, :no_outstanding_charges, message: I18n.t("validations.financial.tshortfall.outstanding_amount_not_required")
     end
   end
 
@@ -25,6 +25,7 @@ module Validations::FinancialValidations
     if record.ecstat1 && record.weekly_net_income
       if record.weekly_net_income > record.applicable_income_range.hard_max
         record.errors.add :earnings, :over_hard_max, message: I18n.t("validations.financial.earnings.over_hard_max", hard_max: record.applicable_income_range.hard_max)
+        record.errors.add :ecstat1, :over_hard_max, message: I18n.t("validations.financial.ecstat.over_hard_max", hard_max: record.applicable_income_range.hard_max)
       end
 
       if record.weekly_net_income < record.applicable_income_range.hard_min
@@ -78,7 +79,7 @@ module Validations::FinancialValidations
         record.errors.add :tshortfall, I18n.t("validations.financial.tshortfall.more_than_rent")
         record.errors.add :brent, I18n.t("validations.financial.rent.less_than_shortfall")
       elsif record.wtshortfall < 0.01
-        record.errors.add :tshortfall, I18n.t("validations.financial.tshortfall.must_be_positive")
+        record.errors.add :tshortfall, :must_be_positive, message: I18n.t("validations.financial.tshortfall.must_be_positive")
       end
     end
 
@@ -88,7 +89,7 @@ module Validations::FinancialValidations
 
     answered_questions = [record.tcharge, record.chcharge].concat(record.household_charge && record.household_charge == 1 ? [record.household_charge] : [])
     if answered_questions.count(&:present?) > 1
-      record.errors.add :tcharge, I18n.t("validations.financial.charges.complete_1_of_3") if record.tcharge.present?
+      record.errors.add :tcharge, :complete_1_of_3, message: I18n.t("validations.financial.charges.complete_1_of_3") if record.tcharge.present?
       record.errors.add :chcharge, I18n.t("validations.financial.charges.complete_1_of_3") if record.chcharge.present?
       record.errors.add :household_charge, I18n.t("validations.financial.charges.complete_1_of_3") if record.household_charge.present?
     end
@@ -122,7 +123,7 @@ module Validations::FinancialValidations
         max_chcharge = [record.form.get_question("chcharge", record).prefix, max_chcharge].join("") if record.form.get_question("chcharge", record).present?
         min_chcharge = [record.form.get_question("chcharge", record).prefix, min_chcharge].join("") if record.form.get_question("chcharge", record).present?
         record.errors.add :period, I18n.t("validations.financial.carehome.out_of_range", period:, min_chcharge:, max_chcharge:)
-        record.errors.add :chcharge, I18n.t("validations.financial.carehome.out_of_range", period:, min_chcharge:, max_chcharge:)
+        record.errors.add :chcharge, :out_of_range, message: I18n.t("validations.financial.carehome.out_of_range", period:, min_chcharge:, max_chcharge:)
       end
     end
   end
@@ -132,12 +133,12 @@ private
   CHARGE_MAXIMUMS = {
     scharge: {
       private_registered_provider: {
-        general_needs: 55,
-        supported_housing: 280,
+        general_needs: 155,
+        supported_housing: 480,
       },
       local_authority: {
-        general_needs: 45,
-        supported_housing: 165,
+        general_needs: 155,
+        supported_housing: 365,
       },
     },
     pscharge: {
@@ -173,7 +174,7 @@ private
       maximum = CHARGE_MAXIMUMS.dig(charge, PROVIDER_TYPE[provider_type], NEEDSTYPE_VALUES[record.needstype])
 
       if maximum.present? && record[:period].present? && record[charge].present? && !weekly_value_in_range(record, charge, 0.0, maximum)
-        record.errors.add charge, I18n.t("validations.financial.rent.#{charge}.#{PROVIDER_TYPE[provider_type]}.#{NEEDSTYPE_VALUES[record.needstype]}")
+        record.errors.add charge, :outside_the_range, message: I18n.t("validations.financial.rent.#{charge}.#{PROVIDER_TYPE[provider_type]}.#{NEEDSTYPE_VALUES[record.needstype]}")
       end
     end
   end
@@ -187,7 +188,12 @@ private
 
     collection_year = record.collection_start_year
 
-    rent_range = LaRentRange.find_by(start_year: collection_year, la: record.la, beds: record.beds_for_la_rent_range, lettype: record.lettype)
+    rent_range = LaRentRange.find_by(
+      start_year: collection_year,
+      la: record.la,
+      beds: record.beds_for_la_rent_range,
+      lettype: record.lettype,
+    )
 
     if rent_range.present? && !weekly_value_in_range(record, "brent", rent_range.hard_min, rent_range.hard_max) && record.brent.present? && record.period.present?
       if record.weekly_value(record["brent"]) < rent_range.hard_min
@@ -200,7 +206,9 @@ private
         record.errors.add :rent_type, I18n.t("validations.financial.brent.rent_type.below_hard_min")
         record.errors.add :needstype, I18n.t("validations.financial.brent.needstype.below_hard_min")
         record.errors.add :period, I18n.t("validations.financial.brent.period.below_hard_min")
-      elsif record.beds.blank? || record.beds < LaRentRange::MAX_BEDS
+      end
+
+      if record.weekly_value(record["brent"]) > rent_range.hard_max
         record.errors.add :brent, I18n.t("validations.financial.brent.above_hard_max")
         record.errors.add :beds, I18n.t("validations.financial.brent.beds.above_hard_max")
         record.errors.add :la, I18n.t("validations.financial.brent.la.above_hard_max")

@@ -23,12 +23,26 @@ module Forms
         bulk_upload_sales_log_path(id: "upload-your-file", form: { year: })
       end
 
+      def old_template_path
+        "/files/bulk-upload-sales-template-2022-23.xlsx"
+      end
+
       def template_path
-        "/files/bulk-upload-sales-template-v1.xlsx"
+        case year
+        when 2022
+          "/files/bulk-upload-sales-template-2022-23.xlsx"
+        when 2023
+          "/files/bulk-upload-sales-template-2023-24.xlsx"
+        end
       end
 
       def specification_path
-        "/files/bulk-upload-sales-specification-2022-23.xlsx"
+        case year
+        when 2022
+          "/files/bulk-upload-sales-specification-2022-23.xlsx"
+        when 2023
+          "/files/bulk-upload-sales-specification-2023-24.xlsx"
+        end
       end
 
       def year_combo

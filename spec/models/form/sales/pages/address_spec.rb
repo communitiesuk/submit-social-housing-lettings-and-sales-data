@@ -20,7 +20,7 @@ RSpec.describe Form::Sales::Pages::Address, type: :model do
   end
 
   it "has the correct header" do
-    expect(page.header).to eq("What is the property's address?")
+    expect(page.header).to eq("Q15 - What is the property's address?")
   end
 
   it "has the correct description" do
@@ -42,7 +42,7 @@ RSpec.describe Form::Sales::Pages::Address, type: :model do
 
     context "when uprn_confirmed != 1" do
       let(:log) do
-        create(:sales_log, uprn_known: 1, uprn_confirmed: 0)
+        create(:sales_log, uprn_known: 1, uprn: "12345", uprn_confirmed: 0)
       end
 
       it "returns true" do
@@ -52,17 +52,18 @@ RSpec.describe Form::Sales::Pages::Address, type: :model do
 
     context "when uprn_known == 0" do
       let(:log) do
-        create(:sales_log, uprn_known: 0, uprn_confirmed: 0)
+        create(:sales_log, uprn_confirmed: 0)
       end
 
       it "returns true" do
+        log.uprn_known = 0
         expect(page.routed_to?(log)).to eq(true)
       end
     end
 
     context "when uprn_confirmed == 1 && uprn_known != 0" do
       let(:log) do
-        create(:sales_log, uprn_known: 1, uprn_confirmed: 1)
+        create(:sales_log, uprn_known: 1, uprn: "12345", uprn_confirmed: 1)
       end
 
       it "returns true" do

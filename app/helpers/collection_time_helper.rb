@@ -22,11 +22,11 @@ module CollectionTimeHelper
   end
 
   def collection_end_date(date)
-    Time.zone.local(collection_start_year(date) + 1, 3, 31)
+    Time.zone.local(collection_start_year(date) + 1, 3, 31).end_of_day
   end
 
   def current_collection_end_date
-    Time.zone.local(current_collection_start_year + 1, 3, 31)
+    Time.zone.local(current_collection_start_year + 1, 3, 31).end_of_day
   end
 
   def previous_collection_end_date

@@ -96,6 +96,7 @@ RSpec.describe Scheme, type: :model do
     let(:scheme) { FactoryBot.build(:scheme) }
 
     before do
+      FactoryBot.create(:location, scheme:)
       Timecop.freeze(2022, 6, 7)
     end
 
@@ -181,7 +182,7 @@ RSpec.describe Scheme, type: :model do
       let(:scheme) { FactoryBot.build(:scheme, created_at: Time.zone.local(2022, 4, 6)) }
 
       it "returns the beginning of 22/23 collection window" do
-        expect(scheme.available_from).to eq(Time.zone.local(2022, 4, 1))
+        expect(scheme.available_from).to eq(Time.zone.local(2021, 4, 1))
       end
     end
 
@@ -197,7 +198,7 @@ RSpec.describe Scheme, type: :model do
       let(:scheme) { FactoryBot.build(:scheme, created_at: Time.zone.local(2021, 4, 6)) }
 
       it "returns the beginning of 21/22 collection window" do
-        expect(scheme.available_from).to eq(Time.zone.local(2021, 4, 1))
+        expect(scheme.available_from).to eq(Time.zone.local(2020, 4, 1))
       end
     end
 
@@ -205,7 +206,7 @@ RSpec.describe Scheme, type: :model do
       let(:scheme) { FactoryBot.build(:scheme, created_at: Time.zone.local(2022, 2, 6)) }
 
       it "returns the beginning of 21/22 collection window" do
-        expect(scheme.available_from).to eq(Time.zone.local(2021, 4, 1))
+        expect(scheme.available_from).to eq(Time.zone.local(2020, 4, 1))
       end
     end
   end

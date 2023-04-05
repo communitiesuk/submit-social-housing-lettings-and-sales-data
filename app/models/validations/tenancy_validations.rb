@@ -30,7 +30,7 @@ module Validations::TenancyValidations
     conditions.each do |condition|
       next unless condition[:condition]
 
-      record.errors.add :tenancylength, condition[:error]
+      record.errors.add :tenancylength, :tenancylength_invalid, message: condition[:error]
       record.errors.add :tenancy, condition[:error]
     end
   end
@@ -42,8 +42,8 @@ module Validations::TenancyValidations
   def validate_joint_tenancy(record)
     return unless record.collection_start_year && record.joint
 
-    if record.hhmemb == 1 && record.joint != 2 && record.collection_start_year >= 2022
-      record.errors.add :joint, I18n.t("validations.tenancy.not_joint")
+    if record.hhmemb == 1 && record.joint == 1 && record.collection_start_year >= 2022
+      record.errors.add :joint, :not_joint_tenancy, message: I18n.t("validations.tenancy.not_joint")
       record.errors.add :hhmemb, I18n.t("validations.tenancy.joint_more_than_one_member")
     end
   end

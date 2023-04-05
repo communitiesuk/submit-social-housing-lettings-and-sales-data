@@ -60,73 +60,6 @@ RSpec.describe Validations::HouseholdValidations do
     end
   end
 
-  describe "pregnancy validations" do
-    context "when there are no female tenants" do
-      it "validates that pregnancy can be yes" do
-        record.preg_occ = 1
-        record.sex1 = "M"
-        household_validator.validate_pregnancy(record)
-        expect(record.errors["preg_occ"]).to be_empty
-      end
-
-      it "validates that pregnancy can be prefer not to say" do
-        record.preg_occ = 3
-        record.sex1 = "M"
-        household_validator.validate_pregnancy(record)
-        expect(record.errors["preg_occ"]).to be_empty
-      end
-    end
-
-    context "when there are female tenants" do
-      context "but they are older than 65" do
-        before { record.assign_attributes(sex1: "F", age1: 66, preg_occ: 1) }
-
-        it "validates that pregnancy cannot be yes" do
-          household_validator.validate_pregnancy(record)
-          expect(record.errors["preg_occ"])
-            .to include(match I18n.t("validations.household.preg_occ.no_female"))
-        end
-      end
-
-      context "and they are the lead tenant and under 65" do
-        before { record.assign_attributes(sex1: "F", age1: 64, preg_occ: 1) }
-
-        it "allows pregnancy to be set to yes" do
-          household_validator.validate_pregnancy(record)
-          expect(record.errors["preg_occ"]).to be_empty
-        end
-      end
-
-      context "and they are another household member and under 51" do
-        before { record.assign_attributes(sex1: "M", age1: 25, sex3: "F", age3: 64, preg_occ: 1) }
-
-        it "allows pregnancy to be set to yes" do
-          household_validator.validate_pregnancy(record)
-          expect(record.errors["preg_occ"]).to be_empty
-        end
-      end
-
-      context "and they are another household member and under 11" do
-        before { record.assign_attributes(sex1: "M", age1: 25, sex3: "F", age3: 10, preg_occ: 1) }
-
-        it "validates that pregnancy cannot be yes" do
-          household_validator.validate_pregnancy(record)
-          expect(record.errors["preg_occ"])
-          .to include(match I18n.t("validations.household.preg_occ.no_female"))
-        end
-      end
-
-      context "and one tenant's age is unknown" do
-        before { record.assign_attributes(sex1: "F", age1: nil, age1_known: 1, preg_occ: 1) }
-
-        it "allows pregnancy to be set to yes" do
-          household_validator.validate_pregnancy(record)
-          expect(record.errors["preg_occ"]).to be_empty
-        end
-      end
-    end
-  end
-
   describe "reason for leaving last settled home validations" do
     let(:field) { "validations.other_field_not_required" }
     let(:main_field_label) { "reason" }
@@ -631,6 +564,18 @@ RSpec.describe Validations::HouseholdValidations do
         household_validator.validate_prevloc(record)
         expect(record.errors["prevloc"])
           .to include(match I18n.t("validations.household.previous_la_known"))
+      end
+    end
+
+    context "when validating layear" do
+      it "household cannot have just moved to area if renewal" do
+        record.layear = 1
+        record.renewal = 1
+        household_validator.validate_layear(record)
+        expect(record.errors["layear"])
+          .to include(match I18n.t("validations.household.renewal_just_moved_to_area.layear"))
+        expect(record.errors["renewal"])
+          .to include(match I18n.t("validations.household.renewal_just_moved_to_area.renewal"))
       end
     end
   end

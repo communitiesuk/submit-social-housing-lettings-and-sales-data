@@ -23,6 +23,7 @@ class Location < ApplicationRecord
   scope :search_by, ->(param) { search_by_name(param).or(search_by_postcode(param)) }
   scope :started, -> { where("startdate <= ?", Time.zone.today).or(where(startdate: nil)) }
   scope :active, -> { where(confirmed: true).and(started) }
+  scope :confirmed, -> { where(confirmed: true) }
 
   LOCAL_AUTHORITIES = LocalAuthority.all.map { |la| [la.name, la.code] }.to_h
 
@@ -52,7 +53,7 @@ class Location < ApplicationRecord
 
   enum type_of_unit: TYPE_OF_UNIT
 
-  def self.find_by_id_on_mulitple_fields(id)
+  def self.find_by_id_on_multiple_fields(id)
     return if id.nil?
 
     where(id:).or(where(old_visible_id: id)).first
@@ -69,7 +70,7 @@ class Location < ApplicationRecord
   def available_from
     return startdate if startdate.present?
 
-    FormHandler.instance.collection_start_date(created_at)
+    FormHandler.instance.earliest_open_collection_start_date(now: created_at)
   end
 
   def open_deactivation

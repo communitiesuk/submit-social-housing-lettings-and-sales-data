@@ -2904,7 +2904,16 @@ RSpec.describe LettingsLog do
 
   describe "csv download" do
     let(:scheme) { create(:scheme) }
-    let(:location) { create(:location, :export, scheme:, type_of_unit: 6, postcode: "SE11TE", startdate: Time.zone.local(2021, 10, 1)) }
+    let(:location) do
+      create(
+        :location,
+        :export,
+        scheme:,
+        type_of_unit: 6,
+        postcode: "SE11TE",
+        startdate: Time.zone.local(2021, 10, 1),
+      )
+    end
     let(:user) { create(:user, organisation: location.scheme.owning_organisation) }
     let(:expected_content) { csv_export_file.read }
 
@@ -2915,7 +2924,18 @@ RSpec.describe LettingsLog do
     context "with values represented as human readable labels" do
       before do
         Timecop.freeze(Time.utc(2022, 6, 5))
-        lettings_log = FactoryBot.create(:lettings_log, needstype: 2, scheme:, location:, owning_organisation: scheme.owning_organisation, created_by: user, rent_type: 2, startdate: Time.zone.local(2021, 10, 2), created_at: Time.zone.local(2022, 2, 8, 16, 52, 15), updated_at: Time.zone.local(2022, 2, 8, 16, 52, 15))
+        lettings_log = FactoryBot.create(
+          :lettings_log,
+          needstype: 2,
+          scheme:,
+          location:,
+          owning_organisation: scheme.owning_organisation,
+          created_by: user,
+          rent_type: 2,
+          startdate: Time.zone.local(2021, 10, 2),
+          created_at: Time.zone.local(2022, 2, 8, 16, 52, 15),
+          updated_at: Time.zone.local(2022, 2, 8, 16, 52, 15),
+        )
         expected_content.sub!(/\{id\}/, lettings_log["id"].to_s)
         expected_content.sub!(/\{scheme_code\}/, "S#{scheme['id']}")
         expected_content.sub!(/\{scheme_service_name\}/, scheme["service_name"].to_s)
@@ -3062,6 +3082,32 @@ RSpec.describe LettingsLog do
         allow_any_instance_of(UprnClient).to receive(:error).and_return(error_message)
 
         expect { lettings_log.process_uprn_change! }.to change { lettings_log.errors[:uprn] }.from([]).to([error_message])
+      end
+    end
+  end
+
+  describe "#beds_for_la_rent_range" do
+    context "when beds nil" do
+      let(:lettings_log) { build(:lettings_log, beds: nil) }
+
+      it "returns nil" do
+        expect(lettings_log.beds_for_la_rent_range).to be_nil
+      end
+    end
+
+    context "when beds <= 4" do
+      let(:lettings_log) { build(:lettings_log, beds: 4) }
+
+      it "returns number of beds" do
+        expect(lettings_log.beds_for_la_rent_range).to eq(4)
+      end
+    end
+
+    context "when beds > 4" do
+      let(:lettings_log) { build(:lettings_log, beds: 40) }
+
+      it "returns max number of beds" do
+        expect(lettings_log.beds_for_la_rent_range).to eq(4)
       end
     end
   end

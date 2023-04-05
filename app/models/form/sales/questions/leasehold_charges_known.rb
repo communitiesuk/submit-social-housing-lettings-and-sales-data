@@ -3,7 +3,7 @@ class Form::Sales::Questions::LeaseholdChargesKnown < ::Form::Question
     super(id, hsh, subsection)
     @id = "mscharge_known"
     @check_answer_label = "Monthly leasehold charges known?"
-    @header = "Does the property have any monthly leasehold charges?"
+    @header = "Do you know the monthly leasehold charges for the property?"
     @hint_text = "For example, service and management charges"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS

@@ -159,6 +159,22 @@ RSpec.describe SalesLogsController, type: :request do
           end
         end
 
+        context "when there is a pending log" do
+          let!(:invisible_log) do
+            FactoryBot.create(
+              :sales_log,
+              owning_organisation: organisation,
+              status: "pending",
+              skip_update_status: true,
+            )
+          end
+
+          it "does not render pending logs" do
+            get "/sales-logs", headers: headers, params: {}
+            expect(page).not_to have_content(invisible_log.id)
+          end
+        end
+
         context "when filtering" do
           context "with status filter" do
             let(:organisation_2) { FactoryBot.create(:organisation) }
@@ -238,17 +254,28 @@ RSpec.describe SalesLogsController, type: :request do
               Timecop.return
             end
 
+            before do
+              Timecop.freeze(2022, 4, 1)
+              sales_log_2022.update!(saledate: Time.zone.local(2022, 4, 1))
+              Timecop.freeze(2023, 1, 1)
+              sales_log_2022.update!(saledate: Time.zone.local(2023, 1, 1))
+            end
+
+            after do
+              Timecop.unfreeze
+            end
+
             let!(:sales_log_2022) do
               FactoryBot.create(:sales_log, :completed,
                                 owning_organisation: organisation,
-                                saledate: Time.zone.local(2022, 4, 1),
-                                created_by: user)
+                                created_by: user,
+                                saledate: Time.zone.today)
             end
             let!(:sales_log_2023) do
               FactoryBot.create(:sales_log,
                                 owning_organisation: organisation,
-                                saledate: Time.zone.local(2023, 1, 1),
-                                created_by: user)
+                                created_by: user,
+                                saledate: Time.zone.today)
             end
 
             it "shows sales logs for multiple selected statuses and years" do

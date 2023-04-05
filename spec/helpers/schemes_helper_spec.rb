@@ -110,164 +110,205 @@ RSpec.describe SchemesHelper do
     let(:support_user) { FactoryBot.create(:user, :support) }
     let(:coordinator_user) { FactoryBot.create(:user, :data_coordinator) }
 
-    it "returns correct display attributes for a support user" do
-      attributes = [
-        { name: "Scheme code", value: "S#{scheme.id}" },
-        { name: "Name", value: "Test service_name", edit: true },
-        { name: "Confidential information", value: "No", edit: true },
-        { name: "Type of scheme", value: "Housing for older people" },
-        { name: "Registered under Care Standards Act 2000", value: "Yes – registered care home providing personal care" },
-        { name: "Housing stock owned by", value: "Acme LTD Owning", edit: true },
-        { name: "Support services provided by", value: "A registered charity or voluntary organisation" },
-        { name: "Primary client group", value: "Rough sleepers" },
-        { name: "Has another client group", value: "Yes" },
-        { name: "Secondary client group", value: "Refugees (permanent)" },
-        { name: "Level of support given", value: "High level" },
-        { name: "Intended length of stay", value: "Permanent" },
-        { name: "Availability", value: "Active from 1 April 2022" },
-        { name: "Status", value: status_tag(:active) },
-      ]
-      expect(display_scheme_attributes(scheme, support_user)).to eq(attributes)
-    end
+    context "when scheme has no locations" do
+      it "returns correct display attributes for a support user" do
+        attributes = [
+          { name: "Scheme code", value: "S#{scheme.id}" },
+          { name: "Name", value: "Test service_name", edit: true },
+          { name: "Confidential information", value: "No", edit: true },
+          { name: "Type of scheme", value: "Housing for older people" },
+          { name: "Registered under Care Standards Act 2000", value: "Yes – registered care home providing personal care" },
+          { name: "Housing stock owned by", value: "Acme LTD Owning", edit: true },
+          { name: "Support services provided by", value: "A registered charity or voluntary organisation" },
+          { name: "Primary client group", value: "Rough sleepers" },
+          { name: "Has another client group", value: "Yes" },
+          { name: "Secondary client group", value: "Refugees (permanent)" },
+          { name: "Level of support given", value: "High level" },
+          { name: "Intended length of stay", value: "Permanent" },
+          { name: "Availability", value: "Active from 1 April 2021" },
+          { name: "Status", value: status_tag(:incomplete) },
+        ]
+        expect(display_scheme_attributes(scheme, support_user)).to eq(attributes)
+      end
 
-    it "returns correct display attributes for a coordinator user" do
-      attributes = [
-        { name: "Scheme code", value: "S#{scheme.id}" },
-        { name: "Name", value: "Test service_name", edit: true },
-        { name: "Confidential information", value: "No", edit: true },
-        { name: "Type of scheme", value: "Housing for older people" },
-        { name: "Registered under Care Standards Act 2000", value: "Yes – registered care home providing personal care" },
-        { name: "Support services provided by", value: "A registered charity or voluntary organisation" },
-        { name: "Primary client group", value: "Rough sleepers" },
-        { name: "Has another client group", value: "Yes" },
-        { name: "Secondary client group", value: "Refugees (permanent)" },
-        { name: "Level of support given", value: "High level" },
-        { name: "Intended length of stay", value: "Permanent" },
-        { name: "Availability", value: "Active from 1 April 2022" },
-        { name: "Status", value: status_tag(:active) },
-      ]
-      expect(display_scheme_attributes(scheme, coordinator_user)).to eq(attributes)
-    end
-
-    context "when the scheme toggle is disabled" do
-      it "doesn't show the scheme status" do
-        allow(FeatureToggle).to receive(:scheme_toggle_enabled?).and_return(false)
-        attributes = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Status" }
-        expect(attributes).to be_nil
+      it "returns correct display attributes for a coordinator user" do
+        attributes = [
+          { name: "Scheme code", value: "S#{scheme.id}" },
+          { name: "Name", value: "Test service_name", edit: true },
+          { name: "Confidential information", value: "No", edit: true },
+          { name: "Type of scheme", value: "Housing for older people" },
+          { name: "Registered under Care Standards Act 2000", value: "Yes – registered care home providing personal care" },
+          { name: "Support services provided by", value: "A registered charity or voluntary organisation" },
+          { name: "Primary client group", value: "Rough sleepers" },
+          { name: "Has another client group", value: "Yes" },
+          { name: "Secondary client group", value: "Refugees (permanent)" },
+          { name: "Level of support given", value: "High level" },
+          { name: "Intended length of stay", value: "Permanent" },
+          { name: "Availability", value: "Active from 1 April 2021" },
+          { name: "Status", value: status_tag(:incomplete) },
+        ]
+        expect(display_scheme_attributes(scheme, coordinator_user)).to eq(attributes)
       end
     end
 
-    context "when the managing organisation is the owning organisation" do
-      it "doesn't show the organisation providing support" do
-        attributes = display_scheme_attributes(scheme_where_managing_organisation_is_owning_organisation, support_user).find { |x| x[:name] == "Organisation providing support" }
-        expect(attributes).to be_nil
-      end
-    end
-
-    context "when viewing availability" do
-      context "with no deactivations" do
-        it "displays created_at as availability date" do
-          availability_attribute = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Availability" }[:value]
-
-          expect(availability_attribute).to eq("Active from #{scheme.created_at.to_formatted_s(:govuk_date)}")
-        end
-
-        it "displays current collection start date as availability date if created_at is later than collection start date" do
-          scheme.update!(created_at: Time.zone.local(2022, 4, 16))
-          availability_attribute = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Availability" }[:value]
-
-          expect(availability_attribute).to eq("Active from 1 April 2022")
-        end
+    context "when scheme has a location" do
+      before do
+        FactoryBot.create(:location, scheme:)
       end
 
-      context "with previous deactivations" do
-        context "and all reactivated deactivations" do
+      it "returns correct display attributes for a support user" do
+        attributes = [
+          { name: "Scheme code", value: "S#{scheme.id}" },
+          { name: "Name", value: "Test service_name", edit: true },
+          { name: "Confidential information", value: "No", edit: true },
+          { name: "Type of scheme", value: "Housing for older people" },
+          { name: "Registered under Care Standards Act 2000", value: "Yes – registered care home providing personal care" },
+          { name: "Housing stock owned by", value: "Acme LTD Owning", edit: true },
+          { name: "Support services provided by", value: "A registered charity or voluntary organisation" },
+          { name: "Primary client group", value: "Rough sleepers" },
+          { name: "Has another client group", value: "Yes" },
+          { name: "Secondary client group", value: "Refugees (permanent)" },
+          { name: "Level of support given", value: "High level" },
+          { name: "Intended length of stay", value: "Permanent" },
+          { name: "Availability", value: "Active from 1 April 2021" },
+          { name: "Status", value: status_tag(:active) },
+        ]
+        expect(display_scheme_attributes(scheme, support_user)).to eq(attributes)
+      end
+
+      it "returns correct display attributes for a coordinator user" do
+        attributes = [
+          { name: "Scheme code", value: "S#{scheme.id}" },
+          { name: "Name", value: "Test service_name", edit: true },
+          { name: "Confidential information", value: "No", edit: true },
+          { name: "Type of scheme", value: "Housing for older people" },
+          { name: "Registered under Care Standards Act 2000", value: "Yes – registered care home providing personal care" },
+          { name: "Support services provided by", value: "A registered charity or voluntary organisation" },
+          { name: "Primary client group", value: "Rough sleepers" },
+          { name: "Has another client group", value: "Yes" },
+          { name: "Secondary client group", value: "Refugees (permanent)" },
+          { name: "Level of support given", value: "High level" },
+          { name: "Intended length of stay", value: "Permanent" },
+          { name: "Availability", value: "Active from 1 April 2021" },
+          { name: "Status", value: status_tag(:active) },
+        ]
+        expect(display_scheme_attributes(scheme, coordinator_user)).to eq(attributes)
+      end
+
+      context "when the scheme toggle is disabled" do
+        it "doesn't show the scheme status" do
+          allow(FeatureToggle).to receive(:scheme_toggle_enabled?).and_return(false)
+          attributes = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Status" }
+          expect(attributes).to be_nil
+        end
+      end
+
+      context "when the managing organisation is the owning organisation" do
+        it "doesn't show the organisation providing support" do
+          attributes = display_scheme_attributes(scheme_where_managing_organisation_is_owning_organisation, support_user).find { |x| x[:name] == "Organisation providing support" }
+          expect(attributes).to be_nil
+        end
+      end
+
+      context "when viewing availability" do
+        context "with no deactivations" do
+          it "displays current collection start date as availability date if created_at is later than collection start date" do
+            scheme.update!(created_at: Time.zone.local(2022, 4, 16))
+            availability_attribute = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Availability" }[:value]
+
+            expect(availability_attribute).to eq("Active from 1 April 2021")
+          end
+        end
+
+        context "with previous deactivations" do
+          context "and all reactivated deactivations" do
+            before do
+              FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 10), reactivation_date: Time.zone.local(2022, 9, 1), scheme:)
+              FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 15), reactivation_date: Time.zone.local(2022, 9, 28), scheme:)
+              scheme.reload
+            end
+
+            it "displays the timeline of availability" do
+              availability_attribute = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Availability" }[:value]
+
+              expect(availability_attribute).to eq("Active from 1 April 2021 to 9 August 2022\nDeactivated on 10 August 2022\nActive from 1 September 2022 to 14 September 2022\nDeactivated on 15 September 2022\nActive from 28 September 2022")
+            end
+          end
+
+          context "and non reactivated deactivation" do
+            before do
+              FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 10), reactivation_date: Time.zone.local(2022, 9, 1), scheme:)
+              FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 15), reactivation_date: nil, scheme:)
+              scheme.reload
+            end
+
+            it "displays the timeline of availability" do
+              availability_attribute = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Availability" }[:value]
+
+              expect(availability_attribute).to eq("Active from 1 April 2021 to 9 August 2022\nDeactivated on 10 August 2022\nActive from 1 September 2022 to 14 September 2022\nDeactivated on 15 September 2022")
+            end
+          end
+        end
+
+        context "with out of order deactivations" do
+          context "and all reactivated deactivations" do
+            before do
+              FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 24), reactivation_date: Time.zone.local(2022, 9, 28), scheme:)
+              FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 15), reactivation_date: Time.zone.local(2022, 6, 18), scheme:)
+              scheme.reload
+            end
+
+            it "displays the timeline of availability" do
+              availability_attribute = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Availability" }[:value]
+
+              expect(availability_attribute).to eq("Active from 1 April 2021 to 14 June 2022\nDeactivated on 15 June 2022\nActive from 18 June 2022 to 23 September 2022\nDeactivated on 24 September 2022\nActive from 28 September 2022")
+            end
+          end
+
+          context "and one non reactivated deactivation" do
+            before do
+              FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 24), reactivation_date: Time.zone.local(2022, 9, 28), scheme:)
+              FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 15), reactivation_date: nil, scheme:)
+              scheme.reload
+            end
+
+            it "displays the timeline of availability" do
+              availability_attribute = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Availability" }[:value]
+
+              expect(availability_attribute).to eq("Active from 1 April 2021 to 14 June 2022\nDeactivated on 15 June 2022\nActive from 28 September 2022")
+            end
+          end
+        end
+
+        context "with multiple out of order deactivations" do
+          context "and one non reactivated deactivation" do
+            before do
+              FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 24), reactivation_date: Time.zone.local(2022, 9, 28), scheme:)
+              FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 24), reactivation_date: Time.zone.local(2022, 10, 28), scheme:)
+              FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 15), reactivation_date: nil, scheme:)
+              scheme.reload
+            end
+
+            it "displays the timeline of availability" do
+              availability_attribute = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Availability" }[:value]
+
+              expect(availability_attribute).to eq("Active from 1 April 2021 to 14 June 2022\nDeactivated on 15 June 2022\nActive from 28 September 2022 to 23 October 2022\nDeactivated on 24 October 2022\nActive from 28 October 2022")
+            end
+          end
+        end
+
+        context "with intersecting deactivations" do
           before do
-            FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 10), reactivation_date: Time.zone.local(2022, 9, 1), scheme:)
-            FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 15), reactivation_date: Time.zone.local(2022, 9, 28), scheme:)
+            FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 10), reactivation_date: Time.zone.local(2022, 12, 1), scheme:)
+            FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 11, 11), reactivation_date: Time.zone.local(2022, 12, 11), scheme:)
             scheme.reload
           end
 
           it "displays the timeline of availability" do
             availability_attribute = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Availability" }[:value]
 
-            expect(availability_attribute).to eq("Active from 1 April 2022 to 9 August 2022\nDeactivated on 10 August 2022\nActive from 1 September 2022 to 14 September 2022\nDeactivated on 15 September 2022\nActive from 28 September 2022")
+            expect(availability_attribute).to eq("Active from 1 April 2021 to 9 October 2022\nDeactivated on 10 October 2022\nActive from 11 December 2022")
           end
-        end
-
-        context "and non reactivated deactivation" do
-          before do
-            FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 10), reactivation_date: Time.zone.local(2022, 9, 1), scheme:)
-            FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 15), reactivation_date: nil, scheme:)
-            scheme.reload
-          end
-
-          it "displays the timeline of availability" do
-            availability_attribute = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Availability" }[:value]
-
-            expect(availability_attribute).to eq("Active from 1 April 2022 to 9 August 2022\nDeactivated on 10 August 2022\nActive from 1 September 2022 to 14 September 2022\nDeactivated on 15 September 2022")
-          end
-        end
-      end
-
-      context "with out of order deactivations" do
-        context "and all reactivated deactivations" do
-          before do
-            FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 24), reactivation_date: Time.zone.local(2022, 9, 28), scheme:)
-            FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 15), reactivation_date: Time.zone.local(2022, 6, 18), scheme:)
-            scheme.reload
-          end
-
-          it "displays the timeline of availability" do
-            availability_attribute = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Availability" }[:value]
-
-            expect(availability_attribute).to eq("Active from 1 April 2022 to 14 June 2022\nDeactivated on 15 June 2022\nActive from 18 June 2022 to 23 September 2022\nDeactivated on 24 September 2022\nActive from 28 September 2022")
-          end
-        end
-
-        context "and one non reactivated deactivation" do
-          before do
-            FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 24), reactivation_date: Time.zone.local(2022, 9, 28), scheme:)
-            FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 15), reactivation_date: nil, scheme:)
-            scheme.reload
-          end
-
-          it "displays the timeline of availability" do
-            availability_attribute = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Availability" }[:value]
-
-            expect(availability_attribute).to eq("Active from 1 April 2022 to 14 June 2022\nDeactivated on 15 June 2022\nActive from 28 September 2022")
-          end
-        end
-      end
-
-      context "with multiple out of order deactivations" do
-        context "and one non reactivated deactivation" do
-          before do
-            FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 24), reactivation_date: Time.zone.local(2022, 9, 28), scheme:)
-            FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 24), reactivation_date: Time.zone.local(2022, 10, 28), scheme:)
-            FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 15), reactivation_date: nil, scheme:)
-            scheme.reload
-          end
-
-          it "displays the timeline of availability" do
-            availability_attribute = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Availability" }[:value]
-
-            expect(availability_attribute).to eq("Active from 1 April 2022 to 14 June 2022\nDeactivated on 15 June 2022\nActive from 28 September 2022 to 23 October 2022\nDeactivated on 24 October 2022\nActive from 28 October 2022")
-          end
-        end
-      end
-
-      context "with intersecting deactivations" do
-        before do
-          FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 10), reactivation_date: Time.zone.local(2022, 12, 1), scheme:)
-          FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 11, 11), reactivation_date: Time.zone.local(2022, 12, 11), scheme:)
-          scheme.reload
-        end
-
-        it "displays the timeline of availability" do
-          availability_attribute = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Availability" }[:value]
-
-          expect(availability_attribute).to eq("Active from 1 April 2022 to 9 October 2022\nDeactivated on 10 October 2022\nActive from 11 December 2022")
         end
       end
     end

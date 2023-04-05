@@ -55,13 +55,13 @@ FactoryBot.define do
       ecstat2 { 6 }
       homeless { 1 }
       underoccupation_benefitcap { 0 }
-      leftreg { 1 }
+      leftreg { 4 }
       reservist { 1 }
       illness { 1 }
       preg_occ { 2 }
       startertenancy { 1 }
-      tenancylength { nil }
-      tenancy { 1 }
+      tenancylength { 2 }
+      tenancy { 4 }
       ppostcode_full { Faker::Address.postcode }
       rsnvac { 6 }
       unittype_gn { 7 }
@@ -142,6 +142,10 @@ FactoryBot.define do
       declaration { 1 }
       first_time_property_let_as_social_housing { 0 }
       referral { 2 }
+      uprn_known { 0 }
+      joint { 3 }
+      address_line1 { "fake address" }
+      town_or_city { "London" }
     end
     trait :export do
       tenancycode { "987654" }

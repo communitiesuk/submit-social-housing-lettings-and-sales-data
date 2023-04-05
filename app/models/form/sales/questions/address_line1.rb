@@ -6,16 +6,7 @@ class Form::Sales::Questions::AddressLine1 < ::Form::Question
     @header = "Address line 1"
     @type = "text"
     @plain_label = true
-    @question_number = 15
-  end
-
-  def hidden_in_check_answers?(log, _current_user = nil)
-    return true if log.uprn_known.nil?
-    return false if log.uprn_known&.zero?
-    return true if log.uprn_confirmed.nil? && log.uprn.present?
-    return true if log.uprn_known == 1 && log.uprn.blank?
-
-    log.uprn_confirmed == 1
+    @check_answer_label = "Q15 - Address"
   end
 
   def answer_label(log, _current_user = nil)

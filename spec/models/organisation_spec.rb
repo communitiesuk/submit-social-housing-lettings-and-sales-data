@@ -169,11 +169,6 @@ RSpec.describe Organisation, type: :model do
       it "has lettings logs" do
         expect(organisation.lettings_logs.to_a).to match_array([owned_lettings_log, managed_lettings_log])
       end
-
-      it "has lettings log status helper methods" do
-        expect(organisation.completed_lettings_logs.to_a).to eq([owned_lettings_log])
-        expect(organisation.not_completed_lettings_logs.to_a).to eq([managed_lettings_log])
-      end
     end
   end
 

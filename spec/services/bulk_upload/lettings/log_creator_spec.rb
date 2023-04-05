@@ -15,6 +15,11 @@ RSpec.describe BulkUpload::Lettings::LogCreator do
         expect { service.call }.to change(LettingsLog, :count)
       end
 
+      it "create a log with pending status" do
+        service.call
+        expect(LettingsLog.last.status).to eql("pending")
+      end
+
       it "associates log with bulk upload" do
         service.call
 
@@ -74,6 +79,23 @@ RSpec.describe BulkUpload::Lettings::LogCreator do
 
         record = LettingsLog.last
         expect(record.age1).to be_blank
+      end
+    end
+
+    context "when pre-creating logs" do
+      subject(:service) { described_class.new(bulk_upload:, path:) }
+
+      it "creates a new log" do
+        expect { service.call }.to change(LettingsLog, :count)
+      end
+
+      it "creates a log with correct states" do
+        service.call
+
+        last_log = LettingsLog.last
+
+        expect(last_log.status).to eql("pending")
+        expect(last_log.status_cache).to eql("completed")
       end
     end
 

@@ -5,11 +5,15 @@ class FeatureToggle
   end
 
   def self.startdate_collection_window_validation_enabled?
-    Rails.env.production? || Rails.env.test? || Rails.env.staging?
+    Rails.env.production? || Rails.env.test?
   end
 
   def self.startdate_two_week_validation_enabled?
     Rails.env.production? || Rails.env.test? || Rails.env.staging?
+  end
+
+  def self.saledate_two_week_validation_enabled?
+    Rails.env.production? || Rails.env.test? || Rails.env.staging? || Rails.env.review?
   end
 
   def self.sales_log_enabled?
@@ -17,7 +21,7 @@ class FeatureToggle
   end
 
   def self.managing_owning_enabled?
-    !Rails.env.production?
+    true
   end
 
   def self.scheme_toggle_enabled?
@@ -29,7 +33,7 @@ class FeatureToggle
   end
 
   def self.managing_for_other_user_enabled?
-    !Rails.env.production?
+    true
   end
 
   def self.bulk_upload_logs?
@@ -46,11 +50,7 @@ class FeatureToggle
     !Rails.env.production?
   end
 
-  def self.validate_valid_radio_options?
-    !(Rails.env.production? || Rails.env.staging?)
-  end
-
   def self.collection_2023_2024_year_enabled?
-    !Rails.env.production?
+    true
   end
 end

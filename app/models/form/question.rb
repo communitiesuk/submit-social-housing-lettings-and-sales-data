@@ -14,11 +14,11 @@ class Form::Question
   def initialize(id, hsh, page)
     @id = id
     @page = page
-    @guidance_position = GuidancePosition::TOP
     if hsh
       @check_answer_label = hsh["check_answer_label"]
       @header = hsh["header"]
       @guidance_partial = hsh["guidance_partial"]
+      @guidance_position = hsh["guidance_position"] || GuidancePosition::TOP
       @hint_text = hsh["hint_text"]
       @type = hsh["type"]
       @min = hsh["min"]
@@ -338,7 +338,7 @@ private
     startertenancy: [0],
     sheltered: [0, 1],
     armedforces: [1, 4, 5],
-    leftreg: [0],
+    leftreg: [6],
     reservist: [1],
     preg_occ: [1],
     illness: [1],
@@ -362,7 +362,7 @@ private
     startertenancy: [1],
     sheltered: [2],
     armedforces: [2],
-    leftreg: [1],
+    leftreg: [4],
     reservist: [2],
     preg_occ: [2],
     illness: [2],

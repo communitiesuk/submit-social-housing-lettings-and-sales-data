@@ -20,7 +20,7 @@ RSpec.describe Form::Lettings::Pages::Address, type: :model do
   end
 
   it "has the correct header" do
-    expect(page.header).to eq("What is the property's address?")
+    expect(page.header).to eq("Q12 - What is the property's address?")
   end
 
   it "has the correct description" do
@@ -62,7 +62,7 @@ RSpec.describe Form::Lettings::Pages::Address, type: :model do
 
     context "when uprn_confirmed == 1 && uprn_known != 0" do
       let(:log) do
-        create(:lettings_log, uprn_known: 1, uprn_confirmed: 1)
+        create(:lettings_log, uprn_known: 1, uprn_confirmed: 1, uprn: "123456789")
       end
 
       it "returns true" do

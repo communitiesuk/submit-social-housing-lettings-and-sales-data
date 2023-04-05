@@ -38,7 +38,7 @@ module Validations::SharedValidations
     postcode = record.postcode_full
     if record.postcode_known? && (postcode.blank? || !postcode.match(POSTCODE_REGEXP))
       error_message = I18n.t("validations.postcode")
-      record.errors.add :postcode_full, error_message
+      record.errors.add :postcode_full, :wrong_format, message: error_message
     end
   end
 
@@ -47,7 +47,7 @@ module Validations::SharedValidations
 
     if location_inactive_status.present?
       date, scope, deactivation_date = location_inactive_status.values_at(:date, :scope, :deactivation_date)
-      record.errors.add field, I18n.t("validations.setup.startdate.location.#{scope}", postcode: record.location.postcode, date:, deactivation_date:)
+      record.errors.add field, :not_active, message: I18n.t("validations.setup.startdate.location.#{scope}", postcode: record.location.postcode, date:, deactivation_date:)
     end
   end
 
@@ -75,19 +75,6 @@ module Validations::SharedValidations
            end
 
     { scope: status, date: date&.to_formatted_s(:govuk_date), deactivation_date: closest_reactivation&.deactivation_date&.to_formatted_s(:govuk_date) }
-  end
-
-  def validate_valid_radio_option(record)
-    return unless FeatureToggle.validate_valid_radio_options?
-
-    record.attributes.each do |question_id, _v|
-      question = record.form.get_question(question_id, record)
-
-      next unless question&.type == "radio"
-      next unless record[question_id].present? && !question.answer_options.key?(record[question_id].to_s) && question.page.routed_to?(record, nil)
-
-      record.errors.add(question_id, I18n.t("validations.invalid_option", question: question.check_answer_label&.downcase))
-    end
   end
 
   def shared_validate_partner_count(record, max_people)
@@ -120,9 +107,9 @@ private
     max = [question.prefix, number_with_delimiter(question.max, delimiter: ","), question.suffix].join("") if question.max
 
     if min && max
-      record.errors.add question.id.to_sym, I18n.t("validations.numeric.within_range", field:, min:, max:)
+      record.errors.add question.id.to_sym, :outside_the_range, message: I18n.t("validations.numeric.within_range", field:, min:, max:)
     elsif min
-      record.errors.add question.id.to_sym, I18n.t("validations.numeric.above_min", field:, min:)
+      record.errors.add question.id.to_sym, :under_min, message: I18n.t("validations.numeric.above_min", field:, min:)
     end
   end
 end

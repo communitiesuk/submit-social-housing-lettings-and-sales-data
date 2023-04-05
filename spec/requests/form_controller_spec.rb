@@ -321,6 +321,23 @@ RSpec.describe FormController, type: :request do
           get "/sales-logs/#{log.id}/review", headers: headers, params: { sales_log: true }
           expect(response.body).to match("Review sales log")
         end
+
+        context "when log is pending" do
+          let(:pending_log) do
+            create(
+              :lettings_log,
+              owning_organisation: organisation,
+              created_by: user,
+              status: "pending",
+              skip_update_status: true,
+            )
+          end
+
+          it "does not render pending log and returns 404" do
+            get "/lettings-logs/#{pending_log.id}/review", headers: headers, params: {}
+            expect(response).to be_not_found
+          end
+        end
       end
 
       context "when viewing a user dependent page" do
@@ -630,10 +647,6 @@ RSpec.describe FormController, type: :request do
               wchair: 1,
             },
           }
-        end
-
-        before do
-          allow(validator).to receive(:validate_pregnancy).and_return(true)
         end
 
         it "routes to the appropriate conditional page based on the question answer of the current page" do

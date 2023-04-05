@@ -23,6 +23,6 @@ class Form::Sales::Questions::Buyer2EthnicGroup < ::Form::Question
     "3" => { "value" => "Black, African, Caribbean or Black British" },
     "4" => { "value" => "Arab or other ethnic group" },
     "divider" => { "value" => true },
-    "17" => { "value" => "Buyer 1 prefers not to say" },
+    "17" => { "value" => "Buyer 2 prefers not to say" },
   }.freeze
 end

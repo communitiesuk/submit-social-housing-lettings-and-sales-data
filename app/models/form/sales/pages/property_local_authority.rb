@@ -14,12 +14,6 @@ class Form::Sales::Pages::PropertyLocalAuthority < ::Form::Page
     ].compact
   end
 
-  def routed_to?(log, _current_user = nil)
-    return false if log.uprn_known.nil? && form.start_date.year >= 2023
-
-    true
-  end
-
   def la_known_question
     if form.start_date.year < 2023
       Form::Sales::Questions::PropertyLocalAuthorityKnown.new(nil, nil, self)

@@ -104,14 +104,6 @@ class SalesLog < Log
     collection_start_year < 2023
   end
 
-  def not_started?
-    status == "not_started"
-  end
-
-  def completed?
-    status == "completed"
-  end
-
   def setup_completed?
     form.setup_sections.all? { |sections| sections.subsections.all? { |subsection| subsection.status(self) == :completed } }
   end
@@ -299,6 +291,10 @@ class SalesLog < Log
     companybuy == 1
   end
 
+  def monthly_leasehold_charges_unknown?
+    mscharge_known&.zero?
+  end
+
   def buyers_age_for_old_persons_shared_ownership_invalid?
     return unless old_persons_shared_ownership?
 
@@ -348,5 +344,9 @@ class SalesLog < Log
     grant_amount = grant || 0
     mortgage_amount = mortgage || 0
     mortgage_amount + deposit + grant_amount
+  end
+
+  def beds_for_la_sale_range
+    beds.nil? ? nil : [beds, LaSaleRange::MAX_BEDS].min
   end
 end

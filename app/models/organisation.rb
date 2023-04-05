@@ -48,7 +48,7 @@ class Organisation < ApplicationRecord
   validates :name, presence: { message: I18n.t("validations.organisation.name_missing") }
   validates :provider_type, presence: { message: I18n.t("validations.organisation.provider_type_missing") }
 
-  def self.find_by_id_on_mulitple_fields(id)
+  def self.find_by_id_on_multiple_fields(id)
     return if id.nil?
 
     if id.start_with?("ORG")
@@ -68,14 +68,6 @@ class Organisation < ApplicationRecord
 
   def sales_logs
     SalesLog.filter_by_organisation(self)
-  end
-
-  def completed_lettings_logs
-    lettings_logs.completed
-  end
-
-  def not_completed_lettings_logs
-    lettings_logs.not_completed
   end
 
   def address_string

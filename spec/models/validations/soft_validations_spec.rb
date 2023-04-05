@@ -4,6 +4,15 @@ RSpec.describe Validations::SoftValidations do
   let(:organisation) { FactoryBot.create(:organisation, provider_type: "PRP") }
   let(:record) { FactoryBot.create(:lettings_log, owning_organisation: organisation) }
 
+  before do
+    Timecop.freeze(Time.zone.local(2021, 10, 10))
+    Singleton.__init__(FormHandler)
+  end
+
+  after do
+    Timecop.return
+  end
+
   describe "rent min max validations" do
     before do
       LaRentRange.create!(
@@ -23,7 +32,7 @@ RSpec.describe Validations::SoftValidations do
       record.rent_type = 0
       record.beds = 1
       record.period = 1
-      record.startdate = Time.zone.local(2021, 10, 10)
+      record.startdate = Time.zone.today
     end
 
     context "when validating soft min" do
@@ -175,14 +184,21 @@ RSpec.describe Validations::SoftValidations do
       end
     end
 
-    context "when female tenants are in 11-16 age range" do
+    context "when there are no female tenants and age of other tenants is unknown" do
+      it "shows the interruption screen" do
+        record.update!(sex1: "M", preg_occ: 1, hhmemb: 1, age1_known: 1)
+        expect(record.no_females_in_a_pregnant_household?).to be true
+      end
+    end
+
+    context "when female tenants are under 16" do
       it "shows the interruption screen" do
         record.update!(age2: 14, sex2: "F", preg_occ: 1, hhmemb: 2, details_known_2: 0, age2_known: 0, age1: 18, sex1: "M", age1_known: 0)
         expect(record.female_in_pregnant_household_in_soft_validation_range?).to be true
       end
     end
 
-    context "when female tenants are in 50-65 age range" do
+    context "when female tenants are over 50" do
       it "shows the interruption screen" do
         record.update!(age1: 54, sex1: "F", preg_occ: 1, hhmemb: 1, age1_known: 0)
         expect(record.female_in_pregnant_household_in_soft_validation_range?).to be true

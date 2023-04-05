@@ -15,7 +15,7 @@ class LettingsLogsController < LogsController
   def index
     respond_to do |format|
       format.html do
-        all_logs = current_user.lettings_logs
+        all_logs = current_user.lettings_logs.visible
         unpaginated_filtered_logs = filtered_logs(all_logs, search_term, @session_filters)
 
         @search_term = search_term
@@ -140,7 +140,7 @@ private
   end
 
   def find_resource
-    @log = LettingsLog.find_by(id: params[:id])
+    @log = LettingsLog.visible.find_by(id: params[:id])
   end
 
   def post_create_redirect_url(log)
