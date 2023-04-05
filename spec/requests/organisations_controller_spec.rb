@@ -227,6 +227,11 @@ RSpec.describe OrganisationsController, type: :request do
             expected_html = "data-qa=\"change-name\" href=\"/organisations/#{organisation.id}/edit\""
             expect(response.body).to include(expected_html)
           end
+
+          it "displays a link to merge organisations" do
+            expect(page).to have_content("Is your organisation merging with another?")
+            expect(page).to have_link("Let us know using this form", href: "/organisations/#{organisation.id}/merge")
+          end
         end
 
         context "with organisation that are not in scope for the user, i.e. that they do not belong to" do

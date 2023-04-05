@@ -53,4 +53,8 @@ class FeatureToggle
   def self.collection_2023_2024_year_enabled?
     true
   end
+
+  def self.merge_organisations_enabled?
+    !Rails.env.production?
+  end
 end
