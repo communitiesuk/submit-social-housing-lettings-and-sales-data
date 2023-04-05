@@ -1,5 +1,5 @@
 class Form::Sales::Questions::CombinedIncomeValueCheck < ::Form::Question
-  def initialize(id, hsh, page, buyer_index:)
+  def initialize(id, hsh, page, check_answers_card_number:)
     super(id, hsh, page)
     @id = "combined_income_value_check"
     @check_answer_label = "Combined income confirmation"
@@ -19,7 +19,7 @@ class Form::Sales::Questions::CombinedIncomeValueCheck < ::Form::Question
         },
       ],
     }
-    @check_answers_card_number = buyer_index
+    @check_answers_card_number = check_answers_card_number
     @page = page
   end
 end
