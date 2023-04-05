@@ -1,15 +1,6 @@
 <% title = "Tell us if your organisation is merging" %>
 <% content_for :title, title %>
 
-<% if current_user.support? %>
-  <h1 class="govuk-heading-l"><%= @organisation.name %></h1>
-  <% if current_user.support? %>
-    <%= render SubNavigationComponent.new(
-      items: secondary_items(request.path, @organisation.id),
-    ) %>
-  <% end %>
-<% end %>
-
 <%= govuk_back_link href: organisation_path %>
 <h2 class="govuk-heading-l">Tell us if your organisation is merging</h2>
 
