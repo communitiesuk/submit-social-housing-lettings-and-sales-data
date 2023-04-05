@@ -571,8 +571,8 @@ RSpec.describe SalesLog, type: :model do
       end
     end
 
-    context "when service errors" do
-      let(:sales_log) { create(:sales_log, uprn_known: 1, uprn: "123456789", uprn_confirmed: 1) }
+    context "when the API returns an error" do
+      let(:sales_log) { build(:sales_log, :outright_sale_setup_complete, uprn_known: 1, uprn: "123456789", uprn_confirmed: 1) }
       let(:error_message) { "error" }
 
       it "adds error to sales log" do

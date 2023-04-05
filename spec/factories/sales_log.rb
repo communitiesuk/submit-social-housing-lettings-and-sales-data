@@ -21,13 +21,13 @@ FactoryBot.define do
       saledate { Time.zone.today }
     end
     trait :shared_ownership_setup_complete do
-      saledate { Time.zone.today }
+      saledate_today
       ownershipsch { 1 }
       type { 30 }
       jointpur { 2 }
     end
     trait :outright_sale_setup_complete do
-      saledate { Time.zone.today }
+      saledate_today
       ownershipsch { 3 }
       type { 10 }
       companybuy { 2 }
