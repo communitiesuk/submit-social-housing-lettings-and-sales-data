@@ -13,7 +13,7 @@ class Form::Sales::Pages::Buyer1IncomeMaxValueCheck < ::Form::Page
           "key" => "field_formatted_as_currency",
           "arguments_for_key" => "income1",
           "i18n_template" => "income",
-        }
+        },
       ],
     }
     @informative_text = {}
