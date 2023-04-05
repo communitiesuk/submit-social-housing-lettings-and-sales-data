@@ -1,9 +1,6 @@
 class Form::Sales::Pages::Buyer2IncomeMinValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
-    @header = ""
-    @description = ""
-    @subsection = subsection
     @depends_on = [
       {
         "income2_under_soft_min?" => true,

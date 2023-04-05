@@ -1,5 +1,5 @@
 class Form::Sales::Pages::CombinedIncomeMaxValueCheck < ::Form::Page
-  def initialize(id, hsh, subsection, buyer_index:)
+  def initialize(id, hsh, subsection, check_answers_card_number:)
     super(id, hsh, subsection)
     @depends_on = [
       {
@@ -17,12 +17,12 @@ class Form::Sales::Pages::CombinedIncomeMaxValueCheck < ::Form::Page
       ],
     }
     @informative_text = {}
-    @buyer_index = buyer_index
+    @check_answers_card_number = check_answers_card_number
   end
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::CombinedIncomeValueCheck.new(nil, nil, self, buyer_index: @buyer_index),
+      Form::Sales::Questions::CombinedIncomeValueCheck.new(nil, nil, self, check_answers_card_number: @check_answers_card_number),
     ]
   end
 end
