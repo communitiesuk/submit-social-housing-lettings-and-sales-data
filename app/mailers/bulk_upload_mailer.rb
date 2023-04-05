@@ -72,24 +72,11 @@ class BulkUploadMailer < NotifyMailer
   end
 
   def send_bulk_upload_failed_file_setup_error_mail(bulk_upload:)
-    bulk_upload_link = if bulk_upload.lettings?
-                         start_bulk_upload_lettings_logs_url
+    bulk_upload_link = if BulkUploadErrorSummaryTableComponent.new(bulk_upload:).errors?
+                         summary_bulk_upload_lettings_result_url(bulk_upload)
                        else
-                         start_bulk_upload_sales_logs_url
+                         bulk_upload_lettings_result_url(bulk_upload)
                        end
-
-    row_parser_class = bulk_upload.prefix_namespace::RowParser
-
-    errors = bulk_upload
-      .bulk_upload_errors
-      .where(category: "setup")
-      .group(:col, :field)
-      .count
-      .keys
-      .sort_by { |_col, field| field }
-      .map do |col, field|
-        "- #{row_parser_class.question_for_field(field.to_sym)} (Column #{col})"
-      end
 
     send_email(
       bulk_upload.user.email,
@@ -99,7 +86,6 @@ class BulkUploadMailer < NotifyMailer
         upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
         lettings_or_sales: bulk_upload.log_type,
         year_combo: bulk_upload.year_combo,
-        errors_list: errors.join("\n"),
         bulk_upload_link:,
       },
     )

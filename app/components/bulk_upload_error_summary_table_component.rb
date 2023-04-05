@@ -24,6 +24,14 @@ class BulkUploadErrorSummaryTableComponent < ViewComponent::Base
     sorted_errors.present?
   end
 
+  def intro
+    if setup_errors.present?
+      "This summary shows important questions that have errors. See full error report for more details."
+    else
+      "This summary shows questions that have more than #{BulkUploadErrorSummaryTableComponent::DISPLAY_THRESHOLD - 1} errors. See full error report for more details."
+    end
+  end
+
 private
 
   def setup_errors
@@ -31,7 +39,6 @@ private
       .bulk_upload_errors
       .where(category: "setup")
       .group(:col, :field, :error)
-      .having("count(*) >= ?", display_threshold)
       .count
       .sort_by { |el| el[0][0].rjust(3, "0") }
   end

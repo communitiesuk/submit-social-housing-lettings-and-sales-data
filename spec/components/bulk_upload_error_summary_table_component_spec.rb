@@ -41,6 +41,12 @@ RSpec.describe BulkUploadErrorSummaryTableComponent, type: :component do
         result = render_inline(component)
         expect(result).to have_selector("table", count: 1)
       end
+
+      it "renders intro with threshold" do
+        result = render_inline(component)
+
+        expect(result).to have_content("This summary shows questions that have more than 0 errors. See full error report for more details.")
+      end
     end
 
     context "when there are 2 independent errors" do
@@ -112,6 +118,8 @@ RSpec.describe BulkUploadErrorSummaryTableComponent, type: :component do
 
       before do
         create(:bulk_upload_error, bulk_upload:, col: "B", row: 2, category: nil)
+
+        stub_const("BulkUploadErrorSummaryTableComponent::DISPLAY_THRESHOLD", 16)
       end
 
       it "only returns the setup errors" do
@@ -129,6 +137,12 @@ RSpec.describe BulkUploadErrorSummaryTableComponent, type: :component do
           error_1.error,
           "1 error",
         ])
+      end
+
+      it "renders intro with setup errors" do
+        result = render_inline(component)
+
+        expect(result).to have_content("This summary shows important questions that have errors. See full error report for more details.")
       end
     end
   end
