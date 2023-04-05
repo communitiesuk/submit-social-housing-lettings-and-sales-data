@@ -357,4 +357,8 @@ class SalesLog < Log
   def beds_for_la_sale_range
     beds.nil? ? nil : [beds, LaSaleRange::MAX_BEDS].min
   end
+
+  def combined_income
+    income1 + income2
+  end
 end
