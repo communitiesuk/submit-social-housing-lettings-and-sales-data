@@ -8,8 +8,9 @@ class Form::Sales::Pages::BuyerLiveInValueCheck < Form::Sales::Pages::Person
     ]
     @title_text = {
       "translation" => "soft_validations.buyer#{person_index}_not_livein.title_text",
-      "arguments" => [{ "key" => "owhership_scheme", "label" => false, "i18n_template" => "owhership_scheme" }],
+      "arguments" => [{ "key" => "ownership_scheme", "label" => false, "i18n_template" => "ownership_scheme" }],
     }
+    @informative_text = {}
   end
 
   def questions

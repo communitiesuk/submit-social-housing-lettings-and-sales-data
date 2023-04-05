@@ -551,6 +551,8 @@ en:
       informative_text: "Your given mortgage, deposit and grant total is £%{mortgage_deposit_and_grant_total}"
     care_home_charges:
       title_text: "Care home charges should be provided if this is a care home accommodation"
+    buyer1_not_livein:
+      title_text: "You told us that buyer 1 will not live in the property. For %{ownership_scheme} types, the buyer usually lives in the property."
 
   devise:
     two_factor_authentication:

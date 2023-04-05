@@ -39,7 +39,7 @@ RSpec.describe Form::Sales::Pages::BuyerLiveInValueCheck, type: :model do
   it "has the correct title_text" do
     expect(page.title_text).to eq({
       "translation" => "soft_validations.buyer1_not_livein.title_text",
-      "arguments" => [{ "key" => "owhership_scheme", "label" => false, "i18n_template" => "owhership_scheme" }],
+      "arguments" => [{ "key" => "ownership_scheme", "label" => false, "i18n_template" => "ownership_scheme" }],
     })
   end
 
@@ -57,7 +57,7 @@ RSpec.describe Form::Sales::Pages::BuyerLiveInValueCheck, type: :model do
     it "has the correct title_text" do
       expect(page.title_text).to eq({
         "translation" => "soft_validations.buyer2_not_livein.title_text",
-        "arguments" => [{ "key" => "owhership_scheme", "label" => false, "i18n_template" => "owhership_scheme" }],
+        "arguments" => [{ "key" => "ownership_scheme", "label" => false, "i18n_template" => "ownership_scheme" }],
       })
     end
   end
