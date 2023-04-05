@@ -17,6 +17,8 @@ class Log < ApplicationRecord
   enum status: STATUS
   enum status_cache: STATUS, _prefix: true
 
+  scope :visible, -> { where(status: %w[not_started in_progress completed]) }
+
   scope :filter_by_status, ->(status, _user = nil) { where status: }
   scope :filter_by_years, lambda { |years, _user = nil|
     first_year = years.shift

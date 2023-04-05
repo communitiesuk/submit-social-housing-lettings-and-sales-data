@@ -9,7 +9,7 @@ class SalesLogsController < LogsController
   def index
     respond_to do |format|
       format.html do
-        all_logs = current_user.sales_logs
+        all_logs = current_user.sales_logs.visible
         unpaginated_filtered_logs = filtered_logs(all_logs, search_term, @session_filters)
 
         @search_term = search_term
@@ -28,7 +28,7 @@ class SalesLogsController < LogsController
   end
 
   def edit
-    @log = current_user.sales_logs.find_by(id: params[:id])
+    @log = current_user.sales_logs.visible.find_by(id: params[:id])
     if @log
       render "logs/edit", locals: { current_user: }
     else

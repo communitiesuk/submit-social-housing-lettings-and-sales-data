@@ -159,6 +159,22 @@ RSpec.describe SalesLogsController, type: :request do
           end
         end
 
+        context "when there is a pending log" do
+          let!(:invisible_log) do
+            FactoryBot.create(
+              :sales_log,
+              owning_organisation: organisation,
+              status: "pending",
+              skip_update_status: true,
+            )
+          end
+
+          it "does not render pending logs" do
+            get "/sales-logs", headers: headers, params: {}
+            expect(page).not_to have_content(invisible_log.id)
+          end
+        end
+
         context "when filtering" do
           context "with status filter" do
             let(:organisation_2) { FactoryBot.create(:organisation) }
