@@ -30,6 +30,19 @@ RSpec.describe BulkUploadErrorSummaryTableComponent, type: :component do
       end
     end
 
+    context "when on threshold" do
+      before do
+        stub_const("BulkUploadErrorSummaryTableComponent::DISPLAY_THRESHOLD", 1)
+
+        create(:bulk_upload_error, bulk_upload:, col: "A", row: 1)
+      end
+
+      it "renders tables" do
+        result = render_inline(component)
+        expect(result).to have_selector("table", count: 1)
+      end
+    end
+
     context "when there are 2 independent errors" do
       let!(:error_2) { create(:bulk_upload_error, bulk_upload:, col: "B", row: 2) }
       let!(:error_1) { create(:bulk_upload_error, bulk_upload:, col: "A", row: 1) }
