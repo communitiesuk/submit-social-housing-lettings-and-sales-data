@@ -1085,7 +1085,7 @@ RSpec.describe LettingsLog do
           end
         end
 
-        context "when rent is paid weekly for 52 weeks" do
+        context "when rent is paid weekly for 53 weeks" do
           it "correctly derives and saves weekly rent" do
             lettings_log.update!(brent: 130, period: 10)
             record_from_db = ActiveRecord::Base.connection.execute("select wrent from lettings_logs where id=#{lettings_log.id}").to_a[0]
