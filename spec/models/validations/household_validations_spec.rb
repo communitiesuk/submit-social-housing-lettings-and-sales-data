@@ -639,12 +639,12 @@ RSpec.describe Validations::HouseholdValidations do
   end
 
   describe "housing needs validations" do
-    it "is invalid when housingneeds == 1 && housingneeds_type == 3 && housingneeds_other == 0" do
+    it "is invalid when a combination of housingneeds == 1 (yes) && housingneeds_type == 3 (none of listed) && housingneeds_other == 0 (no)" do
       record.housingneeds = 1
       record.housingneeds_type = 3
       record.housingneeds_other = 0
 
-      household_validator.validate_housing_needs(record)
+      household_validator.validate_combination_of_housing_needs_responses(record)
 
       error_message = ["If somebody in the household has disabled access needs, they must have the access needs listed, or other access needs"]
 
