@@ -1,4 +1,6 @@
 module InterruptionScreenHelper
+  include MoneyFormattingHelper
+
   def display_informative_text(informative_text, log)
     return "" unless informative_text["arguments"]
 
@@ -32,12 +34,14 @@ module InterruptionScreenHelper
 private
 
   def get_value_from_argument(log, argument)
-    if argument["label"]
-      log.form.get_question(argument["key"], log).answer_label(log).downcase
-    elsif argument["arguments_for_key"]
-      log.public_send(argument["key"], argument["arguments_for_key"])
-    else
-      log.public_send(argument["key"])
-    end
+    value = if argument["label"]
+              log.form.get_question(argument["key"], log).answer_label(log).downcase
+            elsif argument["arguments_for_key"]
+              log.public_send(argument["key"], argument["arguments_for_key"])
+            else
+              log.public_send(argument["key"])
+            end
+
+    argument["money"] ? format_as_currency(value) : value
   end
 end
