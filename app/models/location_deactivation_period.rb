@@ -1,4 +1,6 @@
 class LocationDeactivationPeriodValidator < ActiveModel::Validator
+  include CollectionTimeHelper
+
   def validate(record)
     location = record.location
     recent_deactivation = location.location_deactivation_periods.deactivations_without_reactivation.first
@@ -16,7 +18,7 @@ class LocationDeactivationPeriodValidator < ActiveModel::Validator
       elsif record.reactivation_date_type == "other"
         record.errors.add(:reactivation_date, message: I18n.t("validations.location.toggle_date.invalid"))
       end
-    elsif !record.reactivation_date.between?(location.available_from, Time.zone.local(2200, 1, 1))
+    elsif record.reactivation_date.before? location.available_from
       record.errors.add(:reactivation_date, message: I18n.t("validations.location.toggle_date.out_of_range", date: location.available_from.to_formatted_s(:govuk_date)))
     elsif record.reactivation_date < recent_deactivation.deactivation_date
       record.errors.add(:reactivation_date, message: I18n.t("validations.location.reactivation.before_deactivation", date: recent_deactivation.deactivation_date.to_formatted_s(:govuk_date)))
@@ -32,10 +34,10 @@ class LocationDeactivationPeriodValidator < ActiveModel::Validator
       end
     elsif location.location_deactivation_periods.any? { |period| period.reactivation_date.present? && record.deactivation_date.between?(period.deactivation_date, period.reactivation_date - 1.day) }
       record.errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation.during_deactivated_period"))
-    else
-      unless record.deactivation_date.between?(location.available_from, Time.zone.local(2200, 1, 1))
-        record.errors.add(:deactivation_date, message: I18n.t("validations.location.toggle_date.out_of_range", date: location.available_from.to_formatted_s(:govuk_date)))
-      end
+    elsif record.deactivation_date.before? FormHandler.instance.start_date_of_earliest_open_collection_period
+      record.errors.add(:deactivation_date, message: I18n.t("validations.location.toggle_date.out_of_range", date: FormHandler.instance.start_date_of_earliest_open_collection_period.to_formatted_s(:govuk_date)))
+    elsif record.deactivation_date.before? location.available_from
+      record.errors.add(:deactivation_date, message: I18n.t("validations.location.toggle_date.before_creation", date: location.available_from.to_formatted_s(:govuk_date)))
     end
   end
 end

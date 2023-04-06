@@ -456,6 +456,7 @@ en:
       toggle_date:
         not_selected: "Select one of the options"
         invalid: "Enter a valid day, month and year"
+        before_creation: "The scheme cannot be deactivated before %{date}, the start of the collection year when it was created"
         out_of_range: "The date must be on or after the %{date}"
       reactivation:
         before_deactivation: "This scheme was deactivated on %{date}. The reactivation date must be on or after deactivation date"
@@ -474,6 +475,7 @@ en:
       toggle_date:
         not_selected: "Select one of the options"
         invalid: "Enter a valid day, month and year"
+        before_creation: "The location cannot be deactivated before %{date}, the date when it was first available"
         out_of_range: "The date must be on or after the %{date}"
       reactivation:
         before_deactivation: "This location was deactivated on %{date}. The reactivation date must be on or after deactivation date"
@@ -594,10 +596,10 @@ en:
       postcode: "For example, SW1P 4DF."
       name: "This is how you refer to this location within your organisation"
       units: "A unit is the space being let. For example, the property might be a block of flats and the unit would be the specific flat being let. A unit can also be a bedroom in a shared house or flat. Do not include spaces used for staff."
-      toggle_active: "If the date is before %{date}, select ‘From the start of the current collection period’ because the previous period has now closed."
+      toggle_active: "If the date is before %{date}, select ‘From the start of the open collection period’ because the previous period has now closed."
       startdate: "For example, 27 3 2021"
     scheme:
-      toggle_active: "If the date is before %{date}, select ‘From the start of the current collection period’ because the previous period has now closed."
+      toggle_active: "If the date is before %{date}, select ‘From the start of the open collection period’ because the previous period has now closed."
     bulk_upload:
       needstype: "General needs housing includes both self-contained and shared housing without support or specific adaptations. Supported housing can include direct access hostels, group homes, residential care and nursing homes."
     offered: "Do not include the offer that led to this letting. This is after the last tenancy ended. If the property is being offered for let for the first time, enter 0."
