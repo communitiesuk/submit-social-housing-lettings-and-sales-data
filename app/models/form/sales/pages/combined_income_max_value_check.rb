@@ -13,7 +13,7 @@ class Form::Sales::Pages::CombinedIncomeMaxValueCheck < ::Form::Page
           "key" => "field_formatted_as_currency",
           "arguments_for_key" => "combined_income",
           "i18n_template" => "combined_income",
-        }
+        },
       ],
     }
     @informative_text = {}
