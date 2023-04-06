@@ -548,13 +548,15 @@ private
       if setup_question?(question)
         fields.each do |field|
           if errors[field].present?
-            errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase), category: :setup)
+            question_text = question.check_answer_label.presence || question.header
+            errors.add(field, I18n.t("validations.not_answered", question: question_text&.downcase), category: :setup)
           end
         end
       else
         fields.each do |field|
           unless errors.any? { |e| fields.include?(e.attribute) }
-            errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase))
+            question_text = question.check_answer_label.presence || question.header
+            errors.add(field, I18n.t("validations.not_answered", question: question_text&.downcase))
           end
         end
       end
