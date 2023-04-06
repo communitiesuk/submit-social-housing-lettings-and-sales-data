@@ -91,7 +91,7 @@ class Form
   def previous_page(page, log, current_user)
     page_ids = subsection_for_page(page).pages.map(&:id)
     page_index = page_ids.index(page.id)
-    page_id = if page_index == 0
+    page_id = if page_index.zero?
                 :check_answers
               else
                 page_ids[page_index - 1]
