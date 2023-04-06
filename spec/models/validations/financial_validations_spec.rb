@@ -202,7 +202,7 @@ RSpec.describe Validations::FinancialValidations do
         record.ecstat1 = 1
         financial_validator.validate_net_income(record)
         expect(record.errors["earnings"])
-          .to include(match I18n.t("validations.financial.earnings.over_hard_max", hard_max: 1230))
+          .to eq(["Net income cannot be greater than £1,230.00 per week given the tenant’s working situation"])
       end
     end
 
@@ -213,7 +213,7 @@ RSpec.describe Validations::FinancialValidations do
         record.ecstat1 = 1
         financial_validator.validate_net_income(record)
         expect(record.errors["earnings"])
-          .to include(match I18n.t("validations.financial.earnings.under_hard_min", hard_min: 90))
+          .to eq(["Net income cannot be less than £90.00 per week given the tenant’s working situation"])
       end
     end
   end

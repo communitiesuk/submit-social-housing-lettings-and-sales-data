@@ -1,5 +1,6 @@
 module Validations::FinancialValidations
   include Validations::SharedValidations
+  include MoneyFormattingHelper
   # Validations methods need to be called 'validate_<page_name>' to run on model save
   # or 'validate_' to run on submit as well
   def validate_outstanding_rent_amount(record)
@@ -24,12 +25,26 @@ module Validations::FinancialValidations
   def validate_net_income(record)
     if record.ecstat1 && record.weekly_net_income
       if record.weekly_net_income > record.applicable_income_range.hard_max
-        record.errors.add :earnings, :over_hard_max, message: I18n.t("validations.financial.earnings.over_hard_max", hard_max: record.applicable_income_range.hard_max)
-        record.errors.add :ecstat1, :over_hard_max, message: I18n.t("validations.financial.ecstat.over_hard_max", hard_max: record.applicable_income_range.hard_max)
+        hard_max = format_as_currency(record.applicable_income_range.hard_max)
+        record.errors.add(
+          :earnings,
+          :over_hard_max,
+          message: I18n.t("validations.financial.earnings.over_hard_max", hard_max:),
+        )
+        record.errors.add(
+          :ecstat1,
+          :over_hard_max,
+          message: I18n.t("validations.financial.ecstat.over_hard_max", hard_max:),
+        )
       end
 
       if record.weekly_net_income < record.applicable_income_range.hard_min
-        record.errors.add :earnings, :under_hard_min, message: I18n.t("validations.financial.earnings.under_hard_min", hard_min: record.applicable_income_range.hard_min)
+        hard_min = format_as_currency(record.applicable_income_range.hard_min)
+        record.errors.add(
+          :earnings,
+          :under_hard_min,
+          message: I18n.t("validations.financial.earnings.under_hard_min", hard_min:),
+        )
       end
     end
 
