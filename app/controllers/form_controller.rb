@@ -1,7 +1,7 @@
 class FormController < ApplicationController
   before_action :authenticate_user!
-  before_action :find_resource, only: %i[submit_form review]
-  before_action :find_resource_by_named_id, except: %i[submit_form review]
+  before_action :find_resource, only: %i[review]
+  before_action :find_resource_by_named_id, except: %i[review]
   before_action :check_collection_period, only: %i[submit_form show_page]
 
   def submit_form
@@ -11,16 +11,15 @@ class FormController < ApplicationController
       mandatory_questions_with_no_response = mandatory_questions_with_no_response(responses_for_page)
 
       if mandatory_questions_with_no_response.empty? && @log.update(responses_for_page.merge(updated_by: current_user))
-        session[:errors] = session[:fields] = nil
         redirect_to(successful_redirect_path)
       else
-        redirect_path = "#{@log.model_name.param_key}_#{@page.id}_path"
         mandatory_questions_with_no_response.map do |question|
           @log.errors.add question.id.to_sym, question.unanswered_error_message
         end
-        session[:errors] = @log.errors.to_json
         Rails.logger.info "User triggered validation(s) on: #{@log.errors.map(&:attribute).join(', ')}"
-        redirect_to(send(redirect_path, @log))
+        @subsection = form.subsection_for_page(@page)
+        restore_error_field_values(@page&.questions)
+        render "form/page"
       end
     else
       render_not_found
@@ -47,7 +46,6 @@ class FormController < ApplicationController
 
   def show_page
     if @log
-      restore_error_field_values
       page_id = request.path.split("/")[-1].underscore
       @page = form.get_page(page_id)
       @subsection = form.subsection_for_page(@page)
@@ -63,17 +61,12 @@ class FormController < ApplicationController
 
 private
 
-  def restore_error_field_values
-    if session["errors"]
-      JSON(session["errors"]).each do |field, messages|
-        messages.each { |message| @log.errors.add field.to_sym, message }
-      end
-    end
-    if session["fields"]
-      session["fields"].each do |field, value|
-        if form.get_question(field, @log)&.type != "date" && @log.attributes.key?(field)
-          @log[field] = value
-        end
+  def restore_error_field_values(questions)
+    return unless questions
+
+    questions.each do |question|
+      if question&.type == "date" && @log.attributes.key?(question.id)
+        @log[question.id] = @log.send("#{question.id}_was")
       end
     end
   end
