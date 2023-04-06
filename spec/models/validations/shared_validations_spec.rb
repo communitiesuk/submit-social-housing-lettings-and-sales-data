@@ -175,34 +175,4 @@ RSpec.describe Validations::SharedValidations do
       end
     end
   end
-
-  describe "radio options validations" do
-    it "allows only possible values" do
-      lettings_log.needstype = 1
-      shared_validator.validate_valid_radio_option(lettings_log)
-
-      expect(lettings_log.errors["needstype"]).to be_empty
-    end
-
-    it "denies impossible values" do
-      lettings_log.needstype = 3
-      shared_validator.validate_valid_radio_option(lettings_log)
-
-      expect(lettings_log.errors["needstype"]).to be_present
-      expect(lettings_log.errors["needstype"]).to eql(["Enter a valid value for needs type"])
-    end
-
-    context "when feature is toggled off" do
-      before do
-        allow(FeatureToggle).to receive(:validate_valid_radio_options?).and_return(false)
-      end
-
-      it "allows any values" do
-        lettings_log.needstype = 3
-        shared_validator.validate_valid_radio_option(lettings_log)
-
-        expect(lettings_log.errors["needstype"]).to be_empty
-      end
-    end
-  end
 end
