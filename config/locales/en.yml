@@ -491,7 +491,7 @@ en:
         must_be_after_hodate: "Sale completion date must be after practical completion or handover date"
       previous_property_type:
         property_type_bedsit: "A bedsit cannot have more than 1 bedroom"
-      discounted_ownership_value: "Mortgage, deposit, and grant total must equal £%{value_with_discount}"
+      discounted_ownership_value: "Mortgage, deposit, and grant total must equal %{value_with_discount}"
       monthly_rent:
         higher_than_expected: "Basic monthly rent must be between £0 and £9,999"
 
