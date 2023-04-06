@@ -16,7 +16,8 @@
             type="number"
             name="lettings_log[tcharge]"
             for="<%= question.fields_added.present? ? question.fields_added.map { |x| "lettings-log-#{x}-field" }.join(" ") : "" %>">
-      <%= lettings_log[question.id] %></output>
+      <%= format_money_input(log: lettings_log, question:) %>
+    </output>
     <span class="govuk-input__suffix"><%= question.suffix_label(lettings_log) %></span>
   </div>
 </div>
