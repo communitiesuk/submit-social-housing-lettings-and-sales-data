@@ -85,11 +85,11 @@ RSpec.describe "Form Page Routing" do
     context "when answer is invalid" do
       it "shows error with invalid value in the field" do
         visit("/lettings-logs/#{id}/property-postcode")
-        fill_in("lettings-log-postcode-full-field", with: "fake_postcode")
+        fill_in("lettings-log-postcode-full-field", with: "FAKE_POSTCODE")
         click_button("Save and continue")
 
         expect(page).to have_current_path("/lettings-logs/#{id}/property-postcode")
-        expect(find("#lettings-log-postcode-full-field-error").value).to eq("fake_postcode")
+        expect(find("#lettings-log-postcode-full-field-error").value).to eq("FAKE_POSTCODE")
       end
 
       it "does not reset the displayed date" do
