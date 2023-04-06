@@ -2,7 +2,7 @@ class Form::Lettings::Pages::OutstandingAmount < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "outstanding_amount"
-    @depends_on = [{ "hb" => 1, "hbrentshortfall" => 1 }, { "hb" => 6, "hbrentshortfall" => 1 }]
+    @depends_on = [{ "receives_any_housing_benefit?" => true, "has_housing_benefit_rent_shortfall?" => true }]
   end
 
   def questions

@@ -214,7 +214,7 @@ class LettingsLog < Log
     needstype == 2
   end
 
-  def has_hbrentshortfall?
+  def has_housing_benefit_rent_shortfall?
     # 1: Yes
     hbrentshortfall == 1
   end
@@ -377,6 +377,10 @@ class LettingsLog < Log
   def receives_uc_with_housing_element_excl_housing_benefit?
     # 6: Universal Credit with housing element (excluding housing benefit)
     hb == 6
+  end
+
+  def receives_any_housing_benefit?
+    receives_housing_benefit_only? || receives_uc_with_housing_element_excl_housing_benefit?
   end
 
   def receives_no_benefits?
