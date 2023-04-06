@@ -14,6 +14,7 @@ class Form::Sales::Pages::SharedOwnershipDepositValueCheck < ::Form::Page
           "key" => "expected_shared_ownership_deposit_value",
           "label" => false,
           "i18n_template" => "expected_shared_ownership_deposit_value",
+          "money" => true,
         },
       ],
     }

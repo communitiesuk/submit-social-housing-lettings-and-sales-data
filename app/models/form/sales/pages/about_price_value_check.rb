@@ -13,6 +13,7 @@ class Form::Sales::Pages::AboutPriceValueCheck < ::Form::Page
           "key" => "value",
           "label" => true,
           "i18n_template" => "value",
+          "money" => true,
         },
       ],
     }

@@ -5,7 +5,7 @@ class Form::Lettings::Pages::MaxRentValueCheck < ::Form::Page
     @depends_on = [{ "rent_in_soft_max_range?" => true }]
     @title_text = {
       "translation" => "soft_validations.rent.outside_range_title",
-      "arguments" => [{ "key" => "brent", "label" => true, "i18n_template" => "brent" }],
+      "arguments" => [{ "key" => "brent", "label" => true, "i18n_template" => "brent", "money" => true }],
     }
     @informative_text = {
       "translation" => "soft_validations.rent.max_hint_text",
@@ -14,6 +14,7 @@ class Form::Lettings::Pages::MaxRentValueCheck < ::Form::Page
           "key" => "soft_max_for_period",
           "label" => false,
           "i18n_template" => "soft_max_for_period",
+          "money" => true,
         },
       ],
     }
