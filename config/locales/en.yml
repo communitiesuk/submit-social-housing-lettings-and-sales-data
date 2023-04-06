@@ -218,8 +218,6 @@ en:
         ten_years_before_tenancy_start: "Enter a void date no more than 10 years before the tenancy start date"
         before_tenancy_start: "Enter a void date that is before the tenancy start date"
         after_mrcdate: "Void date must be before the major repairs date if provided"
-      offered:
-        relet_number: "Enter a number between 0 and 20 for the amount of times the property has been re-let"
       la:
         la_invalid_for_org: "%{org_name} does not operate in %{la_name}"
         postcode_invalid_for_org: "Enter a postcode in an area covered by %{org_name}"
@@ -235,8 +233,6 @@ en:
         one_seven_bedroom_shared: "A shared house must have 1 to 7 bedrooms"
         one_three_bedroom_single_tenant_shared: "A shared house with fewer than two tenants must have 1 to 3 bedrooms"
       beds:
-        non_positive: "Number of bedrooms has to be greater than 0"
-        over_max: "Number of bedrooms cannot be more than 12"
         bedsits_have_max_one_bedroom: "Number of bedrooms must be 1 if the property is a bedsit"
       proptype:
         bedsits_have_max_one_bedroom: "Answer cannot be 'Bedsit' if the property has 2 or more bedrooms"
