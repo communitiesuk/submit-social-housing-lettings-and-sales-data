@@ -507,7 +507,15 @@ class LettingsLog < Log
   end
 
   def care_home_charge_expected_not_provided?
-    is_carehome == 1 && chcharge.blank?
+    is_carehome? && chcharge.blank?
+  end
+
+  def rent_and_charges_paid_weekly?
+    [1, 5, 6, 7, 8, 9, 10].include? period
+  end
+
+  def is_carehome?
+    is_carehome == 1
   end
 
 private
