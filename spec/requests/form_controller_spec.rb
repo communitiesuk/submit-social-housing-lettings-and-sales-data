@@ -57,7 +57,7 @@ RSpec.describe FormController, type: :request do
 
     describe "POST" do
       it "does not let you post form answers to lettings logs you don't have access to" do
-        post "/lettings-logs/#{lettings_log.id}/form", params: {}
+        post "/lettings-logs/#{lettings_log.id}/net-income", params: {}
         expect(response).to redirect_to("/account/sign-in")
       end
     end
@@ -102,7 +102,7 @@ RSpec.describe FormController, type: :request do
       end
 
       it "resets created by and renders the next page" do
-        post "/lettings-logs/#{lettings_log.id}/form", params: params
+        post "/lettings-logs/#{lettings_log.id}/net-income", params: params
         expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/created-by")
         follow_redirect!
         lettings_log.reload
@@ -127,7 +127,7 @@ RSpec.describe FormController, type: :request do
       end
 
       it "does not reset created by" do
-        post "/lettings-logs/#{lettings_log.id}/form", params: params
+        post "/lettings-logs/#{lettings_log.id}/net-income", params: params
         expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/created-by")
         follow_redirect!
         lettings_log.reload
@@ -152,7 +152,7 @@ RSpec.describe FormController, type: :request do
       end
 
       it "does not reset created by" do
-        post "/lettings-logs/#{lettings_log.id}/form", params: params
+        post "/lettings-logs/#{lettings_log.id}/stock-owner", params: params
         expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/managing-organisation")
         follow_redirect!
         lettings_log.reload
@@ -177,7 +177,7 @@ RSpec.describe FormController, type: :request do
       end
 
       it "does not reset created by" do
-        post "/lettings-logs/#{lettings_log.id}/form", params: params
+        post "/lettings-logs/#{lettings_log.id}/stock-owner", params: params
         expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/managing-organisation")
         follow_redirect!
         lettings_log.reload
@@ -321,6 +321,23 @@ RSpec.describe FormController, type: :request do
           get "/sales-logs/#{log.id}/review", headers: headers, params: { sales_log: true }
           expect(response.body).to match("Review sales log")
         end
+
+        context "when log is pending" do
+          let(:pending_log) do
+            create(
+              :lettings_log,
+              owning_organisation: organisation,
+              created_by: user,
+              status: "pending",
+              skip_update_status: true,
+            )
+          end
+
+          it "does not render pending log and returns 404" do
+            get "/lettings-logs/#{pending_log.id}/review", headers: headers, params: {}
+            expect(response).to be_not_found
+          end
+        end
       end
 
       context "when viewing a user dependent page" do
@@ -383,22 +400,21 @@ RSpec.describe FormController, type: :request do
           end
 
           it "re-renders the same page with errors if validation fails" do
-            post "/lettings-logs/#{lettings_log.id}/form", params: params
-            expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}")
-            follow_redirect!
+            post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params: params
             expect(page).to have_content("There is a problem")
+            expect(page).to have_content("Error: What is the tenant’s age?")
           end
 
           it "resets errors when fixed" do
-            post "/lettings-logs/#{lettings_log.id}/form", params: params
-            post "/lettings-logs/#{lettings_log.id}/form", params: valid_params
+            post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params: params
+            post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params: valid_params
             get "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}"
             expect(page).not_to have_content("There is a problem")
           end
 
           it "logs that validation was triggered" do
             expect(Rails.logger).to receive(:info).with("User triggered validation(s) on: age1").once
-            post "/lettings-logs/#{lettings_log.id}/form", params:
+            post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params:
           end
 
           context "when the number of days is too high for the month" do
@@ -416,8 +432,7 @@ RSpec.describe FormController, type: :request do
             end
 
             it "validates the date correctly" do
-              post "/lettings-logs/#{lettings_log.id}/form", params: params
-              follow_redirect!
+              post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params: params
               expect(page).to have_content("There is a problem")
             end
           end
@@ -448,10 +463,9 @@ RSpec.describe FormController, type: :request do
           end
 
           it "re-renders the same page with errors if validation fails" do
-            post "/lettings-logs/#{lettings_log.id}/form", params: params
-            expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/managing-organisation")
-            follow_redirect!
+            post "/lettings-logs/#{lettings_log.id}/managing-organisation", params: params
             expect(page).to have_content("There is a problem")
+            expect(page).to have_content("Error: Which organisation manages this letting?")
           end
         end
 
@@ -469,7 +483,7 @@ RSpec.describe FormController, type: :request do
           end
 
           before do
-            post "/lettings-logs/#{lettings_log.id}/form", params:
+            post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params:
           end
 
           it "re-renders the same page with errors if validation fails" do
@@ -507,7 +521,7 @@ RSpec.describe FormController, type: :request do
 
               before do
                 lettings_log.update!(postcode_known: 1, postcode_full: "NW1 8RR")
-                post "/lettings-logs/#{lettings_log.id}/form", params: valid_params
+                post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params: valid_params
               end
 
               it "does not require you to answer that question" do
@@ -541,14 +555,14 @@ RSpec.describe FormController, type: :request do
         end
 
         it "sets checked items to true" do
-          post "/lettings-logs/#{lettings_log.id}/form", params: lettings_log_form_params
+          post "/lettings-logs/#{lettings_log.id}/accessibility-requirements", params: lettings_log_form_params
           lettings_log.reload
 
           expect(lettings_log.housingneeds_b).to eq(1)
         end
 
         it "sets previously submitted items to false when resubmitted with new values" do
-          post "/lettings-logs/#{lettings_log.id}/form", params: new_lettings_log_form_params
+          post "/lettings-logs/#{lettings_log.id}/accessibility-requirements", params: new_lettings_log_form_params
           lettings_log.reload
 
           expect(lettings_log.housingneeds_b).to eq(0)
@@ -592,7 +606,7 @@ RSpec.describe FormController, type: :request do
 
           it "updates both question fields" do
             allow(page).to receive(:questions).and_return(questions_for_page)
-            post "/lettings-logs/#{lettings_log.id}/form", params: lettings_log_form_params
+            post "/lettings-logs/#{lettings_log.id}/#{page.id.dasherize}", params: lettings_log_form_params
             lettings_log.reload
 
             expect(lettings_log.housingneeds_a).to eq(1)
@@ -633,16 +647,16 @@ RSpec.describe FormController, type: :request do
         end
 
         it "routes to the appropriate conditional page based on the question answer of the current page" do
-          post "/lettings-logs/#{lettings_log.id}/form", params: lettings_log_form_conditional_question_yes_params
+          post "/lettings-logs/#{lettings_log.id}/property-wheelchair-accessible", params: lettings_log_form_conditional_question_yes_params
           expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/conditional-question-yes-page")
 
-          post "/lettings-logs/#{lettings_log.id}/form", params: lettings_log_form_conditional_question_no_params
+          post "/lettings-logs/#{lettings_log.id}/property-wheelchair-accessible", params: lettings_log_form_conditional_question_no_params
           expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/conditional-question-no-page")
         end
 
         it "routes to the page if at least one of the condition sets is met" do
-          post "/lettings-logs/#{lettings_log.id}/form", params: lettings_log_form_conditional_question_wchair_yes_params
-          post "/lettings-logs/#{lettings_log.id}/form", params: lettings_log_form_conditional_question_no_params
+          post "/lettings-logs/#{lettings_log.id}/property-wheelchair-accessible", params: lettings_log_form_conditional_question_wchair_yes_params
+          post "/lettings-logs/#{lettings_log.id}/property-wheelchair-accessible", params: lettings_log_form_conditional_question_no_params
           expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/conditional-question-yes-page")
         end
       end
@@ -673,7 +687,7 @@ RSpec.describe FormController, type: :request do
             completed_lettings_log.update!(ecstat1: 1, earnings: 130, hhmemb: 1) # we're not routing to that page, so it gets cleared?
             allow(completed_lettings_log).to receive(:net_income_soft_validation_triggered?).and_return(true)
             allow(completed_lettings_log.form).to receive(:end_date).and_return(Time.zone.today + 1.day)
-            post "/lettings-logs/#{completed_lettings_log.id}/form", params: interrupt_params, headers: headers.merge({ "HTTP_REFERER" => referrer })
+            post "/lettings-logs/#{completed_lettings_log.id}/net-income-value-check", params: interrupt_params, headers: headers.merge({ "HTTP_REFERER" => referrer })
           end
 
           context "when yes is answered" do
@@ -705,7 +719,7 @@ RSpec.describe FormController, type: :request do
         end
 
         before do
-          post "/lettings-logs/#{unauthorized_lettings_log.id}/form", params: {}
+          post "/lettings-logs/#{unauthorized_lettings_log.id}/net-income", params: {}
         end
 
         it "does not let you post form answers to lettings logs you don't have access to" do

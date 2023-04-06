@@ -223,8 +223,8 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
 
         it "intercepts the relevant validation error" do
-          expect(logger).to receive(:warn).with(/Removing earnings with error: Net income cannot be less than £10 per week given the tenant’s working situation/)
-          expect(logger).to receive(:warn).with(/Removing incfreq with error: Net income cannot be less than £10 per week given the tenant’s working situation/)
+          expect(logger).to receive(:warn).with(/Removing earnings with error: Net income cannot be less than £10.00 per week given the tenant’s working situation/)
+          expect(logger).to receive(:warn).with(/Removing incfreq with error: Net income cannot be less than £10.00 per week given the tenant’s working situation/)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end
@@ -428,7 +428,7 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
 
         it "intercepts the relevant validation error" do
-          expect(logger).to receive(:warn).with(/Removing ecstat1 with error: Net income cannot be greater than £890 per week given the tenant’s working situation/)
+          expect(logger).to receive(:warn).with(/Removing ecstat1 with error: Net income cannot be greater than £890.00 per week given the tenant’s working situation/)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end
@@ -532,11 +532,11 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
 
         it "intercepts the relevant validation error" do
-          expect(logger).to receive(:warn).with(/Removing brent with error: Enter a total charge that is at least £10 per week, Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?/)
-          expect(logger).to receive(:warn).with(/Removing scharge with error: Enter a total charge that is at least £10 per week, Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?/)
-          expect(logger).to receive(:warn).with(/Removing pscharge with error: Enter a total charge that is at least £10 per week, Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?/)
-          expect(logger).to receive(:warn).with(/Removing supcharg with error: Enter a total charge that is at least £10 per week, Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?/)
-          expect(logger).to receive(:warn).with(/Removing tcharge with error: Enter a total charge that is at least £10 per week, Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?/)
+          expect(logger).to receive(:warn).with("Log 0b4a68df-30cc-474a-93c0-a56ce8fdad3b: Removing brent with error: Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?’, Enter a total charge that is at least £10 per week")
+          expect(logger).to receive(:warn).with("Log 0b4a68df-30cc-474a-93c0-a56ce8fdad3b: Removing scharge with error: Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?’, Enter a total charge that is at least £10 per week")
+          expect(logger).to receive(:warn).with("Log 0b4a68df-30cc-474a-93c0-a56ce8fdad3b: Removing pscharge with error: Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?’, Enter a total charge that is at least £10 per week")
+          expect(logger).to receive(:warn).with("Log 0b4a68df-30cc-474a-93c0-a56ce8fdad3b: Removing supcharg with error: Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?’, Enter a total charge that is at least £10 per week")
+          expect(logger).to receive(:warn).with("Log 0b4a68df-30cc-474a-93c0-a56ce8fdad3b: Removing tcharge with error: Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?’, Enter a total charge that is at least £10 per week")
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end
@@ -560,11 +560,11 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
 
         it "intercepts the relevant validation error" do
-          expect(logger).to receive(:warn).with(/Removing brent with error: Enter an amount above 0, Enter a value for the service charge between £0 and £480 per week if the landlord is a private registered provider and it is a supported housing letting, Service charge must be at least £0 every week/)
-          expect(logger).to receive(:warn).with(/Removing scharge with error: Enter an amount above 0, Enter a value for the service charge between £0 and £480 per week if the landlord is a private registered provider and it is a supported housing letting, Service charge must be at least £0 every week/)
-          expect(logger).to receive(:warn).with(/Removing pscharge with error: Enter an amount above 0, Enter a value for the service charge between £0 and £480 per week if the landlord is a private registered provider and it is a supported housing letting, Service charge must be at least £0 every week/)
-          expect(logger).to receive(:warn).with(/Removing supcharg with error: Enter an amount above 0, Enter a value for the service charge between £0 and £480 per week if the landlord is a private registered provider and it is a supported housing letting, Service charge must be at least £0 every week/)
-          expect(logger).to receive(:warn).with(/Removing tcharge with error: Enter an amount above 0, Enter a value for the service charge between £0 and £480 per week if the landlord is a private registered provider and it is a supported housing letting, Service charge must be at least £0 every week/)
+          expect(logger).to receive(:warn).with(/Removing brent with error: Enter a value for the service charge between £0 and £480 per week if the landlord is a private registered provider and it is a supported housing letting, Enter an amount above 0, Service charge must be at least £0 every week/)
+          expect(logger).to receive(:warn).with(/Removing scharge with error: Enter a value for the service charge between £0 and £480 per week if the landlord is a private registered provider and it is a supported housing letting, Enter an amount above 0, Service charge must be at least £0 every week/)
+          expect(logger).to receive(:warn).with(/Removing pscharge with error: Enter a value for the service charge between £0 and £480 per week if the landlord is a private registered provider and it is a supported housing letting, Enter an amount above 0, Service charge must be at least £0 every week/)
+          expect(logger).to receive(:warn).with(/Removing supcharg with error: Enter a value for the service charge between £0 and £480 per week if the landlord is a private registered provider and it is a supported housing letting, Enter an amount above 0, Service charge must be at least £0 every week/)
+          expect(logger).to receive(:warn).with(/Removing tcharge with error: Enter a value for the service charge between £0 and £480 per week if the landlord is a private registered provider and it is a supported housing letting, Enter an amount above 0, Service charge must be at least £0 every week/)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end
@@ -762,7 +762,7 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
 
         it "intercepts the relevant validation error" do
-          expect(logger).to receive(:warn).with(/Removing chcharge with error: Household rent and other charges must be between £10 and £1000 if paying weekly for 52 weeks/)
+          expect(logger).to receive(:warn).with(/Removing chcharge with error: Household rent and other charges must be between £10.00 and £1,000.00 if paying weekly for 52 weeks/)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end

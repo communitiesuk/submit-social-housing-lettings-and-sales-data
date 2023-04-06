@@ -1,0 +1,22 @@
+<% content_for :before_content do %>
+  <%= govuk_back_link href: @form.back_path %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l">Bulk upload for lettings (<%= @bulk_upload.year_combo %>)</span>
+    <h1 class="govuk-heading-l">Are you sure you want to upload all logs from this bulk upload?</h1>
+
+    <p class="govuk-body">There are <%= pluralize(@bulk_upload.logs.count, "log") %> in this bulk upload with <%= pluralize(@bulk_upload.bulk_upload_errors.count, "error") %> that still need to be fixed after upload.</p>
+
+    <%= govuk_warning_text(icon_fallback_text: "Danger") do %>
+      You can not delete logs once you create them
+    <% end %>
+
+    <%= form_with model: @form, scope: :form, url: page_bulk_upload_lettings_resume_path(@bulk_upload, page: "confirm"), method: :patch do |f| %>
+      <%= f.govuk_submit %>
+
+      <%= govuk_button_link_to "Cancel", @form.back_path, secondary: true %>
+    <% end %>
+  </div>
+</div>

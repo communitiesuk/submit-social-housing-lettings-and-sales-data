@@ -1,4 +1,6 @@
 class SchemeDeactivationPeriodValidator < ActiveModel::Validator
+  include CollectionTimeHelper
+
   def validate(record)
     scheme = record.scheme
     recent_deactivation = scheme.scheme_deactivation_periods.deactivations_without_reactivation.first
@@ -32,10 +34,10 @@ class SchemeDeactivationPeriodValidator < ActiveModel::Validator
       end
     elsif scheme.scheme_deactivation_periods.any? { |period| period.reactivation_date.present? && record.deactivation_date.between?(period.deactivation_date, period.reactivation_date - 1.day) }
       record.errors.add(:deactivation_date, message: I18n.t("validations.scheme.deactivation.during_deactivated_period"))
-    else
-      unless record.deactivation_date.between?(scheme.available_from, Time.zone.local(2200, 1, 1))
-        record.errors.add(:deactivation_date, message: I18n.t("validations.scheme.toggle_date.out_of_range", date: scheme.available_from.to_formatted_s(:govuk_date)))
-      end
+    elsif record.deactivation_date.before? FormHandler.instance.start_date_of_earliest_open_collection_period
+      record.errors.add(:deactivation_date, message: I18n.t("validations.scheme.toggle_date.out_of_range", date: FormHandler.instance.start_date_of_earliest_open_collection_period.to_formatted_s(:govuk_date)))
+    elsif record.deactivation_date.before? scheme.available_from
+      record.errors.add(:deactivation_date, message: I18n.t("validations.scheme.toggle_date.before_creation", date: scheme.available_from.to_formatted_s(:govuk_date)))
     end
   end
 end

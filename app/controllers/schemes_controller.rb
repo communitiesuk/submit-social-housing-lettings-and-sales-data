@@ -39,7 +39,7 @@ class SchemesController < ApplicationController
   end
 
   def deactivate_confirm
-    @affected_logs = @scheme.lettings_logs.filter_by_before_startdate(params[:deactivation_date])
+    @affected_logs = @scheme.lettings_logs.visible.filter_by_before_startdate(params[:deactivation_date])
     if @affected_logs.count.zero?
       deactivate
     else
@@ -296,7 +296,7 @@ private
     if params[:scheme_deactivation_period].blank?
       return
     elsif params[:scheme_deactivation_period]["#{key}_type".to_sym] == "default"
-      return FormHandler.instance.current_collection_start_date
+      return FormHandler.instance.start_date_of_earliest_open_collection_period
     elsif params[:scheme_deactivation_period][key.to_sym].present?
       return params[:scheme_deactivation_period][key.to_sym]
     end
@@ -310,7 +310,7 @@ private
   end
 
   def reset_location_and_scheme_for_logs!
-    logs = @scheme.lettings_logs.filter_by_before_startdate(params[:deactivation_date].to_time)
+    logs = @scheme.lettings_logs.visible.filter_by_before_startdate(params[:deactivation_date].to_time)
     logs.update!(location: nil, scheme: nil, unresolved: true)
     logs
   end

@@ -60,6 +60,14 @@ class BulkUpload < ApplicationRecord
     "BulkUpload::#{type_class}::#{year_class}".constantize
   end
 
+  def unpend
+    logs.find_each do |log|
+      log.skip_update_status = true
+      log.status = log.status_cache
+      log.save!
+    end
+  end
+
 private
 
   def generate_identifier

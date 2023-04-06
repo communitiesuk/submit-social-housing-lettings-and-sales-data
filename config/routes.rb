@@ -144,6 +144,15 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :bulk_upload_lettings_resume, path: "bulk-upload-resume", only: %i[show update] do
+        member do
+          get :start
+
+          get "*page", to: "bulk_upload_lettings_resume#show", as: "page"
+          patch "*page", to: "bulk_upload_lettings_resume#update"
+        end
+      end
+
       get "update-logs", to: "lettings_logs#update_logs"
     end
 
@@ -155,6 +164,7 @@ Rails.application.routes.draw do
     FormHandler.instance.lettings_forms.each do |_key, form|
       form.pages.map do |page|
         get page.id.to_s.dasherize, to: "form#show_page"
+        post page.id.to_s.dasherize, to: "form#submit_form"
       end
 
       form.subsections.map do |subsection|
@@ -181,6 +191,7 @@ Rails.application.routes.draw do
     FormHandler.instance.sales_forms.each do |_key, form|
       form.pages.map do |page|
         get page.id.to_s.dasherize, to: "form#show_page"
+        post page.id.to_s.dasherize, to: "form#submit_form"
       end
 
       form.subsections.map do |subsection|

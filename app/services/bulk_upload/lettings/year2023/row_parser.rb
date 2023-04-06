@@ -331,6 +331,8 @@ class BulkUpload::Lettings::Year2023::RowParser
   validate :validate_created_by_exists
   validate :validate_created_by_related
 
+  validate :validate_valid_radio_option
+
   def self.question_for_field(field)
     QUESTIONS[field]
   end
@@ -387,6 +389,21 @@ class BulkUpload::Lettings::Year2023::RowParser
   end
 
 private
+
+  def validate_valid_radio_option
+    log.attributes.each do |question_id, _v|
+      question = log.form.get_question(question_id, log)
+
+      next unless question&.type == "radio"
+      next if log[question_id].blank? || question.answer_options.key?(log[question_id].to_s) || !question.page.routed_to?(log, nil)
+
+      fields = field_mapping_for_errors[question_id.to_sym] || []
+
+      fields.each do |field|
+        errors.add(field, I18n.t("validations.invalid_option", question: QUESTIONS[field]))
+      end
+    end
+  end
 
   def validate_created_by_exists
     return if field_3.blank?
@@ -750,6 +767,7 @@ private
       cbl: %i[field_116],
       chr: %i[field_118],
       cap: %i[field_117],
+      letting_allocation: %i[field_116 field_117 field_118],
 
       referral: %i[field_119],
 
@@ -1177,7 +1195,7 @@ private
       2
     elsif field_88 == 1
       3
-    elsif field_87&.zero?
+    elsif field_87.blank? || field_87&.zero?
       1
     end
   end
