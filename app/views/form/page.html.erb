@@ -1,7 +1,7 @@
 <% content_for :title, @page.header.presence || @page.questions.first.header.html_safe %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link(href: :back) %>
+  <%= govuk_back_link(href: send(@log.form.previous_page_redirect_path(@page, @log, current_user), @log)) %>
 <% end %>
 
 <div data-controller="govukfrontend"></div>

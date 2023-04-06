@@ -88,6 +88,17 @@ class Form
     end
   end
 
+  def previous_page_redirect_path(page, log, current_user)
+    page_ids = subsection_for_page(page).pages.map(&:id)
+    page_index = page_ids.index(page.id)
+    previous_page = previous_page(page_ids, page_index, log, current_user)
+    if previous_page == :check_answers
+      "#{type}_log_#{subsection_for_page(page).id}_check_answers_path"
+    else
+      "#{type}_log_#{previous_page}_path"
+    end
+  end
+
   def cancel_path(page, log)
     "#{log.class.name.underscore}_#{page.subsection.id}_check_answers_path"
   end
