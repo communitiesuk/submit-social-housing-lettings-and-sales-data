@@ -498,7 +498,7 @@ RSpec.describe SalesLog, type: :model do
     let!(:completed_sales_log) { create(:sales_log, :completed, ownershipsch: 1, type: 2, value: 1000, equity: 50) }
 
     it "is set to completed for a completed sales log" do
-      expect(completed_sales_log.expected_shared_ownership_deposit_value).to eq("£500.00")
+      expect(completed_sales_log.expected_shared_ownership_deposit_value).to eq(500)
     end
   end
 
