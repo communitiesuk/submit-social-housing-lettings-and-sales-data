@@ -126,7 +126,7 @@ private
       page_index = page_ids.index(@page.id)
       next_page_id = form.next_page(@page, @log, current_user)
       next_page = form.get_page(next_page_id)
-      previous_page = form.previous_page(page_ids, page_index, @log, current_user)
+      previous_page = form.previous_page(@page, @log, current_user)
 
       if next_page&.interruption_screen? || next_page_id == previous_page
         return send("#{@log.class.name.underscore}_#{next_page_id}_path", @log, { referrer: "check_answers" })

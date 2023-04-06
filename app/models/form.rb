@@ -67,7 +67,7 @@ class Form
     page_ids = subsection_for_page(page).pages.map(&:id)
     page_index = page_ids.index(page.id)
     page_id = if page.interruption_screen? && log[page.questions[0].id] == 1 && page.routed_to?(log, current_user)
-                previous_page(page_ids, page_index, log, current_user)
+                previous_page(page, log, current_user)
               else
                 page_ids[page_index + 1]
               end
@@ -88,10 +88,24 @@ class Form
     end
   end
 
-  def previous_page_redirect_path(page, log, current_user)
+  def previous_page(page, log, current_user)
     page_ids = subsection_for_page(page).pages.map(&:id)
     page_index = page_ids.index(page.id)
-    previous_page = previous_page(page_ids, page_index, log, current_user)
+    page_id = if page_index == 0
+                :check_answers
+              else
+                page_ids[page_index - 1]
+              end
+    prvs_page = get_page(page_id)
+
+    return :check_answers if prvs_page.nil?
+    return prvs_page.id if prvs_page.routed_to?(log, current_user)
+
+    previous_page(prvs_page, log, current_user)
+  end
+
+  def previous_page_redirect_path(page, log, current_user)
+    previous_page = previous_page(page, log, current_user)
     if previous_page == :check_answers
       "#{type}_log_#{subsection_for_page(page).id}_check_answers_path"
     else
@@ -215,13 +229,6 @@ class Form
 
   def numeric_questions
     questions.select { |q| q.type == "numeric" }
-  end
-
-  def previous_page(page_ids, page_index, log, current_user)
-    prev_page = get_page(page_ids[page_index - 1])
-    return prev_page.id if prev_page.routed_to?(log, current_user)
-
-    previous_page(page_ids, page_index - 1, log, current_user)
   end
 
   def send_chain(arr, log)
