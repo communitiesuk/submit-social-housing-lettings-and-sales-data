@@ -435,7 +435,7 @@ private
 
   def validate_uprn_exists_if_address_does_not
     if field_18.blank? && field_19.blank? && field_21.blank?
-      errors.add(:field_18, I18n.t("validations.not_answered", question: "UPRN known"))
+      errors.add(:field_18, I18n.t("validations.not_answered", question: "UPRN"))
     end
   end
 
