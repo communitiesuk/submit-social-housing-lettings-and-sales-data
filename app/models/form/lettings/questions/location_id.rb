@@ -1,6 +1,7 @@
 class Form::Lettings::Questions::LocationId < ::Form::Question
-  def initialize(_id, hsh, page)
-    super("location_id", hsh, page)
+  def initialize(id, hsh, page)
+    super
+    @id = "location_id"
     @check_answer_label = "Location"
     @header = header_text
     @type = "radio"
@@ -11,6 +12,7 @@ class Form::Lettings::Questions::LocationId < ::Form::Question
       },
     }
     @question_number = 10
+    @do_not_clear = true
   end
 
   def answer_options

@@ -5,6 +5,7 @@ class Form::Sales::Questions::County < ::Form::Question
     @header = "County (optional)"
     @type = "text"
     @plain_label = true
+    @do_not_clear = true
   end
 
   def hidden_in_check_answers?(_log = nil, _current_user = nil)

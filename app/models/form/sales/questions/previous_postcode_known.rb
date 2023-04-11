@@ -21,6 +21,7 @@ class Form::Sales::Questions::PreviousPostcodeKnown < ::Form::Question
       ],
     }
     @question_number = 57
+    @do_not_clear = true
   end
 
   ANSWER_OPTIONS = {

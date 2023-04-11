@@ -7,6 +7,7 @@ class Form::Sales::Questions::AddressLine1 < ::Form::Question
     @type = "text"
     @plain_label = true
     @check_answer_label = "Q15 - Address"
+    @do_not_clear = true
   end
 
   def answer_label(log, _current_user = nil)

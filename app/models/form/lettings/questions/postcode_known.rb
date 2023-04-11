@@ -8,6 +8,7 @@ class Form::Lettings::Questions::PostcodeKnown < ::Form::Question
     @check_answers_card_number = 0
     @hint_text = ""
     @answer_options = ANSWER_OPTIONS
+    @do_not_clear = true
     @conditional_for = { "postcode_full" => [1] }
     @hidden_in_check_answers = { "depends_on" => [{ "postcode_known" => 0 }, { "postcode_known" => 1 }] }
   end

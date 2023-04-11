@@ -238,12 +238,10 @@ class Form
   end
 
   def routed_and_not_routed_questions_by_type(log, type: nil, current_user: nil)
-    # we're already treating these fields as a special case and reset their values upon saving a log
-    callback_questions = %w[postcode_known la ppcodenk previous_la_known prevloc postcode_full ppostcode_full location_id address_line1 address_line2 town_or_city county]
     questions_to_categorise = if type
-                                questions.reject { |q| q.type != type || callback_questions.include?(q.id) }
+                                questions.reject { |q| q.type != type || q.do_not_clear }
                               else
-                                questions.reject { |q| %w[radio checkbox].include?(q.type) || callback_questions.include?(q.id) }
+                                questions.reject { |q| %w[radio checkbox].include?(q.type) || q.do_not_clear }
                               end
     valid, invalid = questions_to_categorise.partition { |q| q.page.routed_to?(log, current_user) || q.derived? }
     { valid:, invalid: }

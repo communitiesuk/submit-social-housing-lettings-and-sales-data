@@ -21,6 +21,7 @@ class Form::Sales::Questions::PreviousLaKnown < ::Form::Question
       "prevloc" => [1],
     }
     @question_number = 58
+    @do_not_clear = true
   end
 
   ANSWER_OPTIONS = {

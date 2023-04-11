@@ -411,6 +411,7 @@
                   "hint_text": "Type ahead to filter the options",
                   "type": "select",
                   "check_answer_label": "Accessible Select",
+                  "do_not_clear": true,
                   "answer_options": {
                     "": "Select an option",
                     "E07000223": "Adur",
@@ -473,6 +474,7 @@
                   "hint_text": "Type ahead to filter the options",
                   "type": "select",
                   "check_answer_label": "Accessible Select",
+                  "do_not_clear": true,
                   "answer_options": {
                     "": "Select an option",
                     "E07000223": "Adur",
@@ -500,6 +502,7 @@
                   "header": "Do you know the property’s postcode?",
                   "hint_text": "",
                   "type": "radio",
+                  "do_not_clear": true,
                   "answer_options": {
                     "1": {
                       "value": "Yes"
@@ -521,6 +524,7 @@
                   "hint_text": "",
                   "type": "text",
                   "width": 5,
+                  "do_not_clear": true,
                   "inferred_answers": {
                     "la": {
                       "is_la_inferred": true
@@ -544,6 +548,7 @@
                   "header": "Do you know what local authority the property is located in?",
                   "hint_text": "",
                   "type": "radio",
+                  "do_not_clear": true,
                   "answer_options": {
                     "0": {
                       "value": "No"
@@ -1151,6 +1156,7 @@
                   "header": "Postcode for the previous accommodation",
                   "hint_text": "If the household has moved from settled accommodation immediately prior to being re-housed",
                   "type": "text",
+                  "do_not_clear": true,
                   "width": 5
                 }
               }

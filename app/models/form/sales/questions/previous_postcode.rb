@@ -18,5 +18,6 @@ class Form::Sales::Questions::PreviousPostcode < ::Form::Question
       },
     }
     @question_number = 57
+    @do_not_clear = true
   end
 end

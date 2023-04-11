@@ -11,6 +11,7 @@ class Form::Lettings::Questions::PreviousLaKnown < ::Form::Question
     @conditional_for = { "prevloc" => [1] }
     @hidden_in_check_answers = { "depends_on" => [{ "previous_la_known" => 0 }, { "previous_la_known" => 1 }] }
     @question_number = 81
+    @do_not_clear = true
   end
 
   ANSWER_OPTIONS = { "1" => { "value" => "Yes" }, "0" => { "value" => "No" } }.freeze

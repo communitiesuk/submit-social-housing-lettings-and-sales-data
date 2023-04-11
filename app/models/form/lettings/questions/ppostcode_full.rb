@@ -11,5 +11,6 @@ class Form::Lettings::Questions::PpostcodeFull < ::Form::Question
     @hint_text = ""
     @inferred_answers = { "prevloc" => { "is_previous_la_inferred" => true } }
     @question_number = 80
+    @do_not_clear = true
   end
 end

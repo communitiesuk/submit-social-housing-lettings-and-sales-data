@@ -17,6 +17,7 @@ class Form::Lettings::Questions::PostcodeForFullAddress < ::Form::Question
       },
     }
     @plain_label = true
+    @do_not_clear = true
   end
 
   def hidden_in_check_answers?(_log = nil, _current_user = nil)

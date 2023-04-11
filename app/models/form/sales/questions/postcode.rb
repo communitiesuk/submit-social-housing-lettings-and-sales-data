@@ -17,5 +17,6 @@ class Form::Sales::Questions::Postcode < ::Form::Question
         "is_la_inferred" => true,
       },
     }
+    @do_not_clear = true
   end
 end
