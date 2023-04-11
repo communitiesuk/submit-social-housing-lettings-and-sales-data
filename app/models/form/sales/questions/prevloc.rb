@@ -12,7 +12,7 @@ class Form::Sales::Questions::Prevloc < ::Form::Question
       "value" => "Not known",
     }]
     @question_number = 58
-    @do_not_clear = true
+    @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 
   def answer_options

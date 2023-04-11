@@ -12,7 +12,7 @@ class Form::Lettings::Questions::LocationId < ::Form::Question
       },
     }
     @question_number = 10
-    @do_not_clear = true
+    @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 
   def answer_options

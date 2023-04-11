@@ -24,7 +24,7 @@
                   "header": "Do you know the property’s postcode?",
                   "hint_text": "",
                   "type": "radio",
-                  "do_not_clear": true,
+                  "disable_clearing_if_not_routed_or_dynamic_answer_options": true,
                   "answer_options": {
                     "1": {
                       "value": "Yes"
@@ -55,7 +55,7 @@
                   "hint_text": "",
                   "type": "text",
                   "width": 5,
-                  "do_not_clear": true,
+                  "disable_clearing_if_not_routed_or_dynamic_answer_options": true,
                   "inferred_answers": {
                     "la": {
                       "is_la_inferred": true
@@ -84,7 +84,7 @@
                   "header": "What is the local authority of the property?",
                   "hint_text": "",
                   "type": "select",
-                  "do_not_clear": true,
+                  "disable_clearing_if_not_routed_or_dynamic_answer_options": true,
                   "answer_options": {
                     "": "Select an option",
                     "E07000223": "Adur",
@@ -6438,7 +6438,7 @@
                   "header": "Do you know the postcode of the household’s last settled accommodation?",
                   "hint_text": "This is also known as the household’s ‘last settled home’.",
                   "type": "radio",
-                  "do_not_clear": true,
+                  "disable_clearing_if_not_routed_or_dynamic_answer_options": true,
                   "answer_options": {
                     "1": {
                       "value": "Yes"
@@ -6469,7 +6469,7 @@
                   "hint_text": "",
                   "type": "text",
                   "width": 5,
-                  "do_not_clear": true,
+                  "disable_clearing_if_not_routed_or_dynamic_answer_options": true,
                   "inferred_answers": {
                     "prevloc": {
                       "is_previous_la_inferred": true
@@ -6493,7 +6493,7 @@
                   "header": "Do you know the local authority of the household’s last settled accommodation?",
                   "hint_text": "This is also known as the household’s ‘last settled home’.",
                   "type": "radio",
-                  "do_not_clear": true,
+                  "disable_clearing_if_not_routed_or_dynamic_answer_options": true,
                   "hidden_in_check_answers": {
                     "depends_on": [
                       {
@@ -6523,7 +6523,7 @@
                   "header": "Select a local authority",
                   "hint_text": "Select ‘Northern Ireland’, ‘Scotland’, ‘Wales’ or ‘Outside the UK’ if the household’s last settled home was outside England.",
                   "type": "select",
-                  "do_not_clear": true,
+                  "disable_clearing_if_not_routed_or_dynamic_answer_options": true,
                   "answer_options": {
                     "": "Select an option",
                     "S12000033": "Aberdeen City",

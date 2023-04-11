@@ -9,7 +9,7 @@ class Form::Lettings::Questions::Prevloc < ::Form::Question
     @check_answers_card_number = 0
     @hint_text = "Select ‘Northern Ireland’, ‘Scotland’, ‘Wales’ or ‘Outside the UK’ if the household’s last settled home was outside England."
     @question_number = 81
-    @do_not_clear = true
+    @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 
   def answer_options

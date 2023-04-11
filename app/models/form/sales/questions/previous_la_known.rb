@@ -21,7 +21,7 @@ class Form::Sales::Questions::PreviousLaKnown < ::Form::Question
       "prevloc" => [1],
     }
     @question_number = 58
-    @do_not_clear = true
+    @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 
   ANSWER_OPTIONS = {

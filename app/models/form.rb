@@ -239,9 +239,9 @@ class Form
 
   def routed_and_not_routed_questions_by_type(log, type: nil, current_user: nil)
     questions_by_type = if type
-                          questions.reject { |q| q.type != type || q.do_not_clear }
+                          questions.reject { |q| q.type != type || q.disable_clearing_if_not_routed_or_dynamic_answer_options }
                         else
-                          questions.reject { |q| %w[radio checkbox].include?(q.type) || q.do_not_clear }
+                          questions.reject { |q| %w[radio checkbox].include?(q.type) || q.disable_clearing_if_not_routed_or_dynamic_answer_options }
                         end
     routed, not_routed = questions_by_type.partition { |q| q.page.routed_to?(log, current_user) || q.derived? }
     { routed:, not_routed: }

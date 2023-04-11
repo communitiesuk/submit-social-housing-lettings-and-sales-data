@@ -18,6 +18,6 @@ class Form::Sales::Questions::PreviousPostcode < ::Form::Question
       },
     }
     @question_number = 57
-    @do_not_clear = true
+    @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 end

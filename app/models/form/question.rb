@@ -1,5 +1,5 @@
 class Form::Question
-  attr_accessor :id, :header, :hint_text, :description, :questions, :do_not_clear,
+  attr_accessor :id, :header, :hint_text, :description, :questions, :disable_clearing_if_not_routed_or_dynamic_answer_options,
                 :type, :min, :max, :step, :width, :fields_to_add, :result_field,
                 :conditional_for, :readonly, :answer_options, :page, :check_answer_label,
                 :inferred_answers, :hidden_in_check_answers, :inferred_check_answers_value,
@@ -42,7 +42,7 @@ class Form::Question
       @unresolved_hint_text = hsh["unresolved_hint_text"]
       @question_number = hsh["question_number"]
       @plain_label = hsh["plain_label"]
-      @do_not_clear = hsh["do_not_clear"]
+      @disable_clearing_if_not_routed_or_dynamic_answer_options = hsh["disable_clearing_if_not_routed_or_dynamic_answer_options"]
     end
   end
 
