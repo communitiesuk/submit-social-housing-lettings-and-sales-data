@@ -33,7 +33,7 @@ RSpec.describe Form::Lettings::Pages::NetIncomeValueCheck, type: :model do
 
   it "has the correct informative_text" do
     expect(page.informative_text).to eq({
-      "arguments" => [{ "i18n_template" => "ecstat1", "key" => "ecstat1", "label" => true, "money" => true }, { "i18n_template" => "earnings", "key" => "earnings", "label" => true, "money" => true }],
+      "arguments" => [{ "arguments_for_key" => "ecstat1", "i18n_template" => "ecstat1", "key" => "field_formatted_as_currency" }, { "arguments_for_key" => "earnings", "i18n_template" => "earnings", "key" => "field_formatted_as_currency" }],
       "translation" => "soft_validations.net_income.hint_text",
     })
   end

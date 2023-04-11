@@ -9,17 +9,15 @@ class Form::Lettings::Pages::MinRentValueCheck < ::Form::Page
         "key" => "brent",
         "label" => true,
         "i18n_template" => "brent",
-        "money" => true,
       }],
     }
     @informative_text = {
       "translation" => "soft_validations.rent.min_hint_text",
       "arguments" => [
         {
-          "key" => "soft_min_for_period",
-          "label" => false,
+          "key" => "field_formatted_as_currency",
+          "arguments_for_key" => "soft_min_for_period",
           "i18n_template" => "soft_min_for_period",
-          "money" => true,
         },
       ],
     }

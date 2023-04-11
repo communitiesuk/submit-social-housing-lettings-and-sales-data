@@ -32,7 +32,7 @@ RSpec.describe Form::Sales::Pages::AboutPriceValueCheck, type: :model do
   end
 
   it "has the correct title_text" do
-    expect(page.title_text).to eq({ "arguments" => [{ "i18n_template" => "value", "key" => "value", "label" => true, "money" => true }], "translation" => "soft_validations.purchase_price.title_text" })
+    expect(page.title_text).to eq({ "arguments" => [{ "i18n_template" => "value", "key" => "value", "label" => true }], "translation" => "soft_validations.purchase_price.title_text" })
   end
 
   it "has the correct informative_text" do

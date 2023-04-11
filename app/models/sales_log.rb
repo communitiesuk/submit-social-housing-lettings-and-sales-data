@@ -323,11 +323,6 @@ class SalesLog < Log
     format_as_currency(soft_min)
   end
 
-  def field_formatted_as_currency(field_name)
-    field_value = public_send(field_name)
-    format_as_currency(field_value)
-  end
-
   def should_process_uprn_change?
     uprn_changed? && saledate && saledate.year >= 2023
   end

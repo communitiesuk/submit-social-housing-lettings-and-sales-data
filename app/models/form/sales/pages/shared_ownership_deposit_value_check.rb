@@ -11,10 +11,9 @@ class Form::Sales::Pages::SharedOwnershipDepositValueCheck < ::Form::Page
       "translation" => "soft_validations.shared_ownership_deposit.title_text",
       "arguments" => [
         {
-          "key" => "expected_shared_ownership_deposit_value",
-          "label" => false,
+          "key" => "field_formatted_as_currency",
+          "arguments_for_key" => "expected_shared_ownership_deposit_value",
           "i18n_template" => "expected_shared_ownership_deposit_value",
-          "money" => true,
         },
       ],
     }

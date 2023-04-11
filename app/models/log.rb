@@ -126,6 +126,11 @@ class Log < ApplicationRecord
     end
   end
 
+  def field_formatted_as_currency(field_name)
+    field_value = public_send(field_name)
+    format_as_currency(field_value)
+  end
+
 private
 
   def plural_gender_for_person(person_num)

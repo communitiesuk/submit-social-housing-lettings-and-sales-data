@@ -35,13 +35,13 @@ RSpec.describe Form::Lettings::Pages::MinRentValueCheck, type: :model do
   it "has the correct title_text" do
     expect(page.title_text).to eq({
       "translation" => "soft_validations.rent.outside_range_title",
-      "arguments" => [{ "i18n_template" => "brent", "key" => "brent", "label" => true, "money" => true }],
+      "arguments" => [{ "i18n_template" => "brent", "key" => "brent", "label" => true }],
     })
   end
 
   it "has the correct informative_text" do
     expect(page.informative_text).to eq({
-      "arguments" => [{ "i18n_template" => "soft_min_for_period", "key" => "soft_min_for_period", "label" => false, "money" => true }],
+      "arguments" => [{ "arguments_for_key" => "soft_min_for_period", "i18n_template" => "soft_min_for_period", "key" => "field_formatted_as_currency" }],
       "translation" => "soft_validations.rent.min_hint_text",
     })
   end

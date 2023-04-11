@@ -28,10 +28,10 @@ RSpec.describe Form::Lettings::Pages::MaxRentValueCheck, type: :model do
   end
 
   it "has the correct title_text" do
-    expect(page.title_text).to eq({ "arguments" => [{ "i18n_template" => "brent", "key" => "brent", "label" => true, "money" => true }], "translation" => "soft_validations.rent.outside_range_title" })
+    expect(page.title_text).to eq({ "arguments" => [{ "i18n_template" => "brent", "key" => "brent", "label" => true }], "translation" => "soft_validations.rent.outside_range_title" })
   end
 
   it "has the correct informative_text" do
-    expect(page.informative_text).to eq({ "arguments" => [{ "i18n_template" => "soft_max_for_period", "key" => "soft_max_for_period", "label" => false, "money" => true }], "translation" => "soft_validations.rent.max_hint_text" })
+    expect(page.informative_text).to eq({ "arguments" => [{ "arguments_for_key" => "soft_max_for_period", "i18n_template" => "soft_max_for_period", "key" => "field_formatted_as_currency" }], "translation" => "soft_validations.rent.max_hint_text" })
   end
 end

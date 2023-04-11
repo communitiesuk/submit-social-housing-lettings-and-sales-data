@@ -143,15 +143,15 @@ RSpec.describe InterruptionScreenHelper do
         informative_text_hash = {
           "arguments" => [
             {
-              "key" => "retirement_age_for_person",
-              "arguments_for_key" => 1,
+              "key" => "field_formatted_as_currency",
+              "arguments_for_key" => "brent",
               "i18n_template" => "argument",
             },
           ],
         }
-        allow(lettings_log).to receive(:retirement_age_for_person)
+        allow(lettings_log).to receive(:field_formatted_as_currency)
         display_informative_text(informative_text_hash, lettings_log)
-        expect(lettings_log).to have_received(:retirement_age_for_person).with(1)
+        expect(lettings_log).to have_received(:field_formatted_as_currency).with("brent")
       end
 
       it "returns the correct text" do
@@ -160,41 +160,11 @@ RSpec.describe InterruptionScreenHelper do
           "translation" => translation,
           "arguments" => [
             {
-              "key" => "retirement_age_for_person",
-              "arguments_for_key" => 1,
+              "key" => "field_formatted_as_currency",
+              "arguments_for_key" => "brent",
               "i18n_template" => "argument",
             },
           ],
-        }
-        expect(display_informative_text(informative_text_hash, lettings_log)).to eq(I18n.t(translation, argument: lettings_log.retirement_age_for_person(1)))
-      end
-    end
-
-    context "when money not set" do
-      it "does not format the value" do
-        informative_text_hash = {
-          "translation" => "test.title_text.one_argument",
-          "arguments" => [{ "key" => "brent", "label" => true, "i18n_template" => "argument" }],
-        }
-        expect(display_informative_text(informative_text_hash, lettings_log)).to eq("You said this: 12345.0")
-      end
-    end
-
-    context "when money set to false" do
-      it "does not format the value" do
-        informative_text_hash = {
-          "translation" => "test.title_text.one_argument",
-          "arguments" => [{ "key" => "brent", "label" => true, "i18n_template" => "argument", money: false }],
-        }
-        expect(display_informative_text(informative_text_hash, lettings_log)).to eq("You said this: 12345.0")
-      end
-    end
-
-    context "when money set to true" do
-      it "formats the value as money with currency and 2 decimals" do
-        informative_text_hash = {
-          "translation" => "test.title_text.one_argument",
-          "arguments" => [{ "key" => "brent", "label" => true, "i18n_template" => "argument", "money" => true }],
         }
         expect(display_informative_text(informative_text_hash, lettings_log)).to eq("You said this: £12,345.00")
       end
@@ -225,6 +195,38 @@ RSpec.describe InterruptionScreenHelper do
         expect(display_title_text(title_text, lettings_log))
           .to eq(I18n.t("test.title_text.one_argument", argument: lettings_log.form.get_question("ecstat1", lettings_log).answer_label(lettings_log).downcase))
       end
+
+      context "when and argument is given with a key and arguments for the key" do
+        it "makes the correct method call" do
+          title_text = {
+            "arguments" => [
+              {
+                "key" => "field_formatted_as_currency",
+                "arguments_for_key" => "brent",
+                "i18n_template" => "argument",
+              },
+            ],
+          }
+          allow(lettings_log).to receive(:field_formatted_as_currency)
+          display_title_text(title_text, lettings_log)
+          expect(lettings_log).to have_received(:field_formatted_as_currency).with("brent")
+        end
+
+        it "returns the correct text" do
+          translation = "test.title_text.one_argument"
+          title_text = {
+            "translation" => translation,
+            "arguments" => [
+              {
+                "key" => "field_formatted_as_currency",
+                "arguments_for_key" => "brent",
+                "i18n_template" => "argument",
+              },
+            ],
+          }
+          expect(display_title_text(title_text, lettings_log)).to eq("You said this: £12,345.00")
+        end
+      end
     end
 
     context "when title text is not defined" do
@@ -236,36 +238,6 @@ RSpec.describe InterruptionScreenHelper do
     context "when title text is empty string" do
       it "returns an empty string" do
         expect(display_title_text("", lettings_log)).to eq("")
-      end
-    end
-
-    context "when money not set" do
-      it "does not format the value" do
-        informative_text_hash = {
-          "translation" => "test.title_text.one_argument",
-          "arguments" => [{ "key" => "brent", "label" => true, "i18n_template" => "argument" }],
-        }
-        expect(display_title_text(informative_text_hash, lettings_log)).to eq("You said this: 12345.0")
-      end
-    end
-
-    context "when money set to false" do
-      it "does not format the value" do
-        informative_text_hash = {
-          "translation" => "test.title_text.one_argument",
-          "arguments" => [{ "key" => "brent", "label" => true, "i18n_template" => "argument", money: false }],
-        }
-        expect(display_title_text(informative_text_hash, lettings_log)).to eq("You said this: 12345.0")
-      end
-    end
-
-    context "when money set to true" do
-      it "formats the value as money with currency and 2 decimals" do
-        informative_text_hash = {
-          "translation" => "test.title_text.one_argument",
-          "arguments" => [{ "key" => "brent", "label" => true, "i18n_template" => "argument", "money" => true }],
-        }
-        expect(display_title_text(informative_text_hash, lettings_log)).to eq("You said this: £12,345.00")
       end
     end
   end
