@@ -179,21 +179,21 @@ class Form
   end
 
   def reset_not_routed_questions_and_invalid_answers(log)
-    reset_not_routed_checkbox_questions(log)
+    reset_checkbox_questions_if_not_routed(log)
 
     reset_radio_questions_if_not_routed_or_invalid_answers(log)
 
-    reset_not_routed_free_user_input_questions(log)
+    reset_free_user_input_questions_if_not_routed(log)
   end
 
-  def reset_not_routed_checkbox_questions(log)
+  def reset_checkbox_questions_if_not_routed(log)
     checkbox_questions = routed_and_not_routed_questions_by_type(log, type: "checkbox")
-    checkbox_questions[:invalid].each do |invalidated_question|
-      valid_options = checkbox_questions[:valid]
-                                        .select { |q| q.id == invalidated_question.id }
+    checkbox_questions[:not_routed].each do |not_routed_question|
+      valid_options = checkbox_questions[:routed]
+                                        .select { |q| q.id == not_routed_question.id }
                                         .flat_map { |q| q.answer_options.keys }
-      invalidated_question.answer_options.each_key do |invalid_option|
-        if !log.respond_to?(invalid_option) || valid_options.include?(invalid_option)
+      not_routed_question.answer_options.each_key do |invalid_option|
+        if !log.respond_to?(invalid_option) || valid_options.include?(invalid_option) || log.public_send(invalid_option).nil?
           next
         else
           clear_attribute(log, invalid_option)
@@ -204,47 +204,47 @@ class Form
 
   def reset_radio_questions_if_not_routed_or_invalid_answers(log)
     radio_questions = routed_and_not_routed_questions_by_type(log, type: "radio")
-    valid_radio_options = radio_questions[:valid]
-                                   .group_by(&:id)
-                                   .transform_values! { |q_array| q_array.flat_map { |q| q.answer_options.keys } }
-    radio_questions[:invalid].each do |invalidated_question|
-      q_id = invalidated_question.id
-      if !log.respond_to?(q_id) || log.public_send(q_id).nil? || valid_radio_options.key?(q_id)
+    valid_radio_options = radio_questions[:routed]
+                                         .group_by(&:id)
+                                         .transform_values! { |q_array| q_array.flat_map { |q| q.answer_options.keys } }
+    radio_questions[:not_routed].each do |not_routed_question|
+      question_id = not_routed_question.id
+      if !log.respond_to?(question_id) || log.public_send(question_id).nil? || valid_radio_options.key?(question_id)
         next
       else
-        clear_attribute(log, q_id)
+        clear_attribute(log, question_id)
       end
     end
-    valid_radio_options.each do |q_id, valid_options|
-      if !log.respond_to?(q_id) || valid_options.include?(log.public_send(q_id).to_s)
+    valid_radio_options.each do |question_id, valid_options|
+      if !log.respond_to?(question_id) || valid_options.include?(log.public_send(question_id).to_s)
         next
       else
-        clear_attribute(log, q_id)
+        clear_attribute(log, question_id)
       end
     end
   end
 
-  def reset_not_routed_free_user_input_questions(log)
+  def reset_free_user_input_questions_if_not_routed(log)
     non_radio_checkbox_questions = routed_and_not_routed_questions_by_type(log)
-    enabled_question_ids = non_radio_checkbox_questions[:valid].map(&:id)
-    non_radio_checkbox_questions[:invalid].each do |invalidated_question|
-      q_id = invalidated_question.id
-      if log.public_send(q_id).nil? || enabled_question_ids.include?(q_id)
+    enabled_question_ids = non_radio_checkbox_questions[:routed].map(&:id)
+    non_radio_checkbox_questions[:not_routed].each do |not_routed_question|
+      question_id = not_routed_question.id
+      if log.public_send(question_id).nil? || enabled_question_ids.include?(question_id)
         next
       else
-        clear_attribute(log, q_id)
+        clear_attribute(log, question_id)
       end
     end
   end
 
   def routed_and_not_routed_questions_by_type(log, type: nil, current_user: nil)
-    questions_to_categorise = if type
-                                questions.reject { |q| q.type != type || q.do_not_clear }
-                              else
-                                questions.reject { |q| %w[radio checkbox].include?(q.type) || q.do_not_clear }
-                              end
-    valid, invalid = questions_to_categorise.partition { |q| q.page.routed_to?(log, current_user) || q.derived? }
-    { valid:, invalid: }
+    questions_by_type = if type
+                          questions.reject { |q| q.type != type || q.do_not_clear }
+                        else
+                          questions.reject { |q| %w[radio checkbox].include?(q.type) || q.do_not_clear }
+                        end
+    routed, not_routed = questions_by_type.partition { |q| q.page.routed_to?(log, current_user) || q.derived? }
+    { routed:, not_routed: }
   end
 
   def clear_attribute(log, attribute)
