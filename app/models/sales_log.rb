@@ -354,9 +354,9 @@ class SalesLog < Log
   def ownership_scheme
     case ownershipsch
     when 1
-      "Shared owhership"
+      "Shared ownership"
     when 2
-      "Discounted owhership"
+      "Discounted ownership"
     when 3
       "Outright sale"
     end
