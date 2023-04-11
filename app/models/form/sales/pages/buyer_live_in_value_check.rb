@@ -3,11 +3,11 @@ class Form::Sales::Pages::BuyerLiveInValueCheck < Form::Sales::Pages::Person
     super
     @depends_on = [
       {
-        "buyer#{person_index}_not_livein?" => true,
+        "buyer#{person_index}_livein_wrong_for_ownership_type?" => true,
       },
     ]
     @title_text = {
-      "translation" => "soft_validations.buyer#{person_index}_not_livein.title_text",
+      "translation" => "soft_validations.buyer#{person_index}_livein_wrong_for_ownership_type.title_text",
       "arguments" => [{ "key" => "ownership_scheme", "label" => false, "i18n_template" => "ownership_scheme" }],
     }
     @informative_text = {}

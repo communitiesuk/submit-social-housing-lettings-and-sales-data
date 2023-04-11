@@ -27,7 +27,7 @@ RSpec.describe Form::Sales::Pages::BuyerLiveInValueCheck, type: :model do
   it "has correct depends_on" do
     expect(page.depends_on).to eq([
       {
-        "buyer1_not_livein?" => true,
+        "buyer1_livein_wrong_for_ownership_type?" => true,
       },
     ])
   end
@@ -38,7 +38,7 @@ RSpec.describe Form::Sales::Pages::BuyerLiveInValueCheck, type: :model do
 
   it "has the correct title_text" do
     expect(page.title_text).to eq({
-      "translation" => "soft_validations.buyer1_not_livein.title_text",
+      "translation" => "soft_validations.buyer1_livein_wrong_for_ownership_type.title_text",
       "arguments" => [{ "key" => "ownership_scheme", "label" => false, "i18n_template" => "ownership_scheme" }],
     })
   end
@@ -49,14 +49,14 @@ RSpec.describe Form::Sales::Pages::BuyerLiveInValueCheck, type: :model do
     it "has correct depends_on" do
       expect(page.depends_on).to eq([
         {
-          "buyer2_not_livein?" => true,
+          "buyer2_livein_wrong_for_ownership_type?" => true,
         },
       ])
     end
 
     it "has the correct title_text" do
       expect(page.title_text).to eq({
-        "translation" => "soft_validations.buyer2_not_livein.title_text",
+        "translation" => "soft_validations.buyer2_livein_wrong_for_ownership_type.title_text",
         "arguments" => [{ "key" => "ownership_scheme", "label" => false, "i18n_template" => "ownership_scheme" }],
       })
     end

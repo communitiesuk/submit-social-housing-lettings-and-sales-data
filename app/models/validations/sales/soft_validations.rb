@@ -123,13 +123,13 @@ module Validations::Sales::SoftValidations
     mortgage_deposit_and_grant_total != value_with_discount && discounted_ownership_sale?
   end
 
-  def buyer1_not_livein?
+  def buyer1_livein_wrong_for_ownership_type?
     return unless ownershipsch && buy1livein
 
     (discounted_ownership_sale? || shared_ownership_scheme?) && buy1livein == 2
   end
 
-  def buyer2_not_livein?
+  def buyer2_livein_wrong_for_ownership_type?
     return unless ownershipsch && buy2livein
     return unless joint_purchase?
 

@@ -914,7 +914,7 @@ RSpec.describe Validations::Sales::SoftValidations do
     end
   end
 
-  describe "#buyer1_not_livein?" do
+  describe "#buyer1_livein_wrong_for_ownership_type?" do
     context "when it's a shared ownership" do
       let(:record) { FactoryBot.build(:sales_log, ownershipsch: 1) }
 
@@ -924,7 +924,7 @@ RSpec.describe Validations::Sales::SoftValidations do
         end
 
         it "returns true" do
-          expect(record).to be_buyer1_not_livein
+          expect(record).to be_buyer1_livein_wrong_for_ownership_type
         end
       end
 
@@ -934,7 +934,7 @@ RSpec.describe Validations::Sales::SoftValidations do
         end
 
         it "returns false" do
-          expect(record).not_to be_buyer1_not_livein
+          expect(record).not_to be_buyer1_livein_wrong_for_ownership_type
         end
       end
     end
@@ -948,7 +948,7 @@ RSpec.describe Validations::Sales::SoftValidations do
         end
 
         it "returns true" do
-          expect(record).to be_buyer1_not_livein
+          expect(record).to be_buyer1_livein_wrong_for_ownership_type
         end
       end
 
@@ -958,7 +958,7 @@ RSpec.describe Validations::Sales::SoftValidations do
         end
 
         it "returns false" do
-          expect(record).not_to be_buyer1_not_livein
+          expect(record).not_to be_buyer1_livein_wrong_for_ownership_type
         end
       end
     end
@@ -972,7 +972,7 @@ RSpec.describe Validations::Sales::SoftValidations do
         end
 
         it "returns false" do
-          expect(record).not_to be_buyer1_not_livein
+          expect(record).not_to be_buyer1_livein_wrong_for_ownership_type
         end
       end
 
@@ -982,7 +982,7 @@ RSpec.describe Validations::Sales::SoftValidations do
         end
 
         it "returns false" do
-          expect(record).not_to be_buyer1_not_livein
+          expect(record).not_to be_buyer1_livein_wrong_for_ownership_type
         end
       end
     end
@@ -995,12 +995,12 @@ RSpec.describe Validations::Sales::SoftValidations do
       end
 
       it "returns false" do
-        expect(record).not_to be_buyer1_not_livein
+        expect(record).not_to be_buyer1_livein_wrong_for_ownership_type
       end
     end
   end
 
-  describe "#buyer2_not_livein?" do
+  describe "#buyer2_livein_wrong_for_ownership_type?" do
     context "when it's a shared ownership" do
       let(:record) { FactoryBot.build(:sales_log, ownershipsch: 1, jointpur: 1) }
 
@@ -1010,7 +1010,7 @@ RSpec.describe Validations::Sales::SoftValidations do
         end
 
         it "returns true" do
-          expect(record).to be_buyer2_not_livein
+          expect(record).to be_buyer2_livein_wrong_for_ownership_type
         end
       end
 
@@ -1020,7 +1020,7 @@ RSpec.describe Validations::Sales::SoftValidations do
         end
 
         it "returns false" do
-          expect(record).not_to be_buyer2_not_livein
+          expect(record).not_to be_buyer2_livein_wrong_for_ownership_type
         end
       end
 
@@ -1031,7 +1031,7 @@ RSpec.describe Validations::Sales::SoftValidations do
         end
 
         it "returns false" do
-          expect(record).not_to be_buyer2_not_livein
+          expect(record).not_to be_buyer2_livein_wrong_for_ownership_type
         end
       end
     end
@@ -1045,7 +1045,7 @@ RSpec.describe Validations::Sales::SoftValidations do
         end
 
         it "returns true" do
-          expect(record).to be_buyer2_not_livein
+          expect(record).to be_buyer2_livein_wrong_for_ownership_type
         end
       end
 
@@ -1055,7 +1055,7 @@ RSpec.describe Validations::Sales::SoftValidations do
         end
 
         it "returns false" do
-          expect(record).not_to be_buyer2_not_livein
+          expect(record).not_to be_buyer2_livein_wrong_for_ownership_type
         end
       end
     end
@@ -1069,7 +1069,7 @@ RSpec.describe Validations::Sales::SoftValidations do
         end
 
         it "returns false" do
-          expect(record).not_to be_buyer2_not_livein
+          expect(record).not_to be_buyer2_livein_wrong_for_ownership_type
         end
       end
 
@@ -1079,7 +1079,7 @@ RSpec.describe Validations::Sales::SoftValidations do
         end
 
         it "returns false" do
-          expect(record).not_to be_buyer2_not_livein
+          expect(record).not_to be_buyer2_livein_wrong_for_ownership_type
         end
       end
     end
@@ -1092,7 +1092,7 @@ RSpec.describe Validations::Sales::SoftValidations do
       end
 
       it "returns false" do
-        expect(record).not_to be_buyer2_not_livein
+        expect(record).not_to be_buyer2_livein_wrong_for_ownership_type
       end
     end
   end
