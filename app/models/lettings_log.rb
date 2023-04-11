@@ -379,10 +379,6 @@ class LettingsLog < Log
     hb == 6
   end
 
-  def receives_any_housing_benefit?
-    receives_housing_benefit_only? || receives_uc_with_housing_element_excl_housing_benefit?
-  end
-
   def receives_no_benefits?
     # 9: None
     hb == 9
@@ -516,6 +512,18 @@ class LettingsLog < Log
 
   def rent_and_charges_paid_weekly?
     [1, 5, 6, 7, 8, 9, 10].include? period
+  end
+
+  def rent_and_charges_paid_every_4_weeks?
+    period == 3
+  end
+
+  def rent_and_charges_paid_every_2_weeks?
+    period == 2
+  end
+
+  def rent_and_charges_paid_monthly?
+    period == 4
   end
 
   def is_carehome?
