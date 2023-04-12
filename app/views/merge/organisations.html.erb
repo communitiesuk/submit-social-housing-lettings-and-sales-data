@@ -1,0 +1,41 @@
+<% title = "Tell us if your organisation is merging" %>
+<% content_for :title, title %>
+
+<%= govuk_back_link href: organisation_path %>
+<h2 class="govuk-heading-l">Tell us if your organisation is merging</h2>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+   <p class="govuk-body">Start typing to search for your managing agent</p>
+
+<%= form_with model: @merge, url: merge_organisations_organisation_path, method: :patch do |f| %>
+  <%= f.govuk_error_summary %>
+
+  <%= render partial: "organisation_relationships/related_organisation_select_question", locals: {
+    field: :merging_organisation,
+    question: Form::Question.new("", { "answer_options" => @answer_options }, nil),
+    f:,
+  } %>
+  <%= f.hidden_field :merging_organisations %>
+  <%= f.govuk_submit "Add organisation", classes: "govuk-button--secondary" %>
+  <%= govuk_table do |table| %>
+  <% @merging_organisations_list.each do |merging_organisation| %>
+      <%= table.body do |body| %>
+        <%= body.row do |row| %>
+          <% row.cell(text: merging_organisation.name) %>
+          <% if current_user.data_coordinator? || current_user.support? %>
+            <% row.cell(html_attributes: {
+              scope: "row",
+              class: "govuk-!-text-align-right",
+            }) do %>
+              <%= govuk_link_to("Remove", merge_organisations_organisation_path) %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= govuk_button_link_to "Continue", merge_organisations_organisation_path, button: true %>
+</div>
