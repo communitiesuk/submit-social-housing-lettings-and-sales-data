@@ -16,11 +16,11 @@ RSpec.describe Form::Sales::Questions::HasLeaseholdCharges, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Do you know the monthly leasehold charges for the property?")
+    expect(question.header).to eq("Does the property have any monthly leasehold charges?")
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Monthly leasehold charges known?")
+    expect(question.check_answer_label).to eq("Does the property have any monthly leasehold charges?")
   end
 
   it "has the correct type" do
