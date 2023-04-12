@@ -122,8 +122,6 @@ private
 
   def successful_redirect_path
     if is_referrer_check_answers?
-      page_ids = form.subsection_for_page(@page).pages.map(&:id)
-      page_index = page_ids.index(@page.id)
       next_page_id = form.next_page_id(@page, @log, current_user)
       next_page = form.get_page(next_page_id)
       previous_page = form.previous_page_id(@page, @log, current_user)
