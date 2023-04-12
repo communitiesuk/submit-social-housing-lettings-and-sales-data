@@ -80,7 +80,7 @@ module LocationsHelper
 
   def location_creation_success_notice(location)
     if location.confirmed
-      "#{location.postcode} #{location.startdate.blank? || location.startdate < Time.zone.now ? 'has been' : 'will be'} added to this scheme"
+      "#{location.postcode} #{location.startdate.blank? || location.startdate.before?(Time.zone.now) ? 'has been' : 'will be'} added to this scheme"
     end
   end
 
