@@ -1478,6 +1478,40 @@ RSpec.describe Imports::SalesLogsImportService do
           expect(sales_log&.jointmore).to eq(3)
         end
       end
+
+      context "when mscharge is 0" do
+        let(:sales_log_id) { "shared_ownership_sales_log" }
+
+        before do
+          sales_log_xml.at_xpath("//xmlns:Q29MonthlyCharges").content = "0"
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets has_mscharge to no" do
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.has_mscharge).to be(0)
+          expect(sales_log&.mscharge).to be(nil)
+        end
+      end
+
+      context "when mscharge is more than 0" do
+        let(:sales_log_id) { "shared_ownership_sales_log" }
+
+        before do
+          sales_log_xml.at_xpath("//xmlns:Q29MonthlyCharges").content = "100"
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "sets has_mscharge to yes" do
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.has_mscharge).to be(1)
+          expect(sales_log&.mscharge).to eq(100)
+        end
+      end
     end
   end
 end
