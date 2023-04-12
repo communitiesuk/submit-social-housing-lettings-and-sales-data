@@ -18,6 +18,7 @@ class MergeController < ApplicationController
     @answer_options = answer_options
     @merge = Merge.new(form_params)
     @merging_organisations_list = Organisation.where(id: @merge.merging_organisations)
+    @organisation = Organisation.find(params[:id])
   end
 
   def answer_options

@@ -23,11 +23,11 @@
       <%= table.body do |body| %>
         <%= body.row do |row| %>
           <% row.cell(text: merging_organisation.name) %>
-          <% if current_user.data_coordinator? || current_user.support? %>
-            <% row.cell(html_attributes: {
-              scope: "row",
-              class: "govuk-!-text-align-right",
-            }) do %>
+          <% row.cell(html_attributes: {
+            scope: "row",
+            class: "govuk-!-text-align-right",
+          }) do %>
+            <% if @organisation.id != merging_organisation.id %>
               <%= govuk_link_to("Remove", merge_organisations_organisation_path) %>
             <% end %>
           <% end %>

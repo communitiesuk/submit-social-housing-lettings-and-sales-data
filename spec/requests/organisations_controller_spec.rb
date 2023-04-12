@@ -489,6 +489,10 @@ RSpec.describe OrganisationsController, type: :request do
                 expect(page).to have_css("table tr", text: organisation.name)
                 expect(page).not_to have_css("table tr", text: unauthorised_organisation.name)
               end
+
+              it "does not have a remove link" do
+                expect(page).not_to have_link("Remove")
+              end
             end
 
             context "and the page is loaded after adding a new merging organisation" do
@@ -497,6 +501,10 @@ RSpec.describe OrganisationsController, type: :request do
               it "shows current organisation and added organisation in the list of merging organisations" do
                 expect(page).to have_css("table tr", text: organisation.name)
                 expect(page).to have_css("table tr", text: unauthorised_organisation.name)
+              end
+
+              it "has a remove link" do
+                expect(page).to have_link("Remove", href: "/organisations/#{organisation.id}/merge/organisations")
               end
             end
           end
