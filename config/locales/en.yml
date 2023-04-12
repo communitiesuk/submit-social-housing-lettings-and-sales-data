@@ -283,7 +283,7 @@ en:
             general_needs: "Enter a value for the support charge between £0 and £60 per week if the landlord is a local authority and it is a general needs letting"
             supported_housing: "Enter a value for the support charge between £0 and £120 per week if the landlord is a local authority and it is a supported housing letting"
       ecstat:
-        over_hard_max: "Net income of %{hard_max} per week is too high for given the tenant’s working situation"
+        over_hard_max: "Net income of %{hard_max} per week is too high given the tenant’s working situation"
       brent:
         below_hard_min: "Rent is below the absolute minimum expected for a property of this type. Please check the rent, rent period, local authority and (if general needs) number of bedrooms"
         above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type. Please check the rent, rent period, local authority and (if general needs) number of bedrooms"
