@@ -15,7 +15,7 @@ module TasklistHelper
     if subsection.pages.first.routed_to?(log, current_user)
       subsection.pages.first.id
     else
-      log.form.next_page(subsection.pages.first, log, current_user)
+      log.form.next_page_id(subsection.pages.first, log, current_user)
     end
   end
 

@@ -61,55 +61,54 @@ class Form
     subsections.find { |s| s.pages.find { |p| p.id == page.id } }
   end
 
-  def next_page(page, log, current_user)
+  def next_page_id(page, log, current_user)
     return page.next_unresolved_page_id || :check_answers if log.unresolved
 
     page_ids = subsection_for_page(page).pages.map(&:id)
     page_index = page_ids.index(page.id)
     page_id = if page.interruption_screen? && log[page.questions[0].id] == 1 && page.routed_to?(log, current_user)
-                previous_page(page, log, current_user)
+                previous_page_id(page, log, current_user)
               else
                 page_ids[page_index + 1]
               end
-    nxt_page = get_page(page_id)
+    next_page = get_page(page_id)
 
-    return :check_answers if nxt_page.nil?
-    return nxt_page.id if nxt_page.routed_to?(log, current_user)
+    return :check_answers if next_page.nil?
+    return next_page.id if next_page.routed_to?(log, current_user)
 
-    next_page(nxt_page, log, current_user)
+    next_page_id(next_page, log, current_user)
   end
 
   def next_page_redirect_path(page, log, current_user)
-    nxt_page = next_page(page, log, current_user)
-    if nxt_page == :check_answers
+    next_page_id = next_page_id(page, log, current_user)
+    if next_page_id == :check_answers
       "#{type}_log_#{subsection_for_page(page).id}_check_answers_path"
     else
-      "#{type}_log_#{nxt_page}_path"
+      "#{type}_log_#{next_page_id}_path"
     end
   end
 
-  def previous_page(page, log, current_user)
+  def previous_page_id(page, log, current_user)
     page_ids = subsection_for_page(page).pages.map(&:id)
     page_index = page_ids.index(page.id)
-    page_id = if page_index.zero?
-                :check_answers
-              else
-                page_ids[page_index - 1]
-              end
-    prvs_page = get_page(page_id)
+    return :tasklist if page_index.zero?
 
-    return :check_answers if prvs_page.nil?
-    return prvs_page.id if prvs_page.routed_to?(log, current_user)
+    page_id = page_ids[page_index - 1]
+    previous_page = get_page(page_id)
 
-    previous_page(prvs_page, log, current_user)
+    return previous_page.id if previous_page.routed_to?(log, current_user)
+
+    previous_page_id(previous_page, log, current_user)
   end
 
-  def previous_page_redirect_path(page, log, current_user)
-    previous_page = previous_page(page, log, current_user)
-    if previous_page == :check_answers
+  def previous_page_redirect_path(page, log, current_user, referrer)
+    previous_page_id = previous_page_id(page, log, current_user)
+    if referrer == "check_answers"
       "#{type}_log_#{subsection_for_page(page).id}_check_answers_path"
+    elsif previous_page_id == :tasklist
+      "#{type}_log_path"
     else
-      "#{type}_log_#{previous_page}_path"
+      "#{type}_log_#{previous_page_id}_path"
     end
   end
 
