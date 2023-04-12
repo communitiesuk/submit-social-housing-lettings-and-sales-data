@@ -1,12 +1,12 @@
 <% title = "Tell us if your organisation is merging" %>
 <% content_for :title, title %>
 
-<%= govuk_back_link href: organisation_path %>
+<%= govuk_back_link href: merge_start_organisation_path %>
 <h2 class="govuk-heading-l">Tell us if your organisation is merging</h2>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-   <p class="govuk-body">Start typing to search for your managing agent</p>
+   <p class="govuk-body">Which organisations are merging?</p>
 
 <%= form_with model: @merge, url: merge_organisations_organisation_path, method: :patch do |f| %>
   <%= f.govuk_error_summary %>
@@ -35,7 +35,10 @@
       <% end %>
     <% end %>
   <% end %>
+   <%= govuk_details(summary_text: "Can't find the managing agent you're looking for?") do %>
+      <p>List other organisations that are part of the merge but not registered on CORE.</li>
+  <% end %>
 <% end %>
 
-<%= govuk_button_link_to "Continue", merge_organisations_organisation_path, button: true %>
+<%= govuk_button_link_to "Continue", "#", button: true %>
 </div>

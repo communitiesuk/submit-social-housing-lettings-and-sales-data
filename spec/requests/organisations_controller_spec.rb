@@ -443,20 +443,62 @@ RSpec.describe OrganisationsController, type: :request do
 
       describe "#merge" do
         context "with an organisation that the user belongs to" do
-          before do
-            get "/organisations/#{organisation.id}/merge/start", headers:, params: {}
+          context "when on the start merge page" do
+            before do
+              get "/organisations/#{organisation.id}/merge/start", headers:, params: {}
+            end
+
+            it "shows the correct content" do
+              expect(page).to have_content("Tell us if your organisation is merging")
+            end
+
+            it "has a correct back link" do
+              expect(page).to have_link("Back", href: "/organisations/#{organisation.id}")
+            end
+
+            it "has a correct start now button" do
+              expect(page).to have_link("Start now", href: "/organisations/#{organisation.id}/merge/organisations")
+            end
           end
 
-          it "shows the correct content" do
-            expect(page).to have_content("Tell us if your organisation is merging")
-          end
+          context "when on the merging organisations page" do
+            let(:params) { {} }
 
-          it "has a correct back link" do
-            expect(page).to have_link("Back", href: "/organisations/#{organisation.id}")
-          end
+            before do
+              organisation.update!(name: "Name 1")
+              unauthorised_organisation.update!(name: "Name 2")
+              get "/organisations/#{organisation.id}/merge/organisations", headers:, params:
+            end
 
-          it "has a correct start now button" do
-            expect(page).to have_link("Start now", href: "/organisations/#{organisation.id}/merge/organisations")
+            it "shows the correct content" do
+              expect(page).to have_content("Which organisations are merging?")
+            end
+
+            it "has a correct back link" do
+              expect(page).to have_link("Back", href: "/organisations/#{organisation.id}/merge/start")
+            end
+
+            it "has a correct Continue button" do
+              expect(page).to have_link("Continue", href: "#")
+            end
+
+            context "and the page is loaded for the first time" do
+              let(:params) { { merge: { merging_organisation: nil } } }
+
+              it "shows current organisation in the list of merging organisations" do
+                expect(page).to have_css("table tr", text: organisation.name)
+                expect(page).not_to have_css("table tr", text: unauthorised_organisation.name)
+              end
+            end
+
+            context "and the page is loaded after adding a new merging organisation" do
+              let(:params) { { merge: { merging_organisations: organisation.id, merging_organisation: unauthorised_organisation.id } } }
+
+              it "shows current organisation and added organisation in the list of merging organisations" do
+                expect(page).to have_css("table tr", text: organisation.name)
+                expect(page).to have_css("table tr", text: unauthorised_organisation.name)
+              end
+            end
           end
         end
 
