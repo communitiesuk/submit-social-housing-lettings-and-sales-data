@@ -21,7 +21,7 @@ RSpec.describe Form, type: :model do
     let(:value_check_previous_page) { form.get_page("net_income_value_check") }
 
     it "returns the next page given the previous" do
-      expect(form.next_page_id(previous_page, lettings_log, user)).to eq("person_1_gender")
+      expect(form.next_page_id(previous_page_id, lettings_log, user)).to eq("person_1_gender")
     end
 
     context "when the current page is a value check page" do
@@ -46,20 +46,19 @@ RSpec.describe Form, type: :model do
   describe ".previous_page" do
     context "when the current page is not a value check page" do
       let!(:subsection) { form.get_subsection("conditional_question") }
-      let!(:page_ids) { subsection.pages.map(&:id) }
 
       before do
         lettings_log.preg_occ = 2
       end
 
       it "returns the previous page if the page is routed to" do
-        page_index = page_ids.index("conditional_question_no_second_page")
-        expect(form.previous_page_id(page_ids, page_index, lettings_log, user)).to eq("conditional_question_no_page")
+        page = subsection.pages.find { |p| p.id == "conditional_question_no_second_page" }
+        expect(form.previous_page_id(page, lettings_log, user)).to eq("conditional_question_no_page")
       end
 
       it "returns the page before the previous one if the previous page is not routed to" do
-        page_index = page_ids.index("conditional_question_no_page")
-        expect(form.previous_page_id(page_ids, page_index, lettings_log, user)).to eq("conditional_question")
+        page = subsection.pages.find { |p| p.id == "conditional_question_no_page" }
+        expect(form.previous_page_id(page, lettings_log, user)).to eq("conditional_question")
       end
     end
   end
@@ -70,7 +69,7 @@ RSpec.describe Form, type: :model do
     let(:previous_conditional_page) { form.get_page("conditional_question") }
 
     it "returns a correct page path if there is no conditional routing" do
-      expect(form.next_page_redirect_path(previous_page, lettings_log, user)).to eq("lettings_log_net_income_uc_proportion_path")
+      expect(form.next_page_redirect_path(previous_page_id, lettings_log, user)).to eq("lettings_log_net_income_uc_proportion_path")
     end
 
     it "returns a check answers page if previous page is the last page" do
