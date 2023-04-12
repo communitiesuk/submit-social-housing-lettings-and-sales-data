@@ -3,7 +3,7 @@ FactoryBot.define do
     created_by { FactoryBot.create(:user) }
     owning_organisation { created_by.organisation }
     managing_organisation { created_by.organisation }
-    trait :about_completed do
+    trait :setup_completed do
       renewal { 0 }
       needstype { 1 }
       rent_type { 1 }

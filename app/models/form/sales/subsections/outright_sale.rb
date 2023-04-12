@@ -26,7 +26,7 @@ class Form::Sales::Subsections::OutrightSale < ::Form::Subsection
   end
 
   def displayed_in_tasklist?(log)
-    log.ownershipsch == 3
+    log.ownershipsch.nil? || log.ownershipsch == 3
   end
 
   def leasehold_charge_pages

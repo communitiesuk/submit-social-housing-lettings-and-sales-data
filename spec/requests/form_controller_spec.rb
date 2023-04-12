@@ -15,7 +15,7 @@ RSpec.describe FormController, type: :request do
   let(:setup_complete_lettings_log) do
     create(
       :lettings_log,
-      :about_completed,
+      :setup_completed,
       status: 1,
       created_by: user,
     )
@@ -203,7 +203,7 @@ RSpec.describe FormController, type: :request do
       context "with form pages" do
         context "when forms exist for multiple years" do
           let(:lettings_log_year_1) { create(:lettings_log, owning_organisation: organisation, created_by: user) }
-          let(:lettings_log_year_2) { create(:lettings_log, :about_completed, startdate: Time.zone.local(2022, 5, 1), owning_organisation: organisation, created_by: user) }
+          let(:lettings_log_year_2) { create(:lettings_log, :setup_completed, startdate: Time.zone.local(2022, 5, 1), owning_organisation: organisation, created_by: user) }
 
           before do
             Timecop.freeze(Time.zone.local(2021, 5, 1))
