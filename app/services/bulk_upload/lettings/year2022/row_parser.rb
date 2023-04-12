@@ -339,9 +339,11 @@ class BulkUpload::Lettings::Year2022::RowParser
   end
 
   def valid?
+    return @valid if @valid
+
     errors.clear
 
-    return true if blank_row?
+    return @valid = true if blank_row?
 
     super(:before_log)
     before_errors = errors.dup
@@ -361,7 +363,7 @@ class BulkUpload::Lettings::Year2022::RowParser
       end
     end
 
-    errors.blank?
+    @valid = errors.blank?
   end
 
   def blank_row?
