@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Questions::LeaseholdChargesKnown, type: :model do
+RSpec.describe Form::Sales::Questions::HasLeaseholdCharges, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page, ownershipsch: 1) }
 
   let(:question_id) { nil }

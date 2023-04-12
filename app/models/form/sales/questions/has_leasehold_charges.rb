@@ -1,4 +1,4 @@
-class Form::Sales::Questions::LeaseholdChargesKnown < ::Form::Question
+class Form::Sales::Questions::HasLeaseholdCharges < ::Form::Question
   def initialize(id, hsh, subsection, ownershipsch:)
     super(id, hsh, subsection)
     @id = "has_mscharge"
