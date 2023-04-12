@@ -5,6 +5,7 @@ RSpec.describe BulkUploadErrorRowComponent, type: :component do
     let(:row) { rand(9_999) }
     let(:tenant_code) { SecureRandom.hex(4) }
     let(:property_ref) { SecureRandom.hex(4) }
+    let(:purchaser_code) { nil }
     let(:field) { :field_134 }
     let(:error) { "some error" }
     let(:bulk_upload) { create(:bulk_upload, :lettings) }
@@ -16,6 +17,7 @@ RSpec.describe BulkUploadErrorRowComponent, type: :component do
           row:,
           tenant_code:,
           property_ref:,
+          purchaser_code:,
           field:,
           error:,
         ),
@@ -47,6 +49,33 @@ RSpec.describe BulkUploadErrorRowComponent, type: :component do
       expected = "Is this letting a renewal?"
       result = render_inline(described_class.new(bulk_upload_errors:))
       expect(result).to have_content(expected)
+    end
+
+    context "when tenant_code not present" do
+      let(:tenant_code) { nil }
+
+      it "does not render tenant code label" do
+        result = render_inline(described_class.new(bulk_upload_errors:))
+        expect(result).not_to have_content("Tenant code")
+      end
+    end
+
+    context "when property_ref not present" do
+      let(:property_ref) { nil }
+
+      it "does not render the property_ref label" do
+        result = render_inline(described_class.new(bulk_upload_errors:))
+        expect(result).not_to have_content("Property reference")
+      end
+    end
+
+    context "when purchaser_code not present" do
+      let(:bulk_upload) { create(:bulk_upload, :sales) }
+
+      it "does not render the purchaser_code label" do
+        result = render_inline(described_class.new(bulk_upload_errors:))
+        expect(result).not_to have_content("Purchaser code")
+      end
     end
 
     context "when multiple errors for a row" do

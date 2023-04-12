@@ -1,9 +1,9 @@
 <div class="x-govuk-summary-card govuk-!-margin-bottom-6">
   <div class="x-govuk-summary-card__header">
     <% if lettings? %>
-      <h3 class="x-govuk-summary-card__title"><strong>Row <%= row %></strong> <span class="govuk-!-margin-left-3">Tenant code: <%= tenant_code %></span> <span class="govuk-!-margin-left-3">Property reference: <%= property_ref %></span></h3>
+      <h3 class="x-govuk-summary-card__title"><strong>Row <%= row %></strong> <%= tenant_code_html %> <%= property_ref_html %></h3>
     <% else %>
-      <h3 class="x-govuk-summary-card__title"><strong>Row <%= row %></strong> <span class="govuk-!-margin-left-3">Purchaser code: <%= purchaser_code %></span></h3>
+      <h3 class="x-govuk-summary-card__title"><strong>Row <%= row %></strong> <%= purchaser_code_html %></h3>
     <% end %>
   </div>
 

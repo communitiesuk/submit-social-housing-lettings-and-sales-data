@@ -15,12 +15,36 @@ class BulkUploadErrorRowComponent < ViewComponent::Base
     bulk_upload_errors.first.tenant_code
   end
 
+  def tenant_code_html
+    return if tenant_code.blank?
+
+    content_tag :span, class: "govuk-!-margin-left-3" do
+      "Tenant code: #{tenant_code}"
+    end
+  end
+
   def purchaser_code
     bulk_upload_errors.first.purchaser_code
   end
 
+  def purchaser_code_html
+    return if purchaser_code.blank?
+
+    content_tag :span, class: "govuk-!-margin-left-3" do
+      "Purchaser code: #{purchaser_code}"
+    end
+  end
+
   def property_ref
     bulk_upload_errors.first.property_ref
+  end
+
+  def property_ref_html
+    return if property_ref.blank?
+
+    content_tag :span, class: "govuk-!-margin-left-3" do
+      "Property reference: #{property_ref}"
+    end
   end
 
   def question_for_field(field)
