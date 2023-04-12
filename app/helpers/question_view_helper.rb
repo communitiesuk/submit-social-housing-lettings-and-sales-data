@@ -30,7 +30,7 @@ module QuestionViewHelper
   def answer_option_hint(resource)
     return unless resource.instance_of?(Scheme)
 
-    [resource.primary_client_group, resource.secondary_client_group].filter(&:present?).join(", ")
+    [resource.primary_client_group, resource.secondary_client_group].compact.join(", ")
   end
 
 private
