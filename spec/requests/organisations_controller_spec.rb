@@ -230,7 +230,7 @@ RSpec.describe OrganisationsController, type: :request do
 
           it "displays a link to merge organisations" do
             expect(page).to have_content("Is your organisation merging with another?")
-            expect(page).to have_link("Let us know using this form", href: "/organisations/#{organisation.id}/merge")
+            expect(page).to have_link("Let us know using this form", href: "/organisations/#{organisation.id}/merge-request")
           end
         end
 
@@ -441,10 +441,10 @@ RSpec.describe OrganisationsController, type: :request do
         end
       end
 
-      describe "#merge" do
+      fdescribe "#merge" do
         context "with an organisation that the user belongs to" do
           before do
-            get "/organisations/#{organisation.id}/merge", headers:, params: {}
+            get "/organisations/#{organisation.id}/merge-request", headers:, params: {}
           end
 
           it "shows the correct content" do
@@ -456,13 +456,13 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "has a correct start no button" do
-            expect(page).to have_link("Start now", href: "#")
+            expect(page).to have_link("Start now", href: "/merge-request/new")
           end
         end
 
         context "with organisation that are not in scope for the user, i.e. that they do not belong to" do
           before do
-            get "/organisations/#{unauthorised_organisation.id}/merge", headers:, params: {}
+            get "/organisations/#{unauthorised_organisation.id}/merge-request", headers:, params: {}
           end
 
           it "returns not found 404 from org details route" do

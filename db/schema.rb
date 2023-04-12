@@ -354,6 +354,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_12_143245) do
     t.string "collection"
   end
 
+  create_table "merge_requests", force: :cascade do |t|
+    t.integer "requesting_organisation_id"
+    t.integer "merging_organisations", array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "organisation_relationships", force: :cascade do |t|
     t.integer "child_organisation_id"
     t.integer "parent_organisation_id"

@@ -137,6 +137,10 @@ class OrganisationsController < ApplicationController
     end
   end
 
+  def merge_request
+    @merge_request = MergeRequest.new
+  end
+
 private
 
   def org_params
