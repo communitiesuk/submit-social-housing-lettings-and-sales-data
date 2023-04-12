@@ -248,15 +248,15 @@ en:
       benefits:
         part_or_full_time: "Answer cannot be ‘all’ for income from Universal Credit, state pensions or benefits if the tenant or their partner works part-time or full-time"
       earnings:
-        over_hard_max: "Net income cannot be greater than £%{hard_max} per week given the tenant’s working situation"
-        under_hard_min: "Net income cannot be less than £%{hard_min} per week given the tenant’s working situation"
+        over_hard_max: "Net income cannot be greater than %{hard_max} per week given the tenant’s working situation"
+        under_hard_min: "Net income cannot be less than %{hard_min} per week given the tenant’s working situation"
         freq_missing: "Select how often the household receives income"
         earnings_missing: "Enter how much income the household has in total"
       income:
-        over_hard_max_for_london: "Income must not exceed £90,000 for properties within London local authorities"
-        over_hard_max_for_outside_london: "Income must not exceed £80,000 for properties outside London local authorities"
-        combined_over_hard_max_for_london: "Combined income must not exceed £90,000 for properties within London local authorities"
-        combined_over_hard_max_for_outside_london: "Combined income must not exceed £80,000 for properties outside London local authorities"
+        over_hard_max_for_london: "Income must not exceed £90,000.00 for properties within London local authorities"
+        over_hard_max_for_outside_london: "Income must not exceed £80,000.00 for properties outside London local authorities"
+        combined_over_hard_max_for_london: "Combined income must not exceed £90,000.00 for properties within London local authorities"
+        combined_over_hard_max_for_outside_london: "Combined income must not exceed £80,000.00 for properties outside London local authorities"
         child_has_income: "Child's income must be £0"
       negative_currency: "Enter an amount above 0"
       rent:
@@ -389,6 +389,8 @@ en:
       housingneeds_type:
         only_one_option_permitted: "Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected"
       housingneeds:
+        invalid:
+          If somebody in the household has disabled access needs, they must have the access needs listed, or other access needs
         no_disabled_needs_conjunction: "No disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs"
         dont_know_disabled_needs_conjunction: "Don’t know disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs"
         no_and_dont_know_disabled_needs_conjunction: "No disabled access needs and don’t know disabled access needs cannot be selected together"
@@ -456,6 +458,7 @@ en:
       toggle_date:
         not_selected: "Select one of the options"
         invalid: "Enter a valid day, month and year"
+        before_creation: "The scheme cannot be deactivated before %{date}, the start of the collection year when it was created"
         out_of_range: "The date must be on or after the %{date}"
       reactivation:
         before_deactivation: "This scheme was deactivated on %{date}. The reactivation date must be on or after deactivation date"
@@ -474,6 +477,7 @@ en:
       toggle_date:
         not_selected: "Select one of the options"
         invalid: "Enter a valid day, month and year"
+        before_creation: "The location cannot be deactivated before %{date}, the date when it was first available"
         out_of_range: "The date must be on or after the %{date}"
       reactivation:
         before_deactivation: "This location was deactivated on %{date}. The reactivation date must be on or after deactivation date"
@@ -496,9 +500,9 @@ en:
         must_be_after_hodate: "Sale completion date must be after practical completion or handover date"
       previous_property_type:
         property_type_bedsit: "A bedsit cannot have more than 1 bedroom"
-      discounted_ownership_value: "Mortgage, deposit, and grant total must equal £%{value_with_discount}"
+      discounted_ownership_value: "Mortgage, deposit, and grant total must equal %{value_with_discount}"
       monthly_rent:
-        higher_than_expected: "Basic monthly rent must be between £0 and £9,999"
+        higher_than_expected: "Basic monthly rent must be between £0.00 and £9,999.00"
 
   soft_validations:
     net_income:
@@ -594,10 +598,10 @@ en:
       postcode: "For example, SW1P 4DF."
       name: "This is how you refer to this location within your organisation"
       units: "A unit is the space being let. For example, the property might be a block of flats and the unit would be the specific flat being let. A unit can also be a bedroom in a shared house or flat. Do not include spaces used for staff."
-      toggle_active: "If the date is before %{date}, select ‘From the start of the current collection period’ because the previous period has now closed."
+      toggle_active: "If the date is before %{date}, select ‘From the start of the open collection period’ because the previous period has now closed."
       startdate: "For example, 27 3 2021"
     scheme:
-      toggle_active: "If the date is before %{date}, select ‘From the start of the current collection period’ because the previous period has now closed."
+      toggle_active: "If the date is before %{date}, select ‘From the start of the open collection period’ because the previous period has now closed."
     bulk_upload:
       needstype: "General needs housing includes both self-contained and shared housing without support or specific adaptations. Supported housing can include direct access hostels, group homes, residential care and nursing homes."
     offered: "Do not include the offer that led to this letting. This is after the last tenancy ended. If the property is being offered for let for the first time, enter 0."

@@ -246,11 +246,13 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
           it "adds an error if mortgage, deposit and grant total does not equal market value" do
             record.grant = 3_000
             sale_information_validator.validate_discounted_ownership_value(record)
-            expect(record.errors[:mortgage]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "30000.00"))
-            expect(record.errors[:deposit]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "30000.00"))
-            expect(record.errors[:grant]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "30000.00"))
-            expect(record.errors[:value]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "30000.00"))
-            expect(record.errors[:discount]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "30000.00"))
+            expected_message = ["Mortgage, deposit, and grant total must equal £30,000.00"]
+
+            expect(record.errors[:mortgage]).to eq(expected_message)
+            expect(record.errors[:deposit]).to eq(expected_message)
+            expect(record.errors[:grant]).to eq(expected_message)
+            expect(record.errors[:value]).to eq(expected_message)
+            expect(record.errors[:discount]).to eq(expected_message)
           end
 
           it "does not add an error if mortgage, deposit and grant total equals market value" do
@@ -280,11 +282,14 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
           it "adds an error if mortgage and deposit total does not equal market value - discount" do
             record.discount = 10
             sale_information_validator.validate_discounted_ownership_value(record)
-            expect(record.errors[:mortgage]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "27000.00"))
-            expect(record.errors[:deposit]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "27000.00"))
-            expect(record.errors[:grant]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "27000.00"))
-            expect(record.errors[:value]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "27000.00"))
-            expect(record.errors[:discount]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "27000.00"))
+
+            expected_message = ["Mortgage, deposit, and grant total must equal £27,000.00"]
+
+            expect(record.errors[:mortgage]).to eq(expected_message)
+            expect(record.errors[:deposit]).to eq(expected_message)
+            expect(record.errors[:grant]).to eq(expected_message)
+            expect(record.errors[:value]).to eq(expected_message)
+            expect(record.errors[:discount]).to eq(expected_message)
           end
 
           it "does not add an error if mortgage and deposit total equals market value - discount" do
@@ -301,11 +306,14 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
         it "adds an error if mortgage and deposit total does not equal market value" do
           record.deposit = 2_000
           sale_information_validator.validate_discounted_ownership_value(record)
-          expect(record.errors[:mortgage]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "30000.00"))
-          expect(record.errors[:deposit]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "30000.00"))
-          expect(record.errors[:grant]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "30000.00"))
-          expect(record.errors[:value]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "30000.00"))
-          expect(record.errors[:discount]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "30000.00"))
+
+          expected_message = ["Mortgage, deposit, and grant total must equal £30,000.00"]
+
+          expect(record.errors[:mortgage]).to eq(expected_message)
+          expect(record.errors[:deposit]).to eq(expected_message)
+          expect(record.errors[:grant]).to eq(expected_message)
+          expect(record.errors[:value]).to eq(expected_message)
+          expect(record.errors[:discount]).to eq(expected_message)
         end
 
         it "does not add an error if mortgage and deposit total equals market value" do
@@ -334,11 +342,14 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
           it "adds an error if mortgage, grant and deposit total does not equal market value - discount" do
             record.mortgage = 10
             sale_information_validator.validate_discounted_ownership_value(record)
-            expect(record.errors[:mortgage]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "18000.00"))
-            expect(record.errors[:deposit]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "18000.00"))
-            expect(record.errors[:grant]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "18000.00"))
-            expect(record.errors[:value]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "18000.00"))
-            expect(record.errors[:discount]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "18000.00"))
+
+            expected_message = ["Mortgage, deposit, and grant total must equal £18,000.00"]
+
+            expect(record.errors[:mortgage]).to eq(expected_message)
+            expect(record.errors[:deposit]).to eq(expected_message)
+            expect(record.errors[:grant]).to eq(expected_message)
+            expect(record.errors[:value]).to eq(expected_message)
+            expect(record.errors[:discount]).to eq(expected_message)
           end
 
           it "does not add an error if mortgage, grant and deposit total equals market value - discount" do
@@ -354,11 +365,13 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
         it "adds an error if grant and deposit total does not equal market value - discount" do
           sale_information_validator.validate_discounted_ownership_value(record)
-          expect(record.errors[:mortgage]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "18000.00"))
-          expect(record.errors[:deposit]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "18000.00"))
-          expect(record.errors[:grant]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "18000.00"))
-          expect(record.errors[:value]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "18000.00"))
-          expect(record.errors[:discount]).to include(I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: "18000.00"))
+
+          expected_message = ["Mortgage, deposit, and grant total must equal £18,000.00"]
+          expect(record.errors[:mortgage]).to eq(expected_message)
+          expect(record.errors[:deposit]).to eq(expected_message)
+          expect(record.errors[:grant]).to eq(expected_message)
+          expect(record.errors[:value]).to eq(expected_message)
+          expect(record.errors[:discount]).to eq(expected_message)
         end
 
         it "does not add an error if mortgage, grant and deposit total equals market value - discount" do
