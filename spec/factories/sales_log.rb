@@ -92,7 +92,7 @@ FactoryBot.define do
       mortgageused { 1 }
       wchair { 1 }
       armedforcesspouse { 5 }
-      mscharge_known { 1 }
+      has_mscharge { 1 }
       mscharge { 100 }
       mortlen { 10 }
       pcodenk { 1 }

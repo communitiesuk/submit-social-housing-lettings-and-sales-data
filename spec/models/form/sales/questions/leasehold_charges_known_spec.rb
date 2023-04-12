@@ -12,7 +12,7 @@ RSpec.describe Form::Sales::Questions::LeaseholdChargesKnown, type: :model do
   end
 
   it "has the correct id" do
-    expect(question.id).to eq("mscharge_known")
+    expect(question.id).to eq("has_mscharge")
   end
 
   it "has the correct header" do
@@ -52,7 +52,7 @@ RSpec.describe Form::Sales::Questions::LeaseholdChargesKnown, type: :model do
     expect(question.hidden_in_check_answers).to eq({
       "depends_on" => [
         {
-          "mscharge_known" => 1,
+          "has_mscharge" => 1,
         },
       ],
     })
