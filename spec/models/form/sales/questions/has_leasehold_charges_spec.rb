@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Questions::LeaseholdChargesKnown, type: :model do
+RSpec.describe Form::Sales::Questions::HasLeaseholdCharges, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page, ownershipsch: 1) }
 
   let(:question_id) { nil }
@@ -12,15 +12,15 @@ RSpec.describe Form::Sales::Questions::LeaseholdChargesKnown, type: :model do
   end
 
   it "has the correct id" do
-    expect(question.id).to eq("mscharge_known")
+    expect(question.id).to eq("has_mscharge")
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Do you know the monthly leasehold charges for the property?")
+    expect(question.header).to eq("Does the property have any monthly leasehold charges?")
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Monthly leasehold charges known?")
+    expect(question.check_answer_label).to eq("Does the property have any monthly leasehold charges?")
   end
 
   it "has the correct type" do
@@ -52,7 +52,7 @@ RSpec.describe Form::Sales::Questions::LeaseholdChargesKnown, type: :model do
     expect(question.hidden_in_check_answers).to eq({
       "depends_on" => [
         {
-          "mscharge_known" => 1,
+          "has_mscharge" => 1,
         },
       ],
     })

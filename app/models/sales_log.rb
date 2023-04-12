@@ -292,8 +292,8 @@ class SalesLog < Log
     companybuy == 1
   end
 
-  def monthly_leasehold_charges_unknown?
-    mscharge_known&.zero?
+  def no_monthly_leasehold_charges?
+    has_mscharge&.zero?
   end
 
   def buyers_age_for_old_persons_shared_ownership_invalid?

@@ -1,7 +1,7 @@
 module DerivedVariables::SalesLogVariables
   def set_derived_fields!
     self.ethnic = 17 if ethnic_refused?
-    self.mscharge = nil if monthly_leasehold_charges_unknown?
+    self.mscharge = nil if no_monthly_leasehold_charges?
     if exdate.present?
       self.exday = exdate.day
       self.exmonth = exdate.month
