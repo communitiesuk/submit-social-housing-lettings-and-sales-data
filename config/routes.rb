@@ -126,6 +126,7 @@ Rails.application.routes.draw do
   resources :merge_requests, path: "/merge-request" do   
     post "merge-request", to: "merge_request#create_merge_request"
     get "organisations", to: "merge_requests#organisations"
+    patch "organisations", to: "merge_requests#update_organisations"
   end
 
   resources :lettings_logs, path: "/lettings-logs" do
