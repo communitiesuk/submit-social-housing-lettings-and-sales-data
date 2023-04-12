@@ -52,15 +52,23 @@ RSpec.describe Form::Lettings::Questions::CreatedById, type: :model do
   end
 
   context "when the current user is support" do
-    let(:support_user) { FactoryBot.build(:user, :support) }
+    let(:support_user) { build(:user, :support) }
 
     it "is shown in check answers" do
       expect(question.hidden_in_check_answers?(nil, support_user)).to be false
     end
   end
 
+  context "when the current user is daa coordinator" do
+    let(:user) { build(:user, :data_coordinator) }
+
+    it "is shown in check answers" do
+      expect(question.hidden_in_check_answers?(nil, user)).to be false
+    end
+  end
+
   context "when the current user is not support" do
-    let(:user) { FactoryBot.build(:user) }
+    let(:user) { build(:user) }
 
     it "is not shown in check answers" do
       expect(question.hidden_in_check_answers?(nil, user)).to be true

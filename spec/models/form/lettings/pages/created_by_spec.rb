@@ -22,9 +22,15 @@ RSpec.describe Form::Lettings::Pages::CreatedBy, type: :model do
       end
     end
 
+    context "when data coordinator" do
+      it "is shown" do
+        expect(page.routed_to?(nil, create(:user, :data_coordinator))).to eq(true)
+      end
+    end
+
     context "when not support" do
       it "is not shown" do
-        expect(page.routed_to?(nil, create(:user, :data_coordinator))).to eq(false)
+        expect(page.routed_to?(nil, create(:user))).to eq(false)
       end
     end
   end

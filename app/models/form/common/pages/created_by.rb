@@ -11,6 +11,9 @@ class Form::Common::Pages::CreatedBy < ::Form::Page
   end
 
   def routed_to?(_log, current_user)
-    !!current_user&.support?
+    return true if current_user&.support?
+    return true if current_user&.data_coordinator?
+
+    false
   end
 end

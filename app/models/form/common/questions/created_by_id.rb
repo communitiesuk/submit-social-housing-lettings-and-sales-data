@@ -11,8 +11,8 @@ class Form::Common::Questions::CreatedById < ::Form::Question
     answer_opts = { "" => "Select an option" }
     return answer_opts unless ActiveRecord::Base.connected?
 
-    User.select(:id, :name).each_with_object(answer_opts) do |user, hsh|
-      hsh[user.id] = user.name
+    User.select(:id, :name, :email).each_with_object(answer_opts) do |user, hsh|
+      hsh[user.id] = "#{user.name} (#{user.email})"
       hsh
     end
   end
@@ -31,7 +31,10 @@ class Form::Common::Questions::CreatedById < ::Form::Question
   end
 
   def hidden_in_check_answers?(_log, current_user)
-    !current_user.support?
+    return false if current_user.support?
+    return false if current_user.data_coordinator?
+
+    true
   end
 
   def derived?

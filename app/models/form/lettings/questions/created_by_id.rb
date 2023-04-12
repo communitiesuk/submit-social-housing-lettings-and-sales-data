@@ -34,7 +34,10 @@ class Form::Lettings::Questions::CreatedById < ::Form::Question
   end
 
   def hidden_in_check_answers?(_log, current_user)
-    !current_user.support?
+    return false if current_user.support?
+    return false if current_user.data_coordinator?
+
+    true
   end
 
   def derived?
