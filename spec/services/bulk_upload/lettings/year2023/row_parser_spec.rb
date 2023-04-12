@@ -70,6 +70,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             DPA: {
               "POSTCODE": "EC1N 2TD",
               "POST_TOWN": "Newcastle",
+              "ORGANISATION_NAME": "Some place",
             },
           },
         ],
@@ -228,7 +229,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           }
         end
 
-        xit "returns true" do
+        it "returns true" do
           expect(parser).to be_valid
         end
 
@@ -271,6 +272,40 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
               :field_132, # tcharge
             ].each do |field|
               expect(parser.errors[field]).to include(error_message)
+            end
+          end
+        end
+
+        context "when a hidden log already exists in db" do
+          before do
+            parser.log.status = "pending"
+            parser.log.skip_update_status = true
+            parser.log.save!
+          end
+
+          it "is a valid row" do
+            expect(parser).to be_valid
+          end
+
+          it "does not add duplicate errors" do
+            parser.valid?
+
+            [
+              :field_1, # owning_organisation
+              :field_7, # startdate
+              :field_8, # startdate
+              :field_9, # startdate
+              :field_14, # propcode
+              :field_17, # location
+              :field_23, # postcode_full
+              :field_24, # postcode_full
+              :field_25, # postcode_full
+              :field_46, # age1
+              :field_47, # sex1
+              :field_50, # ecstat1
+              :field_132, # tcharge
+            ].each do |field|
+              expect(parser.errors[field]).to be_blank
             end
           end
         end

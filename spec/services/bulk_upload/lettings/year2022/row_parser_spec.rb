@@ -252,6 +252,39 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
             expect(parser.errors.as_json).to eq(expected_errors)
           end
         end
+
+        context "when a hidden log already exists in db" do
+          before do
+            parser.log.status = "pending"
+            parser.log.skip_update_status = true
+            parser.log.save!
+          end
+
+          it "is a valid row" do
+            expect(parser).to be_valid
+          end
+
+          it "does not add duplicate errors" do
+            parser.valid?
+
+            [
+              :field_5, # location
+              :field_12, # age1
+              :field_20, # sex1
+              :field_35, # ecstat1
+              :field_84, # tcharge
+              :field_96, # startdate
+              :field_97, # startdate
+              :field_98, # startdate
+              :field_100, # propcode
+              :field_108, # postcode_full
+              :field_109, # postcode_full
+              :field_111, # owning_organisation
+            ].each do |field|
+              expect(parser.errors[field]).to be_blank
+            end
+          end
+        end
       end
     end
 

@@ -401,7 +401,9 @@ class BulkUpload::Lettings::Year2023::RowParser
   end
 
   def log_already_exists?
-    LettingsLog.exists?(duplicate_check_fields.index_with { |field| log.public_send(field) })
+    @log_already_exists ||= LettingsLog
+      .where(status: %w[not_started in_progress completed])
+      .exists?(duplicate_check_fields.index_with { |field| log.public_send(field) })
   end
 
 private
