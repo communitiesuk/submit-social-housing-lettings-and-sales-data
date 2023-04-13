@@ -1,6 +1,6 @@
 class Form::Sales::Pages::Buyer2IncomeMaxValueCheck < ::Form::Page
-  def initialize(id, hsh, subsection)
-    super
+  def initialize(id, hsh, subsection, check_answers_card_number:)
+    super(id, hsh, subsection)
     @depends_on = [
       {
         "income2_over_soft_max?" => true,
@@ -17,11 +17,12 @@ class Form::Sales::Pages::Buyer2IncomeMaxValueCheck < ::Form::Page
       ],
     }
     @informative_text = {}
+    @check_answers_card_number = check_answers_card_number
   end
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::Buyer2IncomeValueCheck.new(nil, nil, self),
+      Form::Sales::Questions::Buyer2IncomeValueCheck.new(nil, nil, self, check_answers_card_number: @check_answers_card_number),
     ]
   end
 end

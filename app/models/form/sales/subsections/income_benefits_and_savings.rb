@@ -10,7 +10,7 @@ class Form::Sales::Subsections::IncomeBenefitsAndSavings < ::Form::Subsection
     @pages ||= [
       Form::Sales::Pages::Buyer1Income.new(nil, nil, self),
       Form::Sales::Pages::Buyer1IncomeMinValueCheck.new("buyer_1_income_min_value_check", nil, self),
-      Form::Sales::Pages::Buyer1IncomeMaxValueCheck.new("buyer_1_income_max_value_check", nil, self),
+      Form::Sales::Pages::Buyer1IncomeMaxValueCheck.new("buyer_1_income_max_value_check", nil, self, check_answers_card_number: 1),
       Form::Sales::Pages::CombinedIncomeMaxValueCheck.new("buyer_1_combined_income_max_value_check", nil, self, check_answers_card_number: 1),
       Form::Sales::Pages::MortgageValueCheck.new("buyer_1_income_mortgage_value_check", nil, self, 1),
       Form::Sales::Pages::Buyer1Mortgage.new(nil, nil, self),
@@ -18,7 +18,7 @@ class Form::Sales::Subsections::IncomeBenefitsAndSavings < ::Form::Subsection
       Form::Sales::Pages::Buyer2Income.new(nil, nil, self),
       Form::Sales::Pages::MortgageValueCheck.new("buyer_2_income_mortgage_value_check", nil, self, 2),
       Form::Sales::Pages::Buyer2IncomeMinValueCheck.new("buyer_2_income_min_value_check", nil, self),
-      Form::Sales::Pages::Buyer2IncomeMaxValueCheck.new("buyer_2_income_max_value_check", nil, self),
+      Form::Sales::Pages::Buyer2IncomeMaxValueCheck.new("buyer_2_income_max_value_check", nil, self, check_answers_card_number: 2),
       Form::Sales::Pages::CombinedIncomeMaxValueCheck.new("buyer_2_combined_income_max_value_check", nil, self, check_answers_card_number: 2),
       Form::Sales::Pages::Buyer2Mortgage.new(nil, nil, self),
       Form::Sales::Pages::MortgageValueCheck.new("buyer_2_mortgage_value_check", nil, self, 2),

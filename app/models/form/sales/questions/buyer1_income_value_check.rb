@@ -1,8 +1,8 @@
 class Form::Sales::Questions::Buyer1IncomeValueCheck < ::Form::Question
-  def initialize(id, hsh, page)
-    super
+  def initialize(id, hsh, page, check_answers_card_number:)
+    super(id, hsh, page)
     @id = "income1_value_check"
-    @check_answer_label = "Income confirmation"
+    @check_answer_label = "Buyer 1 income confirmation"
     @header = "Are you sure this is correct?"
     @type = "interruption_screen"
     @answer_options = {
@@ -19,6 +19,7 @@ class Form::Sales::Questions::Buyer1IncomeValueCheck < ::Form::Question
         },
       ],
     }
-    @check_answers_card_number = 1
+    @check_answers_card_number = check_answers_card_number
+    @page = page
   end
 end
