@@ -77,6 +77,10 @@ class FormHandler
     form_mappings[current_collection_start_year - year]
   end
 
+  def start_date_of_earliest_open_collection_period
+    in_crossover_period? ? previous_collection_start_date : current_collection_start_date
+  end
+
   def in_crossover_period?(now: Time.zone.now)
     lettings_in_crossover_period?(now:) || sales_in_crossover_period?(now:)
   end

@@ -46,6 +46,6 @@ class Form::Sales::Subsections::SharedOwnershipScheme < ::Form::Subsection
   end
 
   def displayed_in_tasklist?(log)
-    log.ownershipsch == 1
+    log.ownershipsch.nil? || log.ownershipsch == 1
   end
 end

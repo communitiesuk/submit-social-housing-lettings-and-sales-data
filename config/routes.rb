@@ -164,6 +164,7 @@ Rails.application.routes.draw do
     FormHandler.instance.lettings_forms.each do |_key, form|
       form.pages.map do |page|
         get page.id.to_s.dasherize, to: "form#show_page"
+        post page.id.to_s.dasherize, to: "form#submit_form"
       end
 
       form.subsections.map do |subsection|
@@ -190,6 +191,7 @@ Rails.application.routes.draw do
     FormHandler.instance.sales_forms.each do |_key, form|
       form.pages.map do |page|
         get page.id.to_s.dasherize, to: "form#show_page"
+        post page.id.to_s.dasherize, to: "form#submit_form"
       end
 
       form.subsections.map do |subsection|

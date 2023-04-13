@@ -95,7 +95,7 @@ RSpec.describe "Lettings Log Features" do
     end
 
     context "when visiting a subsection check answers page" do
-      let(:lettings_log) { FactoryBot.create(:lettings_log, :about_completed) }
+      let(:lettings_log) { FactoryBot.create(:lettings_log, :setup_completed) }
 
       it "has the correct breadcrumbs with the correct links" do
         visit lettings_log_setup_check_answers_path(lettings_log)

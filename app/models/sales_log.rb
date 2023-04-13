@@ -18,6 +18,7 @@ class SalesLog < Log
   include DerivedVariables::SalesLogVariables
   include Validations::Sales::SoftValidations
   include Validations::SoftValidations
+  include MoneyFormattingHelper
 
   self.inheritance_column = :_type_disabled
 
@@ -215,7 +216,7 @@ class SalesLog < Log
   def expected_shared_ownership_deposit_value
     return unless value && equity
 
-    (value * equity / 100).round(2)
+    format_as_currency(value * equity / 100)
   end
 
   def process_postcode(postcode, postcode_known_key, la_inferred_key, la_key)
@@ -291,8 +292,8 @@ class SalesLog < Log
     companybuy == 1
   end
 
-  def monthly_leasehold_charges_unknown?
-    mscharge_known&.zero?
+  def no_monthly_leasehold_charges?
+    has_mscharge&.zero?
   end
 
   def buyers_age_for_old_persons_shared_ownership_invalid?

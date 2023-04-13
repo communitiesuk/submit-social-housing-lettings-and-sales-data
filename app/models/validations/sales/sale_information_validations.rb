@@ -1,5 +1,6 @@
 module Validations::Sales::SaleInformationValidations
   include CollectionTimeHelper
+  include MoneyFormattingHelper
 
   def validate_practical_completion_date_before_saledate(record)
     return if record.saledate.blank? || record.hodate.blank?
@@ -54,7 +55,13 @@ module Validations::Sales::SaleInformationValidations
 
     if record.mortgage_deposit_and_grant_total != record.value_with_discount && record.discounted_ownership_sale?
       %i[mortgage deposit grant value discount ownershipsch].each do |field|
-        record.errors.add field, I18n.t("validations.sale_information.discounted_ownership_value", value_with_discount: sprintf("%.2f", record.value_with_discount))
+        record.errors.add(
+          field,
+          I18n.t(
+            "validations.sale_information.discounted_ownership_value",
+            value_with_discount: format_as_currency(record.value_with_discount),
+          ),
+        )
       end
     end
   end

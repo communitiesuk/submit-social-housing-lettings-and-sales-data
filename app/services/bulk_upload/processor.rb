@@ -59,12 +59,6 @@ private
       .deliver_later
   end
 
-  def send_fix_errors_mail
-    BulkUploadMailer
-      .send_bulk_upload_with_errors_mail(bulk_upload:)
-      .deliver_later
-  end
-
   def send_success_mail
     BulkUploadMailer
       .send_bulk_upload_complete_mail(user:, bulk_upload:)

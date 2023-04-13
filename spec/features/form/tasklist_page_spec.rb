@@ -33,7 +33,7 @@ RSpec.describe "Task List" do
   let(:setup_completed_log) do
     FactoryBot.create(
       :lettings_log,
-      :about_completed,
+      :setup_completed,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
       created_by: user,
@@ -67,9 +67,17 @@ RSpec.describe "Task List" do
     expect(page).to have_content("This log has not been started.")
   end
 
-  it "shows number of completed sections if one section is completed" do
-    visit("/lettings-logs/#{setup_completed_log.id}")
-    expect(page).to have_content("1 of 8 sections completed.")
+  context "when testing completed subsection count" do
+    let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json") }
+
+    before do
+      allow(FormHandler.instance).to receive(:get_form).and_return(real_2021_2022_form)
+    end
+
+    it "shows number of completed sections if one section is completed" do
+      visit("/lettings-logs/#{setup_completed_log.id}")
+      expect(page).to have_content("1 of 7 subsections completed.")
+    end
   end
 
   it "show skip link for next incomplete section" do

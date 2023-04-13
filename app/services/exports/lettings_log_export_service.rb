@@ -8,49 +8,49 @@ module Exports
       @logger = logger
     end
 
-    def export_csv_lettings_logs
-      time_str = Time.zone.now.strftime("%F").underscore
-      lettings_logs = retrieve_lettings_logs(Time.zone.now, true)
-      csv_io = build_export_csv(lettings_logs)
-      @storage_service.write_file("export_#{time_str}.csv", csv_io)
-    end
-
     def export_xml_lettings_logs(full_update: false)
       start_time = Time.zone.now
-      lettings_logs = retrieve_lettings_logs(start_time, full_update)
-      export = build_export_run(start_time, full_update)
-      daily_run = get_daily_run_number
-      archive_datetimes = write_export_archive(export, lettings_logs)
-      export.empty_export = archive_datetimes.empty?
-      write_master_manifest(daily_run, archive_datetimes)
-      export.save!
+      logs_by_collection = retrieve_lettings_logs(start_time, full_update).group_by(&:collection_start_year)
+      daily_run_number = get_daily_run_number
+      archives_for_manifest = []
+      base_number = LogsExport.where(empty_export: false).maximum(:base_number) || 1
+      available_collection_years.each do |collection|
+        lettings_logs = logs_by_collection.fetch(collection, LettingsLog.none)
+        export = build_export_run(collection, start_time, base_number, full_update)
+        archives = write_export_archive(export, lettings_logs)
+
+        archives_for_manifest << archives if archives.any?
+        export.empty_export = archives.empty?
+        export.save!
+      end
+
+      write_master_manifest(daily_run_number, archives_for_manifest.flatten)
     end
 
   private
 
     def get_daily_run_number
       today = Time.zone.today
-      LogsExport.where(created_at: today.beginning_of_day..today.end_of_day).count + 1
+      LogsExport.where(created_at: today.beginning_of_day..today.end_of_day).select(:started_at).distinct.count + 1
     end
 
-    def build_export_run(current_time, full_update)
-      previous_exports_with_data = LogsExport.where(empty_export: false)
+    def build_export_run(collection, current_time, base_number, full_update)
+      previous_exports_with_data = LogsExport.where(collection:, empty_export: false)
 
-      if previous_exports_with_data.empty?
-        return LogsExport.new(started_at: current_time)
-      end
-
-      base_number = previous_exports_with_data.maximum(:base_number)
-      increment_number = previous_exports_with_data.where(base_number:).maximum(:increment_number)
+      increment_number = previous_exports_with_data.where(base_number:).maximum(:increment_number) || 1
 
       if full_update
-        base_number += 1
+        base_number += 1 if LogsExport.any? # Only increment when it's not the first run
         increment_number = 1
       else
         increment_number += 1
       end
 
-      LogsExport.new(started_at: current_time, base_number:, increment_number:)
+      if previous_exports_with_data.empty?
+        return LogsExport.new(collection:, base_number:, started_at: current_time)
+      end
+
+      LogsExport.new(collection:, started_at: current_time, base_number:, increment_number:)
     end
 
     def write_master_manifest(daily_run, archive_datetimes)
@@ -237,23 +237,6 @@ module Exports
         !EXPORT_FIELDS.include?(field_name)
     end
 
-    def build_export_csv(lettings_logs)
-      csv_io = CSV.generate do |csv|
-        attribute_keys = nil
-        lettings_logs.each do |lettings_log|
-          attribute_hash = apply_cds_transformation(lettings_log, EXPORT_MODE[:csv])
-          if attribute_keys.nil?
-            attribute_keys = attribute_hash.keys
-            filter_keys!(attribute_keys)
-            csv << attribute_keys
-          end
-          csv << attribute_keys.map { |attribute_key| attribute_hash[attribute_key] }
-        end
-      end
-
-      StringIO.new(csv_io)
-    end
-
     def build_export_xml(lettings_logs)
       doc = Nokogiri::XML("<forms/>")
 
@@ -272,6 +255,10 @@ module Exports
       end
 
       xml_doc_to_temp_file(doc)
+    end
+
+    def available_collection_years
+      FormHandler.instance.lettings_forms.values.map { |f| f.start_date.year }.uniq
     end
   end
 end

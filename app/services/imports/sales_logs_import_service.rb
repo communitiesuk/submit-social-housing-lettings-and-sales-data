@@ -107,7 +107,8 @@ module Imports
       attributes["hhregresstill"] = still_serving(xml_doc)
       attributes["proplen"] = safe_string_as_integer(xml_doc, "Q16aProplen2") || safe_string_as_integer(xml_doc, "Q16aProplensec2")
       attributes["mscharge"] = monthly_charges(xml_doc, attributes)
-      attributes["mscharge_known"] = 1 if attributes["mscharge"].present?
+      attributes["has_mscharge"] = 1 if attributes["mscharge"]&.positive?
+      attributes["has_mscharge"] = 0 if attributes["mscharge"].present? && attributes["mscharge"] <= 0
       attributes["prevten"] = unsafe_string_as_integer(xml_doc, "Q6PrevTenure")
       attributes["mortlen"] = mortgage_length(xml_doc, attributes)
       attributes["extrabor"] = borrowing(xml_doc, attributes)

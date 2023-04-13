@@ -11,7 +11,7 @@
     </h1>
 
     <% if @log.status == "in_progress" %>
-      <p class="govuk-body govuk-!-margin-bottom-7"><%= get_subsections_count(@log, :completed) %> of <%= get_subsections_count(@log, :all) %> sections completed.</p>
+      <p class="govuk-body govuk-!-margin-bottom-7"><%= get_subsections_count(@log, :completed) %> of <%= get_subsections_count(@log) %> subsections completed.</p>
       <p class="govuk-body govuk-!-margin-bottom-2">
         <% next_incomplete_section = get_next_incomplete_section(@log) %>
       </p>

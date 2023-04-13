@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_05_132300) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_12_143245) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -351,6 +351,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_05_132300) do
     t.integer "base_number", default: 1, null: false
     t.integer "increment_number", default: 1, null: false
     t.boolean "empty_export", default: false, null: false
+    t.string "collection"
   end
 
   create_table "organisation_relationships", force: :cascade do |t|
@@ -513,12 +514,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_05_132300) do
     t.integer "hhregres"
     t.integer "hhregresstill"
     t.integer "proplen"
-    t.integer "mscharge_known"
+    t.integer "has_mscharge"
     t.decimal "mscharge", precision: 10, scale: 2
     t.integer "prevten"
     t.integer "mortgageused"
     t.integer "wchair"
-    t.integer "income2_value_check"
     t.integer "armedforcesspouse"
     t.datetime "hodate", precision: nil
     t.integer "hoday"
@@ -543,13 +543,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_05_132300) do
     t.integer "retirement_value_check"
     t.integer "hodate_check"
     t.integer "extrabor_value_check"
+    t.integer "grant_value_check"
+    t.integer "staircase_bought_value_check"
     t.integer "deposit_and_mortgage_value_check"
     t.integer "shared_ownership_deposit_value_check"
-    t.integer "grant_value_check"
-    t.integer "value_value_check"
     t.integer "old_persons_shared_ownership_value_check"
-    t.integer "staircase_bought_value_check"
+    t.integer "income2_value_check"
     t.integer "monthly_charges_value_check"
+    t.integer "value_value_check"
     t.integer "details_known_5"
     t.integer "details_known_6"
     t.integer "saledate_check"
@@ -559,9 +560,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_05_132300) do
     t.integer "ethnicbuy2"
     t.integer "proplen_asked"
     t.string "old_id"
+    t.integer "pregblank"
     t.integer "buy2living"
     t.integer "prevtenbuy2"
-    t.integer "pregblank"
+    t.integer "nationalbuy2"
     t.string "uprn"
     t.integer "uprn_known"
     t.integer "uprn_confirmed"
@@ -569,10 +571,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_05_132300) do
     t.string "address_line2"
     t.string "town_or_city"
     t.string "county"
-    t.integer "nationalbuy2"
     t.integer "discounted_sale_value_check"
     t.integer "student_not_child_value_check"
-    t.integer "combined_income_value_check"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["old_id"], name: "index_sales_logs_on_old_id", unique: true

@@ -86,7 +86,7 @@ RSpec.describe Validations::FinancialValidations do
     end
 
     context "when outstanding rent or charges is yes" do
-      let(:record) { FactoryBot.create(:lettings_log, :about_completed, startdate: Time.zone.now) }
+      let(:record) { FactoryBot.create(:lettings_log, :setup_completed, startdate: Time.zone.now) }
 
       it "expects that a shortfall is provided" do
         record.hbrentshortfall = 1
@@ -202,7 +202,7 @@ RSpec.describe Validations::FinancialValidations do
         record.ecstat1 = 1
         financial_validator.validate_net_income(record)
         expect(record.errors["earnings"])
-          .to include(match I18n.t("validations.financial.earnings.over_hard_max", hard_max: 1230))
+          .to eq(["Net income cannot be greater than £1,230.00 per week given the tenant’s working situation"])
       end
     end
 
@@ -213,7 +213,7 @@ RSpec.describe Validations::FinancialValidations do
         record.ecstat1 = 1
         financial_validator.validate_net_income(record)
         expect(record.errors["earnings"])
-          .to include(match I18n.t("validations.financial.earnings.under_hard_min", hard_min: 90))
+          .to eq(["Net income cannot be less than £90.00 per week given the tenant’s working situation"])
       end
     end
   end
@@ -913,15 +913,15 @@ RSpec.describe Validations::FinancialValidations do
         record.is_carehome = 1
       end
 
-      context "and charges are over the valid limit (£1000 per week)" do
+      context "and charges are over the valid limit (£1,000 per week)" do
         it "validates charge when period is weekly for 52 weeks" do
           record.period = 1
           record.chcharge = 1001
           financial_validator.validate_care_home_charges(record)
           expect(record.errors["chcharge"])
-            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 10, period: "weekly for 52 weeks", max_chcharge: 1000))
+            .to include("Household rent and other charges must be between £10.00 and £1,000.00 if paying weekly for 52 weeks")
           expect(record.errors["period"])
-            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 10, period: "weekly for 52 weeks", max_chcharge: 1000))
+            .to include("Household rent and other charges must be between £10.00 and £1,000.00 if paying weekly for 52 weeks")
         end
 
         it "validates charge when period is monthly" do
@@ -929,9 +929,9 @@ RSpec.describe Validations::FinancialValidations do
           record.chcharge = 4334
           financial_validator.validate_care_home_charges(record)
           expect(record.errors["chcharge"])
-            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 43, period: "every calendar month", max_chcharge: 4333))
+            .to include("Household rent and other charges must be between £43.00 and £4,333.00 if paying every calendar month")
           expect(record.errors["period"])
-            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 43, period: "every calendar month", max_chcharge: 4333))
+            .to include("Household rent and other charges must be between £43.00 and £4,333.00 if paying every calendar month")
         end
 
         it "validates charge when period is every 2 weeks" do
@@ -939,9 +939,9 @@ RSpec.describe Validations::FinancialValidations do
           record.chcharge = 2001
           financial_validator.validate_care_home_charges(record)
           expect(record.errors["chcharge"])
-            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 20, period: "every 2 weeks", max_chcharge: 2000))
+            .to include("Household rent and other charges must be between £20.00 and £2,000.00 if paying every 2 weeks")
           expect(record.errors["period"])
-            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 20, period: "every 2 weeks", max_chcharge: 2000))
+            .to include("Household rent and other charges must be between £20.00 and £2,000.00 if paying every 2 weeks")
         end
 
         it "validates charge when period is every 4 weeks" do
@@ -949,13 +949,13 @@ RSpec.describe Validations::FinancialValidations do
           record.chcharge = 4001
           financial_validator.validate_care_home_charges(record)
           expect(record.errors["chcharge"])
-            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 40, period: "every 4 weeks", max_chcharge: 4000))
+            .to include("Household rent and other charges must be between £40.00 and £4,000.00 if paying every 4 weeks")
           expect(record.errors["period"])
-            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 40, period: "every 4 weeks", max_chcharge: 4000))
+            .to include("Household rent and other charges must be between £40.00 and £4,000.00 if paying every 4 weeks")
         end
       end
 
-      context "and charges are within the valid limit (£1000 per week)" do
+      context "and charges are within the valid limit (£1,000 per week)" do
         it "does not throw error when period is weekly for 52 weeks" do
           record.period = 1
           record.chcharge = 999
@@ -1007,9 +1007,9 @@ RSpec.describe Validations::FinancialValidations do
           record.chcharge = 9
           financial_validator.validate_care_home_charges(record)
           expect(record.errors["chcharge"])
-            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 10, period: "weekly for 52 weeks", max_chcharge: 1000))
+            .to include("Household rent and other charges must be between £10.00 and £1,000.00 if paying weekly for 52 weeks")
           expect(record.errors["period"])
-            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 10, period: "weekly for 52 weeks", max_chcharge: 1000))
+            .to include("Household rent and other charges must be between £10.00 and £1,000.00 if paying weekly for 52 weeks")
         end
 
         it "validates charge when period is monthly" do
@@ -1017,9 +1017,9 @@ RSpec.describe Validations::FinancialValidations do
           record.chcharge = 42
           financial_validator.validate_care_home_charges(record)
           expect(record.errors["chcharge"])
-            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 43, period: "every calendar month", max_chcharge: 4333))
+            .to include("Household rent and other charges must be between £43.00 and £4,333.00 if paying every calendar month")
           expect(record.errors["period"])
-            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 43, period: "every calendar month", max_chcharge: 4333))
+            .to include("Household rent and other charges must be between £43.00 and £4,333.00 if paying every calendar month")
         end
 
         it "validates charge when period is every 2 weeks" do
@@ -1027,9 +1027,9 @@ RSpec.describe Validations::FinancialValidations do
           record.chcharge = 19
           financial_validator.validate_care_home_charges(record)
           expect(record.errors["chcharge"])
-            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 20, period: "every 2 weeks", max_chcharge: 2000))
+            .to include("Household rent and other charges must be between £20.00 and £2,000.00 if paying every 2 weeks")
           expect(record.errors["period"])
-            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 20, period: "every 2 weeks", max_chcharge: 2000))
+            .to include("Household rent and other charges must be between £20.00 and £2,000.00 if paying every 2 weeks")
         end
 
         it "validates charge when period is every 4 weeks" do
@@ -1037,9 +1037,9 @@ RSpec.describe Validations::FinancialValidations do
           record.chcharge = 39
           financial_validator.validate_care_home_charges(record)
           expect(record.errors["chcharge"])
-            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 40, period: "every 4 weeks", max_chcharge: 4000))
+            .to include("Household rent and other charges must be between £40.00 and £4,000.00 if paying every 4 weeks")
           expect(record.errors["period"])
-            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 40, period: "every 4 weeks", max_chcharge: 4000))
+            .to include("Household rent and other charges must be between £40.00 and £4,000.00 if paying every 4 weeks")
         end
       end
     end

@@ -674,8 +674,10 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       context "when blank" do
         let(:attributes) { { bulk_upload:, field_1: "" } }
 
-        it "is not permitted" do
-          expect(parser.errors[:field_1]).to eql(["The owning organisation code is incorrect"])
+        it "is not permitted as setup error" do
+          setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
+
+          expect(setup_errors.find { |e| e.attribute == :field_1 }.message).to eql("The owning organisation code is incorrect")
         end
 
         it "blocks log creation" do
@@ -686,8 +688,10 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       context "when cannot find owning org" do
         let(:attributes) { { bulk_upload:, field_1: "donotexist" } }
 
-        it "is not permitted" do
-          expect(parser.errors[:field_1]).to eql(["The owning organisation code is incorrect"])
+        it "is not permitted as setup error" do
+          setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
+
+          expect(setup_errors.find { |e| e.attribute == :field_1 }.message).to eql("The owning organisation code is incorrect")
         end
 
         it "blocks log creation" do
@@ -700,8 +704,10 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id } }
 
-        it "is not permitted" do
-          expect(parser.errors[:field_1]).to eql(["The owning organisation code provided is for an organisation that does not own stock"])
+        it "is not permitted as setup error" do
+          setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
+
+          expect(setup_errors.find { |e| e.attribute == :field_1 }.message).to eql("The owning organisation code provided is for an organisation that does not own stock")
         end
 
         it "blocks log creation" do
@@ -714,8 +720,10 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         let(:attributes) { { bulk_upload:, field_1: unaffiliated_org.old_visible_id } }
 
-        it "is not permitted" do
-          expect(parser.errors[:field_1]).to eql(["You do not have permission to add logs for this owning organisation"])
+        it "is not permitted as setup error" do
+          setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
+
+          expect(setup_errors.find { |e| e.attribute == :field_1 }.message).to eql("You do not have permission to add logs for this owning organisation")
         end
 
         it "blocks log creation" do
@@ -728,8 +736,10 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       context "when blank" do
         let(:attributes) { { bulk_upload:, field_2: "" } }
 
-        it "is not permitted" do
-          expect(parser.errors[:field_2]).to eql(["The managing organisation code is incorrect"])
+        it "is not permitted as setup error" do
+          setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
+
+          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("The managing organisation code is incorrect")
         end
 
         it "blocks log creation" do
@@ -740,8 +750,10 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       context "when cannot find managing org" do
         let(:attributes) { { bulk_upload:, field_2: "donotexist" } }
 
-        it "is not permitted" do
-          expect(parser.errors[:field_2]).to eql(["The managing organisation code is incorrect"])
+        it "is not permitted as setup error" do
+          setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
+
+          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("The managing organisation code is incorrect")
         end
 
         it "blocks log creation" do
@@ -754,8 +766,10 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: unaffiliated_org.old_visible_id } }
 
-        it "is not permitted" do
-          expect(parser.errors[:field_2]).to eql(["This managing organisation does not have a relationship with the owning organisation"])
+        it "is not permitted as setup error" do
+          setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
+
+          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("This managing organisation does not have a relationship with the owning organisation")
         end
 
         it "blocks log creation" do

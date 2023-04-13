@@ -598,7 +598,7 @@ private
       block_log_creation!
 
       if errors[:field_2].blank?
-        errors.add(:field_2, "This managing organisation does not have a relationship with the owning organisation")
+        errors.add(:field_2, "This managing organisation does not have a relationship with the owning organisation", category: :setup)
       end
     end
   end
@@ -608,7 +608,7 @@ private
       block_log_creation!
 
       if errors[:field_2].blank?
-        errors.add(:field_2, "The managing organisation code is incorrect")
+        errors.add(:field_2, "The managing organisation code is incorrect", category: :setup)
       end
     end
   end
@@ -625,7 +625,7 @@ private
       block_log_creation!
 
       if errors[:field_1].blank?
-        errors.add(:field_1, "The owning organisation code provided is for an organisation that does not own stock")
+        errors.add(:field_1, "The owning organisation code provided is for an organisation that does not own stock", category: :setup)
       end
     end
   end
@@ -635,7 +635,7 @@ private
       block_log_creation!
 
       if errors[:field_1].blank?
-        errors.add(:field_1, "The owning organisation code is incorrect")
+        errors.add(:field_1, "The owning organisation code is incorrect", category: :setup)
       end
     end
   end
@@ -652,7 +652,7 @@ private
       block_log_creation!
 
       if errors[:field_1].blank?
-        errors.add(:field_1, "You do not have permission to add logs for this owning organisation")
+        errors.add(:field_1, "You do not have permission to add logs for this owning organisation", category: :setup)
       end
     end
   end

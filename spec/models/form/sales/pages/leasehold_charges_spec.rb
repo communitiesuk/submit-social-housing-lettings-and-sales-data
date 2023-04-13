@@ -12,7 +12,7 @@ RSpec.describe Form::Sales::Pages::LeaseholdCharges, type: :model do
   end
 
   it "has correct questions" do
-    expect(page.questions.map(&:id)).to eq(%w[mscharge_known mscharge])
+    expect(page.questions.map(&:id)).to eq(%w[has_mscharge mscharge])
   end
 
   it "has the correct id" do
