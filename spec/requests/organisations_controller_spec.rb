@@ -441,7 +441,7 @@ RSpec.describe OrganisationsController, type: :request do
         end
       end
 
-      fdescribe "#merge" do
+      describe "#merge" do
         context "with an organisation that the user belongs to" do
           before do
             get "/organisations/#{organisation.id}/merge-request", headers:, params: {}
@@ -455,8 +455,8 @@ RSpec.describe OrganisationsController, type: :request do
             expect(page).to have_link("Back", href: "/organisations/#{organisation.id}")
           end
 
-          it "has a correct start no button" do
-            expect(page).to have_link("Start now", href: "/merge-request/new")
+          it "has a correct start now button" do
+            expect(page).to have_button("Start now")
           end
         end
 
