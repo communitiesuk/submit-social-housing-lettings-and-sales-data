@@ -292,6 +292,7 @@ class BulkUpload::Lettings::Year2023::RowParser
   validates :field_72, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 7 must be a number or the letter R" }, allow_blank: true
   validates :field_76, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 8 must be a number or the letter R" }, allow_blank: true
 
+  validates :field_6, presence: { message: I18n.t("validations.not_answered", question: "property renewal") }
   validates :field_7, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (day)") }
   validates :field_8, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (month)") }
   validates :field_9, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (year)") }
@@ -1050,8 +1051,6 @@ private
       1
     when 2
       0
-    when nil
-      rsnvac == 14 ? 1 : 0
     else
       field_6
     end
