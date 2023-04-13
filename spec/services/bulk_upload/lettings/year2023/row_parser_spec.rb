@@ -821,7 +821,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         end
       end
 
-      context "when neither UPRN nor address given" do
+      context "when neither UPRN nor address fields are given" do
         let(:attributes) do
           {
             bulk_upload:,
@@ -834,7 +834,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         end
       end
 
-      context "when UPRN is given but address is not" do
+      context "when UPRN is given but address fields are not" do
         let(:attributes) do
           {
             bulk_upload:,
