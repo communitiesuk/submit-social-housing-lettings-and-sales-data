@@ -26,12 +26,4 @@ describe "rake core:data_export", type: task do
       expect { task.invoke }.to enqueue_job(DataExportXmlJob)
     end
   end
-
-  context "when exporting lettings logs with CSV format" do
-    let(:task) { Rake::Task["core:data_export_csv"] }
-
-    it "starts the CSV export process" do
-      expect { task.invoke }.to enqueue_job(DataExportCsvJob)
-    end
-  end
 end
