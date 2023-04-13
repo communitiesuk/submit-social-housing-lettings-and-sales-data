@@ -334,7 +334,7 @@ class BulkUpload::Lettings::Year2023::RowParser
 
   validate :validate_valid_radio_option, on: :before_log
 
-  validate :validate_uprn_exists_if_address_does_not
+  validate :validate_uprn_exists_if_any_key_adddress_fields_are_blank
 
   def self.question_for_field(field)
     QUESTIONS[field]
@@ -433,8 +433,8 @@ private
     @created_by ||= User.find_by(email: field_3)
   end
 
-  def validate_uprn_exists_if_address_does_not
-    if field_18.blank? && field_19.blank? && field_21.blank?
+  def validate_uprn_exists_if_any_key_adddress_fields_are_blank
+    if field_18.blank? && (field_19.blank? || field_21.blank?)
       errors.add(:field_18, I18n.t("validations.not_answered", question: "UPRN"))
     end
   end
