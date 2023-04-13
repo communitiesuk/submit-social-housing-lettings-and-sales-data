@@ -435,12 +435,22 @@ class LettingsLog < Log
   end
 
   def soft_min_for_period
-    soft_min = LaRentRange.find_by(start_year: collection_start_year, la:, beds: beds_for_la_rent_range, lettype:).soft_min
+    soft_min = LaRentRange.find_by(
+      start_year: collection_start_year,
+      la:,
+      beds: beds_for_la_rent_range,
+      lettype:,
+    ).soft_min
     "#{soft_value_for_period(soft_min)} #{SUFFIX_FROM_PERIOD[period].presence || 'every week'}"
   end
 
   def soft_max_for_period
-    soft_max = LaRentRange.find_by(start_year: collection_start_year, la:, beds: beds_for_la_rent_range, lettype:).soft_max
+    soft_max = LaRentRange.find_by(
+      start_year: collection_start_year,
+      la:,
+      beds: beds_for_la_rent_range,
+      lettype:,
+    ).soft_max
     "#{soft_value_for_period(soft_max)} #{SUFFIX_FROM_PERIOD[period].presence || 'every week'}"
   end
 

@@ -10,6 +10,8 @@ class Form::Lettings::Subsections::PropertyInformation < ::Form::Subsection
     @pages ||= [
       uprn_questions,
       Form::Lettings::Pages::PropertyLocalAuthority.new(nil, nil, self),
+      Form::Lettings::Pages::MinRentValueCheck.new(nil, nil, self),
+      Form::Lettings::Pages::MaxRentValueCheck.new(nil, nil, self),
       Form::Lettings::Pages::FirstTimePropertyLetAsSocialHousing.new(nil, nil, self),
       Form::Lettings::Pages::PropertyLetType.new(nil, nil, self),
       Form::Lettings::Pages::PropertyVacancyReasonNotFirstLet.new(nil, nil, self),
@@ -20,6 +22,8 @@ class Form::Lettings::Subsections::PropertyInformation < ::Form::Subsection
       Form::Lettings::Pages::PropertyBuildingType.new(nil, nil, self),
       Form::Lettings::Pages::PropertyWheelchairAccessible.new(nil, nil, self),
       Form::Lettings::Pages::PropertyNumberOfBedrooms.new(nil, nil, self),
+      Form::Lettings::Pages::MinRentValueCheck.new(nil, nil, self),
+      Form::Lettings::Pages::MaxRentValueCheck.new(nil, nil, self),
       Form::Lettings::Pages::VoidDate.new(nil, nil, self),
       Form::Lettings::Pages::VoidDateValueCheck.new(nil, nil, self),
       Form::Lettings::Pages::PropertyMajorRepairs.new(nil, nil, self),
