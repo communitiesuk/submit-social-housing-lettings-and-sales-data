@@ -336,7 +336,7 @@ class SalesLog < Log
     return if value.blank?
 
     discount_amount = discount ? value * discount / 100 : 0
-    value - discount_amount
+    format_as_currency(value - discount_amount)
   end
 
   def mortgage_deposit_and_grant_total
@@ -344,7 +344,7 @@ class SalesLog < Log
 
     grant_amount = grant || 0
     mortgage_amount = mortgage || 0
-    mortgage_amount + deposit + grant_amount
+    format_as_currency(mortgage_amount + deposit + grant_amount)
   end
 
   def beds_for_la_sale_range
