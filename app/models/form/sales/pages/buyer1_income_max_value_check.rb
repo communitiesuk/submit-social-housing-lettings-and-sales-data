@@ -7,7 +7,7 @@ class Form::Sales::Pages::Buyer1IncomeMaxValueCheck < ::Form::Page
       },
     ]
     @title_text = {
-      "translation" => "soft_validations.income.over_soft_max_for_la",
+      "translation" => "soft_validations.income.over_soft_max_for_la_buyer_1",
       "arguments" => [
         {
           "key" => "field_formatted_as_currency",
