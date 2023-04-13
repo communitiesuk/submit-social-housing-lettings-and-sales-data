@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Pages::Buyer2IncomeMaxValueCheck, type: :model do
-  subject(:page) { described_class.new(page_id, page_definition, subsection) }
+  subject(:page) { described_class.new(page_id, page_definition, subsection, check_answers_card_number: 2) }
 
   let(:page_id) { "prefix_buyer_2_income_max_value_check" }
   let(:page_definition) { nil }
