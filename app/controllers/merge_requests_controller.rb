@@ -29,13 +29,17 @@ class MergeRequestsController < ApplicationController
   def update_organisations
     if @merge_request.merging_organisation_ids
       @merge_request.merging_organisation_ids << params[:merge_request][:merging_organisation].to_i
-      @merge_request.save!
     else
-      @merge_request.update!(merging_organisation_ids: [params[:merge_request][:merging_organisation]])
+      @merge_request.merging_organisation_ids = [params[:merge_request][:merging_organisation]]
     end
     @answer_options = organisations_answer_options
     @merging_organisations_list = [@merge_request.requesting_organisation] + @merge_request.merging_organisations
-    render "organisations"
+    if @merge_request.save
+      @merging_organisations_list = [@merge_request.requesting_organisation] + @merge_request.merging_organisations
+      render "organisations"
+    else
+      render :organisations, status: :unprocessable_entity
+    end
   end
 
 private
