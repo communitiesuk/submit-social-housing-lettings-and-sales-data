@@ -829,8 +829,10 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           }
         end
 
-        it "adds an appropriate error" do
+        it "adds appropriate errors" do
           expect(parser.errors[:field_18]).to eql(["You must answer UPRN"])
+          expect(parser.errors[:field_19]).to eql(["You must answer q12 - address"])
+          expect(parser.errors[:field_21]).to eql(["You must answer town or city"])
         end
       end
 
