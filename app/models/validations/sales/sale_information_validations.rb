@@ -48,7 +48,7 @@ module Validations::Sales::SaleInformationValidations
   end
 
   def validate_discounted_ownership_value(record)
-    return unless record.saledate && collection_start_year(record.saledate) >= 2024
+    return unless record.saledate && collection_start_year_for_date(record.saledate) >= 2024
     return unless record.value && record.deposit && record.ownershipsch
     return unless record.mortgage || record.mortgageused == 2
     return unless record.discount || record.grant || record.type == 29
