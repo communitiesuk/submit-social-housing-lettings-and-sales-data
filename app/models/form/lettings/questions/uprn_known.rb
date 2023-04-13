@@ -8,6 +8,8 @@ class Form::Lettings::Questions::UprnKnown < ::Form::Question
     @answer_options = ANSWER_OPTIONS
     @hint_text = "The Unique Property Reference Number (UPRN) is a unique number system created by Ordnance Survey and used by housing providers and sectors UK-wide. For example 10010457355.<br><br>
     You can continue without the UPRN, but it means we will need you to enter the address of the property."
+    @conditional_for = { "uprn" => [1] }
+    @hidden_in_check_answers = true
   end
 
   ANSWER_OPTIONS = {

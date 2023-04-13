@@ -5,9 +5,14 @@ class Form::Lettings::Questions::Uprn < ::Form::Question
     @check_answer_label = "UPRN"
     @header = "What is the property's UPRN"
     @type = "text"
-    @hint_text = "The Unique Property Reference Number (UPRN) is a unique number system created by Ordnance Survey and used by housing providers and sectors UK-wide. For example 10010457355."
     @width = 10
     @question_number = 11
+    @inferred_check_answers_value = [
+      {
+        "condition" => { "uprn_known" => 0 },
+        "value" => "Not known",
+      },
+    ]
   end
 
   def unanswered_error_message
@@ -15,6 +20,8 @@ class Form::Lettings::Questions::Uprn < ::Form::Question
   end
 
   def get_extra_check_answer_value(log)
+    return unless log.uprn_known == 1
+
     value = [
       log.address_line1,
       log.address_line2,
@@ -27,9 +34,5 @@ class Form::Lettings::Questions::Uprn < ::Form::Question
     return unless value.any?
 
     "\n\n#{value.join("\n")}"
-  end
-
-  def hidden_in_check_answers?(log, _current_user = nil)
-    log.uprn_known != 1
   end
 end
