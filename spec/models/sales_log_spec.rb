@@ -558,6 +558,7 @@ RSpec.describe SalesLog, type: :model do
         .and change(sales_log, :postcode_full).from(nil).to("POSTCODE")
         .and change(sales_log, :uprn_confirmed).from(1).to(nil)
         .and change(sales_log, :county).from("county").to(nil)
+        .and change(sales_log, :uprn_known).from(nil).to(1)
       end
     end
 

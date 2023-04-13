@@ -3139,6 +3139,7 @@ RSpec.describe LettingsLog do
         .and change(lettings_log, :postcode_full).from(nil).to("POSTCODE")
         .and change(lettings_log, :uprn_confirmed).from(1).to(nil)
         .and change(lettings_log, :county).from("county").to(nil)
+        .and change(lettings_log, :uprn_known).from(nil).to(1)
       end
     end
 
