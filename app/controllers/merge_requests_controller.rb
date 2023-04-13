@@ -14,17 +14,14 @@ class MergeRequestsController < ApplicationController
   end
 
   def update_organisations
-    if @merge_request.merging_organisation_ids
-      @merge_request.merging_organisation_ids << params[:merge_request][:merging_organisation].to_i
-    else
-      @merge_request.merging_organisation_ids = [params[:merge_request][:merging_organisation]]
-    end
+    merge_request_organisation = MergeRequestOrganisation.new(merge_request_organisation_params)
     @answer_options = organisations_answer_options
-    @merging_organisations_list = [@merge_request.requesting_organisation] + @merge_request.merging_organisations
-    if @merge_request.save
+    if merge_request_organisation.save
+      @merge_request.reload
       @merging_organisations_list = [@merge_request.requesting_organisation] + @merge_request.merging_organisations
-      render "organisations"
+      render :organisations
     else
+      @merging_organisations_list = [@merge_request.requesting_organisation] + @merge_request.merging_organisations
       render :organisations, status: :unprocessable_entity
     end
   end
@@ -45,6 +42,10 @@ private
 
     merge_params[:requesting_organisation] = current_user.organisation
     merge_params
+  end
+
+  def merge_request_organisation_params
+    { merge_request: @merge_request, merging_organisation: Organisation.find(params[:merge_request][:merging_organisation]) }
   end
 
   def find_resource
