@@ -342,9 +342,9 @@ class BulkUpload::Lettings::Year2023::RowParser
 
     return true if blank_row?
 
-    super
-
     log.valid?
+
+    super
 
     log.errors.each do |error|
       fields = field_mapping_for_errors[error.attribute] || []
@@ -826,7 +826,7 @@ private
   end
 
   def questions
-    log.form.subsections.flat_map { |ss| ss.applicable_questions(log) }
+    @questions ||= log.form.subsections.flat_map { |ss| ss.applicable_questions(log) }
   end
 
   def attributes_for_log
