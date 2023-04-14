@@ -729,11 +729,11 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
 
         it "intercepts the relevant validation error" do
-          expect(logger).to receive(:warn).with(/Removing brent with error: Enter a total charge that is at least £10 per week/)
-          expect(logger).to receive(:warn).with(/Removing scharge with error: Enter a total charge that is at least £10 per week/)
-          expect(logger).to receive(:warn).with(/Removing pscharge with error: Enter a total charge that is at least £10 per week/)
-          expect(logger).to receive(:warn).with(/Removing supcharg with error: Enter a total charge that is at least £10 per week/)
-          expect(logger).to receive(:warn).with(/Removing tcharge with error: Enter a total charge that is at least £10 per week/)
+          expect(logger).to receive(:warn).with("Log 0ead17cb-1668-442d-898c-0d52879ff592: Removing brent with error: Enter a total charge that is at least £10.00 per week")
+          expect(logger).to receive(:warn).with("Log 0ead17cb-1668-442d-898c-0d52879ff592: Removing scharge with error: Enter a total charge that is at least £10.00 per week")
+          expect(logger).to receive(:warn).with("Log 0ead17cb-1668-442d-898c-0d52879ff592: Removing pscharge with error: Enter a total charge that is at least £10.00 per week")
+          expect(logger).to receive(:warn).with("Log 0ead17cb-1668-442d-898c-0d52879ff592: Removing supcharg with error: Enter a total charge that is at least £10.00 per week")
+          expect(logger).to receive(:warn).with("Log 0ead17cb-1668-442d-898c-0d52879ff592: Removing tcharge with error: Enter a total charge that is at least £10.00 per week")
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end
