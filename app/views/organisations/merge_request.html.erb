@@ -42,6 +42,7 @@
     <%= govuk_warning_text text: "You will not be able to submit your request without the above information. Do not start the form until you have obtained all of the information. " %>
 
     <%= form_for @merge_request, url: merge_requests_path do |f| %>
+      <%= f.hidden_field :requesting_organisation_id, value: @organisation.id %>
       <%= f.submit "Start now", class: "govuk-button govuk-button--start" %>
     <% end %>
   </div>

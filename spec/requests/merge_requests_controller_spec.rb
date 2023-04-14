@@ -6,6 +6,7 @@ RSpec.describe MergeRequestsController, type: :request do
   let(:headers) { { "Accept" => "text/html" } }
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:user) { FactoryBot.create(:user, :data_coordinator) }
+  let(:support_user) { FactoryBot.create(:user, :support, organisation:) }
   let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation) }
 
   context "when user is signed in with a data coordinator user" do
@@ -14,9 +15,11 @@ RSpec.describe MergeRequestsController, type: :request do
     end
 
     describe "#organisations" do
+      let(:params) { {} }
+
       before do
         organisation.update!(name: "Test Org")
-        post "/merge-request", headers:, params: {}
+        post "/merge-request", headers:, params:
       end
 
       it "creates merge request with requesting organisation" do
@@ -24,6 +27,16 @@ RSpec.describe MergeRequestsController, type: :request do
         expect(page).to have_content("Which organisations are merging?")
         expect(page).to have_content("Test Org")
         expect(page).not_to have_link("Remove")
+      end
+
+      context "when passing a different requesting organisation id" do
+        let(:params) { { merge_request: { requesting_organisation_id: other_organisation.id } } }
+
+        it "creates merge request with current user organisation" do
+          follow_redirect!
+          expect(MergeRequest.count).to eq(1)
+          expect(MergeRequest.first.requesting_organisation_id).to eq(organisation.id)
+        end
       end
     end
 
@@ -95,7 +108,7 @@ RSpec.describe MergeRequestsController, type: :request do
     end
 
     describe "#remove_organisation" do
-      let(:params) { { merge_request: {merging_organisation: other_organisation.id } }} 
+      let(:params) { { merge_request: { merging_organisation: other_organisation.id } } }
 
       context "when removing an organisation from merge request " do
         before do
@@ -107,6 +120,28 @@ RSpec.describe MergeRequestsController, type: :request do
           expect(merge_request.merging_organisations.count).to eq(0)
           expect(page).not_to have_link("Remove")
         end
+      end
+    end
+  end
+
+  context "when user is signed in as a support user" do
+    before do
+      allow(support_user).to receive(:need_two_factor_authentication?).and_return(false)
+      sign_in support_user
+    end
+
+    describe "#organisations" do
+      let(:params) { { merge_request: { requesting_organisation_id: other_organisation.id } } }
+
+      before do
+        organisation.update!(name: "Test Org")
+        post "/merge-request", headers:, params:
+      end
+
+      it "creates merge request with requesting organisation" do
+        follow_redirect!
+        expect(MergeRequest.count).to eq(1)
+        expect(MergeRequest.first.requesting_organisation_id).to eq(other_organisation.id)
       end
     end
   end

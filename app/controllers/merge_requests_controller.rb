@@ -27,7 +27,7 @@ class MergeRequestsController < ApplicationController
   end
 
   def remove_merging_organsiation
-    MergeRequestOrganisation.find_by(merge_request_organisation_params).destroy
+    MergeRequestOrganisation.find_by(merge_request_organisation_params).destroy!
     @merge_request.reload
     @answer_options = organisations_answer_options
     @merging_organisations_list = [@merge_request.requesting_organisation] + @merge_request.merging_organisations
@@ -46,9 +46,12 @@ private
   end
 
   def merge_request_params
-    merge_params = params.fetch(:merge_request, {}).permit(:requesting_organisation)
+    merge_params = params.fetch(:merge_request, {}).permit(:requesting_organisation_id)
 
-    merge_params[:requesting_organisation] = current_user.organisation
+    if current_user.data_coordinator? || current_user.data_provider?
+      merge_params[:requesting_organisation_id] = current_user.organisation.id
+    end
+
     merge_params
   end
 
