@@ -1,14 +1,19 @@
-<% title = "Tell us if your organisation is merging" %>
-<% content_for :title, title %>
-<%# <%= govuk_back_link href: merge_request_organisation_path %>
+<% content_for :before_content do %>
+
+  <% title = "Tell us if your organisation is merging" %>
+  <% content_for :title, title %>
+  <%= govuk_back_link href: merge_request_organisation_path(id: @merge_request.requesting_organisation_id) %>
+<% end %>
+
 <h2 class="govuk-heading-l">Which organisations are merging?</h2>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-   <p class="govuk-body">Which organisations are merging?</p>
+   <p class="govuk-body">Add all organisations to be merged - we have already added your own.</p>
 
 <%= form_with model: @merge_request, url: merge_request_organisations_path, method: :patch do |f| %>
   <%= f.govuk_error_summary %>
+  <p class="govuk-body">Start typing to search</p>
   <%= render partial: "organisation_relationships/related_organisation_select_question", locals: {
     field: :merging_organisation,
     question: Form::Question.new("", { "answer_options" => @answer_options }, nil),
