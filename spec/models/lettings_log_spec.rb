@@ -2233,6 +2233,7 @@ RSpec.describe LettingsLog do
 
       it "returns optional fields" do
         expect(lettings_log.optional_fields).to eq(%w[
+          rent_value_check
           first_time_property_let_as_social_housing
           tenancycode
           propcode
@@ -2247,6 +2248,7 @@ RSpec.describe LettingsLog do
 
       it "returns optional fields" do
         expect(lettings_log.optional_fields).to eq(%w[
+          rent_value_check
           first_time_property_let_as_social_housing
           tenancycode
           propcode
