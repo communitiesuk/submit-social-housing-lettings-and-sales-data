@@ -283,7 +283,7 @@ en:
             general_needs: "Enter a value for the support charge between £0 and £60 per week if the landlord is a local authority and it is a general needs letting"
             supported_housing: "Enter a value for the support charge between £0 and £120 per week if the landlord is a local authority and it is a supported housing letting"
       ecstat:
-        over_hard_max: "Net income of £%{hard_max} per week is too high for given the tenant’s working situation"
+        over_hard_max: "Net income of %{hard_max} per week is too high given the tenant’s working situation"
       brent:
         below_hard_min: "Rent is below the absolute minimum expected for a property of this type. Please check the rent, rent period, local authority and (if general needs) number of bedrooms"
         above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type. Please check the rent, rent period, local authority and (if general needs) number of bedrooms"
@@ -314,7 +314,7 @@ en:
       charges:
         complete_1_of_3: "Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?’"
       tcharge:
-        under_10: "Enter a total charge that is at least £10 per week"
+        under_10: "Enter a total charge that is at least £10.00 per week"
       rent_period:
         invalid_for_org: "%{org_name} does not charge rent %{rent_period}"
       carehome:
@@ -516,8 +516,8 @@ en:
       under_soft_min_for_economic_status: "You said income was %{income}, which is below this working situation's minimum (%{minimum})"
     rent:
       outside_range_title: "You told us the rent is %{brent}"
-      min_hint_text: "The minimum rent expected for this type of property in this local authority is £%{soft_min_for_period}."
-      max_hint_text: "The maximum rent expected for this type of property in this local authority is £%{soft_max_for_period}."
+      min_hint_text: "The minimum rent expected for this type of property in this local authority is %{soft_min_for_period}."
+      max_hint_text: "The maximum rent expected for this type of property in this local authority is %{soft_max_for_period}."
     purchase_price:
       title_text: "You told us the purchase price is %{value}"
       hint_text: "The %{min_or_max} purchase price expected for this type of property in this local authority is %{soft_min_or_soft_max}"
@@ -539,7 +539,7 @@ en:
     void_date:
       title_text: "You told us the time between the start of the tenancy and the void date is more than 2 years"
     shared_ownership_deposit:
-      title_text: "Mortgage, deposit and cash discount total should equal £%{expected_shared_ownership_deposit_value}"
+      title_text: "Mortgage, deposit and cash discount total should equal %{expected_shared_ownership_deposit_value}"
     old_persons_shared_ownership: "At least one buyer should be aged over 64 for Older persons’ shared ownership scheme"
     staircase_bought_seems_high: "You said %{percentage}% was bought in this staircasing transaction, which seems high. Are you sure?"
     monthly_charges_over_soft_max:
@@ -547,8 +547,8 @@ en:
     student_not_child:
       title_text: "You told us this person is a student aged beween 16 and 19"
     discounted_sale_value:
-      title_text: "Mortgage, deposit, and grant total must equal £%{value_with_discount}"
-      informative_text: "Your given mortgage, deposit and grant total is £%{mortgage_deposit_and_grant_total}"
+      title_text: "Mortgage, deposit, and grant total must equal %{value_with_discount}"
+      informative_text: "Your given mortgage, deposit and grant total is %{mortgage_deposit_and_grant_total}"
     care_home_charges:
       title_text: "Care home charges should be provided if this is a care home accommodation"
 

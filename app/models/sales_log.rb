@@ -216,7 +216,7 @@ class SalesLog < Log
   def expected_shared_ownership_deposit_value
     return unless value && equity
 
-    format_as_currency(value * equity / 100)
+    value * equity / 100
   end
 
   def process_postcode(postcode, postcode_known_key, la_inferred_key, la_key)
@@ -321,11 +321,6 @@ class SalesLog < Log
 
     soft_min = ALLOWED_INCOME_RANGES_SALES[economic_status_code]&.soft_min
     format_as_currency(soft_min)
-  end
-
-  def field_formatted_as_currency(field_name)
-    field_value = public_send(field_name)
-    format_as_currency(field_value)
   end
 
   def should_process_uprn_change?
