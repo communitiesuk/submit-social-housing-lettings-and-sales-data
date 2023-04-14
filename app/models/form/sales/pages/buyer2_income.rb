@@ -3,7 +3,7 @@ class Form::Sales::Pages::Buyer2Income < ::Form::Page
     super
     @id = "buyer_2_income"
     @depends_on = [{
-      "jointpur" => 1,
+      "joint_purchase?" => true,
     }]
   end
 

@@ -39,7 +39,7 @@ RSpec.describe Form::Sales::Pages::PersonKnown, type: :model do
 
       it "has correct depends_on" do
         expect(page.depends_on).to eq([{
-          "jointpur" => 2,
+          "not_joint_purchase?" => true,
           "hholdcount" => {
             "operator" => ">=",
             "operand" => 1,
@@ -67,14 +67,14 @@ RSpec.describe Form::Sales::Pages::PersonKnown, type: :model do
       it "has correct depends_on" do
         expect(page.depends_on).to eq([
           {
-            "jointpur" => 2,
+            "not_joint_purchase?" => true,
             "hholdcount" => {
               "operator" => ">=",
               "operand" => 2,
             },
           },
           {
-            "jointpur" => 1,
+            "joint_purchase?" => true,
             "hholdcount" => {
               "operator" => ">=",
               "operand" => 1,
@@ -104,14 +104,14 @@ RSpec.describe Form::Sales::Pages::PersonKnown, type: :model do
       it "has correct depends_on" do
         expect(page.depends_on).to eq([
           {
-            "jointpur" => 2,
+            "not_joint_purchase?" => true,
             "hholdcount" => {
               "operator" => ">=",
               "operand" => 3,
             },
           },
           {
-            "jointpur" => 1,
+            "joint_purchase?" => true,
             "hholdcount" => {
               "operator" => ">=",
               "operand" => 2,
@@ -140,14 +140,14 @@ RSpec.describe Form::Sales::Pages::PersonKnown, type: :model do
       it "has correct depends_on" do
         expect(page.depends_on).to eq([
           {
-            "jointpur" => 2,
+            "not_joint_purchase?" => true,
             "hholdcount" => {
               "operator" => ">=",
               "operand" => 4,
             },
           },
           {
-            "jointpur" => 1,
+            "joint_purchase?" => true,
             "hholdcount" => {
               "operator" => ">=",
               "operand" => 3,

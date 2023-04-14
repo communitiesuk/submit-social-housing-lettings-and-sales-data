@@ -4,12 +4,12 @@ class Form::Sales::Pages::GenderIdentity2 < ::Form::Page
     @id = "buyer_2_gender_identity"
     @depends_on = [
       {
-        "jointpur" => 1,
-        "privacynotice" => 1,
+        "joint_purchase?" => true,
+        "buyer_has_seen_privacy_notice?" => true,
       },
       {
-        "jointpur" => 1,
-        "noint" => 1,
+        "joint_purchase?" => true,
+        "buyer_not_interviewed?" => true,
       },
     ]
   end

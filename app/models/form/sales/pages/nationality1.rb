@@ -4,7 +4,7 @@ class Form::Sales::Pages::Nationality1 < ::Form::Page
     @id = "buyer_1_nationality"
     @depends_on = [
       {
-        "privacynotice" => 1,
+        "buyer_has_seen_privacy_notice?" => true,
       },
       {
         "buyer_not_interviewed?" => true,
