@@ -1,6 +1,6 @@
 class Form::Lettings::Pages::MinRentValueCheck < ::Form::Page
-  def initialize(id, hsh, subsection)
-    super
+  def initialize(id, hsh, subsection, check_answers_card_number:)
+    super(id, hsh, subsection)
     @id = "min_rent_value_check"
     @depends_on = [{ "rent_in_soft_min_range?" => true }]
     @title_text = {
@@ -16,10 +16,11 @@ class Form::Lettings::Pages::MinRentValueCheck < ::Form::Page
           "i18n_template" => "soft_min_for_period",
         },
       ],
-    }
+    },
+    @check_answers_card_number = check_answers_card_number
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::RentValueCheck.new(nil, nil, self)]
+    @questions ||= [Form::Lettings::Questions::RentValueCheck.new(nil, nil, self, check_answers_card_number: @check_answers_card_number)]
   end
 end
