@@ -1,5 +1,5 @@
 class Form::Lettings::Pages::MaxRentValueCheck < ::Form::Page
-  def initialize(id, hsh, subsection, check_answers_card_number:)
+  def initialize(id, hsh, subsection, check_answers_card_number = nil)
     super(id, hsh, subsection)
     @id = "max_rent_value_check"
     @depends_on = [{ "rent_in_soft_max_range?" => true }]

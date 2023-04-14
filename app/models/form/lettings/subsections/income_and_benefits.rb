@@ -24,8 +24,8 @@ class Form::Lettings::Subsections::IncomeAndBenefits < ::Form::Subsection
       Form::Lettings::Pages::RentBiWeekly.new(nil, nil, self),
       Form::Lettings::Pages::Rent4Weekly.new(nil, nil, self),
       Form::Lettings::Pages::RentMonthly.new(nil, nil, self),
-      Form::Lettings::Pages::MinRentValueCheck.new(nil, nil, self, check_answers_card_number: 0),
-      Form::Lettings::Pages::MaxRentValueCheck.new(nil, nil, self, check_answers_card_number: 0),
+      Form::Lettings::Pages::MinRentValueCheck.new(nil, nil, self, 0),
+      Form::Lettings::Pages::MaxRentValueCheck.new(nil, nil, self, 0),
       Form::Lettings::Pages::Outstanding.new(nil, nil, self),
       Form::Lettings::Pages::OutstandingAmount.new(nil, nil, self),
     ].compact
