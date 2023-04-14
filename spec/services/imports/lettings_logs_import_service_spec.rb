@@ -719,6 +719,36 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
+      context "and tcharge is less than £10 per week" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q18ai").content = "1"
+          lettings_log_xml.at_xpath("//xmlns:Q18aii").content = "2"
+          lettings_log_xml.at_xpath("//xmlns:Q18aiii").content = "3"
+          lettings_log_xml.at_xpath("//xmlns:Q18aiv").content = "3"
+          lettings_log_xml.at_xpath("//xmlns:Q18av").content = "9"
+        end
+
+        it "intercepts the relevant validation error" do
+          expect(logger).to receive(:warn).with(/Removing brent with error: Enter a total charge that is at least £10 per week/)
+          expect(logger).to receive(:warn).with(/Removing scharge with error: Enter a total charge that is at least £10 per week/)
+          expect(logger).to receive(:warn).with(/Removing pscharge with error: Enter a total charge that is at least £10 per week/)
+          expect(logger).to receive(:warn).with(/Removing supcharg with error: Enter a total charge that is at least £10 per week/)
+          expect(logger).to receive(:warn).with(/Removing tcharge with error: Enter a total charge that is at least £10 per week/)
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the charges answers" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.tcharge).to be_nil
+        end
+      end
+
       context "and location is not active during the period" do
         let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
 

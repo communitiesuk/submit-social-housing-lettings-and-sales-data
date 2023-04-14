@@ -302,6 +302,7 @@ module Imports
         %i[supcharg outside_the_range] => %w[brent scharge pscharge supcharg tcharge],
         %i[scharge outside_the_range] => %w[brent scharge pscharge supcharg tcharge],
         %i[location_id not_active] => %w[location_id scheme_id],
+        %i[tcharge under_10] => %w[brent scharge pscharge supcharg tcharge],
       }
 
       (2..8).each do |person|

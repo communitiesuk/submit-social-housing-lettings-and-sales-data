@@ -99,7 +99,7 @@ module Validations::FinancialValidations
     end
 
     if record.tcharge.present? && weekly_value_in_range(record, "tcharge", 0, 9.99)
-      record.errors.add :tcharge, I18n.t("validations.financial.tcharge.under_10")
+      record.errors.add :tcharge, :under_10, message: I18n.t("validations.financial.tcharge.under_10")
     end
 
     answered_questions = [record.tcharge, record.chcharge].concat(record.household_charge && record.household_charge == 1 ? [record.household_charge] : [])
