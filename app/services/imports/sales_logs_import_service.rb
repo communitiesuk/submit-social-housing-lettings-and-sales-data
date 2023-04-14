@@ -156,6 +156,7 @@ module Imports
       attributes["student_not_child_value_check"] = 0
       attributes["discounted_sale_value_check"] = 0
       attributes["buyer_livein_value_check"] = 0
+      attributes["percentage_discount_value_check"] = 0
 
       # Sets the log creator
       owner_id = meta_field_value(xml_doc, "owner-user-id").strip
@@ -280,7 +281,8 @@ module Imports
          saledate_check
          student_not_child_value_check
          discounted_sale_value_check
-         buyer_livein_value_check]
+         buyer_livein_value_check
+         percentage_discount_value_check]
     end
 
     def check_status_completed(sales_log, previous_status)

@@ -555,6 +555,8 @@ en:
       title_text: "You told us that buyer 1 will not live in the property. For %{ownership_scheme} types, the buyer usually lives in the property."
     buyer2_livein_wrong_for_ownership_type:
       title_text: "You told us that buyer 2 will not live in the property. For %{ownership_scheme} types, the buyer usually lives in the property."
+    percentage_discount_value:
+      title_text: "You told us that the percentage discount was %{discount}. This seems high for this type of property."
 
   devise:
     two_factor_authentication:
