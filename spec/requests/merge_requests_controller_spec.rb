@@ -105,6 +105,36 @@ RSpec.describe MergeRequestsController, type: :request do
           expect(merge_request.merging_organisations.count).to eq(1)
         end
       end
+
+      context "when the user does not select an organisation" do
+        let(:params) { { merge_request: { merging_organisation: nil } } }
+
+        before do
+          patch "/merge-request/#{merge_request.id}/organisations", headers:, params:
+        end
+
+        it "does not update the merge request" do
+          merge_request.reload
+          expect(merge_request.merging_organisations.count).to eq(0)
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.merge_request.organisation_not_selected"))
+        end
+      end
+
+      context "when the user selects non existent id" do
+        let(:params) { { merge_request: { merging_organisation: "clearly_not_an_id" } } }
+
+        before do
+          patch "/merge-request/#{merge_request.id}/organisations", headers:, params:
+        end
+
+        it "does not update the merge request" do
+          merge_request.reload
+          expect(merge_request.merging_organisations.count).to eq(0)
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.merge_request.organisation_not_selected"))
+        end
+      end
     end
 
     describe "#remove_organisation" do

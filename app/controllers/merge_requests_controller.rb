@@ -64,7 +64,7 @@ private
   end
 
   def merge_request_organisation_params
-    { merge_request: @merge_request, merging_organisation: Organisation.find(params[:merge_request][:merging_organisation]) }
+    { merge_request: @merge_request, merging_organisation_id: params[:merge_request][:merging_organisation] }
   end
 
   def other_merging_organisaitions_params
