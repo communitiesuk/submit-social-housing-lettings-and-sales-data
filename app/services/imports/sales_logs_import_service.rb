@@ -155,6 +155,7 @@ module Imports
       attributes["monthly_charges_value_check"] = 0
       attributes["student_not_child_value_check"] = 0
       attributes["discounted_sale_value_check"] = 0
+      attributes["buyer_livein_value_check"] = 0
 
       # Sets the log creator
       owner_id = meta_field_value(xml_doc, "owner-user-id").strip
@@ -278,7 +279,8 @@ module Imports
          hodate_check
          saledate_check
          student_not_child_value_check
-         discounted_sale_value_check]
+         discounted_sale_value_check
+         buyer_livein_value_check]
     end
 
     def check_status_completed(sales_log, previous_status)

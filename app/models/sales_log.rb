@@ -43,7 +43,7 @@ class SalesLog < Log
   }
   scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org) }
 
-  OPTIONAL_FIELDS = %w[saledate_check purchid monthly_charges_value_check old_persons_shared_ownership_value_check othtype discounted_sale_value_check].freeze
+  OPTIONAL_FIELDS = %w[saledate_check purchid monthly_charges_value_check old_persons_shared_ownership_value_check othtype discounted_sale_value_check buyer_livein_value_check].freeze
   RETIREMENT_AGES = { "M" => 65, "F" => 60, "X" => 65 }.freeze
 
   def lettings?
@@ -344,5 +344,16 @@ class SalesLog < Log
 
   def beds_for_la_sale_range
     beds.nil? ? nil : [beds, LaSaleRange::MAX_BEDS].min
+  end
+
+  def ownership_scheme
+    case ownershipsch
+    when 1
+      "shared ownership"
+    when 2
+      "discounted ownership"
+    when 3
+      "outright sale"
+    end
   end
 end
