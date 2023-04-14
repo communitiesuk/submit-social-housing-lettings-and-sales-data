@@ -122,6 +122,22 @@ RSpec.describe MergeRequestsController, type: :request do
         end
       end
     end
+
+    describe "#other_merging_organisations" do
+      let(:params) { { merge_request: { other_merging_organisations: "A list of other merging organisations" } } }
+
+      context "when adding other merging organisations" do
+        before do
+          MergeRequestOrganisation.create!(merge_request_id: merge_request.id, merging_organisation_id: other_organisation.id)
+          patch "/merge-request/#{merge_request.id}/other-merging-organisations", headers:, params:
+        end
+
+        it "updates the merge request" do
+          merge_request.reload
+          expect(merge_request.other_merging_organisations).to eq("A list of other merging organisations")
+        end
+      end
+    end
   end
 
   context "when user is signed in as a support user" do

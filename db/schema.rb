@@ -363,6 +363,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_13_135407) do
 
   create_table "merge_requests", force: :cascade do |t|
     t.integer "requesting_organisation_id"
+    t.text "other_merging_organisations"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -532,6 +533,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_13_135407) do
     t.integer "prevten"
     t.integer "mortgageused"
     t.integer "wchair"
+    t.integer "income2_value_check"
     t.integer "armedforcesspouse"
     t.datetime "hodate", precision: nil
     t.integer "hoday"
@@ -556,14 +558,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_13_135407) do
     t.integer "retirement_value_check"
     t.integer "hodate_check"
     t.integer "extrabor_value_check"
-    t.integer "grant_value_check"
-    t.integer "staircase_bought_value_check"
     t.integer "deposit_and_mortgage_value_check"
     t.integer "shared_ownership_deposit_value_check"
-    t.integer "old_persons_shared_ownership_value_check"
-    t.integer "income2_value_check"
-    t.integer "monthly_charges_value_check"
+    t.integer "grant_value_check"
     t.integer "value_value_check"
+    t.integer "old_persons_shared_ownership_value_check"
+    t.integer "staircase_bought_value_check"
+    t.integer "monthly_charges_value_check"
     t.integer "details_known_5"
     t.integer "details_known_6"
     t.integer "saledate_check"
@@ -573,10 +574,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_13_135407) do
     t.integer "ethnicbuy2"
     t.integer "proplen_asked"
     t.string "old_id"
-    t.integer "pregblank"
     t.integer "buy2living"
     t.integer "prevtenbuy2"
-    t.integer "nationalbuy2"
+    t.integer "pregblank"
     t.string "uprn"
     t.integer "uprn_known"
     t.integer "uprn_confirmed"
@@ -584,10 +584,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_13_135407) do
     t.string "address_line2"
     t.string "town_or_city"
     t.string "county"
+    t.integer "nationalbuy2"
     t.integer "discounted_sale_value_check"
     t.integer "student_not_child_value_check"
-    t.integer "buyer_livein_value_check"
     t.integer "percentage_discount_value_check"
+    t.integer "buyer_livein_value_check"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["old_id"], name: "index_sales_logs_on_old_id", unique: true

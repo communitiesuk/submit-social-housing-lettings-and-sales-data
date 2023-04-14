@@ -5,11 +5,10 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-   <p class="govuk-body">Add all organisations to be merged - we have already added your own.</p>
+   <p class="govuk-body">Which organisations are merging?</p>
 
 <%= form_with model: @merge_request, url: merge_request_organisations_path, method: :patch do |f| %>
   <%= f.govuk_error_summary %>
-  <p class="govuk-body">Start typing to search</p>
   <%= render partial: "organisation_relationships/related_organisation_select_question", locals: {
     field: :merging_organisation,
     question: Form::Question.new("", { "answer_options" => @answer_options }, nil),
@@ -40,8 +39,11 @@
       <% end %>
     <% end %>
   <% end %>
-  <%= govuk_details(summary_text: "I cannot find an organisation on the list") do %>
-  <% end %>
 <% end %>
-<%= govuk_button_link_to "Continue", "#", button: true %>
+<%= form_with model: @merge_request, url: merge_request_other_merging_organisations_path, method: :patch do |f| %>
+  <%= govuk_details(summary_text: "Can't find the managing agent you're looking for?") do %>
+    <%= f.govuk_text_area :other_merging_organisations, label: { text: "Other organisations" }, hint: { text: "List other organisations that are part of the merge but not registered on CORE." }, rows: 9 %>
+  <% end %>
+    <%= f.govuk_submit "Continue" %>
+<% end %>
 </div>

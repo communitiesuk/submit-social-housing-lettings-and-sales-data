@@ -1,6 +1,6 @@
 class MergeRequestsController < ApplicationController
   before_action :authenticate_user!
-  before_action :find_resource, only: %i[organisations update_organisations remove_merging_organsiation]
+  before_action :find_resource, only: %i[organisations update_organisations remove_merging_organisation update_other_merging_organisations]
 
   def create
     @merge_request = MergeRequest.create!(merge_request_params)
@@ -26,7 +26,15 @@ class MergeRequestsController < ApplicationController
     end
   end
 
-  def remove_merging_organsiation
+  def update_other_merging_organisations
+    if @merge_request.update(other_merging_organisaitions_params)
+      redirect_to merge_request_absorbing_organisation_path(@merge_request)
+    else
+      render :organisations, status: :unprocessable_entity
+    end
+  end
+
+  def remove_merging_organisation
     MergeRequestOrganisation.find_by(merge_request_organisation_params).destroy!
     @merge_request.reload
     @answer_options = organisations_answer_options
@@ -46,7 +54,7 @@ private
   end
 
   def merge_request_params
-    merge_params = params.fetch(:merge_request, {}).permit(:requesting_organisation_id)
+    merge_params = params.fetch(:merge_request, {}).permit(:requesting_organisation_id, :other_merging_organisations)
 
     if current_user.data_coordinator? || current_user.data_provider?
       merge_params[:requesting_organisation_id] = current_user.organisation.id
@@ -57,6 +65,10 @@ private
 
   def merge_request_organisation_params
     { merge_request: @merge_request, merging_organisation: Organisation.find(params[:merge_request][:merging_organisation]) }
+  end
+
+  def other_merging_organisaitions_params
+    params.fetch(:merge_request, {}).permit(:other_merging_organisations)
   end
 
   def find_resource
