@@ -1,6 +1,6 @@
 class MergeRequestsController < ApplicationController
   before_action :authenticate_user!
-  before_action :find_resource, only: %i[organisations update_organisations]
+  before_action :find_resource, only: %i[organisations update_organisations remove_merging_organsiation]
 
   def create
     @merge_request = MergeRequest.create!(merge_request_params)
@@ -24,6 +24,14 @@ class MergeRequestsController < ApplicationController
       @merging_organisations_list = [@merge_request.requesting_organisation] + @merge_request.merging_organisations
       render :organisations, status: :unprocessable_entity
     end
+  end
+
+  def remove_merging_organsiation
+    MergeRequestOrganisation.find_by(merge_request_organisation_params).destroy
+    @merge_request.reload
+    @answer_options = organisations_answer_options
+    @merging_organisations_list = [@merge_request.requesting_organisation] + @merge_request.merging_organisations
+    render :organisations
   end
 
 private
