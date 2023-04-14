@@ -129,7 +129,7 @@ Rails.application.routes.draw do
     patch "organisations", to: "merge_requests#update_organisations"
     get "organisations/remove", to: "merge_requests#remove_merging_organisation"
     patch "other-merging-organisations", to: "merge_requests#update_other_merging_organisations"
-    get "absorbing_organisation", to: "merge_requests#absorbing_organisation"
+    get "absorbing-organisation", to: "merge_requests#absorbing_organisation"
   end
 
   resources :lettings_logs, path: "/lettings-logs" do
