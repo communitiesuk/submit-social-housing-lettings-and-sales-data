@@ -99,7 +99,7 @@ module Validations::FinancialValidations
     end
 
     if record.tcharge.present? && weekly_value_in_range(record, "tcharge", 0, 9.99)
-      record.errors.add :tcharge, I18n.t("validations.financial.tcharge.under_10")
+      record.errors.add :tcharge, :under_10, message: I18n.t("validations.financial.tcharge.under_10")
     end
 
     answered_questions = [record.tcharge, record.chcharge].concat(record.household_charge && record.household_charge == 1 ? [record.household_charge] : [])
@@ -224,7 +224,7 @@ private
       end
 
       if record.weekly_value(record["brent"]) > rent_range.hard_max
-        record.errors.add :brent, I18n.t("validations.financial.brent.above_hard_max")
+        record.errors.add :brent, :over_hard_max, message: I18n.t("validations.financial.brent.above_hard_max")
         record.errors.add :beds, I18n.t("validations.financial.brent.beds.above_hard_max")
         record.errors.add :la, I18n.t("validations.financial.brent.la.above_hard_max")
         record.errors.add :postcode_known, I18n.t("validations.financial.brent.postcode_known.above_hard_max")
