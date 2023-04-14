@@ -138,7 +138,7 @@ module Validations::FinancialValidations
         message = I18n.t("validations.financial.carehome.out_of_range", period:, min_chcharge:, max_chcharge:)
 
         record.errors.add :period, message
-        record.errors.add :chcharge, :out_of_range, message: message
+        record.errors.add :chcharge, :out_of_range, message:
       end
     end
   end
