@@ -1,5 +1,5 @@
 class Form::Lettings::Pages::MinRentValueCheck < ::Form::Page
-  def initialize(id, hsh, subsection, check_answers_card_number = nil)
+  def initialize(id, hsh, subsection, check_answers_card_number: nil)
     super(id, hsh, subsection)
     @id = "min_rent_value_check"
     @depends_on = [{ "rent_in_soft_min_range?" => true }]
