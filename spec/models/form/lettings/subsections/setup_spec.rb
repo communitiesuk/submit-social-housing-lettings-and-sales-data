@@ -50,14 +50,22 @@ RSpec.describe Form::Lettings::Subsections::Setup, type: :model do
       expect(setup.pages.map(&:id)).to eq(
         %w[
           stock_owner
+          min_rent_value_check
+          max_rent_value_check
           managing_organisation
           created_by
           needs_type
           scheme
           location
+          min_rent_value_check
+          max_rent_value_check
           renewal
           tenancy_start_date
+          min_rent_value_check
+          max_rent_value_check
           rent_type
+          min_rent_value_check
+          max_rent_value_check
           tenant_code
           property_reference
         ],
