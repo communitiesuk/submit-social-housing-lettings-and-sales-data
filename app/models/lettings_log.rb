@@ -671,6 +671,6 @@ private
   end
 
   def should_process_uprn_change?
-    uprn && stardate && (uprn_changed? || stardate_changed?) && stardate.year >= 2023
+    uprn && startdate && (uprn_changed? || startdate_changed?) && startdate.year >= 2023
   end
 end
