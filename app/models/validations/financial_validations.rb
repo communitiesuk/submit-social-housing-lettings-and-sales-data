@@ -4,7 +4,7 @@ module Validations::FinancialValidations
   # Validations methods need to be called 'validate_<page_name>' to run on model save
   # or 'validate_' to run on submit as well
   def validate_outstanding_rent_amount(record)
-    if !record.has_hbrentshortfall? && record.tshortfall.present?
+    if !record.has_housing_benefit_rent_shortfall? && record.tshortfall.present?
       record.errors.add :tshortfall, :no_outstanding_charges, message: I18n.t("validations.financial.tshortfall.outstanding_amount_not_required")
     end
   end
@@ -69,7 +69,7 @@ module Validations::FinancialValidations
   end
 
   def validate_tshortfall(record)
-    if record.has_hbrentshortfall? && no_known_benefits?(record)
+    if record.has_housing_benefit_rent_shortfall? && no_known_benefits?(record)
       record.errors.add :tshortfall, I18n.t("validations.financial.hbrentshortfall.outstanding_no_benefits")
     end
   end
@@ -138,7 +138,7 @@ module Validations::FinancialValidations
         message = I18n.t("validations.financial.carehome.out_of_range", period:, min_chcharge:, max_chcharge:)
 
         record.errors.add :period, message
-        record.errors.add :chcharge, :out_of_range, message: message
+        record.errors.add :chcharge, :out_of_range, message:
       end
     end
   end

@@ -123,13 +123,17 @@ RSpec.describe Form::Lettings::Questions::SchemeId, type: :model do
     end
 
     context "when the question is answered" do
-      it "returns 'select an option' as selected answer" do
+      before do
+        FactoryBot.create(:location, scheme:)
+      end
+
+      it "returns scheme as selected answer" do
         lettings_log.update!(scheme:)
         answers = question.displayed_answer_options(lettings_log).map do |key, value|
           OpenStruct.new(id: key, name: value.respond_to?(:service_name) ? value.service_name : nil, resource: value)
         end
         answers.each do |answer|
-          if answer.id == scheme.id
+          if answer.id.to_i == scheme.id
             expect(question.answer_selected?(lettings_log, answer)).to eq(true)
           else
             expect(question.answer_selected?(lettings_log, answer)).to eq(false)

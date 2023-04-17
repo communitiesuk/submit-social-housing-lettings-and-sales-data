@@ -2,7 +2,6 @@
 
 <% content_for :before_content do %>
   <%= govuk_back_link(
-        text: "Back",
         href: params[:referrer] == "check_answers" ? scheme_location_check_answers_path(@scheme, @location, route: params[:route]) : scheme_location_type_of_unit_path(@scheme, @location, route: params[:route]),
       ) %>
 <% end %>

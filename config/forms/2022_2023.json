@@ -561,7 +561,7 @@
                   "hint_text": "This is after the last tenancy ended. If the property is being offered for let for the first time, enter 0.",
                   "type": "numeric",
                   "min": 0,
-                  "max": 150,
+                  "max": 20,
                   "step": 1,
                   "width": 2
                 }
@@ -583,7 +583,7 @@
                   "hint_text": "If the property is being offered for let for the first time, enter 0.",
                   "type": "numeric",
                   "min": 0,
-                  "max": 150,
+                  "max": 20,
                   "step": 1,
                   "width": 2
                 }
@@ -697,8 +697,8 @@
                   "header": "How many bedrooms does the property have?",
                   "hint_text": "If shared accommodation, enter the number of bedrooms occupied by this household. A bedsit has 1 bedroom.",
                   "type": "numeric",
-                  "min": 0,
-                  "max": 150,
+                  "min": 1,
+                  "max": 12,
                   "step": 1,
                   "width": 2
                 }
@@ -7492,23 +7492,26 @@
                     "4": {
                       "value": "Every calendar month"
                     },
-                    "5": {
-                      "value": "Weekly for 50 weeks"
-                    },
-                    "6": {
-                      "value": "Weekly for 49 weeks"
-                    },
-                    "7": {
-                      "value": "Weekly for 48 weeks"
+                    "9": {
+                      "value": "Weekly for 46 weeks"
                     },
                     "8": {
                       "value": "Weekly for 47 weeks"
                     },
-                    "9": {
-                      "value": "Weekly for 46 weeks"
+                    "7": {
+                      "value": "Weekly for 48 weeks"
+                    },
+                    "6": {
+                      "value": "Weekly for 49 weeks"
+                    },
+                    "5": {
+                      "value": "Weekly for 50 weeks"
                     },
                     "1": {
                       "value": "Weekly for 52 weeks"
+                    },
+                    "10": {
+                      "value": "Weekly for 53 weeks"
                     }
                   }
                 }
@@ -7558,63 +7561,13 @@
               },
               "depends_on": [
                 {
-                  "period": 1,
-                  "needstype": 2,
+                  "rent_and_charges_paid_weekly?": true,
+                  "is_supported_housing?": true,
                   "household_charge": 0
                 },
                 {
-                  "period": 1,
-                  "needstype": 2,
-                  "household_charge": null
-                },
-                {
-                  "period": 5,
-                  "needstype": 2,
-                  "household_charge": 0
-                },
-                {
-                  "period": 5,
-                  "needstype": 2,
-                  "household_charge": null
-                },
-                {
-                  "period": 6,
-                  "needstype": 2,
-                  "household_charge": 0
-                },
-                {
-                  "period": 6,
-                  "needstype": 2,
-                  "household_charge": null
-                },
-                {
-                  "period": 7,
-                  "needstype": 2,
-                  "household_charge": 0
-                },
-                {
-                  "period": 7,
-                  "needstype": 2,
-                  "household_charge": null
-                },
-                {
-                  "period": 8,
-                  "needstype": 2,
-                  "household_charge": 0
-                },
-                {
-                  "period": 8,
-                  "needstype": 2,
-                  "household_charge": null
-                },
-                {
-                  "period": 9,
-                  "needstype": 2,
-                  "household_charge": 0
-                },
-                {
-                  "period": 9,
-                  "needstype": 2,
+                  "rent_and_charges_paid_weekly?": true,
+                  "is_supported_housing?": true,
                   "household_charge": null
                 }
               ]
@@ -7898,124 +7851,14 @@
               },
               "depends_on": [
                 {
-                  "period": 1,
+                  "rent_and_charges_paid_weekly?": true,
                   "household_charge": 0,
-                  "is_carehome": 0
+                  "is_carehome?": false
                 },
                 {
-                  "period": 1,
+                  "rent_and_charges_paid_weekly?": true,
                   "household_charge": null,
-                  "is_carehome": 0
-                },
-                {
-                  "period": 5,
-                  "household_charge": 0,
-                  "is_carehome": 0
-                },
-                {
-                  "period": 5,
-                  "household_charge": null,
-                  "is_carehome": 0
-                },
-                {
-                  "period": 6,
-                  "household_charge": 0,
-                  "is_carehome": 0
-                },
-                {
-                  "period": 6,
-                  "household_charge": null,
-                  "is_carehome": 0
-                },
-                {
-                  "period": 7,
-                  "household_charge": 0,
-                  "is_carehome": 0
-                },
-                {
-                  "period": 7,
-                  "household_charge": null,
-                  "is_carehome": 0
-                },
-                {
-                  "period": 8,
-                  "household_charge": 0,
-                  "is_carehome": 0
-                },
-                {
-                  "period": 8,
-                  "household_charge": null,
-                  "is_carehome": 0
-                },
-                {
-                  "period": 9,
-                  "household_charge": 0,
-                  "is_carehome": 0
-                },
-                {
-                  "period": 9,
-                  "household_charge": null,
-                  "is_carehome": 0
-                },
-                {
-                  "period": 1,
-                  "household_charge": 0,
-                  "is_carehome": null
-                },
-                {
-                  "period": 1,
-                  "household_charge": null,
-                  "is_carehome": null
-                },
-                {
-                  "period": 5,
-                  "household_charge": 0,
-                  "is_carehome": null
-                },
-                {
-                  "period": 5,
-                  "household_charge": null,
-                  "is_carehome": null
-                },
-                {
-                  "period": 6,
-                  "household_charge": 0,
-                  "is_carehome": null
-                },
-                {
-                  "period": 6,
-                  "household_charge": null,
-                  "is_carehome": null
-                },
-                {
-                  "period": 7,
-                  "household_charge": 0,
-                  "is_carehome": null
-                },
-                {
-                  "period": 7,
-                  "household_charge": null,
-                  "is_carehome": null
-                },
-                {
-                  "period": 8,
-                  "household_charge": 0,
-                  "is_carehome": null
-                },
-                {
-                  "period": 8,
-                  "household_charge": null,
-                  "is_carehome": null
-                },
-                {
-                  "period": 9,
-                  "household_charge": 0,
-                  "is_carehome": null
-                },
-                {
-                  "period": 9,
-                  "household_charge": null,
-                  "is_carehome": null
+                  "is_carehome?": false
                 }
               ]
             },
@@ -8601,6 +8444,12 @@
                       "label": " every week for 52 weeks",
                       "depends_on": {
                         "period": 1
+                      }
+                    },
+                    {
+                      "label": " every week for 53 weeks",
+                      "depends_on": {
+                        "period": 10
                       }
                     }
                   ]

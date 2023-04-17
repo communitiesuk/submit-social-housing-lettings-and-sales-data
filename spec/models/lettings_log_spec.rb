@@ -1,6 +1,7 @@
 require "rails_helper"
 require "shared/shared_examples_for_derived_fields"
 
+# rubocop:disable RSpec/MessageChain
 # rubocop:disable RSpec/AnyInstance
 RSpec.describe LettingsLog do
   let(:different_managing_organisation) { create(:organisation) }
@@ -109,10 +110,6 @@ RSpec.describe LettingsLog do
 
     it "validates bedroom number" do
       expect(validator).to receive(:validate_shared_housing_rooms)
-    end
-
-    it "validates number of times the property has been relet" do
-      expect(validator).to receive(:validate_property_number_of_times_relet)
     end
 
     it "validates tenancy type" do
@@ -1081,6 +1078,87 @@ RSpec.describe LettingsLog do
             expect(record_from_db["wscharge"]).to eq(30.98)
             expect(record_from_db["wrent"]).to eq(100.97)
             expect(record_from_db["wtcharge"]).to eq(187.2)
+          end
+        end
+
+        context "when rent is paid weekly for 53 weeks" do
+          it "correctly derives and saves weekly rent" do
+            lettings_log.update!(brent: 130, period: 10)
+            record_from_db = ActiveRecord::Base.connection.execute("select wrent from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            expect(lettings_log.wrent).to eq(132.5)
+            expect(record_from_db["wrent"]).to eq(132.5)
+          end
+
+          it "correctly derives and saves weekly service charge" do
+            lettings_log.update!(scharge: 30, period: 10)
+            record_from_db = ActiveRecord::Base.connection.execute("select wscharge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            expect(lettings_log.wscharge).to eq(30.58)
+            expect(record_from_db["wscharge"]).to eq(30.58)
+          end
+
+          it "correctly derives and saves weekly personal service charge" do
+            lettings_log.update!(pscharge: 30, period: 10)
+            record_from_db = ActiveRecord::Base.connection.execute("select wpschrge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            expect(lettings_log.wpschrge).to eq(30.58)
+            expect(record_from_db["wpschrge"]).to eq(30.58)
+          end
+
+          it "correctly derives and saves weekly support charge" do
+            lettings_log.update!(supcharg: 30, period: 10)
+            record_from_db = ActiveRecord::Base.connection.execute("select wsupchrg from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            expect(lettings_log.wsupchrg).to eq(30.58)
+            expect(record_from_db["wsupchrg"]).to eq(30.58)
+          end
+
+          it "correctly derives and saves weekly total charge" do
+            lettings_log.update!(tcharge: 30, period: 10)
+            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            expect(lettings_log.wtcharge).to eq(30.58)
+            expect(record_from_db["wtcharge"]).to eq(30.58)
+          end
+
+          context "when the tenant has an outstanding amount after benefits" do
+            context "when tenant is in receipt of housing benefit" do
+              it "correctly derives and saves weekly total shortfall" do
+                lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 10, hb: 1)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                expect(lettings_log.wtshortfall).to eq(132.5)
+                expect(record_from_db["wtshortfall"]).to eq(132.5)
+              end
+            end
+
+            context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
+              it "correctly derives and saves weekly total shortfall" do
+                lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 10, hb: 6)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                expect(lettings_log.wtshortfall).to eq(132.5)
+                expect(record_from_db["wtshortfall"]).to eq(132.5)
+              end
+            end
+
+            context "when tenant is in receipt of housing benefit and universal credit" do
+              it "correctly derives and saves weekly total shortfall" do
+                lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 10, hb: 8)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                expect(lettings_log.wtshortfall).to eq(132.5)
+                expect(record_from_db["wtshortfall"]).to eq(132.5)
+              end
+            end
+          end
+
+          it "correctly derives floats" do
+            lettings_log.update!(supcharg: 30.12, pscharge: 25.13, scharge: 30.98, brent: 100.97, period: 10)
+            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            expect(lettings_log.wsupchrg).to eq(30.7)
+            expect(lettings_log.wpschrge).to eq(25.61)
+            expect(lettings_log.wscharge).to eq(31.58)
+            expect(lettings_log.wrent).to eq(102.91)
+            expect(lettings_log.wtcharge).to eq(190.8)
+            expect(record_from_db["wsupchrg"]).to eq(30.7)
+            expect(record_from_db["wpschrge"]).to eq(25.61)
+            expect(record_from_db["wscharge"]).to eq(31.58)
+            expect(record_from_db["wrent"]).to eq(102.91)
+            expect(record_from_db["wtcharge"]).to eq(190.8)
           end
         end
       end
@@ -2261,7 +2339,7 @@ RSpec.describe LettingsLog do
 
   describe "resetting invalidated fields" do
     let(:scheme) { create(:scheme, owning_organisation: created_by_user.organisation) }
-    let(:location) { create(:location, location_code: "E07000223", scheme:) }
+    let!(:location) { create(:location, location_code: "E07000223", scheme:) }
     let(:lettings_log) do
       create(
         :lettings_log,
@@ -3022,11 +3100,11 @@ RSpec.describe LettingsLog do
     end
 
     context "when a non setup field is invalid" do
-      subject(:model) { described_class.new(beds: 404) }
+      subject(:model) { build(:lettings_log, :completed, offered: 234) }
 
       it "blanks it" do
         model.valid?
-        expect { model.blank_invalid_non_setup_fields! }.to change(model, :beds)
+        expect { model.blank_invalid_non_setup_fields! }.to change(model, :offered)
       end
     end
   end
@@ -3062,6 +3140,7 @@ RSpec.describe LettingsLog do
         .and change(lettings_log, :postcode_full).from(nil).to("POSTCODE")
         .and change(lettings_log, :uprn_confirmed).from(1).to(nil)
         .and change(lettings_log, :county).from("county").to(nil)
+        .and change(lettings_log, :uprn_known).from(nil).to(1)
       end
     end
 
@@ -3111,5 +3190,55 @@ RSpec.describe LettingsLog do
       end
     end
   end
+
+  describe "#collection_period_open?" do
+    let(:log) { build(:lettings_log, startdate:) }
+
+    context "when startdate is nil" do
+      let(:startdate) { nil }
+
+      it "returns false" do
+        expect(log.collection_period_open?).to eq(true)
+      end
+    end
+
+    context "when older_than_previous_collection_year" do
+      let(:previous_collection_start_date) { Time.zone.local(2050, 4, 1) }
+      let(:startdate) { previous_collection_start_date - 1.day }
+
+      before do
+        allow(log).to receive(:previous_collection_start_date).and_return(previous_collection_start_date)
+      end
+
+      it "returns true" do
+        expect(log.collection_period_open?).to eq(false)
+      end
+    end
+
+    context "when form end date is in the future" do
+      let(:startdate) { nil }
+
+      before do
+        allow(log).to receive_message_chain(:form, :end_date).and_return(Time.zone.now + 1.day)
+      end
+
+      it "returns true" do
+        expect(log.collection_period_open?).to eq(true)
+      end
+    end
+
+    context "when form end date is in the past" do
+      let(:startdate) { Time.zone.local(2020, 4, 1) }
+
+      before do
+        allow(log).to receive_message_chain(:form, :end_date).and_return(Time.zone.now - 1.day)
+      end
+
+      it "returns false" do
+        expect(log.collection_period_open?).to eq(false)
+      end
+    end
+  end
 end
 # rubocop:enable RSpec/AnyInstance
+# rubocop:enable RSpec/MessageChain

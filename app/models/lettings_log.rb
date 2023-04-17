@@ -58,7 +58,7 @@ class LettingsLog < Log
   OPTIONAL_FIELDS = %w[first_time_property_let_as_social_housing tenancycode propcode chcharge].freeze
   RENT_TYPE_MAPPING_LABELS = { 1 => "Social Rent", 2 => "Affordable Rent", 3 => "Intermediate Rent" }.freeze
   HAS_BENEFITS_OPTIONS = [1, 6, 8, 7].freeze
-  NUM_OF_WEEKS_FROM_PERIOD = { 2 => 26, 3 => 13, 4 => 12, 5 => 50, 6 => 49, 7 => 48, 8 => 47, 9 => 46, 1 => 52 }.freeze
+  NUM_OF_WEEKS_FROM_PERIOD = { 2 => 26, 3 => 13, 4 => 12, 5 => 50, 6 => 49, 7 => 48, 8 => 47, 9 => 46, 1 => 52, 10 => 53 }.freeze
   SUFFIX_FROM_PERIOD = { 2 => "every 2 weeks", 3 => "every 4 weeks", 4 => "every month" }.freeze
   RETIREMENT_AGES = { "M" => 67, "F" => 60, "X" => 67 }.freeze
 
@@ -203,7 +203,7 @@ class LettingsLog < Log
     needstype == 2
   end
 
-  def has_hbrentshortfall?
+  def has_housing_benefit_rent_shortfall?
     # 1: Yes
     hbrentshortfall == 1
   end
@@ -496,7 +496,27 @@ class LettingsLog < Log
   end
 
   def care_home_charge_expected_not_provided?
-    is_carehome == 1 && chcharge.blank?
+    is_carehome? && chcharge.blank?
+  end
+
+  def rent_and_charges_paid_weekly?
+    [1, 5, 6, 7, 8, 9, 10].include? period
+  end
+
+  def rent_and_charges_paid_every_4_weeks?
+    period == 3
+  end
+
+  def rent_and_charges_paid_every_2_weeks?
+    period == 2
+  end
+
+  def rent_and_charges_paid_monthly?
+    period == 4
+  end
+
+  def is_carehome?
+    is_carehome == 1
   end
 
 private

@@ -50,7 +50,7 @@ RSpec.describe CollectionTimeHelper do
       let(:now) { Time.utc(2022, 8, 3) }
 
       it "returns the same year as the current start year" do
-        expect(collection_start_year(now)).to eq(2022)
+        expect(collection_start_year_for_date(now)).to eq(2022)
       end
 
       it "returns the correct current start date" do
@@ -66,7 +66,7 @@ RSpec.describe CollectionTimeHelper do
       let(:now) { Time.utc(2022, 2, 3) }
 
       it "returns the previous year as the current start year" do
-        expect(collection_start_year(now)).to eq(2021)
+        expect(collection_start_year_for_date(now)).to eq(2021)
       end
 
       it "returns the correct current start date" do

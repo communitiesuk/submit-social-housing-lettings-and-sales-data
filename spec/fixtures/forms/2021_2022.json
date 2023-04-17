@@ -879,23 +879,26 @@
                     "4": {
                       "value": "Every calendar month"
                     },
-                    "5": {
-                      "value": "Weekly for 50 weeks"
-                    },
-                    "6": {
-                      "value": "Weekly for 49 weeks"
-                    },
-                    "7": {
-                      "value": "Weekly for 48 weeks"
+                    "9": {
+                      "value": "Weekly for 46 weeks"
                     },
                     "8": {
                       "value": "Weekly for 47 weeks"
                     },
-                    "9": {
-                      "value": "Weekly for 46 weeks"
+                    "7": {
+                      "value": "Weekly for 48 weeks"
+                    },
+                    "6": {
+                      "value": "Weekly for 49 weeks"
+                    },
+                    "5": {
+                      "value": "Weekly for 50 weeks"
                     },
                     "1": {
                       "value": "Weekly for 52 weeks"
+                    },
+                    "10": {
+                      "value": "Weekly for 53 weeks"
                     }
                   }
                 },
@@ -905,7 +908,7 @@
                   "hint_text": "Eligible for housing benefit or Universal Credit",
                   "type": "numeric",
                   "min": 0,
-                  "step": 1,
+                  "step": 0.01,
                   "width": 4,
                   "fields-to-add": [
                     "brent",
@@ -921,7 +924,7 @@
                   "hint_text": "Eligible for housing benefit or Universal Credit",
                   "type": "numeric",
                   "min": 0,
-                  "step": 1,
+                  "step": 0.01,
                   "width": 4,
                   "fields-to-add": [
                     "brent",
@@ -937,7 +940,7 @@
                   "hint_text": "Not eligible for housing benefit or Universal Credit. For example, hot water excluding water rates.",
                   "type": "numeric",
                   "min": 0,
-                  "step": 1,
+                  "step": 0.01,
                   "width": 4,
                   "fields-to-add": [
                     "brent",
@@ -954,7 +957,7 @@
                   "type": "numeric",
                   "min": 0,
                   "max": 300,
-                  "step": 1,
+                  "step": 0.01,
                   "width": 4,
                   "fields-to-add": [
                     "brent",
@@ -970,7 +973,7 @@
                   "hint_text": "This is the total of rent and all charges",
                   "type": "numeric_output",
                   "min": 0,
-                  "step": 1,
+                  "step": 0.01,
                   "width": 4,
                   "readonly": true,
                   "requires_js": true
@@ -987,7 +990,7 @@
                   "hint_text": "",
                   "type": "numeric",
                   "min": 0,
-                  "step": "1",
+                  "step": 1,
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week"
@@ -997,11 +1000,12 @@
             "care_home_charge": {
               "questions": {
                 "offered": {
-                  "check_answer_label": "Basic Rent",
-                  "header": "What is the basic rent?",
-                  "hint_text": "Eligible for housing benefit or Universal Credit",
+                  "check_answer_label": "Times previously offered since becoming available",
+                  "header": "Since becoming available for re-let, how many times has the property been previously offered?",
+                  "hint_text": "This is after the last tenancy ended. If the property is being offered for let for the first time, enter 0.",
                   "type": "numeric",
                   "min": 0,
+                  "max": 20,
                   "step": 1,
                   "width": 4
                 }
@@ -1015,11 +1019,12 @@
             "care_home_charge_bi_weekly": {
               "questions": {
                 "offered": {
-                  "check_answer_label": "Basic Rent",
-                  "header": "What is the basic rent?",
-                  "hint_text": "Eligible for housing benefit or Universal Credit",
+                  "check_answer_label": "Times previously offered since becoming available",
+                  "header": "Since becoming available for re-let, how many times has the property been previously offered?",
+                  "hint_text": "This is after the last tenancy ended. If the property is being offered for let for the first time, enter 0.",
                   "type": "numeric",
                   "min": 0,
+                  "max": 20,
                   "step": 1,
                   "width": 4
                 }

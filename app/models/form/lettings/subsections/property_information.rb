@@ -30,7 +30,6 @@ class Form::Lettings::Subsections::PropertyInformation < ::Form::Subsection
   def uprn_questions
     if form.start_date.year >= 2023
       [
-        Form::Lettings::Pages::UprnKnown.new(nil, nil, self),
         Form::Lettings::Pages::Uprn.new(nil, nil, self),
         Form::Lettings::Pages::UprnConfirmation.new(nil, nil, self),
         Form::Lettings::Pages::Address.new(nil, nil, self),

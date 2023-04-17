@@ -110,7 +110,7 @@ RSpec.describe "Form Navigation" do
         click_button("Save and continue")
         click_link(text: "Back")
         click_link(text: "Back")
-        expect(page).to have_current_path("/lettings-logs")
+        expect(page).to have_current_path("/lettings-logs/#{id}")
       end
 
       context "when changing an answer from the check answers page", js: true do

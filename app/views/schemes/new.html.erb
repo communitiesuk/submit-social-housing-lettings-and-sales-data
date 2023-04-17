@@ -6,10 +6,7 @@
       <% content_for :title, "Create a new supported housing scheme" %>
 
       <% content_for :before_content do %>
-        <%= govuk_back_link(
-              text: "Back",
-              href: "javascript:history.go(-1);",
-            ) %>
+        <%= govuk_back_link(href: "javascript:history.back()") %>
       <% end %>
 
       <h1 class="govuk-heading-l">

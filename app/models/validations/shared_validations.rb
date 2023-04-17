@@ -34,6 +34,27 @@ module Validations::SharedValidations
     end
   end
 
+  def validate_numeric_step(record)
+    record.form.numeric_questions.each do |question|
+      next unless question.step
+      next unless record[question.id] && question.page.routed_to?(record, nil)
+
+      value = record.public_send("#{question.id}_before_type_cast")
+      field = question.check_answer_label || question.id
+      incorrect_accuracy = (value.to_d * 100) % (question.step * 100) != 0
+
+      if question.step < 1 && incorrect_accuracy
+        record.errors.add question.id.to_sym, I18n.t("validations.numeric.nearest_hundredth", field:)
+      elsif incorrect_accuracy || value.to_d != value.to_i    # if the user enters a value in exponent notation (eg '4e1') the to_i method does not convert this to the correct value
+        field = question.check_answer_label || question.id
+        case question.step
+        when 1 then record.errors.add question.id.to_sym, I18n.t("validations.numeric.whole_number", field:)
+        when 10 then record.errors.add question.id.to_sym, I18n.t("validations.numeric.nearest_ten", field:)
+        end
+      end
+    end
+  end
+
   def validate_property_postcode(record)
     postcode = record.postcode_full
     if record.postcode_known? && (postcode.blank? || !postcode.match(POSTCODE_REGEXP))

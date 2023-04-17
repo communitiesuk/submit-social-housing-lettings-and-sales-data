@@ -36,7 +36,7 @@ RSpec.describe Form::Sales::Questions::Uprn, type: :model do
   end
 
   it "has the correct hint" do
-    expect(question.hint_text).to eq("The Unique Property Reference Number (UPRN) is a unique number system created by Ordnance Survey and used by housing providers and sectors UK-wide. For example 10010457355.")
+    expect(question.hint_text).to be_nil
   end
 
   it "has the correct unanswered_error_message" do
@@ -61,33 +61,44 @@ RSpec.describe Form::Sales::Questions::Uprn, type: :model do
           county: "Test County",
           postcode_full: "AA1 1AA",
           la: "E09000003",
+          uprn_known:,
         )
       end
 
-      it "returns formatted value" do
-        expect(question.get_extra_check_answer_value(log)).to eq(
-          "\n\n1, Test Street\nTest Town\nTest County\nAA1 1AA\nWestminster",
-        )
+      context "when uprn known nil" do
+        let(:uprn_known) { nil }
+
+        it "returns formatted value" do
+          expect(question.get_extra_check_answer_value(log)).to be_nil
+        end
+      end
+
+      context "when uprn known" do
+        let(:uprn_known) { 1 }
+
+        it "returns formatted value" do
+          expect(question.get_extra_check_answer_value(log)).to eq(
+            "\n\n1, Test Street\nTest Town\nTest County\nAA1 1AA\nWestminster",
+          )
+        end
+      end
+
+      context "when uprn not known" do
+        let(:uprn_known) { 0 }
+
+        it "returns formatted value" do
+          expect(question.get_extra_check_answer_value(log)).to be_nil
+        end
       end
     end
   end
 
-  describe "has the correct hidden_in_check_answers" do
-    context "when uprn_known == 1" do
-      let(:log) { create(:sales_log) }
-
-      it "returns false" do
-        log.uprn_known = 1
-        expect(question.hidden_in_check_answers?(log)).to eq(false)
-      end
-    end
-
-    context "when uprn_known != 1" do
-      let(:log) { create(:sales_log, uprn_known: 0) }
-
-      it "returns false" do
-        expect(question.hidden_in_check_answers?(log)).to eq(true)
-      end
-    end
+  it "has the correct inferred_check_answers_value" do
+    expect(question.inferred_check_answers_value).to eq([{
+      "condition" => {
+        "uprn_known" => 0,
+      },
+      "value" => "Not known",
+    }])
   end
 end

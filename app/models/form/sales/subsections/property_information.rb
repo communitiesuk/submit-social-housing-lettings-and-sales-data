@@ -24,7 +24,6 @@ class Form::Sales::Subsections::PropertyInformation < ::Form::Subsection
   def uprn_questions
     if form.start_date.year >= 2023
       [
-        Form::Sales::Pages::UprnKnown.new(nil, nil, self),
         Form::Sales::Pages::Uprn.new(nil, nil, self),
         Form::Sales::Pages::UprnConfirmation.new(nil, nil, self),
         Form::Sales::Pages::Address.new(nil, nil, self),

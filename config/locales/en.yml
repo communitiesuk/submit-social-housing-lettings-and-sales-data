@@ -144,6 +144,11 @@ en:
     numeric:
       within_range: "%{field} must be between %{min} and %{max}"
       above_min: "%{field} must be at least %{min}"
+      whole_number: "%{field} must be a whole number"
+      nearest_ten: "%{field} must be given to the nearest ten"
+      nearest_hundredth: "%{field} must be given to the nearest hundredth"
+      normal_format: "Enter a number"
+
     date:
       invalid_date: "Enter a date in the correct format, for example 31 1 2022"
       outside_collection_window: Enter a date within the 22/23 collection year, which is between 1st April 2022 and 31st March 2023
@@ -190,11 +195,11 @@ en:
           reactivating_soon: "The scheme %{name} is not available until %{date}. Select another scheme or edit the tenancy start date"
           activating_soon: "%{name} is not available until %{date}. Enter a tenancy start date after %{date}"
       owning_organisation:
-        invalid: "Please select owning organisation or managing organisation that you belong to"
+        invalid: "Please select the owning organisation or managing organisation that you belong to"
       managing_organisation:
-        invalid: "Please select owning organisation or managing organisation that you belong to"
+        invalid: "Please select the owning organisation or managing organisation that you belong to"
       created_by:
-        invalid: "Please select owning organisation or managing organisation that you belong to"
+        invalid: "Please select the owning organisation or managing organisation that you belong to"
       lettype:
         general_needs_mismatch: Lettings type must be a general needs type because you selected general needs when uploading the file
         supported_housing_mismatch: Lettings type must be a supported housing type because you selected supported housing when uploading the file
@@ -213,8 +218,6 @@ en:
         ten_years_before_tenancy_start: "Enter a void date no more than 10 years before the tenancy start date"
         before_tenancy_start: "Enter a void date that is before the tenancy start date"
         after_mrcdate: "Void date must be before the major repairs date if provided"
-      offered:
-        relet_number: "Enter a number between 0 and 20 for the amount of times the property has been re-let"
       la:
         la_invalid_for_org: "%{org_name} does not operate in %{la_name}"
         postcode_invalid_for_org: "Enter a postcode in an area covered by %{org_name}"
@@ -230,8 +233,6 @@ en:
         one_seven_bedroom_shared: "A shared house must have 1 to 7 bedrooms"
         one_three_bedroom_single_tenant_shared: "A shared house with fewer than two tenants must have 1 to 3 bedrooms"
       beds:
-        non_positive: "Number of bedrooms has to be greater than 0"
-        over_max: "Number of bedrooms cannot be more than 12"
         bedsits_have_max_one_bedroom: "Number of bedrooms must be 1 if the property is a bedsit"
       proptype:
         bedsits_have_max_one_bedroom: "Answer cannot be 'Bedsit' if the property has 2 or more bedrooms"
@@ -469,6 +470,7 @@ en:
         during_deactivated_period: "The scheme is already deactivated during this date, please enter a different date"
       owning_organisation:
         does_not_own_stock: "Enter an organisation that owns housing stock"
+      no_completed_locations: "This scheme cannot be chosen as it has no completed locations"
 
     location:
       postcode_blank: "Enter a postcode"

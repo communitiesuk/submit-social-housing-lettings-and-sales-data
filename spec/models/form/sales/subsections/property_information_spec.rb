@@ -41,7 +41,6 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
       it "has correct pages" do
         expect(property_information.pages.map(&:id)).to eq(
           %w[
-            uprn_known
             uprn
             uprn_confirmation
             address
