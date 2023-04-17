@@ -16,7 +16,7 @@ RSpec.describe Form::Lettings::Questions::Uprn, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("What is the property's UPRN")
+    expect(question.header).to eq("What is the property's UPRN?")
   end
 
   it "has the correct check_answer_label" do
