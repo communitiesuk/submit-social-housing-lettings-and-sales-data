@@ -4,7 +4,7 @@ RSpec.describe Validations::SetupValidations do
   subject(:setup_validator) { setup_validator_class.new }
 
   let(:setup_validator_class) { Class.new { include Validations::SetupValidations } }
-  let(:record) { FactoryBot.create(:lettings_log) }
+  let(:record) { create(:lettings_log) }
 
   describe "tenancy start date" do
     context "when in 22/23 collection" do
@@ -188,7 +188,7 @@ RSpec.describe Validations::SetupValidations do
       let(:scheme) { create(:scheme, created_at: Time.zone.local(2022, 4, 1)) }
 
       before do
-        FactoryBot.create(:location, scheme:)
+        create(:location, scheme:)
         create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), scheme:)
         scheme.reload
       end
@@ -213,7 +213,7 @@ RSpec.describe Validations::SetupValidations do
       let(:scheme) { create(:scheme, created_at: Time.zone.local(2022, 4, 1)) }
 
       before do
-        FactoryBot.create(:location, scheme:)
+        create(:location, scheme:)
         create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), scheme:)
         create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 2), reactivation_date: Time.zone.local(2022, 8, 3), scheme:)
         create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 1), reactivation_date: Time.zone.local(2022, 9, 4), scheme:)
@@ -310,8 +310,8 @@ RSpec.describe Validations::SetupValidations do
   end
 
   describe "#validate_organisation" do
-    let(:user) { FactoryBot.create(:user) }
-    let(:other_organisation) { FactoryBot.create(:organisation) }
+    let(:user) { create(:user) }
+    let(:other_organisation) { create(:organisation) }
 
     it "validates if neither managing nor owning organisation is the same as created_by user organisation" do
       record.created_by = user
@@ -366,6 +366,38 @@ RSpec.describe Validations::SetupValidations do
       expect(record.errors["created_by"]).to be_empty
       expect(record.errors["owning_organisation_id"]).to be_empty
       expect(record.errors["managing_organisation_id"]).to be_empty
+    end
+  end
+
+  describe "#validate_scheme_has_confirmed_locations_validation" do
+    let(:scheme) { create(:scheme) }
+
+    context "with a scheme that has no confirmed locations" do
+      before do
+        create(:location, scheme:, postcode: nil)
+        scheme.reload
+      end
+
+      it "produces an error" do
+        record.scheme = scheme
+        setup_validator.validate_scheme_has_confirmed_locations_validation(record)
+        expect(record.errors["scheme_id"])
+          .to include(match I18n.t("validations.scheme.no_completed_locations"))
+      end
+    end
+
+    context "with a scheme that has confirmed locations" do
+      before do
+        create(:location, scheme:)
+        scheme.reload
+      end
+
+      it "does not produce an error" do
+        record.scheme = scheme
+        setup_validator.validate_scheme_has_confirmed_locations_validation(record)
+        expect(record.errors["scheme_id"])
+          .to be_empty
+      end
     end
   end
 end

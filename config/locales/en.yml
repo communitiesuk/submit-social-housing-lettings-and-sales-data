@@ -467,6 +467,7 @@ en:
         during_deactivated_period: "The scheme is already deactivated during this date, please enter a different date"
       owning_organisation:
         does_not_own_stock: "Enter an organisation that owns housing stock"
+      no_completed_locations: "This scheme cannot be chosen as it has no completed locations"
 
     location:
       postcode_blank: "Enter a postcode"
