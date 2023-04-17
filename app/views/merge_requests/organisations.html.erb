@@ -11,7 +11,7 @@
   <div class="govuk-grid-column-two-thirds-from-desktop">
    <p class="govuk-body">Add all organisations to be merged - we have already added your own.</p>
 
-<%= form_with model: @merge_request, url: merge_request_organisations_path, method: :patch do |f| %>
+<%= form_with model: @merge_request, url: organisations_merge_request_path, method: :patch do |f| %>
   <%= f.govuk_error_summary %>
   <p class="govuk-body">Start typing to search</p>
   <%= render partial: "organisation_relationships/related_organisation_select_question", locals: {
@@ -38,7 +38,7 @@
             scope: "row",
             class: "govuk-!-text-align-right",
           }) do %>
-            <%= govuk_link_to("Remove", merge_request_organisations_remove_path(merge_request: { merging_organisation: merging_organisation.id })) %>
+            <%= govuk_link_to("Remove", organisations_remove_merge_request_path(merge_request: { merging_organisation: merging_organisation.id })) %>
           <% end %>
         <% end %>
       <% end %>
