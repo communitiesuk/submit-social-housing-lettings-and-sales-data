@@ -2,7 +2,7 @@ class BulkUploadErrorRowComponent < ViewComponent::Base
   attr_reader :bulk_upload_errors
 
   def initialize(bulk_upload_errors:)
-    @bulk_upload_errors = sorted_errors(bulk_upload_errors)
+    @bulk_upload_errors = bulk_upload_errors
 
     super
   end
@@ -61,11 +61,5 @@ class BulkUploadErrorRowComponent < ViewComponent::Base
 
   def sales?
     bulk_upload.log_type == "sales"
-  end
-
-private
-
-  def sorted_errors(errors)
-    errors.sort_by { |e| e.cell.rjust(3, "0") }
   end
 end
