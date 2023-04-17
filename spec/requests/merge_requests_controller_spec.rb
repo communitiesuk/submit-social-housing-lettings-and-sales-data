@@ -140,13 +140,24 @@ RSpec.describe MergeRequestsController, type: :request do
     describe "#remove_organisation" do
       let(:params) { { merge_request: { merging_organisation: other_organisation.id } } }
 
-      context "when removing an organisation from merge request " do
+      context "when removing an organisation from merge request" do
         before do
           MergeRequestOrganisation.create!(merge_request_id: merge_request.id, merging_organisation_id: other_organisation.id)
           get "/merge-request/#{merge_request.id}/organisations/remove", headers:, params:
         end
 
         it "updates the merge request" do
+          expect(merge_request.merging_organisations.count).to eq(0)
+          expect(page).not_to have_link("Remove")
+        end
+      end
+
+      context "when removing an organisation that is not part of a merge from merge request" do
+        before do
+          get "/merge-request/#{merge_request.id}/organisations/remove", headers:, params:
+        end
+
+        it "does not throw an error" do
           expect(merge_request.merging_organisations.count).to eq(0)
           expect(page).not_to have_link("Remove")
         end

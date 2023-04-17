@@ -38,7 +38,7 @@
             scope: "row",
             class: "govuk-!-text-align-right",
           }) do %>
-            <%= govuk_link_to("Remove", merge_request_organisations_path) %>
+            <%= govuk_link_to("Remove", merge_request_organisations_remove_path(merge_request: { merging_organisation: merging_organisation.id })) %>
           <% end %>
         <% end %>
       <% end %>

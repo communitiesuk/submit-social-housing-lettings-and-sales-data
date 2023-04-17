@@ -36,7 +36,7 @@ class MergeRequestsController < ApplicationController
   end
 
   def remove_merging_organisation
-    MergeRequestOrganisation.find_by(merge_request_organisation_params).destroy!
+    MergeRequestOrganisation.find_by(merge_request_organisation_params)&.destroy!
     @merge_request.reload
     @answer_options = organisations_answer_options
     @merging_organisations_list = [@merge_request.requesting_organisation] + @merge_request.merging_organisations
