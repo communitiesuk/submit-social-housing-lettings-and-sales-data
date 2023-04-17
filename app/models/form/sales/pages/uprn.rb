@@ -6,6 +6,7 @@ class Form::Sales::Pages::Uprn < ::Form::Page
 
   def questions
     @questions ||= [
+      Form::Sales::Questions::UprnKnown.new(nil, nil, self),
       Form::Sales::Questions::Uprn.new(nil, nil, self),
     ]
   end
