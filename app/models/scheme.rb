@@ -161,18 +161,6 @@ class Scheme < ApplicationRecord
     ]
   end
 
-  def synonyms
-    locations.map(&:postcode).join(",")
-  end
-
-  def appended_text
-    "#{locations.count { |location| location.startdate.blank? || location.startdate <= Time.zone.today }} locations"
-  end
-
-  def hint
-    [primary_client_group, secondary_client_group].filter(&:present?).join(", ")
-  end
-
   def care_acts_options_with_hints
     hints = { "Yes – part registered as a care home": "A proportion of units are registered as being a care home." }
 

@@ -16,8 +16,8 @@ class BulkUploadErrorSummaryTableComponent < ViewComponent::Base
       .bulk_upload_errors
       .group(:col, :field, :error)
       .having("count(*) >= ?", display_threshold)
+      .order_by_col
       .count
-      .sort_by { |el| el[0][0].rjust(3, "0") }
   end
 
   def errors?
@@ -39,8 +39,8 @@ private
       .bulk_upload_errors
       .where(category: "setup")
       .group(:col, :field, :error)
+      .order_by_col
       .count
-      .sort_by { |el| el[0][0].rjust(3, "0") }
   end
 
   def display_threshold

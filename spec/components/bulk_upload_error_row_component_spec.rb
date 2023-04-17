@@ -78,22 +78,6 @@ RSpec.describe BulkUploadErrorRowComponent, type: :component do
       end
     end
 
-    context "when multiple errors for a row" do
-      subject(:component) { described_class.new(bulk_upload_errors:) }
-
-      let(:bulk_upload_errors) do
-        [
-          build(:bulk_upload_error, cell: "Z1"),
-          build(:bulk_upload_error, cell: "AB1"),
-          build(:bulk_upload_error, cell: "A1"),
-        ]
-      end
-
-      it "is sorted by cell" do
-        expect(component.bulk_upload_errors.map(&:cell)).to eql(%w[A1 Z1 AB1])
-      end
-    end
-
     context "when a sales bulk upload" do
       let(:bulk_upload) { create(:bulk_upload, :sales) }
       let(:field) { :field_87 }

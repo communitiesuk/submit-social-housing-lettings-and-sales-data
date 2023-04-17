@@ -39,6 +39,45 @@ RSpec.describe Form::Lettings::Questions::SchemeId, type: :model do
     expect(question.derived?).to be false
   end
 
+  it "has the correct inferred_answers" do
+    expect(question.inferred_answers).to eq({
+      "location.name": {
+        "scheme_has_multiple_locations?": false,
+      },
+    })
+  end
+
+  describe "has the correct get_extra_check_answer_value" do
+    let(:scheme) { create(:scheme) }
+
+    context "when locations are present but not inferred" do
+      let(:lettings_log) { create(:lettings_log) }
+
+      before do
+        allow(lettings_log).to receive(:scheme_has_multiple_locations?).and_return(true)
+      end
+
+      it "returns nil" do
+        expect(question.get_extra_check_answer_value(lettings_log)).to be_nil
+      end
+    end
+
+    context "when location is present and inferred" do
+      let!(:location) { create(:location, scheme:) }
+      let!(:lettings_log) { create(:lettings_log, scheme:, location:) }
+      let(:real_2022_2023_form) { Form.new("config/forms/2022_2023.json") }
+
+      before do
+        allow(lettings_log).to receive(:scheme_has_multiple_locations?).and_return(false)
+        allow(lettings_log).to receive(:form).and_return(real_2022_2023_form)
+      end
+
+      it "returns the postcode" do
+        expect(question.get_extra_check_answer_value(lettings_log)).to eq(location.postcode)
+      end
+    end
+  end
+
   context "when a user is signed in" do
     let(:organisation) { FactoryBot.create(:organisation) }
     let(:organisation_2) { FactoryBot.create(:organisation) }
@@ -84,13 +123,17 @@ RSpec.describe Form::Lettings::Questions::SchemeId, type: :model do
     end
 
     context "when the question is answered" do
-      it "returns 'select an option' as selected answer" do
+      before do
+        FactoryBot.create(:location, scheme:)
+      end
+
+      it "returns scheme as selected answer" do
         lettings_log.update!(scheme:)
         answers = question.displayed_answer_options(lettings_log).map do |key, value|
           OpenStruct.new(id: key, name: value.respond_to?(:service_name) ? value.service_name : nil, resource: value)
         end
         answers.each do |answer|
-          if answer.id == scheme.id
+          if answer.id.to_i == scheme.id
             expect(question.answer_selected?(lettings_log, answer)).to eq(true)
           else
             expect(question.answer_selected?(lettings_log, answer)).to eq(false)

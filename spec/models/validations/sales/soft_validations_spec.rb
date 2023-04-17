@@ -913,4 +913,325 @@ RSpec.describe Validations::Sales::SoftValidations do
       end
     end
   end
+
+  describe "#buyer1_livein_wrong_for_ownership_type?" do
+    context "when it's a shared ownership" do
+      let(:record) { FactoryBot.build(:sales_log, ownershipsch: 1) }
+
+      context "and buy1livein is no" do
+        before do
+          record.buy1livein = 2
+        end
+
+        it "returns true" do
+          expect(record).to be_buyer1_livein_wrong_for_ownership_type
+        end
+      end
+
+      context "and buy1livein is yes" do
+        before do
+          record.buy1livein = 1
+        end
+
+        it "returns false" do
+          expect(record).not_to be_buyer1_livein_wrong_for_ownership_type
+        end
+      end
+    end
+  end
+
+  describe "#percentage_discount_invalid?" do
+    context "when property type is Flat (1)" do
+      let(:record) { FactoryBot.build(:sales_log, proptype: 1) }
+
+      context "and discount is under 50%" do
+        before do
+          record.discount = 49
+        end
+
+        it "returns false" do
+          expect(record).not_to be_percentage_discount_invalid
+        end
+      end
+
+      context "and discount is over 50%" do
+        before do
+          record.discount = 51
+        end
+
+        it "returns true" do
+          expect(record).to be_percentage_discount_invalid
+        end
+      end
+    end
+
+    context "when it's a discounted ownership" do
+      let(:record) { FactoryBot.build(:sales_log, ownershipsch: 2) }
+
+      context "and buy1livein is no" do
+        before do
+          record.buy1livein = 2
+        end
+
+        it "returns true" do
+          expect(record).to be_buyer1_livein_wrong_for_ownership_type
+        end
+      end
+
+      context "and buy1livein is yes" do
+        before do
+          record.buy1livein = 1
+        end
+
+        it "returns false" do
+          expect(record).not_to be_buyer1_livein_wrong_for_ownership_type
+        end
+      end
+    end
+
+    context "when property type is masionette or bedsit (2)" do
+      let(:record) { FactoryBot.build(:sales_log, proptype: 2) }
+
+      context "and discount is under 50%" do
+        before do
+          record.discount = 49
+        end
+
+        it "returns false" do
+          expect(record).not_to be_percentage_discount_invalid
+        end
+      end
+
+      context "and discount is over 50%" do
+        before do
+          record.discount = 51
+        end
+
+        it "returns true" do
+          expect(record).to be_percentage_discount_invalid
+        end
+      end
+    end
+
+    context "when it's a outright sale" do
+      let(:record) { FactoryBot.build(:sales_log, ownershipsch: 3) }
+
+      context "and buy1livein is no" do
+        before do
+          record.buy1livein = 2
+        end
+
+        it "returns false" do
+          expect(record).not_to be_buyer1_livein_wrong_for_ownership_type
+        end
+      end
+
+      context "and buy1livein is yes" do
+        before do
+          record.buy1livein = 1
+        end
+
+        it "returns false" do
+          expect(record).not_to be_buyer1_livein_wrong_for_ownership_type
+        end
+      end
+    end
+
+    context "when property type is House (3)" do
+      let(:record) { FactoryBot.build(:sales_log, proptype: 3) }
+
+      context "and discount is under 35%" do
+        before do
+          record.discount = 34
+        end
+
+        it "returns false" do
+          expect(record).not_to be_percentage_discount_invalid
+        end
+      end
+
+      context "and discount is over 35%" do
+        before do
+          record.discount = 36
+        end
+
+        it "returns true" do
+          expect(record).to be_percentage_discount_invalid
+        end
+      end
+    end
+
+    context "when ownership is not given" do
+      let(:record) { FactoryBot.build(:sales_log, ownershipsch: 3) }
+
+      before do
+        record.ownershipsch = nil
+      end
+
+      it "returns false" do
+        expect(record).not_to be_buyer1_livein_wrong_for_ownership_type
+      end
+    end
+  end
+
+  describe "#buyer2_livein_wrong_for_ownership_type?" do
+    context "when it's a shared ownership" do
+      let(:record) { FactoryBot.build(:sales_log, ownershipsch: 1, jointpur: 1) }
+
+      context "and buy2livein is no" do
+        before do
+          record.buy2livein = 2
+        end
+
+        it "returns true" do
+          expect(record).to be_buyer2_livein_wrong_for_ownership_type
+        end
+      end
+
+      context "and buy2livein is yes" do
+        before do
+          record.buy2livein = 1
+        end
+
+        it "returns false" do
+          expect(record).not_to be_buyer2_livein_wrong_for_ownership_type
+        end
+      end
+
+      context "and not a joint purchase" do
+        before do
+          record.buy2livein = 2
+          record.jointpur = 2
+        end
+
+        it "returns false" do
+          expect(record).not_to be_buyer2_livein_wrong_for_ownership_type
+        end
+      end
+    end
+
+    context "when it's a discounted ownership" do
+      let(:record) { FactoryBot.build(:sales_log, ownershipsch: 2, jointpur: 1) }
+
+      context "and buy2livein is no" do
+        before do
+          record.buy2livein = 2
+        end
+
+        it "returns true" do
+          expect(record).to be_buyer2_livein_wrong_for_ownership_type
+        end
+      end
+
+      context "and buy2livein is yes" do
+        before do
+          record.buy2livein = 1
+        end
+
+        it "returns false" do
+          expect(record).not_to be_buyer2_livein_wrong_for_ownership_type
+        end
+      end
+    end
+
+    context "when it's a outright sale" do
+      let(:record) { FactoryBot.build(:sales_log, ownershipsch: 3, jointpur: 1) }
+
+      context "and buy2livein is no" do
+        before do
+          record.buy2livein = 2
+        end
+
+        it "returns false" do
+          expect(record).not_to be_buyer2_livein_wrong_for_ownership_type
+        end
+      end
+
+      context "and buy2livein is yes" do
+        before do
+          record.buy2livein = 1
+        end
+
+        it "returns false" do
+          expect(record).not_to be_buyer2_livein_wrong_for_ownership_type
+        end
+      end
+    end
+
+    context "when ownership is not given" do
+      let(:record) { FactoryBot.build(:sales_log, ownershipsch: 3, jointpur: 1) }
+
+      before do
+        record.ownershipsch = nil
+      end
+
+      it "returns false" do
+        expect(record).not_to be_buyer2_livein_wrong_for_ownership_type
+      end
+    end
+
+    context "when property type is Bungalow (4)" do
+      let(:record) { FactoryBot.build(:sales_log, proptype: 4) }
+
+      context "and discount is under 35%" do
+        before do
+          record.discount = 34
+        end
+
+        it "returns false" do
+          expect(record).not_to be_percentage_discount_invalid
+        end
+      end
+
+      context "and discount is over 35%" do
+        before do
+          record.discount = 36
+        end
+
+        it "returns true" do
+          expect(record).to be_percentage_discount_invalid
+        end
+      end
+    end
+
+    context "when property type is Other (9)" do
+      let(:record) { FactoryBot.build(:sales_log, proptype: 9) }
+
+      context "and discount is under 35%" do
+        before do
+          record.discount = 34
+        end
+
+        it "returns false" do
+          expect(record).not_to be_percentage_discount_invalid
+        end
+      end
+
+      context "and discount is over 35%" do
+        before do
+          record.discount = 36
+        end
+
+        it "returns true" do
+          expect(record).to be_percentage_discount_invalid
+        end
+      end
+    end
+
+    context "when discount is not given" do
+      let(:record) { FactoryBot.build(:sales_log, proptype: 1, discount: nil) }
+
+      it "returns false" do
+        expect(record).not_to be_percentage_discount_invalid
+      end
+    end
+
+    context "when property type is not given" do
+      let(:record) { FactoryBot.build(:sales_log, proptype: nil, discount: 51) }
+
+      it "returns false" do
+        expect(record).not_to be_percentage_discount_invalid
+      end
+    end
+  end
 end

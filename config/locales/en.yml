@@ -144,6 +144,11 @@ en:
     numeric:
       within_range: "%{field} must be between %{min} and %{max}"
       above_min: "%{field} must be at least %{min}"
+      whole_number: "%{field} must be a whole number"
+      nearest_ten: "%{field} must be given to the nearest ten"
+      nearest_hundredth: "%{field} must be given to the nearest hundredth"
+      normal_format: "Enter a number"
+
     date:
       invalid_date: "Enter a date in the correct format, for example 31 1 2022"
       outside_collection_window: Enter a date within the 22/23 collection year, which is between 1st April 2022 and 31st March 2023
@@ -190,11 +195,11 @@ en:
           reactivating_soon: "The scheme %{name} is not available until %{date}. Select another scheme or edit the tenancy start date"
           activating_soon: "%{name} is not available until %{date}. Enter a tenancy start date after %{date}"
       owning_organisation:
-        invalid: "Please select owning organisation or managing organisation that you belong to"
+        invalid: "Please select the owning organisation or managing organisation that you belong to"
       managing_organisation:
-        invalid: "Please select owning organisation or managing organisation that you belong to"
+        invalid: "Please select the owning organisation or managing organisation that you belong to"
       created_by:
-        invalid: "Please select owning organisation or managing organisation that you belong to"
+        invalid: "Please select the owning organisation or managing organisation that you belong to"
       lettype:
         general_needs_mismatch: Lettings type must be a general needs type because you selected general needs when uploading the file
         supported_housing_mismatch: Lettings type must be a supported housing type because you selected supported housing when uploading the file
@@ -213,8 +218,6 @@ en:
         ten_years_before_tenancy_start: "Enter a void date no more than 10 years before the tenancy start date"
         before_tenancy_start: "Enter a void date that is before the tenancy start date"
         after_mrcdate: "Void date must be before the major repairs date if provided"
-      offered:
-        relet_number: "Enter a number between 0 and 20 for the amount of times the property has been re-let"
       la:
         la_invalid_for_org: "%{org_name} does not operate in %{la_name}"
         postcode_invalid_for_org: "Enter a postcode in an area covered by %{org_name}"
@@ -230,8 +233,6 @@ en:
         one_seven_bedroom_shared: "A shared house must have 1 to 7 bedrooms"
         one_three_bedroom_single_tenant_shared: "A shared house with fewer than two tenants must have 1 to 3 bedrooms"
       beds:
-        non_positive: "Number of bedrooms has to be greater than 0"
-        over_max: "Number of bedrooms cannot be more than 12"
         bedsits_have_max_one_bedroom: "Number of bedrooms must be 1 if the property is a bedsit"
       proptype:
         bedsits_have_max_one_bedroom: "Answer cannot be 'Bedsit' if the property has 2 or more bedrooms"
@@ -253,10 +254,10 @@ en:
         freq_missing: "Select how often the household receives income"
         earnings_missing: "Enter how much income the household has in total"
       income:
-        over_hard_max_for_london: "Income must not exceed £90,000.00 for properties within London local authorities"
-        over_hard_max_for_outside_london: "Income must not exceed £80,000.00 for properties outside London local authorities"
-        combined_over_hard_max_for_london: "Combined income must not exceed £90,000.00 for properties within London local authorities"
-        combined_over_hard_max_for_outside_london: "Combined income must not exceed £80,000.00 for properties outside London local authorities"
+        over_hard_max_for_london: "Income must be £90,000 or lower for properties within a London local authority"
+        over_hard_max_for_outside_london: "Income must be £80,000 or lower for properties outside London local authority"
+        combined_over_hard_max_for_london: "Combined income must be £90,000 or lower for properties within a London local authority"
+        combined_over_hard_max_for_outside_london: "Combined income must be £80,000 or lower for properties outside London local authorities"
         child_has_income: "Child's income must be £0"
       negative_currency: "Enter an amount above 0"
       rent:
@@ -283,7 +284,7 @@ en:
             general_needs: "Enter a value for the support charge between £0 and £60 per week if the landlord is a local authority and it is a general needs letting"
             supported_housing: "Enter a value for the support charge between £0 and £120 per week if the landlord is a local authority and it is a supported housing letting"
       ecstat:
-        over_hard_max: "Net income of £%{hard_max} per week is too high for given the tenant’s working situation"
+        over_hard_max: "Net income of %{hard_max} per week is too high given the tenant’s working situation"
       brent:
         below_hard_min: "Rent is below the absolute minimum expected for a property of this type. Please check the rent, rent period, local authority and (if general needs) number of bedrooms"
         above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type. Please check the rent, rent period, local authority and (if general needs) number of bedrooms"
@@ -314,7 +315,7 @@ en:
       charges:
         complete_1_of_3: "Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?’"
       tcharge:
-        under_10: "Enter a total charge that is at least £10 per week"
+        under_10: "Enter a total charge that is at least £10.00 per week"
       rent_period:
         invalid_for_org: "%{org_name} does not charge rent %{rent_period}"
       carehome:
@@ -466,6 +467,7 @@ en:
         during_deactivated_period: "The scheme is already deactivated during this date, please enter a different date"
       owning_organisation:
         does_not_own_stock: "Enter an organisation that owns housing stock"
+      no_completed_locations: "This scheme cannot be chosen as it has no completed locations"
 
     location:
       postcode_blank: "Enter a postcode"
@@ -519,8 +521,8 @@ en:
       over_soft_max_for_la_combined: "You told us the combined income of this household is %{combined_income}, which seems high."
     rent:
       outside_range_title: "You told us the rent is %{brent}"
-      min_hint_text: "The minimum rent expected for this type of property in this local authority is £%{soft_min_for_period}."
-      max_hint_text: "The maximum rent expected for this type of property in this local authority is £%{soft_max_for_period}."
+      min_hint_text: "The minimum rent expected for this type of property in this local authority is %{soft_min_for_period}."
+      max_hint_text: "The maximum rent expected for this type of property in this local authority is %{soft_max_for_period}."
     purchase_price:
       title_text: "You told us the purchase price is %{value}"
       hint_text: "The %{min_or_max} purchase price expected for this type of property in this local authority is %{soft_min_or_soft_max}"
@@ -542,7 +544,7 @@ en:
     void_date:
       title_text: "You told us the time between the start of the tenancy and the void date is more than 2 years"
     shared_ownership_deposit:
-      title_text: "Mortgage, deposit and cash discount total should equal £%{expected_shared_ownership_deposit_value}"
+      title_text: "Mortgage, deposit and cash discount total should equal %{expected_shared_ownership_deposit_value}"
     old_persons_shared_ownership: "At least one buyer should be aged over 64 for Older persons’ shared ownership scheme"
     staircase_bought_seems_high: "You said %{percentage}% was bought in this staircasing transaction, which seems high. Are you sure?"
     monthly_charges_over_soft_max:
@@ -550,10 +552,16 @@ en:
     student_not_child:
       title_text: "You told us this person is a student aged beween 16 and 19"
     discounted_sale_value:
-      title_text: "Mortgage, deposit, and grant total must equal £%{value_with_discount}"
-      informative_text: "Your given mortgage, deposit and grant total is £%{mortgage_deposit_and_grant_total}"
+      title_text: "Mortgage, deposit, and grant total must equal %{value_with_discount}"
+      informative_text: "Your given mortgage, deposit and grant total is %{mortgage_deposit_and_grant_total}"
     care_home_charges:
       title_text: "Care home charges should be provided if this is a care home accommodation"
+    buyer1_livein_wrong_for_ownership_type:
+      title_text: "You told us that buyer 1 will not live in the property. For %{ownership_scheme} types, the buyer usually lives in the property."
+    buyer2_livein_wrong_for_ownership_type:
+      title_text: "You told us that buyer 2 will not live in the property. For %{ownership_scheme} types, the buyer usually lives in the property."
+    percentage_discount_value:
+      title_text: "You told us that the percentage discount was %{discount}. This seems high for this type of property."
 
   devise:
     two_factor_authentication:

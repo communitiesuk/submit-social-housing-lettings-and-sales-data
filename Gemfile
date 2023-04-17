@@ -70,6 +70,7 @@ group :development, :test do
   gem "byebug", platforms: %i[mri mingw x64_mingw]
   gem "dotenv-rails"
   gem "factory_bot_rails"
+  gem "faker"
   gem "pry-byebug"
 
   gem "parallel_tests"
@@ -93,7 +94,6 @@ group :test do
   gem "capybara", require: false
   gem "capybara-lockstep"
   gem "capybara-screenshot"
-  gem "faker"
   gem "rspec-rails", require: false
   gem "selenium-webdriver", require: false
   gem "simplecov", require: false

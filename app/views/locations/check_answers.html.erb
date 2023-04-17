@@ -3,7 +3,6 @@
 
 <% content_for :before_content do %>
   <%= govuk_back_link(
-    text: "Back",
     href: case params[:route]
           when "locations"
             scheme_locations_path(@scheme)

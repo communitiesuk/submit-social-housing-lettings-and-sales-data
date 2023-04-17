@@ -11,6 +11,7 @@ class Form::Sales::Subsections::DiscountedOwnershipScheme < ::Form::Subsection
       Form::Sales::Pages::LivingBeforePurchase.new("living_before_purchase_discounted_ownership", nil, self, ownershipsch: 2),
       Form::Sales::Pages::AboutPriceRtb.new(nil, nil, self),
       Form::Sales::Pages::ExtraBorrowingValueCheck.new("extra_borrowing_price_value_check", nil, self),
+      Form::Sales::Pages::PercentageDiscountValueCheck.new("percentage_discount_value_check", nil, self),
       Form::Sales::Pages::AboutPriceNotRtb.new(nil, nil, self),
       Form::Sales::Pages::GrantValueCheck.new(nil, nil, self),
       Form::Sales::Pages::PurchasePriceOutrightOwnership.new("purchase_price_discounted_ownership", nil, self, ownershipsch: 2),

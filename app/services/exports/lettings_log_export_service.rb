@@ -12,19 +12,20 @@ module Exports
       start_time = Time.zone.now
       logs_by_collection = retrieve_lettings_logs(start_time, full_update).group_by(&:collection_start_year)
       daily_run_number = get_daily_run_number
-      archives_for_manifest = []
+      archives_for_manifest = {}
       base_number = LogsExport.where(empty_export: false).maximum(:base_number) || 1
       available_collection_years.each do |collection|
         lettings_logs = logs_by_collection.fetch(collection, LettingsLog.none)
         export = build_export_run(collection, start_time, base_number, full_update)
         archives = write_export_archive(export, lettings_logs)
 
-        archives_for_manifest << archives if archives.any?
+        archives_for_manifest.merge!(archives)
+
         export.empty_export = archives.empty?
         export.save!
       end
 
-      write_master_manifest(daily_run_number, archives_for_manifest.flatten)
+      write_master_manifest(daily_run_number, archives_for_manifest)
     end
 
   private
@@ -129,7 +130,7 @@ module Exports
       headers = ["zip-name", "date-time zipped folder generated", "zip-file-uri"]
       csv_string = CSV.generate do |csv|
         csv << headers
-        archive_datetimes.each do |archive, datetime|
+        archive_datetimes.each do |(archive, datetime)|
           csv << [archive, datetime, "#{archive}.zip"]
         end
       end

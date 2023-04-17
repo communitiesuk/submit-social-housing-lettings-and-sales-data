@@ -27,14 +27,14 @@ RSpec.describe Form::Sales::Pages::DiscountedSaleValueCheck, type: :model do
   it "has the correct title_text" do
     expect(page.title_text).to eq({
       "translation" => "soft_validations.discounted_sale_value.title_text",
-      "arguments" => [{ "key" => "value_with_discount", "label" => false, "i18n_template" => "value_with_discount" }],
+      "arguments" => [{ "arguments_for_key" => "value_with_discount", "i18n_template" => "value_with_discount", "key" => "field_formatted_as_currency" }],
     })
   end
 
   it "has the correct informative_text" do
     expect(page.informative_text).to eq({
       "translation" => "soft_validations.discounted_sale_value.informative_text",
-      "arguments" => [{ "key" => "mortgage_deposit_and_grant_total", "label" => false, "i18n_template" => "mortgage_deposit_and_grant_total" }],
+      "arguments" => [{ "arguments_for_key" => "mortgage_deposit_and_grant_total", "i18n_template" => "mortgage_deposit_and_grant_total", "key" => "field_formatted_as_currency" }],
     })
   end
 

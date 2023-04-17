@@ -566,7 +566,7 @@
                   "hint_text": "This is after the last tenancy ended. If the property is being offered for let for the first time, enter 0.",
                   "type": "numeric",
                   "min": 0,
-                  "max": 150,
+                  "max": 20,
                   "step": 1,
                   "width": 2
                 }
@@ -588,7 +588,7 @@
                   "hint_text": "If the property is being offered for let for the first time, enter 0.",
                   "type": "numeric",
                   "min": 0,
-                  "max": 150,
+                  "max": 20,
                   "step": 1,
                   "width": 2
                 }
@@ -702,8 +702,8 @@
                   "header": "How many bedrooms does the property have?",
                   "hint_text": "If shared accommodation, enter the number of bedrooms occupied by this household. A bedsit has 1 bedroom.",
                   "type": "numeric",
-                  "min": 0,
-                  "max": 150,
+                  "min": 1,
+                  "max": 12,
                   "step": 1,
                   "width": 2
                 }

@@ -2,24 +2,6 @@ module Validations::PropertyValidations
   # Validations methods need to be called 'validate_<page_name>' to run on model save
   # or 'validate_' to run on submit as well
 
-  def validate_property_number_of_times_relet(record)
-    return unless record.offered
-
-    # Since offered is an integer type ActiveRecord will automatically cast that for us
-    # but it's type casting is a little lax so "random" becomes 0. To make sure that doesn't pass
-    # validation and then get silently dropped we attempt strict type casting on the original value
-    # as part of our validation.
-    begin
-      Integer(record.offered_before_type_cast)
-    rescue ArgumentError
-      record.errors.add :offered, I18n.t("validations.property.offered.relet_number")
-    end
-
-    if record.offered.negative? || record.offered > 20
-      record.errors.add :offered, :over_20, message: I18n.t("validations.property.offered.relet_number")
-    end
-  end
-
   REFERRAL_INVALID_TMP = [8, 10, 12, 13, 14, 15].freeze
   def validate_rsnvac(record)
     if !record.first_time_property_let_as_social_housing? && record.has_first_let_vacancy_reason?
@@ -51,10 +33,6 @@ module Validations::PropertyValidations
   end
 
   def validate_shared_housing_rooms(record)
-    if record.beds.present? && record.beds <= 0
-      record.errors.add :beds, I18n.t("validations.property.beds.non_positive")
-    end
-
     unless record.unittype_gn.nil?
       if record.is_bedsit? && record.beds != 1 && record.beds.present?
         record.errors.add :unittype_gn, I18n.t("validations.property.unittype_gn.one_bedroom_bedsit")
@@ -69,10 +47,6 @@ module Validations::PropertyValidations
         record.errors.add :unittype_gn, I18n.t("validations.property.unittype_gn.one_seven_bedroom_shared")
         record.errors.add :beds, I18n.t("validations.property.unittype_gn.one_seven_bedroom_shared")
       end
-    end
-
-    if record.beds.present? && record.beds > 12
-      record.errors.add :beds, :over_max, message: I18n.t("validations.property.beds.over_max")
     end
   end
 
