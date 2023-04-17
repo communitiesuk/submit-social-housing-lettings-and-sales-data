@@ -10,8 +10,8 @@ class Form::Lettings::Subsections::PropertyInformation < ::Form::Subsection
     @pages ||= [
       uprn_questions,
       Form::Lettings::Pages::PropertyLocalAuthority.new(nil, nil, self),
-      Form::Lettings::Pages::MinRentValueCheck.new("local_authority_min_rent_value_check", nil, self, check_answers_card_number: 0),
-      Form::Lettings::Pages::MaxRentValueCheck.new("local_authority_max_rent_value_check", nil, self, check_answers_card_number: 0),
+      Form::Lettings::Pages::MinRentValueCheck.new("local_authority_min_rent_value_check", nil, self, check_answers_card_number: nil),
+      Form::Lettings::Pages::MaxRentValueCheck.new("local_authority_max_rent_value_check", nil, self, check_answers_card_number: nil),
       Form::Lettings::Pages::FirstTimePropertyLetAsSocialHousing.new(nil, nil, self),
       Form::Lettings::Pages::PropertyLetType.new(nil, nil, self),
       Form::Lettings::Pages::PropertyVacancyReasonNotFirstLet.new(nil, nil, self),
