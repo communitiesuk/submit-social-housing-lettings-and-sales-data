@@ -8,6 +8,7 @@ RSpec.describe MergeRequestsController, type: :request do
   let(:user) { FactoryBot.create(:user, :data_coordinator) }
   let(:support_user) { FactoryBot.create(:user, :support, organisation:) }
   let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation) }
+  let(:other_merge_request) { MergeRequest.create!(requesting_organisation: other_organisation) }
 
   context "when user is signed in with a data coordinator user" do
     before do
@@ -17,25 +18,49 @@ RSpec.describe MergeRequestsController, type: :request do
     describe "#organisations" do
       let(:params) { { merge_request: { requesting_organisation_id: "9" } } }
 
-      before do
-        organisation.update!(name: "Test Org")
-        post "/merge-request", headers:, params:
-      end
+      context "when creating a new merge request" do
+        before do
+          organisation.update!(name: "Test Org")
+          post "/merge-request", headers:, params:
+        end
 
-      it "creates merge request with requesting organisation" do
-        follow_redirect!
-        expect(page).to have_content("Which organisations are merging?")
-        expect(page).to have_content("Test Org")
-        expect(page).not_to have_link("Remove")
-      end
-
-      context "when passing a different requesting organisation id" do
-        let(:params) { { merge_request: { requesting_organisation_id: other_organisation.id } } }
-
-        it "creates merge request with current user organisation" do
+        it "creates merge request with requesting organisation" do
           follow_redirect!
-          expect(MergeRequest.count).to eq(1)
-          expect(MergeRequest.first.requesting_organisation_id).to eq(organisation.id)
+          expect(page).to have_content("Which organisations are merging?")
+          expect(page).to have_content("Test Org")
+          expect(page).not_to have_link("Remove")
+        end
+
+        context "when passing a different requesting organisation id" do
+          let(:params) { { merge_request: { requesting_organisation_id: other_organisation.id } } }
+
+          it "creates merge request with current user organisation" do
+            follow_redirect!
+            expect(MergeRequest.count).to eq(1)
+            expect(MergeRequest.first.requesting_organisation_id).to eq(organisation.id)
+          end
+        end
+      end
+
+      context "when viewing existing merge request" do
+        before do
+          organisation.update!(name: "Test Org")
+          get "/merge-request/#{merge_request.id}/organisations", headers:, params:
+        end
+
+        it "shows merge request with requesting organisation" do
+          expect(page).to have_content("Which organisations are merging?")
+          expect(page).to have_content("Test Org")
+        end
+      end
+
+      context "when viewing existing merge request of a different (unauthorised) organisation" do
+        before do
+          get "/merge-request/#{other_merge_request.id}/organisations", headers:, params:
+        end
+
+        it "shows merge request with requesting organisation" do
+          expect(response).to have_http_status(:not_found)
         end
       end
     end

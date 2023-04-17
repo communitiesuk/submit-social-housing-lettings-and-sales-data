@@ -1,6 +1,7 @@
 class MergeRequestsController < ApplicationController
-  before_action :authenticate_user!
   before_action :find_resource, only: %i[update organisations update_organisations remove_merging_organisation]
+  before_action :authenticate_user!
+  before_action :authenticate_scope!, except: [:create]
 
   def create
     @merge_request = MergeRequest.create!(merge_request_params)
@@ -71,5 +72,11 @@ private
 
   def previous_template
     :organisations
+  end
+
+  def authenticate_scope!
+    if current_user.organisation != @merge_request.requesting_organisation && !current_user.support?
+      render_not_found
+    end
   end
 end
