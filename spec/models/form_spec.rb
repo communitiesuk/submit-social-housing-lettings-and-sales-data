@@ -17,11 +17,11 @@ RSpec.describe Form, type: :model do
   let(:conditional_section_complete_lettings_log) { FactoryBot.build(:lettings_log, :conditional_section_complete) }
 
   describe ".next_page" do
-    let(:previous_page) { form.get_page("person_1_age") }
+    let(:previous_page_id) { form.get_page("person_1_age") }
     let(:value_check_previous_page) { form.get_page("net_income_value_check") }
 
     it "returns the next page given the previous" do
-      expect(form.next_page(previous_page, lettings_log, user)).to eq("person_1_gender")
+      expect(form.next_page_id(previous_page_id, lettings_log, user)).to eq("person_1_gender")
     end
 
     context "when the current page is a value check page" do
@@ -33,12 +33,12 @@ RSpec.describe Form, type: :model do
 
       it "returns the previous page if answer is `No` and the page is routed to" do
         lettings_log.net_income_value_check = 1
-        expect(form.next_page(value_check_previous_page, lettings_log, user)).to eq("net_income")
+        expect(form.next_page_id(value_check_previous_page, lettings_log, user)).to eq("net_income")
       end
 
       it "returns the next page if answer is `Yes` answer and the page is routed to" do
         lettings_log.net_income_value_check = 0
-        expect(form.next_page(value_check_previous_page, lettings_log, user)).to eq("net_income_uc_proportion")
+        expect(form.next_page_id(value_check_previous_page, lettings_log, user)).to eq("net_income_uc_proportion")
       end
     end
   end
@@ -46,31 +46,30 @@ RSpec.describe Form, type: :model do
   describe ".previous_page" do
     context "when the current page is not a value check page" do
       let!(:subsection) { form.get_subsection("conditional_question") }
-      let!(:page_ids) { subsection.pages.map(&:id) }
 
       before do
         lettings_log.preg_occ = 2
       end
 
       it "returns the previous page if the page is routed to" do
-        page_index = page_ids.index("conditional_question_no_second_page")
-        expect(form.previous_page(page_ids, page_index, lettings_log, user)).to eq("conditional_question_no_page")
+        page = subsection.pages.find { |p| p.id == "conditional_question_no_second_page" }
+        expect(form.previous_page_id(page, lettings_log, user)).to eq("conditional_question_no_page")
       end
 
       it "returns the page before the previous one if the previous page is not routed to" do
-        page_index = page_ids.index("conditional_question_no_page")
-        expect(form.previous_page(page_ids, page_index, lettings_log, user)).to eq("conditional_question")
+        page = subsection.pages.find { |p| p.id == "conditional_question_no_page" }
+        expect(form.previous_page_id(page, lettings_log, user)).to eq("conditional_question")
       end
     end
   end
 
   describe "next_page_redirect_path" do
-    let(:previous_page) { form.get_page("net_income") }
+    let(:previous_page_id) { form.get_page("net_income") }
     let(:last_previous_page) { form.get_page("housing_benefit") }
     let(:previous_conditional_page) { form.get_page("conditional_question") }
 
     it "returns a correct page path if there is no conditional routing" do
-      expect(form.next_page_redirect_path(previous_page, lettings_log, user)).to eq("lettings_log_net_income_uc_proportion_path")
+      expect(form.next_page_redirect_path(previous_page_id, lettings_log, user)).to eq("lettings_log_net_income_uc_proportion_path")
     end
 
     it "returns a check answers page if previous page is the last page" do

@@ -1,10 +1,7 @@
  <% content_for :title, "Create a new supported housing scheme" %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link(
-        text: "Back",
-        href: :back,
-      ) %>
+   <%= govuk_back_link(href: :back) %>
 <% end %>
 
 <%= form_for(@scheme, method: :patch) do |f| %>
