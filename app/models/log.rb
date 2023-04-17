@@ -1,4 +1,6 @@
 class Log < ApplicationRecord
+  include CollectionTimeHelper
+
   self.abstract_class = true
 
   belongs_to :owning_organisation, class_name: "Organisation", optional: true
@@ -87,6 +89,8 @@ class Log < ApplicationRecord
   end
 
   def collection_period_open?
+    return false if older_than_previous_collection_year?
+
     form.end_date > Time.zone.today
   end
 
@@ -132,6 +136,13 @@ class Log < ApplicationRecord
   end
 
 private
+
+  # Handle logs that are older than previous collection start date
+  def older_than_previous_collection_year?
+    return false unless startdate
+
+    startdate < previous_collection_start_date
+  end
 
   def plural_gender_for_person(person_num)
     gender = public_send("sex#{person_num}".to_sym)
