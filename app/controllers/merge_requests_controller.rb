@@ -26,7 +26,6 @@ class MergeRequestsController < ApplicationController
     merge_request_organisation = MergeRequestOrganisation.new(merge_request_organisation_params)
     @answer_options = organisations_answer_options
     if merge_request_organisation.save
-      @merge_request.reload
       @merging_organisations_list = [@merge_request.requesting_organisation] + @merge_request.merging_organisations
       render :organisations
     else
@@ -37,7 +36,6 @@ class MergeRequestsController < ApplicationController
 
   def remove_merging_organisation
     MergeRequestOrganisation.find_by(merge_request_organisation_params)&.destroy!
-    @merge_request.reload
     @answer_options = organisations_answer_options
     @merging_organisations_list = [@merge_request.requesting_organisation] + @merge_request.merging_organisations
     render :organisations
