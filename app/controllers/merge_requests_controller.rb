@@ -9,7 +9,6 @@ class MergeRequestsController < ApplicationController
   end
 
   def organisations
-    @merge_request = MergeRequest.find(params[:id])
     @answer_options = organisations_answer_options
   end
 

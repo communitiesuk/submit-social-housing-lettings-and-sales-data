@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe MergeRequestsController, type: :request do
   let(:organisation) { user.organisation }
-  let!(:other_organisation) { FactoryBot.create(:organisation, name: "Other Test Org") }
+  let(:other_organisation) { FactoryBot.create(:organisation, name: "Other Test Org") }
   let(:headers) { { "Accept" => "text/html" } }
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:user) { FactoryBot.create(:user, :data_coordinator) }
