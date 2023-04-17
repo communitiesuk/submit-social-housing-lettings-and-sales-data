@@ -253,10 +253,10 @@ en:
         freq_missing: "Select how often the household receives income"
         earnings_missing: "Enter how much income the household has in total"
       income:
-        over_hard_max_for_london: "Income must not exceed £90,000.00 for properties within London local authorities"
-        over_hard_max_for_outside_london: "Income must not exceed £80,000.00 for properties outside London local authorities"
-        combined_over_hard_max_for_london: "Combined income must not exceed £90,000.00 for properties within London local authorities"
-        combined_over_hard_max_for_outside_london: "Combined income must not exceed £80,000.00 for properties outside London local authorities"
+        over_hard_max_for_london: "Income must be £90,000 or lower for properties within a London local authority"
+        over_hard_max_for_outside_london: "Income must be £80,000 or lower for properties outside London local authority"
+        combined_over_hard_max_for_london: "Combined income must be £90,000 or lower for properties within a London local authority"
+        combined_over_hard_max_for_outside_london: "Combined income must be £80,000 or lower for properties outside London local authorities"
         child_has_income: "Child's income must be £0"
       negative_currency: "Enter an amount above 0"
       rent:
