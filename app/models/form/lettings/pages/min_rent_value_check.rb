@@ -16,7 +16,7 @@ class Form::Lettings::Pages::MinRentValueCheck < ::Form::Page
         },
       ],
     },
-    @check_answers_card_number = check_answers_card_number
+                        @check_answers_card_number = check_answers_card_number
   end
 
   def questions
