@@ -128,7 +128,7 @@ private
       next_page = form.get_page(next_page_id)
       previous_page = form.previous_page(page_ids, page_index, @log, current_user)
 
-      if next_page&.interruption_screen? || next_page_id == previous_page
+      if next_page&.interruption_screen? || next_page_id == previous_page || CONFIRMATION_PAGE_IDS.include?(next_page_id)
         return send("#{@log.class.name.underscore}_#{next_page_id}_path", @log, { referrer: "check_answers" })
       else
         return send("#{@log.model_name.param_key}_#{form.subsection_for_page(@page).id}_check_answers_path", @log)
@@ -182,4 +182,6 @@ private
 
     redirect_to lettings_log_path(@log) unless @log.collection_period_open?
   end
+
+  CONFIRMATION_PAGE_IDS = %w[uprn_confirmation].freeze
 end
