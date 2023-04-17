@@ -15,7 +15,7 @@ RSpec.describe MergeRequestsController, type: :request do
     end
 
     describe "#organisations" do
-      let(:params) { {} }
+      let(:params) { { merge_request: { requesting_organisation_id: "9" } } }
 
       before do
         organisation.update!(name: "Test Org")
@@ -159,7 +159,7 @@ RSpec.describe MergeRequestsController, type: :request do
       context "when adding other merging organisations" do
         before do
           MergeRequestOrganisation.create!(merge_request_id: merge_request.id, merging_organisation_id: other_organisation.id)
-          patch "/merge-request/#{merge_request.id}/other-merging-organisations", headers:, params:
+          patch "/merge-request/#{merge_request.id}", headers:, params:
         end
 
         it "updates the merge request" do
