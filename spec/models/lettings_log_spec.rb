@@ -1,6 +1,7 @@
 require "rails_helper"
 require "shared/shared_examples_for_derived_fields"
 
+# rubocop:disable RSpec/MessageChain
 # rubocop:disable RSpec/AnyInstance
 RSpec.describe LettingsLog do
   let(:different_managing_organisation) { create(:organisation) }
@@ -3112,5 +3113,55 @@ RSpec.describe LettingsLog do
       end
     end
   end
+
+  describe "#collection_period_open?" do
+    let(:log) { build(:lettings_log, startdate:) }
+
+    context "when startdate is nil" do
+      let(:startdate) { nil }
+
+      it "returns false" do
+        expect(log.collection_period_open?).to eq(true)
+      end
+    end
+
+    context "when older_than_previous_collection_year" do
+      let(:previous_collection_start_date) { Time.zone.local(2050, 4, 1) }
+      let(:startdate) { previous_collection_start_date - 1.day }
+
+      before do
+        allow(log).to receive(:previous_collection_start_date).and_return(previous_collection_start_date)
+      end
+
+      it "returns true" do
+        expect(log.collection_period_open?).to eq(false)
+      end
+    end
+
+    context "when form end date is in the future" do
+      let(:startdate) { nil }
+
+      before do
+        allow(log).to receive_message_chain(:form, :end_date).and_return(Time.zone.now + 1.day)
+      end
+
+      it "returns true" do
+        expect(log.collection_period_open?).to eq(true)
+      end
+    end
+
+    context "when form end date is in the past" do
+      let(:startdate) { Time.zone.local(2020, 4, 1) }
+
+      before do
+        allow(log).to receive_message_chain(:form, :end_date).and_return(Time.zone.now - 1.day)
+      end
+
+      it "returns false" do
+        expect(log.collection_period_open?).to eq(false)
+      end
+    end
+  end
 end
 # rubocop:enable RSpec/AnyInstance
+# rubocop:enable RSpec/MessageChain
