@@ -1079,6 +1079,87 @@ RSpec.describe LettingsLog do
             expect(record_from_db["wtcharge"]).to eq(187.2)
           end
         end
+
+        context "when rent is paid weekly for 53 weeks" do
+          it "correctly derives and saves weekly rent" do
+            lettings_log.update!(brent: 130, period: 10)
+            record_from_db = ActiveRecord::Base.connection.execute("select wrent from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            expect(lettings_log.wrent).to eq(132.5)
+            expect(record_from_db["wrent"]).to eq(132.5)
+          end
+
+          it "correctly derives and saves weekly service charge" do
+            lettings_log.update!(scharge: 30, period: 10)
+            record_from_db = ActiveRecord::Base.connection.execute("select wscharge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            expect(lettings_log.wscharge).to eq(30.58)
+            expect(record_from_db["wscharge"]).to eq(30.58)
+          end
+
+          it "correctly derives and saves weekly personal service charge" do
+            lettings_log.update!(pscharge: 30, period: 10)
+            record_from_db = ActiveRecord::Base.connection.execute("select wpschrge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            expect(lettings_log.wpschrge).to eq(30.58)
+            expect(record_from_db["wpschrge"]).to eq(30.58)
+          end
+
+          it "correctly derives and saves weekly support charge" do
+            lettings_log.update!(supcharg: 30, period: 10)
+            record_from_db = ActiveRecord::Base.connection.execute("select wsupchrg from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            expect(lettings_log.wsupchrg).to eq(30.58)
+            expect(record_from_db["wsupchrg"]).to eq(30.58)
+          end
+
+          it "correctly derives and saves weekly total charge" do
+            lettings_log.update!(tcharge: 30, period: 10)
+            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            expect(lettings_log.wtcharge).to eq(30.58)
+            expect(record_from_db["wtcharge"]).to eq(30.58)
+          end
+
+          context "when the tenant has an outstanding amount after benefits" do
+            context "when tenant is in receipt of housing benefit" do
+              it "correctly derives and saves weekly total shortfall" do
+                lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 10, hb: 1)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                expect(lettings_log.wtshortfall).to eq(132.5)
+                expect(record_from_db["wtshortfall"]).to eq(132.5)
+              end
+            end
+
+            context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
+              it "correctly derives and saves weekly total shortfall" do
+                lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 10, hb: 6)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                expect(lettings_log.wtshortfall).to eq(132.5)
+                expect(record_from_db["wtshortfall"]).to eq(132.5)
+              end
+            end
+
+            context "when tenant is in receipt of housing benefit and universal credit" do
+              it "correctly derives and saves weekly total shortfall" do
+                lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 10, hb: 8)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                expect(lettings_log.wtshortfall).to eq(132.5)
+                expect(record_from_db["wtshortfall"]).to eq(132.5)
+              end
+            end
+          end
+
+          it "correctly derives floats" do
+            lettings_log.update!(supcharg: 30.12, pscharge: 25.13, scharge: 30.98, brent: 100.97, period: 10)
+            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            expect(lettings_log.wsupchrg).to eq(30.7)
+            expect(lettings_log.wpschrge).to eq(25.61)
+            expect(lettings_log.wscharge).to eq(31.58)
+            expect(lettings_log.wrent).to eq(102.91)
+            expect(lettings_log.wtcharge).to eq(190.8)
+            expect(record_from_db["wsupchrg"]).to eq(30.7)
+            expect(record_from_db["wpschrge"]).to eq(25.61)
+            expect(record_from_db["wscharge"]).to eq(31.58)
+            expect(record_from_db["wrent"]).to eq(102.91)
+            expect(record_from_db["wtcharge"]).to eq(190.8)
+          end
+        end
       end
 
       context "when the owning organisation is a LA" do
