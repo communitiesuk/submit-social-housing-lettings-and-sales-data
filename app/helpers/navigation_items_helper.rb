@@ -101,7 +101,7 @@ private
   end
 
   def subnav_details_path?(path)
-    path.include?("/organisations") && path.include?("/details")
+    path.include?("/organisations") && (path.include?("/details") || path.include?("/merge"))
   end
 
   def stock_owners_path?(path)
