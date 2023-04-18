@@ -21,15 +21,6 @@
   } %>
   <%= f.govuk_submit "Add organisation", classes: "govuk-button--secondary" %>
   <%= govuk_table do |table| %>
-    <%= table.body do |body| %>
-        <%= body.row do |row| %>
-            <% row.cell(text: @merge_request.requesting_organisation.name) %>
-            <% row.cell(html_attributes: {
-                scope: "row",
-                class: "govuk-!-text-align-right",
-                }) %>
-        <% end %>
-    <% end %>
   <% @merge_request.merging_organisations.each do |merging_organisation| %>
       <%= table.body do |body| %>
         <%= body.row do |row| %>
@@ -38,7 +29,9 @@
             scope: "row",
             class: "govuk-!-text-align-right",
           }) do %>
-            <%= govuk_link_to("Remove", organisations_remove_merge_request_path(merge_request: { merging_organisation: merging_organisation.id })) %>
+            <% if @merge_request.requesting_organisation != merging_organisation %>
+              <%= govuk_link_to("Remove", organisations_remove_merge_request_path(merge_request: { merging_organisation: merging_organisation.id })) %>
+            <% end %>
           <% end %>
         <% end %>
       <% end %>
@@ -46,9 +39,11 @@
   <% end %>
 <% end %>
 <%= form_with model: @merge_request, url: merge_request_path(id: @merge_request.id), method: :patch do |f| %>
-  <%= govuk_details(summary_text: "Can’t find the managing agent you’re looking for?") do %>
+  <%= govuk_details(summary_text: "I cannot find an organisation on the list") do %>
     <%= f.govuk_text_area :other_merging_organisations, label: { text: "Other organisations" }, hint: { text: "List other organisations that are part of the merge but not registered on CORE." }, rows: 9 %>
   <% end %>
+  <% if @merge_request.merging_organisations.count.positive? %>
     <%= f.govuk_submit "Continue" %>
+  <% end %>
 <% end %>
 </div>

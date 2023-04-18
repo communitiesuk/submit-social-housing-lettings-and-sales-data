@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_13_135407) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_18_095819) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -366,6 +366,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_13_135407) do
     t.text "other_merging_organisations"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "status"
   end
 
   create_table "organisation_relationships", force: :cascade do |t|

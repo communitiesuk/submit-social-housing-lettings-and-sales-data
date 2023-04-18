@@ -5,6 +5,8 @@ class MergeRequestsController < ApplicationController
 
   def create
     @merge_request = MergeRequest.create!(merge_request_params)
+    MergeRequestOrganisation.create!({ merge_request: @merge_request, merging_organisation_id: merge_request_params.fetch(:requesting_organisation_id) })
+
     redirect_to organisations_merge_request_path(@merge_request)
   end
 
@@ -48,7 +50,7 @@ private
   end
 
   def merge_request_params
-    merge_params = params.fetch(:merge_request, {}).permit(:requesting_organisation_id, :other_merging_organisations)
+    merge_params = params.fetch(:merge_request, {}).permit(:requesting_organisation_id, :other_merging_organisations, :status)
 
     if merge_params[:requesting_organisation_id].present? && (current_user.data_coordinator? || current_user.data_provider?)
       merge_params[:requesting_organisation_id] = current_user.organisation.id

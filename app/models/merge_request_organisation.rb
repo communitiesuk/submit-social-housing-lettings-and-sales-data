@@ -5,6 +5,9 @@ class MergeRequestOrganisation < ApplicationRecord
   validates :merging_organisation, presence: { message: I18n.t("validations.merge_request.merging_organisation_id.blank") }
   validate :validate_merging_organisations
 
+  scope :not_unsubmitted, -> { joins(:merge_request).where.not(merge_requests: { status: "unsubmitted" }) }
+  scope :with_merging_organisation, ->(merging_organisation) { where(merging_organisation:) }
+
   has_paper_trail
 
 private
@@ -14,12 +17,12 @@ private
       errors.add(:merging_organisation, I18n.t("validations.merge_request.organisation_part_of_another_merge"))
     end
 
-    if MergeRequestOrganisation.where.not(merge_request:).where(merging_organisation:).count.positive?
+    if MergeRequestOrganisation.not_unsubmitted.with_merging_organisation(merging_organisation).count.positive?
       errors.add(:merging_organisation, I18n.t("validations.merge_request.organisation_part_of_another_merge"))
       merge_request.errors.add(:merging_organisation, I18n.t("validations.merge_request.organisation_part_of_another_merge"))
     end
 
-    if MergeRequest.where(requesting_organisation: merging_organisation).count.positive?
+    if MergeRequest.not_unsubmitted.where.not(id: merge_request_id).where(requesting_organisation: merging_organisation).count.positive?
       errors.add(:merging_organisation, I18n.t("validations.merge_request.organisation_part_of_another_merge"))
       merge_request.errors.add(:merging_organisation, I18n.t("validations.merge_request.organisation_part_of_another_merge"))
     end
