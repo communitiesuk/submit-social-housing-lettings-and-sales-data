@@ -12,15 +12,13 @@ class Form::Lettings::Pages::MinRentValueCheck < ::Form::Page
     }
     @informative_text = {
       "translation" => "soft_validations.rent.min_hint_text",
-      "arguments" => [
-        {
-          "key" => "field_formatted_as_currency",
-          "arguments_for_key" => "soft_min_for_period",
-          "i18n_template" => "soft_min_for_period",
-        },
-      ],
-    },
-                        @check_answers_card_number = check_answers_card_number
+      "arguments" => [{
+        "key" => "field_formatted_as_currency",
+        "arguments_for_key" => "soft_min_for_period",
+        "i18n_template" => "soft_min_for_period",
+      }],
+    }
+    @check_answers_card_number = check_answers_card_number
   end
 
   def questions
