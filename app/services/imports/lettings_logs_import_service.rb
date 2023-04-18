@@ -202,6 +202,16 @@ module Imports
       attributes["first_time_property_let_as_social_housing"] = first_time_let(attributes["rsnvac"])
       attributes["declaration"] = declaration(xml_doc)
 
+      if attributes["startdate"] >= Time.zone.local(2023, 4, 1)
+        attributes["uprn"] = string_or_nil(xml_doc, "UPRN")
+        attributes["uprn_known"] = attributes["uprn"].present? ? 1 : 0
+        attributes["uprn_confirmed"] = attributes["uprn"].present? ? 1 : 0
+        attributes["address_line1"] = string_or_nil(xml_doc, "AddressLine1")
+        attributes["address_line2"] = string_or_nil(xml_doc, "AddressLine2")
+        attributes["town_or_city"] = string_or_nil(xml_doc, "TownCity")
+        attributes["county"] = string_or_nil(xml_doc, "County")
+      end
+
       set_partial_charges_to_zero(attributes)
 
       # Supported Housing fields
@@ -330,6 +340,13 @@ module Imports
         attributes.delete("incfreq")
         attributes["incref"] = 1
         attributes["net_income_known"] = 2
+        return save_lettings_log(attributes, previous_status)
+      end
+
+      if lettings_log.errors.of_kind?(:uprn, :uprn_error)
+        @logger.warn("Log #{lettings_log.old_id}: Setting uprn_known to no with error: #{lettings_log.errors[:uprn].join(', ')}")
+        @logs_overridden << lettings_log.old_id
+        attributes["uprn_known"] = 0
         return save_lettings_log(attributes, previous_status)
       end
 

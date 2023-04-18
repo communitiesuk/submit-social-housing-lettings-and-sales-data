@@ -48,7 +48,7 @@ class Log < ApplicationRecord
       service = UprnClient.new(uprn)
       service.call
 
-      return errors.add(:uprn, service.error) if service.error.present?
+      return errors.add(:uprn, :uprn_error, message: service.error) if service.error.present?
 
       presenter = UprnDataPresenter.new(service.result)
 
