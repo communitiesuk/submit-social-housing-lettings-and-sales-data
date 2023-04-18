@@ -2,6 +2,7 @@ require "csv"
 
 class BulkUpload::Lettings::Year2023::CsvParser
   FIELDS = 134
+  MAX_COLUMNS = 141
 
   attr_reader :path
 
@@ -50,6 +51,10 @@ class BulkUpload::Lettings::Year2023::CsvParser
     field_numbers.count { |f| f != "field_blank" }
   end
 
+  def with_headers?
+    rows.map { |r| r[0] }.any? { |cell| cell&.match?(/field number/i) }
+  end
+
 private
 
   def default_field_numbers
@@ -62,10 +67,6 @@ private
                        else
                          default_field_numbers
                        end
-  end
-
-  def with_headers?
-    rows.map { |r| r[0] }.any? { |cell| cell&.match?(/field number/i) }
   end
 
   def row_sep
