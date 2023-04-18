@@ -4,9 +4,9 @@ RSpec.describe InterruptionScreenHelper do
   form_handler = FormHandler.instance
   let(:form) { form_handler.get_form("test_form") }
   let(:subsection) { form.get_subsection("household_characteristics") }
-  let(:user) { FactoryBot.create(:user) }
+  let(:user) { create(:user) }
   let(:lettings_log) do
-    FactoryBot.create(
+    create(
       :lettings_log,
       :in_progress,
       ecstat1: 1,
@@ -14,6 +14,7 @@ RSpec.describe InterruptionScreenHelper do
       incfreq: 1,
       created_by: user,
       sex1: "F",
+      brent: 12_345,
     )
   end
 
@@ -45,7 +46,13 @@ RSpec.describe InterruptionScreenHelper do
           ],
         }
         expect(display_informative_text(informative_text, lettings_log))
-          .to eq(I18n.t("soft_validations.net_income.hint_text", ecstat1: lettings_log.form.get_question("ecstat1", lettings_log).answer_label(lettings_log).downcase, earnings: lettings_log.form.get_question("earnings", lettings_log).answer_label(lettings_log)))
+          .to eq(
+            I18n.t(
+              "soft_validations.net_income.hint_text",
+              ecstat1: lettings_log.form.get_question("ecstat1", lettings_log).answer_label(lettings_log).downcase,
+              earnings: lettings_log.form.get_question("earnings", lettings_log).answer_label(lettings_log),
+            ),
+          )
       end
     end
 
@@ -62,7 +69,12 @@ RSpec.describe InterruptionScreenHelper do
           ],
         }
         expect(display_informative_text(informative_text, lettings_log))
-          .to eq(I18n.t("test.one_argument", ecstat1: lettings_log.form.get_question("ecstat1", lettings_log).answer_label(lettings_log).downcase))
+          .to eq(
+            I18n.t(
+              "test.one_argument",
+              ecstat1: lettings_log.form.get_question("ecstat1", lettings_log).answer_label(lettings_log).downcase,
+            ),
+          )
       end
     end
 
@@ -84,7 +96,12 @@ RSpec.describe InterruptionScreenHelper do
           ],
         }
         expect(display_informative_text(informative_text, lettings_log))
-          .to eq(I18n.t("test.one_argument", ecstat1: lettings_log.form.get_question("ecstat1", lettings_log).answer_label(lettings_log).downcase))
+          .to eq(
+            I18n.t(
+              "test.one_argument",
+              ecstat1: lettings_log.form.get_question("ecstat1", lettings_log).answer_label(lettings_log).downcase,
+            ),
+          )
       end
     end
 
@@ -126,15 +143,15 @@ RSpec.describe InterruptionScreenHelper do
         informative_text_hash = {
           "arguments" => [
             {
-              "key" => "retirement_age_for_person",
-              "arguments_for_key" => 1,
+              "key" => "field_formatted_as_currency",
+              "arguments_for_key" => "brent",
               "i18n_template" => "argument",
             },
           ],
         }
-        allow(lettings_log).to receive(:retirement_age_for_person)
+        allow(lettings_log).to receive(:field_formatted_as_currency)
         display_informative_text(informative_text_hash, lettings_log)
-        expect(lettings_log).to have_received(:retirement_age_for_person).with(1)
+        expect(lettings_log).to have_received(:field_formatted_as_currency).with("brent")
       end
 
       it "returns the correct text" do
@@ -143,13 +160,13 @@ RSpec.describe InterruptionScreenHelper do
           "translation" => translation,
           "arguments" => [
             {
-              "key" => "retirement_age_for_person",
-              "arguments_for_key" => 1,
+              "key" => "field_formatted_as_currency",
+              "arguments_for_key" => "brent",
               "i18n_template" => "argument",
             },
           ],
         }
-        expect(display_informative_text(informative_text_hash, lettings_log)).to eq(I18n.t(translation, argument: lettings_log.retirement_age_for_person(1)))
+        expect(display_informative_text(informative_text_hash, lettings_log)).to eq("You said this: £12,345.00")
       end
     end
   end
@@ -177,6 +194,38 @@ RSpec.describe InterruptionScreenHelper do
         }
         expect(display_title_text(title_text, lettings_log))
           .to eq(I18n.t("test.title_text.one_argument", argument: lettings_log.form.get_question("ecstat1", lettings_log).answer_label(lettings_log).downcase))
+      end
+
+      context "when and argument is given with a key and arguments for the key" do
+        it "makes the correct method call" do
+          title_text = {
+            "arguments" => [
+              {
+                "key" => "field_formatted_as_currency",
+                "arguments_for_key" => "brent",
+                "i18n_template" => "argument",
+              },
+            ],
+          }
+          allow(lettings_log).to receive(:field_formatted_as_currency)
+          display_title_text(title_text, lettings_log)
+          expect(lettings_log).to have_received(:field_formatted_as_currency).with("brent")
+        end
+
+        it "returns the correct text" do
+          translation = "test.title_text.one_argument"
+          title_text = {
+            "translation" => translation,
+            "arguments" => [
+              {
+                "key" => "field_formatted_as_currency",
+                "arguments_for_key" => "brent",
+                "i18n_template" => "argument",
+              },
+            ],
+          }
+          expect(display_title_text(title_text, lettings_log)).to eq("You said this: £12,345.00")
+        end
       end
     end
 

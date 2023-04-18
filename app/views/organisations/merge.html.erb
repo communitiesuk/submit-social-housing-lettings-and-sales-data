@@ -1,0 +1,48 @@
+<% content_for :before_content do %>
+  <% title = "Tell us if your organisation is merging" %>
+  <% content_for :title, title %>
+
+  <%= govuk_back_link href: organisation_path %>
+<% end %>
+<h2 class="govuk-heading-l">Tell us if your organisation is merging</h2>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <p class="govuk-body">
+      Use this service to tell us if your organisation is merging with one or more other organisations. You can also use it to tell us about past merges that have not yet been reported to CORE.
+    </p>
+
+    <h2 class="govuk-heading-m">Before you start</h2>
+    <p class="govuk-body">Regardless of the merge type, you’ll be asked for:</p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>the organisations merging in CORE</li>
+        <li>the merge type: for example one organisation absorbing the rest, or them all creating a new organisation</li>
+        <li>to confirm or update the telephone number</li>
+        <li>the merge date</li>
+        <li>if user email addresses will change with this merge</li>
+    </ul>
+
+    <h2 class="govuk-heading-m">If email addresses are changing</h2>
+    <%= govuk_inset_text(text: "Update all user email addresses on CORE as soon as they change, so that everyone can still access their CORE account. ") %>
+    <p class="govuk-body">
+      Users must have access to their old email address, so they can confirm their new one.
+    </p>
+
+    <h2 class="govuk-heading-m">If merging into a new organisation</h2>
+    <p class="govuk-body">You'll also be asked for the new organisation’s:</p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>name</li>
+        <li>address</li>
+        <li>telephone number</li>
+        <li>housing provider type</li>
+        <li>Regulator of Social Housing registration number</li>
+        <li>held stock details</li>
+    </ul>
+
+    <%= govuk_warning_text text: "You will not be able to submit your request without the above information. Do not start the form until you have obtained all of the information. " %>
+    <%= govuk_start_button(
+      text: "Start now",
+      href: "#",
+    ) %>
+  </div>
+</div>

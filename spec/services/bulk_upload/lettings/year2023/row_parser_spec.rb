@@ -242,9 +242,9 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       let(:attributes) { { bulk_upload:, field_13: "123" } }
 
       it "has errors on setup fields" do
-        errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute)
+        errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_4 field_5 field_7 field_8 field_9 field_1 field_2])
+        expect(errors).to eql(%i[field_1 field_2 field_4 field_5 field_6 field_7 field_8 field_9])
       end
     end
 
@@ -792,12 +792,20 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
     end
 
-    describe "#field_6" do
+    describe "#field_6" do # renewal
       context "when an unpermitted value" do
         let(:attributes) { { bulk_upload:, field_6: "3" } }
 
         it "has errors on the field" do
           expect(parser.errors[:field_6]).to be_present
+        end
+      end
+
+      context "when blank" do
+        let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_6: "" } }
+
+        it "has errors on the field" do
+          expect(parser.errors[:field_6]).to include("You must answer property renewal")
         end
       end
     end
@@ -844,12 +852,12 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
     end
 
-    describe "#field_56" do # age3
+    describe "#field_52" do # age2
       context "when null but gender given" do
-        let(:attributes) { setup_section_params.merge({ field_56: "", field_57: "F" }) }
+        let(:attributes) { setup_section_params.merge({ field_52: "", field_53: "F" }) }
 
         it "returns an error" do
-          expect(parser.errors[:field_56]).to be_present
+          expect(parser.errors[:field_52]).to be_present
         end
       end
     end
@@ -1101,14 +1109,6 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "sets value to 0" do
           expect(parser.log.renewal).to eq(0)
-        end
-      end
-
-      context "when field_6 is null but rsnvac/field_27 is 14" do
-        let(:attributes) { { bulk_upload:, field_6: "", field_27: "14" } }
-
-        it "sets renewal to 1" do
-          expect(parser.log.renewal).to eq(1)
         end
       end
     end

@@ -15,11 +15,12 @@ class Form::Lettings::Questions::Period < ::Form::Question
     "2" => { "value" => "Every 2 weeks" },
     "3" => { "value" => "Every 4 weeks" },
     "4" => { "value" => "Every calendar month" },
-    "5" => { "value" => "Weekly for 50 weeks" },
-    "6" => { "value" => "Weekly for 49 weeks" },
-    "7" => { "value" => "Weekly for 48 weeks" },
-    "8" => { "value" => "Weekly for 47 weeks" },
     "9" => { "value" => "Weekly for 46 weeks" },
+    "8" => { "value" => "Weekly for 47 weeks" },
+    "7" => { "value" => "Weekly for 48 weeks" },
+    "6" => { "value" => "Weekly for 49 weeks" },
+    "5" => { "value" => "Weekly for 50 weeks" },
     "1" => { "value" => "Weekly for 52 weeks" },
+    "10" => { "value" => "Weekly for 53 weeks" },
   }.freeze
 end

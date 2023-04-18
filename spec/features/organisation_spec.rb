@@ -40,7 +40,7 @@ RSpec.describe "User Features" do
         expect(page).to have_current_path("/organisations/#{org_id}/details")
       end
 
-      context "when the user is a coordinator and the organisation does not hold housing stock" do
+      context "and the organisation does not hold housing stock" do
         before do
           organisation.update(holds_own_stock: false)
         end
@@ -51,7 +51,7 @@ RSpec.describe "User Features" do
         end
       end
 
-      context "when the user is a coordinator and the organisation holds housing stock" do
+      context "and the organisation holds housing stock" do
         before do
           organisation.update(holds_own_stock: true)
         end
@@ -59,18 +59,6 @@ RSpec.describe "User Features" do
         it "shows schemes in the navigation bar" do
           visit("/lettings-logs")
           expect(page).to have_link("Schemes", href: "/schemes")
-        end
-      end
-
-      context "when the user is support and the organisation does not hold housing stock" do
-        before do
-          organisation.update!(holds_own_stock: false)
-          user.update!(role: "support")
-        end
-
-        it "does not show schemes in the primary or secondary navigation bar on the organisations page" do
-          visit("/organisations")
-          expect(page).not_to have_link("Schemes", href: "/schemes", count: 2)
         end
       end
     end
@@ -319,6 +307,17 @@ RSpec.describe "User Features" do
             end
           end
         end
+      end
+    end
+
+    context "and the organisation does not hold housing stock" do
+      before do
+        organisation.update!(holds_own_stock: false)
+      end
+
+      it "does not show schemes in the primary or secondary navigation bar on the organisations page" do
+        visit("/organisations")
+        expect(page).not_to have_link("Schemes", href: "/schemes", count: 2)
       end
     end
   end

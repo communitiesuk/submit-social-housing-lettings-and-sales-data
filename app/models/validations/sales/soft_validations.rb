@@ -123,6 +123,30 @@ module Validations::Sales::SoftValidations
     mortgage_deposit_and_grant_total != value_with_discount && discounted_ownership_sale?
   end
 
+  def buyer1_livein_wrong_for_ownership_type?
+    return unless ownershipsch && buy1livein
+
+    (discounted_ownership_sale? || shared_ownership_scheme?) && buy1livein == 2
+  end
+
+  def buyer2_livein_wrong_for_ownership_type?
+    return unless ownershipsch && buy2livein
+    return unless joint_purchase?
+
+    (discounted_ownership_sale? || shared_ownership_scheme?) && buy2livein == 2
+  end
+
+  def percentage_discount_invalid?
+    return unless discount && proptype
+
+    case proptype
+    when 1, 2
+      discount > 50
+    when 3, 4, 9
+      discount > 35
+    end
+  end
+
 private
 
   def sale_range

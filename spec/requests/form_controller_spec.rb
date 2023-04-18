@@ -201,22 +201,24 @@ RSpec.describe FormController, type: :request do
 
     describe "GET" do
       context "with form pages" do
-        context "when forms exist for multiple years" do
-          let(:lettings_log_year_1) { create(:lettings_log, owning_organisation: organisation, created_by: user) }
-          let(:lettings_log_year_2) { create(:lettings_log, :setup_completed, startdate: Time.zone.local(2022, 5, 1), owning_organisation: organisation, created_by: user) }
+        context "when forms exist" do
+          let(:lettings_log) { create(:lettings_log, :setup_completed, startdate: Time.zone.local(2022, 5, 1), owning_organisation: organisation, created_by: user) }
 
-          before do
-            Timecop.freeze(Time.zone.local(2021, 5, 1))
-            lettings_log_year_1.update!(startdate: Time.zone.local(2021, 5, 1))
-            Timecop.unfreeze
-            allow(lettings_log_year_1.form).to receive(:end_date).and_return(Time.zone.today + 1.day)
-          end
+          it "displays the question details" do
+            get "/lettings-logs/#{lettings_log.id}/tenant-code-test", headers: headers, params: {}
 
-          it "displays the correct question details for each lettings log based on form year" do
-            get "/lettings-logs/#{lettings_log_year_1.id}/tenant-code-test", headers: headers, params: {}
-            expect(response.body).to include("What is the tenant code?")
-            get "/lettings-logs/#{lettings_log_year_2.id}/tenant-code-test", headers: headers, params: {}
+            expect(response).to be_ok
             expect(response.body).to match("Different question header text for this year - 2023")
+          end
+        end
+
+        context "when question not routed to" do
+          let(:lettings_log) { create(:lettings_log, :setup_completed, startdate: Time.zone.local(2022, 5, 1), owning_organisation: organisation, created_by: user) }
+
+          it "redirects to log" do
+            get "/lettings-logs/#{lettings_log.id}/scheme", headers: headers, params: {}
+
+            expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}")
           end
         end
 

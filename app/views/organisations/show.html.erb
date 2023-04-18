@@ -35,6 +35,9 @@
 
       <% end %>
     <% end %>
+    <% if FeatureToggle.merge_organisations_enabled? %>
+      <p>Is your organisation merging with another? <%= govuk_link_to "Let us know using this form", merge_organisation_path %></p>
+    <% end %>
   </div>
 
   <div class="govuk-grid-column-one-third-from-desktop">

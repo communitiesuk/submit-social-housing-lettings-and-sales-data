@@ -1,6 +1,7 @@
 require "rails_helper"
 require "shared/shared_examples_for_derived_fields"
 
+# rubocop:disable RSpec/MessageChain
 # rubocop:disable RSpec/AnyInstance
 RSpec.describe SalesLog, type: :model do
   let(:owning_organisation) { create(:organisation) }
@@ -61,6 +62,7 @@ RSpec.describe SalesLog, type: :model do
           old_persons_shared_ownership_value_check
           othtype
           discounted_sale_value_check
+          buyer_livein_value_check
           proplen
           mortlen
           frombeds
@@ -79,6 +81,7 @@ RSpec.describe SalesLog, type: :model do
           old_persons_shared_ownership_value_check
           othtype
           discounted_sale_value_check
+          buyer_livein_value_check
           address_line2
           county
           postcode_full
@@ -498,7 +501,7 @@ RSpec.describe SalesLog, type: :model do
     let!(:completed_sales_log) { create(:sales_log, :completed, ownershipsch: 1, type: 2, value: 1000, equity: 50) }
 
     it "is set to completed for a completed sales log" do
-      expect(completed_sales_log.expected_shared_ownership_deposit_value).to eq("£500.00")
+      expect(completed_sales_log.expected_shared_ownership_deposit_value).to eq(500)
     end
   end
 
@@ -556,6 +559,7 @@ RSpec.describe SalesLog, type: :model do
         .and change(sales_log, :postcode_full).from(nil).to("POSTCODE")
         .and change(sales_log, :uprn_confirmed).from(1).to(nil)
         .and change(sales_log, :county).from("county").to(nil)
+        .and change(sales_log, :uprn_known).from(nil).to(1)
       end
     end
 
@@ -605,5 +609,55 @@ RSpec.describe SalesLog, type: :model do
       end
     end
   end
+
+  describe "#collection_period_open?" do
+    let(:log) { build(:sales_log, saledate:) }
+
+    context "when saledate is nil" do
+      let(:saledate) { nil }
+
+      it "returns false" do
+        expect(log.collection_period_open?).to eq(true)
+      end
+    end
+
+    context "when older_than_previous_collection_year" do
+      let(:previous_collection_start_date) { Time.zone.local(2050, 4, 1) }
+      let(:saledate) { previous_collection_start_date - 1.day }
+
+      before do
+        allow(log).to receive(:previous_collection_start_date).and_return(previous_collection_start_date)
+      end
+
+      it "returns true" do
+        expect(log.collection_period_open?).to eq(false)
+      end
+    end
+
+    context "when form end date is in the future" do
+      let(:saledate) { nil }
+
+      before do
+        allow(log).to receive_message_chain(:form, :end_date).and_return(Time.zone.now + 1.day)
+      end
+
+      it "returns true" do
+        expect(log.collection_period_open?).to eq(true)
+      end
+    end
+
+    context "when form end date is in the past" do
+      let(:saledate) { Time.zone.local(2020, 4, 1) }
+
+      before do
+        allow(log).to receive_message_chain(:form, :end_date).and_return(Time.zone.now - 1.day)
+      end
+
+      it "returns false" do
+        expect(log.collection_period_open?).to eq(false)
+      end
+    end
+  end
 end
 # rubocop:enable RSpec/AnyInstance
+# rubocop:enable RSpec/MessageChain

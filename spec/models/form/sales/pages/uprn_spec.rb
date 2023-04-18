@@ -12,7 +12,7 @@ RSpec.describe Form::Sales::Pages::Uprn, type: :model do
   end
 
   it "has correct questions" do
-    expect(page.questions.map(&:id)).to eq(%w[uprn])
+    expect(page.questions.map(&:id)).to eq(%w[uprn_known uprn])
   end
 
   it "has the correct id" do

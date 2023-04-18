@@ -135,6 +135,15 @@ RSpec.describe Exports::LettingsLogExportService do
 
         export_service.export_xml_lettings_logs
       end
+
+      it "generates a master manifest with CSV headers" do
+        actual_content = nil
+        expected_content = "zip-name,date-time zipped folder generated,zip-file-uri\ncore_2021_2022_apr_mar_f0001_inc0001,2022-05-01 00:00:00 +0100,#{expected_zip_filename}\n"
+        allow(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args) { |_, arg2| actual_content = arg2&.string }
+
+        export_service.export_xml_lettings_logs
+        expect(actual_content).to eq(expected_content)
+      end
     end
 
     context "with 23/24 collection period" do

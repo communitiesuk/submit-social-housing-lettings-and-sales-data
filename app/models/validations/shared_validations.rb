@@ -7,6 +7,7 @@ module Validations::SharedValidations
     main_field_label = main_label || main_field.to_s.humanize(capitalize: false)
     other_field_label = other_label || other_field.to_s.humanize(capitalize: false)
     if record[main_field] == value_other && record[other_field].blank?
+      record.errors.add main_field.to_sym, I18n.t("validations.other_field_missing", main_field_label:, other_field_label:)
       record.errors.add other_field.to_sym, I18n.t("validations.other_field_missing", main_field_label:, other_field_label:)
     end
 

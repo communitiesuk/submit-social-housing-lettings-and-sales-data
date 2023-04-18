@@ -4,30 +4,8 @@ class Form::Lettings::Pages::RentWeekly < ::Form::Page
     @id = "rent_weekly"
     @header = "Household rent and charges"
     @depends_on = [
-      { "period" => 1, "household_charge" => 0, "is_carehome" => 0 },
-      { "period" => 1, "household_charge" => nil, "is_carehome" => 0 },
-      { "period" => 5, "household_charge" => 0, "is_carehome" => 0 },
-      { "period" => 5, "household_charge" => nil, "is_carehome" => 0 },
-      { "period" => 6, "household_charge" => 0, "is_carehome" => 0 },
-      { "period" => 6, "household_charge" => nil, "is_carehome" => 0 },
-      { "period" => 7, "household_charge" => 0, "is_carehome" => 0 },
-      { "period" => 7, "household_charge" => nil, "is_carehome" => 0 },
-      { "period" => 8, "household_charge" => 0, "is_carehome" => 0 },
-      { "period" => 8, "household_charge" => nil, "is_carehome" => 0 },
-      { "period" => 9, "household_charge" => 0, "is_carehome" => 0 },
-      { "period" => 9, "household_charge" => nil, "is_carehome" => 0 },
-      { "period" => 1, "household_charge" => 0, "is_carehome" => nil },
-      { "period" => 1, "household_charge" => nil, "is_carehome" => nil },
-      { "period" => 5, "household_charge" => 0, "is_carehome" => nil },
-      { "period" => 5, "household_charge" => nil, "is_carehome" => nil },
-      { "period" => 6, "household_charge" => 0, "is_carehome" => nil },
-      { "period" => 6, "household_charge" => nil, "is_carehome" => nil },
-      { "period" => 7, "household_charge" => 0, "is_carehome" => nil },
-      { "period" => 7, "household_charge" => nil, "is_carehome" => nil },
-      { "period" => 8, "household_charge" => 0, "is_carehome" => nil },
-      { "period" => 8, "household_charge" => nil, "is_carehome" => nil },
-      { "period" => 9, "household_charge" => 0, "is_carehome" => nil },
-      { "period" => 9, "household_charge" => nil, "is_carehome" => nil },
+      { "rent_and_charges_paid_weekly?" => true, "household_charge" => 0, "is_carehome?" => false },
+      { "rent_and_charges_paid_weekly?" => true, "household_charge" => nil, "is_carehome?" => false },
     ]
   end
 

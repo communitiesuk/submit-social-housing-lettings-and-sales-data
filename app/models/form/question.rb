@@ -226,24 +226,6 @@ class Form::Question
     label
   end
 
-  def answer_option_synonyms(resource)
-    return unless resource.respond_to?(:synonyms)
-
-    resource.synonyms
-  end
-
-  def answer_option_append(resource)
-    return unless resource.respond_to?(:appended_text)
-
-    resource.appended_text
-  end
-
-  def answer_option_hint(resource)
-    return unless resource.respond_to?(:hint)
-
-    resource.hint
-  end
-
   def answer_selected?(log, answer)
     return false unless type == "select"
 
@@ -317,7 +299,11 @@ private
   end
 
   def enabled_inferred_answers(inferred_answers, log)
-    inferred_answers.filter { |_key, value| value.all? { |condition_key, condition_value| log[condition_key] == condition_value } }
+    inferred_answers.filter do |_attribute, condition|
+      condition.all? do |condition_key, condition_value|
+        log.public_send(condition_key) == condition_value
+      end
+    end
   end
 
   def inferred_answer_value(log)

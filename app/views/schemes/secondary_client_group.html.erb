@@ -2,7 +2,6 @@
 
 <% content_for :before_content do %>
   <%= govuk_back_link(
-    text: "Back",
     href: request.query_parameters["check_answers"] ? "/schemes/#{@scheme.id}/check-answers" : "/schemes/#{@scheme.id}/confirm-secondary-client-group",
   ) %>
 <% end %>

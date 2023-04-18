@@ -43,7 +43,7 @@ class SalesLog < Log
   }
   scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org) }
 
-  OPTIONAL_FIELDS = %w[saledate_check purchid monthly_charges_value_check old_persons_shared_ownership_value_check othtype discounted_sale_value_check].freeze
+  OPTIONAL_FIELDS = %w[saledate_check purchid monthly_charges_value_check old_persons_shared_ownership_value_check othtype discounted_sale_value_check buyer_livein_value_check].freeze
   RETIREMENT_AGES = { "M" => 65, "F" => 60, "X" => 65 }.freeze
 
   def lettings?
@@ -216,7 +216,7 @@ class SalesLog < Log
   def expected_shared_ownership_deposit_value
     return unless value && equity
 
-    format_as_currency(value * equity / 100)
+    value * equity / 100
   end
 
   def process_postcode(postcode, postcode_known_key, la_inferred_key, la_key)
@@ -323,11 +323,6 @@ class SalesLog < Log
     format_as_currency(soft_min)
   end
 
-  def field_formatted_as_currency(field_name)
-    field_value = public_send(field_name)
-    format_as_currency(field_value)
-  end
-
   def should_process_uprn_change?
     uprn_changed? && saledate && saledate.year >= 2023
   end
@@ -349,5 +344,16 @@ class SalesLog < Log
 
   def beds_for_la_sale_range
     beds.nil? ? nil : [beds, LaSaleRange::MAX_BEDS].min
+  end
+
+  def ownership_scheme
+    case ownershipsch
+    when 1
+      "shared ownership"
+    when 2
+      "discounted ownership"
+    when 3
+      "outright sale"
+    end
   end
 end
