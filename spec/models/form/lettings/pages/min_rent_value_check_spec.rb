@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Form::Lettings::Pages::MinRentValueCheck, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
-  let(:page_id) { "max_rent_value_check" }
+  let(:page_id) { "min_rent_value_check" }
   let(:page_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection) }
 
