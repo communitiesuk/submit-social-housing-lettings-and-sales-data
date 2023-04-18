@@ -6,6 +6,7 @@ class Form::Sales::Questions::PropertyLocalAuthority < ::Form::Question
     @header = "What is the property’s local authority?"
     @type = "select"
     @question_number = 16
+    @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 
   def answer_options

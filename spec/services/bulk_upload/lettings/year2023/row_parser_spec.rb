@@ -793,14 +793,6 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
     end
 
     describe "#field_6" do # renewal
-      context "when an unpermitted value" do
-        let(:attributes) { { bulk_upload:, field_6: "3" } }
-
-        it "has errors on the field" do
-          expect(parser.errors[:field_6]).to be_present
-        end
-      end
-
       context "when blank" do
         let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_6: "" } }
 
@@ -840,14 +832,6 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "populates with correct error message" do
           expect(parser.errors[:field_30]).to eql(["You must answer type of building"])
-        end
-      end
-
-      context "when unpermitted values" do
-        let(:attributes) { setup_section_params.merge({ field_30: "4" }) }
-
-        it "returns an error" do
-          expect(parser.errors[:field_30]).to be_present
         end
       end
     end

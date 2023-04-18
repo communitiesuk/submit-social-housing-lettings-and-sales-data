@@ -50,7 +50,7 @@ RSpec.describe Form::Sales::Questions::UprnConfirmation, type: :model do
 
     context "when address is present" do
       it "returns formatted value" do
-        log = create(:sales_log, address_line1: "1, Test Street", town_or_city: "Test Town", county: "Test County", postcode_full: "AA1 1AA", uprn: "1234", uprn_known: 1)
+        log = build(:sales_log, :outright_sale_setup_complete, address_line1: "1, Test Street", town_or_city: "Test Town", county: "Test County", postcode_full: "AA1 1AA", uprn: "1234", uprn_known: 1)
 
         expect(question.notification_banner(log)).to eq(
           {
