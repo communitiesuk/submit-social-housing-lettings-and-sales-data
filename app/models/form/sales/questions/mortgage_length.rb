@@ -7,7 +7,6 @@ class Form::Sales::Questions::MortgageLength < ::Form::Question
     @type = "numeric"
     @min = 0
     @max = 60
-    @step = 1
     @width = 5
     @suffix = " years"
     @hint_text = "You should round up to the nearest year. Value should not exceed 60 years."

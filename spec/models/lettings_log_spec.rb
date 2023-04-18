@@ -112,6 +112,10 @@ RSpec.describe LettingsLog do
       expect(validator).to receive(:validate_shared_housing_rooms)
     end
 
+    it "validates number of times the property has been relet" do
+      expect(validator).to receive(:validate_property_number_of_times_relet)
+    end
+
     it "validates tenancy type" do
       expect(validator).to receive(:validate_fixed_term_tenancy)
       expect(validator).to receive(:validate_other_tenancy_type)
@@ -3100,11 +3104,11 @@ RSpec.describe LettingsLog do
     end
 
     context "when a non setup field is invalid" do
-      subject(:model) { build(:lettings_log, :completed, offered: 234) }
+      subject(:model) { described_class.new(beds: 404) }
 
       it "blanks it" do
         model.valid?
-        expect { model.blank_invalid_non_setup_fields! }.to change(model, :offered)
+        expect { model.blank_invalid_non_setup_fields! }.to change(model, :beds)
       end
     end
   end

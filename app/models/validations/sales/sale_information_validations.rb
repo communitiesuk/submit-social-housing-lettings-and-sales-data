@@ -12,7 +12,7 @@ module Validations::Sales::SaleInformationValidations
   end
 
   def validate_years_living_in_property_before_purchase(record)
-    return unless record.proplen&.nonzero?
+    return unless record.proplen && record.proplen.nonzero?
 
     case record.type
     when 18
