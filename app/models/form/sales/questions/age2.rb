@@ -13,7 +13,6 @@ class Form::Sales::Questions::Age2 < ::Form::Question
     @check_answers_card_number = 2
     @max = 110
     @min = 0
-    @step = 1
     @question_number = 28
   end
 end

@@ -7,7 +7,6 @@ class Form::Sales::Questions::Equity < ::Form::Question
     @type = "numeric"
     @min = 0
     @max = 100
-    @step = 1
     @width = 5
     @suffix = "%"
     @hint_text = "Enter the amount of initial equity held by the purchaser (for example, 25% or 50%)"

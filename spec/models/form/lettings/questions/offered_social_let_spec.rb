@@ -6,7 +6,7 @@ RSpec.describe Form::Lettings::Questions::OfferedSocialLet, type: :model do
   let(:page) { instance_double(Form::Page) }
 
   it "has correct page" do
-    expect(question.page).to be page
+    expect(question.page).to eq page
   end
 
   it "has the correct id" do
@@ -26,12 +26,12 @@ RSpec.describe Form::Lettings::Questions::OfferedSocialLet, type: :model do
   end
 
   it "has the correct minimum and maximum values" do
-    expect(question.min).to be 0
-    expect(question.max).to be 20
+    expect(question.min).to eq 0
+    expect(question.max).to eq 150
   end
 
   it "has the correct step" do
-    expect(question.step).to be 1
+    expect(question.step).to eq 1
   end
 
   it "is not marked as derived" do
