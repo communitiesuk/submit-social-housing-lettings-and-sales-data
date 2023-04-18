@@ -218,7 +218,7 @@ RSpec.describe Form, type: :model do
 
     context "when there are multiple radio questions for attribute X" do
       context "and attribute Y is changed such that a different question for X is routed to" do
-        let(:log) { FactoryBot.create(:lettings_log, :about_completed, :sheltered_housing, startdate: now, renewal: 0, prevten:) }
+        let(:log) { FactoryBot.create(:lettings_log, :setup_completed, :sheltered_housing, startdate: now, renewal: 0, prevten:) }
 
         context "and the value of X remains valid" do
           let(:prevten) { 36 }
@@ -244,7 +244,7 @@ RSpec.describe Form, type: :model do
 
     context "when there is one radio question for attribute X" do
       context "and the start date or sale date is changed such that the collection year changes and there are different options" do
-        let(:log) { FactoryBot.create(:lettings_log, :about_completed, :sheltered_housing, startdate: now, sheltered:) }
+        let(:log) { FactoryBot.create(:lettings_log, :setup_completed, :sheltered_housing, startdate: now, sheltered:) }
 
         context "and the value of X remains valid" do
           let(:sheltered) { 2 }
@@ -305,7 +305,7 @@ RSpec.describe Form, type: :model do
     end
 
     context "when a value is changed such that a checkbox question is no longer routed to" do
-      let(:log) { FactoryBot.create(:lettings_log, :about_completed, startdate: now, reasonpref: 1, rp_homeless: 1, rp_medwel: 1, rp_hardship: 1) }
+      let(:log) { FactoryBot.create(:lettings_log, :setup_completed, startdate: now, reasonpref: 1, rp_homeless: 1, rp_medwel: 1, rp_hardship: 1) }
 
       it "all attributes relating to that checkbox question are cleared" do
         expect(log.rp_homeless).to be 1

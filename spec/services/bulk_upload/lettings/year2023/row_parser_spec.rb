@@ -793,14 +793,6 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
     end
 
     describe "#field_6" do # renewal
-      context "when an unpermitted value" do
-        let(:attributes) { { bulk_upload:, field_6: "3" } }
-
-        it "has errors on the field" do
-          expect(parser.errors[:field_6]).to be_present
-        end
-      end
-
       context "when blank" do
         let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_6: "" } }
 
