@@ -573,7 +573,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_12_143245) do
     t.integer "nationalbuy2"
     t.integer "discounted_sale_value_check"
     t.integer "student_not_child_value_check"
-    t.integer "combined_income_value_check"
     t.integer "percentage_discount_value_check"
     t.integer "buyer_livein_value_check"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
