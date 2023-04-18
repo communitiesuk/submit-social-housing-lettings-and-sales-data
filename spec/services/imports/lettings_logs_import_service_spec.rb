@@ -434,7 +434,7 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
 
         it "intercepts the relevant validation error" do
-          expect(logger).to receive(:warn).with(/Removing offered with error: Times previously offered since becoming available must be between 0 and 20/)
+          expect(logger).to receive(:warn).with(/Removing offered with error: Enter a number between 0 and 20 for the amount of times the property has been re-let/)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end
@@ -530,7 +530,7 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
 
         it "intercepts the relevant validation error" do
-          expect(logger).to receive(:warn).with(/Removing beds with error: Number of bedrooms must be between 1 and 12/)
+          expect(logger).to receive(:warn).with(/Removing beds with error: Number of bedrooms cannot be more than 12/)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end

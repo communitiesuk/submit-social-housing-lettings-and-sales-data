@@ -6,7 +6,6 @@ class Form::Sales::Questions::LeaseholdCharges < ::Form::Question
     @header = "Enter the total monthly charge"
     @type = "numeric"
     @min = 1
-    @step = 0.01
     @width = 5
     @prefix = "£"
     @ownershipsch = ownershipsch

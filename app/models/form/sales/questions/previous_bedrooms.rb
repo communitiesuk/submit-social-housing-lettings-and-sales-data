@@ -8,7 +8,6 @@ class Form::Sales::Questions::PreviousBedrooms < ::Form::Question
     @width = 5
     @min = 1
     @max = 6
-    @step = 1
     @hint_text = "For bedsits enter 1"
     @question_number = 85
   end

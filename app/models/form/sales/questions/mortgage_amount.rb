@@ -6,7 +6,6 @@ class Form::Sales::Questions::MortgageAmount < ::Form::Question
     @header = "What is the mortgage amount?"
     @type = "numeric"
     @min = 1
-    @step = 1
     @width = 5
     @prefix = "£"
     @hint_text = "Enter the amount of mortgage agreed with the mortgage lender. Exclude any deposits or cash payments. Numeric in pounds. Rounded to the nearest pound."
