@@ -28,7 +28,7 @@ RSpec.describe Form::Lettings::Pages::CreatedBy, type: :model do
       end
     end
 
-    context "when not support" do
+    context "when data provider" do
       it "is not shown" do
         expect(page.routed_to?(nil, create(:user))).to eq(false)
       end

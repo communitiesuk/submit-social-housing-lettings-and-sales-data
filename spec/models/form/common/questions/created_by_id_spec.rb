@@ -56,35 +56,72 @@ RSpec.describe Form::Common::Questions::CreatedById, type: :model do
     it "is shown in check answers" do
       expect(question.hidden_in_check_answers?(nil, support_user)).to be false
     end
+
+    describe "#displayed_answer_options" do
+      let(:owning_org_user) { create(:user) }
+      let(:sales_log) { create(:sales_log, owning_organisation: owning_org_user.organisation) }
+      let(:expected_answer_options) do
+        {
+          "" => "Select an option",
+          owning_org_user.id => "#{owning_org_user.name} (#{owning_org_user.email})",
+        }
+      end
+
+      it "only displays users that belong to the owning organisation" do
+        expect(question.displayed_answer_options(sales_log, support_user)).to eq(expected_answer_options)
+      end
+    end
   end
 
   context "when the current user is data_coordinator" do
-    let(:support_user) { build(:user, :data_coordinator) }
+    let(:data_coordinator) { create(:user, :data_coordinator) }
 
     it "is shown in check answers" do
-      expect(question.hidden_in_check_answers?(nil, support_user)).to be false
+      expect(question.hidden_in_check_answers?(nil, data_coordinator)).to be false
+    end
+
+    describe "#displayed_answer_options" do
+      let(:owning_org_user) { create(:user) }
+      let(:sales_log) { create(:sales_log, owning_organisation: owning_org_user.organisation) }
+      let(:user_in_same_org) { create(:user, organisation: data_coordinator.organisation) }
+
+      let(:expected_answer_options) do
+        {
+          "" => "Select an option",
+          user_in_same_org.id => "#{user_in_same_org.name} (#{user_in_same_org.email})",
+          data_coordinator.id => "#{data_coordinator.name} (#{data_coordinator.email})",
+        }
+      end
+
+      it "only displays users that belong user's org" do
+        expect(question.displayed_answer_options(sales_log, data_coordinator)).to eq(expected_answer_options)
+      end
     end
   end
 
   context "when the current user is data_provider" do
-    let(:user) { build(:user, :data_provider) }
+    let(:data_provider) { create(:user, :data_provider) }
 
     it "is not shown in check answers" do
-      expect(question.hidden_in_check_answers?(nil, user)).to be true
-    end
-  end
-
-  context "when the owning organisation is already set" do
-    let(:lettings_log) { create(:lettings_log, owning_organisation: user_2.organisation) }
-    let(:expected_answer_options) do
-      {
-        "" => "Select an option",
-        user_2.id => "#{user_2.name} (#{user_2.email})",
-      }
+      expect(question.hidden_in_check_answers?(nil, data_provider)).to be true
     end
 
-    it "only displays users that belong to that organisation" do
-      expect(question.displayed_answer_options(lettings_log)).to eq(expected_answer_options)
+    describe "#displayed_answer_options" do
+      let(:owning_org_user) { create(:user) }
+      let(:sales_log) { create(:sales_log, owning_organisation: owning_org_user.organisation) }
+      let(:user_in_same_org) { create(:user, organisation: data_provider.organisation) }
+
+      let(:expected_answer_options) do
+        {
+          "" => "Select an option",
+          user_in_same_org.id => "#{user_in_same_org.name} (#{user_in_same_org.email})",
+          data_provider.id => "#{data_provider.name} (#{data_provider.email})",
+        }
+      end
+
+      it "only displays users that belong user's org" do
+        expect(question.displayed_answer_options(sales_log, data_provider)).to eq(Form::Common::Questions::CreatedById::ANSWER_OPTS)
+      end
     end
   end
 end

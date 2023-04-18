@@ -1,4 +1,6 @@
 class Form::Common::Questions::CreatedById < ::Form::Question
+  ANSWER_OPTS = { "" => "Select an option" }.freeze
+
   def initialize(id, hsh, page)
     super
     @id = "created_by_id"
@@ -8,19 +10,23 @@ class Form::Common::Questions::CreatedById < ::Form::Question
   end
 
   def answer_options
-    answer_opts = { "" => "Select an option" }
-    return answer_opts unless ActiveRecord::Base.connected?
+    return ANSWER_OPTS unless ActiveRecord::Base.connected?
 
-    User.select(:id, :name, :email).each_with_object(answer_opts) do |user, hsh|
+    User.select(:id, :name, :email).each_with_object(ANSWER_OPTS.dup) do |user, hsh|
       hsh[user.id] = "#{user.name} (#{user.email})"
       hsh
     end
   end
 
-  def displayed_answer_options(log, _user = nil)
-    return answer_options unless log.owning_organisation
+  def displayed_answer_options(log, user = nil)
+    return ANSWER_OPTS unless log.owning_organisation
+    return ANSWER_OPTS unless user
+    return ANSWER_OPTS unless user.support? || user.data_coordinator?
 
-    user_ids = log.owning_organisation.users.pluck(:id) + [""]
+    users = user.support? ? log.owning_organisation.users : user.organisation.users
+
+    user_ids = users.pluck(:id) + [""]
+
     answer_options.select { |k, _v| user_ids.include?(k) }
   end
 

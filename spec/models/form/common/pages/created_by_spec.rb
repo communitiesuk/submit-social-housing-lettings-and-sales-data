@@ -49,7 +49,7 @@ RSpec.describe Form::Common::Pages::CreatedBy, type: :model do
     end
   end
 
-  context "when the current user is not a support user" do
+  context "when the current user is a data provider" do
     let(:user) { build(:user) }
 
     it "is not shown" do
