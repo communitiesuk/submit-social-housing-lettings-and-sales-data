@@ -158,6 +158,16 @@ module Imports
       attributes["buyer_livein_value_check"] = 0
       attributes["percentage_discount_value_check"] = 0
 
+      if attributes["saledate"] >= Time.zone.local(2023, 4, 1)
+        attributes["uprn"] = string_or_nil(xml_doc, "UPRN")
+        attributes["uprn_known"] = attributes["uprn"].present? ? 1 : 0
+        attributes["uprn_confirmed"] = attributes["uprn"].present? ? 1 : 0
+        attributes["address_line1"] = string_or_nil(xml_doc, "AddressLine1")
+        attributes["address_line2"] = string_or_nil(xml_doc, "AddressLine2")
+        attributes["town_or_city"] = string_or_nil(xml_doc, "TownCity")
+        attributes["county"] = string_or_nil(xml_doc, "County")
+      end
+
       # Sets the log creator
       owner_id = meta_field_value(xml_doc, "owner-user-id").strip
       if owner_id.present?
@@ -232,6 +242,11 @@ module Imports
         @logger.warn("Log #{sales_log.old_id}: Removing mortgage because it cannot be 0")
         @logs_overridden << sales_log.old_id
         attributes.delete("mortgage")
+        save_sales_log(attributes, previous_status)
+      elsif sales_log.errors.of_kind?(:uprn, :uprn_error)
+        @logger.warn("Log #{sales_log.old_id}: Setting uprn_known to no with error: #{sales_log.errors[:uprn].join(', ')}")
+        @logs_overridden << sales_log.old_id
+        attributes["uprn_known"] = 0
         save_sales_log(attributes, previous_status)
       else
         @logger.error("Log #{sales_log.old_id}: Failed to import")
