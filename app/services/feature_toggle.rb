@@ -36,7 +36,11 @@ class FeatureToggle
     true
   end
 
-  def self.bulk_upload_logs?
+  def self.bulk_upload_lettings_logs?
+    !Rails.env.production?
+  end
+
+  def self.bulk_upload_sales_logs?
     !Rails.env.production?
   end
 
