@@ -9,7 +9,7 @@ class BulkUpload::Lettings::Validator
   attr_reader :bulk_upload, :path
 
   validate :validate_file_not_empty
-  validate :validate_fields_count
+  validate :validate_field_numbers_count
 
   def initialize(bulk_upload:, path:)
     @bulk_upload = bulk_upload
@@ -128,10 +128,10 @@ private
     end
   end
 
-  def validate_fields_count
+  def validate_field_numbers_count
     return if halt_validations?
 
-    errors.add(:base, :wrong_field_count) if csv_parser.valid_field_numbers_count != csv_parser.class::FIELDS
+    errors.add(:base, :wrong_field_numbers_count) if csv_parser.valid_field_numbers_count != csv_parser.class::FIELDS
   end
 
   def halt_validations!
