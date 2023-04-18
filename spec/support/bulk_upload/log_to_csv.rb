@@ -37,11 +37,28 @@ class BulkUpload::LogToCsv
     ]
   end
 
+  def to_custom_2023_csv_row(seed: nil, field_values: to_2023_row)
+    if seed
+      row = field_values.shuffle(random: Random.new(seed))
+      (row_prefix + row).flatten.join(",") + line_ending
+    else
+      (row_prefix + row).flatten.join(",") + line_ending
+    end
+  end
+
   def default_2023_field_numbers_row(seed: nil)
     if seed
       ["Bulk upload field number"] + default_2023_field_numbers.shuffle(random: Random.new(seed))
     else
       ["Bulk upload field number"] + default_2023_field_numbers
+    end.flatten.join(",") + line_ending
+  end
+
+  def custom_2023_field_numbers_row(seed: nil, field_numbers: default_2023_field_numbers)
+    if seed
+      ["Bulk upload field number"] + field_numbers.shuffle(random: Random.new(seed))
+    else
+      ["Bulk upload field number"] + field_numbers
     end.flatten.join(",") + line_ending
   end
 
