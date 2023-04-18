@@ -131,7 +131,7 @@ private
   def validate_fields_count
     return if halt_validations?
 
-    errors.add(:base, :wrong_field_count) if csv_parser.non_blank_fields_count != csv_parser.class::FIELDS
+    errors.add(:base, :wrong_field_count) if csv_parser.valid_field_numbers_count != csv_parser.class::FIELDS
   end
 
   def halt_validations!
