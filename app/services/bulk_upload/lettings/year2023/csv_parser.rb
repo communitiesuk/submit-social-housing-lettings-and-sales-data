@@ -46,7 +46,7 @@ class BulkUpload::Lettings::Year2023::CsvParser
     cols[field_numbers.find_index(field) + col_offset]
   end
 
-  def non_blank_fields_count
+  def valid_field_numbers_count
     field_numbers.count { |f| f != "field_blank" }
   end
 
