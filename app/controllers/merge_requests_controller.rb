@@ -4,10 +4,13 @@ class MergeRequestsController < ApplicationController
   before_action :authenticate_scope!, except: [:create]
 
   def create
-    @merge_request = MergeRequest.create!(merge_request_params)
-    MergeRequestOrganisation.create!({ merge_request: @merge_request, merging_organisation_id: merge_request_params.fetch(:requesting_organisation_id) })
-
+    ActiveRecord::Base.transaction do
+      @merge_request = MergeRequest.create!(merge_request_params.merge(status: :unsubmitted))
+      MergeRequestOrganisation.create!({ merge_request: @merge_request, merging_organisation: @merge_request.requesting_organisation })
+    end
     redirect_to organisations_merge_request_path(@merge_request)
+  rescue ActiveRecord::RecordInvalid
+    render_not_found
   end
 
   def organisations

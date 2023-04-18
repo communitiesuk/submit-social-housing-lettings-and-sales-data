@@ -43,7 +43,6 @@
 
     <%= form_for @merge_request, url: merge_requests_path do |f| %>
       <%= f.hidden_field :requesting_organisation_id, value: @organisation.id %>
-            <%= f.hidden_field :status, value: "unsubmitted" %>
       <%= f.submit "Start now", class: "govuk-button govuk-button--start" %>
     <% end %>
   </div>
