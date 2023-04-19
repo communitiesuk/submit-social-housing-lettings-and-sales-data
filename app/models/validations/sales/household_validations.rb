@@ -20,6 +20,18 @@ module Validations::Sales::HouseholdValidations
     end
   end
 
+  def validate_buyers_living_in_property(record)
+    return unless record.form.start_date.year >= 2023
+
+    if record.buyers_will_live_in? &&
+        record.joint_purchase? &&
+        record.buyer_one_will_not_live_in_property? &&
+        record.buyer_two_will_not_live_in_property?
+      record.errors.add :buy1livein, I18n.t("validations.household.buyers_will_live_in_property.buyers_live_but_no_buyers_live")
+      record.errors.add :buy2livein, I18n.t("validations.household.buyers_will_live_in_property.buyers_live_but_no_buyers_live")
+    end
+  end
+
 private
 
   def validate_person_age_matches_relationship(record, person_num)

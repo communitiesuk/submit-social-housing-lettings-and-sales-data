@@ -201,4 +201,60 @@ RSpec.describe Validations::Sales::HouseholdValidations do
       end
     end
   end
+
+  describe "validating fields about buyers living in the property" do
+    let(:sales_log) { FactoryBot.create(:sales_log, :outright_sale, noint: 1, companybuy: 2, buylivein:, jointpur:, jointmore:, buy1livein:) }
+
+    context "when buyers will live in the property and the sale is a joint purchase" do
+      let(:buylivein) { 1 }
+      let(:jointpur) { 1 }
+      let(:jointmore) { 2 }
+
+      context "and buyer one will live in the property" do
+        let(:buy1livein) { 1 }
+
+        it "does not add validations regardless of whether buyer two will live in the property" do
+          sales_log.buy2livein = 1
+          household_validator.validate_buyers_living_in_property(sales_log)
+          expect(sales_log.errors).to be_empty
+          sales_log.buy2livein = 2
+          household_validator.validate_buyers_living_in_property(sales_log)
+          expect(sales_log.errors).to be_empty
+        end
+      end
+
+      context "and buyer one will not live in the property" do
+        let(:buy1livein) { 2 }
+
+        it "does not add validations if buyer two will live in the property or if we do not yet know" do
+          sales_log.buy2livein = 1
+          household_validator.validate_buyers_living_in_property(sales_log)
+          expect(sales_log.errors).to be_empty
+          sales_log.buy2livein = nil
+          household_validator.validate_buyers_living_in_property(sales_log)
+          expect(sales_log.errors).to be_empty
+        end
+
+        it "triggers a validation if buyer two will also not live in the property" do
+          sales_log.buy2livein = 2
+          household_validator.validate_buyers_living_in_property(sales_log)
+          expect(sales_log.errors[:buy2livein]).to include I18n.t("validations.household.buyers_will_live_in_property.buyers_live_but_no_buyers_live")
+          expect(sales_log.errors[:buy1livein]).to include I18n.t("validations.household.buyers_will_live_in_property.buyers_live_but_no_buyers_live")
+        end
+      end
+
+      context "and we don't know whether buyer one will live in the property" do
+        let(:buy1livein) { nil }
+
+        it "does not add validations regardless of whether buyer two will live in the property" do
+          sales_log.buy2livein = 1
+          household_validator.validate_buyers_living_in_property(sales_log)
+          expect(sales_log.errors).to be_empty
+          sales_log.buy2livein = 2
+          household_validator.validate_buyers_living_in_property(sales_log)
+          expect(sales_log.errors).to be_empty
+        end
+      end
+    end
+  end
 end

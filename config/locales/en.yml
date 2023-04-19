@@ -442,6 +442,8 @@ en:
         no_choices: "You cannot answer this question as you told us nobody in the household has a physical or mental health condition (or other illness) expected to last 12 months or more"
       postcode:
         discounted_ownership: "Last settled accommodation and discounted ownership property postcodes must match"
+      buyers_will_live_in_property:
+        buyers_live_but_no_buyers_live: "You have already told us that the buyers will live in the property. Either buyer 1 or buyer 2 must live in the property"
 
     tenancy:
       length:
