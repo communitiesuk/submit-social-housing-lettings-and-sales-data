@@ -142,6 +142,8 @@ class BulkUpload::Lettings::Year2022::RowParser
   attribute :bulk_upload
   attribute :block_log_creation, :boolean, default: -> { false }
 
+  attribute :field_blank
+
   attribute :field_1, :integer
   attribute :field_2
   attribute :field_3
@@ -366,7 +368,7 @@ class BulkUpload::Lettings::Year2022::RowParser
   def blank_row?
     attribute_set
       .to_hash
-      .reject { |k, _| %w[bulk_upload block_log_creation].include?(k) }
+      .reject { |k, _| %w[bulk_upload block_log_creation field_blank].include?(k) }
       .values
       .reject(&:blank?)
       .compact
