@@ -55,7 +55,7 @@ class BulkUpload::Lettings::Year2022::CsvParser
     rows.map { |r| r[0] }.any? { |cell| cell&.match?(/field number/i) }
   end
 
-  private
+private
 
   def default_field_numbers
     ("field_1".."field_#{FIELDS}").to_a
