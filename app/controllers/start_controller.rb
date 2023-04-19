@@ -28,4 +28,44 @@ class StartController < ApplicationController
       type: "application/pdf",
     )
   end
+
+  def download_23_24_lettings_bulk_upload_template
+    send_file(
+      Rails.root.join("public/files/bulk-upload-lettings-template-2023-24.xlsx"),
+      filename: "2023-24-lettings-bulk-upload-template.xlsx",
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
+  end
+
+  def download_23_24_lettings_bulk_upload_legacy_template
+    send_file(
+      Rails.root.join("public/files/bulk-upload-lettings-legacy-template-2023-24.xlsx"),
+      filename: "2023-24-lettings-bulk-upload-legacy-template.xlsx",
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
+  end
+
+  def download_23_24_lettings_bulk_upload_specification
+    send_file(
+      Rails.root.join("public/files/bulk-upload-lettings-specification-2023-24.xlsx"),
+      filename: "2023-24-lettings-bulk-upload-specification.xlsx",
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
+  end
+
+  def download_22_23_lettings_bulk_upload_template
+    send_file(
+      Rails.root.join("public/files/bulk-upload-lettings-template-2022-23.xlsx"),
+      filename: "2022-23-lettings-bulk-upload-template.xlsx",
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
+  end
+
+  def download_22_23_lettings_bulk_upload_specification
+    send_file(
+      Rails.root.join("public/files/bulk-upload-lettings-specification-2022-23.xlsx"),
+      filename: "2022-23-lettings-bulk-upload-specification.xlsx",
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
+  end
 end
