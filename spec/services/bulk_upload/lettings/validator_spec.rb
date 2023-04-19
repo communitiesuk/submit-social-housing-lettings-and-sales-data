@@ -20,83 +20,87 @@ RSpec.describe BulkUpload::Lettings::Validator do
     context "2022" do
       let(:bulk_upload) { create(:bulk_upload, user:, year: 2022) }
 
-      context "when file has no headers and too many columns" do
-        before do
-          file.write(("a" * 136).chars.join(","))
-          file.write("\n")
-          file.rewind
+      context "when file has no headers" do
+        context "and too many columns" do
+          before do
+            file.write(("a" * 136).chars.join(","))
+            file.write("\n")
+            file.rewind
+          end
+
+          it "is not valid" do
+            expect(validator).not_to be_valid
+            expect(validator.errors["base"]).to eql(["too many columns, please ensure you have used the correct template"])
+          end
         end
 
-        it "is not valid" do
-          expect(validator).not_to be_valid
-          expect(validator.errors["base"]).to eql(["too many columns, please ensure you have used the correct template"])
-        end
-      end
+        context "and doesn't have too many columns" do
+          before do
+            file.write(("a" * 135).chars.join(","))
+            file.write("\n")
+            file.rewind
+          end
 
-      context "when file has no headers and doesn't have too many columns" do
-        before do
-          file.write(("a" * 135).chars.join(","))
-          file.write("\n")
-          file.rewind
-        end
-
-        it "is valid" do
-          expect(validator).to be_valid
-        end
-      end
-
-      context "when file has extra invalid headers" do
-        let(:seed) { rand }
-        let(:log_to_csv) { BulkUpload::LogToCsv.new(log:) }
-        let(:field_numbers) { log_to_csv.default_2022_field_numbers + %w[invalid_field_number] }
-        let(:field_values) { log_to_csv.to_2022_row + %w[value_for_invalid_field_number] }
-
-        before do
-          file.write(log_to_csv.custom_2022_field_numbers_row(seed:, field_numbers:))
-          file.write(log_to_csv.to_custom_2022_csv_row(seed:, field_values:))
-          file.rewind
-        end
-
-        it "is valid" do
-          expect(validator).to be_valid
+          it "is valid" do
+            expect(validator).to be_valid
+          end
         end
       end
 
-      context "when file has too few valid headers" do
-        let(:seed) { rand }
-        let(:log_to_csv) { BulkUpload::LogToCsv.new(log:) }
-        let(:field_numbers) { log_to_csv.default_2022_field_numbers }
-        let(:field_values) { log_to_csv.to_2022_row }
+      context "when file has headers" do
+        context "and file has extra invalid headers" do
+          let(:seed) { rand }
+          let(:log_to_csv) { BulkUpload::LogToCsv.new(log:) }
+          let(:field_numbers) { log_to_csv.default_2022_field_numbers + %w[invalid_field_number] }
+          let(:field_values) { log_to_csv.to_2022_row + %w[value_for_invalid_field_number] }
 
-        before do
-          field_numbers.delete_at(20)
-          field_values.delete_at(20)
-          file.write(log_to_csv.custom_2022_field_numbers_row(seed:, field_numbers:))
-          file.write(log_to_csv.to_custom_2022_csv_row(seed:, field_values:))
-          file.rewind
+          before do
+            file.write(log_to_csv.custom_field_numbers_row(seed:, field_numbers:))
+            file.write(log_to_csv.to_custom_csv_row(seed:, field_values:))
+            file.rewind
+          end
+
+          it "is valid" do
+            expect(validator).to be_valid
+          end
         end
 
-        it "is not valid" do
-          expect(validator).not_to be_valid
-          expect(validator.errors["base"]).to eql(["incorrect number of fields, please ensure you have used the correct template"])
+        context "and file has too few valid headers" do
+          let(:seed) { rand }
+          let(:log_to_csv) { BulkUpload::LogToCsv.new(log:) }
+          let(:field_numbers) { log_to_csv.default_2022_field_numbers }
+          let(:field_values) { log_to_csv.to_2022_row }
+
+          before do
+            field_numbers.delete_at(20)
+            field_values.delete_at(20)
+            file.write(log_to_csv.custom_field_numbers_row(seed:, field_numbers:))
+            file.write(log_to_csv.to_custom_csv_row(seed:, field_values:))
+            file.rewind
+          end
+
+          it "is not valid" do
+            expect(validator).not_to be_valid
+            expect(validator.errors["base"]).to eql(["incorrect number of fields, please ensure you have used the correct template"])
+          end
         end
-      end
 
-      context "when file has too many valid headers" do
-        let(:seed) { rand }
-        let(:log_to_csv) { BulkUpload::LogToCsv.new(log:) }
-        let(:field_numbers) { log_to_csv.default_2022_field_numbers + %w[23] }
-        let(:field_values) { log_to_csv.to_2022_row + %w[value] }
+        context "and file has too many valid headers" do
+          let(:seed) { rand }
+          let(:log_to_csv) { BulkUpload::LogToCsv.new(log:) }
+          let(:field_numbers) { log_to_csv.default_2022_field_numbers + %w[23] }
+          let(:field_values) { log_to_csv.to_2022_row + %w[value] }
 
-        before do
-          file.write(log_to_csv.custom_2022_field_numbers_row(seed:, field_numbers:))
-          file.write(log_to_csv.to_custom_2022_csv_row(seed:, field_values:))
-          file.rewind
-        end
+          before do
+            file.write(log_to_csv.custom_field_numbers_row(seed:, field_numbers:))
+            file.write(log_to_csv.to_custom_csv_row(seed:, field_values:))
+            file.rewind
+          end
 
-        it "is not valid" do
-          expect(validator).not_to be_valid
-          expect(validator.errors["base"]).to eql(["incorrect number of fields, please ensure you have used the correct template"])
+          it "is not valid" do
+            expect(validator).not_to be_valid
+            expect(validator.errors["base"]).to eql(["incorrect number of fields, please ensure you have used the correct template"])
+          end
         end
       end
     end
@@ -104,88 +108,90 @@ RSpec.describe BulkUpload::Lettings::Validator do
     context "2023" do
       let(:bulk_upload) { create(:bulk_upload, user:, year: 2023) }
 
-      context "when file has no headers and too many columns" do
-        before do
-          file.write(("a" * 143).chars.join(","))
-          file.write("\n")
-          file.rewind
+      context "when file has no headers" do
+        context "and too many columns" do
+          before do
+            file.write(("a" * 143).chars.join(","))
+            file.write("\n")
+            file.rewind
+          end
+
+          it "is not valid" do
+            expect(validator).not_to be_valid
+            expect(validator.errors["base"]).to eql(["too many columns, please ensure you have used the correct template"])
+          end
         end
 
-        it "is not valid" do
-          expect(validator).not_to be_valid
-          expect(validator.errors["base"]).to eql(["too many columns, please ensure you have used the correct template"])
-        end
-      end
+        context "and doesn't have too many columns" do
+          before do
+            file.write(("a" * 142).chars.join(","))
+            file.write("\n")
+            file.rewind
+          end
 
-      context "when file has no headers and doesn't have too many columns" do
-        before do
-          file.write(("a" * 142).chars.join(","))
-          file.write("\n")
-          file.rewind
-        end
-
-        it "is valid" do
-          expect(validator).to be_valid
-        end
-      end
-
-      context "when file has extra invalid headers" do
-        let(:seed) { rand }
-        let(:log_to_csv) { BulkUpload::LogToCsv.new(log:) }
-        let(:field_numbers) { log_to_csv.default_2023_field_numbers + %w[invalid_field_number] }
-        let(:field_values) { log_to_csv.to_2023_row + %w[value_for_invalid_field_number] }
-
-        before do
-          file.write(log_to_csv.custom_2023_field_numbers_row(seed:, field_numbers:))
-          file.write(log_to_csv.to_custom_2023_csv_row(seed:, field_values:))
-          file.rewind
-        end
-
-        it "is valid" do
-          expect(validator).to be_valid
+          it "is valid" do
+            expect(validator).to be_valid
+          end
         end
       end
 
-      context "when file has too few valid headers" do
-        let(:seed) { rand }
-        let(:log_to_csv) { BulkUpload::LogToCsv.new(log:) }
-        let(:field_numbers) { log_to_csv.default_2023_field_numbers }
-        let(:field_values) { log_to_csv.to_2023_row }
+      context "when file has headers" do
+        context "and file has extra invalid headers" do
+          let(:seed) { rand }
+          let(:log_to_csv) { BulkUpload::LogToCsv.new(log:) }
+          let(:field_numbers) { log_to_csv.default_2023_field_numbers + %w[invalid_field_number] }
+          let(:field_values) { log_to_csv.to_2023_row + %w[value_for_invalid_field_number] }
 
-        before do
-          field_numbers.delete_at(20)
-          field_values.delete_at(20)
-          file.write(log_to_csv.custom_2023_field_numbers_row(seed:, field_numbers:))
-          file.write(log_to_csv.to_custom_2023_csv_row(seed:, field_values:))
-          file.rewind
+          before do
+            file.write(log_to_csv.custom_field_numbers_row(seed:, field_numbers:))
+            file.write(log_to_csv.to_custom_csv_row(seed:, field_values:))
+            file.rewind
+          end
+
+          it "is valid" do
+            expect(validator).to be_valid
+          end
         end
 
-        it "is not valid" do
-          expect(validator).not_to be_valid
-          expect(validator.errors["base"]).to eql(["incorrect number of fields, please ensure you have used the correct template"])
+        context "and file has too few valid headers" do
+          let(:seed) { rand }
+          let(:log_to_csv) { BulkUpload::LogToCsv.new(log:) }
+          let(:field_numbers) { log_to_csv.default_2023_field_numbers }
+          let(:field_values) { log_to_csv.to_2023_row }
+
+          before do
+            field_numbers.delete_at(20)
+            field_values.delete_at(20)
+            file.write(log_to_csv.custom_field_numbers_row(seed:, field_numbers:))
+            file.write(log_to_csv.to_custom_csv_row(seed:, field_values:))
+            file.rewind
+          end
+
+          it "is not valid" do
+            expect(validator).not_to be_valid
+            expect(validator.errors["base"]).to eql(["incorrect number of fields, please ensure you have used the correct template"])
+          end
         end
-      end
 
-      context "when file has too many valid headers" do
-        let(:seed) { rand }
-        let(:log_to_csv) { BulkUpload::LogToCsv.new(log:) }
-        let(:field_numbers) { log_to_csv.default_2023_field_numbers + %w[23] }
-        let(:field_values) { log_to_csv.to_2023_row + %w[value] }
+        context "and file has too many valid headers" do
+          let(:seed) { rand }
+          let(:log_to_csv) { BulkUpload::LogToCsv.new(log:) }
+          let(:field_numbers) { log_to_csv.default_2023_field_numbers + %w[23] }
+          let(:field_values) { log_to_csv.to_2023_row + %w[value] }
 
-        before do
-          file.write(log_to_csv.custom_2023_field_numbers_row(seed:, field_numbers:))
-          file.write(log_to_csv.to_custom_2023_csv_row(seed:, field_values:))
-          file.rewind
-        end
+          before do
+            file.write(log_to_csv.custom_field_numbers_row(seed:, field_numbers:))
+            file.write(log_to_csv.to_custom_csv_row(seed:, field_values:))
+            file.rewind
+          end
 
-        it "is not valid" do
-          expect(validator).not_to be_valid
-          expect(validator.errors["base"]).to eql(["incorrect number of fields, please ensure you have used the correct template"])
+          it "is not valid" do
+            expect(validator).not_to be_valid
+            expect(validator.errors["base"]).to eql(["incorrect number of fields, please ensure you have used the correct template"])
+          end
         end
       end
     end
-
-    context "when incorrect headers"
   end
 
   describe "#call" do
