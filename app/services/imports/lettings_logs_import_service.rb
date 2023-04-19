@@ -219,15 +219,19 @@ module Imports
 
         schemes = Scheme.where(old_visible_id: scheme_old_visible_id, owning_organisation_id: attributes["owning_organisation_id"])
         location = Location.find_by(old_visible_id: location_old_visible_id, scheme: schemes)
-        raise "No matching location for scheme #{scheme_old_visible_id} and location #{location_old_visible_id} (visible IDs)" if location.nil?
+        if location.nil? && [location_old_visible_id, scheme_old_visible_id].all?(&:present?) && previous_status != "saved"
+          raise "No matching location for scheme #{scheme_old_visible_id} and location #{location_old_visible_id} (visible IDs)"
+        end
 
-        # Set the scheme via location, because the scheme old visible ID can be duplicated at import
-        attributes["location_id"] = location.id
-        attributes["scheme_id"] = location.scheme.id
-        attributes["sheltered"] = unsafe_string_as_integer(xml_doc, "Q1e")
-        attributes["chcharge"] = safe_string_as_decimal(xml_doc, "Q18b")
-        attributes["household_charge"] = household_charge(xml_doc)
-        attributes["is_carehome"] = is_carehome(location.scheme)
+        if location.present?
+          # Set the scheme via location, because the scheme old visible ID can be duplicated at import
+          attributes["location_id"] = location.id
+          attributes["scheme_id"] = location.scheme.id
+          attributes["sheltered"] = unsafe_string_as_integer(xml_doc, "Q1e")
+          attributes["chcharge"] = safe_string_as_decimal(xml_doc, "Q18b")
+          attributes["household_charge"] = household_charge(xml_doc)
+          attributes["is_carehome"] = is_carehome(location.scheme)
+        end
       end
 
       # Handles confidential schemes
