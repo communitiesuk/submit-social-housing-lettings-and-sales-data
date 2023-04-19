@@ -102,9 +102,6 @@ class Log < ApplicationRecord
       next if setup_ids.include?(error.attribute.to_s)
 
       public_send("#{error.attribute}=", nil)
-      form.conditional_question_conditions.map { |c| c[:from] if c[:to] == error.attribute }.compact.each do |conditional_attribute|
-        public_send("#{conditional_attribute}=", nil)
-      end
     end
   end
 
