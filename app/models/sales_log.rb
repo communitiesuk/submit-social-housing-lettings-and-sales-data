@@ -385,25 +385,25 @@ private
   def reset_derived_questions!
     dependencies = [
       {
-        parent_conditions: [
-          { attribute: :buylivein, value: 2 },
-        ],
+        conditions: {
+          buylivein: 2,
+        },
         derived_attributes: %i[buy1livein buy2livein],
       },
       {
-        parent_conditions: [
-          { attribute: :buylivein, value: 1 },
-          { attribute: :jointpur, value: 1 },
-        ],
+        conditions: {
+          buylivein: 1,
+          jointpur: 1,
+        },
         derived_attributes: [:buy1livein],
       },
     ]
 
     dependencies.each do |dependency|
-      any_parent_attributes_changed = dependency[:parent_conditions].any? { |parent_condition| send("#{parent_condition[:attribute]}_changed?") }
-      next unless any_parent_attributes_changed
+      any_primary_attributes_changed = dependency[:conditions].any? { |attribute, _value| send("#{attribute}_changed?") }
+      next unless any_primary_attributes_changed
 
-      previously_in_derived_state = dependency[:parent_conditions].all? { |parent_condition| send("#{parent_condition[:attribute]}_was") == parent_condition[:value] }
+      previously_in_derived_state = dependency[:conditions].all? { |attribute, value| send("#{attribute}_was") == value }
       next unless previously_in_derived_state
 
       dependency[:derived_attributes].each do |derived_attribute|
