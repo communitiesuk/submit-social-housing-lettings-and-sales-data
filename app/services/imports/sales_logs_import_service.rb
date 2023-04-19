@@ -170,7 +170,7 @@ module Imports
       attributes["ethnicbuy2"] = unsafe_string_as_integer(xml_doc, "P2Eth")
       attributes["ethnic_group2"] = ethnic_group(attributes["ethnicbuy2"])
       attributes["nationalbuy2"] = unsafe_string_as_integer(xml_doc, "P2Nat")
-      attributes["buy2living"] = unsafe_string_as_integer(xml_doc, "buy2livein")
+      attributes["buy2living"] = unsafe_string_as_integer(xml_doc, "BUY2LIVEIN")
 
       attributes["staircasesale"] = unsafe_string_as_integer(xml_doc, "STAIRCASESALE")
       attributes["prevtenbuy2"] = unsafe_string_as_integer(xml_doc, "PREVTENBUY2")
