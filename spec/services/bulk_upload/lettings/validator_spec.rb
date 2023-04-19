@@ -5,7 +5,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
 
   let(:organisation) { create(:organisation, old_visible_id: "3") }
   let(:user) { create(:user, organisation:) }
-  let(:bulk_upload) { create(:bulk_upload, user:) }
+  let(:bulk_upload) { create(:bulk_upload, user:, year: 2022) }
   let(:path) { file.path }
   let(:file) { Tempfile.new }
 
