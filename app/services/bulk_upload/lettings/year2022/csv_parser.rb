@@ -55,7 +55,7 @@ class BulkUpload::Lettings::Year2022::CsvParser
   private
 
   def headers
-    @headers ||= ("field_1".."field_134").to_a
+    @headers ||= ("field_1".."field_#{FIELDS}").to_a
   end
 
   def row_sep
