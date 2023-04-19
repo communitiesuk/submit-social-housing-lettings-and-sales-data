@@ -217,5 +217,14 @@ RSpec.describe Imports::SchemeLocationImportService do
         expect(location.scheme.support_type).to eq("Missing")
       end
     end
+
+    context "and support_type is not answered" do
+      before { location_xml.at_xpath("//scheme:support-type").content = "" }
+
+      it "sets the support type to nil" do
+        location = location_service.create_scheme_location(location_xml)
+        expect(location.scheme.support_type).to eq(nil)
+      end
+    end
   end
 end

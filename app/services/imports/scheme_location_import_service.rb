@@ -208,6 +208,8 @@ module Imports
 
     def support_type(xml_doc)
       type = safe_string_as_integer(xml_doc, "support-type")
+      return unless type
+
       Scheme::SUPPORT_TYPE.value?(type) ? type : 0
     end
   end
