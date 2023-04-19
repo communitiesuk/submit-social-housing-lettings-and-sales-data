@@ -30,6 +30,17 @@ module DerivedVariables::SalesLogVariables
       self.uprn = nil
       self.uprn_known = 0
     end
+
+    if buyers_will_not_live_in?
+      self.buy1livein = 2
+      if joint_purchase?
+        self.buy2livein = 2
+      end
+    end
+
+    if buyers_will_live_in? && not_joint_purchase?
+      self.buy1livein = 1
+    end
   end
 
 private

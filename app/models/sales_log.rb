@@ -368,12 +368,48 @@ class SalesLog < Log
 
   def ownership_scheme
     case ownershipsch
-    when 1
-      "shared ownership"
-    when 2
-      "discounted ownership"
-    when 3
-      "outright sale"
+    when 1 then "shared ownership"
+    when 2 then "discounted ownership"
+    when 3 then "outright sale"
+    end
+  end
+
+private
+
+  def reset_invalidated_dependent_fields!
+    super
+
+    reset_derived_questions!
+  end
+
+  def reset_derived_questions!
+    dependencies = [
+      {
+        parent_conditions: [
+          { attribute: :buylivein, value: 2 },
+        ],
+        derived_attributes: %i[buy1livein buy2livein],
+      },
+      {
+        parent_conditions: [
+          { attribute: :buylivein, value: 1 },
+          { attribute: :jointpur, value: 1 },
+        ],
+        derived_attributes: [:buy1livein],
+      },
+    ]
+
+    dependencies.each do |dependency|
+      any_parent_attributes_changed = dependency[:parent_conditions].any? { |parent_condition| send("#{parent_condition[:attribute]}_changed?") }
+      next unless any_parent_attributes_changed
+
+      were_in_derived_state = dependency[:parent_conditions].all? { |parent_condition| send("#{parent_condition[:attribute]}_was") == parent_condition[:value] }
+      next unless were_in_derived_state
+
+      dependency[:derived_attributes].each do |derived_attribute|
+        Rails.logger.debug("Cleared derived #{derived_attribute} value")
+        send("#{derived_attribute}=", nil)
+      end
     end
   end
 end

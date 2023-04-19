@@ -28,6 +28,25 @@ RSpec.describe Form::Sales::Pages::Buyer1LiveInProperty, type: :model do
   end
 
   it "has correct depends_on" do
-    expect(page.depends_on).to eq([{ "buyer_has_seen_privacy_notice?" => true }, { "buyer_not_interviewed?" => true }])
+    expect(page.depends_on).to eq([
+      {
+        "buyer_has_seen_privacy_notice?" => true,
+        "outright_sale?" => false,
+      },
+      {
+        "buyer_not_interviewed?" => true,
+        "outright_sale?" => false,
+      },
+      {
+        "buyer_has_seen_privacy_notice?" => true,
+        "joint_purchase?" => true,
+        "buyers_will_live_in?" => true,
+      },
+      {
+        "buyer_not_interviewed?" => true,
+        "joint_purchase?" => true,
+        "buyers_will_live_in?" => true,
+      },
+    ])
   end
 end

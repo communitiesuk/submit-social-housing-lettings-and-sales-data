@@ -220,6 +220,61 @@ RSpec.describe SalesLog, type: :model do
       record_from_db = ActiveRecord::Base.connection.execute("select mortgage from sales_logs where id=#{sales_log.id}").to_a[0]
       expect(record_from_db["mortgage"]).to eq(0.0)
     end
+
+    context "when outright sale and buyers will live in the property" do
+      let(:sales_log) { create(:sales_log, :outright_sale_setup_complete, buylivein: 1, jointpur:) }
+
+      context "and the sale is not a joint purchase" do
+        let(:jointpur) { 2 }
+
+        it "derives that buyer 1 will live in the property" do
+          expect(sales_log.buy1livein).to be 1
+        end
+
+        it "does not derive a value for whether buyer 2 will live in the property" do
+          expect(sales_log.buy2livein).to be nil
+        end
+
+        it "clears that buyer 1 will live in the property if joint purchase is updated" do
+          sales_log.update!(jointpur: 1)
+          expect(sales_log.buy1livein).to be nil
+        end
+      end
+
+      context "and the sale is a joint purchase" do
+        let(:jointpur) { 1 }
+
+        it "does not derive values for whether buyer 1 or buyer 2 will live in the property" do
+          expect(sales_log.buy1livein).to be nil
+          expect(sales_log.buy2livein).to be nil
+        end
+      end
+    end
+
+    context "when outright sale and buyers will not live in the property" do
+      let(:sales_log) { create(:sales_log, :outright_sale_setup_complete, buylivein: 2, jointpur:) }
+
+      context "and the sale is not a joint purchase" do
+        let(:jointpur) { 2 }
+
+        it "derives that buyer 1 will not live in the property" do
+          expect(sales_log.buy1livein).to be 2
+        end
+
+        it "does not derive a value for whether buyer 2 will live in the property" do
+          expect(sales_log.buy2livein).to be nil
+        end
+      end
+
+      context "and the sale is a joint purchase" do
+        let(:jointpur) { 1 }
+
+        it "derives that neither buyer 1 nor buyer 2 will live in the property" do
+          expect(sales_log.buy1livein).to be 2
+          expect(sales_log.buy2livein).to be 2
+        end
+      end
+    end
   end
 
   context "when saving addresses" do
