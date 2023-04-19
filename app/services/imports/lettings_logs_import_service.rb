@@ -202,15 +202,13 @@ module Imports
       attributes["first_time_property_let_as_social_housing"] = first_time_let(attributes["rsnvac"])
       attributes["declaration"] = declaration(xml_doc)
 
-      if attributes["startdate"] >= Time.zone.local(2023, 4, 1)
-        attributes["uprn"] = string_or_nil(xml_doc, "UPRN")
-        attributes["uprn_known"] = attributes["uprn"].present? ? 1 : 0
-        attributes["uprn_confirmed"] = attributes["uprn"].present? ? 1 : 0
-        attributes["address_line1"] = string_or_nil(xml_doc, "AddressLine1")
-        attributes["address_line2"] = string_or_nil(xml_doc, "AddressLine2")
-        attributes["town_or_city"] = string_or_nil(xml_doc, "TownCity")
-        attributes["county"] = string_or_nil(xml_doc, "County")
-      end
+      attributes["uprn"] = string_or_nil(xml_doc, "UPRN")
+      attributes["uprn_known"] = attributes["uprn"].present? ? 1 : 0
+      attributes["uprn_confirmed"] = attributes["uprn"].present? ? 1 : 0
+      attributes["address_line1"] = string_or_nil(xml_doc, "AddressLine1")
+      attributes["address_line2"] = string_or_nil(xml_doc, "AddressLine2")
+      attributes["town_or_city"] = string_or_nil(xml_doc, "TownCity")
+      attributes["county"] = string_or_nil(xml_doc, "County")
 
       set_partial_charges_to_zero(attributes)
 
@@ -377,7 +375,7 @@ module Imports
     end
 
     def fields_not_present_in_softwire_data
-      %w[majorrepairs illness_type_0 tshortfall_known pregnancy_value_check retirement_value_check rent_value_check net_income_value_check major_repairs_date_value_check void_date_value_check carehome_charges_value_check housingneeds_type housingneeds_other created_by]
+      %w[majorrepairs illness_type_0 tshortfall_known pregnancy_value_check retirement_value_check rent_value_check net_income_value_check major_repairs_date_value_check void_date_value_check carehome_charges_value_check housingneeds_type housingneeds_other created_by uprn_known uprn_confirmed]
     end
 
     def check_status_completed(lettings_log, previous_status)

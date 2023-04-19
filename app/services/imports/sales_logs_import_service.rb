@@ -154,27 +154,26 @@ module Imports
       attributes["buyer_livein_value_check"] = 0
       attributes["percentage_discount_value_check"] = 0
 
-      if attributes["saledate"] >= Time.zone.local(2023, 4, 1)
-        attributes["uprn"] = string_or_nil(xml_doc, "UPRN")
-        attributes["uprn_known"] = attributes["uprn"].present? ? 1 : 0
-        attributes["uprn_confirmed"] = attributes["uprn"].present? ? 1 : 0
-        attributes["address_line1"] = string_or_nil(xml_doc, "AddressLine1")
-        attributes["address_line2"] = string_or_nil(xml_doc, "AddressLine2")
-        attributes["town_or_city"] = string_or_nil(xml_doc, "TownCity")
-        attributes["county"] = string_or_nil(xml_doc, "County")
+      # 2023/34 attributes
+      attributes["uprn"] = string_or_nil(xml_doc, "UPRN")
+      attributes["uprn_known"] = attributes["uprn"].present? ? 1 : 0
+      attributes["uprn_confirmed"] = attributes["uprn"].present? ? 1 : 0
+      attributes["address_line1"] = string_or_nil(xml_doc, "AddressLine1")
+      attributes["address_line2"] = string_or_nil(xml_doc, "AddressLine2")
+      attributes["town_or_city"] = string_or_nil(xml_doc, "TownCity")
+      attributes["county"] = string_or_nil(xml_doc, "County")
 
-        attributes["proplen_asked"] = 0 if attributes["proplen"]&.positive?
-        attributes["proplen_asked"] = 1 if attributes["proplen"]&.zero?
+      attributes["proplen_asked"] = 0 if attributes["proplen"]&.positive?
+      attributes["proplen_asked"] = 1 if attributes["proplen"]&.zero?
 
-        attributes["prevshared"] = unsafe_string_as_integer(xml_doc, "PREVSHARED")
-        attributes["ethnicbuy2"] = unsafe_string_as_integer(xml_doc, "P2Eth")
-        attributes["ethnic_group2"] = ethnic_group(attributes["ethnicbuy2"])
-        attributes["nationalbuy2"] = unsafe_string_as_integer(xml_doc, "P2Nat")
-        attributes["buy2living"] = unsafe_string_as_integer(xml_doc, "buy2livein")
+      attributes["prevshared"] = unsafe_string_as_integer(xml_doc, "PREVSHARED")
+      attributes["ethnicbuy2"] = unsafe_string_as_integer(xml_doc, "P2Eth")
+      attributes["ethnic_group2"] = ethnic_group(attributes["ethnicbuy2"])
+      attributes["nationalbuy2"] = unsafe_string_as_integer(xml_doc, "P2Nat")
+      attributes["buy2living"] = unsafe_string_as_integer(xml_doc, "buy2livein")
 
-        attributes["staircasesale"] = unsafe_string_as_integer(xml_doc, "STAIRCASESALE")
-        attributes["prevtenbuy2"] = unsafe_string_as_integer(xml_doc, "PREVTENBUY2")
-      end
+      attributes["staircasesale"] = unsafe_string_as_integer(xml_doc, "STAIRCASESALE")
+      attributes["prevtenbuy2"] = unsafe_string_as_integer(xml_doc, "PREVTENBUY2")
 
       # Sets the log creator
       owner_id = meta_field_value(xml_doc, "owner-user-id").strip
@@ -589,11 +588,9 @@ module Imports
         attributes["relat2"] ||= "R"
         attributes["inc2mort"] ||= 3
         attributes["buy2livein"] ||= 1 unless attributes["ownershipsch"] == 3
-        if attributes["saledate"] >= Time.zone.local(2023, 4, 1)
-          attributes["ethnic_group2"] ||= 17
-          attributes["ethnicbuy2"] ||= 17
-          attributes["nationalbuy2"] ||= 13
-        end
+        attributes["ethnic_group2"] ||= 17
+        attributes["ethnicbuy2"] ||= 17
+        attributes["nationalbuy2"] ||= 13
       end
 
       # other household members characteristics
