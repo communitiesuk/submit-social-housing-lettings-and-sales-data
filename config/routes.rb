@@ -119,7 +119,16 @@ Rails.application.routes.draw do
       get "managing-agents/remove", to: "organisation_relationships#remove_managing_agent"
       post "managing-agents", to: "organisation_relationships#create_managing_agent"
       delete "managing-agents", to: "organisation_relationships#delete_managing_agent"
-      get "merge", to: "organisations#merge"
+      get "merge-request", to: "organisations#merge_request"
+    end
+  end
+
+  resources :merge_requests, path: "/merge-request" do
+    member do
+      get "organisations"
+      patch "organisations", to: "merge_requests#update_organisations"
+      get "organisations/remove", to: "merge_requests#remove_merging_organisation"
+      get "absorbing-organisation"
     end
   end
 

@@ -504,6 +504,9 @@ en:
       discounted_ownership_value: "Mortgage, deposit, and grant total must equal %{value_with_discount}"
       monthly_rent:
         higher_than_expected: "Basic monthly rent must be between £0.00 and £9,999.00"
+    merge_request:
+      organisation_part_of_another_merge: "This organisation is part of another merge - select a different one"
+      organisation_not_selected: "Select an organisation from the search list"
 
   soft_validations:
     net_income:
