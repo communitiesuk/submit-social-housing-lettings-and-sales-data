@@ -126,10 +126,6 @@ module Imports
       attributes["postcode_full"] = parse_postcode(string_or_nil(xml_doc, "Q14Postcode"))
       attributes["pcodenk"] = 0 if attributes["postcode_full"].present? # known if given
       attributes["soctenant"] = 0 if attributes["ownershipsch"] == 1
-      attributes["ethnic_group2"] = nil # 23/24 variable
-      attributes["ethnicbuy2"] = nil # 23/24 variable
-      attributes["prevshared"] = nil # 23/24 variable
-      attributes["staircasesale"] = nil # 23/24 variable
 
       attributes["previous_la_known"] = 1 if attributes["prevloc"].present?
       if attributes["la"].present?
