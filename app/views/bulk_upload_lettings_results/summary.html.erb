@@ -20,7 +20,7 @@
     <% end %>
 
     <% c.with_tab(label: "Full error report") do %>
-      <% @bulk_upload.bulk_upload_errors.group_by(&:row).each do |_row, errors_for_row| %>
+      <% @bulk_upload.bulk_upload_errors.order_by_cell.group_by(&:row).each do |_row, errors_for_row| %>
         <%= render BulkUploadErrorRowComponent.new(bulk_upload_errors: errors_for_row) %>
       <% end %>
     <% end %>
