@@ -576,8 +576,6 @@ module Imports
       attributes["sex1"] ||= "R"
       attributes["ethnic_group"] ||= 17
       attributes["ethnic"] ||= 17
-      # attributes["ethnic_group2"] ||= 17
-      # attributes["ethnicbuy2"] ||= 17
       attributes["national"] ||= 13
       attributes["ecstat1"] ||= 10
       attributes["income1nk"] ||= attributes["income1"].present? ? 0 : 1
@@ -591,6 +589,11 @@ module Imports
         attributes["relat2"] ||= "R"
         attributes["inc2mort"] ||= 3
         attributes["buy2livein"] ||= 1 unless attributes["ownershipsch"] == 3
+        if attributes["saledate"] >= Time.zone.local(2023, 4, 1)
+          attributes["ethnic_group2"] ||= 17
+          attributes["ethnicbuy2"] ||= 17
+          attributes["nationalbuy2"] ||= 13
+        end
       end
 
       # other household members characteristics
