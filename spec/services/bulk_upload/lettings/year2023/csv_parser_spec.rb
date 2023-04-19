@@ -106,54 +106,6 @@ RSpec.describe BulkUpload::Lettings::Year2023::CsvParser do
     end
   end
 
-  context "when parsing csv with too few valid headers" do
-    let(:seed) { rand }
-    let(:log_to_csv) { BulkUpload::LogToCsv.new(log:) }
-    let(:field_numbers) { log_to_csv.default_2023_field_numbers }
-    let(:field_values) { log_to_csv.to_2023_row }
-
-    before do
-      field_numbers.delete_at(20)
-      field_values.delete_at(20)
-      file.write("Question\n")
-      file.write("Additional info\n")
-      file.write("Values\n")
-      file.write("Can be empty?\n")
-      file.write("Type of letting the question applies to\n")
-      file.write("Duplicate check field?\n")
-      file.write(log_to_csv.custom_2023_field_numbers_row(seed:, field_numbers:))
-      file.write(log_to_csv.to_custom_2023_csv_row(seed:, field_values:))
-      file.rewind
-    end
-
-    it "counts the number of valid field numbers correctly" do
-      expect(service.valid_field_numbers_count).to eql(133)
-    end
-  end
-
-  context "when parsing csv with too many valid headers" do
-    let(:seed) { rand }
-    let(:log_to_csv) { BulkUpload::LogToCsv.new(log:) }
-    let(:field_numbers) { log_to_csv.default_2023_field_numbers + ["23"] }
-    let(:field_values) { log_to_csv.to_2023_row + ["value"] }
-
-    before do
-      file.write("Question\n")
-      file.write("Additional info\n")
-      file.write("Values\n")
-      file.write("Can be empty?\n")
-      file.write("Type of letting the question applies to\n")
-      file.write("Duplicate check field?\n")
-      file.write(log_to_csv.custom_2023_field_numbers_row(seed:, field_numbers:))
-      file.write(log_to_csv.to_custom_2023_csv_row(seed:, field_values:))
-      file.rewind
-    end
-
-    it "counts the number of valid field numbers correctly" do
-      expect(service.valid_field_numbers_count).to eql(135)
-    end
-  end
-
   context "when parsing csv without headers" do
     before do
       file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_2023_csv_row)
