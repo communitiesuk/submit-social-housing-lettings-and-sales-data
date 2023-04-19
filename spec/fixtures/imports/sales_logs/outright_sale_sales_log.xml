@@ -32,6 +32,11 @@
     <Q11Bedrooms override-field="">1</Q11Bedrooms>
     <Q12PropertyType>1 Flat or maisonette</Q12PropertyType>
     <Q13BuildingType>1 Purpose built</Q13BuildingType>
+    <UPRN/>
+    <AddressLine1/>
+    <AddressLine2/>
+    <TownCity/>
+    <County/>
     <Q14Postcode override-field="">SW1A 1AA</Q14Postcode>
     <Q14PropertyLocation>Westminster</Q14PropertyLocation>
     <Q14ONSLACode>E09000033</Q14ONSLACode>
@@ -275,6 +280,7 @@
     <Q41b/>
     <Q42Borrowing/>
     <Q43CashDeposit override-field="">300000</Q43CashDeposit>
+    <Q44MonthlyCharges/>
   </Group>
   <Group>
     <HHMEMB>1</HHMEMB>

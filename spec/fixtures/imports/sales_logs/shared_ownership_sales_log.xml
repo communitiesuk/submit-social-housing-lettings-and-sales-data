@@ -24,6 +24,7 @@
     <Q38OtherSale/>
     <company>2 No</company>
     <LiveInBuyer>1 Yes</LiveInBuyer>
+    <buy2livein/>
     <joint>2 No</joint>
     <JointMore/>
     <PartAPurchaser>2 Yes</PartAPurchaser>
@@ -32,6 +33,12 @@
     <Q11Bedrooms override-field="">2</Q11Bedrooms>
     <Q12PropertyType>1 Flat or maisonette</Q12PropertyType>
     <Q13BuildingType>1 Purpose built</Q13BuildingType>
+    <UPRN/>
+    <AddressLine1/>
+    <AddressLine2/>
+    <TownCity/>
+    <County/>
+    <PREVSHARED/>
     <Q14Postcode override-field="">SW1A 1AA</Q14Postcode>
     <Q14PropertyLocation>Westminster</Q14PropertyLocation>
     <Q14ONSLACode>E09000033</Q14ONSLACode>
@@ -47,6 +54,8 @@
     <P2Sex override-field=""/>
     <P2Rel/>
     <P2Eco/>
+    <P2Eth/>
+    <P2Nat/>
     <P3Age/>
     <P3Sex override-field=""/>
     <P3Rel/>

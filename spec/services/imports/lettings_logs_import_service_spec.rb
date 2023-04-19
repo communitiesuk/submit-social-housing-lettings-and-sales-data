@@ -1151,5 +1151,96 @@ RSpec.describe Imports::LettingsLogsImportService do
         expect(lettings_log.hbrentshortfall).to be_nil
       end
     end
+
+    context "when setting location fields for 23/24 logs" do
+      let(:lettings_log_id) { "00d2343e-d5fa-4c89-8400-ec3854b0f2b4" }
+      let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id) }
+      let(:lettings_log_xml) { Nokogiri::XML(lettings_log_file) }
+
+      around do |example|
+        Timecop.freeze(Time.zone.local(2023, 4, 1)) do
+          Singleton.__init__(FormHandler)
+          example.run
+        end
+        Timecop.return
+        Singleton.__init__(FormHandler)
+      end
+
+      before do
+        lettings_log_xml.at_xpath("//xmlns:DAY").content = "10"
+        lettings_log_xml.at_xpath("//xmlns:MONTH").content = "4"
+        lettings_log_xml.at_xpath("//xmlns:YEAR").content = "2023"
+        lettings_log_xml.at_xpath("//xmlns:UPRN").content = "123456781234"
+        lettings_log_xml.at_xpath("//xmlns:AddressLine1").content = "address 1"
+        lettings_log_xml.at_xpath("//xmlns:AddressLine2").content = "address 2"
+        lettings_log_xml.at_xpath("//xmlns:TownCity").content = "towncity"
+        lettings_log_xml.at_xpath("//xmlns:County").content = "county"
+        lettings_log_xml.at_xpath("//xmlns:POSTCODE").content = "A1"
+        lettings_log_xml.at_xpath("//xmlns:POSTCOD2").content = "1AA"
+
+        body = {
+          results: [
+            {
+              DPA: {
+                "POSTCODE": "LS16 6FT",
+                "POST_TOWN": "Westminster",
+                "PO_BOX_NUMBER": "321",
+                "DOUBLE_DEPENDENT_LOCALITY": "Double Dependent Locality",
+              },
+            },
+          ],
+        }.to_json
+
+        stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=123456781234")
+          .to_return(status: 200, body:, headers: {})
+        stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=123")
+          .to_return(status: 500, body: "{}", headers: {})
+
+        allow(logger).to receive(:warn).and_return(nil)
+      end
+
+      it "correctly sets address if uprn is not given" do
+        lettings_log_xml.at_xpath("//xmlns:UPRN").content = ""
+        lettings_log_service.send(:create_log, lettings_log_xml)
+
+        lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+        expect(lettings_log&.uprn_known).to eq(0) # no
+        expect(lettings_log&.uprn).to be_nil
+        expect(lettings_log&.address_line1).to eq("address 1")
+        expect(lettings_log&.address_line2).to eq("address 2")
+        expect(lettings_log&.town_or_city).to eq("towncity")
+        expect(lettings_log&.county).to eq("county")
+        expect(lettings_log&.postcode_full).to eq("A1 1AA")
+      end
+
+      it "correctly sets address and uprn if uprn is given" do
+        lettings_log_service.send(:create_log, lettings_log_xml)
+
+        lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+        expect(lettings_log&.uprn_known).to eq(1)
+        expect(lettings_log&.uprn).to eq("123456781234")
+        expect(lettings_log&.address_line1).to eq("321")
+        expect(lettings_log&.address_line2).to eq("Double Dependent Locality")
+        expect(lettings_log&.town_or_city).to eq("Westminster")
+        expect(lettings_log&.postcode_full).to eq("LS16 6FT")
+        expect(lettings_log&.la).to eq("E08000035")
+      end
+
+      it "correctly sets address and uprn if uprn is given but not recognised" do
+        lettings_log_xml.at_xpath("//xmlns:UPRN").content = "123"
+
+        lettings_log_service.send(:create_log, lettings_log_xml)
+
+        lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+        expect(lettings_log&.uprn_known).to eq(0)
+        expect(lettings_log&.uprn).to be_nil
+        expect(lettings_log&.address_line1).to eq("address 1")
+        expect(lettings_log&.address_line2).to eq("address 2")
+        expect(lettings_log&.town_or_city).to eq("towncity")
+        expect(lettings_log&.county).to eq("county")
+        expect(lettings_log&.postcode_full).to eq("A1 1AA")
+        expect(lettings_log&.la).to eq("E06000047")
+      end
+    end
   end
 end
