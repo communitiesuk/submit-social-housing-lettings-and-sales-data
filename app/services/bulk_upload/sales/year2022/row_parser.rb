@@ -286,7 +286,36 @@ class BulkUpload::Sales::Year2022::RowParser
     @log ||= SalesLog.new(attributes_for_log)
   end
 
+  def valid?
+    errors.clear
+
+    return true if blank_row?
+
+    log.valid?
+
+    super
+
+    log.errors.each do |error|
+      fields = field_mapping_for_errors[error.attribute] || []
+
+      fields.each do |field|
+        unless errors.include?(field)
+          errors.add(field, error.message)
+        end
+      end
+    end
+
+    errors.blank?
+  end
+
 private
+
+  def field_mapping_for_errors
+    {
+      age1_known: %i[field_7],
+      age1: %i[field_7],
+    }
+  end
 
   def attributes_for_log
     attributes = {}
@@ -368,7 +397,7 @@ private
     attributes["builtype"] = field_52
     attributes["la_known"] = field_53.present? ? 1 : 0
     attributes["la"] = field_53
-    attributes["pcodenk"] = 0 if postcode_full.present? || field_43 == 1
+    attributes["pcodenk"] = 0 if postcode_full.present?
     attributes["postcode_full"] = postcode_full
     attributes["wchair"] = field_56
 
