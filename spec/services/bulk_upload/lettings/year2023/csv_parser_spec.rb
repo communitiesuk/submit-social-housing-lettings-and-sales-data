@@ -92,8 +92,8 @@ RSpec.describe BulkUpload::Lettings::Year2023::CsvParser do
       file.write("Can be empty?\n")
       file.write("Type of letting the question applies to\n")
       file.write("Duplicate check field?\n")
-      file.write(log_to_csv.custom_2023_field_numbers_row(seed:, field_numbers:))
-      file.write(log_to_csv.to_custom_2023_csv_row(seed:, field_values:))
+      file.write(log_to_csv.custom_field_numbers_row(seed:, field_numbers:))
+      file.write(log_to_csv.to_custom_csv_row(seed:, field_values:))
       file.rewind
     end
 
