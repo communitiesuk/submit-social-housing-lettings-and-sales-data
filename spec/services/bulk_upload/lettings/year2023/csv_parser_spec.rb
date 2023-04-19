@@ -82,8 +82,8 @@ RSpec.describe BulkUpload::Lettings::Year2023::CsvParser do
   context "when parsing csv with extra invalid headers" do
     let(:seed) { rand }
     let(:log_to_csv) { BulkUpload::LogToCsv.new(log:) }
-    let(:field_numbers) { log_to_csv.default_2023_field_numbers + ["invalid_field_number"] }
-    let(:field_values) { log_to_csv.to_2023_row + ["value_for_invalid_field_number"] }
+    let(:field_numbers) { log_to_csv.default_2023_field_numbers + %w[invalid_field_number] }
+    let(:field_values) { log_to_csv.to_2023_row + %w[value_for_invalid_field_number] }
 
     before do
       file.write("Question\n")
@@ -102,7 +102,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::CsvParser do
     end
 
     it "counts the number of valid field numbers correctly" do
-      expect(service.valid_field_numbers_count).to eql(134)
+      expect(service.valid_field_numbers_count).to be(134)
     end
   end
 
