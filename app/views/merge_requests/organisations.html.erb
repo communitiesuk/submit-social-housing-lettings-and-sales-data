@@ -42,7 +42,7 @@
   <%= govuk_details(summary_text: "I cannot find an organisation on the list") do %>
     <%= f.govuk_text_area :other_merging_organisations, label: { text: "Other organisations" }, hint: { text: "List other organisations that are part of the merge but not registered on CORE." }, rows: 9 %>
   <% end %>
-  <% if @merge_request.merging_organisations.count.positive? %>
+  <% if @merge_request.merging_organisations.count > 1 %>
     <%= f.govuk_submit "Continue" %>
   <% end %>
 <% end %>
