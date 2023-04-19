@@ -2,7 +2,7 @@ require "csv"
 
 class BulkUpload::Lettings::Year2023::CsvParser
   FIELDS = 134
-  MAX_COLUMNS = 141
+  MAX_COLUMNS = 142
 
   attr_reader :path
 
