@@ -269,7 +269,7 @@ RSpec.describe Imports::SalesLogsImportService do
           sales_log_xml.at_xpath("//xmlns:Q20Bedrooms").content = "2"
           sales_log_xml.at_xpath("//xmlns:P2Eth").content = "2 White: Irish"
           sales_log_xml.at_xpath("//xmlns:P2Nat").content = "18 United Kingdom"
-          sales_log_xml.at_xpath("//xmlns:buy2livein").content = "1"
+          sales_log_xml.at_xpath("//xmlns:BUY2LIVEIN").content = "1"
         end
 
         it "successfully creates a completed shared sale log" do
