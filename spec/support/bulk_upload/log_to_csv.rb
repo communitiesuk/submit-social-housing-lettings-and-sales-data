@@ -40,10 +40,8 @@ class BulkUpload::LogToCsv
   def to_custom_2023_csv_row(seed: nil, field_values: to_2023_row)
     if seed
       row = field_values.shuffle(random: Random.new(seed))
-      (row_prefix + row).flatten.join(",") + line_ending
-    else
-      (row_prefix + row).flatten.join(",") + line_ending
     end
+    (row_prefix + row).flatten.join(",") + line_ending
   end
 
   def default_2023_field_numbers_row(seed: nil)
