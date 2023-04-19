@@ -161,8 +161,24 @@ class SalesLog < Log
     inc1mort == 1
   end
 
+  def buyers_will_live_in?
+    buylivein == 1
+  end
+
+  def buyers_will_not_live_in?
+    buylivein == 2
+  end
+
   def buyer_two_will_live_in_property?
     buy2livein == 1
+  end
+
+  def buyer_two_will_not_live_in_property?
+    buy2livein == 2
+  end
+
+  def buyer_one_will_not_live_in_property?
+    buy1livein == 2
   end
 
   def buyer_two_not_already_living_in_property?
