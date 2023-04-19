@@ -166,6 +166,18 @@ module Imports
         attributes["address_line2"] = string_or_nil(xml_doc, "AddressLine2")
         attributes["town_or_city"] = string_or_nil(xml_doc, "TownCity")
         attributes["county"] = string_or_nil(xml_doc, "County")
+
+        attributes["proplen_asked"] = 0 if attributes["proplen"]&.positive?
+        attributes["proplen_asked"] = 1 if attributes["proplen"]&.zero?
+
+        attributes["prevshared"] = unsafe_string_as_integer(xml_doc, "PREVSHARED")
+        attributes["ethnicbuy2"] = unsafe_string_as_integer(xml_doc, "P2Eth")
+        attributes["ethnic_group2"] = ethnic_group(attributes["ethnicbuy2"])
+        attributes["nationalbuy2"] = unsafe_string_as_integer(xml_doc, "P2Nat")
+        attributes["buy2living"] = unsafe_string_as_integer(xml_doc, "buy2livein")
+
+        attributes["staircasesale"] = unsafe_string_as_integer(xml_doc, "STAIRCASESALE")
+        attributes["prevtenbuy2"] = unsafe_string_as_integer(xml_doc, "PREVTENBUY2")
       end
 
       # Sets the log creator
@@ -297,7 +309,9 @@ module Imports
          student_not_child_value_check
          discounted_sale_value_check
          buyer_livein_value_check
-         percentage_discount_value_check]
+         percentage_discount_value_check
+         uprn_known
+         uprn_confirmed]
     end
 
     def check_status_completed(sales_log, previous_status)
@@ -476,12 +490,14 @@ module Imports
         safe_string_as_decimal(xml_doc, "Q29MonthlyCharges")
       when 2
         safe_string_as_decimal(xml_doc, "Q37MonthlyCharges")
+      when 3
+        safe_string_as_decimal(xml_doc, "Q44MonthlyCharges")
       end
     end
 
     def ownership_from_type(attributes)
       case attributes["type"]
-      when 2, 24, 18, 16, 28, 31, 30
+      when 2, 24, 18, 16, 28, 31, 30, 32
         1 # shared ownership
       when 8, 14, 27, 9, 29, 21, 22
         2 # discounted ownership
@@ -564,6 +580,8 @@ module Imports
       attributes["sex1"] ||= "R"
       attributes["ethnic_group"] ||= 17
       attributes["ethnic"] ||= 17
+      # attributes["ethnic_group2"] ||= 17
+      # attributes["ethnicbuy2"] ||= 17
       attributes["national"] ||= 13
       attributes["ecstat1"] ||= 10
       attributes["income1nk"] ||= attributes["income1"].present? ? 0 : 1

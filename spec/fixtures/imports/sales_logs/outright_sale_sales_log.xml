@@ -280,6 +280,7 @@
     <Q41b/>
     <Q42Borrowing/>
     <Q43CashDeposit override-field="">300000</Q43CashDeposit>
+    <Q44MonthlyCharges/>
   </Group>
   <Group>
     <HHMEMB>1</HHMEMB>

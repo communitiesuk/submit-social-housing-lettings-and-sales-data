@@ -220,6 +220,87 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
+    context "with 23/24 logs" do
+      around do |example|
+        Timecop.freeze(Time.zone.local(2023, 4, 1)) do
+          Singleton.__init__(FormHandler)
+          example.run
+        end
+        Timecop.return
+        Singleton.__init__(FormHandler)
+      end
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:DAY").content = "10"
+        sales_log_xml.at_xpath("//xmlns:MONTH").content = "4"
+        sales_log_xml.at_xpath("//xmlns:YEAR").content = "2023"
+        sales_log_xml.at_xpath("//xmlns:UPRN").content = ""
+        sales_log_xml.at_xpath("//xmlns:AddressLine1").content = "address 1"
+        sales_log_xml.at_xpath("//xmlns:AddressLine2").content = "address 2"
+        sales_log_xml.at_xpath("//xmlns:TownCity").content = "towncity"
+        sales_log_xml.at_xpath("//xmlns:County").content = "county"
+        sales_log_xml.at_xpath("//xmlns:Q14Postcode").content = "A1 1AA"
+      end
+
+      context "with outright sale type" do
+        let(:sales_log_id) { "outright_sale_sales_log" }
+
+        before do
+          sales_log_xml.at_xpath("//xmlns:Q44MonthlyCharges").content = "40"
+        end
+
+        it "successfully creates a completed outright sale log" do
+          expect(logger).not_to receive(:error)
+          expect(logger).not_to receive(:warn)
+          expect(logger).not_to receive(:info)
+          expect { sales_log_service.send(:create_log, sales_log_xml) }
+            .to change(SalesLog, :count).by(1)
+        end
+      end
+
+      context "with shared sale type" do
+        let(:sales_log_id) { "shared_ownership_sales_log" }
+
+        before do
+          sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+          sales_log_xml.at_xpath("//xmlns:JointMore").content = "2 No"
+          sales_log_xml.at_xpath("//xmlns:PREVSHARED").content = "1"
+          sales_log_xml.at_xpath("//xmlns:Q16aProplen2").content = "0"
+          sales_log_xml.at_xpath("//xmlns:Q20Bedrooms").content = "2"
+          sales_log_xml.at_xpath("//xmlns:P2Eth").content = "2 White: Irish"
+          sales_log_xml.at_xpath("//xmlns:P2Nat").content = "18 United Kingdom"
+          sales_log_xml.at_xpath("//xmlns:buy2livein").content = "1"
+        end
+
+        it "successfully creates a completed shared sale log" do
+          expect(logger).not_to receive(:error)
+          expect(logger).not_to receive(:warn)
+          expect(logger).not_to receive(:info)
+          expect { sales_log_service.send(:create_log, sales_log_xml) }
+            .to change(SalesLog, :count).by(1)
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log.proplen_asked).to eq(1)
+        end
+      end
+
+      context "with discounted sale type" do
+        let(:sales_log_id) { "shared_ownership_sales_log" }
+
+        before do
+          sales_log_xml.at_xpath("//xmlns:PREVSHARED").content = "1"
+          sales_log_xml.at_xpath("//xmlns:Q20Bedrooms").content = "2"
+        end
+
+        it "successfully creates a completed shared sale log" do
+          expect(logger).not_to receive(:error)
+          expect(logger).not_to receive(:warn)
+          expect(logger).not_to receive(:info)
+          expect { sales_log_service.send(:create_log, sales_log_xml) }
+            .to change(SalesLog, :count).by(1)
+        end
+      end
+    end
+
     context "and the mortgage soft validation is triggered (mortgage_value_check)" do
       let(:sales_log_id) { "discounted_ownership_sales_log" }
 
