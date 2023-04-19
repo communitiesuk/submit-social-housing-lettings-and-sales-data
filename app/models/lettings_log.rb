@@ -531,6 +531,7 @@ class LettingsLog < Log
 
 private
 
+  # show in diff
   def reset_derived_questions
     dependent_questions = { waityear: [{ key: :renewal, value: 0 }],
                             referral: [{ key: :renewal, value: 0 }],
@@ -548,6 +549,7 @@ private
       end
     end
   end
+  # show in diff
 
   def reset_invalid_unresolved_log_fields!
     return unless unresolved?
