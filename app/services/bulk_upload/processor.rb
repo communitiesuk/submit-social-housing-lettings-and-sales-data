@@ -14,7 +14,7 @@ class BulkUpload::Processor
 
     if validator.any_setup_errors?
       send_setup_errors_mail
-    elsif validator.create_logs?
+    elsif validator.can_create_logs?
       create_logs
 
       if created_logs_but_incompleted?

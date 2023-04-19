@@ -40,11 +40,29 @@ class BulkUpload::Lettings::Validator
     end
   end
 
-  def create_logs?
+  def can_create_logs?
     return false if any_setup_errors?
     return false if row_parsers.any?(&:block_log_creation?)
 
-    row_parsers.all? { |row_parser| row_parser.log.valid? }
+    if row_parsers.all? { |row_parser| row_parser.log.valid? }
+      true
+    else
+      row_parsers.each do |row_parser|
+        next if row_parser.log.valid?
+
+        row_parser.log.errors.each do |error|
+          attribute = error.attribute.to_s
+          if row_parser.log.form.questions.find { |q| q.id == attribute }.type != "radio"
+            row_parser.log[attribute] = nil
+            row_parser.log.form.conditional_question_conditions.map { |c| c[:from] if c[:to] == attribute}.compact.each do |conditional_attribute|
+              row_parser.log[conditional_attribute] = nil
+            end
+          end
+        end
+      end
+
+      row_parsers.all? { |row_parser| row_parser.log.valid? }
+    end
   end
 
   def self.question_for_field(field)
