@@ -1,8 +1,8 @@
 require "csv"
 
 class BulkUpload::Lettings::Year2022::CsvParser
-  MIN_COLUMNS = 134
-  MAX_COLUMNS = 136
+  FIELDS = 134
+  MAX_COLUMNS = 135
 
   attr_reader :path
 
@@ -44,14 +44,18 @@ class BulkUpload::Lettings::Year2022::CsvParser
     cols[headers.find_index(field) + col_offset]
   end
 
-private
-
-  def headers
-    @headers ||= ("field_1".."field_134").to_a
+  def valid_field_numbers_count
+    FIELDS
   end
 
   def with_headers?
     rows[0][0]&.match?(/\D+/)
+  end
+
+  private
+
+  def headers
+    @headers ||= ("field_1".."field_134").to_a
   end
 
   def row_sep
