@@ -28,10 +28,6 @@ class FeatureToggle
     true
   end
 
-  def self.managing_for_other_user_enabled?
-    true
-  end
-
   def self.bulk_upload_lettings_logs?
     true
   end
