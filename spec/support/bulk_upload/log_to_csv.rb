@@ -294,10 +294,8 @@ class BulkUpload::LogToCsv
       log.type, # discounted ownership
       log.value,
       log.grant,
-      log.grant,
       log.discount,
       log.mortgage, # 80
-      log.extrabor,
       log.extrabor,
       log.deposit,
       log.mscharge,

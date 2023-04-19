@@ -130,18 +130,20 @@ class BulkUpload::Sales::Year2022::RowParser
     field_125: "Was a mortgage used for the purchase of this property? - Outright sale",
   }.freeze
 
+  attribute :bulk_upload
+
   attribute :field_1, :string
   attribute :field_2, :integer
   attribute :field_3, :integer
   attribute :field_4, :integer
   attribute :field_5
   attribute :field_6, :integer
-  attribute :field_7, :integer
-  attribute :field_8, :integer
-  attribute :field_9, :integer
-  attribute :field_10, :integer
-  attribute :field_11, :integer
-  attribute :field_12, :integer
+  attribute :field_7, :string
+  attribute :field_8, :string
+  attribute :field_9, :string
+  attribute :field_10, :string
+  attribute :field_11, :string
+  attribute :field_12, :string
   attribute :field_13, :string
   attribute :field_14, :string
   attribute :field_15, :string
@@ -149,10 +151,10 @@ class BulkUpload::Sales::Year2022::RowParser
   attribute :field_17, :string
   attribute :field_18, :string
   attribute :field_19, :string
-  attribute :field_20, :integer
-  attribute :field_21, :integer
-  attribute :field_22, :integer
-  attribute :field_23, :integer
+  attribute :field_20, :string
+  attribute :field_21, :string
+  attribute :field_22, :string
+  attribute :field_23, :string
   attribute :field_24, :integer
   attribute :field_25, :integer
   attribute :field_26, :integer
@@ -221,7 +223,7 @@ class BulkUpload::Sales::Year2022::RowParser
   attribute :field_89, :integer
   attribute :field_90, :integer
   attribute :field_91, :integer
-  attribute :field_92, :integer
+  attribute :field_92, :string
   attribute :field_93, :string
   attribute :field_94
   attribute :field_95, :integer
@@ -260,8 +262,6 @@ class BulkUpload::Sales::Year2022::RowParser
   # validates :field_4, numericality: { in: (1..999), allow_blank: true }
   # validates :field_4, presence: true, if: :field_4_presence_check
 
-  validate :validate_possible_answers
-
   # delegate :valid?, to: :native_object
   # delegate :errors, to: :native_object
 
@@ -269,40 +269,367 @@ class BulkUpload::Sales::Year2022::RowParser
     QUESTIONS[field]
   end
 
+  def attribute_set
+    @attribute_set ||= instance_variable_get(:@attributes)
+  end
+
+  def blank_row?
+    attribute_set
+      .to_hash
+      .reject { |k, _| %w[bulk_upload block_log_creation].include?(k) }
+      .values
+      .compact
+      .empty?
+  end
+
+  def log
+    @log ||= SalesLog.new(attributes_for_log)
+  end
+
 private
 
-  def native_object
-    @native_object ||= SalesLog.new(attributes_for_log)
-  end
-
-  def field_mapping
-    {
-      field_117: :buy1livein,
-    }
-  end
-
-  def validate_possible_answers
-    field_mapping.each do |field, attribute|
-      possible_answers = FormHandler.instance.current_sales_form.questions.find { |q| q.id == attribute.to_s }.answer_options.keys
-
-      unless possible_answers.include?(public_send(field))
-        errors.add(field, "Value supplied is not one of the permitted values")
-      end
-    end
-  end
-
   def attributes_for_log
-    hash = field_mapping.invert
     attributes = {}
+    attributes["purchid"] = field_1
+    attributes["saledate"] = saledate
 
-    hash.map do |k, v|
-      attributes[k] = public_send(v)
-    end
+    attributes["noint"] = 2 if field_6 == 1
+
+    attributes["details_known_2"] = details_known?(2)
+    attributes["details_known_3"] = details_known?(3)
+    attributes["details_known_4"] = details_known?(4)
+    attributes["details_known_5"] = details_known?(5)
+    attributes["details_known_6"] = details_known?(6)
+
+    attributes["age1_known"] = age1_known?
+    attributes["age1"] = field_7 if attributes["age1_known"].zero? && field_7&.match(/\A\d{1,3}\z|\AR\z/)
+
+    attributes["age2_known"] = age2_known?
+    attributes["age2"] = field_8 if attributes["age1_known"].zero? && field_8&.match(/\A\d{1,3}\z|\AR\z/)
+
+    attributes["age3_known"] = age3_known?
+    attributes["age3"] = field_9 if attributes["age1_known"].zero? && field_9&.match(/\A\d{1,3}\z|\AR\z/)
+
+    attributes["age4_known"] = age4_known?
+    attributes["age4"] = field_10 if attributes["age1_known"].zero? && field_10&.match(/\A\d{1,3}\z|\AR\z/)
+
+    attributes["age5_known"] = age5_known?
+    attributes["age5"] = field_11 if attributes["age1_known"].zero? && field_11&.match(/\A\d{1,3}\z|\AR\z/)
+
+    attributes["age6_known"] = age6_known?
+    attributes["age6"] = field_12 if attributes["age1_known"].zero? && field_12&.match(/\A\d{1,3}\z|\AR\z/)
+
+    attributes["sex1"] = field_13
+    attributes["sex2"] = field_14
+    attributes["sex3"] = field_15
+    attributes["sex4"] = field_16
+    attributes["sex5"] = field_17
+    attributes["sex6"] = field_18
+
+    attributes["relat2"] = field_19
+    attributes["relat3"] = field_20
+    attributes["relat4"] = field_21
+    attributes["relat5"] = field_22
+    attributes["relat6"] = field_23
+
+    attributes["ecstat1"] = field_24
+    attributes["ecstat2"] = field_25
+    attributes["ecstat3"] = field_26
+    attributes["ecstat4"] = field_27
+    attributes["ecstat5"] = field_28
+    attributes["ecstat6"] = field_29
+
+    attributes["ethnic_group"] = ethnic_group_from_ethnic
+    attributes["ethnic"] = field_30
+    attributes["national"] = field_31
+    attributes["income1"] = field_32
+    attributes["income2"] = field_33
+    attributes["inc1mort"] = field_34
+    attributes["inc2mort"] = field_35
+    attributes["savings"] = field_36
+    attributes["prevown"] = field_37
+
+    attributes["prevten"] = field_39
+    attributes["prevloc"] = field_40
+    attributes["previous_la_known"] = previous_la_known
+    attributes["ppcodenk"] = field_43
+    attributes["ppostcode_full"] = ppostcode_full
+
+    attributes["pregyrha"] = field_44
+    attributes["pregla"] = field_45
+    attributes["pregghb"] = field_46
+    attributes["pregother"] = field_47
+    attributes["pregblank"] = 1 if [field_44, field_45, field_46, field_47].all?(&:blank?)
+
+    attributes["disabled"] = field_48
+    attributes["wheel"] = field_49
+    attributes["beds"] = field_50
+    attributes["proptype"] = field_51
+    attributes["builtype"] = field_52
+    attributes["la_known"] = field_53.present? ? 1 : 0
+    attributes["la"] = field_53
+    attributes["pcodenk"] = 0 if postcode_full.present? || field_43 == 1
+    attributes["postcode_full"] = postcode_full
+    attributes["wchair"] = field_56
+
+    attributes["type"] = sale_type
+
+    attributes["resale"] = field_58
+
+    attributes["hodate"] = hodate
+    attributes["exdate"] = exdate
+
+    attributes["lanomagr"] = field_65
+
+    attributes["frombeds"] = field_66
+    attributes["fromprop"] = field_67
+
+    attributes["value"] = value
+    attributes["equity"] = field_69
+    attributes["mortgage"] = mortgage
+    attributes["extrabor"] = extrabor
+    attributes["deposit"] = deposit
+    attributes["cashdis"] = field_73
+    attributes["mrent"] = field_74
+    attributes["mscharge"] = mscharge
+    attributes["grant"] = field_78
+    attributes["discount"] = field_79
+
+    attributes["othtype"] = field_85
+
+    attributes["owning_organisation_id"] = owning_organisation_id
+    attributes["created_by"] = created_by || bulk_upload.user
+    attributes["hhregres"] = hhregres
+    attributes["hhregresstill"] = hhregresstill
+    attributes["armedforcesspouse"] = field_97
+
+    attributes["mortgagelender"] = mortgagelender
+    attributes["mortgagelenderother"] = mortgagelenderother
+
+    attributes["hb"] = field_104
+
+    attributes["mortlen"] = mortlen
+
+    attributes["proplen"] = field_108
+    attributes["jointmore"] = field_109
+    attributes["proplen"] = field_110
+    attributes["staircase"] = field_111
+    attributes["privacynotice"] = field_112
+    attributes["ownershipsch"] = field_113
+    attributes["companybuy"] = field_114
+    attributes["buylivein"] = field_115
+    attributes["jointpur"] = field_116
+    attributes["buy1livein"] = field_117
+    attributes["buy2livein"] = field_118
+    attributes["hholdcount"] = field_119
+    attributes["stairbought"] = field_120
+    attributes["stairowned"] = field_121
+    attributes["socprevten"] = field_122
+    attributes["mortgageused"] = mortgageused
 
     attributes
   end
 
-  # def field_4_presence_check
-  #   [1, 3, 5, 7, 9, 11].include?(field_1)
-  # end
+  def saledate
+    Date.new(field_4 + 2000, field_3, field_2) if field_2.present? && field_3.present? && field_4.present?
+  rescue Date::Error
+    Date.new
+  end
+
+  def hodate
+    Date.new(field_61 + 2000, field_60, field_59) if field_59.present? && field_60.present? && field_61.present?
+  rescue Date::Error
+    Date.new
+  end
+
+  def exdate
+    Date.new(field_64 + 2000, field_63, field_62) if field_62.present? && field_63.present? && field_64.present?
+  rescue Date::Error
+    Date.new
+  end
+
+  def age1_known?
+    return 1 if field_7 == "R"
+    return 1 if field_7.blank?
+
+    0
+  end
+
+  [
+    { person: 2, field: :field_8 },
+    { person: 3, field: :field_9 },
+    { person: 4, field: :field_10 },
+    { person: 5, field: :field_11 },
+    { person: 6, field: :field_12 },
+  ].each do |hash|
+    define_method("age#{hash[:person]}_known?") do
+      return 1 if public_send(hash[:field]) == "R"
+      return 0 if send("person_#{hash[:person]}_present?")
+      return 1 if public_send(hash[:field]).blank?
+
+      0
+    end
+  end
+
+  def person_2_present?
+    field_8.present? || field_14.present? || field_19.present?
+  end
+
+  def person_3_present?
+    field_9.present? || field_15.present? || field_20.present?
+  end
+
+  def person_4_present?
+    field_10.present? || field_16.present? || field_21.present?
+  end
+
+  def person_5_present?
+    field_11.present? || field_17.present? || field_22.present?
+  end
+
+  def person_6_present?
+    field_12.present? || field_18.present? || field_23.present?
+  end
+
+  def details_known?(person_n)
+    send("person_#{person_n}_present?") ? 0 : 1
+  end
+
+  def ethnic_group_from_ethnic
+    return nil if field_43.blank?
+
+    case field_43
+    when 1, 2, 3, 18
+      0
+    when 4, 5, 6, 7
+      1
+    when 8, 9, 10, 11, 15
+      2
+    when 12, 13, 14
+      3
+    when 16, 19
+      4
+    when 17
+      17
+    end
+  end
+
+  def postcode_full
+    "#{field_54} #{field_55}" if field_54 && field_55
+  end
+
+  def ppostcode_full
+    "#{field_41} #{field_42}" if field_41 && field_42
+  end
+
+  def sale_type
+    case field_113
+    when 1 then field_57
+    when 2 then field_76
+    when 3 then field_84
+    end
+  end
+
+  def value
+    case field_113
+    when 1 then field_68
+    when 2 then field_77
+    when 3 then field_87
+    end
+  end
+
+  def mortgage
+    case field_113
+    when 1 then field_70
+    when 2 then field_80
+    when 3 then field_88
+    end
+  end
+
+  def extrabor
+    case field_113
+    when 1 then field_71
+    when 2 then field_81
+    when 3 then field_89
+    end
+  end
+
+  def deposit
+    case field_113
+    when 1 then field_72
+    when 2 then field_82
+    when 3 then field_90
+    end
+  end
+
+  def mscharge
+    case field_113
+    when 1 then field_75
+    when 2 then field_83
+    when 3 then field_91
+    end
+  end
+
+  def mortgagelender
+    case field_113
+    when 1 then field_98
+    when 2 then field_100
+    when 3 then field_102
+    end
+  end
+
+  def mortgagelenderother
+    case field_113
+    when 1 then field_99
+    when 2 then field_101
+    when 3 then field_103
+    end
+  end
+
+  def mortlen
+    case field_113
+    when 1 then field_105
+    when 2 then field_106
+    when 3 then field_107
+    end
+  end
+
+  def mortgageused
+    case field_113
+    when 1 then field_123
+    when 2 then field_124
+    when 3 then field_125
+    end
+  end
+
+  def owning_organisation
+    Organisation.find_by_id_on_multiple_fields(field_92)
+  end
+
+  def owning_organisation_id
+    owning_organisation&.id
+  end
+
+  def created_by
+    @created_by ||= User.find_by(email: field_93)
+  end
+
+  def hhregres
+    case field_95
+    when 3 then 3
+    when 4, 5, 6 then 1
+    when 7 then 7
+    when 8 then 8
+    end
+  end
+
+  def hhregresstill
+    return unless hhregres == 1
+
+    field_95
+  end
+
+  def previous_la_known
+    field_40.present? ? 1 : 0
+  end
 end
