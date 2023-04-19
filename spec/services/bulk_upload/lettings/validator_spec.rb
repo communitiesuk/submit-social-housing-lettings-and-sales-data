@@ -17,7 +17,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
       end
     end
 
-    context "2022" do
+    context "when 2022" do
       let(:bulk_upload) { create(:bulk_upload, user:, year: 2022) }
 
       context "when file has no headers" do
@@ -105,7 +105,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
       end
     end
 
-    context "2023" do
+    context "when 2023" do
       let(:bulk_upload) { create(:bulk_upload, user:, year: 2023) }
 
       context "when file has no headers" do
