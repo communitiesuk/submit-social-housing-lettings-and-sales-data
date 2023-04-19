@@ -507,6 +507,14 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
             expect(parser.errors[:field_52]).to be_present
           end
         end
+
+        context "when not a valid option" do
+          let(:attributes) { setup_section_params.merge({ bulk_upload:, field_52: "99" }) }
+
+          it "has error for invalid option" do
+            expect(parser.errors[:field_52]).to include("Enter a valid value for What is the tenant's main reason for the household leaving their last settled home?")
+          end
+        end
       end
     end
 

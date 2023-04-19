@@ -280,59 +280,59 @@ class BulkUpload::Lettings::Year2023::RowParser
   attribute :field_134, :decimal
 
   validates :field_5, presence: { message: I18n.t("validations.not_answered", question: "letting type") },
-                      inclusion: { in: (1..12).to_a, message: I18n.t("validations.invalid_option", question: "letting type") }
-  validates :field_16, presence: { if: proc { [2, 4, 6, 8, 10, 12].include?(field_5) } }
+                      inclusion: { in: (1..12).to_a, message: I18n.t("validations.invalid_option", question: "letting type") }, on: :after_log
+  validates :field_16, presence: { if: proc { [2, 4, 6, 8, 10, 12].include?(field_5) } }, on: :after_log
 
-  validates :field_46, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 1 must be a number or the letter R" }
-  validates :field_52, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 2 must be a number or the letter R" }, allow_blank: true
-  validates :field_56, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 3 must be a number or the letter R" }, allow_blank: true
-  validates :field_60, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 4 must be a number or the letter R" }, allow_blank: true
-  validates :field_64, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 5 must be a number or the letter R" }, allow_blank: true
-  validates :field_68, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 6 must be a number or the letter R" }, allow_blank: true
-  validates :field_72, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 7 must be a number or the letter R" }, allow_blank: true
-  validates :field_76, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 8 must be a number or the letter R" }, allow_blank: true
+  validates :field_46, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 1 must be a number or the letter R" }, on: :after_log
+  validates :field_52, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 2 must be a number or the letter R" }, allow_blank: true, on: :after_log
+  validates :field_56, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 3 must be a number or the letter R" }, allow_blank: true, on: :after_log
+  validates :field_60, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 4 must be a number or the letter R" }, allow_blank: true, on: :after_log
+  validates :field_64, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 5 must be a number or the letter R" }, allow_blank: true, on: :after_log
+  validates :field_68, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 6 must be a number or the letter R" }, allow_blank: true, on: :after_log
+  validates :field_72, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 7 must be a number or the letter R" }, allow_blank: true, on: :after_log
+  validates :field_76, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 8 must be a number or the letter R" }, allow_blank: true, on: :after_log
 
-  validates :field_6, presence: { message: I18n.t("validations.not_answered", question: "property renewal") }
-  validates :field_7, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (day)") }
-  validates :field_8, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (month)") }
-  validates :field_9, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (year)") }
+  validates :field_6, presence: { message: I18n.t("validations.not_answered", question: "property renewal") }, on: :after_log
+  validates :field_7, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (day)") }, on: :after_log
+  validates :field_8, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (month)") }, on: :after_log
+  validates :field_9, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (year)") }, on: :after_log
 
-  validates :field_9, format: { with: /\A\d{2}\z/, message: I18n.t("validations.setup.startdate.year_not_two_digits") }
+  validates :field_9, format: { with: /\A\d{2}\z/, message: I18n.t("validations.setup.startdate.year_not_two_digits") }, on: :after_log
 
-  validate :validate_needs_type_present
-  validate :validate_data_types
-  validate :validate_nulls
-  validate :validate_relevant_collection_window
-  validate :validate_la_with_local_housing_referral
-  validate :validate_cannot_be_la_referral_if_general_needs_and_la
-  validate :validate_leaving_reason_for_renewal
-  validate :validate_lettings_type_matches_bulk_upload
-  validate :validate_only_one_housing_needs_type
-  validate :validate_no_disabled_needs_conjunction
-  validate :validate_dont_know_disabled_needs_conjunction
-  validate :validate_no_and_dont_know_disabled_needs_conjunction
+  validate :validate_needs_type_present, on: :after_log
+  validate :validate_data_types, on: :after_log
+  validate :validate_nulls, on: :after_log
+  validate :validate_relevant_collection_window, on: :after_log
+  validate :validate_la_with_local_housing_referral, on: :after_log
+  validate :validate_cannot_be_la_referral_if_general_needs_and_la, on: :after_log
+  validate :validate_leaving_reason_for_renewal, on: :after_log
+  validate :validate_lettings_type_matches_bulk_upload, on: :after_log
+  validate :validate_only_one_housing_needs_type, on: :after_log
+  validate :validate_no_disabled_needs_conjunction, on: :after_log
+  validate :validate_dont_know_disabled_needs_conjunction, on: :after_log
+  validate :validate_no_and_dont_know_disabled_needs_conjunction, on: :after_log
 
-  validate :validate_owning_org_data_given
-  validate :validate_owning_org_exists
-  validate :validate_owning_org_owns_stock
-  validate :validate_owning_org_permitted
+  validate :validate_owning_org_data_given, on: :after_log
+  validate :validate_owning_org_exists, on: :after_log
+  validate :validate_owning_org_owns_stock, on: :after_log
+  validate :validate_owning_org_permitted, on: :after_log
 
-  validate :validate_managing_org_data_given
-  validate :validate_managing_org_exists
-  validate :validate_managing_org_related
+  validate :validate_managing_org_data_given, on: :after_log
+  validate :validate_managing_org_exists, on: :after_log
+  validate :validate_managing_org_related, on: :after_log
 
-  validate :validate_scheme_related
-  validate :validate_scheme_exists
-  validate :validate_scheme_data_given
+  validate :validate_scheme_related, on: :after_log
+  validate :validate_scheme_exists, on: :after_log
+  validate :validate_scheme_data_given, on: :after_log
 
-  validate :validate_location_related
-  validate :validate_location_exists
-  validate :validate_location_data_given
+  validate :validate_location_related, on: :after_log
+  validate :validate_location_exists, on: :after_log
+  validate :validate_location_data_given, on: :after_log
 
-  validate :validate_created_by_exists
-  validate :validate_created_by_related
+  validate :validate_created_by_exists, on: :after_log
+  validate :validate_created_by_related, on: :after_log
 
-  validate :validate_valid_radio_option
+  validate :validate_valid_radio_option, on: :before_log
 
   def self.question_for_field(field)
     QUESTIONS[field]
@@ -343,9 +343,13 @@ class BulkUpload::Lettings::Year2023::RowParser
 
     return true if blank_row?
 
+    super(:before_log)
+    before_errors = errors.dup
+
     log.valid?
 
-    super
+    super(:after_log)
+    errors.merge!(before_errors)
 
     log.errors.each do |error|
       fields = field_mapping_for_errors[error.attribute] || []

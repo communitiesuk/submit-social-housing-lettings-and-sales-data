@@ -509,7 +509,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         let(:attributes) { setup_section_params.merge({ field_102: "7" }) }
 
         it "returns an error" do
-          expect(parser.errors[:field_102]).to be_present
+          expect(parser.errors[:field_102]).to include("Enter a valid value for What is the tenant’s main reason for the household leaving their last settled home?")
         end
       end
     end
