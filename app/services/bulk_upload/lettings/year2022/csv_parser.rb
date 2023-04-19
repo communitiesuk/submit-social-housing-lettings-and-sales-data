@@ -25,7 +25,6 @@ class BulkUpload::Lettings::Year2022::CsvParser
   def row_parsers
     @row_parsers ||= body_rows.map do |row|
       stripped_row = row[col_offset..]
-      headers = ("field_1".."field_134").to_a
       hash = Hash[headers.zip(stripped_row)]
 
       BulkUpload::Lettings::Year2022::RowParser.new(hash)
