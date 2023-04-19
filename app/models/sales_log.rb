@@ -403,8 +403,8 @@ private
       any_parent_attributes_changed = dependency[:parent_conditions].any? { |parent_condition| send("#{parent_condition[:attribute]}_changed?") }
       next unless any_parent_attributes_changed
 
-      were_in_derived_state = dependency[:parent_conditions].all? { |parent_condition| send("#{parent_condition[:attribute]}_was") == parent_condition[:value] }
-      next unless were_in_derived_state
+      previously_in_derived_state = dependency[:parent_conditions].all? { |parent_condition| send("#{parent_condition[:attribute]}_was") == parent_condition[:value] }
+      next unless previously_in_derived_state
 
       dependency[:derived_attributes].each do |derived_attribute|
         Rails.logger.debug("Cleared derived #{derived_attribute} value")

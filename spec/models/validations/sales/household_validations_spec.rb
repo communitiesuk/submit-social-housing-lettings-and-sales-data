@@ -238,8 +238,8 @@ RSpec.describe Validations::Sales::HouseholdValidations do
         it "triggers a validation if buyer two will also not live in the property" do
           sales_log.buy2livein = 2
           household_validator.validate_buyers_living_in_property(sales_log)
-          expect(sales_log.errors[:buy2livein]).to include I18n.t("validations.household.buyers_will_live_in_property.buyers_live_but_no_buyers_live")
-          expect(sales_log.errors[:buy1livein]).to include I18n.t("validations.household.buyers_will_live_in_property.buyers_live_but_no_buyers_live")
+          expect(sales_log.errors[:buy2livein]).to include I18n.t("validations.household.buylivein.buyers_will_live_in_property_values_inconsistent")
+          expect(sales_log.errors[:buy1livein]).to include I18n.t("validations.household.buylivein.buyers_will_live_in_property_values_inconsistent")
         end
       end
 
