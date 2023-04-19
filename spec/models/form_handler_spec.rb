@@ -219,5 +219,54 @@ RSpec.describe FormHandler do
       end
     end
   end
+
+  describe "#ordered_sales_questions_for_all_years" do
+    let(:result) { FormHandler.instance.ordered_sales_questions_for_all_years }
+    let(:now) { Time.zone.now }
+
+    it "returns an array of questions" do
+      expect(result).to satisfy { |result| result.all? { |element| element.is_a?(Form::Question) } }
+    end
+
+    it "does not return multiple questions with the same id" do
+      unique_id_count = result.map(&:id).uniq.count
+      expect(result.count).to be unique_id_count
+    end
+
+    it "returns the questions in the same order as the form" do
+      household_situation_question_ids = %w[prevten ppcodenk ppostcode_full previous_la_known prevloc buyers_organisations]
+      index_of_household_situation_start = 0
+      household_situation_question_ids.each_with_index do |id, i|
+        if i = 0
+          index_of_household_situation_start = result.index { |q| q.id == id }
+        else
+          question_index = result.index { |q| q.id == id }
+          expect(question_index).to be index_of_household_situation_start + i
+        end
+      end
+    end
+
+    it "returns questions form all years" do
+      current_sales_question_ids = FormHandler.instance.forms["current_sales"].questions.map(&:id).uniq
+      previous_sales_question_ids = FormHandler.instance.forms["previous_sales"].questions.map(&:id).uniq
+      expect(result.count).to be > current_sales_question_ids.count
+      expect(result.count).to be > previous_sales_question_ids.count
+    end
+
+    it "inserts questions from previous years that do not appear in more recent years in the correct position" do
+      current_sales_question_ids = FormHandler.instance.forms["current_sales"].questions.map(&:id).uniq
+      previous_sales_question_ids = FormHandler.instance.forms["previous_sales"].questions.map(&:id).uniq
+      obsolete_question_ids = previous_sales_question_ids - current_sales_question_ids
+      expect(obsolete_question_ids.count).to be_positive
+      obsolete_question_ids.each do |obsolete_id|
+        index = previous_sales_question_ids.index(obsolete_id)
+        previous_question_id = previous_sales_question_ids[index - 1]
+        expect(result).to include { |q| q.id == id }
+        index_of_previous_question_in_result = result.index { |q| q.id == previous_question_id }
+        index_of_obsolete_question_in_result = result.index { |q| q.id == obsolete_id }
+        expect(index_of_obsolete_question_in_result).to be index_of_previous_question_in_result + 1
+      end
+    end
+  end
   # rubocop:enable RSpec/PredicateMatcher
 end
