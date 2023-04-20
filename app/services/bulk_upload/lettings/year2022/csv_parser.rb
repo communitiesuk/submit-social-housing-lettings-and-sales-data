@@ -47,12 +47,18 @@ class BulkUpload::Lettings::Year2022::CsvParser
     cols[field_numbers.find_index(field) + col_offset]
   end
 
-  def valid_field_numbers_count
-    field_numbers.count { |f| f != "field_blank" }
+  def incorrect_field_count?
+    valid_field_numbers_count = field_numbers.count { |f| f != "field_blank" }
+
+    valid_field_numbers_count != FIELDS
   end
 
-  def with_headers?
-    rows.map { |r| r[0] }.any? { |cell| cell&.match?(/field number/i) }
+  def too_many_columns?
+    return if with_headers?
+
+    max_columns_count = body_rows.map(&:size).max - col_offset
+
+    max_columns_count > MAX_COLUMNS
   end
 
 private
@@ -67,6 +73,10 @@ private
                        else
                          default_field_numbers
                        end
+  end
+
+  def with_headers?
+    rows.map { |r| r[0] }.any? { |cell| cell&.match?(/field number/i) }
   end
 
   def row_sep
