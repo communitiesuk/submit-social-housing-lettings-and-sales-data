@@ -94,7 +94,7 @@ RSpec.describe BulkUpload::Lettings::Year2022::CsvParser do
     end
 
     it "parses csv correctly" do
-      expect(service.row_parsers[0].field_12.to_i).to eql(35)
+      expect(service.row_parsers[0].field_12.to_i).to be(35)
     end
   end
 
@@ -108,7 +108,7 @@ RSpec.describe BulkUpload::Lettings::Year2022::CsvParser do
     end
 
     it "parses csv correctly" do
-      expect(service.row_parsers[0].field_12.to_i).to eql(35)
+      expect(service.row_parsers[0].field_12.to_i).to be(35)
     end
   end
 
@@ -122,16 +122,9 @@ RSpec.describe BulkUpload::Lettings::Year2022::CsvParser do
     end
 
     it "parses csv correctly" do
-      expect(service.row_parsers[0].field_12.to_i).to eql(35)
+      expect(service.row_parsers[0].field_12.to_i).to be(35)
     end
   end
-
-
-
-
-
-
-
 
   describe "#column_for_field", aggregate_failures: true do
     context "when with headers using default ordering" do
