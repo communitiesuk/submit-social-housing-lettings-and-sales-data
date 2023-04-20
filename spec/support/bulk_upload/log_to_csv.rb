@@ -12,12 +12,25 @@ class BulkUpload::LogToCsv
     [nil] * col_offset
   end
 
-  def to_2022_csv_row
-    (row_prefix + to_2022_row).flatten.join(",") + line_ending
+  def to_2022_csv_row(seed: nil)
+    if seed
+      row = to_2022_row.shuffle(random: Random.new(seed))
+      (row_prefix + row).flatten.join(",") + line_ending
+    else
+      (row_prefix + to_2022_row).flatten.join(",") + line_ending
+    end
   end
 
   def default_2022_field_numbers
     (1..134).to_a
+  end
+
+  def default_2022_field_numbers_row(seed: nil)
+    if seed
+      ["Bulk upload field number"] + default_2022_field_numbers.shuffle(random: Random.new(seed))
+    else
+      ["Bulk upload field number"] + default_2022_field_numbers
+    end.flatten.join(",") + line_ending
   end
 
   def to_2023_csv_row(seed: nil)
