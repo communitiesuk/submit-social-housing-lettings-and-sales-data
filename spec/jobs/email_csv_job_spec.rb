@@ -41,7 +41,7 @@ describe EmailCsvJob do
       allow(storage_service).to receive(:get_presigned_url).and_return(test_url)
 
       allow(Csv::SalesLogCsvService).to receive(:new).and_return(sales_log_csv_service)
-      allow(sales_log_csv_service).to receive(:prepare_csv).and_return ("")
+      allow(sales_log_csv_service).to receive(:prepare_csv).and_return("")
 
       allow(CsvDownloadMailer).to receive(:new).and_return(mailer)
       allow(mailer).to receive(:send_csv_download_mail)
@@ -59,7 +59,7 @@ describe EmailCsvJob do
       end
     end
 
-    context "When exporting sales logs" do
+    context "when exporting sales logs" do
       it "uses an appropriate filename in S3" do
         expect(storage_service).to receive(:write_file).with(/sales-logs-.*\.csv/, anything)
         job.perform(user, nil, {}, nil, nil, nil, "sales")

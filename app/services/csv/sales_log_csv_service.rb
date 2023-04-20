@@ -21,7 +21,7 @@ module Csv
       created_by_name: %i[created_by name],
       is_dpo: %i[created_by is_dpo],
       owning_organisation_name: %i[owning_organisation name],
-    }
+    }.freeze
 
     # can this be made so general it can also be extracted? quite possibly
     def value(attribute, log)
@@ -66,7 +66,7 @@ module Csv
       "ppostcode_full" => %w[ppostc1 ppostc2],
       "la" => %w[la la_label],
       "prevloc" => %w[prevloc prevloc_label],
-    }
+    }.freeze
 
     def sales_log_attributes
       ordered_questions = FormHandler.instance.ordered_sales_questions_for_all_years
@@ -81,7 +81,7 @@ module Csv
         end
       end
       non_question_fields = %w[id status created_at updated_at created_by_name is_dpo owning_organisation_name collection_start_year creation_method]
-      attributes = non_question_fields + attributes
+      non_question_fields + attributes
     end
   end
 end

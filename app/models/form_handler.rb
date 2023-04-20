@@ -49,10 +49,10 @@ class FormHandler
   # sales_forms = [2021..2023].each { |year| Form.new(nil, year, SALES_SECTIONS, sales) }
   # sidenote, why do we save a reference to the next years sales log in the FormHandler?
   def ordered_sales_questions_for_all_years
-    sales_forms = forms.filter { |name, _form| name.end_with? 'sales' }.values
-    ordered_questions = sales_forms.pop.questions.uniq { |q| q.id }
+    sales_forms = forms.filter { |name, _form| name.end_with? "sales" }.values
+    ordered_questions = sales_forms.pop.questions.uniq(&:id)
     index_of_last_question = 0
-    sales_forms.flat_map(&:questions).each_with_index do |question, i|
+    sales_forms.flat_map(&:questions).each do |question|
       index = ordered_questions.index { |q| q.id == question.id }
       if index
         index_of_last_question = index

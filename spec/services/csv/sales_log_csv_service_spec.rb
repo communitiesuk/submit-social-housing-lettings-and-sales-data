@@ -2,6 +2,9 @@ require "rails_helper"
 
 RSpec.describe Csv::SalesLogCsvService do
   let(:form_handler_mock) { instance_double(FormHandler) }
+  let!(:log) { create(:sales_log, :completed) }
+  let(:service) { described_class.new(export_type: "labels") }
+  let(:csv) { CSV.parse(service.prepare_csv(SalesLog.all)) }
 
   it "calls the form handler to get all questions in order when initialized" do
     allow(FormHandler).to receive(:instance).and_return(form_handler_mock)
@@ -9,10 +12,6 @@ RSpec.describe Csv::SalesLogCsvService do
     described_class.new(export_type: "codes")
     expect(form_handler_mock).to have_received(:ordered_sales_questions_for_all_years)
   end
-
-  let!(:log) { create(:sales_log, :completed) }
-  let(:service) { described_class.new(export_type: "labels") }
-  let(:csv) { CSV.parse(service.prepare_csv(SalesLog.all)) }
 
   it "returns a string" do
     result = service.prepare_csv(SalesLog.all)
