@@ -6,8 +6,8 @@ class OrganisationsController < ApplicationController
   before_action :authenticate_user!
   before_action :find_resource, except: %i[index new create]
   before_action :authenticate_scope!, except: [:index]
-  before_action -> { session_filters(specific_org: true) }, if: -> { current_user.support? || current_user.organisation.has_managing_agents? }, only: %i[lettings_logs sales_logs email_csv download_csv]
-  before_action :set_session_filters, if: -> { current_user.support? || current_user.organisation.has_managing_agents? }, only: %i[lettings_logs sales_logs email_csv download_csv]
+  before_action -> { session_filters(specific_org: true) }, if: -> { current_user.support? || current_user.organisation.has_managing_agents? }, only: %i[lettings_logs sales_logs email_lettings_csv download_lettings_csv email_sales_csv download_sales_csv]
+  before_action :set_session_filters, if: -> { current_user.support? || current_user.organisation.has_managing_agents? }, only: %i[lettings_logs sales_logs email_lettings_csv download_lettings_csv email_sales_csv download_sales_csv]
 
   def index
     redirect_to organisation_path(current_user.organisation) unless current_user.support?
@@ -99,23 +99,24 @@ class OrganisationsController < ApplicationController
         @pagy, @logs = pagy(unpaginated_filtered_logs)
         @searched = search_term.presence
         @total_count = organisation_logs.size
+        @log_type = :lettings
         render "logs", layout: "application"
       end
     end
   end
 
-  def download_csv
+  def download_lettings_csv
     organisation_logs = LettingsLog.visible.where(owning_organisation_id: @organisation.id)
     unpaginated_filtered_logs = filtered_logs(organisation_logs, search_term, @session_filters)
     codes_only = params.require(:codes_only) == "true"
 
-    render "logs/download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: logs_email_csv_organisation_path, codes_only: }
+    render "logs/download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: lettings_logs_email_csv_organisation_path, codes_only: }
   end
 
-  def email_csv
+  def email_lettings_csv
     codes_only_export = params.require(:codes_only) == "true"
     EmailCsvJob.perform_later(current_user, search_term, @session_filters, false, @organisation, codes_only_export)
-    redirect_to logs_csv_confirmation_organisation_path
+    redirect_to lettings_logs_csv_confirmation_organisation_path
   end
 
   def sales_logs
@@ -128,6 +129,7 @@ class OrganisationsController < ApplicationController
         @pagy, @logs = pagy(unpaginated_filtered_logs)
         @searched = search_term.presence
         @total_count = organisation_logs.size
+        @log_type = :sales
         render "logs", layout: "application"
       end
 
@@ -135,6 +137,20 @@ class OrganisationsController < ApplicationController
         send_data byte_order_mark + unpaginated_filtered_logs.to_csv, filename: "sales-logs-#{@organisation.name}-#{Time.zone.now}.csv"
       end
     end
+  end
+
+  def download_sales_csv
+    organisation_logs = SalesLog.visible.where(owning_organisation_id: @organisation.id)
+    unpaginated_filtered_logs = filtered_logs(organisation_logs, search_term, @session_filters)
+    codes_only = params.require(:codes_only) == "true"
+
+    render "logs/download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: sales_logs_email_csv_organisation_path, codes_only: }
+  end
+
+  def email_sales_csv
+    codes_only_export = params.require(:codes_only) == "true"
+    EmailCsvJob.perform_later(current_user, search_term, @session_filters, false, @organisation, codes_only_export, "sales")
+    redirect_to sales_logs_csv_confirmation_organisation_path
   end
 
   def merge_request
@@ -152,7 +168,7 @@ private
   end
 
   def authenticate_scope!
-    if %w[create new lettings_logs download_csv email_csv].include? action_name
+    if %w[create new lettings_logs download_lettings_csv email_lettings_csv email_sales_csv download_sales_csv].include? action_name
       head :unauthorized and return unless current_user.support?
     elsif current_user.organisation != @organisation && !current_user.support?
       render_not_found

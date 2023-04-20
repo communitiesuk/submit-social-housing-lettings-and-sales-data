@@ -36,6 +36,15 @@ module LogsHelper
   def csv_download_url_for_controller(controller_type:, search:, codes_only:)
     case log_type_for_controller(controller_type)
     when "lettings" then csv_download_lettings_logs_path(search:, codes_only:)
+    when "sales" then csv_download_sales_logs_path(search:, codes_only:)
+    end
+  end
+
+  def csv_download_url_by_log_type(log_type, organisation, search:, codes_only:)
+    if log_type == :lettings
+      lettings_logs_csv_download_organisation_path(organisation, search:, codes_only:)
+    else
+      sales_logs_csv_download_organisation_path(organisation, search:, codes_only:)
     end
   end
 end
