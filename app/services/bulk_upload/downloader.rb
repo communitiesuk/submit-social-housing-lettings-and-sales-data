@@ -38,8 +38,7 @@ private
 
   def s3_storage_service
     Storage::S3Service.new(
-      Configuration::PaasConfigurationService.new,
-      ENV["CSV_DOWNLOAD_PAAS_INSTANCE"],
+      Configuration::S3Service.new(name: ENV["CSV_DOWNLOAD_PAAS_INSTANCE"]),
     )
   end
 

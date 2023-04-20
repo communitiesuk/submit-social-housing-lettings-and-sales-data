@@ -6,7 +6,7 @@ describe "rake core:data_import_field", type: :task do
 
   let(:instance_name) { "paas_import_instance" }
   let(:storage_service) { instance_double(Storage::S3Service) }
-  let(:paas_config_service) { instance_double(Configuration::PaasConfigurationService) }
+  let(:paas_config_service) { instance_double(Configuration::S3Service) }
 
   before do
     Rake.application.rake_require("tasks/data_import_field")
@@ -14,7 +14,7 @@ describe "rake core:data_import_field", type: :task do
     task.reenable
 
     allow(Storage::S3Service).to receive(:new).and_return(storage_service)
-    allow(Configuration::PaasConfigurationService).to receive(:new).and_return(paas_config_service)
+    allow(Configuration::S3Service).to receive(:new).and_return(paas_config_service)
     allow(ENV).to receive(:[])
     allow(ENV).to receive(:[]).with("IMPORT_PAAS_INSTANCE").and_return(instance_name)
   end
@@ -32,7 +32,7 @@ describe "rake core:data_import_field", type: :task do
       let(:field) { "tenant_code" }
 
       it "properly configures the storage service" do
-        expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+        expect(Storage::S3Service).to receive(:new).with(paas_config_service)
         task.invoke(field, fixture_path)
       end
 
@@ -46,7 +46,7 @@ describe "rake core:data_import_field", type: :task do
       let(:field) { "lettings_allocation" }
 
       it "properly configures the storage service" do
-        expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+        expect(Storage::S3Service).to receive(:new).with(paas_config_service)
         task.invoke(field, fixture_path)
       end
 
@@ -60,7 +60,7 @@ describe "rake core:data_import_field", type: :task do
       let(:field) { "major_repairs" }
 
       it "properly configures the storage service" do
-        expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+        expect(Storage::S3Service).to receive(:new).with(paas_config_service)
         task.invoke(field, fixture_path)
       end
 

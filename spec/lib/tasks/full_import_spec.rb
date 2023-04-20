@@ -7,14 +7,12 @@ describe "rake core:full_import", type: :task do
 
   let(:s3_service) { instance_double(Storage::S3Service) }
   let(:archive_service) { instance_double(Storage::ArchiveService) }
-  let(:paas_config_service) { instance_double(Configuration::PaasConfigurationService) }
 
   before do
     Rake.application.rake_require("tasks/full_import")
     Rake::Task.define_task(:environment)
     task.reenable
 
-    allow(Configuration::PaasConfigurationService).to receive(:new).and_return(paas_config_service)
     allow(Storage::S3Service).to receive(:new).and_return(s3_service)
     allow(s3_service).to receive(:get_file_io)
     allow(Storage::ArchiveService).to receive(:new).and_return(archive_service)

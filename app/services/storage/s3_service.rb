@@ -2,10 +2,9 @@ module Storage
   class S3Service < StorageService
     attr_reader :configuration
 
-    def initialize(config_service, paas_instance_name)
+    def initialize(config_service)
       super()
       @config_service = config_service
-      @instance_name = (paas_instance_name || "").to_sym
       @configuration = create_configuration
       @client = create_client
     end
@@ -41,16 +40,10 @@ module Storage
 
   private
 
-    def create_configuration
-      unless @config_service.s3_config_present?
-        raise "No S3 bucket is present in the PaaS configuration"
-      end
-      unless @config_service.s3_buckets.key?(@instance_name)
-        raise "#{@instance_name} instance name could not be found"
-      end
+    attr_reader :config_service
 
-      bucket_config = @config_service.s3_buckets[@instance_name]
-      StorageConfiguration.new(bucket_config[:credentials])
+    def create_configuration
+      StorageConfiguration.new(config_service.credentials)
     end
 
     def create_client

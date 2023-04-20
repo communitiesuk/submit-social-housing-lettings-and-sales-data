@@ -20,15 +20,15 @@ RSpec.describe Storage::S3Service do
   end
 
   context "when we create a storage service with no PaaS Configuration present" do
-    subject(:storage_service) { described_class.new(Configuration::PaasConfigurationService.new, "random_instance") }
+    subject(:storage_service) { described_class.new(Configuration::S3Service.new(name: "random_instance")) }
 
     it "raises an exception" do
-      expect { storage_service }.to raise_error(RuntimeError, "No S3 bucket is present in the PaaS configuration")
+      expect { storage_service }.to raise_error(RuntimeError, "VCAP_SERVICES not found")
     end
   end
 
   context "when we create a storage service and the S3 instance name is not found in the PaaS configuration" do
-    subject(:storage_service) { described_class.new(Configuration::PaasConfigurationService.new, "random_instance") }
+    subject(:storage_service) { described_class.new(Configuration::S3Service.new(name: "random_instance")) }
 
     let(:vcap_services) do
       <<-JSON
@@ -41,20 +41,16 @@ RSpec.describe Storage::S3Service do
     end
 
     it "raises an exception" do
-      expect { storage_service }.to raise_error(RuntimeError, /instance name could not be found/)
+      expect { storage_service }.to raise_error(RuntimeError, "bucket: random_instance not found")
     end
   end
 
   context "when we create a storage service with a valid instance name" do
-    subject(:storage_service) { described_class.new(Configuration::PaasConfigurationService.new, instance_name) }
+    subject(:storage_service) { described_class.new(Configuration::S3Service.new(name: instance_name)) }
 
     before do
       allow(ENV).to receive(:[])
       allow(ENV).to receive(:[]).with("VCAP_SERVICES").and_return(vcap_services)
-    end
-
-    it "creates a Storage Configuration" do
-      expect(storage_service.configuration).to be_an(Storage::StorageConfiguration)
     end
 
     it "sets the expected parameters in the configuration" do
@@ -71,7 +67,7 @@ RSpec.describe Storage::S3Service do
   end
 
   context "when we create a storage service and write a stubbed object" do
-    subject(:storage_service) { described_class.new(Configuration::PaasConfigurationService.new, instance_name) }
+    subject(:storage_service) { described_class.new(Configuration::S3Service.new(name: instance_name)) }
 
     let(:filename) { "my_file" }
     let(:content) { "content" }
@@ -106,7 +102,7 @@ RSpec.describe Storage::S3Service do
   end
 
   context "when we create a storage service" do
-    subject(:storage_service) { described_class.new(Configuration::PaasConfigurationService.new, instance_name) }
+    subject(:storage_service) { described_class.new(Configuration::S3Service.new(name: instance_name)) }
 
     let(:s3_client_stub) { Aws::S3::Client.new(stub_responses: true) }
 
