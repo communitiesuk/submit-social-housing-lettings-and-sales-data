@@ -80,7 +80,7 @@ module Csv
           question.id
         end
       end
-      non_question_fields = %w[id status created_at updated_at created_by_name is_dpo owning_organisation_name collection_start_year creation_method]
+      non_question_fields = %w[id status created_at updated_at old_id collection_start_year creation_method created_by_name is_dpo owning_organisation_name]
       non_question_fields + attributes
     end
   end
