@@ -132,15 +132,13 @@ private
   def validate_field_numbers_count
     return if halt_validations?
 
-    errors.add(:base, :wrong_field_numbers_count) if csv_parser.valid_field_numbers_count != csv_parser.class::FIELDS
+    errors.add(:base, :wrong_field_numbers_count) if csv_parser.incorrect_field_count?
   end
 
   def validate_max_columns_count_if_no_headers
-    return if halt_validations? || csv_parser.with_headers?
+    return if halt_validations?
 
-    max_columns_count = body_rows.map(&:size).max - col_offset
-
-    errors.add(:base, :over_max_column_count) if max_columns_count > csv_parser.class::MAX_COLUMNS
+    errors.add(:base, :over_max_column_count) if csv_parser.too_many_columns?
   end
 
   def halt_validations!
