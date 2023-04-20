@@ -131,6 +131,7 @@ class BulkUpload::Sales::Year2022::RowParser
   }.freeze
 
   attribute :bulk_upload
+  attribute :block_log_creation, :boolean, default: -> { false }
 
   attribute :field_1, :string
   attribute :field_2, :integer
@@ -265,6 +266,16 @@ class BulkUpload::Sales::Year2022::RowParser
   # delegate :valid?, to: :native_object
   # delegate :errors, to: :native_object
 
+  validate :validate_owning_org_data_given
+  validate :validate_owning_org_exists
+  validate :validate_owning_org_permitted
+
+  validate :validate_created_by_exists
+  validate :validate_created_by_related
+
+  validate :validate_nulls
+  validate :validate_valid_radio_option
+
   def self.question_for_field(field)
     QUESTIONS[field]
   end
@@ -308,12 +319,127 @@ class BulkUpload::Sales::Year2022::RowParser
     errors.blank?
   end
 
+  def block_log_creation?
+    block_log_creation
+  end
+
 private
 
   def field_mapping_for_errors
     {
       age1_known: %i[field_7],
       age1: %i[field_7],
+      buy1livein: %i[field_117],
+      purchid: %i[field_1],
+      saledate: %i[field_2 field_3 field_4],
+      noint: %i[field_6],
+      age1_known: %i[field_7],
+      age1: %i[field_7],
+      age2_known: %i[field_8],
+      age2: %i[field_8],
+      age3_known: %i[field_9],
+      age3: %i[field_9],
+      age4_known: %i[field_10],
+      age4: %i[field_10],
+      age5_known: %i[field_11],
+      age5: %i[field_11],
+      age6_known: %i[field_12],
+      age6: %i[field_12],
+      sex1: %i[field_13],
+      sex2: %i[field_14],
+      sex3: %i[field_15],
+      sex4: %i[field_16],
+      sex5: %i[field_17],
+      sex6: %i[field_18],
+      relat2: %i[field_19],
+      relat3: %i[field_20],
+      relat4: %i[field_21],
+      relat5: %i[field_22],
+      relat6: %i[field_23],
+      ecstat1: %i[field_24],
+      ecstat2: %i[field_25],
+      ecstat3: %i[field_26],
+      ecstat4: %i[field_27],
+      ecstat5: %i[field_28],
+      ecstat6: %i[field_29],
+      ethnic_group: %i[field_30],
+      ethnic: %i[field_30],
+      national: %i[field_31],
+      income1nk: %i[field_32],
+      income1: %i[field_32],
+      income2nk: %i[field_33],
+      income2: %i[field_33],
+      inc1mort: %i[field_34],
+      inc2mort: %i[field_35],
+      savingsnk: %i[field_36],
+      savings: %i[field_36],
+      prevown: %i[field_37],
+      prevten: %i[field_39],
+      prevloc: %i[field_40],
+      previous_la_known: %i[field_40],
+      ppcodenk: %i[field_43],
+      ppostcode_full: %i[field_41 field_42],
+      pregyrha: %i[field_44],
+      pregla: %i[field_45],
+      pregghb: %i[field_46],
+      pregother: %i[field_47],
+      pregblank: %i[field_44 field_45 field_46 field_47],
+      disabled: %i[field_48],
+      wheel: %i[field_49],
+      beds: %i[field_50],
+      proptype: %i[field_51],
+      builtype: %i[field_52],
+      la_known: %i[field_53],
+      la: %i[field_53],
+      is_la_inferred: %i[field_53],
+      pcodenk: %i[field_54 field_55],
+      postcode_full: %i[field_54 field_55],
+      wchair: %i[field_56],
+      type: %i[field_57 field_76 field_84 field_113],
+      resale: %i[field_58],
+      hodate: %i[field_59 field_60 field_61],
+      exdate: %i[field_62 field_63 field_64],
+      lanomagr: %i[field_65],
+      frombeds: %i[field_66],
+      fromprop: %i[field_67],
+      value: %i[field_68 field_77 field_87],
+      equity: %i[field_69],
+      mortgage: %i[field_70 field_80 field_88],
+      extrabor: %i[field_71 field_81 field_89],
+      deposit: %i[field_72 field_82 field_90],
+      cashdis: %i[field_73],
+      mrent: %i[field_74],
+      has_mscharge: %i[field_75 field_83 field_91],
+      mscharge: %i[field_75 field_83 field_91],
+      grant: %i[field_78],
+      discount: %i[field_79],
+      othtype: %i[field_85],
+      owning_organisation_id: %i[field_92],
+      created_by: %i[field_93],
+      hhregres: %i[field_95],
+      hhregresstill: %i[field_95],
+      armedforcesspouse: %i[field_97],
+      mortgagelender: %i[field_98 field_100 field_102],
+      mortgagelenderother: %i[field_99 field_101 field_103],
+      hb: %i[field_104],
+      mortlen: %i[field_105 field_106 field_107],
+      proplen: %i[field_108],
+      jointmore: %i[field_109],
+      proplen: %i[field_110],
+      staircase: %i[field_111],
+      privacynotice: %i[field_112],
+      ownershipsch: %i[field_113],
+      companybuy: %i[field_114],
+      buylivein: %i[field_115],
+      jointpur: %i[field_116],
+      buy1livein: %i[field_117],
+      buy2livein: %i[field_118],
+      hholdcount: %i[field_119],
+      stairbought: %i[field_120],
+      stairowned: %i[field_121],
+      socprevten: %i[field_122],
+      mortgageused: %i[field_123 field_124 field_125],
+      soctenant: %i[field_39 field_113],
     }
   end
 
@@ -334,19 +460,19 @@ private
     attributes["age1"] = field_7 if attributes["age1_known"].zero? && field_7&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age2_known"] = age2_known?
-    attributes["age2"] = field_8 if attributes["age1_known"].zero? && field_8&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age2"] = field_8 if attributes["age2_known"].zero? && field_8&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age3_known"] = age3_known?
-    attributes["age3"] = field_9 if attributes["age1_known"].zero? && field_9&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age3"] = field_9 if attributes["age3_known"].zero? && field_9&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age4_known"] = age4_known?
-    attributes["age4"] = field_10 if attributes["age1_known"].zero? && field_10&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age4"] = field_10 if attributes["age4_known"].zero? && field_10&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age5_known"] = age5_known?
-    attributes["age5"] = field_11 if attributes["age1_known"].zero? && field_11&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age5"] = field_11 if attributes["age5_known"].zero? && field_11&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age6_known"] = age6_known?
-    attributes["age6"] = field_12 if attributes["age1_known"].zero? && field_12&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age6"] = field_12 if attributes["age6_known"].zero? && field_12&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["sex1"] = field_13
     attributes["sex2"] = field_14
@@ -675,6 +801,115 @@ private
       1
     elsif field_113 == 1
       2
+    end
+  end
+
+  def block_log_creation!
+    self.block_log_creation = true
+  end
+
+  def questions
+    @questions ||= log.form.subsections.flat_map { |ss| ss.applicable_questions(log) }
+  end
+
+  def validate_owning_org_data_given
+    if field_92.blank?
+      block_log_creation!
+
+      if errors[:field_92].blank?
+        errors.add(:field_92, "The owning organisation code is incorrect", category: :setup)
+      end
+    end
+  end
+
+  def validate_owning_org_exists
+    if owning_organisation.nil?
+      block_log_creation!
+
+      if errors[:field_92].blank?
+        errors.add(:field_92, "The owning organisation code is incorrect", category: :setup)
+      end
+    end
+  end
+
+  def validate_owning_org_owns_stock
+    if owning_organisation && !owning_organisation.holds_own_stock?
+      block_log_creation!
+
+      if errors[:field_92].blank?
+        errors.add(:field_92, "The owning organisation code provided is for an organisation that does not own stock", category: :setup)
+      end
+    end
+  end
+
+  def validate_owning_org_permitted
+    if owning_organisation && !bulk_upload.user.organisation.affiliated_stock_owners.include?(owning_organisation)
+      block_log_creation!
+
+      if errors[:field_92].blank?
+        errors.add(:field_92, "You do not have permission to add logs for this owning organisation", category: :setup)
+      end
+    end
+  end
+
+  def validate_created_by_exists
+    return if field_93.blank?
+
+    unless created_by
+      errors.add(:field_93, "User with the specified email could not be found")
+    end
+  end
+
+  def validate_created_by_related
+    return unless created_by
+
+    unless created_by.organisation == owning_organisation
+      block_log_creation!
+      errors.add(:field_93, "User must be related to owning organisation")
+    end
+  end
+
+  def setup_question?(question)
+    log.form.setup_sections[0].subsections[0].questions.include?(question)
+  end
+
+  def validate_nulls
+    field_mapping_for_errors.each do |error_key, fields|
+      question_id = error_key.to_s
+      question = questions.find { |q| q.id == question_id }
+
+      next unless question
+      next if log.optional_fields.include?(question.id)
+      next if question.completed?(log)
+
+      if setup_question?(question)
+        fields.each do |field|
+          if errors[field].present?
+            errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase), category: :setup)
+          end
+        end
+      else
+        fields.each do |field|
+          unless errors.any? { |e| fields.include?(e.attribute) }
+            errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase))
+          end
+        end
+      end
+    end
+  end
+
+  def validate_valid_radio_option
+    log.attributes.each do |question_id, _v|
+      question = log.form.get_question(question_id, log)
+
+      next unless question&.type == "radio"
+      next if log[question_id].blank? || question.answer_options.key?(log[question_id].to_s) || !question.page.routed_to?(log, nil)
+
+      fields = field_mapping_for_errors[question_id.to_sym] || []
+
+      fields.each do |field|
+        errors.add(field, I18n.t("validations.invalid_option", question: QUESTIONS[field]))
+      end
     end
   end
 end
