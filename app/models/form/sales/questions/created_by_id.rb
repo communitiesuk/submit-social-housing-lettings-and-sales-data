@@ -1,4 +1,4 @@
-class Form::Common::Questions::CreatedById < ::Form::Question
+class Form::Sales::Questions::CreatedById < ::Form::Question
   ANSWER_OPTS = { "" => "Select an option" }.freeze
 
   def initialize(id, hsh, page)

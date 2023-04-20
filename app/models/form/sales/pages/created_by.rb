@@ -1,4 +1,4 @@
-class Form::Common::Pages::CreatedBy < ::Form::Page
+class Form::Sales::Pages::CreatedBy < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "created_by"
@@ -6,7 +6,7 @@ class Form::Common::Pages::CreatedBy < ::Form::Page
 
   def questions
     @questions ||= [
-      Form::Common::Questions::CreatedById.new(nil, nil, self),
+      Form::Sales::Questions::CreatedById.new(nil, nil, self),
     ]
   end
 

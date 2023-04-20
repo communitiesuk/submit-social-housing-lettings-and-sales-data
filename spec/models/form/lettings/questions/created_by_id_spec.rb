@@ -129,7 +129,7 @@ RSpec.describe Form::Lettings::Questions::CreatedById, type: :model do
       end
 
       it "only displays users that belong user's org" do
-        expect(question.displayed_answer_options(lettings_log, data_provider)).to eq(Form::Common::Questions::CreatedById::ANSWER_OPTS)
+        expect(question.displayed_answer_options(lettings_log, data_provider)).to eq(Form::Lettings::Questions::CreatedById::ANSWER_OPTS)
       end
     end
   end

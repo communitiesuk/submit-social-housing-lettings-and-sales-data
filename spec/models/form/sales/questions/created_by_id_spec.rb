@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Common::Questions::CreatedById, type: :model do
+RSpec.describe Form::Sales::Questions::CreatedById, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
@@ -120,7 +120,7 @@ RSpec.describe Form::Common::Questions::CreatedById, type: :model do
       end
 
       it "only displays users that belong user's org" do
-        expect(question.displayed_answer_options(sales_log, data_provider)).to eq(Form::Common::Questions::CreatedById::ANSWER_OPTS)
+        expect(question.displayed_answer_options(sales_log, data_provider)).to eq(Form::Sales::Questions::CreatedById::ANSWER_OPTS)
       end
     end
   end
