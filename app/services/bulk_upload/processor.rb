@@ -14,14 +14,15 @@ class BulkUpload::Processor
 
     if validator.any_setup_errors?
       send_setup_errors_mail
+      # emulate rescue_validation_or_raise here
+
     elsif validator.create_logs?
       create_logs
 
+
       if created_logs_but_incompleted?
         send_how_fix_upload_mail
-      end
-
-      if created_logs_and_all_completed?
+      elsif created_logs_and_all_completed?
         bulk_upload.unpend
         send_success_mail
       end
