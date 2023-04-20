@@ -371,10 +371,13 @@ private
     attributes["ethnic_group"] = ethnic_group_from_ethnic
     attributes["ethnic"] = field_30
     attributes["national"] = field_31
+    attributes["income1nk"] = field_32.present? ? 0 : 1
     attributes["income1"] = field_32
+    attributes["income2nk"] = field_33.present? ? 0 : 1
     attributes["income2"] = field_33
     attributes["inc1mort"] = field_34
     attributes["inc2mort"] = field_35
+    attributes["savingsnk"] = field_36.present? ? 0 : 1
     attributes["savings"] = field_36
     attributes["prevown"] = field_37
 
@@ -397,6 +400,7 @@ private
     attributes["builtype"] = field_52
     attributes["la_known"] = field_53.present? ? 1 : 0
     attributes["la"] = field_53
+    attributes["is_la_inferred"] = false
     attributes["pcodenk"] = 0 if postcode_full.present?
     attributes["postcode_full"] = postcode_full
     attributes["wchair"] = field_56
@@ -420,6 +424,7 @@ private
     attributes["deposit"] = deposit
     attributes["cashdis"] = field_73
     attributes["mrent"] = field_74
+    attributes["has_mscharge"] = mscharge.present? ? 1 : 0
     attributes["mscharge"] = mscharge
     attributes["grant"] = field_78
     attributes["discount"] = field_79
@@ -455,6 +460,7 @@ private
     attributes["stairowned"] = field_121
     attributes["socprevten"] = field_122
     attributes["mortgageused"] = mortgageused
+    attributes["soctenant"] = soctenant
 
     attributes
   end
@@ -525,9 +531,9 @@ private
   end
 
   def ethnic_group_from_ethnic
-    return nil if field_43.blank?
+    return nil if field_30.blank?
 
-    case field_43
+    case field_30
     when 1, 2, 3, 18
       0
     when 4, 5, 6, 7
@@ -660,5 +666,15 @@ private
 
   def previous_la_known
     field_40.present? ? 1 : 0
+  end
+
+  def soctenant
+    return unless field_39 && field_113
+
+    if (field_39 == 1 || fields_39 == 2) && field_113 == 1
+      1
+    elsif field_113 == 1
+      2
+    end
   end
 end

@@ -251,7 +251,7 @@ class BulkUpload::LogToCsv
       log.prevloc, # 40
       ((log.ppostcode_full || "").split(" ") || [""]).first,
       ((log.ppostcode_full || "").split(" ") || [""]).last,
-      previous_postcode_known,
+      log.ppcodenk == 0 ? 1 : nil,
 
       log.pregyrha,
       log.pregla,
