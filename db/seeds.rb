@@ -98,16 +98,6 @@ unless Rails.env.test?
     user.confirmed_at = Time.zone.now
   end
 
-  User.find_or_create_by!(
-    name: "Nat",
-    email: "nat.dean-lewis@softwire.com",
-    organisation: org,
-    role: "data_coordinator",
-    ) do |user|
-    user.password = "password"
-    user.confirmed_at = Time.zone.now
-  end
-
   standalone_no_stock = Organisation.find_or_create_by!(
     name: "Standalone No Stock 1 Ltd",
     address_line1: "2 Marsham Street",
