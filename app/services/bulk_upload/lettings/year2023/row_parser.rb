@@ -1317,10 +1317,14 @@ private
 
   def mrcdate
     Date.new(field_38 + 2000, field_37, field_36) if field_38.present? && field_37.present? && field_36.present?
+  rescue Date::Error
+    Date.new
   end
 
   def voiddate
     Date.new(field_35 + 2000, field_34, field_33) if field_35.present? && field_34.present? && field_33.present?
+  rescue Date::Error
+    Date.new
   end
 
   def first_time_property_let_as_social_housing

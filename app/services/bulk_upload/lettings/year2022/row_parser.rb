@@ -1093,6 +1093,8 @@ private
 
   def voiddate
     Date.new(field_91 + 2000, field_90, field_89) if field_91.present? && field_90.present? && field_89.present?
+  rescue Date::Error
+    Date.new
   end
 
   def majorrepairs
@@ -1101,6 +1103,8 @@ private
 
   def mrcdate
     Date.new(field_94 + 2000, field_93, field_92) if field_94.present? && field_93.present? && field_92.present?
+  rescue Date::Error
+    Date.new
   end
 
   def prevloc
