@@ -1346,10 +1346,20 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
     end
 
     describe "#mrcdate" do
-      let(:attributes) { { bulk_upload:, field_92: "13", field_93: "12", field_94: "22" } }
+      context "when valid" do
+        let(:attributes) { { bulk_upload:, field_92: "13", field_93: "12", field_94: "22" } }
 
-      it "sets value given" do
-        expect(parser.log.mrcdate).to eq(Date.new(2022, 12, 13))
+        it "sets value given" do
+          expect(parser.log.mrcdate).to eq(Date.new(2022, 12, 13))
+        end
+      end
+
+      context "when invalid" do
+        let(:attributes) { { bulk_upload:, field_92: "13", field_93: "13", field_94: "22" } }
+
+        it "does not raise an error" do
+          expect { parser.log.mrcdate }.not_to raise_error
+        end
       end
     end
 
@@ -1372,10 +1382,20 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
     end
 
     describe "#voiddate" do
-      let(:attributes) { { bulk_upload:, field_89: "13", field_90: "12", field_91: "22" } }
+      context "when valid" do
+        let(:attributes) { { bulk_upload:, field_89: "13", field_90: "12", field_91: "22" } }
 
-      it "sets value given" do
-        expect(parser.log.voiddate).to eq(Date.new(2022, 12, 13))
+        it "sets value given" do
+          expect(parser.log.voiddate).to eq(Date.new(2022, 12, 13))
+        end
+      end
+
+      context "when invalid" do
+        let(:attributes) { { bulk_upload:, field_89: "13", field_90: "13", field_91: "22" } }
+
+        it "does not raise an error" do
+          expect { parser.log.voiddate }.not_to raise_error
+        end
       end
     end
 
