@@ -327,9 +327,6 @@ private
 
   def field_mapping_for_errors
     {
-      age1_known: %i[field_7],
-      age1: %i[field_7],
-      buy1livein: %i[field_117],
       purchid: %i[field_1],
       saledate: %i[field_2 field_3 field_4],
       noint: %i[field_6],
@@ -423,9 +420,8 @@ private
       mortgagelenderother: %i[field_99 field_101 field_103],
       hb: %i[field_104],
       mortlen: %i[field_105 field_106 field_107],
-      proplen: %i[field_108],
+      proplen: %i[field_108 field_110],
       jointmore: %i[field_109],
-      proplen: %i[field_110],
       staircase: %i[field_111],
       privacynotice: %i[field_112],
       ownershipsch: %i[field_113],
@@ -570,9 +566,8 @@ private
 
     attributes["mortlen"] = mortlen
 
-    attributes["proplen"] = field_108
+    attributes["proplen"] = proplen
     attributes["jointmore"] = field_109
-    attributes["proplen"] = field_110
     attributes["staircase"] = field_111
     attributes["privacynotice"] = field_112
     attributes["ownershipsch"] = field_113
@@ -653,7 +648,7 @@ private
   end
 
   def details_known?(person_n)
-    send("person_#{person_n}_present?") ? 0 : 1
+    send("person_#{person_n}_present?") ? 1 : 2
   end
 
   def ethnic_group_from_ethnic
@@ -752,6 +747,13 @@ private
     when 1 then field_105
     when 2 then field_106
     when 3 then field_107
+    end
+  end
+
+  def proplen
+    case field_113
+    when 1 then field_110
+    when 2 then field_108
     end
   end
 

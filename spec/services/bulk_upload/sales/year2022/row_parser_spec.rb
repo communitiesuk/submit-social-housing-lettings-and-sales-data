@@ -19,7 +19,6 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
       field_2: now.day.to_s,
       field_3: now.month.to_s,
       field_4: now.strftime("%g"),
-      field_134: "2",
       field_113: "1",
       field_57: "2",
       field_116: "2",
@@ -115,22 +114,6 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
     FormHandler.instance.use_fake_forms!
   end
 
-  describe "validations" do
-    before do
-      parser.valid?
-    end
-
-    xdescribe "#field_117" do
-      context "when not a possible value" do
-        let(:attributes) { { bulk_upload:, field_117: "3" } }
-
-        it "is not valid" do
-          expect(parser.errors).to include(:field_117)
-        end
-      end
-    end
-  end
-
   describe "#blank_row?" do
     context "when a new object" do
       it "returns true" do
@@ -177,7 +160,7 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
       context "when valid row" do
         let(:attributes) { valid_attributes }
 
-        xit "returns true" do
+        it "returns true" do
           expect(parser).to be_valid
         end
 
@@ -286,6 +269,75 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
 
         it "is permitted" do
           expect(parser.errors[:field_93]).to be_blank
+        end
+      end
+    end
+
+    [
+      %w[age1_known age1 field_7],
+      %w[age2_known age2 field_8],
+      %w[age3_known age3 field_9],
+      %w[age4_known age4 field_10],
+      %w[age5_known age5 field_11],
+      %w[age6_known age6 field_12],
+    ].each do |known, age, field|
+      describe "##{known} and ##{age}" do
+        context "when #{field} is blank" do
+          let(:attributes) { { bulk_upload:, field.to_s => nil } }
+
+          it "sets ##{known} 1" do
+            expect(parser.log.public_send(known)).to be(1)
+          end
+
+          it "sets ##{age} to nil" do
+            expect(parser.log.public_send(age)).to be_nil
+          end
+        end
+
+        context "when #{field} is R" do
+          let(:attributes) { setup_section_params.merge({ field.to_s => "R", field_6: "1", field_119: "5", field_112: "1" }) }
+
+          it "sets ##{known} 1" do
+            expect(parser.log.public_send(known)).to be(1)
+          end
+
+          it "sets ##{age} to nil" do
+            expect(parser.log.public_send(age)).to be_nil
+          end
+        end
+
+        context "when #{field} is a number" do
+          let(:attributes) { setup_section_params.merge({ field.to_s => "50", field_6: "1", field_119: "5", field_112: "1" }) }
+
+          it "sets ##{known} to 0" do
+            expect(parser.log.public_send(known)).to be(0)
+          end
+
+          it "sets ##{age} to given age" do
+            expect(parser.log.public_send(age)).to be(50)
+          end
+        end
+
+        context "when #{field} is a non-sensical value" do
+          let(:attributes) { setup_section_params.merge({ field.to_s => "A", field_6: "1", field_119: "5", field_112: "1" }) }
+
+          it "sets ##{known} to 0" do
+            expect(parser.log.public_send(known)).to be(0)
+          end
+
+          it "sets ##{age} to nil" do
+            expect(parser.log.public_send(age)).to be_nil
+          end
+        end
+      end
+    end
+
+    xdescribe "#field_117" do
+      context "when not a possible value" do
+        let(:attributes) { { bulk_upload:, field_117: "3" } }
+
+        it "is not valid" do
+          expect(parser.errors).to include(:field_117)
         end
       end
     end
