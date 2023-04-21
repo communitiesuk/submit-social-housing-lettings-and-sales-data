@@ -198,6 +198,8 @@ en:
       lettype:
         general_needs_mismatch: Lettings type must be a general needs type because you selected general needs when uploading the file
         supported_housing_mismatch: Lettings type must be a supported housing type because you selected supported housing when uploading the file
+      saledate:
+        year_not_two_digits: "Sale completion year must be 2 digits"
 
     property:
       uprn:

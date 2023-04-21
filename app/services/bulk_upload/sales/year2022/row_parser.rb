@@ -259,12 +259,22 @@ class BulkUpload::Sales::Year2022::RowParser
   attribute :field_124, :integer
   attribute :field_125, :integer
 
-  # validates :field_1, presence: true, numericality: { in: (1..12) }
-  # validates :field_4, numericality: { in: (1..999), allow_blank: true }
-  # validates :field_4, presence: true, if: :field_4_presence_check
+  validates :field_2, presence: { message: I18n.t("validations.not_answered", question: "sale completion date (day)") }
+  validates :field_3, presence: { message: I18n.t("validations.not_answered", question: "sale completion date (month)") }
+  validates :field_4, presence: { message: I18n.t("validations.not_answered", question: "sale completion date (year)") }
+  validates :field_4, format: { with: /\A\d{2}\z/, message: I18n.t("validations.setup.saledate.year_not_two_digits") }
 
-  # delegate :valid?, to: :native_object
-  # delegate :errors, to: :native_object
+  validates :field_113, presence: { message: I18n.t("validations.not_answered", question: "ownership type") }
+  validates :field_57, presence: { message: I18n.t("validations.not_answered", question: "shared ownership type") }, if: :shared_ownership?
+  validates :field_76, presence: { message: I18n.t("validations.not_answered", question: "shared ownership type") }, if: :discounted_ownership?
+  validates :field_84, presence: { message: I18n.t("validations.not_answered", question: "shared ownership type") }, if: :outright_sale?
+  validates :field_115, presence: { message: I18n.t("validations.not_answered", question: "will the buyers live in the property") }, if: :outright_sale?
+  validates :field_116, presence: { message: I18n.t("validations.not_answered", question: "joint purchase") }, if: :joint_purchase_asked?
+  validates :field_114, presence: { message: I18n.t("validations.not_answered", question: "company buyer") }, if: :outright_sale?
+  validates :field_109, presence: { message: I18n.t("validations.not_answered", question: "more than 2 buyers") }, if: :joint_purchase?
+
+  validate :validate_nulls
+  validate :validate_valid_radio_option
 
   validate :validate_owning_org_data_given
   validate :validate_owning_org_exists
@@ -272,9 +282,7 @@ class BulkUpload::Sales::Year2022::RowParser
 
   validate :validate_created_by_exists
   validate :validate_created_by_related
-
-  validate :validate_nulls
-  validate :validate_valid_radio_option
+  validate :validate_relevant_collection_window
 
   def self.question_for_field(field)
     QUESTIONS[field]
@@ -324,6 +332,26 @@ class BulkUpload::Sales::Year2022::RowParser
   end
 
 private
+
+  def shared_ownership?
+    field_113 == 1
+  end
+
+  def discounted_ownership?
+    field_113 == 2
+  end
+
+  def outright_sale?
+    field_113 == 3
+  end
+
+  def joint_purchase?
+    field_116 == 1
+  end
+
+  def joint_purchase_asked?
+    shared_ownership? || discounted_ownership? || field_114 == 2
+  end
 
   def field_mapping_for_errors
     {
@@ -679,90 +707,68 @@ private
   end
 
   def sale_type
-    case field_113
-    when 1 then field_57
-    when 2 then field_76
-    when 3 then field_84
-    end
+    return field_57 if shared_ownership?
+    return field_76 if discounted_ownership?
+    return field_84 if outright_sale?
   end
 
   def value
-    case field_113
-    when 1 then field_68
-    when 2 then field_77
-    when 3 then field_87
-    end
+    return field_68 if shared_ownership?
+    return field_77 if discounted_ownership?
+    return field_87 if outright_sale?
   end
 
   def mortgage
-    case field_113
-    when 1 then field_70
-    when 2 then field_80
-    when 3 then field_88
-    end
+    return field_70 if shared_ownership?
+    return field_80 if discounted_ownership?
+    return field_88 if outright_sale?
   end
 
   def extrabor
-    case field_113
-    when 1 then field_71
-    when 2 then field_81
-    when 3 then field_89
-    end
+    return field_71 if shared_ownership?
+    return field_81 if discounted_ownership?
+    return field_89 if outright_sale?
   end
 
   def deposit
-    case field_113
-    when 1 then field_72
-    when 2 then field_82
-    when 3 then field_90
-    end
+    return field_72 if shared_ownership?
+    return field_82 if discounted_ownership?
+    return field_90 if outright_sale?
   end
 
   def mscharge
-    case field_113
-    when 1 then field_75
-    when 2 then field_83
-    when 3 then field_91
-    end
+    return field_75 if shared_ownership?
+    return field_83 if discounted_ownership?
+    return field_91 if outright_sale?
   end
 
   def mortgagelender
-    case field_113
-    when 1 then field_98
-    when 2 then field_100
-    when 3 then field_102
-    end
+    return field_98 if shared_ownership?
+    return field_100 if discounted_ownership?
+    return field_102 if outright_sale?
   end
 
   def mortgagelenderother
-    case field_113
-    when 1 then field_99
-    when 2 then field_101
-    when 3 then field_103
-    end
+    return field_99 if shared_ownership?
+    return field_101 if discounted_ownership?
+    return field_103 if outright_sale?
   end
 
   def mortlen
-    case field_113
-    when 1 then field_105
-    when 2 then field_106
-    when 3 then field_107
-    end
+    return field_105 if shared_ownership?
+    return field_106 if discounted_ownership?
+    return field_107 if outright_sale?
   end
 
   def proplen
-    case field_113
-    when 1 then field_110
-    when 2 then field_108
-    end
+    return field_110 if shared_ownership?
+    return field_108 if discounted_ownership?
   end
 
   def mortgageused
-    case field_113
-    when 1 then field_123
-    when 2 then field_124
-    when 3 then field_125
-    end
+    return field_123 if shared_ownership?
+    return field_124 if discounted_ownership?
+    return field_125 if outright_sale?
   end
 
   def owning_organisation
@@ -912,6 +918,16 @@ private
       fields.each do |field|
         errors.add(field, I18n.t("validations.invalid_option", question: QUESTIONS[field]))
       end
+    end
+  end
+
+  def validate_relevant_collection_window
+    return if saledate.blank? || bulk_upload.form.blank?
+
+    unless bulk_upload.form.valid_start_date_for_form?(saledate)
+      errors.add(:field_2, I18n.t("validations.date.outside_collection_window"))
+      errors.add(:field_3, I18n.t("validations.date.outside_collection_window"))
+      errors.add(:field_4, I18n.t("validations.date.outside_collection_window"))
     end
   end
 end

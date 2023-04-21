@@ -14,15 +14,16 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
   let(:setup_section_params) do
     {
       bulk_upload:,
-      field_1: "test id",
-      field_92: owning_org.old_visible_id,
-      field_2: now.day.to_s,
-      field_3: now.month.to_s,
-      field_4: now.strftime("%g"),
-      field_113: "1",
-      field_57: "2",
-      field_116: "2",
-      field_115: "1",
+      field_1: "test id", # purchase id
+      field_92: owning_org.old_visible_id, # organisation
+      field_93: user.email, # user
+      field_2: now.day.to_s, # sale day
+      field_3: now.month.to_s, # sale month
+      field_4: now.strftime("%g"), # sale year
+      field_113: "1", # owhershipsch
+      field_57: "2", # shared ownership sale type
+      field_116: "2", # joint purchase
+      field_115: "1", # will the buyers live in the property
     }
   end
 
@@ -175,13 +176,120 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
       end
     end
 
-    context "when setup section not complete" do
-      let(:attributes) { { bulk_upload:, field_113: "" } }
+    context "when setup section not complete and type is not given" do
+      let(:attributes) do
+        {
+          bulk_upload:,
+          field_1: "test id",
+        }
+      end
 
-      it "has errors on setup fields" do
+      it "has errors on correct setup fields" do
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute)
 
-        expect(errors).to eql(%i[field_1 field_92 field_2 field_3 field_4 field_134 field_113 field_57 field_116 field_115])
+        expect(errors).to eql(%i[field_2 field_3 field_4 field_113 field_92])
+      end
+    end
+
+    context "when setup section not complete and type is shared ownership" do
+      let(:attributes) do
+        {
+          bulk_upload:,
+          field_1: "test id",
+          field_113: "1",
+        }
+      end
+
+      it "has errors on correct setup fields" do
+        errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute)
+
+        expect(errors).to eql(%i[field_2 field_3 field_4 field_57 field_116 field_92])
+      end
+    end
+
+    context "when setup section not complete it's shared ownership joint purchase" do
+      let(:attributes) do
+        {
+          bulk_upload:,
+          field_1: "test id",
+          field_113: "1",
+          field_57: "2",
+          field_116: "1",
+        }
+      end
+
+      it "has errors on correct setup fields" do
+        errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute)
+
+        expect(errors).to eql(%i[field_2 field_3 field_4 field_109 field_92])
+      end
+    end
+
+    context "when setup section not complete and type is discounted ownership" do
+      let(:attributes) do
+        {
+          bulk_upload:,
+          field_1: "test id",
+          field_113: "2",
+        }
+      end
+
+      it "has errors on correct setup fields" do
+        errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute)
+
+        expect(errors).to eql(%i[field_2 field_3 field_4 field_76 field_116 field_92])
+      end
+    end
+
+    context "when setup section not complete it's discounted ownership joint purchase" do
+      let(:attributes) do
+        {
+          bulk_upload:,
+          field_1: "test id",
+          field_113: "2",
+          field_76: "8",
+          field_116: "1",
+        }
+      end
+
+      it "has errors on correct setup fields" do
+        errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute)
+
+        expect(errors).to eql(%i[field_2 field_3 field_4 field_109 field_92])
+      end
+    end
+
+    context "when setup section not complete and type is outright sale" do
+      let(:attributes) do
+        {
+          bulk_upload:,
+          field_1: "test id",
+          field_113: "3",
+        }
+      end
+
+      it "has errors on correct setup fields" do
+        errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute)
+
+        expect(errors).to eql(%i[field_2 field_3 field_4 field_84 field_114 field_92])
+      end
+    end
+
+    context "when setup section not complete outright sale buyer is not company" do
+      let(:attributes) do
+        {
+          bulk_upload:,
+          field_1: "test id",
+          field_113: "3",
+          field_84: "12",
+          field_114: "2",
+        }
+      end
+
+      it "has errors on correct setup fields" do
+        errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute)
+
+        expect(errors).to eql(%i[field_2 field_3 field_4 field_115 field_116 field_92])
       end
     end
 
@@ -332,12 +440,83 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
       end
     end
 
-    xdescribe "#field_117" do
+    describe "#field_117" do
       context "when not a possible value" do
-        let(:attributes) { { bulk_upload:, field_117: "3" } }
+        let(:attributes) { valid_attributes.merge({ field_117: "3" }) }
 
         it "is not valid" do
           expect(parser.errors).to include(:field_117)
+        end
+      end
+    end
+
+    describe "fields 2, 3, 4 => saledate" do
+      context "when all of these fields are blank" do
+        let(:attributes) { setup_section_params.merge({ field_2: nil, field_3: nil, field_4: nil }) }
+
+        it "returns them as setup errors" do
+          setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
+
+          expect(setup_errors.find { |e| e.attribute == :field_2 }).to be_present
+          expect(setup_errors.find { |e| e.attribute == :field_3 }).to be_present
+          expect(setup_errors.find { |e| e.attribute == :field_4 }).to be_present
+        end
+      end
+
+      context "when one of these fields is blank" do
+        let(:attributes) { setup_section_params.merge({ field_2: "1", field_3: "1", field_4: nil }) }
+
+        it "returns an error only on blank field" do
+          expect(parser.errors[:field_2]).to be_blank
+          expect(parser.errors[:field_3]).to be_blank
+          expect(parser.errors[:field_4]).to be_present
+        end
+      end
+
+      context "when field 4 is 4 digits instead of 2" do
+        let(:attributes) { setup_section_params.merge({ bulk_upload:, field_4: "2022" }) }
+
+        it "returns an error" do
+          expect(parser.errors[:field_4]).to include("Sale completion year must be 2 digits")
+        end
+      end
+
+      context "when invalid date given" do
+        let(:attributes) { setup_section_params.merge({ field_2: "a", field_3: "12", field_4: "2022" }) }
+
+        it "does not raise an error" do
+          expect { parser.valid? }.not_to raise_error
+        end
+      end
+
+      context "when inside of collection year" do
+        let(:attributes) { setup_section_params.merge({ field_2: "1", field_3: "10", field_4: "22" }) }
+
+        let(:bulk_upload) { create(:bulk_upload, :sales, user:, year: 2022) }
+
+        it "does not return errors" do
+          expect(parser.errors[:field_2]).not_to be_present
+          expect(parser.errors[:field_3]).not_to be_present
+          expect(parser.errors[:field_4]).not_to be_present
+        end
+      end
+
+      context "when outside of collection year" do
+        around do |example|
+          Timecop.freeze(Date.new(2022, 4, 2)) do
+            example.run
+          end
+          Timecop.return
+        end
+
+        let(:attributes) { setup_section_params.merge({ field_2: "1", field_3: "1", field_4: "22" }) }
+
+        let(:bulk_upload) { create(:bulk_upload, :sales, user:, year: 2022) }
+
+        it "returns errors" do
+          expect(parser.errors[:field_2]).to be_present
+          expect(parser.errors[:field_3]).to be_present
+          expect(parser.errors[:field_4]).to be_present
         end
       end
     end
