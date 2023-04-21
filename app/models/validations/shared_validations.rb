@@ -43,6 +43,15 @@ module Validations::SharedValidations
     end
   end
 
+  def validate_previous_accommodation_postcode(record)
+    postcode = record.ppostcode_full
+    if record.previous_postcode_known? && (postcode.blank? || !postcode.match(POSTCODE_REGEXP))
+      error_message = I18n.t("validations.postcode")
+      record.errors.add :ppostcode_full, message: error_message
+      record.errors.add :ppcodenk, message: error_message
+    end
+  end
+
   def location_during_startdate_validation(record, field)
     location_inactive_status = inactive_status(record.startdate, record.location)
 
@@ -95,6 +104,8 @@ module Validations::SharedValidations
       true
     end
   end
+
+
 
 private
 
