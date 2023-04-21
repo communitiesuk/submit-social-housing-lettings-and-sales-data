@@ -358,6 +358,9 @@ class SalesLog < Log
   end
 
   def combined_income
-    income1 + income2
+    buyer_1_income = income1 || 0
+    buyer_2_income = income2 || 0
+
+    buyer_1_income + buyer_2_income
   end
 end
