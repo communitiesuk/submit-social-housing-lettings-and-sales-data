@@ -303,9 +303,9 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
       let(:attributes) { { bulk_upload:, field_7: "123" } }
 
       it "has errors on setup fields" do
-        errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute)
+        errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_1 field_98 field_97 field_96 field_111 field_113 field_132])
+        expect(errors).to eql(%i[field_1 field_111 field_113 field_96 field_97 field_98])
       end
     end
 
@@ -403,15 +403,13 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
       end
     end
 
-    describe "#field_4" do
+    describe "#field_4" do # mangement group code
       context "when nullable not permitted" do
         let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2) }
         let(:attributes) { { bulk_upload:, field_1: "2", field_4: nil } }
 
         it "cannot be nulled" do
-          setup_errors = parser.errors.select { |e| e.options[:category] == "setup" }
-
-          expect(setup_errors.find { |e| e.attribute == :field_4 }).to be_present
+          expect(parser.errors.where(:field_4, category: :setup).map(&:message)).to eql(["You must answer management group code"])
         end
       end
 
@@ -427,7 +425,7 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
         let(:attributes) { { bulk_upload:, field_1: "1", field_4: "123" } }
 
         it "returns an error" do
-          expect(parser.errors[:field_4]).to be_present
+          expect(parser.errors.where(:field_4, category: :setup)).to be_present
         end
       end
 
@@ -436,7 +434,7 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
         let(:attributes) { { bulk_upload:, field_1: "1", field_4: other_scheme.old_visible_id, field_111: owning_org.old_visible_id } }
 
         it "returns an error" do
-          expect(parser.errors[:field_4]).to include("This management group code does not belong to your organisation, or any of your stock owners / managing agents")
+          expect(parser.errors.where(:field_4, category: :setup).map(&:message)).to include("This management group code does not belong to your organisation, or any of your stock owners / managing agents")
         end
       end
 
@@ -459,15 +457,13 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
       end
     end
 
-    describe "#field_5" do
+    describe "#field_5" do # scheme code
       context "when not nullable" do
         let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2) }
         let(:attributes) { { bulk_upload:, field_1: "2", field_5: nil } }
 
         it "cannot be nulled" do
-          setup_errors = parser.errors.select { |e| e.options[:category] == "setup" }
-
-          expect(setup_errors.find { |e| e.attribute == :field_5 }).to be_present
+          expect(parser.errors.where(:field_5, category: :setup).map(&:message)).to eql(["You must answer scheme code"])
         end
       end
 
@@ -517,8 +513,8 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
           }
         end
 
-        it "returns an error" do
-          expect(parser.errors[:field_5]).to be_present
+        it "returns as setup error" do
+          expect(parser.errors.where(:field_5, category: :setup).map(&:message)).to eql(["Location could be found with provided scheme code"])
         end
       end
     end
@@ -715,21 +711,21 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
         let(:attributes) { { bulk_upload:, field_1: "1", field_96: nil, field_97: nil, field_98: nil } }
 
         it "returns them as setup errors" do
-          setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
-
-          expect(setup_errors.find { |e| e.attribute == :field_96 }).to be_present
-          expect(setup_errors.find { |e| e.attribute == :field_97 }).to be_present
-          expect(setup_errors.find { |e| e.attribute == :field_98 }).to be_present
+          expect(parser.errors.where(:field_96, category: :setup)).to be_present
+          expect(parser.errors.where(:field_97, category: :setup)).to be_present
+          expect(parser.errors.where(:field_98, category: :setup)).to be_present
         end
       end
 
-      context "when one of these fields is blank" do
+      context "when one of these fields is blank", aggregate_failures: true do
         let(:attributes) { { bulk_upload:, field_1: "1", field_96: "1", field_97: "1", field_98: nil } }
 
         it "returns an error only on blank field" do
-          expect(parser.errors[:field_96]).to be_blank
-          expect(parser.errors[:field_97]).to be_blank
-          expect(parser.errors[:field_98]).to be_present
+          expect(parser.errors.where(:field_96, category: :setup)).to be_blank
+          expect(parser.errors.where(:field_97, category: :setup)).to be_blank
+
+          expect(parser.errors.where(:field_98).map(&:message)).to eql(["You must answer tenancy start date (year)"])
+          expect(parser.errors.where(:field_98, category: :setup).map(&:message)).to eql(["You must answer tenancy start date (year)"])
         end
       end
 
@@ -737,7 +733,7 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
         let(:attributes) { { bulk_upload:, field_98: "2022" } }
 
         it "returns an error" do
-          expect(parser.errors[:field_98]).to include("Tenancy start year must be 2 digits")
+          expect(parser.errors.where(:field_98, category: :setup).map(&:message)).to include("Tenancy start year must be 2 digits")
         end
       end
 
@@ -774,9 +770,9 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
         let(:bulk_upload) { create(:bulk_upload, :lettings, user:, year: 2022) }
 
         it "returns errors" do
-          expect(parser.errors[:field_96]).to be_present
-          expect(parser.errors[:field_97]).to be_present
-          expect(parser.errors[:field_98]).to be_present
+          expect(parser.errors.where(:field_96, category: :setup)).to be_present
+          expect(parser.errors.where(:field_97, category: :setup)).to be_present
+          expect(parser.errors.where(:field_98, category: :setup)).to be_present
         end
       end
     end
@@ -788,7 +784,7 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
         it "is not permitted as setup error" do
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
 
-          expect(setup_errors.find { |e| e.attribute == :field_111 }.message).to eql("The owning organisation code is incorrect")
+          expect(setup_errors.find { |e| e.attribute == :field_111 }.message).to eql("You must answer owning organisation")
         end
 
         it "blocks log creation" do
@@ -897,12 +893,10 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
 
     describe "#field_113" do # managing org
       context "when blank" do
-        let(:attributes) { { bulk_upload:, field_113: "", field_4: 1 } }
+        let(:attributes) { setup_section_params.merge(field_113: nil) }
 
         it "is not permitted as setup error" do
-          setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
-
-          expect(setup_errors.find { |e| e.attribute == :field_113 }.message).to eql("The managing organisation code is incorrect")
+          expect(parser.errors.where(:field_113, category: :setup).map(&:message)).to eql(["You must answer managing organisation"])
         end
 
         it "blocks log creation" do
