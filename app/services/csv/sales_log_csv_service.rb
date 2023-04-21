@@ -18,20 +18,30 @@ module Csv
   private
 
     ATTRIBUTES_OF_RELATED_OBJECTS = {
-      created_by_name: %i[created_by name],
       is_dpo: %i[created_by is_dpo],
       owning_organisation_name: %i[owning_organisation name],
     }.freeze
 
-    # can this be made so general it can also be extracted? quite possibly
+    FIELDS_ALWAYS_EXPORTED_AS_CODES = %w[
+      la
+      prevloc
+    ].freeze
+
+    FIELDS_ALWAYS_EXPORTED_AS_LABELS = {
+      "la_label" => "la",
+      "prevloc_label" => "prevloc",
+      "created_by_name" => "created_by_id",
+      "owning_organisation_name" => "owning_organisation_id",
+    }.freeze
+
     def value(attribute, log)
       if ATTRIBUTES_OF_RELATED_OBJECTS.key? attribute.to_sym
         call_chain = ATTRIBUTES_OF_RELATED_OBJECTS[attribute.to_sym]
         call_chain.reduce(log) { |object, next_call| object&.public_send(next_call) }
-      elsif %w[la prevloc].include? attribute # for all exports we output both the codes and labels for these location attributes
+      elsif FIELDS_ALWAYS_EXPORTED_AS_CODES.include? attribute
         log.send(attribute)
-      elsif %w[la_label prevloc_label].include? attribute # as above
-        attribute = attribute.remove("_label")
+      elsif FIELDS_ALWAYS_EXPORTED_AS_LABELS.keys.include? attribute
+        attribute = FIELDS_ALWAYS_EXPORTED_AS_LABELS[attribute]
         field_value = log.send(attribute)
         get_label(field_value, attribute, log)
       else
@@ -46,14 +56,12 @@ module Csv
       end
     end
 
-    # extract - common to lettings log csv service
     def get_label(value, attribute, log)
       log.form
          .get_question(attribute, log)
          &.label_from_value(value)
     end
 
-    # also extract
     def label_if_boolean_value(value)
       return "Yes" if value == true
       return "No" if value == false
@@ -66,11 +74,13 @@ module Csv
       "ppostcode_full" => %w[ppostc1 ppostc2],
       "la" => %w[la la_label],
       "prevloc" => %w[prevloc prevloc_label],
+      "created_by_id" => %w[created_by_name],
+      "owning_organisation_id" => %w[owning_organisation_name],
     }.freeze
 
     def sales_log_attributes
       ordered_questions = FormHandler.instance.ordered_sales_questions_for_all_years
-      ordered_questions.reject! { |q| q.id.match?(/((?<!la)_known)|(_value_check)/) }
+      ordered_questions.reject! { |q| q.id.match?(/((?<!la)_known)|(_check)/) }
       attributes = ordered_questions.flat_map do |question|
         if question.type == "checkbox"
           question.answer_options.keys
@@ -80,7 +90,7 @@ module Csv
           question.id
         end
       end
-      non_question_fields = %w[id status created_at updated_at old_id collection_start_year creation_method created_by_name is_dpo owning_organisation_name]
+      non_question_fields = %w[id status created_at updated_at old_id collection_start_year creation_method is_dpo]
       non_question_fields + attributes
     end
   end
