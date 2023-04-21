@@ -22,4 +22,18 @@ class BulkUploadSalesResultsController < ApplicationController
   def summary
     @bulk_upload = current_user.bulk_uploads.sales.find(params[:id])
   end
+
+  def reset_logs_filters
+    session["logs_filters"] = {}.to_json
+  end
+
+  def set_bulk_upload_logs_filters
+    hash = {
+      years: [""],
+      status: ["", "in_progress"],
+      user: "all",
+    }
+
+    session["logs_filters"] = hash.to_json
+  end
 end

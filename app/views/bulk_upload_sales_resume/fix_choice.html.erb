@@ -1,0 +1,36 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, scope: :form, url: page_bulk_upload_sales_resume_path(@bulk_upload, page: "fix-choice"), method: :patch do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <span class="govuk-caption-l">Bulk upload for sales (<%= @bulk_upload.year_combo %>)</span>
+      <h1 class="govuk-heading-l">How would you like to fix <%= pluralize(@bulk_upload.bulk_upload_errors.count, "error") %>?</h1>
+
+      <div class="govuk-body-l">
+        <%= @bulk_upload.filename %>
+      </div>
+
+      <div class="govuk-body">
+        <%= @form.recommendation %>
+      </div>
+
+      <%= govuk_details(summary_text: "How to choose between fixing errors on the CORE site or in the CSV") do %>
+        <p class="govuk-body">When it comes to fixing errors, there are pros and cons to doing it on a CSV versus doing it on a website.</p>
+
+        <p class="govuk-body">Fixing errors on a CSV file can be beneficial because it allows you to easily make changes to multiple records at once, and you can use tools like Excel to quickly identify and correct errors. However, if the CSV file is not properly formatted, it can be difficult to identify which records contain errors.</p>
+
+        <p class="govuk-body">Fixing errors on a website can be convenient because you can see the data in context and make changes in real-time. However, this approach can be time-consuming if you need to make changes to multiple records, and it may be more difficult to identify errors in a large dataset.</p>
+
+        <p class="govuk-body">Ultimately, the best approach will depend on the specific situation and the nature of the errors that need to be fixed.</p>
+      <% end %>
+
+      <%= f.govuk_collection_radio_buttons :choice,
+            @form.options,
+            :id,
+            :name,
+            legend: { hidden: true } %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

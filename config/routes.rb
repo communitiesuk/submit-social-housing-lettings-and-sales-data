@@ -205,6 +205,15 @@ Rails.application.routes.draw do
           get :summary
         end
       end
+
+      resources :bulk_upload_sales_resume, path: "bulk-upload-resume", only: %i[show update] do
+        member do
+          get :start
+
+          get "*page", to: "bulk_upload_sales_resume#show", as: "page"
+          patch "*page", to: "bulk_upload_sales_resume#update"
+        end
+      end
     end
 
     member do
