@@ -3,7 +3,7 @@ module Validations::SetupValidations
   include CollectionTimeHelper
 
   def validate_startdate_setup(record)
-    return unless record.startdate && date_valid?("startdate", record) && FeatureToggle.startdate_collection_window_validation_enabled?
+    return unless record.startdate && date_valid?("startdate", record)
 
     unless record.startdate.between?(active_collection_start_date, current_collection_end_date)
       record.errors.add :startdate, startdate_validation_error_message
@@ -18,6 +18,14 @@ module Validations::SetupValidations
 
   def validate_location(record)
     location_during_startdate_validation(record, :location_id)
+  end
+
+  def validate_scheme_has_confirmed_locations_validation(record)
+    return unless record.scheme
+
+    unless record.scheme.locations.confirmed.any?
+      record.errors.add :scheme_id, I18n.t("validations.scheme.no_completed_locations")
+    end
   end
 
   def validate_scheme(record)

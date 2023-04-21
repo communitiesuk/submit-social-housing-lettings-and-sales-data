@@ -7,10 +7,7 @@
 <% end %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link(
-    text: "Back",
-    href: back_button_path,
-  ) %>
+  <%= govuk_back_link(href: back_button_path) %>
 <% end %>
 
 <%= form_for(@scheme, method: :patch) do |f| %>

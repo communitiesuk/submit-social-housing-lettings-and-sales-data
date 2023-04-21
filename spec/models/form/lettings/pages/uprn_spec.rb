@@ -12,7 +12,7 @@ RSpec.describe Form::Lettings::Pages::Uprn, type: :model do
   end
 
   it "has correct questions" do
-    expect(page.questions.map(&:id)).to eq(%w[uprn])
+    expect(page.questions.map(&:id)).to eq(%w[uprn_known uprn])
   end
 
   it "has the correct id" do
@@ -36,14 +36,6 @@ RSpec.describe Form::Lettings::Pages::Uprn, type: :model do
   end
 
   describe "has correct routed_to?" do
-    context "when uprn_known != 1" do
-      let(:log) { create(:lettings_log, uprn_known: 0) }
-
-      it "returns false" do
-        expect(page.routed_to?(log)).to eq(false)
-      end
-    end
-
     context "when uprn_known == 1" do
       let(:log) { create(:lettings_log, uprn_known: 1) }
 

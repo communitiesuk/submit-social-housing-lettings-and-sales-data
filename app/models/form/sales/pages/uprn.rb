@@ -6,12 +6,9 @@ class Form::Sales::Pages::Uprn < ::Form::Page
 
   def questions
     @questions ||= [
+      Form::Sales::Questions::UprnKnown.new(nil, nil, self),
       Form::Sales::Questions::Uprn.new(nil, nil, self),
     ]
-  end
-
-  def routed_to?(log, _current_user = nil)
-    log.uprn_known == 1
   end
 
   def skip_text

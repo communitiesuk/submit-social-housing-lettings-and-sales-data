@@ -7,6 +7,7 @@ class Form::Lettings::Questions::AddressLine1 < ::Form::Question
     @type = "text"
     @plain_label = true
     @check_answer_label = "Q12 - Address"
+    @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 
   def answer_label(log, _current_user = nil)

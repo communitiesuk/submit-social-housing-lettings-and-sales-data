@@ -2,7 +2,6 @@
 
 <% content_for :before_content do %>
   <%= govuk_back_link(
-        text: "Back",
         href: case params[:referrer]
               when "check_local_authority"
                 scheme_location_check_answers_path(@scheme, @location, route: params[:route])

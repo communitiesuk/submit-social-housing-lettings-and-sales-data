@@ -131,6 +131,11 @@
     <_2cYears/>
   </Group>
   <Group>
+    <UPRN>12345678</UPRN>
+    <AddressLine1/>
+    <AddressLine2/>
+    <TownCity/>
+    <County/>
     <Q28pc override-field="">SR8 3HF</Q28pc>
     <Q28Auth>Durham</Q28Auth>
     <Q28ONS>E06000047</Q28ONS>

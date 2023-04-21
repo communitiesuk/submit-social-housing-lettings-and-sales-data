@@ -1,5 +1,5 @@
 class Form::Question
-  attr_accessor :id, :header, :hint_text, :description, :questions,
+  attr_accessor :id, :header, :hint_text, :description, :questions, :disable_clearing_if_not_routed_or_dynamic_answer_options,
                 :type, :min, :max, :step, :width, :fields_to_add, :result_field,
                 :conditional_for, :readonly, :answer_options, :page, :check_answer_label,
                 :inferred_answers, :hidden_in_check_answers, :inferred_check_answers_value,
@@ -42,6 +42,7 @@ class Form::Question
       @unresolved_hint_text = hsh["unresolved_hint_text"]
       @question_number = hsh["question_number"]
       @plain_label = hsh["plain_label"]
+      @disable_clearing_if_not_routed_or_dynamic_answer_options = hsh["disable_clearing_if_not_routed_or_dynamic_answer_options"]
     end
   end
 
@@ -226,24 +227,6 @@ class Form::Question
     label
   end
 
-  def answer_option_synonyms(resource)
-    return unless resource.respond_to?(:synonyms)
-
-    resource.synonyms
-  end
-
-  def answer_option_append(resource)
-    return unless resource.respond_to?(:appended_text)
-
-    resource.appended_text
-  end
-
-  def answer_option_hint(resource)
-    return unless resource.respond_to?(:hint)
-
-    resource.hint
-  end
-
   def answer_selected?(log, answer)
     return false unless type == "select"
 
@@ -317,7 +300,11 @@ private
   end
 
   def enabled_inferred_answers(inferred_answers, log)
-    inferred_answers.filter { |_key, value| value.all? { |condition_key, condition_value| log[condition_key] == condition_value } }
+    inferred_answers.filter do |_attribute, condition|
+      condition.all? do |condition_key, condition_value|
+        log.public_send(condition_key) == condition_value
+      end
+    end
   end
 
   def inferred_answer_value(log)

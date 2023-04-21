@@ -227,6 +227,11 @@ RSpec.describe OrganisationsController, type: :request do
             expected_html = "data-qa=\"change-name\" href=\"/organisations/#{organisation.id}/edit\""
             expect(response.body).to include(expected_html)
           end
+
+          it "displays a link to merge organisations" do
+            expect(page).to have_content("Is your organisation merging with another?")
+            expect(page).to have_link("Let us know using this form", href: "/organisations/#{organisation.id}/merge-request")
+          end
         end
 
         context "with organisation that are not in scope for the user, i.e. that they do not belong to" do
@@ -433,6 +438,36 @@ RSpec.describe OrganisationsController, type: :request do
 
         it "does not create an organisation" do
           expect { request }.not_to change(Organisation, :count)
+        end
+      end
+
+      describe "#merge" do
+        context "with an organisation that the user belongs to" do
+          before do
+            get "/organisations/#{organisation.id}/merge-request", headers:, params: {}
+          end
+
+          it "shows the correct content" do
+            expect(page).to have_content("Tell us if your organisation is merging")
+          end
+
+          it "has a correct back link" do
+            expect(page).to have_link("Back", href: "/organisations/#{organisation.id}")
+          end
+
+          it "has a correct start now button" do
+            expect(page).to have_button("Start now")
+          end
+        end
+
+        context "with organisation that are not in scope for the user, i.e. that they do not belong to" do
+          before do
+            get "/organisations/#{unauthorised_organisation.id}/merge-request", headers:, params: {}
+          end
+
+          it "returns not found 404 from org details route" do
+            expect(response).to have_http_status(:not_found)
+          end
         end
       end
     end

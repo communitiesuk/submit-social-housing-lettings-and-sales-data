@@ -61,30 +61,54 @@ class Form
     subsections.find { |s| s.pages.find { |p| p.id == page.id } }
   end
 
-  def next_page(page, log, current_user)
+  def next_page_id(page, log, current_user)
     return page.next_unresolved_page_id || :check_answers if log.unresolved
 
     page_ids = subsection_for_page(page).pages.map(&:id)
     page_index = page_ids.index(page.id)
     page_id = if page.interruption_screen? && log[page.questions[0].id] == 1 && page.routed_to?(log, current_user)
-                previous_page(page_ids, page_index, log, current_user)
+                previous_page_id(page, log, current_user)
               else
                 page_ids[page_index + 1]
               end
-    nxt_page = get_page(page_id)
+    next_page = get_page(page_id)
 
-    return :check_answers if nxt_page.nil?
-    return nxt_page.id if nxt_page.routed_to?(log, current_user)
+    return :check_answers if next_page.nil?
+    return next_page.id if next_page.routed_to?(log, current_user)
 
-    next_page(nxt_page, log, current_user)
+    next_page_id(next_page, log, current_user)
   end
 
   def next_page_redirect_path(page, log, current_user)
-    nxt_page = next_page(page, log, current_user)
-    if nxt_page == :check_answers
+    next_page_id = next_page_id(page, log, current_user)
+    if next_page_id == :check_answers
       "#{type}_log_#{subsection_for_page(page).id}_check_answers_path"
     else
-      "#{type}_log_#{nxt_page}_path"
+      "#{type}_log_#{next_page_id}_path"
+    end
+  end
+
+  def previous_page_id(page, log, current_user)
+    page_ids = subsection_for_page(page).pages.map(&:id)
+    page_index = page_ids.index(page.id)
+    return :tasklist if page_index.zero?
+
+    page_id = page_ids[page_index - 1]
+    previous_page = get_page(page_id)
+
+    return previous_page.id if previous_page.routed_to?(log, current_user)
+
+    previous_page_id(previous_page, log, current_user)
+  end
+
+  def previous_page_redirect_path(page, log, current_user, referrer)
+    previous_page_id = previous_page_id(page, log, current_user)
+    if referrer == "check_answers"
+      "#{type}_log_#{subsection_for_page(page).id}_check_answers_path"
+    elsif previous_page_id == :tasklist
+      "#{type}_log_path"
+    else
+      "#{type}_log_#{previous_page_id}_path"
     end
   end
 
@@ -154,48 +178,78 @@ class Form
     pages.reject { |p| p.routed_to?(log, current_user) }
   end
 
-  def invalidated_questions(log)
-    invalidated_page_questions(log) + invalidated_conditional_questions(log)
+  def reset_not_routed_questions_and_invalid_answers(log)
+    reset_checkbox_questions_if_not_routed(log)
+
+    reset_radio_questions_if_not_routed_or_invalid_answers(log)
+
+    reset_free_user_input_questions_if_not_routed(log)
   end
 
-  def invalidated_page_questions(log, current_user = nil)
-    # we're already treating these fields as a special case and reset their values upon saving a log
-    callback_questions = %w[postcode_known la ppcodenk previous_la_known prevloc postcode_full ppostcode_full location_id address_line1 address_line2 town_or_city county]
-    questions.reject { |q| q.page.routed_to?(log, current_user) || q.derived? || callback_questions.include?(q.id) } || []
-  end
-
-  def reset_not_routed_questions(log)
-    enabled_questions = enabled_page_questions(log)
-    enabled_question_ids = enabled_questions.map(&:id)
-
-    invalidated_page_questions(log).each do |question|
-      if %w[radio checkbox].include?(question.type)
-        enabled_answer_options = enabled_question_ids.include?(question.id) ? enabled_questions.find { |q| q.id == question.id }.answer_options : {}
-        current_answer_option_valid = enabled_answer_options.present? ? enabled_answer_options.key?(log.public_send(question.id).to_s) : false
-
-        if !current_answer_option_valid && log.respond_to?(question.id.to_s)
-          Rails.logger.debug("Cleared #{question.id} value")
-          log.public_send("#{question.id}=", nil)
+  def reset_checkbox_questions_if_not_routed(log)
+    checkbox_questions = routed_and_not_routed_questions_by_type(log, type: "checkbox")
+    checkbox_questions[:not_routed].each do |not_routed_question|
+      valid_options = checkbox_questions[:routed]
+                                        .select { |q| q.id == not_routed_question.id }
+                                        .flat_map { |q| q.answer_options.keys }
+      not_routed_question.answer_options.each_key do |invalid_option|
+        if !log.respond_to?(invalid_option) || valid_options.include?(invalid_option) || log.public_send(invalid_option).nil?
+          next
         else
-
-          (question.answer_options.keys - enabled_answer_options.keys).map do |invalid_answer_option|
-            Rails.logger.debug("Cleared #{invalid_answer_option} value")
-            log.public_send("#{invalid_answer_option}=", nil) if log.respond_to?(invalid_answer_option)
-          end
+          clear_attribute(log, invalid_option)
         end
-      else
-        Rails.logger.debug("Cleared #{question.id} value")
-        log.public_send("#{question.id}=", nil) unless enabled_question_ids.include?(question.id)
       end
     end
   end
 
-  def enabled_page_questions(log)
-    questions - invalidated_page_questions(log)
+  def reset_radio_questions_if_not_routed_or_invalid_answers(log)
+    radio_questions = routed_and_not_routed_questions_by_type(log, type: "radio")
+    valid_radio_options = radio_questions[:routed]
+                                         .group_by(&:id)
+                                         .transform_values! { |q_array| q_array.flat_map { |q| q.answer_options.keys } }
+    radio_questions[:not_routed].each do |not_routed_question|
+      question_id = not_routed_question.id
+      if !log.respond_to?(question_id) || log.public_send(question_id).nil? || valid_radio_options.key?(question_id)
+        next
+      else
+        clear_attribute(log, question_id)
+      end
+    end
+    valid_radio_options.each do |question_id, valid_options|
+      if !log.respond_to?(question_id) || valid_options.include?(log.public_send(question_id).to_s)
+        next
+      else
+        clear_attribute(log, question_id)
+      end
+    end
   end
 
-  def invalidated_conditional_questions(log)
-    questions.reject { |q| q.enabled?(log) } || []
+  def reset_free_user_input_questions_if_not_routed(log)
+    non_radio_checkbox_questions = routed_and_not_routed_questions_by_type(log)
+    enabled_question_ids = non_radio_checkbox_questions[:routed].map(&:id)
+    non_radio_checkbox_questions[:not_routed].each do |not_routed_question|
+      question_id = not_routed_question.id
+      if log.public_send(question_id).nil? || enabled_question_ids.include?(question_id)
+        next
+      else
+        clear_attribute(log, question_id)
+      end
+    end
+  end
+
+  def routed_and_not_routed_questions_by_type(log, type: nil, current_user: nil)
+    questions_by_type = if type
+                          questions.reject { |q| q.type != type || q.disable_clearing_if_not_routed_or_dynamic_answer_options }
+                        else
+                          questions.reject { |q| %w[radio checkbox].include?(q.type) || q.disable_clearing_if_not_routed_or_dynamic_answer_options }
+                        end
+    routed, not_routed = questions_by_type.partition { |q| q.page.routed_to?(log, current_user) || q.derived? }
+    { routed:, not_routed: }
+  end
+
+  def clear_attribute(log, attribute)
+    Rails.logger.debug("Cleared #{attribute} value")
+    log.public_send("#{attribute}=", nil)
   end
 
   def readonly_questions

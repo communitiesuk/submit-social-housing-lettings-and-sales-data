@@ -17,11 +17,11 @@ RSpec.describe Form, type: :model do
   let(:conditional_section_complete_lettings_log) { FactoryBot.build(:lettings_log, :conditional_section_complete) }
 
   describe ".next_page" do
-    let(:previous_page) { form.get_page("person_1_age") }
+    let(:previous_page_id) { form.get_page("person_1_age") }
     let(:value_check_previous_page) { form.get_page("net_income_value_check") }
 
     it "returns the next page given the previous" do
-      expect(form.next_page(previous_page, lettings_log, user)).to eq("person_1_gender")
+      expect(form.next_page_id(previous_page_id, lettings_log, user)).to eq("person_1_gender")
     end
 
     context "when the current page is a value check page" do
@@ -33,12 +33,12 @@ RSpec.describe Form, type: :model do
 
       it "returns the previous page if answer is `No` and the page is routed to" do
         lettings_log.net_income_value_check = 1
-        expect(form.next_page(value_check_previous_page, lettings_log, user)).to eq("net_income")
+        expect(form.next_page_id(value_check_previous_page, lettings_log, user)).to eq("net_income")
       end
 
       it "returns the next page if answer is `Yes` answer and the page is routed to" do
         lettings_log.net_income_value_check = 0
-        expect(form.next_page(value_check_previous_page, lettings_log, user)).to eq("net_income_uc_proportion")
+        expect(form.next_page_id(value_check_previous_page, lettings_log, user)).to eq("net_income_uc_proportion")
       end
     end
   end
@@ -46,31 +46,30 @@ RSpec.describe Form, type: :model do
   describe ".previous_page" do
     context "when the current page is not a value check page" do
       let!(:subsection) { form.get_subsection("conditional_question") }
-      let!(:page_ids) { subsection.pages.map(&:id) }
 
       before do
         lettings_log.preg_occ = 2
       end
 
       it "returns the previous page if the page is routed to" do
-        page_index = page_ids.index("conditional_question_no_second_page")
-        expect(form.previous_page(page_ids, page_index, lettings_log, user)).to eq("conditional_question_no_page")
+        page = subsection.pages.find { |p| p.id == "conditional_question_no_second_page" }
+        expect(form.previous_page_id(page, lettings_log, user)).to eq("conditional_question_no_page")
       end
 
       it "returns the page before the previous one if the previous page is not routed to" do
-        page_index = page_ids.index("conditional_question_no_page")
-        expect(form.previous_page(page_ids, page_index, lettings_log, user)).to eq("conditional_question")
+        page = subsection.pages.find { |p| p.id == "conditional_question_no_page" }
+        expect(form.previous_page_id(page, lettings_log, user)).to eq("conditional_question")
       end
     end
   end
 
   describe "next_page_redirect_path" do
-    let(:previous_page) { form.get_page("net_income") }
+    let(:previous_page_id) { form.get_page("net_income") }
     let(:last_previous_page) { form.get_page("housing_benefit") }
     let(:previous_conditional_page) { form.get_page("conditional_question") }
 
     it "returns a correct page path if there is no conditional routing" do
-      expect(form.next_page_redirect_path(previous_page, lettings_log, user)).to eq("lettings_log_net_income_uc_proportion_path")
+      expect(form.next_page_redirect_path(previous_page_id, lettings_log, user)).to eq("lettings_log_net_income_uc_proportion_path")
     end
 
     it "returns a check answers page if previous page is the last page" do
@@ -205,32 +204,140 @@ RSpec.describe Form, type: :model do
     end
   end
 
-  describe "invalidated_page_questions" do
-    let(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress, needstype: 1) }
-    let(:expected_invalid) { %w[scheme_id retirement_value_check condition_effects cbl conditional_question_no_second_question net_income_value_check dependent_question offered layear declaration] }
+  describe "#reset_not_routed_questions_and_invalid_answers" do
+    around do |example|
+      Singleton.__init__(FormHandler)
+      Timecop.freeze(now) do
+        FormHandler.instance.use_real_forms!
+        example.run
+      end
+      FormHandler.instance.use_fake_forms!
+    end
 
-    context "when dependencies are not met" do
-      it "returns an array of question keys whose pages conditions are not met" do
-        expect(form.invalidated_page_questions(lettings_log).map(&:id).uniq).to eq(expected_invalid)
+    let(:now) { Time.zone.local(2023, 5, 5) }
+
+    context "when there are multiple radio questions for attribute X" do
+      context "and attribute Y is changed such that a different question for X is routed to" do
+        let(:log) { FactoryBot.create(:lettings_log, :setup_completed, :sheltered_housing, startdate: now, renewal: 0, prevten:) }
+
+        context "and the value of X remains valid" do
+          let(:prevten) { 36 }
+
+          it "the value of this attribute is not cleared" do
+            log.renewal = 1
+            log.form.reset_not_routed_questions_and_invalid_answers(log)
+            expect(log.prevten).to be 36
+          end
+        end
+
+        context "and the value of X is now invalid" do
+          let(:prevten) { 30 }
+
+          it "the value of this attribute is cleared" do
+            log.renewal = 1
+            log.form.reset_not_routed_questions_and_invalid_answers(log)
+            expect(log.prevten).to be nil
+          end
+        end
       end
     end
 
-    context "with two pages having the same question and only one has dependencies met" do
-      it "returns an array of question keys whose pages conditions are not met" do
-        lettings_log["preg_occ"] = "No"
-        expect(form.invalidated_page_questions(lettings_log).map(&:id).uniq).to eq(expected_invalid)
+    context "when there is one radio question for attribute X" do
+      context "and the start date or sale date is changed such that the collection year changes and there are different options" do
+        let(:log) { FactoryBot.create(:lettings_log, :setup_completed, :sheltered_housing, startdate: now, sheltered:) }
+
+        context "and the value of X remains valid" do
+          let(:sheltered) { 2 }
+
+          it "the value of this attribute is not cleared" do
+            log.update!(startdate: Time.zone.local(2023, 1, 1))
+            expect(log.sheltered).to be 2
+          end
+        end
+
+        context "and the value of X is now invalid" do
+          let(:sheltered) { 5 }
+
+          it "the value of this attribute is cleared" do
+            log.update!(startdate: Time.zone.local(2023, 1, 1))
+            expect(log.sheltered).to be nil
+          end
+        end
       end
     end
 
-    context "when a question is marked as `derived` and `depends_on: false`" do
-      let(:lettings_log) { FactoryBot.build(:lettings_log, :in_progress, startdate: Time.utc(2022, 4, 2, 10, 36, 49)) }
+    context "when there is one free user input question for an attribute X" do
+      let(:log) { FactoryBot.create(:sales_log, :shared_ownership_setup_complete, staircase: 1, stairbought: 25) }
 
-      it "does not count it's questions as invalidated" do
-        expect(form.enabled_page_questions(lettings_log).map(&:id).uniq).to include("tshortfall_known")
+      context "and attribute Y is changed such that it is no longer routed to" do
+        it "the value of this attribute is cleared" do
+          expect(log.stairbought).to be 25
+          log.staircase = 2
+          log.form.reset_not_routed_questions_and_invalid_answers(log)
+          expect(log.stairbought).to be nil
+        end
+      end
+    end
+
+    context "when there are multiple free user input questions for attribute X" do
+      context "and attribute Y is changed such that a different question for X is routed to" do
+        let(:log) { FactoryBot.create(:sales_log, :saledate_today, :shared_ownership, :privacy_notice_seen, jointpur: 1, jointmore: 2, hholdcount: expected_hholdcount) }
+        let(:expected_hholdcount) { 2 }
+
+        it "the value of this attribute is not cleared" do
+          log.jointpur = 2
+          log.form.reset_not_routed_questions_and_invalid_answers(log)
+          expect(log.hholdcount).to eq expected_hholdcount
+        end
       end
 
-      it "does not route to the page" do
-        expect(form.invalidated_pages(lettings_log).map(&:id)).to include("outstanding_amount_known")
+      context "and attribute Y is changed such that no questions for X are routed to" do
+        let(:log) { FactoryBot.create(:sales_log, :shared_ownership_setup_complete, value: initial_value) }
+        let(:initial_value) { 200_000.to_d }
+
+        it "the value of this attribute is cleared" do
+          expect(log.value).to eq initial_value
+          log.ownershipsch = 2
+          log.form.reset_not_routed_questions_and_invalid_answers(log)
+          expect(log.value).to be nil
+        end
+      end
+    end
+
+    context "when a value is changed such that a checkbox question is no longer routed to" do
+      let(:log) { FactoryBot.create(:lettings_log, :setup_completed, startdate: now, reasonpref: 1, rp_homeless: 1, rp_medwel: 1, rp_hardship: 1) }
+
+      it "all attributes relating to that checkbox question are cleared" do
+        expect(log.rp_homeless).to be 1
+        log.reasonpref = 2
+        log.form.reset_not_routed_questions_and_invalid_answers(log)
+        expect(log.rp_homeless).to be nil
+        expect(log.rp_medwel).to be nil
+        expect(log.rp_hardship).to be nil
+      end
+    end
+
+    context "when an attribute is derived, but no questions for that attribute are routed to" do
+      let(:log) { FactoryBot.create(:sales_log, :outright_sale_setup_complete, value: 200_000) }
+
+      it "the value of this attribute is not cleared" do
+        expect(log.deposit).to be nil
+        log.update!(mortgageused: 2)
+        expect(log.form.questions.any? { |q| q.id == "deposit" && q.page.routed_to?(log, nil) }).to be false
+        expect(log.deposit).not_to be nil
+      end
+    end
+
+    context "when an attribute is related to a callback question with no set answer options, and no questions for that attribute are routed to" do
+      let(:location) { FactoryBot.create(:location) }
+      let(:log) { FactoryBot.create(:lettings_log, :startdate_today) }
+
+      # Pages::PropertyPostcode and questions inside have been removed from form. do we not want to delete and migration delete_column?
+      it "the value of this attribute is not cleared" do
+        expect(log.form.questions.find { |q| q.id == "location_id" }.answer_options.keys).to be_empty
+        log.location_id = location.id
+        log.form.reset_not_routed_questions_and_invalid_answers(log)
+        expect(log.location_id).not_to be nil
       end
     end
   end

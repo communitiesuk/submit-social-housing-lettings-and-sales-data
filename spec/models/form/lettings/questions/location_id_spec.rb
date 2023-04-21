@@ -48,11 +48,13 @@ RSpec.describe Form::Lettings::Questions::LocationId, type: :model do
   context "when getting available locations" do
     let(:scheme) { FactoryBot.create(:scheme) }
     let!(:lettings_log) do
-      FactoryBot.create(:lettings_log, owning_organisation: scheme.owning_organisation, scheme:, needstype: 2)
+      FactoryBot.create(:lettings_log, owning_organisation: scheme.owning_organisation, needstype: 2)
     end
 
     context "when there are no locations" do
-      it "the displayed_answer_options is an empty hash" do
+      it "the displayed_answer_options is an empty hash (the scheme should have failed validation anyway so don't validate here)" do
+        lettings_log.scheme = scheme
+        lettings_log.save!(validate: false)
         expect(question.displayed_answer_options(lettings_log)).to eq({})
       end
     end
@@ -70,6 +72,7 @@ RSpec.describe Form::Lettings::Questions::LocationId, type: :model do
         before do
           FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 13))
           FactoryBot.create(:location, scheme:, startdate: Time.utc(2023, 1, 1))
+          lettings_log.update!(scheme:)
         end
 
         it "the displayed_answer_options is an empty hash" do
@@ -77,10 +80,11 @@ RSpec.describe Form::Lettings::Questions::LocationId, type: :model do
         end
       end
 
-      context "and the locations have a no startdate" do
+      context "and the locations have no startdate" do
         before do
           FactoryBot.create(:location, scheme:, startdate: nil)
           FactoryBot.create(:location, scheme:, startdate: nil)
+          lettings_log.update!(scheme:)
         end
 
         it "the displayed_answer_options shows the locations" do
@@ -92,6 +96,7 @@ RSpec.describe Form::Lettings::Questions::LocationId, type: :model do
         before do
           FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 4, 10))
           FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 12))
+          lettings_log.update!(scheme:)
         end
 
         it "the displayed_answer_options shows the locations" do
@@ -103,9 +108,22 @@ RSpec.describe Form::Lettings::Questions::LocationId, type: :model do
         before do
           FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 10, 10))
           FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 12))
+          lettings_log.update!(scheme:)
         end
 
-        it "the displayed_answer_options shows the active location" do
+        it "the displayed_answer_options shows only the active location" do
+          expect(question.displayed_answer_options(lettings_log).count).to eq(1)
+        end
+      end
+
+      context "and some locations are not confirmed" do
+        before do
+          FactoryBot.create(:location, scheme:, postcode: nil)
+          FactoryBot.create(:location, scheme:)
+          lettings_log.update!(scheme:)
+        end
+
+        it "the displayed_answer_options shows only the confirmed location" do
           expect(question.displayed_answer_options(lettings_log).count).to eq(1)
         end
       end

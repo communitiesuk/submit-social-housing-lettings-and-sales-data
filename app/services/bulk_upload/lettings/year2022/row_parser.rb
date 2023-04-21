@@ -14,37 +14,37 @@ class BulkUpload::Lettings::Year2022::RowParser
     field_9: "What is the tenancy type?",
     field_10: "If 'Other', what is the tenancy type?",
     field_11: "What is the length of the fixed-term tenancy to the nearest year?",
-    field_12: "Age of Person 1",
-    field_13: "Age of Person 2",
-    field_14: "Age of Person 3",
-    field_15: "Age of Person 4",
-    field_16: "Age of Person 5",
-    field_17: "Age of Person 6",
-    field_18: "Age of Person 7",
-    field_19: "Age of Person 8",
-    field_20: "Gender identity of Person 1",
-    field_21: "Gender identity of Person 2",
-    field_22: "Gender identity of Person 3",
-    field_23: "Gender identity of Person 4",
-    field_24: "Gender identity of Person 5",
-    field_25: "Gender identity of Person 6",
-    field_26: "Gender identity of Person 7",
-    field_27: "Gender identity of Person 8",
-    field_28: "Relationship to Person 1 for Person 2",
-    field_29: "Relationship to Person 1 for Person 3",
-    field_30: "Relationship to Person 1 for Person 4",
-    field_31: "Relationship to Person 1 for Person 5",
-    field_32: "Relationship to Person 1 for Person 6",
-    field_33: "Relationship to Person 1 for Person 7",
-    field_34: "Relationship to Person 1 for Person 8",
-    field_35: "Working situation of Person 1",
-    field_36: "Working situation of Person 2",
-    field_37: "Working situation of Person 3",
-    field_38: "Working situation of Person 4",
-    field_39: "Working situation of Person 5",
-    field_40: "Working situation of Person 6",
-    field_41: "Working situation of Person 7",
-    field_42: "Working situation of Person 8",
+    field_12: "Age of person 1",
+    field_13: "Age of person 2",
+    field_14: "Age of person 3",
+    field_15: "Age of person 4",
+    field_16: "Age of person 5",
+    field_17: "Age of person 6",
+    field_18: "Age of person 7",
+    field_19: "Age of person 8",
+    field_20: "Gender identity of person 1",
+    field_21: "Gender identity of person 2",
+    field_22: "Gender identity of person 3",
+    field_23: "Gender identity of person 4",
+    field_24: "Gender identity of person 5",
+    field_25: "Gender identity of person 6",
+    field_26: "Gender identity of person 7",
+    field_27: "Gender identity of person 8",
+    field_28: "Relationship to person 1 for person 2",
+    field_29: "Relationship to person 1 for person 3",
+    field_30: "Relationship to person 1 for person 4",
+    field_31: "Relationship to person 1 for person 5",
+    field_32: "Relationship to person 1 for person 6",
+    field_33: "Relationship to person 1 for person 7",
+    field_34: "Relationship to person 1 for person 8",
+    field_35: "Working situation of person 1",
+    field_36: "Working situation of person 2",
+    field_37: "Working situation of person 3",
+    field_38: "Working situation of person 4",
+    field_39: "Working situation of person 5",
+    field_40: "Working situation of person 6",
+    field_41: "Working situation of person 7",
+    field_42: "Working situation of person 8",
     field_43: "What is the lead tenant's ethnic group?",
     field_44: "What is the lead tenant's nationality?",
     field_45: "Does anybody in the household have links to the UK armed forces?",
@@ -278,58 +278,58 @@ class BulkUpload::Lettings::Year2022::RowParser
   attribute :field_134, :integer
 
   validates :field_1, presence: { message: I18n.t("validations.not_answered", question: "letting type") },
-                      inclusion: { in: (1..12).to_a, message: I18n.t("validations.invalid_option", question: "letting type") }
-  validates :field_4, presence: { if: proc { [2, 4, 6, 8, 10, 12].include?(field_1) } }
+                      inclusion: { in: (1..12).to_a, message: I18n.t("validations.invalid_option", question: "letting type") }, on: :after_log
+  validates :field_4, presence: { if: proc { [2, 4, 6, 8, 10, 12].include?(field_1) } }, on: :after_log
 
-  validates :field_12, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 1 must be a number or the letter R" }
-  validates :field_13, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 2 must be a number or the letter R" }, allow_blank: true
-  validates :field_14, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 3 must be a number or the letter R" }, allow_blank: true
-  validates :field_15, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 4 must be a number or the letter R" }, allow_blank: true
-  validates :field_16, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 5 must be a number or the letter R" }, allow_blank: true
-  validates :field_17, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 6 must be a number or the letter R" }, allow_blank: true
-  validates :field_18, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 7 must be a number or the letter R" }, allow_blank: true
-  validates :field_19, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 8 must be a number or the letter R" }, allow_blank: true
+  validates :field_12, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 1 must be a number or the letter R" }, on: :after_log
+  validates :field_13, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 2 must be a number or the letter R" }, allow_blank: true, on: :after_log
+  validates :field_14, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 3 must be a number or the letter R" }, allow_blank: true, on: :after_log
+  validates :field_15, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 4 must be a number or the letter R" }, allow_blank: true, on: :after_log
+  validates :field_16, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 5 must be a number or the letter R" }, allow_blank: true, on: :after_log
+  validates :field_17, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 6 must be a number or the letter R" }, allow_blank: true, on: :after_log
+  validates :field_18, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 7 must be a number or the letter R" }, allow_blank: true, on: :after_log
+  validates :field_19, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 8 must be a number or the letter R" }, allow_blank: true, on: :after_log
 
-  validates :field_96, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (day)") }
-  validates :field_97, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (month)") }
-  validates :field_98, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (year)") }
+  validates :field_96, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (day)") }, on: :after_log
+  validates :field_97, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (month)") }, on: :after_log
+  validates :field_98, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (year)") }, on: :after_log
 
-  validates :field_98, format: { with: /\A\d{2}\z/, message: I18n.t("validations.setup.startdate.year_not_two_digits") }
+  validates :field_98, format: { with: /\A\d{2}\z/, message: I18n.t("validations.setup.startdate.year_not_two_digits") }, on: :after_log
 
-  validate :validate_data_types
-  validate :validate_nulls
-  validate :validate_relevant_collection_window
-  validate :validate_la_with_local_housing_referral
-  validate :validate_cannot_be_la_referral_if_general_needs_and_la
-  validate :validate_leaving_reason_for_renewal
-  validate :validate_lettings_type_matches_bulk_upload
-  validate :validate_only_one_housing_needs_type
-  validate :validate_no_disabled_needs_conjunction
-  validate :validate_dont_know_disabled_needs_conjunction
-  validate :validate_no_and_dont_know_disabled_needs_conjunction
+  validate :validate_data_types, on: :after_log
+  validate :validate_nulls, on: :after_log
+  validate :validate_relevant_collection_window, on: :after_log
+  validate :validate_la_with_local_housing_referral, on: :after_log
+  validate :validate_cannot_be_la_referral_if_general_needs_and_la, on: :after_log
+  validate :validate_leaving_reason_for_renewal, on: :after_log
+  validate :validate_lettings_type_matches_bulk_upload, on: :after_log
+  validate :validate_only_one_housing_needs_type, on: :after_log
+  validate :validate_no_disabled_needs_conjunction, on: :after_log
+  validate :validate_dont_know_disabled_needs_conjunction, on: :after_log
+  validate :validate_no_and_dont_know_disabled_needs_conjunction, on: :after_log
 
-  validate :validate_owning_org_data_given
-  validate :validate_owning_org_exists
-  validate :validate_owning_org_owns_stock
-  validate :validate_owning_org_permitted
+  validate :validate_owning_org_data_given, on: :after_log
+  validate :validate_owning_org_exists, on: :after_log
+  validate :validate_owning_org_owns_stock, on: :after_log
+  validate :validate_owning_org_permitted, on: :after_log
 
-  validate :validate_managing_org_data_given
-  validate :validate_managing_org_exists
-  validate :validate_managing_org_related
+  validate :validate_managing_org_data_given, on: :after_log
+  validate :validate_managing_org_exists, on: :after_log
+  validate :validate_managing_org_related, on: :after_log
 
-  validate :validate_scheme_related
-  validate :validate_scheme_exists
-  validate :validate_scheme_data_given
+  validate :validate_scheme_related, on: :after_log
+  validate :validate_scheme_exists, on: :after_log
+  validate :validate_scheme_data_given, on: :after_log
 
-  validate :validate_location_related
-  validate :validate_location_exists
-  validate :validate_location_data_given
+  validate :validate_location_related, on: :after_log
+  validate :validate_location_exists, on: :after_log
+  validate :validate_location_data_given, on: :after_log
 
-  validate :validate_created_by_exists
-  validate :validate_created_by_related
-  validate :validate_rent_type
+  validate :validate_created_by_exists, on: :after_log
+  validate :validate_created_by_related, on: :after_log
+  validate :validate_rent_type, on: :after_log
 
-  validate :validate_valid_radio_option
+  validate :validate_valid_radio_option, on: :before_log
 
   def self.question_for_field(field)
     QUESTIONS[field]
@@ -340,9 +340,13 @@ class BulkUpload::Lettings::Year2022::RowParser
 
     return true if blank_row?
 
+    super(:before_log)
+    before_errors = errors.dup
+
     log.valid?
 
-    super
+    super(:after_log)
+    errors.merge!(before_errors)
 
     log.errors.each do |error|
       fields = field_mapping_for_errors[error.attribute] || []
@@ -1089,6 +1093,8 @@ private
 
   def voiddate
     Date.new(field_91 + 2000, field_90, field_89) if field_91.present? && field_90.present? && field_89.present?
+  rescue Date::Error
+    Date.new
   end
 
   def majorrepairs
@@ -1097,6 +1103,8 @@ private
 
   def mrcdate
     Date.new(field_94 + 2000, field_93, field_92) if field_94.present? && field_93.present? && field_92.present?
+  rescue Date::Error
+    Date.new
   end
 
   def prevloc

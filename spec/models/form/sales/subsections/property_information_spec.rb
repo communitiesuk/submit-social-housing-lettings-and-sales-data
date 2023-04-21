@@ -41,17 +41,16 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
       it "has correct pages" do
         expect(property_information.pages.map(&:id)).to eq(
           %w[
-            uprn_known
-            uprn
-            uprn_confirmation
-            address
-            property_local_authority
             property_number_of_bedrooms
             about_price_bedrooms_value_check
             property_unit_type
             monthly_charges_property_type_value_check
             percentage_discount_proptype_value_check
             property_building_type
+            uprn
+            uprn_confirmation
+            address
+            property_local_authority
             about_price_la_value_check
             property_wheelchair_accessible
           ],

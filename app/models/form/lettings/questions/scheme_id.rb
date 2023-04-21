@@ -9,6 +9,11 @@ class Form::Lettings::Questions::SchemeId < ::Form::Question
     @guidance_position = GuidancePosition::BOTTOM
     @guidance_partial = "scheme_selection"
     @question_number = 9
+    @inferred_answers = {
+      "location.name": {
+        "scheme_has_multiple_locations?": false,
+      },
+    }
   end
 
   def answer_options
@@ -39,6 +44,10 @@ class Form::Lettings::Questions::SchemeId < ::Form::Question
 
   def hidden_in_check_answers?(lettings_log, _current_user = nil)
     !supported_housing_selected?(lettings_log)
+  end
+
+  def get_extra_check_answer_value(lettings_log)
+    lettings_log.form.get_question("postcode_full", nil).label_from_value(lettings_log.postcode_full) unless lettings_log.scheme_has_multiple_locations?
   end
 
 private

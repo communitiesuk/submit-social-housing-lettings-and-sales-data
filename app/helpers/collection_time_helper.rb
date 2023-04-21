@@ -1,15 +1,15 @@
 module CollectionTimeHelper
-  def collection_start_year(date)
+  def collection_start_year_for_date(date)
     window_end_date = Time.zone.local(date.year, 4, 1)
     date < window_end_date ? date.year - 1 : date.year
   end
 
   def current_collection_start_year
-    collection_start_year(Time.zone.now)
+    collection_start_year_for_date(Time.zone.now)
   end
 
   def collection_start_date(date)
-    Time.zone.local(collection_start_year(date), 4, 1)
+    Time.zone.local(collection_start_year_for_date(date), 4, 1)
   end
 
   def date_mid_collection_year_formatted(date)
@@ -22,7 +22,7 @@ module CollectionTimeHelper
   end
 
   def collection_end_date(date)
-    Time.zone.local(collection_start_year(date) + 1, 3, 31).end_of_day
+    Time.zone.local(collection_start_year_for_date(date) + 1, 3, 31).end_of_day
   end
 
   def current_collection_end_date

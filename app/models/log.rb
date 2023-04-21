@@ -1,4 +1,6 @@
 class Log < ApplicationRecord
+  include CollectionTimeHelper
+
   self.abstract_class = true
 
   belongs_to :owning_organisation, class_name: "Organisation", optional: true
@@ -46,10 +48,11 @@ class Log < ApplicationRecord
       service = UprnClient.new(uprn)
       service.call
 
-      return errors.add(:uprn, service.error) if service.error.present?
+      return errors.add(:uprn, :uprn_error, message: service.error) if service.error.present?
 
       presenter = UprnDataPresenter.new(service.result)
 
+      self.uprn_known = 1
       self.uprn_confirmed = nil
       self.address_line1 = presenter.address_line1
       self.address_line2 = presenter.address_line2
@@ -87,6 +90,8 @@ class Log < ApplicationRecord
   end
 
   def collection_period_open?
+    return false if older_than_previous_collection_year?
+
     form.end_date > Time.zone.today
   end
 
@@ -133,6 +138,13 @@ class Log < ApplicationRecord
 
 private
 
+  # Handle logs that are older than previous collection start date
+  def older_than_previous_collection_year?
+    return false unless startdate
+
+    startdate < previous_collection_start_date
+  end
+
   def plural_gender_for_person(person_num)
     gender = public_send("sex#{person_num}".to_sym)
     return unless gender
@@ -162,7 +174,7 @@ private
   def reset_invalidated_dependent_fields!
     return unless form
 
-    form.reset_not_routed_questions(self)
+    form.reset_not_routed_questions_and_invalid_answers(self)
     reset_created_by!
   end
 

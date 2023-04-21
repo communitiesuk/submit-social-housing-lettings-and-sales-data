@@ -1,5 +1,6 @@
 module TasklistHelper
   include GovukLinkHelper
+  include CollectionTimeHelper
 
   def get_next_incomplete_section(log)
     log.form.subsections.find { |subsection| subsection.is_incomplete?(log) }
@@ -15,7 +16,7 @@ module TasklistHelper
     if subsection.pages.first.routed_to?(log, current_user)
       subsection.pages.first.id
     else
-      log.form.next_page(subsection.pages.first, log, current_user)
+      log.form.next_page_id(subsection.pages.first, log, current_user)
     end
   end
 
@@ -34,7 +35,9 @@ module TasklistHelper
 
       "You can #{govuk_link_to 'review and make changes to this log', link} until #{log.form.end_date.to_formatted_s(:govuk_date)}.".html_safe
     else
-      "This log is from the #{log.form.start_date.year}/#{log.form.start_date.year + 1} collection window, which is now closed."
+      start_year = log.startdate ? collection_start_year_for_date(log.startdate) : log.form.start_date.year
+
+      "This log is from the #{start_year}/#{start_year + 1} collection window, which is now closed."
     end
   end
 

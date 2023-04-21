@@ -1,6 +1,7 @@
 class Form::Lettings::Questions::LocationId < ::Form::Question
-  def initialize(_id, hsh, page)
-    super("location_id", hsh, page)
+  def initialize(id, hsh, page)
+    super
+    @id = "location_id"
     @check_answer_label = "Location"
     @header = header_text
     @type = "radio"
@@ -11,6 +12,7 @@ class Form::Lettings::Questions::LocationId < ::Form::Question
       },
     }
     @question_number = 10
+    @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 
   def answer_options
@@ -27,7 +29,7 @@ class Form::Lettings::Questions::LocationId < ::Form::Question
   def displayed_answer_options(lettings_log, _user = nil)
     return {} unless lettings_log.scheme
 
-    scheme_location_ids = lettings_log.scheme.locations.pluck(:id)
+    scheme_location_ids = lettings_log.scheme.locations.confirmed.pluck(:id)
     answer_options.select { |k, _v| scheme_location_ids.include?(k.to_i) }
   end
 

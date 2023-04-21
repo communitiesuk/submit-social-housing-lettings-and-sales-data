@@ -77,7 +77,7 @@ module Imports
       attributes["scheme_type"] = safe_string_as_integer(xml_doc, "scheme-type")
       registered_under_care_act = safe_string_as_integer(xml_doc, "reg-home-type")
       attributes["registered_under_care_act"] = registered_under_care_act&.zero? ? nil : registered_under_care_act
-      attributes["support_type"] = safe_string_as_integer(xml_doc, "support-type")
+      attributes["support_type"] = support_type(xml_doc)
       attributes["intended_stay"] = string_or_nil(xml_doc, "intended-stay")
       attributes["mobility_type"] = string_or_nil(xml_doc, "mobility-type")
       attributes["primary_client_group"] = string_or_nil(xml_doc, "client-group-1")
@@ -204,6 +204,13 @@ module Imports
     def parse_date(xml_doc, attribute)
       date = string_or_nil(xml_doc, attribute)
       Time.zone.parse(date) if date
+    end
+
+    def support_type(xml_doc)
+      type = safe_string_as_integer(xml_doc, "support-type")
+      return unless type
+
+      Scheme::SUPPORT_TYPE.value?(type) ? type : 0
     end
   end
 end

@@ -126,10 +126,6 @@ module Imports
       attributes["postcode_full"] = parse_postcode(string_or_nil(xml_doc, "Q14Postcode"))
       attributes["pcodenk"] = 0 if attributes["postcode_full"].present? # known if given
       attributes["soctenant"] = 0 if attributes["ownershipsch"] == 1
-      attributes["ethnic_group2"] = nil # 23/24 variable
-      attributes["ethnicbuy2"] = nil # 23/24 variable
-      attributes["prevshared"] = nil # 23/24 variable
-      attributes["staircasesale"] = nil # 23/24 variable
 
       attributes["previous_la_known"] = 1 if attributes["prevloc"].present?
       if attributes["la"].present?
@@ -157,6 +153,27 @@ module Imports
       attributes["discounted_sale_value_check"] = 0
       attributes["buyer_livein_value_check"] = 0
       attributes["percentage_discount_value_check"] = 0
+
+      # 2023/34 attributes
+      attributes["uprn"] = string_or_nil(xml_doc, "UPRN")
+      attributes["uprn_known"] = attributes["uprn"].present? ? 1 : 0
+      attributes["uprn_confirmed"] = attributes["uprn"].present? ? 1 : 0
+      attributes["address_line1"] = string_or_nil(xml_doc, "AddressLine1")
+      attributes["address_line2"] = string_or_nil(xml_doc, "AddressLine2")
+      attributes["town_or_city"] = string_or_nil(xml_doc, "TownCity")
+      attributes["county"] = string_or_nil(xml_doc, "County")
+
+      attributes["proplen_asked"] = 0 if attributes["proplen"]&.positive?
+      attributes["proplen_asked"] = 1 if attributes["proplen"]&.zero?
+
+      attributes["prevshared"] = unsafe_string_as_integer(xml_doc, "PREVSHARED")
+      attributes["ethnicbuy2"] = unsafe_string_as_integer(xml_doc, "P2Eth")
+      attributes["ethnic_group2"] = ethnic_group(attributes["ethnicbuy2"])
+      attributes["nationalbuy2"] = unsafe_string_as_integer(xml_doc, "P2Nat")
+      attributes["buy2living"] = unsafe_string_as_integer(xml_doc, "BUY2LIVEIN")
+
+      attributes["staircasesale"] = unsafe_string_as_integer(xml_doc, "STAIRCASESALE")
+      attributes["prevtenbuy2"] = unsafe_string_as_integer(xml_doc, "PREVTENBUY2")
 
       # Sets the log creator
       owner_id = meta_field_value(xml_doc, "owner-user-id").strip
@@ -233,6 +250,11 @@ module Imports
         @logs_overridden << sales_log.old_id
         attributes.delete("mortgage")
         save_sales_log(attributes, previous_status)
+      elsif sales_log.errors.of_kind?(:uprn, :uprn_error)
+        @logger.warn("Log #{sales_log.old_id}: Setting uprn_known to no with error: #{sales_log.errors[:uprn].join(', ')}")
+        @logs_overridden << sales_log.old_id
+        attributes["uprn_known"] = 0
+        save_sales_log(attributes, previous_status)
       else
         @logger.error("Log #{sales_log.old_id}: Failed to import")
         sales_log.errors.each do |error|
@@ -282,7 +304,9 @@ module Imports
          student_not_child_value_check
          discounted_sale_value_check
          buyer_livein_value_check
-         percentage_discount_value_check]
+         percentage_discount_value_check
+         uprn_known
+         uprn_confirmed]
     end
 
     def check_status_completed(sales_log, previous_status)
@@ -461,12 +485,14 @@ module Imports
         safe_string_as_decimal(xml_doc, "Q29MonthlyCharges")
       when 2
         safe_string_as_decimal(xml_doc, "Q37MonthlyCharges")
+      when 3
+        safe_string_as_decimal(xml_doc, "Q44MonthlyCharges")
       end
     end
 
     def ownership_from_type(attributes)
       case attributes["type"]
-      when 2, 24, 18, 16, 28, 31, 30
+      when 2, 24, 18, 16, 28, 31, 30, 32
         1 # shared ownership
       when 8, 14, 27, 9, 29, 21, 22
         2 # discounted ownership
@@ -562,6 +588,9 @@ module Imports
         attributes["relat2"] ||= "R"
         attributes["inc2mort"] ||= 3
         attributes["buy2livein"] ||= 1 unless attributes["ownershipsch"] == 3
+        attributes["ethnic_group2"] ||= 17
+        attributes["ethnicbuy2"] ||= 17
+        attributes["nationalbuy2"] ||= 13
       end
 
       # other household members characteristics

@@ -9,8 +9,7 @@ class Form::Sales::Pages::ExtraBorrowingValueCheck < Form::Page
     @title_text = {
       "translation" => "soft_validations.extra_borrowing.title",
     }
-    @informative_text = {
-    }
+    @informative_text = {}
   end
 
   def questions
