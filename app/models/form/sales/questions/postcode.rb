@@ -17,5 +17,6 @@ class Form::Sales::Questions::Postcode < ::Form::Question
         "is_la_inferred" => true,
       },
     }
+    @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 end

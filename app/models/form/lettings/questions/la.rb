@@ -8,6 +8,7 @@ class Form::Lettings::Questions::La < ::Form::Question
     @check_answers_card_number = nil
     @hint_text = ""
     @question_number = 13
+    @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 
   def answer_options

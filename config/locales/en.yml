@@ -365,7 +365,7 @@ en:
           over_20: "The lead tenant must be under 20 as you told us their housing situation immediately before this letting was a children’s home or foster care"
       ecstat:
         retired_over_70: "Person %{person_num} must be retired if over 70"
-        child_under_16: "Person’s %{person_num} working situation must be ’child under 16‘ as you told us they’re under 16"
+        child_under_16: "Person %{person_num}’s working situation must be ‘child under 16’ as you told us they’re under 16"
         child_over_16: "Answer cannot be ‘child under 16’ as you told us the person %{person_num} is older than 16"
         not_student_16_19: "Person’s %{person_num} working situation must be full-time student or prefers not to say as you told us they’re between 16 and 19."
         student_16_19:
@@ -504,6 +504,9 @@ en:
       discounted_ownership_value: "Mortgage, deposit, and grant total must equal %{value_with_discount}"
       monthly_rent:
         higher_than_expected: "Basic monthly rent must be between £0.00 and £9,999.00"
+    merge_request:
+      organisation_part_of_another_merge: "This organisation is part of another merge - select a different one"
+      organisation_not_selected: "Select an organisation from the search list"
 
   soft_validations:
     net_income:

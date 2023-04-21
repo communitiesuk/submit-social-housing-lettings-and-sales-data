@@ -59,4 +59,8 @@ RSpec.describe Form::Sales::Questions::Age2, type: :model do
   it "has the correct max" do
     expect(question.max).to eq(110)
   end
+
+  it "has the correct step" do
+    expect(question.step).to be 1
+  end
 end
