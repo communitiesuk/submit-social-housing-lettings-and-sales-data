@@ -1,8 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Form::Lettings::Pages::MinRentValueCheck, type: :model do
-  subject(:page) { described_class.new(nil, page_definition, subsection) }
+  subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
+  let(:page_id) { "min_rent_value_check" }
   let(:page_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection) }
 
@@ -41,8 +42,14 @@ RSpec.describe Form::Lettings::Pages::MinRentValueCheck, type: :model do
 
   it "has the correct informative_text" do
     expect(page.informative_text).to eq({
-      "arguments" => [{ "arguments_for_key" => "soft_min_for_period", "i18n_template" => "soft_min_for_period", "key" => "field_formatted_as_currency" }],
       "translation" => "soft_validations.rent.min_hint_text",
+      "arguments" => [
+        {
+          "key" => "field_formatted_as_currency",
+          "arguments_for_key" => "soft_min_for_period",
+          "i18n_template" => "soft_min_for_period",
+        },
+      ],
     })
   end
 end

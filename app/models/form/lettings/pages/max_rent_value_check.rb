@@ -1,7 +1,6 @@
 class Form::Lettings::Pages::MaxRentValueCheck < ::Form::Page
-  def initialize(id, hsh, subsection)
-    super
-    @id = "max_rent_value_check"
+  def initialize(id, hsh, subsection, check_answers_card_number: nil)
+    super(id, hsh, subsection)
     @depends_on = [{ "rent_in_soft_max_range?" => true }]
     @title_text = {
       "translation" => "soft_validations.rent.outside_range_title",
@@ -23,9 +22,10 @@ class Form::Lettings::Pages::MaxRentValueCheck < ::Form::Page
         },
       ],
     }
+    @check_answers_card_number = check_answers_card_number
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::RentValueCheck.new(nil, nil, self)]
+    @questions ||= [Form::Lettings::Questions::RentValueCheck.new(nil, nil, self, check_answers_card_number: @check_answers_card_number)]
   end
 end
