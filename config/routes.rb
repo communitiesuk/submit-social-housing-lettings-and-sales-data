@@ -199,7 +199,12 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :bulk_upload_sales_results, path: "bulk-upload-results", only: [:show]
+      resources :bulk_upload_sales_results, path: "bulk-upload-results", only: [:show] do
+        member do
+          get :resume
+          get :summary
+        end
+      end
     end
 
     member do
