@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe BulkUpload::Sales::Year2022::CsvParser do
   subject(:service) { described_class.new(path:) }
 
-  let(:path) { file_fixture("2022_23_sales_bulk_upload.csv") }
+  let(:path) { file_fixture("completed_2022_23_sales_bulk_upload.csv") }
 
   context "when parsing csv with headers" do
     it "returns correct offsets" do
@@ -12,7 +12,7 @@ RSpec.describe BulkUpload::Sales::Year2022::CsvParser do
     end
 
     it "parses csv correctly" do
-      expect(service.row_parsers[0].field_7.to_i).to eq(30)
+      expect(service.row_parsers[0].field_7.to_i).to eq(32)
     end
   end
 
