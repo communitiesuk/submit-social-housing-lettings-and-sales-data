@@ -42,7 +42,7 @@ private
       },
       derived_values: {
         buy1livein: 2,
-      }
+      },
     },
     {
       conditions: {
@@ -52,7 +52,7 @@ private
       derived_values: {
         buy1livein: 2,
         buy2livein: 2,
-      }
+      },
     },
     {
       conditions: {
