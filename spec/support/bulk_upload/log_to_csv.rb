@@ -310,7 +310,7 @@ class BulkUpload::LogToCsv
       log.deposit, # 90
       log.mscharge,
 
-      log.owning_organisation&.old_visible_id,
+      overrides[:organisation_id] || log.owning_organisation&.old_visible_id,
       log.created_by&.email,
       nil,
       hhregres,

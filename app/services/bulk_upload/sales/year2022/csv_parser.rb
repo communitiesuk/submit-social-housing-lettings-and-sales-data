@@ -51,7 +51,7 @@ private
   end
 
   def with_headers?
-    rows[0][0]&.match?(/\D+/)
+    rows.map { |r| r[0] }.any? { |cell| cell&.match?(/field number/i) }
   end
 
   def row_sep

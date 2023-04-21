@@ -259,30 +259,30 @@ class BulkUpload::Sales::Year2022::RowParser
   attribute :field_124, :integer
   attribute :field_125, :integer
 
-  validates :field_2, presence: { message: I18n.t("validations.not_answered", question: "sale completion date (day)") }
-  validates :field_3, presence: { message: I18n.t("validations.not_answered", question: "sale completion date (month)") }
-  validates :field_4, presence: { message: I18n.t("validations.not_answered", question: "sale completion date (year)") }
-  validates :field_4, format: { with: /\A\d{2}\z/, message: I18n.t("validations.setup.saledate.year_not_two_digits") }
+  validates :field_2, presence: { message: I18n.t("validations.not_answered", question: "sale completion date (day)") }, on: :after_log
+  validates :field_3, presence: { message: I18n.t("validations.not_answered", question: "sale completion date (month)") }, on: :after_log
+  validates :field_4, presence: { message: I18n.t("validations.not_answered", question: "sale completion date (year)") }, on: :after_log
+  validates :field_4, format: { with: /\A\d{2}\z/, message: I18n.t("validations.setup.saledate.year_not_two_digits") }, on: :after_log
 
-  validates :field_113, presence: { message: I18n.t("validations.not_answered", question: "ownership type") }
-  validates :field_57, presence: { message: I18n.t("validations.not_answered", question: "shared ownership type") }, if: :shared_ownership?
-  validates :field_76, presence: { message: I18n.t("validations.not_answered", question: "shared ownership type") }, if: :discounted_ownership?
-  validates :field_84, presence: { message: I18n.t("validations.not_answered", question: "shared ownership type") }, if: :outright_sale?
-  validates :field_115, presence: { message: I18n.t("validations.not_answered", question: "will the buyers live in the property") }, if: :outright_sale?
-  validates :field_116, presence: { message: I18n.t("validations.not_answered", question: "joint purchase") }, if: :joint_purchase_asked?
-  validates :field_114, presence: { message: I18n.t("validations.not_answered", question: "company buyer") }, if: :outright_sale?
-  validates :field_109, presence: { message: I18n.t("validations.not_answered", question: "more than 2 buyers") }, if: :joint_purchase?
+  validates :field_113, presence: { message: I18n.t("validations.not_answered", question: "ownership type") }, on: :after_log
+  validates :field_57, presence: { message: I18n.t("validations.not_answered", question: "shared ownership type") }, if: :shared_ownership?, on: :after_log
+  validates :field_76, presence: { message: I18n.t("validations.not_answered", question: "shared ownership type") }, if: :discounted_ownership?, on: :after_log
+  validates :field_84, presence: { message: I18n.t("validations.not_answered", question: "shared ownership type") }, if: :outright_sale?, on: :after_log
+  validates :field_115, presence: { message: I18n.t("validations.not_answered", question: "will the buyers live in the property") }, if: :outright_sale?, on: :after_log
+  validates :field_116, presence: { message: I18n.t("validations.not_answered", question: "joint purchase") }, if: :joint_purchase_asked?, on: :after_log
+  validates :field_114, presence: { message: I18n.t("validations.not_answered", question: "company buyer") }, if: :outright_sale?, on: :after_log
+  validates :field_109, presence: { message: I18n.t("validations.not_answered", question: "more than 2 buyers") }, if: :joint_purchase?, on: :after_log
 
-  validate :validate_nulls
-  validate :validate_valid_radio_option
+  validate :validate_nulls, on: :after_log
+  validate :validate_valid_radio_option, on: :before_log
 
-  validate :validate_owning_org_data_given
-  validate :validate_owning_org_exists
-  validate :validate_owning_org_permitted
+  validate :validate_owning_org_data_given, on: :after_log
+  validate :validate_owning_org_exists, on: :after_log
+  validate :validate_owning_org_permitted, on: :after_log
 
-  validate :validate_created_by_exists
-  validate :validate_created_by_related
-  validate :validate_relevant_collection_window
+  validate :validate_created_by_exists, on: :after_log
+  validate :validate_created_by_related, on: :after_log
+  validate :validate_relevant_collection_window, on: :after_log
 
   def self.question_for_field(field)
     QUESTIONS[field]
@@ -310,9 +310,13 @@ class BulkUpload::Sales::Year2022::RowParser
 
     return true if blank_row?
 
+    super(:before_log)
+    before_errors = errors.dup
+
     log.valid?
 
-    super
+    super(:after_log)
+    errors.merge!(before_errors)
 
     log.errors.each do |error|
       fields = field_mapping_for_errors[error.attribute] || []
@@ -915,8 +919,18 @@ private
 
       fields = field_mapping_for_errors[question_id.to_sym] || []
 
-      fields.each do |field|
-        errors.add(field, I18n.t("validations.invalid_option", question: QUESTIONS[field]))
+      if setup_question?(question)
+        fields.each do |field|
+          if errors[field].present?
+            errors.add(field, I18n.t("validations.invalid_option", question: QUESTIONS[field]), category: :setup)
+          end
+        end
+      else
+        fields.each do |field|
+          unless errors.any? { |e| fields.include?(e.attribute) }
+            errors.add(field, I18n.t("validations.invalid_option", question: QUESTIONS[field]))
+          end
+        end
       end
     end
   end

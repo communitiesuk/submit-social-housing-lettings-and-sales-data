@@ -8,6 +8,7 @@ FactoryBot.define do
       purchid { "PC123" }
       ownershipsch { 2 }
       type { 8 }
+      jointpur { 2 }
       saledate { Time.utc(2023, 2, 2, 10, 36, 49) }
     end
     trait :shared_ownership do

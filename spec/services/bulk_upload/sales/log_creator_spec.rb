@@ -7,7 +7,7 @@ RSpec.describe BulkUpload::Sales::LogCreator do
   let(:user) { create(:user, organisation: owning_org) }
 
   let(:bulk_upload) { create(:bulk_upload, :sales, user:) }
-  let(:path) { file_fixture("2022_23_sales_bulk_upload.csv") }
+  let(:path) { file_fixture("completed_2022_23_sales_bulk_upload.csv") }
 
   describe "#call" do
     context "when a valid csv with new log" do
