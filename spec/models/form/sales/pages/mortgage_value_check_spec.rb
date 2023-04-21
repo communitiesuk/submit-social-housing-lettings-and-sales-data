@@ -43,7 +43,7 @@ RSpec.describe Form::Sales::Pages::MortgageValueCheck, type: :model do
       expect(page.depends_on).to eq([
         {
           "mortgage_over_soft_max?" => true,
-          "jointpur" => 1,
+          "joint_purchase?" => true,
         },
       ])
     end

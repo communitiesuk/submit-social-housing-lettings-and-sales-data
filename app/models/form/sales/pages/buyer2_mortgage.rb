@@ -2,7 +2,7 @@ class Form::Sales::Pages::Buyer2Mortgage < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "buyer_2_mortgage"
-    @depends_on = [{ "jointpur" => 1 }]
+    @depends_on = [{ "joint_purchase?" => true }]
   end
 
   def questions

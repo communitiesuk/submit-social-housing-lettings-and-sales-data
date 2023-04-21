@@ -3,7 +3,7 @@ class Form::Sales::Pages::NumberJointBuyers < ::Form::Page
     super
     @id = "number_joint_buyers"
     @depends_on = [{
-      "jointpur" => 1,
+      "joint_purchase?" => true,
     }]
   end
 

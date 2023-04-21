@@ -28,6 +28,6 @@ RSpec.describe Form::Sales::Pages::Buyer2Income, type: :model do
   end
 
   it "has correct depends_on" do
-    expect(page.depends_on).to eq([{ "jointpur" => 1 }])
+    expect(page.depends_on).to eq([{ "joint_purchase?" => true }])
   end
 end
