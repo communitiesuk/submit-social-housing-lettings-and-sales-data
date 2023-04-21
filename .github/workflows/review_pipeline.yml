@@ -154,7 +154,7 @@ jobs:
         env:
           APP_NAME: dluhc-core-review-${{ github.event.pull_request.number }}
         run: |
-          cf bind-service $APP_NAME dluhc-core-review-csv-bucket --wait
+          cf bind-service $APP_NAME dluhc-core-review-csv-bucket -c '{"allow_external_access": true}' --wait
           cf bind-service $APP_NAME dluhc-core-review-export-bucket --wait
           cf bind-service $APP_NAME dluhc-core-review-import-bucket --wait
 
