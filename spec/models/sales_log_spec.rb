@@ -181,7 +181,7 @@ RSpec.describe SalesLog, type: :model do
     let(:sales_log) { create(:sales_log, :completed) }
 
     it "correctly derives and saves exday, exmonth and exyear" do
-      sales_log.update!(exdate: Time.gm(2022, 5, 4), saledate: Time.gm(2022, 7, 4), ownershipsch: 1, staircase: 2, resale: 2)
+      sales_log.update!(exdate: Time.gm(2022, 5, 4), saledate: Time.gm(2022, 7, 4), ownershipsch: 1, type: 18, staircase: 2, resale: 2, proplen: 0)
       record_from_db = ActiveRecord::Base.connection.execute("select exday, exmonth, exyear from sales_logs where id=#{sales_log.id}").to_a[0]
       expect(record_from_db["exday"]).to eq(4)
       expect(record_from_db["exmonth"]).to eq(5)
@@ -571,8 +571,8 @@ RSpec.describe SalesLog, type: :model do
       end
     end
 
-    context "when service errors" do
-      let(:sales_log) { create(:sales_log, uprn_known: 1, uprn: "123456789", uprn_confirmed: 1) }
+    context "when the API returns an error" do
+      let(:sales_log) { build(:sales_log, :outright_sale_setup_complete, uprn_known: 1, uprn: "123456789", uprn_confirmed: 1) }
       let(:error_message) { "error" }
 
       it "adds error to sales log" do

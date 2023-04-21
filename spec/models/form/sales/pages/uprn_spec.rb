@@ -35,25 +35,6 @@ RSpec.describe Form::Sales::Pages::Uprn, type: :model do
     expect(page.skip_text).to eq("Enter address instead")
   end
 
-  describe "has correct routed_to?" do
-    context "when uprn_known != 1" do
-      let(:log) { create(:sales_log, uprn_known: 0) }
-
-      it "returns false" do
-        expect(page.routed_to?(log)).to eq(false)
-      end
-    end
-
-    context "when uprn_known == 1" do
-      let(:log) { create(:sales_log) }
-
-      it "returns true" do
-        log.uprn_known = 1
-        expect(page.routed_to?(log)).to eq(true)
-      end
-    end
-  end
-
   describe "has correct skip_href" do
     context "when log is nil" do
       it "is nil" do

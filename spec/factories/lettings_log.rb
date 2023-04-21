@@ -158,6 +158,12 @@ FactoryBot.define do
       sheltered { 0 }
       household_charge { 0 }
     end
+    trait :sheltered_housing do
+      needstype { 2 }
+    end
+    trait :startdate_today do
+      startdate { Time.zone.today }
+    end
     created_at { Time.zone.today }
     updated_at { Time.zone.today }
   end

@@ -131,8 +131,17 @@ RSpec.describe TasklistHelper do
 
         it "returns relevant text" do
           Timecop.freeze(now + 1.year) do
-            expect(review_log_text(sales_log)).to eq("This log is from the 2021/2022 collection window, which is now closed.")
+            expect(review_log_text(sales_log)).to eq("This log is from the 2022/2023 collection window, which is now closed.")
           end
+        end
+      end
+
+      context "when older_than_previous_collection_year" do
+        let(:now) { Time.utc(2023, 6, 1) }
+        let(:sales_log) { build(:sales_log, :completed, saledate: Time.utc(2022, 2, 1)) }
+
+        it "returns relevant text" do
+          expect(review_log_text(sales_log)).to eq("This log is from the 2021/2022 collection window, which is now closed.")
         end
       end
     end
@@ -168,8 +177,17 @@ RSpec.describe TasklistHelper do
 
         it "returns relevant text" do
           Timecop.freeze(now + 1.year) do
-            expect(review_log_text(sales_log)).to eq("This log is from the 2021/2022 collection window, which is now closed.")
+            expect(review_log_text(sales_log)).to eq("This log is from the 2022/2023 collection window, which is now closed.")
           end
+        end
+      end
+
+      context "when older_than_previous_collection_year" do
+        let(:now) { Time.utc(2023, 6, 1) }
+        let(:lettings_log) { build(:lettings_log, :completed, startdate: Time.utc(2022, 2, 1)) }
+
+        it "returns relevant text" do
+          expect(review_log_text(lettings_log)).to eq("This log is from the 2021/2022 collection window, which is now closed.")
         end
       end
     end

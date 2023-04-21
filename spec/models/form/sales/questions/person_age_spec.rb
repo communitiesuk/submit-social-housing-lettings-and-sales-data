@@ -40,6 +40,10 @@ RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
     expect(question.width).to eq(3)
   end
 
+  it "has the correct step" do
+    expect(question.step).to be 1
+  end
+
   context "with person 2" do
     let(:person_index) { 2 }
     let(:question_id) { "age2" }
