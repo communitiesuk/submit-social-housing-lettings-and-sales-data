@@ -14,6 +14,10 @@ FactoryBot.define do
       old_visible_id { rand(9_999_999).to_s }
     end
 
+    trait :id_one do
+      id { 1 }
+    end
+
     trait :prp do
       provider_type { "PRP" }
     end

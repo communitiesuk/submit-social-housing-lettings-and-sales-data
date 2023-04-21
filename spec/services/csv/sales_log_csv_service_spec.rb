@@ -2,7 +2,8 @@ require "rails_helper"
 
 RSpec.describe Csv::SalesLogCsvService do
   let(:form_handler_mock) { instance_double(FormHandler) }
-  let!(:log) { create(:sales_log, :completed) }
+  let(:organisation) { create(:organisation, :id_one) }
+  let!(:log) { create(:sales_log, :completed, :id_one, owning_organisation: organisation) }
   let(:service) { described_class.new(export_type: "labels") }
   let(:csv) { CSV.parse(service.prepare_csv(SalesLog.all)) }
 
@@ -45,8 +46,7 @@ RSpec.describe Csv::SalesLogCsvService do
 
   it "returns a csv string with the correct number of logs" do
     create_list(:sales_log, 15)
-    all_logs = SalesLog.all
-    log_count = all_logs.count
+    log_count = SalesLog.count
     expected_row_count_with_headers = log_count + 1
     expect(csv.size).to be expected_row_count_with_headers
   end
@@ -85,6 +85,11 @@ RSpec.describe Csv::SalesLogCsvService do
       la_label_value = csv.second[la_label_column_index]
       expect(la_label_value).to eq "Barnet"
     end
+
+    it "exports the CSV with all values correct" do
+      expected_content = File.open("spec/fixtures/files/sales_logs_csv_export_labels.csv", "r:UTF-8").read
+      expect(service.prepare_csv(SalesLog.all)).to eq expected_content
+    end
   end
 
   context "when exporting values as codes" do
@@ -122,6 +127,11 @@ RSpec.describe Csv::SalesLogCsvService do
       la_label_column_index = csv.first.index("la_label")
       la_label_value = csv.second[la_label_column_index]
       expect(la_label_value).to eq "Barnet"
+    end
+
+    it "exports the CSV with all values correct" do
+      expected_content = File.open("spec/fixtures/files/sales_logs_csv_export_codes.csv", "r:UTF-8").read
+      expect(service.prepare_csv(SalesLog.all)).to eq expected_content
     end
   end
 end
