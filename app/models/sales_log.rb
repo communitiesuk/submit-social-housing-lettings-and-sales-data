@@ -272,6 +272,10 @@ class SalesLog < Log
     jointpur == 2
   end
 
+  def buyer_has_seen_privacy_notice?
+    privacynotice == 1
+  end
+
   def buyer_not_interviewed?
     noint == 1
   end

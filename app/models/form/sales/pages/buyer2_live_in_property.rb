@@ -5,7 +5,7 @@ class Form::Sales::Pages::Buyer2LiveInProperty < ::Form::Page
     @depends_on = [
       {
         "joint_purchase?" => true,
-        "privacynotice" => 1,
+        "buyer_has_seen_privacy_notice?" => true,
       },
       {
         "joint_purchase?" => true,

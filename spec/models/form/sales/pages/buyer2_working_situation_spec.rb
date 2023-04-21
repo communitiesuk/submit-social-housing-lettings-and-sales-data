@@ -30,12 +30,12 @@ RSpec.describe Form::Sales::Pages::Buyer2WorkingSituation, type: :model do
   it "has correct depends_on" do
     expect(page.depends_on).to eq([
       {
-        "jointpur" => 1,
-        "privacynotice" => 1,
+        "joint_purchase?" => true,
+        "buyer_has_seen_privacy_notice?" => true,
       },
       {
-        "jointpur" => 1,
-        "noint" => 1,
+        "joint_purchase?" => true,
+        "buyer_not_interviewed?" => true,
       },
     ])
   end
