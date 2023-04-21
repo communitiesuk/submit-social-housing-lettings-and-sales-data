@@ -63,11 +63,11 @@ RSpec.describe Form::Sales::Questions::UprnKnown, type: :model do
   end
 
   it "has the correct inferred_check_answers_value" do
-    expect(question.hidden_in_check_answers).to eq([
+    expect(question.inferred_check_answers_value).to eq(
       {
         "condition" => { "uprn_known" => 0 },
         "value" => "Not known",
       },
-    ])
+    )
   end
 end
