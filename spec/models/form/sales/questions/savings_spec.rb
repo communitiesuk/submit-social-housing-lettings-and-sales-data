@@ -20,7 +20,7 @@ RSpec.describe Form::Sales::Questions::Savings, type: :model do
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Buyer’s total savings (to nearest £10) before any deposit paid")
+    expect(question.check_answer_label).to eq("Buyer’s total savings before any deposit paid")
   end
 
   it "has the correct type" do
@@ -40,7 +40,7 @@ RSpec.describe Form::Sales::Questions::Savings, type: :model do
   end
 
   it "has correct step" do
-    expect(question.step).to eq(1)
+    expect(question.step).to be 10
   end
 
   it "has correct prefix" do
