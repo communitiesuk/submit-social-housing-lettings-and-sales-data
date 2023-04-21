@@ -47,8 +47,10 @@ class SalesLogsController < LogsController
     all_orgs = params["organisation_select"] == "all" # what's this for? params['organisation_select'] appears to always be nil
     codes_only_export = codes_only_export?(params)
     EmailCsvJob.perform_later(current_user, search_term, @session_filters, all_orgs, nil, codes_only_export, "sales")
-    redirect_to csv_confirmation_lettings_logs_path
+    redirect_to csv_confirmation_sales_logs_path
   end
+
+  def csv_confirmation; end
 
   def post_create_redirect_url(log)
     sales_log_url(log)
