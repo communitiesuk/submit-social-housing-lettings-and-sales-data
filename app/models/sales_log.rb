@@ -26,7 +26,6 @@ class SalesLog < Log
 
   validates_with SalesLogValidator
   before_validation :recalculate_start_year!, if: :saledate_changed?
-  before_validation :reset_invalidated_dependent_fields!
   before_validation :process_postcode_changes!, if: :postcode_full_changed?
   before_validation :process_previous_postcode_changes!, if: :ppostcode_full_changed?
   before_validation :reset_location_fields!, unless: :postcode_known?
@@ -371,45 +370,6 @@ class SalesLog < Log
     when 1 then "shared ownership"
     when 2 then "discounted ownership"
     when 3 then "outright sale"
-    end
-  end
-
-private
-
-  def reset_invalidated_dependent_fields!
-    super
-
-    reset_derived_questions!
-  end
-
-  def reset_derived_questions!
-    dependencies = [
-      {
-        conditions: {
-          buylivein: 2,
-        },
-        derived_attributes: %i[buy1livein buy2livein],
-      },
-      {
-        conditions: {
-          buylivein: 1,
-          jointpur: 1,
-        },
-        derived_attributes: [:buy1livein],
-      },
-    ]
-
-    dependencies.each do |dependency|
-      any_primary_attributes_changed = dependency[:conditions].any? { |attribute, _value| send("#{attribute}_changed?") }
-      next unless any_primary_attributes_changed
-
-      previously_in_derived_state = dependency[:conditions].all? { |attribute, value| send("#{attribute}_was") == value }
-      next unless previously_in_derived_state
-
-      dependency[:derived_attributes].each do |derived_attribute|
-        Rails.logger.debug("Cleared derived #{derived_attribute} value")
-        send("#{derived_attribute}=", nil)
-      end
     end
   end
 end
