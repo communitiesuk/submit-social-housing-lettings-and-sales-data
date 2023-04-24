@@ -7,11 +7,6 @@ class LettingsLogsController < LogsController
   before_action :extract_bulk_upload_from_session_filters, only: [:index]
   before_action :redirect_if_bulk_upload_resolved, only: [:index]
 
-  def authenticate_scope!
-    codes_only_export = codes_only_export?(params)
-    head :unauthorized and return unless current_user.support? || !codes_only_export
-  end
-
   def index
     respond_to do |format|
       format.html do
@@ -119,6 +114,11 @@ class LettingsLogsController < LogsController
   end
 
 private
+
+  def authenticate_scope!
+    codes_only_export = codes_only_export?(params)
+    head :unauthorized and return if codes_only_export && !current_user.support?
+  end
 
   def redirect_if_bulk_upload_resolved
     if @bulk_upload && @bulk_upload.lettings_logs.in_progress.count.zero?

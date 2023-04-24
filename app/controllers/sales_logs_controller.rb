@@ -1,6 +1,7 @@
 class SalesLogsController < LogsController
   before_action :session_filters, if: :current_user, only: %i[index email_csv download_csv]
   before_action :set_session_filters, if: :current_user, only: %i[index email_csv download_csv]
+  before_action :authenticate_scope!, only: %i[download_csv email_csv]
 
   def create
     super { SalesLog.new(log_params) }
@@ -58,5 +59,12 @@ class SalesLogsController < LogsController
 
   def permitted_log_params
     params.require(:sales_log).permit(SalesLog.editable_fields)
+  end
+
+private
+
+  def authenticate_scope!
+    codes_only_export = codes_only_export?(params)
+    head :unauthorized and return if codes_only_export && !current_user.support?
   end
 end
