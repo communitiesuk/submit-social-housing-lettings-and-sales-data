@@ -280,9 +280,61 @@ class BulkUpload::Lettings::Year2023::RowParser
   attribute :field_133, :integer
   attribute :field_134, :decimal
 
-  validates :field_5, presence: { message: I18n.t("validations.not_answered", question: "letting type") },
-                      inclusion: { in: (1..12).to_a, message: I18n.t("validations.invalid_option", question: "letting type") }, on: :after_log
-  validates :field_16, presence: { if: proc { [2, 4, 6, 8, 10, 12].include?(field_5) } }, on: :after_log
+  validate :validate_valid_radio_option, on: :before_log
+
+  validates :field_5,
+            presence: {
+              message: I18n.t("validations.not_answered", question: "letting type"),
+              category: :setup,
+            },
+            inclusion: {
+              in: (1..12).to_a,
+              message: I18n.t("validations.invalid_option", question: "letting type"),
+              unless: -> { field_5.blank? },
+              category: :setup,
+            },
+            on: :after_log
+
+  validates :field_6,
+            presence: {
+              message: I18n.t("validations.not_answered", question: "property renewal"),
+              category: :setup,
+            },
+            on: :after_log
+
+  validates :field_7,
+            presence: {
+              message: I18n.t("validations.not_answered", question: "tenancy start date (day)"),
+              category: :setup,
+            },
+            on: :after_log
+
+  validates :field_8,
+            presence: {
+              message: I18n.t("validations.not_answered", question: "tenancy start date (month)"),
+              category: :setup,
+            },
+            on: :after_log
+
+  validates :field_9,
+            presence: {
+              message: I18n.t("validations.not_answered", question: "tenancy start date (year)"),
+              category: :setup,
+            },
+            format: {
+              with: /\A\d{2}\z/,
+              message: I18n.t("validations.setup.startdate.year_not_two_digits"),
+              category: :setup,
+              unless: -> { field_9.blank? },
+            },
+            on: :after_log
+
+  validates :field_16,
+            presence: {
+              if: proc { [2, 4, 6, 8, 10, 12].include?(field_5) },
+              category: :setup,
+            },
+            on: :after_log
 
   validates :field_46, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 1 must be a number or the letter R" }, on: :after_log
   validates :field_52, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 2 must be a number or the letter R" }, allow_blank: true, on: :after_log
@@ -293,16 +345,8 @@ class BulkUpload::Lettings::Year2023::RowParser
   validates :field_72, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 7 must be a number or the letter R" }, allow_blank: true, on: :after_log
   validates :field_76, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 8 must be a number or the letter R" }, allow_blank: true, on: :after_log
 
-  validates :field_4, presence: { message: I18n.t("validations.not_answered", question: "needs type") }, on: :after_log
-  validates :field_6, presence: { message: I18n.t("validations.not_answered", question: "property renewal") }, on: :after_log
-  validates :field_7, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (day)") }, on: :after_log
-  validates :field_8, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (month)") }, on: :after_log
-  validates :field_9, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (year)") }, on: :after_log
-
-  validates :field_9, format: { with: /\A\d{2}\z/, message: I18n.t("validations.setup.startdate.year_not_two_digits") }, on: :after_log
-
+  validate :validate_needs_type_present
   validate :validate_data_types, on: :after_log
-  validate :validate_nulls, on: :after_log
   validate :validate_relevant_collection_window, on: :after_log
   validate :validate_la_with_local_housing_referral, on: :after_log
   validate :validate_cannot_be_la_referral_if_general_needs_and_la, on: :after_log
@@ -336,7 +380,7 @@ class BulkUpload::Lettings::Year2023::RowParser
 
   validate :validate_declaration_acceptance, on: :after_log
 
-  validate :validate_valid_radio_option, on: :before_log
+  validate :validate_nulls, on: :after_log
 
   validate :validate_uprn_exists_if_any_key_adddress_fields_are_blank, on: :after_log
 
@@ -599,7 +643,7 @@ private
 
       if setup_question?(question)
         fields.each do |field|
-          if errors[field].present?
+          if errors.select { |e| fields.include?(e.attribute) }.none?
             question_text = question.check_answer_label.presence || question.header.presence || "this question"
             errors.add(field, I18n.t("validations.not_answered", question: question_text.downcase), category: :setup)
           end
@@ -620,19 +664,19 @@ private
 
     unless location.scheme == scheme
       block_log_creation!
-      errors.add(:field_17, "Scheme code must relate to a location that is owned by owning organisation or managing organisation")
+      errors.add(:field_17, "Scheme code must relate to a location that is owned by owning organisation or managing organisation", category: :setup)
     end
   end
 
   def validate_location_exists
     if scheme && field_17.present? && location.nil?
-      errors.add(:field_17, "Location could be found with provided scheme code")
+      errors.add(:field_17, "Location could be found with provided scheme code", category: :setup)
     end
   end
 
   def validate_location_data_given
     if supported_housing? && field_17.blank?
-      errors.add(:field_17, "The scheme code must be present", category: "setup")
+      errors.add(:field_17, I18n.t("validations.not_answered", question: "scheme code"), category: "setup")
     end
   end
 
@@ -644,19 +688,19 @@ private
 
     unless owned_by_owning_org || owned_by_managing_org
       block_log_creation!
-      errors.add(:field_16, "This management group code does not belong to your organisation, or any of your stock owners / managing agents")
+      errors.add(:field_16, "This management group code does not belong to your organisation, or any of your stock owners / managing agents", category: :setup)
     end
   end
 
   def validate_scheme_exists
     if field_16.present? && scheme.nil?
-      errors.add(:field_16, "The management group code is not correct")
+      errors.add(:field_16, "The management group code is not correct", category: :setup)
     end
   end
 
   def validate_scheme_data_given
     if supported_housing? && field_16.blank?
-      errors.add(:field_16, "The management group code is not correct", category: "setup")
+      errors.add(:field_16, I18n.t("validations.not_answered", question: "management group code"), category: "setup")
     end
   end
 
@@ -710,7 +754,7 @@ private
   def validate_owning_org_data_given
     if field_1.blank?
       block_log_creation!
-      errors.add(:field_1, "The owning organisation code is incorrect", category: :setup)
+      errors.add(:field_1, I18n.t("validations.not_answered", question: "owning organisation"), category: :setup)
     end
   end
 
