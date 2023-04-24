@@ -33,6 +33,10 @@ module InterruptionScreenHelper
     question.page.affected_question_ids.map { |question_id| log.form.get_question(question_id, log) }
   end
 
+  def interruption_action_href(log, page_id, current_page_id)
+    send("#{log.model_name.param_key}_#{page_id}_path", log, referrer: current_page_id)
+  end
+
 private
 
   def get_value_from_argument(log, argument)
