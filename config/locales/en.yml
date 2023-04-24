@@ -297,6 +297,9 @@ en:
         postcode_known:
           below_hard_min: "Rent is below the absolute minimum expected for a property of this type. Please check the rent, rent period, local authority and number of bedrooms"
           above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type. Please check the rent, rent period, local authority and number of bedrooms"
+        uprn:
+          below_hard_min: "Rent is below the absolute minimum expected for a property of this type based on this UPRN"
+          above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type based on this UPRN"
         la:
           below_hard_min: "Rent is below the absolute minimum expected for a property of this type based on this local authority"
           above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type based on this local authority"

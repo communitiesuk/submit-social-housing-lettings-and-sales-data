@@ -214,6 +214,7 @@ private
       if record.weekly_value(record["brent"]) < rent_range.hard_min
         record.errors.add :brent, I18n.t("validations.financial.brent.below_hard_min")
         record.errors.add :beds, I18n.t("validations.financial.brent.beds.below_hard_min")
+        record.errors.add :uprn, I18n.t("validations.financial.brent.uprn.below_hard_min")
         record.errors.add :la, I18n.t("validations.financial.brent.la.below_hard_min")
         record.errors.add :postcode_known, I18n.t("validations.financial.brent.postcode_known.below_hard_min")
         record.errors.add :scheme_id, I18n.t("validations.financial.brent.scheme_id.below_hard_min")
@@ -226,6 +227,7 @@ private
       if record.weekly_value(record["brent"]) > rent_range.hard_max
         record.errors.add :brent, :over_hard_max, message: I18n.t("validations.financial.brent.above_hard_max")
         record.errors.add :beds, I18n.t("validations.financial.brent.beds.above_hard_max")
+        record.errors.add :uprn, I18n.t("validations.financial.brent.uprn.above_hard_max")
         record.errors.add :la, I18n.t("validations.financial.brent.la.above_hard_max")
         record.errors.add :postcode_known, I18n.t("validations.financial.brent.postcode_known.above_hard_max")
         record.errors.add :scheme_id, I18n.t("validations.financial.brent.scheme_id.above_hard_max")
