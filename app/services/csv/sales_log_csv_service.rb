@@ -40,7 +40,7 @@ module Csv
         call_chain.reduce(log) { |object, next_call| object&.public_send(next_call) }
       elsif FIELDS_ALWAYS_EXPORTED_AS_CODES.include? attribute
         log.send(attribute)
-      elsif FIELDS_ALWAYS_EXPORTED_AS_LABELS.keys.include? attribute
+      elsif FIELDS_ALWAYS_EXPORTED_AS_LABELS.key? attribute
         attribute = FIELDS_ALWAYS_EXPORTED_AS_LABELS[attribute]
         field_value = log.send(attribute)
         get_label(field_value, attribute, log)
