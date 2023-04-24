@@ -355,4 +355,16 @@ class SalesLog < Log
       "outright sale"
     end
   end
+
+  def blank_compound_invalid_non_setup_fields!
+    super
+
+    validate_property_postcode(self)
+    self.pcodenk = nil if errors.of_kind?(:postcode_full, :wrong_format)
+
+    validate_previous_postcode(self)
+    if errors.of_kind?(:postcode_full, :postcodes_not_matching)
+      self.ppcodenk = nil
+    end
+  end
 end
