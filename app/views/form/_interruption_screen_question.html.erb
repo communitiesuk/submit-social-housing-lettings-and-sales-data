@@ -1,22 +1,48 @@
 <%= govuk_panel(
-  title_text: display_title_text(title_text, lettings_log),
   classes: "app-panel--interruption",
 ) do %>
-  <p class="govuk-panel__body"><%= display_informative_text(informative_text, lettings_log) %></p>
-  <%= f.govuk_radio_buttons_fieldset question.id.to_sym,
-    legend: { text: question.header },
-    hint: { text: question.hint_text&.html_safe } do %>
-    <% question.answer_options.map do |key, options| %>
-      <% if key.starts_with?("divider") %>
-        <%= f.govuk_radio_divider %>
-      <% else %>
-        <%= f.govuk_radio_button question.id,
-          key,
-          label: { text: options["value"] },
-          hint: { text: options["hint"] },
-          **stimulus_html_attributes(question) %>
+  <p class="govuk-heading-l"><%= display_title_text(title_text, lettings_log) %></p>
+  <p class="govuk-body-l"><%= display_informative_text(informative_text, lettings_log) %></p>
+  <p class="govuk-body-l"><%= question.header %></p>
+  <p class="govuk-body-l"><%= question.hint_text&.html_safe %></p>
+
+<% end %>
+
+<h1 class="govuk-heading-l">
+  Make sure these answers are all correct
+</h1>
+<%= govuk_summary_list do |summary_list| %>
+  <% soft_validation_affected_questions(question, @log).each do |affected_question| %>
+    <% summary_list.row do |row| %>
+      <% row.key { get_question_label(affected_question) } %>
+      <% row.value do %>
+          <%= simple_format(
+            get_answer_label(affected_question, @log),
+            wrapper_tag: "span",
+            class: "govuk-!-margin-right-4",
+          ) %>
+        <% extra_value = affected_question.get_extra_check_answer_value(@log) %>
+        <% if extra_value && affected_question.answer_label(@log, current_user).present? %>
+          <%= simple_format(
+            extra_value,
+            wrapper_tag: "span",
+            class: "govuk-!-font-weight-regular app-!-colour-muted",
+          ) %>
+        <% end %>
+        <% affected_question.get_inferred_answers(@log).each do |inferred_answer| %>
+          <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= inferred_answer %></span>
+        <% end %>
+      <% end %>
+      <% if @log.collection_period_open? %>
+        <% row.action(
+          text: affected_question.action_text(@log),
+          href: affected_question.interruption_action_href(@log, affected_question.page.id),
+          visually_hidden_text: affected_question.check_answer_label.to_s.downcase,
+        ) %>
       <% end %>
     <% end %>
   <% end %>
-  <%= f.govuk_submit "Save and continue", accesskey: "s", class: "app-button--inverse govuk-!-margin-bottom-0" %>
 <% end %>
+
+<%= f.hidden_field question.id, value: "0" %>
+<%= f.govuk_submit "Save and continue" %>

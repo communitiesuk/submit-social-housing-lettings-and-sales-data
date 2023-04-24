@@ -770,7 +770,8 @@
                     "1": {
                       "value": "No"
                     }
-                  }
+                  },
+                  "affected_question_ids": ["ecstat1", "incfreq", "earnings"]
                 }
               }
             },

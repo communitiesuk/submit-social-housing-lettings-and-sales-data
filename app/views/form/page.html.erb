@@ -7,7 +7,7 @@
 <div data-controller="govukfrontend"></div>
 <%= form_with model: @log, url: request.original_url, method: "post", local: true do |f| %>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-<%= @page.questions[0].type == "interruption_screen" ? "full-from-desktop" : "two-thirds-from-desktop" %>">
+    <div class="govuk-grid-column-two-thirds-from-desktop" %>
       <% remove_other_page_errors(@log, @page) %>
       <%= f.govuk_error_summary %>
 

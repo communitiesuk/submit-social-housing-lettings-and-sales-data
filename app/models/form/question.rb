@@ -4,7 +4,8 @@ class Form::Question
                 :conditional_for, :readonly, :answer_options, :page, :check_answer_label,
                 :inferred_answers, :hidden_in_check_answers, :inferred_check_answers_value,
                 :guidance_partial, :prefix, :suffix, :requires_js, :fields_added, :derived,
-                :check_answers_card_number, :unresolved_hint_text, :question_number, :plain_label
+                :check_answers_card_number, :unresolved_hint_text, :question_number, :plain_label,
+                :affected_question_ids
 
   module GuidancePosition
     TOP = 1
@@ -43,6 +44,7 @@ class Form::Question
       @question_number = hsh["question_number"]
       @plain_label = hsh["plain_label"]
       @disable_clearing_if_not_routed_or_dynamic_answer_options = hsh["disable_clearing_if_not_routed_or_dynamic_answer_options"]
+      @affected_question_ids = hsh["affected_question_ids"] || []
     end
   end
 
@@ -122,6 +124,10 @@ class Form::Question
 
   def action_href(log, page_id)
     "/#{log.model_name.param_key.dasherize}s/#{log.id}/#{page_id.to_s.dasherize}?referrer=check_answers"
+  end
+
+  def interruption_action_href(log, page_id)
+    "/#{log.model_name.param_key.dasherize}s/#{log.id}/#{page_id.to_s.dasherize}"
   end
 
   def unanswered?(log)
