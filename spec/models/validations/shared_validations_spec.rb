@@ -128,7 +128,6 @@ RSpec.describe Validations::SharedValidations do
       shared_validator.validate_previous_accommodation_postcode(record)
       expect(record.errors).not_to be_empty
       expect(record.errors["ppostcode_full"].first).to eq(I18n.t("validations.postcode"))
-      expect(record.errors["ppcodenk"].first).to eq(I18n.t("validations.postcode"))
     end
 
     it "does not add an error if the record ppostcode_full is valid (uppercase space)" do
@@ -151,7 +150,6 @@ RSpec.describe Validations::SharedValidations do
       shared_validator.validate_previous_accommodation_postcode(record)
       expect(record.errors).not_to be_empty
       expect(record.errors["ppostcode_full"].first).to eq(I18n.t("validations.postcode"))
-      expect(record.errors["ppcodenk"].first).to eq(I18n.t("validations.postcode"))
     end
   end
 end

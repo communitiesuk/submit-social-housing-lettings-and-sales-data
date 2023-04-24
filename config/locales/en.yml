@@ -244,6 +244,7 @@ en:
         more_than_rent: "Enter a value less less than the basic rent amount"
         must_be_positive: "Enter a value over £0.01 as you told us there is an outstanding amount"
       hbrentshortfall:
+        outstanding_amount_not_required: "You must have outstanding rent or charges as you have answered the outstanding amount question"
         outstanding_no_benefits: "Answer cannot be ‘yes’ to outstanding amount for basic rent or charges if tenant does not receive housing benefit or Universal Credit or you‘re not sure"
       benefits:
         part_or_full_time: "Answer cannot be ‘all’ for income from Universal Credit, state pensions or benefits if the tenant or their partner works part-time or full-time"
@@ -629,6 +630,8 @@ en:
     offered: "Times previously offered since becoming available"
 
   warnings:
+    bulk_upload_log_creation_logs: "There is 1 log in this bulk upload with 1 error that still 1 need to be fixed after upload."
+    bulk_upload_log_creation_errors: "There is 1 log in this bulk upload with 1 error that still 1 need to be fixed after upload."
     location:
       deactivate:
         existing_logs: "It will not be possible to add logs with this location if their tenancy start date is on or after the date you enter. Any existing logs may be affected."
