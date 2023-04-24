@@ -239,7 +239,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
       describe "#validate_nulls" do
         context "for non-setup questions" do
-          let(:attributes) { { bulk_upload:, field_1: "", field_18: "", field_19: "", field_21: "" } }
+          let(:attributes) { { bulk_upload:, field_1: "a", field_18: "", field_19: "", field_21: "" } }
 
           it "fetches the question's check_answer_label if it exists, otherwise it gets the question's header" do
             parser.valid?
