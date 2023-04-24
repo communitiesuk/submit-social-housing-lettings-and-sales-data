@@ -11,6 +11,7 @@ class FormController < ApplicationController
       mandatory_questions_with_no_response = mandatory_questions_with_no_response(responses_for_page)
 
       if mandatory_questions_with_no_response.empty? && @log.update(responses_for_page.merge(updated_by: current_user))
+        flash[:notice] = "You have successfully updated #{@page.questions.map(&:check_answer_label).join(', ')}" if interruprion_screen_referrer.present?
         redirect_to(successful_redirect_path)
       else
         mandatory_questions_with_no_response.map do |question|
@@ -49,7 +50,7 @@ class FormController < ApplicationController
       page_id = request.path.split("/")[-1].underscore
       @page = form.get_page(page_id)
       @subsection = form.subsection_for_page(@page)
-      if @page.routed_to?(@log, current_user)
+      if @page.routed_to?(@log, current_user) || @page.interruption_screen?
         render "form/page"
       else
         redirect_to @log.lettings? ? lettings_log_path(@log) : sales_log_path(@log)
@@ -120,6 +121,11 @@ private
     referrer.present? && CGI.parse(referrer.split("?")[-1]).present? && CGI.parse(referrer.split("?")[-1])["referrer"][0] == "check_answers"
   end
 
+  def interruprion_screen_referrer
+    referrer = request.headers["HTTP_REFERER"].presence || ""
+    return CGI.parse(referrer.split("?")[-1])["referrer"][0] if referrer.present? && CGI.parse(referrer.split("?")[-1]).present?
+  end
+
   def successful_redirect_path
     if is_referrer_check_answers?
       next_page_id = form.next_page_id(@page, @log, current_user)
@@ -131,6 +137,9 @@ private
       else
         return send("#{@log.model_name.param_key}_#{form.subsection_for_page(@page).id}_check_answers_path", @log)
       end
+    end
+    if interruprion_screen_referrer.present?
+      return send("#{@log.class.name.underscore}_#{interruprion_screen_referrer}_path", @log)
     end
     redirect_path = form.next_page_redirect_path(@page, @log, current_user)
     send(redirect_path, @log)

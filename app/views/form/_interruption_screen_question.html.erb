@@ -1,11 +1,12 @@
-<%= govuk_panel(
-  classes: "app-panel--interruption",
-) do %>
-  <p class="govuk-heading-l"><%= display_title_text(title_text, lettings_log) %></p>
-  <p class="govuk-body-l"><%= display_informative_text(informative_text, lettings_log) %></p>
-  <p class="govuk-body-l"><%= question.header %></p>
-  <p class="govuk-body-l"><%= question.hint_text&.html_safe %></p>
-
+<% if question.page.routed_to?(@log, current_user) %>
+  <%= govuk_panel(
+    classes: "app-panel--interruption",
+  ) do %>
+    <p class="govuk-heading-l"><%= display_title_text(title_text, lettings_log) %></p>
+    <p class="govuk-body-l"><%= display_informative_text(informative_text, lettings_log) %></p>
+    <p class="govuk-body-l"><%= question.header %></p>
+    <p class="govuk-body-l"><%= question.hint_text&.html_safe %></p>
+  <% end %>
 <% end %>
 
 <h1 class="govuk-heading-l">
@@ -36,7 +37,7 @@
       <% if @log.collection_period_open? %>
         <% row.action(
           text: affected_question.action_text(@log),
-          href: affected_question.interruption_action_href(@log, affected_question.page.id),
+          href: affected_question.interruption_action_href(@log, affected_question.page.id, question.page.id),
           visually_hidden_text: affected_question.check_answer_label.to_s.downcase,
         ) %>
       <% end %>
