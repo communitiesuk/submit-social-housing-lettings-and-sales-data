@@ -14,32 +14,34 @@
 </h1>
 <%= govuk_summary_list do |summary_list| %>
   <% soft_validation_affected_questions(question, @log).each do |affected_question| %>
-    <% summary_list.row do |row| %>
-      <% row.key { get_question_label(affected_question) } %>
-      <% row.value do %>
-          <%= simple_format(
-            get_answer_label(affected_question, @log),
-            wrapper_tag: "span",
-            class: "govuk-!-margin-right-4",
-          ) %>
-        <% extra_value = affected_question.get_extra_check_answer_value(@log) %>
-        <% if extra_value && affected_question.answer_label(@log, current_user).present? %>
-          <%= simple_format(
-            extra_value,
-            wrapper_tag: "span",
-            class: "govuk-!-font-weight-regular app-!-colour-muted",
+  <% if affected_question.page.routed_to?(@log, current_user) %>
+      <% summary_list.row do |row| %>
+        <% row.key { get_question_label(affected_question) } %>
+        <% row.value do %>
+            <%= simple_format(
+              get_answer_label(affected_question, @log),
+              wrapper_tag: "span",
+              class: "govuk-!-margin-right-4",
+            ) %>
+          <% extra_value = affected_question.get_extra_check_answer_value(@log) %>
+          <% if extra_value && affected_question.answer_label(@log, current_user).present? %>
+            <%= simple_format(
+              extra_value,
+              wrapper_tag: "span",
+              class: "govuk-!-font-weight-regular app-!-colour-muted",
+            ) %>
+          <% end %>
+          <% affected_question.get_inferred_answers(@log).each do |inferred_answer| %>
+            <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= inferred_answer %></span>
+          <% end %>
+        <% end %>
+        <% if @log.collection_period_open? %>
+          <% row.action(
+            text: affected_question.action_text(@log),
+            href: affected_question.interruption_action_href(@log, affected_question.page.id, question.page.id),
+            visually_hidden_text: affected_question.check_answer_label.to_s.downcase,
           ) %>
         <% end %>
-        <% affected_question.get_inferred_answers(@log).each do |inferred_answer| %>
-          <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= inferred_answer %></span>
-        <% end %>
-      <% end %>
-      <% if @log.collection_period_open? %>
-        <% row.action(
-          text: affected_question.action_text(@log),
-          href: affected_question.interruption_action_href(@log, affected_question.page.id, question.page.id),
-          visually_hidden_text: affected_question.check_answer_label.to_s.downcase,
-        ) %>
       <% end %>
     <% end %>
   <% end %>
