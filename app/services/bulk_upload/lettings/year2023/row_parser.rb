@@ -835,6 +835,7 @@ private
   end
 
   def questions
+    # binding.pry if log.form.subsections.count == 1
     @questions ||= log.form.subsections.flat_map { |ss| ss.applicable_questions(log) }
   end
 

@@ -30,6 +30,11 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
   before do
     create(:organisation_relationship, parent_organisation: owning_org, child_organisation: managing_org)
+    allow(form).to receive(:subsections).and_return([setup_subsection])
+    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(form)
+    allow(setup_subsection).to receive(:pages).and_return([setup_page])
+    allow(setup_page).to receive(:questions).and_return([setup_question])
+    allow(setup_question).to receive(:check_answer_label).and_return(nil)
   end
 
   around do |example|
@@ -238,12 +243,36 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
 
       describe "#validate_nulls" do
-        let(:attributes) { { bulk_upload:, field_18: "", field_19: "", field_21: "" } }
+        context "for setup questions" do
+          let(:attributes) { { bulk_upload:, field_1: "a", field_4: nil, field_6: nil }  }
+          let(:form) { Form.new(nil, 2023, [], "lettings") }
+          let(:setup_subsection) { Form::Lettings::Subsections::Setup.new(nil, nil, form.setup_sections.first) }
+          let(:setup_page) { Form::Lettings::Pages::NeedsType.new(nil, nil, setup_subsection) }
+          let(:setup_question) { Form::Lettings::Questions::NeedsType.new(nil, nil, setup_page) }
 
-        it "fetches the question's check_answer_label if it exists, otherwise it get's the question's header" do
-          parser.valid?
-          expect(parser.errors[:field_19]).to eql(["You must answer q12 - address"])
-          expect(parser.errors[:field_21]).to eql(["You must answer town or city"])
+          # before do
+          #   allow(form).to receive(:subsections).and_return([setup_subsection])
+          #   allow(FormHandler.instance).to receive(:current_lettings_form).and_return(form)
+          #   allow(setup_subsection).to receive(:pages).and_return([setup_page])
+          #   allow(setup_page).to receive(:questions).and_return([setup_question])
+          # end
+
+          it "fetches the question's check_answer_label if it exists, otherwise it gets the question's header" do
+            binding.pry
+            parser.valid?
+            expect(parser.errors[:field_4]).to eql(["You must answer what is the needs type?"])
+            expect(parser.errors[:field_6]).to eql(["You must answer property renewal"])
+          end
+        end
+
+        context "for non-setup questions" do
+          let(:attributes) { { bulk_upload:, field_1: "a", field_18: "", field_19: "", field_21: "" } }
+
+          it "fetches the question's check_answer_label if it exists, otherwise it gets the question's header" do
+            parser.valid?
+            expect(parser.errors[:field_19]).to eql(["You must answer q12 - address"])
+            expect(parser.errors[:field_21]).to eql(["You must answer town or city"])
+          end
         end
       end
     end
