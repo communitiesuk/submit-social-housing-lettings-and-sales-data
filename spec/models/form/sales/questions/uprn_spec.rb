@@ -56,6 +56,7 @@ RSpec.describe Form::Sales::Questions::Uprn, type: :model do
       let(:log) do
         create(
           :sales_log,
+          :completed,
           address_line1: "1, Test Street",
           town_or_city: "Test Town",
           county: "Test County",

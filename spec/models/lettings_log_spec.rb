@@ -112,10 +112,6 @@ RSpec.describe LettingsLog do
       expect(validator).to receive(:validate_shared_housing_rooms)
     end
 
-    it "validates number of times the property has been relet" do
-      expect(validator).to receive(:validate_property_number_of_times_relet)
-    end
-
     it "validates tenancy type" do
       expect(validator).to receive(:validate_fixed_term_tenancy)
       expect(validator).to receive(:validate_other_tenancy_type)
@@ -2314,6 +2310,7 @@ RSpec.describe LettingsLog do
 
       it "returns optional fields" do
         expect(lettings_log.optional_fields).to eq(%w[
+          rent_value_check
           first_time_property_let_as_social_housing
           tenancycode
           propcode
@@ -2328,6 +2325,7 @@ RSpec.describe LettingsLog do
 
       it "returns optional fields" do
         expect(lettings_log.optional_fields).to eq(%w[
+          rent_value_check
           first_time_property_let_as_social_housing
           tenancycode
           propcode
@@ -3104,11 +3102,11 @@ RSpec.describe LettingsLog do
     end
 
     context "when a non setup field is invalid" do
-      subject(:model) { described_class.new(beds: 404) }
+      subject(:model) { build(:lettings_log, :completed, offered: 234) }
 
       it "blanks it" do
         model.valid?
-        expect { model.blank_invalid_non_setup_fields! }.to change(model, :beds)
+        expect { model.blank_invalid_non_setup_fields! }.to change(model, :offered)
       end
     end
   end

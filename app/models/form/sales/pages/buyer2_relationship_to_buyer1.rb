@@ -4,12 +4,12 @@ class Form::Sales::Pages::Buyer2RelationshipToBuyer1 < ::Form::Page
     @id = "buyer_2_relationship_to_buyer_1"
     @depends_on = [
       {
-        "jointpur" => 1,
-        "privacynotice" => 1,
+        "joint_purchase?" => true,
+        "buyer_has_seen_privacy_notice?" => true,
       },
       {
-        "jointpur" => 1,
-        "noint" => 1,
+        "joint_purchase?" => true,
+        "buyer_not_interviewed?" => true,
       },
     ]
   end

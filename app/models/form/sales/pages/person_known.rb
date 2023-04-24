@@ -13,18 +13,18 @@ class Form::Sales::Pages::PersonKnown < Form::Sales::Pages::Person
 
   def depends_on
     if @person_index == 2
-      [{ "jointpur" => 2,
+      [{ "not_joint_purchase?" => true,
          "hholdcount" => {
            "operator" => ">=",
            "operand" => 1,
          } }]
     else
-      [{ "jointpur" => 2,
+      [{ "not_joint_purchase?" => true,
          "hholdcount" => {
            "operator" => ">=",
            "operand" => @person_index - 1,
          } },
-       { "jointpur" => 1,
+       { "joint_purchase?" => true,
          "hholdcount" => {
            "operator" => ">=",
            "operand" => @person_index - 2,

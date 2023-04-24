@@ -9,6 +9,7 @@ class Form::Sales::Questions::NumberOfOthersInProperty < ::Form::Question
     @width = 2
     @min = 0
     @max = 15
+    @step = 1
     @question_number = 35
   end
 

@@ -57,6 +57,10 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
             monthly_charges_property_type_value_check
             percentage_discount_proptype_value_check
             property_building_type
+            uprn
+            uprn_confirmation
+            address
+            property_local_authority
             about_price_la_value_check
             property_wheelchair_accessible
           ],

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_12_143245) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_18_095819) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -354,6 +354,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_12_143245) do
     t.string "collection"
   end
 
+  create_table "merge_request_organisations", force: :cascade do |t|
+    t.integer "merge_request_id"
+    t.integer "merging_organisation_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "merge_requests", force: :cascade do |t|
+    t.integer "requesting_organisation_id"
+    t.text "other_merging_organisations"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "status"
+  end
+
   create_table "organisation_relationships", force: :cascade do |t|
     t.integer "child_organisation_id"
     t.integer "parent_organisation_id"
@@ -573,7 +588,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_12_143245) do
     t.integer "nationalbuy2"
     t.integer "discounted_sale_value_check"
     t.integer "student_not_child_value_check"
-    t.integer "combined_income_value_check"
     t.integer "percentage_discount_value_check"
     t.integer "buyer_livein_value_check"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"

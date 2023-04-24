@@ -35,9 +35,17 @@ Rails.application.routes.draw do
   get "/accessibility-statement", to: "content#accessibility_statement"
   get "/privacy-notice", to: "content#privacy_notice"
   get "/data-sharing-agreement", to: "content#data_sharing_agreement"
+
+  get "/download-23-24-lettings-form", to: "start#download_23_24_lettings_form"
+  get "/download-23-24-lettings-bulk-upload-template", to: "start#download_23_24_lettings_bulk_upload_template"
+  get "/download-23-24-lettings-bulk-upload-legacy-template", to: "start#download_23_24_lettings_bulk_upload_legacy_template"
+  get "/download-23-24-lettings-bulk-upload-specification", to: "start#download_23_24_lettings_bulk_upload_specification"
+
+  get "/download-22-23-lettings-bulk-upload-template", to: "start#download_22_23_lettings_bulk_upload_template"
+  get "/download-22-23-lettings-bulk-upload-specification", to: "start#download_22_23_lettings_bulk_upload_specification"
+
   get "/download-23-24-sales-form", to: "start#download_23_24_sales_form"
   get "/download-22-23-sales-form", to: "start#download_22_23_sales_form"
-  get "/download-23-24-lettings-form", to: "start#download_23_24_lettings_form"
 
   resource :account, only: %i[show edit], controller: "users" do
     get "edit/password", to: "users#edit_password"
@@ -119,7 +127,16 @@ Rails.application.routes.draw do
       get "managing-agents/remove", to: "organisation_relationships#remove_managing_agent"
       post "managing-agents", to: "organisation_relationships#create_managing_agent"
       delete "managing-agents", to: "organisation_relationships#delete_managing_agent"
-      get "merge", to: "organisations#merge"
+      get "merge-request", to: "organisations#merge_request"
+    end
+  end
+
+  resources :merge_requests, path: "/merge-request" do
+    member do
+      get "organisations"
+      patch "organisations", to: "merge_requests#update_organisations"
+      get "organisations/remove", to: "merge_requests#remove_merging_organisation"
+      get "absorbing-organisation"
     end
   end
 

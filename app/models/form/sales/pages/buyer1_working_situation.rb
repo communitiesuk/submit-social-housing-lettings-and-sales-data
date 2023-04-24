@@ -4,10 +4,10 @@ class Form::Sales::Pages::Buyer1WorkingSituation < ::Form::Page
     @id = "buyer_1_working_situation"
     @depends_on = [
       {
-        "privacynotice" => 1,
+        "buyer_has_seen_privacy_notice?" => true,
       },
       {
-        "noint" => 1,
+        "buyer_not_interviewed?" => true,
       },
     ]
   end

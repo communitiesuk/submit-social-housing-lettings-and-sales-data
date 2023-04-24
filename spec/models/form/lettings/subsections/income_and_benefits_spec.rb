@@ -30,8 +30,8 @@ RSpec.describe Form::Lettings::Subsections::IncomeAndBenefits, type: :model do
         rent_bi_weekly
         rent_4_weekly
         rent_monthly
-        min_rent_value_check
-        max_rent_value_check
+        brent_min_rent_value_check
+        brent_max_rent_value_check
         outstanding
         outstanding_amount
       ],

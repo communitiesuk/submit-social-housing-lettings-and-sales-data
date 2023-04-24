@@ -10,6 +10,30 @@ FactoryBot.define do
       type { 8 }
       saledate { Time.utc(2023, 2, 2, 10, 36, 49) }
     end
+    trait :shared_ownership do
+      ownershipsch { 1 }
+      type { 30 }
+    end
+    trait :privacy_notice_seen do
+      privacynotice { 1 }
+    end
+    trait :saledate_today do
+      saledate { Time.zone.today }
+    end
+    trait :shared_ownership_setup_complete do
+      saledate_today
+      ownershipsch { 1 }
+      type { 30 }
+      jointpur { 2 }
+    end
+    trait :outright_sale_setup_complete do
+      saledate_today
+      ownershipsch { 3 }
+      type { 10 }
+      companybuy { 2 }
+      buylivein { 1 }
+      jointpur { 2 }
+    end
     trait :completed do
       ownershipsch { 2 }
       type { 8 }

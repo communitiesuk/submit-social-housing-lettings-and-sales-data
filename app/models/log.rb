@@ -48,7 +48,7 @@ class Log < ApplicationRecord
       service = UprnClient.new(uprn)
       service.call
 
-      return errors.add(:uprn, service.error) if service.error.present?
+      return errors.add(:uprn, :uprn_error, message: service.error) if service.error.present?
 
       presenter = UprnDataPresenter.new(service.result)
 
@@ -174,7 +174,7 @@ private
   def reset_invalidated_dependent_fields!
     return unless form
 
-    form.reset_not_routed_questions(self)
+    form.reset_not_routed_questions_and_invalid_answers(self)
     reset_created_by!
   end
 

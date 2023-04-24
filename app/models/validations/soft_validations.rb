@@ -40,7 +40,12 @@ module Validations::SoftValidations
   def rent_in_soft_max_range?
     return unless brent && weekly_value(brent) && startdate
 
-    rent_range = LaRentRange.find_by(start_year: collection_start_year, la:, beds: beds_for_la_rent_range, lettype: get_lettype)
+    rent_range = LaRentRange.find_by(
+      start_year: collection_start_year,
+      la:,
+      beds: beds_for_la_rent_range,
+      lettype: get_lettype,
+    )
     if beds.present? && rent_range.present? && beds > LaRentRange::MAX_BEDS
       weekly_value(brent) > rent_range.soft_max
     elsif rent_range.present?

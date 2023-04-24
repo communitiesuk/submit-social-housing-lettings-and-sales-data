@@ -11,6 +11,7 @@ class Form::Lettings::Questions::Ppcodenk < ::Form::Question
     @conditional_for = { "ppostcode_full" => [1] }
     @hidden_in_check_answers = { "depends_on" => [{ "ppcodenk" => 0 }, { "ppcodenk" => 1 }] }
     @question_number = 80
+    @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 
   ANSWER_OPTIONS = { "1" => { "value" => "Yes" }, "0" => { "value" => "No" } }.freeze
