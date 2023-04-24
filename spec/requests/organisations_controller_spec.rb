@@ -367,7 +367,7 @@ RSpec.describe OrganisationsController, type: :request do
         end
       end
 
-      context "when viewing logs for other organisation" do
+      context "when viewing lettings logs for other organisation" do
         it "does not display the lettings logs" do
           get "/organisations/#{unauthorised_organisation.id}/lettings-logs", headers:, params: {}
           expect(response).to have_http_status(:unauthorized)
@@ -381,7 +381,7 @@ RSpec.describe OrganisationsController, type: :request do
         end
       end
 
-      context "when viewing logs for your organisation" do
+      context "when viewing lettings logs for your organisation" do
         it "does not display the logs" do
           get "/organisations/#{organisation.id}/lettings-logs", headers:, params: {}
           expect(response).to have_http_status(:unauthorized)
@@ -390,6 +390,34 @@ RSpec.describe OrganisationsController, type: :request do
         it "prevents CSV download" do
           expect {
             post "/organisations/#{organisation.id}/lettings-logs/email-csv", headers:, params: {}
+          }.not_to enqueue_job(EmailCsvJob)
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context "when viewing sales logs for other organisation" do
+        it "does not display the sales logs" do
+          get "/organisations/#{unauthorised_organisation.id}/sales-logs", headers:, params: {}
+          expect(response).to have_http_status(:unauthorized)
+        end
+
+        it "prevents CSV download" do
+          expect {
+            post "/organisations/#{unauthorised_organisation.id}/sales-logs/email-csv", headers:, params: {}
+          }.not_to enqueue_job(EmailCsvJob)
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context "when viewing sales logs for your organisation" do
+        it "does not display the logs" do
+          get "/organisations/#{organisation.id}/sales-logs", headers:, params: {}
+          expect(response).to have_http_status(:unauthorized)
+        end
+
+        it "prevents CSV download" do
+          expect {
+            post "/organisations/#{organisation.id}/sales-logs/email-csv", headers:, params: {}
           }.not_to enqueue_job(EmailCsvJob)
           expect(response).to have_http_status(:unauthorized)
         end
@@ -544,7 +572,7 @@ RSpec.describe OrganisationsController, type: :request do
         end
       end
 
-      context "when viewing logs for other organisation" do
+      context "when viewing lettings logs for other organisation" do
         it "does not display the logs" do
           get "/organisations/#{unauthorised_organisation.id}/lettings-logs", headers:, params: {}
           expect(response).to have_http_status(:unauthorized)
@@ -558,7 +586,7 @@ RSpec.describe OrganisationsController, type: :request do
         end
       end
 
-      context "when viewing logs for your organisation" do
+      context "when viewing lettings logs for your organisation" do
         it "does not display the logs" do
           get "/organisations/#{organisation.id}/lettings-logs", headers:, params: {}
           expect(response).to have_http_status(:unauthorized)
@@ -567,6 +595,34 @@ RSpec.describe OrganisationsController, type: :request do
         it "prevents CSV download" do
           expect {
             post "/organisations/#{organisation.id}/lettings-logs/email-csv", headers:, params: {}
+          }.not_to enqueue_job(EmailCsvJob)
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context "when viewing sales logs for other organisation" do
+        it "does not display the logs" do
+          get "/organisations/#{unauthorised_organisation.id}/sales-logs", headers:, params: {}
+          expect(response).to have_http_status(:unauthorized)
+        end
+
+        it "prevents CSV download" do
+          expect {
+            post "/organisations/#{unauthorised_organisation.id}/sales-logs/email-csv", headers:, params: {}
+          }.not_to enqueue_job(EmailCsvJob)
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context "when viewing sales logs for your organisation" do
+        it "does not display the logs" do
+          get "/organisations/#{organisation.id}/sales-logs", headers:, params: {}
+          expect(response).to have_http_status(:unauthorized)
+        end
+
+        it "prevents CSV download" do
+          expect {
+            post "/organisations/#{organisation.id}/sales-logs/email-csv", headers:, params: {}
           }.not_to enqueue_job(EmailCsvJob)
           expect(response).to have_http_status(:unauthorized)
         end
@@ -1176,7 +1232,7 @@ RSpec.describe OrganisationsController, type: :request do
       sign_in user
     end
 
-    context "when they view the logs tab" do
+    context "when they view the lettings logs tab" do
       before do
         FactoryBot.create(:lettings_log, owning_organisation: organisation)
       end
@@ -1221,7 +1277,59 @@ RSpec.describe OrganisationsController, type: :request do
       end
     end
 
-    describe "GET #download_csv" do
+    context "when they view the sales logs tab" do
+      before do
+        FactoryBot.create(:sales_log, owning_organisation: organisation)
+      end
+
+      it "has CSV download buttons with the correct paths if at least 1 log exists" do
+        get "/organisations/#{organisation.id}/sales-logs"
+        expect(page).to have_link("Download (CSV)", href: "/organisations/#{organisation.id}/sales-logs/csv-download?codes_only=false")
+        expect(page).to have_link("Download (CSV, codes only)", href: "/organisations/#{organisation.id}/sales-logs/csv-download?codes_only=true")
+      end
+
+      context "when you download the CSV" do
+        let(:other_organisation) { FactoryBot.create(:organisation) }
+
+        before do
+          FactoryBot.create_list(:sales_log, 2, owning_organisation: organisation)
+          FactoryBot.create(:sales_log, owning_organisation: organisation, status: "pending", skip_update_status: true)
+          FactoryBot.create_list(:sales_log, 2, owning_organisation: other_organisation)
+        end
+
+        it "only includes logs from that organisation" do
+          get "/organisations/#{organisation.id}/sales-logs/csv-download?codes_only=false"
+
+          expect(page).to have_text("You've selected 3 logs.")
+        end
+
+        it "provides the organisation to the mail job" do
+          expect {
+            post "/organisations/#{organisation.id}/sales-logs/email-csv?status[]=completed&codes_only=false", headers:, params: {}
+          }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed] }, false, organisation, false, "sales")
+        end
+
+        it "provides the log type to the mail job" do
+          log_type = "sales"
+          expect {
+            post "/organisations/#{organisation.id}/sales-logs/email-csv?status[]=completed&codes_only=false", headers:, params: {}
+          }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed] }, false, organisation, false, log_type)
+        end
+
+        it "provides the export type to the mail job" do
+          codes_only_export_type = false
+          expect {
+            post "/organisations/#{organisation.id}/sales-logs/email-csv?codes_only=#{codes_only_export_type}", headers:, params: {}
+          }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, organisation, codes_only_export_type, "sales")
+          codes_only_export_type = true
+          expect {
+            post "/organisations/#{organisation.id}/sales-logs/email-csv?codes_only=#{codes_only_export_type}", headers:, params: {}
+          }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, organisation, codes_only_export_type, "sales")
+        end
+      end
+    end
+
+    describe "GET #download_lettings_csv" do
       it "renders a page with the correct header" do
         get "/organisations/#{organisation.id}/lettings-logs/csv-download?codes_only=false", headers:, params: {}
         header = page.find_css("h1")
@@ -1253,6 +1361,43 @@ RSpec.describe OrganisationsController, type: :request do
       it "when query string contains search parameter, form contains hidden field with correct value" do
         search_term = "blam"
         get "/organisations/#{organisation.id}/lettings-logs/csv-download?codes_only=true&search=#{search_term}", headers:, params: {}
+        hidden_field = page.find("form.button_to").find_field("search", type: "hidden")
+        expect(hidden_field.value).to eq(search_term)
+      end
+    end
+
+    describe "GET #download_sales_csv" do
+      it "renders a page with the correct header" do
+        get "/organisations/#{organisation.id}/sales-logs/csv-download?codes_only=false", headers:, params: {}
+        header = page.find_css("h1")
+        expect(header.text).to include("Download CSV")
+      end
+
+      it "renders a form with the correct target containing a button with the correct text" do
+        get "/organisations/#{organisation.id}/sales-logs/csv-download?codes_only=false", headers:, params: {}
+        form = page.find("form.button_to")
+        expect(form[:method]).to eq("post")
+        expect(form[:action]).to eq("/organisations/#{organisation.id}/sales-logs/email-csv")
+        expect(form).to have_button("Send email")
+      end
+
+      it "when codes_only query parameter is false, form contains hidden field with correct value" do
+        codes_only = false
+        get "/organisations/#{organisation.id}/sales-logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
+        hidden_field = page.find("form.button_to").find_field("codes_only", type: "hidden")
+        expect(hidden_field.value).to eq(codes_only.to_s)
+      end
+
+      it "when codes_only query parameter is true, form contains hidden field with correct value" do
+        codes_only = true
+        get "/organisations/#{organisation.id}/sales-logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
+        hidden_field = page.find("form.button_to").find_field("codes_only", type: "hidden")
+        expect(hidden_field.value).to eq(codes_only.to_s)
+      end
+
+      it "when query string contains search parameter, form contains hidden field with correct value" do
+        search_term = "blam"
+        get "/organisations/#{organisation.id}/sales-logs/csv-download?codes_only=true&search=#{search_term}", headers:, params: {}
         hidden_field = page.find("form.button_to").find_field("search", type: "hidden")
         expect(hidden_field.value).to eq(search_term)
       end
