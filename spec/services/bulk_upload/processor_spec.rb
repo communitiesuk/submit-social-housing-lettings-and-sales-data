@@ -208,6 +208,7 @@ RSpec.describe BulkUpload::Processor do
           managing_organisation: owning_org,
           startdate: Time.zone.local(2022, 10, 1),
           renewal: 2,
+          declaration: 1,
         )
       end
 
@@ -258,6 +259,7 @@ RSpec.describe BulkUpload::Processor do
           startdate: Time.zone.local(2022, 10, 1),
           renewal: 2,
           created_by: other_user, # unaffiliated user
+          declaration: 1,
         )
       end
 

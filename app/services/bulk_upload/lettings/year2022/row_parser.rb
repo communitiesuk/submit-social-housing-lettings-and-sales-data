@@ -329,6 +329,8 @@ class BulkUpload::Lettings::Year2022::RowParser
   validate :validate_created_by_related, on: :after_log
   validate :validate_rent_type, on: :after_log
 
+  validate :validate_declaration_acceptance, on: :after_log
+
   validate :validate_valid_radio_option, on: :before_log
 
   def self.question_for_field(field)
@@ -391,6 +393,12 @@ class BulkUpload::Lettings::Year2022::RowParser
   end
 
 private
+
+  def validate_declaration_acceptance
+    unless field_132 == 1
+      errors.add(:field_132, I18n.t("validations.declaration.missing"), category: :setup)
+    end
+  end
 
   def validate_valid_radio_option
     log.attributes.each do |question_id, _v|

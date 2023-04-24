@@ -25,6 +25,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       field_7: now.day.to_s,
       field_8: now.month.to_s,
       field_9: now.strftime("%g"),
+      field_45: "1",
     }
   end
 
@@ -244,7 +245,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       it "has errors on setup fields" do
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_1 field_2 field_4 field_5 field_6 field_7 field_8 field_9])
+        expect(errors).to eql(%i[field_1 field_2 field_4 field_45 field_5 field_6 field_7 field_8 field_9])
       end
     end
 
