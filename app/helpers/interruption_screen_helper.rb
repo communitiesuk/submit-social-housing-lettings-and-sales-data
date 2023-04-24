@@ -30,7 +30,7 @@ module InterruptionScreenHelper
   end
 
   def soft_validation_affected_questions(question, log)
-    question.affected_question_ids.map { |question_id| log.form.get_question(question_id, log) }
+    question.page.affected_question_ids.map { |question_id| log.form.get_question(question_id, log) }
   end
 
 private

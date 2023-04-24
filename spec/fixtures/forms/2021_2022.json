@@ -770,10 +770,10 @@
                     "1": {
                       "value": "No"
                     }
-                  },
-                  "affected_question_ids": ["ecstat1", "incfreq", "earnings"]
+                  }
                 }
-              }
+              },
+              "affected_question_ids": ["ecstat1", "incfreq", "earnings"]
             },
             "net_income_uc_proportion": {
               "questions": {
