@@ -334,7 +334,7 @@ class BulkUpload::Lettings::Year2023::RowParser
 
   validate :validate_valid_radio_option, on: :before_log
 
-  validate :validate_uprn_exists_if_any_key_adddress_fields_are_blank
+  validate :validate_uprn_exists_if_any_key_adddress_fields_are_blank, on: :after_log
 
   def self.question_for_field(field)
     QUESTIONS[field]
