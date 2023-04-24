@@ -238,12 +238,14 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
 
       describe "#validate_nulls" do
-        let(:attributes) { { bulk_upload:, field_18: "", field_19: "", field_21: "" } }
+        context "for non-setup questions" do
+          let(:attributes) { { bulk_upload:, field_1: "", field_18: "", field_19: "", field_21: "" } }
 
-        it "fetches the question's check_answer_label if it exists, otherwise it get's the question's header" do
-          parser.valid?
-          expect(parser.errors[:field_19]).to eql(["You must answer q12 - address"])
-          expect(parser.errors[:field_21]).to eql(["You must answer town or city"])
+          it "fetches the question's check_answer_label if it exists, otherwise it get's the question's header" do
+            parser.valid?
+            expect(parser.errors[:field_19]).to eql(["You must answer q12 - address"])
+            expect(parser.errors[:field_21]).to eql(["You must answer town or city"])
+          end
         end
       end
     end
