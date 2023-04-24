@@ -48,4 +48,10 @@
 <% end %>
 
 <%= f.hidden_field question.id, value: "0" %>
-<%= f.govuk_submit "Save and continue" %>
+<div class="govuk-button-group">
+  <%= f.govuk_submit "Save and continue" %>
+  <%= govuk_link_to(
+    (@page.skip_text || "Skip for now"),
+    (@page.skip_href(@log) || send(@log.form.next_page_redirect_path(@page, @log, current_user), @log)),
+  ) %>
+</div>
