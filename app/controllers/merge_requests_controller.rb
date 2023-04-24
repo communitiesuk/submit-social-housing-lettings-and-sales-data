@@ -1,5 +1,5 @@
 class MergeRequestsController < ApplicationController
-  before_action :find_resource, only: %i[update organisations update_organisations remove_merging_organisation]
+  before_action :find_resource, only: %i[update organisations update_organisations remove_merging_organisation absorbing_organisation confirm_telephone_number new_org_name]
   before_action :authenticate_user!
   before_action :authenticate_scope!, except: [:create]
 
@@ -13,12 +13,18 @@ class MergeRequestsController < ApplicationController
     render_not_found
   end
 
+  def absorbing_organisation; end
+  def confirm_telephone_number; end
+  def new_org_name; end
+
   def organisations
     @answer_options = organisations_answer_options
   end
 
   def update
-    if @merge_request.update(merge_request_params)
+    if params.dig(:merge_request, :absorbing_organisation_id) == "other"
+      redirect_to next_page_path
+    elsif @merge_request.update(merge_request_params)
       redirect_to next_page_path
     else
       render previous_template, status: :unprocessable_entity
@@ -53,7 +59,12 @@ private
   end
 
   def merge_request_params
-    merge_params = params.fetch(:merge_request, {}).permit(:requesting_organisation_id, :other_merging_organisations, :status)
+    merge_params = params.fetch(:merge_request, {}).permit(
+      :requesting_organisation_id,
+      :other_merging_organisations,
+      :status,
+      :absorbing_organisation_id,
+    )
 
     if merge_params[:requesting_organisation_id].present? && (current_user.data_coordinator? || current_user.data_provider?)
       merge_params[:requesting_organisation_id] = current_user.organisation.id
@@ -63,7 +74,10 @@ private
   end
 
   def merge_request_organisation_params
-    { merge_request: @merge_request, merging_organisation_id: params[:merge_request][:merging_organisation] }
+    {
+      merge_request: @merge_request,
+      merging_organisation_id: params.dig(:merge_request, :merging_organisation),
+    }
   end
 
   def find_resource
@@ -71,11 +85,22 @@ private
   end
 
   def next_page_path
-    absorbing_organisation_merge_request_path(@merge_request)
+    if params.dig(:merge_request, :absorbing_organisation_id) == "other"
+      # TODO: flow to be implemented in follow up PR
+      new_org_name_merge_request_path(@merge_request)
+    elsif params.dig(:merge_request, :absorbing_organisation_id).present?
+      confirm_telephone_number_merge_request_path(@merge_request)
+    else
+      absorbing_organisation_merge_request_path(@merge_request)
+    end
   end
 
   def previous_template
-    :organisations
+    if params.dig(:merge_request, :absorbing_organisation_id).present?
+      :absorbing_organisation
+    else
+      :organisations
+    end
   end
 
   def authenticate_scope!

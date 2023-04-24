@@ -1,0 +1,13 @@
+<% content_for :before_content do %>
+  <% title = "Tell us if your organisation is merging" %>
+  <% content_for :title, title %>
+  <%= govuk_back_link(href: :back) %>
+<% end %>
+
+<h2 class="govuk-heading-l">What is <%= @merge_request.absorbing_organisation.name %>'s telephone number?</h2>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <p class="govuk-body">Confirm the telephone number on file, or enter a new one.</p>
+  </div>
+</div>
