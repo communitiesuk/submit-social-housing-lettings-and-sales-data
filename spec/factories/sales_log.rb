@@ -11,9 +11,6 @@ FactoryBot.define do
       jointpur { 2 }
       saledate { Time.utc(2023, 2, 2, 10, 36, 49) }
     end
-    trait :id_one do
-      id { 1 }
-    end
     trait :shared_ownership do
       ownershipsch { 1 }
       type { 30 }

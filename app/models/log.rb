@@ -137,13 +137,7 @@ class Log < ApplicationRecord
   end
 
   def creation_method
-    if bulk_upload_id.present?
-      "bulk upload"
-    elsif old_id.present?
-      "migrated"
-    else
-      "single log"
-    end
+    bulk_upload_id ? "bulk upload" : "single log"
   end
 
 private

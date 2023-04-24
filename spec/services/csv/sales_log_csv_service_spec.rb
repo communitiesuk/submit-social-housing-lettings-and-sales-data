@@ -2,8 +2,8 @@ require "rails_helper"
 
 RSpec.describe Csv::SalesLogCsvService do
   let(:form_handler_mock) { instance_double(FormHandler) }
-  let(:organisation) { create(:organisation, :id_one) }
-  let!(:log) { create(:sales_log, :completed, :id_one, owning_organisation: organisation) }
+  let(:organisation) { create(:organisation) }
+  let!(:log) { create(:sales_log, :completed, owning_organisation: organisation) }
   let(:service) { described_class.new(export_type: "labels") }
   let(:csv) { CSV.parse(service.prepare_csv(SalesLog.all)) }
 

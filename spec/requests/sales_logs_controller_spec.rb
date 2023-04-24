@@ -346,7 +346,7 @@ RSpec.describe SalesLogsController, type: :request do
           end
 
           it "displays the labelled CSV download link, with the search included in the query params" do
-            get "/sales-logs?search=#{log_to_search.id}", headers: headers, params: {}
+            get "/sales-logs?search=#{log_to_search.id}", headers:, params: {}
             download_link = page.find_link("Download (CSV)")
             download_link_params = CGI.parse(URI.parse(download_link[:href]).query)
             expect(download_link_params).to include("search" => [log_to_search.id.to_s])
@@ -555,6 +555,8 @@ RSpec.describe SalesLogsController, type: :request do
         end
 
         context "and export type is codes only" do
+          let(:codes_only) { true }
+
           it "has a hidden field with the export type" do
             expect(page).to have_field("codes_only", type: "hidden", with: codes_only)
           end
@@ -573,7 +575,7 @@ RSpec.describe SalesLogsController, type: :request do
     end
   end
 
-  describe "POST #email-csv", focus: true do
+  describe "POST #email-csv" do
     let(:other_organisation) { FactoryBot.create(:organisation) }
     let(:user) { FactoryBot.create(:user, :support) }
     let!(:sales_log) do

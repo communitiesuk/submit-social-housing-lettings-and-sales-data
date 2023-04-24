@@ -18,6 +18,9 @@ module Csv
   private
 
     ATTRIBUTES_OF_RELATED_OBJECTS = {
+      day: %i[saledate day],
+      month: %i[saledate month],
+      year: %i[saledate year],
       is_dpo: %i[created_by is_dpo],
       owning_organisation_name: %i[owning_organisation name],
     }.freeze
@@ -34,6 +37,11 @@ module Csv
       "owning_organisation_name" => "owning_organisation_id",
     }.freeze
 
+    DATE_FIELDS = %w[
+      created_at
+      updated_at
+    ]
+
     def value(attribute, log)
       if ATTRIBUTES_OF_RELATED_OBJECTS.key? attribute.to_sym
         call_chain = ATTRIBUTES_OF_RELATED_OBJECTS[attribute.to_sym]
@@ -44,6 +52,8 @@ module Csv
         attribute = FIELDS_ALWAYS_EXPORTED_AS_LABELS[attribute]
         field_value = log.send(attribute)
         get_label(field_value, attribute, log)
+      elsif DATE_FIELDS.include? attribute
+        log.send(attribute)&.iso8601
       else
         value = log.public_send(attribute)
         case @export_type
@@ -68,6 +78,7 @@ module Csv
     end
 
     ATTRIBUTE_MAPPINGS = {
+      "saledate" => %w[day month year],
       "exdate" => %w[exday exmonth exyear],
       "hodate" => %w[hoday homonth hoyear],
       "postcode_full" => %w[pcode1 pcode2],
@@ -80,7 +91,7 @@ module Csv
 
     def sales_log_attributes
       ordered_questions = FormHandler.instance.ordered_sales_questions_for_all_years
-      ordered_questions.reject! { |q| q.id.match?(/((?<!la)_known)|(_check)/) }
+      ordered_questions.reject! { |q| q.id.match?(/((?<!la)_known)|(_check)|(_asked)/) }
       attributes = ordered_questions.flat_map do |question|
         if question.type == "checkbox"
           question.answer_options.keys
