@@ -11,4 +11,8 @@ class Form::Lettings::Questions::PregnancyValueCheck < ::Form::Question
   end
 
   ANSWER_OPTIONS = { "0" => { "value" => "Yes" }, "1" => { "value" => "No" } }.freeze
+
+  def affected_question_ids
+    %w[preg_occ sex1 sex2 sex3 sex4 sex5 sex6 sex7 sex8]
+  end
 end
