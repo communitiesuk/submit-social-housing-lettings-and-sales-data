@@ -141,6 +141,7 @@ private
     if interruprion_screen_referrer.present?
       return send("#{@log.class.name.underscore}_#{interruprion_screen_referrer}_path", @log)
     end
+
     redirect_path = form.next_page_redirect_path(@page, @log, current_user)
     send(redirect_path, @log)
   end
