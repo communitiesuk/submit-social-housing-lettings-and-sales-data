@@ -5,6 +5,4 @@ RSpec.describe Validations::LocalAuthorityValidations do
 
   let(:validator_class) { Class.new { include Validations::LocalAuthorityValidations } }
   let(:record) { FactoryBot.create(:lettings_log) }
-
-
 end
