@@ -10,42 +10,32 @@ class Form::Lettings::Questions::CreatedById < ::Form::Question
   end
 
   def answer_options
-    return ANSWER_OPTS unless ActiveRecord::Base.connected?
-
-    User.select(:id, :name, :email).each_with_object(ANSWER_OPTS.dup) do |user, hsh|
-      hsh[user.id] = "#{user.name} (#{user.email})"
-      hsh
-    end
+    ANSWER_OPTS
   end
 
-  def displayed_answer_options(log, user = nil)
-    return ANSWER_OPTS unless user
-    return ANSWER_OPTS unless user.support? || user.data_coordinator?
+  def displayed_answer_options(log, current_user = nil)
+    return ANSWER_OPTS unless current_user
 
-    user_ids = [""]
-    user_ids += if user.support?
-                  [
-                    (log.owning_organisation&.users&.pluck(:id) if log.owning_organisation),
-                    (log.managing_organisation&.users&.pluck(:id) if log.managing_organisation),
-                  ]
-                else
-                  user.organisation.users.pluck(:id)
-                end.flatten.uniq
+    users = []
+    users += if current_user.support?
+               [
+                 (log.owning_organisation&.users if log.owning_organisation),
+                 (log.managing_organisation&.users if log.managing_organisation),
+               ].flatten
+             else
+               current_user.organisation.users
+             end.uniq.compact
 
-    answer_options.select { |k, _v| user_ids.include?(k) }
+    users.each_with_object(ANSWER_OPTS.dup) do |user, hsh|
+      hsh[user.id] = present_user(user)
+      hsh
+    end
   end
 
   def label_from_value(value, _log = nil, _user = nil)
     return unless value
 
-    answer_options[value]
-  end
-
-  def hidden_in_check_answers?(_log, current_user)
-    return false if current_user.support?
-    return false if current_user.data_coordinator?
-
-    true
+    present_user(User.find(value))
   end
 
   def derived?
@@ -53,6 +43,10 @@ class Form::Lettings::Questions::CreatedById < ::Form::Question
   end
 
 private
+
+  def present_user(user)
+    "#{user.name} (#{user.email})"
+  end
 
   def selected_answer_option_is_derived?(_log)
     true

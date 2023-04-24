@@ -10,30 +10,25 @@ class Form::Sales::Questions::CreatedById < ::Form::Question
   end
 
   def answer_options
-    return ANSWER_OPTS unless ActiveRecord::Base.connected?
-
-    User.select(:id, :name, :email).each_with_object(ANSWER_OPTS.dup) do |user, hsh|
-      hsh[user.id] = "#{user.name} (#{user.email})"
-      hsh
-    end
+    ANSWER_OPTS
   end
 
-  def displayed_answer_options(log, user = nil)
+  def displayed_answer_options(log, current_user = nil)
     return ANSWER_OPTS unless log.owning_organisation
-    return ANSWER_OPTS unless user
-    return ANSWER_OPTS unless user.support? || user.data_coordinator?
+    return ANSWER_OPTS unless current_user
 
-    users = user.support? ? log.owning_organisation.users : user.organisation.users
+    users = current_user.support? ? log.owning_organisation.users : current_user.organisation.users
 
-    user_ids = users.pluck(:id) + [""]
-
-    answer_options.select { |k, _v| user_ids.include?(k) }
+    users.each_with_object(ANSWER_OPTS.dup) do |user, hsh|
+      hsh[user.id] = present_user(user)
+      hsh
+    end
   end
 
   def label_from_value(value, _log = nil, _user = nil)
     return unless value
 
-    answer_options[value]
+    present_user(User.find(value))
   end
 
   def hidden_in_check_answers?(_log, current_user)
@@ -48,6 +43,10 @@ class Form::Sales::Questions::CreatedById < ::Form::Question
   end
 
 private
+
+  def present_user(user)
+    "#{user.name} (#{user.email})"
+  end
 
   def selected_answer_option_is_derived?(_log)
     false
