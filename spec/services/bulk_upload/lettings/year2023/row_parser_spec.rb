@@ -273,7 +273,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
     describe "#field_3" do # created_by
       context "when blank" do
-        let(:attributes) { { bulk_upload:, field_3: "" } }
+        let(:attributes) { { bulk_upload:, field_3: "", field_4: 1 } }
 
         it "is permitted" do
           expect(parser.errors[:field_3]).to be_blank
@@ -695,7 +695,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
     describe "#field_1" do # owning org
       context "when blank" do
-        let(:attributes) { { bulk_upload:, field_1: "" } }
+        let(:attributes) { { bulk_upload:, field_1: "", field_4: 1 } }
 
         it "is not permitted as setup error" do
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
@@ -757,7 +757,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
     describe "#field_2" do # managing org
       context "when blank" do
-        let(:attributes) { { bulk_upload:, field_2: "" } }
+        let(:attributes) { { bulk_upload:, field_2: "", field_4: 1 } }
 
         it "is not permitted as setup error" do
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
@@ -951,7 +951,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
 
       context "when uprn blank" do
-        let(:attributes) { { bulk_upload:, field_18: "" } }
+        let(:attributes) { { bulk_upload:, field_18: "", field_4: 1 } }
 
         it "sets to 0" do
           expect(parser.log.uprn_known).to be(0)
@@ -1003,7 +1003,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
     ].each do |known, age, field|
       describe "##{known} and ##{age}" do
         context "when #{field} is blank" do
-          let(:attributes) { { bulk_upload:, field.to_s => nil } }
+          let(:attributes) { { bulk_upload:, field.to_s => nil, field_4: 1 } }
 
           it "sets ##{known} 1" do
             expect(parser.log.public_send(known)).to be(1)
@@ -1298,7 +1298,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           end
 
           context "when no" do
-            let(:attributes) { { bulk_upload:, hash[:field] => "" } }
+            let(:attributes) { { bulk_upload:, hash[:field] => "", field_4: 1 } }
 
             it "sets value from correct mapping" do
               expect(parser.log.public_send(hash[:attribute])).to be_nil
@@ -1448,7 +1448,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
 
       context "when mrcdate not given" do
-        let(:attributes) { { bulk_upload:, field_36: "", field_37: "", field_38: "" } }
+        let(:attributes) { { bulk_upload:, field_36: "", field_37: "", field_38: "", field_4: 1 } }
 
         it "sets #majorrepairs to 0" do
           expect(parser.log.majorrepairs).to eq(0)
@@ -1516,7 +1516,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
 
       context "when not known" do
-        let(:attributes) { { bulk_upload:, field_109: "" } }
+        let(:attributes) { { bulk_upload:, field_109: "", field_4: 1 } }
 
         it "sets to 0" do
           expect(parser.log.previous_la_known).to eq(0)
