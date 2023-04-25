@@ -40,7 +40,7 @@ module Csv
     DATE_FIELDS = %w[
       created_at
       updated_at
-    ]
+    ].freeze
 
     def value(attribute, log)
       if ATTRIBUTES_OF_RELATED_OBJECTS.key? attribute.to_sym

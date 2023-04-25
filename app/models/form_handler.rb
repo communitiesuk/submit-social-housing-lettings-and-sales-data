@@ -51,17 +51,23 @@ class FormHandler
   def ordered_sales_questions_for_all_years
     sales_forms = forms.filter { |name, _form| name.end_with? "sales" }.values
     ordered_questions = sales_forms.pop.questions.uniq(&:id)
-    index_of_last_question = 0
-    sales_forms.flat_map(&:questions).each do |question|
-      index = ordered_questions.index { |q| q.id == question.id }
-      if index
-        index_of_last_question = index
-      else
-        ordered_questions.insert(index_of_last_question + 1, question)
-        index_of_last_question += 1
-      end
+    question_ids = ordered_questions.map(&:id)
+    all_questions_from_previous_forms = sales_forms.flat_map(&:questions)
+    deprecated_questions_by_preceding_question_id(question_ids, all_questions_from_previous_forms).each do |preceding_question_id, deprecated_question|
+      index_of_preceding_question = ordered_questions.index { |q| q.id == preceding_question_id }
+      ordered_questions.insert(index_of_preceding_question + 1, deprecated_question)
     end
     ordered_questions
+  end
+
+  def deprecated_questions_by_preceding_question_id(current_form_question_ids, all_questions_from_previous_forms)
+    deprecated_questions = {}
+    all_questions_from_previous_forms.each_cons(2) do |preceding_question, question|
+      next if current_form_question_ids.include?(question.id) || deprecated_questions.values.map(&:id).include?(question.id)
+
+      deprecated_questions[preceding_question.id] = question
+    end
+    deprecated_questions
   end
 
   def lettings_forms
