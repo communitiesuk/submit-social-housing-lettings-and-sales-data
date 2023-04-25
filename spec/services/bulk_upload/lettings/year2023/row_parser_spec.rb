@@ -48,7 +48,17 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
     end
 
-    context "when any field is populated" do
+    context "when the only populated fields are whitespace" do
+      before do
+        parser.field_18 = " "
+      end
+
+      it "returns true" do
+        expect(parser).to be_blank_row
+      end
+    end
+
+    context "when any field is populated with something other than whitespace" do
       before do
         parser.field_1 = "1"
       end
