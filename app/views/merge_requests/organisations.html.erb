@@ -44,6 +44,7 @@
       <%= f.govuk_text_area :other_merging_organisations, label: { text: "Other organisations" }, hint: { text: "List other organisations that are part of the merge but not registered on CORE." }, rows: 9 %>
     <% end %>
     <% if @merge_request.merging_organisations.count > 1 %>
+      <%= f.hidden_field :page, value: "organisations" %>
       <%= f.govuk_submit "Continue" %>
     <% end %>
   <% end %>

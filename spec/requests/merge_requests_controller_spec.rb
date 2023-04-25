@@ -238,7 +238,7 @@ RSpec.describe MergeRequestsController, type: :request do
 
       describe "#other_merging_organisations" do
         let(:other_merging_organisations) { "A list of other merging organisations" }
-        let(:params) { { merge_request: { other_merging_organisations: } } }
+        let(:params) { { merge_request: { other_merging_organisations:, page: "organisations" } } }
         let(:request) do
           patch "/merge-request/#{merge_request.id}", headers:, params:
         end
@@ -262,7 +262,7 @@ RSpec.describe MergeRequestsController, type: :request do
 
       context "when absorbing_organisation_id set to other" do
         let(:params) do
-          { merge_request: { absorbing_organisation_id: "other" } }
+          { merge_request: { absorbing_organisation_id: "other", page: "absorbing_organisation" } }
         end
 
         before do
@@ -276,7 +276,7 @@ RSpec.describe MergeRequestsController, type: :request do
 
       context "when absorbing_organisation_id set to id" do
         let(:params) do
-          { merge_request: { absorbing_organisation_id: other_organisation.id } }
+          { merge_request: { absorbing_organisation_id: other_organisation.id, page: "absorbing_organisation" } }
         end
 
         let(:request) do

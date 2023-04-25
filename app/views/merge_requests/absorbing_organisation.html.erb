@@ -15,7 +15,7 @@
 
       <%= f.govuk_radio_buttons_fieldset(
         :absorbing_organisation_id,
-        hint: { text: "For example, if Skype and Yammer merged into Microsoft, you would select Microsoft. " },
+        hint: { text: "For example, if Skype and Yammer merged into Microsoft, you would select Microsoft." },
         legend: nil,
       ) do %>
         <% @merge_request.merging_organisations.order(:name).each do |org| %>
@@ -29,6 +29,8 @@
         <%= f.govuk_radio_divider %>
         <%= f.govuk_radio_button :absorbing_organisation_id, "other", label: { text: "These organisations are merging into a new one" } %>
       <% end %>
+
+      <%= f.hidden_field :page, value: "absorbing_organisation" %>
 
       <%= f.govuk_submit %>
     <% end %>
