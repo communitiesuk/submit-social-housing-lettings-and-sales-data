@@ -292,6 +292,7 @@ class BulkUpload::Lettings::Year2023::RowParser
   validates :field_72, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 7 must be a number or the letter R" }, allow_blank: true, on: :after_log
   validates :field_76, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 8 must be a number or the letter R" }, allow_blank: true, on: :after_log
 
+  validates :field_4, presence: { message: I18n.t("validations.not_answered", question: "needs type") }, on: :after_log
   validates :field_6, presence: { message: I18n.t("validations.not_answered", question: "property renewal") }, on: :after_log
   validates :field_7, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (day)") }, on: :after_log
   validates :field_8, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (month)") }, on: :after_log
@@ -299,7 +300,6 @@ class BulkUpload::Lettings::Year2023::RowParser
 
   validates :field_9, format: { with: /\A\d{2}\z/, message: I18n.t("validations.setup.startdate.year_not_two_digits") }, on: :after_log
 
-  validate :validate_needs_type_present, on: :after_log
   validate :validate_data_types, on: :after_log
   validate :validate_nulls, on: :after_log
   validate :validate_relevant_collection_window, on: :after_log
@@ -333,6 +333,8 @@ class BulkUpload::Lettings::Year2023::RowParser
   validate :validate_created_by_related, on: :after_log
 
   validate :validate_valid_radio_option, on: :before_log
+
+  validate :validate_uprn_exists_if_any_key_adddress_fields_are_blank, on: :after_log
 
   def self.question_for_field(field)
     QUESTIONS[field]
@@ -431,9 +433,9 @@ private
     @created_by ||= User.find_by(email: field_3)
   end
 
-  def validate_needs_type_present
-    if field_4.blank?
-      errors.add(:field_4, I18n.t("validations.not_answered", question: "needs type"))
+  def validate_uprn_exists_if_any_key_adddress_fields_are_blank
+    if field_18.blank? && (field_19.blank? || field_21.blank?)
+      errors.add(:field_18, I18n.t("validations.not_answered", question: "UPRN"))
     end
   end
 
@@ -540,13 +542,15 @@ private
       if setup_question?(question)
         fields.each do |field|
           if errors[field].present?
-            errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase), category: :setup)
+            question_text = question.check_answer_label.presence || question.header.presence || "this question"
+            errors.add(field, I18n.t("validations.not_answered", question: question_text.downcase), category: :setup)
           end
         end
       else
         fields.each do |field|
           unless errors.any? { |e| fields.include?(e.attribute) }
-            errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase))
+            question_text = question.check_answer_label.presence || question.header.presence || "this question"
+            errors.add(field, I18n.t("validations.not_answered", question: question_text.downcase))
           end
         end
       end

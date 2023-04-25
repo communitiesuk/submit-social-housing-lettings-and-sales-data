@@ -236,6 +236,18 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           expect(questions.map(&:id)).to eql([])
         end
       end
+
+      describe "#validate_nulls" do
+        context "when non-setup questions are null" do
+          let(:attributes) { { bulk_upload:, field_1: "a", field_18: "", field_19: "", field_21: "" } }
+
+          it "fetches the question's check_answer_label if it exists, otherwise it gets the question's header" do
+            parser.valid?
+            expect(parser.errors[:field_19]).to eql(["You must answer q12 - address"])
+            expect(parser.errors[:field_21]).to eql(["You must answer town or city"])
+          end
+        end
+      end
     end
 
     context "when setup section not complete" do
@@ -806,8 +818,50 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       context "when over 12 characters" do
         let(:attributes) { { bulk_upload:, field_18: "1234567890123" } }
 
-        it "has errors on the field" do
-          expect(parser.errors[:field_18]).to be_present
+        it "adds an appropriate error" do
+          expect(parser.errors[:field_18]).to eql(["UPRN must be 12 digits or less"])
+        end
+      end
+
+      context "when neither UPRN nor address fields are given" do
+        let(:attributes) do
+          {
+            bulk_upload:,
+            field_1: "1",
+          }
+        end
+
+        it "adds appropriate errors" do
+          expect(parser.errors[:field_18]).to eql(["You must answer UPRN"])
+          expect(parser.errors[:field_19]).to eql(["You must answer q12 - address"])
+          expect(parser.errors[:field_21]).to eql(["You must answer town or city"])
+        end
+      end
+
+      context "when UPRN is given but address fields are not" do
+        let(:attributes) do
+          {
+            bulk_upload:,
+            field_18: "123456789012",
+          }
+        end
+
+        it "doesn't add an error" do
+          expect(parser.errors[:field_18]).to be_empty
+        end
+      end
+
+      context "when address is given but UPRN is not" do
+        let(:attributes) do
+          {
+            bulk_upload:,
+            field_19: "1 Example Rd",
+            field_21: "Example Town/City",
+          }
+        end
+
+        it "doesn't add an error" do
+          expect(parser.errors[:field_18]).to be_empty
         end
       end
     end
