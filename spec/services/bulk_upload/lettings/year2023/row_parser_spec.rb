@@ -245,6 +245,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         context "when the log already exists in the db" do
           before do
             parser.log.save!
+            parser.instance_variable_set(:@valid, nil)
           end
 
           it "is not a valid row" do
