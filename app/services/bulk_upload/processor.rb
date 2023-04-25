@@ -1,3 +1,5 @@
+require 'pp'
+
 class BulkUpload::Processor
   attr_reader :bulk_upload
 
@@ -66,6 +68,10 @@ private
   end
 
   def created_logs_but_incompleted?
+    puts "\n" * 10
+    puts "incomplete logs are..."
+    pp bulk_upload.logs.where.not(status_cache: %w[completed])
+    puts "\n" * 10
     bulk_upload.logs.where.not(status_cache: %w[completed]).count.positive?
   end
 
