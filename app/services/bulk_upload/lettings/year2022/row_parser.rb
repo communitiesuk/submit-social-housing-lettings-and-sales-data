@@ -368,6 +368,7 @@ class BulkUpload::Lettings::Year2022::RowParser
       .to_hash
       .reject { |k, _| %w[bulk_upload block_log_creation].include?(k) }
       .values
+      .reject(&:blank?)
       .compact
       .empty?
   end
