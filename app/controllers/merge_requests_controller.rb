@@ -10,6 +10,7 @@ class MergeRequestsController < ApplicationController
   ]
   before_action :authenticate_user!
   before_action :authenticate_scope!, except: [:create]
+  before_action :validate_response, only: %i[update]
 
   def absorbing_organisation; end
   def confirm_telephone_number; end
@@ -111,6 +112,13 @@ private
     end
 
     merge_params
+  end
+
+  def validate_response
+    if page == "absorbing_organisation" && merge_request_params[:absorbing_organisation_id].blank? && merge_request_params[:new_absorbing_organisation].blank?
+      @merge_request.errors.add(:absorbing_organisation_id, "Select an option")
+      render previous_template
+    end
   end
 
   def merge_request_organisation_params

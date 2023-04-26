@@ -260,6 +260,26 @@ RSpec.describe MergeRequestsController, type: :request do
         end
       end
 
+      context "when not answering the question" do
+        let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: other_organisation) }
+        let(:params) do
+          { merge_request: { page: "absorbing_organisation" } }
+        end
+        let(:request) do
+          patch "/merge-request/#{merge_request.id}", headers:, params:
+        end
+
+        it "renders the error" do
+          request
+
+          expect(page).to have_content("Select an option")
+        end
+
+        it "does not update the request" do
+          expect { request }.not_to(change { merge_request.reload.attributes })
+        end
+      end
+
       context "when absorbing_organisation_id set to other" do
         let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: other_organisation) }
         let(:params) do
