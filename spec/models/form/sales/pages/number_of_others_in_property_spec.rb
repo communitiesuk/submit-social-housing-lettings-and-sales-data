@@ -31,7 +31,7 @@ RSpec.describe Form::Sales::Pages::NumberOfOthersInProperty, type: :model do
   it "has the correct depends_on" do
     expect(page.depends_on).to eq([
       {
-        "privacynotice" => 1,
+        "buyer_has_seen_privacy_notice?" => true,
         "joint_purchase?" => joint_purchase,
       },
       {
@@ -52,7 +52,7 @@ RSpec.describe Form::Sales::Pages::NumberOfOthersInProperty, type: :model do
     it "has the correct depends_on" do
       expect(page.depends_on).to eq([
         {
-          "privacynotice" => 1,
+          "buyer_has_seen_privacy_notice?" => true,
           "joint_purchase?" => joint_purchase,
         },
         {

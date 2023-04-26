@@ -31,7 +31,7 @@ RSpec.describe Form::Sales::Pages::Buyer2LiveInProperty, type: :model do
     expect(page.depends_on).to eq([
       {
         "joint_purchase?" => true,
-        "privacynotice" => 1,
+        "buyer_has_seen_privacy_notice?" => true,
       },
       {
         "joint_purchase?" => true,

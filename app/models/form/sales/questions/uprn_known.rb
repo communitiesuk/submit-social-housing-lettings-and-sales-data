@@ -15,7 +15,12 @@ class Form::Sales::Questions::UprnKnown < ::Form::Question
         "value" => "Not known",
       },
     ]
-    @hidden_in_check_answers = true
+    @hidden_in_check_answers = {
+      "depends_on" => [
+        { "uprn_known" => 0 },
+        { "uprn_known" => 1 },
+      ],
+    }
   end
 
   ANSWER_OPTIONS = {

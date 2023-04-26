@@ -4,10 +4,10 @@ class Form::Sales::Pages::GenderIdentity1 < ::Form::Page
     @id = "buyer_1_gender_identity"
     @depends_on = [
       {
-        "privacynotice" => 1,
+        "buyer_has_seen_privacy_notice?" => true,
       },
       {
-        "noint" => 1,
+        "buyer_not_interviewed?" => true,
       },
     ]
   end

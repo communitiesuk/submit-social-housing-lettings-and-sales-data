@@ -10,7 +10,7 @@ class Form::Lettings::Questions::Earnings < ::Form::Question
     @min = 0
     @guidance_partial = "what_counts_as_income"
     @hint_text = ""
-    @step = 1
+    @step = 0.01
     @prefix = "£"
     @suffix = [
       { "label" => " every week", "depends_on" => { "incfreq" => 1 } },

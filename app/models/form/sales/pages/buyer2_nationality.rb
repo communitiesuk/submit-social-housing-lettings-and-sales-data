@@ -2,7 +2,16 @@ class Form::Sales::Pages::Buyer2Nationality < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "buyer_2_nationality"
-    @depends_on = [{ "joint_purchase?" => true }]
+    @depends_on = [
+      {
+        "joint_purchase?" => true,
+        "buyer_has_seen_privacy_notice?" => true,
+      },
+      {
+        "joint_purchase?" => true,
+        "buyer_not_interviewed?" => true,
+      },
+    ]
   end
 
   def questions

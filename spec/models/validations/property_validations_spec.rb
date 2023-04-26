@@ -6,39 +6,6 @@ RSpec.describe Validations::PropertyValidations do
   let(:property_validator_class) { Class.new { include Validations::PropertyValidations } }
   let(:record) { FactoryBot.create(:lettings_log) }
 
-  describe "#validate_property_number_of_times_relet" do
-    let(:expected_error) { I18n.t("validations.property.offered.relet_number") }
-
-    it "does not add an error if the record offered is missing" do
-      record.offered = nil
-      property_validator.validate_property_number_of_times_relet(record)
-      expect(record.errors).to be_empty
-    end
-
-    it "does not add an error if offered is valid (number between 0 and 20)" do
-      record.offered = 0
-      property_validator.validate_property_number_of_times_relet(record)
-      expect(record.errors).to be_empty
-      record.offered = 10
-      property_validator.validate_property_number_of_times_relet(record)
-      expect(record.errors).to be_empty
-      record.offered = 20
-      property_validator.validate_property_number_of_times_relet(record)
-      expect(record.errors).to be_empty
-    end
-
-    it "does add an error when offered is invalid" do
-      record.offered = "invalid"
-      property_validator.validate_property_number_of_times_relet(record)
-      expect(record.errors).not_to be_empty
-      expect(record.errors["offered"]).to include(match(expected_error))
-      record.offered = 21
-      property_validator.validate_property_number_of_times_relet(record)
-      expect(record.errors).not_to be_empty
-      expect(record.errors["offered"]).to include(match(expected_error))
-    end
-  end
-
   describe "#validate_shared_housing_rooms" do
     context "when number of bedrooms has not been answered" do
       it "does not add an error" do
@@ -127,22 +94,6 @@ RSpec.describe Validations::PropertyValidations do
         property_validator.validate_shared_housing_rooms(record)
         expect(record.errors["unittype_gn"]).to include(match(expected_error))
         expect(record.errors["beds"]).to include(I18n.t("validations.property.unittype_gn.one_three_bedroom_single_tenant_shared"))
-      end
-    end
-
-    context "when a negative number of bedrooms is entered" do
-      it "adds an error" do
-        record.beds = -4
-        property_validator.validate_shared_housing_rooms(record)
-        expect(record.errors["beds"]).to include(I18n.t("validations.property.beds.non_positive"))
-      end
-    end
-
-    context "when a room number higher than 12 has been entered" do
-      it "adds an error" do
-        record.beds = 13
-        property_validator.validate_shared_housing_rooms(record)
-        expect(record.errors["beds"]).to include(I18n.t("validations.property.beds.over_max"))
       end
     end
   end

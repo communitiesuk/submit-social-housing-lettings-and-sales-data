@@ -5,6 +5,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
 
   let(:organisation) { create(:organisation, old_visible_id: "3") }
   let(:user) { create(:user, organisation:) }
+  let(:log) { build(:lettings_log, :completed) }
   let(:bulk_upload) { create(:bulk_upload, user:) }
   let(:path) { file.path }
   let(:file) { Tempfile.new }
@@ -16,31 +17,181 @@ RSpec.describe BulkUpload::Lettings::Validator do
       end
     end
 
-    context "when file has too many columns" do
-      before do
-        file.write("a," * 136)
-        file.write("\n")
-        file.rewind
+    context "when 2022" do
+      let(:bulk_upload) { create(:bulk_upload, user:, year: 2022) }
+
+      context "when file has no headers" do
+        context "and too many columns" do
+          before do
+            file.write(("a" * 136).chars.join(","))
+            file.write("\n")
+            file.rewind
+          end
+
+          it "is not valid" do
+            expect(validator).not_to be_valid
+            expect(validator.errors["base"]).to eql(["too many columns, please ensure you have used the correct template"])
+          end
+        end
+
+        context "and doesn't have too many columns" do
+          before do
+            file.write(("a" * 135).chars.join(","))
+            file.write("\n")
+            file.rewind
+          end
+
+          it "is valid" do
+            expect(validator).to be_valid
+          end
+        end
       end
 
-      it "is not valid" do
-        expect(validator).not_to be_valid
+      context "when file has headers" do
+        context "and file has extra invalid headers" do
+          let(:seed) { rand }
+          let(:log_to_csv) { BulkUpload::LogToCsv.new(log:) }
+          let(:field_numbers) { log_to_csv.default_2022_field_numbers + %w[invalid_field_number] }
+          let(:field_values) { log_to_csv.to_2022_row + %w[value_for_invalid_field_number] }
+
+          before do
+            file.write(log_to_csv.custom_field_numbers_row(seed:, field_numbers:))
+            file.write(log_to_csv.to_custom_csv_row(seed:, field_values:))
+            file.rewind
+          end
+
+          it "is valid" do
+            expect(validator).to be_valid
+          end
+        end
+
+        context "and file has too few valid headers" do
+          let(:seed) { rand }
+          let(:log_to_csv) { BulkUpload::LogToCsv.new(log:) }
+          let(:field_numbers) { log_to_csv.default_2022_field_numbers }
+          let(:field_values) { log_to_csv.to_2022_row }
+
+          before do
+            field_numbers.delete_at(20)
+            field_values.delete_at(20)
+            file.write(log_to_csv.custom_field_numbers_row(seed:, field_numbers:))
+            file.write(log_to_csv.to_custom_csv_row(seed:, field_values:))
+            file.rewind
+          end
+
+          it "is not valid" do
+            expect(validator).not_to be_valid
+            expect(validator.errors["base"]).to eql(["incorrect number of fields, please ensure you have used the correct template"])
+          end
+        end
+
+        context "and file has too many valid headers" do
+          let(:seed) { rand }
+          let(:log_to_csv) { BulkUpload::LogToCsv.new(log:) }
+          let(:field_numbers) { log_to_csv.default_2022_field_numbers + %w[23] }
+          let(:field_values) { log_to_csv.to_2022_row + %w[value] }
+
+          before do
+            file.write(log_to_csv.custom_field_numbers_row(seed:, field_numbers:))
+            file.write(log_to_csv.to_custom_csv_row(seed:, field_values:))
+            file.rewind
+          end
+
+          it "is not valid" do
+            expect(validator).not_to be_valid
+            expect(validator.errors["base"]).to eql(["incorrect number of fields, please ensure you have used the correct template"])
+          end
+        end
       end
     end
 
-    context "when file has too few columns" do
-      before do
-        file.write("a," * 132)
-        file.write("\n")
-        file.rewind
+    context "when 2023" do
+      let(:bulk_upload) { create(:bulk_upload, user:, year: 2023) }
+
+      context "when file has no headers" do
+        context "and too many columns" do
+          before do
+            file.write(("a" * 143).chars.join(","))
+            file.write("\n")
+            file.rewind
+          end
+
+          it "is not valid" do
+            expect(validator).not_to be_valid
+            expect(validator.errors["base"]).to eql(["too many columns, please ensure you have used the correct template"])
+          end
+        end
+
+        context "and doesn't have too many columns" do
+          before do
+            file.write(("a" * 142).chars.join(","))
+            file.write("\n")
+            file.rewind
+          end
+
+          it "is valid" do
+            expect(validator).to be_valid
+          end
+        end
       end
 
-      it "is not valid" do
-        expect(validator).not_to be_valid
+      context "when file has headers" do
+        context "and file has extra invalid headers" do
+          let(:seed) { rand }
+          let(:log_to_csv) { BulkUpload::LogToCsv.new(log:) }
+          let(:field_numbers) { log_to_csv.default_2023_field_numbers + %w[invalid_field_number] }
+          let(:field_values) { log_to_csv.to_2023_row + %w[value_for_invalid_field_number] }
+
+          before do
+            file.write(log_to_csv.custom_field_numbers_row(seed:, field_numbers:))
+            file.write(log_to_csv.to_custom_csv_row(seed:, field_values:))
+            file.rewind
+          end
+
+          it "is valid" do
+            expect(validator).to be_valid
+          end
+        end
+
+        context "and file has too few valid headers" do
+          let(:seed) { rand }
+          let(:log_to_csv) { BulkUpload::LogToCsv.new(log:) }
+          let(:field_numbers) { log_to_csv.default_2023_field_numbers }
+          let(:field_values) { log_to_csv.to_2023_row }
+
+          before do
+            field_numbers.delete_at(20)
+            field_values.delete_at(20)
+            file.write(log_to_csv.custom_field_numbers_row(seed:, field_numbers:))
+            file.write(log_to_csv.to_custom_csv_row(seed:, field_values:))
+            file.rewind
+          end
+
+          it "is not valid" do
+            expect(validator).not_to be_valid
+            expect(validator.errors["base"]).to eql(["incorrect number of fields, please ensure you have used the correct template"])
+          end
+        end
+
+        context "and file has too many valid headers" do
+          let(:seed) { rand }
+          let(:log_to_csv) { BulkUpload::LogToCsv.new(log:) }
+          let(:field_numbers) { log_to_csv.default_2023_field_numbers + %w[23] }
+          let(:field_values) { log_to_csv.to_2023_row + %w[value] }
+
+          before do
+            file.write(log_to_csv.custom_field_numbers_row(seed:, field_numbers:))
+            file.write(log_to_csv.to_custom_csv_row(seed:, field_values:))
+            file.rewind
+          end
+
+          it "is not valid" do
+            expect(validator).not_to be_valid
+            expect(validator.errors["base"]).to eql(["incorrect number of fields, please ensure you have used the correct template"])
+          end
+        end
       end
     end
-
-    context "when incorrect headers"
   end
 
   describe "#call" do
@@ -214,7 +365,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
       end
     end
 
-    context "when a log has incomplete setup secion" do
+    context "when a log has incomplete setup section" do
       let(:log) { build(:lettings_log, :in_progress, created_by: user, startdate: Time.zone.local(2022, 5, 1)) }
 
       before do
@@ -225,52 +376,6 @@ RSpec.describe BulkUpload::Lettings::Validator do
       it "returns false" do
         validator.call
         expect(validator).not_to be_create_logs
-      end
-    end
-
-    context "when a column has error rate below absolute threshold" do
-      context "when a column is over 60% error threshold" do
-        let(:log_1) { build(:lettings_log, :completed, renttype: 1, created_by: user) }
-        let(:log_2) { build(:lettings_log, renttype: 2, created_by: user, builtype: nil, startdate: Time.zone.local(2022, 5, 1)) }
-        let(:log_3) { build(:lettings_log, renttype: 2, created_by: user, builtype: nil, startdate: Time.zone.local(2022, 5, 1)) }
-        let(:log_4) { build(:lettings_log, renttype: 2, created_by: user, builtype: nil, startdate: Time.zone.local(2022, 5, 1)) }
-        let(:log_5) { build(:lettings_log, renttype: 2, created_by: user, builtype: nil, startdate: Time.zone.local(2022, 5, 1)) }
-
-        before do
-          file.write(BulkUpload::LogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
-          file.write(BulkUpload::LogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
-          file.write(BulkUpload::LogToCsv.new(log: log_3, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
-          file.write(BulkUpload::LogToCsv.new(log: log_4, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
-          file.write(BulkUpload::LogToCsv.new(log: log_5, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
-          file.close
-        end
-
-        it "returns true" do
-          validator.call
-          expect(validator).to be_create_logs
-        end
-      end
-
-      context "when a column is under 60% error threshold" do
-        let(:log_1) { build(:lettings_log, :completed, renttype: 1, created_by: user) }
-        let(:log_2) { build(:lettings_log, :completed, renttype: 1, created_by: user) }
-        let(:log_3) { build(:lettings_log, renttype: 2, created_by: user, builtype: nil, startdate: Time.zone.local(2022, 5, 1)) }
-        let(:log_4) { build(:lettings_log, renttype: 2, created_by: user, builtype: nil, startdate: Time.zone.local(2022, 5, 1)) }
-        let(:log_5) { build(:lettings_log, renttype: 2, created_by: user, builtype: nil, startdate: Time.zone.local(2022, 5, 1)) }
-
-        before do
-          file.write(BulkUpload::LogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
-          file.write(BulkUpload::LogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
-          file.write(BulkUpload::LogToCsv.new(log: log_3, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
-          file.write(BulkUpload::LogToCsv.new(log: log_4, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
-          file.write(BulkUpload::LogToCsv.new(log: log_5, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
-          file.close
-        end
-
-        it "returns true" do
-          validator.call
-          expect(validator).to be_create_logs
-        end
       end
     end
   end

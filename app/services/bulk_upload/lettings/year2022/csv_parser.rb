@@ -1,8 +1,8 @@
 require "csv"
 
 class BulkUpload::Lettings::Year2022::CsvParser
-  MIN_COLUMNS = 134
-  MAX_COLUMNS = 136
+  FIELDS = 134
+  MAX_COLUMNS = 135
 
   attr_reader :path
 
@@ -11,7 +11,11 @@ class BulkUpload::Lettings::Year2022::CsvParser
   end
 
   def row_offset
-    with_headers? ? 5 : 0
+    if with_headers?
+      rows.find_index { |row| row[0].match(/field number/i) } + 1
+    else
+      0
+    end
   end
 
   def col_offset
@@ -25,8 +29,7 @@ class BulkUpload::Lettings::Year2022::CsvParser
   def row_parsers
     @row_parsers ||= body_rows.map do |row|
       stripped_row = row[col_offset..]
-      headers = ("field_1".."field_134").to_a
-      hash = Hash[headers.zip(stripped_row)]
+      hash = Hash[field_numbers.zip(stripped_row)]
 
       BulkUpload::Lettings::Year2022::RowParser.new(hash)
     end
@@ -41,17 +44,39 @@ class BulkUpload::Lettings::Year2022::CsvParser
   end
 
   def column_for_field(field)
-    cols[headers.find_index(field) + col_offset]
+    cols[field_numbers.find_index(field) + col_offset]
+  end
+
+  def incorrect_field_count?
+    valid_field_numbers_count = field_numbers.count { |f| f != "field_blank" }
+
+    valid_field_numbers_count != FIELDS
+  end
+
+  def too_many_columns?
+    return if with_headers?
+
+    max_columns_count = body_rows.map(&:size).max - col_offset
+
+    max_columns_count > MAX_COLUMNS
   end
 
 private
 
-  def headers
-    @headers ||= ("field_1".."field_134").to_a
+  def default_field_numbers
+    ("field_1".."field_#{FIELDS}").to_a
+  end
+
+  def field_numbers
+    @field_numbers ||= if with_headers?
+                         rows[row_offset - 1][col_offset..].map { |h| h.present? && h.match?(/^[0-9]+$/) ? "field_#{h}" : "field_blank" }
+                       else
+                         default_field_numbers
+                       end
   end
 
   def with_headers?
-    rows[0][0]&.match?(/\D+/)
+    rows.map { |r| r[0] }.any? { |cell| cell&.match?(/field number/i) }
   end
 
   def row_sep

@@ -26,6 +26,6 @@ RSpec.describe Form::Sales::Pages::Nationality1, type: :model do
   end
 
   it "has correct depends_on" do
-    expect(page.depends_on).to eq [{ "privacynotice" => 1 }, { "buyer_not_interviewed?" => true }]
+    expect(page.depends_on).to eq [{ "buyer_has_seen_privacy_notice?" => true }, { "buyer_not_interviewed?" => true }]
   end
 end

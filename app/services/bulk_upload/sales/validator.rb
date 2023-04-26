@@ -4,6 +4,7 @@ class BulkUpload::Sales::Validator
   attr_reader :bulk_upload, :path
 
   validate :validate_file_not_empty
+  validate :validate_min_columns
   validate :validate_max_columns
 
   def initialize(bulk_upload:, path:)
@@ -18,56 +19,83 @@ class BulkUpload::Sales::Validator
       row = index + row_offset + 1
 
       row_parser.errors.each do |error|
+        col = csv_parser.column_for_field(error.attribute.to_s)
+
         bulk_upload.bulk_upload_errors.create!(
           field: error.attribute,
-          error: error.type,
+          error: error.message,
           purchaser_code: row_parser.field_1,
           row:,
-          cell: "#{cols[field_number_for_attribute(error.attribute) + col_offset - 1]}#{row}",
+          cell: "#{col}#{row}",
+          col:,
+          category: error.options[:category],
         )
       end
     end
   end
 
+  def create_logs?
+    return false if any_setup_errors?
+    return false if row_parsers.any?(&:block_log_creation?)
+
+    row_parsers.all? { |row_parser| row_parser.log.valid? }
+  end
+
+  def any_setup_errors?
+    bulk_upload
+      .bulk_upload_errors
+      .where(category: "setup")
+      .count
+      .positive?
+  end
+
 private
+
+  def csv_parser
+    @csv_parser ||= case bulk_upload.year
+                    when 2022
+                      BulkUpload::Sales::Year2022::CsvParser.new(path:)
+                    when 2023
+                      BulkUpload::Sales::Year2023::CsvParser.new(path:)
+                    else
+                      raise "csv parser not found"
+                    end
+  end
+
+  def row_offset
+    csv_parser.row_offset
+  end
+
+  def col_offset
+    csv_parser.col_offset
+  end
 
   def field_number_for_attribute(attribute)
     attribute.to_s.split("_").last.to_i
   end
 
-  def rows
-    @rows ||= CSV.read(path, row_sep:)
-  end
-
-  def body_rows
-    rows[row_offset..]
-  end
-
-  def row_offset
-    5
-  end
-
-  def col_offset
-    1
-  end
-
   def cols
-    @cols ||= ("A".."DV").to_a
+    csv_parser.cols
   end
 
   def row_parsers
-    @row_parsers ||= body_rows.map do |row|
-      stripped_row = row[col_offset..]
-      headers = ("field_1".."field_125").to_a
-      hash = Hash[headers.zip(stripped_row)]
+    return @row_parsers if @row_parsers
 
-      BulkUpload::Sales::Year2022::RowParser.new(hash)
+    @row_parsers = csv_parser.row_parsers
+
+    @row_parsers.each do |row_parser|
+      row_parser.bulk_upload = bulk_upload
     end
+
+    @row_parsers
   end
 
-  def row_sep
-    "\r\n"
-    # "\n"
+  def rows
+    csv_parser.rows
+  end
+
+  def body_rows
+    csv_parser.body_rows
   end
 
   def validate_file_not_empty
@@ -78,12 +106,20 @@ private
     end
   end
 
+  def validate_min_columns
+    return if halt_validations?
+
+    column_count = rows.map(&:size).min
+
+    errors.add(:base, :under_min_column_count) if column_count < csv_parser.class::MIN_COLUMNS
+  end
+
   def validate_max_columns
     return if halt_validations?
 
-    max_row_size = rows.map(&:size).max
+    column_count = rows.map(&:size).max
 
-    errors.add(:file, :max_row_size) if max_row_size > 126
+    errors.add(:base, :over_max_column_count) if column_count > csv_parser.class::MAX_COLUMNS
   end
 
   def halt_validations!

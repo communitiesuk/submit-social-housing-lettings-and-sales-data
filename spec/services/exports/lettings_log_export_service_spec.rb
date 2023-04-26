@@ -160,7 +160,8 @@ RSpec.describe Exports::LettingsLogExportService do
       "BUILDING_NUMBER": "number",
       "DEPENDENT_THOROUGHFARE_NAME": "data",
       "THOROUGHFARE_NAME": "thing",
-      "POST_TOWN": "London"
+      "POST_TOWN": "London",
+      "POSTCODE": "SE2 6RT"
 
          }}]}', headers: {})
       end
@@ -171,7 +172,7 @@ RSpec.describe Exports::LettingsLogExportService do
       end
 
       context "and one lettings log is available for export" do
-        let!(:lettings_log) { FactoryBot.create(:lettings_log, :completed, uprn_known: 1, uprn: "100023336956", propcode: "123", ppostcode_full: "SE2 6RT", tenancycode: "BZ737", startdate: Time.zone.local(2023, 4, 2, 10, 36, 49), voiddate: Time.zone.local(2021, 11, 3), mrcdate: Time.zone.local(2022, 5, 5, 10, 36, 49), tenancylength: 5, underoccupation_benefitcap: 4) }
+        let!(:lettings_log) { FactoryBot.create(:lettings_log, :completed, uprn_known: 1, uprn: "100023336956", propcode: "123", postcode_full: "SE2 6RT", ppostcode_full: "SE2 6RT", tenancycode: "BZ737", startdate: Time.zone.local(2023, 4, 2, 10, 36, 49), voiddate: Time.zone.local(2021, 11, 3), mrcdate: Time.zone.local(2022, 5, 5, 10, 36, 49), tenancylength: 5, underoccupation_benefitcap: 4) }
         let(:expected_zip_filename) { "core_2023_2024_apr_mar_f0001_inc0001.zip" }
         let(:expected_data_filename) { "core_2023_2024_apr_mar_f0001_inc0001_pt001.xml" }
         let(:xml_export_file) { File.open("spec/fixtures/exports/general_needs_log_23_24.xml", "r:UTF-8") }

@@ -6,6 +6,7 @@ class Form::Sales::Questions::PurchasePrice < ::Form::Question
     @header = "What is the full purchase price?"
     @type = "numeric"
     @min = 0
+    @step = 0.01
     @width = 5
     @prefix = "£"
     @hint_text = hint_text

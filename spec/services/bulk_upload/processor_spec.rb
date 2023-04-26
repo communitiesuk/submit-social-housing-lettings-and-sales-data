@@ -208,6 +208,7 @@ RSpec.describe BulkUpload::Processor do
           managing_organisation: owning_org,
           startdate: Time.zone.local(2022, 10, 1),
           renewal: 2,
+          declaration: 1,
         )
       end
 
@@ -216,6 +217,7 @@ RSpec.describe BulkUpload::Processor do
         file.rewind
 
         allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
+        allow(FeatureToggle).to receive(:bulk_upload_duplicate_log_check_enabled?).and_return(true)
       end
 
       it "creates pending log" do
@@ -258,6 +260,7 @@ RSpec.describe BulkUpload::Processor do
           startdate: Time.zone.local(2022, 10, 1),
           renewal: 2,
           created_by: other_user, # unaffiliated user
+          declaration: 1,
         )
       end
 

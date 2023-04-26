@@ -17,7 +17,7 @@ class Form::Sales::Pages::MortgageValueCheck < ::Form::Page
       [
         {
           "mortgage_over_soft_max?" => true,
-          "jointpur" => 1,
+          "joint_purchase?" => true,
         },
       ]
     else

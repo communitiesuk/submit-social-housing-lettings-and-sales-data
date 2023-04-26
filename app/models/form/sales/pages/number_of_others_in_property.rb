@@ -3,7 +3,7 @@ class Form::Sales::Pages::NumberOfOthersInProperty < ::Form::Page
     super(id, hsh, subsection)
     @depends_on = [
       {
-        "privacynotice" => 1,
+        "buyer_has_seen_privacy_notice?" => true,
         "joint_purchase?" => joint_purchase,
       },
       {
