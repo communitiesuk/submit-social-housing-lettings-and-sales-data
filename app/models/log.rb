@@ -105,6 +105,8 @@ class Log < ApplicationRecord
 
       public_send("#{error.attribute}=", nil)
     end
+
+    errors.clear
   end
 
   (1..8).each do |person_num|
