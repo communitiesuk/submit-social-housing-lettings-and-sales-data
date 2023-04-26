@@ -521,10 +521,8 @@ class LettingsLog < Log
   def blank_compound_invalid_non_setup_fields!
     super
 
-    validate_property_postcode(self)
     self.postcode_known = nil if errors.of_kind?(:postcode_full, :wrong_format)
 
-    validate_net_income(self)
     if errors.of_kind?(:earnings, :under_hard_min)
       self.earnings = nil
       self.incfreq = nil

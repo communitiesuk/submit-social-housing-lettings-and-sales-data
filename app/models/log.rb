@@ -141,10 +141,8 @@ class Log < ApplicationRecord
   end
 
   def blank_compound_invalid_non_setup_fields!
-    validate_previous_accommodation_postcode(self)
     self.ppcodenk = nil if errors.of_kind?(:ppostcode_full, :wrong_format)
 
-    process_uprn_change!
     if errors.of_kind?(:uprn, :uprn_error)
       self.uprn_known = 0
       self.uprn_confirmed = nil
