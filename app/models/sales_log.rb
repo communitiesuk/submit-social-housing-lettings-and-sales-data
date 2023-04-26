@@ -364,5 +364,7 @@ class SalesLog < Log
     if errors.of_kind?(:postcode_full, :postcodes_not_matching)
       self.ppcodenk = nil
     end
+
+    valid?
   end
 end

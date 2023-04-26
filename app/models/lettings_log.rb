@@ -527,6 +527,8 @@ class LettingsLog < Log
       self.earnings = nil
       self.incfreq = nil
     end
+
+    valid?
   end
 
 private

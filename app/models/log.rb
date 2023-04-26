@@ -144,7 +144,7 @@ class Log < ApplicationRecord
     self.ppcodenk = nil if errors.of_kind?(:ppostcode_full, :wrong_format)
 
     if errors.of_kind?(:uprn, :uprn_error)
-      self.uprn_known = 0
+      self.uprn_known = nil
       self.uprn_confirmed = nil
       self.address_line1 = nil
       self.address_line2 = nil
@@ -152,6 +152,8 @@ class Log < ApplicationRecord
       self.postcode_full = nil
       self.county = nil
     end
+
+    valid?
   end
 
 private
