@@ -37,4 +37,8 @@ class Form::Sales::Pages::AboutPriceValueCheck < ::Form::Page
       Form::Sales::Questions::AboutPriceValueCheck.new(nil, nil, self),
     ]
   end
+
+  def affected_question_ids
+    %w[value beds la]
+  end
 end

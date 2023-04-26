@@ -29,4 +29,8 @@ class Form::Sales::Pages::Buyer1IncomeValueCheck < ::Form::Page
       Form::Sales::Questions::Buyer1IncomeValueCheck.new(nil, nil, self),
     ]
   end
+
+  def affected_question_ids
+    %w[ecstat1 income1]
+  end
 end

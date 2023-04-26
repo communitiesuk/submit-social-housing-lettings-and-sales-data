@@ -18,4 +18,8 @@ class Form::Sales::Pages::BuyerLiveInValueCheck < Form::Sales::Pages::Person
       Form::Sales::Questions::BuyerLiveInValueCheck.new(nil, nil, self, person_index: @person_index),
     ]
   end
+
+  def affected_question_ids
+    ["ownershipsch", "buy#{@person_index}livein"]
+  end
 end

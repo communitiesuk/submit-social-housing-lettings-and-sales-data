@@ -51,4 +51,8 @@ RSpec.describe Form::Sales::Pages::AboutPriceValueCheck, type: :model do
       ],
     })
   end
+
+  it "has the correct affected_question_ids" do
+    expect(page.affected_question_ids).to eq(%w[value beds la])
+  end
 end

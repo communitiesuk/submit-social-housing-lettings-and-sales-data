@@ -24,4 +24,8 @@ class Form::Sales::Pages::StaircaseBoughtValueCheck < ::Form::Page
       Form::Sales::Questions::StaircaseBoughtValueCheck.new(nil, nil, self),
     ]
   end
+
+  def affected_question_ids
+    %w[stairbought]
+  end
 end

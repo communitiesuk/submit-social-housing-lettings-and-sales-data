@@ -28,4 +28,8 @@ class Form::Sales::Pages::MortgageValueCheck < ::Form::Page
       ]
     end
   end
+
+  def affected_question_ids
+    %w[mortgage inc1mort inc2mort jointpur income1 income2 inc1mort inc2mort]
+  end
 end

@@ -24,4 +24,8 @@ class Form::Sales::Pages::SharedOwnershipDepositValueCheck < ::Form::Page
       Form::Sales::Questions::SharedOwnershipDepositValueCheck.new(nil, nil, self),
     ]
   end
+
+  def affected_question_ids
+    %w[mortgage mortgageused cashdis type deposit value equity]
+  end
 end

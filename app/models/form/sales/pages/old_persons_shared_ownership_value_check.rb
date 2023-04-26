@@ -18,4 +18,8 @@ class Form::Sales::Pages::OldPersonsSharedOwnershipValueCheck < ::Form::Page
       Form::Sales::Questions::OldPersonsSharedOwnershipValueCheck.new(nil, nil, self),
     ]
   end
+
+  def affected_question_ids
+    %w[type jointpur age1 age2]
+  end
 end

@@ -14,4 +14,8 @@ class Form::Sales::Pages::SavingsValueCheck < ::Form::Page
       Form::Sales::Questions::SavingsValueCheck.new(nil, nil, self),
     ]
   end
+
+  def affected_question_ids
+    %w[savings]
+  end
 end

@@ -14,4 +14,8 @@ class Form::Sales::Pages::HouseholdWheelchairCheck < ::Form::Page
       Form::Sales::Questions::HouseholdWheelchairCheck.new(nil, nil, self),
     ]
   end
+
+  def affected_question_ids
+    %w[disabled wheel]
+  end
 end

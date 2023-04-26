@@ -17,4 +17,8 @@ class Form::Sales::Pages::ExtraBorrowingValueCheck < Form::Page
       Form::Sales::Questions::ExtraBorrowingValueCheck.new(nil, nil, self),
     ]
   end
+
+  def affected_question_ids
+    %w[extrabor mortgage deposit value discount]
+  end
 end

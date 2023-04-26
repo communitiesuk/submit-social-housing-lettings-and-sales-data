@@ -18,4 +18,8 @@ class Form::Sales::Pages::PersonStudentNotChildValueCheck < Form::Sales::Pages::
       Form::Sales::Questions::PersonStudentNotChildValueCheck.new(nil, nil, self, person_index: @person_index),
     ]
   end
+
+  def affected_question_ids
+    ["relat#{@person_index}", "exstat#{@person_index}", "age#{@person_index}"]
+  end
 end

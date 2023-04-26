@@ -14,4 +14,8 @@ class Form::Sales::Pages::DepositValueCheck < ::Form::Page
       Form::Sales::Questions::DepositValueCheck.new(nil, nil, self),
     ]
   end
+
+  def affected_question_ids
+    %w[savings deposit]
+  end
 end

@@ -18,4 +18,8 @@ class Form::Sales::Pages::MonthlyChargesValueCheck < ::Form::Page
       Form::Sales::Questions::MonthlyChargesValueCheck.new(nil, nil, self),
     ]
   end
+
+  def affected_question_ids
+    %w[type mscharge proptype]
+  end
 end

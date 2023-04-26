@@ -71,6 +71,10 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
         ],
       })
     end
+
+    it "has correct affected_question_ids" do
+      expect(page.affected_question_ids).to eq(%w[age1 exstat1 sex1])
+    end
   end
 
   context "with person 2" do
@@ -118,6 +122,10 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
           },
         ],
       })
+    end
+
+    it "has correct affected_question_ids" do
+      expect(page.affected_question_ids).to eq(%w[age2 exstat2 sex2])
     end
   end
 
@@ -167,6 +175,10 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
         ],
       })
     end
+
+    it "has correct affected_question_ids" do
+      expect(page.affected_question_ids).to eq(%w[age3 exstat3 sex3])
+    end
   end
 
   context "with person 4" do
@@ -214,6 +226,10 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
           },
         ],
       })
+    end
+
+    it "has correct affected_question_ids" do
+      expect(page.affected_question_ids).to eq(%w[age4 exstat4 sex4])
     end
   end
 
@@ -263,6 +279,10 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
         ],
       })
     end
+
+    it "has correct affected_question_ids" do
+      expect(page.affected_question_ids).to eq(%w[age5 exstat5 sex5])
+    end
   end
 
   context "with person 6" do
@@ -310,6 +330,10 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
           },
         ],
       })
+    end
+
+    it "has correct affected_question_ids" do
+      expect(page.affected_question_ids).to eq(%w[age6 exstat6 sex6])
     end
   end
 end

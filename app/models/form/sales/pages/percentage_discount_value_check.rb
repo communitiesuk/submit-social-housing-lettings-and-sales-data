@@ -12,4 +12,8 @@ class Form::Sales::Pages::PercentageDiscountValueCheck < ::Form::Page
   def questions
     @questions ||= [Form::Sales::Questions::PercentageDiscountValueCheck.new(nil, nil, self)]
   end
+
+  def affected_question_ids
+    %w[discount proptype]
+  end
 end

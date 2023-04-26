@@ -16,4 +16,8 @@ class Form::Sales::Pages::HandoverDateCheck < ::Form::Page
       Form::Sales::Questions::HandoverDateCheck.new(nil, nil, self),
     ]
   end
+
+  def affected_question_ids
+    %w[hodate saledate]
+  end
 end

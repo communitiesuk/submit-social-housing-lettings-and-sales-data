@@ -32,4 +32,8 @@ class Form::Sales::Pages::Buyer2IncomeValueCheck < ::Form::Page
       Form::Sales::Questions::Buyer2IncomeValueCheck.new(nil, nil, self),
     ]
   end
+
+  def affected_question_ids
+    %w[ecstat2 income2]
+  end
 end

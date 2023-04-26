@@ -15,4 +15,8 @@ class Form::Sales::Pages::GrantValueCheck < ::Form::Page
       Form::Sales::Questions::GrantValueCheck.new(nil, nil, self),
     ]
   end
+
+  def affected_question_ids
+    %w[grant]
+  end
 end

@@ -39,4 +39,8 @@ class Form::Sales::Pages::RetirementValueCheck < Form::Sales::Pages::Person
       Form::Sales::Questions::RetirementValueCheck.new(nil, nil, self, person_index: @person_index),
     ]
   end
+
+  def affected_question_ids
+    ["age#{@person_index}", "exstat#{@person_index}", "sex#{@person_index}"]
+  end
 end
