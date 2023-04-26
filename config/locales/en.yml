@@ -44,8 +44,8 @@ en:
         bulk_upload/lettings/validator:
           attributes:
             base:
+              wrong_field_numbers_count: "incorrect number of fields, please ensure you have used the correct template"
               over_max_column_count: "too many columns, please ensure you have used the correct template"
-              under_min_column_count: "too few columns, please ensure you have used the correct template"
         forms/bulk_upload_lettings/year:
           attributes:
             year:
