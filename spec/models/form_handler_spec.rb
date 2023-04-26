@@ -254,38 +254,8 @@ RSpec.describe FormHandler do
     end
 
     it "inserts questions from previous years that do not appear in more recent years in the correct position" do
-      original_section = build(
-        :section,
-        id: "original_section",
-        subsections: [
-          build(
-            :subsection,
-            id: "original_subsection",
-            pages: [
-              build(:page, id: "1", questions: [build(:question, id: "1")]),
-              build(:page, id: "1a_deprecated", questions: [build(:question, id: "1a_deprecated")]),
-              build(:page, id: "2", questions: [build(:question, id: "2")]),
-              build(:page, id: "3", questions: [build(:question, id: "3")]),
-            ]
-          )
-        ]
-      )
-      new_section = build(
-        :section,
-        id: "new_section",
-        subsections: [
-          build(
-            :subsection,
-            id: "new_subsection",
-            pages: [
-              build(:page, id: "1", questions: [build(:question, id: "1")]),
-              build(:page, id: "2", questions: [build(:question, id: "2")]),
-              build(:page, id: "2a_new", questions: [build(:question, id: "2a_new")]),
-              build(:page, id: "3", questions: [build(:question, id: "3")]),
-            ]
-          )
-        ]
-      )
+      original_section = build(:section, :with_questions, question_ids: %w[1 1a_deprecated 2 3])
+      new_section = build(:section, :with_questions, question_ids: %w[1 2 2a_new 3])
       original_form = FormFactory.new(year: 1066, type: "sales")
                                  .with_sections([original_section])
                                  .build
