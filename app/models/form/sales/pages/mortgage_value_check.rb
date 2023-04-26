@@ -4,6 +4,7 @@ class Form::Sales::Pages::MortgageValueCheck < ::Form::Page
     @depends_on = depends_on
     @informative_text = {}
     @person_index = person_index
+    @title_text = { "translation" => "soft_validations.mortgage.title_text" }
   end
 
   def questions

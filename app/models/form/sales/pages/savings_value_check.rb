@@ -6,6 +6,9 @@ class Form::Sales::Pages::SavingsValueCheck < ::Form::Page
         "savings_over_soft_max?" => true,
       },
     ]
+    @title_text = {
+      "translation" => "soft_validations.savings.title_text",
+    }
     @informative_text = {}
   end
 

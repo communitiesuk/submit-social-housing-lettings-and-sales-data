@@ -8,8 +8,8 @@ class Form::Lettings::Pages::NetIncomeValueCheck < ::Form::Page
       "translation" => "soft_validations.net_income.hint_text",
       "arguments" => [
         {
-          "key" => "field_formatted_as_currency",
-          "arguments_for_key" => "ecstat1",
+          "key" => "ecstat1",
+          "label" => true,
           "i18n_template" => "ecstat1",
         },
         {

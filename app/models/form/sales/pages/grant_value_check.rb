@@ -7,6 +7,7 @@ class Form::Sales::Pages::GrantValueCheck < ::Form::Page
         "grant_outside_common_range?" => true,
       },
     ]
+    @title_text = { "translation" => "soft_validations.grant.title_text" }
     @informative_text = {}
   end
 

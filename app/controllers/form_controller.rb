@@ -11,7 +11,7 @@ class FormController < ApplicationController
       mandatory_questions_with_no_response = mandatory_questions_with_no_response(responses_for_page)
 
       if mandatory_questions_with_no_response.empty? && @log.update(responses_for_page.merge(updated_by: current_user))
-        flash[:notice] = "You have successfully updated #{@page.questions.map(&:check_answer_label).join(', ')}" if interruption_screen_referrer.present?
+        flash[:notice] = "You have successfully updated #{@page.questions.map(&:check_answer_label).join(', ').downcase}" if interruption_screen_referrer.present?
         redirect_to(successful_redirect_path)
       else
         mandatory_questions_with_no_response.map do |question|
@@ -47,7 +47,7 @@ class FormController < ApplicationController
 
   def show_page
     if request.params["referrer"] == "interruption_screen"
-      @interruption_page_id = request.headers["HTTP_REFERER"].split("/")[-1].underscore
+      @interruption_page_id = request.headers["HTTP_REFERER"].split("/")[-1].split("?")[0].underscore
     end
 
     if @log

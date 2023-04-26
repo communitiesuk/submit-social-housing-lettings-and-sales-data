@@ -569,6 +569,16 @@ en:
       title_text: "You told us that buyer 2 will not live in the property. For %{ownership_scheme} types, the buyer usually lives in the property."
     percentage_discount_value:
       title_text: "You told us that the percentage discount was %{discount}. This seems high for this type of property."
+    savings:
+      title_text: "Are you sure the savings are higher than £100,000?"
+    deposit:
+      title_text: "Are you sure that the deposit is this much higher than the buyer's savings?"
+    grant:
+      title_text: "Are you sure? Grants are usually £9,000 - £16,000"
+    wheelchair:
+      title_text: "Are you sure? You said previously that somebody in household uses a wheelchair"
+    mortgage:
+      title_text: "Are you sure that the mortgage is more than 5 times the income used for the mortgage application?"
 
   devise:
     two_factor_authentication:

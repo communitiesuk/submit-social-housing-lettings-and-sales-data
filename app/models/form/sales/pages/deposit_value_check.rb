@@ -7,6 +7,9 @@ class Form::Sales::Pages::DepositValueCheck < ::Form::Page
       },
     ]
     @informative_text = {}
+    @title_text = {
+      "translation" => "soft_validations.deposit.title_text",
+    }
   end
 
   def questions
