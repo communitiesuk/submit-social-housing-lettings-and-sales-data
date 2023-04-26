@@ -23,6 +23,7 @@ class BulkUpload::Lettings::Year2023::CsvParser
   end
 
   def cols
+    # Comment
     @cols ||= ("A".."EL").to_a
   end
 
