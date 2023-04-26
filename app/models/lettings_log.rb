@@ -526,8 +526,6 @@ class LettingsLog < Log
     if errors.of_kind?(:earnings, :under_hard_min)
       self.earnings = nil
       self.incfreq = nil
-      self.incref = 1
-      self.net_income_known = 2
     end
   end
 
