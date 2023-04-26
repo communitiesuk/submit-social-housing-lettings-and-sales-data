@@ -125,9 +125,9 @@ class FormHandler
     forms.count { |form| now.between?(form.start_date, form.end_date) } > 1
   end
 
-  def use_fake_forms!
+  def use_fake_forms!(fake_forms = nil)
     @directories = ["spec/fixtures/forms"]
-    @forms = get_all_forms
+    @forms = fake_forms || get_all_forms
   end
 
   def use_real_forms!

@@ -254,18 +254,50 @@ RSpec.describe FormHandler do
     end
 
     it "inserts questions from previous years that do not appear in more recent years in the correct position" do
-      current_sales_question_ids = described_class.instance.forms["current_sales"].questions.map(&:id).uniq
-      previous_sales_question_ids = described_class.instance.forms["previous_sales"].questions.map(&:id).uniq
-      obsolete_question_ids = previous_sales_question_ids - current_sales_question_ids
-      expect(obsolete_question_ids.count).to be_positive
-      obsolete_question_ids.each do |obsolete_id|
-        index = previous_sales_question_ids.index(obsolete_id)
-        previous_question_id = previous_sales_question_ids[index - 1]
-        expect(result).to(include { |q| q.id == id })
-        index_of_previous_question_in_result = result.index { |q| q.id == previous_question_id }
-        index_of_obsolete_question_in_result = result.index { |q| q.id == obsolete_id }
-        expect(index_of_obsolete_question_in_result).to be index_of_previous_question_in_result + 1
-      end
+      original_section = build(
+        :section,
+        id: "original_section",
+        subsections: [
+          build(
+            :subsection,
+            id: "original_subsection",
+            pages: [
+              build(:page, id: "1", questions: [build(:question, id: "1")]),
+              build(:page, id: "1a_deprecated", questions: [build(:question, id: "1a_deprecated")]),
+              build(:page, id: "2", questions: [build(:question, id: "2")]),
+              build(:page, id: "3", questions: [build(:question, id: "3")]),
+            ]
+          )
+        ]
+      )
+      new_section = build(
+        :section,
+        id: "new_section",
+        subsections: [
+          build(
+            :subsection,
+            id: "new_subsection",
+            pages: [
+              build(:page, id: "1", questions: [build(:question, id: "1")]),
+              build(:page, id: "2", questions: [build(:question, id: "2")]),
+              build(:page, id: "2a_new", questions: [build(:question, id: "2a_new")]),
+              build(:page, id: "3", questions: [build(:question, id: "3")]),
+            ]
+          )
+        ]
+      )
+      original_form = FormFactory.new(year: 1066, type: "sales")
+                                 .with_sections([original_section])
+                                 .build
+      new_form = FormFactory.new(year: 1485, type: "sales")
+                            .with_sections([new_section])
+                            .build
+      fake_forms = {
+        earlier_sales: original_form,
+        newer_sales: new_form,
+      }
+      described_class.instance.use_fake_forms!(fake_forms)
+      expect(result.map(&:id)).to eq %w[1 1a_deprecated 2 2a_new 3]
     end
   end
   # rubocop:enable RSpec/PredicateMatcher
