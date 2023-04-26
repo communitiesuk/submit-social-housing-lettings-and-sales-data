@@ -116,7 +116,7 @@ private
 
   def validate_response
     if page == "absorbing_organisation" && merge_request_params[:absorbing_organisation_id].blank? && merge_request_params[:new_absorbing_organisation].blank?
-      @merge_request.errors.add(:absorbing_organisation_id, "Select an option")
+      @merge_request.errors.add(:absorbing_organisation_id, I18n.t("validations.merge_request.absorbing_organisation_blank"))
       render previous_template
     end
   end
