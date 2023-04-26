@@ -337,6 +337,10 @@ class BulkUpload::Sales::Year2022::RowParser
 
 private
 
+  def buyer_not_interviewed?
+    field_6 == 1
+  end
+
   def shared_ownership?
     field_113 == 1
   end
@@ -476,7 +480,7 @@ private
     attributes["purchid"] = field_1
     attributes["saledate"] = saledate
 
-    attributes["noint"] = 2 if field_6 == 1
+    attributes["noint"] = 2 if buyer_not_interviewed?
 
     attributes["details_known_2"] = details_known?(2)
     attributes["details_known_3"] = details_known?(3)
@@ -515,7 +519,7 @@ private
     attributes["relat5"] = field_22
     attributes["relat6"] = field_23
 
-    attributes["ecstat1"] = field_24
+    attributes["ecstat1"] = buyer_not_interviewed? ? 0 : field_24
     attributes["ecstat2"] = field_25
     attributes["ecstat3"] = field_26
     attributes["ecstat4"] = field_27
@@ -523,19 +527,19 @@ private
     attributes["ecstat6"] = field_29
 
     attributes["ethnic_group"] = ethnic_group_from_ethnic
-    attributes["ethnic"] = field_30
-    attributes["national"] = field_31
-    attributes["income1nk"] = field_32.present? ? 0 : 1
+    attributes["ethnic"] = buyer_not_interviewed? ? 17 : field_30
+    attributes["national"] = buyer_not_interviewed? ? 13 : field_31
+    attributes["income1nk"] = buyer_not_interviewed? || field_32.blank? ? 1 : 0
     attributes["income1"] = field_32
     attributes["income2nk"] = field_33.present? ? 0 : 1
     attributes["income2"] = field_33
-    attributes["inc1mort"] = field_34
+    attributes["inc1mort"] = field_32.blank? ? 2 : field_34
     attributes["inc2mort"] = field_35
-    attributes["savingsnk"] = field_36.present? ? 0 : 1
+    attributes["savingsnk"] = buyer_not_interviewed? || field_36.blank? ? 1 : 0
     attributes["savings"] = field_36
-    attributes["prevown"] = field_37
+    attributes["prevown"] = buyer_not_interviewed? ? 3 : field_37
 
-    attributes["prevten"] = field_39
+    attributes["prevten"] = buyer_not_interviewed? ? 0 : field_39
     attributes["prevloc"] = field_40
     attributes["previous_la_known"] = previous_la_known
     attributes["ppcodenk"] = field_43
@@ -547,8 +551,8 @@ private
     attributes["pregother"] = field_47
     attributes["pregblank"] = 1 if [field_44, field_45, field_46, field_47].all?(&:blank?)
 
-    attributes["disabled"] = field_48
-    attributes["wheel"] = field_49
+    attributes["disabled"] = buyer_not_interviewed? ? 3 : field_48
+    attributes["wheel"] = buyer_not_interviewed? ? 3 : field_49
     attributes["beds"] = field_50
     attributes["proptype"] = field_51
     attributes["builtype"] = field_52
@@ -684,6 +688,7 @@ private
   end
 
   def ethnic_group_from_ethnic
+    return 17 if buyer_not_interviewed?
     return nil if field_30.blank?
 
     case field_30
