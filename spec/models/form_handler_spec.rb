@@ -225,35 +225,35 @@ RSpec.describe FormHandler do
     let(:now) { Time.zone.now }
 
     it "returns an array of questions" do
+      section = build(:section, :with_questions, question_ids: %w[1 2 3])
+      sales_form = FormFactory.new(year: 1936, type: "sales")
+                              .with_sections([section])
+                              .build
+      described_class.instance.use_fake_forms!({ only_sales: sales_form })
       expect(result).to(satisfy { |result| result.all? { |element| element.is_a?(Form::Question) } })
     end
 
     it "does not return multiple questions with the same id" do
-      unique_id_count = result.map(&:id).uniq.count
-      expect(result.count).to be unique_id_count
+      first_section = build(:section, :with_questions, question_ids: %w[1 2 3])
+      second_section = build(:section, :with_questions, question_ids: %w[2 3 4 5])
+      sales_form = FormFactory.new(year: 1936, type: "sales")
+                              .with_sections([first_section, second_section])
+                              .build
+      described_class.instance.use_fake_forms!({ only_sales: sales_form })
+      expect(result.map(&:id)).to eq %w[1 2 3 4 5]
     end
 
     it "returns the questions in the same order as the form" do
-      household_situation_question_ids = %w[prevten ppcodenk ppostcode_full previous_la_known prevloc buyers_organisations]
-      index_of_household_situation_start = 0
-      household_situation_question_ids.each_with_index do |id, i|
-        if i == 0
-          index_of_household_situation_start = result.index { |q| q.id == id }
-        else
-          question_index = result.index { |q| q.id == id }
-          expect(question_index).to be index_of_household_situation_start + i
-        end
-      end
+      first_section = build(:section, :with_questions, question_ids: %w[1 2 3])
+      second_section = build(:section, :with_questions, question_ids: %w[4 5 6])
+      sales_form = FormFactory.new(year: 1945, type: "sales")
+                              .with_sections([first_section, second_section])
+                              .build
+      described_class.instance.use_fake_forms!({ only_sales: sales_form })
+      expect(result.map(&:id)).to eq %w[1 2 3 4 5 6]
     end
 
-    it "returns questions form all years" do
-      current_sales_question_ids = described_class.instance.forms["current_sales"].questions.map(&:id).uniq
-      previous_sales_question_ids = described_class.instance.forms["previous_sales"].questions.map(&:id).uniq
-      expect(result.count).to be > current_sales_question_ids.count
-      expect(result.count).to be > previous_sales_question_ids.count
-    end
-
-    it "inserts questions from previous years that do not appear in more recent years in the correct position" do
+    it "inserts questions from all years in their correct positions" do
       original_section = build(:section, :with_questions, question_ids: %w[1 1a_deprecated 2 3])
       new_section = build(:section, :with_questions, question_ids: %w[1 2 2a_new 3])
       original_form = FormFactory.new(year: 1066, type: "sales")
