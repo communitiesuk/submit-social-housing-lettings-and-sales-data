@@ -137,6 +137,8 @@ Rails.application.routes.draw do
       patch "organisations", to: "merge_requests#update_organisations"
       get "organisations/remove", to: "merge_requests#remove_merging_organisation"
       get "absorbing-organisation"
+      get "confirm-telephone-number"
+      get "new-org-name"
     end
   end
 
