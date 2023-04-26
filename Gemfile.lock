@@ -277,6 +277,8 @@ GEM
     public_suffix (5.0.1)
     puma (5.6.5)
       nio4r (~> 2.0)
+    pundit (2.3.0)
+      activesupport (>= 3.0.0)
     raabro (1.4.0)
     racc (1.6.2)
     rack (2.2.6.4)
@@ -478,6 +480,7 @@ DEPENDENCIES
   propshaft
   pry-byebug
   puma (~> 5.0)
+  pundit
   rack (>= 2.2.6.3)
   rack-attack
   rack-mini-profiler (~> 2.0)

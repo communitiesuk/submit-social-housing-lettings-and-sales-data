@@ -48,6 +48,9 @@ gem "aws-sdk-s3"
 gem "paper_trail"
 # Store active record objects in version whodunnits
 gem "paper_trail-globalid"
+
+gem "pundit"
+
 # Request rate limiting
 gem "rack", ">= 2.2.6.3"
 gem "rack-attack"

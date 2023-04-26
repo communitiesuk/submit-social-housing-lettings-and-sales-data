@@ -9,6 +9,7 @@ require "capybara/rspec"
 require "capybara-screenshot/rspec"
 require "selenium-webdriver"
 require "view_component/test_helpers"
+require "pundit/rspec"
 
 Capybara.register_driver :headless do |app|
   options = Selenium::WebDriver::Firefox::Options.new

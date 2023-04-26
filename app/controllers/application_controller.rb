@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  include Pundit::Authorization
+
   before_action :set_paper_trail_whodunnit
 
   def render_not_found
