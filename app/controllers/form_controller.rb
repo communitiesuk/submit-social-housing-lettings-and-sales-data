@@ -46,6 +46,10 @@ class FormController < ApplicationController
   end
 
   def show_page
+    if request.params["referrer"] == "interruption_screen"
+      @interruption_page_id = request.headers["HTTP_REFERER"].split("/")[-1].underscore
+    end
+
     if @log
       page_id = request.path.split("/")[-1].underscore
       @page = form.get_page(page_id)
@@ -122,8 +126,7 @@ private
   end
 
   def interruption_screen_referrer
-    referrer = request.headers["HTTP_REFERER"].presence || ""
-    return CGI.parse(referrer.split("?")[-1])["referrer"][0] if referrer.present? && CGI.parse(referrer.split("?")[-1]).present?
+    params[@log.model_name.param_key]["interruption_page_id"]
   end
 
   def successful_redirect_path

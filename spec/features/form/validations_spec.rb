@@ -150,17 +150,17 @@ RSpec.describe "validations" do
         expect(page).to have_content("Net income is outside the expected range based on the lead tenant’s working situation")
         expect(page).to have_content("You told us the lead tenant’s working situation is: full-time – 30 hours or more")
         expect(page).to have_content("The household income you have entered is £750.00 every week")
-        click_button("Save and continue")
+        click_button("Confirm and continue")
         expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/net-income-uc-proportion")
       end
 
       it "allows to fix the questions that trigger the soft validation" do
         expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/net-income-value-check")
-        expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/net-income?referrer=net_income_value_check").twice
-        expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/person-1-working-situation?referrer=net_income_value_check")
+        expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/net-income?referrer=interruption_screen").twice
+        expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/person-1-working-situation?referrer=interruption_screen")
         expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/net-income-value-check")
-        click_link("Change", href: "/lettings-logs/#{lettings_log.id}/net-income?referrer=net_income_value_check", match: :first)
-        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/net-income?referrer=net_income_value_check")
+        click_link("Change", href: "/lettings-logs/#{lettings_log.id}/net-income?referrer=interruption_screen", match: :first)
+        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/net-income?referrer=interruption_screen")
         fill_in("lettings-log-earnings-field", with: income_under_soft_limit)
         choose("lettings-log-incfreq-1-field", allow_label_click: true)
         click_button("Save and continue")
@@ -171,11 +171,11 @@ RSpec.describe "validations" do
 
       it "allows to fix the questions from different sections" do
         expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/net-income-value-check")
-        expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/net-income?referrer=net_income_value_check").twice
-        expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/person-1-working-situation?referrer=net_income_value_check")
+        expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/net-income?referrer=interruption_screen").twice
+        expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/person-1-working-situation?referrer=interruption_screen")
         expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/net-income-value-check")
-        click_link("Change", href: "/lettings-logs/#{lettings_log.id}/person-1-working-situation?referrer=net_income_value_check")
-        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/person-1-working-situation?referrer=net_income_value_check")
+        click_link("Change", href: "/lettings-logs/#{lettings_log.id}/person-1-working-situation?referrer=interruption_screen")
+        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/person-1-working-situation?referrer=interruption_screen")
         choose("lettings-log-ecstat1-10-field", allow_label_click: true)
         click_button("Save and continue")
         expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/net-income-value-check")

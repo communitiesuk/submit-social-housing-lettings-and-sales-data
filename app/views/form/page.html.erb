@@ -59,6 +59,7 @@
       <% end %>
 
       <%= f.hidden_field :page, value: @page.id %>
+      <%= f.hidden_field :interruption_page_id, value: @interruption_page_id %>
 
       <div class="govuk-button-group">
         <% if !@page.interruption_screen? && if request.query_parameters["referrer"] != "check_answers" %>

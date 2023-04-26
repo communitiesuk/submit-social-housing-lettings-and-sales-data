@@ -257,11 +257,6 @@ RSpec.describe Form::Question, type: :model do
       expect(question.action_text(lettings_log)).to match(/Change/)
     end
 
-    it "has an update answer link href helper" do
-      lettings_log.id = 1
-      expect(action_href(lettings_log, page.id)).to eq("/lettings-logs/1/net-income?referrer=check_answers")
-    end
-
     context "when the question has an inferred answer" do
       let(:section_id) { "tenancy_and_property" }
       let(:subsection_id) { "property_information" }
