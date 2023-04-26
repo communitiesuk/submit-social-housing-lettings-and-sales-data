@@ -309,6 +309,7 @@ class BulkUpload::Lettings::Year2022::RowParser
   validate :validate_no_disabled_needs_conjunction, on: :after_log
   validate :validate_dont_know_disabled_needs_conjunction, on: :after_log
   validate :validate_no_and_dont_know_disabled_needs_conjunction, on: :after_log
+  validate :validate_if_log_already_exists, on: :after_log, if: -> { FeatureToggle.bulk_upload_duplicate_log_check_enabled? }
 
   validate :validate_owning_org_data_given, on: :after_log
   validate :validate_owning_org_exists, on: :after_log
@@ -340,9 +341,11 @@ class BulkUpload::Lettings::Year2022::RowParser
   end
 
   def valid?
+    return @valid if @valid
+
     errors.clear
 
-    return true if blank_row?
+    return @valid = true if blank_row?
 
     super(:before_log)
     before_errors = errors.dup
@@ -362,7 +365,7 @@ class BulkUpload::Lettings::Year2022::RowParser
       end
     end
 
-    errors.blank?
+    @valid = errors.blank?
   end
 
   def blank_row?
@@ -393,6 +396,12 @@ class BulkUpload::Lettings::Year2022::RowParser
 
   def property_ref
     field_100
+  end
+
+  def log_already_exists?
+    @log_already_exists ||= LettingsLog
+      .where(status: %w[not_started in_progress completed])
+      .exists?(duplicate_check_fields.index_with { |field| log.public_send(field) })
   end
 
 private
@@ -437,6 +446,20 @@ private
 
   def created_by
     @created_by ||= User.find_by(email: field_112)
+  end
+
+  def duplicate_check_fields
+    %w[
+      startdate
+      age1
+      sex1
+      ecstat1
+      owning_organisation
+      tcharge
+      propcode
+      postcode_full
+      location
+    ]
   end
 
   def validate_location_related
@@ -697,6 +720,25 @@ private
     log.form.setup_sections[0].subsections[0].questions.include?(question)
   end
 
+  def validate_if_log_already_exists
+    if log_already_exists?
+      error_message = "This is a duplicate log"
+
+      errors.add(:field_5, error_message) # location
+      errors.add(:field_12, error_message) # age1
+      errors.add(:field_20, error_message) # sex1
+      errors.add(:field_35, error_message) # ecstat1
+      errors.add(:field_84, error_message) # tcharge
+      errors.add(:field_96, error_message) # startdate
+      errors.add(:field_97, error_message) # startdate
+      errors.add(:field_98, error_message) # startdate
+      errors.add(:field_100, error_message) # propcode
+      errors.add(:field_108, error_message) # postcode_full
+      errors.add(:field_109, error_message) # postcode_full
+      errors.add(:field_111, error_message) # owning_organisation
+    end
+  end
+
   def field_mapping_for_errors
     {
       lettype: [:field_1],
@@ -896,16 +938,8 @@ private
     Organisation.find_by_id_on_multiple_fields(field_111)
   end
 
-  def owning_organisation_id
-    owning_organisation&.id
-  end
-
   def managing_organisation
     Organisation.find_by_id_on_multiple_fields(field_113)
-  end
-
-  def managing_organisation_id
-    managing_organisation&.id
   end
 
   def attributes_for_log
@@ -916,8 +950,8 @@ private
     attributes["la"] = field_107
     attributes["postcode_known"] = postcode_known
     attributes["postcode_full"] = postcode_full
-    attributes["owning_organisation_id"] = owning_organisation_id
-    attributes["managing_organisation_id"] = managing_organisation_id
+    attributes["owning_organisation"] = owning_organisation
+    attributes["managing_organisation"] = managing_organisation
     attributes["renewal"] = renewal
     attributes["scheme"] = scheme
     attributes["location"] = location
