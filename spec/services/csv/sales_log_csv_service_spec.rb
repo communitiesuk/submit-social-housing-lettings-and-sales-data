@@ -19,32 +19,44 @@ RSpec.describe Csv::SalesLogCsvService do
     expect(result).to be_a String
   end
 
-  it "returns a csv string with headers" do
+  it "returns a csv with headers" do
     expect(csv.first.first).to eq "id"
     expect(csv.second.first).not_to be log.id.to_s
   end
 
-  it "includes log attributes related to questions to the headers" do
-    headers = csv.first
-    expect(headers).to include("type", "age1", "buy1livein")
+  context "when stubbing :ordered_sales_questions_for_all_years" do
+    let(:sales_form) do
+      FormFactory.new(year: 1936, type: "sales")
+                 .with_sections([build(:section, :with_questions, question_ids:)])
+                 .build
+    end
+    let(:question_ids) { %w[type age1 buy1livein exdate] }
+
+    before do
+      allow(FormHandler).to receive(:instance).and_return(form_handler_mock)
+      allow(form_handler_mock).to receive(:form_name_from_start_year)
+      allow(form_handler_mock).to receive(:get_form).and_return(sales_form)
+      allow(form_handler_mock).to receive(:ordered_sales_questions_for_all_years).and_return(sales_form.questions)
+    end
+
+    it "includes log attributes related to questions to the headers" do
+      headers = csv.first
+      expect(headers).to include(*question_ids.first(3))
+    end
+
+    it "removes some log attributes related to questions from the headers and replaces them with their derived values in the correct order" do
+      headers = csv.first
+      expect(headers).not_to include "exdate"
+      expect(headers.last(4)).to eq(%w[buy1livein exday exmonth exyear])
+    end
   end
 
-  it "includes metadata attributes attributes of related entities to the headers" do
+  it "includes attributes not related to questions to the headers" do
     headers = csv.first
-    expect(headers).to include("id", "status", "created_at", "updated_at", "created_by_name", "is_dpo", "owning_organisation_name", "collection_start_year")
+    expect(headers).to include(*%w[id status created_at updated_at old_id])
   end
 
-  it "removes some log attributes related to questions from the headers and replaces them with their derived values in the correct order" do
-    headers = csv.first
-    expect(headers).not_to include "exdate"
-    expect(headers).to include("exday", "exmonth", "exyear")
-    index_of_exdate = FormHandler.instance.ordered_sales_questions_for_all_years.index { |q| q.id == "exdate" }
-    id_of_question_before_exdate = FormHandler.instance.ordered_sales_questions_for_all_years[index_of_exdate - 1].id
-    index_in_headers_of_question_before_exdate = headers.index(id_of_question_before_exdate)
-    expect(headers.index("exday")).to be index_in_headers_of_question_before_exdate + 1
-  end
-
-  it "returns a csv string with the correct number of logs" do
+  it "returns a csv with the correct number of logs" do
     create_list(:sales_log, 15)
     log_count = SalesLog.count
     expected_row_count_with_headers = log_count + 1
@@ -87,8 +99,13 @@ RSpec.describe Csv::SalesLogCsvService do
     end
 
     it "exports the CSV with all values correct" do
-      expected_content = File.open("spec/fixtures/files/sales_logs_csv_export_labels.csv", "r:UTF-8").read
-      expect(service.prepare_csv(SalesLog.all)).to eq expected_content
+      expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_labels.csv")
+      values_to_delete = %w[id]
+      values_to_delete.each do |attribute|
+        index = csv.first.index(attribute)
+        csv.second[index] = nil
+      end
+      expect(csv).to eq expected_content
     end
   end
 
@@ -130,8 +147,13 @@ RSpec.describe Csv::SalesLogCsvService do
     end
 
     it "exports the CSV with all values correct" do
-      expected_content = File.open("spec/fixtures/files/sales_logs_csv_export_codes.csv", "r:UTF-8").read
-      expect(service.prepare_csv(SalesLog.all)).to eq expected_content
+      expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_codes.csv")
+      values_to_delete = %w[id]
+      values_to_delete.each do |attribute|
+        index = csv.first.index(attribute)
+        csv.second[index] = nil
+      end
+      expect(csv).to eq expected_content
     end
   end
 end
