@@ -10,4 +10,8 @@ class Form::Lettings::Pages::PropertyMajorRepairsValueCheck < ::Form::Page
   def questions
     @questions ||= [Form::Lettings::Questions::MajorRepairsDateValueCheck.new(nil, nil, self)]
   end
+
+  def affected_question_ids
+    %w[mrcdate startdate]
+  end
 end

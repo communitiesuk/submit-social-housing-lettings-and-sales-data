@@ -41,4 +41,8 @@ RSpec.describe Form::Lettings::Pages::CareHomeChargesValueCheck, type: :model do
   it "has the correct informative_text" do
     expect(page.informative_text).to eq("")
   end
+
+  it "has the correct affected_question_ids" do
+    expect(page.affected_question_ids).to eq(%w[chcharge is_carehome])
+  end
 end

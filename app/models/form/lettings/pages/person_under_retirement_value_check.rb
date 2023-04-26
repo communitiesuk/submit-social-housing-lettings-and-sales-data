@@ -28,9 +28,14 @@ class Form::Lettings::Pages::PersonUnderRetirementValueCheck < ::Form::Page
         },
       ],
     }
+    @person_index = person_index
   end
 
   def questions
     @questions ||= [Form::Lettings::Questions::NoRetirementValueCheck.new(nil, nil, self)]
+  end
+
+  def affected_question_ids
+    ["ecstat#{@person_index}", "sex#{@person_index}", "age#{@person_index}"]
   end
 end

@@ -28,4 +28,8 @@ class Form::Lettings::Pages::MaxRentValueCheck < ::Form::Page
   def questions
     @questions ||= [Form::Lettings::Questions::RentValueCheck.new(nil, nil, self, check_answers_card_number: @check_answers_card_number)]
   end
+
+  def affected_question_ids
+    %w[brent startdate la beds rent_type needstype]
+  end
 end

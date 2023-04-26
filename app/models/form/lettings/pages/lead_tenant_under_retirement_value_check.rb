@@ -29,4 +29,8 @@ class Form::Lettings::Pages::LeadTenantUnderRetirementValueCheck < ::Form::Page
   def questions
     @questions ||= [Form::Lettings::Questions::NoRetirementValueCheck.new(nil, nil, self)]
   end
+
+  def affected_question_ids
+    %w[ecstat1 sex1 age1]
+  end
 end

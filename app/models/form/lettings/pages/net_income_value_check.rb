@@ -24,4 +24,8 @@ class Form::Lettings::Pages::NetIncomeValueCheck < ::Form::Page
   def questions
     @questions ||= [Form::Lettings::Questions::NetIncomeValueCheck.new(nil, nil, self)]
   end
+
+  def affected_question_ids
+    %w[incfreq earnings ecstat1]
+  end
 end
