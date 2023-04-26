@@ -10,7 +10,6 @@ class MergeRequestsController < ApplicationController
   ]
   before_action :authenticate_user!
   before_action :authenticate_scope!, except: [:create]
-  before_action :redirect_to_next_page
 
   def absorbing_organisation; end
   def confirm_telephone_number; end
@@ -77,10 +76,6 @@ private
     page
   end
 
-  def redirect_to_next_page
-    redirect_to next_page_path if create_new_org?
-  end
-
   def create_new_org?
     params.dig(:merge_request, :absorbing_organisation_id) == "other"
   end
@@ -104,6 +99,15 @@ private
 
     if merge_params[:requesting_organisation_id].present? && (current_user.data_coordinator? || current_user.data_provider?)
       merge_params[:requesting_organisation_id] = current_user.organisation.id
+    end
+
+    if merge_params[:absorbing_organisation_id].present?
+      if create_new_org?
+        merge_params[:new_absorbing_organisation] = true
+        merge_params[:absorbing_organisation_id] = nil
+      else
+        merge_params[:new_absorbing_organisation] = false
+      end
     end
 
     merge_params

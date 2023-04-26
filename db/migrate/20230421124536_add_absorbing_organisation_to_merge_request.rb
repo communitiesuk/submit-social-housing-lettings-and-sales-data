@@ -1,5 +1,8 @@
 class AddAbsorbingOrganisationToMergeRequest < ActiveRecord::Migration[7.0]
   def change
-    add_column :merge_requests, :absorbing_organisation_id, :integer
+    change_table :merge_requests, bulk: true do |t|
+      t.column :absorbing_organisation_id, :integer
+      t.column :new_absorbing_organisation, :boolean
+    end
   end
 end

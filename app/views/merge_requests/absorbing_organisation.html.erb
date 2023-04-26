@@ -23,11 +23,10 @@
             :absorbing_organisation_id,
             org.id,
             label: { text: org.name },
-            link_errors: true,
           ) %>
         <% end %>
         <%= f.govuk_radio_divider %>
-        <%= f.govuk_radio_button :absorbing_organisation_id, "other", label: { text: "These organisations are merging into a new one" } %>
+        <%= f.govuk_radio_button :absorbing_organisation_id, "other", checked: @merge_request.new_absorbing_organisation?, label: { text: "These organisations are merging into a new one" } %>
       <% end %>
 
       <%= f.hidden_field :page, value: "absorbing_organisation" %>

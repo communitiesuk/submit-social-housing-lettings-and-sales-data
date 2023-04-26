@@ -112,7 +112,7 @@ RSpec.describe MergeRequestsController, type: :request do
       end
 
       context "when the user selects an organisation that is a part of another merge" do
-        let(:another_organisation) { create(:organisation, name: "Other Test Org") }
+        let(:another_organisation) { create(:organisation) }
         let(:params) { { merge_request: { merging_organisation: another_organisation.id } } }
 
         before do
@@ -130,7 +130,7 @@ RSpec.describe MergeRequestsController, type: :request do
       end
 
       context "when the user selects an organisation that is a part of another unsubmitted merge" do
-        let(:another_organisation) { create(:organisation, name: "Other Test Org") }
+        let(:another_organisation) { create(:organisation) }
         let(:params) { { merge_request: { merging_organisation: another_organisation.id } } }
 
         before do
@@ -147,7 +147,7 @@ RSpec.describe MergeRequestsController, type: :request do
       end
 
       context "when the user selects an organisation that is a part of current merge" do
-        let(:another_organisation) { create(:organisation, name: "Other Test Org") }
+        let(:another_organisation) { create(:organisation) }
         let(:params) { { merge_request: { merging_organisation: another_organisation.id } } }
 
         before do
@@ -261,20 +261,31 @@ RSpec.describe MergeRequestsController, type: :request do
       end
 
       context "when absorbing_organisation_id set to other" do
+        let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: other_organisation) }
         let(:params) do
           { merge_request: { absorbing_organisation_id: "other", page: "absorbing_organisation" } }
         end
-
-        before do
+        let(:request) do
           patch "/merge-request/#{merge_request.id}", headers:, params:
         end
 
         it "redirects to new org path" do
+          request
+
           expect(response).to redirect_to(new_org_name_merge_request_path(merge_request))
+        end
+
+        it "resets absorbing_organisation and sets new_absorbing_organisation to true" do
+          expect { request }.to change {
+            merge_request.reload.absorbing_organisation
+          }.from(other_organisation).to(nil).and change {
+            merge_request.reload.new_absorbing_organisation
+          }.from(nil).to(true)
         end
       end
 
       context "when absorbing_organisation_id set to id" do
+        let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, new_absorbing_organisation: true) }
         let(:params) do
           { merge_request: { absorbing_organisation_id: other_organisation.id, page: "absorbing_organisation" } }
         end
@@ -289,8 +300,12 @@ RSpec.describe MergeRequestsController, type: :request do
           expect(response).to redirect_to(confirm_telephone_number_merge_request_path(merge_request))
         end
 
-        it "updates the merge request" do
-          expect { request }.to change { merge_request.reload.absorbing_organisation_id }.from(nil).to(other_organisation.id)
+        it "updates absorbing_organisation_id and sets new_absorbing_organisation to false" do
+          expect { request }.to change {
+            merge_request.reload.absorbing_organisation
+          }.from(nil).to(other_organisation).and change {
+            merge_request.reload.new_absorbing_organisation
+          }.from(true).to(false)
         end
       end
     end

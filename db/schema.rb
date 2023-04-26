@@ -368,6 +368,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_21_124536) do
     t.datetime "updated_at", null: false
     t.integer "status"
     t.integer "absorbing_organisation_id"
+    t.boolean "new_absorbing_organisation"
   end
 
   create_table "organisation_relationships", force: :cascade do |t|
