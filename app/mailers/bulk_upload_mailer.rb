@@ -27,9 +27,9 @@ class BulkUploadMailer < NotifyMailer
 
   def send_bulk_upload_complete_mail(user:, bulk_upload:)
     url = if bulk_upload.lettings?
-            "#{lettings_logs_url}?years[]=&status[]=&user=all&organisation_select=all"
+            lettings_logs_url("[years][]" => "", "[status][]" => "", user: :all, organisation_select: :all)
           else
-            "#{sales_logs_url}?years[]=&status[]=&user=all"
+            sales_logs_url("[years][]" => "", "[status][]" => "", user: :all)
           end
 
     n_logs = pluralize(bulk_upload.logs.count, "log")
