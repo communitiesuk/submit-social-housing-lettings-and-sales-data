@@ -241,4 +241,19 @@ RSpec.describe InterruptionScreenHelper do
       end
     end
   end
+
+  describe "soft_validation_affected_questions" do
+    let(:question) { lettings_log.form.get_question("retirement_value_check", lettings_log) }
+
+    it "returns a list of questions affected by the soft validation" do
+      expect(soft_validation_affected_questions(question, lettings_log).count).to eq(2)
+      expect(soft_validation_affected_questions(question, lettings_log).map(&:id)).to eq(%w[age1 ecstat1])
+    end
+  end
+
+  describe "interruption_action_href" do
+    it "returns a path to given question with interruption screen referrer" do
+      expect(interruption_action_href(lettings_log, "retirement_value_check")).to eq("/lettings-logs/#{lettings_log.id}/retirement-value-check?referrer=interruption_screen")
+    end
+  end
 end

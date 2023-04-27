@@ -226,7 +226,8 @@
                     "operand": 50
                   }
                 }
-              ]
+              ],
+              "affected_question_ids": ["age1", "ecstat1"]
             },
             "person_2_working_situation": {
               "header": "",
