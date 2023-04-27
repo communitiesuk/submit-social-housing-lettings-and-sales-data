@@ -44,7 +44,7 @@ class SalesLogsController < LogsController
   end
 
   def email_csv
-    all_orgs = params["organisation_select"] == "all" # what's this for? params['organisation_select'] appears to always be nil
+    all_orgs = params["organisation_select"] == "all"
     EmailCsvJob.perform_later(current_user, search_term, @session_filters, all_orgs, nil, codes_only_export?, "sales")
     redirect_to csv_confirmation_sales_logs_path
   end

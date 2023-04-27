@@ -40,14 +40,6 @@ class FormHandler
     }
   end
 
-  # there is a problem with this that is potentially more general, which is what we plan to do about
-  # forms that are 2+ years old.
-  # eg. if there is a question/attribute on the 21/22 form that no longer exists, we will not export that already
-  # What is the status of old forms on the web app? I believe we are not allowed to edit but are we allowed to view?
-  # If yes that might be a problem.
-  # If not I suggest that it might be easier in this method to replace line 1 with:
-  # sales_forms = [2021..2023].each { |year| Form.new(nil, year, SALES_SECTIONS, sales) }
-  # sidenote, why do we save a reference to the next years sales log in the FormHandler?
   def ordered_sales_questions_for_all_years
     sales_forms = forms.filter { |name, _form| name.end_with? "sales" }.values
     ordered_questions = sales_forms.pop.questions.uniq(&:id)
