@@ -11,7 +11,7 @@ class FormController < ApplicationController
       mandatory_questions_with_no_response = mandatory_questions_with_no_response(responses_for_page)
 
       if mandatory_questions_with_no_response.empty? && @log.update(responses_for_page.merge(updated_by: current_user))
-        flash[:notice] = "You have successfully updated #{@page.questions.map(&:check_answer_label).join(', ').downcase}" if interruption_screen_referrer.present?
+        flash[:notice] = "You have successfully updated #{@page.questions.map(&:check_answer_label).join(', ').downcase}" if previous_interruption_screen_page_id.present?
         redirect_to(successful_redirect_path)
       else
         mandatory_questions_with_no_response.map do |question|
@@ -54,7 +54,7 @@ class FormController < ApplicationController
       page_id = request.path.split("/")[-1].underscore
       @page = form.get_page(page_id)
       @subsection = form.subsection_for_page(@page)
-      if @page.routed_to?(@log, current_user) || @page.interruption_screen?
+      if @page.routed_to?(@log, current_user) || is_referrer_interruption_screen?
         render "form/page"
       else
         redirect_to @log.lettings? ? lettings_log_path(@log) : sales_log_path(@log)
@@ -125,7 +125,12 @@ private
     referrer.present? && CGI.parse(referrer.split("?")[-1]).present? && CGI.parse(referrer.split("?")[-1])["referrer"][0] == "check_answers"
   end
 
-  def interruption_screen_referrer
+  def is_referrer_interruption_screen?
+    referrer = request.headers["HTTP_REFERER"].presence || ""
+    referrer.present? && CGI.parse(referrer.split("?")[-1]).present? && CGI.parse(referrer.split("?")[-1])["referrer"][0] == "interruption_screen"
+  end
+
+  def previous_interruption_screen_page_id
     params[@log.model_name.param_key]["interruption_page_id"]
   end
 
@@ -141,8 +146,8 @@ private
         return send("#{@log.model_name.param_key}_#{form.subsection_for_page(@page).id}_check_answers_path", @log)
       end
     end
-    if interruption_screen_referrer.present?
-      return send("#{@log.class.name.underscore}_#{interruption_screen_referrer}_path", @log)
+    if previous_interruption_screen_page_id.present?
+      return send("#{@log.class.name.underscore}_#{previous_interruption_screen_page_id}_path", @log)
     end
 
     redirect_path = form.next_page_redirect_path(@page, @log, current_user)
