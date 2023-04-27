@@ -250,10 +250,4 @@ RSpec.describe InterruptionScreenHelper do
       expect(soft_validation_affected_questions(question, lettings_log).map(&:id)).to eq(%w[age1 ecstat1])
     end
   end
-
-  describe "interruption_action_href" do
-    it "returns a path to given question with interruption screen referrer" do
-      expect(interruption_action_href(lettings_log, "retirement_value_check")).to eq("/lettings-logs/#{lettings_log.id}/retirement-value-check?referrer=interruption_screen")
-    end
-  end
 end

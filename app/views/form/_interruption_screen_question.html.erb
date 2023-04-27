@@ -31,7 +31,7 @@
             <% if @log.collection_period_open? %>
               <% row.action(
                 text: affected_question.action_text(@log),
-                href: interruption_action_href(@log, affected_question.page.id),
+                href: action_href(@log, affected_question.page.id, "interruption_screen"),
                 visually_hidden_text: affected_question.check_answer_label.to_s.downcase,
               ) %>
             <% end %>
