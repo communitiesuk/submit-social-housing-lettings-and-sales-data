@@ -1,16 +1,4 @@
-<% if question.page.routed_to?(@log, current_user) %>
-  <%= govuk_panel(
-    classes: "app-panel--interruption",
-  ) do %>
-    <p class="govuk-heading-l"><%= display_title_text(title_text, lettings_log) %></p>
-    <% if informative_text.present? %>
-      <p class="govuk-body-l"><%= display_informative_text(informative_text, lettings_log) %></p>
-    <% end %>
-    <% if question.hint_text.present? %>
-      <p class="govuk-body-l"><%= question.hint_text&.html_safe %></p>
-    <% end %>
-  <% end %>
-<% end %>
+<%= render partial: "form/interruption_screen_banner", locals: { question:, title_text:, informative_text:, lettings_log: } %>
 
 <h1 class="govuk-heading-m">
   Make sure these answers are all correct
