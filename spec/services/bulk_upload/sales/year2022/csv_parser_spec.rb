@@ -22,7 +22,7 @@ RSpec.describe BulkUpload::Sales::Year2022::CsvParser do
     let(:log) { build(:sales_log, :completed) }
 
     before do
-      file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_2022_sales_csv_row)
+      file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2022_sales_csv_row)
       file.rewind
     end
 
@@ -44,7 +44,7 @@ RSpec.describe BulkUpload::Sales::Year2022::CsvParser do
 
     before do
       file.write(bom)
-      file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_2022_sales_csv_row)
+      file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2022_sales_csv_row)
       file.close
     end
 
@@ -61,7 +61,7 @@ RSpec.describe BulkUpload::Sales::Year2022::CsvParser do
 
     before do
       file.write(invalid_sequence)
-      file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_2022_sales_csv_row)
+      file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2022_sales_csv_row)
       file.close
     end
 
@@ -84,7 +84,7 @@ RSpec.describe BulkUpload::Sales::Year2022::CsvParser do
       let(:log) { build(:sales_log, :completed) }
 
       before do
-        file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_2022_sales_csv_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2022_sales_csv_row)
         file.rewind
       end
 

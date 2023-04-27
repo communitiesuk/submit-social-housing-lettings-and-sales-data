@@ -1,4 +1,4 @@
-class BulkUpload::LogToCsv
+class BulkUpload::LettingsLogToCsv
   attr_reader :log, :line_ending, :col_offset, :overrides
 
   def initialize(log:, line_ending: "\n", col_offset: 1, overrides: {})
