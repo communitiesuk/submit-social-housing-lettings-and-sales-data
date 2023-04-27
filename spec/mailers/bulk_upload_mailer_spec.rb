@@ -46,7 +46,7 @@ RSpec.describe BulkUploadMailer do
           filename: bulk_upload.filename,
           upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
           success_description: "The lettings 2022/23 data you uploaded has been checked. The 0 logs you uploaded are now complete.",
-          logs_link: "#{lettings_logs_url}?[years][]=&[status][]=&user=all&organisation_select=all",
+          logs_link: "#{lettings_logs_url}?years[]=&status[]=&user=all&organisation_select=all",
         },
       )
 
