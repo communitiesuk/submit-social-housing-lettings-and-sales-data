@@ -339,6 +339,8 @@ class BulkUpload::Lettings::Year2023::RowParser
 
   validate :validate_uprn_exists_if_any_key_adddress_fields_are_blank, on: :after_log
 
+  validate :validate_incomplete_soft_validations, on: :after_log
+
   def self.question_for_field(field)
     QUESTIONS[field]
   end
@@ -454,6 +456,22 @@ private
   def validate_uprn_exists_if_any_key_adddress_fields_are_blank
     if field_18.blank? && (field_19.blank? || field_21.blank?)
       errors.add(:field_18, I18n.t("validations.not_answered", question: "UPRN"))
+    end
+  end
+
+  def validate_incomplete_soft_validations
+    routed_to_soft_validation_questions = log.form.questions.filter { |q| q.type == "interruption_screen" && q.page.routed_to?(log, nil) }
+    routed_to_soft_validation_questions.each do |question|
+      next unless question
+      next if log.optional_fields.include?(question.id)
+      next if question.completed?(log)
+
+      question.page.interruption_screen_question_ids.each do |interruption_screen_question_id|
+        field_mapping_for_errors[interruption_screen_question_id.to_sym].each do |field|
+          error_message = [display_title_text(question.page.title_text, log), display_informative_text(question.page.informative_text, log)].join(". ")
+          errors.add(field, message: error_message, category: :soft_validation)
+        end
+      end
     end
   end
 
@@ -1387,6 +1405,46 @@ private
       1
     else
       0
+    end
+  end
+
+  def display_title_text(title_text, log)
+    return "" if title_text.nil?
+
+    translation_params = {}
+    arguments = title_text["arguments"] || {}
+    arguments.each do |argument|
+      value = get_value_from_argument(log, argument)
+      translation_params[argument["i18n_template"].to_sym] = value
+    end
+    I18n.t(title_text["translation"], **translation_params).to_s
+  end
+
+  def display_informative_text(informative_text, log)
+    return "" unless informative_text["arguments"]
+
+    translation_params = {}
+    informative_text["arguments"].each do |argument|
+      value = get_value_from_argument(log, argument)
+      translation_params[argument["i18n_template"].to_sym] = value
+    end
+
+    begin
+      translation = I18n.t(informative_text["translation"], **translation_params)
+      translation.to_s.html_safe
+    rescue I18n::MissingInterpolationArgument => e
+      Rails.logger.error(e.message)
+      ""
+    end
+  end
+
+  def get_value_from_argument(log, argument)
+    if argument["label"]
+      log.form.get_question(argument["key"], log).answer_label(log).downcase
+    elsif argument["arguments_for_key"]
+      log.public_send(argument["key"], argument["arguments_for_key"])
+    else
+      log.public_send(argument["key"])
     end
   end
 end
