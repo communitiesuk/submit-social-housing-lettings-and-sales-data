@@ -25,7 +25,8 @@
       <%= render partial: "form/check_answers_summary_list", locals: {
         subsection:,
         lettings_log: @log,
-        questions: total_applicable_questions(subsection, @log, current_user)
+        questions: total_applicable_questions(subsection, @log, current_user),
+        referrer: "check_answers",
       } %>
     <% end %>
 
