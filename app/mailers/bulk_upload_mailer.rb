@@ -27,7 +27,7 @@ class BulkUploadMailer < NotifyMailer
 
   def send_bulk_upload_complete_mail(user:, bulk_upload:)
     url = if bulk_upload.lettings?
-            "#{lettings_logs_url}?[years][]=&[status][]=&user=all"
+            "#{lettings_logs_url}?[years][]=&[status][]=&user=all&organisation_select=all"
           else
             "#{sales_logs_url}?[years][]=&[status][]=&user=all"
           end
