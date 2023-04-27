@@ -11,7 +11,11 @@ class FormController < ApplicationController
       mandatory_questions_with_no_response = mandatory_questions_with_no_response(responses_for_page)
 
       if mandatory_questions_with_no_response.empty? && @log.update(responses_for_page.merge(updated_by: current_user))
+<<<<<<< HEAD
         flash[:notice] = "You have successfully updated #{@page.questions.map(&:check_answer_label).first.downcase}" if previous_interruption_screen_page_id.present?
+=======
+        flash[:notice] = "You have successfully updated #{@page.questions.map(&:check_answer_label).join(', ').downcase}" if previous_interruption_screen_page_id.present?
+>>>>>>> 58bacba66 (Update is_referrer_interruption_screen? check and naming)
         redirect_to(successful_redirect_path)
       else
         mandatory_questions_with_no_response.map do |question|
@@ -55,7 +59,11 @@ class FormController < ApplicationController
       page_id = request.path.split("/")[-1].underscore
       @page = form.get_page(page_id)
       @subsection = form.subsection_for_page(@page)
+<<<<<<< HEAD
       if @page.routed_to?(@log, current_user) || is_referrer_type?("interruption_screen")
+=======
+      if @page.routed_to?(@log, current_user) || is_referrer_interruption_screen?
+>>>>>>> 58bacba66 (Update is_referrer_interruption_screen? check and naming)
         render "form/page"
       else
         redirect_to @log.lettings? ? lettings_log_path(@log) : sales_log_path(@log)
@@ -125,6 +133,7 @@ private
     referrer_from_query == referrer_type
   end
 
+<<<<<<< HEAD
   def referrer_from_query
     referrer = request.headers["HTTP_REFERER"]
     return unless referrer
@@ -136,6 +145,11 @@ private
     return unless parsed_params["referrer"]
 
     parsed_params["referrer"][0]
+=======
+  def is_referrer_interruption_screen?
+    referrer = request.headers["HTTP_REFERER"].presence || ""
+    referrer.present? && CGI.parse(referrer.split("?")[-1]).present? && CGI.parse(referrer.split("?")[-1])["referrer"][0] == "interruption_screen"
+>>>>>>> 58bacba66 (Update is_referrer_interruption_screen? check and naming)
   end
 
   def previous_interruption_screen_page_id
@@ -159,7 +173,11 @@ private
       end
     end
     if previous_interruption_screen_page_id.present?
+<<<<<<< HEAD
       return send("#{@log.class.name.underscore}_#{previous_interruption_screen_page_id}_path", @log, { referrer: previous_interruption_screen_referrer }.compact)
+=======
+      return send("#{@log.class.name.underscore}_#{previous_interruption_screen_page_id}_path", @log)
+>>>>>>> 58bacba66 (Update is_referrer_interruption_screen? check and naming)
     end
 
     redirect_path = form.next_page_redirect_path(@page, @log, current_user)
