@@ -72,8 +72,8 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
       })
     end
 
-    it "has correct affected_question_ids" do
-      expect(page.affected_question_ids).to eq(%w[age1 exstat1 sex1])
+    it "has correct interruption_screen_question_ids" do
+      expect(page.interruption_screen_question_ids).to eq(%w[age1 exstat1 sex1])
     end
   end
 
@@ -124,8 +124,8 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
       })
     end
 
-    it "has correct affected_question_ids" do
-      expect(page.affected_question_ids).to eq(%w[age2 exstat2 sex2])
+    it "has correct interruption_screen_question_ids" do
+      expect(page.interruption_screen_question_ids).to eq(%w[age2 exstat2 sex2])
     end
   end
 
@@ -176,8 +176,8 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
       })
     end
 
-    it "has correct affected_question_ids" do
-      expect(page.affected_question_ids).to eq(%w[age3 exstat3 sex3])
+    it "has correct interruption_screen_question_ids" do
+      expect(page.interruption_screen_question_ids).to eq(%w[age3 exstat3 sex3])
     end
   end
 
@@ -228,8 +228,8 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
       })
     end
 
-    it "has correct affected_question_ids" do
-      expect(page.affected_question_ids).to eq(%w[age4 exstat4 sex4])
+    it "has correct interruption_screen_question_ids" do
+      expect(page.interruption_screen_question_ids).to eq(%w[age4 exstat4 sex4])
     end
   end
 
@@ -280,8 +280,8 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
       })
     end
 
-    it "has correct affected_question_ids" do
-      expect(page.affected_question_ids).to eq(%w[age5 exstat5 sex5])
+    it "has correct interruption_screen_question_ids" do
+      expect(page.interruption_screen_question_ids).to eq(%w[age5 exstat5 sex5])
     end
   end
 
@@ -332,8 +332,8 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
       })
     end
 
-    it "has correct affected_question_ids" do
-      expect(page.affected_question_ids).to eq(%w[age6 exstat6 sex6])
+    it "has correct interruption_screen_question_ids" do
+      expect(page.interruption_screen_question_ids).to eq(%w[age6 exstat6 sex6])
     end
   end
 end

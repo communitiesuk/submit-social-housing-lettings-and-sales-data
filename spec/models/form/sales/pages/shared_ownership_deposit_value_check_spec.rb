@@ -42,7 +42,7 @@ RSpec.describe Form::Sales::Pages::SharedOwnershipDepositValueCheck, type: :mode
     expect(page.informative_text).to eq({})
   end
 
-  it "has the correct affected_question_ids" do
-    expect(page.affected_question_ids).to eq(%w[mortgage mortgageused cashdis type deposit value equity])
+  it "has the correct interruption_screen_question_ids" do
+    expect(page.interruption_screen_question_ids).to eq(%w[mortgage mortgageused cashdis type deposit value equity])
   end
 end

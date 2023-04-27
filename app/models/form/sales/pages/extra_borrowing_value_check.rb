@@ -18,7 +18,7 @@ class Form::Sales::Pages::ExtraBorrowingValueCheck < Form::Page
     ]
   end
 
-  def affected_question_ids
+  def interruption_screen_question_ids
     %w[extrabor mortgage deposit value discount]
   end
 end

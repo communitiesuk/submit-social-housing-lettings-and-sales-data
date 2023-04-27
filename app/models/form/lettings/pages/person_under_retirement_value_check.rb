@@ -35,7 +35,7 @@ class Form::Lettings::Pages::PersonUnderRetirementValueCheck < ::Form::Page
     @questions ||= [Form::Lettings::Questions::NoRetirementValueCheck.new(nil, nil, self)]
   end
 
-  def affected_question_ids
+  def interruption_screen_question_ids
     ["ecstat#{@person_index}", "sex#{@person_index}", "age#{@person_index}"]
   end
 end

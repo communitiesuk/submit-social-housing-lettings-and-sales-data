@@ -35,7 +35,7 @@ RSpec.describe Form::Sales::Pages::Buyer1IncomeValueCheck, type: :model do
     expect(page.interruption_screen?).to eq(true)
   end
 
-  it "is has correct affected_question_ids" do
-    expect(page.affected_question_ids).to eq(%w[ecstat1 income1])
+  it "is has correct interruption_screen_question_ids" do
+    expect(page.interruption_screen_question_ids).to eq(%w[ecstat1 income1])
   end
 end

@@ -30,7 +30,7 @@ class Form::Sales::Pages::Buyer1IncomeValueCheck < ::Form::Page
     ]
   end
 
-  def affected_question_ids
+  def interruption_screen_question_ids
     %w[ecstat1 income1]
   end
 end

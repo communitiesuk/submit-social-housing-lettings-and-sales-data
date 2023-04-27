@@ -16,7 +16,7 @@ class Form::Sales::Pages::HouseholdWheelchairCheck < ::Form::Page
     ]
   end
 
-  def affected_question_ids
+  def interruption_screen_question_ids
     %w[disabled wheel]
   end
 end

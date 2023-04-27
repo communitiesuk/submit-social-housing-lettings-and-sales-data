@@ -25,7 +25,7 @@ class Form::Sales::Pages::StaircaseBoughtValueCheck < ::Form::Page
     ]
   end
 
-  def affected_question_ids
+  def interruption_screen_question_ids
     %w[stairbought]
   end
 end

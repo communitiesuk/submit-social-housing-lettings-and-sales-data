@@ -50,7 +50,7 @@ RSpec.describe Form::Sales::Pages::DiscountedSaleValueCheck, type: :model do
     ])
   end
 
-  it "has correct affected_question_ids" do
-    expect(page.affected_question_ids).to eq(%w[value deposit ownershipsch mortgage mortgageused discount grant type])
+  it "has correct interruption_screen_question_ids" do
+    expect(page.interruption_screen_question_ids).to eq(%w[value deposit ownershipsch mortgage mortgageused discount grant type])
   end
 end

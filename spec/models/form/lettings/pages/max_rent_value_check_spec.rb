@@ -35,7 +35,7 @@ RSpec.describe Form::Lettings::Pages::MaxRentValueCheck, type: :model do
     expect(page.informative_text).to eq({ "arguments" => [{ "arguments_for_key" => "soft_max_for_period", "i18n_template" => "soft_max_for_period", "key" => "field_formatted_as_currency" }], "translation" => "soft_validations.rent.max_hint_text" })
   end
 
-  it "has the correct affected_question_ids" do
-    expect(page.affected_question_ids).to eq(%w[brent startdate la beds rent_type needstype])
+  it "has the correct interruption_screen_question_ids" do
+    expect(page.interruption_screen_question_ids).to eq(%w[brent startdate la beds rent_type needstype])
   end
 end

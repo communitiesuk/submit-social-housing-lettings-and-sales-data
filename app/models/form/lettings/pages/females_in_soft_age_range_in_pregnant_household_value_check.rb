@@ -17,7 +17,7 @@ class Form::Lettings::Pages::FemalesInSoftAgeRangeInPregnantHouseholdValueCheck 
     @questions ||= [Form::Lettings::Questions::PregnancyValueCheck.new(nil, nil, self)]
   end
 
-  def affected_question_ids
+  def interruption_screen_question_ids
     %w[preg_occ sex1 sex2 sex3 sex4 sex5 sex6 sex7 sex8 age1 age2 age3 age4 age5 age6 age7 age8]
   end
 end

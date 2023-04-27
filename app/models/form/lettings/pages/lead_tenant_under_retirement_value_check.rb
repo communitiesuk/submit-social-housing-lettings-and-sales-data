@@ -30,7 +30,7 @@ class Form::Lettings::Pages::LeadTenantUnderRetirementValueCheck < ::Form::Page
     @questions ||= [Form::Lettings::Questions::NoRetirementValueCheck.new(nil, nil, self)]
   end
 
-  def affected_question_ids
+  def interruption_screen_question_ids
     %w[ecstat1 sex1 age1]
   end
 end

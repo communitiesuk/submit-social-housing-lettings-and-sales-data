@@ -43,8 +43,8 @@ RSpec.describe Form::Sales::Pages::BuyerLiveInValueCheck, type: :model do
     })
   end
 
-  it "has the correct affected_question_ids" do
-    expect(page.affected_question_ids).to eq(%w[ownershipsch buy1livein])
+  it "has the correct interruption_screen_question_ids" do
+    expect(page.interruption_screen_question_ids).to eq(%w[ownershipsch buy1livein])
   end
 
   context "with buyer 2" do
@@ -65,8 +65,8 @@ RSpec.describe Form::Sales::Pages::BuyerLiveInValueCheck, type: :model do
       })
     end
 
-    it "has the correct affected_question_ids" do
-      expect(page.affected_question_ids).to eq(%w[ownershipsch buy2livein])
+    it "has the correct interruption_screen_question_ids" do
+      expect(page.interruption_screen_question_ids).to eq(%w[ownershipsch buy2livein])
     end
   end
 end

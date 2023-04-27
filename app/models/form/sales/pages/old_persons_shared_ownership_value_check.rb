@@ -19,7 +19,7 @@ class Form::Sales::Pages::OldPersonsSharedOwnershipValueCheck < ::Form::Page
     ]
   end
 
-  def affected_question_ids
+  def interruption_screen_question_ids
     %w[type jointpur age1 age2]
   end
 end

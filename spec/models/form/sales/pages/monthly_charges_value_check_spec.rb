@@ -46,7 +46,7 @@ RSpec.describe Form::Sales::Pages::MonthlyChargesValueCheck, type: :model do
     expect(page.informative_text).to eq({})
   end
 
-  it "has correct affected_question_ids" do
-    expect(page.affected_question_ids).to eq(%w[type mscharge proptype])
+  it "has correct interruption_screen_question_ids" do
+    expect(page.interruption_screen_question_ids).to eq(%w[type mscharge proptype])
   end
 end

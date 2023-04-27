@@ -39,8 +39,8 @@ RSpec.describe Form::Sales::Pages::PersonStudentNotChildValueCheck, type: :model
     expect(page.questions.map(&:id)).to eq(%w[student_not_child_value_check])
   end
 
-  it "has correct affected_question_ids" do
-    expect(page.affected_question_ids).to eq(%w[relat2 exstat2 age2])
+  it "has correct interruption_screen_question_ids" do
+    expect(page.interruption_screen_question_ids).to eq(%w[relat2 exstat2 age2])
   end
 
   context "with person 2" do
@@ -55,8 +55,8 @@ RSpec.describe Form::Sales::Pages::PersonStudentNotChildValueCheck, type: :model
       expect(page.depends_on).to eq([{ "person_2_student_not_child?" => true }])
     end
 
-    it "has correct affected_question_ids" do
-      expect(page.affected_question_ids).to eq(%w[relat2 exstat2 age2])
+    it "has correct interruption_screen_question_ids" do
+      expect(page.interruption_screen_question_ids).to eq(%w[relat2 exstat2 age2])
     end
   end
 
@@ -72,8 +72,8 @@ RSpec.describe Form::Sales::Pages::PersonStudentNotChildValueCheck, type: :model
       expect(page.depends_on).to eq([{ "person_3_student_not_child?" => true }])
     end
 
-    it "has correct affected_question_ids" do
-      expect(page.affected_question_ids).to eq(%w[relat3 exstat3 age3])
+    it "has correct interruption_screen_question_ids" do
+      expect(page.interruption_screen_question_ids).to eq(%w[relat3 exstat3 age3])
     end
   end
 
@@ -89,8 +89,8 @@ RSpec.describe Form::Sales::Pages::PersonStudentNotChildValueCheck, type: :model
       expect(page.depends_on).to eq([{ "person_4_student_not_child?" => true }])
     end
 
-    it "has correct affected_question_ids" do
-      expect(page.affected_question_ids).to eq(%w[relat4 exstat4 age4])
+    it "has correct interruption_screen_question_ids" do
+      expect(page.interruption_screen_question_ids).to eq(%w[relat4 exstat4 age4])
     end
   end
 
@@ -106,8 +106,8 @@ RSpec.describe Form::Sales::Pages::PersonStudentNotChildValueCheck, type: :model
       expect(page.depends_on).to eq([{ "person_5_student_not_child?" => true }])
     end
 
-    it "has correct affected_question_ids" do
-      expect(page.affected_question_ids).to eq(%w[relat5 exstat5 age5])
+    it "has correct interruption_screen_question_ids" do
+      expect(page.interruption_screen_question_ids).to eq(%w[relat5 exstat5 age5])
     end
   end
 
@@ -123,8 +123,8 @@ RSpec.describe Form::Sales::Pages::PersonStudentNotChildValueCheck, type: :model
       expect(page.depends_on).to eq([{ "person_6_student_not_child?" => true }])
     end
 
-    it "has correct affected_question_ids" do
-      expect(page.affected_question_ids).to eq(%w[relat6 exstat6 age6])
+    it "has correct interruption_screen_question_ids" do
+      expect(page.interruption_screen_question_ids).to eq(%w[relat6 exstat6 age6])
     end
   end
 end

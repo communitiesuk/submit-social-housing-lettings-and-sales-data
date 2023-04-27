@@ -46,7 +46,7 @@ RSpec.describe Form::Sales::Pages::PercentageDiscountValueCheck, type: :model do
     ])
   end
 
-  it "has correct affected_question_ids" do
-    expect(page.affected_question_ids).to eq(%w[discount proptype])
+  it "has correct interruption_screen_question_ids" do
+    expect(page.interruption_screen_question_ids).to eq(%w[discount proptype])
   end
 end

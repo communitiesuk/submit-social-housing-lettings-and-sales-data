@@ -42,7 +42,7 @@ RSpec.describe Form::Sales::Pages::OldPersonsSharedOwnershipValueCheck, type: :m
     expect(page.informative_text).to eq({})
   end
 
-  it "has the correct affected_question_ids" do
-    expect(page.affected_question_ids).to eq(%w[type jointpur age1 age2])
+  it "has the correct interruption_screen_question_ids" do
+    expect(page.interruption_screen_question_ids).to eq(%w[type jointpur age1 age2])
   end
 end

@@ -18,7 +18,7 @@ class Form::Sales::Pages::DepositValueCheck < ::Form::Page
     ]
   end
 
-  def affected_question_ids
+  def interruption_screen_question_ids
     %w[savings deposit]
   end
 end

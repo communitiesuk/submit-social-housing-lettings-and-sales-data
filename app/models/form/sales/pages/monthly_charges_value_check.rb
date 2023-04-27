@@ -19,7 +19,7 @@ class Form::Sales::Pages::MonthlyChargesValueCheck < ::Form::Page
     ]
   end
 
-  def affected_question_ids
+  def interruption_screen_question_ids
     %w[type mscharge proptype]
   end
 end

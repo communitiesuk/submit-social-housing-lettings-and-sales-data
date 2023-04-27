@@ -815,7 +815,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["voiddate", "startdate"]
+              "interruption_screen_question_ids": ["voiddate", "startdate"]
             },
             "property_major_repairs": {
               "header": "",
@@ -925,7 +925,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["mrcdate", "startdate"]
+              "interruption_screen_question_ids": ["mrcdate", "startdate"]
             }
           },
           "displayed_in_tasklist": [
@@ -1240,7 +1240,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_lead_hhmemb_value_check": {
               "depends_on": [
@@ -1284,7 +1284,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "lead_tenant_age": {
               "header": "",
@@ -1384,7 +1384,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_lead_age_value_check": {
               "depends_on": [
@@ -1428,7 +1428,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "lead_tenant_gender_identity": {
               "header": "",
@@ -1507,7 +1507,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_lead_value_check": {
               "depends_on": [
@@ -1551,7 +1551,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "lead_tenant_ethnic_group": {
               "header": "",
@@ -1894,7 +1894,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["ecstat1", "sex1", "age1"]
+              "interruption_screen_question_ids": ["ecstat1", "sex1", "age1"]
             },
             "lead_tenant_over_retirement_value_check": {
               "depends_on": [
@@ -1953,7 +1953,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["ecstat1", "sex1", "age1"]
+              "interruption_screen_question_ids": ["ecstat1", "sex1", "age1"]
             },
             "person_2_known": {
               "header": "You’ve given us the details for 1 person in the household",
@@ -2134,7 +2134,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_person_2_age_value_check": {
               "depends_on": [
@@ -2179,7 +2179,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "person_2_gender_identity": {
               "header": "",
@@ -2259,7 +2259,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_person_2_value_check": {
               "depends_on": [
@@ -2304,7 +2304,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "person_2_working_situation": {
               "header": "",
@@ -2438,7 +2438,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["ecstat2", "sex2", "age2"]
+              "interruption_screen_question_ids": ["ecstat2", "sex2", "age2"]
             },
             "person_2_over_retirement_value_check": {
               "depends_on": [
@@ -2497,7 +2497,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["ecstat2", "sex2", "age2"]
+              "interruption_screen_question_ids": ["ecstat2", "sex2", "age2"]
             },
             "person_3_known": {
               "header": "You’ve given us the details for 2 people in the household",
@@ -2675,7 +2675,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_person_3_age_value_check": {
               "depends_on": [
@@ -2720,7 +2720,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "person_3_gender_identity": {
               "header": "",
@@ -2800,7 +2800,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_person_3_value_check": {
               "depends_on": [
@@ -2845,7 +2845,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "person_3_working_situation": {
               "header": "",
@@ -2979,7 +2979,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["ecstat3", "sex3", "age3"]
+              "interruption_screen_question_ids": ["ecstat3", "sex3", "age3"]
             },
             "person_3_over_retirement_value_check": {
               "depends_on": [
@@ -3038,7 +3038,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["ecstat3", "sex3", "age3"]
+              "interruption_screen_question_ids": ["ecstat3", "sex3", "age3"]
             },
             "person_4_known": {
               "header": "You’ve given us the details for 3 people in the household",
@@ -3213,7 +3213,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_person_4_age_value_check": {
               "depends_on": [
@@ -3258,7 +3258,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "person_4_gender_identity": {
               "header": "",
@@ -3338,7 +3338,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_person_4_value_check": {
               "depends_on": [
@@ -3383,7 +3383,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "person_4_working_situation": {
               "header": "",
@@ -3517,7 +3517,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["ecstat4", "sex4", "age4"]
+              "interruption_screen_question_ids": ["ecstat4", "sex4", "age4"]
             },
             "person_4_over_retirement_value_check": {
               "depends_on": [
@@ -3576,7 +3576,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["ecstat4", "sex4", "age4"]
+              "interruption_screen_question_ids": ["ecstat4", "sex4", "age4"]
             },
             "person_5_known": {
               "header": "You’ve given us the details for 4 people in the household",
@@ -3748,7 +3748,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_person_5_age_value_check": {
               "depends_on": [
@@ -3793,7 +3793,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "person_5_gender_identity": {
               "header": "",
@@ -3873,7 +3873,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_person_5_value_check": {
               "depends_on": [
@@ -3918,7 +3918,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "person_5_working_situation": {
               "header": "",
@@ -4052,7 +4052,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["ecstat5", "sex5", "age5"]
+              "interruption_screen_question_ids": ["ecstat5", "sex5", "age5"]
             },
             "person_5_over_retirement_value_check": {
               "depends_on": [
@@ -4111,7 +4111,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["ecstat5", "sex5", "age5"]
+              "interruption_screen_question_ids": ["ecstat5", "sex5", "age5"]
             },
             "person_6_known": {
               "header": "You’ve given us the details for 5 people in the household",
@@ -4280,7 +4280,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_person_6_age_value_check": {
               "depends_on": [
@@ -4325,7 +4325,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "person_6_gender_identity": {
               "header": "",
@@ -4405,7 +4405,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_person_6_value_check": {
               "depends_on": [
@@ -4450,7 +4450,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "person_6_working_situation": {
               "header": "",
@@ -4584,7 +4584,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["ecstat6", "sex6", "age6"]
+              "interruption_screen_question_ids": ["ecstat6", "sex6", "age6"]
             },
             "person_6_over_retirement_value_check": {
               "depends_on": [
@@ -4643,7 +4643,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["ecstat6", "sex6", "age6"]
+              "interruption_screen_question_ids": ["ecstat6", "sex6", "age6"]
             },
             "person_7_known": {
               "header": "You’ve given us the details for 6 people in the household",
@@ -4809,7 +4809,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_person_7_age_value_check": {
               "depends_on": [
@@ -4854,7 +4854,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "person_7_gender_identity": {
               "header": "",
@@ -4934,7 +4934,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_person_7_value_check": {
               "depends_on": [
@@ -4979,7 +4979,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "person_7_working_situation": {
               "header": "",
@@ -5113,7 +5113,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["ecstat7", "sex7", "age7"]
+              "interruption_screen_question_ids": ["ecstat7", "sex7", "age7"]
             },
             "person_7_over_retirement_value_check": {
               "depends_on": [
@@ -5172,7 +5172,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["ecstat7", "sex7", "age7"]
+              "interruption_screen_question_ids": ["ecstat7", "sex7", "age7"]
             },
             "person_8_known": {
               "header": "You’ve given us the details for 7 people in the household",
@@ -5335,7 +5335,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_person_8_age_value_check": {
               "depends_on": [
@@ -5380,7 +5380,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "person_8_gender_identity": {
               "header": "",
@@ -5460,7 +5460,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_person_8_value_check": {
               "depends_on": [
@@ -5505,7 +5505,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "person_8_working_situation": {
               "header": "",
@@ -5639,7 +5639,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["ecstat8", "sex8", "age8"]
+              "interruption_screen_question_ids": ["ecstat8", "sex8", "age8"]
             },
             "person_8_over_retirement_value_check": {
               "depends_on": [
@@ -5698,7 +5698,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["ecstat8", "sex8", "age8"]
+              "interruption_screen_question_ids": ["ecstat8", "sex8", "age8"]
             }
           }
         },
@@ -5881,7 +5881,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_value_check": {
               "depends_on": [
@@ -5934,7 +5934,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "access_needs_exist": {
               "header": "",
@@ -7447,7 +7447,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["incfreq", "earnings", "ecstat1"]
+              "interruption_screen_question_ids": ["incfreq", "earnings", "ecstat1"]
             },
             "housing_benefit": {
               "header": "",
@@ -7810,7 +7810,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["chcharge", "is_carehome"]
+              "interruption_screen_question_ids": ["chcharge", "is_carehome"]
             },
             "rent_weekly": {
               "header": "Household rent and charges",
@@ -8337,7 +8337,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["brent", "startdate", "la", "beds", "rent_type", "needstype"]
+              "interruption_screen_question_ids": ["brent", "startdate", "la", "beds", "rent_type", "needstype"]
             },
             "max_rent_value_check": {
               "depends_on": [
@@ -8382,7 +8382,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["brent", "startdate", "la", "beds", "rent_type", "needstype"]
+              "interruption_screen_question_ids": ["brent", "startdate", "la", "beds", "rent_type", "needstype"]
             },
             "outstanding": {
               "header": "",

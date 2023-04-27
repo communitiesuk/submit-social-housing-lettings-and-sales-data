@@ -18,7 +18,7 @@ class Form::Sales::Pages::SavingsValueCheck < ::Form::Page
     ]
   end
 
-  def affected_question_ids
+  def interruption_screen_question_ids
     %w[savings]
   end
 end

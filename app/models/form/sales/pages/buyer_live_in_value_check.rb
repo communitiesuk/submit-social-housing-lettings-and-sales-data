@@ -19,7 +19,7 @@ class Form::Sales::Pages::BuyerLiveInValueCheck < Form::Sales::Pages::Person
     ]
   end
 
-  def affected_question_ids
+  def interruption_screen_question_ids
     ["ownershipsch", "buy#{@person_index}livein"]
   end
 end

@@ -25,7 +25,7 @@ class Form::Sales::Pages::SharedOwnershipDepositValueCheck < ::Form::Page
     ]
   end
 
-  def affected_question_ids
+  def interruption_screen_question_ids
     %w[mortgage mortgageused cashdis type deposit value equity]
   end
 end

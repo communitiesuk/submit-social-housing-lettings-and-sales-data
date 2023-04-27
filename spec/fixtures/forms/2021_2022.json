@@ -227,7 +227,7 @@
                   }
                 }
               ],
-              "affected_question_ids": ["age1", "ecstat1"]
+              "interruption_screen_question_ids": ["age1", "ecstat1"]
             },
             "person_2_working_situation": {
               "header": "",
@@ -774,7 +774,7 @@
                   }
                 }
               },
-              "affected_question_ids": ["ecstat1", "incfreq", "earnings"]
+              "interruption_screen_question_ids": ["ecstat1", "incfreq", "earnings"]
             },
             "net_income_uc_proportion": {
               "questions": {

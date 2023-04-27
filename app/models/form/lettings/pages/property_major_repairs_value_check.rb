@@ -11,7 +11,7 @@ class Form::Lettings::Pages::PropertyMajorRepairsValueCheck < ::Form::Page
     @questions ||= [Form::Lettings::Questions::MajorRepairsDateValueCheck.new(nil, nil, self)]
   end
 
-  def affected_question_ids
+  def interruption_screen_question_ids
     %w[mrcdate startdate]
   end
 end

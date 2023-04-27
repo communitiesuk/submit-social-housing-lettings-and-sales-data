@@ -11,7 +11,7 @@ class Form::Lettings::Pages::VoidDateValueCheck < ::Form::Page
     @questions ||= [Form::Lettings::Questions::VoidDateValueCheck.new(nil, nil, self)]
   end
 
-  def affected_question_ids
+  def interruption_screen_question_ids
     %w[voiddate startdate]
   end
 end

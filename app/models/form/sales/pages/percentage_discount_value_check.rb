@@ -13,7 +13,7 @@ class Form::Sales::Pages::PercentageDiscountValueCheck < ::Form::Page
     @questions ||= [Form::Sales::Questions::PercentageDiscountValueCheck.new(nil, nil, self)]
   end
 
-  def affected_question_ids
+  def interruption_screen_question_ids
     %w[discount proptype]
   end
 end
