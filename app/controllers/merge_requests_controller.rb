@@ -1,7 +1,20 @@
 class MergeRequestsController < ApplicationController
-  before_action :find_resource, only: %i[update organisations update_organisations remove_merging_organisation]
+  before_action :find_resource, only: %i[
+    update
+    organisations
+    update_organisations
+    remove_merging_organisation
+    absorbing_organisation
+    confirm_telephone_number
+    new_org_name
+  ]
   before_action :authenticate_user!
   before_action :authenticate_scope!, except: [:create]
+  before_action :validate_response, only: %i[update]
+
+  def absorbing_organisation; end
+  def confirm_telephone_number; end
+  def new_org_name; end
 
   def create
     ActiveRecord::Base.transaction do
@@ -43,6 +56,31 @@ class MergeRequestsController < ApplicationController
 
 private
 
+  def page
+    params.dig(:merge_request, :page)
+  end
+
+  def next_page_path
+    case page
+    when "absorbing_organisation"
+      if create_new_org?
+        new_org_name_merge_request_path(@merge_request)
+      else
+        confirm_telephone_number_merge_request_path(@merge_request)
+      end
+    when "organisations"
+      absorbing_organisation_merge_request_path(@merge_request)
+    end
+  end
+
+  def previous_template
+    page
+  end
+
+  def create_new_org?
+    params.dig(:merge_request, :absorbing_organisation_id) == "other"
+  end
+
   def organisations_answer_options
     answer_options = { "" => "Select an option" }
 
@@ -53,29 +91,45 @@ private
   end
 
   def merge_request_params
-    merge_params = params.fetch(:merge_request, {}).permit(:requesting_organisation_id, :other_merging_organisations, :status)
+    merge_params = params.fetch(:merge_request, {}).permit(
+      :requesting_organisation_id,
+      :other_merging_organisations,
+      :status,
+      :absorbing_organisation_id,
+    )
 
     if merge_params[:requesting_organisation_id].present? && (current_user.data_coordinator? || current_user.data_provider?)
       merge_params[:requesting_organisation_id] = current_user.organisation.id
     end
 
+    if merge_params[:absorbing_organisation_id].present?
+      if create_new_org?
+        merge_params[:new_absorbing_organisation] = true
+        merge_params[:absorbing_organisation_id] = nil
+      else
+        merge_params[:new_absorbing_organisation] = false
+      end
+    end
+
     merge_params
   end
 
+  def validate_response
+    if page == "absorbing_organisation" && merge_request_params[:absorbing_organisation_id].blank? && merge_request_params[:new_absorbing_organisation].blank?
+      @merge_request.errors.add(:absorbing_organisation_id, I18n.t("validations.merge_request.absorbing_organisation_blank"))
+      render previous_template
+    end
+  end
+
   def merge_request_organisation_params
-    { merge_request: @merge_request, merging_organisation_id: params[:merge_request][:merging_organisation] }
+    {
+      merge_request: @merge_request,
+      merging_organisation_id: params.dig(:merge_request, :merging_organisation),
+    }
   end
 
   def find_resource
     @merge_request = MergeRequest.find(params[:id])
-  end
-
-  def next_page_path
-    absorbing_organisation_merge_request_path(@merge_request)
-  end
-
-  def previous_template
-    :organisations
   end
 
   def authenticate_scope!
