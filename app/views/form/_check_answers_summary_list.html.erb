@@ -1,5 +1,5 @@
 <%= govuk_summary_list do |summary_list| %>
-  <% total_applicable_questions(subsection, @log, current_user).each do |question| %>
+  <% questions.each do |question| %>
     <% summary_list.row do |row| %>
       <% row.key { get_question_label(question) } %>
       <% row.value do %>
