@@ -39,15 +39,13 @@ class SalesLogsController < LogsController
 
   def download_csv
     unpaginated_filtered_logs = filtered_logs(current_user.sales_logs, search_term, @session_filters)
-    codes_only = codes_only_export?(params)
 
-    render "download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: email_csv_sales_logs_path, codes_only: }
+    render "download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: email_csv_sales_logs_path, codes_only: codes_only_export? }
   end
 
   def email_csv
     all_orgs = params["organisation_select"] == "all" # what's this for? params['organisation_select'] appears to always be nil
-    codes_only_export = codes_only_export?(params)
-    EmailCsvJob.perform_later(current_user, search_term, @session_filters, all_orgs, nil, codes_only_export, "sales")
+    EmailCsvJob.perform_later(current_user, search_term, @session_filters, all_orgs, nil, codes_only_export?, "sales")
     redirect_to csv_confirmation_sales_logs_path
   end
 
@@ -64,7 +62,6 @@ class SalesLogsController < LogsController
 private
 
   def authenticate_scope!
-    codes_only_export = codes_only_export?(params)
-    head :unauthorized and return if codes_only_export && !current_user.support?
+    head :unauthorized and return if codes_only_export? && !current_user.support?
   end
 end

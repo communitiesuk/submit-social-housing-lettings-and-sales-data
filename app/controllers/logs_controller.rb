@@ -28,7 +28,7 @@ private
     end
   end
 
-  def codes_only_export?(params)
+  def codes_only_export?
     params.require(:codes_only) == "true"
   end
 
