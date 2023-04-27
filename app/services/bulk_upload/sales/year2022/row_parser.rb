@@ -527,7 +527,7 @@ private
     attributes["ecstat6"] = field_29
 
     attributes["ethnic_group"] = ethnic_group_from_ethnic
-    attributes["ethnic"] = buyer_not_interviewed? ? 17 : field_30
+    attributes["ethnic"] = field_30
     attributes["national"] = buyer_not_interviewed? ? 13 : field_31
     attributes["income1nk"] = buyer_not_interviewed? || field_32.blank? ? 1 : 0
     attributes["income1"] = field_32
