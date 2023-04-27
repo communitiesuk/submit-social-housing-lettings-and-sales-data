@@ -533,7 +533,7 @@ RSpec.describe FormController, type: :request do
           end
         end
 
-        context "when the question was accessed from an interrution screen (soft validation)" do
+        context "when the question was accessed from an interruption screen (soft validation)" do
           let(:params) do
             {
               id: lettings_log.id,
@@ -557,6 +557,29 @@ RSpec.describe FormController, type: :request do
             follow_redirect!
             follow_redirect!
             expect(response.body).to include("You have successfully updated lead tenant’s age")
+          end
+        end
+
+        context "when requesting a soft validation page for validation that isn't triggering" do
+          before do
+            get "/lettings-logs/#{lettings_log.id}/retirement-value-check", headers: headers.merge({ "HTTP_REFERER" => referrer })
+          end
+
+          context "when the referrer header has interruption_screen" do
+            let(:referrer) { "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}?referrer=interruption_screen" }
+
+            it "routes to the soft validation page" do
+              expect(response.body).to include("Make sure these answers are all correct")
+            end
+          end
+
+          context "when the referrer header does not have interruption screen" do
+            let(:referrer) { "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}" }
+
+            it "skips the soft validation page" do
+              follow_redirect!
+              expect(response.body).not_to include("Make sure these answers are all correct")
+            end
           end
         end
       end
