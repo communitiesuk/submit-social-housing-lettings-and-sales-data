@@ -12,7 +12,7 @@ module Forms
         case year
         when 2022
           "bulk_upload_lettings_logs/forms/prepare_your_file_2022"
-        when 2023
+        else
           "bulk_upload_lettings_logs/forms/prepare_your_file_2023"
         end
       end
@@ -34,7 +34,7 @@ module Forms
         case year
         when 2022
           "/files/bulk-upload-lettings-template-2022-23.xlsx"
-        when 2023
+        else
           "/files/bulk-upload-lettings-legacy-template-2023-24.xlsx"
         end
       end
@@ -43,7 +43,7 @@ module Forms
         case year
         when 2022
           "/files/bulk-upload-lettings-template-2022-23.xlsx"
-        when 2023
+        else
           "/files/bulk-upload-lettings-template-2023-24.xlsx"
         end
       end
@@ -52,7 +52,7 @@ module Forms
         case year
         when 2022
           "/files/bulk-upload-lettings-specification-2022-23.xlsx"
-        when 2023
+        else
           "/files/bulk-upload-lettings-specification-2023-24.xlsx"
         end
       end
