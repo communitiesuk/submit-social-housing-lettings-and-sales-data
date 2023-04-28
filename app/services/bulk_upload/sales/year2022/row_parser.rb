@@ -704,22 +704,23 @@ private
   end
 
   def ethnic_group_from_ethnic
-    return 17 if buyer_not_interviewed?
-    return nil if field_30.blank?
-
-    case field_30
-    when 1, 2, 3, 18
-      0
-    when 4, 5, 6, 7
-      1
-    when 8, 9, 10, 11, 15
-      2
-    when 12, 13, 14
-      3
-    when 16, 19
-      4
-    when 17
-      17
+    if field_30.blank?
+      buyer_not_interviewed? ? 17 : nil
+    else
+      case field_30
+      when 1, 2, 3, 18
+        0
+      when 4, 5, 6, 7
+        1
+      when 8, 9, 10, 11, 15
+        2
+      when 12, 13, 14
+        3
+      when 16, 19
+        4
+      when 17
+        17
+      end
     end
   end
 
