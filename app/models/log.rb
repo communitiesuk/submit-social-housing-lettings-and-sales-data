@@ -98,15 +98,13 @@ class Log < ApplicationRecord
   def blank_invalid_non_setup_fields!
     setup_ids = form.setup_sections.flat_map(&:subsections).flat_map(&:questions).map(&:id)
 
-    blank_compound_invalid_non_setup_fields!
-
     errors.each do |error|
       next if setup_ids.include?(error.attribute.to_s)
 
       public_send("#{error.attribute}=", nil)
     end
 
-    valid?
+    blank_compound_invalid_non_setup_fields!
   end
 
   (1..8).each do |person_num|
@@ -141,7 +139,7 @@ class Log < ApplicationRecord
   end
 
   def blank_compound_invalid_non_setup_fields!
-    self.ppcodenk = nil if errors.of_kind?(:ppostcode_full, :wrong_format)
+    self.ppcodenk = nil if errors.attribute_names.include? :ppostcode_full
 
     if errors.of_kind?(:uprn, :uprn_error)
       self.uprn_known = nil
@@ -152,8 +150,6 @@ class Log < ApplicationRecord
       self.postcode_full = nil
       self.county = nil
     end
-
-    valid?
   end
 
 private

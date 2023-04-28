@@ -37,8 +37,15 @@ class BulkUpload::Sales::Validator
   def create_logs?
     return false if any_setup_errors?
     return false if row_parsers.any?(&:block_log_creation?)
+    return false if any_logs_already_exist? && FeatureToggle.bulk_upload_duplicate_log_check_enabled?
 
-    row_parsers.all? { |row_parser| row_parser.log.valid? }
+    row_parsers.each do |row_parser|
+      row_parser.log.blank_invalid_non_setup_fields!
+    end
+
+    return false if any_logs_invalid?
+
+    true
   end
 
   def any_setup_errors?
@@ -49,7 +56,15 @@ class BulkUpload::Sales::Validator
       .positive?
   end
 
+  def any_logs_already_exist?
+    row_parsers.any?(&:log_already_exists?)
+  end
+
 private
+
+  def any_logs_invalid?
+    row_parsers.any? { |row_parser| row_parser.log.invalid? }
+  end
 
   def csv_parser
     @csv_parser ||= case bulk_upload.year

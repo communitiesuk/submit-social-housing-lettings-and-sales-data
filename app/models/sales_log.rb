@@ -363,12 +363,6 @@ class SalesLog < Log
   def blank_compound_invalid_non_setup_fields!
     super
 
-    self.pcodenk = nil if errors.of_kind?(:postcode_full, :wrong_format)
-
-    if errors.of_kind?(:postcode_full, :postcodes_not_matching)
-      self.ppcodenk = nil
-    end
-
-    valid?
+    self.pcodenk = nil if errors.attribute_names.include? :postcode_full
   end
 end

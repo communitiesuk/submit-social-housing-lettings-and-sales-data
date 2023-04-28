@@ -82,6 +82,36 @@ RSpec.describe BulkUpload::Lettings::LogCreator do
       end
     end
 
+    context "when a valid csv with row with compound errors on non setup field" do
+      let(:file) { Tempfile.new }
+      let(:path) { file.path }
+      let(:log) do
+        build(
+          :lettings_log,
+          :completed,
+          earnings: 0,
+          incfreq: 1,
+        )
+      end
+
+      before do
+        file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_2023_csv_row)
+        file.rewind
+      end
+
+      it "creates the log" do
+        expect { service.call }.to change(LettingsLog, :count).by(1)
+      end
+
+      it "blanks invalid fields" do
+        service.call
+
+        record = LettingsLog.last
+        expect(record.earnings).to be_blank
+        expect(record.incfreq).to be_blank
+      end
+    end
+
     context "when pre-creating logs" do
       subject(:service) { described_class.new(bulk_upload:, path:) }
 

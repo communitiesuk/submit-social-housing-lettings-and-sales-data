@@ -75,6 +75,42 @@ RSpec.describe BulkUpload::Sales::LogCreator do
       end
     end
 
+    context "when a valid csv with row with compound errors on non setup field" do
+      let(:file) { Tempfile.new }
+      let(:path) { file.path }
+      let(:log) do
+        build(
+          :sales_log,
+          :completed,
+          ownershipsch: 2,
+          pcodenk: 0,
+          ppcodenk: 0,
+          postcode_full: "AA11AA",
+          ppostcode_full: "BB22BB",
+        )
+      end
+
+      before do
+        file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_2022_sales_csv_row)
+        file.rewind
+      end
+
+      it "creates the log" do
+        expect { service.call }.to change(SalesLog, :count).by(1)
+      end
+
+      it "blanks invalid field" do
+        service.call
+
+        record = SalesLog.last
+        expect(record.pcodenk).to be_blank
+        expect(record.postcode_full).to be_blank
+        expect(record.ppcodenk).to be_blank
+        expect(record.ppostcode_full).to be_blank
+      end
+    end
+
+
     context "when pre-creating logs" do
       subject(:service) { described_class.new(bulk_upload:, path:) }
 

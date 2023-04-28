@@ -531,14 +531,11 @@ class LettingsLog < Log
   def blank_compound_invalid_non_setup_fields!
     super
 
-    self.postcode_known = nil if errors.of_kind?(:postcode_full, :wrong_format)
+    self.postcode_known = nil if errors.attribute_names.include? :postcode_full
 
     if errors.of_kind?(:earnings, :under_hard_min)
-      self.earnings = nil
       self.incfreq = nil
     end
-
-    valid?
   end
 
 private
