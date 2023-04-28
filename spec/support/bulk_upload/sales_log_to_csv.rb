@@ -17,7 +17,7 @@ class BulkUpload::SalesLogToCsv
   end
 
   def default_2022_field_numbers
-    (1..134).to_a
+    (1..125).to_a
   end
 
   def default_2022_field_numbers_row(seed: nil)
