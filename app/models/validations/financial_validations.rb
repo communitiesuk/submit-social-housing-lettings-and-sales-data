@@ -5,8 +5,8 @@ module Validations::FinancialValidations
   # or 'validate_' to run on submit as well
   def validate_outstanding_rent_amount(record)
     if !record.has_housing_benefit_rent_shortfall? && record.tshortfall.present?
-      record.errors.add :tshortfall, :no_outstanding_charges, message: I18n.t("validations.financial.tshortfall.outstanding_amount_not_required")
-      record.errors.add :hbrentshortfall, :no_outstanding_charges, message: I18n.t("validations.financial.hbrentshortfall.outstanding_amount_not_required")
+      record.errors.add :tshortfall, :no_outstanding_charges, message: I18n.t("validations.financial.tshortfall.outstanding_amount_not_expected")
+      record.errors.add :hbrentshortfall, :no_outstanding_charges, message: I18n.t("validations.financial.hbrentshortfall.outstanding_amount_not_expected")
     end
   end
 
