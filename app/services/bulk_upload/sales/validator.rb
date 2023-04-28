@@ -37,7 +37,6 @@ class BulkUpload::Sales::Validator
   def create_logs?
     return false if any_setup_errors?
     return false if row_parsers.any?(&:block_log_creation?)
-    return false if any_logs_already_exist? && FeatureToggle.bulk_upload_duplicate_log_check_enabled?
 
     row_parsers.each do |row_parser|
       row_parser.log.blank_invalid_non_setup_fields!
@@ -54,10 +53,6 @@ class BulkUpload::Sales::Validator
       .where(category: "setup")
       .count
       .positive?
-  end
-
-  def any_logs_already_exist?
-    row_parsers.any?(&:log_already_exists?)
   end
 
 private
