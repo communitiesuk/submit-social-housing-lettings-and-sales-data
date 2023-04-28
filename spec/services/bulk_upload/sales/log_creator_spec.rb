@@ -110,7 +110,6 @@ RSpec.describe BulkUpload::Sales::LogCreator do
       end
     end
 
-
     context "when pre-creating logs" do
       subject(:service) { described_class.new(bulk_upload:, path:) }
 
