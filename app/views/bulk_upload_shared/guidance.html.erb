@@ -26,20 +26,29 @@
 
     <div class="govuk-!-padding-bottom-4">
       <h2 class="govuk-heading-s">Exporting CSV data</h2>
+
       <p class="govuk-body">Export CSV data directly from your current systems, or export then adjust it to CSV.</p>
       <p class="govuk-body">You can then upload it via a button at the top of the lettings and sales logs pages.</p>
-      <%= govuk_details(summary_text: "My organisation has a CMS") do %>
+
+      <%= govuk_details(summary_text: "My organisation has a HMS") do %>
         <p class="govuk-body">Some HMS providers sell an add-on "eCORE" module, which exports CSV data for you.</p>
         <p class="govuk-!-font-weight-bold">It can take HMS providers a while to update these per new collection year, so you may have to wait for updates to export, or adjust your data manually post-export.</p>
       <% end %>
-      <%= govuk_details(summary_text: "My organisation does not have a CMS") do %>
+
+      <%= govuk_details(summary_text: "My organisation does not have a HMS") do %>
         <p class="govuk-body">Your organisation’s IT team may be able to export CSV data for you - <%= govuk_link_to "find out more about data specification", @form.specification_path, target: "_blank" %>. This document outlines:</p>
+
         <ul class="govuk-list govuk-list--bullet">
           <li>required fields</li>
           <li>each field's valid response</li>
           <li>if/when certain fields can be left blank</li>
         </ul>
-        <p class="govuk-body">Fields can appear in any order, as long as you include the <%= govuk_link_to "template document", @form.template_path %> headers, to easily identify what each column represents. You can rearrange data columns to match your system exports, copy-pasting multiple columns at once. For data stored in multiple systems, you can copy-paste all columns for one system next to each other, repeating this for subsequent system exports.</p>
+
+        <% if @form.year == 2022 %>
+          <p class="govuk-body">Fields must be in the same order as <%= govuk_link_to "the template", @form.template_path %>. Copy each column of your exported data one at a time and paste into the correct template column.</p>
+        <% else %>
+          <p class="govuk-body">Fields can appear in any order, as long as you include the <%= govuk_link_to "template document", @form.template_path %> headers, to easily identify what each column represents. You can rearrange data columns to match your system exports, copy-pasting multiple columns at once. For data stored in multiple systems, you can copy-paste all columns for one system next to each other, repeating this for subsequent system exports.</p>
+        <% end %>
       <% end %>
     </div>
 

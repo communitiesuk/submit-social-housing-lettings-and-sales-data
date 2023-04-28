@@ -9,7 +9,12 @@ module Forms
       attribute :needstype, :integer
 
       def view_path
-        "bulk_upload_lettings_logs/forms/prepare_your_file"
+        case year
+        when 2022
+          "bulk_upload_lettings_logs/forms/prepare_your_file_2022"
+        else
+          "bulk_upload_lettings_logs/forms/prepare_your_file_2023"
+        end
       end
 
       def back_path
@@ -29,7 +34,7 @@ module Forms
         case year
         when 2022
           "/files/bulk-upload-lettings-template-2022-23.xlsx"
-        when 2023
+        else
           "/files/bulk-upload-lettings-legacy-template-2023-24.xlsx"
         end
       end
@@ -38,7 +43,7 @@ module Forms
         case year
         when 2022
           "/files/bulk-upload-lettings-template-2022-23.xlsx"
-        when 2023
+        else
           "/files/bulk-upload-lettings-template-2023-24.xlsx"
         end
       end
@@ -47,19 +52,13 @@ module Forms
         case year
         when 2022
           "/files/bulk-upload-lettings-specification-2022-23.xlsx"
-        when 2023
+        else
           "/files/bulk-upload-lettings-specification-2023-24.xlsx"
         end
       end
 
       def year_combo
         "#{year}/#{year + 1 - 2000}"
-      end
-
-      def inset_text
-        if year == 2022
-          '<p class="govuk-inset-text">For 2022/23 data, you cannot have a CSV file with both general needs logs and supported housing logs. These must be in separate files.</p>'.html_safe
-        end
       end
 
       def save!
