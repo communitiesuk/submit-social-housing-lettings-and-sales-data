@@ -127,16 +127,20 @@ private
   def validate_response
     if page == "absorbing_organisation" && merge_request_params[:absorbing_organisation_id].blank? && merge_request_params[:new_absorbing_organisation].blank?
       @merge_request.errors.add(:absorbing_organisation_id, I18n.t("validations.merge_request.absorbing_organisation_blank"))
-      render previous_template
+      render previous_template, status: :unprocessable_entity
     end
 
     if page == "confirm_telephone_number"
       if merge_request_params[:telephone_number_correct].blank? && merge_request_params[:new_telephone_number].blank?
-        @merge_request.errors.add(:telephone_number_correct, I18n.t("validations.merge_request.telephone_number_correct_blank"))
-        render previous_template
+        if @merge_request.absorbing_organisation.phone.present?
+          @merge_request.errors.add(:telephone_number_correct, I18n.t("validations.merge_request.telephone_number_correct_blank"))
+        else
+          @merge_request.errors.add(:telephone_number_correct, I18n.t("validations.merge_request.new_telephone_number_blank"))
+        end
+        render previous_template, status: :unprocessable_entity
       elsif merge_request_params[:telephone_number_correct] == "0" && merge_request_params[:new_telephone_number].blank?
         @merge_request.errors.add(:new_telephone_number, I18n.t("validations.merge_request.new_telephone_number_blank"))
-        render previous_template
+        render previous_template, status: :unprocessable_entity
       end
     end
   end

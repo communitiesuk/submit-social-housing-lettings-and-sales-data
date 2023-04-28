@@ -249,6 +249,7 @@ RSpec.describe MergeRequestsController, type: :request do
         it "asks to confirm or provide new number" do
           expect(page).to have_content("This telephone number is correct")
           expect(page).to have_content("Confirm the telephone number on file, or enter a new one.")
+          expect(page).to have_content(phone_number)
           expect(page).to have_content("What is #{merge_request.absorbing_organisation.name}'s telephone number?")
         end
       end
@@ -411,8 +412,8 @@ RSpec.describe MergeRequestsController, type: :request do
           end
         end
 
-        context "when not answering the question" do
-          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: other_organisation) }
+        context "when not answering the question and the org has phone number" do
+          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: create(:organisation, phone: "123")) }
           let(:params) do
             { merge_request: { page: "confirm_telephone_number" } }
           end
@@ -424,6 +425,26 @@ RSpec.describe MergeRequestsController, type: :request do
             request
 
             expect(page).to have_content("Select to confirm or enter a new telephone number")
+          end
+
+          it "does not update the request" do
+            expect { request }.not_to(change { merge_request.reload.attributes })
+          end
+        end
+
+        context "when not answering the question and the org does not have a phone number" do
+          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: other_organisation) }
+          let(:params) do
+            { merge_request: { page: "confirm_telephone_number" } }
+          end
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "renders the error" do
+            request
+
+            expect(page).to have_content("Enter a valid telephone number")
           end
 
           it "does not update the request" do
