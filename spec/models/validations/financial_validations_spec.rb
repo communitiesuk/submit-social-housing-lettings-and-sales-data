@@ -81,7 +81,7 @@ RSpec.describe Validations::FinancialValidations do
         record.tshortfall = 99
         financial_validator.validate_outstanding_rent_amount(record)
         expect(record.errors["tshortfall"])
-          .to include(match I18n.t("validations.financial.tshortfall.outstanding_amount_not_required"))
+          .to include(match I18n.t("validations.financial.tshortfall.outstanding_amount_not_expected"))
       end
     end
 
