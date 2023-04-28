@@ -5,8 +5,14 @@ FactoryBot.define do
     trait :with_question do
       transient do
         question_id { nil }
+        question { nil }
+      end
 
-        after :build do |page, evaluator|
+      after :build do |page, evaluator|
+        if q = evaluator.question
+          q.page = page
+          page.questions = [q]
+        elsif
           page.questions = [build(:question, id: evaluator.question_id, page:)]
         end
       end

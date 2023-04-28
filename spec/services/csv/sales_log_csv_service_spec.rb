@@ -27,10 +27,11 @@ RSpec.describe Csv::SalesLogCsvService do
   context "when stubbing :ordered_sales_questions_for_all_years" do
     let(:sales_form) do
       FormFactory.new(year: 1936, type: "sales")
-                 .with_sections([build(:section, :with_questions, question_ids:)])
+                 .with_sections([build(:section, :with_questions, question_ids:, questions:)])
                  .build
     end
-    let(:question_ids) { %w[type age1 buy1livein exdate] }
+    let(:question_ids) { nil }
+    let(:questions) { nil }
 
     before do
       allow(FormHandler).to receive(:instance).and_return(form_handler_mock)
@@ -39,15 +40,44 @@ RSpec.describe Csv::SalesLogCsvService do
       allow(form_handler_mock).to receive(:ordered_sales_questions_for_all_years).and_return(sales_form.questions)
     end
 
-    it "includes log attributes related to questions to the headers" do
-      headers = csv.first
-      expect(headers).to include(*question_ids.first(3))
+    context "to return questions with particular ids" do
+      let(:question_ids) { %w[type age1 buy1livein exdate] }
+
+      it "includes log attributes related to questions to the headers" do
+        headers = csv.first
+        expect(headers).to include *question_ids.first(3)
+      end
+
+      it "removes some log attributes related to questions from the headers and replaces them with their derived values in the correct order" do
+        headers = csv.first
+        expect(headers).not_to include "exdate"
+        expect(headers.last(4)).to eq %w[buy1livein exday exmonth exyear]
+      end
     end
 
-    it "removes some log attributes related to questions from the headers and replaces them with their derived values in the correct order" do
-      headers = csv.first
-      expect(headers).not_to include "exdate"
-      expect(headers.last(4)).to eq(%w[buy1livein exday exmonth exyear])
+    context "to return questions with particular features" do
+      let(:questions) do
+        [
+          build(:question, id: "attribute_value_check", type: "interruption_screen"),
+          build(:question, id: "something_or_other_known", type: "radio"),
+          build(:question, id: "whatchamacallit_asked", type: "radio"),
+          build(:question, id: "ownershipsch"),
+          build(:question, id: "checkbox_question", type: "checkbox", answer_options: { "pregyrha" => {}, "pregother" => {} }),
+          build(:question, id: "type"),
+        ]
+      end
+
+      it "does not add questions for checks, whether some other attribute is known or whether something else was asked" do
+        headers = csv.first
+        expect(headers).not_to include "attribute_value_check"
+        expect(headers).not_to include "something_or_other_known"
+        expect(headers).not_to include "whatchamacallit_asked"
+      end
+
+      it "does not add the id of checkbox questions, but adds the related attributes of the log in the correct order" do
+        headers = csv.first
+        expect(headers.last(4)).to eq %w[ownershipsch pregyrha pregother type]
+      end
     end
   end
 
