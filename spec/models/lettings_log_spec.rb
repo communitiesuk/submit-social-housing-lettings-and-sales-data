@@ -1504,334 +1504,338 @@ RSpec.describe LettingsLog do
       expect(record_from_db["has_benefits"]).to eq(1)
     end
 
-    context "when it is a renewal" do
+    context "when updating renewal" do
       let!(:lettings_log) do
         described_class.create({
           managing_organisation: owning_organisation,
           owning_organisation:,
           created_by: created_by_user,
-          renewal: 1,
           startdate: Time.zone.local(2021, 4, 10),
           created_at: Time.utc(2022, 2, 8, 16, 52, 15),
         })
       end
 
-      it "correctly derives and saves waityear" do
-        record_from_db = ActiveRecord::Base.connection.execute("select waityear from lettings_logs where id=#{lettings_log.id}").to_a[0]
-        expect(record_from_db["waityear"]).to eq(2)
-        expect(lettings_log["waityear"]).to eq(2)
+      it "correctly derives the length of time on local authority waiting list" do
+        lettings_log.update!(renewal: 1)
+        expect(lettings_log.waityear).to be 2
+        lettings_log.update!(renewal: 0)
+        expect(lettings_log.waityear).to be nil
       end
 
-      it "correctly derives and saves underoccupation_benefitcap if year is 2021" do
-        record_from_db = ActiveRecord::Base.connection.execute("select underoccupation_benefitcap from lettings_logs where id=#{lettings_log.id}").to_a[0]
-        expect(record_from_db["underoccupation_benefitcap"]).to eq(2)
-        expect(lettings_log["underoccupation_benefitcap"]).to eq(2)
+      it "correctly derives the number of times previously offered since becoming available" do
+        lettings_log.update!(renewal: 1)
+        expect(lettings_log.offered).to be 0
+        lettings_log.update!(renewal: 0)
+        expect(lettings_log.offered).to be nil
       end
 
-      it "correctly derives and saves prevten" do
-        lettings_log.managing_organisation.update!({ provider_type: "PRP" })
-        lettings_log.update!({ needstype: 1 })
-
-        record_from_db = ActiveRecord::Base.connection.execute("select prevten from lettings_logs where id=#{lettings_log.id}").to_a[0]
-        expect(record_from_db["prevten"]).to eq(32)
-        expect(lettings_log["prevten"]).to eq(32)
-
-        lettings_log.managing_organisation.update!({ provider_type: "LA" })
-        lettings_log.update!({ needstype: 1 })
-
-        record_from_db = ActiveRecord::Base.connection.execute("select prevten from lettings_logs where id=#{lettings_log.id}").to_a[0]
-        expect(record_from_db["prevten"]).to eq(30)
-        expect(lettings_log["prevten"]).to eq(30)
+      it "correctly derives referral if the letting is a renewal and clears it if it is not" do
+        lettings_log.update!(renewal: 1)
+        expect(lettings_log.referral).to be 1
+        lettings_log.update!(renewal: 0)
+        expect(lettings_log.referral).to be nil
       end
 
-      it "correctly derives and saves referral" do
-        record_from_db = ActiveRecord::Base.connection.execute("select referral from lettings_logs where id=#{lettings_log.id}").to_a[0]
-        expect(record_from_db["referral"]).to eq(1)
-        expect(lettings_log["referral"]).to eq(1)
+      it "correctly derives voiddate if the letting is a renewal and clears it if it is not" do
+        lettings_log.update!(renewal: 1)
+        expect(lettings_log.voiddate).to eq lettings_log.startdate
+        lettings_log.update!(renewal: 0)
+        expect(lettings_log.voiddate).to be nil
       end
 
-      it "correctly derives and saves vacdays" do
-        record_from_db = ActiveRecord::Base.connection.execute("select vacdays from lettings_logs where id=#{lettings_log.id}").to_a[0]
-        expect(record_from_db["vacdays"]).to eq(0)
-        expect(lettings_log["vacdays"]).to eq(0)
+      it "correctly derives first_time_property_let_as_social_housing and clears it if it is not" do
+        lettings_log.update!(renewal: 1)
+        expect(lettings_log.first_time_property_let_as_social_housing).to be 0
+        lettings_log.update!(renewal: 0)
+        expect(lettings_log.first_time_property_let_as_social_housing).to be nil
       end
 
-      it "correctly derives and saves first_time_property_let_as_social_housing" do
-        record_from_db = ActiveRecord::Base.connection.execute(
-          "select first_time_property_let_as_social_housing" \
-          " from lettings_logs where id=#{lettings_log.id}",
-        ).to_a[0]
-        expect(record_from_db["first_time_property_let_as_social_housing"]).to eq(0)
-        expect(lettings_log["first_time_property_let_as_social_housing"]).to eq(0)
+      it "correctly derives vacancy reason and clears it if it is not" do
+        lettings_log.update!(renewal: 1)
+        expect(lettings_log.rsnvac).to be 14
+        lettings_log.update!(renewal: 0)
+        expect(lettings_log.rsnvac).to be nil
       end
 
-      it "derives vacancy reason as relet" do
-        record_from_db = ActiveRecord::Base.connection.execute("select rsnvac from lettings_logs where id=#{lettings_log.id}").to_a[0]
-        expect(record_from_db["rsnvac"]).to eq(14)
-        expect(lettings_log["rsnvac"]).to eq(14)
+      # should have extra tests for whether it is derived when voiddate, mrcdate etc set and reset
+      it "derives vacdays as 0 if log is renewal" do
+        lettings_log.update!(renewal: 1)
+        expect(lettings_log.vacdays).to be 0
       end
 
-      context "when deriving renttype and unitletas" do
-        before do
-          Timecop.freeze(Time.zone.local(2022, 1, 1))
-          allow(FeatureToggle).to receive(:startdate_two_week_validation_enabled?).and_return(false)
-          lettings_log.update!(rent_type:, irproduct_other: "other")
-        end
+      it "correctly derives underoccupation_benefitcap if log is a renewal from 2021/22" do
+        lettings_log.update!(renewal: 1)
+        expect(lettings_log.underoccupation_benefitcap).to be 2
+      end
 
-        after do
-          Timecop.unfreeze
-        end
+      it "clears underoccupation_benefitcap if log is no longer a renewal" do
+        lettings_log.update!(renewal: 1)
+        expect(lettings_log.underoccupation_benefitcap).to be 2
+        lettings_log.update!(renewal: 0)
+        expect(lettings_log.underoccupation_benefitcap).to be nil
+      end
 
-        context "when the rent_type is Social Rent (0)" do
-          let(:rent_type) { 0 }
+      it "clears underoccupation_benefitcap if log is no longer in 2021/22" do
+        lettings_log.update!(renewal: 1)
+        expect(lettings_log.underoccupation_benefitcap).to be 2
+        lettings_log.update!(startdate: Time.zone.now)
+        expect(lettings_log.underoccupation_benefitcap).to be nil
+      end
 
-          it "derives and saves renttype and unitletas as Social rent(1)" do
-            record_from_db = ActiveRecord::Base.connection.execute("select renttype from lettings_logs where id=#{lettings_log.id}").to_a[0]
-            expect(lettings_log.renttype).to eq(1)
-            expect(record_from_db["renttype"]).to eq(1)
+      context "when the log is general needs" do
+        context "and the managing organisation is a private registered provider" do
+          before do
+            lettings_log.managing_organisation.update!(provider_type: "PRP")
+            lettings_log.update!(needstype: 1, renewal: 1)
           end
 
-          it "derives and saves unitletas as Social rent(1)" do
-            record_from_db = ActiveRecord::Base.connection.execute("select unitletas from lettings_logs where id=#{lettings_log.id}").to_a[0]
-            expect(lettings_log.unitletas).to eq(1)
-            expect(record_from_db["unitletas"]).to eq(1)
+          it "correctly derives prevten" do
+            expect(lettings_log.prevten).to be 32
+
           end
 
-          context "and it is a 23/24 form" do
-            before do
-              Timecop.freeze(Time.zone.local(2023, 5, 1))
-            end
+          it "clears prevten if the log is marked as supported housing" do
+            lettings_log.update!(needstype: 2)
+            expect(lettings_log.prevten).to be nil
+          end
 
-            after do
-              Timecop.unfreeze
-            end
-
-            around do |example|
-              Timecop.freeze(Time.zone.local(2023, 5, 1)) do
-                Singleton.__init__(FormHandler)
-                example.run
-              end
-              Timecop.return
-              Singleton.__init__(FormHandler)
-            end
-
-            it "derives and saves unitletas as Social rent(1)" do
-              lettings_log.update!(startdate: Time.zone.local(2023, 5, 1))
-              record_from_db = ActiveRecord::Base.connection.execute("select unitletas from lettings_logs where id=#{lettings_log.id}").to_a[0]
-              expect(lettings_log.unitletas).to eq(1)
-              expect(record_from_db["unitletas"]).to eq(1)
-            end
+          it "clears prevten if renewal is update to no" do
+            lettings_log.update!(renewal: 0)
+            expect(lettings_log.prevten).to be nil
           end
         end
 
-        context "when the rent_type is Affordable Rent(1)" do
-          let(:rent_type) { 1 }
-
-          it "derives and saves renttype as Affordable Rent(2)" do
-            record_from_db = ActiveRecord::Base.connection.execute("select renttype from lettings_logs where id=#{lettings_log.id}").to_a[0]
-            expect(lettings_log.renttype).to eq(2)
-            expect(record_from_db["renttype"]).to eq(2)
+        context "and the managing organisation is a local authority" do
+          before do
+            lettings_log.managing_organisation.update!(provider_type: "LA")
+            lettings_log.update!(needstype: 1, renewal: 1)
           end
 
-          it "derives and saves unitletas as Affordable Rent(2)" do
-            record_from_db = ActiveRecord::Base.connection.execute("select unitletas from lettings_logs where id=#{lettings_log.id}").to_a[0]
-            expect(lettings_log.unitletas).to eq(2)
-            expect(record_from_db["unitletas"]).to eq(2)
+          it "correctly derives prevten" do
+            expect(lettings_log.prevten).to be 30
+
           end
 
-          context "and it is a 23/24 form" do
-            before do
-              Timecop.freeze(Time.zone.local(2023, 5, 1))
-            end
+          it "clears prevten if the log is marked as supported housing" do
+            lettings_log.update!(needstype: 2)
+            expect(lettings_log.prevten).to be nil
+          end
 
-            after do
-              Timecop.unfreeze
-            end
+          it "clears prevten if renewal is update to no" do
+            lettings_log.update!(renewal: 0)
+            expect(lettings_log.prevten).to be nil
+          end
+        end
+      end
 
-            around do |example|
-              Timecop.freeze(Time.zone.local(2023, 5, 1)) do
-                Singleton.__init__(FormHandler)
-                example.run
-              end
-              Timecop.return
-              Singleton.__init__(FormHandler)
-            end
+      context "and updating rent_type" do
+        let(:irproduct_other) { nil }
 
-            it "derives and saves unitletas as Affordable Rent basis(2)" do
-              lettings_log.update!(startdate: Time.zone.local(2023, 5, 1))
-              record_from_db = ActiveRecord::Base.connection.execute("select unitletas from lettings_logs where id=#{lettings_log.id}").to_a[0]
-              expect(lettings_log.unitletas).to eq(2)
-              expect(record_from_db["unitletas"]).to eq(2)
-            end
+        around do |example|
+          Timecop.freeze(now) do
+            Singleton.__init__(FormHandler)
+            lettings_log.update!(rent_type:, irproduct_other:, startdate: now)
+            example.run
           end
         end
 
-        context "when the rent_type is London Affordable Rent(2)" do
-          let(:rent_type) { 2 }
+        context "when collection year is 2022/23 or earlier" do
+          let(:now) { Time.zone.local(2023, 1, 1) }
 
-          it "derives and saves renttype as London Affordable Rent(2)" do
-            record_from_db = ActiveRecord::Base.connection.execute("select renttype from lettings_logs where id=#{lettings_log.id}").to_a[0]
-            expect(lettings_log.renttype).to eq(2)
-            expect(record_from_db["renttype"]).to eq(2)
-          end
+          context "when rent_type is Social Rent" do
+            let(:rent_type) { 0 }
 
-          it "derives and saves unitletas as London Affordable Rent(2)" do
-            record_from_db = ActiveRecord::Base.connection.execute("select unitletas from lettings_logs where id=#{lettings_log.id}").to_a[0]
-            expect(lettings_log.unitletas).to eq(2)
-            expect(record_from_db["unitletas"]).to eq(2)
-          end
-
-          context "and it is a 23/24 form" do
-            before do
-              Timecop.freeze(Time.zone.local(2023, 5, 1))
-            end
-
-            after do
-              Timecop.unfreeze
-            end
-
-            around do |example|
-              Timecop.freeze(Time.zone.local(2023, 5, 1)) do
-                Singleton.__init__(FormHandler)
-                example.run
-              end
-              Timecop.return
-              Singleton.__init__(FormHandler)
-            end
-
-            it "derives and saves unitletas as London Affordable Rent basis(5)" do
-              lettings_log.update!(startdate: Time.zone.local(2023, 5, 1))
-              record_from_db = ActiveRecord::Base.connection.execute("select unitletas from lettings_logs where id=#{lettings_log.id}").to_a[0]
-              expect(lettings_log.unitletas).to eq(5)
-              expect(record_from_db["unitletas"]).to eq(5)
+            it "derives the most recent let type as Social Rent basis if it is a renewal and clears it if it is not" do
+              lettings_log.update!(renewal: 1)
+              expect(lettings_log.unitletas).to be 1
+              lettings_log.update!(renewal: 0)
+              expect(lettings_log.unitletas).to be nil
             end
           end
-        end
 
-        context "when the rent_type is Rent to Buy(3)" do
-          let(:rent_type) { 3 }
+          context "when rent_type is Affordable Rent" do
+            let(:rent_type) { 1 }
 
-          it "derives and saves renttype as Intermediate Rent(3)" do
-            record_from_db = ActiveRecord::Base.connection.execute("select renttype from lettings_logs where id=#{lettings_log.id}").to_a[0]
-            expect(lettings_log.renttype).to eq(3)
-            expect(record_from_db["renttype"]).to eq(3)
+            it "derives the most recent let type as Affordable Rent basis if it is a renewal and clears it if it is not" do
+              lettings_log.update!(renewal: 1)
+              expect(lettings_log.unitletas).to be 2
+              lettings_log.update!(renewal: 0)
+              expect(lettings_log.unitletas).to be nil
+            end
           end
 
-          it "derives and saves unitletas as Intermediate Rent(4)" do
-            record_from_db = ActiveRecord::Base.connection.execute("select unitletas from lettings_logs where id=#{lettings_log.id}").to_a[0]
-            expect(lettings_log.unitletas).to eq(4)
-            expect(record_from_db["unitletas"]).to eq(4)
+          context "when rent_type is London Affordable Rent" do
+            let(:rent_type) { 2 }
+
+            it "derives the most recent let type as Affordable Rent basis if it is a renewal and clears it if it is not" do
+              lettings_log.update!(renewal: 1)
+              expect(lettings_log.unitletas).to be 2
+              lettings_log.update!(renewal: 0)
+              expect(lettings_log.unitletas).to be nil
+            end
           end
 
-          context "and it is a 23/24 form" do
-            before do
-              Timecop.freeze(Time.zone.local(2023, 5, 1))
-            end
+          context "when rent_type is Rent to Buy" do
+            let(:rent_type) { 3 }
 
-            after do
-              Timecop.unfreeze
+            it "derives the most recent let type as Intermediate Rent basis if it is a renewal and clears it if it is not" do
+              lettings_log.update!(renewal: 1)
+              expect(lettings_log.unitletas).to be 4
+              lettings_log.update!(renewal: 0)
+              expect(lettings_log.unitletas).to be nil
             end
+          end
 
-            around do |example|
-              Timecop.freeze(Time.zone.local(2023, 5, 1)) do
-                Singleton.__init__(FormHandler)
-                example.run
-              end
-              Timecop.return
-              Singleton.__init__(FormHandler)
+          context "when rent_type is London Living Rent" do
+            let(:rent_type) { 4 }
+
+            it "derives the most recent let type as Intermediate Rent basis if it is a renewal and clears it if it is not" do
+              lettings_log.update!(renewal: 1)
+              expect(lettings_log.unitletas).to be 4
+              lettings_log.update!(renewal: 0)
+              expect(lettings_log.unitletas).to be nil
             end
+          end
 
-            it "derives and saves unitletas as Rent to Buy basis(6)" do
-              lettings_log.update!(startdate: Time.zone.local(2023, 5, 1))
-              record_from_db = ActiveRecord::Base.connection.execute("select unitletas from lettings_logs where id=#{lettings_log.id}").to_a[0]
-              expect(lettings_log.unitletas).to eq(6)
-              expect(record_from_db["unitletas"]).to eq(6)
+          context "when rent_type is Other intermediate rent product" do
+            let(:rent_type) { 5 }
+            let(:irproduct_other) { "Rent first" }
+
+            it "derives the most recent let type as Intermediate Rent basis if it is a renewal and clears it if it is not" do
+              lettings_log.update!(renewal: 1)
+              expect(lettings_log.unitletas).to be 4
+              lettings_log.update!(renewal: 0)
+              expect(lettings_log.unitletas).to be nil
             end
           end
         end
 
-        context "when the rent_type is London Living Rent(4)" do
-          let(:rent_type) { 4 }
+        context "when collection year is 2023/24 or later" do
+          let(:now) { Time.zone.local(2024, 1, 1) }
 
-          it "derives and saves renttype as Intermediate Rent(3)" do
-            record_from_db = ActiveRecord::Base.connection.execute("select renttype from lettings_logs where id=#{lettings_log.id}").to_a[0]
-            expect(lettings_log.renttype).to eq(3)
-            expect(record_from_db["renttype"]).to eq(3)
+          context "when rent_type is Social Rent" do
+            let(:rent_type) { 0 }
+
+            it "derives the most recent let type as Social Rent basis if it is a renewal and clears it if it is not" do
+              lettings_log.update!(renewal: 1)
+              expect(lettings_log.unitletas).to be 1
+              lettings_log.update!(renewal: 0)
+              expect(lettings_log.unitletas).to be nil
+            end
           end
 
-          it "derives and saves unitletas as Intermediate Rent(4)" do
-            record_from_db = ActiveRecord::Base.connection.execute("select unitletas from lettings_logs where id=#{lettings_log.id}").to_a[0]
-            expect(lettings_log.unitletas).to eq(4)
-            expect(record_from_db["unitletas"]).to eq(4)
+          context "when rent_type is Affordable Rent" do
+            let(:rent_type) { 1 }
+
+            it "derives the most recent let type as Affordable Rent basis if it is a renewal and clears it if it is not" do
+              lettings_log.update!(renewal: 1)
+              expect(lettings_log.unitletas).to be 2
+              lettings_log.update!(renewal: 0)
+              expect(lettings_log.unitletas).to be nil
+            end
           end
 
-          context "and it is a 23/24 form" do
-            before do
-              Timecop.freeze(Time.zone.local(2023, 5, 1))
-            end
+          context "when rent_type is London Affordable Rent" do
+            let(:rent_type) { 2 }
 
-            after do
-              Timecop.unfreeze
+            it "derives the most recent let type as London Affordable Rent basis if it is a renewal and clears it if it is not" do
+              lettings_log.update!(renewal: 1)
+              expect(lettings_log.unitletas).to be 5
+              lettings_log.update!(renewal: 0)
+              expect(lettings_log.unitletas).to be nil
             end
+          end
 
-            around do |example|
-              Timecop.freeze(Time.zone.local(2023, 5, 1)) do
-                Singleton.__init__(FormHandler)
-                example.run
-              end
-              Timecop.return
-              Singleton.__init__(FormHandler)
+          context "when rent_type is Rent to Buy" do
+            let(:rent_type) { 3 }
+
+            it "derives the most recent let type as Rent to Buy basis if it is a renewal and clears it if it is not" do
+              lettings_log.update!(renewal: 1)
+              expect(lettings_log.unitletas).to be 6
+              lettings_log.update!(renewal: 0)
+              expect(lettings_log.unitletas).to be nil
             end
+          end
 
-            it "derives and saves unitletas as London Living Rent basis(7)" do
-              lettings_log.update!(startdate: Time.zone.local(2023, 5, 1))
-              record_from_db = ActiveRecord::Base.connection.execute("select unitletas from lettings_logs where id=#{lettings_log.id}").to_a[0]
-              expect(lettings_log.unitletas).to eq(7)
-              expect(record_from_db["unitletas"]).to eq(7)
+          context "when rent_type is London Living Rent" do
+            let(:rent_type) { 4 }
+
+            it "derives the most recent let type as London Living Rent basis if it is a renewal and clears it if it is not" do
+              lettings_log.update!(renewal: 1)
+              expect(lettings_log.unitletas).to be 7
+              lettings_log.update!(renewal: 0)
+              expect(lettings_log.unitletas).to be nil
+            end
+          end
+
+          context "when rent_type is Other intermediate rent product" do
+            let(:rent_type) { 5 }
+            let(:irproduct_other) { "Rent first" }
+
+            it "derives the most recent let type as Another Intermediate Rent basis if it is a renewal and clears it if it is not" do
+              lettings_log.update!(renewal: 1)
+              expect(lettings_log.unitletas).to be 8
+              lettings_log.update!(renewal: 0)
+              expect(lettings_log.unitletas).to be nil
             end
           end
         end
+      end
+    end
 
-        context "when the rent_type is Other intermediate rent product(5)" do
-          let(:rent_type) { 5 }
+    context "when updating rent type" do
+      let(:irproduct_other) { nil }
 
-          it "derives and saves renttype as Intermediate Rent(3)" do
-            record_from_db = ActiveRecord::Base.connection.execute("select renttype from lettings_logs where id=#{lettings_log.id}").to_a[0]
-            expect(lettings_log.renttype).to eq(3)
-            expect(record_from_db["renttype"]).to eq(3)
-          end
+      before do
+        lettings_log.update!(rent_type:, irproduct_other:)
+      end
 
-          it "derives and saves unitletas as Intermediate Rent(4)" do
-            record_from_db = ActiveRecord::Base.connection.execute("select unitletas from lettings_logs where id=#{lettings_log.id}").to_a[0]
-            expect(lettings_log.unitletas).to eq(4)
-            expect(record_from_db["unitletas"]).to eq(4)
-          end
+      context "when rent_type is Social Rent" do
+        let(:rent_type) { 0 }
 
-          context "and it is a 23/24 form" do
-            before do
-              Timecop.freeze(Time.zone.local(2023, 5, 1))
-            end
+        it "derives renttype as Social Rent" do
+          expect(lettings_log.renttype).to be 1
+        end
+      end
 
-            after do
-              Timecop.unfreeze
-            end
+      context "when rent_type is Affordable Rent" do
+        let(:rent_type) { 1 }
 
-            around do |example|
-              Timecop.freeze(Time.zone.local(2023, 5, 1)) do
-                Singleton.__init__(FormHandler)
-                example.run
-              end
-              Timecop.return
-              Singleton.__init__(FormHandler)
-            end
+        it "derives renttype as Affordable Rent" do
+          expect(lettings_log.renttype).to be 2
+        end
+      end
 
-            it "derives and saves unitletas as Other intermediate rent basis(8)" do
-              lettings_log.update!(startdate: Time.zone.local(2023, 5, 1))
-              record_from_db = ActiveRecord::Base.connection.execute("select unitletas from lettings_logs where id=#{lettings_log.id}").to_a[0]
-              expect(lettings_log.unitletas).to eq(8)
-              expect(record_from_db["unitletas"]).to eq(8)
-            end
-          end
+      context "when rent_type is London Affordable Rent" do
+        let(:rent_type) { 2 }
+
+        it "derives renttype as Affordable Rent" do
+          expect(lettings_log.renttype).to be 2
+        end
+      end
+
+      context "when rent_type is Rent to Buy" do
+        let(:rent_type) { 3 }
+
+        it "derives renttype as Intermediate Rent" do
+          expect(lettings_log.renttype).to be 3
+        end
+      end
+
+      context "when rent_type is London Living Rent" do
+        let(:rent_type) { 4 }
+
+        it "derives renttype as Intermediate Rent" do
+          expect(lettings_log.renttype).to be 3
+        end
+      end
+
+      context "when rent_type is Other intermediate rent product" do
+        let(:rent_type) { 5 }
+        let(:irproduct_other) { "Rent first" }
+
+        it "derives renttype as Intermediate Rent" do
+          expect(lettings_log.renttype).to be 3
         end
       end
     end
@@ -2339,6 +2343,7 @@ RSpec.describe LettingsLog do
     end
   end
 
+  # CHECK THROUGH
   describe "resetting invalidated fields" do
     let(:scheme) { create(:scheme, owning_organisation: created_by_user.organisation) }
     let!(:location) { create(:location, location_code: "E07000223", scheme:) }
