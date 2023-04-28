@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Lettings::Questions::CreatedById, type: :model do
+RSpec.describe Form::Sales::Questions::CreatedById, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
@@ -22,7 +22,7 @@ RSpec.describe Form::Lettings::Questions::CreatedById, type: :model do
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Log owner")
+    expect(question.check_answer_label).to eq("User")
   end
 
   it "has the correct type" do
@@ -33,59 +33,55 @@ RSpec.describe Form::Lettings::Questions::CreatedById, type: :model do
     expect(question.hint_text).to be_nil
   end
 
-  it "has the correct answer options" do
-    expect(question.answer_options).to eq({ "" => "Select an option" })
-  end
-
   it "is marked as derived" do
     expect(question.derived?).to be true
   end
 
   context "when the current user is support" do
-    let(:owning_org_user) { create(:user) }
-    let(:managing_org_user) { create(:user) }
-    let(:support_user) { create(:user, :support, organisation: owning_org_user.organisation) }
+    let(:support_user) { build(:user, :support) }
+
+    it "is shown in check answers" do
+      expect(question.hidden_in_check_answers?(nil, support_user)).to be false
+    end
 
     describe "#displayed_answer_options" do
-      let(:lettings_log) do
-        create(:lettings_log, created_by: support_user, owning_organisation: owning_org_user.organisation, managing_organisation: managing_org_user.organisation)
-      end
-
+      let(:owning_org_user) { create(:user) }
+      let(:sales_log) { create(:sales_log, owning_organisation: owning_org_user.organisation) }
       let(:expected_answer_options) do
         {
           "" => "Select an option",
-          managing_org_user.id => "#{managing_org_user.name} (#{managing_org_user.email})",
           owning_org_user.id => "#{owning_org_user.name} (#{owning_org_user.email})",
-          support_user.id => "#{support_user.name} (#{support_user.email})",
         }
       end
 
-      it "only displays users that belong to owning and managing organisations" do
-        expect(question.displayed_answer_options(lettings_log, support_user)).to eq(expected_answer_options)
+      it "only displays users that belong to the owning organisation" do
+        expect(question.displayed_answer_options(sales_log, support_user)).to eq(expected_answer_options)
       end
     end
   end
 
   context "when the current user is data_coordinator" do
-    let(:managing_org_user) { create(:user) }
     let(:data_coordinator) { create(:user, :data_coordinator) }
 
-    describe "#displayed_answer_options" do
-      let(:lettings_log) do
-        create(:lettings_log, created_by: data_coordinator, owning_organisation: data_coordinator.organisation, managing_organisation: managing_org_user.organisation)
-      end
+    it "is shown in check answers" do
+      expect(question.hidden_in_check_answers?(nil, data_coordinator)).to be false
+    end
 
-      let(:user_in_same_org) { create(:user, organisation: data_coordinator.organisation) }
+    describe "#displayed_answer_options" do
+      let(:owning_org_user) { create(:user) }
+      let(:sales_log) { create(:sales_log, owning_organisation: owning_org_user.organisation) }
+      let!(:user_in_same_org) { create(:user, organisation: data_coordinator.organisation) }
 
       let(:expected_answer_options) do
         {
           "" => "Select an option",
+          user_in_same_org.id => "#{user_in_same_org.name} (#{user_in_same_org.email})",
           data_coordinator.id => "#{data_coordinator.name} (#{data_coordinator.email})",
         }
       end
 
       it "only displays users that belong user's org" do
-        expect(question.displayed_answer_options(lettings_log, data_coordinator)).to eq(expected_answer_options)
+        expect(question.displayed_answer_options(sales_log, data_coordinator)).to eq(expected_answer_options)
       end
     end
   end
