@@ -246,7 +246,7 @@ en:
         more_than_rent: "Enter a value less less than the basic rent amount"
         must_be_positive: "Enter a value over £0.01 as you told us there is an outstanding amount"
       hbrentshortfall:
-        outstanding_amount_not_required: "You must have outstanding rent or charges as you have answered the outstanding amount question"
+        outstanding_amount_not_required: "Answer must be ‘yes’ as you have answered the outstanding amount question"
         outstanding_no_benefits: "Answer cannot be ‘yes’ to outstanding amount for basic rent or charges if tenant does not receive housing benefit or Universal Credit or you‘re not sure"
       benefits:
         part_or_full_time: "Answer cannot be ‘all’ for income from Universal Credit, state pensions or benefits if the tenant or their partner works part-time or full-time"
