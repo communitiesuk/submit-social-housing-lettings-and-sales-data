@@ -8,6 +8,30 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <p class="govuk-body">Confirm the telephone number on file, or enter a new one.</p>
+    <% if @merge_request.absorbing_organisation.phone.present? %>
+      <p class="govuk-body">Confirm the telephone number on file, or enter a new one.</p>
+    <% end %>
+
+    <div class="govuk-inset-text">
+      <%= @merge_request.absorbing_organisation.phone %>
+    </div>
+
+    <%= form_with model: @merge_request, url: merge_request_path, method: :patch do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <% if @merge_request.absorbing_organisation.phone.present? %>
+        <%= f.govuk_radio_buttons_fieldset(:telephone_number_correct, legend: nil) do %>
+          <%= f.govuk_radio_button :telephone_number_correct, 1, checked: @merge_request.telephone_number_correct?, label: { text: "This telephone number is correct" }, link_errors: true %>
+          <%= f.govuk_radio_button :telephone_number_correct, 0, checked: (@merge_request.telephone_number_correct? == false), label: { text: "Enter a new phone number" } do %>
+            <%= f.govuk_text_field :new_telephone_number, label: { text: "Telephone number" }, width: "two-thirds" %>
+          <% end %>
+          <%= f.hidden_field :page, value: "confirm_telephone_number" %>
+        <% end %>
+      <% else %>
+        <%= f.govuk_text_field :new_telephone_number, label: nil, width: "two-thirds" %>
+        <%= f.hidden_field :page, value: "confirm_telephone_number" %>
+      <% end %>
+      <%= f.govuk_submit %>
+    <% end %>
   </div>
 </div>

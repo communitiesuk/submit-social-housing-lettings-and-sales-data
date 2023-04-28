@@ -139,6 +139,7 @@ Rails.application.routes.draw do
       get "absorbing-organisation"
       get "confirm-telephone-number"
       get "new-org-name"
+      get "merge-date"
     end
   end
 

@@ -233,6 +233,37 @@ RSpec.describe MergeRequestsController, type: :request do
       end
     end
 
+    describe "#confirm_telephone_number" do
+      let(:merge_request) do
+        MergeRequest.create!(
+          absorbing_organisation: create(:organisation, phone: phone_number),
+          requesting_organisation: organisation,
+        )
+      end
+
+      before { get "/merge-request/#{merge_request.id}/confirm-telephone-number", headers: }
+
+      context "when org has phone number" do
+        let(:phone_number) { 123 }
+
+        it "asks to confirm or provide new number" do
+          expect(page).to have_content("This telephone number is correct")
+          expect(page).to have_content("Confirm the telephone number on file, or enter a new one.")
+          expect(page).to have_content("What is #{merge_request.absorbing_organisation.name}'s telephone number?")
+        end
+      end
+
+      context "when org does not have a phone number set" do
+        let(:phone_number) { nil }
+
+        it "asks provide new number" do
+          expect(page).not_to have_content("This telephone number is correct")
+          expect(page).not_to have_content("Confirm the telephone number on file, or enter a new one.")
+          expect(page).to have_content("What is #{merge_request.absorbing_organisation.name}'s telephone number?")
+        end
+      end
+    end
+
     describe "#update" do
       before { sign_in user }
 
@@ -260,72 +291,164 @@ RSpec.describe MergeRequestsController, type: :request do
         end
       end
 
-      context "when not answering the question" do
-        let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: other_organisation) }
-        let(:params) do
-          { merge_request: { page: "absorbing_organisation" } }
-        end
-        let(:request) do
-          patch "/merge-request/#{merge_request.id}", headers:, params:
+      describe "from absorbing_organisation page" do
+        context "when not answering the question" do
+          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: other_organisation) }
+          let(:params) do
+            { merge_request: { page: "absorbing_organisation" } }
+          end
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "renders the error" do
+            request
+
+            expect(page).to have_content("Select the organisation absorbing the others")
+          end
+
+          it "does not update the request" do
+            expect { request }.not_to(change { merge_request.reload.attributes })
+          end
         end
 
-        it "renders the error" do
-          request
+        context "when absorbing_organisation_id set to other" do
+          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: other_organisation) }
+          let(:params) do
+            { merge_request: { absorbing_organisation_id: "other", page: "absorbing_organisation" } }
+          end
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
 
-          expect(page).to have_content("Select the organisation absorbing the others")
+          it "redirects to new org path" do
+            request
+
+            expect(response).to redirect_to(new_org_name_merge_request_path(merge_request))
+          end
+
+          it "resets absorbing_organisation and sets new_absorbing_organisation to true" do
+            expect { request }.to change {
+              merge_request.reload.absorbing_organisation
+            }.from(other_organisation).to(nil).and change {
+              merge_request.reload.new_absorbing_organisation
+            }.from(nil).to(true)
+          end
         end
 
-        it "does not update the request" do
-          expect { request }.not_to(change { merge_request.reload.attributes })
+        context "when absorbing_organisation_id set to id" do
+          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, new_absorbing_organisation: true) }
+          let(:params) do
+            { merge_request: { absorbing_organisation_id: other_organisation.id, page: "absorbing_organisation" } }
+          end
+
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "redirects telephone number path" do
+            request
+
+            expect(response).to redirect_to(confirm_telephone_number_merge_request_path(merge_request))
+          end
+
+          it "updates absorbing_organisation_id and sets new_absorbing_organisation to false" do
+            expect { request }.to change {
+              merge_request.reload.absorbing_organisation
+            }.from(nil).to(other_organisation).and change {
+              merge_request.reload.new_absorbing_organisation
+            }.from(true).to(false)
+          end
         end
       end
 
-      context "when absorbing_organisation_id set to other" do
-        let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: other_organisation) }
-        let(:params) do
-          { merge_request: { absorbing_organisation_id: "other", page: "absorbing_organisation" } }
-        end
-        let(:request) do
-          patch "/merge-request/#{merge_request.id}", headers:, params:
-        end
+      describe "from confirm_telephone_number page" do
+        context "when confirming the number" do
+          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, new_absorbing_organisation: true, new_telephone_number: "123") }
+          let(:params) do
+            { merge_request: { telephone_number_correct: "1", page: "confirm_telephone_number" } }
+          end
 
-        it "redirects to new org path" do
-          request
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
 
-          expect(response).to redirect_to(new_org_name_merge_request_path(merge_request))
-        end
+          it "redirects telephone number path" do
+            request
 
-        it "resets absorbing_organisation and sets new_absorbing_organisation to true" do
-          expect { request }.to change {
-            merge_request.reload.absorbing_organisation
-          }.from(other_organisation).to(nil).and change {
-            merge_request.reload.new_absorbing_organisation
-          }.from(nil).to(true)
-        end
-      end
+            expect(response).to redirect_to(merge_date_merge_request_path(merge_request))
+          end
 
-      context "when absorbing_organisation_id set to id" do
-        let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, new_absorbing_organisation: true) }
-        let(:params) do
-          { merge_request: { absorbing_organisation_id: other_organisation.id, page: "absorbing_organisation" } }
+          it "updates telephone_number_correct and sets new_telephone_number to nil" do
+            expect { request }.to change {
+              merge_request.reload.telephone_number_correct
+            }.from(nil).to(true).and change {
+              merge_request.reload.new_telephone_number
+            }.from("123").to(nil)
+          end
         end
 
-        let(:request) do
-          patch "/merge-request/#{merge_request.id}", headers:, params:
+        context "when setting new number" do
+          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, new_absorbing_organisation: true) }
+          let(:params) do
+            { merge_request: { telephone_number_correct: "0", new_telephone_number: "123", page: "confirm_telephone_number" } }
+          end
+
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "redirects telephone number path" do
+            request
+
+            expect(response).to redirect_to(merge_date_merge_request_path(merge_request))
+          end
+
+          it "updates telephone_number_correct and sets new_telephone_number to nil" do
+            expect { request }.to change {
+              merge_request.reload.new_telephone_number
+            }.from(nil).to("123")
+          end
         end
 
-        it "redirects telephone number path" do
-          request
+        context "when not answering the question" do
+          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: other_organisation) }
+          let(:params) do
+            { merge_request: { page: "confirm_telephone_number" } }
+          end
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
 
-          expect(response).to redirect_to(confirm_telephone_number_merge_request_path(merge_request))
+          it "renders the error" do
+            request
+
+            expect(page).to have_content("Select to confirm or enter a new telephone number")
+          end
+
+          it "does not update the request" do
+            expect { request }.not_to(change { merge_request.reload.attributes })
+          end
         end
 
-        it "updates absorbing_organisation_id and sets new_absorbing_organisation to false" do
-          expect { request }.to change {
-            merge_request.reload.absorbing_organisation
-          }.from(nil).to(other_organisation).and change {
-            merge_request.reload.new_absorbing_organisation
-          }.from(true).to(false)
+        context "when not answering the phone number" do
+          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: other_organisation) }
+          let(:params) do
+            { merge_request: { page: "confirm_telephone_number", telephone_number_correct: "0" } }
+          end
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "renders the error" do
+            request
+
+            expect(page).to have_content("Enter a valid telephone number")
+          end
+
+          it "does not update the request" do
+            expect { request }.not_to(change { merge_request.reload.attributes })
+          end
         end
       end
     end

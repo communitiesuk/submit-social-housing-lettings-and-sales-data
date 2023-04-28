@@ -7,6 +7,7 @@ class MergeRequestsController < ApplicationController
     absorbing_organisation
     confirm_telephone_number
     new_org_name
+    merge_date
   ]
   before_action :authenticate_user!
   before_action :authenticate_scope!, except: [:create]
@@ -15,6 +16,7 @@ class MergeRequestsController < ApplicationController
   def absorbing_organisation; end
   def confirm_telephone_number; end
   def new_org_name; end
+  def merge_date; end
 
   def create
     ActiveRecord::Base.transaction do
@@ -70,6 +72,8 @@ private
       end
     when "organisations"
       absorbing_organisation_merge_request_path(@merge_request)
+    when "confirm_telephone_number"
+      merge_date_merge_request_path(@merge_request)
     end
   end
 
@@ -96,6 +100,8 @@ private
       :other_merging_organisations,
       :status,
       :absorbing_organisation_id,
+      :telephone_number_correct,
+      :new_telephone_number,
     )
 
     if merge_params[:requesting_organisation_id].present? && (current_user.data_coordinator? || current_user.data_provider?)
@@ -111,6 +117,10 @@ private
       end
     end
 
+    if merge_params[:telephone_number_correct] == "1"
+      merge_params[:new_telephone_number] = nil
+    end
+
     merge_params
   end
 
@@ -118,6 +128,16 @@ private
     if page == "absorbing_organisation" && merge_request_params[:absorbing_organisation_id].blank? && merge_request_params[:new_absorbing_organisation].blank?
       @merge_request.errors.add(:absorbing_organisation_id, I18n.t("validations.merge_request.absorbing_organisation_blank"))
       render previous_template
+    end
+
+    if page == "confirm_telephone_number"
+      if merge_request_params[:telephone_number_correct].blank? && merge_request_params[:new_telephone_number].blank?
+        @merge_request.errors.add(:telephone_number_correct, I18n.t("validations.merge_request.telephone_number_correct_blank"))
+        render previous_template
+      elsif merge_request_params[:telephone_number_correct] == "0" && merge_request_params[:new_telephone_number].blank?
+        @merge_request.errors.add(:new_telephone_number, I18n.t("validations.merge_request.new_telephone_number_blank"))
+        render previous_template
+      end
     end
   end
 
