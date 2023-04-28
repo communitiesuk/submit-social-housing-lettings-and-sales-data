@@ -480,7 +480,7 @@ private
     attributes["purchid"] = field_1
     attributes["saledate"] = saledate
 
-    attributes["noint"] = 2 if buyer_not_interviewed?
+    attributes["noint"] = field_6
 
     attributes["details_known_2"] = details_known?(2)
     attributes["details_known_3"] = details_known?(3)
@@ -519,7 +519,7 @@ private
     attributes["relat5"] = field_22
     attributes["relat6"] = field_23
 
-    attributes["ecstat1"] = buyer_not_interviewed? ? 0 : field_24
+    attributes["ecstat1"] = buyer_not_interviewed? && field_24.blank? ? 0 : field_24
     attributes["ecstat2"] = field_25
     attributes["ecstat3"] = field_26
     attributes["ecstat4"] = field_27
@@ -528,18 +528,18 @@ private
 
     attributes["ethnic_group"] = ethnic_group_from_ethnic
     attributes["ethnic"] = field_30
-    attributes["national"] = buyer_not_interviewed? ? 13 : field_31
-    attributes["income1nk"] = buyer_not_interviewed? || field_32.blank? ? 1 : 0
+    attributes["national"] = buyer_not_interviewed? && field_31.blank? ? 13 : field_31
+    attributes["income1nk"] = income1nk
     attributes["income1"] = field_32
     attributes["income2nk"] = field_33.present? ? 0 : 1
     attributes["income2"] = field_33
-    attributes["inc1mort"] = field_32.blank? ? 2 : field_34
+    attributes["inc1mort"] = buyer_not_interviewed? && field_32.blank? ? 2 : field_34
     attributes["inc2mort"] = field_35
-    attributes["savingsnk"] = buyer_not_interviewed? || field_36.blank? ? 1 : 0
+    attributes["savingsnk"] = savingsnk
     attributes["savings"] = field_36
-    attributes["prevown"] = buyer_not_interviewed? ? 3 : field_37
+    attributes["prevown"] = buyer_not_interviewed? && field_37.blank? ? 3 : field_37
 
-    attributes["prevten"] = buyer_not_interviewed? ? 0 : field_39
+    attributes["prevten"] = buyer_not_interviewed? && field_39.blank? ? 0 : field_39
     attributes["prevloc"] = field_40
     attributes["previous_la_known"] = previous_la_known
     attributes["ppcodenk"] = field_43
@@ -551,8 +551,8 @@ private
     attributes["pregother"] = field_47
     attributes["pregblank"] = 1 if [field_44, field_45, field_46, field_47].all?(&:blank?)
 
-    attributes["disabled"] = buyer_not_interviewed? ? 3 : field_48
-    attributes["wheel"] = buyer_not_interviewed? ? 3 : field_49
+    attributes["disabled"] = buyer_not_interviewed? && field_48.blank? ? 3 : field_48
+    attributes["wheel"] = buyer_not_interviewed? && field_49.blank? ? 3 : field_49
     attributes["beds"] = field_50
     attributes["proptype"] = field_51
     attributes["builtype"] = field_52
@@ -620,6 +620,22 @@ private
     attributes["soctenant"] = soctenant
 
     attributes
+  end
+
+  def income1nk
+    if field_32.present?
+      0
+    else
+      buyer_not_interviewed? ? 1 : nil
+    end
+  end
+
+  def savingsnk
+    if field_36.present?
+      0
+    else
+      buyer_not_interviewed? ? 1 : nil
+    end
   end
 
   def saledate
