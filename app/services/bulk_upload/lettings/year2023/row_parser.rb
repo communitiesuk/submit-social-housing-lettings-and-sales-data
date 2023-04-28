@@ -467,8 +467,10 @@ private
 
       question.page.interruption_screen_question_ids.each do |interruption_screen_question_id|
         field_mapping_for_errors[interruption_screen_question_id.to_sym].each do |field|
-          error_message = [display_title_text(question.page.title_text, log), display_informative_text(question.page.informative_text, log)].join(". ")
-          errors.add(field, message: error_message, category: :soft_validation)
+          unless errors.any? { |e| field_mapping_for_errors[interruption_screen_question_id.to_sym].include?(e.attribute) }
+            error_message = [display_title_text(question.page.title_text, log), display_informative_text(question.page.informative_text, log)].join(". ")
+            errors.add(field, message: error_message, category: :soft_validation)
+          end
         end
       end
     end

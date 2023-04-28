@@ -1030,6 +1030,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         it "populates with correct error message" do
           soft_validation_errors = parser.errors.select { |e| e.options[:category] == :soft_validation }
 
+          expect(soft_validation_errors.count { |e| e.attribute == :field_128 }).to be(1)
           expect(soft_validation_errors.find { |e| e.attribute == :field_128 }.message).to eql("You told us the rent is £120.00 every week. The maximum rent expected for this type of property in this local authority is ££118.85 every week.")
         end
       end
