@@ -41,6 +41,6 @@ class Form::Sales::Pages::RetirementValueCheck < Form::Sales::Pages::Person
   end
 
   def interruption_screen_question_ids
-    ["age#{@person_index}", "exstat#{@person_index}", "sex#{@person_index}"]
+    ["age#{@person_index}", "ecstat#{@person_index}", "sex#{@person_index}"]
   end
 end

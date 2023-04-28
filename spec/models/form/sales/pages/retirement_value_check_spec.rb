@@ -73,7 +73,7 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
     end
 
     it "has correct interruption_screen_question_ids" do
-      expect(page.interruption_screen_question_ids).to eq(%w[age1 exstat1 sex1])
+      expect(page.interruption_screen_question_ids).to eq(%w[age1 ecstat1 sex1])
     end
   end
 
@@ -125,7 +125,7 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
     end
 
     it "has correct interruption_screen_question_ids" do
-      expect(page.interruption_screen_question_ids).to eq(%w[age2 exstat2 sex2])
+      expect(page.interruption_screen_question_ids).to eq(%w[age2 ecstat2 sex2])
     end
   end
 
@@ -177,7 +177,7 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
     end
 
     it "has correct interruption_screen_question_ids" do
-      expect(page.interruption_screen_question_ids).to eq(%w[age3 exstat3 sex3])
+      expect(page.interruption_screen_question_ids).to eq(%w[age3 ecstat3 sex3])
     end
   end
 
@@ -229,7 +229,7 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
     end
 
     it "has correct interruption_screen_question_ids" do
-      expect(page.interruption_screen_question_ids).to eq(%w[age4 exstat4 sex4])
+      expect(page.interruption_screen_question_ids).to eq(%w[age4 ecstat4 sex4])
     end
   end
 
@@ -281,7 +281,7 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
     end
 
     it "has correct interruption_screen_question_ids" do
-      expect(page.interruption_screen_question_ids).to eq(%w[age5 exstat5 sex5])
+      expect(page.interruption_screen_question_ids).to eq(%w[age5 ecstat5 sex5])
     end
   end
 
@@ -333,7 +333,7 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
     end
 
     it "has correct interruption_screen_question_ids" do
-      expect(page.interruption_screen_question_ids).to eq(%w[age6 exstat6 sex6])
+      expect(page.interruption_screen_question_ids).to eq(%w[age6 ecstat6 sex6])
     end
   end
 end

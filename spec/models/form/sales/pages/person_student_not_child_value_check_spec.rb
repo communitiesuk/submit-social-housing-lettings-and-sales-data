@@ -40,7 +40,7 @@ RSpec.describe Form::Sales::Pages::PersonStudentNotChildValueCheck, type: :model
   end
 
   it "has correct interruption_screen_question_ids" do
-    expect(page.interruption_screen_question_ids).to eq(%w[relat2 exstat2 age2])
+    expect(page.interruption_screen_question_ids).to eq(%w[relat2 ecstat2 age2])
   end
 
   context "with person 2" do
@@ -56,7 +56,7 @@ RSpec.describe Form::Sales::Pages::PersonStudentNotChildValueCheck, type: :model
     end
 
     it "has correct interruption_screen_question_ids" do
-      expect(page.interruption_screen_question_ids).to eq(%w[relat2 exstat2 age2])
+      expect(page.interruption_screen_question_ids).to eq(%w[relat2 ecstat2 age2])
     end
   end
 
@@ -73,7 +73,7 @@ RSpec.describe Form::Sales::Pages::PersonStudentNotChildValueCheck, type: :model
     end
 
     it "has correct interruption_screen_question_ids" do
-      expect(page.interruption_screen_question_ids).to eq(%w[relat3 exstat3 age3])
+      expect(page.interruption_screen_question_ids).to eq(%w[relat3 ecstat3 age3])
     end
   end
 
@@ -90,7 +90,7 @@ RSpec.describe Form::Sales::Pages::PersonStudentNotChildValueCheck, type: :model
     end
 
     it "has correct interruption_screen_question_ids" do
-      expect(page.interruption_screen_question_ids).to eq(%w[relat4 exstat4 age4])
+      expect(page.interruption_screen_question_ids).to eq(%w[relat4 ecstat4 age4])
     end
   end
 
@@ -107,7 +107,7 @@ RSpec.describe Form::Sales::Pages::PersonStudentNotChildValueCheck, type: :model
     end
 
     it "has correct interruption_screen_question_ids" do
-      expect(page.interruption_screen_question_ids).to eq(%w[relat5 exstat5 age5])
+      expect(page.interruption_screen_question_ids).to eq(%w[relat5 ecstat5 age5])
     end
   end
 
@@ -124,7 +124,7 @@ RSpec.describe Form::Sales::Pages::PersonStudentNotChildValueCheck, type: :model
     end
 
     it "has correct interruption_screen_question_ids" do
-      expect(page.interruption_screen_question_ids).to eq(%w[relat6 exstat6 age6])
+      expect(page.interruption_screen_question_ids).to eq(%w[relat6 ecstat6 age6])
     end
   end
 end
