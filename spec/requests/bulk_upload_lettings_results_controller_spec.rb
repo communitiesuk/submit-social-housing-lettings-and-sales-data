@@ -45,9 +45,8 @@ RSpec.describe BulkUploadLettingsResultsController, type: :request do
       let(:viewing_user) { other_user }
 
       it "is not accessible" do
-        expect {
-          get "/lettings-logs/bulk-upload-results/#{bulk_upload.id}/summary"
-        }.to raise_error(Pundit::NotAuthorizedError)
+        get "/lettings-logs/bulk-upload-results/#{bulk_upload.id}/summary"
+        expect(response).to be_unauthorized
       end
     end
 

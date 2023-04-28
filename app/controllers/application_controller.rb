@@ -1,10 +1,16 @@
 class ApplicationController < ActionController::Base
   include Pundit::Authorization
 
+  rescue_from Pundit::NotAuthorizedError, with: :render_not_authorized
+
   before_action :set_paper_trail_whodunnit
 
   def render_not_found
     render "errors/not_found", status: :not_found
+  end
+
+  def render_not_authorized
+    render "errors/not_found", status: :unauthorized
   end
 
   def render_not_found_json(class_name, id)
