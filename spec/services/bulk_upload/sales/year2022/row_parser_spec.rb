@@ -528,6 +528,7 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
 
       it "infers correctly" do
         log = parser.log
+        expect(log["noint"]).to eq(1)
         expect(log["ecstat1"]).to eq(0)
         expect(log["ethnic_group"]).to eq(17)
         expect(log["national"]).to eq(13)
