@@ -165,7 +165,7 @@ RSpec.describe BulkUpload::Processor do
       end
 
       before do
-        file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
         file.rewind
 
         allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
@@ -213,7 +213,7 @@ RSpec.describe BulkUpload::Processor do
       end
 
       before do
-        file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
         file.rewind
 
         allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
@@ -265,7 +265,7 @@ RSpec.describe BulkUpload::Processor do
       end
 
       before do
-        file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
         file.rewind
 
         allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
