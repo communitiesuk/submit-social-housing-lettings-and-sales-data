@@ -9,8 +9,8 @@ RSpec.describe BulkUpload::Lettings::Year2022::CsvParser do
 
   context "when parsing csv with headers" do
     before do
-      file.write(BulkUpload::LogToCsv.new(log:).default_2022_field_numbers_row)
-      file.write(BulkUpload::LogToCsv.new(log:).to_2022_csv_row)
+      file.write(BulkUpload::LettingsLogToCsv.new(log:).default_2022_field_numbers_row)
+      file.write(BulkUpload::LettingsLogToCsv.new(log:).to_2022_csv_row)
       file.rewind
     end
 
@@ -27,8 +27,8 @@ RSpec.describe BulkUpload::Lettings::Year2022::CsvParser do
   context "when parsing csv with headers with extra rows" do
     before do
       file.write("Extra row\n")
-      file.write(BulkUpload::LogToCsv.new(log:).default_2022_field_numbers_row)
-      file.write(BulkUpload::LogToCsv.new(log:).to_2022_csv_row)
+      file.write(BulkUpload::LettingsLogToCsv.new(log:).default_2022_field_numbers_row)
+      file.write(BulkUpload::LettingsLogToCsv.new(log:).to_2022_csv_row)
       file.rewind
     end
 
@@ -46,8 +46,8 @@ RSpec.describe BulkUpload::Lettings::Year2022::CsvParser do
     let(:seed) { rand }
 
     before do
-      file.write(BulkUpload::LogToCsv.new(log:).default_2022_field_numbers_row(seed:))
-      file.write(BulkUpload::LogToCsv.new(log:).to_2022_csv_row(seed:))
+      file.write(BulkUpload::LettingsLogToCsv.new(log:).default_2022_field_numbers_row(seed:))
+      file.write(BulkUpload::LettingsLogToCsv.new(log:).to_2022_csv_row(seed:))
       file.rewind
     end
 
@@ -63,7 +63,7 @@ RSpec.describe BulkUpload::Lettings::Year2022::CsvParser do
 
   context "when parsing csv with extra invalid headers" do
     let(:seed) { rand }
-    let(:log_to_csv) { BulkUpload::LogToCsv.new(log:) }
+    let(:log_to_csv) { BulkUpload::LettingsLogToCsv.new(log:) }
     let(:field_numbers) { log_to_csv.default_2022_field_numbers + %w[invalid_field_number] }
     let(:field_values) { log_to_csv.to_2022_row + %w[value_for_invalid_field_number] }
 
@@ -84,7 +84,7 @@ RSpec.describe BulkUpload::Lettings::Year2022::CsvParser do
 
   context "when parsing csv without headers" do
     before do
-      file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
+      file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
       file.rewind
     end
 
@@ -103,7 +103,7 @@ RSpec.describe BulkUpload::Lettings::Year2022::CsvParser do
 
     before do
       file.write(bom)
-      file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
+      file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
       file.rewind
     end
 
@@ -117,7 +117,7 @@ RSpec.describe BulkUpload::Lettings::Year2022::CsvParser do
 
     before do
       file.write(invalid_sequence)
-      file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
+      file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
       file.rewind
     end
 
@@ -129,8 +129,8 @@ RSpec.describe BulkUpload::Lettings::Year2022::CsvParser do
   describe "#column_for_field", aggregate_failures: true do
     context "when with headers using default ordering" do
       before do
-        file.write(BulkUpload::LogToCsv.new(log:).default_2022_field_numbers_row)
-        file.write(BulkUpload::LogToCsv.new(log:).to_2022_csv_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log:).default_2022_field_numbers_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log:).to_2022_csv_row)
         file.rewind
       end
 
@@ -142,7 +142,7 @@ RSpec.describe BulkUpload::Lettings::Year2022::CsvParser do
 
     context "when without headers using default ordering" do
       before do
-        file.write(BulkUpload::LogToCsv.new(log:).to_2022_csv_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log:).to_2022_csv_row)
         file.rewind
       end
 
@@ -156,8 +156,8 @@ RSpec.describe BulkUpload::Lettings::Year2022::CsvParser do
       let(:seed) { 123 }
 
       before do
-        file.write(BulkUpload::LogToCsv.new(log:).default_2022_field_numbers_row(seed:))
-        file.write(BulkUpload::LogToCsv.new(log:).to_2022_csv_row(seed:))
+        file.write(BulkUpload::LettingsLogToCsv.new(log:).default_2022_field_numbers_row(seed:))
+        file.write(BulkUpload::LettingsLogToCsv.new(log:).to_2022_csv_row(seed:))
         file.rewind
       end
 

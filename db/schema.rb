@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_21_124536) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_27_130334) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -369,6 +369,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_21_124536) do
     t.integer "status"
     t.integer "absorbing_organisation_id"
     t.boolean "new_absorbing_organisation"
+    t.boolean "telephone_number_correct"
+    t.string "new_telephone_number"
   end
 
   create_table "organisation_relationships", force: :cascade do |t|
