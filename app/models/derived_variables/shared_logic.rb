@@ -1,5 +1,5 @@
 module DerivedVariables::SharedLogic
-  private
+private
 
   def reset_invalidated_derived_values!(dependencies)
     dependencies.each do |dependency|

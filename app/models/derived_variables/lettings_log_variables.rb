@@ -1,4 +1,6 @@
 module DerivedVariables::LettingsLogVariables
+  include DerivedVariables::SharedLogic
+
   # renttype and unitletas values are different for intermediate rent (3 for renttype and 4 for unitletas)
   RENT_TYPE_MAPPING = {
     0 => 1, # "Social Rent"  =>  "Social Rent"
@@ -35,10 +37,12 @@ module DerivedVariables::LettingsLogVariables
   end
 
   def set_derived_fields!
+    clear_inapplicable_derived_values
+    set_encoded_derived_values!(DEPENDENCIES)
+
     if rsnvac.present?
       self.newprop = has_first_let_vacancy_reason? ? 1 : 2
     end
-    self.incref = 1 if net_income_refused?
     self.renttype = RENT_TYPE_MAPPING[rent_type]
     self.lettype = get_lettype
     self.totchild = get_totchild
@@ -69,15 +73,9 @@ module DerivedVariables::LettingsLogVariables
     self.nocharge = household_charge&.zero? ? 1 : 0
     if is_renewal?
       self.underoccupation_benefitcap = 2 if collection_start_year == 2021
-      self.referral = 1
-      self.waityear = 2
-      self.offered = 0
       self.voiddate = startdate
-      self.first_time_property_let_as_social_housing = 0
-      self.rsnvac = 14
       self.unitletas = form.start_date.year >= 2023 ? UNITLETAS_MAPPING_23_24[rent_type] : UNITLETAS_MAPPING[rent_type]
       if is_general_needs?
-        # fixed term
         self.prevten = 32 if managing_organisation&.provider_type == "PRP"
         self.prevten = 30 if managing_organisation&.provider_type == "LA"
       end
@@ -108,6 +106,49 @@ module DerivedVariables::LettingsLogVariables
   end
 
 private
+
+  DEPENDENCIES = [
+    {
+      conditions: {
+        renewal: 1,
+      },
+      derived_values: {
+        referral: 1,
+        waityear: 2,
+        offered: 0,
+        rsnvac: 14,
+        first_time_property_let_as_social_housing: 0,
+      },
+    },
+    {
+      conditions: {
+        net_income_known: 2,
+      },
+      derived_values: {
+        incref: 1,
+      },
+    },
+  ].freeze
+
+  def clear_inapplicable_derived_values
+    reset_invalidated_derived_values!(DEPENDENCIES)
+    if (startdate_changed? || renewal_changed?) && (renewal_was == 1 && startdate_was&.between?(Time.zone.local(2021, 4, 1), Time.zone.local(2022, 3, 31)))
+      self.underoccupation_benefitcap = nil
+    end
+    if renewal_changed? && renewal_was == 1
+      self.voiddate = nil
+      self.unitletas = nil
+    end
+    if %w[PRP LA].include?(managing_organisation&.provider_type) &&
+        (needstype_changed? || renewal_changed?) &&
+        needstype_was == 1 && renewal_was == 1
+      self.prevten = nil
+    end
+    if needstype_changed? && needstype_was == 2
+      self.wchair = nil
+      self.location_id = nil
+    end
+  end
 
   def get_totelder
     ages = [age1, age2, age3, age4, age5, age6, age7, age8]

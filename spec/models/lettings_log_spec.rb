@@ -1578,7 +1578,8 @@ RSpec.describe LettingsLog do
       it "clears underoccupation_benefitcap if log is no longer in 2021/22" do
         lettings_log.update!(renewal: 1)
         expect(lettings_log.underoccupation_benefitcap).to be 2
-        lettings_log.update!(startdate: Time.zone.now)
+        Timecop.return
+        lettings_log.update!(startdate: Time.zone.local(2023, 1, 1))
         expect(lettings_log.underoccupation_benefitcap).to be nil
       end
 
@@ -1591,7 +1592,6 @@ RSpec.describe LettingsLog do
 
           it "correctly derives prevten" do
             expect(lettings_log.prevten).to be 32
-
           end
 
           it "clears prevten if the log is marked as supported housing" do
@@ -1613,7 +1613,6 @@ RSpec.describe LettingsLog do
 
           it "correctly derives prevten" do
             expect(lettings_log.prevten).to be 30
-
           end
 
           it "clears prevten if the log is marked as supported housing" do
