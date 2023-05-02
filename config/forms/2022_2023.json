@@ -789,7 +789,10 @@
               "title_text": {
                 "translation": "soft_validations.void_date.title_text"
               },
-              "informative_text": {},
+              "informative_text": {
+                "translation": "soft_validations.void_date.hint_text",
+                "arguments": []
+              },
               "questions": {
                 "void_date_value_check": {
                   "check_answer_label": "Void date confirmation",
@@ -899,7 +902,10 @@
               "title_text": {
                 "translation": "soft_validations.major_repairs_date.title_text"
               },
-              "informative_text": {},
+              "informative_text": {
+                "translation": "soft_validations.major_repairs_date.hint_text",
+                "arguments": []
+              },
               "questions": {
                 "major_repairs_date_value_check": {
                   "check_answer_label": "Major repairs date confirmation",

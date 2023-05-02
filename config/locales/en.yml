@@ -547,9 +547,11 @@ en:
       no_females: "You also told us there are no female tenants living at the property."
       females_not_in_soft_age_range: "You also told us that any female tenants living at the property are in the following age ranges:<ul><li>under 16 years old</li><li>over 50 years old</li></ul>"
     major_repairs_date:
-      title_text: "You told us the time between the start of the tenancy and the major repairs completion date is more than 2 years"
+      title_text: "You told us the property has been vacant for 2 years."
+      hint_text: "This is higher than we would expect."
     void_date:
-      title_text: "You told us the time between the start of the tenancy and the void date is more than 2 years"
+      title_text: "You told us that the property has been vacant for more than 2 years."
+      hint_text: "This is higher than we would expect."
     shared_ownership_deposit:
       title_text: "Mortgage, deposit and cash discount total should equal %{expected_shared_ownership_deposit_value}"
     old_persons_shared_ownership: "At least one buyer should be aged over 64 for Older persons’ shared ownership scheme"
