@@ -627,5 +627,21 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
         expect(parser.log.county).to eql("some county")
       end
     end
+
+    describe "#ethnic_group2" do
+      let(:attributes) { setup_section_params.merge({ field_40: "1" }) }
+
+      it "is correctly set" do
+        expect(parser.log.ethnic_group2).to be(0)
+      end
+    end
+
+    describe "#ethnicbuy2" do
+      let(:attributes) { setup_section_params.merge({ field_40: "1" }) }
+
+      it "is correctly set" do
+        expect(parser.log.ethnicbuy2).to be(1)
+      end
+    end
   end
 end

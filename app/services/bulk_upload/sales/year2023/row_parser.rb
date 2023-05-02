@@ -407,6 +407,23 @@ class BulkUpload::Sales::Year2023::RowParser
 
 private
 
+  def infer_buyer2_ethnic_group_from_ethnic
+    case field_40
+    when 1, 2, 3, 18
+      0
+    when 4, 5, 6, 7
+      1
+    when 8, 9, 10, 11, 15
+      2
+    when 12, 13, 14
+      3
+    when 16, 19
+      4
+    else
+      field_40
+    end
+  end
+
   def validate_uprn_exists_if_any_key_adddress_fields_are_blank
     if field_19.blank? && (field_20.blank? || field_22.blank? || field_24.blank? || field_25.blank?)
       errors.add(:field_19, I18n.t("validations.not_answered", question: "UPRN"))
@@ -734,6 +751,9 @@ private
     attributes["address_line2"] = field_21
     attributes["town_or_city"] = field_22
     attributes["county"] = field_23
+
+    attributes["ethnic_group2"] = infer_buyer2_ethnic_group_from_ethnic
+    attributes["ethnicbuy2"] = field_40
 
     attributes
   end
