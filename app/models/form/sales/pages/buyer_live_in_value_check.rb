@@ -10,7 +10,10 @@ class Form::Sales::Pages::BuyerLiveInValueCheck < Form::Sales::Pages::Person
       "translation" => "soft_validations.buyer#{person_index}_livein_wrong_for_ownership_type.title_text",
       "arguments" => [{ "key" => "ownership_scheme", "label" => false, "i18n_template" => "ownership_scheme" }],
     }
-    @informative_text = {}
+    @informative_text = {
+      "translation" => "soft_validations.buyer#{person_index}_livein_wrong_for_ownership_type.hint_text",
+      "arguments" => [{ "key" => "ownership_scheme", "label" => false, "i18n_template" => "ownership_scheme" }],
+    }
   end
 
   def questions
