@@ -14,12 +14,12 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
   let(:setup_section_params) do
     {
       bulk_upload:,
-      field_6: "test id", # purchase id
       field_1: owning_org.old_visible_id, # organisation
       field_2: user.email, # user
       field_3: now.day.to_s, # sale day
       field_4: now.month.to_s, # sale month
       field_5: now.strftime("%g"), # sale year
+      field_6: "test id", # purchase id
       field_7: "1", # owhershipsch
       field_8: "2", # shared ownership sale type
       field_13: "1", # will the buyers live in the property
@@ -44,6 +44,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       field_16: "2",
       field_17: "1",
       field_18: "1",
+      field_19: "100023336956",
       field_24: "CR0",
       field_25: "4BB",
       field_26: "E09000008",
@@ -138,6 +139,21 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
     before do
       stub_request(:get, /api.postcodes.io/)
       .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\", \"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
+
+      body = {
+        results: [
+          {
+            DPA: {
+              "POSTCODE": "EC1N 2TD",
+              "POST_TOWN": "Newcastle",
+              "ORGANISATION_NAME": "Some place",
+            },
+          },
+        ],
+      }.to_json
+
+      stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=100023336956")
+        .to_return(status: 200, body:, headers: {})
 
       parser.valid?
     end
@@ -376,75 +392,6 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       end
     end
 
-    [
-      %w[age1_known age1 field_30],
-      %w[age2_known age2 field_38],
-      %w[age3_known age3 field_47],
-      %w[age4_known age4 field_51],
-      %w[age5_known age5 field_55],
-      %w[age6_known age6 field_59],
-    ].each do |known, age, field|
-      describe "##{known} and ##{age}" do
-        context "when #{field} is blank" do
-          let(:attributes) { { bulk_upload:, field.to_s => nil } }
-
-          it "sets ##{known} 1" do
-            expect(parser.log.public_send(known)).to be(1)
-          end
-
-          it "sets ##{age} to nil" do
-            expect(parser.log.public_send(age)).to be_nil
-          end
-        end
-
-        context "when #{field} is R" do
-          let(:attributes) { setup_section_params.merge({ field.to_s => "R", field_28: "1", field_45: "5", field_29: "1" }) }
-
-          it "sets ##{known} 1" do
-            expect(parser.log.public_send(known)).to be(1)
-          end
-
-          it "sets ##{age} to nil" do
-            expect(parser.log.public_send(age)).to be_nil
-          end
-        end
-
-        context "when #{field} is a number" do
-          let(:attributes) { setup_section_params.merge({ field.to_s => "50", field_28: "1", field_45: "5", field_29: "1" }) }
-
-          it "sets ##{known} to 0" do
-            expect(parser.log.public_send(known)).to be(0)
-          end
-
-          it "sets ##{age} to given age" do
-            expect(parser.log.public_send(age)).to be(50)
-          end
-        end
-
-        context "when #{field} is a non-sensical value" do
-          let(:attributes) { setup_section_params.merge({ field.to_s => "A", field_28: "1", field_45: "5", field_29: "1" }) }
-
-          it "sets ##{known} to 0" do
-            expect(parser.log.public_send(known)).to be(0)
-          end
-
-          it "sets ##{age} to nil" do
-            expect(parser.log.public_send(age)).to be_nil
-          end
-        end
-      end
-    end
-
-    describe "#field_36" do # will buyer1 live in property?
-      context "when not a possible value" do
-        let(:attributes) { valid_attributes.merge({ field_36: "3" }) }
-
-        it "is not valid" do
-          expect(parser.errors).to include(:field_36)
-        end
-      end
-    end
-
     describe "fields 3, 4, 5 => saledate" do
       context "when all of these fields are blank" do
         let(:attributes) { setup_section_params.merge({ field_3: nil, field_4: nil, field_5: nil }) }
@@ -516,6 +463,168 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
           expect(parser.errors[:field_4]).to be_present
           expect(parser.errors[:field_5]).to be_present
         end
+      end
+    end
+
+    describe "#field_19" do # UPRN
+      context "when UPRN known" do
+        let(:attributes) { setup_section_params.merge({ field_19: "100023336956" }) }
+
+        it "is valid" do
+          expect(parser.errors[:field_19]).to be_blank
+        end
+      end
+
+      context "when UPRN not known but address known" do
+        let(:attributes) { setup_section_params.merge({ field_19: nil, field_20: "some street", field_22: "some town", field_24: "EC1N", field_25: "2TD" }) }
+
+        it "is valid" do
+          expect(parser.errors[:field_19]).to be_blank
+        end
+      end
+
+      context "when neither UPRN or address known" do
+        let(:attributes) { setup_section_params.merge({ field_19: nil, field_20: nil, field_22: nil, field_24: nil, field_25: nil }) }
+
+        it "is not valid" do
+          expect(parser.errors[:field_19]).to be_present
+        end
+      end
+    end
+
+    [
+      # { field: :field_20, name: "address line 1" },
+      # { field: :field_22, name: "town or city" },
+      { field: :field_24, name: "postcode part 1" },
+      # { field: :field_25, name: "postcode part 2" },
+    ].each do |data|
+      describe "##{data[:field]} (#{data[:name]})" do
+        context "when UPRN present" do
+          let(:attributes) { setup_section_params.merge({ field_19: "100023336956", data[:field] => nil }) }
+
+          it "can be blank" do
+            expect(parser.errors[data[:field]]).to be_blank
+          end
+        end
+
+        context "when UPRN not present" do
+          let(:attributes) { setup_section_params.merge({ field_19: nil, data[:field] => nil }) }
+
+          it "cannot be blank" do
+            expect(parser.errors[data[:field]]).to be_present
+          end
+        end
+      end
+    end
+
+    [
+      %w[age1_known age1 field_30],
+      %w[age2_known age2 field_38],
+      %w[age3_known age3 field_47],
+      %w[age4_known age4 field_51],
+      %w[age5_known age5 field_55],
+      %w[age6_known age6 field_59],
+    ].each do |known, age, field|
+      describe "##{known} and ##{age}" do
+        context "when #{field} is blank" do
+          let(:attributes) { { bulk_upload:, field.to_s => nil } }
+
+          it "sets ##{known} 1" do
+            expect(parser.log.public_send(known)).to be(1)
+          end
+
+          it "sets ##{age} to nil" do
+            expect(parser.log.public_send(age)).to be_nil
+          end
+        end
+
+        context "when #{field} is R" do
+          let(:attributes) { setup_section_params.merge({ field.to_s => "R", field_28: "1", field_45: "5", field_29: "1" }) }
+
+          it "sets ##{known} 1" do
+            expect(parser.log.public_send(known)).to be(1)
+          end
+
+          it "sets ##{age} to nil" do
+            expect(parser.log.public_send(age)).to be_nil
+          end
+        end
+
+        context "when #{field} is a number" do
+          let(:attributes) { setup_section_params.merge({ field.to_s => "50", field_28: "1", field_45: "5", field_29: "1" }) }
+
+          it "sets ##{known} to 0" do
+            expect(parser.log.public_send(known)).to be(0)
+          end
+
+          it "sets ##{age} to given age" do
+            expect(parser.log.public_send(age)).to be(50)
+          end
+        end
+
+        context "when #{field} is a non-sensical value" do
+          let(:attributes) { setup_section_params.merge({ field.to_s => "A", field_28: "1", field_45: "5", field_29: "1" }) }
+
+          it "sets ##{known} to 0" do
+            expect(parser.log.public_send(known)).to be(0)
+          end
+
+          it "sets ##{age} to nil" do
+            expect(parser.log.public_send(age)).to be_nil
+          end
+        end
+      end
+    end
+
+    describe "#field_36" do # will buyer1 live in property?
+      context "when not a possible value" do
+        let(:attributes) { valid_attributes.merge({ field_36: "3" }) }
+
+        it "is not valid" do
+          expect(parser.errors).to include(:field_36)
+        end
+      end
+    end
+  end
+
+  fdescribe "#log" do
+    describe "#uprn" do
+      let(:attributes) { setup_section_params.merge({ field_19: "100023336956" }) }
+
+      it "is correctly set" do
+        expect(parser.log.uprn).to eql("100023336956")
+      end
+    end
+
+    describe "#address_line1" do
+      let(:attributes) { setup_section_params.merge({ field_20: "some street" }) }
+
+      it "is correctly set" do
+        expect(parser.log.address_line1).to eql("some street")
+      end
+    end
+
+    describe "#address_line2" do
+      let(:attributes) { setup_section_params.merge({ field_21: "some other street" }) }
+
+      it "is correctly set" do
+        expect(parser.log.address_line2).to eql("some other street")
+      end
+    end
+
+    describe "#town_or_city" do
+      let(:attributes) { setup_section_params.merge({ field_22: "some town" }) }
+
+      it "is correctly set" do
+        expect(parser.log.town_or_city).to eql("some town")
+      end
+    end
+
+    describe "#county" do
+      let(:attributes) { setup_section_params.merge({ field_23: "some county" }) }
+
+      it "is correctly set" do
+        expect(parser.log.county).to eql("some county")
       end
     end
   end

@@ -13,6 +13,7 @@ class BulkUpload::Sales::Year2023::RowParser
     field_8: "What is the type of shared ownership sale?",
     field_9: "What is the type of discounted ownership sale?",
     field_10: "What is the type of outright sale?",
+
     field_11: "If 'other', what is the 'other' type?",
     field_12: "Is the buyer a company?",
     field_13: "Will the buyers live in the property?",
@@ -21,7 +22,12 @@ class BulkUpload::Sales::Year2023::RowParser
     field_16: "How many bedrooms does the property have?",
     field_17: "What type of unit is the property?",
     field_18: "Which type of bulding is the property?",
+    field_19: "If known, enter this property's UPRN",
+    field_20: "Address line 1",
 
+    field_21: "Address line 2",
+    field_22: "Town or city",
+    field_23: "County",
     field_24: "Part 1 of postcode of property",
     field_25: "Part 2 of postcode of property",
     field_26: "What is the local authority of the property?",
@@ -29,17 +35,21 @@ class BulkUpload::Sales::Year2023::RowParser
     field_28: "Was the buyer interviewed for any of the answers you will provide on this log?",
     field_29: "Data Protection question",
     field_30: "Age of buyer 1",
+
     field_31: "Gender identity of buyer 1",
     field_32: "What is buyer 1's ethnic group?",
     field_33: "What is buyer 1's nationality?",
-
+    field_34: "If 'Any other country', what is buyer 1's nationality?",
     field_35: "Working situation of buyer 1",
     field_36: "Will buyer 1 live in the property?",
     field_37: "Relationship to buyer 1 for person 2",
     field_38: "Age of person 2",
     field_39: "Gender identity of person 2",
+    field_40: "Which of the following best describes buyer 2's ethnic background?",
 
-    field_43: "Working situation of person 2",
+    field_41: "What is buyer 2's nationality?",
+    field_42: "If 'Any other country', what is buyer 2's nationality?",
+    field_43: "What is buyer 2 or person 2's working situation?",
     field_44: "Will buyer 2 live in the property?",
     field_45: "Besides the buyers, how many people will live in the property?",
     field_46: "Relationship to buyer 1 for person 3",
@@ -47,6 +57,7 @@ class BulkUpload::Sales::Year2023::RowParser
     field_48: "Gender identity of person 3",
     field_49: "Working situation of person 3",
     field_50: "Relationship to buyer 1 for person 4",
+
     field_51: "Age of person 4",
     field_52: "Gender identity of person 4",
     field_53: "Working situation of person 4",
@@ -57,6 +68,7 @@ class BulkUpload::Sales::Year2023::RowParser
     field_58: "Relationship to buyer 1 for person 6",
     field_59: "Age of person 6",
     field_60: "Gender identity of person 6",
+
     field_61: "Working situation of person 6",
     field_62: "What was buyer 1's previous tenure?",
     field_63: "Do you know the postcode of buyer 1's last settled home?",
@@ -68,23 +80,27 @@ class BulkUpload::Sales::Year2023::RowParser
     field_69: "Was the buyer registered with the local authority?",
     field_70: "Was the buyer registered with a Help to Buy agent?",
 
+    field_71: "At the time of purchase, was buyer 2 living at the same address as buyer 1?",
+    field_72: "What was buyer 2's previous tenure?",
     field_73: "Has the buyer ever served in the UK Armed Forces and for how long?",
-
+    field_74: "Is the buyer still serving in the UK armed forces?",
     field_75: "Are any of the buyers a spouse or civil partner of a UK Armed Forces regular who died in service within the last 2 years?",
     field_76: "Does anyone in the household consider themselves to have a disability?",
     field_77: "Does anyone in the household use a wheelchair?",
     field_78: "What is buyer 1's gross annual income?",
     field_79: "Was buyer 1's income used for a mortgage application?",
     field_80: "What is buyer 2's gross annual income?",
+
     field_81: "Was buyer 2's income used for a mortgage application?",
     field_82: "Were the buyers receiving any of these housing-related benefits immediately before buying this property?",
     field_83: "What is the total amount the buyers had in savings before they paid any deposit for the property?",
     field_84: "Have any of the purchasers previously owned a property?",
-
+    field_85: "Was the previous property under shared ownership?",
     field_86: "How long have the buyers been living in the property before the purchase? - Shared ownership",
     field_87: "Is this a staircasing transaction?",
     field_88: "What percentage of the property has been bought in this staircasing transaction?",
     field_89: "What percentage of the property does the buyer now own in total?",
+    field_90: "Was this transaction part of a back-to-back staircasing transaction to facilitate sale of the home on the open market?",
 
     field_91: "Is this a resale?",
     field_92: "What is the day of the practical completion or handover date?",
@@ -94,8 +110,9 @@ class BulkUpload::Sales::Year2023::RowParser
     field_96: "What is the month of the practical completion or handover date?",
     field_97: "What is the day of the exchange of contracts date?",
     field_98: "Was the household re-housed under a local authority nominations agreement?",
-
+    field_99: "Was the buyer a private registered provider, housing association or local authority tenant immediately before this sale?",
     field_100: "How many bedrooms did the buyer's previous property have?",
+
     field_101: "What was the type of the buyer's previous property?",
     field_102: "What was the rent type of the buyer's previous property?",
     field_103: "What was the full purchase price?",
@@ -106,6 +123,7 @@ class BulkUpload::Sales::Year2023::RowParser
     field_108: "If 'other', what is the name of the mortgage lender?",
     field_109: "What is the length of the mortgage in years? - Shared ownership",
     field_110: "Does this include any extra borrowing?",
+
     field_111: "How much was the cash deposit paid on the property?",
     field_112: "How much cash discount was given through Social Homebuy?",
     field_113: "What is the basic monthly rent?",
@@ -116,6 +134,7 @@ class BulkUpload::Sales::Year2023::RowParser
     field_118: "What was the percentage discount?",
     field_119: "Was a mortgage used for the purchase of this property? - Discounted ownership",
     field_120: "What is the mortgage amount?",
+
     field_121: "What is the name of the mortgage lender? - Discounted ownership",
     field_122: "If 'other', what is the name of the mortgage lender?",
     field_123: "What is the length of the mortgage in years? - Discounted ownership",
@@ -126,6 +145,7 @@ class BulkUpload::Sales::Year2023::RowParser
     field_128: "Was a mortgage used for the purchase of this property? - Outright sale",
     field_129: "What is the mortgage amount?",
     field_130: "What is the name of the mortgage lender? - Outright sale",
+
     field_131: "If 'other', what is the name of the mortgage lender?",
     field_132: "What is the length of the mortgage in years? - Outright sale",
     field_133: "Does this include any extra borrowing?",
@@ -146,6 +166,7 @@ class BulkUpload::Sales::Year2023::RowParser
   attribute :field_8, :integer
   attribute :field_9, :integer
   attribute :field_10, :integer
+
   attribute :field_11, :string
   attribute :field_12, :integer
   attribute :field_13, :integer
@@ -154,6 +175,12 @@ class BulkUpload::Sales::Year2023::RowParser
   attribute :field_16, :integer
   attribute :field_17, :integer
   attribute :field_18, :integer
+  attribute :field_19, :string
+  attribute :field_20, :string
+
+  attribute :field_21, :string
+  attribute :field_22, :string
+  attribute :field_23, :string
   attribute :field_24, :string
   attribute :field_25, :string
   attribute :field_26, :string
@@ -161,14 +188,20 @@ class BulkUpload::Sales::Year2023::RowParser
   attribute :field_28, :integer
   attribute :field_29, :integer
   attribute :field_30, :string
+
   attribute :field_31, :string
   attribute :field_32, :integer
   attribute :field_33, :integer
+  attribute :field_34, :string
   attribute :field_35, :integer
   attribute :field_36, :integer
   attribute :field_37, :string
   attribute :field_38, :string
   attribute :field_39, :string
+  attribute :field_40, :integer
+
+  attribute :field_41, :integer
+  attribute :field_42, :string
   attribute :field_43, :integer
   attribute :field_44, :integer
   attribute :field_45, :integer
@@ -177,6 +210,7 @@ class BulkUpload::Sales::Year2023::RowParser
   attribute :field_48, :string
   attribute :field_49, :integer
   attribute :field_50, :string
+
   attribute :field_51, :string
   attribute :field_52, :string
   attribute :field_53, :integer
@@ -187,6 +221,7 @@ class BulkUpload::Sales::Year2023::RowParser
   attribute :field_58, :string
   attribute :field_59, :string
   attribute :field_60, :string
+
   attribute :field_61, :integer
   attribute :field_62, :integer
   attribute :field_63, :integer
@@ -197,21 +232,29 @@ class BulkUpload::Sales::Year2023::RowParser
   attribute :field_68, :integer
   attribute :field_69, :integer
   attribute :field_70, :integer
+
+  attribute :field_71, :integer
+  attribute :field_72, :string
   attribute :field_73, :integer
+  attribute :field_74, :integer
   attribute :field_75, :integer
   attribute :field_76, :integer
   attribute :field_77, :integer
   attribute :field_78, :integer
   attribute :field_79, :integer
   attribute :field_80, :integer
+
   attribute :field_81, :integer
   attribute :field_82, :integer
   attribute :field_83, :integer
   attribute :field_84, :integer
+  attribute :field_85, :integer
   attribute :field_86, :integer
   attribute :field_87, :integer
   attribute :field_88, :integer
   attribute :field_89, :integer
+  attribute :field_90, :integer
+
   attribute :field_91, :integer
   attribute :field_92, :integer
   attribute :field_93, :integer
@@ -220,7 +263,9 @@ class BulkUpload::Sales::Year2023::RowParser
   attribute :field_96, :integer
   attribute :field_97, :integer
   attribute :field_98, :integer
+  attribute :field_99, :integer
   attribute :field_100, :integer
+
   attribute :field_101, :integer
   attribute :field_102, :integer
   attribute :field_103, :integer
@@ -231,6 +276,7 @@ class BulkUpload::Sales::Year2023::RowParser
   attribute :field_108, :string
   attribute :field_109, :integer
   attribute :field_110, :integer
+
   attribute :field_111, :integer
   attribute :field_112, :integer
   attribute :field_113, :decimal
@@ -241,6 +287,7 @@ class BulkUpload::Sales::Year2023::RowParser
   attribute :field_118, :integer
   attribute :field_119, :integer
   attribute :field_120, :integer
+
   attribute :field_121, :integer
   attribute :field_122, :string
   attribute :field_123, :integer
@@ -251,6 +298,7 @@ class BulkUpload::Sales::Year2023::RowParser
   attribute :field_128, :integer
   attribute :field_129, :integer
   attribute :field_130, :integer
+
   attribute :field_131, :string
   attribute :field_132, :integer
   attribute :field_133, :integer
@@ -296,6 +344,11 @@ class BulkUpload::Sales::Year2023::RowParser
   validate :validate_created_by_exists, on: :after_log
   validate :validate_created_by_related, on: :after_log
   validate :validate_relevant_collection_window, on: :after_log
+
+  validate :validate_uprn_exists_if_any_key_adddress_fields_are_blank, on: :after_log
+  validate :validate_address_line_1, on: :after_log
+  validate :validate_town_or_city, on: :after_log
+  validate :validate_postcode, on: :after_log
 
   def self.question_for_field(field)
     QUESTIONS[field]
@@ -353,6 +406,34 @@ class BulkUpload::Sales::Year2023::RowParser
   end
 
 private
+
+  def validate_uprn_exists_if_any_key_adddress_fields_are_blank
+    if field_19.blank? && (field_20.blank? || field_22.blank? || field_24.blank? || field_25.blank?)
+      errors.add(:field_19, I18n.t("validations.not_answered", question: "UPRN"))
+    end
+  end
+
+  def validate_address_line_1
+    if field_19.blank? && field_20.blank?
+      errors.add(:field_20, I18n.t("validations.not_answered", question: "address line 1"))
+    end
+  end
+
+  def validate_town_or_city
+    if field_19.blank? && field_22.blank?
+      errors.add(:field_22, I18n.t("validations.not_answered", question: "town or city"))
+    end
+  end
+
+  def validate_postcode
+    if field_19.blank? && field_24.blank?
+      errors.add(:field_24, I18n.t("validations.not_answered", question: "part 1 of the property's postcode"))
+    end
+
+    if field_19.blank? && field_25.blank?
+      errors.add(:field_25, I18n.t("validations.not_answered", question: "part 2 of the property's postcode"))
+    end
+  end
 
   def shared_ownership?
     field_7 == 1
@@ -647,6 +728,12 @@ private
     attributes["socprevten"] = field_102
     attributes["mortgageused"] = mortgageused
     attributes["soctenant"] = soctenant
+
+    attributes["uprn"] = field_19
+    attributes["address_line1"] = field_20
+    attributes["address_line2"] = field_21
+    attributes["town_or_city"] = field_22
+    attributes["county"] = field_23
 
     attributes
   end
