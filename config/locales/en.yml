@@ -519,6 +519,7 @@ en:
       telephone_number_correct_blank: Select to confirm or enter a new telephone number
       new_telephone_number_blank: Enter a valid telephone number
       new_organisation_name_blank: "Enter an organisation name"
+      new_organisation_name_exists: "An organisation with this name already exists"
 
   soft_validations:
     net_income:

@@ -529,6 +529,29 @@ RSpec.describe MergeRequestsController, type: :request do
             expect { request }.not_to(change { merge_request.reload.attributes })
           end
         end
+
+        context "when the new organisation name already exists" do
+          before do
+            create(:organisation, name: "new org name")
+          end
+
+          let(:params) do
+            { merge_request: { new_organisation_name: "New org name", page: "new_organisation_name" } }
+          end
+
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "renders the error" do
+            request
+            expect(page).to have_content("An organisation with this name already exists")
+          end
+
+          it "does not update the organisation name" do
+            expect { request }.not_to(change { merge_request.reload.attributes })
+          end
+        end
       end
     end
   end

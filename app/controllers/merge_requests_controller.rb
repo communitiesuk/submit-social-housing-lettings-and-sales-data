@@ -150,6 +150,8 @@ private
     when "new_organisation_name"
       if merge_request_params[:new_organisation_name].blank?
         @merge_request.errors.add(:new_organisation_name, I18n.t("validations.merge_request.new_organisation_name_blank"))
+      elsif Organisation.where("lower(name) = ?", merge_request_params[:new_organisation_name].downcase).exists?
+        @merge_request.errors.add(:new_organisation_name, I18n.t("validations.merge_request.new_organisation_name_exists"))
       end
     end
   end
