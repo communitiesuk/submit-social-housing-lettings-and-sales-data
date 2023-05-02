@@ -768,6 +768,8 @@ private
     attributes["buy2living"] = field_71
     attributes["prevtenbuy2"] = prevtenbuy2
 
+    attributes["hhregresstill"] = field_74
+
     attributes
   end
 

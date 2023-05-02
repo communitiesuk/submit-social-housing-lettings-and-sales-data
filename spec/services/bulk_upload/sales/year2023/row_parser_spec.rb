@@ -667,5 +667,13 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
         expect(parser.log.prevtenbuy2).to be(0)
       end
     end
+
+    describe "#hhregresstill" do
+      let(:attributes) { setup_section_params.merge({ field_74: "4" }) }
+
+      it "is correctly set" do
+        expect(parser.log.hhregresstill).to be(4)
+      end
+    end
   end
 end
