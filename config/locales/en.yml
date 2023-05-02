@@ -562,7 +562,8 @@ en:
       title_text: "You told us that %{percentage}% was bought in this staircasing transaction."
       hint_text: "Most staircasing transactions are less than 50%"
     monthly_charges_over_soft_max:
-      title_text: "The amount of monthly charges is high for this type of property and sale type"
+      title_text: "You told us that the monthly charges were %{mscharge}."
+      hint_text: "This is higher than we would expect."
     student_not_child:
       title_text: "You told us this person is a student aged beween 16 and 19"
     discounted_sale_value:
