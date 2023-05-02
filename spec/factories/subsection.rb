@@ -9,11 +9,11 @@ FactoryBot.define do
       end
 
       after :build do |subsection, evaluator|
-        if evaluator.questions
-          subsection.pages = evaluator.questions.map { |question| build(:page, :with_question, question:, subsection:) }
-        else
-          subsection.pages = evaluator.question_ids.map { |id| build(:page, :with_question, question_id: id, subsection:) }
-        end
+        subsection.pages = if evaluator.questions
+                             evaluator.questions.map { |question| build(:page, :with_question, question:, subsection:) }
+                           else
+                             evaluator.question_ids.map { |question_id| build(:page, :with_question, question_id:, subsection:) }
+                           end
       end
     end
   end

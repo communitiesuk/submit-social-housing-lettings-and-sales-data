@@ -40,12 +40,12 @@ RSpec.describe Csv::SalesLogCsvService do
       allow(form_handler_mock).to receive(:ordered_sales_questions_for_all_years).and_return(sales_form.questions)
     end
 
-    context "to return questions with particular ids" do
+    context "when it returns questions with particular ids" do
       let(:question_ids) { %w[type age1 buy1livein exdate] }
 
       it "includes log attributes related to questions to the headers" do
         headers = csv.first
-        expect(headers).to include *question_ids.first(3)
+        expect(headers).to include(*question_ids.first(3))
       end
 
       it "removes some log attributes related to questions from the headers and replaces them with their derived values in the correct order" do
@@ -55,7 +55,7 @@ RSpec.describe Csv::SalesLogCsvService do
       end
     end
 
-    context "to return questions with particular features" do
+    context "when it returns questions with particular features" do
       let(:questions) do
         [
           build(:question, id: "attribute_value_check", type: "interruption_screen"),

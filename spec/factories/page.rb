@@ -9,12 +9,12 @@ FactoryBot.define do
       end
 
       after :build do |page, evaluator|
-        if q = evaluator.question
-          q.page = page
-          page.questions = [q]
-        elsif
-          page.questions = [build(:question, id: evaluator.question_id, page:)]
-        end
+        page.questions = if (q = evaluator.question)
+                           q.page = page
+                           [q]
+                         else
+                           [build(:question, id: evaluator.question_id, page:)]
+                         end
       end
     end
   end
