@@ -772,6 +772,8 @@ private
 
     attributes["prevshared"] = field_85
 
+    attributes["staircasesale"] = field_90
+
     attributes
   end
 

@@ -683,5 +683,13 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
         expect(parser.log.prevshared).to be(3)
       end
     end
+
+    describe "#staircasesale" do
+      let(:attributes) { setup_section_params.merge({ field_90: "1" }) }
+
+      it "is correctly set" do
+        expect(parser.log.staircasesale).to be(1)
+      end
+    end
   end
 end
