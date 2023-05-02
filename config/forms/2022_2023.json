@@ -1853,8 +1853,8 @@
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
                   {
-                    "key": "retirement_age_for_person_1",
-                    "label": false,
+                    "key": "age1",
+                    "label": true,
                     "i18n_template": "age"
                   }
                 ]
@@ -2383,8 +2383,8 @@
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
                   {
-                    "key": "retirement_age_for_person_2",
-                    "label": false,
+                    "key": "age2",
+                    "label": true,
                     "i18n_template": "age"
                   }
                 ]
@@ -2910,8 +2910,8 @@
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
                   {
-                    "key": "retirement_age_for_person_3",
-                    "label": false,
+                    "key": "age3",
+                    "label": true,
                     "i18n_template": "age"
                   }
                 ]
@@ -3434,8 +3434,8 @@
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
                   {
-                    "key": "retirement_age_for_person_4",
-                    "label": false,
+                    "key": "age4",
+                    "label": true,
                     "i18n_template": "age"
                   }
                 ]
@@ -3955,8 +3955,8 @@
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
                   {
-                    "key": "retirement_age_for_person_5",
-                    "label": false,
+                    "key": "age5",
+                    "label": true,
                     "i18n_template": "age"
                   }
                 ]
@@ -4473,8 +4473,8 @@
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
                   {
-                    "key": "retirement_age_for_person_6",
-                    "label": false,
+                    "key": "age6",
+                    "label": true,
                     "i18n_template": "age"
                   }
                 ]
@@ -4988,8 +4988,8 @@
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
                   {
-                    "key": "retirement_age_for_person_7",
-                    "label": false,
+                    "key": "age7",
+                    "label": true,
                     "i18n_template": "age"
                   }
                 ]
@@ -5500,8 +5500,8 @@
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
                   {
-                    "key": "retirement_age_for_person_8",
-                    "label": false,
+                    "key": "age8",
+                    "label": true,
                     "i18n_template": "age"
                   }
                 ]
