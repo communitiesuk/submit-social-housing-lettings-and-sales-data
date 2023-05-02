@@ -756,6 +756,8 @@ private
     attributes["ethnicbuy2"] = field_40
     attributes["nationalbuy2"] = field_41
 
+    attributes["buy2living"] = field_71
+
     attributes
   end
 
