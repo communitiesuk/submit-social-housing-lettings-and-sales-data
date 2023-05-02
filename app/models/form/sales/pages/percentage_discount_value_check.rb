@@ -5,7 +5,10 @@ class Form::Sales::Pages::PercentageDiscountValueCheck < ::Form::Page
       "translation" => "soft_validations.percentage_discount_value.title_text",
       "arguments" => [{ "key" => "discount", "label" => true, "i18n_template" => "discount" }],
     }
-    @informative_text = {}
+    @informative_text = {
+      "translation" => "soft_validations.percentage_discount_value.hint_text",
+      "arguments" => [],
+    }
     @depends_on = [{ "percentage_discount_invalid?" => true }]
   end
 

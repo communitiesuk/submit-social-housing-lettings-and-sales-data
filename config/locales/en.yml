@@ -580,7 +580,8 @@ en:
       title_text: "You told us that buyer 2 will not live in the property."
       hint_text: " For %{ownership_scheme} types, the buyer usually lives in the property."
     percentage_discount_value:
-      title_text: "You told us that the percentage discount was %{discount}. This seems high for this type of property."
+      title_text: "You told us that the percentage discount is %{discount}."
+      hint_text: "This is higher than we would expect."
     savings:
       title_text: "You told us the buyer’s savings were %{savings}."
       hint_text: "This is higher than we would expect."
