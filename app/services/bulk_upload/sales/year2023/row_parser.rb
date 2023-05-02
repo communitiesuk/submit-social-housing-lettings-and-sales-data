@@ -407,6 +407,15 @@ class BulkUpload::Sales::Year2023::RowParser
 
 private
 
+  def prevtenbuy2
+    case field_72
+    when "R"
+      0
+    else
+      field_72
+    end
+  end
+
   def infer_buyer2_ethnic_group_from_ethnic
     case field_40
     when 1, 2, 3, 18
@@ -757,6 +766,7 @@ private
     attributes["nationalbuy2"] = field_41
 
     attributes["buy2living"] = field_71
+    attributes["prevtenbuy2"] = prevtenbuy2
 
     attributes
   end

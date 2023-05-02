@@ -659,5 +659,13 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
         expect(parser.log.buy2living).to be(1)
       end
     end
+
+    describe "#prevtenbuy2" do
+      let(:attributes) { setup_section_params.merge({ field_72: "R" }) }
+
+      it "is correctly set" do
+        expect(parser.log.prevtenbuy2).to be(0)
+      end
+    end
   end
 end
