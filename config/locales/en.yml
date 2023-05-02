@@ -578,7 +578,8 @@ en:
     percentage_discount_value:
       title_text: "You told us that the percentage discount was %{discount}. This seems high for this type of property."
     savings:
-      title_text: "Are you sure the savings are higher than £100,000?"
+      title_text: "You told us the buyer’s savings were %{savings}."
+      hint_text: "This is higher than we would expect."
     deposit:
       title_text: "Are you sure that the deposit is this much higher than the buyer's savings?"
     grant:

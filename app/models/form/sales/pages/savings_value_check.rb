@@ -8,8 +8,18 @@ class Form::Sales::Pages::SavingsValueCheck < ::Form::Page
     ]
     @title_text = {
       "translation" => "soft_validations.savings.title_text",
+      "arguments" => [
+        {
+          "key" => "field_formatted_as_currency",
+          "arguments_for_key" => "savings",
+          "i18n_template" => "savings",
+        },
+      ],
     }
-    @informative_text = {}
+    @informative_text = {
+      "translation" => "soft_validations.savings.hint_text",
+      "arguments" => [],
+    }
   end
 
   def questions
