@@ -6,7 +6,7 @@ class MergeRequestsController < ApplicationController
     remove_merging_organisation
     absorbing_organisation
     confirm_telephone_number
-    new_org_name
+    new_organisation_name
     merge_date
   ]
   before_action :authenticate_user!
@@ -15,7 +15,7 @@ class MergeRequestsController < ApplicationController
 
   def absorbing_organisation; end
   def confirm_telephone_number; end
-  def new_org_name; end
+  def new_organisation_name; end
   def merge_date; end
 
   def create
@@ -65,8 +65,8 @@ private
   def next_page_path
     case page
     when "absorbing_organisation"
-      if create_new_org?
-        new_org_name_merge_request_path(@merge_request)
+      if create_new_organisation?
+        new_organisation_name_merge_request_path(@merge_request)
       else
         confirm_telephone_number_merge_request_path(@merge_request)
       end
@@ -74,6 +74,8 @@ private
       absorbing_organisation_merge_request_path(@merge_request)
     when "confirm_telephone_number"
       merge_date_merge_request_path(@merge_request)
+    when "new_organisation_name"
+      new_organisation_address_merge_request_path(@merge_request)
     end
   end
 
@@ -81,7 +83,7 @@ private
     page
   end
 
-  def create_new_org?
+  def create_new_organisation?
     params.dig(:merge_request, :absorbing_organisation_id) == "other"
   end
 
@@ -102,6 +104,7 @@ private
       :absorbing_organisation_id,
       :telephone_number_correct,
       :new_telephone_number,
+      :new_organisation_name,
     )
 
     if merge_params[:requesting_organisation_id].present? && (current_user.data_coordinator? || current_user.data_provider?)
@@ -109,7 +112,7 @@ private
     end
 
     if merge_params[:absorbing_organisation_id].present?
-      if create_new_org?
+      if create_new_organisation?
         merge_params[:new_absorbing_organisation] = true
         merge_params[:absorbing_organisation_id] = nil
       else
@@ -125,12 +128,14 @@ private
   end
 
   def validate_response
-    if page == "absorbing_organisation" && merge_request_params[:absorbing_organisation_id].blank? && merge_request_params[:new_absorbing_organisation].blank?
-      @merge_request.errors.add(:absorbing_organisation_id, I18n.t("validations.merge_request.absorbing_organisation_blank"))
-      render previous_template, status: :unprocessable_entity
-    end
+    case page
 
-    if page == "confirm_telephone_number"
+    when "absorbing_organisation"
+      if merge_request_params[:absorbing_organisation_id].blank? && merge_request_params[:new_absorbing_organisation].blank?
+        @merge_request.errors.add(:absorbing_organisation_id, I18n.t("validations.merge_request.absorbing_organisation_blank"))
+        render previous_template, status: :unprocessable_entity
+      end
+    when "confirm_telephone_number"
       if merge_request_params[:telephone_number_correct].blank? && merge_request_params[:new_telephone_number].blank?
         if @merge_request.absorbing_organisation.phone.present?
           @merge_request.errors.add(:telephone_number_correct, I18n.t("validations.merge_request.telephone_number_correct_blank"))
@@ -140,6 +145,11 @@ private
         render previous_template, status: :unprocessable_entity
       elsif merge_request_params[:telephone_number_correct] == "0" && merge_request_params[:new_telephone_number].blank?
         @merge_request.errors.add(:new_telephone_number, I18n.t("validations.merge_request.new_telephone_number_blank"))
+        render previous_template, status: :unprocessable_entity
+      end
+    when "new_organisation_name"
+      if merge_request_params[:new_organisation_name].blank?
+        @merge_request.errors.add(:new_organisation_name, I18n.t("validations.merge_request.new_organisation_name_blank"))
         render previous_template, status: :unprocessable_entity
       end
     end

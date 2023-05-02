@@ -325,7 +325,7 @@ RSpec.describe MergeRequestsController, type: :request do
           it "redirects to new org path" do
             request
 
-            expect(response).to redirect_to(new_org_name_merge_request_path(merge_request))
+            expect(response).to redirect_to(new_organisation_name_merge_request_path(merge_request))
           end
 
           it "resets absorbing_organisation and sets new_absorbing_organisation to true" do
@@ -468,6 +468,64 @@ RSpec.describe MergeRequestsController, type: :request do
           end
 
           it "does not update the request" do
+            expect { request }.not_to(change { merge_request.reload.attributes })
+          end
+        end
+      end
+
+      describe "#new_organsation_name" do
+        let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, new_absorbing_organisation: true) }
+
+        context "when viewing the new organisation name page" do
+          before do
+            get "/merge-request/#{merge_request.id}/new-organisation-name", headers:
+          end
+
+          it "displays the correct question" do
+            expect(page).to have_content("What is the new organisation called?")
+          end
+
+          it "has the correct back button" do
+            expect(page).to have_link("Back", href: absorbing_organisation_merge_request_path(merge_request))
+          end
+        end
+
+        context "when updating the new organisation name" do
+          let(:params) do
+            { merge_request: { new_organisation_name: "new org name", page: "new_organisation_name" } }
+          end
+
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "redirects to new organisation address path" do
+            request
+            expect(response).to redirect_to(new_organisation_address_merge_request_path(merge_request))
+          end
+
+          it "updates new organisation name to the correct name" do
+            expect { request }.to change {
+              merge_request.reload.new_organisation_name
+            }.from(nil).to("new org name")
+          end
+        end
+
+        context "when the new organisation name is not answered" do
+          let(:params) do
+            { merge_request: { new_organisation_name: nil, page: "new_organisation_name" } }
+          end
+
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "renders the error" do
+            request
+            expect(page).to have_content("Enter an organisation name")
+          end
+
+          it "does not update the organisation name" do
             expect { request }.not_to(change { merge_request.reload.attributes })
           end
         end
