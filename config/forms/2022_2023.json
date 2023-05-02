@@ -8331,7 +8331,7 @@
                     ]
                   },
                   "header": "Are you sure this is correct?",
-                  "hint_text": "This rent is lower than expected for this property type, in this area. Check:<ul><li>the decimal point is not missing (£X.XX)</li><li>the frequency is correct, for example weekly, monthly</li><li>the rent type is correct, for example affordable or social rent</li></ul>",
+                  "hint_text": "This is lower than we would expect. Check:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the rent type is correct, for example affordable or social rent</li></ul>",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
@@ -8376,7 +8376,7 @@
                     ]
                   },
                   "header": "Are you sure this is correct?",
-                  "hint_text": "This rent is higher than expected for this property type, in this area. Check:<ul><li>the decimal point is not missing (£X.XX)</li><li>the frequency is correct, for example weekly, monthly</li><li>the rent type is correct, for example affordable or social rent</li></ul>",
+                  "hint_text": "This is higher than we would expect. Check:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the rent type is correct, for example affordable or social rent</li></ul>",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
