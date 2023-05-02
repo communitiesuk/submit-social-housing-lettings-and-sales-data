@@ -7,10 +7,13 @@ class Form::Sales::Pages::OldPersonsSharedOwnershipValueCheck < ::Form::Page
       },
     ]
     @title_text = {
-      "translation" => "soft_validations.old_persons_shared_ownership",
+      "translation" => "soft_validations.old_persons_shared_ownership.title_text",
       "arguments" => [],
     }
-    @informative_text = {}
+    @informative_text = {
+      "translation" => "soft_validations.old_persons_shared_ownership.hint_text",
+      "arguments" => [],
+    }
   end
 
   def questions

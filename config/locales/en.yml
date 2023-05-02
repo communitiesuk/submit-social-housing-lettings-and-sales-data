@@ -557,7 +557,9 @@ en:
       hint_text: "This is higher than we would expect."
     shared_ownership_deposit:
       title_text: "Mortgage, deposit and cash discount total should equal %{expected_shared_ownership_deposit_value}"
-    old_persons_shared_ownership: "At least one buyer should be aged over 64 for Older persons’ shared ownership scheme"
+    old_persons_shared_ownership: 
+      title_text: "You told us the buyer is using the Older Persons Shared Ownership scheme."
+      hint_text: "At least one buyer must be aged 65 years and over to use this scheme."
     staircase_bought_seems_high: 
       title_text: "You told us that %{percentage}% was bought in this staircasing transaction."
       hint_text: "Most staircasing transactions are less than 50%"

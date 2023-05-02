@@ -33,13 +33,13 @@ RSpec.describe Form::Sales::Pages::OldPersonsSharedOwnershipValueCheck, type: :m
 
   it "has the correct title_text" do
     expect(page.title_text).to eq({
-      "translation" => "soft_validations.old_persons_shared_ownership",
+      "translation" => "soft_validations.old_persons_shared_ownership.title_text",
       "arguments" => [],
     })
   end
 
   it "has the correct informative_text" do
-    expect(page.informative_text).to eq({})
+    expect(page.informative_text).to eq({ "arguments" => [], "translation" => "soft_validations.old_persons_shared_ownership.hint_text" })
   end
 
   it "has the correct interruption_screen_question_ids" do
