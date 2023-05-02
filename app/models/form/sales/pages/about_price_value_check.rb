@@ -25,8 +25,8 @@ class Form::Sales::Pages::AboutPriceValueCheck < ::Form::Page
           "i18n_template" => "soft_min_or_soft_max",
         },
         {
-          "key" => "purchase_price_min_or_max_text",
-          "i18n_template" => "min_or_max",
+          "key" => "purchase_price_higher_or_lower_text",
+          "i18n_template" => "higher_or_lower",
         },
       ],
     }
