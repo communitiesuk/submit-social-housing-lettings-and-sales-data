@@ -68,6 +68,14 @@ RSpec.describe CheckAnswersSummaryListCardComponent, type: :component do
       let(:subsection) { log.form.get_subsection(subsection_id) }
       let(:questions) { subsection.applicable_questions(log) }
 
+      around do |example|
+        Timecop.freeze(Time.zone.local(2023, 5, 1))
+        Singleton.__init__(FormHandler)
+        example.run
+        Timecop.return
+        Singleton.__init__(FormHandler)
+      end
+
       it "renders a summary list card including question numbers for the answers to those questions" do
         expect(rendered).to have_content(questions.first.answer_label(log))
         expect(rendered).to have_content("Q32 - Lead tenant’s age")

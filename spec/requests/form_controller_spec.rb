@@ -569,7 +569,7 @@ RSpec.describe FormController, type: :request do
             let(:referrer) { "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}?referrer=interruption_screen" }
 
             it "routes to the soft validation page" do
-              expect(response.body).to include("Make sure these answers are all correct")
+              expect(response.body).to include("Make sure these answers are correct:")
             end
           end
 
@@ -578,7 +578,7 @@ RSpec.describe FormController, type: :request do
 
             it "skips the soft validation page" do
               follow_redirect!
-              expect(response.body).not_to include("Make sure these answers are all correct")
+              expect(response.body).not_to include("Make sure these answers are correct:")
             end
           end
         end
