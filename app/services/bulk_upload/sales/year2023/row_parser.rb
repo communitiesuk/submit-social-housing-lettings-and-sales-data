@@ -770,6 +770,8 @@ private
 
     attributes["hhregresstill"] = field_74
 
+    attributes["prevshared"] = field_85
+
     attributes
   end
 

@@ -675,5 +675,13 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
         expect(parser.log.hhregresstill).to be(4)
       end
     end
+
+    describe "#prevshared" do
+      let(:attributes) { setup_section_params.merge({ field_85: "3" }) }
+
+      it "is correctly set" do
+        expect(parser.log.prevshared).to be(3)
+      end
+    end
   end
 end
