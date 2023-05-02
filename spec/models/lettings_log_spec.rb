@@ -268,13 +268,6 @@ RSpec.describe LettingsLog do
       expect(record_from_db["mrcdate"].year).to eq(2021)
     end
 
-    it "correctly derives and saves partial and full major property void date" do
-      record_from_db = ActiveRecord::Base.connection.execute("select voiddate from lettings_logs where id=#{lettings_log.id}").to_a[0]
-      expect(record_from_db["voiddate"].day).to eq(3)
-      expect(record_from_db["voiddate"].month).to eq(3)
-      expect(record_from_db["voiddate"].year).to eq(2021)
-    end
-
     it "correctly derives and saves incref" do
       record_from_db = ActiveRecord::Base.connection.execute("select incref from lettings_logs where id=#{lettings_log.id}").to_a[0]
       expect(record_from_db["incref"]).to eq(1)
@@ -1504,6 +1497,42 @@ RSpec.describe LettingsLog do
       expect(record_from_db["has_benefits"]).to eq(1)
     end
 
+    context "when updating values that derive vacdays" do
+      let(:lettings_log) { create(:lettings_log, startdate:) }
+
+      context "when start date is set" do
+        let(:startdate) { Time.zone.now }
+
+        it "correctly derives vacdays when voiddate is set" do
+          day_count = 3
+          expect { lettings_log.update!(voiddate: startdate - day_count.days) }.to change(lettings_log, :vacdays).to day_count
+          expect { lettings_log.update!(voiddate: nil) }.to change(lettings_log, :vacdays).from(day_count).to nil
+        end
+
+        it "correctly derives vacdays when mrcdate is set" do
+          day_count = 3
+          expect { lettings_log.update!(mrcdate: startdate - day_count.days) }.to change(lettings_log, :vacdays).to day_count
+          expect { lettings_log.update!(mrcdate: nil) }.to change(lettings_log, :vacdays).from(day_count).to nil
+        end
+      end
+
+      context "when start date is not set" do
+        let(:startdate) { nil }
+
+        it "correctly derives vacdays when voiddate is set" do
+          day_count = 3
+          lettings_log.update!(voiddate: Time.zone.now - day_count.days)
+          expect(lettings_log.vacdays).to be nil
+        end
+
+        it "correctly derives vacdays when mrcdate is set" do
+          day_count = 3
+          lettings_log.update!(mrcdate: Time.zone.now - day_count.days)
+          expect(lettings_log.vacdays).to be nil
+        end
+      end
+    end
+
     context "when updating renewal" do
       let!(:lettings_log) do
         described_class.create({
@@ -1516,51 +1545,38 @@ RSpec.describe LettingsLog do
       end
 
       it "correctly derives the length of time on local authority waiting list" do
-        lettings_log.update!(renewal: 1)
-        expect(lettings_log.waityear).to be 2
-        lettings_log.update!(renewal: 0)
-        expect(lettings_log.waityear).to be nil
+        expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :waityear).to 2
+        expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :waityear).from(2).to nil
       end
 
       it "correctly derives the number of times previously offered since becoming available" do
-        lettings_log.update!(renewal: 1)
-        expect(lettings_log.offered).to be 0
-        lettings_log.update!(renewal: 0)
-        expect(lettings_log.offered).to be nil
+        expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :offered).to 0
+        expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :offered).from(0).to nil
       end
 
       it "correctly derives referral if the letting is a renewal and clears it if it is not" do
-        lettings_log.update!(renewal: 1)
-        expect(lettings_log.referral).to be 1
-        lettings_log.update!(renewal: 0)
-        expect(lettings_log.referral).to be nil
+        expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :referral).to 1
+        expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :referral).from(1).to nil
       end
 
       it "correctly derives voiddate if the letting is a renewal and clears it if it is not" do
-        lettings_log.update!(renewal: 1)
-        expect(lettings_log.voiddate).to eq lettings_log.startdate
-        lettings_log.update!(renewal: 0)
-        expect(lettings_log.voiddate).to be nil
+        expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :voiddate).to lettings_log.startdate
+        expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :voiddate).from(lettings_log.startdate).to nil
       end
 
       it "correctly derives first_time_property_let_as_social_housing and clears it if it is not" do
-        lettings_log.update!(renewal: 1)
-        expect(lettings_log.first_time_property_let_as_social_housing).to be 0
-        lettings_log.update!(renewal: 0)
-        expect(lettings_log.first_time_property_let_as_social_housing).to be nil
+        expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :first_time_property_let_as_social_housing).to 0
+        expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :first_time_property_let_as_social_housing).from(0).to nil
       end
 
       it "correctly derives vacancy reason and clears it if it is not" do
-        lettings_log.update!(renewal: 1)
-        expect(lettings_log.rsnvac).to be 14
-        lettings_log.update!(renewal: 0)
-        expect(lettings_log.rsnvac).to be nil
+        expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :rsnvac).to 14
+        expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :rsnvac).from(14).to nil
       end
 
       # should have extra tests for whether it is derived when voiddate, mrcdate etc set and reset
       it "derives vacdays as 0 if log is renewal" do
-        lettings_log.update!(renewal: 1)
-        expect(lettings_log.vacdays).to be 0
+        expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :vacdays).to 0
       end
 
       it "correctly derives underoccupation_benefitcap if log is a renewal from 2021/22" do
@@ -1569,18 +1585,14 @@ RSpec.describe LettingsLog do
       end
 
       it "clears underoccupation_benefitcap if log is no longer a renewal" do
-        lettings_log.update!(renewal: 1)
-        expect(lettings_log.underoccupation_benefitcap).to be 2
-        lettings_log.update!(renewal: 0)
-        expect(lettings_log.underoccupation_benefitcap).to be nil
+        expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :underoccupation_benefitcap).to 2
+        expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :underoccupation_benefitcap).from(2).to nil
       end
 
       it "clears underoccupation_benefitcap if log is no longer in 2021/22" do
-        lettings_log.update!(renewal: 1)
-        expect(lettings_log.underoccupation_benefitcap).to be 2
+        expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :underoccupation_benefitcap).to 2
         Timecop.return
-        lettings_log.update!(startdate: Time.zone.local(2023, 1, 1))
-        expect(lettings_log.underoccupation_benefitcap).to be nil
+        expect { lettings_log.update!(startdate: Time.zone.local(2023, 1, 1)) }.to change(lettings_log, :underoccupation_benefitcap).from(2).to nil
       end
 
       context "when the log is general needs" do
@@ -1616,13 +1628,11 @@ RSpec.describe LettingsLog do
           end
 
           it "clears prevten if the log is marked as supported housing" do
-            lettings_log.update!(needstype: 2)
-            expect(lettings_log.prevten).to be nil
+            expect { lettings_log.update!(needstype: 2) }.to change(lettings_log, :prevten).to nil
           end
 
           it "clears prevten if renewal is update to no" do
-            lettings_log.update!(renewal: 0)
-            expect(lettings_log.prevten).to be nil
+            expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :prevten).to nil
           end
         end
       end
@@ -1645,10 +1655,8 @@ RSpec.describe LettingsLog do
             let(:rent_type) { 0 }
 
             it "derives the most recent let type as Social Rent basis if it is a renewal and clears it if it is not" do
-              lettings_log.update!(renewal: 1)
-              expect(lettings_log.unitletas).to be 1
-              lettings_log.update!(renewal: 0)
-              expect(lettings_log.unitletas).to be nil
+              expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 1
+              expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(1).to nil
             end
           end
 
@@ -1656,10 +1664,8 @@ RSpec.describe LettingsLog do
             let(:rent_type) { 1 }
 
             it "derives the most recent let type as Affordable Rent basis if it is a renewal and clears it if it is not" do
-              lettings_log.update!(renewal: 1)
-              expect(lettings_log.unitletas).to be 2
-              lettings_log.update!(renewal: 0)
-              expect(lettings_log.unitletas).to be nil
+              expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 2
+              expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(2).to nil
             end
           end
 
@@ -1667,10 +1673,8 @@ RSpec.describe LettingsLog do
             let(:rent_type) { 2 }
 
             it "derives the most recent let type as Affordable Rent basis if it is a renewal and clears it if it is not" do
-              lettings_log.update!(renewal: 1)
-              expect(lettings_log.unitletas).to be 2
-              lettings_log.update!(renewal: 0)
-              expect(lettings_log.unitletas).to be nil
+              expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 2
+              expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(2).to nil
             end
           end
 
@@ -1678,10 +1682,8 @@ RSpec.describe LettingsLog do
             let(:rent_type) { 3 }
 
             it "derives the most recent let type as Intermediate Rent basis if it is a renewal and clears it if it is not" do
-              lettings_log.update!(renewal: 1)
-              expect(lettings_log.unitletas).to be 4
-              lettings_log.update!(renewal: 0)
-              expect(lettings_log.unitletas).to be nil
+              expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 4
+              expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(4).to nil
             end
           end
 
@@ -1689,10 +1691,8 @@ RSpec.describe LettingsLog do
             let(:rent_type) { 4 }
 
             it "derives the most recent let type as Intermediate Rent basis if it is a renewal and clears it if it is not" do
-              lettings_log.update!(renewal: 1)
-              expect(lettings_log.unitletas).to be 4
-              lettings_log.update!(renewal: 0)
-              expect(lettings_log.unitletas).to be nil
+              expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 4
+              expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(4).to nil
             end
           end
 
@@ -1701,10 +1701,8 @@ RSpec.describe LettingsLog do
             let(:irproduct_other) { "Rent first" }
 
             it "derives the most recent let type as Intermediate Rent basis if it is a renewal and clears it if it is not" do
-              lettings_log.update!(renewal: 1)
-              expect(lettings_log.unitletas).to be 4
-              lettings_log.update!(renewal: 0)
-              expect(lettings_log.unitletas).to be nil
+              expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 4
+              expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(4).to nil
             end
           end
         end
@@ -1716,10 +1714,8 @@ RSpec.describe LettingsLog do
             let(:rent_type) { 0 }
 
             it "derives the most recent let type as Social Rent basis if it is a renewal and clears it if it is not" do
-              lettings_log.update!(renewal: 1)
-              expect(lettings_log.unitletas).to be 1
-              lettings_log.update!(renewal: 0)
-              expect(lettings_log.unitletas).to be nil
+              expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 1
+              expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(1).to nil
             end
           end
 
@@ -1727,10 +1723,8 @@ RSpec.describe LettingsLog do
             let(:rent_type) { 1 }
 
             it "derives the most recent let type as Affordable Rent basis if it is a renewal and clears it if it is not" do
-              lettings_log.update!(renewal: 1)
-              expect(lettings_log.unitletas).to be 2
-              lettings_log.update!(renewal: 0)
-              expect(lettings_log.unitletas).to be nil
+              expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 2
+              expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(2).to nil
             end
           end
 
@@ -1738,10 +1732,8 @@ RSpec.describe LettingsLog do
             let(:rent_type) { 2 }
 
             it "derives the most recent let type as London Affordable Rent basis if it is a renewal and clears it if it is not" do
-              lettings_log.update!(renewal: 1)
-              expect(lettings_log.unitletas).to be 5
-              lettings_log.update!(renewal: 0)
-              expect(lettings_log.unitletas).to be nil
+              expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 5
+              expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(5).to nil
             end
           end
 
@@ -1749,10 +1741,8 @@ RSpec.describe LettingsLog do
             let(:rent_type) { 3 }
 
             it "derives the most recent let type as Rent to Buy basis if it is a renewal and clears it if it is not" do
-              lettings_log.update!(renewal: 1)
-              expect(lettings_log.unitletas).to be 6
-              lettings_log.update!(renewal: 0)
-              expect(lettings_log.unitletas).to be nil
+              expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 6
+              expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(6).to nil
             end
           end
 
@@ -1760,10 +1750,8 @@ RSpec.describe LettingsLog do
             let(:rent_type) { 4 }
 
             it "derives the most recent let type as London Living Rent basis if it is a renewal and clears it if it is not" do
-              lettings_log.update!(renewal: 1)
-              expect(lettings_log.unitletas).to be 7
-              lettings_log.update!(renewal: 0)
-              expect(lettings_log.unitletas).to be nil
+              expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 7
+              expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(7).to nil
             end
           end
 
@@ -1772,10 +1760,8 @@ RSpec.describe LettingsLog do
             let(:irproduct_other) { "Rent first" }
 
             it "derives the most recent let type as Another Intermediate Rent basis if it is a renewal and clears it if it is not" do
-              lettings_log.update!(renewal: 1)
-              expect(lettings_log.unitletas).to be 8
-              lettings_log.update!(renewal: 0)
-              expect(lettings_log.unitletas).to be nil
+              expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 8
+              expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(8).to nil
             end
           end
         end
@@ -2171,37 +2157,6 @@ RSpec.describe LettingsLog do
           expect(record_from_db["wchair"]).to eq(1)
         end
       end
-
-      context "and renewal" do
-        before do
-          Timecop.freeze(Time.zone.local(2022, 4, 2))
-        end
-
-        after do
-          Timecop.unfreeze
-        end
-
-        let(:scheme) { create(:scheme) }
-        let(:location) { create(:location, scheme:) }
-        let!(:supported_housing_lettings_log) do
-          described_class.create!({
-            managing_organisation: owning_organisation,
-            owning_organisation:,
-            created_by: created_by_user,
-            needstype: 2,
-            scheme_id: scheme.id,
-            location_id: location.id,
-            renewal: 1,
-            startdate: Time.zone.local(2022, 4, 2),
-            created_at: Time.utc(2022, 2, 8, 16, 52, 15),
-          })
-        end
-
-        it "correctly infers and saves the renewal date" do
-          record_from_db = ActiveRecord::Base.connection.execute("SELECT voiddate from lettings_logs where id=#{supported_housing_lettings_log.id}").to_a[0]
-          expect(record_from_db["voiddate"].to_i).to eq(supported_housing_lettings_log.startdate.to_i)
-        end
-      end
     end
 
     context "when saving accessibility needs" do
@@ -2342,7 +2297,6 @@ RSpec.describe LettingsLog do
     end
   end
 
-  # CHECK THROUGH
   describe "resetting invalidated fields" do
     let(:scheme) { create(:scheme, owning_organisation: created_by_user.organisation) }
     let!(:location) { create(:location, location_code: "E07000223", scheme:) }
@@ -2438,77 +2392,18 @@ RSpec.describe LettingsLog do
       end
     end
 
-    context "when it changes from a renewal to not a renewal" do
-      let(:lettings_log) { create(:lettings_log) }
-
-      it "resets inferred waityear value" do
-        lettings_log.update!({ renewal: 1 })
-
-        record_from_db = ActiveRecord::Base.connection.execute("select waityear from lettings_logs where id=#{lettings_log.id}").to_a[0]
-        expect(record_from_db["waityear"]).to eq(2)
-        expect(lettings_log["waityear"]).to eq(2)
-
-        lettings_log.update!({ renewal: 0 })
-        record_from_db = ActiveRecord::Base.connection.execute("select waityear from lettings_logs where id=#{lettings_log.id}").to_a[0]
-        expect(record_from_db["waityear"]).to eq(nil)
-        expect(lettings_log["waityear"]).to eq(nil)
-      end
-
-      it "resets inferred vacancy reason value" do
-        vacancy_reason = "rsnvac"
-
-        lettings_log.update!({ renewal: 1 })
-
-        record_from_db = ActiveRecord::Base.connection.execute("select #{vacancy_reason} from lettings_logs where id=#{lettings_log.id}").to_a[0]
-        expect(record_from_db[vacancy_reason]).to eq(14)
-        expect(lettings_log[vacancy_reason]).to eq(14)
-
-        lettings_log.update!({ renewal: 0 })
-        record_from_db = ActiveRecord::Base.connection.execute("select #{vacancy_reason} from lettings_logs where id=#{lettings_log.id}").to_a[0]
-        expect(record_from_db[vacancy_reason]).to eq(nil)
-        expect(lettings_log[vacancy_reason]).to eq(nil)
-      end
-    end
-
     context "when it changes from a supported housing to not a supported housing" do
       let(:location) { create(:location, mobility_type: "A", postcode: "SW1P 4DG") }
       let(:lettings_log) { create(:lettings_log, location:) }
 
       it "resets inferred wchair value" do
-        lettings_log.update!({ needstype: 2 })
-
-        record_from_db = ActiveRecord::Base.connection.execute("select wchair from lettings_logs where id=#{lettings_log.id}").to_a[0]
-        expect(record_from_db["wchair"]).to eq(2)
-        expect(lettings_log["wchair"]).to eq(2)
-
-        lettings_log.update!({ needstype: 1 })
-        record_from_db = ActiveRecord::Base.connection.execute("select needstype from lettings_logs where id=#{lettings_log.id}").to_a[0]
-        expect(record_from_db["wchair"]).to eq(nil)
-        expect(lettings_log["wchair"]).to eq(nil)
+        expect { lettings_log.update!(needstype: 2) }.to change(lettings_log, :wchair).to(2)
+        expect { lettings_log.update!(needstype: 1) }.to change(lettings_log, :wchair).from(2).to(nil)
       end
 
       it "resets location" do
-        lettings_log.update!({ needstype: 2 })
-
-        record_from_db = ActiveRecord::Base.connection.execute("select location_id from lettings_logs where id=#{lettings_log.id}").to_a[0]
-        expect(record_from_db["location_id"]).to eq(location.id)
-        expect(lettings_log["location_id"]).to eq(location.id)
-        lettings_log.update!({ needstype: 1 })
-        record_from_db = ActiveRecord::Base.connection.execute("select location_id from lettings_logs where id=#{lettings_log.id}").to_a[0]
-        expect(record_from_db["location_id"]).to eq(nil)
-        expect(lettings_log["location_id"]).to eq(nil)
-      end
-    end
-
-    context "when it is not a renewal" do
-      let(:lettings_log) { create(:lettings_log) }
-
-      it "saves waityear value" do
-        lettings_log.update!({ renewal: 0, waityear: 2 })
-
-        record_from_db = ActiveRecord::Base.connection.execute("select waityear from lettings_logs where id=#{lettings_log.id}").to_a[0]
-        expect(record_from_db["waityear"]).to eq(2)
-        expect(lettings_log["waityear"]).to eq(2)
+        lettings_log.update!(needstype: 2)
+        expect { lettings_log.update!(needstype: 1) }.to change(lettings_log, :location_id).from(location.id).to(nil)
       end
     end
 
