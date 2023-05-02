@@ -7,6 +7,7 @@ class MergeRequestsController < ApplicationController
     absorbing_organisation
     confirm_telephone_number
     new_organisation_name
+    new_organisation_address
     merge_date
   ]
   before_action :authenticate_user!
@@ -15,6 +16,7 @@ class MergeRequestsController < ApplicationController
   def absorbing_organisation; end
   def confirm_telephone_number; end
   def new_organisation_name; end
+  def new_organisation_address; end
   def merge_date; end
 
   def create
