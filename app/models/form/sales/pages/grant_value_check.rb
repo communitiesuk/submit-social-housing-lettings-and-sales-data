@@ -7,8 +7,20 @@ class Form::Sales::Pages::GrantValueCheck < ::Form::Page
         "grant_outside_common_range?" => true,
       },
     ]
-    @title_text = { "translation" => "soft_validations.grant.title_text" }
-    @informative_text = {}
+    @title_text = {
+      "translation" => "soft_validations.grant.title_text",
+      "arguments" => [
+        {
+          "key" => "field_formatted_as_currency",
+          "arguments_for_key" => "grant",
+          "i18n_template" => "grant",
+        },
+      ],
+    }
+    @informative_text = {
+      "translation" => "soft_validations.grant.hint_text",
+      "arguments" => [],
+    }
   end
 
   def questions

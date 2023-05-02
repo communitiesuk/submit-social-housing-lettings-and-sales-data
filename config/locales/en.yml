@@ -584,7 +584,8 @@ en:
     deposit:
       title_text: "Are you sure that the deposit is this much higher than the buyer's savings?"
     grant:
-      title_text: "Are you sure? Grants are usually £9,000 - £16,000"
+      title_text: "You told us that the grant amount is %{grant}"
+      hint_text: "Loans, grants and subsidies are usually between £9,000 and £16,000."
     wheelchair:
       title_text: "Are you sure? You said previously that somebody in household uses a wheelchair"
     mortgage:
