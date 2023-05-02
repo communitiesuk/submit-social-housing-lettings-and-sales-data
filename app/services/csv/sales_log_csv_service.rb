@@ -22,6 +22,7 @@ module Csv
       month: %i[saledate month],
       year: %i[saledate year],
       is_dpo: %i[created_by is_dpo],
+      created_by_name: %i[created_by name],
       owning_organisation_name: %i[owning_organisation name],
     }.freeze
 
@@ -33,8 +34,6 @@ module Csv
     FIELDS_ALWAYS_EXPORTED_AS_LABELS = {
       "la_label" => "la",
       "prevloc_label" => "prevloc",
-      "created_by_name" => "created_by_id",
-      "owning_organisation_name" => "owning_organisation_id",
     }.freeze
 
     DATE_FIELDS = %w[
