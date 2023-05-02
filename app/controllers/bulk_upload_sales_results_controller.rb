@@ -4,7 +4,9 @@ class BulkUploadSalesResultsController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
 
   def show
-    @bulk_upload = current_user.bulk_uploads.sales.find(params[:id])
+    @bulk_upload = BulkUpload.sales.find(params[:id])
+
+    authorize @bulk_upload
   end
 
   def resume
@@ -20,8 +22,12 @@ class BulkUploadSalesResultsController < ApplicationController
   end
 
   def summary
-    @bulk_upload = current_user.bulk_uploads.sales.find(params[:id])
+    @bulk_upload = BulkUpload.sales.find(params[:id])
+
+    authorize @bulk_upload
   end
+
+private
 
   def reset_logs_filters
     session["logs_filters"] = {}.to_json
