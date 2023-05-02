@@ -555,7 +555,9 @@ en:
     shared_ownership_deposit:
       title_text: "Mortgage, deposit and cash discount total should equal %{expected_shared_ownership_deposit_value}"
     old_persons_shared_ownership: "At least one buyer should be aged over 64 for Older persons’ shared ownership scheme"
-    staircase_bought_seems_high: "You said %{percentage}% was bought in this staircasing transaction, which seems high. Are you sure?"
+    staircase_bought_seems_high: 
+      title_text: "You told us that %{percentage}% was bought in this staircasing transaction."
+      hint_text: "Most staircasing transactions are less than 50%"
     monthly_charges_over_soft_max:
       title_text: "The amount of monthly charges is high for this type of property and sale type"
     student_not_child:

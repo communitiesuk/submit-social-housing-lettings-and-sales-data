@@ -8,7 +8,7 @@ class Form::Sales::Pages::StaircaseBoughtValueCheck < ::Form::Page
       },
     ]
     @title_text = {
-      "translation" => "soft_validations.staircase_bought_seems_high",
+      "translation" => "soft_validations.staircase_bought_seems_high.title_text",
       "arguments" => [
         {
           "key" => "stairbought",
@@ -16,7 +16,10 @@ class Form::Sales::Pages::StaircaseBoughtValueCheck < ::Form::Page
         },
       ],
     }
-    @informative_text = {}
+    @informative_text = {
+      "translation" => "soft_validations.staircase_bought_seems_high.hint_text",
+      "arguments" => [],
+    }
   end
 
   def questions
