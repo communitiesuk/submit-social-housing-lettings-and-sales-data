@@ -587,7 +587,7 @@ en:
       title_text: "You told us that the grant amount is %{grant}"
       hint_text: "Loans, grants and subsidies are usually between £9,000 and £16,000."
     wheelchair:
-      title_text: "Are you sure? You said previously that somebody in household uses a wheelchair"
+      title_text: "You told us that someone in the household uses a wheelchair."
     mortgage:
       title_text: "Are you sure that the mortgage is more than 5 times the income used for the mortgage application?"
 
