@@ -957,22 +957,20 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
 
     describe "soft validations" do
       context "when soft validation is triggered" do
-        let(:attributes) { setup_section_params.merge({ field_12: 22, field_35: 5, field_20: "F" }) }
+        let(:attributes) { setup_section_params.merge({ field_12: 22, field_35: 5 }) }
 
         it "adds an error to the relevant fields" do
           soft_validation_errors = parser.errors.select { |e| e.options[:category] == :soft_validation }
 
           expect(soft_validation_errors.find { |e| e.attribute == :field_12 }).to be_present
-          expect(soft_validation_errors.find { |e| e.attribute == :field_20 }).to be_present
           expect(soft_validation_errors.find { |e| e.attribute == :field_35 }).to be_present
         end
 
         it "populates with correct error message" do
           soft_validation_errors = parser.errors.select { |e| e.options[:category] == :soft_validation }
 
-          expect(soft_validation_errors.find { |e| e.attribute == :field_12 }.message).to eql("You told us this person is under 60 and retired. The minimum expected retirement age for females in England is 60.")
-          expect(soft_validation_errors.find { |e| e.attribute == :field_20 }.message).to eql("You told us this person is under 60 and retired. The minimum expected retirement age for females in England is 60.")
-          expect(soft_validation_errors.find { |e| e.attribute == :field_35 }.message).to eql("You told us this person is under 60 and retired. The minimum expected retirement age for females in England is 60.")
+          expect(soft_validation_errors.find { |e| e.attribute == :field_12 }.message).to eql("You told us this person is aged 22 years and retired.")
+          expect(soft_validation_errors.find { |e| e.attribute == :field_35 }.message).to eql("You told us this person is aged 22 years and retired.")
         end
       end
     end
