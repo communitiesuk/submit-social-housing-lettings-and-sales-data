@@ -537,7 +537,7 @@ en:
       hint_text: "This is %{higher_or_lower} than we would expect"
     retirement:
       min:
-        title: "You told us this person is under %{age} and retired"
+        title: "You told us this person is aged %{age} years and retired."
         hint_text: "The minimum expected retirement age for %{gender} in England is %{age}."
       max:
         title: "You told us this person is %{age} or over and not retired"

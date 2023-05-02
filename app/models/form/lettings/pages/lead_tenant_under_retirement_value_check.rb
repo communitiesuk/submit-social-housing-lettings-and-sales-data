@@ -7,23 +7,13 @@ class Form::Lettings::Pages::LeadTenantUnderRetirementValueCheck < ::Form::Page
       "translation" => "soft_validations.retirement.min.title",
       "arguments" => [
         {
-          "key" => "retirement_age_for_person_1",
-          "label" => false,
+          "key" => "age1",
+          "label" => true,
           "i18n_template" => "age",
         },
       ],
     }
-    @informative_text = {
-      "translation" => "soft_validations.retirement.min.hint_text",
-      "arguments" => [
-        { "key" => "plural_gender_for_person_1", "label" => false, "i18n_template" => "gender" },
-        {
-          "key" => "retirement_age_for_person_1",
-          "label" => false,
-          "i18n_template" => "age",
-        },
-      ],
-    }
+    @informative_text = {}
   end
 
   def questions
@@ -31,6 +21,6 @@ class Form::Lettings::Pages::LeadTenantUnderRetirementValueCheck < ::Form::Page
   end
 
   def interruption_screen_question_ids
-    %w[ecstat1 sex1 age1]
+    %w[ecstat1 age1]
   end
 end

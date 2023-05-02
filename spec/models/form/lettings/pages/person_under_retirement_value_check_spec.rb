@@ -39,8 +39,8 @@ RSpec.describe Form::Lettings::Pages::PersonUnderRetirementValueCheck, type: :mo
         "translation" => "soft_validations.retirement.min.title",
         "arguments" => [
           {
-            "key" => "retirement_age_for_person_2",
-            "label" => false,
+            "key" => "age2",
+            "label" => true,
             "i18n_template" => "age",
           },
         ],
@@ -48,21 +48,7 @@ RSpec.describe Form::Lettings::Pages::PersonUnderRetirementValueCheck, type: :mo
     end
 
     it "has the correct informative_text" do
-      expect(page.informative_text).to eq({
-        "translation" => "soft_validations.retirement.min.hint_text",
-        "arguments" => [
-          {
-            "key" => "plural_gender_for_person_2",
-            "label" => false,
-            "i18n_template" => "gender",
-          },
-          {
-            "key" => "retirement_age_for_person_2",
-            "label" => false,
-            "i18n_template" => "age",
-          },
-        ],
-      })
+      expect(page.informative_text).to eq({})
     end
   end
 
@@ -84,8 +70,8 @@ RSpec.describe Form::Lettings::Pages::PersonUnderRetirementValueCheck, type: :mo
         "translation" => "soft_validations.retirement.min.title",
         "arguments" => [
           {
-            "key" => "retirement_age_for_person_3",
-            "label" => false,
+            "key" => "age3",
+            "label" => true,
             "i18n_template" => "age",
           },
         ],
@@ -93,21 +79,7 @@ RSpec.describe Form::Lettings::Pages::PersonUnderRetirementValueCheck, type: :mo
     end
 
     it "has the correct informative_text" do
-      expect(page.informative_text).to eq({
-        "translation" => "soft_validations.retirement.min.hint_text",
-        "arguments" => [
-          {
-            "key" => "plural_gender_for_person_3",
-            "label" => false,
-            "i18n_template" => "gender",
-          },
-          {
-            "key" => "retirement_age_for_person_3",
-            "label" => false,
-            "i18n_template" => "age",
-          },
-        ],
-      })
+      expect(page.informative_text).to eq({})
     end
   end
 end

@@ -1859,21 +1859,7 @@
                   }
                 ]
               },
-              "informative_text": {
-                "translation": "soft_validations.retirement.min.hint_text",
-                "arguments": [
-                  {
-                    "key": "plural_gender_for_person_1",
-                    "label": false,
-                    "i18n_template": "gender"
-                  },
-                  {
-                    "key": "retirement_age_for_person_1",
-                    "label": false,
-                    "i18n_template": "age"
-                  }
-                ]
-              },
+              "informative_text": {},
               "questions": {
                 "retirement_value_check": {
                   "check_answer_label": "Retirement confirmation",
@@ -1900,7 +1886,7 @@
                   }
                 }
               },
-              "interruption_screen_question_ids": ["ecstat1", "sex1", "age1"]
+              "interruption_screen_question_ids": ["ecstat1", "age1"]
             },
             "lead_tenant_over_retirement_value_check": {
               "depends_on": [
@@ -2403,21 +2389,7 @@
                   }
                 ]
               },
-              "informative_text": {
-                "translation": "soft_validations.retirement.min.hint_text",
-                "arguments": [
-                  {
-                    "key": "plural_gender_for_person_2",
-                    "label": false,
-                    "i18n_template": "gender"
-                  },
-                  {
-                    "key": "retirement_age_for_person_2",
-                    "label": false,
-                    "i18n_template": "age"
-                  }
-                ]
-              },
+              "informative_text": {},
               "questions": {
                 "retirement_value_check": {
                   "check_answer_label": "Retirement confirmation",
@@ -2444,7 +2416,7 @@
                   }
                 }
               },
-              "interruption_screen_question_ids": ["ecstat2", "sex2", "age2"]
+              "interruption_screen_question_ids": ["ecstat2", "age2"]
             },
             "person_2_over_retirement_value_check": {
               "depends_on": [
@@ -2944,21 +2916,7 @@
                   }
                 ]
               },
-              "informative_text": {
-                "translation": "soft_validations.retirement.min.hint_text",
-                "arguments": [
-                  {
-                    "key": "plural_gender_for_person_3",
-                    "label": false,
-                    "i18n_template": "gender"
-                  },
-                  {
-                    "key": "retirement_age_for_person_3",
-                    "label": false,
-                    "i18n_template": "age"
-                  }
-                ]
-              },
+              "informative_text": {},
               "questions": {
                 "retirement_value_check": {
                   "check_answer_label": "Retirement confirmation",
@@ -2985,7 +2943,7 @@
                   }
                 }
               },
-              "interruption_screen_question_ids": ["ecstat3", "sex3", "age3"]
+              "interruption_screen_question_ids": ["ecstat3", "age3"]
             },
             "person_3_over_retirement_value_check": {
               "depends_on": [
@@ -3482,21 +3440,7 @@
                   }
                 ]
               },
-              "informative_text": {
-                "translation": "soft_validations.retirement.min.hint_text",
-                "arguments": [
-                  {
-                    "key": "plural_gender_for_person_4",
-                    "label": false,
-                    "i18n_template": "gender"
-                  },
-                  {
-                    "key": "retirement_age_for_person_4",
-                    "label": false,
-                    "i18n_template": "age"
-                  }
-                ]
-              },
+              "informative_text": {},
               "questions": {
                 "retirement_value_check": {
                   "check_answer_label": "Retirement confirmation",
@@ -3523,7 +3467,7 @@
                   }
                 }
               },
-              "interruption_screen_question_ids": ["ecstat4", "sex4", "age4"]
+              "interruption_screen_question_ids": ["ecstat4", "age4"]
             },
             "person_4_over_retirement_value_check": {
               "depends_on": [
@@ -4017,21 +3961,7 @@
                   }
                 ]
               },
-              "informative_text": {
-                "translation": "soft_validations.retirement.min.hint_text",
-                "arguments": [
-                  {
-                    "key": "plural_gender_for_person_5",
-                    "label": false,
-                    "i18n_template": "gender"
-                  },
-                  {
-                    "key": "retirement_age_for_person_5",
-                    "label": false,
-                    "i18n_template": "age"
-                  }
-                ]
-              },
+              "informative_text": {},
               "questions": {
                 "retirement_value_check": {
                   "check_answer_label": "Retirement confirmation",
@@ -4058,7 +3988,7 @@
                   }
                 }
               },
-              "interruption_screen_question_ids": ["ecstat5", "sex5", "age5"]
+              "interruption_screen_question_ids": ["ecstat5", "age5"]
             },
             "person_5_over_retirement_value_check": {
               "depends_on": [
@@ -4549,21 +4479,7 @@
                   }
                 ]
               },
-              "informative_text": {
-                "translation": "soft_validations.retirement.min.hint_text",
-                "arguments": [
-                  {
-                    "key": "plural_gender_for_person_6",
-                    "label": false,
-                    "i18n_template": "gender"
-                  },
-                  {
-                    "key": "retirement_age_for_person_6",
-                    "label": false,
-                    "i18n_template": "age"
-                  }
-                ]
-              },
+              "informative_text": {},
               "questions": {
                 "retirement_value_check": {
                   "check_answer_label": "Retirement confirmation",
@@ -4590,7 +4506,7 @@
                   }
                 }
               },
-              "interruption_screen_question_ids": ["ecstat6", "sex6", "age6"]
+              "interruption_screen_question_ids": ["ecstat6", "age6"]
             },
             "person_6_over_retirement_value_check": {
               "depends_on": [
@@ -5078,21 +4994,7 @@
                   }
                 ]
               },
-              "informative_text": {
-                "translation": "soft_validations.retirement.min.hint_text",
-                "arguments": [
-                  {
-                    "key": "plural_gender_for_person_7",
-                    "label": false,
-                    "i18n_template": "gender"
-                  },
-                  {
-                    "key": "retirement_age_for_person_7",
-                    "label": false,
-                    "i18n_template": "age"
-                  }
-                ]
-              },
+              "informative_text": {},
               "questions": {
                 "retirement_value_check": {
                   "check_answer_label": "Retirement confirmation",
@@ -5119,7 +5021,7 @@
                   }
                 }
               },
-              "interruption_screen_question_ids": ["ecstat7", "sex7", "age7"]
+              "interruption_screen_question_ids": ["ecstat7", "age7"]
             },
             "person_7_over_retirement_value_check": {
               "depends_on": [
@@ -5604,21 +5506,7 @@
                   }
                 ]
               },
-              "informative_text": {
-                "translation": "soft_validations.retirement.min.hint_text",
-                "arguments": [
-                  {
-                    "key": "plural_gender_for_person_8",
-                    "label": false,
-                    "i18n_template": "gender"
-                  },
-                  {
-                    "key": "retirement_age_for_person_8",
-                    "label": false,
-                    "i18n_template": "age"
-                  }
-                ]
-              },
+              "informative_text": {},
               "questions": {
                 "retirement_value_check": {
                   "check_answer_label": "Retirement confirmation",
@@ -5645,7 +5533,7 @@
                   }
                 }
               },
-              "interruption_screen_question_ids": ["ecstat8", "sex8", "age8"]
+              "interruption_screen_question_ids": ["ecstat8", "age8"]
             },
             "person_8_over_retirement_value_check": {
               "depends_on": [
