@@ -754,6 +754,7 @@ private
 
     attributes["ethnic_group2"] = infer_buyer2_ethnic_group_from_ethnic
     attributes["ethnicbuy2"] = field_40
+    attributes["nationalbuy2"] = field_41
 
     attributes
   end

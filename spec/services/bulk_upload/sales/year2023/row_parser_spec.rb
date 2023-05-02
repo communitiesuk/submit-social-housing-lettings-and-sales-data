@@ -643,5 +643,13 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
         expect(parser.log.ethnicbuy2).to be(1)
       end
     end
+
+    describe "#nationalbuy2" do
+      let(:attributes) { setup_section_params.merge({ field_41: "18" }) }
+
+      it "is correctly set" do
+        expect(parser.log.nationalbuy2).to be(18)
+      end
+    end
   end
 end
