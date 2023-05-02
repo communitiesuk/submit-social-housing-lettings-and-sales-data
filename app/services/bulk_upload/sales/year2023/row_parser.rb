@@ -774,6 +774,8 @@ private
 
     attributes["staircasesale"] = field_90
 
+    attributes["soctenant"] = field_99
+
     attributes
   end
 
