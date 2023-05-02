@@ -590,7 +590,8 @@ en:
     wheelchair:
       title_text: "You told us that someone in the household uses a wheelchair."
     mortgage:
-      title_text: "Are you sure that the mortgage is more than 5 times the income used for the mortgage application?"
+      title_text: "You told us that the mortgage amount is %{mortgage}"
+      hint_text: "This is more than 5 times the income, which is higher than we would expect."
 
   devise:
     two_factor_authentication:
