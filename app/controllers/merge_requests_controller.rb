@@ -138,11 +138,8 @@ private
       end
     when "confirm_telephone_number"
       if merge_request_params[:telephone_number_correct].blank?
-        if @merge_request.absorbing_organisation.phone.present?
-          @merge_request.errors.add(:telephone_number_correct, :blank)
-        else
-          @merge_request.errors.add(:telephone_number_correct, :invalid)
-        end
+        @merge_request.errors.add(:telephone_number_correct, :blank) if @merge_request.absorbing_organisation.phone.present?
+        @merge_request.errors.add(:new_telephone_number, :blank) if @merge_request.absorbing_organisation.phone.blank?
       end
     when "new_organisation_name"
       @merge_request.errors.add(:new_organisation_name, :blank) if merge_request_params[:new_organisation_name].blank?
