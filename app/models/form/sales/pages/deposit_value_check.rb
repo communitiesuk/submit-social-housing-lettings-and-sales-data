@@ -6,9 +6,24 @@ class Form::Sales::Pages::DepositValueCheck < ::Form::Page
         "deposit_over_soft_max?" => true,
       },
     ]
-    @informative_text = {}
+    @informative_text = {
+      "translation" => "soft_validations.deposit.hint_text",
+      "arguments" => [],
+    }
     @title_text = {
       "translation" => "soft_validations.deposit.title_text",
+      "arguments" => [
+        {
+          "key" => "field_formatted_as_currency",
+          "arguments_for_key" => "deposit",
+          "i18n_template" => "deposit",
+        },
+        {
+          "key" => "field_formatted_as_currency",
+          "arguments_for_key" => "savings",
+          "i18n_template" => "savings",
+        },
+      ],
     }
   end
 

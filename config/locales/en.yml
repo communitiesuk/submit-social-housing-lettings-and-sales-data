@@ -586,7 +586,8 @@ en:
       title_text: "You told us the buyer’s savings were %{savings}."
       hint_text: "This is higher than we would expect."
     deposit:
-      title_text: "Are you sure that the deposit is this much higher than the buyer's savings?"
+      title_text: "You told us the buyer’s deposit was %{deposit} and their savings were %{savings}."
+      hint_text: "The deposit amount is higher than we would expect for the amount of savings they have."
     grant:
       title_text: "You told us that the grant amount is %{grant}"
       hint_text: "Loans, grants and subsidies are usually between £9,000 and £16,000."
