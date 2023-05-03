@@ -54,7 +54,7 @@ class FormController < ApplicationController
       page_id = request.path.split("/")[-1].underscore
       @page = form.get_page(page_id)
       @subsection = form.subsection_for_page(@page)
-      if @page.routed_to?(@log, current_user) || is_referrer_interruption_screen?
+      if @page.routed_to?(@log, current_user) || is_referrer_type?("interruption_screen")
         render "form/page"
       else
         redirect_to @log.lettings? ? lettings_log_path(@log) : sales_log_path(@log)
@@ -120,14 +120,15 @@ private
            end
   end
 
-  def is_referrer_check_answers?
-    referrer = request.headers["HTTP_REFERER"].presence || ""
-    referrer.present? && CGI.parse(referrer.split("?")[-1]).present? && CGI.parse(referrer.split("?")[-1])["referrer"][0] == "check_answers"
-  end
+  def is_referrer_type?(referrer_type)
+    referrer = request.headers["HTTP_REFERER"]
+    return false unless referrer
 
-  def is_referrer_interruption_screen?
-    referrer = request.headers["HTTP_REFERER"].presence || ""
-    referrer.present? && CGI.parse(referrer.split("?")[-1]).present? && CGI.parse(referrer.split("?")[-1])["referrer"][0] == "interruption_screen"
+    query_params = URI.parse(referrer).query
+    return false unless query_params
+
+    parsed_params = CGI.parse(query_params)
+    parsed_params["referrer"].present? && parsed_params["referrer"][0] == referrer_type
   end
 
   def previous_interruption_screen_page_id
@@ -135,7 +136,7 @@ private
   end
 
   def successful_redirect_path
-    if is_referrer_check_answers?
+    if is_referrer_type?("check_answers")
       next_page_id = form.next_page_id(@page, @log, current_user)
       next_page = form.get_page(next_page_id)
       previous_page = form.previous_page_id(@page, @log, current_user)
