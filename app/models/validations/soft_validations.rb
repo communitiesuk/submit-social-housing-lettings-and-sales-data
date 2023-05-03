@@ -93,6 +93,10 @@ module Validations::SoftValidations
     voiddate.present? && startdate.present? && voiddate.between?(startdate.to_date - TEN_YEARS_IN_DAYS, startdate.to_date - TWO_YEARS_IN_DAYS)
   end
 
+  def net_income_higher_or_lower_text
+    net_income_in_soft_max_range? ? "higher" : "lower"
+  end
+
 private
 
   def details_known_or_lead_tenant?(tenant_number)

@@ -518,8 +518,8 @@ en:
 
   soft_validations:
     net_income:
-      title_text: "Net income is outside the expected range based on the lead tenant’s working situation"
-      hint_text: "<p>You told us the lead tenant’s working situation is: <strong>%{ecstat1}</strong>.</p><p>The household income you have entered is <strong>%{earnings}</strong>.</p>"
+      title_text: "You told us the lead tenant’s income is %{earnings} %{incfreq}."
+      hint_text: "This is %{net_income_higher_or_lower_text} than we would expect for their working situation."
       in_soft_min_range:
         message: "Net income is lower than expected based on the lead tenant’s working situation. Are you sure this is correct?"
       in_soft_max_range:
