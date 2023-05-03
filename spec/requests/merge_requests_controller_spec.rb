@@ -367,7 +367,7 @@ RSpec.describe MergeRequestsController, type: :request do
         context "when confirming the number" do
           let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, new_absorbing_organisation: true, new_telephone_number: "123") }
           let(:params) do
-            { merge_request: { telephone_number_correct: "1", page: "confirm_telephone_number" } }
+            { merge_request: { telephone_number_correct: true, page: "confirm_telephone_number" } }
           end
 
           let(:request) do
@@ -392,7 +392,7 @@ RSpec.describe MergeRequestsController, type: :request do
         context "when setting new number" do
           let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, new_absorbing_organisation: true) }
           let(:params) do
-            { merge_request: { telephone_number_correct: "0", new_telephone_number: "123", page: "confirm_telephone_number" } }
+            { merge_request: { telephone_number_correct: false, new_telephone_number: "123", page: "confirm_telephone_number" } }
           end
 
           let(:request) do
@@ -455,7 +455,7 @@ RSpec.describe MergeRequestsController, type: :request do
         context "when not answering the phone number" do
           let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: other_organisation) }
           let(:params) do
-            { merge_request: { page: "confirm_telephone_number", telephone_number_correct: "0" } }
+            { merge_request: { page: "confirm_telephone_number", telephone_number_correct: false } }
           end
           let(:request) do
             patch "/merge-request/#{merge_request.id}", headers:, params:

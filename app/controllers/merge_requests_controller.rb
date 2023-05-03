@@ -123,7 +123,7 @@ private
       end
     end
 
-    if merge_params[:telephone_number_correct] == "1"
+    if merge_params[:telephone_number_correct] == "true"
       merge_params[:new_telephone_number] = nil
     end
 
@@ -143,12 +143,9 @@ private
         else
           @merge_request.errors.add(:telephone_number_correct, :invalid)
         end
-      elsif merge_request_params[:telephone_number_correct] == "0" && merge_request_params[:new_telephone_number].blank?
-        @merge_request.errors.add(:new_telephone_number, :blank)
       end
     when "new_organisation_name"
       @merge_request.errors.add(:new_organisation_name, :blank) if merge_request_params[:new_organisation_name].blank?
-      @merge_request.errors.add(:new_organisation_name, :invalid) if Organisation.where("lower(name) = ?", merge_request_params[:new_organisation_name]&.downcase).exists?
     end
   end
 
