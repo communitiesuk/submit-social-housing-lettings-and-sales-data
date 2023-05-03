@@ -34,7 +34,7 @@ RSpec.describe Form::Sales::Pages::SharedOwnershipDepositValueCheck, type: :mode
   it "has the correct title_text" do
     expect(page.title_text).to eq({
       "translation" => "soft_validations.shared_ownership_deposit.title_text",
-      "arguments" => [{ "arguments_for_key" => "expected_shared_ownership_deposit_value", "i18n_template" => "expected_shared_ownership_deposit_value", "key" => "field_formatted_as_currency" }],
+      "arguments" => [{ "arguments_for_key" => "mortgage_deposit_and_discount_total", "i18n_template" => "mortgage_deposit_and_discount_total", "key" => "field_formatted_as_currency" }],
     })
   end
 
