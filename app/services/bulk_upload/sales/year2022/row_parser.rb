@@ -941,9 +941,9 @@ private
     return if saledate.blank? || bulk_upload.form.blank?
 
     unless bulk_upload.form.valid_start_date_for_form?(saledate)
-      errors.add(:field_2, I18n.t("validations.date.outside_collection_window"), category: :setup)
-      errors.add(:field_3, I18n.t("validations.date.outside_collection_window"), category: :setup)
-      errors.add(:field_4, I18n.t("validations.date.outside_collection_window"), category: :setup)
+      errors.add(:field_2, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
+      errors.add(:field_3, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
+      errors.add(:field_4, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
     end
   end
 
