@@ -1574,7 +1574,6 @@ RSpec.describe LettingsLog do
         expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :rsnvac).from(14).to nil
       end
 
-      # should have extra tests for whether it is derived when voiddate, mrcdate etc set and reset
       it "derives vacdays as 0 if log is renewal" do
         expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :vacdays).to 0
       end

@@ -37,7 +37,7 @@ module DerivedVariables::LettingsLogVariables
   end
 
   def set_derived_fields!
-    clear_inapplicable_derived_values
+    clear_inapplicable_derived_values!
     set_encoded_derived_values!(DEPENDENCIES)
 
     if rsnvac.present?
@@ -130,7 +130,7 @@ private
     },
   ].freeze
 
-  def clear_inapplicable_derived_values
+  def clear_inapplicable_derived_values!
     reset_invalidated_derived_values!(DEPENDENCIES)
     if (startdate_changed? || renewal_changed?) && (renewal_was == 1 && startdate_was&.between?(Time.zone.local(2021, 4, 1), Time.zone.local(2022, 3, 31)))
       self.underoccupation_benefitcap = nil
