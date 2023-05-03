@@ -1,5 +1,4 @@
 module Imports
-
   class SchemeLocationImportService < ImportService
     def create_scheme_locations(folder)
       import_from(folder, :create_scheme_location)
