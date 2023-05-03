@@ -132,27 +132,23 @@ private
 
   def validate_response
     case page
-
     when "absorbing_organisation"
       if merge_request_params[:absorbing_organisation_id].blank? && merge_request_params[:new_absorbing_organisation].blank?
-        @merge_request.errors.add(:absorbing_organisation_id, I18n.t("validations.merge_request.absorbing_organisation_blank"))
+        @merge_request.errors.add(:absorbing_organisation_id, :blank)
       end
     when "confirm_telephone_number"
       if merge_request_params[:telephone_number_correct].blank?
         if @merge_request.absorbing_organisation.phone.present?
-          @merge_request.errors.add(:telephone_number_correct, I18n.t("validations.merge_request.telephone_number_correct_blank"))
+          @merge_request.errors.add(:telephone_number_correct, :blank)
         else
-          @merge_request.errors.add(:telephone_number_correct, I18n.t("validations.merge_request.new_telephone_number_blank"))
+          @merge_request.errors.add(:telephone_number_correct, :invalid)
         end
       elsif merge_request_params[:telephone_number_correct] == "0" && merge_request_params[:new_telephone_number].blank?
-        @merge_request.errors.add(:new_telephone_number, I18n.t("validations.merge_request.new_telephone_number_blank"))
+        @merge_request.errors.add(:new_telephone_number, :blank)
       end
     when "new_organisation_name"
-      if merge_request_params[:new_organisation_name].blank?
-        @merge_request.errors.add(:new_organisation_name, I18n.t("validations.merge_request.new_organisation_name_blank"))
-      elsif Organisation.where("lower(name) = ?", merge_request_params[:new_organisation_name].downcase).exists?
-        @merge_request.errors.add(:new_organisation_name, I18n.t("validations.merge_request.new_organisation_name_exists"))
-      end
+      @merge_request.errors.add(:new_organisation_name, :blank) if merge_request_params[:new_organisation_name].blank?
+      @merge_request.errors.add(:new_organisation_name, :invalid) if Organisation.where("lower(name) = ?", merge_request_params[:new_organisation_name]&.downcase).exists?
     end
   end
 

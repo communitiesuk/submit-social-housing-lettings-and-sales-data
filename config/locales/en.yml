@@ -123,6 +123,20 @@ en:
             role:
               invalid: "Role must be data accessor, data provider or data coordinator"
               blank: "Select role"
+        merge_request:
+          attributes:
+            absorbing_organisation_id:
+              blank: "Select the organisation absorbing the others"
+            telephone_number_correct:
+              blank: "Select to confirm or enter a new telephone number"
+              invalid: "Enter a valid telephone number"
+            new_telephone_number:
+              blank: "Enter a valid telephone number"
+            new_organisation_name:
+              blank: "Enter an organisation name"
+              invalid: "An organisation with this name already exists"
+
+
 
   validations:
     organisation:
@@ -515,11 +529,6 @@ en:
     merge_request:
       organisation_part_of_another_merge: "This organisation is part of another merge - select a different one"
       organisation_not_selected: "Select an organisation from the search list"
-      absorbing_organisation_blank: Select the organisation absorbing the others
-      telephone_number_correct_blank: Select to confirm or enter a new telephone number
-      new_telephone_number_blank: Enter a valid telephone number
-      new_organisation_name_blank: "Enter an organisation name"
-      new_organisation_name_exists: "An organisation with this name already exists"
 
   soft_validations:
     net_income:
