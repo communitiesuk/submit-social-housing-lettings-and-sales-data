@@ -9,8 +9,7 @@
     <p class="govuk-body">Open your email inbox and click the link to download your CSV file.</p>
 
     <p class="govuk-body">
-      <% logs_path = controller.class.name.start_with?("Lettings") ? lettings_logs_path : sales_logs_path %>
-      <%= govuk_link_to "Return to logs", logs_path %>
+      <%= govuk_link_to "Return to logs", logs_path_for_controller(controller) %>
     </p>
   </div>
 </div>

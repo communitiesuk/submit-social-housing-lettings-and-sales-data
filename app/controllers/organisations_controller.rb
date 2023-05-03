@@ -114,8 +114,7 @@ class OrganisationsController < ApplicationController
   end
 
   def email_lettings_csv
-    codes_only_export = params.require(:codes_only) == "true"
-    EmailCsvJob.perform_later(current_user, search_term, @session_filters, false, @organisation, codes_only_export)
+    EmailCsvJob.perform_later(current_user, search_term, @session_filters, false, @organisation, codes_only_export?)
     redirect_to lettings_logs_csv_confirmation_organisation_path
   end
 
@@ -148,8 +147,7 @@ class OrganisationsController < ApplicationController
   end
 
   def email_sales_csv
-    codes_only_export = params.require(:codes_only) == "true"
-    EmailCsvJob.perform_later(current_user, search_term, @session_filters, false, @organisation, codes_only_export, "sales")
+    EmailCsvJob.perform_later(current_user, search_term, @session_filters, false, @organisation, codes_only_export?, "sales")
     redirect_to sales_logs_csv_confirmation_organisation_path
   end
 
@@ -161,6 +159,10 @@ private
 
   def org_params
     params.require(:organisation).permit(:name, :address_line1, :address_line2, :postcode, :phone, :holds_own_stock, :provider_type, :housing_registration_no)
+  end
+
+  def codes_only_export?
+    params.require(:codes_only) == "true"
   end
 
   def search_term
