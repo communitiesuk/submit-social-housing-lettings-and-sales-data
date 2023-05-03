@@ -156,6 +156,8 @@ class BulkUpload::Sales::Year2023::RowParser
   attribute :bulk_upload
   attribute :block_log_creation, :boolean, default: -> { false }
 
+  attribute :field_blank
+
   attribute :field_1, :string
   attribute :field_2, :string
   attribute :field_3, :integer
