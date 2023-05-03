@@ -63,7 +63,7 @@ gem "possessive"
 # Strip whitespace from active record attributes
 gem "auto_strip_attributes"
 # Use sidekiq for background processing
-gem "sidekiq" ">= 7.0.8"
+gem "sidekiq", ">= 7.0.8"
 gem "sidekiq-cron"
 
 group :development, :test do
