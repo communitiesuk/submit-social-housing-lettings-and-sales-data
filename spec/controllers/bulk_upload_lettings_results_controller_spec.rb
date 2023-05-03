@@ -5,6 +5,19 @@ RSpec.describe BulkUploadLettingsResultsController do
     sign_in user
   end
 
+  describe "#show" do
+    let(:user) { create(:user) }
+    let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }
+
+    it "passes thru pundit" do
+      allow(controller).to receive(:authorize)
+
+      get :show, params: { id: bulk_upload.id }
+
+      expect(controller).to have_received(:authorize)
+    end
+  end
+
   describe "GET #resume /lettings-logs/bulk-upload-results/:ID/resume" do
     let(:user) { create(:user) }
     let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }
