@@ -48,6 +48,7 @@ class FormController < ApplicationController
   def show_page
     if request.params["referrer"] == "interruption_screen"
       @interruption_page_id = URI.parse(request.headers["HTTP_REFERER"]).path.split("/").last.underscore
+      @interruption_page_referrer_type = referrer_from_query
     end
 
     if @log
@@ -121,18 +122,28 @@ private
   end
 
   def is_referrer_type?(referrer_type)
+    referrer_from_query == referrer_type
+  end
+
+  def referrer_from_query
     referrer = request.headers["HTTP_REFERER"]
-    return false unless referrer
+    return nil unless referrer
 
     query_params = URI.parse(referrer).query
-    return false unless query_params
+    return nil unless query_params
 
     parsed_params = CGI.parse(query_params)
-    parsed_params["referrer"].present? && parsed_params["referrer"][0] == referrer_type
+    return nil unless parsed_params["referrer"]
+
+    parsed_params["referrer"][0]
   end
 
   def previous_interruption_screen_page_id
     params[@log.model_name.param_key]["interruption_page_id"]
+  end
+
+  def previous_interruption_screen_referrer
+    params[@log.model_name.param_key]["interruption_page_referrer_type"]
   end
 
   def successful_redirect_path
@@ -148,7 +159,11 @@ private
       end
     end
     if previous_interruption_screen_page_id.present?
-      return send("#{@log.class.name.underscore}_#{previous_interruption_screen_page_id}_path", @log)
+      if previous_interruption_screen_referrer.present?
+        return send("#{@log.class.name.underscore}_#{previous_interruption_screen_page_id}_path", @log, referrer: previous_interruption_screen_referrer)
+      else
+        return send("#{@log.class.name.underscore}_#{previous_interruption_screen_page_id}_path", @log)
+      end
     end
 
     redirect_path = form.next_page_redirect_path(@page, @log, current_user)
