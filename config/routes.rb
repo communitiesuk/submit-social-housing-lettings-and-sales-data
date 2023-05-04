@@ -140,6 +140,7 @@ Rails.application.routes.draw do
       get "confirm-telephone-number"
       get "new-organisation-name"
       get "new-organisation-address"
+      get "new-organisation-telephone-number"
       get "merge-date"
     end
   end
