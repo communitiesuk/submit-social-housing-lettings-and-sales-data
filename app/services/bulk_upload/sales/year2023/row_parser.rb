@@ -972,7 +972,7 @@ private
   def soctenant
     return unless field_62 && field_7
 
-    if (field_62 == 1 || fields_62 == 2) && field_7 == 1
+    if (field_62 == 1 || field_62 == 2) && field_7 == 1
       1
     elsif field_7 == 1
       2
