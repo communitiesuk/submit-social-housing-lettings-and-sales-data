@@ -93,6 +93,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       field_96: "3",
       field_97: "22",
       field_98: "3",
+      field_99: "1",
       field_100: "1",
       field_101: "1",
       field_102: "1",
@@ -238,7 +239,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       it "has errors on correct setup fields" do
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_1 field_3 field_4 field_5])
+        expect(errors).to eql(%i[field_1 field_15 field_3 field_4 field_5])
       end
     end
 
@@ -288,7 +289,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       it "has errors on correct setup fields" do
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_1 field_10 field_12 field_3 field_4 field_5])
+        expect(errors).to eql(%i[field_1 field_10 field_12 field_13 field_3 field_4 field_5])
       end
     end
 
@@ -306,7 +307,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       it "has errors on correct setup fields" do
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_1 field_13 field_3 field_4 field_5])
+        expect(errors).to eql(%i[field_1 field_13 field_14 field_3 field_4 field_5])
       end
     end
 

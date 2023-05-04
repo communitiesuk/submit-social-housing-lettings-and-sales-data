@@ -329,16 +329,71 @@ class BulkUpload::Sales::Year2023::RowParser
               with: /\A\d{2}\z/,
               message: I18n.t("validations.setup.saledate.year_not_two_digits"),
               category: :setup,
+              if: proc { field_5.present? },
             }, on: :after_log
 
-  validates :field_7, presence: { message: I18n.t("validations.not_answered", question: "ownership type") }, on: :after_log
-  validates :field_8, presence: { message: I18n.t("validations.not_answered", question: "shared ownership type") }, if: :shared_ownership?, on: :after_log
-  validates :field_9, presence: { message: I18n.t("validations.not_answered", question: "shared ownership type") }, if: :discounted_ownership?, on: :after_log
-  validates :field_10, presence: { message: I18n.t("validations.not_answered", question: "shared ownership type") }, if: :outright_sale?, on: :after_log
-  validates :field_13, presence: { message: I18n.t("validations.not_answered", question: "will the buyers live in the property") }, if: :outright_sale?, on: :after_log
-  validates :field_14, presence: { message: I18n.t("validations.not_answered", question: "joint purchase") }, if: :joint_purchase_asked?, on: :after_log
-  validates :field_12, presence: { message: I18n.t("validations.not_answered", question: "company buyer") }, if: :outright_sale?, on: :after_log
-  validates :field_15, presence: { message: I18n.t("validations.not_answered", question: "more than 2 buyers") }, if: :joint_purchase?, on: :after_log
+  validates :field_7,
+            presence: {
+              message: I18n.t("validations.not_answered", question: "ownership type"),
+              category: :setup,
+            },
+            on: :after_log
+
+  validates :field_8,
+            presence: {
+              message: I18n.t("validations.not_answered", question: "shared ownership type"),
+              category: :setup,
+              if: :shared_ownership?,
+            },
+            on: :after_log
+
+  validates :field_9,
+            presence: {
+              message: I18n.t("validations.not_answered", question: "shared ownership type"),
+              category: :setup,
+              if: :discounted_ownership?,
+            },
+            on: :after_log
+
+  validates :field_10,
+            presence: {
+              message: I18n.t("validations.not_answered", question: "shared ownership type"),
+              category: :setup,
+              if: :outright_sale?,
+            },
+            on: :after_log
+
+  validates :field_13,
+            presence: {
+              message: I18n.t("validations.not_answered", question: "will the buyers live in the property"),
+              category: :setup,
+              if: :outright_sale?,
+            },
+            on: :after_log
+
+  validates :field_12,
+            presence: {
+              message: I18n.t("validations.not_answered", question: "company buyer"),
+              category: :setup,
+              if: :outright_sale?,
+            },
+            on: :after_log
+
+  validates :field_14,
+            presence: {
+              message: I18n.t("validations.not_answered", question: "joint purchase"),
+              category: :setup,
+              if: :joint_purchase_asked?,
+            },
+            on: :after_log
+
+  validates :field_15,
+            presence: {
+              message: I18n.t("validations.not_answered", question: "more than 2 buyers"),
+              category: :setup,
+              if: :joint_purchase?,
+            },
+            on: :after_log
 
   validate :validate_nulls, on: :after_log
   validate :validate_valid_radio_option, on: :before_log
@@ -609,7 +664,7 @@ private
       stairowned: %i[field_89],
       socprevten: %i[field_102],
       mortgageused: %i[field_105 field_119 field_128],
-      soctenant: %i[field_62 field_7],
+      soctenant: %i[field_99],
     }
   end
 
@@ -759,7 +814,6 @@ private
     attributes["stairowned"] = field_89
     attributes["socprevten"] = field_102
     attributes["mortgageused"] = mortgageused
-    attributes["soctenant"] = soctenant
 
     attributes["uprn"] = field_19
     attributes["address_line1"] = field_20
@@ -973,16 +1027,6 @@ private
     field_66.present? ? 1 : 0
   end
 
-  def soctenant
-    return unless field_62 && field_7
-
-    if (field_62 == 1 || field_62 == 2) && field_7 == 1
-      1
-    elsif field_7 == 1
-      2
-    end
-  end
-
   def block_log_creation!
     self.block_log_creation = true
   end
@@ -1063,7 +1107,7 @@ private
 
       if setup_question?(question)
         fields.each do |field|
-          if errors[field].present?
+          unless errors.any? { |e| fields.include?(e.attribute) }
             errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase), category: :setup)
           end
         end
@@ -1104,6 +1148,7 @@ private
 
   def validate_relevant_collection_window
     return if saledate.blank? || bulk_upload.form.blank?
+    return if errors.key?(:field_3) || errors.key?(:field_4) || errors.key?(:field_5)
 
     unless bulk_upload.form.valid_start_date_for_form?(saledate)
       errors.add(:field_3, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
