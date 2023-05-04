@@ -8,6 +8,7 @@ class MergeRequestsController < ApplicationController
     confirm_telephone_number
     new_organisation_name
     new_organisation_address
+    new_organisation_telephone_number
     merge_date
   ]
   before_action :authenticate_user!
@@ -17,6 +18,7 @@ class MergeRequestsController < ApplicationController
   def confirm_telephone_number; end
   def new_organisation_name; end
   def new_organisation_address; end
+  def new_organisation_telephone_number; end
   def merge_date; end
 
   def create
