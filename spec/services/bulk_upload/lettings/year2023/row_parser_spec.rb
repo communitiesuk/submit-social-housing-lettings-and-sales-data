@@ -31,6 +31,18 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
   before do
     create(:organisation_relationship, parent_organisation: owning_org, child_organisation: managing_org)
+
+    LaRentRange.create!(
+      ranges_rent_id: "1",
+      la: "E09000008",
+      beds: 1,
+      lettype: 3,
+      soft_min: 12.41,
+      soft_max: 118.85,
+      hard_min: 9.87,
+      hard_max: 200.99,
+      start_year: 2023,
+    )
   end
 
   around do |example|
@@ -981,6 +993,43 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "returns an error" do
           expect(parser.errors[:field_52]).to be_present
+        end
+      end
+    end
+
+    describe "soft validations" do
+      context "when soft validation is triggered" do
+        let(:attributes) { setup_section_params.merge({ field_46: 22, field_50: 5 }) }
+
+        it "adds an error to the relevant fields" do
+          soft_validation_errors = parser.errors.select { |e| e.options[:category] == :soft_validation }
+
+          expect(soft_validation_errors.find { |e| e.attribute == :field_46 }).to be_present
+          expect(soft_validation_errors.find { |e| e.attribute == :field_50 }).to be_present
+        end
+
+        it "populates with correct error message" do
+          soft_validation_errors = parser.errors.select { |e| e.options[:category] == :soft_validation }
+
+          expect(soft_validation_errors.find { |e| e.attribute == :field_46 }.message).to eql("You told us this person is aged 22 years and retired.")
+          expect(soft_validation_errors.find { |e| e.attribute == :field_50 }.message).to eql("You told us this person is aged 22 years and retired.")
+        end
+      end
+
+      context "when soft validation is triggered and not required" do
+        let(:attributes) { setup_section_params.merge({ field_128: 120, field_126: 1, field_32: 1, field_4: 1, field_5: "3", field_25: "E09000008" }) }
+
+        it "adds an error to the relevant fields" do
+          soft_validation_errors = parser.errors.select { |e| e.options[:category] == :soft_validation }
+
+          expect(soft_validation_errors.find { |e| e.attribute == :field_128 }).to be_present
+        end
+
+        it "populates with correct error message" do
+          soft_validation_errors = parser.errors.select { |e| e.options[:category] == :soft_validation }
+
+          expect(soft_validation_errors.count { |e| e.attribute == :field_128 }).to be(1)
+          expect(soft_validation_errors.find { |e| e.attribute == :field_128 }.message).to eql("You told us the rent is £120.00 every week. The maximum rent expected for this type of property in this local authority is ££118.85 every week.")
         end
       end
     end

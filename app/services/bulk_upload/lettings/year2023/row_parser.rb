@@ -1,6 +1,7 @@
 class BulkUpload::Lettings::Year2023::RowParser
   include ActiveModel::Model
   include ActiveModel::Attributes
+  include InterruptionScreenHelper
 
   QUESTIONS = {
     field_1: "Which organisation owns this property?",
@@ -339,6 +340,8 @@ class BulkUpload::Lettings::Year2023::RowParser
 
   validate :validate_uprn_exists_if_any_key_adddress_fields_are_blank, on: :after_log
 
+  validate :validate_incomplete_soft_validations, on: :after_log
+
   def self.question_for_field(field)
     QUESTIONS[field]
   end
@@ -454,6 +457,23 @@ private
   def validate_uprn_exists_if_any_key_adddress_fields_are_blank
     if field_18.blank? && (field_19.blank? || field_21.blank?)
       errors.add(:field_18, I18n.t("validations.not_answered", question: "UPRN"))
+    end
+  end
+
+  def validate_incomplete_soft_validations
+    routed_to_soft_validation_questions = log.form.questions.filter { |q| q.type == "interruption_screen" && q.page.routed_to?(log, nil) }
+    routed_to_soft_validation_questions.each do |question|
+      next unless question
+      next if question.completed?(log)
+
+      question.page.interruption_screen_question_ids.each do |interruption_screen_question_id|
+        field_mapping_for_errors[interruption_screen_question_id.to_sym].each do |field|
+          unless errors.any? { |e| field_mapping_for_errors[interruption_screen_question_id.to_sym].include?(e.attribute) }
+            error_message = [display_title_text(question.page.title_text, log), display_informative_text(question.page.informative_text, log)].reject(&:empty?).join(". ")
+            errors.add(field, message: error_message, category: :soft_validation)
+          end
+        end
+      end
     end
   end
 
