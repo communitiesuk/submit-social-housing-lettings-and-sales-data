@@ -105,6 +105,8 @@ class Log < ApplicationRecord
     end
 
     blank_compound_invalid_non_setup_fields!
+
+    errors.clear
   end
 
   (1..8).each do |person_num|
