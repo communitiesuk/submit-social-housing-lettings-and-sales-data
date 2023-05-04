@@ -127,13 +127,13 @@ private
 
   def referrer_from_query
     referrer = request.headers["HTTP_REFERER"]
-    return nil unless referrer
+    return unless referrer
 
     query_params = URI.parse(referrer).query
-    return nil unless query_params
+    return unless query_params
 
     parsed_params = CGI.parse(query_params)
-    return nil unless parsed_params["referrer"]
+    return unless parsed_params["referrer"]
 
     parsed_params["referrer"][0]
   end
@@ -143,7 +143,7 @@ private
   end
 
   def previous_interruption_screen_referrer
-    params[@log.model_name.param_key]["interruption_page_referrer_type"]
+    params[@log.model_name.param_key]["interruption_page_referrer_type"].presence
   end
 
   def successful_redirect_path
@@ -159,11 +159,7 @@ private
       end
     end
     if previous_interruption_screen_page_id.present?
-      if previous_interruption_screen_referrer.present?
-        return send("#{@log.class.name.underscore}_#{previous_interruption_screen_page_id}_path", @log, referrer: previous_interruption_screen_referrer)
-      else
-        return send("#{@log.class.name.underscore}_#{previous_interruption_screen_page_id}_path", @log)
-      end
+      return send("#{@log.class.name.underscore}_#{previous_interruption_screen_page_id}_path", @log, { referrer: previous_interruption_screen_referrer }.compact)
     end
 
     redirect_path = form.next_page_redirect_path(@page, @log, current_user)
