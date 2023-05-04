@@ -98,15 +98,19 @@ class Log < ApplicationRecord
   def blank_invalid_non_setup_fields!
     setup_ids = form.setup_sections.flat_map(&:subsections).flat_map(&:questions).map(&:id)
 
-    errors.each do |error|
-      next if setup_ids.include?(error.attribute.to_s)
+    2.times do
+      next if valid?
 
-      public_send("#{error.attribute}=", nil)
+      errors.each do |error|
+        next if setup_ids.include?(error.attribute.to_s)
+
+        public_send("#{error.attribute}=", nil)
+      end
+
+      blank_compound_invalid_non_setup_fields!
+
+      errors.clear
     end
-
-    blank_compound_invalid_non_setup_fields!
-
-    errors.clear
   end
 
   (1..8).each do |person_num|
