@@ -406,18 +406,18 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       context "when one of these fields is blank" do
         let(:attributes) { setup_section_params.merge({ field_3: "1", field_4: "1", field_5: nil }) }
 
-        it "returns an error only on blank field" do
+        it "returns an error only on blank field as setup error" do
           expect(parser.errors[:field_3]).to be_blank
           expect(parser.errors[:field_4]).to be_blank
-          expect(parser.errors[:field_5]).to be_present
+          expect(parser.errors.where(:field_5, category: :setup)).to be_present
         end
       end
 
       context "when field 5 is 4 digits instead of 2" do
         let(:attributes) { setup_section_params.merge({ bulk_upload:, field_5: "2022" }) }
 
-        it "returns an error" do
-          expect(parser.errors[:field_5]).to include("Sale completion year must be 2 digits")
+        it "returns a setup error" do
+          expect(parser.errors.where(:field_5, category: :setup).map(&:message)).to include("Sale completion year must be 2 digits")
         end
       end
 
@@ -458,10 +458,10 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
 
         let(:bulk_upload) { create(:bulk_upload, :sales, user:, year: 2022) }
 
-        it "returns errors" do
-          expect(parser.errors[:field_3]).to be_present
-          expect(parser.errors[:field_4]).to be_present
-          expect(parser.errors[:field_5]).to be_present
+        it "returns setup errors" do
+          expect(parser.errors.where(:field_3, category: :setup)).to be_present
+          expect(parser.errors.where(:field_4, category: :setup)).to be_present
+          expect(parser.errors.where(:field_5, category: :setup)).to be_present
         end
       end
     end

@@ -310,21 +310,25 @@ class BulkUpload::Sales::Year2023::RowParser
   validates :field_3,
             presence: {
               message: I18n.t("validations.not_answered", question: "sale completion date (day)"),
+              category: :setup,
             },
             on: :after_log
 
   validates :field_4,
             presence: {
               message: I18n.t("validations.not_answered", question: "sale completion date (month)"),
+              category: :setup,
             }, on: :after_log
 
   validates :field_5,
             presence: {
               message: I18n.t("validations.not_answered", question: "sale completion date (year)"),
+              category: :setup,
             },
             format: {
               with: /\A\d{2}\z/,
               message: I18n.t("validations.setup.saledate.year_not_two_digits"),
+              category: :setup,
             }, on: :after_log
 
   validates :field_7, presence: { message: I18n.t("validations.not_answered", question: "ownership type") }, on: :after_log
@@ -1102,9 +1106,9 @@ private
     return if saledate.blank? || bulk_upload.form.blank?
 
     unless bulk_upload.form.valid_start_date_for_form?(saledate)
-      errors.add(:field_3, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year))
-      errors.add(:field_4, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year))
-      errors.add(:field_5, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year))
+      errors.add(:field_3, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
+      errors.add(:field_4, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
+      errors.add(:field_5, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
     end
   end
 end
