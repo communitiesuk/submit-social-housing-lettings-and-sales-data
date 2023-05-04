@@ -43,6 +43,10 @@ RSpec.describe Form::Sales::Pages::BuyerLiveInValueCheck, type: :model do
     })
   end
 
+  it "has the correct interruption_screen_question_ids" do
+    expect(page.interruption_screen_question_ids).to eq(%w[ownershipsch buy1livein])
+  end
+
   context "with buyer 2" do
     let(:person_index) { 2 }
 
@@ -59,6 +63,10 @@ RSpec.describe Form::Sales::Pages::BuyerLiveInValueCheck, type: :model do
         "translation" => "soft_validations.buyer2_livein_wrong_for_ownership_type.title_text",
         "arguments" => [{ "key" => "ownership_scheme", "label" => false, "i18n_template" => "ownership_scheme" }],
       })
+    end
+
+    it "has the correct interruption_screen_question_ids" do
+      expect(page.interruption_screen_question_ids).to eq(%w[ownershipsch buy2livein])
     end
   end
 end

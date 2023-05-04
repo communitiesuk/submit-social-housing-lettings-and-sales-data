@@ -1,11 +1,11 @@
 class Form::Lettings::Questions::NoRetirementValueCheck < ::Form::Question
-  def initialize(id, hsh, page)
-    super
+  def initialize(id, hsh, page, person_index:)
+    super(id, hsh, page)
     @id = "retirement_value_check"
     @check_answer_label = "Retirement confirmation"
     @header = "Are you sure this person is retired?"
     @type = "interruption_screen"
-    @check_answers_card_number = 8
+    @check_answers_card_number = person_index
     @answer_options = ANSWER_OPTIONS
     @hidden_in_check_answers = {
       "depends_on" => [

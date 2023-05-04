@@ -34,14 +34,9 @@ RSpec.describe InterruptionScreenHelper do
           "translation" => "soft_validations.net_income.hint_text",
           "arguments" => [
             {
-              "key" => "ecstat1",
-              "label" => true,
-              "i18n_template" => "ecstat1",
-            },
-            {
-              "key" => "earnings",
-              "label" => true,
-              "i18n_template" => "earnings",
+              "key" => "net_income_higher_or_lower_text",
+              "label" => false,
+              "i18n_template" => "net_income_higher_or_lower_text",
             },
           ],
         }
@@ -49,8 +44,7 @@ RSpec.describe InterruptionScreenHelper do
           .to eq(
             I18n.t(
               "soft_validations.net_income.hint_text",
-              ecstat1: lettings_log.form.get_question("ecstat1", lettings_log).answer_label(lettings_log).downcase,
-              earnings: lettings_log.form.get_question("earnings", lettings_log).answer_label(lettings_log),
+              net_income_higher_or_lower_text: "higher",
             ),
           )
       end
@@ -239,6 +233,15 @@ RSpec.describe InterruptionScreenHelper do
       it "returns an empty string" do
         expect(display_title_text("", lettings_log)).to eq("")
       end
+    end
+  end
+
+  describe "soft_validation_affected_questions" do
+    let(:question) { lettings_log.form.get_question("retirement_value_check", lettings_log) }
+
+    it "returns a list of questions affected by the soft validation" do
+      expect(soft_validation_affected_questions(question, lettings_log).count).to eq(2)
+      expect(soft_validation_affected_questions(question, lettings_log).map(&:id)).to eq(%w[age1 ecstat1])
     end
   end
 end
