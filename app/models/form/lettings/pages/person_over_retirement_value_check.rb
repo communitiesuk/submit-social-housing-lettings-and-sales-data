@@ -32,7 +32,7 @@ class Form::Lettings::Pages::PersonOverRetirementValueCheck < ::Form::Page
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::RetirementValueCheck.new(nil, nil, self)]
+    @questions ||= [Form::Lettings::Questions::RetirementValueCheck.new(nil, nil, self, person_index: @person_index)]
   end
 
   def interruption_screen_question_ids

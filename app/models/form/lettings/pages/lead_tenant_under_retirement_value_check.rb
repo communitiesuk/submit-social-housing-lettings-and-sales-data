@@ -17,7 +17,7 @@ class Form::Lettings::Pages::LeadTenantUnderRetirementValueCheck < ::Form::Page
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::NoRetirementValueCheck.new(nil, nil, self)]
+    @questions ||= [Form::Lettings::Questions::NoRetirementValueCheck.new(nil, nil, self, person_index: 1)]
   end
 
   def interruption_screen_question_ids
