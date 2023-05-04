@@ -1,0 +1,36 @@
+<% content_for :before_content do %>
+  <% title = "Tell us if your organisation is merging" %>
+  <% content_for :title, title %>
+  <%= govuk_back_link href: organisations_merge_request_path(id: @merge_request) %>
+<% end %>
+
+<%= form_with model: @merge_request, url: merge_request_path, method: :patch do |f| %>
+  <%= f.govuk_error_summary %>
+
+  <h2 class="govuk-heading-l">Which organisation is absorbing the others?</h2>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <p class="govuk-body">Select the organisation that the other organisations are merging into.</p>
+
+      <%= f.govuk_radio_buttons_fieldset(
+        :absorbing_organisation_id,
+        hint: { text: "For example, if Skype and Yammer merged into Microsoft, you would select Microsoft." },
+        legend: nil,
+      ) do %>
+        <% @merge_request.merging_organisations.order(:name).each do |org| %>
+          <%= f.govuk_radio_button(
+            :absorbing_organisation_id,
+            org.id,
+            label: { text: org.name },
+          ) %>
+        <% end %>
+        <%= f.govuk_radio_divider %>
+        <%= f.govuk_radio_button :absorbing_organisation_id, "other", checked: @merge_request.new_absorbing_organisation?, label: { text: "These organisations are merging into a new one" } %>
+      <% end %>
+
+      <%= f.hidden_field :page, value: "absorbing_organisation" %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

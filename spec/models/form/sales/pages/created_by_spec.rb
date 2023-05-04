@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Common::Pages::CreatedBy, type: :model do
+RSpec.describe Form::Sales::Pages::CreatedBy, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
   let(:page_id) { nil }
@@ -34,15 +34,23 @@ RSpec.describe Form::Common::Pages::CreatedBy, type: :model do
   end
 
   context "when the current user is a support user" do
-    let(:support_user) { FactoryBot.build(:user, :support) }
+    let(:support_user) { build(:user, :support) }
 
     it "is shown" do
       expect(page.routed_to?(lettings_log, support_user)).to be true
     end
   end
 
-  context "when the current user is not a support user" do
-    let(:user) { FactoryBot.build(:user) }
+  context "when the current user is a data coordinator" do
+    let(:support_user) { build(:user, :data_coordinator) }
+
+    it "is shown" do
+      expect(page.routed_to?(lettings_log, support_user)).to be true
+    end
+  end
+
+  context "when the current user is a data provider" do
+    let(:user) { build(:user) }
 
     it "is not shown" do
       expect(page.routed_to?(lettings_log, user)).to be false

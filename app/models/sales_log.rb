@@ -26,7 +26,6 @@ class SalesLog < Log
 
   validates_with SalesLogValidator
   before_validation :recalculate_start_year!, if: :saledate_changed?
-  before_validation :reset_invalidated_dependent_fields!
   before_validation :process_postcode_changes!, if: :postcode_full_changed?
   before_validation :process_previous_postcode_changes!, if: :ppostcode_full_changed?
   before_validation :reset_location_fields!, unless: :postcode_known?
@@ -161,8 +160,24 @@ class SalesLog < Log
     inc1mort == 1
   end
 
+  def buyers_will_live_in?
+    buylivein == 1
+  end
+
+  def buyers_will_not_live_in?
+    buylivein == 2
+  end
+
   def buyer_two_will_live_in_property?
     buy2livein == 1
+  end
+
+  def buyer_two_will_not_live_in_property?
+    buy2livein == 2
+  end
+
+  def buyer_one_will_not_live_in_property?
+    buy1livein == 2
   end
 
   def buyer_two_not_already_living_in_property?
@@ -352,12 +367,9 @@ class SalesLog < Log
 
   def ownership_scheme
     case ownershipsch
-    when 1
-      "shared ownership"
-    when 2
-      "discounted ownership"
-    when 3
-      "outright sale"
+    when 1 then "shared ownership"
+    when 2 then "discounted ownership"
+    when 3 then "outright sale"
     end
   end
 end

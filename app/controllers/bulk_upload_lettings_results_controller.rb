@@ -4,7 +4,9 @@ class BulkUploadLettingsResultsController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
 
   def show
-    @bulk_upload = current_user.bulk_uploads.lettings.find(params[:id])
+    @bulk_upload = BulkUpload.lettings.find(params[:id])
+
+    authorize @bulk_upload
   end
 
   def resume
@@ -20,7 +22,9 @@ class BulkUploadLettingsResultsController < ApplicationController
   end
 
   def summary
-    @bulk_upload = current_user.bulk_uploads.lettings.find(params[:id])
+    @bulk_upload = BulkUpload.lettings.find(params[:id])
+
+    authorize @bulk_upload
   end
 
 private

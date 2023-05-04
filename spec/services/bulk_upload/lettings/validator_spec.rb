@@ -50,7 +50,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
       context "when file has headers" do
         context "and file has extra invalid headers" do
           let(:seed) { rand }
-          let(:log_to_csv) { BulkUpload::LogToCsv.new(log:) }
+          let(:log_to_csv) { BulkUpload::LettingsLogToCsv.new(log:) }
           let(:field_numbers) { log_to_csv.default_2022_field_numbers + %w[invalid_field_number] }
           let(:field_values) { log_to_csv.to_2022_row + %w[value_for_invalid_field_number] }
 
@@ -67,7 +67,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
 
         context "and file has too few valid headers" do
           let(:seed) { rand }
-          let(:log_to_csv) { BulkUpload::LogToCsv.new(log:) }
+          let(:log_to_csv) { BulkUpload::LettingsLogToCsv.new(log:) }
           let(:field_numbers) { log_to_csv.default_2022_field_numbers }
           let(:field_values) { log_to_csv.to_2022_row }
 
@@ -87,7 +87,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
 
         context "and file has too many valid headers" do
           let(:seed) { rand }
-          let(:log_to_csv) { BulkUpload::LogToCsv.new(log:) }
+          let(:log_to_csv) { BulkUpload::LettingsLogToCsv.new(log:) }
           let(:field_numbers) { log_to_csv.default_2022_field_numbers + %w[23] }
           let(:field_values) { log_to_csv.to_2022_row + %w[value] }
 
@@ -138,7 +138,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
       context "when file has headers" do
         context "and file has extra invalid headers" do
           let(:seed) { rand }
-          let(:log_to_csv) { BulkUpload::LogToCsv.new(log:) }
+          let(:log_to_csv) { BulkUpload::LettingsLogToCsv.new(log:) }
           let(:field_numbers) { log_to_csv.default_2023_field_numbers + %w[invalid_field_number] }
           let(:field_values) { log_to_csv.to_2023_row + %w[value_for_invalid_field_number] }
 
@@ -155,7 +155,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
 
         context "and file has too few valid headers" do
           let(:seed) { rand }
-          let(:log_to_csv) { BulkUpload::LogToCsv.new(log:) }
+          let(:log_to_csv) { BulkUpload::LettingsLogToCsv.new(log:) }
           let(:field_numbers) { log_to_csv.default_2023_field_numbers }
           let(:field_values) { log_to_csv.to_2023_row }
 
@@ -175,7 +175,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
 
         context "and file has too many valid headers" do
           let(:seed) { rand }
-          let(:log_to_csv) { BulkUpload::LogToCsv.new(log:) }
+          let(:log_to_csv) { BulkUpload::LettingsLogToCsv.new(log:) }
           let(:field_numbers) { log_to_csv.default_2023_field_numbers + %w[23] }
           let(:field_values) { log_to_csv.to_2023_row + %w[value] }
 
@@ -233,8 +233,8 @@ RSpec.describe BulkUpload::Lettings::Validator do
       end
 
       before do
-        file.write(BulkUpload::LogToCsv.new(log:, line_ending: "\r\n").default_2023_field_numbers_row(seed:))
-        file.write(BulkUpload::LogToCsv.new(log:, line_ending: "\r\n").to_2023_csv_row(seed:))
+        file.write(BulkUpload::LettingsLogToCsv.new(log:, line_ending: "\r\n").default_2023_field_numbers_row(seed:))
+        file.write(BulkUpload::LettingsLogToCsv.new(log:, line_ending: "\r\n").to_2023_csv_row(seed:))
         file.close
       end
 
@@ -280,7 +280,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
       let(:path) { file.path }
 
       before do
-        file.write(BulkUpload::LogToCsv.new(log:, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log:, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
         file.close
       end
 
@@ -322,8 +322,8 @@ RSpec.describe BulkUpload::Lettings::Validator do
       let(:log_2) { build(:lettings_log, :completed, created_by: user) }
 
       before do
-        file.write(BulkUpload::LogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
-        file.write(BulkUpload::LogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0, overrides: { illness: 100 }).to_2022_csv_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0, overrides: { illness: 100 }).to_2022_csv_row)
         file.close
       end
 
@@ -338,8 +338,8 @@ RSpec.describe BulkUpload::Lettings::Validator do
       let(:log_2) { build(:lettings_log, :completed, renttype: 1, created_by: user) }
 
       before do
-        file.write(BulkUpload::LogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
-        file.write(BulkUpload::LogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
         file.close
       end
 
@@ -355,7 +355,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
       let(:log_1) { build(:lettings_log, :completed, renttype: 1, created_by: user, owning_organisation: unaffiliated_org) }
 
       before do
-        file.write(BulkUpload::LogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
         file.close
       end
 
@@ -369,7 +369,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
       let(:log) { build(:lettings_log, :in_progress, created_by: user, startdate: Time.zone.local(2022, 5, 1)) }
 
       before do
-        file.write(BulkUpload::LogToCsv.new(log:, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log:, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
         file.close
       end
 
