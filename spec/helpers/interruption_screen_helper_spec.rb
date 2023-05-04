@@ -34,14 +34,9 @@ RSpec.describe InterruptionScreenHelper do
           "translation" => "soft_validations.net_income.hint_text",
           "arguments" => [
             {
-              "key" => "ecstat1",
-              "label" => true,
-              "i18n_template" => "ecstat1",
-            },
-            {
-              "key" => "earnings",
-              "label" => true,
-              "i18n_template" => "earnings",
+              "key" => "net_income_higher_or_lower_text",
+              "label" => false,
+              "i18n_template" => "net_income_higher_or_lower_text",
             },
           ],
         }
@@ -49,8 +44,7 @@ RSpec.describe InterruptionScreenHelper do
           .to eq(
             I18n.t(
               "soft_validations.net_income.hint_text",
-              ecstat1: lettings_log.form.get_question("ecstat1", lettings_log).answer_label(lettings_log).downcase,
-              earnings: lettings_log.form.get_question("earnings", lettings_log).answer_label(lettings_log),
+              net_income_higher_or_lower_text: "higher",
             ),
           )
       end
