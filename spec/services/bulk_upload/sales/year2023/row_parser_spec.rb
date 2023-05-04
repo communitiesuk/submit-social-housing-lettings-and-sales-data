@@ -493,10 +493,10 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
     end
 
     [
-      # { field: :field_20, name: "address line 1" },
-      # { field: :field_22, name: "town or city" },
+      { field: :field_20, name: "address line 1" },
+      { field: :field_22, name: "town or city" },
       { field: :field_24, name: "postcode part 1" },
-      # { field: :field_25, name: "postcode part 2" },
+      { field: :field_25, name: "postcode part 2" },
     ].each do |data|
       describe "##{data[:field]} (#{data[:name]})" do
         context "when UPRN present" do
@@ -587,7 +587,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
     end
   end
 
-  fdescribe "#log" do
+  describe "#log" do
     describe "#uprn" do
       let(:attributes) { setup_section_params.merge({ field_19: "100023336956" }) }
 
