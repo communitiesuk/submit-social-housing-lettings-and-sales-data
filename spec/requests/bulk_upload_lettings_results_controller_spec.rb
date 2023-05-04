@@ -2,11 +2,13 @@ require "rails_helper"
 
 RSpec.describe BulkUploadLettingsResultsController, type: :request do
   let(:user) { create(:user) }
+  let(:support_user) { create(:user, :support) }
   let(:bulk_upload) { create(:bulk_upload, :lettings, user:, bulk_upload_errors:) }
   let(:bulk_upload_errors) { create_list(:bulk_upload_error, 2) }
+  let(:viewing_user) { user }
 
   before do
-    sign_in user
+    sign_in viewing_user
   end
 
   describe "GET /lettings-logs/bulk-upload-results/:ID/summary" do
@@ -21,6 +23,43 @@ RSpec.describe BulkUploadLettingsResultsController, type: :request do
       get "/lettings-logs/bulk-upload-results/#{bulk_upload.id}/summary"
 
       expect(response.body).to include(bulk_upload.filename)
+    end
+
+    context "when viewed by support user" do
+      before do
+        allow(support_user).to receive(:need_two_factor_authentication?).and_return(false)
+      end
+
+      let(:viewing_user) { support_user }
+
+      it "is accessible" do
+        get "/lettings-logs/bulk-upload-results/#{bulk_upload.id}/summary"
+
+        expect(response).to be_successful
+        expect(response.body).to include(bulk_upload.filename)
+      end
+    end
+
+    context "when viewed by some other random user" do
+      let(:other_user) { create(:user) }
+      let(:viewing_user) { other_user }
+
+      it "is not accessible" do
+        get "/lettings-logs/bulk-upload-results/#{bulk_upload.id}/summary"
+        expect(response).to be_unauthorized
+      end
+    end
+
+    context "when viewed by another user in the same org" do
+      let(:other_user) { create(:user, organisation: user.organisation) }
+      let(:viewing_user) { other_user }
+
+      it "is accessible" do
+        get "/lettings-logs/bulk-upload-results/#{bulk_upload.id}/summary"
+
+        expect(response).to be_successful
+        expect(response.body).to include(bulk_upload.filename)
+      end
     end
   end
 

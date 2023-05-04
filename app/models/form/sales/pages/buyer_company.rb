@@ -3,7 +3,7 @@ class Form::Sales::Pages::BuyerCompany < ::Form::Page
     super
     @id = "buyer_company"
     @depends_on = [{
-      "ownershipsch" => 3,
+      "outright_sale?" => true,
     }]
   end
 
