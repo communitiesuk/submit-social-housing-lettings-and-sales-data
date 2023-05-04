@@ -1040,7 +1040,7 @@ private
 
     unless created_by.organisation == owning_organisation
       block_log_creation!
-      errors.add(:field_2, "User must be related to owning organisation")
+      errors.add(:field_2, "User must be related to owning organisation", category: :setup)
     end
   end
 

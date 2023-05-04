@@ -372,8 +372,8 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
 
         let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: other_user.email } }
 
-        it "is not permitted" do
-          expect(parser.errors[:field_2]).to be_present
+        it "is not permitted as a setup error" do
+          expect(parser.errors.where(:field_2, category: :setup)).to be_present
         end
 
         it "blocks log creation" do
