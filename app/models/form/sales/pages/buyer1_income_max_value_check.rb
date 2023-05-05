@@ -25,4 +25,8 @@ class Form::Sales::Pages::Buyer1IncomeMaxValueCheck < ::Form::Page
       Form::Sales::Questions::Buyer1IncomeValueCheck.new(nil, nil, self, check_answers_card_number: @check_answers_card_number),
     ]
   end
+
+  def interruption_screen_question_ids
+    %w[la income1]
+  end
 end
