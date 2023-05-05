@@ -305,7 +305,7 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
       it "has errors on setup fields" do
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_1 field_111 field_113 field_96 field_97 field_98])
+        expect(errors).to eql(%i[field_1 field_111 field_113 field_132 field_96 field_97 field_98])
       end
     end
 
