@@ -9,6 +9,7 @@ class MergeRequestsController < ApplicationController
     new_organisation_name
     new_organisation_address
     new_organisation_telephone_number
+    new_organisation_type
     merge_date
   ]
   before_action :authenticate_user!
@@ -19,6 +20,7 @@ class MergeRequestsController < ApplicationController
   def new_organisation_name; end
   def new_organisation_address; end
   def new_organisation_telephone_number; end
+  def new_organisation_type; end
   def merge_date; end
 
   def create
@@ -83,6 +85,8 @@ private
       new_organisation_address_merge_request_path(@merge_request)
     when "new_organisation_address"
       new_organisation_telephone_number_merge_request_path(@merge_request)
+    when "new_organisation_telephone_number"
+      new_organisation_type_merge_request_path(@merge_request)
     end
   end
 
@@ -115,6 +119,7 @@ private
       :new_organisation_address_line1,
       :new_organisation_address_line2,
       :new_organisation_postcode,
+      :new_organisation_telephone_number
     )
 
     if merge_params[:requesting_organisation_id].present? && (current_user.data_coordinator? || current_user.data_provider?)

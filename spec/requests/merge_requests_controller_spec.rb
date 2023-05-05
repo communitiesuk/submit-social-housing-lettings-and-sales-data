@@ -473,7 +473,7 @@ RSpec.describe MergeRequestsController, type: :request do
         end
       end
 
-      describe "#new_organsation_name" do
+      describe "#new_organisation_name" do
         let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, new_absorbing_organisation: true) }
 
         context "when viewing the new organisation name page" do
@@ -554,7 +554,7 @@ RSpec.describe MergeRequestsController, type: :request do
         end
       end
 
-      describe "#new_organsation_address" do
+      describe "#new_organisation_address" do
         let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, new_organisation_name: "New name", new_absorbing_organisation: true) }
 
         context "when viewing the new organisation name page" do
@@ -594,19 +594,19 @@ RSpec.describe MergeRequestsController, type: :request do
             expect(response).to redirect_to(new_organisation_telephone_number_merge_request_path(merge_request))
           end
 
-          it "updates new organisation address line 1 to correct addess line" do
+          it "updates new organisation address line 1 to correct address line" do
             expect { request }.to change {
               merge_request.reload.new_organisation_address_line1
             }.from(nil).to("first address line")
           end
 
-          it "updates new organisation address line 2 to correct addess line" do
+          it "updates new organisation address line 2 to correct address line" do
             expect { request }.to change {
               merge_request.reload.new_organisation_address_line2
             }.from(nil).to("second address line")
           end
 
-          it "updates new organisation postcode to correct addess line" do
+          it "updates new organisation postcode to correct address line" do
             expect { request }.to change {
               merge_request.reload.new_organisation_postcode
             }.from(nil).to("new postcode")
@@ -630,6 +630,91 @@ RSpec.describe MergeRequestsController, type: :request do
           it "does not throw an error" do
             request
             expect(response).to redirect_to(new_organisation_telephone_number_merge_request_path(merge_request))
+          end
+        end
+      end
+
+      describe "#new_organisation_telephone_number" do
+        let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, new_organisation_name: "New name", new_absorbing_organisation: true) }
+
+        context "when viewing the new organisation telephone number page" do
+          before do
+            get "/merge-request/#{merge_request.id}/new-organisation-telephone-number", headers:
+          end
+
+          it "displays the correct question" do
+            expect(page).to have_content("What is New name’s telephone number?")
+          end
+
+          it "has the correct back button" do
+            expect(page).to have_link("Back", href: new_organisation_address_merge_request_path(merge_request))
+          end
+
+          it "has a skip link" do
+            expect(page).to have_link("Skip for now", href: new_organisation_type_merge_request_path(merge_request))
+          end
+        end
+
+        context "when updating the new organisation telephone number" do
+          let(:params) do
+            { merge_request: { new_organisation_telephone_number: "1234", page: "new_organisation_telephone_number" } }
+          end
+
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "redirects to new organisation type path" do
+            request
+            expect(response).to redirect_to(new_organisation_type_merge_request_path(merge_request))
+          end
+
+          it "updates new organisation name to the correct telephone number" do
+            expect { request }.to change {
+              merge_request.reload.new_organisation_telephone_number
+            }.from(nil).to("1234")
+          end
+        end
+
+        context "when the new organisation telephone number is not answered" do
+          let(:params) do
+            { merge_request: { new_organisation_telephone_number: nil, page: "new_organisation_telephone_number" } }
+          end
+
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "renders the error" do
+            request
+            expect(page).to have_content("Enter a telephone number")
+          end
+
+          it "does not update the organisation name" do
+            expect { request }.not_to(change { merge_request.reload.attributes })
+          end
+        end
+
+        context "when the new organisation telephone number already exists" do
+          before do
+            create(:organisation, phone: "1234")
+          end
+
+          let(:params) do
+            { merge_request: { new_organisation_telephone_number: "1234", page: "new_organisation_telephone_number" } }
+          end
+
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "renders the error" do
+            request
+            expect(page).to have_content("An organisation with this telephone number already exists")
+          end
+
+          it "does not update the organisation name" do
+            expect { request }.not_to(change { merge_request.reload.attributes })
           end
         end
       end
