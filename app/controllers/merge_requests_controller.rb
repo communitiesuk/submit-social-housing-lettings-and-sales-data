@@ -155,6 +155,8 @@ private
       end
     when "new_organisation_name"
       @merge_request.errors.add(:new_organisation_name, :blank) if merge_request_params[:new_organisation_name].blank?
+    when "new_organisation_telephone_number"
+      @merge_request.errors.add(:new_organisation_telephone_number, :blank) if merge_request_params[:new_organisation_telephone_number].blank?
     end
   end
 

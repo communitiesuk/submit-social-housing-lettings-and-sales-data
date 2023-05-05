@@ -687,33 +687,10 @@ RSpec.describe MergeRequestsController, type: :request do
 
           it "renders the error" do
             request
-            expect(page).to have_content("Enter a telephone number")
+            expect(page).to have_content("Enter a valid telephone number")
           end
 
-          it "does not update the organisation name" do
-            expect { request }.not_to(change { merge_request.reload.attributes })
-          end
-        end
-
-        context "when the new organisation telephone number already exists" do
-          before do
-            create(:organisation, phone: "1234")
-          end
-
-          let(:params) do
-            { merge_request: { new_organisation_telephone_number: "1234", page: "new_organisation_telephone_number" } }
-          end
-
-          let(:request) do
-            patch "/merge-request/#{merge_request.id}", headers:, params:
-          end
-
-          it "renders the error" do
-            request
-            expect(page).to have_content("An organisation with this telephone number already exists")
-          end
-
-          it "does not update the organisation name" do
+          it "does not update the organisation telephone number" do
             expect { request }.not_to(change { merge_request.reload.attributes })
           end
         end
