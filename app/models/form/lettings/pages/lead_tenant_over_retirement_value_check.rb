@@ -27,6 +27,10 @@ class Form::Lettings::Pages::LeadTenantOverRetirementValueCheck < ::Form::Page
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::RetirementValueCheck.new(nil, nil, self)]
+    @questions ||= [Form::Lettings::Questions::RetirementValueCheck.new(nil, nil, self, person_index: 1)]
+  end
+
+  def interruption_screen_question_ids
+    %w[ecstat1 sex1 age1]
   end
 end

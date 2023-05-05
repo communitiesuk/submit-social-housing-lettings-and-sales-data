@@ -93,6 +93,10 @@ module Validations::SoftValidations
     voiddate.present? && startdate.present? && voiddate.between?(startdate.to_date - TEN_YEARS_IN_DAYS, startdate.to_date - TWO_YEARS_IN_DAYS)
   end
 
+  def net_income_higher_or_lower_text
+    net_income_in_soft_max_range? ? "higher" : "lower"
+  end
+
 private
 
   def details_known_or_lead_tenant?(tenant_number)
@@ -124,11 +128,9 @@ private
   def retired_under_soft_min_age?(person_num)
     age = public_send("age#{person_num}")
     economic_status = public_send("ecstat#{person_num}")
-    gender = public_send("sex#{person_num}")
-    return unless age && economic_status && gender
+    return unless age && economic_status
 
-    %w[M X].include?(gender) && tenant_is_retired?(economic_status) && age < retirement_age_for_person(person_num) ||
-      gender == "F" && tenant_is_retired?(economic_status) && age < 60
+    tenant_is_retired?(economic_status) && age < 60
   end
 
   def not_retired_over_soft_max_age?(person_num)

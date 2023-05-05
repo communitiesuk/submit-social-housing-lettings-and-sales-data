@@ -1,0 +1,8 @@
+<% content_for :before_content do %>
+  <% title = "Tell us if your organisation is merging" %>
+  <% content_for :title, title %>
+  <%# TODO: Update this backlink to also work with the create org flow %>
+  <%= govuk_back_link href: confirm_telephone_number_merge_request_path(@merge_request) %>
+<% end %>
+
+<h2 class="govuk-heading-l">What is the merge date?</h2>

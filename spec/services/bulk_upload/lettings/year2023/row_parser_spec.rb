@@ -25,11 +25,24 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       field_7: now.day.to_s,
       field_8: now.month.to_s,
       field_9: now.strftime("%g"),
+      field_45: "1",
     }
   end
 
   before do
     create(:organisation_relationship, parent_organisation: owning_org, child_organisation: managing_org)
+
+    LaRentRange.create!(
+      ranges_rent_id: "1",
+      la: "E09000008",
+      beds: 1,
+      lettype: 3,
+      soft_min: 12.41,
+      soft_max: 118.85,
+      hard_min: 9.87,
+      hard_max: 200.99,
+      start_year: 2023,
+    )
   end
 
   around do |example|
@@ -47,7 +60,17 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
     end
 
-    context "when any field is populated" do
+    context "when the only populated fields are whitespace" do
+      before do
+        parser.field_18 = " "
+      end
+
+      it "returns true" do
+        expect(parser).to be_blank_row
+      end
+    end
+
+    context "when any field is populated with something other than whitespace" do
       before do
         parser.field_1 = "1"
       end
@@ -69,6 +92,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             DPA: {
               "POSTCODE": "EC1N 2TD",
               "POST_TOWN": "Newcastle",
+              "ORGANISATION_NAME": "Some place",
             },
           },
         ],
@@ -98,6 +122,10 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
 
       context "when valid row" do
+        before do
+          allow(FeatureToggle).to receive(:bulk_upload_duplicate_log_check_enabled?).and_return(true)
+        end
+
         let(:attributes) do
           {
             bulk_upload:,
@@ -223,7 +251,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           }
         end
 
-        xit "returns true" do
+        it "returns true" do
           expect(parser).to be_valid
         end
 
@@ -235,6 +263,87 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           expect(questions.map(&:id).size).to eq(0)
           expect(questions.map(&:id)).to eql([])
         end
+
+        context "when the log already exists in the db" do
+          before do
+            parser.log.save!
+            parser.instance_variable_set(:@valid, nil)
+          end
+
+          it "is not a valid row" do
+            expect(parser).not_to be_valid
+          end
+
+          it "adds an error to all (and only) the fields used to determine duplicates" do
+            parser.valid?
+
+            error_message = "This is a duplicate log"
+
+            [
+              :field_1, # owning_organisation
+              :field_7, # startdate
+              :field_8, # startdate
+              :field_9, # startdate
+              :field_14, # propcode
+              :field_17, # location
+              :field_23, # postcode_full
+              :field_24, # postcode_full
+              :field_25, # postcode_full
+              :field_46, # age1
+              :field_47, # sex1
+              :field_50, # ecstat1
+              :field_132, # tcharge
+            ].each do |field|
+              expect(parser.errors[field]).to include(error_message)
+            end
+          end
+        end
+
+        context "when a hidden log already exists in db" do
+          before do
+            parser.log.status = "pending"
+            parser.log.skip_update_status = true
+            parser.log.save!
+          end
+
+          it "is a valid row" do
+            expect(parser).to be_valid
+          end
+
+          it "does not add duplicate errors" do
+            parser.valid?
+
+            [
+              :field_1, # owning_organisation
+              :field_7, # startdate
+              :field_8, # startdate
+              :field_9, # startdate
+              :field_14, # propcode
+              :field_17, # location
+              :field_23, # postcode_full
+              :field_24, # postcode_full
+              :field_25, # postcode_full
+              :field_46, # age1
+              :field_47, # sex1
+              :field_50, # ecstat1
+              :field_132, # tcharge
+            ].each do |field|
+              expect(parser.errors[field]).to be_blank
+            end
+          end
+        end
+      end
+
+      describe "#validate_nulls" do
+        context "when non-setup questions are null" do
+          let(:attributes) { { bulk_upload:, field_1: "a", field_18: "", field_19: "", field_21: "" } }
+
+          it "fetches the question's check_answer_label if it exists, otherwise it gets the question's header" do
+            parser.valid?
+            expect(parser.errors[:field_19]).to eql(["You must answer q12 - address"])
+            expect(parser.errors[:field_21]).to eql(["You must answer town or city"])
+          end
+        end
       end
     end
 
@@ -244,13 +353,13 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       it "has errors on setup fields" do
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_1 field_2 field_4 field_5 field_6 field_7 field_8 field_9])
+        expect(errors).to eql(%i[field_1 field_2 field_4 field_45 field_5 field_6 field_7 field_8 field_9])
       end
     end
 
     describe "#field_3" do # created_by
       context "when blank" do
-        let(:attributes) { { bulk_upload:, field_3: "" } }
+        let(:attributes) { { bulk_upload:, field_3: "", field_4: 1 } }
 
         it "is permitted" do
           expect(parser.errors[:field_3]).to be_blank
@@ -672,7 +781,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
     describe "#field_1" do # owning org
       context "when blank" do
-        let(:attributes) { { bulk_upload:, field_1: "" } }
+        let(:attributes) { { bulk_upload:, field_1: "", field_4: 1 } }
 
         it "is not permitted as setup error" do
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
@@ -734,7 +843,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
     describe "#field_2" do # managing org
       context "when blank" do
-        let(:attributes) { { bulk_upload:, field_2: "" } }
+        let(:attributes) { { bulk_upload:, field_2: "", field_4: 1 } }
 
         it "is not permitted as setup error" do
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
@@ -806,8 +915,50 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       context "when over 12 characters" do
         let(:attributes) { { bulk_upload:, field_18: "1234567890123" } }
 
-        it "has errors on the field" do
-          expect(parser.errors[:field_18]).to be_present
+        it "adds an appropriate error" do
+          expect(parser.errors[:field_18]).to eql(["UPRN must be 12 digits or less"])
+        end
+      end
+
+      context "when neither UPRN nor address fields are given" do
+        let(:attributes) do
+          {
+            bulk_upload:,
+            field_1: "1",
+          }
+        end
+
+        it "adds appropriate errors" do
+          expect(parser.errors[:field_18]).to eql(["You must answer UPRN"])
+          expect(parser.errors[:field_19]).to eql(["You must answer q12 - address"])
+          expect(parser.errors[:field_21]).to eql(["You must answer town or city"])
+        end
+      end
+
+      context "when UPRN is given but address fields are not" do
+        let(:attributes) do
+          {
+            bulk_upload:,
+            field_18: "123456789012",
+          }
+        end
+
+        it "doesn't add an error" do
+          expect(parser.errors[:field_18]).to be_empty
+        end
+      end
+
+      context "when address is given but UPRN is not" do
+        let(:attributes) do
+          {
+            bulk_upload:,
+            field_19: "1 Example Rd",
+            field_21: "Example Town/City",
+          }
+        end
+
+        it "doesn't add an error" do
+          expect(parser.errors[:field_18]).to be_empty
         end
       end
     end
@@ -842,6 +993,43 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "returns an error" do
           expect(parser.errors[:field_52]).to be_present
+        end
+      end
+    end
+
+    describe "soft validations" do
+      context "when soft validation is triggered" do
+        let(:attributes) { setup_section_params.merge({ field_46: 22, field_50: 5 }) }
+
+        it "adds an error to the relevant fields" do
+          soft_validation_errors = parser.errors.select { |e| e.options[:category] == :soft_validation }
+
+          expect(soft_validation_errors.find { |e| e.attribute == :field_46 }).to be_present
+          expect(soft_validation_errors.find { |e| e.attribute == :field_50 }).to be_present
+        end
+
+        it "populates with correct error message" do
+          soft_validation_errors = parser.errors.select { |e| e.options[:category] == :soft_validation }
+
+          expect(soft_validation_errors.find { |e| e.attribute == :field_46 }.message).to eql("You told us this person is aged 22 years and retired.")
+          expect(soft_validation_errors.find { |e| e.attribute == :field_50 }.message).to eql("You told us this person is aged 22 years and retired.")
+        end
+      end
+
+      context "when soft validation is triggered and not required" do
+        let(:attributes) { setup_section_params.merge({ field_128: 120, field_126: 1, field_32: 1, field_4: 1, field_5: "3", field_25: "E09000008" }) }
+
+        it "adds an error to the relevant fields" do
+          soft_validation_errors = parser.errors.select { |e| e.options[:category] == :soft_validation }
+
+          expect(soft_validation_errors.find { |e| e.attribute == :field_128 }).to be_present
+        end
+
+        it "populates with correct error message" do
+          soft_validation_errors = parser.errors.select { |e| e.options[:category] == :soft_validation }
+
+          expect(soft_validation_errors.count { |e| e.attribute == :field_128 }).to be(1)
+          expect(soft_validation_errors.find { |e| e.attribute == :field_128 }.message).to eql("You told us the rent is £120.00 every week. The maximum rent expected for this type of property in this local authority is ££118.85 every week.")
         end
       end
     end
@@ -886,7 +1074,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
 
       context "when uprn blank" do
-        let(:attributes) { { bulk_upload:, field_18: "" } }
+        let(:attributes) { { bulk_upload:, field_18: "", field_4: 1 } }
 
         it "sets to 0" do
           expect(parser.log.uprn_known).to be(0)
@@ -938,7 +1126,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
     ].each do |known, age, field|
       describe "##{known} and ##{age}" do
         context "when #{field} is blank" do
-          let(:attributes) { { bulk_upload:, field.to_s => nil } }
+          let(:attributes) { { bulk_upload:, field.to_s => nil, field_4: 1 } }
 
           it "sets ##{known} 1" do
             expect(parser.log.public_send(known)).to be(1)
@@ -1233,7 +1421,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           end
 
           context "when no" do
-            let(:attributes) { { bulk_upload:, hash[:field] => "" } }
+            let(:attributes) { { bulk_upload:, hash[:field] => "", field_4: 1 } }
 
             it "sets value from correct mapping" do
               expect(parser.log.public_send(hash[:attribute])).to be_nil
@@ -1383,7 +1571,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
 
       context "when mrcdate not given" do
-        let(:attributes) { { bulk_upload:, field_36: "", field_37: "", field_38: "" } }
+        let(:attributes) { { bulk_upload:, field_36: "", field_37: "", field_38: "", field_4: 1 } }
 
         it "sets #majorrepairs to 0" do
           expect(parser.log.majorrepairs).to eq(0)
@@ -1451,7 +1639,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
 
       context "when not known" do
-        let(:attributes) { { bulk_upload:, field_109: "" } }
+        let(:attributes) { { bulk_upload:, field_109: "", field_4: 1 } }
 
         it "sets to 0" do
           expect(parser.log.previous_la_known).to eq(0)

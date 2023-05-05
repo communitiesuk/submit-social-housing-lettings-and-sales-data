@@ -1,6 +1,7 @@
 class BulkUpload::Lettings::Year2023::RowParser
   include ActiveModel::Model
   include ActiveModel::Attributes
+  include InterruptionScreenHelper
 
   QUESTIONS = {
     field_1: "Which organisation owns this property?",
@@ -292,6 +293,7 @@ class BulkUpload::Lettings::Year2023::RowParser
   validates :field_72, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 7 must be a number or the letter R" }, allow_blank: true, on: :after_log
   validates :field_76, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 8 must be a number or the letter R" }, allow_blank: true, on: :after_log
 
+  validates :field_4, presence: { message: I18n.t("validations.not_answered", question: "needs type") }, on: :after_log
   validates :field_6, presence: { message: I18n.t("validations.not_answered", question: "property renewal") }, on: :after_log
   validates :field_7, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (day)") }, on: :after_log
   validates :field_8, presence: { message: I18n.t("validations.not_answered", question: "tenancy start date (month)") }, on: :after_log
@@ -299,7 +301,6 @@ class BulkUpload::Lettings::Year2023::RowParser
 
   validates :field_9, format: { with: /\A\d{2}\z/, message: I18n.t("validations.setup.startdate.year_not_two_digits") }, on: :after_log
 
-  validate :validate_needs_type_present, on: :after_log
   validate :validate_data_types, on: :after_log
   validate :validate_nulls, on: :after_log
   validate :validate_relevant_collection_window, on: :after_log
@@ -311,6 +312,7 @@ class BulkUpload::Lettings::Year2023::RowParser
   validate :validate_no_disabled_needs_conjunction, on: :after_log
   validate :validate_dont_know_disabled_needs_conjunction, on: :after_log
   validate :validate_no_and_dont_know_disabled_needs_conjunction, on: :after_log
+  validate :validate_if_log_already_exists, on: :after_log, if: -> { FeatureToggle.bulk_upload_duplicate_log_check_enabled? }
 
   validate :validate_owning_org_data_given, on: :after_log
   validate :validate_owning_org_exists, on: :after_log
@@ -332,16 +334,24 @@ class BulkUpload::Lettings::Year2023::RowParser
   validate :validate_created_by_exists, on: :after_log
   validate :validate_created_by_related, on: :after_log
 
+  validate :validate_declaration_acceptance, on: :after_log
+
   validate :validate_valid_radio_option, on: :before_log
+
+  validate :validate_uprn_exists_if_any_key_adddress_fields_are_blank, on: :after_log
+
+  validate :validate_incomplete_soft_validations, on: :after_log
 
   def self.question_for_field(field)
     QUESTIONS[field]
   end
 
   def valid?
+    return @valid if @valid
+
     errors.clear
 
-    return true if blank_row?
+    return @valid = true if blank_row?
 
     super(:before_log)
     before_errors = errors.dup
@@ -361,7 +371,7 @@ class BulkUpload::Lettings::Year2023::RowParser
       end
     end
 
-    errors.blank?
+    @valid = errors.blank?
   end
 
   def blank_row?
@@ -369,6 +379,7 @@ class BulkUpload::Lettings::Year2023::RowParser
       .to_hash
       .reject { |k, _| %w[bulk_upload block_log_creation field_blank].include?(k) }
       .values
+      .reject(&:blank?)
       .compact
       .empty?
   end
@@ -393,7 +404,19 @@ class BulkUpload::Lettings::Year2023::RowParser
     field_14
   end
 
+  def log_already_exists?
+    @log_already_exists ||= LettingsLog
+      .where(status: %w[not_started in_progress completed])
+      .exists?(duplicate_check_fields.index_with { |field| log.public_send(field) })
+  end
+
 private
+
+  def validate_declaration_acceptance
+    unless field_45 == 1
+      errors.add(:field_45, I18n.t("validations.declaration.missing"), category: :setup)
+    end
+  end
 
   def validate_valid_radio_option
     log.attributes.each do |question_id, _v|
@@ -429,6 +452,43 @@ private
 
   def created_by
     @created_by ||= User.find_by(email: field_3)
+  end
+
+  def validate_uprn_exists_if_any_key_adddress_fields_are_blank
+    if field_18.blank? && (field_19.blank? || field_21.blank?)
+      errors.add(:field_18, I18n.t("validations.not_answered", question: "UPRN"))
+    end
+  end
+
+  def validate_incomplete_soft_validations
+    routed_to_soft_validation_questions = log.form.questions.filter { |q| q.type == "interruption_screen" && q.page.routed_to?(log, nil) }
+    routed_to_soft_validation_questions.each do |question|
+      next unless question
+      next if question.completed?(log)
+
+      question.page.interruption_screen_question_ids.each do |interruption_screen_question_id|
+        field_mapping_for_errors[interruption_screen_question_id.to_sym].each do |field|
+          unless errors.any? { |e| field_mapping_for_errors[interruption_screen_question_id.to_sym].include?(e.attribute) }
+            error_message = [display_title_text(question.page.title_text, log), display_informative_text(question.page.informative_text, log)].reject(&:empty?).join(". ")
+            errors.add(field, message: error_message, category: :soft_validation)
+          end
+        end
+      end
+    end
+  end
+
+  def duplicate_check_fields
+    %w[
+      startdate
+      age1
+      sex1
+      ecstat1
+      owning_organisation
+      tcharge
+      propcode
+      postcode_full
+      location
+    ]
   end
 
   def validate_needs_type_present
@@ -540,13 +600,15 @@ private
       if setup_question?(question)
         fields.each do |field|
           if errors[field].present?
-            errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase), category: :setup)
+            question_text = question.check_answer_label.presence || question.header.presence || "this question"
+            errors.add(field, I18n.t("validations.not_answered", question: question_text.downcase), category: :setup)
           end
         end
       else
         fields.each do |field|
           unless errors.any? { |e| fields.include?(e.attribute) }
-            errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase))
+            question_text = question.check_answer_label.presence || question.header.presence || "this question"
+            errors.add(field, I18n.t("validations.not_answered", question: question_text.downcase))
           end
         end
       end
@@ -664,6 +726,26 @@ private
 
   def setup_question?(question)
     log.form.setup_sections[0].subsections[0].questions.include?(question)
+  end
+
+  def validate_if_log_already_exists
+    if log_already_exists?
+      error_message = "This is a duplicate log"
+
+      errors.add(:field_1, error_message) # owning_organisation
+      errors.add(:field_7, error_message) # startdate
+      errors.add(:field_8, error_message) # startdate
+      errors.add(:field_9, error_message) # startdate
+      errors.add(:field_14, error_message) # propcode
+      errors.add(:field_17, error_message) # location
+      errors.add(:field_23, error_message) # postcode_full
+      errors.add(:field_24, error_message) # postcode_full
+      errors.add(:field_25, error_message) # postcode_full
+      errors.add(:field_46, error_message) # age1
+      errors.add(:field_47, error_message) # sex1
+      errors.add(:field_50, error_message) # ecstat1
+      errors.add(:field_132, error_message) # tcharge
+    end
   end
 
   def field_mapping_for_errors
@@ -842,8 +924,8 @@ private
     attributes["la"] = field_25
     attributes["postcode_known"] = postcode_known
     attributes["postcode_full"] = postcode_full
-    attributes["owning_organisation_id"] = owning_organisation_id
-    attributes["managing_organisation_id"] = managing_organisation_id
+    attributes["owning_organisation"] = owning_organisation
+    attributes["managing_organisation"] = managing_organisation
     attributes["renewal"] = renewal
     attributes["scheme"] = scheme
     attributes["location"] = location
@@ -1037,16 +1119,8 @@ private
     Organisation.find_by_id_on_multiple_fields(field_1)
   end
 
-  def owning_organisation_id
-    owning_organisation&.id
-  end
-
   def managing_organisation
     Organisation.find_by_id_on_multiple_fields(field_2)
-  end
-
-  def managing_organisation_id
-    managing_organisation&.id
   end
 
   def renewal

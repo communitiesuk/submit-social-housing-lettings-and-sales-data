@@ -3,7 +3,7 @@ class Form::Lettings::Questions::Uprn < ::Form::Question
     super
     @id = "uprn"
     @check_answer_label = "UPRN"
-    @header = "What is the property's UPRN"
+    @header = "What is the property's UPRN?"
     @type = "text"
     @width = 10
     @question_number = 11

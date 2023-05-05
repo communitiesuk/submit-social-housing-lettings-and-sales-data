@@ -26,13 +26,12 @@ class SalesLog < Log
 
   validates_with SalesLogValidator
   before_validation :recalculate_start_year!, if: :saledate_changed?
-  before_validation :reset_invalidated_dependent_fields!
   before_validation :process_postcode_changes!, if: :postcode_full_changed?
   before_validation :process_previous_postcode_changes!, if: :ppostcode_full_changed?
   before_validation :reset_location_fields!, unless: :postcode_known?
   before_validation :reset_previous_location_fields!, unless: :previous_postcode_known?
   before_validation :set_derived_fields!
-  after_validation :process_uprn_change!, if: :should_process_uprn_change?
+  before_validation :process_uprn_change!, if: :should_process_uprn_change?
 
   scope :filter_by_year, ->(year) { where(saledate: Time.zone.local(year.to_i, 4, 1)...Time.zone.local(year.to_i + 1, 4, 1)) }
   scope :filter_by_purchaser_code, ->(purchid) { where("purchid ILIKE ?", "%#{purchid}%") }
@@ -161,8 +160,24 @@ class SalesLog < Log
     inc1mort == 1
   end
 
+  def buyers_will_live_in?
+    buylivein == 1
+  end
+
+  def buyers_will_not_live_in?
+    buylivein == 2
+  end
+
   def buyer_two_will_live_in_property?
     buy2livein == 1
+  end
+
+  def buyer_two_will_not_live_in_property?
+    buy2livein == 2
+  end
+
+  def buyer_one_will_not_live_in_property?
+    buy1livein == 2
   end
 
   def buyer_two_not_already_living_in_property?
@@ -217,6 +232,20 @@ class SalesLog < Log
     return unless value && equity
 
     value * equity / 100
+  end
+
+  def mortgage_deposit_and_discount_total
+    mortgage_amount = mortgage || 0
+    deposit_amount = deposit || 0
+    cashdis_amount = cashdis || 0
+
+    mortgage_amount + deposit_amount + cashdis_amount
+  end
+
+  def mortgage_and_deposit_total
+    return unless mortgage && deposit
+
+    mortgage + deposit
   end
 
   def process_postcode(postcode, postcode_known_key, la_inferred_key, la_key)
@@ -328,7 +357,7 @@ class SalesLog < Log
   end
 
   def should_process_uprn_change?
-    uprn_changed? && saledate && saledate.year >= 2023
+    uprn && saledate && (uprn_changed? || saledate_changed?) && saledate.year >= 2023
   end
 
   def value_with_discount
@@ -352,12 +381,9 @@ class SalesLog < Log
 
   def ownership_scheme
     case ownershipsch
-    when 1
-      "shared ownership"
-    when 2
-      "discounted ownership"
-    when 3
-      "outright sale"
+    when 1 then "shared ownership"
+    when 2 then "discounted ownership"
+    when 3 then "outright sale"
     end
   end
 

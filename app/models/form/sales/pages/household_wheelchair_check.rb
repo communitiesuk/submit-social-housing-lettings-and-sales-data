@@ -7,11 +7,16 @@ class Form::Sales::Pages::HouseholdWheelchairCheck < ::Form::Page
       },
     ]
     @informative_text = {}
+    @title_text = { "translation" => "soft_validations.wheelchair.title_text" }
   end
 
   def questions
     @questions ||= [
       Form::Sales::Questions::HouseholdWheelchairCheck.new(nil, nil, self),
     ]
+  end
+
+  def interruption_screen_question_ids
+    %w[disabled wheel]
   end
 end

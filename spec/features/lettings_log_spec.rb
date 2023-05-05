@@ -240,10 +240,12 @@ RSpec.describe "Lettings Log Features" do
 
     context "when completing the setup log section" do
       context "and there is at most 1 potential stock owner" do
-        it "does not include the owning organisation and created by questions" do
+        it "does not include the owning organisation and includes the created by questions" do
           visit("/lettings-logs")
           click_button("Create a new lettings log")
           click_link("Set up this lettings log")
+          select(user.name, from: "lettings-log-created-by-id-field")
+          click_button("Save and continue")
           log_id = page.current_path.scan(/\d/).join
           expect(page).to have_current_path("/lettings-logs/#{log_id}/needs-type")
           visit("lettings-logs/#{log_id}/setup/check-answers")

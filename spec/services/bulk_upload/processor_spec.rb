@@ -165,7 +165,7 @@ RSpec.describe BulkUpload::Processor do
       end
 
       before do
-        file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
         file.rewind
 
         allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
@@ -208,14 +208,16 @@ RSpec.describe BulkUpload::Processor do
           managing_organisation: owning_org,
           startdate: Time.zone.local(2022, 10, 1),
           renewal: 2,
+          declaration: 1,
         )
       end
 
       before do
-        file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
         file.rewind
 
         allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
+        allow(FeatureToggle).to receive(:bulk_upload_duplicate_log_check_enabled?).and_return(true)
       end
 
       it "creates pending log" do
@@ -258,11 +260,12 @@ RSpec.describe BulkUpload::Processor do
           startdate: Time.zone.local(2022, 10, 1),
           renewal: 2,
           created_by: other_user, # unaffiliated user
+          declaration: 1,
         )
       end
 
       before do
-        file.write(BulkUpload::LogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
         file.rewind
 
         allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)

@@ -10,7 +10,7 @@ class BulkUploadMailer < NotifyMailer
   def send_how_fix_upload_mail(bulk_upload:)
     title = "We found #{pluralize(bulk_upload.bulk_upload_errors.count, 'error')} in your bulk upload"
     description = "There was a problem with your #{bulk_upload.year_combo} #{bulk_upload.log_type} data. Check the error report below to fix these errors."
-    cta_link = start_bulk_upload_lettings_resume_url(bulk_upload)
+    cta_link = bulk_upload.sales? ? start_bulk_upload_sales_resume_url(bulk_upload) : start_bulk_upload_lettings_resume_url(bulk_upload)
 
     send_email(
       bulk_upload.user.email,
@@ -53,9 +53,9 @@ class BulkUploadMailer < NotifyMailer
 
   def send_correct_and_upload_again_mail(bulk_upload:)
     summary_report_link = if BulkUploadErrorSummaryTableComponent.new(bulk_upload:).errors?
-                            summary_bulk_upload_lettings_result_url(bulk_upload)
+                            bulk_upload.sales? ? summary_bulk_upload_sales_result_url(bulk_upload) : summary_bulk_upload_lettings_result_url(bulk_upload)
                           else
-                            bulk_upload_lettings_result_url(bulk_upload)
+                            bulk_upload.sales? ? bulk_upload_sales_result_url(bulk_upload) : bulk_upload_lettings_result_url(bulk_upload)
                           end
 
     send_email(
@@ -73,9 +73,9 @@ class BulkUploadMailer < NotifyMailer
 
   def send_bulk_upload_failed_file_setup_error_mail(bulk_upload:)
     bulk_upload_link = if BulkUploadErrorSummaryTableComponent.new(bulk_upload:).errors?
-                         summary_bulk_upload_lettings_result_url(bulk_upload)
+                         bulk_upload.sales? ? summary_bulk_upload_sales_result_url(bulk_upload) : summary_bulk_upload_lettings_result_url(bulk_upload)
                        else
-                         bulk_upload_lettings_result_url(bulk_upload)
+                         bulk_upload.sales? ? bulk_upload_sales_result_url(bulk_upload) : bulk_upload_lettings_result_url(bulk_upload)
                        end
 
     send_email(

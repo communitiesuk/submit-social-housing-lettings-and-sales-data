@@ -36,7 +36,7 @@
             <% if @log.collection_period_open? %>
               <% row.action(
                 text: question.action_text(log),
-                href: question.action_href(log, question.page.id),
+                href: action_href(log, question.page.id),
                 visually_hidden_text: question.check_answer_label.to_s.downcase,
               ) %>
             <% end %>

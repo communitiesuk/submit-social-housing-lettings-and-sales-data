@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_18_095819) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_04_111352) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -367,6 +367,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_18_095819) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "status"
+    t.integer "absorbing_organisation_id"
+    t.boolean "new_absorbing_organisation"
+    t.boolean "telephone_number_correct"
+    t.string "new_telephone_number"
+    t.string "new_organisation_name"
+    t.string "new_organisation_address_line1"
+    t.string "new_organisation_address_line2"
+    t.string "new_organisation_postcode"
   end
 
   create_table "organisation_relationships", force: :cascade do |t|
@@ -575,8 +583,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_18_095819) do
     t.integer "ethnicbuy2"
     t.integer "proplen_asked"
     t.string "old_id"
-    t.integer "buy2living"
-    t.integer "prevtenbuy2"
     t.integer "pregblank"
     t.string "uprn"
     t.integer "uprn_known"
@@ -585,12 +591,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_18_095819) do
     t.string "address_line2"
     t.string "town_or_city"
     t.string "county"
+    t.integer "buy2living"
+    t.integer "prevtenbuy2"
     t.integer "nationalbuy2"
     t.integer "discounted_sale_value_check"
     t.integer "student_not_child_value_check"
     t.integer "percentage_discount_value_check"
     t.integer "buyer_livein_value_check"
     t.integer "combined_income_value_check"
+    t.integer "status_cache", default: 0, null: false
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["old_id"], name: "index_sales_logs_on_old_id", unique: true

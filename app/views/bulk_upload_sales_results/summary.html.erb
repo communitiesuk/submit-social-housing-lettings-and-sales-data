@@ -1,0 +1,30 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l">Bulk upload for sales (<%= @bulk_upload.year_combo %>)</span>
+    <h1 class="govuk-heading-l">Fix <%= pluralize(@bulk_upload.bulk_upload_errors.count, "error") %> and upload file again</h1>
+
+    <p class="govuk-body-l">
+      We could not create logs from your bulk upload. Below is a list of everything that you need to fix your spreadsheet. You can download the <%= govuk_link_to "specification", Forms::BulkUploadSales::PrepareYourFile.new(year: @bulk_upload.year).specification_path, target: "_blank" %> to help you fix the cells in your CSV file.
+    </p>
+
+    <p class="govuk-body-l">
+      Filename: <%= @bulk_upload.filename %>
+    </p>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <%= govuk_tabs(title: "Error reports") do |c| %>
+    <% c.with_tab(label: "Summary") do %>
+      <%= render BulkUploadErrorSummaryTableComponent.new(bulk_upload: @bulk_upload) %>
+    <% end %>
+
+    <% c.with_tab(label: "Full error report") do %>
+      <% @bulk_upload.bulk_upload_errors.order_by_cell.group_by(&:row).each do |_row, errors_for_row| %>
+        <%= render BulkUploadErrorRowComponent.new(bulk_upload_errors: errors_for_row) %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>
+
+<%= govuk_button_link_to "Upload your file again", start_bulk_upload_sales_logs_path %>

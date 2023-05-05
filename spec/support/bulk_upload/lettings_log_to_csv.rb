@@ -1,4 +1,4 @@
-class BulkUpload::LogToCsv
+class BulkUpload::LettingsLogToCsv
   attr_reader :log, :line_ending, :col_offset, :overrides
 
   def initialize(log:, line_ending: "\n", col_offset: 1, overrides: {})
@@ -12,8 +12,25 @@ class BulkUpload::LogToCsv
     [nil] * col_offset
   end
 
-  def to_2022_csv_row
-    (row_prefix + to_2022_row).flatten.join(",") + line_ending
+  def to_2022_csv_row(seed: nil)
+    if seed
+      row = to_2022_row.shuffle(random: Random.new(seed))
+      (row_prefix + row).flatten.join(",") + line_ending
+    else
+      (row_prefix + to_2022_row).flatten.join(",") + line_ending
+    end
+  end
+
+  def default_2022_field_numbers
+    (1..134).to_a
+  end
+
+  def default_2022_field_numbers_row(seed: nil)
+    if seed
+      ["Bulk upload field number"] + default_2022_field_numbers.shuffle(random: Random.new(seed))
+    else
+      ["Bulk upload field number"] + default_2022_field_numbers
+    end.flatten.join(",") + line_ending
   end
 
   def to_2023_csv_row(seed: nil)
@@ -198,6 +215,21 @@ class BulkUpload::LogToCsv
     ]
   end
 
+  def custom_field_numbers_row(seed: nil, field_numbers: nil)
+    if seed
+      ["Bulk upload field number"] + field_numbers.shuffle(random: Random.new(seed))
+    else
+      ["Bulk upload field number"] + field_numbers
+    end.flatten.join(",") + line_ending
+  end
+
+  def to_custom_csv_row(seed: nil, field_values: nil)
+    if seed
+      row = field_values.shuffle(random: Random.new(seed))
+    end
+    (row_prefix + row).flatten.join(",") + line_ending
+  end
+
 private
 
   def renewal
@@ -277,6 +309,14 @@ private
       2
     when 1
       1
+    end
+  end
+
+  def hhregres
+    if log.hhregres == 1
+      log.hhregresstill
+    else
+      log.hhregres
     end
   end
 end

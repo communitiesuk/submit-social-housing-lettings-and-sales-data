@@ -532,6 +532,56 @@ RSpec.describe FormController, type: :request do
             end
           end
         end
+
+        context "when the question was accessed from an interruption screen (soft validation)" do
+          let(:params) do
+            {
+              id: lettings_log.id,
+              lettings_log: {
+                page: page_id,
+                age1: 20,
+                interruption_page_id: "retirement_value_check",
+              },
+            }
+          end
+
+          before do
+            post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}?referrer=interruption_screen", params:
+          end
+
+          it "redirects back to the soft validation page" do
+            expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/retirement-value-check")
+          end
+
+          it "displays a success banner" do
+            follow_redirect!
+            follow_redirect!
+            expect(response.body).to include("You have successfully updated lead tenant’s age")
+          end
+        end
+
+        context "when requesting a soft validation page for validation that isn't triggering" do
+          before do
+            get "/lettings-logs/#{lettings_log.id}/retirement-value-check", headers: headers.merge({ "HTTP_REFERER" => referrer })
+          end
+
+          context "when the referrer header has interruption_screen" do
+            let(:referrer) { "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}?referrer=interruption_screen" }
+
+            it "routes to the soft validation page" do
+              expect(response.body).to include("Make sure these answers are correct:")
+            end
+          end
+
+          context "when the referrer header does not have interruption screen" do
+            let(:referrer) { "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}" }
+
+            it "skips the soft validation page" do
+              follow_redirect!
+              expect(response.body).not_to include("Make sure these answers are correct:")
+            end
+          end
+        end
       end
 
       context "with checkbox questions" do

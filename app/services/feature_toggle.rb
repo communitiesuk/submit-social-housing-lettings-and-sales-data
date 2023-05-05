@@ -28,16 +28,16 @@ class FeatureToggle
     true
   end
 
-  def self.managing_for_other_user_enabled?
-    true
-  end
-
   def self.bulk_upload_lettings_logs?
     true
   end
 
   def self.bulk_upload_sales_logs?
     !Rails.env.production?
+  end
+
+  def self.bulk_upload_duplicate_log_check_enabled?
+    !Rails.env.staging?
   end
 
   def self.upload_enabled?

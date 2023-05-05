@@ -137,6 +137,11 @@ Rails.application.routes.draw do
       patch "organisations", to: "merge_requests#update_organisations"
       get "organisations/remove", to: "merge_requests#remove_merging_organisation"
       get "absorbing-organisation"
+      get "confirm-telephone-number"
+      get "new-organisation-name"
+      get "new-organisation-address"
+      get "new-organisation-telephone-number"
+      get "merge-date"
     end
   end
 
@@ -199,7 +204,21 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :bulk_upload_sales_results, path: "bulk-upload-results", only: [:show]
+      resources :bulk_upload_sales_results, path: "bulk-upload-results", only: [:show] do
+        member do
+          get :resume
+          get :summary
+        end
+      end
+
+      resources :bulk_upload_sales_resume, path: "bulk-upload-resume", only: %i[show update] do
+        member do
+          get :start
+
+          get "*page", to: "bulk_upload_sales_resume#show", as: "page"
+          patch "*page", to: "bulk_upload_sales_resume#update"
+        end
+      end
     end
 
     member do

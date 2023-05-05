@@ -1,6 +1,7 @@
 class BulkUpload::Lettings::Year2022::RowParser
   include ActiveModel::Model
   include ActiveModel::Attributes
+  include InterruptionScreenHelper
 
   QUESTIONS = {
     field_1: "What is the letting type?",
@@ -141,6 +142,8 @@ class BulkUpload::Lettings::Year2022::RowParser
 
   attribute :bulk_upload
   attribute :block_log_creation, :boolean, default: -> { false }
+
+  attribute :field_blank
 
   attribute :field_1, :integer
   attribute :field_2
@@ -307,6 +310,7 @@ class BulkUpload::Lettings::Year2022::RowParser
   validate :validate_no_disabled_needs_conjunction, on: :after_log
   validate :validate_dont_know_disabled_needs_conjunction, on: :after_log
   validate :validate_no_and_dont_know_disabled_needs_conjunction, on: :after_log
+  validate :validate_if_log_already_exists, on: :after_log, if: -> { FeatureToggle.bulk_upload_duplicate_log_check_enabled? }
 
   validate :validate_owning_org_data_given, on: :after_log
   validate :validate_owning_org_exists, on: :after_log
@@ -329,16 +333,21 @@ class BulkUpload::Lettings::Year2022::RowParser
   validate :validate_created_by_related, on: :after_log
   validate :validate_rent_type, on: :after_log
 
+  validate :validate_declaration_acceptance, on: :after_log
+
   validate :validate_valid_radio_option, on: :before_log
+  validate :validate_incomplete_soft_validations, on: :after_log
 
   def self.question_for_field(field)
     QUESTIONS[field]
   end
 
   def valid?
+    return @valid if @valid
+
     errors.clear
 
-    return true if blank_row?
+    return @valid = true if blank_row?
 
     super(:before_log)
     before_errors = errors.dup
@@ -358,14 +367,15 @@ class BulkUpload::Lettings::Year2022::RowParser
       end
     end
 
-    errors.blank?
+    @valid = errors.blank?
   end
 
   def blank_row?
     attribute_set
       .to_hash
-      .reject { |k, _| %w[bulk_upload block_log_creation].include?(k) }
+      .reject { |k, _| %w[bulk_upload block_log_creation field_blank].include?(k) }
       .values
+      .reject(&:blank?)
       .compact
       .empty?
   end
@@ -390,7 +400,19 @@ class BulkUpload::Lettings::Year2022::RowParser
     field_100
   end
 
+  def log_already_exists?
+    @log_already_exists ||= LettingsLog
+      .where(status: %w[not_started in_progress completed])
+      .exists?(duplicate_check_fields.index_with { |field| log.public_send(field) })
+  end
+
 private
+
+  def validate_declaration_acceptance
+    unless field_132 == 1
+      errors.add(:field_132, I18n.t("validations.declaration.missing"), category: :setup)
+    end
+  end
 
   def validate_valid_radio_option
     log.attributes.each do |question_id, _v|
@@ -426,6 +448,20 @@ private
 
   def created_by
     @created_by ||= User.find_by(email: field_112)
+  end
+
+  def duplicate_check_fields
+    %w[
+      startdate
+      age1
+      sex1
+      ecstat1
+      owning_organisation
+      tcharge
+      propcode
+      postcode_full
+      location
+    ]
   end
 
   def validate_location_related
@@ -682,8 +718,44 @@ private
     end
   end
 
+  def validate_incomplete_soft_validations
+    routed_to_soft_validation_questions = log.form.questions.filter { |q| q.type == "interruption_screen" && q.page.routed_to?(log, nil) }
+    routed_to_soft_validation_questions.each do |question|
+      next unless question
+      next if question.completed?(log)
+
+      question.page.interruption_screen_question_ids.each do |interruption_screen_question_id|
+        field_mapping_for_errors[interruption_screen_question_id.to_sym].each do |field|
+          unless errors.any? { |e| e.options[:category] == :soft_validation && field_mapping_for_errors[interruption_screen_question_id.to_sym].include?(e.attribute) }
+            error_message = [display_title_text(question.page.title_text, log), display_informative_text(question.page.informative_text, log)].reject(&:empty?).join(". ")
+            errors.add(field, message: error_message, category: :soft_validation)
+          end
+        end
+      end
+    end
+  end
+
   def setup_question?(question)
     log.form.setup_sections[0].subsections[0].questions.include?(question)
+  end
+
+  def validate_if_log_already_exists
+    if log_already_exists?
+      error_message = "This is a duplicate log"
+
+      errors.add(:field_5, error_message) # location
+      errors.add(:field_12, error_message) # age1
+      errors.add(:field_20, error_message) # sex1
+      errors.add(:field_35, error_message) # ecstat1
+      errors.add(:field_84, error_message) # tcharge
+      errors.add(:field_96, error_message) # startdate
+      errors.add(:field_97, error_message) # startdate
+      errors.add(:field_98, error_message) # startdate
+      errors.add(:field_100, error_message) # propcode
+      errors.add(:field_108, error_message) # postcode_full
+      errors.add(:field_109, error_message) # postcode_full
+      errors.add(:field_111, error_message) # owning_organisation
+    end
   end
 
   def field_mapping_for_errors
@@ -885,16 +957,8 @@ private
     Organisation.find_by_id_on_multiple_fields(field_111)
   end
 
-  def owning_organisation_id
-    owning_organisation&.id
-  end
-
   def managing_organisation
     Organisation.find_by_id_on_multiple_fields(field_113)
-  end
-
-  def managing_organisation_id
-    managing_organisation&.id
   end
 
   def attributes_for_log
@@ -905,8 +969,8 @@ private
     attributes["la"] = field_107
     attributes["postcode_known"] = postcode_known
     attributes["postcode_full"] = postcode_full
-    attributes["owning_organisation_id"] = owning_organisation_id
-    attributes["managing_organisation_id"] = managing_organisation_id
+    attributes["owning_organisation"] = owning_organisation
+    attributes["managing_organisation"] = managing_organisation
     attributes["renewal"] = renewal
     attributes["scheme"] = scheme
     attributes["location"] = location

@@ -1,4 +1,6 @@
 class Form::Lettings::Questions::CreatedById < ::Form::Question
+  ANSWER_OPTS = { "" => "Select an option" }.freeze
+
   def initialize(id, hsh, page)
     super
     @id = "created_by_id"
@@ -8,33 +10,32 @@ class Form::Lettings::Questions::CreatedById < ::Form::Question
   end
 
   def answer_options
-    answer_opts = { "" => "Select an option" }
-    return answer_opts unless ActiveRecord::Base.connected?
-
-    User.select(:id, :name, :email).each_with_object(answer_opts) do |user, hsh|
-      hsh[user.id] = "#{user.name} (#{user.email})"
-      hsh
-    end
+    ANSWER_OPTS
   end
 
-  def displayed_answer_options(log, _user = nil)
-    return answer_options unless log.owning_organisation && log.managing_organisation
+  def displayed_answer_options(log, current_user = nil)
+    return ANSWER_OPTS unless current_user
 
-    user_ids = [""]
-    user_ids += log.owning_organisation.users.pluck(:id)
-    user_ids += log.managing_organisation.users.pluck(:id)
+    users = []
+    users += if current_user.support?
+               [
+                 (log.owning_organisation&.users if log.owning_organisation),
+                 (log.managing_organisation&.users if log.managing_organisation),
+               ].flatten
+             else
+               current_user.organisation.users
+             end.uniq.compact
 
-    answer_options.select { |k, _v| user_ids.include?(k) }
+    users.each_with_object(ANSWER_OPTS.dup) do |user, hsh|
+      hsh[user.id] = present_user(user)
+      hsh
+    end
   end
 
   def label_from_value(value, _log = nil, _user = nil)
     return unless value
 
-    answer_options[value]
-  end
-
-  def hidden_in_check_answers?(_log, current_user)
-    !current_user.support?
+    present_user(User.find(value))
   end
 
   def derived?
@@ -42,6 +43,10 @@ class Form::Lettings::Questions::CreatedById < ::Form::Question
   end
 
 private
+
+  def present_user(user)
+    "#{user.name} (#{user.email})"
+  end
 
   def selected_answer_option_is_derived?(_log)
     true

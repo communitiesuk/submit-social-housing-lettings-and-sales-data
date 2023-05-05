@@ -1,5 +1,9 @@
 module DerivedVariables::SalesLogVariables
+  include DerivedVariables::SharedLogic
+
   def set_derived_fields!
+    reset_invalidated_derived_values!(DEPENDENCIES)
+
     self.ethnic = 17 if ethnic_refused?
     self.mscharge = nil if no_monthly_leasehold_charges?
     if exdate.present?
@@ -13,9 +17,6 @@ module DerivedVariables::SalesLogVariables
       self.hoyear = hodate.year
     end
     self.deposit = value if outright_sale? && mortgage_not_used?
-    if mortgage_not_used?
-      self.mortgage = 0
-    end
     self.pcode1, self.pcode2 = postcode_full.split(" ") if postcode_full.present?
     self.totchild = total_child
     self.totadult = total_adult + total_elder
@@ -30,9 +31,49 @@ module DerivedVariables::SalesLogVariables
       self.uprn = nil
       self.uprn_known = 0
     end
+
+    set_encoded_derived_values!(DEPENDENCIES)
   end
 
 private
+
+  DEPENDENCIES = [
+    {
+      conditions: {
+        buylivein: 2,
+      },
+      derived_values: {
+        buy1livein: 2,
+      },
+    },
+    {
+      conditions: {
+        buylivein: 2,
+        jointpur: 1,
+      },
+      derived_values: {
+        buy1livein: 2,
+        buy2livein: 2,
+      },
+    },
+    {
+      conditions: {
+        buylivein: 1,
+        jointpur: 2,
+      },
+      derived_values: {
+        buy1livein: 1,
+      },
+    },
+    {
+      conditions: {
+        mortgageused: 2,
+      },
+      derived_values: {
+        mortgage: 0,
+      },
+    },
+  ].freeze
 
   def number_of_household_members
     return unless hholdcount.present? && jointpur.present?

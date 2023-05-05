@@ -100,8 +100,8 @@ module Validations::Sales::SoftValidations
     saledate - hodate >= 3.years
   end
 
-  def purchase_price_min_or_max_text
-    value < sale_range.soft_min ? "minimum" : "maximum"
+  def purchase_price_higher_or_lower_text
+    value < sale_range.soft_min ? "lower" : "higher"
   end
 
   def purchase_price_soft_min_or_soft_max

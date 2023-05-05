@@ -9,8 +9,8 @@ class BulkUpload::Lettings::Validator
   attr_reader :bulk_upload, :path
 
   validate :validate_file_not_empty
-  validate :validate_min_columns
-  validate :validate_max_columns
+  validate :validate_field_numbers_count
+  validate :validate_max_columns_count_if_no_headers
 
   def initialize(bulk_upload:, path:)
     @bulk_upload = bulk_upload
@@ -43,8 +43,10 @@ class BulkUpload::Lettings::Validator
   def create_logs?
     return false if any_setup_errors?
     return false if row_parsers.any?(&:block_log_creation?)
+    return false if any_logs_already_exist? && FeatureToggle.bulk_upload_duplicate_log_check_enabled?
+    return false if any_logs_invalid?
 
-    row_parsers.all? { |row_parser| row_parser.log.valid? }
+    true
   end
 
   def self.question_for_field(field)
@@ -59,8 +61,6 @@ class BulkUpload::Lettings::Validator
       .positive?
   end
 
-private
-
   def over_column_error_threshold?
     fields = ("field_1".."field_134").to_a
     percentage_threshold = (row_parsers.size * COLUMN_PERCENTAGE_ERROR_THRESHOLD).ceil
@@ -72,6 +72,16 @@ private
 
       count > percentage_threshold
     end
+  end
+
+  def any_logs_already_exist?
+    row_parsers.any?(&:log_already_exists?)
+  end
+
+private
+
+  def any_logs_invalid?
+    row_parsers.any? { |row_parser| row_parser.log.invalid? }
   end
 
   def csv_parser
@@ -129,20 +139,16 @@ private
     end
   end
 
-  def validate_min_columns
+  def validate_field_numbers_count
     return if halt_validations?
 
-    column_count = rows.map(&:size).min
-
-    errors.add(:base, :under_min_column_count) if column_count < csv_parser.class::MIN_COLUMNS
+    errors.add(:base, :wrong_field_numbers_count) if csv_parser.incorrect_field_count?
   end
 
-  def validate_max_columns
+  def validate_max_columns_count_if_no_headers
     return if halt_validations?
 
-    column_count = rows.map(&:size).max
-
-    errors.add(:base, :over_max_column_count) if column_count > csv_parser.class::MAX_COLUMNS
+    errors.add(:base, :over_max_column_count) if csv_parser.too_many_columns?
   end
 
   def halt_validations!

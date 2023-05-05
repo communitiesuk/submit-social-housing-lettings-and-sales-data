@@ -28,8 +28,6 @@ RSpec.describe Form::Sales::Pages::BuyerCompany, type: :model do
   end
 
   it "has correct depends_on" do
-    expect(page.depends_on).to eq([{
-      "ownershipsch" => 3,
-    }])
+    expect(page.depends_on).to eq([{ "outright_sale?" => true }])
   end
 end
