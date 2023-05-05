@@ -717,8 +717,6 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         let(:attributes) { { bulk_upload:, field_5: "1", field_7: nil, field_8: nil, field_9: nil } }
 
         it "returns an error" do
-          parser.valid?
-
           expect(parser.errors[:field_7]).to be_present
           expect(parser.errors[:field_8]).to be_present
           expect(parser.errors[:field_9]).to be_present
@@ -729,8 +727,6 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         let(:attributes) { { bulk_upload:, field_9: "2022" } }
 
         it "returns an error" do
-          parser.valid?
-
           expect(parser.errors[:field_9]).to include("Tenancy start year must be 2 digits")
         end
       end
@@ -749,8 +745,6 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         let(:bulk_upload) { create(:bulk_upload, :lettings, user:, year: 2022) }
 
         it "does not return errors" do
-          parser.valid?
-
           expect(parser.errors[:field_7]).not_to be_present
           expect(parser.errors[:field_8]).not_to be_present
           expect(parser.errors[:field_9]).not_to be_present
@@ -762,19 +756,16 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           Timecop.freeze(Date.new(2022, 4, 2)) do
             example.run
           end
-          Timecop.return
         end
 
         let(:attributes) { { bulk_upload:, field_7: "1", field_8: "1", field_9: "22" } }
 
         let(:bulk_upload) { create(:bulk_upload, :lettings, user:, year: 2022) }
 
-        it "returns errors" do
-          parser.valid?
-
-          expect(parser.errors[:field_7]).to be_present
-          expect(parser.errors[:field_8]).to be_present
-          expect(parser.errors[:field_9]).to be_present
+        it "returns setup errors" do
+          expect(parser.errors.where(:field_7, category: :setup)).to be_present
+          expect(parser.errors.where(:field_8, category: :setup)).to be_present
+          expect(parser.errors.where(:field_9, category: :setup)).to be_present
         end
       end
     end
