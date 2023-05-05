@@ -119,7 +119,7 @@ private
       :new_organisation_address_line1,
       :new_organisation_address_line2,
       :new_organisation_postcode,
-      :new_organisation_telephone_number
+      :new_organisation_telephone_number,
     )
 
     if merge_params[:requesting_organisation_id].present? && (current_user.data_coordinator? || current_user.data_provider?)
