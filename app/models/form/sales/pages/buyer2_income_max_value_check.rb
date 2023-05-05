@@ -27,6 +27,6 @@ class Form::Sales::Pages::Buyer2IncomeMaxValueCheck < ::Form::Page
   end
 
   def interruption_screen_question_ids
-    %w[la income2]
+    %w[uprn postcode_full la income2]
   end
 end
