@@ -903,6 +903,14 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           expect(parser.errors.where(:field_6, category: :setup).map(&:message)).to eql(["You must answer property renewal"])
         end
       end
+
+      context "when none possible option selected" do
+        let(:attributes) { setup_section_params.merge({ field_6: "101" }) }
+
+        it "adds a setup error" do
+          expect(parser.errors.where(:field_6, category: :setup).map(&:message)).to include("Enter a valid value for Is this letting a renewal?")
+        end
+      end
     end
 
     describe "#field_18" do # UPRN

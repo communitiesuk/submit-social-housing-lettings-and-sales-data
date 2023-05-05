@@ -949,6 +949,16 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
       end
     end
 
+    describe "#field_134" do # renewal
+      context "when none possible option selected" do
+        let(:attributes) { setup_section_params.merge({ field_134: "101" }) }
+
+        it "adds a setup error" do
+          expect(parser.errors.where(:field_134, category: :setup).map(&:message)).to include("Enter a valid value for Is this letting a renewal?")
+        end
+      end
+    end
+
     describe "soft validations" do
       context "when soft validation is triggered" do
         let(:attributes) { setup_section_params.merge({ field_12: 22, field_35: 5 }) }

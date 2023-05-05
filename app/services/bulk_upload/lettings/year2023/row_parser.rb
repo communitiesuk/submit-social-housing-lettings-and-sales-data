@@ -472,7 +472,11 @@ private
       fields = field_mapping_for_errors[question_id.to_sym] || []
 
       fields.each do |field|
-        errors.add(field, I18n.t("validations.invalid_option", question: QUESTIONS[field]))
+        if setup_question?(question)
+          errors.add(field, I18n.t("validations.invalid_option", question: QUESTIONS[field]), category: :setup)
+        else
+          errors.add(field, I18n.t("validations.invalid_option", question: QUESTIONS[field]))
+        end
       end
     end
   end
