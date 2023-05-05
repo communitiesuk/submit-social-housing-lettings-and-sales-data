@@ -52,10 +52,10 @@ class BulkUpload::SalesLogToCsv
       log.address_line2,
       log.town_or_city,
       log.county,
-      nil, # mistake and now field is left blank
+      nil, # mistake in template. field is ignored
       log.ethnic_group2,
       log.nationalbuy2,
-      nil,
+      nil, # mistake in template. field is ignored
       log.buy2living,
       log.prevtenbuy2,
       log.hhregresstill,
