@@ -33,7 +33,7 @@ gem "roo"
 gem "json-schema"
 # Authentication
 # Point at branch until devise is compatible with Turbo, see https://github.com/heartcombo/devise/pull/5340
-gem "devise", github: "baarkerlounger/devise", branch: "dluhc-fixes"
+gem "devise"
 # Two-factor Authentication for devise models.
 gem "devise_two_factor_authentication"
 # UK postcode parsing and validation

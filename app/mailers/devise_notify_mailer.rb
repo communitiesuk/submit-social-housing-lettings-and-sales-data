@@ -51,7 +51,7 @@ class DeviseNotifyMailer < Devise::Mailer
   end
 
   def email_allowlist
-    Rails.application.credentials[:email_allowlist]
+    Rails.application.credentials[:email_allowlist] || []
   end
 
 private
