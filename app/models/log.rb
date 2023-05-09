@@ -136,6 +136,10 @@ class Log < ApplicationRecord
     format_as_currency(field_value)
   end
 
+  def creation_method
+    bulk_upload_id ? "bulk upload" : "single log"
+  end
+
 private
 
   # Handle logs that are older than previous collection start date

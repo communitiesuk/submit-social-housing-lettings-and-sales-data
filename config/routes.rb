@@ -113,9 +113,12 @@ Rails.application.routes.draw do
       get "users/invite", to: "users/account#new"
       get "lettings-logs", to: "organisations#lettings_logs"
       get "sales-logs", to: "organisations#sales_logs"
-      get "logs/csv-download", to: "organisations#download_csv"
-      post "logs/email-csv", to: "organisations#email_csv"
-      get "logs/csv-confirmation", to: "lettings_logs#csv_confirmation"
+      get "lettings-logs/csv-download", to: "organisations#download_lettings_csv"
+      post "lettings-logs/email-csv", to: "organisations#email_lettings_csv"
+      get "lettings-logs/csv-confirmation", to: "lettings_logs#csv_confirmation"
+      get "sales-logs/csv-download", to: "organisations#download_sales_csv"
+      post "sales-logs/email-csv", to: "organisations#email_sales_csv"
+      get "sales-logs/csv-confirmation", to: "sales_logs#csv_confirmation"
       get "schemes", to: "organisations#schemes"
       get "stock-owners", to: "organisation_relationships#stock_owners"
       get "stock-owners/add", to: "organisation_relationships#add_stock_owner"
@@ -198,6 +201,10 @@ Rails.application.routes.draw do
 
   resources :sales_logs, path: "/sales-logs" do
     collection do
+      get "csv-download", to: "sales_logs#download_csv"
+      post "email-csv", to: "sales_logs#email_csv"
+      get "csv-confirmation", to: "sales_logs#csv_confirmation"
+
       resources :bulk_upload_sales_logs, path: "bulk-upload-logs" do
         collection do
           get :start
