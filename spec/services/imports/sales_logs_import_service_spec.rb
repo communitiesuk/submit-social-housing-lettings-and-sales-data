@@ -897,6 +897,30 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
+    context "and it has an invalid frombeds" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q20Bedrooms").content = "0"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Removing frombeds with error: Number of bedrooms in previous property must be between 1 and 6/)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers" do
+        allow(logger).to receive(:warn)
+
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+
+        expect(sales_log).not_to be_nil
+        expect(sales_log.frombeds).to be_nil
+      end
+    end
+
     context "when inferring default answers for completed sales logs" do
       context "when the armedforcesspouse is not answered" do
         let(:sales_log_id) { "discounted_ownership_sales_log" }
