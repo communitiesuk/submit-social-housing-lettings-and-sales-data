@@ -1207,6 +1207,34 @@ RSpec.describe Imports::LettingsLogsImportService do
       end
     end
 
+    context "and the earnings is not a whole number" do
+      let(:lettings_log_id) { "00d2343e-d5fa-4c89-8400-ec3854b0f2b4" }
+      let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id) }
+      let(:lettings_log_xml) { Nokogiri::XML(lettings_log_file) }
+
+      before do
+        lettings_log_xml.at_xpath("//meta:status").content = "submitted"
+        lettings_log_xml.at_xpath("//xmlns:Q8a").content = "1 Weekly"
+        lettings_log_xml.at_xpath("//xmlns:Q8Money").content = 100.59
+        lettings_log_xml.at_xpath("//xmlns:Q8Refused").content = ""
+      end
+
+      it "does not error" do
+        expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+          .not_to raise_error
+      end
+
+      it "rounds the earnings value" do
+        allow(logger).to receive(:warn)
+
+        lettings_log_service.send(:create_log, lettings_log_xml)
+        lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+        expect(lettings_log).not_to be_nil
+        expect(lettings_log.earnings).to eq(101)
+      end
+    end
+
     context "when setting location fields for 23/24 logs" do
       let(:lettings_log_id) { "00d2343e-d5fa-4c89-8400-ec3854b0f2b4" }
       let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id) }

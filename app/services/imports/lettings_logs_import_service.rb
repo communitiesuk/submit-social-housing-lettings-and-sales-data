@@ -105,7 +105,7 @@ module Imports
 
       attributes["hb"] = unsafe_string_as_integer(xml_doc, "Q6Ben")
       attributes["benefits"] = unsafe_string_as_integer(xml_doc, "Q7Ben")
-      attributes["earnings"] = safe_string_as_decimal(xml_doc, "Q8Money")
+      attributes["earnings"] = safe_string_as_decimal(xml_doc, "Q8Money")&.round
       attributes["net_income_known"] = net_income_known(xml_doc, attributes["earnings"])
       attributes["incfreq"] = unsafe_string_as_integer(xml_doc, "Q8a")
 
