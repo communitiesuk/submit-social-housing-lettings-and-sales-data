@@ -229,10 +229,15 @@ module Imports
         @logs_overridden << sales_log.old_id
         attributes.delete("exdate")
         save_sales_log(attributes, previous_status)
-      elsif sales_log.errors.of_kind?(:income1, :over_hard_max_for_outside_london)
+      elsif sales_log.errors.of_kind?(:income1, :over_hard_max_for_outside_london) || sales_log.errors.of_kind?(:income1, :over_hard_max_for_london)
         @logger.warn("Log #{sales_log.old_id}: Removing income1 as the income1 is invalid")
         @logs_overridden << sales_log.old_id
         attributes.delete("income1")
+        save_sales_log(attributes, previous_status)
+      elsif sales_log.errors.of_kind?(:income2, :over_hard_max_for_london)
+        @logger.warn("Log #{sales_log.old_id}: Removing income2 as the income2 is invalid")
+        @logs_overridden << sales_log.old_id
+        attributes.delete("income2")
         save_sales_log(attributes, previous_status)
       elsif sales_log.errors.of_kind?(:equity, :over_max) || sales_log.errors.of_kind?(:equity, :under_min)
         @logger.warn("Log #{sales_log.old_id}: Removing equity as the equity is invalid")
