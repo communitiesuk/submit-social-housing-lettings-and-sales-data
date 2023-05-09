@@ -528,7 +528,7 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       it "intercepts the relevant validation error" do
-        expect(logger).to receive(:warn).with(/Log shared_ownership_sales_log: Removing equity as the equity is invalid/)
+        expect(logger).to receive(:warn).with(/Removing equity with error: The maximum initial equity stake is 75%/)
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .not_to raise_error
       end
@@ -552,7 +552,7 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       it "intercepts the relevant validation error" do
-        expect(logger).to receive(:warn).with(/Log shared_ownership_sales_log: Removing equity as the equity is invalid/)
+        expect(logger).to receive(:warn).with(/Removing equity with error: The minimum initial equity stake for this type of shared ownership sale is 25%/)
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .not_to raise_error
       end
@@ -631,7 +631,8 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       it "intercepts the relevant validation error" do
-        expect(logger).to receive(:warn).with(/Removing previous postcode known and previous postcode as the postcode is invalid/)
+        expect(logger).to receive(:warn).with(/Removing ppcodenk with error: Buyer's last accommodation and discounted ownership postcodes must match, Last settled accommodation and discounted ownership property postcodes must match/)
+        expect(logger).to receive(:warn).with(/Removing ppostcode_full with error: Buyer's last accommodation and discounted ownership postcodes must match, Last settled accommodation and discounted ownership property postcodes must match/)
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .not_to raise_error
       end
@@ -701,7 +702,7 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       it "intercepts the relevant validation error" do
-        expect(logger).to receive(:warn).with(/Removing exchange date as the exchange date is invalid/)
+        expect(logger).to receive(:warn).with(/Removing exdate with error: Contract exchange date must be less than 1 year before sale completion date/)
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .not_to raise_error
       end
@@ -726,7 +727,7 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       it "intercepts the relevant validation error" do
-        expect(logger).to receive(:warn).with(/Removing mortgage because it cannot be 0/)
+        expect(logger).to receive(:warn).with(/Removing mortgage with error: Mortgage amount must be at least £1, Mortgage value cannot be £0 if a mortgage was used for the purchase of this property/)
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .not_to raise_error
       end
@@ -742,7 +743,7 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
-    context "and it has an invalid income" do
+    context "and it has an invalid income 1" do
       let(:sales_log_id) { "shared_ownership_sales_log" }
 
       before do
@@ -751,7 +752,7 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       it "intercepts the relevant validation error" do
-        expect(logger).to receive(:warn).with(/Removing income1 as the income1 is invalid/)
+        expect(logger).to receive(:warn).with(/Removing income1 with error: Income must be £80,000 or lower for properties outside London local authority/)
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .not_to raise_error
       end
@@ -764,6 +765,56 @@ RSpec.describe Imports::SalesLogsImportService do
 
         expect(sales_log).not_to be_nil
         expect(sales_log.income1).to be_nil
+      end
+    end
+
+    context "and it has an invalid income 1 for london" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q2Person1Income").content = "95000"
+        sales_log_xml.at_xpath("//xmlns:Q14ONSLACode").content = "E09000012"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Removing income1 with error: Income must be £90,000 or lower for properties within a London local authority/)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers" do
+        allow(logger).to receive(:warn)
+
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+
+        expect(sales_log).not_to be_nil
+        expect(sales_log.income1).to be_nil
+      end
+    end
+
+    context "and it has an invalid income 2 for london" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q2Person2Income").content = "95000"
+        sales_log_xml.at_xpath("//xmlns:Q14ONSLACode").content = "E09000012"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Removing income2 with error: Combined income must be £90,000 or lower for properties within a London local authority, Income must be £90,000 or lower for properties within a London local authority/)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers" do
+        allow(logger).to receive(:warn)
+
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+
+        expect(sales_log).not_to be_nil
+        expect(sales_log.income2).to be_nil
       end
     end
 
@@ -814,6 +865,26 @@ RSpec.describe Imports::SalesLogsImportService do
 
           sales_log = SalesLog.find_by(old_id: sales_log_id)
           expect(sales_log&.savingsnk).to be(0)
+        end
+      end
+
+      context "when the savings is given not to the nearest 10" do
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
+
+        before do
+          sales_log_xml.at_xpath("//xmlns:Q3Savings").content = "10013"
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "does not error" do
+          expect { sales_log_service.send(:create_log, sales_log_xml) }.not_to raise_error
+        end
+
+        it "sets savings to the nearest 10" do
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.savings).to be(10_010)
         end
       end
 
