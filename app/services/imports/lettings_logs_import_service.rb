@@ -289,6 +289,7 @@ module Imports
         lettings_log.errors.each do |error|
           @logger.warn("Log #{lettings_log.old_id}: Removing field #{error.attribute} from log triggering validation: #{error.type}")
           attributes.delete(error.attribute.to_s)
+          %w[brent scharge pscharge supcharg tcharge].each { |attribute| attributes.delete(attribute) } if error.attribute == :tcharge
         end
         @logs_overridden << lettings_log.old_id
         return save_lettings_log(attributes, previous_status)

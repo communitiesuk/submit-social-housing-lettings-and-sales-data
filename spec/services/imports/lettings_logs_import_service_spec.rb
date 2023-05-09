@@ -1173,6 +1173,40 @@ RSpec.describe Imports::LettingsLogsImportService do
       end
     end
 
+    context "and an error is added to tcharge for in progress log" do
+      let(:lettings_log_id) { "00d2343e-d5fa-4c89-8400-ec3854b0f2b4" }
+      let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id) }
+      let(:lettings_log_xml) { Nokogiri::XML(lettings_log_file) }
+
+      before do
+        lettings_log_xml.at_xpath("//meta:status").content = "saved"
+        lettings_log_xml.at_xpath("//xmlns:Q18ai").content = "1"
+        lettings_log_xml.at_xpath("//xmlns:Q18aii").content = "2"
+        lettings_log_xml.at_xpath("//xmlns:Q18aiii").content = "3"
+        lettings_log_xml.at_xpath("//xmlns:Q18aiv").content = "3"
+        lettings_log_xml.at_xpath("//xmlns:Q18av").content = "9"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with("Log 00d2343e-d5fa-4c89-8400-ec3854b0f2b4: Removing field tcharge from log triggering validation: under_10")
+        lettings_log_service.send(:create_log, lettings_log_xml)
+      end
+
+      it "clears out the invalid answers" do
+        allow(logger).to receive(:warn)
+
+        lettings_log_service.send(:create_log, lettings_log_xml)
+        lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+        expect(lettings_log).not_to be_nil
+        expect(lettings_log.tcharge).to be_nil
+        expect(lettings_log.brent).to be_nil
+        expect(lettings_log.scharge).to be_nil
+        expect(lettings_log.pscharge).to be_nil
+        expect(lettings_log.supcharg).to be_nil
+      end
+    end
+
     context "when setting location fields for 23/24 logs" do
       let(:lettings_log_id) { "00d2343e-d5fa-4c89-8400-ec3854b0f2b4" }
       let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id) }
