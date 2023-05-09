@@ -795,6 +795,32 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
+    context "and it has an invalid income 2" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q2Person1Income").content = "0"
+        sales_log_xml.at_xpath("//xmlns:Q2Person2Income").content = "95000"
+        sales_log_xml.at_xpath("//xmlns:Q14ONSLACode").content = "E07000223"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Removing income2 with error: Combined income must be £80,000 or lower for properties outside London local authorities, Income must be £80,000 or lower for properties outside London local authority/)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers" do
+        allow(logger).to receive(:warn)
+
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+
+        expect(sales_log).not_to be_nil
+        expect(sales_log.income2).to be_nil
+      end
+    end
+
     context "and it has an invalid income 1 for london" do
       let(:sales_log_id) { "shared_ownership_sales_log" }
 

@@ -225,6 +225,7 @@ module Imports
         %i[exdate over_a_year_from_saledate] => %w[exdate],
         %i[income1 over_hard_max_for_outside_london] => %w[income1],
         %i[income1 over_hard_max_for_london] => %w[income1],
+        %i[income2 over_hard_max_for_outside_london] => %w[income2],
         %i[income2 over_hard_max_for_london] => %w[income2],
         %i[equity over_max] => %w[equity],
         %i[equity under_min] => %w[equity],
