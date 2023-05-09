@@ -70,7 +70,7 @@ module Imports
       attributes["inc1mort"] = unsafe_string_as_integer(xml_doc, "Q2Person1Mortgage")
       attributes["income2"] = safe_string_as_integer(xml_doc, "Q2Person2Income")
       attributes["income2nk"] = income_known(unsafe_string_as_integer(xml_doc, "P2IncKnown"))
-      attributes["savings"] = safe_string_as_integer(xml_doc, "Q3Savings")
+      attributes["savings"] = safe_string_as_integer(xml_doc, "Q3Savings")&.round(-1)
       attributes["savingsnk"] = savings_known(xml_doc)
       attributes["prevown"] = unsafe_string_as_integer(xml_doc, "Q4PrevOwnedProperty")
       attributes["mortgage"] = safe_string_as_decimal(xml_doc, "CALCMORT")

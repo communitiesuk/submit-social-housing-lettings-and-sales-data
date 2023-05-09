@@ -817,6 +817,26 @@ RSpec.describe Imports::SalesLogsImportService do
         end
       end
 
+      context "when the savings is given not to the nearest 10" do
+        let(:sales_log_id) { "discounted_ownership_sales_log" }
+
+        before do
+          sales_log_xml.at_xpath("//xmlns:Q3Savings").content = "10013"
+          allow(logger).to receive(:warn).and_return(nil)
+        end
+
+        it "does not error" do
+          expect { sales_log_service.send(:create_log, sales_log_xml) }.not_to raise_error
+        end
+
+        it "sets savings to the nearest 10" do
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.savings).to be(10_010)
+        end
+      end
+
       context "when inferring age known" do
         let(:sales_log_id) { "discounted_ownership_sales_log" }
 
