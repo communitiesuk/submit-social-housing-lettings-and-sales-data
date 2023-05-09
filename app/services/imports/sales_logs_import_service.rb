@@ -229,6 +229,7 @@ module Imports
         %i[income2 over_hard_max_for_london] => %w[income2],
         %i[equity over_max] => %w[equity],
         %i[equity under_min] => %w[equity],
+        %i[mscharge under_min] => %w[mscharge has_mscharge],
         %i[mortgage cannot_be_0] => %w[mortgage],
       }
 
