@@ -249,6 +249,12 @@ module Imports
         attributes.delete("postcode_full")
         attributes["pcodenk"] = attributes["la"].present? ? 1 : nil
         save_sales_log(attributes, previous_status)
+      elsif sales_log.errors.of_kind?(:ppostcode_full, :wrong_format)
+        @logger.warn("Log #{sales_log.old_id}: Removing previous postcode as the postcode is invalid")
+        @logs_overridden << sales_log.old_id
+        attributes.delete("ppostcode_full")
+        attributes["ppcodenk"] = attributes["prevloc"].present? ? 1 : nil
+        save_sales_log(attributes, previous_status)
       elsif sales_log.errors.of_kind?(:uprn, :uprn_error)
         @logger.warn("Log #{sales_log.old_id}: Setting uprn_known to no with error: #{sales_log.errors[:uprn].join(', ')}")
         @logs_overridden << sales_log.old_id

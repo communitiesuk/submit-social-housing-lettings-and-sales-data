@@ -467,11 +467,11 @@ module Imports
     def previous_postcode_known(xml_doc, previous_postcode, prevloc)
       previous_postcode_known = string_or_nil(xml_doc, "Q12bnot")
       if previous_postcode_known == "Temporary_or_Unknown" || (previous_postcode.nil? && prevloc.present?)
-        0
+        0 # not known
       elsif previous_postcode.nil?
         nil
       else
-        1
+        1 # known
       end
     end
 
