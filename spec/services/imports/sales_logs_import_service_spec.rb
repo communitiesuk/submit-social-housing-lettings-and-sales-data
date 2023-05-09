@@ -595,6 +595,33 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
+    context "and it has a record with previous postcode in invalid format" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q7Postcode").content = "L3132AF"
+        sales_log_xml.at_xpath("//xmlns:Q7ONSLACode").content = "E07000223"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Log shared_ownership_sales_log: Removing previous postcode as the postcode is invalid/)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers and sets correct prevloc" do
+        allow(logger).to receive(:warn)
+
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+
+        expect(sales_log).not_to be_nil
+        expect(sales_log.ppostcode_full).to be_nil
+        expect(sales_log.ppcodenk).to eq(1) # not known
+        expect(sales_log.prevloc).to eq("E07000223") # not known
+      end
+    end
+
     context "and setup field has validation error in incomplete log" do
       let(:sales_log_id) { "shared_ownership_sales_log" }
 
@@ -768,6 +795,32 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
+    context "and it has an invalid income 2" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q2Person1Income").content = "0"
+        sales_log_xml.at_xpath("//xmlns:Q2Person2Income").content = "95000"
+        sales_log_xml.at_xpath("//xmlns:Q14ONSLACode").content = "E07000223"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Removing income2 with error: Combined income must be £80,000 or lower for properties outside London local authorities, Income must be £80,000 or lower for properties outside London local authority/)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers" do
+        allow(logger).to receive(:warn)
+
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+
+        expect(sales_log).not_to be_nil
+        expect(sales_log.income2).to be_nil
+      end
+    end
+
     context "and it has an invalid income 1 for london" do
       let(:sales_log_id) { "shared_ownership_sales_log" }
 
@@ -815,6 +868,56 @@ RSpec.describe Imports::SalesLogsImportService do
 
         expect(sales_log).not_to be_nil
         expect(sales_log.income2).to be_nil
+      end
+    end
+
+    context "and it has an invalid mscharge" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q29MonthlyCharges").content = "0.1"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Removing mscharge with error: Monthly leasehold charges must be at least £1/)
+        expect(logger).to receive(:warn).with(/Removing has_mscharge with error: Monthly leasehold charges must be at least £1/)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers" do
+        allow(logger).to receive(:warn)
+
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+
+        expect(sales_log).not_to be_nil
+        expect(sales_log.mscharge).to be_nil
+        expect(sales_log.has_mscharge).to be_nil
+      end
+    end
+
+    context "and it has an invalid frombeds" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q20Bedrooms").content = "0"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Removing frombeds with error: Number of bedrooms in previous property must be between 1 and 6/)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers" do
+        allow(logger).to receive(:warn)
+
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+
+        expect(sales_log).not_to be_nil
+        expect(sales_log.frombeds).to be_nil
       end
     end
 

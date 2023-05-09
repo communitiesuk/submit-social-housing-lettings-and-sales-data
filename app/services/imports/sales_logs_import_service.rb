@@ -225,10 +225,13 @@ module Imports
         %i[exdate over_a_year_from_saledate] => %w[exdate],
         %i[income1 over_hard_max_for_outside_london] => %w[income1],
         %i[income1 over_hard_max_for_london] => %w[income1],
+        %i[income2 over_hard_max_for_outside_london] => %w[income2],
         %i[income2 over_hard_max_for_london] => %w[income2],
         %i[equity over_max] => %w[equity],
         %i[equity under_min] => %w[equity],
+        %i[mscharge under_min] => %w[mscharge has_mscharge],
         %i[mortgage cannot_be_0] => %w[mortgage],
+        %i[frombeds outside_the_range] => %w[frombeds],
       }
 
       errors.each do |(error, fields)|
@@ -248,6 +251,12 @@ module Imports
         @logs_overridden << sales_log.old_id
         attributes.delete("postcode_full")
         attributes["pcodenk"] = attributes["la"].present? ? 1 : nil
+        save_sales_log(attributes, previous_status)
+      elsif sales_log.errors.of_kind?(:ppostcode_full, :wrong_format)
+        @logger.warn("Log #{sales_log.old_id}: Removing previous postcode as the postcode is invalid")
+        @logs_overridden << sales_log.old_id
+        attributes.delete("ppostcode_full")
+        attributes["ppcodenk"] = attributes["prevloc"].present? ? 1 : nil
         save_sales_log(attributes, previous_status)
       elsif sales_log.errors.of_kind?(:uprn, :uprn_error)
         @logger.warn("Log #{sales_log.old_id}: Setting uprn_known to no with error: #{sales_log.errors[:uprn].join(', ')}")
