@@ -274,6 +274,7 @@ class BulkUpload::Sales::Year2022::RowParser
   validates :field_114, presence: { message: I18n.t("validations.not_answered", question: "company buyer") }, if: :outright_sale?, on: :after_log
   validates :field_109, presence: { message: I18n.t("validations.not_answered", question: "more than 2 buyers") }, if: :joint_purchase?, on: :after_log
 
+  validate :validate_buyer1_economic_status, on: :before_log
   validate :validate_nulls, on: :after_log
   validate :validate_valid_radio_option, on: :before_log
 
@@ -946,7 +947,7 @@ private
         end
       else
         fields.each do |field|
-          unless errors.any? { |e| fields.include?(e.attribute) }
+          if errors.none? { |e| fields.include?(e.attribute) }
             errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase))
           end
         end
@@ -971,7 +972,7 @@ private
         end
       else
         fields.each do |field|
-          unless errors.any? { |e| fields.include?(e.attribute) }
+          if errors.none? { |e| fields.include?(e.attribute) }
             errors.add(field, I18n.t("validations.invalid_option", question: QUESTIONS[field]))
           end
         end
@@ -1019,6 +1020,12 @@ private
       errors.add(:field_13, error_message) # Buyer 1 gender
       errors.add(:field_24, error_message) # Buyer 1 working situation
       errors.add(:field_1, error_message) # Purchaser code
+    end
+  end
+
+  def validate_buyer1_economic_status
+    if field_24 == 9
+      errors.add(:field_24, "Buyer 1 cannot be a child under 16")
     end
   end
 end

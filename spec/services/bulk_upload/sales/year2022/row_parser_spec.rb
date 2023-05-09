@@ -107,13 +107,13 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
     }
   end
 
-  around do |example|
-    FormHandler.instance.use_real_forms!
+  # around do |example|
+  #   FormHandler.instance.use_real_forms!
 
-    example.run
+  #   example.run
 
-    FormHandler.instance.use_fake_forms!
-  end
+  #   FormHandler.instance.use_fake_forms!
+  # end
 
   describe "#blank_row?" do
     context "when a new object" do
@@ -469,6 +469,17 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
       end
     end
 
+    describe "field_24" do # ecstat1
+      context "when buyer 1 is marked as a child" do
+        let(:attributes) { valid_attributes.merge({ field_24: 9 }) }
+
+        it "a custom validation is applied" do
+          validation_message = "Buyer 1 cannot be a child under 16"
+          expect(parser.errors[:field_24]).to include validation_message
+        end
+      end
+    end
+
     describe "fields 2, 3, 4 => saledate" do
       context "when all of these fields are blank" do
         let(:attributes) { setup_section_params.merge({ field_2: nil, field_3: nil, field_4: nil }) }
@@ -619,6 +630,8 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
         end
       end
     end
+
+
   end
 
   describe "inferences" do
