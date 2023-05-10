@@ -285,7 +285,7 @@ class BulkUpload::Sales::Year2022::RowParser
   validate :validate_created_by_related, on: :after_log
   validate :validate_relevant_collection_window, on: :after_log
   validate :validate_incomplete_soft_validations, on: :after_log
-  validate :validate_if_log_already_exists, on: :after_log
+  validate :validate_if_log_already_exists, on: :after_log, if: -> { FeatureToggle.bulk_upload_duplicate_log_check_enabled? }
 
   def self.question_for_field(field)
     QUESTIONS[field]
@@ -592,7 +592,7 @@ private
 
     attributes["othtype"] = field_85
 
-    attributes["owning_organisation_id"] = owning_organisation_id
+    attributes["owning_organisation"] = owning_organisation
     attributes["created_by"] = created_by || bulk_upload.user
     attributes["hhregres"] = hhregres
     attributes["hhregresstill"] = hhregresstill
@@ -802,10 +802,6 @@ private
 
   def owning_organisation
     Organisation.find_by_id_on_multiple_fields(field_92)
-  end
-
-  def owning_organisation_id
-    owning_organisation&.id
   end
 
   def created_by
