@@ -10,7 +10,9 @@ class BulkUploadLettingsResultsController < ApplicationController
   end
 
   def resume
-    @bulk_upload = current_user.bulk_uploads.lettings.find(params[:id])
+    @bulk_upload = BulkUpload.lettings.find(params[:id])
+
+    authorize @bulk_upload
 
     if @bulk_upload.lettings_logs.in_progress.count.positive?
       set_bulk_upload_logs_filters

@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe BulkUploadPolicy do
   subject(:policy) { described_class }
 
-  permissions :summary?, :show? do
+  permissions :summary?, :show?, :resume? do
     it "grants access to owner" do
       user = build(:user)
       bulk_upload = build(:bulk_upload, user:)
