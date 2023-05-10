@@ -180,6 +180,13 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :bulk_upload_lettings_data_check, path: "bulk-upload-data-check", only: %i[show update] do
+        member do
+          get "*page", to: "bulk_upload_lettings_data_check#show", as: "page"
+          patch "*page", to: "bulk_upload_lettings_data_check#update"
+        end
+      end
+
       get "update-logs", to: "lettings_logs#update_logs"
     end
 

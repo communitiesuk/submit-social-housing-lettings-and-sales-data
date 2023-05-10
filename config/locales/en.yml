@@ -73,6 +73,10 @@ en:
             choice:
               blank: You must select how would you like to fix errors
               inclusion: You must select one of the following options for how would like to fix errors
+        forms/bulk_upload_lettings_data_check/soft_errors_valid:
+          attributes:
+            soft_errors_valid:
+              blank: You must select if there are errors in these fields
 
   activerecord:
     errors:

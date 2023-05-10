@@ -1,0 +1,24 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, scope: :form, url: page_bulk_upload_lettings_data_check_path(@bulk_upload, page: "soft-errors-valid"), method: :patch do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <span class="govuk-caption-l">Bulk upload for lettings (<%= @bulk_upload.year_combo %>)</span>
+      <h1 class="govuk-heading-l">Check these <%= pluralize(@bulk_upload.bulk_upload_errors.count, "answer") %> </h1>
+
+      <p class="govuk-body">Some data from your bulk upload might not be right. Check your file for any errors in the fields below.</p>
+
+      <div class="govuk-body-l">
+        <%= @bulk_upload.filename %>
+      </div>
+
+      <%= f.govuk_collection_radio_buttons :soft_errors_valid,
+            @form.options,
+            :id,
+            :name,
+            legend: { text: "Are there any errors in these fields?", size: "l" } %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>
