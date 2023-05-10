@@ -6,6 +6,7 @@ class BulkUploadMailer < NotifyMailer
   FAILED_FILE_SETUP_ERROR_TEMPLATE_ID = "24c9f4c7-96ad-470a-ba31-eb51b7cbafd9".freeze
   FAILED_SERVICE_ERROR_TEMPLATE_ID = "c3f6288c-7a74-4e77-99ee-6c4a0f6e125a".freeze
   HOW_FIX_UPLOAD_TEMPLATE_ID = "21a07b26-f625-4846-9f4d-39e30937aa24".freeze
+  CHECK_SOFT_VALIDATIONS_TEMPLATE_ID = "123".freeze
 
   def send_how_fix_upload_mail(bulk_upload:)
     title = "We found #{pluralize(bulk_upload.bulk_upload_errors.count, 'error')} in your bulk upload"
@@ -15,6 +16,24 @@ class BulkUploadMailer < NotifyMailer
     send_email(
       bulk_upload.user.email,
       HOW_FIX_UPLOAD_TEMPLATE_ID,
+      {
+        title:,
+        filename: bulk_upload.filename,
+        upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
+        description:,
+        cta_link:,
+      },
+    )
+  end
+
+  def send_check_soft_validations_mail(bulk_upload:)
+    title = "Check your file data"
+    description = "Some of your #{bulk_upload.year_combo} #{bulk_upload.log_type} data might not be right. Click the link below to review the potential errors, and check your file to see if the data is correct."
+    cta_link = bulk_upload.sales? ? bulk_upload_sales_check_data_url(bulk_upload) : bulk_upload_lettings_check_data_url(bulk_upload)
+
+    send_email(
+      bulk_upload.user.email,
+      CHECK_SOFT_VALIDATIONS_TEMPLATE_ID,
       {
         title:,
         filename: bulk_upload.filename,

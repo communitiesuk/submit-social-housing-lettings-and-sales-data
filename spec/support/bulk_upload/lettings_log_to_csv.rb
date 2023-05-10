@@ -123,7 +123,7 @@ class BulkUpload::LettingsLogToCsv
       log.benefits,
       log.earnings, # 50
       net_income_known,
-      nil,
+      log.reason,
       log.reasonother,
       nil,
       nil,

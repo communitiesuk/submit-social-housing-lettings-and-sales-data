@@ -18,7 +18,9 @@ class BulkUpload::Processor
     elsif validator.create_logs?
       create_logs
 
-      if created_logs_but_incompleted?
+      if validator.soft_validation_errors_only?
+        send_check_soft_validations_mail
+      elsif created_logs_but_incompleted?
         send_how_fix_upload_mail
       elsif created_logs_and_all_completed?
         bulk_upload.unpend
@@ -43,6 +45,12 @@ private
   def send_how_fix_upload_mail
     BulkUploadMailer
       .send_how_fix_upload_mail(bulk_upload:)
+      .deliver_later
+  end
+
+  def send_check_soft_validations_mail
+    BulkUploadMailer
+      .send_check_soft_validations_mail(bulk_upload:)
       .deliver_later
   end
 
