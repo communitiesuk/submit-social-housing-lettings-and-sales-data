@@ -338,6 +338,12 @@ class BulkUpload::Sales::Year2022::RowParser
     block_log_creation
   end
 
+  def log_already_exists?
+    @log_already_exists ||= SalesLog
+      .where(status: %w[not_started in_progress completed])
+      .exists?(duplicate_check_fields.index_with { |field| log.public_send(field) })
+  end
+
 private
 
   def buyer_not_interviewed?
@@ -855,12 +861,6 @@ private
       postcode_full
       purchid
     ]
-  end
-
-  def log_already_exists?
-    @log_already_exists ||= SalesLog
-      .where(status: %w[not_started in_progress completed])
-      .exists?(duplicate_check_fields.index_with { |field| log.public_send(field) })
   end
 
   def validate_owning_org_data_given
