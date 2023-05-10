@@ -285,6 +285,7 @@ class BulkUpload::Sales::Year2022::RowParser
   validate :validate_created_by_related, on: :after_log
   validate :validate_relevant_collection_window, on: :after_log
   validate :validate_incomplete_soft_validations, on: :after_log
+  validate :validate_if_log_already_exists, on: :after_log
 
   def self.question_for_field(field)
     QUESTIONS[field]
@@ -848,6 +849,24 @@ private
     @questions ||= log.form.subsections.flat_map { |ss| ss.applicable_questions(log) }
   end
 
+  def duplicate_check_fields
+    %w[
+      saledate
+      age1
+      sex1
+      ecstat1
+      owning_organisation
+      postcode_full
+      purchid
+    ]
+  end
+
+  def log_already_exists?
+    @log_already_exists ||= SalesLog
+      .where(status: %w[not_started in_progress completed])
+      .exists?(duplicate_check_fields.index_with { |field| log.public_send(field) })
+  end
+
   def validate_owning_org_data_given
     if field_92.blank?
       block_log_creation!
@@ -983,6 +1002,23 @@ private
           end
         end
       end
+    end
+  end
+
+  def validate_if_log_already_exists
+    if log_already_exists?
+      error_message = "This is a duplicate log"
+
+      errors.add(:field_92, error_message) # Owning org
+      errors.add(:field_2, error_message) # Sale completion date
+      errors.add(:field_3, error_message) # Sale completion date
+      errors.add(:field_4, error_message) # Sale completion date
+      errors.add(:field_41, error_message) # Postcode
+      errors.add(:field_42, error_message) # Postcode
+      errors.add(:field_7, error_message) # Buyer 1 age
+      errors.add(:field_13, error_message) # Buyer 1 gender
+      errors.add(:field_24, error_message) # Buyer 1 working situation
+      errors.add(:field_1, error_message) # Purchaser code
     end
   end
 end
