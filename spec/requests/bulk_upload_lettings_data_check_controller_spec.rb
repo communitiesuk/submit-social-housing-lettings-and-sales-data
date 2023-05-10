@@ -6,6 +6,7 @@ RSpec.describe BulkUploadLettingsDataCheckController, type: :request do
   let(:bulk_upload_errors) { create_list(:bulk_upload_error, 2) }
 
   before do
+    create_list(:lettings_log, 2, bulk_upload:)
     sign_in user
   end
 
@@ -46,6 +47,31 @@ RSpec.describe BulkUploadLettingsDataCheckController, type: :request do
 
         expect(response).to redirect_to("/lettings-logs/bulk-upload-data-check/#{bulk_upload.id}/confirm")
       end
+    end
+  end
+
+  describe "GET /lettings-logs/bulk-upload-data-check/:ID/confirm" do
+    it "renders page" do
+      get "/lettings-logs/bulk-upload-data-check/#{bulk_upload.id}/confirm"
+
+      expect(response).to be_successful
+
+      expect(response.body).to include("Are you sure you want to upload all logs from this bulk upload?")
+      expect(response.body).to include("There are 2 logs in this bulk upload, and 2 unexpected answers will be marked as correct.")
+    end
+  end
+
+  describe "PATCH /lettings-logs/bulk-upload-resume/:ID/confirm" do
+    let(:mock_processor) { instance_double(BulkUpload::Processor, approve: nil) }
+
+    it "approves logs for creation" do
+      allow(BulkUpload::Processor).to receive(:new).with(bulk_upload:).and_return(mock_processor)
+
+      patch "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/confirm"
+
+      expect(mock_processor).to have_received(:approve)
+
+      expect(response).to redirect_to("/lettings-logs/bulk-upload-results/#{bulk_upload.id}/resume")
     end
   end
 end
