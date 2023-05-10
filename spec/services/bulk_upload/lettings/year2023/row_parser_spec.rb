@@ -675,6 +675,20 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
     end
 
+    describe "#field_83 - #field_88" do
+      context "when all blank" do
+        let(:attributes) { setup_section_params.merge({ field_83: nil, field_84: nil, field_85: nil, field_86: nil, field_87: nil, field_88: nil }) }
+
+        it "adds errors to correct fields" do
+          expect(parser.errors[:field_83]).to be_present
+          expect(parser.errors[:field_84]).to be_present
+          expect(parser.errors[:field_85]).to be_present
+          expect(parser.errors[:field_86]).to be_present
+          expect(parser.errors[:field_87]).to be_present
+        end
+      end
+    end
+
     describe "#field_119" do # referral
       context "when 3 ie PRP nominated by LA and owning org is LA" do
         let(:attributes) { { bulk_upload:, field_119: "3", field_1: owning_org.old_visible_id } }
