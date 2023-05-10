@@ -1,9 +1,10 @@
 class BulkUpload::Lettings::LogCreator
   attr_reader :bulk_upload, :path
 
-  def initialize(bulk_upload:, path:)
+  def initialize(bulk_upload:, path:, confirm_soft_validations: false)
     @bulk_upload = bulk_upload
     @path = path
+    @confirm_soft_validations = confirm_soft_validations
   end
 
   def call
@@ -17,6 +18,17 @@ class BulkUpload::Lettings::LogCreator
       row_parser.log.skip_update_status = true
       row_parser.log.status = "pending"
       row_parser.log.status_cache = row_parser.log.calculate_status
+
+      # confirm soft validations
+      if @confirm_soft_validations
+        row_parser.log.retirement_value_check = 0
+        row_parser.log.pregnancy_value_check = 0
+        row_parser.log.major_repairs_date_value_check = 0
+        row_parser.log.void_date_value_check = 0
+        row_parser.log.rent_value_check = 0
+        row_parser.log.net_income_value_check = 0
+        row_parser.log.carehome_charges_value_check = 0
+      end
 
       begin
         row_parser.log.save!

@@ -65,7 +65,7 @@ class BulkUpload::Lettings::Validator
 
   def soft_validation_errors_only?
     errors = bulk_upload.bulk_upload_errors
-    errors.count == errors.where(category: "soft_validation").count
+    errors.count == errors.where(category: "soft_validation").count && errors.count.positive?
   end
 
   def over_column_error_threshold?
