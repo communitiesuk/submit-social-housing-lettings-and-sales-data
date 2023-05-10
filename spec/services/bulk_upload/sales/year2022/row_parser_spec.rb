@@ -506,17 +506,16 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
           Timecop.freeze(Date.new(2022, 4, 2)) do
             example.run
           end
-          Timecop.return
         end
 
         let(:attributes) { setup_section_params.merge({ field_2: "1", field_3: "1", field_4: "22" }) }
 
         let(:bulk_upload) { create(:bulk_upload, :sales, user:, year: 2022) }
 
-        it "returns errors" do
-          expect(parser.errors[:field_2]).to be_present
-          expect(parser.errors[:field_3]).to be_present
-          expect(parser.errors[:field_4]).to be_present
+        it "returns setup errors" do
+          expect(parser.errors.where(:field_2, category: :setup)).to be_present
+          expect(parser.errors.where(:field_3, category: :setup)).to be_present
+          expect(parser.errors.where(:field_4, category: :setup)).to be_present
         end
       end
     end
