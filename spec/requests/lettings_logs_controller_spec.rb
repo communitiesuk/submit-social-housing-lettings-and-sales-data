@@ -438,7 +438,7 @@ RSpec.describe LettingsLogsController, type: :request do
               let(:organisation) { create(:organisation) }
 
               let(:user) { create(:user, organisation:) }
-              let(:bulk_upload) { create(:bulk_upload, user:) }
+              let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }
 
               let!(:included_log) { create(:lettings_log, :in_progress, bulk_upload:, owning_organisation: organisation) }
               let!(:excluded_log) { create(:lettings_log, :in_progress, owning_organisation: organisation) }
@@ -492,7 +492,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
               let(:user) { create(:user, organisation:) }
               let(:other_user) { create(:user, organisation:) }
-              let(:bulk_upload) { create(:bulk_upload, user: other_user) }
+              let(:bulk_upload) { create(:bulk_upload, :lettings, user: other_user) }
 
               let!(:excluded_log) { create(:lettings_log, bulk_upload:, owning_organisation: organisation) }
               let!(:also_excluded_log) { create(:lettings_log, owning_organisation: organisation) }
@@ -509,7 +509,7 @@ RSpec.describe LettingsLogsController, type: :request do
               let(:organisation) { create(:organisation) }
 
               let(:user) { create(:user, organisation:) }
-              let(:bulk_upload) { create(:bulk_upload, user:) }
+              let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }
 
               it "redirects to resume the bulk upload" do
                 get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"

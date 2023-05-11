@@ -105,7 +105,7 @@ module Imports
 
       attributes["hb"] = unsafe_string_as_integer(xml_doc, "Q6Ben")
       attributes["benefits"] = unsafe_string_as_integer(xml_doc, "Q7Ben")
-      attributes["earnings"] = safe_string_as_decimal(xml_doc, "Q8Money")
+      attributes["earnings"] = safe_string_as_decimal(xml_doc, "Q8Money")&.round
       attributes["net_income_known"] = net_income_known(xml_doc, attributes["earnings"])
       attributes["incfreq"] = unsafe_string_as_integer(xml_doc, "Q8a")
 
@@ -284,11 +284,14 @@ module Imports
     end
 
     def rescue_validation_or_raise(lettings_log, attributes, previous_status, exception)
+      charges_attributes = %w[brent scharge pscharge supcharg tcharge]
+
       # Blank out all invalid fields for in-progress logs
       if %w[saved submitted-invalid].include?(previous_status)
         lettings_log.errors.each do |error|
           @logger.warn("Log #{lettings_log.old_id}: Removing field #{error.attribute} from log triggering validation: #{error.type}")
           attributes.delete(error.attribute.to_s)
+          charges_attributes.each { |attribute| attributes.delete(attribute) } if error.attribute == :tcharge
         end
         @logs_overridden << lettings_log.old_id
         return save_lettings_log(attributes, previous_status)
@@ -306,16 +309,16 @@ module Imports
         %i[earnings over_hard_max] => %w[ecstat1],
         %i[tshortfall no_outstanding_charges] => %w[tshortfall hbrentshortfall],
         %i[beds outside_the_range] => %w[beds],
-        %i[tcharge complete_1_of_3] => %w[brent scharge pscharge supcharg tcharge],
-        %i[scharge under_min] => %w[brent scharge pscharge supcharg tcharge],
+        %i[tcharge complete_1_of_3] => charges_attributes,
+        %i[scharge under_min] => charges_attributes,
         %i[tshortfall must_be_positive] => %w[tshortfall tshortfall_known],
         %i[referral referral_invalid] => %w[referral],
-        %i[pscharge outside_the_range] => %w[brent scharge pscharge supcharg tcharge],
-        %i[supcharg outside_the_range] => %w[brent scharge pscharge supcharg tcharge],
-        %i[scharge outside_the_range] => %w[brent scharge pscharge supcharg tcharge],
+        %i[pscharge outside_the_range] => charges_attributes,
+        %i[supcharg outside_the_range] => charges_attributes,
+        %i[scharge outside_the_range] => charges_attributes,
         %i[location_id not_active] => %w[location_id scheme_id],
-        %i[tcharge under_10] => %w[brent scharge pscharge supcharg tcharge],
-        %i[brent over_hard_max] => %w[brent scharge pscharge supcharg tcharge],
+        %i[tcharge under_10] => charges_attributes,
+        %i[brent over_hard_max] => charges_attributes,
       }
 
       (2..8).each do |person|
@@ -464,11 +467,11 @@ module Imports
     def previous_postcode_known(xml_doc, previous_postcode, prevloc)
       previous_postcode_known = string_or_nil(xml_doc, "Q12bnot")
       if previous_postcode_known == "Temporary_or_Unknown" || (previous_postcode.nil? && prevloc.present?)
-        0
+        0 # not known
       elsif previous_postcode.nil?
         nil
       else
-        1
+        1 # known
       end
     end
 

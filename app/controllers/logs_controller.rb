@@ -28,6 +28,10 @@ private
     end
   end
 
+  def codes_only_export?
+    params.require(:codes_only) == "true"
+  end
+
   def post_create_redirect_url
     raise "implement in sub class"
   end

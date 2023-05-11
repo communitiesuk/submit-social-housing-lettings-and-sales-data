@@ -811,7 +811,7 @@ private
   def soctenant
     return unless field_39 && field_113
 
-    if (field_39 == 1 || fields_39 == 2) && field_113 == 1
+    if (field_39 == 1 || field_39 == 2) && field_113 == 1
       1
     elsif field_113 == 1
       2
@@ -941,9 +941,9 @@ private
     return if saledate.blank? || bulk_upload.form.blank?
 
     unless bulk_upload.form.valid_start_date_for_form?(saledate)
-      errors.add(:field_2, I18n.t("validations.date.outside_collection_window"))
-      errors.add(:field_3, I18n.t("validations.date.outside_collection_window"))
-      errors.add(:field_4, I18n.t("validations.date.outside_collection_window"))
+      errors.add(:field_2, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
+      errors.add(:field_3, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
+      errors.add(:field_4, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
     end
   end
 

@@ -148,6 +148,16 @@ RSpec.describe SalesLogsController, type: :request do
           expect(page).to have_content(other_organisation.name)
         end
 
+        it "shows a link for labelled CSV download of logs" do
+          get "/sales-logs", headers: headers, params: {}
+          expect(page).to have_link("Download (CSV)", href: "/sales-logs/csv-download?codes_only=false")
+        end
+
+        it "shows a link for codes only CSV download of logs" do
+          get "/sales-logs", headers: headers, params: {}
+          expect(page).to have_link("Download (CSV, codes only)", href: "/sales-logs/csv-download?codes_only=true")
+        end
+
         context "when there are no logs in the database" do
           before do
             SalesLog.destroy_all
@@ -156,6 +166,12 @@ RSpec.describe SalesLogsController, type: :request do
           it "page has correct title" do
             get "/sales-logs", headers: headers, params: {}
             expect(page).to have_title("Logs - Submit social housing lettings and sales data (CORE) - GOV.UK")
+          end
+
+          it "does not show CSV download links" do
+            get "/sales-logs", headers: headers, params: {}
+            expect(page).not_to have_link("Download (CSV)")
+            expect(page).not_to have_link("Download (CSV, codes only)")
           end
         end
 
@@ -298,6 +314,19 @@ RSpec.describe SalesLogsController, type: :request do
           expect(page).not_to have_content("Managing organisation")
         end
 
+        it "displays standard CSV download link only, with the correct path" do
+          get "/sales-logs", headers:, params: {}
+          expect(page).to have_link("Download (CSV)", href: "/sales-logs/csv-download?codes_only=false")
+          expect(page).not_to have_link("Download (CSV, codes only)")
+        end
+
+        it "does not display CSV download links if there are no logs" do
+          SalesLog.destroy_all
+          get "/sales-logs", headers:, params: {}
+          expect(page).not_to have_link("Download (CSV)")
+          expect(page).not_to have_link("Download (CSV, codes only)")
+        end
+
         context "when using a search query" do
           let(:logs) { FactoryBot.create_list(:sales_log, 3, :completed, owning_organisation: user.organisation, created_by: user) }
           let(:log_to_search) { FactoryBot.create(:sales_log, :completed, owning_organisation: user.organisation, created_by: user) }
@@ -314,6 +343,13 @@ RSpec.describe SalesLogsController, type: :request do
             logs.each do |log|
               expect(page).not_to have_link(log.id.to_s)
             end
+          end
+
+          it "displays the labelled CSV download link, with the search included in the query params" do
+            get "/sales-logs?search=#{log_to_search.id}", headers:, params: {}
+            download_link = page.find_link("Download (CSV)")
+            download_link_params = CGI.parse(URI.parse(download_link[:href]).query)
+            expect(download_link_params).to include("search" => [log_to_search.id.to_s])
           end
 
           context "when search query doesn't match any logs" do
@@ -352,7 +388,7 @@ RSpec.describe SalesLogsController, type: :request do
           end
         end
 
-        context "when there are less than 20 logs" do
+        context "when there are fewer than 20 logs" do
           before do
             get "/sales-logs", headers:, params: {}
           end
@@ -467,6 +503,152 @@ RSpec.describe SalesLogsController, type: :request do
         get "/sales-logs", headers:, params: {}
         page.assert_selector(".govuk-button", text: "Create a new sales log", count: 1)
         page.assert_selector(".govuk-button", text: "Create a new lettings log", count: 0)
+      end
+    end
+
+    context "when requesting CSV download" do
+      let(:headers) { { "Accept" => "text/html" } }
+      let(:search_term) { "foot" }
+      let(:codes_only) { false }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        get "/sales-logs/csv-download?search=#{search_term}&codes_only=#{codes_only}", headers:
+      end
+
+      it "returns http success" do
+        expect(response).to have_http_status(:success)
+      end
+
+      it "shows a confirmation button" do
+        expect(page).to have_button("Send email")
+      end
+
+      it "has a hidden field with the search term" do
+        expect(page).to have_field("search", type: "hidden", with: search_term)
+      end
+
+      context "when user is not support" do
+        context "and export type is not codes only" do
+          it "has a hidden field with the export type" do
+            expect(page).to have_field("codes_only", type: "hidden", with: codes_only)
+          end
+        end
+
+        context "and export type is codes only" do
+          let(:codes_only) { true }
+
+          it "the user is not authorised" do
+            expect(response).to have_http_status(:unauthorized)
+          end
+        end
+      end
+
+      context "when user is support" do
+        let(:user) { FactoryBot.create(:user, :support) }
+
+        context "and export type is not codes only" do
+          it "has a hidden field with the export type" do
+            expect(page).to have_field("codes_only", type: "hidden", with: codes_only)
+          end
+        end
+
+        context "and export type is codes only" do
+          let(:codes_only) { true }
+
+          it "has a hidden field with the export type" do
+            expect(page).to have_field("codes_only", type: "hidden", with: codes_only)
+          end
+        end
+      end
+    end
+
+    context "when confirming the CSV email" do
+      let(:headers) { { "Accept" => "text/html" } }
+
+      it "confirms that the user will receive an email with the requested CSV" do
+        sign_in user
+        get "/sales-logs/csv-confirmation"
+        expect(CGI.unescape_html(response.body)).to include("We’re sending you an email")
+      end
+    end
+  end
+
+  describe "POST #email-csv" do
+    let(:other_organisation) { FactoryBot.create(:organisation) }
+    let(:user) { FactoryBot.create(:user, :support) }
+    let!(:sales_log) do
+      FactoryBot.create(
+        :sales_log,
+        created_by: user,
+      )
+    end
+
+    before do
+      allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+      sign_in user
+      FactoryBot.create(:sales_log)
+      FactoryBot.create(:sales_log,
+                        :completed,
+                        owning_organisation:,
+                        created_by: user)
+    end
+
+    it "creates an E-mail job with the correct log type" do
+      expect {
+        post "/sales-logs/email-csv?codes_only=true", headers:, params: {}
+      }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, nil, true, "sales")
+    end
+
+    it "redirects to the confirmation page" do
+      post "/sales-logs/email-csv?codes_only=true", headers:, params: {}
+      expect(response).to redirect_to(csv_confirmation_sales_logs_path)
+    end
+
+    it "passes the search term" do
+      expect {
+        post "/sales-logs/email-csv?search=#{sales_log.id}&codes_only=false", headers:, params: {}
+      }.to enqueue_job(EmailCsvJob).with(user, sales_log.id.to_s, {}, false, nil, false, "sales")
+    end
+
+    it "passes filter parameters" do
+      expect {
+        post "/sales-logs/email-csv?status[]=completed&codes_only=true", headers:, params: {}
+      }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed] }, false, nil, true, "sales")
+    end
+
+    it "passes export type flag" do
+      expect {
+        post "/sales-logs/email-csv?codes_only=true", headers:, params: {}
+      }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, nil, true, "sales")
+      expect {
+        post "/sales-logs/email-csv?codes_only=false", headers:, params: {}
+      }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, nil, false, "sales")
+    end
+
+    it "passes a combination of search term, export type and filter parameters" do
+      postcode = "XX1 1TG"
+
+      expect {
+        post "/sales-logs/email-csv?status[]=completed&search=#{postcode}&codes_only=false", headers:, params: {}
+      }.to enqueue_job(EmailCsvJob).with(user, postcode, { "status" => %w[completed] }, false, nil, false, "sales")
+    end
+
+    context "when the user is not a support user" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+
+      it "has permission to download human readable csv" do
+        codes_only_export = false
+        expect {
+          post "/sales-logs/email-csv?codes_only=#{codes_only_export}", headers:, params: {}
+        }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, nil, false, "sales")
+      end
+
+      it "is not authorized to download codes only csv" do
+        codes_only_export = true
+        post "/sales-logs/email-csv?codes_only=#{codes_only_export}", headers:, params: {}
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end
