@@ -46,6 +46,8 @@ RSpec.describe BulkUploadLettingsDataCheckController, type: :request do
         patch "/lettings-logs/bulk-upload-data-check/#{bulk_upload.id}/soft-errors-valid", params: { form: { soft_errors_valid: "no" } }
 
         expect(response).to redirect_to("/lettings-logs/bulk-upload-data-check/#{bulk_upload.id}/confirm")
+        follow_redirect!
+        expect(response.body).not_to include("You’ve successfully uploaded")
       end
     end
   end
@@ -58,20 +60,23 @@ RSpec.describe BulkUploadLettingsDataCheckController, type: :request do
 
       expect(response.body).to include("Are you sure you want to upload all logs from this bulk upload?")
       expect(response.body).to include("There are 2 logs in this bulk upload, and 2 unexpected answers will be marked as correct.")
+      expect(response.body).not_to include("You’ve successfully uploaded")
     end
   end
 
-  describe "PATCH /lettings-logs/bulk-upload-resume/:ID/confirm" do
-    let(:mock_processor) { instance_double(BulkUpload::Processor, approve: nil) }
+  describe "PATCH /lettings-logs/bulk-upload-data-check/:ID/confirm" do
+    let(:mock_processor) { instance_double(BulkUpload::Processor, approve_and_confirm_soft_validations: nil) }
 
     it "approves logs for creation" do
       allow(BulkUpload::Processor).to receive(:new).with(bulk_upload:).and_return(mock_processor)
 
-      patch "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/confirm"
+      patch "/lettings-logs/bulk-upload-data-check/#{bulk_upload.id}/confirm"
 
-      expect(mock_processor).to have_received(:approve)
+      expect(mock_processor).to have_received(:approve_and_confirm_soft_validations)
 
-      expect(response).to redirect_to("/lettings-logs/bulk-upload-results/#{bulk_upload.id}/resume")
+      expect(response).to redirect_to("/lettings-logs")
+      follow_redirect!
+      expect(response.body).to include("You’ve successfully uploaded 2 logs")
     end
   end
 end

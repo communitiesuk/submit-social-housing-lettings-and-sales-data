@@ -16,7 +16,7 @@ module Forms
       end
 
       def next_path
-        resume_bulk_upload_lettings_result_path(bulk_upload)
+        lettings_logs_path
       end
 
       def save!

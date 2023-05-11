@@ -1,4 +1,6 @@
 class BulkUploadLettingsDataCheckController < ApplicationController
+  include ActionView::Helpers::TextHelper
+
   before_action :authenticate_user!
 
   def show
@@ -11,6 +13,11 @@ class BulkUploadLettingsDataCheckController < ApplicationController
     @bulk_upload = current_user.bulk_uploads.find(params[:id])
 
     if form.valid? && form.save!
+      if params[:page] == "confirm"
+        n_logs = pluralize(@bulk_upload.logs.count, "log")
+        flash[:notice] = "You’ve successfully uploaded #{n_logs}"
+      end
+
       redirect_to form.next_path
     else
       render form.view_path
