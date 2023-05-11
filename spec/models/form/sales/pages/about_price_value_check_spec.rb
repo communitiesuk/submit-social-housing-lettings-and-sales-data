@@ -53,6 +53,6 @@ RSpec.describe Form::Sales::Pages::AboutPriceValueCheck, type: :model do
   end
 
   it "has the correct interruption_screen_question_ids" do
-    expect(page.interruption_screen_question_ids).to eq(%w[value beds la])
+    expect(page.interruption_screen_question_ids).to eq(%w[value beds uprn postcode_full la])
   end
 end
