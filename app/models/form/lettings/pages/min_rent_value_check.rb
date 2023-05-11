@@ -24,4 +24,8 @@ class Form::Lettings::Pages::MinRentValueCheck < ::Form::Page
   def questions
     @questions ||= [Form::Lettings::Questions::RentValueCheck.new(nil, nil, self, check_answers_card_number: @check_answers_card_number)]
   end
+
+  def interruption_screen_question_ids
+    %w[brent startdate la beds rent_type needstype]
+  end
 end

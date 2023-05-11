@@ -531,24 +531,6 @@ class LettingsLog < Log
 
 private
 
-  def reset_derived_questions
-    dependent_questions = { waityear: [{ key: :renewal, value: 0 }],
-                            referral: [{ key: :renewal, value: 0 }],
-                            rsnvac: [{ key: :renewal, value: 0 }],
-                            underoccupation_benefitcap: [{ key: :renewal, value: 0 }],
-                            wchair: [{ key: :needstype, value: 1 }],
-                            location_id: [{ key: :needstype, value: 1 }] }
-
-    dependent_questions.each do |dependent, conditions|
-      condition_key = conditions.first[:key]
-      condition_value = conditions.first[:value]
-      if public_send("#{condition_key}_changed?") && condition_value == public_send(condition_key) && !public_send("#{dependent}_changed?")
-        Rails.logger.debug("Cleared derived #{dependent} value")
-        self[dependent] = nil
-      end
-    end
-  end
-
   def reset_invalid_unresolved_log_fields!
     return unless unresolved?
 
@@ -581,7 +563,6 @@ private
 
     reset_invalid_unresolved_log_fields!
     reset_scheme
-    reset_derived_questions
   end
 
   def dynamically_not_required

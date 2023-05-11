@@ -70,7 +70,7 @@ module Imports
       attributes["inc1mort"] = unsafe_string_as_integer(xml_doc, "Q2Person1Mortgage")
       attributes["income2"] = safe_string_as_integer(xml_doc, "Q2Person2Income")
       attributes["income2nk"] = income_known(unsafe_string_as_integer(xml_doc, "P2IncKnown"))
-      attributes["savings"] = safe_string_as_integer(xml_doc, "Q3Savings")
+      attributes["savings"] = safe_string_as_integer(xml_doc, "Q3Savings")&.round(-1)
       attributes["savingsnk"] = savings_known(xml_doc)
       attributes["prevown"] = unsafe_string_as_integer(xml_doc, "Q4PrevOwnedProperty")
       attributes["mortgage"] = safe_string_as_decimal(xml_doc, "CALCMORT")
@@ -217,38 +217,46 @@ module Imports
           attributes.delete("ppcodenk") if error.attribute == :ppostcode_full
         end
         @logs_overridden << sales_log.old_id
-        save_sales_log(attributes, previous_status)
-      elsif sales_log.errors.of_kind?(:postcode_full, :postcodes_not_matching)
-        @logger.warn("Log #{sales_log.old_id}: Removing previous postcode known and previous postcode as the postcode is invalid")
+        return save_sales_log(attributes, previous_status)
+      end
+
+      errors = {
+        %i[postcode_full postcodes_not_matching] => %w[ppcodenk ppostcode_full],
+        %i[exdate over_a_year_from_saledate] => %w[exdate],
+        %i[income1 over_hard_max_for_outside_london] => %w[income1],
+        %i[income1 over_hard_max_for_london] => %w[income1],
+        %i[income2 over_hard_max_for_outside_london] => %w[income2],
+        %i[income2 over_hard_max_for_london] => %w[income2],
+        %i[equity over_max] => %w[equity],
+        %i[equity under_min] => %w[equity],
+        %i[mscharge under_min] => %w[mscharge has_mscharge],
+        %i[mortgage cannot_be_0] => %w[mortgage],
+        %i[frombeds outside_the_range] => %w[frombeds],
+      }
+
+      errors.each do |(error, fields)|
+        next unless sales_log.errors.of_kind?(*error)
+
+        attribute, _type = error
+        fields.each do |field|
+          @logger.warn("Log #{sales_log.old_id}: Removing #{field} with error: #{sales_log.errors[attribute].sort.join(', ')}")
+          attributes.delete(field)
+        end
         @logs_overridden << sales_log.old_id
-        attributes.delete("ppcodenk")
-        attributes.delete("ppostcode_full")
-        save_sales_log(attributes, previous_status)
-      elsif sales_log.errors.of_kind?(:exdate, :over_a_year_from_saledate)
-        @logger.warn("Log #{sales_log.old_id}: Removing exchange date as the exchange date is invalid")
-        @logs_overridden << sales_log.old_id
-        attributes.delete("exdate")
-        save_sales_log(attributes, previous_status)
-      elsif sales_log.errors.of_kind?(:income1, :over_hard_max_for_outside_london)
-        @logger.warn("Log #{sales_log.old_id}: Removing income1 as the income1 is invalid")
-        @logs_overridden << sales_log.old_id
-        attributes.delete("income1")
-        save_sales_log(attributes, previous_status)
-      elsif sales_log.errors.of_kind?(:equity, :over_max) || sales_log.errors.of_kind?(:equity, :under_min)
-        @logger.warn("Log #{sales_log.old_id}: Removing equity as the equity is invalid")
-        @logs_overridden << sales_log.old_id
-        attributes.delete("equity")
-        save_sales_log(attributes, previous_status)
-      elsif sales_log.errors.of_kind?(:postcode_full, :wrong_format)
+        return save_sales_log(attributes, previous_status)
+      end
+
+      if sales_log.errors.of_kind?(:postcode_full, :wrong_format)
         @logger.warn("Log #{sales_log.old_id}: Removing postcode as the postcode is invalid")
         @logs_overridden << sales_log.old_id
         attributes.delete("postcode_full")
         attributes["pcodenk"] = attributes["la"].present? ? 1 : nil
         save_sales_log(attributes, previous_status)
-      elsif sales_log.errors.of_kind?(:mortgage, :cannot_be_0)
-        @logger.warn("Log #{sales_log.old_id}: Removing mortgage because it cannot be 0")
+      elsif sales_log.errors.of_kind?(:ppostcode_full, :wrong_format)
+        @logger.warn("Log #{sales_log.old_id}: Removing previous postcode as the postcode is invalid")
         @logs_overridden << sales_log.old_id
-        attributes.delete("mortgage")
+        attributes.delete("ppostcode_full")
+        attributes["ppcodenk"] = attributes["prevloc"].present? ? 1 : nil
         save_sales_log(attributes, previous_status)
       elsif sales_log.errors.of_kind?(:uprn, :uprn_error)
         @logger.warn("Log #{sales_log.old_id}: Setting uprn_known to no with error: #{sales_log.errors[:uprn].join(', ')}")

@@ -23,6 +23,7 @@ RSpec.describe Validations::TenancyValidations do
           record.tenancy = 3
           record.tenancylength = 10
           tenancy_validator.validate_fixed_term_tenancy(record)
+          expect(record.errors["needstype"]).to include(match(expected_error))
           expect(record.errors["tenancylength"]).to include(match(expected_error))
           expect(record.errors["tenancy"]).to include(match(expected_error))
         end
@@ -42,6 +43,7 @@ RSpec.describe Validations::TenancyValidations do
           it "adds an error" do
             record.tenancylength = 1
             tenancy_validator.validate_fixed_term_tenancy(record)
+            expect(record.errors["needstype"]).to include(match(expected_error))
             expect(record.errors["tenancylength"]).to include(match(expected_error))
             expect(record.errors["tenancy"]).to include(match(expected_error))
           end
@@ -51,6 +53,7 @@ RSpec.describe Validations::TenancyValidations do
           it "adds an error" do
             record.tenancylength = 100
             tenancy_validator.validate_fixed_term_tenancy(record)
+            expect(record.errors["needstype"]).to include(match(expected_error))
             expect(record.errors["tenancylength"]).to include(match(expected_error))
             expect(record.errors["tenancy"]).to include(match(expected_error))
           end
@@ -60,8 +63,7 @@ RSpec.describe Validations::TenancyValidations do
           it "does not add an error" do
             record.tenancylength = 3
             tenancy_validator.validate_fixed_term_tenancy(record)
-            expect(record.errors["tenancylength"]).to be_empty
-            expect(record.errors["tenancy"]).to be_empty
+            expect(record.errors).to be_empty
           end
         end
 
@@ -69,8 +71,7 @@ RSpec.describe Validations::TenancyValidations do
           it "does not add an error" do
             record.tenancylength = nil
             tenancy_validator.validate_fixed_term_tenancy(record)
-            expect(record.errors["tenancylength"]).to be_empty
-            expect(record.errors["tenancy"]).to be_empty
+            expect(record.errors).to be_empty
           end
         end
       end
@@ -90,6 +91,7 @@ RSpec.describe Validations::TenancyValidations do
             it "adds an error" do
               record.tenancylength = 1
               tenancy_validator.validate_fixed_term_tenancy(record)
+              expect(record.errors["needstype"]).to include(match(expected_error))
               expect(record.errors["tenancylength"]).to include(match(expected_error))
               expect(record.errors["tenancy"]).to include(match(expected_error))
             end
@@ -99,6 +101,7 @@ RSpec.describe Validations::TenancyValidations do
             it "adds an error" do
               record.tenancylength = 100
               tenancy_validator.validate_fixed_term_tenancy(record)
+              expect(record.errors["needstype"]).to include(match(expected_error))
               expect(record.errors["tenancylength"]).to include(match(expected_error))
               expect(record.errors["tenancy"]).to include(match(expected_error))
             end
@@ -108,8 +111,7 @@ RSpec.describe Validations::TenancyValidations do
             it "does not add an error" do
               record.tenancylength = 3
               tenancy_validator.validate_fixed_term_tenancy(record)
-              expect(record.errors["tenancylength"]).to be_empty
-              expect(record.errors["tenancy"]).to be_empty
+              expect(record.errors).to be_empty
             end
           end
 
@@ -117,8 +119,7 @@ RSpec.describe Validations::TenancyValidations do
             it "does not add an error" do
               record.tenancylength = nil
               tenancy_validator.validate_fixed_term_tenancy(record)
-              expect(record.errors["tenancylength"]).to be_empty
-              expect(record.errors["tenancy"]).to be_empty
+              expect(record.errors).to be_empty
             end
           end
         end
@@ -149,6 +150,7 @@ RSpec.describe Validations::TenancyValidations do
             it "adds an error" do
               record.tenancylength = 1
               tenancy_validator.validate_fixed_term_tenancy(record)
+              expect(record.errors["needstype"]).to include(match(expected_error))
               expect(record.errors["tenancylength"]).to include(match(expected_error))
               expect(record.errors["tenancy"]).to include(match(expected_error))
             end
@@ -158,6 +160,7 @@ RSpec.describe Validations::TenancyValidations do
             it "adds an error" do
               record.tenancylength = 100
               tenancy_validator.validate_fixed_term_tenancy(record)
+              expect(record.errors["needstype"]).to include(match(expected_error))
               expect(record.errors["tenancylength"]).to include(match(expected_error))
               expect(record.errors["tenancy"]).to include(match(expected_error))
             end
@@ -167,8 +170,7 @@ RSpec.describe Validations::TenancyValidations do
             it "does not add an error" do
               record.tenancylength = 3
               tenancy_validator.validate_fixed_term_tenancy(record)
-              expect(record.errors["tenancylength"]).to be_empty
-              expect(record.errors["tenancy"]).to be_empty
+              expect(record.errors).to be_empty
             end
           end
 
@@ -176,8 +178,7 @@ RSpec.describe Validations::TenancyValidations do
             it "does not add an error" do
               record.tenancylength = nil
               tenancy_validator.validate_fixed_term_tenancy(record)
-              expect(record.errors["tenancylength"]).to be_empty
-              expect(record.errors["tenancy"]).to be_empty
+              expect(record.errors).to be_empty
             end
           end
         end
@@ -196,6 +197,7 @@ RSpec.describe Validations::TenancyValidations do
             it "adds an error" do
               record.tenancylength = 1
               tenancy_validator.validate_fixed_term_tenancy(record)
+              expect(record.errors["needstype"]).to include(match(expected_error))
               expect(record.errors["tenancylength"]).to include(match(expected_error))
               expect(record.errors["tenancy"]).to include(match(expected_error))
             end
@@ -205,6 +207,7 @@ RSpec.describe Validations::TenancyValidations do
             it "adds an error" do
               record.tenancylength = 100
               tenancy_validator.validate_fixed_term_tenancy(record)
+              expect(record.errors["needstype"]).to include(match(expected_error))
               expect(record.errors["tenancylength"]).to include(match(expected_error))
               expect(record.errors["tenancy"]).to include(match(expected_error))
             end
@@ -214,8 +217,7 @@ RSpec.describe Validations::TenancyValidations do
             it "does not add an error" do
               record.tenancylength = 3
               tenancy_validator.validate_fixed_term_tenancy(record)
-              expect(record.errors["tenancylength"]).to be_empty
-              expect(record.errors["tenancy"]).to be_empty
+              expect(record.errors).to be_empty
             end
           end
 
@@ -223,8 +225,7 @@ RSpec.describe Validations::TenancyValidations do
             it "does not add an error" do
               record.tenancylength = nil
               tenancy_validator.validate_fixed_term_tenancy(record)
-              expect(record.errors["tenancylength"]).to be_empty
-              expect(record.errors["tenancy"]).to be_empty
+              expect(record.errors).to be_empty
             end
           end
         end

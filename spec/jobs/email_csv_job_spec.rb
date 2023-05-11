@@ -26,6 +26,7 @@ describe EmailCsvJob do
 
     let(:storage_service) { instance_double(Storage::S3Service) }
     let(:mailer) { instance_double(CsvDownloadMailer) }
+    let(:sales_log_csv_service) { instance_double(Csv::SalesLogCsvService) }
 
     before do
       FactoryBot.create(:lettings_log,
@@ -39,18 +40,44 @@ describe EmailCsvJob do
       allow(storage_service).to receive(:write_file)
       allow(storage_service).to receive(:get_presigned_url).and_return(test_url)
 
+      allow(Csv::SalesLogCsvService).to receive(:new).and_return(sales_log_csv_service)
+      allow(sales_log_csv_service).to receive(:prepare_csv).and_return("")
+
       allow(CsvDownloadMailer).to receive(:new).and_return(mailer)
       allow(mailer).to receive(:send_csv_download_mail)
     end
 
-    it "uses an appropriate filename in S3" do
-      expect(storage_service).to receive(:write_file).with(/logs-.*\.csv/, anything)
-      job.perform(user)
+    context "when exporting lettings logs" do
+      it "uses an appropriate filename in S3" do
+        expect(storage_service).to receive(:write_file).with(/lettings-logs-.*\.csv/, anything)
+        job.perform(user)
+      end
+
+      it "includes the organisation name in the filename when one is provided" do
+        expect(storage_service).to receive(:write_file).with(/lettings-logs-#{organisation.name}-.*\.csv/, anything)
+        job.perform(user, nil, {}, nil, organisation)
+      end
     end
 
-    it "includes the organisation name in the filename when one is provided" do
-      expect(storage_service).to receive(:write_file).with(/logs-#{organisation.name}-.*\.csv/, anything)
-      job.perform(user, nil, {}, nil, organisation)
+    context "when exporting sales logs" do
+      it "uses an appropriate filename in S3" do
+        expect(storage_service).to receive(:write_file).with(/sales-logs-.*\.csv/, anything)
+        job.perform(user, nil, {}, nil, nil, nil, "sales")
+      end
+
+      it "includes the organisation name in the filename when one is provided" do
+        expect(storage_service).to receive(:write_file).with(/sales-logs-#{organisation.name}-.*\.csv/, anything)
+        job.perform(user, nil, {}, nil, organisation, nil, "sales")
+      end
+
+      it "creates a SalesLogCsvService with the correct export type" do
+        expect(Csv::SalesLogCsvService).to receive(:new).with(export_type: "labels")
+        codes_only = false
+        job.perform(user, nil, {}, nil, nil, codes_only, "sales")
+        expect(Csv::SalesLogCsvService).to receive(:new).with(export_type: "codes")
+        codes_only = true
+        job.perform(user, nil, {}, nil, nil, codes_only, "sales")
+      end
     end
 
     it "sends an E-mail with the presigned URL and duration" do

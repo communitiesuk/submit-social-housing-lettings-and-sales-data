@@ -10,7 +10,7 @@ class Form::Sales::Pages::Buyer2IncomeValueCheck < ::Form::Page
       },
     ]
     @title_text = {
-      "translation" => "soft_validations.income.under_soft_min_for_economic_status",
+      "translation" => "soft_validations.income.under_soft_min_for_economic_status.title_text",
       "arguments" => [
         {
           "key" => "field_formatted_as_currency",
@@ -24,12 +24,19 @@ class Form::Sales::Pages::Buyer2IncomeValueCheck < ::Form::Page
         },
       ],
     }
-    @informative_text = {}
+    @informative_text = {
+      "translation" => "soft_validations.income.under_soft_min_for_economic_status.hint_text",
+      "arguments" => [],
+    }
   end
 
   def questions
     @questions ||= [
       Form::Sales::Questions::Buyer2IncomeValueCheck.new(nil, nil, self),
     ]
+  end
+
+  def interruption_screen_question_ids
+    %w[ecstat2 income2]
   end
 end

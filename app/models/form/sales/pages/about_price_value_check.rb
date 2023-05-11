@@ -25,8 +25,8 @@ class Form::Sales::Pages::AboutPriceValueCheck < ::Form::Page
           "i18n_template" => "soft_min_or_soft_max",
         },
         {
-          "key" => "purchase_price_min_or_max_text",
-          "i18n_template" => "min_or_max",
+          "key" => "purchase_price_higher_or_lower_text",
+          "i18n_template" => "higher_or_lower",
         },
       ],
     }
@@ -36,5 +36,9 @@ class Form::Sales::Pages::AboutPriceValueCheck < ::Form::Page
     @questions ||= [
       Form::Sales::Questions::AboutPriceValueCheck.new(nil, nil, self),
     ]
+  end
+
+  def interruption_screen_question_ids
+    %w[value beds la]
   end
 end

@@ -36,6 +36,10 @@ RSpec.describe Form::Sales::Pages::MortgageValueCheck, type: :model do
     ])
   end
 
+  it "has correct interruption_screen_question_ids" do
+    expect(page.interruption_screen_question_ids).to eq(%w[mortgage inc1mort inc2mort jointpur income1 income2 inc1mort inc2mort])
+  end
+
   context "when checking buyer 2" do
     let(:index) { 2 }
 

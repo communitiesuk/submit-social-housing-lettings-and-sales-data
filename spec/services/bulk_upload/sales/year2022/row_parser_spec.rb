@@ -506,17 +506,36 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
           Timecop.freeze(Date.new(2022, 4, 2)) do
             example.run
           end
-          Timecop.return
         end
 
         let(:attributes) { setup_section_params.merge({ field_2: "1", field_3: "1", field_4: "22" }) }
 
         let(:bulk_upload) { create(:bulk_upload, :sales, user:, year: 2022) }
 
-        it "returns errors" do
-          expect(parser.errors[:field_2]).to be_present
-          expect(parser.errors[:field_3]).to be_present
-          expect(parser.errors[:field_4]).to be_present
+        it "returns setup errors" do
+          expect(parser.errors.where(:field_2, category: :setup)).to be_present
+          expect(parser.errors.where(:field_3, category: :setup)).to be_present
+          expect(parser.errors.where(:field_4, category: :setup)).to be_present
+        end
+      end
+    end
+
+    describe "soft validations" do
+      context "when soft validation is triggered" do
+        let(:attributes) { valid_attributes.merge({ field_7: 22, field_24: 5 }) }
+
+        it "adds an error to the relevant fields" do
+          soft_validation_errors = parser.errors.select { |e| e.options[:category] == :soft_validation }
+
+          expect(soft_validation_errors.find { |e| e.attribute == :field_7 }).to be_present
+          expect(soft_validation_errors.find { |e| e.attribute == :field_24 }).to be_present
+        end
+
+        it "populates with correct error message" do
+          soft_validation_errors = parser.errors.select { |e| e.options[:category] == :soft_validation }
+
+          expect(soft_validation_errors.find { |e| e.attribute == :field_7 }.message).to eql("You told us this person is aged 22 years and retired.")
+          expect(soft_validation_errors.find { |e| e.attribute == :field_24 }.message).to eql("You told us this person is aged 22 years and retired.")
         end
       end
     end

@@ -12,4 +12,8 @@ class Form::Lettings::Pages::CareHomeChargesValueCheck < ::Form::Page
   def questions
     @questions ||= [Form::Lettings::Questions::CareHomeChargesValueCheck.new(nil, nil, self)]
   end
+
+  def interruption_screen_question_ids
+    %w[chcharge is_carehome]
+  end
 end

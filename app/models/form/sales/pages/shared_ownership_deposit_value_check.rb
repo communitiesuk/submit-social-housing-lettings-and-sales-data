@@ -12,8 +12,8 @@ class Form::Sales::Pages::SharedOwnershipDepositValueCheck < ::Form::Page
       "arguments" => [
         {
           "key" => "field_formatted_as_currency",
-          "arguments_for_key" => "expected_shared_ownership_deposit_value",
-          "i18n_template" => "expected_shared_ownership_deposit_value",
+          "arguments_for_key" => "mortgage_deposit_and_discount_total",
+          "i18n_template" => "mortgage_deposit_and_discount_total",
         },
       ],
     }
@@ -23,5 +23,9 @@ class Form::Sales::Pages::SharedOwnershipDepositValueCheck < ::Form::Page
     @questions ||= [
       Form::Sales::Questions::SharedOwnershipDepositValueCheck.new(nil, nil, self),
     ]
+  end
+
+  def interruption_screen_question_ids
+    %w[mortgage mortgageused cashdis type deposit value equity]
   end
 end

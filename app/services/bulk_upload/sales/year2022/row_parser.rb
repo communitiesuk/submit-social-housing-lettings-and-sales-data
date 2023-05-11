@@ -1,6 +1,7 @@
 class BulkUpload::Sales::Year2022::RowParser
   include ActiveModel::Model
   include ActiveModel::Attributes
+  include InterruptionScreenHelper
 
   QUESTIONS = {
     field_1: "What is the purchaser code?",
@@ -283,6 +284,7 @@ class BulkUpload::Sales::Year2022::RowParser
   validate :validate_created_by_exists, on: :after_log
   validate :validate_created_by_related, on: :after_log
   validate :validate_relevant_collection_window, on: :after_log
+  validate :validate_incomplete_soft_validations, on: :after_log
 
   def self.question_for_field(field)
     QUESTIONS[field]
@@ -831,7 +833,7 @@ private
   def soctenant
     return unless field_39 && field_113
 
-    if (field_39 == 1 || fields_39 == 2) && field_113 == 1
+    if (field_39 == 1 || field_39 == 2) && field_113 == 1
       1
     elsif field_113 == 1
       2
@@ -961,9 +963,26 @@ private
     return if saledate.blank? || bulk_upload.form.blank?
 
     unless bulk_upload.form.valid_start_date_for_form?(saledate)
-      errors.add(:field_2, I18n.t("validations.date.outside_collection_window"))
-      errors.add(:field_3, I18n.t("validations.date.outside_collection_window"))
-      errors.add(:field_4, I18n.t("validations.date.outside_collection_window"))
+      errors.add(:field_2, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
+      errors.add(:field_3, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
+      errors.add(:field_4, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
+    end
+  end
+
+  def validate_incomplete_soft_validations
+    routed_to_soft_validation_questions = log.form.questions.filter { |q| q.type == "interruption_screen" && q.page.routed_to?(log, nil) }
+    routed_to_soft_validation_questions.each do |question|
+      next unless question
+      next if question.completed?(log)
+
+      question.page.interruption_screen_question_ids.each do |interruption_screen_question_id|
+        field_mapping_for_errors[interruption_screen_question_id.to_sym].each do |field|
+          unless errors.any? { |e| e.options[:category] == :soft_validation && field_mapping_for_errors[interruption_screen_question_id.to_sym].include?(e.attribute) }
+            error_message = [display_title_text(question.page.title_text, log), display_informative_text(question.page.informative_text, log)].reject(&:empty?).join(". ")
+            errors.add(field, message: error_message, category: :soft_validation)
+          end
+        end
+      end
     end
   end
 end

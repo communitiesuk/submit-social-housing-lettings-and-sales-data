@@ -46,8 +46,8 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
         "translation" => "soft_validations.retirement.min.title",
         "arguments" => [
           {
-            "key" => "retirement_age_for_person_1",
-            "label" => false,
+            "key" => "age1",
+            "label" => true,
             "i18n_template" => "age",
           },
         ],
@@ -55,21 +55,11 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
     end
 
     it "has correct informative_text" do
-      expect(page.informative_text).to eq({
-        "translation" => "soft_validations.retirement.min.hint_text",
-        "arguments" => [
-          {
-            "key" => "plural_gender_for_person_1",
-            "label" => false,
-            "i18n_template" => "gender",
-          },
-          {
-            "key" => "retirement_age_for_person_1",
-            "label" => false,
-            "i18n_template" => "age",
-          },
-        ],
-      })
+      expect(page.informative_text).to eq({})
+    end
+
+    it "has correct interruption_screen_question_ids" do
+      expect(page.interruption_screen_question_ids).to eq(%w[age1 ecstat1])
     end
   end
 
@@ -94,8 +84,8 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
         "translation" => "soft_validations.retirement.min.title",
         "arguments" => [
           {
-            "key" => "retirement_age_for_person_2",
-            "label" => false,
+            "key" => "age2",
+            "label" => true,
             "i18n_template" => "age",
           },
         ],
@@ -103,21 +93,11 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
     end
 
     it "has correct informative_text" do
-      expect(page.informative_text).to eq({
-        "translation" => "soft_validations.retirement.min.hint_text",
-        "arguments" => [
-          {
-            "key" => "plural_gender_for_person_2",
-            "label" => false,
-            "i18n_template" => "gender",
-          },
-          {
-            "key" => "retirement_age_for_person_2",
-            "label" => false,
-            "i18n_template" => "age",
-          },
-        ],
-      })
+      expect(page.informative_text).to eq({})
+    end
+
+    it "has correct interruption_screen_question_ids" do
+      expect(page.interruption_screen_question_ids).to eq(%w[age2 ecstat2])
     end
   end
 
@@ -142,8 +122,8 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
         "translation" => "soft_validations.retirement.min.title",
         "arguments" => [
           {
-            "key" => "retirement_age_for_person_3",
-            "label" => false,
+            "key" => "age3",
+            "label" => true,
             "i18n_template" => "age",
           },
         ],
@@ -151,21 +131,11 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
     end
 
     it "has correct informative_text" do
-      expect(page.informative_text).to eq({
-        "translation" => "soft_validations.retirement.min.hint_text",
-        "arguments" => [
-          {
-            "key" => "plural_gender_for_person_3",
-            "label" => false,
-            "i18n_template" => "gender",
-          },
-          {
-            "key" => "retirement_age_for_person_3",
-            "label" => false,
-            "i18n_template" => "age",
-          },
-        ],
-      })
+      expect(page.informative_text).to eq({})
+    end
+
+    it "has correct interruption_screen_question_ids" do
+      expect(page.interruption_screen_question_ids).to eq(%w[age3 ecstat3])
     end
   end
 
@@ -190,8 +160,8 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
         "translation" => "soft_validations.retirement.min.title",
         "arguments" => [
           {
-            "key" => "retirement_age_for_person_4",
-            "label" => false,
+            "key" => "age4",
+            "label" => true,
             "i18n_template" => "age",
           },
         ],
@@ -199,21 +169,11 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
     end
 
     it "has correct informative_text" do
-      expect(page.informative_text).to eq({
-        "translation" => "soft_validations.retirement.min.hint_text",
-        "arguments" => [
-          {
-            "key" => "plural_gender_for_person_4",
-            "label" => false,
-            "i18n_template" => "gender",
-          },
-          {
-            "key" => "retirement_age_for_person_4",
-            "label" => false,
-            "i18n_template" => "age",
-          },
-        ],
-      })
+      expect(page.informative_text).to eq({})
+    end
+
+    it "has correct interruption_screen_question_ids" do
+      expect(page.interruption_screen_question_ids).to eq(%w[age4 ecstat4])
     end
   end
 
@@ -238,8 +198,8 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
         "translation" => "soft_validations.retirement.min.title",
         "arguments" => [
           {
-            "key" => "retirement_age_for_person_5",
-            "label" => false,
+            "key" => "age5",
+            "label" => true,
             "i18n_template" => "age",
           },
         ],
@@ -247,21 +207,11 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
     end
 
     it "has correct informative_text" do
-      expect(page.informative_text).to eq({
-        "translation" => "soft_validations.retirement.min.hint_text",
-        "arguments" => [
-          {
-            "key" => "plural_gender_for_person_5",
-            "label" => false,
-            "i18n_template" => "gender",
-          },
-          {
-            "key" => "retirement_age_for_person_5",
-            "label" => false,
-            "i18n_template" => "age",
-          },
-        ],
-      })
+      expect(page.informative_text).to eq({})
+    end
+
+    it "has correct interruption_screen_question_ids" do
+      expect(page.interruption_screen_question_ids).to eq(%w[age5 ecstat5])
     end
   end
 
@@ -286,8 +236,8 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
         "translation" => "soft_validations.retirement.min.title",
         "arguments" => [
           {
-            "key" => "retirement_age_for_person_6",
-            "label" => false,
+            "key" => "age6",
+            "label" => true,
             "i18n_template" => "age",
           },
         ],
@@ -295,21 +245,11 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
     end
 
     it "has correct informative_text" do
-      expect(page.informative_text).to eq({
-        "translation" => "soft_validations.retirement.min.hint_text",
-        "arguments" => [
-          {
-            "key" => "plural_gender_for_person_6",
-            "label" => false,
-            "i18n_template" => "gender",
-          },
-          {
-            "key" => "retirement_age_for_person_6",
-            "label" => false,
-            "i18n_template" => "age",
-          },
-        ],
-      })
+      expect(page.informative_text).to eq({})
+    end
+
+    it "has correct interruption_screen_question_ids" do
+      expect(page.interruption_screen_question_ids).to eq(%w[age6 ecstat6])
     end
   end
 end

@@ -14,4 +14,8 @@ class Form::Sales::Pages::DepositAndMortgageValueCheck < ::Form::Page
       Form::Sales::Questions::DepositAndMortgageValueCheck.new(nil, nil, self),
     ]
   end
+
+  def interruption_screen_question_ids
+    %w[mortgage deposit value discount]
+  end
 end

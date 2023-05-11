@@ -120,10 +120,14 @@ FactoryBot.define do
       has_mscharge { 1 }
       mscharge { 100 }
       mortlen { 10 }
-      pcodenk { 1 }
+      pcodenk { 0 }
+      postcode_full { "SW1A 1AA" }
       is_la_inferred { false }
       mortgagelender { 5 }
       extrabor { 1 }
+    end
+    trait :with_uprn do
+      uprn { rand(999_999_999_999).to_s }
     end
   end
 end

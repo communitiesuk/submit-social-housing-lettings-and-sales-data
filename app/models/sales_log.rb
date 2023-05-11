@@ -234,6 +234,20 @@ class SalesLog < Log
     value * equity / 100
   end
 
+  def mortgage_deposit_and_discount_total
+    mortgage_amount = mortgage || 0
+    deposit_amount = deposit || 0
+    cashdis_amount = cashdis || 0
+
+    mortgage_amount + deposit_amount + cashdis_amount
+  end
+
+  def mortgage_and_deposit_total
+    return unless mortgage && deposit
+
+    mortgage + deposit
+  end
+
   def process_postcode(postcode, postcode_known_key, la_inferred_key, la_key)
     return if postcode.blank?
 
