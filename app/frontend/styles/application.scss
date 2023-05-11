@@ -44,6 +44,7 @@ $govuk-breakpoints: (
 @import "search";
 @import "sub-navigation";
 @import "errors";
+@import "log-list";
 
 // App utilities
 .app-\!-colour-muted {
@@ -52,7 +53,7 @@ $govuk-breakpoints: (
 }
 
 .app-\!-colour-red {
-  color: govuk-colour("red");
+  color: govuk-colour("red") !important;
 }
 
 .app-\!-font-tabular {
