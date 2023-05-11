@@ -126,5 +126,8 @@ FactoryBot.define do
       mortgagelender { 5 }
       extrabor { 1 }
     end
+    trait :with_uprn do
+      uprn { rand(999_999_999_999).to_s }
+    end
   end
 end
