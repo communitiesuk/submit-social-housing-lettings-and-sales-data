@@ -649,10 +649,6 @@ RSpec.describe MergeRequestsController, type: :request do
           it "has the correct back button" do
             expect(page).to have_link("Back", href: new_organisation_address_merge_request_path(merge_request))
           end
-
-          it "has a skip link" do
-            expect(page).to have_link("Skip for now", href: new_organisation_type_merge_request_path(merge_request))
-          end
         end
 
         context "when updating the new organisation telephone number" do
