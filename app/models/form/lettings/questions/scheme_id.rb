@@ -30,10 +30,10 @@ class Form::Lettings::Questions::SchemeId < ::Form::Question
   def displayed_answer_options(lettings_log, _user = nil)
     organisation = lettings_log.owning_organisation || lettings_log.created_by&.organisation
     schemes = if organisation
-                Scheme.select(:id).where(owning_organisation_id: organisation.id,
-                                         confirmed: true)
+                Scheme.includes(:locations).select(:id).where(owning_organisation_id: organisation.id,
+                                                              confirmed: true)
               else
-                Scheme.select(:id).where(confirmed: true)
+                Scheme.includes(:locations).select(:id).where(confirmed: true)
               end
     filtered_scheme_ids = schemes.joins(:locations).merge(Location.where("startdate <= ? or startdate IS NULL",
                                                                          Time.zone.today)).map(&:id)
