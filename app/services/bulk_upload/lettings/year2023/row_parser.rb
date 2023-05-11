@@ -356,6 +356,7 @@ class BulkUpload::Lettings::Year2023::RowParser
   validate :validate_no_disabled_needs_conjunction, on: :after_log
   validate :validate_dont_know_disabled_needs_conjunction, on: :after_log
   validate :validate_no_and_dont_know_disabled_needs_conjunction, on: :after_log
+  validate :validate_no_housing_needs_questions_answered, on: :after_log
   validate :validate_if_log_already_exists, on: :after_log, if: -> { FeatureToggle.bulk_upload_duplicate_log_check_enabled? }
 
   validate :validate_owning_org_data_given, on: :after_log
@@ -580,6 +581,16 @@ private
     if [field_83, field_84, field_85].count(1) > 1
       %i[field_83 field_84 field_85].each do |field|
         errors.add(field, I18n.t("validations.household.housingneeds_type.only_one_option_permitted")) if send(field) == 1
+      end
+    end
+  end
+
+  def validate_no_housing_needs_questions_answered
+    if [field_83, field_84, field_85, field_86, field_87, field_88].all?(&:blank?)
+      errors.add(:field_87, I18n.t("validations.not_answered", question: "anybody with disabled access needs"))
+      errors.add(:field_86, I18n.t("validations.not_answered", question: "other access needs"))
+      %i[field_83 field_84 field_85].each do |field|
+        errors.add(field, I18n.t("validations.not_answered", question: "disabled access needs type"))
       end
     end
   end
