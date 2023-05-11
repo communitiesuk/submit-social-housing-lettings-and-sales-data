@@ -7,11 +7,6 @@ class LettingsLogsController < LogsController
   before_action :extract_bulk_upload_from_session_filters, only: [:index]
   before_action :redirect_if_bulk_upload_resolved, only: [:index]
 
-  def authenticate_scope!
-    codes_only_export = codes_only_export?(params)
-    head :unauthorized and return unless current_user.support? || !codes_only_export
-  end
-
   def index
     respond_to do |format|
       format.html do
@@ -86,19 +81,13 @@ class LettingsLogsController < LogsController
 
   def download_csv
     unpaginated_filtered_logs = filtered_logs(current_user.lettings_logs, search_term, @session_filters)
-    codes_only = codes_only_export?(params)
 
-    render "download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: email_csv_lettings_logs_path, codes_only: }
-  end
-
-  def codes_only_export?(params)
-    params.require(:codes_only) == "true"
+    render "download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: email_csv_lettings_logs_path, codes_only: codes_only_export? }
   end
 
   def email_csv
     all_orgs = params["organisation_select"] == "all"
-    codes_only_export = params.require(:codes_only) == "true"
-    EmailCsvJob.perform_later(current_user, search_term, @session_filters, all_orgs, nil, codes_only_export)
+    EmailCsvJob.perform_later(current_user, search_term, @session_filters, all_orgs, nil, codes_only_export?)
     redirect_to csv_confirmation_lettings_logs_path
   end
 
@@ -123,6 +112,10 @@ class LettingsLogsController < LogsController
   end
 
 private
+
+  def authenticate_scope!
+    head :unauthorized and return if codes_only_export? && !current_user.support?
+  end
 
   def redirect_if_bulk_upload_resolved
     if @bulk_upload && @bulk_upload.lettings_logs.in_progress.count.zero?

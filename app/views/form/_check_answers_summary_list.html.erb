@@ -1,5 +1,5 @@
 <%= govuk_summary_list do |summary_list| %>
-  <% total_applicable_questions(subsection, @log, current_user).each do |question| %>
+  <% questions.each do |question| %>
     <% summary_list.row do |row| %>
       <% row.key { get_question_label(question) } %>
       <% row.value do %>
@@ -23,7 +23,7 @@
       <% if @log.collection_period_open? %>
         <% row.action(
           text: question.action_text(@log),
-          href: question.action_href(@log, question.page.id),
+          href: action_href(@log, question.page.id, referrer),
           visually_hidden_text: question.check_answer_label.to_s.downcase,
         ) %>
       <% end %>

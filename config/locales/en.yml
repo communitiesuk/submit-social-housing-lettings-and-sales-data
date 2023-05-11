@@ -533,44 +533,54 @@ en:
 
   soft_validations:
     net_income:
-      title_text: "Net income is outside the expected range based on the lead tenant’s working situation"
-      hint_text: "<p>You told us the lead tenant’s working situation is: <strong>%{ecstat1}</strong>.</p><p>The household income you have entered is <strong>%{earnings}</strong>.</p>"
+      title_text: "You told us the lead tenant’s income is %{earnings} %{incfreq}."
+      hint_text: "This is %{net_income_higher_or_lower_text} than we would expect for their working situation."
       in_soft_min_range:
         message: "Net income is lower than expected based on the lead tenant’s working situation. Are you sure this is correct?"
       in_soft_max_range:
         message: "Net income is higher than expected based on the lead tenant’s working situation. Are you sure this is correct?"
     income:
-      under_soft_min_for_economic_status: "You said income was %{income}, which is below this working situation's minimum (%{minimum})"
+      under_soft_min_for_economic_status:
+        title_text: "You told us income was %{income}."
+        hint_text: "This is less than we would expect for someone in this working situation."
     rent:
       outside_range_title: "You told us the rent is %{brent}"
       min_hint_text: "The minimum rent expected for this type of property in this local authority is %{soft_min_for_period}."
       max_hint_text: "The maximum rent expected for this type of property in this local authority is %{soft_max_for_period}."
     purchase_price:
       title_text: "You told us the purchase price is %{value}"
-      hint_text: "The %{min_or_max} purchase price expected for this type of property in this local authority is %{soft_min_or_soft_max}"
+      hint_text: "This is %{higher_or_lower} than we would expect"
     retirement:
       min:
-        title: "You told us this person is under %{age} and retired"
+        title: "You told us this person is aged %{age} years and retired."
         hint_text: "The minimum expected retirement age for %{gender} in England is %{age}."
       max:
         title: "You told us this person is %{age} or over and not retired"
         hint_text: "The minimum expected retirement age for %{gender} in England is %{age}."
     extra_borrowing:
-      title: "The mortgage and deposit are higher than the purchase minus the discount"
+      title_text: "You told us that the mortgage and deposit total is %{mortgage_and_deposit_total}"
+      hint_text: "This is higher than the purchase price minus the discount."
     pregnancy:
       title: "You told us somebody in the household is pregnant"
       no_females: "You also told us there are no female tenants living at the property."
       females_not_in_soft_age_range: "You also told us that any female tenants living at the property are in the following age ranges:<ul><li>under 16 years old</li><li>over 50 years old</li></ul>"
     major_repairs_date:
-      title_text: "You told us the time between the start of the tenancy and the major repairs completion date is more than 2 years"
+      title_text: "You told us the property has been vacant for 2 years."
+      hint_text: "This is higher than we would expect."
     void_date:
-      title_text: "You told us the time between the start of the tenancy and the void date is more than 2 years"
+      title_text: "You told us that the property has been vacant for more than 2 years."
+      hint_text: "This is higher than we would expect."
     shared_ownership_deposit:
-      title_text: "Mortgage, deposit and cash discount total should equal %{expected_shared_ownership_deposit_value}"
-    old_persons_shared_ownership: "At least one buyer should be aged over 64 for Older persons’ shared ownership scheme"
-    staircase_bought_seems_high: "You said %{percentage}% was bought in this staircasing transaction, which seems high. Are you sure?"
+      title_text: "You told us that the mortgage, deposit and discount add up to %{mortgage_deposit_and_discount_total}"
+    old_persons_shared_ownership:
+      title_text: "You told us the buyer is using the Older Persons Shared Ownership scheme."
+      hint_text: "At least one buyer must be aged 65 years and over to use this scheme."
+    staircase_bought_seems_high:
+      title_text: "You told us that %{percentage}% was bought in this staircasing transaction."
+      hint_text: "Most staircasing transactions are less than 50%"
     monthly_charges_over_soft_max:
-      title_text: "The amount of monthly charges is high for this type of property and sale type"
+      title_text: "You told us that the monthly charges were %{mscharge}."
+      hint_text: "This is higher than we would expect."
     student_not_child:
       title_text: "You told us this person is a student aged beween 16 and 19"
     discounted_sale_value:
@@ -579,11 +589,28 @@ en:
     care_home_charges:
       title_text: "Care home charges should be provided if this is a care home accommodation"
     buyer1_livein_wrong_for_ownership_type:
-      title_text: "You told us that buyer 1 will not live in the property. For %{ownership_scheme} types, the buyer usually lives in the property."
+      title_text: "You told us that buyer 1 will not live in the property."
+      hint_text: " For %{ownership_scheme} types, the buyer usually lives in the property."
     buyer2_livein_wrong_for_ownership_type:
-      title_text: "You told us that buyer 2 will not live in the property. For %{ownership_scheme} types, the buyer usually lives in the property."
+      title_text: "You told us that buyer 2 will not live in the property."
+      hint_text: " For %{ownership_scheme} types, the buyer usually lives in the property."
     percentage_discount_value:
-      title_text: "You told us that the percentage discount was %{discount}. This seems high for this type of property."
+      title_text: "You told us that the percentage discount is %{discount}."
+      hint_text: "This is higher than we would expect."
+    savings:
+      title_text: "You told us the buyer’s savings were %{savings}."
+      hint_text: "This is higher than we would expect."
+    deposit:
+      title_text: "You told us the buyer’s deposit was %{deposit} and their savings were %{savings}."
+      hint_text: "The deposit amount is higher than we would expect for the amount of savings they have."
+    grant:
+      title_text: "You told us that the grant amount is %{grant}"
+      hint_text: "Loans, grants and subsidies are usually between £9,000 and £16,000."
+    wheelchair:
+      title_text: "You told us that someone in the household uses a wheelchair."
+    mortgage:
+      title_text: "You told us that the mortgage amount is %{mortgage}"
+      hint_text: "This is more than 5 times the income, which is higher than we would expect."
 
   devise:
     two_factor_authentication:

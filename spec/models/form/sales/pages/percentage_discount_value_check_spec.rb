@@ -31,7 +31,10 @@ RSpec.describe Form::Sales::Pages::PercentageDiscountValueCheck, type: :model do
   end
 
   it "has the correct informative_text" do
-    expect(page.informative_text).to eq({})
+    expect(page.informative_text).to eq({
+      "translation" => "soft_validations.percentage_discount_value.hint_text",
+      "arguments" => [],
+    })
   end
 
   it "is interruption screen page" do
@@ -44,5 +47,9 @@ RSpec.describe Form::Sales::Pages::PercentageDiscountValueCheck, type: :model do
         "percentage_discount_invalid?" => true,
       },
     ])
+  end
+
+  it "has correct interruption_screen_question_ids" do
+    expect(page.interruption_screen_question_ids).to eq(%w[discount proptype])
   end
 end

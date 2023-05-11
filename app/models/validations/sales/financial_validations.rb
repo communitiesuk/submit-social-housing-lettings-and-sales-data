@@ -7,7 +7,7 @@ module Validations::Sales::FinancialValidations
 
     relevant_fields = %i[income1 ownershipsch uprn la postcode_full]
     if record.london_property? && record.income1 > 90_000
-      relevant_fields.each { |field| record.errors.add field, I18n.t("validations.financial.income.over_hard_max_for_london") }
+      relevant_fields.each { |field| record.errors.add field, :over_hard_max_for_london, message: I18n.t("validations.financial.income.over_hard_max_for_london") }
     elsif record.property_not_in_london? && record.income1 > 80_000
       relevant_fields.each { |field| record.errors.add field, :over_hard_max_for_outside_london, message: I18n.t("validations.financial.income.over_hard_max_for_outside_london") }
     end
@@ -18,9 +18,9 @@ module Validations::Sales::FinancialValidations
 
     relevant_fields = %i[income2 ownershipsch uprn la postcode_full]
     if record.london_property? && record.income2 > 90_000
-      relevant_fields.each { |field| record.errors.add field, I18n.t("validations.financial.income.over_hard_max_for_london") }
+      relevant_fields.each { |field| record.errors.add field, :over_hard_max_for_london, message: I18n.t("validations.financial.income.over_hard_max_for_london") }
     elsif record.property_not_in_london? && record.income2 > 80_000
-      relevant_fields.each { |field| record.errors.add field, I18n.t("validations.financial.income.over_hard_max_for_outside_london") }
+      relevant_fields.each { |field| record.errors.add field, :over_hard_max_for_outside_london, message: I18n.t("validations.financial.income.over_hard_max_for_outside_london") }
     end
   end
 

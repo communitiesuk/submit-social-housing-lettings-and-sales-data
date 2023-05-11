@@ -789,7 +789,10 @@
               "title_text": {
                 "translation": "soft_validations.void_date.title_text"
               },
-              "informative_text": {},
+              "informative_text": {
+                "translation": "soft_validations.void_date.hint_text",
+                "arguments": []
+              },
               "questions": {
                 "void_date_value_check": {
                   "check_answer_label": "Void date confirmation",
@@ -814,7 +817,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["voiddate", "startdate"]
             },
             "property_major_repairs": {
               "header": "",
@@ -898,7 +902,10 @@
               "title_text": {
                 "translation": "soft_validations.major_repairs_date.title_text"
               },
-              "informative_text": {},
+              "informative_text": {
+                "translation": "soft_validations.major_repairs_date.hint_text",
+                "arguments": []
+              },
               "questions": {
                 "major_repairs_date_value_check": {
                   "check_answer_label": "Major repairs date confirmation",
@@ -923,7 +930,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["mrcdate", "startdate"]
             }
           },
           "displayed_in_tasklist": [
@@ -1237,7 +1245,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_lead_hhmemb_value_check": {
               "depends_on": [
@@ -1280,7 +1289,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "lead_tenant_age": {
               "header": "",
@@ -1379,7 +1389,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_lead_age_value_check": {
               "depends_on": [
@@ -1422,7 +1433,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "lead_tenant_gender_identity": {
               "header": "",
@@ -1500,7 +1512,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_lead_value_check": {
               "depends_on": [
@@ -1543,7 +1556,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "lead_tenant_ethnic_group": {
               "header": "",
@@ -1839,27 +1853,13 @@
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
                   {
-                    "key": "retirement_age_for_person_1",
-                    "label": false,
+                    "key": "age1",
+                    "label": true,
                     "i18n_template": "age"
                   }
                 ]
               },
-              "informative_text": {
-                "translation": "soft_validations.retirement.min.hint_text",
-                "arguments": [
-                  {
-                    "key": "plural_gender_for_person_1",
-                    "label": false,
-                    "i18n_template": "gender"
-                  },
-                  {
-                    "key": "retirement_age_for_person_1",
-                    "label": false,
-                    "i18n_template": "age"
-                  }
-                ]
-              },
+              "informative_text": {},
               "questions": {
                 "retirement_value_check": {
                   "check_answer_label": "Retirement confirmation",
@@ -1885,7 +1885,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["ecstat1", "age1"]
             },
             "lead_tenant_over_retirement_value_check": {
               "depends_on": [
@@ -1943,7 +1944,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["ecstat1", "sex1", "age1"]
             },
             "person_2_known": {
               "header": "You’ve given us the details for 1 person in the household",
@@ -2123,7 +2125,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_person_2_age_value_check": {
               "depends_on": [
@@ -2167,7 +2170,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "person_2_gender_identity": {
               "header": "",
@@ -2246,7 +2250,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_person_2_value_check": {
               "depends_on": [
@@ -2290,7 +2295,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "person_2_working_situation": {
               "header": "",
@@ -2377,27 +2383,13 @@
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
                   {
-                    "key": "retirement_age_for_person_2",
-                    "label": false,
+                    "key": "age2",
+                    "label": true,
                     "i18n_template": "age"
                   }
                 ]
               },
-              "informative_text": {
-                "translation": "soft_validations.retirement.min.hint_text",
-                "arguments": [
-                  {
-                    "key": "plural_gender_for_person_2",
-                    "label": false,
-                    "i18n_template": "gender"
-                  },
-                  {
-                    "key": "retirement_age_for_person_2",
-                    "label": false,
-                    "i18n_template": "age"
-                  }
-                ]
-              },
+              "informative_text": {},
               "questions": {
                 "retirement_value_check": {
                   "check_answer_label": "Retirement confirmation",
@@ -2423,7 +2415,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["ecstat2", "age2"]
             },
             "person_2_over_retirement_value_check": {
               "depends_on": [
@@ -2481,7 +2474,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["ecstat2", "sex2", "age2"]
             },
             "person_3_known": {
               "header": "You’ve given us the details for 2 people in the household",
@@ -2658,7 +2652,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_person_3_age_value_check": {
               "depends_on": [
@@ -2702,7 +2697,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "person_3_gender_identity": {
               "header": "",
@@ -2781,7 +2777,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_person_3_value_check": {
               "depends_on": [
@@ -2825,7 +2822,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "person_3_working_situation": {
               "header": "",
@@ -2912,27 +2910,13 @@
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
                   {
-                    "key": "retirement_age_for_person_3",
-                    "label": false,
+                    "key": "age3",
+                    "label": true,
                     "i18n_template": "age"
                   }
                 ]
               },
-              "informative_text": {
-                "translation": "soft_validations.retirement.min.hint_text",
-                "arguments": [
-                  {
-                    "key": "plural_gender_for_person_3",
-                    "label": false,
-                    "i18n_template": "gender"
-                  },
-                  {
-                    "key": "retirement_age_for_person_3",
-                    "label": false,
-                    "i18n_template": "age"
-                  }
-                ]
-              },
+              "informative_text": {},
               "questions": {
                 "retirement_value_check": {
                   "check_answer_label": "Retirement confirmation",
@@ -2958,7 +2942,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["ecstat3", "age3"]
             },
             "person_3_over_retirement_value_check": {
               "depends_on": [
@@ -3016,7 +3001,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["ecstat3", "sex3", "age3"]
             },
             "person_4_known": {
               "header": "You’ve given us the details for 3 people in the household",
@@ -3190,7 +3176,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_person_4_age_value_check": {
               "depends_on": [
@@ -3234,7 +3221,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "person_4_gender_identity": {
               "header": "",
@@ -3313,7 +3301,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_person_4_value_check": {
               "depends_on": [
@@ -3357,7 +3346,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "person_4_working_situation": {
               "header": "",
@@ -3444,27 +3434,13 @@
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
                   {
-                    "key": "retirement_age_for_person_4",
-                    "label": false,
+                    "key": "age4",
+                    "label": true,
                     "i18n_template": "age"
                   }
                 ]
               },
-              "informative_text": {
-                "translation": "soft_validations.retirement.min.hint_text",
-                "arguments": [
-                  {
-                    "key": "plural_gender_for_person_4",
-                    "label": false,
-                    "i18n_template": "gender"
-                  },
-                  {
-                    "key": "retirement_age_for_person_4",
-                    "label": false,
-                    "i18n_template": "age"
-                  }
-                ]
-              },
+              "informative_text": {},
               "questions": {
                 "retirement_value_check": {
                   "check_answer_label": "Retirement confirmation",
@@ -3490,7 +3466,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["ecstat4", "age4"]
             },
             "person_4_over_retirement_value_check": {
               "depends_on": [
@@ -3548,7 +3525,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["ecstat4", "sex4", "age4"]
             },
             "person_5_known": {
               "header": "You’ve given us the details for 4 people in the household",
@@ -3719,7 +3697,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_person_5_age_value_check": {
               "depends_on": [
@@ -3763,7 +3742,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "person_5_gender_identity": {
               "header": "",
@@ -3842,7 +3822,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_person_5_value_check": {
               "depends_on": [
@@ -3886,7 +3867,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "person_5_working_situation": {
               "header": "",
@@ -3973,27 +3955,13 @@
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
                   {
-                    "key": "retirement_age_for_person_5",
-                    "label": false,
+                    "key": "age5",
+                    "label": true,
                     "i18n_template": "age"
                   }
                 ]
               },
-              "informative_text": {
-                "translation": "soft_validations.retirement.min.hint_text",
-                "arguments": [
-                  {
-                    "key": "plural_gender_for_person_5",
-                    "label": false,
-                    "i18n_template": "gender"
-                  },
-                  {
-                    "key": "retirement_age_for_person_5",
-                    "label": false,
-                    "i18n_template": "age"
-                  }
-                ]
-              },
+              "informative_text": {},
               "questions": {
                 "retirement_value_check": {
                   "check_answer_label": "Retirement confirmation",
@@ -4019,7 +3987,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["ecstat5", "age5"]
             },
             "person_5_over_retirement_value_check": {
               "depends_on": [
@@ -4077,7 +4046,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["ecstat5", "sex5", "age5"]
             },
             "person_6_known": {
               "header": "You’ve given us the details for 5 people in the household",
@@ -4245,7 +4215,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_person_6_age_value_check": {
               "depends_on": [
@@ -4289,7 +4260,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "person_6_gender_identity": {
               "header": "",
@@ -4368,7 +4340,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_person_6_value_check": {
               "depends_on": [
@@ -4412,7 +4385,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "person_6_working_situation": {
               "header": "",
@@ -4499,27 +4473,13 @@
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
                   {
-                    "key": "retirement_age_for_person_6",
-                    "label": false,
+                    "key": "age6",
+                    "label": true,
                     "i18n_template": "age"
                   }
                 ]
               },
-              "informative_text": {
-                "translation": "soft_validations.retirement.min.hint_text",
-                "arguments": [
-                  {
-                    "key": "plural_gender_for_person_6",
-                    "label": false,
-                    "i18n_template": "gender"
-                  },
-                  {
-                    "key": "retirement_age_for_person_6",
-                    "label": false,
-                    "i18n_template": "age"
-                  }
-                ]
-              },
+              "informative_text": {},
               "questions": {
                 "retirement_value_check": {
                   "check_answer_label": "Retirement confirmation",
@@ -4545,7 +4505,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["ecstat6", "age6"]
             },
             "person_6_over_retirement_value_check": {
               "depends_on": [
@@ -4603,7 +4564,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["ecstat6", "sex6", "age6"]
             },
             "person_7_known": {
               "header": "You’ve given us the details for 6 people in the household",
@@ -4768,7 +4730,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_person_7_age_value_check": {
               "depends_on": [
@@ -4812,7 +4775,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "person_7_gender_identity": {
               "header": "",
@@ -4891,7 +4855,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_person_7_value_check": {
               "depends_on": [
@@ -4935,7 +4900,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "person_7_working_situation": {
               "header": "",
@@ -5022,27 +4988,13 @@
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
                   {
-                    "key": "retirement_age_for_person_7",
-                    "label": false,
+                    "key": "age7",
+                    "label": true,
                     "i18n_template": "age"
                   }
                 ]
               },
-              "informative_text": {
-                "translation": "soft_validations.retirement.min.hint_text",
-                "arguments": [
-                  {
-                    "key": "plural_gender_for_person_7",
-                    "label": false,
-                    "i18n_template": "gender"
-                  },
-                  {
-                    "key": "retirement_age_for_person_7",
-                    "label": false,
-                    "i18n_template": "age"
-                  }
-                ]
-              },
+              "informative_text": {},
               "questions": {
                 "retirement_value_check": {
                   "check_answer_label": "Retirement confirmation",
@@ -5068,7 +5020,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["ecstat7", "age7"]
             },
             "person_7_over_retirement_value_check": {
               "depends_on": [
@@ -5126,7 +5079,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["ecstat7", "sex7", "age7"]
             },
             "person_8_known": {
               "header": "You’ve given us the details for 7 people in the household",
@@ -5288,7 +5242,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_person_8_age_value_check": {
               "depends_on": [
@@ -5332,7 +5287,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "person_8_gender_identity": {
               "header": "",
@@ -5411,7 +5367,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_person_8_value_check": {
               "depends_on": [
@@ -5455,7 +5412,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "person_8_working_situation": {
               "header": "",
@@ -5542,27 +5500,13 @@
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
                   {
-                    "key": "retirement_age_for_person_8",
-                    "label": false,
+                    "key": "age8",
+                    "label": true,
                     "i18n_template": "age"
                   }
                 ]
               },
-              "informative_text": {
-                "translation": "soft_validations.retirement.min.hint_text",
-                "arguments": [
-                  {
-                    "key": "plural_gender_for_person_8",
-                    "label": false,
-                    "i18n_template": "gender"
-                  },
-                  {
-                    "key": "retirement_age_for_person_8",
-                    "label": false,
-                    "i18n_template": "age"
-                  }
-                ]
-              },
+              "informative_text": {},
               "questions": {
                 "retirement_value_check": {
                   "check_answer_label": "Retirement confirmation",
@@ -5588,7 +5532,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["ecstat8", "age8"]
             },
             "person_8_over_retirement_value_check": {
               "depends_on": [
@@ -5646,7 +5591,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["ecstat8", "sex8", "age8"]
             }
           }
         },
@@ -5828,7 +5774,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8"]
             },
             "females_in_soft_age_range_in_pregnant_household_value_check": {
               "depends_on": [
@@ -5880,7 +5827,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["preg_occ", "sex1", "sex2", "sex3", "sex4", "sex5", "sex6", "sex7", "sex8", "age1", "age2", "age3", "age4", "age5", "age6", "age7", "age8"]
             },
             "access_needs_exist": {
               "header": "",
@@ -7351,20 +7299,27 @@
                 }
               ],
               "title_text": {
-                "translation": "soft_validations.net_income.title_text"
+                "translation": "soft_validations.net_income.title_text",
+                "arguments" :[
+                  {
+                    "key": "incfreq",
+                    "label": true,
+                    "i18n_template": "incfreq"
+                  },
+                  {
+                    "key": "field_formatted_as_currency",
+                    "arguments_for_key": "earnings",
+                    "i18n_template": "earnings"
+                  }
+                ]
               },
               "informative_text": {
                 "translation": "soft_validations.net_income.hint_text",
                 "arguments": [
                   {
-                    "key": "ecstat1",
-                    "label": true,
-                    "i18n_template": "ecstat1"
-                  },
-                  {
-                    "key": "earnings",
-                    "label": true,
-                    "i18n_template": "earnings"
+                    "key": "net_income_higher_or_lower_text",
+                    "label": false,
+                    "i18n_template": "net_income_higher_or_lower_text"
                   }
                 ]
               },
@@ -7392,7 +7347,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["incfreq", "earnings", "ecstat1"]
             },
             "housing_benefit": {
               "header": "",
@@ -7754,7 +7710,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["chcharge", "is_carehome"]
             },
             "rent_weekly": {
               "header": "Household rent and charges",
@@ -8268,8 +8225,8 @@
                       }
                     ]
                   },
-                  "header": "This rent is lower than expected for this property type, in this area. Check:",
-                  "hint_text": "<ul><li>the decimal point is not missing (£X.XX)</li><li>the frequency is correct, for example weekly, monthly</li><li>the rent type is correct, for example affordable or social rent</li></ul><p>Are you sure this is correct?</p>",
+                  "header": "Are you sure this is correct?",
+                  "hint_text": "This is lower than we would expect. Check:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the rent type is correct, for example affordable or social rent</li></ul>",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
@@ -8280,7 +8237,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["brent", "startdate", "la", "beds", "rent_type", "needstype"]
             },
             "max_rent_value_check": {
               "depends_on": [
@@ -8312,8 +8270,8 @@
                       }
                     ]
                   },
-                  "header": "This rent is higher than expected for this property type, in this area. Check:",
-                  "hint_text": "<ul><li>the decimal point is not missing (£X.XX)</li><li>the frequency is correct, for example weekly, monthly</li><li>the rent type is correct, for example affordable or social rent</li></ul><p>Are you sure this is correct?</p>",
+                  "header": "Are you sure this is correct?",
+                  "hint_text": "This is higher than we would expect. Check:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the rent type is correct, for example affordable or social rent</li></ul>",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
@@ -8324,7 +8282,8 @@
                     }
                   }
                 }
-              }
+              },
+              "interruption_screen_question_ids": ["brent", "startdate", "la", "beds", "rent_type", "needstype"]
             },
             "outstanding": {
               "header": "",

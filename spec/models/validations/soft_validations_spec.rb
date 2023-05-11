@@ -84,25 +84,9 @@ RSpec.describe Validations::SoftValidations do
 
   describe "retirement soft validations" do
     context "when the tenant is retired but under the expected retirement age" do
-      context "when the tenant is female" do
-        it "shows the interruption screen" do
-          record.update!(age1: 43, sex1: "F", ecstat1: 5)
-          expect(record.person_1_retired_under_soft_min_age?).to be true
-        end
-      end
-
-      context "when the tenant is male" do
-        it "shows the interruption screen" do
-          record.update!(age1: 43, sex1: "M", ecstat1: 5)
-          expect(record.person_1_retired_under_soft_min_age?).to be true
-        end
-      end
-
-      context "when the tenant is non-binary" do
-        it "shows the interruption screen" do
-          record.update!(age1: 43, sex1: "X", ecstat1: 5)
-          expect(record.person_1_retired_under_soft_min_age?).to be true
-        end
+      it "shows the interruption screen" do
+        record.update!(age1: 43, ecstat1: 5)
+        expect(record.person_1_retired_under_soft_min_age?).to be true
       end
     end
 
@@ -130,25 +114,9 @@ RSpec.describe Validations::SoftValidations do
     end
 
     context "when the tenant prefers not to say what their economic status is but is under the expected retirement age" do
-      context "when the tenant is female" do
-        it "does not show the interruption screen" do
-          record.update!(age1: 43, sex1: "F", ecstat1: 10)
-          expect(record.person_1_retired_under_soft_min_age?).to be false
-        end
-      end
-
-      context "when the tenant is male" do
-        it "does not show the interruption screen" do
-          record.update!(age1: 43, sex1: "M", ecstat1: 10)
-          expect(record.person_1_retired_under_soft_min_age?).to be false
-        end
-      end
-
-      context "when the tenant is non-binary" do
-        it "does not show the interruption screen" do
-          record.update!(age1: 43, sex1: "X", ecstat1: 10)
-          expect(record.person_1_retired_under_soft_min_age?).to be false
-        end
+      it "does not show the interruption screen" do
+        record.update!(age1: 43, ecstat1: 10)
+        expect(record.person_1_retired_under_soft_min_age?).to be false
       end
     end
 

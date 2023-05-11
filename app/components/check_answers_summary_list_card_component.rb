@@ -28,6 +28,10 @@ class CheckAnswersSummaryListCardComponent < ViewComponent::Base
     "Person #{question.check_answers_card_number}"
   end
 
+  def action_href(log, page_id, referrer = "check_answers")
+    send("#{log.model_name.param_key}_#{page_id}_path", log, referrer:)
+  end
+
 private
 
   def unanswered_value

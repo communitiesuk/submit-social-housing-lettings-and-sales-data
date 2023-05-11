@@ -120,10 +120,6 @@ class Form::Question
     end
   end
 
-  def action_href(log, page_id)
-    "/#{log.model_name.param_key.dasherize}s/#{log.id}/#{page_id.to_s.dasherize}?referrer=check_answers"
-  end
-
   def unanswered?(log)
     return answer_options.keys.none? { |key| value_is_yes?(log[key]) } if type == "checkbox"
 

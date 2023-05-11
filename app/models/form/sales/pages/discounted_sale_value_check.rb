@@ -35,4 +35,8 @@ class Form::Sales::Pages::DiscountedSaleValueCheck < ::Form::Page
       Form::Sales::Questions::DiscountedSaleValueCheck.new(nil, nil, self),
     ]
   end
+
+  def interruption_screen_question_ids
+    %w[value deposit ownershipsch mortgage mortgageused discount grant type]
+  end
 end

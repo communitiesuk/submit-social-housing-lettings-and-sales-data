@@ -29,6 +29,10 @@ module InterruptionScreenHelper
     I18n.t(title_text["translation"], **translation_params).to_s
   end
 
+  def soft_validation_affected_questions(question, log)
+    question.page.interruption_screen_question_ids.map { |question_id| log.form.get_question(question_id, log) }.compact
+  end
+
 private
 
   def get_value_from_argument(log, argument)

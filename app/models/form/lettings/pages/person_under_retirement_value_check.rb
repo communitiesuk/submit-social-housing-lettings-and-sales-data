@@ -7,30 +7,21 @@ class Form::Lettings::Pages::PersonUnderRetirementValueCheck < ::Form::Page
       "translation" => "soft_validations.retirement.min.title",
       "arguments" => [
         {
-          "key" => "retirement_age_for_person_#{person_index}",
-          "label" => false,
+          "key" => "age#{person_index}",
+          "label" => true,
           "i18n_template" => "age",
         },
       ],
     }
-    @informative_text = {
-      "translation" => "soft_validations.retirement.min.hint_text",
-      "arguments" => [
-        {
-          "key" => "plural_gender_for_person_#{person_index}",
-          "label" => false,
-          "i18n_template" => "gender",
-        },
-        {
-          "key" => "retirement_age_for_person_#{person_index}",
-          "label" => false,
-          "i18n_template" => "age",
-        },
-      ],
-    }
+    @informative_text = {}
+    @person_index = person_index
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::NoRetirementValueCheck.new(nil, nil, self)]
+    @questions ||= [Form::Lettings::Questions::NoRetirementValueCheck.new(nil, nil, self, person_index: @person_index)]
+  end
+
+  def interruption_screen_question_ids
+    ["ecstat#{@person_index}", "age#{@person_index}"]
   end
 end

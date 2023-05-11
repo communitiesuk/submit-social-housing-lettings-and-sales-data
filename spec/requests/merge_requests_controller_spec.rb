@@ -553,6 +553,86 @@ RSpec.describe MergeRequestsController, type: :request do
           end
         end
       end
+
+      describe "#new_organsation_address" do
+        let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, new_organisation_name: "New name", new_absorbing_organisation: true) }
+
+        context "when viewing the new organisation name page" do
+          before do
+            get "/merge-request/#{merge_request.id}/new-organisation-address", headers:
+          end
+
+          it "displays the correct question" do
+            expect(page).to have_content("What is New name’s address?")
+          end
+
+          it "has the correct back button" do
+            expect(page).to have_link("Back", href: new_organisation_name_merge_request_path(merge_request))
+          end
+
+          it "has a skip link" do
+            expect(page).to have_link("Skip for now", href: new_organisation_telephone_number_merge_request_path(merge_request))
+          end
+        end
+
+        context "when updating the new organisation address" do
+          let(:params) do
+            { merge_request: {
+              new_organisation_address_line1: "first address line",
+              new_organisation_address_line2: "second address line",
+              new_organisation_postcode: "new postcode",
+              page: "new_organisation_address",
+            } }
+          end
+
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "redirects to new organisation telephone path" do
+            request
+            expect(response).to redirect_to(new_organisation_telephone_number_merge_request_path(merge_request))
+          end
+
+          it "updates new organisation address line 1 to correct addess line" do
+            expect { request }.to change {
+              merge_request.reload.new_organisation_address_line1
+            }.from(nil).to("first address line")
+          end
+
+          it "updates new organisation address line 2 to correct addess line" do
+            expect { request }.to change {
+              merge_request.reload.new_organisation_address_line2
+            }.from(nil).to("second address line")
+          end
+
+          it "updates new organisation postcode to correct addess line" do
+            expect { request }.to change {
+              merge_request.reload.new_organisation_postcode
+            }.from(nil).to("new postcode")
+          end
+        end
+
+        context "when address is not provided" do
+          let(:params) do
+            { merge_request: {
+              new_organisation_address_line1: nil,
+              new_organisation_address_line2: nil,
+              new_organisation_postcode: nil,
+              page: "new_organisation_address",
+            } }
+          end
+
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "does not throw an error" do
+            request
+            expect(response).to redirect_to(new_organisation_telephone_number_merge_request_path(merge_request))
+          end
+        end
+      end
     end
   end
 

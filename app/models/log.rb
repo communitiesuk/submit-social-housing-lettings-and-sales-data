@@ -158,6 +158,10 @@ class Log < ApplicationRecord
     end
   end
 
+  def creation_method
+    bulk_upload_id ? "bulk upload" : "single log"
+  end
+
 private
 
   # Handle logs that are older than previous collection start date

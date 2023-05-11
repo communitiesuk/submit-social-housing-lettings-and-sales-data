@@ -44,4 +44,8 @@ RSpec.describe Form::Sales::Pages::HandoverDateCheck, type: :model do
   it "is interruption screen page" do
     expect(page.interruption_screen?).to eq(true)
   end
+
+  it "is has correct interruption_screen_question_ids" do
+    expect(page.interruption_screen_question_ids).to eq(%w[hodate saledate])
+  end
 end
