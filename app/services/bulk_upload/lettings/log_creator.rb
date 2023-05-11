@@ -19,17 +19,6 @@ class BulkUpload::Lettings::LogCreator
       row_parser.log.status = "pending"
       row_parser.log.status_cache = row_parser.log.calculate_status
 
-      # confirm soft validations
-      if @confirm_soft_validations
-        row_parser.log.retirement_value_check = 0
-        row_parser.log.pregnancy_value_check = 0
-        row_parser.log.major_repairs_date_value_check = 0
-        row_parser.log.void_date_value_check = 0
-        row_parser.log.rent_value_check = 0
-        row_parser.log.net_income_value_check = 0
-        row_parser.log.carehome_charges_value_check = 0
-      end
-
       begin
         row_parser.log.save!
       rescue StandardError => e

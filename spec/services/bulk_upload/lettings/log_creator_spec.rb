@@ -164,30 +164,6 @@ RSpec.describe BulkUpload::Lettings::LogCreator do
         service.call
         expect(LettingsLog.last.status).to eql("pending")
       end
-
-      context "when confirming soft validations" do
-        subject(:service) { described_class.new(bulk_upload:, path:, confirm_soft_validations: true) }
-
-        it "sets unanswered soft validations to yes" do
-          service.call
-
-          log = LettingsLog.last
-          expect(log.age1).to be(22)
-          expect(log.ecstat1).to be(5)
-          expect(log.retirement_value_check).to be(0)
-        end
-      end
-
-      context "when not confirming soft validations" do
-        it "does not set unanswered soft validations" do
-          service.call
-
-          log = LettingsLog.last
-          expect(log.age1).to be(22)
-          expect(log.ecstat1).to be(5)
-          expect(log.retirement_value_check).to be(nil)
-        end
-      end
     end
 
     context "when valid csv with existing log" do

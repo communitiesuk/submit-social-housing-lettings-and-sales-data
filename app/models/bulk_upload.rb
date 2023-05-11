@@ -72,6 +72,21 @@ class BulkUpload < ApplicationRecord
     end
   end
 
+  def unpend_and_confirm_soft_validations
+    logs.find_each do |log|
+      log.skip_update_status = true
+      log.status = log.status_cache
+      log.retirement_value_check = 0
+      log.pregnancy_value_check = 0
+      log.major_repairs_date_value_check = 0
+      log.void_date_value_check = 0
+      log.rent_value_check = 0
+      log.net_income_value_check = 0
+      log.carehome_charges_value_check = 0
+      log.save!
+    end
+  end
+
 private
 
   def generate_identifier

@@ -16,7 +16,14 @@ module Forms
       end
 
       def next_path
-        page_bulk_upload_lettings_resume_path(bulk_upload, page: "fix-choice")
+        resume_bulk_upload_lettings_result_path(bulk_upload)
+      end
+
+      def save!
+        processor = BulkUpload::Processor.new(bulk_upload:)
+        processor.approve_and_confirm_soft_validations
+
+        true
       end
     end
   end

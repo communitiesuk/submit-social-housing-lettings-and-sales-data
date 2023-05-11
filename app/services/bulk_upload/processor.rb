@@ -40,6 +40,10 @@ class BulkUpload::Processor
     bulk_upload.unpend
   end
 
+  def approve_and_confirm_soft_validations
+    bulk_upload.unpend_and_confirm_soft_validations
+  end
+
 private
 
   def send_how_fix_upload_mail
