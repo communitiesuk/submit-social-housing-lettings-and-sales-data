@@ -540,4 +540,46 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
       end
     end
   end
+
+  describe "inferences" do
+    context "when buyer not interviewed and optional values nil" do
+      let(:attributes) { valid_attributes.merge(field_6: "1", field_24: nil, field_30: nil, field_31: nil, field_32: nil, field_34: nil, field_36: nil, field_37: nil, field_39: nil, field_48: nil, field_49: nil) }
+
+      it "infers correctly" do
+        log = parser.log
+        expect(log["noint"]).to eq(1)
+        expect(log["ecstat1"]).to eq(10)
+        expect(log["ethnic"]).to eq(nil)
+        expect(log["ethnic_group"]).to eq(17)
+        expect(log["national"]).to eq(13)
+        expect(log["income1nk"]).to eq(1)
+        expect(log["inc1mort"]).to eq(2)
+        expect(log["savingsnk"]).to eq(1)
+        expect(log["prevown"]).to eq(3)
+        expect(log["prevten"]).to eq(0)
+        expect(log["disabled"]).to eq(3)
+        expect(log["wheel"]).to eq(3)
+      end
+    end
+
+    context "when buyer not interviewed and optional values present" do
+      let(:attributes) { valid_attributes.merge(field_6: "1", field_24: "1", field_30: "1", field_31: "1", field_32: "1", field_34: "1", field_36: "1", field_37: "1", field_39: "1", field_48: "1", field_49: "1") }
+
+      it "does not override variables correctly" do
+        log = parser.log
+        expect(log["noint"]).to eq(1)
+        expect(log["ecstat1"]).to eq(1)
+        expect(log["ethnic"]).to eq(1)
+        expect(log["ethnic_group"]).to eq(0)
+        expect(log["national"]).to eq(1)
+        expect(log["income1nk"]).to eq(0)
+        expect(log["inc1mort"]).to eq(1)
+        expect(log["savingsnk"]).to eq(0)
+        expect(log["prevown"]).to eq(1)
+        expect(log["prevten"]).to eq(1)
+        expect(log["disabled"]).to eq(1)
+        expect(log["wheel"]).to eq(1)
+      end
+    end
+  end
 end
