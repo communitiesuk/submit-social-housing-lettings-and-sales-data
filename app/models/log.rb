@@ -166,6 +166,9 @@ class Log < ApplicationRecord
     bulk_upload_id.present?
   end
 
+  def setup_completed?
+    form.setup_sections.all? { |sections| sections.subsections.all? { |subsection| subsection.status(self) == :completed } }
+  end
 private
 
   # Handle logs that are older than previous collection start date
