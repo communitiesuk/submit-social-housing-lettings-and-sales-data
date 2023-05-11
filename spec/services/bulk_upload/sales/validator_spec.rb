@@ -16,18 +16,6 @@ RSpec.describe BulkUpload::Sales::Validator do
       end
     end
 
-    context "when file has too few columns" do
-      before do
-        file.write("a," * 112)
-        file.write("\n")
-        file.rewind
-      end
-
-      it "is not valid" do
-        expect(validator).not_to be_valid
-      end
-    end
-
     context "when file has too many columns" do
       before do
         file.write((%w[a] * 127).join(","))

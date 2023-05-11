@@ -4,7 +4,6 @@ class BulkUpload::Sales::Validator
   attr_reader :bulk_upload, :path
 
   validate :validate_file_not_empty
-  validate :validate_min_columns
   validate :validate_max_columns
 
   def initialize(bulk_upload:, path:)
@@ -104,14 +103,6 @@ private
 
       halt_validations!
     end
-  end
-
-  def validate_min_columns
-    return if halt_validations?
-
-    column_count = rows.map(&:size).min
-
-    errors.add(:base, :under_min_column_count) if column_count < csv_parser.class::MIN_COLUMNS
   end
 
   def validate_max_columns
