@@ -1,10 +1,9 @@
 class BulkUpload::Sales::LogCreator
   attr_reader :bulk_upload, :path
 
-  def initialize(bulk_upload:, path:, confirm_soft_validations: false)
+  def initialize(bulk_upload:, path:)
     @bulk_upload = bulk_upload
     @path = path
-    @confirm_soft_validations = confirm_soft_validations
   end
 
   def call

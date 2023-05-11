@@ -164,6 +164,15 @@ RSpec.describe BulkUpload::Lettings::LogCreator do
         service.call
         expect(LettingsLog.last.status).to eql("pending")
       end
+
+      it "does not set unanswered soft validations" do
+        service.call
+
+        log = LettingsLog.last
+        expect(log.age1).to be(22)
+        expect(log.ecstat1).to be(5)
+        expect(log.retirement_value_check).to be(nil)
+      end
     end
 
     context "when valid csv with existing log" do

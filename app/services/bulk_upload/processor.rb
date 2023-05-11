@@ -17,7 +17,7 @@ class BulkUpload::Processor
 
     elsif validator.create_logs?
       create_logs
-      
+
       if validator.soft_validation_errors_only?
         send_check_soft_validations_mail
       elsif created_logs_but_incompleted?
@@ -94,11 +94,10 @@ private
     bulk_upload.user
   end
 
-  def create_logs(confirm_soft_validations: false)
+  def create_logs
     log_creator_class.new(
       bulk_upload:,
       path: downloader.path,
-      confirm_soft_validations:,
     ).call
   end
 

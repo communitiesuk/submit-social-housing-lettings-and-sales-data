@@ -74,8 +74,6 @@ class BulkUpload < ApplicationRecord
 
   def unpend_and_confirm_soft_validations
     logs.find_each do |log|
-      log.skip_update_status = true
-      log.status = log.status_cache
       log.retirement_value_check = 0
       log.pregnancy_value_check = 0
       log.major_repairs_date_value_check = 0

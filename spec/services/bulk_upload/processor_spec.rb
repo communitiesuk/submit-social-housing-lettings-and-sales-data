@@ -235,14 +235,14 @@ RSpec.describe BulkUpload::Processor do
         expect(mail_double).to have_received(:deliver_later)
       end
 
-      it "calls log creator without the confirm_soft_validations option" do
+      it "calls log creator" do
         log_creator_double = instance_double(BulkUpload::Lettings::LogCreator, call: nil)
 
         allow(BulkUpload::Lettings::LogCreator).to receive(:new).and_return(log_creator_double)
 
         processor.call
 
-        expect(BulkUpload::Lettings::LogCreator).to have_received(:new).with(bulk_upload:, path:, confirm_soft_validations: false)
+        expect(BulkUpload::Lettings::LogCreator).to have_received(:new).with(bulk_upload:, path:)
       end
     end
 
@@ -313,14 +313,14 @@ RSpec.describe BulkUpload::Processor do
         expect(mail_double).to have_received(:deliver_later)
       end
 
-      it "calls log creator with the confirm_soft_validations option" do
+      it "calls log creator" do
         log_creator_double = instance_double(BulkUpload::Lettings::LogCreator, call: nil)
 
         allow(BulkUpload::Lettings::LogCreator).to receive(:new).and_return(log_creator_double)
 
         processor.call
 
-        expect(BulkUpload::Lettings::LogCreator).to have_received(:new).with(bulk_upload:, path:, confirm_soft_validations: true)
+        expect(BulkUpload::Lettings::LogCreator).to have_received(:new).with(bulk_upload:, path:)
       end
     end
 
