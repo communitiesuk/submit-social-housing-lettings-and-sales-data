@@ -521,7 +521,7 @@ private
     attributes["relat5"] = field_22
     attributes["relat6"] = field_23
 
-    attributes["ecstat1"] = buyer_not_interviewed? && field_24.blank? ? 0 : field_24
+    attributes["ecstat1"] = buyer_not_interviewed? && field_24.blank? ? 10 : field_24
     attributes["ecstat2"] = field_25
     attributes["ecstat3"] = field_26
     attributes["ecstat4"] = field_27
