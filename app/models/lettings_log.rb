@@ -493,8 +493,8 @@ class LettingsLog < Log
     update(unresolved: false)
   end
 
-  def managing_organisation_provider_type
-    managing_organisation&.provider_type
+  def owning_organisation_provider_type
+    owning_organisation&.provider_type
   end
 
   def reset_created_by!
@@ -527,6 +527,16 @@ class LettingsLog < Log
 
   def is_carehome?
     is_carehome == 1
+  end
+
+  def blank_compound_invalid_non_setup_fields!
+    super
+
+    self.postcode_known = nil if errors.attribute_names.include? :postcode_full
+
+    if errors.of_kind?(:earnings, :under_hard_min)
+      self.incfreq = nil
+    end
   end
 
 private

@@ -339,6 +339,10 @@ class BulkUpload::Sales::Year2022::RowParser
 
 private
 
+  def buyer_not_interviewed?
+    field_6 == 1
+  end
+
   def shared_ownership?
     field_113 == 1
   end
@@ -478,7 +482,7 @@ private
     attributes["purchid"] = field_1
     attributes["saledate"] = saledate
 
-    attributes["noint"] = 2 if field_6 == 1
+    attributes["noint"] = field_6
 
     attributes["details_known_2"] = details_known?(2)
     attributes["details_known_3"] = details_known?(3)
@@ -517,7 +521,7 @@ private
     attributes["relat5"] = field_22
     attributes["relat6"] = field_23
 
-    attributes["ecstat1"] = field_24
+    attributes["ecstat1"] = buyer_not_interviewed? && field_24.blank? ? 10 : field_24
     attributes["ecstat2"] = field_25
     attributes["ecstat3"] = field_26
     attributes["ecstat4"] = field_27
@@ -526,18 +530,18 @@ private
 
     attributes["ethnic_group"] = ethnic_group_from_ethnic
     attributes["ethnic"] = field_30
-    attributes["national"] = field_31
-    attributes["income1nk"] = field_32.present? ? 0 : 1
+    attributes["national"] = buyer_not_interviewed? && field_31.blank? ? 13 : field_31
+    attributes["income1nk"] = income1nk
     attributes["income1"] = field_32
     attributes["income2nk"] = field_33.present? ? 0 : 1
     attributes["income2"] = field_33
-    attributes["inc1mort"] = field_34
+    attributes["inc1mort"] = buyer_not_interviewed? && field_32.blank? ? 2 : field_34
     attributes["inc2mort"] = field_35
-    attributes["savingsnk"] = field_36.present? ? 0 : 1
+    attributes["savingsnk"] = savingsnk
     attributes["savings"] = field_36
-    attributes["prevown"] = field_37
+    attributes["prevown"] = buyer_not_interviewed? && field_37.blank? ? 3 : field_37
 
-    attributes["prevten"] = field_39
+    attributes["prevten"] = buyer_not_interviewed? && field_39.blank? ? 0 : field_39
     attributes["prevloc"] = field_40
     attributes["previous_la_known"] = previous_la_known
     attributes["ppcodenk"] = field_43
@@ -549,8 +553,8 @@ private
     attributes["pregother"] = field_47
     attributes["pregblank"] = 1 if [field_44, field_45, field_46, field_47].all?(&:blank?)
 
-    attributes["disabled"] = field_48
-    attributes["wheel"] = field_49
+    attributes["disabled"] = buyer_not_interviewed? && field_48.blank? ? 3 : field_48
+    attributes["wheel"] = buyer_not_interviewed? && field_49.blank? ? 3 : field_49
     attributes["beds"] = field_50
     attributes["proptype"] = field_51
     attributes["builtype"] = field_52
@@ -620,6 +624,22 @@ private
     attributes
   end
 
+  def income1nk
+    if field_32.present?
+      0
+    else
+      buyer_not_interviewed? ? 1 : nil
+    end
+  end
+
+  def savingsnk
+    if field_36.present?
+      0
+    else
+      buyer_not_interviewed? ? 1 : nil
+    end
+  end
+
   def saledate
     Date.new(field_4 + 2000, field_3, field_2) if field_2.present? && field_3.present? && field_4.present?
   rescue Date::Error
@@ -686,21 +706,23 @@ private
   end
 
   def ethnic_group_from_ethnic
-    return nil if field_30.blank?
-
-    case field_30
-    when 1, 2, 3, 18
-      0
-    when 4, 5, 6, 7
-      1
-    when 8, 9, 10, 11, 15
-      2
-    when 12, 13, 14
-      3
-    when 16, 19
-      4
-    when 17
-      17
+    if field_30.blank?
+      buyer_not_interviewed? ? 17 : nil
+    else
+      case field_30
+      when 1, 2, 3, 18
+        0
+      when 4, 5, 6, 7
+        1
+      when 8, 9, 10, 11, 15
+        2
+      when 12, 13, 14
+        3
+      when 16, 19
+        4
+      when 17
+        17
+      end
     end
   end
 
