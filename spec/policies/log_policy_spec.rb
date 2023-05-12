@@ -6,6 +6,26 @@ RSpec.describe LogPolicy do
   permissions :destroy? do
     let(:log) { create(:lettings_log, :setup_completed) }
 
+    context "when log nil" do
+      before do
+        allow(log).to receive(:collection_period_open?).and_return(false)
+      end
+
+      it "does not allow deletion of log" do
+        expect(policy).not_to permit(build(:user, :support), nil)
+      end
+    end
+
+    context "when user nil" do
+      before do
+        allow(log).to receive(:collection_period_open?).and_return(false)
+      end
+
+      it "does not allow deletion of log" do
+        expect(policy).not_to permit(nil, build(:lettings_log, :setup_completed))
+      end
+    end
+
     context "when collection period closed" do
       before do
         allow(log).to receive(:collection_period_open?).and_return(false)
@@ -14,7 +34,7 @@ RSpec.describe LogPolicy do
       it "does not allow deletion of log" do
         expect(log).to receive(:collection_period_open?)
 
-        expect(policy).not_to permit(nil, log)
+        expect(policy).not_to permit(build(:user, :support), log)
       end
     end
 
@@ -32,7 +52,7 @@ RSpec.describe LogPolicy do
           expect(log).to receive(:setup_completed?)
           expect(log).to receive(:collection_period_open?)
 
-          expect(policy).not_to permit(nil, log)
+          expect(policy).not_to permit(build(:user, :support), log)
         end
       end
 

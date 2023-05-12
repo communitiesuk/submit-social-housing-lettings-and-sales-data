@@ -16,7 +16,7 @@
       <%= govuk_button_to(
         "Delete this log",
         @log.lettings? ? lettings_log_path(@log) : sales_log_path(@log),
-        method: :delete
+        method: :delete,
       ) %>
       <%= govuk_button_link_to(
         "Cancel",

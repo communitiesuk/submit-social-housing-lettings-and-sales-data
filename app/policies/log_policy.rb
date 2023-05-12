@@ -7,6 +7,8 @@ class LogPolicy
   end
 
   def destroy?
+    return false unless log && user
+
     # Return false if the log is not editable.
     return false unless log.collection_period_open?
 
