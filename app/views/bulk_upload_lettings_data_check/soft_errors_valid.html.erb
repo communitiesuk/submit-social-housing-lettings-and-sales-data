@@ -12,6 +12,14 @@
         <%= @bulk_upload.filename %>
       </div>
 
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+          <% @bulk_upload.bulk_upload_errors.order_by_cell.group_by(&:row).each do |_row, errors_for_row| %>
+            <%= render BulkUploadErrorRowComponent.new(bulk_upload_errors: errors_for_row) %>
+          <% end %>
+        </div>
+      </div>
+
       <%= f.govuk_collection_radio_buttons :soft_errors_valid,
             @form.options,
             :id,

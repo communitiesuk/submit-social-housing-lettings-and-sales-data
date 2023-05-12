@@ -20,6 +20,14 @@ RSpec.describe BulkUploadSalesDataCheckController, type: :request do
       expect(response.body).to include(bulk_upload.filename)
       expect(response.body).to include("Are there any errors in these fields?")
     end
+
+    it "shows the soft validation and lists the errors" do
+      get "/sales-logs/bulk-upload-data-check/#{bulk_upload.id}/soft-errors-valid"
+
+      expect(response.body).to include("Row #{bulk_upload_errors.first.row}")
+      expect(response.body).to include("Purchaser code")
+      expect(response.body).to include("some error")
+    end
   end
 
   describe "PATCH /sales-logs/bulk-upload-data-check/:ID/soft-errors-valid" do
