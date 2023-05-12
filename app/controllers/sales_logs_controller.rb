@@ -3,6 +3,9 @@ class SalesLogsController < LogsController
   before_action :set_session_filters, if: :current_user, only: %i[index email_csv download_csv]
   before_action :authenticate_scope!, only: %i[download_csv email_csv]
 
+  before_action :extract_bulk_upload_from_session_filters, only: [:index]
+  before_action :redirect_if_bulk_upload_resolved, only: [:index]
+
   def create
     super { SalesLog.new(log_params) }
   end
@@ -60,6 +63,17 @@ class SalesLogsController < LogsController
   end
 
 private
+
+  def extract_bulk_upload_from_session_filters
+    filter_service = FilterService.new(current_user:, session:)
+    @bulk_upload = filter_service.bulk_upload
+  end
+
+  def redirect_if_bulk_upload_resolved
+    if @bulk_upload&.sales? && @bulk_upload.sales_logs.in_progress.count.zero?
+      redirect_to resume_bulk_upload_sales_result_path(@bulk_upload)
+    end
+  end
 
   def authenticate_scope!
     head :unauthorized and return if codes_only_export? && !current_user.support?
