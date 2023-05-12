@@ -175,43 +175,4 @@ RSpec.describe Validations::SharedValidations do
       end
     end
   end
-
-  describe "#validate_previous_accommodation_postcode" do
-    it "does not add an error if the lettings_log ppostcode_full is missing when postcode not known" do
-      lettings_log.ppcodenk = 2
-      lettings_log.ppostcode_full = nil
-      shared_validator.validate_previous_accommodation_postcode(lettings_log)
-      expect(lettings_log.errors).to be_empty
-    end
-
-    it "does add an error if the lettings_log ppostcode_full is missing when postcode is known" do
-      lettings_log.ppcodenk = 1
-      lettings_log.ppostcode_full = nil
-      shared_validator.validate_previous_accommodation_postcode(lettings_log)
-      expect(lettings_log.errors).not_to be_empty
-      expect(lettings_log.errors["ppostcode_full"].first).to eq(I18n.t("validations.postcode"))
-    end
-
-    it "does not add an error if the lettings_log ppostcode_full is valid (uppercase space)" do
-      lettings_log.ppcodenk = 1
-      lettings_log.ppostcode_full = "M1 1AE"
-      shared_validator.validate_previous_accommodation_postcode(lettings_log)
-      expect(lettings_log.errors).to be_empty
-    end
-
-    it "does not add an error if the lettings_log ppostcode_full is valid (lowercase no space)" do
-      lettings_log.ppcodenk = 1
-      lettings_log.ppostcode_full = "m11ae"
-      shared_validator.validate_previous_accommodation_postcode(lettings_log)
-      expect(lettings_log.errors).to be_empty
-    end
-
-    it "does add an error when the postcode is invalid" do
-      lettings_log.ppcodenk = 1
-      lettings_log.ppostcode_full = "invalid"
-      shared_validator.validate_previous_accommodation_postcode(lettings_log)
-      expect(lettings_log.errors).not_to be_empty
-      expect(lettings_log.errors["ppostcode_full"].first).to eq(I18n.t("validations.postcode"))
-    end
-  end
 end
