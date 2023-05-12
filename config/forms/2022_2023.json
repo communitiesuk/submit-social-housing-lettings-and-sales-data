@@ -7010,7 +7010,7 @@
               },
               "depends_on": [
                 {
-                  "managing_organisation_provider_type": "LA",
+                  "owning_organisation_provider_type": "LA",
                   "needstype": 1,
                   "renewal": 0
                 }
@@ -7067,7 +7067,7 @@
               },
               "depends_on": [
                 {
-                  "managing_organisation_provider_type": "PRP",
+                  "owning_organisation_provider_type": "PRP",
                   "needstype": 1,
                   "renewal": 0
                 }
@@ -7124,7 +7124,7 @@
               },
               "depends_on": [
                 {
-                  "managing_organisation_provider_type": "LA",
+                  "owning_organisation_provider_type": "LA",
                   "needstype": 2,
                   "renewal": 0
                 }
@@ -7184,7 +7184,7 @@
               },
               "depends_on": [
                 {
-                  "managing_organisation_provider_type": "PRP",
+                  "owning_organisation_provider_type": "PRP",
                   "needstype": 2,
                   "renewal": 0
                 }

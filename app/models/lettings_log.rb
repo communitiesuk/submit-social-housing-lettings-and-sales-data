@@ -493,8 +493,8 @@ class LettingsLog < Log
     update(unresolved: false)
   end
 
-  def managing_organisation_provider_type
-    managing_organisation&.provider_type
+  def owning_organisation_provider_type
+    owning_organisation&.provider_type
   end
 
   def reset_created_by!

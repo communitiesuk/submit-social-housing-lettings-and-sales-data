@@ -76,8 +76,8 @@ module DerivedVariables::LettingsLogVariables
       self.voiddate = startdate
       self.unitletas = form.start_date.year >= 2023 ? UNITLETAS_MAPPING_23_24[rent_type] : UNITLETAS_MAPPING[rent_type]
       if is_general_needs?
-        self.prevten = 32 if managing_organisation&.provider_type == "PRP"
-        self.prevten = 30 if managing_organisation&.provider_type == "LA"
+        self.prevten = 32 if owning_organisation&.provider_type == "PRP"
+        self.prevten = 30 if owning_organisation&.provider_type == "LA"
       end
     end
 
