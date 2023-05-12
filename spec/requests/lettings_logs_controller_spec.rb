@@ -1376,6 +1376,8 @@ RSpec.describe LettingsLogsController, type: :request do
         expect(response).to have_http_status(:ok)
 
         expect(page).to have_content("Are you sure you want to delete this log?")
+        expect(page).to have_button(text: "Delete this log")
+        expect(page).to have_button(text: "Cancel")
       end
     end
 
