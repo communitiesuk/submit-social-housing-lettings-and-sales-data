@@ -1,5 +1,5 @@
 class LettingsLogsController < LogsController
-  before_action :find_resource, except: %i[create index edit]
+  before_action :find_resource, except: %i[create index edit delete_confirmation]
   before_action :session_filters, if: :current_user, only: %i[index email_csv download_csv]
   before_action :set_session_filters, if: :current_user, only: %i[index email_csv download_csv]
   before_action :authenticate_scope!, only: %i[download_csv email_csv]
@@ -68,15 +68,25 @@ class LettingsLogsController < LogsController
   end
 
   def destroy
-    if @log
-      if @log.delete
-        head :no_content
-      else
-        render json: { errors: @log.errors.messages }, status: :unprocessable_entity
-      end
+    render_not_found and return unless @log
+
+    authorize @log, policy_class: LogPolicy
+
+    if @log.delete
+      redirect_to lettings_logs_path, notice: "Log #{@log.id} has been deleted"
     else
-      render_not_found_json("Log", params[:id])
+      render_not_found
     end
+  end
+
+  def delete_confirmation
+    @log = LettingsLog.visible.find_by(id: params[:lettings_log_id])
+
+    render_not_found and return unless @log
+
+    authorize @log, :destroy?, policy_class: LogPolicy
+
+    render "logs/delete_confirmation"
   end
 
   def download_csv

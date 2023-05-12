@@ -150,6 +150,8 @@ Rails.application.routes.draw do
   end
 
   resources :lettings_logs, path: "/lettings-logs" do
+    get "delete-confirmation", to: "lettings_logs#delete_confirmation"
+
     collection do
       post "bulk-upload", to: "bulk_upload#bulk_upload"
       get "bulk-upload", to: "bulk_upload#show"
