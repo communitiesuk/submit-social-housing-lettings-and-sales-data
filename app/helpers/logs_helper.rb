@@ -47,4 +47,10 @@ module LogsHelper
     when :sales then sales_logs_csv_download_organisation_path(organisation, search:, codes_only:)
     end
   end
+
+  def pluralize_logs_and_errors_warning(log_count, error_count)
+    is_or_are = log_count == 1 ? "is" : "are"
+    need_or_needs = error_count == 1 ? "needs" : "need"
+    "There #{is_or_are} #{pluralize(log_count, 'log')} in this bulk upload with #{pluralize(error_count, 'error')} that still #{need_or_needs} to be fixed after upload."
+  end
 end

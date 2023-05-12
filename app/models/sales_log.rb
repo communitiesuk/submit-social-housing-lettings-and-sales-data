@@ -2,7 +2,6 @@ class SalesLogValidator < ActiveModel::Validator
   include Validations::Sales::SetupValidations
   include Validations::Sales::HouseholdValidations
   include Validations::Sales::PropertyValidations
-  include Validations::SharedValidations
   include Validations::Sales::FinancialValidations
   include Validations::Sales::SaleInformationValidations
   include Validations::SharedValidations
@@ -385,5 +384,11 @@ class SalesLog < Log
     when 2 then "discounted ownership"
     when 3 then "outright sale"
     end
+  end
+
+  def blank_compound_invalid_non_setup_fields!
+    super
+
+    self.pcodenk = nil if errors.attribute_names.include? :postcode_full
   end
 end

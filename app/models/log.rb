@@ -98,10 +98,18 @@ class Log < ApplicationRecord
   def blank_invalid_non_setup_fields!
     setup_ids = form.setup_sections.flat_map(&:subsections).flat_map(&:questions).map(&:id)
 
-    errors.each do |error|
-      next if setup_ids.include?(error.attribute.to_s)
+    2.times do
+      next if valid?
 
-      public_send("#{error.attribute}=", nil)
+      errors.each do |error|
+        next if setup_ids.include?(error.attribute.to_s)
+
+        public_send("#{error.attribute}=", nil)
+      end
+
+      blank_compound_invalid_non_setup_fields!
+
+      errors.clear
     end
   end
 
@@ -134,6 +142,20 @@ class Log < ApplicationRecord
   def field_formatted_as_currency(field_name)
     field_value = public_send(field_name)
     format_as_currency(field_value)
+  end
+
+  def blank_compound_invalid_non_setup_fields!
+    self.ppcodenk = nil if errors.attribute_names.include? :ppostcode_full
+
+    if errors.of_kind?(:uprn, :uprn_error)
+      self.uprn_known = nil
+      self.uprn_confirmed = nil
+      self.address_line1 = nil
+      self.address_line2 = nil
+      self.town_or_city = nil
+      self.postcode_full = nil
+      self.county = nil
+    end
   end
 
   def creation_method

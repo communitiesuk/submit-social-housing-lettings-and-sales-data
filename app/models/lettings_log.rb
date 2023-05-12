@@ -529,6 +529,16 @@ class LettingsLog < Log
     is_carehome == 1
   end
 
+  def blank_compound_invalid_non_setup_fields!
+    super
+
+    self.postcode_known = nil if errors.attribute_names.include? :postcode_full
+
+    if errors.of_kind?(:earnings, :under_hard_min)
+      self.incfreq = nil
+    end
+  end
+
 private
 
   def reset_invalid_unresolved_log_fields!
