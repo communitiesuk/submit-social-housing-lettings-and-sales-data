@@ -234,6 +234,13 @@ Rails.application.routes.draw do
           patch "*page", to: "bulk_upload_sales_resume#update"
         end
       end
+
+      resources :bulk_upload_sales_data_check, path: "bulk-upload-data-check", only: %i[show update] do
+        member do
+          get "*page", to: "bulk_upload_sales_data_check#show", as: "page"
+          patch "*page", to: "bulk_upload_sales_data_check#update"
+        end
+      end
     end
 
     member do

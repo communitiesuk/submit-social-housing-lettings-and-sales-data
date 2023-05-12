@@ -77,6 +77,10 @@ en:
           attributes:
             soft_errors_valid:
               blank: You must select if there are errors in these fields
+        forms/bulk_upload_sales_data_check/soft_errors_valid:
+          attributes:
+            soft_errors_valid:
+              blank: You must select if there are errors in these fields
 
   activerecord:
     errors:
