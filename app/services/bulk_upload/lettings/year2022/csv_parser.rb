@@ -47,10 +47,10 @@ class BulkUpload::Lettings::Year2022::CsvParser
     cols[field_numbers.find_index(field) + col_offset]
   end
 
-  def incorrect_field_count?
+  def correct_field_count?
     valid_field_numbers_count = field_numbers.count { |f| f != "field_blank" }
 
-    valid_field_numbers_count != FIELDS
+    valid_field_numbers_count == FIELDS
   end
 
   def too_many_columns?

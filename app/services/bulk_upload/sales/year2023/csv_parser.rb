@@ -1,7 +1,6 @@
 require "csv"
 
 class BulkUpload::Sales::Year2023::CsvParser
-  MIN_COLUMNS = 135
   MAX_COLUMNS = 142
 
   attr_reader :path

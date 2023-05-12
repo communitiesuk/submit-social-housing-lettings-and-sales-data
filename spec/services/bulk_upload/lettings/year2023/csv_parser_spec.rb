@@ -102,7 +102,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::CsvParser do
     end
 
     it "counts the number of valid field numbers correctly" do
-      expect(service.incorrect_field_count?).to be false
+      expect(service).to be_correct_field_count
     end
   end
 

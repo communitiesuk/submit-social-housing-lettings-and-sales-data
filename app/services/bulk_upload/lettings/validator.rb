@@ -1,9 +1,6 @@
 require "csv"
 
 class BulkUpload::Lettings::Validator
-  COLUMN_PERCENTAGE_ERROR_THRESHOLD = 0.6
-  COLUMN_ABSOLUTE_ERROR_THRESHOLD = 16
-
   include ActiveModel::Validations
 
   attr_reader :bulk_upload, :path
@@ -64,19 +61,6 @@ class BulkUpload::Lettings::Validator
       .where(category: "setup")
       .count
       .positive?
-  end
-
-  def over_column_error_threshold?
-    fields = ("field_1".."field_134").to_a
-    percentage_threshold = (row_parsers.size * COLUMN_PERCENTAGE_ERROR_THRESHOLD).ceil
-
-    fields.any? do |field|
-      count = row_parsers.count { |row_parser| row_parser.errors[field].present? }
-
-      next if count < COLUMN_ABSOLUTE_ERROR_THRESHOLD
-
-      count > percentage_threshold
-    end
   end
 
   def any_logs_already_exist?
@@ -147,7 +131,7 @@ private
   def validate_field_numbers_count
     return if halt_validations?
 
-    errors.add(:base, :wrong_field_numbers_count) if csv_parser.incorrect_field_count?
+    errors.add(:base, :wrong_field_numbers_count) unless csv_parser.correct_field_count?
   end
 
   def validate_max_columns_count_if_no_headers
