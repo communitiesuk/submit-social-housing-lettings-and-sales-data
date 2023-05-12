@@ -40,6 +40,30 @@ class SalesLogsController < LogsController
     end
   end
 
+  def destroy
+    @log = SalesLog.visible.find_by(id: params[:id])
+
+    render_not_found and return unless @log
+
+    authorize @log, policy_class: LogPolicy
+
+    if @log.delete
+      redirect_to sales_logs_path, notice: "Log #{@log.id} has been deleted"
+    else
+      render_not_found
+    end
+  end
+
+  def delete_confirmation
+    @log = SalesLog.visible.find_by(id: params[:sales_log_id])
+
+    render_not_found and return unless @log
+
+    authorize @log, :destroy?, policy_class: LogPolicy
+
+    render "logs/delete_confirmation"
+  end
+
   def download_csv
     unpaginated_filtered_logs = filtered_logs(current_user.sales_logs, search_term, @session_filters)
 
