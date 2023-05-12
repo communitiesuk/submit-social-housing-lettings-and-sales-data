@@ -53,11 +53,9 @@
     <% end %>
 
     <% if LogPolicy.new(current_user, @log).destroy? %>
-      <%= govuk_button_to(
+      <%= govuk_button_link_to(
         "Delete log",
         lettings_log_delete_confirmation_path(@log),
-        button: true,
-        method: :get,
         warning: true,
       ) %>
     <% end %>

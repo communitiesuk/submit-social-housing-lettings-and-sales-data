@@ -16,14 +16,11 @@
       <%= govuk_button_to(
         "Delete this log",
         @log.lettings? ? lettings_log_path(@log) : sales_log_path(@log),
-        class: "govuk-!-margin-right-6",
         method: :delete
       ) %>
-      <%= govuk_button_to(
+      <%= govuk_button_link_to(
         "Cancel",
         @log.lettings? ? lettings_log_path(@log) : sales_log_path(@log),
-        button: true,
-        method: :get,
         secondary: true,
       ) %>
     </div>

@@ -722,7 +722,7 @@ RSpec.describe SalesLogsController, type: :request do
 
         expect(page).to have_content("Are you sure you want to delete this log?")
         expect(page).to have_button(text: "Delete this log")
-        expect(page).to have_button(text: "Cancel")
+        expect(page).to have_link(text: "Cancel", href: sales_log_path(id))
       end
     end
 
