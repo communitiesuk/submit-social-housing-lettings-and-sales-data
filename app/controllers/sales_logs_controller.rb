@@ -70,7 +70,7 @@ private
   end
 
   def redirect_if_bulk_upload_resolved
-    if @bulk_upload && @bulk_upload.sales? && @bulk_upload.sales_logs.in_progress.count.zero?
+    if @bulk_upload&.sales? && @bulk_upload.sales_logs.in_progress.count.zero?
       redirect_to resume_bulk_upload_sales_result_path(@bulk_upload)
     end
   end
