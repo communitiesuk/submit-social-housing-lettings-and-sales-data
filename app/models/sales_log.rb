@@ -386,6 +386,13 @@ class SalesLog < Log
     end
   end
 
+  def combined_income
+    buyer_1_income = income1 || 0
+    buyer_2_income = income2 || 0
+
+    buyer_1_income + buyer_2_income
+  end
+
   def blank_compound_invalid_non_setup_fields!
     super
 

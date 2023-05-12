@@ -19,6 +19,24 @@ module Validations::Sales::SoftValidations
     income2 < ALLOWED_INCOME_RANGES_SALES[ecstat2][:soft_min]
   end
 
+  def income1_over_soft_max?
+    return unless income1 && la && discounted_ownership_sale?
+
+    income_over_soft_max?(income1)
+  end
+
+  def income2_over_soft_max?
+    return unless income2 && la && discounted_ownership_sale?
+
+    income_over_soft_max?(income2)
+  end
+
+  def combined_income_over_soft_max?
+    return unless income1 && income2 && la && discounted_ownership_sale?
+
+    income_over_soft_max?(income1 + income2)
+  end
+
   def staircase_bought_above_fifty?
     stairbought && stairbought > 50
   end
@@ -155,5 +173,9 @@ private
       la:,
       bedrooms: beds_for_la_sale_range,
     )
+  end
+
+  def income_over_soft_max?(income)
+    (london_property? && income > 90_000) || (property_not_in_london? && income > 80_000)
   end
 end

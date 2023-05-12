@@ -37,7 +37,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
           buyer_1_nationality
           buyer_1_working_situation
           working_situation_1_retirement_value_check
-          working_situation_buyer_1_income_value_check
+          working_situation_buyer_1_income_min_value_check
           buyer_1_live_in_property
           buyer_1_live_in_property_value_check
           buyer_2_relationship_to_buyer_1
@@ -50,7 +50,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
           gender_2_buyer_retirement_value_check
           buyer_2_working_situation
           working_situation_2_retirement_value_check_joint_purchase
-          working_situation_buyer_2_income_value_check
+          working_situation_buyer_2_income_min_value_check
           buyer_2_working_situation_student_not_child_value_check
           buyer_2_live_in_property
           buyer_2_live_in_property_value_check
@@ -141,7 +141,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
           buyer_1_nationality
           buyer_1_working_situation
           working_situation_1_retirement_value_check
-          working_situation_buyer_1_income_value_check
+          working_situation_buyer_1_income_min_value_check
           buyer_1_live_in_property
           buyer_1_live_in_property_value_check
           buyer_2_relationship_to_buyer_1
@@ -161,7 +161,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
           buyer_2_nationality
           buyer_2_working_situation
           working_situation_2_retirement_value_check_joint_purchase
-          working_situation_buyer_2_income_value_check
+          working_situation_buyer_2_income_min_value_check
           buyer_2_working_situation_student_not_child_value_check
           buyer_2_live_in_property
           buyer_2_live_in_property_value_check

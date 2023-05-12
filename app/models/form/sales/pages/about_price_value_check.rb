@@ -39,6 +39,6 @@ class Form::Sales::Pages::AboutPriceValueCheck < ::Form::Page
   end
 
   def interruption_screen_question_ids
-    %w[value beds la]
+    %w[value beds uprn postcode_full la]
   end
 end

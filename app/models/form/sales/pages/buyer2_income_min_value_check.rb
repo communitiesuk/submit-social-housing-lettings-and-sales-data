@@ -1,9 +1,6 @@
-class Form::Sales::Pages::Buyer2IncomeValueCheck < ::Form::Page
+class Form::Sales::Pages::Buyer2IncomeMinValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
-    @header = ""
-    @description = ""
-    @subsection = subsection
     @depends_on = [
       {
         "income2_under_soft_min?" => true,
@@ -32,7 +29,7 @@ class Form::Sales::Pages::Buyer2IncomeValueCheck < ::Form::Page
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::Buyer2IncomeValueCheck.new(nil, nil, self),
+      Form::Sales::Questions::Buyer2IncomeValueCheck.new(nil, nil, self, check_answers_card_number: 2),
     ]
   end
 

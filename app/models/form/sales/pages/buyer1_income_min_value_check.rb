@@ -1,4 +1,4 @@
-class Form::Sales::Pages::Buyer1IncomeValueCheck < ::Form::Page
+class Form::Sales::Pages::Buyer1IncomeMinValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @depends_on = [
@@ -29,7 +29,7 @@ class Form::Sales::Pages::Buyer1IncomeValueCheck < ::Form::Page
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::Buyer1IncomeValueCheck.new(nil, nil, self),
+      Form::Sales::Questions::Buyer1IncomeValueCheck.new(nil, nil, self, check_answers_card_number: 1),
     ]
   end
 

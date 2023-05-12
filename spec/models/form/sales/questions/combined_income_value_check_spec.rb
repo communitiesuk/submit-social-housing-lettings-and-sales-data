@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Questions::Buyer1IncomeValueCheck, type: :model do
-  subject(:question) { described_class.new(question_id, question_definition, page, check_answers_card_number: 1) }
+RSpec.describe Form::Sales::Questions::CombinedIncomeValueCheck, type: :model do
+  subject(:question) { described_class.new(question_id, question_definition, page, check_answers_card_number: nil) }
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
@@ -12,7 +12,7 @@ RSpec.describe Form::Sales::Questions::Buyer1IncomeValueCheck, type: :model do
   end
 
   it "has the correct id" do
-    expect(question.id).to eq("income1_value_check")
+    expect(question.id).to eq("combined_income_value_check")
   end
 
   it "has the correct header" do
@@ -20,7 +20,7 @@ RSpec.describe Form::Sales::Questions::Buyer1IncomeValueCheck, type: :model do
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Buyer 1 income confirmation")
+    expect(question.check_answer_label).to eq("Combined income confirmation")
   end
 
   it "has the correct type" do
@@ -36,7 +36,7 @@ RSpec.describe Form::Sales::Questions::Buyer1IncomeValueCheck, type: :model do
   end
 
   it "has a correct check_answers_card_number" do
-    expect(question.check_answers_card_number).to eq(1)
+    expect(question.check_answers_card_number).to eq(nil)
   end
 
   it "has the correct answer_options" do
@@ -50,10 +50,10 @@ RSpec.describe Form::Sales::Questions::Buyer1IncomeValueCheck, type: :model do
     expect(question.hidden_in_check_answers).to eq({
       "depends_on" => [
         {
-          "income1_value_check" => 0,
+          "combined_income_value_check" => 0,
         },
         {
-          "income1_value_check" => 1,
+          "combined_income_value_check" => 1,
         },
       ],
     })
