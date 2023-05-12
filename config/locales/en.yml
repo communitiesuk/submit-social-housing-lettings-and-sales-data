@@ -135,7 +135,8 @@ en:
             new_organisation_name:
               blank: "Enter an organisation name"
               invalid: "An organisation with this name already exists"
-
+            new_organisation_telephone_number:
+              blank: "Enter a valid telephone number"
 
 
   validations:
