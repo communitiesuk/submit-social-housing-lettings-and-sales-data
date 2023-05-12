@@ -14,6 +14,10 @@ class BulkUploadPolicy
     owner? || same_org? || user.support?
   end
 
+  def resume?
+    owner? || same_org? || user.support?
+  end
+
 private
 
   def owner?

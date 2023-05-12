@@ -12,9 +12,11 @@
 
     <% if @log.status == "in_progress" %>
       <p class="govuk-body govuk-!-margin-bottom-7"><%= get_subsections_count(@log, :completed) %> of <%= get_subsections_count(@log) %> subsections completed.</p>
+
       <p class="govuk-body govuk-!-margin-bottom-2">
         <% next_incomplete_section = get_next_incomplete_section(@log) %>
       </p>
+
       <p>
         <% if next_incomplete_section.present? %>
           <a class="app-section-skip-link" href="#<%= next_incomplete_section.id.dasherize %>">
@@ -28,10 +30,26 @@
       <p class="govuk-body">
         <%= status_tag(@log.status) %>
       </p>
+
       <p class="govuk-body">
         <%= review_log_text(@log) %>
       </p>
     <% end %>
+
     <%= render "tasklist" %>
+
+    <% if @log.completed? %>
+      <% if @log.bulk_uploaded? %>
+        <% if @log.lettings? %>
+          <%= govuk_button_link_to "Back to uploaded logs", resume_bulk_upload_lettings_result_path(@log.bulk_upload) %>
+        <% else %>
+          <%= govuk_button_link_to "Back to uploaded logs", resume_bulk_upload_sales_result_path(@log.bulk_upload) %>
+        <% end %>
+      <% elsif @log.lettings? %>
+        <%= govuk_button_link_to "Back to lettings logs", lettings_logs_path %>
+      <% elsif @log.sales? %>
+        <%= govuk_button_link_to "Back to sales logs", sales_logs_path %>
+      <% end %>
+    <% end %>
   </div>
 </div>
