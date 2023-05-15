@@ -396,13 +396,14 @@ class BulkUpload::Sales::Year2023::RowParser
             },
             on: :after_log
 
-  validates :field_13,
-            presence: {
-              message: I18n.t("validations.not_answered", question: "will the buyers live in the property"),
+  validates :field_12,
+            inclusion: {
+              in: [1, 2],
+              if: proc { outright_sale? && field_12.present? },
               category: :setup,
-              if: :outright_sale?,
+              question: QUESTIONS[:field_12].downcase,
             },
-            on: :after_log
+            on: :before_log
 
   validates :field_12,
             presence: {
@@ -411,6 +412,15 @@ class BulkUpload::Sales::Year2023::RowParser
               if: :outright_sale?,
             },
             on: :after_log
+
+  validates :field_13,
+            presence: {
+              message: I18n.t("validations.not_answered", question: "will the buyers live in the property"),
+              category: :setup,
+              if: :outright_sale?,
+            },
+            on: :after_log
+
 
   validates :field_14,
             presence: {

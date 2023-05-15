@@ -41,6 +41,8 @@ en:
   activemodel:
     errors:
       models:
+        bulk_upload/sales/year2023/row_parser:
+          inclusion: Enter a valid value for %{question}
         bulk_upload/lettings/validator:
           attributes:
             base:
