@@ -597,6 +597,25 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       end
     end
 
+    describe "#uprn_known" do
+      context "when uprn known" do
+        let(:attributes) { setup_section_params.merge({ field_19: "100023336956" }) }
+
+        it "is correctly set" do
+          expect(parser.log.uprn_known).to be(1)
+        end
+      end
+
+      context "when uprn not known" do
+        let(:attributes) { setup_section_params.merge({ field_19: nil }) }
+
+        it "is correctly set" do
+          expect(parser.log.uprn_known).to be(0)
+        end
+      end
+
+    end
+
     describe "#address_line1" do
       let(:attributes) { setup_section_params.merge({ field_20: "some street" }) }
 
