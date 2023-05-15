@@ -406,7 +406,7 @@ class BulkUpload::Sales::Year2023::RowParser
   validate :validate_created_by_related, on: :after_log
   validate :validate_relevant_collection_window, on: :after_log
 
-  validate :validate_uprn_exists_if_any_key_adddress_fields_are_blank, on: :after_log
+  validate :validate_uprn_exists_if_any_key_address_fields_are_blank, on: :after_log
   validate :validate_address_line_1, on: :after_log
   validate :validate_town_or_city, on: :after_log
   validate :validate_postcode, on: :after_log
@@ -494,7 +494,7 @@ private
     end
   end
 
-  def validate_uprn_exists_if_any_key_adddress_fields_are_blank
+  def validate_uprn_exists_if_any_key_address_fields_are_blank
     if field_19.blank? && (field_20.blank? || field_22.blank? || field_24.blank? || field_25.blank?)
       errors.add(:field_19, I18n.t("validations.not_answered", question: "UPRN"))
     end
