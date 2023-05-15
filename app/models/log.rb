@@ -155,6 +155,7 @@ class Log < ApplicationRecord
       self.town_or_city = nil
       self.postcode_full = nil
       self.county = nil
+      process_postcode_changes!
     end
   end
 
