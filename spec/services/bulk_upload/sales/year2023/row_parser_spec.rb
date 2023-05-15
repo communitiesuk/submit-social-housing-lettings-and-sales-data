@@ -615,6 +615,16 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       end
     end
 
+    describe "#field_14" do # joint purchase
+      context "when an invalid option" do
+        let(:attributes) { setup_section_params.merge({ field_14: "100" }) }
+
+        it "returns a setup error" do
+          expect(parser.errors.where(:field_14, category: :setup)).to be_present
+        end
+      end
+    end
+
     describe "#field_19" do # UPRN
       context "when UPRN known and lookup found" do
         let(:attributes) { setup_section_params.merge({ field_19: "100023336956" }) }
