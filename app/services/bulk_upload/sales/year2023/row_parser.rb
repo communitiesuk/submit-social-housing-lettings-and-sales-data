@@ -407,9 +407,7 @@ class BulkUpload::Sales::Year2023::RowParser
   validate :validate_relevant_collection_window, on: :after_log
 
   validate :validate_uprn_exists_if_any_key_address_fields_are_blank, on: :after_log
-  validate :validate_address_line_1, on: :after_log
-  validate :validate_town_or_city, on: :after_log
-  validate :validate_postcode, on: :after_log
+  validate :validate_address_fields, on: :after_log
 
   def self.question_for_field(field)
     QUESTIONS[field]
@@ -500,25 +498,23 @@ private
     end
   end
 
-  def validate_address_line_1
-    if field_19.blank? && field_20.blank?
-      errors.add(:field_20, I18n.t("validations.not_answered", question: "address line 1"))
-    end
-  end
+  def validate_address_fields
+    if field_19.blank? || log.errors.attribute_names.include?(:uprn)
+      if field_20.blank?
+        errors.add(:field_20, I18n.t("validations.not_answered", question: "address line 1"))
+      end
 
-  def validate_town_or_city
-    if field_19.blank? && field_22.blank?
-      errors.add(:field_22, I18n.t("validations.not_answered", question: "town or city"))
-    end
-  end
+      if field_22.blank?
+        errors.add(:field_22, I18n.t("validations.not_answered", question: "town or city"))
+      end
 
-  def validate_postcode
-    if field_19.blank? && field_24.blank?
-      errors.add(:field_24, I18n.t("validations.not_answered", question: "part 1 of the property's postcode"))
-    end
+      if field_24.blank?
+        errors.add(:field_24, I18n.t("validations.not_answered", question: "part 1 of the property's postcode"))
+      end
 
-    if field_19.blank? && field_25.blank?
-      errors.add(:field_25, I18n.t("validations.not_answered", question: "part 2 of the property's postcode"))
+      if field_25.blank?
+        errors.add(:field_25, I18n.t("validations.not_answered", question: "part 2 of the property's postcode"))
+      end
     end
   end
 
