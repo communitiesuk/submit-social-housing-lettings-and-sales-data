@@ -50,7 +50,7 @@ class SalesLogsController < LogsController
     if @log.delete
       redirect_to sales_logs_path, notice: "Log #{@log.id} has been deleted"
     else
-      render_not_found
+      render_internal_server_error
     end
   end
 

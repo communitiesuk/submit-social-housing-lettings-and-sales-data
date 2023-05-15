@@ -13,6 +13,10 @@ class ApplicationController < ActionController::Base
     render "errors/not_found", status: :unauthorized
   end
 
+  def render_internal_server_error
+    render "errors/internal_server_error", status: :internal_server_error
+  end
+
   def render_not_found_json(class_name, id)
     render json: { error: "#{class_name} #{id} not found" }, status: :not_found
   end

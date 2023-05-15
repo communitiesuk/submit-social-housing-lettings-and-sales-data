@@ -668,6 +668,19 @@ RSpec.describe SalesLogsController, type: :request do
       sign_in user
     end
 
+    # rubocop:disable RSpec/AnyInstance
+    context "when log deletion errors" do
+      before do
+        allow_any_instance_of(SalesLog).to receive(:delete).and_return(false)
+      end
+
+      it "renders 500 page" do
+        delete_request
+        expect(response).to have_http_status(:internal_server_error)
+      end
+    end
+    # rubocop:enable RSpec/AnyInstance
+
     context "when delete permitted" do
       it "redirects to sales logs and shows message" do
         delete_request
