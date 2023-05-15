@@ -607,6 +607,7 @@ private
       beds: %i[field_16],
       proptype: %i[field_17],
       builtype: %i[field_18],
+      uprn: %i[field_19],
       la_known: %i[field_26],
       la: %i[field_26],
 
@@ -754,7 +755,7 @@ private
     attributes["proptype"] = field_17
     attributes["builtype"] = field_18
     attributes["la_known"] = field_26.present? ? 1 : 0
-    attributes["la"] = field_24
+    attributes["la"] = field_26
     attributes["is_la_inferred"] = false
     attributes["pcodenk"] = 0 if postcode_full.present?
     attributes["postcode_full"] = postcode_full
