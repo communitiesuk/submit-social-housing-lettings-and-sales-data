@@ -19,7 +19,7 @@ class BulkUpload::Processor
       create_logs
 
       if created_logs_but_incompleted?
-        send_how_fix_upload_mail
+        send_how_to_fix_upload_mail
       elsif created_logs_and_all_completed?
         bulk_upload.unpend
         send_success_mail
@@ -40,9 +40,9 @@ class BulkUpload::Processor
 
 private
 
-  def send_how_fix_upload_mail
+  def send_how_to_fix_upload_mail
     BulkUploadMailer
-      .send_how_fix_upload_mail(bulk_upload:)
+      .send_how_to_fix_upload_mail(bulk_upload:)
       .deliver_later
   end
 
