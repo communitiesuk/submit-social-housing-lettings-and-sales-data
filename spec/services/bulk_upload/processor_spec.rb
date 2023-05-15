@@ -224,14 +224,14 @@ RSpec.describe BulkUpload::Processor do
         expect { processor.call }.to change(LettingsLog.pending, :count).by(1)
       end
 
-      it "sends how_fix_upload_mail" do
+      it "sends how_to_fix_upload_mail" do
         mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
 
-        allow(BulkUploadMailer).to receive(:send_how_fix_upload_mail).and_return(mail_double)
+        allow(BulkUploadMailer).to receive(:send_how_to_fix_upload_mail).and_return(mail_double)
 
         processor.call
 
-        expect(BulkUploadMailer).to have_received(:send_how_fix_upload_mail)
+        expect(BulkUploadMailer).to have_received(:send_how_to_fix_upload_mail)
         expect(mail_double).to have_received(:deliver_later)
       end
 
@@ -304,12 +304,12 @@ RSpec.describe BulkUpload::Processor do
         mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
 
         allow(BulkUploadMailer).to receive(:send_check_soft_validations_mail).and_return(mail_double)
-        allow(BulkUploadMailer).to receive(:send_how_fix_upload_mail).and_return(mail_double)
+        allow(BulkUploadMailer).to receive(:send_how_to_fix_upload_mail).and_return(mail_double)
 
         processor.call
 
         expect(BulkUploadMailer).to have_received(:send_check_soft_validations_mail)
-        expect(BulkUploadMailer).not_to have_received(:send_how_fix_upload_mail)
+        expect(BulkUploadMailer).not_to have_received(:send_how_to_fix_upload_mail)
         expect(mail_double).to have_received(:deliver_later)
       end
 

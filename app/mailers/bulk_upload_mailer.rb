@@ -5,17 +5,17 @@ class BulkUploadMailer < NotifyMailer
   FAILED_CSV_ERRORS_TEMPLATE_ID = "e27abcd4-5295-48c2-b127-e9ee4b781b75".freeze
   FAILED_FILE_SETUP_ERROR_TEMPLATE_ID = "24c9f4c7-96ad-470a-ba31-eb51b7cbafd9".freeze
   FAILED_SERVICE_ERROR_TEMPLATE_ID = "c3f6288c-7a74-4e77-99ee-6c4a0f6e125a".freeze
-  HOW_FIX_UPLOAD_TEMPLATE_ID = "21a07b26-f625-4846-9f4d-39e30937aa24".freeze
+  HOW_TO_FIX_UPLOAD_TEMPLATE_ID = "21a07b26-f625-4846-9f4d-39e30937aa24".freeze
   CHECK_SOFT_VALIDATIONS_TEMPLATE_ID = "21a07b26-f625-4846-9f4d-39e30937aa24".freeze
 
-  def send_how_fix_upload_mail(bulk_upload:)
+  def send_how_to_fix_upload_mail(bulk_upload:)
     title = "We found #{pluralize(bulk_upload.bulk_upload_errors.count, 'error')} in your bulk upload"
     description = "There was a problem with your #{bulk_upload.year_combo} #{bulk_upload.log_type} data. Check the error report below to fix these errors."
     cta_link = bulk_upload.sales? ? start_bulk_upload_sales_resume_url(bulk_upload) : start_bulk_upload_lettings_resume_url(bulk_upload)
 
     send_email(
       bulk_upload.user.email,
-      HOW_FIX_UPLOAD_TEMPLATE_ID,
+      HOW_TO_FIX_UPLOAD_TEMPLATE_ID,
       {
         title:,
         filename: bulk_upload.filename,
