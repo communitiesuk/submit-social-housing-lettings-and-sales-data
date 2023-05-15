@@ -477,11 +477,9 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
         let(:attributes) { setup_section_params.merge({ field_2: nil, field_3: nil, field_4: nil }) }
 
         it "returns them as setup errors" do
-          setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
-
-          expect(setup_errors.find { |e| e.attribute == :field_2 }).to be_present
-          expect(setup_errors.find { |e| e.attribute == :field_3 }).to be_present
-          expect(setup_errors.find { |e| e.attribute == :field_4 }).to be_present
+          expect(parser.errors.where(:field_2, category: :setup)).to be_present
+          expect(parser.errors.where(:field_3, category: :setup)).to be_present
+          expect(parser.errors.where(:field_4, category: :setup)).to be_present
         end
       end
 
