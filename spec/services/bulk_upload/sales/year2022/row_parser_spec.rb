@@ -539,6 +539,71 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
         end
       end
     end
+
+    context "when the log already exists in the db" do
+      let(:attributes) { valid_attributes }
+
+      before do
+        parser.log.save!
+        parser.instance_variable_set(:@valid, nil)
+      end
+
+      it "is not a valid row" do
+        expect(parser).not_to be_valid
+      end
+
+      it "adds an error to all (and only) the fields used to determine duplicates" do
+        parser.valid?
+
+        error_message = "This is a duplicate log"
+
+        [
+          :field_92, # Owning org
+          :field_2, # Sale completion date
+          :field_3, # Sale completion date
+          :field_4, # Sale completion date
+          :field_41, # Postcode
+          :field_42, # Postcode
+          :field_7, # Buyer 1 age
+          :field_13, # Buyer 1 gender
+          :field_24, # Buyer 1 working situation
+          :field_1, # Purchaser code
+        ].each do |field|
+          expect(parser.errors[field]).to include(error_message)
+        end
+      end
+    end
+
+    context "when a hidden log already exists in db" do
+      before do
+        parser.log.status = "pending"
+        parser.log.skip_update_status = true
+        parser.log.save!
+      end
+
+      it "is a valid row" do
+        expect(parser).to be_valid
+      end
+
+      it "does not add duplicate errors" do
+        parser.valid?
+
+        [
+          :field_92, # Owning org
+          :field_2, # Sale completion date
+          :field_3, # Sale completion date
+          :field_4, # Sale completion date
+          :field_41, # Postcode
+          :field_42, # Postcode
+          :field_7, # Buyer 1 age
+          :field_13, # Buyer 1 gender
+          :field_24, # Buyer 1 working situation
+          :field_1, # Purchaser code
+        ].each do |field|
+          expect(parser.errors[field]).to be_blank
+        end
+      end
+    end
   end
 
   describe "inferences" do
