@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe BulkUploadLettingsDataCheckController, type: :request do
+RSpec.describe BulkUploadLettingsSoftValidationsCheckController, type: :request do
   let(:user) { create(:user) }
   let(:bulk_upload) { create(:bulk_upload, :lettings, user:, bulk_upload_errors:) }
   let(:bulk_upload_errors) { create_list(:bulk_upload_error, 2) }
@@ -10,9 +10,9 @@ RSpec.describe BulkUploadLettingsDataCheckController, type: :request do
     sign_in user
   end
 
-  describe "GET /lettings-logs/bulk-upload-data-check/:ID/soft-errors-valid" do
+  describe "GET /lettings-logs/bulk-upload-soft-validations-check/:ID/soft-errors-valid" do
     it "shows the soft validation errors with confirmation question" do
-      get "/lettings-logs/bulk-upload-data-check/#{bulk_upload.id}/soft-errors-valid"
+      get "/lettings-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/soft-errors-valid"
 
       expect(response.body).to include("Bulk upload for lettings")
       expect(response.body).to include("2022/23")
@@ -22,7 +22,7 @@ RSpec.describe BulkUploadLettingsDataCheckController, type: :request do
     end
 
     it "shows the soft validation and lists the errors" do
-      get "/lettings-logs/bulk-upload-data-check/#{bulk_upload.id}/soft-errors-valid"
+      get "/lettings-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/soft-errors-valid"
 
       expect(response.body).to include("Row #{bulk_upload_errors.first.row}")
       expect(response.body).to include("Tenant code")
@@ -30,10 +30,10 @@ RSpec.describe BulkUploadLettingsDataCheckController, type: :request do
     end
   end
 
-  describe "PATCH /lettings-logs/bulk-upload-data-check/:ID/soft-errors-valid" do
+  describe "PATCH /lettings-logs/bulk-upload-soft-validations-check/:ID/soft-errors-valid" do
     context "when no option selected" do
       it "renders error message" do
-        patch "/lettings-logs/bulk-upload-data-check/#{bulk_upload.id}/soft-errors-valid"
+        patch "/lettings-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/soft-errors-valid"
 
         expect(response).to be_successful
 
@@ -43,7 +43,7 @@ RSpec.describe BulkUploadLettingsDataCheckController, type: :request do
 
     context "when yes is selected" do
       it "sends them to the fix choice page" do
-        patch "/lettings-logs/bulk-upload-data-check/#{bulk_upload.id}/soft-errors-valid", params: { form: { soft_errors_valid: "yes" } }
+        patch "/lettings-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/soft-errors-valid", params: { form: { soft_errors_valid: "yes" } }
 
         expect(response).to redirect_to("/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice")
       end
@@ -51,18 +51,18 @@ RSpec.describe BulkUploadLettingsDataCheckController, type: :request do
 
     context "when no is selected" do
       it "sends them to confirm choice" do
-        patch "/lettings-logs/bulk-upload-data-check/#{bulk_upload.id}/soft-errors-valid", params: { form: { soft_errors_valid: "no" } }
+        patch "/lettings-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/soft-errors-valid", params: { form: { soft_errors_valid: "no" } }
 
-        expect(response).to redirect_to("/lettings-logs/bulk-upload-data-check/#{bulk_upload.id}/confirm")
+        expect(response).to redirect_to("/lettings-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/confirm")
         follow_redirect!
         expect(response.body).not_to include("You’ve successfully uploaded")
       end
     end
   end
 
-  describe "GET /lettings-logs/bulk-upload-data-check/:ID/confirm" do
+  describe "GET /lettings-logs/bulk-upload-soft-validations-check/:ID/confirm" do
     it "renders page" do
-      get "/lettings-logs/bulk-upload-data-check/#{bulk_upload.id}/confirm"
+      get "/lettings-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/confirm"
 
       expect(response).to be_successful
 
@@ -72,13 +72,13 @@ RSpec.describe BulkUploadLettingsDataCheckController, type: :request do
     end
   end
 
-  describe "PATCH /lettings-logs/bulk-upload-data-check/:ID/confirm" do
+  describe "PATCH /lettings-logs/bulk-upload-soft-validations-check/:ID/confirm" do
     let(:mock_processor) { instance_double(BulkUpload::Processor, approve_and_confirm_soft_validations: nil) }
 
     it "approves logs for creation" do
       allow(BulkUpload::Processor).to receive(:new).with(bulk_upload:).and_return(mock_processor)
 
-      patch "/lettings-logs/bulk-upload-data-check/#{bulk_upload.id}/confirm"
+      patch "/lettings-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/confirm"
 
       expect(mock_processor).to have_received(:approve_and_confirm_soft_validations)
 

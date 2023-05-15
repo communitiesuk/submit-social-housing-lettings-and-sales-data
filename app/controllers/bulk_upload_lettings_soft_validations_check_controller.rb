@@ -1,4 +1,4 @@
-class BulkUploadLettingsDataCheckController < ApplicationController
+class BulkUploadLettingsSoftValidationsCheckController < ApplicationController
   include ActionView::Helpers::TextHelper
 
   before_action :authenticate_user!
@@ -29,9 +29,9 @@ private
   def form
     @form ||= case params[:page]
               when "soft-errors-valid"
-                Forms::BulkUploadLettingsDataCheck::SoftErrorsValid.new(form_params.merge(bulk_upload: @bulk_upload))
+                Forms::BulkUploadLettingsSoftValidationsCheck::SoftErrorsValid.new(form_params.merge(bulk_upload: @bulk_upload))
               when "confirm"
-                Forms::BulkUploadLettingsDataCheck::Confirm.new(form_params.merge(bulk_upload: @bulk_upload))
+                Forms::BulkUploadLettingsSoftValidationsCheck::Confirm.new(form_params.merge(bulk_upload: @bulk_upload))
               else
                 raise "invalid form"
               end

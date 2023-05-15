@@ -1,5 +1,5 @@
 module Forms
-  module BulkUploadSalesDataCheck
+  module BulkUploadLettingsSoftValidationsCheck
     class Confirm
       include ActiveModel::Model
       include ActiveModel::Attributes
@@ -8,15 +8,15 @@ module Forms
       attribute :bulk_upload
 
       def view_path
-        "bulk_upload_sales_data_check/confirm"
+        "bulk_upload_lettings_soft_validations_check/confirm"
       end
 
       def back_path
-        page_bulk_upload_sales_data_check_path(bulk_upload, page: "soft-errors-valid")
+        page_bulk_upload_lettings_soft_validations_check_path(bulk_upload, page: "soft-errors-valid")
       end
 
       def next_path
-        sales_logs_path
+        lettings_logs_path
       end
 
       def save!

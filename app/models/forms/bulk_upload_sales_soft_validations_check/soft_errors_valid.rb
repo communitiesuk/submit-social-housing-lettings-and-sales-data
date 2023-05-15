@@ -1,5 +1,5 @@
 module Forms
-  module BulkUploadLettingsDataCheck
+  module BulkUploadSalesSoftValidationsCheck
     class SoftErrorsValid
       include ActiveModel::Model
       include ActiveModel::Attributes
@@ -18,15 +18,15 @@ module Forms
       end
 
       def view_path
-        "bulk_upload_lettings_data_check/soft_errors_valid"
+        "bulk_upload_sales_soft_validations_check/soft_errors_valid"
       end
 
       def next_path
         case soft_errors_valid
         when "yes"
-          page_bulk_upload_lettings_resume_path(bulk_upload, page: "fix-choice")
+          page_bulk_upload_sales_resume_path(bulk_upload, page: "fix-choice")
         when "no"
-          page_bulk_upload_lettings_data_check_path(bulk_upload, page: "confirm")
+          page_bulk_upload_sales_soft_validations_check_path(bulk_upload, page: "confirm")
         else
           raise "invalid choice"
         end
