@@ -48,6 +48,10 @@ RSpec.describe SalesLog, type: :model do
     it "validates other household member details" do
       expect(validator).to receive(:validate_household_number_of_other_members)
     end
+
+    it "calls the form to clear any invalid answers" do
+      expect(sales_log.form).to receive(:reset_not_routed_questions_and_invalid_answers)
+    end
   end
 
   describe "#optional_fields" do
