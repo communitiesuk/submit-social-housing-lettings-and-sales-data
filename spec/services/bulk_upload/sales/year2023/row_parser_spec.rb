@@ -613,7 +613,6 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
           expect(parser.log.uprn_known).to be(0)
         end
       end
-
     end
 
     describe "#address_line1" do
