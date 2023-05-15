@@ -799,7 +799,8 @@ RSpec.describe Imports::SalesLogsImportService do
       let(:sales_log_id) { "shared_ownership_sales_log" }
 
       before do
-        sales_log_xml.at_xpath("//xmlns:Q2Person1Income").content = "0"
+        sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+        sales_log_xml.at_xpath("//xmlns:P2IncKnown").content = "1 Yes"
         sales_log_xml.at_xpath("//xmlns:Q2Person2Income").content = "95000"
         sales_log_xml.at_xpath("//xmlns:Q14ONSLACode").content = "E07000223"
       end
@@ -850,6 +851,8 @@ RSpec.describe Imports::SalesLogsImportService do
       let(:sales_log_id) { "shared_ownership_sales_log" }
 
       before do
+        sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+        sales_log_xml.at_xpath("//xmlns:P2IncKnown").content = "1 Yes"
         sales_log_xml.at_xpath("//xmlns:Q2Person2Income").content = "95000"
         sales_log_xml.at_xpath("//xmlns:Q14ONSLACode").content = "E09000012"
       end

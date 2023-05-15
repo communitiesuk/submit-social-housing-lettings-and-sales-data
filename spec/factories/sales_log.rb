@@ -60,7 +60,7 @@ FactoryBot.define do
       buy2livein { "1" }
       ecstat1 { "1" }
       ecstat2 { "1" }
-      hholdcount { "1" }
+      hholdcount { "6" }
       wheel { 1 }
       details_known_3 { 1 }
       age3_known { 0 }
@@ -96,7 +96,6 @@ FactoryBot.define do
       ecstat6 { 1 }
       disabled { 1 }
       deposit { 80_000 }
-      cashdis { 1_000 }
       value { 110_000 }
       grant { 10_000 }
       proplen { 10 }
