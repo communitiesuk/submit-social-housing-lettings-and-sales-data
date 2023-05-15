@@ -29,7 +29,11 @@ class BulkUploadMailer < NotifyMailer
   def send_check_soft_validations_mail(bulk_upload:)
     title = "Check your file data"
     description = "Some of your #{bulk_upload.year_combo} #{bulk_upload.log_type} data might not be right. Click the link below to review the potential errors, and check your file to see if the data is correct."
-    cta_link = bulk_upload.sales? ? bulk_upload_sales_check_soft_validations_url(bulk_upload, page: "soft-errors-valid") : bulk_upload_lettings_check_soft_validations_url(bulk_upload, page: "soft-errors-valid")
+    cta_link = if bulk_upload.lettings?
+                 bulk_upload_lettings_check_soft_validations_url(bulk_upload, page: "soft-errors-valid")
+               else
+                 bulk_upload_sales_check_soft_validations_url(bulk_upload, page: "soft-errors-valid")
+               end
 
     send_email(
       bulk_upload.user.email,
