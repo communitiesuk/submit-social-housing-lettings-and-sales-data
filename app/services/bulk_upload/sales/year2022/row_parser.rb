@@ -591,8 +591,8 @@ private
     attributes["deposit"] = deposit
     attributes["cashdis"] = field_73
     attributes["mrent"] = field_74
-    attributes["has_mscharge"] = mscharge.present? ? 1 : 0
-    attributes["mscharge"] = mscharge
+    attributes["mscharge"] = mscharge if mscharge&.positive?
+    attributes["has_mscharge"] = attributes["mscharge"].present? ? 1 : 0
     attributes["grant"] = field_78
     attributes["discount"] = field_79
 
