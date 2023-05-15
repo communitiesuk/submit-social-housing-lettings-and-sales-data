@@ -4,7 +4,7 @@ RSpec.describe LogPolicy do
   subject(:policy) { described_class }
 
   permissions :destroy? do
-    let(:log) { create(:lettings_log, :setup_completed) }
+    let(:log) { create(:lettings_log, :in_progress) }
 
     context "when log nil" do
       before do
@@ -22,7 +22,7 @@ RSpec.describe LogPolicy do
       end
 
       it "does not allow deletion of log" do
-        expect(policy).not_to permit(nil, build(:lettings_log, :setup_completed))
+        expect(policy).not_to permit(nil, build(:lettings_log, :in_progress))
       end
     end
 
@@ -43,64 +43,63 @@ RSpec.describe LogPolicy do
         allow(log).to receive(:collection_period_open?).and_return(true)
       end
 
-      context "when setup_completed false" do
+      context "when not started" do
         before do
-          allow(log).to receive(:setup_completed?).and_return(false)
+          allow(log).to receive(:in_progress?).and_return(false)
+          allow(log).to receive(:completed?).and_return(false)
         end
 
         it "does not allow deletion of log" do
-          expect(log).to receive(:setup_completed?)
+          expect(log).to receive(:in_progress?)
           expect(log).to receive(:collection_period_open?)
 
           expect(policy).not_to permit(build(:user, :support), log)
         end
       end
 
-      context "when setup_completed true" do
-        before do
-          allow(log).to receive(:setup_completed?).and_return(true)
-        end
-
-        context "when user is data coordinator" do
-          let(:user) { create(:user, :data_coordinator) }
-
-          it "does allow deletion of log" do
-            expect(log).to receive(:setup_completed?)
-            expect(log).to receive(:collection_period_open?)
-
-            expect(policy).to permit(user, log)
-          end
-        end
-
-        context "when user is support" do
-          let(:user) { create(:user, :support) }
-
-          it "does allow deletion of log" do
-            expect(log).to receive(:setup_completed?)
-            expect(log).to receive(:collection_period_open?)
-
-            expect(policy).to permit(user, log)
-          end
-        end
-
-        context "when user is data provider" do
-          let(:user) { create(:user) }
-
-          it "does not allow deletion of log" do
-            expect(log).to receive(:setup_completed?)
-            expect(log).to receive(:collection_period_open?)
-
-            expect(policy).not_to permit(user, log)
-          end
-
-          context "when the log is assigned to the user" do
-            let(:log) { create(:lettings_log, :setup_completed, created_by: user) }
+      [
+        %i[lettings_log in_progress],
+        %i[lettings_log completed],
+        %i[sales_log in_progress],
+        %i[sales_log completed],
+      ].each do |type, status|
+        let(:log) { create(type, status) }
+        context "when #{type} status: #{status}" do
+          context "when user is data coordinator" do
+            let(:user) { create(:user, :data_coordinator) }
 
             it "does allow deletion of log" do
-              expect(log).to receive(:setup_completed?)
               expect(log).to receive(:collection_period_open?)
 
               expect(policy).to permit(user, log)
+            end
+          end
+
+          context "when user is support" do
+            let(:user) { create(:user, :support) }
+
+            it "does allow deletion of log" do
+              expect(log).to receive(:collection_period_open?)
+
+              expect(policy).to permit(user, log)
+            end
+          end
+
+          context "when user is data provider" do
+            let(:user) { create(:user) }
+
+            it "does not allow deletion of log" do
+              expect(log).to receive(:collection_period_open?)
+
+              expect(policy).not_to permit(user, log)
+            end
+
+            context "when the log is assigned to the user" do
+              let(:log) { create(:lettings_log, :in_progress, created_by: user) }
+
+              it "does allow deletion of log" do
+                expect(policy).to permit(user, log)
+              end
             end
           end
         end

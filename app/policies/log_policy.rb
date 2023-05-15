@@ -9,16 +9,16 @@ class LogPolicy
   def destroy?
     return false unless log && user
 
-    # Return false if the log is not editable.
+    # Can only delete editable logs
     return false unless log.collection_period_open?
 
-    # This button should not appear if the Set up section is not started.
-    return false unless log.setup_completed?
+    # Only delete logs with answered questions
+    return false unless log.in_progress? || log.completed?
 
-    # Data coordinators and support users can see this button on any log.
+    # Data coordinators and support users can delete any log
     return true if user.data_coordinator? || user.support?
 
-    # Data providers can only see this button if the log is assigned to them, even if it belongs to a parent org.
+    # Data providers can only delete the log if it is assigned to them
     log.created_by == user
   end
 end
