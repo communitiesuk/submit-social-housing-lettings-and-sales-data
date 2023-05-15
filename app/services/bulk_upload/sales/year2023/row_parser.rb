@@ -806,7 +806,8 @@ private
 
     attributes["mortlen"] = mortlen
 
-    attributes["proplen"] = proplen
+    attributes["proplen"] = proplen if proplen&.positive?
+    attributes["proplen_asked"] = attributes["proplen"]&.present? ? 0 : 1
     attributes["jointmore"] = field_15
     attributes["staircase"] = field_87
     attributes["privacynotice"] = field_29
