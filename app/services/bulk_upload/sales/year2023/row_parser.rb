@@ -341,6 +341,14 @@ class BulkUpload::Sales::Year2023::RowParser
             on: :after_log
 
   validates :field_8,
+            inclusion: {
+              in: [2, 30, 18, 16, 24, 28, 31, 32],
+              if: proc { field_8.present? },
+              category: :setup,
+            },
+            on: :before_log
+
+  validates :field_8,
             presence: {
               message: I18n.t("validations.not_answered", question: "shared ownership type"),
               category: :setup,
@@ -349,12 +357,28 @@ class BulkUpload::Sales::Year2023::RowParser
             on: :after_log
 
   validates :field_9,
+            inclusion: {
+              in: [8, 14, 27, 9, 29, 21, 22],
+              if: proc { field_9.present? },
+              category: :setup,
+            },
+            on: :before_log
+
+  validates :field_9,
             presence: {
               message: I18n.t("validations.not_answered", question: "shared ownership type"),
               category: :setup,
               if: :discounted_ownership?,
             },
             on: :after_log
+
+  validates :field_10,
+            inclusion: {
+              in: [10, 12],
+              if: proc { field_10.present? },
+              category: :setup,
+            },
+            on: :before_log
 
   validates :field_10,
             presence: {
@@ -1155,6 +1179,8 @@ private
   def validate_valid_radio_option
     log.attributes.each do |question_id, _v|
       question = log.form.get_question(question_id, log)
+
+      next if question_id == "type"
 
       next unless question&.type == "radio"
       next if log[question_id].blank? || question.answer_options.key?(log[question_id].to_s) || !question.page.routed_to?(log, nil)

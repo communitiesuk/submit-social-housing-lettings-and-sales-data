@@ -575,6 +575,36 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       end
     end
 
+    describe "#field_8" do # type for shared ownership sale
+      context "when an invalid option" do
+        let(:attributes) { setup_section_params.merge({ field_8: "100" }) }
+
+        it "returns setup error" do
+          expect(parser.errors.where(:field_8, category: :setup)).to be_present
+        end
+      end
+    end
+
+    describe "#field_9" do # type for discounted sale
+      context "when an invalid option" do
+        let(:attributes) { setup_section_params.merge({ field_9: "100" }) }
+
+        it "returns setup error" do
+          expect(parser.errors.where(:field_9, category: :setup)).to be_present
+        end
+      end
+    end
+
+    describe "#field_10" do # type for outright sale
+      context "when an invalid option" do
+        let(:attributes) { setup_section_params.merge({ field_10: "100" }) }
+
+        it "returns setup error" do
+          expect(parser.errors.where(:field_10, category: :setup)).to be_present
+        end
+      end
+    end
+
     describe "#field_19" do # UPRN
       context "when UPRN known and lookup found" do
         let(:attributes) { setup_section_params.merge({ field_19: "100023336956" }) }
