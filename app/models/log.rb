@@ -148,6 +148,7 @@ class Log < ApplicationRecord
     self.ppcodenk = nil if errors.attribute_names.include? :ppostcode_full
 
     if errors.of_kind?(:uprn, :uprn_error)
+      self.uprn = nil
       self.uprn_known = nil
       self.uprn_confirmed = nil
       self.address_line1 = nil
