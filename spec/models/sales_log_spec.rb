@@ -1,5 +1,6 @@
 require "rails_helper"
 require "shared/shared_examples_for_derived_fields"
+require "shared/shared_log_examples"
 
 # rubocop:disable RSpec/MessageChain
 # rubocop:disable RSpec/AnyInstance
@@ -8,6 +9,7 @@ RSpec.describe SalesLog, type: :model do
   let(:created_by_user) { create(:user) }
 
   include_examples "shared examples for derived fields", :sales_log
+  include_examples "shared log examples", :sales_log
 
   it "inherits from log" do
     expect(described_class).to be < Log
@@ -112,27 +114,7 @@ RSpec.describe SalesLog, type: :model do
   end
 
   describe "status" do
-    let!(:empty_sales_log) { create(:sales_log) }
-    let!(:in_progress_sales_log) { create(:sales_log, :in_progress) }
-    let!(:completed_sales_log) { create(:sales_log, :completed) }
-
-    it "is set to not started for an empty sales log" do
-      expect(empty_sales_log.not_started?).to be(true)
-      expect(empty_sales_log.in_progress?).to be(false)
-      expect(empty_sales_log.completed?).to be(false)
-    end
-
-    it "is set to in progress for a started sales log" do
-      expect(in_progress_sales_log.in_progress?).to be(true)
-      expect(in_progress_sales_log.not_started?).to be(false)
-      expect(in_progress_sales_log.completed?).to be(false)
-    end
-
-    it "is set to completed for a completed sales log" do
-      expect(completed_sales_log.in_progress?).to be(false)
-      expect(completed_sales_log.not_started?).to be(false)
-      expect(completed_sales_log.completed?).to be(true)
-    end
+    let(:completed_sales_log) { create(:sales_log, :completed) }
 
     context "when proplen is not given" do
       before do
@@ -148,6 +130,7 @@ RSpec.describe SalesLog, type: :model do
         expect(completed_sales_log.in_progress?).to be(false)
         expect(completed_sales_log.not_started?).to be(false)
         expect(completed_sales_log.completed?).to be(true)
+        expect(completed_sales_log.deleted?).to be(false)
       end
 
       it "is set to in_progress for a log with a saledate after 23/24" do
@@ -155,6 +138,7 @@ RSpec.describe SalesLog, type: :model do
         expect(completed_sales_log.in_progress?).to be(true)
         expect(completed_sales_log.not_started?).to be(false)
         expect(completed_sales_log.completed?).to be(false)
+        expect(completed_sales_log.deleted?).to be(false)
       end
     end
   end

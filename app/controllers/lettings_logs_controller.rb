@@ -72,11 +72,9 @@ class LettingsLogsController < LogsController
 
     authorize @log, policy_class: LogPolicy
 
-    if @log.delete
-      redirect_to lettings_logs_path, notice: "Log #{@log.id} has been deleted"
-    else
-      render_internal_server_error
-    end
+    @log.discard!
+
+    redirect_to lettings_logs_path, notice: "Log #{@log.id} has been deleted"
   end
 
   def delete_confirmation

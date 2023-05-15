@@ -129,5 +129,9 @@ FactoryBot.define do
     trait :with_uprn do
       uprn { rand(999_999_999_999).to_s }
     end
+    trait :deleted do
+      status { 4 }
+      discarded_at { Time.zone.now }
+    end
   end
 end

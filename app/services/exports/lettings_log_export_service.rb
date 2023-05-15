@@ -119,10 +119,10 @@ module Exports
 
       if !full_update && recent_export
         params = { from: recent_export.started_at, to: start_time }
-        LettingsLog.visible.where("updated_at >= :from and updated_at <= :to", params)
+        LettingsLog.exportable.where("updated_at >= :from and updated_at <= :to", params)
       else
         params = { to: start_time }
-        LettingsLog.visible.where("updated_at <= :to", params)
+        LettingsLog.exportable.where("updated_at <= :to", params)
       end
     end
 

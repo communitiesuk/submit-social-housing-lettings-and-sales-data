@@ -1323,19 +1323,6 @@ RSpec.describe LettingsLogsController, type: :request do
       sign_in user
     end
 
-    # rubocop:disable RSpec/AnyInstance
-    context "when log deletion errors" do
-      before do
-        allow_any_instance_of(LettingsLog).to receive(:delete).and_return(false)
-      end
-
-      it "renders 500 page" do
-        delete_request
-        expect(response).to have_http_status(:internal_server_error)
-      end
-    end
-    # rubocop:enable RSpec/AnyInstance
-
     context "when delete permitted" do
       it "redirects to lettings logs and shows message" do
         delete_request
@@ -1344,8 +1331,8 @@ RSpec.describe LettingsLogsController, type: :request do
         expect(page).to have_content("Log #{id} has been deleted")
       end
 
-      it "deletes the log" do
-        expect { delete_request }.to change { LettingsLog.exists?(id) }.from(true).to(false)
+      it "marks the log as deleted" do
+        expect { delete_request }.to change { lettings_log.reload.status }.from("completed").to("deleted")
       end
     end
 

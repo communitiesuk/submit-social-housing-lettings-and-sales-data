@@ -1,5 +1,6 @@
 require "rails_helper"
 require "shared/shared_examples_for_derived_fields"
+require "shared/shared_log_examples"
 
 # rubocop:disable RSpec/MessageChain
 # rubocop:disable RSpec/AnyInstance
@@ -23,6 +24,7 @@ RSpec.describe LettingsLog do
   end
 
   include_examples "shared examples for derived fields", :lettings_log
+  include_examples "shared log examples", :lettings_log
 
   it "inherits from log" do
     expect(described_class).to be < Log
@@ -183,27 +185,7 @@ RSpec.describe LettingsLog do
   end
 
   describe "status" do
-    let!(:empty_lettings_log) { create(:lettings_log) }
-    let!(:in_progress_lettings_log) { create(:lettings_log, :in_progress) }
-    let!(:completed_lettings_log) { create(:lettings_log, :completed) }
-
-    it "is set to not started for an empty lettings log" do
-      expect(empty_lettings_log.not_started?).to be(true)
-      expect(empty_lettings_log.in_progress?).to be(false)
-      expect(empty_lettings_log.completed?).to be(false)
-    end
-
-    it "is set to in progress for a started lettings log" do
-      expect(in_progress_lettings_log.in_progress?).to be(true)
-      expect(in_progress_lettings_log.not_started?).to be(false)
-      expect(in_progress_lettings_log.completed?).to be(false)
-    end
-
-    it "is set to completed for a completed lettings log" do
-      expect(completed_lettings_log.in_progress?).to be(false)
-      expect(completed_lettings_log.not_started?).to be(false)
-      expect(completed_lettings_log.completed?).to be(true)
-    end
+    let(:completed_lettings_log) { create(:lettings_log, :completed) }
 
     context "when only a subsection that is hidden in tasklist is not completed" do
       let(:household_characteristics_subsection) { completed_lettings_log.form.get_subsection("household_characteristics") }
