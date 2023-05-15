@@ -816,6 +816,7 @@ private
     attributes["mortgageused"] = mortgageused
 
     attributes["uprn"] = field_19
+    attributes["uprn_known"] = field_19.present? ? 1 : 0
     attributes["address_line1"] = field_20
     attributes["address_line2"] = field_21
     attributes["town_or_city"] = field_22
