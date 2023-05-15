@@ -81,6 +81,24 @@ class BulkUpload < ApplicationRecord
       log.rent_value_check = 0
       log.net_income_value_check = 0
       log.carehome_charges_value_check = 0
+      log.mortgage_value_check = 0
+      log.shared_ownership_deposit_value_check = 0
+      log.value_value_check = 0
+      log.savings_value_check = 0
+      log.income1_value_check = 0
+      log.deposit_value_check = 0
+      log.wheel_value_check = 0
+      log.extrabor_value_check = 0
+      log.grant_value_check = 0
+      log.staircase_bought_value_check = 0
+      log.deposit_and_mortgage_value_check = 0
+      log.old_persons_shared_ownership_value_check = 0
+      log.income2_value_check = 0
+      log.monthly_charges_value_check = 0
+      log.student_not_child_value_check = 0
+      log.discounted_sale_value_check = 0
+      log.buyer_livein_value_check = 0
+      log.percentage_discount_value_check = 0
       log.save!
     end
   end
