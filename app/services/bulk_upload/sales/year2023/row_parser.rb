@@ -408,6 +408,7 @@ class BulkUpload::Sales::Year2023::RowParser
 
   validate :validate_uprn_exists_if_any_key_address_fields_are_blank, on: :after_log
   validate :validate_address_fields, on: :after_log
+  validate :validate_if_log_already_exists, on: :after_log, if: -> { FeatureToggle.bulk_upload_duplicate_log_check_enabled? }
 
   def self.question_for_field(field)
     QUESTIONS[field]
@@ -462,6 +463,12 @@ class BulkUpload::Sales::Year2023::RowParser
 
   def inspect
     "#<BulkUpload::Sales::Year2023::RowParser:#{object_id}>"
+  end
+
+  def log_already_exists?
+    @log_already_exists ||= SalesLog
+      .where(status: %w[not_started in_progress completed])
+      .exists?(duplicate_check_fields.index_with { |field| log.public_send(field) })
   end
 
 private
@@ -783,7 +790,7 @@ private
 
     attributes["othtype"] = field_11
 
-    attributes["owning_organisation_id"] = owning_organisation_id
+    attributes["owning_organisation"] = owning_organisation
     attributes["created_by"] = created_by || bulk_upload.user
     attributes["hhregres"] = hhregres
     attributes["hhregresstill"] = hhregresstill
@@ -997,10 +1004,6 @@ private
     Organisation.find_by_id_on_multiple_fields(field_1)
   end
 
-  def owning_organisation_id
-    owning_organisation&.id
-  end
-
   def created_by
     @created_by ||= User.find_by(email: field_2)
   end
@@ -1030,6 +1033,18 @@ private
 
   def questions
     @questions ||= log.form.subsections.flat_map { |ss| ss.applicable_questions(log) }
+  end
+
+  def duplicate_check_fields
+    %w[
+      saledate
+      age1
+      sex1
+      ecstat1
+      owning_organisation
+      postcode_full
+      purchid
+    ]
   end
 
   def validate_owning_org_data_given
@@ -1151,6 +1166,23 @@ private
       errors.add(:field_3, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
       errors.add(:field_4, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
       errors.add(:field_5, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
+    end
+  end
+
+  def validate_if_log_already_exists
+    if log_already_exists?
+      error_message = "This is a duplicate log"
+
+      errors.add(:field_1, error_message) # Owning org
+      errors.add(:field_3, error_message) # Sale completion date
+      errors.add(:field_4, error_message) # Sale completion date
+      errors.add(:field_5, error_message) # Sale completion date
+      errors.add(:field_24, error_message) # Postcode
+      errors.add(:field_25, error_message) # Postcode
+      errors.add(:field_30, error_message) # Buyer 1 age
+      errors.add(:field_31, error_message) # Buyer 1 gender
+      errors.add(:field_35, error_message) # Buyer 1 working situation
+      errors.add(:field_6, error_message) # Purchaser code
     end
   end
 end
