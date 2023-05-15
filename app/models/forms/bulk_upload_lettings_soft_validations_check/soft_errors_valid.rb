@@ -18,7 +18,7 @@ module Forms
       end
 
       def view_path
-        "bulk_upload_lettings_soft_validations_check/valid"
+        "bulk_upload_lettings_soft_validations_check/soft_errors_valid"
       end
 
       def next_path
