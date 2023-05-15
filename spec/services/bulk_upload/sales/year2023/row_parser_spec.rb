@@ -340,7 +340,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       it "has errors on correct setup fields" do
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_1 field_13 field_14 field_3 field_4 field_5])
+        expect(errors).to eql(%i[field_1 field_11 field_13 field_14 field_3 field_4 field_5])
       end
     end
 
@@ -601,6 +601,16 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
 
         it "returns setup error" do
           expect(parser.errors.where(:field_10, category: :setup)).to be_present
+        end
+      end
+    end
+
+    describe "#field_11" do # type of other outright sale
+      context "when an invalid option" do
+        let(:attributes) { setup_section_params.merge({ field_10: "12", field_11: nil }) }
+
+        it "returns setup error" do
+          expect(parser.errors.where(:field_11, category: :setup)).to be_present
         end
       end
     end
