@@ -1153,6 +1153,8 @@ private
     attributes["first_time_property_let_as_social_housing"] = first_time_property_let_as_social_housing
 
     attributes["uprn_known"] = field_18.present? ? 1 : 0
+    attributes["uprn_confirmed"] = 1 if field_18.present?
+    attributes["skip_update_uprn_confirmed"] = true
     attributes["uprn"] = field_18
     attributes["address_line1"] = field_19
     attributes["address_line2"] = field_20
