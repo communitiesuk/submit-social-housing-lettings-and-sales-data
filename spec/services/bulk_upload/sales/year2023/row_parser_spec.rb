@@ -626,6 +626,17 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       end
     end
 
+    describe "#field_13" do # will buyers live in the property?
+      context "when an invalid option" do
+        let(:attributes) { setup_section_params.merge({ field_7: "3", field_13: "100" }) }
+
+        it "returns setup error" do
+          expect(parser.errors.where(:field_13).map(&:message)).to eql(["Enter a valid value for will the buyers live in the property?"])
+          expect(parser.errors.where(:field_13, category: :setup)).to be_present
+        end
+      end
+    end
+
     describe "#field_14" do # joint purchase
       context "when an invalid option" do
         let(:attributes) { setup_section_params.merge({ field_14: "100" }) }
