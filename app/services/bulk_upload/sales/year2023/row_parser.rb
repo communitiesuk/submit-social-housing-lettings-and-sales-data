@@ -396,6 +396,7 @@ class BulkUpload::Sales::Year2023::RowParser
             },
             on: :after_log
 
+  validate :validate_buyer1_economic_status, on: :before_log
   validate :validate_nulls, on: :after_log
   validate :validate_valid_radio_option, on: :before_log
 
@@ -1031,7 +1032,7 @@ private
   end
 
   def owning_organisation
-    Organisation.find_by_id_on_multiple_fields(field_1)
+    @owning_organisation ||= Organisation.find_by_id_on_multiple_fields(field_1)
   end
 
   def created_by
@@ -1229,6 +1230,12 @@ private
           end
         end
       end
+    end
+  end
+
+  def validate_buyer1_economic_status
+    if field_35 == 9
+      errors.add(:field_35, "Buyer 1 cannot be a child under 16")
     end
   end
 end

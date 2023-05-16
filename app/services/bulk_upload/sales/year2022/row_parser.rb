@@ -813,7 +813,7 @@ private
   end
 
   def owning_organisation
-    Organisation.find_by_id_on_multiple_fields(field_92)
+    @owning_organisation ||= Organisation.find_by_id_on_multiple_fields(field_92)
   end
 
   def created_by

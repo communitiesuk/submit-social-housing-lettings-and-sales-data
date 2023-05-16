@@ -107,14 +107,6 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
     }
   end
 
-  # around do |example|
-  #   FormHandler.instance.use_real_forms!
-
-  #   example.run
-
-  #   FormHandler.instance.use_fake_forms!
-  # end
-
   describe "#blank_row?" do
     context "when a new object" do
       it "returns true" do
