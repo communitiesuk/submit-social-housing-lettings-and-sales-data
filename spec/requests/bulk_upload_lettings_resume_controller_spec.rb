@@ -49,7 +49,7 @@ RSpec.describe BulkUploadLettingsResumeController, type: :request do
 
         expect(response).to be_successful
 
-        expect(response.body).to include("Select how would you like to fix these errors")
+        expect(response.body).to include("Select how you would like to fix these errors")
       end
     end
 
