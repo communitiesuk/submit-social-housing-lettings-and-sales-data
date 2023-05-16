@@ -41,7 +41,7 @@ class Log < ApplicationRecord
   }
   scope :created_by, ->(user) { where(created_by: user) }
 
-  attr_accessor :skip_update_status
+  attr_accessor :skip_update_status, :skip_update_uprn_confirmed
 
   def process_uprn_change!
     if uprn.present?
@@ -53,7 +53,7 @@ class Log < ApplicationRecord
       presenter = UprnDataPresenter.new(service.result)
 
       self.uprn_known = 1
-      self.uprn_confirmed = nil
+      self.uprn_confirmed = nil unless skip_update_uprn_confirmed
       self.address_line1 = presenter.address_line1
       self.address_line2 = presenter.address_line2
       self.town_or_city = presenter.town_or_city

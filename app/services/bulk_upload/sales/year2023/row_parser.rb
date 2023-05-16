@@ -824,6 +824,8 @@ private
 
     attributes["uprn"] = field_19
     attributes["uprn_known"] = field_19.present? ? 1 : 0
+    attributes["uprn_confirmed"] = 1 if field_19.present?
+    attributes["skip_update_uprn_confirmed"] = true
     attributes["address_line1"] = field_20
     attributes["address_line2"] = field_21
     attributes["town_or_city"] = field_22

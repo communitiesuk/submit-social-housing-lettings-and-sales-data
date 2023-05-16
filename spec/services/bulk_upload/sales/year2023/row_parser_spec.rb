@@ -539,6 +539,12 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
         it "is valid" do
           expect(parser.errors[:field_19]).to be_blank
         end
+
+        it "sets UPRN and UPRN known" do
+          expect(parser.log.uprn).to eq("100023336956")
+          expect(parser.log.uprn_known).to eq(1)
+          expect(parser.log.uprn_confirmed).to eq(1)
+        end
       end
 
       context "when UPRN not known but address known" do

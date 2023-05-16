@@ -1077,6 +1077,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "sets to 1" do
           expect(parser.log.uprn_known).to be(1)
+          expect(parser.log.uprn_confirmed).to be(1)
         end
       end
 
