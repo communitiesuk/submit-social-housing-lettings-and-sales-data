@@ -304,6 +304,16 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
       end
     end
 
+    describe "#field_57" do # type of shared ownership scheme
+      context "when an invalid option" do
+        let(:attributes) { setup_section_params.merge({ field_57: "100" }) }
+
+        it "returns setup error" do
+          expect(parser.errors.where(:field_57, category: :setup).map(&:message)).to eql(["Enter a valid value for what is the type of shared ownership sale?"])
+        end
+      end
+    end
+
     describe "#field_92" do # owning org
       context "when no data given" do
         let(:attributes) { { bulk_upload:, field_92: "" } }
