@@ -622,6 +622,20 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
         end
       end
     end
+
+    describe "shared ownership sale type" do
+      context "when 32 is selected for shared ownership type" do
+        let(:attributes) { valid_attributes.merge(field_113: 1, field_57: "32") }
+
+        it "is not permitted as a setup error" do
+          expect(parser.errors.where(:field_8, category: :setup)).to be_present
+        end
+
+        it "blocks log creation" do
+          expect(parser).to be_block_log_creation
+        end
+      end
+    end
   end
 
   describe "inferences" do

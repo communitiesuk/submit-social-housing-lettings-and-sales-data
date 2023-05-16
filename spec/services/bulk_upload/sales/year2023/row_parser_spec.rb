@@ -931,5 +931,16 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
         expect(log["mscharge"]).to be_nil
       end
     end
+
+    describe "shared ownership sale type" do
+      context "when 32 is selected for shared ownership type" do
+        let(:attributes) { valid_attributes.merge(field_8: "32") }
+
+        it "sets the value correctly" do
+          log = parser.log
+          expect(log["type"]).to eq(32)
+        end
+      end
+    end
   end
 end
