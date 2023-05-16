@@ -73,6 +73,12 @@ en:
             choice:
               blank: You must select how would you like to fix errors
               inclusion: You must select one of the following options for how would like to fix errors
+        forms/bulk_upload_sales_resume/fix_choice:
+          attributes:
+            choice:
+              blank: You must select how would you like to fix errors
+              inclusion: You must select one of the following options for how would like to fix errors
+
 
   activerecord:
     errors:
