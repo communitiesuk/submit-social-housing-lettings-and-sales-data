@@ -451,6 +451,16 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
       end
     end
 
+    describe "#field_113" do # purchase made thru ownership scheme?
+      context "when an invalid option" do
+        let(:attributes) { setup_section_params.merge({ field_113: "100" }) }
+
+        it "returns setup error" do
+          expect(parser.errors.where(:field_113, category: :setup).map(&:message)).to eql(["Enter a valid value for was this purchase made through an ownership scheme?"])
+        end
+      end
+    end
+
     describe "#field_117" do
       context "when not a possible value" do
         let(:attributes) { valid_attributes.merge({ field_117: "3" }) }
