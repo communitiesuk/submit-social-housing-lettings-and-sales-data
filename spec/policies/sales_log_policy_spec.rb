@@ -1,10 +1,10 @@
 require "rails_helper"
 
-RSpec.describe LogPolicy do
+RSpec.describe SalesLogPolicy do
   subject(:policy) { described_class }
 
   permissions :destroy? do
-    let(:log) { create(:lettings_log, :in_progress) }
+    let(:log) { create(:sales_log, :in_progress) }
 
     context "when log nil" do
       before do
@@ -22,7 +22,7 @@ RSpec.describe LogPolicy do
       end
 
       it "does not allow deletion of log" do
-        expect(policy).not_to permit(nil, build(:lettings_log, :in_progress))
+        expect(policy).not_to permit(nil, build(:sales_log, :in_progress))
       end
     end
 
@@ -58,8 +58,6 @@ RSpec.describe LogPolicy do
       end
 
       [
-        %i[lettings_log in_progress],
-        %i[lettings_log completed],
         %i[sales_log in_progress],
         %i[sales_log completed],
       ].each do |type, status|
@@ -67,11 +65,18 @@ RSpec.describe LogPolicy do
         context "when #{type} status: #{status}" do
           context "when user is data coordinator" do
             let(:user) { create(:user, :data_coordinator) }
+            let(:user_of_owning_org) { create(:user, :data_coordinator, organisation: log.owning_organisation) }
 
-            it "does allow deletion of log" do
+            it "does not allow deletion of log" do
               expect(log).to receive(:collection_period_open?)
 
-              expect(policy).to permit(user, log)
+              expect(policy).not_to permit(user, log)
+            end
+
+            it "allows deletion of log" do
+              expect(log).to receive(:collection_period_open?)
+
+              expect(policy).to permit(user_of_owning_org, log)
             end
           end
 
@@ -95,7 +100,7 @@ RSpec.describe LogPolicy do
             end
 
             context "when the log is assigned to the user" do
-              let(:log) { create(:lettings_log, :in_progress, created_by: user) }
+              let(:log) { create(:sales_log, :in_progress, created_by: user) }
 
               it "does allow deletion of log" do
                 expect(policy).to permit(user, log)

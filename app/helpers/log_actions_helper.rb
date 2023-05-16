@@ -30,8 +30,12 @@ private
     end
   end
 
+  def policy_class_for(log)
+    log.lettings? ? LettingsLogPolicy : SalesLogPolicy
+  end
+
   def delete_button_for_log(log)
-    if LogPolicy.new(current_user, log).destroy?
+    if policy_class_for(log).new(current_user, log).destroy?
       govuk_button_link_to(
         "Delete log",
         lettings_log_delete_confirmation_path(log),
