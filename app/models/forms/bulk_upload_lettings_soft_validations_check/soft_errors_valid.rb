@@ -24,7 +24,7 @@ module Forms
       def next_path
         case soft_errors_valid
         when "yes"
-          page_bulk_upload_lettings_resume_path(bulk_upload, page: "fix-choice")
+          page_bulk_upload_lettings_resume_path(bulk_upload, page: "fix-choice", soft_errors_only: true)
         when "no"
           page_bulk_upload_lettings_soft_validations_check_path(bulk_upload, page: "confirm")
         else

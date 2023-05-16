@@ -27,6 +27,18 @@ RSpec.describe BulkUploadLettingsResumeController, type: :request do
       expect(response.body).to include("2022/23")
       expect(response.body).to include("How would you like to fix 2 errors?")
       expect(response.body).to include(bulk_upload.filename)
+      expect(response.body).not_to include("Cancel")
+    end
+  end
+
+  describe "GET /lettings-logs/bulk-upload-resume/:ID/fix-choice?soft_errors_only=true" do
+    it "displays a cancel button" do
+      get "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice?soft_errors_only=true"
+
+      expect(response).to be_successful
+
+      expect(response.body).to include("Bulk upload for lettings")
+      expect(response.body).to include("Cancel")
     end
   end
 

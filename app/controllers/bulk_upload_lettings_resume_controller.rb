@@ -9,6 +9,7 @@ class BulkUploadLettingsResumeController < ApplicationController
 
   def show
     @bulk_upload = current_user.bulk_uploads.find(params[:id])
+    @soft_errors_only = params[:soft_errors_only] == "true"
 
     render form.view_path
   end
