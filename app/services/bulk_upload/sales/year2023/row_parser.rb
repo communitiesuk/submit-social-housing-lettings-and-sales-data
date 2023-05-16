@@ -500,7 +500,7 @@ private
   end
 
   def validate_uprn_exists_if_any_key_address_fields_are_blank
-    if field_19.blank? && (field_20.blank? || field_22.blank? || field_24.blank? || field_25.blank?)
+    if field_19.blank? && (field_20.blank? || field_22.blank?)
       errors.add(:field_19, I18n.t("validations.not_answered", question: "UPRN"))
     end
   end
@@ -513,14 +513,6 @@ private
 
       if field_22.blank?
         errors.add(:field_22, I18n.t("validations.not_answered", question: "town or city"))
-      end
-
-      if field_24.blank?
-        errors.add(:field_24, I18n.t("validations.not_answered", question: "part 1 of the property's postcode"))
-      end
-
-      if field_25.blank?
-        errors.add(:field_25, I18n.t("validations.not_answered", question: "part 2 of the property's postcode"))
       end
     end
   end
