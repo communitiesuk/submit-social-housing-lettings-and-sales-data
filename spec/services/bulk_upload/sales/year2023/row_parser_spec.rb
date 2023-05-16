@@ -542,6 +542,12 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
         it "is valid" do
           expect(parser.errors[:field_19]).to be_blank
         end
+
+        it "sets UPRN and UPRN known" do
+          expect(parser.log.uprn).to eq("100023336956")
+          expect(parser.log.uprn_known).to eq(1)
+          expect(parser.log.uprn_confirmed).to eq(1)
+        end
       end
 
       context "when UPRN not known but address known" do
@@ -673,6 +679,24 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       end
     end
 
+    describe "#uprn_known" do
+      context "when uprn known" do
+        let(:attributes) { setup_section_params.merge({ field_19: "100023336956" }) }
+
+        it "is correctly set" do
+          expect(parser.log.uprn_known).to be(1)
+        end
+      end
+
+      context "when uprn not known" do
+        let(:attributes) { setup_section_params.merge({ field_19: nil }) }
+
+        it "is correctly set" do
+          expect(parser.log.uprn_known).to be(0)
+        end
+      end
+    end
+
     describe "#address_line1" do
       let(:attributes) { setup_section_params.merge({ field_20: "some street" }) }
 
@@ -774,6 +798,42 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
 
       it "is correctly set" do
         expect(parser.log.soctenant).to be(1)
+      end
+    end
+
+    describe "with living before purchase years for shared ownership more than 0" do
+      let(:attributes) { setup_section_params.merge({ field_7: "1", field_86: "1" }) }
+
+      it "is sets living before purchase asked to yes and sets the correct living before purchase years" do
+        expect(parser.log.proplen_asked).to be(0)
+        expect(parser.log.proplen).to be(1)
+      end
+    end
+
+    describe "with living before purchase years for discounted ownership more than 0" do
+      let(:attributes) { setup_section_params.merge({ field_7: "2", field_115: "1" }) }
+
+      it "is sets living before purchase asked to yes and sets the correct living before purchase years" do
+        expect(parser.log.proplen_asked).to be(0)
+        expect(parser.log.proplen).to be(1)
+      end
+    end
+
+    describe "with living before purchase years for shared ownership set to 0" do
+      let(:attributes) { setup_section_params.merge({ field_7: "1", field_86: "0" }) }
+
+      it "is sets living before purchase asked to no" do
+        expect(parser.log.proplen_asked).to be(1)
+        expect(parser.log.proplen).to be_nil
+      end
+    end
+
+    describe "with living before purchase 0 years for discounted ownership set to 0" do
+      let(:attributes) { setup_section_params.merge({ field_7: "2", field_115: "0" }) }
+
+      it "is sets living before purchase asked to no" do
+        expect(parser.log.proplen_asked).to be(1)
+        expect(parser.log.proplen).to be_nil
       end
     end
   end

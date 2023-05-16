@@ -1138,14 +1138,14 @@ RSpec.describe LettingsLogsController, type: :request do
       it "only displays affected logs" do
         get "/lettings-logs/update-logs", headers:, params: {}
         expect(page).to have_content("You need to update 3 logs")
-        expect(page).to have_content(affected_lettings_logs.first.id)
-        expect(page).not_to have_content(non_affected_lettings_logs.first.id)
+        expect(page).to have_link("Update now", href: "/lettings-logs/#{affected_lettings_logs.first.id}/tenancy-start-date")
+        expect(page).not_to have_link("Update now", href: "/lettings-logs/#{non_affected_lettings_logs.first.id}/tenancy-start-date")
       end
 
       it "only displays the logs created by the user" do
         get "/lettings-logs/update-logs", headers:, params: {}
-        expect(page).to have_content(affected_lettings_logs.second.id)
-        expect(page).not_to have_content(other_user_affected_lettings_log.id)
+        expect(page).to have_link("Update now", href: "/lettings-logs/#{affected_lettings_logs.second.id}/tenancy-start-date")
+        expect(page).not_to have_link("Update now", href: "/lettings-logs/#{other_user_affected_lettings_log.id}/tenancy-start-date")
         expect(page).to have_content("You need to update 3 logs")
       end
 
