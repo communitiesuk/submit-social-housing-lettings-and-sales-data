@@ -1,0 +1,2 @@
+class LettingsLogPolicy < LogPolicy
+end

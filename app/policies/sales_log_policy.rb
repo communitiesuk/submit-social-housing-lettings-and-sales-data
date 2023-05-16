@@ -1,0 +1,2 @@
+class SalesLogPolicy < LogPolicy
+end
