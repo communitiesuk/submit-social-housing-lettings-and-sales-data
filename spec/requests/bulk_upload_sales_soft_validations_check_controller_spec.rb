@@ -10,19 +10,19 @@ RSpec.describe BulkUploadSalesSoftValidationsCheckController, type: :request do
     sign_in user
   end
 
-  describe "GET /sales-logs/bulk-upload-soft-validations-check/:ID/soft-errors-valid" do
+  describe "GET /sales-logs/bulk-upload-soft-validations-check/:ID/confirm-soft-errors" do
     it "shows the soft validation errors with confirmation question" do
-      get "/sales-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/soft-errors-valid"
+      get "/sales-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/confirm-soft-errors"
 
       expect(response.body).to include("Bulk upload for sales")
       expect(response.body).to include("2022/23")
       expect(response.body).to include("Check these 2 answers")
       expect(response.body).to include(bulk_upload.filename)
-      expect(response.body).to include("Are there any errors in these fields?")
+      expect(response.body).to include("Are these fields correct?")
     end
 
     it "shows the soft validation and lists the errors" do
-      get "/sales-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/soft-errors-valid"
+      get "/sales-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/confirm-soft-errors"
 
       expect(response.body).to include("Row #{bulk_upload_errors.first.row}")
       expect(response.body).to include("Purchaser code")
@@ -30,10 +30,10 @@ RSpec.describe BulkUploadSalesSoftValidationsCheckController, type: :request do
     end
   end
 
-  describe "PATCH /sales-logs/bulk-upload-soft-validations-check/:ID/soft-errors-valid" do
+  describe "PATCH /sales-logs/bulk-upload-soft-validations-check/:ID/confirm-soft-errors" do
     context "when no option selected" do
       it "renders error message" do
-        patch "/sales-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/soft-errors-valid"
+        patch "/sales-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/confirm-soft-errors"
 
         expect(response).to be_successful
 
@@ -41,17 +41,17 @@ RSpec.describe BulkUploadSalesSoftValidationsCheckController, type: :request do
       end
     end
 
-    context "when yes is selected" do
+    context "when no is selected" do
       it "sends them to the fix choice page" do
-        patch "/sales-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/soft-errors-valid", params: { form: { soft_errors_valid: "yes" } }
+        patch "/sales-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/confirm-soft-errors", params: { form: { confirm_soft_errors: "no" } }
 
-        expect(response).to redirect_to("/sales-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice")
+        expect(response).to redirect_to("/sales-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice?soft_errors_only=true")
       end
     end
 
-    context "when no is selected" do
+    context "when yes is selected" do
       it "sends them to confirm choice" do
-        patch "/sales-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/soft-errors-valid", params: { form: { soft_errors_valid: "no" } }
+        patch "/sales-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/confirm-soft-errors", params: { form: { confirm_soft_errors: "yes" } }
 
         expect(response).to redirect_to("/sales-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/confirm")
         follow_redirect!

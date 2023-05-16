@@ -1,4 +1,4 @@
-<%= form_with model: @form, scope: :form, url: page_bulk_upload_lettings_soft_validations_check_path(@bulk_upload, page: "soft-errors-valid"), method: :patch do |f| %>
+<%= form_with model: @form, scope: :form, url: page_bulk_upload_lettings_soft_validations_check_path(@bulk_upload, page: "confirm-soft-errors"), method: :patch do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <%= f.govuk_error_summary %>
@@ -20,11 +20,11 @@
     </div>
 
     <div class="govuk-grid-column-full">
-      <%= f.govuk_collection_radio_buttons :soft_errors_valid,
+      <%= f.govuk_collection_radio_buttons :confirm_soft_errors,
             @form.options,
             :id,
             :name,
-            legend: { text: "Are there any errors in these fields?", size: "l" } %>
+            legend: { text: "Are these fields correct?", size: "l" } %>
 
       <%= f.govuk_submit %>
     </div>

@@ -49,7 +49,7 @@ RSpec.describe BulkUploadSalesResumeController, type: :request do
 
         expect(response).to be_successful
 
-        expect(response.body).to include("You must select")
+        expect(response.body).to include("Select how would you like to fix these errors")
       end
     end
 

@@ -28,8 +28,8 @@ private
 
   def form
     @form ||= case params[:page]
-              when "soft-errors-valid"
-                Forms::BulkUploadLettingsSoftValidationsCheck::SoftErrorsValid.new(form_params.merge(bulk_upload: @bulk_upload))
+              when "confirm-soft-errors"
+                Forms::BulkUploadLettingsSoftValidationsCheck::ConfirmSoftErrors.new(form_params.merge(bulk_upload: @bulk_upload))
               when "confirm"
                 Forms::BulkUploadLettingsSoftValidationsCheck::Confirm.new(form_params.merge(bulk_upload: @bulk_upload))
               else
@@ -38,6 +38,6 @@ private
   end
 
   def form_params
-    params.fetch(:form, {}).permit(:soft_errors_valid)
+    params.fetch(:form, {}).permit(:confirm_soft_errors)
   end
 end

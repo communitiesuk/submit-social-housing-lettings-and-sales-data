@@ -33,7 +33,7 @@
       <div class="govuk-button-group">
         <%= f.govuk_submit %>
         <% if @soft_errors_only %>
-          <%= govuk_button_link_to "Cancel", bulk_upload_lettings_soft_validations_check_url(@bulk_upload, page: "soft-errors-valid"), secondary: true %>
+          <%= govuk_button_link_to "Cancel", bulk_upload_lettings_soft_validations_check_url(@bulk_upload, page: "confirm-soft-errors"), secondary: true %>
         <% end %>
       </div>
     <% end %>

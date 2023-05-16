@@ -12,7 +12,7 @@ module Forms
       end
 
       def back_path
-        page_bulk_upload_lettings_soft_validations_check_path(bulk_upload, page: "soft-errors-valid")
+        page_bulk_upload_lettings_soft_validations_check_path(bulk_upload, page: "confirm-soft-errors")
       end
 
       def next_path
