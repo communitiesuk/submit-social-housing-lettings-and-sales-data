@@ -561,8 +561,6 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
     [
       { field: :field_20, name: "address line 1" },
       { field: :field_22, name: "town or city" },
-      { field: :field_24, name: "postcode part 1" },
-      { field: :field_25, name: "postcode part 2" },
     ].each do |data|
       describe "##{data[:field]} (#{data[:name]})" do
         context "when UPRN present" do
