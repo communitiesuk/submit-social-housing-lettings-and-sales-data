@@ -622,8 +622,6 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
         end
       end
     end
-
-
   end
 
   describe "inferences" do
