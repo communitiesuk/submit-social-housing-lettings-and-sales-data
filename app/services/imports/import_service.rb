@@ -1,11 +1,14 @@
 module Imports
   class ImportService
+    attr_accessor :allow_updates
+
   private
 
-    def initialize(storage_service, logger = Rails.logger)
+    def initialize(storage_service, logger = Rails.logger, allow_updates: false)
       @storage_service = storage_service
       @logger = logger
       @logs_with_discrepancies = []
+      @allow_updates = allow_updates
     end
 
     def import_from(folder, create_method)
