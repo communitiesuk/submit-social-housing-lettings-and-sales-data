@@ -136,6 +136,25 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
     end
   end
 
+  describe "purchaser_code" do
+    before do
+      def purch_id_field
+        described_class::QUESTIONS.key("What is the purchaser code?").to_s
+      end
+    end
+
+    let(:attributes) do
+      {
+        bulk_upload:,
+        purch_id_field => "some purchaser code",
+      }
+    end
+
+    it "is linked to the correct field" do
+      expect(parser.purchaser_code).to eq("some purchaser code")
+    end
+  end
+
   describe "validations" do
     before do
       stub_request(:get, /api.postcodes.io/)
