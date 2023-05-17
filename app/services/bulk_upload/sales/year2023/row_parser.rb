@@ -602,7 +602,6 @@ private
       beds: %i[field_16],
       proptype: %i[field_17],
       builtype: %i[field_18],
-      uprn: %i[field_19],
       la_known: %i[field_26],
       la: %i[field_26],
 
