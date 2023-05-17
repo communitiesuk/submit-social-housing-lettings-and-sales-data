@@ -36,7 +36,7 @@ private
     raise "implement in sub class"
   end
 
-  API_ACTIONS = %w[create show update destroy].freeze
+  API_ACTIONS = %w[create show update].freeze
 
   def json_api_request?
     API_ACTIONS.include?(request["action"]) && request.format.json?

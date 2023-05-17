@@ -31,10 +31,6 @@ module FiltersHelper
   end
 
   def collection_year_options
-    if FeatureToggle.collection_2023_2024_year_enabled?
-      { "2023": "2023/24", "2022": "2022/23", "2021": "2021/22" }
-    else
-      { "2022": "2022/23", "2021": "2021/22" }
-    end
+    { "2023": "2023/24", "2022": "2022/23", "2021": "2021/22" }
   end
 end

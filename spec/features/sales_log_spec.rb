@@ -52,17 +52,6 @@ RSpec.describe "Sales Log Features" do
           expect(page).to have_content("PC123")
         end
       end
-
-      context "when the sales log feature flag is disabled" do
-        before do
-          allow(FeatureToggle).to receive(:sales_log_enabled?).and_return(false)
-        end
-
-        it "hides the create sales log button in production" do
-          visit("/sales-logs")
-          expect(page).not_to have_content("Create a new sales log")
-        end
-      end
     end
   end
 
