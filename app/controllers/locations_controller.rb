@@ -1,22 +1,57 @@
 class LocationsController < ApplicationController
   include Pagy::Backend
-  before_action :authenticate_user!
-  before_action :authenticate_scope!
-  before_action :find_location, except: %i[create index]
-  before_action :find_scheme
-  before_action :authenticate_action!, only: %i[create update index new_deactivation deactivate_confirm deactivate postcode local_authority name units type_of_unit mobility_standards availability check_answers]
-  before_action :scheme_and_location_present, except: %i[create index]
-
   include Modules::SearchFilter
 
+  before_action :authenticate_user!
+  before_action :find_location, except: %i[create index]
+  before_action :find_scheme
+  before_action :scheme_and_location_present, except: %i[create index]
+
+  before_action :authorize_read,
+                only: %i[
+                  show
+                  postcode
+                  local_authority
+                  name
+                  units
+                  type_of_unit
+                  mobility_standards
+                  availability
+                  check_answers
+                  confirm
+                ]
+
+  before_action :authorize_write,
+                only: %i[
+                  update_postcode
+                  update_local_authority
+                  update_name
+                  update_units
+                  update_type_of_unit
+                  update_mobility_standards
+                  update_availability
+                  new_deactivation
+                  deactivate_confirm
+                  deactivate
+                  new_reactivation
+                  reactivate
+                ]
+
   def index
+    authorize @scheme
+
     @pagy, @locations = pagy(filtered_collection(@scheme.locations, search_term))
     @total_count = @scheme.locations.size
     @searched = search_term.presence
   end
 
   def create
-    @location = @scheme.locations.create!
+    @location = @scheme.locations.new
+
+    authorize @location
+
+    @location.save!
+
     redirect_to scheme_location_postcode_path(@scheme, @location, route: params[:route])
   end
 
@@ -205,6 +240,14 @@ class LocationsController < ApplicationController
 
 private
 
+  def authorize_read
+    authorize @location
+  end
+
+  def authorize_write
+    authorize @location
+  end
+
   def scheme_and_location_present
     render_not_found and return unless @location && @scheme
   end
@@ -219,20 +262,6 @@ private
 
   def find_location
     @location = params[:location_id].present? ? Location.find_by(id: params[:location_id]) : Location.find_by(id: params[:id])
-  end
-
-  def authenticate_scope!
-    head :unauthorized and return unless current_user.data_coordinator? || current_user.support?
-  end
-
-  def authenticate_action!
-    unless user_allowed_action?
-      render_not_found
-    end
-  end
-
-  def user_allowed_action?
-    current_user.support? || current_user.organisation == @scheme&.owning_organisation || current_user.organisation.parent_organisations.exists?(@scheme&.owning_organisation_id)
   end
 
   def location_params
