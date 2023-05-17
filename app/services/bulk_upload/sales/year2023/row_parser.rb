@@ -803,8 +803,8 @@ private
 
     attributes["cashdis"] = field_112
     attributes["mrent"] = field_113
-    attributes["has_mscharge"] = mscharge.present? ? 1 : 0
-    attributes["mscharge"] = mscharge
+    attributes["mscharge"] = mscharge if mscharge&.positive?
+    attributes["has_mscharge"] = attributes["mscharge"].present? ? 1 : 0
     attributes["grant"] = field_117
     attributes["discount"] = field_118
 
