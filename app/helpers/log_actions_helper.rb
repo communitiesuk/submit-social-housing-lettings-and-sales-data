@@ -38,7 +38,7 @@ private
     if policy_class_for(log).new(current_user, log).destroy?
       govuk_button_link_to(
         "Delete log",
-        lettings_log_delete_confirmation_path(log),
+        log.lettings? ? lettings_log_delete_confirmation_path(log) : sales_log_delete_confirmation_path(log),
         warning: true,
       )
     end
