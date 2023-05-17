@@ -271,7 +271,7 @@ private
   end
 
   def user_allowed_action?
-    (current_user.organisation == @scheme&.owning_organisation) || (current_user.organisation.parent_organisations.any? { |org| org == @scheme&.owning_organisation }) || current_user.support?
+    current_user.support? || current_user.organisation == @scheme&.owning_organisation || current_user.organisation.parent_organisations.exists?(@scheme&.owning_organisation_id)
   end
 
   def redirect_if_scheme_confirmed
