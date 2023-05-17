@@ -473,7 +473,11 @@ class BulkUpload::Sales::Year2023::RowParser
       .exists?(duplicate_check_fields.index_with { |field| log.public_send(field) })
   end
 
-private
+  def purchaser_code
+    field_6
+  end
+
+  private
 
   def prevtenbuy2
     case field_72
@@ -695,7 +699,7 @@ private
   def attributes_for_log
     attributes = {}
 
-    attributes["purchid"] = field_6
+    attributes["purchid"] = purchaser_code
     attributes["saledate"] = saledate
     attributes["noint"] = 2 if field_28 == 1
 
