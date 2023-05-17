@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe "logs/edit.html.erb" do
   before do
     assign(:log, log)
+    sign_in create(:user, :support)
   end
 
   context "when log is in progress" do
@@ -14,6 +15,14 @@ RSpec.describe "logs/edit.html.erb" do
       fragment = Capybara::Node::Simple.new(rendered)
 
       expect(fragment).not_to have_link(text: "Back to lettings logs", href: "/lettings-logs")
+    end
+
+    it "has link 'Delete log'" do
+      render
+
+      fragment = Capybara::Node::Simple.new(rendered)
+
+      expect(fragment).to have_link(text: "Delete log", href: "/lettings-logs/#{log.id}/delete-confirmation")
     end
   end
 
@@ -28,6 +37,14 @@ RSpec.describe "logs/edit.html.erb" do
 
         expect(fragment).to have_link(text: "Back to lettings logs", href: "/lettings-logs")
       end
+
+      it "has link 'Delete log'" do
+        render
+
+        fragment = Capybara::Node::Simple.new(rendered)
+
+        expect(fragment).to have_link(text: "Delete log", href: "/lettings-logs/#{log.id}/delete-confirmation")
+      end
     end
 
     context "when showing a sales log" do
@@ -39,6 +56,14 @@ RSpec.describe "logs/edit.html.erb" do
         fragment = Capybara::Node::Simple.new(rendered)
 
         expect(fragment).to have_link(text: "Back to sales logs", href: "/sales-logs")
+      end
+
+      it "has link 'Delete log'" do
+        render
+
+        fragment = Capybara::Node::Simple.new(rendered)
+
+        expect(fragment).to have_link(text: "Delete log", href: "/sales-logs/#{log.id}/delete-confirmation")
       end
     end
 
@@ -53,6 +78,14 @@ RSpec.describe "logs/edit.html.erb" do
 
         expect(fragment).to have_link(text: "Back to uploaded logs", href: "/lettings-logs/bulk-upload-results/#{bulk_upload.id}/resume")
       end
+
+      it "has link 'Delete log'" do
+        render
+
+        fragment = Capybara::Node::Simple.new(rendered)
+
+        expect(fragment).to have_link(text: "Delete log", href: "/lettings-logs/#{log.id}/delete-confirmation")
+      end
     end
 
     context "when sales log is bulk uploaded" do
@@ -65,6 +98,14 @@ RSpec.describe "logs/edit.html.erb" do
         fragment = Capybara::Node::Simple.new(rendered)
 
         expect(fragment).to have_link(text: "Back to uploaded logs", href: "/sales-logs/bulk-upload-results/#{bulk_upload.id}/resume")
+      end
+
+      it "has link 'Delete log'" do
+        render
+
+        fragment = Capybara::Node::Simple.new(rendered)
+
+        expect(fragment).to have_link(text: "Delete log", href: "/sales-logs/#{log.id}/delete-confirmation")
       end
     end
   end
