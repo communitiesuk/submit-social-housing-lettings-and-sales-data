@@ -39,6 +39,9 @@ RSpec.describe SchemesController, type: :request do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
 
       before do
+        schemes.each do |scheme|
+          scheme.update!(owning_organisation: user.organisation)
+        end
         sign_in user
         get "/schemes"
       end
@@ -46,6 +49,33 @@ RSpec.describe SchemesController, type: :request do
       it "redirects to the organisation schemes path" do
         follow_redirect!
         expect(path).to match("/organisations/#{user.organisation.id}/schemes")
+      end
+
+      it "shows a list of schemes for the organisation" do
+        follow_redirect!
+        schemes.each do |scheme|
+          expect(page).to have_content(scheme.id_to_display)
+        end
+      end
+
+      context "when parent organisation has schemes" do
+        let(:parent_organisation) { FactoryBot.create(:organisation) }
+        let!(:parent_schemes) { FactoryBot.create_list(:scheme, 5, owning_organisation: parent_organisation) }
+
+        before do
+          create(:organisation_relationship, parent_organisation:, child_organisation: user.organisation)
+          parent_schemes.each do |scheme|
+            FactoryBot.create(:location, scheme:)
+          end
+          get "/schemes"
+        end
+
+        it "shows parent organisation schemes" do
+          follow_redirect!
+          parent_schemes.each do |scheme|
+            expect(page).to have_content(scheme.id_to_display)
+          end
+        end
       end
     end
 
