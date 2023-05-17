@@ -23,7 +23,7 @@ class BulkUpload::Sales::Validator
         bulk_upload.bulk_upload_errors.create!(
           field: error.attribute,
           error: error.message,
-          purchaser_code: row_parser.field_1,
+          purchaser_code: row_parser.purchaser_code,
           row:,
           cell: "#{col}#{row}",
           col:,
