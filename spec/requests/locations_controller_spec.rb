@@ -145,7 +145,7 @@ RSpec.describe LocationsController, type: :request do
         end
       end
 
-      it "shows locations with correct data wben the new locations layout feature toggle is enabled" do
+      it "shows locations with correct data when the new locations layout feature toggle is enabled" do
         locations.each do |location|
           expect(page).to have_content(location.id)
           expect(page).to have_content(location.postcode)
@@ -154,7 +154,7 @@ RSpec.describe LocationsController, type: :request do
         end
       end
 
-      it "shows locations with correct data wben the new locations layout feature toggle is disabled" do
+      it "shows locations with correct data when the new locations layout feature toggle is disabled" do
         allow(FeatureToggle).to receive(:location_toggle_enabled?).and_return(false)
         get "/schemes/#{scheme.id}/locations"
         locations.each do |location|
@@ -248,6 +248,30 @@ RSpec.describe LocationsController, type: :request do
           expect(page).to have_title(expected_title)
         end
       end
+
+      context "when coordinator attempts to see scheme belonging to a parent organisation" do
+        let(:parent_organisation) { FactoryBot.create(:organisation) }
+        let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: parent_organisation) }
+        let!(:locations) { FactoryBot.create_list(:location, 3, scheme:, startdate: Time.zone.local(2022, 4, 1)) }
+
+        before do
+          create(:organisation_relationship, parent_organisation:, child_organisation: user.organisation)
+          get "/schemes/#{scheme.id}/locations"
+        end
+
+        it "shows all the locations" do
+          locations.each do |location|
+            expect(page).to have_content(location.id)
+            expect(page).to have_content(location.postcode)
+            expect(page).to have_content(location.name)
+            expect(page).to have_content(location.status)
+          end
+        end
+
+        it "does not allow adding new locations" do
+          expect(page).not_to have_button("Add a location")
+        end
+      end
     end
 
     context "when signed in as a support user" do
@@ -261,16 +285,17 @@ RSpec.describe LocationsController, type: :request do
         get "/schemes/#{scheme.id}/locations"
       end
 
-      it "shows locations with correct data wben the new locations layout feature toggle is enabled" do
+      it "shows locations with correct data when the new locations layout feature toggle is enabled" do
         locations.each do |location|
           expect(page).to have_content(location.id)
           expect(page).to have_content(location.postcode)
           expect(page).to have_content(location.name)
           expect(page).to have_content(location.status)
         end
+        expect(page).to have_button("Add a location")
       end
 
-      it "shows locations with correct data wben the new locations layout feature toggle is disabled" do
+      it "shows locations with correct data when the new locations layout feature toggle is disabled" do
         allow(FeatureToggle).to receive(:location_toggle_enabled?).and_return(false)
         get "/schemes/#{scheme.id}/locations"
         locations.each do |location|
@@ -1675,6 +1700,27 @@ RSpec.describe LocationsController, type: :request do
           expect(response).to have_http_status(:ok)
           expect(page).not_to have_link("Reactivate this location")
           expect(page).not_to have_link("Deactivate this location")
+        end
+      end
+
+      context "and are viewing their parent organisation's location" do
+        let(:parent_organisation) { FactoryBot.create(:organisation) }
+        let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: parent_organisation) }
+        let!(:location) { FactoryBot.create(:location, scheme:) }
+        let(:add_deactivations) {}
+
+        before do
+          create(:organisation_relationship, parent_organisation:, child_organisation: user.organisation)
+        end
+
+        it "shows the location" do
+          expect(page).to have_content("Location name")
+          expect(page).to have_content(location.name)
+        end
+
+        it "does not allow editing the location" do
+          expect(page).not_to have_link("Change")
+          expect(page).not_to have_link("Deactivate this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/new-deactivation")
         end
       end
     end

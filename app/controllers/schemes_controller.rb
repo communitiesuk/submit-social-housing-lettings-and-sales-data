@@ -265,9 +265,13 @@ private
   def authenticate_scope!
     head :unauthorized and return unless current_user.data_coordinator? || current_user.support?
 
-    if %w[show locations primary_client_group confirm_secondary_client_group secondary_client_group support details check_answers edit_name deactivate].include?(action_name) && !((current_user.organisation == @scheme&.owning_organisation) || current_user.support?)
+    if %w[show locations primary_client_group confirm_secondary_client_group secondary_client_group support details check_answers edit_name deactivate].include?(action_name) && !user_allowed_action?
       render_not_found and return
     end
+  end
+
+  def user_allowed_action?
+    (current_user.organisation == @scheme&.owning_organisation) || (current_user.organisation.parent_organisations.any? { |org| org == @scheme&.owning_organisation }) || current_user.support?
   end
 
   def redirect_if_scheme_confirmed

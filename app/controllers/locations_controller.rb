@@ -225,9 +225,13 @@ private
   end
 
   def authenticate_action!
-    if %w[create update index new_deactivation deactivate_confirm deactivate postcode local_authority name units type_of_unit mobility_standards availability check_answers].include?(action_name) && !((current_user.organisation == @scheme&.owning_organisation) || current_user.support?)
+    if %w[create update index new_deactivation deactivate_confirm deactivate postcode local_authority name units type_of_unit mobility_standards availability check_answers].include?(action_name) && !user_allowed_action?
       render_not_found and return
     end
+  end
+
+  def user_allowed_action?
+    (current_user.organisation == @scheme&.owning_organisation) || (current_user.organisation.parent_organisations.any? { |org| org == @scheme&.owning_organisation }) || current_user.support?
   end
 
   def location_params
