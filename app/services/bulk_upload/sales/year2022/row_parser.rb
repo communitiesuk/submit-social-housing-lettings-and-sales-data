@@ -481,6 +481,7 @@ private
       socprevten: %i[field_122],
       mortgageused: %i[field_123 field_124 field_125],
       soctenant: %i[field_39 field_113],
+      uprn: %i[],
     }
   end
 

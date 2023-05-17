@@ -123,15 +123,15 @@ class BulkUpload::LettingsLogToCsv
       log.benefits,
       log.earnings, # 50
       net_income_known,
-      nil,
+      log.reason,
       log.reasonother,
       nil,
-      nil,
-      nil,
-      nil,
-      nil,
-      nil,
-      nil, # 60
+      log.housingneeds_a,
+      log.housingneeds_b,
+      log.housingneeds_c,
+      log.housingneeds_f,
+      log.housingneeds_g,
+      log.housingneeds_h, # 60
       log.prevten,
       log.prevloc,
       ((log.ppostcode_full || "").split(" ") || [""]).first,

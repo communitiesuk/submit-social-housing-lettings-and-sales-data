@@ -129,6 +129,52 @@ RSpec.describe BulkUpload::Lettings::LogCreator do
       end
     end
 
+    context "with a valid csv and soft validations" do
+      let(:file) { Tempfile.new }
+      let(:path) { file.path }
+      let(:log) do
+        build(
+          :lettings_log,
+          :completed,
+          renttype: 3,
+          age1: 22,
+          age1_known: 0,
+          ecstat1: 5,
+          owning_organisation: owning_org,
+          managing_organisation: owning_org,
+          created_by: user,
+          national: 18,
+          waityear: 9,
+          joint: 2,
+          tenancy: 9,
+          ppcodenk: 0,
+        )
+      end
+
+      before do
+        file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
+        file.rewind
+      end
+
+      it "creates a new log" do
+        expect { service.call }.to change(LettingsLog, :count)
+      end
+
+      it "creates a log with pending status" do
+        service.call
+        expect(LettingsLog.last.status).to eql("pending")
+      end
+
+      it "does not set unanswered soft validations" do
+        service.call
+
+        log = LettingsLog.last
+        expect(log.age1).to be(22)
+        expect(log.ecstat1).to be(5)
+        expect(log.retirement_value_check).to be(nil)
+      end
+    end
+
     context "when valid csv with existing log" do
       xit "what should happen?"
     end

@@ -180,6 +180,13 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :bulk_upload_lettings_soft_validations_check, path: "bulk-upload-soft-validations-check", only: %i[show update] do
+        member do
+          get "*page", to: "bulk_upload_lettings_soft_validations_check#show", as: "page"
+          patch "*page", to: "bulk_upload_lettings_soft_validations_check#update"
+        end
+      end
+
       get "update-logs", to: "lettings_logs#update_logs"
     end
 
@@ -225,6 +232,13 @@ Rails.application.routes.draw do
 
           get "*page", to: "bulk_upload_sales_resume#show", as: "page"
           patch "*page", to: "bulk_upload_sales_resume#update"
+        end
+      end
+
+      resources :bulk_upload_sales_soft_validations_check, path: "bulk-upload-soft-validations-check", only: %i[show update] do
+        member do
+          get "*page", to: "bulk_upload_sales_soft_validations_check#show", as: "page"
+          patch "*page", to: "bulk_upload_sales_soft_validations_check#update"
         end
       end
     end

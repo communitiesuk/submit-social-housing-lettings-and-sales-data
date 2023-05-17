@@ -224,15 +224,103 @@ RSpec.describe BulkUpload::Processor do
         expect { processor.call }.to change(LettingsLog.pending, :count).by(1)
       end
 
-      it "sends how_fix_upload_mail" do
+      it "sends how_to_fix_upload_mail" do
         mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
 
-        allow(BulkUploadMailer).to receive(:send_how_fix_upload_mail).and_return(mail_double)
+        allow(BulkUploadMailer).to receive(:send_how_to_fix_upload_mail).and_return(mail_double)
 
         processor.call
 
-        expect(BulkUploadMailer).to have_received(:send_how_fix_upload_mail)
+        expect(BulkUploadMailer).to have_received(:send_how_to_fix_upload_mail)
         expect(mail_double).to have_received(:deliver_later)
+      end
+
+      it "calls log creator" do
+        log_creator_double = instance_double(BulkUpload::Lettings::LogCreator, call: nil)
+
+        allow(BulkUpload::Lettings::LogCreator).to receive(:new).and_return(log_creator_double)
+
+        processor.call
+
+        expect(BulkUpload::Lettings::LogCreator).to have_received(:new).with(bulk_upload:, path:)
+      end
+    end
+
+    context "when a bulk upload has logs with only soft validations triggered" do
+      let(:mock_downloader) do
+        instance_double(
+          BulkUpload::Downloader,
+          call: nil,
+          path:,
+          delete_local_file!: nil,
+        )
+      end
+
+      let(:file) { Tempfile.new }
+      let(:path) { file.path }
+
+      let(:log) do
+        build(
+          :lettings_log,
+          :completed,
+          renttype: 3,
+          age1: 20,
+          ecstat1: 5,
+          owning_organisation: owning_org,
+          managing_organisation: owning_org,
+          created_by: nil,
+          national: 18,
+          waityear: 9,
+          joint: 2,
+          tenancy: 2,
+          ppcodenk: 0,
+          voiddate: Date.new(2022, 1, 1),
+          reason: 40,
+          leftreg: 3,
+          mrcdate: nil,
+          startdate: Date.new(2022, 10, 1),
+          tenancylength: nil,
+        )
+      end
+
+      before do
+        FormHandler.instance.use_real_forms!
+        file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
+        file.rewind
+
+        allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
+        allow(FeatureToggle).to receive(:bulk_upload_duplicate_log_check_enabled?).and_return(true)
+      end
+
+      after do
+        FormHandler.instance.use_fake_forms!
+      end
+
+      it "creates pending log" do
+        expect { processor.call }.to change(LettingsLog.pending, :count).by(1)
+      end
+
+      it "sends check_soft_validations_mail" do
+        mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
+
+        allow(BulkUploadMailer).to receive(:send_check_soft_validations_mail).and_return(mail_double)
+        allow(BulkUploadMailer).to receive(:send_how_to_fix_upload_mail).and_return(mail_double)
+
+        processor.call
+
+        expect(BulkUploadMailer).to have_received(:send_check_soft_validations_mail)
+        expect(BulkUploadMailer).not_to have_received(:send_how_to_fix_upload_mail)
+        expect(mail_double).to have_received(:deliver_later)
+      end
+
+      it "calls log creator" do
+        log_creator_double = instance_double(BulkUpload::Lettings::LogCreator, call: nil)
+
+        allow(BulkUpload::Lettings::LogCreator).to receive(:new).and_return(log_creator_double)
+
+        processor.call
+
+        expect(BulkUpload::Lettings::LogCreator).to have_received(:new).with(bulk_upload:, path:)
       end
     end
 
