@@ -12,14 +12,6 @@ class FeatureToggle
     Rails.env.production? || Rails.env.test? || Rails.env.staging? || Rails.env.review?
   end
 
-  def self.sales_log_enabled?
-    true
-  end
-
-  def self.managing_owning_enabled?
-    true
-  end
-
   def self.scheme_toggle_enabled?
     true
   end
@@ -48,10 +40,6 @@ class FeatureToggle
     return false if Rails.env.test?
 
     !Rails.env.production?
-  end
-
-  def self.collection_2023_2024_year_enabled?
-    true
   end
 
   def self.merge_organisations_enabled?
