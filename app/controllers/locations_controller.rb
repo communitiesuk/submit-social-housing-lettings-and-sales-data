@@ -227,7 +227,7 @@ private
 
   def authenticate_action!
     unless user_allowed_action?
-      render_not_found and return
+      render_not_found
     end
   end
 
