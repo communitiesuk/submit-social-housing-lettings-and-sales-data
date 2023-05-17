@@ -156,7 +156,26 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=100023336956")
         .to_return(status: 200, body:, headers: {})
 
+      body = {
+        header: {
+          uri: "https://api.os.uk/search/places/v1/uprn?uprn=2",
+          query: "uprn=2",
+          offset: 0,
+          totalresults: 0,
+          format: "JSON",
+          dataset: "DPA",
+          lr: "EN,CY",
+          maxresults: 100,
+          epoch: "101",
+          lastupdate: "2023-05-11",
+          output_srs: "EPSG:27700",
+        },
+      }.to_json
+
       stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=2")
+        .to_return(status: 200, body:, headers: {})
+
+      stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=3")
         .to_return(status: 404, body:, headers: {})
 
       parser.valid?
@@ -536,7 +555,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
     end
 
     describe "#field_19" do # UPRN
-      context "when UPRN known" do
+      context "when UPRN known and lookup found" do
         let(:attributes) { setup_section_params.merge({ field_19: "100023336956" }) }
 
         it "is valid" do
@@ -565,6 +584,14 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
           expect(parser.errors[:field_19]).to be_present
         end
       end
+
+      context "when UPRN entered but no lookup found" do
+        let(:attributes) { setup_section_params.merge({ field_19: "2" }) }
+
+        it "is not valid" do
+          expect(parser.errors[:field_19]).to be_present
+        end
+      end
     end
 
     [
@@ -582,7 +609,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
           end
 
           context "when UPRN invalid" do
-            let(:attributes) { setup_section_params.merge({ field_19: "2", data[:field] => nil }) }
+            let(:attributes) { setup_section_params.merge({ field_19: "3", data[:field] => nil }) }
 
             it "cannot be blank" do
               expect(parser.errors[data[:field]]).not_to be_blank

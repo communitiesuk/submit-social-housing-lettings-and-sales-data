@@ -59,6 +59,11 @@ class BulkUpload::Sales::Validator
     row_parsers.any?(&:log_already_exists?)
   end
 
+  def soft_validation_errors_only?
+    errors = bulk_upload.bulk_upload_errors
+    errors.count == errors.where(category: "soft_validation").count && errors.count.positive?
+  end
+
 private
 
   def any_logs_invalid?

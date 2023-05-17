@@ -63,6 +63,24 @@ class BulkUpload::Lettings::Validator
       .positive?
   end
 
+  def soft_validation_errors_only?
+    errors = bulk_upload.bulk_upload_errors
+    errors.count == errors.where(category: "soft_validation").count && errors.count.positive?
+  end
+
+  def over_column_error_threshold?
+    fields = ("field_1".."field_134").to_a
+    percentage_threshold = (row_parsers.size * COLUMN_PERCENTAGE_ERROR_THRESHOLD).ceil
+
+    fields.any? do |field|
+      count = row_parsers.count { |row_parser| row_parser.errors[field].present? }
+
+      next if count < COLUMN_ABSOLUTE_ERROR_THRESHOLD
+
+      count > percentage_threshold
+    end
+  end
+
   def any_logs_already_exist?
     row_parsers.any?(&:log_already_exists?)
   end

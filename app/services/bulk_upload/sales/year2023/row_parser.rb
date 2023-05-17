@@ -661,6 +661,23 @@ private
       socprevten: %i[field_102],
       mortgageused: %i[field_105 field_119 field_128],
       soctenant: %i[field_99],
+
+      uprn: %i[field_19],
+      address_line1: %i[field_20],
+      address_line2: %i[field_21],
+      town_or_city: %i[field_22],
+      county: %i[field_23],
+
+      ethnic_group2: %i[field_40],
+      ethnicbuy2: %i[field_40],
+      nationalbuy2: %i[field_41],
+
+      buy2living: %i[field_71],
+      prevtenbuy2: %i[field_72],
+
+      prevshared: %i[field_85],
+
+      staircasesale: %i[field_90],
     }
   end
 

@@ -97,4 +97,27 @@ RSpec.describe BulkUploadMailer do
       end
     end
   end
+
+  describe "#send_check_soft_validations_mail" do
+    before do
+      create(:bulk_upload_error, bulk_upload:, col: "A", field: "field_1", category: "soft_validation")
+      create(:bulk_upload_error, bulk_upload:, col: "E", field: "field_4", category: "soft_validation")
+    end
+
+    it "sends correctly formed email" do
+      expect(notify_client).to receive(:send_email).with(
+        email_address: bulk_upload.user.email,
+        template_id: described_class::CHECK_SOFT_VALIDATIONS_TEMPLATE_ID,
+        personalisation: {
+          title: "Check your file data",
+          filename: bulk_upload.filename,
+          upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
+          description: "Some of your 2022/23 lettings data might not be right. Click the link below to review the potential errors, and check your file to see if the data is correct.",
+          cta_link: bulk_upload_lettings_soft_validations_check_url(bulk_upload, page: "confirm-soft-errors"),
+        },
+      )
+
+      mailer.send_check_soft_validations_mail(bulk_upload:)
+    end
+  end
 end
