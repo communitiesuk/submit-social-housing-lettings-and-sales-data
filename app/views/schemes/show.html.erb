@@ -32,6 +32,6 @@
   </div>
 <% end %>
 
-<% if FeatureToggle.scheme_toggle_enabled? %>
+<% if FeatureToggle.scheme_toggle_enabled? && user_can_edit_scheme?(current_user, @scheme) %>
   <%= toggle_scheme_link(@scheme) %>
 <% end %>

@@ -339,6 +339,7 @@ RSpec.describe SchemesController, type: :request do
         let!(:specific_scheme) { FactoryBot.create(:scheme, owning_organisation: parent_organisation) }
 
         before do
+          FactoryBot.create(:location, scheme: specific_scheme)
           create(:organisation_relationship, parent_organisation:, child_organisation: user.organisation)
           get "/schemes/#{specific_scheme.id}"
         end
@@ -349,6 +350,8 @@ RSpec.describe SchemesController, type: :request do
 
         it "does not allow editing the scheme" do
           expect(page).not_to have_link("Change")
+          expect(page).not_to have_content("Reactivate this scheme")
+          expect(page).not_to have_content("Deactivate this scheme")
         end
       end
     end
