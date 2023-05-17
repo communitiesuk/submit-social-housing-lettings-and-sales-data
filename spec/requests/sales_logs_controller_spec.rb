@@ -652,4 +652,96 @@ RSpec.describe SalesLogsController, type: :request do
       end
     end
   end
+
+  describe "DELETE" do
+    let(:headers) { { "Accept" => "text/html" } }
+    let(:page) { Capybara::Node::Simple.new(response.body) }
+    let(:user) { create(:user, :support) }
+    let!(:sales_log) do
+      create(:sales_log, :completed)
+    end
+    let(:id) { sales_log.id }
+    let(:delete_request) { delete "/sales-logs/#{id}", headers: }
+
+    before do
+      allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+      sign_in user
+    end
+
+    context "when delete permitted" do
+      it "redirects to sales logs and shows message" do
+        delete_request
+        expect(response).to redirect_to(sales_logs_path)
+        follow_redirect!
+        expect(page).to have_content("Log #{id} has been deleted")
+      end
+
+      it "marks the log as deleted" do
+        expect { delete_request }.to change { sales_log.reload.status }.from("completed").to("deleted")
+      end
+    end
+
+    context "when log does not exist" do
+      let(:id) { -1 }
+
+      it "returns 404" do
+        delete_request
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when user not authorised" do
+      let(:user) { create(:user) }
+
+      it "returns 404" do
+        delete_request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+
+  describe "GET delete-confirmation" do
+    let(:headers) { { "Accept" => "text/html" } }
+    let(:page) { Capybara::Node::Simple.new(response.body) }
+    let(:user) { create(:user, :support) }
+    let!(:sales_log) do
+      create(:sales_log, :completed)
+    end
+    let(:id) { sales_log.id }
+    let(:request) { get "/sales-logs/#{id}/delete-confirmation", headers: }
+
+    before do
+      allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+      sign_in user
+    end
+
+    context "when delete permitted" do
+      it "renders page" do
+        request
+        expect(response).to have_http_status(:ok)
+
+        expect(page).to have_content("Are you sure you want to delete this log?")
+        expect(page).to have_button(text: "Delete this log")
+        expect(page).to have_link(text: "Cancel", href: sales_log_path(id))
+      end
+    end
+
+    context "when log does not exist" do
+      let(:id) { -1 }
+
+      it "returns 404" do
+        request
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when user not authorised" do
+      let(:user) { create(:user) }
+
+      it "returns 404" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
 end

@@ -150,6 +150,8 @@ Rails.application.routes.draw do
   end
 
   resources :lettings_logs, path: "/lettings-logs" do
+    get "delete-confirmation", to: "lettings_logs#delete_confirmation"
+
     collection do
       post "bulk-upload", to: "bulk_upload#bulk_upload"
       get "bulk-upload", to: "bulk_upload#show"
@@ -208,6 +210,8 @@ Rails.application.routes.draw do
   end
 
   resources :sales_logs, path: "/sales-logs" do
+    get "delete-confirmation", to: "sales_logs#delete_confirmation"
+
     collection do
       get "csv-download", to: "sales_logs#download_csv"
       post "email-csv", to: "sales_logs#email_csv"

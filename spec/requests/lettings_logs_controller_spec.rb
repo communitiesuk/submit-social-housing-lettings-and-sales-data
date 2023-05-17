@@ -1309,55 +1309,93 @@ RSpec.describe LettingsLogsController, type: :request do
   end
 
   describe "DELETE" do
+    let(:headers) { { "Accept" => "text/html" } }
+    let(:page) { Capybara::Node::Simple.new(response.body) }
+    let(:user) { create(:user, :support) }
     let!(:lettings_log) do
-      FactoryBot.create(:lettings_log, :in_progress)
+      create(:lettings_log, :completed)
     end
     let(:id) { lettings_log.id }
+    let(:delete_request) { delete "/lettings-logs/#{id}", headers: }
 
-    context "when deleting a lettings log" do
-      before do
-        delete "/lettings-logs/#{id}", headers:
+    before do
+      allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+      sign_in user
+    end
+
+    context "when delete permitted" do
+      it "redirects to lettings logs and shows message" do
+        delete_request
+        expect(response).to redirect_to(lettings_logs_path)
+        follow_redirect!
+        expect(page).to have_content("Log #{id} has been deleted")
       end
 
-      it "returns http success" do
-        expect(response).to have_http_status(:success)
-      end
-
-      it "deletes the lettings log" do
-        expect { LettingsLog.find(id) }.to raise_error(ActiveRecord::RecordNotFound)
-      end
-
-      context "with an invalid lettings log id" do
-        let(:id) { (LettingsLog.order(:id).last&.id || 0) + 1 }
-
-        it "returns 404" do
-          expect(response).to have_http_status(:not_found)
-        end
-      end
-
-      context "with a request containing invalid credentials" do
-        let(:basic_credentials) do
-          ActionController::HttpAuthentication::Basic.encode_credentials(api_username, "Oops")
-        end
-
-        it "returns 401" do
-          expect(response).to have_http_status(:unauthorized)
-        end
+      it "marks the log as deleted" do
+        expect { delete_request }.to change { lettings_log.reload.status }.from("completed").to("deleted")
       end
     end
 
-    context "when a lettings log deletion fails" do
-      let(:mock_scope) { instance_double("LettingsLog::ActiveRecord_Relation", find_by: lettings_log) }
+    context "when log does not exist" do
+      let(:id) { -1 }
 
-      before do
-        allow(LettingsLog).to receive(:visible).and_return(mock_scope)
-        allow(lettings_log).to receive(:delete).and_return(false)
-
-        delete "/lettings-logs/#{id}", headers:
+      it "returns 404" do
+        delete_request
+        expect(response).to have_http_status(:not_found)
       end
+    end
 
-      it "returns an unprocessable entity 422" do
-        expect(response).to have_http_status(:unprocessable_entity)
+    context "when user not authorised" do
+      let(:user) { create(:user) }
+
+      it "returns 404" do
+        delete_request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+
+  describe "GET delete-confirmation" do
+    let(:headers) { { "Accept" => "text/html" } }
+    let(:page) { Capybara::Node::Simple.new(response.body) }
+    let(:user) { create(:user, :support) }
+    let!(:lettings_log) do
+      create(:lettings_log, :completed)
+    end
+    let(:id) { lettings_log.id }
+    let(:request) { get "/lettings-logs/#{id}/delete-confirmation", headers: }
+
+    before do
+      allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+      sign_in user
+    end
+
+    context "when delete permitted" do
+      it "renders page" do
+        request
+        expect(response).to have_http_status(:ok)
+
+        expect(page).to have_content("Are you sure you want to delete this log?")
+        expect(page).to have_button(text: "Delete this log")
+        expect(page).to have_link(text: "Cancel", href: lettings_log_path(id))
+      end
+    end
+
+    context "when log does not exist" do
+      let(:id) { -1 }
+
+      it "returns 404" do
+        request
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when user not authorised" do
+      let(:user) { create(:user) }
+
+      it "returns 404" do
+        request
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end

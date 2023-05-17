@@ -1,5 +1,8 @@
 class LettingsLogsController < LogsController
-  before_action :find_resource, except: %i[create index edit]
+  rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
+
+  before_action :find_resource, only: %i[update show]
+
   before_action :session_filters, if: :current_user, only: %i[index email_csv download_csv]
   before_action :set_session_filters, if: :current_user, only: %i[index email_csv download_csv]
   before_action :authenticate_scope!, only: %i[download_csv email_csv]
@@ -55,28 +58,31 @@ class LettingsLogsController < LogsController
   end
 
   def edit
-    @log = current_user.lettings_logs.find_by(id: params[:id])
-    if @log
-      if @log.unresolved
-        redirect_to(send(@log.form.unresolved_log_path, @log))
-      else
-        render("logs/edit", locals: { current_user: })
-      end
+    @log = current_user.lettings_logs.find(params[:id])
+
+    if @log.unresolved
+      redirect_to(send(@log.form.unresolved_log_path, @log))
     else
-      render_not_found
+      render("logs/edit", locals: { current_user: })
     end
   end
 
   def destroy
-    if @log
-      if @log.delete
-        head :no_content
-      else
-        render json: { errors: @log.errors.messages }, status: :unprocessable_entity
-      end
-    else
-      render_not_found_json("Log", params[:id])
-    end
+    @log = LettingsLog.visible.find(params[:id])
+
+    authorize @log
+
+    @log.discard!
+
+    redirect_to lettings_logs_path, notice: "Log #{@log.id} has been deleted"
+  end
+
+  def delete_confirmation
+    @log = LettingsLog.visible.find(params[:lettings_log_id])
+
+    authorize @log, :destroy?
+
+    render "logs/delete_confirmation"
   end
 
   def download_csv
@@ -105,13 +111,13 @@ class LettingsLogsController < LogsController
     end
   end
 
+private
+
   def org_params
     super.merge(
       { "managing_organisation_id" => current_user.organisation.id },
     )
   end
-
-private
 
   def authenticate_scope!
     head :unauthorized and return if codes_only_export? && !current_user.support?

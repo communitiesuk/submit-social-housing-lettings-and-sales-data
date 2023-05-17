@@ -164,6 +164,10 @@ FactoryBot.define do
     trait :startdate_today do
       startdate { Time.zone.today }
     end
+    trait :deleted do
+      status { 4 }
+      discarded_at { Time.zone.now }
+    end
     created_at { Time.zone.today }
     updated_at { Time.zone.today }
   end

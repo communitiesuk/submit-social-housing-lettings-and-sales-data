@@ -1,4 +1,6 @@
 class SalesLogsController < LogsController
+  rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
+
   before_action :session_filters, if: :current_user, only: %i[index email_csv download_csv]
   before_action :set_session_filters, if: :current_user, only: %i[index email_csv download_csv]
   before_action :authenticate_scope!, only: %i[download_csv email_csv]
@@ -32,12 +34,26 @@ class SalesLogsController < LogsController
   end
 
   def edit
-    @log = current_user.sales_logs.visible.find_by(id: params[:id])
-    if @log
-      render "logs/edit", locals: { current_user: }
-    else
-      render_not_found
-    end
+    @log = current_user.sales_logs.visible.find(params[:id])
+    render "logs/edit", locals: { current_user: }
+  end
+
+  def destroy
+    @log = SalesLog.visible.find(params[:id])
+
+    authorize @log
+
+    @log.discard!
+
+    redirect_to sales_logs_path, notice: "Log #{@log.id} has been deleted"
+  end
+
+  def delete_confirmation
+    @log = SalesLog.visible.find(params[:sales_log_id])
+
+    authorize @log, :destroy?
+
+    render "logs/delete_confirmation"
   end
 
   def download_csv

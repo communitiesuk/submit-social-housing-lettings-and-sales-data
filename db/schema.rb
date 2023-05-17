@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_05_105327) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_15_114101) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -288,6 +288,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_05_105327) do
     t.string "county"
     t.integer "carehome_charges_value_check"
     t.integer "status_cache", default: 0, null: false
+    t.datetime "discarded_at"
     t.index ["bulk_upload_id"], name: "index_lettings_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_lettings_logs_on_created_by_id"
     t.index ["location_id"], name: "index_lettings_logs_on_location_id"
@@ -584,6 +585,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_05_105327) do
     t.integer "ethnicbuy2"
     t.integer "proplen_asked"
     t.string "old_id"
+    t.integer "buy2living"
+    t.integer "prevtenbuy2"
     t.integer "pregblank"
     t.string "uprn"
     t.integer "uprn_known"
@@ -592,15 +595,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_05_105327) do
     t.string "address_line2"
     t.string "town_or_city"
     t.string "county"
-    t.integer "buy2living"
-    t.integer "prevtenbuy2"
     t.integer "nationalbuy2"
     t.integer "discounted_sale_value_check"
     t.integer "student_not_child_value_check"
     t.integer "percentage_discount_value_check"
     t.integer "buyer_livein_value_check"
-    t.integer "combined_income_value_check"
     t.integer "status_cache", default: 0, null: false
+    t.integer "combined_income_value_check"
+    t.datetime "discarded_at"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["old_id"], name: "index_sales_logs_on_old_id", unique: true

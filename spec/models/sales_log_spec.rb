@@ -1,13 +1,14 @@
 require "rails_helper"
 require "shared/shared_examples_for_derived_fields"
+require "shared/shared_log_examples"
 
 # rubocop:disable RSpec/MessageChain
-# rubocop:disable RSpec/AnyInstance
 RSpec.describe SalesLog, type: :model do
   let(:owning_organisation) { create(:organisation) }
   let(:created_by_user) { create(:user) }
 
   include_examples "shared examples for derived fields", :sales_log
+  include_examples "shared log examples", :sales_log
 
   it "inherits from log" do
     expect(described_class).to be < Log
@@ -112,27 +113,7 @@ RSpec.describe SalesLog, type: :model do
   end
 
   describe "status" do
-    let!(:empty_sales_log) { create(:sales_log) }
-    let!(:in_progress_sales_log) { create(:sales_log, :in_progress) }
-    let!(:completed_sales_log) { create(:sales_log, :completed) }
-
-    it "is set to not started for an empty sales log" do
-      expect(empty_sales_log.not_started?).to be(true)
-      expect(empty_sales_log.in_progress?).to be(false)
-      expect(empty_sales_log.completed?).to be(false)
-    end
-
-    it "is set to in progress for a started sales log" do
-      expect(in_progress_sales_log.in_progress?).to be(true)
-      expect(in_progress_sales_log.not_started?).to be(false)
-      expect(in_progress_sales_log.completed?).to be(false)
-    end
-
-    it "is set to completed for a completed sales log" do
-      expect(completed_sales_log.in_progress?).to be(false)
-      expect(completed_sales_log.not_started?).to be(false)
-      expect(completed_sales_log.completed?).to be(true)
-    end
+    let(:completed_sales_log) { create(:sales_log, :completed) }
 
     context "when proplen is not given" do
       before do
@@ -148,6 +129,7 @@ RSpec.describe SalesLog, type: :model do
         expect(completed_sales_log.in_progress?).to be(false)
         expect(completed_sales_log.not_started?).to be(false)
         expect(completed_sales_log.completed?).to be(true)
+        expect(completed_sales_log.deleted?).to be(false)
       end
 
       it "is set to in_progress for a log with a saledate after 23/24" do
@@ -155,6 +137,7 @@ RSpec.describe SalesLog, type: :model do
         expect(completed_sales_log.in_progress?).to be(true)
         expect(completed_sales_log.not_started?).to be(false)
         expect(completed_sales_log.completed?).to be(false)
+        expect(completed_sales_log.deleted?).to be(false)
       end
     end
   end
@@ -591,63 +574,6 @@ RSpec.describe SalesLog, type: :model do
     end
   end
 
-  describe "#process_uprn_change!" do
-    context "when UPRN set to a value" do
-      let(:sales_log) do
-        create(
-          :sales_log,
-          uprn: "123456789",
-          uprn_confirmed: 1,
-          county: "county",
-        )
-      end
-
-      it "updates sales log fields" do
-        sales_log.uprn = "1111111"
-        sales_log.uprn_confirmed = 1
-
-        allow_any_instance_of(UprnClient).to receive(:call)
-        allow_any_instance_of(UprnClient).to receive(:result).and_return({
-          "UPRN" => "UPRN",
-          "UDPRN" => "UDPRN",
-          "ADDRESS" => "full address",
-          "SUB_BUILDING_NAME" => "0",
-          "BUILDING_NAME" => "building name",
-          "THOROUGHFARE_NAME" => "thoroughfare",
-          "POST_TOWN" => "posttown",
-          "POSTCODE" => "postcode",
-        })
-
-        expect { sales_log.process_uprn_change! }.to change(sales_log, :address_line1).from(nil).to("0, Building Name, Thoroughfare")
-        .and change(sales_log, :town_or_city).from(nil).to("Posttown")
-        .and change(sales_log, :postcode_full).from(nil).to("POSTCODE")
-        .and change(sales_log, :uprn_confirmed).from(1).to(nil)
-        .and change(sales_log, :county).from("county").to(nil)
-        .and change(sales_log, :uprn_known).from(nil).to(1)
-      end
-    end
-
-    context "when UPRN nil" do
-      let(:sales_log) { create(:sales_log, uprn: nil) }
-
-      it "does not update sales log" do
-        expect { sales_log.process_uprn_change! }.not_to change(sales_log, :attributes)
-      end
-    end
-
-    context "when the API returns an error" do
-      let(:sales_log) { build(:sales_log, :outright_sale_setup_complete, uprn_known: 1, uprn: "123456789", uprn_confirmed: 1) }
-      let(:error_message) { "error" }
-
-      it "adds error to sales log" do
-        allow_any_instance_of(UprnClient).to receive(:call)
-        allow_any_instance_of(UprnClient).to receive(:error).and_return(error_message)
-
-        expect { sales_log.process_uprn_change! }.to change { sales_log.errors[:uprn] }.from([]).to([error_message])
-      end
-    end
-  end
-
   describe "#beds_for_la_sale_range" do
     context "when beds nil" do
       let(:sales_log) { build(:sales_log, beds: nil) }
@@ -723,5 +649,4 @@ RSpec.describe SalesLog, type: :model do
     end
   end
 end
-# rubocop:enable RSpec/AnyInstance
 # rubocop:enable RSpec/MessageChain

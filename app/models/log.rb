@@ -15,11 +15,13 @@ class Log < ApplicationRecord
     "in_progress" => 1,
     "completed" => 2,
     "pending" => 3,
+    "deleted" => 4,
   }.freeze
   enum status: STATUS
   enum status_cache: STATUS, _prefix: true
 
   scope :visible, -> { where(status: %w[not_started in_progress completed]) }
+  scope :exportable, -> { where(status: %w[not_started in_progress completed deleted]) }
 
   scope :filter_by_status, ->(status, _user = nil) { where status: }
   scope :filter_by_years, lambda { |years, _user = nil|
@@ -129,7 +131,13 @@ class Log < ApplicationRecord
     end
   end
 
+  def discard!
+    update!(status: "deleted", discarded_at: Time.zone.now)
+  end
+
   def calculate_status
+    return "deleted" if discarded_at.present?
+
     if all_fields_completed? && errors.empty?
       "completed"
     elsif all_fields_nil?
