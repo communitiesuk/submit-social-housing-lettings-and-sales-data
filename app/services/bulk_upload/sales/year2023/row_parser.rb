@@ -477,7 +477,7 @@ class BulkUpload::Sales::Year2023::RowParser
     field_6
   end
 
-  private
+private
 
   def prevtenbuy2
     case field_72
