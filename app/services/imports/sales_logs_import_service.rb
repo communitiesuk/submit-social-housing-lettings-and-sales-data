@@ -1,6 +1,6 @@
 module Imports
   class SalesLogsImportService < LogsImportService
-    def initialize(storage_service, logger = Rails.logger)
+    def initialize(storage_service, logger = Rails.logger, allow_updates: false)
       @logs_with_discrepancies = Set.new
       @logs_overridden = Set.new
       super
@@ -198,8 +198,14 @@ module Imports
       rescue ActiveRecord::RecordNotUnique
         legacy_id = attributes["old_id"]
         record = SalesLog.find_by(old_id: legacy_id)
-        @logger.info "Updating sales log #{record.id} with legacy ID #{legacy_id}"
-        record.update!(attributes)
+
+        if allow_updates
+          @logger.info "Updating sales log #{record.id} with legacy ID #{legacy_id}"
+          attributes["updated_at"] = Time.zone.now
+          record.update!(attributes)
+        else
+          @logger.info "Lettings log #{record.id} with legacy ID #{legacy_id} already present, skipping."
+        end
         record
       rescue ActiveRecord::RecordInvalid => e
         rescue_validation_or_raise(sales_log, attributes, previous_status, e)

@@ -85,12 +85,40 @@ RSpec.describe Imports::LettingsLogsImportService do
           .to change(LettingsLog, :count).by(3)
       end
 
-      it "only updates existing lettings logs" do
+      it "does not by default update existing lettings logs" do
         expect(logger).not_to receive(:error)
         expect(logger).not_to receive(:warn)
-        expect(logger).to receive(:info).with(/Updating lettings log/).exactly(3).times
+        expect(logger).not_to receive(:info).with(/Updating lettings log/)
+
+        start_time = Time.current
+
         expect { 2.times { lettings_log_service.create_logs(remote_folder) } }
-          .to change(LettingsLog, :count).by(3)
+        .to change(LettingsLog, :count).by(3)
+
+        end_time = Time.current
+
+        updated_logs = LettingsLog.where(updated_at: start_time..end_time).count
+        expect(updated_logs).to eq(0)
+      end
+
+      context "with updates allowed" do
+        subject(:lettings_log_service) { described_class.new(storage_service, logger, allow_updates: true) }
+
+        it "only updates existing lettings logs" do
+          expect(logger).not_to receive(:error)
+          expect(logger).not_to receive(:warn)
+          expect(logger).to receive(:info).with(/Updating lettings log/).exactly(3).times
+
+          start_time = Time.current
+
+          expect { 2.times { lettings_log_service.create_logs(remote_folder) } }
+            .to change(LettingsLog, :count).by(3)
+
+          end_time = Time.current
+
+          updated_logs = LettingsLog.where(updated_at: start_time..end_time).count
+          expect(updated_logs).to eq(3)
+        end
       end
 
       it "creates organisation relationship once" do
@@ -1078,12 +1106,40 @@ RSpec.describe Imports::LettingsLogsImportService do
           .to change(LettingsLog, :count).by(1)
       end
 
-      it "only updates existing lettings logs" do
+      it "does not by default update existing lettings logs" do
         expect(logger).not_to receive(:error)
         expect(logger).not_to receive(:warn)
-        expect(logger).to receive(:info).with(/Updating lettings log/).once
+        expect(logger).not_to receive(:info).with(/Updating lettings log/)
+
+        start_time = Time.current
+
         expect { 2.times { lettings_log_service.create_logs(remote_folder) } }
-          .to change(LettingsLog, :count).by(1)
+        .to change(LettingsLog, :count).by(1)
+
+        end_time = Time.current
+
+        updated_logs = LettingsLog.where(updated_at: start_time..end_time).count
+        expect(updated_logs).to eq(0)
+      end
+
+      context "with updates allowed" do
+        subject(:lettings_log_service) { described_class.new(storage_service, logger, allow_updates: true) }
+
+        it "only updates existing lettings logs" do
+          expect(logger).not_to receive(:error)
+          expect(logger).not_to receive(:warn)
+          expect(logger).to receive(:info).with(/Updating lettings log/).once
+
+          start_time = Time.current
+
+          expect { 2.times { lettings_log_service.create_logs(remote_folder) } }
+            .to change(LettingsLog, :count).by(1)
+
+          end_time = Time.current
+
+          updated_logs = LettingsLog.where(updated_at: start_time..end_time).count
+          expect(updated_logs).to eq(1)
+        end
       end
 
       it "creates organisation relationship once" do
