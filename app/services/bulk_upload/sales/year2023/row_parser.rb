@@ -408,10 +408,8 @@ class BulkUpload::Sales::Year2023::RowParser
   validate :validate_relevant_collection_window, on: :after_log
   validate :validate_incomplete_soft_validations, on: :after_log
 
-  validate :validate_uprn_exists_if_any_key_adddress_fields_are_blank, on: :after_log
-  validate :validate_address_line_1, on: :after_log
-  validate :validate_town_or_city, on: :after_log
-  validate :validate_postcode, on: :after_log
+  validate :validate_uprn_exists_if_any_key_address_fields_are_blank, on: :after_log
+  validate :validate_address_fields, on: :after_log
   validate :validate_if_log_already_exists, on: :after_log, if: -> { FeatureToggle.bulk_upload_duplicate_log_check_enabled? }
 
   def self.question_for_field(field)
@@ -507,31 +505,21 @@ private
     end
   end
 
-  def validate_uprn_exists_if_any_key_adddress_fields_are_blank
-    if field_19.blank? && (field_20.blank? || field_22.blank? || field_24.blank? || field_25.blank?)
+  def validate_uprn_exists_if_any_key_address_fields_are_blank
+    if field_19.blank? && (field_20.blank? || field_22.blank?)
       errors.add(:field_19, I18n.t("validations.not_answered", question: "UPRN"))
     end
   end
 
-  def validate_address_line_1
-    if field_19.blank? && field_20.blank?
-      errors.add(:field_20, I18n.t("validations.not_answered", question: "address line 1"))
-    end
-  end
+  def validate_address_fields
+    if field_19.blank? || log.errors.attribute_names.include?(:uprn)
+      if field_20.blank?
+        errors.add(:field_20, I18n.t("validations.not_answered", question: "address line 1"))
+      end
 
-  def validate_town_or_city
-    if field_19.blank? && field_22.blank?
-      errors.add(:field_22, I18n.t("validations.not_answered", question: "town or city"))
-    end
-  end
-
-  def validate_postcode
-    if field_19.blank? && field_24.blank?
-      errors.add(:field_24, I18n.t("validations.not_answered", question: "part 1 of the property's postcode"))
-    end
-
-    if field_19.blank? && field_25.blank?
-      errors.add(:field_25, I18n.t("validations.not_answered", question: "part 2 of the property's postcode"))
+      if field_22.blank?
+        errors.add(:field_22, I18n.t("validations.not_answered", question: "town or city"))
+      end
     end
   end
 
@@ -784,7 +772,7 @@ private
     attributes["proptype"] = field_17
     attributes["builtype"] = field_18
     attributes["la_known"] = field_26.present? ? 1 : 0
-    attributes["la"] = field_24
+    attributes["la"] = field_26
     attributes["is_la_inferred"] = false
     attributes["pcodenk"] = 0 if postcode_full.present?
     attributes["postcode_full"] = postcode_full

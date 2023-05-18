@@ -73,6 +73,11 @@ en:
             choice:
               blank: Select how you would like to fix these errors
               inclusion: You must select one of the following options for how you would like to fix these errors
+        forms/bulk_upload_sales_resume/fix_choice:
+          attributes:
+            choice:
+              blank: Select how you would like to fix these errors
+              inclusion: You must select one of the following options for how you would like to fix these errors
         forms/bulk_upload_lettings_soft_validations_check/confirm_soft_errors:
           attributes:
             confirm_soft_errors:
@@ -81,11 +86,7 @@ en:
           attributes:
             confirm_soft_errors:
               blank: You must select if there are errors in these fields
-        forms/bulk_upload_sales_resume/fix_choice:
-            attributes:
-              choice:
-                blank: Select how you would like to fix these errors
-                inclusion: You must select one of the following options for how you would like to fix these errors
+
 
   activerecord:
     errors:

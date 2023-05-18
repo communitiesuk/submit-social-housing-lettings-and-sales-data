@@ -194,6 +194,9 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=2")
         .to_return(status: 200, body:, headers: {})
 
+      stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=3")
+        .to_return(status: 404, body:, headers: {})
+
       parser.valid?
     end
 
@@ -613,15 +616,23 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
     [
       { field: :field_20, name: "address line 1" },
       { field: :field_22, name: "town or city" },
-      { field: :field_24, name: "postcode part 1" },
-      { field: :field_25, name: "postcode part 2" },
     ].each do |data|
       describe "##{data[:field]} (#{data[:name]})" do
         context "when UPRN present" do
-          let(:attributes) { setup_section_params.merge({ field_19: "100023336956", data[:field] => nil }) }
+          context "when UPRN valid" do
+            let(:attributes) { setup_section_params.merge({ field_19: "100023336956", data[:field] => nil }) }
 
-          it "can be blank" do
-            expect(parser.errors[data[:field]]).to be_blank
+            it "can be blank" do
+              expect(parser.errors[data[:field]]).to be_blank
+            end
+          end
+
+          context "when UPRN invalid" do
+            let(:attributes) { setup_section_params.merge({ field_19: "3", data[:field] => nil }) }
+
+            it "cannot be blank" do
+              expect(parser.errors[data[:field]]).not_to be_blank
+            end
           end
         end
 
