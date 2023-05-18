@@ -117,7 +117,7 @@ module Validations::FinancialValidations
   def validate_rent_period(record)
     if record.managing_organisation.present? && record.managing_organisation.rent_periods.present? &&
         record.period && !record.managing_organisation.rent_periods.include?(record.period)
-      record.errors.add :period, I18n.t(
+      record.errors.add :period, :wrong_rent_period, message: I18n.t(
         "validations.financial.rent_period.invalid_for_org",
         org_name: record.managing_organisation.name,
         rent_period: record.form.get_question("period", record).label_from_value(record.period).downcase,

@@ -1263,6 +1263,53 @@ RSpec.describe Imports::LettingsLogsImportService do
       end
     end
 
+    context "when the organisation does not charge rent in certain period" do
+      let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+      let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id) }
+      let(:lettings_log_xml) { Nokogiri::XML(lettings_log_file) }
+
+      before do
+        FormHandler.instance.use_fake_forms!
+        create(:organisation_rent_period, organisation: managing_organisation, rent_period: 2)
+
+        lettings_log_xml.at_xpath("//xmlns:DAY").content = "10"
+        lettings_log_xml.at_xpath("//xmlns:MONTH").content = "10"
+        lettings_log_xml.at_xpath("//xmlns:YEAR").content = "2022"
+        lettings_log_xml.at_xpath("//xmlns:Q17").content = "1"
+        lettings_log_xml.at_xpath("//xmlns:Q18c").content = ""
+        lettings_log_xml.at_xpath("//xmlns:Q18ai").content = ""
+        lettings_log_xml.at_xpath("//xmlns:Q18aiii").content = ""
+        lettings_log_xml.at_xpath("//xmlns:Q18aiv").content = ""
+        lettings_log_xml.at_xpath("//xmlns:Q18av").content = ""
+        lettings_log_xml.at_xpath("//xmlns:Q2b").content = ""
+        lettings_log_xml.at_xpath("//xmlns:_2cYears").content = ""
+        lettings_log_xml.at_xpath("//xmlns:P1Nat").content = ""
+        lettings_log_xml.at_xpath("//xmlns:_1cschemecode").content = ""
+        lettings_log_xml.at_xpath("//xmlns:_1cmangroupcode").content = ""
+        lettings_log_xml.at_xpath("//xmlns:Q25").content = ""
+      end
+
+      after do
+        FormHandler.instance.use_real_forms!
+        Singleton.__init__(FormHandler)
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with("Log 0b4a68df-30cc-474a-93c0-a56ce8fdad3b: Removing period with error: DLUHC does not charge rent weekly for 52 weeks")
+        expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+        .not_to raise_error
+      end
+
+      it "clears out the referral answer" do
+        allow(logger).to receive(:warn)
+        lettings_log_service.send(:create_log, lettings_log_xml)
+        lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+        expect(lettings_log).not_to be_nil
+        expect(lettings_log.period).to be_nil
+      end
+    end
+
     context "and the earnings is not a whole number" do
       let(:lettings_log_id) { "00d2343e-d5fa-4c89-8400-ec3854b0f2b4" }
       let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id) }
