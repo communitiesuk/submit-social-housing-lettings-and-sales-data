@@ -39,5 +39,15 @@ RSpec.describe "schemes/show.html.erb" do
 
       expect(rendered).not_to have_content("Deactivate this scheme")
     end
+
+    it "does not see change answer links" do
+      assign(:scheme, scheme)
+
+      allow(view).to receive(:current_user).and_return(user)
+
+      render
+
+      expect(rendered).not_to have_content("Change")
+    end
   end
 end
