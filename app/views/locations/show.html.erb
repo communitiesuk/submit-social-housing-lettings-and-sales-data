@@ -22,6 +22,9 @@
         <% end %>
     </div>
 </div>
-<% if FeatureToggle.location_toggle_enabled? && user_can_edit_scheme?(current_user, @scheme) %>
+
+<% if FeatureToggle.location_toggle_enabled? %>
+  <% if LocationPolicy.new(current_user, Location).deactivate? %>
     <%= toggle_location_link(@location) %>
+  <% end %>
 <% end %>
