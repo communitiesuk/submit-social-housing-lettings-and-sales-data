@@ -1263,6 +1263,169 @@ RSpec.describe Imports::LettingsLogsImportService do
       end
     end
 
+    context "when the organisation does not charge rent in certain period" do
+      let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+      let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id) }
+      let(:lettings_log_xml) { Nokogiri::XML(lettings_log_file) }
+
+      before do
+        FormHandler.instance.use_fake_forms!
+        create(:organisation_rent_period, organisation: managing_organisation, rent_period: 2)
+
+        lettings_log_xml.at_xpath("//xmlns:DAY").content = "10"
+        lettings_log_xml.at_xpath("//xmlns:MONTH").content = "10"
+        lettings_log_xml.at_xpath("//xmlns:YEAR").content = "2022"
+        lettings_log_xml.at_xpath("//xmlns:Q17").content = "1"
+        lettings_log_xml.at_xpath("//xmlns:Q18c").content = ""
+        lettings_log_xml.at_xpath("//xmlns:Q18ai").content = ""
+        lettings_log_xml.at_xpath("//xmlns:Q18aiii").content = ""
+        lettings_log_xml.at_xpath("//xmlns:Q18aiv").content = ""
+        lettings_log_xml.at_xpath("//xmlns:Q18av").content = ""
+        lettings_log_xml.at_xpath("//xmlns:Q2b").content = ""
+        lettings_log_xml.at_xpath("//xmlns:_2cYears").content = ""
+        lettings_log_xml.at_xpath("//xmlns:P1Nat").content = ""
+        lettings_log_xml.at_xpath("//xmlns:_1cschemecode").content = ""
+        lettings_log_xml.at_xpath("//xmlns:_1cmangroupcode").content = ""
+        lettings_log_xml.at_xpath("//xmlns:Q25").content = ""
+      end
+
+      after do
+        FormHandler.instance.use_real_forms!
+        Singleton.__init__(FormHandler)
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with("Log 0b4a68df-30cc-474a-93c0-a56ce8fdad3b: Removing period with error: DLUHC does not charge rent weekly for 52 weeks")
+        expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+        .not_to raise_error
+      end
+
+      it "clears out the referral answer" do
+        allow(logger).to receive(:warn)
+        lettings_log_service.send(:create_log, lettings_log_xml)
+        lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+        expect(lettings_log).not_to be_nil
+        expect(lettings_log.period).to be_nil
+      end
+    end
+
+    context "when this is a renewal and layear is just moved to local authority" do
+      let(:lettings_log_id) { "0ead17cb-1668-442d-898c-0d52879ff592" }
+      let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id) }
+      let(:lettings_log_xml) { Nokogiri::XML(lettings_log_file) }
+
+      before do
+        lettings_log_xml.at_xpath("//xmlns:DAY").content = "10"
+        lettings_log_xml.at_xpath("//xmlns:MONTH").content = "10"
+        lettings_log_xml.at_xpath("//xmlns:YEAR").content = "2022"
+        lettings_log_xml.at_xpath("//xmlns:Q27").content = "14"
+        lettings_log_xml.at_xpath("//xmlns:Q12c").content = "1"
+        lettings_log_xml.at_xpath("//xmlns:Q26").content = "1"
+        lettings_log_xml.at_xpath("//xmlns:MRCDAY").content = ""
+        lettings_log_xml.at_xpath("//xmlns:MRCMONTH").content = ""
+        lettings_log_xml.at_xpath("//xmlns:MRCYEAR").content = ""
+        lettings_log_xml.at_xpath("//xmlns:VDAY").content = "10"
+        lettings_log_xml.at_xpath("//xmlns:VMONTH").content = "10"
+        lettings_log_xml.at_xpath("//xmlns:VYEAR").content = "2022"
+        lettings_log_xml.at_xpath("//xmlns:P1Nat").content = ""
+        lettings_log_xml.at_xpath("//xmlns:Q9a").content = ""
+        lettings_log_xml.at_xpath("//xmlns:Q11").content = "32"
+        lettings_log_xml.at_xpath("//xmlns:Q16").content = "1"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Removing layear with error: The household cannot have just moved to the local authority area if this letting is a renewal/)
+        expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the layear answer" do
+        allow(logger).to receive(:warn)
+
+        lettings_log_service.send(:create_log, lettings_log_xml)
+        lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+        expect(lettings_log).not_to be_nil
+        expect(lettings_log.layear).to be_nil
+      end
+    end
+
+    context "when this is a void date is after major repairs day" do
+      let(:lettings_log_id) { "0ead17cb-1668-442d-898c-0d52879ff592" }
+      let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id) }
+      let(:lettings_log_xml) { Nokogiri::XML(lettings_log_file) }
+
+      before do
+        lettings_log_xml.at_xpath("//xmlns:DAY").content = "10"
+        lettings_log_xml.at_xpath("//xmlns:MONTH").content = "10"
+        lettings_log_xml.at_xpath("//xmlns:YEAR").content = "2022"
+        lettings_log_xml.at_xpath("//xmlns:MRCDAY").content = "9"
+        lettings_log_xml.at_xpath("//xmlns:MRCMONTH").content = "9"
+        lettings_log_xml.at_xpath("//xmlns:MRCYEAR").content = "2021"
+        lettings_log_xml.at_xpath("//xmlns:VDAY").content = "10"
+        lettings_log_xml.at_xpath("//xmlns:VMONTH").content = "10"
+        lettings_log_xml.at_xpath("//xmlns:VYEAR").content = "2021"
+        lettings_log_xml.at_xpath("//xmlns:P1Nat").content = ""
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Removing voiddate with error: Void date must be before the major repairs date if provided/)
+        expect(logger).to receive(:warn).with(/Removing mrcdate with error: Void date must be before the major repairs date if provided/)
+        expect(logger).to receive(:warn).with(/Removing majorrepairs with error: Void date must be before the major repairs date if provided/)
+        expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the voiddate and mrcdate answers" do
+        allow(logger).to receive(:warn)
+
+        lettings_log_service.send(:create_log, lettings_log_xml)
+        lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+        expect(lettings_log).not_to be_nil
+        expect(lettings_log.voiddate).to be_nil
+        expect(lettings_log.mrcdate).to be_nil
+      end
+    end
+
+    context "when shortfall is more than basic rent" do
+      let(:lettings_log_id) { "0ead17cb-1668-442d-898c-0d52879ff592" }
+      let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id) }
+      let(:lettings_log_xml) { Nokogiri::XML(lettings_log_file) }
+
+      before do
+        lettings_log_xml.at_xpath("//xmlns:DAY").content = "10"
+        lettings_log_xml.at_xpath("//xmlns:MONTH").content = "10"
+        lettings_log_xml.at_xpath("//xmlns:YEAR").content = "2022"
+        lettings_log_xml.at_xpath("//xmlns:P1Nat").content = ""
+        lettings_log_xml.at_xpath("//xmlns:Q18dyes").content = "200"
+        lettings_log_xml.at_xpath("//xmlns:Q18ai").content = "20"
+        lettings_log_xml.at_xpath("//xmlns:Q18aii").content = "20"
+        lettings_log_xml.at_xpath("//xmlns:Q18aiii").content = "40"
+        lettings_log_xml.at_xpath("//xmlns:Q18aiv").content = "20"
+        lettings_log_xml.at_xpath("//xmlns:Q18av").content = "100"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Removing tshortfall with error: Enter a value less less than the basic rent amount/)
+        expect(logger).to receive(:warn).with(/Removing tshortfall_known with error: Enter a value less less than the basic rent amount/)
+        expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the voiddate and mrcdate answers" do
+        allow(logger).to receive(:warn)
+
+        lettings_log_service.send(:create_log, lettings_log_xml)
+        lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+        expect(lettings_log).not_to be_nil
+        expect(lettings_log.tshortfall).to be_nil
+        expect(lettings_log.tshortfall_known).to be_nil
+      end
+    end
+
     context "and the earnings is not a whole number" do
       let(:lettings_log_id) { "00d2343e-d5fa-4c89-8400-ec3854b0f2b4" }
       let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id) }
