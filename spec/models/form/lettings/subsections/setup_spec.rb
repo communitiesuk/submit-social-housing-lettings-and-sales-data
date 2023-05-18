@@ -15,22 +15,14 @@ RSpec.describe Form::Lettings::Subsections::Setup, type: :model do
     expect(setup.pages.map(&:id)).to eq(
       %w[
         stock_owner
-        stock_owner_min_rent_value_check
-        stock_owner_max_rent_value_check
         managing_organisation
         created_by
         needs_type
         scheme
         location
-        needs_type_min_rent_value_check
-        needs_type_max_rent_value_check
         renewal
         tenancy_start_date
-        start_date_min_rent_value_check
-        start_date_max_rent_value_check
         rent_type
-        rent_type_min_rent_value_check
-        rent_type_max_rent_value_check
         tenant_code
         property_reference
       ],
@@ -50,22 +42,14 @@ RSpec.describe Form::Lettings::Subsections::Setup, type: :model do
       expect(setup.pages.map(&:id)).to eq(
         %w[
           stock_owner
-          stock_owner_min_rent_value_check
-          stock_owner_max_rent_value_check
           managing_organisation
           created_by
           needs_type
           scheme
           location
-          needs_type_min_rent_value_check
-          needs_type_max_rent_value_check
           renewal
           tenancy_start_date
-          start_date_min_rent_value_check
-          start_date_max_rent_value_check
           rent_type
-          rent_type_min_rent_value_check
-          rent_type_max_rent_value_check
           tenant_code
           property_reference
         ],
