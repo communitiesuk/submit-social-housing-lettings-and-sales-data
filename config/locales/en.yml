@@ -94,6 +94,9 @@ en:
 
 
   activerecord:
+    attributes:
+      user:
+        email: email
     errors:
       models:
         scheme:
@@ -142,6 +145,9 @@ en:
             role:
               invalid: "Role must be data accessor, data provider or data coordinator"
               blank: "Select role"
+            password:
+              blank: Enter a password
+              too_short: Password is too short (minimum is %{count} characters)
         merge_request:
           attributes:
             absorbing_organisation_id:
@@ -156,7 +162,6 @@ en:
               invalid: "An organisation with this name already exists"
             new_organisation_telephone_number:
               blank: "Enter a valid telephone number"
-
 
   validations:
     organisation:
