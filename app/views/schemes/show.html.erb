@@ -35,7 +35,7 @@
 <% end %>
 
 <% if FeatureToggle.scheme_toggle_enabled? %>
-  <% if SchemePolicy.new(current_user, nil).deactivate? %>
+  <% if SchemePolicy.new(current_user, @scheme).deactivate? %>
     <%= toggle_scheme_link(@scheme) %>
   <% end %>
 <% end %>
