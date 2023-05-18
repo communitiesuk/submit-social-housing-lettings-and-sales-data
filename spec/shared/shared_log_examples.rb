@@ -55,6 +55,7 @@ RSpec.shared_examples "shared log examples" do |log_type|
           log_type,
           uprn: "123456789",
           uprn_confirmed: 1,
+          uprn_known: 1,
           county: "county",
         )
       end
@@ -92,7 +93,7 @@ RSpec.shared_examples "shared log examples" do |log_type|
     end
 
     context "when service errors" do
-      let(:log) { create(log_type, uprn: "123456789", uprn_confirmed: 1) }
+      let(:log) { build(log_type, :in_progress, uprn_known: 1, uprn: "123456789", uprn_confirmed: 1) }
       let(:error_message) { "error" }
 
       it "adds error to log" do
