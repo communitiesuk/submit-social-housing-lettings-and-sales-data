@@ -1360,34 +1360,31 @@ RSpec.describe Imports::LettingsLogsImportService do
         lettings_log_xml.at_xpath("//xmlns:DAY").content = "10"
         lettings_log_xml.at_xpath("//xmlns:MONTH").content = "10"
         lettings_log_xml.at_xpath("//xmlns:YEAR").content = "2022"
-        # lettings_log_xml.at_xpath("//xmlns:Q12c").content = "1"
-        # lettings_log_xml.at_xpath("//xmlns:Q26").content = "1"
         lettings_log_xml.at_xpath("//xmlns:MRCDAY").content = "9"
         lettings_log_xml.at_xpath("//xmlns:MRCMONTH").content = "9"
         lettings_log_xml.at_xpath("//xmlns:MRCYEAR").content = "2021"
         lettings_log_xml.at_xpath("//xmlns:VDAY").content = "10"
         lettings_log_xml.at_xpath("//xmlns:VMONTH").content = "10"
         lettings_log_xml.at_xpath("//xmlns:VYEAR").content = "2021"
-        # lettings_log_xml.at_xpath("//xmlns:P1Nat").content = ""
-        # lettings_log_xml.at_xpath("//xmlns:Q9a").content = ""
-        # lettings_log_xml.at_xpath("//xmlns:Q11").content = "32"
-        # lettings_log_xml.at_xpath("//xmlns:Q16").content = "1"
+        lettings_log_xml.at_xpath("//xmlns:P1Nat").content = ""
       end
 
       it "intercepts the relevant validation error" do
-        expect(logger).to receive(:warn).with(/Removing layear with error: The household cannot have just moved to the local authority area if this letting is a renewal/)
+        expect(logger).to receive(:warn).with(/Removing voiddate with error: Void date must be before the major repairs date if provided/)
+        expect(logger).to receive(:warn).with(/Removing mrcdate with error: Void date must be before the major repairs date if provided/)
         expect { lettings_log_service.send(:create_log, lettings_log_xml) }
           .not_to raise_error
       end
 
-      it "clears out the layear answer" do
+      it "clears out the voiddate and mrcdate answers" do
         allow(logger).to receive(:warn)
 
         lettings_log_service.send(:create_log, lettings_log_xml)
         lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
 
         expect(lettings_log).not_to be_nil
-        expect(lettings_log.layear).to be_nil
+        expect(lettings_log.voiddate).to be_nil
+        expect(lettings_log.mrcdate).to be_nil
       end
     end
 
