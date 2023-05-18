@@ -13,7 +13,11 @@ class LocationPolicy
   def create?
     return true if user.support?
 
-    user.data_coordinator? && user.organisation == scheme&.owning_organisation
+    if location == Location
+      user.data_coordinator?
+    else
+      user.data_coordinator? && user.organisation == scheme&.owning_organisation
+    end
   end
 
   def update?

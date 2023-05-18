@@ -26,7 +26,7 @@
 </div>
 
 <% if FeatureToggle.location_toggle_enabled? %>
-  <% if LocationPolicy.new(current_user, Location).deactivate? %>
+  <% if LocationPolicy.new(current_user, @location).deactivate? %>
     <%= toggle_location_link(@location) %>
   <% end %>
 <% end %>

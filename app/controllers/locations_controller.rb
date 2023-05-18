@@ -7,35 +7,7 @@ class LocationsController < ApplicationController
   before_action :find_scheme
   before_action :scheme_and_location_present, except: %i[create index]
 
-  before_action :authorize_read,
-                only: %i[
-                  show
-                  postcode
-                  local_authority
-                  name
-                  units
-                  type_of_unit
-                  mobility_standards
-                  availability
-                  check_answers
-                  confirm
-                ]
-
-  before_action :authorize_write,
-                only: %i[
-                  update_postcode
-                  update_local_authority
-                  update_name
-                  update_units
-                  update_type_of_unit
-                  update_mobility_standards
-                  update_availability
-                  new_deactivation
-                  deactivate_confirm
-                  deactivate
-                  new_reactivation
-                  reactivate
-                ]
+  before_action :authorize_user, except: %i[index create]
 
   def index
     authorize @scheme
@@ -240,12 +212,8 @@ class LocationsController < ApplicationController
 
 private
 
-  def authorize_read
-    authorize @location
-  end
-
-  def authorize_write
-    authorize @location
+  def authorize_user
+    authorize(@location || Location)
   end
 
   def scheme_and_location_present
