@@ -149,7 +149,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :lettings_logs, path: "/lettings-logs" do
+  resources :lettings_logs, path: "/lettings-logs", except: :new do
     get "delete-confirmation", to: "lettings_logs#delete_confirmation"
 
     collection do
@@ -209,7 +209,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :sales_logs, path: "/sales-logs" do
+  resources :sales_logs, path: "/sales-logs", except: :new do
     get "delete-confirmation", to: "sales_logs#delete_confirmation"
 
     collection do
