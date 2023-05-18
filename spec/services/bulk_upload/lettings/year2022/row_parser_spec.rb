@@ -978,17 +978,13 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
         let(:attributes) { setup_section_params.merge({ field_12: 22, field_35: 5 }) }
 
         it "adds an error to the relevant fields" do
-          soft_validation_errors = parser.errors.select { |e| e.options[:category] == :soft_validation }
-
-          expect(soft_validation_errors.find { |e| e.attribute == :field_12 }).to be_present
-          expect(soft_validation_errors.find { |e| e.attribute == :field_35 }).to be_present
+          expect(parser.errors.where(:field_12, category: :soft_validation)).to be_present
+          expect(parser.errors.where(:field_35, category: :soft_validation)).to be_present
         end
 
         it "populates with correct error message" do
-          soft_validation_errors = parser.errors.select { |e| e.options[:category] == :soft_validation }
-
-          expect(soft_validation_errors.find { |e| e.attribute == :field_12 }.message).to eql("You told us this person is aged 22 years and retired.")
-          expect(soft_validation_errors.find { |e| e.attribute == :field_35 }.message).to eql("You told us this person is aged 22 years and retired.")
+          expect(parser.errors.where(:field_12, category: :soft_validation).first.message).to eql("You told us this person is aged 22 years and retired.")
+          expect(parser.errors.where(:field_35, category: :soft_validation).first.message).to eql("You told us this person is aged 22 years and retired.")
         end
       end
     end

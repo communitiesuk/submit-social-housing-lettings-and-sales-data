@@ -765,9 +765,8 @@ private
   end
 
   def validate_incomplete_soft_validations
-    routed_to_soft_validation_questions = log.form.questions.filter { |q| q.type == "interruption_screen" && q.page.routed_to?(log, nil) }
+    routed_to_soft_validation_questions = log.form.questions.filter { |q| q.type == "interruption_screen" && q.page.routed_to?(log, nil) }.compact
     routed_to_soft_validation_questions.each do |question|
-      next unless question
       next if question.completed?(log)
 
       question.page.interruption_screen_question_ids.each do |interruption_screen_question_id|

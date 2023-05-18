@@ -703,6 +703,22 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
         end
       end
     end
+
+    describe "soft validations" do
+      context "when soft validation is triggered" do
+        let(:attributes) { valid_attributes.merge({ field_30: 22, field_35: 5 }) }
+
+        it "adds an error to the relevant fields" do
+          expect(parser.errors.where(:field_30, category: :soft_validation)).to be_present
+          expect(parser.errors.where(:field_35, category: :soft_validation)).to be_present
+        end
+
+        it "populates with correct error message" do
+          expect(parser.errors.where(:field_30, category: :soft_validation).first.message).to eql("You told us this person is aged 22 years and retired.")
+          expect(parser.errors.where(:field_30, category: :soft_validation).first.message).to eql("You told us this person is aged 22 years and retired.")
+        end
+      end
+    end
   end
 
   describe "#log" do
