@@ -10,17 +10,19 @@
 <%= render partial: "organisations/headings", locals: { main: @location.postcode, sub: @location.name } %>
 
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds-from-desktop">
-        <%= govuk_summary_list do |summary_list| %>
-            <% display_location_attributes(@location).each do |attr| %>
-                <%= summary_list.row do |row| %>
-                <% row.key { attr[:name] } %>
-                <% row.value { attr[:attribute].eql?("status") ? status_tag(attr[:value]) : details_html(attr) } %>
-                <% row.action(text: "Change", href: scheme_location_name_path(@scheme, @location, referrer: "details")) if attr[:attribute] == "name" && user_can_edit_scheme?(current_user, @scheme) %>
-                <% end %>
-            <% end %>
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= govuk_summary_list do |summary_list| %>
+      <% display_location_attributes(@location).each do |attr| %>
+        <%= summary_list.row do |row| %>
+          <% row.key { attr[:name] } %>
+          <% row.value { attr[:attribute].eql?("status") ? status_tag(attr[:value]) : details_html(attr) } %>
+          <% if LocationPolicy.new(current_user, @location).update? %>
+            <% row.action(text: "Change", href: scheme_location_name_path(@scheme, @location, referrer: "details")) if attr[:attribute] == "name" %>
+          <% end %>
         <% end %>
-    </div>
+      <% end %>
+    <% end %>
+  </div>
 </div>
 
 <% if FeatureToggle.location_toggle_enabled? %>
