@@ -27,9 +27,7 @@ RSpec.describe SalesLog, type: :model do
 
   describe "#new" do
     context "when creating a record" do
-      let(:sales_log) do
-        described_class.create
-      end
+      let(:sales_log) { described_class.create }
 
       it "attaches the correct custom validator" do
         expect(sales_log._validators.values.flatten.map(&:class))
@@ -48,6 +46,18 @@ RSpec.describe SalesLog, type: :model do
 
     it "validates other household member details" do
       expect(validator).to receive(:validate_household_number_of_other_members)
+    end
+
+    it "calls the form to clear any invalid answers" do
+      expect(sales_log.form).to receive(:reset_not_routed_questions_and_invalid_answers)
+    end
+  end
+
+  describe "resetting invalid answers" do
+    let(:sales_log) { create(:sales_log, ownershipsch: 2, type: 8) }
+
+    it "resets attributes that have become invalid when the sales log is updated" do
+      expect { sales_log.update!(ownershipsch: 1) }.to change(sales_log, :type).from(8).to(nil)
     end
   end
 
