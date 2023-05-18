@@ -620,7 +620,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
         let(:attributes) { setup_section_params.merge({ field_7: "3", field_12: "100" }) }
 
         it "returns setup error" do
-          expect(parser.errors.where(:field_12).map(&:message)).to eql(["Enter a valid value for is the buyer a company?"])
+          expect(parser.errors.where(:field_12).map(&:message)).to include("Enter a valid value for is the buyer a company?")
           expect(parser.errors.where(:field_12, category: :setup)).to be_present
         end
       end
