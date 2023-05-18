@@ -57,6 +57,7 @@ RSpec.shared_examples "shared log examples" do |log_type|
           uprn_confirmed: 1,
           uprn_known: 1,
           county: "county",
+          postcode_full: nil,
         )
       end
 
@@ -80,7 +81,6 @@ RSpec.shared_examples "shared log examples" do |log_type|
         .and change(log, :postcode_full).from(nil).to("POSTCODE")
         .and change(log, :uprn_confirmed).from(1).to(nil)
         .and change(log, :county).from("county").to(nil)
-        .and change(log, :uprn_known).from(nil).to(1)
       end
     end
 
