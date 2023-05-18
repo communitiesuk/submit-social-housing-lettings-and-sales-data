@@ -111,7 +111,8 @@ module Imports
       if attributes["end_date"]
         location.location_deactivation_periods.create!(deactivation_date: attributes["end_date"])
       end
-      location
+      confirm_scheme_or_location(location)
+      location.save! && location
     rescue ActiveRecord::RecordNotUnique
       @logger.warn("Location is already present with legacy ID #{attributes['location_old_id']}, skipping")
     rescue ActiveRecord::RecordInvalid
