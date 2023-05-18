@@ -60,16 +60,16 @@
               <% row.cell(text: location.name) %>
               <% row.cell(text: location.id) %>
               <% row.cell(text: status_tag(location.status)) %>
-              <% end %>
+            <% end %>
           <% end %>
         <% end %>
       <% end %>
-      <% if user_can_edit_scheme?(current_user, @scheme) %>
+
+      <% if LocationPolicy.new(current_user, Location).create? %>
         <%= govuk_button_to "Add a location", scheme_locations_path(@scheme), method: "post", secondary: true %>
       <% end %>
     </div>
   </div>
-
 <% else %>
   <%= govuk_table do |table| %>
     <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
