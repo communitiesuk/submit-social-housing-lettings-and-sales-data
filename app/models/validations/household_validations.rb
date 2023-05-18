@@ -116,7 +116,7 @@ module Validations::HouseholdValidations
     return unless record.layear && record.renewal
 
     if record.is_renewal? && record.layear == 1
-      record.errors.add :layear, I18n.t("validations.household.renewal_just_moved_to_area.layear")
+      record.errors.add :layear, :renewal_just_moved, message: I18n.t("validations.household.renewal_just_moved_to_area.layear")
       record.errors.add :renewal, I18n.t("validations.household.renewal_just_moved_to_area.renewal")
     end
   end
