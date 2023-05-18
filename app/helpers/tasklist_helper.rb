@@ -50,6 +50,10 @@ private
              "#{log.class.name.underscore}_#{next_question_page(subsection, log, current_user)}_path"
            end
 
-    send(path, log)
+    if log.is_a? SalesLog
+      send(path, sales_log_id: log.id || "new")
+    else
+      send(path, lettings_log_id: log.id || "new")
+    end
   end
 end

@@ -107,7 +107,11 @@ private
 
   def find_resource
     @log = if params.key?("sales_log")
-             current_user.sales_logs.visible.find_by(id: params[:id])
+             if params[:id] == "new" && FeatureToggle.not_started_status_removed?
+               current_user.sales_logs.new
+             else
+               current_user.sales_logs.visible.find_by(id: params[:id])
+             end
            else
              current_user.lettings_logs.visible.find_by(id: params[:id])
            end
@@ -115,7 +119,13 @@ private
 
   def find_resource_by_named_id
     @log = if params[:sales_log_id].present?
-             current_user.sales_logs.visible.find_by(id: params[:sales_log_id])
+             if params[:sales_log_id] == "new" && FeatureToggle.not_started_status_removed?
+               current_user.sales_logs.new
+             else
+               current_user.sales_logs.visible.find_by(id: params[:sales_log_id])
+             end
+           elsif params[:lettings_log_id] == "new" && FeatureToggle.not_started_status_removed?
+             current_user.lettings_logs.new
            else
              current_user.lettings_logs.visible.find_by(id: params[:lettings_log_id])
            end

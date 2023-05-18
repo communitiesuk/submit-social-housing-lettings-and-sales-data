@@ -106,7 +106,7 @@ class Form
     if referrer == "check_answers"
       "#{type}_log_#{subsection_for_page(page).id}_check_answers_path"
     elsif previous_page_id == :tasklist
-      "#{type}_log_path"
+      ["#{type}_log_path", { id: (log.id || "new") }]
     else
       "#{type}_log_#{previous_page_id}_path"
     end

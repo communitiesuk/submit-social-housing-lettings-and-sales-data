@@ -45,4 +45,11 @@ class FeatureToggle
   def self.merge_organisations_enabled?
     !Rails.env.production?
   end
+
+  def self.not_started_status_removed?
+    return false if Rails.env.production?
+    return false if Rails.env.test?
+
+    true
+  end
 end

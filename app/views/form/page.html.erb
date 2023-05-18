@@ -1,7 +1,7 @@
 <% content_for :title, @page.header.presence || @page.questions.first.header.html_safe %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link(href: send(@log.form.previous_page_redirect_path(@page, @log, current_user, params[:referrer]), @log)) %>
+  <%= page_back_link(log: @log, page: @page, user: current_user, referrer: params[:referrer]) %>
 <% end %>
 
 <div data-controller="govukfrontend"></div>
@@ -65,13 +65,10 @@
       <div class="govuk-button-group">
         <% if !@page.interruption_screen? && if request.query_parameters["referrer"] != "check_answers" %>
           <%= f.govuk_submit "Save and continue" %>
-          <%= govuk_link_to(
-            (@page.skip_text || "Skip for now"),
-            (@page.skip_href(@log) || send(@log.form.next_page_redirect_path(@page, @log, current_user), @log)),
-          ) %>
-          <% else %>
+          <%= page_skip_link(page: @page, log: @log, user: current_user) %>
+        <% else %>
           <%= f.govuk_submit "Save changes" %>
-            <%= govuk_link_to "Cancel", send(@log.form.cancel_path(@page, @log), @log) %>
+            <%= page_cancel_link(log: @log, page: @page) %>
           <% end %>
         <% end %>
       </div>

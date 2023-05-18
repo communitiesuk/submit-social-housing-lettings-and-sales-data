@@ -58,7 +58,11 @@ class LettingsLogsController < LogsController
   end
 
   def edit
-    @log = current_user.lettings_logs.find(params[:id])
+    @log = if params[:id] == "new" && FeatureToggle.not_started_status_removed?
+             current_user.lettings_logs.new
+           else
+             current_user.lettings_logs.find(params[:id])
+           end
 
     if @log.unresolved
       redirect_to(send(@log.form.unresolved_log_path, @log))
@@ -139,7 +143,11 @@ private
   end
 
   def find_resource
-    @log = LettingsLog.visible.find_by(id: params[:id])
+    @log = if params[:id] == "new" && FeatureToggle.not_started_status_removed?
+             LettingsLog.new
+           else
+             LettingsLog.visible.find_by(id: params[:id])
+           end
   end
 
   def post_create_redirect_url(log)

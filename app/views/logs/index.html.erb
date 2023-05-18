@@ -48,11 +48,11 @@
   <% unless @bulk_upload %>
     <div class="govuk-button-group app-filter-toggle govuk-!-margin-bottom-6">
       <% if current_page?(controller: 'lettings_logs', action: 'index') %>
-        <%= govuk_button_to "Create a new lettings log", lettings_logs_path, class: "govuk-!-margin-right-6" %>
+        <%= create_lettings_log_button %>
       <% end %>
 
       <% if current_page?(controller: 'sales_logs', action: 'index') %>
-        <%= govuk_button_to "Create a new sales log", sales_logs_path, class: "govuk-!-margin-right-6" %>
+        <%= create_sales_log_button %>
       <% end %>
 
       <% if FeatureToggle.bulk_upload_lettings_logs? && log_type_for_controller(controller) == "lettings" %>

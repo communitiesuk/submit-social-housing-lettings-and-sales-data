@@ -34,7 +34,11 @@ class SalesLogsController < LogsController
   end
 
   def edit
-    @log = current_user.sales_logs.visible.find(params[:id])
+    @log = if params[:id] == "new" && FeatureToggle.not_started_status_removed?
+             current_user.sales_logs.new
+           else
+             current_user.sales_logs.visible.find(params[:id])
+           end
     render "logs/edit", locals: { current_user: }
   end
 
