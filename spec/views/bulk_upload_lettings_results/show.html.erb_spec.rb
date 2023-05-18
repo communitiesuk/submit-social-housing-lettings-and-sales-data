@@ -3,18 +3,37 @@ require "rails_helper"
 RSpec.describe "bulk_upload_lettings_results/show.html.erb" do
   let(:bulk_upload) { create(:bulk_upload, :lettings) }
 
-  before do
-    create(:bulk_upload_error, bulk_upload:, cell: "AA100", row: "100", col: "AA")
-    create(:bulk_upload_error, bulk_upload:, cell: "Z100", row: "100", col: "Z")
+  context "when mutiple rows in wrong order" do
+    before do
+      create(:bulk_upload_error, bulk_upload:, cell: "C14", row: "14", col: "C")
+      create(:bulk_upload_error, bulk_upload:, cell: "D10", row: "10", col: "D")
+    end
+
+    it "renders errors order by row" do
+      assign(:bulk_upload, bulk_upload)
+
+      render
+
+      fragment = Capybara::Node::Simple.new(rendered)
+
+      expect(fragment.find_css(".x-govuk-summary-card__title strong").map(&:inner_text)).to eql(["Row 10", "Row 14"])
+    end
   end
 
-  it "renders errors ordered by cell" do
-    assign(:bulk_upload, bulk_upload)
+  context "when 1 row with 2 errors" do
+    before do
+      create(:bulk_upload_error, bulk_upload:, cell: "AA100", row: "100", col: "AA")
+      create(:bulk_upload_error, bulk_upload:, cell: "Z100", row: "100", col: "Z")
+    end
 
-    render
+    it "renders errors ordered by cell" do
+      assign(:bulk_upload, bulk_upload)
 
-    fragment = Capybara::Node::Simple.new(rendered)
+      render
 
-    expect(fragment.find_css("table tbody th").map(&:inner_text)).to eql(%w[Z100 AA100])
+      fragment = Capybara::Node::Simple.new(rendered)
+
+      expect(fragment.find_css("table tbody th").map(&:inner_text)).to eql(%w[Z100 AA100])
+    end
   end
 end
