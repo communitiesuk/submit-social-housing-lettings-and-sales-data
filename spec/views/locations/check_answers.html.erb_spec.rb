@@ -54,5 +54,16 @@ RSpec.describe "locations/check_answers.html.erb" do
 
       expect(rendered).not_to have_content("Save and return to locations")
     end
+
+    it "does not see change answer links" do
+      assign(:scheme, scheme)
+      assign(:location, location)
+
+      allow(view).to receive(:current_user).and_return(user)
+
+      render
+
+      expect(rendered).not_to have_content("Change")
+    end
   end
 end
