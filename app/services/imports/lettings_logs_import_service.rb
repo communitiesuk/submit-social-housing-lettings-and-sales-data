@@ -326,7 +326,8 @@ module Imports
         %i[brent over_hard_max] => charges_attributes,
         %i[period wrong_rent_period] => %w[period],
         %i[layear renewal_just_moved] => %w[layear],
-        %i[voiddate after_mrcdate] => %w[voiddate mrcdate],
+        %i[voiddate after_mrcdate] => %w[voiddate mrcdate majorrepairs],
+        %i[tshortfall more_than_rent] => %w[tshortfall tshortfall_known],
       }
 
       (2..8).each do |person|

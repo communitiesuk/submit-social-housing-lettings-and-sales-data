@@ -92,7 +92,7 @@ module Validations::FinancialValidations
   def validate_rent_amount(record)
     if record.wtshortfall
       if record.wrent && (record.wtshortfall > record.wrent)
-        record.errors.add :tshortfall, I18n.t("validations.financial.tshortfall.more_than_rent")
+        record.errors.add :tshortfall, :more_than_rent, message: I18n.t("validations.financial.tshortfall.more_than_rent")
         record.errors.add :brent, I18n.t("validations.financial.rent.less_than_shortfall")
       elsif record.wtshortfall < 0.01
         record.errors.add :tshortfall, :must_be_positive, message: I18n.t("validations.financial.tshortfall.must_be_positive")

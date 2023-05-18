@@ -1372,6 +1372,7 @@ RSpec.describe Imports::LettingsLogsImportService do
       it "intercepts the relevant validation error" do
         expect(logger).to receive(:warn).with(/Removing voiddate with error: Void date must be before the major repairs date if provided/)
         expect(logger).to receive(:warn).with(/Removing mrcdate with error: Void date must be before the major repairs date if provided/)
+        expect(logger).to receive(:warn).with(/Removing majorrepairs with error: Void date must be before the major repairs date if provided/)
         expect { lettings_log_service.send(:create_log, lettings_log_xml) }
           .not_to raise_error
       end
@@ -1385,6 +1386,43 @@ RSpec.describe Imports::LettingsLogsImportService do
         expect(lettings_log).not_to be_nil
         expect(lettings_log.voiddate).to be_nil
         expect(lettings_log.mrcdate).to be_nil
+      end
+    end
+
+    context "when shortfall is more than basic rent" do
+      let(:lettings_log_id) { "0ead17cb-1668-442d-898c-0d52879ff592" }
+      let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id) }
+      let(:lettings_log_xml) { Nokogiri::XML(lettings_log_file) }
+
+      before do
+        lettings_log_xml.at_xpath("//xmlns:DAY").content = "10"
+        lettings_log_xml.at_xpath("//xmlns:MONTH").content = "10"
+        lettings_log_xml.at_xpath("//xmlns:YEAR").content = "2022"
+        lettings_log_xml.at_xpath("//xmlns:P1Nat").content = ""
+        lettings_log_xml.at_xpath("//xmlns:Q18dyes").content = "200"
+        lettings_log_xml.at_xpath("//xmlns:Q18ai").content = "20"
+        lettings_log_xml.at_xpath("//xmlns:Q18aii").content = "20"
+        lettings_log_xml.at_xpath("//xmlns:Q18aiii").content = "40"
+        lettings_log_xml.at_xpath("//xmlns:Q18aiv").content = "20"
+        lettings_log_xml.at_xpath("//xmlns:Q18av").content = "100"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect(logger).to receive(:warn).with(/Removing tshortfall with error: Enter a value less less than the basic rent amount/)
+        expect(logger).to receive(:warn).with(/Removing tshortfall_known with error: Enter a value less less than the basic rent amount/)
+        expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the voiddate and mrcdate answers" do
+        allow(logger).to receive(:warn)
+
+        lettings_log_service.send(:create_log, lettings_log_xml)
+        lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+        expect(lettings_log).not_to be_nil
+        expect(lettings_log.tshortfall).to be_nil
+        expect(lettings_log.tshortfall_known).to be_nil
       end
     end
 
