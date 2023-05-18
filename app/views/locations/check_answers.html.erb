@@ -27,7 +27,10 @@
         <% end %>
     </div>
 </div>
-<div class="govuk-button-group">
-  <%= govuk_button_to "Save and return to locations", scheme_location_confirm_path(@scheme, @location, route: params[:route]), method: :patch %>
-  <%= govuk_button_link_to "Cancel", scheme_locations_path(@scheme), secondary: true %>
-</div>
+
+<% if LocationPolicy.new(current_user, Location).create? %>
+  <div class="govuk-button-group">
+    <%= govuk_button_to "Save and return to locations", scheme_location_confirm_path(@scheme, @location, route: params[:route]), method: :patch %>
+    <%= govuk_button_link_to "Cancel", scheme_locations_path(@scheme), secondary: true %>
+  </div>
+<% end %>
