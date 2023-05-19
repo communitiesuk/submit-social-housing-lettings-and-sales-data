@@ -908,7 +908,7 @@ RSpec.describe Imports::LettingsLogsImportService do
 
         before do
           scheme1.update!(registered_under_care_act: 2)
-          lettings_log_xml.at_xpath("//xmlns:Q18b").content = "2000"
+          lettings_log_xml.at_xpath("//xmlns:Q18b").content = "6000"
           lettings_log_xml.at_xpath("//xmlns:Q17").content = "1"
           lettings_log_xml.at_xpath("//xmlns:Q18ai").content = ""
           lettings_log_xml.at_xpath("//xmlns:Q18aii").content = ""
@@ -918,7 +918,7 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
 
         it "intercepts the relevant validation error" do
-          expect(logger).to receive(:warn).with(/Removing chcharge with error: Household rent and other charges must be between £10.00 and £1,000.00 if paying weekly for 52 weeks/)
+          expect(logger).to receive(:warn).with(/Removing chcharge with error: Household rent and other charges must be between £10.00 and £5,000.00 if paying weekly for 52 weeks/)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end
