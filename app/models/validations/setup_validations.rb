@@ -24,7 +24,7 @@ module Validations::SetupValidations
     return unless record.scheme
 
     unless record.scheme.locations.confirmed.any?
-      record.errors.add :scheme_id, I18n.t("validations.scheme.no_completed_locations")
+      record.errors.add :scheme_id, :no_completed_locations, message: I18n.t("validations.scheme.no_completed_locations")
     end
   end
 

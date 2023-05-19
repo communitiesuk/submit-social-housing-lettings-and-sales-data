@@ -328,6 +328,7 @@ module Imports
         %i[layear renewal_just_moved] => %w[layear],
         %i[voiddate after_mrcdate] => %w[voiddate mrcdate majorrepairs],
         %i[tshortfall more_than_rent] => %w[tshortfall tshortfall_known],
+        %i[scheme_id no_completed_locations] => %w[scheme_id location_id],
       }
 
       (2..8).each do |person|
