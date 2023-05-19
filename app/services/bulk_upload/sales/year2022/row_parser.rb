@@ -1029,7 +1029,7 @@ private
       errors.add(:field_24, "Buyer 1 cannot be a child under 16")
     end
   end
-  
+
   def validate_shared_ownership_type
     if sale_type == 32
       block_log_creation!
