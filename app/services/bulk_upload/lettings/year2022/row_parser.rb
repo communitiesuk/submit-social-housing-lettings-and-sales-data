@@ -434,7 +434,7 @@ class BulkUpload::Lettings::Year2022::RowParser
 
   def log_already_exists?
     @log_already_exists ||= LettingsLog
-      .where(status: %w[not_started in_progress completed])
+      .visible
       .exists?(duplicate_check_fields.index_with { |field| log.public_send(field) })
   end
 

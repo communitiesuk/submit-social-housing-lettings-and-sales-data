@@ -20,8 +20,20 @@ class Log < ApplicationRecord
   enum status: STATUS
   enum status_cache: STATUS, _prefix: true
 
-  scope :visible, -> { where(status: %w[not_started in_progress completed]) }
-  scope :exportable, -> { where(status: %w[not_started in_progress completed deleted]) }
+  scope :visible, lambda {
+    if FeatureToggle.not_started_status_removed?
+      where(status: %w[in_progress completed])
+    else
+      where(status: %w[not_started in_progress completed])
+    end
+  }
+  scope :exportable, lambda {
+    if FeatureToggle.not_started_status_removed?
+      where(status: %w[in_progress completed deleted])
+    else
+      where(status: %w[not_started in_progress completed deleted])
+    end
+  }
 
   scope :filter_by_status, ->(status, _user = nil) { where status: }
   scope :filter_by_years, lambda { |years, _user = nil|
