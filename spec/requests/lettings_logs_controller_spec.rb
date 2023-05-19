@@ -347,7 +347,6 @@ RSpec.describe LettingsLogsController, type: :request do
               Timecop.freeze(2022, 3, 1) do
                 example.run
               end
-              Timecop.return
             end
 
             let!(:lettings_log_2021) do
@@ -536,9 +535,121 @@ RSpec.describe LettingsLogsController, type: :request do
             end
           end
         end
+
+        context "and no filters or search are active" do
+          it "does not show the delete logs button even if logs are visible" do
+            get lettings_logs_path
+            expect(page).to have_selector "article.app-log-summary"
+            expect(page).not_to have_link("Delete logs")
+          end
+        end
+
+        context "and search is active" do
+          let(:tenancycode) { "tenant_1" }
+
+          before do
+            create(:lettings_log, tenancycode:)
+          end
+
+          context "and there is at least one log that meets the search" do
+            it "shows the delete logs button" do
+              get lettings_logs_path, headers:, params: { search: tenancycode }
+              expect(page).to have_selector "article.app-log-summary"
+              expect(page).to have_link("Delete logs")
+            end
+          end
+
+          context "and there are no logs that meet the search" do
+            it "shows the delete logs button" do
+              get lettings_logs_path, headers:, params: { search: "gibberish_kshdfjhsdfkjs" }
+              expect(page).not_to have_selector "article.app-log-summary"
+              expect(page).not_to have_link("Delete logs")
+            end
+          end
+        end
+
+        context "and filters are active" do
+          context "and filtering by year" do
+            before do
+              LettingsLog.destroy_all
+              create_list(:lettings_log, 5, startdate: Time.zone.local(2023, 5, 6))
+            end
+
+            context "and there is at least one log that meets the filter" do
+              it "shows the delete logs button" do
+                get lettings_logs_path, headers:, params: { years: [2023] }
+                expect(page).to have_selector "article.app-log-summary"
+                expect(page).to have_link("Delete logs")
+              end
+            end
+
+            context "and there are no logs that meet the search" do
+              it "does not show the delete logs button" do
+                get lettings_logs_path, headers:, params: { years: [2022] }
+                expect(page).not_to have_selector "article.app-log-summary"
+                expect(page).not_to have_link("Delete logs")
+              end
+            end
+          end
+
+          context "and filtering by status" do
+            before do
+              LettingsLog.destroy_all
+              create_list(:lettings_log, 2, :in_progress)
+            end
+
+            context "and there is at least one log that satisfies the filter" do
+              it "shows the delete logs button" do
+                get lettings_logs_path, headers:, params: { status: %w[in_progress] }
+                expect(page).to have_selector "article.app-log-summary"
+                expect(page).to have_link("Delete logs")
+              end
+            end
+
+            context "and there are no logs that satisfy the filter" do
+              it "does not show the delete logs button" do
+                get lettings_logs_path, headers:, params: { status: %w[completed] }
+                expect(page).not_to have_selector "article.app-log-summary"
+                expect(page).not_to have_link("Delete logs")
+              end
+            end
+          end
+
+          context "and created by all is selected" do
+            before do
+              create_list(:lettings_log, 2, :in_progress)
+            end
+
+            it "does not show the delete logs button even if logs are visible" do
+              get lettings_logs_path, headers:, params: { user: %w[all] }
+              expect(page).to have_selector "article.app-log-summary"
+              expect(page).not_to have_link("Delete logs")
+            end
+          end
+
+          context "and created by you is selected" do
+            before do
+              LettingsLog.destroy_all
+            end
+
+            it "shows the delete logs button if any logs satisfy the filter" do
+              create_list(:lettings_log, 2, :in_progress, created_by: user)
+              get lettings_logs_path, headers:, params: { user: %w[yours] }
+              expect(page).to have_selector "article.app-log-summary"
+              expect(page).to have_link("Delete logs")
+            end
+
+            it "does not show the delete logs button if no logs satisfy the filter" do
+              create_list(:lettings_log, 2, :in_progress)
+              get lettings_logs_path, headers:, params: { user: %w[yours] }
+              expect(page).not_to have_selector "article.app-log-summary"
+              expect(page).not_to have_link("Delete logs")
+            end
+          end
+        end
       end
 
-      context "when the user is not a customer support user" do
+      context "when the user is a data provider" do
         before do
           sign_in user
         end
@@ -820,6 +931,172 @@ RSpec.describe LettingsLogsController, type: :request do
 
             it "has pagination in the title" do
               expect(page).to have_title("Logs (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            end
+          end
+        end
+
+        context "and no filters or search are active" do
+          it "does not show the delete logs button even if logs are visible" do
+            get lettings_logs_path
+            expect(page).to have_selector "article.app-log-summary"
+            expect(page).not_to have_link("Delete logs")
+          end
+        end
+
+        context "and any combination of search and filters except user filter are active" do
+          let(:tenancycode) { "tenant_1" }
+
+          before do
+            create(:lettings_log, tenancycode:, owning_organisation: user.organisation)
+          end
+
+          it "does not show the delete logs button even if logs are visible" do
+            get lettings_logs_path, headers:, params: { status: %w[in_progress completed], search: tenancycode }
+            expect(page).to have_selector "article.app-log-summary"
+            expect(page).not_to have_link "Delete logs"
+          end
+        end
+
+        context "and the created by filter is set to all" do
+          it "does not show the delete logs button even if logs are visible" do
+            get lettings_logs_path, headers:, params: { user: "all" }
+            expect(page).to have_selector "article.app-log-summary"
+            expect(page).not_to have_link "Delete logs"
+          end
+        end
+
+        context "and the created by filter is set to 'yours'" do
+          it "shows the delete logs button if logs are visible" do
+            get lettings_logs_path, headers:, params: { user: "yours" }
+            expect(page).to have_selector "article.app-log-summary"
+            expect(page).to have_link "Delete logs"
+          end
+
+          it "does not show the delete logs button if no logs are visible" do
+            LettingsLog.where(created_by: user).destroy_all
+            get lettings_logs_path, headers:, params: { user: "yours" }
+            expect(page).not_to have_link "Delete logs"
+          end
+        end
+      end
+
+      context "when the user is a data coordinator" do
+        let(:user) { FactoryBot.create(:user, :data_coordinator) }
+
+        before do
+          allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+          sign_in user
+        end
+
+        context "and no filters or search are active" do
+          it "does not show the delete logs button even if logs are visible" do
+            create(:lettings_log, :in_progress, owning_organisation: user.organisation)
+            get lettings_logs_path
+            expect(page).to have_selector "article.app-log-summary"
+            expect(page).not_to have_link("Delete logs")
+          end
+        end
+
+        context "and search is active" do
+          let(:tenancycode) { "tenant_1" }
+
+          before do
+            create(:lettings_log, tenancycode:, owning_organisation: user.organisation)
+          end
+
+          context "and there is at least one log that meets the search" do
+            it "shows the delete logs button" do
+              get lettings_logs_path, headers:, params: { search: tenancycode }
+              expect(page).to have_selector "article.app-log-summary"
+              expect(page).to have_link("Delete logs")
+            end
+          end
+
+          context "and there are no logs that meet the search" do
+            it "shows the delete logs button" do
+              get lettings_logs_path, headers:, params: { search: "gibberish_kshdfjhsdfkjs" }
+              expect(page).not_to have_selector "article.app-log-summary"
+              expect(page).not_to have_link("Delete logs")
+            end
+          end
+        end
+
+        context "and filters are active" do
+          context "and filtering by year" do
+            before do
+              LettingsLog.destroy_all
+              create_list(:lettings_log, 5, startdate: Time.zone.local(2023, 5, 6), owning_organisation: user.organisation)
+            end
+
+            context "and there is at least one log that meets the filter" do
+              it "shows the delete logs button" do
+                get lettings_logs_path, headers:, params: { years: [2023] }
+                expect(page).to have_selector "article.app-log-summary"
+                expect(page).to have_link("Delete logs")
+              end
+            end
+
+            context "and there are no logs that meet the search" do
+              it "does not show the delete logs button" do
+                get lettings_logs_path, headers:, params: { years: [2022] }
+                expect(page).not_to have_selector "article.app-log-summary"
+                expect(page).not_to have_link("Delete logs")
+              end
+            end
+          end
+
+          context "and filtering by status" do
+            before do
+              LettingsLog.destroy_all
+              create_list(:lettings_log, 2, :in_progress, owning_organisation: user.organisation)
+            end
+
+            context "and there is at least one log that satisfies the filter" do
+              it "shows the delete logs button" do
+                get lettings_logs_path, headers:, params: { status: %w[in_progress] }
+                expect(page).to have_selector "article.app-log-summary"
+                expect(page).to have_link("Delete logs")
+              end
+            end
+
+            context "and there are no logs that satisfy the filter" do
+              it "does not show the delete logs button" do
+                get lettings_logs_path, headers:, params: { status: %w[completed] }
+                expect(page).not_to have_selector "article.app-log-summary"
+                expect(page).not_to have_link("Delete logs")
+              end
+            end
+          end
+
+          context "and created by all is selected" do
+            before do
+              create_list(:lettings_log, 2, :in_progress)
+            end
+
+            it "does not show the delete logs button even if logs are visible" do
+              get lettings_logs_path, headers:, params: { user: %w[all] }
+              expect(page).to have_selector "article.app-log-summary"
+              expect(page).not_to have_link("Delete logs")
+            end
+          end
+
+          context "and created by you is selected" do
+            before do
+              LettingsLog.destroy_all
+            end
+
+            it "shows the delete logs button if any logs satisfy the filter" do
+              create_list(:lettings_log, 2, :in_progress, created_by: user)
+              get lettings_logs_path, headers:, params: { user: %w[yours] }
+              expect(page).to have_selector "article.app-log-summary"
+              expect(page).to have_link("Delete logs")
+            end
+
+            it "does not show the delete logs button if no logs satisfy the filter" do
+              create_list(:lettings_log, 2, :in_progress)
+              get lettings_logs_path, headers:, params: { user: %w[yours] }
+              expect(page).not_to have_selector "article.app-log-summary"
+              expect(page).not_to have_link("Delete logs")
             end
           end
         end
