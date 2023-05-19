@@ -15,7 +15,6 @@ class Form::Sales::Questions::AddressLine1 < ::Form::Question
       log.address_line1,
       log.address_line2,
       log.postcode_full,
-      log.town_or_city,
       log.county,
     ].select(&:present?).join("\n")
   end

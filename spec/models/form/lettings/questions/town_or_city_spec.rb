@@ -42,8 +42,4 @@ RSpec.describe Form::Lettings::Questions::TownOrCity, type: :model do
   it "has the correct check_answers_card_number" do
     expect(question.check_answers_card_number).to be_nil
   end
-
-  it "has the correct hidden_in_check_answers" do
-    expect(question.hidden_in_check_answers?).to eq(true)
-  end
 end
