@@ -1723,6 +1723,8 @@ RSpec.describe LocationsController, type: :request do
         end
 
         it "shows the location" do
+          get "/schemes/#{scheme.id}/locations/#{location.id}"
+
           expect(page).to have_content("Location name")
           expect(page).to have_content(location.name)
         end

@@ -65,7 +65,7 @@
         <% end %>
       <% end %>
 
-      <% if LocationPolicy.new(current_user, Location).create? %>
+      <% if LocationPolicy.new(current_user, @scheme.locations.new).create? %>
         <%= govuk_button_to "Add a location", scheme_locations_path(@scheme), method: "post", secondary: true %>
       <% end %>
     </div>

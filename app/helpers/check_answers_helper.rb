@@ -12,7 +12,10 @@ module CheckAnswersHelper
   end
 
   def can_change_scheme_answer?(attribute_name, scheme)
+    return false unless current_user.support? || current_user.data_coordinator?
+
     editable_attributes = current_user.support? ? ["Name", "Confidential information", "Housing stock owned by"] : ["Name", "Confidential information"]
+
     !scheme.confirmed? || editable_attributes.include?(attribute_name)
   end
 

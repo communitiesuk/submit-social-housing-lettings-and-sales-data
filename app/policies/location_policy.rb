@@ -62,7 +62,7 @@ class LocationPolicy
     define_method method_name do
       return true if user.support?
 
-      scheme&.owning_organisation == user.organisation
+      user.organisation.parent_organisations.exists?(scheme&.owning_organisation_id) || scheme&.owning_organisation == user.organisation
     end
   end
 

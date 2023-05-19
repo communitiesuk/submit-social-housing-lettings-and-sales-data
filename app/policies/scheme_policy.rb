@@ -12,7 +12,7 @@ class SchemePolicy
     if scheme == Scheme
       true
     else
-      scheme&.owning_organisation == user.organisation
+      user.organisation.parent_organisations.exists?(scheme&.owning_organisation_id) || scheme&.owning_organisation == user.organisation
     end
   end
 
@@ -25,7 +25,9 @@ class SchemePolicy
   end
 
   def update?
-    user.data_coordinator? || user.support?
+    return true if user.support?
+
+    user.data_coordinator? && (scheme&.owning_organisation == user.organisation)
   end
 
   %w[
@@ -35,7 +37,7 @@ class SchemePolicy
     define_method method_name do
       return true if user.support?
 
-      scheme&.owning_organisation == user.organisation
+      user.organisation.parent_organisations.exists?(scheme&.owning_organisation_id) || scheme&.owning_organisation == user.organisation
     end
   end
 

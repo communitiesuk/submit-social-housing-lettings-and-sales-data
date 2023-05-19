@@ -14,9 +14,10 @@
             <%= details_html(attribute) %>
         </dd>
     <% end %>
+
     <% if can_change_scheme_answer?(attribute[:name], scheme) %>
-        <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="<%= change_link %>">Change</a>
-        </dd>
+      <dd class="govuk-summary-list__actions">
+        <a class="govuk-link" href="<%= change_link %>">Change</a>
+      </dd>
     <% end %>
 </div>
