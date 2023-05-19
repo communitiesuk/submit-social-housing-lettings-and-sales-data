@@ -24,6 +24,7 @@ RSpec.describe Validations::TenancyValidations do
           record.tenancylength = 10
           tenancy_validator.validate_fixed_term_tenancy(record)
           expect(record.errors["needstype"]).to include(match(expected_error))
+          expect(record.errors["rent_type"]).not_to include(match(expected_error))
           expect(record.errors["tenancylength"]).to include(match(expected_error))
           expect(record.errors["tenancy"]).to include(match(expected_error))
         end
@@ -44,6 +45,7 @@ RSpec.describe Validations::TenancyValidations do
             record.tenancylength = 1
             tenancy_validator.validate_fixed_term_tenancy(record)
             expect(record.errors["needstype"]).to include(match(expected_error))
+            expect(record.errors["rent_type"]).to include(match(expected_error))
             expect(record.errors["tenancylength"]).to include(match(expected_error))
             expect(record.errors["tenancy"]).to include(match(expected_error))
           end
@@ -54,6 +56,7 @@ RSpec.describe Validations::TenancyValidations do
             record.tenancylength = 100
             tenancy_validator.validate_fixed_term_tenancy(record)
             expect(record.errors["needstype"]).to include(match(expected_error))
+            expect(record.errors["rent_type"]).to include(match(expected_error))
             expect(record.errors["tenancylength"]).to include(match(expected_error))
             expect(record.errors["tenancy"]).to include(match(expected_error))
           end
