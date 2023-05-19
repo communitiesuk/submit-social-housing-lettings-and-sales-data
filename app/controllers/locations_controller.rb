@@ -4,7 +4,7 @@ class LocationsController < ApplicationController
   before_action :authenticate_scope!
   before_action :find_location, except: %i[create index]
   before_action :find_scheme
-  before_action :authenticate_action!
+  before_action :authenticate_action!, only: %i[create update index new_deactivation deactivate_confirm deactivate postcode local_authority name units type_of_unit mobility_standards availability check_answers]
   before_action :scheme_and_location_present, except: %i[create index]
 
   include Modules::SearchFilter
@@ -21,6 +21,7 @@ class LocationsController < ApplicationController
   end
 
   def postcode; end
+  def update; end
 
   def update_postcode
     @location.postcode = location_params[:postcode]
@@ -225,9 +226,13 @@ private
   end
 
   def authenticate_action!
-    if %w[create update index new_deactivation deactivate_confirm deactivate postcode local_authority name units type_of_unit mobility_standards availability check_answers].include?(action_name) && !((current_user.organisation == @scheme&.owning_organisation) || current_user.support?)
-      render_not_found and return
+    unless user_allowed_action?
+      render_not_found
     end
+  end
+
+  def user_allowed_action?
+    current_user.support? || current_user.organisation == @scheme&.owning_organisation || current_user.organisation.parent_organisations.exists?(@scheme&.owning_organisation_id)
   end
 
   def location_params

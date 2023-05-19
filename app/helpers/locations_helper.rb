@@ -84,6 +84,10 @@ module LocationsHelper
     end
   end
 
+  def user_can_edit_scheme?(user, scheme)
+    user.support? || user.organisation == scheme.owning_organisation
+  end
+
 private
 
   ActivePeriod = Struct.new(:from, :to)

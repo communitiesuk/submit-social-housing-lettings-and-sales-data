@@ -39,6 +39,9 @@ RSpec.describe SchemesController, type: :request do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
 
       before do
+        schemes.each do |scheme|
+          scheme.update!(owning_organisation: user.organisation)
+        end
         sign_in user
         get "/schemes"
       end
@@ -46,6 +49,33 @@ RSpec.describe SchemesController, type: :request do
       it "redirects to the organisation schemes path" do
         follow_redirect!
         expect(path).to match("/organisations/#{user.organisation.id}/schemes")
+      end
+
+      it "shows a list of schemes for the organisation" do
+        follow_redirect!
+        schemes.each do |scheme|
+          expect(page).to have_content(scheme.id_to_display)
+        end
+      end
+
+      context "when parent organisation has schemes" do
+        let(:parent_organisation) { FactoryBot.create(:organisation) }
+        let!(:parent_schemes) { FactoryBot.create_list(:scheme, 5, owning_organisation: parent_organisation) }
+
+        before do
+          create(:organisation_relationship, parent_organisation:, child_organisation: user.organisation)
+          parent_schemes.each do |scheme|
+            FactoryBot.create(:location, scheme:)
+          end
+          get "/schemes"
+        end
+
+        it "shows parent organisation schemes" do
+          follow_redirect!
+          parent_schemes.each do |scheme|
+            expect(page).to have_content(scheme.id_to_display)
+          end
+        end
       end
     end
 
@@ -233,9 +263,6 @@ RSpec.describe SchemesController, type: :request do
         expect(page).to have_content(specific_scheme.id_to_display)
         expect(page).to have_content(specific_scheme.service_name)
         expect(page).to have_content(specific_scheme.sensitive)
-        expect(page).to have_content(specific_scheme.id_to_display)
-        expect(page).to have_content(specific_scheme.service_name)
-        expect(page).to have_content(specific_scheme.sensitive)
         expect(page).to have_content(specific_scheme.scheme_type)
         expect(page).to have_content(specific_scheme.registered_under_care_act)
         expect(page).to have_content(specific_scheme.primary_client_group)
@@ -304,6 +331,27 @@ RSpec.describe SchemesController, type: :request do
             expect(page).not_to have_link("Reactivate this scheme")
             expect(page).not_to have_link("Deactivate this scheme")
           end
+        end
+      end
+
+      context "when coordinator attempts to see scheme belonging to a parent organisation" do
+        let(:parent_organisation) { FactoryBot.create(:organisation) }
+        let!(:specific_scheme) { FactoryBot.create(:scheme, owning_organisation: parent_organisation) }
+
+        before do
+          FactoryBot.create(:location, scheme: specific_scheme)
+          create(:organisation_relationship, parent_organisation:, child_organisation: user.organisation)
+          get "/schemes/#{specific_scheme.id}"
+        end
+
+        it "shows the scheme" do
+          expect(page).to have_content(specific_scheme.id_to_display)
+        end
+
+        it "does not allow editing the scheme" do
+          expect(page).not_to have_link("Change")
+          expect(page).not_to have_content("Reactivate this scheme")
+          expect(page).not_to have_content("Deactivate this scheme")
         end
       end
     end
