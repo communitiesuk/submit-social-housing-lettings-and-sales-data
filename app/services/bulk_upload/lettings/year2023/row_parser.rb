@@ -384,6 +384,7 @@ class BulkUpload::Lettings::Year2023::RowParser
   validate :validate_nulls, on: :after_log
 
   validate :validate_uprn_exists_if_any_key_address_fields_are_blank, on: :after_log
+  validate :validate_uprn_not_in_scientific_notation, on: :after_log
 
   validate :validate_incomplete_soft_validations, on: :after_log
 
@@ -506,6 +507,13 @@ private
   def validate_uprn_exists_if_any_key_address_fields_are_blank
     if field_18.blank? && (field_19.blank? || field_21.blank?)
       errors.add(:field_18, I18n.t("validations.not_answered", question: "UPRN"))
+    end
+  end
+
+
+  def validate_uprn_not_in_scientific_notation
+    if field_18.&include?("E")
+      errors.add(:field_19, I18n.t("validations.invalid_option", question: "UPRN"))
     end
   end
 

@@ -410,6 +410,7 @@ class BulkUpload::Sales::Year2023::RowParser
   validate :validate_incomplete_soft_validations, on: :after_log
 
   validate :validate_uprn_exists_if_any_key_address_fields_are_blank, on: :after_log
+  validate :validate_uprn_not_in_scientific_notation, on: :after_log
   validate :validate_address_fields, on: :after_log
   validate :validate_if_log_already_exists, on: :after_log, if: -> { FeatureToggle.bulk_upload_duplicate_log_check_enabled? }
 
@@ -509,6 +510,12 @@ private
   def validate_uprn_exists_if_any_key_address_fields_are_blank
     if field_19.blank? && (field_20.blank? || field_22.blank?)
       errors.add(:field_19, I18n.t("validations.not_answered", question: "UPRN"))
+    end
+  end
+
+  def validate_uprn_not_in_scientific_notation
+    if field_19&.include?("E")
+      errors.add(:field_19, I18n.t("validations.invalid_option", question: "UPRN"))
     end
   end
 
