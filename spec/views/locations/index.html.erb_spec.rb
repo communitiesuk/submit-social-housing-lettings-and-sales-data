@@ -23,6 +23,7 @@ RSpec.describe "locations/index.html.erb" do
         available_from: 1.week.ago,
         scheme_deactivation_periods: [],
         status: :active,
+        locations: Location,
       )
     end
 
