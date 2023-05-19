@@ -938,7 +938,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
 
         it "sets the value correctly" do
           log = parser.log
-          expect(log["type"]).to eq(32)
+          expect(log.type).to eq(32)
         end
       end
     end
