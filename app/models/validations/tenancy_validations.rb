@@ -31,6 +31,7 @@ module Validations::TenancyValidations
       next unless condition[:condition]
 
       record.errors.add :needstype, condition[:error]
+      record.errors.add :rent_type, condition[:error]
       record.errors.add :tenancylength, :tenancylength_invalid, message: condition[:error]
       record.errors.add :tenancy, condition[:error]
     end
