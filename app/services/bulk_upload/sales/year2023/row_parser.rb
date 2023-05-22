@@ -345,6 +345,7 @@ class BulkUpload::Sales::Year2023::RowParser
               in: [2, 30, 18, 16, 24, 28, 31, 32],
               if: proc { field_8.present? },
               category: :setup,
+              question: QUESTIONS[:field_8].downcase,
             },
             on: :before_log
 
@@ -361,6 +362,7 @@ class BulkUpload::Sales::Year2023::RowParser
               in: [8, 14, 27, 9, 29, 21, 22],
               if: proc { field_9.present? },
               category: :setup,
+              question: QUESTIONS[:field_9].downcase,
             },
             on: :before_log
 
@@ -377,6 +379,7 @@ class BulkUpload::Sales::Year2023::RowParser
               in: [10, 12],
               if: proc { field_10.present? },
               category: :setup,
+              question: QUESTIONS[:field_10].downcase,
             },
             on: :before_log
 
