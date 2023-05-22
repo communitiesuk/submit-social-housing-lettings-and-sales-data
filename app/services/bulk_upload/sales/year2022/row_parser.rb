@@ -287,7 +287,6 @@ class BulkUpload::Sales::Year2022::RowParser
   validate :validate_relevant_collection_window, on: :after_log
   validate :validate_incomplete_soft_validations, on: :after_log
   validate :validate_if_log_already_exists, on: :after_log, if: -> { FeatureToggle.bulk_upload_duplicate_log_check_enabled? }
-  validate :validate_shared_ownership_type, on: :after_log, if: :shared_ownership?
 
   def self.question_for_field(field)
     QUESTIONS[field]
@@ -967,7 +966,8 @@ private
 
       if setup_question?(question)
         fields.each do |field|
-          if errors[field].present?
+          if errors[field].blank?
+            block_log_creation!
             errors.add(field, I18n.t("validations.invalid_option", question: QUESTIONS[field]), category: :setup)
           end
         end
@@ -1027,14 +1027,6 @@ private
   def validate_buyer1_economic_status
     if field_24 == 9
       errors.add(:field_24, "Buyer 1 cannot be a child under 16")
-    end
-  end
-
-  def validate_shared_ownership_type
-    if sale_type == 32
-      block_log_creation!
-
-      errors.add(:field_57, I18n.t("validations.invalid_option", question: "shared ownership type"), category: :setup)
     end
   end
 end
