@@ -260,19 +260,19 @@ class BulkUpload::Sales::Year2022::RowParser
   attribute :field_124, :integer
   attribute :field_125, :integer
 
-  validates :field_2, presence: { message: I18n.t("validations.not_answered", question: "sale completion date (day)") }, on: :after_log
-  validates :field_3, presence: { message: I18n.t("validations.not_answered", question: "sale completion date (month)") }, on: :after_log
-  validates :field_4, presence: { message: I18n.t("validations.not_answered", question: "sale completion date (year)") }, on: :after_log
+  validates :field_2, presence: { message: I18n.t("validations.not_answered", question: "sale completion date (day)"), category: :setup }, on: :after_log
+  validates :field_3, presence: { message: I18n.t("validations.not_answered", question: "sale completion date (month)"), category: :setup }, on: :after_log
+  validates :field_4, presence: { message: I18n.t("validations.not_answered", question: "sale completion date (year)"), category: :setup }, on: :after_log
   validates :field_4, format: { with: /\A\d{2}\z/, message: I18n.t("validations.setup.saledate.year_not_two_digits") }, on: :after_log
 
-  validates :field_113, presence: { message: I18n.t("validations.not_answered", question: "ownership type") }, on: :after_log
-  validates :field_57, presence: { message: I18n.t("validations.not_answered", question: "shared ownership type") }, if: :shared_ownership?, on: :after_log
-  validates :field_76, presence: { message: I18n.t("validations.not_answered", question: "shared ownership type") }, if: :discounted_ownership?, on: :after_log
-  validates :field_84, presence: { message: I18n.t("validations.not_answered", question: "shared ownership type") }, if: :outright_sale?, on: :after_log
-  validates :field_115, presence: { message: I18n.t("validations.not_answered", question: "will the buyers live in the property") }, if: :outright_sale?, on: :after_log
-  validates :field_116, presence: { message: I18n.t("validations.not_answered", question: "joint purchase") }, if: :joint_purchase_asked?, on: :after_log
-  validates :field_114, presence: { message: I18n.t("validations.not_answered", question: "company buyer") }, if: :outright_sale?, on: :after_log
-  validates :field_109, presence: { message: I18n.t("validations.not_answered", question: "more than 2 buyers") }, if: :joint_purchase?, on: :after_log
+  validates :field_113, presence: { message: I18n.t("validations.not_answered", question: "ownership type"), category: :setup }, on: :after_log
+  validates :field_57, presence: { message: I18n.t("validations.not_answered", question: "shared ownership type"), category: :setup }, if: :shared_ownership?, on: :after_log
+  validates :field_76, presence: { message: I18n.t("validations.not_answered", question: "shared ownership type"), category: :setup }, if: :discounted_ownership?, on: :after_log
+  validates :field_84, presence: { message: I18n.t("validations.not_answered", question: "shared ownership type"), category: :setup }, if: :outright_sale?, on: :after_log
+  validates :field_115, presence: { message: I18n.t("validations.not_answered", question: "will the buyers live in the property"), category: :setup }, if: :outright_sale?, on: :after_log
+  validates :field_116, presence: { message: I18n.t("validations.not_answered", question: "joint purchase"), category: :setup }, if: :joint_purchase_asked?, on: :after_log
+  validates :field_114, presence: { message: I18n.t("validations.not_answered", question: "company buyer"), category: :setup }, if: :outright_sale?, on: :after_log
+  validates :field_109, presence: { message: I18n.t("validations.not_answered", question: "more than 2 buyers"), category: :setup }, if: :joint_purchase?, on: :after_log
 
   validate :validate_buyer1_economic_status, on: :before_log
   validate :validate_nulls, on: :after_log
@@ -941,13 +941,13 @@ private
 
       if setup_question?(question)
         fields.each do |field|
-          if errors[field].present?
+          unless errors.any? { |e| fields.include?(e.attribute) }
             errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase), category: :setup)
           end
         end
       else
         fields.each do |field|
-          if errors.none? { |e| fields.include?(e.attribute) }
+          unless errors.any? { |e| fields.include?(e.attribute) }
             errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase))
           end
         end
