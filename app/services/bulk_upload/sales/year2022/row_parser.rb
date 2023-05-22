@@ -277,6 +277,7 @@ class BulkUpload::Sales::Year2022::RowParser
   validates :field_57,
             presence: {
               message: I18n.t("validations.not_answered", question: "shared ownership type"),
+              category: :setup,
             },
             if: :shared_ownership?,
             on: :after_log
@@ -293,6 +294,7 @@ class BulkUpload::Sales::Year2022::RowParser
   validates :field_76,
             presence: {
               message: I18n.t("validations.not_answered", question: "discounted ownership type"),
+              category: :setup,
             },
             if: :discounted_ownership?,
             on: :after_log
@@ -309,6 +311,7 @@ class BulkUpload::Sales::Year2022::RowParser
   validates :field_84,
             presence: {
               message: I18n.t("validations.not_answered", question: "type of outright sale"),
+              category: :setup,
             },
             if: :outright_sale?,
             on: :after_log
