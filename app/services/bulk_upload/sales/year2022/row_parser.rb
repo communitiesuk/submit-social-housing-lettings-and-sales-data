@@ -1034,7 +1034,7 @@ private
     if sale_type == 32
       block_log_creation!
 
-      errors.add(:field_8, I18n.t("validations.invalid_option", question: "shared ownership type"), category: :setup)
+      errors.add(:field_57, I18n.t("validations.invalid_option", question: "shared ownership type"), category: :setup)
     end
   end
 end

@@ -628,7 +628,7 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
         let(:attributes) { valid_attributes.merge(field_113: 1, field_57: "32") }
 
         it "is not permitted as a setup error" do
-          expect(parser.errors.where(:field_8, category: :setup)).to be_present
+          expect(parser.errors.where(:field_57, category: :setup)).to be_present
         end
 
         it "blocks log creation" do
