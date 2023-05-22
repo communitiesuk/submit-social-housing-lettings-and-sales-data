@@ -4,6 +4,26 @@ class FormController < ApplicationController
   before_action :find_resource_by_named_id, except: %i[review]
   before_action :check_collection_period, only: %i[submit_form show_page]
 
+  def update_owning_org(log)
+    return unless current_user
+    return if current_user.support?
+
+    stock_owners = current_user.organisation.stock_owners
+
+    if current_user.organisation.holds_own_stock?
+      return if stock_owners.count >= 1
+
+      log.update!(owning_organisation: current_user.organisation)
+    else
+      return if stock_owners.count.zero?
+      return if stock_owners.count > 1
+
+      log.update!(owning_organisation: stock_owners.first)
+    end
+
+    false
+  end
+
   def submit_form
     if @log
       @page = form.get_page(params[@log.model_name.param_key][:page])
@@ -11,6 +31,7 @@ class FormController < ApplicationController
       mandatory_questions_with_no_response = mandatory_questions_with_no_response(responses_for_page)
 
       if mandatory_questions_with_no_response.empty? && @log.update(responses_for_page.merge(updated_by: current_user))
+        update_owning_org(@log)
         flash[:notice] = "You have successfully updated #{@page.questions.map(&:check_answer_label).first.downcase}" if previous_interruption_screen_page_id.present?
         redirect_to(successful_redirect_path)
       else
