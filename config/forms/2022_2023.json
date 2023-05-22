@@ -7481,9 +7481,14 @@
               },
               "depends_on": [
                 {
+                  "needstype": 1
+                },
+                {
+                  "needstype": 2,
                   "household_charge": 0
                 },
                 {
+                  "needstype": 2,
                   "household_charge": null
                 }
               ]
