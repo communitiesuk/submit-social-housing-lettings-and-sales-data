@@ -6,11 +6,7 @@ module Validations::TenancyValidations
   def validate_fixed_term_tenancy(record)
     is_present = record.tenancylength.present?
     is_in_range = record.tenancylength.to_i.between?(min_tenancy_length(record), 99)
-    conditions = [
-      {
-        condition: !(record.is_secure_tenancy? || record.is_assured_shorthold_tenancy?) && is_present,
-        error: I18n.t("validations.tenancy.length.fixed_term_not_required"),
-      },
+    rent_type_dependent_conditions = [
       {
         condition: (record.is_assured_shorthold_tenancy? && !is_in_range) && is_present,
         error: I18n.t(
@@ -19,18 +15,26 @@ module Validations::TenancyValidations
         ),
       },
       {
-        condition: record.is_secure_tenancy? && (!is_in_range && is_present),
+        condition: (record.is_secure_tenancy? && !is_in_range) && is_present,
         error: I18n.t(
           "validations.tenancy.length.secure",
           min_tenancy_length: min_tenancy_length(record),
         ),
       },
     ]
+    rent_type_independent_conditions = [
+      {
+        condition: !(record.is_secure_tenancy? || record.is_assured_shorthold_tenancy?) && is_present,
+        error: I18n.t("validations.tenancy.length.fixed_term_not_required"),
+      },
+    ]
+    conditions = rent_type_dependent_conditions + rent_type_independent_conditions
 
     conditions.each do |condition|
       next unless condition[:condition]
 
       record.errors.add :needstype, condition[:error]
+      record.errors.add :rent_type, condition[:error] if rent_type_dependent_conditions.include?(condition)
       record.errors.add :tenancylength, :tenancylength_invalid, message: condition[:error]
       record.errors.add :tenancy, condition[:error]
     end
