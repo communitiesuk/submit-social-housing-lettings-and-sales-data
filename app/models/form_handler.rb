@@ -33,7 +33,7 @@ class FormHandler
   end
 
   def sales_forms
-    {
+    @sales_forms ||= {
       "current_sales" => Form.new(nil, current_collection_start_year, SALES_SECTIONS, "sales"),
       "previous_sales" => Form.new(nil, previous_collection_start_year, SALES_SECTIONS, "sales"),
       "next_sales" => Form.new(nil, next_collection_start_year, SALES_SECTIONS, "sales"),
