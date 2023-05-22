@@ -152,7 +152,7 @@ class Log < ApplicationRecord
 
     if all_fields_completed? && errors.empty?
       "completed"
-    elsif all_fields_nil?
+    elsif all_fields_nil? && !FeatureToggle.not_started_status_removed?
       "not_started"
     else
       "in_progress"

@@ -22,16 +22,16 @@ module LogActionsHelper
 
   def create_lettings_log_for_org_button(org)
     # This doesn't work because it's a get request and can't old params like that
-    if FeatureToggle.not_started_status_removed?
-      govuk_button_link_to(
-        "Create a new lettings log for this organisation",
-        lettings_log_path(id: "new", lettings_log: { owning_organisation_id: org.id }),
-      )
-    else
+    # if FeatureToggle.not_started_status_removed?
+    #   govuk_button_link_to(
+    #     "Create a new lettings log for this organisation",
+    #     lettings_log_path(id: "new", lettings_log: { owning_organisation_id: org.id }),
+    #   )
+    # else
       govuk_button_to(
         "Create a new lettings log for this organisation", lettings_logs_path(lettings_log: { owning_organisation_id: org.id }, method: :post)
       )
-    end
+    # end
   end
 
   def create_sales_log_button
