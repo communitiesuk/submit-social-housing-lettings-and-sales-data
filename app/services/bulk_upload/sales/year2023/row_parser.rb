@@ -1163,7 +1163,8 @@ private
 
       if setup_question?(question)
         fields.each do |field|
-          if errors[field].present?
+          if errors[field].blank?
+            block_log_creation!
             errors.add(field, I18n.t("validations.invalid_option", question: QUESTIONS[field]), category: :setup)
           end
         end
