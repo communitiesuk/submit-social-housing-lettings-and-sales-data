@@ -21,7 +21,6 @@ RSpec.describe Csv::LettingsLogCsvService do
         owning_organisation_name
         managing_organisation_name
         collection_start_year
-        rent_value_check
         needstype
         renewal
         startdate
@@ -163,6 +162,7 @@ RSpec.describe Csv::LettingsLogCsvService do
         pscharge
         supcharg
         tcharge
+        rent_value_check
         hbrentshortfall
         tshortfall_known
         tshortfall

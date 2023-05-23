@@ -67,13 +67,8 @@ RSpec.describe SalesLog, type: :model do
 
       it "returns optional fields" do
         expect(sales_log.optional_fields).to eq(%w[
-          saledate_check
           purchid
-          monthly_charges_value_check
-          old_persons_shared_ownership_value_check
           othtype
-          discounted_sale_value_check
-          buyer_livein_value_check
           proplen
           mortlen
           frombeds
@@ -86,13 +81,8 @@ RSpec.describe SalesLog, type: :model do
 
       it "returns optional fields" do
         expect(sales_log.optional_fields).to eq(%w[
-          saledate_check
           purchid
-          monthly_charges_value_check
-          old_persons_shared_ownership_value_check
           othtype
-          discounted_sale_value_check
-          buyer_livein_value_check
           address_line2
           county
           postcode_full

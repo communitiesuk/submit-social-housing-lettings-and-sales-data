@@ -1,6 +1,6 @@
 class Form::Lettings::Pages::FemalesInSoftAgeRangeInPregnantHouseholdLeadHhmembValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
-    super
+    super(id, hsh, subsection)
     @id = "females_in_soft_age_range_in_pregnant_household_lead_hhmemb_value_check"
     @depends_on = [{ "female_in_pregnant_household_in_soft_validation_range?" => true }]
     @title_text = {
@@ -14,7 +14,7 @@ class Form::Lettings::Pages::FemalesInSoftAgeRangeInPregnantHouseholdLeadHhmembV
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::PregnancyValueCheck.new(nil, nil, self)]
+    @questions ||= [Form::Lettings::Questions::PregnancyValueCheck.new(nil, nil, self, person_index: 0)]
   end
 
   def interruption_screen_question_ids
