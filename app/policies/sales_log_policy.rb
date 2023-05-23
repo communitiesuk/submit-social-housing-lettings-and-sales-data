@@ -12,9 +12,6 @@ class SalesLogPolicy
     # Can only delete editable logs
     return false unless log.collection_period_open?
 
-    # Only delete logs with answered questions
-    return false unless log.in_progress? || log.completed?
-
     # Support users can delete any log
     return true if user.support?
 
