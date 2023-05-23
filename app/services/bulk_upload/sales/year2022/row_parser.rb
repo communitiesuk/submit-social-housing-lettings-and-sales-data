@@ -414,7 +414,7 @@ class BulkUpload::Sales::Year2022::RowParser
 private
 
   def validate_data_protection_answered
-    unless field_112 == 1
+    unless field_112 == 1 || buyer_not_interviewed?
       errors.add(:field_112, I18n.t("validations.not_answered", question: QUESTIONS[:field_112].downcase), category: :setup)
     end
   end

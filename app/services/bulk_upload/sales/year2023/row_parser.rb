@@ -536,9 +536,13 @@ class BulkUpload::Sales::Year2023::RowParser
 private
 
   def validate_data_protection_answered
-    unless field_29 == 1
+    unless field_29 == 1 || buyer_not_interviewed?
       errors.add(:field_29, I18n.t("validations.not_answered", question: QUESTIONS[:field_29].downcase), category: :setup)
     end
+  end
+
+  def buyer_not_interviewed?
+    field_28 == 1
   end
 
   def prevtenbuy2
@@ -753,7 +757,7 @@ private
 
     attributes["purchid"] = purchaser_code
     attributes["saledate"] = saledate
-    attributes["noint"] = 2 if field_28 == 1
+    attributes["noint"] = 2 if buyer_not_interviewed?
 
     attributes["age1_known"] = age1_known?
     attributes["age1"] = field_30 if attributes["age1_known"].zero? && field_30&.match(/\A\d{1,3}\z|\AR\z/)
