@@ -14,7 +14,7 @@ class Form::Lettings::Pages::FemalesInSoftAgeRangeInPregnantHouseholdValueCheck 
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::PregnancyValueCheck.new(nil, nil, self)]
+    @questions ||= [Form::Lettings::Questions::PregnancyValueCheck.new(nil, nil, self, person_index: nil)]
   end
 
   def interruption_screen_question_ids

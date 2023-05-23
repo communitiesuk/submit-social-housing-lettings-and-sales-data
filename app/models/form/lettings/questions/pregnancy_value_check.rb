@@ -1,11 +1,11 @@
 class Form::Lettings::Questions::PregnancyValueCheck < ::Form::Question
-  def initialize(id, hsh, page)
-    super
+  def initialize(id, hsh, page, person_index:)
+    super(id, hsh, page)
     @id = "pregnancy_value_check"
     @check_answer_label = "Pregnancy confirmation"
     @header = "Are you sure this is correct?"
     @type = "interruption_screen"
-    @check_answers_card_number = 0
+    @check_answers_card_number = person_index
     @answer_options = ANSWER_OPTIONS
     @hidden_in_check_answers = { "depends_on" => [{ "pregnancy_value_check" => 0 }, { "pregnancy_value_check" => 1 }] }
   end

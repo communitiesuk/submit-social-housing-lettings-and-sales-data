@@ -1,6 +1,6 @@
 class Form::Lettings::Pages::NoFemalesPregnantHouseholdLeadAgeValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
-    super
+    super(id, hsh, subsection)
     @id = "no_females_pregnant_household_lead_age_value_check"
     @depends_on = [{ "no_females_in_a_pregnant_household?" => true }]
     @title_text = {
@@ -14,7 +14,7 @@ class Form::Lettings::Pages::NoFemalesPregnantHouseholdLeadAgeValueCheck < ::For
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::PregnancyValueCheck.new(nil, nil, self)]
+    @questions ||= [Form::Lettings::Questions::PregnancyValueCheck.new(nil, nil, self, person_index: 1)]
   end
 
   def interruption_screen_question_ids

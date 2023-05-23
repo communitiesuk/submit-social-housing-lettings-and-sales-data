@@ -14,7 +14,7 @@ class Form::Lettings::Pages::NoFemalesPregnantHouseholdLeadHhmembValueCheck < ::
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::PregnancyValueCheck.new(nil, nil, self)]
+    @questions ||= [Form::Lettings::Questions::PregnancyValueCheck.new(nil, nil, self, person_index: 0)]
   end
 
   def interruption_screen_question_ids
