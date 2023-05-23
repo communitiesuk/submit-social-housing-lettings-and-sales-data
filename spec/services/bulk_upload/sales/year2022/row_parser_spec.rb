@@ -198,7 +198,7 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
       it "has errors on correct setup fields" do
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute)
 
-        expect(errors).to eql(%i[field_2 field_3 field_4 field_113 field_92])
+        expect(errors).to eql(%i[field_2 field_3 field_4 field_113 field_92 field_112])
       end
     end
 
@@ -212,9 +212,9 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
       end
 
       it "has errors on correct setup fields" do
-        errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute)
+        errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_2 field_3 field_4 field_57 field_116 field_92])
+        expect(errors).to eql(%i[field_112 field_116 field_2 field_3 field_4 field_57 field_92])
       end
     end
 
@@ -232,7 +232,7 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
       it "has errors on correct setup fields" do
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute)
 
-        expect(errors).to eql(%i[field_2 field_3 field_4 field_109 field_92])
+        expect(errors).to eql(%i[field_2 field_3 field_4 field_109 field_92 field_112])
       end
     end
 
@@ -246,9 +246,9 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
       end
 
       it "has errors on correct setup fields" do
-        errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute)
+        errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_2 field_3 field_4 field_76 field_116 field_92])
+        expect(errors).to eql(%i[field_112 field_116 field_2 field_3 field_4 field_76 field_92])
       end
     end
 
@@ -266,7 +266,7 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
       it "has errors on correct setup fields" do
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute)
 
-        expect(errors).to eql(%i[field_2 field_3 field_4 field_109 field_92])
+        expect(errors).to eql(%i[field_2 field_3 field_4 field_109 field_92 field_112])
       end
     end
 
@@ -280,9 +280,9 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
       end
 
       it "has errors on correct setup fields" do
-        errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute)
+        errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_2 field_3 field_4 field_84 field_115 field_114 field_92])
+        expect(errors).to eql(%i[field_112 field_114 field_115 field_2 field_3 field_4 field_84 field_92])
       end
     end
 
@@ -291,16 +291,57 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
         {
           bulk_upload:,
           field_1: "test id",
-          field_113: "3",
           field_84: "12",
+          field_85: "other sale type",
+          field_113: "3",
           field_114: "2",
         }
       end
 
       it "has errors on correct setup fields" do
-        errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute)
+        errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_2 field_3 field_4 field_115 field_116 field_92])
+        expect(errors).to eql(%i[field_2 field_3 field_4 field_115 field_116 field_92 field_112].sort)
+      end
+    end
+
+    describe "#field_57" do # type of shared ownership scheme
+      context "when an invalid option" do
+        let(:attributes) { setup_section_params.merge(field_57: "100", field_113: "1") }
+
+        it "returns setup error" do
+          expect(parser.errors.where(:field_57, category: :setup).map(&:message)).to include("Enter a valid value for what is the type of shared ownership sale?")
+        end
+      end
+    end
+
+    describe "#field_76" do # type of discounted ownership scheme
+      context "when an invalid option" do
+        let(:attributes) { setup_section_params.merge({ field_76: "100", field_113: "2" }) }
+
+        it "returns setup error" do
+          expect(parser.errors.where(:field_76, category: :setup).map(&:message)).to eql(["Enter a valid value for what is the type of discounted ownership sale?"])
+        end
+      end
+    end
+
+    describe "#field_84" do # type of outright sale
+      context "when an invalid option" do
+        let(:attributes) { setup_section_params.merge({ field_84: "100", field_113: "3" }) }
+
+        it "returns setup error" do
+          expect(parser.errors.where(:field_84, category: :setup).map(&:message)).to eql(["Enter a valid value for what is the type of outright sale?"])
+        end
+      end
+    end
+
+    describe "#field_85" do # type of other outright sale
+      context "when cant be blank" do
+        let(:attributes) { setup_section_params.merge({ field_85: nil, field_84: "12" }) }
+
+        it "returns setup error" do
+          expect(parser.errors.where(:field_85, category: :setup).map(&:message)).to eql(["You must answer type of outright sale"])
+        end
       end
     end
 
@@ -451,6 +492,66 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
       end
     end
 
+    describe "#field_109" do # more that 2 joint purchasers?
+      context "when an invalid option" do
+        let(:attributes) { setup_section_params.merge({ field_109: "100", field_116: "1" }) }
+
+        it "returns setup error" do
+          expect(parser.errors.where(:field_109, category: :setup).map(&:message)).to include("Enter a valid value for are there more than two joint purchasers of this property?")
+        end
+      end
+    end
+
+    describe "#field_112" do # data protection
+      context "when not accepted" do
+        let(:attributes) { setup_section_params.merge(field_112: nil) }
+
+        it "returns setup error" do
+          expect(parser.errors.where(:field_112, category: :setup).map(&:message)).to eql(["You must answer data protection question"])
+        end
+      end
+    end
+
+    describe "#field_113" do # purchase made thru ownership scheme?
+      context "when an invalid option" do
+        let(:attributes) { setup_section_params.merge({ field_113: "100" }) }
+
+        it "returns setup error" do
+          expect(parser.errors.where(:field_113, category: :setup).map(&:message)).to include("Enter a valid value for was this purchase made through an ownership scheme?")
+        end
+      end
+    end
+
+    describe "#field_114" do # is buyer a company?
+      context "when an invalid option" do
+        let(:attributes) { setup_section_params.merge({ field_114: "100", field_113: "3" }) }
+
+        it "returns setup error" do
+          expect(parser.errors.where(:field_114, category: :setup).map(&:message)).to include("Enter a valid value for is the buyer a company?")
+        end
+      end
+    end
+
+    describe "#field_115" do # will buyers live in property?
+      context "when an invalid option" do
+        let(:attributes) { setup_section_params.merge({ field_115: "100", field_113: "3", field_114: "2" }) }
+
+        it "returns setup error" do
+          expect(parser.errors.where(:field_115, category: :setup).map(&:message)).to include("Enter a valid value for will the buyers live in the property?")
+        end
+      end
+    end
+
+    describe "#field_116" do # joint purchase?
+      context "when an invalid option" do
+        let(:attributes) { setup_section_params.merge({ field_116: "100" }) }
+
+        it "returns setup error" do
+          expect(parser.errors.where(:field_116, category: :setup).map(&:message)).to include("Enter a valid value for is this a joint purchase?")
+        end
+      end
+    end
+
     describe "#field_117" do
       context "when not a possible value" do
         let(:attributes) { valid_attributes.merge({ field_117: "3" }) }
@@ -477,11 +578,9 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
         let(:attributes) { setup_section_params.merge({ field_2: nil, field_3: nil, field_4: nil }) }
 
         it "returns them as setup errors" do
-          setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
-
-          expect(setup_errors.find { |e| e.attribute == :field_2 }).to be_present
-          expect(setup_errors.find { |e| e.attribute == :field_3 }).to be_present
-          expect(setup_errors.find { |e| e.attribute == :field_4 }).to be_present
+          expect(parser.errors.where(:field_2, category: :setup)).to be_present
+          expect(parser.errors.where(:field_3, category: :setup)).to be_present
+          expect(parser.errors.where(:field_4, category: :setup)).to be_present
         end
       end
 
@@ -629,10 +728,6 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
 
         it "is not permitted as a setup error" do
           expect(parser.errors.where(:field_57, category: :setup)).to be_present
-        end
-
-        it "blocks log creation" do
-          expect(parser).to be_block_log_creation
         end
       end
     end

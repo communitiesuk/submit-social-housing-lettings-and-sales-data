@@ -341,6 +341,15 @@ class BulkUpload::Sales::Year2023::RowParser
             on: :after_log
 
   validates :field_8,
+            inclusion: {
+              in: [2, 30, 18, 16, 24, 28, 31, 32],
+              if: proc { field_8.present? },
+              category: :setup,
+              question: QUESTIONS[:field_8].downcase,
+            },
+            on: :before_log
+
+  validates :field_8,
             presence: {
               message: I18n.t("validations.not_answered", question: "shared ownership type"),
               category: :setup,
@@ -349,32 +358,76 @@ class BulkUpload::Sales::Year2023::RowParser
             on: :after_log
 
   validates :field_9,
+            inclusion: {
+              in: [8, 14, 27, 9, 29, 21, 22],
+              if: proc { field_9.present? },
+              category: :setup,
+              question: QUESTIONS[:field_9].downcase,
+            },
+            on: :before_log
+
+  validates :field_9,
             presence: {
-              message: I18n.t("validations.not_answered", question: "shared ownership type"),
+              message: I18n.t("validations.not_answered", question: "discounted ownership type"),
               category: :setup,
               if: :discounted_ownership?,
             },
             on: :after_log
 
   validates :field_10,
+            inclusion: {
+              in: [10, 12],
+              if: proc { field_10.present? },
+              category: :setup,
+              question: QUESTIONS[:field_10].downcase,
+            },
+            on: :before_log
+
+  validates :field_10,
             presence: {
-              message: I18n.t("validations.not_answered", question: "shared ownership type"),
+              message: I18n.t("validations.not_answered", question: "type of ouright sale"),
+              category: :setup,
+              if: :outright_sale?,
+            },
+            on: :after_log
+
+  validates :field_11,
+            presence: {
+              message: I18n.t("validations.not_answered", question: "type of outright sale"),
+              category: :setup,
+              if: proc { field_10 == 12 },
+            },
+            on: :after_log
+
+  validates :field_12,
+            inclusion: {
+              in: [1, 2],
+              if: proc { outright_sale? && field_12.present? },
+              category: :setup,
+              question: QUESTIONS[:field_12].downcase,
+            },
+            on: :before_log
+
+  validates :field_12,
+            presence: {
+              message: I18n.t("validations.not_answered", question: "company buyer"),
               category: :setup,
               if: :outright_sale?,
             },
             on: :after_log
 
   validates :field_13,
+            inclusion: {
+              in: [1, 2],
+              if: proc { outright_sale? && field_13.present? },
+              category: :setup,
+              question: QUESTIONS[:field_13].downcase,
+            },
+            on: :before_log
+
+  validates :field_13,
             presence: {
               message: I18n.t("validations.not_answered", question: "will the buyers live in the property"),
-              category: :setup,
-              if: :outright_sale?,
-            },
-            on: :after_log
-
-  validates :field_12,
-            presence: {
-              message: I18n.t("validations.not_answered", question: "company buyer"),
               category: :setup,
               if: :outright_sale?,
             },
@@ -412,6 +465,8 @@ class BulkUpload::Sales::Year2023::RowParser
   validate :validate_uprn_exists_if_any_key_address_fields_are_blank, on: :after_log
   validate :validate_address_fields, on: :after_log
   validate :validate_if_log_already_exists, on: :after_log, if: -> { FeatureToggle.bulk_upload_duplicate_log_check_enabled? }
+
+  validate :validate_data_protection_answered, on: :after_log
 
   def self.question_for_field(field)
     QUESTIONS[field]
@@ -479,6 +534,12 @@ class BulkUpload::Sales::Year2023::RowParser
   end
 
 private
+
+  def validate_data_protection_answered
+    unless field_29 == 1
+      errors.add(:field_29, I18n.t("validations.not_answered", question: QUESTIONS[:field_29].downcase), category: :setup)
+    end
+  end
 
   def prevtenbuy2
     case field_72
@@ -1156,6 +1217,8 @@ private
     log.attributes.each do |question_id, _v|
       question = log.form.get_question(question_id, log)
 
+      next if question_id == "type"
+
       next unless question&.type == "radio"
       next if log[question_id].blank? || question.answer_options.key?(log[question_id].to_s) || !question.page.routed_to?(log, nil)
 
@@ -1163,7 +1226,7 @@ private
 
       if setup_question?(question)
         fields.each do |field|
-          if errors[field].blank?
+          if errors[field].none?
             block_log_creation!
             errors.add(field, I18n.t("validations.invalid_option", question: QUESTIONS[field]), category: :setup)
           end

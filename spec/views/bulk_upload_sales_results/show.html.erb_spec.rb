@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.describe "bulk_upload_lettings_results/summary.html.erb" do
-  let(:bulk_upload) { create(:bulk_upload, :lettings) }
+RSpec.describe "bulk_upload_sales_results/show.html.erb" do
+  let(:bulk_upload) { create(:bulk_upload, :sales) }
 
   context "when mutiple rows in wrong order" do
     before do
