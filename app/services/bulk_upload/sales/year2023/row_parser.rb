@@ -819,7 +819,7 @@ private
     attributes["prevten"] = field_62
     attributes["prevloc"] = field_66
     attributes["previous_la_known"] = previous_la_known
-    attributes["ppcodenk"] = field_63
+    attributes["ppcodenk"] = previous_postcode_known
     attributes["ppostcode_full"] = ppostcode_full
 
     attributes["pregyrha"] = field_67
@@ -1105,6 +1105,12 @@ private
 
   def previous_la_known
     field_66.present? ? 1 : 0
+  end
+
+  def previous_postcode_known
+    return 1 if field_63 == 2
+
+    0 if field_63 == 1
   end
 
   def block_log_creation!

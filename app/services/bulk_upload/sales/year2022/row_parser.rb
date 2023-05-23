@@ -625,7 +625,7 @@ private
     attributes["prevten"] = buyer_not_interviewed? && field_39.blank? ? 0 : field_39
     attributes["prevloc"] = field_40
     attributes["previous_la_known"] = previous_la_known
-    attributes["ppcodenk"] = field_43
+    attributes["ppcodenk"] = previous_postcode_known
     attributes["ppostcode_full"] = ppostcode_full
 
     attributes["pregyrha"] = field_44
@@ -905,6 +905,12 @@ private
 
   def previous_la_known
     field_40.present? ? 1 : 0
+  end
+
+  def previous_postcode_known
+    return 1 if field_43.blank?
+
+    0 if field_43 == 1
   end
 
   def soctenant
