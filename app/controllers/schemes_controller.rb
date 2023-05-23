@@ -3,9 +3,11 @@ class SchemesController < ApplicationController
   include Modules::SearchFilter
 
   before_action :authenticate_user!
-  before_action :find_resource, except: %i[index]
-  before_action :authenticate_scope!
+  before_action :find_resource, except: %i[index create new]
   before_action :redirect_if_scheme_confirmed, only: %i[primary_client_group confirm_secondary_client_group secondary_client_group support details]
+  before_action :authorize_user
+
+  rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
 
   def index
     redirect_to schemes_organisation_path(current_user.organisation) unless current_user.support?
@@ -18,6 +20,9 @@ class SchemesController < ApplicationController
 
   def show
     @scheme = Scheme.find_by(id: params[:id])
+
+    authorize @scheme
+
     render_not_found and return unless @scheme
   end
 
@@ -89,6 +94,8 @@ class SchemesController < ApplicationController
   def create
     @scheme = Scheme.new(scheme_params)
 
+    authorize @scheme
+
     validation_errors scheme_params
 
     if @scheme.errors.empty? && @scheme.save
@@ -108,6 +115,8 @@ class SchemesController < ApplicationController
 
   def update
     render_not_found and return unless @scheme
+
+    authorize @scheme
 
     check_answers = params[:scheme][:check_answers]
     page = params[:scheme][:page]
@@ -181,6 +190,10 @@ class SchemesController < ApplicationController
   end
 
 private
+
+  def authorize_user
+    authorize(@scheme || Scheme)
+  end
 
   def validation_errors(scheme_params)
     scheme_params.each_key do |key|
@@ -260,14 +273,10 @@ private
 
   def find_resource
     @scheme = Scheme.find_by(id: params[:id]) || Scheme.find_by(id: params[:scheme_id])
-  end
 
-  def authenticate_scope!
-    head :unauthorized and return unless current_user.data_coordinator? || current_user.support?
+    raise ActiveRecord::RecordNotFound unless @scheme
 
-    if %w[show locations primary_client_group confirm_secondary_client_group secondary_client_group support details check_answers edit_name deactivate].include?(action_name) && !user_allowed_action?
-      render_not_found and return
-    end
+    @scheme
   end
 
   def user_allowed_action?

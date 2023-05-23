@@ -2,8 +2,8 @@ require "rails_helper"
 
 RSpec.describe LocationsController, type: :request do
   let(:page) { Capybara::Node::Simple.new(response.body) }
-  let(:user) { FactoryBot.create(:user, :support) }
-  let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+  let(:user) { create(:user, :support) }
+  let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
   let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
 
   before do
@@ -19,22 +19,21 @@ RSpec.describe LocationsController, type: :request do
     end
 
     context "when signed in as a data provider" do
-      let(:user) { FactoryBot.create(:user) }
+      let(:user) { create(:user) }
 
       before do
         sign_in user
         get "/schemes/1/locations/create"
       end
 
-      it "returns 401 unauthorized" do
-        request
-        expect(response).to have_http_status(:unauthorized)
+      it "returns 404" do
+        expect(response).to be_not_found
       end
     end
 
     context "when signed in as a data coordinator" do
-      let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let(:user) { create(:user, :data_coordinator) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
 
       before do
         sign_in user
@@ -56,18 +55,18 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when trying to add a new location to a scheme that belongs to another organisation" do
-        let(:another_scheme)  { FactoryBot.create(:scheme) }
+        let(:another_scheme) { create(:scheme) }
 
         it "displays the new page with an error message" do
           post scheme_locations_path(another_scheme)
-          expect(response).to have_http_status(:not_found)
+          expect(response).to be_unauthorized
         end
       end
     end
 
     context "when signed in as a support user" do
-      let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let(:user) { create(:user, :data_coordinator) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -90,11 +89,11 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when trying to add a new location to a scheme that belongs to another organisation" do
-        let(:another_scheme)  { FactoryBot.create(:scheme) }
+        let(:another_scheme) { create(:scheme) }
 
         it "displays the new page with an error message" do
           post scheme_locations_path(another_scheme)
-          expect(response).to have_http_status(:not_found)
+          expect(response).to be_unauthorized
         end
       end
     end
@@ -109,23 +108,23 @@ RSpec.describe LocationsController, type: :request do
     end
 
     context "when signed in as a data provider user" do
-      let(:user) { FactoryBot.create(:user) }
+      let(:user) { create(:user) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
 
       before do
         sign_in user
         get "/schemes/#{scheme.id}/locations"
       end
 
-      it "returns 401 unauthorized" do
-        request
-        expect(response).to have_http_status(:unauthorized)
+      it "returns 200" do
+        expect(response).to be_successful
       end
     end
 
     context "when signed in as a data coordinator user" do
-      let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:locations) { FactoryBot.create_list(:location, 3, scheme:, startdate: Time.zone.local(2022, 4, 1)) }
+      let(:user) { create(:user, :data_coordinator) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let!(:locations) { create_list(:location, 3, scheme:, startdate: Time.zone.local(2022, 4, 1)) }
 
       before do
         sign_in user
@@ -133,15 +132,15 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when coordinator attempts to see scheme belonging to a different organisation" do
-        let!(:another_scheme) { FactoryBot.create(:scheme) }
+        let(:another_scheme) { create(:scheme) }
 
         before do
-          FactoryBot.create(:location, scheme:, startdate: Time.zone.local(2022, 4, 1))
+          create(:location, scheme:, startdate: Time.zone.local(2022, 4, 1))
         end
 
-        it "returns 404 not found" do
+        it "returns 401" do
           get "/schemes/#{another_scheme.id}/locations"
-          expect(response).to have_http_status(:not_found)
+          expect(response).to be_unauthorized
         end
       end
 
@@ -177,7 +176,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when paginating over 20 results" do
-        let!(:locations) { FactoryBot.create_list(:location, 25, scheme:) }
+        let!(:locations) { create_list(:location, 25, scheme:) }
 
         context "when on the first page" do
           before do
@@ -275,9 +274,9 @@ RSpec.describe LocationsController, type: :request do
     end
 
     context "when signed in as a support user" do
-      let(:user) { FactoryBot.create(:user, :support) }
-      let!(:scheme) { FactoryBot.create(:scheme) }
-      let!(:locations) { FactoryBot.create_list(:location, 3, scheme:, startdate: Time.zone.local(2022, 4, 1)) }
+      let(:user) { create(:user, :support) }
+      let(:scheme) { create(:scheme) }
+      let!(:locations) { create_list(:location, 3, scheme:, startdate: Time.zone.local(2022, 4, 1)) }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -318,7 +317,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when paginating over 20 results" do
-        let!(:locations) { FactoryBot.create_list(:location, 25, scheme:) }
+        let!(:locations) { create_list(:location, 25, scheme:) }
 
         context "when on the first page" do
           before do
@@ -401,23 +400,24 @@ RSpec.describe LocationsController, type: :request do
     end
 
     context "when signed in as a data provider" do
-      let(:user) { FactoryBot.create(:user) }
+      let(:user) { create(:user) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let(:location) { create(:location, scheme:) }
 
       before do
         sign_in user
-        get "/schemes/1/locations/1/postcode"
+        get "/schemes/#{scheme.id}/locations/#{location.id}/postcode"
       end
 
-      it "returns 401 unauthorized" do
-        request
-        expect(response).to have_http_status(:unauthorized)
+      it "returns 401" do
+        expect(response).to be_unauthorized
       end
     end
 
     context "when signed in as a data coordinator" do
-      let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:location) { FactoryBot.create(:location, scheme:) }
+      let(:user) { create(:user, :data_coordinator) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let(:location) { create(:location, scheme:) }
 
       before do
         sign_in user
@@ -464,20 +464,20 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when trying to edit postcode of location that belongs to another organisation" do
-        let(:another_scheme)  { FactoryBot.create(:scheme) }
-        let(:another_location)  { FactoryBot.create(:location, scheme: another_scheme) }
+        let(:another_scheme) { create(:scheme) }
+        let(:another_location) { create(:location, scheme: another_scheme) }
 
         it "displays the new page with an error message" do
           get "/schemes/#{another_scheme.id}/locations/#{another_location.id}/postcode"
-          expect(response).to have_http_status(:not_found)
+          expect(response).to be_unauthorized
         end
       end
     end
 
     context "when signed in as a support user" do
-      let(:user) { FactoryBot.create(:user, :support) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:location) { FactoryBot.create(:location, scheme:) }
+      let(:user) { create(:user, :support) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let(:location) { create(:location, scheme:) }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -543,23 +543,24 @@ RSpec.describe LocationsController, type: :request do
     end
 
     context "when signed in as a data provider" do
-      let(:user) { FactoryBot.create(:user) }
+      let(:user) { create(:user) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let(:location) { create(:location, scheme:) }
 
       before do
         sign_in user
-        get "/schemes/1/locations/1/local-authority"
+        get "/schemes/#{scheme.id}/locations/#{location.id}/local-authority"
       end
 
-      it "returns 401 unauthorized" do
-        request
-        expect(response).to have_http_status(:unauthorized)
+      it "returns 401" do
+        expect(response).to be_unauthorized
       end
     end
 
     context "when signed in as a data coordinator" do
-      let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:location) { FactoryBot.create(:location, scheme:) }
+      let(:user) { create(:user, :data_coordinator) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let(:location) { create(:location, scheme:) }
 
       before do
         sign_in user
@@ -590,20 +591,20 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when trying to edit local authority of location that belongs to another organisation" do
-        let(:another_scheme)  { FactoryBot.create(:scheme) }
-        let(:another_location)  { FactoryBot.create(:location, scheme: another_scheme) }
+        let(:another_scheme) { create(:scheme) }
+        let(:another_location) { create(:location, scheme: another_scheme) }
 
         it "displays the new page with an error message" do
           get "/schemes/#{another_scheme.id}/locations/#{another_location.id}/local-authority"
-          expect(response).to have_http_status(:not_found)
+          expect(response).to be_unauthorized
         end
       end
     end
 
     context "when signed in as a support user" do
-      let(:user) { FactoryBot.create(:user, :support) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:location) { FactoryBot.create(:location, scheme:) }
+      let(:user) { create(:user, :support) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let(:location) { create(:location, scheme:) }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -653,23 +654,24 @@ RSpec.describe LocationsController, type: :request do
     end
 
     context "when signed in as a data provider" do
-      let(:user) { FactoryBot.create(:user) }
+      let(:user) { create(:user) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let(:location) { create(:location, scheme:) }
 
       before do
         sign_in user
-        get "/schemes/1/locations/1/name"
+        get "/schemes/#{scheme.id}/locations/#{location.id}/name"
       end
 
-      it "returns 401 unauthorized" do
-        request
-        expect(response).to have_http_status(:unauthorized)
+      it "returns 401" do
+        expect(response).to be_unauthorized
       end
     end
 
     context "when signed in as a data coordinator" do
-      let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:location) { FactoryBot.create(:location, scheme:) }
+      let(:user) { create(:user, :data_coordinator) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let(:location) { create(:location, scheme:) }
 
       before do
         sign_in user
@@ -699,20 +701,20 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when trying to edit name of location that belongs to another organisation" do
-        let(:another_scheme)  { FactoryBot.create(:scheme) }
-        let(:another_location)  { FactoryBot.create(:location, scheme: another_scheme) }
+        let(:another_scheme) { create(:scheme) }
+        let(:another_location) { create(:location, scheme: another_scheme) }
 
         it "displays the new page with an error message" do
           get "/schemes/#{another_scheme.id}/locations/#{another_location.id}/name"
-          expect(response).to have_http_status(:not_found)
+          expect(response).to be_unauthorized
         end
       end
     end
 
     context "when signed in as a support user" do
-      let(:user) { FactoryBot.create(:user, :support) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:location) { FactoryBot.create(:location, scheme:) }
+      let(:user) { create(:user, :support) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let(:location) { create(:location, scheme:) }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -761,23 +763,24 @@ RSpec.describe LocationsController, type: :request do
     end
 
     context "when signed in as a data provider" do
-      let(:user) { FactoryBot.create(:user) }
+      let(:user) { create(:user) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let(:location) { create(:location, scheme:) }
 
       before do
         sign_in user
-        get "/schemes/1/locations/1/units"
+        get "/schemes/#{scheme.id}/locations/#{location.id}/units"
       end
 
-      it "returns 401 unauthorized" do
-        request
-        expect(response).to have_http_status(:unauthorized)
+      it "returns 401" do
+        expect(response).to be_unauthorized
       end
     end
 
     context "when signed in as a data coordinator" do
-      let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:location) { FactoryBot.create(:location, scheme:) }
+      let(:user) { create(:user, :data_coordinator) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let(:location) { create(:location, scheme:) }
 
       before do
         sign_in user
@@ -807,20 +810,20 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when trying to edit units of location that belongs to another organisation" do
-        let(:another_scheme)  { FactoryBot.create(:scheme) }
-        let(:another_location)  { FactoryBot.create(:location, scheme: another_scheme) }
+        let(:another_scheme) { create(:scheme) }
+        let(:another_location) { create(:location, scheme: another_scheme) }
 
         it "displays the new page with an error message" do
           get "/schemes/#{another_scheme.id}/locations/#{another_location.id}/units"
-          expect(response).to have_http_status(:not_found)
+          expect(response).to be_unauthorized
         end
       end
     end
 
     context "when signed in as a support user" do
-      let(:user) { FactoryBot.create(:user, :support) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:location) { FactoryBot.create(:location, scheme:) }
+      let(:user) { create(:user, :support) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let(:location) { create(:location, scheme:) }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -869,23 +872,24 @@ RSpec.describe LocationsController, type: :request do
     end
 
     context "when signed in as a data provider" do
-      let(:user) { FactoryBot.create(:user) }
+      let(:user) { create(:user) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let(:location) { create(:location, scheme:) }
 
       before do
         sign_in user
-        get "/schemes/1/locations/1/type-of-unit"
+        get "/schemes/#{scheme.id}/locations/#{location.id}/type-of-unit"
       end
 
-      it "returns 401 unauthorized" do
-        request
-        expect(response).to have_http_status(:unauthorized)
+      it "returns 401" do
+        expect(response).to be_unauthorized
       end
     end
 
     context "when signed in as a data coordinator" do
-      let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:location) { FactoryBot.create(:location, scheme:) }
+      let(:user) { create(:user, :data_coordinator) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let(:location) { create(:location, scheme:) }
 
       before do
         sign_in user
@@ -915,20 +919,20 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when trying to edit type_of_unit of location that belongs to another organisation" do
-        let(:another_scheme)  { FactoryBot.create(:scheme) }
-        let(:another_location)  { FactoryBot.create(:location, scheme: another_scheme) }
+        let(:another_scheme) { create(:scheme) }
+        let(:another_location) { create(:location, scheme: another_scheme) }
 
         it "displays the new page with an error message" do
           get "/schemes/#{another_scheme.id}/locations/#{another_location.id}/type-of-unit"
-          expect(response).to have_http_status(:not_found)
+          expect(response).to be_unauthorized
         end
       end
     end
 
     context "when signed in as a support user" do
-      let(:user) { FactoryBot.create(:user, :support) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:location) { FactoryBot.create(:location, scheme:) }
+      let(:user) { create(:user, :support) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let(:location) { create(:location, scheme:) }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -977,23 +981,24 @@ RSpec.describe LocationsController, type: :request do
     end
 
     context "when signed in as a data provider" do
-      let(:user) { FactoryBot.create(:user) }
+      let(:user) { create(:user) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let(:location) { create(:location, scheme:) }
 
       before do
         sign_in user
-        get "/schemes/1/locations/1/mobility-standards"
+        get "/schemes/#{scheme.id}/locations/#{location.id}/mobility-standards"
       end
 
-      it "returns 401 unauthorized" do
-        request
-        expect(response).to have_http_status(:unauthorized)
+      it "returns 401" do
+        expect(response).to be_unauthorized
       end
     end
 
     context "when signed in as a data coordinator" do
-      let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:location) { FactoryBot.create(:location, scheme:) }
+      let(:user) { create(:user, :data_coordinator) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let(:location) { create(:location, scheme:) }
 
       before do
         sign_in user
@@ -1023,20 +1028,20 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when trying to edit mobility_standards of location that belongs to another organisation" do
-        let(:another_scheme)  { FactoryBot.create(:scheme) }
-        let(:another_location)  { FactoryBot.create(:location, scheme: another_scheme) }
+        let(:another_scheme) { create(:scheme) }
+        let(:another_location) { create(:location, scheme: another_scheme) }
 
         it "displays the new page with an error message" do
           get "/schemes/#{another_scheme.id}/locations/#{another_location.id}/mobility-standards"
-          expect(response).to have_http_status(:not_found)
+          expect(response).to be_unauthorized
         end
       end
     end
 
     context "when signed in as a support user" do
-      let(:user) { FactoryBot.create(:user, :support) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:location) { FactoryBot.create(:location, scheme:) }
+      let(:user) { create(:user, :support) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let(:location) { create(:location, scheme:) }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -1085,23 +1090,24 @@ RSpec.describe LocationsController, type: :request do
     end
 
     context "when signed in as a data provider" do
-      let(:user) { FactoryBot.create(:user) }
+      let(:user) { create(:user) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let(:location) { create(:location, scheme:) }
 
       before do
         sign_in user
-        get "/schemes/1/locations/1/availability"
+        get "/schemes/#{scheme.id}/locations/#{location.id}/availability"
       end
 
-      it "returns 401 unauthorized" do
-        request
-        expect(response).to have_http_status(:unauthorized)
+      it "returns 401" do
+        expect(response).to be_unauthorized
       end
     end
 
     context "when signed in as a data coordinator" do
-      let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:location) { FactoryBot.create(:location, scheme:) }
+      let(:user) { create(:user, :data_coordinator) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let(:location) { create(:location, scheme:) }
 
       before do
         sign_in user
@@ -1161,20 +1167,20 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when trying to edit startdate of location that belongs to another organisation" do
-        let(:another_scheme)  { FactoryBot.create(:scheme) }
-        let(:another_location)  { FactoryBot.create(:location, scheme: another_scheme) }
+        let(:another_scheme) { create(:scheme) }
+        let(:another_location) { create(:location, scheme: another_scheme) }
 
         it "displays the new page with an error message" do
           get "/schemes/#{another_scheme.id}/locations/#{another_location.id}/availability"
-          expect(response).to have_http_status(:not_found)
+          expect(response).to be_unauthorized
         end
       end
     end
 
     context "when signed in as a support user" do
-      let(:user) { FactoryBot.create(:user, :support) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:location) { FactoryBot.create(:location, scheme:) }
+      let(:user) { create(:user, :support) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let(:location) { create(:location, scheme:) }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -1253,23 +1259,24 @@ RSpec.describe LocationsController, type: :request do
     end
 
     context "when signed in as a data provider" do
-      let(:user) { FactoryBot.create(:user) }
+      let(:user) { create(:user) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let(:location) { create(:location, scheme:, startdate: Time.zone.local(2000, 1, 1)) }
 
       before do
         sign_in user
-        get "/schemes/1/locations/1/check-answers"
+        get "/schemes/#{scheme.id}/locations/#{location.id}/check-answers"
       end
 
-      it "returns 401 unauthorized" do
-        request
-        expect(response).to have_http_status(:unauthorized)
+      it "returns 200" do
+        expect(response).to be_successful
       end
     end
 
     context "when signed in as a data coordinator" do
-      let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:location) { FactoryBot.create(:location, scheme:, startdate: Time.zone.local(2000, 1, 1)) }
+      let(:user) { create(:user, :data_coordinator) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let(:location) { create(:location, scheme:, startdate: Time.zone.local(2000, 1, 1)) }
 
       before do
         sign_in user
@@ -1301,7 +1308,7 @@ RSpec.describe LocationsController, type: :request do
         end
 
         context "when location is not complete" do
-          let(:location) { FactoryBot.create(:location, scheme:, startdate: Time.zone.local(2000, 1, 1), postcode: nil) }
+          let(:location) { create(:location, scheme:, startdate: Time.zone.local(2000, 1, 1), postcode: nil) }
 
           it "does not confirm location" do
             expect(Location.last.confirmed).to eq(false)
@@ -1316,20 +1323,20 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when trying to edit check_answers of location that belongs to another organisation" do
-        let(:another_scheme)  { FactoryBot.create(:scheme) }
-        let(:another_location)  { FactoryBot.create(:location, scheme: another_scheme) }
+        let(:another_scheme) { create(:scheme) }
+        let(:another_location) { create(:location, scheme: another_scheme) }
 
         it "displays the new page with an error message" do
           get "/schemes/#{another_scheme.id}/locations/#{another_location.id}/check-answers"
-          expect(response).to have_http_status(:not_found)
+          expect(response).to be_unauthorized
         end
       end
     end
 
     context "when signed in as a support user" do
-      let(:user) { FactoryBot.create(:user, :support) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:location) { FactoryBot.create(:location, scheme:, startdate: Time.zone.local(2000, 1, 1)) }
+      let(:user) { create(:user, :support) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let(:location) { create(:location, scheme:, startdate: Time.zone.local(2000, 1, 1)) }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -1362,7 +1369,7 @@ RSpec.describe LocationsController, type: :request do
         end
 
         context "when location is not complete" do
-          let(:location) { FactoryBot.create(:location, scheme:, startdate: Time.zone.local(2000, 1, 1), postcode: nil) }
+          let(:location) { create(:location, scheme:, startdate: Time.zone.local(2000, 1, 1), postcode: nil) }
 
           it "does not confirm location" do
             expect(Location.last.confirmed).to eq(false)
@@ -1395,25 +1402,26 @@ RSpec.describe LocationsController, type: :request do
     end
 
     context "when signed in as a data provider" do
-      let(:user) { FactoryBot.create(:user) }
+      let(:user) { create(:user) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let(:location) { create(:location, scheme:, created_at: Time.zone.local(2022, 4, 1)) }
 
       before do
         sign_in user
-        patch "/schemes/1/locations/1/deactivate"
+        patch "/schemes/#{scheme.id}/locations/#{location.id}/deactivate"
       end
 
       it "returns 401 unauthorized" do
-        request
         expect(response).to have_http_status(:unauthorized)
       end
     end
 
     context "when signed in as a data coordinator" do
-      let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:location) { FactoryBot.create(:location, scheme:, created_at: Time.zone.local(2022, 4, 1)) }
+      let(:user) { create(:user, :data_coordinator) }
+      let!(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let!(:location) { create(:location, scheme:, created_at: Time.zone.local(2022, 4, 1)) }
       let(:deactivation_date) { Time.utc(2022, 10, 10) }
-      let!(:lettings_log) { FactoryBot.create(:lettings_log, :sh, location:, scheme:, startdate:, owning_organisation: user.organisation) }
+      let!(:lettings_log) { create(:lettings_log, :sh, location:, scheme:, startdate:, owning_organisation: user.organisation) }
       let(:startdate) { Time.utc(2022, 10, 11) }
       let(:add_deactivations) { nil }
       let(:setup_locations) { nil }
@@ -1487,12 +1495,12 @@ RSpec.describe LocationsController, type: :request do
         let(:params) { { deactivation_date:, confirm: true, deactivation_date_type: "other" } }
         let(:mailer) { instance_double(LocationOrSchemeDeactivationMailer) }
 
-        let(:user_a) { FactoryBot.create(:user, email: "user_a@example.com") }
-        let(:user_b) { FactoryBot.create(:user, email: "user_b@example.com") }
+        let(:user_a) { create(:user, email: "user_a@example.com") }
+        let(:user_b) { create(:user, email: "user_b@example.com") }
 
         before do
-          FactoryBot.create_list(:lettings_log, 1, :sh, location:, scheme:, startdate:, created_by: user_a)
-          FactoryBot.create_list(:lettings_log, 3, :sh, location:, scheme:, startdate:, created_by: user_b)
+          create_list(:lettings_log, 1, :sh, location:, scheme:, startdate:, created_by: user_a)
+          create_list(:lettings_log, 3, :sh, location:, scheme:, startdate:, created_by: user_b)
 
           Timecop.freeze(Time.utc(2022, 10, 10))
           sign_in user
@@ -1615,7 +1623,7 @@ RSpec.describe LocationsController, type: :request do
       context "when deactivation date is during a deactivated period" do
         let(:deactivation_date) { Time.zone.local(2022, 10, 10) }
         let(:params) { { location_deactivation_period: { deactivation_date_type: "other", "deactivation_date(3i)": "8", "deactivation_date(2i)": "9", "deactivation_date(1i)": "2022" } } }
-        let(:add_deactivations) { FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 5, 5), reactivation_date: Time.zone.local(2022, 10, 12), location:) }
+        let(:add_deactivations) { create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 5, 5), reactivation_date: Time.zone.local(2022, 10, 12), location:) }
 
         it "displays page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
@@ -1634,23 +1642,24 @@ RSpec.describe LocationsController, type: :request do
     end
 
     context "when signed in as a data provider" do
-      let(:user) { FactoryBot.create(:user) }
+      let(:user) { create(:user) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let(:location) { create(:location, scheme:) }
 
       before do
         sign_in user
-        get "/schemes/1/locations/1"
+        get "/schemes/#{scheme.id}/locations/#{location.id}"
       end
 
-      it "returns 401 unauthorized" do
-        request
-        expect(response).to have_http_status(:unauthorized)
+      it "returns 200" do
+        expect(response).to be_successful
       end
     end
 
     context "when signed in as a data coordinator" do
-      let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:location) { FactoryBot.create(:location, scheme:) }
+      let(:user) { create(:user, :data_coordinator) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let(:location) { create(:location, scheme:) }
       let(:add_deactivations) { location.location_deactivation_periods << location_deactivation_period }
 
       before do
@@ -1675,7 +1684,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "with deactivated location" do
-        let(:location_deactivation_period) { FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 9), location:) }
+        let(:location_deactivation_period) { create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 9), location:) }
 
         it "renders reactivate this location" do
           expect(response).to have_http_status(:ok)
@@ -1684,7 +1693,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "with location that's deactivating soon" do
-        let(:location_deactivation_period) { FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 12), location:) }
+        let(:location_deactivation_period) { create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 12), location:) }
 
         it "does not render toggle location link" do
           expect(response).to have_http_status(:ok)
@@ -1694,7 +1703,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "with location that's reactivating soon" do
-        let(:location_deactivation_period) { FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 4, 12), reactivation_date: Time.zone.local(2022, 10, 12), location:) }
+        let(:location_deactivation_period) { create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 4, 12), reactivation_date: Time.zone.local(2022, 10, 12), location:) }
 
         it "does not render toggle location link" do
           expect(response).to have_http_status(:ok)
@@ -1714,6 +1723,8 @@ RSpec.describe LocationsController, type: :request do
         end
 
         it "shows the location" do
+          get "/schemes/#{scheme.id}/locations/#{location.id}"
+
           expect(page).to have_content("Location name")
           expect(page).to have_content(location.name)
         end
@@ -1735,30 +1746,31 @@ RSpec.describe LocationsController, type: :request do
     end
 
     context "when signed in as a data provider" do
-      let(:user) { FactoryBot.create(:user) }
+      let(:user) { create(:user) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let(:location) { create(:location, scheme:) }
 
       before do
         sign_in user
-        patch "/schemes/1/locations/1/reactivate"
+        patch "/schemes/#{scheme.id}/locations/#{location.id}/reactivate"
       end
 
       it "returns 401 unauthorized" do
-        request
-        expect(response).to have_http_status(:unauthorized)
+        expect(response).to be_unauthorized
       end
     end
 
     context "when signed in as a data coordinator" do
-      let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:location) { FactoryBot.create(:location, scheme:) }
+      let(:user) { create(:user, :data_coordinator) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+      let(:location) { create(:location, scheme:) }
       let(:deactivation_date) { Time.zone.local(2022, 4, 1) }
       let(:startdate) { Time.utc(2022, 10, 11) }
 
       before do
         Timecop.freeze(Time.utc(2022, 10, 10))
         sign_in user
-        FactoryBot.create(:location_deactivation_period, deactivation_date:, location:)
+        create(:location_deactivation_period, deactivation_date:, location:)
         location.save!
         patch "/schemes/#{scheme.id}/locations/#{location.id}/reactivate", params:
       end

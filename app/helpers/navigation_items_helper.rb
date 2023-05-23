@@ -10,20 +10,11 @@ module NavigationItemsHelper
         NavigationItem.new("Sales logs", sales_logs_path, sales_logs_current?(path)),
         NavigationItem.new("Schemes", "/schemes", supported_housing_schemes_current?(path)),
       ].compact
-    elsif current_user.data_coordinator? && current_user.organisation.holds_own_stock?
-      [
-        NavigationItem.new("Lettings logs", lettings_logs_path, lettings_logs_current?(path)),
-        NavigationItem.new("Sales logs", sales_logs_path, sales_logs_current?(path)),
-        NavigationItem.new("Schemes", "/schemes", subnav_supported_housing_schemes_path?(path)),
-        NavigationItem.new("Users", users_organisation_path(current_user.organisation), subnav_users_path?(path)),
-        NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}", subnav_details_path?(path)),
-        NavigationItem.new("Stock owners", stock_owners_organisation_path(current_user.organisation), stock_owners_path?(path)),
-        NavigationItem.new("Managing agents", managing_agents_organisation_path(current_user.organisation), managing_agents_path?(path)),
-      ].compact
     else
       [
         NavigationItem.new("Lettings logs", lettings_logs_path, lettings_logs_current?(path)),
         NavigationItem.new("Sales logs", sales_logs_path, sales_logs_current?(path)),
+        (NavigationItem.new("Schemes", "/schemes", subnav_supported_housing_schemes_path?(path)) if current_user.organisation.holds_own_stock?),
         NavigationItem.new("Users", users_organisation_path(current_user.organisation), subnav_users_path?(path)),
         NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}", subnav_details_path?(path)),
         NavigationItem.new("Stock owners", stock_owners_organisation_path(current_user.organisation), stock_owners_path?(path)),

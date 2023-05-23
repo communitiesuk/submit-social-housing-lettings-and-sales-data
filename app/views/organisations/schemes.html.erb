@@ -12,7 +12,9 @@
   <h2 class="govuk-visually-hidden">Supported housing schemes</h2>
 <% end %>
 
-<%= govuk_button_link_to "Create a new supported housing scheme", new_scheme_path, html: { method: :post } %>
+<% if SchemePolicy.new(current_user, nil).create? %>
+  <%= govuk_button_link_to "Create a new supported housing scheme", new_scheme_path, html: { method: :post } %>
+<% end %>
 
 <%= govuk_details(
   classes: "govuk-!-width-two-thirds",
