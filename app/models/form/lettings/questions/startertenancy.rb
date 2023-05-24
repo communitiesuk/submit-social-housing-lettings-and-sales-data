@@ -6,7 +6,7 @@ class Form::Lettings::Questions::Startertenancy < ::Form::Question
     @header = "Is this a starter tenancy?"
     @type = "radio"
     @check_answers_card_number = 0
-    @hint_text = ""
+    @hint_text = "This is also known as an ‘introductory period’."
     @answer_options = ANSWER_OPTIONS
     @question_number = 26
   end

@@ -984,7 +984,7 @@
                 "startertenancy": {
                   "check_answer_label": "Is this a starter or introductory tenancy?",
                   "header": "Is this a starter tenancy?",
-                  "hint_text": "",
+                  "hint_text": "This is also known as an ‘introductory period’.",
                   "type": "radio",
                   "answer_options": {
                     "1": {
