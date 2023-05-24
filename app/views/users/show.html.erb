@@ -5,17 +5,6 @@
     <h1 class="govuk-heading-l">
       <%= content_for(:title) %>
     </h1>
-    <p>
-      <% if current_user.can_toggle_active?(@user) %>
-        <% if @user.active? %>
-          <%= govuk_link_to "Deactivate user", "/users/#{@user.id}/deactivate" %>
-        <% else %>
-          <span class="app-!-colour-muted govuk-!-margin-right-2">
-            This user has been deactivated. <%= govuk_link_to "Reactivate user", "/users/#{@user.id}/reactivate" %>
-          </span>
-        <% end %>
-      <% end %>
-    </p>
 
     <h2 class="govuk-heading-m">
       Personal details
@@ -103,5 +92,30 @@
             end
           end %>
     <% end %>
+
+    <div class="govuk-button-group">
+      <p>
+        <% if current_user.can_toggle_active?(@user) %>
+          <% if @user.active? %>
+            <%= govuk_button_link_to "Deactivate user", deactivate_user_path(@user), warning: true %>
+          <% else %>
+            <span class="app-!-colour-muted govuk-!-margin-right-2">
+              This user has been deactivated. <%= govuk_button_link_to "Reactivate user", reactivate_user_path(@user) %>
+            </span>
+          <% end %>
+        <% end %>
+
+        <% if current_user.can_toggle_active?(@user) %>
+          <% if @user.active? %>
+            <%= govuk_button_link_to "Resend invite link", resend_invite_user_path(@user) %>
+          <% else %>
+            <span class="app-!-colour-muted govuk-!-margin-right-2">
+              This user has been deactivated. <%= govuk_link_to "Reactivate user", "/users/#{@user.id}/reactivate" %>
+            </span>
+          <% end %>
+        <% end %>
+      </p>
+    </div>
+
   </div>
 </div>

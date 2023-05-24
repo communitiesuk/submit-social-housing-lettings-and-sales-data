@@ -103,6 +103,7 @@ Rails.application.routes.draw do
     member do
       get "deactivate", to: "users#deactivate"
       get "reactivate", to: "users#reactivate"
+      get "resend-invite", to: "users#resend_invite"
     end
   end
 
