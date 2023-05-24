@@ -44,16 +44,8 @@ RSpec.describe LettingsLogPolicy do
       end
 
       context "when not started" do
-        before do
-          allow(log).to receive(:in_progress?).and_return(false)
-          allow(log).to receive(:completed?).and_return(false)
-        end
-
-        it "does not allow deletion of log" do
-          expect(log).to receive(:in_progress?)
-          expect(log).to receive(:collection_period_open?)
-
-          expect(policy).not_to permit(build(:user, :support), log)
+        it "allows deletion of log" do
+          expect(policy).to permit(build(:user, :support), create(:lettings_log))
         end
       end
 
@@ -83,9 +75,7 @@ RSpec.describe LettingsLogPolicy do
           context "when user is support" do
             let(:user) { create(:user, :support) }
 
-            it "does allow deletion of log" do
-              expect(log).to receive(:collection_period_open?)
-
+            it "allows deletion of log" do
               expect(policy).to permit(user, log)
             end
           end
