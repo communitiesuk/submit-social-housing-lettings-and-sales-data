@@ -7,7 +7,7 @@
       <h1 class="govuk-heading-l">How would you like to fix <%= pluralize(@bulk_upload.bulk_upload_errors.count, "error") %>?</h1>
 
       <div class="govuk-body-l">
-        <%= @bulk_upload.filename %>
+        File: <%= @bulk_upload.filename %>
       </div>
 
       <div class="govuk-body">
