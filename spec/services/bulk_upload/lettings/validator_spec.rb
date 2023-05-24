@@ -257,6 +257,23 @@ RSpec.describe BulkUpload::Lettings::Validator do
       end
     end
 
+    context "when duplicate rows present" do
+      let(:file) { Tempfile.new }
+      let(:path) { file.path }
+      let(:log) { build(:lettings_log, :completed) }
+
+      before do
+        file.write(BulkUpload::LettingsLogToCsv.new(log:, line_ending: "\r\n").default_2023_field_numbers_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log:, line_ending: "\r\n").to_2023_csv_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log:, line_ending: "\r\n").to_2023_csv_row)
+        file.close
+      end
+
+      it "creates errors" do
+        expect { validator.call }.to change(BulkUploadError.where(category: :setup, error: "Duplicate row found in spreadsheet"), :count).by(24)
+      end
+    end
+
     context "with unix line endings" do
       let(:fixture_path) { file_fixture("2022_23_lettings_bulk_upload.csv") }
       let(:file) { Tempfile.new }

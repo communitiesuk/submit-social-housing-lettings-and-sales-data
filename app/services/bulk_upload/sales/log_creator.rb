@@ -16,7 +16,6 @@ class BulkUpload::Sales::LogCreator
       row_parser.log.bulk_upload = bulk_upload
       row_parser.log.skip_update_status = true
       row_parser.log.status = "pending"
-
       row_parser.log.status_cache = row_parser.log.calculate_status
 
       begin
