@@ -804,4 +804,16 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
       end
     end
   end
+
+  describe "#spreadsheet_duplicate_hash" do
+    it "returns a hash" do
+      expect(parser.spreadsheet_duplicate_hash).to be_a(Hash)
+    end
+  end
+
+  describe "#add_duplicate_found_in_spreadsheet_errors" do
+    it "adds errors" do
+      expect { parser.add_duplicate_found_in_spreadsheet_errors }.to change(parser.errors, :size)
+    end
+  end
 end
