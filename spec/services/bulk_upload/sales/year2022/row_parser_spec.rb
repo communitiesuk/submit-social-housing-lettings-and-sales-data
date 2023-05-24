@@ -144,6 +144,34 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
     end
   end
 
+  describe "previous postcode known" do
+    context "when field_43 is 1" do
+      let(:attributes) do
+        {
+          bulk_upload:,
+          field_43: 1,
+        }
+      end
+
+      it "sets previous postcode known to yes" do
+        expect(parser.log.ppcodenk).to eq(0)
+      end
+    end
+
+    context "when field_43 is nil" do
+      let(:attributes) do
+        {
+          bulk_upload:,
+          field_43: nil,
+        }
+      end
+
+      it "sets previous postcode known to no" do
+        expect(parser.log.ppcodenk).to eq(1)
+      end
+    end
+  end
+
   describe "validations" do
     before do
       stub_request(:get, /api.postcodes.io/)
