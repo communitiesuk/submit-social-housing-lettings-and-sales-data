@@ -11,8 +11,6 @@ RSpec.describe CheckAnswersHelper do
       Singleton.__init__(FormHandler)
       example.run
     end
-    Timecop.return
-    Singleton.__init__(FormHandler)
   end
 
   describe "display_answered_questions_summary" do
@@ -34,6 +32,18 @@ RSpec.describe CheckAnswersHelper do
           .to match(/You answered all the questions./)
         expect(display_answered_questions_summary(subsection, lettings_log, current_user))
           .not_to match(/href/)
+      end
+    end
+  end
+
+  describe "#get_answer_label" do
+    context "when unanswered and bulk upload" do
+      let(:question) { log.form.questions.sample }
+      let(:bulk_upload) { build(:bulk_upload, :sales) }
+      let(:log) { build(:sales_log, bulk_upload:) }
+
+      it "is red" do
+        expect(get_answer_label(question, log)).to include("red")
       end
     end
   end
