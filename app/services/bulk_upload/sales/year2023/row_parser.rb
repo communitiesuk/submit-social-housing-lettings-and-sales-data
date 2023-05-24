@@ -702,7 +702,7 @@ private
       owning_organisation_id: %i[field_1],
       created_by: %i[field_2],
       hhregres: %i[field_73],
-      hhregresstill: %i[field_73],
+      hhregresstill: %i[field_74],
       armedforcesspouse: %i[field_75],
 
       mortgagelender: %i[field_107 field_121 field_130],
@@ -868,8 +868,8 @@ private
 
     attributes["owning_organisation"] = owning_organisation
     attributes["created_by"] = created_by || bulk_upload.user
-    attributes["hhregres"] = hhregres
-    attributes["hhregresstill"] = hhregresstill
+    attributes["hhregres"] = field_73
+    attributes["hhregresstill"] = field_74
     attributes["armedforcesspouse"] = field_75
 
     attributes["mortgagelender"] = mortgagelender
@@ -911,8 +911,6 @@ private
 
     attributes["buy2living"] = field_71
     attributes["prevtenbuy2"] = prevtenbuy2
-
-    attributes["hhregresstill"] = field_74
 
     attributes["prevshared"] = field_85
 
@@ -1086,21 +1084,6 @@ private
 
   def created_by
     @created_by ||= User.find_by(email: field_2)
-  end
-
-  def hhregres
-    case field_73
-    when 3 then 3
-    when 4, 5, 6 then 1
-    when 7 then 7
-    when 8 then 8
-    end
-  end
-
-  def hhregresstill
-    return unless hhregres == 1
-
-    field_73
   end
 
   def previous_la_known
