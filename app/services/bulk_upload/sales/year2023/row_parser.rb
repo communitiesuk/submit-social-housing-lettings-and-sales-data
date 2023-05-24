@@ -550,7 +550,7 @@ class BulkUpload::Sales::Year2023::RowParser
 
   def add_duplicate_found_in_spreadsheet_errors
     spreadsheet_duplicate_hash.each_key do |field|
-      errors.add(field, "Duplicate row found in spreadsheet", category: :setup)
+      errors.add(field, :spreadsheet_dupe, category: :setup)
     end
   end
 

@@ -41,10 +41,17 @@ en:
   activemodel:
     errors:
       models:
+        bulk_upload/row_parser: &bulk_upload__row_parser__base
+          inclusion: Enter a valid value for %{question}
+          spreadsheet_dupe: This is a duplicate of a log in your file
+        bulk_upload/lettings/year2022/row_parser:
+          <<: *bulk_upload__row_parser__base
+        bulk_upload/lettings/year2023/row_parser:
+          <<: *bulk_upload__row_parser__base
         bulk_upload/sales/year2022/row_parser:
-          inclusion: Enter a valid value for %{question}
+          <<: *bulk_upload__row_parser__base
         bulk_upload/sales/year2023/row_parser:
-          inclusion: Enter a valid value for %{question}
+          <<: *bulk_upload__row_parser__base
         bulk_upload/lettings/validator:
           attributes:
             base:
