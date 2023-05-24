@@ -1,6 +1,8 @@
 require "csv"
 
 class BulkUpload::Lettings::Year2023::CsvParser
+  include CollectionTimeHelper
+
   FIELDS = 134
   MAX_COLUMNS = 142
 
@@ -61,6 +63,12 @@ class BulkUpload::Lettings::Year2023::CsvParser
     max_columns_count > MAX_COLUMNS
   end
 
+  def correct_template_for_year?
+    collection_start_year_for_date(first_record_start_date) == 2023
+  rescue Date::Error
+    true
+  end
+
 private
 
   def default_field_numbers
@@ -91,5 +99,17 @@ private
     @normalised_string.scrub!("")
 
     @normalised_string
+  end
+
+  def has_field_in_header?(field)
+    rows[rows.find_index { |row| row[0].match(/field number/i) }].any? { |cell| cell&.match?(/#{field}/i) }
+  end
+
+  def first_record_start_date
+    if with_headers?
+      Date.new(row_parsers.first.field_98.to_i + 2000, row_parsers.first.field_97.to_i, row_parsers.first.field_96.to_i)
+    else
+      Date.new(rows.first[97].to_i + 2000, rows.first[96].to_i, rows.first[95].to_i)
+    end
   end
 end
