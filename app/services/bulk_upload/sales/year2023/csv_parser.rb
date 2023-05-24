@@ -49,15 +49,9 @@ class BulkUpload::Sales::Year2023::CsvParser
   end
 
   def correct_template_for_year?
-    if with_headers?
-      has_field_in_header?(135)
-    else
-      begin
-        collection_start_year_for_date(first_record_start_date) == 2023
-      rescue Date::Error
-        true
-      end
-    end
+    collection_start_year_for_date(first_record_start_date) == 2023
+  rescue Date::Error
+    true
   end
 
 private
@@ -107,6 +101,10 @@ private
   end
 
   def first_record_start_date
-    Date.new(rows.first[3].to_i + 2000, rows.first[2].to_i, rows.first[1].to_i)
+    if with_headers?
+      Date.new(row_parsers.first.field_4.to_i + 2000, row_parsers.first.field_3.to_i, row_parsers.first.field_2.to_i)
+    else
+      Date.new(rows.first[3].to_i + 2000, rows.first[2].to_i, rows.first[1].to_i)
+    end
   end
 end
