@@ -14,7 +14,7 @@ class BulkUpload::Sales::Validator
   def call
     row_parsers.each(&:valid?)
 
-    validate_duplicate_rows
+    validate_duplicate_rows if FeatureToggle.bulk_upload_duplicate_log_check_enabled?
 
     row_parsers.each_with_index do |row_parser, index|
       row = index + row_offset + 1
