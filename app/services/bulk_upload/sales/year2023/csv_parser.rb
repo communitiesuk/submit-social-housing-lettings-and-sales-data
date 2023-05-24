@@ -1,6 +1,8 @@
 require "csv"
 
 class BulkUpload::Sales::Year2023::CsvParser
+  include CollectionTimeHelper
+
   MAX_COLUMNS = 142
 
   attr_reader :path
@@ -47,7 +49,15 @@ class BulkUpload::Sales::Year2023::CsvParser
   end
 
   def correct_template_for_year?
-    !with_headers? || (with_headers? && has_field_in_header?(135))
+    if with_headers?
+      has_field_in_header?(135)
+    else
+      begin
+        collection_start_year_for_date(first_record_start_date) == 2023
+      rescue Date::Error
+        true
+      end
+    end
   end
 
 private
@@ -94,5 +104,9 @@ private
 
   def has_field_in_header?(field)
     rows[rows.find_index { |row| row[0].match(/field number/i) }].any? { |cell| cell&.match?(/#{field}/i) }
+  end
+
+  def first_record_start_date
+    Date.new(rows.first[3].to_i + 2000, rows.first[2].to_i, rows.first[1].to_i)
   end
 end

@@ -65,7 +65,7 @@ RSpec.describe BulkUpload::Sales::Validator do
           file.close
         end
 
-        xit "is not valid" do
+        it "is not valid" do
           expect(validator).not_to be_valid
         end
       end
