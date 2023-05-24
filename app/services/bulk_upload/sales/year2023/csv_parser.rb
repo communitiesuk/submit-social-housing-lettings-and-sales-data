@@ -46,6 +46,10 @@ class BulkUpload::Sales::Year2023::CsvParser
     cols[field_numbers.find_index(field) + col_offset]
   end
 
+  def correct_template_for_year?
+    !with_headers? || (with_headers? && has_field_in_header?(135))
+  end
+
 private
 
   def default_field_numbers
@@ -86,5 +90,9 @@ private
     @normalised_string.scrub!("")
 
     @normalised_string
+  end
+
+  def has_field_in_header?(field)
+    rows[rows.find_index { |row| row[0].match(/field number/i) }].any? { |cell| cell&.match?(/#{field}/i) }
   end
 end

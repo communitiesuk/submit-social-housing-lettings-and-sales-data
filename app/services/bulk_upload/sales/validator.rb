@@ -5,6 +5,7 @@ class BulkUpload::Sales::Validator
 
   validate :validate_file_not_empty
   validate :validate_max_columns
+  validate :validate_correct_template
 
   def initialize(bulk_upload:, path:)
     @bulk_upload = bulk_upload
@@ -131,6 +132,12 @@ private
     column_count = rows.map(&:size).max
 
     errors.add(:base, :over_max_column_count) if column_count > csv_parser.class::MAX_COLUMNS
+  end
+
+  def validate_correct_template
+    return if halt_validations?
+
+    errors.add(:base, :wrong_template) unless csv_parser.correct_template_for_year?
   end
 
   def halt_validations!
