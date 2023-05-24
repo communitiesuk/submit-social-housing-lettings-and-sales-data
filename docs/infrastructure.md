@@ -47,9 +47,23 @@ This assumes that `S3_CONFIG` or/and `REDIS_CONFIG` are available.
 
 Please check `full_import.rake` and `rack_attack.rb` for examples of how the configuration is used.
 
-## Deployment
+## Deployment (Pipeline — Recommended)
 
-This application is running on [GOV.UK PaaS](https://www.cloud.service.gov.uk/). To deploy you need to:
+The application is set up so that it can be deployed via GitHub actions. We use Git tags to mark releases. The only pre-requisite is that your GitHub account is added to our team.
+
+To deploy you need to:
+
+1. Determine [previous version](https://github.com/communitiesuk/submit-social-housing-lettings-and-sales-data/tags), such as `v0.1.1`.
+2. Create a [new release](https://github.com/communitiesuk/submit-social-housing-lettings-and-sales-data/releases/new) with subsequent version (e.g., `v0.1.2`). On this page, create a new tag with that version and generate release notes. Save as draft.
+3. Post release notes on Slack.
+4. Publish release.
+5. Monitor alerting, logging and Sentry.
+6. Post success message on Slack.
+7. Tag tickets as ‘Released’ and move tickets to done on JIRA.
+
+## Deployment (Manual)
+
+It is unlikely you will need to deploy manually as the GitHub actions method supersedes this one. This application is running on [GOV.UK PaaS](https://www.cloud.service.gov.uk/). To deploy you need to:
 
 1. Contact your organisation manager to get an account in `dluhc-core` organization and in the relevant spaces (staging/production).
 
