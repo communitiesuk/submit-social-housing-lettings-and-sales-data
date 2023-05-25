@@ -1,7 +1,10 @@
 require "csv"
 
 class BulkUpload::Sales::Year2023::CsvParser
+  include CollectionTimeHelper
+
   MAX_COLUMNS = 142
+  FORM_YEAR = 2023
 
   attr_reader :path
 
@@ -46,6 +49,12 @@ class BulkUpload::Sales::Year2023::CsvParser
     cols[field_numbers.find_index(field) + col_offset]
   end
 
+  def wrong_template_for_year?
+    collection_start_year_for_date(first_record_start_date) != FORM_YEAR
+  rescue Date::Error
+    false
+  end
+
 private
 
   def default_field_numbers
@@ -86,5 +95,13 @@ private
     @normalised_string.scrub!("")
 
     @normalised_string
+  end
+
+  def first_record_start_date
+    if with_headers?
+      Date.new(row_parsers.first.field_4.to_i + 2000, row_parsers.first.field_3.to_i, row_parsers.first.field_2.to_i)
+    else
+      Date.new(rows.first[3].to_i + 2000, rows.first[2].to_i, rows.first[1].to_i)
+    end
   end
 end

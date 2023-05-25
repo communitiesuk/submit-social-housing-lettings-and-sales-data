@@ -43,6 +43,10 @@ class BulkUpload::Sales::Year2022::CsvParser
     cols[headers.find_index(field) + col_offset]
   end
 
+  def wrong_template_for_year?
+    false
+  end
+
 private
 
   def headers

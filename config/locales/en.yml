@@ -50,11 +50,13 @@ en:
             base:
               wrong_field_numbers_count: "Incorrect number of fields, please ensure you have used the correct template"
               over_max_column_count: "Too many columns, please ensure you have used the correct template"
+              wrong_template: "Incorrect start dates, please ensure you have used the correct template"
         bulk_upload/sales/validator:
           attributes:
             base:
               wrong_field_numbers_count: "Incorrect number of fields, please ensure you have used the correct template"
               over_max_column_count: "Too many columns, please ensure you have used the correct template"
+              wrong_template: "Incorrect sale dates, please ensure you have used the correct template"
         forms/bulk_upload_lettings/year:
           attributes:
             year:

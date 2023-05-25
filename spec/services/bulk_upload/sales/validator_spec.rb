@@ -27,7 +27,49 @@ RSpec.describe BulkUpload::Sales::Validator do
       end
     end
 
-    context "when incorrect headers"
+    context "when trying to upload 2022 data for 2023 bulk upload" do
+      let(:bulk_upload) { create(:bulk_upload, user:, year: 2023) }
+
+      context "with a valid csv" do
+        let(:path) { file_fixture("2022_23_sales_bulk_upload.csv") }
+
+        it "is not valid" do
+          expect(validator).not_to be_valid
+        end
+      end
+
+      context "with unix line endings" do
+        let(:fixture_path) { file_fixture("2022_23_sales_bulk_upload.csv") }
+        let(:file) { Tempfile.new }
+        let(:path) { file.path }
+
+        before do
+          string = File.read(fixture_path)
+          string.gsub!("\r\n", "\n")
+          file.write(string)
+          file.rewind
+        end
+
+        it "is not valid" do
+          expect(validator).not_to be_valid
+        end
+      end
+
+      context "without headers" do
+        let(:log) { build(:sales_log, :completed) }
+        let(:file) { Tempfile.new }
+        let(:path) { file.path }
+
+        before do
+          file.write(BulkUpload::SalesLogToCsv.new(log:, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
+          file.close
+        end
+
+        it "is not valid" do
+          expect(validator).not_to be_valid
+        end
+      end
+    end
   end
 
   describe "#call" do
