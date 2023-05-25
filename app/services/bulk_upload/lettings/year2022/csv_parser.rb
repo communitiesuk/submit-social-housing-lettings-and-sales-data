@@ -61,8 +61,8 @@ class BulkUpload::Lettings::Year2022::CsvParser
     max_columns_count > MAX_COLUMNS
   end
 
-  def correct_template_for_year?
-    true
+  def wrong_template_for_year?
+    false
   end
 
 private

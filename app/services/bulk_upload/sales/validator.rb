@@ -137,7 +137,7 @@ private
   def validate_correct_template
     return if halt_validations?
 
-    errors.add(:base, :wrong_template) unless csv_parser.correct_template_for_year?
+    errors.add(:base, :wrong_template) if csv_parser.wrong_template_for_year?
   end
 
   def halt_validations!

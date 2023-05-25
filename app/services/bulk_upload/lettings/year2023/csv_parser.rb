@@ -64,10 +64,10 @@ class BulkUpload::Lettings::Year2023::CsvParser
     max_columns_count > MAX_COLUMNS
   end
 
-  def correct_template_for_year?
-    collection_start_year_for_date(first_record_start_date) == FORM_YEAR
+  def wrong_template_for_year?
+    collection_start_year_for_date(first_record_start_date) != FORM_YEAR
   rescue Date::Error
-    true
+    false
   end
 
 private

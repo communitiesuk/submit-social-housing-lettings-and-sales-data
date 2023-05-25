@@ -49,10 +49,10 @@ class BulkUpload::Sales::Year2023::CsvParser
     cols[field_numbers.find_index(field) + col_offset]
   end
 
-  def correct_template_for_year?
-    collection_start_year_for_date(first_record_start_date) == FORM_YEAR
+  def wrong_template_for_year?
+    collection_start_year_for_date(first_record_start_date) != FORM_YEAR
   rescue Date::Error
-    true
+    false
   end
 
 private
