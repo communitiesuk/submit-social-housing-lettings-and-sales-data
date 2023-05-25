@@ -9,6 +9,7 @@ class Form::Lettings::Questions::Earnings < ::Form::Question
     @check_answers_card_number = 0
     @min = 0
     @guidance_partial = "what_counts_as_income"
+    @guidance_position = GuidancePosition::TOP
     @hint_text = ""
     @step = 0.01
     @prefix = "£"
