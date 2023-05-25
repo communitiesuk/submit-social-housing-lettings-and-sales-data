@@ -46,7 +46,17 @@ module Forms
       end
 
       def save!
-        bulk_upload.update(choice:)
+        bulk_upload.update!(choice:) if choice == "upload-again"
+
+        true
+      end
+
+      def preflight_valid?
+        bulk_upload.choice != "create-fix-inline"
+      end
+
+      def preflight_redirect
+        page_bulk_upload_lettings_resume_path(bulk_upload, :chosen)
       end
     end
   end

@@ -20,10 +20,22 @@ module Forms
       end
 
       def save!
-        processor = BulkUpload::Processor.new(bulk_upload:)
-        processor.approve
+        ApplicationRecord.transaction do
+          processor = BulkUpload::Processor.new(bulk_upload:)
+          processor.approve
+
+          bulk_upload.update!(choice: "create-fix-inline")
+        end
 
         true
+      end
+
+      def preflight_valid?
+        bulk_upload.choice != "create-fix-inline"
+      end
+
+      def preflight_redirect
+        page_bulk_upload_lettings_resume_path(bulk_upload, :chosen)
       end
     end
   end
