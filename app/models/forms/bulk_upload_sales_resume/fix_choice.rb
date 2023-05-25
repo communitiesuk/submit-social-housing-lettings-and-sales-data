@@ -46,7 +46,7 @@ module Forms
       end
 
       def save!
-        bulk_upload.update(choice:) if choice == "upload-again"
+        bulk_upload.update!(choice:) if choice == "upload-again"
 
         true
       end
