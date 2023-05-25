@@ -964,6 +964,14 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       end
     end
 
+    describe "#hhregres" do
+      let(:attributes) { setup_section_params.merge({ field_73: "1" }) }
+
+      it "is correctly set" do
+        expect(parser.log.hhregres).to be(1)
+      end
+    end
+
     describe "#hhregresstill" do
       let(:attributes) { setup_section_params.merge({ field_74: "4" }) }
 
