@@ -58,6 +58,8 @@ RSpec.describe BulkUploadLettingsResumeController, type: :request do
         patch "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice", params: { form: { choice: "upload-again" } }
 
         expect(response).to redirect_to("/lettings-logs/bulk-upload-results/#{bulk_upload.id}")
+
+        expect(bulk_upload.reload.choice).to eql("upload-again")
       end
     end
 

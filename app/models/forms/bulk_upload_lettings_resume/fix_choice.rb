@@ -46,7 +46,7 @@ module Forms
       end
 
       def save!
-        true
+        bulk_upload.update(choice:)
       end
     end
   end
