@@ -11,6 +11,8 @@ class BulkUploadSalesResumeController < ApplicationController
     @bulk_upload = current_user.bulk_uploads.find(params[:id])
     @soft_errors_only = params[:soft_errors_only] == "true"
 
+    return redirect_to form.preflight_redirect unless form.preflight_valid?
+
     render form.view_path
   end
 
@@ -30,6 +32,8 @@ private
     @form ||= case params[:page]
               when "fix-choice"
                 Forms::BulkUploadSalesResume::FixChoice.new(form_params.merge(bulk_upload: @bulk_upload))
+              when "chosen"
+                Forms::BulkUploadSalesResume::Chosen.new(form_params.merge(bulk_upload: @bulk_upload))
               when "confirm"
                 Forms::BulkUploadSalesResume::Confirm.new(form_params.merge(bulk_upload: @bulk_upload))
               else
