@@ -1625,7 +1625,7 @@ RSpec.describe LettingsLogsController, type: :request do
     context "when user not authorised" do
       let(:user) { create(:user) }
 
-      it "returns 404" do
+      it "returns 401" do
         delete_request
         expect(response).to have_http_status(:unauthorized)
       end
@@ -1990,6 +1990,53 @@ RSpec.describe LettingsLogsController, type: :request do
         checkboxes.each do |checkbox|
           expect(checkbox).not_to be_checked
         end
+      end
+    end
+  end
+
+  describe "DELETE delete-logs" do
+    let(:page) { Capybara::Node::Simple.new(response.body) }
+    let(:urban_chronotis) { create(:user, :data_provider, name: "Urban Chronotis") }
+    let(:log_1) { create(:lettings_log, :in_progress, created_by: urban_chronotis) }
+    let(:params) { { ids: [log_1.id, log_2.id] } }
+
+    before do
+      allow(urban_chronotis).to receive(:need_two_factor_authentication?).and_return(false)
+      sign_in urban_chronotis
+    end
+
+    context "when the user is authorized to delete the logs provided" do
+      let(:log_2) { create(:lettings_log, :completed, created_by: urban_chronotis) }
+
+      it "deletes the logs provided" do
+        delete delete_logs_lettings_logs_path, params: params
+        log_1.reload
+        expect(log_1.status).to eq "deleted"
+        expect(log_1.discarded_at).not_to be nil
+        log_2.reload
+        expect(log_2.status).to eq "deleted"
+        expect(log_2.discarded_at).not_to be nil
+      end
+
+      it "redirects to the lettings log index and displays a notice that the logs have been deleted" do
+        delete delete_logs_lettings_logs_path, params: params
+        expect(response).to redirect_to lettings_logs_path
+        follow_redirect!
+        expect(page).to have_selector(".govuk-notification-banner--success")
+        expect(page).to have_selector(".govuk-notification-banner--success", text: "2 logs have been deleted")
+      end
+    end
+
+    context "when the user is not authorized to delete the logs provided" do
+      let(:log_2) { create(:lettings_log, :completed) }
+
+      it "returns unauthorised and does not delete logs" do
+        delete delete_logs_lettings_logs_path, params: params
+        expect(response).to have_http_status(:unauthorized)
+        log_1.reload
+        expect(log_1.discarded_at).to be nil
+        log_2.reload
+        expect(log_2.discarded_at).to be nil
       end
     end
   end
