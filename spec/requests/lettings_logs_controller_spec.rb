@@ -1677,7 +1677,7 @@ RSpec.describe LettingsLogsController, type: :request do
     end
   end
 
-  describe "GET #csv-download" do
+  describe "GET csv-download" do
     let(:page) { Capybara::Node::Simple.new(response.body) }
     let(:user) { FactoryBot.create(:user) }
     let(:headers) { { "Accept" => "text/html" } }
@@ -1759,7 +1759,7 @@ RSpec.describe LettingsLogsController, type: :request do
     end
   end
 
-  describe "POST #email-csv" do
+  describe "POST email-csv" do
     let(:other_organisation) { FactoryBot.create(:organisation) }
     let(:user) { FactoryBot.create(:user, :support) }
 
@@ -1839,6 +1839,49 @@ RSpec.describe LettingsLogsController, type: :request do
           expect(response).to have_http_status(:unauthorized)
         end
       end
+    end
+  end
+
+  describe "GET delete-logs" do
+    let(:page) { Capybara::Node::Simple.new(response.body) }
+    let(:user) { create(:user, name: "Richard MacDuff") }
+    let(:log_1) { create(:lettings_log, :in_progress) }
+    let(:log_2) { create(:lettings_log, :completed) }
+
+    before do
+      allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+      sign_in user
+      create(:lettings_log, :in_progress)
+    end
+
+    it "requires log_ids to be provided" do
+      expect { get delete_logs_lettings_logs_path }.to raise_error(ActionController::ParameterMissing)
+    end
+
+    it "displays the logs for the ids provided" do
+      get delete_logs_lettings_logs_path(log_ids: [log_1.id, log_2.id])
+
+      table_body_rows = page.find_all("tbody tr")
+      expect(table_body_rows.count).to be 2
+      ids_in_table = table_body_rows.map { |row| row.first("td").text }
+      expect(ids_in_table).to match_array [log_1.id.to_s, log_2.id.to_s]
+    end
+
+    it "checks all checkboxes by default" do
+      get delete_logs_lettings_logs_path(log_ids: [log_1.id, log_2.id])
+
+      checkboxes = page.find_all("tbody tr").map { |row| row.find("input") }
+      expect(checkboxes).to all be_checked
+    end
+
+    it "only checks the selected checkboxes when selected_ids provided" do
+      get delete_logs_lettings_logs_path(log_ids: [log_1.id, log_2.id], selected_ids:[log_1.id])
+
+      checkboxes = page.find_all("tbody tr").map { |row| row.find("input") }
+      checkbox_expected_checked = checkboxes.find { |cb| cb.value == log_1.id.to_s }
+      checkbox_expected_unchecked = checkboxes.find { |cb| cb.value == log_2.id.to_s }
+      expect(checkbox_expected_checked).to be_checked
+      expect(checkbox_expected_unchecked).not_to be_checked
     end
   end
 end
