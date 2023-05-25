@@ -14,4 +14,11 @@ RSpec.describe Form::Lettings::Questions::NetIncomeKnown do
       expect(question.type).to eql("radio")
     end
   end
+
+  describe "#partial guidance" do
+    it "is at the top" do
+      expect(question.top_guidance?).to eq(true)
+      expect(question.bottom_guidance?).to eq(false)
+    end
+  end
 end
