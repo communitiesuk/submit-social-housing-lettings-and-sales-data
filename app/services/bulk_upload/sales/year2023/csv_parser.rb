@@ -96,10 +96,6 @@ private
     @normalised_string
   end
 
-  def has_field_in_header?(field)
-    rows[rows.find_index { |row| row[0].match(/field number/i) }].any? { |cell| cell&.match?(/#{field}/i) }
-  end
-
   def first_record_start_date
     if with_headers?
       Date.new(row_parsers.first.field_4.to_i + 2000, row_parsers.first.field_3.to_i, row_parsers.first.field_2.to_i)
