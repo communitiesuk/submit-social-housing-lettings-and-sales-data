@@ -114,6 +114,10 @@ class LettingsLogsController < LogsController
 
 private
 
+  def log_filter_manager
+    @log_filter_manager = LogsFilterManager.new(@session_filters, current_user)
+  end
+
   def org_params
     super.merge(
       { "managing_organisation_id" => current_user.organisation.id },
