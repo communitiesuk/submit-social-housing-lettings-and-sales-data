@@ -5,6 +5,7 @@ class BulkUpload::Lettings::Year2023::CsvParser
 
   FIELDS = 134
   MAX_COLUMNS = 142
+  FORM_YEAR = 2023
 
   attr_reader :path
 
@@ -64,7 +65,7 @@ class BulkUpload::Lettings::Year2023::CsvParser
   end
 
   def correct_template_for_year?
-    collection_start_year_for_date(first_record_start_date) == 2023
+    collection_start_year_for_date(first_record_start_date) == FORM_YEAR
   rescue Date::Error
     true
   end
