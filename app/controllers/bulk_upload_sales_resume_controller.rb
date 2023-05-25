@@ -1,5 +1,10 @@
 class BulkUploadSalesResumeController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_no_cache_headers
+
+  def set_no_cache_headers
+    response.set_header("Cache-Control", "no-store")
+  end
 
   def start
     @bulk_upload = current_user.bulk_uploads.find(params[:id])

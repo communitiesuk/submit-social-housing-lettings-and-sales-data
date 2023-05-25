@@ -30,6 +30,12 @@ RSpec.describe BulkUploadSalesResumeController, type: :request do
       expect(response.body).not_to include("Cancel")
     end
 
+    it "sets no cache headers" do
+      get "/sales-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice"
+
+      expect(response.headers["Cache-Control"]).to eql("no-store")
+    end
+
     context "and previosuly told us to fix inline" do
       let(:bulk_upload) { create(:bulk_upload, :sales, user:, bulk_upload_errors:, choice: "create-fix-inline") }
 
@@ -91,6 +97,12 @@ RSpec.describe BulkUploadSalesResumeController, type: :request do
       expect(response).to be_successful
 
       expect(response.body).to include("Are you sure")
+    end
+
+    it "sets no cache headers" do
+      get "/sales-logs/bulk-upload-resume/#{bulk_upload.id}/confirm"
+
+      expect(response.headers["Cache-Control"]).to eql("no-store")
     end
   end
 
