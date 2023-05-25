@@ -5,6 +5,7 @@ class LettingsLogsController < LogsController
 
   before_action :session_filters, if: :current_user, only: %i[index email_csv download_csv]
   before_action :set_session_filters, if: :current_user, only: %i[index email_csv download_csv]
+  before_action :log_filter_manager, if: :current_user, only: %i[index email_csv download_csv]
   before_action :authenticate_scope!, only: %i[download_csv email_csv]
 
   before_action :extract_bulk_upload_from_session_filters, only: [:index]
@@ -13,7 +14,6 @@ class LettingsLogsController < LogsController
   def index
     respond_to do |format|
       format.html do
-        @log_filter_manager = LogsFilterManager.new(@session_filters, current_user)
         all_logs = current_user.lettings_logs.visible
         unpaginated_filtered_logs = filtered_logs(all_logs, search_term, @log_filter_manager.applied_filters)
 
@@ -87,7 +87,7 @@ class LettingsLogsController < LogsController
   end
 
   def download_csv
-    unpaginated_filtered_logs = filtered_logs(current_user.lettings_logs, search_term, @session_filters)
+    unpaginated_filtered_logs = filtered_logs(current_user.lettings_logs, search_term, @log_filter_manager.applied_filters)
 
     render "download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: email_csv_lettings_logs_path, codes_only: codes_only_export? }
   end

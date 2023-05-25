@@ -3,6 +3,7 @@ class SalesLogsController < LogsController
 
   before_action :session_filters, if: :current_user, only: %i[index email_csv download_csv]
   before_action :set_session_filters, if: :current_user, only: %i[index email_csv download_csv]
+  before_action :log_filter_manager, if: :current_user, only: %i[index email_csv download_csv]
   before_action :authenticate_scope!, only: %i[download_csv email_csv]
 
   before_action :extract_bulk_upload_from_session_filters, only: [:index]
@@ -16,7 +17,7 @@ class SalesLogsController < LogsController
     respond_to do |format|
       format.html do
         all_logs = current_user.sales_logs.visible
-        unpaginated_filtered_logs = filtered_logs(all_logs, search_term, @session_filters)
+        unpaginated_filtered_logs = filtered_logs(all_logs, search_term, @log_filter_manager.applied_filters)
 
         @search_term = search_term
         @pagy, @logs = pagy(unpaginated_filtered_logs)
@@ -57,14 +58,14 @@ class SalesLogsController < LogsController
   end
 
   def download_csv
-    unpaginated_filtered_logs = filtered_logs(current_user.sales_logs, search_term, @session_filters)
+    unpaginated_filtered_logs = filtered_logs(current_user.sales_logs, search_term, @log_filter_manager.applied_filters)
 
     render "download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: email_csv_sales_logs_path, codes_only: codes_only_export? }
   end
 
   def email_csv
     all_orgs = params["organisation_select"] == "all"
-    EmailCsvJob.perform_later(current_user, search_term, @session_filters, all_orgs, nil, codes_only_export?, "sales")
+    EmailCsvJob.perform_later(current_user, search_term, @log_filter_manager.applied_filters, all_orgs, nil, codes_only_export?, "sales")
     redirect_to csv_confirmation_sales_logs_path
   end
 
@@ -79,6 +80,10 @@ class SalesLogsController < LogsController
   end
 
 private
+
+  def log_filter_manager
+    @log_filter_manager = LogsFilterManager.new(@session_filters, current_user)
+  end
 
   def extract_bulk_upload_from_session_filters
     filter_service = FilterService.new(current_user:, session:)
