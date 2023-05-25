@@ -11,9 +11,9 @@ class LettingsLogsController < LogsController
   before_action :redirect_if_bulk_upload_resolved, only: [:index]
 
   def index
-    @log_filter_manager = LogsFilterManager.new(@session_filters, current_user)
     respond_to do |format|
       format.html do
+        @log_filter_manager = LogsFilterManager.new(@session_filters, current_user)
         all_logs = current_user.lettings_logs.visible
         unpaginated_filtered_logs = filtered_logs(all_logs, search_term, @log_filter_manager.applied_filters)
 
