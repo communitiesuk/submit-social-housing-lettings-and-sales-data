@@ -1875,13 +1875,122 @@ RSpec.describe LettingsLogsController, type: :request do
     end
 
     it "only checks the selected checkboxes when selected_ids provided" do
-      get delete_logs_lettings_logs_path(log_ids: [log_1.id, log_2.id], selected_ids:[log_1.id])
+      get delete_logs_lettings_logs_path(log_ids: [log_1.id, log_2.id], selected_ids: [log_1.id])
 
       checkboxes = page.find_all("tbody tr").map { |row| row.find("input") }
       checkbox_expected_checked = checkboxes.find { |cb| cb.value == log_1.id.to_s }
       checkbox_expected_unchecked = checkboxes.find { |cb| cb.value == log_2.id.to_s }
       expect(checkbox_expected_checked).to be_checked
       expect(checkbox_expected_unchecked).not_to be_checked
+    end
+  end
+
+  describe "GET delete-logs-confirmation" do
+    let(:page) { Capybara::Node::Simple.new(response.body) }
+    let(:user) { create(:user, name: "Urban Chronotis") }
+    let(:log_1) { create(:lettings_log, :in_progress) }
+    let(:log_2) { create(:lettings_log, :completed) }
+    let(:log_3) { create(:lettings_log, :in_progress) }
+    let(:params) do
+      {
+        forms_delete_logs_form: {
+          log_type: :lettings,
+          log_ids: [log_1, log_2, log_3].map(&:id).join(" "),
+          logs_to_delete: [log_1, log_2].map(&:id),
+        },
+      }
+    end
+
+    before do
+      allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+      sign_in user
+      get delete_logs_confirmation_lettings_logs_path, params: params
+    end
+
+    it "requires delete logs form data to be provided" do
+      expect { get delete_logs_confirmation_lettings_logs_path }.to raise_error(ActionController::ParameterMissing)
+    end
+
+    it "shows the correct title" do
+      expect(page.find("h1").text).to include "Are you sure you want to delete these logs?"
+    end
+
+    it "shows the correct information text to the user" do
+      expect(page).to have_selector("p", text: "You've selected 2 logs to delete")
+    end
+
+    context "when only one log is selected" do
+      let(:params) do
+        {
+          forms_delete_logs_form: {
+            log_type: :lettings,
+            log_ids: [log_1, log_2, log_3].map(&:id).join(" "),
+            logs_to_delete: [log_1.id],
+          },
+        }
+      end
+
+      it "shows the correct information text to the user in the singular" do
+        get delete_logs_confirmation_lettings_logs_path, params: params
+
+        expect(page).to have_selector("p", text: "You've selected 1 log to delete")
+      end
+    end
+
+    it "shows a warning to the user" do
+      expect(page).to have_selector(".govuk-warning-text", text: "You will not be able to undo this action")
+    end
+
+    it "shows a button to delete the selected logs" do
+      expect(page).to have_selector("form.button_to button", text: "Delete logs")
+    end
+
+    it "the delete logs button submits the correct data to the correct path" do
+      form_containing_button = page.find("form.button_to")
+
+      expect(form_containing_button[:action]).to eq delete_logs_lettings_logs_path(ids: params[:forms_delete_logs_form][:logs_to_delete])
+      expect(form_containing_button[:method]).to eq "post"
+    end
+
+    it "shows a cancel button with the correct style" do
+      expect(page).to have_selector("a.govuk-button.govuk-button--secondary", text: "Cancel")
+    end
+
+    it "the cancel button submits the correct data to the correct path" do
+      cancel_button = page.find("a.govuk-button.govuk-button--secondary", text: "Cancel")
+      expected_path = delete_logs_lettings_logs_path(log_ids: params[:forms_delete_logs_form][:log_ids].split, selected_ids: params[:forms_delete_logs_form][:logs_to_delete])
+
+      expect(cancel_button[:href]).to eq expected_path
+    end
+
+    context "when no logs are selected" do
+      let(:params) do
+        {
+          forms_delete_logs_form: {
+            log_type: :lettings,
+            log_ids: [log_1, log_2, log_3].map(&:id).join(" "),
+          },
+        }
+      end
+
+      before do
+        get delete_logs_confirmation_lettings_logs_path, params: params
+      end
+
+      it "renders the list of logs table again" do
+        expect(page.find("h1").text).to include "Review the logs you want to delete"
+      end
+
+      it "displays an error message" do
+        expect(page).to have_selector(".govuk-error-summary", text: "Select at least one log to delete or press cancel to return")
+      end
+
+      it "renders the table with all checkboxes unchecked" do
+        checkboxes = page.find_all("tbody tr").map { |row| row.find("input") }
+        checkboxes.each do |checkbox|
+          expect(checkbox).not_to be_checked
+        end
+      end
     end
   end
 end
