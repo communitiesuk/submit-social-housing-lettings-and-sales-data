@@ -7,6 +7,7 @@ class Form::Lettings::Questions::NetIncomeKnown < ::Form::Question
     @type = "radio"
     @check_answers_card_number = 0
     @guidance_partial = "what_counts_as_income"
+    @guidance_position = GuidancePosition::TOP
     @hint_text = ""
     @answer_options = ANSWER_OPTIONS
     @question_number = 86
