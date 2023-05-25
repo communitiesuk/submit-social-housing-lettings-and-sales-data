@@ -70,6 +70,7 @@ class BulkUploadMailer < NotifyMailer
         upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
         success_description:,
         logs_link: url,
+        log_type: bulk_upload.log_type,
       },
     )
   end
