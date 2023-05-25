@@ -92,4 +92,20 @@ class StartController < ApplicationController
       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     )
   end
+
+  def download_22_23_sales_bulk_upload_template
+    send_file(
+      Rails.root.join("public/files/bulk-upload-sales-template-2022-23.xlsx"),
+      filename: "2022-23-sales-bulk-upload-template.xlsx",
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
+  end
+
+  def download_22_23_sales_bulk_upload_specification
+    send_file(
+      Rails.root.join("public/files/bulk-upload-sales-specification-2022-23.xlsx"),
+      filename: "2022-23-sales-bulk-upload-specification.xlsx",
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
+  end
 end
