@@ -8,7 +8,7 @@ defaults: &defaults
       instances: 2
       memory: 1G
     - type: worker
-      command: bundle exec sidekiq
+      command: bundle exec sidekiq -t 3
       health-check-type: process
       instances: 2
   health-check-type: http
@@ -31,7 +31,7 @@ applications:
         instances: 4
         memory: 1G
       - type: worker
-        command: bundle exec sidekiq
+        command: bundle exec sidekiq -3
         health-check-type: process
         instances: 2
     env:
