@@ -14,13 +14,14 @@ class LettingsLogsController < LogsController
     respond_to do |format|
       format.html do
         all_logs = current_user.lettings_logs.visible
-        unpaginated_filtered_logs = filtered_logs(all_logs, search_term, @session_filters)
+        unpaginated_filtered_logs = filter_manager.filtered_logs(all_logs, search_term, session_filters)
 
         @search_term = search_term
         @pagy, @logs = pagy(unpaginated_filtered_logs)
         @searched = search_term.presence
         @total_count = all_logs.size
         @unresolved_count = all_logs.unresolved.created_by(current_user).count
+        @filter_type = "lettings_logs"
         render "logs/index"
       end
     end
@@ -113,6 +114,18 @@ class LettingsLogsController < LogsController
 
 private
 
+  def set_session_filters
+    filter_manager.serialize_filters_to_session("lettings_logs")
+  end
+
+  def session_filters
+    filter_manager.session_filters("lettings_logs")
+  end
+
+  def filter_manager
+    FilterManager.new(current_user:, session:, params:)
+  end
+
   def org_params
     super.merge(
       { "managing_organisation_id" => current_user.organisation.id },
@@ -131,7 +144,7 @@ private
 
   def extract_bulk_upload_from_session_filters
     filter_service = FilterService.new(current_user:, session:)
-    @bulk_upload = filter_service.bulk_upload
+    @bulk_upload = filter_service.bulk_upload("lettings_logs")
   end
 
   def permitted_log_params

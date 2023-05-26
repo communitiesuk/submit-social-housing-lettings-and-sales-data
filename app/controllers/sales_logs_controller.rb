@@ -16,12 +16,13 @@ class SalesLogsController < LogsController
     respond_to do |format|
       format.html do
         all_logs = current_user.sales_logs.visible
-        unpaginated_filtered_logs = filtered_logs(all_logs, search_term, @session_filters)
+        unpaginated_filtered_logs = filter_manager.filtered_logs(all_logs, search_term, session_filters)
 
         @search_term = search_term
         @pagy, @logs = pagy(unpaginated_filtered_logs)
         @searched = search_term.presence
         @total_count = all_logs.size
+        @filter_type = "sales_logs"
         render "logs/index"
       end
     end
@@ -80,9 +81,21 @@ class SalesLogsController < LogsController
 
 private
 
+  def set_session_filters
+    filter_manager.serialize_filters_to_session("sales_logs")
+  end
+
+  def session_filters
+    filter_manager.session_filters("sales_logs")
+  end
+
+  def filter_manager
+    FilterManager.new(current_user:, session:, params:)
+  end
+
   def extract_bulk_upload_from_session_filters
     filter_service = FilterService.new(current_user:, session:)
-    @bulk_upload = filter_service.bulk_upload
+    @bulk_upload = filter_service.bulk_upload("sales_logs")
   end
 
   def redirect_if_bulk_upload_resolved

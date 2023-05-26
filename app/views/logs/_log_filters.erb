@@ -6,7 +6,7 @@
 
     <div class="app-filter__content">
       <%= form_with html: { method: :get } do |f| %>
-        <% all_or_yours = { "all": { label: "All" }, "yours": { label: "Yours" } } %>
+        <% all_or_yours = { "all": { label: "All" }, "yours": { label: "Yours" }} %>
 
         <% if bulk_upload_options(@bulk_upload).present? %>
           <%= render partial: "filters/checkbox_filter",
@@ -39,6 +39,7 @@
         <%= render partial: "filters/radio_filter",
                    locals: {
                      f: f,
+                     filter_type: @filter_type,
                      options: all_or_yours,
                      label: "Logs",
                      category: "user",
@@ -47,6 +48,7 @@
         <% if (@current_user.support? || @current_user.organisation.has_managing_agents?) && request.path == "/lettings-logs" %>
           <%= render partial: "filters/radio_filter", locals: {
             f: f,
+            filter_type: @filter_type,
             options: {
               "all": { label: "All" },
               "specific_org": {

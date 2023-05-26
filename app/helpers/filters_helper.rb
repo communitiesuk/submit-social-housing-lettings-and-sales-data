@@ -1,8 +1,8 @@
 module FiltersHelper
-  def filter_selected?(filter, value)
-    return false unless session[:logs_filters]
+  def filter_selected?(filter, value, type)
+    return false unless session["#{type}_filters"]
 
-    selected_filters = JSON.parse(session[:logs_filters])
+    selected_filters = JSON.parse(session["#{type}_filters"])
     return true if selected_filters.blank? && filter == "user" && value == :all
     return true if !selected_filters.key?("organisation") && filter == "organisation_select" && value == :all
     return true if selected_filters["organisation"].present? && filter == "organisation_select" && value == :specific_org
@@ -19,10 +19,10 @@ module FiltersHelper
     }.freeze
   end
 
-  def selected_option(filter)
-    return false unless session[:logs_filters]
+  def selected_option(filter, type)
+    return false unless session["#{type}_filters"]
 
-    JSON.parse(session[:logs_filters])[filter] || ""
+    JSON.parse(session["#{type}_filters"])[filter] || ""
   end
 
   def organisations_filter_options(user)
