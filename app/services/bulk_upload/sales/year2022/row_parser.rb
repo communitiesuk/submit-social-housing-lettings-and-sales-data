@@ -324,6 +324,27 @@ class BulkUpload::Sales::Year2022::RowParser
             if: proc { field_84 == 12 },
             on: :after_log
 
+  validates :field_68,
+            presence: {
+              message: I18n.t("validations.not_answered", question: "What was the full purchase price?"),
+            },
+            if: :shared_ownership?,
+            on: :after_log
+
+  validates :field_77,
+            presence: {
+              message: I18n.t("validations.not_answered", question: "What was the full purchase price?"),
+            },
+            if: :discounted_ownership?,
+            on: :after_log
+
+  validates :field_87,
+            presence: {
+              message: I18n.t("validations.not_answered", question: "What was the full purchase price?"),
+            },
+            if: :outright_sale?,
+            on: :after_log
+
   validates :field_109, presence: { message: I18n.t("validations.not_answered", question: "more than 2 buyers"), category: :setup }, if: :joint_purchase?, on: :after_log
 
   validates :field_113, presence: { message: I18n.t("validations.not_answered", question: "ownership type"), category: :setup }, on: :after_log
@@ -517,7 +538,6 @@ private
       lanomagr: %i[field_65],
       frombeds: %i[field_66],
       fromprop: %i[field_67],
-      value: %i[field_68 field_77 field_87],
       equity: %i[field_69],
       mortgage: %i[field_70 field_80 field_88],
       extrabor: %i[field_71 field_81 field_89],
@@ -1013,15 +1033,11 @@ private
       next if log.optional_fields.include?(question.id)
       next if question.completed?(log)
 
-      if setup_question?(question)
-        fields.each do |field|
-          unless errors.any? { |e| fields.include?(e.attribute) }
+      fields.each do |field|
+        unless errors.any? { |e| fields.include?(e.attribute) }
+          if setup_question?(question)
             errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase), category: :setup)
-          end
-        end
-      else
-        fields.each do |field|
-          unless errors.any? { |e| fields.include?(e.attribute) }
+          else
             errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase))
           end
         end
