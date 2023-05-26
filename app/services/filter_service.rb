@@ -35,14 +35,14 @@ class FilterService
     @session = session
   end
 
-  def bulk_upload(type)
-    id = (logs_filters(type)["bulk_upload_id"] || []).reject(&:blank?)[0]
+  def bulk_upload(filter_type)
+    id = (logs_filters(filter_type)["bulk_upload_id"] || []).reject(&:blank?)[0]
     @bulk_upload ||= current_user.bulk_uploads.find_by(id:)
   end
 
 private
 
-  def logs_filters(type)
-    JSON.parse(session["#{type}_filters"] || "{}") || {}
+  def logs_filters(filter_type)
+    JSON.parse(session["#{filter_type}_filters"] || "{}") || {}
   end
 end
