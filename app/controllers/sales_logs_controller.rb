@@ -58,7 +58,7 @@ class SalesLogsController < LogsController
   end
 
   def download_csv
-    unpaginated_filtered_logs = filtered_logs(current_user.sales_logs, search_term, @session_filters)
+    unpaginated_filtered_logs = filter_manager.filtered_logs(current_user.sales_logs, search_term, session_filters)
 
     render "download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: email_csv_sales_logs_path, codes_only: codes_only_export? }
   end
