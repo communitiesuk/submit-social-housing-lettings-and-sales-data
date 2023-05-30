@@ -7,6 +7,7 @@ export default class extends Controller {
   connect () {
     const selectEl = this.element
     const selectOptions = Array.from(selectEl.options).filter(function (option, index, arr) { return option.value !== '' })
+    const nullOption = Array.from(selectEl.options).find(function (option, index, arr) { return option.value === '' })
     const options = selectOptions.map((o) => enhanceOption(o))
 
     const matches = /^(\w+)\[(\w+)\]$/.exec(selectEl.name)
@@ -29,7 +30,12 @@ export default class extends Controller {
           selectOptions,
           (option) => (option.textContent || option.innerText) === val
         )[0]
-        if (selectedOption) selectedOption.selected = true
+
+        if (selectedOption) {
+          selectedOption.selected = true
+        } else {
+          nullOption.selected = true
+        }
       }
     })
   }
