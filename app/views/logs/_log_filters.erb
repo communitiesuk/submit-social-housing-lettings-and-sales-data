@@ -39,7 +39,6 @@
         <%= render partial: "filters/radio_filter",
                    locals: {
                      f: f,
-                     filter_type: @filter_type,
                      options: all_or_yours,
                      label: "Logs",
                      category: "user",
@@ -48,7 +47,6 @@
         <% if (@current_user.support? || @current_user.organisation.has_managing_agents?) && request.path == "/lettings-logs" %>
           <%= render partial: "filters/radio_filter", locals: {
             f: f,
-            filter_type: @filter_type,
             options: {
               "all": { label: "All" },
               "specific_org": {
