@@ -36,7 +36,9 @@ RSpec.describe BulkUpload::Lettings::Validator do
 
         context "and doesn't have too many columns" do
           before do
-            file.write(("a" * 135).chars.join(","))
+            file.write(("a" * 95).chars.join(","))
+            file.write(",1,10,22,")
+            file.write(("a" * 37).chars.join(","))
             file.write("\n")
             file.rewind
           end

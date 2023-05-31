@@ -116,4 +116,35 @@ RSpec.describe BulkUpload::Sales::Year2022::CsvParser do
       expect(service.column_for_field("field_125")).to eql("DU")
     end
   end
+
+  describe "#wrong_template_for_year?" do
+    let(:file) { Tempfile.new }
+    let(:path) { file.path }
+
+    context "when 23/24 file with 23/24 data" do
+      let(:log) { build(:sales_log, :completed, saledate: Date.new(2023, 10, 1)) }
+
+      before do
+        file.write(BulkUpload::SalesLogToCsv.new(log:, col_offset: 0).to_2023_csv_row)
+        file.rewind
+      end
+
+      it "returns true" do
+        expect(service).to be_wrong_template_for_year
+      end
+    end
+
+    context "when 22/23 file with 22/23 data" do
+      let(:log) { build(:sales_log, :completed, saledate: Date.new(2022, 10, 1)) }
+
+      before do
+        file.write(BulkUpload::SalesLogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
+        file.rewind
+      end
+
+      it "returns false" do
+        expect(service).not_to be_wrong_template_for_year
+      end
+    end
+  end
 end

@@ -453,6 +453,12 @@ class BulkUpload::Sales::Year2022::RowParser
     end
   end
 
+  def saledate
+    Date.new(field_4 + 2000, field_3, field_2) if field_2.present? && field_3.present? && field_4.present?
+  rescue Date::Error
+    Date.new
+  end
+
 private
 
   def validate_data_protection_answered
@@ -760,12 +766,6 @@ private
     else
       buyer_not_interviewed? ? 1 : nil
     end
-  end
-
-  def saledate
-    Date.new(field_4 + 2000, field_3, field_2) if field_2.present? && field_3.present? && field_4.present?
-  rescue Date::Error
-    Date.new
   end
 
   def hodate
