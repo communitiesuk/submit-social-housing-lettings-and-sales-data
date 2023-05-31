@@ -189,9 +189,10 @@ private
 
     age_between_16_19 = age.between?(16, 19)
     student = tenant_is_fulltime_student?(economic_status)
+    economic_status_refused = tenant_economic_status_refused?(economic_status)
     child = tenant_is_child?(relationship)
 
-    if age_between_16_19 && !student && child
+    if age_between_16_19 && !(student || economic_status_refused) && child
       record.errors.add "age#{person_num}", I18n.t("validations.household.age.student_16_19.cannot_be_16_19.child_not_student")
       record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19.must_be_student")
       record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.student_16_19.cannot_be_child.16_19_not_student")
@@ -210,6 +211,10 @@ private
 
   def tenant_is_fulltime_student?(economic_status)
     economic_status == 7
+  end
+
+  def tenant_economic_status_refused?(economic_status)
+    economic_status == 10
   end
 
   def tenant_is_child?(relationship)
