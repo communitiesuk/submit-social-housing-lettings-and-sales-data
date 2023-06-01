@@ -159,11 +159,11 @@ class OrganisationsController < ApplicationController
 private
 
   def set_session_filters
-    filter_manager.serialize_filters_to_session("#{params[:action]}", specific_org: true)
+    filter_manager.serialize_filters_to_session(params[:action].to_s, specific_org: true)
   end
 
   def session_filters
-    filter_manager.session_filters("#{params[:action]}", specific_org: true)
+    filter_manager.session_filters(params[:action].to_s, specific_org: true)
   end
 
   def filter_manager
