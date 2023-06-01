@@ -232,9 +232,10 @@ Rails.application.routes.draw do
       post "email-csv", to: "sales_logs#email_csv"
       get "csv-confirmation", to: "sales_logs#csv_confirmation"
 
-      get "delete-logs", to: "sales_logs#delete_logs_list"
-      get "delete-logs-confirmation", to: "sales_logs#delete_logs_confirmation"
-      delete "delete-logs", to: "sales_logs#delete_logs"
+      get "delete-logs", to: "delete_logs#delete_sales_logs"
+      post "delete-logs", to: "delete_logs#delete_sales_logs_with_selected_ids"
+      post "delete-logs-confirmation", to: "delete_logs#delete_sales_logs_confirmation"
+      delete "delete-logs", to: "delete_logs#discard_sales_logs"
 
       resources :bulk_upload_sales_logs, path: "bulk-upload-logs" do
         collection do
