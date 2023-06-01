@@ -112,41 +112,6 @@ class LettingsLogsController < LogsController
     end
   end
 
-  def delete_lettings_logs
-    @delete_logs_form = delete_logs_form
-  end
-
-  def delete_lettings_logs_with_selected_ids
-    selected_ids = params.require(:selected_ids).split.map(&:to_i)
-    @delete_logs_form = delete_logs_form(selected_ids:)
-    render :delete_lettings_logs
-  end
-
-  def delete_logs_confirmation
-    default_attributes = {
-      current_user:,
-      log_filters: @session_filters,
-      log_type: :lettings,
-    }
-    form_attributes = params.require(:forms_delete_logs_form).permit(:search_term, selected_ids: [])
-    attributes = form_attributes.merge(default_attributes)
-    attributes[:selected_ids] = [] unless attributes.key? :selected_ids
-    @delete_logs_form = Forms::DeleteLogsForm.new(attributes)
-    unless @delete_logs_form.valid?
-      render :delete_lettings_logs
-    end
-  end
-
-  def delete_logs
-    logs = LettingsLog.find(params.require(:ids))
-    logs.each do |log|
-      authorize log, :destroy?
-      log.discard!
-    end
-
-    redirect_to lettings_logs_path, notice: I18n.t("notification.logs_deleted", count: logs.count)
-  end
-
 private
 
   def session_filters
@@ -161,10 +126,6 @@ private
     super.merge(
       { "managing_organisation_id" => current_user.organisation.id },
     )
-  end
-
-  def delete_logs_form(selected_ids: nil)
-    Forms::DeleteLogsForm.new(current_user:, search_term:, log_filters: @session_filters, log_type: :lettings, selected_ids:)
   end
 
   def authenticate_scope!

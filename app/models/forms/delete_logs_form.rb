@@ -1,6 +1,5 @@
 module Forms
   class DeleteLogsForm
-    include Modules::LogsFilter
     include ActiveModel::Model
     include ActiveModel::Validations
 

@@ -16,8 +16,8 @@
 <% end %>
 
 <div class="govuk-button-group">
-  <%= govuk_button_to "Delete logs", delete_logs_lettings_logs_path, method: "delete", params: { ids: @delete_logs_form.selected_ids } %>
-  <%= form_with url: delete_logs_lettings_logs_path do |f| %>
+  <%= govuk_button_to "Delete logs", @delete_path, method: "delete", params: { ids: @delete_logs_form.selected_ids } %>
+  <%= form_with url: @delete_path do |f| %>
     <%= f.hidden_field :selected_ids, value: @delete_logs_form.selected_ids %>
     <%= f.hidden_field :search, value: @delete_logs_form.search_term %>
     <%= f.govuk_submit "Cancel", secondary: true %>

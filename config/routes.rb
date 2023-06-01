@@ -170,10 +170,10 @@ Rails.application.routes.draw do
       post "email-csv", to: "lettings_logs#email_csv"
       get "csv-confirmation", to: "lettings_logs#csv_confirmation"
 
-      get "delete-logs", to: "lettings_logs#delete_lettings_logs"
-      post "delete-logs", to: "lettings_logs#delete_lettings_logs_with_selected_ids"
-      post "delete-logs-confirmation", to: "lettings_logs#delete_logs_confirmation"
-      delete "delete-logs", to: "lettings_logs#delete_logs"
+      get "delete-logs", to: "delete_logs#delete_lettings_logs"
+      post "delete-logs", to: "delete_logs#delete_lettings_logs_with_selected_ids"
+      post "delete-logs-confirmation", to: "delete_logs#delete_lettings_logs_confirmation"
+      delete "delete-logs", to: "delete_logs#discard_lettings_logs"
 
       resources :bulk_upload_lettings_logs, path: "bulk-upload-logs", only: %i[show update] do
         collection do
