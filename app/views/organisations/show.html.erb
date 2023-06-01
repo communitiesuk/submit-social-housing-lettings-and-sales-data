@@ -34,7 +34,7 @@
         <% end %>
       <% end %>
       <% if FeatureToggle.new_data_sharing_agreement? %>
-        <%= data_sharing_agreement_row(organisation: @organisation, user: current_user, summary_list: summary_list) %>
+        <%= data_sharing_agreement_row(organisation: @organisation, user: current_user, summary_list:) %>
       <% end %>
     <% end %>
     <% if FeatureToggle.merge_organisations_enabled? %>
