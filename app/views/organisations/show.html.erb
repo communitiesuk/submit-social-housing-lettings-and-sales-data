@@ -21,7 +21,7 @@
             <% row.value { details_html(attr) } %>
             <% row.action(
               visually_hidden_text: attr[:name].to_s.humanize.downcase,
-              href: edit_organisation_path,
+              href: edit_organisation_path(@organisation),
               html_attributes: { "data-qa": "change-#{attr[:name].downcase}" },
             ) %>
           <% end %>
@@ -32,11 +32,13 @@
             <% row.action %>
           <% end %>
         <% end %>
-
+      <% end %>
+      <% if FeatureToggle.new_data_sharing_agreement? %>
+        <%= data_sharing_agreement_row(organisation: @organisation, user: current_user, summary_list: summary_list) %>
       <% end %>
     <% end %>
     <% if FeatureToggle.merge_organisations_enabled? %>
-      <p>Is your organisation merging with another? <%= govuk_link_to "Let us know using this form", merge_request_organisation_path %></p>
+      <p>Is your organisation merging with another? <%= govuk_link_to "Let us know using this form", merge_request_organisation_path(@organisation) %></p>
     <% end %>
   </div>
 
