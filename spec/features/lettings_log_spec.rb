@@ -245,13 +245,13 @@ RSpec.describe "Lettings Log Features" do
         expect(rows.count).to be 2
         id_to_delete, id_to_keep = rows.map { |row| row.first("td").text.to_i }
         expect([id_to_delete, id_to_keep]).to match_array [lettings_log_1.id, lettings_log_2.id]
-        check "forms-delete-logs-form-logs-to-delete-#{id_to_delete}-field"
-        uncheck "forms-delete-logs-form-logs-to-delete-#{id_to_keep}-field"
+        check "forms-delete-logs-form-selected-ids-#{id_to_delete}-field"
+        uncheck "forms-delete-logs-form-selected-ids-#{id_to_keep}-field"
         click_button "Continue"
 
-        expect(page).to have_current_path delete_logs_confirmation_lettings_logs_path, ignore_query: true
+        expect(page).to have_current_path delete_logs_confirmation_lettings_logs_path
         expect(page.text).to include "You've selected 1 log to delete"
-        expect(page.find("input#ids", visible: false).value.to_i).to be id_to_delete
+        expect(page.find("form.button_to")[:action]).to eq delete_logs_lettings_logs_path
         click_button "Delete logs"
 
         expect(page).to have_current_path lettings_logs_path

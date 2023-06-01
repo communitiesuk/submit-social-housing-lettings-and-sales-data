@@ -175,6 +175,11 @@ en:
             new_organisation_telephone_number:
               blank: "Enter a valid telephone number"
 
+  notification:
+    logs_deleted:
+      one: "%{count} log has been deleted"
+      other: "%{count} logs have been deleted"
+
   validations:
     organisation:
       data_sharing_agreement_not_signed: Your organisation must accept the Data Sharing Agreement before you can create any logs.

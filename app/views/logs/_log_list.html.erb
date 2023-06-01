@@ -10,8 +10,8 @@
   <% end %>
 </div>
 <div class="govuk-grid-column-one-quarter govuk-!-text-align-right">
-  <% if display_delete_logs? %>
-    <%= govuk_link_to "Delete logs", "#", class: "app-!-colour-red" %>
+  <% if logs&.any? && display_delete_logs?(@current_user, @searched) %>
+    <%= govuk_link_to "Delete logs", delete_logs_path, class: "app-!-colour-red" %>
   <% end %>
 </div>
 </div>

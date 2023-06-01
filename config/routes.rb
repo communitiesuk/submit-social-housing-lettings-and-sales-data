@@ -170,6 +170,11 @@ Rails.application.routes.draw do
       post "email-csv", to: "lettings_logs#email_csv"
       get "csv-confirmation", to: "lettings_logs#csv_confirmation"
 
+      get "delete-logs", to: "lettings_logs#delete_lettings_logs"
+      post "delete-logs", to: "lettings_logs#delete_lettings_logs_with_selected_ids"
+      post "delete-logs-confirmation", to: "lettings_logs#delete_logs_confirmation"
+      delete "delete-logs", to: "lettings_logs#delete_logs"
+
       resources :bulk_upload_lettings_logs, path: "bulk-upload-logs", only: %i[show update] do
         collection do
           get :start
@@ -226,6 +231,10 @@ Rails.application.routes.draw do
       get "csv-download", to: "sales_logs#download_csv"
       post "email-csv", to: "sales_logs#email_csv"
       get "csv-confirmation", to: "sales_logs#csv_confirmation"
+
+      get "delete-logs", to: "sales_logs#delete_logs_list"
+      get "delete-logs-confirmation", to: "sales_logs#delete_logs_confirmation"
+      delete "delete-logs", to: "sales_logs#delete_logs"
 
       resources :bulk_upload_sales_logs, path: "bulk-upload-logs" do
         collection do

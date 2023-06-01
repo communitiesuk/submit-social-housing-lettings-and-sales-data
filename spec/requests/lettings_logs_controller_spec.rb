@@ -1845,21 +1845,35 @@ RSpec.describe LettingsLogsController, type: :request do
   describe "GET delete-logs" do
     let(:page) { Capybara::Node::Simple.new(response.body) }
     let(:user) { create(:user, name: "Richard MacDuff") }
-    let(:log_1) { create(:lettings_log, :in_progress) }
-    let(:log_2) { create(:lettings_log, :completed) }
+    let!(:log_1) { create(:lettings_log, :in_progress, created_by: user) }
+    let!(:log_2) { create(:lettings_log, :completed, created_by: user) }
 
     before do
       allow(user).to receive(:need_two_factor_authentication?).and_return(false)
       sign_in user
-      create(:lettings_log, :in_progress)
+      allow(FilterService).to receive(:filter_logs).and_return LettingsLog.all
     end
 
-    it "requires log_ids to be provided" do
-      expect { get delete_logs_lettings_logs_path }.to raise_error(ActionController::ParameterMissing)
+    it "calls the filter service with the filters in the session and the search term from the query params" do
+      search = "Schrödinger's cat"
+      logs_filters = {
+        "years" => [""],
+        "status" => ["", "in_progress"],
+        "user" => "all",
+      }
+      get lettings_logs_path(logs_filters) # adds the filters to the session
+
+      expect(FilterService).to receive(:filter_logs) { |arg1, arg2, arg3, _arg4, _arg5|
+        expect(arg1).to contain_exactly(log_1, log_2)
+        expect(arg2).to eq search
+        expect(arg3).to eq logs_filters
+      }.and_return LettingsLog.all
+
+      get delete_logs_lettings_logs_path(search:)
     end
 
-    it "displays the logs for the ids provided" do
-      get delete_logs_lettings_logs_path(log_ids: [log_1.id, log_2.id])
+    it "displays the logs returned by the filter service" do
+      get delete_logs_lettings_logs_path
 
       table_body_rows = page.find_all("tbody tr")
       expect(table_body_rows.count).to be 2
@@ -1868,14 +1882,60 @@ RSpec.describe LettingsLogsController, type: :request do
     end
 
     it "checks all checkboxes by default" do
-      get delete_logs_lettings_logs_path(log_ids: [log_1.id, log_2.id])
+      get delete_logs_lettings_logs_path
 
       checkboxes = page.find_all("tbody tr").map { |row| row.find("input") }
+      expect(checkboxes.count).to be 2
       expect(checkboxes).to all be_checked
+    end
+  end
+
+  describe "POST delete-logs" do
+    let(:page) { Capybara::Node::Simple.new(response.body) }
+    let(:user) { create(:user, name: "Richard MacDuff") }
+    let!(:log_1) { create(:lettings_log, :in_progress, created_by: user) }
+    let!(:log_2) { create(:lettings_log, :completed, created_by: user) }
+    let(:selected_ids) { log_1.id }
+
+    before do
+      allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+      sign_in user
+      allow(FilterService).to receive(:filter_logs).and_return LettingsLog.all
+    end
+
+    it "throws an error if selected ids are not provided" do
+      expect { post delete_logs_lettings_logs_path }.to raise_error ActionController::ParameterMissing
+    end
+
+    it "calls the filter service with the filters in the session and the search term from the query params" do
+      search = "Schrödinger's cat"
+      logs_filters = {
+        "years" => [""],
+        "status" => ["", "in_progress"],
+        "user" => "all",
+      }
+      get lettings_logs_path(logs_filters) # adds the filters to the session
+
+      expect(FilterService).to receive(:filter_logs) { |arg1, arg2, arg3, _arg4, _arg5|
+        expect(arg1).to contain_exactly(log_1, log_2)
+        expect(arg2).to eq search
+        expect(arg3).to eq logs_filters
+      }.and_return LettingsLog.all
+
+      post delete_logs_lettings_logs_path(search:, selected_ids:)
+    end
+
+    it "displays the logs returned by the filter service" do
+      post delete_logs_lettings_logs_path(selected_ids:)
+
+      table_body_rows = page.find_all("tbody tr")
+      expect(table_body_rows.count).to be 2
+      ids_in_table = table_body_rows.map { |row| row.first("td").text }
+      expect(ids_in_table).to match_array [log_1.id.to_s, log_2.id.to_s]
     end
 
     it "only checks the selected checkboxes when selected_ids provided" do
-      get delete_logs_lettings_logs_path(log_ids: [log_1.id, log_2.id], selected_ids: [log_1.id])
+      post delete_logs_lettings_logs_path(selected_ids:)
 
       checkboxes = page.find_all("tbody tr").map { |row| row.find("input") }
       checkbox_expected_checked = checkboxes.find { |cb| cb.value == log_1.id.to_s }
@@ -1885,7 +1945,7 @@ RSpec.describe LettingsLogsController, type: :request do
     end
   end
 
-  describe "GET delete-logs-confirmation" do
+  describe "POST delete-logs-confirmation" do
     let(:page) { Capybara::Node::Simple.new(response.body) }
     let(:user) { create(:user, name: "Urban Chronotis") }
     let(:log_1) { create(:lettings_log, :in_progress) }
@@ -1894,9 +1954,8 @@ RSpec.describe LettingsLogsController, type: :request do
     let(:params) do
       {
         forms_delete_logs_form: {
-          log_type: :lettings,
-          log_ids: [log_1, log_2, log_3].map(&:id).join(" "),
-          logs_to_delete: [log_1, log_2].map(&:id),
+          search_term: "milk",
+          selected_ids: [log_1, log_2].map(&:id),
         },
       }
     end
@@ -1904,11 +1963,11 @@ RSpec.describe LettingsLogsController, type: :request do
     before do
       allow(user).to receive(:need_two_factor_authentication?).and_return(false)
       sign_in user
-      get delete_logs_confirmation_lettings_logs_path, params: params
+      post delete_logs_confirmation_lettings_logs_path, params: params
     end
 
     it "requires delete logs form data to be provided" do
-      expect { get delete_logs_confirmation_lettings_logs_path }.to raise_error(ActionController::ParameterMissing)
+      expect { post delete_logs_confirmation_lettings_logs_path }.to raise_error(ActionController::ParameterMissing)
     end
 
     it "shows the correct title" do
@@ -1923,15 +1982,14 @@ RSpec.describe LettingsLogsController, type: :request do
       let(:params) do
         {
           forms_delete_logs_form: {
-            log_type: :lettings,
-            log_ids: [log_1, log_2, log_3].map(&:id).join(" "),
-            logs_to_delete: [log_1.id],
+            search_term: "milk",
+            selected_ids: [log_1].map(&:id),
           },
         }
       end
 
       it "shows the correct information text to the user in the singular" do
-        get delete_logs_confirmation_lettings_logs_path, params: params
+        post delete_logs_confirmation_lettings_logs_path, params: params
 
         expect(page).to have_selector("p", text: "You've selected 1 log to delete")
       end
@@ -1948,19 +2006,22 @@ RSpec.describe LettingsLogsController, type: :request do
     it "the delete logs button submits the correct data to the correct path" do
       form_containing_button = page.find("form.button_to")
 
-      expect(form_containing_button[:action]).to eq delete_logs_lettings_logs_path(ids: params[:forms_delete_logs_form][:logs_to_delete])
-      expect(form_containing_button[:method]).to eq "post"
+      expect(form_containing_button[:action]).to eq delete_logs_lettings_logs_path
+      expect(form_containing_button).to have_field "_method", type: :hidden, with: "delete"
+      expect(form_containing_button).to have_field "ids[]", type: :hidden, with: log_1.id
+      expect(form_containing_button).to have_field "ids[]", type: :hidden, with: log_2.id
     end
 
     it "shows a cancel button with the correct style" do
-      expect(page).to have_selector("a.govuk-button.govuk-button--secondary", text: "Cancel")
+      expect(page).to have_selector("button.govuk-button--secondary", text: "Cancel")
     end
 
     it "the cancel button submits the correct data to the correct path" do
-      cancel_button = page.find("a.govuk-button.govuk-button--secondary", text: "Cancel")
-      expected_path = delete_logs_lettings_logs_path(log_ids: params[:forms_delete_logs_form][:log_ids].split, selected_ids: params[:forms_delete_logs_form][:logs_to_delete])
-
-      expect(cancel_button[:href]).to eq expected_path
+      form_containing_cancel = page.find_all("form").find { |form| form.has_selector?("button.govuk-button--secondary") }
+      expect(form_containing_cancel).to have_field("selected_ids", type: :hidden, with: [log_1, log_2].map(&:id).join(" "))
+      expect(form_containing_cancel).to have_field("search", type: :hidden, with: "milk")
+      expect(form_containing_cancel[:method]).to eq "post"
+      expect(form_containing_cancel[:action]).to eq delete_logs_lettings_logs_path
     end
 
     context "when no logs are selected" do
@@ -1974,7 +2035,7 @@ RSpec.describe LettingsLogsController, type: :request do
       end
 
       before do
-        get delete_logs_confirmation_lettings_logs_path, params: params
+        post delete_logs_confirmation_lettings_logs_path, params: params
       end
 
       it "renders the list of logs table again" do
@@ -2027,14 +2088,15 @@ RSpec.describe LettingsLogsController, type: :request do
       end
     end
 
-    context "when the user is not authorized to delete the logs provided" do
+    context "when the user is not authorized to delete all the logs provided" do
       let(:log_2) { create(:lettings_log, :completed) }
 
-      it "returns unauthorised and does not delete logs" do
+      it "returns unauthorised and only deletes logs for which the user is authorised" do
         delete delete_logs_lettings_logs_path, params: params
         expect(response).to have_http_status(:unauthorized)
         log_1.reload
-        expect(log_1.discarded_at).to be nil
+        expect(log_1.status).to eq "deleted"
+        expect(log_1.discarded_at).not_to be nil
         log_2.reload
         expect(log_2.discarded_at).to be nil
       end
