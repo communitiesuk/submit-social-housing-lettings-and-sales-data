@@ -4,9 +4,9 @@ class UsersController < ApplicationController
   include Helpers::Email
   include Modules::SearchFilter
 
-  before_action :authenticate_user!, except: %i[resend_invite]
+  before_action :authenticate_user!
   before_action :find_resource, except: %i[new create]
-  before_action :authenticate_scope!, except: %i[new resend_invite]
+  before_action :authenticate_scope!, except: %i[new]
 
   def index
     redirect_to users_organisation_path(current_user.organisation) unless current_user.support?
