@@ -16,6 +16,8 @@ Dependencies:
 
 We recommend using [RBenv](https://github.com/rbenv/rbenv) to manage Ruby versions.
 
+We recommend using [nvm](https://github.com/nvm-sh/nvm) to manage NodeJS versions.
+
 1. Install PostgreSQL
 
     macOS:
@@ -70,12 +72,14 @@ We recommend using [RBenv](https://github.com/rbenv/rbenv) to manage Ruby versio
 
 5. Install JavaScript dependencies
 
-    macOS:
+   Note that we currently use node v16, which is no longer the latest LTS version so you will need to specify the version number when installing
 
-    ```bash
-    brew install node
-    brew install yarn
-    ```
+    macOS (using nvm):
+   ```bash
+   nvm install 16
+   nvm use 16
+   brew install yarn
+   ```
 
     Linux (Debian):
 
@@ -167,6 +171,8 @@ We recommend using [RBenv](https://github.com/rbenv/rbenv) to manage Ruby versio
     ```bash
     bundle exec rspec
     ```
+   
+    Note that these tests assume you have firefox installed.
 
 ## Using Docker
 
