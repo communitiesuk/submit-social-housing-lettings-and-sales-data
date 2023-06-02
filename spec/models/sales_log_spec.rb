@@ -165,7 +165,7 @@ RSpec.describe SalesLog, type: :model do
 
     it "correctly derives and saves exday, exmonth and exyear" do
       sales_log.update!(exdate: Time.gm(2022, 5, 4), saledate: Time.gm(2022, 7, 4), ownershipsch: 1, type: 18, staircase: 2, resale: 2, proplen: 0)
-      record_from_db = ActiveRecord::Base.connection.execute("select exday, exmonth, exyear from sales_logs where id=#{sales_log.id}").to_a[0]
+      record_from_db = described_class.find(sales_log.id)
       expect(record_from_db["exday"]).to eq(4)
       expect(record_from_db["exmonth"]).to eq(5)
       expect(record_from_db["exyear"]).to eq(2022)
@@ -173,25 +173,25 @@ RSpec.describe SalesLog, type: :model do
 
     it "correctly derives and saves deposit for outright sales when no mortgage is used" do
       sales_log.update!(value: 123_400, deposit: nil, mortgageused: 2, ownershipsch: 3, type: 10, companybuy: 1, jointpur: 1, jointmore: 1)
-      record_from_db = ActiveRecord::Base.connection.execute("select deposit from sales_logs where id=#{sales_log.id}").to_a[0]
+      record_from_db = described_class.find(sales_log.id)
       expect(record_from_db["deposit"]).to eq(123_400)
     end
 
     it "does not derive deposit if the sale isn't outright" do
       sales_log.update!(value: 123_400, deposit: nil, mortgageused: 2, ownershipsch: 2)
-      record_from_db = ActiveRecord::Base.connection.execute("select deposit from sales_logs where id=#{sales_log.id}").to_a[0]
+      record_from_db = described_class.find(sales_log.id)
       expect(record_from_db["deposit"]).to eq(nil)
     end
 
     it "does not derive deposit if the mortgage is used" do
       sales_log.update!(value: 123_400, deposit: nil, mortgageused: 1, ownershipsch: 3, type: 10, companybuy: 1, jointpur: 1, jointmore: 1)
-      record_from_db = ActiveRecord::Base.connection.execute("select deposit from sales_logs where id=#{sales_log.id}").to_a[0]
+      record_from_db = described_class.find(sales_log.id)
       expect(record_from_db["deposit"]).to eq(nil)
     end
 
     it "correctly derives and saves pcode1 and pcode1 and pcode2" do
       sales_log.update!(postcode_full: "W6 0SP")
-      record_from_db = ActiveRecord::Base.connection.execute("select pcode1, pcode2 from sales_logs where id=#{sales_log.id}").to_a[0]
+      record_from_db = described_class.find(sales_log.id)
       expect(record_from_db["pcode1"]).to eq("W6")
       expect(record_from_db["pcode2"]).to eq("0SP")
     end
@@ -200,7 +200,7 @@ RSpec.describe SalesLog, type: :model do
       # to avoid log failing validations when mortgage value is removed:
       new_grant_value = sales_log.grant + sales_log.mortgage
       sales_log.update!(mortgageused: 2, grant: new_grant_value)
-      record_from_db = ActiveRecord::Base.connection.execute("select mortgage from sales_logs where id=#{sales_log.id}").to_a[0]
+      record_from_db = described_class.find(sales_log.id)
       expect(record_from_db["mortgage"]).to eq(0.0)
     end
 
@@ -209,7 +209,7 @@ RSpec.describe SalesLog, type: :model do
       new_grant_value = sales_log.grant + sales_log.mortgage
       sales_log.update!(mortgageused: 2, grant: new_grant_value)
       sales_log.update!(mortgageused: 1)
-      record_from_db = ActiveRecord::Base.connection.execute("select mortgage from sales_logs where id=#{sales_log.id}").to_a[0]
+      record_from_db = described_class.find(sales_log.id)
       expect(record_from_db["mortgage"]).to eq(nil)
     end
 
@@ -276,7 +276,7 @@ RSpec.describe SalesLog, type: :model do
     end
 
     def check_postcode_fields(postcode_field)
-      record_from_db = ActiveRecord::Base.connection.execute("select #{postcode_field} from sales_logs where id=#{address_sales_log.id}").to_a[0]
+      record_from_db = described_class.find(address_sales_log.id)
       expect(address_sales_log[postcode_field]).to eq("M1 1AE")
       expect(record_from_db[postcode_field]).to eq("M1 1AE")
     end
@@ -311,7 +311,7 @@ RSpec.describe SalesLog, type: :model do
     end
 
     it "correctly infers la" do
-      record_from_db = ActiveRecord::Base.connection.execute("select la from sales_logs where id=#{address_sales_log.id}").to_a[0]
+      record_from_db = described_class.find(address_sales_log.id)
       expect(address_sales_log.la).to eq("E08000003")
       expect(record_from_db["la"]).to eq("E08000003")
     end
@@ -340,7 +340,7 @@ RSpec.describe SalesLog, type: :model do
       end
 
       it "correctly sets la as nil" do
-        record_from_db = ActiveRecord::Base.connection.execute("select la from sales_logs where id=#{address_sales_log_22_23.id}").to_a[0]
+        record_from_db = described_class.find(address_sales_log_22_23.id)
         expect(address_sales_log_22_23.la).to eq(nil)
         expect(record_from_db["la"]).to eq(nil)
       end
@@ -370,7 +370,7 @@ RSpec.describe SalesLog, type: :model do
       end
 
       it "correctly infers new la" do
-        record_from_db = ActiveRecord::Base.connection.execute("select la from sales_logs where id=#{address_sales_log_23_24.id}").to_a[0]
+        record_from_db = described_class.find(address_sales_log_23_24.id)
         expect(address_sales_log_23_24.la).to eq("E06000064")
         expect(record_from_db["la"]).to eq("E06000064")
       end
@@ -400,7 +400,7 @@ RSpec.describe SalesLog, type: :model do
     it "correctly resets all fields if property postcode not known" do
       address_sales_log.update!({ pcodenk: 1 })
 
-      record_from_db = ActiveRecord::Base.connection.execute("select la, postcode_full from sales_logs where id=#{address_sales_log.id}").to_a[0]
+      record_from_db = described_class.find(address_sales_log.id)
       expect(record_from_db["postcode_full"]).to eq(nil)
       expect(address_sales_log.la).to eq(nil)
       expect(record_from_db["la"]).to eq(nil)
@@ -410,14 +410,14 @@ RSpec.describe SalesLog, type: :model do
       address_sales_log.update!({ pcodenk: 1 })
       address_sales_log.update!({ la: "E09000033" })
 
-      record_from_db = ActiveRecord::Base.connection.execute("select la, postcode_full from sales_logs where id=#{address_sales_log.id}").to_a[0]
+      record_from_db = described_class.find(address_sales_log.id)
       expect(record_from_db["postcode_full"]).to eq(nil)
       expect(address_sales_log.la).to eq("E09000033")
       expect(record_from_db["la"]).to eq("E09000033")
 
       address_sales_log.update!({ pcodenk: 0, postcode_full: "M1 1AD" })
 
-      record_from_db = ActiveRecord::Base.connection.execute("select la, postcode_full from sales_logs where id=#{address_sales_log.id}").to_a[0]
+      record_from_db = described_class.find(address_sales_log.id)
       expect(record_from_db["postcode_full"]).to eq("M1 1AD")
       expect(address_sales_log.la).to eq("E08000003")
       expect(record_from_db["la"]).to eq("E08000003")
@@ -453,35 +453,35 @@ RSpec.describe SalesLog, type: :model do
     end
 
     it "correctly derives and saves hhmemb" do
-      record_from_db = ActiveRecord::Base.connection.execute("select hhmemb from sales_logs where id=#{sales_log.id}").to_a[0]
+      record_from_db = described_class.find(sales_log.id)
       expect(record_from_db["hhmemb"]).to eq(6)
     end
 
     it "correctly derives and saves hhmemb if it's a joint purchase" do
       sales_log.update!(jointpur: 2, jointmore: 2)
-      record_from_db = ActiveRecord::Base.connection.execute("select hhmemb from sales_logs where id=#{sales_log.id}").to_a[0]
+      record_from_db = described_class.find(sales_log.id)
       expect(record_from_db["hhmemb"]).to eq(5)
     end
 
     it "correctly derives and saves totchild" do
-      record_from_db = ActiveRecord::Base.connection.execute("select totchild from sales_logs where id=#{sales_log.id}").to_a[0]
+      record_from_db = described_class.find(sales_log.id)
       expect(record_from_db["totchild"]).to eq(2)
     end
 
     it "correctly derives and saves totadult" do
-      record_from_db = ActiveRecord::Base.connection.execute("select totadult from sales_logs where id=#{sales_log.id}").to_a[0]
+      record_from_db = described_class.find(sales_log.id)
       expect(record_from_db["totadult"]).to eq(4)
     end
 
     it "correctly derives and saves hhtype" do
-      record_from_db = ActiveRecord::Base.connection.execute("select hhtype from sales_logs where id=#{sales_log.id}").to_a[0]
+      record_from_db = described_class.find(sales_log.id)
       expect(record_from_db["hhtype"]).to eq(9)
     end
   end
 
   context "when saving previous address" do
     def check_previous_postcode_fields(postcode_field)
-      record_from_db = ActiveRecord::Base.connection.execute("select #{postcode_field} from sales_logs where id=#{address_sales_log.id}").to_a[0]
+      record_from_db = described_class.find(address_sales_log.id)
       expect(address_sales_log[postcode_field]).to eq("M1 1AE")
       expect(record_from_db[postcode_field]).to eq("M1 1AE")
     end
@@ -519,7 +519,7 @@ RSpec.describe SalesLog, type: :model do
     end
 
     it "correctly infers prevloc" do
-      record_from_db = ActiveRecord::Base.connection.execute("select prevloc from sales_logs where id=#{address_sales_log.id}").to_a[0]
+      record_from_db = described_class.find(address_sales_log.id)
       expect(address_sales_log.prevloc).to eq("E08000003")
       expect(record_from_db["prevloc"]).to eq("E08000003")
     end
@@ -537,7 +537,7 @@ RSpec.describe SalesLog, type: :model do
     it "correctly resets all fields if previous postcode not known" do
       address_sales_log.update!({ ppcodenk: 1 })
 
-      record_from_db = ActiveRecord::Base.connection.execute("select prevloc, ppostcode_full from sales_logs where id=#{address_sales_log.id}").to_a[0]
+      record_from_db = described_class.find(address_sales_log.id)
       expect(record_from_db["ppostcode_full"]).to eq(nil)
       expect(address_sales_log.prevloc).to eq(nil)
       expect(record_from_db["prevloc"]).to eq(nil)

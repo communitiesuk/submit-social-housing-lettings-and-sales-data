@@ -14,8 +14,6 @@ RSpec.describe LettingsLog do
       Singleton.__init__(FormHandler)
       example.run
     end
-    Timecop.return
-    Singleton.__init__(FormHandler)
   end
 
   before do
@@ -243,19 +241,19 @@ RSpec.describe LettingsLog do
     end
 
     it "correctly derives and saves partial and full major repairs date" do
-      record_from_db = ActiveRecord::Base.connection.execute("select mrcdate from lettings_logs where id=#{lettings_log.id}").to_a[0]
+      record_from_db = described_class.find(lettings_log.id)
       expect(record_from_db["mrcdate"].day).to eq(4)
       expect(record_from_db["mrcdate"].month).to eq(5)
       expect(record_from_db["mrcdate"].year).to eq(2021)
     end
 
     it "correctly derives and saves incref" do
-      record_from_db = ActiveRecord::Base.connection.execute("select incref from lettings_logs where id=#{lettings_log.id}").to_a[0]
+      record_from_db = described_class.find(lettings_log.id)
       expect(record_from_db["incref"]).to eq(1)
     end
 
     it "correctly derives and saves renttype" do
-      record_from_db = ActiveRecord::Base.connection.execute("select renttype from lettings_logs where id=#{lettings_log.id}").to_a[0]
+      record_from_db = described_class.find(lettings_log.id)
       expect(lettings_log.renttype).to eq(3)
       expect(record_from_db["renttype"]).to eq(3)
     end
@@ -267,7 +265,7 @@ RSpec.describe LettingsLog do
         context "when the rent type is intermediate rent and supported housing" do
           it "correctly derives and saves lettype" do
             lettings_log.update!(rent_type: 4, needstype: 2)
-            record_from_db = ActiveRecord::Base.connection.execute("select lettype from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.lettype).to eq(10)
             expect(record_from_db["lettype"]).to eq(10)
           end
@@ -276,7 +274,7 @@ RSpec.describe LettingsLog do
         context "when the rent type is intermediate rent and general needs housing" do
           it "correctly derives and saves lettype" do
             lettings_log.update!(rent_type: 4, needstype: 1)
-            record_from_db = ActiveRecord::Base.connection.execute("select lettype from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.lettype).to eq(9)
             expect(record_from_db["lettype"]).to eq(9)
           end
@@ -285,7 +283,7 @@ RSpec.describe LettingsLog do
         context "when the rent type is affordable rent and supported housing" do
           it "correctly derives and saves lettype" do
             lettings_log.update!(rent_type: 2, needstype: 2)
-            record_from_db = ActiveRecord::Base.connection.execute("select lettype from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.lettype).to eq(6)
             expect(record_from_db["lettype"]).to eq(6)
           end
@@ -294,7 +292,7 @@ RSpec.describe LettingsLog do
         context "when the rent type is affordable rent and general needs housing" do
           it "correctly derives and saves lettype" do
             lettings_log.update!(rent_type: 2, needstype: 1)
-            record_from_db = ActiveRecord::Base.connection.execute("select lettype from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.lettype).to eq(5)
             expect(record_from_db["lettype"]).to eq(5)
           end
@@ -303,7 +301,7 @@ RSpec.describe LettingsLog do
         context "when the rent type is social rent and supported housing" do
           it "correctly derives and saves lettype" do
             lettings_log.update!(rent_type: 0, needstype: 2)
-            record_from_db = ActiveRecord::Base.connection.execute("select lettype from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.lettype).to eq(2)
             expect(record_from_db["lettype"]).to eq(2)
           end
@@ -312,7 +310,7 @@ RSpec.describe LettingsLog do
         context "when the rent type is social rent and general needs housing" do
           it "correctly derives and saves lettype" do
             lettings_log.update!(rent_type: 0, needstype: 1)
-            record_from_db = ActiveRecord::Base.connection.execute("select lettype from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.lettype).to eq(1)
             expect(record_from_db["lettype"]).to eq(1)
           end
@@ -321,7 +319,7 @@ RSpec.describe LettingsLog do
         context "when the tenant is not in receipt of applicable benefits" do
           it "correctly resets total shortfall" do
             lettings_log.update!(hbrentshortfall: 2, wtshortfall: 100, hb: 9)
-            record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wtshortfall).to be_nil
             expect(record_from_db["wtshortfall"]).to be_nil
           end
@@ -330,35 +328,35 @@ RSpec.describe LettingsLog do
         context "when rent is paid bi-weekly" do
           it "correctly derives and saves weekly rent" do
             lettings_log.update!(brent: 100, period: 2)
-            record_from_db = ActiveRecord::Base.connection.execute("select wrent from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wrent).to eq(50.0)
             expect(record_from_db["wrent"]).to eq(50.0)
           end
 
           it "correctly derives and saves weekly service charge" do
             lettings_log.update!(scharge: 70, period: 2)
-            record_from_db = ActiveRecord::Base.connection.execute("select wscharge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wscharge).to eq(35.0)
             expect(record_from_db["wscharge"]).to eq(35.0)
           end
 
           it "correctly derives and saves weekly personal service charge" do
             lettings_log.update!(pscharge: 60, period: 2)
-            record_from_db = ActiveRecord::Base.connection.execute("select wpschrge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wpschrge).to eq(30.0)
             expect(record_from_db["wpschrge"]).to eq(30.0)
           end
 
           it "correctly derives and saves weekly support charge" do
             lettings_log.update!(supcharg: 80, period: 2)
-            record_from_db = ActiveRecord::Base.connection.execute("select wsupchrg from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wsupchrg).to eq(40.0)
             expect(record_from_db["wsupchrg"]).to eq(40.0)
           end
 
           it "correctly derives and saves weekly total charge" do
             lettings_log.update!(tcharge: 100, period: 2)
-            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wtcharge).to eq(50.0)
             expect(record_from_db["wtcharge"]).to eq(50.0)
           end
@@ -367,7 +365,7 @@ RSpec.describe LettingsLog do
             context "when tenant is in receipt of housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
                 lettings_log.update!(hbrentshortfall: 1, tshortfall: 100, period: 2, hb: 1)
-                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                record_from_db = described_class.find(lettings_log.id)
                 expect(lettings_log.wtshortfall).to eq(50.0)
                 expect(record_from_db["wtshortfall"]).to eq(50.0)
               end
@@ -376,7 +374,7 @@ RSpec.describe LettingsLog do
             context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
                 lettings_log.update!(hbrentshortfall: 1, tshortfall: 100, period: 2, hb: 6)
-                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                record_from_db = described_class.find(lettings_log.id)
                 expect(lettings_log.wtshortfall).to eq(50.0)
                 expect(record_from_db["wtshortfall"]).to eq(50.0)
               end
@@ -385,7 +383,7 @@ RSpec.describe LettingsLog do
             context "when tenant is in receipt of housing benefit and universal credit" do
               it "correctly derives and saves weekly total shortfall" do
                 lettings_log.update!(hbrentshortfall: 1, tshortfall: 100, period: 2, hb: 8)
-                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                record_from_db = described_class.find(lettings_log.id)
                 expect(lettings_log.wtshortfall).to eq(50.0)
                 expect(record_from_db["wtshortfall"]).to eq(50.0)
               end
@@ -394,7 +392,7 @@ RSpec.describe LettingsLog do
 
           it "correctly derives floats" do
             lettings_log.update!(supcharg: 60.12, pscharge: 50.13, scharge: 60.98, brent: 60.97, period: 2)
-            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wsupchrg).to eq(30.06)
             expect(lettings_log.wpschrge).to eq(25.06)
             expect(lettings_log.wscharge).to eq(30.49)
@@ -411,35 +409,35 @@ RSpec.describe LettingsLog do
         context "when rent is paid every 4 weeks" do
           it "correctly derives and saves weekly rent" do
             lettings_log.update!(brent: 120, period: 3)
-            record_from_db = ActiveRecord::Base.connection.execute("select wrent from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wrent).to eq(30.0)
             expect(record_from_db["wrent"]).to eq(30.0)
           end
 
           it "correctly derives and saves weekly service charge" do
             lettings_log.update!(scharge: 120, period: 3)
-            record_from_db = ActiveRecord::Base.connection.execute("select wscharge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wscharge).to eq(30.0)
             expect(record_from_db["wscharge"]).to eq(30.0)
           end
 
           it "correctly derives and saves weekly personal service charge" do
             lettings_log.update!(pscharge: 120, period: 3)
-            record_from_db = ActiveRecord::Base.connection.execute("select wpschrge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wpschrge).to eq(30.0)
             expect(record_from_db["wpschrge"]).to eq(30.0)
           end
 
           it "correctly derives and saves weekly support charge" do
             lettings_log.update!(supcharg: 120, period: 3)
-            record_from_db = ActiveRecord::Base.connection.execute("select wsupchrg from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wsupchrg).to eq(30.0)
             expect(record_from_db["wsupchrg"]).to eq(30.0)
           end
 
           it "correctly derives and saves weekly total charge" do
             lettings_log.update!(tcharge: 120, period: 3)
-            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wtcharge).to eq(30.0)
             expect(record_from_db["wtcharge"]).to eq(30.0)
           end
@@ -448,7 +446,7 @@ RSpec.describe LettingsLog do
             context "when tenant is in receipt of housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
                 lettings_log.update!(hbrentshortfall: 1, tshortfall: 120, period: 3, hb: 1)
-                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                record_from_db = described_class.find(lettings_log.id)
                 expect(lettings_log.wtshortfall).to eq(30.0)
                 expect(record_from_db["wtshortfall"]).to eq(30.0)
               end
@@ -457,7 +455,7 @@ RSpec.describe LettingsLog do
             context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
                 lettings_log.update!(hbrentshortfall: 1, tshortfall: 120, period: 3, hb: 6)
-                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                record_from_db = described_class.find(lettings_log.id)
                 expect(lettings_log.wtshortfall).to eq(30.0)
                 expect(record_from_db["wtshortfall"]).to eq(30.0)
               end
@@ -466,7 +464,7 @@ RSpec.describe LettingsLog do
             context "when tenant is in receipt of housing benefit and universal credit" do
               it "correctly derives and saves weekly total shortfall" do
                 lettings_log.update!(hbrentshortfall: 1, tshortfall: 120, period: 3, hb: 8)
-                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                record_from_db = described_class.find(lettings_log.id)
                 expect(lettings_log.wtshortfall).to eq(30.0)
                 expect(record_from_db["wtshortfall"]).to eq(30.0)
               end
@@ -475,7 +473,7 @@ RSpec.describe LettingsLog do
 
           it "correctly derives floats" do
             lettings_log.update!(supcharg: 100.12, pscharge: 100.13, scharge: 100.98, brent: 100.97, period: 3)
-            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wsupchrg).to eq(25.03)
             expect(lettings_log.wpschrge).to eq(25.03)
             expect(lettings_log.wscharge).to eq(25.24)
@@ -492,35 +490,35 @@ RSpec.describe LettingsLog do
         context "when rent is paid every calendar month" do
           it "correctly derives and saves weekly rent" do
             lettings_log.update!(brent: 130, period: 4)
-            record_from_db = ActiveRecord::Base.connection.execute("select wrent from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wrent).to eq(30.0)
             expect(record_from_db["wrent"]).to eq(30.0)
           end
 
           it "correctly derives and saves weekly service charge" do
             lettings_log.update!(scharge: 130, period: 4)
-            record_from_db = ActiveRecord::Base.connection.execute("select wscharge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wscharge).to eq(30.0)
             expect(record_from_db["wscharge"]).to eq(30.0)
           end
 
           it "correctly derives and saves weekly personal service charge" do
             lettings_log.update!(pscharge: 130, period: 4)
-            record_from_db = ActiveRecord::Base.connection.execute("select wpschrge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wpschrge).to eq(30.0)
             expect(record_from_db["wpschrge"]).to eq(30.0)
           end
 
           it "correctly derives and saves weekly support charge" do
             lettings_log.update!(supcharg: 130, period: 4)
-            record_from_db = ActiveRecord::Base.connection.execute("select wsupchrg from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wsupchrg).to eq(30.0)
             expect(record_from_db["wsupchrg"]).to eq(30.0)
           end
 
           it "correctly derives and saves weekly total charge" do
             lettings_log.update!(tcharge: 130, period: 4)
-            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wtcharge).to eq(30.0)
             expect(record_from_db["wtcharge"]).to eq(30.0)
           end
@@ -529,7 +527,7 @@ RSpec.describe LettingsLog do
             context "when tenant is in receipt of housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
                 lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 4, hb: 1)
-                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                record_from_db = described_class.find(lettings_log.id)
                 expect(lettings_log.wtshortfall).to eq(30.0)
                 expect(record_from_db["wtshortfall"]).to eq(30.0)
               end
@@ -538,7 +536,7 @@ RSpec.describe LettingsLog do
             context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
                 lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 4, hb: 6)
-                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                record_from_db = described_class.find(lettings_log.id)
                 expect(lettings_log.wtshortfall).to eq(30.0)
                 expect(record_from_db["wtshortfall"]).to eq(30.0)
               end
@@ -547,7 +545,7 @@ RSpec.describe LettingsLog do
             context "when tenant is in receipt of housing benefit and universal credit" do
               it "correctly derives and saves weekly total shortfall" do
                 lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 4, hb: 8)
-                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                record_from_db = described_class.find(lettings_log.id)
                 expect(lettings_log.wtshortfall).to eq(30.0)
                 expect(record_from_db["wtshortfall"]).to eq(30.0)
               end
@@ -556,7 +554,7 @@ RSpec.describe LettingsLog do
 
           it "correctly derives floats" do
             lettings_log.update!(supcharg: 100.12, pscharge: 100.13, scharge: 100.98, brent: 100.97, period: 4)
-            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wsupchrg).to eq(23.10)
             expect(lettings_log.wpschrge).to eq(23.11)
             expect(lettings_log.wscharge).to eq(23.30)
@@ -573,35 +571,35 @@ RSpec.describe LettingsLog do
         context "when rent is paid weekly for 50 weeks" do
           it "correctly derives and saves weekly rent" do
             lettings_log.update!(brent: 130, period: 5)
-            record_from_db = ActiveRecord::Base.connection.execute("select wrent from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wrent).to eq(125.0)
             expect(record_from_db["wrent"]).to eq(125.0)
           end
 
           it "correctly derives and saves weekly service charge" do
             lettings_log.update!(scharge: 20, period: 5)
-            record_from_db = ActiveRecord::Base.connection.execute("select wscharge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wscharge).to eq(19.23)
             expect(record_from_db["wscharge"]).to eq(19.23)
           end
 
           it "correctly derives and saves weekly personal service charge" do
             lettings_log.update!(pscharge: 20, period: 5)
-            record_from_db = ActiveRecord::Base.connection.execute("select wpschrge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wpschrge).to eq(19.23)
             expect(record_from_db["wpschrge"]).to eq(19.23)
           end
 
           it "correctly derives and saves weekly support charge" do
             lettings_log.update!(supcharg: 20, period: 5)
-            record_from_db = ActiveRecord::Base.connection.execute("select wsupchrg from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wsupchrg).to eq(19.23)
             expect(record_from_db["wsupchrg"]).to eq(19.23)
           end
 
           it "correctly derives and saves weekly total charge" do
             lettings_log.update!(tcharge: 130, period: 5)
-            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wtcharge).to eq(125.0)
             expect(record_from_db["wtcharge"]).to eq(125.0)
           end
@@ -610,7 +608,7 @@ RSpec.describe LettingsLog do
             context "when tenant is in receipt of housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
                 lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 5, hb: 1)
-                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                record_from_db = described_class.find(lettings_log.id)
                 expect(lettings_log.wtshortfall).to eq(125.0)
                 expect(record_from_db["wtshortfall"]).to eq(125.0)
               end
@@ -619,7 +617,7 @@ RSpec.describe LettingsLog do
             context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
                 lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 5, hb: 6)
-                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                record_from_db = described_class.find(lettings_log.id)
                 expect(lettings_log.wtshortfall).to eq(125.0)
                 expect(record_from_db["wtshortfall"]).to eq(125.0)
               end
@@ -628,7 +626,7 @@ RSpec.describe LettingsLog do
             context "when tenant is in receipt of housing benefit and universal credit" do
               it "correctly derives and saves weekly total shortfall" do
                 lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 5, hb: 8)
-                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                record_from_db = described_class.find(lettings_log.id)
                 expect(lettings_log.wtshortfall).to eq(125.0)
                 expect(record_from_db["wtshortfall"]).to eq(125.0)
               end
@@ -637,7 +635,7 @@ RSpec.describe LettingsLog do
 
           it "correctly derives floats" do
             lettings_log.update!(supcharg: 20.12, pscharge: 20.13, scharge: 20.98, brent: 100.97, period: 5)
-            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wsupchrg).to eq(19.35)
             expect(lettings_log.wpschrge).to eq(19.36)
             expect(lettings_log.wscharge).to eq(20.17)
@@ -654,35 +652,35 @@ RSpec.describe LettingsLog do
         context "when rent is paid weekly for 49 weeks" do
           it "correctly derives and saves weekly rent" do
             lettings_log.update!(brent: 130, period: 6)
-            record_from_db = ActiveRecord::Base.connection.execute("select wrent from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wrent).to eq(122.5)
             expect(record_from_db["wrent"]).to eq(122.5)
           end
 
           it "correctly derives and saves weekly service charge" do
             lettings_log.update!(scharge: 30, period: 6)
-            record_from_db = ActiveRecord::Base.connection.execute("select wscharge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wscharge).to eq(28.27)
             expect(record_from_db["wscharge"]).to eq(28.27)
           end
 
           it "correctly derives and saves weekly personal service charge" do
             lettings_log.update!(pscharge: 30, period: 6)
-            record_from_db = ActiveRecord::Base.connection.execute("select wpschrge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wpschrge).to eq(28.27)
             expect(record_from_db["wpschrge"]).to eq(28.27)
           end
 
           it "correctly derives and saves weekly support charge" do
             lettings_log.update!(supcharg: 30, period: 6)
-            record_from_db = ActiveRecord::Base.connection.execute("select wsupchrg from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wsupchrg).to eq(28.27)
             expect(record_from_db["wsupchrg"]).to eq(28.27)
           end
 
           it "correctly derives and saves weekly total charge" do
             lettings_log.update!(tcharge: 130, period: 6)
-            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wtcharge).to eq(122.5)
             expect(record_from_db["wtcharge"]).to eq(122.5)
           end
@@ -691,7 +689,7 @@ RSpec.describe LettingsLog do
             context "when tenant is in receipt of housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
                 lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 6, hb: 1)
-                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                record_from_db = described_class.find(lettings_log.id)
                 expect(lettings_log.wtshortfall).to eq(122.5)
                 expect(record_from_db["wtshortfall"]).to eq(122.5)
               end
@@ -700,7 +698,7 @@ RSpec.describe LettingsLog do
             context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
                 lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 6, hb: 6)
-                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                record_from_db = described_class.find(lettings_log.id)
                 expect(lettings_log.wtshortfall).to eq(122.5)
                 expect(record_from_db["wtshortfall"]).to eq(122.5)
               end
@@ -717,7 +715,7 @@ RSpec.describe LettingsLog do
 
           it "correctly derives floats" do
             lettings_log.update!(supcharg: 30.12, pscharge: 30.13, scharge: 30.98, brent: 100.97, period: 6)
-            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wsupchrg).to eq(28.38)
             expect(lettings_log.wpschrge).to eq(28.39)
             expect(lettings_log.wscharge).to eq(29.19)
@@ -734,35 +732,35 @@ RSpec.describe LettingsLog do
         context "when rent is paid weekly for 48 weeks" do
           it "correctly derives and saves weekly rent" do
             lettings_log.update!(brent: 130, period: 7)
-            record_from_db = ActiveRecord::Base.connection.execute("select wrent from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wrent).to eq(120.0)
             expect(record_from_db["wrent"]).to eq(120.0)
           end
 
           it "correctly derives and saves weekly service charge" do
             lettings_log.update!(scharge: 30, period: 7)
-            record_from_db = ActiveRecord::Base.connection.execute("select wscharge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wscharge).to eq(27.69)
             expect(record_from_db["wscharge"]).to eq(27.69)
           end
 
           it "correctly derives and saves weekly personal service charge" do
             lettings_log.update!(pscharge: 30, period: 7)
-            record_from_db = ActiveRecord::Base.connection.execute("select wpschrge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wpschrge).to eq(27.69)
             expect(record_from_db["wpschrge"]).to eq(27.69)
           end
 
           it "correctly derives and saves weekly support charge" do
             lettings_log.update!(supcharg: 30, period: 7)
-            record_from_db = ActiveRecord::Base.connection.execute("select wsupchrg from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wsupchrg).to eq(27.69)
             expect(record_from_db["wsupchrg"]).to eq(27.69)
           end
 
           it "correctly derives and saves weekly total charge" do
             lettings_log.update!(tcharge: 130, period: 7)
-            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wtcharge).to eq(120.0)
             expect(record_from_db["wtcharge"]).to eq(120.0)
           end
@@ -771,7 +769,7 @@ RSpec.describe LettingsLog do
             context "when tenant is in receipt of housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
                 lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 7, hb: 1)
-                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                record_from_db = described_class.find(lettings_log.id)
                 expect(lettings_log.wtshortfall).to eq(120.0)
                 expect(record_from_db["wtshortfall"]).to eq(120.0)
               end
@@ -780,7 +778,7 @@ RSpec.describe LettingsLog do
             context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
                 lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 7, hb: 6)
-                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                record_from_db = described_class.find(lettings_log.id)
                 expect(lettings_log.wtshortfall).to eq(120.0)
                 expect(record_from_db["wtshortfall"]).to eq(120.0)
               end
@@ -789,7 +787,7 @@ RSpec.describe LettingsLog do
             context "when tenant is in receipt of housing benefit and universal credit" do
               it "correctly derives and saves weekly total shortfall" do
                 lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 7, hb: 8)
-                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                record_from_db = described_class.find(lettings_log.id)
                 expect(lettings_log.wtshortfall).to eq(120.0)
                 expect(record_from_db["wtshortfall"]).to eq(120.0)
               end
@@ -798,7 +796,7 @@ RSpec.describe LettingsLog do
 
           it "correctly derives floats" do
             lettings_log.update!(supcharg: 30.12, pscharge: 30.13, scharge: 30.98, brent: 100.97, period: 7)
-            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wsupchrg).to eq(27.8)
             expect(lettings_log.wpschrge).to eq(27.81)
             expect(lettings_log.wscharge).to eq(28.6)
@@ -815,35 +813,35 @@ RSpec.describe LettingsLog do
         context "when rent is paid weekly for 47 weeks" do
           it "correctly derives and saves weekly rent" do
             lettings_log.update!(brent: 130, period: 8)
-            record_from_db = ActiveRecord::Base.connection.execute("select wrent from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wrent).to eq(117.5)
             expect(record_from_db["wrent"]).to eq(117.5)
           end
 
           it "correctly derives and saves weekly service charge" do
             lettings_log.update!(scharge: 30, period: 8)
-            record_from_db = ActiveRecord::Base.connection.execute("select wscharge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wscharge).to eq(27.12)
             expect(record_from_db["wscharge"]).to eq(27.12)
           end
 
           it "correctly derives and saves weekly personal service charge" do
             lettings_log.update!(pscharge: 30, period: 8)
-            record_from_db = ActiveRecord::Base.connection.execute("select wpschrge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wpschrge).to eq(27.12)
             expect(record_from_db["wpschrge"]).to eq(27.12)
           end
 
           it "correctly derives and saves weekly support charge" do
             lettings_log.update!(supcharg: 30, period: 8)
-            record_from_db = ActiveRecord::Base.connection.execute("select wsupchrg from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wsupchrg).to eq(27.12)
             expect(record_from_db["wsupchrg"]).to eq(27.12)
           end
 
           it "correctly derives and saves weekly total charge" do
             lettings_log.update!(tcharge: 130, period: 8)
-            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wtcharge).to eq(117.5)
             expect(record_from_db["wtcharge"]).to eq(117.5)
           end
@@ -852,7 +850,7 @@ RSpec.describe LettingsLog do
             context "when tenant is in receipt of housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
                 lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 8, hb: 1)
-                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                record_from_db = described_class.find(lettings_log.id)
                 expect(lettings_log.wtshortfall).to eq(117.5)
                 expect(record_from_db["wtshortfall"]).to eq(117.5)
               end
@@ -861,7 +859,7 @@ RSpec.describe LettingsLog do
             context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
                 lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 8, hb: 6)
-                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                record_from_db = described_class.find(lettings_log.id)
                 expect(lettings_log.wtshortfall).to eq(117.5)
                 expect(record_from_db["wtshortfall"]).to eq(117.5)
               end
@@ -870,7 +868,7 @@ RSpec.describe LettingsLog do
             context "when tenant is in receipt of housing benefit and universal credit" do
               it "correctly derives and saves weekly total shortfall" do
                 lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 8, hb: 8)
-                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                record_from_db = described_class.find(lettings_log.id)
                 expect(lettings_log.wtshortfall).to eq(117.5)
                 expect(record_from_db["wtshortfall"]).to eq(117.5)
               end
@@ -879,7 +877,7 @@ RSpec.describe LettingsLog do
 
           it "correctly derives floats" do
             lettings_log.update!(supcharg: 30.12, pscharge: 30.13, scharge: 30.98, brent: 100.97, period: 8)
-            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wsupchrg).to eq(27.22)
             expect(lettings_log.wpschrge).to eq(27.23)
             expect(lettings_log.wscharge).to eq(28)
@@ -896,35 +894,35 @@ RSpec.describe LettingsLog do
         context "when rent is paid weekly for 46 weeks" do
           it "correctly derives and saves weekly rent" do
             lettings_log.update!(brent: 130, period: 9)
-            record_from_db = ActiveRecord::Base.connection.execute("select wrent from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wrent).to eq(115.0)
             expect(record_from_db["wrent"]).to eq(115.0)
           end
 
           it "correctly derives and saves weekly service charge" do
             lettings_log.update!(scharge: 30, period: 9)
-            record_from_db = ActiveRecord::Base.connection.execute("select wscharge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wscharge).to eq(26.54)
             expect(record_from_db["wscharge"]).to eq(26.54)
           end
 
           it "correctly derives and saves weekly personal service charge" do
             lettings_log.update!(pscharge: 30, period: 9)
-            record_from_db = ActiveRecord::Base.connection.execute("select wpschrge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wpschrge).to eq(26.54)
             expect(record_from_db["wpschrge"]).to eq(26.54)
           end
 
           it "correctly derives and saves weekly support charge" do
             lettings_log.update!(supcharg: 30, period: 9)
-            record_from_db = ActiveRecord::Base.connection.execute("select wsupchrg from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wsupchrg).to eq(26.54)
             expect(record_from_db["wsupchrg"]).to eq(26.54)
           end
 
           it "correctly derives and saves weekly total charge" do
             lettings_log.update!(tcharge: 130, period: 9)
-            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wtcharge).to eq(115.0)
             expect(record_from_db["wtcharge"]).to eq(115.0)
           end
@@ -933,7 +931,7 @@ RSpec.describe LettingsLog do
             context "when tenant is in receipt of housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
                 lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 9, hb: 1)
-                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                record_from_db = described_class.find(lettings_log.id)
                 expect(lettings_log.wtshortfall).to eq(115.0)
                 expect(record_from_db["wtshortfall"]).to eq(115.0)
               end
@@ -942,7 +940,7 @@ RSpec.describe LettingsLog do
             context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
                 lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 9, hb: 6)
-                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                record_from_db = described_class.find(lettings_log.id)
                 expect(lettings_log.wtshortfall).to eq(115.0)
                 expect(record_from_db["wtshortfall"]).to eq(115.0)
               end
@@ -951,7 +949,7 @@ RSpec.describe LettingsLog do
             context "when tenant is in receipt of housing benefit and universal credit" do
               it "correctly derives and saves weekly total shortfall" do
                 lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 9, hb: 8)
-                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                record_from_db = described_class.find(lettings_log.id)
                 expect(lettings_log.wtshortfall).to eq(115.0)
                 expect(record_from_db["wtshortfall"]).to eq(115.0)
               end
@@ -960,7 +958,7 @@ RSpec.describe LettingsLog do
 
           it "correctly derives floats" do
             lettings_log.update!(supcharg: 30.12, pscharge: 30.13, scharge: 30.98, brent: 100.97, period: 9)
-            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wsupchrg).to eq(26.64)
             expect(lettings_log.wpschrge).to eq(26.65)
             expect(lettings_log.wscharge).to eq(27.41)
@@ -977,35 +975,35 @@ RSpec.describe LettingsLog do
         context "when rent is paid weekly for 52 weeks" do
           it "correctly derives and saves weekly rent" do
             lettings_log.update!(brent: 130, period: 1)
-            record_from_db = ActiveRecord::Base.connection.execute("select wrent from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wrent).to eq(130.0)
             expect(record_from_db["wrent"]).to eq(130.0)
           end
 
           it "correctly derives and saves weekly service charge" do
             lettings_log.update!(scharge: 30, period: 1)
-            record_from_db = ActiveRecord::Base.connection.execute("select wscharge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wscharge).to eq(30.0)
             expect(record_from_db["wscharge"]).to eq(30.0)
           end
 
           it "correctly derives and saves weekly personal service charge" do
             lettings_log.update!(pscharge: 30, period: 1)
-            record_from_db = ActiveRecord::Base.connection.execute("select wpschrge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wpschrge).to eq(30.0)
             expect(record_from_db["wpschrge"]).to eq(30.0)
           end
 
           it "correctly derives and saves weekly support charge" do
             lettings_log.update!(supcharg: 30, period: 1)
-            record_from_db = ActiveRecord::Base.connection.execute("select wsupchrg from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wsupchrg).to eq(30.0)
             expect(record_from_db["wsupchrg"]).to eq(30.0)
           end
 
           it "correctly derives and saves weekly total charge" do
             lettings_log.update!(tcharge: 30, period: 1)
-            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wtcharge).to eq(30.0)
             expect(record_from_db["wtcharge"]).to eq(30.0)
           end
@@ -1014,7 +1012,7 @@ RSpec.describe LettingsLog do
             context "when tenant is in receipt of housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
                 lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 1, hb: 1)
-                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                record_from_db = described_class.find(lettings_log.id)
                 expect(lettings_log.wtshortfall).to eq(130.0)
                 expect(record_from_db["wtshortfall"]).to eq(130.0)
               end
@@ -1023,7 +1021,7 @@ RSpec.describe LettingsLog do
             context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
                 lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 1, hb: 6)
-                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                record_from_db = described_class.find(lettings_log.id)
                 expect(lettings_log.wtshortfall).to eq(130.0)
                 expect(record_from_db["wtshortfall"]).to eq(130.0)
               end
@@ -1032,7 +1030,7 @@ RSpec.describe LettingsLog do
             context "when tenant is in receipt of housing benefit and universal credit" do
               it "correctly derives and saves weekly total shortfall" do
                 lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 1, hb: 8)
-                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                record_from_db = described_class.find(lettings_log.id)
                 expect(lettings_log.wtshortfall).to eq(130.0)
                 expect(record_from_db["wtshortfall"]).to eq(130.0)
               end
@@ -1041,7 +1039,7 @@ RSpec.describe LettingsLog do
 
           it "correctly derives floats" do
             lettings_log.update!(supcharg: 30.12, pscharge: 25.13, scharge: 30.98, brent: 100.97, period: 1)
-            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wsupchrg).to eq(30.12)
             expect(lettings_log.wpschrge).to eq(25.13)
             expect(lettings_log.wscharge).to eq(30.98)
@@ -1058,35 +1056,35 @@ RSpec.describe LettingsLog do
         context "when rent is paid weekly for 53 weeks" do
           it "correctly derives and saves weekly rent" do
             lettings_log.update!(brent: 130, period: 10)
-            record_from_db = ActiveRecord::Base.connection.execute("select wrent from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wrent).to eq(132.5)
             expect(record_from_db["wrent"]).to eq(132.5)
           end
 
           it "correctly derives and saves weekly service charge" do
             lettings_log.update!(scharge: 30, period: 10)
-            record_from_db = ActiveRecord::Base.connection.execute("select wscharge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wscharge).to eq(30.58)
             expect(record_from_db["wscharge"]).to eq(30.58)
           end
 
           it "correctly derives and saves weekly personal service charge" do
             lettings_log.update!(pscharge: 30, period: 10)
-            record_from_db = ActiveRecord::Base.connection.execute("select wpschrge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wpschrge).to eq(30.58)
             expect(record_from_db["wpschrge"]).to eq(30.58)
           end
 
           it "correctly derives and saves weekly support charge" do
             lettings_log.update!(supcharg: 30, period: 10)
-            record_from_db = ActiveRecord::Base.connection.execute("select wsupchrg from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wsupchrg).to eq(30.58)
             expect(record_from_db["wsupchrg"]).to eq(30.58)
           end
 
           it "correctly derives and saves weekly total charge" do
             lettings_log.update!(tcharge: 30, period: 10)
-            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wtcharge).to eq(30.58)
             expect(record_from_db["wtcharge"]).to eq(30.58)
           end
@@ -1095,7 +1093,7 @@ RSpec.describe LettingsLog do
             context "when tenant is in receipt of housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
                 lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 10, hb: 1)
-                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                record_from_db = described_class.find(lettings_log.id)
                 expect(lettings_log.wtshortfall).to eq(132.5)
                 expect(record_from_db["wtshortfall"]).to eq(132.5)
               end
@@ -1104,7 +1102,7 @@ RSpec.describe LettingsLog do
             context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
                 lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 10, hb: 6)
-                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                record_from_db = described_class.find(lettings_log.id)
                 expect(lettings_log.wtshortfall).to eq(132.5)
                 expect(record_from_db["wtshortfall"]).to eq(132.5)
               end
@@ -1113,7 +1111,7 @@ RSpec.describe LettingsLog do
             context "when tenant is in receipt of housing benefit and universal credit" do
               it "correctly derives and saves weekly total shortfall" do
                 lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 10, hb: 8)
-                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from lettings_logs where id=#{lettings_log.id}").to_a[0]
+                record_from_db = described_class.find(lettings_log.id)
                 expect(lettings_log.wtshortfall).to eq(132.5)
                 expect(record_from_db["wtshortfall"]).to eq(132.5)
               end
@@ -1122,7 +1120,7 @@ RSpec.describe LettingsLog do
 
           it "correctly derives floats" do
             lettings_log.update!(supcharg: 30.12, pscharge: 25.13, scharge: 30.98, brent: 100.97, period: 10)
-            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.wsupchrg).to eq(30.7)
             expect(lettings_log.wpschrge).to eq(25.61)
             expect(lettings_log.wscharge).to eq(31.58)
@@ -1143,7 +1141,7 @@ RSpec.describe LettingsLog do
         context "when the rent type is intermediate rent and supported housing" do
           it "correctly derives and saves lettype" do
             lettings_log.update!(rent_type: 4, needstype: 2)
-            record_from_db = ActiveRecord::Base.connection.execute("select lettype from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.lettype).to eq(12)
             expect(record_from_db["lettype"]).to eq(12)
           end
@@ -1152,7 +1150,7 @@ RSpec.describe LettingsLog do
         context "when the rent type is intermediate rent and general needs housing" do
           it "correctly derives and saves lettype" do
             lettings_log.update!(rent_type: 4, needstype: 1)
-            record_from_db = ActiveRecord::Base.connection.execute("select lettype from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.lettype).to eq(11)
             expect(record_from_db["lettype"]).to eq(11)
           end
@@ -1161,7 +1159,7 @@ RSpec.describe LettingsLog do
         context "when the rent type is affordable rent and supported housing" do
           it "correctly derives and saves lettype" do
             lettings_log.update!(rent_type: 2, needstype: 2)
-            record_from_db = ActiveRecord::Base.connection.execute("select lettype from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.lettype).to eq(8)
             expect(record_from_db["lettype"]).to eq(8)
           end
@@ -1170,7 +1168,7 @@ RSpec.describe LettingsLog do
         context "when the rent type is affordable rent and general needs housing" do
           it "correctly derives and saves lettype" do
             lettings_log.update!(rent_type: 2, needstype: 1)
-            record_from_db = ActiveRecord::Base.connection.execute("select lettype from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.lettype).to eq(7)
             expect(record_from_db["lettype"]).to eq(7)
           end
@@ -1179,7 +1177,7 @@ RSpec.describe LettingsLog do
         context "when the rent type is social rent and supported housing" do
           it "correctly derives and saves lettype" do
             lettings_log.update!(rent_type: 0, needstype: 2)
-            record_from_db = ActiveRecord::Base.connection.execute("select lettype from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.lettype).to eq(4)
             expect(record_from_db["lettype"]).to eq(4)
           end
@@ -1188,7 +1186,7 @@ RSpec.describe LettingsLog do
         context "when the rent type is social rent and general needs housing" do
           it "correctly derives and saves lettype" do
             lettings_log.update!(rent_type: 0, needstype: 1)
-            record_from_db = ActiveRecord::Base.connection.execute("select lettype from lettings_logs where id=#{lettings_log.id}").to_a[0]
+            record_from_db = described_class.find(lettings_log.id)
             expect(lettings_log.lettype).to eq(3)
             expect(record_from_db["lettype"]).to eq(3)
           end
@@ -1197,7 +1195,7 @@ RSpec.describe LettingsLog do
     end
 
     it "correctly derives and saves day, month, year from start date" do
-      record_from_db = ActiveRecord::Base.connection.execute("select startdate from lettings_logs where id=#{lettings_log.id}").to_a[0]
+      record_from_db = described_class.find(lettings_log.id)
       expect(record_from_db["startdate"].day).to eq(10)
       expect(record_from_db["startdate"].month).to eq(10)
       expect(record_from_db["startdate"].year).to eq(2021)
@@ -1209,20 +1207,20 @@ RSpec.describe LettingsLog do
       end
 
       it "derives that any blank ones are 0" do
-        record_from_db = ActiveRecord::Base.connection.execute("select supcharg, scharge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+        record_from_db = described_class.find(lettings_log.id)
         expect(record_from_db["supcharg"].to_f).to eq(0.0)
         expect(record_from_db["scharge"].to_f).to eq(0.0)
       end
     end
 
     def check_postcode_fields(postcode_field)
-      record_from_db = ActiveRecord::Base.connection.execute("select #{postcode_field} from lettings_logs where id=#{address_lettings_log.id}").to_a[0]
+      record_from_db = described_class.find(lettings_log.id)
       expect(address_lettings_log[postcode_field]).to eq("M1 1AE")
       expect(record_from_db[postcode_field]).to eq("M1 1AE")
     end
 
     def check_previous_postcode_fields(postcode_field)
-      record_from_db = ActiveRecord::Base.connection.execute("select #{postcode_field} from lettings_logs where id=#{address_lettings_log.id}").to_a[0]
+      record_from_db = described_class.find(address_lettings_log.id)
       expect(address_lettings_log[postcode_field]).to eq("M1 1AE")
       expect(record_from_db[postcode_field]).to eq("M1 1AE")
     end
@@ -1262,7 +1260,7 @@ RSpec.describe LettingsLog do
       end
 
       it "correctly infers la" do
-        record_from_db = ActiveRecord::Base.connection.execute("select la from lettings_logs where id=#{address_lettings_log.id}").to_a[0]
+        record_from_db = described_class.find(address_lettings_log.id)
         expect(address_lettings_log.la).to eq("E08000003")
         expect(record_from_db["la"]).to eq("E08000003")
       end
@@ -1291,7 +1289,7 @@ RSpec.describe LettingsLog do
       it "correctly resets all fields if property postcode not known" do
         address_lettings_log.update!({ postcode_known: 0 })
 
-        record_from_db = ActiveRecord::Base.connection.execute("select la, postcode_full from lettings_logs where id=#{address_lettings_log.id}").to_a[0]
+        record_from_db = described_class.find(address_lettings_log.id)
         expect(record_from_db["postcode_full"]).to eq(nil)
         expect(address_lettings_log.la).to eq(nil)
         expect(record_from_db["la"]).to eq(nil)
@@ -1301,14 +1299,14 @@ RSpec.describe LettingsLog do
         address_lettings_log.update!({ postcode_known: 0 })
         address_lettings_log.update!({ la: "E09000033" })
 
-        record_from_db = ActiveRecord::Base.connection.execute("select la, postcode_full from lettings_logs where id=#{address_lettings_log.id}").to_a[0]
+        record_from_db = described_class.find(address_lettings_log.id)
         expect(record_from_db["postcode_full"]).to eq(nil)
         expect(address_lettings_log.la).to eq("E09000033")
         expect(record_from_db["la"]).to eq("E09000033")
 
         address_lettings_log.update!({ postcode_known: 1, postcode_full: "M1 1AD" })
 
-        record_from_db = ActiveRecord::Base.connection.execute("select la, postcode_full from lettings_logs where id=#{address_lettings_log.id}").to_a[0]
+        record_from_db = described_class.find(address_lettings_log.id)
         expect(record_from_db["postcode_full"]).to eq("M1 1AD")
         expect(address_lettings_log.la).to eq("E08000003")
         expect(record_from_db["la"]).to eq("E08000003")
@@ -1350,7 +1348,7 @@ RSpec.describe LettingsLog do
       end
 
       it "correctly infers prevloc" do
-        record_from_db = ActiveRecord::Base.connection.execute("select prevloc from lettings_logs where id=#{address_lettings_log.id}").to_a[0]
+        record_from_db = described_class.find(address_lettings_log.id)
         expect(address_lettings_log.prevloc).to eq("E08000003")
         expect(record_from_db["prevloc"]).to eq("E08000003")
       end
@@ -1368,7 +1366,7 @@ RSpec.describe LettingsLog do
       it "correctly resets all fields if previous postcode not known" do
         address_lettings_log.update!({ ppcodenk: 0 })
 
-        record_from_db = ActiveRecord::Base.connection.execute("select prevloc, ppostcode_full from lettings_logs where id=#{address_lettings_log.id}").to_a[0]
+        record_from_db = described_class.find(address_lettings_log.id)
         expect(record_from_db["ppostcode_full"]).to eq(nil)
         expect(address_lettings_log.prevloc).to eq(nil)
         expect(record_from_db["prevloc"]).to eq(nil)
@@ -1377,12 +1375,12 @@ RSpec.describe LettingsLog do
       it "correctly resets la if la is not known" do
         address_lettings_log.update!({ ppcodenk: 0 })
         address_lettings_log.update!({ previous_la_known: 1, prevloc: "S92000003" })
-        record_from_db = ActiveRecord::Base.connection.execute("select prevloc from lettings_logs where id=#{address_lettings_log.id}").to_a[0]
+        record_from_db = described_class.find(address_lettings_log.id)
         expect(record_from_db["prevloc"]).to eq("S92000003")
         expect(address_lettings_log.prevloc).to eq("S92000003")
 
         address_lettings_log.update!({ previous_la_known: 0 })
-        record_from_db = ActiveRecord::Base.connection.execute("select prevloc from lettings_logs where id=#{address_lettings_log.id}").to_a[0]
+        record_from_db = described_class.find(address_lettings_log.id)
         expect(address_lettings_log.prevloc).to eq(nil)
         expect(record_from_db["prevloc"]).to eq(nil)
       end
@@ -1391,14 +1389,14 @@ RSpec.describe LettingsLog do
         address_lettings_log.update!({ ppcodenk: 0 })
         address_lettings_log.update!({ previous_la_known: 1, prevloc: "E09000033" })
 
-        record_from_db = ActiveRecord::Base.connection.execute("select prevloc, ppostcode_full from lettings_logs where id=#{address_lettings_log.id}").to_a[0]
+        record_from_db = described_class.find(address_lettings_log.id)
         expect(record_from_db["ppostcode_full"]).to eq(nil)
         expect(address_lettings_log.prevloc).to eq("E09000033")
         expect(record_from_db["prevloc"]).to eq("E09000033")
 
         address_lettings_log.update!({ ppcodenk: 0, ppostcode_full: "M1 1AD" })
 
-        record_from_db = ActiveRecord::Base.connection.execute("select prevloc, ppostcode_full from lettings_logs where id=#{address_lettings_log.id}").to_a[0]
+        record_from_db = described_class.find(address_lettings_log.id)
         expect(record_from_db["ppostcode_full"]).to eq("M1 1AD")
         expect(address_lettings_log.prevloc).to eq("E08000003")
         expect(record_from_db["prevloc"]).to eq("E08000003")
@@ -1419,7 +1417,7 @@ RSpec.describe LettingsLog do
       end
 
       it "correctly sums rental charges" do
-        record_from_db = ActiveRecord::Base.connection.execute("select tcharge from lettings_logs where id=#{lettings_log.id}").to_a[0]
+        record_from_db = described_class.find(lettings_log.id)
         expect(record_from_db["tcharge"]).to eq(30.98)
       end
     end
@@ -1447,34 +1445,34 @@ RSpec.describe LettingsLog do
       end
 
       it "correctly derives and saves totchild" do
-        record_from_db = ActiveRecord::Base.connection.execute("select totchild from lettings_logs where id=#{household_lettings_log.id}").to_a[0]
+        record_from_db = described_class.find(household_lettings_log.id)
         expect(record_from_db["totchild"]).to eq(3)
       end
 
       it "correctly derives and saves totelder" do
-        record_from_db = ActiveRecord::Base.connection.execute("select totelder from lettings_logs where id=#{household_lettings_log.id}").to_a[0]
+        record_from_db = described_class.find(household_lettings_log.id)
         expect(record_from_db["totelder"]).to eq(2)
       end
 
       it "correctly derives and saves totadult" do
-        record_from_db = ActiveRecord::Base.connection.execute("select totadult from lettings_logs where id=#{household_lettings_log.id}").to_a[0]
+        record_from_db = described_class.find(household_lettings_log.id)
         expect(record_from_db["totadult"]).to eq(3)
       end
 
       it "correctly derives economic status for tenants under 16" do
-        record_from_db = ActiveRecord::Base.connection.execute("select ecstat7 from lettings_logs where id=#{household_lettings_log.id}").to_a[0]
+        record_from_db = described_class.find(household_lettings_log.id)
         expect(record_from_db["ecstat7"]).to eq(9)
       end
 
       it "correctly resets economic status when age changes from under 16" do
         household_lettings_log.update!(age7_known: 0, age7: 17)
-        record_from_db = ActiveRecord::Base.connection.execute("select ecstat7 from lettings_logs where id=#{household_lettings_log.id}").to_a[0]
+        record_from_db = described_class.find(household_lettings_log.id)
         expect(record_from_db["ecstat7"]).to eq(nil)
       end
     end
 
     it "correctly derives and saves has_benefits" do
-      record_from_db = ActiveRecord::Base.connection.execute("select has_benefits from lettings_logs where id=#{lettings_log.id}").to_a[0]
+      record_from_db = described_class.find(lettings_log.id)
       expect(record_from_db["has_benefits"]).to eq(1)
     end
 
@@ -1819,7 +1817,7 @@ RSpec.describe LettingsLog do
       end
 
       it "correctly derives and saves refused" do
-        record_from_db = ActiveRecord::Base.connection.execute("select refused from lettings_logs where id=#{lettings_log.id}").to_a[0]
+        record_from_db = described_class.find(lettings_log.id)
         expect(record_from_db["refused"]).to eq(1)
         expect(lettings_log["refused"]).to eq(1)
       end
@@ -1838,14 +1836,14 @@ RSpec.describe LettingsLog do
       context "when the care home charge is paid bi-weekly" do
         it "correctly derives and saves weekly care home charge" do
           lettings_log.update!(chcharge: 100, period: 2)
-          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from lettings_logs where id=#{lettings_log.id}").to_a[0]
+          record_from_db = described_class.find(lettings_log.id)
           expect(lettings_log.wchchrg).to eq(50.0)
           expect(record_from_db["wchchrg"]).to eq(50.0)
         end
 
         it "correctly derives floats" do
           lettings_log.update!(chcharge: 100.12, period: 2)
-          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from lettings_logs where id=#{lettings_log.id}").to_a[0]
+          record_from_db = described_class.find(lettings_log.id)
           expect(lettings_log.wchchrg).to eq(50.06)
           expect(record_from_db["wchchrg"]).to eq(50.06)
         end
@@ -1854,14 +1852,14 @@ RSpec.describe LettingsLog do
       context "when the care home charge is paid every 4 weeks" do
         it "correctly derives and saves weekly care home charge" do
           lettings_log.update!(chcharge: 120, period: 3)
-          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from lettings_logs where id=#{lettings_log.id}").to_a[0]
+          record_from_db = described_class.find(lettings_log.id)
           expect(lettings_log.wchchrg).to eq(30.0)
           expect(record_from_db["wchchrg"]).to eq(30.0)
         end
 
         it "correctly derives floats" do
           lettings_log.update!(chcharge: 100.12, period: 3)
-          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from lettings_logs where id=#{lettings_log.id}").to_a[0]
+          record_from_db = described_class.find(lettings_log.id)
           expect(lettings_log.wchchrg).to eq(25.03)
           expect(record_from_db["wchchrg"]).to eq(25.03)
         end
@@ -1870,14 +1868,14 @@ RSpec.describe LettingsLog do
       context "when the care home charge is paid every calendar month" do
         it "correctly derives and saves weekly care home charge" do
           lettings_log.update!(chcharge: 130, period: 4)
-          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from lettings_logs where id=#{lettings_log.id}").to_a[0]
+          record_from_db = described_class.find(lettings_log.id)
           expect(lettings_log.wchchrg).to eq(30.0)
           expect(record_from_db["wchchrg"]).to eq(30.0)
         end
 
         it "correctly derives floats" do
           lettings_log.update!(chcharge: 100.12, period: 4)
-          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from lettings_logs where id=#{lettings_log.id}").to_a[0]
+          record_from_db = described_class.find(lettings_log.id)
           expect(lettings_log.wchchrg).to eq(23.10)
           expect(record_from_db["wchchrg"]).to eq(23.10)
         end
@@ -1886,14 +1884,14 @@ RSpec.describe LettingsLog do
       context "when the care home charge is paid weekly for 50 weeks" do
         it "correctly derives and saves weekly care home charge" do
           lettings_log.update!(chcharge: 130, period: 5)
-          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from lettings_logs where id=#{lettings_log.id}").to_a[0]
+          record_from_db = described_class.find(lettings_log.id)
           expect(lettings_log.wchchrg).to eq(125.0)
           expect(record_from_db["wchchrg"]).to eq(125.0)
         end
 
         it "correctly derives floats" do
           lettings_log.update!(chcharge: 100.12, period: 5)
-          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from lettings_logs where id=#{lettings_log.id}").to_a[0]
+          record_from_db = described_class.find(lettings_log.id)
           expect(lettings_log.wchchrg).to eq(96.27)
           expect(record_from_db["wchchrg"]).to eq(96.27)
         end
@@ -1902,14 +1900,14 @@ RSpec.describe LettingsLog do
       context "when the care home charge is paid weekly for 49 weeks" do
         it "correctly derives and saves weekly care home charge" do
           lettings_log.update!(chcharge: 130, period: 6)
-          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from lettings_logs where id=#{lettings_log.id}").to_a[0]
+          record_from_db = described_class.find(lettings_log.id)
           expect(lettings_log.wchchrg).to eq(122.5)
           expect(record_from_db["wchchrg"]).to eq(122.5)
         end
 
         it "correctly derives floats" do
           lettings_log.update!(chcharge: 100.12, period: 6)
-          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from lettings_logs where id=#{lettings_log.id}").to_a[0]
+          record_from_db = described_class.find(lettings_log.id)
           expect(lettings_log.wchchrg).to eq(94.34)
           expect(record_from_db["wchchrg"]).to eq(94.34)
         end
@@ -1918,14 +1916,14 @@ RSpec.describe LettingsLog do
       context "when the care home charge is paid weekly for 48 weeks" do
         it "correctly derives and saves weekly care home charge" do
           lettings_log.update!(chcharge: 130, period: 7)
-          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from lettings_logs where id=#{lettings_log.id}").to_a[0]
+          record_from_db = described_class.find(lettings_log.id)
           expect(lettings_log.wchchrg).to eq(120.0)
           expect(record_from_db["wchchrg"]).to eq(120.0)
         end
 
         it "correctly derives floats" do
           lettings_log.update!(chcharge: 100.12, period: 7)
-          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from lettings_logs where id=#{lettings_log.id}").to_a[0]
+          record_from_db = described_class.find(lettings_log.id)
           expect(lettings_log.wchchrg).to eq(92.42)
           expect(record_from_db["wchchrg"]).to eq(92.42)
         end
@@ -1934,14 +1932,14 @@ RSpec.describe LettingsLog do
       context "when the care home charge is paid weekly for 47 weeks" do
         it "correctly derives and saves weekly care home charge" do
           lettings_log.update!(chcharge: 130, period: 8)
-          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from lettings_logs where id=#{lettings_log.id}").to_a[0]
+          record_from_db = described_class.find(lettings_log.id)
           expect(lettings_log.wchchrg).to eq(117.5)
           expect(record_from_db["wchchrg"]).to eq(117.5)
         end
 
         it "correctly derives floats" do
           lettings_log.update!(chcharge: 100.12, period: 8)
-          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from lettings_logs where id=#{lettings_log.id}").to_a[0]
+          record_from_db = described_class.find(lettings_log.id)
           expect(lettings_log.wchchrg).to eq(90.49)
           expect(record_from_db["wchchrg"]).to eq(90.49)
         end
@@ -1950,14 +1948,14 @@ RSpec.describe LettingsLog do
       context "when the care home charge is paid weekly for 46 weeks" do
         it "correctly derives and saves weekly care home charge" do
           lettings_log.update!(chcharge: 130, period: 9)
-          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from lettings_logs where id=#{lettings_log.id}").to_a[0]
+          record_from_db = described_class.find(lettings_log.id)
           expect(lettings_log.wchchrg).to eq(115.0)
           expect(record_from_db["wchchrg"]).to eq(115.0)
         end
 
         it "correctly derives floats" do
           lettings_log.update!(chcharge: 100.12, period: 9)
-          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from lettings_logs where id=#{lettings_log.id}").to_a[0]
+          record_from_db = described_class.find(lettings_log.id)
           expect(lettings_log.wchchrg).to eq(88.57)
           expect(record_from_db["wchchrg"]).to eq(88.57)
         end
@@ -1966,14 +1964,14 @@ RSpec.describe LettingsLog do
       context "when the care home charge is paid weekly for 52 weeks" do
         it "correctly derives and saves weekly care home charge" do
           lettings_log.update!(chcharge: 130, period: 1)
-          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from lettings_logs where id=#{lettings_log.id}").to_a[0]
+          record_from_db = described_class.find(lettings_log.id)
           expect(lettings_log.wchchrg).to eq(130.0)
           expect(record_from_db["wchchrg"]).to eq(130.0)
         end
 
         it "correctly derives floats" do
           lettings_log.update!(chcharge: 100.12, period: 1)
-          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from lettings_logs where id=#{lettings_log.id}").to_a[0]
+          record_from_db = described_class.find(lettings_log.id)
           expect(lettings_log.wchchrg).to eq(100.12)
           expect(record_from_db["wchchrg"]).to eq(100.12)
         end
@@ -2001,14 +1999,14 @@ RSpec.describe LettingsLog do
 
       it "the newprop variable is correctly derived and saved as 1 for a first let vacancy reason" do
         first_let_lettings_log.update!({ rsnvac: 15 })
-        record_from_db = ActiveRecord::Base.connection.execute("select newprop from lettings_logs where id=#{first_let_lettings_log.id}").to_a[0]
+        record_from_db = described_class.find(first_let_lettings_log.id)
         expect(record_from_db["newprop"]).to eq(1)
         expect(first_let_lettings_log["newprop"]).to eq(1)
       end
 
       it "the newprop variable is correctly derived and saved as 2 for anything that is not a first let vacancy reason" do
         relet_lettings_log.update!({ rsnvac: 2 })
-        record_from_db = ActiveRecord::Base.connection.execute("select newprop from lettings_logs where id=#{relet_lettings_log.id}").to_a[0]
+        record_from_db = described_class.find(relet_lettings_log.id)
         expect(record_from_db["newprop"]).to eq(2)
         expect(relet_lettings_log["newprop"]).to eq(2)
       end
@@ -2017,7 +2015,7 @@ RSpec.describe LettingsLog do
     context "when a total shortfall is provided" do
       it "derives that tshortfall is known" do
         lettings_log.update!({ tshortfall: 10 })
-        record_from_db = ActiveRecord::Base.connection.execute("select tshortfall_known from lettings_logs where id=#{lettings_log.id}").to_a[0]
+        record_from_db = described_class.find(lettings_log.id)
         expect(record_from_db["tshortfall_known"]).to eq(0)
         expect(lettings_log["tshortfall_known"]).to eq(0)
       end
@@ -2042,7 +2040,7 @@ RSpec.describe LettingsLog do
         end
 
         it "derives the scheme location" do
-          record_from_db = ActiveRecord::Base.connection.execute("select location_id from lettings_logs where id=#{lettings_log.id}").to_a[0]
+          record_from_db = described_class.find(lettings_log.id)
           expect(record_from_db["location_id"]).to eq(location.id)
           expect(lettings_log["location_id"]).to eq(location.id)
         end
@@ -2117,13 +2115,13 @@ RSpec.describe LettingsLog do
         end
 
         it "correctly infers and saves la" do
-          record_from_db = ActiveRecord::Base.connection.execute("SELECT la from lettings_logs WHERE id=#{supported_housing_lettings_log.id}").to_a[0]
+          record_from_db = described_class.find(supported_housing_lettings_log.id)
           expect(record_from_db["la"]).to be_nil
           expect(supported_housing_lettings_log.la).to eq("E08000003")
         end
 
         it "correctly infers and saves postcode" do
-          record_from_db = ActiveRecord::Base.connection.execute("SELECT postcode_full from lettings_logs WHERE id=#{supported_housing_lettings_log.id}").to_a[0]
+          record_from_db = described_class.find(supported_housing_lettings_log.id)
           expect(record_from_db["postcode_full"]).to be_nil
           expect(supported_housing_lettings_log.postcode_full).to eq("M1 1AE")
         end
@@ -2133,7 +2131,7 @@ RSpec.describe LettingsLog do
         end
 
         it "correctly infers and saves wchair" do
-          record_from_db = ActiveRecord::Base.connection.execute("SELECT wchair from lettings_logs WHERE id=#{supported_housing_lettings_log.id}").to_a[0]
+          record_from_db = described_class.find(supported_housing_lettings_log.id)
           expect(record_from_db["wchair"]).to eq(1)
         end
       end
@@ -2142,7 +2140,7 @@ RSpec.describe LettingsLog do
     context "when saving accessibility needs" do
       it "derives housingneeds_h as true if 'Don't know' is selected for housingneeds" do
         lettings_log.update!({ housingneeds: 3 })
-        record_from_db = ActiveRecord::Base.connection.execute("select housingneeds_a, housingneeds_b, housingneeds_c, housingneeds_f, housingneeds_g, housingneeds_h from lettings_logs where id=#{lettings_log.id}").to_a[0]
+        record_from_db = described_class.find(lettings_log.id)
         not_selected_housingneeds = %w[housingneeds_a housingneeds_b housingneeds_c housingneeds_f housingneeds_g]
         not_selected_housingneeds.each do |housingneed|
           expect(record_from_db[housingneed]).to eq(0)
@@ -2154,7 +2152,7 @@ RSpec.describe LettingsLog do
 
       it "derives housingneeds_g as true if 'No' is selected for housingneeds" do
         lettings_log.update!({ housingneeds: 2 })
-        record_from_db = ActiveRecord::Base.connection.execute("select housingneeds_a, housingneeds_b, housingneeds_c, housingneeds_f, housingneeds_g, housingneeds_h from lettings_logs where id=#{lettings_log.id}").to_a[0]
+        record_from_db = described_class.find(lettings_log.id)
         not_selected_housingneeds = %w[housingneeds_a housingneeds_b housingneeds_c housingneeds_f housingneeds_h]
         not_selected_housingneeds.each do |housingneed|
           expect(record_from_db[housingneed]).to eq(0)
@@ -2166,7 +2164,7 @@ RSpec.describe LettingsLog do
 
       it "derives housingneeds_a as true if 'Fully wheelchair accessible' is selected for housingneeds_type" do
         lettings_log.update!({ housingneeds: 1, housingneeds_type: 0 })
-        record_from_db = ActiveRecord::Base.connection.execute("select housingneeds_a, housingneeds_b, housingneeds_c, housingneeds_f, housingneeds_g, housingneeds_h from lettings_logs where id=#{lettings_log.id}").to_a[0]
+        record_from_db = described_class.find(lettings_log.id)
         not_selected_housingneeds = %w[housingneeds_b housingneeds_c housingneeds_f housingneeds_g housingneeds_h]
         not_selected_housingneeds.each do |housingneed|
           expect(record_from_db[housingneed]).to eq(0)
@@ -2178,7 +2176,7 @@ RSpec.describe LettingsLog do
 
       it "derives housingneeds_b as true if 'Wheelchair access to essential rooms' is selected for housingneeds_type" do
         lettings_log.update!({ housingneeds: 1, housingneeds_type: 1 })
-        record_from_db = ActiveRecord::Base.connection.execute("select housingneeds_a, housingneeds_b, housingneeds_c, housingneeds_f, housingneeds_g, housingneeds_h from lettings_logs where id=#{lettings_log.id}").to_a[0]
+        record_from_db = described_class.find(lettings_log.id)
         not_selected_housingneeds = %w[housingneeds_a housingneeds_c housingneeds_f housingneeds_g housingneeds_h]
         not_selected_housingneeds.each do |housingneed|
           expect(record_from_db[housingneed]).to eq(0)
@@ -2190,7 +2188,7 @@ RSpec.describe LettingsLog do
 
       it "derives housingneeds_c if 'Level access housing' is selected for housingneeds_type" do
         lettings_log.update!({ housingneeds: 1, housingneeds_type: 2 })
-        record_from_db = ActiveRecord::Base.connection.execute("select housingneeds_a, housingneeds_b, housingneeds_c, housingneeds_f, housingneeds_g, housingneeds_h from lettings_logs where id=#{lettings_log.id}").to_a[0]
+        record_from_db = described_class.find(lettings_log.id)
         not_selected_housingneeds = %w[housingneeds_a housingneeds_b housingneeds_f housingneeds_g housingneeds_h]
         not_selected_housingneeds.each do |housingneed|
           expect(record_from_db[housingneed]).to eq(0)
@@ -2202,7 +2200,7 @@ RSpec.describe LettingsLog do
 
       it "derives housingneeds_f if 'Yes' is selected for housingneeds_other" do
         lettings_log.update!({ housingneeds: 1, housingneeds_other: 1 })
-        record_from_db = ActiveRecord::Base.connection.execute("select housingneeds_a, housingneeds_b, housingneeds_c, housingneeds_f, housingneeds_g, housingneeds_h from lettings_logs where id=#{lettings_log.id}").to_a[0]
+        record_from_db = described_class.find(lettings_log.id)
         not_selected_housingneeds = %w[housingneeds_a housingneeds_b housingneeds_c housingneeds_g housingneeds_h]
         not_selected_housingneeds.each do |housingneed|
           expect(record_from_db[housingneed]).to eq(0)
@@ -2214,14 +2212,14 @@ RSpec.describe LettingsLog do
 
       it "clears previously set housingneeds if 'No' is selected for housingneeds" do
         lettings_log.update!({ housingneeds: 1, housingneeds_type: 2, housingneeds_other: 1 })
-        record_from_db = ActiveRecord::Base.connection.execute("select housingneeds_a, housingneeds_b, housingneeds_c, housingneeds_f, housingneeds_g, housingneeds_h from lettings_logs where id=#{lettings_log.id}").to_a[0]
+        record_from_db = described_class.find(lettings_log.id)
         expect(record_from_db["housingneeds_c"]).to eq(1)
         expect(lettings_log["housingneeds_c"]).to eq(1)
         expect(record_from_db["housingneeds_f"]).to eq(1)
         expect(lettings_log["housingneeds_f"]).to eq(1)
 
         lettings_log.update!({ housingneeds: 2 })
-        record_from_db = ActiveRecord::Base.connection.execute("select housingneeds_a, housingneeds_b, housingneeds_c, housingneeds_f, housingneeds_g, housingneeds_h from lettings_logs where id=#{lettings_log.id}").to_a[0]
+        record_from_db = described_class.find(lettings_log.id)
         not_selected_housingneeds = %w[housingneeds_a housingneeds_b housingneeds_c housingneeds_f housingneeds_h]
         not_selected_housingneeds.each do |housingneed|
           expect(record_from_db[housingneed]).to eq(0)
