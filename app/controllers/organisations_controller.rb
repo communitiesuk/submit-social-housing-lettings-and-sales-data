@@ -158,12 +158,20 @@ class OrganisationsController < ApplicationController
 
 private
 
+  def filter_type
+    if params[:action].include?("lettings")
+      "lettings_logs"
+    elsif params[:action].include?("sales")
+      "sales_logs"
+    end
+  end
+
   def set_session_filters
-    filter_manager.serialize_filters_to_session(params[:action].to_s, specific_org: true)
+    filter_manager.serialize_filters_to_session(filter_type, specific_org: true)
   end
 
   def session_filters
-    filter_manager.session_filters(params[:action].to_s, specific_org: true)
+    filter_manager.session_filters(filter_type, specific_org: true)
   end
 
   def filter_manager
