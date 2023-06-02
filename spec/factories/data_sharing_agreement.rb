@@ -1,7 +1,8 @@
 FactoryBot.define do
   factory :data_sharing_agreement do
-    organisation
-    data_protection_officer { create(:user, is_dpo: true) }
+    organisation { association :organisation, data_sharing_agreement: instance }
+    data_protection_officer { association :user, :data_protection_officer, organisation: (instance.organisation || organisation) }
+
     signed_at { Time.zone.now }
     created_at { Time.zone.now }
     updated_at { Time.zone.now }
