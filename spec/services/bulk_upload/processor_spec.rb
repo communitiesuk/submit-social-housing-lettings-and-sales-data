@@ -8,6 +8,16 @@ RSpec.describe BulkUpload::Processor do
   let(:owning_org) { create(:organisation, old_visible_id: 123) }
 
   describe "#call" do
+    context "when errors exist from prior job run" do
+      let!(:existing_error) { create(:bulk_upload_error, bulk_upload:) }
+
+      it "destroys existing errors" do
+        processor.call
+
+        expect { existing_error.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
     context "when the bulk upload itself is not considered valid" do
       let(:mock_downloader) do
         instance_double(

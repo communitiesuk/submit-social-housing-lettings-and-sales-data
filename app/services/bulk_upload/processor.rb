@@ -6,6 +6,8 @@ class BulkUpload::Processor
   end
 
   def call
+    destroy_any_existing_errors_from_prior_run
+
     download
 
     return send_failure_mail(errors: validator.errors.full_messages) if validator.invalid?
@@ -45,6 +47,10 @@ class BulkUpload::Processor
   end
 
 private
+
+  def destroy_any_existing_errors_from_prior_run
+    bulk_upload.bulk_upload_errors.destroy_all
+  end
 
   def send_how_to_fix_upload_mail
     BulkUploadMailer
