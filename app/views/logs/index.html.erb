@@ -55,7 +55,7 @@
         <%= govuk_button_to "Create a new sales log", sales_logs_path, class: "govuk-!-margin-right-6" %>
       <% end %>
 
-      <% if FeatureToggle.bulk_upload_lettings_logs? && log_type_for_controller(controller) == "lettings" %>
+      <% if log_type_for_controller(controller) == "lettings" %>
         <%= govuk_button_link_to "Upload lettings logs in bulk", bulk_upload_path_for_controller(controller, id: "start"), secondary: true %>
       <% end %>
 
