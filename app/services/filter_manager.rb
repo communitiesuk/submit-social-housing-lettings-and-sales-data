@@ -1,4 +1,4 @@
-class FilterService
+class FilterManager
   attr_reader :current_user, :session, :params, :filter_type
 
   def initialize(current_user:, session:, params:, filter_type:)

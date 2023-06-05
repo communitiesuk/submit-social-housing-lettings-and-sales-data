@@ -6,7 +6,7 @@ class OrganisationsController < ApplicationController
   before_action :find_resource, except: %i[index new create]
   before_action :authenticate_scope!, except: [:index]
   before_action :session_filters, if: -> { current_user.support? || current_user.organisation.has_managing_agents? }, only: %i[lettings_logs sales_logs email_lettings_csv download_lettings_csv email_sales_csv download_sales_csv]
-  before_action -> { filter_service.serialize_filters_to_session }, if: -> { current_user.support? || current_user.organisation.has_managing_agents? }, only: %i[lettings_logs sales_logs email_lettings_csv download_lettings_csv email_sales_csv download_sales_csv]
+  before_action -> { filter_manager.serialize_filters_to_session }, if: -> { current_user.support? || current_user.organisation.has_managing_agents? }, only: %i[lettings_logs sales_logs email_lettings_csv download_lettings_csv email_sales_csv download_sales_csv]
 
   def index
     redirect_to organisation_path(current_user.organisation) unless current_user.support?
@@ -90,7 +90,7 @@ class OrganisationsController < ApplicationController
 
   def lettings_logs
     organisation_logs = LettingsLog.visible.where(owning_organisation_id: @organisation.id)
-    unpaginated_filtered_logs = filter_service.filtered_logs(organisation_logs, search_term, session_filters)
+    unpaginated_filtered_logs = filter_manager.filtered_logs(organisation_logs, search_term, session_filters)
 
     respond_to do |format|
       format.html do
@@ -107,7 +107,7 @@ class OrganisationsController < ApplicationController
 
   def download_lettings_csv
     organisation_logs = LettingsLog.visible.where(owning_organisation_id: @organisation.id)
-    unpaginated_filtered_logs = filter_service.filtered_logs(organisation_logs, search_term, session_filters)
+    unpaginated_filtered_logs = filter_manager.filtered_logs(organisation_logs, search_term, session_filters)
     codes_only = params.require(:codes_only) == "true"
 
     render "logs/download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: lettings_logs_email_csv_organisation_path, codes_only: }
@@ -120,7 +120,7 @@ class OrganisationsController < ApplicationController
 
   def sales_logs
     organisation_logs = SalesLog.where(owning_organisation_id: @organisation.id)
-    unpaginated_filtered_logs = filter_service.filtered_logs(organisation_logs, search_term, session_filters)
+    unpaginated_filtered_logs = filter_manager.filtered_logs(organisation_logs, search_term, session_filters)
 
     respond_to do |format|
       format.html do
@@ -141,7 +141,7 @@ class OrganisationsController < ApplicationController
 
   def download_sales_csv
     organisation_logs = SalesLog.visible.where(owning_organisation_id: @organisation.id)
-    unpaginated_filtered_logs = filter_service.filtered_logs(organisation_logs, search_term, session_filters)
+    unpaginated_filtered_logs = filter_manager.filtered_logs(organisation_logs, search_term, session_filters)
     codes_only = params.require(:codes_only) == "true"
 
     render "logs/download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: sales_logs_email_csv_organisation_path, codes_only: }
@@ -167,11 +167,11 @@ private
   end
 
   def session_filters
-    filter_service.session_filters
+    filter_manager.session_filters
   end
 
-  def filter_service
-    FilterService.new(current_user:, session:, params:, filter_type:)
+  def filter_manager
+    FilterManager.new(current_user:, session:, params:, filter_type:)
   end
 
   def org_params

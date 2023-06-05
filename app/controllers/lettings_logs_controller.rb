@@ -4,7 +4,7 @@ class LettingsLogsController < LogsController
   before_action :find_resource, only: %i[update show]
 
   before_action :session_filters, if: :current_user, only: %i[index email_csv download_csv]
-  before_action -> { filter_service.serialize_filters_to_session }, if: :current_user, only: %i[index email_csv download_csv]
+  before_action -> { filter_manager.serialize_filters_to_session }, if: :current_user, only: %i[index email_csv download_csv]
   before_action :authenticate_scope!, only: %i[download_csv email_csv]
 
   before_action :extract_bulk_upload_from_session_filters, only: [:index]
@@ -14,7 +14,7 @@ class LettingsLogsController < LogsController
     respond_to do |format|
       format.html do
         all_logs = current_user.lettings_logs.visible
-        unpaginated_filtered_logs = filter_service.filtered_logs(all_logs, search_term, session_filters)
+        unpaginated_filtered_logs = filter_manager.filtered_logs(all_logs, search_term, session_filters)
 
         @search_term = search_term
         @pagy, @logs = pagy(unpaginated_filtered_logs)
@@ -87,7 +87,7 @@ class LettingsLogsController < LogsController
   end
 
   def download_csv
-    unpaginated_filtered_logs = filter_service.filtered_logs(current_user.lettings_logs, search_term, session_filters)
+    unpaginated_filtered_logs = filter_manager.filtered_logs(current_user.lettings_logs, search_term, session_filters)
 
     render "download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: email_csv_lettings_logs_path, codes_only: codes_only_export? }
   end
@@ -115,11 +115,11 @@ class LettingsLogsController < LogsController
 private
 
   def session_filters
-    filter_service.session_filters
+    filter_manager.session_filters
   end
 
-  def filter_service
-    FilterService.new(current_user:, session:, params:, filter_type: "lettings_logs")
+  def filter_manager
+    FilterManager.new(current_user:, session:, params:, filter_type: "lettings_logs")
   end
 
   def org_params
@@ -139,8 +139,8 @@ private
   end
 
   def extract_bulk_upload_from_session_filters
-    filter_service = FilterService.new(current_user:, session:, params:, filter_type: "lettings_logs")
-    @bulk_upload = filter_service.bulk_upload
+    filter_manager = FilterManager.new(current_user:, session:, params:, filter_type: "lettings_logs")
+    @bulk_upload = filter_manager.bulk_upload
   end
 
   def permitted_log_params
