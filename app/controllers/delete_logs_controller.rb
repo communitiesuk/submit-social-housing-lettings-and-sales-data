@@ -3,7 +3,7 @@ class DeleteLogsController < ApplicationController
 
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
 
-  before_action :session_filters, if: :current_user, except: [:delete_logs]
+  before_action :session_filters, if: :current_user, except: %i[discard_lettings_logs discard_sales_logs discard_lettings_logs_for_organisation discard_sales_logs_for_organisation]
 
   def delete_lettings_logs
     @delete_logs_form = delete_logs_form(log_type: :lettings, paths: lettings_logs_paths)
@@ -11,7 +11,6 @@ class DeleteLogsController < ApplicationController
   end
 
   def delete_lettings_logs_with_selected_ids
-    selected_ids = params.require(:selected_ids).split.map(&:to_i)
     @delete_logs_form = delete_logs_form(selected_ids:, log_type: :lettings, paths: lettings_logs_paths)
     render "logs/delete_logs"
   end
@@ -34,10 +33,7 @@ class DeleteLogsController < ApplicationController
 
   def discard_lettings_logs
     logs = LettingsLog.find(params.require(:ids))
-    logs.each do |log|
-      authorize log, :destroy?
-      log.discard!
-    end
+    discard logs
 
     redirect_to lettings_logs_path, notice: I18n.t("notification.logs_deleted", count: logs.count)
   end
@@ -48,7 +44,6 @@ class DeleteLogsController < ApplicationController
   end
 
   def delete_sales_logs_with_selected_ids
-    selected_ids = params.require(:selected_ids).split.map(&:to_i)
     @delete_logs_form = delete_logs_form(selected_ids:, log_type: :sales, paths: sales_logs_paths)
     render "logs/delete_logs"
   end
@@ -71,10 +66,7 @@ class DeleteLogsController < ApplicationController
 
   def discard_sales_logs
     logs = SalesLog.find(params.require(:ids))
-    logs.each do |log|
-      authorize log, :destroy?
-      log.discard!
-    end
+    discard logs
 
     redirect_to sales_logs_path, notice: I18n.t("notification.logs_deleted", count: logs.count)
   end
@@ -85,7 +77,6 @@ class DeleteLogsController < ApplicationController
   end
 
   def delete_lettings_logs_for_organisation_with_selected_ids
-    selected_ids = params.require(:selected_ids).split.map(&:to_i)
     @delete_logs_form = delete_logs_form(selected_ids:, log_type: :lettings, paths: lettings_logs_for_organisation_paths)
     render "logs/delete_logs"
   end
@@ -108,10 +99,7 @@ class DeleteLogsController < ApplicationController
 
   def discard_lettings_logs_for_organisation
     logs = LettingsLog.find(params.require(:ids))
-    logs.each do |log|
-      authorize log, :destroy?
-      log.discard!
-    end
+    discard logs
 
     redirect_to lettings_logs_organisation_path, notice: I18n.t("notification.logs_deleted", count: logs.count)
   end
@@ -122,7 +110,6 @@ class DeleteLogsController < ApplicationController
   end
 
   def delete_sales_logs_for_organisation_with_selected_ids
-    selected_ids = params.require(:selected_ids).split.map(&:to_i)
     @delete_logs_form = delete_logs_form(selected_ids:, log_type: :sales, paths: sales_logs_for_organisation_paths)
     render "logs/delete_logs"
   end
@@ -145,10 +132,7 @@ class DeleteLogsController < ApplicationController
 
   def discard_sales_logs_for_organisation
     logs = SalesLog.find(params.require(:ids))
-    logs.each do |log|
-      authorize log, :destroy?
-      log.discard!
-    end
+    discard logs
 
     redirect_to sales_logs_organisation_path, notice: I18n.t("notification.logs_deleted", count: logs.count)
   end
@@ -197,5 +181,16 @@ private
 
   def search_term
     params["search"]
+  end
+
+  def selected_ids
+    params.require(:selected_ids).split.map(&:to_i)
+  end
+
+  def discard(logs)
+    logs.each do |log|
+      authorize log, :destroy?
+      log.discard!
+    end
   end
 end
