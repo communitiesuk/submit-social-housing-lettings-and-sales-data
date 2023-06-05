@@ -13,9 +13,11 @@ class BulkUpload::Sales::Validator
   end
 
   def call
-    row_parsers.each_with_index do |row_parser, index|
-      row_parser.valid?
+    row_parsers.each(&:valid?)
 
+    validate_duplicate_rows if FeatureToggle.bulk_upload_duplicate_log_check_enabled?
+
+    row_parsers.each_with_index do |row_parser, index|
       row = index + row_offset + 1
 
       row_parser.errors.each do |error|
@@ -66,6 +68,19 @@ class BulkUpload::Sales::Validator
   end
 
 private
+
+  # n^2 algo
+  def validate_duplicate_rows
+    row_parsers.each do |rp|
+      dupe = row_parsers.reject { |r| r.object_id.equal?(rp.object_id) }.any? do |rp_counter|
+        rp.spreadsheet_duplicate_hash == rp_counter.spreadsheet_duplicate_hash
+      end
+
+      if dupe
+        rp.add_duplicate_found_in_spreadsheet_errors
+      end
+    end
+  end
 
   def any_logs_invalid?
     row_parsers.any? { |row_parser| row_parser.log.invalid? }

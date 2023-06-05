@@ -1,5 +1,3 @@
-require "csv"
-
 class BulkUpload::Lettings::Validator
   include ActiveModel::Validations
 
@@ -16,9 +14,11 @@ class BulkUpload::Lettings::Validator
   end
 
   def call
-    row_parsers.each_with_index do |row_parser, index|
-      row_parser.valid?
+    row_parsers.each(&:valid?)
 
+    validate_duplicate_rows if FeatureToggle.bulk_upload_duplicate_log_check_enabled?
+
+    row_parsers.each_with_index do |row_parser, index|
       row = index + row_offset + 1
 
       row_parser.errors.each do |error|
@@ -69,24 +69,24 @@ class BulkUpload::Lettings::Validator
     errors.count == errors.where(category: "soft_validation").count && errors.count.positive?
   end
 
-  def over_column_error_threshold?
-    fields = ("field_1".."field_134").to_a
-    percentage_threshold = (row_parsers.size * COLUMN_PERCENTAGE_ERROR_THRESHOLD).ceil
-
-    fields.any? do |field|
-      count = row_parsers.count { |row_parser| row_parser.errors[field].present? }
-
-      next if count < COLUMN_ABSOLUTE_ERROR_THRESHOLD
-
-      count > percentage_threshold
-    end
-  end
-
   def any_logs_already_exist?
     row_parsers.any?(&:log_already_exists?)
   end
 
 private
+
+  # n^2 algo
+  def validate_duplicate_rows
+    row_parsers.each do |rp|
+      dupe = row_parsers.reject { |r| r.object_id.equal?(rp.object_id) }.any? do |rp_counter|
+        rp.spreadsheet_duplicate_hash == rp_counter.spreadsheet_duplicate_hash
+      end
+
+      if dupe
+        rp.add_duplicate_found_in_spreadsheet_errors
+      end
+    end
+  end
 
   def any_logs_invalid?
     row_parsers.any? { |row_parser| row_parser.log.invalid? }

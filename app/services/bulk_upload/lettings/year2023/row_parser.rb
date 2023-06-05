@@ -455,6 +455,29 @@ class BulkUpload::Lettings::Year2023::RowParser
       .exists?(duplicate_check_fields.index_with { |field| log.public_send(field) })
   end
 
+  def spreadsheet_duplicate_hash
+    attributes.slice(
+      "field_1",   # owning org
+      "field_7",   # startdate
+      "field_8",   # startdate
+      "field_9",   # startdate
+      "field_14",  # propcode
+      "field_17",  # location
+      "field_23",  # postcode
+      "field_24",  # postcode
+      "field_46",  # age1
+      "field_47",  # sex1
+      "field_50",  # ecstat1
+      "field_132", # tcharge
+    )
+  end
+
+  def add_duplicate_found_in_spreadsheet_errors
+    spreadsheet_duplicate_hash.each_key do |field|
+      errors.add(field, :spreadsheet_dupe, category: :setup)
+    end
+  end
+
 private
 
   def validate_declaration_acceptance

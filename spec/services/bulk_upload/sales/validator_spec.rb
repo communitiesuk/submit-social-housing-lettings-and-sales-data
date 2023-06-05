@@ -125,6 +125,22 @@ RSpec.describe BulkUpload::Sales::Validator do
         expect { validator.call }.to change(BulkUploadError, :count)
       end
     end
+
+    context "when duplicate rows present" do
+      let(:file) { Tempfile.new }
+      let(:path) { file.path }
+      let(:log) { build(:sales_log, :completed) }
+
+      before do
+        file.write(BulkUpload::SalesLogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
+        file.write(BulkUpload::SalesLogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
+        file.close
+      end
+
+      it "creates errors" do
+        expect { validator.call }.to change(BulkUploadError.where(category: :setup, error: "This is a duplicate of a log in your file"), :count).by(20)
+      end
+    end
   end
 
   describe "#create_logs?" do

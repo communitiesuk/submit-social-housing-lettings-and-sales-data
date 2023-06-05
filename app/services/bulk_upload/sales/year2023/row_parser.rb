@@ -533,6 +533,27 @@ class BulkUpload::Sales::Year2023::RowParser
     field_6
   end
 
+  def spreadsheet_duplicate_hash
+    attributes.slice(
+      "field_1",  # owning org
+      "field_3",  # saledate
+      "field_4",  # saledate
+      "field_5",  # saledate
+      "field_6",  # purchaser_code
+      "field_24", # postcode
+      "field_25", # postcode
+      "field_30", # age1
+      "field_31", # sex1
+      "field_35", # ecstat1
+    )
+  end
+
+  def add_duplicate_found_in_spreadsheet_errors
+    spreadsheet_duplicate_hash.each_key do |field|
+      errors.add(field, :spreadsheet_dupe, category: :setup)
+    end
+  end
+
 private
 
   def validate_data_protection_answered

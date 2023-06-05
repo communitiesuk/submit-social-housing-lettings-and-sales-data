@@ -36,6 +36,7 @@ FactoryBot.define do
       jointpur { 2 }
     end
     trait :completed do
+      purchid { rand(999_999_999).to_s }
       ownershipsch { 2 }
       type { 8 }
       saledate { Time.utc(2023, 2, 2, 10, 36, 49) }
