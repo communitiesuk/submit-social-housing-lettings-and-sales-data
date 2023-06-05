@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "logs/delete_lettings_logs.html.erb" do
+RSpec.describe "logs/delete_logs.html.erb" do
   let(:user) { create(:user, :support, name: "Dirk Gently") }
   let(:lettings_log_1) { create(:lettings_log, tenancycode: "Holistic", propcode: "Detective Agency", created_by: user) }
   let(:lettings_logs) { [lettings_log_1] }
@@ -53,18 +53,46 @@ RSpec.describe "logs/delete_lettings_logs.html.erb" do
     end
   end
 
-  it "shows the correct headers in the table" do
-    render
-    fragment = Capybara::Node::Simple.new(rendered)
-    headers = fragment.find_all("table thead tr th").map(&:text)
-    expect(headers).to eq ["Log ID", "Tenancy code", "Property reference", "Status", "Delete?"]
+  context "when the table contains lettings logs" do
+    it "shows the correct headers in the table" do
+      render
+      fragment = Capybara::Node::Simple.new(rendered)
+      headers = fragment.find_all("table thead tr th").map(&:text)
+      expect(headers).to eq ["Log ID", "Tenancy code", "Property reference", "Status", "Delete?"]
+    end
+
+    it "shows the correct information in each row" do
+      render
+      fragment = Capybara::Node::Simple.new(rendered)
+      row_data = fragment.find_all("table tbody tr td").map(&:text)[0...-1]
+      expect(row_data).to eq [lettings_log_1.id.to_s, lettings_log_1.tenancycode, lettings_log_1.propcode, lettings_log_1.status.humanize.capitalize]
+    end
   end
 
-  it "shows the correct information in each row" do
-    render
-    fragment = Capybara::Node::Simple.new(rendered)
-    row_data = fragment.find_all("table tbody tr td").map(&:text)[0...-1]
-    expect(row_data).to eq [lettings_log_1.id.to_s, lettings_log_1.tenancycode, lettings_log_1.propcode, lettings_log_1.status.humanize.capitalize]
+  context "when the table contains sales logs" do
+    let(:sales_log) { create(:sales_log, purchid: "Interconnectedness", saledate: Time.zone.today, created_by: user) }
+    let(:sales_logs) { [sales_log] }
+    let(:delete_logs_form_sales) { Forms::DeleteLogsForm.new(log_type: :sales, current_user: user, **paths) }
+
+    before do
+      sign_in user
+      allow(FilterService).to receive(:filter_logs).and_return sales_logs
+      assign(:delete_logs_form, delete_logs_form_sales)
+    end
+
+    it "shows the correct headers in the table" do
+      render
+      fragment = Capybara::Node::Simple.new(rendered)
+      headers = fragment.find_all("table thead tr th").map(&:text)
+      expect(headers).to eq ["Log ID", "Purchaser code", "Sale completion date", "Status", "Delete?"]
+    end
+
+    it "shows the correct information in each row" do
+      render
+      fragment = Capybara::Node::Simple.new(rendered)
+      row_data = fragment.find_all("table tbody tr td").map(&:text)[0...-1]
+      expect(row_data).to eq [sales_log.id.to_s, sales_log.purchid, sales_log.saledate.to_formatted_s(:govuk_date), sales_log.status.humanize.capitalize]
+    end
   end
 
   it "shows a checkbox with the correct hidden label in the final cell of each row" do

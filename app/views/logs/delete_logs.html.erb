@@ -17,8 +17,13 @@
     <% table.head do |head| %>
       <% head.row do |row| %>
         <% row.cell(header: true, text: "Log ID") %>
-        <% row.cell(header: true, text: "Owning Organisation") %>
-        <% row.cell(header: true, text: "Created") %>
+        <% if @delete_logs_form.log_type == :lettings %>
+          <% row.cell(header: true, text: "Tenancy code") %>
+          <% row.cell(header: true, text: "Property reference") %>
+        <% elsif @delete_logs_form.log_type == :sales %>
+          <% row.cell(header: true, text: "Purchaser code") %>
+          <% row.cell(header: true, text: "Sale completion date") %>
+        <% end %>
         <% row.cell(header: true, text: "Status") %>
         <% row.cell(header: true, text: "Delete?") %>
       <% end %>
@@ -28,8 +33,13 @@
         <% @delete_logs_form.logs.each do |log| %>
           <% body.row do |row| %>
             <% row.cell(text: log.id) %>
-            <% row.cell(text: log.owning_organisation&.name) %>
-            <% row.cell(text: log.created_at&.to_formatted_s(:govuk_date)) %>
+            <% if @delete_logs_form.log_type == :lettings %>
+              <% row.cell(text: log.tenancycode) %>
+              <% row.cell(text: log.propcode) %>
+            <% elsif @delete_logs_form.log_type == :sales %>
+              <% row.cell(text: log.purchid) %>
+              <% row.cell(text: log.saledate&.to_formatted_s(:govuk_date)) %>
+            <% end %>
             <% row.cell(text: status_tag(log.status)) %>
             <% row.cell do %>
               <% f.govuk_check_box :selected_ids, log.id,

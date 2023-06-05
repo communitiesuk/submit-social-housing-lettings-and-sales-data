@@ -7,13 +7,13 @@ class DeleteLogsController < ApplicationController
 
   def delete_lettings_logs
     @delete_logs_form = delete_logs_form(log_type: :lettings, paths: lettings_logs_paths)
-    render "logs/delete_lettings_logs"
+    render "logs/delete_logs"
   end
 
   def delete_lettings_logs_with_selected_ids
     selected_ids = params.require(:selected_ids).split.map(&:to_i)
     @delete_logs_form = delete_logs_form(selected_ids:, log_type: :lettings, paths: lettings_logs_paths)
-    render "logs/delete_lettings_logs"
+    render "logs/delete_logs"
   end
 
   def delete_lettings_logs_confirmation
@@ -28,7 +28,7 @@ class DeleteLogsController < ApplicationController
     if @delete_logs_form.valid?
       render "logs/delete_logs_confirmation"
     else
-      render "logs/delete_lettings_logs"
+      render "logs/delete_logs"
     end
   end
 
@@ -44,13 +44,13 @@ class DeleteLogsController < ApplicationController
 
   def delete_sales_logs
     @delete_logs_form = delete_logs_form(log_type: :sales, paths: sales_logs_paths)
-    render "logs/delete_sales_logs"
+    render "logs/delete_logs"
   end
 
   def delete_sales_logs_with_selected_ids
     selected_ids = params.require(:selected_ids).split.map(&:to_i)
     @delete_logs_form = delete_logs_form(selected_ids:, log_type: :sales, paths: sales_logs_paths)
-    render "logs/delete_sales_logs"
+    render "logs/delete_logs"
   end
 
   def delete_sales_logs_confirmation
@@ -65,7 +65,7 @@ class DeleteLogsController < ApplicationController
     if @delete_logs_form.valid?
       render "logs/delete_logs_confirmation"
     else
-      render "logs/delete_sales_logs"
+      render "logs/delete_logs"
     end
   end
 
@@ -81,13 +81,13 @@ class DeleteLogsController < ApplicationController
 
   def delete_lettings_logs_for_organisation
     @delete_logs_form = delete_logs_form(log_type: :lettings, paths: lettings_logs_for_organisation_paths)
-    render "logs/delete_lettings_logs"
+    render "logs/delete_logs"
   end
 
   def delete_lettings_logs_for_organisation_with_selected_ids
     selected_ids = params.require(:selected_ids).split.map(&:to_i)
     @delete_logs_form = delete_logs_form(selected_ids:, log_type: :lettings, paths: lettings_logs_for_organisation_paths)
-    render "logs/delete_lettings_logs"
+    render "logs/delete_logs"
   end
 
   def delete_lettings_logs_for_organisation_confirmation
@@ -102,7 +102,7 @@ class DeleteLogsController < ApplicationController
     if @delete_logs_form.valid?
       render "logs/delete_logs_confirmation"
     else
-      render "logs/delete_lettings_logs"
+      render "logs/delete_logs"
     end
   end
 
@@ -118,13 +118,13 @@ class DeleteLogsController < ApplicationController
 
   def delete_sales_logs_for_organisation
     @delete_logs_form = delete_logs_form(log_type: :sales, paths: sales_logs_for_organisation_paths)
-    render "logs/delete_sales_logs"
+    render "logs/delete_logs"
   end
 
   def delete_sales_logs_for_organisation_with_selected_ids
     selected_ids = params.require(:selected_ids).split.map(&:to_i)
     @delete_logs_form = delete_logs_form(selected_ids:, log_type: :sales, paths: sales_logs_for_organisation_paths)
-    render "logs/delete_sales_logs"
+    render "logs/delete_logs"
   end
 
   def delete_sales_logs_for_organisation_confirmation
@@ -139,7 +139,7 @@ class DeleteLogsController < ApplicationController
     if @delete_logs_form.valid?
       render "logs/delete_logs_confirmation"
     else
-      render "logs/delete_sales_logs"
+      render "logs/delete_logs"
     end
   end
 
