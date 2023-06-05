@@ -169,4 +169,22 @@ RSpec.describe BulkUpload::Lettings::Year2022::CsvParser do
       end
     end
   end
+
+  context "when parsing csv with carriage returns" do
+    before do
+      file.write("Question\r\n")
+      file.write("Additional info\r\r")
+      file.write("Values\r")
+      file.write("Can be empty?\n")
+      file.write("Type of letting the question applies to\r\n")
+      file.write("Duplicate check field?\r\r")
+      file.write(BulkUpload::LettingsLogToCsv.new(log:).default_2022_field_numbers_row)
+      file.write(BulkUpload::LettingsLogToCsv.new(log:).to_2022_csv_row)
+      file.rewind
+    end
+
+    it "parses csv correctly" do
+      expect(service.row_parsers[0].field_12.to_i).to eq(35)
+    end
+  end
 end

@@ -94,4 +94,26 @@ RSpec.describe BulkUpload::Sales::Year2022::CsvParser do
       end
     end
   end
+
+  context "when parsing csv with carriage returns" do
+    let(:file) { Tempfile.new }
+    let(:path) { file.path }
+    let(:log) { build(:sales_log, :completed) }
+
+    before do
+      file.write("Question\r\n")
+      file.write("Additional info\r\r")
+      file.write("Values\r")
+      file.write("Can be empty?\n")
+      file.write("Type of letting the question applies to\r\n")
+      file.write("Duplicate check field?\r\r")
+      file.write(BulkUpload::SalesLogToCsv.new(log:).to_2022_csv_row)
+      file.rewind
+    end
+
+    it "parses csv correctly" do
+      expect(service.column_for_field("field_1")).to eql("A")
+      expect(service.column_for_field("field_125")).to eql("DU")
+    end
+  end
 end
