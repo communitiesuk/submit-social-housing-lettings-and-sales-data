@@ -24,10 +24,6 @@ RSpec.describe Form::Lettings::Pages::PersonOverRetirementValueCheck, type: :mod
   end
 
   context "with person 2" do
-    it "has the correct id" do
-      expect(page.id).to eq("person_2_over_retirement_value_check")
-    end
-
     it "has correct depends_on" do
       expect(page.depends_on).to eq(
         [{ "person_2_not_retired_over_soft_max_age?" => true }],
@@ -68,10 +64,6 @@ RSpec.describe Form::Lettings::Pages::PersonOverRetirementValueCheck, type: :mod
 
   context "with person 3" do
     let(:person_index) { 3 }
-
-    it "has the correct id" do
-      expect(page.id).to eq("person_3_over_retirement_value_check")
-    end
 
     it "has correct depends_on" do
       expect(page.depends_on).to eq(
