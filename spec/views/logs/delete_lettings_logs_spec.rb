@@ -4,7 +4,14 @@ RSpec.describe "logs/delete_lettings_logs.html.erb" do
   let(:user) { create(:user, :support, name: "Dirk Gently") }
   let(:lettings_log_1) { create(:lettings_log, tenancycode: "Holistic", propcode: "Detective Agency", created_by: user) }
   let(:lettings_logs) { [lettings_log_1] }
-  let(:delete_logs_form) { Forms::DeleteLogsForm.new(log_type: :lettings, current_user: user) }
+  let(:paths) do
+    {
+      delete_confirmation_path: delete_logs_confirmation_lettings_logs_path,
+      back_to_logs_path: lettings_logs_path(search: "search_term"),
+      delete_path: delete_logs_lettings_logs_path,
+    }
+  end
+  let(:delete_logs_form) { Forms::DeleteLogsForm.new(log_type: :lettings, current_user: user, **paths) }
 
   before do
     sign_in user
@@ -34,7 +41,7 @@ RSpec.describe "logs/delete_lettings_logs.html.erb" do
     before do
       lettings_logs << lettings_log_2
       allow(FilterService).to receive(:filter_logs).and_return lettings_logs
-      delete_logs_form = Forms::DeleteLogsForm.new(log_type: :lettings, current_user: user)
+      delete_logs_form = Forms::DeleteLogsForm.new(log_type: :lettings, current_user: user, **paths)
       assign(:delete_logs_form, delete_logs_form)
     end
 

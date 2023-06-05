@@ -34,7 +34,7 @@
                  total_count: @total_count,
                  csv_download_url: csv_download_url_by_log_type(@log_type, @organisation, search: @search_term, codes_only: false),
                  csv_codes_only_download_url: csv_download_url_by_log_type(@log_type, @organisation, search: @search_term, codes_only: true),
-                 delete_logs_path: "#",
+                 delete_logs_path: @delete_logs_path,
                } %>
     <%= render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "logs" } %>
   </div>

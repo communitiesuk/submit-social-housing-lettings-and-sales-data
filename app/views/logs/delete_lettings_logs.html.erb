@@ -10,7 +10,7 @@
 </h1>
 <p>You've selected <%= @delete_logs_form.log_count %> <%= "log".pluralize(@delete_logs_form.log_count) %> to delete</p>
 
-<%= form_with model: @delete_logs_form, url: delete_logs_confirmation_lettings_logs_path do |f| %>
+<%= form_with model: @delete_logs_form, url: @delete_logs_form.delete_confirmation_path do |f| %>
   <%= f.hidden_field :search_term, value: @delete_logs_form.search_term %>
   <%= f.govuk_error_summary %>
   <%= govuk_table do |table| %>
@@ -43,6 +43,6 @@
     <% end %>
   <% end %>
   <%= f.govuk_submit "Continue" do %>
-    <%= govuk_button_link_to "Cancel", lettings_logs_path(search: @delete_logs_form.search_term), secondary: true %>
+    <%= govuk_button_link_to "Cancel", @delete_logs_form.back_to_logs_path, secondary: true %>
   <% end %>
 <% end %>

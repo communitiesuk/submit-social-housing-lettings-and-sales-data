@@ -3,7 +3,7 @@ module Forms
     include ActiveModel::Model
     include ActiveModel::Validations
 
-    attr_reader :logs, :log_type, :selected_ids, :search_term
+    attr_reader :logs, :log_type, :selected_ids, :search_term, :delete_confirmation_path, :back_to_logs_path, :delete_path
 
     validate :at_least_one_log_selected
 
@@ -13,6 +13,9 @@ module Forms
       @current_user = attributes[:current_user]
       @logs = FilterService.filter_logs(all_logs, @search_term, attributes[:log_filters], nil, @current_user)
       @selected_ids = attributes[:selected_ids] || @logs.map(&:id)
+      @delete_confirmation_path = attributes[:delete_confirmation_path]
+      @back_to_logs_path = attributes[:back_to_logs_path]
+      @delete_path = attributes[:delete_path]
     end
 
     def log_count
