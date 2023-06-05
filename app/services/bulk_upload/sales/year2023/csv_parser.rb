@@ -92,6 +92,8 @@ private
 
     @normalised_string = File.read(path, encoding: "bom|utf-8")
     @normalised_string.gsub!("\r\n", "\n")
+    @normalised_string.gsub!("\r\r", "\n")
+    @normalised_string.tr!("\r", "\n")
     @normalised_string.scrub!("")
 
     @normalised_string
