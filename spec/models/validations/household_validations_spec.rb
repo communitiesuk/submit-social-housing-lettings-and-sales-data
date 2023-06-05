@@ -363,7 +363,7 @@ RSpec.describe Validations::HouseholdValidations do
       end
     end
 
-    it "does not add an error for a person aged 16-19 who is a student but not a child of the buyer" do
+    it "does not add an error for a person aged 16-19 who is a student but not a child of the lead tenant" do
       record.age2 = 18
       record.ecstat2 = "7"
       record.relat2 = "P"
@@ -373,7 +373,17 @@ RSpec.describe Validations::HouseholdValidations do
       expect(record.errors["age2"]).to be_empty
     end
 
-    it "adds errors for a person who is a child of the buyer and a student but not aged 16-19" do
+    it "does not add an error for a person not aged 16-19 who is a student but not a child of the lead tenant" do
+      record.age2 = 20
+      record.ecstat2 = "7"
+      record.relat2 = "P"
+      household_validator.validate_household_number_of_other_members(record)
+      expect(record.errors["relat2"]).to be_empty
+      expect(record.errors["ecstat2"]).to be_empty
+      expect(record.errors["age2"]).to be_empty
+    end
+
+    it "adds errors for a person who is a child of the lead tenant and a student but not aged 16-19" do
       record.age2 = 14
       record.ecstat2 = "7"
       record.relat2 = "C"
