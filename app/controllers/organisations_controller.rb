@@ -175,7 +175,7 @@ private
   end
 
   def filter_manager
-    FilterManager.new(current_user:, session:, params:, filter_type: )
+    FilterManager.new(current_user:, session:, params:, filter_type:)
   end
 
   def org_params
