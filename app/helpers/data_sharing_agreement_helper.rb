@@ -31,6 +31,16 @@ module DataSharingAgreementHelper
     end
   end
 
+  def org_name_for_data_sharing_agreement(data_sharing_agreement, user)
+    if data_sharing_agreement.present?
+      data_sharing_agreement.organisation_name
+    elsif user.is_dpo?
+      user.organisation.name
+    else
+      "[Data provider organisation]"
+    end
+  end
+
 private
 
   def data_sharing_agreement_first_line(organisation:, user:)

@@ -52,13 +52,7 @@ RSpec.describe "organisations/show.html.erb" do
     end
 
     context "when accepted" do
-      let(:data_sharing_agreement) do
-        DataSharingAgreement.create!(
-          organisation:,
-          signed_at: Time.zone.now - 1.day,
-          data_protection_officer: user,
-        )
-      end
+      let(:data_sharing_agreement) { create(:data_sharing_agreement, organisation:, signed_at: Time.zone.now - 1.day) }
 
       it "includes data sharing agreement row" do
         render
@@ -108,14 +102,7 @@ RSpec.describe "organisations/show.html.erb" do
     end
 
     context "when accepted" do
-      let(:dpo) { create(:user, is_dpo: true) }
-      let(:data_sharing_agreement) do
-        DataSharingAgreement.create!(
-          organisation:,
-          signed_at: Time.zone.now - 1.day,
-          data_protection_officer: dpo,
-        )
-      end
+      let(:data_sharing_agreement) { create(:data_sharing_agreement, organisation:, signed_at: Time.zone.now - 1.day) }
 
       it "includes data sharing agreement row" do
         render
@@ -132,7 +119,7 @@ RSpec.describe "organisations/show.html.erb" do
       it "shows show name of who signed the agreement" do
         render
 
-        expect(fragment).to have_content(dpo.name)
+        expect(fragment).to have_content(data_sharing_agreement.dpo_name)
       end
 
       it "shows link to view data sharing agreement" do
@@ -169,11 +156,7 @@ RSpec.describe "organisations/show.html.erb" do
 
     context "when accepted" do
       let(:data_sharing_agreement) do
-        DataSharingAgreement.create!(
-          organisation:,
-          signed_at: Time.zone.now - 1.day,
-          data_protection_officer: user,
-        )
+        create(:data_sharing_agreement, organisation:, signed_at: Time.zone.now - 1.day)
       end
 
       it "includes data sharing agreement row" do

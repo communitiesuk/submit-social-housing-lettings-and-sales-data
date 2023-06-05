@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "organisations/data_sharing_agreement.html.erb" do
+RSpec.describe "organisations/data_sharing_agreement.html.erb", :aggregate_failures do
   before do
     Timecop.freeze(Time.zone.local(2023, 1, 10))
     allow(view).to receive(:current_user).and_return(user)
@@ -19,46 +19,50 @@ RSpec.describe "organisations/data_sharing_agreement.html.erb" do
   context "when dpo" do
     let(:user) { create(:user, is_dpo: true) }
 
-    it "shows current date" do
+    it "renders dynamic content" do
       render
+      # current date
       expect(fragment).to have_content("10th day of January 2023")
-    end
-
-    it "shows dpo name" do
-      render
+      # dpo name
       expect(fragment).to have_content("Name: #{user.name}")
-    end
-
-    it "shows action buttons" do
-      render
+      # org details
+      expect(fragment).to have_content("[Data provider organisation] of [full address] (“CORE Data Provider”)")
+      # header
+      expect(fragment).to have_css("h2", text: "#{user.organisation.name} and Department for Levelling Up, Housing and Communities")
+      # action buttons
       expect(fragment).to have_button(text: "Accept this agreement")
       expect(fragment).to have_link(text: "Cancel", href: "/organisations/#{organisation.id}/details")
+
+      # Shows placeholder details in 12.2
+      expect(fragment).to have_content("12.2. For [Organisation name]: Name: [DPO name], Postal Address: [Organisation address], E-mail address: [DPO email], Telephone number: [Organisation telephone number]")
     end
 
     context "when accepted" do
       let(:data_sharing_agreement) do
-        DataSharingAgreement.create!(
+        create(
+          :data_sharing_agreement,
           organisation:,
           signed_at: Time.zone.now - 1.day,
-          data_protection_officer: user,
         )
       end
 
-      it "does not show action buttons" do
+      it "renders dynamic content" do
         render
 
+        # dpo name
+        expect(fragment).to have_content("Name: #{data_sharing_agreement.dpo_name}")
+
+        # org details
+        expect(fragment).to have_content("#{data_sharing_agreement.organisation_name} of #{data_sharing_agreement.organisation_address} (“CORE Data Provider”)")
+        # header
+        expect(fragment).to have_css("h2", text: "#{data_sharing_agreement.organisation_name} and Department for Levelling Up, Housing and Communities")
+        # does not show action buttons
         expect(fragment).not_to have_button(text: "Accept this agreement")
         expect(fragment).not_to have_link(text: "Cancel", href: "/organisations/#{organisation.id}/details")
-      end
-
-      it "sees signed_at date" do
-        render
+        # sees signed_at date
         expect(fragment).to have_content("9th day of January 2023")
-      end
-
-      it "shows dpo name" do
-        render
-        expect(fragment).to have_content("Name: #{user.name}")
+        # Shows filled in details in 12.2
+        expect(fragment).to have_content("12.2. For #{data_sharing_agreement.organisation_name}: Name: #{data_sharing_agreement.dpo_name}, Postal Address: #{data_sharing_agreement.organisation_address}, E-mail address: #{data_sharing_agreement.dpo_email}, Telephone number: #{data_sharing_agreement.organisation_phone_number}")
       end
     end
   end
@@ -66,45 +70,47 @@ RSpec.describe "organisations/data_sharing_agreement.html.erb" do
   context "when not dpo" do
     let(:user) { create(:user) }
 
-    it "shows DPO placeholder" do
+    it "renders dynamic content" do
       render
-      expect(fragment).to have_content("Name: [DPO name]")
-    end
-
-    it "shows placeholder date" do
-      render
+      # placeholder date
       expect(fragment).to have_content("This agreement is made the [XX] day of [XX] 20[XX]")
-    end
-
-    it "does not show action buttons" do
-      render
+      # dpo name placedholder
+      expect(fragment).to have_content("Name: [DPO name]")
+      # org details
+      expect(fragment).to have_content("[Data provider organisation] of [full address] (“CORE Data Provider”)")
+      # header
+      expect(fragment).to have_css("h2", text: "[Data provider organisation] and Department for Levelling Up, Housing and Communities")
+      # does not show action buttons
       expect(fragment).not_to have_button(text: "Accept this agreement")
       expect(fragment).not_to have_link(text: "Cancel", href: "/organisations/#{organisation.id}/details")
+      # Shows placeholder details in 12.2
+      expect(fragment).to have_content("12.2. For [Organisation name]: Name: [DPO name], Postal Address: [Organisation address], E-mail address: [DPO email], Telephone number: [Organisation telephone number]")
     end
 
     context "when accepted" do
       let(:data_sharing_agreement) do
-        DataSharingAgreement.create!(
+        create(
+          :data_sharing_agreement,
           organisation:,
           signed_at: Time.zone.now - 1.day,
-          data_protection_officer: user,
         )
       end
 
-      it "does not show action buttons" do
+      it "renders dynamic content" do
         render
+        # sees signed_at date
+        expect(fragment).to have_content("9th day of January 2023")
+        # dpo name placedholder
+        expect(fragment).to have_content("Name: #{data_sharing_agreement.dpo_name}")
+        # org details
+        expect(fragment).to have_content("#{data_sharing_agreement.organisation_name} of #{data_sharing_agreement.organisation_address} (“CORE Data Provider”)")
+        # header
+        expect(fragment).to have_css("h2", text: "#{data_sharing_agreement.organisation_name} and Department for Levelling Up, Housing and Communities")
+        # does not show action buttons
         expect(fragment).not_to have_button(text: "Accept this agreement")
         expect(fragment).not_to have_link(text: "Cancel", href: "/organisations/#{organisation.id}/details")
-      end
-
-      it "sees signed_at date" do
-        render
-        expect(fragment).to have_content("9th day of January 2023")
-      end
-
-      it "shows dpo name" do
-        render
-        expect(fragment).to have_content("Name: #{user.name}")
+        # Shows filled in details in 12.2
+        expect(fragment).to have_content("12.2. For #{data_sharing_agreement.organisation_name}: Name: #{data_sharing_agreement.dpo_name}, Postal Address: #{data_sharing_agreement.organisation_address}, E-mail address: #{data_sharing_agreement.dpo_email}, Telephone number: #{data_sharing_agreement.organisation_phone_number}")
       end
     end
   end

@@ -60,6 +60,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_30_094653) do
     t.bigint "organisation_id"
     t.bigint "data_protection_officer_id"
     t.datetime "signed_at", null: false
+    t.string "organisation_name", null: false
+    t.string "organisation_address", null: false
+    t.string "organisation_phone_number"
+    t.string "dpo_email", null: false
+    t.string "dpo_name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["data_protection_officer_id"], name: "index_data_sharing_agreements_on_data_protection_officer_id"

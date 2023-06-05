@@ -1518,13 +1518,24 @@ RSpec.describe OrganisationsController, type: :request do
             expect(flash[:notification_banner_body]).to eq("Your organisation can now submit logs.")
           end
 
+          it "creates a data sharing agreement" do
+            expect(organisation.reload.data_sharing_agreement).to be_nil
+
+            post("/organisations/#{organisation.id}/data-sharing-agreement", headers:)
+
+            data_sharing_agreement = organisation.reload.data_sharing_agreement
+
+            expect(data_sharing_agreement.organisation_address).to eq(organisation.address_string)
+            expect(data_sharing_agreement.organisation_name).to eq(organisation.name)
+            expect(data_sharing_agreement.organisation_phone_number).to eq(organisation.phone)
+            expect(data_sharing_agreement.data_protection_officer).to eq(user)
+            expect(data_sharing_agreement.dpo_name).to eq(user.name)
+            expect(data_sharing_agreement.dpo_email).to eq(user.email)
+          end
+
           context "when the user has already accepted the agreement" do
             before do
-              DataSharingAgreement.create!(
-                organisation: user.organisation,
-                signed_at: Time.zone.now - 1.day,
-                data_protection_officer: user,
-              )
+              create(:data_sharing_agreement, data_protection_officer: user, organisation: user.organisation)
             end
 
             it "returns not found" do
