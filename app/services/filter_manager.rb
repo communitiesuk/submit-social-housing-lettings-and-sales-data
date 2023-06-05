@@ -38,7 +38,7 @@ class FilterManager
   end
 
   def serialize_filters_to_session(specific_org: false)
-    session["#{@filter_type}_filters"] = session_filters(specific_org:).to_json
+    session[session_name_for(filter_type)] = session_filters(specific_org:).to_json
   end
 
   def session_filters(specific_org: false)
@@ -46,7 +46,7 @@ class FilterManager
   end
 
   def deserialize_filters_from_session(specific_org)
-    current_filters = session["#{@filter_type}_filters"]
+    current_filters = session[session_name_for(filter_type)]
     new_filters = current_filters.present? ? JSON.parse(current_filters) : {}
     if @filter_type.include?("logs")
       current_user.logs_filters(specific_org:).each do |filter|
@@ -69,6 +69,10 @@ class FilterManager
 private
 
   def logs_filters
-    JSON.parse(session["#{@filter_type}_filters"] || "{}") || {}
+    JSON.parse(session[session_name_for(filter_type)] || "{}") || {}
+  end
+
+  def session_name_for(filter_type)
+    "#{filter_type}_filters"
   end
 end
