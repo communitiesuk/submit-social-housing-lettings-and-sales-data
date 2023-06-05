@@ -149,11 +149,11 @@ RSpec.describe BulkUpload::Sales::Year2023::CsvParser do
   context "when parsing csv with carriage returns" do
     before do
       file.write("Question\r\n")
-      file.write("Additional info\r\r")
-      file.write("Values\r")
-      file.write("Can be empty?\n")
+      file.write("Additional info\r")
+      file.write("Values\r\n")
+      file.write("Can be empty?\r")
       file.write("Type of letting the question applies to\r\n")
-      file.write("Duplicate check field?\r\r")
+      file.write("Duplicate check field?\r")
       file.write(BulkUpload::SalesLogToCsv.new(log:).default_2023_field_numbers_row)
       file.write(BulkUpload::SalesLogToCsv.new(log:).to_2023_csv_row)
       file.rewind

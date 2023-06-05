@@ -102,11 +102,11 @@ RSpec.describe BulkUpload::Sales::Year2022::CsvParser do
 
     before do
       file.write("Question\r\n")
-      file.write("Additional info\r\r")
-      file.write("Values\r")
-      file.write("Can be empty?\n")
+      file.write("Additional info\r")
+      file.write("Values\r\n")
+      file.write("Can be empty?\r")
       file.write("Type of letting the question applies to\r\n")
-      file.write("Duplicate check field?\r\r")
+      file.write("Duplicate check field?\r")
       file.write(BulkUpload::SalesLogToCsv.new(log:).to_2022_csv_row)
       file.rewind
     end
