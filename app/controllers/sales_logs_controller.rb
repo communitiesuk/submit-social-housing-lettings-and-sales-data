@@ -82,15 +82,15 @@ class SalesLogsController < LogsController
 private
 
   def set_session_filters
-    filter_manager.serialize_filters_to_session("sales_logs")
+    filter_manager.serialize_filters_to_session
   end
 
   def session_filters
-    filter_manager.session_filters("sales_logs")
+    filter_manager.session_filters
   end
 
   def filter_manager
-    FilterManager.new(current_user:, session:, params:)
+    FilterManager.new(current_user:, session:, params:, filter_type: "sales_logs")
   end
 
   def extract_bulk_upload_from_session_filters

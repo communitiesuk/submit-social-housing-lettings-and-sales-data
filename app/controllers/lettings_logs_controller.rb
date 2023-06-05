@@ -115,15 +115,15 @@ class LettingsLogsController < LogsController
 private
 
   def set_session_filters
-    filter_manager.serialize_filters_to_session("lettings_logs")
+    filter_manager.serialize_filters_to_session
   end
 
   def session_filters
-    filter_manager.session_filters("lettings_logs")
+    filter_manager.session_filters
   end
 
   def filter_manager
-    FilterManager.new(current_user:, session:, params:)
+    FilterManager.new(current_user:, session:, params:, filter_type: "lettings_logs")
   end
 
   def org_params

@@ -167,15 +167,15 @@ private
   end
 
   def set_session_filters
-    filter_manager.serialize_filters_to_session(filter_type, specific_org: true)
+    filter_manager.serialize_filters_to_session(specific_org: true)
   end
 
   def session_filters
-    filter_manager.session_filters(filter_type, specific_org: true)
+    filter_manager.session_filters(specific_org: true)
   end
 
   def filter_manager
-    FilterManager.new(current_user:, session:, params:)
+    FilterManager.new(current_user:, session:, params:, filter_type: )
   end
 
   def org_params
