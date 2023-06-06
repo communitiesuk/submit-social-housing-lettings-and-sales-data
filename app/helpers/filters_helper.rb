@@ -1,6 +1,6 @@
 module FiltersHelper
   def filter_selected?(filter, value, filter_type)
-    return false unless session["#{filter_type}_filters"]
+    return false unless session[session_name_for(filter_type)]
 
     selected_filters = JSON.parse(session[session_name_for(filter_type)])
     return true if selected_filters.blank? && filter == "user" && value == :all
@@ -20,7 +20,7 @@ module FiltersHelper
   end
 
   def selected_option(filter, filter_type)
-    return false unless session["#{filter_type}_filters"]
+    return false unless session[session_name_for(filter_type)]
 
     JSON.parse(session[[session_name_for(filter_type)]])[filter] || ""
   end
