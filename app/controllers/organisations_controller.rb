@@ -171,7 +171,7 @@ class OrganisationsController < ApplicationController
       signed_at: Time.zone.now,
       data_protection_officer: current_user,
       organisation_name: @organisation.name,
-      organisation_address: @organisation.address_string,
+      organisation_address: @organisation.address_row,
       organisation_phone_number: @organisation.phone,
       dpo_email: current_user.email,
       dpo_name: current_user.name,

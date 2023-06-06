@@ -34,12 +34,36 @@ module DataSharingAgreementHelper
   def org_name_for_data_sharing_agreement(data_sharing_agreement, user)
     if data_sharing_agreement.present?
       data_sharing_agreement.organisation_name
-    elsif user.is_dpo?
-      user.organisation.name
     else
-      "[Data provider organisation]"
+      user.organisation.name
     end
   end
+
+  # rubocop:disable Rails/HelperInstanceVariable
+  def section_12_2(data_sharing_agreement:, user:, organisation:)
+    if data_sharing_agreement
+      @org_address = data_sharing_agreement.organisation_address
+      @org_name = data_sharing_agreement.organisation_name
+      @org_phone = data_sharing_agreement.organisation_phone_number
+      @dpo_name = data_sharing_agreement.dpo_name
+      @dpo_email = data_sharing_agreement.dpo_email
+    else
+      @org_name = organisation.name
+      @org_address = organisation.address_row
+      @org_phone = organisation.phone
+
+      if user.is_dpo?
+        @dpo_name = user.name
+        @dpo_email = user.email
+      else
+        @dpo_name = "[DPO name]"
+        @dpo_email = "[DPO email]"
+      end
+    end
+
+    "12.2. For #{@org_name}: Name: #{@dpo_name}, Postal Address: #{@org_address}, E-mail address: #{@dpo_email}, Telephone number: #{@org_phone}"
+  end
+# rubocop:enable Rails/HelperInstanceVariable
 
 private
 

@@ -1525,7 +1525,7 @@ RSpec.describe OrganisationsController, type: :request do
 
             data_sharing_agreement = organisation.reload.data_sharing_agreement
 
-            expect(data_sharing_agreement.organisation_address).to eq(organisation.address_string)
+            expect(data_sharing_agreement.organisation_address).to eq(organisation.address_row)
             expect(data_sharing_agreement.organisation_name).to eq(organisation.name)
             expect(data_sharing_agreement.organisation_phone_number).to eq(organisation.phone)
             expect(data_sharing_agreement.data_protection_officer).to eq(user)

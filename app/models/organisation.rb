@@ -75,6 +75,10 @@ class Organisation < ApplicationRecord
     %i[address_line1 address_line2 postcode].map { |field| public_send(field) }.join("\n")
   end
 
+  def address_row
+    %i[address_line1 address_line2 postcode].map { |field| public_send(field) }.join(", ")
+  end
+
   def rent_periods
     organisation_rent_periods.pluck(:rent_period)
   end

@@ -18,7 +18,7 @@
     <% if @data_sharing_agreement %>
       <p class="govuk-body-m">1) <%= @data_sharing_agreement.organisation_name %> of <%= @data_sharing_agreement.organisation_address %> (“CORE Data Provider”)</p>
     <% else %>
-      <p class="govuk-body-m">1) [Data provider organisation] of [full address] (“CORE Data Provider”)</p>
+      <p class="govuk-body-m">1) <%= @organisation.name %> of <%= @organisation.address_row %> (“CORE Data Provider”)</p>
     <% end %>
     <p class="govuk-body-m">and</p>
     <p class="govuk-body-m">2) The Department for Levelling Up, Housing and Communities of 2 Marsham Street, London, SW1P 4DF (“DLUHC”)</p>
@@ -105,13 +105,11 @@
     <p class="govuk-body-m">11.2. CORE data providers and DLUHC acknowledge that any loss or unauthorised release of the Data can be treated as valid grounds for immediately terminating this agreement by DLUHC.</p>
     <h3 id="12-authorised-representatives" class="govuk-heading-m">12. Authorised representatives</h3>
     <p class="govuk-body-m">12.1. CORE data providers and DLUHC will each appoint an Authorised Representative to be the primary point of contact in all day-to-day matters relating to this Agreement:</p>
-    <% if @data_sharing_agreement %>
-      <p class="govuk-body-m">12.2. For <%= @data_sharing_agreement.organisation_name %>: Name: <%= @data_sharing_agreement.dpo_name %>, Postal Address: <%= @data_sharing_agreement.organisation_address %>, E-mail address: <%= @data_sharing_agreement.dpo_email %>, Telephone number: <%= @data_sharing_agreement.organisation_phone_number %></p>
-    <% else %>
-      <p class="govuk-body-m">12.2. For [Organisation name]: Name: [DPO name], Postal Address: [Organisation address], E-mail address: [DPO email], Telephone number: [Organisation telephone number]</p>
-    <% end %>
-    <p class="govuk-body-m">12.3. For DLUHC: Name: Rachel Worledge
-    Postal Address: South-west section, 4th Floor, Fry Building, 2 Marsham Street, London, SW1P 4DF
+    <p class="govuk-body-m">
+      <%= section_12_2(data_sharing_agreement: @data_sharing_agreement, user: current_user, organisation: @organisation) %>
+    </p>
+    <p class="govuk-body-m">12.3. For DLUHC: Name: Rachel Worledge,
+    Postal Address: South-west section, 4th Floor, Fry Building, 2 Marsham Street, London, SW1P 4DF,
     E-mail address: Rachel.Worledge@levellingup.gov.uk </p>
     <h3 id="13-products-and-publications" class="govuk-heading-m">13. Products and publications</h3>
     <p class="govuk-body-m">13.1. The Data potentially allows for persons to be identified, although the risk of this happening should be minimised by the steps taken in clause 9. CORE data providers should agree to carry out a thorough check of the Data and ensure that all steps are taken within its powers to minimise the risk that any outputs lead to identification of a person by a third party.</p>
@@ -125,7 +123,7 @@
     <h3 id="16-statutory-compliance" class="govuk-heading-m">16. Statutory compliance</h3>
     <p class="govuk-body-m">16.1. The Parties shall comply with all relevant legislation, regulations, orders, statutory instruments and any amendments or re-enactments thereof from the commencement of this agreement.</p>
     <p class="govuk-body-m">As witness of which the parties have set their hands on the day and year first above written
-    signed for and on behalf of [job title of an officer with appropriate delegated authority] for <%= org_name_for_data_sharing_agreement(@data_sharing_agreement, current_user) %>, by:</p>
+    signed for and on behalf of the Data Protection Officer for <%= org_name_for_data_sharing_agreement(@data_sharing_agreement, current_user) %>, by:</p>
     <ul class="govuk-list govuk-list--bullet">
       <li>Name: <%= name_for_data_sharing_agreement(@data_sharing_agreement, current_user) %></li>
       <li>Title: Data Protection Officer</li>

@@ -26,15 +26,14 @@ RSpec.describe "organisations/data_sharing_agreement.html.erb", :aggregate_failu
       # dpo name
       expect(fragment).to have_content("Name: #{user.name}")
       # org details
-      expect(fragment).to have_content("[Data provider organisation] of [full address] (“CORE Data Provider”)")
+      expect(fragment).to have_content("#{organisation.name} of #{organisation.address_row} (“CORE Data Provider”)")
       # header
-      expect(fragment).to have_css("h2", text: "#{user.organisation.name} and Department for Levelling Up, Housing and Communities")
+      expect(fragment).to have_css("h2", text: "#{organisation.name} and Department for Levelling Up, Housing and Communities")
       # action buttons
       expect(fragment).to have_button(text: "Accept this agreement")
       expect(fragment).to have_link(text: "Cancel", href: "/organisations/#{organisation.id}/details")
-
-      # Shows placeholder details in 12.2
-      expect(fragment).to have_content("12.2. For [Organisation name]: Name: [DPO name], Postal Address: [Organisation address], E-mail address: [DPO email], Telephone number: [Organisation telephone number]")
+      # Shows DPO and org details in 12.2
+      expect(fragment).to have_content("12.2. For #{organisation.name}: Name: #{user.name}, Postal Address: #{organisation.address_row}, E-mail address: #{user.email}, Telephone number: #{organisation.phone}")
     end
 
     context "when accepted" do
@@ -61,7 +60,7 @@ RSpec.describe "organisations/data_sharing_agreement.html.erb", :aggregate_failu
         expect(fragment).not_to have_link(text: "Cancel", href: "/organisations/#{organisation.id}/details")
         # sees signed_at date
         expect(fragment).to have_content("9th day of January 2023")
-        # Shows filled in details in 12.2
+        # Shows DPO and org details in 12.2
         expect(fragment).to have_content("12.2. For #{data_sharing_agreement.organisation_name}: Name: #{data_sharing_agreement.dpo_name}, Postal Address: #{data_sharing_agreement.organisation_address}, E-mail address: #{data_sharing_agreement.dpo_email}, Telephone number: #{data_sharing_agreement.organisation_phone_number}")
       end
     end
@@ -77,14 +76,14 @@ RSpec.describe "organisations/data_sharing_agreement.html.erb", :aggregate_failu
       # dpo name placedholder
       expect(fragment).to have_content("Name: [DPO name]")
       # org details
-      expect(fragment).to have_content("[Data provider organisation] of [full address] (“CORE Data Provider”)")
+      expect(fragment).to have_content("#{organisation.name} of #{organisation.address_row} (“CORE Data Provider”)")
       # header
-      expect(fragment).to have_css("h2", text: "[Data provider organisation] and Department for Levelling Up, Housing and Communities")
+      expect(fragment).to have_css("h2", text: "#{organisation.name} and Department for Levelling Up, Housing and Communities")
       # does not show action buttons
       expect(fragment).not_to have_button(text: "Accept this agreement")
       expect(fragment).not_to have_link(text: "Cancel", href: "/organisations/#{organisation.id}/details")
       # Shows placeholder details in 12.2
-      expect(fragment).to have_content("12.2. For [Organisation name]: Name: [DPO name], Postal Address: [Organisation address], E-mail address: [DPO email], Telephone number: [Organisation telephone number]")
+      expect(fragment).to have_content("12.2. For #{organisation.name}: Name: [DPO name], Postal Address: #{organisation.address_row}, E-mail address: [DPO email], Telephone number: #{organisation.phone}")
     end
 
     context "when accepted" do
