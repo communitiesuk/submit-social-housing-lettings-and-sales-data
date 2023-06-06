@@ -32,4 +32,8 @@ Sidekiq.configure_server do |config|
   config.on(:startup) do
     Sidekiq::Cron::Job.load_from_hash YAML.load_file("config/sidekiq_cron_schedule.yml")
   end
+
+  config.on(:shutdown) do
+    Sidekiq::CLI.instance.launcher.quiet
+  end
 end

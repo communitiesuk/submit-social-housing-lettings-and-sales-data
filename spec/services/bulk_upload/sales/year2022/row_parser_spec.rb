@@ -419,6 +419,30 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
       end
     end
 
+    context "when type is shared ownership" do
+      let(:attributes) { valid_attributes.merge({ field_113: 1, field_68: nil }) }
+
+      it "has error on correct fields" do
+        expect(parser.errors).to include(:field_68)
+      end
+    end
+
+    context "when type is discounted ownership" do
+      let(:attributes) { valid_attributes.merge({ field_113: 2, field_77: nil }) }
+
+      it "has error on correct fields" do
+        expect(parser.errors).to include(:field_77)
+      end
+    end
+
+    context "when type is outright sale" do
+      let(:attributes) { valid_attributes.merge({ field_113: 3, field_87: nil }) }
+
+      it "has error on correct fields" do
+        expect(parser.errors).to include(:field_87)
+      end
+    end
+
     describe "#field_93" do # username for created_by
       context "when blank" do
         let(:attributes) { { bulk_upload:, field_93: "" } }
@@ -830,6 +854,18 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
         expect(log["has_mscharge"]).to eq(0) # no
         expect(log["mscharge"]).to be_nil
       end
+    end
+  end
+
+  describe "#spreadsheet_duplicate_hash" do
+    it "returns a hash" do
+      expect(parser.spreadsheet_duplicate_hash).to be_a(Hash)
+    end
+  end
+
+  describe "#add_duplicate_found_in_spreadsheet_errors" do
+    it "adds errors" do
+      expect { parser.add_duplicate_found_in_spreadsheet_errors }.to change(parser.errors, :size)
     end
   end
 end
