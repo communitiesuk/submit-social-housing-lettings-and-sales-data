@@ -109,6 +109,9 @@ Rails.application.routes.draw do
   resources :organisations do
     member do
       get "details", to: "organisations#details"
+      get "data-sharing-agreement", to: "organisations#data_sharing_agreement"
+      post "data-sharing-agreement", to: "organisations#confirm_data_sharing_agreement"
+
       get "users", to: "organisations#users"
       get "users/invite", to: "users/account#new"
       get "lettings-logs", to: "organisations#lettings_logs"

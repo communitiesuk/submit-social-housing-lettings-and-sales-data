@@ -2,10 +2,10 @@ require "rails_helper"
 
 RSpec.describe OrganisationsController, type: :request do
   let(:organisation) { user.organisation }
-  let!(:unauthorised_organisation) { FactoryBot.create(:organisation) }
+  let!(:unauthorised_organisation) { create(:organisation) }
   let(:headers) { { "Accept" => "text/html" } }
   let(:page) { Capybara::Node::Simple.new(response.body) }
-  let(:user) { FactoryBot.create(:user, :data_coordinator) }
+  let(:user) { create(:user, :data_coordinator) }
   let(:new_value) { "Test Name 35" }
   let(:params) { { id: organisation.id, organisation: { name: new_value } } }
 
@@ -41,9 +41,9 @@ RSpec.describe OrganisationsController, type: :request do
   context "when user is signed in" do
     describe "#schemes" do
       context "when support user" do
-        let(:user) { FactoryBot.create(:user, :support) }
-        let!(:schemes) { FactoryBot.create_list(:scheme, 5) }
-        let!(:same_org_scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+        let(:user) { create(:user, :support) }
+        let!(:schemes) { create_list(:scheme, 5) }
+        let!(:same_org_scheme) { create(:scheme, owning_organisation: user.organisation) }
 
         before do
           allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -72,11 +72,11 @@ RSpec.describe OrganisationsController, type: :request do
         end
 
         context "when searching" do
-          let!(:searched_scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+          let!(:searched_scheme) { create(:scheme, owning_organisation: user.organisation) }
           let(:search_param) { searched_scheme.id }
 
           before do
-            FactoryBot.create(:location, scheme: searched_scheme)
+            create(:location, scheme: searched_scheme)
             allow(user).to receive(:need_two_factor_authentication?).and_return(false)
             get "/organisations/#{organisation.id}/schemes?search=#{search_param}"
           end
@@ -99,9 +99,9 @@ RSpec.describe OrganisationsController, type: :request do
       end
 
       context "when data coordinator user" do
-        let(:user) { FactoryBot.create(:user, :data_coordinator) }
-        let!(:schemes) { FactoryBot.create_list(:scheme, 5) }
-        let!(:same_org_scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+        let(:user) { create(:user, :data_coordinator) }
+        let!(:schemes) { create_list(:scheme, 5) }
+        let!(:same_org_scheme) { create(:scheme, owning_organisation: user.organisation) }
 
         before do
           sign_in user
@@ -135,7 +135,7 @@ RSpec.describe OrganisationsController, type: :request do
         end
 
         context "with schemes that are not in scope for the user, i.e. that they do not belong to" do
-          let!(:unauthorised_organisation) { FactoryBot.create(:organisation) }
+          let!(:unauthorised_organisation) { create(:organisation) }
 
           before do
             get "/organisations/#{unauthorised_organisation.id}/schemes", headers:, params: {}
@@ -147,11 +147,11 @@ RSpec.describe OrganisationsController, type: :request do
         end
 
         context "when searching" do
-          let!(:searched_scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+          let!(:searched_scheme) { create(:scheme, owning_organisation: user.organisation) }
           let(:search_param) { searched_scheme.id_to_display }
 
           before do
-            FactoryBot.create(:location, scheme: searched_scheme)
+            create(:location, scheme: searched_scheme)
             get "/organisations/#{organisation.id}/schemes?search=#{search_param}"
           end
 
@@ -247,9 +247,9 @@ RSpec.describe OrganisationsController, type: :request do
 
       context "when accessing the users tab" do
         context "with an organisation that the user belongs to" do
-          let!(:other_user) { FactoryBot.create(:user, organisation: user.organisation, name: "User 2") }
-          let!(:inactive_user) { FactoryBot.create(:user, organisation: user.organisation, active: false, name: "User 3") }
-          let!(:other_org_user) { FactoryBot.create(:user, name: "User 4") }
+          let!(:other_user) { create(:user, organisation: user.organisation, name: "User 2") }
+          let!(:inactive_user) { create(:user, organisation: user.organisation, active: false, name: "User 3") }
+          let!(:other_org_user) { create(:user, name: "User 4") }
 
           before do
             get "/organisations/#{organisation.id}/users", headers:, params: {}
@@ -501,7 +501,7 @@ RSpec.describe OrganisationsController, type: :request do
     end
 
     context "with a data provider user" do
-      let(:user) { FactoryBot.create(:user) }
+      let(:user) { create(:user) }
 
       before do
         sign_in user
@@ -630,7 +630,7 @@ RSpec.describe OrganisationsController, type: :request do
     end
 
     context "with a support user" do
-      let(:user) { FactoryBot.create(:user, :support) }
+      let(:user) { create(:user, :support) }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -681,9 +681,9 @@ RSpec.describe OrganisationsController, type: :request do
           let(:number_of_org2_lettings_logs) { 4 }
 
           before do
-            FactoryBot.create_list(:lettings_log, number_of_org1_lettings_logs, created_by: user)
-            FactoryBot.create(:lettings_log, created_by: user, status: "pending", skip_update_status: true)
-            FactoryBot.create_list(:lettings_log, number_of_org2_lettings_logs, created_by: nil, owning_organisation_id: unauthorised_organisation.id, managing_organisation_id: unauthorised_organisation.id)
+            create_list(:lettings_log, number_of_org1_lettings_logs, created_by: user)
+            create(:lettings_log, created_by: user, status: "pending", skip_update_status: true)
+            create_list(:lettings_log, number_of_org2_lettings_logs, created_by: nil, owning_organisation_id: unauthorised_organisation.id, managing_organisation_id: unauthorised_organisation.id)
 
             get "/organisations/#{organisation.id}/lettings-logs", headers:, params: {}
           end
@@ -715,8 +715,8 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           context "when using a search query" do
-            let(:logs) { FactoryBot.create_list(:lettings_log, 3, :completed, owning_organisation: user.organisation, created_by: user) }
-            let(:log_to_search) { FactoryBot.create(:lettings_log, :completed, owning_organisation: user.organisation, created_by: user) }
+            let(:logs) { create_list(:lettings_log, 3, :completed, owning_organisation: user.organisation, created_by: user) }
+            let(:log_to_search) { create(:lettings_log, :completed, owning_organisation: user.organisation, created_by: user) }
             let(:log_total_count) { LettingsLog.where(owning_organisation: user.organisation).count }
 
             it "has search results in the title" do
@@ -757,7 +757,7 @@ RSpec.describe OrganisationsController, type: :request do
             end
 
             context "when more than one results with matching postcode" do
-              let!(:matching_postcode_log) { FactoryBot.create(:lettings_log, :completed, owning_organisation: user.organisation, postcode_full: log_to_search.postcode_full) }
+              let!(:matching_postcode_log) { create(:lettings_log, :completed, owning_organisation: user.organisation, postcode_full: log_to_search.postcode_full) }
 
               it "displays all matching logs" do
                 get "/organisations/#{organisation.id}/lettings-logs?search=#{log_to_search.postcode_full}", headers: headers, params: {}
@@ -771,7 +771,7 @@ RSpec.describe OrganisationsController, type: :request do
 
             context "when there are more than 1 page of search results" do
               let(:postcode) { "XX11YY" }
-              let(:logs) { FactoryBot.create_list(:lettings_log, 30, :completed, owning_organisation: user.organisation, postcode_full: postcode) }
+              let(:logs) { create_list(:lettings_log, 30, :completed, owning_organisation: user.organisation, postcode_full: postcode) }
               let(:log_total_count) { LettingsLog.where(owning_organisation: user.organisation).count }
 
               it "has title with pagination details for page 1" do
@@ -808,7 +808,7 @@ RSpec.describe OrganisationsController, type: :request do
             context "when search and filter is present" do
               let(:matching_postcode) { log_to_search.postcode_full }
               let(:matching_status) { "in_progress" }
-              let!(:log_matching_filter_and_search) { FactoryBot.create(:lettings_log, :in_progress, owning_organisation: user.organisation, postcode_full: matching_postcode, created_by: user) }
+              let!(:log_matching_filter_and_search) { create(:lettings_log, :in_progress, owning_organisation: user.organisation, postcode_full: matching_postcode, created_by: user) }
 
               it "shows only logs matching both search and filters" do
                 get "/organisations/#{organisation.id}/lettings-logs?search=#{matching_postcode}&status[]=#{matching_status}", headers: headers, params: {}
@@ -827,8 +827,8 @@ RSpec.describe OrganisationsController, type: :request do
           let(:number_of_org2_sales_logs) { 4 }
 
           before do
-            FactoryBot.create_list(:sales_log, number_of_org1_sales_logs, owning_organisation_id: organisation.id)
-            FactoryBot.create_list(:sales_log, number_of_org2_sales_logs, owning_organisation_id: unauthorised_organisation.id)
+            create_list(:sales_log, number_of_org1_sales_logs, owning_organisation_id: organisation.id)
+            create_list(:sales_log, number_of_org2_sales_logs, owning_organisation_id: unauthorised_organisation.id)
 
             get "/organisations/#{organisation.id}/sales-logs", headers:, params: {}
           end
@@ -859,8 +859,8 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           context "when using a search query" do
-            let(:logs) { FactoryBot.create_list(:sales_log, 3, :completed, owning_organisation: user.organisation, created_by: user) }
-            let(:log_to_search) { FactoryBot.create(:sales_log, :completed, owning_organisation: user.organisation, created_by: user) }
+            let(:logs) { create_list(:sales_log, 3, :completed, owning_organisation: user.organisation, created_by: user) }
+            let(:log_to_search) { create(:sales_log, :completed, owning_organisation: user.organisation, created_by: user) }
             let(:log_total_count) { LettingsLog.where(owning_organisation: user.organisation).count }
 
             it "has search results in the title" do
@@ -898,7 +898,7 @@ RSpec.describe OrganisationsController, type: :request do
 
             context "when search and filter is present" do
               let(:matching_status) { "completed" }
-              let!(:log_matching_filter_and_search) { FactoryBot.create(:sales_log, :completed, owning_organisation: user.organisation, created_by: user) }
+              let!(:log_matching_filter_and_search) { create(:sales_log, :completed, owning_organisation: user.organisation, created_by: user) }
               let(:matching_id) { log_matching_filter_and_search.id }
 
               it "shows only logs matching both search and filters" do
@@ -914,8 +914,8 @@ RSpec.describe OrganisationsController, type: :request do
         end
 
         context "when viewing a specific organisation's users" do
-          let!(:users) { FactoryBot.create_list(:user, 5, organisation:) }
-          let!(:different_org_users) { FactoryBot.create_list(:user, 5) }
+          let!(:users) { create_list(:user, 5, organisation:) }
+          let!(:different_org_users) { create_list(:user, 5) }
 
           before do
             get "/organisations/#{organisation.id}/users", headers:, params: {}
@@ -944,7 +944,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           context "when a search parameter is passed" do
-            let!(:matching_user) { FactoryBot.create(:user, organisation:, name: "joe", email: "matching@example.com") }
+            let!(:matching_user) { create(:user, organisation:, name: "joe", email: "matching@example.com") }
             let(:org_user_count) { User.where(organisation:).count }
 
             before do
@@ -1014,8 +1014,8 @@ RSpec.describe OrganisationsController, type: :request do
               end
 
               context "when our search term matches an email and a name" do
-                let!(:matching_user) { FactoryBot.create(:user, organisation:, name: "Foobar", email: "some@example.com") }
-                let!(:another_matching_user) { FactoryBot.create(:user, organisation:, name: "Joe", email: "foobar@example.com") }
+                let!(:matching_user) { create(:user, organisation:, name: "Foobar", email: "some@example.com") }
+                let!(:another_matching_user) { create(:user, organisation:, name: "Joe", email: "foobar@example.com") }
                 let!(:org_user_count) { User.where(organisation:).count }
                 let(:search_param) { "Foobar" }
 
@@ -1068,7 +1068,7 @@ RSpec.describe OrganisationsController, type: :request do
           let(:total_organisations_count) { Organisation.all.count }
 
           before do
-            FactoryBot.create_list(:organisation, 25)
+            create_list(:organisation, 25)
             get "/organisations"
           end
 
@@ -1115,8 +1115,8 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           context "when searching" do
-            let!(:searched_organisation) { FactoryBot.create(:organisation, name: "Unusual name") }
-            let!(:other_organisation) { FactoryBot.create(:organisation, name: "Some other name") }
+            let!(:searched_organisation) { create(:organisation, name: "Unusual name") }
+            let!(:other_organisation) { create(:organisation, name: "Some other name") }
             let(:search_param) { "Unusual" }
 
             before do
@@ -1225,7 +1225,7 @@ RSpec.describe OrganisationsController, type: :request do
   end
 
   context "when the user is a support user" do
-    let(:user) { FactoryBot.create(:user, :support) }
+    let(:user) { create(:user, :support) }
 
     before do
       allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -1234,7 +1234,7 @@ RSpec.describe OrganisationsController, type: :request do
 
     context "when they view the lettings logs tab" do
       before do
-        FactoryBot.create(:lettings_log, owning_organisation: organisation)
+        create(:lettings_log, owning_organisation: organisation)
       end
 
       it "has CSV download buttons with the correct paths if at least 1 log exists" do
@@ -1244,12 +1244,12 @@ RSpec.describe OrganisationsController, type: :request do
       end
 
       context "when you download the CSV" do
-        let(:other_organisation) { FactoryBot.create(:organisation) }
+        let(:other_organisation) { create(:organisation) }
 
         before do
-          FactoryBot.create_list(:lettings_log, 2, owning_organisation: organisation)
-          FactoryBot.create(:lettings_log, owning_organisation: organisation, status: "pending", skip_update_status: true)
-          FactoryBot.create_list(:lettings_log, 2, owning_organisation: other_organisation)
+          create_list(:lettings_log, 2, owning_organisation: organisation)
+          create(:lettings_log, owning_organisation: organisation, status: "pending", skip_update_status: true)
+          create_list(:lettings_log, 2, owning_organisation: other_organisation)
         end
 
         it "only includes logs from that organisation" do
@@ -1279,7 +1279,7 @@ RSpec.describe OrganisationsController, type: :request do
 
     context "when they view the sales logs tab" do
       before do
-        FactoryBot.create(:sales_log, owning_organisation: organisation)
+        create(:sales_log, owning_organisation: organisation)
       end
 
       it "has CSV download buttons with the correct paths if at least 1 log exists" do
@@ -1289,12 +1289,12 @@ RSpec.describe OrganisationsController, type: :request do
       end
 
       context "when you download the CSV" do
-        let(:other_organisation) { FactoryBot.create(:organisation) }
+        let(:other_organisation) { create(:organisation) }
 
         before do
-          FactoryBot.create_list(:sales_log, 2, owning_organisation: organisation)
-          FactoryBot.create(:sales_log, owning_organisation: organisation, status: "pending", skip_update_status: true)
-          FactoryBot.create_list(:sales_log, 2, owning_organisation: other_organisation)
+          create_list(:sales_log, 2, owning_organisation: organisation)
+          create(:sales_log, owning_organisation: organisation, status: "pending", skip_update_status: true)
+          create_list(:sales_log, 2, owning_organisation: other_organisation)
         end
 
         it "only includes logs from that organisation" do
@@ -1414,17 +1414,135 @@ RSpec.describe OrganisationsController, type: :request do
 
       context "when you download the CSV" do
         let(:headers) { { "Accept" => "text/csv" } }
-        let(:other_organisation) { FactoryBot.create(:organisation) }
+        let(:other_organisation) { create(:organisation) }
 
         before do
-          FactoryBot.create_list(:user, 3, organisation:)
-          FactoryBot.create_list(:user, 2, organisation: other_organisation)
+          create_list(:user, 3, organisation:)
+          create_list(:user, 2, organisation: other_organisation)
         end
 
         it "only includes users from that organisation" do
           get "/organisations/#{other_organisation.id}/users", headers:, params: {}
           csv = CSV.parse(response.body)
           expect(csv.count).to eq(3)
+        end
+      end
+    end
+  end
+
+  describe "GET #data_sharing_agreement" do
+    context "when not signed in" do
+      it "redirects to sign in" do
+        get "/organisations/#{organisation.id}/data-sharing-agreement", headers: headers
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in" do
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+      end
+
+      context "when flag not enabled" do
+        before do
+          allow(FeatureToggle).to receive(:new_data_sharing_agreement?).and_return(false)
+        end
+
+        it "returns not found" do
+          get "/organisations/#{organisation.id}/data-sharing-agreement", headers: headers
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+
+      context "when flag enabled" do
+        before do
+          allow(FeatureToggle).to receive(:new_data_sharing_agreement?).and_return(true)
+        end
+
+        it "returns ok" do
+          get "/organisations/#{organisation.id}/data-sharing-agreement", headers: headers
+          expect(response).to have_http_status(:ok)
+        end
+      end
+    end
+  end
+
+  describe "POST #data_sharing_agreement" do
+    context "when not signed in" do
+      it "redirects to sign in" do
+        post "/organisations/#{organisation.id}/data-sharing-agreement", headers: headers
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in" do
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+      end
+
+      context "when flag not enabled" do
+        before do
+          allow(FeatureToggle).to receive(:new_data_sharing_agreement?).and_return(false)
+        end
+
+        it "returns not found" do
+          post "/organisations/#{organisation.id}/data-sharing-agreement", headers: headers
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+
+      context "when flag enabled" do
+        before do
+          allow(FeatureToggle).to receive(:new_data_sharing_agreement?).and_return(true)
+        end
+
+        context "when user not dpo" do
+          let(:user) { create(:user, is_dpo: false) }
+
+          it "returns not found" do
+            post "/organisations/#{organisation.id}/data-sharing-agreement", headers: headers
+            expect(response).to have_http_status(:not_found)
+          end
+        end
+
+        context "when user is dpo" do
+          let(:user) { create(:user, is_dpo: true) }
+
+          it "returns redirects to details page" do
+            post "/organisations/#{organisation.id}/data-sharing-agreement", headers: headers
+
+            expect(response).to redirect_to("/organisations/#{organisation.id}/details")
+            expect(flash[:notice]).to eq("You have accepted the Data Sharing Agreement")
+            expect(flash[:notification_banner_body]).to eq("Your organisation can now submit logs.")
+          end
+
+          it "creates a data sharing agreement" do
+            expect(organisation.reload.data_sharing_agreement).to be_nil
+
+            post("/organisations/#{organisation.id}/data-sharing-agreement", headers:)
+
+            data_sharing_agreement = organisation.reload.data_sharing_agreement
+
+            expect(data_sharing_agreement.organisation_address).to eq(organisation.address_row)
+            expect(data_sharing_agreement.organisation_name).to eq(organisation.name)
+            expect(data_sharing_agreement.organisation_phone_number).to eq(organisation.phone)
+            expect(data_sharing_agreement.data_protection_officer).to eq(user)
+            expect(data_sharing_agreement.dpo_name).to eq(user.name)
+            expect(data_sharing_agreement.dpo_email).to eq(user.email)
+          end
+
+          context "when the user has already accepted the agreement" do
+            before do
+              create(:data_sharing_agreement, data_protection_officer: user, organisation: user.organisation)
+            end
+
+            it "returns not found" do
+              post "/organisations/#{organisation.id}/data-sharing-agreement", headers: headers
+              expect(response).to have_http_status(:not_found)
+            end
+          end
         end
       end
     end
