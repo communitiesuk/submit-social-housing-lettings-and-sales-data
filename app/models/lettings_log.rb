@@ -660,7 +660,7 @@ private
     num_of_weeks = NUM_OF_WEEKS_FROM_PERIOD[period]
     return "" unless value && num_of_weeks
 
-    format_as_currency((value * 52 / num_of_weeks))
+    (value * 52 / num_of_weeks)
   end
 
   def fully_wheelchair_accessible?
