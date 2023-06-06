@@ -1104,7 +1104,7 @@ private
     attributes["reason"] = field_102
     attributes["reasonother"] = field_103
     attributes["prevten"] = field_104
-    attributes["homeless"] = homeless
+    attributes["homeless"] = field_105
 
     attributes["prevloc"] = prevloc
     attributes["previous_la_known"] = previous_la_known
@@ -1372,15 +1372,6 @@ private
 
   def housingneeds_other
     return 1 if field_86 == 1
-  end
-
-  def homeless
-    case field_105
-    when 1
-      1
-    when 12
-      11
-    end
   end
 
   def prevloc
