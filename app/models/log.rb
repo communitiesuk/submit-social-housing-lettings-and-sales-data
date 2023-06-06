@@ -106,7 +106,11 @@ class Log < ApplicationRecord
       errors.each do |error|
         next if setup_ids.include?(error.attribute.to_s)
 
-        public_send("#{error.attribute}=", nil)
+        if form.questions.find { |q| q.id == error.attribute.to_s }.type == "checkbox"
+          question.answer_options.each_key { |attribute| public_send("#{attribute}=", nil) }
+        else
+          public_send("#{error.attribute}=", nil)
+        end
       end
 
       blank_compound_invalid_non_setup_fields!
