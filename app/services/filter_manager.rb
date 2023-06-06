@@ -8,7 +8,7 @@ class FilterManager
     @filter_type = filter_type
   end
 
-  def filter_by_search(base_collection, search_term = nil)
+  def self.filter_by_search(base_collection, search_term = nil)
     if search_term.present?
       base_collection.search_by(search_term)
     else
@@ -16,7 +16,7 @@ class FilterManager
     end
   end
 
-  def filter_logs(logs, search_term, filters, all_orgs, user)
+  def self.filter_logs(logs, search_term, filters, all_orgs, user)
     logs = filter_by_search(logs, search_term)
 
     filters.each do |category, values|
@@ -58,7 +58,7 @@ class FilterManager
 
   def filtered_logs(logs, search_term, filters)
     all_orgs = params["organisation_select"] == "all"
-    filter_logs(logs, search_term, filters, all_orgs, current_user)
+    FilterManager.filter_logs(logs, search_term, filters, all_orgs, current_user)
   end
 
   def bulk_upload

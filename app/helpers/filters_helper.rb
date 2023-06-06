@@ -22,7 +22,7 @@ module FiltersHelper
   def selected_option(filter, filter_type)
     return false unless session[session_name_for(filter_type)]
 
-    JSON.parse(session[[session_name_for(filter_type)]])[filter] || ""
+    JSON.parse(session[session_name_for(filter_type)])[filter] || ""
   end
 
   def organisations_filter_options(user)

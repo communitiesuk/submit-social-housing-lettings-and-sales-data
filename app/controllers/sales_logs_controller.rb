@@ -90,7 +90,6 @@ private
   end
 
   def extract_bulk_upload_from_session_filters
-    filter_manager = FilterManager.new(current_user:, session:, params:, filter_type: "lettings_logs")
     @bulk_upload = filter_manager.bulk_upload
   end
 
