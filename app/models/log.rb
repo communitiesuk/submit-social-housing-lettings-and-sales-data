@@ -106,7 +106,8 @@ class Log < ApplicationRecord
       errors.each do |error|
         next if setup_ids.include?(error.attribute.to_s)
 
-        if form.questions.find { |q| q.id == error.attribute.to_s }.type == "checkbox"
+        question = form.questions.find { |q| q.id == error.attribute.to_s }
+        if question.type == "checkbox"
           question.answer_options.each_key { |attribute| public_send("#{attribute}=", nil) }
         else
           public_send("#{error.attribute}=", nil)
