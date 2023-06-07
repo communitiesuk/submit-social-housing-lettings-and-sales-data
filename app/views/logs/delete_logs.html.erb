@@ -13,45 +13,7 @@
 <%= form_with model: @delete_logs_form, url: @delete_logs_form.delete_confirmation_path do |f| %>
   <%= f.hidden_field :search_term, value: @delete_logs_form.search_term %>
   <%= f.govuk_error_summary %>
-  <%= govuk_table do |table| %>
-    <% table.head do |head| %>
-      <% head.row do |row| %>
-        <% row.cell(header: true, text: "Log ID") %>
-        <% if @delete_logs_form.log_type == :lettings %>
-          <% row.cell(header: true, text: "Tenancy code") %>
-          <% row.cell(header: true, text: "Property reference") %>
-        <% elsif @delete_logs_form.log_type == :sales %>
-          <% row.cell(header: true, text: "Purchaser code") %>
-          <% row.cell(header: true, text: "Sale completion date") %>
-        <% end %>
-        <% row.cell(header: true, text: "Status") %>
-        <% row.cell(header: true, text: "Delete?") %>
-      <% end %>
-    <% end %>
-    <% table.body do |body| %>
-      <% f.govuk_check_boxes_fieldset :selected_ids, small: true do %>
-        <% @delete_logs_form.logs.each do |log| %>
-          <% body.row do |row| %>
-            <% row.cell(text: log.id) %>
-            <% if @delete_logs_form.log_type == :lettings %>
-              <% row.cell(text: log.tenancycode) %>
-              <% row.cell(text: log.propcode) %>
-            <% elsif @delete_logs_form.log_type == :sales %>
-              <% row.cell(text: log.purchid) %>
-              <% row.cell(text: log.saledate&.to_formatted_s(:govuk_date)) %>
-            <% end %>
-            <% row.cell(text: status_tag(log.status)) %>
-            <% row.cell do %>
-              <% f.govuk_check_box :selected_ids, log.id,
-                label: { text: log.id, hidden: true },
-                size: "s",
-                checked: @delete_logs_form.selected_ids.include?(log.id) %>
-            <% end %>
-          <% end %>
-        <% end %>
-      <% end %>
-    <% end %>
-  <% end %>
+  <%= render partial: @delete_logs_form.table_partial_name, locals: { f:, delete_logs_form: @delete_logs_form } %>
   <%= f.govuk_submit "Continue" do %>
     <%= govuk_button_link_to "Cancel", @delete_logs_form.back_to_logs_path, secondary: true %>
   <% end %>

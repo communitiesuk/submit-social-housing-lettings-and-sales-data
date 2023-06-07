@@ -1,0 +1,28 @@
+<%= govuk_table do |table| %>
+  <% table.head do |head| %>
+    <% head.row do |row| %>
+      <% row.cell header: true, text: "Log ID" %>
+      <% row.cell header: true, text: "Purchaser code" %>
+      <% row.cell header: true, text: "Sale completion date" %>
+      <% row.cell header: true, text: "Status" %>
+      <% row.cell header: true, text: "Delete?" %>
+    <% end %>
+  <% end %>
+  <% table.body do |body| %>
+    <% f.govuk_check_boxes_fieldset :selected_ids, small: true do %>
+      <% delete_logs_form.logs.each do |log| %>
+        <% body.row do |row| %>
+          <% row.cell text: log.id %>
+          <% row.cell text: log.purchid %>
+          <% row.cell text: log.saledate&.to_formatted_s(:govuk_date) %>
+          <% row.cell text: status_tag(log.status) %>
+          <% row.cell do %>
+            <% f.govuk_check_box :selected_ids, log.id,
+              label: { text: log.id, hidden: true },
+              checked: delete_logs_form.selected_ids.include?(log.id) %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
