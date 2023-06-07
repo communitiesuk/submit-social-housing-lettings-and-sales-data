@@ -11,7 +11,7 @@ module Forms
       @log_type = attributes[:log_type]
       @search_term = attributes[:search_term]
       @current_user = attributes[:current_user]
-      @logs = FilterService.filter_logs(all_logs, @search_term, attributes[:log_filters], nil, @current_user)
+      @logs = FilterService.filter_logs(visible_logs, @search_term, attributes[:log_filters], nil, @current_user)
       @selected_ids = attributes[:selected_ids] || @logs.map(&:id)
       @delete_confirmation_path = attributes[:delete_confirmation_path]
       @back_to_logs_path = attributes[:back_to_logs_path]
@@ -22,6 +22,10 @@ module Forms
       @logs.count
     end
 
+    def table_partial_name
+      "logs/delete_logs_table_#{@log_type}"
+    end
+
   private
 
     def at_least_one_log_selected
@@ -30,7 +34,7 @@ module Forms
       end
     end
 
-    def all_logs
+    def visible_logs
       case @log_type
       when :lettings then @current_user.lettings_logs.visible
       when :sales then @current_user.sales_logs.visible

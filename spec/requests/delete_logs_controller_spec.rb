@@ -513,7 +513,7 @@ RSpec.describe "DeleteLogs", type: :request do
         expect(FilterService).to receive(:filter_logs) { |arg1, arg2, arg3, _arg4, _arg5|
           expect(arg1).to contain_exactly(log_1, log_2)
           expect(arg2).to eq search
-          expect(arg3).to eq logs_filters
+          expect(arg3).to eq logs_filters.merge(organisation: organisation.id.to_s)
         }.and_return LettingsLog.all
 
         get delete_lettings_logs_organisation_path(id: organisation, search:)
@@ -562,7 +562,7 @@ RSpec.describe "DeleteLogs", type: :request do
         expect(FilterService).to receive(:filter_logs) { |arg1, arg2, arg3, _arg4, _arg5|
           expect(arg1).to contain_exactly(log_1, log_2)
           expect(arg2).to eq search
-          expect(arg3).to eq logs_filters
+          expect(arg3).to eq logs_filters.merge(organisation: organisation.id.to_s)
         }.and_return LettingsLog.all
 
         post delete_lettings_logs_organisation_path(id: organisation, search:, selected_ids:)
@@ -738,7 +738,7 @@ RSpec.describe "DeleteLogs", type: :request do
         expect(FilterService).to receive(:filter_logs) { |arg1, arg2, arg3, _arg4, _arg5|
           expect(arg1).to contain_exactly(log_1, log_2)
           expect(arg2).to eq search
-          expect(arg3).to eq logs_filters
+          expect(arg3).to eq logs_filters.merge(organisation: organisation.id.to_s)
         }.and_return SalesLog.all
 
         get delete_sales_logs_organisation_path(id: organisation, search:)
@@ -787,7 +787,7 @@ RSpec.describe "DeleteLogs", type: :request do
         expect(FilterService).to receive(:filter_logs) { |arg1, arg2, arg3, _arg4, _arg5|
           expect(arg1).to contain_exactly(log_1, log_2)
           expect(arg2).to eq search
-          expect(arg3).to eq logs_filters
+          expect(arg3).to eq logs_filters.merge(organisation: organisation.id.to_s)
         }.and_return SalesLog.all
 
         post delete_sales_logs_organisation_path(id: organisation, search:, selected_ids:)

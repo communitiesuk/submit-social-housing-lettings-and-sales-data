@@ -96,7 +96,7 @@ class OrganisationsController < ApplicationController
       format.html do
         @search_term = search_term
         @pagy, @logs = pagy(unpaginated_filtered_logs)
-        @delete_logs_path = delete_lettings_logs_organisation_path
+        @delete_logs_path = delete_lettings_logs_organisation_path(search: @search_term)
         @searched = search_term.presence
         @total_count = organisation_logs.size
         @log_type = :lettings
@@ -127,7 +127,7 @@ class OrganisationsController < ApplicationController
       format.html do
         @search_term = search_term
         @pagy, @logs = pagy(unpaginated_filtered_logs)
-        @delete_logs_path = delete_sales_logs_organisation_path
+        @delete_logs_path = delete_sales_logs_organisation_path(search: @search_term)
         @searched = search_term.presence
         @total_count = organisation_logs.size
         @log_type = :sales
