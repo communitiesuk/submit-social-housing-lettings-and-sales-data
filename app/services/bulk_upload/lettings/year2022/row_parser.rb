@@ -684,10 +684,8 @@ private
   end
 
   def validate_reasonable_preference_homeless
-    if field_69 == 1
-      if homeless == 1 && field_70 == 1
-        errors.add(:field_70, I18n.t("validations.household.reasonpref.not_homeless"))
-      end
+    if field_69 == 1 && homeless == 1 && field_70 == 1
+      errors.add(:field_70, I18n.t("validations.household.reasonpref.not_homeless"))
     end
   end
 
