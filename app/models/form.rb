@@ -1,6 +1,6 @@
 class Form
   attr_reader :form_definition, :sections, :subsections, :pages, :questions,
-              :start_date, :end_date, :type, :name, :setup_definition,
+              :start_date, :end_date, :display_end_date, :type, :name, :setup_definition,
               :setup_sections, :form_sections, :unresolved_log_redirect_page_id
 
   def initialize(form_path, start_year = "", sections_in_form = [], type = "lettings")
@@ -9,7 +9,7 @@ class Form
       @end_date = if start_year && start_year.to_i > 2022
                     Time.zone.local(start_year + 1, 6, 9)
                   else
-                    Time.zone.local(start_year + 1, 6, 7)
+                    Time.zone.local(start_year + 1, 8, 7)
                   end
       @setup_sections = type == "sales" ? [Form::Sales::Sections::Setup.new(nil, nil, self)] : [Form::Lettings::Sections::Setup.new(nil, nil, self)]
       @form_sections = sections_in_form.map { |sec| sec.new(nil, nil, self) }
@@ -40,6 +40,7 @@ class Form
       @end_date = Time.iso8601(form_definition["end_date"])
       @unresolved_log_redirect_page_id = form_definition["unresolved_log_redirect_page_id"]
     end
+    @display_end_date = start_year == 2022 ? Time.zone.local(2023, 6, 9) : @end_date
     @name = "#{start_date.year}_#{end_date.year}_#{type}"
   end
 
