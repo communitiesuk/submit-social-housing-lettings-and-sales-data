@@ -45,4 +45,8 @@ class FeatureToggle
   def self.merge_organisations_enabled?
     !Rails.env.production?
   end
+
+  def self.new_data_sharing_agreement?
+    !Rails.env.production?
+  end
 end
