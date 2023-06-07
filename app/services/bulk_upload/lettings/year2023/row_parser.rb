@@ -357,6 +357,7 @@ class BulkUpload::Lettings::Year2023::RowParser
   validate :validate_dont_know_disabled_needs_conjunction, on: :after_log
   validate :validate_no_and_dont_know_disabled_needs_conjunction, on: :after_log
   validate :validate_no_housing_needs_questions_answered, on: :after_log
+  validate :validate_reasonable_preference_homeless, on: :after_log
   validate :validate_if_log_already_exists, on: :after_log, if: -> { FeatureToggle.bulk_upload_duplicate_log_check_enabled? }
 
   validate :validate_owning_org_data_given, on: :after_log
@@ -613,6 +614,14 @@ private
       errors.add(:field_86, I18n.t("validations.not_answered", question: "other access needs"))
       %i[field_83 field_84 field_85].each do |field|
         errors.add(field, I18n.t("validations.not_answered", question: "disabled access needs type"))
+      end
+    end
+  end
+
+  def validate_reasonable_preference_homeless
+    if field_110 == 1
+      if field_105 == 1 && field_111 == 1
+        errors.add(:field_111, I18n.t("validations.household.reasonpref.not_homeless"))
       end
     end
   end
