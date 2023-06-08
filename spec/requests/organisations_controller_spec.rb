@@ -1469,6 +1469,8 @@ RSpec.describe OrganisationsController, type: :request do
   end
 
   describe "POST #data_sharing_agreement" do
+    let(:organisation) { create(:organisation, :without_dsa) }
+
     context "when not signed in" do
       it "redirects to sign in" do
         post "/organisations/#{organisation.id}/data-sharing-agreement", headers: headers
@@ -1508,7 +1510,7 @@ RSpec.describe OrganisationsController, type: :request do
         end
 
         context "when user is dpo" do
-          let(:user) { create(:user, is_dpo: true) }
+          let(:user) { create(:user, is_dpo: true, organisation:) }
 
           it "returns redirects to details page" do
             post "/organisations/#{organisation.id}/data-sharing-agreement", headers: headers
