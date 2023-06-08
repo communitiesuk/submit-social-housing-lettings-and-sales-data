@@ -17,7 +17,7 @@ RSpec.describe "organisations/data_sharing_agreement.html.erb", :aggregate_failu
   let(:data_sharing_agreement) { nil }
 
   context "when dpo" do
-    let(:user) { create(:user, is_dpo: true) }
+    let(:user) { create(:user, is_dpo: true, organisation: create(:organisation, :without_dsa)) }
 
     it "renders dynamic content" do
       render

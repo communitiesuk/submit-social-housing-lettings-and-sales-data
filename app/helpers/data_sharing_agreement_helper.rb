@@ -23,7 +23,7 @@ module DataSharingAgreementHelper
 
   def name_for_data_sharing_agreement(data_sharing_agreement, user)
     if data_sharing_agreement.present?
-      data_sharing_agreement.data_protection_officer.name
+      data_sharing_agreement.dpo_name
     elsif user.is_dpo?
       user.name
     else
@@ -79,7 +79,7 @@ private
 
   def data_sharing_agreement_second_line(organisation:, user:)
     if organisation.data_sharing_agreement.present?
-      organisation.data_sharing_agreement.data_protection_officer.name if user.support?
+      organisation.data_sharing_agreement.dpo_name if user.support?
     else
       "Data protection officer must sign" unless user.is_dpo?
     end

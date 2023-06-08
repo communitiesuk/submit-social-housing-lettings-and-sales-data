@@ -11,7 +11,7 @@
         <% if bulk_upload_options(@bulk_upload).present? %>
           <%= render partial: "filters/checkbox_filter",
                      locals: {
-                       f: f,
+                       f:,
                        options: bulk_upload_options(@bulk_upload),
                        label: "Bulk upload",
                        category: "bulk_upload_id",
@@ -21,7 +21,7 @@
         <% if bulk_upload_options(@bulk_upload).blank? %>
           <%= render partial: "filters/checkbox_filter",
                      locals: {
-                       f: f,
+                       f:,
                        options: collection_year_options,
                        label: "Collection year",
                        category: "years",
@@ -29,7 +29,7 @@
 
           <%= render partial: "filters/checkbox_filter",
                      locals: {
-                       f: f,
+                       f:,
                        options: status_filters,
                        label: "Status",
                        category: "status",
@@ -38,7 +38,7 @@
 
         <%= render partial: "filters/radio_filter",
                    locals: {
-                     f: f,
+                     f:,
                      options: all_or_yours,
                      label: "Logs",
                      category: "user",
@@ -46,7 +46,7 @@
 
         <% if (@current_user.support? || @current_user.organisation.has_managing_agents?) && request.path == "/lettings-logs" %>
           <%= render partial: "filters/radio_filter", locals: {
-            f: f,
+            f:,
             options: {
               "all": { label: "All" },
               "specific_org": {

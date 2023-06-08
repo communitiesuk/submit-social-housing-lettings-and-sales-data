@@ -9,7 +9,24 @@ FactoryBot.define do
     created_at { Time.zone.now }
     updated_at { Time.zone.now }
     holds_own_stock { true }
-    association :data_sharing_agreement
+
+    transient do
+      with_dsa { true }
+    end
+
+    after(:create) do |org, evaluator|
+      if evaluator.with_dsa
+        create(
+          :data_sharing_agreement,
+          organisation: org,
+          dpo_name: "DPO Name",
+          dpo_email: "test@email.com",
+          organisation_address: "address 123",
+          organisation_phone_number: "123456789",
+          organisation_name: "Organisation Name",
+        )
+      end
+    end
 
     trait :with_old_visible_id do
       old_visible_id { rand(9_999_999).to_s }
@@ -24,6 +41,10 @@ FactoryBot.define do
     end
 
     trait :without_dsa do
+      transient do
+        with_dsa { false }
+      end
+
       data_sharing_agreement { nil }
     end
   end
