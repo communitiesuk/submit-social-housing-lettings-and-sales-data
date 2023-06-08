@@ -104,5 +104,26 @@ RSpec.shared_examples "shared log examples" do |log_type|
       end
     end
   end
+
+  describe "#verify_dsa_signed" do
+    it "is valid if the DSA is signed" do
+      log = build(log_type, :in_progress, owning_organisation: create(:organisation))
+
+      expect(log).to be_valid
+    end
+
+    it "is not valid if the DSA is not signed" do
+      log = build(log_type, owning_organisation: create(:organisation, :without_dsa))
+
+      expect(log).not_to be_valid
+      expect(log.errors[:owning_organisation]).to eq(["Your organisation must accept the Data Sharing Agreement before you can create any logs."])
+    end
+
+    it "is valid when owning_organisation nil" do
+      log = build(log_type, owning_organisation: nil)
+
+      expect(log).to be_valid
+    end
+  end
 end
 # rubocop:enable RSpec/AnyInstance

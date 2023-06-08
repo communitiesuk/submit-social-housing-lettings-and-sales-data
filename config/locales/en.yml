@@ -105,7 +105,6 @@ en:
             confirm_soft_errors:
               blank: You must select if there are errors in these fields
 
-
   activerecord:
     attributes:
       user:
@@ -178,6 +177,7 @@ en:
 
   validations:
     organisation:
+      data_sharing_agreement_not_signed: Your organisation must accept the Data Sharing Agreement before you can create any logs.
       name_missing: "Enter the name of the organisation"
       provider_type_missing: "Select the organisation type"
       stock_owner:

@@ -9,6 +9,7 @@ class Log < ApplicationRecord
   belongs_to :bulk_upload, optional: true
 
   before_save :update_status!
+  before_validation :verify_dsa_signed, on: :create
 
   STATUS = {
     "not_started" => 0,
@@ -176,6 +177,13 @@ class Log < ApplicationRecord
   end
 
 private
+
+  def verify_dsa_signed
+    return unless owning_organisation
+    return if owning_organisation.data_sharing_agreement.present?
+
+    errors.add :owning_organisation, I18n.t("validations.organisation.data_sharing_agreement_not_signed")
+  end
 
   # Handle logs that are older than previous collection start date
   def older_than_previous_collection_year?
