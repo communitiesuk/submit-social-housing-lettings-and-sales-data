@@ -31,9 +31,9 @@ module TasklistHelper
 
   def review_log_text(log)
     if log.collection_period_open?
-      link = log.sales? ? review_sales_log_path(id: log, sales_log: true) : review_lettings_log_path(log)
+      path = log.sales? ? review_sales_log_path(id: log, sales_log: true) : review_lettings_log_path(log)
 
-      "You can #{govuk_link_to 'review and make changes to this log', link} until #{log.form.end_date.to_formatted_s(:govuk_date)}.".html_safe
+      "You can #{govuk_link_to 'review and make changes to this log', path} until #{log.form.display_end_date.to_formatted_s(:govuk_date)}.".html_safe
     else
       start_year = log.startdate ? collection_start_year_for_date(log.startdate) : log.form.start_date.year
 
