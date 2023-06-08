@@ -200,6 +200,13 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
       context "when valid row" do
         let(:attributes) { valid_attributes }
 
+        around do |example|
+          Timecop.freeze(Date.new(2023, 2, 22)) do
+            example.run
+          end
+          Timecop.return
+        end
+
         it "returns true" do
           expect(parser).to be_valid
         end
