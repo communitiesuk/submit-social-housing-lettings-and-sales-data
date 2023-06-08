@@ -13,7 +13,7 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
   let(:managing_org) { create(:organisation, :with_old_visible_id) }
   let(:scheme) { create(:scheme, :with_old_visible_id, owning_organisation: owning_org) }
   let(:location) { create(:location, :with_old_visible_id, scheme:) }
-  let(:mock_interrupion_ids) {}
+  let(:mock_interruption_ids) {}
 
   let(:setup_section_params) do
     {
@@ -148,7 +148,7 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
   end
 
   before do
-    mock_interrupion_ids
+    mock_interruption_ids
     create(:organisation_relationship, parent_organisation: owning_org, child_organisation: managing_org)
   end
 
@@ -993,7 +993,7 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
       context "when soft validation is triggered and the mappings for errors are not defined" do
         let(:attributes) { setup_section_params.merge({ field_12: 22, field_35: 5 }) }
         # rubocop:disable RSpec/AnyInstance
-        let(:mock_interrupion_ids) { allow_any_instance_of(Form::Page).to receive(:interruption_screen_question_ids).and_return(%w[fake_question_id]) }
+        let(:mock_interruption_ids) { allow_any_instance_of(Form::Page).to receive(:interruption_screen_question_ids).and_return(%w[fake_question_id]) }
         # rubocop:enable RSpec/AnyInstance
 
         it "does not crash" do

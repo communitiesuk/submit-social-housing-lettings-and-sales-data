@@ -2,14 +2,14 @@ FactoryBot.define do
   factory :sales_log do
     created_by { FactoryBot.create(:user) }
     owning_organisation { created_by.organisation }
-    created_at { Time.utc(2023, 2, 8, 16, 52, 15) }
-    updated_at { Time.utc(2023, 2, 8, 16, 52, 15) }
+    created_at { Time.zone.today }
+    updated_at { Time.zone.today }
     trait :in_progress do
       purchid { "PC123" }
       ownershipsch { 2 }
       type { 8 }
       jointpur { 2 }
-      saledate { Time.utc(2023, 2, 2, 10, 36, 49) }
+      saledate { Time.zone.today }
     end
     trait :shared_ownership do
       ownershipsch { 1 }
@@ -39,7 +39,7 @@ FactoryBot.define do
       purchid { rand(999_999_999).to_s }
       ownershipsch { 2 }
       type { 8 }
-      saledate { Time.utc(2023, 2, 2, 10, 36, 49) }
+      saledate { Time.zone.today }
       jointpur { 1 }
       beds { 2 }
       jointmore { 1 }
