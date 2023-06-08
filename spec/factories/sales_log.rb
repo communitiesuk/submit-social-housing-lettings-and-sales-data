@@ -2,8 +2,8 @@ FactoryBot.define do
   factory :sales_log do
     created_by { FactoryBot.create(:user) }
     owning_organisation { created_by.organisation }
-    created_at { Time.zone.today }
-    updated_at { Time.zone.today }
+    created_at { Time.zone.now }
+    updated_at { Time.zone.now }
     trait :in_progress do
       purchid { "PC123" }
       ownershipsch { 2 }

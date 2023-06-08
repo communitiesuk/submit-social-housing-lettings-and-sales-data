@@ -7,6 +7,15 @@ RSpec.describe Csv::SalesLogCsvService do
   let(:service) { described_class.new(export_type: "labels") }
   let(:csv) { CSV.parse(service.prepare_csv(SalesLog.all)) }
 
+  around do |example|
+    Timecop.freeze(Time.utc(2023, 2, 8)) do
+      Singleton.__init__(FormHandler)
+      example.run
+    end
+    Timecop.return
+    Singleton.__init__(FormHandler)
+  end
+
   it "calls the form handler to get all questions in order when initialized" do
     allow(FormHandler).to receive(:instance).and_return(form_handler_mock)
     allow(form_handler_mock).to receive(:ordered_sales_questions_for_all_years).and_return([])
