@@ -81,6 +81,9 @@ FactoryBot.define do
       income2nk { 0 }
       income2 { 10_000 }
       inc2mort { 1 }
+      uprn_known { 0 }
+      address_line1 { "Address line 1" }
+      town_or_city { "Town or city" }
       la_known { 1 }
       la { "E09000003" }
       savingsnk { 1 }
@@ -125,9 +128,14 @@ FactoryBot.define do
       is_la_inferred { false }
       mortgagelender { 5 }
       extrabor { 1 }
+      ethnic_group2 { 17 }
+      nationalbuy2 { 13 }
+      buy2living { 3 }
+      proplen_asked { 1 }
     end
     trait :with_uprn do
       uprn { rand(999_999_999_999).to_s }
+      uprn_known { 1 }
     end
     trait :deleted do
       status { 4 }
