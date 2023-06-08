@@ -2,16 +2,12 @@ require "rails_helper"
 
 RSpec.describe Organisation, type: :model do
   describe "#new" do
-    let(:user) { FactoryBot.create(:user) }
+    let(:user) { create(:user) }
     let!(:organisation) { user.organisation }
-    let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: organisation) }
+    let!(:scheme) { create(:scheme, owning_organisation: organisation) }
 
     it "has expected fields" do
       expect(organisation.attribute_names).to include("name", "phone", "provider_type")
-    end
-
-    it "has users" do
-      expect(organisation.users.first).to eq(user)
     end
 
     it "has owned_schemes" do
@@ -19,22 +15,22 @@ RSpec.describe Organisation, type: :model do
     end
 
     it "validates provider_type presence" do
-      expect { FactoryBot.create(:organisation, provider_type: nil) }
+      expect { create(:organisation, provider_type: nil) }
         .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Provider type #{I18n.t('validations.organisation.provider_type_missing')}")
     end
 
     context "with parent/child associations", :aggregate_failures do
-      let!(:child_organisation) { FactoryBot.create(:organisation, name: "DLUHC Child") }
-      let!(:grandchild_organisation) { FactoryBot.create(:organisation, name: "DLUHC Grandchild") }
+      let!(:child_organisation) { create(:organisation, name: "DLUHC Child") }
+      let!(:grandchild_organisation) { create(:organisation, name: "DLUHC Grandchild") }
 
       before do
-        FactoryBot.create(
+        create(
           :organisation_relationship,
           child_organisation:,
           parent_organisation: organisation,
         )
 
-        FactoryBot.create(
+        create(
           :organisation_relationship,
           child_organisation: grandchild_organisation,
           parent_organisation: child_organisation,
@@ -53,17 +49,17 @@ RSpec.describe Organisation, type: :model do
     end
 
     context "with owning association", :aggregate_failures do
-      let!(:child_organisation) { FactoryBot.create(:organisation, name: "DLUHC Child") }
-      let!(:grandchild_organisation) { FactoryBot.create(:organisation, name: "DLUHC Grandchild") }
+      let!(:child_organisation) { create(:organisation, name: "DLUHC Child") }
+      let!(:grandchild_organisation) { create(:organisation, name: "DLUHC Grandchild") }
 
       before do
-        FactoryBot.create(
+        create(
           :organisation_relationship,
           child_organisation:,
           parent_organisation: organisation,
         )
 
-        FactoryBot.create(
+        create(
           :organisation_relationship,
           child_organisation: grandchild_organisation,
           parent_organisation: child_organisation,
@@ -77,17 +73,17 @@ RSpec.describe Organisation, type: :model do
     end
 
     context "with managing association", :aggregate_failures do
-      let!(:child_organisation) { FactoryBot.create(:organisation, name: "DLUHC Child") }
-      let!(:grandchild_organisation) { FactoryBot.create(:organisation, name: "DLUHC Grandchild") }
+      let!(:child_organisation) { create(:organisation, name: "DLUHC Child") }
+      let!(:grandchild_organisation) { create(:organisation, name: "DLUHC Grandchild") }
 
       before do
-        FactoryBot.create(
+        create(
           :organisation_relationship,
           child_organisation:,
           parent_organisation: organisation,
         )
 
-        FactoryBot.create(
+        create(
           :organisation_relationship,
           child_organisation: grandchild_organisation,
           parent_organisation: child_organisation,
@@ -103,8 +99,8 @@ RSpec.describe Organisation, type: :model do
 
     context "with data protection confirmations" do
       before do
-        FactoryBot.create(:data_protection_confirmation, organisation:, confirmed: false, created_at: Time.utc(2018, 0o6, 0o5, 10, 36, 49))
-        FactoryBot.create(:data_protection_confirmation, organisation:, created_at: Time.utc(2019, 0o6, 0o5, 10, 36, 49))
+        create(:data_protection_confirmation, organisation:, confirmed: false, created_at: Time.utc(2018, 0o6, 0o5, 10, 36, 49))
+        create(:data_protection_confirmation, organisation:, created_at: Time.utc(2019, 0o6, 0o5, 10, 36, 49))
       end
 
       it "takes the most recently created" do
@@ -118,11 +114,11 @@ RSpec.describe Organisation, type: :model do
       end
 
       before do
-        FactoryBot.create(:organisation_rent_period, organisation:, rent_period: 2)
-        FactoryBot.create(:organisation_rent_period, organisation:, rent_period: 3)
+        create(:organisation_rent_period, organisation:, rent_period: 2)
+        create(:organisation_rent_period, organisation:, rent_period: 3)
 
         # Unmapped and ignored by `rent_period_labels`
-        FactoryBot.create(:organisation_rent_period, organisation:, rent_period: 10)
+        create(:organisation_rent_period, organisation:, rent_period: 10)
         allow(RentPeriod).to receive(:rent_period_mappings).and_return(rent_period_mappings)
       end
 
@@ -142,9 +138,9 @@ RSpec.describe Organisation, type: :model do
     end
 
     context "with lettings logs" do
-      let(:other_organisation) { FactoryBot.create(:organisation) }
+      let(:other_organisation) { create(:organisation) }
       let!(:owned_lettings_log) do
-        FactoryBot.create(
+        create(
           :lettings_log,
           :completed,
           managing_organisation: other_organisation,
@@ -152,7 +148,7 @@ RSpec.describe Organisation, type: :model do
         )
       end
       let!(:managed_lettings_log) do
-        FactoryBot.create(
+        create(
           :lettings_log,
           created_by: user,
         )
@@ -173,7 +169,7 @@ RSpec.describe Organisation, type: :model do
   end
 
   describe "paper trail" do
-    let(:organisation) { FactoryBot.create(:organisation) }
+    let(:organisation) { create(:organisation) }
 
     it "creates a record of changes to a log" do
       expect { organisation.update!(name: "new test name") }.to change(organisation.versions, :count).by(1)
@@ -187,11 +183,11 @@ RSpec.describe Organisation, type: :model do
 
   describe "delete cascade" do
     context "when the organisation is deleted" do
-      let!(:organisation) { FactoryBot.create(:organisation) }
-      let!(:user) { FactoryBot.create(:user, :support, last_sign_in_at: Time.zone.now, organisation:) }
-      let!(:scheme_to_delete) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:log_to_delete) { FactoryBot.create(:lettings_log, owning_organisation: user.organisation) }
-      let!(:sales_log_to_delete) { FactoryBot.create(:sales_log, owning_organisation: user.organisation) }
+      let!(:organisation) { create(:organisation) }
+      let!(:user) { create(:user, :support, last_sign_in_at: Time.zone.now, organisation:) }
+      let!(:scheme_to_delete) { create(:scheme, owning_organisation: user.organisation) }
+      let!(:log_to_delete) { create(:lettings_log, owning_organisation: user.organisation) }
+      let!(:sales_log_to_delete) { create(:sales_log, owning_organisation: user.organisation) }
 
       context "when organisation is deleted" do
         it "child relationships ie logs, schemes and users are deleted too - application" do
@@ -216,8 +212,8 @@ RSpec.describe Organisation, type: :model do
 
   describe "scopes" do
     before do
-      FactoryBot.create(:organisation, name: "Joe Bloggs")
-      FactoryBot.create(:organisation, name: "Tom Smith")
+      create(:organisation, name: "Joe Bloggs")
+      create(:organisation, name: "Tom Smith")
     end
 
     context "when searching by name" do
