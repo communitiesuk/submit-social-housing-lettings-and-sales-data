@@ -8,15 +8,24 @@
 
 # rubocop:disable Rails/Output
 
+def create_dpo(org)
+  User.find_or_create_by!(
+    name: "#{org.name} User",
+    email: "#{org.name}@example.com",
+    organisation: standalone_owns_stock,
+    role: "data_provider",
+    is_dpo: true,
+  ) do |user|
+    user.password = "password"
+    user.confirmed_at = Time.zone.now
+  end
+end
+
 def create_dsa(org)
-  DataSharingAgreement.find_or_create_by!(
-    dpo_name: "DPO Name",
-    dpo_email: "dpo@example.com",
+  DataProtectionConfirmation.find_or_create_by!(
     organisation: org,
-    organisation_address: org.address_row,
-    organisation_phone_number: org.phone,
-    organisation_name: org.name,
-    signed_at: Time.zone.now,
+    confirmed: true,
+    data_protection_officer: create_dpo(org),
   )
 end
 

@@ -19,11 +19,7 @@ FactoryBot.define do
         create(
           :data_sharing_agreement,
           organisation: org,
-          dpo_name: "DPO Name",
-          dpo_email: "test@email.com",
-          organisation_address: "address 123",
-          organisation_phone_number: "123456789",
-          organisation_name: "Organisation Name",
+          data_protection_officer: org.users.any? ? org.users.first : create(:user, :data_protection_officer, organisation: org),
         )
       end
     end

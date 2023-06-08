@@ -179,8 +179,9 @@ class Log < ApplicationRecord
 private
 
   def verify_dsa_signed
+    return unless FeatureToggle.new_data_protection_confirmation?
     return unless owning_organisation
-    return if owning_organisation.data_sharing_agreement.present?
+    return if owning_organisation.data_protection_confirmation&.confirmed?
 
     errors.add :owning_organisation, I18n.t("validations.organisation.data_sharing_agreement_not_signed")
   end

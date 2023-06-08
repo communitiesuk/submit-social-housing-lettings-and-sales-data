@@ -11,15 +11,14 @@ class DataSharingAgreementBannerComponent < ViewComponent::Base
   end
 
   def display_banner?
-    return false unless FeatureToggle.new_data_sharing_agreement?
+    return false unless FeatureToggle.new_data_protection_confirmation?
     return false if user.is_dpo?
     return false if user.support? && organisation.blank?
 
-    if organisation.present?
-      !DataSharingAgreement.exists?(organisation:)
-    else
-      !DataSharingAgreement.exists?(organisation: user.organisation)
-    end
+    !DataProtectionConfirmation.exists?(
+      organisation: (organisation.presence || user.organisation),
+      confirmed: true,
+    )
   end
 
   def data_sharing_agreement_href

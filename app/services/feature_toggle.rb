@@ -42,7 +42,7 @@ class FeatureToggle
     !Rails.env.production?
   end
 
-  def self.new_data_sharing_agreement?
+  def self.new_data_protection_confirmation?
     !Rails.env.production?
   end
 end

@@ -6,8 +6,8 @@
       <%= org_name_for_data_sharing_agreement(@data_sharing_agreement, current_user) %> and Department for Levelling Up, Housing and Communities
     </h2>
     <p class="govuk-body-m">
-      <% if @data_sharing_agreement %>
-        This agreement is made the <%= @data_sharing_agreement.signed_at.day.ordinalize %> day of <%= @data_sharing_agreement.signed_at.strftime("%B") %> <%= @data_sharing_agreement.signed_at.year %>
+      <% if @data_sharing_agreement&.confirmed? %>
+        This agreement is made the <%= @data_sharing_agreement.created_at.day.ordinalize %> day of <%= @data_sharing_agreement.created_at.strftime("%B") %> <%= @data_sharing_agreement.created_at.year %>
       <% elsif current_user.is_dpo? %>
         This agreement is made the <%= Time.zone.now.day.ordinalize %> day of <%= Time.zone.now.strftime("%B") %> <%= Time.zone.now.year %>
       <% else %>
@@ -134,7 +134,7 @@
       <li>Title: Deputy Director</li>
     </ul>
 
-    <% if current_user.is_dpo? && @organisation.data_sharing_agreement.nil? %>
+    <% if current_user.is_dpo? && !(@organisation.data_sharing_agreement&.confirmed?) %>
       <div class="govuk-button-group govuk-!-margin-top-9">
         <%= govuk_button_to("Accept this agreement", data_sharing_agreement_organisation_path(@organisation), method: :post) %>
         <%= govuk_button_link_to("Cancel", details_organisation_path(@organisation), secondary: true) %>
