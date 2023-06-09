@@ -107,7 +107,7 @@ RSpec.shared_examples "shared log examples" do |log_type|
 
   describe "#verify_dsa_signed" do
     before do
-      allow(FeatureToggle).to receive(:new_data_sharing_agreement?).and_return(false)
+      allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(false)
     end
 
     it "is valid if the DSA is signed" do
@@ -123,7 +123,7 @@ RSpec.shared_examples "shared log examples" do |log_type|
     end
 
     it "is not valid if the DSA is not signed" do
-      log = build(log_type, owning_organisation: create(:organisation, :without_dsa))
+      log = build(log_type, owning_organisation: create(:organisation, :without_dpc))
 
       expect(log).to be_valid
     end
@@ -131,7 +131,7 @@ RSpec.shared_examples "shared log examples" do |log_type|
 
   context "when flag enabled" do
     before do
-      allow(FeatureToggle).to receive(:new_data_sharing_agreement?).and_return(true)
+      allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(true)
     end
 
     it "is valid if the DSA is signed" do
@@ -147,7 +147,7 @@ RSpec.shared_examples "shared log examples" do |log_type|
     end
 
     it "is not valid if the DSA is not signed" do
-      log = build(log_type, owning_organisation: create(:organisation, :without_dsa))
+      log = build(log_type, owning_organisation: create(:organisation, :without_dpc))
 
       expect(log).not_to be_valid
       expect(log.errors[:owning_organisation]).to eq(["Your organisation must accept the Data Sharing Agreement before you can create any logs."])

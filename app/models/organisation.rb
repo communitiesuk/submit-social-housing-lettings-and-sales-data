@@ -88,7 +88,7 @@ class Organisation < ApplicationRecord
   end
 
   def data_protection_confirmed?
-    !!data_protection_confirmations.order(created_at: :desc).first&.confirmed
+    !!data_protection_confirmation&.confirmed?
   end
 
   def data_protection_agreement_string
@@ -112,6 +112,7 @@ class Organisation < ApplicationRecord
       { name: "Owns housing stock", value: holds_own_stock ? "Yes" : "No", editable: false },
     ].compact
 
+    # TODO: test
     unless FeatureToggle.new_data_protection_confirmation?
       attrs << { name: "Data protection agreement", value: data_protection_agreement_string, editable: false }
     end

@@ -21,9 +21,9 @@ module DataSharingAgreementHelper
     end
   end
 
-  def name_for_data_sharing_agreement(data_sharing_agreement, user)
-    if data_sharing_agreement.present?
-      data_sharing_agreement.dpo_name
+  def name_for_data_sharing_agreement(data_protection_confirmation, user)
+    if data_protection_confirmation&.confirmed?
+      data_protection_confirmation.data_protection_officer.name
     elsif user.is_dpo?
       user.name
     else
@@ -68,7 +68,7 @@ module DataSharingAgreementHelper
 private
 
   def data_sharing_agreement_first_line(organisation:, user:)
-    return "Not accepted" if organisation.data_protection_confirmation&.confirmed?
+    return "Not accepted" unless organisation.data_protection_confirmation&.confirmed?
 
     if user.support?
       "Accepted #{organisation.data_protection_confirmation.created_at.strftime('%d/%m/%Y')}"
@@ -79,7 +79,7 @@ private
 
   def data_sharing_agreement_second_line(organisation:, user:)
     if organisation.data_protection_confirmation&.confirmed?
-      organisation.data_sharing_agreement.data_protection_officer.name if user.support?
+      organisation.data_protection_confirmation.data_protection_officer.name if user.support?
     else
       "Data protection officer must sign" unless user.is_dpo?
     end

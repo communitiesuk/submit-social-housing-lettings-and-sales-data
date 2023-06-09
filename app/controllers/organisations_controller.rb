@@ -165,35 +165,27 @@ class OrganisationsController < ApplicationController
   def confirm_data_sharing_agreement
     return render_not_found unless FeatureToggle.new_data_protection_confirmation?
     return render_not_found unless current_user.is_dpo?
-    return render_not_found if @organisation.latest_data_protection_confirmation&.confirmed?
+    return render_not_found if @organisation.data_protection_confirmation&.confirmed?
 
-
-    if @organisation.latest_data_protection_confirmation
-      @organisation.latest_data_protection_confirmation.update!(
+    if @organisation.data_protection_confirmation
+      @organisation.data_protection_confirmation.update!(
         confirmed: true,
         data_protection_officer: current_user,
         # When it was signed
         created_at: Time.zone.now,
-
       )
-      dpo.confirmed = true
-      dpo.data_protection_officer = current_user
-      dpo.save!
-
-    data_protection_confirmation = DataProtectionConfirmation.new(
-      organisation: current_user.organisation,
-      confirmed: true,
-      data_protection_officer: current_user,
-    )
-
-    if data_protection_confirmation.save
-      flash[:notice] = "You have accepted the Data Sharing Agreement"
-      flash[:notification_banner_body] = "Your organisation can now submit logs."
-
-      redirect_to details_organisation_path(@organisation)
     else
-      render :data_sharing_agreement
+      DataProtectionConfirmation.create!(
+        organisation: current_user.organisation,
+        confirmed: true,
+        data_protection_officer: current_user,
+      )
     end
+
+    flash[:notice] = "You have accepted the Data Sharing Agreement"
+    flash[:notification_banner_body] = "Your organisation can now submit logs."
+
+    redirect_to details_organisation_path(@organisation)
   end
 
 private

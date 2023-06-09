@@ -22,7 +22,7 @@ RSpec.describe CreateLogActionsComponent, type: :component do
 
     context "when flag disabled" do
       before do
-        allow(FeatureToggle).to receive(:new_data_sharing_agreement?).and_return(false)
+        allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(false)
       end
 
       it "renders actions" do
@@ -67,7 +67,7 @@ RSpec.describe CreateLogActionsComponent, type: :component do
 
     context "when flag enabled" do
       before do
-        allow(FeatureToggle).to receive(:new_data_sharing_agreement?).and_return(true)
+        allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(true)
       end
 
       context "when support user" do
@@ -115,10 +115,10 @@ RSpec.describe CreateLogActionsComponent, type: :component do
 
       context "when not support user" do
         context "without data sharing agreement" do
-          let(:user) { create(:user, organisation: create(:organisation, :without_dsa)) }
+          let(:user) { create(:user, organisation: create(:organisation, :without_dpc)) }
 
           it "does not render actions" do
-            expect(component.display_actions?).to eq(false)
+            expect(component).not_to be_display_actions
           end
         end
 

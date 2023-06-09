@@ -7,25 +7,11 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 # rubocop:disable Rails/Output
-
-def create_dpo(org)
-  User.find_or_create_by!(
-    name: "#{org.name} User",
-    email: "#{org.name}@example.com",
-    organisation: standalone_owns_stock,
-    role: "data_provider",
-    is_dpo: true,
-  ) do |user|
-    user.password = "password"
-    user.confirmed_at = Time.zone.now
-  end
-end
-
-def create_dsa(org)
+def create_dsa(user)
   DataProtectionConfirmation.find_or_create_by!(
-    organisation: org,
+    organisation: user.organisation,
     confirmed: true,
-    data_protection_officer: create_dpo(org),
+    data_protection_officer: user,
   )
 end
 
@@ -40,7 +26,6 @@ unless Rails.env.test?
     managing_agents_label: "None",
     provider_type: "LA",
   )
-  create_dsa(stock_owner1)
   stock_owner2 = Organisation.find_or_create_by!(
     name: "Stock Owner 2",
     address_line1: "2 Marsham Street",
@@ -51,7 +36,6 @@ unless Rails.env.test?
     managing_agents_label: "None",
     provider_type: "LA",
   )
-  create_dsa(stock_owner2)
   managing_agent1 = Organisation.find_or_create_by!(
     name: "Managing Agent 1",
     address_line1: "2 Marsham Street",
@@ -62,7 +46,6 @@ unless Rails.env.test?
     managing_agents_label: "None",
     provider_type: "LA",
   )
-  create_dsa(managing_agent1)
   managing_agent2 = Organisation.find_or_create_by!(
     name: "Managing Agent 2",
     address_line1: "2 Marsham Street",
@@ -73,7 +56,6 @@ unless Rails.env.test?
     managing_agents_label: "None",
     provider_type: "LA",
   )
-  create_dsa(managing_agent2)
 
   org = Organisation.find_or_create_by!(
     name: "DLUHC",
@@ -92,7 +74,6 @@ unless Rails.env.test?
       Rails.logger.info info
     end
   end
-  create_dsa(org)
 
   standalone_owns_stock = Organisation.find_or_create_by!(
     name: "Standalone Owns Stock 1 Ltd",
@@ -113,6 +94,7 @@ unless Rails.env.test?
   ) do |user|
     user.password = "password"
     user.confirmed_at = Time.zone.now
+    create_dsa(user)
   end
 
   User.find_or_create_by!(
@@ -123,6 +105,7 @@ unless Rails.env.test?
   ) do |user|
     user.password = "password"
     user.confirmed_at = Time.zone.now
+    create_dsa(user)
   end
 
   standalone_no_stock = Organisation.find_or_create_by!(
@@ -203,6 +186,8 @@ unless Rails.env.test?
       user.password = "password"
       user.confirmed_at = Time.zone.now
     end
+
+    create_dsa(support_user)
 
     pp "Seeded 3 dummy users"
   end

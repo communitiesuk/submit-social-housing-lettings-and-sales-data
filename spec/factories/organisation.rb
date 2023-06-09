@@ -17,7 +17,7 @@ FactoryBot.define do
     after(:create) do |org, evaluator|
       if evaluator.with_dsa
         create(
-          :data_sharing_agreement,
+          :data_protection_confirmation,
           organisation: org,
           data_protection_officer: org.users.any? ? org.users.first : create(:user, :data_protection_officer, organisation: org),
         )
@@ -36,12 +36,12 @@ FactoryBot.define do
       holds_own_stock { false }
     end
 
-    trait :without_dsa do
+    trait :without_dpc do
       transient do
         with_dsa { false }
       end
 
-      data_sharing_agreement { nil }
+      data_protection_confirmation { nil }
     end
   end
 

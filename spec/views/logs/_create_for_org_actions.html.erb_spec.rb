@@ -13,7 +13,7 @@ RSpec.describe "logs/_create_for_org_actions.html.erb" do
 
   context "when flag disabled" do
     before do
-      allow(FeatureToggle).to receive(:new_data_sharing_agreement?).and_return(false)
+      allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(false)
     end
 
     it "shows create buttons" do
@@ -26,7 +26,7 @@ RSpec.describe "logs/_create_for_org_actions.html.erb" do
 
   context "when flag enabled" do
     before do
-      allow(FeatureToggle).to receive(:new_data_sharing_agreement?).and_return(true)
+      allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(true)
     end
 
     context "with data sharing agreement" do
@@ -38,7 +38,7 @@ RSpec.describe "logs/_create_for_org_actions.html.erb" do
     end
 
     context "without data sharing agreement" do
-      let(:user) { create(:user, organisation: create(:organisation, :without_dsa)) }
+      let(:user) { create(:user, organisation: create(:organisation, :without_dpc)) }
 
       it "does not include create log buttons" do
         render

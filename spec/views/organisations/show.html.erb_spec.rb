@@ -12,14 +12,14 @@ RSpec.describe "organisations/show.html.erb" do
   end
 
   let(:fragment) { Capybara::Node::Simple.new(rendered) }
-  let(:organisation_without_dsa) { create(:organisation, :without_dsa) }
+  let(:organisation_without_dpc) { create(:organisation, :without_dpc) }
   let(:organisation_with_dsa) { create(:organisation) }
 
   context "when flag disabled" do
-    let(:user) { create(:user, organisation: organisation_without_dsa) }
+    let(:user) { create(:user, organisation: organisation_without_dpc) }
 
     before do
-      allow(FeatureToggle).to receive(:new_data_sharing_agreement?).and_return(false)
+      allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(false)
     end
 
     it "does not include data sharing agreement row" do
@@ -30,7 +30,7 @@ RSpec.describe "organisations/show.html.erb" do
   end
 
   context "when dpo" do
-    let(:user) { create(:user, is_dpo: true, organisation: organisation_without_dsa) }
+    let(:user) { create(:user, is_dpo: true, organisation: organisation_without_dpc) }
 
     it "includes data sharing agreement row" do
       render
@@ -47,7 +47,7 @@ RSpec.describe "organisations/show.html.erb" do
     it "shows link to view data sharing agreement" do
       render
 
-      expect(fragment).to have_link(text: "View agreement", href: "/organisations/#{organisation_without_dsa.id}/data-sharing-agreement")
+      expect(fragment).to have_link(text: "View agreement", href: "/organisations/#{organisation_without_dpc.id}/data-sharing-agreement")
     end
 
     context "when accepted" do
@@ -74,7 +74,7 @@ RSpec.describe "organisations/show.html.erb" do
   end
 
   context "when support user" do
-    let(:user) { create(:user, :support, organisation: organisation_without_dsa) }
+    let(:user) { create(:user, :support, organisation: organisation_without_dpc) }
 
     it "includes data sharing agreement row" do
       render
@@ -97,7 +97,7 @@ RSpec.describe "organisations/show.html.erb" do
     it "shows link to view data sharing agreement" do
       render
 
-      expect(fragment).to have_link(text: "View agreement", href: "/organisations/#{organisation_without_dsa.id}/data-sharing-agreement")
+      expect(fragment).to have_link(text: "View agreement", href: "/organisations/#{organisation_without_dpc.id}/data-sharing-agreement")
     end
 
     context "when accepted" do
@@ -118,7 +118,7 @@ RSpec.describe "organisations/show.html.erb" do
       it "shows show name of who signed the agreement" do
         render
 
-        expect(fragment).to have_content(user.organisation.data_sharing_agreement.dpo_name)
+        expect(fragment).to have_content(user.organisation.data_protection_confirmation.data_protection_officer.name)
       end
 
       it "shows link to view data sharing agreement" do
@@ -130,7 +130,7 @@ RSpec.describe "organisations/show.html.erb" do
   end
 
   context "when not dpo" do
-    let(:user) { create(:user, organisation: organisation_without_dsa) }
+    let(:user) { create(:user, organisation: organisation_without_dpc) }
 
     it "includes data sharing agreement row" do
       render
@@ -150,7 +150,7 @@ RSpec.describe "organisations/show.html.erb" do
 
     it "shows link to view data sharing agreement" do
       render
-      expect(fragment).to have_link(text: "View agreement", href: "/organisations/#{organisation_without_dsa.id}/data-sharing-agreement")
+      expect(fragment).to have_link(text: "View agreement", href: "/organisations/#{organisation_without_dpc.id}/data-sharing-agreement")
     end
 
     context "when accepted" do

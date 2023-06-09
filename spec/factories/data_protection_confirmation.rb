@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :data_protection_confirmation do
-    organisation { association :organisation, data_sharing_agreement: instance }
+    organisation { association :organisation, data_protection_confirmation: instance }
     data_protection_officer { association :user, :data_protection_officer, organisation: (instance.organisation || organisation) }
 
     confirmed { true }
