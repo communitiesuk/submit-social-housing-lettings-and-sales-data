@@ -20,7 +20,7 @@ class FilterManager
     logs = filter_by_search(logs, search_term)
 
     filters.each do |category, values|
-      next if Array(values).reject(&:empty?).blank?
+      next if values.all(&:empty?)
       next if category == "organisation" && all_orgs
 
       logs = logs.public_send("filter_by_#{category}", values, user)
