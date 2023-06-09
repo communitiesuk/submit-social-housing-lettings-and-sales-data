@@ -18,6 +18,7 @@ RSpec.describe BulkUpload::Sales::LogCreator do
       Timecop.return
       Singleton.__init__(FormHandler)
     end
+
     context "when a valid csv with new log" do
       it "creates a new log" do
         expect { service.call }.to change(SalesLog, :count)

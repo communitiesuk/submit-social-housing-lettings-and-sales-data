@@ -69,6 +69,7 @@ RSpec.describe BulkUpload::Sales::Validator do
         after do
           Timecop.unfreeze
         end
+
         it "is not valid" do
           expect(validator).not_to be_valid
         end

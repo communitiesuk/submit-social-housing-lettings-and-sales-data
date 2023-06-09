@@ -162,6 +162,7 @@ RSpec.describe SalesLog, type: :model do
 
   describe "derived variables" do
     let(:sales_log) { create(:sales_log, :completed) }
+
     around do |example|
       Timecop.freeze(Time.zone.local(2022, 7, 4)) do
         example.run

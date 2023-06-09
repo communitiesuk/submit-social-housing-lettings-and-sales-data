@@ -107,7 +107,6 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
     }
   end
 
-
   around do |example|
     Timecop.freeze(Time.zone.local(2023, 2, 22)) do
       Singleton.__init__(FormHandler)
