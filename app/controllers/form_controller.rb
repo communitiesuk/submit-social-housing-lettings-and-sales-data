@@ -95,7 +95,7 @@ private
       next unless question_params
 
       if %w[checkbox validation_override].include?(question.type)
-        question.answer_options.answer_keys_without_dividers.each do |option|
+        question.answer_keys_without_dividers.each do |option|
           result[option] = question_params.include?(option) ? 1 : 0
         end
       else

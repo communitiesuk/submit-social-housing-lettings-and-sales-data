@@ -107,7 +107,7 @@ class Log < ApplicationRecord
         next if setup_ids.include?(error.attribute.to_s)
 
         question = form.questions.find { |q| q.id == error.attribute.to_s }
-        if question.type == "checkbox"
+        if question&.type == "checkbox"
           question.answer_keys_without_dividers.each { |attribute| public_send("#{attribute}=", nil) }
         else
           public_send("#{error.attribute}=", nil)
