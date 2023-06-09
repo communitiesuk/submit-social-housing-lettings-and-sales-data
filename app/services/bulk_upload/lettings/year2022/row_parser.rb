@@ -342,6 +342,7 @@ class BulkUpload::Lettings::Year2022::RowParser
   validate :validate_no_and_dont_know_disabled_needs_conjunction, on: :after_log
   validate :validate_no_housing_needs_questions_answered, on: :after_log
   validate :validate_reasonable_preference_homeless, on: :after_log
+  validate :validate_condition_effects, on: :after_log
   validate :validate_if_log_already_exists, on: :after_log, if: -> { FeatureToggle.bulk_upload_duplicate_log_check_enabled? }
 
   validate :validate_owning_org_data_given, on: :after_log
@@ -687,6 +688,21 @@ private
     if field_69 == 1 && homeless == 1 && field_70 == 1
       errors.add(:field_70, I18n.t("validations.household.reasonpref.not_homeless"))
     end
+  end
+
+  def validate_condition_effects
+    if household_no_illness?
+      illness_option_fields = [field_119, field_120, field_121, field_122, field_123, field_124, field_125, field_126, field_127, field_128]
+      illness_option_fields.each do |field|
+        if field == 1
+          errors.add(field, I18n.t("validations.household.condition_effects.no_choices"))
+        end
+      end
+    end
+  end
+
+  def household_no_illness?
+    field_118 != 1
   end
 
   def validate_lettings_type_matches_bulk_upload

@@ -624,6 +624,21 @@ private
     end
   end
 
+  def validate_condition_effects
+    if household_no_illness?
+      illness_option_fields = [field_98, field_92, field_95, field_90, field_91, field_93, field_94, field_97, field_96, field_99]
+      illness_option_fields.each do |field|
+        if field == 1
+          errors.add(field, I18n.t("validations.household.condition_effects.no_choices"))
+        end
+      end
+    end
+  end
+
+  def household_no_illness?
+    field_89 != 1
+  end
+
   def validate_lettings_type_matches_bulk_upload
     if [1, 3, 5, 7, 9, 11].include?(field_5) && !general_needs?
       errors.add(:field_5, I18n.t("validations.setup.lettype.supported_housing_mismatch"))
