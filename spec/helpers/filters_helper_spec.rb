@@ -70,6 +70,75 @@ RSpec.describe FiltersHelper do
     end
   end
 
+  describe "#any_filter_selected?" do
+    let(:result) { any_filter_selected? }
+    let(:serialised_filters) { filters&.to_json }
+    let(:filters) { nil }
+
+    before do
+      session[:logs_filters] = serialised_filters if serialised_filters
+    end
+
+    it "returns false if the session contains no logs filters" do
+      expect(result).to be_falsey
+    end
+
+    context "when organisation and user are set to all" do
+      let(:filters) { { "organisation_select" => "all", "user" => "all" } }
+
+      it "returns false" do
+        expect(result).to be_falsey
+      end
+    end
+
+    context "when user is set to 'yours'" do
+      let(:filters) { { "user" => "yours" } }
+
+      it "returns true" do
+        expect(result).to be true
+      end
+    end
+
+    context "when organisation is filtered" do
+      let(:filters) { { "organisation" => 2 } }
+
+      it "returns true" do
+        expect(result).to be true
+      end
+    end
+
+    context "when status is filtered" do
+      let(:filters) { { "status" => ["in_progress"] } }
+
+      it "returns true" do
+        expect(result).to be true
+      end
+    end
+
+    context "when collection year is filtered" do
+      let(:filters) { { "years" => ["2023"] } }
+
+      it "returns true" do
+        expect(result).to be true
+      end
+    end
+
+    context "when a range of filters are applied" do
+      let(:filters) do
+        {
+          "user" => "all",
+          "status" => %w[in_progress completed],
+          "years" => [""],
+          "organisation" => 2,
+        }
+      end
+
+      it "returns true" do
+        expect(result).to be true
+      end
+    end
+  end
+
   describe "#selected_option" do
     before do
       session[:lettings_logs_filters] = {}.to_json

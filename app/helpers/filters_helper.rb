@@ -18,8 +18,7 @@ module FiltersHelper
     filter_selected?("user", "yours") ||
       selected_filters["organisation"]&.present? ||
       selected_filters["status"]&.compact_blank&.any? ||
-      selected_filters["years"]&.compact_blank&.any? ||
-      selected_filters["bulk_upload_id"]&.compact_blank&.any?
+      selected_filters["years"]&.compact_blank&.any?
   end
 
   def status_filters
