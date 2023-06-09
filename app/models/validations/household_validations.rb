@@ -187,10 +187,21 @@ private
     relationship = record.public_send("relat#{person_num}")
     return unless age && economic_status && relationship
 
-    if age >= 16 && age <= 19 && tenant_is_child?(relationship) && (!tenant_is_fulltime_student?(economic_status) && !tenant_economic_status_refused?(economic_status))
-      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.not_student_16_19", person_num:)
-      record.errors.add "age#{person_num}", I18n.t("validations.household.age.not_student_16_19", person_num:)
-      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.not_student_16_19", person_num:)
+    age_between_16_19 = age.between?(16, 19)
+    student = tenant_is_fulltime_student?(economic_status)
+    economic_status_refused = tenant_economic_status_refused?(economic_status)
+    child = tenant_is_child?(relationship)
+
+    if age_between_16_19 && !(student || economic_status_refused) && child
+      record.errors.add "age#{person_num}", I18n.t("validations.household.age.student_16_19.cannot_be_16_19.child_not_student")
+      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19.must_be_student")
+      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.student_16_19.cannot_be_child.16_19_not_student")
+    end
+
+    if !age_between_16_19 && student && child
+      record.errors.add "age#{person_num}", I18n.t("validations.household.age.student_16_19.must_be_16_19")
+      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19.cannot_be_student.child_not_16_19")
+      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.student_16_19.cannot_be_child.student_not_16_19")
     end
   end
 
