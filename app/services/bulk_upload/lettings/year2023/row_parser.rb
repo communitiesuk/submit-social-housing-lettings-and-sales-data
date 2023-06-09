@@ -358,6 +358,7 @@ class BulkUpload::Lettings::Year2023::RowParser
   validate :validate_no_and_dont_know_disabled_needs_conjunction, on: :after_log
   validate :validate_no_housing_needs_questions_answered, on: :after_log
   validate :validate_reasonable_preference_homeless, on: :after_log
+  validate :validate_condition_effects, on: :after_log
   validate :validate_if_log_already_exists, on: :after_log, if: -> { FeatureToggle.bulk_upload_duplicate_log_check_enabled? }
 
   validate :validate_owning_org_data_given, on: :after_log
