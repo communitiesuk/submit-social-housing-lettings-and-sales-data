@@ -649,6 +649,16 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
       end
     end
 
+    describe "#field_68 - 70" do
+      context "when not homeless but reasonable preference for homelessness" do
+        let(:attributes) { { bulk_upload:, field_68: "1", field_69: "1", field_70: "1" } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_70]).to be_present
+        end
+      end
+    end
+
     describe "#field_78" do # referral
       context "when 3 ie PRP nominated by LA and owning org is LA" do
         let(:attributes) { { bulk_upload:, field_78: "3", field_111: owning_org.old_visible_id } }
@@ -775,6 +785,20 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
           expect(parser.errors.where(:field_96, category: :setup)).to be_present
           expect(parser.errors.where(:field_97, category: :setup)).to be_present
           expect(parser.errors.where(:field_98, category: :setup)).to be_present
+        end
+      end
+    end
+
+    describe "#field_103" do
+      context "when null" do
+        let(:attributes) { setup_section_params.merge({ field_103: nil }) }
+
+        it "returns an error" do
+          expect(parser.errors[:field_103]).to be_present
+        end
+
+        it "populates with correct error message" do
+          expect(parser.errors[:field_103]).to eql(["You must answer type of building"])
         end
       end
     end
@@ -937,16 +961,21 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
       end
     end
 
-    describe "#field_103" do
-      context "when null" do
-        let(:attributes) { setup_section_params.merge({ field_103: nil }) }
+    describe "#field_118, field_119 - 128" do
+      context "when no illness but illnesses answered" do
+        let(:attributes) { { bulk_upload:, field_118: "2", field_119: "1", field_120: "1", field_121: "1" } }
 
-        it "returns an error" do
-          expect(parser.errors[:field_103]).to be_present
-        end
-
-        it "populates with correct error message" do
-          expect(parser.errors[:field_103]).to eql(["You must answer type of building"])
+        it "errors added to correct fields" do
+          expect(parser.errors[:field_119]).to be_present
+          expect(parser.errors[:field_120]).to be_present
+          expect(parser.errors[:field_121]).to be_present
+          expect(parser.errors[:field_122]).not_to be_present
+          expect(parser.errors[:field_123]).not_to be_present
+          expect(parser.errors[:field_124]).not_to be_present
+          expect(parser.errors[:field_125]).not_to be_present
+          expect(parser.errors[:field_126]).not_to be_present
+          expect(parser.errors[:field_127]).not_to be_present
+          expect(parser.errors[:field_128]).not_to be_present
         end
       end
     end

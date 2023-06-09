@@ -689,6 +689,35 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
     end
 
+    describe "#field_89, field_98 - 99" do
+      context "when no illness but illnesses answered" do
+        let(:attributes) { { bulk_upload:, field_89: "2", field_90: "1", field_91: "1", field_92: "1" } }
+
+        it "errors added to correct fields" do
+          expect(parser.errors[:field_90]).to be_present
+          expect(parser.errors[:field_91]).to be_present
+          expect(parser.errors[:field_92]).to be_present
+          expect(parser.errors[:field_93]).not_to be_present
+          expect(parser.errors[:field_94]).not_to be_present
+          expect(parser.errors[:field_95]).not_to be_present
+          expect(parser.errors[:field_96]).not_to be_present
+          expect(parser.errors[:field_97]).not_to be_present
+          expect(parser.errors[:field_98]).not_to be_present
+          expect(parser.errors[:field_99]).not_to be_present
+        end
+      end
+    end
+
+    describe "#field_105, field_110 - 11" do
+      context "when not homeless but reasonable preference for homelessness" do
+        let(:attributes) { { bulk_upload:, field_105: "1", field_110: "1", field_111: "1" } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_111]).to be_present
+        end
+      end
+    end
+
     describe "#field_119" do # referral
       context "when 3 ie PRP nominated by LA and owning org is LA" do
         let(:attributes) { { bulk_upload:, field_119: "3", field_1: owning_org.old_visible_id } }

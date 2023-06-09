@@ -692,10 +692,10 @@ private
 
   def validate_condition_effects
     if household_no_illness?
-      illness_option_fields = [field_119, field_120, field_121, field_122, field_123, field_124, field_125, field_126, field_127, field_128]
+      illness_option_fields = %i[field_119 field_120 field_121 field_122 field_123 field_124 field_125 field_126 field_127 field_128]
       illness_option_fields.each do |field|
-        if field == 1
-          errors.add(field, I18n.t("validations.household.condition_effects.no_choices"))
+        if attributes["#{field}"] == 1
+          errors.add(field.to_sym, I18n.t("validations.household.condition_effects.no_choices"))
         end
       end
     end
