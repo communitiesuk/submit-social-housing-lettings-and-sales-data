@@ -26,7 +26,7 @@ RSpec.describe "DeleteLogs", type: :request do
       }
       get lettings_logs_path(logs_filters) # adds the filters to the session
 
-      expect(FilterService).to receive(:filter_logs) { |arg1, arg2, arg3, _arg4, _arg5|
+      expect(FilterService).to receive(:filter_logs) { |arg1, arg2, arg3|
         expect(arg1).to contain_exactly(log_1, log_2)
         expect(arg2).to eq search
         expect(arg3).to eq logs_filters
@@ -75,7 +75,7 @@ RSpec.describe "DeleteLogs", type: :request do
       }
       get lettings_logs_path(logs_filters) # adds the filters to the session
 
-      expect(FilterService).to receive(:filter_logs) { |arg1, arg2, arg3, _arg4, _arg5|
+      expect(FilterService).to receive(:filter_logs) { |arg1, arg2, arg3|
         expect(arg1).to contain_exactly(log_1, log_2)
         expect(arg2).to eq search
         expect(arg3).to eq logs_filters
@@ -266,7 +266,7 @@ RSpec.describe "DeleteLogs", type: :request do
       }
       get sales_logs_path(logs_filters) # adds the filters to the session
 
-      expect(FilterService).to receive(:filter_logs) { |arg1, arg2, arg3, _arg4, _arg5|
+      expect(FilterService).to receive(:filter_logs) { |arg1, arg2, arg3|
         expect(arg1).to contain_exactly(log_1, log_2)
         expect(arg2).to eq search
         expect(arg3).to eq logs_filters
@@ -315,7 +315,7 @@ RSpec.describe "DeleteLogs", type: :request do
       }
       get sales_logs_path(logs_filters) # adds the filters to the session
 
-      expect(FilterService).to receive(:filter_logs) { |arg1, arg2, arg3, _arg4, _arg5|
+      expect(FilterService).to receive(:filter_logs) { |arg1, arg2, arg3|
         expect(arg1).to contain_exactly(log_1, log_2)
         expect(arg2).to eq search
         expect(arg3).to eq logs_filters
@@ -510,7 +510,7 @@ RSpec.describe "DeleteLogs", type: :request do
         }
         get lettings_logs_path(logs_filters) # adds the filters to the session
 
-        expect(FilterService).to receive(:filter_logs) { |arg1, arg2, arg3, _arg4, _arg5|
+        expect(FilterService).to receive(:filter_logs) { |arg1, arg2, arg3|
           expect(arg1).to contain_exactly(log_1, log_2)
           expect(arg2).to eq search
           expect(arg3).to eq logs_filters.merge(organisation: organisation.id.to_s)
@@ -559,7 +559,7 @@ RSpec.describe "DeleteLogs", type: :request do
         }
         get lettings_logs_path(logs_filters) # adds the filters to the session
 
-        expect(FilterService).to receive(:filter_logs) { |arg1, arg2, arg3, _arg4, _arg5|
+        expect(FilterService).to receive(:filter_logs) { |arg1, arg2, arg3|
           expect(arg1).to contain_exactly(log_1, log_2)
           expect(arg2).to eq search
           expect(arg3).to eq logs_filters.merge(organisation: organisation.id.to_s)
@@ -735,7 +735,7 @@ RSpec.describe "DeleteLogs", type: :request do
         }
         get sales_logs_path(logs_filters) # adds the filters to the session
 
-        expect(FilterService).to receive(:filter_logs) { |arg1, arg2, arg3, _arg4, _arg5|
+        expect(FilterService).to receive(:filter_logs) { |arg1, arg2, arg3|
           expect(arg1).to contain_exactly(log_1, log_2)
           expect(arg2).to eq search
           expect(arg3).to eq logs_filters.merge(organisation: organisation.id.to_s)
@@ -784,7 +784,7 @@ RSpec.describe "DeleteLogs", type: :request do
         }
         get sales_logs_path(logs_filters) # adds the filters to the session
 
-        expect(FilterService).to receive(:filter_logs) { |arg1, arg2, arg3, _arg4, _arg5|
+        expect(FilterService).to receive(:filter_logs) { |arg1, arg2, arg3|
           expect(arg1).to contain_exactly(log_1, log_2)
           expect(arg2).to eq search
           expect(arg3).to eq logs_filters.merge(organisation: organisation.id.to_s)
