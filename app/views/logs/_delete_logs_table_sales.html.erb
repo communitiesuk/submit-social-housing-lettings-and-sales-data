@@ -16,7 +16,7 @@
           <% row.cell text: log.purchid %>
           <% row.cell text: log.saledate&.to_formatted_s(:govuk_date) %>
           <% row.cell text: status_tag(log.status) %>
-          <% row.cell do %>
+          <% row.cell html_attributes: { class: "checkbox-cell" } do %>
             <% f.govuk_check_box :selected_ids, log.id,
               label: { text: log.id, hidden: true },
               checked: delete_logs_form.selected_ids.include?(log.id) %>
