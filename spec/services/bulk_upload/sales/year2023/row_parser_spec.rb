@@ -6,11 +6,9 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
   let(:now) { Time.zone.parse("01/03/2023") }
 
   let(:attributes) { { bulk_upload: } }
-  let(:bulk_upload) { create(:bulk_upload, :sales, user:) }
+  let(:bulk_upload) { create(:bulk_upload, :sales, user:, year: 2023) }
   let(:user) { create(:user, organisation: owning_org) }
-
   let(:owning_org) { create(:organisation, :with_old_visible_id) }
-
   let(:setup_section_params) do
     {
       bulk_upload:,
@@ -26,7 +24,6 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       field_14: "2", # joint purchase
     }
   end
-
   let(:valid_attributes) do
     {
       bulk_upload:,
@@ -34,7 +31,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       field_1: owning_org.old_visible_id,
       field_3: "22",
       field_4: "2",
-      field_5: "23",
+      field_5: "24",
       field_6: "test id",
       field_7: "1",
       field_8: "2",
@@ -60,6 +57,8 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       field_37: "R",
       field_38: "32",
       field_39: "F",
+      field_40: "17",
+      field_41: "13",
       field_43: "2",
       field_44: "1",
       field_45: "0",
@@ -70,6 +69,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       field_66: "E09000008",
       field_69: "1",
       field_70: "1",
+      field_71: "3",
       field_73: "3",
       field_75: "5",
       field_76: "3",
@@ -85,11 +85,11 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       field_87: "1",
       field_88: "10",
       field_89: "10",
-      field_91: "2",
+      field_90: "1",
       field_92: "30",
       field_93: "3",
       field_94: "22",
-      field_95: "23",
+      field_95: "24",
       field_96: "3",
       field_97: "22",
       field_98: "3",
@@ -108,6 +108,15 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       field_113: "800",
       field_114: "200",
     }
+  end
+
+  around do |example|
+    Timecop.freeze(Time.zone.local(2024, 2, 22)) do
+      Singleton.__init__(FormHandler)
+      example.run
+    end
+    Timecop.return
+    Singleton.__init__(FormHandler)
   end
 
   describe "#blank_row?" do

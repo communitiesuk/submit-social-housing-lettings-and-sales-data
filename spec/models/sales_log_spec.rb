@@ -162,6 +162,12 @@ RSpec.describe SalesLog, type: :model do
 
   describe "derived variables" do
     let(:sales_log) { create(:sales_log, :completed) }
+    around do |example|
+      Timecop.freeze(Time.zone.local(2022, 7, 4)) do
+        example.run
+      end
+      Timecop.return
+    end
 
     it "correctly derives and saves exday, exmonth and exyear" do
       sales_log.update!(exdate: Time.gm(2022, 5, 4), saledate: Time.gm(2022, 7, 4), ownershipsch: 1, type: 18, staircase: 2, resale: 2, proplen: 0)

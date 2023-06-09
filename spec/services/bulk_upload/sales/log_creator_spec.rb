@@ -10,6 +10,14 @@ RSpec.describe BulkUpload::Sales::LogCreator do
   let(:path) { file_fixture("completed_2022_23_sales_bulk_upload.csv") }
 
   describe "#call" do
+    around do |example|
+      Timecop.freeze(Time.zone.local(2023, 2, 22)) do
+        Singleton.__init__(FormHandler)
+        example.run
+      end
+      Timecop.return
+      Singleton.__init__(FormHandler)
+    end
     context "when a valid csv with new log" do
       it "creates a new log" do
         expect { service.call }.to change(SalesLog, :count)
