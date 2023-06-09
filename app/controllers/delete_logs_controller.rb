@@ -125,7 +125,7 @@ private
       log_filters: @session_filters,
       search_term:,
       selected_ids:,
-      **paths
+      **paths,
     }.merge(form_params).transform_keys(&:to_sym)
     Forms::DeleteLogsForm.new(attributes)
   end

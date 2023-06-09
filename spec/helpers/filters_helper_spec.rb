@@ -108,7 +108,7 @@ RSpec.describe FiltersHelper do
     end
 
     context "when status is filtered" do
-      let(:filters) { { "status" => ["in_progress"] } }
+      let(:filters) { { "status" => %w[in_progress] } }
 
       it "returns true" do
         expect(result).to be true
@@ -116,7 +116,7 @@ RSpec.describe FiltersHelper do
     end
 
     context "when collection year is filtered" do
-      let(:filters) { { "years" => ["2023"] } }
+      let(:filters) { { "years" => %w[2023] } }
 
       it "returns true" do
         expect(result).to be true
