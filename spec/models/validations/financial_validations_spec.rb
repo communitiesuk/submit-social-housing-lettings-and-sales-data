@@ -990,7 +990,7 @@ RSpec.describe Validations::FinancialValidations do
       end
 
       context "and charges are not provided" do
-        xit "throws and error" do
+        xit "throws an error" do
           record.period = 3
           record.chcharge = nil
           financial_validator.validate_care_home_charges(record)

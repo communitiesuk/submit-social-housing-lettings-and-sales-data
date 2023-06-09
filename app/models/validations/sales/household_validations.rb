@@ -54,9 +54,10 @@ private
 
     age_between_16_19 = age.between?(16, 19)
     student = person_is_fulltime_student?(economic_status)
+    economic_status_refused = person_economic_status_refused?(economic_status)
     child = person_is_child?(relationship)
 
-    if age_between_16_19 && !student && child
+    if age_between_16_19 && !(student || economic_status_refused) && child
       record.errors.add "age#{person_num}", I18n.t("validations.household.age.student_16_19.cannot_be_16_19.child_not_student")
       record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19.must_be_student")
       record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.student_16_19.cannot_be_child.16_19_not_student")
@@ -74,11 +75,11 @@ private
     economic_status = record.public_send("ecstat#{person_num}")
     return unless age && economic_status
 
-    if age < 16 && !tenant_is_economic_child?(economic_status)
+    if age < 16 && !person_is_economic_child?(economic_status)
       record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.child_under_16", person_num:)
       record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_under_16", person_num:)
     end
-    if tenant_is_economic_child?(economic_status) && age > 16
+    if person_is_economic_child?(economic_status) && age > 16
       record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.child_over_16", person_num:)
       record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_over_16", person_num:)
     end
@@ -109,7 +110,11 @@ private
     relationship == "C"
   end
 
-  def tenant_is_economic_child?(economic_status)
+  def person_is_economic_child?(economic_status)
     economic_status == 9
+  end
+
+  def person_economic_status_refused?(economic_status)
+    economic_status == 10
   end
 end
