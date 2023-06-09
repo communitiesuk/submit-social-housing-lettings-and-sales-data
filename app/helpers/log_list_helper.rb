@@ -6,4 +6,8 @@ module LogListHelper
       any_filter_selected? || search_term.present?
     end
   end
+
+  def in_organisations_tab?
+    controller.class.name.start_with? "Organisation"
+  end
 end
