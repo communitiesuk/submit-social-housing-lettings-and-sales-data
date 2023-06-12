@@ -181,7 +181,7 @@ private
   def verify_dsa_signed
     return unless FeatureToggle.new_data_protection_confirmation?
     return unless owning_organisation
-    return if owning_organisation.data_protection_confirmation&.confirmed?
+    return if owning_organisation.data_protection_confirmed?
 
     errors.add :owning_organisation, I18n.t("validations.organisation.data_sharing_agreement_not_signed")
   end

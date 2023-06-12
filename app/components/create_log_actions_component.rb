@@ -16,7 +16,7 @@ class CreateLogActionsComponent < ViewComponent::Base
     return true unless FeatureToggle.new_data_protection_confirmation?
     return true if user.support?
 
-    user.organisation.data_protection_confirmation&.confirmed?
+    user.organisation.data_protection_confirmed?
   end
 
   def create_button_href
