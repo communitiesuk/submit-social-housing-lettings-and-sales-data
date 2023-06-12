@@ -112,7 +112,6 @@ class Organisation < ApplicationRecord
       { name: "Owns housing stock", value: holds_own_stock ? "Yes" : "No", editable: false },
     ].compact
 
-    # TODO: test
     unless FeatureToggle.new_data_protection_confirmation?
       attrs << { name: "Data protection agreement", value: data_protection_agreement_string, editable: false }
     end
