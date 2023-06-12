@@ -452,6 +452,34 @@ RSpec.describe "User Features" do
         expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
       end
     end
+
+    context "when reinviting a user" do
+      let!(:other_user) { FactoryBot.create(:user, name: "new user", is_dpo: false, organisation: user.organisation, email: "new_user@example.com") }
+
+      let(:personalisation) do
+        {
+          name: "new user",
+          email: "new_user@example.com",
+          organisation: other_user.organisation.name,
+          link: include("/account/confirmation?confirmation_token="),
+        }
+      end
+
+      before do
+        other_user.update!(confirmation_token: "abc")
+        visit("/lettings-logs")
+        fill_in("user[email]", with: user.email)
+        fill_in("user[password]", with: "pAssword1")
+        click_button("Sign in")
+        visit("/users/#{other_user.id}")
+      end
+
+      it "sends and email when the resend invite link is clicked" do
+        visit("users/#{other_user.id}/")
+        expect(notify_client).to receive(:send_email).with(email_address: "new_user@example.com", template_id: User::RECONFIRMABLE_TEMPLATE_ID, personalisation:).once
+        click_link("Resend invite link")
+      end
+    end
   end
 
   context "when the user is a customer support person" do
