@@ -453,21 +453,21 @@ RSpec.describe "User Features" do
       end
     end
 
-    context "when reinviting a user" do
-      let!(:other_user) { FactoryBot.create(:user, name: "new user", is_dpo: false, organisation: user.organisation, email: "new_user@example.com") }
+    context "when reinviting a user after initial confirmation email has been sent" do
+      let!(:other_user) { FactoryBot.create(:user, name: "new user", organisation: user.organisation, email: "new_user@example.com", initial_confirmation_sent: true) }
 
       let(:personalisation) do
         {
           name: "new user",
           email: "new_user@example.com",
           organisation: other_user.organisation.name,
-          link: include("/account/confirmation?confirmation_token="),
+          link: include("/account/confirmation?confirmation_token=#{other_user.confirmation_token}"),
         }
       end
 
       before do
         other_user.update!(confirmation_token: "abc")
-        visit("/lettings-logs")
+        visit(lettings_logs_path)
         fill_in("user[email]", with: user.email)
         fill_in("user[password]", with: "pAssword1")
         click_button("Sign in")
@@ -475,8 +475,15 @@ RSpec.describe "User Features" do
       end
 
       it "sends and email when the resend invite link is clicked" do
-        visit("users/#{other_user.id}/")
+        other_user.legacy_users.destroy_all
+        visit(user_path(other_user))
         expect(notify_client).to receive(:send_email).with(email_address: "new_user@example.com", template_id: User::RECONFIRMABLE_TEMPLATE_ID, personalisation:).once
+        click_link("Resend invite link")
+      end
+
+      it "sends beta onboarding email to be sent when user is legacy" do
+        visit(user_path(other_user))
+        expect(notify_client).to receive(:send_email).with(email_address: "new_user@example.com", template_id: User::BETA_ONBOARDING_TEMPLATE_ID, personalisation:).once
         click_link("Resend invite link")
       end
     end

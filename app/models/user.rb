@@ -109,11 +109,7 @@ class User < ApplicationRecord
   end
 
   def was_migrated_from_softwire?
-    let l = legacy_users
-    let y = old_user_id
-    let x = 1
     legacy_users.any? || old_user_id.present?
-
   end
 
   def send_confirmation_instructions
