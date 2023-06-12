@@ -107,8 +107,18 @@ RSpec.describe Validations::Sales::HouseholdValidations do
         .to include(match I18n.t("validations.household.age.child_over_20"))
     end
 
-    it "does not add and error for a person aged 16-19 who is a student but not a child of the buyer" do
+    it "does not add an error for a person aged 16-19 who is a student but not a child of the buyer" do
       record.age2 = 18
+      record.ecstat2 = "7"
+      record.relat2 = "P"
+      household_validator.validate_household_number_of_other_members(record)
+      expect(record.errors["relat2"]).to be_empty
+      expect(record.errors["ecstat2"]).to be_empty
+      expect(record.errors["age2"]).to be_empty
+    end
+
+    it "does not add an error for a person not aged 16-19 who is a student but not a child of the buyer" do
+      record.age2 = 20
       record.ecstat2 = "7"
       record.relat2 = "P"
       household_validator.validate_household_number_of_other_members(record)

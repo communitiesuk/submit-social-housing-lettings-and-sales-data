@@ -156,6 +156,38 @@ class OrganisationsController < ApplicationController
     @merge_request = MergeRequest.new
   end
 
+  def data_sharing_agreement
+    return render_not_found unless FeatureToggle.new_data_sharing_agreement?
+
+    @data_sharing_agreement = current_user.organisation.data_sharing_agreement
+  end
+
+  def confirm_data_sharing_agreement
+    return render_not_found unless FeatureToggle.new_data_sharing_agreement?
+    return render_not_found unless current_user.is_dpo?
+    return render_not_found if @organisation.data_sharing_agreement.present?
+
+    data_sharing_agreement = DataSharingAgreement.new(
+      organisation: current_user.organisation,
+      signed_at: Time.zone.now,
+      data_protection_officer: current_user,
+      organisation_name: @organisation.name,
+      organisation_address: @organisation.address_row,
+      organisation_phone_number: @organisation.phone,
+      dpo_email: current_user.email,
+      dpo_name: current_user.name,
+    )
+
+    if data_sharing_agreement.save
+      flash[:notice] = "You have accepted the Data Sharing Agreement"
+      flash[:notification_banner_body] = "Your organisation can now submit logs."
+
+      redirect_to details_organisation_path(@organisation)
+    else
+      render :data_sharing_agreement
+    end
+  end
+
 private
 
   def filter_type
