@@ -2,7 +2,7 @@
   <% options.map do |key, option| %>
     <%= f.govuk_check_box category, key.to_s,
     label: { text: option },
-    checked: filter_selected?(category, key),
+    checked: filter_selected?(category, key, @filter_type),
     size: "s" %>
   <% end %>
 <% end %>

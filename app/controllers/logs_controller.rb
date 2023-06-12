@@ -1,6 +1,5 @@
 class LogsController < ApplicationController
   include Pagy::Backend
-  include Modules::LogsFilter
   include Modules::SearchFilter
 
   skip_before_action :verify_authenticity_token, if: :json_api_request?

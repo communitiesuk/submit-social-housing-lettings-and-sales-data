@@ -3,5 +3,5 @@
     :id,
     :name,
     label: { hidden: secondary },
-    options: { disabled: [""], selected: selected_option(category) },
+    options: { disabled: [""], selected: selected_option(category, @filter_type) },
     "data-controller": %w[accessible-autocomplete conditional-filter] %>

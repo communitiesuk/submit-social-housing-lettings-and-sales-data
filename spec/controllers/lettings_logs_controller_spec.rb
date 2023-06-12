@@ -10,7 +10,7 @@ RSpec.describe LettingsLogsController do
       let(:bulk_upload) { create(:bulk_upload, :sales) }
 
       it "does not redirect to resume path" do
-        session[:logs_filters] = { bulk_upload_id: [bulk_upload.id.to_s] }.to_json
+        session[:lettings_logs_filters] = { bulk_upload_id: [bulk_upload.id.to_s] }.to_json
 
         get :index
 
