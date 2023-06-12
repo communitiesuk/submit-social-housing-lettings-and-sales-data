@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Lettings::Questions::OfferedSocialLet, type: :model do
+RSpec.describe Form::Lettings::Questions::Offered, type: :model do
   subject(:question) { described_class.new(nil, nil, page) }
 
   let(:page) { instance_double(Form::Page) }
