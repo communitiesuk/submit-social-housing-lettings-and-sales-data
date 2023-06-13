@@ -5,7 +5,7 @@
 
 <%= render partial: "organisations/headings", locals: { main: @organisation.name, sub: nil } %>
 
-<%= render DataSharingAgreementBannerComponent.new(
+<%= render DataProtectionConfirmationBannerComponent.new(
   user: current_user,
   organisation: @organisation,
 ) %>

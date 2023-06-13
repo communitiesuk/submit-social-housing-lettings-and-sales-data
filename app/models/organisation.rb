@@ -1,5 +1,6 @@
 class Organisation < ApplicationRecord
   has_many :users, dependent: :delete_all
+  has_many :data_protection_officers, -> { where(is_dpo: true) }, class_name: "User"
   has_many :owned_lettings_logs, class_name: "LettingsLog", foreign_key: "owning_organisation_id", dependent: :delete_all
   has_many :managed_lettings_logs, class_name: "LettingsLog", foreign_key: "managing_organisation_id"
   has_many :owned_sales_logs, class_name: "SalesLog", foreign_key: "owning_organisation_id", dependent: :delete_all

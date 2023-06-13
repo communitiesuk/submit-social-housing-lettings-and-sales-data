@@ -3,7 +3,7 @@
 
 <% content_for :title, title %>
 
-<%= render DataSharingAgreementBannerComponent.new(
+<%= render DataProtectionConfirmationBannerComponent.new(
   user: current_user,
   organisation: @organisation,
 ) %>

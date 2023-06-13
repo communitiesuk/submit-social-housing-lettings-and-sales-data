@@ -3,10 +3,14 @@
     <p class="govuk-notification-banner__heading govuk-!-width-full" style="max-width: fit-content">
       <%= I18n.t("validations.organisation.data_sharing_agreement_not_signed") %>
     <p>
-    <%= govuk_link_to(
-      "Read the Data Sharing Agreement",
-      data_sharing_agreement_href,
-      class: "govuk-notification-banner__link govuk-!-font-weight-bold",
-    ) %>
+    <% if user.is_dpo? %>
+      <%= govuk_link_to(
+        "Read the Data Sharing Agreement",
+        data_sharing_agreement_href,
+        class: "govuk-notification-banner__link govuk-!-font-weight-bold",
+      ) %>
+    <% else %>
+      <%= data_protection_officers_text %>
+    <% end %>
   <% end %>
 <% end %>

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe DataSharingAgreementBannerComponent, type: :component do
+RSpec.describe DataProtectionConfirmationBannerComponent, type: :component do
   let(:component) { described_class.new(user:, organisation:) }
   let(:render) { render_inline(component) }
   let(:user) { create(:user) }
@@ -21,11 +21,19 @@ RSpec.describe DataSharingAgreementBannerComponent, type: :component do
       allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(true)
     end
 
-    context "when user is dpo" do
-      let(:user) { create(:user, is_dpo: true) }
+    describe "#data_protection_officers_text" do
+      it "returns the correct text" do
+        expect(component.data_protection_officers_text).to eq("You can ask: Danny Rojas")
+      end
 
-      it "does not display banner" do
-        expect(component.display_banner?).to eq(false)
+      context "with two DPOs" do
+        before do
+          create(:user, organisation:, is_dpo: true, name: "Test McTest")
+        end
+
+        it "returns the correct text" do
+          expect(component.data_protection_officers_text).to eq("You can ask: Danny Rojas, Test McTest")
+        end
       end
     end
 
