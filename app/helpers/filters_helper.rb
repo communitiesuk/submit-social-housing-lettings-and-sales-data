@@ -11,14 +11,15 @@ module FiltersHelper
     selected_filters[filter].include?(value.to_s)
   end
 
-  def any_filter_selected?
-    return false unless session[:logs_filters]
+  def any_filter_selected?(filter_type)
+    filters_json = session[session_name_for(filter_type)]
+    return false unless filters_json
 
-    selected_filters = JSON.parse(session[:logs_filters])
-    filter_selected?("user", "yours") ||
-      selected_filters["organisation"]&.present? ||
-      selected_filters["status"]&.compact_blank&.any? ||
-      selected_filters["years"]&.compact_blank&.any?
+    filters = JSON.parse(filters_json)
+    filters["user"] == "yours" ||
+      filters["organisation"]&.present? ||
+      filters["status"]&.compact_blank&.any? ||
+      filters["years"]&.compact_blank&.any?
   end
 
   def status_filters

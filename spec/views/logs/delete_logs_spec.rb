@@ -15,7 +15,7 @@ RSpec.describe "logs/delete_logs.html.erb" do
 
   before do
     sign_in user
-    allow(FilterService).to receive(:filter_logs).and_return lettings_logs
+    allow(FilterManager).to receive(:filter_logs).and_return lettings_logs
     assign(:delete_logs_form, delete_logs_form)
   end
 
@@ -40,7 +40,7 @@ RSpec.describe "logs/delete_logs.html.erb" do
 
     before do
       lettings_logs << lettings_log_2
-      allow(FilterService).to receive(:filter_logs).and_return lettings_logs
+      allow(FilterManager).to receive(:filter_logs).and_return lettings_logs
       delete_logs_form = Forms::DeleteLogsForm.new(log_type: :lettings, current_user: user, **paths)
       assign(:delete_logs_form, delete_logs_form)
     end
@@ -76,7 +76,7 @@ RSpec.describe "logs/delete_logs.html.erb" do
 
     before do
       sign_in user
-      allow(FilterService).to receive(:filter_logs).and_return sales_logs
+      allow(FilterManager).to receive(:filter_logs).and_return sales_logs
       assign(:delete_logs_form, delete_logs_form_sales)
     end
 

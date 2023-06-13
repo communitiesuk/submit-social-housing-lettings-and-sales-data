@@ -1,6 +1,4 @@
 class DeleteLogsController < ApplicationController
-  include Modules::LogsFilter
-
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
 
   before_action :session_filters, if: :current_user, except: %i[discard_lettings_logs discard_sales_logs discard_lettings_logs_for_organisation discard_sales_logs_for_organisation]
@@ -111,6 +109,15 @@ class DeleteLogsController < ApplicationController
   end
 
 private
+
+  def session_filters
+    @session_filters ||= filter_manager.session_filters
+  end
+
+  def filter_manager
+    log_type = action_name.include?("lettings") ? "lettings_logs" : "sales_logs"
+    FilterManager.new(current_user:, session:, params:, filter_type: log_type)
+  end
 
   def delete_logs_form(log_type:, organisation: false, selected_ids: nil, form_params: {})
     paths = case log_type

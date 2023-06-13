@@ -14,7 +14,7 @@ RSpec.describe "DeleteLogs", type: :request do
     let!(:log_2) { create(:lettings_log, :completed, created_by: user) }
 
     before do
-      allow(FilterService).to receive(:filter_logs).and_return LettingsLog.all
+      allow(FilterManager).to receive(:filter_logs).and_return LettingsLog.all
     end
 
     it "calls the filter service with the filters in the session and the search term from the query params" do
@@ -26,7 +26,7 @@ RSpec.describe "DeleteLogs", type: :request do
       }
       get lettings_logs_path(logs_filters) # adds the filters to the session
 
-      expect(FilterService).to receive(:filter_logs) { |arg1, arg2, arg3|
+      expect(FilterManager).to receive(:filter_logs) { |arg1, arg2, arg3|
         expect(arg1).to contain_exactly(log_1, log_2)
         expect(arg2).to eq search
         expect(arg3).to eq logs_filters
@@ -59,7 +59,7 @@ RSpec.describe "DeleteLogs", type: :request do
     let(:selected_ids) { log_1.id }
 
     before do
-      allow(FilterService).to receive(:filter_logs).and_return LettingsLog.all
+      allow(FilterManager).to receive(:filter_logs).and_return LettingsLog.all
     end
 
     it "throws an error if selected ids are not provided" do
@@ -75,7 +75,7 @@ RSpec.describe "DeleteLogs", type: :request do
       }
       get lettings_logs_path(logs_filters) # adds the filters to the session
 
-      expect(FilterService).to receive(:filter_logs) { |arg1, arg2, arg3|
+      expect(FilterManager).to receive(:filter_logs) { |arg1, arg2, arg3|
         expect(arg1).to contain_exactly(log_1, log_2)
         expect(arg2).to eq search
         expect(arg3).to eq logs_filters
@@ -254,7 +254,7 @@ RSpec.describe "DeleteLogs", type: :request do
     let!(:log_2) { create(:sales_log, :completed, created_by: user) }
 
     before do
-      allow(FilterService).to receive(:filter_logs).and_return SalesLog.all
+      allow(FilterManager).to receive(:filter_logs).and_return SalesLog.all
     end
 
     it "calls the filter service with the filters in the session and the search term from the query params" do
@@ -266,7 +266,7 @@ RSpec.describe "DeleteLogs", type: :request do
       }
       get sales_logs_path(logs_filters) # adds the filters to the session
 
-      expect(FilterService).to receive(:filter_logs) { |arg1, arg2, arg3|
+      expect(FilterManager).to receive(:filter_logs) { |arg1, arg2, arg3|
         expect(arg1).to contain_exactly(log_1, log_2)
         expect(arg2).to eq search
         expect(arg3).to eq logs_filters
@@ -299,7 +299,7 @@ RSpec.describe "DeleteLogs", type: :request do
     let(:selected_ids) { log_1.id }
 
     before do
-      allow(FilterService).to receive(:filter_logs).and_return SalesLog.all
+      allow(FilterManager).to receive(:filter_logs).and_return SalesLog.all
     end
 
     it "throws an error if selected ids are not provided" do
@@ -315,7 +315,7 @@ RSpec.describe "DeleteLogs", type: :request do
       }
       get sales_logs_path(logs_filters) # adds the filters to the session
 
-      expect(FilterService).to receive(:filter_logs) { |arg1, arg2, arg3|
+      expect(FilterManager).to receive(:filter_logs) { |arg1, arg2, arg3|
         expect(arg1).to contain_exactly(log_1, log_2)
         expect(arg2).to eq search
         expect(arg3).to eq logs_filters
@@ -498,7 +498,7 @@ RSpec.describe "DeleteLogs", type: :request do
       let!(:log_2) { create(:lettings_log, :completed, owning_organisation: organisation) }
 
       before do
-        allow(FilterService).to receive(:filter_logs).and_return LettingsLog.all
+        allow(FilterManager).to receive(:filter_logs).and_return LettingsLog.all
       end
 
       it "calls the filter service with the filters in the session and the search term from the query params" do
@@ -510,7 +510,7 @@ RSpec.describe "DeleteLogs", type: :request do
         }
         get lettings_logs_path(logs_filters) # adds the filters to the session
 
-        expect(FilterService).to receive(:filter_logs) { |arg1, arg2, arg3|
+        expect(FilterManager).to receive(:filter_logs) { |arg1, arg2, arg3|
           expect(arg1).to contain_exactly(log_1, log_2)
           expect(arg2).to eq search
           expect(arg3).to eq logs_filters.merge(organisation: organisation.id.to_s)
@@ -543,7 +543,7 @@ RSpec.describe "DeleteLogs", type: :request do
       let(:selected_ids) { log_1.id }
 
       before do
-        allow(FilterService).to receive(:filter_logs).and_return LettingsLog.all
+        allow(FilterManager).to receive(:filter_logs).and_return LettingsLog.all
       end
 
       it "throws an error if selected ids are not provided" do
@@ -559,7 +559,7 @@ RSpec.describe "DeleteLogs", type: :request do
         }
         get lettings_logs_path(logs_filters) # adds the filters to the session
 
-        expect(FilterService).to receive(:filter_logs) { |arg1, arg2, arg3|
+        expect(FilterManager).to receive(:filter_logs) { |arg1, arg2, arg3|
           expect(arg1).to contain_exactly(log_1, log_2)
           expect(arg2).to eq search
           expect(arg3).to eq logs_filters.merge(organisation: organisation.id.to_s)
@@ -723,7 +723,7 @@ RSpec.describe "DeleteLogs", type: :request do
       let!(:log_2) { create(:sales_log, :completed, owning_organisation: organisation) }
 
       before do
-        allow(FilterService).to receive(:filter_logs).and_return SalesLog.all
+        allow(FilterManager).to receive(:filter_logs).and_return SalesLog.all
       end
 
       it "calls the filter service with the filters in the session and the search term from the query params" do
@@ -735,7 +735,7 @@ RSpec.describe "DeleteLogs", type: :request do
         }
         get sales_logs_path(logs_filters) # adds the filters to the session
 
-        expect(FilterService).to receive(:filter_logs) { |arg1, arg2, arg3|
+        expect(FilterManager).to receive(:filter_logs) { |arg1, arg2, arg3|
           expect(arg1).to contain_exactly(log_1, log_2)
           expect(arg2).to eq search
           expect(arg3).to eq logs_filters.merge(organisation: organisation.id.to_s)
@@ -768,7 +768,7 @@ RSpec.describe "DeleteLogs", type: :request do
       let(:selected_ids) { log_1.id }
 
       before do
-        allow(FilterService).to receive(:filter_logs).and_return SalesLog.all
+        allow(FilterManager).to receive(:filter_logs).and_return SalesLog.all
       end
 
       it "throws an error if selected ids are not provided" do
@@ -784,7 +784,7 @@ RSpec.describe "DeleteLogs", type: :request do
         }
         get sales_logs_path(logs_filters) # adds the filters to the session
 
-        expect(FilterService).to receive(:filter_logs) { |arg1, arg2, arg3|
+        expect(FilterManager).to receive(:filter_logs) { |arg1, arg2, arg3|
           expect(arg1).to contain_exactly(log_1, log_2)
           expect(arg2).to eq search
           expect(arg3).to eq logs_filters.merge(organisation: organisation.id.to_s)

@@ -71,15 +71,16 @@ RSpec.describe FiltersHelper do
   end
 
   describe "#any_filter_selected?" do
-    let(:result) { any_filter_selected? }
+    let(:filter_type) { "lettings_logs" }
+    let(:result) { any_filter_selected?(filter_type) }
     let(:serialised_filters) { filters&.to_json }
     let(:filters) { nil }
 
     before do
-      session[:logs_filters] = serialised_filters if serialised_filters
+      session[:lettings_logs_filters] = serialised_filters if serialised_filters
     end
 
-    it "returns false if the session contains no logs filters" do
+    it "returns false if the session contains no filters" do
       expect(result).to be_falsey
     end
 
