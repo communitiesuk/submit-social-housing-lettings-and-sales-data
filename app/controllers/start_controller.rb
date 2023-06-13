@@ -34,7 +34,7 @@ class StartController < ApplicationController
       Rails.root.join("public/files/2022_23_lettings_paper_form.pdf"),
       filename: "2022-23 Lettings paper form.pdf",
       type: "application/pdf",
-      )
+    )
   end
 
   def download_23_24_lettings_bulk_upload_template
