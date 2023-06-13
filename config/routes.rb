@@ -37,6 +37,7 @@ Rails.application.routes.draw do
   get "/data-sharing-agreement", to: "content#data_sharing_agreement"
 
   get "/download-23-24-lettings-form", to: "start#download_23_24_lettings_form"
+  get "/download-22-23-lettings-form", to: "start#download_22_23_lettings_form"
   get "/download-23-24-lettings-bulk-upload-template", to: "start#download_23_24_lettings_bulk_upload_template"
   get "/download-23-24-lettings-bulk-upload-legacy-template", to: "start#download_23_24_lettings_bulk_upload_legacy_template"
   get "/download-23-24-lettings-bulk-upload-specification", to: "start#download_23_24_lettings_bulk_upload_specification"
