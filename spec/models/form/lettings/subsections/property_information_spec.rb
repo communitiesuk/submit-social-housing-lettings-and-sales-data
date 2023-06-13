@@ -26,8 +26,7 @@ RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
             property_let_type
             property_vacancy_reason_not_first_let
             property_vacancy_reason_first_let
-            property_number_of_times_relet_not_social_let
-            property_number_of_times_relet_social_let
+            property_number_of_times_relet
             property_unit_type
             property_building_type
             property_wheelchair_accessible
