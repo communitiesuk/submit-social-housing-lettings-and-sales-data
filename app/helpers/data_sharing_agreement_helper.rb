@@ -40,7 +40,7 @@ module DataSharingAgreementHelper
   end
 
   # rubocop:disable Rails/HelperInstanceVariable
-  def section_12_2(data_protection_confirmation:, user:, organisation:)
+  def present_section_12_2(data_protection_confirmation:, user:, organisation:)
     if data_protection_confirmation&.confirmed?
       @org_address = data_protection_confirmation.organisation.address_row
       @org_name = data_protection_confirmation.organisation.name

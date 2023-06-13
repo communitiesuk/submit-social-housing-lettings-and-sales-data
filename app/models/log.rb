@@ -9,7 +9,7 @@ class Log < ApplicationRecord
   belongs_to :bulk_upload, optional: true
 
   before_save :update_status!
-  before_validation :verify_dsa_signed, on: :create
+  before_validation :verify_data_protection_confirmation, on: :create
 
   STATUS = {
     "not_started" => 0,
@@ -178,7 +178,7 @@ class Log < ApplicationRecord
 
 private
 
-  def verify_dsa_signed
+  def verify_data_protection_confirmation
     return unless FeatureToggle.new_data_protection_confirmation?
     return unless owning_organisation
     return if owning_organisation.data_protection_confirmed?

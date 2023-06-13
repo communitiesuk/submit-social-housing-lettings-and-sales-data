@@ -7,7 +7,7 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 # rubocop:disable Rails/Output
-def create_dsa(user)
+def create_data_protection_confirmation(user)
   DataProtectionConfirmation.find_or_create_by!(
     organisation: user.organisation,
     confirmed: true,
@@ -94,7 +94,7 @@ unless Rails.env.test?
   ) do |user|
     user.password = "password"
     user.confirmed_at = Time.zone.now
-    create_dsa(user)
+    create_data_protection_confirmation(user)
   end
 
   User.find_or_create_by!(
@@ -105,7 +105,7 @@ unless Rails.env.test?
   ) do |user|
     user.password = "password"
     user.confirmed_at = Time.zone.now
-    create_dsa(user)
+    create_data_protection_confirmation(user)
   end
 
   standalone_no_stock = Organisation.find_or_create_by!(
@@ -187,7 +187,7 @@ unless Rails.env.test?
       user.confirmed_at = Time.zone.now
     end
 
-    create_dsa(support_user)
+    create_data_protection_confirmation(support_user)
 
     pp "Seeded 3 dummy users"
   end

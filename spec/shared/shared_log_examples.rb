@@ -105,7 +105,7 @@ RSpec.shared_examples "shared log examples" do |log_type|
     end
   end
 
-  describe "#verify_dsa_signed" do
+  describe "#verify_data_protection_confirmation" do
     before do
       allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(false)
     end
