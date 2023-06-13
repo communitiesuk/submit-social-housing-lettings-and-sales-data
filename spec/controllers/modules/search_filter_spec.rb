@@ -49,7 +49,7 @@ RSpec.describe Modules::SearchFilter do
       let(:search_term) { nil }
 
       it "returns all the users" do
-        expect(instance.filtered_users(user_list, search_term).count).to eq(7)
+        expect(instance.filtered_users(user_list, search_term).count).to eq(user_list.count)
       end
     end
   end

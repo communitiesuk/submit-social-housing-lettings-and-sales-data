@@ -157,35 +157,35 @@ class OrganisationsController < ApplicationController
   end
 
   def data_sharing_agreement
-    return render_not_found unless FeatureToggle.new_data_sharing_agreement?
+    return render_not_found unless FeatureToggle.new_data_protection_confirmation?
 
-    @data_sharing_agreement = current_user.organisation.data_sharing_agreement
+    @data_protection_confirmation = current_user.organisation.data_protection_confirmation
   end
 
   def confirm_data_sharing_agreement
-    return render_not_found unless FeatureToggle.new_data_sharing_agreement?
+    return render_not_found unless FeatureToggle.new_data_protection_confirmation?
     return render_not_found unless current_user.is_dpo?
-    return render_not_found if @organisation.data_sharing_agreement.present?
+    return render_not_found if @organisation.data_protection_confirmed?
 
-    data_sharing_agreement = DataSharingAgreement.new(
-      organisation: current_user.organisation,
-      signed_at: Time.zone.now,
-      data_protection_officer: current_user,
-      organisation_name: @organisation.name,
-      organisation_address: @organisation.address_row,
-      organisation_phone_number: @organisation.phone,
-      dpo_email: current_user.email,
-      dpo_name: current_user.name,
-    )
-
-    if data_sharing_agreement.save
-      flash[:notice] = "You have accepted the Data Sharing Agreement"
-      flash[:notification_banner_body] = "Your organisation can now submit logs."
-
-      redirect_to details_organisation_path(@organisation)
+    if @organisation.data_protection_confirmation
+      @organisation.data_protection_confirmation.update!(
+        confirmed: true,
+        data_protection_officer: current_user,
+        # When it was signed
+        created_at: Time.zone.now,
+      )
     else
-      render :data_sharing_agreement
+      DataProtectionConfirmation.create!(
+        organisation: current_user.organisation,
+        confirmed: true,
+        data_protection_officer: current_user,
+      )
     end
+
+    flash[:notice] = "You have accepted the Data Sharing Agreement"
+    flash[:notification_banner_body] = "Your organisation can now submit logs."
+
+    redirect_to details_organisation_path(@organisation)
   end
 
 private

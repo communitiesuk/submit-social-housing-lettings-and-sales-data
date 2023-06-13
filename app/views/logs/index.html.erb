@@ -3,6 +3,11 @@
 
 <% content_for :title, title %>
 
+<%= render DataProtectionConfirmationBannerComponent.new(
+  user: current_user,
+  organisation: @organisation,
+) %>
+
 <% if current_page?(controller: 'lettings_logs', action: 'index') %>
   <% if @unresolved_count > 0 %>
     <%= govuk_notification_banner(
@@ -45,26 +50,11 @@
 <% end %>
 
 <div class="app-filter-layout" data-controller="filter-layout">
-  <% unless @bulk_upload %>
-    <div class="govuk-button-group app-filter-toggle govuk-!-margin-bottom-6">
-      <% if current_page?(controller: 'lettings_logs', action: 'index') %>
-        <%= govuk_button_to "Create a new lettings log", lettings_logs_path, class: "govuk-!-margin-right-6" %>
-      <% end %>
-
-      <% if current_page?(controller: 'sales_logs', action: 'index') %>
-        <%= govuk_button_to "Create a new sales log", sales_logs_path, class: "govuk-!-margin-right-6" %>
-      <% end %>
-
-      <% if FeatureToggle.bulk_upload_lettings_logs? && log_type_for_controller(controller) == "lettings" %>
-        <%= govuk_button_link_to "Upload lettings logs in bulk", bulk_upload_path_for_controller(controller, id: "start"), secondary: true %>
-      <% end %>
-
-      <% if FeatureToggle.bulk_upload_sales_logs? && log_type_for_controller(controller) == "sales" %>
-        <%= govuk_button_link_to "Upload sales logs in bulk", bulk_upload_path_for_controller(controller, id: "start"), secondary: true %>
-      <% end %>
-    </div>
-  <% end %>
-
+  <%= render CreateLogActionsComponent.new(
+    bulk_upload: @bulk_upload,
+    user: current_user,
+    log_type: log_type_for_controller(controller),
+  ) %>
   <%= render partial: "log_filters" %>
 
   <div class="app-filter-layout__content">

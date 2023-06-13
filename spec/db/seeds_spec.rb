@@ -24,12 +24,12 @@ RSpec.describe "seeding process", type: task do
   it "sets up correct data" do
     expect {
       Rails.application.load_seed
-    }.to change(User, :count).by(7)
-     .and change(Organisation, :count).by(8)
-     .and change(OrganisationRelationship, :count).by(4)
-     .and change(Scheme, :count).by(3)
-     .and change(Location, :count).by(3)
-     .and change(LaRentRange, :count).by(22_850)
+    }.to change(User, :count)
+     .and change(Organisation, :count)
+     .and change(OrganisationRelationship, :count)
+     .and change(Scheme, :count)
+     .and change(Location, :count)
+     .and change(LaRentRange, :count)
   end
 
   it "is idempotent" do

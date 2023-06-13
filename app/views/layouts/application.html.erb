@@ -126,7 +126,7 @@
           ) do |notification_banner|
             notification_banner.heading(text: flash.notice.html_safe)
             if flash[:notification_banner_body]
-              tag.p flash[:notification_banner_body]
+              tag.p flash[:notification_banner_body]&.html_safe
             end
           end %>
         <% end %>

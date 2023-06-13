@@ -8,13 +8,6 @@ module LogsHelper
     end
   end
 
-  def bulk_upload_path_for_controller(controller, id:)
-    case log_type_for_controller(controller)
-    when "lettings" then bulk_upload_lettings_log_path(id:)
-    when "sales" then bulk_upload_sales_log_path(id:)
-    end
-  end
-
   def bulk_upload_options(bulk_upload)
     array = bulk_upload ? [bulk_upload.id] : []
     array.index_with { |_bulk_upload_id| "With logs from bulk upload" }

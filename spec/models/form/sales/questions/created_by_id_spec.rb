@@ -37,6 +37,12 @@ RSpec.describe Form::Sales::Questions::CreatedById, type: :model do
     expect(question.derived?).to be true
   end
 
+  def expected_option_for_users(users)
+    users.each_with_object({ "" => "Select an option" }) do |user, obj|
+      obj[user.id] = "#{user.name} (#{user.email})"
+    end
+  end
+
   context "when the current user is support" do
     let(:support_user) { build(:user, :support) }
 
@@ -47,15 +53,9 @@ RSpec.describe Form::Sales::Questions::CreatedById, type: :model do
     describe "#displayed_answer_options" do
       let(:owning_org_user) { create(:user) }
       let(:sales_log) { create(:sales_log, owning_organisation: owning_org_user.organisation) }
-      let(:expected_answer_options) do
-        {
-          "" => "Select an option",
-          owning_org_user.id => "#{owning_org_user.name} (#{owning_org_user.email})",
-        }
-      end
 
       it "only displays users that belong to the owning organisation" do
-        expect(question.displayed_answer_options(sales_log, support_user)).to eq(expected_answer_options)
+        expect(question.displayed_answer_options(sales_log, support_user)).to eq(expected_option_for_users(owning_org_user.organisation.users))
       end
     end
   end
@@ -70,18 +70,13 @@ RSpec.describe Form::Sales::Questions::CreatedById, type: :model do
     describe "#displayed_answer_options" do
       let(:owning_org_user) { create(:user) }
       let(:sales_log) { create(:sales_log, owning_organisation: owning_org_user.organisation) }
-      let!(:user_in_same_org) { create(:user, organisation: data_coordinator.organisation) }
 
-      let(:expected_answer_options) do
-        {
-          "" => "Select an option",
-          user_in_same_org.id => "#{user_in_same_org.name} (#{user_in_same_org.email})",
-          data_coordinator.id => "#{data_coordinator.name} (#{data_coordinator.email})",
-        }
+      before do
+        create(:user, organisation: data_coordinator.organisation)
       end
 
       it "only displays users that belong user's org" do
-        expect(question.displayed_answer_options(sales_log, data_coordinator)).to eq(expected_answer_options)
+        expect(question.displayed_answer_options(sales_log, data_coordinator)).to eq(expected_option_for_users(data_coordinator.organisation.users))
       end
     end
   end

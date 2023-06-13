@@ -41,6 +41,12 @@ RSpec.describe Form::Lettings::Questions::CreatedById, type: :model do
     expect(question.derived?).to be true
   end
 
+  def expected_option_for_users(users)
+    users.each_with_object({ "" => "Select an option" }) do |user, obj|
+      obj[user.id] = "#{user.name} (#{user.email})"
+    end
+  end
+
   context "when the current user is support" do
     let(:owning_org_user) { create(:user) }
     let(:managing_org_user) { create(:user) }
@@ -51,17 +57,8 @@ RSpec.describe Form::Lettings::Questions::CreatedById, type: :model do
         create(:lettings_log, created_by: support_user, owning_organisation: owning_org_user.organisation, managing_organisation: managing_org_user.organisation)
       end
 
-      let(:expected_answer_options) do
-        {
-          "" => "Select an option",
-          managing_org_user.id => "#{managing_org_user.name} (#{managing_org_user.email})",
-          owning_org_user.id => "#{owning_org_user.name} (#{owning_org_user.email})",
-          support_user.id => "#{support_user.name} (#{support_user.email})",
-        }
-      end
-
       it "only displays users that belong to owning and managing organisations" do
-        expect(question.displayed_answer_options(lettings_log, support_user)).to eq(expected_answer_options)
+        expect(question.displayed_answer_options(lettings_log, support_user)).to eq(expected_option_for_users(managing_org_user.organisation.users + owning_org_user.organisation.users))
       end
     end
   end
@@ -77,15 +74,8 @@ RSpec.describe Form::Lettings::Questions::CreatedById, type: :model do
 
       let(:user_in_same_org) { create(:user, organisation: data_coordinator.organisation) }
 
-      let(:expected_answer_options) do
-        {
-          "" => "Select an option",
-          data_coordinator.id => "#{data_coordinator.name} (#{data_coordinator.email})",
-        }
-      end
-
       it "only displays users that belong user's org" do
-        expect(question.displayed_answer_options(lettings_log, data_coordinator)).to eq(expected_answer_options)
+        expect(question.displayed_answer_options(lettings_log, data_coordinator)).to eq(expected_option_for_users(data_coordinator.organisation.users))
       end
     end
   end

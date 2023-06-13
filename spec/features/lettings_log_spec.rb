@@ -85,7 +85,7 @@ RSpec.describe "Lettings Log Features" do
         click_link("Set up this lettings log")
         select(support_user.organisation.name, from: "lettings-log-owning-organisation-id-field")
         click_button("Save and continue")
-        select(support_user.name, from: "lettings-log-created-by-id-field")
+        select("#{support_user.name} (#{support_user.email})", from: "lettings-log-created-by-id-field")
         click_button("Save and continue")
         log_id = page.current_path.scan(/\d/).join
         visit("lettings-logs/#{log_id}/setup/check-answers")
@@ -95,7 +95,7 @@ RSpec.describe "Lettings Log Features" do
     end
 
     context "when visiting a subsection check answers page" do
-      let(:lettings_log) { FactoryBot.create(:lettings_log, :setup_completed) }
+      let(:lettings_log) { create(:lettings_log, :setup_completed) }
 
       it "has the correct breadcrumbs with the correct links" do
         visit lettings_log_setup_check_answers_path(lettings_log)
@@ -108,7 +108,7 @@ RSpec.describe "Lettings Log Features" do
     end
 
     context "when reviewing a complete log" do
-      let(:lettings_log) { FactoryBot.create(:lettings_log, :completed) }
+      let(:lettings_log) { create(:lettings_log, :completed) }
 
       it "has the correct breadcrumbs with the correct links" do
         visit review_lettings_log_path(lettings_log)

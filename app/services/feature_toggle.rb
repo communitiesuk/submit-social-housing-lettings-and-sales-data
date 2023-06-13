@@ -20,10 +20,6 @@ class FeatureToggle
     true
   end
 
-  def self.bulk_upload_lettings_logs?
-    true
-  end
-
   def self.bulk_upload_sales_logs?
     !Rails.env.production?
   end
@@ -46,7 +42,7 @@ class FeatureToggle
     !Rails.env.production?
   end
 
-  def self.new_data_sharing_agreement?
+  def self.new_data_protection_confirmation?
     !Rails.env.production?
   end
 end
