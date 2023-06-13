@@ -25,7 +25,7 @@ class FeatureToggle
   end
 
   def self.bulk_upload_sales_logs?
-    !Rails.env.production?
+    true
   end
 
   def self.bulk_upload_duplicate_log_check_enabled?
