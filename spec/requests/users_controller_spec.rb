@@ -99,8 +99,8 @@ RSpec.describe UsersController, type: :request do
 
     describe "#resend_invite" do
       it "does not allow resending activation emails" do
-        get "/users/#{user.id}/deactivate", headers: headers, params: {}
-        expect(response).to redirect_to("/account/sign-in")
+        get deactivate_user_path(user.id), headers: headers, params: {}
+        expect(response).to redirect_to(new_user_session_path)
       end
     end
   end
@@ -131,7 +131,7 @@ RSpec.describe UsersController, type: :request do
         end
 
         it "does not allow resending invitation emails" do
-          expect(page).not_to have_link("Resend invite link", href: "/users/#{other_user.id}/resend-invite")
+          expect(page).not_to have_button("Resend invite link")
         end
 
         context "when user is deactivated" do
@@ -201,7 +201,7 @@ RSpec.describe UsersController, type: :request do
             end
 
             it "does not allow resending invitation emails" do
-              expect(page).not_to have_link("Resend invite link", href: "/users/#{other_user.id}/resend-invite")
+              expect(page).not_to have_button("Resend invite link")
             end
           end
         end
@@ -520,7 +520,7 @@ RSpec.describe UsersController, type: :request do
           end
 
           it "does not allow resending invitation emails" do
-            expect(page).not_to have_link("Resend invite link", href: "/users/#{other_user.id}/resend-invite")
+            expect(page).not_to have_button("Resend invite link")
           end
         end
       end
@@ -553,8 +553,8 @@ RSpec.describe UsersController, type: :request do
             expect(page).to have_link("Deactivate user", href: "/users/#{other_user.id}/deactivate")
           end
 
-          it "allows you to resend invitation emails" do
-            expect(page).to have_link("Resend invite link", href: "/users/#{other_user.id}/resend-invite")
+          it "does not allow you to resend invitation emails" do
+            expect(page).not_to have_button("Resend invite link")
           end
 
           context "when user is deactivated" do
@@ -572,7 +572,7 @@ RSpec.describe UsersController, type: :request do
             end
 
             it "does not allow you to resend invitation emails" do
-              expect(page).not_to have_link("Resend invite link", href: "/users/#{other_user.id}/resend-invite")
+              expect(page).not_to have_button("Resend invite link")
             end
           end
         end
@@ -1202,6 +1202,10 @@ RSpec.describe UsersController, type: :request do
 
           it "allows deactivating the user" do
             expect(page).to have_link("Deactivate user", href: "/users/#{other_user.id}/deactivate")
+          end
+
+          it "allows you to resend invitation emails" do
+            expect(page).to have_button("Resend invite link")
           end
 
           context "when user is deactivated" do
