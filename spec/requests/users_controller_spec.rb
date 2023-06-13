@@ -145,7 +145,7 @@ RSpec.describe UsersController, type: :request do
           end
 
           it "does not allow resending invitation emails" do
-            expect(page).not_to have_link("Resend invite link", href: "/users/#{other_user.id}/resend-invite")
+            expect(page).not_to have_link("Resend invite link")
           end
         end
       end
