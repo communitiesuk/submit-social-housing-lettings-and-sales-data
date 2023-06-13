@@ -96,12 +96,14 @@
     <div class="govuk-button-group">
       <% if current_user.can_toggle_active?(@user) %>
         <% if @user.active? %>
+          <% if current_user.support? %>
+            <%= govuk_button_to "Resend invite link", resend_invite_user_path(@user) %>
+          <% end %>
           <%= govuk_button_link_to "Deactivate user", deactivate_user_path(@user), warning: true %>
-          <%= govuk_button_link_to "Resend invite link", resend_invite_user_path(@user) %>
         <% else %>
-          <span class="app-!-colour-muted govuk-!-margin-right-2">
-            This user has been deactivated. <%= govuk_button_link_to "Reactivate user", reactivate_user_path(@user) %>
-          </span>
+            <span class="app-!-colour-muted govuk-!-margin-right-2">
+              This user has been deactivated. <%= govuk_button_link_to "Reactivate user", reactivate_user_path(@user) %>
+            </span>
         <% end %>
       <% end %>
     </div>
