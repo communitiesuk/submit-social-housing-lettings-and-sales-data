@@ -40,7 +40,7 @@ class CreateLogActionsComponent < ViewComponent::Base
   def upload_button_copy
     if log_type == "lettings"
       "Upload lettings logs in bulk"
-    elsif FeatureToggle.bulk_upload_sales_logs? && log_type == "sales"
+    elsif log_type == "sales"
       "Upload sales logs in bulk"
     end
   end
@@ -48,7 +48,7 @@ class CreateLogActionsComponent < ViewComponent::Base
   def upload_button_href
     if log_type == "lettings"
       bulk_upload_lettings_log_path(id: "start")
-    elsif FeatureToggle.bulk_upload_sales_logs? && log_type == "sales"
+    elsif log_type == "sales"
       bulk_upload_sales_log_path(id: "start")
     end
   end
