@@ -456,13 +456,13 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
-      context "and the number the property was relet is over 20" do
+      context "and the number the property was relet is over 150" do
         before do
-          lettings_log_xml.at_xpath("//xmlns:Q20").content = "25"
+          lettings_log_xml.at_xpath("//xmlns:Q20").content = "155"
         end
 
         it "intercepts the relevant validation error" do
-          expect(logger).to receive(:warn).with(/Removing offered with error: Times previously offered since becoming available must be between 0 and 20/)
+          expect(logger).to receive(:warn).with(/Removing offered with error: Times previously offered since becoming available must be between 0 and 150/)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end
