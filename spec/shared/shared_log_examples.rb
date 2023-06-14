@@ -105,12 +105,12 @@ RSpec.shared_examples "shared log examples" do |log_type|
     end
   end
 
-  describe "#verify_data_protection_confirmation" do
+  describe "#data_protection_confirmation_signed?" do
     before do
       allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(false)
     end
 
-    it "is valid if the DSA is signed" do
+    it "is valid if the Data Protection Confirmation is signed" do
       log = build(log_type, :in_progress, owning_organisation: create(:organisation))
 
       expect(log).to be_valid
@@ -122,7 +122,7 @@ RSpec.shared_examples "shared log examples" do |log_type|
       expect(log).to be_valid
     end
 
-    it "is not valid if the DSA is not signed" do
+    it "is not valid if the Data Protection Confirmation is not signed" do
       log = build(log_type, owning_organisation: create(:organisation, :without_dpc))
 
       expect(log).to be_valid
@@ -134,7 +134,7 @@ RSpec.shared_examples "shared log examples" do |log_type|
       allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(true)
     end
 
-    it "is valid if the DSA is signed" do
+    it "is valid if the Data Protection Confirmation is signed" do
       log = build(log_type, :in_progress, owning_organisation: create(:organisation))
 
       expect(log).to be_valid
@@ -146,11 +146,25 @@ RSpec.shared_examples "shared log examples" do |log_type|
       expect(log).to be_valid
     end
 
-    it "is not valid if the DSA is not signed" do
+    it "is not valid if the Data Protection Confirmation is not signed" do
       log = build(log_type, owning_organisation: create(:organisation, :without_dpc))
 
       expect(log).not_to be_valid
-      expect(log.errors[:owning_organisation]).to eq(["Your organisation must accept the Data Sharing Agreement before you can create any logs."])
+      expect(log.errors[:owning_organisation_id]).to eq(["The organisation must accept the Data Sharing Agreement before it can be selected as the managing organisation."])
+    end
+
+    context "when updating" do
+      let(:log) { create(log_type, :in_progress) }
+      let(:org_with_dpc) { create(:organisation) }
+      let(:org_without_dpc) { create(:organisation, :without_dpc) }
+
+      it "is valid when changing to another org with a signed Data Protection Confirmation" do
+        expect { log.owning_organisation = org_with_dpc }.not_to change(log, :valid?)
+      end
+
+      it "invalid when changing to another org without a signed Data Protection Confirmation" do
+        expect { log.owning_organisation = org_without_dpc }.to change(log, :valid?).from(true).to(false)
+      end
     end
   end
 end
