@@ -38,17 +38,19 @@ class CreateLogActionsComponent < ViewComponent::Base
   end
 
   def upload_button_copy
-    if log_type == "lettings"
+    case log_type
+    when "lettings"
       "Upload lettings logs in bulk"
-    elsif FeatureToggle.bulk_upload_sales_logs? && log_type == "sales"
+    when "sales"
       "Upload sales logs in bulk"
     end
   end
 
   def upload_button_href
-    if log_type == "lettings"
+    case log_type
+    when "lettings"
       bulk_upload_lettings_log_path(id: "start")
-    elsif FeatureToggle.bulk_upload_sales_logs? && log_type == "sales"
+    when "sales"
       bulk_upload_sales_log_path(id: "start")
     end
   end
