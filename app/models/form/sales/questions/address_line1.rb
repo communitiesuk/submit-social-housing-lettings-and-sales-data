@@ -6,7 +6,7 @@ class Form::Sales::Questions::AddressLine1 < ::Form::Question
     @header = "Address line 1"
     @type = "text"
     @plain_label = true
-    @check_answer_label = "Q15 - Address"
+    @check_answer_label = "Q15 - Address lines 1 and 2"
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 
@@ -14,17 +14,6 @@ class Form::Sales::Questions::AddressLine1 < ::Form::Question
     [
       log.address_line1,
       log.address_line2,
-      log.postcode_full,
-      log.town_or_city,
-      log.county,
     ].select(&:present?).join("\n")
-  end
-
-  def get_extra_check_answer_value(log)
-    return unless log.is_la_inferred?
-
-    la = LocalAuthority.find_by(code: log.la)&.name
-
-    la.presence
   end
 end
