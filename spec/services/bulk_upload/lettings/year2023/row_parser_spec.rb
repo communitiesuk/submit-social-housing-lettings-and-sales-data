@@ -6,7 +6,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
   let(:now) { Time.zone.now.beginning_of_day }
 
   let(:attributes) { { bulk_upload: } }
-  let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: nil) }
+  let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: nil, year: 2023) }
   let(:user) { create(:user, organisation: owning_org) }
 
   let(:owning_org) { create(:organisation, :with_old_visible_id) }

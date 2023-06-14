@@ -65,7 +65,7 @@ RSpec.describe SalesLogsController, type: :request do
       context "with a request containing invalid json parameters" do
         let(:params) do
           {
-            "saledate": Date.new(2022, 4, 1),
+            "saledate": Time.zone.today,
             "purchid": "1",
             "ownershipsch": 1,
             "type": 2,
@@ -236,17 +236,35 @@ RSpec.describe SalesLogsController, type: :request do
           end
 
           context "with year filter" do
+            around do |example|
+              Timecop.freeze(2022, 12, 1) do
+                example.run
+              end
+              Timecop.return
+            end
+
+            before do
+              Timecop.freeze(2022, 4, 1)
+              sales_log_2022.update!(saledate: Time.zone.local(2022, 4, 1))
+              Timecop.freeze(2023, 1, 1)
+              sales_log_2022.update!(saledate: Time.zone.local(2023, 1, 1))
+            end
+
+            after do
+              Timecop.unfreeze
+            end
+
             let!(:sales_log_2022) do
-              FactoryBot.create(:sales_log, :in_progress,
+              FactoryBot.create(:sales_log, :completed,
                                 owning_organisation: organisation,
-                                saledate: Time.zone.local(2022, 4, 1))
+                                created_by: user,
+                                saledate: Time.zone.today)
             end
             let!(:sales_log_2023) do
-              sales_log = FactoryBot.build(:sales_log, :completed,
-                                           owning_organisation: organisation,
-                                           saledate: Time.zone.local(2023, 1, 1))
-              sales_log.save!(validate: false)
-              sales_log
+              FactoryBot.create(:sales_log,
+                                owning_organisation: organisation,
+                                created_by: user,
+                                saledate: Time.zone.today)
             end
 
             it "shows sales logs for multiple selected years" do

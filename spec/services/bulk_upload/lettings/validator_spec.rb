@@ -387,6 +387,13 @@ RSpec.describe BulkUpload::Lettings::Validator do
       let(:log_1) { build(:lettings_log, :completed, renttype: 1, created_by: user) }
       let(:log_2) { build(:lettings_log, :completed, renttype: 1, created_by: user) }
 
+      around do |example|
+        Timecop.freeze(Time.zone.local(2023, 2, 22)) do
+          example.run
+        end
+        Timecop.return
+      end
+
       before do
         file.write(BulkUpload::LettingsLogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
         file.write(BulkUpload::LettingsLogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)

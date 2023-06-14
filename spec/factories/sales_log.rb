@@ -2,14 +2,14 @@ FactoryBot.define do
   factory :sales_log do
     created_by { FactoryBot.create(:user) }
     owning_organisation { created_by.organisation }
-    created_at { Time.utc(2023, 2, 8, 16, 52, 15) }
-    updated_at { Time.utc(2023, 2, 8, 16, 52, 15) }
+    created_at { Time.zone.now }
+    updated_at { Time.zone.now }
     trait :in_progress do
       purchid { "PC123" }
       ownershipsch { 2 }
       type { 8 }
       jointpur { 2 }
-      saledate { Time.utc(2023, 2, 2, 10, 36, 49) }
+      saledate { Time.zone.today }
     end
     trait :shared_ownership do
       ownershipsch { 1 }
@@ -39,7 +39,7 @@ FactoryBot.define do
       purchid { rand(999_999_999).to_s }
       ownershipsch { 2 }
       type { 8 }
-      saledate { Time.utc(2023, 2, 2, 10, 36, 49) }
+      saledate { Time.zone.today }
       jointpur { 1 }
       beds { 2 }
       jointmore { 1 }
@@ -81,6 +81,9 @@ FactoryBot.define do
       income2nk { 0 }
       income2 { 10_000 }
       inc2mort { 1 }
+      uprn_known { 0 }
+      address_line1 { "Address line 1" }
+      town_or_city { "Town or city" }
       la_known { 1 }
       la { "E09000003" }
       savingsnk { 1 }
@@ -125,9 +128,14 @@ FactoryBot.define do
       is_la_inferred { false }
       mortgagelender { 5 }
       extrabor { 1 }
+      ethnic_group2 { 17 }
+      nationalbuy2 { 13 }
+      buy2living { 3 }
+      proplen_asked { 1 }
     end
     trait :with_uprn do
       uprn { rand(999_999_999_999).to_s }
+      uprn_known { 1 }
     end
     trait :deleted do
       status { 4 }
