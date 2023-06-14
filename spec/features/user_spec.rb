@@ -452,7 +452,6 @@ RSpec.describe "User Features" do
         expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
       end
     end
-
   end
 
   context "when signed in as support" do
@@ -730,6 +729,5 @@ RSpec.describe "User Features" do
         end
       end
     end
-
   end
 end
