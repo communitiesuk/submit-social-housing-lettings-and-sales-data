@@ -1373,6 +1373,14 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         end
       end
 
+      context "when 2" do
+        let(:attributes) { { bulk_upload:, field_120: "2" } }
+
+        it "sets value from correct mapping" do
+          expect(parser.log.net_income_known).to eq(1)
+        end
+      end
+
       context "when 3" do
         let(:attributes) { { bulk_upload:, field_120: "3" } }
 
