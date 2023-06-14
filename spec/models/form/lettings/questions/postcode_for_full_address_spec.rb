@@ -20,7 +20,7 @@ RSpec.describe Form::Lettings::Questions::PostcodeForFullAddress, type: :model d
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to be_nil
+    expect(question.check_answer_label).to eq("Q12 - Postcode")
   end
 
   it "has the correct type" do

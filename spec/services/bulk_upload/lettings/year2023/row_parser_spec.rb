@@ -340,8 +340,8 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
           it "fetches the question's check_answer_label if it exists, otherwise it gets the question's header" do
             parser.valid?
-            expect(parser.errors[:field_19]).to eql(["You must answer q12 - address"])
-            expect(parser.errors[:field_21]).to eql(["You must answer town or city"])
+            expect(parser.errors[:field_19]).to eql(["You must answer q12 - address lines 1 and 2"])
+            expect(parser.errors[:field_21]).to eql(["You must answer q12 - town or city"])
           end
         end
       end
@@ -937,8 +937,8 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "adds appropriate errors" do
           expect(parser.errors[:field_18]).to eql(["You must answer UPRN"])
-          expect(parser.errors[:field_19]).to eql(["You must answer q12 - address"])
-          expect(parser.errors[:field_21]).to eql(["You must answer town or city"])
+          expect(parser.errors[:field_19]).to eql(["You must answer q12 - address lines 1 and 2"])
+          expect(parser.errors[:field_21]).to eql(["You must answer q12 - town or city"])
         end
       end
 
