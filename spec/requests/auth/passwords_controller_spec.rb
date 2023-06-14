@@ -145,4 +145,12 @@ RSpec.describe Auth::PasswordsController, type: :request do
       end
     end
   end
+
+  context "when a password is reset" do
+    let(:email) { nil }
+
+    it "does not error if the email is nil or not in the params" do
+      expect { get account_password_reset_confirmation_path(email:) }.not_to raise_error
+    end
+  end
 end

@@ -4,7 +4,7 @@ class Auth::PasswordsController < Devise::PasswordsController
   def reset_confirmation
     self.resource = resource_class.new
     @email = params["email"]
-    if @email.empty?
+    if @email.blank?
       resource.errors.add :email, I18n.t("validations.email.blank")
       render "devise/passwords/new", status: :unprocessable_entity
     elsif !email_valid?(@email)
