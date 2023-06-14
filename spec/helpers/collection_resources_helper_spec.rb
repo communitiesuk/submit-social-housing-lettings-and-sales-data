@@ -7,13 +7,13 @@ RSpec.describe CollectionResourcesHelper do
   describe "when displaying file metadata" do
     context "with pages" do
       it "returns correct metadata" do
-        expect(metadata_helper("2023_24_lettings_paper_form.pdf", 8)).to eq("PDF, 286 KB, 8 pages")
+        expect(file_type_size_and_pages("2023_24_lettings_paper_form.pdf", number_of_pages: 8)).to eq("PDF, 286 KB, 8 pages")
       end
     end
 
     context "without pages" do
       it "returns correct metadata" do
-        expect(metadata_helper("bulk-upload-lettings-template-2023-24.xlsx")).to eq("Microsoft Excel, 15 KB")
+        expect(file_type_size_and_pages("bulk-upload-lettings-template-2023-24.xlsx")).to eq("Microsoft Excel, 15 KB")
       end
     end
   end
