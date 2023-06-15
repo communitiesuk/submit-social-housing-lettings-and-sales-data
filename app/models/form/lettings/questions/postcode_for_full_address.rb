@@ -17,7 +17,9 @@ class Form::Lettings::Questions::PostcodeForFullAddress < ::Form::Question
       },
     }
     @plain_label = true
-    @check_answer_label = "Q12 - Postcode"
+    @check_answer_label = "Postcode"
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
+    @question_number = 12
+    @hide_question_number_on_page = true
   end
 end
