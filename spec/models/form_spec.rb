@@ -190,8 +190,6 @@ RSpec.describe Form, type: :model do
         FormHandler.instance.use_real_forms!
 
         example.run
-
-        FormHandler.instance.use_fake_forms!
       end
 
       it "finds the path to the section after" do
@@ -200,6 +198,20 @@ RSpec.describe Form, type: :model do
         lettings_log.needstype = 2
         lettings_log.postcode_known = 0
         expect(form.next_incomplete_section_redirect_path(subsection, lettings_log)).to eq("joint")
+      end
+    end
+
+    context "when a log has status in progress but all subsections are complete" do
+      let(:lettings_log) { build(:lettings_log, :completed, status: "in_progress") }
+      let(:subsection) { form.get_subsection("setup") }
+
+      before do
+        Timecop.return
+        FormHandler.instance.use_real_forms!
+      end
+
+      it "does not raise a Stack Error" do
+        expect { form.next_incomplete_section_redirect_path(subsection, lettings_log) }.not_to raise_error
       end
     end
   end
