@@ -205,10 +205,9 @@ RSpec.describe Form, type: :model do
       let(:lettings_log) { build(:lettings_log, :completed, status: "in_progress") }
       let(:subsection) { form.get_subsection("setup") }
 
-      around do |example|
+      before do
+        Timecop.return
         FormHandler.instance.use_real_forms!
-
-        example.run
       end
 
       it "should not raise a Stack Error" do
