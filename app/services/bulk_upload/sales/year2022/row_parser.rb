@@ -1057,9 +1057,9 @@ private
       fields.each do |field|
         unless errors.any? { |e| fields.include?(e.attribute) }
           if setup_question?(question)
-            errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase), category: :setup)
+            errors.add(field, I18n.t("validations.not_answered", question: question.display_label&.downcase), category: :setup)
           else
-            errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase))
+            errors.add(field, I18n.t("validations.not_answered", question: question.display_label&.downcase))
           end
         end
       end

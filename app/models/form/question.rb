@@ -41,7 +41,7 @@ class Form::Question
       @check_answers_card_number = hsh["check_answers_card_number"] || 0
       @unresolved_hint_text = hsh["unresolved_hint_text"]
       @question_number = hsh["question_number"]
-      @hide_question_number_on_page = hsh["hide_question_number_on_page"]
+      @hide_question_number_on_page = hsh["hide_question_number_on_page"] || false
       @plain_label = hsh["plain_label"]
       @error_label = hsh["error_label"]
       @disable_clearing_if_not_routed_or_dynamic_answer_options = hsh["disable_clearing_if_not_routed_or_dynamic_answer_options"]
