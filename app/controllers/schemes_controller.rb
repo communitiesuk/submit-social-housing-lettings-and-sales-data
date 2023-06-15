@@ -27,7 +27,7 @@ class SchemesController < ApplicationController
   end
 
   def new_deactivation
-    @scheme_deactivation_period = if @scheme.deactivates_in_more_than_6_months?
+    @scheme_deactivation_period = if @scheme.deactivates_in_a_long_time?
                                     @scheme.open_deactivation || SchemeDeactivationPeriod.new
                                   else
                                     SchemeDeactivationPeriod.new

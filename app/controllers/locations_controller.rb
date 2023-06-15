@@ -149,7 +149,7 @@ class LocationsController < ApplicationController
   def show; end
 
   def new_deactivation
-    @location_deactivation_period = if @location.deactivates_in_more_than_6_months?
+    @location_deactivation_period = if @location.deactivates_in_a_long_time?
                                       @location.open_deactivation || LocationDeactivationPeriod.new
                                     else
                                       LocationDeactivationPeriod.new

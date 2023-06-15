@@ -37,7 +37,7 @@ module TagHelper
 
   def status_tag_from_resource(resource, classes = [])
     status = resource.status
-    status = :active if resource.deactivates_in_more_than_6_months?
+    status = :active if resource.deactivates_in_a_long_time?
     status_tag(status, classes)
   end
 end

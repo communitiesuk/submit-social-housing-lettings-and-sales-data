@@ -69,7 +69,7 @@ module LocationsHelper
   end
 
   def toggle_location_link(location)
-    return govuk_button_link_to "Deactivate this location", scheme_location_new_deactivation_path(location.scheme, location), warning: true if location.active? || location.deactivates_in_more_than_6_months?
+    return govuk_button_link_to "Deactivate this location", scheme_location_new_deactivation_path(location.scheme, location), warning: true if location.active? || location.deactivates_in_a_long_time?
     return govuk_button_link_to "Reactivate this location", scheme_location_new_reactivation_path(location.scheme, location) if location.deactivated?
   end
 
