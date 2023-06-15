@@ -12,13 +12,14 @@
 
       <h2 class="govuk-heading-s">Download template</h2>
 
+      <p class="govuk-body govuk-!-margin-bottom-2">Use one of these templates to upload logs for 2023/24:</p>
       <ul class="govuk-list govuk-list--bullet">
         <li>
-          If your organisation is new to using bulk upload or you have updated your HMS export, use <%= govuk_link_to "this template (improved question ordering)", @form.template_path %>.
+          <%= govuk_link_to "New template", @form.template_path %>: In this template, the questions are in the same order as the 2023/24 paper form and web form.
         </li>
 
         <li>
-          If your organisation was using bulk upload on the previous CORE website and hasn't changed its HMS to be compatible with the new CORE service, use <%= govuk_link_to "this template", @form.old_template_path %>.
+          <%= govuk_link_to "Legacy template", @form.old_template_path %>: In this template, the questions are in the same order as the 2022/23 template, with new questions added on to the end.
         </li>
       </ul>
 
