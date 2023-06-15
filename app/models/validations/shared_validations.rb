@@ -117,6 +117,14 @@ module Validations::SharedValidations
     end
   end
 
+  def validate_owning_organisation_data_sharing_agremeent_signed(record)
+    return unless FeatureToggle.new_data_protection_confirmation?
+
+    if record.owning_organisation_id_changed? && record.owning_organisation.present? && !record.owning_organisation.data_protection_confirmed?
+      record.errors.add :owning_organisation_id, I18n.t("validations.setup.owning_organisation.data_sharing_agreement_not_signed")
+    end
+  end
+
 private
 
   def person_is_partner?(relationship)

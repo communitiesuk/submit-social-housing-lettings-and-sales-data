@@ -4,8 +4,8 @@ RSpec.describe Validations::SharedValidations do
   subject(:shared_validator) { validator_class.new }
 
   let(:validator_class) { Class.new { include Validations::SharedValidations } }
-  let(:lettings_log) { FactoryBot.create(:lettings_log) }
-  let(:sales_log) { FactoryBot.create(:sales_log, :completed) }
+  let(:lettings_log) { create(:lettings_log) }
+  let(:sales_log) { create(:sales_log, :completed) }
   let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
 
   describe "numeric min max validations" do
@@ -172,6 +172,71 @@ RSpec.describe Validations::SharedValidations do
         sales_log.mscharge = 30.74
         shared_validator.validate_numeric_step(sales_log)
         expect(sales_log.errors).to be_empty
+      end
+    end
+
+    %i[sales_log lettings_log].each do |log_type|
+      describe "validate_owning_organisation_data_sharing_agremeent_signed" do
+        before do
+          allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(false)
+        end
+
+        it "is valid if the DSA is signed" do
+          log = build(log_type, :in_progress, owning_organisation: create(:organisation))
+
+          expect(log).to be_valid
+        end
+
+        it "is valid when owning_organisation nil" do
+          log = build(log_type, owning_organisation: nil)
+
+          expect(log).to be_valid
+        end
+
+        it "is not valid if the DSA is not signed" do
+          log = build(log_type, owning_organisation: create(:organisation, :without_dpc))
+
+          expect(log).to be_valid
+        end
+      end
+
+      context "when flag enabled" do
+        before do
+          allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(true)
+        end
+
+        it "is valid if the Data Protection Confirmation is signed" do
+          log = build(log_type, :in_progress, owning_organisation: create(:organisation))
+
+          expect(log).to be_valid
+        end
+
+        it "is valid when owning_organisation nil" do
+          log = build(log_type, owning_organisation: nil)
+
+          expect(log).to be_valid
+        end
+
+        it "is not valid if the Data Protection Confirmation is not signed" do
+          log = build(log_type, owning_organisation: create(:organisation, :without_dpc))
+
+          expect(log).not_to be_valid
+          expect(log.errors[:owning_organisation_id]).to eq(["The organisation must accept the Data Sharing Agreement before it can be selected as the owning organisation."])
+        end
+
+        context "when updating" do
+          let(:log) { create(log_type, :in_progress) }
+          let(:org_with_dpc) { create(:organisation) }
+          let(:org_without_dpc) { create(:organisation, :without_dpc) }
+
+          it "is valid when changing to another org with a signed Data Protection Confirmation" do
+            expect { log.owning_organisation = org_with_dpc }.not_to change(log, :valid?)
+          end
+
+          it "invalid when changing to another org without a signed Data Protection Confirmation" do
+            expect { log.owning_organisation = org_without_dpc }.to change(log, :valid?).from(true).to(false).and(change { log.errors[:owning_organisation_id] }.to(["The organisation must accept the Data Sharing Agreement before it can be selected as the owning organisation."]))
+          end
+        end
       end
     end
   end
