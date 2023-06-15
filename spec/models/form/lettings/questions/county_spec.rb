@@ -20,7 +20,11 @@ RSpec.describe Form::Lettings::Questions::County, type: :model do
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Q12 - County")
+    expect(question.check_answer_label).to eq("County")
+  end
+
+  it "has the correct question_number" do
+    expect(question.question_number).to eq(12)
   end
 
   it "has the correct type" do
@@ -41,9 +45,5 @@ RSpec.describe Form::Lettings::Questions::County, type: :model do
 
   it "has the correct check_answers_card_number" do
     expect(question.check_answers_card_number).to be_nil
-  end
-
-  it "has the correct hidden_in_check_answers" do
-    expect(question.hidden_in_check_answers?).to eq(true)
   end
 end
