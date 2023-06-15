@@ -246,9 +246,38 @@ RSpec.describe LettingsLogsController, type: :request do
         end
 
         it "does not have a button for creating sales logs" do
-          get "/lettings-logs", headers:, params: {}
+          get lettings_logs_path, headers:, params: {}
           page.assert_selector(".govuk-button", text: "Create a new sales log", count: 0)
           page.assert_selector(".govuk-button", text: "Create a new lettings log", count: 1)
+        end
+
+        context "and the state of filters and search is such that display_delete_logs returns true" do
+          before do
+            allow_any_instance_of(LogListHelper).to receive(:display_delete_logs?).and_return(true) # rubocop:disable RSpec/AnyInstance
+          end
+
+          it "displays the delete logs button with the correct path if there are logs visibile" do
+            get lettings_logs_path(search: "LC783")
+            expect(page).to have_link "Delete logs", href: delete_logs_lettings_logs_path(search: "LC783")
+          end
+
+          it "does not display the delete logs button if there are no logs displayed" do
+            LettingsLog.destroy_all
+            get lettings_logs_path
+            expect(page).not_to have_link "Delete logs"
+          end
+        end
+
+        context "and the state of filters and search is such that display_delete_logs returns false" do
+          before do
+            allow_any_instance_of(LogListHelper).to receive(:display_delete_logs?).and_return(false) # rubocop:disable RSpec/AnyInstance
+          end
+
+          it "does not display the delete logs button even if there are logs displayed" do
+            get lettings_logs_path
+            expect(page).to have_selector "article.app-log-summary"
+            expect(page).not_to have_link "Delete logs"
+          end
         end
       end
 
@@ -347,7 +376,6 @@ RSpec.describe LettingsLogsController, type: :request do
               Timecop.freeze(2022, 3, 1) do
                 example.run
               end
-              Timecop.return
             end
 
             let!(:lettings_log_2021) do
@@ -538,7 +566,7 @@ RSpec.describe LettingsLogsController, type: :request do
         end
       end
 
-      context "when the user is not a customer support user" do
+      context "when the user is a data provider" do
         before do
           sign_in user
         end
@@ -1348,7 +1376,7 @@ RSpec.describe LettingsLogsController, type: :request do
     context "when user not authorised" do
       let(:user) { create(:user) }
 
-      it "returns 404" do
+      it "returns 401" do
         delete_request
         expect(response).to have_http_status(:unauthorized)
       end
@@ -1400,7 +1428,7 @@ RSpec.describe LettingsLogsController, type: :request do
     end
   end
 
-  describe "GET #csv-download" do
+  describe "GET csv-download" do
     let(:page) { Capybara::Node::Simple.new(response.body) }
     let(:user) { FactoryBot.create(:user) }
     let(:headers) { { "Accept" => "text/html" } }
@@ -1482,7 +1510,7 @@ RSpec.describe LettingsLogsController, type: :request do
     end
   end
 
-  describe "POST #email-csv" do
+  describe "POST email-csv" do
     let(:other_organisation) { FactoryBot.create(:organisation) }
     let(:user) { FactoryBot.create(:user, :support) }
 

@@ -1,0 +1,25 @@
+<% title = "Delete logs" %>
+<% content_for :title, title %>
+<% content_for :before_content do %>
+  <%= govuk_back_link(href: :back) %>
+<% end %>
+
+<h1 class="govuk-heading-l">
+  <span class="govuk-caption-l"><%= title %></span>
+  Are you sure you want to delete these logs?
+</h1>
+<% log_count = @delete_logs_form.selected_ids.count %>
+<p>You've selected <%= log_count %> <%= "log".pluralize(log_count) %> to delete</p>
+
+<%= govuk_warning_text(icon_fallback_text: "Danger") do %>
+  You will not be able to undo this action
+<% end %>
+
+<div class="govuk-button-group">
+  <%= govuk_button_to "Delete logs", @delete_logs_form.delete_path, method: "delete", params: { ids: @delete_logs_form.selected_ids } %>
+  <%= form_with url: @delete_logs_form.delete_path do |f| %>
+    <%= f.hidden_field :selected_ids, value: @delete_logs_form.selected_ids %>
+    <%= f.hidden_field :search, value: @delete_logs_form.search_term %>
+    <%= f.govuk_submit "Cancel", secondary: true %>
+  <% end %>
+</div>

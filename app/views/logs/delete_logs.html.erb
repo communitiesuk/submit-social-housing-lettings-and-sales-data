@@ -1,0 +1,22 @@
+<% title = "Delete logs" %>
+<% content_for :title, title %>
+<% content_for :before_content do %>
+  <%= govuk_back_link(href: :back) %>
+<% end %>
+
+<h1 class="govuk-heading-l">
+  <span class="govuk-caption-l"><%= title %></span>
+  Review the logs you want to delete
+</h1>
+<p>You've selected <%= @delete_logs_form.log_count %> <%= "log".pluralize(@delete_logs_form.log_count) %> to delete</p>
+
+<div class="govuk-checkboxes govuk-checkboxes--small">
+  <%= form_with model: @delete_logs_form, url: @delete_logs_form.delete_confirmation_path do |f| %>
+    <%= f.hidden_field :search_term, value: @delete_logs_form.search_term %>
+    <%= f.govuk_error_summary %>
+    <%= render partial: @delete_logs_form.table_partial_name, locals: { f:, delete_logs_form: @delete_logs_form } %>
+    <%= f.govuk_submit "Continue" do %>
+      <%= govuk_button_link_to "Cancel", @delete_logs_form.back_to_logs_path, secondary: true %>
+    <% end %>
+  <% end %>
+</div>
