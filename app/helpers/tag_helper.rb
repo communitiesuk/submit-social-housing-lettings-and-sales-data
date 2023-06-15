@@ -27,13 +27,17 @@ module TagHelper
     deactivated: "grey",
   }.freeze
 
-  def status_tag(resource, classes = [])
-    display_status = resource.status
-    display_status = :active if resource.deactivates_in_more_than_6_months?
+  def status_tag(status, classes = [])
     govuk_tag(
       classes:,
-      colour: COLOUR[display_status.to_sym],
-      text: TEXT[display_status.to_sym],
+      colour: COLOUR[status.to_sym],
+      text: TEXT[status.to_sym],
     )
+  end
+
+  def status_tag_from_resource(resource, classes = [])
+    status = resource.status
+    status = :active if resource.deactivates_in_more_than_6_months?
+    status_tag(status, classes)
   end
 end

@@ -14,7 +14,7 @@ module SchemesHelper
       { name: "Level of support given", value: scheme.support_type },
       { name: "Intended length of stay", value: scheme.intended_stay },
       { name: "Availability", value: scheme_availability(scheme) },
-      { name: "Status", value: status_tag(scheme.status) },
+      { name: "Status", value: status_tag_from_resource(scheme) },
     ]
 
     if user.data_coordinator?
