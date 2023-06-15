@@ -124,10 +124,7 @@ class Form
   def next_incomplete_section_redirect_path(subsection, log)
     subsection_ids = subsections.map(&:id)
 
-    if log.status == "completed"
-      return first_question_in_last_subsection(subsection_ids)
-    elsif log.calculate_status == "completed"
-      log.update!(status: "completed")
+    if log.status == "completed" || log.calculate_status == "completed" # if a log's status in in progress but then fields are made optional, all its subsections are complete, resulting in a stack error
       return first_question_in_last_subsection(subsection_ids)
     end
 
