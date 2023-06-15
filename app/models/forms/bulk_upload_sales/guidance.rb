@@ -16,7 +16,7 @@ module Forms
       end
 
       def old_template_path
-        Forms::BulkUploadLettings::PrepareYourFile.new.old_template_path
+        Forms::BulkUploadSales::PrepareYourFile.new.old_template_path
       end
 
       def template_path
