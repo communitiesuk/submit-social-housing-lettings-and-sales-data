@@ -9,8 +9,6 @@ class Log < ApplicationRecord
   belongs_to :bulk_upload, optional: true
 
   before_save :update_status!
-  before_validation :data_protection_confirmation_signed?, on: :create
-  validate :data_protection_confirmation_signed?, on: :update, if: :owning_organisation_id_changed?
 
   STATUS = {
     "not_started" => 0,
@@ -178,14 +176,6 @@ class Log < ApplicationRecord
   end
 
 private
-
-  def data_protection_confirmation_signed?
-    return unless FeatureToggle.new_data_protection_confirmation?
-    return unless owning_organisation
-    return if owning_organisation.data_protection_confirmed?
-
-    errors.add :owning_organisation_id, I18n.t("validations.organisation.data_sharing_agreement_not_signed")
-  end
 
   # Handle logs that are older than previous collection start date
   def older_than_previous_collection_year?
