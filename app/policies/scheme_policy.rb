@@ -49,6 +49,7 @@ class SchemePolicy
     new_deactivation?
     new_reactivation?
     deactivate?
+    reactivate?
     details?
     support?
     deactivate_confirm?
