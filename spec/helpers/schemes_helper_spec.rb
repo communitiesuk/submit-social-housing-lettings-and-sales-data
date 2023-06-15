@@ -195,14 +195,6 @@ RSpec.describe SchemesHelper do
         expect(display_scheme_attributes(scheme, coordinator_user)).to eq(attributes)
       end
 
-      context "when the scheme toggle is disabled" do
-        it "doesn't show the scheme status" do
-          allow(FeatureToggle).to receive(:scheme_toggle_enabled?).and_return(false)
-          attributes = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Status" }
-          expect(attributes).to be_nil
-        end
-      end
-
       context "when the managing organisation is the owning organisation" do
         it "doesn't show the organisation providing support" do
           attributes = display_scheme_attributes(scheme_where_managing_organisation_is_owning_organisation, support_user).find { |x| x[:name] == "Organisation providing support" }

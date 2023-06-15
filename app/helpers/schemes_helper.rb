@@ -14,11 +14,8 @@ module SchemesHelper
       { name: "Level of support given", value: scheme.support_type },
       { name: "Intended length of stay", value: scheme.intended_stay },
       { name: "Availability", value: scheme_availability(scheme) },
+      { name: "Status", value: status_tag(scheme.status) },
     ]
-
-    if FeatureToggle.scheme_toggle_enabled?
-      base_attributes.append({ name: "Status", value: status_tag(scheme.status) })
-    end
 
     if user.data_coordinator?
       base_attributes.delete_if { |item| item[:name] == "Housing stock owned by" }
