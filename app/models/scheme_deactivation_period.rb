@@ -4,7 +4,7 @@ class SchemeDeactivationPeriodValidator < ActiveModel::Validator
   def validate(record)
     scheme = record.scheme
     recent_deactivation = scheme.scheme_deactivation_periods.deactivations_without_reactivation.first
-    if recent_deactivation.present?
+    if recent_deactivation.present? && recent_deactivation.deactivation_date <= 6.months.from_now
       validate_reactivation(record, recent_deactivation, scheme)
     else
       validate_deactivation(record, scheme)
