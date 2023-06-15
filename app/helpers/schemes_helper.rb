@@ -10,7 +10,6 @@ module SchemesHelper
       { name: "Support services provided by", value: scheme.arrangement_type },
       { name: "Primary client group", value: scheme.primary_client_group },
       { name: "Has another client group", value: scheme.has_other_client_group },
-      { name: "Secondary client group", value: scheme.secondary_client_group },
       { name: "Level of support given", value: scheme.support_type },
       { name: "Intended length of stay", value: scheme.intended_stay },
       { name: "Availability", value: scheme_availability(scheme) },
@@ -25,7 +24,9 @@ module SchemesHelper
     end
 
     if scheme.has_other_client_group == "Yes"
-      base_attributes.append
+      insertion_index = base_attributes.index { |attribute| attribute[:name] == "Has another client group" } + 1
+      base_attributes.insert(insertion_index, { name: "Secondary client group", value: scheme.secondary_client_group })
+
     end
 
     base_attributes
