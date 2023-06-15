@@ -20,7 +20,7 @@ RSpec.describe Form::Sales::Pages::OutrightOwnershipType, type: :model do
   end
 
   it "has the correct header" do
-    expect(page.header).to be_nil
+    expect(page.header).to eq("Outright ownership type")
   end
 
   it "has the correct description" do

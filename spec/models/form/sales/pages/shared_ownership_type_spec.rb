@@ -22,7 +22,7 @@ RSpec.describe Form::Sales::Pages::SharedOwnershipType, type: :model do
   end
 
   it "has the correct header" do
-    expect(page.header).to be_nil
+    expect(page.header).to eq("Shared Ownership")
   end
 
   it "has the correct description" do

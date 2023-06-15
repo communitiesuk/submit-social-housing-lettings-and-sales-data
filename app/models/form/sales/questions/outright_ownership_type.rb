@@ -5,6 +5,8 @@ class Form::Sales::Questions::OutrightOwnershipType < ::Form::Question
     @check_answer_label = "Type of outright sale"
     @header = "What is the type of outright sale?"
     @type = "radio"
+    @guidance_partial = "outright_sale_type_definitions"
+    @guidance_position = GuidancePosition::TOP
     @answer_options = ANSWER_OPTIONS
     @conditional_for = {
       "othtype" => [12],

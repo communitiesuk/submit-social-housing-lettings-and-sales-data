@@ -2,6 +2,7 @@ class Form::Sales::Pages::DiscountedOwnershipType < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "discounted_ownership_type"
+    @header = "Discounted ownership type"
     @depends_on = [{
       "ownershipsch" => 2,
     }]

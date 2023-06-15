@@ -5,6 +5,8 @@ class Form::Sales::Questions::DiscountedOwnershipType < ::Form::Question
     @check_answer_label = "Type of discounted ownership sale"
     @header = "What is the type of discounted ownership sale?"
     @type = "radio"
+    @guidance_partial = "discounted_ownership_type_definitions"
+    @guidance_position = GuidancePosition::TOP
     @answer_options = ANSWER_OPTIONS
     @question_number = 5
   end
