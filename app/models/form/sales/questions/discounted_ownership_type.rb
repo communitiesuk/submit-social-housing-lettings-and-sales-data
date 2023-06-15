@@ -5,7 +5,7 @@ class Form::Sales::Questions::DiscountedOwnershipType < ::Form::Question
     @check_answer_label = "Type of discounted ownership sale"
     @header = "What is the type of discounted ownership sale?"
     @type = "radio"
-    @guidance_partial = "discounted_ownership_type_definitions"
+    @guidance_partial = guidance_partial
     @guidance_position = GuidancePosition::TOP
     @answer_options = ANSWER_OPTIONS
     @question_number = 5
@@ -20,4 +20,8 @@ class Form::Sales::Questions::DiscountedOwnershipType < ::Form::Question
     "21" => { "value" => "Social HomeBuy for outright purchase" },
     "22" => { "value" => "Any other equity loan scheme" },
   }.freeze
+
+  def guidance_partial
+    "discounted_ownership_type_definitions" if form.start_date.year >= 2023
+  end
 end

@@ -5,7 +5,7 @@ class Form::Sales::Questions::OutrightOwnershipType < ::Form::Question
     @check_answer_label = "Type of outright sale"
     @header = "What is the type of outright sale?"
     @type = "radio"
-    @guidance_partial = "outright_sale_type_definitions"
+    @guidance_partial = guidance_partial
     @guidance_position = GuidancePosition::TOP
     @answer_options = ANSWER_OPTIONS
     @conditional_for = {
@@ -18,4 +18,8 @@ class Form::Sales::Questions::OutrightOwnershipType < ::Form::Question
     "10" => { "value" => "Outright" },
     "12" => { "value" => "Other sale" },
   }.freeze
+
+  def guidance_partial
+    "outright_sale_type_definitions" if form.start_date.year >= 2023
+  end
 end
