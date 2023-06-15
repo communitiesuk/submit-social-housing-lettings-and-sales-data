@@ -24,7 +24,7 @@ module LocationsHelper
   end
 
   def display_location_attributes(location)
-    base_attributes = [
+    [
       { name: "Postcode", value: location.postcode, attribute: "postcode" },
       { name: "Location name", value: location.name, attribute: "name" },
       { name: "Local authority", value: formatted_local_authority_timeline(location, "name"), attribute: "local_authority" },
@@ -33,13 +33,8 @@ module LocationsHelper
       { name: "Mobility standards", value: location.mobility_type, attribute: "mobility_standards" },
       { name: "Location code", value: formatted_local_authority_timeline(location, "code"), attribute: "location_code" },
       { name: "Availability", value: location_availability(location), attribute: "availability" },
+      { name: "Status", value: location.status, attribute: "status" },
     ]
-
-    if FeatureToggle.location_toggle_enabled?
-      base_attributes.append({ name: "Status", value: location.status, attribute: "status" })
-    end
-
-    base_attributes
   end
 
   def display_location_attributes_for_check_answers(location)
