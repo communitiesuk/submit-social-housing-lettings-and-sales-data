@@ -153,19 +153,6 @@ RSpec.describe LocationsController, type: :request do
         end
       end
 
-      it "shows locations with correct data when the new locations layout feature toggle is disabled" do
-        allow(FeatureToggle).to receive(:location_toggle_enabled?).and_return(false)
-        get "/schemes/#{scheme.id}/locations"
-        locations.each do |location|
-          expect(page).to have_content(location.id)
-          expect(page).to have_content(location.postcode)
-          expect(page).to have_content(location.type_of_unit)
-          expect(page).to have_content(location.mobility_type)
-          expect(page).to have_content(location.location_admin_district)
-          expect(page).to have_content(location.startdate&.to_formatted_s(:govuk_date))
-        end
-      end
-
       it "has page heading" do
         expect(page).to have_content(scheme.service_name)
       end
@@ -292,19 +279,6 @@ RSpec.describe LocationsController, type: :request do
           expect(page).to have_content(location.status)
         end
         expect(page).to have_button("Add a location")
-      end
-
-      it "shows locations with correct data when the new locations layout feature toggle is disabled" do
-        allow(FeatureToggle).to receive(:location_toggle_enabled?).and_return(false)
-        get "/schemes/#{scheme.id}/locations"
-        locations.each do |location|
-          expect(page).to have_content(location.id)
-          expect(page).to have_content(location.postcode)
-          expect(page).to have_content(location.type_of_unit)
-          expect(page).to have_content(location.mobility_type)
-          expect(page).to have_content(location.location_admin_district)
-          expect(page).to have_content(location.startdate&.to_formatted_s(:govuk_date))
-        end
       end
 
       it "has page heading" do

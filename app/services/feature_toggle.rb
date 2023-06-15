@@ -12,10 +12,6 @@ class FeatureToggle
     Rails.env.production? || Rails.env.test? || Rails.env.staging? || Rails.env.review?
   end
 
-  def self.location_toggle_enabled?
-    true
-  end
-
   def self.bulk_upload_duplicate_log_check_enabled?
     !Rails.env.staging?
   end
