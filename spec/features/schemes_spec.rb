@@ -149,20 +149,44 @@ RSpec.describe "Schemes scheme Features" do
         context "when I click to see individual scheme" do
           let(:scheme) { schemes.first }
 
-          before do
-            click_link(scheme.service_name)
+          context "when there is a secondary client group" do
+            before do
+              click_link(scheme.service_name)
+            end
+            it "shows me details about the selected scheme" do
+              expect(page).to have_content(schemes.first.id_to_display)
+              expect(page).to have_content(schemes.first.service_name)
+              expect(page).to have_content(schemes.first.sensitive)
+              expect(page).to have_content(schemes.first.scheme_type)
+              expect(page).to have_content(schemes.first.registered_under_care_act)
+              expect(page).to have_content(schemes.first.primary_client_group)
+              expect(page).to have_content(schemes.first.has_other_client_group)
+              expect(page).to have_content(schemes.first.secondary_client_group)
+              expect(page).to have_content(schemes.first.support_type)
+              expect(page).to have_content(schemes.first.intended_stay)
+            end
           end
 
-          it "shows me details about the selected scheme" do
-            expect(page).to have_content(schemes.first.id_to_display)
-            expect(page).to have_content(schemes.first.service_name)
-            expect(page).to have_content(schemes.first.sensitive)
-            expect(page).to have_content(schemes.first.scheme_type)
-            expect(page).to have_content(schemes.first.registered_under_care_act)
-            expect(page).to have_content(schemes.first.primary_client_group)
-            expect(page).to have_content(schemes.first.secondary_client_group)
-            expect(page).to have_content(schemes.first.support_type)
-            expect(page).to have_content(schemes.first.intended_stay)
+          context "when there is no secondary client group" do
+            before do
+              scheme.has_other_client_group = "No"
+              scheme.secondary_client_group = nil
+              scheme.save!
+              click_link(scheme.service_name)
+            end
+
+            it "shows me details about the selected scheme" do
+              expect(page).to have_content(schemes.first.id_to_display)
+              expect(page).to have_content(schemes.first.service_name)
+              expect(page).to have_content(schemes.first.sensitive)
+              expect(page).to have_content(schemes.first.scheme_type)
+              expect(page).to have_content(schemes.first.registered_under_care_act)
+              expect(page).to have_content(schemes.first.primary_client_group)
+              expect(page).to have_content(schemes.first.has_other_client_group)
+              expect(page).not_to have_content("Secondary client group")
+              expect(page).to have_content(schemes.first.support_type)
+              expect(page).to have_content(schemes.first.intended_stay)
+            end
           end
 
           context "when I click to go back" do
@@ -685,23 +709,50 @@ RSpec.describe "Schemes scheme Features" do
 
           before do
             FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), location: deactivated_location)
-            click_link(scheme.service_name)
           end
 
-          it "shows me details about the selected scheme" do
-            expect(page).to have_content(schemes.first.id_to_display)
-            expect(page).to have_content(schemes.first.service_name)
-            expect(page).to have_content(schemes.first.sensitive)
-            expect(page).to have_content(schemes.first.scheme_type)
-            expect(page).to have_content(schemes.first.registered_under_care_act)
-            expect(page).to have_content(schemes.first.primary_client_group)
-            expect(page).to have_content(schemes.first.secondary_client_group)
-            expect(page).to have_content(schemes.first.support_type)
-            expect(page).to have_content(schemes.first.intended_stay)
+          context "when there is a secondary client group" do
+            before do
+              click_link(scheme.service_name)
+            end
+            it "shows me details about the selected scheme" do
+              expect(page).to have_content(schemes.first.id_to_display)
+              expect(page).to have_content(schemes.first.service_name)
+              expect(page).to have_content(schemes.first.sensitive)
+              expect(page).to have_content(schemes.first.scheme_type)
+              expect(page).to have_content(schemes.first.registered_under_care_act)
+              expect(page).to have_content(schemes.first.primary_client_group)
+              expect(page).to have_content(schemes.first.has_other_client_group)
+              expect(page).to have_content(schemes.first.secondary_client_group)
+              expect(page).to have_content(schemes.first.support_type)
+              expect(page).to have_content(schemes.first.intended_stay)
+            end
           end
 
+          context "when there is no secondary client group" do
+            before do
+              scheme.has_other_client_group = "No"
+              scheme.secondary_client_group = nil
+              scheme.save!
+              click_link(scheme.service_name)
+            end
+
+            it "shows me details about the selected scheme" do
+              expect(page).to have_content(schemes.first.id_to_display)
+              expect(page).to have_content(schemes.first.service_name)
+              expect(page).to have_content(schemes.first.sensitive)
+              expect(page).to have_content(schemes.first.scheme_type)
+              expect(page).to have_content(schemes.first.registered_under_care_act)
+              expect(page).to have_content(schemes.first.primary_client_group)
+              expect(page).to have_content(schemes.first.has_other_client_group)
+              expect(page).not_to have_content("Secondary client group")
+              expect(page).to have_content(schemes.first.support_type)
+              expect(page).to have_content(schemes.first.intended_stay)
+            end
+          end
           context "when I click to change scheme name" do
             before do
+              click_link(scheme.service_name)
               click_link("Change", href: "/schemes/#{scheme.id}/edit-name", match: :first)
             end
 
@@ -734,6 +785,7 @@ RSpec.describe "Schemes scheme Features" do
 
           context "when I click to see locations" do
             before do
+              click_link(scheme.service_name)
               click_link "Locations"
             end
 
