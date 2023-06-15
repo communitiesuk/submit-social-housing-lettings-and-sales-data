@@ -124,6 +124,14 @@ RSpec.describe FiltersHelper do
       end
     end
 
+    context "when the user is currently in a bulk upload journey" do
+      let(:filters) { { "bulk_upload_id" => "3456" } }
+
+      it "returns true" do
+        expect(result).to be true
+      end
+    end
+
     context "when a range of filters are applied" do
       let(:filters) do
         {

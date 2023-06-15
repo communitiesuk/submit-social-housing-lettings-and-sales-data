@@ -17,9 +17,10 @@ module FiltersHelper
 
     filters = JSON.parse(filters_json)
     filters["user"] == "yours" ||
-      filters["organisation"]&.present? ||
+      filters["organisation"].present? ||
       filters["status"]&.compact_blank&.any? ||
-      filters["years"]&.compact_blank&.any?
+      filters["years"]&.compact_blank&.any? ||
+      filters["bulk_upload_id"].present?
   end
 
   def status_filters

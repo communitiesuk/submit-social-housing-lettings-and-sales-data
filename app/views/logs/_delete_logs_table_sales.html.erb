@@ -12,7 +12,9 @@
     <% f.govuk_check_boxes_fieldset :selected_ids, small: true do %>
       <% delete_logs_form.logs.each do |log| %>
         <% body.row do |row| %>
-          <% row.cell text: log.id %>
+          <% row.cell do %>
+            <%= govuk_link_to log.id, url_for(log) %>
+          <% end %>
           <% row.cell text: log.purchid %>
           <% row.cell text: log.saledate&.to_formatted_s(:govuk_date) %>
           <% row.cell text: status_tag(log.status) %>

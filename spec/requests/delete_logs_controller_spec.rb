@@ -40,7 +40,7 @@ RSpec.describe "DeleteLogs", type: :request do
 
       table_body_rows = page.find_all("tbody tr")
       expect(table_body_rows.count).to be 2
-      ids_in_table = table_body_rows.map { |row| row.first("td").text }
+      ids_in_table = table_body_rows.map { |row| row.first("td").text.strip }
       expect(ids_in_table).to match_array [log_1.id.to_s, log_2.id.to_s]
     end
 
@@ -89,7 +89,7 @@ RSpec.describe "DeleteLogs", type: :request do
 
       table_body_rows = page.find_all("tbody tr")
       expect(table_body_rows.count).to be 2
-      ids_in_table = table_body_rows.map { |row| row.first("td").text }
+      ids_in_table = table_body_rows.map { |row| row.first("td").text.strip }
       expect(ids_in_table).to match_array [log_1.id.to_s, log_2.id.to_s]
     end
 
@@ -280,7 +280,7 @@ RSpec.describe "DeleteLogs", type: :request do
 
       table_body_rows = page.find_all("tbody tr")
       expect(table_body_rows.count).to be 2
-      ids_in_table = table_body_rows.map { |row| row.first("td").text }
+      ids_in_table = table_body_rows.map { |row| row.first("td").text.strip }
       expect(ids_in_table).to match_array [log_1.id.to_s, log_2.id.to_s]
     end
 
@@ -329,7 +329,7 @@ RSpec.describe "DeleteLogs", type: :request do
 
       table_body_rows = page.find_all("tbody tr")
       expect(table_body_rows.count).to be 2
-      ids_in_table = table_body_rows.map { |row| row.first("td").text }
+      ids_in_table = table_body_rows.map { |row| row.first("td").text.strip }
       expect(ids_in_table).to match_array [log_1.id.to_s, log_2.id.to_s]
     end
 
@@ -524,7 +524,7 @@ RSpec.describe "DeleteLogs", type: :request do
 
         table_body_rows = page.find_all("tbody tr")
         expect(table_body_rows.count).to be 2
-        ids_in_table = table_body_rows.map { |row| row.first("td").text }
+        ids_in_table = table_body_rows.map { |row| row.first("td").text.strip }
         expect(ids_in_table).to match_array [log_1.id.to_s, log_2.id.to_s]
       end
 
@@ -573,7 +573,7 @@ RSpec.describe "DeleteLogs", type: :request do
 
         table_body_rows = page.find_all("tbody tr")
         expect(table_body_rows.count).to be 2
-        ids_in_table = table_body_rows.map { |row| row.first("td").text }
+        ids_in_table = table_body_rows.map { |row| row.first("td").text.strip }
         expect(ids_in_table).to match_array [log_1.id.to_s, log_2.id.to_s]
       end
 
@@ -749,7 +749,7 @@ RSpec.describe "DeleteLogs", type: :request do
 
         table_body_rows = page.find_all("tbody tr")
         expect(table_body_rows.count).to be 2
-        ids_in_table = table_body_rows.map { |row| row.first("td").text }
+        ids_in_table = table_body_rows.map { |row| row.first("td").text.strip }
         expect(ids_in_table).to match_array [log_1.id.to_s, log_2.id.to_s]
       end
 
@@ -798,7 +798,7 @@ RSpec.describe "DeleteLogs", type: :request do
 
         table_body_rows = page.find_all("tbody tr")
         expect(table_body_rows.count).to be 2
-        ids_in_table = table_body_rows.map { |row| row.first("td").text }
+        ids_in_table = table_body_rows.map { |row| row.first("td").text.strip }
         expect(ids_in_table).to match_array [log_1.id.to_s, log_2.id.to_s]
       end
 

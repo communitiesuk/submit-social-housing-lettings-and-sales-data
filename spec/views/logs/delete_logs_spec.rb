@@ -64,8 +64,15 @@ RSpec.describe "logs/delete_logs.html.erb" do
     it "shows the correct information in each row" do
       render
       fragment = Capybara::Node::Simple.new(rendered)
-      row_data = fragment.find_all("table tbody tr td").map(&:text)[0...-1]
+      row_data = fragment.find_all("table tbody tr td").map(&:text)[0...-1].map(&:strip)
       expect(row_data).to eq [lettings_log_1.id.to_s, lettings_log_1.tenancycode, lettings_log_1.propcode, lettings_log_1.status.humanize.capitalize]
+    end
+
+    it "links to the relevant log on each row" do
+      render
+      fragment = Capybara::Node::Simple.new(rendered)
+      first_cell = fragment.first("table tbody tr td")
+      expect(first_cell).to have_link lettings_log_1.id.to_s, href: lettings_log_path(lettings_log_1)
     end
   end
 
@@ -90,8 +97,15 @@ RSpec.describe "logs/delete_logs.html.erb" do
     it "shows the correct information in each row" do
       render
       fragment = Capybara::Node::Simple.new(rendered)
-      row_data = fragment.find_all("table tbody tr td").map(&:text)[0...-1]
+      row_data = fragment.find_all("table tbody tr td").map(&:text)[0...-1].map(&:strip)
       expect(row_data).to eq [sales_log.id.to_s, sales_log.purchid, sales_log.saledate.to_formatted_s(:govuk_date), sales_log.status.humanize.capitalize]
+    end
+
+    it "links to the relevant log on each row" do
+      render
+      fragment = Capybara::Node::Simple.new(rendered)
+      first_cell = fragment.first("table tbody tr td")
+      expect(first_cell).to have_link sales_log.id.to_s, href: sales_log_path(sales_log)
     end
   end
 
