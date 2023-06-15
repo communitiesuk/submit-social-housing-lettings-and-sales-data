@@ -115,6 +115,7 @@ RSpec.describe SchemesHelper do
         attributes = [
           { name: "Scheme code", value: "S#{scheme.id}" },
           { name: "Name", value: "Test service_name", edit: true },
+          { name: "Status", value: status_tag(:incomplete) },
           { name: "Confidential information", value: "No", edit: true },
           { name: "Type of scheme", value: "Housing for older people" },
           { name: "Registered under Care Standards Act 2000", value: "Yes – registered care home providing personal care" },
@@ -126,7 +127,6 @@ RSpec.describe SchemesHelper do
           { name: "Level of support given", value: "High level" },
           { name: "Intended length of stay", value: "Permanent" },
           { name: "Availability", value: "Active from 1 April 2021" },
-          { name: "Status", value: status_tag(:incomplete) },
         ]
         expect(display_scheme_attributes(scheme, support_user)).to eq(attributes)
       end
@@ -135,6 +135,7 @@ RSpec.describe SchemesHelper do
         attributes = [
           { name: "Scheme code", value: "S#{scheme.id}" },
           { name: "Name", value: "Test service_name", edit: true },
+          { name: "Status", value: status_tag(:incomplete) },
           { name: "Confidential information", value: "No", edit: true },
           { name: "Type of scheme", value: "Housing for older people" },
           { name: "Registered under Care Standards Act 2000", value: "Yes – registered care home providing personal care" },
@@ -145,7 +146,6 @@ RSpec.describe SchemesHelper do
           { name: "Level of support given", value: "High level" },
           { name: "Intended length of stay", value: "Permanent" },
           { name: "Availability", value: "Active from 1 April 2021" },
-          { name: "Status", value: status_tag(:incomplete) },
         ]
         expect(display_scheme_attributes(scheme, coordinator_user)).to eq(attributes)
       end
@@ -160,6 +160,7 @@ RSpec.describe SchemesHelper do
         attributes = [
           { name: "Scheme code", value: "S#{scheme.id}" },
           { name: "Name", value: "Test service_name", edit: true },
+          { name: "Status", value: status_tag(:active) },
           { name: "Confidential information", value: "No", edit: true },
           { name: "Type of scheme", value: "Housing for older people" },
           { name: "Registered under Care Standards Act 2000", value: "Yes – registered care home providing personal care" },
@@ -171,7 +172,6 @@ RSpec.describe SchemesHelper do
           { name: "Level of support given", value: "High level" },
           { name: "Intended length of stay", value: "Permanent" },
           { name: "Availability", value: "Active from 1 April 2021" },
-          { name: "Status", value: status_tag(:active) },
         ]
         expect(display_scheme_attributes(scheme, support_user)).to eq(attributes)
       end
@@ -180,6 +180,7 @@ RSpec.describe SchemesHelper do
         attributes = [
           { name: "Scheme code", value: "S#{scheme.id}" },
           { name: "Name", value: "Test service_name", edit: true },
+          { name: "Status", value: status_tag(:active) },
           { name: "Confidential information", value: "No", edit: true },
           { name: "Type of scheme", value: "Housing for older people" },
           { name: "Registered under Care Standards Act 2000", value: "Yes – registered care home providing personal care" },
@@ -190,7 +191,6 @@ RSpec.describe SchemesHelper do
           { name: "Level of support given", value: "High level" },
           { name: "Intended length of stay", value: "Permanent" },
           { name: "Availability", value: "Active from 1 April 2021" },
-          { name: "Status", value: status_tag(:active) },
         ]
         expect(display_scheme_attributes(scheme, coordinator_user)).to eq(attributes)
       end
