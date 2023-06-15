@@ -27,13 +27,13 @@ module LocationsHelper
     [
       { name: "Postcode", value: location.postcode, attribute: "postcode" },
       { name: "Location name", value: location.name, attribute: "name" },
+      { name: "Status", value: location.status, attribute: "status" },
       { name: "Local authority", value: formatted_local_authority_timeline(location, "name"), attribute: "local_authority" },
       { name: "Number of units", value: location.units, attribute: "units" },
       { name: "Most common unit", value: location.type_of_unit, attribute: "type_of_unit" },
       { name: "Mobility standards", value: location.mobility_type, attribute: "mobility_standards" },
       { name: "Location code", value: formatted_local_authority_timeline(location, "code"), attribute: "location_code" },
       { name: "Availability", value: location_availability(location), attribute: "availability" },
-      { name: "Status", value: location.status, attribute: "status" },
     ]
   end
 

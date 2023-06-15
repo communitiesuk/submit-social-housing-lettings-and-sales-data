@@ -364,6 +364,23 @@ RSpec.describe SchemesController, type: :request do
           expect(page).not_to have_content("Deactivate this scheme")
         end
       end
+
+      context "when the scheme has all details but no confirmed locations" do
+        it "shows the scheme as incomplete with text to explain" do
+          get scheme_path(specific_scheme)
+          expect(page).to have_content "Incomplete"
+          expect(page).to have_content "Add a location to complete this scheme"
+        end
+      end
+
+      context "when the scheme has all details and confirmed locations" do
+        it "shows the scheme as complete" do
+          create(:location, scheme: specific_scheme)
+          get scheme_path(specific_scheme)
+          expect(page).to have_content "Active"
+          expect(page).not_to have_content "Add a location to complete this scheme"
+        end
+      end
     end
 
     context "when signed in as a support user" do
