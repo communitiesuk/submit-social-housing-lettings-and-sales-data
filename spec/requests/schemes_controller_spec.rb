@@ -330,6 +330,18 @@ RSpec.describe SchemesController, type: :request do
             expect(page).not_to have_link("Deactivate this scheme")
           end
         end
+
+        context "with scheme that's deactivating in more than 6 months" do
+          let(:scheme_deactivation_period) { create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2023, 5, 12), scheme:) }
+
+          it "does not render toggle scheme link" do
+            expect(response).to have_http_status(:ok)
+            expect(page).not_to have_link("Reactivate this scheme")
+            expect(page).to have_link("Deactivate this scheme")
+            expect(response.body).not_to include("<strong class=\"govuk-tag govuk-tag--yellow\">Deactivating soon</strong>")
+            expect(response.body).to include("<strong class=\"govuk-tag govuk-tag--green\">Active</strong>")
+          end
+        end
       end
 
       context "when coordinator attempts to see scheme belonging to a parent organisation" do

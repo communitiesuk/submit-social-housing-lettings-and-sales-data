@@ -242,4 +242,8 @@ class Scheme < ApplicationRecord
   def deactivated?
     status == :deactivated
   end
+
+  def deactivates_in_more_than_6_months?
+    status == :deactivating_soon && open_deactivation.present? && open_deactivation.deactivation_date > 6.months.from_now
+  end
 end

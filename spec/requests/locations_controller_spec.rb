@@ -1673,6 +1673,19 @@ RSpec.describe LocationsController, type: :request do
           expect(response).to have_http_status(:ok)
           expect(page).not_to have_link("Reactivate this location")
           expect(page).not_to have_link("Deactivate this location")
+          expect(page).to have_content("Deactivating soon")
+        end
+      end
+
+      context "with location that's deactivating in more than 6 months" do
+        let(:location_deactivation_period) { create(:location_deactivation_period, deactivation_date: Time.zone.local(2023, 6, 12), location:) }
+
+        it "does render toggle location link" do
+          expect(response).to have_http_status(:ok)
+          expect(page).not_to have_link("Reactivate this location")
+          expect(page).to have_link("Deactivate this location")
+          expect(response.body).not_to include("<strong class=\"govuk-tag govuk-tag--yellow\">Deactivating soon</strong>")
+          expect(response.body).to include("<strong class=\"govuk-tag govuk-tag--green\">Active</strong>")
         end
       end
 
