@@ -210,7 +210,7 @@ RSpec.describe Form, type: :model do
         FormHandler.instance.use_real_forms!
       end
 
-      it "should not raise a Stack Error" do
+      it "does not raise a Stack Error" do
         expect { form.next_incomplete_section_redirect_path(subsection, lettings_log) }.not_to raise_error
       end
     end

@@ -127,7 +127,7 @@ class Form
     if log.status == "completed"
       return first_question_in_last_subsection(subsection_ids)
     elsif log.calculate_status == "completed"
-      log.update(status: "completed")
+      log.update!(status: "completed")
       return first_question_in_last_subsection(subsection_ids)
     end
 

@@ -19,7 +19,6 @@ RSpec.describe Log, type: :model do
 
     it "returns the correct status for a completed lettings log" do
       complete_lettings_log = create(:lettings_log, :completed, status: nil)
-      binding.pry
       expect(complete_lettings_log.calculate_status).to eq "completed"
     end
 
