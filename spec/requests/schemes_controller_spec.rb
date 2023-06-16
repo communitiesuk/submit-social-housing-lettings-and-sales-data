@@ -1930,7 +1930,6 @@ RSpec.describe SchemesController, type: :request do
 
       context "when confirming deactivation" do
         let(:params) { { deactivation_date:, confirm: true, deactivation_date_type: "other" } }
-        let(:mailer) { instance_double(LocationOrSchemeDeactivationMailer) }
 
         before do
           Timecop.freeze(Time.utc(2022, 10, 10))
@@ -1943,6 +1942,8 @@ RSpec.describe SchemesController, type: :request do
 
         context "and a log startdate is after scheme deactivation date" do
           before do
+            allow(LocationOrSchemeDeactivationMailer).to receive(:send_deactivation_mail).and_call_original
+
             patch "/schemes/#{scheme.id}/deactivate", params:
           end
 
@@ -1968,6 +1969,15 @@ RSpec.describe SchemesController, type: :request do
             expect(lettings_log.unresolved).to eq(nil)
             lettings_log.reload
             expect(lettings_log.unresolved).to eq(true)
+          end
+
+          it "sends deactivation emails" do
+            expect(LocationOrSchemeDeactivationMailer).to have_received(:send_deactivation_mail).with(
+              user,
+              1,
+              update_logs_lettings_logs_url,
+              scheme.service_name,
+            )
           end
         end
 
