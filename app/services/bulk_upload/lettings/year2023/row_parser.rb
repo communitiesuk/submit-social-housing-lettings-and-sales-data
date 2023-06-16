@@ -1442,8 +1442,6 @@ private
     when 2
       1
     when 3
-      1
-    when 4
       2
     end
   end
