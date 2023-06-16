@@ -153,6 +153,7 @@ RSpec.describe "Schemes scheme Features" do
             before do
               click_link(scheme.service_name)
             end
+
             it "shows me details about the selected scheme" do
               expect(page).to have_content(schemes.first.id_to_display)
               expect(page).to have_content(schemes.first.service_name)
@@ -715,6 +716,7 @@ RSpec.describe "Schemes scheme Features" do
             before do
               click_link(scheme.service_name)
             end
+
             it "shows me details about the selected scheme" do
               expect(page).to have_content(schemes.first.id_to_display)
               expect(page).to have_content(schemes.first.service_name)
@@ -750,6 +752,7 @@ RSpec.describe "Schemes scheme Features" do
               expect(page).to have_content(schemes.first.intended_stay)
             end
           end
+
           context "when I click to change scheme name" do
             before do
               click_link(scheme.service_name)
