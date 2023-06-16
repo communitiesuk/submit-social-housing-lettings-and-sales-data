@@ -13,7 +13,7 @@ RSpec.describe Form::Sales::Pages::SharedOwnershipType, type: :model do
       let(:start_date) { Time.utc(2023, 2, 8) }
 
       it "has the correct header" do
-        expect(page.header).to eq("Shared ownership type")
+        expect(page.header).to eq("Type of shared ownership sale")
       end
     end
 

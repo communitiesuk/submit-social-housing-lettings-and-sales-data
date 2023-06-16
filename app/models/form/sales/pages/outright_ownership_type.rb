@@ -16,6 +16,6 @@ class Form::Sales::Pages::OutrightOwnershipType < ::Form::Page
   end
 
   def header
-    "Outright ownership type" if form.start_date.year >= 2023
+    "Type of outright sale" if form.start_date.year >= 2023
   end
 end

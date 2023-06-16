@@ -15,6 +15,6 @@ class Form::Sales::Pages::DiscountedOwnershipType < ::Form::Page
   end
 
   def header
-    "Discounted ownership type" if form.start_date.year >= 2023
+    "Type of discounted ownership sale" if form.start_date.year >= 2023
   end
 end

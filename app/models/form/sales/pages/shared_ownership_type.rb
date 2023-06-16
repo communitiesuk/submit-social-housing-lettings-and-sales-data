@@ -15,6 +15,6 @@ class Form::Sales::Pages::SharedOwnershipType < ::Form::Page
   end
 
   def header
-    "Shared ownership type" if form.start_date.year >= 2023
+    "Type of shared ownership sale" if form.start_date.year >= 2023
   end
 end
