@@ -1,7 +1,6 @@
 class Form::Lettings::Pages::LeadTenantUnderRetirementValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
-    @id = "lead_tenant_under_retirement_value_check"
     @depends_on = [{ "person_1_retired_under_soft_min_age?" => true }]
     @title_text = {
       "translation" => "soft_validations.retirement.min.title",

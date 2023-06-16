@@ -1,7 +1,6 @@
 class Form::Lettings::Pages::PersonOverRetirementValueCheck < ::Form::Page
   def initialize(id, hsh, subsection, person_index:)
     super(id, hsh, subsection)
-    @id = "person_#{person_index}_over_retirement_value_check"
     @depends_on = [{ "person_#{person_index}_not_retired_over_soft_max_age?" => true }]
     @title_text = {
       "translation" => "soft_validations.retirement.max.title",
