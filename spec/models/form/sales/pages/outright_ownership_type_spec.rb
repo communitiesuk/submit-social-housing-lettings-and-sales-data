@@ -5,7 +5,8 @@ RSpec.describe Form::Sales::Pages::OutrightOwnershipType, type: :model do
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection) }
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date:)) }
+  let(:start_date) { Time.zone.today }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
@@ -19,10 +20,6 @@ RSpec.describe Form::Sales::Pages::OutrightOwnershipType, type: :model do
     expect(page.id).to eq("outright_ownership_type")
   end
 
-  it "has the correct header" do
-    expect(page.header).to eq("Outright ownership type")
-  end
-
   it "has the correct description" do
     expect(page.description).to be_nil
   end
@@ -31,5 +28,23 @@ RSpec.describe Form::Sales::Pages::OutrightOwnershipType, type: :model do
     expect(page.depends_on).to eq([{
       "ownershipsch" => 3,
     }])
+  end
+
+  describe "headers" do
+    context "when the form year is 2023" do
+      let(:start_date) { Time.utc(2023, 2, 8) }
+
+      it "has the correct header" do
+        expect(page.header).to eq("Outright ownership type")
+      end
+    end
+
+    context "when the form is before the year 2023" do
+      let(:start_date) { Time.utc(2022, 2, 8) }
+
+      it "does not have a page header" do
+        expect(page.header).to eq(nil)
+      end
+    end
   end
 end

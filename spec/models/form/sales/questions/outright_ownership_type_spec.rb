@@ -5,7 +5,9 @@ RSpec.describe Form::Sales::Questions::OutrightOwnershipType, type: :model do
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page) }
+  let(:page) { instance_double(Form::Page, subsection:) }
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date:)) }
+  let(:start_date) { Time.zone.today }
 
   it "has correct page" do
     expect(question.page).to eq(page)
@@ -13,10 +15,6 @@ RSpec.describe Form::Sales::Questions::OutrightOwnershipType, type: :model do
 
   it "has the correct id" do
     expect(question.id).to eq("type")
-  end
-
-  it "has the correct header" do
-    expect(question.header).to eq("What is the type of outright sale?")
   end
 
   it "has the correct check_answer_label" do
@@ -43,4 +41,33 @@ RSpec.describe Form::Sales::Questions::OutrightOwnershipType, type: :model do
       "othtype" => [12],
     })
   end
+
+  it "has the correct header" do
+    expect(question.header).to eq("What is the type of outright sale?")
+  end
+
+  describe "partial guidance" do
+    context "when the form is for year 2023" do
+      let(:start_date) { Time.utc(2023, 2, 8) }
+
+      it "has the correct guidance_partial" do
+        expect(question.guidance_partial).to eq("outright_sale_type_definitions")
+      end
+
+      it "is at the top" do
+        expect(question.top_guidance?).to eq(true)
+        expect(question.bottom_guidance?).to eq(false)
+      end
+    end
+
+    context "when the form is for before year 2023" do
+      let(:start_date) { Time.utc(2022, 2, 8) }
+
+      it "does not display a guidance partial" do
+        expect(question.guidance_partial).to eq(nil);
+      end
+    end
+  end
+
+
 end

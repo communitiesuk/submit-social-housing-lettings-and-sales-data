@@ -8,13 +8,13 @@ class Form::Sales::Pages::SharedOwnershipType < ::Form::Page
     }]
   end
 
-  def header
-    "Shared ownership type" if form.start_date.year >= 2023
-  end
-
   def questions
     @questions ||= [
-      Form::Sales::Questions::SharedOwnershipType.new(nil, nil, self),
+    Form::Sales::Questions::SharedOwnershipType.new(nil, nil, self),
     ]
+  end
+
+  def header
+    "Shared ownership type" if form.start_date.year >= 2023
   end
 end

@@ -50,6 +50,10 @@ RSpec.describe Form::Sales::Questions::SharedOwnershipType, type: :model do
         "30" => { "value" => "Shared Ownership - 2021 model lease" },
       })
     end
+
+    it "does not show a guidance_partial" do
+      expect(question.guidance_partial).to eq(nil)
+    end
   end
 
   context "when form start date is 2023" do
@@ -66,6 +70,10 @@ RSpec.describe Form::Sales::Questions::SharedOwnershipType, type: :model do
         "31" => { "value" => "Right to Shared Ownership (RtSO)" },
         "32" => { "value" => "London Living Rent — Shared Ownership" },
       })
+    end
+
+    it "shows shows correct guidance_partial" do
+      expect(question.guidance_partial).to eq("shared_ownership_type_definitions")
     end
   end
 end

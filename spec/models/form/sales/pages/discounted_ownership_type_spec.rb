@@ -5,7 +5,26 @@ RSpec.describe Form::Sales::Pages::DiscountedOwnershipType, type: :model do
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection) }
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date:)) }
+  let(:start_date) { Time.zone.today }
+
+  describe "headers" do
+    context "when form year is for 2023" do
+      let(:start_date) { Time.utc(2023, 2, 8) }
+
+      it "has the correct header" do
+        expect(page.header).to eq("Discounted ownership type")
+      end
+    end
+
+    context "when form year is for before 2023" do
+      let(:start_date) { Time.utc(2022, 2, 8) }
+
+      it "does not have a page header" do
+        expect(page.header).to eq(nil)
+      end
+    end
+  end
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
@@ -17,10 +36,6 @@ RSpec.describe Form::Sales::Pages::DiscountedOwnershipType, type: :model do
 
   it "has the correct id" do
     expect(page.id).to eq("discounted_ownership_type")
-  end
-
-  it "has the correct header" do
-    expect(page.header).to eq("Discounted ownership type")
   end
 
   it "has the correct description" do
