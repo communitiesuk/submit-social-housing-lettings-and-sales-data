@@ -4,36 +4,60 @@ RSpec.describe User, type: :model do
   describe "#new" do
     let(:user) { create(:user, old_user_id: "3") }
     let(:other_organisation) { create(:organisation) }
-    let!(:owned_lettings_log) do
-      create(
-        :lettings_log,
-        :completed,
-        managing_organisation: other_organisation,
-        created_by: user,
-      )
-    end
-    let!(:managed_lettings_log) do
-      create(
-        :lettings_log,
-        created_by: user,
-        owning_organisation: other_organisation,
-      )
-    end
 
     it "belongs to an organisation" do
       expect(user.organisation).to be_a(Organisation)
     end
 
-    it "has owned lettings logs through their organisation" do
-      expect(user.owned_lettings_logs.first).to eq(owned_lettings_log)
+    describe "#owned_lettings_logs" do
+      let!(:owned_lettings_log) do
+        create(
+          :lettings_log,
+          :completed,
+          managing_organisation: other_organisation,
+          created_by: user,
+        )
+      end
+
+      it "has owned lettings logs through their organisation" do
+        expect(user.owned_lettings_logs.first).to eq(owned_lettings_log)
+      end
     end
 
-    it "has managed lettings logs through their organisation" do
-      expect(user.managed_lettings_logs.first).to eq(managed_lettings_log)
+    describe "#managed_lettings_logs" do
+      let!(:managed_lettings_log) do
+        create(
+          :lettings_log,
+          created_by: user,
+          owning_organisation: other_organisation,
+        )
+      end
+
+      it "has managed lettings logs through their organisation" do
+        expect(user.managed_lettings_logs.first).to eq(managed_lettings_log)
+      end
     end
 
-    it "has lettings logs through their organisation" do
-      expect(user.lettings_logs.to_a).to match_array([owned_lettings_log, managed_lettings_log])
+    describe "#lettings_logs" do
+      let!(:owned_lettings_log) do
+        create(
+          :lettings_log,
+          :completed,
+          managing_organisation: other_organisation,
+          created_by: user,
+        )
+      end
+      let!(:managed_lettings_log) do
+        create(
+          :lettings_log,
+          created_by: user,
+          owning_organisation: other_organisation,
+        )
+      end
+
+      it "has lettings logs through their organisation" do
+        expect(user.lettings_logs.to_a).to match_array([owned_lettings_log, managed_lettings_log])
+      end
     end
 
     it "has a role" do
@@ -136,6 +160,22 @@ RSpec.describe User, type: :model do
     context "when the user is a Customer Support person" do
       let(:user) { create(:user, :support) }
       let!(:other_orgs_log) { create(:lettings_log) }
+      let!(:owned_lettings_log) do
+        create(
+          :lettings_log,
+          :completed,
+          managing_organisation: other_organisation,
+          created_by: user,
+        )
+      end
+      let!(:managed_lettings_log) do
+        create(
+          :lettings_log,
+          created_by: user,
+          owning_organisation: other_organisation,
+        )
+      end
+
 
       it "has access to logs from all organisations" do
         expect(user.lettings_logs.to_a).to match_array([owned_lettings_log, managed_lettings_log, other_orgs_log])
