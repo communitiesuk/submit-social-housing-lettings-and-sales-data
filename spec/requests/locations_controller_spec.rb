@@ -1467,13 +1467,14 @@ RSpec.describe LocationsController, type: :request do
 
       context "when confirming deactivation" do
         let(:params) { { deactivation_date:, confirm: true, deactivation_date_type: "other" } }
-        let(:mailer) { instance_double(LocationOrSchemeDeactivationMailer) }
 
-        let(:user_a) { create(:user, email: "user_a@example.com") }
-        let(:user_b) { create(:user, email: "user_b@example.com") }
+        let(:user_a) { create(:user) }
+        let(:user_b) { create(:user) }
 
         before do
-          create_list(:lettings_log, 1, :sh, location:, scheme:, startdate:, created_by: user_a)
+          allow(LocationOrSchemeDeactivationMailer).to receive(:send_deactivation_mail).and_call_original
+
+          create(:lettings_log, :sh, location:, scheme:, startdate:, created_by: user_a)
           create_list(:lettings_log, 3, :sh, location:, scheme:, startdate:, created_by: user_b)
 
           Timecop.freeze(Time.utc(2022, 10, 10))
@@ -1510,6 +1511,24 @@ RSpec.describe LocationsController, type: :request do
             expect(lettings_log.unresolved).to eq(nil)
             lettings_log.reload
             expect(lettings_log.unresolved).to eq(true)
+          end
+
+          it "sends deactivation emails" do
+            expect(LocationOrSchemeDeactivationMailer).to have_received(:send_deactivation_mail).with(
+              user_a,
+              1,
+              update_logs_lettings_logs_url,
+              location.scheme.service_name,
+              location.postcode,
+            )
+
+            expect(LocationOrSchemeDeactivationMailer).to have_received(:send_deactivation_mail).with(
+              user_b,
+              3,
+              update_logs_lettings_logs_url,
+              location.scheme.service_name,
+              location.postcode,
+            )
           end
         end
 
