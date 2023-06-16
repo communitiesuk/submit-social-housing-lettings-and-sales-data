@@ -28,6 +28,32 @@ RSpec.describe BulkUploadSalesSoftValidationsCheckController, type: :request do
       expect(response.body).to include("Purchaser code")
       expect(response.body).to include("some error")
     end
+
+    it "sets no cache headers" do
+      get "/sales-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/confirm-soft-errors"
+
+      expect(response.headers["Cache-Control"]).to eql("no-store")
+    end
+
+    context "and previosuly told us to fix inline" do
+      let(:bulk_upload) { create(:bulk_upload, :sales, user:, bulk_upload_errors:, choice: "create-fix-inline") }
+
+      it "redirects to resume chosen" do
+        get "/sales-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/confirm-soft-errors"
+
+        expect(response).to redirect_to("/sales-logs/bulk-upload-resume/#{bulk_upload.id}/chosen")
+      end
+    end
+
+    context "and previosuly told us to bulk confirm soft validations" do
+      let(:bulk_upload) { create(:bulk_upload, :sales, user:, bulk_upload_errors:, choice: "bulk-confirm-soft-validations") }
+
+      it "redirects to soft validations check chosen" do
+        get "/sales-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/confirm-soft-errors"
+
+        expect(response).to redirect_to("/sales-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/chosen")
+      end
+    end
   end
 
   describe "PATCH /sales-logs/bulk-upload-soft-validations-check/:ID/confirm-soft-errors" do
@@ -38,6 +64,8 @@ RSpec.describe BulkUploadSalesSoftValidationsCheckController, type: :request do
         expect(response).to be_successful
 
         expect(response.body).to include("You must select if there are errors in these fields")
+
+        expect(bulk_upload.reload.choice).to be_blank
       end
     end
 
@@ -46,6 +74,8 @@ RSpec.describe BulkUploadSalesSoftValidationsCheckController, type: :request do
         patch "/sales-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/confirm-soft-errors", params: { form: { confirm_soft_errors: "no" } }
 
         expect(response).to redirect_to("/sales-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice?soft_errors_only=true")
+
+        expect(bulk_upload.reload.choice).to be_blank
       end
     end
 
@@ -56,6 +86,8 @@ RSpec.describe BulkUploadSalesSoftValidationsCheckController, type: :request do
         expect(response).to redirect_to("/sales-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/confirm")
         follow_redirect!
         expect(response.body).not_to include("You’ve successfully uploaded")
+
+        expect(bulk_upload.reload.choice).to be_blank
       end
     end
   end
@@ -85,6 +117,8 @@ RSpec.describe BulkUploadSalesSoftValidationsCheckController, type: :request do
       expect(response).to redirect_to("/sales-logs")
       follow_redirect!
       expect(response.body).to include("You’ve successfully uploaded 2 logs")
+
+      expect(bulk_upload.reload.choice).to eql("bulk-confirm-soft-validations")
     end
   end
 end

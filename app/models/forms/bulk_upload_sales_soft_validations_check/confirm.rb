@@ -20,10 +20,27 @@ module Forms
       end
 
       def save!
-        processor = BulkUpload::Processor.new(bulk_upload:)
-        processor.approve_and_confirm_soft_validations
+        ApplicationRecord.transaction do
+          processor = BulkUpload::Processor.new(bulk_upload:)
+          processor.approve_and_confirm_soft_validations
+
+          bulk_upload.update!(choice: "bulk-confirm-soft-validations")
+        end
 
         true
+      end
+
+      def preflight_valid?
+        bulk_upload.choice != "bulk-confirm-soft-validations" && bulk_upload.choice != "create-fix-inline"
+      end
+
+      def preflight_redirect
+        case bulk_upload.choice
+        when "bulk-confirm-soft-validations"
+          page_bulk_upload_sales_soft_validations_check_path(bulk_upload, :chosen)
+        when "create-fix-inline"
+          page_bulk_upload_sales_resume_path(bulk_upload, :chosen)
+        end
       end
     end
   end
