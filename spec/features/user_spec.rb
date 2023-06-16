@@ -454,6 +454,85 @@ RSpec.describe "User Features" do
     end
   end
 
+  context "when signed in as support" do
+    let!(:user) { FactoryBot.create(:user, :support) }
+    let!(:other_user) { FactoryBot.create(:user, name: "new user", organisation: user.organisation, email: "new_user@example.com", confirmation_token: "abc") }
+
+    context "when reinviting a user before initial confirmation email has been sent" do
+      let(:personalisation) do
+        {
+          name: "new user",
+          email: "new_user@example.com",
+          organisation: other_user.organisation.name,
+          link: include("/account/confirmation?confirmation_token=#{other_user.confirmation_token}"),
+        }
+      end
+
+      before do
+        other_user.update!(initial_confirmation_sent: false)
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in(user)
+        visit(user_path(user.id))
+      end
+
+      it "sends initial confirmable template email when the resend invite link is clicked" do
+        other_user.legacy_users.destroy_all
+        visit(user_path(other_user))
+        expect(notify_client).to receive(:send_email).with(email_address: "new_user@example.com", template_id: User::CONFIRMABLE_TEMPLATE_ID, personalisation:).once
+        click_button("Resend invite link")
+      end
+    end
+
+    context "when reinviting a user after initial confirmation email has been sent" do
+      let(:personalisation) do
+        {
+          name: "new user",
+          email: "new_user@example.com",
+          organisation: other_user.organisation.name,
+          link: include("/account/confirmation?confirmation_token=#{other_user.confirmation_token}"),
+        }
+      end
+
+      before do
+        other_user.update!(initial_confirmation_sent: true)
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in(user)
+        visit(user_path(user.id))
+      end
+
+      it "sends and email when the resend invite link is clicked" do
+        other_user.legacy_users.destroy_all
+        visit(user_path(other_user))
+        expect(notify_client).to receive(:send_email).with(email_address: "new_user@example.com", template_id: User::RECONFIRMABLE_TEMPLATE_ID, personalisation:).once
+        click_button("Resend invite link")
+      end
+    end
+
+    context "when reinviting a legacy user" do
+      let(:personalisation) do
+        {
+          name: "new user",
+          email: "new_user@example.com",
+          organisation: other_user.organisation.name,
+          link: include("/account/confirmation?confirmation_token=#{other_user.confirmation_token}"),
+        }
+      end
+
+      before do
+        other_user.update!(initial_confirmation_sent: true)
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in(user)
+        visit(user_path(user.id))
+      end
+
+      it "sends beta onboarding email to be sent when user is legacy" do
+        visit(user_path(other_user))
+        expect(notify_client).to receive(:send_email).with(email_address: "new_user@example.com", template_id: User::BETA_ONBOARDING_TEMPLATE_ID, personalisation:).once
+        click_button("Resend invite link")
+      end
+    end
+  end
+
   context "when the user is a customer support person" do
     let(:support_user) { FactoryBot.create(:user, :support, last_sign_in_at: Time.zone.now) }
     let(:devise_notify_mailer) { DeviseNotifyMailer.new }

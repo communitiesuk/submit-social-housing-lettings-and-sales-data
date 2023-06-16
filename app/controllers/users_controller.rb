@@ -29,6 +29,12 @@ class UsersController < ApplicationController
     end
   end
 
+  def resend_invite
+    @user.send_confirmation_instructions
+    flash[:notice] = "Invitation sent to #{@user.email}"
+    render :show
+  end
+
   def show; end
 
   def dpo; end
