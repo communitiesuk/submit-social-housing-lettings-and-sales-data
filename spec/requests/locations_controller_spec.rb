@@ -1625,7 +1625,7 @@ RSpec.describe LocationsController, type: :request do
         end
       end
 
-      xcontext "when deactivation date is during a deactivated period" do
+      context "when deactivation date is during a deactivated period" do
         let(:deactivation_date) { Time.zone.local(2022, 10, 10) }
         let(:params) { { location_deactivation_period: { deactivation_date_type: "other", "deactivation_date(3i)": "8", "deactivation_date(2i)": "9", "deactivation_date(1i)": "2022" } } }
         let(:add_deactivations) { create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 5, 5), reactivation_date: Time.zone.local(2022, 10, 12), location:) }
