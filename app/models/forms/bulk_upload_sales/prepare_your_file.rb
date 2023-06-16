@@ -29,7 +29,12 @@ module Forms
       end
 
       def legacy_template_path
-        "/files/bulk-upload-sales-template-2022-23.xlsx"
+        case year
+        when 2022
+          "/files/bulk-upload-sales-template-2022-23.xlsx"
+        else
+          "/files/bulk-upload-sales-legacy-template-2023-24.xlsx"
+        end
       end
 
       def template_path
