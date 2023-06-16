@@ -582,6 +582,31 @@ RSpec.describe FormController, type: :request do
             end
           end
         end
+
+        context "when requesting a soft validation page without a http referrer header" do
+          before do
+            get "/lettings-logs/#{lettings_log.id}/#{page_path}?referrer=interruption_screen", headers:
+          end
+
+          context "when the page is routed to" do
+            let(:page_path) { page_id.dasherize }
+
+            it "directs to the question page" do
+              expect(response.body).to include("What is the tenant’s age?")
+              expect(response.body).to include("Skip for now")
+            end
+          end
+
+          context "when the page is not routed to" do
+            let(:page_path) { "person-2-working-situation" }
+
+            it "redirects to the log page" do
+              follow_redirect!
+              expect(response.body).to include("Before you start")
+              expect(response.body).not_to include("Skip for now")
+            end
+          end
+        end
       end
 
       context "with checkbox questions" do
