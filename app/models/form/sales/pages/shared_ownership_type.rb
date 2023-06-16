@@ -10,7 +10,7 @@ class Form::Sales::Pages::SharedOwnershipType < ::Form::Page
 
   def questions
     @questions ||= [
-    Form::Sales::Questions::SharedOwnershipType.new(nil, nil, self),
+      Form::Sales::Questions::SharedOwnershipType.new(nil, nil, self),
     ]
   end
 

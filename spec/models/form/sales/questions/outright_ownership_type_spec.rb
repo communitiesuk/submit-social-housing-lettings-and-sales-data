@@ -64,10 +64,8 @@ RSpec.describe Form::Sales::Questions::OutrightOwnershipType, type: :model do
       let(:start_date) { Time.utc(2022, 2, 8) }
 
       it "does not display a guidance partial" do
-        expect(question.guidance_partial).to eq(nil);
+        expect(question.guidance_partial).to eq(nil)
       end
     end
   end
-
-
 end

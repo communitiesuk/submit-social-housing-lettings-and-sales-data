@@ -25,6 +25,7 @@ RSpec.describe Form::Sales::Pages::SharedOwnershipType, type: :model do
       end
     end
   end
+
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
   end
