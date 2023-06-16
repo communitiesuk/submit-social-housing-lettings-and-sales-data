@@ -42,6 +42,16 @@
           end %>
 
       <%= summary_list.row do |row|
+            row.key { "Telephone number" }
+            row.value { @user.phone }
+            if can_edit_telephone_numbers?(@user, current_user)
+              row.action(visually_hidden_text: "telephone number", href: aliased_user_edit(@user, current_user), html_attributes: { "data-qa": "change-telephone-number" })
+            else
+              row.action
+            end
+          end %>
+
+      <%= summary_list.row do |row|
             row.key { "Password" }
             row.value { "••••••••" }
             if can_edit_password?(@user, current_user)

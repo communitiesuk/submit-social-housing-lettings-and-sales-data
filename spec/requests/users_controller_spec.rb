@@ -113,6 +113,7 @@ RSpec.describe UsersController, type: :request do
         it "allows changing name, email and password" do
           expect(page).to have_link("Change", text: "name")
           expect(page).to have_link("Change", text: "email address")
+          expect(page).to have_link("Change", text: "telephone number")
           expect(page).to have_link("Change", text: "password")
           expect(page).not_to have_link("Change", text: "role")
           expect(page).not_to have_link("Change", text: "if data protection officer")
@@ -165,6 +166,7 @@ RSpec.describe UsersController, type: :request do
           it "does not have edit links" do
             expect(page).not_to have_link("Change", text: "name")
             expect(page).not_to have_link("Change", text: "email address")
+            expect(page).not_to have_link("Change", text: "telephone number")
             expect(page).not_to have_link("Change", text: "password")
             expect(page).not_to have_link("Change", text: "role")
             expect(page).not_to have_link("Change", text: "if data protection officer")
@@ -480,6 +482,7 @@ RSpec.describe UsersController, type: :request do
         it "allows changing name, email, password, role, dpo and key contact" do
           expect(page).to have_link("Change", text: "name")
           expect(page).to have_link("Change", text: "email address")
+          expect(page).to have_link("Change", text: "telephone number")
           expect(page).to have_link("Change", text: "password")
           expect(page).to have_link("Change", text: "role")
           expect(page).to have_link("Change", text: "if data protection officer")
@@ -520,6 +523,7 @@ RSpec.describe UsersController, type: :request do
           it "allows changing name, email, role, dpo and key contact" do
             expect(page).to have_link("Change", text: "name")
             expect(page).to have_link("Change", text: "email address")
+            expect(page).to have_link("Change", text: "telephone number")
             expect(page).not_to have_link("Change", text: "password")
             expect(page).to have_link("Change", text: "role")
             expect(page).to have_link("Change", text: "if data protection officer")
@@ -1138,6 +1142,7 @@ RSpec.describe UsersController, type: :request do
         it "allows changing name, email, password, role, dpo and key contact" do
           expect(page).to have_link("Change", text: "name")
           expect(page).to have_link("Change", text: "email address")
+          expect(page).to have_link("Change", text: "telephone number")
           expect(page).to have_link("Change", text: "password")
           expect(page).to have_link("Change", text: "role")
           expect(page).to have_link("Change", text: "if data protection officer")
@@ -1167,6 +1172,7 @@ RSpec.describe UsersController, type: :request do
           it "allows changing name, email, role, dpo and key contact" do
             expect(page).to have_link("Change", text: "name")
             expect(page).to have_link("Change", text: "email address")
+            expect(page).to have_link("Change", text: "telephone number")
             expect(page).not_to have_link("Change", text: "password")
             expect(page).to have_link("Change", text: "role")
             expect(page).to have_link("Change", text: "if data protection officer")
@@ -1207,6 +1213,7 @@ RSpec.describe UsersController, type: :request do
           it "allows changing name, email, role, dpo and key contact" do
             expect(page).to have_link("Change", text: "name")
             expect(page).to have_link("Change", text: "email address")
+            expect(page).to have_link("Change", text: "telephone number")
             expect(page).not_to have_link("Change", text: "password")
             expect(page).to have_link("Change", text: "role")
             expect(page).to have_link("Change", text: "if data protection officer")

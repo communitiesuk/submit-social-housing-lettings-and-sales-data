@@ -322,16 +322,42 @@ RSpec.describe "User Features" do
         expect(page).to have_title("Error")
       end
 
+      it "validates telephone number is numeric" do
+        visit("users/new")
+        fill_in("user[name]", with: "New User")
+        fill_in("user[email]", with: "newuser@example.com")
+        fill_in("user[phone]", with: "randomstring")
+        click_button("Continue")
+        expect(page).to have_selector("#error-summary-title")
+        expect(page).to have_selector("#user-phone-field-error")
+        expect(page).to have_content(/Enter a telephone number in the correct format/)
+        expect(page).to have_title("Error")
+      end
+
+      it "validates telephone number is longer than 11 digits" do
+        visit("users/new")
+        fill_in("user[name]", with: "New User")
+        fill_in("user[email]", with: "newuser@example.com")
+        fill_in("user[phone]", with: "123")
+        click_button("Continue")
+        expect(page).to have_selector("#error-summary-title")
+        expect(page).to have_selector("#user-phone-field-error")
+        expect(page).to have_content(/Enter a telephone number in the correct format/)
+        expect(page).to have_title("Error")
+      end
+
       it "sets name, email, role, is_dpo and is_key_contact fields" do
         visit("users/new")
         fill_in("user[name]", with: "New User")
         fill_in("user[email]", with: "newuser@example.com")
+        fill_in("user[phone]", with: "12345678910")
         choose("user-role-data-provider-field")
         click_button("Continue")
         expect(User.find_by(
                  name: "New User",
                  email: "newuser@example.com",
                  role: "data_provider",
+                 phone: "12345678910",
                  is_dpo: false,
                  is_key_contact: false,
                )).to be_a(User)
