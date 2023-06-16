@@ -196,7 +196,7 @@ class Form::Question
     type == "radio" && RADIO_REFUSED_VALUE[id.to_sym]&.include?(value)
   end
 
-  def display_label
+  def error_display_label
     error_label || check_answer_label || header || id.humanize
   end
 
@@ -204,7 +204,7 @@ class Form::Question
     return I18n.t("validations.declaration.missing") if id == "declaration"
     return I18n.t("validations.privacynotice.missing") if id == "privacynotice"
 
-    I18n.t("validations.not_answered", question: display_label.downcase)
+    I18n.t("validations.not_answered", question: error_display_label.downcase)
   end
 
   def suffix_label(log)

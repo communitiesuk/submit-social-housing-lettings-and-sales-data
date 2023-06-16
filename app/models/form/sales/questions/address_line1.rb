@@ -2,7 +2,6 @@ class Form::Sales::Questions::AddressLine1 < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "address_line1"
-    @check_answer_label = "Address"
     @header = "Address line 1"
     @error_label = "Address line 1"
     @type = "text"
