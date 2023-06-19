@@ -18,6 +18,18 @@ RSpec.describe BulkUploadLettingsLogsController, type: :request do
 
         expect(response).to redirect_to("/lettings-logs")
       end
+
+      context "when feature flag disabled" do
+        before do
+          allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(false)
+        end
+
+        it "does not redirect to lettings index page" do
+          get "/lettings-logs/bulk-upload-logs/start", params: {}
+
+          expect(response).not_to redirect_to("/lettings-logs")
+        end
+      end
     end
 
     context "when not in crossover period" do
