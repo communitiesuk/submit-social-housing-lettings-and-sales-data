@@ -649,12 +649,24 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
       end
     end
 
-    describe "#field_68 - 70" do
+    describe "#field_68 - 74" do
       context "when not homeless but reasonable preference for homelessness" do
         let(:attributes) { { bulk_upload:, field_68: "1", field_69: "1", field_70: "1" } }
 
         it "is not permitted" do
           expect(parser.errors[:field_70]).to be_present
+        end
+      end
+
+      context "when there is a reasonable preference but none is given" do
+        let(:attributes) { { bulk_upload:, field_69: "1", field_70: nil, field_71: nil, field_72: nil, field_73: nil, field_74: nil } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_70]).to be_present
+          expect(parser.errors[:field_71]).to be_present
+          expect(parser.errors[:field_72]).to be_present
+          expect(parser.errors[:field_73]).to be_present
+          expect(parser.errors[:field_74]).to be_present
         end
       end
     end
@@ -976,6 +988,23 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
           expect(parser.errors[:field_126]).not_to be_present
           expect(parser.errors[:field_127]).not_to be_present
           expect(parser.errors[:field_128]).not_to be_present
+        end
+      end
+
+      context "when illness but no illnesses answered" do
+        let(:attributes) { { bulk_upload:, field_118: "1", field_119: nil, field_120: nil, field_121: nil, field_122: nil, field_123: nil, field_124: nil, field_125: nil, field_126: nil, field_127: nil, field_128: nil } }
+
+        it "errors added to correct fields" do
+          expect(parser.errors[:field_119]).to be_present
+          expect(parser.errors[:field_120]).to be_present
+          expect(parser.errors[:field_121]).to be_present
+          expect(parser.errors[:field_122]).to be_present
+          expect(parser.errors[:field_123]).to be_present
+          expect(parser.errors[:field_124]).to be_present
+          expect(parser.errors[:field_125]).to be_present
+          expect(parser.errors[:field_126]).to be_present
+          expect(parser.errors[:field_127]).to be_present
+          expect(parser.errors[:field_128]).to be_present
         end
       end
     end

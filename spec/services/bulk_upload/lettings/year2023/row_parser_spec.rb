@@ -706,14 +706,43 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           expect(parser.errors[:field_99]).not_to be_present
         end
       end
+
+      context "when illness but no illnesses answered" do
+        let(:attributes) { { bulk_upload:, field_89: "1", field_90: nil, field_91: nil, field_92: nil, field_93: nil, field_94: nil, field_95: nil, field_96: nil, field_97: nil, field_98: nil, field_99: nil } }
+
+        it "errors added to correct fields" do
+          expect(parser.errors[:field_90]).to be_present
+          expect(parser.errors[:field_91]).to be_present
+          expect(parser.errors[:field_92]).to be_present
+          expect(parser.errors[:field_93]).to be_present
+          expect(parser.errors[:field_94]).to be_present
+          expect(parser.errors[:field_95]).to be_present
+          expect(parser.errors[:field_96]).to be_present
+          expect(parser.errors[:field_97]).to be_present
+          expect(parser.errors[:field_98]).to be_present
+          expect(parser.errors[:field_99]).to be_present
+        end
+      end
     end
 
-    describe "#field_105, field_110 - 11" do
+    describe "#field_105, field_110 - 15" do
       context "when not homeless but reasonable preference for homelessness" do
         let(:attributes) { { bulk_upload:, field_105: "1", field_110: "1", field_111: "1" } }
 
         it "is not permitted" do
           expect(parser.errors[:field_111]).to be_present
+        end
+      end
+
+      context "when there is a reasonable preference but none is given" do
+        let(:attributes) { { bulk_upload:, field_110: "1", field_111: nil, field_112: nil, field_113: nil, field_114: nil, field_115: nil } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_111]).to be_present
+          expect(parser.errors[:field_112]).to be_present
+          expect(parser.errors[:field_113]).to be_present
+          expect(parser.errors[:field_114]).to be_present
+          expect(parser.errors[:field_115]).to be_present
         end
       end
     end

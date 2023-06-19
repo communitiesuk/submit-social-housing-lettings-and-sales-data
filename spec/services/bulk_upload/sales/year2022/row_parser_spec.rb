@@ -349,6 +349,19 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
       end
     end
 
+    describe "#field_44 - 7" do # buyers organisations
+      context "when all nil" do
+        let(:attributes) { setup_section_params.merge(field_44: nil, field_45: nil, field_46: nil, field_47: nil) }
+
+        it "returns correct errors" do
+          expect(parser.errors[:field_44]).to be_present
+          expect(parser.errors[:field_45]).to be_present
+          expect(parser.errors[:field_46]).to be_present
+          expect(parser.errors[:field_47]).to be_present
+        end
+      end
+    end
+
     describe "#field_57" do # type of shared ownership scheme
       context "when an invalid option" do
         let(:attributes) { setup_section_params.merge(field_57: "100", field_113: "1") }
