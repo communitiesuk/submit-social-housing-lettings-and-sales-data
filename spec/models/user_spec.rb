@@ -369,4 +369,30 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe "#send_data_protection_confirmation_reminder" do
+    context "when updating to dpo" do
+      let!(:user) { create(:user, is_dpo: false) }
+
+      it "sends the email" do
+        expect { user.update!(is_dpo: true) }.to enqueue_job(DataProtectionConfirmationMailer)
+      end
+    end
+
+    context "when updating to non dpo" do
+      let!(:user) { create(:user, is_dpo: true) }
+
+      it "does not send the email" do
+        expect { user.update!(is_dpo: false) }.not_to enqueue_job(DataProtectionConfirmationMailer)
+      end
+    end
+
+    context "when updating something else" do
+      let!(:user) { create(:user) }
+
+      it "does not send the email" do
+        expect { user.update!(name: "foobar") }.not_to enqueue_job(DataProtectionConfirmationMailer)
+      end
+    end
+  end
 end

@@ -21,7 +21,7 @@ class User < ApplicationRecord
   validates :password, confirmation: { if: :password_required? }
   validates :password, length: { within: Devise.password_length, allow_blank: true }
 
-  after_save :send_data_protection_confirmation_reminder, if: :is_dpo_changed?
+  after_update :send_data_protection_confirmation_reminder, if: :is_dpo_changed?
 
   validates :organisation_id, presence: true
 
@@ -186,8 +186,10 @@ protected
 private
 
   def send_data_protection_confirmation_reminder
+    # binding.pry
+    return unless is_dpo_changed?
     return unless is_dpo?
 
-    DataProtectionConfirmationMailer.send_confirmation_email(user)
+    DataProtectionConfirmationMailer.send_confirmation_email(user).deliver_later
   end
 end
