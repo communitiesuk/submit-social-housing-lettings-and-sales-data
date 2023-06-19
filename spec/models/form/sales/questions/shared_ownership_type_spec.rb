@@ -5,7 +5,7 @@ RSpec.describe Form::Sales::Questions::SharedOwnershipType, type: :model do
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
-  let(:start_date) { Time.utc(2022, 4, 1) }
+  let(:start_date) { Time.zone.local(2022, 4, 1) }
   let(:form) { instance_double(Form, start_date:) }
   let(:subsection) { instance_double(Form::Subsection, form:) }
   let(:page) { instance_double(Form::Page, subsection:) }
@@ -38,7 +38,8 @@ RSpec.describe Form::Sales::Questions::SharedOwnershipType, type: :model do
     expect(question.hint_text).to eq("A shared ownership sale is when the purchaser buys up to 75% of the property value and pays rent to the Private Registered Provider (PRP) on the remaining portion")
   end
 
-  context "when form start date is 2022" do
+  context "when form start date is 2022/23" do
+    let(:start_date) { Time.zone.local(2022, 4, 1) }
     it "has the correct answer_options" do
       expect(question.answer_options).to eq({
         "2" => { "value" => "Shared Ownership" },
@@ -56,8 +57,8 @@ RSpec.describe Form::Sales::Questions::SharedOwnershipType, type: :model do
     end
   end
 
-  context "when form start date is 2023" do
-    let(:start_date) { Time.utc(2023, 4, 2) }
+  context "when form start date is 2023/24" do
+    let(:start_date) { Time.zone.local(2023, 4, 2) }
 
     it "has the correct answer_options" do
       expect(question.answer_options).to eq({

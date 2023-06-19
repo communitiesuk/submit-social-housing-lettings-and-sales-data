@@ -31,16 +31,16 @@ RSpec.describe Form::Sales::Pages::OutrightOwnershipType, type: :model do
   end
 
   describe "headers" do
-    context "when the form year is 2023" do
-      let(:start_date) { Time.utc(2023, 2, 8) }
+    context "when the form year is 2023/24" do
+      let(:start_date) { Time.zone.local(2023, 4, 8) }
 
       it "has the correct header" do
         expect(page.header).to eq("Type of outright sale")
       end
     end
 
-    context "when the form is before the year 2023" do
-      let(:start_date) { Time.utc(2022, 2, 8) }
+    context "when the form is before the year 2023/24" do
+      let(:start_date) { Time.zone.local(2022, 4, 8) }
 
       it "does not have a page header" do
         expect(page.header).to eq(nil)

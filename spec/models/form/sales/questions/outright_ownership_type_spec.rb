@@ -47,8 +47,8 @@ RSpec.describe Form::Sales::Questions::OutrightOwnershipType, type: :model do
   end
 
   describe "partial guidance" do
-    context "when the form is for year 2023" do
-      let(:start_date) { Time.utc(2023, 2, 8) }
+    context "when the form is for year 2023/24" do
+      let(:start_date) { Time.zone.local(2023, 4, 8) }
 
       it "has the correct guidance_partial" do
         expect(question.guidance_partial).to eq("outright_sale_type_definitions")
@@ -60,8 +60,8 @@ RSpec.describe Form::Sales::Questions::OutrightOwnershipType, type: :model do
       end
     end
 
-    context "when the form is for before year 2023" do
-      let(:start_date) { Time.utc(2022, 2, 8) }
+    context "when the form is for before year 2023/24" do
+      let(:start_date) { Time.zone.local(2022, 4, 8) }
 
       it "does not display a guidance partial" do
         expect(question.guidance_partial).to eq(nil)

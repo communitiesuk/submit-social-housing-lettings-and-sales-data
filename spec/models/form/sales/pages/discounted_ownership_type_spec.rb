@@ -9,16 +9,16 @@ RSpec.describe Form::Sales::Pages::DiscountedOwnershipType, type: :model do
   let(:start_date) { Time.zone.today }
 
   describe "headers" do
-    context "when form year is for 2023" do
-      let(:start_date) { Time.utc(2023, 2, 8) }
+    context "when form year is for 2023/24" do
+      let(:start_date) { Time.zone.local(2023, 4, 8) }
 
       it "has the correct header" do
         expect(page.header).to eq("Type of discounted ownership sale")
       end
     end
 
-    context "when form year is for before 2023" do
-      let(:start_date) { Time.utc(2022, 2, 8) }
+    context "when form year is for before 2023/24" do
+      let(:start_date) { Time.zone.local(2022, 2, 8) }
 
       it "does not have a page header" do
         expect(page.header).to eq(nil)

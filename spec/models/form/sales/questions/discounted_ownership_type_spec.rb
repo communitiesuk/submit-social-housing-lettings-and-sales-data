@@ -46,8 +46,8 @@ RSpec.describe Form::Sales::Questions::DiscountedOwnershipType, type: :model do
   end
 
   describe "partial guidance" do
-    context "when the form is for 2023" do
-      let(:start_date) { Time.utc(2023, 2, 8) }
+    context "when the form is for 2023/24" do
+      let(:start_date) { Time.zone.local(2023, 4, 8) }
 
       it "shows shows correct guidance_partial" do
         expect(question.guidance_partial).to eq("discounted_ownership_type_definitions")
@@ -59,8 +59,8 @@ RSpec.describe Form::Sales::Questions::DiscountedOwnershipType, type: :model do
       end
     end
 
-    context "when the form is for before 2023" do
-      let(:start_date) { Time.utc(2022, 2, 8) }
+    context "when the form is for before 2023/24" do
+      let(:start_date) { Time.zone.local(2022, 4, 8) }
 
       it "does not show a guidance_partial" do
         expect(question.guidance_partial).to eq(nil)
