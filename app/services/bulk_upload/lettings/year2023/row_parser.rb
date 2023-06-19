@@ -624,7 +624,7 @@ private
       errors.add(:field_111, I18n.t("validations.household.reasonpref.not_homeless"))
     else
       reason_fields = %i[field_111 field_112 field_113 field_114 field_115]
-      if field_110 == 1 && reason_fields.all? { |field| attributes[field.to_sym].blank? }
+      if field_110 == 1 && reason_fields.all? { |field| attributes[field.to_s].blank? }
         reason_fields.each do |field|
           errors.add(field, I18n.t("validations.not_answered", question: "reason for reasonable preference"))
         end
@@ -640,7 +640,7 @@ private
           errors.add(field, I18n.t("validations.household.condition_effects.no_choices"))
         end
       end
-    elsif illness_option_fields.all? { |field| attributes[field.to_sym].blank? }
+    elsif illness_option_fields.all? { |field| attributes[field.to_s].blank? }
       illness_option_fields.each do |field|
         errors.add(field, I18n.t("validations.not_answered", question: "how is person affected by condition or illness"))
       end

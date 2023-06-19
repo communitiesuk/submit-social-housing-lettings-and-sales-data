@@ -470,7 +470,7 @@ private
 
   def validate_buyers_organisations
     organisations_fields = %i[field_44 field_45 field_46 field_47]
-    if organisations_fields.all? { |field| attributes[field.to_sym].blank? }
+    if organisations_fields.all? { |field| attributes[field.to_s].blank? }
       organisations_fields.each do |field|
         errors.add(field, "At least one option must be selected of these four")
       end
