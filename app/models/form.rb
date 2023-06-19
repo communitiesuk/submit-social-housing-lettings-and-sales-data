@@ -12,10 +12,10 @@ class Form
                     Time.zone.local(start_year + 1, 8, 7)
                   end
       @submission_deadline = if start_year && start_year.to_i > 2022
-                              Time.zone.local(start_year + 1, 6, 7)
-                            else
-                              Time.zone.local(start_year + 1, 6, 9)
-                            end
+                               Time.zone.local(start_year + 1, 6, 7)
+                             else
+                               Time.zone.local(start_year + 1, 6, 9)
+                             end
       @setup_sections = type == "sales" ? [Form::Sales::Sections::Setup.new(nil, nil, self)] : [Form::Lettings::Sections::Setup.new(nil, nil, self)]
       @form_sections = sections_in_form.map { |sec| sec.new(nil, nil, self) }
       @type = type
