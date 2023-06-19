@@ -1,5 +1,5 @@
 module Imports
-  class LettingsLogsFieldImportService < ImportService
+  class LettingsLogsFieldImportService < LogsImportService
     def update_field(field, folder)
       case field
       when "tenancycode"
