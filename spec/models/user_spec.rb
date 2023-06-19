@@ -375,7 +375,22 @@ RSpec.describe User, type: :model do
       let!(:user) { create(:user, is_dpo: false) }
 
       it "sends the email" do
-        expect { user.update!(is_dpo: true) }.to enqueue_job(DataProtectionConfirmationMailer)
+        expect { user.update!(is_dpo: true) }.to enqueue_job(ActionMailer::MailDeliveryJob).with(
+          "DataProtectionConfirmationMailer",
+          "send_confirmation_email",
+          "deliver_now",
+          args: [user],
+        )
+      end
+
+      context "when feature flag disabled" do
+        before do
+          allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(false)
+        end
+
+        it "does not send the email" do
+          expect { user.update!(is_dpo: true) }.not_to enqueue_job(ActionMailer::MailDeliveryJob)
+        end
       end
     end
 
@@ -383,7 +398,7 @@ RSpec.describe User, type: :model do
       let!(:user) { create(:user, is_dpo: true) }
 
       it "does not send the email" do
-        expect { user.update!(is_dpo: false) }.not_to enqueue_job(DataProtectionConfirmationMailer)
+        expect { user.update!(is_dpo: false) }.not_to enqueue_job(ActionMailer::MailDeliveryJob)
       end
     end
 
@@ -391,7 +406,7 @@ RSpec.describe User, type: :model do
       let!(:user) { create(:user) }
 
       it "does not send the email" do
-        expect { user.update!(name: "foobar") }.not_to enqueue_job(DataProtectionConfirmationMailer)
+        expect { user.update!(name: "foobar") }.not_to enqueue_job(ActionMailer::MailDeliveryJob)
       end
     end
   end
