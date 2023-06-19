@@ -13,7 +13,7 @@
       <%= summary_list.row do |row|
             row.key { "Name" }
             row.value { @user.name }
-            if can_edit_names?(@user, current_user)
+            if UserPolicy.new(current_user, @user).edit_names?
               row.action(visually_hidden_text: "name", href: aliased_user_edit(@user, current_user), html_attributes: { "data-qa": "change-name" })
             else
               row.action
@@ -23,8 +23,18 @@
       <%= summary_list.row do |row|
             row.key { "Email address" }
             row.value { @user.email }
-            if can_edit_emails?(@user, current_user)
+            if UserPolicy.new(current_user, @user).edit_emails?
               row.action(visually_hidden_text: "email address", href: aliased_user_edit(@user, current_user), html_attributes: { "data-qa": "change-email-address" })
+            else
+              row.action
+            end
+          end %>
+
+      <%= summary_list.row do |row|
+            row.key { "Telephone number" }
+            row.value { @user.phone }
+            if UserPolicy.new(current_user, @user).edit_telephone_numbers?
+              row.action(visually_hidden_text: "telephone number", href: aliased_user_edit(@user, current_user), html_attributes: { "data-qa": "change-telephone-number" })
             else
               row.action
             end
@@ -33,7 +43,7 @@
       <%= summary_list.row do |row|
             row.key { "Password" }
             row.value { "••••••••" }
-            if can_edit_password?(@user, current_user)
+            if UserPolicy.new(current_user, @user).edit_password?
               row.action(
                 visually_hidden_text: "password",
                 href: edit_password_account_path,
@@ -53,7 +63,7 @@
       <%= summary_list.row do |row|
             row.key { "Role" }
             row.value { @user.role&.humanize }
-            if can_edit_roles?(@user, current_user)
+            if UserPolicy.new(current_user, @user).edit_roles?
               row.action(
                 visually_hidden_text: "role",
                 href: aliased_user_edit(@user, current_user),
@@ -67,7 +77,7 @@
       <%= summary_list.row do |row|
             row.key { "Data protection officer" }
             row.value { @user.is_data_protection_officer? ? "Yes" : "No" }
-            if can_edit_dpo?(@user, current_user)
+            if UserPolicy.new(current_user, @user).edit_dpo?
               row.action(
                 visually_hidden_text: "if data protection officer",
                 href: user_edit_dpo_path(@user),
@@ -81,7 +91,7 @@
       <%= summary_list.row do |row|
             row.key { "Key contact" }
             row.value { @user.is_key_contact? ? "Yes" : "No" }
-            if can_edit_key_contact?(@user, current_user)
+            if UserPolicy.new(current_user, @user).edit_key_contact?
               row.action(
                 visually_hidden_text: "if a key contact",
                 href: user_edit_key_contact_path(@user),

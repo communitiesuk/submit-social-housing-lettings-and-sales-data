@@ -120,6 +120,14 @@ private
     if user_params[:role].present? && !current_user.assignable_roles.key?(user_params[:role].to_sym)
       @resource.errors.add :role, I18n.t("validations.role.invalid")
     end
+
+    if user_params[:phone].present? && !valid_phone_number?(user_params[:phone])
+      @resource.errors.add :phone
+    end
+  end
+
+  def valid_phone_number?(number)
+    number.to_i.to_s == number && number.length >= 11
   end
 
   def format_error_messages
@@ -151,14 +159,14 @@ private
   def user_params
     if @user == current_user
       if current_user.data_coordinator? || current_user.support?
-        params.require(:user).permit(:email, :name, :password, :password_confirmation, :role, :is_dpo, :is_key_contact, :initial_confirmation_sent)
+        params.require(:user).permit(:email, :phone, :name, :password, :password_confirmation, :role, :is_dpo, :is_key_contact, :initial_confirmation_sent)
       else
-        params.require(:user).permit(:email, :name, :password, :password_confirmation, :initial_confirmation_sent)
+        params.require(:user).permit(:email, :phone, :name, :password, :password_confirmation, :initial_confirmation_sent)
       end
     elsif current_user.data_coordinator?
-      params.require(:user).permit(:email, :name, :role, :is_dpo, :is_key_contact, :active, :initial_confirmation_sent)
+      params.require(:user).permit(:email, :phone, :name, :role, :is_dpo, :is_key_contact, :active, :initial_confirmation_sent)
     elsif current_user.support?
-      params.require(:user).permit(:email, :name, :role, :is_dpo, :is_key_contact, :organisation_id, :active, :initial_confirmation_sent)
+      params.require(:user).permit(:email, :phone, :name, :role, :is_dpo, :is_key_contact, :organisation_id, :active, :initial_confirmation_sent)
     end
   end
 
