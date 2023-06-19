@@ -36,13 +36,23 @@ RSpec.describe BulkUploadLettingsResumeController, type: :request do
       expect(response.headers["Cache-Control"]).to eql("no-store")
     end
 
-    context "and previosuly told us to fix inline" do
+    context "and previously told us to fix inline" do
       let(:bulk_upload) { create(:bulk_upload, :lettings, user:, bulk_upload_errors:, choice: "create-fix-inline") }
 
       it "redirects to chosen" do
         get "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice"
 
         expect(response).to redirect_to("/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/chosen")
+      end
+    end
+
+    context "and previously told us to bulk confirm soft validations" do
+      let(:bulk_upload) { create(:bulk_upload, :lettings, user:, bulk_upload_errors:, choice: "bulk-confirm-soft-validations") }
+
+      it "redirects to soft validations check chosen" do
+        get "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice"
+
+        expect(response).to redirect_to("/lettings-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/chosen")
       end
     end
   end
@@ -105,13 +115,23 @@ RSpec.describe BulkUploadLettingsResumeController, type: :request do
       expect(response.headers["Cache-Control"]).to eql("no-store")
     end
 
-    context "and previosuly told us to fix inline" do
+    context "and previously told us to fix inline" do
       let(:bulk_upload) { create(:bulk_upload, :lettings, user:, bulk_upload_errors:, choice: "create-fix-inline") }
 
       it "redirects to chosen" do
         get "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/confirm"
 
         expect(response).to redirect_to("/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/chosen")
+      end
+    end
+
+    context "and previously told us to bulk confirm soft validations" do
+      let(:bulk_upload) { create(:bulk_upload, :lettings, user:, bulk_upload_errors:, choice: "bulk-confirm-soft-validations") }
+
+      it "redirects to soft validations check chosen" do
+        get "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/confirm"
+
+        expect(response).to redirect_to("/lettings-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/chosen")
       end
     end
   end

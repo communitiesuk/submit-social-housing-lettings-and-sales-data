@@ -35,7 +35,7 @@ RSpec.describe BulkUploadSalesSoftValidationsCheckController, type: :request do
       expect(response.headers["Cache-Control"]).to eql("no-store")
     end
 
-    context "and previosuly told us to fix inline" do
+    context "and previously told us to fix inline" do
       let(:bulk_upload) { create(:bulk_upload, :sales, user:, bulk_upload_errors:, choice: "create-fix-inline") }
 
       it "redirects to resume chosen" do
@@ -45,7 +45,7 @@ RSpec.describe BulkUploadSalesSoftValidationsCheckController, type: :request do
       end
     end
 
-    context "and previosuly told us to bulk confirm soft validations" do
+    context "and previously told us to bulk confirm soft validations" do
       let(:bulk_upload) { create(:bulk_upload, :sales, user:, bulk_upload_errors:, choice: "bulk-confirm-soft-validations") }
 
       it "redirects to soft validations check chosen" do
