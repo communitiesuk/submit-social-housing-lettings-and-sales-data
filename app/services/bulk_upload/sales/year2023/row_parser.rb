@@ -1218,13 +1218,13 @@ private
       if setup_question?(question)
         fields.each do |field|
           unless errors.any? { |e| fields.include?(e.attribute) }
-            errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase), category: :setup)
+            errors.add(field, I18n.t("validations.not_answered", question: question.error_display_label&.downcase), category: :setup)
           end
         end
       else
         fields.each do |field|
           unless errors.any? { |e| fields.include?(e.attribute) }
-            errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase))
+            errors.add(field, I18n.t("validations.not_answered", question: question.error_display_label&.downcase))
           end
         end
       end

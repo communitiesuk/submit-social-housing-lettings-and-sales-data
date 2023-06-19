@@ -153,19 +153,6 @@ RSpec.describe LocationsController, type: :request do
         end
       end
 
-      it "shows locations with correct data when the new locations layout feature toggle is disabled" do
-        allow(FeatureToggle).to receive(:location_toggle_enabled?).and_return(false)
-        get "/schemes/#{scheme.id}/locations"
-        locations.each do |location|
-          expect(page).to have_content(location.id)
-          expect(page).to have_content(location.postcode)
-          expect(page).to have_content(location.type_of_unit)
-          expect(page).to have_content(location.mobility_type)
-          expect(page).to have_content(location.location_admin_district)
-          expect(page).to have_content(location.startdate&.to_formatted_s(:govuk_date))
-        end
-      end
-
       it "has page heading" do
         expect(page).to have_content(scheme.service_name)
       end
@@ -292,19 +279,6 @@ RSpec.describe LocationsController, type: :request do
           expect(page).to have_content(location.status)
         end
         expect(page).to have_button("Add a location")
-      end
-
-      it "shows locations with correct data when the new locations layout feature toggle is disabled" do
-        allow(FeatureToggle).to receive(:location_toggle_enabled?).and_return(false)
-        get "/schemes/#{scheme.id}/locations"
-        locations.each do |location|
-          expect(page).to have_content(location.id)
-          expect(page).to have_content(location.postcode)
-          expect(page).to have_content(location.type_of_unit)
-          expect(page).to have_content(location.mobility_type)
-          expect(page).to have_content(location.location_admin_district)
-          expect(page).to have_content(location.startdate&.to_formatted_s(:govuk_date))
-        end
       end
 
       it "has page heading" do
@@ -1493,13 +1467,14 @@ RSpec.describe LocationsController, type: :request do
 
       context "when confirming deactivation" do
         let(:params) { { deactivation_date:, confirm: true, deactivation_date_type: "other" } }
-        let(:mailer) { instance_double(LocationOrSchemeDeactivationMailer) }
 
-        let(:user_a) { create(:user, email: "user_a@example.com") }
-        let(:user_b) { create(:user, email: "user_b@example.com") }
+        let(:user_a) { create(:user) }
+        let(:user_b) { create(:user) }
 
         before do
-          create_list(:lettings_log, 1, :sh, location:, scheme:, startdate:, created_by: user_a)
+          allow(LocationOrSchemeDeactivationMailer).to receive(:send_deactivation_mail).and_call_original
+
+          create(:lettings_log, :sh, location:, scheme:, startdate:, created_by: user_a)
           create_list(:lettings_log, 3, :sh, location:, scheme:, startdate:, created_by: user_b)
 
           Timecop.freeze(Time.utc(2022, 10, 10))
@@ -1537,6 +1512,24 @@ RSpec.describe LocationsController, type: :request do
             lettings_log.reload
             expect(lettings_log.unresolved).to eq(true)
           end
+
+          it "sends deactivation emails" do
+            expect(LocationOrSchemeDeactivationMailer).to have_received(:send_deactivation_mail).with(
+              user_a,
+              1,
+              update_logs_lettings_logs_url,
+              location.scheme.service_name,
+              location.postcode,
+            )
+
+            expect(LocationOrSchemeDeactivationMailer).to have_received(:send_deactivation_mail).with(
+              user_b,
+              3,
+              update_logs_lettings_logs_url,
+              location.scheme.service_name,
+              location.postcode,
+            )
+          end
         end
 
         context "and the users need to be notified" do
@@ -1562,6 +1555,37 @@ RSpec.describe LocationsController, type: :request do
             expect(lettings_log.unresolved).to eq(nil)
             lettings_log.reload
             expect(lettings_log.unresolved).to eq(nil)
+          end
+        end
+
+        context "and there already is a deactivation period" do
+          let(:add_deactivations) { create(:location_deactivation_period, deactivation_date: Time.zone.local(2023, 6, 5), reactivation_date: nil, location:) }
+
+          before do
+            patch "/schemes/#{scheme.id}/locations/#{location.id}/deactivate", params:
+          end
+
+          it "updates existing location with valid deactivation date and renders location page" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+            location.reload
+            expect(location.location_deactivation_periods.count).to eq(1)
+            expect(location.location_deactivation_periods.first.deactivation_date).to eq(deactivation_date)
+          end
+
+          it "clears the location and scheme answers" do
+            expect(lettings_log.location).to eq(location)
+            expect(lettings_log.scheme).to eq(scheme)
+            lettings_log.reload
+            expect(lettings_log.location).to eq(nil)
+            expect(lettings_log.scheme).to eq(nil)
+          end
+
+          it "marks log as needing attention" do
+            expect(lettings_log.unresolved).to eq(nil)
+            lettings_log.reload
+            expect(lettings_log.unresolved).to eq(true)
           end
         end
       end
@@ -1628,6 +1652,34 @@ RSpec.describe LocationsController, type: :request do
         it "displays page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_content(I18n.t("validations.location.deactivation.during_deactivated_period"))
+        end
+      end
+
+      context "when there is an earlier open deactivation" do
+        let(:deactivation_date) { Time.zone.local(2022, 10, 10) }
+        let(:params) { { location_deactivation_period: { deactivation_date_type: "other", "deactivation_date(3i)": "8", "deactivation_date(2i)": "9", "deactivation_date(1i)": "2023" } } }
+        let(:add_deactivations) { create(:location_deactivation_period, deactivation_date: Time.zone.local(2023, 6, 5), reactivation_date: nil, location:) }
+
+        it "redirects to the location page and updates the existing deactivation period" do
+          follow_redirect!
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+          location.reload
+          expect(location.location_deactivation_periods.count).to eq(1)
+          expect(location.location_deactivation_periods.first.deactivation_date).to eq(Time.zone.local(2023, 9, 8))
+        end
+      end
+
+      context "when there is a later open deactivation" do
+        let(:deactivation_date) { Time.zone.local(2022, 10, 10) }
+        let(:params) { { location_deactivation_period: { deactivation_date_type: "other", "deactivation_date(3i)": "8", "deactivation_date(2i)": "9", "deactivation_date(1i)": "2022" } } }
+        let(:add_deactivations) { create(:location_deactivation_period, deactivation_date: Time.zone.local(2023, 6, 5), reactivation_date: nil, location:) }
+
+        it "redirects to the confirmation page" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("This change will affect 1 logs")
         end
       end
     end
@@ -1699,6 +1751,19 @@ RSpec.describe LocationsController, type: :request do
           expect(response).to have_http_status(:ok)
           expect(page).not_to have_link("Reactivate this location")
           expect(page).not_to have_link("Deactivate this location")
+          expect(page).to have_content("Deactivating soon")
+        end
+      end
+
+      context "with location that's deactivating in more than 6 months" do
+        let(:location_deactivation_period) { create(:location_deactivation_period, deactivation_date: Time.zone.local(2023, 6, 12), location:) }
+
+        it "does render toggle location link" do
+          expect(response).to have_http_status(:ok)
+          expect(page).not_to have_link("Reactivate this location")
+          expect(page).to have_link("Deactivate this location")
+          expect(response.body).not_to include("<strong class=\"govuk-tag govuk-tag--yellow\">Deactivating soon</strong>")
+          expect(response.body).to include("<strong class=\"govuk-tag govuk-tag--green\">Active</strong>")
         end
       end
 
@@ -1765,10 +1830,10 @@ RSpec.describe LocationsController, type: :request do
       let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
       let(:location) { create(:location, scheme:) }
       let(:deactivation_date) { Time.zone.local(2022, 4, 1) }
-      let(:startdate) { Time.utc(2022, 10, 11) }
+      let(:startdate) { Time.utc(2022, 9, 11) }
 
       before do
-        Timecop.freeze(Time.utc(2022, 10, 10))
+        Timecop.freeze(Time.utc(2022, 9, 10))
         sign_in user
         create(:location_deactivation_period, deactivation_date:, location:)
         location.save!
@@ -1799,7 +1864,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "with other date" do
-        let(:params) { { location_deactivation_period: { reactivation_date_type: "other", "reactivation_date(3i)": "10", "reactivation_date(2i)": "10", "reactivation_date(1i)": "2022" } } }
+        let(:params) { { location_deactivation_period: { reactivation_date_type: "other", "reactivation_date(3i)": "10", "reactivation_date(2i)": "9", "reactivation_date(1i)": "2022" } } }
 
         it "redirects to the location page and displays a success banner" do
           expect(response).to redirect_to("/schemes/#{scheme.id}/locations/#{location.id}")
@@ -1812,7 +1877,7 @@ RSpec.describe LocationsController, type: :request do
           follow_redirect!
           location.reload
           expect(location.location_deactivation_periods.count).to eq(1)
-          expect(location.location_deactivation_periods.first.reactivation_date).to eq(Time.zone.local(2022, 10, 10))
+          expect(location.location_deactivation_periods.first.reactivation_date).to eq(Time.zone.local(2022, 9, 10))
         end
       end
 

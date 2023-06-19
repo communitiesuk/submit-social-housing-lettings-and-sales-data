@@ -12,22 +12,6 @@ class FeatureToggle
     Rails.env.production? || Rails.env.test? || Rails.env.staging? || Rails.env.review?
   end
 
-  def self.scheme_toggle_enabled?
-    true
-  end
-
-  def self.location_toggle_enabled?
-    true
-  end
-
-  def self.bulk_upload_lettings_logs?
-    true
-  end
-
-  def self.bulk_upload_sales_logs?
-    !Rails.env.production?
-  end
-
   def self.bulk_upload_duplicate_log_check_enabled?
     !Rails.env.staging?
   end
@@ -46,7 +30,7 @@ class FeatureToggle
     !Rails.env.production?
   end
 
-  def self.new_data_sharing_agreement?
+  def self.new_data_protection_confirmation?
     !Rails.env.production?
   end
 end

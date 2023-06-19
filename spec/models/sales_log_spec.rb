@@ -125,7 +125,7 @@ RSpec.describe SalesLog, type: :model do
       end
 
       it "is set to completed for a log with a saledate before 23/24" do
-        completed_sales_log.update!(proplen: nil, saledate: Time.zone.local(2022, 5, 1))
+        completed_sales_log.update!(proplen: nil, proplen_asked: 0, saledate: Time.zone.local(2022, 5, 1))
         expect(completed_sales_log.in_progress?).to be(false)
         expect(completed_sales_log.not_started?).to be(false)
         expect(completed_sales_log.completed?).to be(true)
@@ -133,7 +133,7 @@ RSpec.describe SalesLog, type: :model do
       end
 
       it "is set to in_progress for a log with a saledate after 23/24" do
-        completed_sales_log.update!(proplen: nil, saledate: Time.zone.local(2023, 5, 1))
+        completed_sales_log.update!(proplen: nil, proplen_asked: 0, saledate: Time.zone.local(2023, 5, 1))
         expect(completed_sales_log.in_progress?).to be(true)
         expect(completed_sales_log.not_started?).to be(false)
         expect(completed_sales_log.completed?).to be(false)
@@ -162,6 +162,13 @@ RSpec.describe SalesLog, type: :model do
 
   describe "derived variables" do
     let(:sales_log) { create(:sales_log, :completed) }
+
+    around do |example|
+      Timecop.freeze(Time.zone.local(2022, 7, 4)) do
+        example.run
+      end
+      Timecop.return
+    end
 
     it "correctly derives and saves exday, exmonth and exyear" do
       sales_log.update!(exdate: Time.gm(2022, 5, 4), saledate: Time.gm(2022, 7, 4), ownershipsch: 1, type: 18, staircase: 2, resale: 2, proplen: 0)

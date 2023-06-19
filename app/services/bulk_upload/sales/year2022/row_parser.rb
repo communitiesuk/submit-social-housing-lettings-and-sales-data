@@ -454,6 +454,12 @@ class BulkUpload::Sales::Year2022::RowParser
     end
   end
 
+  def saledate
+    Date.new(field_4 + 2000, field_3, field_2) if field_2.present? && field_3.present? && field_4.present?
+  rescue Date::Error
+    Date.new
+  end
+
 private
 
   def validate_data_protection_answered
@@ -770,12 +776,6 @@ private
     end
   end
 
-  def saledate
-    Date.new(field_4 + 2000, field_3, field_2) if field_2.present? && field_3.present? && field_4.present?
-  rescue Date::Error
-    Date.new
-  end
-
   def hodate
     Date.new(field_61 + 2000, field_60, field_59) if field_59.present? && field_60.present? && field_61.present?
   rescue Date::Error
@@ -1065,9 +1065,9 @@ private
       fields.each do |field|
         unless errors.any? { |e| fields.include?(e.attribute) }
           if setup_question?(question)
-            errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase), category: :setup)
+            errors.add(field, I18n.t("validations.not_answered", question: question.error_display_label&.downcase), category: :setup)
           else
-            errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase))
+            errors.add(field, I18n.t("validations.not_answered", question: question.error_display_label&.downcase))
           end
         end
       end

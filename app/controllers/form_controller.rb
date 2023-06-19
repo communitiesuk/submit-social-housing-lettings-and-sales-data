@@ -46,7 +46,7 @@ class FormController < ApplicationController
   end
 
   def show_page
-    if request.params["referrer"] == "interruption_screen"
+    if request.params["referrer"] == "interruption_screen" && request.headers["HTTP_REFERER"].present?
       @interruption_page_id = URI.parse(request.headers["HTTP_REFERER"]).path.split("/").last.underscore
       @interruption_page_referrer_type = referrer_from_query
     end

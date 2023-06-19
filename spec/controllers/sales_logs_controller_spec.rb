@@ -10,7 +10,7 @@ RSpec.describe SalesLogsController do
   describe "#index" do
     context "when a sales bulk upload has been resolved" do
       it "redirects to resume_bulk_upload_sales_result_path" do
-        session[:logs_filters] = { bulk_upload_id: [bulk_upload.id.to_s] }.to_json
+        session[:sales_logs_filters] = { bulk_upload_id: [bulk_upload.id.to_s] }.to_json
 
         get :index
 
@@ -22,7 +22,7 @@ RSpec.describe SalesLogsController do
       let(:bulk_upload) { create(:bulk_upload, :lettings) }
 
       it "does not redirect to resume" do
-        session[:logs_filters] = { bulk_upload_id: [bulk_upload.id.to_s] }.to_json
+        session[:sales_logs_filters] = { bulk_upload_id: [bulk_upload.id.to_s] }.to_json
 
         get :index
 

@@ -96,6 +96,13 @@ RSpec.describe UsersController, type: :request do
         expect(response).to redirect_to("/account/sign-in")
       end
     end
+
+    describe "#resend_invite" do
+      it "does not allow resending activation emails" do
+        get deactivate_user_path(user.id), headers: headers, params: {}
+        expect(response).to redirect_to(new_user_session_path)
+      end
+    end
   end
 
   context "when user is signed in as a data provider" do
@@ -113,6 +120,7 @@ RSpec.describe UsersController, type: :request do
         it "allows changing name, email and password" do
           expect(page).to have_link("Change", text: "name")
           expect(page).to have_link("Change", text: "email address")
+          expect(page).to have_link("Change", text: "telephone number")
           expect(page).to have_link("Change", text: "password")
           expect(page).not_to have_link("Change", text: "role")
           expect(page).not_to have_link("Change", text: "if data protection officer")
@@ -123,6 +131,10 @@ RSpec.describe UsersController, type: :request do
           expect(page).not_to have_link("Deactivate user", href: "/users/#{user.id}/deactivate")
         end
 
+        it "does not allow resending invitation emails" do
+          expect(page).not_to have_button("Resend invite link")
+        end
+
         context "when user is deactivated" do
           before do
             user.update!(active: false)
@@ -131,6 +143,10 @@ RSpec.describe UsersController, type: :request do
 
           it "does not allow reactivating the user" do
             expect(page).not_to have_link("Reactivate user", href: "/users/#{user.id}/reactivate")
+          end
+
+          it "does not allow resending invitation emails" do
+            expect(page).not_to have_link("Resend invite link")
           end
         end
       end
@@ -165,6 +181,7 @@ RSpec.describe UsersController, type: :request do
           it "does not have edit links" do
             expect(page).not_to have_link("Change", text: "name")
             expect(page).not_to have_link("Change", text: "email address")
+            expect(page).not_to have_link("Change", text: "telephone number")
             expect(page).not_to have_link("Change", text: "password")
             expect(page).not_to have_link("Change", text: "role")
             expect(page).not_to have_link("Change", text: "if data protection officer")
@@ -183,6 +200,10 @@ RSpec.describe UsersController, type: :request do
 
             it "does not allow reactivating the user" do
               expect(page).not_to have_link("Reactivate user", href: "/users/#{other_user.id}/reactivate")
+            end
+
+            it "does not allow resending invitation emails" do
+              expect(page).not_to have_button("Resend invite link")
             end
           end
         end
@@ -363,7 +384,7 @@ RSpec.describe UsersController, type: :request do
   end
 
   context "when user is signed in as a data coordinator" do
-    let(:user) { FactoryBot.create(:user, :data_coordinator, email: "coordinator@example.com") }
+    let(:user) { FactoryBot.create(:user, :data_coordinator, email: "coordinator@example.com", organisation: create(:organisation, :without_dpc)) }
     let!(:other_user) { FactoryBot.create(:user, organisation: user.organisation, name: "filter name", email: "filter@example.com") }
 
     describe "#index" do
@@ -480,6 +501,7 @@ RSpec.describe UsersController, type: :request do
         it "allows changing name, email, password, role, dpo and key contact" do
           expect(page).to have_link("Change", text: "name")
           expect(page).to have_link("Change", text: "email address")
+          expect(page).to have_link("Change", text: "telephone number")
           expect(page).to have_link("Change", text: "password")
           expect(page).to have_link("Change", text: "role")
           expect(page).to have_link("Change", text: "if data protection officer")
@@ -498,6 +520,10 @@ RSpec.describe UsersController, type: :request do
 
           it "does not allow reactivating the user" do
             expect(page).not_to have_link("Reactivate user", href: "/users/#{user.id}/reactivate")
+          end
+
+          it "does not allow resending invitation emails" do
+            expect(page).not_to have_button("Resend invite link")
           end
         end
       end
@@ -520,6 +546,7 @@ RSpec.describe UsersController, type: :request do
           it "allows changing name, email, role, dpo and key contact" do
             expect(page).to have_link("Change", text: "name")
             expect(page).to have_link("Change", text: "email address")
+            expect(page).to have_link("Change", text: "telephone number")
             expect(page).not_to have_link("Change", text: "password")
             expect(page).to have_link("Change", text: "role")
             expect(page).to have_link("Change", text: "if data protection officer")
@@ -528,6 +555,10 @@ RSpec.describe UsersController, type: :request do
 
           it "allows deactivating the user" do
             expect(page).to have_link("Deactivate user", href: "/users/#{other_user.id}/deactivate")
+          end
+
+          it "does not allow you to resend invitation emails" do
+            expect(page).not_to have_button("Resend invite link")
           end
 
           context "when user is deactivated" do
@@ -542,6 +573,10 @@ RSpec.describe UsersController, type: :request do
 
             it "allows reactivating the user" do
               expect(page).to have_link("Reactivate user", href: "/users/#{other_user.id}/reactivate")
+            end
+
+            it "does not allow you to resend invitation emails" do
+              expect(page).not_to have_button("Resend invite link")
             end
           end
         end
@@ -969,7 +1004,7 @@ RSpec.describe UsersController, type: :request do
   end
 
   context "when user is signed in as a support user" do
-    let(:user) { FactoryBot.create(:user, :support) }
+    let(:user) { FactoryBot.create(:user, :support, organisation: create(:organisation, :without_dpc)) }
     let(:other_user) { FactoryBot.create(:user, organisation: user.organisation) }
 
     before do
@@ -979,7 +1014,7 @@ RSpec.describe UsersController, type: :request do
     describe "#index" do
       let!(:other_user) { FactoryBot.create(:user, organisation: user.organisation, name: "User 2", email: "other@example.com") }
       let!(:inactive_user) { FactoryBot.create(:user, organisation: user.organisation, active: false, name: "User 3", email: "inactive@example.com") }
-      let!(:other_org_user) { FactoryBot.create(:user, name: "User 4", email: "otherorg@otherexample.com") }
+      let!(:other_org_user) { FactoryBot.create(:user, name: "User 4", email: "otherorg@otherexample.com", organisation: create(:organisation, :without_dpc)) }
 
       before do
         sign_in user
@@ -1058,7 +1093,7 @@ RSpec.describe UsersController, type: :request do
 
           context "when our search term matches an email and a name" do
             let!(:other_user) { FactoryBot.create(:user, organisation: user.organisation, name: "joe", email: "other@example.com") }
-            let!(:other_org_user) { FactoryBot.create(:user, name: "User 4", email: "joe@otherexample.com") }
+            let!(:other_org_user) { FactoryBot.create(:user, name: "User 4", email: "joe@otherexample.com", organisation: create(:organisation, :without_dpc)) }
             let(:search_param) { "joe" }
 
             it "returns any results including joe" do
@@ -1090,15 +1125,19 @@ RSpec.describe UsersController, type: :request do
           get "/users", headers:, params: {}
         end
 
+        let(:byte_order_mark) { "\uFEFF" }
+
         it "downloads a CSV file with headers" do
           csv = CSV.parse(response.body)
-          expect(csv.first.second).to eq("email")
-          expect(csv.second.first).to eq(user.id.to_s)
+
+          expect(csv.first.to_csv).to eq(
+            "#{byte_order_mark}id,email,name,organisation_name,role,old_user_id,is_dpo,is_key_contact,active,sign_in_count,last_sign_in_at\n",
+          )
         end
 
         it "downloads all users" do
           csv = CSV.parse(response.body)
-          expect(csv.count).to eq(27)
+          expect(csv.count).to eq(User.all.count + 1) # +1 for the headers
         end
 
         it "downloads organisation names rather than ids" do
@@ -1134,6 +1173,7 @@ RSpec.describe UsersController, type: :request do
         it "allows changing name, email, password, role, dpo and key contact" do
           expect(page).to have_link("Change", text: "name")
           expect(page).to have_link("Change", text: "email address")
+          expect(page).to have_link("Change", text: "telephone number")
           expect(page).to have_link("Change", text: "password")
           expect(page).to have_link("Change", text: "role")
           expect(page).to have_link("Change", text: "if data protection officer")
@@ -1163,6 +1203,7 @@ RSpec.describe UsersController, type: :request do
           it "allows changing name, email, role, dpo and key contact" do
             expect(page).to have_link("Change", text: "name")
             expect(page).to have_link("Change", text: "email address")
+            expect(page).to have_link("Change", text: "telephone number")
             expect(page).not_to have_link("Change", text: "password")
             expect(page).to have_link("Change", text: "role")
             expect(page).to have_link("Change", text: "if data protection officer")
@@ -1171,6 +1212,10 @@ RSpec.describe UsersController, type: :request do
 
           it "allows deactivating the user" do
             expect(page).to have_link("Deactivate user", href: "/users/#{other_user.id}/deactivate")
+          end
+
+          it "allows you to resend invitation emails" do
+            expect(page).to have_button("Resend invite link")
           end
 
           context "when user is deactivated" do
@@ -1203,6 +1248,7 @@ RSpec.describe UsersController, type: :request do
           it "allows changing name, email, role, dpo and key contact" do
             expect(page).to have_link("Change", text: "name")
             expect(page).to have_link("Change", text: "email address")
+            expect(page).to have_link("Change", text: "telephone number")
             expect(page).not_to have_link("Change", text: "password")
             expect(page).to have_link("Change", text: "role")
             expect(page).to have_link("Change", text: "if data protection officer")
@@ -1517,7 +1563,7 @@ RSpec.describe UsersController, type: :request do
     end
 
     describe "#create" do
-      let(:organisation) { FactoryBot.create(:organisation) }
+      let(:organisation) { FactoryBot.create(:organisation, :without_dpc) }
       let(:email) { "new_user@example.com" }
       let(:params) do
         {

@@ -2,6 +2,7 @@ require "csv"
 
 class BulkUpload::Sales::Year2022::CsvParser
   MAX_COLUMNS = 126
+  FORM_YEAR = 2022
 
   attr_reader :path
 
@@ -44,10 +45,18 @@ class BulkUpload::Sales::Year2022::CsvParser
   end
 
   def wrong_template_for_year?
-    false
+    !(first_record_sale_date >= form.start_date && first_record_sale_date <= form.end_date)
   end
 
 private
+
+  def form
+    @form ||= FormHandler.instance.sales_form_for_start_year(FORM_YEAR)
+  end
+
+  def first_record_sale_date
+    @first_record_sale_date ||= row_parsers.first.saledate || Date.new
+  end
 
   def headers
     @headers ||= ("field_1".."field_125").to_a
@@ -67,6 +76,7 @@ private
     @normalised_string = File.read(path, encoding: "bom|utf-8")
     @normalised_string.gsub!("\r\n", "\n")
     @normalised_string.scrub!("")
+    @normalised_string.tr!("\r", "\n")
 
     @normalised_string
   end

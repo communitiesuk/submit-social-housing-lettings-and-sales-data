@@ -3,6 +3,7 @@ module SchemesHelper
     base_attributes = [
       { name: "Scheme code", value: scheme.id_to_display },
       { name: "Name", value: scheme.service_name, edit: true },
+      { name: "Status", value: status_tag_from_resource(scheme) },
       { name: "Confidential information", value: scheme.sensitive, edit: true },
       { name: "Type of scheme", value: scheme.scheme_type },
       { name: "Registered under Care Standards Act 2000", value: scheme.registered_under_care_act },
@@ -15,10 +16,6 @@ module SchemesHelper
       { name: "Intended length of stay", value: scheme.intended_stay },
       { name: "Availability", value: scheme_availability(scheme) },
     ]
-
-    if FeatureToggle.scheme_toggle_enabled?
-      base_attributes.append({ name: "Status", value: status_tag(scheme.status) })
-    end
 
     if user.data_coordinator?
       base_attributes.delete_if { |item| item[:name] == "Housing stock owned by" }
@@ -43,7 +40,7 @@ module SchemesHelper
   end
 
   def toggle_scheme_link(scheme)
-    return govuk_button_link_to "Deactivate this scheme", scheme_new_deactivation_path(scheme), warning: true if scheme.active?
+    return govuk_button_link_to "Deactivate this scheme", scheme_new_deactivation_path(scheme), warning: true if scheme.active? || scheme.deactivates_in_a_long_time?
     return govuk_button_link_to "Reactivate this scheme", scheme_new_reactivation_path(scheme) if scheme.deactivated?
   end
 

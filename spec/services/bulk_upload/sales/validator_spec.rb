@@ -61,8 +61,13 @@ RSpec.describe BulkUpload::Sales::Validator do
         let(:path) { file.path }
 
         before do
+          Timecop.freeze(Time.utc(2022, 6, 3))
           file.write(BulkUpload::SalesLogToCsv.new(log:, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
           file.close
+        end
+
+        after do
+          Timecop.unfreeze
         end
 
         it "is not valid" do
@@ -144,6 +149,15 @@ RSpec.describe BulkUpload::Sales::Validator do
   end
 
   describe "#create_logs?" do
+    around do |example|
+      Timecop.freeze(Time.zone.local(2023, 2, 22)) do
+        Singleton.__init__(FormHandler)
+        example.run
+      end
+      Timecop.return
+      Singleton.__init__(FormHandler)
+    end
+
     context "when all logs are valid" do
       let(:target_path) { file_fixture("completed_2022_23_sales_bulk_upload.csv") }
 

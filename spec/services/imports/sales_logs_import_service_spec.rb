@@ -16,6 +16,15 @@ RSpec.describe Imports::SalesLogsImportService do
     File.open("#{directory}/#{filename}.xml")
   end
 
+  around do |example|
+    Timecop.freeze(Time.zone.local(2023, 2, 1)) do
+      Singleton.__init__(FormHandler)
+      example.run
+    end
+    Timecop.return
+    Singleton.__init__(FormHandler)
+  end
+
   before do
     allow(Organisation).to receive(:find_by).and_return(nil)
     allow(Organisation).to receive(:find_by).with(old_visible_id: organisation.old_visible_id).and_return(organisation)

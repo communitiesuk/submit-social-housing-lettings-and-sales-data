@@ -1,10 +1,10 @@
 class Organisation < ApplicationRecord
   has_many :users, dependent: :delete_all
+  has_many :data_protection_officers, -> { where(is_dpo: true) }, class_name: "User"
   has_many :owned_lettings_logs, class_name: "LettingsLog", foreign_key: "owning_organisation_id", dependent: :delete_all
   has_many :managed_lettings_logs, class_name: "LettingsLog", foreign_key: "managing_organisation_id"
   has_many :owned_sales_logs, class_name: "SalesLog", foreign_key: "owning_organisation_id", dependent: :delete_all
-  has_many :data_protection_confirmations
-  has_one :data_sharing_agreement
+  has_one :data_protection_confirmation
   has_many :organisation_rent_periods
   has_many :owned_schemes, class_name: "Scheme", foreign_key: "owning_organisation_id", dependent: :delete_all
   has_many :parent_organisation_relationships, foreign_key: :child_organisation_id, class_name: "OrganisationRelationship"
@@ -89,7 +89,7 @@ class Organisation < ApplicationRecord
   end
 
   def data_protection_confirmed?
-    !!data_protection_confirmations.order(created_at: :desc).first&.confirmed
+    !!data_protection_confirmation&.confirmed?
   end
 
   def data_protection_agreement_string
@@ -103,7 +103,7 @@ class Organisation < ApplicationRecord
   end
 
   def display_organisation_attributes
-    [
+    attrs = [
       { name: "Name", value: name, editable: true },
       { name: "Address", value: address_string, editable: true },
       { name: "Telephone_number", value: phone, editable: true },
@@ -111,8 +111,13 @@ class Organisation < ApplicationRecord
       { name: "Registration number", value: housing_registration_no || "", editable: false },
       { name: "Rent_periods", value: rent_period_labels, editable: false, format: :bullet },
       { name: "Owns housing stock", value: holds_own_stock ? "Yes" : "No", editable: false },
-      { name: "Data protection agreement", value: data_protection_agreement_string, editable: false },
     ].compact
+
+    unless FeatureToggle.new_data_protection_confirmation?
+      attrs << { name: "Data protection agreement", value: data_protection_agreement_string, editable: false }
+    end
+
+    attrs
   end
 
   def has_managing_agents?

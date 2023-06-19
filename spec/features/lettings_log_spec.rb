@@ -85,7 +85,7 @@ RSpec.describe "Lettings Log Features" do
         click_link("Set up this lettings log")
         select(support_user.organisation.name, from: "lettings-log-owning-organisation-id-field")
         click_button("Save and continue")
-        select(support_user.name, from: "lettings-log-created-by-id-field")
+        select("#{support_user.name} (#{support_user.email})", from: "lettings-log-created-by-id-field")
         click_button("Save and continue")
         log_id = page.current_path.scan(/\d/).join
         visit("lettings-logs/#{log_id}/setup/check-answers")
@@ -95,7 +95,7 @@ RSpec.describe "Lettings Log Features" do
     end
 
     context "when visiting a subsection check answers page" do
-      let(:lettings_log) { FactoryBot.create(:lettings_log, :setup_completed) }
+      let(:lettings_log) { create(:lettings_log, :setup_completed) }
 
       it "has the correct breadcrumbs with the correct links" do
         visit lettings_log_setup_check_answers_path(lettings_log)
@@ -108,7 +108,7 @@ RSpec.describe "Lettings Log Features" do
     end
 
     context "when reviewing a complete log" do
-      let(:lettings_log) { FactoryBot.create(:lettings_log, :completed) }
+      let(:lettings_log) { create(:lettings_log, :completed) }
 
       it "has the correct breadcrumbs with the correct links" do
         visit review_lettings_log_path(lettings_log)
@@ -219,6 +219,46 @@ RSpec.describe "Lettings Log Features" do
           end
         end
       end
+    end
+
+    it "is possible to delete multiple logs" do
+      postcode = "SW1A 1AA"
+      lettings_log_1 = create(:lettings_log, :setup_completed, created_by: support_user, postcode_full: postcode)
+      lettings_log_2 = create(:lettings_log, :in_progress, created_by: support_user, postcode_full: postcode)
+      create_list(:lettings_log, 5, :in_progress)
+
+      visit lettings_logs_path
+      expect(page).to have_selector "article.app-log-summary", count: 7
+      expect(page).not_to have_link "Delete logs"
+      within ".app-filter" do
+        check "status-in-progress-field"
+        choose "user-yours-field"
+        click_button
+      end
+      expect(page).to have_selector "article.app-log-summary", count: 2
+      expect(page).to have_link "Delete logs"
+      click_link "Delete logs"
+
+      expect(page).to have_current_path delete_logs_lettings_logs_path
+      rows = page.find_all "tbody tr"
+      expect(rows.count).to be 2
+      id_to_delete, id_to_keep = rows.map { |row| row.first("td").text.to_i }
+      expect([id_to_delete, id_to_keep]).to match_array [lettings_log_1.id, lettings_log_2.id]
+      check "forms-delete-logs-form-selected-ids-#{id_to_delete}-field"
+      uncheck "forms-delete-logs-form-selected-ids-#{id_to_keep}-field"
+      click_button "Continue"
+
+      expect(page).to have_current_path delete_logs_confirmation_lettings_logs_path
+      expect(page.text).to include "You've selected 1 log to delete"
+      expect(page.find("form.button_to")[:action]).to eq delete_logs_lettings_logs_path
+      click_button "Delete logs"
+
+      expect(page).to have_current_path lettings_logs_path
+      expect(page).to have_selector "article.app-log-summary", count: 1
+      expect(page.find("article.app-log-summary h2").text).to eq "Log #{id_to_keep}"
+      deleted_log = LettingsLog.find(id_to_delete)
+      expect(deleted_log.status).to eq "deleted"
+      expect(deleted_log.discarded_at).not_to be nil
     end
   end
 

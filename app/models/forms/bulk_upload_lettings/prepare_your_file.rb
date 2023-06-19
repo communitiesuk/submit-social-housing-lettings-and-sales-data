@@ -30,7 +30,7 @@ module Forms
         bulk_upload_lettings_log_path(id: page_id, form: { year:, needstype: })
       end
 
-      def old_template_path
+      def legacy_template_path
         case year
         when 2022
           "/files/bulk-upload-lettings-template-2022-23.xlsx"

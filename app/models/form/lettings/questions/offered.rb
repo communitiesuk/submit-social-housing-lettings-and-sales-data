@@ -7,7 +7,7 @@ class Form::Lettings::Questions::Offered < ::Form::Question
     @type = "numeric"
     @width = 2
     @check_answers_card_number = 0
-    @max = 20
+    @max = 150
     @min = 0
     @hint_text = I18n.t("hints.offered")
     @step = 1

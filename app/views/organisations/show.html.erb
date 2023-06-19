@@ -33,7 +33,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <% if FeatureToggle.new_data_sharing_agreement? %>
+      <% if FeatureToggle.new_data_protection_confirmation? %>
         <%= data_sharing_agreement_row(organisation: @organisation, user: current_user, summary_list:) %>
       <% end %>
     <% end %>

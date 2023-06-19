@@ -2,10 +2,10 @@ require "rails_helper"
 
 RSpec.describe User, type: :model do
   describe "#new" do
-    let(:user) { FactoryBot.create(:user, old_user_id: "3") }
-    let(:other_organisation) { FactoryBot.create(:organisation) }
+    let(:user) { create(:user, old_user_id: "3") }
+    let(:other_organisation) { create(:organisation) }
     let!(:owned_lettings_log) do
-      FactoryBot.create(
+      create(
         :lettings_log,
         :completed,
         managing_organisation: other_organisation,
@@ -13,7 +13,7 @@ RSpec.describe User, type: :model do
       )
     end
     let!(:managed_lettings_log) do
-      FactoryBot.create(
+      create(
         :lettings_log,
         created_by: user,
         owning_organisation: other_organisation,
@@ -103,7 +103,7 @@ RSpec.describe User, type: :model do
     end
 
     context "when the user is a data coordinator" do
-      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let(:user) { create(:user, :data_coordinator) }
 
       it "can assign all roles except support" do
         expect(user.assignable_roles).to eq({
@@ -124,7 +124,7 @@ RSpec.describe User, type: :model do
 
       context "and their organisation has managing agents" do
         before do
-          FactoryBot.create(:organisation_relationship, parent_organisation: user.organisation)
+          create(:organisation_relationship, parent_organisation: user.organisation)
         end
 
         it "can filter lettings logs by user, year, status and organisation" do
@@ -134,8 +134,8 @@ RSpec.describe User, type: :model do
     end
 
     context "when the user is a Customer Support person" do
-      let(:user) { FactoryBot.create(:user, :support) }
-      let!(:other_orgs_log) { FactoryBot.create(:lettings_log) }
+      let(:user) { create(:user, :support) }
+      let!(:other_orgs_log) { create(:lettings_log) }
 
       it "has access to logs from all organisations" do
         expect(user.lettings_logs.to_a).to match_array([owned_lettings_log, managed_lettings_log, other_orgs_log])
@@ -159,7 +159,7 @@ RSpec.describe User, type: :model do
     end
 
     context "when the user is in development environment" do
-      let(:user) { FactoryBot.create(:user, :support) }
+      let(:user) { create(:user, :support) }
 
       before do
         allow(Rails.env).to receive(:development?).and_return(true)
@@ -171,7 +171,7 @@ RSpec.describe User, type: :model do
     end
 
     context "when the user is in review environment" do
-      let(:user) { FactoryBot.create(:user, :support) }
+      let(:user) { create(:user, :support) }
 
       before do
         allow(Rails.env).to receive(:development?).and_return(false)
@@ -185,7 +185,7 @@ RSpec.describe User, type: :model do
   end
 
   describe "paper trail" do
-    let(:user) { FactoryBot.create(:user) }
+    let(:user) { create(:user) }
 
     it "creates a record of changes to a log" do
       expect { user.update!(name: "new test name") }.to change(user.versions, :count).by(1)
@@ -217,13 +217,13 @@ RSpec.describe User, type: :model do
   end
 
   describe "scopes" do
-    let(:organisation_1) { FactoryBot.create(:organisation, name: "A") }
-    let(:organisation_2) { FactoryBot.create(:organisation, name: "B") }
-    let!(:user_1) { FactoryBot.create(:user, name: "Joe Bloggs", email: "joe@example.com", organisation: organisation_1, role: "support") }
-    let!(:user_3) { FactoryBot.create(:user, name: "Tom Smith", email: "tom@example.com", organisation: organisation_1, role: "data_provider") }
-    let!(:user_2) { FactoryBot.create(:user, name: "Jenny Ford", email: "jenny@smith.com", organisation: organisation_1, role: "data_coordinator") }
-    let!(:user_4) { FactoryBot.create(:user, name: "Greg Thomas", email: "greg@org2.com", organisation: organisation_2, role: "data_coordinator") }
-    let!(:user_5) { FactoryBot.create(:user, name: "Adam Thomas", email: "adam@org2.com", organisation: organisation_2, role: "data_coordinator") }
+    let(:organisation_1) { create(:organisation, :without_dpc, name: "A") }
+    let(:organisation_2) { create(:organisation, :without_dpc, name: "B") }
+    let!(:user_1) { create(:user, name: "Joe Bloggs", email: "joe@example.com", organisation: organisation_1, role: "support") }
+    let!(:user_3) { create(:user, name: "Tom Smith", email: "tom@example.com", organisation: organisation_1, role: "data_provider") }
+    let!(:user_2) { create(:user, name: "Jenny Ford", email: "jenny@smith.com", organisation: organisation_1, role: "data_coordinator") }
+    let!(:user_4) { create(:user, name: "Greg Thomas", email: "greg@org2.com", organisation: organisation_2, role: "data_coordinator") }
+    let!(:user_5) { create(:user, name: "Adam Thomas", email: "adam@org2.com", organisation: organisation_2, role: "data_coordinator") }
 
     context "when searching by name" do
       it "returns case insensitive matching records" do
@@ -271,7 +271,7 @@ RSpec.describe User, type: :model do
       let(:error_message) { "Validation failed: Password #{I18n.t('activerecord.errors.models.user.attributes.password.too_short', count: 8)}" }
 
       it "validates password length" do
-        expect { FactoryBot.create(:user, password:) }
+        expect { create(:user, password:) }
           .to raise_error(ActiveRecord::RecordInvalid, error_message)
       end
     end
@@ -281,27 +281,27 @@ RSpec.describe User, type: :model do
       let(:error_message) { "Validation failed: email #{I18n.t('activerecord.errors.models.user.attributes.email.invalid')}" }
 
       it "validates email format" do
-        expect { FactoryBot.create(:user, email: invalid_email) }
+        expect { create(:user, email: invalid_email) }
           .to raise_error(ActiveRecord::RecordInvalid, error_message)
       end
     end
 
     context "when the email entered has already been used" do
-      let(:user) { FactoryBot.create(:user) }
+      let(:user) { create(:user) }
       let(:error_message) { "Validation failed: email #{I18n.t('activerecord.errors.models.user.attributes.email.taken')}" }
 
       it "validates email uniqueness" do
-        expect { FactoryBot.create(:user, email: user.email) }
+        expect { create(:user, email: user.email) }
           .to raise_error(ActiveRecord::RecordInvalid, error_message)
       end
     end
   end
 
   describe "delete" do
-    let(:user) { FactoryBot.create(:user) }
+    let(:user) { create(:user) }
 
     before do
-      FactoryBot.create(
+      create(
         :lettings_log,
         :completed,
         owning_organisation: user.organisation,
@@ -309,7 +309,7 @@ RSpec.describe User, type: :model do
         created_by: user,
       )
 
-      FactoryBot.create(
+      create(
         :sales_log,
         owning_organisation: user.organisation,
         created_by: user,
@@ -319,13 +319,13 @@ RSpec.describe User, type: :model do
     context "when the user is deleted" do
       it "owned lettings logs are not deleted as a result" do
         expect { user.destroy! }
-          .to change(described_class, :count).from(1).to(0)
+          .to change(described_class, :count).by(-1)
           .and change(LettingsLog, :count).by(0)
       end
 
       it "owned sales logs are not deleted as a result" do
         expect { user.destroy! }
-          .to change(described_class, :count).from(1).to(0)
+          .to change(described_class, :count).by(-1)
           .and change(SalesLog, :count).by(0)
       end
     end

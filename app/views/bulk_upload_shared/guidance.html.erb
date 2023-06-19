@@ -54,7 +54,14 @@
 
     <div class="govuk-!-padding-bottom-4">
       <h2 class="govuk-heading-s">Getting help</h2>
-      <p class="govuk-body">There is no step-by-step bulk upload guide like there is with single log upload. However, you can download <%= govuk_link_to "our template", @form.template_path %>, which you can copy-paste data into from your systems column-by-column. You can also view a post-upload report showing any data errors, and our <%= govuk_link_to "data specification", @form.specification_path, target: "_blank" %> can help fix these.</p>
+      <p class="govuk-body">There is no step-by-step bulk upload guide like there is with single log upload. However, you can download <%= @form.year == 2022 ? govuk_link_to("our template", @form.template_path) : "one of our templates" %>, which you can copy-paste data into from your systems column-by-column. You can also view a post-upload report showing any data errors, and our <%= govuk_link_to "data specification", @form.specification_path, target: "_blank" %> can help fix these.</p>
+      <% if @form.year == 2023 %>
+        <%= govuk_details(summary_text: "How to choose the right template") do %>
+          <p class="govuk-body">Use one of these templates to upload logs for 2023/24:</p>
+          <p class="govuk-body"><%= govuk_link_to "New template", @form.template_path %>: In this template, the questions are in the same order as the 2023/24 paper form and web form. Use this template if your organisation is new to bulk upload or if your housing management system matches the new column ordering.</p>
+          <p class="govuk-body"><%= govuk_link_to "Legacy template", @form.legacy_template_path %>: In this template, the questions are in the same order as the 2022/23 template, with new questions added on to the end. Use this template if you have not updated your system to match the new template yet.</p>
+        <% end %>
+      <% end %>
       <p class="govuk-body">If you still need support mapping data in the way we need, DLUHC’s helpdesk can help. If your data is across multiple systems, or is hard to export as a single file in the correct format, you could try different exports, or copy-pasting data by hand.</p>
     </div>
   </div>

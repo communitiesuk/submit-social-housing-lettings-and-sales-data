@@ -149,7 +149,11 @@ class LocationsController < ApplicationController
   def show; end
 
   def new_deactivation
-    @location_deactivation_period = LocationDeactivationPeriod.new
+    @location_deactivation_period = if @location.deactivates_in_a_long_time?
+                                      @location.open_deactivation || LocationDeactivationPeriod.new
+                                    else
+                                      LocationDeactivationPeriod.new
+                                    end
 
     if params[:location_deactivation_period].blank?
       render "toggle_active", locals: { action: "deactivate" }
@@ -176,16 +180,21 @@ class LocationsController < ApplicationController
   end
 
   def deactivate
-    if @location.location_deactivation_periods.create!(deactivation_date: params[:deactivation_date])
+    if @location.open_deactivation&.update!(deactivation_date: params[:deactivation_date]) || @location.location_deactivation_periods.create!(deactivation_date: params[:deactivation_date])
       logs = reset_location_and_scheme_for_logs!
 
       flash[:notice] = deactivate_success_notice
-      logs.group_by(&:created_by).transform_values(&:count).compact.each do |user, count|
-        LocationOrSchemeDeactivationMailer.send_deactivation_mail(user,
-                                                                  count,
-                                                                  url_for(controller: "lettings_logs", action: "update_logs"),
-                                                                  @location.scheme.service_name,
-                                                                  @location.postcode).deliver_later
+
+      logs.group_by(&:created_by).transform_values(&:count).each do |user, count|
+        next unless user
+
+        LocationOrSchemeDeactivationMailer.send_deactivation_mail(
+          user,
+          count,
+          url_for(controller: "lettings_logs", action: "update_logs"),
+          @location.scheme.service_name,
+          @location.postcode,
+        ).deliver_later
       end
     end
     redirect_to scheme_location_path(@scheme, @location)

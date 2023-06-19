@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe BulkUploadSalesLogsController, type: :request do
-  let(:user) { FactoryBot.create(:user) }
+  let(:user) { create(:user) }
   let(:organisation) { user.organisation }
 
   before do
@@ -9,6 +9,29 @@ RSpec.describe BulkUploadSalesLogsController, type: :request do
   end
 
   describe "GET /sales-logs/bulk-upload-logs/start" do
+    context "when data protection confirmation not signed" do
+      let(:organisation) { create(:organisation, :without_dpc) }
+      let(:user) { create(:user, organisation:) }
+
+      it "redirects to sales index page" do
+        get "/sales-logs/bulk-upload-logs/start", params: {}
+
+        expect(response).to redirect_to("/sales-logs")
+      end
+
+      context "when feature flag disabled" do
+        before do
+          allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(false)
+        end
+
+        it "does not redirect to lettings index page" do
+          get "/lettings-logs/bulk-upload-logs/start", params: {}
+
+          expect(response).not_to redirect_to("/sales-logs")
+        end
+      end
+    end
+
     context "when not in crossover period" do
       let(:expected_year) { FormHandler.instance.forms["current_sales"].start_date.year }
 

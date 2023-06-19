@@ -21,9 +21,9 @@ module DataSharingAgreementHelper
     end
   end
 
-  def name_for_data_sharing_agreement(data_sharing_agreement, user)
-    if data_sharing_agreement.present?
-      data_sharing_agreement.data_protection_officer.name
+  def name_for_data_sharing_agreement(data_protection_confirmation, user)
+    if data_protection_confirmation&.confirmed?
+      data_protection_confirmation.data_protection_officer.name
     elsif user.is_dpo?
       user.name
     else
@@ -31,22 +31,22 @@ module DataSharingAgreementHelper
     end
   end
 
-  def org_name_for_data_sharing_agreement(data_sharing_agreement, user)
-    if data_sharing_agreement.present?
-      data_sharing_agreement.organisation_name
+  def org_name_for_data_sharing_agreement(data_protection_confirmation, user)
+    if data_protection_confirmation&.confirmed?
+      data_protection_confirmation.organisation.name
     else
       user.organisation.name
     end
   end
 
   # rubocop:disable Rails/HelperInstanceVariable
-  def section_12_2(data_sharing_agreement:, user:, organisation:)
-    if data_sharing_agreement
-      @org_address = data_sharing_agreement.organisation_address
-      @org_name = data_sharing_agreement.organisation_name
-      @org_phone = data_sharing_agreement.organisation_phone_number
-      @dpo_name = data_sharing_agreement.dpo_name
-      @dpo_email = data_sharing_agreement.dpo_email
+  def present_section_12_2(data_protection_confirmation:, user:, organisation:)
+    if data_protection_confirmation&.confirmed?
+      @org_address = data_protection_confirmation.organisation.address_row
+      @org_name = data_protection_confirmation.organisation.name
+      @org_phone = data_protection_confirmation.organisation.phone
+      @dpo_name = data_protection_confirmation.data_protection_officer.name
+      @dpo_email = data_protection_confirmation.data_protection_officer.email
     else
       @org_name = organisation.name
       @org_address = organisation.address_row
@@ -68,18 +68,18 @@ module DataSharingAgreementHelper
 private
 
   def data_sharing_agreement_first_line(organisation:, user:)
-    return "Not accepted" if organisation.data_sharing_agreement.blank?
+    return "Not accepted" unless organisation.data_protection_confirmed?
 
     if user.support?
-      "Accepted #{organisation.data_sharing_agreement.signed_at.strftime('%d/%m/%Y')}"
+      "Accepted #{organisation.data_protection_confirmation.created_at.strftime('%d/%m/%Y')}"
     else
       "Accepted"
     end
   end
 
   def data_sharing_agreement_second_line(organisation:, user:)
-    if organisation.data_sharing_agreement.present?
-      organisation.data_sharing_agreement.data_protection_officer.name if user.support?
+    if organisation.data_protection_confirmed?
+      organisation.data_protection_confirmation.data_protection_officer.name if user.support?
     else
       "Data protection officer must sign" unless user.is_dpo?
     end

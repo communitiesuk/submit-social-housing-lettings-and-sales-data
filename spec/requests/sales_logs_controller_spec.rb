@@ -65,7 +65,7 @@ RSpec.describe SalesLogsController, type: :request do
       context "with a request containing invalid json parameters" do
         let(:params) do
           {
-            "saledate": Date.new(2022, 4, 1),
+            "saledate": Time.zone.today,
             "purchid": "1",
             "ownershipsch": 1,
             "type": 2,
@@ -112,9 +112,11 @@ RSpec.describe SalesLogsController, type: :request do
     let(:user) { FactoryBot.create(:user) }
     let(:organisation) { user.organisation }
     let(:other_organisation) { FactoryBot.create(:organisation) }
+    let(:purchaser_code) { "coop123" }
     let!(:sales_log) do
       FactoryBot.create(
         :sales_log,
+        purchid: purchaser_code,
         owning_organisation: organisation,
       )
     end
@@ -172,6 +174,36 @@ RSpec.describe SalesLogsController, type: :request do
             get "/sales-logs", headers: headers, params: {}
             expect(page).not_to have_link("Download (CSV)")
             expect(page).not_to have_link("Download (CSV, codes only)")
+          end
+        end
+
+        context "and the state of filters and search is such that display_delete_logs returns true" do
+          before do
+            allow_any_instance_of(LogListHelper).to receive(:display_delete_logs?).and_return(true) # rubocop:disable RSpec/AnyInstance
+          end
+
+          it "displays the delete logs button with the correct path if there are logs visibile" do
+            get sales_logs_path(search: purchaser_code)
+            expect(page).to have_link "Delete logs", href: delete_logs_sales_logs_path(search: purchaser_code)
+          end
+
+          it "does not display the delete logs button if there are no logs displayed" do
+            SalesLog.destroy_all
+            get sales_logs_path(search: "gibberish_e9o87tvbyc4875g")
+            expect(page).not_to have_selector "article.app-log-summary"
+            expect(page).not_to have_link "Delete logs"
+          end
+        end
+
+        context "and the state of filters and search is such that display_delete_logs returns false" do
+          before do
+            allow_any_instance_of(LogListHelper).to receive(:display_delete_logs?).and_return(false) # rubocop:disable RSpec/AnyInstance
+          end
+
+          it "does not display the delete logs button even if there are logs displayed" do
+            get sales_logs_path
+            expect(page).to have_selector "article.app-log-summary"
+            expect(page).not_to have_link "Delete logs"
           end
         end
 
@@ -236,17 +268,35 @@ RSpec.describe SalesLogsController, type: :request do
           end
 
           context "with year filter" do
+            around do |example|
+              Timecop.freeze(2022, 12, 1) do
+                example.run
+              end
+              Timecop.return
+            end
+
+            before do
+              Timecop.freeze(2022, 4, 1)
+              sales_log_2022.update!(saledate: Time.zone.local(2022, 4, 1))
+              Timecop.freeze(2023, 1, 1)
+              sales_log_2022.update!(saledate: Time.zone.local(2023, 1, 1))
+            end
+
+            after do
+              Timecop.unfreeze
+            end
+
             let!(:sales_log_2022) do
-              FactoryBot.create(:sales_log, :in_progress,
+              FactoryBot.create(:sales_log, :completed,
                                 owning_organisation: organisation,
-                                saledate: Time.zone.local(2022, 4, 1))
+                                created_by: user,
+                                saledate: Time.zone.today)
             end
             let!(:sales_log_2023) do
-              sales_log = FactoryBot.build(:sales_log, :completed,
-                                           owning_organisation: organisation,
-                                           saledate: Time.zone.local(2023, 1, 1))
-              sales_log.save!(validate: false)
-              sales_log
+              FactoryBot.create(:sales_log,
+                                owning_organisation: organisation,
+                                created_by: user,
+                                saledate: Time.zone.today)
             end
 
             it "shows sales logs for multiple selected years" do

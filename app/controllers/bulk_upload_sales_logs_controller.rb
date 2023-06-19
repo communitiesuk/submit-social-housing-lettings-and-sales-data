@@ -1,5 +1,6 @@
 class BulkUploadSalesLogsController < ApplicationController
   before_action :authenticate_user!
+  before_action :validate_data_protection_agrement_signed!
 
   def start
     if in_crossover_period?
@@ -22,6 +23,13 @@ class BulkUploadSalesLogsController < ApplicationController
   end
 
 private
+
+  def validate_data_protection_agrement_signed!
+    return unless FeatureToggle.new_data_protection_confirmation?
+    return if @current_user.organisation.data_protection_confirmed?
+
+    redirect_to sales_logs_path
+  end
 
   def current_year
     FormHandler.instance.forms["current_sales"].start_date.year

@@ -4,80 +4,158 @@ RSpec.describe FiltersHelper do
   describe "#filter_selected?" do
     context "when no filters are selected" do
       it "returns false for all filters" do
-        expect(filter_selected?("status", "completed")).to be_falsey
-        expect(filter_selected?("status", "in_progress")).to be_falsey
+        expect(filter_selected?("status", "completed", "lettings_logs")).to be_falsey
+        expect(filter_selected?("status", "in_progress", "lettings_logs")).to be_falsey
       end
     end
 
     context "when the filter is the user filter but session filters is empty" do
       before do
-        session[:logs_filters] = {}.to_json
+        session[:lettings_logs_filters] = {}.to_json
       end
 
       context "when looking at the all value" do
         it "returns true if no filters have been set yet" do
-          expect(filter_selected?("user", :all)).to be true
-          expect(filter_selected?("user", :yours)).to be false
+          expect(filter_selected?("user", :all, "lettings_logs")).to be true
+          expect(filter_selected?("user", :yours, "lettings_logs")).to be false
         end
       end
     end
 
     context "when one filter is selected" do
       before do
-        session[:logs_filters] = { "status": "in_progress" }.to_json
+        session[:lettings_logs_filters] = { "status": "in_progress" }.to_json
       end
 
       it "returns false for non selected filters" do
-        expect(filter_selected?("status", "completed")).to be false
+        expect(filter_selected?("status", "completed", "lettings_logs")).to be false
       end
 
       it "returns true for selected filter" do
-        expect(filter_selected?("status", "in_progress")).to be true
+        expect(filter_selected?("status", "in_progress", "lettings_logs")).to be true
       end
     end
 
     context "when support user is using the organisation filter" do
       before do
-        session[:logs_filters] = { "organisation": "1" }.to_json
+        session[:lettings_logs_filters] = { "organisation": "1" }.to_json
       end
 
       it "returns true for the parent organisation_select filter" do
-        expect(filter_selected?("organisation_select", :specific_org)).to be true
-        expect(filter_selected?("organisation_select", :all)).to be false
+        expect(filter_selected?("organisation_select", :specific_org, "lettings_logs")).to be true
+        expect(filter_selected?("organisation_select", :all, "lettings_logs")).to be false
       end
     end
 
     context "when support user has not set the organisation_select filter" do
       before do
-        session[:logs_filters] = {}.to_json
+        session[:lettings_logs_filters] = {}.to_json
       end
 
       it "defaults to all organisations" do
-        expect(filter_selected?("organisation_select", :all)).to be true
-        expect(filter_selected?("organisation_select", :specific_org)).to be false
+        expect(filter_selected?("organisation_select", :all, "lettings_logs")).to be true
+        expect(filter_selected?("organisation_select", :specific_org, "lettings_logs")).to be false
       end
     end
 
     context "when the specific organisation filter is not set" do
       before do
-        session[:logs_filters] = { "status" => [""], "years" => [""], "user" => "all" }.to_json
+        session[:lettings_logs_filters] = { "status" => [""], "years" => [""], "user" => "all" }.to_json
       end
 
       it "marks the all options as checked" do
-        expect(filter_selected?("organisation_select", :all)).to be true
-        expect(filter_selected?("organisation_select", :specific_org)).to be false
+        expect(filter_selected?("organisation_select", :all, "lettings_logs")).to be true
+        expect(filter_selected?("organisation_select", :specific_org, "lettings_logs")).to be false
+      end
+    end
+  end
+
+  describe "#any_filter_selected?" do
+    let(:filter_type) { "lettings_logs" }
+    let(:result) { any_filter_selected?(filter_type) }
+    let(:serialised_filters) { filters&.to_json }
+    let(:filters) { nil }
+
+    before do
+      session[:lettings_logs_filters] = serialised_filters if serialised_filters
+    end
+
+    it "returns false if the session contains no filters" do
+      expect(result).to be_falsey
+    end
+
+    context "when organisation and user are set to all" do
+      let(:filters) { { "organisation_select" => "all", "user" => "all" } }
+
+      it "returns false" do
+        expect(result).to be_falsey
+      end
+    end
+
+    context "when user is set to 'yours'" do
+      let(:filters) { { "user" => "yours" } }
+
+      it "returns true" do
+        expect(result).to be true
+      end
+    end
+
+    context "when organisation is filtered" do
+      let(:filters) { { "organisation" => 2 } }
+
+      it "returns true" do
+        expect(result).to be true
+      end
+    end
+
+    context "when status is filtered" do
+      let(:filters) { { "status" => %w[in_progress] } }
+
+      it "returns true" do
+        expect(result).to be true
+      end
+    end
+
+    context "when collection year is filtered" do
+      let(:filters) { { "years" => %w[2023] } }
+
+      it "returns true" do
+        expect(result).to be true
+      end
+    end
+
+    context "when the user is currently in a bulk upload journey" do
+      let(:filters) { { "bulk_upload_id" => "3456" } }
+
+      it "returns true" do
+        expect(result).to be true
+      end
+    end
+
+    context "when a range of filters are applied" do
+      let(:filters) do
+        {
+          "user" => "all",
+          "status" => %w[in_progress completed],
+          "years" => [""],
+          "organisation" => 2,
+        }
+      end
+
+      it "returns true" do
+        expect(result).to be true
       end
     end
   end
 
   describe "#selected_option" do
     before do
-      session[:logs_filters] = {}.to_json
+      session[:lettings_logs_filters] = {}.to_json
     end
 
     context "when nothing has been selected" do
       it "returns an empty string" do
-        expect(selected_option("organisation")).to eq("")
+        expect(selected_option("organisation", "lettings_logs")).to eq("")
       end
     end
   end

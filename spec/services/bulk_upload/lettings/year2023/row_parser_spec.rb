@@ -6,7 +6,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
   let(:now) { Time.zone.now.beginning_of_day }
 
   let(:attributes) { { bulk_upload: } }
-  let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: nil) }
+  let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: nil, year: 2023) }
   let(:user) { create(:user, organisation: owning_org) }
 
   let(:owning_org) { create(:organisation, :with_old_visible_id) }
@@ -340,7 +340,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
           it "fetches the question's check_answer_label if it exists, otherwise it gets the question's header" do
             parser.valid?
-            expect(parser.errors[:field_19]).to eql(["You must answer q12 - address"])
+            expect(parser.errors[:field_19]).to eql(["You must answer address line 1"])
             expect(parser.errors[:field_21]).to eql(["You must answer town or city"])
           end
         end
@@ -966,7 +966,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "adds appropriate errors" do
           expect(parser.errors[:field_18]).to eql(["You must answer UPRN"])
-          expect(parser.errors[:field_19]).to eql(["You must answer q12 - address"])
+          expect(parser.errors[:field_19]).to eql(["You must answer address line 1"])
           expect(parser.errors[:field_21]).to eql(["You must answer town or city"])
         end
       end
@@ -1394,10 +1394,28 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
     end
 
     describe "#net_income_known" do
-      let(:attributes) { { bulk_upload:, field_120: "1" } }
+      context "when 1" do
+        let(:attributes) { { bulk_upload:, field_120: "1" } }
 
-      it "sets value from correct mapping" do
-        expect(parser.log.net_income_known).to eq(0)
+        it "sets value from correct mapping" do
+          expect(parser.log.net_income_known).to eq(0)
+        end
+      end
+
+      context "when 2" do
+        let(:attributes) { { bulk_upload:, field_120: "2" } }
+
+        it "sets value from correct mapping" do
+          expect(parser.log.net_income_known).to eq(1)
+        end
+      end
+
+      context "when 3" do
+        let(:attributes) { { bulk_upload:, field_120: "3" } }
+
+        it "sets value from correct mapping" do
+          expect(parser.log.net_income_known).to eq(2)
+        end
       end
     end
 

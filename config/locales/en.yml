@@ -105,7 +105,6 @@ en:
             confirm_soft_errors:
               blank: You must select if there are errors in these fields
 
-
   activerecord:
     attributes:
       user:
@@ -155,6 +154,8 @@ en:
               invalid: "Enter an email address in the correct format, like name@example.com"
               blank: "Enter an email address"
               taken: "Enter an email address that hasn’t already been used to sign up"
+            phone:
+              invalid: "Enter a telephone number in the correct format"
             role:
               invalid: "Role must be data accessor, data provider or data coordinator"
               blank: "Select role"
@@ -176,8 +177,14 @@ en:
             new_organisation_telephone_number:
               blank: "Enter a valid telephone number"
 
+  notification:
+    logs_deleted:
+      one: "%{count} log has been deleted"
+      other: "%{count} logs have been deleted"
+
   validations:
     organisation:
+      data_sharing_agreement_not_signed: Your organisation must accept the Data Sharing Agreement before you can create any logs.
       name_missing: "Enter the name of the organisation"
       provider_type_missing: "Select the organisation type"
       stock_owner:
@@ -249,8 +256,10 @@ en:
           activating_soon: "%{name} is not available until %{date}. Enter a tenancy start date after %{date}"
       owning_organisation:
         invalid: "Please select the owning organisation or managing organisation that you belong to"
+        data_sharing_agreement_not_signed: "The organisation must accept the Data Sharing Agreement before it can be selected as the owning organisation."
       managing_organisation:
         invalid: "Please select the owning organisation or managing organisation that you belong to"
+        data_sharing_agreement_not_signed: "The organisation must accept the Data Sharing Agreement before it can be selected as the managing organisation."
       created_by:
         invalid: "Please select the owning organisation or managing organisation that you belong to"
       lettype:

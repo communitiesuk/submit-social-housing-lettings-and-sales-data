@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe FilterService do
+describe FilterManager do
   describe "filter_by_search" do
     context "when filtering organisations" do
       before do

@@ -29,7 +29,7 @@ RSpec.describe Imports::DataProtectionConfirmationImportService do
     end
 
     context "when the organisation does exist" do
-      let!(:organisation) { FactoryBot.create(:organisation, old_org_id:) }
+      let!(:organisation) { create(:organisation, :without_dpc, old_org_id:) }
 
       context "when a data protection officer with matching name does not exists for the organisation" do
         it "creates a data protection officer without sign in credentials" do
@@ -41,7 +41,7 @@ RSpec.describe Imports::DataProtectionConfirmationImportService do
 
         it "successfully create a data protection confirmation record with the expected data" do
           import_service.create_data_protection_confirmations("data_protection_directory")
-          confirmation = Organisation.find_by(old_org_id:).data_protection_confirmations.last
+          confirmation = Organisation.find_by(old_org_id:).data_protection_confirmation
           expect(confirmation.data_protection_officer.name).to eq("John Doe")
           expect(confirmation.confirmed).to be_truthy
           expect(Time.zone.local_to_utc(confirmation.created_at)).to eq(Time.utc(2018, 0o6, 0o5, 10, 36, 49))
@@ -50,13 +50,13 @@ RSpec.describe Imports::DataProtectionConfirmationImportService do
 
       context "when a data protection officer with matching name already exists for the organisation" do
         let!(:data_protection_officer) do
-          FactoryBot.create(:user, :data_protection_officer, name: "John Doe", organisation:)
+          create(:user, :data_protection_officer, name: "John Doe", organisation:)
         end
 
         it "successfully creates a data protection confirmation record with the expected data" do
           import_service.create_data_protection_confirmations("data_protection_directory")
 
-          confirmation = Organisation.find_by(old_org_id:).data_protection_confirmations.last
+          confirmation = Organisation.find_by(old_org_id:).data_protection_confirmation
           expect(confirmation.data_protection_officer.id).to eq(data_protection_officer.id)
           expect(confirmation.confirmed).to be_truthy
           expect(Time.zone.local_to_utc(confirmation.created_at)).to eq(Time.utc(2018, 0o6, 0o5, 10, 36, 49))
@@ -64,7 +64,7 @@ RSpec.describe Imports::DataProtectionConfirmationImportService do
 
         context "when the data protection record has already been imported previously" do
           before do
-            FactoryBot.create(
+            create(
               :data_protection_confirmation,
               organisation:,
               data_protection_officer:,

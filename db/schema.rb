@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_30_094653) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_09_101144) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -39,6 +39,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_30_094653) do
     t.datetime "updated_at", null: false
     t.text "filename"
     t.integer "needstype"
+    t.text "choice"
     t.index ["identifier"], name: "index_bulk_uploads_on_identifier", unique: true
     t.index ["user_id"], name: "index_bulk_uploads_on_user_id"
   end
@@ -54,22 +55,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_30_094653) do
     t.index ["data_protection_officer_id"], name: "dpo_user_id"
     t.index ["organisation_id", "data_protection_officer_id", "confirmed"], name: "data_protection_confirmations_unique", unique: true
     t.index ["organisation_id"], name: "index_data_protection_confirmations_on_organisation_id"
-  end
-
-  create_table "data_sharing_agreements", force: :cascade do |t|
-    t.bigint "organisation_id"
-    t.bigint "data_protection_officer_id"
-    t.datetime "signed_at", null: false
-    t.string "organisation_name", null: false
-    t.string "organisation_address", null: false
-    t.string "organisation_phone_number"
-    t.string "dpo_email", null: false
-    t.string "dpo_name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["data_protection_officer_id"], name: "index_data_sharing_agreements_on_data_protection_officer_id"
-    t.index ["organisation_id", "data_protection_officer_id"], name: "data_sharing_agreements_unique", unique: true
-    t.index ["organisation_id"], name: "index_data_sharing_agreements_on_organisation_id"
   end
 
   create_table "la_rent_ranges", force: :cascade do |t|

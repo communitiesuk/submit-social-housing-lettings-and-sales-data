@@ -285,7 +285,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "shows the pagination count" do
-            expect(page).to have_content("3 total users")
+            expect(page).to have_content("#{user.organisation.users.count} total users")
           end
         end
 
@@ -1221,210 +1221,228 @@ RSpec.describe OrganisationsController, type: :request do
           end
         end
       end
-    end
-  end
 
-  context "when the user is a support user" do
-    let(:user) { create(:user, :support) }
-
-    before do
-      allow(user).to receive(:need_two_factor_authentication?).and_return(false)
-      sign_in user
-    end
-
-    context "when they view the lettings logs tab" do
-      before do
-        create(:lettings_log, owning_organisation: organisation)
-      end
-
-      it "has CSV download buttons with the correct paths if at least 1 log exists" do
-        get "/organisations/#{organisation.id}/lettings-logs"
-        expect(page).to have_link("Download (CSV)", href: "/organisations/#{organisation.id}/lettings-logs/csv-download?codes_only=false")
-        expect(page).to have_link("Download (CSV, codes only)", href: "/organisations/#{organisation.id}/lettings-logs/csv-download?codes_only=true")
-      end
-
-      context "when you download the CSV" do
-        let(:other_organisation) { create(:organisation) }
+      context "when they view the lettings logs tab" do
+        let(:tenancycode) { "42" }
 
         before do
-          create_list(:lettings_log, 2, owning_organisation: organisation)
-          create(:lettings_log, owning_organisation: organisation, status: "pending", skip_update_status: true)
-          create_list(:lettings_log, 2, owning_organisation: other_organisation)
+          create(:lettings_log, owning_organisation: organisation, tenancycode:)
         end
 
-        it "only includes logs from that organisation" do
-          get "/organisations/#{organisation.id}/lettings-logs/csv-download?codes_only=false"
+        context "when there is at least one log visible" do
+          before do
+            get lettings_logs_organisation_path(organisation, search: tenancycode)
+          end
 
-          expect(page).to have_text("You've selected 3 logs.")
+          it "shows the delete logs button with the correct path" do
+            expect(page).to have_link "Delete logs", href: delete_lettings_logs_organisation_path(search: tenancycode)
+          end
+
+          it "has CSV download buttons with the correct paths" do
+            expect(page).to have_link "Download (CSV)", href: lettings_logs_csv_download_organisation_path(organisation, codes_only: false, search: tenancycode)
+            expect(page).to have_link "Download (CSV, codes only)", href: lettings_logs_csv_download_organisation_path(organisation, codes_only: true, search: tenancycode)
+          end
         end
 
-        it "provides the organisation to the mail job" do
-          expect {
-            post "/organisations/#{organisation.id}/lettings-logs/email-csv?status[]=completed&codes_only=false", headers:, params: {}
-          }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed] }, false, organisation, false)
+        context "when there are no visible logs" do
+          before do
+            LettingsLog.destroy_all
+            get lettings_logs_organisation_path(organisation)
+          end
+
+          it "does not show the delete logs button " do
+            expect(page).not_to have_link "Delete logs"
+          end
+
+          it "does not show the csv download buttons" do
+            expect(page).not_to have_link "Download (CSV)"
+            expect(page).not_to have_link "Download (CSV, codes only)"
+          end
         end
 
-        it "provides the export type to the mail job" do
-          codes_only_export_type = false
-          expect {
-            post "/organisations/#{organisation.id}/lettings-logs/email-csv?codes_only=#{codes_only_export_type}", headers:, params: {}
-          }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, organisation, codes_only_export_type)
-          codes_only_export_type = true
-          expect {
-            post "/organisations/#{organisation.id}/lettings-logs/email-csv?codes_only=#{codes_only_export_type}", headers:, params: {}
-          }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, organisation, codes_only_export_type)
+        context "when you download the CSV" do
+          let(:other_organisation) { create(:organisation) }
+
+          before do
+            create_list(:lettings_log, 2, owning_organisation: organisation)
+            create(:lettings_log, owning_organisation: organisation, status: "pending", skip_update_status: true)
+            create_list(:lettings_log, 2, owning_organisation: other_organisation)
+          end
+
+          it "only includes logs from that organisation" do
+            get "/organisations/#{organisation.id}/lettings-logs/csv-download?codes_only=false"
+
+            expect(page).to have_text("You've selected 3 logs.")
+          end
+
+          it "provides the organisation to the mail job" do
+            expect {
+              post "/organisations/#{organisation.id}/lettings-logs/email-csv?status[]=completed&codes_only=false", headers:, params: {}
+            }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed] }, false, organisation, false)
+          end
+
+          it "provides the export type to the mail job" do
+            codes_only_export_type = false
+            expect {
+              post "/organisations/#{organisation.id}/lettings-logs/email-csv?codes_only=#{codes_only_export_type}", headers:, params: {}
+            }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, organisation, codes_only_export_type)
+            codes_only_export_type = true
+            expect {
+              post "/organisations/#{organisation.id}/lettings-logs/email-csv?codes_only=#{codes_only_export_type}", headers:, params: {}
+            }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, organisation, codes_only_export_type)
+          end
         end
       end
-    end
 
-    context "when they view the sales logs tab" do
-      before do
-        create(:sales_log, owning_organisation: organisation)
-      end
-
-      it "has CSV download buttons with the correct paths if at least 1 log exists" do
-        get "/organisations/#{organisation.id}/sales-logs"
-        expect(page).to have_link("Download (CSV)", href: "/organisations/#{organisation.id}/sales-logs/csv-download?codes_only=false")
-        expect(page).to have_link("Download (CSV, codes only)", href: "/organisations/#{organisation.id}/sales-logs/csv-download?codes_only=true")
-      end
-
-      context "when you download the CSV" do
-        let(:other_organisation) { create(:organisation) }
-
+      context "when they view the sales logs tab" do
         before do
-          create_list(:sales_log, 2, owning_organisation: organisation)
-          create(:sales_log, owning_organisation: organisation, status: "pending", skip_update_status: true)
-          create_list(:sales_log, 2, owning_organisation: other_organisation)
+          create(:sales_log, owning_organisation: organisation)
         end
 
-        it "only includes logs from that organisation" do
-          get "/organisations/#{organisation.id}/sales-logs/csv-download?codes_only=false"
-
-          expect(page).to have_text("You've selected 3 logs.")
+        it "has CSV download buttons with the correct paths if at least 1 log exists" do
+          get "/organisations/#{organisation.id}/sales-logs"
+          expect(page).to have_link("Download (CSV)", href: "/organisations/#{organisation.id}/sales-logs/csv-download?codes_only=false")
+          expect(page).to have_link("Download (CSV, codes only)", href: "/organisations/#{organisation.id}/sales-logs/csv-download?codes_only=true")
         end
 
-        it "provides the organisation to the mail job" do
-          expect {
-            post "/organisations/#{organisation.id}/sales-logs/email-csv?status[]=completed&codes_only=false", headers:, params: {}
-          }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed] }, false, organisation, false, "sales")
+        context "when you download the CSV" do
+          let(:other_organisation) { create(:organisation) }
+
+          before do
+            create_list(:sales_log, 2, owning_organisation: organisation)
+            create(:sales_log, owning_organisation: organisation, status: "pending", skip_update_status: true)
+            create_list(:sales_log, 2, owning_organisation: other_organisation)
+          end
+
+          it "only includes logs from that organisation" do
+            get "/organisations/#{organisation.id}/sales-logs/csv-download?codes_only=false"
+
+            expect(page).to have_text("You've selected 3 logs.")
+          end
+
+          it "provides the organisation to the mail job" do
+            expect {
+              post "/organisations/#{organisation.id}/sales-logs/email-csv?status[]=completed&codes_only=false", headers:, params: {}
+            }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed] }, false, organisation, false, "sales")
+          end
+
+          it "provides the log type to the mail job" do
+            log_type = "sales"
+            expect {
+              post "/organisations/#{organisation.id}/sales-logs/email-csv?status[]=completed&codes_only=false", headers:, params: {}
+            }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed] }, false, organisation, false, log_type)
+          end
+
+          it "provides the export type to the mail job" do
+            codes_only_export_type = false
+            expect {
+              post "/organisations/#{organisation.id}/sales-logs/email-csv?codes_only=#{codes_only_export_type}", headers:, params: {}
+            }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, organisation, codes_only_export_type, "sales")
+            codes_only_export_type = true
+            expect {
+              post "/organisations/#{organisation.id}/sales-logs/email-csv?codes_only=#{codes_only_export_type}", headers:, params: {}
+            }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, organisation, codes_only_export_type, "sales")
+          end
+        end
+      end
+
+      describe "GET #download_lettings_csv" do
+        it "renders a page with the correct header" do
+          get "/organisations/#{organisation.id}/lettings-logs/csv-download?codes_only=false", headers:, params: {}
+          header = page.find_css("h1")
+          expect(header.text).to include("Download CSV")
         end
 
-        it "provides the log type to the mail job" do
-          log_type = "sales"
-          expect {
-            post "/organisations/#{organisation.id}/sales-logs/email-csv?status[]=completed&codes_only=false", headers:, params: {}
-          }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed] }, false, organisation, false, log_type)
+        it "renders a form with the correct target containing a button with the correct text" do
+          get "/organisations/#{organisation.id}/lettings-logs/csv-download?codes_only=false", headers:, params: {}
+          form = page.find("form.button_to")
+          expect(form[:method]).to eq("post")
+          expect(form[:action]).to eq("/organisations/#{organisation.id}/lettings-logs/email-csv")
+          expect(form).to have_button("Send email")
         end
 
-        it "provides the export type to the mail job" do
-          codes_only_export_type = false
-          expect {
-            post "/organisations/#{organisation.id}/sales-logs/email-csv?codes_only=#{codes_only_export_type}", headers:, params: {}
-          }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, organisation, codes_only_export_type, "sales")
-          codes_only_export_type = true
-          expect {
-            post "/organisations/#{organisation.id}/sales-logs/email-csv?codes_only=#{codes_only_export_type}", headers:, params: {}
-          }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, organisation, codes_only_export_type, "sales")
+        it "when codes_only query parameter is false, form contains hidden field with correct value" do
+          codes_only = false
+          get "/organisations/#{organisation.id}/lettings-logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
+          hidden_field = page.find("form.button_to").find_field("codes_only", type: "hidden")
+          expect(hidden_field.value).to eq(codes_only.to_s)
+        end
+
+        it "when codes_only query parameter is true, form contains hidden field with correct value" do
+          codes_only = true
+          get "/organisations/#{organisation.id}/lettings-logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
+          hidden_field = page.find("form.button_to").find_field("codes_only", type: "hidden")
+          expect(hidden_field.value).to eq(codes_only.to_s)
+        end
+
+        it "when query string contains search parameter, form contains hidden field with correct value" do
+          search_term = "blam"
+          get "/organisations/#{organisation.id}/lettings-logs/csv-download?codes_only=true&search=#{search_term}", headers:, params: {}
+          hidden_field = page.find("form.button_to").find_field("search", type: "hidden")
+          expect(hidden_field.value).to eq(search_term)
         end
       end
-    end
 
-    describe "GET #download_lettings_csv" do
-      it "renders a page with the correct header" do
-        get "/organisations/#{organisation.id}/lettings-logs/csv-download?codes_only=false", headers:, params: {}
-        header = page.find_css("h1")
-        expect(header.text).to include("Download CSV")
+      describe "GET #download_sales_csv" do
+        it "renders a page with the correct header" do
+          get "/organisations/#{organisation.id}/sales-logs/csv-download?codes_only=false", headers:, params: {}
+          header = page.find_css("h1")
+          expect(header.text).to include("Download CSV")
+        end
+
+        it "renders a form with the correct target containing a button with the correct text" do
+          get "/organisations/#{organisation.id}/sales-logs/csv-download?codes_only=false", headers:, params: {}
+          form = page.find("form.button_to")
+          expect(form[:method]).to eq("post")
+          expect(form[:action]).to eq("/organisations/#{organisation.id}/sales-logs/email-csv")
+          expect(form).to have_button("Send email")
+        end
+
+        it "when codes_only query parameter is false, form contains hidden field with correct value" do
+          codes_only = false
+          get "/organisations/#{organisation.id}/sales-logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
+          hidden_field = page.find("form.button_to").find_field("codes_only", type: "hidden")
+          expect(hidden_field.value).to eq(codes_only.to_s)
+        end
+
+        it "when codes_only query parameter is true, form contains hidden field with correct value" do
+          codes_only = true
+          get "/organisations/#{organisation.id}/sales-logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
+          hidden_field = page.find("form.button_to").find_field("codes_only", type: "hidden")
+          expect(hidden_field.value).to eq(codes_only.to_s)
+        end
+
+        it "when query string contains search parameter, form contains hidden field with correct value" do
+          search_term = "blam"
+          get "/organisations/#{organisation.id}/sales-logs/csv-download?codes_only=true&search=#{search_term}", headers:, params: {}
+          hidden_field = page.find("form.button_to").find_field("search", type: "hidden")
+          expect(hidden_field.value).to eq(search_term)
+        end
       end
 
-      it "renders a form with the correct target containing a button with the correct text" do
-        get "/organisations/#{organisation.id}/lettings-logs/csv-download?codes_only=false", headers:, params: {}
-        form = page.find("form.button_to")
-        expect(form[:method]).to eq("post")
-        expect(form[:action]).to eq("/organisations/#{organisation.id}/lettings-logs/email-csv")
-        expect(form).to have_button("Send email")
-      end
-
-      it "when codes_only query parameter is false, form contains hidden field with correct value" do
-        codes_only = false
-        get "/organisations/#{organisation.id}/lettings-logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
-        hidden_field = page.find("form.button_to").find_field("codes_only", type: "hidden")
-        expect(hidden_field.value).to eq(codes_only.to_s)
-      end
-
-      it "when codes_only query parameter is true, form contains hidden field with correct value" do
-        codes_only = true
-        get "/organisations/#{organisation.id}/lettings-logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
-        hidden_field = page.find("form.button_to").find_field("codes_only", type: "hidden")
-        expect(hidden_field.value).to eq(codes_only.to_s)
-      end
-
-      it "when query string contains search parameter, form contains hidden field with correct value" do
-        search_term = "blam"
-        get "/organisations/#{organisation.id}/lettings-logs/csv-download?codes_only=true&search=#{search_term}", headers:, params: {}
-        hidden_field = page.find("form.button_to").find_field("search", type: "hidden")
-        expect(hidden_field.value).to eq(search_term)
-      end
-    end
-
-    describe "GET #download_sales_csv" do
-      it "renders a page with the correct header" do
-        get "/organisations/#{organisation.id}/sales-logs/csv-download?codes_only=false", headers:, params: {}
-        header = page.find_css("h1")
-        expect(header.text).to include("Download CSV")
-      end
-
-      it "renders a form with the correct target containing a button with the correct text" do
-        get "/organisations/#{organisation.id}/sales-logs/csv-download?codes_only=false", headers:, params: {}
-        form = page.find("form.button_to")
-        expect(form[:method]).to eq("post")
-        expect(form[:action]).to eq("/organisations/#{organisation.id}/sales-logs/email-csv")
-        expect(form).to have_button("Send email")
-      end
-
-      it "when codes_only query parameter is false, form contains hidden field with correct value" do
-        codes_only = false
-        get "/organisations/#{organisation.id}/sales-logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
-        hidden_field = page.find("form.button_to").find_field("codes_only", type: "hidden")
-        expect(hidden_field.value).to eq(codes_only.to_s)
-      end
-
-      it "when codes_only query parameter is true, form contains hidden field with correct value" do
-        codes_only = true
-        get "/organisations/#{organisation.id}/sales-logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
-        hidden_field = page.find("form.button_to").find_field("codes_only", type: "hidden")
-        expect(hidden_field.value).to eq(codes_only.to_s)
-      end
-
-      it "when query string contains search parameter, form contains hidden field with correct value" do
-        search_term = "blam"
-        get "/organisations/#{organisation.id}/sales-logs/csv-download?codes_only=true&search=#{search_term}", headers:, params: {}
-        hidden_field = page.find("form.button_to").find_field("search", type: "hidden")
-        expect(hidden_field.value).to eq(search_term)
-      end
-    end
-
-    context "when they view the users tab" do
-      before do
-        get "/organisations/#{organisation.id}/users"
-      end
-
-      it "has a CSV download button with the correct path" do
-        expect(page).to have_link("Download (CSV)", href: "/organisations/#{organisation.id}/users.csv")
-      end
-
-      context "when you download the CSV" do
-        let(:headers) { { "Accept" => "text/csv" } }
-        let(:other_organisation) { create(:organisation) }
-
+      context "when they view the users tab" do
         before do
-          create_list(:user, 3, organisation:)
-          create_list(:user, 2, organisation: other_organisation)
+          get "/organisations/#{organisation.id}/users"
         end
 
-        it "only includes users from that organisation" do
-          get "/organisations/#{other_organisation.id}/users", headers:, params: {}
-          csv = CSV.parse(response.body)
-          expect(csv.count).to eq(3)
+        it "has a CSV download button with the correct path" do
+          expect(page).to have_link("Download (CSV)", href: "/organisations/#{organisation.id}/users.csv")
+        end
+
+        context "when you download the CSV" do
+          let(:headers) { { "Accept" => "text/csv" } }
+          let(:other_organisation) { create(:organisation) }
+
+          before do
+            create_list(:user, 3, organisation:)
+            create_list(:user, 2, organisation: other_organisation)
+          end
+
+          it "only includes users from that organisation" do
+            get "/organisations/#{other_organisation.id}/users", headers:, params: {}
+            csv = CSV.parse(response.body)
+            expect(csv.count).to eq(other_organisation.users.count + 1)
+          end
         end
       end
     end
@@ -1446,7 +1464,7 @@ RSpec.describe OrganisationsController, type: :request do
 
       context "when flag not enabled" do
         before do
-          allow(FeatureToggle).to receive(:new_data_sharing_agreement?).and_return(false)
+          allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(false)
         end
 
         it "returns not found" do
@@ -1457,7 +1475,7 @@ RSpec.describe OrganisationsController, type: :request do
 
       context "when flag enabled" do
         before do
-          allow(FeatureToggle).to receive(:new_data_sharing_agreement?).and_return(true)
+          allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(true)
         end
 
         it "returns ok" do
@@ -1469,6 +1487,8 @@ RSpec.describe OrganisationsController, type: :request do
   end
 
   describe "POST #data_sharing_agreement" do
+    let(:organisation) { create(:organisation, :without_dpc) }
+
     context "when not signed in" do
       it "redirects to sign in" do
         post "/organisations/#{organisation.id}/data-sharing-agreement", headers: headers
@@ -1484,7 +1504,7 @@ RSpec.describe OrganisationsController, type: :request do
 
       context "when flag not enabled" do
         before do
-          allow(FeatureToggle).to receive(:new_data_sharing_agreement?).and_return(false)
+          allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(false)
         end
 
         it "returns not found" do
@@ -1495,7 +1515,7 @@ RSpec.describe OrganisationsController, type: :request do
 
       context "when flag enabled" do
         before do
-          allow(FeatureToggle).to receive(:new_data_sharing_agreement?).and_return(true)
+          allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(true)
         end
 
         context "when user not dpo" do
@@ -1508,39 +1528,48 @@ RSpec.describe OrganisationsController, type: :request do
         end
 
         context "when user is dpo" do
-          let(:user) { create(:user, is_dpo: true) }
-
-          it "returns redirects to details page" do
-            post "/organisations/#{organisation.id}/data-sharing-agreement", headers: headers
-
-            expect(response).to redirect_to("/organisations/#{organisation.id}/details")
-            expect(flash[:notice]).to eq("You have accepted the Data Sharing Agreement")
-            expect(flash[:notification_banner_body]).to eq("Your organisation can now submit logs.")
-          end
-
-          it "creates a data sharing agreement" do
-            expect(organisation.reload.data_sharing_agreement).to be_nil
-
-            post("/organisations/#{organisation.id}/data-sharing-agreement", headers:)
-
-            data_sharing_agreement = organisation.reload.data_sharing_agreement
-
-            expect(data_sharing_agreement.organisation_address).to eq(organisation.address_row)
-            expect(data_sharing_agreement.organisation_name).to eq(organisation.name)
-            expect(data_sharing_agreement.organisation_phone_number).to eq(organisation.phone)
-            expect(data_sharing_agreement.data_protection_officer).to eq(user)
-            expect(data_sharing_agreement.dpo_name).to eq(user.name)
-            expect(data_sharing_agreement.dpo_email).to eq(user.email)
-          end
-
-          context "when the user has already accepted the agreement" do
-            before do
-              create(:data_sharing_agreement, data_protection_officer: user, organisation: user.organisation)
-            end
+          context "when the organisation has a non-confirmed confirmation" do
+            let(:user) { create(:user, is_dpo: false) }
 
             it "returns not found" do
               post "/organisations/#{organisation.id}/data-sharing-agreement", headers: headers
               expect(response).to have_http_status(:not_found)
+            end
+          end
+
+          context "when the organisation does not have a confirmation" do
+            let(:user) { create(:user, is_dpo: true, organisation:) }
+
+            it "returns redirects to details page" do
+              post "/organisations/#{organisation.id}/data-sharing-agreement", headers: headers
+
+              expect(response).to redirect_to("/organisations/#{organisation.id}/details")
+              expect(flash[:notice]).to eq("You have accepted the Data Sharing Agreement")
+              expect(flash[:notification_banner_body]).to eq("Your organisation can now submit logs.")
+            end
+
+            it "creates a data sharing agreement" do
+              expect(organisation.reload.data_protection_confirmation).to be_nil
+
+              post("/organisations/#{organisation.id}/data-sharing-agreement", headers:)
+
+              data_protection_confirmation = organisation.reload.data_protection_confirmation
+
+              expect(data_protection_confirmation.organisation.address_row).to eq(organisation.address_row)
+              expect(data_protection_confirmation.organisation.name).to eq(organisation.name)
+              expect(data_protection_confirmation.organisation.phone).to eq(organisation.phone)
+              expect(data_protection_confirmation.data_protection_officer).to eq(user)
+            end
+
+            context "when the user has already accepted the agreement" do
+              before do
+                create(:data_protection_confirmation, data_protection_officer: user, organisation: user.organisation)
+              end
+
+              it "returns not found" do
+                post "/organisations/#{organisation.id}/data-sharing-agreement", headers: headers
+                expect(response).to have_http_status(:not_found)
+              end
             end
           end
         end

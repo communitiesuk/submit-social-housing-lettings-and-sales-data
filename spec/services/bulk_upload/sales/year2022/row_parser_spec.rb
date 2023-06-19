@@ -107,6 +107,15 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
     }
   end
 
+  around do |example|
+    Timecop.freeze(Time.zone.local(2023, 2, 22)) do
+      Singleton.__init__(FormHandler)
+      example.run
+    end
+    Timecop.return
+    Singleton.__init__(FormHandler)
+  end
+
   describe "#blank_row?" do
     context "when a new object" do
       it "returns true" do
@@ -199,6 +208,13 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
 
       context "when valid row" do
         let(:attributes) { valid_attributes }
+
+        around do |example|
+          Timecop.freeze(Date.new(2023, 2, 22)) do
+            example.run
+          end
+          Timecop.return
+        end
 
         it "returns true" do
           expect(parser).to be_valid

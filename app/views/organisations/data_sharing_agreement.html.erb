@@ -3,11 +3,11 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <h2 id="data-provider-organisation-and-department-for-levelling-up-housing-and-communities" class="govuk-heading-l">
-      <%= org_name_for_data_sharing_agreement(@data_sharing_agreement, current_user) %> and Department for Levelling Up, Housing and Communities
+      <%= org_name_for_data_sharing_agreement(@data_protection_confirmation, current_user) %> and Department for Levelling Up, Housing and Communities
     </h2>
     <p class="govuk-body-m">
-      <% if @data_sharing_agreement %>
-        This agreement is made the <%= @data_sharing_agreement.signed_at.day.ordinalize %> day of <%= @data_sharing_agreement.signed_at.strftime("%B") %> <%= @data_sharing_agreement.signed_at.year %>
+      <% if @data_protection_confirmation&.confirmed? %>
+        This agreement is made the <%= @data_protection_confirmation.created_at.day.ordinalize %> day of <%= @data_protection_confirmation.created_at.strftime("%B") %> <%= @data_protection_confirmation.created_at.year %>
       <% elsif current_user.is_dpo? %>
         This agreement is made the <%= Time.zone.now.day.ordinalize %> day of <%= Time.zone.now.strftime("%B") %> <%= Time.zone.now.year %>
       <% else %>
@@ -15,8 +15,8 @@
       <% end %>
     </p>
     <p class="govuk-body-m"><strong>between</strong></p>
-    <% if @data_sharing_agreement %>
-      <p class="govuk-body-m">1) <%= @data_sharing_agreement.organisation_name %> of <%= @data_sharing_agreement.organisation_address %> (“CORE Data Provider”)</p>
+    <% if @data_protection_confirmation&.confirmed? %>
+      <p class="govuk-body-m">1) <%= @data_protection_confirmation.organisation.name %> of <%= @data_protection_confirmation.organisation.address_row %> (“CORE Data Provider”)</p>
     <% else %>
       <p class="govuk-body-m">1) <%= @organisation.name %> of <%= @organisation.address_row %> (“CORE Data Provider”)</p>
     <% end %>
@@ -106,7 +106,7 @@
     <h3 id="12-authorised-representatives" class="govuk-heading-m">12. Authorised representatives</h3>
     <p class="govuk-body-m">12.1. CORE data providers and DLUHC will each appoint an Authorised Representative to be the primary point of contact in all day-to-day matters relating to this Agreement:</p>
     <p class="govuk-body-m">
-      <%= section_12_2(data_sharing_agreement: @data_sharing_agreement, user: current_user, organisation: @organisation) %>
+      <%= present_section_12_2(data_protection_confirmation: @data_protection_confirmation, user: current_user, organisation: @organisation) %>
     </p>
     <p class="govuk-body-m">12.3. For DLUHC: Name: Rachel Worledge,
     Postal Address: South-west section, 4th Floor, Fry Building, 2 Marsham Street, London, SW1P 4DF,
@@ -123,9 +123,9 @@
     <h3 id="16-statutory-compliance" class="govuk-heading-m">16. Statutory compliance</h3>
     <p class="govuk-body-m">16.1. The Parties shall comply with all relevant legislation, regulations, orders, statutory instruments and any amendments or re-enactments thereof from the commencement of this agreement.</p>
     <p class="govuk-body-m">As witness of which the parties have set their hands on the day and year first above written
-    signed for and on behalf of the Data Protection Officer for <%= org_name_for_data_sharing_agreement(@data_sharing_agreement, current_user) %>, by:</p>
+    signed for and on behalf of the Data Protection Officer for <%= org_name_for_data_sharing_agreement(@data_protection_confirmation, current_user) %>, by:</p>
     <ul class="govuk-list govuk-list--bullet">
-      <li>Name: <%= name_for_data_sharing_agreement(@data_sharing_agreement, current_user) %></li>
+      <li>Name: <%= name_for_data_sharing_agreement(@data_protection_confirmation, current_user) %></li>
       <li>Title: Data Protection Officer</li>
     </ul>
     <p class="govuk-body-m">SIGNED for and on behalf of the deputy director of the data, analytics &amp; statistics in the Department for Levelling Up, Housing and Communities, by:</p>
@@ -134,8 +134,8 @@
       <li>Title: Deputy Director</li>
     </ul>
 
-    <% if current_user.is_dpo? && @organisation.data_sharing_agreement.nil? %>
-      <div class="govuk-button-group">
+    <% if current_user.is_dpo? && !(@organisation.data_protection_confirmed?) %>
+      <div class="govuk-button-group govuk-!-margin-top-9">
         <%= govuk_button_to("Accept this agreement", data_sharing_agreement_organisation_path(@organisation), method: :post) %>
         <%= govuk_button_link_to("Cancel", details_organisation_path(@organisation), secondary: true) %>
       </div>

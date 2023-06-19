@@ -463,6 +463,12 @@ class BulkUpload::Lettings::Year2022::RowParser
     end
   end
 
+  def startdate
+    Date.new(field_98 + 2000, field_97, field_96) if field_98.present? && field_97.present? && field_96.present?
+  rescue Date::Error
+    Date.new
+  end
+
 private
 
   def validate_declaration_acceptance
@@ -808,13 +814,13 @@ private
       if setup_question?(question)
         fields.each do |field|
           if errors.select { |e| fields.include?(e.attribute) }.none?
-            errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase), category: :setup)
+            errors.add(field, I18n.t("validations.not_answered", question: question.error_display_label&.downcase), category: :setup)
           end
         end
       else
         fields.each do |field|
           unless errors.any? { |e| fields.include?(e.attribute) }
-            errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase))
+            errors.add(field, I18n.t("validations.not_answered", question: question.error_display_label&.downcase))
           end
         end
       end
@@ -1015,12 +1021,6 @@ private
       voiddate: %i[field_89 field_90 field_91],
       is_carehome: %i[field_85],
     }
-  end
-
-  def startdate
-    Date.new(field_98 + 2000, field_97, field_96) if field_98.present? && field_97.present? && field_96.present?
-  rescue Date::Error
-    Date.new
   end
 
   def renttype

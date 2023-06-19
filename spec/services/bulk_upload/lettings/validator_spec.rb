@@ -36,7 +36,9 @@ RSpec.describe BulkUpload::Lettings::Validator do
 
         context "and doesn't have too many columns" do
           before do
-            file.write(("a" * 135).chars.join(","))
+            file.write(("a" * 95).chars.join(","))
+            file.write(",1,10,22,")
+            file.write(("a" * 37).chars.join(","))
             file.write("\n")
             file.rewind
           end
@@ -386,6 +388,13 @@ RSpec.describe BulkUpload::Lettings::Validator do
     context "when all logs valid?" do
       let(:log_1) { build(:lettings_log, :completed, renttype: 1, created_by: user) }
       let(:log_2) { build(:lettings_log, :completed, renttype: 1, created_by: user) }
+
+      around do |example|
+        Timecop.freeze(Time.zone.local(2023, 2, 22)) do
+          example.run
+        end
+        Timecop.return
+      end
 
       before do
         file.write(BulkUpload::LettingsLogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)

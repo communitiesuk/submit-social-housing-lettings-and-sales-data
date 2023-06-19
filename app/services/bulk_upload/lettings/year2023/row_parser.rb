@@ -715,14 +715,14 @@ private
       if setup_question?(question)
         fields.each do |field|
           if errors.select { |e| fields.include?(e.attribute) }.none?
-            question_text = question.check_answer_label.presence || question.header.presence || "this question"
+            question_text = question.error_display_label.presence || "this question"
             errors.add(field, I18n.t("validations.not_answered", question: question_text.downcase), category: :setup)
           end
         end
       else
         fields.each do |field|
           unless errors.any? { |e| fields.include?(e.attribute) }
-            question_text = question.check_answer_label.presence || question.header.presence || "this question"
+            question_text = question.error_display_label.presence || "this question"
             errors.add(field, I18n.t("validations.not_answered", question: question_text.downcase))
           end
         end
@@ -1467,8 +1467,6 @@ private
     when 2
       1
     when 3
-      1
-    when 4
       2
     end
   end

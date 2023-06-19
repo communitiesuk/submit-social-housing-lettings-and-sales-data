@@ -150,6 +150,24 @@ RSpec.describe BulkUpload::Lettings::Year2023::CsvParser do
     end
   end
 
+  context "when parsing csv with carriage returns" do
+    before do
+      file.write("Question\r\n")
+      file.write("Additional info\r")
+      file.write("Values\r\n")
+      file.write("Can be empty?\r")
+      file.write("Type of letting the question applies to\r\n")
+      file.write("Duplicate check field?\r")
+      file.write(BulkUpload::LettingsLogToCsv.new(log:).default_2023_field_numbers_row)
+      file.write(BulkUpload::LettingsLogToCsv.new(log:).to_2023_csv_row)
+      file.rewind
+    end
+
+    it "parses csv correctly" do
+      expect(service.row_parsers[0].field_13).to eql(log.tenancycode)
+    end
+  end
+
   describe "#column_for_field", aggregate_failures: true do
     context "when with headers using default ordering" do
       before do
