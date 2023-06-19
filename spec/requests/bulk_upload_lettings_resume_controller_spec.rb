@@ -29,6 +29,32 @@ RSpec.describe BulkUploadLettingsResumeController, type: :request do
       expect(response.body).to include(bulk_upload.filename)
       expect(response.body).not_to include("Cancel")
     end
+
+    it "sets no cache headers" do
+      get "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice"
+
+      expect(response.headers["Cache-Control"]).to eql("no-store")
+    end
+
+    context "and previously told us to fix inline" do
+      let(:bulk_upload) { create(:bulk_upload, :lettings, user:, bulk_upload_errors:, choice: "create-fix-inline") }
+
+      it "redirects to chosen" do
+        get "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice"
+
+        expect(response).to redirect_to("/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/chosen")
+      end
+    end
+
+    context "and previously told us to bulk confirm soft validations" do
+      let(:bulk_upload) { create(:bulk_upload, :lettings, user:, bulk_upload_errors:, choice: "bulk-confirm-soft-validations") }
+
+      it "redirects to soft validations check chosen" do
+        get "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice"
+
+        expect(response).to redirect_to("/lettings-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/chosen")
+      end
+    end
   end
 
   describe "GET /lettings-logs/bulk-upload-resume/:ID/fix-choice?soft_errors_only=true" do
@@ -58,6 +84,8 @@ RSpec.describe BulkUploadLettingsResumeController, type: :request do
         patch "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice", params: { form: { choice: "upload-again" } }
 
         expect(response).to redirect_to("/lettings-logs/bulk-upload-results/#{bulk_upload.id}")
+
+        expect(bulk_upload.reload.choice).to eql("upload-again")
       end
     end
 
@@ -66,6 +94,8 @@ RSpec.describe BulkUploadLettingsResumeController, type: :request do
         patch "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice", params: { form: { choice: "create-fix-inline" } }
 
         expect(response).to redirect_to("/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/confirm")
+
+        expect(bulk_upload.reload.choice).to be_blank
       end
     end
   end
@@ -78,6 +108,32 @@ RSpec.describe BulkUploadLettingsResumeController, type: :request do
 
       expect(response.body).to include("Are you sure")
     end
+
+    it "sets no cache headers" do
+      get "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/confirm"
+
+      expect(response.headers["Cache-Control"]).to eql("no-store")
+    end
+
+    context "and previously told us to fix inline" do
+      let(:bulk_upload) { create(:bulk_upload, :lettings, user:, bulk_upload_errors:, choice: "create-fix-inline") }
+
+      it "redirects to chosen" do
+        get "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/confirm"
+
+        expect(response).to redirect_to("/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/chosen")
+      end
+    end
+
+    context "and previously told us to bulk confirm soft validations" do
+      let(:bulk_upload) { create(:bulk_upload, :lettings, user:, bulk_upload_errors:, choice: "bulk-confirm-soft-validations") }
+
+      it "redirects to soft validations check chosen" do
+        get "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/confirm"
+
+        expect(response).to redirect_to("/lettings-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/chosen")
+      end
+    end
   end
 
   describe "PATCH /lettings-logs/bulk-upload-resume/:ID/confirm" do
@@ -89,6 +145,8 @@ RSpec.describe BulkUploadLettingsResumeController, type: :request do
       patch "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/confirm"
 
       expect(mock_processor).to have_received(:approve)
+
+      expect(bulk_upload.reload.choice).to eql("create-fix-inline")
 
       expect(response).to redirect_to("/lettings-logs/bulk-upload-results/#{bulk_upload.id}/resume")
     end
