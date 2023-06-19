@@ -461,6 +461,12 @@ class BulkUpload::Lettings::Year2022::RowParser
     end
   end
 
+  def startdate
+    Date.new(field_98 + 2000, field_97, field_96) if field_98.present? && field_97.present? && field_96.present?
+  rescue Date::Error
+    Date.new
+  end
+
 private
 
   def validate_declaration_acceptance
@@ -981,12 +987,6 @@ private
       voiddate: %i[field_89 field_90 field_91],
       is_carehome: %i[field_85],
     }
-  end
-
-  def startdate
-    Date.new(field_98 + 2000, field_97, field_96) if field_98.present? && field_97.present? && field_96.present?
-  rescue Date::Error
-    Date.new
   end
 
   def renttype

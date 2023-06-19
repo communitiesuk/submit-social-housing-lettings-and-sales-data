@@ -187,4 +187,32 @@ RSpec.describe BulkUpload::Lettings::Year2022::CsvParser do
       expect(service.row_parsers[0].field_12.to_i).to eq(35)
     end
   end
+
+  describe "#wrong_template_for_year?" do
+    context "when 23/24 file with 23/24 data" do
+      let(:log) { build(:lettings_log, :completed, startdate: Date.new(2023, 10, 1)) }
+
+      before do
+        file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2023_csv_row)
+        file.rewind
+      end
+
+      it "returns true" do
+        expect(service).to be_wrong_template_for_year
+      end
+    end
+
+    context "when 22/23 file with 22/23 data" do
+      let(:log) { build(:lettings_log, :completed, startdate: Date.new(2022, 10, 1)) }
+
+      before do
+        file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
+        file.rewind
+      end
+
+      it "returns false" do
+        expect(service).not_to be_wrong_template_for_year
+      end
+    end
+  end
 end
