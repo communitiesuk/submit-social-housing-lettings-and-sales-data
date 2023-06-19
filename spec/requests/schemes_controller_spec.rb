@@ -330,6 +330,18 @@ RSpec.describe SchemesController, type: :request do
             expect(page).not_to have_link("Deactivate this scheme")
           end
         end
+
+        context "with scheme that's deactivating in more than 6 months" do
+          let(:scheme_deactivation_period) { create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2023, 5, 12), scheme:) }
+
+          it "does not render toggle scheme link" do
+            expect(response).to have_http_status(:ok)
+            expect(page).not_to have_link("Reactivate this scheme")
+            expect(page).to have_link("Deactivate this scheme")
+            expect(response.body).not_to include("<strong class=\"govuk-tag govuk-tag--yellow\">Deactivating soon</strong>")
+            expect(response.body).to include("<strong class=\"govuk-tag govuk-tag--green\">Active</strong>")
+          end
+        end
       end
 
       context "when coordinator attempts to see scheme belonging to a parent organisation" do
@@ -1999,6 +2011,38 @@ RSpec.describe SchemesController, type: :request do
           end
         end
 
+        context "and there already is a deactivation period" do
+          let(:add_deactivations) { create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2023, 6, 5), reactivation_date: nil, scheme:) }
+
+          before do
+            create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2023, 6, 5), reactivation_date: nil, scheme:)
+            patch "/schemes/#{scheme.id}/deactivate", params:
+          end
+
+          it "updates existing scheme with valid deactivation date and renders scheme page" do
+            follow_redirect!
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+            scheme.reload
+            expect(scheme.scheme_deactivation_periods.count).to eq(1)
+            expect(scheme.scheme_deactivation_periods.first.deactivation_date).to eq(deactivation_date)
+          end
+
+          it "clears the scheme and scheme answers" do
+            expect(lettings_log.scheme).to eq(scheme)
+            lettings_log.reload
+            expect(lettings_log.scheme).to eq(nil)
+            expect(lettings_log.scheme).to eq(nil)
+          end
+
+          it "marks log as needing attention" do
+            expect(lettings_log.unresolved).to eq(nil)
+            lettings_log.reload
+            expect(lettings_log.unresolved).to eq(true)
+          end
+        end
+
         context "and the users need to be notified" do
           it "sends E-mails to the creators of affected logs with counts" do
             expect {
@@ -2059,6 +2103,35 @@ RSpec.describe SchemesController, type: :request do
         it "displays page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_content(I18n.t("validations.scheme.toggle_date.invalid"))
+        end
+      end
+
+      context "when there is an earlier open deactivation" do
+        let(:deactivation_date) { Time.zone.local(2022, 10, 10) }
+        let(:params) { { scheme_deactivation_period: { deactivation_date_type: "other", "deactivation_date(3i)": "8", "deactivation_date(2i)": "9", "deactivation_date(1i)": "2023" } } }
+        let(:add_deactivations) { create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2023, 6, 5), reactivation_date: nil, scheme:) }
+
+        it "redirects to the scheme page and updates the existing deactivation period" do
+          follow_redirect!
+          follow_redirect!
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+          scheme.reload
+          expect(scheme.scheme_deactivation_periods.count).to eq(1)
+          expect(scheme.scheme_deactivation_periods.first.deactivation_date).to eq(Time.zone.local(2023, 9, 8))
+        end
+      end
+
+      context "when there is a later open deactivation" do
+        let(:deactivation_date) { Time.zone.local(2022, 10, 10) }
+        let(:params) { { scheme_deactivation_period: { deactivation_date_type: "other", "deactivation_date(3i)": "8", "deactivation_date(2i)": "9", "deactivation_date(1i)": "2022" } } }
+        let(:add_deactivations) { create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2023, 6, 5), reactivation_date: nil, scheme:) }
+
+        it "redirects to the confirmation page" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("This change will affect 1 logs")
         end
       end
     end

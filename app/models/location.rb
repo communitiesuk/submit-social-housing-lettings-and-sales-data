@@ -108,6 +108,10 @@ class Location < ApplicationRecord
     status == :reactivating_soon
   end
 
+  def deactivates_in_a_long_time?
+    status_at(6.months.from_now) == :deactivating_soon
+  end
+
   def validate_postcode
     if !postcode&.match(POSTCODE_REGEXP)
       error_message = I18n.t("validations.postcode")

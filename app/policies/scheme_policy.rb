@@ -47,7 +47,9 @@ class SchemePolicy
     confirm_secondary_client_group?
     secondary_client_group?
     new_deactivation?
+    new_reactivation?
     deactivate?
+    reactivate?
     details?
     support?
     deactivate_confirm?

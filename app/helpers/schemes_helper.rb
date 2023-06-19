@@ -14,7 +14,7 @@ module SchemesHelper
       { name: "Level of support given", value: scheme.support_type },
       { name: "Intended length of stay", value: scheme.intended_stay },
       { name: "Availability", value: scheme_availability(scheme) },
-      { name: "Status", value: status_tag(scheme.status) },
+      { name: "Status", value: status_tag_from_resource(scheme) },
     ]
 
     if user.data_coordinator?
@@ -40,7 +40,7 @@ module SchemesHelper
   end
 
   def toggle_scheme_link(scheme)
-    return govuk_button_link_to "Deactivate this scheme", scheme_new_deactivation_path(scheme), warning: true if scheme.active?
+    return govuk_button_link_to "Deactivate this scheme", scheme_new_deactivation_path(scheme), warning: true if scheme.active? || scheme.deactivates_in_a_long_time?
     return govuk_button_link_to "Reactivate this scheme", scheme_new_reactivation_path(scheme) if scheme.deactivated?
   end
 
