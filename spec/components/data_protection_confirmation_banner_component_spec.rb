@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe DataProtectionConfirmationBannerComponent, type: :component do
+  include GovukComponent
+
   let(:component) { described_class.new(user:, organisation:) }
   let(:render) { render_inline(component) }
   let(:user) { create(:user) }
@@ -13,114 +15,74 @@ RSpec.describe DataProtectionConfirmationBannerComponent, type: :component do
 
     it "does not display banner" do
       expect(component.display_banner?).to eq(false)
+      expect(render.content).to be_empty
     end
   end
 
-  context "when flag enabled" do
+  context "when flag enabled", :aggregate_failures do
     before do
       allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(true)
     end
 
-    describe "#data_protection_officers_text" do
-      it "returns the correct text" do
-        expect(component.data_protection_officers_text).to eq("You can ask: Danny Rojas")
-      end
-
-      context "with two DPOs" do
-        before do
-          create(:user, organisation:, is_dpo: true, name: "Test McTest")
-        end
-
-        it "returns the correct list of names, in alphabetical order)" do
-          expect(component.data_protection_officers_text).to eq("You can ask: Danny Rojas, Test McTest")
-        end
-      end
-    end
-
-    context "when user is not support and not dpo" do
-      let(:user) { create(:user) }
-
-      context "when org blank" do
-        let(:organisation) { nil }
-
-        before do
-          allow(DataProtectionConfirmation).to receive(:exists?).and_call_original
-        end
-
-        context "when data sharing agreement present" do
-          it "does not display banner" do
-            expect(component.display_banner?).to eq(false)
-          end
-
-          it "verifies DSA exists for organisation" do
-            render
-            expect(DataProtectionConfirmation).to have_received(:exists?).with(organisation: user.organisation, confirmed: true)
-          end
-        end
-
-        context "when data sharing agreement not present" do
-          let(:user) { create(:user, organisation: create(:organisation, :without_dpc)) }
-
-          it "displays the banner" do
-            expect(component.display_banner?).to eq(true)
-          end
-
-          it "produces the correct link" do
-            render
-            expect(component.data_sharing_agreement_href).to eq("/organisations/#{user.organisation.id}/data-sharing-agreement")
-          end
-
-          it "verifies DSA exists for organisation" do
-            render
-            expect(DataProtectionConfirmation).to have_received(:exists?).with(organisation: user.organisation, confirmed: true)
-          end
-        end
-      end
-    end
-
-    context "when user is support" do
+    context "when user is support and organisation is blank" do
       let(:user) { create(:user, :support) }
+      let(:organisation) { nil }
 
-      context "when org blank" do
-        let(:organisation) { nil }
+      it "does not display banner" do
+        expect(component.display_banner?).to eq(false)
+        expect(render.content).to be_empty
+      end
+    end
 
+    context "when org does not have a DPO" do
+      before do
+        organisation.users.where(is_dpo: true).destroy_all
+      end
+
+      it "displays the banner" do
+        expect(component.display_banner?).to eq(true)
+        expect(render).to have_link(
+          "Contact helpdesk to assign a data protection officer",
+          href: "https://digital.dclg.gov.uk/jira/servicedesk/customer/portal/4/group/21",
+        )
+        expect(render).to have_selector("p", text: "To create logs your organisation must state a data protection officer. They must sign the Data Sharing Agreement.")
+      end
+    end
+
+    context "when org has a DPO" do
+      context "when org does not have a signed data sharing agreement" do
+        context "when user is not a DPO" do
+          let(:organisation) { create(:organisation, :without_dpc) }
+          let(:user) { create(:user, organisation:) }
+          let!(:dpo) { create(:user, :data_protection_officer, organisation:) }
+
+          it "displays the banner and shows DPOs" do
+            expect(component.display_banner?).to eq(true)
+            expect(render.css("a")).to be_empty
+            expect(render).to have_selector("p", text: "Your data protection officer must accept the Data Sharing Agreement on CORE before you can create any logs.")
+            expect(render).to have_selector("p", text: "You can ask: #{dpo.name}")
+          end
+        end
+
+        context "when user is a DPO" do
+          let(:organisation) { create(:organisation, :without_dpc) }
+          let(:user) { create(:user, :data_protection_officer, organisation:) }
+
+          it "displays the banner and asks to sign" do
+            expect(component.display_banner?).to eq(true)
+            expect(render).to have_link(
+              "Read the Data Sharing Agreement",
+              href: "/organisations/#{organisation.id}/data-sharing-agreement",
+            )
+            expect(render).to have_selector("p", text: "Your organisation must accept the Data Sharing Agreement before you can create any logs.")
+          end
+        end
+      end
+
+      context "when org has a signed data sharing agremeent" do
         it "does not display banner" do
           expect(component.display_banner?).to eq(false)
-        end
-      end
-
-      context "when org present" do
-        before do
-          allow(DataProtectionConfirmation).to receive(:exists?).and_call_original
-        end
-
-        context "when data sharing agreement present" do
-          it "does not display banner" do
-            expect(component.display_banner?).to eq(false)
-          end
-
-          it "verifies DSA exists for organisation" do
-            render
-            expect(DataProtectionConfirmation).to have_received(:exists?).with(organisation:, confirmed: true)
-          end
-        end
-
-        context "when data sharing agreement not present" do
-          let(:organisation) { create(:organisation, :without_dpc) }
-
-          it "displays the banner" do
-            expect(component.display_banner?).to eq(true)
-          end
-
-          it "produces the correct link" do
-            render
-            expect(component.data_sharing_agreement_href).to eq("/organisations/#{organisation.id}/data-sharing-agreement")
-          end
-
-          it "verifies DSA exists for organisation" do
-            render
-            expect(DataProtectionConfirmation).to have_received(:exists?).with(organisation:, confirmed: true)
-          end
+          expect(render.content).to be_empty
         end
       end
     end
