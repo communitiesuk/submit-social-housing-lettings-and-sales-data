@@ -322,16 +322,42 @@ RSpec.describe "User Features" do
         expect(page).to have_title("Error")
       end
 
+      it "validates telephone number is numeric" do
+        visit("users/new")
+        fill_in("user[name]", with: "New User")
+        fill_in("user[email]", with: "newuser@example.com")
+        fill_in("user[phone]", with: "randomstring")
+        click_button("Continue")
+        expect(page).to have_selector("#error-summary-title")
+        expect(page).to have_selector("#user-phone-field-error")
+        expect(page).to have_content(/Enter a telephone number in the correct format/)
+        expect(page).to have_title("Error")
+      end
+
+      it "validates telephone number is longer than 11 digits" do
+        visit("users/new")
+        fill_in("user[name]", with: "New User")
+        fill_in("user[email]", with: "newuser@example.com")
+        fill_in("user[phone]", with: "123")
+        click_button("Continue")
+        expect(page).to have_selector("#error-summary-title")
+        expect(page).to have_selector("#user-phone-field-error")
+        expect(page).to have_content(/Enter a telephone number in the correct format/)
+        expect(page).to have_title("Error")
+      end
+
       it "sets name, email, role, is_dpo and is_key_contact fields" do
         visit("users/new")
         fill_in("user[name]", with: "New User")
         fill_in("user[email]", with: "newuser@example.com")
+        fill_in("user[phone]", with: "12345678910")
         choose("user-role-data-provider-field")
         click_button("Continue")
         expect(User.find_by(
                  name: "New User",
                  email: "newuser@example.com",
                  role: "data_provider",
+                 phone: "12345678910",
                  is_dpo: false,
                  is_key_contact: false,
                )).to be_a(User)
@@ -450,6 +476,85 @@ RSpec.describe "User Features" do
         expect(page).to have_current_path("/users/#{other_user.id}")
         expect(page).to have_no_content("This user has been deactivated.")
         expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+      end
+    end
+  end
+
+  context "when signed in as support" do
+    let!(:user) { FactoryBot.create(:user, :support) }
+    let!(:other_user) { FactoryBot.create(:user, name: "new user", organisation: user.organisation, email: "new_user@example.com", confirmation_token: "abc") }
+
+    context "when reinviting a user before initial confirmation email has been sent" do
+      let(:personalisation) do
+        {
+          name: "new user",
+          email: "new_user@example.com",
+          organisation: other_user.organisation.name,
+          link: include("/account/confirmation?confirmation_token=#{other_user.confirmation_token}"),
+        }
+      end
+
+      before do
+        other_user.update!(initial_confirmation_sent: false)
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in(user)
+        visit(user_path(user.id))
+      end
+
+      it "sends initial confirmable template email when the resend invite link is clicked" do
+        other_user.legacy_users.destroy_all
+        visit(user_path(other_user))
+        expect(notify_client).to receive(:send_email).with(email_address: "new_user@example.com", template_id: User::CONFIRMABLE_TEMPLATE_ID, personalisation:).once
+        click_button("Resend invite link")
+      end
+    end
+
+    context "when reinviting a user after initial confirmation email has been sent" do
+      let(:personalisation) do
+        {
+          name: "new user",
+          email: "new_user@example.com",
+          organisation: other_user.organisation.name,
+          link: include("/account/confirmation?confirmation_token=#{other_user.confirmation_token}"),
+        }
+      end
+
+      before do
+        other_user.update!(initial_confirmation_sent: true)
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in(user)
+        visit(user_path(user.id))
+      end
+
+      it "sends and email when the resend invite link is clicked" do
+        other_user.legacy_users.destroy_all
+        visit(user_path(other_user))
+        expect(notify_client).to receive(:send_email).with(email_address: "new_user@example.com", template_id: User::RECONFIRMABLE_TEMPLATE_ID, personalisation:).once
+        click_button("Resend invite link")
+      end
+    end
+
+    context "when reinviting a legacy user" do
+      let(:personalisation) do
+        {
+          name: "new user",
+          email: "new_user@example.com",
+          organisation: other_user.organisation.name,
+          link: include("/account/confirmation?confirmation_token=#{other_user.confirmation_token}"),
+        }
+      end
+
+      before do
+        other_user.update!(initial_confirmation_sent: true)
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in(user)
+        visit(user_path(user.id))
+      end
+
+      it "sends beta onboarding email to be sent when user is legacy" do
+        visit(user_path(other_user))
+        expect(notify_client).to receive(:send_email).with(email_address: "new_user@example.com", template_id: User::BETA_ONBOARDING_TEMPLATE_ID, personalisation:).once
+        click_button("Resend invite link")
       end
     end
   end

@@ -20,7 +20,11 @@ RSpec.describe Form::Lettings::Questions::PostcodeForFullAddress, type: :model d
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to be_nil
+    expect(question.check_answer_label).to eq("Postcode")
+  end
+
+  it "has the correct question_number" do
+    expect(question.question_number).to eq(12)
   end
 
   it "has the correct type" do
@@ -54,9 +58,5 @@ RSpec.describe Form::Lettings::Questions::PostcodeForFullAddress, type: :model d
       },
       "value" => "Not known",
     }])
-  end
-
-  it "has the correct hidden_in_check_answers" do
-    expect(question.hidden_in_check_answers?).to eq(true)
   end
 end

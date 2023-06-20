@@ -9,7 +9,6 @@ class Log < ApplicationRecord
   belongs_to :bulk_upload, optional: true
 
   before_save :update_status!
-  before_validation :verify_data_protection_confirmation, on: :create
 
   STATUS = {
     "not_started" => 0,
@@ -139,9 +138,9 @@ class Log < ApplicationRecord
   def calculate_status
     return "deleted" if discarded_at.present?
 
-    if all_fields_completed? && errors.empty?
+    if all_subsections_completed? && errors.empty?
       "completed"
-    elsif all_fields_nil?
+    elsif all_subsections_unstarted?
       "not_started"
     else
       "in_progress"
@@ -178,14 +177,6 @@ class Log < ApplicationRecord
 
 private
 
-  def verify_data_protection_confirmation
-    return unless FeatureToggle.new_data_protection_confirmation?
-    return unless owning_organisation
-    return if owning_organisation.data_protection_confirmed?
-
-    errors.add :owning_organisation, I18n.t("validations.organisation.data_sharing_agreement_not_signed")
-  end
-
   # Handle logs that are older than previous collection start date
   def older_than_previous_collection_year?
     return false unless startdate
@@ -210,11 +201,11 @@ private
     self.status = calculate_status
   end
 
-  def all_fields_completed?
+  def all_subsections_completed?
     form.subsections.all? { |subsection| subsection.complete?(self) || subsection.not_displayed_in_tasklist?(self) }
   end
 
-  def all_fields_nil?
+  def all_subsections_unstarted?
     not_started_statuses = %i[not_started cannot_start_yet]
     form.subsections.all? { |subsection| not_started_statuses.include? subsection.status(self) }
   end

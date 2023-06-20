@@ -22,7 +22,7 @@ class DataProtectionConfirmationBannerComponent < ViewComponent::Base
 
   def data_protection_officers_text
     if org_or_user_org.data_protection_officers.any?
-      "You can ask: #{org_or_user_org.data_protection_officers.map(&:name).join(', ')}"
+      "You can ask: #{org_or_user_org.data_protection_officers.map(&:name).sort_by(&:downcase).join(', ')}"
     end
   end
 

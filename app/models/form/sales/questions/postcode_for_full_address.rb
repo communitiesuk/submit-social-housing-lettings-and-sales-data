@@ -17,10 +17,9 @@ class Form::Sales::Questions::PostcodeForFullAddress < ::Form::Question
       },
     }
     @plain_label = true
+    @check_answer_label = "Postcode"
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
-  end
-
-  def hidden_in_check_answers?(_log = nil, _current_user = nil)
-    true
+    @question_number = 15
+    @hide_question_number_on_page = true
   end
 end

@@ -1,5 +1,10 @@
 class BulkUploadLettingsResumeController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_no_cache_headers
+
+  def set_no_cache_headers
+    response.set_header("Cache-Control", "no-store")
+  end
 
   def start
     @bulk_upload = current_user.bulk_uploads.find(params[:id])
@@ -10,6 +15,8 @@ class BulkUploadLettingsResumeController < ApplicationController
   def show
     @bulk_upload = current_user.bulk_uploads.find(params[:id])
     @soft_errors_only = params[:soft_errors_only] == "true"
+
+    return redirect_to form.preflight_redirect unless form.preflight_valid?
 
     render form.view_path
   end
@@ -30,6 +37,8 @@ private
     @form ||= case params[:page]
               when "fix-choice"
                 Forms::BulkUploadLettingsResume::FixChoice.new(form_params.merge(bulk_upload: @bulk_upload))
+              when "chosen"
+                Forms::BulkUploadLettingsResume::Chosen.new(form_params.merge(bulk_upload: @bulk_upload))
               when "confirm"
                 Forms::BulkUploadLettingsResume::Confirm.new(form_params.merge(bulk_upload: @bulk_upload))
               else

@@ -1295,10 +1295,36 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
     end
 
     describe "#net_income_known" do
-      let(:attributes) { { bulk_upload:, field_51: "1" } }
+      context "when 1" do
+        let(:attributes) { { bulk_upload:, field_51: "1" } }
 
-      it "sets value from correct mapping" do
-        expect(parser.log.net_income_known).to eq(0)
+        it "sets value from correct mapping" do
+          expect(parser.log.net_income_known).to eq(0)
+        end
+      end
+
+      context "when 2" do
+        let(:attributes) { { bulk_upload:, field_51: "2" } }
+
+        it "sets value from correct mapping" do
+          expect(parser.log.net_income_known).to eq(1)
+        end
+      end
+
+      context "when 3" do
+        let(:attributes) { { bulk_upload:, field_51: "3" } }
+
+        it "sets value from correct mapping" do
+          expect(parser.log.net_income_known).to eq(1)
+        end
+      end
+
+      context "when 4" do
+        let(:attributes) { { bulk_upload:, field_51: "4" } }
+
+        it "sets value from correct mapping" do
+          expect(parser.log.net_income_known).to eq(2)
+        end
       end
     end
 

@@ -31,7 +31,7 @@ RSpec.describe DataProtectionConfirmationBannerComponent, type: :component do
           create(:user, organisation:, is_dpo: true, name: "Test McTest")
         end
 
-        it "returns the correct text" do
+        it "returns the correct list of names, in alphabetical order)" do
           expect(component.data_protection_officers_text).to eq("You can ask: Danny Rojas, Test McTest")
         end
       end

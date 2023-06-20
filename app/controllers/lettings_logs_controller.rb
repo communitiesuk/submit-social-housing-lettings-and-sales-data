@@ -16,7 +16,7 @@ class LettingsLogsController < LogsController
         all_logs = current_user.lettings_logs.visible
         unpaginated_filtered_logs = filter_manager.filtered_logs(all_logs, search_term, session_filters)
 
-        @search_term = search_term
+        @delete_logs_path = delete_logs_lettings_logs_path(search: search_term)
         @pagy, @logs = pagy(unpaginated_filtered_logs)
         @searched = search_term.presence
         @total_count = all_logs.size

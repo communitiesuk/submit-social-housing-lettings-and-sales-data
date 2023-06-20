@@ -11,6 +11,18 @@ module FiltersHelper
     selected_filters[filter].include?(value.to_s)
   end
 
+  def any_filter_selected?(filter_type)
+    filters_json = session[session_name_for(filter_type)]
+    return false unless filters_json
+
+    filters = JSON.parse(filters_json)
+    filters["user"] == "yours" ||
+      filters["organisation"].present? ||
+      filters["status"]&.compact_blank&.any? ||
+      filters["years"]&.compact_blank&.any? ||
+      filters["bulk_upload_id"].present?
+  end
+
   def status_filters
     {
       "not_started" => "Not started",

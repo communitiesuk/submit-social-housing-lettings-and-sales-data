@@ -110,6 +110,7 @@ Rails.application.routes.draw do
     member do
       get "deactivate", to: "users#deactivate"
       get "reactivate", to: "users#reactivate"
+      post "resend-invite", to: "users#resend_invite"
     end
   end
 
@@ -122,7 +123,15 @@ Rails.application.routes.draw do
       get "users", to: "organisations#users"
       get "users/invite", to: "users/account#new"
       get "lettings-logs", to: "organisations#lettings_logs"
+      get "delete-lettings-logs", to: "delete_logs#delete_lettings_logs_for_organisation"
+      post "delete-lettings-logs", to: "delete_logs#delete_lettings_logs_for_organisation_with_selected_ids"
+      post "delete-lettings-logs-confirmation", to: "delete_logs#delete_lettings_logs_for_organisation_confirmation"
+      delete "delete-lettings-logs", to: "delete_logs#discard_lettings_logs_for_organisation"
       get "sales-logs", to: "organisations#sales_logs"
+      get "delete-sales-logs", to: "delete_logs#delete_sales_logs_for_organisation"
+      post "delete-sales-logs", to: "delete_logs#delete_sales_logs_for_organisation_with_selected_ids"
+      post "delete-sales-logs-confirmation", to: "delete_logs#delete_sales_logs_for_organisation_confirmation"
+      delete "delete-sales-logs", to: "delete_logs#discard_sales_logs_for_organisation"
       get "lettings-logs/csv-download", to: "organisations#download_lettings_csv"
       post "lettings-logs/email-csv", to: "organisations#email_lettings_csv"
       get "lettings-logs/csv-confirmation", to: "lettings_logs#csv_confirmation"
@@ -169,6 +178,11 @@ Rails.application.routes.draw do
       get "csv-download", to: "lettings_logs#download_csv"
       post "email-csv", to: "lettings_logs#email_csv"
       get "csv-confirmation", to: "lettings_logs#csv_confirmation"
+
+      get "delete-logs", to: "delete_logs#delete_lettings_logs"
+      post "delete-logs", to: "delete_logs#delete_lettings_logs_with_selected_ids"
+      post "delete-logs-confirmation", to: "delete_logs#delete_lettings_logs_confirmation"
+      delete "delete-logs", to: "delete_logs#discard_lettings_logs"
 
       resources :bulk_upload_lettings_logs, path: "bulk-upload-logs", only: %i[show update] do
         collection do
@@ -226,6 +240,11 @@ Rails.application.routes.draw do
       get "csv-download", to: "sales_logs#download_csv"
       post "email-csv", to: "sales_logs#email_csv"
       get "csv-confirmation", to: "sales_logs#csv_confirmation"
+
+      get "delete-logs", to: "delete_logs#delete_sales_logs"
+      post "delete-logs", to: "delete_logs#delete_sales_logs_with_selected_ids"
+      post "delete-logs-confirmation", to: "delete_logs#delete_sales_logs_confirmation"
+      delete "delete-logs", to: "delete_logs#discard_sales_logs"
 
       resources :bulk_upload_sales_logs, path: "bulk-upload-logs" do
         collection do

@@ -22,6 +22,11 @@
         autocomplete: "email",
         spellcheck: "false" %>
 
+      <%= f.govuk_phone_field :phone,
+        label: { text: "Telephone number", size: "m" },
+        autocomplete: "phone",
+        spellcheck: "false" %>
+
       <% if current_user.data_coordinator? || current_user.support? %>
         <% roles = current_user.assignable_roles.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
 

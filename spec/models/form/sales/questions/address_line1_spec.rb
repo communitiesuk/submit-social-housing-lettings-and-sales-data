@@ -11,10 +11,6 @@ RSpec.describe Form::Sales::Questions::AddressLine1, type: :model do
     expect(question.page).to eq(page)
   end
 
-  it "has the correct question_number" do
-    expect(question.question_number).to be_nil
-  end
-
   it "has the correct id" do
     expect(question.id).to eq("address_line1")
   end
@@ -23,8 +19,16 @@ RSpec.describe Form::Sales::Questions::AddressLine1, type: :model do
     expect(question.header).to eq("Address line 1")
   end
 
+  it "has the correct error label" do
+    expect(question.error_label).to eq("Address line 1")
+  end
+
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Q15 - Address")
+    expect(question.check_answer_label).to eq("Address lines 1 and 2")
+  end
+
+  it "has the correct question_number" do
+    expect(question.question_number).to eq(15)
   end
 
   it "has the correct type" do
@@ -45,35 +49,5 @@ RSpec.describe Form::Sales::Questions::AddressLine1, type: :model do
 
   it "has the correct check_answers_card_number" do
     expect(question.check_answers_card_number).to be_nil
-  end
-
-  describe "has the correct get_extra_check_answer_value" do
-    context "when la is not present" do
-      let(:log) { create(:sales_log, la: nil) }
-
-      it "returns nil" do
-        expect(question.get_extra_check_answer_value(log)).to be_nil
-      end
-    end
-
-    context "when la is present but not inferred" do
-      let(:log) { create(:sales_log, la: "E09000003", is_la_inferred: false) }
-
-      it "returns nil" do
-        expect(question.get_extra_check_answer_value(log)).to be_nil
-      end
-    end
-
-    context "when la is present and inferred" do
-      let(:log) { create(:sales_log, la: "E09000003") }
-
-      before do
-        allow(log).to receive(:is_la_inferred?).and_return(true)
-      end
-
-      it "returns the la" do
-        expect(question.get_extra_check_answer_value(log)).to eq("Barnet")
-      end
-    end
   end
 end

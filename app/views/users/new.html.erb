@@ -23,6 +23,12 @@
         spellcheck: "false",
         value: @resource.email %>
 
+      <%= f.govuk_phone_field :phone,
+        label: { text: "Telephone number", size: "m" },
+        autocomplete: "phone",
+        spellcheck: "false",
+        value: @resource.phone %>
+
       <% if current_user.support? %>
         <% null_option = [OpenStruct.new(id: "", name: "Select an option")] %>
         <% organisations = Organisation.all.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>

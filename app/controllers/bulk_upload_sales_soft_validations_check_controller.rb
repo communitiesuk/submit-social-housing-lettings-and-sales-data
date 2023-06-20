@@ -2,9 +2,16 @@ class BulkUploadSalesSoftValidationsCheckController < ApplicationController
   include ActionView::Helpers::TextHelper
 
   before_action :authenticate_user!
+  before_action :set_no_cache_headers
+
+  def set_no_cache_headers
+    response.set_header("Cache-Control", "no-store")
+  end
 
   def show
     @bulk_upload = current_user.bulk_uploads.find(params[:id])
+
+    return redirect_to form.preflight_redirect unless form.preflight_valid?
 
     render form.view_path
   end
@@ -30,6 +37,8 @@ private
     @form ||= case params[:page]
               when "confirm-soft-errors"
                 Forms::BulkUploadSalesSoftValidationsCheck::ConfirmSoftErrors.new(form_params.merge(bulk_upload: @bulk_upload))
+              when "chosen"
+                Forms::BulkUploadSalesSoftValidationsCheck::Chosen.new(form_params.merge(bulk_upload: @bulk_upload))
               when "confirm"
                 Forms::BulkUploadSalesSoftValidationsCheck::Confirm.new(form_params.merge(bulk_upload: @bulk_upload))
               else

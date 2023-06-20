@@ -146,6 +146,8 @@ FactoryBot.define do
       joint { 3 }
       address_line1 { "fake address" }
       town_or_city { "London" }
+      ppcodenk { 0 }
+      tshortfall_known { 1 }
     end
     trait :export do
       tenancycode { "987654" }

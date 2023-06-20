@@ -21,9 +21,12 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
         lead_tenant_age
         no_females_pregnant_household_lead_age_value_check
         females_in_soft_age_range_in_pregnant_household_lead_age_value_check
+        age_lead_tenant_under_retirement_value_check
+        age_lead_tenant_over_retirement_value_check
         lead_tenant_gender_identity
         no_females_pregnant_household_lead_value_check
         females_in_soft_age_range_in_pregnant_household_lead_value_check
+        gender_lead_tenant_over_retirement_value_check
         lead_tenant_ethnic_group
         lead_tenant_ethnic_background_arab
         lead_tenant_ethnic_background_asian
@@ -32,92 +35,113 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
         lead_tenant_ethnic_background_white
         lead_tenant_nationality
         lead_tenant_working_situation
-        lead_tenant_under_retirement_value_check
-        lead_tenant_over_retirement_value_check
+        working_situation_lead_tenant_under_retirement_value_check
+        working_situation_lead_tenant_over_retirement_value_check
         person_2_known
         person_2_relationship_to_lead
         person_2_age_child
         person_2_age_non_child
         no_females_pregnant_household_person_2_age_value_check
         females_in_soft_age_range_in_pregnant_household_person_2_age_value_check
+        age_2_under_retirement_value_check
+        age_2_over_retirement_value_check
         person_2_gender_identity
         no_females_pregnant_household_person_2_value_check
         females_in_soft_age_range_in_pregnant_household_person_2_value_check
+        gender_2_over_retirement_value_check
         person_2_working_situation
-        person_2_under_retirement_value_check
-        person_2_over_retirement_value_check
+        working_situation_2_under_retirement_value_check
+        working_situation_2_over_retirement_value_check
         person_3_known
         person_3_relationship_to_lead
         person_3_age_child
         person_3_age_non_child
         no_females_pregnant_household_person_3_age_value_check
         females_in_soft_age_range_in_pregnant_household_person_3_age_value_check
+        age_3_under_retirement_value_check
+        age_3_over_retirement_value_check
         person_3_gender_identity
         no_females_pregnant_household_person_3_value_check
         females_in_soft_age_range_in_pregnant_household_person_3_value_check
+        gender_3_over_retirement_value_check
         person_3_working_situation
-        person_3_under_retirement_value_check
-        person_3_over_retirement_value_check
+        working_situation_3_under_retirement_value_check
+        working_situation_3_over_retirement_value_check
         person_4_known
         person_4_relationship_to_lead
         person_4_age_child
         person_4_age_non_child
         no_females_pregnant_household_person_4_age_value_check
         females_in_soft_age_range_in_pregnant_household_person_4_age_value_check
+        age_4_under_retirement_value_check
+        age_4_over_retirement_value_check
         person_4_gender_identity
         no_females_pregnant_household_person_4_value_check
         females_in_soft_age_range_in_pregnant_household_person_4_value_check
+        gender_4_over_retirement_value_check
         person_4_working_situation
-        person_4_under_retirement_value_check
-        person_4_over_retirement_value_check
+        working_situation_4_under_retirement_value_check
+        working_situation_4_over_retirement_value_check
         person_5_known
         person_5_relationship_to_lead
         person_5_age_child
         person_5_age_non_child
         no_females_pregnant_household_person_5_age_value_check
         females_in_soft_age_range_in_pregnant_household_person_5_age_value_check
+        age_5_under_retirement_value_check
+        age_5_over_retirement_value_check
         person_5_gender_identity
         no_females_pregnant_household_person_5_value_check
         females_in_soft_age_range_in_pregnant_household_person_5_value_check
+        gender_5_over_retirement_value_check
         person_5_working_situation
-        person_5_under_retirement_value_check
-        person_5_over_retirement_value_check
+        working_situation_5_under_retirement_value_check
+        working_situation_5_over_retirement_value_check
         person_6_known
         person_6_relationship_to_lead
         person_6_age_child
         person_6_age_non_child
         no_females_pregnant_household_person_6_age_value_check
         females_in_soft_age_range_in_pregnant_household_person_6_age_value_check
+        age_6_under_retirement_value_check
+        age_6_over_retirement_value_check
         person_6_gender_identity
         no_females_pregnant_household_person_6_value_check
         females_in_soft_age_range_in_pregnant_household_person_6_value_check
+        gender_6_over_retirement_value_check
         person_6_working_situation
-        person_6_under_retirement_value_check
-        person_6_over_retirement_value_check
+        working_situation_6_under_retirement_value_check
+        working_situation_6_over_retirement_value_check
         person_7_known
         person_7_relationship_to_lead
         person_7_age_child
         person_7_age_non_child
         no_females_pregnant_household_person_7_age_value_check
         females_in_soft_age_range_in_pregnant_household_person_7_age_value_check
+        age_7_under_retirement_value_check
+        age_7_over_retirement_value_check
         person_7_gender_identity
         no_females_pregnant_household_person_7_value_check
         females_in_soft_age_range_in_pregnant_household_person_7_value_check
+        gender_7_over_retirement_value_check
         person_7_working_situation
-        person_7_under_retirement_value_check
-        person_7_over_retirement_value_check
+        working_situation_7_under_retirement_value_check
+        working_situation_7_over_retirement_value_check
         person_8_known
         person_8_relationship_to_lead
         person_8_age_child
         person_8_age_non_child
         no_females_pregnant_household_person_8_age_value_check
         females_in_soft_age_range_in_pregnant_household_person_8_age_value_check
+        age_8_under_retirement_value_check
+        age_8_over_retirement_value_check
         person_8_gender_identity
         no_females_pregnant_household_person_8_value_check
         females_in_soft_age_range_in_pregnant_household_person_8_value_check
+        gender_8_over_retirement_value_check
         person_8_working_situation
-        person_8_under_retirement_value_check
-        person_8_over_retirement_value_check
+        working_situation_8_under_retirement_value_check
+        working_situation_8_over_retirement_value_check
       ],
     )
   end

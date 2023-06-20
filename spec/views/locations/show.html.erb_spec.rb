@@ -40,6 +40,7 @@ RSpec.describe "locations/show.html.erb" do
         status: :active,
         active?: true,
         scheme:,
+        deactivates_in_a_long_time?: false,
       )
     end
 

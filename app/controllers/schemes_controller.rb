@@ -27,7 +27,11 @@ class SchemesController < ApplicationController
   end
 
   def new_deactivation
-    @scheme_deactivation_period = SchemeDeactivationPeriod.new
+    @scheme_deactivation_period = if @scheme.deactivates_in_a_long_time?
+                                    @scheme.open_deactivation || SchemeDeactivationPeriod.new
+                                  else
+                                    SchemeDeactivationPeriod.new
+                                  end
 
     if params[:scheme_deactivation_period].blank?
       render "toggle_active", locals: { action: "deactivate" }
@@ -54,15 +58,20 @@ class SchemesController < ApplicationController
   end
 
   def deactivate
-    if @scheme.scheme_deactivation_periods.create!(deactivation_date: params[:deactivation_date])
+    if @scheme.open_deactivation&.update!(deactivation_date: params[:deactivation_date]) || @scheme.scheme_deactivation_periods.create!(deactivation_date: params[:deactivation_date])
       logs = reset_location_and_scheme_for_logs!
 
       flash[:notice] = deactivate_success_notice
-      logs.group_by(&:created_by).transform_values(&:count).compact.each do |user, count|
-        LocationOrSchemeDeactivationMailer.send_deactivation_mail(user,
-                                                                  count,
-                                                                  url_for(controller: "lettings_logs", action: "update_logs"),
-                                                                  @scheme.service_name).deliver_later
+
+      logs.group_by(&:created_by).transform_values(&:count).each do |user, count|
+        next unless user
+
+        LocationOrSchemeDeactivationMailer.send_deactivation_mail(
+          user,
+          count,
+          url_for(controller: "lettings_logs", action: "update_logs"),
+          @scheme.service_name,
+        ).deliver_later
       end
     end
     redirect_to scheme_details_path(@scheme)
