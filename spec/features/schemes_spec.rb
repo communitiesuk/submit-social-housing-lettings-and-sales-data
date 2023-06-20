@@ -170,9 +170,7 @@ RSpec.describe "Schemes scheme Features" do
 
           context "when there is no secondary client group" do
             before do
-              scheme.has_other_client_group = "No"
-              scheme.secondary_client_group = nil
-              scheme.save!
+              scheme.update!(has_other_client_group: "No", secondary_client_group: nil)
               click_link(scheme.service_name)
             end
 
@@ -733,9 +731,7 @@ RSpec.describe "Schemes scheme Features" do
 
           context "when there is no secondary client group" do
             before do
-              scheme.has_other_client_group = "No"
-              scheme.secondary_client_group = nil
-              scheme.save!
+              scheme.update!(has_other_client_group: "No", secondary_client_group: nil)
               click_link(scheme.service_name)
             end
 
