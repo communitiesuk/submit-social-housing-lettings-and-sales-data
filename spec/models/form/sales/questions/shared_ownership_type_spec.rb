@@ -40,6 +40,7 @@ RSpec.describe Form::Sales::Questions::SharedOwnershipType, type: :model do
 
   context "when form start date is 2022/23" do
     let(:start_date) { Time.zone.local(2022, 4, 1) }
+
     it "has the correct answer_options" do
       expect(question.answer_options).to eq({
         "2" => { "value" => "Shared Ownership" },
