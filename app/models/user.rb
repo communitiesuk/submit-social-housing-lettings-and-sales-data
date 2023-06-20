@@ -188,7 +188,6 @@ private
   def send_data_protection_confirmation_reminder
     return unless FeatureToggle.new_data_protection_confirmation?
     return unless persisted?
-    return unless is_dpo_changed?
     return unless is_dpo?
 
     DataProtectionConfirmationMailer.send_confirmation_email(self).deliver_later

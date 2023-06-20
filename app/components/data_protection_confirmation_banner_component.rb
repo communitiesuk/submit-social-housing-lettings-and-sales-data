@@ -30,7 +30,7 @@ class DataProtectionConfirmationBannerComponent < ViewComponent::Base
     end
   end
 
-  def second_row
+  def banner_text
     if org_without_dpo? || user.is_dpo?
       govuk_link_to(
         link_text,
