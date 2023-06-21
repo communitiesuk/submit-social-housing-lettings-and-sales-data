@@ -938,6 +938,45 @@ RSpec.describe UsersController, type: :request do
           expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.email.blank"))
         end
       end
+
+      context "when validating telephone numbers" do
+        let(:params) do
+          {
+            "user": {
+              phone:,
+            },
+          }
+        end
+
+        context "when telephone number is not numeric" do
+          let(:phone) { "randomstring" }
+
+          it "validates telephone number" do
+            request
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.phone.invalid"))
+          end
+        end
+
+        context "when telephone number is shorter than 11 digits" do
+          let(:phone) { "123" }
+
+          it "validates telephone number" do
+            request
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.phone.invalid"))
+          end
+        end
+
+        context "when telephone number is in correct format" do
+          let(:phone) { "012345678919" }
+
+          it "validates telephone number" do
+            request
+            expect(page).not_to have_content(I18n.t("activerecord.errors.models.user.attributes.phone.invalid"))
+          end
+        end
+      end
     end
 
     describe "#new" do
