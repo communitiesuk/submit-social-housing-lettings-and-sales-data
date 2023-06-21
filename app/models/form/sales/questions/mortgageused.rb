@@ -18,7 +18,7 @@ class Form::Sales::Questions::Mortgageused < ::Form::Question
 
   def displayed_answer_options(log, _user = nil)
     if log.stairowned == 100 &&
-      ANSWER_OPTIONS
+        ANSWER_OPTIONS
     else
       {
         "1" => { "value" => "Yes" },

@@ -50,22 +50,24 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
 
   context "staircase owned percentage is 100%" do
     let(:log) { build(:sales_log, stairowned: 100) }
+
     it "show's the don't know option" do
       expect(question.displayed_answer_options(log)).to eq({
-         "1" => { "value" => "Yes" },
-         "2" => { "value" => "No" },
-         "3" => { "value" => "Don’t know" }
+        "1" => { "value" => "Yes" },
+        "2" => { "value" => "No" },
+        "3" => { "value" => "Don’t know" },
       })
     end
   end
 
   context "staircase owned percentage is less than 100%" do
     let(:log) { build(:sales_log, stairowned: 99) }
+
     it "show's the don't know option" do
       expect(question.displayed_answer_options(log)).to eq({
-       "1" => { "value" => "Yes" },
-       "2" => { "value" => "No" },
-     })
+        "1" => { "value" => "Yes" },
+        "2" => { "value" => "No" },
+      })
     end
   end
 end
