@@ -370,6 +370,7 @@ class BulkUpload::Sales::Year2022::RowParser
   validate :validate_if_log_already_exists, on: :after_log, if: -> { FeatureToggle.bulk_upload_duplicate_log_check_enabled? }
 
   validate :validate_data_protection_answered, on: :after_log
+  validate :validate_buyers_organisations, on: :after_log
 
   def self.question_for_field(field)
     QUESTIONS[field]
@@ -467,6 +468,15 @@ private
     end
   end
 
+  def validate_buyers_organisations
+    organisations_fields = %i[field_44 field_45 field_46 field_47]
+    if organisations_fields.all? { |field| attributes[field.to_s].blank? }
+      organisations_fields.each do |field|
+        errors.add(field, "At least one option must be selected of these four")
+      end
+    end
+  end
+
   def buyer_not_interviewed?
     field_6 == 1
   end
@@ -546,7 +556,6 @@ private
       pregla: %i[field_45],
       pregghb: %i[field_46],
       pregother: %i[field_47],
-      pregblank: %i[field_44 field_45 field_46 field_47],
       disabled: %i[field_48],
       wheel: %i[field_49],
       beds: %i[field_50],
@@ -679,7 +688,6 @@ private
     attributes["pregla"] = field_45
     attributes["pregghb"] = field_46
     attributes["pregother"] = field_47
-    attributes["pregblank"] = 1 if [field_44, field_45, field_46, field_47].all?(&:blank?)
 
     attributes["disabled"] = buyer_not_interviewed? && field_48.blank? ? 3 : field_48
     attributes["wheel"] = buyer_not_interviewed? && field_49.blank? ? 3 : field_49

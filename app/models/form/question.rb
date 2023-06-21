@@ -249,6 +249,10 @@ class Form::Question
     end
   end
 
+  def answer_keys_without_dividers
+    answer_options.keys.reject { |x| x.match(/divider/) }
+  end
+
 private
 
   def selected_answer_option_is_derived?(log)

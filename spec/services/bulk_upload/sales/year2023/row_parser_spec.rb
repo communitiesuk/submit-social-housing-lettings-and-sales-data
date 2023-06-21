@@ -857,6 +857,19 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       end
     end
 
+    describe "#field_67 - 70" do # buyers organisations
+      context "when all nil" do
+        let(:attributes) { setup_section_params.merge(field_67: nil, field_68: nil, field_69: nil, field_70: nil) }
+
+        it "returns correct errors" do
+          expect(parser.errors[:field_67]).to be_present
+          expect(parser.errors[:field_68]).to be_present
+          expect(parser.errors[:field_69]).to be_present
+          expect(parser.errors[:field_70]).to be_present
+        end
+      end
+    end
+
     describe "soft validations" do
       context "when soft validation is triggered" do
         let(:attributes) { valid_attributes.merge({ field_30: 22, field_35: 5 }) }
