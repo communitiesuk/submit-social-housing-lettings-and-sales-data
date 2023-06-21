@@ -94,7 +94,7 @@ class Log < ApplicationRecord
   def collection_period_open?
     return false if older_than_previous_collection_year?
 
-    form.end_date > Time.zone.today
+    form.new_logs_end_date > Time.zone.today
   end
 
   def blank_invalid_non_setup_fields!

@@ -54,7 +54,7 @@ RSpec.describe "Task List" do
   before do
     Timecop.freeze(Time.zone.local(2021, 5, 1))
     setup_completed_log.update!(startdate: Time.zone.local(2021, 5, 1))
-    allow(lettings_log.form).to receive(:end_date).and_return(Time.zone.today + 1.day)
+    allow(lettings_log.form).to receive(:new_logs_end_date).and_return(Time.zone.today + 1.day)
     sign_in user
   end
 
