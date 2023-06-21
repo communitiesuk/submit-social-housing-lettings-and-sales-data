@@ -977,6 +977,15 @@ RSpec.describe UsersController, type: :request do
             expect(page).not_to have_content(I18n.t("activerecord.errors.models.user.attributes.phone.invalid"))
           end
         end
+
+        context "when telephone number is in correct format and includes +" do
+          let(:phone) { "+12345678919" }
+
+          it "validates telephone number" do
+            request
+            expect(page).not_to have_content(I18n.t("activerecord.errors.models.user.attributes.phone.invalid"))
+          end
+        end
       end
     end
 

@@ -129,7 +129,7 @@ private
   end
 
   def valid_phone_number?(number)
-    /^\d{11,}$/.match?(number)
+    /^[+\d]{11,}$/.match?(number)
   end
 
   def format_error_messages
