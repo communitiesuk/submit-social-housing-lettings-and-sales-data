@@ -105,6 +105,7 @@ class Organisation < ApplicationRecord
   def display_organisation_attributes
     attrs = [
       { name: "Name", value: name, editable: true },
+      { name: "Organisation ID", value: "ORG#{id}", editable: false },
       { name: "Address", value: address_string, editable: true },
       { name: "Telephone_number", value: phone, editable: true },
       { name: "Type of provider", value: display_provider_type, editable: false },
