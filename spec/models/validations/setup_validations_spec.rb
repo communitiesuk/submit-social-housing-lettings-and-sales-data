@@ -85,6 +85,48 @@ RSpec.describe Validations::SetupValidations do
           expect(record.errors["startdate"]).to include(match "Enter a date within the 23/24 collection year, which is between 1st April 2023 and 31st March 2024")
         end
       end
+
+      context "when after the new logs end date but before edit end date for the previous period" do
+        before do
+          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 8, 8))
+        end
+
+        it "cannot create new logs for the previous collection year" do
+          record.update!(startdate: nil)
+          record.startdate = Time.zone.local(2023, 1, 1)
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"]).to include(match "Enter a date within the 23/24 collection year, which is between 1st April 2023 and 31st March 2024")
+        end
+
+        it "can edit already created logs logs for the previous collection year" do
+          record.startdate = Time.zone.local(2023, 1, 2)
+          record.save!(validate: false)
+          record.startdate = Time.zone.local(2023, 1, 1)
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"]).not_to include(match "Enter a date within the 23/24 collection year, which is between 1st April 2023 and 31st March 2024")
+        end
+      end
+
+      context "when after the new logs end date and after the edit end date for the previous period" do
+        before do
+          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 12, 8))
+        end
+
+        it "cannot create new logs for the previous collection year" do
+          record.update!(startdate: nil)
+          record.startdate = Time.zone.local(2023, 1, 1)
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"]).to include(match "Enter a date within the 23/24 collection year, which is between 1st April 2023 and 31st March 2024")
+        end
+
+        it "cannot edit already created logs logs for the previous collection year" do
+          record.startdate = Time.zone.local(2023, 1, 2)
+          record.save!(validate: false)
+          record.startdate = Time.zone.local(2023, 1, 1)
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"]).to include(match "Enter a date within the 23/24 collection year, which is between 1st April 2023 and 31st March 2024")
+        end
+      end
     end
   end
 
