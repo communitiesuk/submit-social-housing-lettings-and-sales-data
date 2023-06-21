@@ -23,6 +23,10 @@ class Form::Sales::Questions::Mortgageused < ::Form::Question
     }
   end
 
+  def answer_options(_log, _user = null)
+    log.stairowned == 100
+  end
+
   def question_number
     case @ownershipsch
     when 1
