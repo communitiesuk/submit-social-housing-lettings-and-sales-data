@@ -127,7 +127,13 @@ private
   end
 
   def valid_phone_number?(number)
-    number.to_i.to_s == number && number.length >= 11
+    numeric?(number) && number.length >= 11
+  end
+
+  def numeric?(str)
+    !Float(str).nil?
+  rescue StandardError
+    false
   end
 
   def format_error_messages

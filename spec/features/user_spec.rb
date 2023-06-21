@@ -346,6 +346,13 @@ RSpec.describe "User Features" do
         expect(page).to have_title("Error")
       end
 
+      it "allows telephone number in correct format" do
+        visit("users/new")
+        fill_in("user[phone]", with: "02345678910")
+        click_button("Continue")
+        expect(page).not_to have_content(/Enter a telephone number in the correct format/)
+      end
+
       it "sets name, email, role, is_dpo and is_key_contact fields" do
         visit("users/new")
         fill_in("user[name]", with: "New User")
