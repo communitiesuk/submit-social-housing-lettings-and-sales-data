@@ -242,7 +242,7 @@ RSpec.describe Organisation, type: :model do
       it "does not include data protection agreement" do
         expect(organisation.display_organisation_attributes).to eq(
           [{ editable: true, name: "Name", value: "DLUHC" },
-           { name: "Organisation ID", value: "ORG#{organisation.id}", editable: false },
+           { editable: false, name: "Organisation ID", value: "ORG#{organisation.id}" },
            { editable: true,
              name: "Address",
              value: "2 Marsham Street\nLondon\nSW1P 4DF" },
