@@ -246,10 +246,10 @@ RSpec.describe Organisation, type: :model do
            { editable: true,
              name: "Address",
              value: "2 Marsham Street\nLondon\nSW1P 4DF" },
-           { editable: true, name: "Telephone_number", value: nil },
+           { editable: true, name: "Telephone number", value: nil },
            { editable: false, name: "Type of provider", value: "Local authority" },
            { editable: false, name: "Registration number", value: "1234" },
-           { editable: false, format: :bullet, name: "Rent_periods", value: %w[All] },
+           { editable: false, format: :bullet, name: "Rent periods", value: %w[All] },
            { editable: false, name: "Owns housing stock", value: "Yes" }],
         )
       end
@@ -267,10 +267,10 @@ RSpec.describe Organisation, type: :model do
            { editable: true,
              name: "Address",
              value: "2 Marsham Street\nLondon\nSW1P 4DF" },
-           { editable: true, name: "Telephone_number", value: nil },
+           { editable: true, name: "Telephone number", value: nil },
            { editable: false, name: "Type of provider", value: "Local authority" },
            { editable: false, name: "Registration number", value: "1234" },
-           { editable: false, format: :bullet, name: "Rent_periods", value: %w[All] },
+           { editable: false, format: :bullet, name: "Rent periods", value: %w[All] },
            { editable: false, name: "Owns housing stock", value: "Yes" },
            { editable: false, name: "Data protection agreement", value: "Accepted" }],
         )
