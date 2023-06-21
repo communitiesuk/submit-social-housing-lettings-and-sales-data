@@ -20,7 +20,7 @@ RSpec.describe Form::Lettings::Pages::RentType, type: :model do
   end
 
   it "has the correct header" do
-    expect(page.header).to be_nil
+    expect(page.header).to eq("Rent Type")
   end
 
   it "has the correct description" do

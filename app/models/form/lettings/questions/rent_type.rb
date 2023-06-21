@@ -5,6 +5,8 @@ class Form::Lettings::Questions::RentType < ::Form::Question
     @check_answer_label = "Rent type"
     @header = "What is the rent type?"
     @type = "radio"
+    @guidance_partial = "rent_type_definitions"
+    @guidance_position = GuidancePosition::TOP
     @answer_options = ANSWER_OPTIONS
     @conditional_for = { "irproduct_other" => [5] }
     @question_number = 6
