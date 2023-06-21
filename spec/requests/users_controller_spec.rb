@@ -850,6 +850,7 @@ RSpec.describe UsersController, type: :request do
             name: "new user ",
             email: "new_user@example.com",
             role: "data_coordinator",
+            phone: "12345678910",
           },
         }
       end
@@ -1312,6 +1313,7 @@ RSpec.describe UsersController, type: :request do
           expect(page).to have_field("user[name]")
           expect(page).to have_field("user[email]")
           expect(page).to have_field("user[role]")
+          expect(page).to have_field("user[phone]")
         end
 
         it "allows setting the role to `support`" do
@@ -1610,6 +1612,7 @@ RSpec.describe UsersController, type: :request do
             name: "new user",
             email:,
             role: "data_coordinator",
+            phone: "12345612456",
             organisation_id: organisation.id,
           },
         }
@@ -1641,6 +1644,7 @@ RSpec.describe UsersController, type: :request do
               name: "",
               email: "",
               role: "",
+              phone: "",
               organisation_id: nil,
             },
           }
@@ -1656,6 +1660,7 @@ RSpec.describe UsersController, type: :request do
           expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.name.blank"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.email.blank"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.organisation_id.blank"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.phone.blank"))
         end
       end
 
