@@ -1095,6 +1095,24 @@ RSpec.describe LettingsLogsController, type: :request do
         expect(page).not_to have_link("Answer")
       end
 
+      context "when the edit end date is in the future" do
+        before do
+          Timecop.freeze(2022, 7, 5)
+        end
+
+        after do
+          Timecop.return
+        end
+
+        it "allows you to change the answers for previous collection year logs" do
+          get "/lettings-logs/#{completed_lettings_log.id}/setup/check-answers", headers: { "Accept" => "text/html" }, params: {}
+          expect(page).to have_link("Change")
+
+          get "/lettings-logs/#{completed_lettings_log.id}/income-and-benefits/check-answers", headers: { "Accept" => "text/html" }, params: {}
+          expect(page).to have_link("Change")
+        end
+      end
+
       it "does not let the user navigate to questions for previous collection year logs" do
         get "/lettings-logs/#{completed_lettings_log.id}/needs-type", headers: { "Accept" => "text/html" }, params: {}
         expect(response).to redirect_to("/lettings-logs/#{completed_lettings_log.id}")

@@ -97,6 +97,12 @@ class Log < ApplicationRecord
     form.new_logs_end_date > Time.zone.today
   end
 
+  def collection_period_open_for_editing?
+    return false if older_than_previous_collection_year?
+
+    form.edit_end_date > Time.zone.today
+  end
+
   def blank_invalid_non_setup_fields!
     setup_ids = form.setup_sections.flat_map(&:subsections).flat_map(&:questions).map(&:id)
 

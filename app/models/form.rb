@@ -46,7 +46,7 @@ class Form
       @submission_deadline = Time.zone.local(2023, 6, 9)
       @unresolved_log_redirect_page_id = form_definition["unresolved_log_redirect_page_id"]
     end
-    @edit_end_date = @new_logs_end_date
+    @edit_end_date = @new_logs_end_date + 2.months # it depends on the year and QA activities, but it would always be later than new logs end date
     @name = "#{start_date.year}_#{new_logs_end_date.year}_#{type}"
   end
 
