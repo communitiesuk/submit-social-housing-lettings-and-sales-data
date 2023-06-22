@@ -600,9 +600,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_09_101144) do
     t.integer "discounted_sale_value_check"
     t.integer "student_not_child_value_check"
     t.integer "percentage_discount_value_check"
-    t.integer "combined_income_value_check"
     t.integer "buyer_livein_value_check"
     t.integer "status_cache", default: 0, null: false
+    t.integer "combined_income_value_check"
     t.datetime "discarded_at"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
