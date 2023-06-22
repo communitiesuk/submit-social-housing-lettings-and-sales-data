@@ -372,7 +372,7 @@ RSpec.describe Form, type: :model do
       expect(form.questions.first.id).to eq("owning_organisation_id")
       expect(form.start_date).to eq(Time.zone.parse("2022-04-01"))
       expect(form.new_logs_end_date).to eq(Time.zone.parse("2023-08-07"))
-      expect(form.edit_end_date).to eq(Time.zone.parse("2023-08-07"))
+      expect(form.edit_end_date).to eq(Time.zone.parse("2023-10-07"))
       expect(form.submission_deadline).to eq(Time.zone.parse("2023-06-09"))
       expect(form.unresolved_log_redirect_page_id).to eq(nil)
     end
