@@ -98,7 +98,7 @@ RSpec.describe Validations::SetupValidations do
           expect(record.errors["startdate"]).to include(match "Enter a date within the 23/24 collection year, which is between 1st April 2023 and 31st March 2024")
         end
 
-        it "can edit already created logs logs for the previous collection year" do
+        it "can edit already created logs for the previous collection year" do
           record.startdate = Time.zone.local(2023, 1, 2)
           record.save!(validate: false)
           record.startdate = Time.zone.local(2023, 1, 1)
@@ -119,7 +119,7 @@ RSpec.describe Validations::SetupValidations do
           expect(record.errors["startdate"]).to include(match "Enter a date within the 23/24 collection year, which is between 1st April 2023 and 31st March 2024")
         end
 
-        it "cannot edit already created logs logs for the previous collection year" do
+        it "cannot edit already created logs for the previous collection year" do
           record.startdate = Time.zone.local(2023, 1, 2)
           record.save!(validate: false)
           record.startdate = Time.zone.local(2023, 1, 1)

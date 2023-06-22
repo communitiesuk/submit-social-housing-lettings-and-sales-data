@@ -106,7 +106,7 @@ RSpec.describe Validations::Sales::SetupValidations do
         end
       end
 
-      context "when after the new logs end date but before edit end date for the previous period" do
+      context "when current time is after the new logs end date but before edit end date for the previous period" do
         let(:record) { build(:sales_log, saledate: Time.zone.local(2025, 4, 1)) }
 
         before do
@@ -120,7 +120,7 @@ RSpec.describe Validations::Sales::SetupValidations do
           expect(record.errors["saledate"]).to include(match "Enter a date within the 24/25 collection year, which is between 1st April 2024 and 31st March 2025")
         end
 
-        it "can edit already created logs logs for the previous collection year" do
+        it "can edit already created logs for the previous collection year" do
           record.saledate = Time.zone.local(2024, 1, 2)
           record.save!(validate: false)
           record.saledate = Time.zone.local(2024, 1, 1)
@@ -143,7 +143,7 @@ RSpec.describe Validations::Sales::SetupValidations do
           expect(record.errors["saledate"]).to include(match "Enter a date within the 24/25 collection year, which is between 1st April 2024 and 31st March 2025")
         end
 
-        it "cannot edit already created logs logs for the previous collection year" do
+        it "cannot edit already created logs for the previous collection year" do
           record.saledate = Time.zone.local(2024, 1, 2)
           record.save!(validate: false)
           record.saledate = Time.zone.local(2024, 1, 1)
