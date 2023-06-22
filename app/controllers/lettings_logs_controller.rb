@@ -1,4 +1,5 @@
 class LettingsLogsController < LogsController
+  include CollectionTimeHelper
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
 
   before_action :find_resource, only: %i[update show]
@@ -63,6 +64,8 @@ class LettingsLogsController < LogsController
 
     if @log.unresolved
       redirect_to(send(@log.form.unresolved_log_path, @log))
+    elsif @log.form.edit_end_date < Time.zone.now || (@log.startdate.present? && @log.startdate < previous_collection_start_date)
+      redirect_to review_lettings_log_path(@log)
     else
       render("logs/edit", locals: { current_user: })
     end
