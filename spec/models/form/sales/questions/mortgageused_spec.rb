@@ -48,7 +48,7 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
     expect(question.hint_text).to be_nil
   end
 
-  context "staircase owned percentage is 100%" do
+  context "when staircase owned percentage is 100%" do
     let(:log) { build(:sales_log, stairowned: 100) }
 
     it "show's the don't know option" do
@@ -60,7 +60,7 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
     end
   end
 
-  context "staircase owned percentage is less than 100%" do
+  context "when staircase owned percentage is less than 100%" do
     let(:log) { build(:sales_log, stairowned: 99) }
 
     it "show's the don't know option" do
