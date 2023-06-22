@@ -3,11 +3,11 @@
     <div class="govuk-grid-column-one-half">
       <header class="app-log-summary__header">
         <h2 class="app-log-summary__title">
-          <%= govuk_link_to log.lettings? ? lettings_log_path(log) : sales_log_path(log) do %>
+          <%= govuk_link_to lettings_log_path(log) do %>
             <span class="govuk-visually-hidden">Log </span><%= log.id %>
           <% end %>
         </h2>
-        <% if log.lettings? && (log.tenancycode? or log.propcode?) %>
+        <% if log.tenancycode? or log.propcode? %>
           <dl class="app-metadata app-metadata--inline">
             <% if log.tenancycode? %>
               <div class="app-metadata__item">
@@ -23,39 +23,14 @@
             <% end %>
           </dl>
         <% end %>
-        <% if log.sales? %>
-          <dl class="app-metadata app-metadata--inline">
-            <% if log.purchaser_code %>
-              <div class="app-metadata__item">
-                <dt class="app-metadata__term">Purchaser</dt>
-                <dd class="app-metadata__definition"><%= log.purchaser_code %></dd>
-              </div>
-            <% end %>
-          </dl>
-        <% end %>
       </header>
-      <% if log.lettings? && (log.needstype? or log.startdate?) %>
+      <% if log.needstype? or log.startdate? %>
         <p class="govuk-body govuk-!-margin-bottom-2">
           <% if log.needstype? %>
             <%= log.is_general_needs? ? "General needs" : "Supported housing" %><br>
           <% end %>
           <% if log.startdate? %>
             Tenancy starts <time datetime="<%= log.startdate.iso8601 %>"><%= log.startdate.to_formatted_s(:govuk_date) %></time>
-          <% end %>
-        </p>
-      <% end %>
-      <% if log.sales? %>
-        <p class="govuk-body govuk-!-margin-bottom-2">
-          <% if log.ownership_scheme %>
-            <%= case log.ownership_scheme
-              when "shared ownership" then "Shared ownership"
-              when "discounted ownership" then "Discounted ownership"
-              when "outright sale" then "Outright or other sale"
-              end %>
-            <br>
-          <% end %>
-          <% if log.saledate %>
-            Sale completed <time datetime="<%= log.saledate.iso8601 %>"><%= log.saledate.to_formatted_s(:govuk_date) %></time>
           <% end %>
         </p>
       <% end %>
@@ -67,7 +42,7 @@
               <dd class="app-metadata__definition"><%= log.owning_organisation&.name %></dd>
             </div>
           <% end %>
-          <% if log.lettings? && log.managing_organisation %>
+          <% if log.managing_organisation %>
             <div class="app-metadata__item">
               <dt class="app-metadata__term">Managed by</dt>
               <dd class="app-metadata__definition"><%= log.managing_organisation&.name %></dd>

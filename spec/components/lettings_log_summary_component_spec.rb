@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe LogSummaryComponent, type: :component do
+RSpec.describe LettingsLogSummaryComponent, type: :component do
   let(:support_user) { FactoryBot.create(:user, :support) }
   let(:coordinator_user) { FactoryBot.create(:user) }
   let(:propcode) { "P3647" }

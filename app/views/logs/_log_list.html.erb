@@ -17,5 +17,9 @@
 </div>
 </h2>
 <% logs.map do |log| %>
-  <%= render(LogSummaryComponent.new(current_user:, log:)) %>
+  <% if log.sales? %>
+    <%= render(SalesLogSummaryComponent.new(current_user:, log:)) %>
+    <% else %>
+    <%= render(LettingsLogSummaryComponent.new(current_user:, log:)) %>
+  <% end %>
 <% end %>
