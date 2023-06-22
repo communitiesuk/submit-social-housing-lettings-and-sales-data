@@ -11,7 +11,6 @@
 </div>
 <div class="govuk-grid-column-one-quarter govuk-!-text-align-right">
   <% if logs&.any? && (display_delete_logs?(@current_user, searched, filter_type) || in_organisations_tab?) %>
-  <%# remove @ on current user %>
     <%= govuk_link_to "Delete logs", delete_logs_path, class: "app-!-colour-red" %>
   <% end %>
 </div>

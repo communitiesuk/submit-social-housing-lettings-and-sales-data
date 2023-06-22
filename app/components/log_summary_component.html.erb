@@ -36,6 +36,16 @@
         </p>
       <% end %>
 
+      <% if log.sales? %>
+        <p class="govuk-body govuk-!-margin-bottom-2">
+        <%= case log.ownership_scheme %>
+          when 1 then "shared ownership"
+          <% when 2 then "discounted ownership"
+          <% when 3 then "outright sale" %>>  <% end %>
+        <% end %>
+        </p>
+      <% end %>
+
       <% if current_user.support? || current_user.organisation.has_managing_agents? %>
         <dl class="app-metadata">
           <% if log.owning_organisation %>
