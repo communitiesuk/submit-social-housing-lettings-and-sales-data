@@ -30,6 +30,7 @@ class Form
         "sections" => sections,
       }
       @unresolved_log_redirect_page_id = "tenancy_start_date" if type == "lettings"
+      @edit_end_date = Time.zone.local(start_year + 1, 12, 31) # this is to be manually updated each year when we want to stop users from editing logs
     else
       raise "No form definition file exists for given year".freeze unless File.exist?(form_path)
 
@@ -43,10 +44,10 @@ class Form
       @questions = pages.flat_map(&:questions)
       @start_date = Time.iso8601(form_definition["start_date"])
       @new_logs_end_date = Time.iso8601(form_definition["end_date"])
-      @submission_deadline = Time.zone.local(2023, 6, 9)
+      @submission_deadline = Time.zone.local(@start_date.year + 1, 6, 9)
+      @edit_end_date = Time.zone.local(@start_date.year + 1, 12, 31)
       @unresolved_log_redirect_page_id = form_definition["unresolved_log_redirect_page_id"]
     end
-    @edit_end_date = @new_logs_end_date + 2.months # it depends on the year and QA activities, but it would always be later than new logs end date
     @name = "#{start_date.year}_#{new_logs_end_date.year}_#{type}"
   end
 

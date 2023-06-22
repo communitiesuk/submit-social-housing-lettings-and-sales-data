@@ -109,7 +109,7 @@ RSpec.describe Validations::SetupValidations do
 
       context "when after the new logs end date and after the edit end date for the previous period" do
         before do
-          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 12, 8))
+          allow(Time).to receive(:now).and_return(Time.zone.local(2024, 1, 8))
         end
 
         it "cannot create new logs for the previous collection year" do

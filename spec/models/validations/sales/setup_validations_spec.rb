@@ -133,7 +133,7 @@ RSpec.describe Validations::Sales::SetupValidations do
         let(:record) { build(:sales_log, saledate: Time.zone.local(2025, 4, 1)) }
 
         before do
-          allow(Time).to receive(:now).and_return(Time.zone.local(2024, 12, 8))
+          allow(Time).to receive(:now).and_return(Time.zone.local(2025, 1, 8))
         end
 
         it "cannot create new logs for the previous collection year" do
