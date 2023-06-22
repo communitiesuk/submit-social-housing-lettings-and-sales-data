@@ -61,6 +61,10 @@ class SalesLog < Log
     attribute_names
   end
 
+  def purchaser_code
+    purchid
+  end
+
   def form_name
     return unless saledate
 

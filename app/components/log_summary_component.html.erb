@@ -23,8 +23,17 @@
             <% end %>
           </dl>
         <% end %>
+        <% if log.sales? %>
+          <dl class="app-metadata app-metadata--inline">
+            <% if log.purchaser_code %>
+              <div class="app-metadata__item">
+                <dt class="app-metadata__term">Purchaser</dt>
+                <dd class="app-metadata__definition"><%= log.purchaser_code %></dd>
+              </div>
+            <% end %>
+          </dl>
+        <% end %>
       </header>
-
       <% if log.lettings? && (log.needstype? or log.startdate?) %>
         <p class="govuk-body govuk-!-margin-bottom-2">
           <% if log.needstype? %>
@@ -35,17 +44,21 @@
           <% end %>
         </p>
       <% end %>
-
       <% if log.sales? %>
         <p class="govuk-body govuk-!-margin-bottom-2">
-        <%= case log.ownership_scheme %>
-          when 1 then "shared ownership"
-          <% when 2 then "discounted ownership"
-          <% when 3 then "outright sale" %>>  <% end %>
-        <% end %>
+          <% if log.ownership_scheme %>
+            <%= case log.ownership_scheme
+              when "shared ownership" then "Shared ownership"
+              when "discounted ownership" then "Discounted ownership"
+              when "outright sale" then "Outright or other sale"
+              end %>
+            <br>
+          <% end %>
+          <% if log.saledate %>
+            Sale completed <time datetime="<%= log.saledate.iso8601 %>"><%= log.saledate.to_formatted_s(:govuk_date) %></time>
+          <% end %>
         </p>
       <% end %>
-
       <% if current_user.support? || current_user.organisation.has_managing_agents? %>
         <dl class="app-metadata">
           <% if log.owning_organisation %>
@@ -63,7 +76,6 @@
         </dl>
       <% end %>
     </div>
-
     <footer class="govuk-grid-column-one-half app-log-summary__footer">
       <p class="govuk-body govuk-!-margin-bottom-2">
         <%= log_status %>
