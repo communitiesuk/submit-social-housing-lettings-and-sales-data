@@ -72,6 +72,7 @@ RSpec.describe "User Features" do
         expect(page).to have_content("Invite somebody to submit CORE data")
         fill_in("user[name]", with: "New User")
         fill_in("user[email]", with: "new_user@example.com")
+        fill_in("user[phone]", with: "+88877677777")
         choose("user-role-data-provider-field")
         expect(notify_client).to receive(:send_email).with(
           {

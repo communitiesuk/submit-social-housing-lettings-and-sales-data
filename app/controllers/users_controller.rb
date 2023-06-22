@@ -121,13 +121,15 @@ private
       @resource.errors.add :role, I18n.t("validations.role.invalid")
     end
 
-    if user_params[:phone].present? && !valid_phone_number?(user_params[:phone])
+    if user_params[:phone].blank?
+      @resource.errors.add :phone, :blank
+    elsif !valid_phone_number?(user_params[:phone])
       @resource.errors.add :phone
     end
   end
 
   def valid_phone_number?(number)
-    number.to_i.to_s == number && number.length >= 11
+    /^[+\d]{11,}$/.match?(number)
   end
 
   def format_error_messages

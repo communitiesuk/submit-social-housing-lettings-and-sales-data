@@ -156,6 +156,7 @@ en:
               taken: "Enter an email address that hasn’t already been used to sign up"
             phone:
               invalid: "Enter a telephone number in the correct format"
+              blank: "Enter a telephone number"
             role:
               invalid: "Role must be data accessor, data provider or data coordinator"
               blank: "Select role"
