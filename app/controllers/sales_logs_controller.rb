@@ -1,5 +1,6 @@
 class SalesLogsController < LogsController
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
+  include CollectionTimeHelper
 
   before_action :session_filters, if: :current_user, only: %i[index email_csv download_csv]
   before_action -> { filter_manager.serialize_filters_to_session }, if: :current_user, only: %i[index email_csv download_csv]
@@ -37,7 +38,11 @@ class SalesLogsController < LogsController
 
   def edit
     @log = current_user.sales_logs.visible.find(params[:id])
-    render "logs/edit", locals: { current_user: }
+    if @log.form.edit_end_date < Time.zone.now || (@log.saledate.present? && @log.saledate < previous_collection_start_date)
+      redirect_to review_sales_log_path(@log, sales_log: true)
+    else
+      render "logs/edit", locals: { current_user: }
+    end
   end
 
   def destroy
