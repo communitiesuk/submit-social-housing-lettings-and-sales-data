@@ -176,6 +176,7 @@ RSpec.describe OrganisationsController, type: :request do
     describe "#show" do
       context "with an organisation that the user belongs to" do
         let(:set_time) {}
+
         before do
           set_time
           sign_in user
