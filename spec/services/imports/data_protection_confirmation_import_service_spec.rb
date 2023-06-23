@@ -46,6 +46,26 @@ RSpec.describe Imports::DataProtectionConfirmationImportService do
           expect(confirmation.confirmed).to be_truthy
           expect(Time.zone.local_to_utc(confirmation.created_at)).to eq(Time.utc(2018, 0o6, 0o5, 10, 36, 49))
         end
+
+        context "when a user with empty email already exists" do
+          before do
+            User.new(
+              name: "Test McTest",
+              organisation: create(:organisation),
+              encrypted_password: SecureRandom.hex(10),
+            ).save!(validate: false)
+            allow(logger).to receive(:warn)
+          end
+
+          it "does not create a data sharing confirmation because it thinks it exists already and logs a misleading message" do
+            expect(logger).to receive(:warn).with("Data protection confirmation 7c5bd5fb549c09a2c55d7cb90d7ba84927e64618 created by John Doe for DLUHC is already present, skipping.")
+            import_service.create_data_protection_confirmations("data_protection_directory")
+          end
+
+          it "does add a data protection confirmation and the org still does not have it" do
+            expect { import_service.create_data_protection_confirmations("data_protection_directory") }.to not_change { organisation.reload.data_protection_confirmation }.from(nil)
+          end
+        end
       end
 
       context "when a data protection officer with matching name already exists for the organisation" do
