@@ -855,7 +855,7 @@ private
       errors.add(:field_17, error_message) # location
       errors.add(:field_23, error_message) # postcode_full
       errors.add(:field_24, error_message) # postcode_full
-      errors.add(:field_25, error_message) # postcode_full
+      errors.add(:field_25, error_message) # la
       errors.add(:field_46, error_message) # age1
       errors.add(:field_47, error_message) # sex1
       errors.add(:field_50, error_message) # ecstat1
