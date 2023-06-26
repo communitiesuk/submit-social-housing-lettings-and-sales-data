@@ -49,8 +49,6 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
     FormHandler.instance.use_real_forms!
 
     example.run
-
-    FormHandler.instance.use_fake_forms!
   end
 
   describe "#blank_row?" do
@@ -1074,6 +1072,20 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         it "populates with correct error message" do
           expect(parser.errors.where(:field_46, category: :soft_validation).first.message).to eql("You told us this person is aged 22 years and retired.")
           expect(parser.errors.where(:field_50, category: :soft_validation).first.message).to eql("You told us this person is aged 22 years and retired.")
+        end
+      end
+
+      context "when a soft validation is triggered that relates both to fields that are and are not routed to" do
+        let(:attributes) { setup_section_params.merge({ field_82: "1", field_47: "M", field_53: "M", field_57: "M" }) }
+
+        it "adds errors to fields that are routed to" do
+          expect(parser.errors.where(:field_53, category: :soft_validation)).to be_present
+          expect(parser.errors.where(:field_57, category: :soft_validation)).to be_present
+        end
+
+        it "does not add errors to fields that are not routed to" do
+          expect(parser.errors.where(:field_61, category: :soft_validation)).not_to be_present
+          expect(parser.errors.where(:field_65, category: :soft_validation)).not_to be_present
         end
       end
 

@@ -112,8 +112,6 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
       Singleton.__init__(FormHandler)
       example.run
     end
-    Timecop.return
-    Singleton.__init__(FormHandler)
   end
 
   describe "#blank_row?" do
@@ -734,6 +732,19 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
         it "populates with correct error message" do
           expect(parser.errors.where(:field_7, category: :soft_validation).first.message).to eql("You told us this person is aged 22 years and retired.")
           expect(parser.errors.where(:field_24, category: :soft_validation).first.message).to eql("You told us this person is aged 22 years and retired.")
+        end
+      end
+
+      context "when a soft validation is triggered that relates both to fields that are and are not routed to" do
+        let(:attributes) { valid_attributes.merge({ field_123: "2" }) }
+
+        it "adds errors to fields that are routed to" do
+          expect(parser.errors.where(:field_123, category: :soft_validation)).to be_present
+        end
+
+        it "does not add errors to fields that are not routed to" do
+          expect(parser.errors.where(:field_73, category: :soft_validation)).not_to be_present
+          expect(parser.errors.where(:field_70, category: :soft_validation)).not_to be_present
         end
       end
     end

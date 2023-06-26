@@ -1048,11 +1048,23 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
         end
       end
 
+      context "when a soft validation is triggered that relates both to fields that are and are not routed to" do
+        let(:attributes) { setup_section_params.merge({ field_47: "1", field_20: "M", field_21: "M" }) }
+
+        it "adds errors to fields that are routed to" do
+          expect(parser.errors.where(:field_20, category: :soft_validation)).to be_present
+          expect(parser.errors.where(:field_21, category: :soft_validation)).to be_present
+        end
+
+        it "does not add errors to fields that are not routed to" do
+          expect(parser.errors.where(:field_22, category: :soft_validation)).not_to be_present
+          expect(parser.errors.where(:field_23, category: :soft_validation)).not_to be_present
+        end
+      end
+
       context "when soft validation is triggered and the mappings for errors are not defined" do
         let(:attributes) { setup_section_params.merge({ field_12: 22, field_35: 5 }) }
-        # rubocop:disable RSpec/AnyInstance
-        let(:mock_interruption_ids) { allow_any_instance_of(Form::Page).to receive(:interruption_screen_question_ids).and_return(%w[fake_question_id]) }
-        # rubocop:enable RSpec/AnyInstance
+        let(:mock_interruption_ids) { allow_any_instance_of(Form::Page).to receive(:interruption_screen_question_ids).and_return(%w[fake_question_id]) } # rubocop:disable RSpec/AnyInstance
 
         it "does not crash" do
           expect(parser.errors).to be_present
