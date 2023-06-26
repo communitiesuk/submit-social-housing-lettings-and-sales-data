@@ -1,5 +1,5 @@
 module Imports
-  class LettingsLogsFieldImportService < ImportService
+  class LettingsLogsFieldImportService < LogsImportService
     def update_field(field, folder)
       case field
       when "tenancycode"
@@ -8,12 +8,31 @@ module Imports
         import_from(folder, :update_major_repairs)
       when "lettings_allocation"
         import_from(folder, :update_lettings_allocation)
+      when "offered"
+        import_from(folder, :update_offered)
       else
         raise "Updating #{field} is not supported by the field import service"
       end
     end
 
   private
+
+    def update_offered(xml_doc)
+      old_id = meta_field_value(xml_doc, "document-id")
+      record = LettingsLog.find_by(old_id:)
+
+      if record.present?
+        if record.offered.present?
+          @logger.info("lettings log #{record.id} has a value for offered, skipping update")
+        else
+          offered = safe_string_as_integer(xml_doc, "Q20")
+          record.update!(offered:)
+          @logger.info("lettings log #{record.id}'s offered value has been set to #{offered}'")
+        end
+      else
+        @logger.warn("lettings log with old id #{old_id} not found")
+      end
+    end
 
     def update_lettings_allocation(xml_doc)
       old_id = meta_field_value(xml_doc, "document-id")
