@@ -23,7 +23,7 @@ RSpec.describe Imports::DataProtectionConfirmationImportService do
 
     context "when the organisation in the import file doesn't exist in the system" do
       it "does not create a data protection confirmation" do
-        expect(logger).to receive(:error).with(/Organisation must exist/)
+        expect(logger).to receive(:error).with("Organisation must exist")
         import_service.create_data_protection_confirmations("data_protection_directory")
       end
     end
@@ -32,11 +32,12 @@ RSpec.describe Imports::DataProtectionConfirmationImportService do
       let!(:organisation) { create(:organisation, :without_dpc, old_org_id:) }
 
       context "when a data protection officer with matching name does not exists for the organisation" do
-        it "creates a data protection officer without sign in credentials" do
+        it "creates an inactive data protection officer" do
           expect { import_service.create_data_protection_confirmations("data_protection_directory") }
             .to change(User, :count).by(1)
           data_protection_officer = User.find_by(organisation:, is_dpo: true)
-          expect(data_protection_officer.email).to eq("")
+          expect(data_protection_officer.confirmed_at).not_to be_nil
+          expect(data_protection_officer.active).to be false
         end
 
         it "successfully create a data protection confirmation record with the expected data" do
@@ -45,26 +46,6 @@ RSpec.describe Imports::DataProtectionConfirmationImportService do
           expect(confirmation.data_protection_officer.name).to eq("John Doe")
           expect(confirmation.confirmed).to be_truthy
           expect(Time.zone.local_to_utc(confirmation.created_at)).to eq(Time.utc(2018, 0o6, 0o5, 10, 36, 49))
-        end
-
-        context "when a user with empty email already exists" do
-          before do
-            User.new(
-              name: "Test McTest",
-              organisation: create(:organisation),
-              encrypted_password: SecureRandom.hex(10),
-            ).save!(validate: false)
-            allow(logger).to receive(:warn)
-          end
-
-          it "does not create a data sharing confirmation because it thinks it exists already and logs a misleading message" do
-            expect(logger).to receive(:warn).with("Data protection confirmation 7c5bd5fb549c09a2c55d7cb90d7ba84927e64618 created by John Doe for DLUHC is already present, skipping.")
-            import_service.create_data_protection_confirmations("data_protection_directory")
-          end
-
-          it "does add a data protection confirmation and the org still does not have it" do
-            expect { import_service.create_data_protection_confirmations("data_protection_directory") }.to not_change { organisation.reload.data_protection_confirmation }.from(nil)
-          end
         end
       end
 
