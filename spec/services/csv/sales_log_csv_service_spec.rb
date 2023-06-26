@@ -3,23 +3,27 @@ require "rails_helper"
 RSpec.describe Csv::SalesLogCsvService do
   let(:form_handler_mock) { instance_double(FormHandler) }
   let(:organisation) { create(:organisation) }
-  let!(:log) { create(:sales_log, :completed, owning_organisation: organisation, purchid: nil) }
+  let(:fixed_time) { Time.zone.local(2023, 2, 8) }
+  let(:user) { create(:user, email: "billyboy@eyeKLAUD.com") }
+  let!(:log) do
+    create(
+      :sales_log,
+      :completed,
+      created_by: user,
+      saledate: fixed_time,
+      created_at: fixed_time,
+      updated_at: fixed_time,
+      owning_organisation: organisation,
+      purchid: nil
+    )
+  end
   let(:service) { described_class.new(export_type: "labels") }
   let(:csv) { CSV.parse(service.prepare_csv(SalesLog.all)) }
-
-  around do |example|
-    Timecop.freeze(Time.utc(2023, 2, 8)) do
-      Singleton.__init__(FormHandler)
-      example.run
-    end
-    Timecop.return
-    Singleton.__init__(FormHandler)
-  end
 
   it "calls the form handler to get all questions in order when initialized" do
     allow(FormHandler).to receive(:instance).and_return(form_handler_mock)
     allow(form_handler_mock).to receive(:ordered_sales_questions_for_all_years).and_return([])
-    described_class.new(export_type: "codes")
+    service
     expect(form_handler_mock).to have_received(:ordered_sales_questions_for_all_years)
   end
 
@@ -30,7 +34,6 @@ RSpec.describe Csv::SalesLogCsvService do
 
   it "returns a csv with headers" do
     expect(csv.first.first).to eq "id"
-    expect(csv.second.first).not_to be log.id.to_s
   end
 
   context "when stubbing :ordered_sales_questions_for_all_years" do

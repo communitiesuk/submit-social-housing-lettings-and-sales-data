@@ -10,7 +10,9 @@ class EmailCsvJob < ApplicationJob
     when "lettings"
       unfiltered_logs = organisation.present? && user.support? ? LettingsLog.visible.where(owning_organisation_id: organisation.id) : user.lettings_logs.visible
       filtered_logs = FilterManager.filter_logs(unfiltered_logs, search_term, filters, all_orgs, user)
-      csv_string = filtered_logs.to_csv(user, codes_only_export:)
+      export_type = codes_only_export ? "codes" : "labels"
+      csv_string = Csv::LettingsLogCsvService.new(user:, export_type:).prepare_csv(filtered_logs)
+      # csv_string = filtered_logs.to_csv(user, codes_only_export:)
     when "sales"
       unfiltered_logs = organisation.present? && user.support? ? SalesLog.visible.where(owning_organisation_id: organisation.id) : user.sales_logs.visible
       filtered_logs = FilterManager.filter_logs(unfiltered_logs, search_term, filters, all_orgs, user)
