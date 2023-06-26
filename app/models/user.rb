@@ -174,6 +174,10 @@ class User < ApplicationRecord
     super && active?
   end
 
+  def resend_invitation_email
+    ResendInvitationMailer.resend_invitation_email(self).deliver_later
+  end
+
 protected
 
   # Checks whether a password is needed or not. For validations only.
