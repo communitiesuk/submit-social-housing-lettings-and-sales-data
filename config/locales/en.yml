@@ -595,6 +595,7 @@ en:
       over_soft_max_for_la_combined: "You told us the combined income of this household is %{combined_income}. This seems high.  Are you sure this is correct?"
     rent:
       outside_range_title: "You told us the rent is %{brent}"
+      hint_text: "This is %{higher_or_lower} than we would expect. Check:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the rent type is correct, for example affordable or social rent</li></ul>"
     purchase_price:
       title_text: "You told us the purchase price is %{value}"
       hint_text: "This is %{higher_or_lower} than we would expect"
