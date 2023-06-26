@@ -12,6 +12,7 @@ class Form::Lettings::Pages::MaxRentValueCheck < ::Form::Page
         },
       ],
     }
+    @informative_text = {}
     @check_answers_card_number = check_answers_card_number
   end
 
