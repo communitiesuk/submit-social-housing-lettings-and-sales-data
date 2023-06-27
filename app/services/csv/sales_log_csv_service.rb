@@ -17,7 +17,7 @@ module Csv
 
   private
 
-    ATTRIBUTES_OF_RELATED_OBJECTS = {
+    CUSTOM_CALL_CHAINS = {
       day: {
         labels: %i[saledate day],
         codes: %i[saledate day],
@@ -64,8 +64,8 @@ module Csv
     ].freeze
 
     def value(attribute, log)
-      if ATTRIBUTES_OF_RELATED_OBJECTS.key? attribute.to_sym
-        call_chain = ATTRIBUTES_OF_RELATED_OBJECTS[attribute.to_sym][@export_type.to_sym]
+      if CUSTOM_CALL_CHAINS.key? attribute.to_sym
+        call_chain = CUSTOM_CALL_CHAINS[attribute.to_sym][@export_type.to_sym]
         call_chain.reduce(log) { |object, next_call| object&.public_send(next_call) }
       elsif FIELDS_ALWAYS_EXPORTED_AS_CODES.include? attribute
         log.send(attribute)

@@ -3,10 +3,16 @@ require "rails_helper"
 RSpec.describe Csv::LettingsLogCsvService do
   let(:form_handler_mock) { instance_double(FormHandler) }
   let(:organisation) { create(:organisation) }
+  let(:fixed_time) { Time.zone.local(2023, 6, 26) }
   let(:log) do
     create(
       :lettings_log,
       :completed,
+      startdate: fixed_time,
+      created_at: fixed_time,
+      updated_at: fixed_time,
+      mrcdate: fixed_time - 1.day,
+      voiddate: fixed_time - 2.days,
       propcode: "ABCDEFG",
       tenancycode: "HIJKLMN",
       postcode_full: "NW9 5LL",
@@ -136,7 +142,7 @@ RSpec.describe Csv::LettingsLogCsvService do
 
     it "exports the CSV with all values correct" do
       expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_labels.csv")
-      values_to_delete = %w[id mrcdate voiddate vacdays]
+      values_to_delete = %w[id vacdays]
       values_to_delete.each do |attribute|
         index = csv.first.index(attribute)
         csv.second[index] = nil
@@ -174,7 +180,7 @@ RSpec.describe Csv::LettingsLogCsvService do
 
     it "exports the CSV with all values correct" do
       expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_codes.csv")
-      values_to_delete = %w[id mrcdate voiddate vacdays]
+      values_to_delete = %w[id vacdays]
       values_to_delete.each do |attribute|
         index = csv.first.index(attribute)
         csv.second[index] = nil
@@ -195,7 +201,7 @@ RSpec.describe Csv::LettingsLogCsvService do
 
       it "exports the CSV with all values correct" do
         expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_non_support_labels.csv")
-        values_to_delete = %w[id mrcdate voiddate]
+        values_to_delete = %w[id]
         values_to_delete.each do |attribute|
           index = csv.first.index(attribute)
           csv.second[index] = nil
@@ -209,7 +215,7 @@ RSpec.describe Csv::LettingsLogCsvService do
 
       it "exports the CSV with all values correct" do
         expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_non_support_codes.csv")
-        values_to_delete = %w[id mrcdate voiddate]
+        values_to_delete = %w[id]
         values_to_delete.each do |attribute|
           index = csv.first.index(attribute)
           csv.second[index] = nil

@@ -6,17 +6,15 @@ class EmailCsvJob < ApplicationJob
   EXPIRATION_TIME = 3.hours.to_i
 
   def perform(user, search_term = nil, filters = {}, all_orgs = false, organisation = nil, codes_only_export = false, log_type = "lettings") # rubocop:disable Style/OptionalBooleanParameter - sidekiq can't serialise named params
+    export_type = codes_only_export ? "codes" : "labels"
     case log_type
     when "lettings"
       unfiltered_logs = organisation.present? && user.support? ? LettingsLog.visible.where(owning_organisation_id: organisation.id) : user.lettings_logs.visible
       filtered_logs = FilterManager.filter_logs(unfiltered_logs, search_term, filters, all_orgs, user)
-      export_type = codes_only_export ? "codes" : "labels"
       csv_string = Csv::LettingsLogCsvService.new(user:, export_type:).prepare_csv(filtered_logs)
-      # csv_string = filtered_logs.to_csv(user, codes_only_export:)
     when "sales"
       unfiltered_logs = organisation.present? && user.support? ? SalesLog.visible.where(owning_organisation_id: organisation.id) : user.sales_logs.visible
       filtered_logs = FilterManager.filter_logs(unfiltered_logs, search_term, filters, all_orgs, user)
-      export_type = codes_only_export ? "codes" : "labels"
       csv_string = Csv::SalesLogCsvService.new(export_type:).prepare_csv(filtered_logs)
     end
 

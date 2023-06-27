@@ -14,7 +14,7 @@ RSpec.describe Csv::SalesLogCsvService do
       created_at: fixed_time,
       updated_at: fixed_time,
       owning_organisation: organisation,
-      purchid: nil
+      purchid: nil,
     )
   end
   let(:service) { described_class.new(export_type: "labels") }
