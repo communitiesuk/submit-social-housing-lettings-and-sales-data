@@ -41,6 +41,7 @@ class OrganisationRelationshipsController < ApplicationController
 
   def create_stock_owner
     @organisation_relationship = organisation.parent_organisation_relationships.new(organisation_relationship_params)
+    authorize @organisation_relationship
     if @organisation_relationship.save(context: :stock_owner)
       flash[:notice] = "#{@organisation_relationship.parent_organisation.name} is now one of #{current_user.data_coordinator? ? 'your' : "this organisation's"} stock owners"
       redirect_to stock_owners_organisation_path

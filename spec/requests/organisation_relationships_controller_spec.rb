@@ -296,6 +296,27 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         end
       end
 
+      context "when directly adding a stock owner" do
+        let!(:stock_owner) { FactoryBot.create(:organisation) }
+        let(:params) do
+          {
+            "organisation_relationship": {
+              "parent_organisation_id": stock_owner.id,
+            },
+          }
+        end
+        let(:request) { post "/organisations/#{organisation.id}/stock-owners", headers:, params: }
+
+        it "returns 401 from users page" do
+          request
+          expect(response).to have_http_status(:unauthorized)
+        end
+
+        it "does not create a new organisation relationship" do
+          expect { request }.not_to change(OrganisationRelationship, :count)
+        end
+      end
+
       context "when accessing the managing agents tab" do
         context "with an organisation that the user belongs to" do
           let!(:managing_agent) { FactoryBot.create(:organisation) }
