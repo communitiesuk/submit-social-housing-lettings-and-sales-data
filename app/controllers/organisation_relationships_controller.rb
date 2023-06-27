@@ -53,6 +53,7 @@ class OrganisationRelationshipsController < ApplicationController
 
   def create_managing_agent
     @organisation_relationship = organisation.child_organisation_relationships.new(organisation_relationship_params)
+    authorize @organisation_relationship
     if @organisation_relationship.save
       flash[:notice] = "#{@organisation_relationship.child_organisation.name} is now one of #{current_user.data_coordinator? ? 'your' : "this organisation's"} managing agents"
       redirect_to managing_agents_organisation_path
