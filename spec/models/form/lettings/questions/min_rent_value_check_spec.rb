@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Lettings::Questions::MaxRentValueCheck, type: :model do
+RSpec.describe Form::Lettings::Questions::MinRentValueCheck, type: :model do
   subject(:question) { described_class.new(nil, question_definition, page, check_answers_card_number:) }
 
   let(:question_definition) { nil }
@@ -28,14 +28,14 @@ RSpec.describe Form::Lettings::Questions::MaxRentValueCheck, type: :model do
   end
 
   it "has the correct hint" do
-    expect(question.hint_text).to eq("This is higher than we would expect. Check:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the rent type is correct, for example affordable or social rent</li></ul>")
+    expect(question.hint_text).to eq("This is lower than we would expect. Check:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the rent type is correct, for example affordable or social rent</li></ul>")
   end
 
   it "has the correct answer_options" do
     expect(question.answer_options).to eq({
-                                            "0" => { "value" => "Yes" },
-                                            "1" => { "value" => "No" },
-                                          })
+      "0" => { "value" => "Yes" },
+      "1" => { "value" => "No" },
+    })
   end
 
   it "has the correct hidden_in_check_answers" do
