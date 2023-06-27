@@ -33,10 +33,12 @@ class OrganisationRelationshipsController < ApplicationController
 
   def add_stock_owner
     @organisation_relationship = organisation.parent_organisation_relationships.new
+    authorize @organisation_relationship
   end
 
   def add_managing_agent
     @organisation_relationship = organisation.child_organisation_relationships.new
+    authorize @organisation_relationship
   end
 
   def create_stock_owner

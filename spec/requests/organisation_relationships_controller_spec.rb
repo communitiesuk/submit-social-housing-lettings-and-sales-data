@@ -296,6 +296,15 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         end
       end
 
+      context "when directly accessing the page to add a stock owner" do
+        let(:request) { get "/organisations/#{organisation.id}/stock-owners/add", headers: }
+
+        it "returns 401 from users page" do
+          request
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
       context "when directly adding a stock owner" do
         let!(:stock_owner) { FactoryBot.create(:organisation) }
         let(:params) do
@@ -324,6 +333,15 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         before do
           FactoryBot.create(:organisation_relationship, parent_organisation: stock_owner, child_organisation: organisation)
         end
+
+        it "returns 401 from users page" do
+          request
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context "when directly accessing the page to add a managing agent" do
+        let(:request) { get "/organisations/#{organisation.id}/managing-agents/add", headers: }
 
         it "returns 401 from users page" do
           request
@@ -400,16 +418,6 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
           it "shows the pagination count" do
             expect(page).to have_content("1 total agents")
-          end
-        end
-
-        context "when adding a managing agent" do
-          before do
-            get "/organisations/#{organisation.id}/managing-agents/add", headers:, params: {}
-          end
-
-          it "has the correct header" do
-            expect(response.body).to include("What is the name of your managing agent?")
           end
         end
 

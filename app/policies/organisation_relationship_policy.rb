@@ -6,11 +6,19 @@ class OrganisationRelationshipPolicy
     @organisation_relationship = organisation_relationship
   end
 
+  def add_stock_owner?
+    return true unless user.data_provider?
+  end
+
   def create_stock_owner?
     return true unless user.data_provider?
   end
 
   def remove_stock_owner?
+    return true unless user.data_provider?
+  end
+
+  def add_managing_agent?
     return true unless user.data_provider?
   end
 
