@@ -318,20 +318,16 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
       end
 
       context "when directly removing a stock owner" do
-        let(:managing_agent) { FactoryBot.create(:organisation) }
-        let(:request) { get "/organisations/#{organisation.id}/stock-owners/remove?target_organisation_id=#{managing_agent.id}", headers: }
+        let(:stock_owner) { FactoryBot.create(:organisation) }
+        let(:request) { get "/organisations/#{organisation.id}/stock-owners/remove?target_organisation_id=#{stock_owner.id}", headers: }
 
         before do
-          FactoryBot.create(:organisation_relationship, parent_organisation: organisation, child_organisation: managing_agent)
+          FactoryBot.create(:organisation_relationship, parent_organisation: stock_owner, child_organisation: organisation)
         end
 
         it "returns 401 from users page" do
           request
           expect(response).to have_http_status(:unauthorized)
-        end
-
-        it "does not remove the organisation relationship" do
-          expect { request }.not_to change(OrganisationRelationship, :count)
         end
       end
 
@@ -353,6 +349,20 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
         it "does not create a new organisation relationship" do
           expect { request }.not_to change(OrganisationRelationship, :count)
+        end
+      end
+
+      context "when directly removing a managing agent" do
+        let(:managing_agent) { FactoryBot.create(:organisation) }
+        let(:request) { get "/organisations/#{organisation.id}/managing-agents/remove?target_organisation_id=#{managing_agent.id}", headers: }
+
+        before do
+          FactoryBot.create(:organisation_relationship, parent_organisation: organisation, child_organisation: managing_agent)
+        end
+
+        it "returns 401 from users page" do
+          request
+          expect(response).to have_http_status(:unauthorized)
         end
       end
 

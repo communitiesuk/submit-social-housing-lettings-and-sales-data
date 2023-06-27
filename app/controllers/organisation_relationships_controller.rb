@@ -65,8 +65,8 @@ class OrganisationRelationshipsController < ApplicationController
 
   def remove_stock_owner
     organisation_relationship = OrganisationRelationship.find_by!(
-      parent_organisation: organisation,
-      child_organisation: @target_organisation,
+      parent_organisation: @target_organisation,
+      child_organisation: organisation,
     )
     authorize organisation_relationship
   end
@@ -80,7 +80,13 @@ class OrganisationRelationshipsController < ApplicationController
     redirect_to stock_owners_organisation_path
   end
 
-  def remove_managing_agent; end
+  def remove_managing_agent
+    organisation_relationship = OrganisationRelationship.find_by!(
+      parent_organisation: organisation,
+      child_organisation: @target_organisation,
+    )
+    authorize organisation_relationship
+  end
 
   def delete_managing_agent
     OrganisationRelationship.find_by!(
