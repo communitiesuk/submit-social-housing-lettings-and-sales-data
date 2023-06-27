@@ -383,12 +383,13 @@ class SalesLog < Log
     beds.nil? ? nil : [beds, LaSaleRange::MAX_BEDS].min
   end
 
-  def ownership_scheme
-    case ownershipsch
-    when 1 then "shared ownership"
-    when 2 then "discounted ownership"
-    when 3 then "outright sale"
-    end
+  def ownership_scheme(uppercase: false)
+    owner_scheme = case ownershipsch
+                   when 1 then "shared ownership"
+                   when 2 then "discounted ownership"
+                   when 3 then "outright or other sale"
+                   end
+    uppercase ? owner_scheme.capitalize : owner_scheme
   end
 
   def combined_income
