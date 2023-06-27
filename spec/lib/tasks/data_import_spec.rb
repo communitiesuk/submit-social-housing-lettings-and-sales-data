@@ -1,177 +1,217 @@
 require "rails_helper"
 require "rake"
 
-describe "rake core:data_import", type: :task do
-  subject(:task) { Rake::Task["core:data_import"] }
-
+describe "data import", type: :task do
   let(:instance_name) { "paas_import_instance" }
-  let(:storage_service) { instance_double(Storage::S3Service) }
   let(:paas_config_service) { instance_double(Configuration::PaasConfigurationService) }
+  let(:storage_service) { instance_double(Storage::S3Service) }
 
-  before do
-    Rake.application.rake_require("tasks/data_import")
-    Rake::Task.define_task(:environment)
-    task.reenable
-
-    allow(Storage::S3Service).to receive(:new).and_return(storage_service)
-    allow(Configuration::PaasConfigurationService).to receive(:new).and_return(paas_config_service)
-    allow(ENV).to receive(:[])
-    allow(ENV).to receive(:[]).with("IMPORT_PAAS_INSTANCE").and_return(instance_name)
-  end
-
-  context "when importing organisation data" do
-    let(:type) { "organisation" }
-    let(:import_service) { instance_double(Imports::OrganisationImportService) }
-    let(:fixture_path) { "spec/fixtures/imports/organisations" }
+  describe "core:data_import" do
+    subject(:task) { Rake::Task["core:data_import"] }
 
     before do
-      allow(Imports::OrganisationImportService).to receive(:new).and_return(import_service)
+      Rake.application.rake_require("tasks/data_import")
+      Rake::Task.define_task(:environment)
+      task.reenable
+
+      allow(Storage::S3Service).to receive(:new).and_return(storage_service)
+      allow(Configuration::PaasConfigurationService).to receive(:new).and_return(paas_config_service)
+      allow(ENV).to receive(:[])
+      allow(ENV).to receive(:[]).with("IMPORT_PAAS_INSTANCE").and_return(instance_name)
     end
 
-    it "creates an organisation from the given XML file" do
-      expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
-      expect(Imports::OrganisationImportService).to receive(:new).with(storage_service)
-      expect(import_service).to receive(:create_organisations).with(fixture_path)
+    context "when importing organisation data" do
+      let(:type) { "organisation" }
+      let(:import_service) { instance_double(Imports::OrganisationImportService) }
+      let(:fixture_path) { "spec/fixtures/imports/organisations" }
 
-      task.invoke(type, fixture_path)
+      before do
+        allow(Imports::OrganisationImportService).to receive(:new).and_return(import_service)
+      end
+
+      it "creates an organisation from the given XML file" do
+        expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+        expect(Imports::OrganisationImportService).to receive(:new).with(storage_service)
+        expect(import_service).to receive(:create_organisations).with(fixture_path)
+
+        task.invoke(type, fixture_path)
+      end
+    end
+
+    context "when importing user data" do
+      let(:type) { "user" }
+      let(:import_service) { instance_double(Imports::UserImportService) }
+      let(:fixture_path) { "spec/fixtures/imports/users" }
+
+      before do
+        allow(Imports::UserImportService).to receive(:new).and_return(import_service)
+      end
+
+      it "creates a user from the given XML file" do
+        expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+        expect(Imports::UserImportService).to receive(:new).with(storage_service)
+        expect(import_service).to receive(:create_users).with(fixture_path)
+
+        task.invoke(type, fixture_path)
+      end
+    end
+
+    context "when importing data protection confirmation data" do
+      let(:type) { "data-protection-confirmation" }
+      let(:import_service) { instance_double(Imports::DataProtectionConfirmationImportService) }
+      let(:fixture_path) { "spec/fixtures/imports/data_protection_confirmations" }
+
+      before do
+        allow(Imports::DataProtectionConfirmationImportService).to receive(:new).and_return(import_service)
+      end
+
+      it "creates an organisation from the given XML file" do
+        expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+        expect(Imports::DataProtectionConfirmationImportService).to receive(:new).with(storage_service)
+        expect(import_service).to receive(:create_data_protection_confirmations).with(fixture_path)
+
+        task.invoke(type, fixture_path)
+      end
+    end
+
+    context "when importing organisation rent period data" do
+      let(:type) { "organisation-rent-periods" }
+      let(:import_service) { instance_double(Imports::OrganisationRentPeriodImportService) }
+      let(:fixture_path) { "spec/fixtures/imports/organisation_rent_periods" }
+
+      before do
+        allow(Imports::OrganisationRentPeriodImportService).to receive(:new).and_return(import_service)
+      end
+
+      it "creates an organisation la from the given XML file" do
+        expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+        expect(Imports::OrganisationRentPeriodImportService).to receive(:new).with(storage_service)
+        expect(import_service).to receive(:create_organisation_rent_periods).with(fixture_path)
+
+        task.invoke(type, fixture_path)
+      end
+    end
+
+    context "when importing lettings logs" do
+      let(:type) { "lettings-logs" }
+      let(:import_service) { instance_double(Imports::LettingsLogsImportService) }
+      let(:fixture_path) { "spec/fixtures/imports/lettings_logs" }
+
+      before do
+        allow(Imports::LettingsLogsImportService).to receive(:new).and_return(import_service)
+      end
+
+      it "creates lettings logs from the given XML file" do
+        expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+        expect(Imports::LettingsLogsImportService).to receive(:new).with(storage_service)
+        expect(import_service).to receive(:create_logs).with(fixture_path)
+
+        task.invoke(type, fixture_path)
+      end
+    end
+
+    context "when importing sales logs" do
+      let(:type) { "sales-logs" }
+      let(:import_service) { instance_double(Imports::SalesLogsImportService) }
+      let(:fixture_path) { "spec/fixtures/imports/sales_logs" }
+
+      before do
+        allow(Imports::SalesLogsImportService).to receive(:new).and_return(import_service)
+      end
+
+      it "creates sales logs from the given XML file" do
+        expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+        expect(Imports::SalesLogsImportService).to receive(:new).with(storage_service)
+        expect(import_service).to receive(:create_logs).with(fixture_path)
+
+        task.invoke(type, fixture_path)
+      end
+    end
+
+    context "when importing scheme data" do
+      let(:type) { "scheme" }
+      let(:import_service) { instance_double(Imports::SchemeImportService) }
+      let(:fixture_path) { "spec/fixtures/imports/schemes" }
+
+      before do
+        allow(Imports::SchemeImportService).to receive(:new).and_return(import_service)
+      end
+
+      it "creates a scheme from the given XML file" do
+        expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+        expect(Imports::SchemeImportService).to receive(:new).with(storage_service)
+        expect(import_service).to receive(:create_schemes).with(fixture_path)
+
+        task.invoke(type, fixture_path)
+      end
+    end
+
+    context "when importing scheme location data" do
+      let(:type) { "scheme-location" }
+      let(:import_service) { instance_double(Imports::SchemeLocationImportService) }
+      let(:fixture_path) { "spec/fixtures/imports/organisations" }
+
+      before do
+        allow(Imports::SchemeLocationImportService).to receive(:new).and_return(import_service)
+      end
+
+      it "creates a scheme location from the given XML file" do
+        expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+        expect(Imports::SchemeLocationImportService).to receive(:new).with(storage_service)
+        expect(import_service).to receive(:create_scheme_locations).with(fixture_path)
+
+        task.invoke(type, fixture_path)
+      end
+    end
+
+    it "raises an exception if no parameters are provided" do
+      expect { task.invoke }.to raise_error(/Usage/)
+    end
+
+    it "raises an exception if a single parameter is provided" do
+      expect { task.invoke("one_parameter") }.to raise_error(/Usage/)
+    end
+
+    it "raises an exception if the type is not supported" do
+      expect { task.invoke("unknown_type", "my_path") }.to raise_error(/Type unknown_type is not supported/)
     end
   end
 
-  context "when importing user data" do
-    let(:type) { "user" }
-    let(:import_service) { instance_double(Imports::UserImportService) }
-    let(:fixture_path) { "spec/fixtures/imports/users" }
+  describe "core:data_protection_confirmation_import" do
+    subject(:task) { Rake::Task["core:data_protection_confirmation_import"] }
 
-    before do
-      allow(Imports::UserImportService).to receive(:new).and_return(import_service)
-    end
-
-    it "creates a user from the given XML file" do
-      expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
-      expect(Imports::UserImportService).to receive(:new).with(storage_service)
-      expect(import_service).to receive(:create_users).with(fixture_path)
-
-      task.invoke(type, fixture_path)
-    end
-  end
-
-  context "when importing data protection confirmation data" do
-    let(:type) { "data-protection-confirmation" }
     let(:import_service) { instance_double(Imports::DataProtectionConfirmationImportService) }
-    let(:fixture_path) { "spec/fixtures/imports/data_protection_confirmations" }
+    # let(:fixture_path) { "spec/fixtures/imports/data_protection_confirmations" }
+    let(:storage_service) { instance_double(Storage::S3Service) }
+    let(:archive_service) { instance_double(Storage::ArchiveService) }
+
+    let!(:organisation_without_dpc_with_old_org_id) { create(:organisation, :without_dpc, old_org_id: 1) }
 
     before do
+      Rake.application.rake_require("tasks/data_import")
+      Rake::Task.define_task(:environment)
+      task.reenable
+
+      allow(Storage::S3Service).to receive(:new).and_return(storage_service)
+      allow(Configuration::PaasConfigurationService).to receive(:new).and_return(paas_config_service)
+      allow(ENV).to receive(:[])
+      allow(ENV).to receive(:[]).with("IMPORT_PAAS_INSTANCE").and_return(instance_name)
       allow(Imports::DataProtectionConfirmationImportService).to receive(:new).and_return(import_service)
+
+      allow(Storage::ArchiveService).to receive(:new).and_return(archive_service)
+      allow(archive_service).to receive(:folder_present?).with("dataprotect").and_return(true)
+
+      _org_without_old_org_id = create(:organisation, old_org_id: nil)
+      _organisation_without_dp = create(:organisation, :without_dpc, old_org_id: nil)
     end
 
     it "creates an organisation from the given XML file" do
       expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
-      expect(Imports::DataProtectionConfirmationImportService).to receive(:new).with(storage_service)
-      expect(import_service).to receive(:create_data_protection_confirmations).with(fixture_path)
+      expect(storage_service).to receive(:get_file_io).with("#{organisation_without_dpc_with_old_org_id.old_org_id}.zip")
+      expect(Imports::DataProtectionConfirmationImportService).to receive(:new).with(archive_service)
+      expect(import_service).to receive(:create_data_protection_confirmations).with("dataprotect")
 
-      task.invoke(type, fixture_path)
+      task.invoke
     end
-  end
-
-  context "when importing organisation rent period data" do
-    let(:type) { "organisation-rent-periods" }
-    let(:import_service) { instance_double(Imports::OrganisationRentPeriodImportService) }
-    let(:fixture_path) { "spec/fixtures/imports/organisation_rent_periods" }
-
-    before do
-      allow(Imports::OrganisationRentPeriodImportService).to receive(:new).and_return(import_service)
-    end
-
-    it "creates an organisation la from the given XML file" do
-      expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
-      expect(Imports::OrganisationRentPeriodImportService).to receive(:new).with(storage_service)
-      expect(import_service).to receive(:create_organisation_rent_periods).with(fixture_path)
-
-      task.invoke(type, fixture_path)
-    end
-  end
-
-  context "when importing lettings logs" do
-    let(:type) { "lettings-logs" }
-    let(:import_service) { instance_double(Imports::LettingsLogsImportService) }
-    let(:fixture_path) { "spec/fixtures/imports/lettings_logs" }
-
-    before do
-      allow(Imports::LettingsLogsImportService).to receive(:new).and_return(import_service)
-    end
-
-    it "creates lettings logs from the given XML file" do
-      expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
-      expect(Imports::LettingsLogsImportService).to receive(:new).with(storage_service)
-      expect(import_service).to receive(:create_logs).with(fixture_path)
-
-      task.invoke(type, fixture_path)
-    end
-  end
-
-  context "when importing sales logs" do
-    let(:type) { "sales-logs" }
-    let(:import_service) { instance_double(Imports::SalesLogsImportService) }
-    let(:fixture_path) { "spec/fixtures/imports/sales_logs" }
-
-    before do
-      allow(Imports::SalesLogsImportService).to receive(:new).and_return(import_service)
-    end
-
-    it "creates sales logs from the given XML file" do
-      expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
-      expect(Imports::SalesLogsImportService).to receive(:new).with(storage_service)
-      expect(import_service).to receive(:create_logs).with(fixture_path)
-
-      task.invoke(type, fixture_path)
-    end
-  end
-
-  context "when importing scheme data" do
-    let(:type) { "scheme" }
-    let(:import_service) { instance_double(Imports::SchemeImportService) }
-    let(:fixture_path) { "spec/fixtures/imports/schemes" }
-
-    before do
-      allow(Imports::SchemeImportService).to receive(:new).and_return(import_service)
-    end
-
-    it "creates a scheme from the given XML file" do
-      expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
-      expect(Imports::SchemeImportService).to receive(:new).with(storage_service)
-      expect(import_service).to receive(:create_schemes).with(fixture_path)
-
-      task.invoke(type, fixture_path)
-    end
-  end
-
-  context "when importing scheme location data" do
-    let(:type) { "scheme-location" }
-    let(:import_service) { instance_double(Imports::SchemeLocationImportService) }
-    let(:fixture_path) { "spec/fixtures/imports/organisations" }
-
-    before do
-      allow(Imports::SchemeLocationImportService).to receive(:new).and_return(import_service)
-    end
-
-    it "creates a scheme location from the given XML file" do
-      expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
-      expect(Imports::SchemeLocationImportService).to receive(:new).with(storage_service)
-      expect(import_service).to receive(:create_scheme_locations).with(fixture_path)
-
-      task.invoke(type, fixture_path)
-    end
-  end
-
-  it "raises an exception if no parameters are provided" do
-    expect { task.invoke }.to raise_error(/Usage/)
-  end
-
-  it "raises an exception if a single parameter is provided" do
-    expect { task.invoke("one_parameter") }.to raise_error(/Usage/)
-  end
-
-  it "raises an exception if the type is not supported" do
-    expect { task.invoke("unknown_type", "my_path") }.to raise_error(/Type unknown_type is not supported/)
   end
 end
