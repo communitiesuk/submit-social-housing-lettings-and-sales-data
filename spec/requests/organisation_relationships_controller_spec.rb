@@ -317,6 +317,24 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         end
       end
 
+      context "when directly removing a stock owner" do
+        let(:managing_agent) { FactoryBot.create(:organisation) }
+        let(:request) { get "/organisations/#{organisation.id}/stock-owners/remove?target_organisation_id=#{managing_agent.id}", headers: }
+
+        before do
+          FactoryBot.create(:organisation_relationship, parent_organisation: organisation, child_organisation: managing_agent)
+        end
+
+        it "returns 401 from users page" do
+          request
+          expect(response).to have_http_status(:unauthorized)
+        end
+
+        it "does not remove the organisation relationship" do
+          expect { request }.not_to change(OrganisationRelationship, :count)
+        end
+      end
+
       context "when accessing the managing agents tab" do
         context "with an organisation that the user belongs to" do
           let!(:managing_agent) { FactoryBot.create(:organisation) }

@@ -9,4 +9,8 @@ class OrganisationRelationshipPolicy
   def create_stock_owner?
     return true unless user.data_provider?
   end
+
+  def remove_stock_owner?
+    return true unless user.data_provider?
+  end
 end

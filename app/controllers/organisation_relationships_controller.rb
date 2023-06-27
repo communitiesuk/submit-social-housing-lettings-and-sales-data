@@ -62,7 +62,13 @@ class OrganisationRelationshipsController < ApplicationController
     end
   end
 
-  def remove_stock_owner; end
+  def remove_stock_owner
+    organisation_relationship = OrganisationRelationship.find_by!(
+      parent_organisation: organisation,
+      child_organisation: @target_organisation,
+    )
+    authorize organisation_relationship
+  end
 
   def delete_stock_owner
     OrganisationRelationship.find_by!(
