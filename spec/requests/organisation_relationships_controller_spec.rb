@@ -299,7 +299,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
       context "when directly accessing the page to add a stock owner" do
         let(:request) { get "/organisations/#{organisation.id}/stock-owners/add", headers: }
 
-        it "returns 401 from users page" do
+        it "returns 401" do
           request
           expect(response).to have_http_status(:unauthorized)
         end
@@ -316,7 +316,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         end
         let(:request) { post "/organisations/#{organisation.id}/stock-owners", headers:, params: }
 
-        it "returns 401 from users page" do
+        it "returns 401" do
           request
           expect(response).to have_http_status(:unauthorized)
         end
@@ -334,7 +334,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           FactoryBot.create(:organisation_relationship, parent_organisation: stock_owner, child_organisation: organisation)
         end
 
-        it "returns 401 from users page" do
+        it "returns 401" do
           request
           expect(response).to have_http_status(:unauthorized)
         end
@@ -343,7 +343,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
       context "when directly accessing the page to add a managing agent" do
         let(:request) { get "/organisations/#{organisation.id}/managing-agents/add", headers: }
 
-        it "returns 401 from users page" do
+        it "returns 401" do
           request
           expect(response).to have_http_status(:unauthorized)
         end
@@ -360,7 +360,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         end
         let(:request) { post "/organisations/#{organisation.id}/managing-agents", headers:, params: }
 
-        it "returns 401 from users page" do
+        it "returns 401" do
           request
           expect(response).to have_http_status(:unauthorized)
         end
@@ -378,7 +378,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           FactoryBot.create(:organisation_relationship, parent_organisation: organisation, child_organisation: managing_agent)
         end
 
-        it "returns 401 from users page" do
+        it "returns 401" do
           request
           expect(response).to have_http_status(:unauthorized)
         end
