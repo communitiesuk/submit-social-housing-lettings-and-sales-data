@@ -6,27 +6,16 @@ class OrganisationRelationshipPolicy
     @organisation_relationship = organisation_relationship
   end
 
-  def add_stock_owner?
-    return true unless user.data_provider?
-  end
-
-  def create_stock_owner?
-    return true unless user.data_provider?
-  end
-
-  def remove_stock_owner?
-    return true unless user.data_provider?
-  end
-
-  def add_managing_agent?
-    return true unless user.data_provider?
-  end
-
-  def create_managing_agent?
-    return true unless user.data_provider?
-  end
-
-  def remove_managing_agent?
-    return true unless user.data_provider?
+  %w[
+    add_stock_owner?
+    create_stock_owner?
+    remove_stock_owner?
+    add_managing_agent?
+    create_managing_agent?
+    remove_managing_agent?
+  ].each do |method_name|
+    define_method method_name do
+      return true unless user.data_provider?
+    end
   end
 end
