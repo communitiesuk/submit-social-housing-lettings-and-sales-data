@@ -10,7 +10,7 @@ class Form::Lettings::Pages::MinRentValueCheck < ::Form::Page
         "i18n_template" => "brent",
       }],
     }
-    @informative_text = {}
+    @informative_text = I18n.t("soft_validations.rent.informative_text", higher_or_lower: "lower")
     @check_answers_card_number = check_answers_card_number
   end
 
