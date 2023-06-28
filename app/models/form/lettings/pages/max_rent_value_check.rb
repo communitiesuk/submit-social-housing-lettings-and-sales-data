@@ -12,7 +12,18 @@ class Form::Lettings::Pages::MaxRentValueCheck < ::Form::Page
         },
       ],
     }
-    @informative_text = {}
+    # @informative_text = {}
+    @informative_text = {
+      "translation" => "soft_validations.rent.max_hint_text",
+      "arguments" => [
+        {
+          "key" => "field_formatted_as_currency",
+          "arguments_for_key" => "soft_max_for_period",
+          "i18n_template" => "soft_max_for_period",
+        },
+      ],
+    }
+
     @check_answers_card_number = check_answers_card_number
   end
 
