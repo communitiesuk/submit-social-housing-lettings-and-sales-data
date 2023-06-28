@@ -18,8 +18,8 @@
 </h2>
 <% logs.map do |log| %>
   <% if log.sales? %>
-    <%= render(SalesLogSummaryComponent.new(current_user:, log:)) %>
+    <%= render SalesLogSummaryComponent.new(current_user:, log:) %>
     <% else %>
-    <%= render(LettingsLogSummaryComponent.new(current_user:, log:)) %>
+    <%= render LettingsLogSummaryComponent.new(current_user:, log:) %>
   <% end %>
 <% end %>

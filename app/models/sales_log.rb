@@ -384,12 +384,12 @@ class SalesLog < Log
   end
 
   def ownership_scheme(uppercase: false)
-    owner_scheme = case ownershipsch
+    ownership_scheme = case ownershipsch
                    when 1 then "shared ownership"
                    when 2 then "discounted ownership"
                    when 3 then "outright or other sale"
                    end
-    uppercase ? owner_scheme.capitalize : owner_scheme
+    uppercase ? ownership_scheme.capitalize : ownership_scheme
   end
 
   def combined_income
