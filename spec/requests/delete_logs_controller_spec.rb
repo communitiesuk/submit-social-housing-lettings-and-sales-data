@@ -118,7 +118,7 @@ RSpec.describe "DeleteLogs", type: :request do
     end
 
     before do
-      post delete_logs_confirmation_lettings_logs_path, params: params
+      post delete_logs_confirmation_lettings_logs_path, params:
     end
 
     it "requires delete logs form data to be provided" do
@@ -188,7 +188,7 @@ RSpec.describe "DeleteLogs", type: :request do
       end
 
       before do
-        post delete_logs_confirmation_lettings_logs_path, params: params
+        post delete_logs_confirmation_lettings_logs_path, params:
       end
 
       it "renders the list of logs table again" do
@@ -358,7 +358,7 @@ RSpec.describe "DeleteLogs", type: :request do
     end
 
     before do
-      post delete_logs_confirmation_sales_logs_path, params: params
+      post delete_logs_confirmation_sales_logs_path, params:
     end
 
     it "requires delete logs form data to be provided" do
@@ -428,7 +428,7 @@ RSpec.describe "DeleteLogs", type: :request do
       end
 
       before do
-        post delete_logs_confirmation_sales_logs_path, params: params
+        post delete_logs_confirmation_sales_logs_path, params:
       end
 
       it "renders the list of logs table again" do
@@ -602,7 +602,7 @@ RSpec.describe "DeleteLogs", type: :request do
       end
 
       before do
-        post delete_lettings_logs_confirmation_organisation_path(id: organisation), params: params
+        post delete_lettings_logs_confirmation_organisation_path(id: organisation), params:
       end
 
       it "requires delete logs form data to be provided" do
@@ -827,7 +827,7 @@ RSpec.describe "DeleteLogs", type: :request do
       end
 
       before do
-        post delete_sales_logs_confirmation_organisation_path(id: organisation), params: params
+        post delete_sales_logs_confirmation_organisation_path(id: organisation), params:
       end
 
       it "requires delete logs form data to be provided" do
