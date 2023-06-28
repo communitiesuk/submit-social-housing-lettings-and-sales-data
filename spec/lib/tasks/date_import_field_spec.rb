@@ -28,8 +28,8 @@ describe "rake core:data_import_field", type: :task do
       allow(import_service).to receive(:update_field)
     end
 
-    context "and we update the tenant_code field" do
-      let(:field) { "tenant_code" }
+    context "and we update the tenancycode field" do
+      let(:field) { "tenancycode" }
 
       it "properly configures the storage service" do
         expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
