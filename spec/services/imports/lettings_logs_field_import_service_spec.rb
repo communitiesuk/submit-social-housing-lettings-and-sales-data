@@ -10,7 +10,7 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
   let(:fixture_directory) { "spec/fixtures/imports/logs" }
 
   let(:lettings_log_id) { "0ead17cb-1668-442d-898c-0d52879ff592" }
-  let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id) }
+  let(:lettings_log_file) { File.open("#{fixture_directory}/#{lettings_log_id}.xml") }
   let(:lettings_log_xml) { Nokogiri::XML(lettings_log_file) }
   let(:remote_folder) { "lettings_logs" }
   let(:old_user_id) { "c3061a2e6ea0b702e6f6210d5c52d2a92612d2aa" }
@@ -21,12 +21,6 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
       Singleton.__init__(FormHandler)
       example.run
     end
-    Timecop.return
-    Singleton.__init__(FormHandler)
-  end
-
-  def open_file(directory, filename)
-    File.open("#{directory}/#{filename}.xml")
   end
 
   before do

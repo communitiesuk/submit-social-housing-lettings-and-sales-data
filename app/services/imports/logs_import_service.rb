@@ -11,11 +11,7 @@ module Imports
     # Unsafe: A string that has more than just the integer value
     def unsafe_string_as_integer(xml_doc, attribute)
       str = string_or_nil(xml_doc, attribute)
-      if str.nil?
-        nil
-      else
-        str.to_i
-      end
+      str&.to_i
     end
 
     def compose_date(xml_doc, day_str, month_str, year_str)

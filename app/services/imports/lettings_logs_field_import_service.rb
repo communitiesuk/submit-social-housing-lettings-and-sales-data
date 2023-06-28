@@ -110,31 +110,5 @@ module Imports
         @logger.warn("Could not find record matching legacy ID #{old_id}")
       end
     end
-
-    def compose_date(xml_doc, day_str, month_str, year_str)
-      day = Integer(field_value(xml_doc, "xmlns", day_str), exception: false)
-      month = Integer(field_value(xml_doc, "xmlns", month_str), exception: false)
-      year = Integer(field_value(xml_doc, "xmlns", year_str), exception: false)
-      if day.nil? || month.nil? || year.nil?
-        nil
-      else
-        Time.zone.local(year, month, day)
-      end
-    end
-
-    def string_or_nil(xml_doc, attribute)
-      str = field_value(xml_doc, "xmlns", attribute)
-      str.presence
-    end
-
-    # Unsafe: A string that has more than just the integer value
-    def unsafe_string_as_integer(xml_doc, attribute)
-      str = string_or_nil(xml_doc, attribute)
-      if str.nil?
-        nil
-      else
-        str.to_i
-      end
-    end
   end
 end
