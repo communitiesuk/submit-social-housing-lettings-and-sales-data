@@ -2,7 +2,7 @@ module Imports
   class LettingsLogsFieldImportService < LogsImportService
     def update_field(field, folder)
       case field
-      when "tenant_code"
+      when "tenancycode"
         import_from(folder, :update_tenant_code)
       when "major_repairs"
         import_from(folder, :update_major_repairs)
