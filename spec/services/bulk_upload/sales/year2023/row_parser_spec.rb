@@ -115,8 +115,6 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       Singleton.__init__(FormHandler)
       example.run
     end
-    Timecop.return
-    Singleton.__init__(FormHandler)
   end
 
   describe "#blank_row?" do
@@ -857,6 +855,19 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       end
     end
 
+    describe "#field_67 - 70" do # buyers organisations
+      context "when all nil" do
+        let(:attributes) { setup_section_params.merge(field_67: nil, field_68: nil, field_69: nil, field_70: nil) }
+
+        it "returns correct errors" do
+          expect(parser.errors[:field_67]).to be_present
+          expect(parser.errors[:field_68]).to be_present
+          expect(parser.errors[:field_69]).to be_present
+          expect(parser.errors[:field_70]).to be_present
+        end
+      end
+    end
+
     describe "soft validations" do
       context "when soft validation is triggered" do
         let(:attributes) { valid_attributes.merge({ field_30: 22, field_35: 5 }) }
@@ -869,6 +880,18 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
         it "populates with correct error message" do
           expect(parser.errors.where(:field_30, category: :soft_validation).first.message).to eql("You told us this person is aged 22 years and retired.")
           expect(parser.errors.where(:field_30, category: :soft_validation).first.message).to eql("You told us this person is aged 22 years and retired.")
+        end
+      end
+
+      context "when a soft validation is triggered that relates both to fields that are and are not routed to" do
+        let(:attributes) { valid_attributes.merge({ field_103: "300000" }) }
+
+        it "adds errors to fields that are routed to" do
+          expect(parser.errors.where(:field_103, category: :soft_validation)).to be_present
+        end
+
+        it "does not add errors to fields that are not routed to" do
+          expect(parser.errors.where(:field_112, category: :soft_validation)).not_to be_present
         end
       end
     end

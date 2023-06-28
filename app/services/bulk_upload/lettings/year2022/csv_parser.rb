@@ -3,6 +3,7 @@ require "csv"
 class BulkUpload::Lettings::Year2022::CsvParser
   FIELDS = 134
   MAX_COLUMNS = 135
+  FORM_YEAR = 2022
 
   attr_reader :path
 
@@ -62,10 +63,18 @@ class BulkUpload::Lettings::Year2022::CsvParser
   end
 
   def wrong_template_for_year?
-    false
+    !(first_record_start_date >= form.start_date && first_record_start_date <= form.end_date)
   end
 
 private
+
+  def form
+    @form ||= FormHandler.instance.lettings_form_for_start_year(FORM_YEAR)
+  end
+
+  def first_record_start_date
+    @first_record_start_date ||= row_parsers.first.startdate || Date.new
+  end
 
   def default_field_numbers
     ("field_1".."field_#{FIELDS}").to_a

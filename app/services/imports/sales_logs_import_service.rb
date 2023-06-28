@@ -238,6 +238,7 @@ module Imports
         %i[mscharge under_min] => %w[mscharge has_mscharge],
         %i[mortgage cannot_be_0] => %w[mortgage],
         %i[frombeds outside_the_range] => %w[frombeds],
+        %i[age1 outside_the_range] => %w[age1 age1_known],
       }
 
       errors.each do |(error, fields)|

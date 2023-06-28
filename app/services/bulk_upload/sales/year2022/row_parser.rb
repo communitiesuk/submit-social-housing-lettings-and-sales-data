@@ -370,6 +370,7 @@ class BulkUpload::Sales::Year2022::RowParser
   validate :validate_if_log_already_exists, on: :after_log, if: -> { FeatureToggle.bulk_upload_duplicate_log_check_enabled? }
 
   validate :validate_data_protection_answered, on: :after_log
+  validate :validate_buyers_organisations, on: :after_log
 
   def self.question_for_field(field)
     QUESTIONS[field]
@@ -453,11 +454,26 @@ class BulkUpload::Sales::Year2022::RowParser
     end
   end
 
+  def saledate
+    Date.new(field_4 + 2000, field_3, field_2) if field_2.present? && field_3.present? && field_4.present?
+  rescue Date::Error
+    Date.new
+  end
+
 private
 
   def validate_data_protection_answered
     unless field_112 == 1
       errors.add(:field_112, I18n.t("validations.not_answered", question: QUESTIONS[:field_112].downcase), category: :setup)
+    end
+  end
+
+  def validate_buyers_organisations
+    organisations_fields = %i[field_44 field_45 field_46 field_47]
+    if organisations_fields.all? { |field| attributes[field.to_s].blank? }
+      organisations_fields.each do |field|
+        errors.add(field, "At least one option must be selected of these four")
+      end
     end
   end
 
@@ -540,7 +556,6 @@ private
       pregla: %i[field_45],
       pregghb: %i[field_46],
       pregother: %i[field_47],
-      pregblank: %i[field_44 field_45 field_46 field_47],
       disabled: %i[field_48],
       wheel: %i[field_49],
       beds: %i[field_50],
@@ -673,7 +688,6 @@ private
     attributes["pregla"] = field_45
     attributes["pregghb"] = field_46
     attributes["pregother"] = field_47
-    attributes["pregblank"] = 1 if [field_44, field_45, field_46, field_47].all?(&:blank?)
 
     attributes["disabled"] = buyer_not_interviewed? && field_48.blank? ? 3 : field_48
     attributes["wheel"] = buyer_not_interviewed? && field_49.blank? ? 3 : field_49
@@ -760,12 +774,6 @@ private
     else
       buyer_not_interviewed? ? 1 : nil
     end
-  end
-
-  def saledate
-    Date.new(field_4 + 2000, field_3, field_2) if field_2.present? && field_3.present? && field_4.present?
-  rescue Date::Error
-    Date.new
   end
 
   def hodate
@@ -1057,9 +1065,9 @@ private
       fields.each do |field|
         unless errors.any? { |e| fields.include?(e.attribute) }
           if setup_question?(question)
-            errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase), category: :setup)
+            errors.add(field, I18n.t("validations.not_answered", question: question.error_display_label&.downcase), category: :setup)
           else
-            errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase))
+            errors.add(field, I18n.t("validations.not_answered", question: question.error_display_label&.downcase))
           end
         end
       end
@@ -1110,8 +1118,10 @@ private
       next if question.completed?(log)
 
       question.page.interruption_screen_question_ids.each do |interruption_screen_question_id|
+        next if log.form.questions.none? { |q| q.id == interruption_screen_question_id && q.page.routed_to?(log, nil) }
+
         field_mapping_for_errors[interruption_screen_question_id.to_sym]&.each do |field|
-          unless errors.any? { |e| e.options[:category] == :soft_validation && field_mapping_for_errors[interruption_screen_question_id.to_sym].include?(e.attribute) }
+          if errors.none? { |e| e.options[:category] == :soft_validation && field_mapping_for_errors[interruption_screen_question_id.to_sym].include?(e.attribute) }
             error_message = [display_title_text(question.page.title_text, log), display_informative_text(question.page.informative_text, log)].reject(&:empty?).join(". ")
             errors.add(field, message: error_message, category: :soft_validation)
           end

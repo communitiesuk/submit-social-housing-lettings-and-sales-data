@@ -25,9 +25,10 @@ class BulkUploadSalesLogsController < ApplicationController
 private
 
   def validate_data_protection_agrement_signed!
-    unless @current_user.organisation.data_protection_confirmed?
-      redirect_to sales_logs_path
-    end
+    return unless FeatureToggle.new_data_protection_confirmation?
+    return if @current_user.organisation.data_protection_confirmed?
+
+    redirect_to sales_logs_path
   end
 
   def current_year

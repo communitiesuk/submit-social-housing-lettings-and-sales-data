@@ -53,6 +53,10 @@ RSpec.describe QuestionViewHelper do
         def plain_label
           nil
         end
+
+        def hide_question_number_on_page
+          false
+        end
       end
     end
 
@@ -97,6 +101,10 @@ RSpec.describe QuestionViewHelper do
 
           def plain_label
             true
+          end
+
+          def hide_question_number_on_page
+            false
           end
         end
       end

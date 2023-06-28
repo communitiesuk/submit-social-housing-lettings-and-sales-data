@@ -120,6 +120,7 @@ RSpec.describe UsersController, type: :request do
         it "allows changing name, email and password" do
           expect(page).to have_link("Change", text: "name")
           expect(page).to have_link("Change", text: "email address")
+          expect(page).to have_link("Change", text: "telephone number")
           expect(page).to have_link("Change", text: "password")
           expect(page).not_to have_link("Change", text: "role")
           expect(page).not_to have_link("Change", text: "if data protection officer")
@@ -180,6 +181,7 @@ RSpec.describe UsersController, type: :request do
           it "does not have edit links" do
             expect(page).not_to have_link("Change", text: "name")
             expect(page).not_to have_link("Change", text: "email address")
+            expect(page).not_to have_link("Change", text: "telephone number")
             expect(page).not_to have_link("Change", text: "password")
             expect(page).not_to have_link("Change", text: "role")
             expect(page).not_to have_link("Change", text: "if data protection officer")
@@ -499,6 +501,7 @@ RSpec.describe UsersController, type: :request do
         it "allows changing name, email, password, role, dpo and key contact" do
           expect(page).to have_link("Change", text: "name")
           expect(page).to have_link("Change", text: "email address")
+          expect(page).to have_link("Change", text: "telephone number")
           expect(page).to have_link("Change", text: "password")
           expect(page).to have_link("Change", text: "role")
           expect(page).to have_link("Change", text: "if data protection officer")
@@ -543,6 +546,7 @@ RSpec.describe UsersController, type: :request do
           it "allows changing name, email, role, dpo and key contact" do
             expect(page).to have_link("Change", text: "name")
             expect(page).to have_link("Change", text: "email address")
+            expect(page).to have_link("Change", text: "telephone number")
             expect(page).not_to have_link("Change", text: "password")
             expect(page).to have_link("Change", text: "role")
             expect(page).to have_link("Change", text: "if data protection officer")
@@ -846,6 +850,7 @@ RSpec.describe UsersController, type: :request do
             name: "new user ",
             email: "new_user@example.com",
             role: "data_coordinator",
+            phone: "12345678910",
           },
         }
       end
@@ -932,6 +937,54 @@ RSpec.describe UsersController, type: :request do
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.name.blank"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.email.blank"))
+        end
+      end
+
+      context "when validating telephone numbers" do
+        let(:params) do
+          {
+            "user": {
+              phone:,
+            },
+          }
+        end
+
+        context "when telephone number is not numeric" do
+          let(:phone) { "randomstring" }
+
+          it "validates telephone number" do
+            request
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.phone.invalid"))
+          end
+        end
+
+        context "when telephone number is shorter than 11 digits" do
+          let(:phone) { "123" }
+
+          it "validates telephone number" do
+            request
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.phone.invalid"))
+          end
+        end
+
+        context "when telephone number is in correct format" do
+          let(:phone) { "012345678919" }
+
+          it "validates telephone number" do
+            request
+            expect(page).not_to have_content(I18n.t("activerecord.errors.models.user.attributes.phone.invalid"))
+          end
+        end
+
+        context "when telephone number is in correct format and includes +" do
+          let(:phone) { "+12345678919" }
+
+          it "validates telephone number" do
+            request
+            expect(page).not_to have_content(I18n.t("activerecord.errors.models.user.attributes.phone.invalid"))
+          end
         end
       end
     end
@@ -1169,6 +1222,7 @@ RSpec.describe UsersController, type: :request do
         it "allows changing name, email, password, role, dpo and key contact" do
           expect(page).to have_link("Change", text: "name")
           expect(page).to have_link("Change", text: "email address")
+          expect(page).to have_link("Change", text: "telephone number")
           expect(page).to have_link("Change", text: "password")
           expect(page).to have_link("Change", text: "role")
           expect(page).to have_link("Change", text: "if data protection officer")
@@ -1198,6 +1252,7 @@ RSpec.describe UsersController, type: :request do
           it "allows changing name, email, role, dpo and key contact" do
             expect(page).to have_link("Change", text: "name")
             expect(page).to have_link("Change", text: "email address")
+            expect(page).to have_link("Change", text: "telephone number")
             expect(page).not_to have_link("Change", text: "password")
             expect(page).to have_link("Change", text: "role")
             expect(page).to have_link("Change", text: "if data protection officer")
@@ -1242,6 +1297,7 @@ RSpec.describe UsersController, type: :request do
           it "allows changing name, email, role, dpo and key contact" do
             expect(page).to have_link("Change", text: "name")
             expect(page).to have_link("Change", text: "email address")
+            expect(page).to have_link("Change", text: "telephone number")
             expect(page).not_to have_link("Change", text: "password")
             expect(page).to have_link("Change", text: "role")
             expect(page).to have_link("Change", text: "if data protection officer")
@@ -1266,6 +1322,7 @@ RSpec.describe UsersController, type: :request do
           expect(page).to have_field("user[name]")
           expect(page).to have_field("user[email]")
           expect(page).to have_field("user[role]")
+          expect(page).to have_field("user[phone]")
         end
 
         it "allows setting the role to `support`" do
@@ -1564,6 +1621,7 @@ RSpec.describe UsersController, type: :request do
             name: "new user",
             email:,
             role: "data_coordinator",
+            phone: "12345612456",
             organisation_id: organisation.id,
           },
         }
@@ -1595,6 +1653,7 @@ RSpec.describe UsersController, type: :request do
               name: "",
               email: "",
               role: "",
+              phone: "",
               organisation_id: nil,
             },
           }
@@ -1610,6 +1669,7 @@ RSpec.describe UsersController, type: :request do
           expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.name.blank"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.email.blank"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.organisation_id.blank"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.phone.blank"))
         end
       end
 

@@ -8,7 +8,12 @@ module Forms
       attribute :year, :integer
 
       def view_path
-        "bulk_upload_sales_logs/forms/prepare_your_file"
+        case year
+        when 2022
+          "bulk_upload_sales_logs/forms/prepare_your_file_2022"
+        else
+          "bulk_upload_sales_logs/forms/prepare_your_file_2023"
+        end
       end
 
       def back_path
@@ -23,8 +28,13 @@ module Forms
         bulk_upload_sales_log_path(id: "upload-your-file", form: { year: })
       end
 
-      def old_template_path
-        "/files/bulk-upload-sales-template-2022-23.xlsx"
+      def legacy_template_path
+        case year
+        when 2022
+          "/files/bulk-upload-sales-template-2022-23.xlsx"
+        else
+          "/files/bulk-upload-sales-legacy-template-2023-24.xlsx"
+        end
       end
 
       def template_path

@@ -54,7 +54,7 @@
                                                                              end), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
             <% row.cell(text: location.name) %>
             <% row.cell(text: location.id) %>
-            <% row.cell(text: status_tag(location.status)) %>
+            <% row.cell(text: status_tag_from_resource(location)) %>
           <% end %>
         <% end %>
       <% end %>

@@ -23,7 +23,7 @@ RSpec.describe Imports::DataProtectionConfirmationImportService do
 
     context "when the organisation in the import file doesn't exist in the system" do
       it "does not create a data protection confirmation" do
-        expect(logger).to receive(:error).with(/Organisation must exist/)
+        expect(logger).to receive(:error).with("Organisation must exist")
         import_service.create_data_protection_confirmations("data_protection_directory")
       end
     end
@@ -32,11 +32,12 @@ RSpec.describe Imports::DataProtectionConfirmationImportService do
       let!(:organisation) { create(:organisation, :without_dpc, old_org_id:) }
 
       context "when a data protection officer with matching name does not exists for the organisation" do
-        it "creates a data protection officer without sign in credentials" do
+        it "creates an inactive data protection officer" do
           expect { import_service.create_data_protection_confirmations("data_protection_directory") }
             .to change(User, :count).by(1)
           data_protection_officer = User.find_by(organisation:, is_dpo: true)
-          expect(data_protection_officer.email).to eq("")
+          expect(data_protection_officer.confirmed_at).not_to be_nil
+          expect(data_protection_officer.active).to be false
         end
 
         it "successfully create a data protection confirmation record with the expected data" do

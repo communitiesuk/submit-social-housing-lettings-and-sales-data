@@ -150,13 +150,19 @@ private
   def validate_field_numbers_count
     return if halt_validations?
 
-    errors.add(:base, :wrong_field_numbers_count) unless csv_parser.correct_field_count?
+    unless csv_parser.correct_field_count?
+      errors.add(:base, :wrong_field_numbers_count)
+      halt_validations!
+    end
   end
 
   def validate_max_columns_count_if_no_headers
     return if halt_validations?
 
-    errors.add(:base, :over_max_column_count) if csv_parser.too_many_columns?
+    if csv_parser.too_many_columns?
+      errors.add(:base, :over_max_column_count)
+      halt_validations!
+    end
   end
 
   def validate_correct_template

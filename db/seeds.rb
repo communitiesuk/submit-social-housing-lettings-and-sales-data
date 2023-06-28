@@ -175,6 +175,8 @@ unless Rails.env.test?
     ) do |user|
       user.password = "password"
       user.confirmed_at = Time.zone.now
+      user.is_dpo = true
+      create_data_protection_confirmation(user)
     end
 
     support_user = User.find_or_create_by!(
@@ -185,11 +187,10 @@ unless Rails.env.test?
     ) do |user|
       user.password = "password"
       user.confirmed_at = Time.zone.now
+      create_data_protection_confirmation(user)
     end
 
-    create_data_protection_confirmation(support_user)
-
-    pp "Seeded 3 dummy users"
+    pp "Seeded dummy users"
   end
 
   if (Rails.env.development? || Rails.env.review?) && SalesLog.count.zero?
@@ -318,7 +319,7 @@ unless Rails.env.test?
       units: 1,
       mobility_type: "W",
     )
-    pp "Seeded 3 dummy schemes"
+    pp "Seeded dummy schemes"
   end
 
   if LocalAuthority.count.zero?

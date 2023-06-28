@@ -467,6 +467,7 @@ class BulkUpload::Sales::Year2023::RowParser
   validate :validate_if_log_already_exists, on: :after_log, if: -> { FeatureToggle.bulk_upload_duplicate_log_check_enabled? }
 
   validate :validate_data_protection_answered, on: :after_log
+  validate :validate_buyers_organisations, on: :after_log
 
   def self.question_for_field(field)
     QUESTIONS[field]
@@ -559,6 +560,15 @@ private
   def validate_data_protection_answered
     unless field_29 == 1
       errors.add(:field_29, I18n.t("validations.not_answered", question: QUESTIONS[:field_29].downcase), category: :setup)
+    end
+  end
+
+  def validate_buyers_organisations
+    organisations_fields = %i[field_67 field_68 field_69 field_70]
+    if organisations_fields.all? { |field| attributes[field.to_s].blank? }
+      organisations_fields.each do |field|
+        errors.add(field, "At least one option must be selected of these four")
+      end
     end
   end
 
@@ -684,7 +694,6 @@ private
       pregla: %i[field_69],
       pregghb: %i[field_70],
       pregother: %i[field_68],
-      pregblank: %i[field_67 field_69 field_70 field_68],
       disabled: %i[field_76],
 
       wheel: %i[field_77],
@@ -847,7 +856,6 @@ private
     attributes["pregla"] = field_69
     attributes["pregghb"] = field_70
     attributes["pregother"] = field_68
-    attributes["pregblank"] = 1 if [field_67, field_69, field_70, field_78].all?(&:blank?)
 
     attributes["disabled"] = field_76
     attributes["wheel"] = field_77
@@ -1210,13 +1218,13 @@ private
       if setup_question?(question)
         fields.each do |field|
           unless errors.any? { |e| fields.include?(e.attribute) }
-            errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase), category: :setup)
+            errors.add(field, I18n.t("validations.not_answered", question: question.error_display_label&.downcase), category: :setup)
           end
         end
       else
         fields.each do |field|
           unless errors.any? { |e| fields.include?(e.attribute) }
-            errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase))
+            errors.add(field, I18n.t("validations.not_answered", question: question.error_display_label&.downcase))
           end
         end
       end
@@ -1285,8 +1293,10 @@ private
       next if question.completed?(log)
 
       question.page.interruption_screen_question_ids.each do |interruption_screen_question_id|
+        next if log.form.questions.none? { |q| q.id == interruption_screen_question_id && q.page.routed_to?(log, nil) }
+
         field_mapping_for_errors[interruption_screen_question_id.to_sym]&.each do |field|
-          unless errors.any? { |e| e.options[:category] == :soft_validation && field_mapping_for_errors[interruption_screen_question_id.to_sym].include?(e.attribute) }
+          if errors.none? { |e| e.options[:category] == :soft_validation && field_mapping_for_errors[interruption_screen_question_id.to_sym].include?(e.attribute) }
             error_message = [display_title_text(question.page.title_text, log), display_informative_text(question.page.informative_text, log)].reject(&:empty?).join(". ")
             errors.add(field, message: error_message, category: :soft_validation)
           end

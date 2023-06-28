@@ -649,6 +649,28 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
       end
     end
 
+    describe "#field_68 - 74" do
+      context "when not homeless but reasonable preference for homelessness" do
+        let(:attributes) { { bulk_upload:, field_68: "1", field_69: "1", field_70: "1" } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_70]).to be_present
+        end
+      end
+
+      context "when there is a reasonable preference but none is given" do
+        let(:attributes) { { bulk_upload:, field_69: "1", field_70: nil, field_71: nil, field_72: nil, field_73: nil, field_74: nil } }
+
+        it "is not permitted" do
+          expect(parser.errors[:field_70]).to be_present
+          expect(parser.errors[:field_71]).to be_present
+          expect(parser.errors[:field_72]).to be_present
+          expect(parser.errors[:field_73]).to be_present
+          expect(parser.errors[:field_74]).to be_present
+        end
+      end
+    end
+
     describe "#field_78" do # referral
       context "when 3 ie PRP nominated by LA and owning org is LA" do
         let(:attributes) { { bulk_upload:, field_78: "3", field_111: owning_org.old_visible_id } }
@@ -775,6 +797,20 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
           expect(parser.errors.where(:field_96, category: :setup)).to be_present
           expect(parser.errors.where(:field_97, category: :setup)).to be_present
           expect(parser.errors.where(:field_98, category: :setup)).to be_present
+        end
+      end
+    end
+
+    describe "#field_103" do
+      context "when null" do
+        let(:attributes) { setup_section_params.merge({ field_103: nil }) }
+
+        it "returns an error" do
+          expect(parser.errors[:field_103]).to be_present
+        end
+
+        it "populates with correct error message" do
+          expect(parser.errors[:field_103]).to eql(["You must answer type of building"])
         end
       end
     end
@@ -937,16 +973,38 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
       end
     end
 
-    describe "#field_103" do
-      context "when null" do
-        let(:attributes) { setup_section_params.merge({ field_103: nil }) }
+    describe "#field_118, field_119 - 128" do
+      context "when no illness but illnesses answered" do
+        let(:attributes) { { bulk_upload:, field_118: "2", field_119: "1", field_120: "1", field_121: "1" } }
 
-        it "returns an error" do
-          expect(parser.errors[:field_103]).to be_present
+        it "errors added to correct fields" do
+          expect(parser.errors[:field_119]).to be_present
+          expect(parser.errors[:field_120]).to be_present
+          expect(parser.errors[:field_121]).to be_present
+          expect(parser.errors[:field_122]).not_to be_present
+          expect(parser.errors[:field_123]).not_to be_present
+          expect(parser.errors[:field_124]).not_to be_present
+          expect(parser.errors[:field_125]).not_to be_present
+          expect(parser.errors[:field_126]).not_to be_present
+          expect(parser.errors[:field_127]).not_to be_present
+          expect(parser.errors[:field_128]).not_to be_present
         end
+      end
 
-        it "populates with correct error message" do
-          expect(parser.errors[:field_103]).to eql(["You must answer type of building"])
+      context "when illness but no illnesses answered" do
+        let(:attributes) { { bulk_upload:, field_118: "1", field_119: nil, field_120: nil, field_121: nil, field_122: nil, field_123: nil, field_124: nil, field_125: nil, field_126: nil, field_127: nil, field_128: nil } }
+
+        it "errors added to correct fields" do
+          expect(parser.errors[:field_119]).to be_present
+          expect(parser.errors[:field_120]).to be_present
+          expect(parser.errors[:field_121]).to be_present
+          expect(parser.errors[:field_122]).to be_present
+          expect(parser.errors[:field_123]).to be_present
+          expect(parser.errors[:field_124]).to be_present
+          expect(parser.errors[:field_125]).to be_present
+          expect(parser.errors[:field_126]).to be_present
+          expect(parser.errors[:field_127]).to be_present
+          expect(parser.errors[:field_128]).to be_present
         end
       end
     end
@@ -990,11 +1048,23 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
         end
       end
 
+      context "when a soft validation is triggered that relates both to fields that are and are not routed to" do
+        let(:attributes) { setup_section_params.merge({ field_47: "1", field_20: "M", field_21: "M" }) }
+
+        it "adds errors to fields that are routed to" do
+          expect(parser.errors.where(:field_20, category: :soft_validation)).to be_present
+          expect(parser.errors.where(:field_21, category: :soft_validation)).to be_present
+        end
+
+        it "does not add errors to fields that are not routed to" do
+          expect(parser.errors.where(:field_22, category: :soft_validation)).not_to be_present
+          expect(parser.errors.where(:field_23, category: :soft_validation)).not_to be_present
+        end
+      end
+
       context "when soft validation is triggered and the mappings for errors are not defined" do
         let(:attributes) { setup_section_params.merge({ field_12: 22, field_35: 5 }) }
-        # rubocop:disable RSpec/AnyInstance
-        let(:mock_interruption_ids) { allow_any_instance_of(Form::Page).to receive(:interruption_screen_question_ids).and_return(%w[fake_question_id]) }
-        # rubocop:enable RSpec/AnyInstance
+        let(:mock_interruption_ids) { allow_any_instance_of(Form::Page).to receive(:interruption_screen_question_ids).and_return(%w[fake_question_id]) } # rubocop:disable RSpec/AnyInstance
 
         it "does not crash" do
           expect(parser.errors).to be_present

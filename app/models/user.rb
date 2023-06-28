@@ -20,6 +20,9 @@ class User < ApplicationRecord
   validates :password, presence: { if: :password_required? }
   validates :password, confirmation: { if: :password_required? }
   validates :password, length: { within: Devise.password_length, allow_blank: true }
+
+  after_validation :send_data_protection_confirmation_reminder, if: :is_dpo_changed?
+
   validates :organisation_id, presence: true
 
   has_paper_trail ignore: %w[last_sign_in_at
@@ -178,5 +181,15 @@ protected
   # or confirmation are being set somewhere.
   def password_required?
     !persisted? || !password.nil? || !password_confirmation.nil?
+  end
+
+private
+
+  def send_data_protection_confirmation_reminder
+    return unless FeatureToggle.new_data_protection_confirmation?
+    return unless persisted?
+    return unless is_dpo?
+
+    DataProtectionConfirmationMailer.send_confirmation_email(self).deliver_later
   end
 end

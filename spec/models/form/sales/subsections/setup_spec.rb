@@ -5,7 +5,8 @@ RSpec.describe Form::Sales::Subsections::Setup, type: :model do
 
   let(:subsection_id) { nil }
   let(:subsection_definition) { nil }
-  let(:section) { instance_double(Form::Sales::Sections::Setup) }
+  let(:section) { instance_double(Form::Sales::Sections::Setup, form: instance_double(Form, start_date:)) }
+  let(:start_date) { Time.utc(2022, 4, 1) }
 
   it "has correct section" do
     expect(setup.section).to eq(section)

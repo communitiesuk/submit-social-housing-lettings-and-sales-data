@@ -4,7 +4,7 @@ class Form::Question
                 :conditional_for, :readonly, :answer_options, :page, :check_answer_label,
                 :inferred_answers, :hidden_in_check_answers, :inferred_check_answers_value,
                 :guidance_partial, :prefix, :suffix, :requires_js, :fields_added, :derived,
-                :check_answers_card_number, :unresolved_hint_text, :question_number, :plain_label
+                :check_answers_card_number, :unresolved_hint_text, :question_number, :hide_question_number_on_page, :plain_label, :error_label
 
   module GuidancePosition
     TOP = 1
@@ -41,7 +41,9 @@ class Form::Question
       @check_answers_card_number = hsh["check_answers_card_number"] || 0
       @unresolved_hint_text = hsh["unresolved_hint_text"]
       @question_number = hsh["question_number"]
+      @hide_question_number_on_page = hsh["hide_question_number_on_page"] || false
       @plain_label = hsh["plain_label"]
+      @error_label = hsh["error_label"]
       @disable_clearing_if_not_routed_or_dynamic_answer_options = hsh["disable_clearing_if_not_routed_or_dynamic_answer_options"]
     end
   end
@@ -194,15 +196,15 @@ class Form::Question
     type == "radio" && RADIO_REFUSED_VALUE[id.to_sym]&.include?(value)
   end
 
-  def display_label
-    check_answer_label || header || id.humanize
+  def error_display_label
+    error_label || check_answer_label || header || id.humanize
   end
 
   def unanswered_error_message
     return I18n.t("validations.declaration.missing") if id == "declaration"
     return I18n.t("validations.privacynotice.missing") if id == "privacynotice"
 
-    I18n.t("validations.not_answered", question: display_label.downcase)
+    I18n.t("validations.not_answered", question: error_display_label.downcase)
   end
 
   def suffix_label(log)
@@ -241,10 +243,14 @@ class Form::Question
     selected_answer_option_is_derived?(log) || has_inferred_check_answers_value?(log)
   end
 
-  def question_number_string(conditional: false)
-    if @question_number && !conditional && form.start_date.year >= 2023
+  def question_number_string(hidden: false)
+    if @question_number && !hidden && form.start_date.year >= 2023
       "Q#{@question_number}"
     end
+  end
+
+  def answer_keys_without_dividers
+    answer_options.keys.reject { |x| x.match(/divider/) }
   end
 
 private

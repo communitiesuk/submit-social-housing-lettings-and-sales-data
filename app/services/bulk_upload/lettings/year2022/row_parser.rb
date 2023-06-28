@@ -341,6 +341,8 @@ class BulkUpload::Lettings::Year2022::RowParser
   validate :validate_dont_know_disabled_needs_conjunction, on: :after_log
   validate :validate_no_and_dont_know_disabled_needs_conjunction, on: :after_log
   validate :validate_no_housing_needs_questions_answered, on: :after_log
+  validate :validate_reasonable_preference_homeless, on: :after_log
+  validate :validate_condition_effects, on: :after_log
   validate :validate_if_log_already_exists, on: :after_log, if: -> { FeatureToggle.bulk_upload_duplicate_log_check_enabled? }
 
   validate :validate_owning_org_data_given, on: :after_log
@@ -459,6 +461,12 @@ class BulkUpload::Lettings::Year2022::RowParser
     spreadsheet_duplicate_hash.each_key do |field|
       errors.add(field, :spreadsheet_dupe, category: :setup)
     end
+  end
+
+  def startdate
+    Date.new(field_98 + 2000, field_97, field_96) if field_98.present? && field_97.present? && field_96.present?
+  rescue Date::Error
+    Date.new
   end
 
 private
@@ -682,6 +690,38 @@ private
     end
   end
 
+  def validate_reasonable_preference_homeless
+    if field_69 == 1 && homeless == 1 && field_70 == 1
+      errors.add(:field_70, I18n.t("validations.household.reasonpref.not_homeless"))
+    else
+      reason_fields = %i[field_70 field_71 field_72 field_73 field_74]
+      if field_69 == 1 && reason_fields.all? { |field| attributes[field.to_s].blank? }
+        reason_fields.each do |field|
+          errors.add(field, I18n.t("validations.not_answered", question: "reason for reasonable preference"))
+        end
+      end
+    end
+  end
+
+  def validate_condition_effects
+    illness_option_fields = %i[field_119 field_120 field_121 field_122 field_123 field_124 field_125 field_126 field_127 field_128]
+    if household_no_illness?
+      illness_option_fields.each do |field|
+        if attributes[field.to_s] == 1
+          errors.add(field, I18n.t("validations.household.condition_effects.no_choices"))
+        end
+      end
+    elsif illness_option_fields.all? { |field| attributes[field.to_s].blank? }
+      illness_option_fields.each do |field|
+        errors.add(field, I18n.t("validations.not_answered", question: "how is person affected by condition or illness"))
+      end
+    end
+  end
+
+  def household_no_illness?
+    field_118 != 1
+  end
+
   def validate_lettings_type_matches_bulk_upload
     if [1, 3, 5, 7, 9, 11].include?(field_1) && !bulk_upload.general_needs?
       errors.add(:field_1, I18n.t("validations.setup.lettype.supported_housing_mismatch"))
@@ -774,13 +814,13 @@ private
       if setup_question?(question)
         fields.each do |field|
           if errors.select { |e| fields.include?(e.attribute) }.none?
-            errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase), category: :setup)
+            errors.add(field, I18n.t("validations.not_answered", question: question.error_display_label&.downcase), category: :setup)
           end
         end
       else
         fields.each do |field|
           unless errors.any? { |e| fields.include?(e.attribute) }
-            errors.add(field, I18n.t("validations.not_answered", question: question.check_answer_label&.downcase))
+            errors.add(field, I18n.t("validations.not_answered", question: question.error_display_label&.downcase))
           end
         end
       end
@@ -793,8 +833,10 @@ private
       next if question.completed?(log)
 
       question.page.interruption_screen_question_ids.each do |interruption_screen_question_id|
+        next if log.form.questions.none? { |q| q.id == interruption_screen_question_id && q.page.routed_to?(log, nil) }
+
         field_mapping_for_errors[interruption_screen_question_id.to_sym]&.each do |field|
-          unless errors.any? { |e| e.options[:category] == :soft_validation && field_mapping_for_errors[interruption_screen_question_id.to_sym].include?(e.attribute) }
+          if errors.none? { |e| e.options[:category] == :soft_validation && field_mapping_for_errors[interruption_screen_question_id.to_sym].include?(e.attribute) }
             error_message = [display_title_text(question.page.title_text, log), display_informative_text(question.page.informative_text, log)].reject(&:empty?).join(". ")
             errors.add(field, message: error_message, category: :soft_validation)
           end
@@ -981,12 +1023,6 @@ private
       voiddate: %i[field_89 field_90 field_91],
       is_carehome: %i[field_85],
     }
-  end
-
-  def startdate
-    Date.new(field_98 + 2000, field_97, field_96) if field_98.present? && field_97.present? && field_96.present?
-  rescue Date::Error
-    Date.new
   end
 
   def renttype

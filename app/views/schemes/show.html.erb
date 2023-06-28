@@ -19,7 +19,12 @@
       <% display_scheme_attributes(@scheme, current_user).each do |attr| %>
         <%= summary_list.row do |row| %>
           <% row.key { attr[:name] } %>
-          <% row.value { details_html(attr) } %>
+          <% row.value do %>
+            <%= details_html(attr) %>
+            <% if attr[:name] == "Status" && @scheme.confirmed? && @scheme.locations.confirmed.none? %>
+              <span class="app-!-colour-muted">Add a location to complete this scheme</span>
+            <% end %>
+          <% end %>
           <% if SchemePolicy.new(current_user, @scheme).update? %>
             <% row.action(text: "Change", href: scheme_edit_name_path(scheme_id: @scheme.id)) if attr[:edit] %>
           <% end %>

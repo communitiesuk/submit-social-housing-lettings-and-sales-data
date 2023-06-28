@@ -326,12 +326,14 @@ RSpec.describe "User Features" do
         visit("users/new")
         fill_in("user[name]", with: "New User")
         fill_in("user[email]", with: "newuser@example.com")
+        fill_in("user[phone]", with: "12345678910")
         choose("user-role-data-provider-field")
         click_button("Continue")
         expect(User.find_by(
                  name: "New User",
                  email: "newuser@example.com",
                  role: "data_provider",
+                 phone: "12345678910",
                  is_dpo: false,
                  is_key_contact: false,
                )).to be_a(User)

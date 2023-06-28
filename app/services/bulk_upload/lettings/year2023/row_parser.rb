@@ -357,6 +357,8 @@ class BulkUpload::Lettings::Year2023::RowParser
   validate :validate_dont_know_disabled_needs_conjunction, on: :after_log
   validate :validate_no_and_dont_know_disabled_needs_conjunction, on: :after_log
   validate :validate_no_housing_needs_questions_answered, on: :after_log
+  validate :validate_reasonable_preference_homeless, on: :after_log
+  validate :validate_condition_effects, on: :after_log
   validate :validate_if_log_already_exists, on: :after_log, if: -> { FeatureToggle.bulk_upload_duplicate_log_check_enabled? }
 
   validate :validate_owning_org_data_given, on: :after_log
@@ -538,8 +540,10 @@ private
       next if question.completed?(log)
 
       question.page.interruption_screen_question_ids.each do |interruption_screen_question_id|
+        next if log.form.questions.none? { |q| q.id == interruption_screen_question_id && q.page.routed_to?(log, nil) }
+
         field_mapping_for_errors[interruption_screen_question_id.to_sym]&.each do |field|
-          unless errors.any? { |e| field_mapping_for_errors[interruption_screen_question_id.to_sym].include?(e.attribute) }
+          if errors.none? { |e| field_mapping_for_errors[interruption_screen_question_id.to_sym].include?(e.attribute) }
             error_message = [display_title_text(question.page.title_text, log), display_informative_text(question.page.informative_text, log)].reject(&:empty?).join(". ")
             errors.add(field, message: error_message, category: :soft_validation)
           end
@@ -617,6 +621,38 @@ private
     end
   end
 
+  def validate_reasonable_preference_homeless
+    if field_110 == 1 && field_105 == 1 && field_111 == 1
+      errors.add(:field_111, I18n.t("validations.household.reasonpref.not_homeless"))
+    else
+      reason_fields = %i[field_111 field_112 field_113 field_114 field_115]
+      if field_110 == 1 && reason_fields.all? { |field| attributes[field.to_s].blank? }
+        reason_fields.each do |field|
+          errors.add(field, I18n.t("validations.not_answered", question: "reason for reasonable preference"))
+        end
+      end
+    end
+  end
+
+  def validate_condition_effects
+    illness_option_fields = %i[field_98 field_92 field_95 field_90 field_91 field_93 field_94 field_97 field_96 field_99]
+    if household_no_illness?
+      illness_option_fields.each do |field|
+        if attributes[field.to_s] == 1
+          errors.add(field, I18n.t("validations.household.condition_effects.no_choices"))
+        end
+      end
+    elsif illness_option_fields.all? { |field| attributes[field.to_s].blank? }
+      illness_option_fields.each do |field|
+        errors.add(field, I18n.t("validations.not_answered", question: "how is person affected by condition or illness"))
+      end
+    end
+  end
+
+  def household_no_illness?
+    field_89 != 1
+  end
+
   def validate_lettings_type_matches_bulk_upload
     if [1, 3, 5, 7, 9, 11].include?(field_5) && !general_needs?
       errors.add(:field_5, I18n.t("validations.setup.lettype.supported_housing_mismatch"))
@@ -681,14 +717,14 @@ private
       if setup_question?(question)
         fields.each do |field|
           if errors.select { |e| fields.include?(e.attribute) }.none?
-            question_text = question.check_answer_label.presence || question.header.presence || "this question"
+            question_text = question.error_display_label.presence || "this question"
             errors.add(field, I18n.t("validations.not_answered", question: question_text.downcase), category: :setup)
           end
         end
       else
         fields.each do |field|
           unless errors.any? { |e| fields.include?(e.attribute) }
-            question_text = question.check_answer_label.presence || question.header.presence || "this question"
+            question_text = question.error_display_label.presence || "this question"
             errors.add(field, I18n.t("validations.not_answered", question: question_text.downcase))
           end
         end
@@ -1104,7 +1140,7 @@ private
     attributes["reason"] = field_102
     attributes["reasonother"] = field_103
     attributes["prevten"] = field_104
-    attributes["homeless"] = homeless
+    attributes["homeless"] = field_105
 
     attributes["prevloc"] = prevloc
     attributes["previous_la_known"] = previous_la_known
@@ -1372,15 +1408,6 @@ private
 
   def housingneeds_other
     return 1 if field_86 == 1
-  end
-
-  def homeless
-    case field_105
-    when 1
-      1
-    when 12
-      11
-    end
   end
 
   def prevloc
