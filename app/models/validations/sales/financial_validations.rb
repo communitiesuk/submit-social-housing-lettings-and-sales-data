@@ -76,15 +76,6 @@ module Validations::Sales::FinancialValidations
     end
   end
 
-  def validate_percentage_owned_not_too_much_if_older_person(record)
-    return unless record.old_persons_shared_ownership? && record.stairowned
-
-    if record.stairowned > 75
-      record.errors.add :stairowned, I18n.t("validations.financial.staircasing.older_person_percentage_owned_maximum_75")
-      record.errors.add :type, I18n.t("validations.financial.staircasing.older_person_percentage_owned_maximum_75")
-    end
-  end
-
   def validate_equity_in_range_for_year_and_type(record)
     return unless record.type && record.equity && record.collection_start_year
 
