@@ -391,7 +391,6 @@ en:
       cash_discount_invalid: "Cash discount must be £0 - £999,999"
       staircasing:
         percentage_bought_must_be_greater_than_percentage_owned: "Total percentage buyer now owns must be more than percentage bought in this transaction"
-        older_person_percentage_owned_maximum_75: "Percentage cannot be above 75% under Older Person's Shared Ownership"
         percentage_bought_must_be_at_least_threshold: "The minimum increase in equity while staircasing is %{threshold}%"
       monthly_leasehold_charges:
         not_zero: "Monthly leasehold charges cannot be £0 if the property has monthly charges"
@@ -601,6 +600,12 @@ en:
     purchase_price:
       title_text: "You told us the purchase price is %{value}"
       hint_text: "This is %{higher_or_lower} than we would expect"
+    staircase_owned:
+      title_text:
+        one: "You told us that the buyer now owns %{stairowned} of the property"
+        two: "You told us that the buyers now own %{stairowned} of the property"
+      hint_text: "The maximum percentage that can be owned under the Older Persons Shared Ownership scheme is 75%, unless the property was funded outside the Affordable Homes Programme.
+Make sure these answers are correct."
     retirement:
       min:
         title: "You told us this person is aged %{age} years and retired."
