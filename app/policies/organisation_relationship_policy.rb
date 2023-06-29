@@ -15,7 +15,7 @@ class OrganisationRelationshipPolicy
     remove_managing_agent?
   ].each do |method_name|
     define_method method_name do
-      return true unless user.data_provider?
+      !user.data_provider?
     end
   end
 end

@@ -297,7 +297,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
       end
 
       context "when directly accessing the page to add a stock owner" do
-        let(:request) { get "/organisations/#{organisation.id}/stock-owners/add", headers: }
+        let(:request) { get "/organisations/#{organisation.id}/stock-owners/add" }
 
         it "returns 401" do
           request
@@ -314,7 +314,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
             },
           }
         end
-        let(:request) { post "/organisations/#{organisation.id}/stock-owners", headers:, params: }
+        let(:request) { post "/organisations/#{organisation.id}/stock-owners", params: }
 
         it "returns 401" do
           request
@@ -328,7 +328,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
       context "when directly removing a stock owner" do
         let(:stock_owner) { FactoryBot.create(:organisation) }
-        let(:request) { get "/organisations/#{organisation.id}/stock-owners/remove?target_organisation_id=#{stock_owner.id}", headers: }
+        let(:request) { get "/organisations/#{organisation.id}/stock-owners/remove?target_organisation_id=#{stock_owner.id}" }
 
         before do
           FactoryBot.create(:organisation_relationship, parent_organisation: stock_owner, child_organisation: organisation)
@@ -341,7 +341,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
       end
 
       context "when directly accessing the page to add a managing agent" do
-        let(:request) { get "/organisations/#{organisation.id}/managing-agents/add", headers: }
+        let(:request) { get "/organisations/#{organisation.id}/managing-agents/add" }
 
         it "returns 401" do
           request
@@ -358,7 +358,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
             },
           }
         end
-        let(:request) { post "/organisations/#{organisation.id}/managing-agents", headers:, params: }
+        let(:request) { post "/organisations/#{organisation.id}/managing-agents", params: }
 
         it "returns 401" do
           request
@@ -372,7 +372,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
       context "when directly removing a managing agent" do
         let(:managing_agent) { FactoryBot.create(:organisation) }
-        let(:request) { get "/organisations/#{organisation.id}/managing-agents/remove?target_organisation_id=#{managing_agent.id}", headers: }
+        let(:request) { get "/organisations/#{organisation.id}/managing-agents/remove?target_organisation_id=#{managing_agent.id}" }
 
         before do
           FactoryBot.create(:organisation_relationship, parent_organisation: organisation, child_organisation: managing_agent)
