@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_21_142422) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_29_125541) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -290,6 +290,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_21_142422) do
     t.integer "carehome_charges_value_check"
     t.integer "status_cache", default: 0, null: false
     t.datetime "discarded_at"
+    t.integer "creation_method", default: 1
     t.index ["bulk_upload_id"], name: "index_lettings_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_lettings_logs_on_created_by_id"
     t.index ["location_id"], name: "index_lettings_logs_on_location_id"
@@ -600,11 +601,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_21_142422) do
     t.integer "discounted_sale_value_check"
     t.integer "student_not_child_value_check"
     t.integer "percentage_discount_value_check"
-    t.integer "combined_income_value_check"
     t.integer "buyer_livein_value_check"
     t.integer "status_cache", default: 0, null: false
+    t.integer "combined_income_value_check"
     t.datetime "discarded_at"
     t.integer "stairowned_value_check"
+    t.integer "creation_method", default: 1
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["old_id"], name: "index_sales_logs_on_old_id", unique: true
