@@ -57,7 +57,6 @@
               "questions": {
                 "sex1": {
                   "check_answers_card_number": 1,
-                  "check_answer_label": "Lead tenant’s gender identity",
                   "header": "Which of these best describes the tenant’s gender identity?",
                   "type": "radio",
                   "answer_options": {

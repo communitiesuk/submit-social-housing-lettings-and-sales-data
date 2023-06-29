@@ -11,7 +11,7 @@ class FormController < ApplicationController
       mandatory_questions_with_no_response = mandatory_questions_with_no_response(responses_for_page)
 
       if mandatory_questions_with_no_response.empty? && @log.update(responses_for_page.merge(updated_by: current_user))
-        flash[:notice] = "You have successfully updated #{@page.questions.map(&:check_answer_label).first.downcase}" if previous_interruption_screen_page_id.present?
+        flash[:notice] = "You have successfully updated #{@page.questions.map(&:check_answer_label).reject { |e| e.to_s.empty? }.first&.downcase}" if previous_interruption_screen_page_id.present?
         redirect_to(successful_redirect_path)
       else
         mandatory_questions_with_no_response.map do |question|
