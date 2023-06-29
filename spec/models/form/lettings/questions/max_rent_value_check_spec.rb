@@ -28,7 +28,7 @@ RSpec.describe Form::Lettings::Questions::MaxRentValueCheck, type: :model do
   end
 
   it "has the correct hint" do
-    expect(question.hint_text).to eq("This is higher than we would expect. Check:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the rent type is correct, for example affordable or social rent</li></ul>")
+    expect(question.hint_text).to eq("Check the following:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the rent type is correct, for example affordable or social rent</li></ul>")
   end
 
   it "has the correct answer_options" do
