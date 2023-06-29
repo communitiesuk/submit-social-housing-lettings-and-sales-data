@@ -61,6 +61,10 @@ class SalesLog < Log
     attribute_names
   end
 
+  def purchaser_code
+    purchid
+  end
+
   def form_name
     return unless saledate
 
@@ -379,12 +383,13 @@ class SalesLog < Log
     beds.nil? ? nil : [beds, LaSaleRange::MAX_BEDS].min
   end
 
-  def ownership_scheme
-    case ownershipsch
-    when 1 then "shared ownership"
-    when 2 then "discounted ownership"
-    when 3 then "outright sale"
-    end
+  def ownership_scheme(uppercase: false)
+    ownership_scheme = case ownershipsch
+                       when 1 then "shared ownership"
+                       when 2 then "discounted ownership"
+                       when 3 then "outright or other sale"
+                       end
+    uppercase ? ownership_scheme.capitalize : ownership_scheme
   end
 
   def combined_income
