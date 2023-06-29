@@ -1401,7 +1401,7 @@ RSpec.describe LocationsController, type: :request do
       let(:setup_locations) { nil }
 
       before do
-        Timecop.freeze(Time.utc(2022, 10, 10))
+        Timecop.freeze(Time.utc(2023, 10, 10))
         sign_in user
         add_deactivations
         setup_locations
@@ -1608,7 +1608,7 @@ RSpec.describe LocationsController, type: :request do
         end
       end
 
-      context "when the date is entered is before the beginning of current collection window" do
+      context "when the date entered is before the beginning of current collection window" do
         let(:params) { { location_deactivation_period: { deactivation_date_type: "other", "deactivation_date(3i)": "10", "deactivation_date(2i)": "4", "deactivation_date(1i)": "2020" } } }
 
         it "displays the new page with an error message" do
@@ -1656,9 +1656,9 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when there is an earlier open deactivation" do
-        let(:deactivation_date) { Time.zone.local(2022, 10, 10) }
-        let(:params) { { location_deactivation_period: { deactivation_date_type: "other", "deactivation_date(3i)": "8", "deactivation_date(2i)": "9", "deactivation_date(1i)": "2023" } } }
-        let(:add_deactivations) { create(:location_deactivation_period, deactivation_date: Time.zone.local(2023, 6, 5), reactivation_date: nil, location:) }
+        let(:deactivation_date) { Time.zone.local(2023, 10, 10) }
+        let(:params) { { location_deactivation_period: { deactivation_date_type: "other", "deactivation_date(3i)": "8", "deactivation_date(2i)": "9", "deactivation_date(1i)": "2024" } } }
+        let(:add_deactivations) { create(:location_deactivation_period, deactivation_date: Time.zone.local(2024, 6, 5), reactivation_date: nil, location:) }
 
         it "redirects to the location page and updates the existing deactivation period" do
           follow_redirect!
@@ -1667,14 +1667,13 @@ RSpec.describe LocationsController, type: :request do
           expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
           location.reload
           expect(location.location_deactivation_periods.count).to eq(1)
-          expect(location.location_deactivation_periods.first.deactivation_date).to eq(Time.zone.local(2023, 9, 8))
+          expect(location.location_deactivation_periods.first.deactivation_date).to eq(Time.zone.local(2024, 9, 8))
         end
       end
 
       context "when there is a later open deactivation" do
-        let(:deactivation_date) { Time.zone.local(2022, 10, 10) }
         let(:params) { { location_deactivation_period: { deactivation_date_type: "other", "deactivation_date(3i)": "8", "deactivation_date(2i)": "9", "deactivation_date(1i)": "2022" } } }
-        let(:add_deactivations) { create(:location_deactivation_period, deactivation_date: Time.zone.local(2023, 6, 5), reactivation_date: nil, location:) }
+        let(:add_deactivations) { create(:location_deactivation_period, deactivation_date: Time.zone.local(2024, 6, 5), reactivation_date: nil, location:) }
 
         it "redirects to the confirmation page" do
           follow_redirect!
@@ -1833,7 +1832,7 @@ RSpec.describe LocationsController, type: :request do
       let(:startdate) { Time.utc(2022, 9, 11) }
 
       before do
-        Timecop.freeze(Time.utc(2022, 9, 10))
+        Timecop.freeze(Time.utc(2023, 1, 10))
         sign_in user
         create(:location_deactivation_period, deactivation_date:, location:)
         location.save!
@@ -1882,13 +1881,13 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "with other future date" do
-        let(:params) { { location_deactivation_period: { reactivation_date_type: "other", "reactivation_date(3i)": "14", "reactivation_date(2i)": "12", "reactivation_date(1i)": "2022" } } }
+        let(:params) { { location_deactivation_period: { reactivation_date_type: "other", "reactivation_date(3i)": "14", "reactivation_date(2i)": "12", "reactivation_date(1i)": "2023" } } }
 
         it "redirects to the location page and displays a success banner" do
           expect(response).to redirect_to("/schemes/#{scheme.id}/locations/#{location.id}")
           follow_redirect!
           expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
-          expect(page).to have_content("#{location.name} will reactivate on 14 December 2022")
+          expect(page).to have_content("#{location.name} will reactivate on 14 December 2023")
         end
       end
 
