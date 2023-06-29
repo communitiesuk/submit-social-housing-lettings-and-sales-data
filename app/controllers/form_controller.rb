@@ -104,7 +104,7 @@ private
 
       if current_user.support? && question.id == "owning_organisation_id" && @log.managing_organisation.blank?
         owning_organisation = Organisation.find(result["owning_organisation_id"])
-        if owning_organisation.present? && !owning_organisation.has_managing_agents?
+        if owning_organisation&.managing_agents&.empty?
           result["managing_organisation_id"] = owning_organisation.id
         end
       end
