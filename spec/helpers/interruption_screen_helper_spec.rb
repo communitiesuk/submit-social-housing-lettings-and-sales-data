@@ -166,7 +166,8 @@ RSpec.describe InterruptionScreenHelper do
 
     context "when a string given" do
       it "returns the string" do
-        expect(display_informative_text("some words", lettings_log)).to eq("some words")
+        test_string = "some words"
+        expect(display_informative_text(test_string, lettings_log)).to eq(test_string)
       end
     end
   end
