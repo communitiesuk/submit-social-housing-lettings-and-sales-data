@@ -190,7 +190,7 @@ module Csv
       "voiddate" => %w[voiddate vacdays],
       "rsnvac" => %w[rsnvac newprop],
       "household_charge" => %w[household_charge nocharge],
-      "brent" => %w[brent wrent],
+      "brent" => %w[brent wrent rent_value_check],
       "scharge" => %w[scharge wscharge],
       "pscharge" => %w[pscharge wpschrge],
       "supcharg" => %w[supcharg wsupchrg],
@@ -203,6 +203,7 @@ module Csv
 
     def lettings_log_attributes
       ordered_questions = FormHandler.instance.ordered_lettings_questions_for_all_years
+      ordered_questions.reject! { |q| q.id.match?(/rent_value_check/) }
       attributes = ordered_questions.flat_map do |question|
         if question.type == "checkbox"
           question.answer_options.keys.reject { |key| key == "divider" }
