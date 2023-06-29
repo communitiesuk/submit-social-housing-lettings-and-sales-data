@@ -20,6 +20,12 @@ class Log < ApplicationRecord
   enum status: STATUS
   enum status_cache: STATUS, _prefix: true
 
+  CREATION_METHOD = {
+    "single log" => 1,
+    "bulk upload" => 2,
+  }.freeze
+  enum creation_method: CREATION_METHOD
+
   scope :visible, -> { where(status: %w[not_started in_progress completed]) }
   scope :exportable, -> { where(status: %w[not_started in_progress completed deleted]) }
 
