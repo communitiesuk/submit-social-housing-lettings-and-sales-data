@@ -18,6 +18,8 @@ module Imports
   private
 
     def update_offered(xml_doc)
+      return if meta_field_value(xml_doc, "form-name").include?("Sales")
+
       old_id = meta_field_value(xml_doc, "document-id")
       record = LettingsLog.find_by(old_id:)
 
@@ -27,7 +29,7 @@ module Imports
         else
           offered = safe_string_as_integer(xml_doc, "Q20")
           record.update!(offered:)
-          @logger.info("lettings log #{record.id}'s offered value has been set to #{offered}'")
+          @logger.info("lettings log #{record.id}'s offered value has been set to #{offered}")
         end
       else
         @logger.warn("lettings log with old id #{old_id} not found")
@@ -35,6 +37,8 @@ module Imports
     end
 
     def update_lettings_allocation(xml_doc)
+      return if meta_field_value(xml_doc, "form-name").include?("Sales")
+
       old_id = meta_field_value(xml_doc, "document-id")
       previous_status = meta_field_value(xml_doc, "status")
       record = LettingsLog.find_by(old_id:)
@@ -65,6 +69,8 @@ module Imports
     end
 
     def update_major_repairs(xml_doc)
+      return if meta_field_value(xml_doc, "form-name").include?("Sales")
+
       old_id = meta_field_value(xml_doc, "document-id")
       record = LettingsLog.find_by(old_id:)
 
@@ -88,6 +94,8 @@ module Imports
     end
 
     def update_tenant_code(xml_doc)
+      return if meta_field_value(xml_doc, "form-name").include?("Sales")
+
       old_id = meta_field_value(xml_doc, "document-id")
       record = LettingsLog.find_by(old_id:)
 
