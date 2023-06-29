@@ -17,27 +17,28 @@ describe "rake core:data_import_field", type: :task do
     allow(Configuration::PaasConfigurationService).to receive(:new).and_return(paas_config_service)
     allow(ENV).to receive(:[])
     allow(ENV).to receive(:[]).with("IMPORT_PAAS_INSTANCE").and_return(instance_name)
+    allow(Imports::LettingsLogsFieldImportService).to receive(:new).and_return(import_service)
   end
 
   context "when importing a lettings log field" do
     let(:import_service) { instance_double(Imports::LettingsLogsFieldImportService) }
-    let(:fixture_path) { "spec/fixtures/imports/lettings_logs" }
+    let(:fixture_path) { "spec/fixtures/imports/logs" }
+    let(:archive_service) { instance_double(Storage::ArchiveService) }
 
     before do
-      allow(Imports::LettingsLogsFieldImportService).to receive(:new).and_return(import_service)
       allow(import_service).to receive(:update_field)
+      allow(Storage::ArchiveService).to receive(:new).and_return(archive_service)
+      allow(archive_service).to receive(:folder_present?).with("logs").and_return(true)
     end
 
     context "and we update the tenancycode field" do
       let(:field) { "tenancycode" }
 
-      it "properly configures the storage service" do
+      it "updates the logs from the given XML file" do
         expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
-        task.invoke(field, fixture_path)
-      end
-
-      it "calls the expected update method with parameters" do
-        expect(import_service).to receive(:update_field).with(field, fixture_path)
+        expect(storage_service).to receive(:get_file_io).with("spec/fixtures/imports/logs")
+        expect(Imports::LettingsLogsFieldImportService).to receive(:new).with(archive_service)
+        expect(import_service).to receive(:update_field).with(field, "logs")
         task.invoke(field, fixture_path)
       end
     end
@@ -45,13 +46,11 @@ describe "rake core:data_import_field", type: :task do
     context "and we update the lettings_allocation fields" do
       let(:field) { "lettings_allocation" }
 
-      it "properly configures the storage service" do
+      it "updates the logs from the given XML file" do
         expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
-        task.invoke(field, fixture_path)
-      end
-
-      it "calls the expected update method with parameters" do
-        expect(import_service).to receive(:update_field).with(field, fixture_path)
+        expect(storage_service).to receive(:get_file_io).with("spec/fixtures/imports/logs")
+        expect(Imports::LettingsLogsFieldImportService).to receive(:new).with(archive_service)
+        expect(import_service).to receive(:update_field).with(field, "logs")
         task.invoke(field, fixture_path)
       end
     end
@@ -59,13 +58,23 @@ describe "rake core:data_import_field", type: :task do
     context "and we update the major repairs fields" do
       let(:field) { "major_repairs" }
 
-      it "properly configures the storage service" do
+      it "updates the logs from the given XML file" do
         expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+        expect(storage_service).to receive(:get_file_io).with("spec/fixtures/imports/logs")
+        expect(Imports::LettingsLogsFieldImportService).to receive(:new).with(archive_service)
+        expect(import_service).to receive(:update_field).with(field, "logs")
         task.invoke(field, fixture_path)
       end
+    end
 
-      it "calls the expected update method with parameters" do
-        expect(import_service).to receive(:update_field).with(field, fixture_path)
+    context "and we update the offered fields" do
+      let(:field) { "offered" }
+
+      it "updates the logs from the given XML file" do
+        expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+        expect(storage_service).to receive(:get_file_io).with("spec/fixtures/imports/logs")
+        expect(Imports::LettingsLogsFieldImportService).to receive(:new).with(archive_service)
+        expect(import_service).to receive(:update_field).with(field, "logs")
         task.invoke(field, fixture_path)
       end
     end
