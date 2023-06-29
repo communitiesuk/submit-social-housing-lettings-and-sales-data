@@ -43,8 +43,8 @@ module Csv
         codes: %i[owning_organisation name],
       },
       creation_method: {
-        labels: %i[creation_method_label],
-        codes: %i[creation_method_code],
+        labels: %i[creation_method],
+        codes: %i[creation_method_before_type_cast],
       },
     }.freeze
 

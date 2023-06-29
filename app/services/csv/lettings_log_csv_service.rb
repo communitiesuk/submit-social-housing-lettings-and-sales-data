@@ -108,8 +108,8 @@ module Csv
         codes: %i[scheme id_to_display],
       },
       creation_method: {
-        labels: %i[creation_method_label],
-        codes: %i[creation_method_code],
+        labels: %i[creation_method],
+        codes: %i[creation_method_before_type_cast],
       },
       is_dpo: {
         labels: %i[created_by is_dpo?],

@@ -178,14 +178,6 @@ class Log < ApplicationRecord
     end
   end
 
-  def creation_method_code
-    bulk_uploaded? ? 2 : 1
-  end
-
-  def creation_method_label
-    bulk_uploaded? ? "bulk upload" : "single log"
-  end
-
   def bulk_uploaded?
     bulk_upload_id.present?
   end
