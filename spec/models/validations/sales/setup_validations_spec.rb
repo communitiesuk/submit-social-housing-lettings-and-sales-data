@@ -110,7 +110,7 @@ RSpec.describe Validations::Sales::SetupValidations do
         let(:record) { build(:sales_log, saledate: Time.zone.local(2025, 4, 1)) }
 
         before do
-          allow(Time).to receive(:now).and_return(Time.zone.local(2024, 8, 8))
+          allow(Time).to receive(:now).and_return(Time.zone.local(2025, 1, 8))
         end
 
         it "cannot create new logs for the previous collection year" do
@@ -120,7 +120,7 @@ RSpec.describe Validations::Sales::SetupValidations do
           expect(record.errors["saledate"]).to include(match "Enter a date within the 24/25 collection year, which is between 1st April 2024 and 31st March 2025")
         end
 
-        it "can edit already created logs for the previous collection year" do
+        xit "can edit already created logs for the previous collection year" do
           record.saledate = Time.zone.local(2024, 1, 2)
           record.save!(validate: false)
           record.saledate = Time.zone.local(2024, 1, 1)

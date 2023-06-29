@@ -83,7 +83,7 @@ RSpec.describe "Bulk upload lettings log" do
 
   context "when not it crossover period" do
     it "shows journey with year option" do
-      Timecop.freeze(2023, 10, 1) do
+      Timecop.freeze(2024, 1, 1) do
         visit("/lettings-logs")
         expect(page).to have_link("Upload lettings logs in bulk")
         click_link("Upload lettings logs in bulk")
@@ -98,7 +98,7 @@ RSpec.describe "Bulk upload lettings log" do
 
   context "when the collection year isn't 22/23" do
     it "shows journey without the needstype" do
-      Timecop.freeze(2023, 10, 1) do
+      Timecop.freeze(2024, 1, 1) do
         visit("/lettings-logs")
         expect(page).to have_link("Upload lettings logs in bulk")
         click_link("Upload lettings logs in bulk")

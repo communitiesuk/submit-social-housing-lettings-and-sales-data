@@ -51,7 +51,7 @@ RSpec.describe LocationsHelper do
     let(:location) { FactoryBot.create(:location, startdate: nil) }
 
     before do
-      Timecop.freeze(2022, 10, 10)
+      Timecop.freeze(2023, 10, 10)
     end
 
     after do
@@ -201,7 +201,7 @@ RSpec.describe LocationsHelper do
     context "when viewing availability" do
       context "with no deactivations" do
         it "displays current collection start date as availability date if created_at is later than collection start date" do
-          location.update!(startdate: nil, created_at: Time.zone.local(2023, 8, 16))
+          location.update!(startdate: nil, created_at: Time.zone.local(2024, 1, 16))
           availability_attribute = display_location_attributes(location).find { |x| x[:name] == "Availability" }[:value]
 
           expect(availability_attribute).to eq("Active from 1 April 2023")
