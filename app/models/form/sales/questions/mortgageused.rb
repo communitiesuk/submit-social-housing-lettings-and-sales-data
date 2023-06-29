@@ -16,11 +16,15 @@ class Form::Sales::Questions::Mortgageused < ::Form::Question
     "3" => { "value" => "Don’t know" },
   }.freeze
 
-  def displayed_answer_options(_log, _user = nil)
-    {
-      "1" => { "value" => "Yes" },
-      "2" => { "value" => "No" },
-    }
+  def displayed_answer_options(log, _user = nil)
+    if log.stairowned == 100
+      ANSWER_OPTIONS
+    else
+      {
+        "1" => { "value" => "Yes" },
+        "2" => { "value" => "No" },
+      }
+    end
   end
 
   def question_number
