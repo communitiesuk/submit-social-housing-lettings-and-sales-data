@@ -27,6 +27,12 @@ RSpec.describe BulkUpload::Lettings::LogCreator do
         expect(log.bulk_upload).to eql(bulk_upload)
         expect(bulk_upload.lettings_logs).to include(log)
       end
+
+      it "sets the creation method" do
+        service.call
+
+        expect(LettingsLog.last.creation_method).to eq "bulk upload"
+      end
     end
 
     context "when a valid csv with several blank rows" do
