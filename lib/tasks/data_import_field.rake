@@ -5,12 +5,17 @@ namespace :core do
     path = args[:path]
     raise "Usage: rake core:data_import_field['field','path/to/xml_files']" if path.blank? || field.blank?
 
-    storage_service = Storage::S3Service.new(Configuration::PaasConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
-
     # We only allow a reduced list of known fields to be updatable
     case field
     when "tenancycode", "major_repairs", "lettings_allocation", "offered"
-      Imports::LettingsLogsFieldImportService.new(storage_service).update_field(field, path)
+      s3_service = Storage::S3Service.new(Configuration::PaasConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
+      archive_io = s3_service.get_file_io(path)
+      archive_service = Storage::ArchiveService.new(archive_io)
+      if archive_service.folder_present?("logs")
+        Rails.logger.info("Start importing field from folder logs")
+        Imports::LettingsLogsFieldImportService.new(archive_service).update_field(field, "logs")
+        Rails.logger.info("Imported")
+      end
     else
       raise "Field #{field} cannot be updated by data_import_field"
     end
