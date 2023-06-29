@@ -31,6 +31,6 @@ class FeatureToggle
   end
 
   def self.new_data_protection_confirmation?
-    !Rails.env.production?
+    true
   end
 end
