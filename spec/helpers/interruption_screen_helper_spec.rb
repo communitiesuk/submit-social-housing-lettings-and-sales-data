@@ -163,6 +163,12 @@ RSpec.describe InterruptionScreenHelper do
         expect(display_informative_text(informative_text_hash, lettings_log)).to eq("You said this: £12,345.00")
       end
     end
+
+    context "when a string given" do
+      it "returns the string" do
+        expect(display_informative_text("some words", lettings_log)).to eq("some words")
+      end
+    end
   end
 
   describe "display_title_text" do
