@@ -546,7 +546,7 @@ RSpec.describe FormController, type: :request do
           end
 
           before do
-            post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}?referrer=interruption_screen", params:
+            post "/lettings-logs/#{lettings_log.id}/lead-tenant-age?referrer=interruption_screen", params:
           end
 
           it "redirects back to the soft validation page" do
@@ -557,6 +557,29 @@ RSpec.describe FormController, type: :request do
             follow_redirect!
             follow_redirect!
             expect(response.body).to include("You have successfully updated lead tenant’s age")
+          end
+        end
+
+        context "when the question was accessed from an interruption screen and it has no check answers" do
+          let(:params) do
+            {
+              id: lettings_log.id,
+              lettings_log: {
+                page: "person_1_gender",
+                sex1: "F",
+                interruption_page_id: "retirement_value_check",
+              },
+            }
+          end
+
+          before do
+            post "/lettings-logs/#{lettings_log.id}/lead-tenant-gender-identity?referrer=interruption_screen", params:
+          end
+
+          it "displays a success banner without crashing" do
+            follow_redirect!
+            follow_redirect!
+            expect(response.body).to include("You have successfully updated")
           end
         end
 
