@@ -26,7 +26,7 @@ RSpec.describe Imports::SalesLogsFieldImportService do
       .and_return(sales_log_file)
   end
 
-  context "when updating bulk upload id" do
+  context "when updating creation method" do
     let(:field) { "creation_method" }
     let(:sales_log) { SalesLog.find_by(old_id: sales_log_filename) }
 
