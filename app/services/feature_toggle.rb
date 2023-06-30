@@ -1,6 +1,8 @@
 class FeatureToggle
   # Disable check on preview apps to allow for testing of future forms
   def self.saledate_collection_window_validation_enabled?
+    return true
+
     Rails.env.production? || Rails.env.test? || Rails.env.staging?
   end
 
@@ -21,7 +23,7 @@ class FeatureToggle
   end
 
   def self.force_crossover?
-    return false if Rails.env.test?
+    return false
 
     !Rails.env.production?
   end
