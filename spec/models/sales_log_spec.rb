@@ -635,7 +635,7 @@ RSpec.describe SalesLog, type: :model do
       let(:saledate) { nil }
 
       before do
-        allow(log).to receive_message_chain(:form, :end_date).and_return(Time.zone.now + 1.day)
+        allow(log).to receive_message_chain(:form, :new_logs_end_date).and_return(Time.zone.now + 1.day)
       end
 
       it "returns true" do
@@ -647,7 +647,7 @@ RSpec.describe SalesLog, type: :model do
       let(:saledate) { Time.zone.local(2020, 4, 1) }
 
       before do
-        allow(log).to receive_message_chain(:form, :end_date).and_return(Time.zone.now - 1.day)
+        allow(log).to receive_message_chain(:form, :new_logs_end_date).and_return(Time.zone.now - 1.day)
       end
 
       it "returns false" do

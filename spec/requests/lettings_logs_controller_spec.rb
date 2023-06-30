@@ -937,14 +937,14 @@ RSpec.describe LettingsLogsController, type: :request do
               completed_lettings_log.reload
 
               get "/lettings-logs/#{completed_lettings_log.id}", headers:, params: {}
-              expect(completed_lettings_log.form.end_date).to eq(Time.zone.local(2023, 7, 1))
+              expect(completed_lettings_log.form.new_logs_end_date).to eq(Time.zone.local(2023, 12, 31))
               expect(completed_lettings_log.status).to eq("completed")
               expect(page).to have_link("review and make changes to this log", href: "/lettings-logs/#{completed_lettings_log.id}/review")
             end
 
             xit "displays a closed collection window message for previous collection year logs" do
               get "/lettings-logs/#{completed_lettings_log.id}", headers:, params: {}
-              expect(completed_lettings_log.form.end_date).to eq(Time.zone.local(2022, 7, 1))
+              expect(completed_lettings_log.form.new_logs_end_date).to eq(Time.zone.local(2022, 7, 1))
               expect(completed_lettings_log.status).to eq("completed")
               expect(page).to have_content("This log is from the 2021/2022 collection window, which is now closed.")
             end
@@ -1095,6 +1095,29 @@ RSpec.describe LettingsLogsController, type: :request do
         expect(page).not_to have_link("Answer")
       end
 
+      context "when the edit end date is in the future" do
+        before do
+          Timecop.freeze(2022, 7, 5)
+        end
+
+        after do
+          Timecop.return
+        end
+
+        it "allows you to change the answers for previous collection year logs" do
+          get "/lettings-logs/#{completed_lettings_log.id}/setup/check-answers", headers: { "Accept" => "text/html" }, params: {}
+          expect(page).to have_link("Change")
+
+          get "/lettings-logs/#{completed_lettings_log.id}/income-and-benefits/check-answers", headers: { "Accept" => "text/html" }, params: {}
+          expect(page).to have_link("Change")
+        end
+
+        it "lets the user navigate to questions for previous collection year logs" do
+          get "/lettings-logs/#{completed_lettings_log.id}/needs-type", headers: { "Accept" => "text/html" }, params: {}
+          expect(response).to have_http_status(:ok)
+        end
+      end
+
       it "does not let the user navigate to questions for previous collection year logs" do
         get "/lettings-logs/#{completed_lettings_log.id}/needs-type", headers: { "Accept" => "text/html" }, params: {}
         expect(response).to redirect_to("/lettings-logs/#{completed_lettings_log.id}")
@@ -1198,7 +1221,7 @@ RSpec.describe LettingsLogsController, type: :request do
       let(:headers) { { "Accept" => "text/html" } }
 
       before do
-        allow(affected_lettings_log.form).to receive(:end_date).and_return(Time.zone.today + 1.day)
+        allow(affected_lettings_log.form).to receive(:edit_end_date).and_return(Time.zone.today + 1.day)
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in user
       end

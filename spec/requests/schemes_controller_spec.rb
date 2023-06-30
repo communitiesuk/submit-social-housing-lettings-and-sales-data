@@ -1893,7 +1893,7 @@ RSpec.describe SchemesController, type: :request do
       let(:setup_schemes) { nil }
 
       before do
-        Timecop.freeze(Time.utc(2022, 10, 10))
+        Timecop.freeze(Time.utc(2023, 10, 10))
         sign_in user
         setup_schemes
         patch "/schemes/#{scheme.id}/new-deactivation", params:

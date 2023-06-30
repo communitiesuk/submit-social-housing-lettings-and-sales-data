@@ -208,7 +208,7 @@ private
   def check_collection_period
     return unless @log
 
-    redirect_to lettings_log_path(@log) unless @log.collection_period_open?
+    redirect_to lettings_log_path(@log) unless @log.collection_period_open_for_editing?
   end
 
   CONFIRMATION_PAGE_IDS = %w[uprn_confirmation].freeze

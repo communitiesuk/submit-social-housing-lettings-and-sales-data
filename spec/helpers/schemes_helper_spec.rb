@@ -5,7 +5,7 @@ RSpec.describe SchemesHelper do
     let(:scheme) { FactoryBot.create(:scheme, created_at: Time.zone.today) }
 
     before do
-      Timecop.freeze(2022, 10, 10)
+      Timecop.freeze(2023, 1, 10)
     end
 
     after do
