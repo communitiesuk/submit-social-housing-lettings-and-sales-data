@@ -478,6 +478,28 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
+      context "when the log being imported was manually entered" do
+        it "sets the creation method correctly" do
+          lettings_log_service.send(:create_log, lettings_log_xml)
+
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+          expect(lettings_log.creation_method).to eq "single log"
+        end
+      end
+
+      context "when the log being imported was bulk uploaded" do
+        before do
+          lettings_log_xml.at_xpath("//meta:upload-method", { "meta" => "http://data.gov.uk/core/metadata" }).content = "Bulk Upload"
+        end
+
+        it "sets the creation method correctly" do
+          lettings_log_service.send(:create_log, lettings_log_xml)
+
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+          expect(lettings_log.creation_method).to eq "bulk upload"
+        end
+      end
+
       context "and income over the max" do
         before do
           lettings_log_xml.at_xpath("//xmlns:Q8Money").content = "25000"

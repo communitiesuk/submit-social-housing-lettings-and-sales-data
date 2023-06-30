@@ -25,6 +25,16 @@ module Imports
       end
     end
 
+    CREATION_METHODS = {
+      "Bulk Upload" => "bulk upload",
+      "Manual Entry" => "single log",
+    }.freeze
+
+    def get_creation_method(xml_doc)
+      upload_method = meta_field_value(xml_doc, "upload-method")
+      CREATION_METHODS[upload_method]
+    end
+
     def find_organisation_id(xml_doc, id_field)
       old_visible_id = string_or_nil(xml_doc, id_field)
       organisation = Organisation.find_by(old_visible_id:)
