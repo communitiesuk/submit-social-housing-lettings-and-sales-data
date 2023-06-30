@@ -335,7 +335,7 @@ class BulkUpload::Sales::Year2023::RowParser
 
   validates :field_7,
             presence: {
-              message: I18n.t("validations.not_answered", question: "ownership type"),
+              message: I18n.t("validations.not_answered", question: "purchase made under ownership scheme"),
               category: :setup,
             },
             on: :after_log
@@ -351,7 +351,7 @@ class BulkUpload::Sales::Year2023::RowParser
 
   validates :field_8,
             presence: {
-              message: I18n.t("validations.not_answered", question: "shared ownership type"),
+              message: I18n.t("validations.not_answered", question: "type of shared ownership sale"),
               category: :setup,
               if: :shared_ownership?,
             },
@@ -368,7 +368,7 @@ class BulkUpload::Sales::Year2023::RowParser
 
   validates :field_9,
             presence: {
-              message: I18n.t("validations.not_answered", question: "discounted ownership type"),
+              message: I18n.t("validations.not_answered", question: "type of discounted ownership sale"),
               category: :setup,
               if: :discounted_ownership?,
             },
@@ -427,7 +427,7 @@ class BulkUpload::Sales::Year2023::RowParser
 
   validates :field_13,
             presence: {
-              message: I18n.t("validations.not_answered", question: "will the buyers live in the property"),
+              message: I18n.t("validations.not_answered", question: "buyers living in property"),
               category: :setup,
               if: :outright_sale?,
             },
@@ -443,7 +443,7 @@ class BulkUpload::Sales::Year2023::RowParser
 
   validates :field_15,
             presence: {
-              message: I18n.t("validations.not_answered", question: "more than 2 buyers"),
+              message: I18n.t("validations.not_answered", question: "more than 2 joint buyers"),
               category: :setup,
               if: :joint_purchase?,
             },
