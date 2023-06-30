@@ -9,4 +9,20 @@ module ReviewHelper
       "This log is from the #{start_year}/#{start_year + 1} collection window, which is now closed."
     end
   end
+
+  def review_breadcrumbs(log)
+    class_name = log.class.model_name.human.downcase
+    if log.collection_closed_for_editing?
+      content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
+        "Logs" => url_for(log.class),
+        "Log #{log.id}" => "",
+      })
+    else
+      content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
+        "Logs" => url_for(log.class),
+        "Log #{log.id}" => url_for(log),
+        "Review #{class_name}" => "",
+      })
+    end
+  end
 end
