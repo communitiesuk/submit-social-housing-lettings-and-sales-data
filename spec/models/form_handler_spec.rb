@@ -270,5 +270,56 @@ RSpec.describe FormHandler do
       expect(result.map(&:id)).to eq %w[1 1a_deprecated 2 2a_new 3]
     end
   end
+
+  describe "#ordered_lettings_questions_for_all_years" do
+    let(:result) { described_class.instance.ordered_lettings_questions_for_all_years }
+    let(:now) { Time.zone.now }
+
+    it "returns an array of questions" do
+      section = build(:section, :with_questions, question_ids: %w[1 2 3])
+      lettings_form = FormFactory.new(year: 2936, type: "lettings")
+                              .with_sections([section])
+                              .build
+      described_class.instance.use_fake_forms!({ only_lettings: lettings_form })
+      expect(result).to(satisfy { |result| result.all? { |element| element.is_a?(Form::Question) } })
+    end
+
+    it "does not return multiple questions with the same id" do
+      first_section = build(:section, :with_questions, question_ids: %w[1 2 3])
+      second_section = build(:section, :with_questions, question_ids: %w[2 3 4 5])
+      lettings_form = FormFactory.new(year: 2936, type: "lettings")
+                              .with_sections([first_section, second_section])
+                              .build
+      described_class.instance.use_fake_forms!({ only_lettings: lettings_form })
+      expect(result.map(&:id)).to eq %w[1 2 3 4 5]
+    end
+
+    it "returns the questions in the same order as the form" do
+      first_section = build(:section, :with_questions, question_ids: %w[1 2 3])
+      second_section = build(:section, :with_questions, question_ids: %w[4 5 6])
+      lettings_form = FormFactory.new(year: 2945, type: "lettings")
+                              .with_sections([first_section, second_section])
+                              .build
+      described_class.instance.use_fake_forms!({ only_lettings: lettings_form })
+      expect(result.map(&:id)).to eq %w[1 2 3 4 5 6]
+    end
+
+    it "inserts questions from all years in their correct positions" do
+      original_section = build(:section, :with_questions, question_ids: %w[1 1a_deprecated 2 3])
+      new_section = build(:section, :with_questions, question_ids: %w[1 2 2a_new 3])
+      original_form = FormFactory.new(year: 2066, type: "lettings")
+                                 .with_sections([original_section])
+                                 .build
+      new_form = FormFactory.new(year: 2485, type: "lettings")
+                            .with_sections([new_section])
+                            .build
+      fake_forms = {
+        earlier_lettings: original_form,
+        newer_lettings: new_form,
+      }
+      described_class.instance.use_fake_forms!(fake_forms)
+      expect(result.map(&:id)).to eq %w[1 1a_deprecated 2 2a_new 3]
+    end
+  end
   # rubocop:enable RSpec/PredicateMatcher
 end

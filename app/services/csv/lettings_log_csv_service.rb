@@ -1,26 +1,32 @@
 module Csv
   class LettingsLogCsvService
-    CSV_FIELDS_TO_OMIT = %w[hhmemb net_income_value_check first_time_property_let_as_social_housing renttype needstype postcode_known is_la_inferred totchild totelder totadult net_income_known is_carehome previous_la_known is_previous_la_inferred age1_known age2_known age3_known age4_known age5_known age6_known age7_known age8_known letting_allocation_unknown details_known_2 details_known_3 details_known_4 details_known_5 details_known_6 details_known_7 details_known_8 rent_type_detail wrent wscharge wpschrge wsupchrg wtcharge wtshortfall rent_value_check old_form_id old_id retirement_value_check tshortfall_known pregnancy_value_check hhtype new_old vacdays la prevloc unresolved updated_by_id bulk_upload_id uprn_confirmed status_cache discarded_at].freeze
-
-    def initialize(user, export_type:)
+    def initialize(user:, export_type:)
       @user = user
       @export_type = export_type
-      set_csv_attributes
+      @attributes = lettings_log_attributes
     end
 
-    def to_csv
+    def prepare_csv(logs)
       CSV.generate(headers: true) do |csv|
         csv << @attributes
 
-        LettingsLog.all.find_each do |record|
-          csv << @attributes.map { |attribute| get_value(attribute, record) }
+        logs.find_each do |log|
+          csv << @attributes.map { |attribute| value(attribute, log) }
         end
       end
     end
 
   private
 
-    ATTRIBUTES_OF_RELATED_OBJECTS = {
+    CUSTOM_CALL_CHAINS = {
+      created_by: {
+        labels: %i[created_by email],
+        codes: %i[created_by email],
+      },
+      updated_by: {
+        labels: %i[updated_by email],
+        codes: %i[updated_by email],
+      },
       location_code: {
         labels: %i[location id],
         codes: %i[location id],
@@ -61,7 +67,7 @@ module Csv
         labels: %i[scheme sensitive],
         codes: %i[scheme sensitive_before_type_cast],
       },
-      scheme_type: {
+      SCHTYPE: {
         labels: %i[scheme scheme_type],
         codes: %i[scheme scheme_type_before_type_cast],
       },
@@ -97,37 +103,67 @@ module Csv
         labels: %i[scheme created_at],
         codes: %i[scheme created_at],
       },
+      scheme_code: {
+        labels: %i[scheme id_to_display],
+        codes: %i[scheme id_to_display],
+      },
+      creation_method: {
+        labels: %i[creation_method],
+        codes: %i[creation_method_before_type_cast],
+      },
+      is_dpo: {
+        labels: %i[created_by is_dpo?],
+        codes: %i[created_by is_dpo?],
+      },
     }.freeze
 
-    def get_value(attribute, record)
-      attribute = "rent_type" if attribute == "rent_type_detail" # rent_type_detail is the requested column header for rent_type, so as not to confuse with renttype
-      if ATTRIBUTES_OF_RELATED_OBJECTS.key? attribute.to_sym
-        call_chain = ATTRIBUTES_OF_RELATED_OBJECTS[attribute.to_sym][@export_type.to_sym]
-        call_chain.reduce(record) { |object, next_call| object&.send(next_call) }
-      elsif %w[la prevloc].include? attribute # for all exports we output both the codes and labels for these location attributes
-        record.send(attribute)
-      elsif %w[la_label prevloc_label].include? attribute # as above
-        attribute = attribute.remove("_label")
-        field_value = record.send(attribute)
-        get_label(field_value, attribute, record)
-      elsif %w[mrcdate startdate voiddate].include? attribute
-        record.send(attribute)&.to_formatted_s(:govuk_date)
+    FIELDS_ALWAYS_EXPORTED_AS_CODES = %w[
+      la
+      prevloc
+    ].freeze
+
+    FIELDS_ALWAYS_EXPORTED_AS_LABELS = {
+      "la_label" => "la",
+      "prevloc_label" => "prevloc",
+    }.freeze
+
+    DATE_FIELDS = %w[
+      mrcdate
+      startdate
+      voiddate
+      created_at
+      updated_at
+    ].freeze
+
+    def value(attribute, log)
+      attribute = "rent_type" if attribute == "rent_type_detail" # rent_type_detail is the requested column header for rent_type, so as not to confuse with renttype. It can be exported as label or code.
+      if CUSTOM_CALL_CHAINS.key? attribute.to_sym
+        call_chain = CUSTOM_CALL_CHAINS[attribute.to_sym][@export_type.to_sym]
+        call_chain.reduce(log) { |object, next_call| object&.public_send(next_call) }
+      elsif FIELDS_ALWAYS_EXPORTED_AS_CODES.include? attribute
+        log.public_send(attribute)
+      elsif FIELDS_ALWAYS_EXPORTED_AS_LABELS.key? attribute
+        attribute = FIELDS_ALWAYS_EXPORTED_AS_LABELS[attribute]
+        value = log.public_send(attribute)
+        get_label(value, attribute, log)
+      elsif DATE_FIELDS.include? attribute
+        log.public_send(attribute)&.iso8601
       else
-        field_value = record.send(attribute)
+        value = log.public_send(attribute)
         case @export_type
         when "codes"
-          field_value
+          value
         when "labels"
-          answer_label = get_label(field_value, attribute, record)
-          answer_label || label_if_boolean_value(field_value) || field_value
+          answer_label = get_label(value, attribute, log)
+          answer_label || label_if_boolean_value(value) || value
         end
       end
     end
 
-    def get_label(value, attribute, record)
-      record.form
-            .get_question(attribute, record)
-            &.label_from_value(value)
+    def get_label(value, attribute, log)
+      log.form
+         .get_question(attribute, log)
+         &.label_from_value(value)
     end
 
     def label_if_boolean_value(value)
@@ -135,60 +171,52 @@ module Csv
       return "No" if value == false
     end
 
-    def set_csv_attributes
-      metadata_fields = %w[id status created_at updated_at created_by_name is_dpo owning_organisation_name managing_organisation_name collection_start_year]
-      metadata_id_fields = %w[managing_organisation_id owning_organisation_id created_by_id bulk_upload_id]
-      scheme_and_location_ids = %w[scheme_id location_id]
-      scheme_attributes = %w[scheme_code scheme_service_name scheme_sensitive scheme_type scheme_registered_under_care_act scheme_owning_organisation_name scheme_primary_client_group scheme_has_other_client_group scheme_secondary_client_group scheme_support_type scheme_intended_stay scheme_created_at]
-      location_attributes = %w[location_code location_postcode location_name location_units location_type_of_unit location_mobility_type location_admin_district location_startdate]
-      intersecting_attributes = ordered_form_questions & LettingsLog.attribute_names - scheme_and_location_ids
-      remaining_attributes = LettingsLog.attribute_names - intersecting_attributes - scheme_and_location_ids
+    ATTRIBUTE_MAPPINGS = {
+      "owning_organisation_id" => %w[owning_organisation_name],
+      "managing_organisation_id" => %w[managing_organisation_name],
+      "created_by_id" => [],
+      "scheme_id" => [],
+      "location_id" => [],
+      "rent_type" => %w[renttype rent_type_detail],
+      "hb" => %w[hb has_benefits],
+      "age1" => %w[refused hhtype totchild totelder totadult age1],
+      "housingneeds_type" => %w[housingneeds_type housingneeds_a housingneeds_b housingneeds_c housingneeds_f housingneeds_g housingneeds_h],
+      "net_income_known" => %w[net_income_known incref],
+      "irproduct_other" => %w[irproduct irproduct_other lar],
+      "la" => %w[is_la_inferred la_label la],
+      "prevloc" => %w[is_previous_la_inferred prevloc_label prevloc],
+      "needstype" => %w[needstype lettype],
+      "prevten" => %w[prevten new_old],
+      "voiddate" => %w[voiddate vacdays],
+      "rsnvac" => %w[rsnvac newprop],
+      "household_charge" => %w[household_charge nocharge],
+      "brent" => %w[brent wrent rent_value_check],
+      "scharge" => %w[scharge wscharge],
+      "pscharge" => %w[pscharge wpschrge],
+      "supcharg" => %w[supcharg wsupchrg],
+      "tcharge" => %w[tcharge wtcharge],
+      "chcharge" => %w[chcharge wchchrg],
+      "tshortfall" => %w[tshortfall wtshortfall],
+    }.freeze
 
-      @attributes = (metadata_fields + intersecting_attributes + remaining_attributes - metadata_id_fields + %w[unittype_sh] + scheme_attributes + location_attributes).uniq
-      move_la_fields
-      rename_attributes
+    SUPPORT_ONLY_ATTRIBUTES = %w[hhmemb net_income_value_check first_time_property_let_as_social_housing renttype needstype postcode_known is_la_inferred totchild totelder totadult net_income_known is_carehome previous_la_known is_previous_la_inferred age1_known age2_known age3_known age4_known age5_known age6_known age7_known age8_known letting_allocation_unknown details_known_2 details_known_3 details_known_4 details_known_5 details_known_6 details_known_7 details_known_8 rent_type_detail wrent wscharge wpschrge wsupchrg wtcharge wtshortfall rent_value_check old_form_id old_id retirement_value_check tshortfall_known pregnancy_value_check hhtype new_old vacdays la prevloc updated_by_id bulk_upload_id uprn_confirmed].freeze
 
-      @attributes -= CSV_FIELDS_TO_OMIT if @user.present? && !@user.support?
-    end
-
-    def ordered_form_questions
-      downloaded_form_years = LettingsLog.all.map(&:collection_start_year).uniq.compact
-
-      if downloaded_form_years.count == 1 && downloaded_form_years[0].present?
-        form_name = FormHandler.instance.form_name_from_start_year(downloaded_form_years[0], "lettings")
-        downloaded_form_fields = FormHandler.instance.get_form(form_name).questions
-      else
-        downloaded_form_fields = FormHandler.instance.current_lettings_form.questions
-      end
-      move_checkbox_answer_options(downloaded_form_fields)
-    end
-
-    def move_checkbox_answer_options(form_questions)
-      checkboxes = form_questions.filter { |question| question.type == "checkbox" }.map { |question| { "#{question.id}": question.answer_options.keys } }
-      attributes = form_questions.map(&:id).uniq
-
-      checkboxes.each do |checkbox_question|
-        checkbox_question.values[0].each do |answer_option|
-          attributes.insert(attributes.find_index(checkbox_question.keys[0].to_s), answer_option)
+    def lettings_log_attributes
+      ordered_questions = FormHandler.instance.ordered_lettings_questions_for_all_years
+      ordered_questions.reject! { |q| q.id.match?(/rent_value_check/) }
+      attributes = ordered_questions.flat_map do |question|
+        if question.type == "checkbox"
+          question.answer_options.keys.reject { |key| key == "divider" }
+        elsif ATTRIBUTE_MAPPINGS.key? question.id
+          ATTRIBUTE_MAPPINGS[question.id]
+        else
+          question.id
         end
       end
-      attributes
-    end
-
-    def move_la_fields
-      { la: %w[is_la_inferred la_label], prevloc: %w[is_previous_la_inferred prevloc_label] }.each do |inferred_field, fields|
-        fields.each do |field|
-          @attributes.delete(field)
-          @attributes.insert(@attributes.find_index(inferred_field.to_s), field)
-        end
-      end
-    end
-
-    def rename_attributes
-      { "rent_type" => "rent_type_detail" }.each do |original_field, new_field|
-        @attributes.insert(@attributes.find_index(original_field), new_field)
-        @attributes.delete(original_field)
-      end
+      non_question_fields = %w[id status created_by is_dpo created_at updated_by updated_at creation_method old_id old_form_id collection_start_year]
+      scheme_and_location_attributes = %w[scheme_code scheme_service_name scheme_sensitive SCHTYPE scheme_registered_under_care_act scheme_owning_organisation_name scheme_primary_client_group scheme_has_other_client_group scheme_secondary_client_group scheme_support_type scheme_intended_stay scheme_created_at location_code location_postcode location_name location_units location_type_of_unit location_mobility_type location_admin_district location_startdate]
+      final_attributes = non_question_fields + attributes + scheme_and_location_attributes
+      @user.support? ? final_attributes : final_attributes - SUPPORT_ONLY_ATTRIBUTES
     end
   end
 end

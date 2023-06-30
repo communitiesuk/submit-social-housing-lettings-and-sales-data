@@ -17,13 +17,35 @@ module Csv
 
   private
 
-    ATTRIBUTES_OF_RELATED_OBJECTS = {
-      day: %i[saledate day],
-      month: %i[saledate month],
-      year: %i[saledate year],
-      is_dpo: %i[created_by is_dpo],
-      created_by_name: %i[created_by name],
-      owning_organisation_name: %i[owning_organisation name],
+    CUSTOM_CALL_CHAINS = {
+      day: {
+        labels: %i[saledate day],
+        codes: %i[saledate day],
+      },
+      month: {
+        labels: %i[saledate month],
+        codes: %i[saledate month],
+      },
+      year: {
+        labels: %i[saledate year],
+        codes: %i[saledate year],
+      },
+      is_dpo: {
+        labels: %i[created_by is_dpo],
+        codes: %i[created_by is_dpo],
+      },
+      created_by: {
+        labels: %i[created_by email],
+        codes: %i[created_by email],
+      },
+      owning_organisation_name: {
+        labels: %i[owning_organisation name],
+        codes: %i[owning_organisation name],
+      },
+      creation_method: {
+        labels: %i[creation_method],
+        codes: %i[creation_method_before_type_cast],
+      },
     }.freeze
 
     FIELDS_ALWAYS_EXPORTED_AS_CODES = %w[
@@ -42,15 +64,15 @@ module Csv
     ].freeze
 
     def value(attribute, log)
-      if ATTRIBUTES_OF_RELATED_OBJECTS.key? attribute.to_sym
-        call_chain = ATTRIBUTES_OF_RELATED_OBJECTS[attribute.to_sym]
+      if CUSTOM_CALL_CHAINS.key? attribute.to_sym
+        call_chain = CUSTOM_CALL_CHAINS[attribute.to_sym][@export_type.to_sym]
         call_chain.reduce(log) { |object, next_call| object&.public_send(next_call) }
       elsif FIELDS_ALWAYS_EXPORTED_AS_CODES.include? attribute
         log.send(attribute)
       elsif FIELDS_ALWAYS_EXPORTED_AS_LABELS.key? attribute
         attribute = FIELDS_ALWAYS_EXPORTED_AS_LABELS[attribute]
-        field_value = log.send(attribute)
-        get_label(field_value, attribute, log)
+        value = log.send(attribute)
+        get_label(value, attribute, log)
       elsif DATE_FIELDS.include? attribute
         log.send(attribute)&.iso8601
       else
@@ -84,7 +106,7 @@ module Csv
       "ppostcode_full" => %w[ppostc1 ppostc2],
       "la" => %w[la la_label],
       "prevloc" => %w[prevloc prevloc_label],
-      "created_by_id" => %w[created_by_name],
+      "created_by_id" => %w[created_by],
       "owning_organisation_id" => %w[owning_organisation_name],
     }.freeze
 

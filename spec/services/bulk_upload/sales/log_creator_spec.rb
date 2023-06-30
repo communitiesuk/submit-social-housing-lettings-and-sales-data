@@ -15,8 +15,6 @@ RSpec.describe BulkUpload::Sales::LogCreator do
         Singleton.__init__(FormHandler)
         example.run
       end
-      Timecop.return
-      Singleton.__init__(FormHandler)
     end
 
     context "when a valid csv with new log" do
@@ -35,6 +33,12 @@ RSpec.describe BulkUpload::Sales::LogCreator do
         log = SalesLog.last
         expect(log.bulk_upload).to eql(bulk_upload)
         expect(bulk_upload.sales_logs).to include(log)
+      end
+
+      it "sets the creation method" do
+        service.call
+
+        expect(SalesLog.last.creation_method).to eq "bulk upload"
       end
     end
 

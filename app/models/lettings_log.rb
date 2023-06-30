@@ -411,23 +411,6 @@ class LettingsLog < Log
     managing_organisation&.name
   end
 
-  def created_by_name
-    created_by&.name
-  end
-
-  def is_dpo
-    created_by&.is_dpo
-  end
-
-  def scheme_code
-    scheme&.id ? "S#{scheme.id}" : nil
-  end
-
-  def self.to_csv(user = nil, codes_only_export:)
-    export_type = codes_only_export ? "codes" : "labels"
-    Csv::LettingsLogCsvService.new(user, export_type:).to_csv
-  end
-
   def beds_for_la_rent_range
     return 0 if is_supported_housing?
 
