@@ -62,6 +62,10 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
             it "shows an add button" do
               expect(page).to have_button("Add")
             end
+
+            it "shows a cancel button" do
+              expect(page).to have_link("Cancel", href: "/organisations/#{organisation.id}/stock-owners")
+            end
           end
         end
 
@@ -562,7 +566,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           expect(response.body).to include("Remove")
         end
 
-        context "when adding a stock owner" do
+        context "when adding a managing agent" do
           before do
             get "/organisations/#{organisation.id}/managing-agents/add", headers:, params: {}
           end
@@ -573,6 +577,10 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
           it "shows an add button" do
             expect(page).to have_button("Add")
+          end
+
+          it "shows a cancel button" do
+            expect(page).to have_link("Cancel", href: "/organisations/#{organisation.id}/managing-agents")
           end
         end
       end
