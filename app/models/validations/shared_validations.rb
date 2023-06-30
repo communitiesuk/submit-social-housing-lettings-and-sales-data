@@ -130,11 +130,13 @@ module Validations::SharedValidations
 private
 
   def scheme_location_validation_page(field)
-    case field
-    when :startdate then "date_page"
-    when :location_id then "location_page"
-    when :scheme_id then "scheme_page"
-    end
+    field_mappings = {
+      startdate: "date_page",
+      location_id: "location_page",
+      scheme_id: "scheme_page",
+    }
+
+    field_mappings[field]
   end
 
   def person_is_partner?(relationship)
