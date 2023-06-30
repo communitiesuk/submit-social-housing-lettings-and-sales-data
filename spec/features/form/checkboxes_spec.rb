@@ -24,7 +24,7 @@ RSpec.describe "Checkboxes" do
   end
 
   before do
-    allow(lettings_log.form).to receive(:end_date).and_return(Time.zone.today + 1.day)
+    allow(lettings_log.form).to receive(:new_logs_end_date).and_return(Time.zone.today + 1.day)
     RequestHelper.stub_http_requests
     sign_in user
   end

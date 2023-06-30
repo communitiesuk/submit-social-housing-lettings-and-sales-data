@@ -5,7 +5,13 @@ module Validations::SetupValidations
   def validate_startdate_setup(record)
     return unless record.startdate && date_valid?("startdate", record)
 
-    unless record.startdate.between?(active_collection_start_date, current_collection_end_date)
+    first_collection_start_date = if record.startdate_was.present?
+                                    editable_collection_start_date
+                                  else
+                                    active_collection_start_date
+                                  end
+
+    unless record.startdate.between?(first_collection_start_date, current_collection_end_date)
       record.errors.add :startdate, startdate_validation_error_message
     end
   end
@@ -54,6 +60,14 @@ private
 
   def active_collection_start_date
     if FormHandler.instance.lettings_in_crossover_period?
+      previous_collection_start_date
+    else
+      current_collection_start_date
+    end
+  end
+
+  def editable_collection_start_date
+    if FormHandler.instance.lettings_in_edit_crossover_period?
       previous_collection_start_date
     else
       current_collection_start_date

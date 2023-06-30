@@ -31,7 +31,8 @@ RSpec.describe FormController, type: :request do
   let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
 
   before do
-    allow(fake_2021_2022_form).to receive(:end_date).and_return(Time.zone.today + 1.day)
+    allow(fake_2021_2022_form).to receive(:new_logs_end_date).and_return(Time.zone.today + 1.day)
+    allow(fake_2021_2022_form).to receive(:edit_end_date).and_return(Time.zone.today + 2.months)
     allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
   end
 
@@ -546,7 +547,7 @@ RSpec.describe FormController, type: :request do
           end
 
           before do
-            post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}?referrer=interruption_screen", params:
+            post "/lettings-logs/#{lettings_log.id}/lead-tenant-age?referrer=interruption_screen", params:
           end
 
           it "redirects back to the soft validation page" do
@@ -557,6 +558,29 @@ RSpec.describe FormController, type: :request do
             follow_redirect!
             follow_redirect!
             expect(response.body).to include("You have successfully updated lead tenant’s age")
+          end
+        end
+
+        context "when the question was accessed from an interruption screen and it has no check answers" do
+          let(:params) do
+            {
+              id: lettings_log.id,
+              lettings_log: {
+                page: "person_1_gender",
+                sex1: "F",
+                interruption_page_id: "retirement_value_check",
+              },
+            }
+          end
+
+          before do
+            post "/lettings-logs/#{lettings_log.id}/lead-tenant-gender-identity?referrer=interruption_screen", params:
+          end
+
+          it "displays a success banner without crashing" do
+            follow_redirect!
+            follow_redirect!
+            expect(response.body).to include("You have successfully updated")
           end
         end
 
@@ -763,7 +787,8 @@ RSpec.describe FormController, type: :request do
           before do
             completed_lettings_log.update!(ecstat1: 1, earnings: 130, hhmemb: 1) # we're not routing to that page, so it gets cleared?
             allow(completed_lettings_log).to receive(:net_income_soft_validation_triggered?).and_return(true)
-            allow(completed_lettings_log.form).to receive(:end_date).and_return(Time.zone.today + 1.day)
+            allow(completed_lettings_log.form).to receive(:new_logs_end_date).and_return(Time.zone.today + 1.day)
+            allow(completed_lettings_log.form).to receive(:edit_end_date).and_return(Time.zone.today + 2.months)
             post "/lettings-logs/#{completed_lettings_log.id}/net-income-value-check", params: interrupt_params, headers: headers.merge({ "HTTP_REFERER" => referrer })
           end
 

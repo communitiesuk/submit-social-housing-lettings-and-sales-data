@@ -5,7 +5,13 @@ module Validations::Sales::SetupValidations
   def validate_saledate_collection_year(record)
     return unless record.saledate && date_valid?("saledate", record) && FeatureToggle.saledate_collection_window_validation_enabled?
 
-    unless record.saledate.between?(active_collection_start_date, current_collection_end_date)
+    first_collection_start_date = if record.saledate_was.present?
+                                    editable_collection_start_date
+                                  else
+                                    active_collection_start_date
+                                  end
+
+    unless record.saledate.between?(first_collection_start_date, current_collection_end_date)
       record.errors.add :saledate, saledate_validation_error_message
     end
   end
@@ -22,6 +28,14 @@ private
 
   def active_collection_start_date
     if FormHandler.instance.sales_in_crossover_period?
+      previous_collection_start_date
+    else
+      current_collection_start_date
+    end
+  end
+
+  def editable_collection_start_date
+    if FormHandler.instance.sales_in_edit_crossover_period?
       previous_collection_start_date
     else
       current_collection_start_date

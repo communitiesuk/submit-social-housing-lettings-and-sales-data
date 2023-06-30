@@ -51,8 +51,8 @@ RSpec.describe "Lettings Log Check Answers Page" do
   let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
 
   before do
-    allow(lettings_log.form).to receive(:end_date).and_return(Time.zone.today + 1.day)
-    allow(fake_2021_2022_form).to receive(:end_date).and_return(Time.zone.today + 1.day)
+    allow(lettings_log.form).to receive(:new_logs_end_date).and_return(Time.zone.today + 1.day)
+    allow(fake_2021_2022_form).to receive(:new_logs_end_date).and_return(Time.zone.today + 1.day)
     sign_in user
     allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
   end
@@ -72,7 +72,7 @@ RSpec.describe "Lettings Log Check Answers Page" do
 
     it "has question headings based on the subsection" do
       visit("/lettings-logs/#{id}/#{subsection}/check-answers")
-      question_labels = ["Tenant code", "Lead tenant’s age", "Lead tenant’s gender identity", "Number of Household Members"]
+      question_labels = ["Tenant code", "Lead tenant’s age", "Number of Household Members"]
       question_labels.each do |label|
         expect(page).to have_content(label)
       end
@@ -91,7 +91,7 @@ RSpec.describe "Lettings Log Check Answers Page" do
     # This way only the links in the table will get picked up
     it "has an answer link for questions missing an answer" do
       visit("/lettings-logs/#{empty_lettings_log.id}/#{subsection}/check-answers?referrer=check_answers")
-      assert_selector "a", text: /Answer (?!the missing questions)/, count: 5
+      assert_selector "a", text: /Answer (?!the missing questions)/, count: 4
       assert_selector "a", text: "Change", count: 0
       expect(page).to have_link("Answer", href: "/lettings-logs/#{empty_lettings_log.id}/person-1-age?referrer=check_answers")
     end
@@ -99,7 +99,7 @@ RSpec.describe "Lettings Log Check Answers Page" do
     it "has a change link for answered questions" do
       fill_in_number_question(empty_lettings_log.id, "age1", 28, "person-1-age")
       visit("/lettings-logs/#{empty_lettings_log.id}/#{subsection}/check-answers")
-      assert_selector "a", text: /Answer (?!the missing questions)/, count: 4
+      assert_selector "a", text: /Answer (?!the missing questions)/, count: 3
       assert_selector "a", text: "Change", count: 1
       expect(page).to have_link("Change", href: "/lettings-logs/#{empty_lettings_log.id}/person-1-age?referrer=check_answers")
     end

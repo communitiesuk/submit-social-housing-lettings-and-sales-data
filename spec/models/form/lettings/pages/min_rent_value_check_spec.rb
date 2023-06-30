@@ -40,19 +40,6 @@ RSpec.describe Form::Lettings::Pages::MinRentValueCheck, type: :model do
     })
   end
 
-  it "has the correct informative_text" do
-    expect(page.informative_text).to eq({
-      "translation" => "soft_validations.rent.min_hint_text",
-      "arguments" => [
-        {
-          "key" => "field_formatted_as_currency",
-          "arguments_for_key" => "soft_min_for_period",
-          "i18n_template" => "soft_min_for_period",
-        },
-      ],
-    })
-  end
-
   it "has the correct interruption_screen_question_ids" do
     expect(page.interruption_screen_question_ids).to eq(%w[brent startdate uprn postcode_full la beds rent_type needstype])
   end

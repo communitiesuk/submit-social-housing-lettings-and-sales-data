@@ -190,7 +190,7 @@ RSpec.describe BulkUpload::Lettings::Year2022::CsvParser do
 
   describe "#wrong_template_for_year?" do
     context "when 23/24 file with 23/24 data" do
-      let(:log) { build(:lettings_log, :completed, startdate: Date.new(2023, 10, 1)) }
+      let(:log) { build(:lettings_log, :completed, startdate: Date.new(2024, 1, 1)) }
 
       before do
         file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2023_csv_row)

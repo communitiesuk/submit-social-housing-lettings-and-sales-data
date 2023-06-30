@@ -13,5 +13,5 @@ Also, if incorrect data is found during QA process, data providers might be aske
 
 To accommodate the different end dates, we will now store 3 different dates on the form definition:
 - Submission deadline (submission_deadline) - this is the date displayed at the top of a completed log in lettings and sales - "You can review and make changes to this log until 9 June 2024.". Nothing happens on this date
-- New logs end date (end_date) - no new logs for that collection year can be submitted, but logs can be edited
+- New logs end date (new_logs_end_date) - no new logs for that collection year can be submitted, but logs can be edited
 - Edit and delete logs end date (edit_end_date) - logs can no longer be edited or deleted. Completed logs can still be viewed. Materials / references to the collection year are removed.

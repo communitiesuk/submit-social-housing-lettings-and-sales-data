@@ -109,12 +109,22 @@ class FormHandler
 
   def lettings_in_crossover_period?(now: Time.zone.now)
     forms = lettings_forms.values
-    forms.count { |form| now.between?(form.start_date, form.end_date) } > 1
+    forms.count { |form| now.between?(form.start_date, form.new_logs_end_date) } > 1
+  end
+
+  def lettings_in_edit_crossover_period?(now: Time.zone.now)
+    forms = lettings_forms.values
+    forms.count { |form| now.between?(form.start_date, form.edit_end_date) } > 1
   end
 
   def sales_in_crossover_period?(now: Time.zone.now)
     forms = sales_forms.values
-    forms.count { |form| now.between?(form.start_date, form.end_date) } > 1
+    forms.count { |form| now.between?(form.start_date, form.new_logs_end_date) } > 1
+  end
+
+  def sales_in_edit_crossover_period?(now: Time.zone.now)
+    forms = sales_forms.values
+    forms.count { |form| now.between?(form.start_date, form.edit_end_date) } > 1
   end
 
   def use_fake_forms!(fake_forms = nil)

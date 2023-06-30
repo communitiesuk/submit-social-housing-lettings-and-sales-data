@@ -10,19 +10,12 @@ class Form::Lettings::Pages::MinRentValueCheck < ::Form::Page
         "i18n_template" => "brent",
       }],
     }
-    @informative_text = {
-      "translation" => "soft_validations.rent.min_hint_text",
-      "arguments" => [{
-        "key" => "field_formatted_as_currency",
-        "arguments_for_key" => "soft_min_for_period",
-        "i18n_template" => "soft_min_for_period",
-      }],
-    }
+    @informative_text = I18n.t("soft_validations.rent.informative_text", higher_or_lower: "lower")
     @check_answers_card_number = check_answers_card_number
   end
 
   def questions
-    @questions ||= [Form::Lettings::Questions::RentValueCheck.new(nil, nil, self, check_answers_card_number: @check_answers_card_number)]
+    @questions ||= [Form::Lettings::Questions::MinRentValueCheck.new(nil, nil, self, check_answers_card_number: @check_answers_card_number)]
   end
 
   def interruption_screen_question_ids

@@ -1,7 +1,3 @@
-data_export_csv:
-  cron: "every day at 4am"
-  class: "DataExportCsvJob"
-  queue: default
 data_export_xml:
   cron: "every day at 5am"
   class: "DataExportXmlJob"

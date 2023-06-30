@@ -25,7 +25,7 @@
         <% end %>
       <% end %>
 
-      <% if @log.collection_period_open? %>
+      <% if @log.collection_period_open_for_editing? %>
         <% row.action(
           text: question.action_text(@log),
           href: action_href(@log, question.page.id, referrer),
