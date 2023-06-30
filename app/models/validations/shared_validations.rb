@@ -69,7 +69,8 @@ module Validations::SharedValidations
 
     if location_inactive_status.present?
       date, scope, deactivation_date = location_inactive_status.values_at(:date, :scope, :deactivation_date)
-      record.errors.add field, :not_active, message: I18n.t("validations.setup.startdate.location.#{scope}", postcode: record.location.postcode, date:, deactivation_date:)
+      page = scheme_location_validation_page(field)
+      record.errors.add field, :not_active, message: I18n.t("validations.setup.startdate.location.#{scope}.#{page}", postcode: record.location.postcode, date:, deactivation_date:)
     end
   end
 
@@ -77,7 +78,8 @@ module Validations::SharedValidations
     scheme_inactive_status = inactive_status(record.startdate, record.scheme)
     if scheme_inactive_status.present?
       date, scope, deactivation_date = scheme_inactive_status.values_at(:date, :scope, :deactivation_date)
-      record.errors.add field, I18n.t("validations.setup.startdate.scheme.#{scope}", name: record.scheme.service_name, date:, deactivation_date:)
+      page = scheme_location_validation_page(field)
+      record.errors.add field, I18n.t("validations.setup.startdate.scheme.#{scope}.#{page}", name: record.scheme.service_name, date:, deactivation_date:)
     end
   end
 
@@ -126,6 +128,14 @@ module Validations::SharedValidations
   end
 
 private
+
+  def scheme_location_validation_page(field)
+    case field
+    when :startdate then "date_page"
+    when :location_id then "location_page"
+    when :scheme_id then "scheme_page"
+    end
+  end
 
   def person_is_partner?(relationship)
     relationship == "P"

@@ -258,7 +258,7 @@ private
 
   def reset_scheme_location!
     self.location = nil
-    if scheme && scheme.locations.active.size == 1
+    if scheme && scheme.locations.active_in_2_weeks.size == 1
       self.location = scheme.locations.first
     end
   end
