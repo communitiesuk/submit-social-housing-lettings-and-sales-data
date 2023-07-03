@@ -63,6 +63,8 @@ class LettingsLogsController < LogsController
 
     if @log.unresolved
       redirect_to(send(@log.form.unresolved_log_path, @log))
+    elsif @log.collection_closed_for_editing?
+      redirect_to review_lettings_log_path(@log)
     else
       render("logs/edit", locals: { current_user: })
     end

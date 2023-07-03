@@ -188,6 +188,10 @@ class Log < ApplicationRecord
     bulk_upload_id.present?
   end
 
+  def collection_closed_for_editing?
+    form.edit_end_date < Time.zone.now || older_than_previous_collection_year?
+  end
+
 private
 
   # Handle logs that are older than previous collection start date

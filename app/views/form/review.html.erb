@@ -1,10 +1,6 @@
 <% class_name = @log.class.model_name.human.downcase %>
 <% content_for :title, "Review #{class_name}" %>
-<% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
-  "Logs" => url_for(@log.class),
-  "Log #{@log.id}" => url_for(@log),
-  "Review #{class_name}" => "",
-}) %>
+<% review_breadcrumbs(@log) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
@@ -12,7 +8,7 @@
       <%= content_for(:title) %>
     </h1>
     <p class="govuk-body">
-      You can review and make changes to this log until <%= @log.form.submission_deadline.to_formatted_s(:govuk_date) %>.
+      <%= review_log_info_text(@log) %>
     </p>
     <% @log.form.sections.map do |section| %>
       <h2 class="govuk-heading-m"><%= section.label %></h2>

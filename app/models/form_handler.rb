@@ -115,8 +115,16 @@ class FormHandler
     in_crossover_period? ? previous_collection_start_date : current_collection_start_date
   end
 
+  def start_date_of_earliest_open_for_editing_collection_period
+    in_edit_crossover_period? ? previous_collection_start_date : current_collection_start_date
+  end
+
   def in_crossover_period?(now: Time.zone.now)
     lettings_in_crossover_period?(now:) || sales_in_crossover_period?(now:)
+  end
+
+  def in_edit_crossover_period?(now: Time.zone.now)
+    lettings_in_edit_crossover_period?(now:) || sales_in_edit_crossover_period?(now:)
   end
 
   def lettings_in_crossover_period?(now: Time.zone.now)
@@ -151,6 +159,14 @@ class FormHandler
 
   def earliest_open_collection_start_date(now: Time.zone.now)
     if in_crossover_period?(now:)
+      collection_start_date(now) - 1.year
+    else
+      collection_start_date(now)
+    end
+  end
+
+  def earliest_open_for_editing_collection_start_date(now: Time.zone.now)
+    if in_edit_crossover_period?(now:)
       collection_start_date(now) - 1.year
     else
       collection_start_date(now)

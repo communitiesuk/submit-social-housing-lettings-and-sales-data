@@ -1832,7 +1832,7 @@ RSpec.describe LocationsController, type: :request do
       let(:startdate) { Time.utc(2022, 9, 11) }
 
       before do
-        Timecop.freeze(Time.utc(2023, 1, 10))
+        Timecop.freeze(Time.utc(2023, 9, 10))
         sign_in user
         create(:location_deactivation_period, deactivation_date:, location:)
         location.save!
