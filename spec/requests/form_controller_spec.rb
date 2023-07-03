@@ -136,6 +136,32 @@ RSpec.describe FormController, type: :request do
       end
     end
 
+    context "when owning organisation doesn't have any managing agents" do
+      let(:params) do
+        {
+          id: lettings_log.id,
+          lettings_log: {
+            page: "stock_owner",
+            owning_organisation_id: managing_organisation.id,
+          },
+        }
+      end
+
+      before do
+        lettings_log.update!(owning_organisation: nil, created_by: nil, managing_organisation: nil)
+        lettings_log.reload
+      end
+
+      it "sets managing organisation to owning organisation" do
+        post "/lettings-logs/#{lettings_log.id}/stock-owner", params: params
+        expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/created-by")
+        follow_redirect!
+        lettings_log.reload
+        expect(lettings_log.owning_organisation).to eq(managing_organisation)
+        expect(lettings_log.managing_organisation).to eq(managing_organisation)
+      end
+    end
+
     context "with valid managing organisation" do
       let(:params) do
         {
