@@ -69,7 +69,7 @@ RSpec.describe "logs/edit.html.erb" do
 
     context "when lettings log is bulk uploaded" do
       let(:bulk_upload) { create(:bulk_upload, :lettings) }
-      let(:log) { create(:lettings_log, :completed, bulk_upload:) }
+      let(:log) { create(:lettings_log, :completed, bulk_upload:, creation_method: "bulk upload") }
 
       it "has link 'Back to uploaded logs'" do
         render
@@ -90,7 +90,7 @@ RSpec.describe "logs/edit.html.erb" do
 
     context "when sales log is bulk uploaded" do
       let(:bulk_upload) { create(:bulk_upload, :sales) }
-      let(:log) { create(:sales_log, :completed, bulk_upload:) }
+      let(:log) { create(:sales_log, :completed, bulk_upload:, creation_method: "bulk upload") }
 
       it "has link 'Back to uploaded logs'" do
         render

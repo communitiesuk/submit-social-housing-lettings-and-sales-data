@@ -106,7 +106,7 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
       let(:lettings_log_id) { "166fc004-392e-47a8-acb8-1c018734882b" }
 
       it "logs that bulk upload id does not need setting" do
-        lettings_log.update!(creation_method: "single log")
+        lettings_log.creation_method_single_log!
         expect(logger).to receive(:info).with(/lettings log \d+ creation method set to bulk upload/)
         expect { import_service.update_field(field, remote_folder) }.to change { lettings_log.reload.creation_method }.to "bulk upload"
       end

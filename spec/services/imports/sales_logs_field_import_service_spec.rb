@@ -57,7 +57,7 @@ RSpec.describe Imports::SalesLogsFieldImportService do
       let(:sales_log_filename) { "shared_ownership_sales_log2" }
 
       it "logs that bulk upload id does not need setting" do
-        sales_log.update!(creation_method: "single log")
+        sales_log.creation_method_single_log!
         expect(logger).to receive(:info).with(/sales log \d+ creation method set to bulk upload/)
         expect { import_service.update_field(field, remote_folder) }.to change { sales_log.reload.creation_method }.to "bulk upload"
       end

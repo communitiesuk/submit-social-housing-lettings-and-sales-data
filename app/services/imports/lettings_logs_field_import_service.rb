@@ -49,10 +49,10 @@ module Imports
         when "Manual Entry"
           @logger.info "lettings log with old id #{old_id} entered manually, no need for update"
         when "Bulk Upload"
-          if log.creation_method == "bulk upload"
+          if log.creation_method_bulk_upload?
             @logger.info "lettings log #{log.id} creation method already set to bulk upload, no need for update"
           else
-            log.update!(creation_method: "bulk upload")
+            log.creation_method_bulk_upload!
             @logger.info "lettings log #{log.id} creation method set to bulk upload"
           end
         end
