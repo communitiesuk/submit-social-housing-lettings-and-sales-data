@@ -23,7 +23,7 @@ module Validations::SetupValidations
   end
 
   def validate_location(record)
-    location_during_startdate_validation(record, :location_id)
+    location_during_startdate_validation(record)
   end
 
   def validate_scheme_has_confirmed_locations_validation(record)
@@ -35,8 +35,8 @@ module Validations::SetupValidations
   end
 
   def validate_scheme(record)
-    location_during_startdate_validation(record, :scheme_id)
-    scheme_during_startdate_validation(record, :scheme_id)
+    location_during_startdate_validation(record)
+    scheme_during_startdate_validation(record)
   end
 
   def validate_organisation(record)

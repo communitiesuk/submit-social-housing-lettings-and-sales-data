@@ -54,8 +54,8 @@ module Validations::DateValidations
       record.errors.add :startdate, I18n.t("validations.setup.startdate.ten_years_after_mrc_date")
     end
 
-    location_during_startdate_validation(record, :startdate)
-    scheme_during_startdate_validation(record, :startdate)
+    location_during_startdate_validation(record)
+    scheme_during_startdate_validation(record)
   end
 
 private

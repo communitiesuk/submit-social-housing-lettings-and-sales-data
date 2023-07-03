@@ -64,24 +64,26 @@ module Validations::SharedValidations
     end
   end
 
-  def location_during_startdate_validation(record, field)
-    location_inactive_status = inactive_status(record.startdate, record.location, field)
+  def location_during_startdate_validation(record)
+    location_inactive_status = inactive_status(record.startdate, record.location)
 
     if location_inactive_status.present?
       date, scope, deactivation_date = location_inactive_status.values_at(:date, :scope, :deactivation_date)
-      record.errors.add field, :not_active, message: I18n.t("validations.setup.startdate.location.#{scope}", postcode: record.location.postcode, date:, deactivation_date:)
+      record.errors.add :startdate, :not_active, message: I18n.t("validations.setup.startdate.location.#{scope}.startdate", postcode: record.location.postcode, date:, deactivation_date:)
+      record.errors.add :location_id, :not_active, message: I18n.t("validations.setup.startdate.location.#{scope}.location_id", postcode: record.location.postcode, date:, deactivation_date:)
     end
   end
 
-  def scheme_during_startdate_validation(record, field)
-    scheme_inactive_status = inactive_status(record.startdate, record.scheme, field)
+  def scheme_during_startdate_validation(record)
+    scheme_inactive_status = inactive_status(record.startdate, record.scheme)
     if scheme_inactive_status.present?
       date, scope, deactivation_date = scheme_inactive_status.values_at(:date, :scope, :deactivation_date)
-      record.errors.add field, I18n.t("validations.setup.startdate.scheme.#{scope}", name: record.scheme.service_name, date:, deactivation_date:)
+      record.errors.add :startdate, I18n.t("validations.setup.startdate.scheme.#{scope}.startdate", name: record.scheme.service_name, date:, deactivation_date:)
+      record.errors.add :scheme_id, I18n.t("validations.setup.startdate.scheme.#{scope}.scheme_id", name: record.scheme.service_name, date:, deactivation_date:)
     end
   end
 
-  def inactive_status(date, resource, field)
+  def inactive_status(date, resource)
     return if date.blank? || resource.blank?
 
     status = resource.status_at(date)
@@ -96,7 +98,7 @@ module Validations::SharedValidations
            when :deactivated then open_deactivation.deactivation_date
            end
 
-    scope = %i[activating_soon reactivating_soon].include?(status) ? "#{status}.#{scheme_location_validation_page(field)}" : status
+    scope = status
     { scope:, date: date&.to_formatted_s(:govuk_date), deactivation_date: closest_reactivation&.deactivation_date&.to_formatted_s(:govuk_date) }
   end
 
@@ -127,16 +129,6 @@ module Validations::SharedValidations
   end
 
 private
-
-  def scheme_location_validation_page(field)
-    field_mappings = {
-      startdate: "date_page",
-      location_id: "location_page",
-      scheme_id: "scheme_page",
-    }
-
-    field_mappings[field]
-  end
 
   def person_is_partner?(relationship)
     relationship == "P"
