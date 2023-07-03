@@ -96,7 +96,7 @@ module Validations::SharedValidations
            when :deactivated then open_deactivation.deactivation_date
            end
 
-    scope = date == :activating_soon ? "#{status}.#{status(scheme_location_validation_page(field))}" : status
+    scope = %i[activating_soon reactivating_soon].include?(status) ? "#{status}.#{scheme_location_validation_page(field)}" : status
     { scope:, date: date&.to_formatted_s(:govuk_date), deactivation_date: closest_reactivation&.deactivation_date&.to_formatted_s(:govuk_date) }
   end
 
