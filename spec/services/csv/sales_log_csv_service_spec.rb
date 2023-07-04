@@ -5,7 +5,7 @@ RSpec.describe Csv::SalesLogCsvService do
   let(:organisation) { create(:organisation) }
   let(:fixed_time) { Time.zone.local(2023, 2, 8) }
   let(:user) { create(:user, email: "billyboy@eyeKLAUD.com") }
-  let!(:log) do
+  let(:log) do
     create(
       :sales_log,
       :completed,
@@ -19,6 +19,12 @@ RSpec.describe Csv::SalesLogCsvService do
   end
   let(:service) { described_class.new(export_type: "labels") }
   let(:csv) { CSV.parse(service.prepare_csv(SalesLog.all)) }
+
+  before do
+    allow(Time).to receive(:now).and_return(fixed_time)
+    Singleton.__init__(FormHandler)
+    log
+  end
 
   it "calls the form handler to get all questions in order when initialized" do
     allow(FormHandler).to receive(:instance).and_return(form_handler_mock)
