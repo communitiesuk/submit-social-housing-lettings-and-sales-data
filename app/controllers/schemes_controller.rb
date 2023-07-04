@@ -145,7 +145,6 @@ class SchemesController < ApplicationController
         if confirm_secondary_page? page
           redirect_to scheme_secondary_client_group_path(@scheme, check_answers: "true")
         else
-          @scheme.update!(secondary_client_group: nil) if @scheme.has_other_client_group == "No"
           redirect_to scheme_check_answers_path(@scheme)
         end
       else

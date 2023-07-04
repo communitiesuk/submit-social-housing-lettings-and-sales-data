@@ -1,4 +1,6 @@
 class Scheme < ApplicationRecord
+  include DerivedVariables::SchemeVariables
+
   belongs_to :owning_organisation, class_name: "Organisation"
   has_many :locations, dependent: :delete_all
   has_many :lettings_logs, class_name: "LettingsLog", dependent: :delete_all
@@ -22,6 +24,8 @@ class Scheme < ApplicationRecord
 
   validate :validate_confirmed
   validate :validate_owning_organisation
+
+  before_validation :set_derived_fields!
 
   auto_strip_attributes :service_name
 
@@ -188,7 +192,7 @@ class Scheme < ApplicationRecord
   end
 
   def validate_confirmed
-    required_attributes = attribute_names - %w[id created_at updated_at old_id old_visible_id confirmed end_date sensitive secondary_client_group total_units has_other_client_group deactivation_date deactivation_date_type]
+    required_attributes = attribute_names - %w[id created_at updated_at old_id old_visible_id confirmed end_date sensitive secondary_client_group total_units deactivation_date deactivation_date_type]
 
     if confirmed == true
       required_attributes.any? do |attribute|
