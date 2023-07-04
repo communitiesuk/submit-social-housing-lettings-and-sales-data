@@ -105,12 +105,27 @@ RSpec.describe Form::Lettings::Pages::ManagingOrganisation, type: :model do
 
     context "when not support" do
       context "when does not hold own stock" do
-        let(:user) do
-          create(:user, :data_coordinator, organisation: create(:organisation, holds_own_stock: false))
+        let(:user) { create(:user, :data_coordinator, organisation: create(:organisation, holds_own_stock: false)) }
+
+        context "and the user's organisation is selected as owning organisation" do
+          let(:log) { create(:lettings_log, owning_organisation: user.organisation) }
+
+          it "is shown" do
+            expect(page.routed_to?(log, user)).to eq(true)
+          end
         end
 
-        it "is shown" do
-          expect(page.routed_to?(log, user)).to eq(true)
+        context "and a different than the user's organisation is selected as owning organisation" do
+          let(:stock_owner) { create(:organisation, holds_own_stock: true) }
+          let(:log) { create(:lettings_log, owning_organisation: stock_owner) }
+
+          before do
+            create(:organisation_relationship, parent_organisation: stock_owner, child_organisation: user.organisation)
+          end
+
+          it "is not shown" do
+            expect(page.routed_to?(log, user)).to eq(false)
+          end
         end
       end
 
