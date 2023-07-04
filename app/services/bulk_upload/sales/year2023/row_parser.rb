@@ -385,7 +385,7 @@ class BulkUpload::Sales::Year2023::RowParser
 
   validates :field_10,
             presence: {
-              message: I18n.t("validations.not_answered", question: "type of ouright sale"),
+              message: I18n.t("validations.not_answered", question: "type of outright sale"),
               category: :setup,
               if: :outright_sale?,
             },
