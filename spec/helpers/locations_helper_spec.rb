@@ -52,6 +52,7 @@ RSpec.describe LocationsHelper do
 
     before do
       Timecop.freeze(2023, 10, 10)
+      allow(FormHandler.instance).to receive(:lettings_in_crossover_period?).and_return(true)
     end
 
     after do

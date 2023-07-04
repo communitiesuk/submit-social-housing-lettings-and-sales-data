@@ -30,6 +30,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
   end
 
   before do
+    allow(FormHandler.instance).to receive(:lettings_in_crossover_period?).and_return(true)
     create(:organisation_relationship, parent_organisation: owning_org, child_organisation: managing_org)
 
     LaRentRange.create!(

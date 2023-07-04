@@ -34,6 +34,7 @@ RSpec.describe FormController, type: :request do
     allow(fake_2021_2022_form).to receive(:new_logs_end_date).and_return(Time.zone.today + 1.day)
     allow(fake_2021_2022_form).to receive(:edit_end_date).and_return(Time.zone.today + 2.months)
     allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
+    allow(FormHandler.instance).to receive(:lettings_in_crossover_period?).and_return(true)
   end
 
   context "when a user is not signed in" do

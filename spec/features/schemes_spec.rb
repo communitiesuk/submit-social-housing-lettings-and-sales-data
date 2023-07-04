@@ -347,6 +347,7 @@ RSpec.describe "Schemes scheme Features" do
 
       context "when I press create a new scheme" do
         before do
+          allow(FormHandler.instance).to receive(:lettings_in_crossover_period?).and_return(true)
           click_link "Create a new supported housing scheme"
         end
 
