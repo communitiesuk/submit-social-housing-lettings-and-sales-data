@@ -30,7 +30,7 @@ module Imports
       "Manual Entry" => "single log",
     }.freeze
 
-    def get_creation_method(xml_doc)
+    def creation_method(xml_doc)
       upload_method = meta_field_value(xml_doc, "upload-method")
       CREATION_METHODS[upload_method]
     end
