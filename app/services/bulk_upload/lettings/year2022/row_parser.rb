@@ -853,7 +853,7 @@ private
     if log_already_exists?
       error_message = "This is a duplicate log"
 
-      errors.add(:field_5, error_message) unless bulk_upload.needstype == 1 # location
+      errors.add(:field_5, error_message) if bulk_upload.needstype != 1 # location
       errors.add(:field_7, error_message) # tenancycode
       errors.add(:field_12, error_message) # age1
       errors.add(:field_20, error_message) # sex1
@@ -863,8 +863,8 @@ private
       errors.add(:field_97, error_message) # startdate
       errors.add(:field_98, error_message) # startdate
       errors.add(:field_100, error_message) # propcode
-      errors.add(:field_108, error_message) unless bulk_upload.needstype == 2  # postcode_full
-      errors.add(:field_109, error_message) unless bulk_upload.needstype == 2  # postcode_full
+      errors.add(:field_108, error_message) if bulk_upload.needstype != 2  # postcode_full
+      errors.add(:field_109, error_message) if bulk_upload.needstype != 2  # postcode_full
       errors.add(:field_111, error_message) # owning_organisation
     end
   end

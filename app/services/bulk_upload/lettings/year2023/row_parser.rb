@@ -857,10 +857,10 @@ private
       errors.add(:field_9, error_message) # startdate
       errors.add(:field_13, error_message) # tenancycode
       errors.add(:field_14, error_message) # propcode
-      errors.add(:field_17, error_message) unless field_4 == 1 # location
-      errors.add(:field_23, error_message) unless field_4 == 2 # postcode_full
-      errors.add(:field_24, error_message) unless field_4 == 2 # postcode_full
-      errors.add(:field_25, error_message) unless field_4 == 2 # la
+      errors.add(:field_17, error_message) if field_4 != 1 # location
+      errors.add(:field_23, error_message) if field_4 != 2 # postcode_full
+      errors.add(:field_24, error_message) if field_4 != 2 # postcode_full
+      errors.add(:field_25, error_message) if field_4 != 2 # la
       errors.add(:field_46, error_message) # age1
       errors.add(:field_47, error_message) # sex1
       errors.add(:field_50, error_message) # ecstat1
