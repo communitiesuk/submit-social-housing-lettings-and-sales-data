@@ -62,6 +62,14 @@ class SalesLogsController < LogsController
     render "logs/delete_confirmation"
   end
 
+  def delete_duplicates
+    @log = SalesLog.visible.find(params[:sales_log_id])
+    authorize @log
+
+    @duplicate_logs = SalesLog.duplicate_logs_for_organisation(current_user.organisation, @log)
+    render "logs/delete_duplicates"
+  end
+
   def download_csv
     unpaginated_filtered_logs = filter_manager.filtered_logs(current_user.sales_logs, search_term, session_filters)
 

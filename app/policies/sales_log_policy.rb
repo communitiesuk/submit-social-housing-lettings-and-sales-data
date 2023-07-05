@@ -21,4 +21,8 @@ class SalesLogPolicy
     # Data providers can only delete the log if it is assigned to them
     log.created_by == user
   end
+
+  def delete_duplicates?
+    user.support? || log.owning_organisation == user.organisation
+  end
 end
