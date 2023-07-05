@@ -450,7 +450,7 @@ class BulkUpload::Lettings::Year2022::RowParser
       "field_96",  # startdate
       "field_97",  # startdate
       "field_98",  # startdate
-      bulk_upload.needstype != 2 ? "field_100" : nil, # propcode
+      "field_100", # propcode
       bulk_upload.needstype != 2 ? "field_108" : nil, # postcode
       bulk_upload.needstype != 2 ? "field_109" : nil, # postcode
       "field_111", # owning org
