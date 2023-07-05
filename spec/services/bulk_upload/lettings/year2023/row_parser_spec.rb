@@ -334,6 +334,277 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         end
       end
 
+      context "when valid row with valid decimal (integer) field_5" do
+        before do
+          allow(FeatureToggle).to receive(:bulk_upload_duplicate_log_check_enabled?).and_return(true)
+        end
+
+        let(:attributes) do
+          {
+            bulk_upload:,
+            field_5: "1.00",
+            field_13: "123",
+            field_7: now.day.to_s,
+            field_8: now.month.to_s,
+            field_9: now.strftime("%g"),
+            field_23: "EC1N",
+            field_24: "2TD",
+            field_1: owning_org.old_visible_id,
+            field_2: managing_org.old_visible_id,
+            field_11: "1",
+            field_6: "2",
+            field_29: "2",
+            field_30: "1",
+            field_31: "1",
+            field_32: "1",
+            field_39: "2",
+            field_40: "1",
+            field_41: "2",
+            field_45: "1",
+
+            field_46: "42",
+            field_52: "41",
+            field_56: "20",
+            field_60: "18",
+            field_64: "16",
+            field_68: "14",
+            field_72: "12",
+            field_76: "20",
+
+            field_47: "F",
+            field_53: "M",
+            field_57: "F",
+            field_61: "M",
+            field_65: "F",
+            field_69: "M",
+            field_73: "F",
+            field_77: "M",
+
+            field_48: "17",
+            field_49: "18",
+
+            field_51: "P",
+            field_55: "C",
+            field_59: "X",
+            field_63: "R",
+            field_67: "C",
+            field_71: "C",
+            field_75: "X",
+
+            field_50: "1",
+            field_54: "2",
+            field_58: "6",
+            field_62: "7",
+            field_66: "8",
+            field_70: "9",
+            field_74: "0",
+            field_78: "10",
+
+            field_79: "1",
+            field_80: "4",
+            field_81: "1",
+
+            field_82: "1",
+
+            field_83: "1",
+            field_84: "0",
+            field_85: "0",
+            field_86: "1",
+            field_87: "0",
+
+            field_89: "2",
+
+            field_100: "5",
+            field_101: "2",
+            field_102: "31",
+            field_104: "3",
+            field_105: "11",
+
+            field_106: "1",
+            field_107: "EC1N",
+            field_108: "2TD",
+
+            field_110: "1",
+            field_111: "1",
+            field_112: "",
+            field_113: "1",
+            field_114: "",
+            field_115: "",
+
+            field_116: "1",
+            field_117: "2",
+            field_118: "2",
+
+            field_119: "2",
+
+            field_120: "1",
+            field_122: "2000",
+            field_121: "2",
+            field_123: "1",
+            field_124: "1",
+
+            field_126: "4",
+            field_128: "1234.56",
+            field_129: "43.32",
+            field_130: "13.14",
+            field_131: "101.11",
+            field_132: "1500.19",
+            field_133: "1",
+            field_134: "234.56",
+
+            field_27: "15",
+            field_28: "0",
+            field_33: now.day.to_s,
+            field_34: now.month.to_s,
+            field_35: now.strftime("%g"),
+
+            field_4: "1",
+
+            field_18: "100023336956",
+          }
+        end
+
+        it "returns true" do
+          expect(parser).to be_valid
+        end
+      end
+
+      context "when valid row with invalid decimal (non-integer) field_5" do
+        before do
+          allow(FeatureToggle).to receive(:bulk_upload_duplicate_log_check_enabled?).and_return(true)
+        end
+
+        let(:attributes) do
+          {
+            bulk_upload:,
+            field_5: "1.56",
+            field_13: "123",
+            field_7: now.day.to_s,
+            field_8: now.month.to_s,
+            field_9: now.strftime("%g"),
+            field_23: "EC1N",
+            field_24: "2TD",
+            field_1: owning_org.old_visible_id,
+            field_2: managing_org.old_visible_id,
+            field_11: "1",
+            field_6: "2",
+            field_29: "2",
+            field_30: "1",
+            field_31: "1",
+            field_32: "1",
+            field_39: "2",
+            field_40: "1",
+            field_41: "2",
+            field_45: "1",
+
+            field_46: "42",
+            field_52: "41",
+            field_56: "20",
+            field_60: "18",
+            field_64: "16",
+            field_68: "14",
+            field_72: "12",
+            field_76: "20",
+
+            field_47: "F",
+            field_53: "M",
+            field_57: "F",
+            field_61: "M",
+            field_65: "F",
+            field_69: "M",
+            field_73: "F",
+            field_77: "M",
+
+            field_48: "17",
+            field_49: "18",
+
+            field_51: "P",
+            field_55: "C",
+            field_59: "X",
+            field_63: "R",
+            field_67: "C",
+            field_71: "C",
+            field_75: "X",
+
+            field_50: "1",
+            field_54: "2",
+            field_58: "6",
+            field_62: "7",
+            field_66: "8",
+            field_70: "9",
+            field_74: "0",
+            field_78: "10",
+
+            field_79: "1",
+            field_80: "4",
+            field_81: "1",
+
+            field_82: "1",
+
+            field_83: "1",
+            field_84: "0",
+            field_85: "0",
+            field_86: "1",
+            field_87: "0",
+
+            field_89: "2",
+
+            field_100: "5",
+            field_101: "2",
+            field_102: "31",
+            field_104: "3",
+            field_105: "11",
+
+            field_106: "1",
+            field_107: "EC1N",
+            field_108: "2TD",
+
+            field_110: "1",
+            field_111: "1",
+            field_112: "",
+            field_113: "1",
+            field_114: "",
+            field_115: "",
+
+            field_116: "1",
+            field_117: "2",
+            field_118: "2",
+
+            field_119: "2",
+
+            field_120: "1",
+            field_122: "2000",
+            field_121: "2",
+            field_123: "1",
+            field_124: "1",
+
+            field_126: "4",
+            field_128: "1234.56",
+            field_129: "43.32",
+            field_130: "13.14",
+            field_131: "101.11",
+            field_132: "1500.19",
+            field_133: "1",
+            field_134: "234.56",
+
+            field_27: "15",
+            field_28: "0",
+            field_33: now.day.to_s,
+            field_34: now.month.to_s,
+            field_35: now.strftime("%g"),
+
+            field_4: "1",
+
+            field_18: "100023336956",
+          }
+        end
+
+        it "returns false" do
+          expect(parser).not_to be_valid
+        end
+      end
+
+
       describe "#validate_nulls" do
         context "when non-setup questions are null" do
           let(:attributes) { { bulk_upload:, field_1: "a", field_18: "", field_19: "", field_21: "" } }

@@ -698,7 +698,7 @@ private
   end
 
   def validate_data_types
-    unless attribute_set["field_5"].value_before_type_cast&.match?(/\A\d+\z/)
+    unless attribute_set["field_5"].value_before_type_cast&.match?(/^\d+\.?0*$/)
       errors.add(:field_5, I18n.t("validations.invalid_number", question: "letting type"))
     end
   end
