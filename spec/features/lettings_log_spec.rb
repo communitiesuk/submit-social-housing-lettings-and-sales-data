@@ -389,5 +389,22 @@ RSpec.describe "Lettings Log Features" do
         expect(page).to have_current_path("/lettings-logs")
       end
     end
+
+    context "when there are duplicate logs" do
+      let(:lettings_log) { create(:lettings_log, :completed, owning_organisation: user.organisation, created_by: user) }
+      let!(:duplicate_log) do
+        duplicate = lettings_log.dup
+        duplicate.id = nil
+        duplicate.save!
+        duplicate
+      end
+
+      it "is possible to delete duplicate logs" do
+        visit lettings_log_delete_duplicates_path(lettings_log)
+        click_button "Delete this log"
+        duplicate_log.reload
+        expect(duplicate_log.status).to eq("deleted")
+      end
+    end
   end
 end

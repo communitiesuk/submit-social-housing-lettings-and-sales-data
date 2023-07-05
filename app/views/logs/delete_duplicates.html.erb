@@ -1,5 +1,5 @@
 <% content_for :before_content do %>
-  <% content_for :title, "Are you sure you want to delete #{@duplicate_logs.count == 1 ? "this duplicate log" : "these duplicate logs"}?" %>
+  <% content_for :title, "Are you sure you want to delete #{@duplicate_logs.count == 1 ? 'this duplicate log' : 'these duplicate logs'}?" %>
   <%= govuk_back_link href: @log.lettings? ? lettings_logs_path(@log) : sales_logs_path(@log) %>
 <% end %>
 
@@ -16,13 +16,14 @@
     </p>
 
     <% @duplicate_logs.each do |duplicate_log| %>
-      <%= govuk_link_to "Log #{duplicate_log.id}", lettings_log_path(duplicate_log)%>
+      <%= govuk_link_to "Log #{duplicate_log.id}", lettings_log_path(duplicate_log) %>
     <% end %>
 
     <div class="govuk-button-group">
-      <%= govuk_button_to(
-        @duplicate_logs.count == 1 ? "Delete this log" : "Delete these logs"
-      ) %>
+      <%= govuk_button_to @duplicate_logs.count == 1 ? "Delete this log" : "Delete these logs",
+        delete_logs_lettings_logs_path,
+        method: "delete",
+        params: { ids: @duplicate_logs.map(&:id) } %>
       <%= govuk_button_link_to(
         "Cancel",
         @log.lettings? ? lettings_log_path(@log) : sales_log_path(@log),
