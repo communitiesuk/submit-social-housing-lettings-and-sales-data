@@ -233,8 +233,9 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
           expect(questions.map(&:id)).to eql([])
         end
 
-        context "when the log already exists in the db" do
+        context "when a general needs log already exists in the db" do
           before do
+            parser.log.needstype = 1
             parser.log.save!
             parser.instance_variable_set(:@valid, nil)
           end
@@ -249,7 +250,7 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
             error_message = "This is a duplicate log"
 
             expected_errors = {
-              field_5: [error_message], # location
+              field_7: [error_message], # tenancycode
               field_12: [error_message], # age1
               field_20: [error_message], # sex1
               field_35: [error_message], # ecstat1
@@ -263,6 +264,45 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
               field_111: [error_message], # owning_organisation
             }
             expect(parser.errors.as_json).to eq(expected_errors)
+          end
+        end
+
+        context "when a supported housing log already exists in the db" do
+          let(:scheme) { create(:scheme, :with_old_visible_id, owning_organisation: owning_org) }
+          let(:location) { create(:location, :with_old_visible_id, scheme:) }
+          let(:attributes) { valid_attributes.merge({ field_4: scheme.old_visible_id, field_5: location.old_visible_id, field_111: owning_org.old_visible_id }) }
+
+          before do
+            parser.bulk_upload.needstype = "2"
+            parser.log.save!
+            parser.instance_variable_set(:@valid, nil)
+          end
+
+          it "is not a valid row" do
+            expect(parser).not_to be_valid
+          end
+
+          it "adds an error to all the fields used to determine duplicates" do
+            parser.valid?
+
+            [
+              :field_5, # location
+              :field_7, # tenancycode
+              :field_12, # age1
+              :field_20, # sex1
+              :field_35, # ecstat1
+              :field_84, # tcharge
+              :field_96, # startdate
+              :field_97, # startdate
+              :field_98, # startdate
+              :field_100, # propcode
+              :field_111, # owning_organisation
+            ].each do |field|
+              expect(parser.errors[field]).to include("This is a duplicate log")
+            end
+
+            expect(parser.errors[:field_109]).not_to include("This is a duplicate log")
+            expect(parser.errors[:field_108]).not_to include("This is a duplicate log")
           end
         end
 

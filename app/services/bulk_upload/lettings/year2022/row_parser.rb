@@ -442,7 +442,7 @@ class BulkUpload::Lettings::Year2022::RowParser
 
   def spreadsheet_duplicate_hash
     attributes.slice(
-      "field_5",   # location
+      bulk_upload.needstype != 1 ? "field_5" : nil,   # location
       "field_12",  # age1
       "field_20",  # sex1
       "field_35",  # ecstat1
@@ -450,9 +450,9 @@ class BulkUpload::Lettings::Year2022::RowParser
       "field_96",  # startdate
       "field_97",  # startdate
       "field_98",  # startdate
-      "field_100", # propcode
-      "field_108", # postcode
-      "field_109", # postcode
+      bulk_upload.needstype != 2 ? "field_100" : nil, # propcode
+      bulk_upload.needstype != 2 ? "field_108" : nil, # postcode
+      bulk_upload.needstype != 2 ? "field_109" : nil, # postcode
       "field_111", # owning org
     )
   end
@@ -518,17 +518,17 @@ private
   end
 
   def duplicate_check_fields
-    %w[
-      startdate
-      age1
-      sex1
-      ecstat1
-      owning_organisation
-      tcharge
-      propcode
-      postcode_full
-      location
-    ]
+    [
+      "startdate",
+      "age1",
+      "sex1",
+      "ecstat1",
+      "owning_organisation",
+      "tcharge",
+      "propcode",
+      bulk_upload.needstype != 2 ? "postcode_full" : nil,
+      bulk_upload.needstype != 1 ? "location" : nil,
+    ].compact
   end
 
   def validate_location_related
@@ -853,7 +853,8 @@ private
     if log_already_exists?
       error_message = "This is a duplicate log"
 
-      errors.add(:field_5, error_message) # location
+      errors.add(:field_5, error_message) unless bulk_upload.needstype == 1 # location
+      errors.add(:field_7, error_message) # tenancycode
       errors.add(:field_12, error_message) # age1
       errors.add(:field_20, error_message) # sex1
       errors.add(:field_35, error_message) # ecstat1
@@ -862,8 +863,8 @@ private
       errors.add(:field_97, error_message) # startdate
       errors.add(:field_98, error_message) # startdate
       errors.add(:field_100, error_message) # propcode
-      errors.add(:field_108, error_message) # postcode_full
-      errors.add(:field_109, error_message) # postcode_full
+      errors.add(:field_108, error_message) unless bulk_upload.needstype == 2  # postcode_full
+      errors.add(:field_109, error_message) unless bulk_upload.needstype == 2  # postcode_full
       errors.add(:field_111, error_message) # owning_organisation
     end
   end
