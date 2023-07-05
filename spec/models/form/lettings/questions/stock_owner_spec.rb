@@ -107,15 +107,17 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
 
       let(:log) { create(:lettings_log) }
 
+      let(:non_stock_organisation) { create(:organisation, holds_own_stock: false) }
       let(:expected_opts) do
-        Organisation.all.each_with_object(options) do |organisation, hsh|
+        Organisation.where(holds_own_stock: true).each_with_object(options) do |organisation, hsh|
           hsh[organisation.id] = organisation.name
           hsh
         end
       end
 
-      it "shows all orgs" do
+      it "shows orgs where organisation holds own stock" do
         expect(question.displayed_answer_options(log, user)).to eq(expected_opts)
+        expect(question.displayed_answer_options(log, user)).not_to include(non_stock_organisation.id)
       end
     end
   end
