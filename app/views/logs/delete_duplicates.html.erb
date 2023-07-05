@@ -1,5 +1,5 @@
 <% content_for :before_content do %>
-  <% content_for :title, "Are you sure you want to delete this duplicate log?" %>
+  <% content_for :title, "Are you sure you want to delete #{@duplicate_logs.count == 1 ? "this duplicate log" : "these duplicate logs"}?" %>
   <%= govuk_back_link href: @log.lettings? ? lettings_logs_path(@log) : sales_logs_path(@log) %>
 <% end %>
 
@@ -12,7 +12,7 @@
     <%= govuk_warning_text(text: "You will not be able to undo this action.") %>
 
     <p class="govuk-body">
-      This log will be deleted:
+      <%= @duplicate_logs.count == 1 ? "This log" : "These logs" %> will be deleted:
     </p>
 
     <% @duplicate_logs.each do |duplicate_log| %>
@@ -21,7 +21,7 @@
 
     <div class="govuk-button-group">
       <%= govuk_button_to(
-        "Delete this log"
+        @duplicate_logs.count == 1 ? "Delete this log" : "Delete these logs"
       ) %>
       <%= govuk_button_link_to(
         "Cancel",

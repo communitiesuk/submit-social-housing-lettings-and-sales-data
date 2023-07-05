@@ -1695,10 +1695,41 @@ RSpec.describe LettingsLogsController, type: :request do
         expect(response).to have_http_status(:ok)
 
         expect(page).to have_content("Are you sure you want to delete this duplicate log?")
+        expect(page).to have_content("This log will be deleted:")
         expect(page).to have_button(text: "Delete this log")
         expect(page).to have_link(text: "Log #{duplicate_log.id}", href: lettings_log_path(duplicate_log.id))
         expect(page).not_to have_link(text: "Log #{id}", href: lettings_log_path(id))
         expect(page).to have_link(text: "Cancel", href: lettings_log_path(id)) # update with correct path when known
+      end
+    end
+
+    context "when there are multiple duplicate logs being deleted" do
+      let!(:duplicate_log_2) do
+        duplicate = lettings_log.dup
+        duplicate.id = nil
+        duplicate.save!
+        duplicate
+      end
+
+      it "renders page" do
+        request
+        expect(response).to have_http_status(:ok)
+
+        expect(page).to have_content("Are you sure you want to delete these duplicate logs?")
+        expect(page).to have_content("These logs will be deleted:")
+        expect(page).to have_button(text: "Delete these logs")
+        expect(page).to have_link(text: "Log #{duplicate_log.id}", href: lettings_log_path(duplicate_log.id))
+        expect(page).to have_link(text: "Log #{duplicate_log_2.id}", href: lettings_log_path(duplicate_log_2.id))
+        expect(page).to have_link(text: "Cancel", href: lettings_log_path(id)) # update with correct path when known
+      end
+    end
+
+    context "when log does not exist" do
+      let(:id) { -1 }
+
+      it "returns 404" do
+        request
+        expect(response).to have_http_status(:not_found)
       end
     end
   end
