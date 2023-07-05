@@ -263,7 +263,9 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           expect(questions.map(&:id)).to eql([])
         end
 
-        context "when the log already exists in the db" do
+        context "when a general needs log already exists in the db" do
+          let(:attributes) { { bulk_upload:, field_4: "1" } }
+
           before do
             parser.log.save!
             parser.instance_variable_set(:@valid, nil)
@@ -283,8 +285,8 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
               :field_7, # startdate
               :field_8, # startdate
               :field_9, # startdate
+              :field_13, # tenancycode
               :field_14, # propcode
-              :field_17, # location
               :field_23, # postcode_full
               :field_24, # postcode_full
               :field_25, # postcode_full
@@ -295,6 +297,47 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             ].each do |field|
               expect(parser.errors[field]).to include(error_message)
             end
+
+            expect(parser.errors[:field_17]).not_to include(error_message)
+          end
+        end
+
+        context "when a supported housing log already exists in the db" do
+          let(:attributes) { { bulk_upload:, field_4: "2" } }
+
+          before do
+            parser.log.save!
+            parser.instance_variable_set(:@valid, nil)
+          end
+
+          it "is not a valid row" do
+            expect(parser).not_to be_valid
+          end
+
+          it "adds an error to all the fields used to determine duplicates" do
+            parser.valid?
+
+            error_message = "This is a duplicate log"
+
+            [
+              :field_1, # owning_organisation
+              :field_7, # startdate
+              :field_8, # startdate
+              :field_9, # startdate
+              :field_13, # tenancycode
+              :field_14, # propcode
+              :field_17, # location
+              :field_46, # age1
+              :field_47, # sex1
+              :field_50, # ecstat1
+              :field_132, # tcharge
+            ].each do |field|
+              expect(parser.errors[field]).to include(error_message)
+            end
+
+            expect(parser.errors[:field_23]).not_to include(error_message)
+            expect(parser.errors[:field_24]).not_to include(error_message)
+            expect(parser.errors[:field_25]).not_to include(error_message)
           end
         end
 
