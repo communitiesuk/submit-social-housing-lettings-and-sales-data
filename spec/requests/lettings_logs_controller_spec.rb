@@ -1667,4 +1667,39 @@ RSpec.describe LettingsLogsController, type: :request do
       end
     end
   end
+
+  describe "GET delete-duplicates" do
+    let(:headers) { { "Accept" => "text/html" } }
+    let(:page) { Capybara::Node::Simple.new(response.body) }
+    let(:user) { create(:user, :data_coordinator) }
+    let!(:lettings_log) do
+      create(:lettings_log, :completed, owning_organisation: user.organisation)
+    end
+    let(:id) { lettings_log.id }
+    let!(:duplicate_log) do
+      duplicate = lettings_log.dup
+      duplicate.id = nil
+      duplicate.save!
+      duplicate
+    end
+    let(:request) { get "/lettings-logs/#{id}/delete-duplicates", headers: }
+
+    before do
+      allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+      sign_in user
+    end
+
+    context "when there is 1 duplicate log being deleted" do
+      it "renders page" do
+        request
+        expect(response).to have_http_status(:ok)
+
+        expect(page).to have_content("Are you sure you want to delete this duplicate log?")
+        expect(page).to have_button(text: "Delete this log")
+        expect(page).to have_link(text: "Log #{duplicate_log.id}", href: lettings_log_path(duplicate_log.id))
+        expect(page).not_to have_link(text: "Log #{id}", href: lettings_log_path(id))
+        expect(page).to have_link(text: "Cancel", href: lettings_log_path(id)) # update with correct path when known
+      end
+    end
+  end
 end

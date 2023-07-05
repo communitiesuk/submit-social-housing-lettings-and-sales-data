@@ -1,0 +1,33 @@
+<% content_for :before_content do %>
+  <% content_for :title, "Are you sure you want to delete this duplicate log?" %>
+  <%= govuk_back_link href: @log.lettings? ? lettings_logs_path(@log) : sales_logs_path(@log) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <h1 class="govuk-heading-xl">
+      <%= content_for(:title) %>
+    </h1>
+
+    <%= govuk_warning_text(text: "You will not be able to undo this action.") %>
+
+    <p class="govuk-body">
+      This log will be deleted:
+    </p>
+
+    <% @duplicate_logs.each do |duplicate_log| %>
+      <%= govuk_link_to "Log #{duplicate_log.id}", lettings_log_path(duplicate_log)%>
+    <% end %>
+
+    <div class="govuk-button-group">
+      <%= govuk_button_to(
+        "Delete this log"
+      ) %>
+      <%= govuk_button_link_to(
+        "Cancel",
+        @log.lettings? ? lettings_log_path(@log) : sales_log_path(@log),
+        secondary: true,
+      ) %>
+    </div>
+  </div>
+</div>
