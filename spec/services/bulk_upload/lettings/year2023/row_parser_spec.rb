@@ -604,7 +604,6 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         end
       end
 
-
       describe "#validate_nulls" do
         context "when non-setup questions are null" do
           let(:attributes) { { bulk_upload:, field_1: "a", field_18: "", field_19: "", field_21: "" } }
