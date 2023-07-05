@@ -1732,5 +1732,19 @@ RSpec.describe LettingsLogsController, type: :request do
         expect(response).to have_http_status(:not_found)
       end
     end
+
+    context "when user is not authorised" do
+      let(:other_user) { create(:user) }
+
+      before do
+        allow(other_user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in other_user
+      end
+
+      it "returns 404" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
   end
 end
