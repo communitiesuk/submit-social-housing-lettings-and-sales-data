@@ -143,6 +143,8 @@
     <address_line2/>
     <town_or_city>London</town_or_city>
     <county/>
+    <discarded_at/>
+    <creation_method>1</creation_method>
     <formid>{id}</formid>
     <owningorgid>{owning_org_id}</owningorgid>
     <owningorgname>DLUHC</owningorgname>
