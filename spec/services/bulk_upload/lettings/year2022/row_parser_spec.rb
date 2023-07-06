@@ -556,7 +556,7 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
         end
 
         it "returns as setup error" do
-          expect(parser.errors.where(:field_5, category: :setup).map(&:message)).to eql(["Location could not be found with provided scheme code"])
+          expect(parser.errors.where(:field_5, category: :setup).map(&:message)).to eql(["Location could not be found with the provided scheme code"])
         end
       end
     end
