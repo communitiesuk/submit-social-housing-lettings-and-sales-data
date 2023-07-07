@@ -2797,6 +2797,72 @@ RSpec.describe LettingsLog do
         expect(described_class.filter_by_user(%w[all yours], created_by_user).count).to eq(3)
       end
     end
+
+    context "when filtering duplicate logs" do
+      let(:log) { create(:lettings_log, :duplicate_general_needs) }
+      let!(:duplicate_log) { create(:lettings_log, :duplicate_general_needs) }
+      let!(:deleted_duplicate_log) { create(:lettings_log, :duplicate_general_needs, discarded_at: Time.zone.now) }
+      let!(:different_start_date_log) { create(:lettings_log, :duplicate_general_needs, startdate: Time.zone.tomorrow) }
+      let!(:different_age1) { create(:lettings_log, :duplicate_general_needs, age1: 50) }
+      let!(:different_sex1) { create(:lettings_log, :duplicate_general_needs, sex1: "F") }
+      let!(:different_ecstat1) { create(:lettings_log, :duplicate_general_needs, ecstat1: 1) }
+      let!(:different_tcharge) { create(:lettings_log, :duplicate_general_needs, brent: 100) }
+      let!(:different_propcode) { create(:lettings_log, :duplicate_general_needs, propcode: "different") }
+      let!(:different_tenancycode) { create(:lettings_log, :duplicate_general_needs, tenancycode: "different") }
+      let!(:different_postcode_full) { create(:lettings_log, :duplicate_general_needs, postcode_full: "B1 1AA") }
+
+      before do
+        create(:lettings_log, :in_progress)
+      end
+
+      it "returns all duplicate logs for given log" do
+        expect(described_class.duplicate_logs(log).count).to eq(1)
+      end
+
+      it "returns duplicate log" do
+        expect(described_class.duplicate_logs(log)).to include(duplicate_log)
+      end
+
+      it "does not return deleted duplicate logs" do
+        expect(described_class.duplicate_logs(log)).not_to include(deleted_duplicate_log)
+      end
+
+      it "does not return the given log" do
+        expect(described_class.duplicate_logs(log)).not_to include(log)
+      end
+
+      it "does not return a log with a different start date" do
+        expect(described_class.duplicate_logs(log)).not_to include(different_start_date_log)
+      end
+
+      it "does not return a log with a different age1" do
+        expect(described_class.duplicate_logs(log)).not_to include(different_age1)
+      end
+
+      it "does not return a log with a different sex1" do
+        expect(described_class.duplicate_logs(log)).not_to include(different_sex1)
+      end
+
+      it "does not return a log with a different ecstat1" do
+        expect(described_class.duplicate_logs(log)).not_to include(different_ecstat1)
+      end
+
+      it "does not return a log with a different tcharge" do
+        expect(described_class.duplicate_logs(log)).not_to include(different_tcharge)
+      end
+
+      it "does not return a log with a different propcode" do
+        expect(described_class.duplicate_logs(log)).not_to include(different_propcode)
+      end
+
+      it "does not return a log with a different tenancycode" do
+        expect(described_class.duplicate_logs(log)).not_to include(different_tenancycode)
+      end
+
+      it "does not return a log with a different postcode_full" do
+        expect(described_class.duplicate_logs(log)).not_to include(different_postcode_full)
+      end
+    end
   end
 
   describe "#retirement_age_for_person" do
