@@ -69,16 +69,4 @@ private
       personalisation(record, token, url, username:),
     )
   end
-
-  # def unlock_instructions(record, token, opts = {})
-  #   super
-  # end
-  #
-  # def email_changed(record, opts = {})
-  #   super
-  # end
-  #
-  # def password_change(record, opts = {})
-  #   super
-  # end
 end

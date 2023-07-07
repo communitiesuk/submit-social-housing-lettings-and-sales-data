@@ -46,6 +46,7 @@ class UsersController < ApplicationController
   end
 
   def update
+    @user.skip_reconfirmation!
     if @user.update(user_params)
       if @user == current_user
         bypass_sign_in @user
