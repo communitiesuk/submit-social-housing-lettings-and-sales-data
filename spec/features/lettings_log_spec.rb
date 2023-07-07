@@ -404,6 +404,8 @@ RSpec.describe "Lettings Log Features" do
         click_button "Delete this log"
         duplicate_log.reload
         expect(duplicate_log.status).to eq("deleted")
+        expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+        expect(page).to have_content("Log #{duplicate_log.id} has been deleted")
       end
     end
   end

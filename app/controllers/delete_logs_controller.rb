@@ -26,8 +26,12 @@ class DeleteLogsController < ApplicationController
   def discard_lettings_logs
     logs = LettingsLog.find(params.require(:ids))
     discard logs
-
-    redirect_to lettings_logs_path, notice: I18n.t("notification.logs_deleted", count: logs.count)
+    if request.referer&.include?("delete-duplicates")
+      log_ids = logs.map { |log| "Log #{log.id}" }.join(", ")
+      redirect_to lettings_logs_path, notice: I18n.t("notification.duplicate_logs_deleted", count: logs.count, log_ids:)
+    else
+      redirect_to lettings_logs_path, notice: I18n.t("notification.logs_deleted", count: logs.count)
+    end
   end
 
   def delete_sales_logs
