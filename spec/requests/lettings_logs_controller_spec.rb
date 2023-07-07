@@ -1676,12 +1676,6 @@ RSpec.describe LettingsLogsController, type: :request do
       create(:lettings_log, :completed, owning_organisation: user.organisation)
     end
     let(:id) { lettings_log.id }
-    let!(:duplicate_log) do
-      duplicate = lettings_log.dup
-      duplicate.id = nil
-      duplicate.save!
-      duplicate
-    end
     let(:request) { get "/lettings-logs/#{id}/delete-duplicates", headers: }
 
     before do
@@ -1689,7 +1683,21 @@ RSpec.describe LettingsLogsController, type: :request do
       sign_in user
     end
 
+    context "when there are no duplicate logs" do
+      it "renders page not found" do
+        request
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
     context "when there is 1 duplicate log being deleted" do
+      let!(:duplicate_log) do
+        duplicate = lettings_log.dup
+        duplicate.id = nil
+        duplicate.save!
+        duplicate
+      end
+
       it "renders page" do
         request
         expect(response).to have_http_status(:ok)
@@ -1704,6 +1712,12 @@ RSpec.describe LettingsLogsController, type: :request do
     end
 
     context "when there are multiple duplicate logs being deleted" do
+      let!(:duplicate_log) do
+        duplicate = lettings_log.dup
+        duplicate.id = nil
+        duplicate.save!
+        duplicate
+      end
       let!(:duplicate_log_2) do
         duplicate = lettings_log.dup
         duplicate.id = nil

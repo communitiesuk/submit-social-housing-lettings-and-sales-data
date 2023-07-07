@@ -93,7 +93,11 @@ class LettingsLogsController < LogsController
     authorize @log
 
     @duplicate_logs = LettingsLog.duplicate_logs_for_organisation(current_user.organisation, @log)
-    render "logs/delete_duplicates"
+    if @duplicate_logs.empty?
+      render_not_found
+    else
+      render "logs/delete_duplicates"
+    end
   end
 
   def download_csv
