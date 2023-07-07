@@ -304,7 +304,7 @@ RSpec.describe UsersController, type: :request do
 
           it "allows changing email but not dpo or key_contact" do
             user.reload
-            expect(user.unconfirmed_email).to eq(new_email)
+            expect(user.email).to eq(new_email)
             expect(user.is_data_protection_officer?).to be false
             expect(user.is_key_contact?).to be false
           end
@@ -702,7 +702,7 @@ RSpec.describe UsersController, type: :request do
 
           it "allows changing email and dpo" do
             user.reload
-            expect(user.unconfirmed_email).to eq(new_email)
+            expect(user.email).to eq(new_email)
             expect(user.is_data_protection_officer?).to be true
             expect(user.is_key_contact?).to be true
           end
@@ -749,7 +749,7 @@ RSpec.describe UsersController, type: :request do
             it "allows changing email, dpo, key_contact" do
               patch "/users/#{other_user.id}", headers: headers, params: params
               other_user.reload
-              expect(other_user.unconfirmed_email).to eq(new_email)
+              expect(other_user.email).to eq(new_email)
               expect(other_user.is_data_protection_officer?).to be true
               expect(other_user.is_key_contact?).to be true
             end
@@ -1454,14 +1454,14 @@ RSpec.describe UsersController, type: :request do
           it "allows changing email and dpo" do
             request
             user.reload
-            expect(user.unconfirmed_email).to eq(new_email)
+            expect(user.email).to eq(new_email)
             expect(user.is_data_protection_officer?).to be true
             expect(user.is_key_contact?).to be true
           end
 
-          it "sends a confirmation email to both emails" do
-            expect(notify_client).to receive(:send_email).with(email_address: new_email, template_id: User::CONFIRMABLE_TEMPLATE_ID, personalisation:).once
-            expect(notify_client).to receive(:send_email).with(email_address: user.email, template_id: User::CONFIRMABLE_TEMPLATE_ID, personalisation:).once
+          it "does not send a confirmation email to either email" do
+            expect(notify_client).not_to receive(:send_email).with(email_address: new_email, template_id: User::CONFIRMABLE_TEMPLATE_ID, personalisation:)
+            expect(notify_client).not_to receive(:send_email).with(email_address: user.email, template_id: User::CONFIRMABLE_TEMPLATE_ID, personalisation:)
             request
           end
         end
@@ -1507,7 +1507,7 @@ RSpec.describe UsersController, type: :request do
             it "allows changing email, dpo, key_contact" do
               patch "/users/#{other_user.id}", headers: headers, params: params
               other_user.reload
-              expect(other_user.unconfirmed_email).to eq(new_email)
+              expect(other_user.email).to eq(new_email)
               expect(other_user.is_data_protection_officer?).to be true
               expect(other_user.is_key_contact?).to be true
             end
@@ -1564,7 +1564,7 @@ RSpec.describe UsersController, type: :request do
               it "allows changing email, dpo, key_contact" do
                 patch "/users/#{other_user.id}", headers: headers, params: params
                 other_user.reload
-                expect(other_user.unconfirmed_email).to eq(new_email)
+                expect(other_user.email).to eq(new_email)
                 expect(other_user.is_data_protection_officer?).to be true
                 expect(other_user.is_key_contact?).to be true
               end
