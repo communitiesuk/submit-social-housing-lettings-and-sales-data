@@ -2810,6 +2810,8 @@ RSpec.describe LettingsLog do
       let!(:different_propcode) { create(:lettings_log, :duplicate_general_needs, propcode: "different") }
       let!(:different_tenancycode) { create(:lettings_log, :duplicate_general_needs, tenancycode: "different") }
       let!(:different_postcode_full) { create(:lettings_log, :duplicate_general_needs, postcode_full: "B1 1AA") }
+      let!(:duplicate_check_fields_not_given) { create(:lettings_log, :duplicate_general_needs, age1: nil, sex1: nil, ecstat1: nil, propcode: nil, postcode_known: 2, postcode_full: nil) }
+      let!(:tenancycode_not_given) { create(:lettings_log, :duplicate_general_needs, tenancycode: nil) }
 
       before do
         create(:lettings_log, :in_progress)
@@ -2861,6 +2863,16 @@ RSpec.describe LettingsLog do
 
       it "does not return a log with a different postcode_full" do
         expect(described_class.duplicate_logs(log)).not_to include(different_postcode_full)
+      end
+
+      it "does not return a log with nil values" do
+        log.update!(age1: nil, sex1: nil, ecstat1: nil, propcode: nil, postcode_known: 2, postcode_full: nil)
+        expect(described_class.duplicate_logs(log)).not_to include(duplicate_check_fields_not_given)
+      end
+
+      it "does return the log if tenancy code is nil" do
+        log.update!(tenancycode: nil)
+        expect(described_class.duplicate_logs(log)).to include(tenancycode_not_given)
       end
     end
   end
