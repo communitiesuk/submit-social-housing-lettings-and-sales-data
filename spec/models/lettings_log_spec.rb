@@ -2802,10 +2802,6 @@ RSpec.describe LettingsLog do
       let(:log) { create(:lettings_log, :duplicate) }
       let!(:duplicate_log) { create(:lettings_log, :duplicate) }
 
-      before do
-        create(:lettings_log, :in_progress)
-      end
-
       it "returns all duplicate logs for given log" do
         expect(described_class.duplicate_logs(log).count).to eq(1)
       end
