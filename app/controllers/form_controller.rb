@@ -50,8 +50,8 @@ class FormController < ApplicationController
       @interruption_page_id = URI.parse(request.headers["HTTP_REFERER"]).path.split("/").last.underscore
       @interruption_page_referrer_type = referrer_from_query
     end
-    if DuplicateLogService.is_log_duplicate?(@log)
-      redirect_to 
+    if @log.duplicate_logs?
+      redirect_to
     end
     if @log
       page_id = request.path.split("/")[-1].underscore
