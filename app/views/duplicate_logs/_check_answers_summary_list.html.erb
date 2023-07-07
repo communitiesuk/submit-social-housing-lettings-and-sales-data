@@ -1,0 +1,37 @@
+<%= govuk_summary_list do |summary_list| %>
+  <% questions.each do |question| %>
+    <% summary_list.row do |row| %>
+      <% row.key { get_question_label(question) } %>
+
+      <% row.value do %>
+        <%= simple_format(
+          get_answer_label(question, @log),
+          wrapper_tag: "span",
+          class: "govuk-!-margin-right-4",
+        ) %>
+
+        <% extra_value = question.get_extra_check_answer_value(@log) %>
+
+        <% if extra_value && question.answer_label(@log, current_user).present? %>
+          <%= simple_format(
+            extra_value,
+            wrapper_tag: "span",
+            class: "govuk-!-font-weight-regular app-!-colour-muted",
+          ) %>
+        <% end %>
+
+        <% question.get_inferred_answers(@log).each do |inferred_answer| %>
+          <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= inferred_answer %></span>
+        <% end %>
+      <% end %>
+
+      <% if @log.collection_period_open_for_editing? %>
+        <% row.action(
+          text: question.action_text(@log),
+          href: action_href(@log, question.page.id, referrer),
+          visually_hidden_text: question.check_answer_label.to_s.downcase,
+        ) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
