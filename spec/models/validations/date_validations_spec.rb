@@ -81,6 +81,8 @@ RSpec.describe Validations::DateValidations do
           .to include(match I18n.t("validations.setup.startdate.location.deactivated.startdate", postcode: location.postcode, date: "4 June 2022"))
         expect(record.errors["location_id"])
           .to include(match I18n.t("validations.setup.startdate.location.deactivated.location_id", postcode: location.postcode, date: "4 June 2022"))
+        expect(record.errors["scheme_id"])
+          .to include(match I18n.t("validations.setup.startdate.location.deactivated.location_id", postcode: location.postcode, date: "4 June 2022"))
       end
 
       it "produces no error when tenancy start date is during an active location period" do
@@ -89,6 +91,7 @@ RSpec.describe Validations::DateValidations do
         date_validator.validate_startdate(record)
         expect(record.errors["startdate"]).to be_empty
         expect(record.errors["location_id"]).to be_empty
+        expect(record.errors["scheme_id"]).to be_empty
       end
     end
 
@@ -109,6 +112,8 @@ RSpec.describe Validations::DateValidations do
           .to include(match I18n.t("validations.setup.startdate.location.reactivating_soon.startdate", postcode: location.postcode, date: "4 August 2022"))
         expect(record.errors["location_id"])
           .to include(match I18n.t("validations.setup.startdate.location.reactivating_soon.location_id", postcode: location.postcode, date: "4 August 2022"))
+        expect(record.errors["scheme_id"])
+          .to include(match I18n.t("validations.setup.startdate.location.reactivating_soon.location_id", postcode: location.postcode, date: "4 August 2022"))
       end
 
       it "produces no error when tenancy start date is during an active location period" do
@@ -117,6 +122,7 @@ RSpec.describe Validations::DateValidations do
         date_validator.validate_startdate(record)
         expect(record.errors["startdate"]).to be_empty
         expect(record.errors["location_id"]).to be_empty
+        expect(record.errors["scheme_id"]).to be_empty
       end
     end
 
@@ -139,6 +145,8 @@ RSpec.describe Validations::DateValidations do
           .to include(match I18n.t("validations.setup.startdate.location.reactivating_soon.startdate", postcode: location.postcode, date: "4 September 2022"))
         expect(record.errors["location_id"])
           .to include(match I18n.t("validations.setup.startdate.location.reactivating_soon.location_id", postcode: location.postcode, date: "4 September 2022"))
+        expect(record.errors["scheme_id"])
+          .to include(match I18n.t("validations.setup.startdate.location.reactivating_soon.location_id", postcode: location.postcode, date: "4 September 2022"))
       end
 
       it "produces no error when tenancy start date is during an active location period" do
@@ -147,6 +155,7 @@ RSpec.describe Validations::DateValidations do
         date_validator.validate_startdate(record)
         expect(record.errors["startdate"]).to be_empty
         expect(record.errors["location_id"]).to be_empty
+        expect(record.errors["scheme_id"]).to be_empty
       end
     end
 
@@ -160,6 +169,7 @@ RSpec.describe Validations::DateValidations do
         date_validator.validate_startdate(record)
         expect(record.errors["startdate"]).to be_empty
         expect(record.errors["location_id"]).to be_empty
+        expect(record.errors["scheme_id"]).to be_empty
       end
 
       it "produces an error when the date is before available_from date" do
@@ -169,6 +179,8 @@ RSpec.describe Validations::DateValidations do
         expect(record.errors["startdate"])
           .to include(match I18n.t("validations.setup.startdate.location.activating_soon.startdate", postcode: location.postcode, date: "15 September 2022"))
         expect(record.errors["location_id"])
+          .to include(match I18n.t("validations.setup.startdate.location.activating_soon.location_id", postcode: location.postcode, date: "15 September 2022"))
+        expect(record.errors["scheme_id"])
           .to include(match I18n.t("validations.setup.startdate.location.activating_soon.location_id", postcode: location.postcode, date: "15 September 2022"))
       end
     end

@@ -71,6 +71,7 @@ module Validations::SharedValidations
       date, scope, deactivation_date = location_inactive_status.values_at(:date, :scope, :deactivation_date)
       record.errors.add :startdate, :not_active, message: I18n.t("validations.setup.startdate.location.#{scope}.startdate", postcode: record.location.postcode, date:, deactivation_date:)
       record.errors.add :location_id, :not_active, message: I18n.t("validations.setup.startdate.location.#{scope}.location_id", postcode: record.location.postcode, date:, deactivation_date:)
+      record.errors.add :scheme_id, :not_active, message: I18n.t("validations.setup.startdate.location.#{scope}.location_id", postcode: record.location.postcode, date:, deactivation_date:)
     end
   end
 
@@ -98,8 +99,7 @@ module Validations::SharedValidations
            when :deactivated then open_deactivation.deactivation_date
            end
 
-    scope = status
-    { scope:, date: date&.to_formatted_s(:govuk_date), deactivation_date: closest_reactivation&.deactivation_date&.to_formatted_s(:govuk_date) }
+    { scope: status, date: date&.to_formatted_s(:govuk_date), deactivation_date: closest_reactivation&.deactivation_date&.to_formatted_s(:govuk_date) }
   end
 
   def shared_validate_partner_count(record, max_people)

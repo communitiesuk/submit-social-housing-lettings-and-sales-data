@@ -249,7 +249,7 @@ en:
 
         location:
           deactivated:
-            startdate: "The location %{postcode} was deactivated on %{date} and was not available on the day you entered. Enter a tenancy start date after %{date}"
+            startdate: "The location %{postcode} was deactivated on %{date} and was not available on the day you entered. Select another location or edit the tenancy start date"
             location_id: "The location %{postcode} was deactivated on %{date} and was not available on the day you entered. Select another location or edit the tenancy start date"
           activating_soon:
             startdate: "The location %{postcode} is not available until %{date}. Enter a tenancy start date after %{date}"
@@ -259,7 +259,7 @@ en:
             location_id: "The location %{postcode} is not available until %{date}. Select another location or edit the tenancy start date"
         scheme:
           deactivated:
-            startdate: "The scheme %{name} was deactivated on %{date} and was not available on the day you entered. Enter a tenancy start date after %{date}"
+            startdate: "The scheme %{name} was deactivated on %{date} and was not available on the day you entered. Select another scheme or edit the tenancy start date"
             scheme_id: "The scheme %{name} was deactivated on %{date} and was not available on the day you entered. Select another scheme or edit the tenancy start date"
           reactivating_soon:
             startdate: "The scheme %{name} is not available until %{date}. Enter a tenancy start date after %{date}"
