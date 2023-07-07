@@ -77,6 +77,12 @@ module Validations::Sales::SoftValidations
     !value.between?(sale_range.soft_min, sale_range.soft_max)
   end
 
+  def staircase_owned_out_of_soft_range?
+    return unless type && stairowned
+
+    type == 24 && stairowned.between?(76, 100)
+  end
+
   def shared_ownership_deposit_invalid?
     return unless mortgage || mortgageused == 2 || mortgageused == 3
     return unless cashdis || !is_type_discount?
@@ -135,7 +141,7 @@ module Validations::Sales::SoftValidations
   def discounted_ownership_value_invalid?
     return unless saledate && collection_start_year <= 2023
     return unless value && deposit && ownershipsch
-    return unless mortgage || mortgageused == 2
+    return unless mortgage || mortgageused == 2 || mortgageused == 3
     return unless discount || grant || type == 29
 
     mortgage_deposit_and_grant_total != value_with_discount && discounted_ownership_sale?

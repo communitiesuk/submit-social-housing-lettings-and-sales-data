@@ -31,8 +31,10 @@ RSpec.describe FormController, type: :request do
   let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
 
   before do
-    allow(fake_2021_2022_form).to receive(:end_date).and_return(Time.zone.today + 1.day)
+    allow(fake_2021_2022_form).to receive(:new_logs_end_date).and_return(Time.zone.today + 1.day)
+    allow(fake_2021_2022_form).to receive(:edit_end_date).and_return(Time.zone.today + 2.months)
     allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
+    allow(FormHandler.instance).to receive(:lettings_in_crossover_period?).and_return(true)
   end
 
   context "when a user is not signed in" do
@@ -132,6 +134,32 @@ RSpec.describe FormController, type: :request do
         follow_redirect!
         lettings_log.reload
         expect(lettings_log.created_by).to eq(user)
+      end
+    end
+
+    context "when owning organisation doesn't have any managing agents" do
+      let(:params) do
+        {
+          id: lettings_log.id,
+          lettings_log: {
+            page: "stock_owner",
+            owning_organisation_id: managing_organisation.id,
+          },
+        }
+      end
+
+      before do
+        lettings_log.update!(owning_organisation: nil, created_by: nil, managing_organisation: nil)
+        lettings_log.reload
+      end
+
+      it "sets managing organisation to owning organisation" do
+        post "/lettings-logs/#{lettings_log.id}/stock-owner", params: params
+        expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/created-by")
+        follow_redirect!
+        lettings_log.reload
+        expect(lettings_log.owning_organisation).to eq(managing_organisation)
+        expect(lettings_log.managing_organisation).to eq(managing_organisation)
       end
     end
 
@@ -546,7 +574,7 @@ RSpec.describe FormController, type: :request do
           end
 
           before do
-            post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}?referrer=interruption_screen", params:
+            post "/lettings-logs/#{lettings_log.id}/lead-tenant-age?referrer=interruption_screen", params:
           end
 
           it "redirects back to the soft validation page" do
@@ -557,6 +585,29 @@ RSpec.describe FormController, type: :request do
             follow_redirect!
             follow_redirect!
             expect(response.body).to include("You have successfully updated lead tenant’s age")
+          end
+        end
+
+        context "when the question was accessed from an interruption screen and it has no check answers" do
+          let(:params) do
+            {
+              id: lettings_log.id,
+              lettings_log: {
+                page: "person_1_gender",
+                sex1: "F",
+                interruption_page_id: "retirement_value_check",
+              },
+            }
+          end
+
+          before do
+            post "/lettings-logs/#{lettings_log.id}/lead-tenant-gender-identity?referrer=interruption_screen", params:
+          end
+
+          it "displays a success banner without crashing" do
+            follow_redirect!
+            follow_redirect!
+            expect(response.body).to include("You have successfully updated")
           end
         end
 
@@ -763,7 +814,8 @@ RSpec.describe FormController, type: :request do
           before do
             completed_lettings_log.update!(ecstat1: 1, earnings: 130, hhmemb: 1) # we're not routing to that page, so it gets cleared?
             allow(completed_lettings_log).to receive(:net_income_soft_validation_triggered?).and_return(true)
-            allow(completed_lettings_log.form).to receive(:end_date).and_return(Time.zone.today + 1.day)
+            allow(completed_lettings_log.form).to receive(:new_logs_end_date).and_return(Time.zone.today + 1.day)
+            allow(completed_lettings_log.form).to receive(:edit_end_date).and_return(Time.zone.today + 2.months)
             post "/lettings-logs/#{completed_lettings_log.id}/net-income-value-check", params: interrupt_params, headers: headers.merge({ "HTTP_REFERER" => referrer })
           end
 

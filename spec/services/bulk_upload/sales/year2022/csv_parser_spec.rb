@@ -122,7 +122,7 @@ RSpec.describe BulkUpload::Sales::Year2022::CsvParser do
     let(:path) { file.path }
 
     context "when 23/24 file with 23/24 data" do
-      let(:log) { build(:sales_log, :completed, saledate: Date.new(2023, 10, 1)) }
+      let(:log) { build(:sales_log, :completed, saledate: Date.new(2024, 1, 1)) }
 
       before do
         file.write(BulkUpload::SalesLogToCsv.new(log:, col_offset: 0).to_2023_csv_row)

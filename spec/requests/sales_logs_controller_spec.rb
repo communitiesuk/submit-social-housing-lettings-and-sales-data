@@ -556,6 +556,84 @@ RSpec.describe SalesLogsController, type: :request do
       end
     end
 
+    context "when viewing a sales log" do
+      let(:headers) { { "Accept" => "text/html" } }
+      let(:completed_sales_log) { FactoryBot.create(:sales_log, :completed, owning_organisation: user.organisation, created_by: user) }
+
+      before do
+        sign_in user
+        Timecop.freeze(2021, 4, 1)
+        Singleton.__init__(FormHandler)
+        completed_sales_log.update!(saledate: Time.zone.local(2021, 4, 1))
+        completed_sales_log.reload
+      end
+
+      context "with sales logs that are owned by your organisation" do
+        before do
+          get "/sales-logs/#{completed_sales_log.id}", headers:, params: {}
+        end
+
+        after do
+          Timecop.return
+          Singleton.__init__(FormHandler)
+        end
+
+        it "shows the tasklist for sales logs you have access to" do
+          expect(response.body).to match("Log")
+          expect(response.body).to match(completed_sales_log.id.to_s)
+        end
+
+        it "displays a link to update the log for currently editable logs" do
+          completed_sales_log.update!(saledate: Time.zone.local(2021, 4, 1))
+          completed_sales_log.reload
+
+          get "/sales-logs/#{completed_sales_log.id}", headers:, params: {}
+          expect(completed_sales_log.form.new_logs_end_date).to eq(Time.zone.local(2022, 12, 31))
+          expect(completed_sales_log.status).to eq("completed")
+          expect(page).to have_link("review and make changes to this log", href: "/sales-logs/#{completed_sales_log.id}/review?sales_log=true")
+        end
+      end
+
+      context "with sales logs from a closed collection period before the previous collection" do
+        before do
+          sign_in user
+          Timecop.return
+          Singleton.__init__(FormHandler)
+          get "/sales-logs/#{completed_sales_log.id}", headers:, params: {}
+        end
+
+        it "redirects to review page" do
+          expect(response).to redirect_to("/sales-logs/#{completed_sales_log.id}/review?sales_log=true")
+        end
+      end
+
+      context "with sales logs from a closed previous collection period" do
+        before do
+          sign_in user
+          Timecop.freeze(2023, 2, 1)
+          Singleton.__init__(FormHandler)
+          get "/sales-logs/#{completed_sales_log.id}", headers:, params: {}
+        end
+
+        after do
+          Timecop.return
+          Singleton.__init__(FormHandler)
+        end
+
+        it "redirects to review page" do
+          expect(response).to redirect_to("/sales-logs/#{completed_sales_log.id}/review?sales_log=true")
+        end
+
+        it "displays a closed collection window message for previous collection year logs" do
+          get "/sales-logs/#{completed_sales_log.id}", headers:, params: {}
+          expect(completed_sales_log.form.new_logs_end_date).to eq(Time.zone.local(2022, 12, 31))
+          expect(completed_sales_log.status).to eq("completed")
+          follow_redirect!
+          expect(page).to have_content("This log is from the 2021/2022 collection window, which is now closed.")
+        end
+      end
+    end
+
     context "when requesting CSV download" do
       let(:headers) { { "Accept" => "text/html" } }
       let(:search_term) { "foot" }

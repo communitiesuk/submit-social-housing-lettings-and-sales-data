@@ -13,6 +13,8 @@ class Form::Sales::Subsections::SharedOwnershipScheme < ::Form::Subsection
       Form::Sales::Pages::AboutStaircase.new("about_staircasing_joint_purchase", nil, self, joint_purchase: true),
       Form::Sales::Pages::AboutStaircase.new("about_staircasing_not_joint_purchase", nil, self, joint_purchase: false),
       Form::Sales::Pages::StaircaseBoughtValueCheck.new(nil, nil, self),
+      Form::Sales::Pages::StaircaseOwnedValueCheck.new("staircase_owned_value_check_joint_purchase", nil, self, joint_purchase: true),
+      Form::Sales::Pages::StaircaseOwnedValueCheck.new("staircase_owned_value_check_not_joint_purchase", nil, self, joint_purchase: false),
       Form::Sales::Pages::Resale.new(nil, nil, self),
       Form::Sales::Pages::ExchangeDate.new(nil, nil, self),
       Form::Sales::Pages::HandoverDate.new(nil, nil, self),

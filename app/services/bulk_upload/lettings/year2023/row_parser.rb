@@ -463,10 +463,11 @@ class BulkUpload::Lettings::Year2023::RowParser
       "field_7",   # startdate
       "field_8",   # startdate
       "field_9",   # startdate
+      "field_13",  # tenancycode
       "field_14",  # propcode
-      "field_17",  # location
-      "field_23",  # postcode
-      "field_24",  # postcode
+      field_4 != 1 ? "field_17" : nil,  # location
+      field_4 != 2 ? "field_23" : nil,  # postcode
+      field_4 != 2 ? "field_24" : nil,  # postcode
       "field_46",  # age1
       "field_47",  # sex1
       "field_50",  # ecstat1
@@ -540,8 +541,10 @@ private
       next if question.completed?(log)
 
       question.page.interruption_screen_question_ids.each do |interruption_screen_question_id|
+        next if log.form.questions.none? { |q| q.id == interruption_screen_question_id && q.page.routed_to?(log, nil) }
+
         field_mapping_for_errors[interruption_screen_question_id.to_sym]&.each do |field|
-          unless errors.any? { |e| field_mapping_for_errors[interruption_screen_question_id.to_sym].include?(e.attribute) }
+          if errors.none? { |e| field_mapping_for_errors[interruption_screen_question_id.to_sym].include?(e.attribute) }
             error_message = [display_title_text(question.page.title_text, log), display_informative_text(question.page.informative_text, log)].reject(&:empty?).join(". ")
             errors.add(field, message: error_message, category: :soft_validation)
           end
@@ -551,17 +554,18 @@ private
   end
 
   def duplicate_check_fields
-    %w[
-      startdate
-      age1
-      sex1
-      ecstat1
-      owning_organisation
-      tcharge
-      propcode
-      postcode_full
-      location
-    ]
+    [
+      "startdate",
+      "age1",
+      "sex1",
+      "ecstat1",
+      "owning_organisation",
+      "tcharge",
+      "propcode",
+      field_4 != 2 ? "postcode_full" : nil,
+      field_4 != 1 ? "location" : nil,
+      "tenancycode",
+    ].compact
   end
 
   def validate_needs_type_present
@@ -741,7 +745,7 @@ private
 
   def validate_location_exists
     if scheme && field_17.present? && location.nil?
-      errors.add(:field_17, "Location could be found with provided scheme code", category: :setup)
+      errors.add(:field_17, "Location could not be found with the provided scheme code", category: :setup)
     end
   end
 
@@ -851,11 +855,12 @@ private
       errors.add(:field_7, error_message) # startdate
       errors.add(:field_8, error_message) # startdate
       errors.add(:field_9, error_message) # startdate
+      errors.add(:field_13, error_message) # tenancycode
       errors.add(:field_14, error_message) # propcode
-      errors.add(:field_17, error_message) # location
-      errors.add(:field_23, error_message) # postcode_full
-      errors.add(:field_24, error_message) # postcode_full
-      errors.add(:field_25, error_message) # postcode_full
+      errors.add(:field_17, error_message) if field_4 != 1 # location
+      errors.add(:field_23, error_message) if field_4 != 2 # postcode_full
+      errors.add(:field_24, error_message) if field_4 != 2 # postcode_full
+      errors.add(:field_25, error_message) if field_4 != 2 # la
       errors.add(:field_46, error_message) # age1
       errors.add(:field_47, error_message) # sex1
       errors.add(:field_50, error_message) # ecstat1
@@ -1401,6 +1406,8 @@ private
       1
     elsif field_85 == 1
       2
+    else
+      3
     end
   end
 

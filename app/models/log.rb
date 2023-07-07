@@ -20,6 +20,12 @@ class Log < ApplicationRecord
   enum status: STATUS
   enum status_cache: STATUS, _prefix: true
 
+  CREATION_METHOD = {
+    "single log" => 1,
+    "bulk upload" => 2,
+  }.freeze
+  enum creation_method: CREATION_METHOD
+
   scope :visible, -> { where(status: %w[not_started in_progress completed]) }
   scope :exportable, -> { where(status: %w[not_started in_progress completed deleted]) }
 
@@ -94,7 +100,13 @@ class Log < ApplicationRecord
   def collection_period_open?
     return false if older_than_previous_collection_year?
 
-    form.end_date > Time.zone.today
+    form.new_logs_end_date > Time.zone.today
+  end
+
+  def collection_period_open_for_editing?
+    return false if older_than_previous_collection_year?
+
+    form.edit_end_date > Time.zone.today
   end
 
   def blank_invalid_non_setup_fields!
@@ -172,12 +184,12 @@ class Log < ApplicationRecord
     end
   end
 
-  def creation_method
-    bulk_uploaded? ? "bulk upload" : "single log"
-  end
-
   def bulk_uploaded?
     bulk_upload_id.present?
+  end
+
+  def collection_closed_for_editing?
+    form.edit_end_date < Time.zone.now || older_than_previous_collection_year?
   end
 
 private

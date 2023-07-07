@@ -1,4 +1,4 @@
-class LogSummaryComponent < ViewComponent::Base
+class SalesLogSummaryComponent < ViewComponent::Base
   attr_reader :current_user, :log
 
   def initialize(current_user:, log:)

@@ -34,8 +34,8 @@ class LocationDeactivationPeriodValidator < ActiveModel::Validator
       end
     elsif location.location_deactivation_periods.any? { |period| period.reactivation_date.present? && record.deactivation_date.between?(period.deactivation_date, period.reactivation_date - 1.day) }
       record.errors.add(:deactivation_date, message: I18n.t("validations.location.deactivation.during_deactivated_period"))
-    elsif record.deactivation_date.before? FormHandler.instance.start_date_of_earliest_open_collection_period
-      record.errors.add(:deactivation_date, message: I18n.t("validations.location.toggle_date.out_of_range", date: FormHandler.instance.start_date_of_earliest_open_collection_period.to_formatted_s(:govuk_date)))
+    elsif record.deactivation_date.before? FormHandler.instance.start_date_of_earliest_open_for_editing_collection_period
+      record.errors.add(:deactivation_date, message: I18n.t("validations.location.toggle_date.out_of_range", date: FormHandler.instance.start_date_of_earliest_open_for_editing_collection_period.to_formatted_s(:govuk_date)))
     elsif record.deactivation_date.before? location.available_from
       record.errors.add(:deactivation_date, message: I18n.t("validations.location.toggle_date.before_creation", date: location.available_from.to_formatted_s(:govuk_date)))
     end

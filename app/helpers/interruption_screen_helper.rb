@@ -1,5 +1,6 @@
 module InterruptionScreenHelper
   def display_informative_text(informative_text, log)
+    return informative_text if informative_text.is_a? String
     return "" unless informative_text["arguments"]
 
     translation_params = {}

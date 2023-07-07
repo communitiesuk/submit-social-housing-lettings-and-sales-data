@@ -37,7 +37,11 @@ class SalesLogsController < LogsController
 
   def edit
     @log = current_user.sales_logs.visible.find(params[:id])
-    render "logs/edit", locals: { current_user: }
+    if @log.collection_closed_for_editing?
+      redirect_to review_sales_log_path(@log, sales_log: true)
+    else
+      render "logs/edit", locals: { current_user: }
+    end
   end
 
   def destroy

@@ -442,7 +442,7 @@ class BulkUpload::Lettings::Year2022::RowParser
 
   def spreadsheet_duplicate_hash
     attributes.slice(
-      "field_5",   # location
+      bulk_upload.needstype != 1 ? "field_5" : nil,   # location
       "field_12",  # age1
       "field_20",  # sex1
       "field_35",  # ecstat1
@@ -451,8 +451,8 @@ class BulkUpload::Lettings::Year2022::RowParser
       "field_97",  # startdate
       "field_98",  # startdate
       "field_100", # propcode
-      "field_108", # postcode
-      "field_109", # postcode
+      bulk_upload.needstype != 2 ? "field_108" : nil, # postcode
+      bulk_upload.needstype != 2 ? "field_109" : nil, # postcode
       "field_111", # owning org
     )
   end
@@ -518,17 +518,17 @@ private
   end
 
   def duplicate_check_fields
-    %w[
-      startdate
-      age1
-      sex1
-      ecstat1
-      owning_organisation
-      tcharge
-      propcode
-      postcode_full
-      location
-    ]
+    [
+      "startdate",
+      "age1",
+      "sex1",
+      "ecstat1",
+      "owning_organisation",
+      "tcharge",
+      "propcode",
+      bulk_upload.needstype != 2 ? "postcode_full" : nil,
+      bulk_upload.needstype != 1 ? "location" : nil,
+    ].compact
   end
 
   def validate_location_related
@@ -548,7 +548,7 @@ private
 
   def validate_location_exists
     if scheme && field_5.present? && location.nil?
-      errors.add(:field_5, "Location could be found with provided scheme code", category: :setup)
+      errors.add(:field_5, "Location could not be found with the provided scheme code", category: :setup)
     end
   end
 
@@ -833,8 +833,10 @@ private
       next if question.completed?(log)
 
       question.page.interruption_screen_question_ids.each do |interruption_screen_question_id|
+        next if log.form.questions.none? { |q| q.id == interruption_screen_question_id && q.page.routed_to?(log, nil) }
+
         field_mapping_for_errors[interruption_screen_question_id.to_sym]&.each do |field|
-          unless errors.any? { |e| e.options[:category] == :soft_validation && field_mapping_for_errors[interruption_screen_question_id.to_sym].include?(e.attribute) }
+          if errors.none? { |e| e.options[:category] == :soft_validation && field_mapping_for_errors[interruption_screen_question_id.to_sym].include?(e.attribute) }
             error_message = [display_title_text(question.page.title_text, log), display_informative_text(question.page.informative_text, log)].reject(&:empty?).join(". ")
             errors.add(field, message: error_message, category: :soft_validation)
           end
@@ -851,7 +853,8 @@ private
     if log_already_exists?
       error_message = "This is a duplicate log"
 
-      errors.add(:field_5, error_message) # location
+      errors.add(:field_5, error_message) if bulk_upload.needstype != 1 # location
+      errors.add(:field_7, error_message) # tenancycode
       errors.add(:field_12, error_message) # age1
       errors.add(:field_20, error_message) # sex1
       errors.add(:field_35, error_message) # ecstat1
@@ -860,8 +863,8 @@ private
       errors.add(:field_97, error_message) # startdate
       errors.add(:field_98, error_message) # startdate
       errors.add(:field_100, error_message) # propcode
-      errors.add(:field_108, error_message) # postcode_full
-      errors.add(:field_109, error_message) # postcode_full
+      errors.add(:field_108, error_message) if bulk_upload.needstype != 2  # postcode_full
+      errors.add(:field_109, error_message) if bulk_upload.needstype != 2  # postcode_full
       errors.add(:field_111, error_message) # owning_organisation
     end
   end
@@ -1459,6 +1462,8 @@ private
       1
     elsif field_57 == 1
       2
+    else
+      3
     end
   end
 

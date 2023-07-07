@@ -104,12 +104,12 @@ class BulkUpload::Sales::Year2023::RowParser
     field_90: "Was this transaction part of a back-to-back staircasing transaction to facilitate sale of the home on the open market?",
 
     field_91: "Is this a resale?",
-    field_92: "What is the day of the practical completion or handover date?",
-    field_93: "What is the month of the practical completion or handover date?",
-    field_94: "What is the year of the practical completion or handover date?",
+    field_92: "What is the day of the exchange of contracts date?",
+    field_93: "What is the month of the exchange of contracts date?",
+    field_94: "What is the year of the exchange of contracts date?",
     field_95: "What is the day of the practical completion or handover date?",
     field_96: "What is the month of the practical completion or handover date?",
-    field_97: "What is the day of the exchange of contracts date?",
+    field_97: "What is the year of the practical completion or handover date?",
     field_98: "Was the household re-housed under a local authority nominations agreement?",
     field_99: "Was the buyer a private registered provider, housing association or local authority tenant immediately before this sale?",
     field_100: "How many bedrooms did the buyer's previous property have?",
@@ -335,7 +335,7 @@ class BulkUpload::Sales::Year2023::RowParser
 
   validates :field_7,
             presence: {
-              message: I18n.t("validations.not_answered", question: "ownership type"),
+              message: I18n.t("validations.not_answered", question: "purchase made under ownership scheme"),
               category: :setup,
             },
             on: :after_log
@@ -351,7 +351,7 @@ class BulkUpload::Sales::Year2023::RowParser
 
   validates :field_8,
             presence: {
-              message: I18n.t("validations.not_answered", question: "shared ownership type"),
+              message: I18n.t("validations.not_answered", question: "type of shared ownership sale"),
               category: :setup,
               if: :shared_ownership?,
             },
@@ -368,7 +368,7 @@ class BulkUpload::Sales::Year2023::RowParser
 
   validates :field_9,
             presence: {
-              message: I18n.t("validations.not_answered", question: "discounted ownership type"),
+              message: I18n.t("validations.not_answered", question: "type of discounted ownership sale"),
               category: :setup,
               if: :discounted_ownership?,
             },
@@ -385,7 +385,7 @@ class BulkUpload::Sales::Year2023::RowParser
 
   validates :field_10,
             presence: {
-              message: I18n.t("validations.not_answered", question: "type of ouright sale"),
+              message: I18n.t("validations.not_answered", question: "type of outright sale"),
               category: :setup,
               if: :outright_sale?,
             },
@@ -427,7 +427,7 @@ class BulkUpload::Sales::Year2023::RowParser
 
   validates :field_13,
             presence: {
-              message: I18n.t("validations.not_answered", question: "will the buyers live in the property"),
+              message: I18n.t("validations.not_answered", question: "buyers living in property"),
               category: :setup,
               if: :outright_sale?,
             },
@@ -443,7 +443,7 @@ class BulkUpload::Sales::Year2023::RowParser
 
   validates :field_15,
             presence: {
-              message: I18n.t("validations.not_answered", question: "more than 2 buyers"),
+              message: I18n.t("validations.not_answered", question: "more than 2 joint buyers"),
               category: :setup,
               if: :joint_purchase?,
             },
@@ -1293,8 +1293,10 @@ private
       next if question.completed?(log)
 
       question.page.interruption_screen_question_ids.each do |interruption_screen_question_id|
+        next if log.form.questions.none? { |q| q.id == interruption_screen_question_id && q.page.routed_to?(log, nil) }
+
         field_mapping_for_errors[interruption_screen_question_id.to_sym]&.each do |field|
-          unless errors.any? { |e| e.options[:category] == :soft_validation && field_mapping_for_errors[interruption_screen_question_id.to_sym].include?(e.attribute) }
+          if errors.none? { |e| e.options[:category] == :soft_validation && field_mapping_for_errors[interruption_screen_question_id.to_sym].include?(e.attribute) }
             error_message = [display_title_text(question.page.title_text, log), display_informative_text(question.page.informative_text, log)].reject(&:empty?).join(". ")
             errors.add(field, message: error_message, category: :soft_validation)
           end

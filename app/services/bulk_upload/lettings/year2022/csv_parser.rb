@@ -63,7 +63,7 @@ class BulkUpload::Lettings::Year2022::CsvParser
   end
 
   def wrong_template_for_year?
-    !(first_record_start_date >= form.start_date && first_record_start_date <= form.end_date)
+    !(first_record_start_date >= form.start_date && first_record_start_date <= form.new_logs_end_date)
   end
 
 private

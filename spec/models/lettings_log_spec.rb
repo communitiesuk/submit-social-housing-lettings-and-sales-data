@@ -2857,115 +2857,6 @@ RSpec.describe LettingsLog do
     end
   end
 
-  describe "csv download" do
-    let(:scheme) { create(:scheme) }
-    let(:location) do
-      create(
-        :location,
-        :export,
-        scheme:,
-        type_of_unit: 6,
-        postcode: "SE11TE",
-        startdate: Time.zone.local(2021, 10, 1),
-      )
-    end
-    let(:user) { create(:user, organisation: location.scheme.owning_organisation) }
-    let(:expected_content) { csv_export_file.read }
-
-    after do
-      Timecop.unfreeze
-    end
-
-    context "with values represented as human readable labels" do
-      before do
-        Timecop.freeze(Time.utc(2022, 6, 5))
-        lettings_log = FactoryBot.create(
-          :lettings_log,
-          needstype: 2,
-          scheme:,
-          location:,
-          owning_organisation: scheme.owning_organisation,
-          created_by: user,
-          rent_type: 2,
-          startdate: Time.zone.local(2021, 10, 2),
-          created_at: Time.zone.local(2022, 2, 8, 16, 52, 15),
-          updated_at: Time.zone.local(2022, 2, 8, 16, 52, 15),
-        )
-        expected_content.sub!(/\{id\}/, lettings_log["id"].to_s)
-        expected_content.sub!(/\{scheme_code\}/, "S#{scheme['id']}")
-        expected_content.sub!(/\{scheme_service_name\}/, scheme["service_name"].to_s)
-        expected_content.sub!(/\{scheme_sensitive\}/, scheme["sensitive"].to_s)
-        expected_content.sub!(/\{scheme_primary_client_group\}/, scheme["primary_client_group"].to_s)
-        expected_content.sub!(/\{scheme_secondary_client_group\}/, scheme["secondary_client_group"].to_s)
-        expected_content.sub!(/\{scheme_support_type\}/, scheme["support_type"].to_s)
-        expected_content.sub!(/\{scheme_intended_stay\}/, scheme["intended_stay"].to_s)
-        expected_content.sub!(/\{location_code\}/, location["id"].to_s)
-        expected_content.sub!(/\{location_startdate\}/, location["startdate"].to_s)
-        expected_content.sub!(/\{scheme_id\}/, scheme["service_name"].to_s)
-        expected_content.sub!(/\{location_id\}/, location["id"].to_s)
-      end
-
-      around do |example|
-        Timecop.freeze(Time.zone.local(2022, 6, 5)) do
-          Singleton.__init__(FormHandler)
-          example.run
-        end
-        Timecop.return
-        Singleton.__init__(FormHandler)
-      end
-
-      context "with a support user" do
-        let(:csv_export_file) { File.open("spec/fixtures/files/lettings_logs_download.csv", "r:UTF-8") }
-
-        it "generates a correct csv from a lettings log" do
-          expect(described_class.to_csv(codes_only_export: false)).to eq(expected_content)
-        end
-      end
-
-      context "with a non support user" do
-        let(:csv_export_file) { File.open("spec/fixtures/files/lettings_logs_download_non_support.csv", "r:UTF-8") }
-
-        it "generates a correct csv from a lettings log" do
-          expect(described_class.to_csv(user, codes_only_export: false)).to eq(expected_content)
-        end
-      end
-    end
-
-    context "with values represented as codes" do
-      before do
-        Timecop.freeze(Time.utc(2022, 6, 5))
-        lettings_log = FactoryBot.create(:lettings_log, needstype: 2, scheme:, location:, owning_organisation: scheme.owning_organisation, created_by: user, rent_type: 2, startdate: Time.zone.local(2021, 10, 2), created_at: Time.zone.local(2022, 2, 8, 16, 52, 15), updated_at: Time.zone.local(2022, 2, 8, 16, 52, 15))
-        expected_content.sub!(/\{id\}/, lettings_log["id"].to_s)
-        expected_content.sub!(/\{scheme_code\}/, "S#{scheme.id}")
-        expected_content.sub!(/\{scheme_service_name\}/, scheme.service_name.to_s)
-        expected_content.sub!(/\{scheme_sensitive\}/, scheme.sensitive_before_type_cast.to_s)
-        expected_content.sub!(/\{scheme_primary_client_group\}/, scheme.primary_client_group_before_type_cast.to_s)
-        expected_content.sub!(/\{scheme_secondary_client_group\}/, scheme.secondary_client_group_before_type_cast.to_s)
-        expected_content.sub!(/\{scheme_support_type\}/, scheme.support_type_before_type_cast.to_s)
-        expected_content.sub!(/\{scheme_intended_stay\}/, scheme.intended_stay_before_type_cast.to_s)
-        expected_content.sub!(/\{location_code\}/, location.id.to_s)
-        expected_content.sub!(/\{location_startdate\}/, location.startdate.to_s)
-        expected_content.sub!(/\{scheme_id\}/, scheme.service_name.to_s)
-        expected_content.sub!(/\{location_id\}/, location.id.to_s)
-      end
-
-      let(:csv_export_file) { File.open("spec/fixtures/files/lettings_logs_download_codes_only.csv", "r:UTF-8") }
-
-      around do |example|
-        Timecop.freeze(Time.zone.local(2022, 6, 5)) do
-          Singleton.__init__(FormHandler)
-          example.run
-        end
-        Timecop.return
-        Singleton.__init__(FormHandler)
-      end
-
-      it "generates a correct csv from a lettings log" do
-        expect(described_class.to_csv(codes_only_export: true)).to eq(expected_content)
-      end
-    end
-  end
-
   describe "#blank_invalid_non_setup_fields!" do
     context "when a setup field is invalid" do
       subject(:model) { described_class.new(needstype: 404) }
@@ -3040,7 +2931,7 @@ RSpec.describe LettingsLog do
       let(:startdate) { nil }
 
       before do
-        allow(log).to receive_message_chain(:form, :end_date).and_return(Time.zone.now + 1.day)
+        allow(log).to receive_message_chain(:form, :new_logs_end_date).and_return(Time.zone.now + 1.day)
       end
 
       it "returns true" do
@@ -3052,7 +2943,7 @@ RSpec.describe LettingsLog do
       let(:startdate) { Time.zone.local(2020, 4, 1) }
 
       before do
-        allow(log).to receive_message_chain(:form, :end_date).and_return(Time.zone.now - 1.day)
+        allow(log).to receive_message_chain(:form, :new_logs_end_date).and_return(Time.zone.now - 1.day)
       end
 
       it "returns false" do

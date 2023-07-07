@@ -30,6 +30,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
   end
 
   before do
+    allow(FormHandler.instance).to receive(:lettings_in_crossover_period?).and_return(true)
     create(:organisation_relationship, parent_organisation: owning_org, child_organisation: managing_org)
 
     LaRentRange.create!(
@@ -49,8 +50,6 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
     FormHandler.instance.use_real_forms!
 
     example.run
-
-    FormHandler.instance.use_fake_forms!
   end
 
   describe "#blank_row?" do
@@ -267,11 +266,13 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             expect(questions.map(&:id)).to eql([])
           end
 
-          context "when the log already exists in the db" do
-            before do
-              parser.log.save!
-              parser.instance_variable_set(:@valid, nil)
-            end
+        context "when a general needs log already exists in the db" do
+          let(:attributes) { { bulk_upload:, field_4: "1" } }
+
+          before do
+            parser.log.save!
+            parser.instance_variable_set(:@valid, nil)
+          end
 
             it "is not a valid row" do
               expect(parser).not_to be_valid
@@ -282,25 +283,66 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
               error_message = "This is a duplicate log"
 
-              [
-                :field_1, # owning_organisation
-                :field_7, # startdate
-                :field_8, # startdate
-                :field_9, # startdate
-                :field_14, # propcode
-                :field_17, # location
-                :field_23, # postcode_full
-                :field_24, # postcode_full
-                :field_25, # postcode_full
-                :field_46, # age1
-                :field_47, # sex1
-                :field_50, # ecstat1
-                :field_132, # tcharge
-              ].each do |field|
-                expect(parser.errors[field]).to include(error_message)
-              end
+            [
+              :field_1, # owning_organisation
+              :field_7, # startdate
+              :field_8, # startdate
+              :field_9, # startdate
+              :field_13, # tenancycode
+              :field_14, # propcode
+              :field_23, # postcode_full
+              :field_24, # postcode_full
+              :field_25, # postcode_full
+              :field_46, # age1
+              :field_47, # sex1
+              :field_50, # ecstat1
+              :field_132, # tcharge
+            ].each do |field|
+              expect(parser.errors[field]).to include(error_message)
             end
+
+            expect(parser.errors[:field_17]).not_to include(error_message)
           end
+        end
+
+        context "when a supported housing log already exists in the db" do
+          let(:attributes) { { bulk_upload:, field_4: "2" } }
+
+          before do
+            parser.log.save!
+            parser.instance_variable_set(:@valid, nil)
+          end
+
+          it "is not a valid row" do
+            expect(parser).not_to be_valid
+          end
+
+          it "adds an error to all the fields used to determine duplicates" do
+            parser.valid?
+
+            error_message = "This is a duplicate log"
+
+            [
+              :field_1, # owning_organisation
+              :field_7, # startdate
+              :field_8, # startdate
+              :field_9, # startdate
+              :field_13, # tenancycode
+              :field_14, # propcode
+              :field_17, # location
+              :field_46, # age1
+              :field_47, # sex1
+              :field_50, # ecstat1
+              :field_132, # tcharge
+            ].each do |field|
+              expect(parser.errors[field]).to include(error_message)
+            end
+
+            expect(parser.errors[:field_23]).not_to include(error_message)
+            expect(parser.errors[:field_24]).not_to include(error_message)
+            expect(parser.errors[:field_25]).not_to include(error_message)
+          end
+        end
 
           context "when a hidden log already exists in db" do
             before do
@@ -1105,6 +1147,20 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         end
       end
 
+      context "when a soft validation is triggered that relates both to fields that are and are not routed to" do
+        let(:attributes) { setup_section_params.merge({ field_82: "1", field_47: "M", field_53: "M", field_57: "M" }) }
+
+        it "adds errors to fields that are routed to" do
+          expect(parser.errors.where(:field_53, category: :soft_validation)).to be_present
+          expect(parser.errors.where(:field_57, category: :soft_validation)).to be_present
+        end
+
+        it "does not add errors to fields that are not routed to" do
+          expect(parser.errors.where(:field_61, category: :soft_validation)).not_to be_present
+          expect(parser.errors.where(:field_65, category: :soft_validation)).not_to be_present
+        end
+      end
+
       context "when soft validation is triggered and not required" do
         let(:attributes) { setup_section_params.merge({ field_128: 120, field_126: 1, field_32: 1, field_4: 1, field_5: "3", field_25: "E09000008" }) }
 
@@ -1114,7 +1170,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "populates with correct error message" do
           expect(parser.errors.where(:field_128, category: :soft_validation).count).to be(1)
-          expect(parser.errors.where(:field_128, category: :soft_validation).first.message).to eql("You told us the rent is £120.00 every week. The maximum rent expected for this type of property in this local authority is ££118.85 every week.")
+          expect(parser.errors.where(:field_128, category: :soft_validation).first.message).to eql("You told us the rent is £120.00 every week. This is higher than we would expect.")
         end
       end
     end
@@ -1803,6 +1859,15 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           expect(parser.log.housingneeds).to eq(1)
           expect(parser.log.housingneeds_type).to eq(2)
           expect(parser.log.housingneeds_other).to eq(1)
+        end
+      end
+
+      context "when housingneeds are not given" do
+        let(:attributes) { { bulk_upload:, field_83: nil, field_84: nil, field_85: nil, field_87: nil } }
+
+        it "sets correct housingneeds" do
+          expect(parser.log.housingneeds).to eq(1)
+          expect(parser.log.housingneeds_type).to eq(3)
         end
       end
 

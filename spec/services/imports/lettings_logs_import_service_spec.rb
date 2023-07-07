@@ -456,7 +456,7 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
-      context "and the number the property was relet is over 150" do
+      context "and the number of times the property was relet is over 150" do
         before do
           lettings_log_xml.at_xpath("//xmlns:Q20").content = "155"
         end
@@ -1360,6 +1360,7 @@ RSpec.describe Imports::LettingsLogsImportService do
         lettings_log_xml.at_xpath("//xmlns:Q9a").content = ""
         lettings_log_xml.at_xpath("//xmlns:Q11").content = "32"
         lettings_log_xml.at_xpath("//xmlns:Q16").content = "1"
+        lettings_log_xml.at_xpath("//xmlns:Q20").content = "0"
       end
 
       it "intercepts the relevant validation error" do

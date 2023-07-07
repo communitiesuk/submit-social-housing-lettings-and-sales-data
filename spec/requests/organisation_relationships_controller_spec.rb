@@ -62,6 +62,10 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
             it "shows an add button" do
               expect(page).to have_button("Add")
             end
+
+            it "shows a cancel button" do
+              expect(page).to have_link("Cancel", href: "/organisations/#{organisation.id}/stock-owners")
+            end
           end
         end
 
@@ -296,6 +300,94 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         end
       end
 
+      context "when directly accessing the page to add a stock owner" do
+        let(:request) { get "/organisations/#{organisation.id}/stock-owners/add" }
+
+        it "returns 401" do
+          request
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context "when directly adding a stock owner" do
+        let!(:stock_owner) { FactoryBot.create(:organisation) }
+        let(:params) do
+          {
+            "organisation_relationship": {
+              "parent_organisation_id": stock_owner.id,
+            },
+          }
+        end
+        let(:request) { post "/organisations/#{organisation.id}/stock-owners", params: }
+
+        it "returns 401" do
+          request
+          expect(response).to have_http_status(:unauthorized)
+        end
+
+        it "does not create a new organisation relationship" do
+          expect { request }.not_to change(OrganisationRelationship, :count)
+        end
+      end
+
+      context "when directly removing a stock owner" do
+        let(:stock_owner) { FactoryBot.create(:organisation) }
+        let(:request) { get "/organisations/#{organisation.id}/stock-owners/remove?target_organisation_id=#{stock_owner.id}" }
+
+        before do
+          FactoryBot.create(:organisation_relationship, parent_organisation: stock_owner, child_organisation: organisation)
+        end
+
+        it "returns 401" do
+          request
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context "when directly accessing the page to add a managing agent" do
+        let(:request) { get "/organisations/#{organisation.id}/managing-agents/add" }
+
+        it "returns 401" do
+          request
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context "when directly adding a managing agent" do
+        let!(:managing_agent) { FactoryBot.create(:organisation) }
+        let(:params) do
+          {
+            "organisation_relationship": {
+              "child_organisation_id": managing_agent.id,
+            },
+          }
+        end
+        let(:request) { post "/organisations/#{organisation.id}/managing-agents", params: }
+
+        it "returns 401" do
+          request
+          expect(response).to have_http_status(:unauthorized)
+        end
+
+        it "does not create a new organisation relationship" do
+          expect { request }.not_to change(OrganisationRelationship, :count)
+        end
+      end
+
+      context "when directly removing a managing agent" do
+        let(:managing_agent) { FactoryBot.create(:organisation) }
+        let(:request) { get "/organisations/#{organisation.id}/managing-agents/remove?target_organisation_id=#{managing_agent.id}" }
+
+        before do
+          FactoryBot.create(:organisation_relationship, parent_organisation: organisation, child_organisation: managing_agent)
+        end
+
+        it "returns 401" do
+          request
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
       context "when accessing the managing agents tab" do
         context "with an organisation that the user belongs to" do
           let!(:managing_agent) { FactoryBot.create(:organisation) }
@@ -330,16 +422,6 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
           it "shows the pagination count" do
             expect(page).to have_content("1 total agents")
-          end
-        end
-
-        context "when adding a managing agent" do
-          before do
-            get "/organisations/#{organisation.id}/managing-agents/add", headers:, params: {}
-          end
-
-          it "has the correct header" do
-            expect(response.body).to include("What is the name of your managing agent?")
           end
         end
 
@@ -562,7 +644,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           expect(response.body).to include("Remove")
         end
 
-        context "when adding a stock owner" do
+        context "when adding a managing agent" do
           before do
             get "/organisations/#{organisation.id}/managing-agents/add", headers:, params: {}
           end
@@ -573,6 +655,10 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
           it "shows an add button" do
             expect(page).to have_button("Add")
+          end
+
+          it "shows a cancel button" do
+            expect(page).to have_link("Cancel", href: "/organisations/#{organisation.id}/managing-agents")
           end
         end
       end

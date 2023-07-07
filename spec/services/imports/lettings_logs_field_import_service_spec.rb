@@ -249,4 +249,40 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
       end
     end
   end
+
+  context "when updating offered" do
+    let(:field) { "offered" }
+
+    context "when the lettings log has no offered value" do
+      let(:lettings_log) { LettingsLog.find_by(old_id: lettings_log_id) }
+
+      before do
+        Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+        lettings_log_file.rewind
+        lettings_log.update!(offered: nil)
+      end
+
+      it "updates the lettings_log offered value" do
+        expect(logger).to receive(:info).with(/lettings log \d+'s offered value has been set to 21/)
+        expect { import_service.send(:update_field, field, remote_folder) }
+          .to(change { lettings_log.reload.offered }.from(nil).to(21))
+      end
+    end
+
+    context "when the lettings log has a different offered value" do
+      let(:lettings_log) { LettingsLog.find_by(old_id: lettings_log_id) }
+
+      before do
+        Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+        lettings_log_file.rewind
+        lettings_log.update!(offered: 18)
+      end
+
+      it "does not update the lettings_log offered value" do
+        expect(logger).to receive(:info).with(/lettings log \d+ has a value for offered, skipping update/)
+        expect { import_service.send(:update_field, field, remote_folder) }
+          .not_to(change { lettings_log.reload.offered })
+      end
+    end
+  end
 end

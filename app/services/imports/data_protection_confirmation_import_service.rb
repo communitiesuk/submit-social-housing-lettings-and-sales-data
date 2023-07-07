@@ -8,6 +8,10 @@ module Imports
 
     def create_data_protection_confirmation(xml_document)
       org = Organisation.find_by(old_org_id: record_field_value(xml_document, "institution"))
+
+      return log_org_must_exist if org.blank?
+      return log_dpc_already_present(org) if org.data_protection_confirmed?
+
       dp_officer = User.find_by(
         name: record_field_value(xml_document, "dp-user"),
         organisation: org,
@@ -20,6 +24,9 @@ module Imports
           organisation: org,
           is_dpo: true,
           encrypted_password: SecureRandom.hex(10),
+          email: SecureRandom.uuid,
+          confirmed_at: Time.zone.now,
+          active: false,
         )
         dp_officer.save!(validate: false)
       end
@@ -32,14 +39,18 @@ module Imports
         old_org_id: record_field_value(xml_document, "institution"),
         created_at: record_field_value(xml_document, "change-date").to_time(:utc),
       )
-    rescue ActiveRecord::RecordNotUnique
-      id = record_field_value(xml_document, "id")
-      dp_officer_name = record_field_value(xml_document, "dp-user")
-      @logger.warn("Data protection confirmation #{id} created by #{dp_officer_name} for #{org.name} is already present, skipping.")
     end
 
     def record_field_value(xml_document, field)
       field_value(xml_document, "dataprotect", field)
+    end
+
+    def log_dpc_already_present(org)
+      @logger.warn("Data protection confirmation for #{org.name} with id #{org.id} is already present, skipping.")
+    end
+
+    def log_org_must_exist
+      @logger.error("Organisation must exist")
     end
   end
 end

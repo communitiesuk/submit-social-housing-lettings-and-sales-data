@@ -20,6 +20,7 @@ class Form::Lettings::Pages::ManagingOrganisation < ::Form::Page
                    end
 
     return false unless organisation
+    return false if log.owning_organisation != organisation && !organisation.holds_own_stock?
     return true unless organisation.holds_own_stock?
 
     organisation.managing_agents.count >= 1

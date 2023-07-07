@@ -1888,12 +1888,14 @@ RSpec.describe SchemesController, type: :request do
       let!(:scheme) { create(:scheme, owning_organisation: user.organisation, created_at: Time.zone.today) }
       let!(:location) { create(:location, scheme:) }
       let(:deactivation_date) { Time.utc(2022, 10, 10) }
-      let!(:lettings_log) { create(:lettings_log, :sh, location:, scheme:, startdate:, owning_organisation: user.organisation, created_by: user) }
+      let(:lettings_log) { create(:lettings_log, :sh, location:, scheme:, startdate:, owning_organisation: user.organisation, created_by: user) }
       let(:startdate) { Time.utc(2022, 10, 11) }
       let(:setup_schemes) { nil }
 
       before do
-        Timecop.freeze(Time.utc(2022, 10, 10))
+        allow(FormHandler.instance).to receive(:lettings_in_crossover_period?).and_return(true)
+        lettings_log
+        Timecop.freeze(Time.utc(2023, 10, 10))
         sign_in user
         setup_schemes
         patch "/schemes/#{scheme.id}/new-deactivation", params:

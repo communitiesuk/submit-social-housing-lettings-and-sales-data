@@ -52,6 +52,18 @@ class FormHandler
     ordered_questions
   end
 
+  def ordered_lettings_questions_for_all_years
+    lettings_forms = forms.filter { |name, _form| name.end_with? "lettings" }.values
+    ordered_questions = lettings_forms.pop.questions.uniq(&:id)
+    question_ids = ordered_questions.map(&:id)
+    all_questions_from_previous_forms = lettings_forms.flat_map(&:questions)
+    deprecated_questions_by_preceding_question_id(question_ids, all_questions_from_previous_forms).each do |preceding_question_id, deprecated_question|
+      index_of_preceding_question = ordered_questions.index { |q| q.id == preceding_question_id }
+      ordered_questions.insert(index_of_preceding_question + 1, deprecated_question)
+    end
+    ordered_questions
+  end
+
   def deprecated_questions_by_preceding_question_id(current_form_question_ids, all_questions_from_previous_forms)
     deprecated_questions = {}
     all_questions_from_previous_forms.each_cons(2) do |preceding_question, question|
@@ -103,18 +115,36 @@ class FormHandler
     in_crossover_period? ? previous_collection_start_date : current_collection_start_date
   end
 
+  def start_date_of_earliest_open_for_editing_collection_period
+    in_edit_crossover_period? ? previous_collection_start_date : current_collection_start_date
+  end
+
   def in_crossover_period?(now: Time.zone.now)
     lettings_in_crossover_period?(now:) || sales_in_crossover_period?(now:)
   end
 
+  def in_edit_crossover_period?(now: Time.zone.now)
+    lettings_in_edit_crossover_period?(now:) || sales_in_edit_crossover_period?(now:)
+  end
+
   def lettings_in_crossover_period?(now: Time.zone.now)
     forms = lettings_forms.values
-    forms.count { |form| now.between?(form.start_date, form.end_date) } > 1
+    forms.count { |form| now.between?(form.start_date, form.new_logs_end_date) } > 1
+  end
+
+  def lettings_in_edit_crossover_period?(now: Time.zone.now)
+    forms = lettings_forms.values
+    forms.count { |form| now.between?(form.start_date, form.edit_end_date) } > 1
   end
 
   def sales_in_crossover_period?(now: Time.zone.now)
     forms = sales_forms.values
-    forms.count { |form| now.between?(form.start_date, form.end_date) } > 1
+    forms.count { |form| now.between?(form.start_date, form.new_logs_end_date) } > 1
+  end
+
+  def sales_in_edit_crossover_period?(now: Time.zone.now)
+    forms = sales_forms.values
+    forms.count { |form| now.between?(form.start_date, form.edit_end_date) } > 1
   end
 
   def use_fake_forms!(fake_forms = nil)
@@ -129,6 +159,14 @@ class FormHandler
 
   def earliest_open_collection_start_date(now: Time.zone.now)
     if in_crossover_period?(now:)
+      collection_start_date(now) - 1.year
+    else
+      collection_start_date(now)
+    end
+  end
+
+  def earliest_open_for_editing_collection_start_date(now: Time.zone.now)
+    if in_edit_crossover_period?(now:)
       collection_start_date(now) - 1.year
     else
       collection_start_date(now)
