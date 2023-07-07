@@ -2799,8 +2799,8 @@ RSpec.describe LettingsLog do
     end
 
     context "when filtering duplicate logs" do
-      let(:log) { create(:lettings_log, :duplicate_general_needs) }
-      let!(:duplicate_log) { create(:lettings_log, :duplicate_general_needs) }
+      let(:log) { create(:lettings_log, :duplicate) }
+      let!(:duplicate_log) { create(:lettings_log, :duplicate) }
 
       before do
         create(:lettings_log, :in_progress)
@@ -2819,7 +2819,7 @@ RSpec.describe LettingsLog do
       end
 
       context "when there is a deleted duplicate log" do
-        let!(:deleted_duplicate_log) { create(:lettings_log, :duplicate_general_needs, discarded_at: Time.zone.now) }
+        let!(:deleted_duplicate_log) { create(:lettings_log, :duplicate, discarded_at: Time.zone.now) }
 
         it "does not return the deleted log as a duplicate" do
           expect(described_class.duplicate_logs(log)).not_to include(deleted_duplicate_log)
@@ -2827,7 +2827,7 @@ RSpec.describe LettingsLog do
       end
 
       context "when there is a log with a different start date" do
-        let!(:different_start_date_log) { create(:lettings_log, :duplicate_general_needs, startdate: Time.zone.tomorrow) }
+        let!(:different_start_date_log) { create(:lettings_log, :duplicate, startdate: Time.zone.tomorrow) }
 
         it "does not return a log with a different start date as a duplicate" do
           expect(described_class.duplicate_logs(log)).not_to include(different_start_date_log)
@@ -2835,7 +2835,7 @@ RSpec.describe LettingsLog do
       end
 
       context "when there is a log with a different age1" do
-        let!(:different_age1) { create(:lettings_log, :duplicate_general_needs, age1: 50) }
+        let!(:different_age1) { create(:lettings_log, :duplicate, age1: 50) }
 
         it "does not return a log with a different age1 as a duplicate" do
           expect(described_class.duplicate_logs(log)).not_to include(different_age1)
@@ -2843,7 +2843,7 @@ RSpec.describe LettingsLog do
       end
 
       context "when there is a log with a different sex1" do
-        let!(:different_sex1) { create(:lettings_log, :duplicate_general_needs, sex1: "F") }
+        let!(:different_sex1) { create(:lettings_log, :duplicate, sex1: "F") }
 
         it "does not return a log with a different sex1 as a duplicate" do
           expect(described_class.duplicate_logs(log)).not_to include(different_sex1)
@@ -2851,7 +2851,7 @@ RSpec.describe LettingsLog do
       end
 
       context "when there is a log with a different ecstat1" do
-        let!(:different_ecstat1) { create(:lettings_log, :duplicate_general_needs, ecstat1: 1) }
+        let!(:different_ecstat1) { create(:lettings_log, :duplicate, ecstat1: 1) }
 
         it "does not return a log with a different ecstat1 as a duplicate" do
           expect(described_class.duplicate_logs(log)).not_to include(different_ecstat1)
@@ -2859,7 +2859,7 @@ RSpec.describe LettingsLog do
       end
 
       context "when there is a log with a different tcharge" do
-        let!(:different_tcharge) { create(:lettings_log, :duplicate_general_needs, brent: 100) }
+        let!(:different_tcharge) { create(:lettings_log, :duplicate, brent: 100) }
 
         it "does not return a log with a different tcharge as a duplicate" do
           expect(described_class.duplicate_logs(log)).not_to include(different_tcharge)
@@ -2867,7 +2867,7 @@ RSpec.describe LettingsLog do
       end
 
       context "when there is a log with a different propcode" do
-        let!(:different_propcode) { create(:lettings_log, :duplicate_general_needs, propcode: "different") }
+        let!(:different_propcode) { create(:lettings_log, :duplicate, propcode: "different") }
 
         it "does not return a log with a different propcode as a duplicate" do
           expect(described_class.duplicate_logs(log)).not_to include(different_propcode)
@@ -2875,7 +2875,7 @@ RSpec.describe LettingsLog do
       end
 
       context "when there is a log with a different tenancycode" do
-        let!(:different_tenancycode) { create(:lettings_log, :duplicate_general_needs, tenancycode: "different") }
+        let!(:different_tenancycode) { create(:lettings_log, :duplicate, tenancycode: "different") }
 
         it "does not return a log with a different tenancycode as a duplicate" do
           expect(described_class.duplicate_logs(log)).not_to include(different_tenancycode)
@@ -2883,7 +2883,7 @@ RSpec.describe LettingsLog do
       end
 
       context "when there is a log with a different postcode_full" do
-        let!(:different_postcode_full) { create(:lettings_log, :duplicate_general_needs, postcode_full: "B1 1AA") }
+        let!(:different_postcode_full) { create(:lettings_log, :duplicate, postcode_full: "B1 1AA") }
 
         it "does not return a log with a different postcode_full as a duplicate" do
           expect(described_class.duplicate_logs(log)).not_to include(different_postcode_full)
@@ -2891,7 +2891,7 @@ RSpec.describe LettingsLog do
       end
 
       context "when there is a log with nil values for duplicate check fields" do
-        let!(:duplicate_check_fields_not_given) { create(:lettings_log, :duplicate_general_needs, age1: nil, sex1: nil, ecstat1: nil, propcode: nil, postcode_known: 2, postcode_full: nil) }
+        let!(:duplicate_check_fields_not_given) { create(:lettings_log, :duplicate, age1: nil, sex1: nil, ecstat1: nil, propcode: nil, postcode_known: 2, postcode_full: nil) }
 
         it "does not return a log with nil values as a duplicate" do
           log.update!(age1: nil, sex1: nil, ecstat1: nil, propcode: nil, postcode_known: 2, postcode_full: nil)
@@ -2900,11 +2900,28 @@ RSpec.describe LettingsLog do
       end
 
       context "when there is a log with nil values for tenancycode" do
-        let!(:tenancycode_not_given) { create(:lettings_log, :duplicate_general_needs, tenancycode: nil) }
+        let!(:tenancycode_not_given) { create(:lettings_log, :duplicate, tenancycode: nil) }
 
         it "returns the log as a duplicate if tenancy code is nil" do
           log.update!(tenancycode: nil)
           expect(described_class.duplicate_logs(log)).to include(tenancycode_not_given)
+        end
+      end
+
+      context "when there is a duplicate supported housing log" do
+        let(:scheme) { create(:scheme) }
+        let(:location) { create(:location, scheme:) }
+        let(:location_2) { create(:location, scheme:) }
+        let(:supported_housing_log) { create(:lettings_log, :duplicate, needstype: 2, location:, scheme:) }
+        let!(:duplicate_supported_housing_log) { create(:lettings_log, :duplicate, needstype: 2, location:, scheme:) }
+
+        it "returns the log as a duplicate" do
+          expect(described_class.duplicate_logs(supported_housing_log)).to include(duplicate_supported_housing_log)
+        end
+
+        it "does not return the log if the locations are different" do
+          duplicate_supported_housing_log.update!(location: location_2)
+          expect(described_class.duplicate_logs(supported_housing_log)).not_to include(duplicate_supported_housing_log)
         end
       end
     end

@@ -34,8 +34,9 @@ FactoryBot.define do
       ecstat1 { 2 }
       hhmemb { 1 }
     end
-    trait :duplicate_general_needs do
+    trait :duplicate do
       status { 1 }
+      needstype { 1 }
       tenancycode { "same tenancy code" }
       postcode_full { "A1 1AA" }
       age1 { 18 }
