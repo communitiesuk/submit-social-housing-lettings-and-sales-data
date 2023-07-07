@@ -745,7 +745,7 @@ private
 
   def validate_location_exists
     if scheme && field_17.present? && location.nil?
-      errors.add(:field_17, "Location could be found with provided scheme code", category: :setup)
+      errors.add(:field_17, "Location could not be found with the provided scheme code", category: :setup)
     end
   end
 
