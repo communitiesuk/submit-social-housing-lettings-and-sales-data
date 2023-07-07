@@ -1,7 +1,7 @@
 class Form::Page
   attr_accessor :id, :header, :header_partial, :description, :questions, :depends_on, :title_text,
                 :informative_text, :subsection, :hide_subsection_label, :next_unresolved_page_id,
-                :skip_text, :interruption_screen_question_ids
+                :skip_text, :interruption_screen_question_ids, :page_type
 
   def initialize(id, hsh, subsection)
     @id = id
@@ -18,6 +18,7 @@ class Form::Page
       @next_unresolved_page_id = hsh["next_unresolved_page_id"]
       @skip_text = hsh["skip_text"]
       @interruption_screen_question_ids = hsh["interruption_screen_question_ids"] || []
+      @page_type = hsh["page_type"]
     end
   end
 
