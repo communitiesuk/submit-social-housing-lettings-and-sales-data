@@ -1,5 +1,12 @@
 <% content_for :title, "Check duplicate logs" %>
 
-back button
-Duplicate logs blue box
-List or components
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <%= govuk_panel(
+            classes: "app-panel--interruption",
+        ) do %>
+            <p class="govuk-heading-l">These logs are duplicates</p>
+            <p class="govuk-body-l">These logs have the same values for the following fields. Choose one to keep or correct the answers.</p>
+        <% end %>
+    </div>
+</div>
