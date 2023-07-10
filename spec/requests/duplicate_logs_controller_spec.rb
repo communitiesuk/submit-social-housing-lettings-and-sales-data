@@ -117,6 +117,10 @@ RSpec.describe DuplicateLogsController, type: :request do
           expect(page).to have_content("Household rent and charges", count: 3)
           expect(page).to have_link("Change", count: 21)
         end
+
+        it "displays buttons to delete duplicates" do
+          expect(page).to have_link("Keep this log and delete duplicates", count: 3)
+        end
       end
     end
   end
