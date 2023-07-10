@@ -11,6 +11,7 @@
         <% @all_duplicates.each do |log| %>
             <%= render partial: "duplicate_log", locals: { log: log } %>
             <%= render partial: "duplicate_log_check_answers", locals: { log: log } %>
+            <%= govuk_button_link_to "Keep this log and delete duplicates", "#" %>
         <% end %>   
     </div>
 </div>
