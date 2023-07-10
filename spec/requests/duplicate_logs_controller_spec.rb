@@ -179,7 +179,7 @@ RSpec.describe DuplicateLogsController, type: :request do
           let(:duplicate_logs) { create_list(:sales_log, 2, :completed) }
 
           before do
-            allow(SalesLog).to receive(:duplicate_logs_for_organisation).and_return(duplicate_logs)
+            allow(SalesLog).to receive(:duplicate_logs).and_return(duplicate_logs)
             get "/sales-logs/#{sales_log.id}/duplicate-logs"
           end
 
