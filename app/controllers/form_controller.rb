@@ -155,8 +155,12 @@ private
   end
 
   def successful_redirect_path
-    if @log.class.duplicate_logs_for_organisation(current_user.organisation, @log).count.positive?
-      return send("#{@log.class.name.underscore}_duplicate_logs_path", @log)
+    if @log.lettings?
+      if current_user.lettings_logs.duplicate_logs(@log).count.positive?
+        return send("lettings_log_duplicate_logs_path", @log)
+      end
+    elsif current_user.sales_logs.duplicate_logs(@log).count.positive?
+      return send("sales_log_duplicate_logs_path", @log)
     end
 
     if is_referrer_type?("check_answers")

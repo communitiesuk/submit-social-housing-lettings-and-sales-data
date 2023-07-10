@@ -4,7 +4,11 @@ class DuplicateLogsController < ApplicationController
 
   def show
     if @log
-      @duplicate_logs = @log.class.duplicate_logs_for_organisation(current_user.organisation_id, @log)
+      @duplicate_logs = if @log.lettings?
+                          current_user.lettings_logs.duplicate_logs(@log)
+                        else
+                          current_user.sales_logs.duplicate_logs(@log)
+                        end
       @all_duplicates = [@log, *@duplicate_logs]
       @duplicate_check_questions = duplicate_check_question_ids.map { |question_id| @log.form.get_question(question_id, @log) }.compact
     else

@@ -537,7 +537,7 @@ RSpec.describe FormController, type: :request do
             let(:duplicate_logs) { create_list(:lettings_log, 2) }
 
             before do
-              allow(LettingsLog).to receive(:duplicate_logs_for_organisation).and_return(duplicate_logs)
+              allow(LettingsLog).to receive(:duplicate_logs).and_return(duplicate_logs)
               post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params:
             end
 
@@ -570,7 +570,7 @@ RSpec.describe FormController, type: :request do
             let(:duplicate_logs) { create_list(:sales_log, 2) }
 
             before do
-              allow(SalesLog).to receive(:duplicate_logs_for_organisation).and_return(duplicate_logs)
+              allow(SalesLog).to receive(:duplicate_logs).and_return(duplicate_logs)
               post "/sales-logs/#{sales_log.id}/buyer-1-age", params:
             end
 
