@@ -258,7 +258,6 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
               field_96: [error_message], # startdate
               field_97: [error_message], # startdate
               field_98: [error_message], # startdate
-              field_100: [error_message], # propcode
               field_108: [error_message], # postcode_full
               field_109: [error_message], # postcode_full
               field_111: [error_message], # owning_organisation
@@ -295,7 +294,6 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
               :field_96, # startdate
               :field_97, # startdate
               :field_98, # startdate
-              :field_100, # propcode
               :field_111, # owning_organisation
             ].each do |field|
               expect(parser.errors[field]).to include("This is a duplicate log")
@@ -329,7 +327,6 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
               :field_96, # startdate
               :field_97, # startdate
               :field_98, # startdate
-              :field_100, # propcode
               :field_108, # postcode_full
               :field_109, # postcode_full
               :field_111, # owning_organisation

@@ -328,7 +328,6 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
                 :field_8, # startdate
                 :field_9, # startdate
                 :field_13, # tenancycode
-                :field_14, # propcode
                 :field_17, # location
                 :field_46, # age1
                 :field_47, # sex1
@@ -363,7 +362,6 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
                 :field_7, # startdate
                 :field_8, # startdate
                 :field_9, # startdate
-                :field_14, # propcode
                 :field_17, # location
                 :field_23, # postcode_full
                 :field_24, # postcode_full

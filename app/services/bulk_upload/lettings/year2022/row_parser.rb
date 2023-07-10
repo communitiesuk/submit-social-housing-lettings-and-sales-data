@@ -450,7 +450,6 @@ class BulkUpload::Lettings::Year2022::RowParser
       "field_96",  # startdate
       "field_97",  # startdate
       "field_98",  # startdate
-      "field_100", # propcode
       bulk_upload.needstype != 2 ? "field_108" : nil, # postcode
       bulk_upload.needstype != 2 ? "field_109" : nil, # postcode
       "field_111", # owning org
@@ -525,7 +524,6 @@ private
       "ecstat1",
       "owning_organisation",
       "tcharge",
-      "propcode",
       bulk_upload.needstype != 2 ? "postcode_full" : nil,
       bulk_upload.needstype != 1 ? "location" : nil,
     ].compact
@@ -862,7 +860,6 @@ private
       errors.add(:field_96, error_message) # startdate
       errors.add(:field_97, error_message) # startdate
       errors.add(:field_98, error_message) # startdate
-      errors.add(:field_100, error_message) # propcode
       errors.add(:field_108, error_message) if bulk_upload.needstype != 2  # postcode_full
       errors.add(:field_109, error_message) if bulk_upload.needstype != 2  # postcode_full
       errors.add(:field_111, error_message) # owning_organisation

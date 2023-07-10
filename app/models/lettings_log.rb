@@ -56,7 +56,7 @@ class LettingsLog < Log
   scope :duplicate_logs, lambda { |log|
     visible.where(log.slice(*DUPLICATE_LOG_ATTRIBUTES))
     .where.not(id: log.id)
-    .where.not("startdate IS NULL OR age1 IS NULL OR sex1 IS NULL OR ecstat1 IS NULL OR tcharge IS NULL OR postcode_full IS NULL OR propcode IS NULL OR needstype IS NULL")
+    .where.not("startdate IS NULL OR age1 IS NULL OR sex1 IS NULL OR ecstat1 IS NULL OR tcharge IS NULL OR postcode_full IS NULL OR needstype IS NULL")
     .where("location_id = ? OR needstype = 1", log.location_id)
   }
 
@@ -67,7 +67,7 @@ class LettingsLog < Log
   NUM_OF_WEEKS_FROM_PERIOD = { 2 => 26, 3 => 13, 4 => 12, 5 => 50, 6 => 49, 7 => 48, 8 => 47, 9 => 46, 1 => 52, 10 => 53 }.freeze
   SUFFIX_FROM_PERIOD = { 2 => "every 2 weeks", 3 => "every 4 weeks", 4 => "every month" }.freeze
   RETIREMENT_AGES = { "M" => 67, "F" => 60, "X" => 67 }.freeze
-  DUPLICATE_LOG_ATTRIBUTES = %w[tenancycode propcode startdate age1 sex1 ecstat1 tcharge postcode_full].freeze
+  DUPLICATE_LOG_ATTRIBUTES = %w[tenancycode startdate age1 sex1 ecstat1 tcharge postcode_full].freeze
 
   def form
     FormHandler.instance.get_form(form_name) || FormHandler.instance.current_lettings_form
