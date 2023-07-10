@@ -50,6 +50,7 @@ class FormController < ApplicationController
       @interruption_page_id = URI.parse(request.headers["HTTP_REFERER"]).path.split("/").last.underscore
       @interruption_page_referrer_type = referrer_from_query
     end
+
     if @log
       page_id = request.path.split("/")[-1].underscore
       @page = form.get_page(page_id)
