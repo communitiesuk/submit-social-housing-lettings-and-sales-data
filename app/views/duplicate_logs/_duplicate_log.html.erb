@@ -1,0 +1,26 @@
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-one-third">
+            <header class="app-log-summary__header">
+              <h2 class="app-log-summary__title">
+                <%= govuk_link_to "Log #{log.id}", lettings_log_path(log) %>
+              </h2>
+            </header>
+          </div>
+          <div class="govuk-grid-column-two-thirds">
+            <p class="govuk-body">
+              Created <time datetime="<%= log.created_at.iso8601 %>"><%= log.created_at.to_formatted_s(:govuk_date) %></time>
+              <% if log.created_by %>
+                <span class="app-log-summary__footer--actor">Assigned to <%= log.created_by.name || log.created_by.email %></span>
+              <% end %>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="govuk-grid-column-one-third app-log-summary__footer">
+        <p class="govuk-body govuk-!-margin-bottom-2">
+          <%= status_tag(log.status) %>
+        </p>
+    </div>
+</div>

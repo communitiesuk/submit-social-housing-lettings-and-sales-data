@@ -1,5 +1,4 @@
 <% content_for :title, "Check duplicate logs" %>
-
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <%= govuk_panel(
@@ -8,5 +7,9 @@
             <p class="govuk-heading-l">These logs are duplicates</p>
             <p class="govuk-body-l">These logs have the same values for the following fields. Choose one to keep or correct the answers.</p>
         <% end %>
+
+        <% @all_duplicates.each do |log| %>
+            <%= render partial: "duplicate_log", locals: { log: log } %>
+        <% end %>   
     </div>
 </div>
