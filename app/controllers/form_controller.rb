@@ -154,7 +154,7 @@ private
   end
 
   def successful_redirect_path
-    if LettingsLog.duplicate_logs_for_organisation(current_user.organisation, @log).count.positive?
+    if @log.class.duplicate_logs_for_organisation(current_user.organisation, @log).count.positive?
       return send("#{@log.class.name.underscore}_duplicate_logs_path", @log)
     end
 
