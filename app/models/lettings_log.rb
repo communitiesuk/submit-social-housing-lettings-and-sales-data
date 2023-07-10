@@ -54,9 +54,8 @@ class LettingsLog < Log
   scope :unresolved, -> { where(unresolved: true) }
   scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org).or(where(managing_organisation: org)) }
   scope :duplicate_logs, lambda { |log|
-    where(log.slice(*DUPLICATE_LOG_ATTRIBUTES))
+    visible.where(log.slice(*DUPLICATE_LOG_ATTRIBUTES))
     .where.not(id: log.id)
-    .where.not(status: "deleted")
     .where.not("startdate IS NULL OR age1 IS NULL OR sex1 IS NULL OR ecstat1 IS NULL OR tcharge IS NULL OR postcode_full IS NULL OR propcode IS NULL OR needstype IS NULL")
     .where("location_id = ? OR needstype = 1", log.location_id)
   }
