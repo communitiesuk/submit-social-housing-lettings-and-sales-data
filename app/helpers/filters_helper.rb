@@ -46,9 +46,35 @@ module FiltersHelper
     { "2023": "2023/24", "2022": "2022/23", "2021": "2021/22" }
   end
 
+  def filters_applied_text(filter_type)
+    applied_filters = JSON.parse(session[session_name_for(filter_type)])
+    applied_filters_count = filters_count(applied_filters)
+    applied_filters_count.zero? ? "No filters applied" : "#{pluralize(applied_filters_count, 'filter')} applied"
+  end
+
+  def reset_filters_link(filter_type)
+    applied_filters = JSON.parse(session[session_name_for(filter_type)])
+    applied_filters_count = filters_count(applied_filters)
+    if applied_filters_count.positive?
+      #clear filters
+
+      govuk_link_to "Reset filters", request.path
+    end
+  end
+
 private
 
   def session_name_for(filter_type)
     "#{filter_type}_filters"
+  end
+
+  def filters_count(filters)
+    filters.values.sum do |category|
+      if category.is_a?(String)
+        category != "all" ? 1 : 0
+      else
+        category.count(&:present?)
+      end
+    end
   end
 end

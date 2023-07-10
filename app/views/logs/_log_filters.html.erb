@@ -8,6 +8,14 @@
       <%= form_with html: { method: :get } do |f| %>
         <% all_or_yours = { "all": { label: "All" }, "yours": { label: "Yours" } } %>
 
+        <p class="govuk-body">
+          <%= filters_applied_text(@filter_type) %>
+        </p>
+
+        <p>
+          <%= reset_filters_link(@filter_type) %>
+        </p>
+
         <% if bulk_upload_options(@bulk_upload).present? %>
           <%= render partial: "filters/checkbox_filter",
                      locals: {
