@@ -120,12 +120,8 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         end
       end
 
-      context "when valid row" do
-        before do
-          allow(FeatureToggle).to receive(:bulk_upload_duplicate_log_check_enabled?).and_return(true)
-        end
-
-        let(:attributes) do
+      context "when testing valid/invalid attributes" do
+        let(:valid_attributes) do
           {
             bulk_upload:,
             field_5: "1",
@@ -250,128 +246,160 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           }
         end
 
-        it "returns true" do
-          expect(parser).to be_valid
-        end
-
-        xit "instantiates a log with everything completed", aggregate_failures: true do
-          questions = parser.send(:questions).reject do |q|
-            parser.send(:log).optional_fields.include?(q.id) || q.completed?(parser.send(:log))
-          end
-
-          expect(questions.map(&:id).size).to eq(0)
-          expect(questions.map(&:id)).to eql([])
-        end
-
-        context "when a general needs log already exists in the db" do
-          let(:attributes) { { bulk_upload:, field_4: "1" } }
-
+        context "when valid row" do
           before do
-            parser.log.save!
-            parser.instance_variable_set(:@valid, nil)
+            allow(FeatureToggle).to receive(:bulk_upload_duplicate_log_check_enabled?).and_return(true)
           end
 
-          it "is not a valid row" do
-            expect(parser).not_to be_valid
-          end
+          let(:attributes) { valid_attributes }
 
-          it "adds an error to all (and only) the fields used to determine duplicates" do
-            parser.valid?
-
-            error_message = "This is a duplicate log"
-
-            [
-              :field_1, # owning_organisation
-              :field_7, # startdate
-              :field_8, # startdate
-              :field_9, # startdate
-              :field_13, # tenancycode
-              :field_14, # propcode
-              :field_23, # postcode_full
-              :field_24, # postcode_full
-              :field_25, # postcode_full
-              :field_46, # age1
-              :field_47, # sex1
-              :field_50, # ecstat1
-              :field_132, # tcharge
-            ].each do |field|
-              expect(parser.errors[field]).to include(error_message)
-            end
-
-            expect(parser.errors[:field_17]).not_to include(error_message)
-          end
-        end
-
-        context "when a supported housing log already exists in the db" do
-          let(:attributes) { { bulk_upload:, field_4: "2" } }
-
-          before do
-            parser.log.save!
-            parser.instance_variable_set(:@valid, nil)
-          end
-
-          it "is not a valid row" do
-            expect(parser).not_to be_valid
-          end
-
-          it "adds an error to all the fields used to determine duplicates" do
-            parser.valid?
-
-            error_message = "This is a duplicate log"
-
-            [
-              :field_1, # owning_organisation
-              :field_7, # startdate
-              :field_8, # startdate
-              :field_9, # startdate
-              :field_13, # tenancycode
-              :field_14, # propcode
-              :field_17, # location
-              :field_46, # age1
-              :field_47, # sex1
-              :field_50, # ecstat1
-              :field_132, # tcharge
-            ].each do |field|
-              expect(parser.errors[field]).to include(error_message)
-            end
-
-            expect(parser.errors[:field_23]).not_to include(error_message)
-            expect(parser.errors[:field_24]).not_to include(error_message)
-            expect(parser.errors[:field_25]).not_to include(error_message)
-          end
-        end
-
-        context "when a hidden log already exists in db" do
-          before do
-            parser.log.status = "pending"
-            parser.log.skip_update_status = true
-            parser.log.save!
-          end
-
-          it "is a valid row" do
+          it "returns true" do
             expect(parser).to be_valid
           end
 
-          it "does not add duplicate errors" do
-            parser.valid?
-
-            [
-              :field_1, # owning_organisation
-              :field_7, # startdate
-              :field_8, # startdate
-              :field_9, # startdate
-              :field_14, # propcode
-              :field_17, # location
-              :field_23, # postcode_full
-              :field_24, # postcode_full
-              :field_25, # postcode_full
-              :field_46, # age1
-              :field_47, # sex1
-              :field_50, # ecstat1
-              :field_132, # tcharge
-            ].each do |field|
-              expect(parser.errors[field]).to be_blank
+          xit "instantiates a log with everything completed", aggregate_failures: true do
+            questions = parser.send(:questions).reject do |q|
+              parser.send(:log).optional_fields.include?(q.id) || q.completed?(parser.send(:log))
             end
+
+            expect(questions.map(&:id).size).to eq(0)
+            expect(questions.map(&:id)).to eql([])
+          end
+
+          context "when a general needs log already exists in the db" do
+            let(:attributes) { { bulk_upload:, field_4: "1" } }
+
+            before do
+              parser.log.save!
+              parser.instance_variable_set(:@valid, nil)
+            end
+
+            it "is not a valid row" do
+              expect(parser).not_to be_valid
+            end
+
+            it "adds an error to all (and only) the fields used to determine duplicates" do
+              parser.valid?
+
+              error_message = "This is a duplicate log"
+
+              [
+                :field_1, # owning_organisation
+                :field_7, # startdate
+                :field_8, # startdate
+                :field_9, # startdate
+                :field_13, # tenancycode
+                :field_14, # propcode
+                :field_23, # postcode_full
+                :field_24, # postcode_full
+                :field_25, # postcode_full
+                :field_46, # age1
+                :field_47, # sex1
+                :field_50, # ecstat1
+                :field_132, # tcharge
+              ].each do |field|
+                expect(parser.errors[field]).to include(error_message)
+              end
+
+              expect(parser.errors[:field_17]).not_to include(error_message)
+            end
+          end
+
+          context "when a supported housing log already exists in the db" do
+            let(:attributes) { { bulk_upload:, field_4: "2" } }
+
+            before do
+              parser.log.save!
+              parser.instance_variable_set(:@valid, nil)
+            end
+
+            it "is not a valid row" do
+              expect(parser).not_to be_valid
+            end
+
+            it "adds an error to all the fields used to determine duplicates" do
+              parser.valid?
+
+              error_message = "This is a duplicate log"
+
+              [
+                :field_1, # owning_organisation
+                :field_7, # startdate
+                :field_8, # startdate
+                :field_9, # startdate
+                :field_13, # tenancycode
+                :field_14, # propcode
+                :field_17, # location
+                :field_46, # age1
+                :field_47, # sex1
+                :field_50, # ecstat1
+                :field_132, # tcharge
+              ].each do |field|
+                expect(parser.errors[field]).to include(error_message)
+              end
+
+              expect(parser.errors[:field_23]).not_to include(error_message)
+              expect(parser.errors[:field_24]).not_to include(error_message)
+              expect(parser.errors[:field_25]).not_to include(error_message)
+            end
+          end
+
+          context "when a hidden log already exists in db" do
+            before do
+              parser.log.status = "pending"
+              parser.log.skip_update_status = true
+              parser.log.save!
+            end
+
+            it "is a valid row" do
+              expect(parser).to be_valid
+            end
+
+            it "does not add duplicate errors" do
+              parser.valid?
+
+              [
+                :field_1, # owning_organisation
+                :field_7, # startdate
+                :field_8, # startdate
+                :field_9, # startdate
+                :field_14, # propcode
+                :field_17, # location
+                :field_23, # postcode_full
+                :field_24, # postcode_full
+                :field_25, # postcode_full
+                :field_46, # age1
+                :field_47, # sex1
+                :field_50, # ecstat1
+                :field_132, # tcharge
+              ].each do |field|
+                expect(parser.errors[field]).to be_blank
+              end
+            end
+          end
+        end
+
+        context "when valid row with valid decimal (integer) field_5" do
+          before do
+            allow(FeatureToggle).to receive(:bulk_upload_duplicate_log_check_enabled?).and_return(true)
+          end
+
+          let(:attributes) { valid_attributes.merge(field_5: "1.00") }
+
+          it "returns true" do
+            expect(parser).to be_valid
+          end
+        end
+
+        context "when valid row with invalid decimal (non-integer) field_5" do
+          before do
+            allow(FeatureToggle).to receive(:bulk_upload_duplicate_log_check_enabled?).and_return(true)
+          end
+
+          let(:attributes) { valid_attributes.merge(field_5: "1.56") }
+
+          it "returns false" do
+            expect(parser).not_to be_valid
           end
         end
       end
