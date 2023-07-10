@@ -2896,6 +2896,15 @@ RSpec.describe LettingsLog do
         end
       end
 
+      context "when there is a log with age1 not known" do
+        let!(:age1_not_known) { create(:lettings_log, :duplicate, age1_known: 1, age1: nil) }
+
+        it "returns the log as a duplicate if age1 is not known" do
+          log.update!(age1_known: 1, age1: nil)
+          expect(described_class.duplicate_logs(log)).to include(age1_not_known)
+        end
+      end
+
       context "when there is a duplicate supported housing log" do
         let(:scheme) { create(:scheme) }
         let(:location) { create(:location, scheme:) }
