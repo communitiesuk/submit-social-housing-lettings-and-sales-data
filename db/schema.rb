@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_29_125541) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_10_101532) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -52,8 +52,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_29_125541) do
     t.string "old_org_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "signed_at"
+    t.string "organisation_name"
+    t.string "organisation_address"
+    t.string "organisation_phone_number"
+    t.string "data_protection_officer_email"
+    t.string "data_protection_officer_name"
     t.index ["data_protection_officer_id"], name: "dpo_user_id"
-    t.index ["organisation_id", "data_protection_officer_id", "confirmed"], name: "data_protection_confirmations_unique", unique: true
     t.index ["organisation_id"], name: "index_data_protection_confirmations_on_organisation_id"
   end
 
