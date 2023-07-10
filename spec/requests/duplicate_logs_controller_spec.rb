@@ -167,7 +167,7 @@ RSpec.describe DuplicateLogsController, type: :request do
             expect(page).to have_content("Q33 - Lead tenant’s gender identity", count: 3)
             expect(page).to have_content("Q37 - Lead tenant’s working situation", count: 3)
             expect(page).to have_content("Household rent and charges", count: 3)
-            expect(page).to have_link("Change", count: 24)
+            expect(page).to have_link("Change", count: 21)
           end
 
           it "displays buttons to delete" do
@@ -190,14 +190,13 @@ RSpec.describe DuplicateLogsController, type: :request do
           end
 
           it "displays check your answers for each log with correct questions" do
-            expect(page).to have_content("Owning organisation", count: 3)
             expect(page).to have_content("Q1 - Sale completion date", count: 3)
             expect(page).to have_content("Q2 - Purchaser code", count: 3)
             expect(page).to have_content("Q20 - Lead buyer’s age", count: 3)
             expect(page).to have_content("Q21 - Buyer 1’s gender identity", count: 3)
             expect(page).to have_content("Q25 - Buyer 1's working situation", count: 3)
             expect(page).to have_content("Q15 - Postcode", count: 3)
-            expect(page).to have_link("Change", count: 21)
+            expect(page).to have_link("Change", count: 18)
           end
 
           it "displays buttons to delete" do
