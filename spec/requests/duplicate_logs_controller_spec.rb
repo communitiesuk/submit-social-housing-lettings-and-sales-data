@@ -8,6 +8,7 @@ RSpec.describe DuplicateLogsController, type: :request do
     let(:lettings_log) do
       create(
         :lettings_log,
+        :completed,
         created_by: user,
       )
     end
@@ -18,8 +19,8 @@ RSpec.describe DuplicateLogsController, type: :request do
     end
 
     describe "GET" do
-      context "with multiple duplicate logs" do
-        let(:duplicate_logs) { create_list(:lettings_log, 2) }
+      context "with multiple duplicate lettings logs" do
+        let(:duplicate_logs) { create_list(:lettings_log, 2, :completed) }
 
         before do
           allow(LettingsLog).to receive(:duplicate_logs_for_organisation).and_return(duplicate_logs)
@@ -30,6 +31,17 @@ RSpec.describe DuplicateLogsController, type: :request do
           expect(page).to have_link("Log #{lettings_log.id}", href: "/lettings-logs/#{lettings_log.id}")
           expect(page).to have_link("Log #{duplicate_logs.first.id}", href: "/lettings-logs/#{duplicate_logs.first.id}")
           expect(page).to have_link("Log #{duplicate_logs.second.id}", href: "/lettings-logs/#{duplicate_logs.second.id}")
+        end
+
+        it "displays check your answers for each log with correct questions" do
+          expect(page).to have_content("Q5 - Tenancy start date", count: 3)
+          expect(page).to have_content("Q7 - Tenant code", count: 3)
+          expect(page).to have_content("Q12 - Postcode", count: 3)
+          expect(page).to have_content("Q32 - Lead tenant’s age", count: 3)
+          expect(page).to have_content("Q33 - Lead tenant’s gender identity", count: 3)
+          expect(page).to have_content("Q37 - Lead tenant’s working situation", count: 3)
+          expect(page).to have_content("Household rent and charges", count: 3)
+          expect(page).to have_link("Change", count: 21)
         end
       end
     end

@@ -10,6 +10,7 @@
 
         <% @all_duplicates.each do |log| %>
             <%= render partial: "duplicate_log", locals: { log: log } %>
+            <%= render partial: "duplicate_log_check_answers", locals: { log: log } %>
         <% end %>   
     </div>
 </div>

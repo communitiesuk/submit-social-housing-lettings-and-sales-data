@@ -1,0 +1,25 @@
+<div class="x-govuk-summary-card govuk-!-margin-bottom-6">
+  <div class="x-govuk-summary-card__body">
+    <%= govuk_summary_list do |summary_list| %>
+      <% @duplicate_check_questions.each do |question| %>
+        <% summary_list.row do |row| %>
+          <% row.key { get_question_label(question) } %>
+
+          <% row.value do %>
+            <%= simple_format(
+              get_answer_label(question, @log),
+              wrapper_tag: "span",
+              class: "govuk-!-margin-right-4",
+            ) %>
+          <% end %>
+
+          <% row.action(
+            text: question.action_text(@log),
+            href: action_href(@log, question.page.id),
+            visually_hidden_text: question.check_answer_label.to_s.downcase,
+          ) %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
