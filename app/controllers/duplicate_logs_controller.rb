@@ -28,7 +28,7 @@ private
 
   def duplicate_check_question_ids
     if @log.lettings?
-      %w[owning_organisation_id startdate tenancycode postcode_full age1 sex1 ecstat1 tcharge]
+      ["owning_organisation_id", "startdate", "tenancycode", @log.is_general_needs? ? "postcode_full" : nil, @log.is_supported_housing? ? "location_id" : nil, "age1", "sex1", "ecstat1", "tcharge"].compact
     else
       %w[owning_organisation_id saledate purchid age1 sex1 ecstat1 postcode_full]
     end
