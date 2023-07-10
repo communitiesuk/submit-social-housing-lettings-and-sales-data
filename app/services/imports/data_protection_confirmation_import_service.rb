@@ -38,6 +38,12 @@ module Imports
         old_id: record_field_value(xml_document, "id"),
         old_org_id: record_field_value(xml_document, "institution"),
         created_at: record_field_value(xml_document, "change-date").to_time(:utc),
+        signed_at: record_field_value(xml_document, "change-date").to_time(:utc),
+        organisation_name: org.name,
+        organisation_address: org.address_row,
+        organisation_phone_number: org.phone,
+        data_protection_officer_email: dp_officer.email,
+        data_protection_officer_name: dp_officer.name,
       )
     end
 
