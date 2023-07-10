@@ -47,14 +47,4 @@ private
       %w[owning_organisation_id saledate purchid age1 sex1 ecstat1 postcode_full]
     end
   end
-
-private
-
-  def find_resource_by_named_id
-    @log = if params[:sales_log_id].present?
-             current_user.sales_logs.visible.find_by(id: params[:sales_log_id])
-           else
-             current_user.lettings_logs.visible.find_by(id: params[:lettings_log_id])
-           end
-  end
 end
