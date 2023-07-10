@@ -61,7 +61,7 @@ class Form
     routed_question || all_questions[0]
   end
 
-  def f(page)
+  def subsection_for_page(page)
     subsections.find { |s| s.pages.find { |p| p.id == page.id } }
   end
 
