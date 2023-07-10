@@ -529,10 +529,6 @@ class LettingsLog < Log
     end
   end
 
-  def duplicate_log_attributes
-    %w[tenancycode propcode startdate age1 sex1 ecstat1 tcharge postcode_full]
-  end
-
 private
 
   def reset_invalid_unresolved_log_fields!
