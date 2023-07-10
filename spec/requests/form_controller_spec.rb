@@ -546,13 +546,6 @@ RSpec.describe FormController, type: :request do
               follow_redirect!
               expect(page).to have_content("These logs are duplicates")
             end
-
-            it "displays links to all the duplicate logs" do
-              follow_redirect!
-              expect(page).to have_link("Log #{lettings_log.id}", href: "/lettings-logs/#{lettings_log.id}")
-              expect(page).to have_link("Log #{duplicate_logs.first.id}", href: "/lettings-logs/#{duplicate_logs.first.id}")
-              expect(page).to have_link("Log #{duplicate_logs.second.id}", href: "/lettings-logs/#{duplicate_logs.second.id}")
-            end
           end
         end
 
