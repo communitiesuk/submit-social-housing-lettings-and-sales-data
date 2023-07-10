@@ -251,22 +251,6 @@ RSpec.describe SalesLog, type: :model do
     end
   end
 
-  context "when filtering duplicate logs for organisation" do
-    let(:organisation) { create(:organisation) }
-    let(:log) { create(:sales_log, :duplicate, owning_organisation: organisation) }
-    let!(:duplicate_log_same_owning_org) { create(:sales_log, :duplicate, owning_organisation: organisation) }
-    let!(:duplicate_log_different_org) { create(:sales_log, :duplicate) }
-
-    it "returns all duplicate logs for given log" do
-      expect(described_class.duplicate_logs_for_organisation(organisation, log).count).to eq(1)
-    end
-
-    it "returns duplicate log" do
-      expect(described_class.duplicate_logs_for_organisation(organisation, log)).to include(duplicate_log_same_owning_org)
-      expect(described_class.duplicate_logs_for_organisation(organisation, log)).not_to include(duplicate_log_different_org)
-    end
-  end
-
   describe "derived variables" do
     let(:sales_log) { create(:sales_log, :completed) }
 

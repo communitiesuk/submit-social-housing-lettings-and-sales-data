@@ -2921,24 +2921,6 @@ RSpec.describe LettingsLog do
         end
       end
     end
-
-    context "when filtering duplicate logs for organisation" do
-      let(:organisation) { create(:organisation) }
-      let(:log) { create(:lettings_log, :duplicate, owning_organisation: organisation) }
-      let!(:duplicate_log_same_owning_org) { create(:lettings_log, :duplicate, owning_organisation: organisation) }
-      let!(:duplicate_log_same_managing_org) { create(:lettings_log, :duplicate, managing_organisation: organisation) }
-      let!(:duplicate_log_different_org) { create(:lettings_log, :duplicate) }
-
-      it "returns all duplicate logs for given log" do
-        expect(described_class.duplicate_logs_for_organisation(organisation, log).count).to eq(2)
-      end
-
-      it "returns duplicate log" do
-        expect(described_class.duplicate_logs_for_organisation(organisation, log)).to include(duplicate_log_same_owning_org)
-        expect(described_class.duplicate_logs_for_organisation(organisation, log)).to include(duplicate_log_same_managing_org)
-        expect(described_class.duplicate_logs_for_organisation(organisation, log)).not_to include(duplicate_log_different_org)
-      end
-    end
   end
 
   describe "#retirement_age_for_person" do

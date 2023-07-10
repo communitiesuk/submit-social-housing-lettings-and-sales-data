@@ -47,7 +47,6 @@ class SalesLog < Log
     .where.not(status: "deleted")
     .where.not("saledate is NULL OR age1 IS NULL OR sex1 IS NULL OR ecstat1 IS NULL OR postcode_full IS NULL")
   }
-  scope :duplicate_logs_for_organisation, ->(org, log) { filter_by_organisation(org).duplicate_logs(log) }
 
   OPTIONAL_FIELDS = %w[purchid othtype].freeze
   RETIREMENT_AGES = { "M" => 65, "F" => 60, "X" => 65 }.freeze
