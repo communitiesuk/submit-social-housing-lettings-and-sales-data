@@ -1,5 +1,5 @@
 <div class="govuk-button-group app-filter-toggle">
-  <% if !FeatureToggle.new_data_protection_confirmation? || @organisation.data_protection_confirmed? %>
+  <% if @organisation.data_protection_confirmed? %>
     <% if current_page?(controller: 'organisations', action: 'lettings_logs') %>
       <%= govuk_button_to "Create a new lettings log for this organisation", lettings_logs_path(lettings_log: { owning_organisation_id: @organisation.id }, method: :post) %>
     <% end %>

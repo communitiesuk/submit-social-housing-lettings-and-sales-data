@@ -13,7 +13,6 @@ class CreateLogActionsComponent < ViewComponent::Base
 
   def display_actions?
     return false if bulk_upload.present?
-    return true unless FeatureToggle.new_data_protection_confirmation?
     return true if user.support?
 
     user.organisation.data_protection_confirmed?

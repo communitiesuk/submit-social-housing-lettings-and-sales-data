@@ -1501,26 +1501,9 @@ RSpec.describe OrganisationsController, type: :request do
         sign_in user
       end
 
-      context "when flag not enabled" do
-        before do
-          allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(false)
-        end
-
-        it "returns not found" do
-          get "/organisations/#{organisation.id}/data-sharing-agreement", headers: headers
-          expect(response).to have_http_status(:not_found)
-        end
-      end
-
-      context "when flag enabled" do
-        before do
-          allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(true)
-        end
-
-        it "returns ok" do
-          get "/organisations/#{organisation.id}/data-sharing-agreement", headers: headers
-          expect(response).to have_http_status(:ok)
-        end
+      it "returns ok" do
+        get "/organisations/#{organisation.id}/data-sharing-agreement", headers: headers
+        expect(response).to have_http_status(:ok)
       end
     end
   end
@@ -1541,10 +1524,8 @@ RSpec.describe OrganisationsController, type: :request do
         sign_in user
       end
 
-      context "when flag not enabled" do
-        before do
-          allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(false)
-        end
+      context "when user not dpo" do
+        let(:user) { create(:user, is_dpo: false) }
 
         it "returns not found" do
           post "/organisations/#{organisation.id}/data-sharing-agreement", headers: headers
@@ -1552,12 +1533,8 @@ RSpec.describe OrganisationsController, type: :request do
         end
       end
 
-      context "when flag enabled" do
-        before do
-          allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(true)
-        end
-
-        context "when user not dpo" do
+      context "when user is dpo" do
+        context "when the organisation has a non-confirmed confirmation" do
           let(:user) { create(:user, is_dpo: false) }
 
           it "returns not found" do
@@ -1566,49 +1543,38 @@ RSpec.describe OrganisationsController, type: :request do
           end
         end
 
-        context "when user is dpo" do
-          context "when the organisation has a non-confirmed confirmation" do
-            let(:user) { create(:user, is_dpo: false) }
+        context "when the organisation does not have a confirmation" do
+          let(:user) { create(:user, is_dpo: true, organisation:) }
+
+          it "returns redirects to details page" do
+            post "/organisations/#{organisation.id}/data-sharing-agreement", headers: headers
+
+            expect(response).to redirect_to("/organisations/#{organisation.id}/details")
+            expect(flash[:notice]).to eq("You have accepted the Data Sharing Agreement")
+            expect(flash[:notification_banner_body]).to eq("Your organisation can now submit logs.")
+          end
+
+          it "creates a data sharing agreement" do
+            expect(organisation.reload.data_protection_confirmation).to be_nil
+
+            post("/organisations/#{organisation.id}/data-sharing-agreement", headers:)
+
+            data_protection_confirmation = organisation.reload.data_protection_confirmation
+
+            expect(data_protection_confirmation.organisation.address_row).to eq(organisation.address_row)
+            expect(data_protection_confirmation.organisation.name).to eq(organisation.name)
+            expect(data_protection_confirmation.organisation.phone).to eq(organisation.phone)
+            expect(data_protection_confirmation.data_protection_officer).to eq(user)
+          end
+
+          context "when the user has already accepted the agreement" do
+            before do
+              create(:data_protection_confirmation, data_protection_officer: user, organisation: user.organisation)
+            end
 
             it "returns not found" do
               post "/organisations/#{organisation.id}/data-sharing-agreement", headers: headers
               expect(response).to have_http_status(:not_found)
-            end
-          end
-
-          context "when the organisation does not have a confirmation" do
-            let(:user) { create(:user, is_dpo: true, organisation:) }
-
-            it "returns redirects to details page" do
-              post "/organisations/#{organisation.id}/data-sharing-agreement", headers: headers
-
-              expect(response).to redirect_to("/organisations/#{organisation.id}/details")
-              expect(flash[:notice]).to eq("You have accepted the Data Sharing Agreement")
-              expect(flash[:notification_banner_body]).to eq("Your organisation can now submit logs.")
-            end
-
-            it "creates a data sharing agreement" do
-              expect(organisation.reload.data_protection_confirmation).to be_nil
-
-              post("/organisations/#{organisation.id}/data-sharing-agreement", headers:)
-
-              data_protection_confirmation = organisation.reload.data_protection_confirmation
-
-              expect(data_protection_confirmation.organisation.address_row).to eq(organisation.address_row)
-              expect(data_protection_confirmation.organisation.name).to eq(organisation.name)
-              expect(data_protection_confirmation.organisation.phone).to eq(organisation.phone)
-              expect(data_protection_confirmation.data_protection_officer).to eq(user)
-            end
-
-            context "when the user has already accepted the agreement" do
-              before do
-                create(:data_protection_confirmation, data_protection_officer: user, organisation: user.organisation)
-              end
-
-              it "returns not found" do
-                post "/organisations/#{organisation.id}/data-sharing-agreement", headers: headers
-                expect(response).to have_http_status(:not_found)
-              end
             end
           end
         end

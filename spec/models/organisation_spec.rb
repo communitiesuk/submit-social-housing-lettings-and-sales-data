@@ -234,47 +234,19 @@ RSpec.describe Organisation, type: :model do
   describe "display_organisation_attributes" do
     let(:organisation) { create(:organisation) }
 
-    context "when new_data_protection_confirmation flag enabled" do
-      before do
-        allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(true)
-      end
-
-      it "does not include data protection agreement" do
-        expect(organisation.display_organisation_attributes).to eq(
-          [{ editable: true, name: "Name", value: "DLUHC" },
-           { editable: false, name: "Organisation ID", value: "ORG#{organisation.id}" },
-           { editable: true,
-             name: "Address",
-             value: "2 Marsham Street\nLondon\nSW1P 4DF" },
-           { editable: true, name: "Telephone number", value: nil },
-           { editable: false, name: "Type of provider", value: "Local authority" },
-           { editable: false, name: "Registration number", value: "1234" },
-           { editable: false, format: :bullet, name: "Rent periods", value: %w[All] },
-           { editable: false, name: "Owns housing stock", value: "Yes" }],
-        )
-      end
-    end
-
-    context "when new_data_protection_confirmation flag disabled" do
-      before do
-        allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(false)
-      end
-
-      it "includes data protection agreement" do
-        expect(organisation.display_organisation_attributes).to eq(
-          [{ editable: true, name: "Name", value: "DLUHC" },
-           { editable: false, name: "Organisation ID", value: "ORG#{organisation.id}" },
-           { editable: true,
-             name: "Address",
-             value: "2 Marsham Street\nLondon\nSW1P 4DF" },
-           { editable: true, name: "Telephone number", value: nil },
-           { editable: false, name: "Type of provider", value: "Local authority" },
-           { editable: false, name: "Registration number", value: "1234" },
-           { editable: false, format: :bullet, name: "Rent periods", value: %w[All] },
-           { editable: false, name: "Owns housing stock", value: "Yes" },
-           { editable: false, name: "Data protection agreement", value: "Accepted" }],
-        )
-      end
+    it "does not include data protection agreement" do
+      expect(organisation.display_organisation_attributes).to eq(
+        [{ editable: true, name: "Name", value: "DLUHC" },
+         { editable: false, name: "Organisation ID", value: "ORG#{organisation.id}" },
+         { editable: true,
+           name: "Address",
+           value: "2 Marsham Street\nLondon\nSW1P 4DF" },
+         { editable: true, name: "Telephone number", value: nil },
+         { editable: false, name: "Type of provider", value: "Local authority" },
+         { editable: false, name: "Registration number", value: "1234" },
+         { editable: false, format: :bullet, name: "Rent periods", value: %w[All] },
+         { editable: false, name: "Owns housing stock", value: "Yes" }],
+      )
     end
   end
 end

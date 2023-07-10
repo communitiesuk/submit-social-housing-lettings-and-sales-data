@@ -159,13 +159,10 @@ class OrganisationsController < ApplicationController
   end
 
   def data_sharing_agreement
-    return render_not_found unless FeatureToggle.new_data_protection_confirmation?
-
     @data_protection_confirmation = current_user.organisation.data_protection_confirmation
   end
 
   def confirm_data_sharing_agreement
-    return render_not_found unless FeatureToggle.new_data_protection_confirmation?
     return render_not_found unless current_user.is_dpo?
     return render_not_found if @organisation.data_protection_confirmed?
 
