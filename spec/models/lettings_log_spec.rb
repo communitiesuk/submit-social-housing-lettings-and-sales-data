@@ -2920,6 +2920,24 @@ RSpec.describe LettingsLog do
           duplicate_supported_housing_log.update!(location: location_2)
           expect(described_class.duplicate_logs(supported_housing_log)).not_to include(duplicate_supported_housing_log)
         end
+
+        it "does not compare tcharge if there are no household charges" do
+          supported_housing_log.update!(household_charge: 1, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil)
+          duplicate_supported_housing_log.update!(household_charge: 1, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil)
+          expect(described_class.duplicate_logs(supported_housing_log)).to include(duplicate_supported_housing_log)
+        end
+
+        it "compares chcharge if it's a carehome" do
+          supported_housing_log.update!(is_carehome: 1, chcharge: 100, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil)
+          duplicate_supported_housing_log.update!(is_carehome: 1, chcharge: 100, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil)
+          expect(described_class.duplicate_logs(supported_housing_log)).to include(duplicate_supported_housing_log)
+        end
+
+        it "does not return a duplicate if carehome charge is not given" do
+          supported_housing_log.update!(is_carehome: 1, chcharge: nil, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil)
+          duplicate_supported_housing_log.update!(is_carehome: 1, chcharge: nil, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil)
+          expect(described_class.duplicate_logs(supported_housing_log)).not_to include(duplicate_supported_housing_log)
+        end
       end
     end
   end

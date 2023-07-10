@@ -28,7 +28,17 @@ private
 
   def duplicate_check_question_ids
     if @log.lettings?
-      ["owning_organisation_id", "startdate", "tenancycode", @log.is_general_needs? ? "postcode_full" : nil, @log.is_supported_housing? ? "location_id" : nil, "age1", "sex1", "ecstat1", "tcharge"].compact
+      ["owning_organisation_id",
+       "startdate",
+       "tenancycode",
+       @log.is_general_needs? ? "postcode_full" : nil,
+       @log.is_supported_housing? ? "location_id" : nil,
+       "age1",
+       "sex1",
+       "ecstat1",
+       @log.household_charge == 1 ? "household_charge" : nil,
+       !@log.is_carehome? && @log.household_charge != 1 ? "tcharge" : nil,
+       @log.is_carehome? ? "chcharge" : nil].compact
     else
       %w[owning_organisation_id saledate purchid age1 sex1 ecstat1 postcode_full]
     end
