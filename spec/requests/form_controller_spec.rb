@@ -532,6 +532,21 @@ RSpec.describe FormController, type: :request do
             expect(whodunnit_actor).to be_a(User)
             expect(whodunnit_actor.id).to eq(user.id)
           end
+
+          context "and duplicate logs" do
+            let(:duplicate_logs) { create_list(:lettings_log, 2) }
+
+            before do
+              allow(LettingsLog).to receive(:duplicate_logs_for_organisation).and_return(duplicate_logs)
+              post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params:
+            end
+
+            it "redirects to the duplicate logs page" do
+              expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/duplicate-logs")
+              follow_redirect!
+              expect(page).to have_content("These logs are duplicates")
+            end
+          end
         end
 
         context "when the question has a conditional question" do

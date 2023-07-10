@@ -50,9 +50,6 @@ class FormController < ApplicationController
       @interruption_page_id = URI.parse(request.headers["HTTP_REFERER"]).path.split("/").last.underscore
       @interruption_page_referrer_type = referrer_from_query
     end
-    if @log.duplicate_logs?
-      redirect_to
-    end
     if @log
       page_id = request.path.split("/")[-1].underscore
       @page = form.get_page(page_id)
@@ -157,6 +154,10 @@ private
   end
 
   def successful_redirect_path
+    if LettingsLog.duplicate_logs_for_organisation(current_user.organisation, @log).count.positive?
+      return send("#{@log.class.name.underscore}_duplicate_logs_path", @log)
+    end
+
     if is_referrer_type?("check_answers")
       next_page_id = form.next_page_id(@page, @log, current_user)
       next_page = form.get_page(next_page_id)
