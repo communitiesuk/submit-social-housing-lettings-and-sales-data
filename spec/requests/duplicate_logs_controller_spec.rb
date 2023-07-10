@@ -106,6 +106,17 @@ RSpec.describe DuplicateLogsController, type: :request do
             expect(page).to have_link("Keep this log and delete duplicates", count: 3)
           end
         end
+
+        it "displays check your answers for each log with correct questions" do
+          expect(page).to have_content("Q5 - Tenancy start date", count: 3)
+          expect(page).to have_content("Q7 - Tenant code", count: 3)
+          expect(page).to have_content("Q12 - Postcode", count: 3)
+          expect(page).to have_content("Q32 - Lead tenant’s age", count: 3)
+          expect(page).to have_content("Q33 - Lead tenant’s gender identity", count: 3)
+          expect(page).to have_content("Q37 - Lead tenant’s working situation", count: 3)
+          expect(page).to have_content("Household rent and charges", count: 3)
+          expect(page).to have_link("Change", count: 21)
+        end
       end
     end
   end
