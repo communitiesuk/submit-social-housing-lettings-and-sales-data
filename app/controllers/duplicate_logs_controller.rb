@@ -10,7 +10,10 @@ class DuplicateLogsController < ApplicationController
                           current_user.sales_logs.duplicate_logs(@log)
                         end
       @all_duplicates = [@log, *@duplicate_logs]
-      @duplicate_check_questions = duplicate_check_question_ids.map { |question_id| @log.form.get_question(question_id, @log) }.compact
+      @duplicate_check_questions = duplicate_check_question_ids.map { |question_id|
+        question = @log.form.get_question(question_id, @log)
+        question if question.page.routed_to?(@log, current_user)
+      }.compact
     else
       render_not_found
     end
@@ -31,13 +34,14 @@ private
       ["owning_organisation_id",
        "startdate",
        "tenancycode",
-       @log.is_general_needs? ? "postcode_full" : nil,
-       @log.is_supported_housing? ? "location_id" : nil,
+       "postcode_full",
+       "scheme_id",
+       "location_id",
        "age1",
        "sex1",
        "ecstat1",
        @log.household_charge == 1 ? "household_charge" : nil,
-       !@log.is_carehome? && @log.household_charge != 1 ? "tcharge" : nil,
+       "tcharge",
        @log.is_carehome? ? "chcharge" : nil].compact
     else
       %w[owning_organisation_id saledate purchid age1 sex1 ecstat1 postcode_full]

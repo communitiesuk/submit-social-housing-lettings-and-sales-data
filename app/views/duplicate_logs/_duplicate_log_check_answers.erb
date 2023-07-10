@@ -11,6 +11,20 @@
               wrapper_tag: "span",
               class: "govuk-!-margin-right-4",
             ) %>
+
+            <% extra_value = question.get_extra_check_answer_value(@log) %>
+
+            <% if extra_value && question.answer_label(@log, current_user).present? %>
+              <%= simple_format(
+                extra_value,
+                wrapper_tag: "span",
+                class: "govuk-!-font-weight-regular app-!-colour-muted",
+              ) %>
+            <% end %>
+
+            <% question.get_inferred_answers(@log).each do |inferred_answer| %>
+              <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= inferred_answer %></span>
+            <% end %>
           <% end %>
 
           <% row.action(
