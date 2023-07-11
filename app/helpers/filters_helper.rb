@@ -67,11 +67,11 @@ private
   end
 
   def filters_count(filters)
-    filters.values.sum do |category|
-      if category.is_a?(String)
-        category != "all" ? 1 : 0
-      else
-        category.count(&:present?)
+    filters.each.sum do |category, category_filters|
+      if %w[status years].include?(category)
+        category_filters.count(&:present?)
+      elsif %w[user organisation].include?(category)
+        category_filters != "all" ? 1 : 0
       end
     end
   end
