@@ -18,7 +18,7 @@
       <% @duplicate_logs.each do |duplicate_log| %>
         <li>
           <strong>
-            <%= govuk_link_to "Log #{duplicate_log.id}", duplicate_log.lettings? ? lettings_log_path(duplicate_log) : sales_log_path(duplicate_log) %>
+            <%= govuk_link_to "Log #{duplicate_log.id}", url_for(duplicate_log) %>
           </strong>
         </li>
       <% end %>

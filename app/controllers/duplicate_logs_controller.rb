@@ -1,6 +1,7 @@
 class DuplicateLogsController < ApplicationController
   before_action :authenticate_user!
   before_action :find_resource_by_named_id
+  before_action :find_duplicate_logs
 
   def show
     if @log
@@ -19,6 +20,12 @@ class DuplicateLogsController < ApplicationController
     end
   end
 
+  def delete_duplicates
+    return render_not_found unless @log && @duplicate_logs.any?
+
+    render "logs/delete_duplicates"
+  end
+
 private
 
   def find_resource_by_named_id
@@ -27,6 +34,16 @@ private
            else
              current_user.lettings_logs.visible.find_by(id: params[:lettings_log_id])
            end
+  end
+
+  def find_duplicate_logs
+    return unless @log
+
+    @duplicate_logs = if @log.lettings?
+                        current_user.lettings_logs.duplicate_logs(@log)
+                      else
+                        current_user.sales_logs.duplicate_logs(@log)
+                      end
   end
 
   def duplicate_check_question_ids
