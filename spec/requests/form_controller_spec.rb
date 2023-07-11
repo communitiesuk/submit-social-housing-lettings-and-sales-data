@@ -532,6 +532,54 @@ RSpec.describe FormController, type: :request do
             expect(whodunnit_actor).to be_a(User)
             expect(whodunnit_actor.id).to eq(user.id)
           end
+
+          context "and duplicate logs" do
+            let(:duplicate_logs) { create_list(:lettings_log, 2) }
+
+            before do
+              allow(LettingsLog).to receive(:duplicate_logs).and_return(duplicate_logs)
+              post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params:
+            end
+
+            it "redirects to the duplicate logs page" do
+              expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/duplicate-logs")
+              follow_redirect!
+              expect(page).to have_content("These logs are duplicates")
+            end
+          end
+        end
+
+        context "with valid sales answers" do
+          let(:sales_log) do
+            create(
+              :sales_log,
+              created_by: user,
+            )
+          end
+          let(:params) do
+            {
+              id: sales_log.id,
+              sales_log: {
+                page: "buyer-1-age",
+                age1: 20,
+              },
+            }
+          end
+
+          context "and duplicate logs" do
+            let(:duplicate_logs) { create_list(:sales_log, 2) }
+
+            before do
+              allow(SalesLog).to receive(:duplicate_logs).and_return(duplicate_logs)
+              post "/sales-logs/#{sales_log.id}/buyer-1-age", params:
+            end
+
+            it "redirects to the duplicate logs page" do
+              expect(response).to redirect_to("/sales-logs/#{sales_log.id}/duplicate-logs")
+              follow_redirect!
+              expect(page).to have_content("These logs are duplicates")
+            end
+          end
         end
 
         context "when the question has a conditional question" do

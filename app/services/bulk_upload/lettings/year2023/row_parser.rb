@@ -464,7 +464,6 @@ class BulkUpload::Lettings::Year2023::RowParser
       "field_8",   # startdate
       "field_9",   # startdate
       "field_13",  # tenancycode
-      "field_14",  # propcode
       field_4 != 1 ? "field_17" : nil,  # location
       field_4 != 2 ? "field_23" : nil,  # postcode
       field_4 != 2 ? "field_24" : nil,  # postcode
@@ -561,7 +560,6 @@ private
       "ecstat1",
       "owning_organisation",
       "tcharge",
-      "propcode",
       field_4 != 2 ? "postcode_full" : nil,
       field_4 != 1 ? "location" : nil,
       "tenancycode",
@@ -856,7 +854,6 @@ private
       errors.add(:field_8, error_message) # startdate
       errors.add(:field_9, error_message) # startdate
       errors.add(:field_13, error_message) # tenancycode
-      errors.add(:field_14, error_message) # propcode
       errors.add(:field_17, error_message) if field_4 != 1 # location
       errors.add(:field_23, error_message) if field_4 != 2 # postcode_full
       errors.add(:field_24, error_message) if field_4 != 2 # postcode_full

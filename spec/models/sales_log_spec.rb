@@ -249,6 +249,33 @@ RSpec.describe SalesLog, type: :model do
         expect(described_class.duplicate_logs(log)).to include(purchid_not_given)
       end
     end
+
+    context "when there is a log age not known" do
+      let!(:age1_not_known) { create(:sales_log, :duplicate, age1_known: 1, age1: nil) }
+
+      it "returns the log as a duplicate if age is not known" do
+        log.update!(age1_known: 1, age1: nil)
+        expect(described_class.duplicate_logs(log)).to include(age1_not_known)
+      end
+    end
+
+    context "when there is a log age pefers not to say" do
+      let!(:age1_prefers_not_to_say) { create(:sales_log, :duplicate, age1_known: 2, age1: nil) }
+
+      it "returns the log as a duplicate if age is prefers not to say" do
+        log.update!(age1_known: 2, age1: nil)
+        expect(described_class.duplicate_logs(log)).to include(age1_prefers_not_to_say)
+      end
+    end
+
+    context "when there is a log age pefers not to say and not known" do
+      let!(:age1_prefers_not_to_say) { create(:sales_log, :duplicate, age1_known: 2, age1: nil) }
+
+      it "does not return the log as a duplicate if age is prefers not to say" do
+        log.update!(age1_known: 1, age1: nil)
+        expect(described_class.duplicate_logs(log)).not_to include(age1_prefers_not_to_say)
+      end
+    end
   end
 
   describe "derived variables" do

@@ -2862,14 +2862,6 @@ RSpec.describe LettingsLog do
         end
       end
 
-      context "when there is a log with a different propcode" do
-        let!(:different_propcode) { create(:lettings_log, :duplicate, propcode: "different") }
-
-        it "does not return a log with a different propcode as a duplicate" do
-          expect(described_class.duplicate_logs(log)).not_to include(different_propcode)
-        end
-      end
-
       context "when there is a log with a different tenancycode" do
         let!(:different_tenancycode) { create(:lettings_log, :duplicate, tenancycode: "different") }
 
@@ -2887,10 +2879,10 @@ RSpec.describe LettingsLog do
       end
 
       context "when there is a log with nil values for duplicate check fields" do
-        let!(:duplicate_check_fields_not_given) { create(:lettings_log, :duplicate, age1: nil, sex1: nil, ecstat1: nil, propcode: nil, postcode_known: 2, postcode_full: nil) }
+        let!(:duplicate_check_fields_not_given) { create(:lettings_log, :duplicate, age1: nil, sex1: nil, ecstat1: nil, postcode_known: 2, postcode_full: nil) }
 
         it "does not return a log with nil values as a duplicate" do
-          log.update!(age1: nil, sex1: nil, ecstat1: nil, propcode: nil, postcode_known: 2, postcode_full: nil)
+          log.update!(age1: nil, sex1: nil, ecstat1: nil, postcode_known: 2, postcode_full: nil)
           expect(described_class.duplicate_logs(log)).not_to include(duplicate_check_fields_not_given)
         end
       end
@@ -2901,6 +2893,15 @@ RSpec.describe LettingsLog do
         it "returns the log as a duplicate if tenancy code is nil" do
           log.update!(tenancycode: nil)
           expect(described_class.duplicate_logs(log)).to include(tenancycode_not_given)
+        end
+      end
+
+      context "when there is a log with age1 not known" do
+        let!(:age1_not_known) { create(:lettings_log, :duplicate, age1_known: 1, age1: nil) }
+
+        it "returns the log as a duplicate if age1 is not known" do
+          log.update!(age1_known: 1, age1: nil)
+          expect(described_class.duplicate_logs(log)).to include(age1_not_known)
         end
       end
 
@@ -2917,6 +2918,24 @@ RSpec.describe LettingsLog do
 
         it "does not return the log if the locations are different" do
           duplicate_supported_housing_log.update!(location: location_2)
+          expect(described_class.duplicate_logs(supported_housing_log)).not_to include(duplicate_supported_housing_log)
+        end
+
+        it "does not compare tcharge if there are no household charges" do
+          supported_housing_log.update!(household_charge: 1, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil)
+          duplicate_supported_housing_log.update!(household_charge: 1, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil)
+          expect(described_class.duplicate_logs(supported_housing_log)).to include(duplicate_supported_housing_log)
+        end
+
+        it "compares chcharge if it's a carehome" do
+          supported_housing_log.update!(is_carehome: 1, chcharge: 100, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil)
+          duplicate_supported_housing_log.update!(is_carehome: 1, chcharge: 100, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil)
+          expect(described_class.duplicate_logs(supported_housing_log)).to include(duplicate_supported_housing_log)
+        end
+
+        it "does not return a duplicate if carehome charge is not given" do
+          supported_housing_log.update!(is_carehome: 1, chcharge: nil, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil)
+          duplicate_supported_housing_log.update!(is_carehome: 1, chcharge: nil, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil)
           expect(described_class.duplicate_logs(supported_housing_log)).not_to include(duplicate_supported_housing_log)
         end
       end

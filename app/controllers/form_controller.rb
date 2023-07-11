@@ -155,6 +155,16 @@ private
   end
 
   def successful_redirect_path
+    if FeatureToggle.deduplication_flow_enabled?
+      if @log.lettings?
+        if current_user.lettings_logs.duplicate_logs(@log).count.positive?
+          return send("lettings_log_duplicate_logs_path", @log)
+        end
+      elsif current_user.sales_logs.duplicate_logs(@log).count.positive?
+        return send("sales_log_duplicate_logs_path", @log)
+      end
+    end
+
     if is_referrer_type?("check_answers")
       next_page_id = form.next_page_id(@page, @log, current_user)
       next_page = form.get_page(next_page_id)
