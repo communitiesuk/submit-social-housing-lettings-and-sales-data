@@ -35,8 +35,7 @@ class Form::Lettings::Questions::SchemeId < ::Form::Question
               else
                 Scheme.includes(:locations).select(:id).where(confirmed: true)
               end
-    filtered_scheme_ids = schemes.joins(:locations).merge(Location.where("startdate <= ? or startdate IS NULL",
-                                                                         Time.zone.today)).map(&:id)
+    filtered_scheme_ids = schemes.joins(:locations).merge(Location.started_in_2_weeks).map(&:id)
     answer_options.select do |k, _v|
       filtered_scheme_ids.include?(k.to_i) || k.blank?
     end

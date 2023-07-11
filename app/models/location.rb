@@ -23,6 +23,8 @@ class Location < ApplicationRecord
   scope :search_by, ->(param) { search_by_name(param).or(search_by_postcode(param)) }
   scope :started, -> { where("startdate <= ?", Time.zone.today).or(where(startdate: nil)) }
   scope :active, -> { where(confirmed: true).and(started) }
+  scope :started_in_2_weeks, -> { where("startdate <= ?", Time.zone.today + 2.weeks).or(where(startdate: nil)) }
+  scope :active_in_2_weeks, -> { where(confirmed: true).and(started_in_2_weeks) }
   scope :confirmed, -> { where(confirmed: true) }
   scope :unconfirmed, -> { where.not(confirmed: true) }
 
