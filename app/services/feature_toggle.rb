@@ -35,6 +35,6 @@ class FeatureToggle
   end
 
   def self.deduplication_flow_enabled?
-    !Rails.env.production?
+    !Rails.env.production? && !Rails.env.staging?
   end
 end
