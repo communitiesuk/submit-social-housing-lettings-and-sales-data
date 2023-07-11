@@ -29,7 +29,7 @@ RSpec.describe Imports::DataProtectionConfirmationImportService do
     end
 
     context "when the organisation does exist" do
-      let!(:organisation) { create(:organisation, :without_dpc, old_org_id:) }
+      let!(:organisation) { create(:organisation, :without_dpc, old_org_id:, phone: "123") }
 
       context "when a data protection officer with matching name does not exists for the organisation" do
         it "creates an inactive data protection officer" do
@@ -40,12 +40,18 @@ RSpec.describe Imports::DataProtectionConfirmationImportService do
           expect(data_protection_officer.active).to be false
         end
 
-        it "successfully create a data protection confirmation record with the expected data" do
+        it "successfully create a data protection confirmation record with the expected data", :aggregate_failures do
           import_service.create_data_protection_confirmations("data_protection_directory")
           confirmation = Organisation.find_by(old_org_id:).data_protection_confirmation
-          expect(confirmation.data_protection_officer.name).to eq("John Doe")
           expect(confirmation.confirmed).to be_truthy
+
+          expect(confirmation.data_protection_officer.name).to eq("John Doe")
+          expect(confirmation.data_protection_officer_name).to eq("John Doe")
+          expect(confirmation.organisation_address).to eq("2 Marsham Street, London, SW1P 4DF")
+          expect(confirmation.organisation_name).to eq("DLUHC")
+          expect(confirmation.organisation_phone_number).to eq("123")
           expect(Time.zone.local_to_utc(confirmation.created_at)).to eq(Time.utc(2018, 0o6, 0o5, 10, 36, 49))
+          expect(Time.zone.local_to_utc(confirmation.signed_at)).to eq(Time.utc(2018, 0o6, 0o5, 10, 36, 49))
         end
       end
 
@@ -60,7 +66,15 @@ RSpec.describe Imports::DataProtectionConfirmationImportService do
           confirmation = Organisation.find_by(old_org_id:).data_protection_confirmation
           expect(confirmation.data_protection_officer.id).to eq(data_protection_officer.id)
           expect(confirmation.confirmed).to be_truthy
+
+          expect(confirmation.data_protection_officer.name).to eq(data_protection_officer.name)
+          expect(confirmation.data_protection_officer_name).to eq(data_protection_officer.name)
+          expect(confirmation.data_protection_officer_email).to eq(data_protection_officer.email)
+          expect(confirmation.organisation_address).to eq("2 Marsham Street, London, SW1P 4DF")
+          expect(confirmation.organisation_name).to eq("DLUHC")
+          expect(confirmation.organisation_phone_number).to eq("123")
           expect(Time.zone.local_to_utc(confirmation.created_at)).to eq(Time.utc(2018, 0o6, 0o5, 10, 36, 49))
+          expect(Time.zone.local_to_utc(confirmation.signed_at)).to eq(Time.utc(2018, 0o6, 0o5, 10, 36, 49))
         end
 
         context "when the data protection record has already been imported previously" do

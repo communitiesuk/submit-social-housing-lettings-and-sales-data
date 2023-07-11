@@ -444,34 +444,6 @@ RSpec.describe Validations::SetupValidations do
   end
 
   describe "#validate_managing_organisation_data_sharing_agremeent_signed" do
-    before do
-      allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(false)
-    end
-
-    it "is valid if the DSA is signed" do
-      log = build(:lettings_log, :in_progress, owning_organisation: create(:organisation))
-
-      expect(log).to be_valid
-    end
-
-    it "is valid when owning_organisation nil" do
-      log = build(:lettings_log, owning_organisation: nil)
-
-      expect(log).to be_valid
-    end
-
-    it "is not valid if the DSA is not signed" do
-      log = build(:lettings_log, owning_organisation: create(:organisation, :without_dpc))
-
-      expect(log).to be_valid
-    end
-  end
-
-  context "when flag enabled" do
-    before do
-      allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(true)
-    end
-
     it "is valid if the Data Protection Confirmation is signed" do
       log = build(:lettings_log, :in_progress, managing_organisation: create(:organisation))
 

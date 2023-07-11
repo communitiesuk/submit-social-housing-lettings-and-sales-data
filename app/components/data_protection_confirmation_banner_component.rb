@@ -13,7 +13,6 @@ class DataProtectionConfirmationBannerComponent < ViewComponent::Base
   end
 
   def display_banner?
-    return false unless FeatureToggle.new_data_protection_confirmation?
     return false if user.support? && organisation.blank?
     return true if org_without_dpo?
 

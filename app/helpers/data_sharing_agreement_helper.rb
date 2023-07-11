@@ -61,7 +61,11 @@ module DataSharingAgreementHelper
       end
     end
 
-    "12.2. For #{@org_name}: Name: #{@dpo_name}, Postal Address: #{@org_address}, E-mail address: #{@dpo_email}, Telephone number: #{@org_phone}"
+    if data_protection_confirmation&.confirmed? && @dpo_email.exclude?("@") # Do not show invalid email addresses
+      "12.2. For #{@org_name}: Name: #{@dpo_name}, Postal Address: #{@org_address}, Telephone number: #{@org_phone}"
+    else
+      "12.2. For #{@org_name}: Name: #{@dpo_name}, Postal Address: #{@org_address}, E-mail address: #{@dpo_email}, Telephone number: #{@org_phone}"
+    end
   end
 # rubocop:enable Rails/HelperInstanceVariable
 

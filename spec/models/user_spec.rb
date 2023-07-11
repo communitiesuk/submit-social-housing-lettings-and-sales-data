@@ -382,16 +382,6 @@ RSpec.describe User, type: :model do
           args: [user],
         )
       end
-
-      context "when feature flag disabled" do
-        before do
-          allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(false)
-        end
-
-        it "does not send the email" do
-          expect { user.update!(is_dpo: true) }.not_to enqueue_job(ActionMailer::MailDeliveryJob)
-        end
-      end
     end
 
     context "when updating to non dpo" do

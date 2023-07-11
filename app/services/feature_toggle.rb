@@ -30,10 +30,6 @@ class FeatureToggle
     !Rails.env.production?
   end
 
-  def self.new_data_protection_confirmation?
-    true
-  end
-
   def self.deduplication_flow_enabled?
     !Rails.env.production? && !Rails.env.staging?
   end
