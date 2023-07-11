@@ -75,9 +75,9 @@ RSpec.describe DuplicateLogsController, type: :request do
 
         it "displays buttons to delete" do
           expect(page).to have_link("Keep this log and delete duplicates", count: 3)
-          expect(page).to have_link("Keep this log and delete duplicates", href: "/lettings-logs/#{lettings_log.id}/delete-duplicates")
-          expect(page).to have_link("Keep this log and delete duplicates", href: "/lettings-logs/#{duplicate_logs.first.id}/delete-duplicates")
-          expect(page).to have_link("Keep this log and delete duplicates", href: "/lettings-logs/#{duplicate_logs.second.id}/delete-duplicates")
+          expect(page).to have_link("Keep this log and delete duplicates", href: "/lettings-logs/#{lettings_log.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
+          expect(page).to have_link("Keep this log and delete duplicates", href: "/lettings-logs/#{duplicate_logs.first.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
+          expect(page).to have_link("Keep this log and delete duplicates", href: "/lettings-logs/#{duplicate_logs.second.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
         end
       end
 
@@ -107,9 +107,9 @@ RSpec.describe DuplicateLogsController, type: :request do
 
         it "displays buttons to delete" do
           expect(page).to have_link("Keep this log and delete duplicates", count: 3)
-          expect(page).to have_link("Keep this log and delete duplicates", href: "/sales-logs/#{sales_log.id}/delete-duplicates")
-          expect(page).to have_link("Keep this log and delete duplicates", href: "/sales-logs/#{duplicate_logs.first.id}/delete-duplicates")
-          expect(page).to have_link("Keep this log and delete duplicates", href: "/sales-logs/#{duplicate_logs.second.id}/delete-duplicates")
+          expect(page).to have_link("Keep this log and delete duplicates", href: "/sales-logs/#{sales_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
+          expect(page).to have_link("Keep this log and delete duplicates", href: "/sales-logs/#{duplicate_logs.first.id}/delete-duplicates?original_log_id=#{sales_log.id}")
+          expect(page).to have_link("Keep this log and delete duplicates", href: "/sales-logs/#{duplicate_logs.second.id}/delete-duplicates?original_log_id=#{sales_log.id}")
         end
       end
     end
@@ -118,7 +118,7 @@ RSpec.describe DuplicateLogsController, type: :request do
   describe "GET sales delete-duplicates" do
     let(:headers) { { "Accept" => "text/html" } }
     let(:id) { sales_log.id }
-    let(:request) { get "/sales-logs/#{id}/delete-duplicates" }
+    let(:request) { get "/sales-logs/#{id}/delete-duplicates?original_log_id=#{id}" }
 
     before do
       allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -207,7 +207,7 @@ RSpec.describe DuplicateLogsController, type: :request do
 
   describe "GET lettings delete-duplicates" do
     let(:id) { lettings_log.id }
-    let(:request) { get "/lettings-logs/#{id}/delete-duplicates" }
+    let(:request) { get "/lettings-logs/#{id}/delete-duplicates?original_log_id=#{id}" }
 
     before do
       allow(user).to receive(:need_two_factor_authentication?).and_return(false)

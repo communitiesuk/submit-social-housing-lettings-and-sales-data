@@ -390,7 +390,7 @@ RSpec.describe "Lettings Log Features" do
       end
     end
 
-    context "when there are duplicate logs" do
+    context "when a log becomes a duplicate" do
       let(:lettings_log) { create(:lettings_log, :completed, owning_organisation: user.organisation, created_by: user) }
       let!(:duplicate_log) do
         duplicate = lettings_log.dup
@@ -399,13 +399,41 @@ RSpec.describe "Lettings Log Features" do
         duplicate
       end
 
-      it "is possible to delete duplicate logs" do
-        visit lettings_log_delete_duplicates_path(lettings_log)
+      before do
+        lettings_log.update!(tenancycode: "different")
+        visit("/lettings-logs/#{lettings_log.id}/tenant-code")
+        fill_in("lettings-log-tenancycode-field", with: duplicate_log.tenancycode)
+        click_button("Save and continue")
+      end
+
+      it "allows keeping the original log and deleting duplicates" do
+        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/duplicate-logs")
+        click_link("Keep this log and delete duplicates", href: "/lettings-logs/#{lettings_log.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
+        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
         click_button "Delete this log"
         duplicate_log.reload
         expect(duplicate_log.status).to eq("deleted")
         expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
         expect(page).to have_content("Log #{duplicate_log.id} has been deleted")
+        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
+        expect(page).not_to have_content("These logs are duplicates")
+        expect(page).not_to have_link("Keep this log and delete duplicates")
+        expect(page).to have_link("Continue editing Log #{lettings_log.id}", href: "/lettings-logs/#{lettings_log.id}")
+      end
+
+      it "allows keeping the duplicate log and deleting the original one" do
+        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/duplicate-logs")
+        click_link("Keep this log and delete duplicates", href: "/lettings-logs/#{duplicate_log.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
+        expect(page).to have_current_path("/lettings-logs/#{duplicate_log.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
+        click_button "Delete this log"
+        lettings_log.reload
+        expect(lettings_log.status).to eq("deleted")
+        expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+        expect(page).to have_content("Log #{lettings_log.id} has been deleted")
+        expect(page).to have_current_path("/lettings-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
+        expect(page).not_to have_content("These logs are duplicates")
+        expect(page).not_to have_link("Keep this log and delete duplicates")
+        expect(page).to have_link("Back to lettings logs", href: "/lettings-logs")
       end
     end
   end

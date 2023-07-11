@@ -26,12 +26,12 @@
 
     <div class="govuk-button-group">
       <%= govuk_button_to @duplicate_logs.count == 1 ? "Delete this log" : "Delete these logs",
-        delete_logs_lettings_logs_path,
+        send("delete_logs_#{@log.class.name.underscore}s_path"),
         method: "delete",
-        params: { ids: @duplicate_logs.map(&:id) } %>
+        params: { ids: @duplicate_logs.map(&:id), original_log_id: @original_log_id } %>
       <%= govuk_button_link_to(
         "Cancel",
-        @log.lettings? ? lettings_log_duplicate_logs_path(@log) : sales_log_duplicate_logs_path(@log),
+        send("#{@log.class.name.underscore}_duplicate_logs_path", @log),
         secondary: true,
       ) %>
     </div>
