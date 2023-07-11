@@ -1061,7 +1061,7 @@ RSpec.describe Imports::SalesLogsImportService do
           sales_log_service.send(:create_log, sales_log_xml)
 
           sales_log = SalesLog.find_by(old_id: sales_log_id)
-          expect(sales_log.creation_method).to eq "single log"
+          expect(sales_log.creation_method_single_log?).to be true
         end
       end
 
@@ -1072,7 +1072,7 @@ RSpec.describe Imports::SalesLogsImportService do
           sales_log_service.send(:create_log, sales_log_xml)
 
           sales_log = SalesLog.find_by(old_id: sales_log_id)
-          expect(sales_log.creation_method).to eq "bulk upload"
+          expect(sales_log.creation_method_bulk_upload?).to be true
         end
       end
 

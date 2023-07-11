@@ -31,8 +31,8 @@ module Imports
     }.freeze
 
     def creation_method(xml_doc)
-      upload_method = meta_field_value(xml_doc, "upload-method")
-      CREATION_METHODS[upload_method]
+      upload_id = meta_field_value(xml_doc, "upload-id")
+      upload_id.present? ? "bulk upload" : "single log"
     end
 
     def find_organisation_id(xml_doc, id_field)
