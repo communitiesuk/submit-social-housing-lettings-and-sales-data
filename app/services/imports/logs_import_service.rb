@@ -25,11 +25,6 @@ module Imports
       end
     end
 
-    CREATION_METHODS = {
-      "Bulk Upload" => "bulk upload",
-      "Manual Entry" => "single log",
-    }.freeze
-
     def creation_method(xml_doc)
       upload_id = meta_field_value(xml_doc, "upload-id")
       upload_id.present? ? "bulk upload" : "single log"

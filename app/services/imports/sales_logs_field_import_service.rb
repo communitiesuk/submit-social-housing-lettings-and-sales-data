@@ -16,12 +16,11 @@ module Imports
       log = SalesLog.find_by(old_id:)
 
       if log
-        upload_method = meta_field_value(xml_doc, "upload-method")
+        upload_id = meta_field_value(xml_doc, "upload-id")
 
-        case upload_method
-        when "Manual Entry"
+        if upload_id.nil?
           @logger.info "sales log with old id #{old_id} entered manually, no need for update"
-        when "Bulk Upload"
+        else
           if log.creation_method_bulk_upload?
             @logger.info "sales log #{log.id} creation method already set to bulk upload, no need for update"
           else
