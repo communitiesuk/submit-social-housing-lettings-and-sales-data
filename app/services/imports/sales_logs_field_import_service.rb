@@ -15,21 +15,17 @@ module Imports
       old_id = meta_field_value(xml_doc, "document-id")
       log = SalesLog.find_by(old_id:)
 
-      if log
-        upload_id = meta_field_value(xml_doc, "upload-id")
+      return @logger.warn "sales log with old id #{old_id} not found" unless log
 
-        if upload_id.nil?
-          @logger.info "sales log with old id #{old_id} entered manually, no need for update"
-        else
-          if log.creation_method_bulk_upload?
-            @logger.info "sales log #{log.id} creation method already set to bulk upload, no need for update"
-          else
-            log.creation_method_bulk_upload!
-            @logger.info "sales log #{log.id} creation method set to bulk upload"
-          end
-        end
+      upload_id = meta_field_value(xml_doc, "upload-id")
+
+      if upload_id.nil?
+        @logger.info "sales log with old id #{old_id} entered manually, no need for update"
+      elsif log.creation_method_bulk_upload?
+        @logger.info "sales log #{log.id} creation method already set to bulk upload, no need for update"
       else
-        @logger.warn "sales log with old id #{old_id} not found"
+        log.creation_method_bulk_upload!
+        @logger.info "sales log #{log.id} creation method set to bulk upload"
       end
     end
   end
