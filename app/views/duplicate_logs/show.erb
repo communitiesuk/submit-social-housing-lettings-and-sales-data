@@ -13,7 +13,7 @@
         <% @all_duplicates.each_with_index do |log, index| %>
             <%= render partial: "duplicate_log", locals: { log: log } %>
             <%= render partial: "duplicate_log_check_answers", locals: { log: log } %>
-            <%= duplicate_logs_continue_button(@all_duplicates, log, @log) %>
+            <%= duplicate_logs_continue_button(@all_duplicates, log, @original_log_id) %>
             <% if index < @all_duplicates.count - 1 %>
                 <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
             <% end %>

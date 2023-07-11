@@ -146,6 +146,17 @@ private
     parsed_params["referrer"][0]
   end
 
+  def original_duplicate_log_id_from_query
+    query_params = URI.parse(request.url).query
+
+    return unless query_params
+
+    parsed_params = CGI.parse(query_params)
+    return unless parsed_params["original_log_id"]
+
+    parsed_params["original_log_id"][0]
+  end
+
   def previous_interruption_screen_page_id
     params[@log.model_name.param_key]["interruption_page_id"]
   end
@@ -177,7 +188,7 @@ private
       end
     end
     if previous_interruption_screen_page_id.present?
-      return send("#{@log.class.name.underscore}_#{previous_interruption_screen_page_id}_path", @log, { referrer: previous_interruption_screen_referrer }.compact)
+      return send("#{@log.class.name.underscore}_#{previous_interruption_screen_page_id}_path", @log, { referrer: previous_interruption_screen_referrer, original_log_id: original_duplicate_log_id_from_query }.compact)
     end
 
     redirect_path = form.next_page_redirect_path(@page, @log, current_user)

@@ -62,7 +62,9 @@ private
   end
 
   def find_original_log_id
+    return unless @log
+
     query_params = URI.parse(request.url).query
-    @original_log_id = CGI.parse(query_params)["original_log_id"][0].to_i if query_params
+    @original_log_id = query_params.present? ? CGI.parse(query_params)["original_log_id"][0]&.to_i : @log.id
   end
 end
