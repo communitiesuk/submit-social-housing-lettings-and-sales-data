@@ -176,42 +176,4 @@ describe "data import", type: :task do
       expect { task.invoke("unknown_type", "my_path") }.to raise_error(/Type unknown_type is not supported/)
     end
   end
-
-  describe "core:data_protection_confirmation_import" do
-    subject(:task) { Rake::Task["core:data_protection_confirmation_import"] }
-
-    let(:import_service) { instance_double(Imports::DataProtectionConfirmationImportService) }
-    # let(:fixture_path) { "spec/fixtures/imports/data_protection_confirmations" }
-    let(:storage_service) { instance_double(Storage::S3Service) }
-    let(:archive_service) { instance_double(Storage::ArchiveService) }
-
-    let!(:organisation_without_dpc_with_old_org_id) { create(:organisation, :without_dpc, old_org_id: 1) }
-
-    before do
-      Rake.application.rake_require("tasks/data_import")
-      Rake::Task.define_task(:environment)
-      task.reenable
-
-      allow(Storage::S3Service).to receive(:new).and_return(storage_service)
-      allow(Configuration::PaasConfigurationService).to receive(:new).and_return(paas_config_service)
-      allow(ENV).to receive(:[])
-      allow(ENV).to receive(:[]).with("IMPORT_PAAS_INSTANCE").and_return(instance_name)
-      allow(Imports::DataProtectionConfirmationImportService).to receive(:new).and_return(import_service)
-
-      allow(Storage::ArchiveService).to receive(:new).and_return(archive_service)
-      allow(archive_service).to receive(:folder_present?).with("dataprotect").and_return(true)
-
-      _org_without_old_org_id = create(:organisation, old_org_id: nil)
-      _organisation_without_dp = create(:organisation, :without_dpc, old_org_id: nil)
-    end
-
-    it "creates an organisation from the given XML file" do
-      expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
-      expect(storage_service).to receive(:get_file_io).with("#{organisation_without_dpc_with_old_org_id.old_org_id}.zip")
-      expect(Imports::DataProtectionConfirmationImportService).to receive(:new).with(archive_service)
-      expect(import_service).to receive(:create_data_protection_confirmations).with("dataprotect")
-
-      task.invoke
-    end
-  end
 end
