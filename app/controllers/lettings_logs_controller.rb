@@ -88,18 +88,6 @@ class LettingsLogsController < LogsController
     render "logs/delete_confirmation"
   end
 
-  def delete_duplicates
-    @log = LettingsLog.visible.find(params[:lettings_log_id])
-    authorize @log
-
-    @duplicate_logs = LettingsLog.duplicate_logs_for_organisation(current_user.organisation, @log)
-    if @duplicate_logs.empty?
-      render_not_found
-    else
-      render "logs/delete_duplicates"
-    end
-  end
-
   def download_csv
     unpaginated_filtered_logs = filter_manager.filtered_logs(current_user.lettings_logs, search_term, session_filters)
 
