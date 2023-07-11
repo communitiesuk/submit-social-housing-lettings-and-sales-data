@@ -11,7 +11,7 @@
         <% @all_duplicates.each_with_index do |log, index| %>
             <%= render partial: "duplicate_log", locals: { log: log } %>
             <%= render partial: "duplicate_log_check_answers", locals: { log: log } %>
-            <%= govuk_button_link_to "Keep this log and delete duplicates", "#" %>
+            <%= govuk_button_link_to "Keep this log and delete duplicates", log.lettings? ? lettings_log_delete_duplicates_path(log) : sales_log_delete_duplicates_path(log) %>
             <% if index < @all_duplicates.count - 1 %>
                 <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
             <% end %>

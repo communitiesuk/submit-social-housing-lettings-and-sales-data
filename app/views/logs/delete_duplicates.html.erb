@@ -1,6 +1,6 @@
 <% content_for :before_content do %>
   <% content_for :title, "Are you sure you want to delete #{@duplicate_logs.count == 1 ? 'this duplicate log' : 'these duplicate logs'}?" %>
-  <%= govuk_back_link href: @log.lettings? ? lettings_log_path(@log) : sales_log_path(@log) %>
+  <%= govuk_back_link href: @log.lettings? ? lettings_log_duplicate_logs_path(@log) : sales_log_duplicate_logs_path(@log) %>
 <% end %>
 
 <div class="govuk-grid-row">
@@ -31,7 +31,7 @@
         params: { ids: @duplicate_logs.map(&:id) } %>
       <%= govuk_button_link_to(
         "Cancel",
-        @log.lettings? ? lettings_log_path(@log) : sales_log_path(@log),
+        @log.lettings? ? lettings_log_duplicate_logs_path(@log) : sales_log_duplicate_logs_path(@log),
         secondary: true,
       ) %>
     </div>

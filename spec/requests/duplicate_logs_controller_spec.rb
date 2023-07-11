@@ -75,6 +75,9 @@ RSpec.describe DuplicateLogsController, type: :request do
 
         it "displays buttons to delete" do
           expect(page).to have_link("Keep this log and delete duplicates", count: 3)
+          expect(page).to have_link("Keep this log and delete duplicates", href: "/lettings-logs/#{lettings_log.id}/delete-duplicates")
+          expect(page).to have_link("Keep this log and delete duplicates", href: "/lettings-logs/#{duplicate_logs.first.id}/delete-duplicates")
+          expect(page).to have_link("Keep this log and delete duplicates", href: "/lettings-logs/#{duplicate_logs.second.id}/delete-duplicates")
         end
       end
 
@@ -104,6 +107,9 @@ RSpec.describe DuplicateLogsController, type: :request do
 
         it "displays buttons to delete" do
           expect(page).to have_link("Keep this log and delete duplicates", count: 3)
+          expect(page).to have_link("Keep this log and delete duplicates", href: "/sales-logs/#{sales_log.id}/delete-duplicates")
+          expect(page).to have_link("Keep this log and delete duplicates", href: "/sales-logs/#{duplicate_logs.first.id}/delete-duplicates")
+          expect(page).to have_link("Keep this log and delete duplicates", href: "/sales-logs/#{duplicate_logs.second.id}/delete-duplicates")
         end
       end
     end
@@ -142,7 +148,8 @@ RSpec.describe DuplicateLogsController, type: :request do
         expect(page).to have_button(text: "Delete this log")
         expect(page).to have_link(text: "Log #{duplicate_log.id}", href: sales_log_path(duplicate_log.id))
         expect(page).not_to have_link(text: "Log #{id}", href: sales_log_path(id))
-        expect(page).to have_link(text: "Cancel", href: sales_log_path(id)) # update with correct path when known
+        expect(page).to have_link(text: "Cancel", href: sales_log_duplicate_logs_path(id))
+        expect(page).to have_link(text: "Back", href: sales_log_duplicate_logs_path(id))
       end
     end
 
@@ -169,7 +176,8 @@ RSpec.describe DuplicateLogsController, type: :request do
         expect(page).to have_button(text: "Delete these logs")
         expect(page).to have_link(text: "Log #{duplicate_log.id}", href: sales_log_path(duplicate_log.id))
         expect(page).to have_link(text: "Log #{duplicate_log_2.id}", href: sales_log_path(duplicate_log_2.id))
-        expect(page).to have_link(text: "Cancel", href: sales_log_path(id)) # update with correct path when known
+        expect(page).to have_link(text: "Cancel", href: sales_log_duplicate_logs_path(id))
+        expect(page).to have_link(text: "Back", href: sales_log_duplicate_logs_path(id))
       end
     end
 
@@ -230,7 +238,8 @@ RSpec.describe DuplicateLogsController, type: :request do
         expect(page).to have_button(text: "Delete this log")
         expect(page).to have_link(text: "Log #{duplicate_log.id}", href: lettings_log_path(duplicate_log.id))
         expect(page).not_to have_link(text: "Log #{id}", href: lettings_log_path(id))
-        expect(page).to have_link(text: "Cancel", href: lettings_log_path(id)) # update with correct path when known
+        expect(page).to have_link(text: "Cancel", href: lettings_log_duplicate_logs_path(id))
+        expect(page).to have_link(text: "Back", href: lettings_log_duplicate_logs_path(id))
       end
     end
 
@@ -257,7 +266,8 @@ RSpec.describe DuplicateLogsController, type: :request do
         expect(page).to have_button(text: "Delete these logs")
         expect(page).to have_link(text: "Log #{duplicate_log.id}", href: lettings_log_path(duplicate_log.id))
         expect(page).to have_link(text: "Log #{duplicate_log_2.id}", href: lettings_log_path(duplicate_log_2.id))
-        expect(page).to have_link(text: "Cancel", href: lettings_log_path(id)) # update with correct path when known
+        expect(page).to have_link(text: "Cancel", href: lettings_log_duplicate_logs_path(id))
+        expect(page).to have_link(text: "Back", href: lettings_log_duplicate_logs_path(id))
       end
     end
 
