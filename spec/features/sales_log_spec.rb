@@ -170,6 +170,11 @@ RSpec.describe "Sales Log Features" do
       expect(page).not_to have_content("These logs are duplicates")
       expect(page).not_to have_link("Keep this log and delete duplicates")
       expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
+    end
+
+    it "allows changing answer on remaining original log" do
+      click_link("Keep this log and delete duplicates", href: "/sales-logs/#{sales_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
+      click_button "Delete this log"
       click_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=interruption_screen")
       click_button("Save and continue")
       expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
@@ -189,6 +194,11 @@ RSpec.describe "Sales Log Features" do
       expect(page).not_to have_content("These logs are duplicates")
       expect(page).not_to have_link("Keep this log and delete duplicates")
       expect(page).to have_link("Back to sales logs", href: "/sales-logs")
+    end
+
+    it "allows changing answers on remaining duplicate log" do
+      click_link("Keep this log and delete duplicates", href: "/sales-logs/#{duplicate_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
+      click_button "Delete this log"
       click_link("Change", href: "/sales-logs/#{duplicate_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=interruption_screen")
       click_button("Save and continue")
       expect(page).to have_current_path("/sales-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")

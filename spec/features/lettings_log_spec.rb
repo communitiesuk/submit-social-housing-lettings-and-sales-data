@@ -419,6 +419,11 @@ RSpec.describe "Lettings Log Features" do
         expect(page).not_to have_content("These logs are duplicates")
         expect(page).not_to have_link("Keep this log and delete duplicates")
         expect(page).to have_link("Back to Log #{lettings_log.id}", href: "/lettings-logs/#{lettings_log.id}")
+      end
+
+      it "allows changing answers on remaining original log" do
+        click_link("Keep this log and delete duplicates", href: "/lettings-logs/#{lettings_log.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
+        click_button "Delete this log"
         click_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?original_log_id=#{lettings_log.id}&referrer=interruption_screen")
         click_button("Save and continue")
         expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
@@ -438,6 +443,11 @@ RSpec.describe "Lettings Log Features" do
         expect(page).not_to have_content("These logs are duplicates")
         expect(page).not_to have_link("Keep this log and delete duplicates")
         expect(page).to have_link("Back to lettings logs", href: "/lettings-logs")
+      end
+
+      it "allows changing answers to remaining duplicate log" do
+        click_link("Keep this log and delete duplicates", href: "/lettings-logs/#{duplicate_log.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
+        click_button "Delete this log"
         click_link("Change", href: "/lettings-logs/#{duplicate_log.id}/tenant-code?original_log_id=#{lettings_log.id}&referrer=interruption_screen")
         click_button("Save and continue")
         expect(page).to have_current_path("/lettings-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
