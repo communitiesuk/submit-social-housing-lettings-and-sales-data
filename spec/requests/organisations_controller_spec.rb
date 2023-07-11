@@ -1575,8 +1575,8 @@ RSpec.describe OrganisationsController, type: :request do
             expect(data_protection_confirmation.organisation_name).to eq(organisation.name)
             expect(data_protection_confirmation.organisation_address).to eq(organisation.address_row)
             expect(data_protection_confirmation.organisation_phone_number).to eq(organisation.phone)
-            expect(data_protection_confirmation.data_protection_officer_email).to eq(current_user.email)
-            expect(data_protection_confirmation.data_protection_officer_name).to eq(current_user.name)
+            expect(data_protection_confirmation.data_protection_officer_email).to eq(user.email)
+            expect(data_protection_confirmation.data_protection_officer_name).to eq(user.name)
           end
 
           context "when the user has already accepted the agreement" do
