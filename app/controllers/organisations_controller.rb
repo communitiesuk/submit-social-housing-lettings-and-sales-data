@@ -170,14 +170,25 @@ class OrganisationsController < ApplicationController
       @organisation.data_protection_confirmation.update!(
         confirmed: true,
         data_protection_officer: current_user,
-        # When it was signed
         created_at: Time.zone.now,
+        signed_at_at: Time.zone.now,
+        organisation_name: @organisation.name,
+        organisation_address: @organisation.address_row,
+        organisation_phone_number: @organisation.phone,
+        data_protection_officer_email: current_user.email,
+        data_protection_officer_name: current_user.name,
       )
     else
       DataProtectionConfirmation.create!(
-        organisation: current_user.organisation,
+        organisation: @organisation,
         confirmed: true,
         data_protection_officer: current_user,
+        signed_at: Time.zone.now,
+        organisation_name: @organisation.name,
+        organisation_address: @organisation.address_row,
+        organisation_phone_number: @organisation.phone,
+        data_protection_officer_email: current_user.email,
+        data_protection_officer_name: current_user.name,
       )
     end
 

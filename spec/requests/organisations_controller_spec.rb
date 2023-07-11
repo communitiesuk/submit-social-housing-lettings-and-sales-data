@@ -1544,6 +1544,14 @@ RSpec.describe OrganisationsController, type: :request do
         end
 
         context "when the organisation does not have a confirmation" do
+          before do
+            Timecop.freeze(Time.zone.local(2022, 2, 1))
+          end
+
+          after do
+            Timecop.unfreeze
+          end
+
           let(:user) { create(:user, is_dpo: true, organisation:) }
 
           it "returns redirects to details page" do
@@ -1561,10 +1569,14 @@ RSpec.describe OrganisationsController, type: :request do
 
             data_protection_confirmation = organisation.reload.data_protection_confirmation
 
-            expect(data_protection_confirmation.organisation.address_row).to eq(organisation.address_row)
-            expect(data_protection_confirmation.organisation.name).to eq(organisation.name)
-            expect(data_protection_confirmation.organisation.phone).to eq(organisation.phone)
+            expect(data_protection_confirmation.organisation).to eq(organisation)
             expect(data_protection_confirmation.data_protection_officer).to eq(user)
+            expect(data_protection_confirmation.signed_at).to eq(Time.zone.local(2022, 2, 1))
+            expect(data_protection_confirmation.organisation_name).to eq(organisation.name)
+            expect(data_protection_confirmation.organisation_address).to eq(organisation.address_row)
+            expect(data_protection_confirmation.organisation_phone_number).to eq(organisation.phone)
+            expect(data_protection_confirmation.data_protection_officer_email).to eq(current_user.email)
+            expect(data_protection_confirmation.data_protection_officer_name).to eq(current_user.name)
           end
 
           context "when the user has already accepted the agreement" do
