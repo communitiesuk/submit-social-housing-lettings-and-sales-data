@@ -7,7 +7,7 @@
     </h2>
     <p class="govuk-body-m">
       <% if @data_protection_confirmation&.confirmed? %>
-        This agreement is made the <%= @data_protection_confirmation.created_at.day.ordinalize %> day of <%= @data_protection_confirmation.created_at.strftime("%B") %> <%= @data_protection_confirmation.created_at.year %>
+        This agreement is made the <%= @data_protection_confirmation.signed_at.day.ordinalize %> day of <%= @data_protection_confirmation.signed_at.strftime("%B") %> <%= @data_protection_confirmation.signed_at.year %>
       <% elsif current_user.is_dpo? %>
         This agreement is made the <%= Time.zone.now.day.ordinalize %> day of <%= Time.zone.now.strftime("%B") %> <%= Time.zone.now.year %>
       <% else %>
@@ -16,7 +16,7 @@
     </p>
     <p class="govuk-body-m"><strong>between</strong></p>
     <% if @data_protection_confirmation&.confirmed? %>
-      <p class="govuk-body-m">1) <%= @data_protection_confirmation.organisation.name %> of <%= @data_protection_confirmation.organisation.address_row %> (“CORE Data Provider”)</p>
+      <p class="govuk-body-m">1) <%= @data_protection_confirmation.organisation_name %> of <%= @data_protection_confirmation.organisation_address %> (“CORE Data Provider”)</p>
     <% else %>
       <p class="govuk-body-m">1) <%= @organisation.name %> of <%= @organisation.address_row %> (“CORE Data Provider”)</p>
     <% end %>

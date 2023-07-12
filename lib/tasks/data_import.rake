@@ -28,21 +28,4 @@ namespace :core do
       raise "Type #{type} is not supported by data_import"
     end
   end
-
-  desc "Persist user and org data on data sharing confirmations"
-  task persist_user_and_org_data_on_data_sharing_confirmations: :environment do |_task|
-    DataProtectionConfirmation.all.includes(:data_protection_officer, :organisation).each do |dpc|
-      dpc.update!(
-        organisation_name: dpc.organisation.name,
-        organisation_address: dpc.organisation.address_row,
-        signed_at: dpc.created_at,
-        organisation_phone_number: dpc.organisation.phone,
-        data_protection_officer_email: dpc.data_protection_officer.email,
-        data_protection_officer_name: dpc.data_protection_officer.name,
-      )
-      print "."
-    end
-
-    puts "done"
-  end
 end

@@ -50,7 +50,6 @@ RSpec.describe Imports::DataProtectionConfirmationImportService do
           expect(confirmation.organisation_address).to eq("2 Marsham Street, London, SW1P 4DF")
           expect(confirmation.organisation_name).to eq("DLUHC")
           expect(confirmation.organisation_phone_number).to eq("123")
-          expect(Time.zone.local_to_utc(confirmation.created_at)).to eq(Time.utc(2018, 0o6, 0o5, 10, 36, 49))
           expect(Time.zone.local_to_utc(confirmation.signed_at)).to eq(Time.utc(2018, 0o6, 0o5, 10, 36, 49))
         end
       end
@@ -73,7 +72,6 @@ RSpec.describe Imports::DataProtectionConfirmationImportService do
           expect(confirmation.organisation_address).to eq("2 Marsham Street, London, SW1P 4DF")
           expect(confirmation.organisation_name).to eq("DLUHC")
           expect(confirmation.organisation_phone_number).to eq("123")
-          expect(Time.zone.local_to_utc(confirmation.created_at)).to eq(Time.utc(2018, 0o6, 0o5, 10, 36, 49))
           expect(Time.zone.local_to_utc(confirmation.signed_at)).to eq(Time.utc(2018, 0o6, 0o5, 10, 36, 49))
         end
 
