@@ -47,20 +47,24 @@ module FiltersHelper
   end
 
   def filters_applied_text(filter_type)
-    applied_filters = JSON.parse(session[session_name_for(filter_type)])
-    applied_filters_count = filters_count(applied_filters)
-    applied_filters_count.zero? ? "No filters applied" : "#{pluralize(applied_filters_count, 'filter')} applied"
+    applied_filters_count(filter_type).zero? ? "No filters applied" : "#{pluralize(applied_filters_count(filter_type), 'filter')} applied"
   end
 
   def reset_filters_link(filter_type)
-    applied_filters = JSON.parse(session[session_name_for(filter_type)])
-    applied_filters_count = filters_count(applied_filters)
-    if applied_filters_count.positive?
+    if applied_filters_count(filter_type).positive?
       govuk_link_to "Clear", clear_filters_path(filter_type:)
     end
   end
 
 private
+
+  def applied_filters_count(filter_type)
+    filters_count(applied_filters(filter_type))
+  end
+
+  def applied_filters(filter_type)
+    JSON.parse(session[session_name_for(filter_type)])
+  end
 
   def session_name_for(filter_type)
     "#{filter_type}_filters"
