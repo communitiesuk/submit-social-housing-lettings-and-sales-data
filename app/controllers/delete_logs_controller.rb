@@ -27,7 +27,7 @@ class DeleteLogsController < ApplicationController
     logs = LettingsLog.find(params.require(:ids))
     discard logs
     if request.referer&.include?("delete-duplicates")
-      redirect_to lettings_log_duplicate_logs_path(lettings_log_id: remaining_log_id, original_log_id:), notice: I18n.t("notification.duplicate_logs_deleted", count: logs.count, log_ids: duplicate_log_ids(logs))
+      redirect_to lettings_log_duplicate_logs_path(lettings_log_id: params["remaining_log_id"], original_log_id: params["original_log_id"]), notice: I18n.t("notification.duplicate_logs_deleted", count: logs.count, log_ids: duplicate_log_ids(logs))
     else
       redirect_to lettings_logs_path, notice: I18n.t("notification.logs_deleted", count: logs.count)
     end
@@ -56,7 +56,7 @@ class DeleteLogsController < ApplicationController
     logs = SalesLog.find(params.require(:ids))
     discard logs
     if request.referer&.include?("delete-duplicates")
-      redirect_to sales_log_duplicate_logs_path(sales_log_id: remaining_log_id, original_log_id:), notice: I18n.t("notification.duplicate_logs_deleted", count: logs.count, log_ids: duplicate_log_ids(logs))
+      redirect_to sales_log_duplicate_logs_path(sales_log_id: params["remaining_log_id"], original_log_id: params["original_log_id"]), notice: I18n.t("notification.duplicate_logs_deleted", count: logs.count, log_ids: duplicate_log_ids(logs))
     else
       redirect_to sales_logs_path, notice: I18n.t("notification.logs_deleted", count: logs.count)
     end
@@ -202,13 +202,5 @@ private
 
   def duplicate_log_ids(logs)
     logs.map { |log| "Log #{log.id}" }.join(", ")
-  end
-
-  def original_log_id
-    CGI.parse(URI.parse(request.referer).query)["original_log_id"][0]
-  end
-
-  def remaining_log_id
-    request.referer.split("/")[-2]
   end
 end
