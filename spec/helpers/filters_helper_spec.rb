@@ -132,7 +132,7 @@ RSpec.describe FiltersHelper do
       end
     end
 
-    context "when a range of filters are applied" do
+    context "when a range of filters is applied" do
       let(:filters) do
         {
           "user" => "all",
@@ -202,6 +202,47 @@ RSpec.describe FiltersHelper do
           "2021": "2021/22", "2022": "2022/23", "2023": "2023/24"
         },
       )
+    end
+  end
+
+  describe "#filters_applied_text" do
+    let(:filter_type) { "lettings_logs" }
+    let(:result) { filters_applied_text(filter_type) }
+    let(:serialised_filters) { filters&.to_json }
+    let(:filters) { nil }
+
+    before do
+      session[:lettings_logs_filters] = serialised_filters if serialised_filters
+    end
+
+    context "when no filters are applied" do
+      let(:filters) do
+        {
+          "user" => "all",
+          "status" => [""],
+          "years" => [""],
+          "organisation" => "all",
+        }
+      end
+
+      it "returns the correct filters count" do
+        expect(result).to eq "No filters applied"
+      end
+    end
+
+    context "when a range of filters is applied" do
+      let(:filters) do
+        {
+          "user" => "all",
+          "status" => %w[in_progress completed],
+          "years" => [""],
+          "organisation" => 2,
+        }
+      end
+
+      it "returns the correct filters count" do
+        expect(result).to eq "3 filters applied"
+      end
     end
   end
 end
