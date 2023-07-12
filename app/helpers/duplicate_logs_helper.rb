@@ -27,4 +27,36 @@ module DuplicateLogsHelper
     first_remaining_duplicate_id = all_duplicates.map(&:id).reject { |id| id == log.id }.first
     send("#{log.model_name.param_key}_#{page_id}_path", log, referrer: "duplicate_logs", first_remaining_duplicate_id:, original_log_id:)
   end
+  
+  def duplicates_for_user(user)
+    duplicate_sets = { lettings: [], sales: [] }
+    duplicate_lettings_ids = Set.new
+    duplicate_sales_ids = Set.new
+
+    user.lettings_logs(created_by: true).each do |log|
+      next if duplicate_lettings_ids.include? log.id
+
+      duplicates = LettingsLog.filter_by_organisation(user.organisation).duplicate_logs(log)
+      next unless duplicates.any?
+
+      duplicate_ids = [log.id, *duplicates.map(&:id)]
+      duplicate_sets[:lettings] << duplicate_ids
+      duplicate_lettings_ids << duplicate_ids
+    end
+
+    user.sales_logs(created_by: true).each do |log|
+      next if duplicate_sales_ids.include? log.id
+
+      duplicates = SalesLog.filter_by_organisation(user.organisation).duplicate_logs(log)
+      next unless duplicates.any?
+
+      duplicate_ids = [log.id, *duplicates.map(&:id)]
+      duplicate_sets[:sales] << duplicate_ids
+      duplicate_sales_ids << duplicate_ids
+    end
+
+    return if duplicate_lettings_ids.empty? && duplicate_sales_ids.empty?
+
+    duplicate_sets
+  end
 end

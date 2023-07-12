@@ -75,16 +75,20 @@ class User < ApplicationRecord
   scope :deactivated, -> { where(active: false) }
   scope :active_status, -> { where(active: true).where.not(last_sign_in_at: nil) }
 
-  def lettings_logs
-    if support?
+  def lettings_logs(created_by: false)
+    if created_by
+      LettingsLog.created_by(self)
+    elsif support?
       LettingsLog.all
     else
       LettingsLog.filter_by_organisation(organisation.absorbed_organisations + [organisation])
     end
   end
 
-  def sales_logs
-    if support?
+  def sales_logs(created_by: false)
+    if created_by
+      SalesLog.created_by(self)
+    elsif support?
       SalesLog.all
     else
       SalesLog.filter_by_owning_organisation(organisation.absorbed_organisations + [organisation])
