@@ -163,6 +163,32 @@ RSpec.describe FormController, type: :request do
       end
     end
 
+    context "when submitting a sales log for organisation that doesn't have any managing agents" do
+      let(:sales_log) { create(:sales_log) }
+      let(:params) do
+        {
+          id: sales_log.id,
+          sales_log: {
+            page: "organisation",
+            owning_organisation_id: managing_organisation.id,
+          },
+        }
+      end
+
+      before do
+        sales_log.update!(owning_organisation: nil, created_by: nil)
+        sales_log.reload
+      end
+
+      it "correctly sets owning organisation" do
+        post "/sales-logs/#{sales_log.id}/organisation", params: params
+        expect(response).to redirect_to("/sales-logs/#{sales_log.id}/created-by")
+        follow_redirect!
+        sales_log.reload
+        expect(sales_log.owning_organisation).to eq(managing_organisation)
+      end
+    end
+
     context "with valid managing organisation" do
       let(:params) do
         {
