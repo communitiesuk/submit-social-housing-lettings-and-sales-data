@@ -8,6 +8,11 @@
                 <p class="govuk-heading-l">These logs are duplicates</p>
                 <p class="govuk-body-l">These logs have the same values for the following fields. Choose one to keep or correct the answers.</p>
             <% end %>
+        <% else %>
+            <h1 class="govuk-heading-l">Make sure these answers are correct</h1>
+            <p class="govuk-body">
+                This log had the same answers but it is no longer a duplicate. Make sure the answers are correct.
+            </p>
         <% end %>
 
         <% @all_duplicates.each_with_index do |log, index| %>
