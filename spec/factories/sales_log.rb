@@ -46,6 +46,7 @@ FactoryBot.define do
       ecstat1 { 1 }
       postcode_full { "A1 1AA" }
       privacynotice { 1 }
+      uprn_known { 0 }
     end
     trait :completed do
       purchid { rand(999_999_999).to_s }

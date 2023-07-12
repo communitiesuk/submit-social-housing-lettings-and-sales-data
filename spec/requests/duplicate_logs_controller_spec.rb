@@ -3,22 +3,8 @@ require "rails_helper"
 RSpec.describe DuplicateLogsController, type: :request do
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:user) { create(:user, :data_coordinator) }
-  let(:lettings_log) do
-    create(
-      :lettings_log,
-      :completed,
-      created_by: user,
-      owning_organisation: user.organisation,
-    )
-  end
-  let(:sales_log) do
-    create(
-      :sales_log,
-      :completed,
-      created_by: user,
-      owning_organisation: user.organisation,
-    )
-  end
+  let(:lettings_log) { create(:lettings_log, :duplicate, created_by: user) }
+  let(:sales_log) { create(:sales_log, :duplicate, created_by: user) }
 
   describe "GET show" do
     context "when user is not signed in" do
@@ -133,12 +119,7 @@ RSpec.describe DuplicateLogsController, type: :request do
     end
 
     context "when there is 1 duplicate log being deleted" do
-      let!(:duplicate_log) do
-        duplicate = sales_log.dup
-        duplicate.id = nil
-        duplicate.save!
-        duplicate
-      end
+      let!(:duplicate_log) { create(:sales_log, :duplicate, created_by: user) }
 
       it "renders page" do
         request
@@ -154,18 +135,8 @@ RSpec.describe DuplicateLogsController, type: :request do
     end
 
     context "when there are multiple duplicate logs being deleted" do
-      let!(:duplicate_log) do
-        duplicate = sales_log.dup
-        duplicate.id = nil
-        duplicate.save!
-        duplicate
-      end
-      let!(:duplicate_log_2) do
-        duplicate = sales_log.dup
-        duplicate.id = nil
-        duplicate.save!
-        duplicate
-      end
+      let!(:duplicate_log) { create(:sales_log, :duplicate, created_by: user) }
+      let!(:duplicate_log_2) { create(:sales_log, :duplicate, created_by: user) }
 
       it "renders page" do
         request
@@ -222,12 +193,7 @@ RSpec.describe DuplicateLogsController, type: :request do
     end
 
     context "when there is 1 duplicate log being deleted" do
-      let!(:duplicate_log) do
-        duplicate = lettings_log.dup
-        duplicate.id = nil
-        duplicate.save!
-        duplicate
-      end
+      let!(:duplicate_log) { create(:lettings_log, :duplicate, created_by: user) }
 
       it "renders page" do
         request
@@ -244,18 +210,8 @@ RSpec.describe DuplicateLogsController, type: :request do
     end
 
     context "when there are multiple duplicate logs being deleted" do
-      let!(:duplicate_log) do
-        duplicate = lettings_log.dup
-        duplicate.id = nil
-        duplicate.save!
-        duplicate
-      end
-      let!(:duplicate_log_2) do
-        duplicate = lettings_log.dup
-        duplicate.id = nil
-        duplicate.save!
-        duplicate
-      end
+      let!(:duplicate_log) { create(:lettings_log, :duplicate, created_by: user) }
+      let!(:duplicate_log_2) { create(:lettings_log, :duplicate, created_by: user) }
 
       it "renders page" do
         request

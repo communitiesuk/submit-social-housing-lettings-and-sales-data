@@ -140,13 +140,8 @@ RSpec.describe "Sales Log Features" do
 
   context "when a log becomes a duplicate" do
     let(:user) { create(:user, :data_coordinator) }
-    let(:sales_log) { create(:sales_log, :completed, owning_organisation: user.organisation, created_by: user) }
-    let!(:duplicate_log) do
-      duplicate = sales_log.dup
-      duplicate.id = nil
-      duplicate.save!
-      duplicate
-    end
+    let(:sales_log) { create(:sales_log, :duplicate, created_by: user) }
+    let!(:duplicate_log) { create(:sales_log, :duplicate, created_by: user) }
 
     before do
       allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -163,7 +158,7 @@ RSpec.describe "Sales Log Features" do
       expect(page).to have_current_path("/sales-logs/#{sales_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
       click_button "Delete this log"
       duplicate_log.reload
-      expect(duplicate_log.status).to eq("deleted")
+      expect(duplicate_log.deleted?).to be true
       expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
       expect(page).to have_content("Log #{duplicate_log.id} has been deleted")
       expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")

@@ -39,6 +39,8 @@ FactoryBot.define do
       needstype { 1 }
       tenancycode { "same tenancy code" }
       postcode_full { "A1 1AA" }
+      uprn_known { 0 }
+      declaration { 1 }
       age1 { 18 }
       sex1 { "M" }
       ecstat1 { 0 }

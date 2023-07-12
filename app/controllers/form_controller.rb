@@ -141,9 +141,7 @@ private
     return unless query_params
 
     parsed_params = CGI.parse(query_params)
-    return unless parsed_params["referrer"]
-
-    parsed_params["referrer"][0]
+    parsed_params["referrer"]&.first
   end
 
   def original_duplicate_log_id_from_query
@@ -152,9 +150,7 @@ private
     return unless query_params
 
     parsed_params = CGI.parse(query_params)
-    return unless parsed_params["original_log_id"]
-
-    parsed_params["original_log_id"][0]
+    parsed_params["original_log_id"]&.first
   end
 
   def previous_interruption_screen_page_id
