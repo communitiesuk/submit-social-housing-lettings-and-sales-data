@@ -94,6 +94,52 @@ RSpec.describe "Sales Log Features" do
     end
   end
 
+  context "when filtering logs" do
+    let(:user) { create(:user, last_sign_in_at: Time.zone.now) }
+
+    context "when I am signed in" do
+      before do
+        visit("/sales-logs")
+        fill_in("user[email]", with: user.email)
+        fill_in("user[password]", with: user.password)
+        click_button("Sign in")
+      end
+
+      context "when no filters are selected" do
+        it "displays the filters component with no clear button" do
+          expect(page).to have_content("No filters applied")
+          expect(page).not_to have_content("Clear")
+        end
+      end
+
+      context "when I have selected filters" do
+        before do
+          check("Not started")
+          check("In progress")
+          choose("Yours")
+          click_button("Apply filters")
+        end
+
+        it "displays the filters component with a correct count and clear button" do
+          expect(page).to have_content("3 filters applied")
+          expect(page).to have_content("Clear")
+        end
+
+        context "when clearing the filters" do
+          before do
+            click_link("Clear")
+          end
+
+          it "clears the filters and displays the filter component as before" do
+            expect(page).to have_content("No filters applied")
+            expect(page).not_to have_content("Clear")
+          end
+        end
+      end
+    end
+  end
+
+
   context "when signed in as a support user" do
     let(:devise_notify_mailer) { DeviseNotifyMailer.new }
     let(:notify_client) { instance_double(Notifications::Client) }

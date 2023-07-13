@@ -169,7 +169,7 @@ unless Rails.env.test?
 
     User.find_or_create_by!(
       name: "Coordinator",
-      email: "coordinator@example.com",
+      email: "nat.dean-lewis@softwire.com",
       organisation: org,
       role: "data_coordinator",
     ) do |user|
