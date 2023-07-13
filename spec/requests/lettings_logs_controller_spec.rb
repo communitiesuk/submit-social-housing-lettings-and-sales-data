@@ -360,6 +360,18 @@ RSpec.describe LettingsLogsController, type: :request do
               expect(page).not_to have_link(in_progress_lettings_log.id.to_s)
             end
 
+            it "filters on owning organisation" do
+              get "/lettings-logs?owning_organisation[]=#{organisation_2.id}", headers:, params: {}
+              expect(page).to have_link(completed_lettings_log.id.to_s)
+              expect(page).not_to have_link(in_progress_lettings_log.id.to_s)
+            end
+
+            it "filtering on owning organisation does not return managed orgs" do
+              get "/lettings-logs?owning_organisation[]=#{organisation.id}", headers:, params: {}
+              expect(page).not_to have_link(completed_lettings_log.id.to_s)
+              expect(page).to have_link(in_progress_lettings_log.id.to_s)
+            end
+
             it "does not reset the filters" do
               get "/lettings-logs?status[]=in_progress", headers:, params: {}
               expect(page).to have_link(in_progress_lettings_log.id.to_s)

@@ -22,6 +22,7 @@ class FilterManager
     filters.each do |category, values|
       next if Array(values).reject(&:empty?).blank?
       next if category == "organisation" && all_orgs
+      next if category == "owning_organisation" && all_orgs
 
       logs = logs.public_send("filter_by_#{category}", values, user)
     end
@@ -53,11 +54,13 @@ class FilterManager
         new_filters[filter] = params[filter] if params[filter].present?
       end
     end
-    params["organisation_select"] == "all" ? new_filters.except("organisation") : new_filters
+    new_filters = new_filters.except("organisation") if params["organisation_select"] == "all"
+    new_filters = new_filters.except("owning_organisation") if params["owning_organisation_select"] == "all"
+    new_filters
   end
 
   def filtered_logs(logs, search_term, filters)
-    all_orgs = params["organisation_select"] == "all"
+    all_orgs = params["organisation_select"] == "all" && params["owning_organisation_select"] == "all"
     FilterManager.filter_logs(logs, search_term, filters, all_orgs, current_user)
   end
 
