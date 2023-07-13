@@ -402,7 +402,7 @@ RSpec.describe "Lettings Log Features" do
       end
 
       it "allows keeping the original log and deleting duplicates" do
-        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/duplicate-logs")
+        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
         click_link("Keep this log and delete duplicates", href: "/lettings-logs/#{lettings_log.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
         expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
         click_button "Delete this log"
@@ -426,7 +426,7 @@ RSpec.describe "Lettings Log Features" do
       end
 
       it "allows keeping the duplicate log and deleting the original one" do
-        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/duplicate-logs")
+        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
         click_link("Keep this log and delete duplicates", href: "/lettings-logs/#{duplicate_log.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
         expect(page).to have_current_path("/lettings-logs/#{duplicate_log.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
         click_button "Delete this log"

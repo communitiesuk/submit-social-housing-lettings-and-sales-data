@@ -165,10 +165,10 @@ private
     if FeatureToggle.deduplication_flow_enabled?
       if @log.lettings?
         if current_user.lettings_logs.duplicate_logs(@log).count.positive?
-          return send("lettings_log_duplicate_logs_path", @log)
+          return send("lettings_log_duplicate_logs_path", @log, original_log_id: @log.id)
         end
       elsif current_user.sales_logs.duplicate_logs(@log).count.positive?
-        return send("sales_log_duplicate_logs_path", @log)
+        return send("sales_log_duplicate_logs_path", @log, original_log_id: @log.id)
       end
     end
 

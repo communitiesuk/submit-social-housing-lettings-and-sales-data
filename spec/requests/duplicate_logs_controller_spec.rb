@@ -39,7 +39,7 @@ RSpec.describe DuplicateLogsController, type: :request do
 
         before do
           allow(LettingsLog).to receive(:duplicate_logs).and_return(duplicate_logs)
-          get "/lettings-logs/#{lettings_log.id}/duplicate-logs"
+          get "/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}"
         end
 
         it "displays links to all the duplicate logs" do
@@ -72,7 +72,7 @@ RSpec.describe DuplicateLogsController, type: :request do
 
         before do
           allow(SalesLog).to receive(:duplicate_logs).and_return(duplicate_logs)
-          get "/sales-logs/#{sales_log.id}/duplicate-logs"
+          get "/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}"
         end
 
         it "displays links to all the duplicate logs" do

@@ -153,7 +153,7 @@ RSpec.describe "Sales Log Features" do
     end
 
     it "allows keeping the original log and deleting duplicates" do
-      expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs")
+      expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
       click_link("Keep this log and delete duplicates", href: "/sales-logs/#{sales_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
       expect(page).to have_current_path("/sales-logs/#{sales_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
       click_button "Delete this log"
@@ -177,7 +177,7 @@ RSpec.describe "Sales Log Features" do
     end
 
     it "allows keeping the duplicate log and deleting the original one" do
-      expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs")
+      expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
       click_link("Keep this log and delete duplicates", href: "/sales-logs/#{duplicate_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
       expect(page).to have_current_path("/sales-logs/#{duplicate_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
       click_button "Delete this log"
