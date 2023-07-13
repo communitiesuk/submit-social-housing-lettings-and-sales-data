@@ -498,6 +498,12 @@ RSpec.describe LettingsLogsController, type: :request do
                 expect(page).not_to have_content("Status")
               end
 
+              it "has correct filter count and clear button" do
+                get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
+                expect(page).to have_content("1 filter applied")
+                expect(page).to have_content("Clear")
+              end
+
               it "hides button to create a new log" do
                 get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
                 expect(page).not_to have_content("Create a new lettings log")
