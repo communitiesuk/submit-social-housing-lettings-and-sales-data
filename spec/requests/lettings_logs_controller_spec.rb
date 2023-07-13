@@ -469,13 +469,13 @@ RSpec.describe LettingsLogsController, type: :request do
               let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }
 
               let!(:included_log) { create(:lettings_log, :in_progress, bulk_upload:, owning_organisation: organisation) }
-              let!(:excluded_log) { create(:lettings_log, :in_progress, owning_organisation: organisation) }
+              let!(:excluded_log) { create(:lettings_log, :in_progress, owning_organisation: organisation, tenancycode: "fake_code") }
 
               it "returns logs only associated with the bulk upload" do
                 get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
 
                 expect(page).to have_content(included_log.id)
-                expect(page).not_to have_content(excluded_log.id)
+                expect(page).not_to have_content(excluded_log.tenancycode)
               end
 
               it "dislays how many logs remaining to fix" do
@@ -528,14 +528,16 @@ RSpec.describe LettingsLogsController, type: :request do
               let(:other_user) { create(:user, organisation:) }
               let(:bulk_upload) { create(:bulk_upload, :lettings, user: other_user) }
 
-              let!(:excluded_log) { create(:lettings_log, bulk_upload:, owning_organisation: organisation) }
-              let!(:also_excluded_log) { create(:lettings_log, owning_organisation: organisation) }
+              before do
+                create(:lettings_log, bulk_upload:, owning_organisation: organisation, tenancycode: "fake_code_1")
+                create(:lettings_log, owning_organisation: organisation, tenancycode: "fake_code_2")
+              end
 
               it "does not return any logs" do
                 get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
 
-                expect(page).not_to have_content(excluded_log.id)
-                expect(page).not_to have_content(also_excluded_log.id)
+                expect(page).not_to have_content("fake_code_1")
+                expect(page).not_to have_content("fake_code_2")
               end
             end
 
