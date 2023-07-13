@@ -139,7 +139,6 @@ RSpec.describe "Sales Log Features" do
     end
   end
 
-
   context "when signed in as a support user" do
     let(:devise_notify_mailer) { DeviseNotifyMailer.new }
     let(:notify_client) { instance_double(Notifications::Client) }
