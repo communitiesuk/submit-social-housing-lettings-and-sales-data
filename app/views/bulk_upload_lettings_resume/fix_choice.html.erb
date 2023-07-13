@@ -4,10 +4,14 @@
       <%= f.govuk_error_summary %>
 
       <span class="govuk-caption-l">Bulk upload for lettings (<%= @bulk_upload.year_combo %>)</span>
-      <h1 class="govuk-heading-l">How would you like to fix <%= pluralize(@bulk_upload.bulk_upload_errors.count, "error") %>?</h1>
+      <h1 class="govuk-heading-l">How would you like to fix the errors?</h1>
 
       <div class="govuk-body-l">
         File: <%= @bulk_upload.filename %>
+      </div>
+
+      <div class="govuk-body">
+        You have tried to upload <%= @bulk_upload.total_logs_count ? pluralize(@bulk_upload.total_logs_count, "log") : "logs" %>. There are errors in <%= pluralize(@bulk_upload.logs_with_errors_count, "log") %>, and <%= pluralize(@bulk_upload.bulk_upload_errors.count, "error") %> in total.
       </div>
 
       <div class="govuk-body">
@@ -15,13 +19,18 @@
       </div>
 
       <%= govuk_details(summary_text: "How to choose between fixing errors on the CORE site or in the CSV") do %>
-        <p class="govuk-body">When it comes to fixing errors, there are pros and cons to doing it on a CSV versus doing it on a website.</p>
-
-        <p class="govuk-body">Fixing errors on a CSV file can be beneficial because it allows you to easily make changes to multiple records at once, and you can use tools like Excel to quickly identify and correct errors. However, if the CSV file is not properly formatted, it can be difficult to identify which records contain errors.</p>
-
-        <p class="govuk-body">Fixing errors on a website can be convenient because you can see the data in context and make changes in real-time. However, this approach can be time-consuming if you need to make changes to multiple records, and it may be more difficult to identify errors in a large dataset.</p>
-
-        <p class="govuk-body">Ultimately, the best approach will depend on the specific situation and the nature of the errors that need to be fixed.</p>
+        <p class="govuk-body govuk-!-margin-bottom-2">You may find it easier to fix the errors in the CSV file if:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>you have a lot of errors</li>
+          <li>the CSV file is formatted incorrectly and you can see where the errors are</li>
+          <li>you need to fix multiple errors at once</li>
+        </ul>
+        <p class="govuk-body govuk-!-margin-bottom-2">You may find it easier to fix the errors on the CORE site if:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>you need to see the data in context</li>
+          <li>you have a smaller file, with a few errors</li>
+          <li>you are not sure where the errors are</li>
+        </ul>
       <% end %>
 
       <%= f.govuk_collection_radio_buttons :choice,

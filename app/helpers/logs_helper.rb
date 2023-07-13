@@ -41,9 +41,15 @@ module LogsHelper
     end
   end
 
-  def pluralize_logs_and_errors_warning(log_count, error_count)
-    is_or_are = log_count == 1 ? "is" : "are"
-    need_or_needs = error_count == 1 ? "needs" : "need"
-    "There #{is_or_are} #{pluralize(log_count, 'log')} in this bulk upload with #{pluralize(error_count, 'error')} that still #{need_or_needs} to be fixed after upload."
+  def logs_and_errors_warning(bulk_upload)
+    this_or_these_errors = bulk_upload.bulk_upload_errors.count == 1 ? "This error" : "These errors"
+
+    "You will upload #{pluralize(bulk_upload.total_logs_count, 'log')}. There are errors in #{pluralize(bulk_upload.logs_with_errors_count, 'log')}, and #{pluralize(bulk_upload.bulk_upload_errors.count, 'error')} in total. #{this_or_these_errors} will need to be fixed on the CORE site."
+  end
+
+  def logs_and_soft_validations_warning(bulk_upload)
+    this_or_these_unexpected_answers = bulk_upload.bulk_upload_errors.count == 1 ? "This unexpected answer" : "These unexpected answers"
+
+    "You will upload #{pluralize(bulk_upload.total_logs_count, 'log')}. There are unexpected answers in #{pluralize(bulk_upload.logs_with_errors_count, 'log')}, and #{pluralize(bulk_upload.bulk_upload_errors.count, 'unexpected answer')} in total. #{this_or_these_unexpected_answers} will be marked as correct."
   end
 end
