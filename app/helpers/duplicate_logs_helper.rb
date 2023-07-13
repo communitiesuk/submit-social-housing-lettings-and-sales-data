@@ -39,24 +39,24 @@ module DuplicateLogsHelper
       next if duplicate_lettings_ids.include? log.id
 
       duplicates = LettingsLog.filter_by_organisation(user.organisation).duplicate_logs(log)
-      if duplicates.any?
-        duplicate_ids = [log.id, *duplicates.map(&:id)]
-        duplicate_sets[:lettings][lettings_count] = duplicate_ids
-        lettings_count += 1
-        duplicate_lettings_ids << duplicate_ids
-      end
+      next if duplicates.none?
+
+      duplicate_ids = [log.id, *duplicates.map(&:id)]
+      duplicate_sets[:lettings][lettings_count] = duplicate_ids
+      lettings_count += 1
+      duplicate_lettings_ids << duplicate_ids
     end
 
     user.sales_logs(created_by: true).each do |log|
       next if duplicate_sales_ids.include? log.id
 
       duplicates = SalesLog.filter_by_organisation(user.organisation).duplicate_logs(log)
-      if duplicates.any?
-        duplicate_ids = [log.id, *duplicates.map(&:id)]
-        duplicate_sets[:sales][sales_count] = duplicate_ids
-        sales_count += 1
-        duplicate_sales_ids << duplicate_ids
-      end
+      next if duplicates.none?
+
+      duplicate_ids = [log.id, *duplicates.map(&:id)]
+      duplicate_sets[:sales][sales_count] = duplicate_ids
+      sales_count += 1
+      duplicate_sales_ids << duplicate_ids
     end
 
     return if duplicate_lettings_ids.empty? && duplicate_sales_ids.empty?

@@ -1,0 +1,29 @@
+<%= govuk_table do |table| %>
+  <%= table.head do |head| %>
+    <%= head.row do |row| %>
+      <% row.cell header: true, text: "Type of logs" %>
+      <% row.cell header: true, text: "Log IDs" %>
+      <% row.cell header: true %>
+    <% end %>
+  <% end %>
+  <%= table.body do |body| %>
+    <% @duplicates[:lettings].each do |_i, duplicate_set| %>
+      <% body.row do |row| %>
+        <% row.cell text: "Lettings" %>
+        <% row.cell text: duplicate_set.map { |id| "Log #{id}" }.join(", ") %>
+        <% row.cell do %>
+          <%= govuk_link_to "Review logs", lettings_log_duplicate_logs_path(duplicate_set.first) %>
+        <% end %>
+      <% end %>
+    <% end %>
+    <% @duplicates[:sales].each do |_i, duplicate_set| %>
+      <% body.row do |row| %>
+        <% row.cell text: "Sales" %>
+        <% row.cell text: duplicate_set.map { |id| "Log #{id}" }.join(", ") %>
+        <% row.cell do %>
+          <%= govuk_link_to "Review logs", sales_log_duplicate_logs_path(duplicate_set.first) %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

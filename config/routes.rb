@@ -105,6 +105,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :duplicate_logs, only: [:index]
+
   resources :users do
     get "edit-dpo", to: "users#dpo"
     get "edit-key-contact", to: "users#key_contact"
