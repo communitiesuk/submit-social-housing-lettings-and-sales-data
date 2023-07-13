@@ -33,6 +33,7 @@ RSpec.describe BulkUpload::Processor do
           BulkUpload::Lettings::Validator,
           invalid?: true,
           call: nil,
+          total_logs_count: 1,
           errors: [],
         )
       end
@@ -58,6 +59,13 @@ RSpec.describe BulkUpload::Processor do
 
         expect(mock_validator).not_to have_received(:call)
       end
+
+      it "sets total number of logs on bulk upload" do
+        processor.call
+
+        bulk_upload.reload
+        expect(bulk_upload.total_logs_count).to eq(1)
+      end
     end
 
     context "when the bulk upload processing throws an error" do
@@ -74,6 +82,7 @@ RSpec.describe BulkUpload::Processor do
         instance_double(
           BulkUpload::Lettings::Validator,
           invalid?: false,
+          total_logs_count: 1,
         )
       end
 
@@ -119,6 +128,7 @@ RSpec.describe BulkUpload::Processor do
           BulkUpload::Lettings::Validator,
           invalid?: false,
           call: nil,
+          total_logs_count: 1,
           any_setup_errors?: true,
         )
       end

@@ -10,6 +10,7 @@ class BulkUpload::Processor
 
     download
 
+    @bulk_upload.update!(total_logs_count: validator.total_logs_count)
     return send_failure_mail(errors: validator.errors.full_messages) if validator.invalid?
 
     validator.call

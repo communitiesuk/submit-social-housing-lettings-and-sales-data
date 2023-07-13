@@ -73,6 +73,10 @@ class BulkUpload::Lettings::Validator
     row_parsers.any?(&:log_already_exists?)
   end
 
+  def total_logs_count
+    csv_parser.body_rows.count
+  end
+
 private
 
   # n^2 algo
