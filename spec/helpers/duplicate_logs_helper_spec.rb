@@ -34,7 +34,7 @@ RSpec.describe DuplicateLogsHelper do
 
     it "returns the ids of the duplicates in an array under the lettings key in the duplicates hash" do
       expect(result).to be_a Hash
-      expect(result[:lettings]).to match_array [[lettings_log.id, duplicate_lettings_log.id]]
+      expect(result[:lettings].values).to match_array [[lettings_log.id, duplicate_lettings_log.id]]
     end
   end
 
@@ -43,7 +43,7 @@ RSpec.describe DuplicateLogsHelper do
 
     it "returns the ids of the duplicates in an array under the sales key in the duplicates hash" do
       expect(result).to be_a Hash
-      expect(result[:sales]).to match_array [[sales_log.id, duplicate_sales_log.id]]
+      expect(result[:sales].values).to match_array [[sales_log.id, duplicate_sales_log.id]]
     end
   end
 
@@ -59,8 +59,8 @@ RSpec.describe DuplicateLogsHelper do
         [further_sales_log.id, *further_duplicate_sales_logs.map(&:id)],
       ]
 
-      expect(result[:lettings]).to match_array [[lettings_log.id, duplicate_lettings_log.id]]
-      expect(result[:sales]).to match_array expected_sales_duplicates_result
+      expect(result[:lettings].values).to match_array [[lettings_log.id, duplicate_lettings_log.id]]
+      expect(result[:sales].values).to match_array expected_sales_duplicates_result
     end
   end
 end
