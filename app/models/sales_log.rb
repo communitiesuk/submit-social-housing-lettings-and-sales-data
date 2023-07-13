@@ -41,9 +41,19 @@ class SalesLog < Log
       .or(filter_by_id(param))
   }
   scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org) }
+  scope :duplicate_logs, lambda { |log|
+    visible.where(log.slice(*DUPLICATE_LOG_ATTRIBUTES))
+    .where.not(id: log.id)
+    .where.not(saledate: nil)
+    .where.not(sex1: nil)
+    .where.not(ecstat1: nil)
+    .where.not(postcode_full: nil)
+    .where("age1 IS NOT NULL OR age1_known = 1 OR age1_known = 2")
+  }
 
   OPTIONAL_FIELDS = %w[purchid othtype].freeze
   RETIREMENT_AGES = { "M" => 65, "F" => 60, "X" => 65 }.freeze
+  DUPLICATE_LOG_ATTRIBUTES = %w[purchid saledate age1_known age1 sex1 ecstat1 postcode_full].freeze
 
   def lettings?
     false

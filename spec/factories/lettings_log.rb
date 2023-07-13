@@ -34,6 +34,25 @@ FactoryBot.define do
       ecstat1 { 2 }
       hhmemb { 1 }
     end
+    trait :duplicate do
+      status { 1 }
+      needstype { 1 }
+      tenancycode { "same tenancy code" }
+      postcode_full { "A1 1AA" }
+      age1 { 18 }
+      sex1 { "M" }
+      ecstat1 { 0 }
+      period { 2 }
+      brent { 200 }
+      scharge { 50 }
+      pscharge { 40 }
+      supcharg { 35 }
+      tcharge { 325 }
+      propcode { "same property code" }
+      renewal { 1 }
+      rent_type { 1 }
+      startdate { Time.zone.today }
+    end
     trait :completed do
       startdate { Time.zone.today }
       status { 2 }

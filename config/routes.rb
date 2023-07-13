@@ -172,6 +172,7 @@ Rails.application.routes.draw do
 
   resources :lettings_logs, path: "/lettings-logs" do
     get "delete-confirmation", to: "lettings_logs#delete_confirmation"
+    get "duplicate-logs", to: "duplicate_logs#show"
 
     collection do
       post "bulk-upload", to: "bulk_upload#bulk_upload"
@@ -237,6 +238,7 @@ Rails.application.routes.draw do
 
   resources :sales_logs, path: "/sales-logs" do
     get "delete-confirmation", to: "sales_logs#delete_confirmation"
+    get "duplicate-logs", to: "duplicate_logs#show"
 
     collection do
       get "csv-download", to: "sales_logs#download_csv"

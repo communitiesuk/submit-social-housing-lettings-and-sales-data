@@ -1,0 +1,20 @@
+<% content_for :title, "Check duplicate logs" %>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <%= govuk_panel(
+            classes: "app-panel--interruption",
+        ) do %>
+            <p class="govuk-heading-l">These logs are duplicates</p>
+            <p class="govuk-body-l">These logs have the same values for the following fields. Choose one to keep or correct the answers.</p>
+        <% end %>
+
+        <% @all_duplicates.each_with_index do |log, index| %>
+            <%= render partial: "duplicate_log", locals: { log: log } %>
+            <%= render partial: "duplicate_log_check_answers", locals: { log: log } %>
+            <%= govuk_button_link_to "Keep this log and delete duplicates", "#" %>
+            <% if index < @all_duplicates.count - 1 %>
+                <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
+            <% end %>
+        <% end %>   
+    </div>
+</div>

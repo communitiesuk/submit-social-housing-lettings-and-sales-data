@@ -258,7 +258,6 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
               field_96: [error_message], # startdate
               field_97: [error_message], # startdate
               field_98: [error_message], # startdate
-              field_100: [error_message], # propcode
               field_108: [error_message], # postcode_full
               field_109: [error_message], # postcode_full
               field_111: [error_message], # owning_organisation
@@ -295,7 +294,6 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
               :field_96, # startdate
               :field_97, # startdate
               :field_98, # startdate
-              :field_100, # propcode
               :field_111, # owning_organisation
             ].each do |field|
               expect(parser.errors[field]).to include("This is a duplicate log")
@@ -329,7 +327,6 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
               :field_96, # startdate
               :field_97, # startdate
               :field_98, # startdate
-              :field_100, # propcode
               :field_108, # postcode_full
               :field_109, # postcode_full
               :field_111, # owning_organisation
@@ -337,6 +334,30 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
               expect(parser.errors[field]).to be_blank
             end
           end
+        end
+      end
+
+      context "when valid row with valid decimal (integer) field_1" do
+        before do
+          allow(FeatureToggle).to receive(:bulk_upload_duplicate_log_check_enabled?).and_return(true)
+        end
+
+        let(:attributes) { valid_attributes.merge(field_1: "1.00") }
+
+        it "returns true" do
+          expect(parser).to be_valid
+        end
+      end
+
+      context "when valid row with invalid decimal (non-integer) field_1" do
+        before do
+          allow(FeatureToggle).to receive(:bulk_upload_duplicate_log_check_enabled?).and_return(true)
+        end
+
+        let(:attributes) { valid_attributes.merge(field_1: "1.56") }
+
+        it "returns false" do
+          expect(parser).not_to be_valid
         end
       end
     end

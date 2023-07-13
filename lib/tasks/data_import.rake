@@ -28,27 +28,4 @@ namespace :core do
       raise "Type #{type} is not supported by data_import"
     end
   end
-
-  desc "Import missing data sharing agreement XMLs from legacy CORE"
-  task :data_protection_confirmation_import, %i[type path] => :environment do |_task|
-    orgs_without_dpc = Organisation.includes(:data_protection_confirmation)
-      .where.not(id: DataProtectionConfirmation.all.select(:organisation_id))
-      .where.not(old_org_id: nil)
-
-    puts "Processing #{orgs_without_dpc.count} orgs without data protection confirmation"
-    s3_service = Storage::S3Service.new(Configuration::PaasConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
-
-    orgs_without_dpc.each do |org|
-      archive_path = "#{org.old_org_id}.zip"
-      archive_io = s3_service.get_file_io(archive_path)
-      archive_service = Storage::ArchiveService.new(archive_io)
-      if archive_service.folder_present?("dataprotect")
-        Rails.logger.info("Start importing folder dataprotect")
-        Imports::DataProtectionConfirmationImportService.new(archive_service).create_data_protection_confirmations("dataprotect")
-        Rails.logger.info("Imported")
-      else
-        Rails.logger.info("dataprotect does not exist, skipping import")
-      end
-    end
-  end
 end

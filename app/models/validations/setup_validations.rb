@@ -23,7 +23,7 @@ module Validations::SetupValidations
   end
 
   def validate_location(record)
-    location_during_startdate_validation(record, :location_id)
+    location_during_startdate_validation(record)
   end
 
   def validate_scheme_has_confirmed_locations_validation(record)
@@ -35,8 +35,8 @@ module Validations::SetupValidations
   end
 
   def validate_scheme(record)
-    location_during_startdate_validation(record, :scheme_id)
-    scheme_during_startdate_validation(record, :scheme_id)
+    location_during_startdate_validation(record)
+    scheme_during_startdate_validation(record)
   end
 
   def validate_organisation(record)
@@ -49,8 +49,6 @@ module Validations::SetupValidations
   end
 
   def validate_managing_organisation_data_sharing_agremeent_signed(record)
-    return unless FeatureToggle.new_data_protection_confirmation?
-
     if record.managing_organisation_id_changed? && record.managing_organisation.present? && !record.managing_organisation.data_protection_confirmed?
       record.errors.add :managing_organisation_id, I18n.t("validations.setup.managing_organisation.data_sharing_agreement_not_signed")
     end

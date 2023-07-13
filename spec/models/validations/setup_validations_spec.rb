@@ -156,6 +156,92 @@ RSpec.describe Validations::SetupValidations do
   end
 
   describe "#validate_scheme" do
+    context "with a deactivated scheme" do
+      let(:scheme) { create(:scheme) }
+
+      before do
+        create(:location, scheme:)
+        create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), scheme:)
+        scheme.reload
+      end
+
+      it "produces error when tenancy start date is during deactivated scheme period" do
+        record.startdate = Time.zone.local(2022, 7, 5)
+        record.scheme = scheme
+        setup_validator.validate_scheme(record)
+        expect(record.errors["startdate"])
+          .to include(match I18n.t("validations.setup.startdate.scheme.deactivated.startdate", name: scheme.service_name, date: "4 June 2022"))
+        expect(record.errors["scheme_id"])
+          .to include(match I18n.t("validations.setup.startdate.scheme.deactivated.scheme_id", name: scheme.service_name, date: "4 June 2022"))
+      end
+
+      it "produces no error when tenancy start date is during an active scheme period" do
+        record.startdate = Time.zone.local(2022, 6, 1)
+        record.scheme = scheme
+        setup_validator.validate_scheme(record)
+        expect(record.errors["startdate"]).to be_empty
+        expect(record.errors["scheme_id"]).to be_empty
+      end
+    end
+
+    context "with a scheme that is reactivating soon" do
+      let(:scheme) { create(:scheme) }
+
+      before do
+        create(:location, scheme:)
+        create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), scheme:)
+        scheme.reload
+      end
+
+      it "produces error when tenancy start date is during deactivated scheme period" do
+        record.startdate = Time.zone.local(2022, 7, 5)
+        record.scheme = scheme
+        setup_validator.validate_scheme(record)
+        expect(record.errors["startdate"])
+          .to include(match I18n.t("validations.setup.startdate.scheme.reactivating_soon.startdate", name: scheme.service_name, date: "4 August 2022"))
+        expect(record.errors["scheme_id"])
+          .to include(match I18n.t("validations.setup.startdate.scheme.reactivating_soon.scheme_id", name: scheme.service_name, date: "4 August 2022"))
+      end
+
+      it "produces no error when tenancy start date is during an active scheme period" do
+        record.startdate = Time.zone.local(2022, 9, 1)
+        record.scheme = scheme
+        setup_validator.validate_scheme(record)
+        expect(record.errors["startdate"]).to be_empty
+        expect(record.errors["scheme_id"]).to be_empty
+      end
+    end
+
+    context "with a scheme that has many reactivations soon" do
+      let(:scheme) { create(:scheme) }
+
+      before do
+        create(:location, scheme:)
+        create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), scheme:)
+        create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 2), reactivation_date: Time.zone.local(2022, 8, 3), scheme:)
+        create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 1), reactivation_date: Time.zone.local(2022, 9, 4), scheme:)
+        scheme.reload
+      end
+
+      it "produces error when tenancy start date is during deactivated scheme period" do
+        record.startdate = Time.zone.local(2022, 7, 5)
+        record.scheme = scheme
+        setup_validator.validate_scheme(record)
+        expect(record.errors["startdate"])
+          .to include(match I18n.t("validations.setup.startdate.scheme.reactivating_soon.startdate", name: scheme.service_name, date: "4 September 2022"))
+        expect(record.errors["scheme_id"])
+          .to include(match I18n.t("validations.setup.startdate.scheme.reactivating_soon.scheme_id", name: scheme.service_name, date: "4 September 2022"))
+      end
+
+      it "produces no error when tenancy start date is during an active scheme period" do
+        record.startdate = Time.zone.local(2022, 10, 1)
+        record.scheme = scheme
+        setup_validator.validate_scheme(record)
+        expect(record.errors["startdate"]).to be_empty
+        expect(record.errors["scheme_id"]).to be_empty
+      end
+    end
+
     context "with a deactivated location" do
       let(:scheme) { create(:scheme) }
       let(:location) { create(:location, scheme:) }
@@ -169,15 +255,18 @@ RSpec.describe Validations::SetupValidations do
         record.startdate = Time.zone.local(2022, 7, 5)
         record.location = location
         setup_validator.validate_scheme(record)
-        expect(record.errors["scheme_id"])
-          .to include(match I18n.t("validations.setup.startdate.location.deactivated", postcode: location.postcode, date: "4 June 2022"))
+        expect(record.errors["startdate"])
+          .to include(match I18n.t("validations.setup.startdate.location.deactivated.startdate", postcode: location.postcode, date: "4 June 2022"))
+        expect(record.errors["location_id"])
+          .to include(match I18n.t("validations.setup.startdate.location.deactivated.location_id", postcode: location.postcode, date: "4 June 2022"))
       end
 
       it "produces no error when tenancy start date is during an active location period" do
         record.startdate = Time.zone.local(2022, 6, 1)
         record.location = location
         setup_validator.validate_scheme(record)
-        expect(record.errors["scheme_id"]).to be_empty
+        expect(record.errors["startdate"]).to be_empty
+        expect(record.errors["location_id"]).to be_empty
       end
     end
 
@@ -194,87 +283,71 @@ RSpec.describe Validations::SetupValidations do
         record.startdate = Time.zone.local(2022, 7, 5)
         record.location = location
         setup_validator.validate_scheme(record)
-        expect(record.errors["scheme_id"])
-          .to include(match I18n.t("validations.setup.startdate.location.reactivating_soon", postcode: location.postcode, date: "4 August 2022"))
+        expect(record.errors["startdate"])
+          .to include(match I18n.t("validations.setup.startdate.location.reactivating_soon.startdate", postcode: location.postcode, date: "4 August 2022"))
+        expect(record.errors["location_id"])
+          .to include(match I18n.t("validations.setup.startdate.location.reactivating_soon.location_id", postcode: location.postcode, date: "4 August 2022"))
       end
 
       it "produces no error when tenancy start date is during an active location period" do
         record.startdate = Time.zone.local(2022, 9, 1)
         record.location = location
         setup_validator.validate_scheme(record)
-        expect(record.errors["scheme_id"]).to be_empty
+        expect(record.errors["startdate"]).to be_empty
+        expect(record.errors["location_id"]).to be_empty
       end
     end
 
-    context "with a location with no deactivation periods" do
-      let(:scheme) { create(:scheme, created_at: Time.zone.local(2022, 10, 3)) }
+    context "with a location that has many reactivations soon" do
+      let(:scheme) { create(:scheme) }
+      let(:location) { create(:location, scheme:) }
+
+      before do
+        create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), location:)
+        create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 2), reactivation_date: Time.zone.local(2022, 8, 3), location:)
+        create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 1), reactivation_date: Time.zone.local(2022, 9, 4), location:)
+        location.reload
+      end
+
+      it "produces error when tenancy start date is during deactivated location period" do
+        record.startdate = Time.zone.local(2022, 7, 5)
+        record.location = location
+        setup_validator.validate_scheme(record)
+        expect(record.errors["startdate"])
+          .to include(match I18n.t("validations.setup.startdate.location.reactivating_soon.startdate", postcode: location.postcode, date: "4 September 2022"))
+        expect(record.errors["location_id"])
+          .to include(match I18n.t("validations.setup.startdate.location.reactivating_soon.location_id", postcode: location.postcode, date: "4 September 2022"))
+      end
+
+      it "produces no error when tenancy start date is during an active location period" do
+        record.startdate = Time.zone.local(2022, 10, 1)
+        record.location = location
+        setup_validator.validate_scheme(record)
+        expect(record.errors["startdate"]).to be_empty
+        expect(record.errors["location_id"]).to be_empty
+      end
+    end
+
+    context "with a location that is activating soon (has no deactivation periods)" do
+      let(:scheme) { create(:scheme) }
       let(:location) { create(:location, scheme:, startdate: Time.zone.local(2022, 9, 15)) }
 
       it "produces no error" do
         record.startdate = Time.zone.local(2022, 10, 15)
         record.location = location
         setup_validator.validate_scheme(record)
-        expect(record.errors["scheme_id"]).to be_empty
+        expect(record.errors["startdate"]).to be_empty
+        expect(record.errors["location_id"]).to be_empty
       end
 
       it "produces an error when the date is before available_from date" do
         record.startdate = Time.zone.local(2022, 8, 15)
         record.location = location
         setup_validator.validate_scheme(record)
-        expect(record.errors["scheme_id"])
-          .to include(match I18n.t("validations.setup.startdate.location.activating_soon", postcode: location.postcode, date: "15 September 2022"))
-      end
-    end
-
-    context "with a scheme that is reactivating soon" do
-      let(:scheme) { create(:scheme, created_at: Time.zone.local(2022, 4, 1)) }
-
-      before do
-        create(:location, scheme:)
-        create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), scheme:)
-        scheme.reload
-      end
-
-      it "produces error when tenancy start date is during deactivated scheme period" do
-        record.startdate = Time.zone.local(2022, 7, 5)
-        record.scheme = scheme
-        setup_validator.validate_scheme(record)
-        expect(record.errors["scheme_id"])
-          .to include(match I18n.t("validations.setup.startdate.scheme.reactivating_soon", name: scheme.service_name, date: "4 August 2022"))
-      end
-
-      it "produces no error when tenancy start date is during an active scheme period" do
-        record.startdate = Time.zone.local(2022, 9, 1)
-        record.scheme = scheme
-        setup_validator.validate_scheme(record)
-        expect(record.errors["scheme_id"]).to be_empty
-      end
-    end
-
-    context "with a scheme that has many reactivations soon" do
-      let(:scheme) { create(:scheme, created_at: Time.zone.local(2022, 4, 1)) }
-
-      before do
-        create(:location, scheme:)
-        create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), scheme:)
-        create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 2), reactivation_date: Time.zone.local(2022, 8, 3), scheme:)
-        create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 1), reactivation_date: Time.zone.local(2022, 9, 4), scheme:)
-        scheme.reload
-      end
-
-      it "produces error when tenancy start date is during deactivated scheme period" do
-        record.startdate = Time.zone.local(2022, 7, 5)
-        record.scheme = scheme
-        setup_validator.validate_scheme(record)
-        expect(record.errors["scheme_id"])
-          .to include(match I18n.t("validations.setup.startdate.scheme.reactivating_soon", name: scheme.service_name, date: "4 September 2022"))
-      end
-
-      it "produces no error when tenancy start date is during an active scheme period" do
-        record.startdate = Time.zone.local(2022, 10, 1)
-        record.scheme = scheme
-        setup_validator.validate_scheme(record)
-        expect(record.errors["scheme_id"]).to be_empty
+        expect(record.errors["startdate"])
+          .to include(match I18n.t("validations.setup.startdate.location.activating_soon.startdate", postcode: location.postcode, date: "15 September 2022"))
+        expect(record.errors["location_id"])
+          .to include(match I18n.t("validations.setup.startdate.location.activating_soon.location_id", postcode: location.postcode, date: "15 September 2022"))
       end
     end
   end
@@ -293,14 +366,17 @@ RSpec.describe Validations::SetupValidations do
         record.startdate = Time.zone.local(2022, 7, 5)
         record.location = location
         setup_validator.validate_location(record)
+        expect(record.errors["startdate"])
+          .to include(match I18n.t("validations.setup.startdate.location.deactivated.startdate", postcode: location.postcode, date: "4 June 2022"))
         expect(record.errors["location_id"])
-          .to include(match I18n.t("validations.setup.startdate.location.deactivated", postcode: location.postcode, date: "4 June 2022"))
+          .to include(match I18n.t("validations.setup.startdate.location.deactivated.location_id", postcode: location.postcode, date: "4 June 2022"))
       end
 
       it "produces no error when tenancy start date is during an active location period" do
         record.startdate = Time.zone.local(2022, 6, 1)
         record.location = location
         setup_validator.validate_location(record)
+        expect(record.errors["startdate"]).to be_empty
         expect(record.errors["location_id"]).to be_empty
       end
     end
@@ -318,19 +394,52 @@ RSpec.describe Validations::SetupValidations do
         record.startdate = Time.zone.local(2022, 7, 5)
         record.location = location
         setup_validator.validate_location(record)
+        expect(record.errors["startdate"])
+          .to include(match I18n.t("validations.setup.startdate.location.reactivating_soon.startdate", postcode: location.postcode, date: "4 August 2022"))
         expect(record.errors["location_id"])
-          .to include(match I18n.t("validations.setup.startdate.location.reactivating_soon", postcode: location.postcode, date: "4 August 2022"))
+          .to include(match I18n.t("validations.setup.startdate.location.reactivating_soon.location_id", postcode: location.postcode, date: "4 August 2022"))
       end
 
       it "produces no error when tenancy start date is during an active location period" do
         record.startdate = Time.zone.local(2022, 9, 1)
         record.location = location
         setup_validator.validate_location(record)
+        expect(record.errors["startdate"]).to be_empty
         expect(record.errors["location_id"]).to be_empty
       end
     end
 
-    context "with a location with no deactivation periods" do
+    context "with a location that has many reactivations soon" do
+      let(:scheme) { create(:scheme) }
+      let(:location) { create(:location, scheme:) }
+
+      before do
+        create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), location:)
+        create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 2), reactivation_date: Time.zone.local(2022, 8, 3), location:)
+        create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 1), reactivation_date: Time.zone.local(2022, 9, 4), location:)
+        location.reload
+      end
+
+      it "produces error when tenancy start date is during deactivated location period" do
+        record.startdate = Time.zone.local(2022, 7, 5)
+        record.location = location
+        setup_validator.validate_location(record)
+        expect(record.errors["startdate"])
+          .to include(match I18n.t("validations.setup.startdate.location.reactivating_soon.startdate", postcode: location.postcode, date: "4 September 2022"))
+        expect(record.errors["location_id"])
+          .to include(match I18n.t("validations.setup.startdate.location.reactivating_soon.location_id", postcode: location.postcode, date: "4 September 2022"))
+      end
+
+      it "produces no error when tenancy start date is during an active location period" do
+        record.startdate = Time.zone.local(2022, 10, 1)
+        record.location = location
+        setup_validator.validate_location(record)
+        expect(record.errors["startdate"]).to be_empty
+        expect(record.errors["location_id"]).to be_empty
+      end
+    end
+
+    context "with a location that is activating soon (has no deactivation periods)" do
       let(:scheme) { create(:scheme) }
       let(:location) { create(:location, scheme:, startdate: Time.zone.local(2022, 9, 15)) }
 
@@ -338,6 +447,7 @@ RSpec.describe Validations::SetupValidations do
         record.startdate = Time.zone.local(2022, 10, 15)
         record.location = location
         setup_validator.validate_location(record)
+        expect(record.errors["startdate"]).to be_empty
         expect(record.errors["location_id"]).to be_empty
       end
 
@@ -345,8 +455,10 @@ RSpec.describe Validations::SetupValidations do
         record.startdate = Time.zone.local(2022, 8, 15)
         record.location = location
         setup_validator.validate_location(record)
+        expect(record.errors["startdate"])
+          .to include(match I18n.t("validations.setup.startdate.location.activating_soon.startdate", postcode: location.postcode, date: "15 September 2022"))
         expect(record.errors["location_id"])
-          .to include(match I18n.t("validations.setup.startdate.location.activating_soon", postcode: location.postcode, date: "15 September 2022"))
+          .to include(match I18n.t("validations.setup.startdate.location.activating_soon.location_id", postcode: location.postcode, date: "15 September 2022"))
       end
     end
   end
@@ -444,34 +556,6 @@ RSpec.describe Validations::SetupValidations do
   end
 
   describe "#validate_managing_organisation_data_sharing_agremeent_signed" do
-    before do
-      allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(false)
-    end
-
-    it "is valid if the DSA is signed" do
-      log = build(:lettings_log, :in_progress, owning_organisation: create(:organisation))
-
-      expect(log).to be_valid
-    end
-
-    it "is valid when owning_organisation nil" do
-      log = build(:lettings_log, owning_organisation: nil)
-
-      expect(log).to be_valid
-    end
-
-    it "is not valid if the DSA is not signed" do
-      log = build(:lettings_log, owning_organisation: create(:organisation, :without_dpc))
-
-      expect(log).to be_valid
-    end
-  end
-
-  context "when flag enabled" do
-    before do
-      allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(true)
-    end
-
     it "is valid if the Data Protection Confirmation is signed" do
       log = build(:lettings_log, :in_progress, managing_organisation: create(:organisation))
 

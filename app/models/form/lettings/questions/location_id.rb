@@ -19,8 +19,7 @@ class Form::Lettings::Questions::LocationId < ::Form::Question
     answer_opts = {}
     return answer_opts unless ActiveRecord::Base.connected?
 
-    Location.select(:id, :postcode, :name).where("startdate <= ? or startdate IS NULL",
-                                                 Time.zone.today).each_with_object(answer_opts) do |location, hsh|
+    Location.started_in_2_weeks.select(:id, :postcode, :name).each_with_object(answer_opts) do |location, hsh|
       hsh[location.id.to_s] = { "value" => location.postcode, "hint" => location.name }
       hsh
     end

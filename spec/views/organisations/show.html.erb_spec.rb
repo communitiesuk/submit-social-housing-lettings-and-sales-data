@@ -15,20 +15,6 @@ RSpec.describe "organisations/show.html.erb" do
   let(:organisation_without_dpc) { create(:organisation, :without_dpc) }
   let(:organisation_with_dsa) { create(:organisation) }
 
-  context "when flag disabled" do
-    let(:user) { create(:user, organisation: organisation_without_dpc) }
-
-    before do
-      allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(false)
-    end
-
-    it "does not include data sharing agreement row" do
-      render
-
-      expect(fragment).not_to have_content("Data Sharing Agreement")
-    end
-  end
-
   context "when dpo" do
     let(:user) { create(:user, is_dpo: true, organisation: organisation_without_dpc) }
 

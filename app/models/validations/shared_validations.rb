@@ -64,20 +64,23 @@ module Validations::SharedValidations
     end
   end
 
-  def location_during_startdate_validation(record, field)
+  def location_during_startdate_validation(record)
     location_inactive_status = inactive_status(record.startdate, record.location)
 
     if location_inactive_status.present?
       date, scope, deactivation_date = location_inactive_status.values_at(:date, :scope, :deactivation_date)
-      record.errors.add field, :not_active, message: I18n.t("validations.setup.startdate.location.#{scope}", postcode: record.location.postcode, date:, deactivation_date:)
+      record.errors.add :startdate, :not_active, message: I18n.t("validations.setup.startdate.location.#{scope}.startdate", postcode: record.location.postcode, date:, deactivation_date:)
+      record.errors.add :location_id, :not_active, message: I18n.t("validations.setup.startdate.location.#{scope}.location_id", postcode: record.location.postcode, date:, deactivation_date:)
+      record.errors.add :scheme_id, :not_active, message: I18n.t("validations.setup.startdate.location.#{scope}.location_id", postcode: record.location.postcode, date:, deactivation_date:)
     end
   end
 
-  def scheme_during_startdate_validation(record, field)
+  def scheme_during_startdate_validation(record)
     scheme_inactive_status = inactive_status(record.startdate, record.scheme)
     if scheme_inactive_status.present?
       date, scope, deactivation_date = scheme_inactive_status.values_at(:date, :scope, :deactivation_date)
-      record.errors.add field, I18n.t("validations.setup.startdate.scheme.#{scope}", name: record.scheme.service_name, date:, deactivation_date:)
+      record.errors.add :startdate, I18n.t("validations.setup.startdate.scheme.#{scope}.startdate", name: record.scheme.service_name, date:, deactivation_date:)
+      record.errors.add :scheme_id, I18n.t("validations.setup.startdate.scheme.#{scope}.scheme_id", name: record.scheme.service_name, date:, deactivation_date:)
     end
   end
 
@@ -118,8 +121,6 @@ module Validations::SharedValidations
   end
 
   def validate_owning_organisation_data_sharing_agremeent_signed(record)
-    return unless FeatureToggle.new_data_protection_confirmation?
-
     if record.owning_organisation_id_changed? && record.owning_organisation.present? && !record.owning_organisation.data_protection_confirmed?
       record.errors.add :owning_organisation_id, I18n.t("validations.setup.owning_organisation.data_sharing_agreement_not_signed")
     end

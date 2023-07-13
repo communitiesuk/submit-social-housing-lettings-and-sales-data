@@ -33,9 +33,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <% if FeatureToggle.new_data_protection_confirmation? %>
-        <%= data_sharing_agreement_row(organisation: @organisation, user: current_user, summary_list:) %>
-      <% end %>
+      <%= data_sharing_agreement_row(organisation: @organisation, user: current_user, summary_list:) %>
     <% end %>
     <% if FeatureToggle.merge_organisations_enabled? %>
       <p>Is your organisation merging with another? <%= govuk_link_to "Let us know using this form", merge_request_organisation_path(@organisation) %></p>

@@ -102,7 +102,7 @@ private
         result[question.id] = question_params
       end
 
-      if current_user.support? && question.id == "owning_organisation_id" && @log.managing_organisation.blank?
+      if current_user.support? && question.id == "owning_organisation_id" && @log.lettings? && @log.managing_organisation.blank?
         owning_organisation = Organisation.find(result["owning_organisation_id"])
         if owning_organisation&.managing_agents&.empty?
           result["managing_organisation_id"] = owning_organisation.id
@@ -155,6 +155,16 @@ private
   end
 
   def successful_redirect_path
+    if FeatureToggle.deduplication_flow_enabled?
+      if @log.lettings?
+        if current_user.lettings_logs.duplicate_logs(@log).count.positive?
+          return send("lettings_log_duplicate_logs_path", @log)
+        end
+      elsif current_user.sales_logs.duplicate_logs(@log).count.positive?
+        return send("sales_log_duplicate_logs_path", @log)
+      end
+    end
+
     if is_referrer_type?("check_answers")
       next_page_id = form.next_page_id(@page, @log, current_user)
       next_page = form.get_page(next_page_id)
