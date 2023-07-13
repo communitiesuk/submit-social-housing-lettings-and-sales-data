@@ -41,7 +41,7 @@ RSpec.describe "organisations/data_sharing_agreement.html.erb", :aggregate_failu
         create(
           :data_protection_confirmation,
           organisation:,
-          created_at: Time.zone.now - 1.day,
+          signed_at: Time.zone.now - 1.day,
         )
       end
 
@@ -85,7 +85,7 @@ RSpec.describe "organisations/data_sharing_agreement.html.erb", :aggregate_failu
           create(
             :data_protection_confirmation,
             organisation:,
-            created_at: Time.zone.now - 1.day,
+            signed_at: Time.zone.now - 1.day,
             data_protection_officer: dpo,
           )
         end
@@ -137,7 +137,7 @@ RSpec.describe "organisations/data_sharing_agreement.html.erb", :aggregate_failu
         create(
           :data_protection_confirmation,
           organisation:,
-          created_at: Time.zone.now - 1.day,
+          signed_at: Time.zone.now - 1.day,
         )
       end
 

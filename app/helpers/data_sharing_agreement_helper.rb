@@ -23,7 +23,7 @@ module DataSharingAgreementHelper
 
   def name_for_data_sharing_agreement(data_protection_confirmation, user)
     if data_protection_confirmation&.confirmed?
-      data_protection_confirmation.data_protection_officer.name
+      data_protection_confirmation.data_protection_officer_name
     elsif user.is_dpo?
       user.name
     else
@@ -33,7 +33,7 @@ module DataSharingAgreementHelper
 
   def org_name_for_data_sharing_agreement(data_protection_confirmation, user)
     if data_protection_confirmation&.confirmed?
-      data_protection_confirmation.organisation.name
+      data_protection_confirmation.organisation_name
     else
       user.organisation.name
     end
@@ -42,11 +42,11 @@ module DataSharingAgreementHelper
   # rubocop:disable Rails/HelperInstanceVariable
   def present_section_12_2(data_protection_confirmation:, user:, organisation:)
     if data_protection_confirmation&.confirmed?
-      @org_address = data_protection_confirmation.organisation.address_row
-      @org_name = data_protection_confirmation.organisation.name
-      @org_phone = data_protection_confirmation.organisation.phone
-      @dpo_name = data_protection_confirmation.data_protection_officer.name
-      @dpo_email = data_protection_confirmation.data_protection_officer.email
+      @org_address = data_protection_confirmation.organisation_address
+      @org_name = data_protection_confirmation.organisation_name
+      @org_phone = data_protection_confirmation.organisation_phone_number
+      @dpo_name = data_protection_confirmation.data_protection_officer_name
+      @dpo_email = data_protection_confirmation.data_protection_officer_email
     else
       @org_name = organisation.name
       @org_address = organisation.address_row
@@ -83,7 +83,7 @@ private
 
   def data_sharing_agreement_second_line(organisation:, user:)
     if organisation.data_protection_confirmed?
-      organisation.data_protection_confirmation.data_protection_officer.name if user.support?
+      organisation.data_protection_confirmation.data_protection_officer_name if user.support?
     else
       "Data protection officer must sign" unless user.is_dpo?
     end
