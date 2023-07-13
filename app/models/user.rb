@@ -144,9 +144,9 @@ class User < ApplicationRecord
 
   def logs_filters(specific_org: false)
     if (support? && !specific_org) || organisation.has_managing_agents?
-      %w[status years user organisation bulk_upload_id]
+      %w[status years assigned_to user organisation bulk_upload_id]
     else
-      %w[status years user bulk_upload_id]
+      %w[status years assigned_to user bulk_upload_id]
     end
   end
 

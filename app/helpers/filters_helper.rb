@@ -3,7 +3,8 @@ module FiltersHelper
     return false unless session[session_name_for(filter_type)]
 
     selected_filters = JSON.parse(session[session_name_for(filter_type)])
-    return true if selected_filters.blank? && filter == "user" && value == :all
+    return true if !selected_filters.key?("user") && filter == "assigned_to" && value == :all
+    return true if selected_filters["assigned_to"] == "specific_user" && filter == "assigned_to" && value == :specific_user
     return true if !selected_filters.key?("organisation") && filter == "organisation_select" && value == :all
     return true if selected_filters["organisation"].present? && filter == "organisation_select" && value == :specific_org
     return false if selected_filters[filter].blank?
@@ -16,7 +17,7 @@ module FiltersHelper
     return false unless filters_json
 
     filters = JSON.parse(filters_json)
-    filters["user"] == "yours" ||
+    filters["user"].present? ||
       filters["organisation"].present? ||
       filters["status"]&.compact_blank&.any? ||
       filters["years"]&.compact_blank&.any? ||
@@ -41,6 +42,12 @@ module FiltersHelper
     organisation_options = user.support? ? Organisation.all : [user.organisation] + user.organisation.managing_agents
     [OpenStruct.new(id: "", name: "Select an option")] + organisation_options.map { |org| OpenStruct.new(id: org.id, name: org.name) }
   end
+
+  def assigned_to_filter_options(user)
+    user_options = user.organisation.users
+    [OpenStruct.new(id: "", name: "Select an option")] + user_options.map { |user| OpenStruct.new(id: user.id, name: user.name) }
+  end
+
 
   def collection_year_options
     { "2023": "2023/24", "2022": "2022/23", "2021": "2021/22" }
