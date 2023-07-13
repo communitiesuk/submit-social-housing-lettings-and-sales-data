@@ -72,10 +72,12 @@ private
 
   def filters_count(filters)
     filters.each.sum do |category, category_filters|
-      if %w[status years].include?(category)
+      if %w[status years bulk_upload_id].include?(category)
         category_filters.count(&:present?)
       elsif %w[user organisation].include?(category)
         category_filters != "all" ? 1 : 0
+      else
+        0
       end
     end
   end
