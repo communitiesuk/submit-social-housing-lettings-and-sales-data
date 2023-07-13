@@ -29,8 +29,8 @@ class Log < ApplicationRecord
   scope :visible, -> { where(status: %w[not_started in_progress completed]) }
   scope :exportable, -> { where(status: %w[not_started in_progress completed deleted]) }
 
-  scope :filter_by_status, ->(status) { where status: }
-  scope :filter_by_years, lambda { |years|
+  scope :filter_by_status, ->(status, _user = nil) { where status: }
+  scope :filter_by_years, lambda { |years, _user = nil|
     first_year = years.shift
     query = filter_by_year(first_year)
     years.each { |year| query = query.or(filter_by_year(year)) }
@@ -38,7 +38,7 @@ class Log < ApplicationRecord
   }
   scope :filter_by_postcode, ->(postcode_full) { where("REPLACE(postcode_full, ' ', '') ILIKE ?", "%#{postcode_full.delete(' ')}%") }
   scope :filter_by_id, ->(id) { where(id:) }
-  scope :filter_by_user, ->(selected_user) { where(created_by: selected_user) }
+  scope :filter_by_user, ->(selected_user, _user = nil) { where(created_by: selected_user) }
   scope :filter_by_bulk_upload_id, lambda { |bulk_upload_id, user|
     joins(:bulk_upload)
       .where(bulk_upload: { id: bulk_upload_id, user: })

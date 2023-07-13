@@ -17,7 +17,7 @@ RSpec.describe LettingsLogSummaryComponent, type: :component do
       expect(result).to have_text("General needs")
       expect(result).to have_text("Tenancy starts #{Time.zone.today.strftime('%e %B %Y').strip}")
       expect(result).to have_text("Created #{Time.zone.today.strftime('%e %B %Y').strip}")
-      expect(result).to have_text("by Danny Rojas")
+      expect(result).to have_text("Assigned to Danny Rojas")
       expect(result).to have_content("Owned by\n              DLUHC")
       expect(result).to have_content("Managed by\n              DLUHC")
     end

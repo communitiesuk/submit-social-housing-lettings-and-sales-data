@@ -24,7 +24,7 @@ class FilterManager
       next if category == "organisation" && all_orgs
       next if category == "assigned_to"
 
-      logs = logs.public_send("filter_by_#{category}", values)
+      logs = logs.public_send("filter_by_#{category}", values, user)
     end
     logs = logs.order(created_at: :desc)
     if user.support?

@@ -79,7 +79,7 @@ RSpec.describe "Lettings Log Features" do
         before do
           check("Not started")
           check("In progress")
-          choose("Yours")
+          choose("You")
           click_button("Apply filters")
         end
 

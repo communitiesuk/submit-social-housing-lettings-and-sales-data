@@ -2786,15 +2786,15 @@ RSpec.describe LettingsLog do
       end
 
       it "allows filtering on current user" do
-        expect(described_class.filter_by_user(%w[yours], created_by_user).count).to eq(2)
+        expect(described_class.filter_by_user(%w[you]).count).to eq(2)
       end
 
       it "returns all logs when all logs selected" do
-        expect(described_class.filter_by_user(%w[all], created_by_user).count).to eq(3)
+        expect(described_class.filter_by_user(%w[all]).count).to eq(3)
       end
 
       it "returns all logs when all and your users selected" do
-        expect(described_class.filter_by_user(%w[all yours], created_by_user).count).to eq(3)
+        expect(described_class.filter_by_user(%w[all you]).count).to eq(3)
       end
     end
 
