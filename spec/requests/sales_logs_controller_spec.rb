@@ -350,6 +350,115 @@ RSpec.describe SalesLogsController, type: :request do
               expect(page).to have_link(sales_log_2023.id.to_s)
             end
           end
+
+          context "with bulk_upload_id filter" do
+            context "with bulk upload that belongs to current user" do
+              let(:organisation) { create(:organisation) }
+
+              let(:user) { create(:user, organisation:) }
+              let(:bulk_upload) { create(:bulk_upload, :sales, user:) }
+
+              let!(:included_log) { create(:sales_log, :in_progress, bulk_upload:, owning_organisation: organisation) }
+              let!(:excluded_log) { create(:sales_log, :in_progress, owning_organisation: organisation) }
+
+              it "returns logs only associated with the bulk upload" do
+                get "/sales-logs?bulk_upload_id[]=#{bulk_upload.id}"
+
+                expect(page).to have_content(included_log.id)
+                expect(page).not_to have_content(excluded_log.id)
+              end
+
+              it "dislays how many logs remaining to fix" do
+                get "/sales-logs?bulk_upload_id[]=#{bulk_upload.id}"
+                expect(page).to have_content("You need to fix 1 log")
+              end
+
+              it "displays filter" do
+                get "/sales-logs?bulk_upload_id[]=#{bulk_upload.id}"
+                expect(page).to have_content("With logs from bulk upload")
+              end
+
+              it "hides collection year filter" do
+                get "/sales-logs?bulk_upload_id[]=#{bulk_upload.id}"
+                expect(page).not_to have_content("Collection year")
+              end
+
+              it "hides status filter" do
+                get "/sales-logs?bulk_upload_id[]=#{bulk_upload.id}"
+                expect(page).not_to have_content("Status")
+              end
+
+              it "has correct filter count and clear button" do
+                get "/sales-logs?bulk_upload_id[]=#{bulk_upload.id}"
+                expect(page).to have_content("1 filter applied")
+                expect(page).to have_content("Clear")
+              end
+
+              it "hides button to create a new log" do
+                get "/sales-logs?bulk_upload_id[]=#{bulk_upload.id}"
+                expect(page).not_to have_content("Create a new sales log")
+              end
+
+              it "displays card with help info" do
+                get "/sales-logs?bulk_upload_id[]=#{bulk_upload.id}"
+                expect(page).to have_content("The following logs are from your recent bulk upload")
+              end
+
+              it "displays meta info about the bulk upload" do
+                get "/sales-logs?bulk_upload_id[]=#{bulk_upload.id}"
+                expect(page).to have_content(bulk_upload.filename)
+                expect(page).to have_content(bulk_upload.created_at.to_fs(:govuk_date_and_time))
+              end
+            end
+
+            context "with bulk upload that belongs to another user" do
+              let(:organisation) { create(:organisation) }
+
+              let(:user) { create(:user, organisation:) }
+              let(:other_user) { create(:user, organisation:) }
+              let(:bulk_upload) { create(:bulk_upload, :sales, user: other_user) }
+
+              let!(:excluded_log) { create(:sales_log, bulk_upload:, owning_organisation: organisation) }
+              let!(:also_excluded_log) { create(:sales_log, owning_organisation: organisation) }
+
+              it "does not return any logs" do
+                get "/sales-logs?bulk_upload_id[]=#{bulk_upload.id}"
+
+                expect(page).not_to have_content(excluded_log.id)
+                expect(page).not_to have_content(also_excluded_log.id)
+              end
+            end
+
+            context "when bulk upload has been resolved" do
+              let(:organisation) { create(:organisation) }
+
+              let(:user) { create(:user, organisation:) }
+              let(:bulk_upload) { create(:bulk_upload, :sales, user:) }
+
+              it "redirects to resume the bulk upload" do
+                get "/sales-logs?bulk_upload_id[]=#{bulk_upload.id}"
+
+                expect(response).to redirect_to(resume_bulk_upload_sales_result_path(bulk_upload))
+              end
+            end
+          end
+
+          context "without bulk_upload_id" do
+            it "does not display filter" do
+              get "/sales-logs"
+              expect(page).not_to have_content("With logs from bulk upload")
+            end
+
+            it "displays button to create a new log" do
+              get "/sales-logs"
+              expect(page).to have_content("Create a new sales log")
+            end
+
+            it "does not display card with help info" do
+              get "/sales-logs"
+              expect(page).not_to have_content("The following logs are from your recent bulk upload")
+            end
+          end
         end
       end
 

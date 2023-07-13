@@ -54,6 +54,8 @@ Rails.application.routes.draw do
   get "/download-22-23-sales-bulk-upload-template", to: "start#download_22_23_sales_bulk_upload_template"
   get "/download-22-23-sales-bulk-upload-specification", to: "start#download_22_23_sales_bulk_upload_specification"
 
+  get "clear-filters", to: "sessions#clear_filters"
+
   resource :account, only: %i[show edit], controller: "users" do
     get "edit/password", to: "users#edit_password"
   end

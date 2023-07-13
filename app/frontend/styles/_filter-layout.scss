@@ -5,7 +5,7 @@
 .app-filter-layout__filter {
   @include govuk-media-query(wide) {
     float: left;
-    min-width: govuk-grid-width("one-quarter");
+    width: govuk-grid-width("one-quarter");
   }
 }
 
