@@ -418,14 +418,14 @@ RSpec.describe SalesLogsController, type: :request do
               let(:other_user) { create(:user, organisation:) }
               let(:bulk_upload) { create(:bulk_upload, :sales, user: other_user) }
 
-              let!(:excluded_log) { create(:sales_log, bulk_upload:, owning_organisation: organisation) }
-              let!(:also_excluded_log) { create(:sales_log, owning_organisation: organisation) }
+              let!(:excluded_log) { create(:sales_log, bulk_upload:, owning_organisation: organisation, purchid: "fake_tenancy_code") }
+              let!(:also_excluded_log) { create(:sales_log, owning_organisation: organisation, purchid: "fake_tenancy_code_too") }
 
               it "does not return any logs" do
                 get "/sales-logs?bulk_upload_id[]=#{bulk_upload.id}"
 
-                expect(page).not_to have_content(excluded_log.id)
-                expect(page).not_to have_content(also_excluded_log.id)
+                expect(page).not_to have_content(excluded_log.purchid)
+                expect(page).not_to have_content(also_excluded_log.purchid)
               end
             end
 
