@@ -66,6 +66,7 @@ module Imports
       attributes["startdate"] = compose_date(xml_doc, "DAY", "MONTH", "YEAR")
       attributes["owning_organisation_id"] = find_organisation_id(xml_doc, "OWNINGORGID")
       attributes["managing_organisation_id"] = find_organisation_id(xml_doc, "MANINGORGID")
+      attributes["creation_method"] = creation_method(xml_doc)
       attributes["joint"] = unsafe_string_as_integer(xml_doc, "joint")
       attributes["startertenancy"] = unsafe_string_as_integer(xml_doc, "_2a")
       attributes["tenancy"] = unsafe_string_as_integer(xml_doc, "Q2b")

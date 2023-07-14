@@ -10,6 +10,8 @@ module Imports
         import_from(folder, :update_lettings_allocation)
       when "offered"
         import_from(folder, :update_offered)
+      when "creation_method"
+        import_from(folder, :update_creation_method)
       else
         raise "Updating #{field} is not supported by the field import service"
       end
@@ -33,6 +35,24 @@ module Imports
         end
       else
         @logger.warn("lettings log with old id #{old_id} not found")
+      end
+    end
+
+    def update_creation_method(xml_doc)
+      old_id = meta_field_value(xml_doc, "document-id")
+      log = LettingsLog.find_by(old_id:)
+
+      return @logger.warn "lettings log with old id #{old_id} not found" unless log
+
+      upload_id = meta_field_value(xml_doc, "upload-id")
+
+      if upload_id.nil?
+        @logger.info "lettings log with old id #{old_id} entered manually, no need for update"
+      elsif log.creation_method_bulk_upload?
+        @logger.info "lettings log #{log.id} creation method already set to bulk upload, no need for update"
+      else
+        log.creation_method_bulk_upload!
+        @logger.info "lettings log #{log.id} creation method set to bulk upload"
       end
     end
 
@@ -108,32 +128,6 @@ module Imports
         end
       else
         @logger.warn("Could not find record matching legacy ID #{old_id}")
-      end
-    end
-
-    def compose_date(xml_doc, day_str, month_str, year_str)
-      day = Integer(field_value(xml_doc, "xmlns", day_str), exception: false)
-      month = Integer(field_value(xml_doc, "xmlns", month_str), exception: false)
-      year = Integer(field_value(xml_doc, "xmlns", year_str), exception: false)
-      if day.nil? || month.nil? || year.nil?
-        nil
-      else
-        Time.zone.local(year, month, day)
-      end
-    end
-
-    def string_or_nil(xml_doc, attribute)
-      str = field_value(xml_doc, "xmlns", attribute)
-      str.presence
-    end
-
-    # Unsafe: A string that has more than just the integer value
-    def unsafe_string_as_integer(xml_doc, attribute)
-      str = string_or_nil(xml_doc, attribute)
-      if str.nil?
-        nil
-      else
-        str.to_i
       end
     end
   end
