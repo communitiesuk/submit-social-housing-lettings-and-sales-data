@@ -6,7 +6,7 @@ class Form::Lettings::Questions::Period < ::Form::Question
     @header = "How often does the household pay rent and other charges?"
     @type = "radio"
     @check_answers_card_number = 0
-    @hint_text = ""
+    @hint_text = "Select how often the household is charged. This may be different to how often they pay."
     @answer_options = ANSWER_OPTIONS
     @question_number = 92
   end
