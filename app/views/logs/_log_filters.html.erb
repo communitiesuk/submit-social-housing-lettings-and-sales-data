@@ -44,11 +44,11 @@
                      category: "user",
                    } %>
 
-         <% if @current_user.support? || @current_user.organisation.has_stock_owners? && request.path == "/lettings-logs" %>
+         <% if @current_user.support? || @current_user.organisation.stock_owners.count > 1 && request.path == "/lettings-logs" %>
           <%= render partial: "filters/radio_filter", locals: {
             f:,
             options: {
-              "all": { label: "All" },
+              "all": { label: "Any owning organisation" },
               "specific_org": {
                 label: "Specific owning organisation",
                 conditional_filter: {
@@ -59,7 +59,7 @@
                 },
               },
             },
-            label: "Owning organisation",
+            label: "Owned by",
             category: "owning_organisation_select",
           } %>
         <% end %>
