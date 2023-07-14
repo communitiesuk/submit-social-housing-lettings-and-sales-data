@@ -32,7 +32,7 @@ RSpec.describe DuplicateLogsHelper do
   context "when another user in the same org has created a duplicate lettings log" do
     let!(:duplicate_lettings_log) { create(:lettings_log, :duplicate, created_by: user_same_org) }
 
-    it "returns the ids of the duplicates in an array under the lettings key in the duplicates hash" do
+    it "returns the ids of the duplicates in a hash under the lettings key" do
       expect(result).to be_a Hash
       expect(result[:lettings].values).to match_array [[lettings_log.id, duplicate_lettings_log.id]]
     end
@@ -41,7 +41,7 @@ RSpec.describe DuplicateLogsHelper do
   context "when another user in the same org has created a duplicate sales log" do
     let!(:duplicate_sales_log) { create(:sales_log, :duplicate, created_by: user_same_org) }
 
-    it "returns the ids of the duplicates in an array under the sales key in the duplicates hash" do
+    it "returns the ids of the duplicates in a hash under the sales key" do
       expect(result).to be_a Hash
       expect(result[:sales].values).to match_array [[sales_log.id, duplicate_sales_log.id]]
     end

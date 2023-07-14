@@ -120,10 +120,6 @@ class SalesLog < Log
     collection_start_year < 2023
   end
 
-  def setup_completed?
-    form.setup_sections.all? { |sections| sections.subsections.all? { |subsection| subsection.status(self) == :completed } }
-  end
-
   def unresolved
     false
   end

@@ -105,7 +105,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :duplicate_logs, only: [:index]
+  resources :duplicate_logs, only: [:index], path: "/duplicate-logs"
 
   resources :users do
     get "edit-dpo", to: "users#dpo"
