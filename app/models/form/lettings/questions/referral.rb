@@ -6,7 +6,7 @@ class Form::Lettings::Questions::Referral < ::Form::Question
     @header = "What was the source of referral for this letting?"
     @type = "radio"
     @check_answers_card_number = 0
-    @hint_text = ""
+    @hint_text = "You told us that you are a local authority and that the needs type is general needs. We have removed some options because of this."
     @answer_options = ANSWER_OPTIONS
     @question_number = 85
   end
