@@ -58,7 +58,7 @@ RSpec.describe "Sales Log Features" do
         expect(page).not_to have_link "Delete logs"
 
         within ".app-filter" do
-          choose "user-yours-field"
+          choose "assigned-to-you-field"
           click_button
         end
 
