@@ -72,6 +72,26 @@
           } %>
         <% end %>
 
+        <% if (@current_user.support? || @current_user.organisation.managing_agents.count > 1) && request.path == "/lettings-logs" %>
+          <%= render partial: "filters/radio_filter", locals: {
+            f:,
+            options: {
+              "all": { label: "Any managing organisation" },
+              "specific_org": {
+                label: "Specific managing organisation",
+                conditional_filter: {
+                  type: "select",
+                  label: "Managed by",
+                  category: "managing_organisation",
+                  options: managing_organisation_filter_options(@current_user),
+                },
+              },
+            },
+            label: "Managed by",
+            category: "managing_organisation_select",
+          } %>
+        <% end %>
+
         <%= f.govuk_submit "Apply filters", class: "govuk-!-margin-bottom-0" %>
       <% end %>
     </div>

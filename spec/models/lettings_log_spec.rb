@@ -2788,6 +2788,25 @@ RSpec.describe LettingsLog do
       end
     end
 
+    context "when filtering by managing organisation" do
+      let(:organisation_1) { create(:organisation) }
+      let(:organisation_2) { create(:organisation) }
+      let(:organisation_3) { create(:organisation) }
+
+      before do
+        create(:lettings_log, :in_progress, managing_organisation: organisation_1)
+        create(:lettings_log, :completed, managing_organisation: organisation_1)
+        create(:lettings_log, :completed, managing_organisation: organisation_2)
+        create(:lettings_log, :completed, managing_organisation: organisation_2)
+      end
+
+      it "filters by given managing organisation" do
+        expect(described_class.filter_by_managing_organisation([organisation_1]).count).to eq(2)
+        expect(described_class.filter_by_managing_organisation([organisation_1, organisation_2]).count).to eq(4)
+        expect(described_class.filter_by_managing_organisation([organisation_3]).count).to eq(0)
+      end
+    end
+
     context "when filtering on status" do
       it "allows filtering on a single status" do
         expect(described_class.filter_by_status(%w[in_progress]).count).to eq(2)

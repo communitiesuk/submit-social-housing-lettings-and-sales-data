@@ -52,8 +52,11 @@ class LettingsLog < Log
   }
   scope :filter_by_before_startdate, ->(date) { where("lettings_logs.startdate >= ?", date) }
   scope :unresolved, -> { where(unresolved: true) }
+
   scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org).or(where(managing_organisation: org)) }
   scope :filter_by_owning_organisation, ->(org, _user = nil) { where(owning_organisation: org) }
+  scope :filter_by_managing_organisation, ->(managing_organisation, _user = nil) { where(managing_organisation:) }
+
   scope :duplicate_logs, lambda { |log|
     visible
       .where(log.slice(*DUPLICATE_LOG_ATTRIBUTES))

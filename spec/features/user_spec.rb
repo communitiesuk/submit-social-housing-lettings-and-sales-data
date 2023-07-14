@@ -726,10 +726,10 @@ RSpec.describe "User Features" do
           expect(page).to have_field("owning-organisation-field", with: "")
           find("#owning-organisation-field").click.native.send_keys("F", "i", "l", "t", :down, :enter)
           click_button("Apply filters")
-          expect(page).to have_current_path("/lettings-logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&user=all&owning_organisation_select=specific_org&owning_organisation=#{parent_organisation.id}")
+          expect(page).to have_current_path("/lettings-logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&user=all&owning_organisation_select=specific_org&owning_organisation=#{parent_organisation.id}&managing_organisation_select=all")
           choose("owning-organisation-select-all-field", allow_label_click: true)
           click_button("Apply filters")
-          expect(page).to have_current_path("/lettings-logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&user=all&owning_organisation_select=all")
+          expect(page).to have_current_path("/lettings-logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&user=all&owning_organisation_select=all&managing_organisation_select=all")
         end
       end
     end
