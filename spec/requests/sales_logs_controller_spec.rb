@@ -250,12 +250,6 @@ RSpec.describe SalesLogsController, type: :request do
               expect(page).not_to have_link(completed_sales_log.id.to_s)
             end
 
-            it "filters on organisation" do
-              get "/sales-logs?organisation[]=#{organisation_2.id}", headers: headers, params: {}
-              expect(page).to have_link(completed_sales_log.id.to_s)
-              expect(page).not_to have_link(not_started_sales_log.id.to_s)
-            end
-
             it "does not reset the filters" do
               get "/sales-logs?status[]=not_started", headers: headers, params: {}
               expect(page).to have_link(not_started_sales_log.id.to_s)

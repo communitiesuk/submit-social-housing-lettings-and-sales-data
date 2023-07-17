@@ -4,9 +4,7 @@ module FiltersHelper
 
     selected_filters = JSON.parse(session[session_name_for(filter_type)])
     return true if selected_filters.blank? && filter == "user" && value == :all
-    return true if !selected_filters.key?("organisation") && filter == "organisation_select" && value == :all
     return true if !selected_filters.key?("owning_organisation") && filter == "owning_organisation_select" && value == :all
-    return true if selected_filters["organisation"].present? && filter == "organisation_select" && value == :specific_org
     return true if selected_filters["owning_organisation"].present? && filter == "owning_organisation_select" && value == :specific_org
     return false if selected_filters[filter].blank?
 
@@ -37,11 +35,6 @@ module FiltersHelper
     return false unless session[session_name_for(filter_type)]
 
     JSON.parse(session[session_name_for(filter_type)])[filter] || ""
-  end
-
-  def organisations_filter_options(user)
-    organisation_options = user.support? ? Organisation.all : [user.organisation] + user.organisation.managing_agents
-    [OpenStruct.new(id: "", name: "Select an option")] + organisation_options.map { |org| OpenStruct.new(id: org.id, name: org.name) }
   end
 
   def owning_organisations_filter_options(user)

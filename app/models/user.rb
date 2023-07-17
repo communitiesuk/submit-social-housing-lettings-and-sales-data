@@ -143,8 +143,8 @@ class User < ApplicationRecord
   end
 
   def logs_filters(specific_org: false)
-    if (support? && !specific_org) || organisation.has_managing_agents? || organisation.has_stock_owners?
-      %w[status years user organisation owning_organisation bulk_upload_id]
+    if (support? && !specific_org) || organisation.has_stock_owners?
+      %w[status years user owning_organisation bulk_upload_id]
     else
       %w[status years user bulk_upload_id]
     end
