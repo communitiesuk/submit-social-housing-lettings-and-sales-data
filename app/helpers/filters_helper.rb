@@ -45,9 +45,8 @@ module FiltersHelper
 
   def assigned_to_filter_options(user)
     user_options = user.organisation.users
-    [OpenStruct.new(id: "", name: "Select an option")] + user_options.map { |user| OpenStruct.new(id: user.id, name: user.name) }
+    [OpenStruct.new(id: "", name: "Select an option")] + user_options.map { |user_option| OpenStruct.new(id: user_option.id, name: user_option.name) }
   end
-
 
   def collection_year_options
     { "2023": "2023/24", "2022": "2022/23", "2021": "2021/22" }
