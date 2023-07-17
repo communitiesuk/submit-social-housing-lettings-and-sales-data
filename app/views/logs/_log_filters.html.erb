@@ -52,23 +52,23 @@
                      category: "user",
                    } %>
 
-        <% if (@current_user.support? || @current_user.organisation.has_managing_agents?) && request.path == "/lettings-logs" %>
+         <% if @current_user.support? || @current_user.organisation.stock_owners.count > 1 && request.path == "/lettings-logs" %>
           <%= render partial: "filters/radio_filter", locals: {
             f:,
             options: {
-              "all": { label: "All" },
+              "all": { label: "Any owning organisation" },
               "specific_org": {
-                label: "Specific organisation",
+                label: "Specific owning organisation",
                 conditional_filter: {
                   type: "select",
-                  label: "Organisation",
-                  category: "organisation",
-                  options: organisations_filter_options(@current_user),
+                  label: "Owning Organisation",
+                  category: "owning_organisation",
+                  options: owning_organisations_filter_options(@current_user),
                 },
               },
             },
-            label: "Organisation",
-            category: "organisation_select",
+            label: "Owned by",
+            category: "owning_organisation_select",
           } %>
         <% end %>
 

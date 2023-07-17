@@ -118,4 +118,8 @@ class Organisation < ApplicationRecord
   def has_managing_agents?
     managing_agents.count.positive?
   end
+
+  def has_stock_owners?
+    stock_owners.count.positive?
+  end
 end

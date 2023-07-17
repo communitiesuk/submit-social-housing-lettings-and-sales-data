@@ -708,10 +708,12 @@ RSpec.describe "User Features" do
     end
 
     context "when viewing logs" do
-      context "when filtering by organisation and then switching back to all organisations", js: true do
-        let!(:organisation) { FactoryBot.create(:organisation, name: "Filtered Org") }
+      context "when filtering by owning organisation and then switching back to all organisations", js: true do
+        let!(:organisation) { FactoryBot.create(:organisation) }
+        let(:parent_organisation) { FactoryBot.create(:organisation, name: "Filtered Org") }
 
         before do
+          create(:organisation_relationship, child_organisation: organisation, parent_organisation:)
           allow(SecureRandom).to receive(:random_number).and_return(otp)
           click_button("Sign in")
           fill_in("code", with: otp)
@@ -720,14 +722,14 @@ RSpec.describe "User Features" do
 
         it "clears the previously selected organisation value" do
           visit("/lettings-logs")
-          choose("organisation-select-specific-org-field", allow_label_click: true)
-          expect(page).to have_field("organisation-field", with: "")
-          find("#organisation-field").click.native.send_keys("F", "i", "l", "t", :down, :enter)
+          choose("owning-organisation-select-specific-org-field", allow_label_click: true)
+          expect(page).to have_field("owning-organisation-field", with: "")
+          find("#owning-organisation-field").click.native.send_keys("F", "i", "l", "t", :down, :enter)
           click_button("Apply filters")
-          expect(page).to have_current_path("/lettings-logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&user=all&organisation_select=specific_org&organisation=#{organisation.id}")
-          choose("organisation-select-all-field", allow_label_click: true)
+          expect(page).to have_current_path("/lettings-logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&user=all&owning_organisation_select=specific_org&owning_organisation=#{parent_organisation.id}")
+          choose("owning-organisation-select-all-field", allow_label_click: true)
           click_button("Apply filters")
-          expect(page).to have_current_path("/lettings-logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&user=all&organisation_select=all")
+          expect(page).to have_current_path("/lettings-logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&user=all&owning_organisation_select=all")
         end
       end
     end
