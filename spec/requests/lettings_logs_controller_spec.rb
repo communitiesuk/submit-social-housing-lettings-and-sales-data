@@ -774,7 +774,7 @@ RSpec.describe LettingsLogsController, type: :request do
           let(:tenant_code_2) { "TC8745" }
 
           before do
-            FactoryBot.create(:lettings_log, :in_progress, owning_organisation: org_1, tenancycode: tenant_code_1)
+            FactoryBot.create(:lettings_log, :in_progress, owning_organisation: org_1, tenancycode: tenant_code_1, created_by: user)
             FactoryBot.create(:lettings_log, :in_progress, owning_organisation: org_2, tenancycode: tenant_code_2)
             allow(user).to receive(:need_two_factor_authentication?).and_return(false)
             sign_in user
@@ -794,6 +794,14 @@ RSpec.describe LettingsLogsController, type: :request do
           context "when filtering by organisation" do
             it "only show the selected organisations logs" do
               get "/lettings-logs?organisation_select=specific_org&organisation=#{org_1.id}", headers:, params: {}
+              expect(page).to have_content(tenant_code_1)
+              expect(page).not_to have_content(tenant_code_2)
+            end
+          end
+
+          context "when filtering by a specific user" do
+            it "only show the selected user's logs" do
+              get "/lettings-logs?assigned_to=you&user=#{user.id}", headers:, params: {}
               expect(page).to have_content(tenant_code_1)
               expect(page).not_to have_content(tenant_code_2)
             end
