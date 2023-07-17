@@ -6220,7 +6220,7 @@
                 "reason": {
                   "check_answer_label": "Reason for leaving last settled home",
                   "header": "What is the tenant’s main reason for the household leaving their last settled home?",
-                  "hint_text": "",
+                  "hint_text": "You told us this letting is a renewal. We have removed some options because of this.",
                   "type": "radio",
                   "answer_options": {
                     "40": {
@@ -6966,7 +6966,7 @@
                 "referral": {
                   "check_answer_label": "Source of referral for letting",
                   "header": "What was the source of referral for this letting?",
-                  "hint_text": "",
+                  "hint_text": "You told us that you are a local authority and that the needs type is general needs. We have removed some options because of this.",
                   "type": "radio",
                   "answer_options": {
                     "1": {
@@ -7023,7 +7023,7 @@
                 "referral": {
                   "check_answer_label": "Source of referral for letting",
                   "header": "What was the source of referral for this letting?",
-                  "hint_text": "",
+                  "hint_text": "You told us that the needs type is general needs. We have removed some options because of this.",
                   "type": "radio",
                   "answer_options": {
                     "1": {
@@ -7080,7 +7080,7 @@
                 "referral": {
                   "check_answer_label": "Source of referral for letting",
                   "header": "What was the source of referral for this letting?",
-                  "hint_text": "",
+                  "hint_text": "You told us that you are a local authority. We have removed some options because of this.",
                   "type": "radio",
                   "answer_options": {
                     "1": {

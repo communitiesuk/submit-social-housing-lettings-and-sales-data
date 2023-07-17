@@ -6,7 +6,7 @@ class Form::Lettings::Questions::ReasonRenewal < ::Form::Question
     @header = "What is the tenant’s main reason for the household leaving their last settled home?"
     @type = "radio"
     @check_answers_card_number = 0
-    @hint_text = ""
+    @hint_text = "You told us this letting is a renewal. We have removed some options because of this."
     @answer_options = ANSWER_OPTIONS
     @question_number = 77
   end
