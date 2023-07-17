@@ -16,22 +16,22 @@ RSpec.describe LogListHelper, type: :helper do
         expect(result).to be false
       end
 
-      it "returns true if the user filter is set to 'yours'" do
-        allow(self).to receive(:filter_selected?).with("user", "yours", filter_type).and_return true
+      it "returns true if the assigned to filter is set to you" do
+        allow(self).to receive(:filter_selected?).with("assigned_to", "you", filter_type).and_return true
         expect(result).to be true
       end
 
       it "returns false if any filters other than the user filter are set" do
         allow(self).to receive(:filter_selected?).and_return true
-        allow(self).to receive(:filter_selected?).with("user", "yours", filter_type).and_return false
+        allow(self).to receive(:filter_selected?).with("assigned_to", "you", filter_type).and_return false
         expect(result).to be false
       end
 
       context "when there is a search term present" do
         let(:search_term) { "word" }
 
-        it "still returns false as long as the user filter is not set to yours" do
-          allow(self).to receive(:filter_selected?).with("user", "yours", filter_type).and_return false
+        it "still returns false as long as the assigned to filter is not set to you" do
+          allow(self).to receive(:filter_selected?).with("assigned_to", "you", filter_type).and_return false
           expect(result).to be false
         end
       end

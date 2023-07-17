@@ -38,7 +38,7 @@ class Log < ApplicationRecord
   }
   scope :filter_by_postcode, ->(postcode_full) { where("REPLACE(postcode_full, ' ', '') ILIKE ?", "%#{postcode_full.delete(' ')}%") }
   scope :filter_by_id, ->(id) { where(id:) }
-  scope :filter_by_user, ->(selected_user, _user = nil) { where(created_by: selected_user) }
+  scope :filter_by_user, ->(selected_user, _user = nil) { selected_user.present? ? where(created_by: selected_user) : all }
   scope :filter_by_bulk_upload_id, lambda { |bulk_upload_id, user|
     joins(:bulk_upload)
       .where(bulk_upload: { id: bulk_upload_id, user: })
