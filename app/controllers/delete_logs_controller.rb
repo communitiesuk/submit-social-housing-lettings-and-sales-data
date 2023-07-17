@@ -26,8 +26,11 @@ class DeleteLogsController < ApplicationController
   def discard_lettings_logs
     logs = LettingsLog.find(params.require(:ids))
     discard logs
-
-    redirect_to lettings_logs_path, notice: I18n.t("notification.logs_deleted", count: logs.count)
+    if request.referer&.include?("delete-duplicates")
+      redirect_to lettings_log_duplicate_logs_path(lettings_log_id: params["remaining_log_id"], original_log_id: params["original_log_id"]), notice: I18n.t("notification.duplicate_logs_deleted", count: logs.count, log_ids: duplicate_log_ids(logs))
+    else
+      redirect_to lettings_logs_path, notice: I18n.t("notification.logs_deleted", count: logs.count)
+    end
   end
 
   def delete_sales_logs
@@ -52,8 +55,11 @@ class DeleteLogsController < ApplicationController
   def discard_sales_logs
     logs = SalesLog.find(params.require(:ids))
     discard logs
-
-    redirect_to sales_logs_path, notice: I18n.t("notification.logs_deleted", count: logs.count)
+    if request.referer&.include?("delete-duplicates")
+      redirect_to sales_log_duplicate_logs_path(sales_log_id: params["remaining_log_id"], original_log_id: params["original_log_id"]), notice: I18n.t("notification.duplicate_logs_deleted", count: logs.count, log_ids: duplicate_log_ids(logs))
+    else
+      redirect_to sales_logs_path, notice: I18n.t("notification.logs_deleted", count: logs.count)
+    end
   end
 
   def delete_lettings_logs_for_organisation
@@ -192,5 +198,9 @@ private
       authorize log, :destroy?
       log.discard!
     end
+  end
+
+  def duplicate_log_ids(logs)
+    logs.map { |log| "Log #{log.id}" }.to_sentence(last_word_connector: " and ")
   end
 end

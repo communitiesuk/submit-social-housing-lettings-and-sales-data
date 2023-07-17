@@ -904,7 +904,7 @@ RSpec.describe SalesLogsController, type: :request do
         delete_request
         expect(response).to redirect_to(sales_logs_path)
         follow_redirect!
-        expect(page).to have_content("Log #{id} has been deleted")
+        expect(page).to have_content("Log #{id} has been deleted.")
       end
 
       it "marks the log as deleted" do
