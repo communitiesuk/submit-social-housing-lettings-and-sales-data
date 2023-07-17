@@ -230,7 +230,7 @@ RSpec.describe "DeleteLogs", type: :request do
         expect(response).to redirect_to lettings_logs_path
         follow_redirect!
         expect(page).to have_selector(".govuk-notification-banner--success")
-        expect(page).to have_selector(".govuk-notification-banner--success", text: "2 logs have been deleted")
+        expect(page).to have_selector(".govuk-notification-banner--success", text: "2 logs have been deleted.")
       end
     end
 
@@ -470,7 +470,7 @@ RSpec.describe "DeleteLogs", type: :request do
         expect(response).to redirect_to sales_logs_path
         follow_redirect!
         expect(page).to have_selector(".govuk-notification-banner--success")
-        expect(page).to have_selector(".govuk-notification-banner--success", text: "2 logs have been deleted")
+        expect(page).to have_selector(".govuk-notification-banner--success", text: "2 logs have been deleted.")
       end
     end
 
@@ -714,7 +714,7 @@ RSpec.describe "DeleteLogs", type: :request do
         expect(response).to redirect_to lettings_logs_organisation_path(id: organisation)
         follow_redirect!
         expect(page).to have_selector(".govuk-notification-banner--success")
-        expect(page).to have_selector(".govuk-notification-banner--success", text: "2 logs have been deleted")
+        expect(page).to have_selector(".govuk-notification-banner--success", text: "2 logs have been deleted.")
       end
     end
 
@@ -939,7 +939,7 @@ RSpec.describe "DeleteLogs", type: :request do
         expect(response).to redirect_to sales_logs_organisation_path(id: organisation)
         follow_redirect!
         expect(page).to have_selector(".govuk-notification-banner--success")
-        expect(page).to have_selector(".govuk-notification-banner--success", text: "2 logs have been deleted")
+        expect(page).to have_selector(".govuk-notification-banner--success", text: "2 logs have been deleted.")
       end
     end
   end

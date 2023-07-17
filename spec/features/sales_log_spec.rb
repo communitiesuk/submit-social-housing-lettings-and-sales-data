@@ -160,7 +160,7 @@ RSpec.describe "Sales Log Features" do
       duplicate_log.reload
       expect(duplicate_log.deleted?).to be true
       expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
-      expect(page).to have_content("Log #{duplicate_log.id} has been deleted")
+      expect(page).to have_content("Log #{duplicate_log.id} has been deleted.")
       expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
       expect(page).not_to have_content("These logs are duplicates")
       expect(page).not_to have_link("Keep this log and delete duplicates")
@@ -184,7 +184,7 @@ RSpec.describe "Sales Log Features" do
       sales_log.reload
       expect(sales_log.status).to eq("deleted")
       expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
-      expect(page).to have_content("Log #{sales_log.id} has been deleted")
+      expect(page).to have_content("Log #{sales_log.id} has been deleted.")
       expect(page).to have_current_path("/sales-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
       expect(page).not_to have_content("These logs are duplicates")
       expect(page).not_to have_link("Keep this log and delete duplicates")

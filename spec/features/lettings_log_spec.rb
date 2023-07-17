@@ -409,7 +409,7 @@ RSpec.describe "Lettings Log Features" do
         duplicate_log.reload
         expect(duplicate_log.deleted?).to be true
         expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
-        expect(page).to have_content("Log #{duplicate_log.id} has been deleted")
+        expect(page).to have_content("Log #{duplicate_log.id} has been deleted.")
         expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
         expect(page).not_to have_content("These logs are duplicates")
         expect(page).not_to have_link("Keep this log and delete duplicates")
@@ -433,7 +433,7 @@ RSpec.describe "Lettings Log Features" do
         lettings_log.reload
         expect(lettings_log.status).to eq("deleted")
         expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
-        expect(page).to have_content("Log #{lettings_log.id} has been deleted")
+        expect(page).to have_content("Log #{lettings_log.id} has been deleted.")
         expect(page).to have_current_path("/lettings-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
         expect(page).not_to have_content("These logs are duplicates")
         expect(page).not_to have_link("Keep this log and delete duplicates")

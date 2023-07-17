@@ -51,7 +51,7 @@ class SalesLogsController < LogsController
 
     @log.discard!
 
-    redirect_to sales_logs_path, notice: "Log #{@log.id} has been deleted"
+    redirect_to sales_logs_path, notice: "Log #{@log.id} has been deleted."
   end
 
   def delete_confirmation

@@ -180,11 +180,11 @@ en:
 
   notification:
     logs_deleted:
-      one: "%{count} log has been deleted"
-      other: "%{count} logs have been deleted"
+      one: "%{count} log has been deleted."
+      other: "%{count} logs have been deleted."
     duplicate_logs_deleted:
-      one: "%{log_ids} has been deleted"
-      other: "%{log_ids} have been deleted"
+      one: "%{log_ids} has been deleted."
+      other: "%{log_ids} have been deleted."
 
   validations:
     organisation:
