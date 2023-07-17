@@ -201,6 +201,6 @@ private
   end
 
   def duplicate_log_ids(logs)
-    logs.map { |log| "Log #{log.id}" }.join(", ")
+    logs.map { |log| "Log #{log.id}" }.to_sentence(last_word_connector: ' and ')
   end
 end
