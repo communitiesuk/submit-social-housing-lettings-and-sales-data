@@ -35,11 +35,15 @@ class CheckAnswersSummaryListCardComponent < ViewComponent::Base
 private
 
   def unanswered_value
-    if log.creation_method_bulk_upload?
+    if bulk_uploaded?
       "<span class=\"app-!-colour-red\">You still need to answer this question</span>".html_safe
     else
       "<span class=\"app-!-colour-muted\">You didn’t answer this question</span>".html_safe
     end
+  end
+
+  def bulk_uploaded?
+    log.bulk_upload
   end
 
   def number_of_buyers

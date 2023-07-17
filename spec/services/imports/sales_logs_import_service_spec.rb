@@ -263,6 +263,8 @@ RSpec.describe Imports::SalesLogsImportService do
           Singleton.__init__(FormHandler)
           example.run
         end
+        Timecop.return
+        Singleton.__init__(FormHandler)
       end
 
       before do
@@ -1051,28 +1053,6 @@ RSpec.describe Imports::SalesLogsImportService do
 
           sales_log = SalesLog.find_by(old_id: sales_log_id)
           expect(sales_log&.savings).to be(10_010)
-        end
-      end
-
-      context "when the log being imported was manually entered" do
-        let(:sales_log_id) { "shared_ownership_sales_log" }
-
-        it "sets the creation method correctly" do
-          sales_log_service.send(:create_log, sales_log_xml)
-
-          sales_log = SalesLog.find_by(old_id: sales_log_id)
-          expect(sales_log.creation_method_single_log?).to be true
-        end
-      end
-
-      context "when the log being imported was bulk uploaded" do
-        let(:sales_log_id) { "shared_ownership_sales_log2" }
-
-        it "sets the creation method correctly" do
-          sales_log_service.send(:create_log, sales_log_xml)
-
-          sales_log = SalesLog.find_by(old_id: sales_log_id)
-          expect(sales_log.creation_method_bulk_upload?).to be true
         end
       end
 

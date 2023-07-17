@@ -11,7 +11,11 @@ module Imports
     # Unsafe: A string that has more than just the integer value
     def unsafe_string_as_integer(xml_doc, attribute)
       str = string_or_nil(xml_doc, attribute)
-      str&.to_i
+      if str.nil?
+        nil
+      else
+        str.to_i
+      end
     end
 
     def compose_date(xml_doc, day_str, month_str, year_str)
@@ -23,11 +27,6 @@ module Imports
       else
         Time.zone.local(year, month, day)
       end
-    end
-
-    def creation_method(xml_doc)
-      upload_id = meta_field_value(xml_doc, "upload-id")
-      upload_id.present? ? "bulk upload" : "single log"
     end
 
     def find_organisation_id(xml_doc, id_field)

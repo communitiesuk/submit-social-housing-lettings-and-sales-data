@@ -31,7 +31,6 @@ module Imports
       attributes["owning_organisation_id"] = find_organisation_id(xml_doc, "OWNINGORGID")
       attributes["type"] = unsafe_string_as_integer(xml_doc, "DerSaleType")
       attributes["old_id"] = meta_field_value(xml_doc, "document-id")
-      attributes["creation_method"] = creation_method(xml_doc)
       attributes["created_at"] = Time.zone.parse(meta_field_value(xml_doc, "created-date"))
       attributes["updated_at"] = Time.zone.parse(meta_field_value(xml_doc, "modified-date"))
       attributes["purchid"] = string_or_nil(xml_doc, "PurchaserCode")

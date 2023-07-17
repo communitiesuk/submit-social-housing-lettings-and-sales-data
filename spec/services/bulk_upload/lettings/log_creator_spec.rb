@@ -31,7 +31,7 @@ RSpec.describe BulkUpload::Lettings::LogCreator do
       it "sets the creation method" do
         service.call
 
-        expect(LettingsLog.last.creation_method_bulk_upload?).to be true
+        expect(LettingsLog.last.creation_method).to eq "bulk upload"
       end
     end
 
