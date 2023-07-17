@@ -27,6 +27,7 @@ class Location < ApplicationRecord
   scope :active_in_2_weeks, -> { where(confirmed: true).and(started_in_2_weeks) }
   scope :confirmed, -> { where(confirmed: true) }
   scope :unconfirmed, -> { where.not(confirmed: true) }
+  scope :filter_by_status, ->(status, _user = nil) { where status: }
 
   LOCAL_AUTHORITIES = LocalAuthority.all.map { |la| [la.name, la.code] }.to_h
 
@@ -96,6 +97,10 @@ class Location < ApplicationRecord
     return :activating_soon if startdate.present? && date < startdate
 
     :active
+  end
+
+  def self.filter_by_status(statuses, _user = nil)
+    where(id: all.select { |record| statuses.include?(record.status.to_s) })
   end
 
   def active?

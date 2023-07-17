@@ -119,6 +119,49 @@ RSpec.describe LocationsController, type: :request do
       it "returns 200" do
         expect(response).to be_successful
       end
+
+      context "when filtering" do
+        context "with status filter" do
+          let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+          let!(:incomplete_location) { create(:location, :incomplete, scheme:, startdate: Time.zone.local(2022, 4, 1)) }
+          let!(:active_location) { create(:location, scheme:, startdate: Time.zone.local(2022, 4, 1)) }
+
+          it "shows locations for multiple selected statuses" do
+            get "/schemes/#{scheme.id}/locations?status[]=incomplete&status[]=active", headers:, params: {}
+            expect(page).to have_link(incomplete_location.postcode)
+            expect(page).to have_link(active_location.postcode)
+          end
+
+          it "shows filtered incomplete locations" do
+            get "/schemes/#{scheme.id}/locations?status[]=incomplete", headers:, params: {}
+            expect(page).to have_link(incomplete_location.postcode)
+            expect(page).not_to have_link(active_location.postcode)
+          end
+
+          it "shows filtered active locations" do
+            get "/schemes/#{scheme.id}/locations?status[]=active", headers:, params: {}
+            expect(page).to have_link(active_location.postcode)
+            expect(page).not_to have_link(incomplete_location.postcode)
+          end
+
+          xit "shows filtered deactivated locations" do
+            get "/schemes/#{scheme.id}/locations?status[]=deactivated", headers:, params: {}
+            expect(page).to have_link(deactivated_location.postcode)
+            expect(page).not_to have_link(active_location.postcode)
+            expect(page).not_to have_link(incomplete_location.postcode)
+          end
+
+          it "does not reset the filters" do
+            get "/schemes/#{scheme.id}/locations?status[]=incomplete", headers:, params: {}
+            expect(page).to have_link(incomplete_location.postcode)
+            expect(page).not_to have_link(active_location.postcode)
+
+            get "/schemes/#{scheme.id}/locations", headers:, params: {}
+            expect(page).to have_link(incomplete_location.postcode)
+            expect(page).not_to have_link(active_location.postcode)
+          end
+        end
+      end
     end
 
     context "when signed in as a data coordinator user" do

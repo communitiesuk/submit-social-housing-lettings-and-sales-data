@@ -21,6 +21,11 @@ FactoryBot.define do
       old_visible_id { "111" }
     end
 
+    trait :incomplete do
+      units { nil }
+      confirmed { false }
+    end
+
     trait :with_old_visible_id do
       old_visible_id { rand(9_999_999).to_s }
     end
