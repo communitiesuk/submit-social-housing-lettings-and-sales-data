@@ -44,7 +44,7 @@ module FiltersHelper
   end
 
   def assigned_to_filter_options(user)
-    user_options = user.organisation.users
+    user_options = user.support? ? User.all : user.organisation.users
     [OpenStruct.new(id: "", name: "Select an option")] + user_options.map { |user_option| OpenStruct.new(id: user_option.id, name: user_option.name) }
   end
 
