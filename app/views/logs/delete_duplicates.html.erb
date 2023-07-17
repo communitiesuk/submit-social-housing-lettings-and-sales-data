@@ -15,7 +15,7 @@
     <p class="govuk-body govuk-!-margin-bottom-2">
       <%= @duplicate_logs.count == 1 ? "This log" : "These logs" %> will be deleted:
     </p>
-    <ul class="govuk-list">
+    <ul class="govuk-list govuk-!-margin-bottom-6">
       <% @duplicate_logs.each do |duplicate_log| %>
         <li>
           <strong>
