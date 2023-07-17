@@ -52,4 +52,8 @@ module LogsHelper
 
     "You will upload #{pluralize(bulk_upload.total_logs_count, 'log')}. There are unexpected answers in #{pluralize(bulk_upload.logs_with_errors_count, 'log')}, and #{pluralize(bulk_upload.bulk_upload_errors.count, 'unexpected answer')} in total. #{this_or_these_unexpected_answers} will be marked as correct."
   end
+
+  def bulk_upload_error_summary(bulk_upload)
+    "You have tried to upload #{bulk_upload.total_logs_count ? pluralize(bulk_upload.total_logs_count, 'log') : 'logs'}. There are errors in #{pluralize(bulk_upload.logs_with_errors_count, 'log')}, and #{pluralize(bulk_upload.bulk_upload_errors.count, 'error')} in total."
+  end
 end

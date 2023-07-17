@@ -11,7 +11,7 @@
       </div>
 
       <div class="govuk-body">
-        You have tried to upload <%= @bulk_upload.total_logs_count ? pluralize(@bulk_upload.total_logs_count, "log") : "logs" %>. There are errors in <%= pluralize(@bulk_upload.logs_with_errors_count, "log") %>, and <%= pluralize(@bulk_upload.bulk_upload_errors.count, "error") %> in total.
+        <%= bulk_upload_error_summary(@bulk_upload) %>
       </div>
 
       <div class="govuk-body">
