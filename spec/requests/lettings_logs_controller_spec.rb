@@ -801,7 +801,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
           context "when filtering by a specific user" do
             it "only show the selected user's logs" do
-              get "/lettings-logs?assigned_to=you&user=#{user.id}", headers:, params: {}
+              get "/lettings-logs?assigned_to=specific_user&user=#{user.id}", headers:, params: {}
               expect(page).to have_content(tenant_code_1)
               expect(page).not_to have_content(tenant_code_2)
             end
