@@ -180,8 +180,11 @@ en:
 
   notification:
     logs_deleted:
-      one: "%{count} log has been deleted"
-      other: "%{count} logs have been deleted"
+      one: "%{count} log has been deleted."
+      other: "%{count} logs have been deleted."
+    duplicate_logs_deleted:
+      one: "%{log_ids} has been deleted."
+      other: "%{log_ids} have been deleted."
 
   validations:
     organisation:
@@ -248,13 +251,22 @@ en:
         ten_years_after_mrc_date: "Enter a tenancy start date that is no more than 10 years after the major repairs completion date"
 
         location:
-          deactivated: "The location %{postcode} was deactivated on %{date} and was not available on the day you entered."
-          reactivating_soon: "The location %{postcode} is not available until %{date}. Select another location or edit the tenancy start date"
-          activating_soon: "The location %{postcode} is not available until %{date}. Enter a tenancy start date after %{date}"
+          deactivated:
+            startdate: "The location %{postcode} was deactivated on %{date} and was not available on the day you entered. Select another location or edit the tenancy start date"
+            location_id: "The location %{postcode} was deactivated on %{date} and was not available on the day you entered. Select another location or edit the tenancy start date"
+          activating_soon:
+            startdate: "The location %{postcode} is not available until %{date}. Enter a tenancy start date after %{date}"
+            location_id: "The location %{postcode} is not available until %{date}. Select another location or edit the tenancy start date"
+          reactivating_soon:
+            startdate: "The location %{postcode} is not available until %{date}. Enter a tenancy start date after %{date}"
+            location_id: "The location %{postcode} is not available until %{date}. Select another location or edit the tenancy start date"
         scheme:
-          deactivated: "%{name} was deactivated on %{date} and was not available on the day you entered"
-          reactivating_soon: "The scheme %{name} is not available until %{date}. Select another scheme or edit the tenancy start date"
-          activating_soon: "%{name} is not available until %{date}. Enter a tenancy start date after %{date}"
+          deactivated:
+            startdate: "The scheme %{name} was deactivated on %{date} and was not available on the day you entered. Select another scheme or edit the tenancy start date"
+            scheme_id: "The scheme %{name} was deactivated on %{date} and was not available on the day you entered. Select another scheme or edit the tenancy start date"
+          reactivating_soon:
+            startdate: "The scheme %{name} is not available until %{date}. Enter a tenancy start date after %{date}"
+            scheme_id: "The scheme %{name} is not available until %{date}. Select another scheme or edit the tenancy start date"
       owning_organisation:
         invalid: "Please select the owning organisation or managing organisation that you belong to"
         data_sharing_agreement_not_signed: "The organisation must accept the Data Sharing Agreement before it can be selected as the owning organisation."

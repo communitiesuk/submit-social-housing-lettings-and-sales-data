@@ -102,7 +102,7 @@ private
         result[question.id] = question_params
       end
 
-      if current_user.support? && question.id == "owning_organisation_id" && @log.managing_organisation.blank?
+      if current_user.support? && question.id == "owning_organisation_id" && @log.lettings? && @log.managing_organisation.blank?
         owning_organisation = Organisation.find(result["owning_organisation_id"])
         if owning_organisation&.managing_agents&.empty?
           result["managing_organisation_id"] = owning_organisation.id
@@ -141,9 +141,16 @@ private
     return unless query_params
 
     parsed_params = CGI.parse(query_params)
-    return unless parsed_params["referrer"]
+    parsed_params["referrer"]&.first
+  end
 
-    parsed_params["referrer"][0]
+  def original_duplicate_log_id_from_query
+    query_params = URI.parse(request.url).query
+
+    return unless query_params
+
+    parsed_params = CGI.parse(query_params)
+    parsed_params["original_log_id"]&.first
   end
 
   def previous_interruption_screen_page_id
@@ -155,6 +162,16 @@ private
   end
 
   def successful_redirect_path
+    if FeatureToggle.deduplication_flow_enabled?
+      if @log.lettings?
+        if current_user.lettings_logs.duplicate_logs(@log).count.positive?
+          return send("lettings_log_duplicate_logs_path", @log, original_log_id: @log.id)
+        end
+      elsif current_user.sales_logs.duplicate_logs(@log).count.positive?
+        return send("sales_log_duplicate_logs_path", @log, original_log_id: @log.id)
+      end
+    end
+
     if is_referrer_type?("check_answers")
       next_page_id = form.next_page_id(@page, @log, current_user)
       next_page = form.get_page(next_page_id)
@@ -167,7 +184,7 @@ private
       end
     end
     if previous_interruption_screen_page_id.present?
-      return send("#{@log.class.name.underscore}_#{previous_interruption_screen_page_id}_path", @log, { referrer: previous_interruption_screen_referrer }.compact)
+      return send("#{@log.class.name.underscore}_#{previous_interruption_screen_page_id}_path", @log, { referrer: previous_interruption_screen_referrer, original_log_id: original_duplicate_log_id_from_query }.compact)
     end
 
     redirect_path = form.next_page_redirect_path(@page, @log, current_user)

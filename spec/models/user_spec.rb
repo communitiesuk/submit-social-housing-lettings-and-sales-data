@@ -148,11 +148,11 @@ RSpec.describe User, type: :model do
 
       context "and their organisation has managing agents" do
         before do
-          create(:organisation_relationship, parent_organisation: user.organisation)
+          create(:organisation_relationship, child_organisation: user.organisation)
         end
 
-        it "can filter lettings logs by user, year, status and organisation" do
-          expect(user.logs_filters).to eq(%w[status years user organisation bulk_upload_id])
+        it "can filter lettings logs by user, year, status, managing_organisation and owning_organisation" do
+          expect(user.logs_filters).to match_array(%w[status years user managing_organisation owning_organisation bulk_upload_id])
         end
       end
     end
@@ -192,8 +192,8 @@ RSpec.describe User, type: :model do
         })
       end
 
-      it "can filter lettings logs by user, year, status and organisation" do
-        expect(user.logs_filters).to eq(%w[status years user organisation bulk_upload_id])
+      it "can filter lettings logs by user, year, status, managing_organisation and owning_organisation" do
+        expect(user.logs_filters).to match_array(%w[status years user owning_organisation managing_organisation bulk_upload_id])
       end
     end
 
@@ -381,16 +381,6 @@ RSpec.describe User, type: :model do
           "deliver_now",
           args: [user],
         )
-      end
-
-      context "when feature flag disabled" do
-        before do
-          allow(FeatureToggle).to receive(:new_data_protection_confirmation?).and_return(false)
-        end
-
-        it "does not send the email" do
-          expect { user.update!(is_dpo: true) }.not_to enqueue_job(ActionMailer::MailDeliveryJob)
-        end
       end
     end
 

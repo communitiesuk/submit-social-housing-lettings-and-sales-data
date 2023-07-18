@@ -3,7 +3,7 @@ class DataProtectionConfirmationBannerComponent < ViewComponent::Base
 
   attr_reader :user, :organisation
 
-  HELPDESK_URL = "https://digital.dclg.gov.uk/jira/servicedesk/customer/portal/4/group/21".freeze
+  HELPDESK_URL = "https://dluhcdigital.atlassian.net/servicedesk/customer/portal/6/group/11".freeze
 
   def initialize(user:, organisation: nil)
     @user = user
@@ -13,7 +13,6 @@ class DataProtectionConfirmationBannerComponent < ViewComponent::Base
   end
 
   def display_banner?
-    return false unless FeatureToggle.new_data_protection_confirmation?
     return false if user.support? && organisation.blank?
     return true if org_without_dpo?
 

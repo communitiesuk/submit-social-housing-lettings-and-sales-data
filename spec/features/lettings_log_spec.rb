@@ -57,6 +57,51 @@ RSpec.describe "Lettings Log Features" do
     end
   end
 
+  context "when filtering logs" do
+    let(:user) { create(:user, last_sign_in_at: Time.zone.now) }
+
+    context "when I am signed in" do
+      before do
+        visit("/lettings-logs")
+        fill_in("user[email]", with: user.email)
+        fill_in("user[password]", with: user.password)
+        click_button("Sign in")
+      end
+
+      context "when no filters are selected" do
+        it "displays the filters component with no clear button" do
+          expect(page).to have_content("No filters applied")
+          expect(page).not_to have_content("Clear")
+        end
+      end
+
+      context "when I have selected filters" do
+        before do
+          check("Not started")
+          check("In progress")
+          choose("Yours")
+          click_button("Apply filters")
+        end
+
+        it "displays the filters component with a correct count and clear button" do
+          expect(page).to have_content("3 filters applied")
+          expect(page).to have_content("Clear")
+        end
+
+        context "when clearing the filters" do
+          before do
+            click_link("Clear")
+          end
+
+          it "clears the filters and displays the filter component as before" do
+            expect(page).to have_content("No filters applied")
+            expect(page).not_to have_content("Clear")
+          end
+        end
+      end
+    end
+  end
+
   context "when the signed is user is a Support user" do
     let(:organisation) { create(:organisation, name: "User org") }
     let(:support_user) { create(:user, :support, last_sign_in_at: Time.zone.now, organisation:) }
@@ -132,30 +177,6 @@ RSpec.describe "Lettings Log Features" do
     end
 
     context "when the owning organisation question is answered" do
-      context "and the owning organisation doesn't hold stock" do
-        let(:managing_org) { create(:organisation, name: "Managing org") }
-        let!(:org_rel) { create(:organisation_relationship, parent_organisation: support_user.organisation, child_organisation: managing_org) }
-
-        before do
-          support_user.organisation.update!(holds_own_stock: false)
-        end
-
-        it "shows the managing organisation question" do
-          visit("/lettings-logs")
-          click_button("Create a new lettings log")
-          click_link("Set up this lettings log")
-          log_id = page.current_path.scan(/\d/).join
-          select(support_user.organisation.name, from: "lettings-log-owning-organisation-id-field")
-          click_button("Save and continue")
-          expect(page).to have_current_path("/lettings-logs/#{log_id}/managing-organisation")
-          select(managing_org.name, from: "lettings-log-managing-organisation-id-field")
-          click_button("Save and continue")
-          visit("lettings-logs/#{log_id}/setup/check-answers")
-          expect(page).to have_content("Managing agent Managing org", normalize_ws: true)
-          expect(support_user.organisation.managing_agents).to eq([org_rel.child_organisation])
-        end
-      end
-
       context "and the owning organisation does hold stock" do
         before do
           support_user.organisation.update!(holds_own_stock: true)
@@ -338,7 +359,7 @@ RSpec.describe "Lettings Log Features" do
         let!(:org_rel1) { create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: owning_org1) }
         let!(:org_rel2) { create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: owning_org2) }
 
-        it "shows the managing organisation question" do
+        it "does not show the managing organisation question, because managing organisation can be inferred" do
           user.organisation.update!(holds_own_stock: false)
           visit("/lettings-logs")
           click_button("Create a new lettings log")
@@ -347,13 +368,11 @@ RSpec.describe "Lettings Log Features" do
           expect(page).to have_current_path("/lettings-logs/#{log_id}/stock-owner")
           select(owning_org1.name, from: "lettings-log-owning-organisation-id-field")
           click_button("Save and continue")
-          expect(page).to have_current_path("/lettings-logs/#{log_id}/managing-organisation")
-          select(user.organisation.name, from: "lettings-log-managing-organisation-id-field")
-          click_button("Save and continue")
           visit("lettings-logs/#{log_id}/setup/check-answers")
 
-          expect(page).to have_content("Managing agent User org", normalize_ws: true)
+          expect(page).not_to have_content("Managing agent User org", normalize_ws: true)
           expect(user.organisation.stock_owners).to eq([org_rel1.parent_organisation, org_rel2.parent_organisation])
+          expect(LettingsLog.find(log_id).managing_organisation).to eq(user.organisation)
         end
       end
 
@@ -413,6 +432,66 @@ RSpec.describe "Lettings Log Features" do
 
       it "navigates you to the lettings logs page" do
         expect(page).to have_current_path("/lettings-logs")
+      end
+    end
+
+    context "when a log becomes a duplicate" do
+      let(:lettings_log) { create(:lettings_log, :duplicate, owning_organisation: user.organisation, created_by: user) }
+      let!(:duplicate_log) { create(:lettings_log, :duplicate, owning_organisation: user.organisation, created_by: user) }
+
+      before do
+        lettings_log.update!(tenancycode: "different")
+        visit("/lettings-logs/#{lettings_log.id}/tenant-code")
+        fill_in("lettings-log-tenancycode-field", with: duplicate_log.tenancycode)
+        click_button("Save and continue")
+      end
+
+      it "allows keeping the original log and deleting duplicates" do
+        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
+        click_link("Keep this log and delete duplicates", href: "/lettings-logs/#{lettings_log.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
+        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
+        click_button "Delete this log"
+        duplicate_log.reload
+        expect(duplicate_log.deleted?).to be true
+        expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+        expect(page).to have_content("Log #{duplicate_log.id} has been deleted.")
+        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
+        expect(page).not_to have_content("These logs are duplicates")
+        expect(page).not_to have_link("Keep this log and delete duplicates")
+        expect(page).to have_link("Back to Log #{lettings_log.id}", href: "/lettings-logs/#{lettings_log.id}")
+      end
+
+      it "allows changing answers on remaining original log" do
+        click_link("Keep this log and delete duplicates", href: "/lettings-logs/#{lettings_log.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
+        click_button "Delete this log"
+        click_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?original_log_id=#{lettings_log.id}&referrer=interruption_screen")
+        click_button("Save and continue")
+        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
+        expect(page).to have_link("Back to Log #{lettings_log.id}", href: "/lettings-logs/#{lettings_log.id}")
+      end
+
+      it "allows keeping the duplicate log and deleting the original one" do
+        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
+        click_link("Keep this log and delete duplicates", href: "/lettings-logs/#{duplicate_log.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
+        expect(page).to have_current_path("/lettings-logs/#{duplicate_log.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
+        click_button "Delete this log"
+        lettings_log.reload
+        expect(lettings_log.status).to eq("deleted")
+        expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+        expect(page).to have_content("Log #{lettings_log.id} has been deleted.")
+        expect(page).to have_current_path("/lettings-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
+        expect(page).not_to have_content("These logs are duplicates")
+        expect(page).not_to have_link("Keep this log and delete duplicates")
+        expect(page).to have_link("Back to lettings logs", href: "/lettings-logs")
+      end
+
+      it "allows changing answers to remaining duplicate log" do
+        click_link("Keep this log and delete duplicates", href: "/lettings-logs/#{duplicate_log.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
+        click_button "Delete this log"
+        click_link("Change", href: "/lettings-logs/#{duplicate_log.id}/tenant-code?original_log_id=#{lettings_log.id}&referrer=interruption_screen")
+        click_button("Save and continue")
+        expect(page).to have_current_path("/lettings-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
+        expect(page).to have_link("Back to lettings logs", href: "/lettings-logs")
       end
     end
   end

@@ -94,6 +94,51 @@ RSpec.describe "Sales Log Features" do
     end
   end
 
+  context "when filtering logs" do
+    let(:user) { create(:user, last_sign_in_at: Time.zone.now) }
+
+    context "when I am signed in" do
+      before do
+        visit("/sales-logs")
+        fill_in("user[email]", with: user.email)
+        fill_in("user[password]", with: user.password)
+        click_button("Sign in")
+      end
+
+      context "when no filters are selected" do
+        it "displays the filters component with no clear button" do
+          expect(page).to have_content("No filters applied")
+          expect(page).not_to have_content("Clear")
+        end
+      end
+
+      context "when I have selected filters" do
+        before do
+          check("Not started")
+          check("In progress")
+          choose("Yours")
+          click_button("Apply filters")
+        end
+
+        it "displays the filters component with a correct count and clear button" do
+          expect(page).to have_content("3 filters applied")
+          expect(page).to have_content("Clear")
+        end
+
+        context "when clearing the filters" do
+          before do
+            click_link("Clear")
+          end
+
+          it "clears the filters and displays the filter component as before" do
+            expect(page).to have_content("No filters applied")
+            expect(page).not_to have_content("Clear")
+          end
+        end
+      end
+    end
+  end
+
   context "when signed in as a support user" do
     let(:devise_notify_mailer) { DeviseNotifyMailer.new }
     let(:notify_client) { instance_double(Notifications::Client) }
@@ -135,6 +180,69 @@ RSpec.describe "Sales Log Features" do
         expect(breadcrumbs[1].text).to eq "Log #{sales_log.id}"
         expect(breadcrumbs[1][:href]).to eq sales_log_path(sales_log.id)
       end
+    end
+  end
+
+  context "when a log becomes a duplicate" do
+    let(:user) { create(:user, :data_coordinator) }
+    let(:sales_log) { create(:sales_log, :duplicate, created_by: user) }
+    let!(:duplicate_log) { create(:sales_log, :duplicate, created_by: user) }
+
+    before do
+      allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+      sign_in user
+      sales_log.update!(purchid: "different")
+      visit("/sales-logs/#{sales_log.id}/purchaser-code")
+      fill_in("sales-log-purchid-field", with: duplicate_log.purchid)
+      click_button("Save and continue")
+    end
+
+    it "allows keeping the original log and deleting duplicates" do
+      expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
+      click_link("Keep this log and delete duplicates", href: "/sales-logs/#{sales_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
+      expect(page).to have_current_path("/sales-logs/#{sales_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
+      click_button "Delete this log"
+      duplicate_log.reload
+      expect(duplicate_log.deleted?).to be true
+      expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+      expect(page).to have_content("Log #{duplicate_log.id} has been deleted.")
+      expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
+      expect(page).not_to have_content("These logs are duplicates")
+      expect(page).not_to have_link("Keep this log and delete duplicates")
+      expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
+    end
+
+    it "allows changing answer on remaining original log" do
+      click_link("Keep this log and delete duplicates", href: "/sales-logs/#{sales_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
+      click_button "Delete this log"
+      click_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=interruption_screen")
+      click_button("Save and continue")
+      expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
+      expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
+    end
+
+    it "allows keeping the duplicate log and deleting the original one" do
+      expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
+      click_link("Keep this log and delete duplicates", href: "/sales-logs/#{duplicate_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
+      expect(page).to have_current_path("/sales-logs/#{duplicate_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
+      click_button "Delete this log"
+      sales_log.reload
+      expect(sales_log.status).to eq("deleted")
+      expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+      expect(page).to have_content("Log #{sales_log.id} has been deleted.")
+      expect(page).to have_current_path("/sales-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
+      expect(page).not_to have_content("These logs are duplicates")
+      expect(page).not_to have_link("Keep this log and delete duplicates")
+      expect(page).to have_link("Back to sales logs", href: "/sales-logs")
+    end
+
+    it "allows changing answers on remaining duplicate log" do
+      click_link("Keep this log and delete duplicates", href: "/sales-logs/#{duplicate_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
+      click_button "Delete this log"
+      click_link("Change", href: "/sales-logs/#{duplicate_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=interruption_screen")
+      click_button("Save and continue")
+      expect(page).to have_current_path("/sales-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
+      expect(page).to have_link("Back to sales logs", href: "/sales-logs")
     end
   end
 end

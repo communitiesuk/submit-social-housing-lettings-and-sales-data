@@ -41,7 +41,7 @@ RSpec.describe "organisations/data_sharing_agreement.html.erb", :aggregate_failu
         create(
           :data_protection_confirmation,
           organisation:,
-          created_at: Time.zone.now - 1.day,
+          signed_at: Time.zone.now - 1.day,
         )
       end
 
@@ -64,6 +64,50 @@ RSpec.describe "organisations/data_sharing_agreement.html.erb", :aggregate_failu
         expect(fragment).to have_content("9th day of January 2023")
         # Shows DPO and org details in 12.2
         expect(fragment).to have_content("12.2. For #{organisation.name}: Name: #{dpo.name}, Postal Address: #{organisation.address_row}, E-mail address: #{dpo.email}, Telephone number: #{organisation.phone}")
+      end
+
+      context "when user email not valid" do
+        let(:dpo) do
+          u = User.new(
+            name: "test",
+            organisation:,
+            is_dpo: true,
+            encrypted_password: SecureRandom.hex(10),
+            email: SecureRandom.uuid,
+            confirmed_at: Time.zone.now,
+            active: false,
+          )
+          u.save!(validate: false)
+          u
+        end
+
+        let(:data_protection_confirmation) do
+          create(
+            :data_protection_confirmation,
+            organisation:,
+            signed_at: Time.zone.now - 1.day,
+            data_protection_officer: dpo,
+          )
+        end
+
+        it "renders dynamic content" do
+          render
+
+          # dpo name
+          expect(fragment).to have_content("Name: #{dpo.name}")
+
+          # org details
+          expect(fragment).to have_content("#{organisation.name} of #{organisation.address_row} (“CORE Data Provider”)")
+          # header
+          expect(fragment).to have_css("h2", text: "#{organisation.name} and Department for Levelling Up, Housing and Communities")
+          # does not show action buttons
+          expect(fragment).not_to have_button(text: "Accept this agreement")
+          expect(fragment).not_to have_link(text: "Cancel", href: "/organisations/#{organisation.id}/details")
+          # sees signed_at date
+          expect(fragment).to have_content("9th day of January 2023")
+          # Shows DPO and org details in 12.2
+          expect(fragment).to have_content("12.2. For #{organisation.name}: Name: #{dpo.name}, Postal Address: #{organisation.address_row}, Telephone number: #{organisation.phone}")
+        end
       end
     end
   end
@@ -93,7 +137,7 @@ RSpec.describe "organisations/data_sharing_agreement.html.erb", :aggregate_failu
         create(
           :data_protection_confirmation,
           organisation:,
-          created_at: Time.zone.now - 1.day,
+          signed_at: Time.zone.now - 1.day,
         )
       end
 

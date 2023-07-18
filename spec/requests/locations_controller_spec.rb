@@ -1395,12 +1395,14 @@ RSpec.describe LocationsController, type: :request do
       let!(:scheme) { create(:scheme, owning_organisation: user.organisation) }
       let!(:location) { create(:location, scheme:, created_at: Time.zone.local(2022, 4, 1)) }
       let(:deactivation_date) { Time.utc(2022, 10, 10) }
-      let!(:lettings_log) { create(:lettings_log, :sh, location:, scheme:, startdate:, owning_organisation: user.organisation) }
+      let(:lettings_log) { create(:lettings_log, :sh, location:, scheme:, startdate:, owning_organisation: user.organisation) }
       let(:startdate) { Time.utc(2022, 10, 11) }
       let(:add_deactivations) { nil }
       let(:setup_locations) { nil }
 
       before do
+        allow(FormHandler.instance).to receive(:lettings_in_crossover_period?).and_return(true)
+        lettings_log
         Timecop.freeze(Time.utc(2023, 10, 10))
         sign_in user
         add_deactivations

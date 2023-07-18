@@ -276,7 +276,7 @@ class BulkUpload::Sales::Year2022::RowParser
 
   validates :field_57,
             presence: {
-              message: I18n.t("validations.not_answered", question: "shared ownership type"),
+              message: I18n.t("validations.not_answered", question: "type of shared ownership sale"),
               category: :setup,
             },
             if: :shared_ownership?,
@@ -293,7 +293,7 @@ class BulkUpload::Sales::Year2022::RowParser
 
   validates :field_76,
             presence: {
-              message: I18n.t("validations.not_answered", question: "discounted ownership type"),
+              message: I18n.t("validations.not_answered", question: "type of discounted ownership sale"),
               category: :setup,
             },
             if: :discounted_ownership?,
@@ -345,13 +345,13 @@ class BulkUpload::Sales::Year2022::RowParser
             if: :outright_sale?,
             on: :after_log
 
-  validates :field_109, presence: { message: I18n.t("validations.not_answered", question: "more than 2 buyers"), category: :setup }, if: :joint_purchase?, on: :after_log
+  validates :field_109, presence: { message: I18n.t("validations.not_answered", question: "more than 2 joint buyers"), category: :setup }, if: :joint_purchase?, on: :after_log
 
-  validates :field_113, presence: { message: I18n.t("validations.not_answered", question: "ownership type"), category: :setup }, on: :after_log
+  validates :field_113, presence: { message: I18n.t("validations.not_answered", question: "purchase made under ownership scheme"), category: :setup }, on: :after_log
 
   validates :field_114, presence: { message: I18n.t("validations.not_answered", question: "company buyer"), category: :setup }, if: :outright_sale?, on: :after_log
 
-  validates :field_115, presence: { message: I18n.t("validations.not_answered", question: "will the buyers live in the property"), category: :setup }, if: :outright_sale?, on: :after_log
+  validates :field_115, presence: { message: I18n.t("validations.not_answered", question: "buyers living in property"), category: :setup }, if: :outright_sale?, on: :after_log
 
   validates :field_116, presence: { message: I18n.t("validations.not_answered", question: "joint purchase"), category: :setup }, if: :joint_purchase_asked?, on: :after_log
 

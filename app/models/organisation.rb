@@ -103,7 +103,7 @@ class Organisation < ApplicationRecord
   end
 
   def display_organisation_attributes
-    attrs = [
+    [
       { name: "Name", value: name, editable: true },
       { name: "Organisation ID", value: "ORG#{id}", editable: false },
       { name: "Address", value: address_string, editable: true },
@@ -112,16 +112,14 @@ class Organisation < ApplicationRecord
       { name: "Registration number", value: housing_registration_no || "", editable: false },
       { name: "Rent periods", value: rent_period_labels, editable: false, format: :bullet },
       { name: "Owns housing stock", value: holds_own_stock ? "Yes" : "No", editable: false },
-    ].compact
-
-    unless FeatureToggle.new_data_protection_confirmation?
-      attrs << { name: "Data protection agreement", value: data_protection_agreement_string, editable: false }
-    end
-
-    attrs
+    ]
   end
 
   def has_managing_agents?
     managing_agents.count.positive?
+  end
+
+  def has_stock_owners?
+    stock_owners.count.positive?
   end
 end

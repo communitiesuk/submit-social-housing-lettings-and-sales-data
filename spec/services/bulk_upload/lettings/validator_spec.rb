@@ -305,7 +305,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
       end
 
       it "creates errors" do
-        expect { validator.call }.to change(BulkUploadError.where(category: :setup, error: "This is a duplicate of a log in your file"), :count).by(24)
+        expect { validator.call }.to change(BulkUploadError.where(category: :setup, error: "This is a duplicate of a log in your file"), :count).by(20)
       end
     end
 
@@ -347,6 +347,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
       let(:target_path) { file_fixture("2022_23_lettings_bulk_upload.csv") }
 
       before do
+        allow(FormHandler.instance).to receive(:lettings_in_crossover_period?).and_return(true)
         target_array = File.open(target_path).readlines
         target_array[0..71].each do |line|
           file.write line

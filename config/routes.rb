@@ -54,6 +54,8 @@ Rails.application.routes.draw do
   get "/download-22-23-sales-bulk-upload-template", to: "start#download_22_23_sales_bulk_upload_template"
   get "/download-22-23-sales-bulk-upload-specification", to: "start#download_22_23_sales_bulk_upload_specification"
 
+  get "clear-filters", to: "sessions#clear_filters"
+
   resource :account, only: %i[show edit], controller: "users" do
     get "edit/password", to: "users#edit_password"
   end
@@ -170,6 +172,8 @@ Rails.application.routes.draw do
 
   resources :lettings_logs, path: "/lettings-logs" do
     get "delete-confirmation", to: "lettings_logs#delete_confirmation"
+    get "duplicate-logs", to: "duplicate_logs#show"
+    get "delete-duplicates", to: "duplicate_logs#delete_duplicates"
 
     collection do
       post "bulk-upload", to: "bulk_upload#bulk_upload"
@@ -235,6 +239,8 @@ Rails.application.routes.draw do
 
   resources :sales_logs, path: "/sales-logs" do
     get "delete-confirmation", to: "sales_logs#delete_confirmation"
+    get "duplicate-logs", to: "duplicate_logs#show"
+    get "delete-duplicates", to: "duplicate_logs#delete_duplicates"
 
     collection do
       get "csv-download", to: "sales_logs#download_csv"

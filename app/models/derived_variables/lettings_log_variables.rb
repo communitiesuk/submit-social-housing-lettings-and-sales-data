@@ -32,7 +32,7 @@ module DerivedVariables::LettingsLogVariables
   def scheme_has_multiple_locations?
     return false unless scheme
 
-    @scheme_locations_count ||= scheme.locations.active.size
+    @scheme_locations_count ||= scheme.locations.active_in_2_weeks.size
     @scheme_locations_count > 1
   end
 
@@ -258,7 +258,7 @@ private
 
   def reset_scheme_location!
     self.location = nil
-    if scheme && scheme.locations.active.size == 1
+    if scheme && scheme.locations.active_in_2_weeks.size == 1
       self.location = scheme.locations.first
     end
   end

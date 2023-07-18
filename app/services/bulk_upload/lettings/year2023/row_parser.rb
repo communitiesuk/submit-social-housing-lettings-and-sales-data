@@ -463,10 +463,10 @@ class BulkUpload::Lettings::Year2023::RowParser
       "field_7",   # startdate
       "field_8",   # startdate
       "field_9",   # startdate
-      "field_14",  # propcode
-      "field_17",  # location
-      "field_23",  # postcode
-      "field_24",  # postcode
+      "field_13",  # tenancycode
+      field_4 != 1 ? "field_17" : nil,  # location
+      field_4 != 2 ? "field_23" : nil,  # postcode
+      field_4 != 2 ? "field_24" : nil,  # postcode
       "field_46",  # age1
       "field_47",  # sex1
       "field_50",  # ecstat1
@@ -553,17 +553,17 @@ private
   end
 
   def duplicate_check_fields
-    %w[
-      startdate
-      age1
-      sex1
-      ecstat1
-      owning_organisation
-      tcharge
-      propcode
-      postcode_full
-      location
-    ]
+    [
+      "startdate",
+      "age1",
+      "sex1",
+      "ecstat1",
+      "owning_organisation",
+      "tcharge",
+      field_4 != 2 ? "postcode_full" : nil,
+      field_4 != 1 ? "location" : nil,
+      "tenancycode",
+    ].compact
   end
 
   def validate_needs_type_present
@@ -700,7 +700,7 @@ private
   end
 
   def validate_data_types
-    unless attribute_set["field_5"].value_before_type_cast&.match?(/\A\d+\z/)
+    unless attribute_set["field_5"].value_before_type_cast&.match?(/^\d+\.?0*$/)
       errors.add(:field_5, I18n.t("validations.invalid_number", question: "letting type"))
     end
   end
@@ -743,7 +743,7 @@ private
 
   def validate_location_exists
     if scheme && field_17.present? && location.nil?
-      errors.add(:field_17, "Location could be found with provided scheme code", category: :setup)
+      errors.add(:field_17, "Location could not be found with the provided scheme code", category: :setup)
     end
   end
 
@@ -853,11 +853,11 @@ private
       errors.add(:field_7, error_message) # startdate
       errors.add(:field_8, error_message) # startdate
       errors.add(:field_9, error_message) # startdate
-      errors.add(:field_14, error_message) # propcode
-      errors.add(:field_17, error_message) # location
-      errors.add(:field_23, error_message) # postcode_full
-      errors.add(:field_24, error_message) # postcode_full
-      errors.add(:field_25, error_message) # la
+      errors.add(:field_13, error_message) # tenancycode
+      errors.add(:field_17, error_message) if field_4 != 1 # location
+      errors.add(:field_23, error_message) if field_4 != 2 # postcode_full
+      errors.add(:field_24, error_message) if field_4 != 2 # postcode_full
+      errors.add(:field_25, error_message) if field_4 != 2 # la
       errors.add(:field_46, error_message) # age1
       errors.add(:field_47, error_message) # sex1
       errors.add(:field_50, error_message) # ecstat1
@@ -1403,6 +1403,8 @@ private
       1
     elsif field_85 == 1
       2
+    else
+      3
     end
   end
 

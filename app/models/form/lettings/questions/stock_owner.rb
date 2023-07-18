@@ -24,7 +24,7 @@ class Form::Lettings::Questions::StockOwner < ::Form::Question
     end
 
     stock_owners_answer_options = if user.support?
-                                    Organisation
+                                    Organisation.where(holds_own_stock: true)
                                   else
                                     user.organisation.stock_owners
                                   end.pluck(:id, :name).to_h

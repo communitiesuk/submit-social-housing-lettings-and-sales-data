@@ -143,8 +143,8 @@ class User < ApplicationRecord
   end
 
   def logs_filters(specific_org: false)
-    if (support? && !specific_org) || organisation.has_managing_agents?
-      %w[status years user organisation bulk_upload_id]
+    if (support? && !specific_org) || organisation.has_managing_agents? || organisation.has_stock_owners?
+      %w[status years user managing_organisation owning_organisation bulk_upload_id]
     else
       %w[status years user bulk_upload_id]
     end
@@ -186,7 +186,6 @@ protected
 private
 
   def send_data_protection_confirmation_reminder
-    return unless FeatureToggle.new_data_protection_confirmation?
     return unless persisted?
     return unless is_dpo?
 

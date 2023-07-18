@@ -90,13 +90,37 @@ RSpec.describe Form::Lettings::Questions::SchemeId, type: :model do
     end
 
     context "when a scheme with at least 1 location exists" do
-      before do
-        FactoryBot.create(:location, scheme:)
+      context "when the location is active" do
+        before do
+          FactoryBot.create(:location, startdate: Time.zone.yesterday, scheme:)
+        end
+
+        it "has the correct answer_options based on the schemes the user's organisation owns or manages" do
+          expected_answer = { "" => "Select an option", scheme.id.to_s => scheme }
+          expect(question.displayed_answer_options(lettings_log)).to eq(expected_answer)
+        end
       end
 
-      it "has the correct answer_options based on the schemes the user's organisation owns or manages" do
-        expected_answer = { "" => "Select an option", scheme.id.to_s => scheme }
-        expect(question.displayed_answer_options(lettings_log)).to eq(expected_answer)
+      context "when the location is activating soon" do
+        before do
+          FactoryBot.create(:location, startdate: Time.zone.tomorrow, scheme:)
+        end
+
+        it "has the correct answer_options based on the schemes the user's organisation owns or manages" do
+          expected_answer = { "" => "Select an option", scheme.id.to_s => scheme }
+          expect(question.displayed_answer_options(lettings_log)).to eq(expected_answer)
+        end
+      end
+
+      context "when the location is activating more than 2 weeks in the future" do
+        before do
+          FactoryBot.create(:location, startdate: Time.zone.today + 3.weeks, scheme:)
+        end
+
+        it "has the correct answer_options based on the schemes the user's organisation owns or manages" do
+          expected_answer = { "" => "Select an option" }
+          expect(question.displayed_answer_options(lettings_log)).to eq(expected_answer)
+        end
       end
     end
 

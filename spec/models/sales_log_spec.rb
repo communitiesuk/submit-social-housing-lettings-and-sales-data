@@ -160,6 +160,124 @@ RSpec.describe SalesLog, type: :model do
     end
   end
 
+  context "when filtering duplicate logs" do
+    let(:log) { create(:sales_log, :duplicate) }
+    let!(:duplicate_log) { create(:sales_log, :duplicate) }
+
+    it "returns all duplicate logs for given log" do
+      expect(described_class.duplicate_logs(log).count).to eq(1)
+    end
+
+    it "returns duplicate log" do
+      expect(described_class.duplicate_logs(log)).to include(duplicate_log)
+    end
+
+    it "does not return the given log" do
+      expect(described_class.duplicate_logs(log)).not_to include(log)
+    end
+
+    context "when there is a deleted duplicate log" do
+      let!(:deleted_duplicate_log) { create(:sales_log, :duplicate, discarded_at: Time.zone.now) }
+
+      it "does not return the deleted log as a duplicate" do
+        expect(described_class.duplicate_logs(log)).not_to include(deleted_duplicate_log)
+      end
+    end
+
+    context "when there is a log with a different sale date" do
+      let!(:different_sale_date_log) { create(:sales_log, :duplicate, saledate: Time.zone.tomorrow) }
+
+      it "does not return a log with a different sale date as a duplicate" do
+        expect(described_class.duplicate_logs(log)).not_to include(different_sale_date_log)
+      end
+    end
+
+    context "when there is a log with a different age1" do
+      let!(:different_age1) { create(:sales_log, :duplicate, age1: 50) }
+
+      it "does not return a log with a different age1 as a duplicate" do
+        expect(described_class.duplicate_logs(log)).not_to include(different_age1)
+      end
+    end
+
+    context "when there is a log with a different sex1" do
+      let!(:different_sex1) { create(:sales_log, :duplicate, sex1: "M") }
+
+      it "does not return a log with a different sex1 as a duplicate" do
+        expect(described_class.duplicate_logs(log)).not_to include(different_sex1)
+      end
+    end
+
+    context "when there is a log with a different ecstat1" do
+      let!(:different_ecstat1) { create(:sales_log, :duplicate, ecstat1: 0) }
+
+      it "does not return a log with a different ecstat1 as a duplicate" do
+        expect(described_class.duplicate_logs(log)).not_to include(different_ecstat1)
+      end
+    end
+
+    context "when there is a log with a different purchid" do
+      let!(:different_purchid) { create(:sales_log, :duplicate, purchid: "different") }
+
+      it "does not return a log with a different purchid as a duplicate" do
+        expect(described_class.duplicate_logs(log)).not_to include(different_purchid)
+      end
+    end
+
+    context "when there is a log with a different postcode_full" do
+      let!(:different_postcode_full) { create(:sales_log, :duplicate, postcode_full: "B1 1AA") }
+
+      it "does not return a log with a different postcode_full as a duplicate" do
+        expect(described_class.duplicate_logs(log)).not_to include(different_postcode_full)
+      end
+    end
+
+    context "when there is a log with nil values for duplicate check fields" do
+      let!(:duplicate_check_fields_not_given) { create(:sales_log, :duplicate, age1: nil, sex1: nil, ecstat1: nil, pcodenk: 1, postcode_full: nil) }
+
+      it "does not return a log with nil values as a duplicate" do
+        log.update!(age1: nil, sex1: nil, ecstat1: nil, pcodenk: 1, postcode_full: nil)
+        expect(described_class.duplicate_logs(log)).not_to include(duplicate_check_fields_not_given)
+      end
+    end
+
+    context "when there is a log with nil values for purchid" do
+      let!(:purchid_not_given) { create(:sales_log, :duplicate, purchid: nil) }
+
+      it "returns the log as a duplicate if purchid is nil" do
+        log.update!(purchid: nil)
+        expect(described_class.duplicate_logs(log)).to include(purchid_not_given)
+      end
+    end
+
+    context "when there is a log age not known" do
+      let!(:age1_not_known) { create(:sales_log, :duplicate, age1_known: 1, age1: nil) }
+
+      it "returns the log as a duplicate if age is not known" do
+        log.update!(age1_known: 1, age1: nil)
+        expect(described_class.duplicate_logs(log)).to include(age1_not_known)
+      end
+    end
+
+    context "when there is a log age pefers not to say" do
+      let!(:age1_prefers_not_to_say) { create(:sales_log, :duplicate, age1_known: 2, age1: nil) }
+
+      it "returns the log as a duplicate if age is prefers not to say" do
+        log.update!(age1_known: 2, age1: nil)
+        expect(described_class.duplicate_logs(log)).to include(age1_prefers_not_to_say)
+      end
+    end
+
+    context "when there is a log age pefers not to say and not known" do
+      let!(:age1_prefers_not_to_say) { create(:sales_log, :duplicate, age1_known: 2, age1: nil) }
+
+      it "does not return the log as a duplicate if age is prefers not to say" do
+        log.update!(age1_known: 1, age1: nil)
+        expect(described_class.duplicate_logs(log)).not_to include(age1_prefers_not_to_say)
+      end
+    end
+  end
+
   describe "derived variables" do
     let(:sales_log) { create(:sales_log, :completed) }
 
