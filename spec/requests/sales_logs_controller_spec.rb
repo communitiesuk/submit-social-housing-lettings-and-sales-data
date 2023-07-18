@@ -552,8 +552,9 @@ RSpec.describe SalesLogsController, type: :request do
           end
 
           it "only shows sales logs for your organisation" do
-            expected_case_row_log = "<span class=\"govuk-visually-hidden\">Log </span>#{sales_log.id}"
-            unauthorized_case_row_log = "<span class=\"govuk-visually-hidden\">Log </span>#{unauthorized_sales_log.id}"
+            expected_case_row_log = "Log #{sales_log.id}"
+            unauthorized_case_row_log = "Log #{unauthorized_sales_log.id}"
+
             expect(CGI.unescape_html(response.body)).to include(expected_case_row_log)
             expect(CGI.unescape_html(response.body)).not_to include(unauthorized_case_row_log)
           end

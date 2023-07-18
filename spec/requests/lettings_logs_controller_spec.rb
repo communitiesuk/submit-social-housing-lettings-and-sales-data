@@ -731,8 +731,8 @@ RSpec.describe LettingsLogsController, type: :request do
           end
 
           it "only shows lettings logs for your organisation" do
-            expected_case_row_log = "<span class=\"govuk-visually-hidden\">Log </span>#{lettings_log.id}"
-            unauthorized_case_row_log = "<span class=\"govuk-visually-hidden\">Log </span>#{unauthorized_lettings_log.id}"
+            expected_case_row_log = "Log #{lettings_log.id}"
+            unauthorized_case_row_log = "Log #{unauthorized_lettings_log.id}"
             expect(CGI.unescape_html(response.body)).to include(expected_case_row_log)
             expect(CGI.unescape_html(response.body)).not_to include(unauthorized_case_row_log)
           end
