@@ -954,51 +954,51 @@ RSpec.describe Location, type: :model do
 
     context "when filtering by incomplete status" do
       it "returns only incomplete locations" do
-        expect(described_class.filter_by_status(["incomplete"]).count).to eq(1)
-        expect(described_class.filter_by_status(["incomplete"]).first).to eq(incomplete_location)
+        expect(described_class.filter_by_status(%w[incomplete]).count).to eq(1)
+        expect(described_class.filter_by_status(%w[incomplete]).first).to eq(incomplete_location)
       end
     end
 
     context "when filtering by active status" do
       it "returns only active locations" do
-        expect(described_class.filter_by_status(["active"]).count).to eq(1)
-        expect(described_class.filter_by_status(["active"]).first).to eq(active_location)
+        expect(described_class.filter_by_status(%w[active]).count).to eq(1)
+        expect(described_class.filter_by_status(%w[active]).first).to eq(active_location)
       end
     end
 
     context "when filtering by deactivating_soon status" do
       it "returns only deactivating_soon locations" do
-        expect(described_class.filter_by_status(["deactivating_soon"]).count).to eq(1)
-        expect(described_class.filter_by_status(["deactivating_soon"]).first).to eq(deactivating_soon_location)
+        expect(described_class.filter_by_status(%w[deactivating_soon]).count).to eq(1)
+        expect(described_class.filter_by_status(%w[deactivating_soon]).first).to eq(deactivating_soon_location)
       end
     end
 
     context "when filtering by deactivated status" do
       it "returns only deactivated locations" do
-        expect(described_class.filter_by_status(["deactivated"]).count).to eq(1)
-        expect(described_class.filter_by_status(["deactivated"]).first).to eq(deactivated_location)
+        expect(described_class.filter_by_status(%w[deactivated]).count).to eq(1)
+        expect(described_class.filter_by_status(%w[deactivated]).first).to eq(deactivated_location)
       end
     end
 
     context "when filtering by reactivating_soon status" do
       it "returns only reactivating_soon locations" do
-        expect(described_class.filter_by_status(["reactivating_soon"]).count).to eq(1)
-        expect(described_class.filter_by_status(["reactivating_soon"]).first).to eq(reactivating_soon_location)
+        expect(described_class.filter_by_status(%w[reactivating_soon]).count).to eq(1)
+        expect(described_class.filter_by_status(%w[reactivating_soon]).first).to eq(reactivating_soon_location)
       end
     end
 
     context "when filtering by activating_soon status" do
       it "returns only activating_soon locations" do
-        expect(described_class.filter_by_status(["activating_soon"]).count).to eq(1)
-        expect(described_class.filter_by_status(["activating_soon"]).first).to eq(activating_soon_location)
+        expect(described_class.filter_by_status(%w[activating_soon]).count).to eq(1)
+        expect(described_class.filter_by_status(%w[activating_soon]).first).to eq(activating_soon_location)
       end
     end
 
     context "when filtering by multiple statuses" do
       it "returns only activating_soon locations" do
-        expect(described_class.filter_by_status(["deactivating_soon", "activating_soon"]).count).to eq(2)
-        expect(described_class.filter_by_status(["deactivating_soon", "activating_soon"])).to include(activating_soon_location)
-        expect(described_class.filter_by_status(["deactivating_soon", "activating_soon"])).to include(deactivating_soon_location)
+        expect(described_class.filter_by_status(%w[deactivating_soon activating_soon]).count).to eq(2)
+        expect(described_class.filter_by_status(%w[deactivating_soon activating_soon])).to include(activating_soon_location)
+        expect(described_class.filter_by_status(%w[deactivating_soon activating_soon])).to include(deactivating_soon_location)
       end
     end
   end

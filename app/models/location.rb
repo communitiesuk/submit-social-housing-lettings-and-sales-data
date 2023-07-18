@@ -27,51 +27,55 @@ class Location < ApplicationRecord
   scope :active_in_2_weeks, -> { where(confirmed: true).and(started_in_2_weeks) }
   scope :confirmed, -> { where(confirmed: true) }
   scope :unconfirmed, -> { where.not(confirmed: true) }
-  scope :filter_by_status, ->(statuses, _user = nil) {
+  scope :filter_by_status, lambda { |statuses, _user = nil|
     filtered_records = all
     scopes = []
-  
+
     statuses.each do |status|
       if respond_to?(status, true)
-        status == "active" ? scopes << send("active_status") : scopes << send(status)
+        scopes << (status == "active" ? send("active_status") : send(status))
       end
     end
-  
-    filtered_records = filtered_records.left_outer_joins(:location_deactivation_periods).merge(scopes.reduce(&:or)) if scopes.any?
-  
+
+    if scopes.any?
+      filtered_records = filtered_records
+      .left_outer_joins(:location_deactivation_periods)
+      .order("location_deactivation_periods.created_at DESC")
+      .merge(scopes.reduce(&:or))
+    end
+
     filtered_records
   }
-  
-  scope :incomplete, -> {
-      where(confirmed: false)
+
+  scope :incomplete, lambda {
+    where.not(confirmed: true)
   }
-  
-  scope :deactivated, -> {
-      merge(LocationDeactivationPeriod.deactivations_without_reactivation)
-      .where("location_deactivation_periods.deactivation_date <= ?", Time.zone.now)
+
+  scope :deactivated, lambda {
+    merge(LocationDeactivationPeriod.deactivations_without_reactivation)
+    .where("location_deactivation_periods.deactivation_date <= ?", Time.zone.now)
   }
-  
-  scope :deactivating_soon, -> {
-      merge(LocationDeactivationPeriod.deactivations_without_reactivation)
-      .where("location_deactivation_periods.deactivation_date > ?", Time.zone.now)
+
+  scope :deactivating_soon, lambda {
+    merge(LocationDeactivationPeriod.deactivations_without_reactivation)
+    .where("location_deactivation_periods.deactivation_date > ?", Time.zone.now)
   }
-  
-  scope :reactivating_soon, -> {
-      where.not("location_deactivation_periods.reactivation_date IS NULL")
-      .order("location_deactivation_periods.created_at DESC")
-      .where("location_deactivation_periods.reactivation_date > ?", Time.zone.now)
+
+  scope :reactivating_soon, lambda {
+    where.not("location_deactivation_periods.reactivation_date IS NULL")
+    .where("location_deactivation_periods.reactivation_date > ?", Time.zone.now)
   }
-  
-  scope :activating_soon, -> {
+
+  scope :activating_soon, lambda {
     where("startdate > ?", Time.zone.now)
   }
-  
-  scope :active_status, -> {
-      where.not(id: joins(:location_deactivation_periods).reactivating_soon.pluck(:id))
-      .where.not(id: joins(:location_deactivation_periods).deactivated.pluck(:id))
-      .where.not(id: incomplete.pluck(:id))
-      .where.not(id: joins(:location_deactivation_periods).deactivating_soon.pluck(:id))
-      .where.not(id: activating_soon.pluck(:id))
+
+  scope :active_status, lambda {
+    where.not(id: joins(:location_deactivation_periods).reactivating_soon.pluck(:id))
+    .where.not(id: joins(:location_deactivation_periods).deactivated.pluck(:id))
+    .where.not(id: incomplete.pluck(:id))
+    .where.not(id: joins(:location_deactivation_periods).deactivating_soon.pluck(:id))
+    .where.not(id: activating_soon.pluck(:id))
   }
 
   LOCAL_AUTHORITIES = LocalAuthority.all.map { |la| [la.name, la.code] }.to_h
