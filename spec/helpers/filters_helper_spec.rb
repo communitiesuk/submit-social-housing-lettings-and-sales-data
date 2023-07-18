@@ -86,7 +86,7 @@ RSpec.describe FiltersHelper do
     end
 
     context "when organisation and user are set to all" do
-      let(:filters) { { "owning_organisation_select" => "all", "user" => "all" } }
+      let(:filters) { { "owning_organisation_select" => "all", "assigned_to" => "all" } }
 
       it "returns false" do
         expect(result).to be_falsey
