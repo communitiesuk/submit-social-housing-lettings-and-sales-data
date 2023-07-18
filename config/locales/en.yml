@@ -441,7 +441,7 @@ en:
           must_be_16_19: "Person must be aged 16-19 if they are a student and have relationship ‘child’"
         partner_under_16: "Cannot be under 16 if the relationship is partner"
         lead:
-          over_20: "The lead tenant must be under 20 as you told us their housing situation immediately before this letting was a children’s home or foster care"
+          over_25: "The lead tenant must be under 26 as you told us their housing situation immediately before this letting was a children’s home or foster care"
       ecstat:
         retired_over_70: "Person %{person_num} must be retired if over 70"
         child_under_16: "Person %{person_num}’s working situation must be ‘child under 16’ as you told us they’re under 16"
@@ -475,7 +475,7 @@ en:
         no_and_dont_know_disabled_needs_conjunction: "No disabled access needs and don’t know disabled access needs cannot be selected together"
       prevten:
         non_temp_accommodation: "Answer cannot be non-temporary accommodation as this is a re-let to a tenant who occupied the same property as temporary accommodation"
-        over_20_foster_care: "Answer cannot be a children’s home or foster care as the lead tenant is 20 or older"
+        over_25_foster_care: "Answer cannot be a children’s home or foster care as the lead tenant is 26 or older"
         male_refuge: "Answer cannot be a refuge as the lead tenant identifies as male"
         internal_transfer: "Answer cannot be %{prevten} as this tenancy is an internal transfer"
         la_general_needs:
