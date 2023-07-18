@@ -434,5 +434,65 @@ RSpec.describe "Lettings Log Features" do
         expect(page).to have_current_path("/lettings-logs")
       end
     end
+
+    context "when a log becomes a duplicate" do
+      let(:lettings_log) { create(:lettings_log, :duplicate, owning_organisation: user.organisation, created_by: user) }
+      let!(:duplicate_log) { create(:lettings_log, :duplicate, owning_organisation: user.organisation, created_by: user) }
+
+      before do
+        lettings_log.update!(tenancycode: "different")
+        visit("/lettings-logs/#{lettings_log.id}/tenant-code")
+        fill_in("lettings-log-tenancycode-field", with: duplicate_log.tenancycode)
+        click_button("Save and continue")
+      end
+
+      it "allows keeping the original log and deleting duplicates" do
+        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
+        click_link("Keep this log and delete duplicates", href: "/lettings-logs/#{lettings_log.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
+        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
+        click_button "Delete this log"
+        duplicate_log.reload
+        expect(duplicate_log.deleted?).to be true
+        expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+        expect(page).to have_content("Log #{duplicate_log.id} has been deleted.")
+        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
+        expect(page).not_to have_content("These logs are duplicates")
+        expect(page).not_to have_link("Keep this log and delete duplicates")
+        expect(page).to have_link("Back to Log #{lettings_log.id}", href: "/lettings-logs/#{lettings_log.id}")
+      end
+
+      it "allows changing answers on remaining original log" do
+        click_link("Keep this log and delete duplicates", href: "/lettings-logs/#{lettings_log.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
+        click_button "Delete this log"
+        click_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?original_log_id=#{lettings_log.id}&referrer=interruption_screen")
+        click_button("Save and continue")
+        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
+        expect(page).to have_link("Back to Log #{lettings_log.id}", href: "/lettings-logs/#{lettings_log.id}")
+      end
+
+      it "allows keeping the duplicate log and deleting the original one" do
+        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
+        click_link("Keep this log and delete duplicates", href: "/lettings-logs/#{duplicate_log.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
+        expect(page).to have_current_path("/lettings-logs/#{duplicate_log.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
+        click_button "Delete this log"
+        lettings_log.reload
+        expect(lettings_log.status).to eq("deleted")
+        expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+        expect(page).to have_content("Log #{lettings_log.id} has been deleted.")
+        expect(page).to have_current_path("/lettings-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
+        expect(page).not_to have_content("These logs are duplicates")
+        expect(page).not_to have_link("Keep this log and delete duplicates")
+        expect(page).to have_link("Back to lettings logs", href: "/lettings-logs")
+      end
+
+      it "allows changing answers to remaining duplicate log" do
+        click_link("Keep this log and delete duplicates", href: "/lettings-logs/#{duplicate_log.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
+        click_button "Delete this log"
+        click_link("Change", href: "/lettings-logs/#{duplicate_log.id}/tenant-code?original_log_id=#{lettings_log.id}&referrer=interruption_screen")
+        click_button("Save and continue")
+        expect(page).to have_current_path("/lettings-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
+        expect(page).to have_link("Back to lettings logs", href: "/lettings-logs")
+      end
+    end
   end
 end

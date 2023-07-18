@@ -141,9 +141,16 @@ private
     return unless query_params
 
     parsed_params = CGI.parse(query_params)
-    return unless parsed_params["referrer"]
+    parsed_params["referrer"]&.first
+  end
 
-    parsed_params["referrer"][0]
+  def original_duplicate_log_id_from_query
+    query_params = URI.parse(request.url).query
+
+    return unless query_params
+
+    parsed_params = CGI.parse(query_params)
+    parsed_params["original_log_id"]&.first
   end
 
   def previous_interruption_screen_page_id
@@ -158,10 +165,10 @@ private
     if FeatureToggle.deduplication_flow_enabled?
       if @log.lettings?
         if current_user.lettings_logs.duplicate_logs(@log).count.positive?
-          return send("lettings_log_duplicate_logs_path", @log)
+          return send("lettings_log_duplicate_logs_path", @log, original_log_id: @log.id)
         end
       elsif current_user.sales_logs.duplicate_logs(@log).count.positive?
-        return send("sales_log_duplicate_logs_path", @log)
+        return send("sales_log_duplicate_logs_path", @log, original_log_id: @log.id)
       end
     end
 
@@ -177,7 +184,7 @@ private
       end
     end
     if previous_interruption_screen_page_id.present?
-      return send("#{@log.class.name.underscore}_#{previous_interruption_screen_page_id}_path", @log, { referrer: previous_interruption_screen_referrer }.compact)
+      return send("#{@log.class.name.underscore}_#{previous_interruption_screen_page_id}_path", @log, { referrer: previous_interruption_screen_referrer, original_log_id: original_duplicate_log_id_from_query }.compact)
     end
 
     redirect_path = form.next_page_redirect_path(@page, @log, current_user)

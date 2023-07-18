@@ -5,8 +5,13 @@ module FiltersHelper
     selected_filters = JSON.parse(session[session_name_for(filter_type)])
     return true if !selected_filters.key?("user") && filter == "assigned_to" && value == :all
     return true if selected_filters["assigned_to"] == "specific_user" && filter == "assigned_to" && value == :specific_user
-    return true if !selected_filters.key?("organisation") && filter == "organisation_select" && value == :all
-    return true if selected_filters["organisation"].present? && filter == "organisation_select" && value == :specific_org
+
+    return true if !selected_filters.key?("owning_organisation") && filter == "owning_organisation_select" && value == :all
+    return true if !selected_filters.key?("managing_organisation") && filter == "managing_organisation_select" && value == :all
+
+    return true if selected_filters["owning_organisation"].present? && filter == "owning_organisation_select" && value == :specific_org
+    return true if selected_filters["managing_organisation"].present? && filter == "managing_organisation_select" && value == :specific_org
+
     return false if selected_filters[filter].blank?
 
     selected_filters[filter].include?(value.to_s)
@@ -19,6 +24,7 @@ module FiltersHelper
     filters = JSON.parse(filters_json)
     filters["user"].present? ||
       filters["organisation"].present? ||
+      filters["managing_organisation"].present? ||
       filters["status"]&.compact_blank&.any? ||
       filters["years"]&.compact_blank&.any? ||
       filters["bulk_upload_id"].present?
@@ -38,8 +44,8 @@ module FiltersHelper
     JSON.parse(session[session_name_for(filter_type)])[filter] || ""
   end
 
-  def organisations_filter_options(user)
-    organisation_options = user.support? ? Organisation.all : [user.organisation] + user.organisation.managing_agents
+  def owning_organisations_filter_options(user)
+    organisation_options = user.support? ? Organisation.all : [user.organisation] + user.organisation.stock_owners
     [OpenStruct.new(id: "", name: "Select an option")] + organisation_options.map { |org| OpenStruct.new(id: org.id, name: org.name) }
   end
 
@@ -60,6 +66,11 @@ module FiltersHelper
     if applied_filters_count(filter_type).positive?
       govuk_link_to "Clear", clear_filters_path(filter_type:)
     end
+  end
+
+  def managing_organisation_filter_options(user)
+    organisation_options = user.support? ? Organisation.all : [user.organisation] + user.organisation.managing_agents
+    [OpenStruct.new(id: "", name: "Select an option")] + organisation_options.map { |org| OpenStruct.new(id: org.id, name: org.name) }
   end
 
 private

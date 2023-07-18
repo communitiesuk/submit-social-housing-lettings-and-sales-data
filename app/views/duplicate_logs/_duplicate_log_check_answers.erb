@@ -29,7 +29,7 @@
 
           <% row.action(
             text: question.action_text(@log),
-            href: action_href(@log, question.page.id),
+            href: duplicate_logs_action_href(@log, question.page.id, @original_log_id),
             visually_hidden_text: question.check_answer_label.to_s.downcase,
           ) %>
         <% end %>

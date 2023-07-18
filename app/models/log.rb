@@ -24,7 +24,7 @@ class Log < ApplicationRecord
     "single log" => 1,
     "bulk upload" => 2,
   }.freeze
-  enum creation_method: CREATION_METHOD
+  enum creation_method: CREATION_METHOD, _prefix: true
 
   scope :visible, -> { where(status: %w[not_started in_progress completed]) }
   scope :exportable, -> { where(status: %w[not_started in_progress completed deleted]) }
@@ -178,10 +178,6 @@ class Log < ApplicationRecord
       self.county = nil
       process_postcode_changes!
     end
-  end
-
-  def bulk_uploaded?
-    bulk_upload_id.present?
   end
 
   def collection_closed_for_editing?

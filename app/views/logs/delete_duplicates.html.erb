@@ -1,0 +1,40 @@
+<% content_for :before_content do %>
+  <% content_for :title, "Are you sure you want to delete #{@duplicate_logs.count == 1 ? 'this duplicate log' : 'these duplicate logs'}?" %>
+  <%= govuk_back_link href: @log.lettings? ? lettings_log_duplicate_logs_path(@log) : sales_log_duplicate_logs_path(@log) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <span class="govuk-caption-l">Delete duplicate logs</span>
+    <h1 class="govuk-heading-l">
+      <%= content_for(:title) %>
+    </h1>
+
+    <%= govuk_warning_text(text: "You will not be able to undo this action.") %>
+
+    <p class="govuk-body govuk-!-margin-bottom-2">
+      <%= @duplicate_logs.count == 1 ? "This log" : "These logs" %> will be deleted:
+    </p>
+    <ul class="govuk-list govuk-!-margin-bottom-6">
+      <% @duplicate_logs.each do |duplicate_log| %>
+        <li>
+          <strong>
+            <%= govuk_link_to "Log #{duplicate_log.id}", url_for(duplicate_log) %>
+          </strong>
+        </li>
+      <% end %>
+    </ul>
+
+    <div class="govuk-button-group">
+      <%= govuk_button_to @duplicate_logs.count == 1 ? "Delete this log" : "Delete these logs",
+        send("delete_logs_#{@log.class.name.underscore}s_path"),
+        method: "delete",
+        params: { ids: @duplicate_logs.map(&:id), original_log_id: @original_log_id, remaining_log_id: @log.id } %>
+      <%= govuk_button_link_to(
+        "Cancel",
+        send("#{@log.class.name.underscore}_duplicate_logs_path", @log),
+        secondary: true,
+      ) %>
+    </div>
+  </div>
+</div>

@@ -568,7 +568,7 @@ RSpec.describe FormController, type: :request do
             end
 
             it "redirects to the duplicate logs page" do
-              expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/duplicate-logs")
+              expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
               follow_redirect!
               expect(page).to have_content("These logs are duplicates")
             end
@@ -601,7 +601,7 @@ RSpec.describe FormController, type: :request do
             end
 
             it "redirects to the duplicate logs page" do
-              expect(response).to redirect_to("/sales-logs/#{sales_log.id}/duplicate-logs")
+              expect(response).to redirect_to("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
               follow_redirect!
               expect(page).to have_content("These logs are duplicates")
             end

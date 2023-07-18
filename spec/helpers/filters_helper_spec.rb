@@ -39,34 +39,34 @@ RSpec.describe FiltersHelper do
 
     context "when support user is using the organisation filter" do
       before do
-        session[:lettings_logs_filters] = { "organisation": "1" }.to_json
+        session[:lettings_logs_filters] = { "owning_organisation": "1" }.to_json
       end
 
-      it "returns true for the parent organisation_select filter" do
-        expect(filter_selected?("organisation_select", :specific_org, "lettings_logs")).to be true
-        expect(filter_selected?("organisation_select", :all, "lettings_logs")).to be false
+      it "returns true for the parent owning_organisation_select filter" do
+        expect(filter_selected?("owning_organisation_select", :specific_org, "lettings_logs")).to be true
+        expect(filter_selected?("owning_organisation_select", :all, "lettings_logs")).to be false
       end
     end
 
-    context "when support user has not set the organisation_select filter" do
+    context "when support user has not set the owning_organisation_select filter" do
       before do
         session[:lettings_logs_filters] = {}.to_json
       end
 
       it "defaults to all organisations" do
-        expect(filter_selected?("organisation_select", :all, "lettings_logs")).to be true
-        expect(filter_selected?("organisation_select", :specific_org, "lettings_logs")).to be false
+        expect(filter_selected?("owning_organisation_select", :all, "lettings_logs")).to be true
+        expect(filter_selected?("owning_organisation_select", :specific_org, "lettings_logs")).to be false
       end
     end
 
-    context "when the specific organisation filter is not set" do
+    context "when the specific owning organisation filter is not set" do
       before do
         session[:lettings_logs_filters] = { "status" => [""], "years" => [""], "assigned_to" => "all" }.to_json
       end
 
       it "marks the all options as checked" do
-        expect(filter_selected?("organisation_select", :all, "lettings_logs")).to be true
-        expect(filter_selected?("organisation_select", :specific_org, "lettings_logs")).to be false
+        expect(filter_selected?("owning_organisation_select", :all, "lettings_logs")).to be true
+        expect(filter_selected?("owning_organisation_select", :specific_org, "lettings_logs")).to be false
       end
     end
   end
@@ -86,7 +86,7 @@ RSpec.describe FiltersHelper do
     end
 
     context "when organisation and user are set to all" do
-      let(:filters) { { "organisation_select" => "all", "assigned_to" => "all" } }
+      let(:filters) { { "owning_organisation_select" => "all", "user" => "all" } }
 
       it "returns false" do
         expect(result).to be_falsey
@@ -161,7 +161,7 @@ RSpec.describe FiltersHelper do
     end
   end
 
-  describe "#organisations_filter_options" do
+  describe "#owning_organisations_filter_options" do
     let(:parent_organisation) { FactoryBot.create(:organisation, name: "Parent organisation") }
     let(:child_organisation) { FactoryBot.create(:organisation, name: "Child organisation") }
 
@@ -171,10 +171,10 @@ RSpec.describe FiltersHelper do
     end
 
     context "with a support user" do
-      let(:user) { FactoryBot.create(:user, :support, organisation: parent_organisation) }
+      let(:user) { FactoryBot.create(:user, :support, organisation: child_organisation) }
 
       it "returns a list of all organisations" do
-        expect(organisations_filter_options(user)).to eq([
+        expect(owning_organisations_filter_options(user)).to eq([
           OpenStruct.new(id: "", name: "Select an option"),
           OpenStruct.new(id: parent_organisation.id, name: "Parent organisation"),
           OpenStruct.new(id: child_organisation.id, name: "Child organisation"),
@@ -184,13 +184,13 @@ RSpec.describe FiltersHelper do
     end
 
     context "with a data coordinator user" do
-      let(:user) { FactoryBot.create(:user, :data_coordinator, organisation: parent_organisation) }
+      let(:user) { FactoryBot.create(:user, :data_coordinator, organisation: child_organisation) }
 
-      it "returns a list of managing agents and your own organisation" do
-        expect(organisations_filter_options(user)).to eq([
+      it "returns a list of paret orgs and your own organisation" do
+        expect(owning_organisations_filter_options(user)).to eq([
           OpenStruct.new(id: "", name: "Select an option"),
-          OpenStruct.new(id: parent_organisation.id, name: "Parent organisation"),
           OpenStruct.new(id: child_organisation.id, name: "Child organisation"),
+          OpenStruct.new(id: parent_organisation.id, name: "Parent organisation"),
         ])
       end
     end

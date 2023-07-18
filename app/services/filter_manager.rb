@@ -21,7 +21,8 @@ class FilterManager
 
     filters.each do |category, values|
       next if Array(values).reject(&:empty?).blank?
-      next if category == "organisation" && all_orgs
+      next if category == "owning_organisation" && all_orgs
+      next if category == "managing_organisation" && all_orgs
       next if category == "assigned_to"
 
       logs = logs.public_send("filter_by_#{category}", values, user)
@@ -55,22 +56,18 @@ class FilterManager
       end
     end
 
-    if params["organisation_select"] == "all"
-      new_filters = new_filters.except("organisation")
-    end
-    if params["assigned_to"] == "all"
-      new_filters = new_filters.except("user")
-    end
+    new_filters = new_filters.except("owning_organisation") if params["owning_organisation_select"] == "all"
+    new_filters = new_filters.except("managing_organisation") if params["managing_organisation_select"] == "all"
 
-    if params["assigned_to"] == "you"
-      new_filters["user"] = current_user.id.to_s
-    end
+    new_filters = new_filters.except("user") if params["assigned_to"] == "all"
+    new_filters["user"] = current_user.id.to_s if params["assigned_to"] == "you"
 
     new_filters
   end
 
   def filtered_logs(logs, search_term, filters)
-    all_orgs = params["organisation_select"] == "all"
+    all_orgs = params["managing_organisation_select"] == "all" && params["owning_organisation_select"] == "all"
+
     FilterManager.filter_logs(logs, search_term, filters, all_orgs, current_user)
   end
 

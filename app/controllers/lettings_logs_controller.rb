@@ -77,7 +77,7 @@ class LettingsLogsController < LogsController
 
     @log.discard!
 
-    redirect_to lettings_logs_path, notice: "Log #{@log.id} has been deleted"
+    redirect_to lettings_logs_path, notice: "Log #{@log.id} has been deleted."
   end
 
   def delete_confirmation

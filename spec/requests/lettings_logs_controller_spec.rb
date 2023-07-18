@@ -354,10 +354,16 @@ RSpec.describe LettingsLogsController, type: :request do
               expect(page).not_to have_link(completed_lettings_log.id.to_s)
             end
 
-            it "filters on organisation" do
-              get "/lettings-logs?organisation[]=#{organisation_2.id}", headers:, params: {}
+            it "filters on owning organisation" do
+              get "/lettings-logs?owning_organisation[]=#{organisation_2.id}", headers:, params: {}
               expect(page).to have_link(completed_lettings_log.id.to_s)
               expect(page).not_to have_link(in_progress_lettings_log.id.to_s)
+            end
+
+            it "filtering on owning organisation does not return managed orgs" do
+              get "/lettings-logs?owning_organisation[]=#{organisation.id}", headers:, params: {}
+              expect(page).not_to have_link(completed_lettings_log.id.to_s)
+              expect(page).to have_link(in_progress_lettings_log.id.to_s)
             end
 
             it "does not reset the filters" do
@@ -780,23 +786,10 @@ RSpec.describe LettingsLogsController, type: :request do
             sign_in user
           end
 
-          it "does show the organisation filter" do
-            get "/lettings-logs", headers:, params: {}
-            expect(page).to have_field("organisation-field")
-          end
-
           it "shows all logs by default" do
             get "/lettings-logs", headers:, params: {}
             expect(page).to have_content(tenant_code_1)
             expect(page).to have_content(tenant_code_2)
-          end
-
-          context "when filtering by organisation" do
-            it "only show the selected organisations logs" do
-              get "/lettings-logs?organisation_select=specific_org&organisation=#{org_1.id}", headers:, params: {}
-              expect(page).to have_content(tenant_code_1)
-              expect(page).not_to have_content(tenant_code_2)
-            end
           end
 
           context "when filtering by a specific user" do
@@ -1447,7 +1440,7 @@ RSpec.describe LettingsLogsController, type: :request do
         delete_request
         expect(response).to redirect_to(lettings_logs_path)
         follow_redirect!
-        expect(page).to have_content("Log #{id} has been deleted")
+        expect(page).to have_content("Log #{id} has been deleted.")
       end
 
       it "marks the log as deleted" do

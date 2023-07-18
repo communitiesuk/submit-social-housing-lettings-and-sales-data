@@ -250,12 +250,6 @@ RSpec.describe SalesLogsController, type: :request do
               expect(page).not_to have_link(completed_sales_log.id.to_s)
             end
 
-            it "filters on organisation" do
-              get "/sales-logs?organisation[]=#{organisation_2.id}", headers: headers, params: {}
-              expect(page).to have_link(completed_sales_log.id.to_s)
-              expect(page).not_to have_link(not_started_sales_log.id.to_s)
-            end
-
             it "does not reset the filters" do
               get "/sales-logs?status[]=not_started", headers: headers, params: {}
               expect(page).to have_link(not_started_sales_log.id.to_s)
@@ -418,14 +412,14 @@ RSpec.describe SalesLogsController, type: :request do
               let(:other_user) { create(:user, organisation:) }
               let(:bulk_upload) { create(:bulk_upload, :sales, user: other_user) }
 
-              let!(:excluded_log) { create(:sales_log, bulk_upload:, owning_organisation: organisation) }
-              let!(:also_excluded_log) { create(:sales_log, owning_organisation: organisation) }
+              let!(:excluded_log) { create(:sales_log, bulk_upload:, owning_organisation: organisation, purchid: "fake_tenancy_code") }
+              let!(:also_excluded_log) { create(:sales_log, owning_organisation: organisation, purchid: "fake_tenancy_code_too") }
 
               it "does not return any logs" do
                 get "/sales-logs?bulk_upload_id[]=#{bulk_upload.id}"
 
-                expect(page).not_to have_content(excluded_log.id)
-                expect(page).not_to have_content(also_excluded_log.id)
+                expect(page).not_to have_content(excluded_log.purchid)
+                expect(page).not_to have_content(also_excluded_log.purchid)
               end
             end
 
@@ -910,7 +904,7 @@ RSpec.describe SalesLogsController, type: :request do
         delete_request
         expect(response).to redirect_to(sales_logs_path)
         follow_redirect!
-        expect(page).to have_content("Log #{id} has been deleted")
+        expect(page).to have_content("Log #{id} has been deleted.")
       end
 
       it "marks the log as deleted" do

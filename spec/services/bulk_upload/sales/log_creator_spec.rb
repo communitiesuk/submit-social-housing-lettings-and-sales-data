@@ -38,7 +38,7 @@ RSpec.describe BulkUpload::Sales::LogCreator do
       it "sets the creation method" do
         service.call
 
-        expect(SalesLog.last.creation_method).to eq "bulk upload"
+        expect(SalesLog.last.creation_method_bulk_upload?).to be true
       end
     end
 

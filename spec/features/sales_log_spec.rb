@@ -182,4 +182,67 @@ RSpec.describe "Sales Log Features" do
       end
     end
   end
+
+  context "when a log becomes a duplicate" do
+    let(:user) { create(:user, :data_coordinator) }
+    let(:sales_log) { create(:sales_log, :duplicate, created_by: user) }
+    let!(:duplicate_log) { create(:sales_log, :duplicate, created_by: user) }
+
+    before do
+      allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+      sign_in user
+      sales_log.update!(purchid: "different")
+      visit("/sales-logs/#{sales_log.id}/purchaser-code")
+      fill_in("sales-log-purchid-field", with: duplicate_log.purchid)
+      click_button("Save and continue")
+    end
+
+    it "allows keeping the original log and deleting duplicates" do
+      expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
+      click_link("Keep this log and delete duplicates", href: "/sales-logs/#{sales_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
+      expect(page).to have_current_path("/sales-logs/#{sales_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
+      click_button "Delete this log"
+      duplicate_log.reload
+      expect(duplicate_log.deleted?).to be true
+      expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+      expect(page).to have_content("Log #{duplicate_log.id} has been deleted.")
+      expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
+      expect(page).not_to have_content("These logs are duplicates")
+      expect(page).not_to have_link("Keep this log and delete duplicates")
+      expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
+    end
+
+    it "allows changing answer on remaining original log" do
+      click_link("Keep this log and delete duplicates", href: "/sales-logs/#{sales_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
+      click_button "Delete this log"
+      click_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=interruption_screen")
+      click_button("Save and continue")
+      expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
+      expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
+    end
+
+    it "allows keeping the duplicate log and deleting the original one" do
+      expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
+      click_link("Keep this log and delete duplicates", href: "/sales-logs/#{duplicate_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
+      expect(page).to have_current_path("/sales-logs/#{duplicate_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
+      click_button "Delete this log"
+      sales_log.reload
+      expect(sales_log.status).to eq("deleted")
+      expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+      expect(page).to have_content("Log #{sales_log.id} has been deleted.")
+      expect(page).to have_current_path("/sales-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
+      expect(page).not_to have_content("These logs are duplicates")
+      expect(page).not_to have_link("Keep this log and delete duplicates")
+      expect(page).to have_link("Back to sales logs", href: "/sales-logs")
+    end
+
+    it "allows changing answers on remaining duplicate log" do
+      click_link("Keep this log and delete duplicates", href: "/sales-logs/#{duplicate_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
+      click_button "Delete this log"
+      click_link("Change", href: "/sales-logs/#{duplicate_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=interruption_screen")
+      click_button("Save and continue")
+      expect(page).to have_current_path("/sales-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
+      expect(page).to have_link("Back to sales logs", href: "/sales-logs")
+    end
+  end
 end

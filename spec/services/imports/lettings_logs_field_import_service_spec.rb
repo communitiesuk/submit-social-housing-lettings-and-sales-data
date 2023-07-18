@@ -10,7 +10,7 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
   let(:fixture_directory) { "spec/fixtures/imports/logs" }
 
   let(:lettings_log_id) { "0ead17cb-1668-442d-898c-0d52879ff592" }
-  let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id) }
+  let(:lettings_log_file) { File.open("#{fixture_directory}/#{lettings_log_id}.xml") }
   let(:lettings_log_xml) { Nokogiri::XML(lettings_log_file) }
   let(:remote_folder) { "lettings_logs" }
   let(:old_user_id) { "c3061a2e6ea0b702e6f6210d5c52d2a92612d2aa" }
@@ -21,12 +21,6 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
       Singleton.__init__(FormHandler)
       example.run
     end
-    Timecop.return
-    Singleton.__init__(FormHandler)
-  end
-
-  def open_file(directory, filename)
-    File.open("#{directory}/#{filename}.xml")
   end
 
   before do
@@ -83,7 +77,51 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
     end
   end
 
-  context "when updating letings allocation values" do
+  context "when updating creation method" do
+    let(:field) { "creation_method" }
+    let(:lettings_log) { LettingsLog.find_by(old_id: lettings_log_id) }
+
+    before do
+      Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+      lettings_log_file.rewind
+    end
+
+    context "and the log was manually entered" do
+      it "logs that bulk upload id does not need setting" do
+        expect(logger).to receive(:info).with("lettings log with old id #{lettings_log_id} entered manually, no need for update")
+        expect { import_service.update_field(field, remote_folder) }.not_to(change { lettings_log.reload.creation_method })
+      end
+    end
+
+    context "and the log was bulk uploaded and the creation method is already correct" do
+      let(:lettings_log_id) { "166fc004-392e-47a8-acb8-1c018734882b" }
+
+      it "logs that bulk upload id does not need setting" do
+        expect(logger).to receive(:info).with(/lettings log \d+ creation method already set to bulk upload, no need for update/)
+        expect { import_service.update_field(field, remote_folder) }.not_to(change { lettings_log.reload.creation_method })
+      end
+    end
+
+    context "and the log was bulk uploaded and the creation method requires updating" do
+      let(:lettings_log_id) { "166fc004-392e-47a8-acb8-1c018734882b" }
+
+      it "logs that bulk upload id does not need setting" do
+        lettings_log.creation_method_single_log!
+        expect(logger).to receive(:info).with(/lettings log \d+ creation method set to bulk upload/)
+        expect { import_service.update_field(field, remote_folder) }.to change { lettings_log.reload.creation_method }.to "bulk upload"
+      end
+    end
+
+    context "and the log was not previously imported" do
+      it "logs a warning that the log has not been found in the db" do
+        lettings_log.destroy!
+        expect(logger).to receive(:warn).with("lettings log with old id #{lettings_log_id} not found")
+        import_service.update_field(field, remote_folder)
+      end
+    end
+  end
+
+  context "when updating lettings allocation values" do
     let(:field) { "lettings_allocation" }
     let(:lettings_log) { LettingsLog.find_by(old_id: lettings_log_id) }
 
