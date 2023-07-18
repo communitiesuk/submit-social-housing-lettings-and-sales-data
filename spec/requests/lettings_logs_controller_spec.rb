@@ -521,7 +521,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
               it "displays card with help info" do
                 get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
-                expect(page).to have_content("You have uploaded 1 log. There are errors in 1 log and 1 error in total. Select the log to fix the errors.")
+                expect(page).to have_content("You have uploaded 1 log. There are errors in 1 log, and 1 error in total. Select the log to fix the errors.")
               end
 
               it "displays meta info about the bulk upload" do
