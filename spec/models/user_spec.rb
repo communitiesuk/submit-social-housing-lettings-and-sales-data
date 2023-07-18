@@ -151,8 +151,8 @@ RSpec.describe User, type: :model do
           create(:organisation_relationship, child_organisation: user.organisation)
         end
 
-        it "can filter lettings logs by user, owning_organisation, year and status" do
-          expect(user.logs_filters).to eq(%w[status years user owning_organisation bulk_upload_id])
+        it "can filter lettings logs by user, year, status, managing_organisation and owning_organisation" do
+          expect(user.logs_filters).to match_array(%w[status years user managing_organisation owning_organisation bulk_upload_id])
         end
       end
     end
@@ -192,8 +192,8 @@ RSpec.describe User, type: :model do
         })
       end
 
-      it "can filter lettings logs by user, owning_organisation, year and status" do
-        expect(user.logs_filters).to eq(%w[status years user owning_organisation bulk_upload_id])
+      it "can filter lettings logs by user, year, status, managing_organisation and owning_organisation" do
+        expect(user.logs_filters).to match_array(%w[status years user owning_organisation managing_organisation bulk_upload_id])
       end
     end
 
