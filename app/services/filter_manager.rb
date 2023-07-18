@@ -56,7 +56,6 @@ class FilterManager
       end
     end
 
-    new_filters = new_filters.except("organisation") if params["organisation_select"] == "all"
     new_filters = new_filters.except("owning_organisation") if params["owning_organisation_select"] == "all"
     new_filters = new_filters.except("managing_organisation") if params["managing_organisation_select"] == "all"
 
