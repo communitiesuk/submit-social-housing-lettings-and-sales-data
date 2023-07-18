@@ -17,6 +17,7 @@ class LocationsController < ApplicationController
     @pagy, @locations = pagy(filter_manager.filtered_locations(@scheme.locations, search_term, session_filters))
     @total_count = @scheme.locations.size
     @searched = search_term.presence
+    @filter_type = "scheme_locations"
   end
 
   def create
@@ -301,7 +302,7 @@ private
   helper_method :return_to_check_your_answers?
 
   def filter_manager
-    FilterManager.new(current_user:, session:, params:, filter_type: "locations")
+    FilterManager.new(current_user:, session:, params:, filter_type: "scheme_locations")
   end
 
   def session_filters

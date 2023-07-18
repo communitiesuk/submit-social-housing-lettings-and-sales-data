@@ -97,7 +97,7 @@ class FilterManager
       new_filters["user"] = current_user.id.to_s if params["assigned_to"] == "you"
     end
 
-    if (filter_type.include?("schemes") || filter_type.include?("users") || filter_type.include?("locations")) && params["status"].present?
+    if (filter_type.include?("schemes") || filter_type.include?("users") || filter_type.include?("scheme_locations")) && params["status"].present?
       new_filters["status"] = params["status"]
     end
 

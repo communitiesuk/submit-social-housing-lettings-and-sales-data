@@ -23,6 +23,7 @@
 </div>
 
 <div class="govuk-grid-row">
+  <%= render partial: "locations/location_filters" %>
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <%= govuk_table do |table| %>
       <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>

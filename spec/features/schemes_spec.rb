@@ -284,6 +284,43 @@ RSpec.describe "Schemes scheme Features" do
               end
             end
 
+            context "when filtering locations" do
+              before do
+                click_link("Locations")
+              end
+
+              context "when no filters are selected" do
+                it "displays the filters component with no clear button" do
+                  expect(page).to have_content("No filters applied")
+                  expect(page).not_to have_content("Clear")
+                end
+              end
+
+              context "when I have selected filters" do
+                before do
+                  check("Active")
+                  check("Incomplete")
+                  click_button("Apply filters")
+                end
+
+                it "displays the filters component with a correct count and clear button" do
+                  expect(page).to have_content("2 filters applied")
+                  expect(page).to have_content("Clear")
+                end
+
+                context "when clearing the filters" do
+                  before do
+                    click_link("Clear")
+                  end
+
+                  it "clears the filters and displays the filter component as before" do
+                    expect(page).to have_content("No filters applied")
+                    expect(page).not_to have_content("Clear")
+                  end
+                end
+              end
+            end
+
             context "when the user clicks add location" do
               before do
                 click_link("Locations")
