@@ -12,7 +12,7 @@ describe EmailCsvJob do
   let(:sales_log_csv_service) { instance_double(Csv::SalesLogCsvService) }
   let(:lettings_log_csv_service) { instance_double(Csv::LettingsLogCsvService) }
   let(:search_term) { "meaning" }
-  let(:filters) { { "user" => "yours", "status" => %w[in_progress] } }
+  let(:filters) { { "user" => "you", "status" => %w[in_progress] } }
   let(:all_orgs) { false }
   let(:organisation) { build(:organisation) }
   let(:codes_only_export) { true }

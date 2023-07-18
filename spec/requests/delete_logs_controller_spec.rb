@@ -22,7 +22,7 @@ RSpec.describe "DeleteLogs", type: :request do
       logs_filters = {
         "years" => [""],
         "status" => ["", "in_progress"],
-        "user" => "all",
+        "assigned_to" => "all",
       }
       get lettings_logs_path(logs_filters) # adds the filters to the session
 
@@ -71,7 +71,7 @@ RSpec.describe "DeleteLogs", type: :request do
       logs_filters = {
         "years" => [""],
         "status" => ["", "in_progress"],
-        "user" => "all",
+        "assigned_to" => "all",
       }
       get lettings_logs_path(logs_filters) # adds the filters to the session
 
@@ -262,7 +262,7 @@ RSpec.describe "DeleteLogs", type: :request do
       logs_filters = {
         "years" => [""],
         "status" => ["", "in_progress"],
-        "user" => "all",
+        "assigned_to" => "all",
       }
       get sales_logs_path(logs_filters) # adds the filters to the session
 
@@ -311,7 +311,7 @@ RSpec.describe "DeleteLogs", type: :request do
       logs_filters = {
         "years" => [""],
         "status" => ["", "in_progress"],
-        "user" => "all",
+        "assigned_to" => "all",
       }
       get sales_logs_path(logs_filters) # adds the filters to the session
 
@@ -506,7 +506,7 @@ RSpec.describe "DeleteLogs", type: :request do
         logs_filters = {
           "years" => [""],
           "status" => ["", "in_progress"],
-          "user" => "all",
+          "assigned_to" => "all",
         }
         get lettings_logs_path(logs_filters) # adds the filters to the session
 
@@ -555,7 +555,7 @@ RSpec.describe "DeleteLogs", type: :request do
         logs_filters = {
           "years" => [""],
           "status" => ["", "in_progress"],
-          "user" => "all",
+          "assigned_to" => "all",
         }
         get lettings_logs_path(logs_filters) # adds the filters to the session
 
@@ -731,7 +731,7 @@ RSpec.describe "DeleteLogs", type: :request do
         logs_filters = {
           "years" => [""],
           "status" => ["", "in_progress"],
-          "user" => "all",
+          "assigned_to" => "all",
         }
         get sales_logs_path(logs_filters) # adds the filters to the session
 
@@ -780,7 +780,7 @@ RSpec.describe "DeleteLogs", type: :request do
         logs_filters = {
           "years" => [""],
           "status" => ["", "in_progress"],
-          "user" => "all",
+          "assigned_to" => "all",
         }
         get sales_logs_path(logs_filters) # adds the filters to the session
 

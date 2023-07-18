@@ -484,7 +484,7 @@ RSpec.describe LettingsLogsController, type: :request do
                 expect(page).not_to have_content(excluded_log.tenancycode)
               end
 
-              it "dislays how many logs remaining to fix" do
+              it "displays how many logs remaining to fix" do
                 get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
                 expect(page).to have_content("You need to fix 1 log")
               end
@@ -780,7 +780,7 @@ RSpec.describe LettingsLogsController, type: :request do
           let(:tenant_code_2) { "TC8745" }
 
           before do
-            FactoryBot.create(:lettings_log, :in_progress, owning_organisation: org_1, tenancycode: tenant_code_1)
+            FactoryBot.create(:lettings_log, :in_progress, owning_organisation: org_1, tenancycode: tenant_code_1, created_by: user)
             FactoryBot.create(:lettings_log, :in_progress, owning_organisation: org_2, tenancycode: tenant_code_2)
             allow(user).to receive(:need_two_factor_authentication?).and_return(false)
             sign_in user
@@ -792,9 +792,17 @@ RSpec.describe LettingsLogsController, type: :request do
             expect(page).to have_content(tenant_code_2)
           end
 
+          context "when filtering by a specific user" do
+            it "only show the selected user's logs" do
+              get "/lettings-logs?assigned_to=specific_user&user=#{user.id}", headers:, params: {}
+              expect(page).to have_content(tenant_code_1)
+              expect(page).not_to have_content(tenant_code_2)
+            end
+          end
+
           context "when the support user has filtered by organisation, then switches back to all organisations" do
             it "shows all organisations" do
-              get "http://localhost:3000/lettings-logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&user=all&organisation_select=all&organisation=#{org_1.id}", headers:, params: {}
+              get "http://localhost:3000/lettings-logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&assigned_to=all&organisation_select=all&organisation=#{org_1.id}", headers:, params: {}
               expect(page).to have_content(tenant_code_1)
               expect(page).to have_content(tenant_code_2)
             end

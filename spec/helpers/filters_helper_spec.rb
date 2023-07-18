@@ -16,8 +16,9 @@ RSpec.describe FiltersHelper do
 
       context "when looking at the all value" do
         it "returns true if no filters have been set yet" do
-          expect(filter_selected?("user", :all, "lettings_logs")).to be true
-          expect(filter_selected?("user", :yours, "lettings_logs")).to be false
+          expect(filter_selected?("assigned_to", :all, "lettings_logs")).to be true
+          expect(filter_selected?("assigned_to", :you, "lettings_logs")).to be false
+          expect(filter_selected?("assigned_to", :specific_user, "lettings_logs")).to be false
         end
       end
     end
@@ -60,7 +61,7 @@ RSpec.describe FiltersHelper do
 
     context "when the specific owning organisation filter is not set" do
       before do
-        session[:lettings_logs_filters] = { "status" => [""], "years" => [""], "user" => "all" }.to_json
+        session[:lettings_logs_filters] = { "status" => [""], "years" => [""], "assigned_to" => "all" }.to_json
       end
 
       it "marks the all options as checked" do
@@ -85,15 +86,15 @@ RSpec.describe FiltersHelper do
     end
 
     context "when organisation and user are set to all" do
-      let(:filters) { { "owning_organisation_select" => "all", "user" => "all" } }
+      let(:filters) { { "owning_organisation_select" => "all", "assigned_to" => "all" } }
 
       it "returns false" do
         expect(result).to be_falsey
       end
     end
 
-    context "when user is set to 'yours'" do
-      let(:filters) { { "user" => "yours" } }
+    context "when user is set to 'you'" do
+      let(:filters) { { "user" => "you" } }
 
       it "returns true" do
         expect(result).to be true
@@ -135,7 +136,7 @@ RSpec.describe FiltersHelper do
     context "when a range of filters is applied" do
       let(:filters) do
         {
-          "user" => "all",
+          "assigned_to" => "all",
           "status" => %w[in_progress completed],
           "years" => [""],
           "organisation" => 2,
@@ -218,7 +219,7 @@ RSpec.describe FiltersHelper do
     context "when no filters are applied" do
       let(:filters) do
         {
-          "user" => "all",
+          "assigned_to" => "all",
           "status" => [""],
           "years" => [""],
           "organisation" => "all",
@@ -233,7 +234,7 @@ RSpec.describe FiltersHelper do
     context "when a range of filters is applied" do
       let(:filters) do
         {
-          "user" => "all",
+          "assigned_to" => "all",
           "status" => %w[in_progress completed],
           "years" => [""],
           "organisation" => 2,

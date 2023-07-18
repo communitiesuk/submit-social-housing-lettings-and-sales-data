@@ -79,7 +79,7 @@ RSpec.describe "Lettings Log Features" do
         before do
           check("Not started")
           check("In progress")
-          choose("Yours")
+          choose("You")
           click_button("Apply filters")
         end
 
@@ -253,7 +253,7 @@ RSpec.describe "Lettings Log Features" do
       expect(page).not_to have_link "Delete logs"
       within ".app-filter" do
         check "status-in-progress-field"
-        choose "user-yours-field"
+        choose "assigned-to-you-field"
         click_button
       end
       expect(page).to have_selector "article.app-log-summary", count: 2

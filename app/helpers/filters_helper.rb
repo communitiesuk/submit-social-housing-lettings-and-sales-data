@@ -3,7 +3,8 @@ module FiltersHelper
     return false unless session[session_name_for(filter_type)]
 
     selected_filters = JSON.parse(session[session_name_for(filter_type)])
-    return true if selected_filters.blank? && filter == "user" && value == :all
+    return true if !selected_filters.key?("user") && filter == "assigned_to" && value == :all
+    return true if selected_filters["assigned_to"] == "specific_user" && filter == "assigned_to" && value == :specific_user
 
     return true if !selected_filters.key?("owning_organisation") && filter == "owning_organisation_select" && value == :all
     return true if !selected_filters.key?("managing_organisation") && filter == "managing_organisation_select" && value == :all
@@ -21,7 +22,7 @@ module FiltersHelper
     return false unless filters_json
 
     filters = JSON.parse(filters_json)
-    filters["user"] == "yours" ||
+    filters["user"].present? ||
       filters["organisation"].present? ||
       filters["managing_organisation"].present? ||
       filters["status"]&.compact_blank&.any? ||
@@ -46,6 +47,11 @@ module FiltersHelper
   def owning_organisations_filter_options(user)
     organisation_options = user.support? ? Organisation.all : [user.organisation] + user.organisation.stock_owners
     [OpenStruct.new(id: "", name: "Select an option")] + organisation_options.map { |org| OpenStruct.new(id: org.id, name: org.name) }
+  end
+
+  def assigned_to_filter_options(user)
+    user_options = user.support? ? User.all : (user.organisation.users + user.organisation.managing_agents.flat_map(&:users) + user.organisation.stock_owners.flat_map(&:users))
+    [OpenStruct.new(id: "", name: "Select an option")] + user_options.map { |user_option| OpenStruct.new(id: user_option.id, name: user_option.name) }
   end
 
   def collection_year_options
@@ -85,7 +91,7 @@ private
     filters.each.sum do |category, category_filters|
       if %w[status years bulk_upload_id].include?(category)
         category_filters.count(&:present?)
-      elsif %w[user organisation].include?(category)
+      elsif %w[assigned_to organisation].include?(category)
         category_filters != "all" ? 1 : 0
       else
         0

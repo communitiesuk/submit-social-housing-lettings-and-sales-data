@@ -22,7 +22,7 @@ RSpec.describe Forms::DeleteLogsForm do
     {
       "years" => [""],
       "status" => ["", "completed"],
-      "user" => "yours",
+      "user" => "you",
     }
   end
   let(:selected_ids) { [visible_logs.first.id] }

@@ -194,7 +194,7 @@ RSpec.describe "User Features" do
         end
         check("years-2021-field")
         click_button("Apply filters")
-        expect(page).to have_current_path("/organisations/#{org_id}/lettings-logs?years[]=&years[]=2021&status[]=&user=all&owning_organisation_select=all&owning_organisation=")
+        expect(page).to have_current_path("/organisations/#{org_id}/lettings-logs?years[]=&years[]=2021&status[]=&assigned_to=all&user=&owning_organisation_select=all&owning_organisation=")
         expect(page).not_to have_link first_log.id.to_s, href: "/lettings-logs/#{first_log.id}"
       end
     end
@@ -227,7 +227,7 @@ RSpec.describe "User Features" do
         end
         check("years-2021-field")
         click_button("Apply filters")
-        expect(page).to have_current_path("/organisations/#{org_id}/sales-logs?years[]=&years[]=2021&status[]=&user=all&owning_organisation_select=all&owning_organisation=")
+        expect(page).to have_current_path("/organisations/#{org_id}/sales-logs?years[]=&years[]=2021&status[]=&assigned_to=all&user=&owning_organisation_select=all&owning_organisation=")
         expect(page).not_to have_link first_log.id.to_s, href: "/sales-logs/#{first_log.id}"
       end
     end

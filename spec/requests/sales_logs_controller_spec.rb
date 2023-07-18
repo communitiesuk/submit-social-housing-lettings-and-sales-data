@@ -362,7 +362,7 @@ RSpec.describe SalesLogsController, type: :request do
                 expect(page).not_to have_content(excluded_log.id)
               end
 
-              it "dislays how many logs remaining to fix" do
+              it "displays how many logs remaining to fix" do
                 get "/sales-logs?bulk_upload_id[]=#{bulk_upload.id}"
                 expect(page).to have_content("You need to fix 1 log")
               end

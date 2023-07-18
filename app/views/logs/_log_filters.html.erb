@@ -6,7 +6,6 @@
 
     <div class="app-filter__content">
       <%= form_with html: { method: :get } do |f| %>
-        <% all_or_yours = { "all": { label: "All" }, "yours": { label: "Yours" } } %>
 
         <div class="govuk-grid-row" style="white-space: nowrap">
           <p class="govuk-grid-column-one-half">
@@ -44,13 +43,25 @@
                      } %>
         <% end %>
 
-        <%= render partial: "filters/radio_filter",
-                   locals: {
-                     f:,
-                     options: all_or_yours,
-                     label: "Logs",
-                     category: "user",
-                   } %>
+          <%= render partial: "filters/radio_filter",
+                     locals: {
+                       f:,
+                       options: {
+                         "all": { label: "Any user" },
+                         "you": { label: "You" },
+                         "specific_user": {
+                           label: "Specific user",
+                           conditional_filter: {
+                             type: "select",
+                             label: "User",
+                             category: "user",
+                             options: assigned_to_filter_options(@current_user),
+                           },
+                         },
+                       },
+                       label: "Assigned to",
+                       category: "assigned_to",
+                     } %>
 
          <% if @current_user.support? || @current_user.organisation.stock_owners.count > 1 && request.path == "/lettings-logs" %>
           <%= render partial: "filters/radio_filter", locals: {

@@ -58,7 +58,7 @@ RSpec.describe "Sales Log Features" do
         expect(page).not_to have_link "Delete logs"
 
         within ".app-filter" do
-          choose "user-yours-field"
+          choose "assigned-to-you-field"
           click_button
         end
 
@@ -116,7 +116,7 @@ RSpec.describe "Sales Log Features" do
         before do
           check("Not started")
           check("In progress")
-          choose("Yours")
+          choose("You")
           click_button("Apply filters")
         end
 

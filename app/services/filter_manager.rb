@@ -21,9 +21,9 @@ class FilterManager
 
     filters.each do |category, values|
       next if Array(values).reject(&:empty?).blank?
-
       next if category == "owning_organisation" && all_orgs
       next if category == "managing_organisation" && all_orgs
+      next if category == "assigned_to"
 
       logs = logs.public_send("filter_by_#{category}", values, user)
     end
@@ -58,6 +58,9 @@ class FilterManager
 
     new_filters = new_filters.except("owning_organisation") if params["owning_organisation_select"] == "all"
     new_filters = new_filters.except("managing_organisation") if params["managing_organisation_select"] == "all"
+
+    new_filters = new_filters.except("user") if params["assigned_to"] == "all"
+    new_filters["user"] = current_user.id.to_s if params["assigned_to"] == "you"
 
     new_filters
   end
