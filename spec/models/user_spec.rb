@@ -337,7 +337,7 @@ RSpec.describe User, type: :model do
 
     context "when a user is added to a merged organisation" do
       let(:merged_organisation) { create(:organisation, merge_date: Time.zone.yesterday) }
-      let(:error_message) { "Validation failed: Organisation #{I18n.t("validations.organisation.merged")}" }
+      let(:error_message) { "Validation failed: Organisation #{I18n.t('validations.organisation.merged')}" }
 
       it "validates email format" do
         expect { create(:user, organisation: merged_organisation) }
