@@ -161,17 +161,29 @@ private
     params[@log.model_name.param_key]["interruption_page_referrer_type"].presence
   end
 
+  def correcting_duplicate_logs_redirect_path
+    class_name = @log.class.name.underscore
+
+    original_log = current_user.send(class_name.pluralize).find_by(id: from_referrer_query("original_log_id"))
+
+    if current_user.send(class_name.pluralize).duplicate_logs(original_log).count.positive?
+      send("#{class_name}_duplicate_logs_path", original_log, original_log_id: original_log.id)
+    else
+      send("#{class_name}_duplicate_logs_path", "#{class_name}_id".to_sym => from_referrer_query("remaining_duplicate_id"), original_log_id: from_referrer_query("original_log_id"))
+    end
+  end
+
   def successful_redirect_path
     if FeatureToggle.deduplication_flow_enabled?
-      if @log.lettings?
-        if is_referrer_type?("duplicate_logs")
-          return send("lettings_log_duplicate_logs_path", lettings_log_id: from_referrer_query("remaining_duplicate_id"), original_log_id: from_referrer_query("original_log_id"))
-        elsif current_user.lettings_logs.duplicate_logs(@log).count.positive?
-          return send("lettings_log_duplicate_logs_path", @log, original_log_id: @log.id)
-        end
-      elsif is_referrer_type?("duplicate_logs")
-        return send("sales_log_duplicate_logs_path", sales_log_id: from_referrer_query("remaining_duplicate_id"), original_log_id: from_referrer_query("original_log_id"))
-      elsif current_user.sales_logs.duplicate_logs(@log).count.positive?
+      if is_referrer_type?("duplicate_logs")
+        return correcting_duplicate_logs_redirect_path
+      end
+
+      if @log.lettings? && current_user.lettings_logs.duplicate_logs(@log).count.positive?
+        return send("lettings_log_duplicate_logs_path", @log, original_log_id: @log.id)
+      end
+
+      if @log.sales? && current_user.sales_logs.duplicate_logs(@log).count.positive?
         return send("sales_log_duplicate_logs_path", @log, original_log_id: @log.id)
       end
     end

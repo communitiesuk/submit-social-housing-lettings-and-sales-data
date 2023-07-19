@@ -755,6 +755,23 @@ RSpec.describe FormController, type: :request do
           it "redirects back to the duplicates page for remaining duplicates" do
             expect(response).to redirect_to("/lettings-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
           end
+
+          context "and the answer didn't change" do
+            let(:params) do
+              {
+                id: lettings_log.id,
+                lettings_log: {
+                  page: "lead_tenant_age",
+                  age1: lettings_log.age1,
+                  age1_known: lettings_log.age1_known,
+                },
+              }
+            end
+
+            it "redirects back to the duplicates page for remaining duplicates" do
+              expect(response).to have_http_status(:ok)
+            end
+          end
         end
 
         context "when the sales question was accessed from a duplicate logs screen" do
@@ -778,6 +795,23 @@ RSpec.describe FormController, type: :request do
 
           it "redirects back to the duplicates page for remaining duplicates" do
             expect(response).to redirect_to("/sales-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
+          end
+
+          context "and the answer didn't change" do
+            let(:params) do
+              {
+                id: sales_log.id,
+                sales_log: {
+                  page: "buyer_1_age",
+                  age1: sales_log.age1,
+                  age1_known: sales_log.age1_known,
+                },
+              }
+            end
+
+            it "redirects back to the duplicates page for remaining duplicates" do
+              expect(response).to have_http_status(:ok)
+            end
           end
         end
       end
