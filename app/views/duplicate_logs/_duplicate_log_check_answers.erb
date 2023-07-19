@@ -26,12 +26,19 @@
               <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= inferred_answer %></span>
             <% end %>
           <% end %>
-
-          <% row.action(
-            text: question.action_text(log),
-            href: duplicate_logs_action_href(log, question.page.id, @original_log_id),
-            visually_hidden_text: question.check_answer_label.to_s.downcase,
-          ) %>
+          <% if @all_duplicates.count > 1 %>
+            <% row.action(
+                text: question.action_text(log),
+                href: change_duplicate_logs_action_href(log, question.page.id, @all_duplicates),
+                visually_hidden_text: question.check_answer_label.to_s.downcase,
+              ) %>
+          <% else %>
+            <% row.action(
+              text: question.action_text(log),
+              href: duplicate_logs_action_href(log, question.page.id, @original_log_id),
+              visually_hidden_text: question.check_answer_label.to_s.downcase,
+            ) %>
+          <% end %>
         <% end %>
       <% end %>
     <% end %>

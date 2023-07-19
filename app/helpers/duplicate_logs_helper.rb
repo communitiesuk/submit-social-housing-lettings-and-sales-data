@@ -22,4 +22,9 @@ module DuplicateLogsHelper
   def duplicate_logs_action_href(log, page_id, original_log_id)
     send("#{log.model_name.param_key}_#{page_id}_path", log, referrer: "interruption_screen", original_log_id:)
   end
+
+  def change_duplicate_logs_action_href(log, page_id, all_duplicates)
+    remaining_duplicate_id = all_duplicates.map(&:id).reject { |id| id == log.id }.first
+    send("#{log.model_name.param_key}_#{page_id}_path", log, referrer: "duplicate_logs", remaining_duplicate_id:)
+  end
 end
