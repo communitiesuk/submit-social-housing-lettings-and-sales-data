@@ -18,6 +18,9 @@ class Organisation < ApplicationRecord
   has_many :managing_agent_relationships, foreign_key: :parent_organisation_id, class_name: "OrganisationRelationship"
   has_many :managing_agents, through: :managing_agent_relationships, source: :child_organisation
 
+  belongs_to :absorbing_organisation, class_name: "Organisation", optional: true
+  has_many :absorbed_organisations, class_name: "Organisation", foreign_key: "absorbing_organisation_id"
+
   def affiliated_stock_owners
     ids = []
 
