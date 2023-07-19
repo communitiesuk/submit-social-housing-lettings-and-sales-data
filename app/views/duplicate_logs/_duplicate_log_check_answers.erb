@@ -29,13 +29,13 @@
           <% if @all_duplicates.count > 1 %>
             <% row.action(
                 text: question.action_text(log),
-                href: change_duplicate_logs_action_href(log, question.page.id, @all_duplicates),
+                href: change_duplicate_logs_action_href(log, question.page.id, @all_duplicates, @original_log.id),
                 visually_hidden_text: question.check_answer_label.to_s.downcase,
               ) %>
           <% else %>
             <% row.action(
               text: question.action_text(log),
-              href: duplicate_logs_action_href(log, question.page.id, @original_log_id),
+              href: duplicate_logs_action_href(log, question.page.id, @original_log.id),
               visually_hidden_text: question.check_answer_label.to_s.downcase,
             ) %>
           <% end %>

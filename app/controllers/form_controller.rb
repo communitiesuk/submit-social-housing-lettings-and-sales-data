@@ -48,7 +48,7 @@ class FormController < ApplicationController
   def show_page
     if request.params["referrer"] == "interruption_screen" && request.headers["HTTP_REFERER"].present?
       @interruption_page_id = URI.parse(request.headers["HTTP_REFERER"]).path.split("/").last.underscore
-      @interruption_page_referrer_type = referrer_from_query
+      @interruption_page_referrer_type = from_referrer_query("referrer")
     end
 
     if @log
@@ -130,10 +130,10 @@ private
   end
 
   def is_referrer_type?(referrer_type)
-    referrer_from_query == referrer_type
+    from_referrer_query("referrer") == referrer_type
   end
 
-  def referrer_from_query
+  def from_referrer_query(query_param)
     referrer = request.headers["HTTP_REFERER"]
     return unless referrer
 
@@ -141,7 +141,7 @@ private
     return unless query_params
 
     parsed_params = CGI.parse(query_params)
-    parsed_params["referrer"]&.first
+    parsed_params[query_param]&.first
   end
 
   def original_duplicate_log_id_from_query
@@ -164,9 +164,13 @@ private
   def successful_redirect_path
     if FeatureToggle.deduplication_flow_enabled?
       if @log.lettings?
-        if current_user.lettings_logs.duplicate_logs(@log).count.positive?
+        if is_referrer_type?("duplicate_logs")
+          return send("lettings_log_duplicate_logs_path", lettings_log_id: from_referrer_query("remaining_duplicate_id"), original_log_id: from_referrer_query("original_log_id"))
+        elsif current_user.lettings_logs.duplicate_logs(@log).count.positive?
           return send("lettings_log_duplicate_logs_path", @log, original_log_id: @log.id)
         end
+      elsif is_referrer_type?("duplicate_logs")
+        return send("sales_log_duplicate_logs_path", sales_log_id: from_referrer_query("remaining_duplicate_id"), original_log_id: from_referrer_query("original_log_id"))
       elsif current_user.sales_logs.duplicate_logs(@log).count.positive?
         return send("sales_log_duplicate_logs_path", @log, original_log_id: @log.id)
       end
