@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe OrganisationsHelper do
-
   include TagHelper
   describe "display_organisation_attributes" do
     let(:organisation) { create(:organisation) }
