@@ -995,7 +995,7 @@ RSpec.describe Location, type: :model do
     end
 
     context "when filtering by multiple statuses" do
-      it "returns only activating_soon locations" do
+      it "returns relevant locations" do
         expect(described_class.filter_by_status(%w[deactivating_soon activating_soon]).count).to eq(2)
         expect(described_class.filter_by_status(%w[deactivating_soon activating_soon])).to include(activating_soon_location)
         expect(described_class.filter_by_status(%w[deactivating_soon activating_soon])).to include(deactivating_soon_location)
