@@ -198,6 +198,7 @@ en:
       managing_agent:
         blank: "You must choose a managing agent"
         already_added: "You have already added this managing agent"
+      merged: "Select an organisation that has not been merged"
     not_answered: "You must answer %{question}"
     invalid_option: "Enter a valid value for %{question}"
     invalid_number: "Enter a number for %{question}"
