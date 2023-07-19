@@ -57,6 +57,9 @@ RSpec.describe DuplicateLogsController, type: :request do
           expect(page).to have_content("Q37 - Lead tenant’s working situation", count: 3)
           expect(page).to have_content("Household rent and charges", count: 3)
           expect(page).to have_link("Change", count: 21)
+          expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?original_log_id=#{lettings_log.id}&referrer=interruption_screen")
+          expect(page).to have_link("Change", href: "/lettings-logs/#{duplicate_logs[0].id}/tenant-code?original_log_id=#{lettings_log.id}&referrer=interruption_screen")
+          expect(page).to have_link("Change", href: "/lettings-logs/#{duplicate_logs[1].id}/tenant-code?original_log_id=#{lettings_log.id}&referrer=interruption_screen")
         end
 
         it "displays buttons to delete" do
