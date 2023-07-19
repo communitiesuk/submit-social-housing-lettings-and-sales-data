@@ -5,7 +5,7 @@
     </div>
 
     <div class="app-filter__content">
-      <%= form_with html: { method: :get } do |f| %>
+      <%= form_with url: scheme_locations_path(@scheme), html: { method: :get } do |f| %>
         <div class="govuk-grid-row" style="white-space: nowrap">
           <p class="govuk-grid-column-one-half">
             <%= filters_applied_text(@filter_type) %>
