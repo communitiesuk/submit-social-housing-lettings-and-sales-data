@@ -262,9 +262,9 @@ RSpec.describe OrganisationsController, type: :request do
             expect(response.body).to include(organisation.name)
           end
 
-          it "has a change details link" do
+          it "does not include a change details link" do
             expected_html = "data-qa=\"change-name\" href=\"/organisations/#{organisation.id}/edit\""
-            expect(response.body).to include(expected_html)
+            expect(response.body).not_to include(expected_html)
           end
 
           it "displays a link to merge organisations" do
@@ -345,9 +345,9 @@ RSpec.describe OrganisationsController, type: :request do
             get "/organisations/#{organisation.id}/edit", headers:, params: {}
           end
 
-          it "shows an edit form" do
+          it "shows an edit form without name field" do
             expect(response.body).to include("Change #{organisation.name}’s details")
-            expect(page).to have_field("organisation-name-field")
+            expect(page).not_to have_field("organisation-name-field")
             expect(page).to have_field("organisation-phone-field")
           end
         end
