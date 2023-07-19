@@ -1,4 +1,4 @@
-module OrganisationHelper
+module OrganisationsHelper
   def organisation_header(path, user, current_organisation)
     if path == "/organisations"
       "Organisations"

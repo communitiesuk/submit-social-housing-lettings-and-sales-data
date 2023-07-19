@@ -20,6 +20,7 @@ RSpec.describe TagHelper do
       expect(status_tag("activating_soon", "app-tag--small")).to eq("<strong class=\"govuk-tag govuk-tag--blue app-tag--small\">Activating soon</strong>")
       expect(status_tag("reactivating_soon", "app-tag--small")).to eq("<strong class=\"govuk-tag govuk-tag--blue app-tag--small\">Reactivating soon</strong>")
       expect(status_tag("deactivated", "app-tag--small")).to eq("<strong class=\"govuk-tag govuk-tag--grey app-tag--small\">Deactivated</strong>")
+      expect(status_tag("merged", "app-tag--small")).to eq("<strong class=\"govuk-tag govuk-tag--green app-tag--small\">Merged</strong>")
     end
   end
 end
