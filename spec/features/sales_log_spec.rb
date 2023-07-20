@@ -259,7 +259,7 @@ RSpec.describe "Sales Log Features" do
       fill_in("sales-log-purchid-field", with: "something else")
       click_button("Save and continue")
       expect(page).to have_current_path("/sales-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
-      # expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
+      expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
     end
   end
 end

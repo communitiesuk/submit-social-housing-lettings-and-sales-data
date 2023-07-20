@@ -12,7 +12,7 @@ module DuplicateLogsHelper
     end
 
     if !original_log.deleted?
-      govuk_button_link_to "Back to Log #{duplicate_log.id}", send("#{duplicate_log.class.name.underscore}_path", duplicate_log)
+      govuk_button_link_to "Back to Log #{original_log.id}", send("#{original_log.class.name.underscore}_path", original_log)
     else
       type = duplicate_log.lettings? ? "lettings" : "sales"
       govuk_button_link_to "Back to #{type} logs", url_for(duplicate_log.class)

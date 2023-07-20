@@ -520,7 +520,7 @@ RSpec.describe "Lettings Log Features" do
         fill_in("lettings-log-tenancycode-field", with: "something else")
         click_button("Save and continue")
         expect(page).to have_current_path("/lettings-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
-        # expect(page).to have_link("Back to Log #{lettings_log.id}", href: "/lettings-logs/#{lettings_log.id}")
+        expect(page).to have_link("Back to Log #{lettings_log.id}", href: "/lettings-logs/#{lettings_log.id}")
       end
     end
   end
