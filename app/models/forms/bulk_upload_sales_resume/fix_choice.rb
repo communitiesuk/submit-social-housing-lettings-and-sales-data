@@ -39,9 +39,9 @@ module Forms
 
       def recommendation
         if BulkUploadErrorSummaryTableComponent.new(bulk_upload:).errors?
-          "For this many errors we recommend to fix errors in the CSV and re-upload as you may be able to edit many fields at once in a CSV."
+          "We recommend fixing these errors in the CSV, as you may be able to edit multiple fields at once. However, you can also upload these logs and fix the errors on the CORE site."
         else
-          "For this many errors we recommend to upload logs and fix errors on site as you can easily see the questions and select the appropriate answer."
+          "We recommend uploading logs and fixing errors on site as you can easily see the questions and select the appropriate answer. However, you can also fix these errors in the CSV."
         end
       end
 

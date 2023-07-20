@@ -107,6 +107,10 @@ class BulkUpload < ApplicationRecord
     end
   end
 
+  def logs_with_errors_count
+    bulk_upload_errors.distinct.count("row")
+  end
+
 private
 
   def generate_identifier

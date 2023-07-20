@@ -246,4 +246,31 @@ RSpec.describe BulkUpload::Sales::Validator do
       end
     end
   end
+
+  describe "#total_logs_count?" do
+    around do |example|
+      Timecop.freeze(Time.zone.local(2023, 2, 22)) do
+        Singleton.__init__(FormHandler)
+        example.run
+      end
+      Timecop.return
+      Singleton.__init__(FormHandler)
+    end
+
+    context "when all logs are valid" do
+      let(:target_path) { file_fixture("completed_2022_23_sales_bulk_upload.csv") }
+
+      before do
+        target_array = File.open(target_path).readlines
+        target_array[0..118].each do |line|
+          file.write line
+        end
+        file.rewind
+      end
+
+      it "returns correct total logs count" do
+        expect(validator.total_logs_count).to be(1)
+      end
+    end
+  end
 end
