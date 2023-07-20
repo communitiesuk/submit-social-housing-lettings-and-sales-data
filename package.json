@@ -2,7 +2,7 @@
   "name": "data-collector",
   "private": true,
   "engines": {
-    "node": "^16.0.0"
+    "node": "^18.0.0"
   },
   "dependencies": {
     "@babel/core": "^7.17.7",
