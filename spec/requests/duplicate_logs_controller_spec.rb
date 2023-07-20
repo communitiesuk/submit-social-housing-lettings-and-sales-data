@@ -313,4 +313,104 @@ RSpec.describe DuplicateLogsController, type: :request do
       end
     end
   end
+
+  describe "GET #index" do
+    before do
+      allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+      sign_in user
+    end
+
+    context "when the user is support" do
+      let(:user) { create(:user, :support) }
+
+      it "renders not found" do
+        get duplicate_logs_path
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when the user is a data coordinator" do
+      let(:user) { create(:user, :data_coordinator) }
+
+      it "renders not found" do
+        get duplicate_logs_path
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when the user is a provider" do
+      let(:user) { create(:user) }
+      let(:duplicates) do
+        {
+          lettings: {
+            "0" => [1, 2],
+            "1" => [3, 4, 5],
+          },
+          sales: {
+            "0" => [11, 12],
+          },
+        }
+      end
+
+      context "when duplicates are not provided in the params" do
+        before do
+          allow_any_instance_of(DuplicateLogsHelper).to receive(:duplicates_for_user).and_return duplicates
+        end
+
+        it "calls the helper method to retrieve duplicates for the current user" do
+          expect_any_instance_of(DuplicateLogsHelper).to receive(:duplicates_for_user).with(user)
+          get duplicate_logs_path
+        end
+      end
+
+      context "when duplicates are provided in the params" do
+        it "does not call the helper method" do
+          expect_any_instance_of(DuplicateLogsHelper).not_to receive :duplicates_for_user  # rubocop:disable RSpec/AnyInstance
+          get duplicate_logs_path(duplicates:)
+        end
+
+        context "and either lettings or sales is not present" do
+          let(:duplicates) { { lettings: { "0" => [1, 2] } } }
+
+          it "does not throw an error" do
+            expect { get duplicate_logs_path(duplicates:) }.not_to raise_error
+          end
+        end
+      end
+
+      describe "viewing the page" do
+        before do
+          get duplicate_logs_path(duplicates:)
+        end
+
+        it "has the correct headers" do
+          headers = page.find_css("th").map(&:text)
+          expect(headers).to include("Type of logs", "Log IDs")
+        end
+
+        it "has the correct number of rows for each log type" do
+          expect(page).to have_selector "tbody tr td", text: "Lettings", count: duplicates[:lettings].count
+          expect(page).to have_selector "tbody tr td", text: "Sales", count: duplicates[:sales].count
+        end
+
+        it "shows the log ids for each set of duplicates" do
+          id_strings = duplicates.values.flat_map(&:values).map do |id_set|
+            id_set.map { |id| "Log #{id}" }.join(", ")
+          end
+          id_strings.each do |id_string|
+            expect(page).to have_selector "td", text: id_string
+          end
+        end
+
+        it "shows links for each set of duplciates" do
+          duplicates[:lettings].each_value do |id_set|
+            expect(page).to have_link "Review logs", href: lettings_log_duplicate_logs_path(id_set.first)
+          end
+          duplicates[:sales].each_value do |id_set|
+            expect(page).to have_link "Review logs", href: sales_log_duplicate_logs_path(id_set.first)
+          end
+        end
+      end
+    end
+  end
 end

@@ -27,10 +27,11 @@ class DuplicateLogsController < ApplicationController
 
   def index
     @duplicates = params.permit(duplicates: {})[:duplicates]&.to_h || duplicates_for_user(current_user)
+    return render_not_found unless @duplicates
+
     @duplicates[:lettings] ||= []
     @duplicates[:sales] ||= []
     @duplicate_sets_count = @duplicates[:lettings].count + @duplicates[:sales].count
-    render_not_found if @duplicate_sets_count.zero?
   end
 
 private
