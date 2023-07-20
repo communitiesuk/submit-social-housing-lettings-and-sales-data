@@ -254,6 +254,7 @@ RSpec.describe "Sales Log Features" do
       expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
       expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
       expect(page).to have_content("Log #{duplicate_log.id} is no longer a duplicate and has been removed from the list")
+      expect(page).to have_content("You changed the purchaser code.")
     end
 
     it "allows deduplicating logs by changing the answers on the original log" do
@@ -264,6 +265,7 @@ RSpec.describe "Sales Log Features" do
       expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
       expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
       expect(page).to have_content("Log #{sales_log.id} is no longer a duplicate and has been removed from the list")
+      expect(page).to have_content("You changed the purchaser code.")
     end
   end
 end

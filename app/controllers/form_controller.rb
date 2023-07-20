@@ -257,6 +257,9 @@ private
   end
 
   def deduplication_success_banner
-    "<a class=\"govuk-notification-banner__link govuk-!-font-weight-bold\" href=\"#{send("#{@log.class.name.underscore}_path", @log)}\">Log #{@log.id}</a> is no longer a duplicate and has been removed from the list".html_safe
+    deduplicated_log_link = "<a class=\"govuk-notification-banner__link govuk-!-font-weight-bold\" href=\"#{send("#{@log.class.name.underscore}_path", @log)}\">Log #{@log.id}</a>"
+    changed_question_label = (@page.questions.first.check_answer_label.to_s.presence || @page.questions.first.header.to_s).downcase
+
+    I18n.t("notification.duplicate_logs.deduplication_success_banner", log_link: deduplicated_log_link, changed_question_label:).html_safe
   end
 end
