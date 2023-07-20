@@ -354,8 +354,8 @@ RSpec.describe SalesLogsController, type: :request do
               let(:user) { create(:user, organisation:) }
               let(:bulk_upload) { create(:bulk_upload, :sales, user:) }
 
-              let!(:included_log) { create(:sales_log, :in_progress, bulk_upload:, owning_organisation: organisation) }
-              let!(:excluded_log) { create(:sales_log, :in_progress, owning_organisation: organisation) }
+              let!(:included_log) { create(:sales_log, :in_progress, purchid: "included_id", bulk_upload:, owning_organisation: organisation) }
+              let!(:excluded_log) { create(:sales_log, :in_progress, purchid: "excluded_id", owning_organisation: organisation) }
 
               before do
                 create(:bulk_upload_error, bulk_upload:, col: "A", row: 1)
@@ -364,8 +364,8 @@ RSpec.describe SalesLogsController, type: :request do
               it "returns logs only associated with the bulk upload" do
                 get "/sales-logs?bulk_upload_id[]=#{bulk_upload.id}"
 
-                expect(page).to have_content(included_log.id)
-                expect(page).not_to have_content(excluded_log.id)
+                expect(page).to have_content(included_log.purchid)
+                expect(page).not_to have_content(excluded_log.purchid)
               end
 
               it "dislays bulk upload banner" do
