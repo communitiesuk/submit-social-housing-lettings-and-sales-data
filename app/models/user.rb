@@ -60,7 +60,7 @@ class User < ApplicationRecord
     if support?
       LettingsLog.all
     else
-      LettingsLog.filter_by_organisation(organisation)
+      LettingsLog.filter_by_organisation(organisation.absorbed_organisations << organisation)
     end
   end
 
@@ -68,7 +68,7 @@ class User < ApplicationRecord
     if support?
       SalesLog.all
     else
-      SalesLog.filter_by_organisation(organisation)
+      SalesLog.filter_by_organisation(organisation.absorbed_organisations << organisation)
     end
   end
 
