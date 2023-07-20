@@ -63,7 +63,7 @@
                        category: "assigned_to",
                      } %>
 
-         <% if @current_user.support? || @current_user.organisation.stock_owners.count > 1 && request.path == "/lettings-logs" %>
+         <% if (@current_user.support? || @current_user.organisation.stock_owners.count > 1) && request.path == "/lettings-logs" %>
           <%= render partial: "filters/radio_filter", locals: {
             f:,
             options: {

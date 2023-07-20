@@ -96,9 +96,17 @@ RSpec.describe "Sales Log Features" do
 
   context "when filtering logs" do
     let(:user) { create(:user, last_sign_in_at: Time.zone.now) }
+    let(:stock_owner_1) { create(:organisation, name: "stock owner 1") }
+    let(:stock_owner_2) { create(:organisation, name: "stock owner 2") }
+    let(:managing_agent_1) { create(:organisation, name: "managing agent 1") }
+    let(:managing_agent_2) { create(:organisation, name: "managing agent 2") }
 
     context "when I am signed in" do
       before do
+        FactoryBot.create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: stock_owner_1)
+        FactoryBot.create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: stock_owner_2)
+        FactoryBot.create(:organisation_relationship, child_organisation: managing_agent_1, parent_organisation: user.organisation)
+        FactoryBot.create(:organisation_relationship, child_organisation: managing_agent_2, parent_organisation: user.organisation)
         visit("/sales-logs")
         fill_in("user[email]", with: user.email)
         fill_in("user[password]", with: user.password)
@@ -117,11 +125,15 @@ RSpec.describe "Sales Log Features" do
           check("Not started")
           check("In progress")
           choose("You")
+          choose("Specific owning organisation")
+          select(stock_owner_1.name, from: "owning_organisation")
+          choose("Specific managing organisation")
+          select(managing_agent_1.name, from: "managing_organisation")
           click_button("Apply filters")
         end
 
         it "displays the filters component with a correct count and clear button" do
-          expect(page).to have_content("3 filters applied")
+          expect(page).to have_content("5 filters applied")
           expect(page).to have_content("Clear")
         end
 
