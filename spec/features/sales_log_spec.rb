@@ -252,6 +252,8 @@ RSpec.describe "Sales Log Features" do
       click_button("Save and continue")
       expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
       expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
+      expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+      expect(page).to have_content("Log #{duplicate_log.id} is no longer a duplicate and has been removed from the list")
     end
 
     it "allows deduplicating logs by changing the answers on the original log" do
@@ -260,6 +262,8 @@ RSpec.describe "Sales Log Features" do
       click_button("Save and continue")
       expect(page).to have_current_path("/sales-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
       expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
+      expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+      expect(page).to have_content("Log #{sales_log.id} is no longer a duplicate and has been removed from the list")
     end
   end
 end

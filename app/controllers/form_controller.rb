@@ -161,18 +161,6 @@ private
     params[@log.model_name.param_key]["interruption_page_referrer_type"].presence
   end
 
-  def correcting_duplicate_logs_redirect_path
-    class_name = @log.class.name.underscore
-
-    original_log = current_user.send(class_name.pluralize).find_by(id: from_referrer_query("original_log_id"))
-
-    if current_user.send(class_name.pluralize).duplicate_logs(original_log).count.positive?
-      send("#{class_name}_duplicate_logs_path", original_log, original_log_id: original_log.id)
-    else
-      send("#{class_name}_duplicate_logs_path", "#{class_name}_id".to_sym => from_referrer_query("remaining_duplicate_id"), original_log_id: from_referrer_query("original_log_id"))
-    end
-  end
-
   def successful_redirect_path
     if FeatureToggle.deduplication_flow_enabled?
       if is_referrer_type?("duplicate_logs")
@@ -253,4 +241,22 @@ private
   end
 
   CONFIRMATION_PAGE_IDS = %w[uprn_confirmation].freeze
+
+  def correcting_duplicate_logs_redirect_path
+    class_name = @log.class.name.underscore
+
+    original_log = current_user.send(class_name.pluralize).find_by(id: from_referrer_query("original_log_id"))
+
+    if current_user.send(class_name.pluralize).duplicate_logs(original_log).count.positive?
+      flash[:notice] = deduplication_success_banner unless current_user.send(class_name.pluralize).duplicate_logs(@log).count.positive?
+      send("#{class_name}_duplicate_logs_path", original_log, original_log_id: original_log.id)
+    else
+      flash[:notice] = deduplication_success_banner
+      send("#{class_name}_duplicate_logs_path", "#{class_name}_id".to_sym => from_referrer_query("remaining_duplicate_id"), original_log_id: from_referrer_query("original_log_id"))
+    end
+  end
+
+  def deduplication_success_banner
+    "<a class=\"govuk-notification-banner__link govuk-!-font-weight-bold\" href=\"#{send("#{@log.class.name.underscore}_path", @log)}\">Log #{@log.id}</a> is no longer a duplicate and has been removed from the list".html_safe
+  end
 end
