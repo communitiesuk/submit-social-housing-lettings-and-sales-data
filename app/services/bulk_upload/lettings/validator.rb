@@ -145,7 +145,7 @@ private
 
   def validate_file_not_empty
     if File.size(path).zero?
-      errors.add(:file, :blank)
+      errors.add(:base, :blank_file)
 
       halt_validations!
     end

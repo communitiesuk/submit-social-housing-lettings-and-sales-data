@@ -207,6 +207,47 @@ RSpec.describe BulkUpload::Processor do
       end
     end
 
+    context "when processing an empty file" do
+      let(:mock_downloader) do
+        instance_double(
+          BulkUpload::Downloader,
+          call: nil,
+          path:,
+          delete_local_file!: nil,
+        )
+      end
+
+      let(:file) { Tempfile.new }
+      let(:path) { file.path }
+
+      let(:log) do
+        build(
+          :lettings_log,
+          :completed,
+          renttype: 3,
+          age1: 20,
+        )
+      end
+
+      before do
+        allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
+      end
+
+      it "sends failure email" do
+        mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
+
+        allow(BulkUploadMailer).to receive(:send_bulk_upload_failed_service_error_mail).and_return(mail_double)
+
+        processor.call
+
+        expect(BulkUploadMailer).to have_received(:send_bulk_upload_failed_service_error_mail).with(
+          bulk_upload:,
+          errors: ["Template is blank - The template must be filled in for us to create the logs and check if data is correct."],
+        )
+        expect(mail_double).to have_received(:deliver_later)
+      end
+    end
+
     context "when a bulk upload has an in progress log" do
       let(:mock_downloader) do
         instance_double(
