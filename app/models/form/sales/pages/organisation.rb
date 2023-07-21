@@ -9,4 +9,8 @@ class Form::Sales::Pages::Organisation < ::Form::Page
       Form::Sales::Questions::OwningOrganisationId.new(nil, nil, self),
     ]
   end
+
+  def routed_to?(_log, current_user)
+    !!current_user&.support?
+  end
 end
