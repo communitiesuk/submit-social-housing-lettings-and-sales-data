@@ -1,9 +1,6 @@
 class Organisation < ApplicationRecord
   has_many :users, dependent: :delete_all
   has_many :data_protection_officers, -> { where(is_dpo: true) }, class_name: "User"
-  has_many :owned_lettings_logs, class_name: "LettingsLog", foreign_key: "owning_organisation_id", dependent: :delete_all
-  has_many :managed_lettings_logs, class_name: "LettingsLog", foreign_key: "managing_organisation_id"
-  has_many :owned_sales_logs, class_name: "SalesLog", foreign_key: "owning_organisation_id", dependent: :delete_all
   has_one :data_protection_confirmation
   has_many :organisation_rent_periods
   has_many :owned_schemes, class_name: "Scheme", foreign_key: "owning_organisation_id", dependent: :delete_all
@@ -67,11 +64,19 @@ class Organisation < ApplicationRecord
   end
 
   def lettings_logs
-    LettingsLog.filter_by_organisation(self)
+    LettingsLog.filter_by_organisation(absorbed_organisations << self)
   end
 
   def sales_logs
-    SalesLog.filter_by_organisation(self)
+    SalesLog.filter_by_owning_organisation(absorbed_organisations << self)
+  end
+
+  def owned_lettings_logs
+    LettingsLog.filter_by_owning_organisation(absorbed_organisations << self)
+  end
+
+  def managed_lettings_logs
+    LettingsLog.filter_by_managing_organisation(absorbed_organisations << self)
   end
 
   def address_string
