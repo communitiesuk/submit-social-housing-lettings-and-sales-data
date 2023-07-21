@@ -58,7 +58,7 @@ class FilterManager
 
       schemes = schemes.public_send("filter_by_#{category}", values, user)
     end
-    schemes.order(created_at: :desc)
+    schemes
   end
 
   def serialize_filters_to_session(specific_org: false)
