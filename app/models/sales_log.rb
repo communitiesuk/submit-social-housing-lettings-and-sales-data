@@ -40,8 +40,7 @@ class SalesLog < Log
       .or(filter_by_postcode(param))
       .or(filter_by_id(param))
   }
-  scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org) }
-  scope :filter_by_owning_organisation, ->(org, _user = nil) { where(owning_organisation: org) }
+  scope :filter_by_owning_organisation, ->(owning_organisation, _user = nil) { where(owning_organisation:) }
   scope :duplicate_logs, lambda { |log|
     visible.where(log.slice(*DUPLICATE_LOG_ATTRIBUTES))
     .where.not(id: log.id)
