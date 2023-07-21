@@ -7,15 +7,18 @@ class UsersController < ApplicationController
   before_action :authenticate_user!
   before_action :find_resource, except: %i[new create]
   before_action :authenticate_scope!, except: %i[new]
+  before_action :session_filters, if: :current_user, only: %i[index]
+  before_action -> { filter_manager.serialize_filters_to_session }, if: :current_user, only: %i[index]
 
   def index
     redirect_to users_organisation_path(current_user.organisation) unless current_user.support?
 
     all_users = User.sorted_by_organisation_and_role
-    filtered_users = filtered_users(all_users, search_term)
+    filtered_users = filter_manager.filtered_users(all_users, search_term, session_filters)
     @pagy, @users = pagy(filtered_users)
     @searched = search_term.presence
     @total_count = all_users.size
+    @filter_type = "users"
 
     respond_to do |format|
       format.html
@@ -193,5 +196,13 @@ private
       render_not_found and return unless action_name == "show" ||
         current_user.data_coordinator? || current_user.support? || current_user == @user
     end
+  end
+
+  def filter_manager
+    FilterManager.new(current_user:, session:, params:, filter_type: "users")
+  end
+
+  def session_filters
+    filter_manager.session_filters
   end
 end

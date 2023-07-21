@@ -471,6 +471,60 @@ RSpec.describe UsersController, type: :request do
           end
         end
       end
+
+      context "when filtering" do
+        context "with status filter" do
+          let!(:active_user) { create(:user, name: "active name", active: true, organisation: user.organisation) }
+          let!(:deactivated_user) { create(:user, active: false, name: "deactivated name", organisation: user.organisation) }
+          let!(:unconfirmed_user) { create(:user, confirmed_at: nil, name: "unconfirmed name", organisation: user.organisation) }
+
+          it "shows users for multiple selected statuses" do
+            get "/users?status[]=active&status[]=deactivated", headers:, params: {}
+            follow_redirect!
+            expect(page).to have_link(active_user.name)
+            expect(page).to have_link(deactivated_user.name)
+            expect(page).not_to have_link(unconfirmed_user.name)
+          end
+
+          it "shows filtered active users" do
+            get "/users?status[]=active", headers:, params: {}
+            follow_redirect!
+            expect(page).to have_link(active_user.name)
+            expect(page).not_to have_link(deactivated_user.name)
+            expect(page).not_to have_link(unconfirmed_user.name)
+          end
+
+          it "shows filtered deactivated users" do
+            get "/users?status[]=deactivated", headers:, params: {}
+            follow_redirect!
+            expect(page).to have_link(deactivated_user.name)
+            expect(page).not_to have_link(active_user.name)
+            expect(page).not_to have_link(unconfirmed_user.name)
+          end
+
+          it "shows filtered unconfirmed users" do
+            get "/users?status[]=unconfirmed", headers:, params: {}
+            follow_redirect!
+            expect(page).to have_link(unconfirmed_user.name)
+            expect(page).not_to have_link(active_user.name)
+            expect(page).not_to have_link(deactivated_user.name)
+          end
+
+          it "does not reset the filters" do
+            get "/users?status[]=deactivated", headers:, params: {}
+            follow_redirect!
+            expect(page).to have_link(deactivated_user.name)
+            expect(page).not_to have_link(active_user.name)
+            expect(page).not_to have_link(unconfirmed_user.name)
+
+            get "/users", headers:, params: {}
+            follow_redirect!
+            expect(page).to have_link(deactivated_user.name)
+            expect(page).not_to have_link(active_user.name)
+            expect(page).not_to have_link(unconfirmed_user.name)
+          end
+        end
+      end
     end
 
     describe "CSV download" do
@@ -1155,6 +1209,54 @@ RSpec.describe UsersController, type: :request do
             it "updates the table caption" do
               expect(page).to have_content("2 users found matching ‘joe’ of 4 total users.")
             end
+          end
+        end
+      end
+
+      context "when filtering" do
+        context "with status filter" do
+          let!(:active_user) { create(:user, name: "active name", active: true) }
+          let!(:deactivated_user) { create(:user, active: false, name: "deactivated name") }
+          let!(:unconfirmed_user) { create(:user, confirmed_at: nil, name: "unconfirmed name") }
+
+          it "shows users for multiple selected statuses" do
+            get "/users?status[]=active&status[]=deactivated", headers:, params: {}
+            expect(page).to have_link(active_user.name)
+            expect(page).to have_link(deactivated_user.name)
+            expect(page).not_to have_link(unconfirmed_user.name)
+          end
+
+          it "shows filtered active users" do
+            get "/users?status[]=active", headers:, params: {}
+            expect(page).to have_link(active_user.name)
+            expect(page).not_to have_link(deactivated_user.name)
+            expect(page).not_to have_link(unconfirmed_user.name)
+          end
+
+          it "shows filtered deactivated users" do
+            get "/users?status[]=deactivated", headers:, params: {}
+            expect(page).to have_link(deactivated_user.name)
+            expect(page).not_to have_link(active_user.name)
+            expect(page).not_to have_link(unconfirmed_user.name)
+          end
+
+          it "shows filtered unconfirmed users" do
+            get "/users?status[]=unconfirmed", headers:, params: {}
+            expect(page).to have_link(unconfirmed_user.name)
+            expect(page).not_to have_link(active_user.name)
+            expect(page).not_to have_link(deactivated_user.name)
+          end
+
+          it "does not reset the filters" do
+            get "/users?status[]=deactivated", headers:, params: {}
+            expect(page).to have_link(deactivated_user.name)
+            expect(page).not_to have_link(active_user.name)
+            expect(page).not_to have_link(unconfirmed_user.name)
+
+            get "/users", headers:, params: {}
+            expect(page).to have_link(deactivated_user.name)
+            expect(page).not_to have_link(active_user.name)
+            expect(page).not_to have_link(unconfirmed_user.name)
           end
         end
       end

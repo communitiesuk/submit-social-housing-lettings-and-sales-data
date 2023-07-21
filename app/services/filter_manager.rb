@@ -39,6 +39,17 @@ class FilterManager
     end
   end
 
+  def self.filter_users(users, search_term, filters, user)
+    users = filter_by_search(users, search_term)
+
+    filters.each do |category, values|
+      next if Array(values).reject(&:empty?).blank?
+
+      users = users.public_send("filter_by_#{category}", values, user)
+    end
+    users
+  end
+
   def serialize_filters_to_session(specific_org: false)
     session[session_name_for(filter_type)] = session_filters(specific_org:).to_json
   end
@@ -54,13 +65,17 @@ class FilterManager
       current_user.logs_filters(specific_org:).each do |filter|
         new_filters[filter] = params[filter] if params[filter].present?
       end
+
+      new_filters = new_filters.except("owning_organisation") if params["owning_organisation_select"] == "all"
+      new_filters = new_filters.except("managing_organisation") if params["managing_organisation_select"] == "all"
+
+      new_filters = new_filters.except("user") if params["assigned_to"] == "all"
+      new_filters["user"] = current_user.id.to_s if params["assigned_to"] == "you"
     end
 
-    new_filters = new_filters.except("owning_organisation") if params["owning_organisation_select"] == "all"
-    new_filters = new_filters.except("managing_organisation") if params["managing_organisation_select"] == "all"
-
-    new_filters = new_filters.except("user") if params["assigned_to"] == "all"
-    new_filters["user"] = current_user.id.to_s if params["assigned_to"] == "you"
+    if @filter_type.include?("users") && params["status"].present?
+      new_filters["status"] = params["status"]
+    end
 
     new_filters
   end
@@ -69,6 +84,10 @@ class FilterManager
     all_orgs = params["managing_organisation_select"] == "all" && params["owning_organisation_select"] == "all"
 
     FilterManager.filter_logs(logs, search_term, filters, all_orgs, current_user)
+  end
+
+  def filtered_users(users, search_term, filters)
+    FilterManager.filter_users(users, search_term, filters, current_user)
   end
 
   def bulk_upload
