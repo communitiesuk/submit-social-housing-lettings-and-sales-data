@@ -5,9 +5,9 @@ class OrganisationsController < ApplicationController
   before_action :authenticate_user!
   before_action :find_resource, except: %i[index new create]
   before_action :authenticate_scope!, except: [:index]
-  before_action :session_filters, if: -> { current_user.support? || current_user.organisation.has_managing_agents? }, only: %i[lettings_logs sales_logs email_lettings_csv download_lettings_csv email_sales_csv download_sales_csv]
+  before_action :session_filters, if: -> { current_user.support? || current_user.organisation.has_managing_agents? }, only: %i[lettings_logs sales_logs email_lettings_csv download_lettings_csv email_sales_csv download_sales_csv schemes]
   before_action :session_filters, only: %i[users]
-  before_action -> { filter_manager.serialize_filters_to_session }, if: -> { current_user.support? || current_user.organisation.has_managing_agents? }, only: %i[lettings_logs sales_logs email_lettings_csv download_lettings_csv email_sales_csv download_sales_csv]
+  before_action -> { filter_manager.serialize_filters_to_session }, if: -> { current_user.support? || current_user.organisation.has_managing_agents? }, only: %i[lettings_logs sales_logs email_lettings_csv download_lettings_csv email_sales_csv download_sales_csv schemes]
   before_action -> { filter_manager.serialize_filters_to_session }, only: %i[users]
 
   def index
@@ -22,9 +22,10 @@ class OrganisationsController < ApplicationController
   def schemes
     all_schemes = Scheme.where(owning_organisation: [@organisation] + @organisation.parent_organisations).order_by_completion.order_by_service_name
 
-    @pagy, @schemes = pagy(filtered_collection(all_schemes, search_term))
+    @pagy, @schemes = pagy(filter_manager.filtered_schemes(all_schemes, search_term, session_filters))
     @searched = search_term.presence
     @total_count = all_schemes.size
+    @filter_type = "schemes"
   end
 
   def show
@@ -209,6 +210,8 @@ private
       "sales_logs"
     elsif params[:action].include?("users")
       "users"
+    elsif params[:action].include?("schemes")
+      "schemes"
     end
   end
 

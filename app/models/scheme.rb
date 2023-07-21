@@ -19,6 +19,52 @@ class Scheme < ApplicationRecord
 
   scope :order_by_completion, -> { order("confirmed ASC NULLS FIRST") }
   scope :order_by_service_name, -> { order(service_name: :asc) }
+  scope :filter_by_status, lambda { |statuses, _user = nil|
+    filtered_records = all
+    scopes = []
+
+    statuses.each do |status|
+      status = status == "active" ? "active_status" : status
+      if respond_to?(status, true)
+        scopes << send(status)
+      end
+    end
+
+    if scopes.any?
+      filtered_records = filtered_records
+      .left_outer_joins(:scheme_deactivation_periods)
+      .order("scheme_deactivation_periods.created_at DESC")
+      .merge(scopes.reduce(&:or))
+    end
+
+    filtered_records
+  }
+
+  scope :incomplete, lambda {
+    where.not(confirmed: true)
+  }
+
+  scope :deactivated, lambda {
+    merge(SchemeDeactivationPeriod.deactivations_without_reactivation)
+    .where("scheme_deactivation_periods.deactivation_date <= ?", Time.zone.now)
+  }
+
+  scope :deactivating_soon, lambda {
+    merge(SchemeDeactivationPeriod.deactivations_without_reactivation)
+    .where("scheme_deactivation_periods.deactivation_date > ?", Time.zone.now)
+  }
+
+  scope :reactivating_soon, lambda {
+    where.not("scheme_deactivation_periods.reactivation_date IS NULL")
+    .where("scheme_deactivation_periods.reactivation_date > ?", Time.zone.now)
+  }
+
+  scope :active_status, lambda {
+    where.not(id: joins(:scheme_deactivation_periods).reactivating_soon.pluck(:id))
+    .where.not(id: joins(:scheme_deactivation_periods).deactivated.pluck(:id))
+    .where.not(id: incomplete.pluck(:id))
+    .where.not(id: joins(:scheme_deactivation_periods).deactivating_soon.pluck(:id))
+  }
 
   validate :validate_confirmed
   validate :validate_owning_organisation
