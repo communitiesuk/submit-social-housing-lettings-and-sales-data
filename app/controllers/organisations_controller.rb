@@ -5,10 +5,10 @@ class OrganisationsController < ApplicationController
   before_action :authenticate_user!
   before_action :find_resource, except: %i[index new create]
   before_action :authenticate_scope!, except: [:index]
-  before_action :session_filters, if: -> { current_user.support? || current_user.organisation.has_managing_agents? }, only: %i[lettings_logs sales_logs email_lettings_csv download_lettings_csv email_sales_csv download_sales_csv schemes]
-  before_action :session_filters, only: %i[users]
-  before_action -> { filter_manager.serialize_filters_to_session }, if: -> { current_user.support? || current_user.organisation.has_managing_agents? }, only: %i[lettings_logs sales_logs email_lettings_csv download_lettings_csv email_sales_csv download_sales_csv schemes]
-  before_action -> { filter_manager.serialize_filters_to_session }, only: %i[users]
+  before_action :session_filters, if: -> { current_user.support? || current_user.organisation.has_managing_agents? }, only: %i[lettings_logs sales_logs email_lettings_csv download_lettings_csv email_sales_csv download_sales_csv]
+  before_action :session_filters, only: %i[users schemes]
+  before_action -> { filter_manager.serialize_filters_to_session }, if: -> { current_user.support? || current_user.organisation.has_managing_agents? }, only: %i[lettings_logs sales_logs email_lettings_csv download_lettings_csv email_sales_csv download_sales_csv]
+  before_action -> { filter_manager.serialize_filters_to_session }, only: %i[users schemes]
 
   def index
     redirect_to organisation_path(current_user.organisation) unless current_user.support?
