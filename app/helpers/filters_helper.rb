@@ -46,6 +46,16 @@ module FiltersHelper
     }.freeze
   end
 
+  def scheme_status_filters
+    {
+      "incomplete" => "Incomplete",
+      "active" => "Active",
+      "deactivating_soon" => "Deactivating soon",
+      "reactivating_soon" => "Reactivating soon",
+      "deactivated" => "Deactivated",
+    }.freeze
+  end
+
   def selected_option(filter, filter_type)
     return false unless session[session_name_for(filter_type)]
 
