@@ -296,16 +296,16 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
-      context "and an lead tenant must be under 20 if childrens home or foster care" do
+      context "and an lead tenant must be under 26 if childrens home or foster care" do
         before do
           lettings_log_xml.at_xpath("//meta:status").content = "submitted"
           lettings_log_xml.at_xpath("//xmlns:Q11").content = "13"
-          lettings_log_xml.at_xpath("//xmlns:P1Age").content = "22"
+          lettings_log_xml.at_xpath("//xmlns:P1Age").content = "26"
         end
 
         it "intercepts the relevant validation error" do
-          expect(logger).to receive(:warn).with(/Removing prevten with error: Answer cannot be a children’s home or foster care as the lead tenant is 20 or older/)
-          expect(logger).to receive(:warn).with(/Removing age1 with error: Answer cannot be a children’s home or foster care as the lead tenant is 20 or older/)
+          expect(logger).to receive(:warn).with(/Removing prevten with error: Answer cannot be a children’s home or foster care as the lead tenant is 26 or older/)
+          expect(logger).to receive(:warn).with(/Removing age1 with error: Answer cannot be a children’s home or foster care as the lead tenant is 26 or older/)
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
             .not_to raise_error
         end
