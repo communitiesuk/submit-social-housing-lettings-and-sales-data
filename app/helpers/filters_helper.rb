@@ -38,6 +38,14 @@ module FiltersHelper
     }.freeze
   end
 
+  def user_status_filters
+    {
+      "active" => "Active",
+      "deactivated" => "Deactivated",
+      "unconfirmed" => "Unconfirmed",
+    }.freeze
+  end
+
   def selected_option(filter, filter_type)
     return false unless session[session_name_for(filter_type)]
 
