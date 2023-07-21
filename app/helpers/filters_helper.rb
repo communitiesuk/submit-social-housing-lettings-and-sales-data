@@ -45,7 +45,7 @@ module FiltersHelper
   end
 
   def owning_organisations_filter_options(user)
-    organisation_options = user.support? ? Organisation.all : ([user.organisation] + user.organisation.stock_owners + user.organisation.absorbed_organisations.flat_map(&:stock_owners)).uniq
+    organisation_options = user.support? ? Organisation.all : ([user.organisation] + user.organisation.stock_owners + user.organisation.absorbed_organisations).uniq
     [OpenStruct.new(id: "", name: "Select an option")] + organisation_options.map { |org| OpenStruct.new(id: org.id, name: org.name) }
   end
 
@@ -69,7 +69,7 @@ module FiltersHelper
   end
 
   def managing_organisation_filter_options(user)
-    organisation_options = user.support? ? Organisation.all : [user.organisation] + user.organisation.managing_agents + user.organisation.absorbed_organisations.flat_map(&:managing_agents)
+    organisation_options = user.support? ? Organisation.all : ([user.organisation] + user.organisation.managing_agents + user.organisation.absorbed_organisations).uniq
     [OpenStruct.new(id: "", name: "Select an option")] + organisation_options.map { |org| OpenStruct.new(id: org.id, name: org.name) }
   end
 
