@@ -5,9 +5,9 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <span class="govuk-caption-l">Bulk upload for lettings (<%= @bulk_upload.year_combo %>)</span>
-    <h1 class="govuk-heading-l">Are you sure you want to upload all logs from this bulk upload?</h1>
+    <h1 class="govuk-heading-l">You have chosen to upload all logs from this bulk upload.</h1>
 
-    <p class="govuk-body">There are <%= pluralize(@bulk_upload.logs.count, "log") %> in this bulk upload, and <%= pluralize(@bulk_upload.bulk_upload_errors.count, "unexpected answer") %> will be marked as correct.</p>
+    <p class="govuk-body"><%= logs_and_soft_validations_warning(@bulk_upload) %></p>
 
     <%= form_with model: @form, scope: :form, url: page_bulk_upload_lettings_soft_validations_check_path(@bulk_upload, page: "confirm"), method: :patch do |f| %>
       <%= f.govuk_submit %>

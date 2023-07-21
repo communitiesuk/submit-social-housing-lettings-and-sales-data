@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_18_151955) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_13_140231) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,6 +40,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_18_151955) do
     t.text "filename"
     t.integer "needstype"
     t.text "choice"
+    t.integer "total_logs_count"
     t.index ["identifier"], name: "index_bulk_uploads_on_identifier", unique: true
     t.index ["user_id"], name: "index_bulk_uploads_on_user_id"
   end
@@ -432,7 +433,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_18_151955) do
     t.integer "unspecified_units"
     t.string "old_org_id"
     t.string "old_visible_id"
-    t.datetime "merge_date"
     t.index ["old_visible_id"], name: "index_organisations_on_old_visible_id", unique: true
   end
 

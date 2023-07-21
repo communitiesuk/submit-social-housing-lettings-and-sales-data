@@ -65,6 +65,10 @@ RSpec.describe BulkUpload::Lettings::Validator do
           it "is valid" do
             expect(validator).to be_valid
           end
+
+          it "returns correct total logs count" do
+            expect(validator.total_logs_count).to be(1)
+          end
         end
 
         context "and file has too few valid headers" do

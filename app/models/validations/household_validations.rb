@@ -60,9 +60,9 @@ module Validations::HouseholdValidations
       record.errors.add :prevten, :non_temp_accommodation, message: I18n.t("validations.household.prevten.non_temp_accommodation")
     end
 
-    if record.age1.present? && record.age1 > 19 && record.previous_tenancy_was_foster_care?
-      record.errors.add :prevten, :over_20_foster_care, message: I18n.t("validations.household.prevten.over_20_foster_care")
-      record.errors.add :age1, I18n.t("validations.household.age.lead.over_20")
+    if record.age1.present? && record.age1 > 25 && record.previous_tenancy_was_foster_care?
+      record.errors.add :prevten, :over_25_foster_care, message: I18n.t("validations.household.prevten.over_25_foster_care")
+      record.errors.add :age1, I18n.t("validations.household.age.lead.over_25")
     end
 
     if record.sex1 == "M" && record.previous_tenancy_was_refuge?

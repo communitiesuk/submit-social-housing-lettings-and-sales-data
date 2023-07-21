@@ -67,6 +67,10 @@ class BulkUpload::Sales::Validator
     errors.count == errors.where(category: "soft_validation").count && errors.count.positive?
   end
 
+  def total_logs_count
+    csv_parser.body_rows.count
+  end
+
 private
 
   # n^2 algo
