@@ -1,4 +1,4 @@
-class Form::Common::Pages::Organisation < ::Form::Page
+class Form::Sales::Pages::Organisation < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "organisation"
@@ -6,7 +6,7 @@ class Form::Common::Pages::Organisation < ::Form::Page
 
   def questions
     @questions ||= [
-      Form::Common::Questions::OwningOrganisationId.new(nil, nil, self),
+      Form::Sales::Questions::OwningOrganisationId.new(nil, nil, self),
     ]
   end
 

@@ -1,4 +1,4 @@
-class Form::Common::Questions::OwningOrganisationId < ::Form::Question
+class Form::Sales::Questions::OwningOrganisationId < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "owning_organisation_id"

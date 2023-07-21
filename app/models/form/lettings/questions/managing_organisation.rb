@@ -28,10 +28,10 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
     end
 
     orgs = if user.support?
-             log.owning_organisation
+             log.owning_organisation.managing_agents
            else
-             user.organisation
-           end.managing_agents.pluck(:id, :name).to_h
+             user.organisation.managing_agents + user.organisation.absorbed_organisations
+           end.pluck(:id, :name).to_h
 
     opts.merge(orgs)
   end
