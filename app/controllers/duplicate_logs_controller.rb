@@ -29,8 +29,8 @@ class DuplicateLogsController < ApplicationController
     @duplicates = params.permit(duplicates: {})[:duplicates]&.to_h || duplicates_for_user(current_user)
     return render_not_found unless @duplicates
 
-    @duplicates[:lettings] ||= []
-    @duplicates[:sales] ||= []
+    @duplicates[:lettings] ||= {}
+    @duplicates[:sales] ||= {}
     @duplicate_sets_count = @duplicates[:lettings].count + @duplicates[:sales].count
   end
 

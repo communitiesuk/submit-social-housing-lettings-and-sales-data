@@ -352,6 +352,7 @@ RSpec.describe DuplicateLogsController, type: :request do
         }
       end
 
+      # rubocop:disable RSpec/AnyInstance
       context "when duplicates are not provided in the params" do
         before do
           allow_any_instance_of(DuplicateLogsHelper).to receive(:duplicates_for_user).and_return duplicates
@@ -365,7 +366,7 @@ RSpec.describe DuplicateLogsController, type: :request do
 
       context "when duplicates are provided in the params" do
         it "does not call the helper method" do
-          expect_any_instance_of(DuplicateLogsHelper).not_to receive :duplicates_for_user  # rubocop:disable RSpec/AnyInstance
+          expect_any_instance_of(DuplicateLogsHelper).not_to receive :duplicates_for_user
           get duplicate_logs_path(duplicates:)
         end
 
@@ -377,6 +378,7 @@ RSpec.describe DuplicateLogsController, type: :request do
           end
         end
       end
+      # rubocop:enable RSpec/AnyInstance
 
       describe "viewing the page" do
         before do
