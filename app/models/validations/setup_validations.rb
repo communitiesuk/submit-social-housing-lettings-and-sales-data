@@ -41,7 +41,7 @@ module Validations::SetupValidations
 
   def validate_organisation(record)
     created_by, managing_organisation, owning_organisation = record.values_at("created_by", "managing_organisation", "owning_organisation")
-    unless [created_by, managing_organisation, owning_organisation].any?(&:blank?) || created_by.organisation.absorbed_organisations << created_by.organisation & [managing_organisation, owning_organisation]
+    unless [created_by, managing_organisation, owning_organisation].any?(&:blank?) || ((created_by.organisation.absorbed_organisations + [created_by.organisation]) & [managing_organisation, owning_organisation]).present?
       record.errors.add :created_by, I18n.t("validations.setup.created_by.invalid")
       record.errors.add :owning_organisation_id, I18n.t("validations.setup.owning_organisation.invalid")
       record.errors.add :managing_organisation_id, I18n.t("validations.setup.managing_organisation.invalid")

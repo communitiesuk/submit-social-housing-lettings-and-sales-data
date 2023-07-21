@@ -57,7 +57,7 @@ class User < ApplicationRecord
     if support?
       LettingsLog.all
     else
-      LettingsLog.filter_by_organisation(organisation.absorbed_organisations << organisation)
+      LettingsLog.filter_by_organisation(organisation.absorbed_organisations + [organisation])
     end
   end
 
@@ -65,16 +65,16 @@ class User < ApplicationRecord
     if support?
       SalesLog.all
     else
-      SalesLog.filter_by_owning_organisation(organisation.absorbed_organisations << organisation)
+      SalesLog.filter_by_owning_organisation(organisation.absorbed_organisations + [organisation])
     end
   end
 
   def owned_lettings_logs
-    LettingsLog.filter_by_owning_organisation(organisation.absorbed_organisations << organisation)
+    LettingsLog.filter_by_owning_organisation(organisation.absorbed_organisations + [organisation])
   end
 
   def managed_lettings_logs
-    LettingsLog.filter_by_managing_organisation(organisation.absorbed_organisations << organisation)
+    LettingsLog.filter_by_managing_organisation(organisation.absorbed_organisations + [organisation])
   end
 
   def is_key_contact?
