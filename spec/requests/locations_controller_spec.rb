@@ -125,6 +125,11 @@ RSpec.describe LocationsController, type: :request do
           let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
           let!(:incomplete_location) { create(:location, :incomplete, scheme:, startdate: Time.zone.local(2022, 4, 1)) }
           let!(:active_location) { create(:location, scheme:, startdate: Time.zone.local(2022, 4, 1)) }
+          let!(:deactivated_location) { create(:location, scheme:, startdate: Time.zone.local(2022, 4, 1)) }
+
+          before do
+            create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 4, 1), location: deactivated_location)
+          end
 
           it "shows locations for multiple selected statuses" do
             get "/schemes/#{scheme.id}/locations?status[]=incomplete&status[]=active", headers:, params: {}
@@ -144,7 +149,7 @@ RSpec.describe LocationsController, type: :request do
             expect(page).not_to have_link(incomplete_location.postcode)
           end
 
-          xit "shows filtered deactivated locations" do
+          it "shows filtered deactivated locations" do
             get "/schemes/#{scheme.id}/locations?status[]=deactivated", headers:, params: {}
             expect(page).to have_link(deactivated_location.postcode)
             expect(page).not_to have_link(active_location.postcode)
