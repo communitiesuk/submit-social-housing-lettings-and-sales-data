@@ -339,7 +339,7 @@ RSpec.describe User, type: :model do
       let(:merged_organisation) { create(:organisation, merge_date: Time.zone.yesterday) }
       let(:error_message) { "Validation failed: Organisation #{I18n.t('validations.organisation.merged')}" }
 
-      it "validates email format" do
+      it "validates organisation merge status" do
         expect { create(:user, organisation: merged_organisation) }
           .to raise_error(ActiveRecord::RecordInvalid, error_message)
       end
