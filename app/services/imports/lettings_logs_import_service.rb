@@ -8,9 +8,6 @@ module Imports
 
     def create_logs(folder)
       import_from(folder, :create_log)
-      if @logs_with_discrepancies.count.positive?
-        @logger.warn("The following lettings logs had status discrepancies: [#{@logs_with_discrepancies.join(', ')}]")
-      end
     end
 
   private
@@ -254,7 +251,6 @@ module Imports
       owner_id = meta_field_value(xml_doc, "owner-user-id").strip
       if owner_id.present?
         user = LegacyUser.find_by(old_user_id: owner_id)&.user
-        @logger.warn "Missing user! We expected to find a legacy user with old_user_id #{owner_id}" unless user
 
         attributes["created_by"] = user
       end
@@ -278,10 +274,7 @@ module Imports
         record = LettingsLog.find_by(old_id: legacy_id)
         if allow_updates
           attributes["updated_at"] = Time.zone.now
-          @logger.info "Updating lettings log #{record.id} with legacy ID #{legacy_id}"
           record.update!(attributes)
-        else
-          @logger.info "Lettings log #{record.id} with legacy ID #{legacy_id} already present, skipping."
         end
         record
       rescue ActiveRecord::RecordInvalid => e
@@ -295,7 +288,6 @@ module Imports
       # Blank out all invalid fields for in-progress logs
       if %w[saved submitted-invalid].include?(previous_status)
         lettings_log.errors.each do |error|
-          @logger.warn("Log #{lettings_log.old_id}: Removing field #{error.attribute} from log triggering validation: #{error.type}")
           attributes.delete(error.attribute.to_s)
           charges_attributes.each { |attribute| attributes.delete(attribute) } if error.attribute == :tcharge
         end
@@ -341,7 +333,6 @@ module Imports
 
         attribute, _type = error
         fields.each do |field|
-          @logger.warn("Log #{lettings_log.old_id}: Removing #{field} with error: #{lettings_log.errors[attribute].sort.join(', ')}")
           attributes.delete(field)
         end
         @logs_overridden << lettings_log.old_id
@@ -349,8 +340,6 @@ module Imports
       end
 
       if lettings_log.errors.of_kind?(:earnings, :under_hard_min)
-        @logger.warn("Log #{lettings_log.old_id}: Removing earnings with error: #{lettings_log.errors[:earnings].join(', ')}")
-        @logger.warn("Log #{lettings_log.old_id}: Removing incfreq with error: #{lettings_log.errors[:earnings].join(', ')}")
         @logs_overridden << lettings_log.old_id
         attributes.delete("earnings")
         attributes.delete("incfreq")
@@ -360,7 +349,6 @@ module Imports
       end
 
       if lettings_log.errors.of_kind?(:uprn, :uprn_error)
-        @logger.warn("Log #{lettings_log.old_id}: Setting uprn_known to no with error: #{lettings_log.errors[:uprn].join(', ')}")
         @logs_overridden << lettings_log.old_id
         attributes["uprn_known"] = 0
         return save_lettings_log(attributes, previous_status)
@@ -389,7 +377,6 @@ module Imports
           differences.push("#{key} #{value.inspect} #{lettings_log_value.inspect}")
         end
       end
-      @logger.warn "Differences found when saving log #{lettings_log.old_id}: #{differences}" unless differences.empty?
     end
 
     def fields_not_present_in_softwire_data
@@ -398,8 +385,6 @@ module Imports
 
     def check_status_completed(lettings_log, previous_status)
       if previous_status.include?("submitted") && lettings_log.status != "completed"
-        @logger.warn "lettings log #{lettings_log.id} is not completed"
-        @logger.warn "lettings log with old id:#{lettings_log.old_id} is incomplete but status should be complete"
         @logs_with_discrepancies << lettings_log.old_id
       end
     end

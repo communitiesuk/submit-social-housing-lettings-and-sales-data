@@ -8,9 +8,6 @@ module Imports
 
     def create_logs(folder)
       import_from(folder, :create_log)
-      if @logs_with_discrepancies.count.positive?
-        @logger.warn("The following sales logs had status discrepancies: [#{@logs_with_discrepancies.join(', ')}]")
-      end
     end
 
   private
@@ -180,7 +177,6 @@ module Imports
       owner_id = meta_field_value(xml_doc, "owner-user-id").strip
       if owner_id.present?
         user = LegacyUser.find_by(old_user_id: owner_id)&.user
-        @logger.warn "Missing user! We expected to find a legacy user with old_user_id #{owner_id}" unless user
 
         attributes["created_by"] = user
       end
@@ -201,11 +197,8 @@ module Imports
         record = SalesLog.find_by(old_id: legacy_id)
 
         if allow_updates
-          @logger.info "Updating sales log #{record.id} with legacy ID #{legacy_id}"
           attributes["updated_at"] = Time.zone.now
           record.update!(attributes)
-        else
-          @logger.info "Lettings log #{record.id} with legacy ID #{legacy_id} already present, skipping."
         end
         record
       rescue ActiveRecord::RecordInvalid => e
@@ -217,7 +210,6 @@ module Imports
       if %w[saved submitted-invalid].include?(previous_status)
         sales_log.errors.each do |error|
           unless error.attribute == :type || error.attribute == :ownershipsch
-            @logger.warn("Log #{sales_log.old_id}: Removing field #{error.attribute} from log triggering validation: #{error.type}")
             attributes.delete(error.attribute.to_s)
           end
           attributes.delete("pcodenk") if error.attribute == :postcode_full
@@ -247,7 +239,6 @@ module Imports
 
         attribute, _type = error
         fields.each do |field|
-          @logger.warn("Log #{sales_log.old_id}: Removing #{field} with error: #{sales_log.errors[attribute].sort.join(', ')}")
           attributes.delete(field)
         end
         @logs_overridden << sales_log.old_id
@@ -255,19 +246,16 @@ module Imports
       end
 
       if sales_log.errors.of_kind?(:postcode_full, :wrong_format)
-        @logger.warn("Log #{sales_log.old_id}: Removing postcode as the postcode is invalid")
         @logs_overridden << sales_log.old_id
         attributes.delete("postcode_full")
         attributes["pcodenk"] = attributes["la"].present? ? 1 : nil
         save_sales_log(attributes, previous_status)
       elsif sales_log.errors.of_kind?(:ppostcode_full, :wrong_format)
-        @logger.warn("Log #{sales_log.old_id}: Removing previous postcode as the postcode is invalid")
         @logs_overridden << sales_log.old_id
         attributes.delete("ppostcode_full")
         attributes["ppcodenk"] = attributes["prevloc"].present? ? 1 : nil
         save_sales_log(attributes, previous_status)
       elsif sales_log.errors.of_kind?(:uprn, :uprn_error)
-        @logger.warn("Log #{sales_log.old_id}: Setting uprn_known to no with error: #{sales_log.errors[:uprn].join(', ')}")
         @logs_overridden << sales_log.old_id
         attributes["uprn_known"] = 0
         save_sales_log(attributes, previous_status)
@@ -295,7 +283,6 @@ module Imports
           differences.push("#{key} #{value.inspect} #{sales_log_value.inspect}")
         end
       end
-      @logger.warn "Differences found when saving log #{sales_log.old_id}: #{differences}" unless differences.empty?
     end
 
     def fields_not_present_in_softwire_data
@@ -327,8 +314,6 @@ module Imports
 
     def check_status_completed(sales_log, previous_status)
       if previous_status.include?("submitted") && sales_log.status != "completed"
-        @logger.warn "sales log #{sales_log.id} is not completed. The following answers are missing: #{missing_answers(sales_log).join(', ')}"
-        @logger.warn "sales log with old id:#{sales_log.old_id} is incomplete but status should be complete"
         @logs_with_discrepancies << sales_log.old_id
       end
     end
