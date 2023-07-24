@@ -230,4 +230,24 @@ RSpec.describe Organisation, type: :model do
       end
     end
   end
+
+  describe "display_organisation_attributes" do
+    let(:organisation) { create(:organisation) }
+
+    it "does not include data protection agreement" do
+      expect(organisation.display_organisation_attributes).to eq(
+        [
+          { editable: false, name: "Organisation ID", value: "ORG#{organisation.id}" },
+          { editable: true,
+            name: "Address",
+            value: "2 Marsham Street\nLondon\nSW1P 4DF" },
+          { editable: true, name: "Telephone number", value: nil },
+          { editable: false, name: "Type of provider", value: "Local authority" },
+          { editable: false, name: "Registration number", value: "1234" },
+          { editable: false, format: :bullet, name: "Rent periods", value: %w[All] },
+          { editable: false, name: "Owns housing stock", value: "Yes" },
+        ],
+      )
+    end
+  end
 end

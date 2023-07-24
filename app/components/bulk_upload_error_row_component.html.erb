@@ -1,13 +1,13 @@
-<div class="x-govuk-summary-card govuk-!-margin-bottom-6">
-  <div class="x-govuk-summary-card__header">
+<div class="govuk-summary-card govuk-!-margin-bottom-6">
+  <div class="govuk-summary-card__title-wrapper">
     <% if lettings? %>
-      <h3 class="x-govuk-summary-card__title"><strong>Row <%= row %></strong> <%= tenant_code_html %> <%= property_ref_html %></h3>
+      <h3 class="govuk-summary-card__title"><strong>Row <%= row %></strong> <%= tenant_code_html %> <%= property_ref_html %></h3>
     <% else %>
-      <h3 class="x-govuk-summary-card__title"><strong>Row <%= row %></strong> <%= purchaser_code_html %></h3>
+      <h3 class="govuk-summary-card__title"><strong>Row <%= row %></strong> <%= purchaser_code_html %></h3>
     <% end %>
   </div>
 
-  <div class="x-govuk-summary-card__body">
+  <div class="govuk-summary-card__content">
     <%= govuk_table do |table| %>
       <% table.head do |head| %>
         <% head.row do |row| %>
