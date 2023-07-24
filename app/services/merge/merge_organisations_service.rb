@@ -9,6 +9,7 @@ class Merge::MergeOrganisationsService
     merge_rent_periods
     merge_organisation_relationships
     merge_users
+    merge_schemes_and_locations
     mark_organisations_as_merged
     @absorbing_organisation.save!
   end
@@ -17,9 +18,6 @@ private
 
   def merge_organisation_details
     @absorbing_organisation.holds_own_stock = merge_boolean_organisation_attribute("holds_own_stock")
-    @absorbing_organisation.choice_based_lettings = merge_boolean_organisation_attribute("choice_based_lettings")
-    @absorbing_organisation.common_housing_register = merge_boolean_organisation_attribute("common_housing_register")
-    @absorbing_organisation.choice_allocation_policy = merge_boolean_organisation_attribute("choice_allocation_policy")
   end
 
   def merge_rent_periods
@@ -52,6 +50,20 @@ private
   def merge_users
     @merging_organisations.each do |merging_organisation|
       merging_organisation.users.update_all(organisation_id: @absorbing_organisation.id)
+    end
+  end
+
+  def merge_schemes_and_locations
+    @merging_organisations.each do |merging_organisation|
+      merging_organisation.owned_schemes.each do |scheme|
+        next if scheme.deactivated?
+
+        new_scheme = Scheme.create!(scheme.attributes.except("id", "owning_organisation_id").merge(owning_organisation: @absorbing_organisation))
+        scheme.locations.each do |location|
+          new_scheme.locations << Location.new(location.attributes.except("id", "scheme_id")) unless location.deactivated?
+        end
+        SchemeDeactivationPeriod.create!(scheme:, deactivation_date: Time.zone.now)
+      end
     end
   end
 
