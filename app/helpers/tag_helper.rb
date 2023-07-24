@@ -28,7 +28,7 @@ module TagHelper
     reactivating_soon: "blue",
     deactivated: "grey",
     deleted: "red",
-    merged: "green",
+    merged: "orange",
   }.freeze
 
   def status_tag(status, classes = [])
