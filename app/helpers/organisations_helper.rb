@@ -11,7 +11,6 @@ module OrganisationsHelper
 
   def display_organisation_attributes(organisation)
     [
-      { name: "Name", value: organisation.name, editable: true },
       { name: "Organisation ID", value: "ORG#{organisation.id}", editable: false },
       { name: "Address", value: organisation.address_string, editable: true },
       { name: "Telephone number", value: organisation.phone, editable: true },
@@ -21,5 +20,21 @@ module OrganisationsHelper
       { name: "Owns housing stock", value: organisation.holds_own_stock ? "Yes" : "No", editable: false },
       { name: "Status", value: status_tag(organisation.status), editable: false },
     ]
+  end
+
+  def organisation_name_row(user:, organisation:, summary_list:)
+    summary_list.row do |row|
+      row.key { "Name" }
+      row.value { organisation.name }
+      if user.support?
+        row.action(
+          visually_hidden_text: organisation.name.humanize.downcase,
+          href: edit_organisation_path(organisation),
+          html_attributes: { "data-qa": "change-#{organisation.name.downcase}" },
+          )
+      else
+        row.action
+      end
+    end
   end
 end
