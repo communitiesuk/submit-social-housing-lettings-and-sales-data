@@ -76,7 +76,7 @@ RSpec.describe User, type: :model do
         end
 
         it "has lettings logs through both their organisation and absorbed organisation" do
-          expect(user.lettings_logs.to_a).to match_array([owned_lettings_log, managed_lettings_log, absorbed_org_owned_lettings_log, absorbed_org_managed_lettings_log])
+          expect(user.reload.lettings_logs.to_a).to match_array([owned_lettings_log, managed_lettings_log, absorbed_org_owned_lettings_log, absorbed_org_managed_lettings_log])
         end
       end
     end
