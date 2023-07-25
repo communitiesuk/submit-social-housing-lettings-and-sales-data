@@ -37,7 +37,7 @@ namespace :import do
       Import.new(Imports::SalesLogsImportService, :create_logs, "logs"),
     ]
 
-    Rails.logger.info("Beginning log imports for #{org_count} organisations")
+    Rails.logger.info("Initial imports complete, beginning log imports for #{org_count} organisations")
 
     csv.each { |row|
       archive_path = row[1]
@@ -45,7 +45,7 @@ namespace :import do
       archive_service = Storage::ArchiveService.new(archive_io)
 
       log_count = row[2].to_i + row[3].to_i + row[4].to_i + row[5].to_i
-      Rails.logger.info("Performing log imports for organisation #{row[0]}, expecting #{log_count} logs")
+      Rails.logger.info("Importing logs for organisation #{row[0]}, expecting #{log_count} logs")
 
       logs_import_list.each do |step|
         if archive_service.folder_present?(step.folder)
@@ -54,17 +54,35 @@ namespace :import do
       end
     }
 
-    Rails.logger.info("Import complete, triggering user invite emails")
+    Rails.logger.info("Log import complete, triggering user invite emails")
 
     csv.each { |row|
       organisation = Organisation.find_by(name: row[0])
       next unless organisation
-      users = User.where(:organisation, active: true)
+      users = User.where(organisation: organisation, active: true)
       users.each { |user| ResendInvitationMailer.resend_invitation_email(user).deliver_later }
     }
 
-    Rails.logger.info("Invite emails triggered")
+    Rails.logger.info("Invite emails triggered, generating report")
 
-    # Do output data
+    rep = CSV.generate do |report|
+      headers = ["Institution name", "Id", "Old Completed lettings logs", "Old In progress lettings logs", "Old Completed sales logs", "Old In progress sales logs", "New Completed lettings logs", "New In Progress lettings logs", "New Completed sales logs", "New In Progress sales logs"]
+      report << headers
+
+      csv.each { |row|
+        name = row[0]
+        organisation = Organisation.find_by(name: name)
+        next unless organisation
+        completed_sales_logs = organisation.owned_sales_logs.where(status: "completed").count
+        in_progress_sales_logs = organisation.owned_sales_logs.where(status: "in_progress").count
+        completed_lettings_logs = organisation.owned_lettings_logs.where(status: "completed").count
+        in_progress_lettings_logs = organisation.owned_lettings_logs.where(status: "in_progress").count
+        report << row.push(completed_lettings_logs, in_progress_lettings_logs, completed_sales_logs, in_progress_sales_logs)
+      }
+    end
+    report_name = "LogsReport-#{DateTime.now()}"
+    s3_service.write_file(report_name, rep)
+
+    Rails.logger.info("Logs report available in s3 import bucket at #{report_name}")
   end
 end
