@@ -36,33 +36,33 @@ RSpec.describe "Sales Log Check Answers Page" do
 
     it "does not group questions into summary cards if the questions in the subsection don't have a check_answers_card_number attribute" do
       visit("/sales-logs/#{completed_sales_log_joint_purchase.id}/household-needs/check-answers")
-      assert_selector ".x-govuk-summary-card__title", count: 0
+      assert_selector ".govuk-summary-card__title", count: 0
     end
 
     context "when the user is checking their answers for the household characteristics subsection" do
       context "and the log is for a joint purchase" do
         it "they see a separate summary card for each member of the household" do
           visit("/sales-logs/#{completed_sales_log_joint_purchase.id}/#{subsection}/check-answers")
-          assert_selector ".x-govuk-summary-card__title", text: "Buyer 1", count: 1
-          assert_selector ".x-govuk-summary-card__title", text: "Buyer 2", count: 1
-          assert_selector ".x-govuk-summary-card__title", text: "Person 1", count: 0
-          assert_selector ".x-govuk-summary-card__title", text: "Person 2", count: 0
-          assert_selector ".x-govuk-summary-card__title", text: "Person 3", count: 1
-          assert_selector ".x-govuk-summary-card__title", text: "Person 4", count: 1
-          assert_selector ".x-govuk-summary-card__title", text: "Person 5", count: 1
+          assert_selector ".govuk-summary-card__title", text: "Buyer 1", count: 1
+          assert_selector ".govuk-summary-card__title", text: "Buyer 2", count: 1
+          assert_selector ".govuk-summary-card__title", text: "Person 1", count: 0
+          assert_selector ".govuk-summary-card__title", text: "Person 2", count: 0
+          assert_selector ".govuk-summary-card__title", text: "Person 3", count: 1
+          assert_selector ".govuk-summary-card__title", text: "Person 4", count: 1
+          assert_selector ".govuk-summary-card__title", text: "Person 5", count: 1
         end
       end
 
       context "and the log is for a non-joint purchase" do
         it "they see a separate summary card for each member of the household" do
           visit("/sales-logs/#{completed_sales_log_non_joint_purchase.id}/#{subsection}/check-answers")
-          assert_selector ".x-govuk-summary-card__title", text: "Buyer 1", count: 1
-          assert_selector ".x-govuk-summary-card__title", text: "Buyer 2", count: 0
-          assert_selector ".x-govuk-summary-card__title", text: "Person 1", count: 0
-          assert_selector ".x-govuk-summary-card__title", text: "Person 2", count: 1
-          assert_selector ".x-govuk-summary-card__title", text: "Person 3", count: 1
-          assert_selector ".x-govuk-summary-card__title", text: "Person 4", count: 1
-          assert_selector ".x-govuk-summary-card__title", text: "Person 5", count: 1
+          assert_selector ".govuk-summary-card__title", text: "Buyer 1", count: 1
+          assert_selector ".govuk-summary-card__title", text: "Buyer 2", count: 0
+          assert_selector ".govuk-summary-card__title", text: "Person 1", count: 0
+          assert_selector ".govuk-summary-card__title", text: "Person 2", count: 1
+          assert_selector ".govuk-summary-card__title", text: "Person 3", count: 1
+          assert_selector ".govuk-summary-card__title", text: "Person 4", count: 1
+          assert_selector ".govuk-summary-card__title", text: "Person 5", count: 1
         end
       end
     end

@@ -2,7 +2,7 @@
   "name": "data-collector",
   "private": true,
   "engines": {
-    "node": "^16.0.0"
+    "node": "^18.0.0"
   },
   "dependencies": {
     "@babel/core": "^7.17.7",
@@ -11,6 +11,7 @@
     "@hotwired/stimulus": "^3.0.0",
     "@stimulus/polyfills": "^2.0.0",
     "@webcomponents/webcomponentsjs": "^2.6.0",
+    "@x-govuk/govuk-prototype-components": "^2.0.1",
     "accessible-autocomplete": "^2.0.3",
     "babel-loader": "^8.2.3",
     "babel-plugin-macros": "^3.1.0",
@@ -19,8 +20,7 @@
     "css-loader": "^6.7.1",
     "custom-event-polyfill": "^1.0.7",
     "file-loader": "^6.2.0",
-    "govuk-frontend": "4.2.0",
-    "govuk-prototype-components": "^0.4.0",
+    "govuk-frontend": "4.7.0",
     "html5shiv": "^3.7.3",
     "intersection-observer": "^0.12.0",
     "mini-css-extract-plugin": "^2.6.0",

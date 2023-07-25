@@ -14,6 +14,9 @@
         <% row.cell(header: true, text: "Type", html_attributes: {
           scope: "col",
         }) %>
+        <% row.cell(header: true, text: "Status", html_attributes: {
+          scope: "col",
+        }) %>
       <% end %>
     <% end %>
     <% @organisations.each do |organisation| %>
@@ -26,6 +29,7 @@
           <% end %>
           <% row.cell(text: organisation.housing_registration_no) %>
           <% row.cell(text: organisation.display_provider_type) %>
+          <% row.cell(text: status_tag(organisation.status)) %>
         <% end %>
       <% end %>
     <% end %>

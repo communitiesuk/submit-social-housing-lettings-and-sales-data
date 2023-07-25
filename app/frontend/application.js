@@ -13,7 +13,7 @@ import 'regenerator-runtime/runtime'
 
 //
 import { initAll as GOVUKFrontend } from 'govuk-frontend'
-import { initAll as GOVUKPrototypeComponents } from 'govuk-prototype-components'
+import { initAll as GOVUKPrototypeComponents } from '@x-govuk/govuk-prototype-components'
 import './controllers'
 import './cookie-banner'
 import './styles/application.scss'

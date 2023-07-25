@@ -355,6 +355,16 @@ RSpec.describe User, type: :model do
           .to raise_error(ActiveRecord::RecordInvalid, error_message)
       end
     end
+
+    context "when a user is added to a merged organisation" do
+      let(:merged_organisation) { create(:organisation, merge_date: Time.zone.yesterday) }
+      let(:error_message) { "Validation failed: Organisation #{I18n.t('validations.organisation.merged')}" }
+
+      it "validates organisation merge status" do
+        expect { create(:user, organisation: merged_organisation) }
+          .to raise_error(ActiveRecord::RecordInvalid, error_message)
+      end
+    end
   end
 
   describe "delete" do
