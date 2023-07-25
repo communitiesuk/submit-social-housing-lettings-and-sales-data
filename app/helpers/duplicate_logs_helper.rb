@@ -35,10 +35,10 @@ module DuplicateLogsHelper
     duplicate_lettings_ids = Set.new
     duplicate_sales_ids = Set.new
 
-    user.lettings_logs(created_by: true).each do |log|
+    LettingsLog.created_by(user).visible.each do |log|
       next if duplicate_lettings_ids.include? log.id
 
-      duplicates = LettingsLog.filter_by_organisation(user.organisation).duplicate_logs(log)
+      duplicates = user.lettings_logs.duplicate_logs(log)
       next if duplicates.none?
 
       duplicate_ids = [log.id, *duplicates.map(&:id)]
@@ -47,10 +47,10 @@ module DuplicateLogsHelper
       duplicate_lettings_ids << duplicate_ids
     end
 
-    user.sales_logs(created_by: true).each do |log|
+    SalesLog.created_by(user).visible.each do |log|
       next if duplicate_sales_ids.include? log.id
 
-      duplicates = SalesLog.filter_by_organisation(user.organisation).duplicate_logs(log)
+      duplicates = user.sales_logs.duplicate_logs(log)
       next if duplicates.none?
 
       duplicate_ids = [log.id, *duplicates.map(&:id)]

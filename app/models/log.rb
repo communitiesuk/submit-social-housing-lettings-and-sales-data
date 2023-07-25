@@ -29,7 +29,6 @@ class Log < ApplicationRecord
   scope :visible, -> { where(status: %w[not_started in_progress completed]) }
   scope :exportable, -> { where(status: %w[not_started in_progress completed deleted]) }
 
-  scope :created_by, ->(user) { where(created_by: user) }
   scope :filter_by_status, ->(status, _user = nil) { where status: }
   scope :filter_by_years, lambda { |years, _user = nil|
     first_year = years.shift
