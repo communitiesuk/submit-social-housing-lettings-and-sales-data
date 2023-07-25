@@ -2,8 +2,8 @@ require "rails_helper"
 require "rake"
 require "zip"
 
-describe "rake core:full_import", type: :task do
-  subject(:task) { Rake::Task["core:full_import"] }
+describe "rake import:full", type: :task do
+  subject(:task) { Rake::Task["import:full"] }
 
   let(:s3_service) { instance_double(Storage::S3Service) }
   let(:archive_service) { instance_double(Storage::ArchiveService) }
@@ -17,6 +17,7 @@ describe "rake core:full_import", type: :task do
     allow(Configuration::PaasConfigurationService).to receive(:new).and_return(paas_config_service)
     allow(Storage::S3Service).to receive(:new).and_return(s3_service)
     allow(s3_service).to receive(:get_file_io)
+    allow(s3_service).to receive(:write_file)
     allow(Storage::ArchiveService).to receive(:new).and_return(archive_service)
   end
 
@@ -56,7 +57,7 @@ describe "rake core:full_import", type: :task do
         expect(data_protection_service).to receive(:create_data_protection_confirmations).with("dataprotect")
         expect(rent_period_service).to receive(:create_organisation_rent_periods).with("rent-period")
         expect(lettings_logs_service).to receive(:create_logs).with("logs")
-        # expect(sales_logs_service).to receive(:create_logs).with("logs")
+        expect(sales_logs_service).to receive(:create_logs).with("logs")
 
         task.invoke(fixture_path)
       end
@@ -76,12 +77,10 @@ describe "rake core:full_import", type: :task do
         expect(data_protection_service).to receive(:create_data_protection_confirmations)
         expect(rent_period_service).to receive(:create_organisation_rent_periods)
         expect(lettings_logs_service).to receive(:create_logs)
-        # expect(sales_logs_service).to receive(:create_logs)
+        expect(sales_logs_service).to receive(:create_logs)
 
         expect(scheme_service).not_to receive(:create_schemes)
         expect(location_service).not_to receive(:create_scheme_locations)
-        expect(Rails.logger).to receive(:info).with("mgmtgroups does not exist, skipping Imports::SchemeImportService")
-        expect(Rails.logger).to receive(:info).with("schemes does not exist, skipping Imports::SchemeLocationImportService")
 
         task.invoke(fixture_path)
       end

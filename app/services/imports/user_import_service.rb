@@ -18,15 +18,14 @@ module Imports
       deleted = user_field_value(xml_document, "deleted")
 
       if LegacyUser.find_by(old_user_id:)
-        #@logger.warn("User #{name} with old user id #{old_user_id} is already present, skipping.")
+        @logger.warn("User #{name} with old user id #{old_user_id} is already present, skipping.")
       elsif deleted == "true"
-        #@logger.warn("User #{name} with old user id #{old_user_id} is deleted, skipping.")
+        @logger.warn("User #{name} with old user id #{old_user_id} is deleted, skipping.")
       elsif (user = User.find_by(email:, organisation:))
         is_dpo = user.is_data_protection_officer? || is_dpo?(user_field_value(xml_document, "user-type"))
         role = highest_role(user.role, role(user_field_value(xml_document, "user-type")))
         user.update!(role:, is_dpo:)
         user.legacy_users.create!(old_user_id:)
-        #@logger.info("Found duplicated email, updating user #{user.id} with role #{role} and is_dpo #{is_dpo}")
       else
         user = User.new
         user.email = email

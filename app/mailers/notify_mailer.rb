@@ -6,10 +6,7 @@ class NotifyMailer < ApplicationMailer
   end
 
   def send_email(email, template_id, personalisation)
-    if intercept_send?(email)
-      Rails.logger.info("Intercepted email send to #{email}")
-      return true
-    end
+    return true if intercept_send?(email)
 
     notify_client.send_email(
       email_address: email,

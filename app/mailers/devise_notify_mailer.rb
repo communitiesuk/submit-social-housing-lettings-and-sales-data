@@ -6,11 +6,7 @@ class DeviseNotifyMailer < Devise::Mailer
   end
 
   def send_email(email, template_id, personalisation)
-    if intercept_send?(email)
-      Rails.logger.info("Intercepted send to #{email}")
-      return true
-    end
-    #return true if intercept_send?(email)
+    return true if intercept_send?(email)
 
     notify_client.send_email(
       email_address: email,
