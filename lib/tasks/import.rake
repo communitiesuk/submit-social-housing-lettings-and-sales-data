@@ -4,7 +4,7 @@ namespace :import do
     raise "Must provide institutions csv path" if institutions_csv_path.blank?
 
     s3_service = Storage::S3Service.new(Configuration::PaasConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
-    csv = CSV.parse(s3_service.get_file_io(institutions_csv_path))
+    csv = CSV.parse(s3_service.get_file_io(institutions_csv_path), headers: true)
     org_count = csv.length
 
     initial_import_list = [
