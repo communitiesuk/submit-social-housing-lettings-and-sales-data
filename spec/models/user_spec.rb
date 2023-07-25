@@ -294,7 +294,7 @@ RSpec.describe User, type: :model do
     context "when filtering by status" do
       before do
         user_2.update!(active: false)
-        user_3.update!(active: false)
+        user_3.update!(active: false, confirmed_at: nil)
         user_4.update!(confirmed_at: nil)
       end
 

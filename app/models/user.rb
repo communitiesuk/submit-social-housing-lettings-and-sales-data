@@ -72,7 +72,7 @@ class User < ApplicationRecord
 
     filtered_records
   }
-  scope :unconfirmed, -> { where(confirmed_at: nil) }
+  scope :unconfirmed, -> { where(confirmed_at: nil, active: true) }
   scope :deactivated, -> { where(active: false) }
   scope :active_status, -> { where(active: true).where.not(confirmed_at: nil) }
 
