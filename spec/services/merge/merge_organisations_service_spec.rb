@@ -116,6 +116,22 @@ RSpec.describe Merge::MergeOrganisationsService do
           expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(nil)
         end
       end
+
+      context "and merging sales logs" do
+        let!(:sales_log) { create(:sales_log, saledate: Time.zone.tomorrow, owning_organisation: merging_organisation) }
+
+        before do
+          create(:sales_log, saledate: Time.zone.yesterday, owning_organisation: merging_organisation)
+        end
+
+        it "moves relevant logs" do
+          merge_organisations_service.call
+
+          absorbing_organisation.reload
+          expect(absorbing_organisation.owned_sales_logs.count).to eq(1)
+          expect(absorbing_organisation.owned_sales_logs.first).to eq(sales_log)
+        end
+      end
     end
   end
 end

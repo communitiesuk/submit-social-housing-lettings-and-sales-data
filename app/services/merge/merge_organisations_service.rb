@@ -11,6 +11,7 @@ class Merge::MergeOrganisationsService
     merge_users
     merge_schemes_and_locations
     merge_lettings_logs
+    merge_sales_logs
     mark_organisations_as_merged
     @absorbing_organisation.save!
   end
@@ -84,6 +85,14 @@ private
       merging_organisation.managed_lettings_logs.after_date(Time.zone.today).each do |lettings_log|
         lettings_log.managing_organisation = @absorbing_organisation
         lettings_log.save!
+      end
+    end
+  end
+
+  def merge_sales_logs
+    @merging_organisations.each do |merging_organisation|
+      merging_organisation.owned_sales_logs.after_date(Time.zone.today).each do |sales_log|
+        sales_log.update(owning_organisation: @absorbing_organisation)
       end
     end
   end
