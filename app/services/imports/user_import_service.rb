@@ -26,19 +26,20 @@ module Imports
         role = highest_role(user.role, role(user_field_value(xml_document, "user-type")))
         user.update!(role:, is_dpo:)
         user.legacy_users.create!(old_user_id:)
-        @logger.info("Found duplicated email, updating user #{user.id} with role #{role} and is_dpo #{is_dpo}")
       else
-        user = User.create!(
-          email:,
-          name:,
-          password: Devise.friendly_token,
-          phone: user_field_value(xml_document, "telephone-no"),
-          organisation:,
-          role: role(user_field_value(xml_document, "user-type")),
-          is_dpo: is_dpo?(user_field_value(xml_document, "user-type")),
-          is_key_contact: is_key_contact?(user_field_value(xml_document, "contact-priority-id")),
-          active: user_field_value(xml_document, "active"),
-        )
+        user = User.new
+        user.email = email
+        user.name = name
+        user.password = Devise.friendly_token
+        user.phone = user_field_value(xml_document, "telephone-no")
+        user.organisation = organisation
+        user.role = role(user_field_value(xml_document, "user-type"))
+        user.is_dpo = is_dpo?(user_field_value(xml_document, "user-type"))
+        user.is_key_contact = is_key_contact?(user_field_value(xml_document, "contact-priority-id"))
+        user.active = user_field_value(xml_document, "active")
+
+        user.skip_confirmation_notification!
+        user.save!
         user.legacy_users.create!(old_user_id:)
         user
       end
