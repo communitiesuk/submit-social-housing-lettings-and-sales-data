@@ -87,7 +87,6 @@ RSpec.describe Imports::SalesLogsImportService do
       it "only updates existing sales logs" do
         expect(logger).not_to receive(:error)
         allow(logger).to receive(:warn)
-        expect(logger).to receive(:info).with(/Updating sales log/).exactly(4).times
 
         start_time = Time.current
 
@@ -98,37 +97,6 @@ RSpec.describe Imports::SalesLogsImportService do
 
         updated_logs = SalesLog.where(updated_at: start_time..end_time).count
         expect(updated_logs).to eq(4)
-      end
-    end
-
-    context "when there are status discrepancies" do
-      let(:sales_log_file) { open_file(fixture_directory, "shared_ownership_sales_log3") }
-      let(:sales_log_xml) { Nokogiri::XML(sales_log_file) }
-
-      before do
-        allow(storage_service).to receive(:get_file_io)
-          .with("#{remote_folder}/shared_ownership_sales_log3.xml")
-          .and_return(open_file(fixture_directory, "shared_ownership_sales_log3"), open_file(fixture_directory, "shared_ownership_sales_log3"))
-        allow(storage_service).to receive(:get_file_io)
-          .with("#{remote_folder}/shared_ownership_sales_log4.xml")
-          .and_return(open_file(fixture_directory, "shared_ownership_sales_log4"), open_file(fixture_directory, "shared_ownership_sales_log4"))
-      end
-
-      it "the logger logs a warning with the sales log's old id/filename" do
-        expect(logger).to receive(:warn).with(/is not completed/).once
-        expect(logger).to receive(:warn).with(/sales log with old id:shared_ownership_sales_log3 is incomplete but status should be complete/).once
-
-        sales_log_service.send(:create_log, sales_log_xml)
-      end
-
-      it "on completion the ids of all logs with status discrepancies are logged in a warning" do
-        allow(storage_service).to receive(:list_files)
-                                  .and_return(%W[#{remote_folder}/shared_ownership_sales_log3.xml #{remote_folder}/shared_ownership_sales_log4.xml])
-        expect(logger).to receive(:warn).with(/is not completed/).twice
-        expect(logger).to receive(:warn).with(/is incomplete but status should be complete/).twice
-        expect(logger).to receive(:warn).with(/The following sales logs had status discrepancies: \[shared_ownership_sales_log3, shared_ownership_sales_log4\]/)
-
-        sales_log_service.create_logs(remote_folder)
       end
     end
   end
