@@ -22,10 +22,11 @@ RSpec.describe Merge::MergeOrganisationsService do
         expect(merging_organisation_user.organisation).to eq(absorbing_organisation)
       end
 
-      xit "sets merge date on merged organisation" do
+      it "sets merge date on merged organisation" do
         merge_organisations_service.call
 
-        expect(merging_organisation.merge_date).to eq(Time.zone.today)
+        merging_organisation.reload
+        expect(merging_organisation.merge_date.to_date).to eq(Time.zone.today)
       end
 
       it "combines organisation data" do

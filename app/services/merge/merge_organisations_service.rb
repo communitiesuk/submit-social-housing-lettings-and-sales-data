@@ -16,9 +16,9 @@ class Merge::MergeOrganisationsService
         merge_schemes_and_locations(merging_organisation)
         merge_lettings_logs(merging_organisation)
         merge_sales_logs(merging_organisation)
+        mark_organisation_as_merged(merging_organisation)
       end
       @absorbing_organisation.save!
-      mark_organisations_as_merged
       Rails.logger.info(@users_success_message)
       Rails.logger.info(@schemes_success_message)
     rescue ActiveRecord::RecordInvalid => e
@@ -99,8 +99,8 @@ private
     end
   end
 
-  def mark_organisations_as_merged
-    # @merging_organisations.update_all(merge_date: Time.zone.today)
+  def mark_organisation_as_merged(merging_organisation)
+    merging_organisation.update(merge_date: Time.zone.today)
   end
 
   def merge_boolean_organisation_attribute(attribute)
