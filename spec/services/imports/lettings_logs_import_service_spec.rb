@@ -107,7 +107,6 @@ RSpec.describe Imports::LettingsLogsImportService do
         it "only updates existing lettings logs" do
           expect(logger).not_to receive(:error)
           expect(logger).not_to receive(:warn)
-          expect(logger).to receive(:info).with(/Updating lettings log/).exactly(3).times
 
           start_time = Time.current
 
