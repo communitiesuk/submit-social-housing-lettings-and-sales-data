@@ -5,17 +5,22 @@ class Merge::MergeOrganisationsService
   end
 
   def call
-    merge_organisation_details
-    @merging_organisations.each do |merging_organisation|
-      merge_rent_periods(merging_organisation)
-      merge_organisation_relationships(merging_organisation)
-      merge_users(merging_organisation)
-      merge_schemes_and_locations(merging_organisation)
-      merge_lettings_logs(merging_organisation)
-      merge_sales_logs(merging_organisation)
+    ActiveRecord::Base.transaction do
+      merge_organisation_details
+      @merging_organisations.each do |merging_organisation|
+        merge_rent_periods(merging_organisation)
+        merge_organisation_relationships(merging_organisation)
+        merge_users(merging_organisation)
+        merge_schemes_and_locations(merging_organisation)
+        merge_lettings_logs(merging_organisation)
+        merge_sales_logs(merging_organisation)
+      end
+      @absorbing_organisation.save!
+      mark_organisations_as_merged
+    rescue ActiveRecord::RecordInvalid => e
+      Rails.logger.error("Organisation merge failed with: #{e.message}")
+      raise ActiveRecord::Rollback
     end
-    @absorbing_organisation.save!
-    mark_organisations_as_merged
   end
 
 private
