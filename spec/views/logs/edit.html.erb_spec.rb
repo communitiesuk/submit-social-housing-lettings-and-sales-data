@@ -88,6 +88,18 @@ RSpec.describe "logs/edit.html.erb" do
       end
     end
 
+    context "when lettings log is bulk uploaded without a bulk upload id" do
+      let(:log) { create(:lettings_log, :completed, bulk_upload: nil, creation_method: "bulk upload") }
+
+      it "does not have link 'Back to uploaded logs'" do
+        render
+
+        fragment = Capybara::Node::Simple.new(rendered)
+
+        expect(fragment).not_to have_link(text: "Back to uploaded logs")
+      end
+    end
+
     context "when sales log is bulk uploaded" do
       let(:bulk_upload) { create(:bulk_upload, :sales) }
       let(:log) { create(:sales_log, :completed, bulk_upload:, creation_method: "bulk upload") }

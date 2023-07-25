@@ -40,10 +40,21 @@ RSpec.describe CheckAnswersSummaryListCardComponent, type: :component do
       context "when log was created via a bulk upload and has an unanswered question" do
         subject(:component) { described_class.new(questions:, log:, user:) }
 
-        let(:log) { build(:lettings_log, :in_progress, creation_method: "bulk upload", age2: 99, startdate: Time.zone.local(2021, 5, 1)) }
+        let(:bulk_upload) { create(:bulk_upload) }
+        let(:log) { build(:lettings_log, :in_progress, creation_method: "bulk upload", age2: 99, startdate: Time.zone.local(2021, 5, 1), bulk_upload:) }
 
         it "displays tweaked copy in red" do
           expect(rendered).to have_selector("span", class: "app-!-colour-red", text: "You still need to answer this question")
+        end
+      end
+
+      context "when log was imported with a bulk upload creation method, without bulk upload id and has an unanswered question" do
+        subject(:component) { described_class.new(questions:, log:, user:) }
+
+        let(:log) { build(:lettings_log, :in_progress, creation_method: "bulk upload", age2: 99, startdate: Time.zone.local(2021, 5, 1), bulk_upload_id: nil) }
+
+        it "displays tweaked copy in red" do
+          expect(rendered).not_to have_selector("span", class: "app-!-colour-red", text: "You still need to answer this question")
         end
       end
 

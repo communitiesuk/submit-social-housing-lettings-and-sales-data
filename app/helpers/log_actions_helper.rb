@@ -16,7 +16,7 @@ private
 
   def back_button_for(log)
     if log.completed?
-      if log.creation_method_bulk_upload?
+      if log.creation_method_bulk_upload? && log.bulk_upload.present?
         if log.lettings?
           govuk_button_link_to "Back to uploaded logs", resume_bulk_upload_lettings_result_path(log.bulk_upload)
         else
