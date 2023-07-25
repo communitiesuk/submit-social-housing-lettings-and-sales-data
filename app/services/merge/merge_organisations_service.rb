@@ -6,6 +6,8 @@ class Merge::MergeOrganisationsService
 
   def call
     ActiveRecord::Base.transaction do
+      @users_success_message = "Absorbing organisation users: #{@absorbing_organisation.users.map { |user| "#{user.name} (#{user.email})" }.join(', ')}\n"
+      @schemes_success_message = ""
       merge_organisation_details
       @merging_organisations.each do |merging_organisation|
         merge_rent_periods(merging_organisation)
@@ -17,6 +19,8 @@ class Merge::MergeOrganisationsService
       end
       @absorbing_organisation.save!
       mark_organisations_as_merged
+      Rails.logger.info(@users_success_message)
+      Rails.logger.info(@schemes_success_message)
     rescue ActiveRecord::RecordInvalid => e
       Rails.logger.error("Organisation merge failed with: #{e.message}")
       raise ActiveRecord::Rollback
@@ -53,10 +57,12 @@ private
   end
 
   def merge_users(merging_organisation)
+    @users_success_message += "Merged users from #{merging_organisation.name}: #{merging_organisation.users.map { |user| "#{user.name} (#{user.email})" }.join(', ')}\n"
     merging_organisation.users.update_all(organisation_id: @absorbing_organisation.id)
   end
 
   def merge_schemes_and_locations(merging_organisation)
+    @schemes_success_message += "New schemes from #{merging_organisation.name}:\n"
     merging_organisation.owned_schemes.each do |scheme|
       next if scheme.deactivated?
 
@@ -64,6 +70,7 @@ private
       scheme.locations.each do |location|
         new_scheme.locations << Location.new(location.attributes.except("id", "scheme_id")) unless location.deactivated?
       end
+      @schemes_success_message += "Scheme #{new_scheme.service_name} with locations: #{new_scheme.locations.map { |location| "#{location.name} (#{location.postcode})" }.join(', ')}\n"
       SchemeDeactivationPeriod.create!(scheme:, deactivation_date: Time.zone.now)
     end
   end
