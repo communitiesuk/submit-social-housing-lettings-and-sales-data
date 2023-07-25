@@ -51,7 +51,7 @@ class SchemesController < ApplicationController
   end
 
   def deactivate_confirm
-    @affected_logs = @scheme.lettings_logs.visible.filter_by_before_startdate(params[:deactivation_date])
+    @affected_logs = @scheme.lettings_logs.visible.after_date(params[:deactivation_date])
     if @affected_logs.count.zero?
       deactivate
     else
@@ -335,7 +335,7 @@ private
   end
 
   def reset_location_and_scheme_for_logs!
-    logs = @scheme.lettings_logs.visible.filter_by_before_startdate(params[:deactivation_date].to_time)
+    logs = @scheme.lettings_logs.visible.after_date(params[:deactivation_date].to_time)
     logs.update!(location: nil, scheme: nil, unresolved: true)
     logs
   end
