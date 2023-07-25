@@ -102,24 +102,21 @@ class Organisation < ApplicationRecord
     DISPLAY_PROVIDER_TYPE[provider_type.to_sym]
   end
 
-  def display_organisation_attributes
-    [
-      { name: "Name", value: name, editable: true },
-      { name: "Organisation ID", value: "ORG#{id}", editable: false },
-      { name: "Address", value: address_string, editable: true },
-      { name: "Telephone number", value: phone, editable: true },
-      { name: "Type of provider", value: display_provider_type, editable: false },
-      { name: "Registration number", value: housing_registration_no || "", editable: false },
-      { name: "Rent periods", value: rent_period_labels, editable: false, format: :bullet },
-      { name: "Owns housing stock", value: holds_own_stock ? "Yes" : "No", editable: false },
-    ]
-  end
-
   def has_managing_agents?
     managing_agents.count.positive?
   end
 
   def has_stock_owners?
     stock_owners.count.positive?
+  end
+
+  def status
+    @status ||= status_at(Time.zone.now)
+  end
+
+  def status_at(date)
+    return :merged if merge_date.present? && merge_date < date
+
+    :active
   end
 end

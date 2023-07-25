@@ -16,7 +16,7 @@ RSpec.describe "bulk_upload_lettings_results/summary.html.erb" do
 
       fragment = Capybara::Node::Simple.new(rendered)
 
-      expect(fragment.find_css(".x-govuk-summary-card__title strong").map(&:inner_text)).to eql(["Row 10", "Row 14"])
+      expect(fragment.find_css(".govuk-summary-card__title strong").map(&:inner_text)).to eql(["Row 10", "Row 14"])
     end
   end
 

@@ -20,7 +20,9 @@ module Exports::LettingsLogExportConstants
     "cligrp1",
     "cligrp2",
     "createddate", # New metadata coming from our system
+    "creation_method",
     "confidential",
+    "discarded_at",
     "earnings",
     "ethnic",
     "formid",

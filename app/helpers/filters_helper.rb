@@ -91,8 +91,8 @@ private
     filters.each.sum do |category, category_filters|
       if %w[status years bulk_upload_id].include?(category)
         category_filters.count(&:present?)
-      elsif %w[assigned_to organisation].include?(category)
-        category_filters != "all" ? 1 : 0
+      elsif %w[user owning_organisation managing_organisation].include?(category)
+        1
       else
         0
       end
