@@ -624,15 +624,15 @@ RSpec.describe Validations::HouseholdValidations do
       end
     end
 
-    context "when the lead tenant is over 20" do
+    context "when the lead tenant is over 25" do
       it "cannot be children's home/foster care" do
         record.prevten = 13
-        record.age1 = 21
+        record.age1 = 26
         household_validator.validate_previous_housing_situation(record)
         expect(record.errors["prevten"])
-          .to include(match I18n.t("validations.household.prevten.over_20_foster_care"))
+          .to include(match I18n.t("validations.household.prevten.over_25_foster_care"))
         expect(record.errors["age1"])
-          .to include(match I18n.t("validations.household.age.lead.over_20"))
+          .to include(match I18n.t("validations.household.age.lead.over_25"))
       end
     end
 

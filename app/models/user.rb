@@ -24,6 +24,7 @@ class User < ApplicationRecord
   after_validation :send_data_protection_confirmation_reminder, if: :is_dpo_changed?
 
   validates :organisation_id, presence: true
+  validate :organisation_not_merged
 
   has_paper_trail ignore: %w[last_sign_in_at
                              current_sign_in_at
@@ -184,6 +185,12 @@ protected
   end
 
 private
+
+  def organisation_not_merged
+    if organisation&.merge_date.present? && organisation.merge_date < Time.zone.now
+      errors.add :organisation_id, I18n.t("validations.organisation.merged")
+    end
+  end
 
   def send_data_protection_confirmation_reminder
     return unless persisted?

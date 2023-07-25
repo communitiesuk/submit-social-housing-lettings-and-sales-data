@@ -222,7 +222,7 @@ RSpec.describe FiltersHelper do
           "assigned_to" => "all",
           "status" => [""],
           "years" => [""],
-          "organisation" => "all",
+          "organisation_select" => "all",
         }
       end
 
@@ -237,7 +237,8 @@ RSpec.describe FiltersHelper do
           "assigned_to" => "all",
           "status" => %w[in_progress completed],
           "years" => [""],
-          "organisation" => 2,
+          "organisation_select" => "specific_org",
+          "managing_organisation" => 2,
         }
       end
 

@@ -252,11 +252,11 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
-      context "and an lead tenant must be under 20 if childrens home or foster care" do
+      context "and an lead tenant must be under 26 if childrens home or foster care" do
         before do
           lettings_log_xml.at_xpath("//meta:status").content = "submitted"
           lettings_log_xml.at_xpath("//xmlns:Q11").content = "13"
-          lettings_log_xml.at_xpath("//xmlns:P1Age").content = "22"
+          lettings_log_xml.at_xpath("//xmlns:P1Age").content = "26"
         end
 
         it "intercepts the relevant validation error" do
