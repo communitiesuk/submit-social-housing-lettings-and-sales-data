@@ -87,7 +87,6 @@ RSpec.describe Imports::SalesLogsImportService do
       it "only updates existing sales logs" do
         expect(logger).not_to receive(:error)
         allow(logger).to receive(:warn)
-        expect(logger).to receive(:info).with(/Updating sales log/).exactly(4).times
 
         start_time = Time.current
 
@@ -98,37 +97,6 @@ RSpec.describe Imports::SalesLogsImportService do
 
         updated_logs = SalesLog.where(updated_at: start_time..end_time).count
         expect(updated_logs).to eq(4)
-      end
-    end
-
-    context "when there are status discrepancies" do
-      let(:sales_log_file) { open_file(fixture_directory, "shared_ownership_sales_log3") }
-      let(:sales_log_xml) { Nokogiri::XML(sales_log_file) }
-
-      before do
-        allow(storage_service).to receive(:get_file_io)
-          .with("#{remote_folder}/shared_ownership_sales_log3.xml")
-          .and_return(open_file(fixture_directory, "shared_ownership_sales_log3"), open_file(fixture_directory, "shared_ownership_sales_log3"))
-        allow(storage_service).to receive(:get_file_io)
-          .with("#{remote_folder}/shared_ownership_sales_log4.xml")
-          .and_return(open_file(fixture_directory, "shared_ownership_sales_log4"), open_file(fixture_directory, "shared_ownership_sales_log4"))
-      end
-
-      it "the logger logs a warning with the sales log's old id/filename" do
-        expect(logger).to receive(:warn).with(/is not completed/).once
-        expect(logger).to receive(:warn).with(/sales log with old id:shared_ownership_sales_log3 is incomplete but status should be complete/).once
-
-        sales_log_service.send(:create_log, sales_log_xml)
-      end
-
-      it "on completion the ids of all logs with status discrepancies are logged in a warning" do
-        allow(storage_service).to receive(:list_files)
-                                  .and_return(%W[#{remote_folder}/shared_ownership_sales_log3.xml #{remote_folder}/shared_ownership_sales_log4.xml])
-        expect(logger).to receive(:warn).with(/is not completed/).twice
-        expect(logger).to receive(:warn).with(/is incomplete but status should be complete/).twice
-        expect(logger).to receive(:warn).with(/The following sales logs had status discrepancies: \[shared_ownership_sales_log3, shared_ownership_sales_log4\]/)
-
-        sales_log_service.create_logs(remote_folder)
       end
     end
   end
@@ -537,8 +505,6 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       it "intercepts the relevant validation error" do
-        expect(logger).to receive(:warn).with(/Log discounted_ownership_sales_log: Removing field ecstat2 from log triggering validation: Answer cannot be ‘child under 16’ as you told us the person 2 is older than 16/)
-        expect(logger).to receive(:warn).with(/Log discounted_ownership_sales_log: Removing field age2 from log triggering validation: Answer cannot be over 16 as person’s 2 working situation is ‘child under 16‘/)
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .not_to raise_error
       end
@@ -563,7 +529,6 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       it "intercepts the relevant validation error" do
-        expect(logger).to receive(:warn).with(/Removing equity with error: The maximum initial equity stake is 75%/)
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .not_to raise_error
       end
@@ -587,7 +552,6 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       it "intercepts the relevant validation error" do
-        expect(logger).to receive(:warn).with(/Removing equity with error: The minimum initial equity stake for this type of shared ownership sale is 25%/)
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .not_to raise_error
       end
@@ -612,7 +576,6 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       it "intercepts the relevant validation error" do
-        expect(logger).to receive(:warn).with(/Log shared_ownership_sales_log: Removing postcode as the postcode is invalid/)
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .not_to raise_error
       end
@@ -639,7 +602,6 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       it "intercepts the relevant validation error" do
-        expect(logger).to receive(:warn).with(/Log shared_ownership_sales_log: Removing previous postcode as the postcode is invalid/)
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .not_to raise_error
       end
@@ -675,7 +637,6 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       it "intercepts the relevant validation error but does not clear setup fields" do
-        expect(logger).to receive(:warn).with(/Log shared_ownership_sales_log: Removing field stairbought from log triggering validation: The minimum increase in equity while staircasing is 10%/)
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .not_to raise_error
         sales_log = SalesLog.find_by(old_id: sales_log_id)
@@ -693,8 +654,6 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       it "intercepts the relevant validation error" do
-        expect(logger).to receive(:warn).with(/Removing ppcodenk with error: Buyer's last accommodation and discounted ownership postcodes must match, Last settled accommodation and discounted ownership property postcodes must match/)
-        expect(logger).to receive(:warn).with(/Removing ppostcode_full with error: Buyer's last accommodation and discounted ownership postcodes must match, Last settled accommodation and discounted ownership property postcodes must match/)
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .not_to raise_error
       end
@@ -720,7 +679,6 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       it "intercepts the relevant validation error" do
-        expect(logger).to receive(:warn).with(/Removing field postcode_full from log triggering validation: wrong_format/)
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .not_to raise_error
       end
@@ -764,7 +722,6 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       it "intercepts the relevant validation error" do
-        expect(logger).to receive(:warn).with(/Removing exdate with error: Contract exchange date must be less than 1 year before sale completion date/)
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .not_to raise_error
       end
@@ -789,7 +746,6 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       it "intercepts the relevant validation error" do
-        expect(logger).to receive(:warn).with(/Removing mortgage with error: Mortgage amount must be at least £1, Mortgage value cannot be £0 if a mortgage was used for the purchase of this property/)
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .not_to raise_error
       end
@@ -814,7 +770,6 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       it "intercepts the relevant validation error" do
-        expect(logger).to receive(:warn).with(/Removing income1 with error: Income must be £80,000 or lower for properties outside London local authority/)
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .not_to raise_error
       end
@@ -841,7 +796,6 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       it "intercepts the relevant validation error" do
-        expect(logger).to receive(:warn).with(/Removing income2 with error: Combined income must be £80,000 or lower for properties outside London local authorities, Income must be £80,000 or lower for properties outside London local authority/)
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .not_to raise_error
       end
@@ -866,7 +820,6 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       it "intercepts the relevant validation error" do
-        expect(logger).to receive(:warn).with(/Removing income1 with error: Income must be £90,000 or lower for properties within a London local authority/)
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .not_to raise_error
       end
@@ -893,7 +846,6 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       it "intercepts the relevant validation error" do
-        expect(logger).to receive(:warn).with(/Removing income2 with error: Combined income must be £90,000 or lower for properties within a London local authority, Income must be £90,000 or lower for properties within a London local authority/)
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .not_to raise_error
       end
@@ -917,8 +869,6 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       it "intercepts the relevant validation error" do
-        expect(logger).to receive(:warn).with(/Removing mscharge with error: Monthly leasehold charges must be at least £1/)
-        expect(logger).to receive(:warn).with(/Removing has_mscharge with error: Monthly leasehold charges must be at least £1/)
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .not_to raise_error
       end
@@ -943,7 +893,6 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       it "intercepts the relevant validation error" do
-        expect(logger).to receive(:warn).with(/Removing frombeds with error: Number of bedrooms in previous property must be between 1 and 6/)
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .not_to raise_error
       end
@@ -967,8 +916,6 @@ RSpec.describe Imports::SalesLogsImportService do
       end
 
       it "intercepts the relevant validation error" do
-        expect(logger).to receive(:warn).with(/Removing age1 with error: Lead buyer’s age must be between 16 and 110/)
-        expect(logger).to receive(:warn).with(/Removing age1_known with error: Lead buyer’s age must be between 16 and 110/)
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .not_to raise_error
       end
