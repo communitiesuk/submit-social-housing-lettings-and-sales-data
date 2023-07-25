@@ -16,7 +16,7 @@ describe "rake import:full", type: :task do
 
     allow(Configuration::PaasConfigurationService).to receive(:new).and_return(paas_config_service)
     allow(Storage::S3Service).to receive(:new).and_return(s3_service)
-    allow(s3_service).to receive(:get_file_io)
+    allow(s3_service).to receive(:get_file_io).and_return("")
     allow(s3_service).to receive(:write_file)
     allow(Storage::ArchiveService).to receive(:new).and_return(archive_service)
   end
