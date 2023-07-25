@@ -10,6 +10,7 @@ class Merge::MergeOrganisationsService
     merge_organisation_relationships
     merge_users
     merge_schemes_and_locations
+    merge_lettings_logs
     mark_organisations_as_merged
     @absorbing_organisation.save!
   end
@@ -63,6 +64,26 @@ private
           new_scheme.locations << Location.new(location.attributes.except("id", "scheme_id")) unless location.deactivated?
         end
         SchemeDeactivationPeriod.create!(scheme:, deactivation_date: Time.zone.now)
+      end
+    end
+  end
+
+  def merge_lettings_logs
+    @merging_organisations.each do |merging_organisation|
+      merging_organisation.owned_lettings_logs.after_date(Time.zone.today).each do |lettings_log|
+        if lettings_log.scheme.present?
+          scheme_to_set = @absorbing_organisation.owned_schemes.find_by(service_name: lettings_log.scheme.service_name)
+          location_to_set = scheme_to_set.locations.find_by(name: lettings_log.location&.name, postcode: lettings_log.location&.postcode)
+
+          lettings_log.scheme = scheme_to_set if scheme_to_set.present?
+          lettings_log.location = location_to_set if location_to_set.present?
+        end
+        lettings_log.owning_organisation = @absorbing_organisation
+        lettings_log.save!
+      end
+      merging_organisation.managed_lettings_logs.after_date(Time.zone.today).each do |lettings_log|
+        lettings_log.managing_organisation = @absorbing_organisation
+        lettings_log.save!
       end
     end
   end

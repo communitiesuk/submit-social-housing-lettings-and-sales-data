@@ -80,11 +80,16 @@ RSpec.describe Merge::MergeOrganisationsService do
         let!(:location) { create(:location, scheme:) }
         let!(:deactivated_location) { create(:location, scheme:) }
         let!(:deactivated_scheme) { create(:scheme, owning_organisation: merging_organisation) }
-        let!(:deactivated_scheme_location) { create(:location, scheme: deactivated_scheme) }
+        let!(:owned_lettings_log) { create(:lettings_log, :sh, scheme:, location:, startdate: Time.zone.tomorrow, owning_organisation: merging_organisation) }
+        let!(:owned_lettings_log_no_location) { create(:lettings_log, :sh, scheme:, startdate: Time.zone.tomorrow, owning_organisation: merging_organisation) }
 
         before do
+          create(:location, scheme:)
+          create(:location, scheme: deactivated_scheme)
           create(:scheme_deactivation_period, scheme: deactivated_scheme, deactivation_date: Time.zone.today - 1.month)
           create(:location_deactivation_period, location: deactivated_location, deactivation_date: Time.zone.today - 1.month)
+          create(:lettings_log, scheme:, location:, startdate: Time.zone.yesterday)
+          create(:lettings_log, startdate: Time.zone.tomorrow, managing_organisation: merging_organisation)
         end
 
         it "combines organisation relationships" do
@@ -93,10 +98,22 @@ RSpec.describe Merge::MergeOrganisationsService do
           absorbing_organisation.reload
           expect(absorbing_organisation.owned_schemes.count).to eq(1)
           expect(absorbing_organisation.owned_schemes.first.service_name).to eq(scheme.service_name)
-          expect(absorbing_organisation.owned_schemes.first.locations.count).to eq(1)
+          expect(absorbing_organisation.owned_schemes.first.locations.count).to eq(2)
           expect(absorbing_organisation.owned_schemes.first.locations.first.postcode).to eq(location.postcode)
           expect(scheme.scheme_deactivation_periods.count).to eq(1)
           expect(scheme.scheme_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today)
+        end
+
+        it "moves relevant logs and assigns the new scheme" do
+          merge_organisations_service.call
+
+          absorbing_organisation.reload
+          expect(absorbing_organisation.owned_lettings_logs.count).to eq(2)
+          expect(absorbing_organisation.managed_lettings_logs.count).to eq(1)
+          expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).scheme).to eq(absorbing_organisation.owned_schemes.first)
+          expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).location).to eq(absorbing_organisation.owned_schemes.first.locations.first)
+          expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).scheme).to eq(absorbing_organisation.owned_schemes.first)
+          expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(nil)
         end
       end
     end
