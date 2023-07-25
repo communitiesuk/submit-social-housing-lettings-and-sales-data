@@ -331,7 +331,6 @@ module Imports
       errors.each do |(error, fields)|
         next unless lettings_log.errors.of_kind?(*error)
 
-        attribute, _type = error
         fields.each do |field|
           attributes.delete(field)
         end
