@@ -6,8 +6,8 @@ class Merge::MergeOrganisationsService
 
   def call
     ActiveRecord::Base.transaction do
-      @users_success_message = "Absorbing organisation users: #{@absorbing_organisation.users.map { |user| "#{user.name} (#{user.email})" }.join(', ')}\n"
-      @schemes_success_message = ""
+      @merged_users = {}
+      @merged_schemes = {}
       merge_organisation_details
       @merging_organisations.each do |merging_organisation|
         merge_rent_periods(merging_organisation)
@@ -19,8 +19,7 @@ class Merge::MergeOrganisationsService
         mark_organisation_as_merged(merging_organisation)
       end
       @absorbing_organisation.save!
-      Rails.logger.info(@users_success_message)
-      Rails.logger.info(@schemes_success_message)
+      log_success_message
     rescue ActiveRecord::RecordInvalid => e
       Rails.logger.error("Organisation merge failed with: #{e.message}")
       raise ActiveRecord::Rollback
@@ -57,12 +56,12 @@ private
   end
 
   def merge_users(merging_organisation)
-    @users_success_message += "Merged users from #{merging_organisation.name}: #{merging_organisation.users.map { |user| "#{user.name} (#{user.email})" }.join(', ')}\n"
+    @merged_users[merging_organisation.name] = merging_organisation.users.map { |user| { name: user.name, email: user.email } }
     merging_organisation.users.update_all(organisation_id: @absorbing_organisation.id)
   end
 
   def merge_schemes_and_locations(merging_organisation)
-    @schemes_success_message += "New schemes from #{merging_organisation.name}:\n"
+    @merged_schemes[merging_organisation.name] = []
     merging_organisation.owned_schemes.each do |scheme|
       next if scheme.deactivated?
 
@@ -70,7 +69,7 @@ private
       scheme.locations.each do |location|
         new_scheme.locations << Location.new(location.attributes.except("id", "scheme_id")) unless location.deactivated?
       end
-      @schemes_success_message += "Scheme #{new_scheme.service_name} with locations: #{new_scheme.locations.map { |location| "#{location.name} (#{location.postcode})" }.join(', ')}\n"
+      @merged_schemes[merging_organisation.name] << { name: new_scheme.service_name, code: new_scheme.id }
       SchemeDeactivationPeriod.create!(scheme:, deactivation_date: Time.zone.now)
     end
   end
@@ -101,6 +100,21 @@ private
 
   def mark_organisation_as_merged(merging_organisation)
     merging_organisation.update(merge_date: Time.zone.today)
+  end
+
+  def log_success_message
+    @merged_users.each do |organisation_name, users|
+      Rails.logger.info("Merged users from #{organisation_name}:")
+      users.each do |user|
+        Rails.logger.info("\t#{user[:name]} (#{user[:email]})")
+      end
+    end
+    @merged_schemes.each do |organisation_name, schemes|
+      Rails.logger.info("New schemes from #{organisation_name}:")
+      schemes.each do |scheme|
+        Rails.logger.info("\t#{scheme[:name]} (S#{scheme[:code]})")
+      end
+    end
   end
 
   def merge_boolean_organisation_attribute(attribute)
