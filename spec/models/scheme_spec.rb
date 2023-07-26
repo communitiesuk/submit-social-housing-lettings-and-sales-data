@@ -92,7 +92,7 @@ RSpec.describe Scheme, type: :model do
 
       context "when filtering by status" do
         let!(:incomplete_scheme) { FactoryBot.create(:scheme, :incomplete) }
-        let!(:active_scheme) { FactoryBot.create(:scheme) }
+        let(:active_scheme) { FactoryBot.create(:scheme) }
         let(:deactivating_soon_scheme) { FactoryBot.create(:scheme) }
         let(:deactivated_scheme) { FactoryBot.create(:scheme) }
         let(:reactivating_soon_scheme) { FactoryBot.create(:scheme) }
@@ -108,6 +108,7 @@ RSpec.describe Scheme, type: :model do
           deactivated_scheme.save!
           FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 7), reactivation_date: Time.zone.local(2022, 6, 8), scheme: reactivating_soon_scheme)
           reactivating_soon_scheme.save!
+          FactoryBot.create(:location, scheme: active_scheme, confirmed: true)
         end
 
         after do

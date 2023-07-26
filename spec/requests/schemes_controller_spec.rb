@@ -79,10 +79,11 @@ RSpec.describe SchemesController, type: :request do
       context "when filtering" do
         context "with status filter" do
           let!(:incomplete_scheme) { create(:scheme, :incomplete, owning_organisation: user.organisation) }
-          let!(:active_scheme) { create(:scheme, owning_organisation: user.organisation) }
+          let(:active_scheme) { create(:scheme, owning_organisation: user.organisation) }
           let!(:deactivated_scheme) { create(:scheme, owning_organisation: user.organisation) }
 
           before do
+            create(:location, scheme: active_scheme)
             create(:scheme_deactivation_period, scheme: deactivated_scheme, deactivation_date: Time.zone.local(2022, 4, 1))
           end
 
@@ -283,10 +284,11 @@ RSpec.describe SchemesController, type: :request do
       context "when filtering" do
         context "with status filter" do
           let!(:incomplete_scheme) { create(:scheme, :incomplete) }
-          let!(:active_scheme) { create(:scheme) }
+          let(:active_scheme) { create(:scheme) }
           let!(:deactivated_scheme) { create(:scheme) }
 
           before do
+            create(:location, scheme: active_scheme)
             create(:scheme_deactivation_period, scheme: deactivated_scheme, deactivation_date: Time.zone.local(2022, 4, 1))
           end
 

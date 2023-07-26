@@ -17,7 +17,7 @@ class Scheme < ApplicationRecord
                         .or(filter_by_id(param)).distinct
                     }
 
-  scope :order_by_completion, -> { order("confirmed ASC NULLS FIRST") }
+  scope :order_by_completion, -> { order("schemes.confirmed ASC NULLS FIRST") }
   scope :order_by_service_name, -> { order(service_name: :asc) }
   scope :filter_by_status, lambda { |statuses, _user = nil|
     filtered_records = all
@@ -42,6 +42,10 @@ class Scheme < ApplicationRecord
 
   scope :incomplete, lambda {
     where.not(confirmed: true)
+    .or(where.not(id: Location.select(:scheme_id).where(confirmed: true).distinct))
+    .where.not(id: joins(:scheme_deactivation_periods).reactivating_soon.pluck(:id))
+    .where.not(id: joins(:scheme_deactivation_periods).deactivated.pluck(:id))
+    .where.not(id: joins(:scheme_deactivation_periods).deactivating_soon.pluck(:id))
   }
 
   scope :deactivated, lambda {
