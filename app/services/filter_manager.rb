@@ -50,11 +50,12 @@ class FilterManager
     users
   end
 
-  def self.filter_schemes(schemes, search_term, filters, user)
+  def self.filter_schemes(schemes, search_term, filters, user, all_orgs)
     schemes = filter_by_search(schemes, search_term)
 
     filters.each do |category, values|
       next if Array(values).reject(&:empty?).blank?
+      next if category == "owning_organisation" && all_orgs
 
       schemes = schemes.public_send("filter_by_#{category}", values, user)
     end
@@ -72,7 +73,8 @@ class FilterManager
   def deserialize_filters_from_session(specific_org)
     current_filters = session[session_name_for(filter_type)]
     new_filters = current_filters.present? ? JSON.parse(current_filters) : {}
-    if @filter_type.include?("logs")
+
+    if filter_type.include?("logs")
       current_user.logs_filters(specific_org:).each do |filter|
         new_filters[filter] = params[filter] if params[filter].present?
       end
@@ -84,8 +86,12 @@ class FilterManager
       new_filters["user"] = current_user.id.to_s if params["assigned_to"] == "you"
     end
 
-    if (@filter_type.include?("schemes") || @filter_type.include?("users")) && params["status"].present?
-      new_filters["status"] = params["status"]
+    if filter_type.include?("schemes")
+      current_user.logs_filters(specific_org:).each do |filter|
+        new_filters[filter] = params[filter] if params[filter].present?
+      end
+
+      new_filters = new_filters.except("owning_organisation") if params["owning_organisation_select"] == "all"
     end
 
     new_filters
@@ -102,7 +108,9 @@ class FilterManager
   end
 
   def filtered_schemes(schemes, search_term, filters)
-    FilterManager.filter_schemes(schemes, search_term, filters, current_user)
+    all_orgs = params["owning_organisation_select"] == "all"
+
+    FilterManager.filter_schemes(schemes, search_term, filters, current_user, all_orgs)
   end
 
   def bulk_upload

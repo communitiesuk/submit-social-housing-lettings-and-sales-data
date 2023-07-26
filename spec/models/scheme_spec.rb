@@ -90,6 +90,25 @@ RSpec.describe Scheme, type: :model do
         end
       end
 
+      context "when filtering by owning organisation" do
+        let(:organisation_1) { create(:organisation) }
+        let(:organisation_2) { create(:organisation) }
+        let(:organisation_3) { create(:organisation) }
+
+        before do
+          create(:scheme, owning_organisation: organisation_1)
+          create(:scheme, owning_organisation: organisation_1)
+          create(:scheme, owning_organisation: organisation_2)
+          create(:scheme, owning_organisation: organisation_2)
+        end
+
+        it "filters by given owning organisation" do
+          expect(described_class.filter_by_owning_organisation([organisation_1]).count).to eq(2)
+          expect(described_class.filter_by_owning_organisation([organisation_1, organisation_2]).count).to eq(4)
+          expect(described_class.filter_by_owning_organisation([organisation_3]).count).to eq(0)
+        end
+      end
+
       context "when filtering by status" do
         let!(:incomplete_scheme) { FactoryBot.create(:scheme, :incomplete) }
         let!(:active_scheme) { FactoryBot.create(:scheme) }

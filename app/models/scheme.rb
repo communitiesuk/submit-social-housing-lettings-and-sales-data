@@ -19,6 +19,7 @@ class Scheme < ApplicationRecord
 
   scope :order_by_completion, -> { order("confirmed ASC NULLS FIRST") }
   scope :order_by_service_name, -> { order(service_name: :asc) }
+  scope :filter_by_owning_organisation, ->(owning_organisation, _user = nil) { where(owning_organisation:) }
   scope :filter_by_status, lambda { |statuses, _user = nil|
     filtered_records = all
     scopes = []
