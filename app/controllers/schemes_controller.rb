@@ -6,6 +6,8 @@ class SchemesController < ApplicationController
   before_action :find_resource, except: %i[index create new]
   before_action :redirect_if_scheme_confirmed, only: %i[primary_client_group confirm_secondary_client_group secondary_client_group support details]
   before_action :authorize_user
+  before_action :session_filters, if: :current_user, only: %i[index]
+  before_action -> { filter_manager.serialize_filters_to_session }, if: :current_user, only: %i[index]
 
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
 
@@ -13,9 +15,10 @@ class SchemesController < ApplicationController
     redirect_to schemes_organisation_path(current_user.organisation) unless current_user.support?
     all_schemes = Scheme.order_by_completion.order_by_service_name
 
-    @pagy, @schemes = pagy(filtered_collection(all_schemes, search_term))
+    @pagy, @schemes = pagy(filter_manager.filtered_schemes(all_schemes, search_term, session_filters))
     @searched = search_term.presence
     @total_count = all_schemes.size
+    @filter_type = "schemes"
   end
 
   def show
@@ -335,5 +338,13 @@ private
     logs = @scheme.lettings_logs.visible.filter_by_before_startdate(params[:deactivation_date].to_time)
     logs.update!(location: nil, scheme: nil, unresolved: true)
     logs
+  end
+
+  def filter_manager
+    FilterManager.new(current_user:, session:, params:, filter_type: "schemes")
+  end
+
+  def session_filters
+    filter_manager.session_filters
   end
 end

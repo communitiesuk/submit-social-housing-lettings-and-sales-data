@@ -25,5 +25,9 @@ FactoryBot.define do
     trait :with_old_visible_id do
       old_visible_id { rand(9_999_999) }
     end
+    trait :incomplete do
+      confirmed { false }
+      support_type { nil }
+    end
   end
 end

@@ -50,6 +50,17 @@ class FilterManager
     users
   end
 
+  def self.filter_schemes(schemes, search_term, filters, user)
+    schemes = filter_by_search(schemes, search_term)
+
+    filters.each do |category, values|
+      next if Array(values).reject(&:empty?).blank?
+
+      schemes = schemes.public_send("filter_by_#{category}", values, user)
+    end
+    schemes
+  end
+
   def serialize_filters_to_session(specific_org: false)
     session[session_name_for(filter_type)] = session_filters(specific_org:).to_json
   end
@@ -73,7 +84,7 @@ class FilterManager
       new_filters["user"] = current_user.id.to_s if params["assigned_to"] == "you"
     end
 
-    if @filter_type.include?("users") && params["status"].present?
+    if (@filter_type.include?("schemes") || @filter_type.include?("users")) && params["status"].present?
       new_filters["status"] = params["status"]
     end
 
@@ -88,6 +99,10 @@ class FilterManager
 
   def filtered_users(users, search_term, filters)
     FilterManager.filter_users(users, search_term, filters, current_user)
+  end
+
+  def filtered_schemes(schemes, search_term, filters)
+    FilterManager.filter_schemes(schemes, search_term, filters, current_user)
   end
 
   def bulk_upload

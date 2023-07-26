@@ -75,6 +75,65 @@ RSpec.describe SchemesController, type: :request do
           end
         end
       end
+
+      context "when filtering" do
+        context "with status filter" do
+          let!(:incomplete_scheme) { create(:scheme, :incomplete, owning_organisation: user.organisation) }
+          let(:active_scheme) { create(:scheme, owning_organisation: user.organisation) }
+          let!(:deactivated_scheme) { create(:scheme, owning_organisation: user.organisation) }
+
+          before do
+            create(:location, scheme: active_scheme)
+            create(:scheme_deactivation_period, scheme: deactivated_scheme, deactivation_date: Time.zone.local(2022, 4, 1))
+          end
+
+          it "shows schemes for multiple selected statuses" do
+            get "/schemes?status[]=incomplete&status[]=active", headers:, params: {}
+            follow_redirect!
+            expect(page).to have_link(incomplete_scheme.service_name)
+            expect(page).to have_link(active_scheme.service_name)
+            expect(page).not_to have_link(deactivated_scheme.service_name)
+          end
+
+          it "shows filtered incomplete schemes" do
+            get "/schemes?status[]=incomplete", headers:, params: {}
+            follow_redirect!
+            expect(page).to have_link(incomplete_scheme.service_name)
+            expect(page).not_to have_link(active_scheme.service_name)
+            expect(page).not_to have_link(deactivated_scheme.service_name)
+          end
+
+          it "shows filtered active schemes" do
+            get "/schemes?status[]=active", headers:, params: {}
+            follow_redirect!
+            expect(page).to have_link(active_scheme.service_name)
+            expect(page).not_to have_link(incomplete_scheme.service_name)
+            expect(page).not_to have_link(deactivated_scheme.service_name)
+          end
+
+          it "shows filtered deactivated schemes" do
+            get "/schemes?status[]=deactivated", headers:, params: {}
+            follow_redirect!
+            expect(page).to have_link(deactivated_scheme.service_name)
+            expect(page).not_to have_link(active_scheme.service_name)
+            expect(page).not_to have_link(incomplete_scheme.service_name)
+          end
+
+          it "does not reset the filters" do
+            get "/schemes?status[]=incomplete", headers:, params: {}
+            follow_redirect!
+            expect(page).to have_link(incomplete_scheme.service_name)
+            expect(page).not_to have_link(active_scheme.service_name)
+            expect(page).not_to have_link(deactivated_scheme.service_name)
+
+            get "/schemes", headers:, params: {}
+            follow_redirect!
+            expect(page).to have_link(incomplete_scheme.service_name)
+            expect(page).not_to have_link(active_scheme.service_name)
+            expect(page).not_to have_link(deactivated_scheme.service_name)
+          end
+        end
+      end
     end
 
     context "when signed in as a support user" do
@@ -219,6 +278,59 @@ RSpec.describe SchemesController, type: :request do
 
         it "has search in the title" do
           expect(page).to have_title("Supported housing schemes (1 scheme matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+        end
+      end
+
+      context "when filtering" do
+        context "with status filter" do
+          let!(:incomplete_scheme) { create(:scheme, :incomplete) }
+          let(:active_scheme) { create(:scheme) }
+          let!(:deactivated_scheme) { create(:scheme) }
+
+          before do
+            create(:location, scheme: active_scheme)
+            create(:scheme_deactivation_period, scheme: deactivated_scheme, deactivation_date: Time.zone.local(2022, 4, 1))
+          end
+
+          it "shows schemes for multiple selected statuses" do
+            get "/schemes?status[]=incomplete&status[]=active", headers:, params: {}
+            expect(page).to have_link(incomplete_scheme.service_name)
+            expect(page).to have_link(active_scheme.service_name)
+            expect(page).not_to have_link(deactivated_scheme.service_name)
+          end
+
+          it "shows filtered incomplete schemes" do
+            get "/schemes?status[]=incomplete", headers:, params: {}
+            expect(page).to have_link(incomplete_scheme.service_name)
+            expect(page).not_to have_link(active_scheme.service_name)
+            expect(page).not_to have_link(deactivated_scheme.service_name)
+          end
+
+          it "shows filtered active schemes" do
+            get "/schemes?status[]=active", headers:, params: {}
+            expect(page).to have_link(active_scheme.service_name)
+            expect(page).not_to have_link(incomplete_scheme.service_name)
+            expect(page).not_to have_link(deactivated_scheme.service_name)
+          end
+
+          it "shows filtered deactivated schemes" do
+            get "/schemes?status[]=deactivated", headers:, params: {}
+            expect(page).to have_link(deactivated_scheme.service_name)
+            expect(page).not_to have_link(active_scheme.service_name)
+            expect(page).not_to have_link(incomplete_scheme.service_name)
+          end
+
+          it "does not reset the filters" do
+            get "/schemes?status[]=incomplete", headers:, params: {}
+            expect(page).to have_link(incomplete_scheme.service_name)
+            expect(page).not_to have_link(active_scheme.service_name)
+            expect(page).not_to have_link(deactivated_scheme.service_name)
+
+            get "/schemes", headers:, params: {}
+            expect(page).to have_link(incomplete_scheme.service_name)
+            expect(page).not_to have_link(active_scheme.service_name)
+            expect(page).not_to have_link(deactivated_scheme.service_name)
+          end
         end
       end
     end

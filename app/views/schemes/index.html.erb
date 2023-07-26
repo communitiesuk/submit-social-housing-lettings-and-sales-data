@@ -8,11 +8,15 @@
 <% if SchemePolicy.new(current_user, nil).create? %>
   <%= govuk_button_link_to "Create a new supported housing scheme", new_scheme_path, html: { method: :post } %>
 <% end %>
+<div class="app-filter-layout" data-controller="filter-layout">
+  <%= render partial: "schemes/scheme_filters" %>
+  <div class="app-filter-layout__content">
+    <%= render SearchComponent.new(current_user:, search_label: "Search by scheme name, code, postcode or location name", value: @searched) %>
 
-<%= render SearchComponent.new(current_user:, search_label: "Search by scheme name, code, postcode or location name", value: @searched) %>
+    <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
 
-<hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
+    <%= render partial: "schemes/scheme_list", locals: { schemes: @schemes, title:, pagy: @pagy, searched: @searched, item_label:, total_count: @total_count } %>
 
-<%= render partial: "schemes/scheme_list", locals: { schemes: @schemes, title:, pagy: @pagy, searched: @searched, item_label:, total_count: @total_count } %>
-
-<%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "schemes" } %>
+    <%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "schemes" } %>
+  </div>
+</div>

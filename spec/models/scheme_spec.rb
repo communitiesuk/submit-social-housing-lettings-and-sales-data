@@ -89,6 +89,75 @@ RSpec.describe Scheme, type: :model do
           expect(described_class.search_by(location.name.downcase).first.locations.first.name).to eq(location.name)
         end
       end
+
+      context "when filtering by status" do
+        let!(:incomplete_scheme) { FactoryBot.create(:scheme, :incomplete) }
+        let(:active_scheme) { FactoryBot.create(:scheme) }
+        let(:deactivating_soon_scheme) { FactoryBot.create(:scheme) }
+        let(:deactivated_scheme) { FactoryBot.create(:scheme) }
+        let(:reactivating_soon_scheme) { FactoryBot.create(:scheme) }
+
+        before do
+          scheme.destroy!
+          scheme_1.destroy!
+          scheme_2.destroy!
+          Timecop.freeze(2022, 6, 7)
+          FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 8), scheme: deactivating_soon_scheme)
+          deactivating_soon_scheme.save!
+          FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 6), scheme: deactivated_scheme)
+          deactivated_scheme.save!
+          FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 7), reactivation_date: Time.zone.local(2022, 6, 8), scheme: reactivating_soon_scheme)
+          reactivating_soon_scheme.save!
+          FactoryBot.create(:location, scheme: active_scheme, confirmed: true)
+        end
+
+        after do
+          Timecop.unfreeze
+        end
+
+        context "when filtering by incomplete status" do
+          it "returns only incomplete schemes" do
+            expect(described_class.filter_by_status(%w[incomplete]).count).to eq(1)
+            expect(described_class.filter_by_status(%w[incomplete]).first).to eq(incomplete_scheme)
+          end
+        end
+
+        context "when filtering by active status" do
+          it "returns only active schemes" do
+            expect(described_class.filter_by_status(%w[active]).count).to eq(1)
+            expect(described_class.filter_by_status(%w[active]).first).to eq(active_scheme)
+          end
+        end
+
+        context "when filtering by deactivating_soon status" do
+          it "returns only deactivating_soon schemes" do
+            expect(described_class.filter_by_status(%w[deactivating_soon]).count).to eq(1)
+            expect(described_class.filter_by_status(%w[deactivating_soon]).first).to eq(deactivating_soon_scheme)
+          end
+        end
+
+        context "when filtering by deactivated status" do
+          it "returns only deactivated schemes" do
+            expect(described_class.filter_by_status(%w[deactivated]).count).to eq(1)
+            expect(described_class.filter_by_status(%w[deactivated]).first).to eq(deactivated_scheme)
+          end
+        end
+
+        context "when filtering by reactivating_soon status" do
+          it "returns only reactivating_soon schemes" do
+            expect(described_class.filter_by_status(%w[reactivating_soon]).count).to eq(1)
+            expect(described_class.filter_by_status(%w[reactivating_soon]).first).to eq(reactivating_soon_scheme)
+          end
+        end
+
+        context "when filtering by multiple statuses" do
+          it "returns relevant schemes" do
+            expect(described_class.filter_by_status(%w[deactivating_soon reactivating_soon]).count).to eq(2)
+            expect(described_class.filter_by_status(%w[deactivating_soon reactivating_soon])).to include(reactivating_soon_scheme)
+            expect(described_class.filter_by_status(%w[deactivating_soon reactivating_soon])).to include(deactivating_soon_scheme)
+          end
+        end
+      end
     end
   end
 
