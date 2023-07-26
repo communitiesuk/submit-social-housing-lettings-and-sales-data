@@ -213,7 +213,7 @@ private
 
     if rent_range.present? && !weekly_value_in_range(record, "brent", rent_range.hard_min, rent_range.hard_max) && record.brent.present? && record.period.present?
       if record.weekly_value(record["brent"]) < rent_range.hard_min
-        record.errors.add :brent, I18n.t("validations.financial.brent.below_hard_min")
+        record.errors.add :brent, :below_hard_min, message: I18n.t("validations.financial.brent.below_hard_min")
         record.errors.add :beds, I18n.t("validations.financial.brent.beds.below_hard_min")
         record.errors.add :uprn, I18n.t("validations.financial.brent.uprn.below_hard_min")
         record.errors.add :la, I18n.t("validations.financial.brent.la.below_hard_min")
