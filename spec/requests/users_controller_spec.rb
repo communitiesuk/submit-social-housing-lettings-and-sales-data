@@ -474,9 +474,9 @@ RSpec.describe UsersController, type: :request do
 
       context "when filtering" do
         context "with status filter" do
-          let!(:active_user) { create(:user, name: "active name", active: true, organisation: user.organisation) }
-          let!(:deactivated_user) { create(:user, active: false, name: "deactivated name", organisation: user.organisation) }
-          let!(:unconfirmed_user) { create(:user, confirmed_at: nil, name: "unconfirmed name", organisation: user.organisation) }
+          let!(:active_user) { create(:user, name: "active name", active: true, organisation: user.organisation, last_sign_in_at: Time.zone.now) }
+          let!(:deactivated_user) { create(:user, active: false, name: "deactivated name", organisation: user.organisation, last_sign_in_at: Time.zone.now) }
+          let!(:unconfirmed_user) { create(:user, last_sign_in_at: nil, name: "unconfirmed name", organisation: user.organisation) }
 
           it "shows users for multiple selected statuses" do
             get "/users?status[]=active&status[]=deactivated", headers:, params: {}
@@ -1215,9 +1215,9 @@ RSpec.describe UsersController, type: :request do
 
       context "when filtering" do
         context "with status filter" do
-          let!(:active_user) { create(:user, name: "active name", active: true) }
-          let!(:deactivated_user) { create(:user, active: false, name: "deactivated name") }
-          let!(:unconfirmed_user) { create(:user, confirmed_at: nil, name: "unconfirmed name") }
+          let!(:active_user) { create(:user, name: "active name", active: true, last_sign_in_at: Time.zone.now) }
+          let!(:deactivated_user) { create(:user, active: false, name: "deactivated name", last_sign_in_at: Time.zone.now) }
+          let!(:unconfirmed_user) { create(:user, last_sign_in_at: nil, name: "unconfirmed name") }
 
           it "shows users for multiple selected statuses" do
             get "/users?status[]=active&status[]=deactivated", headers:, params: {}

@@ -61,6 +61,7 @@ class User < ApplicationRecord
 
     statuses.each do |status|
       status = status == "active" ? "active_status" : status
+      status = status == "unconfirmed" ? "not_signed_in" : status
       if respond_to?(status, true)
         scopes << send(status)
       end
@@ -72,9 +73,9 @@ class User < ApplicationRecord
 
     filtered_records
   }
-  scope :unconfirmed, -> { where(confirmed_at: nil, active: true) }
+  scope :not_signed_in, -> { where(last_sign_in_at: nil, active: true) }
   scope :deactivated, -> { where(active: false) }
-  scope :active_status, -> { where(active: true).where.not(confirmed_at: nil) }
+  scope :active_status, -> { where(active: true).where.not(last_sign_in_at: nil) }
 
   def lettings_logs
     if support?

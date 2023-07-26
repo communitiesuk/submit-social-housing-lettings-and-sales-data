@@ -258,11 +258,11 @@ RSpec.describe User, type: :model do
   describe "scopes" do
     let(:organisation_1) { create(:organisation, :without_dpc, name: "A") }
     let(:organisation_2) { create(:organisation, :without_dpc, name: "B") }
-    let!(:user_1) { create(:user, name: "Joe Bloggs", email: "joe@example.com", organisation: organisation_1, role: "support") }
+    let!(:user_1) { create(:user, name: "Joe Bloggs", email: "joe@example.com", organisation: organisation_1, role: "support", last_sign_in_at: Time.zone.now) }
     let!(:user_2) { create(:user, name: "Jenny Ford", email: "jenny@smith.com", organisation: organisation_1, role: "data_coordinator") }
     let!(:user_3) { create(:user, name: "Tom Smith", email: "tom@example.com", organisation: organisation_1, role: "data_provider") }
     let!(:user_4) { create(:user, name: "Greg Thomas", email: "greg@org2.com", organisation: organisation_2, role: "data_coordinator") }
-    let!(:user_5) { create(:user, name: "Adam Thomas", email: "adam@org2.com", organisation: organisation_2, role: "data_coordinator") }
+    let!(:user_5) { create(:user, name: "Adam Thomas", email: "adam@org2.com", organisation: organisation_2, role: "data_coordinator", last_sign_in_at: Time.zone.now) }
 
     context "when searching by name" do
       it "returns case insensitive matching records" do
@@ -294,8 +294,8 @@ RSpec.describe User, type: :model do
     context "when filtering by status" do
       before do
         user_2.update!(active: false)
-        user_3.update!(active: false, confirmed_at: nil)
-        user_4.update!(confirmed_at: nil)
+        user_3.update!(active: false, last_sign_in_at: nil)
+        user_4.update!(last_sign_in_at: nil)
       end
 
       context "when filtering by active status" do
