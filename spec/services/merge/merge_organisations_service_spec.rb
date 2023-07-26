@@ -45,7 +45,7 @@ RSpec.describe Merge::MergeOrganisationsService do
 
         absorbing_organisation.reload
         expect(absorbing_organisation.holds_own_stock).to eq(false)
-        # expect(merging_organisation.merge_date).to eq(nil)
+        expect(merging_organisation.merge_date).to eq(nil)
         expect(merging_organisation_user.organisation).to eq(merging_organisation)
       end
 
@@ -203,6 +203,56 @@ RSpec.describe Merge::MergeOrganisationsService do
           expect(absorbing_organisation.owned_sales_logs.count).to eq(0)
           expect(sales_log.owning_organisation).to eq(merging_organisation)
         end
+      end
+    end
+
+    context "when merging a multiple organisations into an existing organisation" do
+      let(:merging_organisation) { create(:organisation, holds_own_stock: true, name: "fake org") }
+      let(:merging_organisation_too) { create(:organisation, holds_own_stock: true, name: "second org") }
+
+      let(:merging_organisation_ids) { [merging_organisation.id, merging_organisation_too.id] }
+      let!(:merging_organisation_user) { create(:user, organisation: merging_organisation, name: "fake name", email: "fake@email.com") }
+
+      before do
+        create_list(:user, 5, organisation: merging_organisation_too)
+      end
+
+      it "moves the users from merging organisations to absorbing organisation" do
+        expect(Rails.logger).to receive(:info).with(/Merged users from second org:/)
+        expect(Rails.logger).to receive(:info).with("New schemes from fake org:\nNew schemes from second org:\n")
+        merge_organisations_service.call
+
+        merging_organisation_user.reload
+        expect(merging_organisation_user.organisation).to eq(absorbing_organisation)
+      end
+
+      it "sets merge date on merged organisations" do
+        merge_organisations_service.call
+
+        merging_organisation.reload
+        merging_organisation_too.reload
+        expect(merging_organisation.merge_date.to_date).to eq(Time.zone.today)
+        expect(merging_organisation_too.merge_date.to_date).to eq(Time.zone.today)
+      end
+
+      it "combines organisation data" do
+        merge_organisations_service.call
+
+        absorbing_organisation.reload
+        expect(absorbing_organisation.holds_own_stock).to eq(true)
+      end
+
+      it "rolls back if there's an error" do
+        allow(Organisation).to receive(:find).with([merging_organisation_ids]).and_return(Organisation.find(merging_organisation_ids))
+        allow(Organisation).to receive(:find).with(absorbing_organisation.id).and_return(absorbing_organisation)
+        allow(absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
+        expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
+        merge_organisations_service.call
+
+        absorbing_organisation.reload
+        expect(absorbing_organisation.holds_own_stock).to eq(false)
+        expect(merging_organisation.merge_date).to eq(nil)
+        expect(merging_organisation_user.organisation).to eq(merging_organisation)
       end
     end
   end
