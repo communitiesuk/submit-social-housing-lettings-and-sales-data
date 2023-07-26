@@ -323,6 +323,7 @@ module Imports
         %i[voiddate after_mrcdate] => %w[voiddate mrcdate majorrepairs],
         %i[tshortfall more_than_rent] => %w[tshortfall tshortfall_known],
         %i[scheme_id no_completed_locations] => %w[scheme_id location_id],
+        %i[beds one_three_bedroom_single_tenant_shared] => %w[beds],
       }
 
       (2..8).each do |person|

@@ -535,6 +535,29 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
+      context "and beds over the max for the number of tenants" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q22").content = "4"
+          lettings_log_xml.at_xpath("//xmlns:HHMEMB").content = "1"
+          lettings_log_xml.at_xpath("//xmlns:Q23").content = "4"
+        end
+
+        it "intercepts the relevant validation error" do
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the bedrooms answer" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.beds).to be_nil
+        end
+      end
+
       context "and carehome charges and other charges are entered" do
         let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
 
