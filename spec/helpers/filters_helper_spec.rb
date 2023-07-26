@@ -193,8 +193,8 @@ RSpec.describe FiltersHelper do
         expect(owning_organisation_filter_options(user.reload)).to eq([
           OpenStruct.new(id: "", name: "Select an option"),
           OpenStruct.new(id: child_organisation.id, name: "Child organisation"),
-          OpenStruct.new(id: absorbed_organisation.id, name: "Absorbed organisation"),
           OpenStruct.new(id: parent_organisation.id, name: "Parent organisation"),
+          OpenStruct.new(id: absorbed_organisation.id, name: "Absorbed organisation"),
         ])
       end
     end
