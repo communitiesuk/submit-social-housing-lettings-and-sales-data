@@ -93,13 +93,13 @@ private
   end
 
   def merge_sales_logs(merging_organisation)
-    merging_organisation.owned_sales_logs.after_date(Time.zone.today).each do |sales_log|
+    merging_organisation.sales_logs.after_date(Time.zone.today).each do |sales_log|
       sales_log.update(owning_organisation: @absorbing_organisation)
     end
   end
 
   def mark_organisation_as_merged(merging_organisation)
-    merging_organisation.update(merge_date: Time.zone.today)
+    merging_organisation.update(merge_date: Time.zone.today, absorbing_organisation: @absorbing_organisation)
   end
 
   def log_success_message

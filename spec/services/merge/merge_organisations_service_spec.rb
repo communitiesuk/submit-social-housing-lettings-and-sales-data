@@ -29,6 +29,7 @@ RSpec.describe Merge::MergeOrganisationsService do
 
         merging_organisation.reload
         expect(merging_organisation.merge_date.to_date).to eq(Time.zone.today)
+        expect(merging_organisation.absorbing_organisation_id).to eq(absorbing_organisation.id)
       end
 
       it "combines organisation data" do
@@ -46,8 +47,10 @@ RSpec.describe Merge::MergeOrganisationsService do
         merge_organisations_service.call
 
         absorbing_organisation.reload
+        merging_organisation.reload
         expect(absorbing_organisation.holds_own_stock).to eq(false)
         expect(merging_organisation.merge_date).to eq(nil)
+        expect(merging_organisation.absorbing_organisation_id).to eq(nil)
         expect(merging_organisation_user.organisation).to eq(merging_organisation)
       end
 
@@ -78,6 +81,7 @@ RSpec.describe Merge::MergeOrganisationsService do
           merge_organisations_service.call
 
           absorbing_organisation.reload
+          merging_organisation.reload
           expect(absorbing_organisation.rent_periods.count).to eq(2)
           expect(merging_organisation.rent_periods.count).to eq(2)
         end
@@ -159,6 +163,7 @@ RSpec.describe Merge::MergeOrganisationsService do
           merge_organisations_service.call
 
           absorbing_organisation.reload
+          merging_organisation.reload
           expect(absorbing_organisation.owned_lettings_logs.count).to eq(2)
           expect(absorbing_organisation.managed_lettings_logs.count).to eq(1)
           expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).scheme).to eq(absorbing_organisation.owned_schemes.first)
@@ -175,6 +180,7 @@ RSpec.describe Merge::MergeOrganisationsService do
           merge_organisations_service.call
 
           absorbing_organisation.reload
+          merging_organisation.reload
           expect(absorbing_organisation.owned_schemes.count).to eq(0)
           expect(scheme.scheme_deactivation_periods.count).to eq(0)
           expect(owned_lettings_log.owning_organisation).to eq(merging_organisation)
@@ -193,8 +199,8 @@ RSpec.describe Merge::MergeOrganisationsService do
           merge_organisations_service.call
 
           absorbing_organisation.reload
-          expect(absorbing_organisation.owned_sales_logs.count).to eq(1)
-          expect(absorbing_organisation.owned_sales_logs.first).to eq(sales_log)
+          expect(SalesLog.filter_by_owning_organisation(absorbing_organisation).count).to eq(1)
+          expect(SalesLog.filter_by_owning_organisation(absorbing_organisation).first).to eq(sales_log)
         end
 
         it "rolls back if there's an error" do
@@ -205,7 +211,7 @@ RSpec.describe Merge::MergeOrganisationsService do
           merge_organisations_service.call
 
           absorbing_organisation.reload
-          expect(absorbing_organisation.owned_sales_logs.count).to eq(0)
+          expect(absorbing_organisation.sales_logs.count).to eq(0)
           expect(sales_log.owning_organisation).to eq(merging_organisation)
         end
       end
@@ -236,13 +242,15 @@ RSpec.describe Merge::MergeOrganisationsService do
         expect(merging_organisation_user.organisation).to eq(absorbing_organisation)
       end
 
-      it "sets merge date on merged organisations" do
+      it "sets merge date and absorbing organisation on merged organisations" do
         merge_organisations_service.call
 
         merging_organisation.reload
         merging_organisation_too.reload
         expect(merging_organisation.merge_date.to_date).to eq(Time.zone.today)
+        expect(merging_organisation.absorbing_organisation_id).to eq(absorbing_organisation.id)
         expect(merging_organisation_too.merge_date.to_date).to eq(Time.zone.today)
+        expect(merging_organisation_too.absorbing_organisation_id).to eq(absorbing_organisation.id)
       end
 
       it "combines organisation data" do
@@ -260,8 +268,10 @@ RSpec.describe Merge::MergeOrganisationsService do
         merge_organisations_service.call
 
         absorbing_organisation.reload
+        merging_organisation.reload
         expect(absorbing_organisation.holds_own_stock).to eq(false)
         expect(merging_organisation.merge_date).to eq(nil)
+        expect(merging_organisation.absorbing_organisation_id).to eq(nil)
         expect(merging_organisation_user.organisation).to eq(merging_organisation)
       end
 
@@ -300,6 +310,7 @@ RSpec.describe Merge::MergeOrganisationsService do
           merge_organisations_service.call
 
           absorbing_organisation.reload
+          merging_organisation.reload
           expect(absorbing_organisation.child_organisations.count).to eq(2)
           expect(absorbing_organisation.parent_organisations.count).to eq(1)
           expect(absorbing_organisation.child_organisations).to include(other_organisation)
