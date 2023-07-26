@@ -1,3 +1,5 @@
+Import = Struct.new("Import", :import_class, :import_method, :folder)
+
 namespace :import do
   desc "Run a full import for the institutions listed in the named file on s3"
   task :full, %i[institutions_csv_name] => :environment do |_task, args|
