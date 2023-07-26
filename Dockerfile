@@ -16,6 +16,7 @@ RUN apk add --no-cache build-base yarn postgresql-dev git bash
 RUN gem install bundler:2.3.14 --no-document
 
 COPY .ruby-version Gemfile Gemfile.lock /app/
+RUN bundle config set without "development"
 RUN bundle install --jobs=4 --no-binstubs --no-cache
 
 COPY package.json yarn.lock /app/
@@ -31,6 +32,9 @@ EXPOSE ${PORT}
 
 FROM base as development
 
+RUN bundle config set without ""
+RUN bundle install --jobs=4 --no-binstubs --no-cache
+
 # Install gecko driver for Capybara tests
 RUN apk add firefox
 RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.31.0/geckodriver-v0.31.0-linux64.tar.gz \
@@ -39,12 +43,12 @@ RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.31.0/geckod
   && chmod +x geckodriver \
   && mv geckodriver /usr/local/bin/
 
-CMD RAILS_ENV=${RAILS_ENV} bundle exec rake db:migrate && bundle exec rails s -e ${RAILS_ENV} -p ${PORT} --binding=0.0.0.0
+CMD bundle exec rails s -e ${RAILS_ENV} -p ${PORT} --binding=0.0.0.0
 
 FROM base as staging
 
-CMD RAILS_ENV=${RAILS_ENV} bundle exec rake db:migrate && bundle exec rails s -e ${RAILS_ENV} -p ${PORT} --binding=0.0.0.0
+CMD bundle exec rails s -e ${RAILS_ENV} -p ${PORT} --binding=0.0.0.0
 
 FROM base as production
 
-CMD RAILS_ENV=${RAILS_ENV} bundle exec rake db:migrate && bundle exec rails s -e ${RAILS_ENV} -p ${PORT} --binding=0.0.0.0
+CMD bundle exec rails s -e ${RAILS_ENV} -p ${PORT} --binding=0.0.0.0
