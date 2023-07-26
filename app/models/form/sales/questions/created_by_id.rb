@@ -17,8 +17,17 @@ class Form::Sales::Questions::CreatedById < ::Form::Question
     return ANSWER_OPTS unless log.owning_organisation
     return ANSWER_OPTS unless current_user
 
-    users = current_user.support? ? log.owning_organisation.users : current_user.organisation.users
-
+    users = []
+    users += if current_user.support?
+               [
+                 (
+                   if log.owning_organisation
+                     log.owning_organisation.absorbing_organisation.present? ? log.owning_organisation&.absorbing_organisation&.users : log.owning_organisation&.users
+                   end),
+               ].flatten
+             else
+               current_user.organisation.users
+             end.uniq.compact
     users.each_with_object(ANSWER_OPTS.dup) do |user, hsh|
       hsh[user.id] = present_user(user)
       hsh

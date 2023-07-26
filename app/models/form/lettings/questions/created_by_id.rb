@@ -19,8 +19,14 @@ class Form::Lettings::Questions::CreatedById < ::Form::Question
     users = []
     users += if current_user.support?
                [
-                 (log.owning_organisation&.users if log.owning_organisation),
-                 (log.managing_organisation&.users if log.managing_organisation),
+                 (
+                   if log.owning_organisation
+                     log.owning_organisation.absorbing_organisation.present? ? log.owning_organisation&.absorbing_organisation&.users : log.owning_organisation&.users
+                   end),
+                 (
+                   if log.managing_organisation
+                     log.managing_organisation.absorbing_organisation.present? ? log.managing_organisation&.absorbing_organisation&.users : log.managing_organisation.users
+                   end),
                ].flatten
              else
                current_user.organisation.users
