@@ -39,7 +39,7 @@ RSpec.describe User, type: :model do
     end
 
     describe "#lettings_logs" do
-      let!(:owned_lettings_log) do
+      let!(:managed_lettings_log) do
         create(
           :lettings_log,
           :completed,
@@ -47,7 +47,7 @@ RSpec.describe User, type: :model do
           created_by: user,
         )
       end
-      let!(:managed_lettings_log) do
+      let!(:owned_lettings_log) do
         create(
           :lettings_log,
           created_by: user,
@@ -57,6 +57,27 @@ RSpec.describe User, type: :model do
 
       it "has lettings logs through their organisation" do
         expect(user.lettings_logs.to_a).to match_array([owned_lettings_log, managed_lettings_log])
+      end
+
+      context "when the user's organisation has absorbed another" do
+        let!(:absorbed_org) { create(:organisation, absorbing_organisation_id: user.organisation.id) }
+        let!(:absorbed_org_managed_lettings_log) do
+          create(
+            :lettings_log,
+            :completed,
+            managing_organisation: absorbed_org,
+          )
+        end
+        let!(:absorbed_org_owned_lettings_log) do
+          create(
+            :lettings_log,
+            owning_organisation: absorbed_org,
+          )
+        end
+
+        it "has lettings logs through both their organisation and absorbed organisation" do
+          expect(user.reload.lettings_logs.to_a).to match_array([owned_lettings_log, managed_lettings_log, absorbed_org_owned_lettings_log, absorbed_org_managed_lettings_log])
+        end
       end
     end
 

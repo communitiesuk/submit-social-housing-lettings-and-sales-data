@@ -465,7 +465,7 @@ RSpec.describe Validations::SetupValidations do
 
   describe "#validate_organisation" do
     let(:user) { create(:user) }
-    let(:other_organisation) { create(:organisation) }
+    let(:other_organisation) { create(:organisation, name: "other org") }
 
     it "validates if neither managing nor owning organisation is the same as created_by user organisation" do
       record.created_by = user
@@ -478,7 +478,7 @@ RSpec.describe Validations::SetupValidations do
       expect(record.errors["managing_organisation_id"]).to include(I18n.t("validations.setup.managing_organisation.invalid"))
     end
 
-    it "doesn not validate if either managing or owning organisation is the same as current user organisation" do
+    it "does not validate if either managing or owning organisation is the same as current user organisation" do
       record.created_by = user
       record.owning_organisation = user.organisation
       record.managing_organisation = other_organisation

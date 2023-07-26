@@ -7,9 +7,6 @@ class User < ApplicationRecord
   # Marked as optional because we validate organisation_id below instead so that
   # the error message is linked to the right field on the form
   belongs_to :organisation, optional: true
-  has_many :owned_lettings_logs, through: :organisation
-  has_many :managed_lettings_logs, through: :organisation
-  has_many :owned_sales_logs, through: :organisation
   has_many :legacy_users
   has_many :bulk_uploads
 
@@ -82,7 +79,7 @@ class User < ApplicationRecord
     if support?
       LettingsLog.all
     else
-      LettingsLog.filter_by_organisation(organisation)
+      LettingsLog.filter_by_organisation(organisation.absorbed_organisations + [organisation])
     end
   end
 
@@ -90,8 +87,16 @@ class User < ApplicationRecord
     if support?
       SalesLog.all
     else
-      SalesLog.filter_by_organisation(organisation)
+      SalesLog.filter_by_owning_organisation(organisation.absorbed_organisations + [organisation])
     end
+  end
+
+  def owned_lettings_logs
+    LettingsLog.filter_by_owning_organisation(organisation.absorbed_organisations + [organisation])
+  end
+
+  def managed_lettings_logs
+    LettingsLog.filter_by_managing_organisation(organisation.absorbed_organisations + [organisation])
   end
 
   def is_key_contact?

@@ -54,7 +54,7 @@ class LettingsLog < Log
   scope :unresolved, -> { where(unresolved: true) }
 
   scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org).or(where(managing_organisation: org)) }
-  scope :filter_by_owning_organisation, ->(org, _user = nil) { where(owning_organisation: org) }
+  scope :filter_by_owning_organisation, ->(owning_organisation, _user = nil) { where(owning_organisation:) }
   scope :filter_by_managing_organisation, ->(managing_organisation, _user = nil) { where(managing_organisation:) }
 
   scope :duplicate_logs, lambda { |log|

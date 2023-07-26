@@ -161,23 +161,26 @@ RSpec.describe FiltersHelper do
     end
   end
 
-  describe "#owning_organisations_filter_options" do
+  describe "#owning_organisation_filter_options" do
     let(:parent_organisation) { FactoryBot.create(:organisation, name: "Parent organisation") }
     let(:child_organisation) { FactoryBot.create(:organisation, name: "Child organisation") }
+    let!(:absorbed_organisation) { FactoryBot.create(:organisation, name: "Absorbed organisation", absorbing_organisation: child_organisation) }
 
     before do
       FactoryBot.create(:organisation_relationship, parent_organisation:, child_organisation:)
       FactoryBot.create(:organisation, name: "Other organisation", id: 99)
+      user.organisation.reload
     end
 
     context "with a support user" do
       let(:user) { FactoryBot.create(:user, :support, organisation: child_organisation) }
 
       it "returns a list of all organisations" do
-        expect(owning_organisations_filter_options(user)).to eq([
+        expect(owning_organisation_filter_options(user)).to eq([
           OpenStruct.new(id: "", name: "Select an option"),
-          OpenStruct.new(id: parent_organisation.id, name: "Parent organisation"),
           OpenStruct.new(id: child_organisation.id, name: "Child organisation"),
+          OpenStruct.new(id: absorbed_organisation.id, name: "Absorbed organisation"),
+          OpenStruct.new(id: parent_organisation.id, name: "Parent organisation"),
           OpenStruct.new(id: 99, name: "Other organisation"),
         ])
       end
@@ -186,11 +189,51 @@ RSpec.describe FiltersHelper do
     context "with a data coordinator user" do
       let(:user) { FactoryBot.create(:user, :data_coordinator, organisation: child_organisation) }
 
-      it "returns a list of paret orgs and your own organisation" do
-        expect(owning_organisations_filter_options(user)).to eq([
+      it "returns a list of parent orgs and your own organisation" do
+        expect(owning_organisation_filter_options(user.reload)).to eq([
           OpenStruct.new(id: "", name: "Select an option"),
           OpenStruct.new(id: child_organisation.id, name: "Child organisation"),
           OpenStruct.new(id: parent_organisation.id, name: "Parent organisation"),
+          OpenStruct.new(id: absorbed_organisation.id, name: "Absorbed organisation"),
+        ])
+      end
+    end
+  end
+
+  describe "#managing_organisation_filter_options" do
+    let(:parent_organisation) { FactoryBot.create(:organisation, name: "Parent organisation") }
+    let(:child_organisation) { FactoryBot.create(:organisation, name: "Child organisation") }
+    let!(:absorbed_organisation) { FactoryBot.create(:organisation, name: "Absorbed organisation", absorbing_organisation: parent_organisation) }
+
+    before do
+      FactoryBot.create(:organisation_relationship, parent_organisation:, child_organisation:)
+      FactoryBot.create(:organisation, name: "Other organisation", id: 99)
+      user.organisation.reload
+    end
+
+    context "with a support user" do
+      let(:user) { FactoryBot.create(:user, :support, organisation: parent_organisation) }
+
+      it "returns a list of all organisations" do
+        expect(managing_organisation_filter_options(user)).to eq([
+          OpenStruct.new(id: "", name: "Select an option"),
+          OpenStruct.new(id: parent_organisation.id, name: "Parent organisation"),
+          OpenStruct.new(id: absorbed_organisation.id, name: "Absorbed organisation"),
+          OpenStruct.new(id: child_organisation.id, name: "Child organisation"),
+          OpenStruct.new(id: 99, name: "Other organisation"),
+        ])
+      end
+    end
+
+    context "with a data coordinator user" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator, organisation: parent_organisation) }
+
+      it "returns a list of child orgs and your own organisation" do
+        expect(managing_organisation_filter_options(user.reload)).to eq([
+          OpenStruct.new(id: "", name: "Select an option"),
+          OpenStruct.new(id: parent_organisation.id, name: "Parent organisation"),
+          OpenStruct.new(id: child_organisation.id, name: "Child organisation"),
+          OpenStruct.new(id: absorbed_organisation.id, name: "Absorbed organisation"),
         ])
       end
     end

@@ -23,13 +23,13 @@ class Form::Lettings::Questions::StockOwner < ::Form::Question
       answer_opts[user.organisation.id] = "#{user.organisation.name} (Your organisation)"
     end
 
-    stock_owners_answer_options = if user.support?
-                                    Organisation.where(holds_own_stock: true)
-                                  else
-                                    user.organisation.stock_owners
-                                  end.pluck(:id, :name).to_h
+    user_answer_options = if user.support?
+                            Organisation.where(holds_own_stock: true)
+                          else
+                            user.organisation.stock_owners + user.organisation.absorbed_organisations.where(holds_own_stock: true)
+                          end.pluck(:id, :name).to_h
 
-    answer_opts.merge(stock_owners_answer_options)
+    answer_opts.merge(user_answer_options)
   end
 
   def displayed_answer_options(log, user = nil)
