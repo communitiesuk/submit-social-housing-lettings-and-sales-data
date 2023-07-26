@@ -15,10 +15,15 @@
 <% if current_user.data_coordinator? || current_user.support? %>
   <%= govuk_button_link_to "Invite user", new_user_path(organisation_id: @organisation.id), html: { method: :get } %>
 <% end %>
+<div class="app-filter-layout" data-controller="filter-layout">
+  <%= render partial: "users/user_filters" %>
+  <div class="app-filter-layout__content">
 
-<%= render SearchComponent.new(current_user:, search_label: "Search by name or email address", value: @searched) %>
+    <%= render SearchComponent.new(current_user:, search_label: "Search by name or email address", value: @searched) %>
 
-<%= govuk_section_break(visible: true, size: "m") %>
+    <%= govuk_section_break(visible: true, size: "m") %>
 
-<%= render partial: "users/user_list", locals: { users: @users, title:, pagy: @pagy, searched: @searched, item_label:, total_count: @total_count } %>
-<%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "users" } %>
+    <%= render partial: "users/user_list", locals: { users: @users, title:, pagy: @pagy, searched: @searched, item_label:, total_count: @total_count } %>
+    <%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "users" } %>
+  </div>
+</div>

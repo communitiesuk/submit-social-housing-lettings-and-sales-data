@@ -258,11 +258,11 @@ RSpec.describe User, type: :model do
   describe "scopes" do
     let(:organisation_1) { create(:organisation, :without_dpc, name: "A") }
     let(:organisation_2) { create(:organisation, :without_dpc, name: "B") }
-    let!(:user_1) { create(:user, name: "Joe Bloggs", email: "joe@example.com", organisation: organisation_1, role: "support") }
-    let!(:user_3) { create(:user, name: "Tom Smith", email: "tom@example.com", organisation: organisation_1, role: "data_provider") }
+    let!(:user_1) { create(:user, name: "Joe Bloggs", email: "joe@example.com", organisation: organisation_1, role: "support", last_sign_in_at: Time.zone.now) }
     let!(:user_2) { create(:user, name: "Jenny Ford", email: "jenny@smith.com", organisation: organisation_1, role: "data_coordinator") }
+    let!(:user_3) { create(:user, name: "Tom Smith", email: "tom@example.com", organisation: organisation_1, role: "data_provider") }
     let!(:user_4) { create(:user, name: "Greg Thomas", email: "greg@org2.com", organisation: organisation_2, role: "data_coordinator") }
-    let!(:user_5) { create(:user, name: "Adam Thomas", email: "adam@org2.com", organisation: organisation_2, role: "data_coordinator") }
+    let!(:user_5) { create(:user, name: "Adam Thomas", email: "adam@org2.com", organisation: organisation_2, role: "data_coordinator", last_sign_in_at: Time.zone.now) }
 
     context "when searching by name" do
       it "returns case insensitive matching records" do
@@ -288,6 +288,46 @@ RSpec.describe User, type: :model do
     context "when using sorted by organisation and role scope" do
       it "returns all users sorted by organisation name, then by role, then alphabetically by name" do
         expect(described_class.sorted_by_organisation_and_role.to_a).to eq([user_1, user_2, user_3, user_5, user_4])
+      end
+    end
+
+    context "when filtering by status" do
+      before do
+        user_2.update!(active: false)
+        user_3.update!(active: false, last_sign_in_at: nil)
+        user_4.update!(last_sign_in_at: nil)
+      end
+
+      context "when filtering by active status" do
+        it "returns only active users" do
+          expect(described_class.filter_by_status(%w[active]).count).to eq(2)
+          expect(described_class.filter_by_status(%w[active])).to include(user_1)
+          expect(described_class.filter_by_status(%w[active])).to include(user_5)
+        end
+      end
+
+      context "when filtering by deactivated status" do
+        it "returns only deactivated users" do
+          expect(described_class.filter_by_status(%w[deactivated]).count).to eq(2)
+          expect(described_class.filter_by_status(%w[deactivated])).to include(user_2)
+          expect(described_class.filter_by_status(%w[deactivated])).to include(user_3)
+        end
+      end
+
+      context "when filtering by unconfirmed status" do
+        it "returns only unconfirmed users" do
+          expect(described_class.filter_by_status(%w[unconfirmed]).count).to eq(1)
+          expect(described_class.filter_by_status(%w[unconfirmed])).to include(user_4)
+        end
+      end
+
+      context "when filtering by multiple statuses" do
+        it "returns relevant users" do
+          expect(described_class.filter_by_status(%w[active unconfirmed]).count).to eq(3)
+          expect(described_class.filter_by_status(%w[active])).to include(user_1)
+          expect(described_class.filter_by_status(%w[active])).to include(user_5)
+          expect(described_class.filter_by_status(%w[unconfirmed])).to include(user_4)
+        end
       end
     end
   end

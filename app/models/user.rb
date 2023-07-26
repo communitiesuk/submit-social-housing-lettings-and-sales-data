@@ -56,6 +56,27 @@ class User < ApplicationRecord
   scope :filter_by_active, -> { where(active: true) }
   scope :search_by, ->(param) { search_by_name(param).or(search_by_email(param)) }
   scope :sorted_by_organisation_and_role, -> { joins(:organisation).order("organisations.name", role: :desc, name: :asc) }
+  scope :filter_by_status, lambda { |statuses, _user = nil|
+    filtered_records = all
+    scopes = []
+
+    statuses.each do |status|
+      status = status == "active" ? "active_status" : status
+      status = status == "unconfirmed" ? "not_signed_in" : status
+      if respond_to?(status, true)
+        scopes << send(status)
+      end
+    end
+
+    if scopes.any?
+      filtered_records = filtered_records.merge(scopes.reduce(&:or))
+    end
+
+    filtered_records
+  }
+  scope :not_signed_in, -> { where(last_sign_in_at: nil, active: true) }
+  scope :deactivated, -> { where(active: false) }
+  scope :active_status, -> { where(active: true).where.not(last_sign_in_at: nil) }
 
   def lettings_logs
     if support?
