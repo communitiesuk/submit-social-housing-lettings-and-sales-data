@@ -254,6 +254,49 @@ RSpec.describe Merge::MergeOrganisationsService do
         expect(merging_organisation.merge_date).to eq(nil)
         expect(merging_organisation_user.organisation).to eq(merging_organisation)
       end
+
+      context "and merging organisation relationships" do
+        let(:other_organisation) { create(:organisation) }
+        let!(:merging_organisation_relationship) { create(:organisation_relationship, parent_organisation: merging_organisation) }
+        let!(:absorbing_organisation_relationship) { create(:organisation_relationship, parent_organisation: absorbing_organisation) }
+
+        before do
+          create(:organisation_relationship, parent_organisation: merging_organisation, child_organisation: absorbing_organisation)
+          create(:organisation_relationship, parent_organisation: merging_organisation, child_organisation: other_organisation)
+          create(:organisation_relationship, parent_organisation: absorbing_organisation, child_organisation: other_organisation)
+          create(:organisation_relationship, parent_organisation: merging_organisation, child_organisation: merging_organisation_too)
+        end
+
+        it "combines organisation relationships" do
+          merge_organisations_service.call
+
+          absorbing_organisation.reload
+          expect(absorbing_organisation.child_organisations).to include(other_organisation)
+          expect(absorbing_organisation.child_organisations).to include(absorbing_organisation_relationship.child_organisation)
+          expect(absorbing_organisation.child_organisations).to include(merging_organisation_relationship.child_organisation)
+          expect(absorbing_organisation.child_organisations).not_to include(merging_organisation)
+          expect(absorbing_organisation.parent_organisations).not_to include(merging_organisation)
+          expect(absorbing_organisation.child_organisations).not_to include(merging_organisation_too)
+          expect(absorbing_organisation.parent_organisations).not_to include(merging_organisation_too)
+          expect(absorbing_organisation.parent_organisations.count).to eq(0)
+          expect(absorbing_organisation.child_organisations.count).to eq(3)
+        end
+
+        it "rolls back if there's an error" do
+          allow(Organisation).to receive(:find).with([merging_organisation_ids]).and_return(Organisation.find(merging_organisation_ids))
+          allow(Organisation).to receive(:find).with(absorbing_organisation.id).and_return(absorbing_organisation)
+          allow(absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
+          expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
+          merge_organisations_service.call
+
+          absorbing_organisation.reload
+          expect(absorbing_organisation.child_organisations.count).to eq(2)
+          expect(absorbing_organisation.parent_organisations.count).to eq(1)
+          expect(absorbing_organisation.child_organisations).to include(other_organisation)
+          expect(absorbing_organisation.parent_organisations).to include(merging_organisation)
+          expect(absorbing_organisation.child_organisations).to include(absorbing_organisation_relationship.child_organisation)
+        end
+      end
     end
   end
 end
