@@ -1410,6 +1410,7 @@ private
 
   def housingneeds_other
     return 1 if field_86 == 1
+    return 0 if [field_83, field_84, field_85].include?(1)
   end
 
   def prevloc

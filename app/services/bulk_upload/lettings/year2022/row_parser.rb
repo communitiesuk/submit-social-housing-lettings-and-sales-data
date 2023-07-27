@@ -1466,6 +1466,7 @@ private
 
   def housingneeds_other
     return 1 if field_58 == 1
+    return 0 if [field_55, field_56, field_57].include?(1)
   end
 
   def ethnic_group_from_ethnic
