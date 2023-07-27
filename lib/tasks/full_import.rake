@@ -63,7 +63,7 @@ namespace :import do
       organisation = Organisation.find_by(name: row[0])
       next unless organisation
 
-      users = User.where(organisation:, active: true, initial_confirmation_sent: false)
+      users = User.where(organisation:, active: true, initial_confirmation_sent: nil)
       users.each { |user| ResendInvitationMailer.resend_invitation_email(user).deliver_later }
     end
 
