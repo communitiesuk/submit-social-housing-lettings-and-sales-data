@@ -562,6 +562,13 @@ RSpec.describe LettingsLogsController, type: :request do
 
                 expect(response).to redirect_to(resume_bulk_upload_lettings_result_path(bulk_upload))
               end
+
+              it "allows returning to all logs" do
+                get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
+
+                follow_redirect!
+                expect(page).to have_link("Back to all logs", href: clear_filters_path(filter_type: "lettings_logs"))
+              end
             end
           end
 
