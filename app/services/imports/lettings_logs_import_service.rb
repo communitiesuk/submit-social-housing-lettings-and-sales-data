@@ -317,11 +317,13 @@ module Imports
         %i[location_id not_active] => %w[location_id scheme_id],
         %i[tcharge under_10] => charges_attributes,
         %i[brent over_hard_max] => charges_attributes,
+        %i[brent below_hard_min] => charges_attributes,
         %i[period wrong_rent_period] => %w[period],
         %i[layear renewal_just_moved] => %w[layear],
         %i[voiddate after_mrcdate] => %w[voiddate mrcdate majorrepairs],
         %i[tshortfall more_than_rent] => %w[tshortfall tshortfall_known],
         %i[scheme_id no_completed_locations] => %w[scheme_id location_id],
+        %i[beds one_three_bedroom_single_tenant_shared] => %w[beds],
       }
 
       (2..8).each do |person|

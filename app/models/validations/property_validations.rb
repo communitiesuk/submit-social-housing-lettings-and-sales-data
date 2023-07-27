@@ -42,7 +42,7 @@ module Validations::PropertyValidations
       if record.hhmemb == 1 && record.is_shared_housing? &&
           !record.beds.to_i.between?(1, 3) && record.beds.present?
         record.errors.add :unittype_gn, I18n.t("validations.property.unittype_gn.one_three_bedroom_single_tenant_shared")
-        record.errors.add :beds, I18n.t("validations.property.unittype_gn.one_three_bedroom_single_tenant_shared")
+        record.errors.add :beds, :one_three_bedroom_single_tenant_shared, message: I18n.t("validations.property.unittype_gn.one_three_bedroom_single_tenant_shared")
       elsif record.is_shared_housing? && record.beds.present? && !record.beds.to_i.between?(1, 7)
         record.errors.add :unittype_gn, I18n.t("validations.property.unittype_gn.one_seven_bedroom_shared")
         record.errors.add :beds, I18n.t("validations.property.unittype_gn.one_seven_bedroom_shared")

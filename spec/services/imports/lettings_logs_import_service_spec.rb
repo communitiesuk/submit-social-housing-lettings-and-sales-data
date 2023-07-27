@@ -535,6 +535,29 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
+      context "and beds over the max for the number of tenants" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q22").content = "4"
+          lettings_log_xml.at_xpath("//xmlns:HHMEMB").content = "1"
+          lettings_log_xml.at_xpath("//xmlns:Q23").content = "4"
+        end
+
+        it "intercepts the relevant validation error" do
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the bedrooms answer" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.beds).to be_nil
+        end
+      end
+
       context "and carehome charges and other charges are entered" do
         let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
 
@@ -752,6 +775,44 @@ RSpec.describe Imports::LettingsLogsImportService do
           lettings_log_xml.at_xpath("//xmlns:Q18aiii").content = "3"
           lettings_log_xml.at_xpath("//xmlns:Q18aiv").content = "3"
           lettings_log_xml.at_xpath("//xmlns:Q18av").content = "508"
+        end
+
+        it "intercepts the relevant validation error" do
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the charges answers" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.tcharge).to be_nil
+        end
+      end
+
+      context "and rent is lower than the absolute minimum expected for a property " do
+        before do
+          LaRentRange.create!(
+            ranges_rent_id: "2",
+            la: "E08000035",
+            beds: 2,
+            lettype: 1,
+            soft_min: 12.41,
+            soft_max: 89.54,
+            hard_min: 12.87,
+            hard_max: 100.99,
+            start_year: 2021,
+          )
+
+          lettings_log_xml.at_xpath("//xmlns:Q18ai").content = "8"
+          lettings_log_xml.at_xpath("//xmlns:Q18aii").content = "1"
+          lettings_log_xml.at_xpath("//xmlns:Q18aiii").content = "1"
+          lettings_log_xml.at_xpath("//xmlns:Q18aiv").content = "1"
+          lettings_log_xml.at_xpath("//xmlns:Q18av").content = "11"
+          lettings_log_xml.at_xpath("//xmlns:Q17").content = "1"
         end
 
         it "intercepts the relevant validation error" do
