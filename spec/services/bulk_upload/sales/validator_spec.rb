@@ -13,6 +13,7 @@ RSpec.describe BulkUpload::Sales::Validator do
     context "when file is empty" do
       it "is not valid" do
         expect(validator).not_to be_valid
+        expect(validator.errors["base"]).to eql(["Template is blank - The template must be filled in for us to create the logs and check if data is correct."])
       end
     end
 
