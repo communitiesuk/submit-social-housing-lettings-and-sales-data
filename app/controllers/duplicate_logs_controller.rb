@@ -2,7 +2,6 @@ class DuplicateLogsController < ApplicationController
   include DuplicateLogsHelper
 
   before_action :authenticate_user!
-  before_action :authenticate_scope!, only: [:index]
   before_action :find_resource_by_named_id
   before_action :find_duplicate_logs
   before_action :find_original_log
@@ -26,12 +25,19 @@ class DuplicateLogsController < ApplicationController
   end
 
   def index
-    @duplicates = params.permit(duplicates: {})[:duplicates]&.to_h || duplicates_for_user(current_user)
-    return render_not_found unless @duplicates
+    if current_user.data_provider?
+      @duplicates = duplicates_for_user(current_user)
+    elsif current_user.support?
+      organisation = Organisation.find(params[:organisation_id])
+      render_not_found unless organisation
+      @duplicates = duplicates_for_organisation(organisation)
+    elsif current_user.data_coordinator?
+      @duplicates = duplicates_for_organisation(current_user.organisation)
+    end
 
-    @duplicates[:lettings] ||= {}
-    @duplicates[:sales] ||= {}
     @duplicate_sets_count = @duplicates[:lettings].count + @duplicates[:sales].count
+
+    render_not_found if @duplicate_sets_count.zero?
   end
 
 private

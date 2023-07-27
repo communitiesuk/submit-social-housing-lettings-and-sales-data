@@ -7,7 +7,7 @@
     <% end %>
   <% end %>
   <%= table.body do |body| %>
-    <% @duplicates[:lettings].each do |_i, duplicate_set| %>
+    <% @duplicates[:lettings].each do |duplicate_set| %>
       <% body.row do |row| %>
         <% row.cell text: "Lettings" %>
         <% row.cell text: duplicate_set.map { |id| "Log #{id}" }.join(", ") %>
@@ -16,7 +16,7 @@
         <% end %>
       <% end %>
     <% end %>
-    <% @duplicates[:sales].each do |_i, duplicate_set| %>
+    <% @duplicates[:sales].each do |duplicate_set| %>
       <% body.row do |row| %>
         <% row.cell text: "Sales" %>
         <% row.cell text: duplicate_set.map { |id| "Log #{id}" }.join(", ") %>

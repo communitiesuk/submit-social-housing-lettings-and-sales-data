@@ -29,38 +29,64 @@ module DuplicateLogsHelper
   end
   
   def duplicates_for_user(user)
-    duplicate_sets = { lettings: {}, sales: {} }
-    lettings_count = 0
-    sales_count = 0
-    duplicate_lettings_ids = Set.new
-    duplicate_sales_ids = Set.new
+    {
+      lettings: lettings_duplicate_sets_from_collection(LettingsLog.created_by(user), user.organisation),
+      sales: sales_duplicate_sets_from_collection(SalesLog.created_by(user), user.organisation),
+    }
+  end
 
-    LettingsLog.created_by(user).visible.each do |log|
-      next if duplicate_lettings_ids.include? log.id
+  def duplicates_for_organisation(organisation)
+    {
+      lettings: lettings_duplicate_sets_from_collection(LettingsLog.filter_by_organisation(organisation), organisation),
+      sales: sales_duplicate_sets_from_collection(SalesLog.filter_by_organisation(organisation), organisation),
+    }
+  end
 
-      duplicates = user.lettings_logs.duplicate_logs(log)
+  def sales_duplicate_sets_from_collection(logs, organisation)
+    duplicate_sets = []
+    duplicate_ids_seen = Set.new
+
+    logs.visible.each do |log|
+      next if duplicate_ids_seen.include? log.id
+
+      duplicates = SalesLog.filter_by_organisation(organisation).duplicate_logs(log)
       next if duplicates.none?
 
       duplicate_ids = [log.id, *duplicates.map(&:id)]
-      duplicate_sets[:lettings][lettings_count] = duplicate_ids
-      lettings_count += 1
-      duplicate_lettings_ids << duplicate_ids
+      duplicate_sets << duplicate_ids
+      duplicate_ids_seen.merge duplicate_ids
     end
-
-    SalesLog.created_by(user).visible.each do |log|
-      next if duplicate_sales_ids.include? log.id
-
-      duplicates = user.sales_logs.duplicate_logs(log)
-      next if duplicates.none?
-
-      duplicate_ids = [log.id, *duplicates.map(&:id)]
-      duplicate_sets[:sales][sales_count] = duplicate_ids
-      sales_count += 1
-      duplicate_sales_ids << duplicate_ids
-    end
-
-    return if duplicate_lettings_ids.empty? && duplicate_sales_ids.empty?
 
     duplicate_sets
+  end
+
+  def lettings_duplicate_sets_from_collection(logs, organisation)
+    duplicate_sets = []
+    duplicate_ids_seen = Set.new
+
+    logs.visible.each do |log|
+      next if duplicate_ids_seen.include? log.id
+
+      duplicates = LettingsLog.filter_by_organisation(organisation).duplicate_logs(log)
+      next if duplicates.none?
+
+      duplicate_ids = [log.id, *duplicates.map(&:id)]
+      duplicate_sets << duplicate_ids
+      duplicate_ids_seen.merge duplicate_ids
+    end
+
+    duplicate_sets
+  end
+
+  def duplicate_sets_count(user, organisation)
+    duplicates = if user.support?
+                   duplicates_for_organisation(organisation)
+                 elsif user.data_coordinator?
+                   duplicates_for_organisation(user.organisation)
+                 elsif user.data_provider?
+                   duplicates_for_user(user)
+                 end
+
+    duplicates[:lettings].count + duplicates[:sales].count
   end
 end

@@ -13,10 +13,6 @@ class LettingsLogsController < LogsController
   before_action :redirect_if_bulk_upload_resolved, only: [:index]
 
   def index
-    if current_user.data_provider? && (@duplicates = duplicates_for_user(current_user))
-      @duplicate_sets_count = @duplicates[:lettings].count + @duplicates[:sales].count
-    end
-
     all_logs = current_user.lettings_logs.visible
     unpaginated_filtered_logs = filter_manager.filtered_logs(all_logs, search_term, session_filters)
 
@@ -26,6 +22,7 @@ class LettingsLogsController < LogsController
     @total_count = all_logs.size
     @unresolved_count = all_logs.unresolved.created_by(current_user).count
     @filter_type = "lettings_logs"
+    @duplicate_sets_count = duplicate_sets_count(current_user, nil)
     render "logs/index"
   end
 

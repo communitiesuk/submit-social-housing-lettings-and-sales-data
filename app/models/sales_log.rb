@@ -49,7 +49,7 @@ class SalesLog < Log
     .where.not(sex1: nil)
     .where.not(ecstat1: nil)
     .where.not(postcode_full: nil)
-    .where("age1 IS NOT NULL OR age1_known = 1 OR age1_known = 2")
+    .age1_answered
   }
   scope :after_date, ->(date) { where("saledate >= ?", date) }
 

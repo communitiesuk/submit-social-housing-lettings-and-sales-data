@@ -119,6 +119,8 @@ Rails.application.routes.draw do
   end
 
   resources :organisations do
+    get "duplicates", to: "duplicate_logs#index"
+
     member do
       get "details", to: "organisations#details"
       get "data-sharing-agreement", to: "organisations#data_sharing_agreement"
