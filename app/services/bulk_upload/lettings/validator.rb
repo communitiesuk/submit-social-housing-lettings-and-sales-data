@@ -144,8 +144,8 @@ private
   end
 
   def validate_file_not_empty
-    if File.size(path).zero?
-      errors.add(:file, :blank)
+    if File.size(path).zero? || csv_parser.body_rows.flatten.compact.empty?
+      errors.add(:base, :blank_file)
 
       halt_validations!
     end

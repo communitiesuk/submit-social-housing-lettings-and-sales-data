@@ -22,3 +22,5 @@ Sentry.init do |config|
     end
   end
 end
+
+Sentry.set_tags("app_host": ENV["APP_HOST"])
