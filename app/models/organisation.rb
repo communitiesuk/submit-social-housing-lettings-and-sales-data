@@ -75,6 +75,10 @@ class Organisation < ApplicationRecord
     LettingsLog.filter_by_owning_organisation(absorbed_organisations + [self])
   end
 
+  def owned_sales_logs
+    sales_logs
+  end
+
   def managed_lettings_logs
     LettingsLog.filter_by_managing_organisation(absorbed_organisations + [self])
   end
