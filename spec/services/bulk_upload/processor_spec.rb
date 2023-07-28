@@ -240,11 +240,42 @@ RSpec.describe BulkUpload::Processor do
     end
 
     context "when processing an empty file with headers" do
+      context "when 2022-23" do
+        let(:mock_downloader) do
+          instance_double(
+            BulkUpload::Downloader,
+            call: nil,
+            path: file_fixture("2022_23_lettings_bulk_upload_empty_with_headers.csv"),
+            delete_local_file!: nil,
+          )
+        end
+
+        before do
+          allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
+        end
+
+        it "sends failure email" do
+          mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
+
+          allow(BulkUploadMailer).to receive(:send_bulk_upload_failed_service_error_mail).and_return(mail_double)
+
+          processor.call
+
+          expect(BulkUploadMailer).to have_received(:send_bulk_upload_failed_service_error_mail).with(
+            bulk_upload:,
+            errors: ["Template is blank - The template must be filled in for us to create the logs and check if data is correct."],
+          )
+          expect(mail_double).to have_received(:deliver_later)
+        end
+      end
+    end
+
+    context "when 2023-24" do
       let(:mock_downloader) do
         instance_double(
           BulkUpload::Downloader,
           call: nil,
-          path: file_fixture("2022_23_lettings_bulk_upload_empty_with_headers.csv"),
+          path: file_fixture("2023_24_lettings_bulk_upload_empty_with_headers.csv"),
           delete_local_file!: nil,
         )
       end
