@@ -81,7 +81,7 @@ RSpec.describe Form::Sales::Pages::Organisation, type: :model do
               :organisation_relationship,
               child_organisation: user.organisation,
               parent_organisation: stock_owner,
-              )
+            )
           end
 
           it "is not shown" do
@@ -102,12 +102,12 @@ RSpec.describe Form::Sales::Pages::Organisation, type: :model do
               :organisation_relationship,
               child_organisation: user.organisation,
               parent_organisation: stock_owner1,
-              )
+            )
             create(
               :organisation_relationship,
               child_organisation: user.organisation,
               parent_organisation: stock_owner2,
-              )
+            )
           end
 
           it "is not shown" do

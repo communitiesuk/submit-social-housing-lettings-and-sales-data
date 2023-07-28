@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
-  let(:user) { FactoryBot.create(:user, :data_coordinator)}
+  let(:user) { FactoryBot.create(:user, :data_coordinator) }
   let(:question_id) { nil }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
@@ -112,6 +112,7 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
         end
       end
     end
+
     context "when user is support" do
       let(:user) { create(:user, :support) }
 
