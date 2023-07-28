@@ -64,6 +64,6 @@ class Form::Sales::Questions::OwningOrganisationId < ::Form::Question
 private
 
   def selected_answer_option_is_derived?(_log)
-    false
+    true
   end
 end
