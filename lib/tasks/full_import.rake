@@ -1,10 +1,10 @@
 Import = Struct.new("Import", :import_class, :import_method, :folder)
 
 namespace :import do
-  desc "Run a full import for the institutions listed in the named file on s3"
-  task :full, %i[institutions_csv_name] => :environment do |_task, args|
+  desc "Run initial import steps - orgs, schemes, users etc (without triggering user invite emails)"
+  task :initial, %i[institutions_csv_name] => :environment do |_task, args|
     institutions_csv_name = args[:institutions_csv_name]
-    raise "Usage: rake core:full_import['institutions_csv_name']" if institutions_csv_name.blank?
+    raise "Usage: rake import:initial['institutions_csv_name']" if institutions_csv_name.blank?
 
     s3_service = Storage::S3Service.new(Configuration::PaasConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
     csv = CSV.parse(s3_service.get_file_io(institutions_csv_name), headers: true)
@@ -35,12 +35,24 @@ namespace :import do
       end
     end
 
+    Rails.logger.info("Finished initial imports")
+  end
+
+  desc "Run logs import steps"
+  task :logs, %i[institutions_csv_name] => :environment do |_task, args|
+    institutions_csv_name = args[:institutions_csv_name]
+    raise "Usage: rake import:logs['institutions_csv_name']" if institutions_csv_name.blank?
+
+    s3_service = Storage::S3Service.new(Configuration::PaasConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
+    csv = CSV.parse(s3_service.get_file_io(institutions_csv_name), headers: true)
+    org_count = csv.length
+
     logs_import_list = [
       Import.new(Imports::LettingsLogsImportService, :create_logs, "logs"),
       Import.new(Imports::SalesLogsImportService, :create_logs, "logs"),
     ]
 
-    Rails.logger.info("Initial imports complete, beginning log imports for #{org_count} organisations")
+    Rails.logger.info("Beginning log imports for #{org_count} organisations")
 
     csv.each do |row|
       archive_path = row[1]
@@ -57,17 +69,39 @@ namespace :import do
       end
     end
 
-    Rails.logger.info("Log import complete, triggering user invite emails")
+    Rails.logger.info("Log import complete")
+  end
+
+  desc "Trigger invite emails for imported users"
+  task :trigger_invites, %i[institutions_csv_name] => :environment do |_task, args|
+    institutions_csv_name = args[:institutions_csv_name]
+    raise "Usage: rake import:trigger_invites['institutions_csv_name']" if institutions_csv_name.blank?
+
+    s3_service = Storage::S3Service.new(Configuration::PaasConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
+    csv = CSV.parse(s3_service.get_file_io(institutions_csv_name), headers: true)
+
+    Rails.logger.info("Triggering user invite emails")
 
     csv.each do |row|
       organisation = Organisation.find_by(name: row[0])
       next unless organisation
 
-      users = User.where(organisation:, active: true, initial_confirmation_sent: false)
+      users = User.where(organisation:, active: true, initial_confirmation_sent: nil)
       users.each { |user| ResendInvitationMailer.resend_invitation_email(user).deliver_later }
     end
 
-    Rails.logger.info("Invite emails triggered, generating report")
+    Rails.logger.info("Invite emails triggered")
+  end
+
+  desc "Generate migrated logs report"
+  task :generate_report, %i[institutions_csv_name] => :environment do |_task, args|
+    institutions_csv_name = args[:institutions_csv_name]
+    raise "Usage: rake import:generate_report['institutions_csv_name']" if institutions_csv_name.blank?
+
+    s3_service = Storage::S3Service.new(Configuration::PaasConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
+    csv = CSV.parse(s3_service.get_file_io(institutions_csv_name), headers: true)
+
+    Rails.logger.info("Generating migrated logs report")
 
     rep = CSV.generate do |report|
       headers = ["Institution name", "Id", "Old Completed lettings logs", "Old In progress lettings logs", "Old Completed sales logs", "Old In progress sales logs", "New Completed lettings logs", "New In Progress lettings logs", "New Completed sales logs", "New In Progress sales logs"]
@@ -91,4 +125,10 @@ namespace :import do
 
     Rails.logger.info("Logs report available in s3 import bucket at #{report_name}")
   end
+
+  desc "Run import from logs step to end"
+  task :logs_onwards, %i[institutions_csv_name] => %i[environment logs trigger_invites generate_report]
+
+  desc "Run a full import for the institutions listed in the named file on s3"
+  task :full, %i[institutions_csv_name] => %i[environment initial logs trigger_invites generate_report]
 end
