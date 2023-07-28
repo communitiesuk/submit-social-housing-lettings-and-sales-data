@@ -14,7 +14,7 @@ class Form::Lettings::Pages::StockOwner < ::Form::Page
     return false unless current_user
     return true if current_user.support?
 
-    stock_owners = current_user.organisation.stock_owners
+    stock_owners = current_user.organisation.stock_owners + current_user.organisation.absorbed_organisations.where(holds_own_stock: true)
 
     if current_user.organisation.holds_own_stock?
       if current_user.organisation.absorbed_organisations.any?(&:holds_own_stock?)

@@ -48,7 +48,7 @@ class Form::Sales::Questions::OwningOrganisationId < ::Form::Question
   def hidden_in_check_answers?(_log, user = nil)
     return false if user.support?
 
-    stock_owners = user.organisation.stock_owners
+    stock_owners = user.organisation.stock_owners + user.organisation.absorbed_organisations.where(holds_own_stock: true)
 
     if user.organisation.holds_own_stock?
       stock_owners.count.zero?
