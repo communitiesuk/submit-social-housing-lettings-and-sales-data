@@ -16,7 +16,7 @@ RUN apk add --no-cache build-base yarn postgresql-dev git bash
 RUN gem install bundler:2.3.14 --no-document
 
 COPY .ruby-version Gemfile Gemfile.lock /app/
-RUN bundle config set without "development"
+RUN bundle config set without "development test"
 RUN bundle install --jobs=4 --no-binstubs --no-cache
 
 COPY package.json yarn.lock /app/
@@ -46,6 +46,9 @@ RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.31.0/geckod
 CMD bundle exec rails s -e ${RAILS_ENV} -p ${PORT} --binding=0.0.0.0
 
 FROM base as staging
+
+RUN bundle config set without "development"
+RUN bundle install --jobs=4 --no-binstubs --no-cache
 
 CMD bundle exec rails s -e ${RAILS_ENV} -p ${PORT} --binding=0.0.0.0
 
