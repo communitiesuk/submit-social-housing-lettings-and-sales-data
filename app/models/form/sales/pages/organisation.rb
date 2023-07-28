@@ -11,6 +11,6 @@ class Form::Sales::Pages::Organisation < ::Form::Page
   end
 
   def routed_to?(_log, current_user)
-    !!current_user&.support?
+    !!current_user&.support? || current_user&.organisation&.absorbed_organisations.present?
   end
 end

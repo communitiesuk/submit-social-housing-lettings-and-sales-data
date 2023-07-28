@@ -17,6 +17,9 @@ class Form::Lettings::Pages::StockOwner < ::Form::Page
     stock_owners = current_user.organisation.stock_owners
 
     if current_user.organisation.holds_own_stock?
+      if current_user.organisation.absorbed_organisations.any?(&:holds_own_stock?)
+        return true
+      end
       return true if stock_owners.count >= 1
 
       log.update!(owning_organisation: current_user.organisation)
