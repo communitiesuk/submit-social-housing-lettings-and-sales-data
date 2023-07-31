@@ -66,7 +66,7 @@ RUN rm -rf node_modules && \
     find /usr/local/bundle/gems -name "*.o" -delete && \
     find /usr/local/bundle/gems -name "*.html" -delete && \
     rm -rf .env  && \
-    rm -rf frontend
+    rm -rf app/frontend
 
 USER nonroot
 
@@ -82,7 +82,7 @@ RUN rm -rf node_modules && \
     find /usr/local/bundle/gems -name "*.o" -delete && \
     find /usr/local/bundle/gems -name "*.html" -delete && \
     rm -rf .env  && \
-    rm -rf frontend
+    rm -rf app/frontend
 
 USER nonroot
 
