@@ -336,12 +336,6 @@ RSpec.describe SchemesController, type: :request do
             let!(:scheme1) { create(:scheme, owning_organisation: organisation1) }
             let!(:scheme2) { create(:scheme, owning_organisation: user.organisation) }
 
-            # before do
-            #   org = user.organisation
-            #   org.stock_owners = [organisation1, user.organisation]
-            #   org.save!
-            # end
-
             context "when filtering by all owning orgs" do
               it "shows schemes for all owning orgs" do
                 get "/schemes?owning_organisation_select=all", headers:, params: {}

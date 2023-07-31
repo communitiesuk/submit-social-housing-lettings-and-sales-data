@@ -91,6 +91,12 @@ module FiltersHelper
     [OpenStruct.new(id: "", name: "Select an option")] + organisation_options.map { |org| OpenStruct.new(id: org.id, name: org.name) }
   end
 
+  def show_scheme_managing_org_filter?(user)
+    org = user.organisation
+
+    user.support? || org.stock_owners.count > 1 || (org.holds_own_stock? && org.stock_owners.count.positive?)
+  end
+
 private
 
   def applied_filters_count(filter_type)

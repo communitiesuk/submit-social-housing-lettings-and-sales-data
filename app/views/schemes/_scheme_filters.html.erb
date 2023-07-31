@@ -23,7 +23,7 @@
                     category: "status",
                   } %>
 
-         <% if current_user.support? || current_user.organisation.stock_owners.count > 1 %>
+         <% if show_scheme_managing_org_filter?(current_user) %>
           <%= render partial: "filters/radio_filter", locals: {
             f:,
             options: {
