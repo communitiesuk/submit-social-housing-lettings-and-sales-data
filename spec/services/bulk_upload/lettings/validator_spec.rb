@@ -11,12 +11,6 @@ RSpec.describe BulkUpload::Lettings::Validator do
   let(:file) { Tempfile.new }
 
   describe "validations" do
-    context "when file is empty" do
-      it "is not valid" do
-        expect(validator).not_to be_valid
-      end
-    end
-
     context "when 2022" do
       let(:bulk_upload) { create(:bulk_upload, user:, year: 2022) }
 
@@ -31,6 +25,25 @@ RSpec.describe BulkUpload::Lettings::Validator do
           it "is not valid" do
             expect(validator).not_to be_valid
             expect(validator.errors["base"]).to eql(["Too many columns, please ensure you have used the correct template"])
+          end
+        end
+
+        context "and is empty" do
+          it "is not valid" do
+            expect(validator).not_to be_valid
+            expect(validator.errors["base"]).to eql(["Template is blank - The template must be filled in for us to create the logs and check if data is correct."])
+          end
+        end
+
+        context "and has a new line in it (empty)" do
+          before do
+            file.write("\n")
+            file.rewind
+          end
+
+          it "is not valid" do
+            expect(validator).not_to be_valid
+            expect(validator.errors["base"]).to eql(["Template is blank - The template must be filled in for us to create the logs and check if data is correct."])
           end
         end
 
@@ -68,6 +81,13 @@ RSpec.describe BulkUpload::Lettings::Validator do
 
           it "returns correct total logs count" do
             expect(validator.total_logs_count).to be(1)
+          end
+        end
+
+        context "and is empty" do
+          it "is not valid" do
+            expect(validator).not_to be_valid
+            expect(validator.errors["base"]).to eql(["Template is blank - The template must be filled in for us to create the logs and check if data is correct."])
           end
         end
 
@@ -128,6 +148,13 @@ RSpec.describe BulkUpload::Lettings::Validator do
           end
         end
 
+        context "and is empty" do
+          it "is not valid" do
+            expect(validator).not_to be_valid
+            expect(validator.errors["base"]).to eql(["Template is blank - The template must be filled in for us to create the logs and check if data is correct."])
+          end
+        end
+
         context "and doesn't have too many columns" do
           before do
             file.write(("a" * 142).chars.join(","))
@@ -142,6 +169,13 @@ RSpec.describe BulkUpload::Lettings::Validator do
       end
 
       context "when file has headers" do
+        context "and is empty" do
+          it "is not valid" do
+            expect(validator).not_to be_valid
+            expect(validator.errors["base"]).to eql(["Template is blank - The template must be filled in for us to create the logs and check if data is correct."])
+          end
+        end
+
         context "and file has extra invalid headers" do
           let(:seed) { rand }
           let(:log_to_csv) { BulkUpload::LettingsLogToCsv.new(log:) }
