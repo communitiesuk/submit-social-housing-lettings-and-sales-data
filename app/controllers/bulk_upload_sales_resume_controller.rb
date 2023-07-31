@@ -41,6 +41,8 @@ private
                 Forms::BulkUploadSalesResume::Chosen.new(form_params.merge(bulk_upload: @bulk_upload))
               when "confirm"
                 Forms::BulkUploadSalesResume::Confirm.new(form_params.merge(bulk_upload: @bulk_upload))
+              when "completed"
+                Forms::BulkUploadSalesResume::Confirm.new(form_params.merge(bulk_upload: @bulk_upload))
               else
                 raise "invalid form"
               end

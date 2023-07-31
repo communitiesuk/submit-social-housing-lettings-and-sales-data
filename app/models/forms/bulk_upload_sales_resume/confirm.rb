@@ -41,7 +41,7 @@ module Forms
         when "bulk-confirm-soft-validations"
           page_bulk_upload_sales_soft_validations_check_path(bulk_upload, :chosen)
         when "completed"
-          resume_bulk_upload_lettings_result_path(bulk_upload.id)
+          resume_bulk_upload_sales_result_path(bulk_upload.id)
         end
       end
     end
