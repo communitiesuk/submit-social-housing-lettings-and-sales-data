@@ -6,15 +6,18 @@ class LocationsController < ApplicationController
   before_action :find_location, except: %i[create index]
   before_action :find_scheme
   before_action :scheme_and_location_present, except: %i[create index]
+  before_action :session_filters, if: :current_user, only: %i[index]
+  before_action -> { filter_manager.serialize_filters_to_session }, if: :current_user, only: %i[index]
 
   before_action :authorize_user, except: %i[index create]
 
   def index
     authorize @scheme
 
-    @pagy, @locations = pagy(filtered_collection(@scheme.locations, search_term))
+    @pagy, @locations = pagy(filter_manager.filtered_locations(@scheme.locations, search_term, session_filters))
     @total_count = @scheme.locations.size
     @searched = search_term.presence
+    @filter_type = "scheme_locations"
   end
 
   def create
@@ -297,4 +300,12 @@ private
     params[:referrer] == "check_answers"
   end
   helper_method :return_to_check_your_answers?
+
+  def filter_manager
+    FilterManager.new(current_user:, session:, params:, filter_type: "scheme_locations")
+  end
+
+  def session_filters
+    filter_manager.session_filters
+  end
 end

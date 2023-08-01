@@ -62,6 +62,17 @@ class FilterManager
     schemes
   end
 
+  def self.filter_locations(locations, search_term, filters, user)
+    locations = filter_by_search(locations, search_term)
+
+    filters.each do |category, values|
+      next if Array(values).reject(&:empty?).blank?
+
+      locations = locations.public_send("filter_by_#{category}", values, user)
+    end
+    locations.order(created_at: :desc)
+  end
+
   def serialize_filters_to_session(specific_org: false)
     session[session_name_for(filter_type)] = session_filters(specific_org:).to_json
   end
@@ -86,7 +97,7 @@ class FilterManager
       new_filters["user"] = current_user.id.to_s if params["assigned_to"] == "you"
     end
 
-    if (filter_type.include?("schemes") || filter_type.include?("users")) && params["status"].present?
+    if (filter_type.include?("schemes") || filter_type.include?("users") || filter_type.include?("scheme_locations")) && params["status"].present?
       new_filters["status"] = params["status"]
     end
 
@@ -115,6 +126,10 @@ class FilterManager
     all_orgs = params["owning_organisation_select"] == "all"
 
     FilterManager.filter_schemes(schemes, search_term, filters, current_user, all_orgs)
+  end
+
+  def filtered_locations(locations, search_term, filters)
+    FilterManager.filter_locations(locations, search_term, filters, current_user)
   end
 
   def bulk_upload
