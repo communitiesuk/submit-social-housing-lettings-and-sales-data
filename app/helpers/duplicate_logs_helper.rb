@@ -47,14 +47,14 @@ module DuplicateLogsHelper
     duplicate_ids_seen = Set.new
 
     logs.visible.each do |log|
-      next if duplicate_ids_seen.include? log.id
+      next if duplicate_ids_seen.include?(log.id)
 
       duplicates = SalesLog.filter_by_organisation(organisation).duplicate_logs(log)
       next if duplicates.none?
 
       duplicate_ids = [log.id, *duplicates.map(&:id)]
       duplicate_sets << duplicate_ids
-      duplicate_ids_seen.merge duplicate_ids
+      duplicate_ids_seen.merge(duplicate_ids)
     end
 
     duplicate_sets

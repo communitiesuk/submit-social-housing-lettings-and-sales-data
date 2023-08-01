@@ -60,7 +60,6 @@ class LettingsLog < Log
   scope :postcode_answered, ->(log) { where(postcode_full: log.postcode_full).or(where(needstype: 2)) }
   scope :duplicate_logs, lambda { |log|
     visible
-    .where(log.slice(*DUPLICATE_LOG_ATTRIBUTES))
       .where.not(id: log.id)
       .where.not(startdate: nil)
       .where.not(sex1: nil)
@@ -71,6 +70,7 @@ class LettingsLog < Log
       .chcharge_answered
       .location_answered(log)
       .postcode_answered(log)
+      .where(log.slice(*DUPLICATE_LOG_ATTRIBUTES))
   }
   scope :all_duplicates, -> { select(:id, :propcode, :tenancycode).group(:tenancycode, :propcode, :age1).having("count(*) > 1").size }
 

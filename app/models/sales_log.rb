@@ -42,6 +42,7 @@ class SalesLog < Log
   }
   scope :filter_by_organisation, ->(owning_organisation, _user = nil) { where(owning_organisation:) }
   scope :filter_by_owning_organisation, ->(owning_organisation, _user = nil) { where(owning_organisation:) }
+  scope :age1_answered, -> { where.not(age1: nil).or(where(age1_known: [1, 2])) }
   scope :duplicate_logs, lambda { |log|
     visible.where(log.slice(*DUPLICATE_LOG_ATTRIBUTES))
     .where.not(id: log.id)

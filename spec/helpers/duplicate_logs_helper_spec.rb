@@ -1,22 +1,20 @@
 require "rails_helper"
 
 RSpec.describe DuplicateLogsHelper do
-  let(:org) { create(:organisation) }
-  let(:other_org) { create(:organisation) }
-  let(:current_user) { create(:user, organisation: org) }
-  let(:user_same_org) { create(:user, organisation: org) }
-  let(:user_other_org) { create(:user, organisation: other_org) }
-  let(:empty_duplicates) { { lettings: [], sales: [] } }
-
-  let!(:lettings_log) { create(:lettings_log, :duplicate, created_by: current_user) }
-  let!(:sales_log) { create(:sales_log, :duplicate, created_by: current_user) }
-
   describe "#duplicates_for_user" do
+    let(:org) { create(:organisation) }
+    let(:other_org) { create(:organisation) }
+    let(:current_user) { create(:user, organisation: org) }
+    let(:user_same_org) { create(:user, organisation: org) }
+    let(:user_other_org) { create(:user, organisation: other_org) }
+
+    let!(:lettings_log) { create(:lettings_log, :duplicate, created_by: current_user) }
+    let!(:sales_log) { create(:sales_log, :duplicate, created_by: current_user) }
     let(:result) { duplicates_for_user(current_user) }
 
     context "when there are no duplicates" do
-      it "returns nil" do
-        expect(result).to eq empty_duplicates
+      it "returns empty duplicates" do
+        expect(result).to eq({ lettings: [], sales: [] })
       end
     end
 
@@ -27,7 +25,7 @@ RSpec.describe DuplicateLogsHelper do
       end
 
       it "does not locate duplicates" do
-        expect(result).to eq empty_duplicates
+        expect(result).to eq({ lettings: [], sales: [] })
       end
     end
 
@@ -63,6 +61,33 @@ RSpec.describe DuplicateLogsHelper do
 
         expect(result[:lettings]).to match_array [[lettings_log.id, duplicate_lettings_log.id]]
         expect(result[:sales]).to match_array expected_sales_duplicates_result
+      end
+    end
+  end
+
+  describe "#sales_duplicate_sets_from_collection" do
+    let(:organisation) { create(:organisation) }
+    let(:sales_logs) { SalesLog.filter_by_organisation(organisation) }
+
+    context "when there are no duplicates" do
+      it "returns empty duplicates" do
+        expect(sales_duplicate_sets_from_collection(sales_logs, organisation)).to eq([])
+      end
+    end
+
+    context "when there are multiple sets of sales duplicates" do
+      let!(:duplicate_sales_logs) { create_list(:sales_log, 4, :duplicate, purchid: "set 1", owning_organisation: organisation) }
+      let!(:duplicate_sales_logs_too) { create_list(:sales_log, 5, :duplicate, postcode_full: "B1 1BB", owning_organisation: organisation) }
+      let!(:duplicate_sales_logs_3) { create_list(:sales_log, 3, :duplicate, age1: 38, owning_organisation: organisation) }
+
+      it "returns them all with no repeats" do
+        expected_sales_duplicates_result = [
+          duplicate_sales_logs.map(&:id),
+          duplicate_sales_logs_too.map(&:id),
+          duplicate_sales_logs_3.map(&:id),
+        ]
+
+        expect(sales_duplicate_sets_from_collection(sales_logs, organisation)).to match_array(expected_sales_duplicates_result)
       end
     end
   end

@@ -306,11 +306,16 @@ RSpec.describe LettingsLogsController, type: :request do
           expect(page).to have_link("Download (CSV, codes only)", href: "/lettings-logs/csv-download?codes_only=true")
         end
 
-        it "does not show a notification banner even if there are duplicate logs for this user" do
-          allow_any_instance_of(DuplicateLogsHelper).to receive(:duplicates_for_user).and_return({ lettings: [[1, 2]], sales: [] }) # rubocop:disable RSpec/AnyInstance
-          get lettings_logs_path
-          expect(page).not_to have_content "duplicate logs"
-          expect(page).not_to have_link "Review logs"
+        context "when there are duplicate logs for this user" do
+          before do
+            FactoryBot.create_list(:lettings_log, 2, :duplicate, owning_organisation: user.organisation, created_by: user)
+          end
+
+          it "does not show a notification banner even if there are duplicate logs for this user" do
+            get lettings_logs_path
+            expect(page).not_to have_content "duplicate logs"
+            expect(page).not_to have_link "Review logs"
+          end
         end
 
         context "when there are no logs in the database" do
@@ -884,12 +889,8 @@ RSpec.describe LettingsLogsController, type: :request do
         end
 
         context "and there are duplicate logs for this user" do
-          let(:duplicates) { { lettings:, sales: } }
-          let(:lettings) { [[1, 2]] }
-          let(:sales) { [] }
-
           before do
-            allow_any_instance_of(DuplicateLogsHelper).to receive(:duplicates_for_user).and_return duplicates # rubocop:disable RSpec/AnyInstance
+            FactoryBot.create_list(:lettings_log, 2, :duplicate, owning_organisation: user.organisation, created_by: user)
           end
 
           it "displays a notification banner with a link to review logs" do
@@ -906,7 +907,9 @@ RSpec.describe LettingsLogsController, type: :request do
           end
 
           context "when there are multiple sets of duplicates" do
-            let(:sales) { [[3, 4]] }
+            before do
+              FactoryBot.create_list(:sales_log, 2, :duplicate, owning_organisation: user.organisation, created_by: user)
+            end
 
             it "displays the correct copy in the banner" do
               get lettings_logs_path

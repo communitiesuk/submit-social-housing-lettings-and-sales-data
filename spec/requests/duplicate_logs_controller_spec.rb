@@ -324,7 +324,7 @@ RSpec.describe DuplicateLogsController, type: :request do
       let(:user) { create(:user, :support) }
 
       it "renders not found" do
-        get duplicate_logs_path
+        get duplicate_logs_path(organisation_id: user.organisation.id)
         expect(response).to have_http_status(:not_found)
       end
     end
@@ -333,7 +333,7 @@ RSpec.describe DuplicateLogsController, type: :request do
       let(:user) { create(:user, :data_coordinator) }
 
       it "renders not found" do
-        get duplicate_logs_path
+        get duplicate_logs_path(organisation_id: user.organisation.id)
         expect(response).to have_http_status(:not_found)
       end
     end
@@ -386,8 +386,8 @@ RSpec.describe DuplicateLogsController, type: :request do
         end
 
         it "has the correct headers" do
-          headers = page.find_css("th").map(&:text)
-          expect(headers).to include("Type of logs", "Log IDs")
+          expect(page).to have_content("Type of logs")
+          expect(page).to have_content("Log IDs")
         end
 
         it "has the correct number of rows for each log type" do
