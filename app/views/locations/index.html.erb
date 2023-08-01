@@ -11,10 +11,10 @@
 <%= render partial: "organisations/headings", locals: { main: @scheme.service_name, sub: nil } %>
 <div class="app-filter-layout" data-controller="filter-layout">
 
+  <%= render SubNavigationComponent.new(items: scheme_items(request.path, @scheme.id, "Locations")) %>
+
   <%= render partial: "locations/location_filters" %>
   <div class="app-filter-layout__content">
-    <%= render SubNavigationComponent.new(items: scheme_items(request.path, @scheme.id, "Locations")) %>
-
     <h2 class="govuk-visually-hidden">Locations</h2>
 
     <div class="app-filter-toggle"></div>
