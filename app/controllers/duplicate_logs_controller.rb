@@ -3,8 +3,9 @@ class DuplicateLogsController < ApplicationController
 
   before_action :authenticate_user!
   before_action :find_resource_by_named_id
-  before_action :find_duplicate_logs
+  before_action :find_duplicates_for_a_log
   before_action :find_original_log
+  before_action :find_all_duplicates, only: [:index]
 
   def show
     if @log
@@ -25,18 +26,9 @@ class DuplicateLogsController < ApplicationController
   end
 
   def index
-    if current_user.data_provider?
-      @duplicates = duplicates_for_user(current_user)
-    elsif current_user.support?
-      organisation = Organisation.find(params[:organisation_id])
-      render_not_found unless organisation
-      @duplicates = duplicates_for_organisation(organisation)
-    elsif current_user.data_coordinator?
-      @duplicates = duplicates_for_organisation(current_user.organisation)
-    end
+    render_not_found if @duplicates.blank?
 
     @duplicate_sets_count = @duplicates[:lettings].count + @duplicates[:sales].count
-
     render_not_found if @duplicate_sets_count.zero?
   end
 
@@ -50,7 +42,7 @@ private
            end
   end
 
-  def find_duplicate_logs
+  def find_duplicates_for_a_log
     return unless @log
 
     @duplicate_logs = if @log.lettings?
@@ -58,6 +50,15 @@ private
                       else
                         current_user.sales_logs.duplicate_logs(@log)
                       end
+  end
+
+  def find_all_duplicates
+    return @duplicates = duplicates_for_user(current_user) if current_user.data_provider?
+
+    organisation = current_user.support? ? Organisation.find(params[:organisation_id]) : current_user.organisation
+    return unless organisation
+
+    @duplicates = duplicates_for_organisation(organisation)
   end
 
   def duplicate_check_question_ids
