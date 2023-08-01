@@ -24,7 +24,7 @@ class SalesLogsController < LogsController
     @searched = search_term.presence
     @total_count = all_logs.size
     @filter_type = "sales_logs"
-    @duplicate_sets_count = duplicate_sets_count(current_user, nil)
+    @duplicate_sets_count = current_user.support? ? 0 : duplicate_sets_count(current_user, nil)
     render "logs/index"
   end
 
