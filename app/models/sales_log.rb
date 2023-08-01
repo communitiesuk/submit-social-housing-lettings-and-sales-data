@@ -54,6 +54,29 @@ class SalesLog < Log
   }
   scope :after_date, ->(date) { where("saledate >= ?", date) }
 
+  scope :duplicates, lambda { |created_by_id = nil|
+    scope = visible
+    .group(*DUPLICATE_LOG_ATTRIBUTES)
+            .having("COUNT(*) > 1")
+
+    if created_by_id
+      scope = scope.where("EXISTS (
+                            SELECT 1
+                            FROM sales_logs AS inner_logs
+                            WHERE sales_logs.purchid = inner_logs.purchid
+                              AND sales_logs.saledate = inner_logs.saledate
+                              AND sales_logs.age1_known = inner_logs.age1_known
+                              AND sales_logs.age1 = inner_logs.age1
+                              AND sales_logs.sex1 = inner_logs.sex1
+                              AND sales_logs.ecstat1 = inner_logs.ecstat1
+                              AND sales_logs.postcode_full = inner_logs.postcode_full
+                              AND inner_logs.created_by_id = ?
+                          )", created_by_id)
+    end
+
+    scope
+  }
+
   OPTIONAL_FIELDS = %w[purchid othtype].freeze
   RETIREMENT_AGES = { "M" => 65, "F" => 60, "X" => 65 }.freeze
   DUPLICATE_LOG_ATTRIBUTES = %w[owning_organisation_id purchid saledate age1_known age1 sex1 ecstat1 postcode_full].freeze

@@ -30,52 +30,16 @@ module DuplicateLogsHelper
   
   def duplicates_for_user(user)
     {
-      lettings: lettings_duplicate_sets_from_collection(LettingsLog.created_by(user), user.organisation),
-      sales: sales_duplicate_sets_from_collection(SalesLog.created_by(user), user.organisation),
+      lettings: user.duplicate_lettings_logs_sets,
+      sales: user.duplicate_sales_logs_sets,
     }
   end
 
   def duplicates_for_organisation(organisation)
     {
-      lettings: lettings_duplicate_sets_from_collection(LettingsLog.filter_by_organisation(organisation), organisation),
-      sales: sales_duplicate_sets_from_collection(SalesLog.filter_by_organisation(organisation), organisation),
+      lettings: organisation.duplicate_lettings_logs_sets,
+      sales: organisation.duplicate_sales_logs_sets,
     }
-  end
-
-  def sales_duplicate_sets_from_collection(logs, organisation)
-    duplicate_sets = []
-    duplicate_ids_seen = Set.new
-
-    logs.visible.each do |log|
-      next if duplicate_ids_seen.include?(log.id)
-
-      duplicates = SalesLog.filter_by_organisation(organisation).duplicate_logs(log)
-      next if duplicates.none?
-
-      duplicate_ids = [log.id, *duplicates.map(&:id)]
-      duplicate_sets << duplicate_ids
-      duplicate_ids_seen.merge(duplicate_ids)
-    end
-
-    duplicate_sets
-  end
-
-  def lettings_duplicate_sets_from_collection(logs, organisation)
-    duplicate_sets = []
-    duplicate_ids_seen = Set.new
-
-    logs.visible.each do |log|
-      next if duplicate_ids_seen.include? log.id
-
-      duplicates = LettingsLog.filter_by_organisation(organisation).duplicate_logs(log)
-      next if duplicates.none?
-
-      duplicate_ids = [log.id, *duplicates.map(&:id)]
-      duplicate_sets << duplicate_ids
-      duplicate_ids_seen.merge duplicate_ids
-    end
-
-    duplicate_sets
   end
 
   def duplicate_sets_count(user, organisation)
