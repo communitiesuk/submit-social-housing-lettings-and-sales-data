@@ -22,7 +22,7 @@ class LettingsLogsController < LogsController
     @total_count = all_logs.size
     @unresolved_count = all_logs.unresolved.created_by(current_user).count
     @filter_type = "lettings_logs"
-    @duplicate_sets_count = current_user.support? ? 0 : duplicate_sets_count(current_user, nil)
+    @duplicate_sets_count = FeatureToggle.duplicate_summary_enabled? && !current_user.support? ? duplicate_sets_count(current_user, nil) : 0
     render "logs/index"
   end
 
