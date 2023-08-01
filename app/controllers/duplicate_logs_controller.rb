@@ -89,11 +89,4 @@ private
                       current_user.lettings_logs.find_by(id: original_log_id)
                     end
   end
-
-  def authenticate_scope!
-    case action_name
-    when :index
-      render_not_found unless current_user.data_provider?
-    end
-  end
 end

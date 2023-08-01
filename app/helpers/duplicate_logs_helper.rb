@@ -43,14 +43,7 @@ module DuplicateLogsHelper
   end
 
   def duplicate_sets_count(user, organisation)
-    duplicates = if user.support?
-                   duplicates_for_organisation(organisation)
-                 elsif user.data_coordinator?
-                   duplicates_for_organisation(user.organisation)
-                 elsif user.data_provider?
-                   duplicates_for_user(user)
-                 end
-
+    duplicates = user.data_provider? ? duplicates_for_user(user) : duplicates_for_organisation(organisation)
     duplicates[:lettings].count + duplicates[:sales].count
   end
 end
