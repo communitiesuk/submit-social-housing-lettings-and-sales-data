@@ -290,4 +290,74 @@ RSpec.describe FiltersHelper do
       end
     end
   end
+
+  describe "#show_scheme_managing_org_filter?" do
+    context "when support user" do
+      let(:user) { create(:user, :support, organisation: create(:organisation, stock_owners: [])) }
+
+      it "returns true" do
+        expect(show_scheme_managing_org_filter?(user)).to be true
+      end
+    end
+
+    context "when not support user" do
+      let(:stock_owner1) { create(:organisation) }
+      let(:stock_owner2) { create(:organisation) }
+
+      context "when org's stock_owners > 1" do
+        let(:user) { create(:user, organisation: create(:organisation, holds_own_stock: false)) }
+
+        before do
+          create(
+            :organisation_relationship,
+            child_organisation: user.organisation,
+            parent_organisation: stock_owner1,
+          )
+          create(
+            :organisation_relationship,
+            child_organisation: user.organisation,
+            parent_organisation: stock_owner2,
+          )
+        end
+
+        it "returns true" do
+          expect(show_scheme_managing_org_filter?(user)).to be true
+        end
+      end
+
+      context "when org's stock_owners == 1" do
+        before do
+          create(
+            :organisation_relationship,
+            child_organisation: user.organisation,
+            parent_organisation: stock_owner1,
+          )
+        end
+
+        context "when holds own stock" do
+          let(:user) { create(:user, organisation: create(:organisation, holds_own_stock: true)) }
+
+          it "returns true" do
+            expect(show_scheme_managing_org_filter?(user)).to be true
+          end
+        end
+
+        context "when does not hold own stock" do
+          let(:user) { create(:user, organisation: create(:organisation, holds_own_stock: false)) }
+
+          it "returns false" do
+            expect(show_scheme_managing_org_filter?(user)).to be false
+          end
+        end
+      end
+
+      context "when org's stock_owners == 0" do
+        let(:user) { create(:user) }
+
+        it "returns false" do
+          expect(show_scheme_managing_org_filter?(user)).to be false
+        end
+      end
+    end
+  end
 end
