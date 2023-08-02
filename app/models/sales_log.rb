@@ -51,6 +51,7 @@ class SalesLog < Log
     .where.not(postcode_full: nil)
     .where("age1 IS NOT NULL OR age1_known = 1 OR age1_known = 2")
   }
+  scope :after_date, ->(date) { where("saledate >= ?", date) }
 
   OPTIONAL_FIELDS = %w[purchid othtype].freeze
   RETIREMENT_AGES = { "M" => 65, "F" => 60, "X" => 65 }.freeze

@@ -50,7 +50,7 @@ class LettingsLog < Log
         .or(filter_by_postcode(param))
         .or(filter_by_id(param))
   }
-  scope :filter_by_before_startdate, ->(date) { where("lettings_logs.startdate >= ?", date) }
+  scope :after_date, ->(date) { where("lettings_logs.startdate >= ?", date) }
   scope :unresolved, -> { where(unresolved: true) }
 
   scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org).or(where(managing_organisation: org)) }
