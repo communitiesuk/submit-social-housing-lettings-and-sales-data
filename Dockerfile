@@ -58,31 +58,11 @@ FROM base as staging
 RUN bundle config set without "development"
 RUN bundle install --jobs=4 --no-binstubs --no-cache
 
-# Cleanup to reduce image size
-RUN rm -rf node_modules && \
-    rm -rf /usr/local/bundle/cache && \
-    find /usr/local/bundle/gems -name "*.c" -delete && \
-    find /usr/local/bundle/gems -name "*.h" -delete && \
-    find /usr/local/bundle/gems -name "*.o" -delete && \
-    find /usr/local/bundle/gems -name "*.html" -delete && \
-    rm -rf .env  && \
-    rm -rf app/frontend
-
 USER nonroot
 
 CMD bundle exec rails s -e ${RAILS_ENV} -p ${PORT} --binding=0.0.0.0
 
 FROM base as production
-
-# Cleanup to reduce image size
-RUN rm -rf node_modules && \
-    rm -rf /usr/local/bundle/cache && \
-    find /usr/local/bundle/gems -name "*.c" -delete && \
-    find /usr/local/bundle/gems -name "*.h" -delete && \
-    find /usr/local/bundle/gems -name "*.o" -delete && \
-    find /usr/local/bundle/gems -name "*.html" -delete && \
-    rm -rf .env  && \
-    rm -rf app/frontend
 
 USER nonroot
 
