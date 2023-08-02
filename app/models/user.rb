@@ -204,15 +204,11 @@ class User < ApplicationRecord
   end
 
   def duplicate_lettings_logs_sets
-    duplicate_sets = lettings_logs.duplicates(id).pluck("ARRAY_AGG(id)")
-
-    duplicate_sets.map { |array_str| array_str ? array_str.map(&:to_i) : [] }
+    lettings_logs.duplicate_sets(id).map { |array_str| array_str ? array_str.map(&:to_i) : [] }
   end
 
   def duplicate_sales_logs_sets
-    duplicate_sets = sales_logs.duplicates(id).pluck("ARRAY_AGG(id)")
-
-    duplicate_sets.map { |array_str| array_str ? array_str.map(&:to_i) : [] }
+    sales_logs.duplicate_sets(id).map { |array_str| array_str ? array_str.map(&:to_i) : [] }
   end
 
 protected
