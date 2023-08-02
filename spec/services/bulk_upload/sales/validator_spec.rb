@@ -4,7 +4,7 @@ RSpec.describe BulkUpload::Sales::Validator do
   subject(:validator) { described_class.new(bulk_upload:, path:) }
 
   let(:user) { create(:user, organisation:) }
-  let(:organisation) { create(:organisation, old_visible_id: "3") }
+  let(:organisation) { create(:organisation, old_visible_id: "123") }
   let(:bulk_upload) { create(:bulk_upload, user:) }
   let(:path) { file.path }
   let(:file) { Tempfile.new }
