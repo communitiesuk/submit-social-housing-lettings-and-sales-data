@@ -384,7 +384,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
         let(:attributes) { setup_section_params.merge(field_1: nil) }
 
         it "is not permitted as setup error" do
-          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql(["The owning organisation code is incorrect"])
+          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql(["You must answer owning organisation"])
         end
 
         it "blocks log creation" do
@@ -396,7 +396,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
         let(:attributes) { { bulk_upload:, field_1: "donotexist" } }
 
         it "is not permitted as a setup error" do
-          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql(["The owning organisation code is incorrect"])
+          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql(["You must answer owning organisation"])
         end
 
         it "blocks log creation" do
