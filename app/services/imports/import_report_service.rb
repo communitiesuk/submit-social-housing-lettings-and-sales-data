@@ -8,11 +8,11 @@ module Imports
 
     BYTE_ORDER_MARK = "\uFEFF".freeze # Required to ensure Excel always reads CSV as UTF-8
 
-    def create_report(report_directory)
-      write_missing_data_coordinators_report(report_directory)
+    def create_report(report_suffix)
+      generate_missing_data_coordinators_report(report_suffix)
     end
 
-    def write_missing_data_coordinators_report(report_directory)
+    def generate_missing_data_coordinators_report(report_suffix)
       csv_string = "Organisation ID,Old Organisation ID,Organisation Name\n"
       @old_organisation_ids.each do |old_organisation_id|
         organisation = Organisation.find_by(old_visible_id: old_organisation_id)
@@ -21,7 +21,7 @@ module Imports
         end
       end
 
-      @storage_service.write_file("#{report_directory}/organisations_without_data_coordinators.csv", BYTE_ORDER_MARK + csv_string)
+      @storage_service.write_file("OrganisationsWithoutDataCoordinators_#{report_suffix}.csv", BYTE_ORDER_MARK + csv_string)
     end
   end
 end

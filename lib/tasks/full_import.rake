@@ -36,6 +36,8 @@ namespace :import do
     end
 
     Rails.logger.info("Finished initial imports")
+    reports_service = Imports::ImportReportService.new(s3_service, csv.map { |row| row[1] })
+    Rails.logger.info("Running report generation")
   end
 
   desc "Run logs import steps"
@@ -122,6 +124,9 @@ namespace :import do
 
     report_name = "MigratedLogsReport_#{institutions_csv_name}"
     s3_service.write_file(report_name, rep)
+
+    old_organisation_ids = csv.map { |row| Organisation.find_by(name: row[0]).old_visible_id }.compact
+    Imports::ImportReportService.new(s3_service, old_organisation_ids).generate_missing_data_coordinators_report(institutions_csv_name)
 
     Rails.logger.info("Logs report available in s3 import bucket at #{report_name}")
   end

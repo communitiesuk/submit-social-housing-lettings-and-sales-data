@@ -14,9 +14,9 @@ RSpec.describe Imports::ImportReportService do
     end
 
     it "writes an empty organisations without a data coordinators report" do
-      expect(storage_service).to receive(:write_file).with("report_directory/organisations_without_data_coordinators.csv", "\uFEFFOrganisation ID,Old Organisation ID,Organisation Name\n")
+      expect(storage_service).to receive(:write_file).with("OrganisationsWithoutDataCoordinators_report_suffix.csv", "\uFEFFOrganisation ID,Old Organisation ID,Organisation Name\n")
 
-      report_service.create_report("report_directory")
+      report_service.create_report("report_suffix")
     end
   end
 
@@ -31,9 +31,9 @@ RSpec.describe Imports::ImportReportService do
     end
 
     it "writes an empty organisations without a data coordinators report" do
-      expect(storage_service).to receive(:write_file).with("report_directory/organisations_without_data_coordinators.csv", "\uFEFFOrganisation ID,Old Organisation ID,Organisation Name\n#{organisation2.id},2,#{organisation2.name}\n#{organisation3.id},3,#{organisation3.name}\n")
+      expect(storage_service).to receive(:write_file).with("OrganisationsWithoutDataCoordinators_report_suffix.csv", "\uFEFFOrganisation ID,Old Organisation ID,Organisation Name\n#{organisation2.id},2,#{organisation2.name}\n#{organisation3.id},3,#{organisation3.name}\n")
 
-      report_service.create_report("report_directory")
+      report_service.create_report("report_suffix")
     end
   end
 end
