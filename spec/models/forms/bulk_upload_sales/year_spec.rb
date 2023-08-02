@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe Forms::BulkUploadSales::Year do
   subject(:form) { described_class.new }
+
   around do |example|
     Timecop.freeze(Time.zone.now) do
       example.run
