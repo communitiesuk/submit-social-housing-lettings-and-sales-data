@@ -443,7 +443,7 @@ RSpec.describe SalesLogsController, type: :request do
                 get "/sales-logs?bulk_upload_id[]=#{bulk_upload.id}"
 
                 follow_redirect!
-                expect(page).to have_link("Back to all logs", href: clear_filters_path(filter_type: "sales_logs"))
+                expect(page).to have_link("Return to sales logs", href: clear_filters_path(filter_type: "sales_logs"))
               end
             end
           end
