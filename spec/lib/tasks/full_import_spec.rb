@@ -16,8 +16,8 @@ describe "full import", type: :task do
     allow(ENV).to receive(:[]).with("IMPORT_PAAS_INSTANCE").and_return(instance_name)
   end
 
-  describe "import:generate_report" do
-    subject(:task) { Rake::Task["import:generate_report"] }
+  describe "import:generate_reports" do
+    subject(:task) { Rake::Task["import:generate_reports"] }
 
     before do
       Rake.application.rake_require("tasks/full_import")
@@ -35,7 +35,7 @@ describe "full import", type: :task do
       it "creates a report using given organisation csv" do
         expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
         expect(Imports::ImportReportService).to receive(:new).with(storage_service, CSV.parse(orgs_list, headers: true))
-        expect(import_report_service).to receive(:create_report).with("some_name")
+        expect(import_report_service).to receive(:create_reports).with("some_name")
 
         task.invoke("some_name")
       end

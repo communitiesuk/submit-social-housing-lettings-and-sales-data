@@ -8,7 +8,7 @@ module Imports
 
     BYTE_ORDER_MARK = "\uFEFF".freeze # Required to ensure Excel always reads CSV as UTF-8
 
-    def create_report(report_suffix)
+    def create_reports(report_suffix)
       generate_missing_data_coordinators_report(report_suffix)
       generate_logs_report(report_suffix)
     end

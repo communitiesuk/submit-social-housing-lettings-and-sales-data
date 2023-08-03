@@ -94,19 +94,19 @@ namespace :import do
   end
 
   desc "Generate migrated logs report"
-  task :generate_report, %i[institutions_csv_name] => :environment do |_task, args|
+  task :generate_reports, %i[institutions_csv_name] => :environment do |_task, args|
     institutions_csv_name = args[:institutions_csv_name]
-    raise "Usage: rake import:generate_report['institutions_csv_name']" if institutions_csv_name.blank?
+    raise "Usage: rake import:generate_reports['institutions_csv_name']" if institutions_csv_name.blank?
 
     s3_service = Storage::S3Service.new(Configuration::PaasConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
     institutions_csv = CSV.parse(s3_service.get_file_io(institutions_csv_name), headers: true)
 
-    Imports::ImportReportService.new(s3_service, institutions_csv).create_report(institutions_csv_name)
+    Imports::ImportReportService.new(s3_service, institutions_csv).create_reports(institutions_csv_name)
   end
 
   desc "Run import from logs step to end"
-  task :logs_onwards, %i[institutions_csv_name] => %i[environment logs trigger_invites generate_report]
+  task :logs_onwards, %i[institutions_csv_name] => %i[environment logs trigger_invites generate_reports]
 
   desc "Run a full import for the institutions listed in the named file on s3"
-  task :full, %i[institutions_csv_name] => %i[environment initial logs trigger_invites generate_report]
+  task :full, %i[institutions_csv_name] => %i[environment initial logs trigger_invites generate_reports]
 end
