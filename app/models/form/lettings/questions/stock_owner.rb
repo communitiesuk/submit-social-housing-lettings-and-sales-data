@@ -27,13 +27,7 @@ class Form::Lettings::Questions::StockOwner < ::Form::Question
                             Organisation.where(holds_own_stock: true).pluck(:id, :name).to_h
                           else
                             stock_owners = user.organisation.stock_owners
-                                               .map { |stock_owner|
-                                                 # if user.organisation.absorbed_organisations.find { |absorbed_org| absorbed_org.stock_owners.include?(stock_owner) }.present?
-                                                   # [stock_owner.id, "#{stock_owner.name} (Active as of #{user.organisation.absorbed_organisations.find { |absorbed_org| absorbed_org.stock_owners.include?(stock_owner) }.merge_date})"]
-                                                 # else
-                                                   [stock_owner.id, stock_owner.name]
-                                                 # end
-                                               }.to_h
+                                               .map { |stock_owner| [stock_owner.id, stock_owner.name] }.to_h
                             absorbed_stock_owning_orgs = user.organisation.absorbed_organisations
                                                         .where(holds_own_stock: true)
                                                         .map { |org| [org.id, "#{org.name} (Inactive as of #{org.merge_date.to_time.to_formatted_s(:govuk_date)})"] }.to_h
