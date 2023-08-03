@@ -30,8 +30,12 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
     orgs = if user.support?
              log.owning_organisation.managing_agents
            else
-             user.organisation.managing_agents + user.organisation.absorbed_organisations
+             user.organisation.managing_agents
            end.pluck(:id, :name).to_h
+
+    user.organisation.absorbed_organisations.each do |absorbed_org|
+      opts[absorbed_org.id] = "#{absorbed_org.name} (active until #{absorbed_org.merge_date.to_fs(:govuk_date)})"
+    end
 
     opts.merge(orgs)
   end

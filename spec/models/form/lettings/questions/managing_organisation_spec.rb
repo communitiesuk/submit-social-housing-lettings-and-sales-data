@@ -161,6 +161,29 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
         expect(question.displayed_answer_options(log, user)).to eq(options)
       end
     end
+
+    context "when organisation has merged" do
+      let(:absorbing_org) { create(:organisation, name: "Absorbing org", holds_own_stock: true) }
+      let!(:merged_org) { create(:organisation, name: "Merged org", holds_own_stock: false) }
+      let(:user) { create(:user, :data_coordinator, organisation: absorbing_org) }
+
+      let(:log) do
+        merged_org.update!(merge_date: Time.zone.local(2023, 8, 2), absorbing_organisation_id: absorbing_org.id)
+        create(:lettings_log, owning_organisation: absorbing_org, managing_organisation: nil)
+      end
+
+      let(:options) do
+        {
+          "" => "Select an option",
+          absorbing_org.id => "Absorbing org (Your organisation)",
+          merged_org.id => "Merged org (active until 2 August 2023)",
+        }
+      end
+
+      it "displays merged organisation on the list of choices" do
+        expect(question.displayed_answer_options(log, user)).to eq(options)
+      end
+    end
   end
 
   it "is marked as derived" do
