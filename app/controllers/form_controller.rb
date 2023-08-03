@@ -102,9 +102,11 @@ private
         result[question.id] = question_params
       end
 
-      if current_user.support? && question.id == "owning_organisation_id" && @log.lettings? && @log.managing_organisation.blank?
+      if question.id == "owning_organisation_id" && @log.lettings?
         owning_organisation = Organisation.find(result["owning_organisation_id"])
-        if owning_organisation&.managing_agents&.empty?
+        if current_user.support? && @log.managing_organisation.blank? && owning_organisation&.managing_agents&.empty?
+          result["managing_organisation_id"] = owning_organisation.id
+        elsif owning_organisation&.absorbing_organisation == current_user.organisation
           result["managing_organisation_id"] = owning_organisation.id
         end
       end
