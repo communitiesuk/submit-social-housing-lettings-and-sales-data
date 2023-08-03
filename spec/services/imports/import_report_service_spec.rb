@@ -32,7 +32,22 @@ RSpec.describe Imports::ImportReportService do
       end
 
       it "writes an empty organisations without a data coordinators report" do
-        expect(storage_service).to receive(:write_file).with("OrganisationsWithoutDataCoordinators_report_suffix.csv", "\uFEFFOrganisation ID,Old Organisation ID,Organisation Name\n#{organisation2.id},2,#{organisation2.name}\n#{organisation3.id},3,#{organisation3.name}\n")
+        expect(storage_service).to receive(:write_file).with("OrganisationsWithoutDataCoordinators_report_suffix.csv", "\uFEFFOrganisation ID,Old Organisation ID,Organisation Name\n#{organisation2.id},2,org2\n#{organisation3.id},3,org3\n")
+
+        report_service.generate_missing_data_coordinators_report("report_suffix")
+      end
+    end
+
+    context "when organisation has an inactive data coordinator" do
+      let!(:organisation) { create(:organisation, old_visible_id: "1", name: "org1") }
+      let(:institutions_csv) { CSV.parse("Institution name,Id,Old Completed lettings logs,Old In progress lettings logs,Old Completed sales logs,Old In progress sales logs\norg1,1,2,1,4,3", headers: true) }
+
+      before do
+        create(:user, :data_coordinator, organisation:, active: false)
+      end
+
+      it "includes that organisation in the data coordinators report" do
+        expect(storage_service).to receive(:write_file).with("OrganisationsWithoutDataCoordinators_report_suffix.csv", "\uFEFFOrganisation ID,Old Organisation ID,Organisation Name\n#{organisation.id},1,org1\n")
 
         report_service.generate_missing_data_coordinators_report("report_suffix")
       end

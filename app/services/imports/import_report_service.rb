@@ -17,7 +17,7 @@ module Imports
       report_csv = "Organisation ID,Old Organisation ID,Organisation Name\n"
       organisations = @institutions_csv.map { |row| Organisation.find_by(name: row[0]) }.compact
       organisations.each do |organisation|
-        if organisation.users.none?(&:data_coordinator?)
+        if organisation.users.none? { |user| user.data_coordinator? && user.active? }
           report_csv += "#{organisation.id},#{organisation.old_visible_id},#{organisation.name}\n"
         end
       end
