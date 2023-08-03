@@ -20,14 +20,20 @@ class Form::Lettings::Questions::StockOwner < ::Form::Question
     end
 
     if !user.support? && user.organisation.holds_own_stock?
-      answer_opts[user.organisation.id] = "#{user.organisation.name} (Your organisation)"
+      answer_opts[user.organisation.id] = "#{user.organisation.name} (Your organisation, active as of #{user.organisation.created_at.to_time.to_formatted_s(:govuk_date)})"
     end
 
     user_answer_options = if user.support?
-                            Organisation.where(holds_own_stock: true)
+                            Organisation.where(holds_own_stock: true).pluck(:id, :name).to_h
                           else
-                            user.organisation.stock_owners + user.organisation.absorbed_organisations.where(holds_own_stock: true)
-                          end.pluck(:id, :name).to_h
+                            stock_owners = user.organisation.stock_owners
+                                               .map { |stock_owner| [stock_owner.id, stock_owner.name] }.to_h
+                            absorbed_stock_owning_orgs = user.organisation.absorbed_organisations
+                                                             .where(holds_own_stock: true)
+                                                             .map { |org| [org.id, "#{org.name} (Inactive as of #{org.merge_date.to_time.to_formatted_s(:govuk_date)})"] }.to_h
+
+                            stock_owners.merge(absorbed_stock_owning_orgs)
+                          end
 
     answer_opts.merge(user_answer_options)
   end
@@ -62,7 +68,7 @@ class Form::Lettings::Questions::StockOwner < ::Form::Question
     true
   end
 
-private
+  private
 
   def selected_answer_option_is_derived?(_log)
     true
