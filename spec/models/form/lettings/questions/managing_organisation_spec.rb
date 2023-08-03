@@ -163,7 +163,7 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
     end
 
     context "when organisation has merged" do
-      let(:absorbing_org) { create(:organisation, name: "Absorbing org", holds_own_stock: true) }
+      let(:absorbing_org) { create(:organisation, name: "Absorbing org", holds_own_stock: true, created_at: Time.zone.local(2023, 8, 3)) }
       let!(:merged_org) { create(:organisation, name: "Merged org", holds_own_stock: false) }
       let(:user) { create(:user, :data_coordinator, organisation: absorbing_org) }
 
@@ -175,24 +175,24 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
       it "displays merged organisation on the list of choices" do
         options = {
           "" => "Select an option",
-          absorbing_org.id => "Absorbing org (Your organisation)",
-          merged_org.id => "Merged org (active until 2 August 2023)",
-          merged_org.id => "Merged org (active until 2 August 2023)",
+          absorbing_org.id => "Absorbing org (Your organisation, active as of 3 August 2023)",
+          merged_org.id => "Merged org (inactive as of 2 August 2023)",
+          merged_org.id => "Merged org (inactive as of 2 August 2023)",
         }
         expect(question.displayed_answer_options(log, user)).to eq(options)
       end
 
-      it "displays managing agents of merged organisation selected as owning org" do        
-        managing_agent = create(:organisation, name: "Managing org 1") 
+      it "displays managing agents of merged organisation selected as owning org" do
+        managing_agent = create(:organisation, name: "Managing org 1")
         create(:organisation_relationship, parent_organisation: merged_org, child_organisation: managing_agent)
 
         options = {
           "" => "Select an option",
-          merged_org.id => "Merged org (active until 2 August 2023)",
-          absorbing_org.id => "Absorbing org (Your organisation)",
+          merged_org.id => "Merged org (inactive as of 2 August 2023)",
+          absorbing_org.id => "Absorbing org (Your organisation, active as of 3 August 2023)",
           managing_agent.id => "Managing org 1",
         }
-        
+
         log.update!(owning_organisation: merged_org)
         expect(question.displayed_answer_options(log, user)).to eq(options)
       end

@@ -23,22 +23,22 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
       if log.owning_organisation.holds_own_stock?
         opts[log.owning_organisation.id] = "#{log.owning_organisation.name} (Owning organisation)"
       end
+    elsif user.organisation.absorbed_organisations.exists?
+      opts[user.organisation.id] = "#{user.organisation.name} (Your organisation, active as of #{user.organisation.created_at.to_fs(:govuk_date)})"
     else
       opts[user.organisation.id] = "#{user.organisation.name} (Your organisation)"
     end
 
     orgs = if user.support?
              log.owning_organisation.managing_agents
-           else
-            if user.organisation.absorbed_organisations.include?(log.owning_organisation)
+           elsif user.organisation.absorbed_organisations.include?(log.owning_organisation)
              user.organisation.managing_agents + log.owning_organisation.managing_agents
-            else
-              user.organisation.managing_agents
-            end
+           else
+             user.organisation.managing_agents
            end.pluck(:id, :name).to_h
 
     user.organisation.absorbed_organisations.each do |absorbed_org|
-      opts[absorbed_org.id] = "#{absorbed_org.name} (active until #{absorbed_org.merge_date.to_fs(:govuk_date)})"
+      opts[absorbed_org.id] = "#{absorbed_org.name} (inactive as of #{absorbed_org.merge_date.to_fs(:govuk_date)})"
     end
 
     opts.merge(orgs)
