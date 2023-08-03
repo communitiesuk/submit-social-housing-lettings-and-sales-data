@@ -65,6 +65,8 @@ RSpec.describe SalesLogsController, type: :request do
       context "with a request containing invalid json parameters" do
         let(:params) do
           {
+            "owning_organisation_id": owning_organisation.id,
+            "created_by_id": user.id,
             "saledate": Time.zone.today,
             "purchid": "1",
             "ownershipsch": 1,

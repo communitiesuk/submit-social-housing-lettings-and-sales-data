@@ -116,20 +116,20 @@ class Form::Question
     if is_derived_or_has_inferred_check_answers_value?(log)
       "Change"
     elsif type == "checkbox"
-      answer_options.keys.any? { |key| value_is_yes?(log[key]) } ? "Change" : "Answer"
+      answer_options.keys.any? { |key| value_is_yes?(log[key], log.lettings?) } ? "Change" : "Answer"
     else
       log[id].blank? ? "Answer" : "Change"
     end
   end
 
   def unanswered?(log)
-    return answer_options.keys.none? { |key| value_is_yes?(log[key]) } if type == "checkbox"
+    return answer_options.keys.none? { |key| value_is_yes?(log[key], log.lettings?) } if type == "checkbox"
 
     log[id].blank?
   end
 
   def completed?(log)
-    return answer_options.keys.any? { |key| value_is_yes?(log[key]) } if type == "checkbox"
+    return answer_options.keys.any? { |key| value_is_yes?(log[key], log.lettings?) } if type == "checkbox"
 
     log[id].present? || !log.respond_to?(id.to_sym) || has_inferred_display_value?(log)
   end
@@ -166,23 +166,23 @@ class Form::Question
     label || value.to_s
   end
 
-  def value_is_yes?(value)
+  def value_is_yes?(value, is_lettings)
     case type
     when "checkbox"
       value == 1
     when "radio"
-      RADIO_YES_VALUE[id.to_sym]&.include?(value)
+      is_lettings ? RADIO_YES_VALUE_LETTINGS[id.to_sym]&.include?(value) : RADIO_YES_VALUE_SALES[id.to_sym]&.include?(value)
     else
       %w[yes].include?(value.downcase)
     end
   end
 
-  def value_is_no?(value)
+  def value_is_no?(value, is_lettings)
     case type
     when "checkbox"
       value && value.zero?
     when "radio"
-      RADIO_NO_VALUE[id.to_sym]&.include?(value)
+      is_lettings ? RADIO_NO_VALUE_LETTINGS[id.to_sym]&.include?(value) : RADIO_NO_VALUE_SALES[id.to_sym]&.include?(value)
     else
       %w[no].include?(value.downcase)
     end
@@ -272,9 +272,9 @@ private
 
   def checkbox_answer_label(log)
     answer = []
-    return "Yes" if id == "declaration" && value_is_yes?(log["declaration"])
+    return "Yes" if id == "declaration" && value_is_yes?(log["declaration"], log.lettings?)
 
-    answer_options.each { |key, options| value_is_yes?(log[key]) ? answer << options["value"] : nil }
+    answer_options.each { |key, options| value_is_yes?(log[key], log.lettings?) ? answer << options["value"] : nil }
     answer.join(", ")
   end
 
@@ -319,7 +319,7 @@ private
   RADIO_YES_VALUE = {
     renewal: [1],
     postcode_known: [1],
-    ppcodenk: [1],
+    pcodenk: [0],
     previous_la_known: [1],
     first_time_property_let_as_social_housing: [1],
     wchair: [1],
@@ -343,7 +343,7 @@ private
   RADIO_NO_VALUE = {
     renewal: [0],
     postcode_known: [0],
-    ppcodenk: [0],
+    pcodenk: [1],
     previous_la_known: [0],
     first_time_property_let_as_social_housing: [0],
     wchair: [0],
@@ -363,6 +363,11 @@ private
     hbrentshortfall: [2],
     net_income_value_check: [1],
   }.freeze
+
+  RADIO_YES_VALUE_LETTINGS = RADIO_YES_VALUE.merge({ ppcodenk: [1] })
+  RADIO_YES_VALUE_SALES = RADIO_YES_VALUE.merge({ ppcodenk: [0] })
+  RADIO_NO_VALUE_LETTINGS = RADIO_NO_VALUE.merge({ ppcodenk: [0] })
+  RADIO_NO_VALUE_SALES = RADIO_NO_VALUE.merge({ ppcodenk: [1] })
 
   RADIO_DONT_KNOW_VALUE = {
     sheltered: [3],

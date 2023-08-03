@@ -19,6 +19,7 @@ class Form::Sales::Questions::PostcodeKnown < ::Form::Question
         },
       ],
     }
+    @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 
   ANSWER_OPTIONS = {

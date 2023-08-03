@@ -7,7 +7,6 @@ RSpec.describe Form::Sales::Pages::Organisation, type: :model do
   let(:page_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection) }
   let(:form) { instance_double(Form) }
-  let(:lettings_log) { instance_double(LettingsLog) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
@@ -33,19 +32,126 @@ RSpec.describe Form::Sales::Pages::Organisation, type: :model do
     expect(page.depends_on).to be nil
   end
 
-  context "when the current user is a support user" do
-    let(:support_user) { FactoryBot.build(:user, :support) }
+  describe "#routed_to?" do
+    let(:log) { create(:lettings_log, owning_organisation_id: nil) }
 
-    it "is shown" do
-      expect(page.routed_to?(lettings_log, support_user)).to be true
+    context "when user nil" do
+      it "is not shown" do
+        expect(page.routed_to?(log, nil)).to eq(false)
+      end
+
+      it "does not update owning_organisation_id" do
+        expect { page.routed_to?(log, nil) }.not_to change(log.reload, :owning_organisation).from(nil)
+      end
     end
-  end
 
-  context "when the current user is not a support user" do
-    let(:user) { FactoryBot.build(:user) }
+    context "when support" do
+      let(:user) { create(:user, :support) }
 
-    it "is not shown" do
-      expect(page.routed_to?(lettings_log, user)).to be false
+      it "is shown" do
+        expect(page.routed_to?(log, user)).to eq(true)
+      end
+
+      it "does not update owning_organisation_id" do
+        expect { page.routed_to?(log, user) }.not_to change(log.reload, :owning_organisation).from(nil)
+      end
+    end
+
+    context "when not support" do
+      context "when does not hold own stock" do
+        let(:user) do
+          create(:user, :data_coordinator, organisation: create(:organisation, holds_own_stock: false))
+        end
+
+        context "with 0 stock_owners" do
+          it "is not shown" do
+            expect(page.routed_to?(log, user)).to eq(false)
+          end
+
+          it "does not update owning_organisation_id" do
+            expect { page.routed_to?(log, user) }.not_to change(log.reload, :owning_organisation)
+          end
+        end
+
+        context "with 1 stock_owners" do
+          let(:stock_owner) { create(:organisation) }
+
+          before do
+            create(
+              :organisation_relationship,
+              child_organisation: user.organisation,
+              parent_organisation: stock_owner,
+            )
+          end
+
+          it "is not shown" do
+            expect(page.routed_to?(log, user)).to eq(false)
+          end
+
+          it "updates owning_organisation_id" do
+            expect { page.routed_to?(log, user) }.to change(log.reload, :owning_organisation).from(nil).to(stock_owner)
+          end
+        end
+
+        context "with >1 stock_owners" do
+          let(:stock_owner1) { create(:organisation) }
+          let(:stock_owner2) { create(:organisation) }
+
+          before do
+            create(
+              :organisation_relationship,
+              child_organisation: user.organisation,
+              parent_organisation: stock_owner1,
+            )
+            create(
+              :organisation_relationship,
+              child_organisation: user.organisation,
+              parent_organisation: stock_owner2,
+            )
+          end
+
+          it "is not shown" do
+            expect(page.routed_to?(log, user)).to eq(true)
+          end
+
+          it "updates owning_organisation_id" do
+            expect { page.routed_to?(log, user) }.not_to change(log.reload, :owning_organisation)
+          end
+        end
+      end
+
+      context "when holds own stock" do
+        let(:user) do
+          create(:user, :data_coordinator, organisation: create(:organisation, holds_own_stock: true))
+        end
+
+        context "with 0 stock_owners" do
+          it "is not shown" do
+            expect(page.routed_to?(log, user)).to eq(false)
+          end
+
+          it "updates owning_organisation_id to user organisation" do
+            expect {
+              page.routed_to?(log, user)
+            }.to change(log.reload, :owning_organisation).from(nil).to(user.organisation)
+          end
+        end
+
+        context "with >0 stock_owners" do
+          before do
+            create(:organisation_relationship, child_organisation: user.organisation)
+            create(:organisation_relationship, child_organisation: user.organisation)
+          end
+
+          it "is shown" do
+            expect(page.routed_to?(log, user)).to eq(true)
+          end
+
+          it "does not update owning_organisation_id" do
+            expect { page.routed_to?(log, user) }.not_to change(log.reload, :owning_organisation).from(nil)
+          end
+        end
+      end
     end
   end
 end

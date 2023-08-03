@@ -4,7 +4,7 @@ RSpec.describe BulkUpload::Sales::Validator do
   subject(:validator) { described_class.new(bulk_upload:, path:) }
 
   let(:user) { create(:user, organisation:) }
-  let(:organisation) { create(:organisation, old_visible_id: "3") }
+  let(:organisation) { create(:organisation, old_visible_id: "123") }
   let(:bulk_upload) { create(:bulk_upload, user:) }
   let(:path) { file.path }
   let(:file) { Tempfile.new }
@@ -104,7 +104,7 @@ RSpec.describe BulkUpload::Sales::Validator do
         error = BulkUploadError.find_by(row: "6", field: "field_92", category: "setup")
 
         expect(error.field).to eql("field_92")
-        expect(error.error).to eql("The owning organisation code is incorrect")
+        expect(error.error).to eql("You must answer owning organisation")
         expect(error.purchaser_code).to eql("22 test BU")
         expect(error.row).to eql("6")
         expect(error.cell).to eql("CO6")

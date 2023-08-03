@@ -407,7 +407,7 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
         it "is not permitted as setup error" do
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
 
-          expect(setup_errors.find { |e| e.attribute == :field_92 }.message).to eql("The owning organisation code is incorrect")
+          expect(setup_errors.find { |e| e.attribute == :field_92 }.message).to eql("You must answer owning organisation")
         end
 
         it "blocks log creation" do
@@ -421,7 +421,7 @@ RSpec.describe BulkUpload::Sales::Year2022::RowParser do
         it "is not permitted as a setup error" do
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
 
-          expect(setup_errors.find { |e| e.attribute == :field_92 }.message).to eql("The owning organisation code is incorrect")
+          expect(setup_errors.find { |e| e.attribute == :field_92 }.message).to eql("You must answer owning organisation")
         end
 
         it "blocks log creation" do

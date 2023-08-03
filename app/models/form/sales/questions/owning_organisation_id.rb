@@ -7,37 +7,63 @@ class Form::Sales::Questions::OwningOrganisationId < ::Form::Question
     @type = "select"
   end
 
-  def answer_options
+  def answer_options(log = nil, user = nil)
     answer_opts = { "" => "Select an option" }
+
     return answer_opts unless ActiveRecord::Base.connected?
+    return answer_opts unless user
+    return answer_opts unless log
 
-    Organisation.select(:id, :name).each_with_object(answer_opts) do |organisation, hsh|
-      hsh[organisation.id] = organisation.name
-      hsh
+    if log.owning_organisation_id.present?
+      answer_opts = answer_opts.merge({ log.owning_organisation.id => log.owning_organisation.name })
     end
+
+    if !user.support? && user.organisation.holds_own_stock?
+      answer_opts[user.organisation.id] = "#{user.organisation.name} (Your organisation)"
+    end
+
+    user_answer_options = if user.support?
+                            Organisation.where(holds_own_stock: true)
+                          else
+                            user.organisation.stock_owners + user.organisation.absorbed_organisations.where(holds_own_stock: true)
+                          end.pluck(:id, :name).to_h
+
+    answer_opts.merge(user_answer_options)
   end
 
-  def displayed_answer_options(_log, _user = nil)
-    answer_options
+  def displayed_answer_options(log, user = nil)
+    answer_options(log, user)
   end
 
-  def label_from_value(value, _log = nil, _user = nil)
+  def label_from_value(value, log = nil, user = nil)
     return unless value
 
-    answer_options[value]
-  end
-
-  def hidden_in_check_answers?(_log, current_user)
-    !current_user.support?
+    answer_options(log, user)[value]
   end
 
   def derived?
     true
   end
 
+  def hidden_in_check_answers?(_log, user = nil)
+    return false if user.support?
+
+    stock_owners = user.organisation.stock_owners + user.organisation.absorbed_organisations.where(holds_own_stock: true)
+
+    if user.organisation.holds_own_stock?
+      stock_owners.count.zero?
+    else
+      stock_owners.count <= 1
+    end
+  end
+
+  def enabled
+    true
+  end
+
 private
 
   def selected_answer_option_is_derived?(_log)
-    false
+    true
   end
 end

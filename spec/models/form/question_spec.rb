@@ -60,15 +60,37 @@ RSpec.describe Form::Question, type: :model do
   end
 
   it "has a yes value helper" do
-    expect(question).to be_value_is_yes("Yes")
-    expect(question).to be_value_is_yes("YES")
-    expect(question).not_to be_value_is_yes("random")
+    expect(question).to be_value_is_yes("Yes", true)
+    expect(question).to be_value_is_yes("YES", true)
+    expect(question).not_to be_value_is_yes("random", true)
   end
 
   it "has a no value helper" do
-    expect(question).to be_value_is_no("No")
-    expect(question).to be_value_is_no("NO")
-    expect(question).not_to be_value_is_no("random")
+    expect(question).to be_value_is_no("No", true)
+    expect(question).to be_value_is_no("NO", true)
+    expect(question).not_to be_value_is_no("random", true)
+  end
+
+  context "when there are different value helper values for lettings and sales" do
+    context "with a lettings log" do
+      let(:lettings_log) { FactoryBot.build(:lettings_log, :in_progress) }
+      let(:question) { Form::Lettings::Questions::Ppcodenk.new(nil, nil, Form::Lettings::Pages::PreviousPostcode.new("previous_postcode", nil, Form::Lettings::Subsections::HouseholdSituation.new(nil, nil, Form::Lettings::Sections::Household))) }
+
+      it "has the correct values" do
+        expect(question.value_is_yes?(1, lettings_log.lettings?)).to be true
+        expect(question.value_is_no?(0, lettings_log.lettings?)).to be true
+      end
+    end
+
+    context "with a sales log" do
+      let(:sales_log) { FactoryBot.build(:sales_log, :in_progress) }
+      let(:question) { Form::Sales::Questions::PreviousPostcodeKnown.new(nil, nil, Form::Sales::Pages::LastAccommodation.new("previous_postcode", nil, Form::Sales::Subsections::HouseholdSituation.new(nil, nil, Form::Sales::Sections::Household))) }
+
+      it "has the correct values" do
+        expect(question.value_is_yes?(0, sales_log.lettings?)).to be true
+        expect(question.value_is_no?(1, sales_log.lettings?)).to be true
+      end
+    end
   end
 
   context "when type is numeric" do
@@ -108,10 +130,10 @@ RSpec.describe Form::Question, type: :model do
       let(:question_id) { "illness" }
 
       it "maps those options" do
-        expect(question).to be_value_is_yes(1)
-        expect(question).not_to be_value_is_no(1)
+        expect(question).to be_value_is_yes(1, true)
+        expect(question).not_to be_value_is_no(1, true)
         expect(question).not_to be_value_is_refused(1)
-        expect(question).to be_value_is_no(2)
+        expect(question).to be_value_is_no(2, true)
         expect(question).to be_value_is_dont_know(3)
       end
     end
@@ -123,8 +145,8 @@ RSpec.describe Form::Question, type: :model do
       let(:question_id) { "layear" }
 
       it "maps those options" do
-        expect(question).not_to be_value_is_yes(7)
-        expect(question).not_to be_value_is_no(7)
+        expect(question).not_to be_value_is_yes(7, true)
+        expect(question).not_to be_value_is_no(7, true)
         expect(question).not_to be_value_is_refused(7)
         expect(question).to be_value_is_dont_know(7)
       end
@@ -209,13 +231,13 @@ RSpec.describe Form::Question, type: :model do
     end
 
     it "can map yes values" do
-      expect(question).to be_value_is_yes(1)
-      expect(question).not_to be_value_is_yes(0)
+      expect(question).to be_value_is_yes(1, true)
+      expect(question).not_to be_value_is_yes(0, true)
     end
 
     it "can map no values" do
-      expect(question).to be_value_is_no(0)
-      expect(question).not_to be_value_is_no(1)
+      expect(question).to be_value_is_no(0, true)
+      expect(question).not_to be_value_is_no(1, true)
     end
   end
 
