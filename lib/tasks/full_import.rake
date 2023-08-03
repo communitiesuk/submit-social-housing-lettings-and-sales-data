@@ -6,7 +6,7 @@ namespace :import do
     institutions_csv_name = args[:institutions_csv_name]
     raise "Usage: rake import:initial['institutions_csv_name']" if institutions_csv_name.blank?
 
-    s3_service = Storage::S3Service.new(Configuration::PaasConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
+    s3_service = Storage::S3Service.new(PlatformHelper.is_paas? ? Configuration::PaasConfigurationService.new : Configuration::EnvConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
     csv = CSV.parse(s3_service.get_file_io(institutions_csv_name), headers: true)
     org_count = csv.length
 
@@ -43,7 +43,7 @@ namespace :import do
     institutions_csv_name = args[:institutions_csv_name]
     raise "Usage: rake import:logs['institutions_csv_name']" if institutions_csv_name.blank?
 
-    s3_service = Storage::S3Service.new(Configuration::PaasConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
+    s3_service = Storage::S3Service.new(PlatformHelper.is_paas? ? Configuration::PaasConfigurationService.new : Configuration::EnvConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
     csv = CSV.parse(s3_service.get_file_io(institutions_csv_name), headers: true)
     org_count = csv.length
 
@@ -77,7 +77,7 @@ namespace :import do
     institutions_csv_name = args[:institutions_csv_name]
     raise "Usage: rake import:trigger_invites['institutions_csv_name']" if institutions_csv_name.blank?
 
-    s3_service = Storage::S3Service.new(Configuration::PaasConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
+    s3_service = Storage::S3Service.new(PlatformHelper.is_paas? ? Configuration::PaasConfigurationService.new : Configuration::EnvConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
     csv = CSV.parse(s3_service.get_file_io(institutions_csv_name), headers: true)
 
     Rails.logger.info("Triggering user invite emails")
@@ -98,7 +98,7 @@ namespace :import do
     institutions_csv_name = args[:institutions_csv_name]
     raise "Usage: rake import:generate_reports['institutions_csv_name']" if institutions_csv_name.blank?
 
-    s3_service = Storage::S3Service.new(Configuration::PaasConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
+    s3_service = Storage::S3Service.new(PlatformHelper.is_paas? ? Configuration::PaasConfigurationService.new : Configuration::EnvConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
     institutions_csv = CSV.parse(s3_service.get_file_io(institutions_csv_name), headers: true)
 
     Imports::ImportReportService.new(s3_service, institutions_csv).create_reports(institutions_csv_name)

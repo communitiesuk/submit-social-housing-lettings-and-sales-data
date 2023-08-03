@@ -8,7 +8,7 @@ namespace :core do
     # We only allow a reduced list of known fields to be updatable
     case field
     when "tenancycode", "major_repairs", "lettings_allocation", "offered"
-      s3_service = Storage::S3Service.new(Configuration::PaasConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
+      s3_service = Storage::S3Service.new(PlatformHelper.is_paas? ? Configuration::PaasConfigurationService.new : Configuration::EnvConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
       archive_io = s3_service.get_file_io(path)
       archive_service = Storage::ArchiveService.new(archive_io)
       if archive_service.folder_present?("logs")
