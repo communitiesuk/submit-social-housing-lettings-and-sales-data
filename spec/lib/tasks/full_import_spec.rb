@@ -23,9 +23,6 @@ describe "full import", type: :task do
       Rake.application.rake_require("tasks/full_import")
       Rake::Task.define_task(:environment)
       task.reenable
-
-      create(:organisation, old_visible_id: 1, name: "org1")
-      create(:organisation, old_visible_id: 2, name: "org2")
     end
 
     context "when generating report" do
@@ -35,10 +32,10 @@ describe "full import", type: :task do
         allow(Imports::ImportReportService).to receive(:new).and_return(import_report_service)
       end
 
-      it "creates an organisation from the given XML file" do
+      it "creates a report using given organisation csv" do
         expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
-        expect(Imports::ImportReportService).to receive(:new).with(storage_service, %w[1 2])
-        expect(import_report_service).to receive(:generate_missing_data_coordinators_report).with("some_name")
+        expect(Imports::ImportReportService).to receive(:new).with(storage_service, CSV.parse(orgs_list, headers: true))
+        expect(import_report_service).to receive(:create_report).with("some_name")
 
         task.invoke("some_name")
       end

@@ -1,39 +1,55 @@
 require "rails_helper"
 
 RSpec.describe Imports::ImportReportService do
-  subject(:report_service) { described_class.new(storage_service, old_organisation_ids) }
+  subject(:report_service) { described_class.new(storage_service, institutions_csv) }
 
   let(:storage_service) { instance_double(Storage::S3Service) }
 
-  context "when all organisations have data coordinators" do
-    let(:organisation) { create(:organisation, old_visible_id: "1") }
-    let(:old_organisation_ids) { [organisation.old_visible_id] }
+  describe "#generate_missing_data_coordinators_report" do
+    context "when all organisations have data coordinators" do
+      let!(:organisation) { create(:organisation, old_visible_id: "1", name: "org1") }
+      let(:institutions_csv) { CSV.parse("Institution name,Id,Old Completed lettings logs,Old In progress lettings logs,Old Completed sales logs,Old In progress sales logs\norg1,1,2,1,4,3", headers: true) }
 
-    before do
-      create(:user, :data_coordinator, organisation:)
+      before do
+        create(:user, :data_coordinator, organisation:)
+      end
+
+      it "writes an empty organisations without a data coordinators report" do
+        expect(storage_service).to receive(:write_file).with("OrganisationsWithoutDataCoordinators_report_suffix.csv", "\uFEFFOrganisation ID,Old Organisation ID,Organisation Name\n")
+
+        report_service.generate_missing_data_coordinators_report("report_suffix")
+      end
     end
 
-    it "writes an empty organisations without a data coordinators report" do
-      expect(storage_service).to receive(:write_file).with("OrganisationsWithoutDataCoordinators_report_suffix.csv", "\uFEFFOrganisation ID,Old Organisation ID,Organisation Name\n")
+    context "when some organisations have no data coordinators" do
+      let!(:organisation) { create(:organisation, old_visible_id: "1", name: "org1") }
+      let!(:organisation2) { create(:organisation, old_visible_id: "2", name: "org2") }
+      let!(:organisation3) { create(:organisation, old_visible_id: "3", name: "org3") }
+      let(:institutions_csv) { CSV.parse("Institution name,Id,Old Completed lettings logs,Old In progress lettings logs,Old Completed sales logs,Old In progress sales logs\norg1,1,2,1,4,3\norg2,2,5,6,5,7\norg3,3,5,6,5,7", headers: true) }
 
-      report_service.create_report("report_suffix")
+      before do
+        create(:user, :data_coordinator, organisation:)
+      end
+
+      it "writes an empty organisations without a data coordinators report" do
+        expect(storage_service).to receive(:write_file).with("OrganisationsWithoutDataCoordinators_report_suffix.csv", "\uFEFFOrganisation ID,Old Organisation ID,Organisation Name\n#{organisation2.id},2,#{organisation2.name}\n#{organisation3.id},3,#{organisation3.name}\n")
+
+        report_service.generate_missing_data_coordinators_report("report_suffix")
+      end
     end
   end
 
-  context "when some organisations have no data coordinators" do
-    let(:organisation) { create(:organisation, old_visible_id: "") }
-    let(:organisation2) { create(:organisation, old_visible_id: "2") }
-    let(:organisation3) { create(:organisation, old_visible_id: "3") }
-    let(:old_organisation_ids) { [organisation.old_visible_id, organisation2.old_visible_id, organisation3.old_visible_id] }
+  describe "#generate_logs_report" do
+    let(:institutions_csv) { CSV.parse("Institution name,Id,Old Completed lettings logs,Old In progress lettings logs,Old Completed sales logs,Old In progress sales logs\norg1,1,2,1,4,3\norg2,2,5,6,5,7", headers: true) }
 
     before do
-      create(:user, :data_coordinator, organisation:)
+      create(:organisation, old_visible_id: "1", name: "org1")
+      create(:organisation, old_visible_id: "2", name: "org2")
     end
 
-    it "writes an empty organisations without a data coordinators report" do
-      expect(storage_service).to receive(:write_file).with("OrganisationsWithoutDataCoordinators_report_suffix.csv", "\uFEFFOrganisation ID,Old Organisation ID,Organisation Name\n#{organisation2.id},2,#{organisation2.name}\n#{organisation3.id},3,#{organisation3.name}\n")
-
-      report_service.create_report("report_suffix")
+    it "generates a report with imported logs" do
+      expect(storage_service).to receive(:write_file).with("MigratedLogsReport_report_suffix.csv", "\uFEFFInstitution name,Id,Old Completed lettings logs,Old In progress lettings logs,Old Completed sales logs,Old In progress sales logs,New Completed lettings logs,New In Progress lettings logs,New Completed sales logs,New In Progress sales logs\norg1,1,2,1,4,3,0,0,0,0\norg2,2,5,6,5,7,0,0,0,0\n")
+      report_service.generate_logs_report("report_suffix")
     end
   end
 end
