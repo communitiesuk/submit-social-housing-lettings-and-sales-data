@@ -30,7 +30,11 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
     orgs = if user.support?
              log.owning_organisation.managing_agents
            else
-             user.organisation.managing_agents
+            if user.organisation.absorbed_organisations.include?(log.owning_organisation)
+             user.organisation.managing_agents + log.owning_organisation.managing_agents
+            else
+              user.organisation.managing_agents
+            end
            end.pluck(:id, :name).to_h
 
     user.organisation.absorbed_organisations.each do |absorbed_org|
