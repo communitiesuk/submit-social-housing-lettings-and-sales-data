@@ -152,6 +152,28 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
           user.organisation.update!(created_at: Time.zone.local(2021, 2, 2))
         end
 
+        it "shows merged organisations stock owners as options" do
+          expect(question.displayed_answer_options(log, user)).to eq(options)
+        end
+      end
+
+      context "when user's org has absorbed other orgs with parent organisations during closed collection periods" do
+        let(:merged_organisation) { create(:organisation, name: "Merged org") }
+        let(:options) do
+          {
+            "" => "Select an option",
+            user.organisation.id => "User org (Your organisation)",
+            owning_org_1.id => "Owning org 1",
+          }
+        end
+
+        before do
+          Timecop.freeze(Time.zone.local(2023, 4, 2))
+          org_rel.update!(child_organisation: merged_organisation)
+          merged_organisation.update!(merge_date: Time.zone.local(2021, 6, 2), absorbing_organisation: user.organisation)
+          user.organisation.update!(created_at: Time.zone.local(2021, 2, 2))
+        end
+
         it "shows merged organisation as an option" do
           expect(question.displayed_answer_options(log, user)).to eq(options)
         end

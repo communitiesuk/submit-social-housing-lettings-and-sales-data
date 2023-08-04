@@ -16,16 +16,21 @@ class Form::Sales::Questions::OwningOrganisationId < ::Form::Question
       answer_opts[log.owning_organisation.id] = log.owning_organisation.name
     end
 
+    recently_absorbed_organisations = user.organisation.absorbed_organisations.merged_during_open_collection_period
     if !user.support? && user.organisation.holds_own_stock?
-      answer_opts[user.organisation.id] = organisation_label(user.organisation)
+      answer_opts[user.organisation.id] = if recently_absorbed_organisations.exists?
+                                            "#{user.organisation.name} (Your organisation, active as of #{user.organisation.created_at.to_fs(:govuk_date)})"
+                                          else
+                                            "#{user.organisation.name} (Your organisation)"
+                                          end
     end
 
     user_organisation_options = user.support? ? Organisation.where(holds_own_stock: true) : user.organisation.stock_owners
     user_answer_options = user_organisation_options.pluck(:id, :name).to_h
 
     unless user.support?
-      user.organisation.absorbed_organisations.where(holds_own_stock: true).find_each do |absorbed_org|
-        answer_opts[absorbed_org.id] = merged_organisation_label(absorbed_org.name, absorbed_org.merge_date)
+      recently_absorbed_organisations.each do |absorbed_org|
+        answer_opts[absorbed_org.id] = merged_organisation_label(absorbed_org.name, absorbed_org.merge_date) if absorbed_org.holds_own_stock?
         absorbed_org.stock_owners.each do |stock_owner|
           user_answer_options[stock_owner.id] = merged_organisation_label(stock_owner.name, absorbed_org.merge_date)
         end
@@ -69,14 +74,6 @@ private
 
   def selected_answer_option_is_derived?(_log)
     true
-  end
-
-  def organisation_label(organisation)
-    if organisation.absorbed_organisations.exists?
-      "#{organisation.name} (Your organisation, active as of #{organisation.created_at.to_fs(:govuk_date)})"
-    else
-      "#{organisation.name} (Your organisation)"
-    end
   end
 
   def merged_organisation_label(name, merge_date)
