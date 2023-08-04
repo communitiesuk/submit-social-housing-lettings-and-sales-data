@@ -54,19 +54,17 @@ class DeviseNotifyMailer < Devise::Mailer
     Rails.application.credentials[:email_allowlist] || []
   end
 
-private
-
-  def email_changed(record)
-    record.confirmable_template == User::CONFIRMABLE_TEMPLATE_ID && (record.unconfirmed_email.present? && record.unconfirmed_email != record.email)
-  end
-
-  def send_confirmation_email(email, record, token, username)
-    url = "#{user_confirmation_url}?confirmation_token="
+  def email_changed(record, _opts = {})
+    # TODO: do not send if user changed own email address
+    return true if intercept_send?(email)
 
     send_email(
-      email,
-      record.confirmable_template,
-      personalisation(record, token, url, username:),
+      record.email,
+      User::FOR_OLD_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID,
+      {
+        new_email: record.unconfirmed_email,
+        old_email: record.email,
+      },
     )
   end
 
