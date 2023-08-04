@@ -24,7 +24,7 @@ module DuplicateLogsHelper
   end
 
   def change_duplicate_logs_action_href(log, page_id, all_duplicates, original_log_id)
-    remaining_duplicate_id = all_duplicates.map(&:id).reject { |id| id == log.id }.first
-    send("#{log.model_name.param_key}_#{page_id}_path", log, referrer: "duplicate_logs", remaining_duplicate_id:, original_log_id:)
+    first_remaining_duplicate_id = all_duplicates.map(&:id).reject { |id| id == log.id }.first
+    send("#{log.model_name.param_key}_#{page_id}_path", log, referrer: "duplicate_logs", first_remaining_duplicate_id:, original_log_id:)
   end
 end

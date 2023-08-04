@@ -252,7 +252,7 @@ private
       send("#{class_name}_duplicate_logs_path", original_log, original_log_id: original_log.id)
     else
       flash[:notice] = deduplication_success_banner
-      send("#{class_name}_duplicate_logs_path", "#{class_name}_id".to_sym => from_referrer_query("remaining_duplicate_id"), original_log_id: from_referrer_query("original_log_id"))
+      send("#{class_name}_duplicate_logs_path", "#{class_name}_id".to_sym => from_referrer_query("first_remaining_duplicate_id"), original_log_id: from_referrer_query("original_log_id"))
     end
   end
 

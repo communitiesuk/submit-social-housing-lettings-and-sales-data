@@ -26,7 +26,7 @@
               <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= inferred_answer %></span>
             <% end %>
           <% end %>
-          <% if @all_duplicates.count > 1 %>
+          <% if @all_duplicates.many? %>
             <% row.action(
                 text: question.action_text(log),
                 href: change_duplicate_logs_action_href(log, question.page.id, @all_duplicates, @original_log.id),

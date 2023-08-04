@@ -58,9 +58,9 @@ RSpec.describe DuplicateLogsController, type: :request do
             expect(page).to have_content("Q37 - Lead tenant’s working situation", count: 3)
             expect(page).to have_content("Household rent and charges", count: 3)
             expect(page).to have_link("Change", count: 21)
-            expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?original_log_id=#{lettings_log.id}&referrer=duplicate_logs&remaining_duplicate_id=#{duplicate_logs[0].id}")
-            expect(page).to have_link("Change", href: "/lettings-logs/#{duplicate_logs[0].id}/tenant-code?original_log_id=#{lettings_log.id}&referrer=duplicate_logs&remaining_duplicate_id=#{lettings_log.id}")
-            expect(page).to have_link("Change", href: "/lettings-logs/#{duplicate_logs[1].id}/tenant-code?original_log_id=#{lettings_log.id}&referrer=duplicate_logs&remaining_duplicate_id=#{lettings_log.id}")
+            expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
+            expect(page).to have_link("Change", href: "/lettings-logs/#{duplicate_logs[0].id}/tenant-code?first_remaining_duplicate_id=#{lettings_log.id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
+            expect(page).to have_link("Change", href: "/lettings-logs/#{duplicate_logs[1].id}/tenant-code?first_remaining_duplicate_id=#{lettings_log.id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
           end
 
           it "displays buttons to delete" do
@@ -122,9 +122,9 @@ RSpec.describe DuplicateLogsController, type: :request do
             expect(page).to have_content("Q25 - Buyer 1's working situation", count: 3)
             expect(page).to have_content("Q15 - Postcode", count: 3)
             expect(page).to have_link("Change", count: 18)
-            expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=duplicate_logs&remaining_duplicate_id=#{duplicate_logs[0].id}")
-            expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[0].id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=duplicate_logs&remaining_duplicate_id=#{sales_log.id}")
-            expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[1].id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=duplicate_logs&remaining_duplicate_id=#{sales_log.id}")
+            expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
+            expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[0].id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
+            expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[1].id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
           end
 
           it "displays buttons to delete" do
