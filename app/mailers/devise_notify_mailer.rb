@@ -36,8 +36,9 @@ class DeviseNotifyMailer < Devise::Mailer
 
   def confirmation_instructions(record, token, _opts = {})
     username = record.email
-    if email_changed(record)
+    if email_changed?(record)
       username = record.unconfirmed_email
+      send_email_changed_to_old_email(record)
       send_confirmation_email(record.unconfirmed_email, record, token, username)
     end
     send_confirmation_email(record.email, record, token, username)
@@ -54,9 +55,11 @@ class DeviseNotifyMailer < Devise::Mailer
     Rails.application.credentials[:email_allowlist] || []
   end
 
-  def email_changed(record, _opts = {})
-    # TODO: do not send if user changed own email address
-    return true if intercept_send?(email)
+  def send_email_changed_to_old_email(record)
+    # Do not send if user changed own email
+    return if record.versions.last.actor == record
+
+    return true if intercept_send?(record.email)
 
     send_email(
       record.email,
@@ -65,6 +68,22 @@ class DeviseNotifyMailer < Devise::Mailer
         new_email: record.unconfirmed_email,
         old_email: record.email,
       },
+    )
+  end
+
+  def email_changed?(record)
+    # binding.pry
+    # record.versions.last.changeset.has_key? "unconfirmed_email"
+    record.confirmable_template == User::CONFIRMABLE_TEMPLATE_ID && (record.unconfirmed_email.present? && record.unconfirmed_email != record.email)
+  end
+
+  def send_confirmation_email(email, record, token, username)
+    url = "#{user_confirmation_url}?confirmation_token="
+
+    send_email(
+      email,
+      record.confirmable_template,
+      personalisation(record, token, url, username:),
     )
   end
 
