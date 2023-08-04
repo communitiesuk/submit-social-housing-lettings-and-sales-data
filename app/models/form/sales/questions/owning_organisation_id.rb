@@ -10,7 +10,9 @@ class Form::Sales::Questions::OwningOrganisationId < ::Form::Question
   def answer_options(log = nil, user = nil)
     answer_opts = { "" => "Select an option" }
 
-    return answer_opts unless ActiveRecord::Base.connected? && user && log
+    return answer_opts unless ActiveRecord::Base.connected?
+    return answer_opts unless user
+    return answer_opts unless log
 
     if log.owning_organisation_id.present?
       answer_opts[log.owning_organisation.id] = log.owning_organisation.name
