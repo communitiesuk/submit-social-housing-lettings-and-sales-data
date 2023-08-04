@@ -57,7 +57,7 @@ class DeviseNotifyMailer < Devise::Mailer
 
   def send_email_changed_to_old_email(record)
     # Do not send if user changed own email
-    return if record.versions.last.actor == record
+    return unless record.versions.last.actor != record && record.versions.last.changeset.key?("unconfirmed_email") && FeatureToggle.new_email_journey?
 
     return true if intercept_send?(record.email)
 
@@ -72,8 +72,6 @@ class DeviseNotifyMailer < Devise::Mailer
   end
 
   def email_changed?(record)
-    # binding.pry
-    # record.versions.last.changeset.has_key? "unconfirmed_email"
     record.confirmable_template == User::CONFIRMABLE_TEMPLATE_ID && (record.unconfirmed_email.present? && record.unconfirmed_email != record.email)
   end
 

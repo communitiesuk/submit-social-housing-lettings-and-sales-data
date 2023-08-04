@@ -1679,11 +1679,26 @@ RSpec.describe UsersController, type: :request do
               expect(page).to have_content(other_user.reload.email.to_s)
             end
 
-            context "when the support user tries to update the user’s password" do
+            context "when the support user tries to update the user’s password", :aggregate_failures do
               let(:params) do
                 {
-                  id: user.id, user: { password: new_name, password_confirmation: new_name, name: "new name" }
+                  id: user.id, user: { password: new_name, password_confirmation: new_name, name: "new name", email: new_email }
                 }
+              end
+
+              let(:personalisation) do
+                {
+                  name: params[:user][:name],
+                  email: new_email,
+                  organisation: other_user.organisation.name,
+                  link: include("/account/confirmation?confirmation_token="),
+                }
+              end
+
+              before do
+                other_user.legacy_users.destroy_all
+
+                allow(FeatureToggle).to receive(:new_email_journey?).and_return(true)
               end
 
               it "does not update the password" do
@@ -1694,6 +1709,40 @@ RSpec.describe UsersController, type: :request do
               it "does update other values" do
                 expect { patch "/users/#{other_user.id}", headers:, params: }
                   .to change { other_user.reload.name }.from("Danny Rojas").to("new name")
+              end
+
+              it "allows changing email" do
+                expect { patch "/users/#{other_user.id}", headers:, params: }
+                  .to change { other_user.reload.unconfirmed_email }.from(nil).to(new_email)
+              end
+
+              it "sends a confirmation email to both emails" do
+                expect(notify_client).to receive(:send_email).with(email_address: other_user.email, template_id: User::CONFIRMABLE_TEMPLATE_ID, personalisation:).once
+                expect(notify_client).to receive(:send_email).with(email_address: new_email, template_id: User::CONFIRMABLE_TEMPLATE_ID, personalisation:).once
+
+                patch "/users/#{other_user.id}", headers:, params:
+              end
+
+              context "with new user email flow enabled" do
+                before do
+                  allow(FeatureToggle).to receive(:new_email_journey?).and_return(true)
+                end
+
+                it "sends a new flow emails" do
+                  expect(notify_client).to receive(:send_email).with(email_address: other_user.email, template_id: User::CONFIRMABLE_TEMPLATE_ID, personalisation:).once
+                  expect(notify_client).to receive(:send_email).with(email_address: new_email, template_id: User::CONFIRMABLE_TEMPLATE_ID, personalisation:).once
+
+                  expect(notify_client).to receive(:send_email).with(
+                    email_address: other_user.email,
+                    template_id: User::FOR_OLD_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID,
+                    personalisation: {
+                      new_email:,
+                      old_email: other_user.email,
+                    },
+                  ).once
+
+                  patch "/users/#{other_user.id}", headers:, params:
+                end
               end
             end
           end
