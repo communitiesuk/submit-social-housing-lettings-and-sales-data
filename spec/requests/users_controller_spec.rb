@@ -1720,6 +1720,8 @@ RSpec.describe UsersController, type: :request do
                 expect(notify_client).to receive(:send_email).with(email_address: other_user.email, template_id: User::CONFIRMABLE_TEMPLATE_ID, personalisation:).once
                 expect(notify_client).to receive(:send_email).with(email_address: new_email, template_id: User::CONFIRMABLE_TEMPLATE_ID, personalisation:).once
 
+                expect(notify_client).not_to receive(:send_email)
+
                 patch "/users/#{other_user.id}", headers:, params:
               end
 
@@ -1729,7 +1731,6 @@ RSpec.describe UsersController, type: :request do
                 end
 
                 it "sends a new flow emails" do
-
                   expect(notify_client).to receive(:send_email).with(
                     email_address: other_user.email,
                     template_id: User::FOR_OLD_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID,
@@ -1740,7 +1741,7 @@ RSpec.describe UsersController, type: :request do
                   ).once
 
                   expect(notify_client).to receive(:send_email).with(
-                    email_address: other_user.email,
+                    email_address: new_email,
                     template_id: User::FOR_NEW_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID,
                     personalisation: {
                       new_email:,
@@ -1748,6 +1749,8 @@ RSpec.describe UsersController, type: :request do
                       link: include("/account/confirmation?confirmation_token="),
                     },
                   ).once
+
+                  expect(notify_client).not_to receive(:send_email)
 
                   patch "/users/#{other_user.id}", headers:, params:
                 end

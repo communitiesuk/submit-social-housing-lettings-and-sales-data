@@ -35,17 +35,17 @@ class DeviseNotifyMailer < Devise::Mailer
   end
 
   def confirmation_instructions(record, token, _opts = {})
-    username = record.email
     if email_changed?(record)
-      username = record.unconfirmed_email
       if someone_else_changed_email?(record)
         send_email_changed_to_old_email(record)
         send_email_changed_to_new_email(record, token)
       else
         send_confirmation_email(record.unconfirmed_email, record, token, record.unconfirmed_email)
+        send_confirmation_email(record.email, record, token, record.unconfirmed_email)
       end
+    else
+      send_confirmation_email(record.email, record, token, record.email)
     end
-    send_confirmation_email(record.email, record, token, username)
   end
 
   def intercept_send?(email)
@@ -83,7 +83,7 @@ class DeviseNotifyMailer < Devise::Mailer
     link = "#{user_confirmation_url}?confirmation_token=#{token}"
 
     send_email(
-      record.email,
+      record.unconfirmed_email,
       User::FOR_NEW_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID,
       {
         new_email: record.unconfirmed_email,
