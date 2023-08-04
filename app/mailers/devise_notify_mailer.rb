@@ -38,8 +38,12 @@ class DeviseNotifyMailer < Devise::Mailer
     username = record.email
     if email_changed?(record)
       username = record.unconfirmed_email
-      send_email_changed_to_old_email(record)
-      send_confirmation_email(record.unconfirmed_email, record, token, username)
+      if someone_else_changed_email?(record)
+        send_email_changed_to_old_email(record)
+        send_email_changed_to_new_email(record, token)
+      else
+        send_confirmation_email(record.unconfirmed_email, record, token, record.unconfirmed_email)
+      end
     end
     send_confirmation_email(record.email, record, token, username)
   end
@@ -55,10 +59,12 @@ class DeviseNotifyMailer < Devise::Mailer
     Rails.application.credentials[:email_allowlist] || []
   end
 
-  def send_email_changed_to_old_email(record)
+  def someone_else_changed_email?(record)
     # Do not send if user changed own email
-    return unless record.versions.last.actor != record && record.versions.last.changeset.key?("unconfirmed_email") && FeatureToggle.new_email_journey?
+    FeatureToggle.new_email_journey? && record.versions.last.actor != record && record.versions.last.changeset.key?("unconfirmed_email")
+  end
 
+  def send_email_changed_to_old_email(record)
     return true if intercept_send?(record.email)
 
     send_email(
@@ -67,6 +73,22 @@ class DeviseNotifyMailer < Devise::Mailer
       {
         new_email: record.unconfirmed_email,
         old_email: record.email,
+      },
+    )
+  end
+
+  def send_email_changed_to_new_email(record, token)
+    return true if intercept_send?(record.email)
+
+    link = "#{user_confirmation_url}?confirmation_token=#{token}"
+
+    send_email(
+      record.email,
+      User::FOR_NEW_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID,
+      {
+        new_email: record.unconfirmed_email,
+        old_email: record.email,
+        link:,
       },
     )
   end

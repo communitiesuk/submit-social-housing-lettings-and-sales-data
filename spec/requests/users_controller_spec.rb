@@ -1698,7 +1698,7 @@ RSpec.describe UsersController, type: :request do
               before do
                 other_user.legacy_users.destroy_all
 
-                allow(FeatureToggle).to receive(:new_email_journey?).and_return(true)
+                allow(FeatureToggle).to receive(:new_email_journey?).and_return(false)
               end
 
               it "does not update the password" do
@@ -1729,8 +1729,6 @@ RSpec.describe UsersController, type: :request do
                 end
 
                 it "sends a new flow emails" do
-                  expect(notify_client).to receive(:send_email).with(email_address: other_user.email, template_id: User::CONFIRMABLE_TEMPLATE_ID, personalisation:).once
-                  expect(notify_client).to receive(:send_email).with(email_address: new_email, template_id: User::CONFIRMABLE_TEMPLATE_ID, personalisation:).once
 
                   expect(notify_client).to receive(:send_email).with(
                     email_address: other_user.email,
@@ -1738,6 +1736,16 @@ RSpec.describe UsersController, type: :request do
                     personalisation: {
                       new_email:,
                       old_email: other_user.email,
+                    },
+                  ).once
+
+                  expect(notify_client).to receive(:send_email).with(
+                    email_address: other_user.email,
+                    template_id: User::FOR_NEW_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID,
+                    personalisation: {
+                      new_email:,
+                      old_email: other_user.email,
+                      link: include("/account/confirmation?confirmation_token="),
                     },
                   ).once
 
