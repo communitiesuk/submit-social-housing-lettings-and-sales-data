@@ -133,7 +133,7 @@ class User < ApplicationRecord
       USER_REACTIVATED_TEMPLATE_ID
     elsif was_migrated_from_softwire? && last_sign_in_at.blank?
       BETA_ONBOARDING_TEMPLATE_ID
-    elsif initial_confirmation_sent
+    elsif initial_confirmation_sent && !confirmed?
       RECONFIRMABLE_TEMPLATE_ID
     else
       CONFIRMABLE_TEMPLATE_ID

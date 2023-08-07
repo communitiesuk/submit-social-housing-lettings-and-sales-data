@@ -57,8 +57,30 @@ RSpec.describe ResendInvitationMailer do
       end
 
       it "sends a reinvitation" do
-        expect(notify_client).to receive(:send_email).with(email_address: "active_user@example.com", template_id: User::RECONFIRMABLE_TEMPLATE_ID, personalisation:).once
+        expect(notify_client).to receive(:send_email).with(email_address: "active_user@example.com", template_id: User::CONFIRMABLE_TEMPLATE_ID, personalisation:).once
         described_class.new.resend_invitation_email(active_user)
+      end
+    end
+
+    context "with unconfirmed user after the initial invitation has been sent" do
+      let!(:unconfirmed_user) { create(:user, organisation:, confirmation_token: "dluch", initial_confirmation_sent: true, old_user_id: "234", sign_in_count: 0, confirmed_at: nil) }
+
+      let(:personalisation) do
+        {
+          name: unconfirmed_user.name,
+          email: unconfirmed_user.email,
+          organisation: unconfirmed_user.organisation.name,
+          link: include("/account/confirmation?confirmation_token=#{unconfirmed_user.confirmation_token}"),
+        }
+      end
+
+      before do
+        LegacyUser.destroy_all
+      end
+
+      it "sends a reinvitation" do
+        expect(notify_client).to receive(:send_email).with(email_address: unconfirmed_user.email, template_id: User::RECONFIRMABLE_TEMPLATE_ID, personalisation:).once
+        described_class.new.resend_invitation_email(unconfirmed_user)
       end
     end
   end
