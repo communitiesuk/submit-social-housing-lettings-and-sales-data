@@ -701,6 +701,82 @@ RSpec.describe Validations::SetupValidations do
       expect(record.errors["owning_organisation_id"]).to be_empty
       expect(record.errors["managing_organisation_id"]).to be_empty
     end
+
+    context "when organisations are merged" do
+      let(:absorbing_organisation) { create(:organisation, created_at: Time.zone.local(2023, 2, 1), name: "Absorbing org") }
+      let(:merged_organisation) { create(:organisation, name: "Merged org") }
+
+      around do |example|
+        Timecop.freeze(Time.zone.local(2023, 5, 1))
+        merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation:)
+        example.run
+        Timecop.return
+      end
+
+      context "and owning organisation is no longer active" do
+        it "does not allow organisation that has been merged" do
+          record.startdate = Time.zone.local(2023, 3, 1)
+          record.owning_organisation_id = merged_organisation.id
+          setup_validator.validate_organisation(record)
+          expect(record.errors["owning_organisation_id"]).to include(match "The owning organisation must be active on the tenancy start date. Merged org became inactive on 2 February 2023 and was replaced by Absorbing org.")
+        end
+
+        it "allows organisation before it has been merged" do
+          record.startdate = Time.zone.local(2023, 1, 1)
+          record.owning_organisation_id = merged_organisation.id
+          setup_validator.validate_organisation(record)
+          expect(record.errors["owning_organisation_id"]).to be_empty
+        end
+      end
+
+      context "and owning organisation is not yet active during the startdate" do
+        it "does not allow absorbing organisation before it had been created" do
+          record.startdate = Time.zone.local(2023, 1, 1)
+          record.owning_organisation_id = absorbing_organisation.id
+          setup_validator.validate_organisation(record)
+          expect(record.errors["owning_organisation_id"]).to include(match "The owning organisation must be active on the tenancy start date. Absorbing org became active on 1 February 2023.")
+        end
+
+        it "allows absorbing organisation after it has been created" do
+          record.startdate = Time.zone.local(2023, 2, 2)
+          record.owning_organisation_id = absorbing_organisation.id
+          setup_validator.validate_organisation(record)
+          expect(record.errors["owning_organisation_id"]).to be_empty
+        end
+      end
+
+      context "when managing organisation is no longer active" do
+        it "does not allow organisation that has been merged" do
+          record.startdate = Time.zone.local(2023, 3, 1)
+          record.managing_organisation_id = merged_organisation.id
+          setup_validator.validate_organisation(record)
+          expect(record.errors["managing_organisation_id"]).to include(match "The managing organisation must be active on the tenancy start date. Merged org became inactive on 2 February 2023 and was replaced by Absorbing org.")
+        end
+
+        it "allows organisation before it has been merged" do
+          record.startdate = Time.zone.local(2023, 1, 1)
+          record.managing_organisation_id = merged_organisation.id
+          setup_validator.validate_organisation(record)
+          expect(record.errors["managing_organisation_id"]).to be_empty
+        end
+      end
+
+      context "when managing organisation is not yet active during the startdate" do
+        it "does not allow absorbing organisation before it had been created" do
+          record.startdate = Time.zone.local(2023, 1, 1)
+          record.managing_organisation_id = absorbing_organisation.id
+          setup_validator.validate_organisation(record)
+          expect(record.errors["managing_organisation_id"]).to include(match "The managing organisation must be active on the tenancy start date. Absorbing org became active on 1 February 2023.")
+        end
+
+        it "allows absorbing organisation after it has been created" do
+          record.startdate = Time.zone.local(2023, 2, 2)
+          record.managing_organisation_id = absorbing_organisation.id
+          setup_validator.validate_organisation(record)
+          expect(record.errors["managing_organisation_id"]).to be_empty
+        end
+      end
+    end
   end
 
   describe "#validate_scheme_has_confirmed_locations_validation" do
