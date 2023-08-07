@@ -14,6 +14,8 @@ module Validations::SetupValidations
     unless record.startdate.between?(first_collection_start_date, current_collection_end_date)
       record.errors.add :startdate, startdate_validation_error_message
     end
+
+    validate_merged_organisations_start_date(record)
   end
 
   def validate_irproduct_other(record)
@@ -97,5 +99,104 @@ private
 
   def intermediate_product_rent_type?(record)
     record.rent_type == 5
+  end
+
+  def validate_merged_organisations_start_date(record)
+    return add_same_merge_organisation_error(record) if record.owning_organisation == record.managing_organisation
+    return add_same_merge_error(record) if organisations_belong_to_same_merge?(record.owning_organisation, record.managing_organisation)
+
+    add_merged_organisations_errors(record)
+    add_absorbing_organisations_errors(record)
+  end
+
+  def add_same_merge_organisation_error(record)
+    if merged_owning_organisation_inactive?(record)
+      record.errors.add :startdate, I18n.t("validations.setup.startdate.invalid_merged_organisations_start_date.same_organisation",
+                                           owning_organisation: record.owning_organisation.name,
+                                           owning_organisation_merge_date: record.owning_organisation.merge_date.to_formatted_s(:govuk_date),
+                                           owning_absorbing_organisation: record.owning_organisation.absorbing_organisation.name)
+    elsif absorbing_owning_organisation_inactive?(record)
+      record.errors.add :startdate, I18n.t("validations.setup.startdate.invalid_absorbing_organisations_start_date.same_organisation",
+                                           owning_organisation: record.owning_organisation.name,
+                                           owning_organisation_available_from: record.owning_organisation.created_at.to_formatted_s(:govuk_date))
+    end
+  end
+
+  def add_same_merge_error(record)
+    if merged_owning_organisation_inactive?(record)
+      record.errors.add :startdate, I18n.t("validations.setup.startdate.invalid_merged_organisations_start_date.same_merge",
+                                           owning_organisation: record.owning_organisation.name,
+                                           managing_organisation: record.managing_organisation.name,
+                                           owning_organisation_merge_date: record.owning_organisation.merge_date.to_formatted_s(:govuk_date),
+                                           owning_absorbing_organisation: record.owning_organisation.absorbing_organisation.name)
+    end
+  end
+
+  def add_merged_organisations_errors(record)
+    if merged_owning_organisation_inactive?(record) && merged_managing_organisation_inactive?(record)
+      record.errors.add :startdate, I18n.t("validations.setup.startdate.invalid_merged_organisations_start_date.different_merge",
+                                           owning_organisation: record.owning_organisation.name,
+                                           owning_organisation_merge_date: record.owning_organisation.merge_date.to_formatted_s(:govuk_date),
+                                           owning_absorbing_organisation: record.owning_organisation.absorbing_organisation.name,
+                                           managing_organisation: record.managing_organisation.name,
+                                           managing_organisation_merge_date: record.managing_organisation.merge_date.to_formatted_s(:govuk_date),
+                                           managing_absorbing_organisation: record.managing_organisation.absorbing_organisation.name)
+    else
+      if merged_owning_organisation_inactive?(record)
+        record.errors.add :startdate, I18n.t("validations.setup.startdate.invalid_merged_organisations_start_date.owning_organisation",
+                                             owning_organisation: record.owning_organisation.name,
+                                             owning_organisation_merge_date: record.owning_organisation.merge_date.to_formatted_s(:govuk_date),
+                                             owning_absorbing_organisation: record.owning_organisation.absorbing_organisation.name)
+      end
+
+      if merged_managing_organisation_inactive?(record)
+        record.errors.add :startdate, I18n.t("validations.setup.startdate.invalid_merged_organisations_start_date.managing_organisation",
+                                             managing_organisation: record.managing_organisation.name,
+                                             managing_organisation_merge_date: record.managing_organisation.merge_date.to_formatted_s(:govuk_date),
+                                             managing_absorbing_organisation: record.managing_organisation.absorbing_organisation.name)
+      end
+    end
+  end
+
+  def add_absorbing_organisations_errors(record)
+    if absorbing_owning_organisation_inactive?(record) && absorbing_managing_organisation_inactive?(record)
+      record.errors.add :startdate, I18n.t("validations.setup.startdate.invalid_absorbing_organisations_start_date.different_organisations",
+                                           owning_organisation: record.owning_organisation.name,
+                                           owning_organisation_active_from: record.owning_organisation.created_at.to_formatted_s(:govuk_date),
+                                           managing_organisation: record.managing_organisation.name,
+                                           managing_organisation_active_from: record.managing_organisation.created_at.to_formatted_s(:govuk_date))
+    else
+      if absorbing_owning_organisation_inactive?(record)
+        record.errors.add :startdate, I18n.t("validations.setup.startdate.invalid_absorbing_organisations_start_date.owning_organisation",
+                                             owning_organisation: record.owning_organisation.name,
+                                             owning_organisation_available_from: record.owning_organisation.created_at.to_formatted_s(:govuk_date))
+      end
+
+      if absorbing_managing_organisation_inactive?(record)
+        record.errors.add :startdate, I18n.t("validations.setup.startdate.invalid_absorbing_organisations_start_date.managing_organisation",
+                                             managing_organisation: record.managing_organisation.name,
+                                             managing_organisation_available_from: record.managing_organisation.created_at.to_formatted_s(:govuk_date))
+      end
+    end
+  end
+
+  def merged_owning_organisation_inactive?(record)
+    record.owning_organisation&.merge_date.present? && record.owning_organisation.merge_date < record.startdate
+  end
+
+  def merged_managing_organisation_inactive?(record)
+    record.managing_organisation&.merge_date.present? && record.managing_organisation.merge_date < record.startdate
+  end
+
+  def absorbing_owning_organisation_inactive?(record)
+    record.owning_organisation&.absorbed_organisations.present? && record.owning_organisation.created_at > record.startdate
+  end
+
+  def absorbing_managing_organisation_inactive?(record)
+    record.managing_organisation&.absorbed_organisations.present? && record.managing_organisation.created_at > record.startdate
+  end
+
+  def organisations_belong_to_same_merge?(organisation_a, organisation_b)
+    organisation_a.merge_date.present? && organisation_a.merge_date == organisation_b.merge_date && organisation_a.absorbing_organisation == organisation_b.absorbing_organisation
   end
 end
