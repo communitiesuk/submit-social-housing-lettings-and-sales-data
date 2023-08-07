@@ -1730,6 +1730,12 @@ RSpec.describe UsersController, type: :request do
                   allow(FeatureToggle).to receive(:new_email_journey?).and_return(true)
                 end
 
+                it "shows flash notice" do
+                  patch("/users/#{other_user.id}", headers:, params:)
+
+                  expect(flash[:notice]).to eq("An email has been sent to #{new_email} to confirm this change.")
+                end
+
                 it "sends a new flow emails" do
                   expect(notify_client).to receive(:send_email).with(
                     email_address: other_user.email,

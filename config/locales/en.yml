@@ -684,6 +684,8 @@ Make sure these answers are correct."
       hint_text: "This is more than 5 times the income, which is higher than we would expect."
 
   devise:
+    email:
+      updated: An email has been sent to %{email} to confirm this change.
     two_factor_authentication:
       success: "Two-factor authentication successful"
       attempt_failed: "Attempt failed"
