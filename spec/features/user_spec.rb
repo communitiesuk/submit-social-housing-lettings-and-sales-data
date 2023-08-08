@@ -529,7 +529,7 @@ RSpec.describe "User Features" do
       end
 
       before do
-        other_user.update!(initial_confirmation_sent: true)
+        other_user.update!(initial_confirmation_sent: true, confirmed_at: nil)
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in(user)
         visit(user_path(user.id))
