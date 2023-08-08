@@ -48,6 +48,7 @@ module Validations::SetupValidations
       record.errors.add :owning_organisation_id, I18n.t("validations.setup.owning_organisation.invalid")
       record.errors.add :managing_organisation_id, I18n.t("validations.setup.managing_organisation.invalid")
     end
+    return unless record.startdate
 
     if owning_organisation.present?
       if owning_organisation&.merge_date.present? && owning_organisation.merge_date < record.startdate
