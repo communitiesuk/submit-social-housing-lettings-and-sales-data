@@ -41,6 +41,23 @@ module Validations::Sales::SetupValidations
     end
   end
 
+  def validate_organisation(record)
+    return unless record.saledate && record.owning_organisation
+
+    if record.owning_organisation.present?
+      if record.owning_organisation&.merge_date.present? && record.owning_organisation.merge_date < record.saledate
+        record.errors.add :owning_organisation_id, I18n.t("validations.setup.owning_organisation.inactive_merged_organisation",
+                                                          owning_organisation: record.owning_organisation.name,
+                                                          owning_organisation_merge_date: record.owning_organisation.merge_date.to_formatted_s(:govuk_date),
+                                                          owning_absorbing_organisation: record.owning_organisation.absorbing_organisation.name)
+      elsif record.owning_organisation&.absorbed_organisations.present? && record.owning_organisation.created_at > record.saledate
+        record.errors.add :owning_organisation_id, I18n.t("validations.setup.owning_organisation.inactive_absorbing_organisation",
+                                                          owning_organisation: record.owning_organisation.name,
+                                                          owning_organisation_available_from: record.owning_organisation.created_at.to_formatted_s(:govuk_date))
+      end
+    end
+  end
+
 private
 
   def active_collection_start_date
