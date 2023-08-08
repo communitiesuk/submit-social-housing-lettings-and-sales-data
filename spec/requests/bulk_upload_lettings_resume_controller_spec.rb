@@ -10,10 +10,54 @@ RSpec.describe BulkUploadLettingsResumeController, type: :request do
   end
 
   describe "GET /lettings-logs/bulk-upload-resume/:ID/start" do
-    it "redirects to choice page" do
-      get "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/start"
+    context "when a choice has not been made" do
+      it "redirects to choice page" do
+        get "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/start"
 
-      expect(response).to redirect_to("/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice")
+        expect(response).to redirect_to("/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice")
+      end
+    end
+
+    context "when a choice has been made and then the logs have been completed" do
+      let(:lettings_log) { create_list(:lettings_log, 2, :completed, bulk_upload:) }
+
+
+      it "redirects to the complete page if the bulk uploads are completed" do
+        bulk_upload.update!(choice: "create-fix-inline")
+
+        get "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/start"
+        follow_redirect!
+        expect(response).to redirect_to("/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/chosen")
+
+        follow_redirect!
+        expect(response.body).to include("You have created logs from your bulk upload, and the logs are complete. Return to lettings logs to view them.")
+      end
+    end
+  end
+
+  describe "GET /sales-logs/bulk-upload-resume/:ID/start" do
+    context "when a choice has not been made" do
+      it "redirects to choice page" do
+        get "/sales-logs/bulk-upload-resume/#{bulk_upload.id}/start"
+
+        expect(response).to redirect_to("/sales-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice")
+      end
+    end
+
+    context "when a choice has been made and then the logs have been completed" do
+      let(:sales_log) { create_list(:sales_log, 2, :completed, bulk_upload:) }
+
+
+      it "redirects to the complete page if the bulk uploads are completed" do
+        bulk_upload.update!(choice: "create-fix-inline")
+
+        get "/sales-logs/bulk-upload-resume/#{bulk_upload.id}/start"
+        follow_redirect!
+        expect(response).to redirect_to("/sales-logs/bulk-upload-resume/#{bulk_upload.id}/chosen")
+
+        follow_redirect!
+        expect(response.body).to include("You have created logs from your bulk upload, and the logs are complete. Return to sales logs to view them.")
+      end
     end
   end
 

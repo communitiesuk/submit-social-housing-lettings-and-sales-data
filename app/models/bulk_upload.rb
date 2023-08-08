@@ -10,6 +10,10 @@ class BulkUpload < ApplicationRecord
 
   after_initialize :generate_identifier, unless: :identifier
 
+  def completed?
+    incomplete_logs = logs.where.not(status: "completed")
+    !incomplete_logs.exists?
+  end
   def year_combo
     "#{year}/#{year - 2000 + 1}"
   end

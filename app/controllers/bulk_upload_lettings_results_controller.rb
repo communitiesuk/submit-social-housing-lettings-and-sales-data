@@ -19,7 +19,6 @@ class BulkUploadLettingsResultsController < ApplicationController
 
       redirect_to(lettings_logs_path(bulk_upload_id: [@bulk_upload.id]))
     else
-      @bulk_upload.update!(choice: "completed")
       reset_logs_filters
     end
   end

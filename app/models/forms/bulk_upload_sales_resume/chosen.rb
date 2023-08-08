@@ -8,7 +8,7 @@ module Forms
       attribute :bulk_upload
 
       def view_path
-        "bulk_upload_sales_resume/chosen"
+        bulk_upload.completed? ? "bulk_upload_sales_resume/completed" : "bulk_upload_sales_resume/chosen"
       end
 
       def back_path
