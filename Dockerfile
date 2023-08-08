@@ -10,7 +10,7 @@ RUN apk add --update --no-cache tzdata && \
 # build-base: compilation tools for bundle
 # yarn: node package manager
 # postgresql-dev: postgres driver and libraries
-RUN apk add --no-cache build-base yarn postgresql-dev git bash
+RUN apk add --no-cache build-base=0.5-r3 yarn=1.22.19-r0 postgresql13-dev=13.11-r0 git=2.40.1-r0 bash=5.2.15-r5
 
 # Bundler version should be the same version as what the Gemfile.lock was bundled with
 RUN gem install bundler:2.3.14 --no-document
@@ -31,12 +31,7 @@ EXPOSE ${PORT}
 
 RUN adduser --system --no-create-home nonroot
 
-# We expect the rake assets:precompile command to create these directories, but mkdir -p will create them if they don't already exist
-RUN mkdir -p tmp log
-RUN chown -R nonroot tmp log
-RUN chown nonroot db/schema.rb
-
-FROM base as development
+FROM base as test
 
 RUN bundle config set without ""
 RUN bundle install --jobs=4 --no-binstubs --no-cache
@@ -49,21 +44,33 @@ RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.31.0/geckod
     && chmod +x geckodriver \
     && mv geckodriver /usr/local/bin/
 
-USER nonroot
+RUN bundle exec rake parallel:setup
 
-CMD bundle exec rails s -e ${RAILS_ENV} -p ${PORT} --binding=0.0.0.0
+CMD bundle exec rake parallel:spec
 
-FROM base as staging
+FROM base as development
 
-RUN bundle config set without "development"
+# We expect the rake assets:precompile command to create these directories, but mkdir -p will create them if they don't already exist
+RUN mkdir -p tmp log /home/nonroot/.cache/yarn /home/nonroot/.yarnrc /app/yarn-error.log
+RUN touch spec/examples.txt
+RUN chown -R nonroot tmp log
+
+RUN bundle config set without "test"
 RUN bundle install --jobs=4 --no-binstubs --no-cache
 
 USER nonroot
 
 CMD bundle exec rails s -e ${RAILS_ENV} -p ${PORT} --binding=0.0.0.0
 
-FROM base as production
+FROM base as staging
+
+# We expect the rake assets:precompile command to create these directories, but mkdir -p will create them if they don't already exist
+RUN mkdir -p tmp log /home/nonroot/.cache/yarn /home/nonroot/.yarnrc /app/yarn-error.log
+RUN touch spec/examples.txt
+RUN chown -R nonroot tmp log
 
 USER nonroot
 
 CMD bundle exec rails s -e ${RAILS_ENV} -p ${PORT} --binding=0.0.0.0
+
+FROM staging as production
