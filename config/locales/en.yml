@@ -239,6 +239,8 @@ en:
         previous_and_current_collection_year:
           "Enter a date within the %{previous_start_year_short}/%{previous_end_year_short} or %{previous_end_year_short}/%{current_end_year_short} collection years, which is between %{previous_start_year_long} and %{current_end_year_long}"
         year_not_two_digits: "Sale completion year must be 2 digits"
+        invalid_merged_organisations_saledate: "Enter a date when the owning organisation was active. %{owning_organisation} became inactive on %{owning_organisation_merge_date} and was replaced by %{owning_absorbing_organisation}."
+        invalid_absorbing_organisations_saledate:  "Enter a date when the owning organisation was active. %{owning_organisation} became active on %{owning_organisation_available_from}."
       type:
         percentage_bought_must_be_at_least_threshold: "The minimum increase in equity while staircasing is %{threshold}% for this shared ownership type"
 

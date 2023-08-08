@@ -185,4 +185,52 @@ RSpec.describe Validations::Sales::SetupValidations do
       end
     end
   end
+
+  describe "#validate_merged_organisations_saledate" do
+    let(:record) { build(:sales_log) }
+    let(:absorbing_organisation) { create(:organisation, created_at: Time.zone.local(2023, 2, 1), name: "Absorbing org") }
+    let(:merged_organisation) { create(:organisation, name: "Merged org") }
+
+    around do |example|
+      Timecop.freeze(Time.zone.local(2023, 5, 1))
+      example.run
+      Timecop.return
+    end
+
+    before do
+      merged_organisation.update!(absorbing_organisation:, merge_date: Time.zone.local(2023, 2, 2))
+    end
+
+    context "and owning organisation is no longer active" do
+      it "does not allow saledate after organisation has been merged" do
+        record.saledate = Time.zone.local(2023, 3, 1)
+        record.owning_organisation_id = merged_organisation.id
+        setup_validator.validate_merged_organisations_saledate(record)
+        expect(record.errors["saledate"]).to include(match "Enter a date when the owning organisation was active. Merged org became inactive on 2 February 2023 and was replaced by Absorbing org.")
+      end
+
+      it "allows saledate before organisation has been merged" do
+        record.saledate = Time.zone.local(2023, 1, 1)
+        record.owning_organisation_id = merged_organisation.id
+        setup_validator.validate_merged_organisations_saledate(record)
+        expect(record.errors["saledate"]).to be_empty
+      end
+    end
+
+    context "and owning organisation is not yet active during the saledate" do
+      it "does not allow saledate before absorbing organisation has been created" do
+        record.saledate = Time.zone.local(2023, 1, 1)
+        record.owning_organisation_id = absorbing_organisation.id
+        setup_validator.validate_merged_organisations_saledate(record)
+        expect(record.errors["saledate"]).to include(match "Enter a date when the owning organisation was active. Absorbing org became active on 1 February 2023.")
+      end
+
+      it "allows saledate after absorbing organisation has been created" do
+        record.saledate = Time.zone.local(2023, 2, 2)
+        record.owning_organisation_id = absorbing_organisation.id
+        setup_validator.validate_merged_organisations_saledate(record)
+        expect(record.errors["saledate"]).to be_empty
+      end
+    end
+  end
 end
