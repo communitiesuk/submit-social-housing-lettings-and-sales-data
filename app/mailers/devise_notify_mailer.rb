@@ -36,7 +36,7 @@ class DeviseNotifyMailer < Devise::Mailer
 
   def confirmation_instructions(record, token, _opts = {})
     if email_changed?(record)
-      if someone_else_changed_email?(record)
+      if new_email_journey?
         send_email_changed_to_old_email(record)
         send_email_changed_to_new_email(record, token)
       else
@@ -57,11 +57,6 @@ class DeviseNotifyMailer < Devise::Mailer
 
   def email_allowlist
     Rails.application.credentials[:email_allowlist] || []
-  end
-
-  def someone_else_changed_email?(record)
-    # Do not send if user changed own email
-    FeatureToggle.new_email_journey? && record.versions.last.actor != record && record.versions.last.changeset.key?("unconfirmed_email")
   end
 
   def send_email_changed_to_old_email(record)
@@ -94,7 +89,18 @@ class DeviseNotifyMailer < Devise::Mailer
   end
 
   def email_changed?(record)
-    record.confirmable_template == User::CONFIRMABLE_TEMPLATE_ID && (record.unconfirmed_email.present? && record.unconfirmed_email != record.email)
+    (
+      record.confirmable_template == User::CONFIRMABLE_TEMPLATE_ID && (
+        record.unconfirmed_email.present? && record.unconfirmed_email != record.email)
+    ) || (
+      new_email_journey? &&
+        record.versions.last.changeset.key?("unconfirmed_email") &&
+        record.confirmed?
+    )
+  end
+
+  def new_email_journey?
+    FeatureToggle.new_email_journey?
   end
 
   def send_confirmation_email(email, record, token, username)

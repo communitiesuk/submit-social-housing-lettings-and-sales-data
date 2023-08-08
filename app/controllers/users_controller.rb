@@ -53,6 +53,10 @@ class UsersController < ApplicationController
       if @user == current_user
         bypass_sign_in @user
         flash[:notice] = I18n.t("devise.passwords.updated") if user_params.key?("password")
+        if user_params.key?("email") && FeatureToggle.new_email_journey?
+          flash[:notice] = I18n.t("devise.email.updated", email: @user.unconfirmed_email)
+        end
+
         redirect_to account_path
       else
         user_name = @user.name&.possessive || @user.email.possessive

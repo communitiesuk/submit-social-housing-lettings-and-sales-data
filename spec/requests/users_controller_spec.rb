@@ -1538,7 +1538,7 @@ RSpec.describe UsersController, type: :request do
           expect(whodunnit_actor.id).to eq(user.id)
         end
 
-        context "when user changes email, dpo and key contact" do
+        context "when user changes email, dpo and key contact", :aggregate_failures do
           let(:params) { { id: user.id, user: { name: new_name, email: new_email, is_dpo: "true", is_key_contact: "true" } } }
           let(:personalisation) do
             {
@@ -1551,6 +1551,8 @@ RSpec.describe UsersController, type: :request do
 
           before do
             user.legacy_users.destroy_all
+
+            allow(FeatureToggle).to receive(:new_email_journey?).and_return(false)
           end
 
           it "allows changing email and dpo" do
@@ -1565,6 +1567,43 @@ RSpec.describe UsersController, type: :request do
             expect(notify_client).to receive(:send_email).with(email_address: new_email, template_id: User::CONFIRMABLE_TEMPLATE_ID, personalisation:).once
             expect(notify_client).to receive(:send_email).with(email_address: user.email, template_id: User::CONFIRMABLE_TEMPLATE_ID, personalisation:).once
             request
+          end
+
+          context "with new email journy enabled" do
+            before do
+              allow(FeatureToggle).to receive(:new_email_journey?).and_return(true)
+            end
+
+            it "shows flash notice" do
+              patch("/users/#{other_user.id}", headers:, params:)
+
+              expect(flash[:notice]).to eq("An email has been sent to #{new_email} to confirm this change.")
+            end
+
+            it "sends new flow emails" do
+              expect(notify_client).to receive(:send_email).with(
+                email_address: other_user.email,
+                template_id: User::FOR_OLD_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID,
+                personalisation: {
+                  new_email:,
+                  old_email: other_user.email,
+                },
+              ).once
+
+              expect(notify_client).to receive(:send_email).with(
+                email_address: new_email,
+                template_id: User::FOR_NEW_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID,
+                personalisation: {
+                  new_email:,
+                  old_email: other_user.email,
+                  link: include("/account/confirmation?confirmation_token="),
+                },
+              ).once
+
+              expect(notify_client).not_to receive(:send_email)
+
+              patch "/users/#{other_user.id}", headers:, params:
+            end
           end
         end
 
@@ -1736,7 +1775,7 @@ RSpec.describe UsersController, type: :request do
                   expect(flash[:notice]).to eq("An email has been sent to #{new_email} to confirm this change.")
                 end
 
-                it "sends a new flow emails" do
+                it "sends new flow emails" do
                   expect(notify_client).to receive(:send_email).with(
                     email_address: other_user.email,
                     template_id: User::FOR_OLD_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID,
