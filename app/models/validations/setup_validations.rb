@@ -223,6 +223,6 @@ private
   end
 
   def organisations_belong_to_same_merge?(organisation_a, organisation_b)
-    organisation_a.merge_date.present? && organisation_a.merge_date == organisation_b.merge_date && organisation_a.absorbing_organisation == organisation_b.absorbing_organisation
+    organisation_a&.merge_date.present? && organisation_b&.merge_date.present? && organisation_a.merge_date == organisation_b.merge_date && organisation_a.absorbing_organisation == organisation_b.absorbing_organisation
   end
 end
