@@ -22,7 +22,7 @@ module Imports
         end
       end
 
-      report_name = "OrganisationsWithoutDataCoordinators_#{report_suffix}.csv"
+      report_name = "OrganisationsWithoutDataCoordinators_#{report_suffix}"
       @storage_service.write_file(report_name, BYTE_ORDER_MARK + report_csv)
 
       @logger.info("Missing data coordinators report available in s3 import bucket at #{report_name}")
@@ -48,7 +48,7 @@ module Imports
         end
       end
 
-      report_name = "MigratedLogsReport_#{report_suffix}.csv"
+      report_name = "MigratedLogsReport_#{report_suffix}"
       @storage_service.write_file(report_name, BYTE_ORDER_MARK + rep)
 
       @logger.info("Logs report available in s3 import bucket at #{report_name}")

@@ -17,7 +17,7 @@ RSpec.describe Imports::ImportReportService do
       it "writes an empty organisations without a data coordinators report" do
         expect(storage_service).to receive(:write_file).with("OrganisationsWithoutDataCoordinators_report_suffix.csv", "\uFEFFOrganisation ID,Old Organisation ID,Organisation Name\n")
 
-        report_service.generate_missing_data_coordinators_report("report_suffix")
+        report_service.generate_missing_data_coordinators_report("report_suffix.csv")
       end
     end
 
@@ -34,7 +34,7 @@ RSpec.describe Imports::ImportReportService do
       it "writes an empty organisations without a data coordinators report" do
         expect(storage_service).to receive(:write_file).with("OrganisationsWithoutDataCoordinators_report_suffix.csv", "\uFEFFOrganisation ID,Old Organisation ID,Organisation Name\n#{organisation2.id},2,org2\n#{organisation3.id},3,org3\n")
 
-        report_service.generate_missing_data_coordinators_report("report_suffix")
+        report_service.generate_missing_data_coordinators_report("report_suffix.csv")
       end
     end
 
@@ -49,7 +49,7 @@ RSpec.describe Imports::ImportReportService do
       it "includes that organisation in the data coordinators report" do
         expect(storage_service).to receive(:write_file).with("OrganisationsWithoutDataCoordinators_report_suffix.csv", "\uFEFFOrganisation ID,Old Organisation ID,Organisation Name\n#{organisation.id},1,org1\n")
 
-        report_service.generate_missing_data_coordinators_report("report_suffix")
+        report_service.generate_missing_data_coordinators_report("report_suffix.csv")
       end
     end
   end
@@ -64,7 +64,7 @@ RSpec.describe Imports::ImportReportService do
 
     it "generates a report with imported logs" do
       expect(storage_service).to receive(:write_file).with("MigratedLogsReport_report_suffix.csv", "\uFEFFInstitution name,Id,Old Completed lettings logs,Old In progress lettings logs,Old Completed sales logs,Old In progress sales logs,New Completed lettings logs,New In Progress lettings logs,New Completed sales logs,New In Progress sales logs\norg1,1,2,1,4,3,0,0,0,0\norg2,2,5,6,5,7,0,0,0,0\n")
-      report_service.generate_logs_report("report_suffix")
+      report_service.generate_logs_report("report_suffix.csv")
     end
   end
 end
