@@ -128,6 +128,22 @@ private
         incref: 1,
       },
     },
+    {
+      conditions: {
+        net_income_known: 0,
+      },
+      derived_values: {
+        incref: 0,
+      },
+    },
+    {
+      conditions: {
+        net_income_known: 1,
+      },
+      derived_values: {
+        incref: 2,
+      },
+    },
   ].freeze
 
   def clear_inapplicable_derived_values!
