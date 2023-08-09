@@ -37,7 +37,7 @@
       <%= data_sharing_agreement_row(organisation: @organisation, user: current_user, summary_list:) %>
     <% end %>
     <% if FeatureToggle.merge_organisations_enabled? %>
-      <p>Is your organisation merging with another? <%= govuk_link_to "Let us know using this form", merge_request_organisation_path(@organisation) %></p>
+      <p>To report a merge or update your organisation details, <%= govuk_link_to "contact the helpdesk", "https://dluhcdigital.atlassian.net/servicedesk/customer/portal/6/group/11" %>.</p>
     <% end %>
   </div>
 

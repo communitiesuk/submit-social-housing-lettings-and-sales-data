@@ -111,12 +111,11 @@
             <%= govuk_button_to "Resend invite link", resend_invite_user_path(@user), secondary: true %>
           <% end %>
         <% else %>
-            <span class="app-!-colour-muted govuk-!-margin-right-2">
-              This user has been deactivated. <%= govuk_button_link_to "Reactivate user", reactivate_user_path(@user) %>
-            </span>
+          <span class="app-!-colour-muted govuk-!-margin-right-2">
+            This user has been deactivated. <%= govuk_button_link_to "Reactivate user", reactivate_user_path(@user) %>
+          </span>
         <% end %>
       <% end %>
     </div>
-
   </div>
 </div>

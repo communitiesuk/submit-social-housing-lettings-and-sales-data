@@ -440,6 +440,13 @@ RSpec.describe SalesLogsController, type: :request do
 
                 expect(response).to redirect_to(resume_bulk_upload_sales_result_path(bulk_upload))
               end
+
+              it "allows returning to all logs" do
+                get "/sales-logs?bulk_upload_id[]=#{bulk_upload.id}"
+
+                follow_redirect!
+                expect(page).to have_link("Return to sales logs", href: clear_filters_path(filter_type: "sales_logs"))
+              end
             end
           end
 

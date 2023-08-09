@@ -6,15 +6,18 @@ class LocationsController < ApplicationController
   before_action :find_location, except: %i[create index]
   before_action :find_scheme
   before_action :scheme_and_location_present, except: %i[create index]
+  before_action :session_filters, if: :current_user, only: %i[index]
+  before_action -> { filter_manager.serialize_filters_to_session }, if: :current_user, only: %i[index]
 
   before_action :authorize_user, except: %i[index create]
 
   def index
     authorize @scheme
 
-    @pagy, @locations = pagy(filtered_collection(@scheme.locations, search_term))
+    @pagy, @locations = pagy(filter_manager.filtered_locations(@scheme.locations, search_term, session_filters))
     @total_count = @scheme.locations.size
     @searched = search_term.presence
+    @filter_type = "scheme_locations"
   end
 
   def create
@@ -170,7 +173,7 @@ class LocationsController < ApplicationController
   end
 
   def deactivate_confirm
-    @affected_logs = @location.lettings_logs.visible.filter_by_before_startdate(params[:deactivation_date])
+    @affected_logs = @location.lettings_logs.visible.after_date(params[:deactivation_date])
     if @affected_logs.count.zero?
       deactivate
     else
@@ -271,7 +274,7 @@ private
   end
 
   def reset_location_and_scheme_for_logs!
-    logs = @location.lettings_logs.visible.filter_by_before_startdate(params[:deactivation_date].to_time)
+    logs = @location.lettings_logs.visible.after_date(params[:deactivation_date].to_time)
     logs.update!(location: nil, scheme: nil, unresolved: true)
     logs
   end
@@ -297,4 +300,12 @@ private
     params[:referrer] == "check_answers"
   end
   helper_method :return_to_check_your_answers?
+
+  def filter_manager
+    FilterManager.new(current_user:, session:, params:, filter_type: "scheme_locations")
+  end
+
+  def session_filters
+    filter_manager.session_filters
+  end
 end

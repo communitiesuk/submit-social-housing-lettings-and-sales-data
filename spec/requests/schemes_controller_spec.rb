@@ -57,13 +57,13 @@ RSpec.describe SchemesController, type: :request do
       end
 
       context "when parent organisation has schemes" do
-        let(:parent_organisation) { FactoryBot.create(:organisation) }
-        let!(:parent_schemes) { FactoryBot.create_list(:scheme, 5, owning_organisation: parent_organisation) }
+        let(:parent_organisation) { create(:organisation) }
+        let!(:parent_schemes) { create_list(:scheme, 5, owning_organisation: parent_organisation) }
 
         before do
           create(:organisation_relationship, parent_organisation:, child_organisation: user.organisation)
           parent_schemes.each do |scheme|
-            FactoryBot.create(:location, scheme:)
+            create(:location, scheme:)
           end
           get "/schemes"
         end
@@ -77,6 +77,48 @@ RSpec.describe SchemesController, type: :request do
       end
 
       context "when filtering" do
+        context "with owning organisation filter" do
+          context "when user org does not have owning orgs" do
+            it "does not show filter" do
+              expect(page).not_to have_content("Owned by")
+            end
+          end
+
+          context "when user org has owning orgs" do
+            let!(:organisation1) { create(:organisation) }
+            let!(:scheme1) { create(:scheme, owning_organisation: organisation1) }
+            let!(:scheme2) { create(:scheme, owning_organisation: user.organisation) }
+
+            before do
+              org = user.organisation
+              org.stock_owners = [organisation1, user.organisation]
+              org.save!
+            end
+
+            context "when filtering by all owning orgs" do
+              it "shows schemes for all owning orgs" do
+                get "/schemes?owning_organisation_select=all", headers:, params: {}
+                follow_redirect!
+
+                expect(page).to have_content("Owned by")
+                expect(page).to have_link(scheme1.service_name)
+                expect(page).to have_link(scheme2.service_name)
+              end
+            end
+
+            context "when filtering by an owning org" do
+              it "when filtering by an owning org" do
+                get "/schemes?owning_organisation=#{organisation1.id}", headers:, params: {}
+                follow_redirect!
+
+                expect(page).to have_content("Owned by")
+                expect(page).to have_link(scheme1.service_name)
+                expect(page).not_to have_link(scheme2.service_name)
+              end
+            end
+          end
+        end
+
         context "with status filter" do
           let!(:incomplete_scheme) { create(:scheme, :incomplete, owning_organisation: user.organisation) }
           let(:active_scheme) { create(:scheme, owning_organisation: user.organisation) }
@@ -282,6 +324,40 @@ RSpec.describe SchemesController, type: :request do
       end
 
       context "when filtering" do
+        context "with owning organisation filter" do
+          context "when user org does not have owning orgs" do
+            it "shows the filter" do
+              expect(page).to have_content("Owned by")
+            end
+          end
+
+          context "when user org has owning orgs" do
+            let!(:organisation1) { create(:organisation) }
+            let!(:scheme1) { create(:scheme, owning_organisation: organisation1) }
+            let!(:scheme2) { create(:scheme, owning_organisation: user.organisation) }
+
+            context "when filtering by all owning orgs" do
+              it "shows schemes for all owning orgs" do
+                get "/schemes?owning_organisation_select=all", headers:, params: {}
+
+                expect(page).to have_content("Owned by")
+                expect(page).to have_link(scheme1.service_name)
+                expect(page).to have_link(scheme2.service_name)
+              end
+            end
+
+            context "when filtering by an owning org" do
+              it "when filtering by an owning org" do
+                get "/schemes?owning_organisation=#{organisation1.id}", headers:, params: {}
+
+                expect(page).to have_content("Owned by")
+                expect(page).to have_link(scheme1.service_name)
+                expect(page).not_to have_link(scheme2.service_name)
+              end
+            end
+          end
+        end
+
         context "with status filter" do
           let!(:incomplete_scheme) { create(:scheme, :incomplete) }
           let(:active_scheme) { create(:scheme) }
@@ -457,11 +533,11 @@ RSpec.describe SchemesController, type: :request do
       end
 
       context "when coordinator attempts to see scheme belonging to a parent organisation" do
-        let(:parent_organisation) { FactoryBot.create(:organisation) }
-        let!(:specific_scheme) { FactoryBot.create(:scheme, owning_organisation: parent_organisation) }
+        let(:parent_organisation) { create(:organisation) }
+        let!(:specific_scheme) { create(:scheme, owning_organisation: parent_organisation) }
 
         before do
-          FactoryBot.create(:location, scheme: specific_scheme)
+          create(:location, scheme: specific_scheme)
           create(:organisation_relationship, parent_organisation:, child_organisation: user.organisation)
           get "/schemes/#{specific_scheme.id}"
         end

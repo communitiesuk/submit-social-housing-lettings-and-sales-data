@@ -930,6 +930,79 @@ RSpec.describe Location, type: :model do
     end
   end
 
+  describe "filter by status" do
+    let!(:incomplete_location) { FactoryBot.create(:location, :incomplete, startdate: Time.zone.local(2022, 4, 1)) }
+    let!(:active_location) { FactoryBot.create(:location, startdate: Time.zone.local(2022, 4, 1)) }
+    let(:deactivating_soon_location) { FactoryBot.create(:location, startdate: Time.zone.local(2022, 4, 1)) }
+    let(:deactivated_location) { FactoryBot.create(:location, startdate: Time.zone.local(2022, 4, 1)) }
+    let(:reactivating_soon_location) { FactoryBot.create(:location, startdate: Time.zone.local(2022, 4, 1)) }
+    let!(:activating_soon_location) { FactoryBot.create(:location, startdate: Time.zone.local(2022, 7, 7)) }
+
+    before do
+      Timecop.freeze(2022, 6, 7)
+      FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 8), location: deactivating_soon_location)
+      deactivating_soon_location.save!
+      FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 6), location: deactivated_location)
+      deactivated_location.save!
+      FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 7), reactivation_date: Time.zone.local(2022, 6, 8), location: reactivating_soon_location)
+      reactivating_soon_location.save!
+    end
+
+    after do
+      Timecop.unfreeze
+    end
+
+    context "when filtering by incomplete status" do
+      it "returns only incomplete locations" do
+        expect(described_class.filter_by_status(%w[incomplete]).count).to eq(1)
+        expect(described_class.filter_by_status(%w[incomplete]).first).to eq(incomplete_location)
+      end
+    end
+
+    context "when filtering by active status" do
+      it "returns only active locations" do
+        expect(described_class.filter_by_status(%w[active]).count).to eq(1)
+        expect(described_class.filter_by_status(%w[active]).first).to eq(active_location)
+      end
+    end
+
+    context "when filtering by deactivating_soon status" do
+      it "returns only deactivating_soon locations" do
+        expect(described_class.filter_by_status(%w[deactivating_soon]).count).to eq(1)
+        expect(described_class.filter_by_status(%w[deactivating_soon]).first).to eq(deactivating_soon_location)
+      end
+    end
+
+    context "when filtering by deactivated status" do
+      it "returns only deactivated locations" do
+        expect(described_class.filter_by_status(%w[deactivated]).count).to eq(1)
+        expect(described_class.filter_by_status(%w[deactivated]).first).to eq(deactivated_location)
+      end
+    end
+
+    context "when filtering by reactivating_soon status" do
+      it "returns only reactivating_soon locations" do
+        expect(described_class.filter_by_status(%w[reactivating_soon]).count).to eq(1)
+        expect(described_class.filter_by_status(%w[reactivating_soon]).first).to eq(reactivating_soon_location)
+      end
+    end
+
+    context "when filtering by activating_soon status" do
+      it "returns only activating_soon locations" do
+        expect(described_class.filter_by_status(%w[activating_soon]).count).to eq(1)
+        expect(described_class.filter_by_status(%w[activating_soon]).first).to eq(activating_soon_location)
+      end
+    end
+
+    context "when filtering by multiple statuses" do
+      it "returns relevant locations" do
+        expect(described_class.filter_by_status(%w[deactivating_soon activating_soon]).count).to eq(2)
+        expect(described_class.filter_by_status(%w[deactivating_soon activating_soon])).to include(activating_soon_location)
+        expect(described_class.filter_by_status(%w[deactivating_soon activating_soon])).to include(deactivating_soon_location)
+      end
+    end
+  end
+
   describe "available_from" do
     context "when there is a startdate" do
       let(:location) { FactoryBot.build(:location, startdate: Time.zone.local(2022, 4, 6)) }

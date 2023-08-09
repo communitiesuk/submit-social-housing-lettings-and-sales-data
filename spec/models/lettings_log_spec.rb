@@ -248,8 +248,13 @@ RSpec.describe LettingsLog do
     end
 
     it "correctly derives and saves incref" do
-      record_from_db = described_class.find(lettings_log.id)
-      expect(record_from_db["incref"]).to eq(1)
+      expect(lettings_log.reload.incref).to eq(1)
+
+      lettings_log.update!(net_income_known: 1)
+      expect(lettings_log.reload.incref).to eq(2)
+
+      lettings_log.update!(net_income_known: 0)
+      expect(lettings_log.reload.incref).to eq(0)
     end
 
     it "correctly derives and saves renttype" do
@@ -2246,7 +2251,6 @@ RSpec.describe LettingsLog do
 
       it "returns optional fields" do
         expect(lettings_log.optional_fields).to eq(%w[
-          first_time_property_let_as_social_housing
           tenancycode
           propcode
           chcharge
@@ -2260,7 +2264,6 @@ RSpec.describe LettingsLog do
 
       it "returns optional fields" do
         expect(lettings_log.optional_fields).to eq(%w[
-          first_time_property_let_as_social_housing
           tenancycode
           propcode
           chcharge

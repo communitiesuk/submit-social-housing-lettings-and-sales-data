@@ -56,6 +56,17 @@ module FiltersHelper
     }.freeze
   end
 
+  def location_status_filters
+    {
+      "incomplete" => "Incomplete",
+      "active" => "Active",
+      "deactivating_soon" => "Deactivating soon",
+      "activating_soon" => "Activating soon",
+      "reactivating_soon" => "Reactivating soon",
+      "deactivated" => "Deactivated",
+    }.freeze
+  end
+
   def selected_option(filter, filter_type)
     return false unless session[session_name_for(filter_type)]
 
@@ -80,15 +91,21 @@ module FiltersHelper
     applied_filters_count(filter_type).zero? ? "No filters applied" : "#{pluralize(applied_filters_count(filter_type), 'filter')} applied"
   end
 
-  def reset_filters_link(filter_type)
+  def reset_filters_link(filter_type, path_params = {})
     if applied_filters_count(filter_type).positive?
-      govuk_link_to "Clear", clear_filters_path(filter_type:)
+      govuk_link_to "Clear", clear_filters_path(filter_type:, path_params:)
     end
   end
 
   def managing_organisation_filter_options(user)
     organisation_options = user.support? ? Organisation.all : ([user.organisation] + user.organisation.managing_agents + user.organisation.absorbed_organisations).uniq
     [OpenStruct.new(id: "", name: "Select an option")] + organisation_options.map { |org| OpenStruct.new(id: org.id, name: org.name) }
+  end
+
+  def show_scheme_managing_org_filter?(user)
+    org = user.organisation
+
+    user.support? || org.stock_owners.count > 1 || (org.holds_own_stock? && org.stock_owners.count.positive?)
   end
 
 private
@@ -98,6 +115,8 @@ private
   end
 
   def applied_filters(filter_type)
+    return {} unless session[session_name_for(filter_type)]
+
     JSON.parse(session[session_name_for(filter_type)])
   end
 

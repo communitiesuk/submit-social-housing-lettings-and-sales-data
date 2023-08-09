@@ -754,6 +754,16 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           expect(parser.errors[:field_87]).to be_present
         end
       end
+
+      context "when one item selected and field_86 is blank" do
+        let(:attributes) { setup_section_params.merge({ field_83: "1", field_86: nil }) }
+
+        it "sets other disabled access needs as no" do
+          expect(parser.errors[:field_83]).to be_blank
+          expect(parser.errors[:field_86]).to be_blank
+          expect(parser.log.housingneeds_other).to eq(0)
+        end
+      end
     end
 
     describe "#field_89, field_98 - 99" do
