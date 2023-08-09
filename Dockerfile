@@ -44,9 +44,7 @@ RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.31.0/geckod
     && chmod +x geckodriver \
     && mv geckodriver /usr/local/bin/
 
-RUN bundle exec rake parallel:setup
-
-CMD bundle exec rake parallel:spec
+CMD bundle exec rake parallel:setup && bundle exec rake parallel:spec
 
 FROM base as development
 
