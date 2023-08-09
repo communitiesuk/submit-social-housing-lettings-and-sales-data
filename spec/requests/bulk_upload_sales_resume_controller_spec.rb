@@ -9,14 +9,6 @@ RSpec.describe BulkUploadSalesResumeController, type: :request do
     sign_in user
   end
 
-  describe "GET /sales-logs/bulk-upload-resume/:ID/start" do
-    it "redirects to choice page" do
-      get "/sales-logs/bulk-upload-resume/#{bulk_upload.id}/start"
-
-      expect(response).to redirect_to("/sales-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice")
-    end
-  end
-
   describe "GET /sales-logs/bulk-upload-resume/:ID/fix-choice" do
     it "renders the page correctly" do
       get "/sales-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice"
@@ -142,11 +134,29 @@ RSpec.describe BulkUploadSalesResumeController, type: :request do
     end
   end
 
-  describe "GET /sales-logs/bulk-upload-resume/:ID/chosen" do
-    it "displays correct content" do
-      get "/sales-logs/bulk-upload-resume/#{bulk_upload.id}/chosen"
+  describe "GET /sales-logs/bulk-upload-resume/:ID/start" do
+    context "when a choice has not been made" do
+      it "redirects to choice page" do
+        get "/sales-logs/bulk-upload-resume/#{bulk_upload.id}/start"
 
-      expect(response.body).to include("You need to fix logs from your bulk upload")
+        expect(response).to redirect_to("/sales-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice")
+      end
+    end
+
+    context "when a choice has been made and then the logs have been completed" do
+      let(:sales_log) { create_list(:sales_log, 2, :completed, bulk_upload:) }
+
+
+      it "redirects to the complete page if the bulk uploads are completed" do
+        bulk_upload.update!(choice: "create-fix-inline")
+
+        get "/sales-logs/bulk-upload-resume/#{bulk_upload.id}/start"
+        follow_redirect!
+        expect(response).to redirect_to("/sales-logs/bulk-upload-resume/#{bulk_upload.id}/chosen")
+
+        follow_redirect!
+        expect(response.body).to include("You have created logs from your bulk upload, and the logs are complete. Return to sales logs to view them.")
+      end
     end
   end
 end
