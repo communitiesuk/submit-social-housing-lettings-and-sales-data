@@ -70,30 +70,12 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
             "" => "Select an option",
             owning_org_1.id => "Owning org 1",
             user.organisation.id => "User org (Your organisation)",
-            owning_org_2.id => "Owning org 2",
           }
         end
 
-        it "shows current stock owner at top, followed by user's org (with hint), followed by the stock owners of the user's org" do
+        it "does not show stock owner" do
           user.organisation.update!(holds_own_stock: true)
           expect(question.displayed_answer_options(log, user)).to eq(options)
-        end
-
-        context "when the owning-managing organisation relationship is deleted" do
-          let(:options) do
-            {
-              "" => "Select an option",
-              user.organisation.id => "User org (Your organisation)",
-              owning_org_2.id => "Owning org 2",
-            }
-          end
-
-          it "doesn't remove the housing provider from the list of allowed housing providers" do
-            log.update!(owning_organisation: owning_org_2)
-            expect(question.displayed_answer_options(log, user)).to eq(options)
-            org_rel.destroy!
-            expect(question.displayed_answer_options(log, user)).to eq(options)
-          end
         end
       end
 
@@ -102,11 +84,10 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
           {
             "" => "Select an option",
             owning_org_1.id => "Owning org 1",
-            owning_org_2.id => "Owning org 2",
           }
         end
 
-        it "shows current stock owner at top, followed by the stock owners of the user's org" do
+        it "shows current log owner" do
           user.organisation.update!(holds_own_stock: false)
           expect(question.displayed_answer_options(log, user)).to eq(options)
         end
@@ -120,7 +101,6 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
             user.organisation.id => "User org (Your organisation, active as of 2 February 2021)",
             owning_org_1.id => "Owning org 1",
             merged_organisation.id => "Merged org (inactive as of 2 February 2023)",
-            owning_org_2.id => "Owning org 2",
           }
         end
 
@@ -142,7 +122,6 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
             user.organisation.id => "User org (Your organisation, active as of 2 February 2021)",
             owning_org_1.id => "Owning org 1",
             merged_organisation.id => "Merged org (inactive as of 2 February 2023)",
-            owning_org_2.id => "Owning org 2 (inactive as of 2 February 2023)",
           }
         end
 
@@ -152,7 +131,7 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
           user.organisation.update!(created_at: Time.zone.local(2021, 2, 2))
         end
 
-        it "shows merged organisations stock owners as options" do
+        it "does not show merged organisations stock owners as options" do
           expect(question.displayed_answer_options(log, user)).to eq(options)
         end
       end

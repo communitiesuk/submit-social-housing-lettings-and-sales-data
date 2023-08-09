@@ -27,15 +27,12 @@ class Form::Sales::Questions::OwningOrganisationId < ::Form::Question
                                           end
     end
 
-    user_organisation_options = user.support? ? Organisation.where(holds_own_stock: true) : user.organisation.stock_owners
+    user_organisation_options = user.support? ? Organisation.where(holds_own_stock: true) : Organisation.none
     user_answer_options = user_organisation_options.pluck(:id, :name).to_h
 
     unless user.support?
       recently_absorbed_organisations.each do |absorbed_org|
         answer_opts[absorbed_org.id] = merged_organisation_label(absorbed_org.name, absorbed_org.merge_date) if absorbed_org.holds_own_stock?
-        absorbed_org.stock_owners.each do |stock_owner|
-          user_answer_options[stock_owner.id] = merged_organisation_label(stock_owner.name, absorbed_org.merge_date)
-        end
       end
     end
 
