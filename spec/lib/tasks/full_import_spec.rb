@@ -41,4 +41,36 @@ describe "full import", type: :task do
       end
     end
   end
+
+  describe "import:initial" do
+    subject(:task) { Rake::Task["import:initial"] }
+
+    let(:archive_service) { instance_double(Storage::ArchiveService) }
+
+    before do
+      Rake.application.rake_require("tasks/full_import")
+      Rake::Task.define_task(:environment)
+      task.reenable
+    end
+
+    context "when calling the initial import" do
+      before do
+        allow(Storage::ArchiveService).to receive(:new).and_return(archive_service)
+        allow(archive_service).to receive(:folder_present?).and_return(false)
+        allow(Imports::OrganisationImportService).to receive(:new).and_return(instance_double(Imports::OrganisationImportService))
+        allow(Imports::SchemeImportService).to receive(:new).and_return(instance_double(Imports::SchemeImportService))
+        allow(Imports::SchemeLocationImportService).to receive(:new).and_return(instance_double(Imports::SchemeLocationImportService))
+        allow(Imports::UserImportService).to receive(:new).and_return(instance_double(Imports::UserImportService))
+        allow(Imports::DataProtectionConfirmationImportService).to receive(:new).and_return(instance_double(Imports::DataProtectionConfirmationImportService))
+        allow(Imports::OrganisationRentPeriodImportService).to receive(:new).and_return(instance_double(Imports::OrganisationRentPeriodImportService))
+      end
+
+      it "creates a report using given organisation csv" do
+        expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+        expect(storage_service).to receive(:write_file).with("some_name_initial.log", / INFO -- : Beginning initial imports for 2 organisations/)
+
+        task.invoke("some_name.csv")
+      end
+    end
+  end
 end

@@ -1,4 +1,4 @@
-Import = Struct.new("Import", :import_class, :import_method, :folder)
+Import = Struct.new("Import", :import_class, :import_method, :folder, :logger)
 
 namespace :import do
   desc "Run initial import steps - orgs, schemes, users etc (without triggering user invite emails)"
@@ -8,18 +8,20 @@ namespace :import do
 
     s3_service = Storage::S3Service.new(Configuration::PaasConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
     csv = CSV.parse(s3_service.get_file_io(institutions_csv_name), headers: true)
+    logs_string = StringIO.new
+    logger = MultiLogger.new(Rails.logger, Logger.new(logs_string))
     org_count = csv.length
 
     initial_import_list = [
-      Import.new(Imports::OrganisationImportService, :create_organisations, "institution"),
-      Import.new(Imports::SchemeImportService, :create_schemes, "mgmtgroups"),
-      Import.new(Imports::SchemeLocationImportService, :create_scheme_locations, "schemes"),
-      Import.new(Imports::UserImportService, :create_users, "user"),
-      Import.new(Imports::DataProtectionConfirmationImportService, :create_data_protection_confirmations, "dataprotect"),
-      Import.new(Imports::OrganisationRentPeriodImportService, :create_organisation_rent_periods, "rent-period"),
+      Import.new(Imports::OrganisationImportService, :create_organisations, "institution", logger),
+      Import.new(Imports::SchemeImportService, :create_schemes, "mgmtgroups", logger),
+      Import.new(Imports::SchemeLocationImportService, :create_scheme_locations, "schemes", logger),
+      Import.new(Imports::UserImportService, :create_users, "user", logger),
+      Import.new(Imports::DataProtectionConfirmationImportService, :create_data_protection_confirmations, "dataprotect", logger),
+      Import.new(Imports::OrganisationRentPeriodImportService, :create_organisation_rent_periods, "rent-period", logger),
     ]
 
-    Rails.logger.info("Beginning initial imports for #{org_count} organisations")
+    logger.info("Beginning initial imports for #{org_count} organisations")
 
     csv.each do |row|
       archive_path = row[1]
@@ -30,12 +32,14 @@ namespace :import do
 
       initial_import_list.each do |step|
         if archive_service.folder_present?(step.folder)
-          step.import_class.new(archive_service).send(step.import_method, step.folder)
+          step.import_class.new(archive_service).send(step.import_method, step.folder, step.logger)
         end
       end
     end
 
-    Rails.logger.info("Finished initial imports")
+    logger.info("Finished initial imports")
+    log_file = "#{File.basename(institutions_csv_name, File.extname(institutions_csv_name))}_initial.log"
+    s3_service.write_file(log_file, logs_string.string)
   end
 
   desc "Run logs import steps"
