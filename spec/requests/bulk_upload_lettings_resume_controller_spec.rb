@@ -21,7 +21,6 @@ RSpec.describe BulkUploadLettingsResumeController, type: :request do
     context "when a choice has been made and then the logs have been completed" do
       let(:lettings_log) { create_list(:lettings_log, 2, :completed, bulk_upload:) }
 
-
       it "redirects to the complete page if the bulk uploads are completed" do
         bulk_upload.update!(choice: "create-fix-inline")
 
