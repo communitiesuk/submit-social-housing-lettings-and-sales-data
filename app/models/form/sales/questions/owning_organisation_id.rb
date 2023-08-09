@@ -73,22 +73,6 @@ class Form::Sales::Questions::OwningOrganisationId < ::Form::Question
     true
   end
 
-  def hidden_in_check_answers?(_log, user = nil)
-    return false if user.support?
-
-    stock_owners = user.organisation.stock_owners + user.organisation.absorbed_organisations.where(holds_own_stock: true)
-
-    if user.organisation.holds_own_stock?
-      stock_owners.count.zero?
-    else
-      stock_owners.count <= 1
-    end
-  end
-
-  def enabled
-    true
-  end
-
 private
 
   def selected_answer_option_is_derived?(_log)
