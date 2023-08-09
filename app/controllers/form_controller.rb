@@ -247,7 +247,7 @@ private
 
     original_log = current_user.send(class_name.pluralize).find_by(id: from_referrer_query("original_log_id"))
 
-    if current_user.send(class_name.pluralize).duplicate_logs(original_log).count.positive?
+    if original_log.present? && current_user.send(class_name.pluralize).duplicate_logs(original_log).count.positive?
       flash[:notice] = deduplication_success_banner unless current_user.send(class_name.pluralize).duplicate_logs(@log).count.positive?
       send("#{class_name}_duplicate_logs_path", original_log, original_log_id: original_log.id)
     else
@@ -258,7 +258,16 @@ private
 
   def deduplication_success_banner
     deduplicated_log_link = "<a class=\"govuk-notification-banner__link govuk-!-font-weight-bold\" href=\"#{send("#{@log.class.name.underscore}_path", @log)}\">Log #{@log.id}</a>"
-    changed_question_label = (@page.questions.first.check_answer_label.to_s.presence || @page.questions.first.header.to_s).downcase
+    changed_labels = {
+      property_postcode: "postcode",
+      lead_tenant_age: "lead tenant’s age",
+      rent_4_weekly: "household rent and charges",
+      rent_bi_weekly: "household rent and charges",
+      rent_monthly: "household rent and charges",
+      rent_or_other_charges: "household rent and charges",
+      address: "postcode",
+    }
+    changed_question_label = changed_labels[@page.id.to_sym] || (@page.questions.first.check_answer_label.to_s.presence || @page.questions.first.header.to_s).downcase
 
     I18n.t("notification.duplicate_logs.deduplication_success_banner", log_link: deduplicated_log_link, changed_question_label:).html_safe
   end
