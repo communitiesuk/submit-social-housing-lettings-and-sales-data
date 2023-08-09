@@ -8,6 +8,11 @@ RSpec.describe DeviseNotifyMailer do
     let(:name) { "test" }
     let(:password) { "password" }
     let(:role) { "data_coordinator" }
+    let(:bad_request_error) do
+      # rubocop:disable RSpec/VerifiedDoubles
+      Notifications::Client::BadRequestError.new(double(code: 200, body: ""))
+      # rubocop:enable RSpec/VerifiedDoubles
+    end
 
     before do
       allow(described_class).to receive(:new).and_return(devise_notify_mailer)
@@ -37,6 +42,21 @@ RSpec.describe DeviseNotifyMailer do
         it "does send emails" do
           expect(notify_client).to receive(:send_email).once
           User.create!(name:, organisation:, email:, password:, role:)
+        end
+      end
+
+      context "when notify mailer raises BadRequestError" do
+        before do
+          allow(notify_client).to receive(:send_email).and_raise(bad_request_error)
+        end
+
+        let(:domain) { Rails.application.credentials[:email_allowlist].first }
+        let(:email) { "test@#{domain}" }
+
+        it "does not raise an error" do
+          expect {
+            User.create!(name:, organisation:, email:, password:, role:)
+          }.not_to raise_error
         end
       end
     end

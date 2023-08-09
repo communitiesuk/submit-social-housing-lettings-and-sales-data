@@ -5,14 +5,18 @@ class DeviseNotifyMailer < Devise::Mailer
     @notify_client ||= ::Notifications::Client.new(ENV["GOVUK_NOTIFY_API_KEY"])
   end
 
-  def send_email(email, template_id, personalisation)
-    return true if intercept_send?(email)
+  def send_email(email_address, template_id, personalisation)
+    return true if intercept_send?(email_address)
 
     notify_client.send_email(
-      email_address: email,
+      email_address:,
       template_id:,
       personalisation:,
     )
+  rescue Notifications::Client::BadRequestError => e
+    Sentry.capture_exception(e)
+
+    true
   end
 
   def personalisation(record, token, url, username: false)
