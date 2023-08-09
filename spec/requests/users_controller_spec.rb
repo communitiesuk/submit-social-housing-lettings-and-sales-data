@@ -1361,12 +1361,45 @@ RSpec.describe UsersController, type: :request do
             expect(page).to have_link("Change", text: "if a key contact")
           end
 
+          it "does not show option to resend confirmation email" do
+            expect(page).not_to have_button("Resend invite link")
+          end
+
           it "allows deactivating the user" do
             expect(page).to have_link("Deactivate user", href: "/users/#{other_user.id}/deactivate")
           end
 
-          it "allows you to resend invitation emails" do
-            expect(page).to have_button("Resend invite link")
+          context "when user is not confirmed" do
+            before do
+              other_user.update!(confirmed_at: nil)
+              get "/users/#{other_user.id}", headers:, params: {}
+            end
+
+            it "returns 200" do
+              expect(response).to have_http_status(:ok)
+            end
+
+            it "shows the user details page" do
+              expect(page).to have_content("#{other_user.name}’s account")
+            end
+
+            it "allows changing name, email, role, dpo and key contact" do
+              expect(page).to have_link("Change", text: "name")
+              expect(page).to have_link("Change", text: "email address")
+              expect(page).to have_link("Change", text: "telephone number")
+              expect(page).not_to have_link("Change", text: "password")
+              expect(page).to have_link("Change", text: "role")
+              expect(page).to have_link("Change", text: "if data protection officer")
+              expect(page).to have_link("Change", text: "if a key contact")
+            end
+
+            it "allows deactivating the user" do
+              expect(page).to have_link("Deactivate user", href: "/users/#{other_user.id}/deactivate")
+            end
+
+            it "allows you to resend invitation emails" do
+              expect(page).to have_button("Resend invite link")
+            end
           end
 
           context "when user is deactivated" do
