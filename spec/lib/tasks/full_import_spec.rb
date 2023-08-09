@@ -73,4 +73,32 @@ describe "full import", type: :task do
       end
     end
   end
+
+  describe "import:logs" do
+    subject(:task) { Rake::Task["import:logs"] }
+
+    let(:archive_service) { instance_double(Storage::ArchiveService) }
+
+    before do
+      Rake.application.rake_require("tasks/full_import")
+      Rake::Task.define_task(:environment)
+      task.reenable
+    end
+
+    context "when calling the logs import" do
+      before do
+        allow(Storage::ArchiveService).to receive(:new).and_return(archive_service)
+        allow(archive_service).to receive(:folder_present?).and_return(false)
+        allow(Imports::LettingsLogsImportService).to receive(:new).and_return(instance_double(Imports::LettingsLogsImportService))
+        allow(Imports::SalesLogsImportService).to receive(:new).and_return(instance_double(Imports::SalesLogsImportService))
+      end
+
+      it "creates a report using given organisation csv" do
+        expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+        expect(storage_service).to receive(:write_file).with("some_name_logs.log", / INFO -- : Beginning log imports for 2 organisations/)
+
+        task.invoke("some_name.csv")
+      end
+    end
+  end
 end
