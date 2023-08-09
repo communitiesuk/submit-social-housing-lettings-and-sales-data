@@ -49,9 +49,9 @@ CMD bundle exec rake parallel:setup && bundle exec rake parallel:spec
 FROM base as development
 
 # We expect the rake assets:precompile command to create these directories, but mkdir -p will create them if they don't already exist
-RUN mkdir -p tmp log /home/nonroot/.cache/yarn /home/nonroot/.yarnrc /app/yarn-error.log
-RUN touch spec/examples.txt
+RUN mkdir -p tmp log
 RUN chown -R nonroot tmp log
+RUN chown nonroot db/schema.rb
 
 RUN bundle config set without "test"
 RUN bundle install --jobs=4 --no-binstubs --no-cache
@@ -63,9 +63,9 @@ CMD bundle exec rails s -e ${RAILS_ENV} -p ${PORT} --binding=0.0.0.0
 FROM base as staging
 
 # We expect the rake assets:precompile command to create these directories, but mkdir -p will create them if they don't already exist
-RUN mkdir -p tmp log /home/nonroot/.cache/yarn /home/nonroot/.yarnrc /app/yarn-error.log
-RUN touch spec/examples.txt
+RUN mkdir -p tmp log
 RUN chown -R nonroot tmp log
+RUN chown nonroot db/schema.rb
 
 USER nonroot
 
