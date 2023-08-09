@@ -14,8 +14,4 @@ class MultiLogger
   def error(data)
     @targets.each { |t| t.error(data) }
   end
-
-  def close
-    @targets.each(&:close)
-  end
 end
