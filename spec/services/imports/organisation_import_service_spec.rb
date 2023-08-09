@@ -2,7 +2,8 @@ require "rails_helper"
 
 RSpec.describe Imports::OrganisationImportService do
   let(:storage_service) { instance_double(Storage::S3Service) }
-  let(:logger) { instance_double(Rails::Rack::Logger) }
+  let(:logs_string) { StringIO.new }
+  let(:logger) { MultiLogger.new(Rails.logger, Logger.new(logs_string)) }
   let(:folder_name) { "organisations" }
   let(:filenames) { %w[my_folder/my_file1.xml my_folder/my_file2.xml] }
   let(:fixture_directory) { "spec/fixtures/imports/institution" }
@@ -81,10 +82,12 @@ RSpec.describe Imports::OrganisationImportService do
     it "successfully create an organisation the first time, and does not update it" do
       expect(storage_service).to receive(:list_files).with(folder_name).twice
       expect(storage_service).to receive(:get_file_io).with(filenames[0]).twice
-      expect(logger).to receive(:warn).once
+      expect(logger).to receive(:warn).once.and_call_original
+      expect(Rails.logger).to receive(:warn).with("Organisation my_new_organisation is already present with old visible ID 1, skipping.")
 
       expect { import_service.create_organisations(folder_name) }.to change(Organisation, :count).by(1)
       expect { import_service.create_organisations(folder_name) }.to change(Organisation, :count).by(0)
+      expect(logs_string.string).to include("Organisation my_new_organisation is already present with old visible ID 1, skipping.")
 
       expect(Organisation).to exist(old_visible_id: "1", name: "HA Ltd")
     end
