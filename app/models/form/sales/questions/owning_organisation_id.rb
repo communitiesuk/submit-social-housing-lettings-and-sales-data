@@ -76,6 +76,10 @@ class Form::Sales::Questions::OwningOrganisationId < ::Form::Question
 private
 
   def selected_answer_option_is_derived?(_log)
-    FeatureToggle.merge_organisations_enabled? ? true : false
+    if FeatureToggle.merge_organisations_enabled?
+      true
+    else
+      false
+    end
   end
 end
