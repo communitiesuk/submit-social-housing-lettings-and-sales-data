@@ -27,19 +27,21 @@ namespace :import do
       archive_path = row[1]
       archive_io = s3_service.get_file_io(archive_path)
       archive_service = Storage::ArchiveService.new(archive_io)
-
-      Rails.logger.info("Performing initial imports for organisation #{row[0]}")
+      logger.info("Performing initial imports for organisation #{row[0]}")
 
       initial_import_list.each do |step|
         if archive_service.folder_present?(step.folder)
           step.import_class.new(archive_service).send(step.import_method, step.folder, step.logger)
         end
       end
+
+      log_file = "#{File.basename(institutions_csv_name, File.extname(institutions_csv_name))}_#{File.basename(archive_path, File.extname(archive_path))}_initial.log"
+      s3_service.write_file(log_file, logs_string.string)
+      logs_string.rewind
+      logs_string.truncate(0)
     end
 
     logger.info("Finished initial imports")
-    log_file = "#{File.basename(institutions_csv_name, File.extname(institutions_csv_name))}_initial.log"
-    s3_service.write_file(log_file, logs_string.string)
   end
 
   desc "Run logs import steps"
@@ -73,11 +75,14 @@ namespace :import do
           step.import_class.new(archive_service).send(step.import_method, step.folder, step.logger)
         end
       end
+
+      log_file = "#{File.basename(institutions_csv_name, File.extname(institutions_csv_name))}_#{File.basename(archive_path, File.extname(archive_path))}_logs.log"
+      s3_service.write_file(log_file, logs_string.string)
+      logs_string.rewind
+      logs_string.truncate(0)
     end
 
     logger.info("Log import complete")
-    log_file = "#{File.basename(institutions_csv_name, File.extname(institutions_csv_name))}_logs.log"
-    s3_service.write_file(log_file, logs_string.string)
   end
 
   desc "Trigger invite emails for imported users"
