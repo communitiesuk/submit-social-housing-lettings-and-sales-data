@@ -48,7 +48,7 @@ class FormController < ApplicationController
   def show_page
     if request.params["referrer"] == "interruption_screen" && request.headers["HTTP_REFERER"].present?
       @interruption_page_id = URI.parse(request.headers["HTTP_REFERER"]).path.split("/").last.underscore
-      @interruption_page_referrer_type = referrer_from_query
+      @interruption_page_referrer_type = from_referrer_query("referrer")
     end
 
     if @log
@@ -130,10 +130,10 @@ private
   end
 
   def is_referrer_type?(referrer_type)
-    referrer_from_query == referrer_type
+    from_referrer_query("referrer") == referrer_type
   end
 
-  def referrer_from_query
+  def from_referrer_query(query_param)
     referrer = request.headers["HTTP_REFERER"]
     return unless referrer
 
@@ -141,7 +141,7 @@ private
     return unless query_params
 
     parsed_params = CGI.parse(query_params)
-    parsed_params["referrer"]&.first
+    parsed_params[query_param]&.first
   end
 
   def original_duplicate_log_id_from_query
@@ -163,11 +163,15 @@ private
 
   def successful_redirect_path
     if FeatureToggle.deduplication_flow_enabled?
-      if @log.lettings?
-        if current_user.lettings_logs.duplicate_logs(@log).count.positive?
-          return send("lettings_log_duplicate_logs_path", @log, original_log_id: @log.id)
-        end
-      elsif current_user.sales_logs.duplicate_logs(@log).count.positive?
+      if is_referrer_type?("duplicate_logs")
+        return correcting_duplicate_logs_redirect_path
+      end
+
+      if @log.lettings? && current_user.lettings_logs.duplicate_logs(@log).count.positive?
+        return send("lettings_log_duplicate_logs_path", @log, original_log_id: @log.id)
+      end
+
+      if @log.sales? && current_user.sales_logs.duplicate_logs(@log).count.positive?
         return send("sales_log_duplicate_logs_path", @log, original_log_id: @log.id)
       end
     end
@@ -237,4 +241,34 @@ private
   end
 
   CONFIRMATION_PAGE_IDS = %w[uprn_confirmation].freeze
+
+  def correcting_duplicate_logs_redirect_path
+    class_name = @log.class.name.underscore
+
+    original_log = current_user.send(class_name.pluralize).find_by(id: from_referrer_query("original_log_id"))
+
+    if original_log.present? && current_user.send(class_name.pluralize).duplicate_logs(original_log).count.positive?
+      flash[:notice] = deduplication_success_banner unless current_user.send(class_name.pluralize).duplicate_logs(@log).count.positive?
+      send("#{class_name}_duplicate_logs_path", original_log, original_log_id: original_log.id)
+    else
+      flash[:notice] = deduplication_success_banner
+      send("#{class_name}_duplicate_logs_path", "#{class_name}_id".to_sym => from_referrer_query("first_remaining_duplicate_id"), original_log_id: from_referrer_query("original_log_id"))
+    end
+  end
+
+  def deduplication_success_banner
+    deduplicated_log_link = "<a class=\"govuk-notification-banner__link govuk-!-font-weight-bold\" href=\"#{send("#{@log.class.name.underscore}_path", @log)}\">Log #{@log.id}</a>"
+    changed_labels = {
+      property_postcode: "postcode",
+      lead_tenant_age: "lead tenant’s age",
+      rent_4_weekly: "household rent and charges",
+      rent_bi_weekly: "household rent and charges",
+      rent_monthly: "household rent and charges",
+      rent_or_other_charges: "household rent and charges",
+      address: "postcode",
+    }
+    changed_question_label = changed_labels[@page.id.to_sym] || (@page.questions.first.check_answer_label.to_s.presence || @page.questions.first.header.to_s).downcase
+
+    I18n.t("notification.duplicate_logs.deduplication_success_banner", log_link: deduplicated_log_link, changed_question_label:).html_safe
+  end
 end

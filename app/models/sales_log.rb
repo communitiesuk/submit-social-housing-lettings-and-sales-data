@@ -55,7 +55,7 @@ class SalesLog < Log
 
   OPTIONAL_FIELDS = %w[purchid othtype].freeze
   RETIREMENT_AGES = { "M" => 65, "F" => 60, "X" => 65 }.freeze
-  DUPLICATE_LOG_ATTRIBUTES = %w[purchid saledate age1_known age1 sex1 ecstat1 postcode_full].freeze
+  DUPLICATE_LOG_ATTRIBUTES = %w[owning_organisation_id purchid saledate age1_known age1 sex1 ecstat1 postcode_full].freeze
 
   def lettings?
     false

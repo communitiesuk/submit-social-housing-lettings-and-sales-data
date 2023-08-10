@@ -128,6 +128,186 @@ RSpec.describe Validations::SetupValidations do
         end
       end
     end
+
+    context "when organisations were merged" do
+      around do |example|
+        Timecop.freeze(Time.zone.local(2023, 5, 1))
+        example.run
+        Timecop.return
+      end
+
+      let(:absorbing_organisation) { create(:organisation, created_at: Time.zone.local(2023, 2, 1, 4, 5, 6), name: "Absorbing org") }
+      let(:absorbing_organisation_2) { create(:organisation, created_at: Time.zone.local(2023, 2, 1), name: "Absorbing org 2") }
+      let(:merged_organisation) { create(:organisation, name: "Merged org") }
+      let(:merged_organisation_2) { create(:organisation, name: "Merged org 2") }
+
+      before do
+        merged_organisation.update!(absorbing_organisation:, merge_date: Time.zone.local(2023, 2, 2))
+        merged_organisation_2.update!(absorbing_organisation:, merge_date: Time.zone.local(2023, 2, 2))
+      end
+
+      context "and owning organisation is no longer active" do
+        it "does not allow startate after organisation has been merged" do
+          record.startdate = Time.zone.local(2023, 3, 1)
+          record.owning_organisation_id = merged_organisation.id
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"]).to include(match "Enter a date when the owning organisation was active. Merged org became inactive on 2 February 2023 and was replaced by Absorbing org.")
+        end
+
+        it "allows startate before organisation has been merged" do
+          record.startdate = Time.zone.local(2023, 1, 1)
+          record.owning_organisation_id = merged_organisation.id
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"]).to be_empty
+        end
+      end
+
+      context "and owning organisation is not yet active during the startdate" do
+        it "does not allow startate before absorbing organisation has been created" do
+          record.startdate = Time.zone.local(2023, 1, 1)
+          record.owning_organisation_id = absorbing_organisation.id
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"]).to include(match "Enter a date when the owning organisation was active. Absorbing org became active on 1 February 2023.")
+        end
+
+        it "allows startate after absorbing organisation has been created" do
+          record.startdate = Time.zone.local(2023, 2, 2)
+          record.owning_organisation_id = absorbing_organisation.id
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"]).to be_empty
+        end
+      end
+
+      context "and managing organisation is no longer active during the startdate" do
+        it "does not allow startate after organisation has been merged" do
+          record.startdate = Time.zone.local(2023, 3, 1)
+          record.managing_organisation_id = merged_organisation.id
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"]).to include(match "Enter a date when the managing organisation was active. Merged org became inactive on 2 February 2023 and was replaced by Absorbing org.")
+        end
+
+        it "allows startate before organisation has been merged" do
+          record.startdate = Time.zone.local(2023, 1, 1)
+          record.managing_organisation_id = merged_organisation.id
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"]).to be_empty
+        end
+      end
+
+      context "and managing organisation is not yet active during the startdate" do
+        it "does not allow startate before absorbing organisation has been created" do
+          record.startdate = Time.zone.local(2023, 1, 1)
+          record.managing_organisation_id = absorbing_organisation.id
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"]).to include(match "Enter a date when the managing organisation was active. Absorbing org became active on 1 February 2023.")
+        end
+
+        it "allows startate after absorbing organisation has been created" do
+          record.startdate = Time.zone.local(2023, 2, 2)
+          record.managing_organisation_id = absorbing_organisation.id
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"]).to be_empty
+        end
+      end
+
+      context "and owning and managing organisation is no longer active during the startdate" do
+        it "does not allow startate after organisation has been merged" do
+          record.startdate = Time.zone.local(2023, 3, 1)
+          record.managing_organisation_id = merged_organisation.id
+          record.owning_organisation_id = merged_organisation.id
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"]).to include(match "Enter a date when the owning and managing organisation was active. Merged org became inactive on 2 February 2023 and was replaced by Absorbing org.")
+        end
+
+        it "allows startate before organisation has been merged" do
+          record.startdate = Time.zone.local(2023, 1, 1)
+          record.managing_organisation_id = merged_organisation.id
+          record.owning_organisation_id = merged_organisation.id
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"]).to be_empty
+        end
+      end
+
+      context "and owning and managing organisation is not yet active during the startdate" do
+        it "does not allow startate before absorbing organisation has been created" do
+          record.startdate = Time.zone.local(2023, 1, 1)
+          record.managing_organisation_id = absorbing_organisation.id
+          record.owning_organisation_id = absorbing_organisation.id
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"]).to include(match "Enter a date when the owning and managing organisation was active. Absorbing org became active on 1 February 2023.")
+        end
+
+        it "allows startate after absorbing organisation has been created" do
+          record.startdate = Time.zone.local(2023, 2, 1)
+          record.managing_organisation_id = absorbing_organisation.id
+          record.owning_organisation_id = absorbing_organisation.id
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"]).to be_empty
+        end
+      end
+
+      context "and owning and managing organisations are no longer active during the startdate" do
+        it "does not allow startate after organisation have been merged" do
+          record.startdate = Time.zone.local(2023, 2, 2)
+          record.managing_organisation_id = merged_organisation.id
+          record.owning_organisation_id = merged_organisation_2.id
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"]).to include(match "Enter a date when the owning and managing organisations were active. Merged org 2 and Merged org became inactive on 2 February 2023 and were replaced by Absorbing org.")
+        end
+
+        it "allows startate before organisations have been merged" do
+          record.startdate = Time.zone.local(2023, 1, 1)
+          record.managing_organisation_id = merged_organisation.id
+          record.owning_organisation_id = merged_organisation_2.id
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"]).to be_empty
+        end
+      end
+
+      context "and owning and managing organisations are from different merges and no longer active during the startdate" do
+        before do
+          merged_organisation_2.update!(absorbing_organisation: absorbing_organisation_2, merge_date: Time.zone.local(2023, 2, 2))
+        end
+
+        it "does not allow startate after organisations have been merged" do
+          record.startdate = Time.zone.local(2023, 3, 1)
+          record.managing_organisation_id = merged_organisation.id
+          record.owning_organisation_id = merged_organisation_2.id
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"]).to include(match "Enter a date when the owning and managing organisations were active. Merged org 2 became inactive on 2 February 2023 and was replaced by Absorbing org 2. Merged org became inactive on 2 February 2023 and was replaced by Absorbing org.")
+        end
+
+        it "allows startate before organisations have been merged" do
+          record.startdate = Time.zone.local(2023, 1, 1)
+          record.managing_organisation_id = merged_organisation.id
+          record.owning_organisation_id = merged_organisation_2.id
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"]).to be_empty
+        end
+      end
+
+      context "and owning and managing organisation have different merges and are not yet active during the startdate" do
+        before do
+          merged_organisation_2.update!(absorbing_organisation: absorbing_organisation_2, merge_date: Time.zone.local(2023, 2, 2))
+        end
+
+        it "does not allow startate before absorbing organisation has been created" do
+          record.startdate = Time.zone.local(2023, 1, 1)
+          record.managing_organisation_id = absorbing_organisation.id
+          record.owning_organisation_id = absorbing_organisation_2.id
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"]).to include(match "Enter a date when the owning and managing organisations were active. Absorbing org 2 became active on 1 February 2023, and Absorbing org became active on 1 February 2023.")
+        end
+
+        it "allows startate after absorbing organisation has been created" do
+          record.startdate = Time.zone.local(2023, 2, 2)
+          record.managing_organisation_id = absorbing_organisation.id
+          record.owning_organisation_id = absorbing_organisation.id
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"]).to be_empty
+        end
+      end
+    end
   end
 
   describe "#validate_irproduct" do
@@ -520,6 +700,82 @@ RSpec.describe Validations::SetupValidations do
       expect(record.errors["created_by"]).to be_empty
       expect(record.errors["owning_organisation_id"]).to be_empty
       expect(record.errors["managing_organisation_id"]).to be_empty
+    end
+
+    context "when organisations are merged" do
+      let(:absorbing_organisation) { create(:organisation, created_at: Time.zone.local(2023, 2, 1, 4, 5, 6), name: "Absorbing org") }
+      let(:merged_organisation) { create(:organisation, name: "Merged org") }
+
+      around do |example|
+        Timecop.freeze(Time.zone.local(2023, 5, 1))
+        merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation:)
+        example.run
+        Timecop.return
+      end
+
+      context "and owning organisation is no longer active" do
+        it "does not allow organisation that has been merged" do
+          record.startdate = Time.zone.local(2023, 3, 1)
+          record.owning_organisation_id = merged_organisation.id
+          setup_validator.validate_organisation(record)
+          expect(record.errors["owning_organisation_id"]).to include(match "The owning organisation must be active on the tenancy start date. Merged org became inactive on 2 February 2023 and was replaced by Absorbing org.")
+        end
+
+        it "allows organisation before it has been merged" do
+          record.startdate = Time.zone.local(2023, 1, 1)
+          record.owning_organisation_id = merged_organisation.id
+          setup_validator.validate_organisation(record)
+          expect(record.errors["owning_organisation_id"]).to be_empty
+        end
+      end
+
+      context "and owning organisation is not yet active during the startdate" do
+        it "does not allow absorbing organisation before it had been created" do
+          record.startdate = Time.zone.local(2023, 1, 1)
+          record.owning_organisation_id = absorbing_organisation.id
+          setup_validator.validate_organisation(record)
+          expect(record.errors["owning_organisation_id"]).to include(match "The owning organisation must be active on the tenancy start date. Absorbing org became active on 1 February 2023.")
+        end
+
+        it "allows absorbing organisation after it has been created" do
+          record.startdate = Time.zone.local(2023, 2, 2)
+          record.owning_organisation_id = absorbing_organisation.id
+          setup_validator.validate_organisation(record)
+          expect(record.errors["owning_organisation_id"]).to be_empty
+        end
+      end
+
+      context "when managing organisation is no longer active" do
+        it "does not allow organisation that has been merged" do
+          record.startdate = Time.zone.local(2023, 3, 1)
+          record.managing_organisation_id = merged_organisation.id
+          setup_validator.validate_organisation(record)
+          expect(record.errors["managing_organisation_id"]).to include(match "The managing organisation must be active on the tenancy start date. Merged org became inactive on 2 February 2023 and was replaced by Absorbing org.")
+        end
+
+        it "allows organisation before it has been merged" do
+          record.startdate = Time.zone.local(2023, 1, 1)
+          record.managing_organisation_id = merged_organisation.id
+          setup_validator.validate_organisation(record)
+          expect(record.errors["managing_organisation_id"]).to be_empty
+        end
+      end
+
+      context "when managing organisation is not yet active during the startdate" do
+        it "does not allow absorbing organisation before it had been created" do
+          record.startdate = Time.zone.local(2023, 1, 1)
+          record.managing_organisation_id = absorbing_organisation.id
+          setup_validator.validate_organisation(record)
+          expect(record.errors["managing_organisation_id"]).to include(match "The managing organisation must be active on the tenancy start date. Absorbing org became active on 1 February 2023.")
+        end
+
+        it "allows absorbing organisation after it has been created" do
+          record.startdate = Time.zone.local(2023, 2, 2)
+          record.managing_organisation_id = absorbing_organisation.id
+          setup_validator.validate_organisation(record)
+          expect(record.errors["managing_organisation_id"]).to be_empty
+        end
+      end
     end
   end
 

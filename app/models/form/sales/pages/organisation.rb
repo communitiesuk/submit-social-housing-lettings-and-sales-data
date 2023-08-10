@@ -10,25 +10,19 @@ class Form::Sales::Pages::Organisation < ::Form::Page
     ]
   end
 
-  def routed_to?(log, current_user)
+  def routed_to?(_log, current_user)
     if FeatureToggle.merge_organisations_enabled?
+
       return false unless current_user
       return true if current_user.support?
 
-      stock_owners = current_user.organisation.stock_owners + current_user.organisation.absorbed_organisations.where(holds_own_stock: true)
+      absorbed_stock_owners = current_user.organisation.absorbed_organisations.where(holds_own_stock: true)
 
       if current_user.organisation.holds_own_stock?
-        if current_user.organisation.absorbed_organisations.any?(&:holds_own_stock?)
-          return true
-        end
-        return true if stock_owners.count >= 1
-
-        log.update!(owning_organisation: current_user.organisation)
+        return true if absorbed_stock_owners.count >= 1
       else
-        return false if stock_owners.count.zero?
-        return true if stock_owners.count > 1
-
-        log.update!(owning_organisation: stock_owners.first)
+        return false if absorbed_stock_owners.count.zero?
+        return true if absorbed_stock_owners.count > 1
       end
 
       false
