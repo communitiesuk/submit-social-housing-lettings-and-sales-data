@@ -51,12 +51,12 @@ module Validations::SetupValidations
     return unless record.startdate
 
     if owning_organisation.present?
-      if owning_organisation&.merge_date.present? && owning_organisation.merge_date < record.startdate
+      if owning_organisation&.merge_date.present? && owning_organisation.merge_date <= record.startdate
         record.errors.add :owning_organisation_id, I18n.t("validations.setup.owning_organisation.inactive_merged_organisation",
                                                           owning_organisation: record.owning_organisation.name,
                                                           owning_organisation_merge_date: record.owning_organisation.merge_date.to_formatted_s(:govuk_date),
                                                           owning_absorbing_organisation: record.owning_organisation.absorbing_organisation.name)
-      elsif owning_organisation&.absorbed_organisations.present? && owning_organisation.created_at > record.startdate
+      elsif owning_organisation&.absorbed_organisations.present? && owning_organisation.created_at.to_date > record.startdate.to_date
         record.errors.add :owning_organisation_id, I18n.t("validations.setup.owning_organisation.inactive_absorbing_organisation",
                                                           owning_organisation: record.owning_organisation.name,
                                                           owning_organisation_available_from: record.owning_organisation.created_at.to_formatted_s(:govuk_date))
@@ -64,12 +64,12 @@ module Validations::SetupValidations
     end
 
     if managing_organisation.present?
-      if managing_organisation&.merge_date.present? && managing_organisation.merge_date < record.startdate
+      if managing_organisation&.merge_date.present? && managing_organisation.merge_date <= record.startdate
         record.errors.add :managing_organisation_id, I18n.t("validations.setup.managing_organisation.inactive_merged_organisation",
                                                             managing_organisation: record.managing_organisation.name,
                                                             managing_organisation_merge_date: record.managing_organisation.merge_date.to_formatted_s(:govuk_date),
                                                             managing_absorbing_organisation: record.managing_organisation.absorbing_organisation.name)
-      elsif managing_organisation&.absorbed_organisations.present? && managing_organisation.created_at > record.startdate
+      elsif managing_organisation&.absorbed_organisations.present? && managing_organisation.created_at.to_date > record.startdate.to_date
         record.errors.add :managing_organisation_id, I18n.t("validations.setup.managing_organisation.inactive_absorbing_organisation",
                                                             managing_organisation: record.managing_organisation.name,
                                                             managing_organisation_available_from: record.managing_organisation.created_at.to_formatted_s(:govuk_date))
@@ -208,19 +208,19 @@ private
   end
 
   def merged_owning_organisation_inactive?(record)
-    record.owning_organisation&.merge_date.present? && record.owning_organisation.merge_date < record.startdate
+    record.owning_organisation&.merge_date.present? && record.owning_organisation.merge_date <= record.startdate
   end
 
   def merged_managing_organisation_inactive?(record)
-    record.managing_organisation&.merge_date.present? && record.managing_organisation.merge_date < record.startdate
+    record.managing_organisation&.merge_date.present? && record.managing_organisation.merge_date <= record.startdate
   end
 
   def absorbing_owning_organisation_inactive?(record)
-    record.owning_organisation&.absorbed_organisations.present? && record.owning_organisation.created_at > record.startdate
+    record.owning_organisation&.absorbed_organisations.present? && record.owning_organisation.created_at.to_date > record.startdate.to_date
   end
 
   def absorbing_managing_organisation_inactive?(record)
-    record.managing_organisation&.absorbed_organisations.present? && record.managing_organisation.created_at > record.startdate
+    record.managing_organisation&.absorbed_organisations.present? && record.managing_organisation.created_at.to_date > record.startdate.to_date
   end
 
   def organisations_belong_to_same_merge?(organisation_a, organisation_b)

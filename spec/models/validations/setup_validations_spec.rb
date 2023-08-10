@@ -136,7 +136,7 @@ RSpec.describe Validations::SetupValidations do
         Timecop.return
       end
 
-      let(:absorbing_organisation) { create(:organisation, created_at: Time.zone.local(2023, 2, 1), name: "Absorbing org") }
+      let(:absorbing_organisation) { create(:organisation, created_at: Time.zone.local(2023, 2, 1, 4, 5, 6), name: "Absorbing org") }
       let(:absorbing_organisation_2) { create(:organisation, created_at: Time.zone.local(2023, 2, 1), name: "Absorbing org 2") }
       let(:merged_organisation) { create(:organisation, name: "Merged org") }
       let(:merged_organisation_2) { create(:organisation, name: "Merged org 2") }
@@ -238,7 +238,7 @@ RSpec.describe Validations::SetupValidations do
         end
 
         it "allows startate after absorbing organisation has been created" do
-          record.startdate = Time.zone.local(2023, 2, 2)
+          record.startdate = Time.zone.local(2023, 2, 1)
           record.managing_organisation_id = absorbing_organisation.id
           record.owning_organisation_id = absorbing_organisation.id
           setup_validator.validate_startdate_setup(record)
@@ -248,7 +248,7 @@ RSpec.describe Validations::SetupValidations do
 
       context "and owning and managing organisations are no longer active during the startdate" do
         it "does not allow startate after organisation have been merged" do
-          record.startdate = Time.zone.local(2023, 3, 1)
+          record.startdate = Time.zone.local(2023, 2, 2)
           record.managing_organisation_id = merged_organisation.id
           record.owning_organisation_id = merged_organisation_2.id
           setup_validator.validate_startdate_setup(record)
@@ -703,7 +703,7 @@ RSpec.describe Validations::SetupValidations do
     end
 
     context "when organisations are merged" do
-      let(:absorbing_organisation) { create(:organisation, created_at: Time.zone.local(2023, 2, 1), name: "Absorbing org") }
+      let(:absorbing_organisation) { create(:organisation, created_at: Time.zone.local(2023, 2, 1, 4, 5, 6), name: "Absorbing org") }
       let(:merged_organisation) { create(:organisation, name: "Merged org") }
 
       around do |example|
