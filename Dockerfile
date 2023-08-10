@@ -60,7 +60,7 @@ USER nonroot
 
 CMD bundle exec rails s -e ${RAILS_ENV} -p ${PORT} --binding=0.0.0.0
 
-FROM base as staging
+FROM base as production
 
 # We expect the rake assets:precompile command to create these directories, but mkdir -p will create them if they don't already exist
 RUN mkdir -p tmp log
@@ -70,5 +70,3 @@ RUN chown nonroot db/schema.rb
 USER nonroot
 
 CMD bundle exec rails s -e ${RAILS_ENV} -p ${PORT} --binding=0.0.0.0
-
-FROM staging as production
