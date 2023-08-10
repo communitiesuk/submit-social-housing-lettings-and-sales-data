@@ -29,7 +29,7 @@
       <%= govuk_button_to @duplicate_logs.count == 1 ? "Delete this log" : "Delete these logs",
         send("delete_logs_#{@log.class.name.underscore}s_path"),
         method: "delete",
-        params: { ids: @duplicate_logs.map(&:id), original_log_id: @original_log_id, remaining_log_id: @log.id } %>
+        params: { ids: @duplicate_logs.map(&:id), original_log_id: @original_log.id, remaining_log_id: @log.id } %>
       <%= govuk_button_link_to(
         "Cancel",
         send("#{@log.class.name.underscore}_duplicate_logs_path", @log),

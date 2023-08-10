@@ -2,7 +2,7 @@ class DuplicateLogsController < ApplicationController
   before_action :authenticate_user!
   before_action :find_resource_by_named_id
   before_action :find_duplicate_logs
-  before_action :find_original_log_id
+  before_action :find_original_log
 
   def show
     if @log
@@ -61,8 +61,13 @@ private
     end
   end
 
-  def find_original_log_id
+  def find_original_log
     query_params = URI.parse(request.url).query
-    @original_log_id = CGI.parse(query_params)["original_log_id"][0]&.to_i if query_params.present?
+    original_log_id = CGI.parse(query_params)["original_log_id"][0]&.to_i if query_params.present?
+    @original_log = if params[:sales_log_id].present?
+                      current_user.sales_logs.find_by(id: original_log_id)
+                    else
+                      current_user.lettings_logs.find_by(id: original_log_id)
+                    end
   end
 end
