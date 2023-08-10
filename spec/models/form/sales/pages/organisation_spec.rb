@@ -88,8 +88,8 @@ RSpec.describe Form::Sales::Pages::Organisation, type: :model do
             expect(page.routed_to?(log, user)).to eq(false)
           end
 
-          it "updates owning_organisation_id" do
-            expect { page.routed_to?(log, user) }.to change(log.reload, :owning_organisation).from(nil).to(stock_owner)
+          it "does not update owning_organisation_id" do
+            expect { page.routed_to?(log, user) }.not_to change(log.reload, :owning_organisation)
           end
         end
 
@@ -111,11 +111,7 @@ RSpec.describe Form::Sales::Pages::Organisation, type: :model do
           end
 
           it "is not shown" do
-            expect(page.routed_to?(log, user)).to eq(true)
-          end
-
-          it "updates owning_organisation_id" do
-            expect { page.routed_to?(log, user) }.not_to change(log.reload, :owning_organisation)
+            expect(page.routed_to?(log, user)).to eq(false)
           end
         end
       end
@@ -129,12 +125,6 @@ RSpec.describe Form::Sales::Pages::Organisation, type: :model do
           it "is not shown" do
             expect(page.routed_to?(log, user)).to eq(false)
           end
-
-          it "updates owning_organisation_id to user organisation" do
-            expect {
-              page.routed_to?(log, user)
-            }.to change(log.reload, :owning_organisation).from(nil).to(user.organisation)
-          end
         end
 
         context "with >0 stock_owners" do
@@ -143,12 +133,20 @@ RSpec.describe Form::Sales::Pages::Organisation, type: :model do
             create(:organisation_relationship, child_organisation: user.organisation)
           end
 
-          it "is shown" do
-            expect(page.routed_to?(log, user)).to eq(true)
+          it "is not shown" do
+            expect(page.routed_to?(log, user)).to eq(false)
+          end
+        end
+
+        context "with merged organisations" do
+          let(:merged_org) { create(:organisation) }
+
+          before do
+            merged_org.update!(absorbing_organisation: user.organisation, merge_date: Time.zone.now)
           end
 
-          it "does not update owning_organisation_id" do
-            expect { page.routed_to?(log, user) }.not_to change(log.reload, :owning_organisation).from(nil)
+          it "is shown" do
+            expect(page.routed_to?(log, user)).to eq(true)
           end
         end
       end
