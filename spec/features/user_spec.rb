@@ -375,7 +375,7 @@ RSpec.describe "User Features" do
 
     context "when editing someone elses account details" do
       let!(:user) { create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
-      let!(:other_user) { create(:user, name: "Other name", is_dpo: false, organisation: user.organisation) }
+      let!(:other_user) { create(:user, name: "Other name", is_dpo: false, organisation: user.organisation, last_sign_in_at: Time.zone.now) }
 
       before do
         visit("/lettings-logs")
@@ -504,7 +504,7 @@ RSpec.describe "User Features" do
       end
 
       before do
-        other_user.update!(initial_confirmation_sent: false, confirmed_at: nil)
+        other_user.update!(initial_confirmation_sent: false, last_sign_in_at: nil)
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in(user)
         other_user.legacy_users.destroy_all
@@ -552,7 +552,7 @@ RSpec.describe "User Features" do
       end
 
       before do
-        other_user.update!(initial_confirmation_sent: true, confirmed_at: nil)
+        other_user.update!(initial_confirmation_sent: true, last_sign_in_at: nil)
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in(user)
         visit(user_path(other_user))
