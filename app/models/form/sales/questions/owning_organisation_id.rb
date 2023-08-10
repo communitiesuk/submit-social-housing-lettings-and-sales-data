@@ -27,16 +27,23 @@ class Form::Sales::Questions::OwningOrganisationId < ::Form::Question
                                           end
     end
 
-    user_organisation_options = user.support? ? Organisation.where(holds_own_stock: true) : Organisation.none
-    user_answer_options = user_organisation_options.pluck(:id, :name).to_h
-
-    unless user.support?
+    if user.support?
+      Organisation.where(holds_own_stock: true).find_each do |org|
+        if org.merge_date.present?
+          answer_opts[org.id] = "#{org.name} (inactive as of #{org.merge_date.to_fs(:govuk_date)})" if org.merge_date >= FormHandler.instance.start_date_of_earliest_open_for_editing_collection_period
+        elsif org.absorbed_organisations.merged_during_open_collection_period.exists?
+          answer_opts[org.id] = "#{org.name} (active as of #{org.created_at.to_fs(:govuk_date)})"
+        else
+          answer_opts[org.id] = org.name
+        end
+      end
+    else
       recently_absorbed_organisations.each do |absorbed_org|
         answer_opts[absorbed_org.id] = merged_organisation_label(absorbed_org.name, absorbed_org.merge_date) if absorbed_org.holds_own_stock?
       end
     end
 
-    answer_opts.merge(user_answer_options)
+    answer_opts
   end
 
   def displayed_answer_options(log, user = nil)
