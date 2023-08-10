@@ -107,7 +107,7 @@
       <% if current_user.can_toggle_active?(@user) %>
         <% if @user.active? %>
           <%= govuk_button_link_to "Deactivate user", deactivate_user_path(@user), warning: true %>
-          <% if current_user.support? %>
+          <% if current_user.support? && @user.last_sign_in_at.nil? %>
             <%= govuk_button_to "Resend invite link", resend_invite_user_path(@user), secondary: true %>
           <% end %>
         <% else %>

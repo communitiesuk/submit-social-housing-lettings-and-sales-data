@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe UsersController, type: :request do
-  let(:user) { FactoryBot.create(:user) }
-  let(:other_user) { FactoryBot.create(:user) }
+  let(:user) { create(:user) }
+  let(:other_user) { create(:user) }
   let(:headers) { { "Accept" => "text/html" } }
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:new_name) { "new test name" }
@@ -152,7 +152,7 @@ RSpec.describe UsersController, type: :request do
       end
 
       context "when the user does not have a role because they are a data protection officer only" do
-        let(:user) { FactoryBot.create(:user, role: nil) }
+        let(:user) { create(:user, role: nil) }
 
         before do
           sign_in user
@@ -171,7 +171,7 @@ RSpec.describe UsersController, type: :request do
         end
 
         context "when the user is part of the same organisation" do
-          let(:other_user) { FactoryBot.create(:user, organisation: user.organisation) }
+          let(:other_user) { create(:user, organisation: user.organisation) }
 
           it "shows their details" do
             expect(response).to have_http_status(:ok)
@@ -384,8 +384,8 @@ RSpec.describe UsersController, type: :request do
   end
 
   context "when user is signed in as a data coordinator" do
-    let(:user) { FactoryBot.create(:user, :data_coordinator, email: "coordinator@example.com", organisation: create(:organisation, :without_dpc)) }
-    let!(:other_user) { FactoryBot.create(:user, organisation: user.organisation, name: "filter name", email: "filter@example.com") }
+    let(:user) { create(:user, :data_coordinator, email: "coordinator@example.com", organisation: create(:organisation, :without_dpc)) }
+    let!(:other_user) { create(:user, organisation: user.organisation, name: "filter name", email: "filter@example.com") }
 
     describe "#index" do
       before do
@@ -413,9 +413,9 @@ RSpec.describe UsersController, type: :request do
       end
 
       context "when a search parameter is passed" do
-        let!(:other_user_2) { FactoryBot.create(:user, organisation: user.organisation, name: "joe", email: "other@example.com") }
-        let!(:other_user_3) { FactoryBot.create(:user, name: "User 5", organisation: user.organisation, email: "joe@example.com") }
-        let!(:other_org_user) { FactoryBot.create(:user, name: "User 4", email: "joe@otherexample.com") }
+        let!(:other_user_2) { create(:user, organisation: user.organisation, name: "joe", email: "other@example.com") }
+        let!(:other_user_3) { create(:user, name: "User 5", organisation: user.organisation, email: "joe@example.com") }
+        let!(:other_org_user) { create(:user, name: "User 4", email: "joe@otherexample.com") }
 
         before do
           get "/organisations/#{user.organisation.id}/users?search=#{search_param}"
@@ -529,7 +529,7 @@ RSpec.describe UsersController, type: :request do
 
     describe "CSV download" do
       let(:headers) { { "Accept" => "text/csv" } }
-      let(:user) { FactoryBot.create(:user) }
+      let(:user) { create(:user) }
 
       before do
         sign_in user
@@ -636,7 +636,7 @@ RSpec.describe UsersController, type: :request do
         end
 
         context "when the user is not part of the same organisation as the current user" do
-          let(:other_user) { FactoryBot.create(:user) }
+          let(:other_user) { create(:user) }
 
           it "returns not found 404" do
             expect(response).to have_http_status(:not_found)
@@ -694,7 +694,7 @@ RSpec.describe UsersController, type: :request do
         end
 
         context "when the user is not part of the same organisation as the current user" do
-          let(:other_user) { FactoryBot.create(:user) }
+          let(:other_user) { create(:user) }
 
           it "returns not found 404" do
             expect(response).to have_http_status(:not_found)
@@ -867,7 +867,7 @@ RSpec.describe UsersController, type: :request do
 
         context "when the current user does not match the user ID" do
           context "when the user is not part of the same organisation as the current user" do
-            let(:other_user) { FactoryBot.create(:user) }
+            let(:other_user) { create(:user) }
             let(:params) { { id: other_user.id, user: { name: new_name } } }
 
             before do
@@ -897,7 +897,7 @@ RSpec.describe UsersController, type: :request do
     end
 
     describe "#create" do
-      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let(:user) { create(:user, :data_coordinator) }
       let(:params) do
         {
           "user": {
@@ -947,7 +947,7 @@ RSpec.describe UsersController, type: :request do
 
       context "when the email is already taken" do
         before do
-          FactoryBot.create(:user, email: "new_user@example.com")
+          create(:user, email: "new_user@example.com")
         end
 
         it "shows an error" do
@@ -1107,17 +1107,17 @@ RSpec.describe UsersController, type: :request do
   end
 
   context "when user is signed in as a support user" do
-    let(:user) { FactoryBot.create(:user, :support, organisation: create(:organisation, :without_dpc)) }
-    let(:other_user) { FactoryBot.create(:user, organisation: user.organisation) }
+    let(:user) { create(:user, :support, organisation: create(:organisation, :without_dpc)) }
+    let(:other_user) { create(:user, organisation: user.organisation, last_sign_in_at: Time.zone.now) }
 
     before do
       allow(user).to receive(:need_two_factor_authentication?).and_return(false)
     end
 
     describe "#index" do
-      let!(:other_user) { FactoryBot.create(:user, organisation: user.organisation, name: "User 2", email: "other@example.com") }
-      let!(:inactive_user) { FactoryBot.create(:user, organisation: user.organisation, active: false, name: "User 3", email: "inactive@example.com") }
-      let!(:other_org_user) { FactoryBot.create(:user, name: "User 4", email: "otherorg@otherexample.com", organisation: create(:organisation, :without_dpc)) }
+      let!(:other_user) { create(:user, organisation: user.organisation, name: "User 2", email: "other@example.com") }
+      let!(:inactive_user) { create(:user, organisation: user.organisation, active: false, name: "User 3", email: "inactive@example.com") }
+      let!(:other_org_user) { create(:user, name: "User 4", email: "otherorg@otherexample.com", organisation: create(:organisation, :without_dpc)) }
 
       before do
         sign_in user
@@ -1195,8 +1195,8 @@ RSpec.describe UsersController, type: :request do
           end
 
           context "when our search term matches an email and a name" do
-            let!(:other_user) { FactoryBot.create(:user, organisation: user.organisation, name: "joe", email: "other@example.com") }
-            let!(:other_org_user) { FactoryBot.create(:user, name: "User 4", email: "joe@otherexample.com", organisation: create(:organisation, :without_dpc)) }
+            let!(:other_user) { create(:user, organisation: user.organisation, name: "joe", email: "other@example.com") }
+            let!(:other_org_user) { create(:user, name: "User 4", email: "joe@otherexample.com", organisation: create(:organisation, :without_dpc)) }
             let(:search_param) { "joe" }
 
             it "returns any results including joe" do
@@ -1264,10 +1264,10 @@ RSpec.describe UsersController, type: :request do
 
     describe "CSV download" do
       let(:headers) { { "Accept" => "text/csv" } }
-      let(:user) { FactoryBot.create(:user, :support) }
+      let(:user) { create(:user, :support) }
 
       before do
-        FactoryBot.create_list(:user, 25)
+        create_list(:user, 25)
         sign_in user
       end
 
@@ -1299,7 +1299,7 @@ RSpec.describe UsersController, type: :request do
 
       context "when there is a search param" do
         before do
-          FactoryBot.create(:user, name: "Unusual name")
+          create(:user, name: "Unusual name")
           get "/users?search=unusual", headers:, params: {}
         end
 
@@ -1361,12 +1361,45 @@ RSpec.describe UsersController, type: :request do
             expect(page).to have_link("Change", text: "if a key contact")
           end
 
+          it "does not show option to resend confirmation email" do
+            expect(page).not_to have_button("Resend invite link")
+          end
+
           it "allows deactivating the user" do
             expect(page).to have_link("Deactivate user", href: "/users/#{other_user.id}/deactivate")
           end
 
-          it "allows you to resend invitation emails" do
-            expect(page).to have_button("Resend invite link")
+          context "when user never logged in" do
+            before do
+              other_user.update!(last_sign_in_at: nil)
+              get "/users/#{other_user.id}", headers:, params: {}
+            end
+
+            it "returns 200" do
+              expect(response).to have_http_status(:ok)
+            end
+
+            it "shows the user details page" do
+              expect(page).to have_content("#{other_user.name}’s account")
+            end
+
+            it "allows changing name, email, role, dpo and key contact" do
+              expect(page).to have_link("Change", text: "name")
+              expect(page).to have_link("Change", text: "email address")
+              expect(page).to have_link("Change", text: "telephone number")
+              expect(page).not_to have_link("Change", text: "password")
+              expect(page).to have_link("Change", text: "role")
+              expect(page).to have_link("Change", text: "if data protection officer")
+              expect(page).to have_link("Change", text: "if a key contact")
+            end
+
+            it "allows deactivating the user" do
+              expect(page).to have_link("Deactivate user", href: "/users/#{other_user.id}/deactivate")
+            end
+
+            it "allows you to resend invitation emails" do
+              expect(page).to have_button("Resend invite link")
+            end
           end
 
           context "when user is deactivated" do
@@ -1386,7 +1419,7 @@ RSpec.describe UsersController, type: :request do
         end
 
         context "when the user is not part of the same organisation as the current user" do
-          let(:other_user) { FactoryBot.create(:user) }
+          let(:other_user) { create(:user) }
 
           it "returns 200" do
             expect(response).to have_http_status(:ok)
@@ -1455,7 +1488,7 @@ RSpec.describe UsersController, type: :request do
         end
 
         context "when the user is not part of the same organisation as the current user" do
-          let(:other_user) { FactoryBot.create(:user) }
+          let(:other_user) { create(:user) }
 
           it "returns 200" do
             expect(response).to have_http_status(:ok)
@@ -1682,7 +1715,7 @@ RSpec.describe UsersController, type: :request do
 
         context "when the current user does not match the user ID" do
           context "when the user is not part of the same organisation as the current user" do
-            let(:other_user) { FactoryBot.create(:user) }
+            let(:other_user) { create(:user) }
             let(:params) { { id: other_user.id, user: { name: new_name } } }
 
             before do
@@ -1820,7 +1853,7 @@ RSpec.describe UsersController, type: :request do
     end
 
     describe "#create" do
-      let(:organisation) { FactoryBot.create(:organisation, :without_dpc) }
+      let(:organisation) { create(:organisation, :without_dpc) }
       let(:email) { "new_user@example.com" }
       let(:params) do
         {
@@ -1867,7 +1900,7 @@ RSpec.describe UsersController, type: :request do
         end
 
         before do
-          FactoryBot.create(:user, email: "new_user@example.com")
+          create(:user, email: "new_user@example.com")
         end
 
         it "shows an error messages for all failed validations" do
@@ -1882,7 +1915,7 @@ RSpec.describe UsersController, type: :request do
 
       context "when the email is already taken" do
         before do
-          FactoryBot.create(:user, email: "new_user@example.com")
+          create(:user, email: "new_user@example.com")
         end
 
         it "shows an error" do
@@ -1912,7 +1945,7 @@ RSpec.describe UsersController, type: :request do
     describe "#new" do
       before do
         sign_in user
-        FactoryBot.create(:organisation, name: "other org")
+        create(:organisation, name: "other org")
       end
 
       context "when support user" do

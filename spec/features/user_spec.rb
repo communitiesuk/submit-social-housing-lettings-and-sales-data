@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "User Features" do
-  let!(:user) { FactoryBot.create(:user, last_sign_in_at: Time.zone.now) }
+  let!(:user) { create(:user, last_sign_in_at: Time.zone.now) }
   let(:reset_password_template_id) { User::RESET_PASSWORD_TEMPLATE_ID }
   let(:notify_client) { instance_double(Notifications::Client) }
   let(:reset_password_token) { "MCDH5y6Km-U7CFPgAMVS" }
@@ -212,7 +212,7 @@ RSpec.describe "User Features" do
   end
 
   context "when signed in as a data coordinator" do
-    let!(:user) { FactoryBot.create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
+    let!(:user) { create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
 
     context "when viewing users" do
       before do
@@ -374,8 +374,8 @@ RSpec.describe "User Features" do
     end
 
     context "when editing someone elses account details" do
-      let!(:user) { FactoryBot.create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
-      let!(:other_user) { FactoryBot.create(:user, name: "Other name", is_dpo: false, organisation: user.organisation) }
+      let!(:user) { create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
+      let!(:other_user) { create(:user, name: "Other name", is_dpo: false, organisation: user.organisation, last_sign_in_at: Time.zone.now) }
 
       before do
         visit("/lettings-logs")
@@ -423,8 +423,8 @@ RSpec.describe "User Features" do
     end
 
     context "when deactivating a user" do
-      let!(:user) { FactoryBot.create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
-      let!(:other_user) { FactoryBot.create(:user, name: "Other name", organisation: user.organisation) }
+      let!(:user) { create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
+      let!(:other_user) { create(:user, name: "Other name", organisation: user.organisation) }
 
       before do
         visit("/lettings-logs")
@@ -451,8 +451,8 @@ RSpec.describe "User Features" do
     end
 
     context "when reactivating a user" do
-      let!(:user) { FactoryBot.create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
-      let!(:other_user) { FactoryBot.create(:user, name: "Other name", active: false, organisation: user.organisation, last_sign_in_at: Time.zone.now) }
+      let!(:user) { create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
+      let!(:other_user) { create(:user, name: "Other name", active: false, organisation: user.organisation, last_sign_in_at: Time.zone.now) }
       let(:personalisation) do
         {
           name: other_user.name,
@@ -490,8 +490,8 @@ RSpec.describe "User Features" do
   end
 
   context "when signed in as support" do
-    let!(:user) { FactoryBot.create(:user, :support) }
-    let!(:other_user) { FactoryBot.create(:user, name: "new user", organisation: user.organisation, email: "new_user@example.com", confirmation_token: "abc") }
+    let!(:user) { create(:user, :support) }
+    let!(:other_user) { create(:user, name: "new user", organisation: user.organisation, email: "new_user@example.com", confirmation_token: "abc") }
 
     context "when reinviting a user before initial confirmation email has been sent" do
       let(:personalisation) do
@@ -504,15 +504,14 @@ RSpec.describe "User Features" do
       end
 
       before do
-        other_user.update!(initial_confirmation_sent: false)
+        other_user.update!(initial_confirmation_sent: false, last_sign_in_at: nil)
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in(user)
-        visit(user_path(user.id))
+        other_user.legacy_users.destroy_all
+        visit(user_path(other_user))
       end
 
       it "sends initial confirmable template email when the resend invite link is clicked" do
-        other_user.legacy_users.destroy_all
-        visit(user_path(other_user))
         expect(notify_client).to receive(:send_email).with(email_address: "new_user@example.com", template_id: User::CONFIRMABLE_TEMPLATE_ID, personalisation:).once
         click_button("Resend invite link")
       end
@@ -532,12 +531,11 @@ RSpec.describe "User Features" do
         other_user.update!(initial_confirmation_sent: true, confirmed_at: nil)
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in(user)
-        visit(user_path(user.id))
+        other_user.legacy_users.destroy_all
+        visit(user_path(other_user))
       end
 
       it "sends and email when the resend invite link is clicked" do
-        other_user.legacy_users.destroy_all
-        visit(user_path(other_user))
         expect(notify_client).to receive(:send_email).with(email_address: "new_user@example.com", template_id: User::RECONFIRMABLE_TEMPLATE_ID, personalisation:).once
         click_button("Resend invite link")
       end
@@ -554,14 +552,13 @@ RSpec.describe "User Features" do
       end
 
       before do
-        other_user.update!(initial_confirmation_sent: true)
+        other_user.update!(initial_confirmation_sent: true, last_sign_in_at: nil)
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in(user)
-        visit(user_path(user.id))
+        visit(user_path(other_user))
       end
 
       it "sends beta onboarding email to be sent when user is legacy" do
-        visit(user_path(other_user))
         expect(notify_client).to receive(:send_email).with(email_address: "new_user@example.com", template_id: User::BETA_ONBOARDING_TEMPLATE_ID, personalisation:).once
         click_button("Resend invite link")
       end
@@ -569,7 +566,7 @@ RSpec.describe "User Features" do
   end
 
   context "when the user is a customer support person" do
-    let(:support_user) { FactoryBot.create(:user, :support, last_sign_in_at: Time.zone.now) }
+    let(:support_user) { create(:user, :support, last_sign_in_at: Time.zone.now) }
     let(:devise_notify_mailer) { DeviseNotifyMailer.new }
     let(:notify_client) { instance_double(Notifications::Client) }
     let(:mfa_template_id) { User::MFA_TEMPLATE_ID }
@@ -742,8 +739,8 @@ RSpec.describe "User Features" do
 
     context "when viewing logs" do
       context "when filtering by owning organisation and then switching back to all organisations", js: true do
-        let!(:organisation) { FactoryBot.create(:organisation) }
-        let(:parent_organisation) { FactoryBot.create(:organisation, name: "Filtered Org") }
+        let!(:organisation) { create(:organisation) }
+        let(:parent_organisation) { create(:organisation, name: "Filtered Org") }
 
         before do
           create(:organisation_relationship, child_organisation: organisation, parent_organisation:)
