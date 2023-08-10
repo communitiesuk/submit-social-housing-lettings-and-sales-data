@@ -16,7 +16,6 @@ describe "full import", type: :task do
     allow(Configuration::EnvConfigurationService).to receive(:new).and_return(env_config_service)
     allow(ENV).to receive(:[])
     allow(ENV).to receive(:[]).with("IMPORT_PAAS_INSTANCE").and_return(instance_name)
-
   end
 
   describe "import:generate_reports" do
@@ -35,7 +34,7 @@ describe "full import", type: :task do
         allow(Imports::ImportReportService).to receive(:new).and_return(import_report_service)
       end
 
-      it "creates a report using given organisation csv" do
+      it "creates a report using given organisation csv when the VCAP_SERVICES environment variable exists" do
         allow(ENV).to receive(:[]).with("VCAP_SERVICES").and_return("dummy")
         expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
         expect(Imports::ImportReportService).to receive(:new).with(storage_service, CSV.parse(orgs_list, headers: true))
@@ -44,7 +43,7 @@ describe "full import", type: :task do
         task.invoke("some_name")
       end
 
-      it "creates a report using given organisation csv" do
+      it "creates a report using given organisation csv when the VCAP_SERVICES environment variable does not exist" do
         allow(ENV).to receive(:[]).with("VCAP_SERVICES")
         expect(Storage::S3Service).to receive(:new).with(env_config_service, instance_name)
         expect(Imports::ImportReportService).to receive(:new).with(storage_service, CSV.parse(orgs_list, headers: true))
