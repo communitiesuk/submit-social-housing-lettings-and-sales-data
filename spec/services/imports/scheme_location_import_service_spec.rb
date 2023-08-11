@@ -234,7 +234,7 @@ RSpec.describe Imports::SchemeLocationImportService do
       it "imports location code correctly" do
         location = location_service.create_scheme_location(location_xml)
         expect(location.postcode).to eq("A1 1AA")
-        expect(location.location_code).to eq("E08000036")
+        expect(location.location_code).to eq("E07000033")
       end
     end
   end

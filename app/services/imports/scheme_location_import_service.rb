@@ -26,10 +26,6 @@ module Imports
       4 => "(Registered nursing care home)",
     }.freeze
 
-    LA_NAME_TO_CODE = {
-      "134" => "E08000036",
-    }.freeze
-
     def create_scheme(source_scheme, attributes)
       scheme = Scheme.new(
         scheme_type: attributes["scheme_type"],
@@ -97,7 +93,7 @@ module Imports
       attributes["location_old_id"] = string_or_nil(xml_doc, "id")
       attributes["location_old_visible_id"] = string_or_nil(xml_doc, "visible-id")
       attributes["scheme_old_id"] = string_or_nil(xml_doc, "mgmtgroup")
-      attributes["location_code"] = LA_NAME_TO_CODE[string_or_nil(xml_doc, "local-authority-name")]
+      attributes["location_code"] = LocationConstants::LA_NAME_TO_CODE[string_or_nil(xml_doc, "local-authority-name")]
       attributes
     end
 
