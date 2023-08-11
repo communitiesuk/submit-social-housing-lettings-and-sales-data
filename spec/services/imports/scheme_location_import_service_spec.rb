@@ -17,7 +17,7 @@ RSpec.describe Imports::SchemeLocationImportService do
   end
 
   before do
-    WebMock.stub_request(:get, /api.postcodes.io\/postcodes\/S446EJ/)
+    WebMock.stub_request(:get, /api\.postcodes\.io\/postcodes\/S446EJ/)
     .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Westminster","codes":{"admin_district":"E08000035"}}}', headers: {})
   end
 
