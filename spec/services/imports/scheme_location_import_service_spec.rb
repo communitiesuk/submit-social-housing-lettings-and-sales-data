@@ -17,7 +17,7 @@ RSpec.describe Imports::SchemeLocationImportService do
   end
 
   before do
-    WebMock.stub_request(:get, /api.postcodes.io\/postcodes/)
+    WebMock.stub_request(:get, /api\.postcodes\.io\/postcodes\/S446EJ/)
     .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Westminster","codes":{"admin_district":"E08000035"}}}', headers: {})
   end
 
@@ -143,6 +143,7 @@ RSpec.describe Imports::SchemeLocationImportService do
       location = location_service.create_scheme_location(location_xml)
       expect(location.name).to eq("Location 1")
       expect(location.postcode).to eq("S44 6EJ")
+      expect(location.location_code).to eq("E08000035")
       expect(location.units).to eq(5)
       expect(location.mobility_type).to eq("Fitted with equipment and adaptations")
       expect(location.type_of_unit).to eq("Bungalow")
@@ -224,6 +225,16 @@ RSpec.describe Imports::SchemeLocationImportService do
       it "sets the support type to nil" do
         location = location_service.create_scheme_location(location_xml)
         expect(location.scheme.support_type).to eq(nil)
+      end
+    end
+
+    context "and postcode does not return a location code" do
+      before { location_xml.at_xpath("//scheme:postcode").content = "A1 1AA" }
+
+      it "imports location code correctly" do
+        location = location_service.create_scheme_location(location_xml)
+        expect(location.postcode).to eq("A1 1AA")
+        expect(location.location_code).to eq("E07000033")
       end
     end
   end
