@@ -1,0 +1,5 @@
+<institution-link:institution-link xmlns:institution-link="dclg:institution-link">
+  <institution-link:id>1</institution-link:id>
+  <institution-link:parent-institution>1</institution-link:parent-institution>
+  <institution-link:child-institution>2</institution-link:child-institution>
+</institution-link:institution-link>

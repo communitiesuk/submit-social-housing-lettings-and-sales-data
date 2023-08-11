@@ -14,8 +14,6 @@ module Imports
           old_id: attributes["old_id"],
           old_visible_id: attributes["old_visible_id"],
         )
-      else
-        # Continue
       end
     rescue ActiveRecord::RecordInvalid
       @logger.error("Scheme #{attributes['old_visible_id']}: Failed to import")

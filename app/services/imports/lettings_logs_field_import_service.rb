@@ -123,8 +123,6 @@ module Imports
         tenant_code = string_or_nil(xml_doc, "_2bTenCode")
         if tenant_code.present? && record.tenancycode.blank?
           record.update!(tenancycode: tenant_code)
-        else
-          # Continue
         end
       else
         @logger.warn("Could not find record matching legacy ID #{old_id}")
