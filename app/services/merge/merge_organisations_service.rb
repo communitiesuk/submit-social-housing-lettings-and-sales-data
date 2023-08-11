@@ -43,14 +43,14 @@ private
       if parent_relationship_exists_on_absorbing_organisation?(parent_organisation_relationship)
         parent_organisation_relationship.destroy!
       else
-        parent_organisation_relationship.update!(child_organisation: @absorbing_organisation)
+        OrganisationRelationship.create!(parent_organisation: parent_organisation_relationship.parent_organisation, child_organisation: @absorbing_organisation)
       end
     end
     merging_organisation.child_organisation_relationships.each do |child_organisation_relationship|
       if child_relationship_exists_on_absorbing_organisation?(child_organisation_relationship)
         child_organisation_relationship.destroy!
       else
-        child_organisation_relationship.update!(parent_organisation: @absorbing_organisation)
+        OrganisationRelationship.create!(parent_organisation: @absorbing_organisation, child_organisation: child_organisation_relationship.child_organisation)
       end
     end
   end
@@ -122,10 +122,10 @@ private
   end
 
   def parent_relationship_exists_on_absorbing_organisation?(parent_organisation_relationship)
-    parent_organisation_relationship.parent_organisation == @absorbing_organisation || @absorbing_organisation.parent_organisation_relationships.where(parent_organisation: parent_organisation_relationship.parent_organisation).exists?
+    parent_organisation_relationship.parent_organisation == @absorbing_organisation || @merging_organisations.include?(parent_organisation_relationship.parent_organisation) || @absorbing_organisation.parent_organisation_relationships.where(parent_organisation: parent_organisation_relationship.parent_organisation).exists?
   end
 
   def child_relationship_exists_on_absorbing_organisation?(child_organisation_relationship)
-    child_organisation_relationship.child_organisation == @absorbing_organisation || @absorbing_organisation.child_organisation_relationships.where(child_organisation: child_organisation_relationship.child_organisation).exists?
+    child_organisation_relationship.child_organisation == @absorbing_organisation || @merging_organisations.include?(child_organisation_relationship.child_organisation) || @absorbing_organisation.child_organisation_relationships.where(child_organisation: child_organisation_relationship.child_organisation).exists?
   end
 end

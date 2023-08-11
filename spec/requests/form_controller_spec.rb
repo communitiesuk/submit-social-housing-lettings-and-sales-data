@@ -417,7 +417,7 @@ RSpec.describe FormController, type: :request do
 
     describe "Submit Form" do
       context "with a form page" do
-        let(:user) { create(:user) }
+        let(:user) { create(:user, :data_coordinator) }
         let(:support_user) { FactoryBot.create(:user, :support) }
         let(:organisation) { user.organisation }
         let(:lettings_log) do
@@ -730,6 +730,34 @@ RSpec.describe FormController, type: :request do
               expect(response.body).to include("Before you start")
               expect(response.body).not_to include("Skip for now")
             end
+          end
+        end
+
+        context "when owning organisation is an organisation merged into user organisation" do
+          let(:params) do
+            {
+              id: lettings_log.id,
+              lettings_log: {
+                page: "stock_owner",
+                owning_organisation_id: merged_org.id,
+              },
+            }
+          end
+          let(:merged_org) { create(:organisation) }
+
+          before do
+            lettings_log.update!(owning_organisation: nil)
+            lettings_log.reload
+            merged_org.update!(merge_date: Time.zone.today, absorbing_organisation: organisation)
+            create(:organisation_relationship, parent_organisation: organisation)
+          end
+
+          it "sets managing organisation to owning organisation" do
+            post "/lettings-logs/#{lettings_log.id}/stock-owner", params: params
+            expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/managing-organisation")
+            follow_redirect!
+            lettings_log.reload
+            expect(lettings_log.managing_organisation).to eq(merged_org)
           end
         end
 
