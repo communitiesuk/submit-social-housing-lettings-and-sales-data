@@ -114,7 +114,7 @@ module Imports
       confirm_scheme_or_location(location)
       location.save! && location
     rescue ActiveRecord::RecordNotUnique
-      @logger.warn("Location is already present with legacy ID #{attributes['location_old_id']}, skipping")
+      # Continue
     rescue ActiveRecord::RecordInvalid
       @logger.error("Location #{attributes['location_old_id']}: Failed to import")
       raise

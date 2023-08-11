@@ -18,9 +18,9 @@ module Imports
       deleted = user_field_value(xml_document, "deleted")
 
       if LegacyUser.find_by(old_user_id:)
-        @logger.warn("User #{name} with old user id #{old_user_id} is already present, skipping.")
+        # Continue
       elsif deleted == "true"
-        @logger.warn("User #{name} with old user id #{old_user_id} is deleted, skipping.")
+        # Continue
       elsif (user = User.find_by(email:, organisation:))
         is_dpo = user.is_data_protection_officer? || is_dpo?(user_field_value(xml_document, "user-type"))
         role = highest_role(user.role, role(user_field_value(xml_document, "user-type")))

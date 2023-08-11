@@ -27,7 +27,7 @@ module Imports
 
       if record.present?
         if record.offered.present?
-          @logger.info("lettings log #{record.id} has a value for offered, skipping update")
+          # Continue
         else
           offered = safe_string_as_integer(xml_doc, "Q20")
           record.update!(offered:)
@@ -106,7 +106,7 @@ module Imports
           record.update!(mrcdate: major_repairs_date, majorrepairs: major_repairs)
           @logger.info("lettings log #{record.id}'s major repair value has been updated'")
         elsif record.majorrepairs.present?
-          @logger.info("lettings log #{record.id} has a value for major repairs, skipping update")
+          # Continue
         end
       else
         @logger.warn("Could not find record matching legacy ID #{old_id}")
@@ -124,7 +124,7 @@ module Imports
         if tenant_code.present? && record.tenancycode.blank?
           record.update!(tenancycode: tenant_code)
         else
-          @logger.info("lettings log #{record.id} has a value for tenancycode, skipping update")
+          # Continue
         end
       else
         @logger.warn("Could not find record matching legacy ID #{old_id}")

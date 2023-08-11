@@ -51,7 +51,7 @@ module Imports
     end
 
     def log_dpc_already_present(org)
-      @logger.warn("Data protection confirmation for #{org.name} with id #{org.id} is already present, skipping.")
+      # Continue
     end
 
     def log_org_must_exist

@@ -37,8 +37,7 @@ module Imports
         old_visible_id:,
       )
     rescue ActiveRecord::RecordNotUnique
-      name = organisation_field_value(xml_document, "name")
-      @logger.warn("Organisation #{name} is already present with old visible ID #{old_visible_id}, skipping.")
+      # Continue
     rescue ActiveRecord::RecordInvalid
       @logger.error("Organisation #{old_visible_id}: Failed to import")
       raise
