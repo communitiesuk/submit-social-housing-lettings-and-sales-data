@@ -4,7 +4,7 @@ module Imports
       import_from(folder, :create_organisation_relationships)
     end
 
-    private
+  private
 
     def create_organisation_relationship(xml_document)
       parent_organisation_id = find_organisation_id(xml_document, "parent-institution")
