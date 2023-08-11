@@ -1604,6 +1604,48 @@ RSpec.describe UsersController, type: :request do
 
               patch "/users/#{other_user.id}", headers:, params:
             end
+
+            context "when user has never confirmed email address" do
+              let(:old_email) { "old@test.com" }
+              let(:new_email) { "new@test.com" }
+              let(:other_user) { create(:user, organisation: user.organisation, email: old_email, confirmed_at: nil) }
+
+              before do
+                other_user.legacy_users.destroy_all
+              end
+
+              it "shows flash notice" do
+                patch("/users/#{other_user.id}", headers:, params:)
+
+                expect(flash[:notice]).to eq("An email has been sent to #{new_email} to confirm this change.")
+              end
+
+              it "sends new flow emails" do
+                expect(notify_client).to receive(:send_email).with(
+                  email_address: new_email,
+                  template_id: User::RECONFIRMABLE_TEMPLATE_ID,
+                  personalisation: {
+                    name: new_name,
+                    email: new_email,
+                    organisation: other_user.organisation.name,
+                    link: include("/account/confirmation?confirmation_token="),
+                  },
+                ).once
+
+                expect(notify_client).to receive(:send_email).with(
+                  email_address: old_email,
+                  template_id: User::FOR_OLD_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID,
+                  personalisation: {
+                    new_email:,
+                    old_email:,
+                  },
+                ).once
+
+                expect(notify_client).not_to receive(:send_email)
+
+                patch "/users/#{other_user.id}", headers:, params:
+              end
+            end
           end
         end
 

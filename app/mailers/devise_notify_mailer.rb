@@ -43,6 +43,9 @@ class DeviseNotifyMailer < Devise::Mailer
         send_confirmation_email(record.unconfirmed_email, record, token, record.unconfirmed_email)
         send_confirmation_email(record.email, record, token, record.unconfirmed_email)
       end
+    elsif !record.confirmed? && record.unconfirmed_email && new_email_journey?
+      send_confirmation_email(record.unconfirmed_email, record, token, record.unconfirmed_email)
+      send_email_changed_to_old_email(record)
     else
       send_confirmation_email(record.email, record, token, record.email)
     end
