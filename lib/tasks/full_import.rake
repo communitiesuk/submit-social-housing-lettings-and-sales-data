@@ -12,6 +12,7 @@ namespace :import do
 
     initial_import_list = [
       Import.new(Imports::OrganisationImportService, :create_organisations, "institution"),
+      Import.new(Imports::OrganisationRelationshipImportService, :create_organisation_relationships, "institution-link"),
       Import.new(Imports::SchemeImportService, :create_schemes, "mgmtgroups"),
       Import.new(Imports::SchemeLocationImportService, :create_scheme_locations, "schemes"),
       Import.new(Imports::UserImportService, :create_users, "user"),
