@@ -26,6 +26,10 @@ module Imports
       4 => "(Registered nursing care home)",
     }.freeze
 
+    LA_NAME_TO_CODE = {
+      "134" => "E08000036",
+    }.freeze
+
     def create_scheme(source_scheme, attributes)
       scheme = Scheme.new(
         scheme_type: attributes["scheme_type"],
@@ -93,6 +97,7 @@ module Imports
       attributes["location_old_id"] = string_or_nil(xml_doc, "id")
       attributes["location_old_visible_id"] = string_or_nil(xml_doc, "visible-id")
       attributes["scheme_old_id"] = string_or_nil(xml_doc, "mgmtgroup")
+      attributes["location_code"] = LA_NAME_TO_CODE[string_or_nil(xml_doc, "local-authority-name")]
       attributes
     end
 
@@ -106,6 +111,7 @@ module Imports
         old_visible_id: attributes["location_old_visible_id"],
         old_id: attributes["location_old_id"],
         startdate: attributes["start_date"],
+        location_code: attributes["location_code"],
         scheme:,
       )
       if attributes["end_date"]
