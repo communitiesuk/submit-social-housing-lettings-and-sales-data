@@ -111,15 +111,3 @@ namespace :import do
   desc "Run a full import for the institutions listed in the named file on s3"
   task :full, %i[institutions_csv_name] => %i[environment initial logs trigger_invites generate_reports]
 end
-
-require 'benchmark'
-
-class Rake::Task
-  def execute_with_benchmark(*args)
-    bm = Benchmark.measure { execute_without_benchmark(*args) }
-    puts "   #{name} --> #{bm}"
-  end
-
-  alias_method :execute_without_benchmark, :execute
-  alias_method :execute, :execute_with_benchmark
-end
