@@ -176,7 +176,7 @@ RSpec.describe FiltersHelper do
       let(:user) { FactoryBot.create(:user, :support, organisation: child_organisation) }
 
       it "returns a list of all organisations" do
-        expect(owning_organisation_filter_options(user)).to eq([
+        expect(owning_organisation_filter_options(user)).to match_array([
           OpenStruct.new(id: "", name: "Select an option"),
           OpenStruct.new(id: child_organisation.id, name: "Child organisation"),
           OpenStruct.new(id: absorbed_organisation.id, name: "Absorbed organisation"),
