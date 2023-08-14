@@ -11,7 +11,7 @@ services:
     volumes:
       - dbdata:/var/lib/postgresql/data
     ports:
-      - 5433:5432 # Mapped to 5433 in case Postgres is already running locally on 5432
+      - 8081:5432 # Mapped to 8081 in case Postgres is already running locally on 5432
     environment:
       - POSTGRES_PASSWORD=password
       - POSTGRES_USER=postgres
@@ -20,7 +20,9 @@ services:
   app:
     build:
       context: .
-      dockerfile: ./Dockerfile_dev
+      dockerfile: ./Dockerfile
+      target: development
+    platform: linux/amd64
     ports:
       - 8080:8080
     depends_on:
