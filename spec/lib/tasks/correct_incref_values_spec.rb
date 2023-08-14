@@ -31,6 +31,14 @@ RSpec.describe "correct_incref_values" do
         task.invoke
         expect(lettings_log.reload.incref).to eq(1)
       end
+
+      it "skips validations for previous years" do
+        lettings_log.update!(net_income_known: 2, incref: nil)
+        lettings_log.startdate = Time.zone.local(2021, 3, 3)
+        lettings_log.save!(validate: false)
+        task.invoke
+        expect(lettings_log.reload.incref).to eq(1)
+      end
     end
   end
 end
