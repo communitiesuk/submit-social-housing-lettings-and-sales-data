@@ -6,6 +6,7 @@ describe "rake core:data_import_field", type: :task do
 
   let(:instance_name) { "paas_import_instance" }
   let(:storage_service) { instance_double(Storage::S3Service) }
+  let(:env_config_service) { instance_double(Configuration::EnvConfigurationService) }
   let(:paas_config_service) { instance_double(Configuration::PaasConfigurationService) }
 
   before do
@@ -14,9 +15,11 @@ describe "rake core:data_import_field", type: :task do
     task.reenable
 
     allow(Storage::S3Service).to receive(:new).and_return(storage_service)
+    allow(Configuration::EnvConfigurationService).to receive(:new).and_return(env_config_service)
     allow(Configuration::PaasConfigurationService).to receive(:new).and_return(paas_config_service)
     allow(ENV).to receive(:[])
     allow(ENV).to receive(:[]).with("IMPORT_PAAS_INSTANCE").and_return(instance_name)
+    allow(ENV).to receive(:[]).with("VCAP_SERVICES").and_return("dummy")
     allow(Imports::LettingsLogsFieldImportService).to receive(:new).and_return(import_service)
   end
 
@@ -34,8 +37,17 @@ describe "rake core:data_import_field", type: :task do
     context "and we update the tenancycode field" do
       let(:field) { "tenancycode" }
 
-      it "updates the logs from the given XML file" do
+      it "updates the logs from the given XML file when the VCAP_SERVICES environment variable exists" do
         expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+        expect(storage_service).to receive(:get_file_io).with("spec/fixtures/imports/logs")
+        expect(Imports::LettingsLogsFieldImportService).to receive(:new).with(archive_service)
+        expect(import_service).to receive(:update_field).with(field, "logs")
+        task.invoke(field, fixture_path)
+      end
+
+      it "updates the logs from the given XML file when the VCAP_SERVICES environment variable does not exist" do
+        allow(ENV).to receive(:[]).with("VCAP_SERVICES")
+        expect(Storage::S3Service).to receive(:new).with(env_config_service, instance_name)
         expect(storage_service).to receive(:get_file_io).with("spec/fixtures/imports/logs")
         expect(Imports::LettingsLogsFieldImportService).to receive(:new).with(archive_service)
         expect(import_service).to receive(:update_field).with(field, "logs")

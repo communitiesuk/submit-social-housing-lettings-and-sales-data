@@ -3,6 +3,7 @@ require "rake"
 
 describe "data import", type: :task do
   let(:instance_name) { "paas_import_instance" }
+  let(:env_config_service) { instance_double(Configuration::EnvConfigurationService) }
   let(:paas_config_service) { instance_double(Configuration::PaasConfigurationService) }
   let(:storage_service) { instance_double(Storage::S3Service) }
 
@@ -16,8 +17,10 @@ describe "data import", type: :task do
 
       allow(Storage::S3Service).to receive(:new).and_return(storage_service)
       allow(Configuration::PaasConfigurationService).to receive(:new).and_return(paas_config_service)
+      allow(Configuration::EnvConfigurationService).to receive(:new).and_return(env_config_service)
       allow(ENV).to receive(:[])
       allow(ENV).to receive(:[]).with("IMPORT_PAAS_INSTANCE").and_return(instance_name)
+      allow(ENV).to receive(:[]).with("VCAP_SERVICES").and_return("dummy")
     end
 
     context "when importing organisation data" do
@@ -29,8 +32,17 @@ describe "data import", type: :task do
         allow(Imports::OrganisationImportService).to receive(:new).and_return(import_service)
       end
 
-      it "creates an organisation from the given XML file" do
+      it "creates an organisation from the given XML file when the VCAP_SERVICES environment variable exists" do
         expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+        expect(Imports::OrganisationImportService).to receive(:new).with(storage_service)
+        expect(import_service).to receive(:create_organisations).with(fixture_path)
+
+        task.invoke(type, fixture_path)
+      end
+
+      it "creates an organisation from the given XML file when the VCAP_SERVICES environment variable does not exist" do
+        allow(ENV).to receive(:[]).with("VCAP_SERVICES")
+        expect(Storage::S3Service).to receive(:new).with(env_config_service, instance_name)
         expect(Imports::OrganisationImportService).to receive(:new).with(storage_service)
         expect(import_service).to receive(:create_organisations).with(fixture_path)
 
