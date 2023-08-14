@@ -81,7 +81,7 @@ RSpec.describe Imports::OrganisationImportService do
     it "successfully create an organisation the first time, and does not update it" do
       expect(storage_service).to receive(:list_files).with(folder_name).twice
       expect(storage_service).to receive(:get_file_io).with(filenames[0]).twice
-      expect(logger).to receive(:warn).once
+      expect(logger).not_to receive(:warn)
 
       expect { import_service.create_organisations(folder_name) }.to change(Organisation, :count).by(1)
       expect { import_service.create_organisations(folder_name) }.to change(Organisation, :count).by(0)

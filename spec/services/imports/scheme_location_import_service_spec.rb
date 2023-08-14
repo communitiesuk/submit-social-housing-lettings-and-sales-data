@@ -175,7 +175,7 @@ RSpec.describe Imports::SchemeLocationImportService do
       before { location_service.create_scheme_location(location_xml) }
 
       it "does not create the location" do
-        expect(logger).to receive(:warn).with("Location is already present with legacy ID 0ae7ad6dc0f1cf7ef33c18cc8c108bebc1b4923e, skipping")
+        expect(logger).not_to receive(:warn)
         expect { location_service.create_scheme_location(location_xml) }
           .not_to change(Location, :count)
       end

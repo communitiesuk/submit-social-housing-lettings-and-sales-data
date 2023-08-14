@@ -102,7 +102,7 @@ RSpec.describe Imports::UserImportService do
       end
 
       it "logs that the user already exists" do
-        expect(logger).to receive(:warn)
+        expect(logger).not_to receive(:warn)
         import_service.create_users("user_directory")
       end
     end

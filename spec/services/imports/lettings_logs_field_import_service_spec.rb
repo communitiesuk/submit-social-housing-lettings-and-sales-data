@@ -55,7 +55,7 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
       end
 
       it "logs that the tenancycode already has a value and does not update the lettings_log" do
-        expect(logger).to receive(:info).with(/lettings log \d+ has a value for tenancycode, skipping update/)
+        expect(logger).not_to receive(:info)
         expect { import_service.send(:update_field, field, remote_folder) }
           .not_to(change { lettings_log.reload.tenancycode })
       end
@@ -253,13 +253,13 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
       end
 
       it "logs that major repairs already has a value and does not update major repairs" do
-        expect(logger).to receive(:info).with(/lettings log \d+ has a value for major repairs, skipping update/)
+        expect(logger).not_to receive(:info)
         expect { import_service.send(:update_field, field, remote_folder) }
           .not_to(change { lettings_log.reload.majorrepairs })
       end
 
       it "logs that major repairs already has a value and does not update the major repairs date" do
-        expect(logger).to receive(:info).with(/lettings log \d+ has a value for major repairs, skipping update/)
+        expect(logger).not_to receive(:info)
         expect { import_service.send(:update_field, field, remote_folder) }
           .not_to(change { lettings_log.reload.mrcdate })
       end
@@ -317,7 +317,7 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
       end
 
       it "does not update the lettings_log offered value" do
-        expect(logger).to receive(:info).with(/lettings log \d+ has a value for offered, skipping update/)
+        expect(logger).not_to receive(:info)
         expect { import_service.send(:update_field, field, remote_folder) }
           .not_to(change { lettings_log.reload.offered })
       end

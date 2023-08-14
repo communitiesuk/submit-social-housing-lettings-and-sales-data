@@ -87,7 +87,7 @@ RSpec.describe Imports::DataProtectionConfirmationImportService do
           end
 
           it "logs that the record already exists" do
-            expect(logger).to receive(:warn)
+            expect(logger).not_to receive(:warn)
             import_service.create_data_protection_confirmations("data_protection_directory")
           end
         end

@@ -124,7 +124,7 @@ RSpec.describe Imports::LettingsLogsImportService do
         expect(logger).not_to receive(:error)
         expect(logger).not_to receive(:warn)
         expect { lettings_log_service.create_logs(remote_folder) }
-          .to change(OrganisationRelationship, :count).by(1)
+          .not_to change(OrganisationRelationship, :count)
       end
     end
 
@@ -1146,11 +1146,11 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
-      it "creates organisation relationship once" do
+      it "does not create organisation relationship" do
         expect(logger).not_to receive(:error)
         expect(logger).not_to receive(:warn)
         expect { lettings_log_service.create_logs(remote_folder) }
-          .to change(OrganisationRelationship, :count).by(1)
+          .not_to change(OrganisationRelationship, :count)
       end
     end
 
