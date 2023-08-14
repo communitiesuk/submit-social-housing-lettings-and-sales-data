@@ -28,6 +28,15 @@ RSpec.describe Csv::LettingsLogCsvService do
   let(:logs) { [log] }
   let(:headers) { csv.first }
 
+  before do
+    Timecop.freeze(fixed_time)
+    Singleton.__init__(FormHandler)
+  end
+
+  after do
+    Timecop.return
+  end
+
   it "calls the form handler to get all questions in order when initialized" do
     allow(FormHandler).to receive(:instance).and_return(form_handler_mock)
     allow(form_handler_mock).to receive(:ordered_lettings_questions_for_all_years).and_return([])
