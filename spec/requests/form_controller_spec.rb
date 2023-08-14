@@ -797,7 +797,7 @@ RSpec.describe FormController, type: :request do
             end
 
             it "redirects back to the duplicates page for remaining duplicates" do
-              expect(response).to have_http_status(:ok)
+              expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
             end
           end
         end
@@ -805,13 +805,13 @@ RSpec.describe FormController, type: :request do
         context "when the sales question was accessed from a duplicate logs screen" do
           let(:sales_log) { create(:sales_log, :duplicate, created_by: user) }
           let(:duplicate_log) { create(:sales_log, :duplicate, created_by: user) }
-          let(:referrer) { "/sales-logs/#{sales_log.id}/buyer-1-age?referrer=duplicate_logs&first_remaining_duplicate_id=#{duplicate_log.id}&original_log_id=#{sales_log.id}" }
+          let(:referrer) { "/sales-logs/#{sales_log.id}/buyer-1-age?referrer=duplicate_logs&first_remaining_duplicate_id=#{duplicate_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs" }
           let(:params) do
             {
               id: sales_log.id,
               sales_log: {
                 page: "buyer_1_age",
-                age1: 20,
+                age1: 29,
                 age1_known: 1,
               },
             }
@@ -838,7 +838,7 @@ RSpec.describe FormController, type: :request do
             end
 
             it "redirects back to the duplicates page for remaining duplicates" do
-              expect(response).to have_http_status(:ok)
+              expect(response).to redirect_to("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
             end
           end
         end

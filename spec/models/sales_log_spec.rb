@@ -281,8 +281,8 @@ RSpec.describe SalesLog, type: :model do
 
   context "when getting list of duplicate logs" do
     let(:organisation) { create(:organisation) }
-    let!(:log) { create(:sales_log, :duplicate) }
-    let!(:duplicate_log) { create(:sales_log, :duplicate) }
+    let!(:log) { create(:sales_log, :duplicate, owning_organisation: organisation) }
+    let!(:duplicate_log) { create(:sales_log, :duplicate, owning_organisation: organisation) }
     let(:duplicate_sets) { described_class.duplicate_sets }
 
     it "returns a list of duplicates in the same organisation" do
@@ -379,7 +379,7 @@ RSpec.describe SalesLog, type: :model do
     end
 
     context "when there is a log with nil values for purchid" do
-      let!(:purchid_not_given) { create(:sales_log, :duplicate, purchid: nil) }
+      let!(:purchid_not_given) { create(:sales_log, :duplicate, purchid: nil, owning_organisation: organisation) }
 
       it "returns the log as a duplicate if tenancy code is nil" do
         log.update!(purchid: nil)
@@ -389,7 +389,7 @@ RSpec.describe SalesLog, type: :model do
     end
 
     context "when there is a log with age1 not known" do
-      let!(:age1_not_known) { create(:sales_log, :duplicate, age1_known: 1, age1: nil) }
+      let!(:age1_not_known) { create(:sales_log, :duplicate, age1_known: 1, age1: nil, owning_organisation: organisation) }
 
       it "returns the log as a duplicate if age1 is not known" do
         log.update!(age1_known: 1, age1: nil)
@@ -399,7 +399,7 @@ RSpec.describe SalesLog, type: :model do
     end
 
     context "when there is a log with age1 prefers not to say" do
-      let!(:age1_prefers_not_to_say) { create(:sales_log, :duplicate, age1_known: 2, age1: nil) }
+      let!(:age1_prefers_not_to_say) { create(:sales_log, :duplicate, age1_known: 2, age1: nil, owning_organisation: organisation) }
 
       it "returns the log as a duplicate if age1 is prefers not to say" do
         log.update!(age1_known: 2, age1: nil)
@@ -428,6 +428,7 @@ RSpec.describe SalesLog, type: :model do
       end
 
       it "does not return logs not associated with the given user" do
+        duplicate_log.update!(owning_organisation: user.organisation)
         duplicate_sets = described_class.duplicate_sets(user.id)
         expect(duplicate_sets.count).to eq(1)
         expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)

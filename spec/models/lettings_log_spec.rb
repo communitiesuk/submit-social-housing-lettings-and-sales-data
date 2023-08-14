@@ -3090,7 +3090,7 @@ RSpec.describe LettingsLog do
       end
 
       context "when there is a log with nil values for tenancycode" do
-        let!(:tenancycode_not_given) { create(:lettings_log, :duplicate, tenancycode: nil) }
+        let!(:tenancycode_not_given) { create(:lettings_log, :duplicate, tenancycode: nil, owning_organisation: organisation) }
 
         it "returns the log as a duplicate if tenancy code is nil" do
           log.update!(tenancycode: nil)
@@ -3100,7 +3100,7 @@ RSpec.describe LettingsLog do
       end
 
       context "when there is a log with age1 not known" do
-        let!(:age1_not_known) { create(:lettings_log, :duplicate, age1_known: 1, age1: nil) }
+        let!(:age1_not_known) { create(:lettings_log, :duplicate, age1_known: 1, age1: nil, owning_organisation: organisation) }
 
         it "returns the log as a duplicate if age1 is not known" do
           log.update!(age1_known: 1, age1: nil)
@@ -3113,8 +3113,8 @@ RSpec.describe LettingsLog do
         let(:scheme) { create(:scheme) }
         let(:location) { create(:location, scheme:) }
         let(:location_2) { create(:location, scheme:) }
-        let!(:supported_housing_log) { create(:lettings_log, :duplicate, needstype: 2, location:, scheme:) }
-        let!(:duplicate_supported_housing_log) { create(:lettings_log, :duplicate, needstype: 2, location:, scheme:) }
+        let!(:supported_housing_log) { create(:lettings_log, :duplicate, needstype: 2, location:, scheme:, owning_organisation: organisation) }
+        let!(:duplicate_supported_housing_log) { create(:lettings_log, :duplicate, needstype: 2, location:, scheme:, owning_organisation: organisation) }
 
         it "returns the log as a duplicate" do
           expect(duplicate_sets.count).to eq(2)
@@ -3129,8 +3129,8 @@ RSpec.describe LettingsLog do
         end
 
         it "does not compare tcharge if there are no household charges" do
-          supported_housing_log.update!(household_charge: 1, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil)
-          duplicate_supported_housing_log.update!(household_charge: 1, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil)
+          supported_housing_log.update!(household_charge: 1, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil, owning_organisation: organisation)
+          duplicate_supported_housing_log.update!(household_charge: 1, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil, owning_organisation: organisation)
           expect(duplicate_sets.count).to eq(2)
           expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)
           expect(duplicate_sets.second).to contain_exactly(supported_housing_log.id, duplicate_supported_housing_log.id)
@@ -3138,7 +3138,7 @@ RSpec.describe LettingsLog do
 
         it "does not return logs not associated with the user if user is given" do
           user = create(:user)
-          supported_housing_log.update!(created_by: user, managing_organisation: user.organisation)
+          supported_housing_log.update!(created_by: user, owning_organisation: user.organisation)
           duplicate_supported_housing_log.update!(owning_organisation: user.organisation)
           duplicate_sets = described_class.duplicate_sets(user.id)
           expect(duplicate_sets.count).to eq(1)
@@ -3146,16 +3146,16 @@ RSpec.describe LettingsLog do
         end
 
         it "compares chcharge if it's a carehome" do
-          supported_housing_log.update!(is_carehome: 1, chcharge: 100, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil)
-          duplicate_supported_housing_log.update!(is_carehome: 1, chcharge: 100, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil)
+          supported_housing_log.update!(is_carehome: 1, chcharge: 100, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil, owning_organisation: organisation)
+          duplicate_supported_housing_log.update!(is_carehome: 1, chcharge: 100, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil, owning_organisation: organisation)
           expect(duplicate_sets.count).to eq(2)
           expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)
           expect(duplicate_sets.second).to contain_exactly(supported_housing_log.id, duplicate_supported_housing_log.id)
         end
 
         it "does not return a duplicate if carehome charge is not given" do
-          supported_housing_log.update!(is_carehome: 1, chcharge: nil, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil)
-          duplicate_supported_housing_log.update!(is_carehome: 1, chcharge: nil, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil)
+          supported_housing_log.update!(is_carehome: 1, chcharge: nil, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil, owning_organisation: organisation)
+          duplicate_supported_housing_log.update!(is_carehome: 1, chcharge: nil, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil, owning_organisation: organisation)
           expect(duplicate_sets.count).to eq(1)
           expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)
         end

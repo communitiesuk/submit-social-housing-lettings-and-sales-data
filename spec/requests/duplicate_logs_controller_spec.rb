@@ -380,9 +380,9 @@ RSpec.describe DuplicateLogsController, type: :request do
         end
 
         it "shows links for each set of duplciates" do
-          expect(page).to have_link("Review logs", href: lettings_log_duplicate_logs_path(1))
-          expect(page).to have_link("Review logs", href: lettings_log_duplicate_logs_path(3))
-          expect(page).to have_link("Review logs", href: sales_log_duplicate_logs_path(11))
+          expect(page).to have_link("Review logs", href: lettings_log_duplicate_logs_path(1, original_log_id: 1))
+          expect(page).to have_link("Review logs", href: lettings_log_duplicate_logs_path(3, original_log_id: 3))
+          expect(page).to have_link("Review logs", href: sales_log_duplicate_logs_path(11, original_log_id: 11))
         end
       end
     end
