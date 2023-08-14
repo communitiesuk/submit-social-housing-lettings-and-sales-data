@@ -46,4 +46,8 @@ module DuplicateLogsHelper
     duplicates = user.data_provider? ? duplicates_for_user(user) : duplicates_for_organisation(organisation)
     duplicates[:lettings].count + duplicates[:sales].count
   end
+
+  def duplicate_list_header(duplicate_sets_count)
+    duplicate_sets_count > 1 ? "Review these #{duplicate_sets_count} sets of logs" : "Review this #{duplicate_sets_count} set of logs"
+  end
 end
