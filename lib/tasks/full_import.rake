@@ -86,6 +86,53 @@ namespace :import do
     logger.info("Log import complete")
   end
 
+  desc "Batch import logs"
+  task :batch_import_logs, %i[institutions_csv_name total_batches batch_number] => :environment do |_task, args|
+    institutions_csv_name = args[:institutions_csv_name]
+    app_name = args[:app_name]
+    total_batches = args[:total_batches]
+    batch_number = args[:batch_number]
+
+    raise "Usage: rake import:batch_import_logs['institutions_csv_name', 'app_name', 'total_batches', 'batch_number']" if [institutions_csv_name, app_name, total_batches, batch_number].any?(&:blank?) || total_batches < batch_number
+
+    s3_service = Storage::S3Service.new(PlatformHelper.is_paas? ? Configuration::PaasConfigurationService.new : Configuration::EnvConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
+    whole_csv = CSV.parse(s3_service.get_file_io(institutions_csv_name), headers: true)
+    #split csv into n batches, and import the mth batch (n = total_batches, m = batch_number)
+    batch_csv = whole_csv.each_slice((whole_csv.size / total_batches.to_f).round).to_a[batch_number - 1]
+    org_count = batch_csv.length
+    logs_string = StringIO.new
+    logger = MultiLogger.new(Rails.logger, Logger.new(logs_string))
+
+    logs_import_list = [
+      Import.new(Imports::LettingsLogsImportService, :create_logs, "logs", logger),
+      Import.new(Imports::SalesLogsImportService, :create_logs, "logs", logger),
+    ]
+
+    logger.info("Beginning log imports for #{org_count} organisations in batch #{batch_number} of #{total_batches}")
+
+    batch_csv.each do |row|
+      archive_path = row[1]
+      archive_io = s3_service.get_file_io(archive_path)
+      archive_service = Storage::ArchiveService.new(archive_io)
+
+      log_count = row[2].to_i + row[3].to_i + row[4].to_i + row[5].to_i
+      logger.info("Importing logs for organisation #{row[0]}, expecting #{log_count} logs in this batch")
+
+      logs_import_list.each do |step|
+        if archive_service.folder_present?(step.folder)
+          step.import_class.new(archive_service, step.logger).send(step.import_method, step.folder)
+        end
+      end
+
+      log_file = "#{File.basename(institutions_csv_name, File.extname(institutions_csv_name))}_#{File.basename(archive_path, File.extname(archive_path))}_logs.log"
+      s3_service.write_file(log_file, logs_string.string)
+      logs_string.rewind
+      logs_string.truncate(0)
+    end
+
+    logger.info("Log import complete")
+  end
+
   desc "Trigger invite emails for imported users"
   task :trigger_invites, %i[institutions_csv_name] => :environment do |_task, args|
     institutions_csv_name = args[:institutions_csv_name]
