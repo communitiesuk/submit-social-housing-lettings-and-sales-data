@@ -78,7 +78,7 @@ describe "full import", type: :task do
       end
 
       it "creates a report using given organisation csv" do
-        expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+        expect(Storage::S3Service).to receive(:new).with(env_config_service, instance_name)
         expect(storage_service).to receive(:write_file).with("some_name_1_initial.log", / INFO -- : Performing initial imports for organisation org1/)
         expect(storage_service).to receive(:write_file).with("some_name_2_initial.log", / INFO -- : Performing initial imports for organisation org2/)
 
@@ -107,7 +107,7 @@ describe "full import", type: :task do
       end
 
       it "creates a report using given organisation csv" do
-        expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+        expect(Storage::S3Service).to receive(:new).with(env_config_service, instance_name)
         expect(storage_service).to receive(:write_file).with("some_name_1_logs.log", / INFO -- : Importing logs for organisation org1, expecting 0 logs/)
         expect(storage_service).to receive(:write_file).with("some_name_2_logs.log", / INFO -- : Importing logs for organisation org2, expecting 0 logs/)
 
