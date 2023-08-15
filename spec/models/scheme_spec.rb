@@ -110,7 +110,7 @@ RSpec.describe Scheme, type: :model do
       end
 
       context "when filtering by status" do
-        let!(:incomplete_scheme) { FactoryBot.create(:scheme, :incomplete) }
+        let!(:incomplete_scheme) { FactoryBot.create(:scheme, :incomplete, service_name: "name") }
         let(:active_scheme) { FactoryBot.create(:scheme) }
         let(:deactivating_soon_scheme) { FactoryBot.create(:scheme) }
         let(:deactivated_scheme) { FactoryBot.create(:scheme) }
@@ -138,6 +138,13 @@ RSpec.describe Scheme, type: :model do
           it "returns only incomplete schemes" do
             expect(described_class.filter_by_status(%w[incomplete]).count).to eq(1)
             expect(described_class.filter_by_status(%w[incomplete]).first).to eq(incomplete_scheme)
+          end
+        end
+
+        context "when filtering by incomplete status and searching" do
+          it "returns only incomplete schemes" do
+            expect(described_class.search_by("name").filter_by_status(%w[incomplete]).count).to eq(1)
+            expect(described_class.search_by("name").filter_by_status(%w[incomplete]).first).to eq(incomplete_scheme)
           end
         end
 
