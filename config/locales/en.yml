@@ -290,6 +290,8 @@ en:
         data_sharing_agreement_not_signed: "The organisation must accept the Data Sharing Agreement before it can be selected as the owning organisation."
         inactive_merged_organisation: "The owning organisation must be active on the tenancy start date. %{owning_organisation} became inactive on %{owning_organisation_merge_date} and was replaced by %{owning_absorbing_organisation}."
         inactive_absorbing_organisation: "The owning organisation must be active on the tenancy start date. %{owning_organisation} became active on %{owning_organisation_available_from}."
+        inactive_merged_organisation_sales: "The owning organisation must be active on the sale completion date. %{owning_organisation} became inactive on %{owning_organisation_merge_date} and was replaced by %{owning_absorbing_organisation}."
+        inactive_absorbing_organisation_sales: "The owning organisation must be active on the sale completion date. %{owning_organisation} became active on %{owning_organisation_available_from}."
       managing_organisation:
         invalid: "Please select the owning organisation or managing organisation that you belong to"
         data_sharing_agreement_not_signed: "The organisation must accept the Data Sharing Agreement before it can be selected as the managing organisation."

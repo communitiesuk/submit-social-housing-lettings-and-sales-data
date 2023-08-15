@@ -253,7 +253,7 @@ RSpec.describe Validations::Sales::SetupValidations do
           record.saledate = Time.zone.local(2023, 3, 1)
           record.owning_organisation_id = merged_organisation.id
           setup_validator.validate_organisation(record)
-          expect(record.errors["owning_organisation_id"]).to include(match "The owning organisation must be active on the tenancy start date. Merged org became inactive on 2 February 2023 and was replaced by Absorbing org.")
+          expect(record.errors["owning_organisation_id"]).to include(match "The owning organisation must be active on the sale completion date. Merged org became inactive on 2 February 2023 and was replaced by Absorbing org.")
         end
 
         it "allows organisation before it has been merged" do
@@ -269,7 +269,7 @@ RSpec.describe Validations::Sales::SetupValidations do
           record.saledate = Time.zone.local(2023, 1, 1)
           record.owning_organisation_id = absorbing_organisation.id
           setup_validator.validate_organisation(record)
-          expect(record.errors["owning_organisation_id"]).to include(match "The owning organisation must be active on the tenancy start date. Absorbing org became active on 1 February 2023.")
+          expect(record.errors["owning_organisation_id"]).to include(match "The owning organisation must be active on the sale completion date. Absorbing org became active on 1 February 2023.")
         end
 
         it "allows absorbing organisation after it has been created" do
