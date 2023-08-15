@@ -36,14 +36,9 @@ class DeviseNotifyMailer < Devise::Mailer
 
   def confirmation_instructions(record, token, _opts = {})
     if email_changed?(record)
-      if new_email_journey?
-        send_email_changed_to_old_email(record)
-        send_email_changed_to_new_email(record, token)
-      else
-        send_confirmation_email(record.unconfirmed_email, record, token, record.unconfirmed_email)
-        send_confirmation_email(record.email, record, token, record.unconfirmed_email)
-      end
-    elsif !record.confirmed? && record.unconfirmed_email && new_email_journey?
+      send_email_changed_to_old_email(record)
+      send_email_changed_to_new_email(record, token)
+    elsif !record.confirmed? && record.unconfirmed_email
       send_confirmation_email(record.unconfirmed_email, record, token, record.unconfirmed_email)
       send_email_changed_to_old_email(record)
     else
@@ -96,14 +91,9 @@ class DeviseNotifyMailer < Devise::Mailer
       record.confirmable_template == User::CONFIRMABLE_TEMPLATE_ID && (
         record.unconfirmed_email.present? && record.unconfirmed_email != record.email)
     ) || (
-      new_email_journey? &&
-        record.versions.last.changeset.key?("unconfirmed_email") &&
-        record.confirmed?
+      record.versions.last.changeset.key?("unconfirmed_email") &&
+      record.confirmed?
     )
-  end
-
-  def new_email_journey?
-    FeatureToggle.new_email_journey?
   end
 
   def send_confirmation_email(email, record, token, username)
