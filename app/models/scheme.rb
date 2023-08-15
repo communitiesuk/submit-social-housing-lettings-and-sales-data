@@ -34,7 +34,6 @@ class Scheme < ApplicationRecord
     if scopes.any?
       filtered_records = filtered_records
       .left_outer_joins(:scheme_deactivation_periods)
-      .order("scheme_deactivation_periods.created_at DESC")
       .merge(scopes.reduce(&:or))
     end
 
@@ -44,9 +43,9 @@ class Scheme < ApplicationRecord
   scope :incomplete, lambda {
     where.not(confirmed: true)
     .or(where.not(id: Location.select(:scheme_id).where(confirmed: true).distinct))
-    .where.not(id: joins(:scheme_deactivation_periods).reactivating_soon.pluck(:id))
-    .where.not(id: joins(:scheme_deactivation_periods).deactivated.pluck(:id))
-    .where.not(id: joins(:scheme_deactivation_periods).deactivating_soon.pluck(:id))
+    .where.not(id: joins(:scheme_deactivation_periods).reactivating_soon.pluck(:id, :service_name, :confirmed))
+    .where.not(id: joins(:scheme_deactivation_periods).deactivated.pluck(:id, :service_name, :confirmed))
+    .where.not(id: joins(:scheme_deactivation_periods).deactivating_soon.pluck(:id, :service_name, :confirmed))
   }
 
   scope :deactivated, lambda {
@@ -65,10 +64,10 @@ class Scheme < ApplicationRecord
   }
 
   scope :active_status, lambda {
-    where.not(id: joins(:scheme_deactivation_periods).reactivating_soon.pluck(:id))
-    .where.not(id: joins(:scheme_deactivation_periods).deactivated.pluck(:id))
-    .where.not(id: incomplete.pluck(:id))
-    .where.not(id: joins(:scheme_deactivation_periods).deactivating_soon.pluck(:id))
+    where.not(id: joins(:scheme_deactivation_periods).reactivating_soon.pluck(:id, :service_name, :confirmed))
+    .where.not(id: joins(:scheme_deactivation_periods).deactivated.pluck(:id, :service_name, :confirmed))
+    .where.not(id: incomplete.pluck(:id, :service_name, :confirmed))
+    .where.not(id: joins(:scheme_deactivation_periods).deactivating_soon.pluck(:id, :service_name, :confirmed))
   }
 
   validate :validate_confirmed
