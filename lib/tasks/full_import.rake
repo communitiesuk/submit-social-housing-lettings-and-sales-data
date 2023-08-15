@@ -31,7 +31,7 @@ namespace :import do
 
       initial_import_list.each do |step|
         if archive_service.folder_present?(step.folder)
-          step.import_class.new(archive_service).send(step.import_method, step.folder, step.logger)
+          step.import_class.new(archive_service, step.logger).send(step.import_method, step.folder)
         end
       end
 
@@ -72,7 +72,7 @@ namespace :import do
 
       logs_import_list.each do |step|
         if archive_service.folder_present?(step.folder)
-          step.import_class.new(archive_service).send(step.import_method, step.folder, step.logger)
+          step.import_class.new(archive_service, step.logger).send(step.import_method, step.folder)
         end
       end
 
