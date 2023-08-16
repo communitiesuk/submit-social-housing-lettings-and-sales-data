@@ -87,18 +87,17 @@ namespace :import do
   end
 
   desc "Batch import logs"
-  task :batch_import_logs, %i[institutions_csv_name total_batches batch_number] => :environment do |_task, args|
+  task :batch_import_logs, %i[institutions_csv_name orgs_per_batch batch_number] => :environment do |_task, args|
     institutions_csv_name = args[:institutions_csv_name]
     app_name = args[:app_name]
-    total_batches = args[:total_batches]
+    orgs_per_batch = args[:orgs_per_batch]
     batch_number = args[:batch_number]
 
-    raise "Usage: rake import:batch_import_logs['institutions_csv_name', 'app_name', 'total_batches', 'batch_number']" if [institutions_csv_name, app_name, total_batches, batch_number].any?(&:blank?) || total_batches < batch_number
+    raise "Usage: rake import:batch_import_logs['institutions_csv_name', 'app_name', 'orgs_per_batch', 'batch_number']" if [institutions_csv_name, app_name, orgs_per_batch, batch_number].any?(&:blank?)
 
     s3_service = Storage::S3Service.new(PlatformHelper.is_paas? ? Configuration::PaasConfigurationService.new : Configuration::EnvConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
     whole_csv = CSV.parse(s3_service.get_file_io(institutions_csv_name), headers: true)
-    #split csv into n batches, and import the mth batch (n = total_batches, m = batch_number)
-    batch_csv = whole_csv.each_slice((whole_csv.size / total_batches.to_f).round).to_a[batch_number - 1]
+    batch_csv = whole_csv.each_slice(orgs_per_batch).to_a[batch_number - 1]
     org_count = batch_csv.length
     logs_string = StringIO.new
     logger = MultiLogger.new(Rails.logger, Logger.new(logs_string))
@@ -108,7 +107,7 @@ namespace :import do
       Import.new(Imports::SalesLogsImportService, :create_logs, "logs", logger),
     ]
 
-    logger.info("Beginning log imports for #{org_count} organisations in batch #{batch_number} of #{total_batches}")
+    logger.info("Beginning log imports for #{org_count} organisations in batch #{batch_number}")
 
     batch_csv.each do |row|
       archive_path = row[1]
@@ -116,7 +115,7 @@ namespace :import do
       archive_service = Storage::ArchiveService.new(archive_io)
 
       log_count = row[2].to_i + row[3].to_i + row[4].to_i + row[5].to_i
-      logger.info("Importing logs for organisation #{row[0]}, expecting #{log_count} logs in this batch")
+      logger.info("Importing logs for organisation #{row[0]}, expecting #{log_count} logs")
 
       logs_import_list.each do |step|
         if archive_service.folder_present?(step.folder)
@@ -130,7 +129,7 @@ namespace :import do
       logs_string.truncate(0)
     end
 
-    logger.info("Log import complete")
+    logger.info("Log import for org batch #{batch_number} complete")
   end
 
   desc "Trigger invite emails for imported users"
