@@ -340,7 +340,7 @@ RSpec.describe Imports::LettingsLogsImportService do
 
         it "logs the error" do
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
-          .to raise_error
+          .to raise_error(ActiveRecord::RecordInvalid)
 
           expect(logs_string.string).to include("Failed to import")
           expect(logs_string.string).to include("ERROR -- : Validation error: Field hhmemb")
