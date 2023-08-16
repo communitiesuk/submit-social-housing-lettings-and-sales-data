@@ -77,10 +77,10 @@ describe "full import", type: :task do
         allow(Imports::OrganisationRentPeriodImportService).to receive(:new).and_return(instance_double(Imports::OrganisationRentPeriodImportService))
       end
 
-      it "creates a report using given organisation csv" do
+      it "does not write a report if there were no errors" do
         expect(Storage::S3Service).to receive(:new).with(env_config_service, instance_name)
-        expect(storage_service).to receive(:write_file).with("some_name_1_initial.log", / INFO -- : Performing initial imports for organisation org1/)
-        expect(storage_service).to receive(:write_file).with("some_name_2_initial.log", / INFO -- : Performing initial imports for organisation org2/)
+        expect(storage_service).not_to receive(:write_file).with("some_name_1_initial.log", "")
+        expect(storage_service).not_to receive(:write_file).with("some_name_2_initial.log", "")
 
         task.invoke("some_name.csv")
       end
@@ -106,10 +106,10 @@ describe "full import", type: :task do
         allow(Imports::SalesLogsImportService).to receive(:new).and_return(instance_double(Imports::SalesLogsImportService))
       end
 
-      it "creates a report using given organisation csv" do
+      it "does not write a report if there were no errors" do
         expect(Storage::S3Service).to receive(:new).with(env_config_service, instance_name)
-        expect(storage_service).to receive(:write_file).with("some_name_1_logs.log", / INFO -- : Importing logs for organisation org1, expecting 0 logs/)
-        expect(storage_service).to receive(:write_file).with("some_name_2_logs.log", / INFO -- : Importing logs for organisation org2, expecting 0 logs/)
+        expect(storage_service).not_to receive(:write_file).with("some_name_1_logs.log", "")
+        expect(storage_service).not_to receive(:write_file).with("some_name_2_logs.log", "")
 
         task.invoke("some_name.csv")
       end
