@@ -1584,27 +1584,46 @@ RSpec.describe UsersController, type: :request do
 
           before do
             user.legacy_users.destroy_all
-
-            allow(FeatureToggle).to receive(:new_email_journey?).and_return(false)
           end
 
-          it "allows changing email and dpo" do
-            request
-            user.reload
-            expect(user.unconfirmed_email).to eq(new_email)
-            expect(user.is_data_protection_officer?).to be true
-            expect(user.is_key_contact?).to be true
+          it "shows flash notice" do
+            patch("/users/#{other_user.id}", headers:, params:)
+
+            expect(flash[:notice]).to eq("An email has been sent to #{new_email} to confirm this change.")
           end
 
-          it "sends a confirmation email to both emails" do
-            expect(notify_client).to receive(:send_email).with(email_address: new_email, template_id: User::CONFIRMABLE_TEMPLATE_ID, personalisation:).once
-            expect(notify_client).to receive(:send_email).with(email_address: user.email, template_id: User::CONFIRMABLE_TEMPLATE_ID, personalisation:).once
-            request
+          it "sends new flow emails" do
+            expect(notify_client).to receive(:send_email).with(
+              email_address: other_user.email,
+              template_id: User::FOR_OLD_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID,
+              personalisation: {
+                new_email:,
+                old_email: other_user.email,
+              },
+            ).once
+
+            expect(notify_client).to receive(:send_email).with(
+              email_address: new_email,
+              template_id: User::FOR_NEW_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID,
+              personalisation: {
+                new_email:,
+                old_email: other_user.email,
+                link: include("/account/confirmation?confirmation_token="),
+              },
+            ).once
+
+            expect(notify_client).not_to receive(:send_email)
+
+            patch "/users/#{other_user.id}", headers:, params:
           end
 
-          context "with new email journy enabled" do
+          context "when user has never confirmed email address" do
+            let(:old_email) { "old@test.com" }
+            let(:new_email) { "new@test.com" }
+            let(:other_user) { create(:user, organisation: user.organisation, email: old_email, confirmed_at: nil) }
+
             before do
-              allow(FeatureToggle).to receive(:new_email_journey?).and_return(true)
+              other_user.legacy_users.destroy_all
             end
 
             it "shows flash notice" do
@@ -1615,21 +1634,22 @@ RSpec.describe UsersController, type: :request do
 
             it "sends new flow emails" do
               expect(notify_client).to receive(:send_email).with(
-                email_address: other_user.email,
-                template_id: User::FOR_OLD_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID,
+                email_address: new_email,
+                template_id: User::RECONFIRMABLE_TEMPLATE_ID,
                 personalisation: {
-                  new_email:,
-                  old_email: other_user.email,
+                  name: new_name,
+                  email: new_email,
+                  organisation: other_user.organisation.name,
+                  link: include("/account/confirmation?confirmation_token="),
                 },
               ).once
 
               expect(notify_client).to receive(:send_email).with(
-                email_address: new_email,
-                template_id: User::FOR_NEW_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID,
+                email_address: old_email,
+                template_id: User::FOR_OLD_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID,
                 personalisation: {
                   new_email:,
-                  old_email: other_user.email,
-                  link: include("/account/confirmation?confirmation_token="),
+                  old_email:,
                 },
               ).once
 
@@ -1769,69 +1789,37 @@ RSpec.describe UsersController, type: :request do
 
               before do
                 other_user.legacy_users.destroy_all
-
-                allow(FeatureToggle).to receive(:new_email_journey?).and_return(false)
               end
 
-              it "does not update the password" do
-                expect { patch "/users/#{other_user.id}", headers:, params: }
-                  .not_to change(other_user, :encrypted_password)
+              it "shows flash notice" do
+                patch("/users/#{other_user.id}", headers:, params:)
+
+                expect(flash[:notice]).to eq("An email has been sent to #{new_email} to confirm this change.")
               end
 
-              it "does update other values" do
-                expect { patch "/users/#{other_user.id}", headers:, params: }
-                  .to change { other_user.reload.name }.from("Danny Rojas").to("new name")
-              end
+              it "sends new flow emails" do
+                expect(notify_client).to receive(:send_email).with(
+                  email_address: other_user.email,
+                  template_id: User::FOR_OLD_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID,
+                  personalisation: {
+                    new_email:,
+                    old_email: other_user.email,
+                  },
+                ).once
 
-              it "allows changing email" do
-                expect { patch "/users/#{other_user.id}", headers:, params: }
-                  .to change { other_user.reload.unconfirmed_email }.from(nil).to(new_email)
-              end
-
-              it "sends a confirmation email to both emails" do
-                expect(notify_client).to receive(:send_email).with(email_address: other_user.email, template_id: User::CONFIRMABLE_TEMPLATE_ID, personalisation:).once
-                expect(notify_client).to receive(:send_email).with(email_address: new_email, template_id: User::CONFIRMABLE_TEMPLATE_ID, personalisation:).once
+                expect(notify_client).to receive(:send_email).with(
+                  email_address: new_email,
+                  template_id: User::FOR_NEW_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID,
+                  personalisation: {
+                    new_email:,
+                    old_email: other_user.email,
+                    link: include("/account/confirmation?confirmation_token="),
+                  },
+                ).once
 
                 expect(notify_client).not_to receive(:send_email)
 
                 patch "/users/#{other_user.id}", headers:, params:
-              end
-
-              context "with new user email flow enabled" do
-                before do
-                  allow(FeatureToggle).to receive(:new_email_journey?).and_return(true)
-                end
-
-                it "shows flash notice" do
-                  patch("/users/#{other_user.id}", headers:, params:)
-
-                  expect(flash[:notice]).to eq("An email has been sent to #{new_email} to confirm this change.")
-                end
-
-                it "sends new flow emails" do
-                  expect(notify_client).to receive(:send_email).with(
-                    email_address: other_user.email,
-                    template_id: User::FOR_OLD_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID,
-                    personalisation: {
-                      new_email:,
-                      old_email: other_user.email,
-                    },
-                  ).once
-
-                  expect(notify_client).to receive(:send_email).with(
-                    email_address: new_email,
-                    template_id: User::FOR_NEW_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID,
-                    personalisation: {
-                      new_email:,
-                      old_email: other_user.email,
-                      link: include("/account/confirmation?confirmation_token="),
-                    },
-                  ).once
-
-                  expect(notify_client).not_to receive(:send_email)
-
-                  patch "/users/#{other_user.id}", headers:, params:
-                end
               end
             end
           end

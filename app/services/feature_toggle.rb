@@ -33,8 +33,4 @@ class FeatureToggle
   def self.deduplication_flow_enabled?
     !Rails.env.production? && !Rails.env.staging?
   end
-
-  def self.new_email_journey?
-    !Rails.env.production?
-  end
 end
