@@ -75,6 +75,10 @@ class FormHandler
   end
 
   def lettings_forms
+    @lettings_forms ||= get_lettings_forms
+  end
+
+  def get_lettings_forms
     forms = {}
     directories.each do |directory|
       Dir.glob("#{directory}/*.json").each do |form_path|
@@ -154,6 +158,7 @@ class FormHandler
 
   def use_real_forms!
     @directories = ["config/forms"]
+    @lettings_forms = get_lettings_forms
     @forms = get_all_forms
   end
 
