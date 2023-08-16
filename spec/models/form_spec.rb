@@ -188,7 +188,6 @@ RSpec.describe Form, type: :model do
 
       around do |example|
         FormHandler.instance.use_real_forms!
-
         example.run
       end
 
