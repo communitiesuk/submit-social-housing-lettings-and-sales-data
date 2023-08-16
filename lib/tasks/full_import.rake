@@ -9,7 +9,7 @@ namespace :import do
     s3_service = Storage::S3Service.new(PlatformHelper.is_paas? ? Configuration::PaasConfigurationService.new : Configuration::EnvConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
     csv = CSV.parse(s3_service.get_file_io(institutions_csv_name), headers: true)
     logs_string = StringIO.new
-    logger = MultiLogger.new(Rails.logger, Logger.new(logs_string))
+    logger = MultiLogger.new(Logger.new(logs_string))
     org_count = csv.length
 
     initial_import_list = [
@@ -36,7 +36,7 @@ namespace :import do
       end
 
       log_file = "#{File.basename(institutions_csv_name, File.extname(institutions_csv_name))}_#{File.basename(archive_path, File.extname(archive_path))}_initial.log"
-      s3_service.write_file(log_file, logs_string.string)
+      s3_service.write_file(log_file, logs_string.string) if logs_string.string.present?
       logs_string.rewind
       logs_string.truncate(0)
     end
@@ -53,7 +53,7 @@ namespace :import do
     csv = CSV.parse(s3_service.get_file_io(institutions_csv_name), headers: true)
     org_count = csv.length
     logs_string = StringIO.new
-    logger = MultiLogger.new(Rails.logger, Logger.new(logs_string))
+    logger = MultiLogger.new(Logger.new(logs_string))
 
     logs_import_list = [
       Import.new(Imports::LettingsLogsImportService, :create_logs, "logs", logger),
@@ -77,7 +77,7 @@ namespace :import do
       end
 
       log_file = "#{File.basename(institutions_csv_name, File.extname(institutions_csv_name))}_#{File.basename(archive_path, File.extname(archive_path))}_logs.log"
-      s3_service.write_file(log_file, logs_string.string)
+      s3_service.write_file(log_file, logs_string.string) if logs_string.string.present?
       logs_string.rewind
       logs_string.truncate(0)
     end

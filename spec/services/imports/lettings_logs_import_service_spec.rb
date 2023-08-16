@@ -14,7 +14,9 @@ RSpec.describe Imports::LettingsLogsImportService do
     end
 
     let(:storage_service) { instance_double(Storage::S3Service) }
-    let(:logger) { instance_double(ActiveSupport::Logger) }
+    let(:logs_string) { StringIO.new }
+    let(:file_logger) { Logger.new(logs_string) }
+    let(:logger) { MultiLogger.new(file_logger) }
 
     let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json") }
     let(:real_2022_2023_form) { Form.new("config/forms/2022_2023.json") }
@@ -325,6 +327,24 @@ RSpec.describe Imports::LettingsLogsImportService do
           expect(lettings_log).not_to be_nil
           expect(lettings_log.tenancy).to be_nil
           expect(lettings_log.tenancyother).to be_nil
+        end
+      end
+
+      context "and submitted log has errors" do
+        let(:lettings_log_id) { "0ead17cb-1668-442d-898c-0d52879ff592" }
+
+        before do
+          lettings_log_xml.at_xpath("//meta:status").content = "submitted"
+          lettings_log_xml.at_xpath("//xmlns:HHMEMB").content = "32"
+        end
+
+        it "logs the error" do
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+          .to raise_error
+
+          expect(logs_string.string).to include("Failed to import")
+          expect(logs_string.string).to include("ERROR -- : Validation error: Field hhmemb")
+          expect(logs_string.string).to include("Error message: outside_the_range")
         end
       end
 
@@ -1048,7 +1068,9 @@ RSpec.describe Imports::LettingsLogsImportService do
     end
 
     let(:storage_service) { instance_double(Storage::S3Service) }
-    let(:logger) { instance_double(ActiveSupport::Logger) }
+    let(:logs_string) { StringIO.new }
+    let(:file_logger) { Logger.new(logs_string) }
+    let(:logger) { MultiLogger.new(file_logger) }
 
     let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json") }
     let(:real_2022_2023_form) { Form.new("config/forms/2022_2023.json") }

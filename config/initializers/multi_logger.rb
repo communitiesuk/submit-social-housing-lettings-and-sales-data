@@ -1,17 +1,19 @@
 class MultiLogger
-  def initialize(*targets)
-    @targets = targets
+  def initialize(file_logger)
+    @rails_logger = Rails.logger
+    @file_logger = file_logger
   end
 
   def info(data)
-    @targets.each { |t| t.info(data) }
+    @rails_logger.info(data)
   end
 
   def warn(data)
-    @targets.each { |t| t.warn(data) }
+    @rails_logger.warn(data)
   end
 
   def error(data)
-    @targets.each { |t| t.error(data) }
+    @rails_logger.error(data)
+    @file_logger.error(data)
   end
 end

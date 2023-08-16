@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Imports::OrganisationImportService do
   let(:storage_service) { instance_double(Storage::S3Service) }
   let(:logs_string) { StringIO.new }
-  let(:logger) { MultiLogger.new(Rails.logger, Logger.new(logs_string)) }
+  let(:logger) { MultiLogger.new(logs_string) }
   let(:folder_name) { "organisations" }
   let(:filenames) { %w[my_folder/my_file1.xml my_folder/my_file2.xml] }
   let(:fixture_directory) { "spec/fixtures/imports/institution" }
@@ -87,7 +87,7 @@ RSpec.describe Imports::OrganisationImportService do
 
       expect { import_service.create_organisations(folder_name) }.to change(Organisation, :count).by(1)
       expect { import_service.create_organisations(folder_name) }.to change(Organisation, :count).by(0)
-      expect(logs_string.string).to include("Organisation my_new_organisation is already present with old visible ID 1, skipping.")
+      expect(logs_string.string).not_to include("Organisation my_new_organisation is already present with old visible ID 1, skipping.")
 
       expect(Organisation).to exist(old_visible_id: "1", name: "HA Ltd")
     end
