@@ -89,8 +89,8 @@ namespace :import do
   desc "Batch import logs"
   task :batch_import_logs, %i[institutions_csv_name orgs_per_batch batch_number] => :environment do |_task, args|
     institutions_csv_name = args[:institutions_csv_name]
-    orgs_per_batch = args[:orgs_per_batch]
-    batch_number = args[:batch_number]
+    orgs_per_batch = args[:orgs_per_batch].to_i
+    batch_number = args[:batch_number].to_i
 
     raise "Usage: rake import:batch_import_logs['institutions_csv_name', orgs_per_batch, batch_number]" if [institutions_csv_name, orgs_per_batch, batch_number].any?(&:blank?)
 
