@@ -92,7 +92,7 @@ namespace :import do
     orgs_per_batch = args[:orgs_per_batch]
     batch_number = args[:batch_number]
 
-    raise "Usage: rake import:batch_import_logs['institutions_csv_name', 'orgs_per_batch', 'batch_number']" if [institutions_csv_name, app_name, orgs_per_batch, batch_number].any?(&:blank?)
+    raise "Usage: rake import:batch_import_logs['institutions_csv_name', orgs_per_batch, batch_number]" if [institutions_csv_name, app_name, orgs_per_batch, batch_number].any?(&:blank?)
 
     s3_service = Storage::S3Service.new(PlatformHelper.is_paas? ? Configuration::PaasConfigurationService.new : Configuration::EnvConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
     whole_csv = CSV.parse(s3_service.get_file_io(institutions_csv_name), headers: true)
