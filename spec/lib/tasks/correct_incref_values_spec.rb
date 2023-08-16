@@ -39,6 +39,14 @@ RSpec.describe "correct_incref_values" do
         task.invoke
         expect(lettings_log.reload.incref).to eq(1)
       end
+
+      it "updates updated_at value" do
+        lettings_log.updated_at = Time.zone.local(2021, 3, 3)
+        lettings_log.save!(validate: false)
+        expect(lettings_log.updated_at.to_date).to eq(Time.zone.local(2021, 3, 3))
+        task.invoke
+        expect(lettings_log.reload.updated_at.to_date).to eq(Time.zone.today)
+      end
     end
   end
 end
