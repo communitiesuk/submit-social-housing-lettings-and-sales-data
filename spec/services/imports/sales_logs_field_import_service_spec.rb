@@ -73,4 +73,41 @@ RSpec.describe Imports::SalesLogsFieldImportService do
       end
     end
   end
+
+  context "when updating owning_organisation_id" do
+    let(:field) { "owning_organisation_id" }
+    let(:sales_log_filename) { "shared_ownership_sales_log" }
+
+    context "when the sales log has no offered value" do
+      let(:sales_log) { SalesLog.find_by(old_id: sales_log_filename) }
+
+      before do
+        Imports::SalesLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+        sales_log_file.rewind
+        sales_log.update!(owning_organisation_id: nil)
+      end
+
+      it "updates the sales_log owning_organisation_id value" do
+        expect(logger).to receive(:info).with("sales log #{sales_log.id}'s owning_organisation_id value has been set to #{organisation.id}")
+        expect { import_service.send(:update_field, field, remote_folder) }
+          .to(change { sales_log.reload.owning_organisation_id }.from(nil).to(organisation.id))
+      end
+    end
+
+    context "when the sales log has a different offered value" do
+      let(:sales_log) { SalesLog.find_by(old_id: sales_log_filename) }
+
+      before do
+        Imports::SalesLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+        sales_log_file.rewind
+        sales_log.update!(owning_organisation_id: organisation.id)
+      end
+
+      it "does not update the sales_log owning_organisation_id value" do
+        expect(logger).to receive(:info).with(/sales log \d+ has a value for owning_organisation_id, skipping update/)
+        expect { import_service.send(:update_field, field, remote_folder) }
+          .not_to(change { sales_log.reload.owning_organisation_id })
+      end
+    end
+  end
 end
