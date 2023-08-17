@@ -1,6 +1,7 @@
 class OrganisationsController < ApplicationController
   include Pagy::Backend
   include Modules::SearchFilter
+  include DuplicateLogsHelper
 
   before_action :authenticate_user!
   before_action :find_resource, except: %i[index new create]
@@ -96,18 +97,15 @@ class OrganisationsController < ApplicationController
     organisation_logs = LettingsLog.visible.where(owning_organisation_id: @organisation.id)
     unpaginated_filtered_logs = filter_manager.filtered_logs(organisation_logs, search_term, session_filters)
 
-    respond_to do |format|
-      format.html do
-        @search_term = search_term
-        @pagy, @logs = pagy(unpaginated_filtered_logs)
-        @delete_logs_path = delete_lettings_logs_organisation_path(search: @search_term)
-        @searched = search_term.presence
-        @total_count = organisation_logs.size
-        @log_type = :lettings
-        @filter_type = "lettings_logs"
-        render "logs", layout: "application"
-      end
-    end
+    @search_term = search_term
+    @pagy, @logs = pagy(unpaginated_filtered_logs)
+    @delete_logs_path = delete_lettings_logs_organisation_path(search: @search_term)
+    @searched = search_term.presence
+    @total_count = organisation_logs.size
+    @log_type = :lettings
+    @filter_type = "lettings_logs"
+    @duplicate_sets_count = FeatureToggle.duplicate_summary_enabled? ? duplicate_sets_count(current_user, @organisation) : 0
+    render "logs", layout: "application"
   end
 
   def download_lettings_csv
@@ -136,6 +134,7 @@ class OrganisationsController < ApplicationController
         @total_count = organisation_logs.size
         @log_type = :sales
         @filter_type = "sales_logs"
+        @duplicate_sets_count = FeatureToggle.duplicate_summary_enabled? ? duplicate_sets_count(current_user, @organisation) : 0
         render "logs", layout: "application"
       end
 

@@ -1,4 +1,6 @@
 class SalesLogsController < LogsController
+  include DuplicateLogsHelper
+
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
 
   before_action :session_filters, if: :current_user, only: %i[index email_csv download_csv]
@@ -13,20 +15,17 @@ class SalesLogsController < LogsController
   end
 
   def index
-    respond_to do |format|
-      format.html do
-        all_logs = current_user.sales_logs.visible
-        unpaginated_filtered_logs = filter_manager.filtered_logs(all_logs, search_term, session_filters)
+    all_logs = current_user.sales_logs.visible
+    unpaginated_filtered_logs = filter_manager.filtered_logs(all_logs, search_term, session_filters)
 
-        @delete_logs_path = delete_logs_sales_logs_path(search: search_term)
-        @search_term = search_term
-        @pagy, @logs = pagy(unpaginated_filtered_logs)
-        @searched = search_term.presence
-        @total_count = all_logs.size
-        @filter_type = "sales_logs"
-        render "logs/index"
-      end
-    end
+    @delete_logs_path = delete_logs_sales_logs_path(search: search_term)
+    @search_term = search_term
+    @pagy, @logs = pagy(unpaginated_filtered_logs)
+    @searched = search_term.presence
+    @total_count = all_logs.size
+    @filter_type = "sales_logs"
+    @duplicate_sets_count = FeatureToggle.duplicate_summary_enabled? && !current_user.support? ? duplicate_sets_count(current_user, current_user.organisation) : 0
+    render "logs/index"
   end
 
   def show

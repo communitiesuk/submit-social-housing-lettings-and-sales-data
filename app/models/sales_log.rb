@@ -42,6 +42,7 @@ class SalesLog < Log
   }
   scope :filter_by_organisation, ->(owning_organisation, _user = nil) { where(owning_organisation:) }
   scope :filter_by_owning_organisation, ->(owning_organisation, _user = nil) { where(owning_organisation:) }
+  scope :age1_answered, -> { where.not(age1: nil).or(where(age1_known: [1, 2])) }
   scope :duplicate_logs, lambda { |log|
     visible.where(log.slice(*DUPLICATE_LOG_ATTRIBUTES))
     .where.not(id: log.id)
@@ -49,9 +50,26 @@ class SalesLog < Log
     .where.not(sex1: nil)
     .where.not(ecstat1: nil)
     .where.not(postcode_full: nil)
-    .where("age1 IS NOT NULL OR age1_known = 1 OR age1_known = 2")
+    .age1_answered
   }
   scope :after_date, ->(date) { where("saledate >= ?", date) }
+
+  scope :duplicate_sets, lambda { |created_by_id = nil|
+    scope = visible
+    .group(*DUPLICATE_LOG_ATTRIBUTES)
+    .where.not(saledate: nil)
+    .where.not(sex1: nil)
+    .where.not(ecstat1: nil)
+    .where.not(postcode_full: nil)
+    .age1_answered
+    .having("COUNT(*) > 1")
+
+    if created_by_id
+      scope = scope.having("MAX(CASE WHEN created_by_id = ? THEN 1 ELSE 0 END) >= 1", created_by_id)
+    end
+
+    scope.pluck("ARRAY_AGG(id)")
+  }
 
   OPTIONAL_FIELDS = %w[purchid othtype].freeze
   RETIREMENT_AGES = { "M" => 65, "F" => 60, "X" => 65 }.freeze
@@ -118,10 +136,6 @@ class SalesLog < Log
     return false unless collection_start_year
 
     collection_start_year < 2023
-  end
-
-  def setup_completed?
-    form.setup_sections.all? { |sections| sections.subsections.all? { |subsection| subsection.status(self) == :completed } }
   end
 
   def unresolved

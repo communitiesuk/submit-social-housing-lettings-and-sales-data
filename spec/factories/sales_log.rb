@@ -41,6 +41,7 @@ FactoryBot.define do
       type { 8 }
       jointpur { 2 }
       saledate { Time.zone.today }
+      age1_known { 1 }
       age1 { 20 }
       sex1 { "F" }
       ecstat1 { 1 }

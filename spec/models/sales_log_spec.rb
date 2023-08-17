@@ -279,6 +279,163 @@ RSpec.describe SalesLog, type: :model do
     end
   end
 
+  context "when getting list of duplicate logs" do
+    let(:organisation) { create(:organisation) }
+    let!(:log) { create(:sales_log, :duplicate, owning_organisation: organisation) }
+    let!(:duplicate_log) { create(:sales_log, :duplicate, owning_organisation: organisation) }
+    let(:duplicate_sets) { described_class.duplicate_sets }
+
+    it "returns a list of duplicates in the same organisation" do
+      expect(duplicate_sets.count).to eq(1)
+      expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)
+    end
+
+    context "when there is a deleted duplicate log" do
+      before do
+        create(:sales_log, :duplicate, discarded_at: Time.zone.now, status: 4)
+      end
+
+      it "does not return the deleted log as a duplicate" do
+        expect(duplicate_sets.count).to eq(1)
+        expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)
+      end
+    end
+
+    context "when there is a log with a different sale date" do
+      before do
+        create(:sales_log, :duplicate, saledate: Time.zone.tomorrow)
+      end
+
+      it "does not return a log with a different sale date as a duplicate" do
+        expect(duplicate_sets.count).to eq(1)
+        expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)
+      end
+    end
+
+    context "when there is a log with a different age1" do
+      before do
+        create(:sales_log, :duplicate, age1: 50)
+      end
+
+      it "does not return a log with a different age1 as a duplicate" do
+        expect(duplicate_sets.count).to eq(1)
+        expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)
+      end
+    end
+
+    context "when there is a log with a different sex1" do
+      before do
+        create(:sales_log, :duplicate, sex1: "X")
+      end
+
+      it "does not return a log with a different sex1 as a duplicate" do
+        expect(duplicate_sets.count).to eq(1)
+        expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)
+      end
+    end
+
+    context "when there is a log with a different ecstat1" do
+      before do
+        create(:sales_log, :duplicate, ecstat1: 9)
+      end
+
+      it "does not return a log with a different ecstat1 as a duplicate" do
+        expect(duplicate_sets.count).to eq(1)
+        expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)
+      end
+    end
+
+    context "when there is a log with a different purchid" do
+      before do
+        create(:sales_log, :duplicate, purchid: "different")
+      end
+
+      it "does not return a log with a different purchid as a duplicate" do
+        expect(duplicate_sets.count).to eq(1)
+        expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)
+      end
+    end
+
+    context "when there is a log with a different postcode_full" do
+      before do
+        create(:sales_log, :duplicate, postcode_full: "B1 1AA")
+      end
+
+      it "does not return a log with a different postcode_full as a duplicate" do
+        expect(duplicate_sets.count).to eq(1)
+        expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)
+      end
+    end
+
+    context "when there is a log with nil values for duplicate check fields" do
+      before do
+        create(:sales_log, :duplicate, age1: nil, sex1: nil, ecstat1: nil, pcodenk: 1, postcode_full: nil)
+      end
+
+      it "does not return a log with nil values as a duplicate" do
+        log.update!(age1: nil, sex1: nil, ecstat1: nil, pcodenk: 1, postcode_full: nil)
+        expect(duplicate_sets).to be_empty
+      end
+    end
+
+    context "when there is a log with nil values for purchid" do
+      let!(:purchid_not_given) { create(:sales_log, :duplicate, purchid: nil, owning_organisation: organisation) }
+
+      it "returns the log as a duplicate if tenancy code is nil" do
+        log.update!(purchid: nil)
+        expect(duplicate_sets.count).to eq(1)
+        expect(duplicate_sets.first).to contain_exactly(log.id, purchid_not_given.id)
+      end
+    end
+
+    context "when there is a log with age1 not known" do
+      let!(:age1_not_known) { create(:sales_log, :duplicate, age1_known: 1, age1: nil, owning_organisation: organisation) }
+
+      it "returns the log as a duplicate if age1 is not known" do
+        log.update!(age1_known: 1, age1: nil)
+        expect(duplicate_sets.count).to eq(1)
+        expect(duplicate_sets.first).to contain_exactly(age1_not_known.id, log.id)
+      end
+    end
+
+    context "when there is a log with age1 prefers not to say" do
+      let!(:age1_prefers_not_to_say) { create(:sales_log, :duplicate, age1_known: 2, age1: nil, owning_organisation: organisation) }
+
+      it "returns the log as a duplicate if age1 is prefers not to say" do
+        log.update!(age1_known: 2, age1: nil)
+        expect(duplicate_sets.count).to eq(1)
+        expect(duplicate_sets.first).to contain_exactly(age1_prefers_not_to_say.id, log.id)
+      end
+    end
+
+    context "when there is a log with age1 not known and prefers not to say" do
+      before do
+        create(:sales_log, :duplicate, age1_known: 2, age1: nil)
+      end
+
+      it "doe not return the log as a duplicate" do
+        log.update!(age1_known: 1, age1: nil)
+        expect(duplicate_sets).to be_empty
+      end
+    end
+
+    context "when user is given" do
+      let(:user) { create(:user) }
+
+      before do
+        create_list(:sales_log, 2, :duplicate, purchid: "other duplicates")
+        log.update!(created_by: user, owning_organisation: user.organisation)
+      end
+
+      it "does not return logs not associated with the given user" do
+        duplicate_log.update!(owning_organisation: user.organisation)
+        duplicate_sets = described_class.duplicate_sets(user.id)
+        expect(duplicate_sets.count).to eq(1)
+        expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)
+      end
+    end
+  end
+
   describe "derived variables" do
     let(:sales_log) { create(:sales_log, :completed) }
 

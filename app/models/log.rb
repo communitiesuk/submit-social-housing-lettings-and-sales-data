@@ -81,6 +81,10 @@ class Log < ApplicationRecord
     collection_start_year
   end
 
+  def setup_completed?
+    form.setup_sections.all? { |sections| sections.subsections.all? { |subsection| subsection.status(self) == :completed } }
+  end
+
   def lettings?
     false
   end

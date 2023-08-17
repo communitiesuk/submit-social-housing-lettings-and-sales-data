@@ -189,6 +189,9 @@ en:
       other: "%{log_ids} have been deleted."
     duplicate_logs:
         deduplication_success_banner: "%{log_link} is no longer a duplicate and has been removed from the list.<p class=\"govuk-body govuk-!-margin-top-4\">You changed the %{changed_question_label}.</p>"
+    duplicate_sets:
+      one: "There is %{count} set of duplicate logs"
+      other: "There are %{count} sets of duplicate logs"
 
   validations:
     organisation:

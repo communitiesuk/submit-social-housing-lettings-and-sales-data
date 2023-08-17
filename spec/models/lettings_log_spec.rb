@@ -2980,6 +2980,189 @@ RSpec.describe LettingsLog do
         end
       end
     end
+
+    context "when getting list of duplicate logs" do
+      let(:organisation) { create(:organisation) }
+      let!(:log) { create(:lettings_log, :duplicate, owning_organisation: organisation) }
+      let!(:duplicate_log) { create(:lettings_log, :duplicate, owning_organisation: organisation) }
+      let(:duplicate_sets) { described_class.duplicate_sets }
+
+      it "returns a list of duplicates in the same organisation" do
+        expect(duplicate_sets.count).to eq(1)
+        expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)
+      end
+
+      context "when there is a deleted duplicate log" do
+        before do
+          create(:lettings_log, :duplicate, discarded_at: Time.zone.now, status: 4)
+        end
+
+        it "does not return the deleted log as a duplicate" do
+          expect(duplicate_sets.count).to eq(1)
+          expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)
+        end
+      end
+
+      context "when there is a log with a different start date" do
+        before do
+          create(:lettings_log, :duplicate, startdate: Time.zone.tomorrow)
+        end
+
+        it "does not return a log with a different start date as a duplicate" do
+          expect(duplicate_sets.count).to eq(1)
+          expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)
+        end
+      end
+
+      context "when there is a log with a different age1" do
+        before do
+          create(:lettings_log, :duplicate, age1: 50)
+        end
+
+        it "does not return a log with a different age1 as a duplicate" do
+          expect(duplicate_sets.count).to eq(1)
+          expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)
+        end
+      end
+
+      context "when there is a log with a different sex1" do
+        before do
+          create(:lettings_log, :duplicate, sex1: "F")
+        end
+
+        it "does not return a log with a different sex1 as a duplicate" do
+          expect(duplicate_sets.count).to eq(1)
+          expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)
+        end
+      end
+
+      context "when there is a log with a different ecstat1" do
+        before do
+          create(:lettings_log, :duplicate, ecstat1: 1)
+        end
+
+        it "does not return a log with a different ecstat1 as a duplicate" do
+          expect(duplicate_sets.count).to eq(1)
+          expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)
+        end
+      end
+
+      context "when there is a log with a different tcharge" do
+        before do
+          create(:lettings_log, :duplicate, brent: 100)
+        end
+
+        it "does not return a log with a different tcharge as a duplicate" do
+          expect(duplicate_sets.count).to eq(1)
+          expect(duplicate_sets.first).to contain_exactly(duplicate_log.id, log.id)
+        end
+      end
+
+      context "when there is a log with a different tenancycode" do
+        before do
+          create(:lettings_log, :duplicate, tenancycode: "different")
+        end
+
+        it "does not return a log with a different tenancycode as a duplicate" do
+          expect(duplicate_sets.count).to eq(1)
+          expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)
+        end
+      end
+
+      context "when there is a log with a different postcode_full" do
+        before do
+          create(:lettings_log, :duplicate, postcode_full: "B1 1AA")
+        end
+
+        it "does not return a log with a different postcode_full as a duplicate" do
+          expect(duplicate_sets.count).to eq(1)
+          expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)
+        end
+      end
+
+      context "when there is a log with nil values for duplicate check fields" do
+        before do
+          create(:lettings_log, :duplicate, age1: nil, sex1: nil, ecstat1: nil, postcode_known: 2, postcode_full: nil)
+        end
+
+        it "does not return a log with nil values as a duplicate" do
+          log.update!(age1: nil, sex1: nil, ecstat1: nil, postcode_known: 2, postcode_full: nil)
+          expect(duplicate_sets).to be_empty
+        end
+      end
+
+      context "when there is a log with nil values for tenancycode" do
+        let!(:tenancycode_not_given) { create(:lettings_log, :duplicate, tenancycode: nil, owning_organisation: organisation) }
+
+        it "returns the log as a duplicate if tenancy code is nil" do
+          log.update!(tenancycode: nil)
+          expect(duplicate_sets.count).to eq(1)
+          expect(duplicate_sets.first).to contain_exactly(log.id, tenancycode_not_given.id)
+        end
+      end
+
+      context "when there is a log with age1 not known" do
+        let!(:age1_not_known) { create(:lettings_log, :duplicate, age1_known: 1, age1: nil, owning_organisation: organisation) }
+
+        it "returns the log as a duplicate if age1 is not known" do
+          log.update!(age1_known: 1, age1: nil)
+          expect(duplicate_sets.count).to eq(1)
+          expect(duplicate_sets.first).to contain_exactly(age1_not_known.id, log.id)
+        end
+      end
+
+      context "when there is a duplicate supported housing log" do
+        let(:scheme) { create(:scheme) }
+        let(:location) { create(:location, scheme:) }
+        let(:location_2) { create(:location, scheme:) }
+        let!(:supported_housing_log) { create(:lettings_log, :duplicate, needstype: 2, location:, scheme:, owning_organisation: organisation) }
+        let!(:duplicate_supported_housing_log) { create(:lettings_log, :duplicate, needstype: 2, location:, scheme:, owning_organisation: organisation) }
+
+        it "returns the log as a duplicate" do
+          expect(duplicate_sets.count).to eq(2)
+          expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)
+          expect(duplicate_sets.second).to contain_exactly(duplicate_supported_housing_log.id, supported_housing_log.id)
+        end
+
+        it "does not return the log if the locations are different" do
+          duplicate_supported_housing_log.update!(location: location_2)
+          expect(duplicate_sets.count).to eq(1)
+          expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)
+        end
+
+        it "does not compare tcharge if there are no household charges" do
+          supported_housing_log.update!(household_charge: 1, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil, owning_organisation: organisation)
+          duplicate_supported_housing_log.update!(household_charge: 1, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil, owning_organisation: organisation)
+          expect(duplicate_sets.count).to eq(2)
+          expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)
+          expect(duplicate_sets.second).to contain_exactly(supported_housing_log.id, duplicate_supported_housing_log.id)
+        end
+
+        it "does not return logs not associated with the user if user is given" do
+          user = create(:user)
+          supported_housing_log.update!(created_by: user, owning_organisation: user.organisation)
+          duplicate_supported_housing_log.update!(owning_organisation: user.organisation)
+          duplicate_sets = described_class.duplicate_sets(user.id)
+          expect(duplicate_sets.count).to eq(1)
+          expect(duplicate_sets.first).to contain_exactly(supported_housing_log.id, duplicate_supported_housing_log.id)
+        end
+
+        it "compares chcharge if it's a carehome" do
+          supported_housing_log.update!(is_carehome: 1, chcharge: 100, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil, owning_organisation: organisation)
+          duplicate_supported_housing_log.update!(is_carehome: 1, chcharge: 100, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil, owning_organisation: organisation)
+          expect(duplicate_sets.count).to eq(2)
+          expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)
+          expect(duplicate_sets.second).to contain_exactly(supported_housing_log.id, duplicate_supported_housing_log.id)
+        end
+
+        it "does not return a duplicate if carehome charge is not given" do
+          supported_housing_log.update!(is_carehome: 1, chcharge: nil, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil, owning_organisation: organisation)
+          duplicate_supported_housing_log.update!(is_carehome: 1, chcharge: nil, supcharg: nil, brent: nil, scharge: nil, pscharge: nil, tcharge: nil, owning_organisation: organisation)
+          expect(duplicate_sets.count).to eq(1)
+          expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)
+        end
+      end
+    end
   end
 
   describe "#retirement_age_for_person" do

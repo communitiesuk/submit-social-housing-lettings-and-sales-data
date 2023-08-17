@@ -132,4 +132,12 @@ class Organisation < ApplicationRecord
 
     :active
   end
+
+  def duplicate_lettings_logs_sets
+    lettings_logs.duplicate_sets.map { |array_str| array_str ? array_str.map(&:to_i) : [] }
+  end
+
+  def duplicate_sales_logs_sets
+    sales_logs.duplicate_sets.map { |array_str| array_str ? array_str.map(&:to_i) : [] }
+  end
 end

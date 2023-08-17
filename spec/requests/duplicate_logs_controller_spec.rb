@@ -313,4 +313,78 @@ RSpec.describe DuplicateLogsController, type: :request do
       end
     end
   end
+
+  describe "GET #index" do
+    before do
+      allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+      sign_in user
+    end
+
+    context "when the user is support" do
+      let(:user) { create(:user, :support) }
+
+      it "renders not found" do
+        get duplicate_logs_path(organisation_id: user.organisation.id)
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when the user is a data coordinator" do
+      let(:user) { create(:user, :data_coordinator) }
+
+      before do
+        allow(user.organisation).to receive(:duplicate_lettings_logs_sets).and_return([[1, 2], [3, 4, 5]])
+        allow(user.organisation).to receive(:duplicate_sales_logs_sets).and_return([[11, 12]])
+      end
+
+      it "gets organisation duplicates" do
+        expect(user.organisation).to receive(:duplicate_lettings_logs_sets)
+        expect(user.organisation).to receive(:duplicate_sales_logs_sets)
+        get duplicate_logs_path(organisation_id: user.organisation.id)
+      end
+    end
+
+    context "when the user is a provider" do
+      let(:user) { create(:user) }
+
+      before do
+        allow(user).to receive(:duplicate_lettings_logs_sets).and_return([[1, 2], [3, 4, 5]])
+        allow(user).to receive(:duplicate_sales_logs_sets).and_return([[11, 12]])
+      end
+
+      it "calls the helper method to retrieve duplicates for the current user" do
+        expect(user).to receive(:duplicate_lettings_logs_sets)
+        expect(user).to receive(:duplicate_sales_logs_sets)
+        get duplicate_logs_path
+      end
+
+      describe "viewing the page" do
+        before do
+          get duplicate_logs_path
+        end
+
+        it "has the correct headers" do
+          expect(page).to have_content("Type of logs")
+          expect(page).to have_content("Log IDs")
+        end
+
+        it "has the correct number of rows for each log type" do
+          expect(page).to have_selector("tbody tr td", text: "Lettings", count: 2)
+          expect(page).to have_selector("tbody tr td", text: "Sales", count: 1)
+        end
+
+        it "shows the log ids for each set of duplicates" do
+          expect(page).to have_content("Log 1, Log 2")
+          expect(page).to have_content("Log 3, Log 4, Log 5")
+          expect(page).to have_content("Log 11, Log 12")
+        end
+
+        it "shows links for each set of duplciates" do
+          expect(page).to have_link("Review logs", href: lettings_log_duplicate_logs_path(1, original_log_id: 1))
+          expect(page).to have_link("Review logs", href: lettings_log_duplicate_logs_path(3, original_log_id: 3))
+          expect(page).to have_link("Review logs", href: sales_log_duplicate_logs_path(11, original_log_id: 11))
+        end
+      end
+    end
+  end
 end

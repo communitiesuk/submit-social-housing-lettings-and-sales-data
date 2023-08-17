@@ -203,6 +203,14 @@ class User < ApplicationRecord
     super && active?
   end
 
+  def duplicate_lettings_logs_sets
+    lettings_logs.duplicate_sets(id).map { |array_str| array_str ? array_str.map(&:to_i) : [] }
+  end
+
+  def duplicate_sales_logs_sets
+    sales_logs.duplicate_sets(id).map { |array_str| array_str ? array_str.map(&:to_i) : [] }
+  end
+
 protected
 
   # Checks whether a password is needed or not. For validations only.

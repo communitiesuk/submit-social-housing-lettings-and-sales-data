@@ -238,8 +238,6 @@ RSpec.describe LettingsLogsController, type: :request do
       let(:headers) { { "Accept" => "text/html" } }
 
       context "when you visit the index page" do
-        let(:user) { FactoryBot.create(:user, :support) }
-
         before do
           allow(user).to receive(:need_two_factor_authentication?).and_return(false)
           sign_in user
@@ -306,6 +304,18 @@ RSpec.describe LettingsLogsController, type: :request do
           get "/lettings-logs", headers:, params: {}
           expect(page).to have_link("Download (CSV)", href: "/lettings-logs/csv-download?codes_only=false")
           expect(page).to have_link("Download (CSV, codes only)", href: "/lettings-logs/csv-download?codes_only=true")
+        end
+
+        context "when there are duplicate logs for this user" do
+          before do
+            FactoryBot.create_list(:lettings_log, 2, :duplicate, owning_organisation: user.organisation, created_by: user)
+          end
+
+          it "does not show a notification banner even if there are duplicate logs for this user" do
+            get lettings_logs_path
+            expect(page).not_to have_content "duplicate logs"
+            expect(page).not_to have_link "Review logs"
+          end
         end
 
         context "when there are no logs in the database" do
@@ -615,6 +625,12 @@ RSpec.describe LettingsLogsController, type: :request do
           expect(page).not_to have_link("Download (CSV, codes only)")
         end
 
+        it "does not show a notification banner even if there are duplicate logs for this user" do
+          get lettings_logs_path
+          expect(page).not_to have_content "duplicate logs"
+          expect(page).not_to have_link "Review logs"
+        end
+
         context "when using a search query" do
           let(:logs) { FactoryBot.create_list(:lettings_log, 3, :completed, owning_organisation: user.organisation, created_by: user) }
           let(:log_to_search) { FactoryBot.create(:lettings_log, :completed, owning_organisation: user.organisation, created_by: user) }
@@ -868,6 +884,36 @@ RSpec.describe LettingsLogsController, type: :request do
 
             it "has pagination in the title" do
               expect(page).to have_title("Logs (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            end
+          end
+        end
+
+        context "and there are duplicate logs for this user" do
+          before do
+            FactoryBot.create_list(:lettings_log, 2, :duplicate, owning_organisation: user.organisation, created_by: user)
+          end
+
+          it "displays a notification banner with a link to review logs" do
+            get lettings_logs_path
+            expect(page).to have_content "duplicate logs"
+            expect(page).to have_link "Review logs" # add an href when routing done
+          end
+
+          context "when there is one set of duplicates" do
+            it "displays the correct copy in the banner" do
+              get lettings_logs_path
+              expect(page).to have_content "There is 1 set of duplicate logs"
+            end
+          end
+
+          context "when there are multiple sets of duplicates" do
+            before do
+              FactoryBot.create_list(:sales_log, 2, :duplicate, owning_organisation: user.organisation, created_by: user)
+            end
+
+            it "displays the correct copy in the banner" do
+              get lettings_logs_path
+              expect(page).to have_content "There are 2 sets of duplicate logs"
             end
           end
         end

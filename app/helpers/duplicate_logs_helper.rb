@@ -27,4 +27,27 @@ module DuplicateLogsHelper
     first_remaining_duplicate_id = all_duplicates.map(&:id).reject { |id| id == log.id }.first
     send("#{log.model_name.param_key}_#{page_id}_path", log, referrer: "duplicate_logs", first_remaining_duplicate_id:, original_log_id:)
   end
+
+  def duplicates_for_user(user)
+    {
+      lettings: user.duplicate_lettings_logs_sets,
+      sales: user.duplicate_sales_logs_sets,
+    }
+  end
+
+  def duplicates_for_organisation(organisation)
+    {
+      lettings: organisation.duplicate_lettings_logs_sets,
+      sales: organisation.duplicate_sales_logs_sets,
+    }
+  end
+
+  def duplicate_sets_count(user, organisation)
+    duplicates = user.data_provider? ? duplicates_for_user(user) : duplicates_for_organisation(organisation)
+    duplicates[:lettings].count + duplicates[:sales].count
+  end
+
+  def duplicate_list_header(duplicate_sets_count)
+    duplicate_sets_count > 1 ? "Review these #{duplicate_sets_count} sets of logs" : "Review this #{duplicate_sets_count} set of logs"
+  end
 end
