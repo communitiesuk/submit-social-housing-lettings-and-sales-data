@@ -39,6 +39,8 @@ module Imports
     end
 
     def update_creation_method(xml_doc)
+      return if meta_field_value(xml_doc, "form-name").include?("Sales")
+
       old_id = meta_field_value(xml_doc, "document-id")
       log = LettingsLog.find_by(old_id:)
 

@@ -4,6 +4,8 @@ module Imports
       case field
       when "creation_method"
         import_from(folder, :update_creation_method)
+      when "owning_organisation_id"
+        import_from(folder, :update_owning_organisation_id)
       else
         raise "Updating #{field} is not supported by the field import service"
       end
@@ -12,6 +14,8 @@ module Imports
   private
 
     def update_creation_method(xml_doc)
+      return if meta_field_value(xml_doc, "form-name").include?("Lettings")
+
       old_id = meta_field_value(xml_doc, "document-id")
       log = SalesLog.find_by(old_id:)
 
@@ -26,6 +30,25 @@ module Imports
       else
         log.creation_method_bulk_upload!
         @logger.info "sales log #{log.id} creation method set to bulk upload"
+      end
+    end
+
+    def update_owning_organisation_id(xml_doc)
+      return if meta_field_value(xml_doc, "form-name").include?("Lettings")
+
+      old_id = meta_field_value(xml_doc, "document-id")
+      record = SalesLog.find_by(old_id:)
+
+      if record.present?
+        if record.owning_organisation_id.present?
+          @logger.info("sales log #{record.id} has a value for owning_organisation_id, skipping update")
+        else
+          owning_organisation_id = safe_string_as_integer(xml_doc, "OWNINGORGID")
+          record.update!(owning_organisation_id:)
+          @logger.info("sales log #{record.id}'s owning_organisation_id value has been set to #{owning_organisation_id}")
+        end
+      else
+        @logger.warn("sales log with old id #{old_id} not found")
       end
     end
   end
