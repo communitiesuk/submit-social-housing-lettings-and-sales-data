@@ -158,6 +158,7 @@ class FormHandler
 
   def use_real_forms!
     @directories = ["config/forms"]
+    @lettings_forms = get_lettings_forms
     @forms = get_all_forms
   end
 

@@ -1575,6 +1575,7 @@ RSpec.describe LettingsLog do
       it "clears underoccupation_benefitcap if log is no longer in 2021/22" do
         expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :underoccupation_benefitcap).to 2
         Timecop.return
+        Singleton.__init__(FormHandler)
         expect { lettings_log.update!(startdate: Time.zone.local(2023, 1, 1)) }.to change(lettings_log, :underoccupation_benefitcap).from(2).to nil
       end
 
@@ -2040,6 +2041,7 @@ RSpec.describe LettingsLog do
 
         before do
           Timecop.freeze(Time.zone.local(2022, 4, 2))
+          Singleton.__init__(FormHandler)
           lettings_log.update!(startdate: Time.zone.local(2022, 4, 2), scheme:)
           Timecop.unfreeze
         end
