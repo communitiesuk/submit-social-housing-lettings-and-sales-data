@@ -17,7 +17,7 @@ namespace :core do
         Rails.logger.info("Imported")
       end
     else
-      raise "Field #{field} cannot be updated by data_import_field"
+      raise "Field #{field} cannot be updated by lettings_data_import_field"
     end
   end
 
@@ -39,7 +39,7 @@ namespace :core do
         Rails.logger.info("Imported")
       end
     else
-      raise "Field #{field} cannot be updated by data_import_field"
+      raise "Field #{field} cannot be updated by sales_data_import_field"
     end
   end
 end
