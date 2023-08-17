@@ -14,7 +14,7 @@ module Imports
   private
 
     def update_creation_method(xml_doc)
-      return if meta_field_value(xml_doc, "form-name").include?("Lettings")
+      return unless meta_field_value(xml_doc, "form-name").include?("Sales")
 
       old_id = meta_field_value(xml_doc, "document-id")
       log = SalesLog.find_by(old_id:)
@@ -34,7 +34,7 @@ module Imports
     end
 
     def update_owning_organisation_id(xml_doc)
-      return if meta_field_value(xml_doc, "form-name").include?("Lettings")
+      return unless meta_field_value(xml_doc, "form-name").include?("Sales")
 
       old_id = meta_field_value(xml_doc, "document-id")
       record = SalesLog.find_by(old_id:)
