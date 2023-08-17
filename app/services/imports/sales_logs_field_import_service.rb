@@ -43,9 +43,10 @@ module Imports
         if record.owning_organisation_id.present?
           @logger.info("sales log #{record.id} has a value for owning_organisation_id, skipping update")
         else
-          owning_organisation_id = safe_string_as_integer(xml_doc, "OWNINGORGID")
-          record.update!(owning_organisation_id:)
-          @logger.info("sales log #{record.id}'s owning_organisation_id value has been set to #{owning_organisation_id}")
+          old_owning_organisation_id = safe_string_as_integer(xml_doc, "OWNINGORGID")
+          new_owning_organisation_id = Organisation.find_by(old_visible_id: old_owning_organisation_id).id
+          record.update!(owning_organisation_id: new_owning_organisation_id)
+          @logger.info("sales log #{record.id}'s owning_organisation_id value has been set to #{new_owning_organisation_id}")
         end
       else
         @logger.warn("sales log with old id #{old_id} not found")
