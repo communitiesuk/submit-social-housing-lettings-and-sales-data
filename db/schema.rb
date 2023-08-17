@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_19_150610) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_16_083950) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -616,6 +616,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_19_150610) do
     t.datetime "discarded_at"
     t.integer "stairowned_value_check"
     t.integer "creation_method", default: 1
+    t.integer "old_form_id"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["old_id"], name: "index_sales_logs_on_old_id", unique: true
