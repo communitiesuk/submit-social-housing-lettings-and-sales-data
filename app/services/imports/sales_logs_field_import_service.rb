@@ -6,6 +6,8 @@ module Imports
         import_from(folder, :update_creation_method)
       when "owning_organisation_id"
         import_from(folder, :update_owning_organisation_id)
+      when "old_form_id"
+        import_from(folder, :update_old_form_id)
       else
         raise "Updating #{field} is not supported by the field import service"
       end
@@ -46,6 +48,25 @@ module Imports
           owning_organisation_id = find_organisation_id(xml_doc, "OWNINGORGID")
           record.update!(owning_organisation_id:)
           @logger.info("sales log #{record.id}'s owning_organisation_id value has been set to #{owning_organisation_id}")
+        end
+      else
+        @logger.warn("sales log with old id #{old_id} not found")
+      end
+    end
+
+    def update_old_form_id(xml_doc)
+      return unless meta_field_value(xml_doc, "form-name").include?("Sales")
+
+      old_id = meta_field_value(xml_doc, "document-id")
+      record = SalesLog.find_by(old_id:)
+
+      if record.present?
+        if record.old_form_id.present?
+          @logger.info("sales log #{record.id} has a value for old_form_id, skipping update")
+        else
+          old_form_id = safe_string_as_integer(xml_doc, "Form")
+          record.update!(old_form_id:)
+          @logger.info("sales log #{record.id}'s old_form_id value has been set to #{old_form_id}")
         end
       else
         @logger.warn("sales log with old id #{old_id} not found")
