@@ -153,6 +153,9 @@
     <manhcnum>1234</manhcnum>
     <createddate>2022-05-01T00:00:00+01:00</createddate>
     <uploaddate>2022-05-01T00:00:00+01:00</uploaddate>
+    <log_id>{log_id}</log_id>
+    <created_by>test1@example.com</created_by>
+    <amended_by/>
     <providertype>1</providertype>
   </form>
 </forms>
