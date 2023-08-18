@@ -6,7 +6,12 @@ class Form::Lettings::Questions::PpostcodeFull < ::Form::Question
     @header = "Postcode for the previous accommodation"
     @type = "text"
     @width = 5
-    @inferred_check_answers_value = [{ "condition" => { "ppcodenk" => 0 }, "value" => "Not known" }]
+    @inferred_check_answers_value = [{
+      "condition" => {
+        "ppcodenk" => 1,
+      },
+      "value" => "Not known",
+    }]
     @check_answers_card_number = 0
     @hint_text = ""
     @inferred_answers = { "prevloc" => { "is_previous_la_inferred" => true } }

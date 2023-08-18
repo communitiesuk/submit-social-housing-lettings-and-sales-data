@@ -14,5 +14,8 @@ class Form::Lettings::Questions::Ppcodenk < ::Form::Question
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 
-  ANSWER_OPTIONS = { "1" => { "value" => "Yes" }, "0" => { "value" => "No" } }.freeze
+  ANSWER_OPTIONS = {
+    "0" => { "value" => "Yes" },
+    "1" => { "value" => "No" },
+  }.freeze
 end

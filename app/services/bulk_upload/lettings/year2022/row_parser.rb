@@ -1283,12 +1283,7 @@ private
   end
 
   def ppcodenk
-    case field_65
-    when 1
-      1
-    when 2
-      0
-    end
+    field_65 == 1 ? 0 : 1
   end
 
   def earnings

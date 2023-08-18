@@ -260,8 +260,8 @@ class LettingsLog < Log
   end
 
   def previous_postcode_known?
-    # 1: Yes
-    ppcodenk == 1
+    # 0: Yes
+    postcode_known&.zero?
   end
 
   def previous_la_known?
