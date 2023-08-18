@@ -65,7 +65,7 @@ class Form::Sales::Questions::OwningOrganisationId < ::Form::Question
   end
 
   def derived?
-    true if FeatureToggle.merge_organisations_enabled?
+    true
   end
 
   def hidden_in_check_answers?(_log, user = nil)

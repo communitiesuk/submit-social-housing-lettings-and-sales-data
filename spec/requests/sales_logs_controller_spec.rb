@@ -159,6 +159,24 @@ RSpec.describe SalesLogsController, type: :request do
               expect(sales_log.owning_organisation.name).to eq("User org")
             end
           end
+
+          context "when the user's org doesn't hold stock and merge_organisations_enabled is false" do
+            let(:organisation) { FactoryBot.create(:organisation, name: "User org", holds_own_stock: false) }
+            let(:user) { FactoryBot.create(:user, :data_coordinator, organisation:) }
+
+            before do
+              RequestHelper.stub_http_requests
+              sign_in user
+              allow(FeatureToggle).to receive(:merge_organisations_enabled?).and_return(false)
+              post "/sales-logs", headers:
+            end
+
+            it "sets the stock-owning org as user's org" do
+              created_id = response.location.match(/[0-9]+/)[0]
+              sales_log = SalesLog.find_by(id: created_id)
+              expect(sales_log.owning_organisation.name).to eq("User org")
+            end
+          end
         end
       end
     end
