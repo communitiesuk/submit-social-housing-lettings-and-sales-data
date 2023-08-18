@@ -130,13 +130,6 @@ module Exports::LettingsLogExportConstants
     "wsupchrg",
     "wtcharge",
     "wtshortfall",
-    "location_code",
-    "scheme_old",
-    "log_id",
-    "scheme_status",
-    "location_status",
-    "created_by",
-    "amended_by"
   ]
 
   (1..8).each do |index|

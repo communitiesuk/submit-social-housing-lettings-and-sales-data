@@ -152,9 +152,6 @@
     <manhcnum>1234</manhcnum>
     <createddate>2022-05-01T00:00:00+01:00</createddate>
     <uploaddate>2022-05-01T00:00:00+01:00</uploaddate>
-    <log_id>{log_id}</log_id>
-    <created_by>fake@email.com</created_by>
-    <amended_by>other@email.com</amended_by>
     <unittype_sh>7</unittype_sh>
     <confidential>1</confidential>
     <cligrp1>G</cligrp1>
@@ -165,13 +162,9 @@
     <schtype>7</schtype>
     <support>4</support>
     <units_scheme>20</units_scheme>
-    <scheme>{scheme_id}</scheme>
-    <scheme_status>active</scheme_status>
     <mobstand>A</mobstand>
-    <scheme_old>111</scheme_old>
+    <scheme>111</scheme>
     <units>20</units>
-    <location_code>{location_id}</location_code>
-    <location_status>active</location_status>
     <providertype>1</providertype>
   </form>
 </forms>

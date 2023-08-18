@@ -196,10 +196,6 @@ module Exports
         attribute_hash["age#{index}"] = -9 if attribute_hash["age#{index}_known"] == 1
       end
 
-      attribute_hash["log_id"] = lettings_log.id
-      attribute_hash["created_by"] = lettings_log.created_by&.email
-      attribute_hash["amended_by"] = lettings_log.updated_by&.email
-
       # Supported housing fields
       if lettings_log.is_supported_housing?
         attribute_hash["unittype_sh"] = lettings_log.unittype_sh
@@ -223,16 +219,12 @@ module Exports
       attribute_hash["schtype"] = scheme.scheme_type_before_type_cast
       attribute_hash["support"] = scheme.support_type_before_type_cast
       attribute_hash["units_scheme"] = scheme.locations.map(&:units).compact.sum
-      attribute_hash["scheme"] = scheme.id
-      attribute_hash["scheme_status"] = scheme.status_at(attribute_hash["startdate"])
     end
 
     def add_location_fields!(location, attribute_hash)
       attribute_hash["mobstand"] = location.mobility_type_before_type_cast
-      attribute_hash["scheme_old"] = location.old_visible_id
+      attribute_hash["scheme"] = location.old_visible_id || (location.id + LOG_ID_OFFSET)
       attribute_hash["units"] = location.units
-      attribute_hash["location_code"] = location.id
-      attribute_hash["location_status"] = location.status_at(attribute_hash["startdate"])
     end
 
     def filter_keys!(attributes)
