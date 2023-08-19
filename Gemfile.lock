@@ -269,7 +269,7 @@ GEM
       byebug (~> 11.0)
       pry (>= 0.13, < 0.15)
     public_suffix (5.0.1)
-    puma (5.6.5)
+    puma (5.6.7)
       nio4r (~> 2.0)
     pundit (2.3.0)
       activesupport (>= 3.0.0)
@@ -474,7 +474,7 @@ DEPENDENCIES
   postcodes_io
   propshaft
   pry-byebug
-  puma (~> 5.0)
+  puma (~> 5.6)
   pundit
   rack (>= 2.2.6.3)
   rack-attack
