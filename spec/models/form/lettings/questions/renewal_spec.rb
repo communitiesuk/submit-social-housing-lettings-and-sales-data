@@ -28,7 +28,7 @@ RSpec.describe Form::Lettings::Questions::Renewal, type: :model do
   end
 
   it "has the correct hint_text" do
-    expect(question.hint_text).to eq("A renewal is a letting to the same tenant in the same property")
+    expect(question.hint_text).to eq("A renewal is a letting to the same tenant in the same property. If the property was previously being used as temporary accommodation, then answer 'no'")
   end
 
   it "has the correct answer_options" do
