@@ -36,7 +36,7 @@ module Exports
     end
 
     def build_export_run(collection, current_time, base_number, full_update)
-      logger.info("Building export run for #{collection}")
+      @logger.info("Building export run for #{collection}")
       previous_exports_with_data = LogsExport.where(collection:, empty_export: false)
 
       increment_number = previous_exports_with_data.where(base_number:).maximum(:increment_number) || 1
@@ -77,7 +77,7 @@ module Exports
     end
 
     def write_export_archive(export, lettings_logs)
-      logger.info("Writing export archives")
+      @logger.info("Writing export archives")
       # Order lettings logs per archive
       lettings_logs_per_archive = {}
       lettings_logs.each do |lettings_log|
@@ -93,9 +93,10 @@ module Exports
 
       # Write all archives
       archive_datetimes = {}
-      logger.info("Following archives to write:")
+      @logger.info("Following archives to write:")
+      # rubocop:disable Style/CombinableLoops
       lettings_logs_per_archive.each do |archive, lettings_logs_to_export|
-        logger.info("#{archive} - #{lettings_logs_to_export.count} logs")
+        @logger.info("#{archive} - #{lettings_logs_to_export.count} logs")
       end
       lettings_logs_per_archive.each do |archive, lettings_logs_to_export|
         manifest_xml = build_manifest_xml(lettings_logs_to_export.count)
@@ -106,7 +107,7 @@ module Exports
         lettings_logs_to_export.each_slice(MAX_XML_RECORDS) do |lettings_logs_slice|
           data_xml = build_export_xml(lettings_logs_slice)
           part_number_str = "pt#{part_number.to_s.rjust(3, '0')}"
-          logger.info("Adding #{archive}_#{part_number_str}.xml")
+          @logger.info("Adding #{archive}_#{part_number_str}.xml")
           zip_file.add("#{archive}_#{part_number_str}.xml", data_xml)
           part_number += 1
         end
@@ -114,16 +115,17 @@ module Exports
         # Required by S3 to avoid Aws::S3::Errors::BadDigest
         zip_io = zip_file.write_buffer
         zip_io.rewind
-        logger.info("Writting #{archive}.zip")
+        @logger.info("Writting #{archive}.zip")
         @storage_service.write_file("#{archive}.zip", zip_io)
         archive_datetimes[archive] = Time.zone.now
       end
+      # rubocop:enable Style/CombinableLoops
 
       archive_datetimes
     end
 
     def retrieve_lettings_logs(start_time, full_update)
-      logger.info("Retrieving lettings logs")
+      @logger.info("Retrieving lettings logs")
       recent_export = LogsExport.order("started_at").last
 
       if !full_update && recent_export
