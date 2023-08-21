@@ -10,14 +10,12 @@ module Exports
 
     def export_xml_lettings_logs(full_update: false)
       start_time = Time.zone.now
-      logs_by_collection = retrieve_lettings_logs(start_time, full_update).group_by(&:collection_start_year)
       daily_run_number = get_daily_run_number
       archives_for_manifest = {}
       base_number = LogsExport.where(empty_export: false).maximum(:base_number) || 1
       available_collection_years.each do |collection|
-        lettings_logs = logs_by_collection.fetch(collection, LettingsLog.none)
         export = build_export_run(collection, start_time, base_number, full_update)
-        archives = write_export_archive(export, lettings_logs)
+        archives = write_export_archive(export, collection, start_time, full_update)
 
         archives_for_manifest.merge!(archives)
 
@@ -76,29 +74,19 @@ module Exports
       "core_#{collection_start}_#{collection_start + 1}_#{start_month}_#{end_month}_#{base_number_str}_#{increment_str}".downcase
     end
 
-    def write_export_archive(export, lettings_logs)
+    def write_export_archive(export, collection, start_time, full_update)
       @logger.info("Writing export archives")
       # Order lettings logs per archive
-      lettings_logs_per_archive = {}
-      lettings_logs.each do |lettings_log|
-        archive = get_archive_name(lettings_log, export.base_number, export.increment_number)
-        next unless archive
-
-        if lettings_logs_per_archive.key?(archive)
-          lettings_logs_per_archive[archive] << lettings_log
-        else
-          lettings_logs_per_archive[archive] = [lettings_log]
-        end
-      end
+      lettings_logs = retrieve_lettings_logs(start_time, full_update).filter_by_year(collection)
+      return {} unless lettings_logs.exists?
+      
+      archive_name = get_archive_name(lettings_logs.first, export.base_number, export.increment_number) #archive name would be the same for all logs because they're already filtered by year (?)
+      lettings_logs_per_archive = { archive_name => lettings_logs }
 
       # Write all archives
       archive_datetimes = {}
-      @logger.info("Following archives to write:")
-      # rubocop:disable Style/CombinableLoops
       lettings_logs_per_archive.each do |archive, lettings_logs_to_export|
-        @logger.info("#{archive} - #{lettings_logs_to_export.count} logs")
-      end
-      lettings_logs_per_archive.each do |archive, lettings_logs_to_export|
+        @logger.info("Writing #{archive} - #{lettings_logs_to_export.count} logs")
         manifest_xml = build_manifest_xml(lettings_logs_to_export.count)
         zip_file = Zip::File.open_buffer(StringIO.new)
         zip_file.add("manifest.xml", manifest_xml)
