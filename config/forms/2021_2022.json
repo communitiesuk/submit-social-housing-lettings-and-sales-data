@@ -6488,10 +6488,10 @@
                   "disable_clearing_if_not_routed_or_dynamic_answer_options": true,
                   "answer_options": {
                     "1": {
-                      "value": "Yes"
+                      "value": "No"
                     },
                     "0": {
-                      "value": "No"
+                      "value": "Yes"
                     }
                   },
                   "conditional_for": {
@@ -6524,7 +6524,7 @@
                   },
                   "inferred_check_answers_value": [{
                     "condition": {
-                      "ppcodenk": 0
+                      "ppcodenk": 1
                     },
                     "value": "Not known"
                   }]
