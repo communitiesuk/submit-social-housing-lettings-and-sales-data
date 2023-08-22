@@ -8,7 +8,7 @@ class Form::Lettings::Questions::Ppcodenk < ::Form::Question
     @check_answers_card_number = 0
     @hint_text = "This is also known as the household’s ‘last settled home’."
     @answer_options = ANSWER_OPTIONS
-    @conditional_for = { "ppostcode_full" => [1] }
+    @conditional_for = { "ppostcode_full" => [0] }
     @hidden_in_check_answers = { "depends_on" => [{ "ppcodenk" => 0 }, { "ppcodenk" => 1 }] }
     @question_number = 80
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
