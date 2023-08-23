@@ -75,7 +75,6 @@ module Exports
     def write_export_archive(export, collection, start_time, recent_export, full_update)
       archive = get_archive_name(collection, export.base_number, export.increment_number) # archive name would be the same for all logs because they're already filtered by year (?)
 
-      # Write archive
       logs_count = retrieve_lettings_logs(start_time, recent_export, full_update).filter_by_year(collection).count
       @logger.info("Creating #{archive} - #{logs_count} logs")
       manifest_xml = build_manifest_xml(logs_count)
