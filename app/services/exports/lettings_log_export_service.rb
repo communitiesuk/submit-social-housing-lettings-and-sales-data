@@ -105,6 +105,7 @@ module Exports
         zip_file.add("#{archive}_#{part_number_str}.xml", data_xml)
         part_number += 1
         last_processed_marker = lettings_logs_slice.last.created_at
+        @logger.info("Added #{archive}_#{part_number_str}.xml")
       end
 
       # Required by S3 to avoid Aws::S3::Errors::BadDigest
