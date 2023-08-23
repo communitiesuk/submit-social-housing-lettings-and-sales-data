@@ -13,9 +13,10 @@ module Exports
       daily_run_number = get_daily_run_number
       archives_for_manifest = {}
       base_number = LogsExport.where(empty_export: false).maximum(:base_number) || 1
+      recent_export = LogsExport.order("started_at").last
       available_collection_years.each do |collection|
         export = build_export_run(collection, start_time, base_number, full_update)
-        archives = write_export_archive(export, collection, start_time, full_update)
+        archives = write_export_archive(export, collection, start_time, recent_export, full_update)
 
         archives_for_manifest.merge!(archives)
 
@@ -71,13 +72,12 @@ module Exports
       "core_#{collection}_#{collection + 1}_apr_mar_#{base_number_str}_#{increment_str}".downcase
     end
 
-    def write_export_archive(export, collection, start_time, full_update)
-      @logger.info("Writing export archives")
+    def write_export_archive(export, collection, start_time, recent_export, full_update)
       archive = get_archive_name(collection, export.base_number, export.increment_number) # archive name would be the same for all logs because they're already filtered by year (?)
 
       # Write archive
-      logs_count = retrieve_lettings_logs(start_time, full_update).filter_by_year(collection).count
-      @logger.info("Writing #{archive} - #{logs_count} logs")
+      logs_count = retrieve_lettings_logs(start_time, recent_export, full_update).filter_by_year(collection).count
+      @logger.info("Creating #{archive} - #{logs_count} logs")
       manifest_xml = build_manifest_xml(logs_count)
       return {} if logs_count.zero?
 
@@ -89,12 +89,12 @@ module Exports
 
       loop do
         lettings_logs_slice = if last_processed_marker.present?
-                                retrieve_lettings_logs(start_time, full_update).filter_by_year(collection)
+                                retrieve_lettings_logs(start_time, recent_export, full_update).filter_by_year(collection)
                                       .where("created_at > ?", last_processed_marker)
                                       .order(:created_at)
                                       .limit(MAX_XML_RECORDS)
                               else
-                                retrieve_lettings_logs(start_time, full_update).filter_by_year(collection)
+                                retrieve_lettings_logs(start_time, recent_export, full_update).filter_by_year(collection)
                                 .order(:created_at)
                                 .limit(MAX_XML_RECORDS)
                               end
@@ -103,7 +103,6 @@ module Exports
 
         data_xml = build_export_xml(lettings_logs_slice)
         part_number_str = "pt#{part_number.to_s.rjust(3, '0')}"
-        @logger.info("Adding #{archive}_#{part_number_str}.xml")
         zip_file.add("#{archive}_#{part_number_str}.xml", data_xml)
         part_number += 1
         last_processed_marker = lettings_logs_slice.last.created_at
@@ -112,15 +111,12 @@ module Exports
       # Required by S3 to avoid Aws::S3::Errors::BadDigest
       zip_io = zip_file.write_buffer
       zip_io.rewind
-      @logger.info("Writting #{archive}.zip")
+      @logger.info("Writing #{archive}.zip")
       @storage_service.write_file("#{archive}.zip", zip_io)
       { archive => Time.zone.now }
     end
 
-    def retrieve_lettings_logs(start_time, full_update)
-      @logger.info("Retrieving lettings logs")
-      recent_export = LogsExport.order("started_at").last
-
+    def retrieve_lettings_logs(start_time, recent_export, full_update)
       if !full_update && recent_export
         params = { from: recent_export.started_at, to: start_time }
         LettingsLog.exportable.where("updated_at >= :from and updated_at <= :to", params)

@@ -33,7 +33,7 @@ RSpec.describe Exports::LettingsLogExportService do
   end
 
   before do
-    Timecop.freeze(start_time)
+    Timecop.travel(start_time)
     allow(storage_service).to receive(:write_file)
 
     # Stub the form handler to use the real form
@@ -43,7 +43,7 @@ RSpec.describe Exports::LettingsLogExportService do
   end
 
   after do
-    Timecop.unfreeze
+    Timecop.return
   end
 
   context "when exporting daily lettings logs in XML" do
@@ -206,6 +206,14 @@ RSpec.describe Exports::LettingsLogExportService do
         it "generates multiple ZIP export files with the expected filenames" do
           expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)
           expect(storage_service).to receive(:write_file).with(expected_zip_filename2, any_args)
+          expect(Rails.logger).to receive(:info).with("Building export run for 2021")
+          expect(Rails.logger).to receive(:info).with("Creating core_2021_2022_apr_mar_f0001_inc0001 - 1 logs")
+          expect(Rails.logger).to receive(:info).with("Writing core_2021_2022_apr_mar_f0001_inc0001.zip")
+          expect(Rails.logger).to receive(:info).with("Building export run for 2022")
+          expect(Rails.logger).to receive(:info).with("Creating core_2022_2023_apr_mar_f0001_inc0001 - 1 logs")
+          expect(Rails.logger).to receive(:info).with("Writing core_2022_2023_apr_mar_f0001_inc0001.zip")
+          expect(Rails.logger).to receive(:info).with("Building export run for 2023")
+          expect(Rails.logger).to receive(:info).with("Creating core_2023_2024_apr_mar_f0001_inc0001 - 0 logs")
 
           export_service.export_xml_lettings_logs
         end
@@ -232,7 +240,7 @@ RSpec.describe Exports::LettingsLogExportService do
       it "creates a logs export record in a database with correct time" do
         expect { export_service.export_xml_lettings_logs }
           .to change(LogsExport, :count).by(3)
-        expect(LogsExport.last.started_at).to eq(start_time)
+        expect(LogsExport.last.started_at).to be_within(2.seconds).of(start_time)
       end
 
       context "when this is the first export (full)" do
