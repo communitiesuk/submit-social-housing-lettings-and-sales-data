@@ -26,7 +26,7 @@ RSpec.describe "layouts/application" do
 
   context "with no cookie set" do
     before do
-      cookies[:accept_analytics_cookies] = nil
+      request.cookies[:accept_analytics_cookies] = nil
       render
     end
 
@@ -39,7 +39,7 @@ RSpec.describe "layouts/application" do
 
   context "with analytics accepted" do
     before do
-      cookies[:accept_analytics_cookies] = "on"
+      request.cookies[:accept_analytics_cookies] = "on"
       render
     end
 
@@ -48,7 +48,7 @@ RSpec.describe "layouts/application" do
 
   context "with analytics rejected" do
     before do
-      cookies[:accept_analytics_cookies] = "off"
+      request.cookies[:accept_analytics_cookies] = "off"
       render
     end
 
