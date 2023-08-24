@@ -153,13 +153,13 @@ module Imports
       attributes["percentage_discount_value_check"] = 0
 
       # 2023/34 attributes
-      attributes["uprn"] = string_or_nil(xml_doc, "UPRN")
-      attributes["uprn_known"] = attributes["uprn"].present? ? 1 : 0
-      attributes["uprn_confirmed"] = attributes["uprn"].present? ? 1 : 0
       attributes["address_line1"] = string_or_nil(xml_doc, "AddressLine1")
       attributes["address_line2"] = string_or_nil(xml_doc, "AddressLine2")
       attributes["town_or_city"] = string_or_nil(xml_doc, "TownCity")
       attributes["county"] = string_or_nil(xml_doc, "County")
+      attributes["uprn"] = address_given?(attributes) ? nil : string_or_nil(xml_doc, "UPRN")
+      attributes["uprn_known"] = attributes["uprn"].present? ? 1 : 0
+      attributes["uprn_confirmed"] = attributes["uprn"].present? ? 1 : 0
 
       attributes["proplen_asked"] = 0 if attributes["proplen"]&.positive?
       attributes["proplen_asked"] = 1 if attributes["proplen"]&.zero?
@@ -605,6 +605,10 @@ module Imports
     def missing_answers(sales_log)
       applicable_questions = sales_log.form.subsections.map { |s| s.applicable_questions(sales_log).select { |q| q.enabled?(sales_log) } }.flatten
       applicable_questions.filter { |q| q.unanswered?(sales_log) }.map(&:id) - sales_log.optional_fields
+    end
+
+    def address_given?(attributes)
+      attributes["address_line1"].present? && attributes["town_or_city"].present?
     end
   end
 end

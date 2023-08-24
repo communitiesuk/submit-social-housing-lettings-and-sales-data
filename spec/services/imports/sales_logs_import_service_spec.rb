@@ -1684,7 +1684,24 @@ RSpec.describe Imports::SalesLogsImportService do
           expect(sales_log&.postcode_full).to eq("A1 1AA")
         end
 
-        it "correctly sets address and uprn if uprn is given" do
+        it "prioritises address and doesn't set UPRN if both address and UPRN is given" do
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.find_by(old_id: sales_log_id)
+          expect(sales_log&.uprn_known).to eq(0) # no
+          expect(sales_log&.uprn).to be_nil
+          expect(sales_log&.address_line1).to eq("address 1")
+          expect(sales_log&.address_line2).to eq("address 2")
+          expect(sales_log&.town_or_city).to eq("towncity")
+          expect(sales_log&.county).to eq("county")
+          expect(sales_log&.postcode_full).to eq("A1 1AA")
+        end
+
+        it "correctly sets address and uprn if uprn is given and address is not given" do
+          sales_log_xml.at_xpath("//xmlns:AddressLine1").content = ""
+          sales_log_xml.at_xpath("//xmlns:AddressLine2").content = ""
+          sales_log_xml.at_xpath("//xmlns:TownCity").content = ""
+          sales_log_xml.at_xpath("//xmlns:County").content = ""
           sales_log_service.send(:create_log, sales_log_xml)
 
           sales_log = SalesLog.find_by(old_id: sales_log_id)
