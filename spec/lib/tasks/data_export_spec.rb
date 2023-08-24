@@ -26,4 +26,23 @@ describe "rake core:data_export", type: task do
       expect { task.invoke }.to enqueue_job(DataExportXmlJob)
     end
   end
+
+  context "when running full export" do
+    let(:storage_service) { instance_double(Storage::S3Service) }
+    let(:paas_config_service) { instance_double(Configuration::PaasConfigurationService) }
+    let(:export_service) { instance_double(Exports::LettingsLogExportService) }
+    let(:task) { Rake::Task["core:full_data_export_xml"] }
+
+    before do
+      allow(Storage::S3Service).to receive(:new).and_return(storage_service)
+      allow(Configuration::PaasConfigurationService).to receive(:new).and_return(paas_config_service)
+      allow(Exports::LettingsLogExportService).to receive(:new).and_return(export_service)
+    end
+
+    it "calls the export service" do
+      expect(export_service).to receive(:export_xml_lettings_logs).with(full_update: true)
+
+      task.invoke
+    end
+  end
 end
