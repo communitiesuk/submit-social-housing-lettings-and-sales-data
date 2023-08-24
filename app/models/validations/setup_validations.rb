@@ -26,6 +26,11 @@ module Validations::SetupValidations
 
   def validate_location(record)
     location_during_startdate_validation(record)
+
+    if record.location&.status == :incomplete
+      record.errors.add :location_id, :incomplete, message: I18n.t("validations.setup.location.incomplete")
+      record.errors.add :scheme_id, :incomplete, message: I18n.t("validations.setup.location.incomplete")
+    end
   end
 
   def validate_scheme_has_confirmed_locations_validation(record)
