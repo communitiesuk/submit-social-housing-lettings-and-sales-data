@@ -200,13 +200,13 @@ module Imports
       attributes["first_time_property_let_as_social_housing"] = first_time_let(attributes["rsnvac"])
       attributes["declaration"] = declaration(xml_doc)
 
-      attributes["uprn"] = string_or_nil(xml_doc, "UPRN")
-      attributes["uprn_known"] = attributes["uprn"].present? ? 1 : 0
-      attributes["uprn_confirmed"] = attributes["uprn"].present? ? 1 : 0
       attributes["address_line1"] = string_or_nil(xml_doc, "AddressLine1")
       attributes["address_line2"] = string_or_nil(xml_doc, "AddressLine2")
       attributes["town_or_city"] = string_or_nil(xml_doc, "TownCity")
       attributes["county"] = string_or_nil(xml_doc, "County")
+      attributes["uprn"] = address_given?(attributes) ? nil : string_or_nil(xml_doc, "UPRN")
+      attributes["uprn_known"] = attributes["uprn"].present? ? 1 : 0
+      attributes["uprn_confirmed"] = attributes["uprn"].present? ? 1 : 0
 
       set_partial_charges_to_zero(attributes)
 
@@ -649,6 +649,10 @@ module Imports
       return if parent_organisation_id == child_organisation_id
 
       OrganisationRelationship.find_or_create_by!(parent_organisation_id:, child_organisation_id:)
+    end
+
+    def address_given?(attributes)
+      attributes["address_line1"].present? && attributes["town_or_city"].present?
     end
   end
 end
