@@ -34,6 +34,7 @@ module Imports
         intended_stay: attributes["intended_stay"],
         primary_client_group: attributes["primary_client_group"],
         secondary_client_group: attributes["secondary_client_group"],
+        has_other_client_group: attributes["has_other_client_group"],
         sensitive: attributes["sensitive"],
         # These values were set by the scheme import (management groups)
         owning_organisation_id: source_scheme.owning_organisation_id,
@@ -56,6 +57,7 @@ module Imports
         support_type: attributes["support_type"],
         intended_stay: attributes["intended_stay"],
         primary_client_group: attributes["primary_client_group"],
+        has_other_client_group: attributes["has_other_client_group"],
         secondary_client_group: attributes["secondary_client_group"],
         sensitive: attributes["sensitive"],
       }
@@ -83,6 +85,7 @@ module Imports
       attributes["primary_client_group"] = string_or_nil(xml_doc, "client-group-1")
       attributes["secondary_client_group"] = string_or_nil(xml_doc, "client-group-2")
       attributes["secondary_client_group"] = nil if attributes["primary_client_group"] == attributes["secondary_client_group"]
+      attributes["has_other_client_group"] = attributes["secondary_client_group"].present? ? 1 : 0
       attributes["sensitive"] = sensitive(xml_doc)
       attributes["start_date"] = parse_date(xml_doc, "start-date")
       attributes["end_date"] = parse_date(xml_doc, "end-date")
