@@ -54,11 +54,14 @@ module Storage
     end
 
     def create_client
-      credentials = PlatformHelper.is_paas? ?
-        Aws::Credentials.new(
-          @configuration.access_key_id,
-          @configuration.secret_access_key,
-        ) : Aws::ECSCredentials.new
+      credentials = if PlatformHelper.is_paas?
+                      Aws::Credentials.new(
+                        @configuration.access_key_id,
+                        @configuration.secret_access_key,
+                      )
+                    else
+                      Aws::ECSCredentials.new
+                    end
       Aws::S3::Client.new(
         region: @configuration.region,
         credentials:,
