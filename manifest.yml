@@ -12,7 +12,7 @@ defaults: &defaults
       disk_quota: 4G
       health-check-type: process
       instances: 2
-      memory: 4G
+      memory: 8G
   health-check-type: http
   health-check-http-endpoint: /health
 
