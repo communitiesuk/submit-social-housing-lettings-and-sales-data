@@ -9,6 +9,7 @@ FactoryBot.define do
     intended_stay { %w[M P S V X].sample }
     primary_client_group { %w[O H M L A G F B D E I S N R Q P X].sample }
     secondary_client_group { %w[O H M L A G F B D E I S N R Q P X].sample }
+    has_other_client_group { 1 }
     owning_organisation { FactoryBot.create(:organisation) }
     confirmed { true }
     created_at { Time.zone.local(2021, 4, 1) }
@@ -20,6 +21,7 @@ FactoryBot.define do
       intended_stay { "M" }
       primary_client_group { "G" }
       secondary_client_group { "M" }
+      has_other_client_group { 1 }
     end
 
     trait :with_old_visible_id do
