@@ -552,6 +552,13 @@ RSpec.describe "Schemes scheme Features" do
             fill_in_and_save_second_location
             expect(page).to have_content "Check your answers"
           end
+
+          it "dispays correct text for uunanswered questions" do
+            fill_in_and_save_location
+            location.update!(location_code: nil)
+            visit "/schemes/#{scheme.id}/locations/#{location.id}/check-answers"
+            expect(page).to have_content "You didn’t answer this question"
+          end
         end
 
         context "when viewing locations" do
