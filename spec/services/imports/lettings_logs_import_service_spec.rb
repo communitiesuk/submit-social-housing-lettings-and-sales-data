@@ -1557,7 +1557,25 @@ RSpec.describe Imports::LettingsLogsImportService do
         expect(lettings_log&.postcode_full).to eq("A1 1AA")
       end
 
-      it "correctly sets address and uprn if uprn is given" do
+      it "prioritises address and doesn't set UPRN if both address and UPRN is given" do
+        lettings_log_service.send(:create_log, lettings_log_xml)
+
+        lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+        expect(lettings_log&.uprn_known).to eq(0) # no
+        expect(lettings_log&.uprn).to be_nil
+        expect(lettings_log&.uprn_confirmed).to eq(0)
+        expect(lettings_log&.address_line1).to eq("address 1")
+        expect(lettings_log&.address_line2).to eq("address 2")
+        expect(lettings_log&.town_or_city).to eq("towncity")
+        expect(lettings_log&.county).to eq("county")
+        expect(lettings_log&.postcode_full).to eq("A1 1AA")
+      end
+
+      it "correctly sets address and uprn if uprn is given and address isn't given" do
+        lettings_log_xml.at_xpath("//xmlns:AddressLine1").content = ""
+        lettings_log_xml.at_xpath("//xmlns:AddressLine2").content = ""
+        lettings_log_xml.at_xpath("//xmlns:TownCity").content = ""
+        lettings_log_xml.at_xpath("//xmlns:County").content = ""
         lettings_log_service.send(:create_log, lettings_log_xml)
 
         lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
