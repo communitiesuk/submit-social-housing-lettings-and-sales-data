@@ -553,7 +553,7 @@ RSpec.describe "Schemes scheme Features" do
             expect(page).to have_content "Check your answers"
           end
 
-          it "dispays correct text for uunanswered questions" do
+          it "dispays correct text for unanswered questions" do
             fill_in_and_save_location
             location.update!(location_code: nil)
             visit "/schemes/#{scheme.id}/locations/#{location.id}/check-answers"
