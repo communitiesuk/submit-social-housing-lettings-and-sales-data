@@ -40,7 +40,7 @@ RSpec.describe Auth::ConfirmationsController, type: :request do
     end
 
     it "shows the expired page" do
-      expect(page).to have_content("For security reasons, your link expired - get another one using the button below (valid for 24 hours).")
+      expect(page).to have_content("Your join link has expired. Select the button below to get a new one. The link will be valid for 24 hours.")
     end
   end
 
