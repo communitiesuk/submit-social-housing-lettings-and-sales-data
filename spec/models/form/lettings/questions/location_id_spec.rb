@@ -130,8 +130,8 @@ RSpec.describe Form::Lettings::Questions::LocationId, type: :model do
 
       context "and some locations are not confirmed" do
         before do
-          FactoryBot.create(:location, scheme:, postcode: nil)
           FactoryBot.create(:location, scheme:)
+          FactoryBot.create(:location, :incomplete, scheme:)
           lettings_log.update!(scheme:)
         end
 
