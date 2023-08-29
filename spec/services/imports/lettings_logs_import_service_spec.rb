@@ -1537,6 +1537,7 @@ RSpec.describe Imports::LettingsLogsImportService do
         lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
         expect(lettings_log&.uprn_known).to eq(0) # no
         expect(lettings_log&.uprn).to be_nil
+        expect(lettings_log&.uprn_confirmed).to eq(0)
         expect(lettings_log&.address_line1).to eq("address 1")
         expect(lettings_log&.address_line2).to eq("address 2")
         expect(lettings_log&.town_or_city).to eq("towncity")
