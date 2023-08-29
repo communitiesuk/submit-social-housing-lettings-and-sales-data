@@ -110,4 +110,41 @@ RSpec.describe Imports::SalesLogsFieldImportService do
       end
     end
   end
+
+  context "when updating old_form_id" do
+    let(:field) { "old_form_id" }
+    let(:sales_log_filename) { "shared_ownership_sales_log" }
+
+    context "when the sales log has no offered value" do
+      let(:sales_log) { SalesLog.find_by(old_id: sales_log_filename) }
+
+      before do
+        Imports::SalesLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+        sales_log_file.rewind
+        sales_log.update!(old_form_id: nil)
+      end
+
+      it "updates the sales_log old_form_id value" do
+        expect(logger).to receive(:info).with("sales log #{sales_log.id}'s old_form_id value has been set to 300204")
+        expect { import_service.send(:update_field, field, remote_folder) }
+          .to(change { sales_log.reload.old_form_id }.from(nil).to(300_204))
+      end
+    end
+
+    context "when the sales log has a different offered value" do
+      let(:sales_log) { SalesLog.find_by(old_id: sales_log_filename) }
+
+      before do
+        Imports::SalesLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+        sales_log_file.rewind
+        sales_log.update!(old_form_id: 123)
+      end
+
+      it "does not update the sales_log old_form_id value" do
+        expect(logger).to receive(:info).with(/sales log \d+ has a value for old_form_id, skipping update/)
+        expect { import_service.send(:update_field, field, remote_folder) }
+          .not_to(change { sales_log.reload.old_form_id })
+      end
+    end
+  end
 end

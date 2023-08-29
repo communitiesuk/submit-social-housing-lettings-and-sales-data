@@ -101,7 +101,7 @@ RSpec.describe Csv::SalesLogCsvService do
 
   it "includes attributes not related to questions to the headers" do
     headers = csv.first
-    expect(headers).to include(*%w[id status created_at updated_at old_id])
+    expect(headers).to include(*%w[id status created_at updated_at old_form_id])
   end
 
   it "returns a csv with the correct number of logs" do
