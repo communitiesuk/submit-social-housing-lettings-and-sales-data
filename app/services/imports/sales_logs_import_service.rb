@@ -198,6 +198,7 @@ module Imports
         end
         attributes["created_by"] = user
       end
+      attributes["imported_at"] = Time.zone.now
 
       set_default_values(attributes) if previous_status.include?("submitted")
       sales_log = save_sales_log(attributes, previous_status)

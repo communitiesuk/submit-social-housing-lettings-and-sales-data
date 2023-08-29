@@ -102,8 +102,16 @@ RSpec.describe Imports::SalesLogsImportService do
   end
 
   context "when importing a specific log" do
+    let(:sales_log_id) { "shared_ownership_sales_log" }
     let(:sales_log_file) { open_file(fixture_directory, sales_log_id) }
     let(:sales_log_xml) { Nokogiri::XML(sales_log_file) }
+
+    it "correctly sets imported at date" do
+      sales_log_service.send(:create_log, sales_log_xml)
+
+      sales_log = SalesLog.where(old_id: sales_log_id).first
+      expect(sales_log&.imported_at).to eq(Time.zone.local(2023, 2, 1))
+    end
 
     context "and the organisation legacy ID does not exist" do
       let(:sales_log_id) { "shared_ownership_sales_log" }
