@@ -159,6 +159,13 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
+      it "correctly sets imported at date" do
+        lettings_log_service.send(:create_log, lettings_log_xml)
+
+        lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+        expect(lettings_log&.imported_at).to eq(Time.zone.local(2022, 1, 1))
+      end
+
       context "and the void date is after the start date" do
         before { lettings_log_xml.at_xpath("//xmlns:VYEAR").content = 2023 }
 
