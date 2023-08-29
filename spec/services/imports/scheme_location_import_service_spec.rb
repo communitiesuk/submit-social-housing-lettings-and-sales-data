@@ -162,6 +162,7 @@ RSpec.describe Imports::SchemeLocationImportService do
       expect(location.scheme.intended_stay).to eq("Permanent")
       expect(location.scheme.primary_client_group).to eq("Older people with support needs")
       expect(location.scheme.secondary_client_group).to be_nil
+      expect(location.scheme.has_other_client_group).to eq("No")
       expect(location.scheme.sensitive).to eq("No")
       expect(location.scheme.confirmed).to be_truthy
     end
