@@ -23,7 +23,11 @@ module Imports
     end
 
     def field_value(xml_document, namespace, field, *args)
-      xml_document.at_xpath("//#{namespace}:#{field}", *args)&.text
+      if namespace.present?
+        xml_document.at_xpath("//#{namespace}:#{field}", *args)&.text
+      else
+        xml_document.at_xpath("//dclg:#{field}", *args + [{ "dclg" => "dclg:institution" }])&.text
+      end
     end
 
     def meta_field_value(xml_document, field)
