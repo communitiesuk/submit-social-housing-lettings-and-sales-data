@@ -32,7 +32,7 @@ describe "rake core:data_export", type: task do
 
     context "with all available years" do
       it "calls the export service" do
-        expect(export_service).to receive(:export_xml_lettings_logs).with(full_update: true, collection_year: false)
+        expect(export_service).to receive(:export_xml_lettings_logs).with(full_update: true, collection_year: nil)
 
         task.invoke
       end
