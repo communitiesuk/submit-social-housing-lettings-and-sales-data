@@ -8,13 +8,13 @@ module Exports
       @logger = logger
     end
 
-    def export_xml_lettings_logs(full_update: false)
+    def export_xml_lettings_logs(full_update: false, collection_year: nil)
       start_time = Time.zone.now
       daily_run_number = get_daily_run_number
       archives_for_manifest = {}
       base_number = LogsExport.where(empty_export: false).maximum(:base_number) || 1
       recent_export = LogsExport.order("started_at").last
-      available_collection_years.each do |collection|
+      collection_years_to_export(collection_year).each do |collection|
         export = build_export_run(collection, start_time, base_number, full_update)
         archives = write_export_archive(export, collection, start_time, recent_export, full_update)
 
@@ -267,7 +267,9 @@ module Exports
       xml_doc_to_temp_file(doc)
     end
 
-    def available_collection_years
+    def collection_years_to_export(collection_year)
+      return [collection_year] if collection_year.present?
+
       FormHandler.instance.lettings_forms.values.map { |f| f.start_date.year }.uniq
     end
   end
