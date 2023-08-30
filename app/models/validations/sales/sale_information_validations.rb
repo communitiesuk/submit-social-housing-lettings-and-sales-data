@@ -11,19 +11,6 @@ module Validations::Sales::SaleInformationValidations
     end
   end
 
-  def validate_years_living_in_property_before_purchase(record)
-    return unless record.proplen&.nonzero?
-
-    case record.type
-    when 18
-      record.errors.add :type, I18n.t("validations.sale_information.proplen.social_homebuy")
-      record.errors.add :proplen, I18n.t("validations.sale_information.proplen.social_homebuy")
-    when 28, 29
-      record.errors.add :type, I18n.t("validations.sale_information.proplen.rent_to_buy")
-      record.errors.add :proplen, I18n.t("validations.sale_information.proplen.rent_to_buy")
-    end
-  end
-
   def validate_exchange_date(record)
     return unless record.exdate && record.saledate
 
