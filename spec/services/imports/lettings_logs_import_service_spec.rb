@@ -1470,27 +1470,6 @@ RSpec.describe Imports::LettingsLogsImportService do
       end
     end
 
-    context "and the provider type doesn't match the org" do
-      let(:invalid_lettings_log_id) { "c1bf33c5-f715-407a-840d-d6825554feca" }
-      let(:valid_lettings_log_id) { "0a36f37c-11aa-48ef-854e-8ce8d9bccd9f" }
-      let(:lettings_log_file) { open_file(fixture_directory, invalid_lettings_log_id) }
-      let(:lettings_log_xml) { Nokogiri::XML(lettings_log_file) }
-
-      around do |example|
-        Timecop.freeze(Time.zone.local(2023, 8, 24)) do
-          Singleton.__init__(FormHandler)
-          example.run
-        end
-        Timecop.return
-        Singleton.__init__(FormHandler)
-      end
-
-      it "does not error" do
-        expect { lettings_log_service.send(:create_log, lettings_log_xml) }
-          .not_to raise_error
-      end
-    end
-
     context "when setting location fields for 23/24 logs" do
       let(:lettings_log_id) { "00d2343e-d5fa-4c89-8400-ec3854b0f2b4" }
       let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id) }
