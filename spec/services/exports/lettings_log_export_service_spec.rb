@@ -219,6 +219,16 @@ RSpec.describe Exports::LettingsLogExportService do
 
           export_service.export_xml_lettings_logs
         end
+
+        it "generates zip export files only for specified year" do
+          expect(storage_service).to receive(:write_file).with(expected_zip_filename2, any_args)
+          expect(Rails.logger).to receive(:info).with("Building export run for 2022")
+          expect(Rails.logger).to receive(:info).with("Creating core_2022_2023_apr_mar_f0001_inc0001 - 1 logs")
+          expect(Rails.logger).to receive(:info).with("Added core_2022_2023_apr_mar_f0001_inc0001_pt001.xml")
+          expect(Rails.logger).to receive(:info).with("Writing core_2022_2023_apr_mar_f0001_inc0001.zip")
+
+          export_service.export_xml_lettings_logs(collection_year: 2022)
+        end
       end
     end
 
