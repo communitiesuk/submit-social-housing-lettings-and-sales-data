@@ -12,36 +12,6 @@ RSpec.describe Validations::HouseholdValidations do
   end
 
   describe "reasonable preference validations" do
-    context "when reasonable preference is homeless" do
-      context "when the tenant was not previously homeless" do
-        it "adds an error" do
-          record.homeless = 1
-          record.rp_homeless = 1
-          household_validator.validate_reasonable_preference(record)
-          expect(record.errors["reasonable_preference_reason"])
-            .to include(match I18n.t("validations.household.reasonpref.not_homeless"))
-          expect(record.errors["homeless"])
-            .to include(match I18n.t("validations.household.homeless.reasonpref.not_homeless"))
-        end
-      end
-
-      context "when reasonable preference is given" do
-        context "when the tenant was previously homeless" do
-          it "does not add an error" do
-            record.homeless = 1
-            record.reasonpref = 1
-            household_validator.validate_reasonable_preference(record)
-            expect(record.errors["reasonpref"]).to be_empty
-            expect(record.errors["homeless"]).to be_empty
-            record.homeless = 0
-            household_validator.validate_reasonable_preference(record)
-            expect(record.errors["reasonpref"]).to be_empty
-            expect(record.errors["homeless"]).to be_empty
-          end
-        end
-      end
-    end
-
     context "when reasonable preference is not given" do
       it "validates that no reason is needed" do
         record.reasonpref = 1

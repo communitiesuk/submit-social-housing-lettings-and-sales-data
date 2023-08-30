@@ -803,14 +803,6 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
     end
 
     describe "#field_105, field_110 - 15" do
-      context "when not homeless but reasonable preference for homelessness" do
-        let(:attributes) { { bulk_upload:, field_105: "1", field_110: "1", field_111: "1" } }
-
-        it "is not permitted" do
-          expect(parser.errors[:field_111]).to be_present
-        end
-      end
-
       context "when there is a reasonable preference but none is given" do
         let(:attributes) { { bulk_upload:, field_110: "1", field_111: nil, field_112: nil, field_113: nil, field_114: nil, field_115: nil } }
 
