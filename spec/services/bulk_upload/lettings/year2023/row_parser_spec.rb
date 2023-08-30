@@ -1642,7 +1642,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       let(:attributes) { { bulk_upload:, field_106: "2" } }
 
       it "sets correct value from mapping" do
-        expect(parser.log.ppcodenk).to eq(0)
+        expect(parser.log.ppcodenk).to eq(1)
       end
     end
 

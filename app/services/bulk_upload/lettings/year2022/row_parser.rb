@@ -1285,9 +1285,9 @@ private
   def ppcodenk
     case field_65
     when 1
-      1
-    when 2
       0
+    when 2
+      1
     end
   end
 

@@ -1329,7 +1329,7 @@ RSpec.describe LettingsLog do
           managing_organisation: owning_organisation,
           owning_organisation:,
           created_by: created_by_user,
-          ppcodenk: 1,
+          ppcodenk: 0,
           ppostcode_full: "M1 1AE",
         })
       end
@@ -1369,7 +1369,7 @@ RSpec.describe LettingsLog do
       end
 
       it "correctly resets all fields if previous postcode not known" do
-        address_lettings_log.update!({ ppcodenk: 0 })
+        address_lettings_log.update!({ ppcodenk: 1 })
 
         record_from_db = described_class.find(address_lettings_log.id)
         expect(record_from_db["ppostcode_full"]).to eq(nil)
@@ -1378,7 +1378,7 @@ RSpec.describe LettingsLog do
       end
 
       it "correctly resets la if la is not known" do
-        address_lettings_log.update!({ ppcodenk: 0 })
+        address_lettings_log.update!({ ppcodenk: 1 })
         address_lettings_log.update!({ previous_la_known: 1, prevloc: "S92000003" })
         record_from_db = described_class.find(address_lettings_log.id)
         expect(record_from_db["prevloc"]).to eq("S92000003")
@@ -1391,7 +1391,7 @@ RSpec.describe LettingsLog do
       end
 
       it "changes the prevloc if previous postcode changes from not known to known and provided" do
-        address_lettings_log.update!({ ppcodenk: 0 })
+        address_lettings_log.update!({ ppcodenk: 1 })
         address_lettings_log.update!({ previous_la_known: 1, prevloc: "E09000033" })
 
         record_from_db = described_class.find(address_lettings_log.id)
