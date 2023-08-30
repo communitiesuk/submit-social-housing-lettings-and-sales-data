@@ -177,6 +177,17 @@ class Form::Question
     end
   end
 
+  def value_is_no?(value)
+    case type
+    when "checkbox"
+      value && value.zero?
+    when "radio"
+      is_lettings ? RADIO_NO_VALUE_LETTINGS[id.to_sym]&.include?(value) : RADIO_NO_VALUE_SALES[id.to_sym]&.include?(value)
+    else
+      %w[no].include?(value.downcase)
+    end
+  end
+
   def value_is_dont_know?(value)
     type == "radio" && RADIO_DONT_KNOW_VALUE[id.to_sym]&.include?(value)
   end
