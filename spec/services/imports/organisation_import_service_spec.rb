@@ -15,8 +15,8 @@ RSpec.describe Imports::OrganisationImportService do
       doc.at_xpath("//institution:visible-id").content = visible_id if visible_id
       doc.at_xpath("//institution:name").content = name if name
     else
-      doc.at_xpath("//dclg:visible-id", {'dclg' => 'dclg:institution'}).content = visible_id if visible_id
-      doc.at_xpath("//dclg:name", {'dclg' => 'dclg:institution'}).content = name if name
+      doc.at_xpath("//dclg:visible-id", { "dclg" => "dclg:institution" }).content = visible_id if visible_id
+      doc.at_xpath("//dclg:name", { "dclg" => "dclg:institution" }).content = name if name
     end
 
     StringIO.new(doc.to_xml)
@@ -150,5 +150,4 @@ RSpec.describe Imports::OrganisationImportService do
       expect(Organisation).to exist(old_visible_id: "2")
     end
   end
-
 end
