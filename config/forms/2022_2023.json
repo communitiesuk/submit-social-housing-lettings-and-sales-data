@@ -6228,8 +6228,30 @@
                     },
                     "42": {
                       "value": "End of fixed term tenancy (no fault)"
+                    },
+                    "20": {
+                      "value": "Other"
+                    },
+                    "47": {
+                      "value":"Tenant prefers not to say"
+                    },
+                    "divider": {
+                      "value": true
+                    },
+                    "28": {
+                      "value": "Don’t know"
                     }
+                  },
+                  "conditional_for": {
+                    "reasonother": [
+                      20
+                    ]
                   }
+                },
+                "reasonother": {
+                  "header": "What is the reason?",
+                  "hint_text": "",
+                  "type": "text"
                 }
               },
               "depends_on": [
