@@ -8,7 +8,7 @@ RSpec.describe Imports::OrganisationImportService do
   let(:filenames) { %w[my_folder/my_file1.xml my_folder/my_file2.xml] }
   let(:fixture_directory) { "spec/fixtures/imports/institution" }
 
-  def create_organisation_file(fixture_directory, visible_id, name = nil, filename, namespace_given)
+  def create_organisation_file(fixture_directory, visible_id, filename, namespace_given, name = nil)
     file = File.open("#{fixture_directory}/#{filename}.xml")
     doc =  Nokogiri::XML(file)
     if namespace_given
@@ -81,7 +81,7 @@ RSpec.describe Imports::OrganisationImportService do
       allow(storage_service).to receive(:list_files).and_return([filenames[0]])
       allow(storage_service).to receive(:get_file_io).and_return(
         create_organisation_file(fixture_directory, 1, "7c5bd5fb549c09a2c55d7cb90d7ba84927e64618", true),
-        create_organisation_file(fixture_directory, 1, "my_new_organisation", "7c5bd5fb549c09a2c55d7cb90d7ba84927e64618", true),
+        create_organisation_file(fixture_directory, 1, "7c5bd5fb549c09a2c55d7cb90d7ba84927e64618", true, "my_new_organisation"),
       )
     end
 
