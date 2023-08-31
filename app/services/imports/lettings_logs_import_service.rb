@@ -174,7 +174,7 @@ module Imports
                                      0
                                    end
 
-      attributes["offered"] = safe_string_as_integer(xml_doc, "Q20")
+      attributes["offered"] = unsafe_string_as_integer(xml_doc, "Q20")
       attributes["propcode"] = string_or_nil(xml_doc, "Q21a")
       attributes["beds"] = safe_string_as_integer(xml_doc, "Q22")
       attributes["unittype_gn"] = unsafe_string_as_integer(xml_doc, "Q23")
