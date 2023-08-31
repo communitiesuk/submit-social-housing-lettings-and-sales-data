@@ -1104,6 +1104,8 @@ RSpec.describe Imports::LettingsLogsImportService do
 
     let(:organisation) { FactoryBot.create(:organisation, old_visible_id: "1", provider_type: "PRP") }
     let(:managing_organisation) { FactoryBot.create(:organisation, old_visible_id: "2", provider_type: "PRP") }
+    let(:local_authority_organisation) { FactoryBot.create(:organisation, old_visible_id: "79740", provider_type: "LA") }
+    let(:local_authority_organisation_managing_organisation) { FactoryBot.create(:organisation, old_visible_id: "79741", provider_type: "PRP") }
     let(:scheme1) { FactoryBot.create(:scheme, old_visible_id: "0123", owning_organisation: organisation) }
     let(:scheme2) { FactoryBot.create(:scheme, old_visible_id: "456", owning_organisation: organisation) }
 
@@ -1118,10 +1120,12 @@ RSpec.describe Imports::LettingsLogsImportService do
       allow(Organisation).to receive(:find_by).and_return(nil)
       allow(Organisation).to receive(:find_by).with(old_visible_id: organisation.old_visible_id).and_return(organisation)
       allow(Organisation).to receive(:find_by).with(old_visible_id: managing_organisation.old_visible_id).and_return(managing_organisation)
+      allow(Organisation).to receive(:find_by).with(old_visible_id: local_authority_organisation.old_visible_id).and_return(local_authority_organisation)
 
       # Created by users
       FactoryBot.create(:user, old_user_id: "c3061a2e6ea0b702e6f6210d5c52d2a92612d2aa", organisation:)
       FactoryBot.create(:user, old_user_id: "e29c492473446dca4d50224f2bb7cf965a261d6f", organisation:)
+      FactoryBot.create(:user, old_user_id: "32df07263e56a856a100aa86ad407ed3632402f3", organisation: local_authority_organisation_managing_organisation)
 
       # Location setup
       FactoryBot.create(:location, old_visible_id: "10", postcode: "LS166FT", scheme_id: scheme1.id, mobility_type: "W", startdate: Time.zone.local(2021, 4, 1))
@@ -1493,6 +1497,27 @@ RSpec.describe Imports::LettingsLogsImportService do
 
         expect(lettings_log).not_to be_nil
         expect(lettings_log.earnings).to eq(101)
+      end
+    end
+
+    context "and the provider type doesn't match the org" do
+      let(:invalid_lettings_log_id) { "c1bf33c5-f715-407a-840d-d6825554feca" }
+      let(:valid_lettings_log_id) { "0a36f37c-11aa-48ef-854e-8ce8d9bccd9f" }
+      let(:lettings_log_file) { open_file(fixture_directory, invalid_lettings_log_id) }
+      let(:lettings_log_xml) { Nokogiri::XML(lettings_log_file) }
+
+      around do |example|
+        Timecop.freeze(Time.zone.local(2023, 8, 24)) do
+          Singleton.__init__(FormHandler)
+          example.run
+        end
+        Timecop.return
+        Singleton.__init__(FormHandler)
+      end
+
+      it "does not error" do
+        expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+          .not_to raise_error
       end
     end
 
