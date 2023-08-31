@@ -163,7 +163,7 @@ RSpec.describe Imports::LettingsLogsImportService do
         lettings_log_service.send(:create_log, lettings_log_xml)
 
         lettings_log = LettingsLog.where(old_id: lettings_log_id).first
-        expect(lettings_log&.imported_at).to eq(Time.zone.local(2022, 1, 1))
+        expect(lettings_log&.values_updated_at).to eq(Time.zone.local(2022, 1, 1))
       end
 
       context "and the void date is after the start date" do

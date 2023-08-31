@@ -297,7 +297,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_28_145454) do
     t.integer "status_cache", default: 0, null: false
     t.datetime "discarded_at"
     t.integer "creation_method", default: 1
-    t.datetime "imported_at"
+    t.datetime "values_updated_at"
     t.index ["bulk_upload_id"], name: "index_lettings_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_lettings_logs_on_created_by_id"
     t.index ["location_id"], name: "index_lettings_logs_on_location_id"
@@ -618,7 +618,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_28_145454) do
     t.integer "stairowned_value_check"
     t.integer "creation_method", default: 1
     t.integer "old_form_id"
-    t.datetime "imported_at"
+    t.datetime "values_updated_at"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["old_id"], name: "index_sales_logs_on_old_id", unique: true

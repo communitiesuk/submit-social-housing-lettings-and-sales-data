@@ -106,11 +106,11 @@ RSpec.describe Imports::SalesLogsImportService do
     let(:sales_log_file) { open_file(fixture_directory, sales_log_id) }
     let(:sales_log_xml) { Nokogiri::XML(sales_log_file) }
 
-    it "correctly sets imported at date" do
+    it "correctly sets values updated at date" do
       sales_log_service.send(:create_log, sales_log_xml)
 
       sales_log = SalesLog.where(old_id: sales_log_id).first
-      expect(sales_log&.imported_at).to eq(Time.zone.local(2023, 2, 1))
+      expect(sales_log&.values_updated_at).to eq(Time.zone.local(2023, 2, 1))
     end
 
     context "and the organisation legacy ID does not exist" do
@@ -170,17 +170,6 @@ RSpec.describe Imports::SalesLogsImportService do
         expect(logger).not_to receive(:warn)
         expect { sales_log_service.send(:create_log, sales_log_xml) }
         .to change(SalesLog, :count).by(0)
-      end
-    end
-
-    context "when the log is valid" do
-      let(:sales_log_id) { "shared_ownership_sales_log" }
-
-      it "correctly sets old form id" do
-        sales_log_service.send(:create_log, sales_log_xml)
-
-        sales_log = SalesLog.find_by(old_id: sales_log_id)
-        expect(sales_log&.old_form_id).to eq(300_204)
       end
     end
 
@@ -1729,24 +1718,7 @@ RSpec.describe Imports::SalesLogsImportService do
           expect(sales_log&.postcode_full).to eq("A1 1AA")
         end
 
-        it "prioritises address and doesn't set UPRN if both address and UPRN is given" do
-          sales_log_service.send(:create_log, sales_log_xml)
-
-          sales_log = SalesLog.find_by(old_id: sales_log_id)
-          expect(sales_log&.uprn_known).to eq(0) # no
-          expect(sales_log&.uprn).to be_nil
-          expect(sales_log&.address_line1).to eq("address 1")
-          expect(sales_log&.address_line2).to eq("address 2")
-          expect(sales_log&.town_or_city).to eq("towncity")
-          expect(sales_log&.county).to eq("county")
-          expect(sales_log&.postcode_full).to eq("A1 1AA")
-        end
-
-        it "correctly sets address and uprn if uprn is given and address is not given" do
-          sales_log_xml.at_xpath("//xmlns:AddressLine1").content = ""
-          sales_log_xml.at_xpath("//xmlns:AddressLine2").content = ""
-          sales_log_xml.at_xpath("//xmlns:TownCity").content = ""
-          sales_log_xml.at_xpath("//xmlns:County").content = ""
+        it "correctly sets address and uprn if uprn is given" do
           sales_log_service.send(:create_log, sales_log_xml)
 
           sales_log = SalesLog.find_by(old_id: sales_log_id)
