@@ -230,3 +230,13 @@ jobs:
           cf set-env $APP_NAME CSV_DOWNLOAD_PAAS_INSTANCE $CSV_DOWNLOAD_PAAS_INSTANCE
           cf set-env $APP_NAME SENTRY_DSN $SENTRY_DSN
           cf push $APP_NAME --strategy rolling
+
+  aws_deploy:
+    name: AWS Deploy
+    if: github.ref == 'refs/heads/main'
+    needs: [lint, test, feature_test, audit]
+    uses: ./.github/workflows/aws_deploy.yml
+    with:
+      environment: staging
+    permissions:
+      id-token: write
