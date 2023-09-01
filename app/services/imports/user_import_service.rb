@@ -39,9 +39,15 @@ module Imports
         user.active = user_field_value(xml_document, "active")
 
         user.skip_confirmation_notification!
-        user.save!
-        user.legacy_users.create!(old_user_id:)
-        user
+
+        begin
+          user.save!
+          user.legacy_users.create!(old_user_id:)
+          user
+        rescue ActiveRecord::RecordInvalid => e
+          @logger.error(e.message)
+          @logger.error("Could not save user with email: #{email}")
+        end
       end
     end
 
