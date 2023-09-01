@@ -480,7 +480,6 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
-
       context "and the relationship is refused" do
         before do
           lettings_log_xml.at_xpath("//xmlns:P2Rel").content = "Person prefers not to say"
