@@ -173,6 +173,17 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
+    context "when the log is valid" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      it "correctly sets old form id" do
+        sales_log_service.send(:create_log, sales_log_xml)
+
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log&.old_form_id).to eq(300_204)
+      end
+    end
+
     context "when the mortgage lender is set to an existing option" do
       let(:sales_log_id) { "discounted_ownership_sales_log" }
 
