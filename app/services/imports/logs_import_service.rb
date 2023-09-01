@@ -106,7 +106,7 @@ module Imports
         "F"
       when "Other", "Non-binary"
         "X"
-      when "Refused"
+      when "Refused", "Person prefers not to say", "Buyer prefers not to say"
         "R"
       end
     end
@@ -120,7 +120,7 @@ module Imports
         "P"
       when "Other", "Non-binary"
         "X"
-      when "Refused", "Buyer prefers not to say"
+      when "Refused", "Person prefers not to say", "Buyer prefers not to say"
         "R"
       end
     end

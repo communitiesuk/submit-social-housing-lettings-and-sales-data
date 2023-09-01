@@ -442,6 +442,63 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
+      context "and the number of times the property was relet is 0.00" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q20").content = "0.00"
+        end
+
+        it "does not raise an error" do
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "does not clear offered answer" do
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.offered).to equal(0)
+        end
+      end
+
+      context "and the gender identity is refused" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:P1Sex").content = "Person prefers not to say"
+        end
+
+        it "does not raise an error" do
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "saves the correct answer" do
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.sex1).to eq("R")
+        end
+      end
+
+      context "and the relationship is refused" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:P2Rel").content = "Person prefers not to say"
+        end
+
+        it "does not raise an error" do
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "saves the correct answer" do
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.relat2).to eq("R")
+        end
+      end
+
       context "when the log being imported was manually entered" do
         it "sets the creation method correctly" do
           lettings_log_service.send(:create_log, lettings_log_xml)
