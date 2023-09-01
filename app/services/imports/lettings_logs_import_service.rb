@@ -271,6 +271,7 @@ module Imports
 
         attributes["created_by"] = user
       end
+      attributes["values_updated_at"] = Time.zone.now
 
       apply_date_consistency!(attributes)
       apply_household_consistency!(attributes)
