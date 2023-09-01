@@ -9,10 +9,27 @@ class Form::Lettings::Questions::ReasonRenewal < ::Form::Question
     @hint_text = "You told us this letting is a renewal. We have removed some options because of this."
     @answer_options = ANSWER_OPTIONS
     @question_number = 77
+    @conditional_for = {
+      "reasonother" => [
+        20,
+      ],
+    }
   end
 
   ANSWER_OPTIONS = {
     "40" => { "value" => "End of assured shorthold tenancy (no fault)" },
     "42" => { "value" => "End of fixed term tenancy (no fault)" },
+    "20" => {
+      "value" => "Other",
+    },
+    "47" => {
+      "value" => "Tenant prefers not to say",
+    },
+    "divider" => {
+      "value" => true,
+    },
+    "28" => {
+      "value" => "Don’t know",
+    },
   }.freeze
 end
