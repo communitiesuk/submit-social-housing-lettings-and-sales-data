@@ -4,10 +4,6 @@ module Validations::HouseholdValidations
   # Validations methods need to be called 'validate_<page_name>' to run on model save
   # or 'validate_' to run on submit as well
   def validate_reasonable_preference(record)
-    if record.is_not_homeless? && record.rp_homeless == 1
-      record.errors.add :reasonable_preference_reason, I18n.t("validations.household.reasonpref.not_homeless")
-      record.errors.add :homeless, I18n.t("validations.household.homeless.reasonpref.not_homeless")
-    end
     if !record.given_reasonable_preference? && [record.rp_homeless, record.rp_insan_unsat, record.rp_medwel, record.rp_hardship, record.rp_dontknow].any? { |a| a == 1 }
       record.errors.add :reasonable_preference_reason, I18n.t("validations.household.reasonable_preference_reason.reason_not_required")
     end

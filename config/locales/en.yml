@@ -441,8 +441,6 @@ en:
       mortgage: "Mortgage value cannot be £0 if a mortgage was used for the purchase of this property"
 
     household:
-      reasonpref:
-        not_homeless: "Answer cannot be ‘homeless or about to lose their home’ as the tenant was not homeless immediately prior to this letting"
       reasonable_preference_reason:
         reason_required: "Enter a reason if you've answered 'yes' to reasonable preference"
         reason_not_required: "Do not enter a reason if you've answered 'no' to reasonable preference"
