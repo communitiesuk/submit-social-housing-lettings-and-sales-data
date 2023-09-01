@@ -179,6 +179,23 @@ module Imports
       if owner_id.present?
         user = LegacyUser.find_by(old_user_id: owner_id)&.user
 
+        if user.blank?
+          @logger.error("Sales log '#{attributes['old_id']}' belongs to legacy user with owner-user-id: '#{owner_id}' which cannot be found. Assigning log to 'Unassigned' user.")
+          if User.find_by(name: "Unassigned")
+            user = User.find_by(name: "Unassigned")
+          else
+            user = User.new(
+              name: "Unassigned",
+              organisation_id: attributes["managing_organisation_id"],
+              is_dpo: false,
+              encrypted_password: SecureRandom.hex(10),
+              email: SecureRandom.uuid,
+              confirmed_at: Time.zone.now,
+              active: false,
+            )
+            user.save!(validate: false)
+          end
+        end
         attributes["created_by"] = user
       end
 

@@ -44,8 +44,22 @@ RSpec.describe Imports::UserImportService do
     end
 
     it "refuses to create a user belonging to a non existing organisation" do
-      expect(logger).to receive(:error).with(/ActiveRecord::RecordInvalid/)
+      expect(logger).to receive(:error).with(/Could not save user with email: john.doe@gov.uk/)
+      expect(logger).to receive(:error).with(/Validation failed: Organisation Select the user’s organisation/)
       import_service.create_users("user_directory")
+    end
+
+    context "when the user with the same email already exists" do
+      before do
+        create(:organisation, old_org_id:)
+        create(:user, email: "john.doe@gov.uk")
+      end
+
+      it "logs an error and user email" do
+        expect(logger).to receive(:error).with(/Could not save user with email: john.doe@gov.uk/)
+        expect(logger).to receive(:error).with(/Validation failed: email Enter an email address that hasn’t already been used to sign up/)
+        import_service.create_users("user_directory")
+      end
     end
 
     context "when the user is a data coordinator" do
