@@ -99,9 +99,6 @@ jobs:
           cf api $CF_API_ENDPOINT
           cf auth
           cf target -o $CF_ORG -s $CF_SPACE
-          cf push $APP_NAME \
-            --manifest ./config/cloud_foundry/review_manifest.yml \
-            --no-start
 
       - name: Set environment variables
         env:
@@ -162,7 +159,8 @@ jobs:
         env:
           APP_NAME: dluhc-core-review-${{ github.event.pull_request.number }}
         run: |
-          cf restage $APP_NAME
+          cf push $APP_NAME --strategy rolling -t 180 \
+            --manifest ./config/cloud_foundry/review_manifest.yml
 
       - name: Comment on PR with URL
         uses: unsplash/comment-on-pr@v1.3.0
