@@ -148,6 +148,19 @@ RSpec.describe Imports::SalesLogsImportService do
         second_sales_log = SalesLog.where(old_id: "fake_id").first
         expect(sales_log&.created_by).to eq(second_sales_log&.created_by)
       end
+
+      context "when unassigned user exist for a different organisation" do
+        let!(:other_unassigned_user) { create(:user, name: "Unassigned") }
+
+        it "creates a new unassigned user for current organisation" do
+          expect(logger).to receive(:error).with("Sales log 'shared_ownership_sales_log' belongs to legacy user with owner-user-id: 'fake_id' which cannot be found. Assigning log to 'Unassigned' user.")
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.where(old_id: sales_log_id).first
+          expect(sales_log&.created_by&.name).to eq("Unassigned")
+          expect(sales_log&.created_by).not_to eq(other_unassigned_user)
+        end
+      end
     end
 
     context "and the log startdate is before 22/23 collection period" do

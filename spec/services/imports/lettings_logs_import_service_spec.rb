@@ -157,6 +157,19 @@ RSpec.describe Imports::LettingsLogsImportService do
           second_lettings_log = LettingsLog.where(old_id: "fake_id").first
           expect(lettings_log&.created_by).to eq(second_lettings_log&.created_by)
         end
+
+        context "when unassigned user exist for a different organisation" do
+          let!(:other_unassigned_user) { create(:user, name: "Unassigned") }
+
+          it "creates a new unassigned user for current organisation" do
+            expect(logger).to receive(:error).with("Lettings log '0ead17cb-1668-442d-898c-0d52879ff592' belongs to legacy user with owner-user-id: 'fake_id' which cannot be found. Assigning log to 'Unassigned' user.")
+            lettings_log_service.send(:create_log, lettings_log_xml)
+
+            lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+            expect(lettings_log&.created_by&.name).to eq("Unassigned")
+            expect(lettings_log&.created_by).not_to eq(other_unassigned_user)
+          end
+        end
       end
 
       it "correctly sets imported at date" do
