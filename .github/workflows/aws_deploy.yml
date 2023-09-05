@@ -14,7 +14,9 @@ concurrency:
 env:
   app_repo_role: arn:aws:iam::815624722760:role/core-application-repo
   aws_region: eu-west-2
-  repository: core
+  repository: core-ecr
+  # TODO: This is going to change, and also be an input in some sensible way
+  prefix: core-stag
 
 jobs:
   push_docker_image:
@@ -83,5 +85,47 @@ jobs:
           aws ecr put-image --repository-name $repository --image-tag $readable_tag --image-manifest "$manifest"
           echo "image=$registry/$repository:$readable_tag" >> $GITHUB_ENV
 
-      - name: TODO
-        run: echo $image
+      - name: Configure AWS credentials for environment
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-region: ${{ env.aws_region }}
+          role-to-assume: arn:aws:iam::107155005276:role/core-stag-deployment
+          role-chaining: true
+
+      - name: Download task definition
+        env:
+          ad_hoc_task_definition: ${{ env.prefix }}-ad-hoc
+        run: |
+          def=$(aws ecs describe-task-definition --task-definition $ad_hoc_task_definition --query taskDefinition)
+          echo $def
+          echo $def > task-definition.json
+
+      - name: Update image ID
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: app
+          image: ${{ env.image }}
+
+      - name: Update ad hoc task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+
+      - name: Run migrations task
+        env:
+          ad_hoc_task_definition: ${{ env.prefix }}-ad-hoc
+          cluster: ${{ env.prefix }}-ecs-cluster
+          service: ${{ env.prefix }}-ecs-service
+        run: |
+          network=$(aws ecs describe-services --cluster $cluster --services $service --query services[0].networkConfiguration)
+          overrides='{ "containerOverrides" : [{ "name" : "app", "command" : ["bundle", "exec", "rake", "db:migrate"]}]}'
+          arn=$(aws ecs run-task --cluster $cluster --task-definition $ad_hoc_task_definition --network-configuration "$network" --overrides "$overrides" --group migrations --launch-type FARGATE --query tasks[0].taskArn)
+          echo "Waiting for migration task to complete"
+          temp=${arn##*/}
+          id=${temp%*\"}
+          aws ecs wait tasks-stopped --cluster $cluster --tasks $id
+          succeeded=$(aws ecs describe-tasks --cluster $cluster --tasks $id --query "tasks[0].stopCode == 'EssentialContainerExited' && to_string(tasks[0].containers[0].exitCode) == '0'")
+          if [ $succeeded == true ]; then exit 0; else exit 1; fi
+
