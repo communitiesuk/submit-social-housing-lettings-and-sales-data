@@ -238,6 +238,8 @@ jobs:
     #needs: [lint, test, feature_test, audit]
     uses: ./.github/workflows/aws_deploy.yml
     with:
+      aws_account_id: 107155005276
+      aws_resource_prefix: core-staging
       environment: staging
     permissions:
       id-token: write

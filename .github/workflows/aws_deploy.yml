@@ -3,6 +3,12 @@ name: AWS Deployment
 on:
   workflow_call:
     inputs:
+      aws_account_id:
+        required: true
+        type: string
+      aws_resource_prefix:
+        required: true
+        type: string
       environment:
         required: true
         type: string
@@ -14,9 +20,7 @@ concurrency:
 env:
   app_repo_role: arn:aws:iam::815624722760:role/core-application-repo
   aws_region: eu-west-2
-  repository: core-ecr
-  # TODO: This is going to change, and also be an input in some sensible way
-  prefix: core-stag
+  repository: core
 
 jobs:
   push_docker_image:
@@ -24,8 +28,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
-    outputs:
-      image: ${{ steps.build-image.outputs.image }}
 
     steps:
       - name: Checkout code
@@ -89,12 +91,12 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v3
         with:
           aws-region: ${{ env.aws_region }}
-          role-to-assume: arn:aws:iam::107155005276:role/core-stag-deployment
+          role-to-assume: arn:aws:iam::${{ inputs.aws_account_id }}:role/${{ inputs.aws_resource_prefix }}-deployment
           role-chaining: true
 
       - name: Download task definition
         env:
-          ad_hoc_task_definition: ${{ env.prefix }}-ad-hoc
+          ad_hoc_task_definition: ${{ inputs.aws_resource_prefix }}-ad-hoc
         run: |
           def=$(aws ecs describe-task-definition --task-definition $ad_hoc_task_definition --query taskDefinition)
           echo $def
@@ -115,9 +117,9 @@ jobs:
 
       - name: Run migrations task
         env:
-          ad_hoc_task_definition: ${{ env.prefix }}-ad-hoc
-          cluster: ${{ env.prefix }}-ecs-cluster
-          service: ${{ env.prefix }}-ecs-service
+          ad_hoc_task_definition: ${{ inputs.aws_resource_prefix }}-ad-hoc
+          cluster: ${{ inputs.aws_resource_prefix }}
+          service: ${{ inputs.aws_resource_prefix }}
         run: |
           network=$(aws ecs describe-services --cluster $cluster --services $service --query services[0].networkConfiguration)
           overrides='{ "containerOverrides" : [{ "name" : "app", "command" : ["bundle", "exec", "rake", "db:migrate"]}]}'
