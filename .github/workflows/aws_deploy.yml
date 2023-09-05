@@ -98,9 +98,7 @@ jobs:
         env:
           ad_hoc_task_definition: ${{ inputs.aws_resource_prefix }}-ad-hoc
         run: |
-          def=$(aws ecs describe-task-definition --task-definition $ad_hoc_task_definition --query taskDefinition)
-          echo $def
-          echo $def > task-definition.json
+          aws ecs describe-task-definition --task-definition $ad_hoc_task_definition --query taskDefinition > task-definition.json
 
       - name: Update image ID
         id: task-def
@@ -130,4 +128,3 @@ jobs:
           aws ecs wait tasks-stopped --cluster $cluster --tasks $id
           succeeded=$(aws ecs describe-tasks --cluster $cluster --tasks $id --query "tasks[0].stopCode == 'EssentialContainerExited' && to_string(tasks[0].containers[0].exitCode) == '0'")
           if [ $succeeded == true ]; then exit 0; else exit 1; fi
-
