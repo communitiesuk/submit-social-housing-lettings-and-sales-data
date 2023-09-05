@@ -29,6 +29,7 @@ namespace :data_import do
       lettings_log.address_line2 = row[2]
       lettings_log.town_or_city = row[3]
       lettings_log.postcode_full = row[4]
+      lettings_log.postcode_known = lettings_log.postcode_full.present? ? 1 : nil
       lettings_log.county = nil
       lettings_log.is_la_inferred = nil
       lettings_log.la = nil
