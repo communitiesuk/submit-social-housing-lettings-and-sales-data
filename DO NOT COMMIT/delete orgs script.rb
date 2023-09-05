@@ -13,6 +13,7 @@ def delete_organisations(org_names)
     org.parent_organisation_relationships.destroy_all
     org.child_organisation_relationships.destroy_all
     org.users.each { |u| u.legacy_users.destroy_all }
+    org.users.destroy_all
     org.owned_lettings_logs.destroy_all
     org.owned_sales_logs.destroy_all
     org.managed_lettings_logs.destroy_all
