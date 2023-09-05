@@ -456,5 +456,19 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
         expect(lettings_log.is_la_inferred).to eq(false)
       end
     end
+
+    context "when the lettings log is from before collection 23/24" do
+      let(:lettings_log_id) { "00d2343e-d5fa-4c89-8400-ec3854b0f2b4" }
+      let(:lettings_log) { LettingsLog.find_by(old_id: lettings_log_id) }
+
+      before do
+        lettings_log.update!(startdate: Time.zone.local(2022, 5, 5))
+      end
+
+      it "skips the update" do
+        expect(logger).to receive(:info).with(/lettings log #{lettings_log.id} is from previous collection year, skipping/)
+        import_service.send(:update_address, lettings_log_xml)
+      end
+    end
   end
 end

@@ -140,6 +140,7 @@ module Imports
 
       old_id = meta_field_value(xml_doc, "document-id")
       record = LettingsLog.find_by(old_id:)
+      return @logger.info("lettings log #{record.id} is from previous collection year, skipping") if record.collection_start_year < 2023
 
       if record.present?
         if string_or_nil(xml_doc, "AddressLine1").present? && string_or_nil(xml_doc, "TownCity").present?
