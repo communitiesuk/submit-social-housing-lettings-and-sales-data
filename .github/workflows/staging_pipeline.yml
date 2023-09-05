@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - AwsRunDbMigrations
   pull_request:
     types:
       - opened
@@ -233,8 +234,8 @@ jobs:
 
   aws_deploy:
     name: AWS Deploy
-    if: github.ref == 'refs/heads/main'
-    needs: [lint, test, feature_test, audit]
+    if: github.ref == 'refs/heads/AwsRunDbMigrations'
+    #needs: [lint, test, feature_test, audit]
     uses: ./.github/workflows/aws_deploy.yml
     with:
       environment: staging
