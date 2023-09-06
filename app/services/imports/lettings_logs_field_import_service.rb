@@ -162,7 +162,7 @@ module Imports
           @logger.info("lettings log #{record.id} county value has been set to #{record.county}")
           @logger.info("lettings log #{record.id} postcode_full value has been set to #{record.postcode_full}")
         else
-          @logger.info("lettings log #{record.id} does not include address_line1 or town or city, skipping")
+          @logger.info("lettings log #{record.id} is missing either or both of address_line1 and town or city, skipping")
         end
       else
         @logger.warn("Could not find record matching legacy ID #{old_id}")
