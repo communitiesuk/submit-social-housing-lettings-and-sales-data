@@ -149,3 +149,4 @@ jobs:
           cluster: ${{ inputs.aws_resource_prefix }}
           service: ${{ inputs.aws_resource_prefix }}
           task-definition: ${{ steps.app-task-def.outputs.task-definition }}
+          wait-for-service-stability: true
