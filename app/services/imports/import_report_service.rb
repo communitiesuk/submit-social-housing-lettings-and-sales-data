@@ -87,31 +87,47 @@ module Imports
 
     def generate_missing_answers_report(report_suffix)
       Rails.logger.info("Generating missing imported lettings logs answers report")
+      unanswered_question_counts = {}
+      missing_answers_example_sets = {}
+
+      LettingsLog.where.not(old_id: nil).where(status: "in_progress").each do |lettings_log|
+        applicable_questions = lettings_log.form.subsections.map { |s| s.applicable_questions(lettings_log).select { |q| q.enabled?(lettings_log) } }.flatten
+        unanswered_questions = applicable_questions.filter { |q| q.unanswered?(lettings_log) }.map(&:id) - lettings_log.optional_fields
+
+        if unanswered_question_counts[unanswered_questions.join(", ")].present?
+          unanswered_question_counts[unanswered_questions.join(", ")] += 1
+          missing_answers_example_sets[unanswered_questions.join(", ")] << { id: lettings_log.id, old_id: lettings_log.old_id, owning_organisation_id: lettings_log.owning_organisation_id } unless unanswered_question_counts[unanswered_questions.join(", ")] > 10
+        else
+          unanswered_question_counts[unanswered_questions.join(", ")] = 1
+          missing_answers_example_sets[unanswered_questions.join(", ")] = [{ id: lettings_log.id, old_id: lettings_log.old_id, owning_organisation_id: lettings_log.owning_organisation_id }]
+        end
+      end
 
       rep = CSV.generate do |report|
         headers = ["Missing answers", "Total number of affected logs"]
         report << headers
-
-        unanswered_question_counts = {}
-
-        LettingsLog.where.not(old_id: nil).where(status: "in_progress").each do |lettings_log|
-          applicable_questions = lettings_log.form.subsections.map { |s| s.applicable_questions(lettings_log).select { |q| q.enabled?(lettings_log) } }.flatten
-          unanswered_questions = applicable_questions.filter { |q| q.unanswered?(lettings_log) }.map(&:id) - lettings_log.optional_fields
-
-          if unanswered_question_counts[unanswered_questions.join(", ")].present?
-            unanswered_question_counts[unanswered_questions.join(", ")] += 1
-          else
-            unanswered_question_counts[unanswered_questions.join(", ")] = 1
-          end
-        end
 
         unanswered_question_counts.each do |missing_answers, count|
           report << [missing_answers, count]
         end
       end
 
+      missing_answers_examples = CSV.generate do |report|
+        headers = ["Missing answers", "Organisation ID", "Log ID", "Old Log ID"]
+        report << headers
+
+        missing_answers_example_sets.each do |missing_answers, examples|
+          examples.each do |example|
+            report << [missing_answers, example[:owning_organisation_id], example[:id], example[:old_id]]
+          end
+        end
+      end
+
       report_name = "MissingAnswersReport_#{report_suffix}.csv"
       @storage_service.write_file(report_name, BYTE_ORDER_MARK + rep)
+
+      examples_report_name = "MissingAnswersExamples_#{report_suffix}.csv"
+      @storage_service.write_file(examples_report_name, BYTE_ORDER_MARK + missing_answers_examples)
 
       @logger.info("Missing answers report available in s3 import bucket at #{report_name}")
     end
