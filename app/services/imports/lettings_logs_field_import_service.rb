@@ -170,10 +170,8 @@ module Imports
     end
 
     def postcode_known(record)
-      if record.postcode_full.nil? && record.la.nil?
-        nil
-      elsif record.postcode_full.nil?
-        0 # Assumes we selected No in the form since the LA is present
+      if record.postcode_full.nil?
+        record.la.nil? ? nil : 0 # Assumes we selected No in the form since the LA is present
       else
         1
       end
