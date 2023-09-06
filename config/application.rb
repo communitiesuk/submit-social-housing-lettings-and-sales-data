@@ -39,7 +39,7 @@ module DataCollector
     config.session_store(
       :cookie_store,
       key: "_data_collector_session",
-      secure: (Rails.env.production? || Rails.env.staging? || Rails.env.review?)
+      secure: false
     )
 
     config.generators do |g|
