@@ -401,7 +401,7 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
 
       context "and new address values don't include address" do
         it "skips the update" do
-          expect(logger).to receive(:info).with(/lettings log #{lettings_log.id} does not include address_line1 or town or city, skipping/)
+          expect(logger).to receive(:info).with(/lettings log #{lettings_log.id} is missing either or both of address_line1 and town or city, skipping/)
           import_service.send(:update_address, lettings_log_xml)
         end
       end
