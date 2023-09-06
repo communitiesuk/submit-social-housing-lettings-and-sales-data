@@ -102,8 +102,16 @@ RSpec.describe Imports::SalesLogsImportService do
   end
 
   context "when importing a specific log" do
+    let(:sales_log_id) { "shared_ownership_sales_log" }
     let(:sales_log_file) { open_file(fixture_directory, sales_log_id) }
     let(:sales_log_xml) { Nokogiri::XML(sales_log_file) }
+
+    it "correctly sets values updated at date" do
+      sales_log_service.send(:create_log, sales_log_xml)
+
+      sales_log = SalesLog.where(old_id: sales_log_id).first
+      expect(sales_log&.values_updated_at).to eq(Time.zone.local(2023, 2, 1))
+    end
 
     context "and the organisation legacy ID does not exist" do
       let(:sales_log_id) { "shared_ownership_sales_log" }
@@ -113,6 +121,45 @@ RSpec.describe Imports::SalesLogsImportService do
       it "raises an exception" do
         expect { sales_log_service.send(:create_log, sales_log_xml) }
           .to raise_error(RuntimeError, "Organisation not found with legacy ID 99999")
+      end
+    end
+
+    context "and the user does not exist" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before { sales_log_xml.at_xpath("//meta:owner-user-id").content = "fake_id" }
+
+      it "creates a new unassigned user" do
+        expect(logger).to receive(:error).with("Sales log 'shared_ownership_sales_log' belongs to legacy user with owner-user-id: 'fake_id' which cannot be found. Assigning log to 'Unassigned' user.")
+        sales_log_service.send(:create_log, sales_log_xml)
+
+        sales_log = SalesLog.where(old_id: sales_log_id).first
+        expect(sales_log&.created_by&.name).to eq("Unassigned")
+      end
+
+      it "only creates one unassigned user" do
+        expect(logger).to receive(:error).with("Sales log 'shared_ownership_sales_log' belongs to legacy user with owner-user-id: 'fake_id' which cannot be found. Assigning log to 'Unassigned' user.")
+        expect(logger).to receive(:error).with("Sales log 'fake_id' belongs to legacy user with owner-user-id: 'fake_id' which cannot be found. Assigning log to 'Unassigned' user.")
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log_xml.at_xpath("//meta:document-id").content = "fake_id"
+        sales_log_service.send(:create_log, sales_log_xml)
+
+        sales_log = SalesLog.where(old_id: sales_log_id).first
+        second_sales_log = SalesLog.where(old_id: "fake_id").first
+        expect(sales_log&.created_by).to eq(second_sales_log&.created_by)
+      end
+
+      context "when unassigned user exist for a different organisation" do
+        let!(:other_unassigned_user) { create(:user, name: "Unassigned") }
+
+        it "creates a new unassigned user for current organisation" do
+          expect(logger).to receive(:error).with("Sales log 'shared_ownership_sales_log' belongs to legacy user with owner-user-id: 'fake_id' which cannot be found. Assigning log to 'Unassigned' user.")
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.where(old_id: sales_log_id).first
+          expect(sales_log&.created_by&.name).to eq("Unassigned")
+          expect(sales_log&.created_by).not_to eq(other_unassigned_user)
+        end
       end
     end
 

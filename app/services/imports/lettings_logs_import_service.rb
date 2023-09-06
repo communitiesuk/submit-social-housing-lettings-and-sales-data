@@ -174,7 +174,7 @@ module Imports
                                      0
                                    end
 
-      attributes["offered"] = safe_string_as_integer(xml_doc, "Q20")
+      attributes["offered"] = safe_string_as_decimal(xml_doc, "Q20")
       attributes["propcode"] = string_or_nil(xml_doc, "Q21a")
       attributes["beds"] = safe_string_as_integer(xml_doc, "Q22")
       attributes["unittype_gn"] = unsafe_string_as_integer(xml_doc, "Q23")
@@ -251,9 +251,27 @@ module Imports
       owner_id = meta_field_value(xml_doc, "owner-user-id").strip
       if owner_id.present?
         user = LegacyUser.find_by(old_user_id: owner_id)&.user
+        if user.blank?
+          @logger.error("Lettings log '#{attributes['old_id']}' belongs to legacy user with owner-user-id: '#{owner_id}' which cannot be found. Assigning log to 'Unassigned' user.")
+          if User.find_by(name: "Unassigned", organisation_id: attributes["managing_organisation_id"])
+            user = User.find_by(name: "Unassigned", organisation_id: attributes["managing_organisation_id"])
+          else
+            user = User.new(
+              name: "Unassigned",
+              organisation_id: attributes["managing_organisation_id"],
+              is_dpo: false,
+              encrypted_password: SecureRandom.hex(10),
+              email: SecureRandom.uuid,
+              confirmed_at: Time.zone.now,
+              active: false,
+            )
+            user.save!(validate: false)
+          end
+        end
 
         attributes["created_by"] = user
       end
+      attributes["values_updated_at"] = Time.zone.now
 
       apply_date_consistency!(attributes)
       apply_household_consistency!(attributes)
@@ -465,11 +483,11 @@ module Imports
     def previous_postcode_known(xml_doc, previous_postcode, prevloc)
       previous_postcode_known = string_or_nil(xml_doc, "Q12bnot")
       if previous_postcode_known == "Temporary_or_Unknown" || (previous_postcode.nil? && prevloc.present?)
-        0 # not known
+        1 # not known
       elsif previous_postcode.nil?
         nil
       else
-        1 # known
+        0 # known
       end
     end
 

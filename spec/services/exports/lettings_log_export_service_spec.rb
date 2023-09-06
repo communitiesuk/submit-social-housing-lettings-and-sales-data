@@ -219,6 +219,16 @@ RSpec.describe Exports::LettingsLogExportService do
 
           export_service.export_xml_lettings_logs
         end
+
+        it "generates zip export files only for specified year" do
+          expect(storage_service).to receive(:write_file).with(expected_zip_filename2, any_args)
+          expect(Rails.logger).to receive(:info).with("Building export run for 2022")
+          expect(Rails.logger).to receive(:info).with("Creating core_2022_2023_apr_mar_f0001_inc0001 - 1 logs")
+          expect(Rails.logger).to receive(:info).with("Added core_2022_2023_apr_mar_f0001_inc0001_pt001.xml")
+          expect(Rails.logger).to receive(:info).with("Writing core_2022_2023_apr_mar_f0001_inc0001.zip")
+
+          export_service.export_xml_lettings_logs(collection_year: 2022)
+        end
       end
     end
 
@@ -316,6 +326,26 @@ RSpec.describe Exports::LettingsLogExportService do
         export_service.export_xml_lettings_logs
 
         expect(LogsExport.last.increment_number).to eq(1)
+      end
+    end
+
+    context "and a log has been migrated since the previous partial export" do
+      before do
+        FactoryBot.create(:lettings_log, startdate: Time.zone.local(2022, 2, 1), updated_at: Time.zone.local(2022, 4, 27), values_updated_at: Time.zone.local(2022, 4, 29))
+        FactoryBot.create(:lettings_log, startdate: Time.zone.local(2022, 2, 1), updated_at: Time.zone.local(2022, 4, 27), values_updated_at: Time.zone.local(2022, 4, 29))
+        LogsExport.create!(started_at: Time.zone.local(2022, 4, 28), base_number: 1, increment_number: 1)
+      end
+
+      it "generates an XML manifest file with the expected content within the ZIP file" do
+        expected_content = replace_record_number(local_manifest_file.read, 2)
+        expect(storage_service).to receive(:write_file).with(expected_master_manifest_rerun, any_args)
+        expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
+          entry = Zip::File.open_buffer(content).find_entry(expected_manifest_filename)
+          expect(entry).not_to be_nil
+          expect(entry.get_input_stream.read).to eq(expected_content)
+        end
+
+        export_service.export_xml_lettings_logs
       end
     end
   end

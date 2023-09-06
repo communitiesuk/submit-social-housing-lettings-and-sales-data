@@ -135,6 +135,50 @@ RSpec.describe Imports::LettingsLogsImportService do
       let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id) }
       let(:lettings_log_xml) { Nokogiri::XML(lettings_log_file) }
 
+      context "and the user does not exist" do
+        before { lettings_log_xml.at_xpath("//meta:owner-user-id").content = "fake_id" }
+
+        it "creates a new unassigned user" do
+          expect(logger).to receive(:error).with("Lettings log '0ead17cb-1668-442d-898c-0d52879ff592' belongs to legacy user with owner-user-id: 'fake_id' which cannot be found. Assigning log to 'Unassigned' user.")
+          lettings_log_service.send(:create_log, lettings_log_xml)
+
+          lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+          expect(lettings_log&.created_by&.name).to eq("Unassigned")
+        end
+
+        it "only creates one unassigned user" do
+          expect(logger).to receive(:error).with("Lettings log '0ead17cb-1668-442d-898c-0d52879ff592' belongs to legacy user with owner-user-id: 'fake_id' which cannot be found. Assigning log to 'Unassigned' user.")
+          expect(logger).to receive(:error).with("Lettings log 'fake_id' belongs to legacy user with owner-user-id: 'fake_id' which cannot be found. Assigning log to 'Unassigned' user.")
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log_xml.at_xpath("//meta:document-id").content = "fake_id"
+          lettings_log_service.send(:create_log, lettings_log_xml)
+
+          lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+          second_lettings_log = LettingsLog.where(old_id: "fake_id").first
+          expect(lettings_log&.created_by).to eq(second_lettings_log&.created_by)
+        end
+
+        context "when unassigned user exist for a different organisation" do
+          let!(:other_unassigned_user) { create(:user, name: "Unassigned") }
+
+          it "creates a new unassigned user for current organisation" do
+            expect(logger).to receive(:error).with("Lettings log '0ead17cb-1668-442d-898c-0d52879ff592' belongs to legacy user with owner-user-id: 'fake_id' which cannot be found. Assigning log to 'Unassigned' user.")
+            lettings_log_service.send(:create_log, lettings_log_xml)
+
+            lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+            expect(lettings_log&.created_by&.name).to eq("Unassigned")
+            expect(lettings_log&.created_by).not_to eq(other_unassigned_user)
+          end
+        end
+      end
+
+      it "correctly sets imported at date" do
+        lettings_log_service.send(:create_log, lettings_log_xml)
+
+        lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+        expect(lettings_log&.values_updated_at).to eq(Time.zone.local(2022, 1, 1))
+      end
+
       context "and the void date is after the start date" do
         before { lettings_log_xml.at_xpath("//xmlns:VYEAR").content = 2023 }
 
@@ -439,6 +483,63 @@ RSpec.describe Imports::LettingsLogsImportService do
 
           expect(lettings_log).not_to be_nil
           expect(lettings_log.offered).to be_nil
+        end
+      end
+
+      context "and the number of times the property was relet is 0.00" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q20").content = "0.00"
+        end
+
+        it "does not raise an error" do
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "does not clear offered answer" do
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.offered).to equal(0)
+        end
+      end
+
+      context "and the gender identity is refused" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:P1Sex").content = "Person prefers not to say"
+        end
+
+        it "does not raise an error" do
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "saves the correct answer" do
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.sex1).to eq("R")
+        end
+      end
+
+      context "and the relationship is refused" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:P2Rel").content = "Person prefers not to say"
+        end
+
+        it "does not raise an error" do
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "saves the correct answer" do
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.relat2).to eq("R")
         end
       end
 
