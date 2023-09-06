@@ -117,6 +117,15 @@ namespace :import do
     Imports::ImportReportService.new(s3_service, institutions_csv).create_reports(institutions_csv_name)
   end
 
+  desc "Generate migrated logs report"
+  task :generate_missing_answers_report, %i[file_suffix] => :environment do |_task, args|
+    file_suffix = args[:file_suffix]
+    raise "Usage: rake import:generate_reports['file_suffix']" if file_suffix.blank?
+
+    s3_service = Storage::S3Service.new(PlatformHelper.is_paas? ? Configuration::PaasConfigurationService.new : Configuration::EnvConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
+    Imports::ImportReportService.new(s3_service, nil).generate_missing_answers_report(file_suffix)
+  end
+
   desc "Run import from logs step to end"
   task :logs_onwards, %i[institutions_csv_name] => %i[environment logs trigger_invites generate_reports]
 

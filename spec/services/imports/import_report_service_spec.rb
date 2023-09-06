@@ -98,4 +98,25 @@ RSpec.describe Imports::ImportReportService do
       end
     end
   end
+
+  describe "#generate_missing_answers_report" do
+    context "when there are in progress imported logs" do
+      let(:institutions_csv) { nil }
+      let(:expected_content) { File.read("spec/fixtures/files/imported_lettings_logs_missing_answers_report.csv") }
+
+      before do
+        create_list(:lettings_log, 11, :completed, age1_known: nil) do |log, _i|
+          log.old_id = Faker::Name.initials(number: 10)
+          log.save!
+        end
+        create_list(:lettings_log, 2, :completed, age1_known: nil)
+      end
+
+      it "generates a csv with expected missing fields" do
+        expect(storage_service).to receive(:write_file).with("MissingAnswersReport_report_suffix.csv", "﻿#{expected_content}")
+
+        report_service.generate_missing_answers_report("report_suffix")
+      end
+    end
+  end
 end
