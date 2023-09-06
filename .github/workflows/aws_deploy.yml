@@ -94,24 +94,24 @@ jobs:
           role-to-assume: arn:aws:iam::${{ inputs.aws_account_id }}:role/${{ inputs.aws_resource_prefix }}-deployment
           role-chaining: true
 
-      - name: Download task definition
+      - name: Download ad hoc task definition
         env:
           ad_hoc_task_definition: ${{ inputs.aws_resource_prefix }}-ad-hoc
         run: |
-          aws ecs describe-task-definition --task-definition $ad_hoc_task_definition --query taskDefinition > task-definition.json
+          aws ecs describe-task-definition --task-definition $ad_hoc_task_definition --query taskDefinition > ad-hoc-task-definition.json
 
       - name: Update image ID
-        id: task-def
+        id: ad-hoc-task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: task-definition.json
+          task-definition: ad-hoc-task-definition.json
           container-name: app
           image: ${{ env.image }}
 
       - name: Update ad hoc task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          task-definition: ${{ steps.ad-hoc-task-def.outputs.task-definition }}
 
       - name: Run migrations task
         env:
@@ -128,3 +128,24 @@ jobs:
           aws ecs wait tasks-stopped --cluster $cluster --tasks $id
           succeeded=$(aws ecs describe-tasks --cluster $cluster --tasks $id --query "tasks[0].stopCode == 'EssentialContainerExited' && to_string(tasks[0].containers[0].exitCode) == '0'")
           if [ $succeeded == true ]; then exit 0; else exit 1; fi
+
+      - name: Download service task definition
+        env:
+          app_task_definition: ${{ inputs.aws_resource_prefix }}-app
+        run: |
+          aws ecs describe-task-definition --task-definition $app_task_definition --query taskDefinition > app-task-definition.json
+
+      - name: Update image ID
+        id: app-task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: app-task-definition.json
+          container-name: app
+          image: ${{ env.image }}
+
+      - name: Deploy updated application
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          cluster: ${{ inputs.aws_resource_prefix }}
+          service: ${{ inputs.aws_resource_prefix }}
+          task-definition: ${{ steps.app-task-def.outputs.task-definition }}
