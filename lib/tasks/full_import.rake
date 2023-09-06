@@ -117,7 +117,7 @@ namespace :import do
     Imports::ImportReportService.new(s3_service, institutions_csv).create_reports(institutions_csv_name)
   end
 
-  desc "Generate migrated logs report"
+  desc "Generate missing answers report"
   task :generate_missing_answers_report, %i[file_suffix] => :environment do |_task, args|
     file_suffix = args[:file_suffix]
     raise "Usage: rake import:generate_reports['file_suffix']" if file_suffix.blank?
