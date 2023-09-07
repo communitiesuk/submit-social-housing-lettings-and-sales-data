@@ -12,6 +12,8 @@ module Imports
         import_from(folder, :update_offered)
       when "creation_method"
         import_from(folder, :update_creation_method)
+      when "address"
+        import_from(folder, :update_address)
       else
         raise "Updating #{field} is not supported by the field import service"
       end
@@ -130,6 +132,48 @@ module Imports
         end
       else
         @logger.warn("Could not find record matching legacy ID #{old_id}")
+      end
+    end
+
+    def update_address(xml_doc)
+      return if meta_field_value(xml_doc, "form-name").include?("Sales")
+
+      old_id = meta_field_value(xml_doc, "document-id")
+      record = LettingsLog.find_by(old_id:)
+      return @logger.info("lettings log #{record.id} is from previous collection year, skipping") if record.collection_start_year < 2023
+
+      if record.present?
+        if string_or_nil(xml_doc, "AddressLine1").present? && string_or_nil(xml_doc, "TownCity").present?
+          record.la = string_or_nil(xml_doc, "Q28ONS")
+          record.postcode_full = compose_postcode(xml_doc, "POSTCODE", "POSTCOD2")
+          record.postcode_known = postcode_known(record)
+          record.address_line1 = string_or_nil(xml_doc, "AddressLine1")
+          record.address_line2 = string_or_nil(xml_doc, "AddressLine2")
+          record.town_or_city = string_or_nil(xml_doc, "TownCity")
+          record.county = string_or_nil(xml_doc, "County")
+          record.uprn = nil
+          record.uprn_known = 0
+          record.uprn_confirmed = 0
+          record.values_updated_at = Time.zone.now
+          record.save!
+          @logger.info("lettings log #{record.id} address_line1 value has been set to #{record.address_line1}")
+          @logger.info("lettings log #{record.id} address_line2 value has been set to #{record.address_line2}")
+          @logger.info("lettings log #{record.id} town_or_city value has been set to #{record.town_or_city}")
+          @logger.info("lettings log #{record.id} county value has been set to #{record.county}")
+          @logger.info("lettings log #{record.id} postcode_full value has been set to #{record.postcode_full}")
+        else
+          @logger.info("lettings log #{record.id} is missing either or both of address_line1 and town or city, skipping")
+        end
+      else
+        @logger.warn("Could not find record matching legacy ID #{old_id}")
+      end
+    end
+
+    def postcode_known(record)
+      if record.postcode_full.nil?
+        record.la.nil? ? nil : 0 # Assumes we selected No in the form since the LA is present
+      else
+        1
       end
     end
   end
