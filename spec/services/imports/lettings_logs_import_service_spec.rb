@@ -172,6 +172,45 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
+      context "and the user exists on a different organisation" do
+        let!(:legacy_user) { create(:legacy_user, old_user_id: "fake_id") }
+
+        before { lettings_log_xml.at_xpath("//meta:owner-user-id").content = "fake_id" }
+
+        it "creates a new unassigned user" do
+          expect(logger).to receive(:error).with("Lettings log '0ead17cb-1668-442d-898c-0d52879ff592' belongs to legacy user with owner-user-id: 'fake_id' which belongs to a different organisation. Assigning log to 'Unassigned' user.")
+          lettings_log_service.send(:create_log, lettings_log_xml)
+
+          lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+          expect(lettings_log&.created_by&.name).to eq("Unassigned")
+        end
+
+        it "only creates one unassigned user" do
+          expect(logger).to receive(:error).with("Lettings log '0ead17cb-1668-442d-898c-0d52879ff592' belongs to legacy user with owner-user-id: 'fake_id' which belongs to a different organisation. Assigning log to 'Unassigned' user.")
+          expect(logger).to receive(:error).with("Lettings log 'fake_id' belongs to legacy user with owner-user-id: 'fake_id' which belongs to a different organisation. Assigning log to 'Unassigned' user.")
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log_xml.at_xpath("//meta:document-id").content = "fake_id"
+          lettings_log_service.send(:create_log, lettings_log_xml)
+
+          lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+          second_lettings_log = LettingsLog.where(old_id: "fake_id").first
+          expect(lettings_log&.created_by).to eq(second_lettings_log&.created_by)
+        end
+
+        context "when unassigned user exist for a different organisation" do
+          let!(:other_unassigned_user) { create(:user, name: "Unassigned") }
+
+          it "creates a new unassigned user for current organisation" do
+            expect(logger).to receive(:error).with("Lettings log '0ead17cb-1668-442d-898c-0d52879ff592' belongs to legacy user with owner-user-id: 'fake_id' which belongs to a different organisation. Assigning log to 'Unassigned' user.")
+            lettings_log_service.send(:create_log, lettings_log_xml)
+
+            lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+            expect(lettings_log&.created_by&.name).to eq("Unassigned")
+            expect(lettings_log&.created_by).not_to eq(other_unassigned_user)
+          end
+        end
+      end
+
       it "correctly sets imported at date" do
         lettings_log_service.send(:create_log, lettings_log_xml)
 
