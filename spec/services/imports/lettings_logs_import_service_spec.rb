@@ -173,9 +173,10 @@ RSpec.describe Imports::LettingsLogsImportService do
       end
 
       context "and the user exists on a different organisation" do
-        let!(:legacy_user) { create(:legacy_user, old_user_id: "fake_id") }
-
-        before { lettings_log_xml.at_xpath("//meta:owner-user-id").content = "fake_id" }
+        before do
+          create(:legacy_user, old_user_id: "fake_id")
+          lettings_log_xml.at_xpath("//meta:owner-user-id").content = "fake_id"
+        end
 
         it "creates a new unassigned user" do
           expect(logger).to receive(:error).with("Lettings log '0ead17cb-1668-442d-898c-0d52879ff592' belongs to legacy user with owner-user-id: 'fake_id' which belongs to a different organisation. Assigning log to 'Unassigned' user.")
