@@ -326,6 +326,7 @@ module Imports
         %i[prevten non_temp_accommodation] => %w[prevten rsnvac],
         %i[joint not_joint_tenancy] => %w[joint],
         %i[offered outside_the_range] => %w[offered],
+        %i[offered not_integer] => %w[offered],
         %i[earnings over_hard_max] => %w[ecstat1],
         %i[tshortfall no_outstanding_charges] => %w[tshortfall hbrentshortfall],
         %i[beds outside_the_range] => %w[beds],
