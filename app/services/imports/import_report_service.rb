@@ -86,24 +86,47 @@ module Imports
     end
 
     def generate_missing_answers_report(report_suffix)
-      Rails.logger.info("Generating missing imported lettings logs answers report")
+      create_missing_answers_report(report_suffix, LettingsLog)
+      create_missing_answers_report(report_suffix, SalesLog)
+    end
+
+    def create_missing_answers_report(report_suffix, log_class)
+      class_name = log_class.name.underscore.humanize
+      Rails.logger.info("Generating missing imported #{class_name}s answers report")
+
+      unanswered_question_counts, missing_answers_example_sets = process_missing_answers(log_class)
+
+      report_name = "MissingAnswersReport#{log_class.name}_#{report_suffix}.csv"
+      @storage_service.write_file(report_name, BYTE_ORDER_MARK + missing_answers_report(unanswered_question_counts))
+
+      examples_report_name = "MissingAnswersExamples#{log_class.name}_#{report_suffix}.csv"
+      @storage_service.write_file(examples_report_name, BYTE_ORDER_MARK + missing_answers_examples(missing_answers_example_sets))
+
+      @logger.info("Missing #{class_name}s answers report available in s3 import bucket at #{report_name}")
+    end
+
+    def process_missing_answers(log_class)
       unanswered_question_counts = {}
       missing_answers_example_sets = {}
 
-      LettingsLog.where.not(old_id: nil).where(status: "in_progress").each do |lettings_log|
-        applicable_questions = lettings_log.form.subsections.map { |s| s.applicable_questions(lettings_log).select { |q| q.enabled?(lettings_log) } }.flatten
-        unanswered_questions = (applicable_questions.filter { |q| q.unanswered?(lettings_log) }.map(&:id) - lettings_log.optional_fields).join(", ")
+      log_class.where.not(old_id: nil).where(status: "in_progress").each do |sales_log|
+        applicable_questions = sales_log.form.subsections.map { |s| s.applicable_questions(sales_log).select { |q| q.enabled?(sales_log) } }.flatten
+        unanswered_questions = (applicable_questions.filter { |q| q.unanswered?(sales_log) }.map(&:id) - sales_log.optional_fields).join(", ")
 
         if unanswered_question_counts[unanswered_questions].present?
           unanswered_question_counts[unanswered_questions] += 1
-          missing_answers_example_sets[unanswered_questions] << { id: lettings_log.id, old_form_id: lettings_log.old_form_id, owning_organisation_id: lettings_log.owning_organisation_id } unless unanswered_question_counts[unanswered_questions] > 10
+          missing_answers_example_sets[unanswered_questions] << { id: sales_log.id, old_form_id: sales_log.old_form_id, owning_organisation_id: sales_log.owning_organisation_id } unless unanswered_question_counts[unanswered_questions] > 10
         else
           unanswered_question_counts[unanswered_questions] = 1
-          missing_answers_example_sets[unanswered_questions] = [{ id: lettings_log.id, old_form_id: lettings_log.old_form_id, owning_organisation_id: lettings_log.owning_organisation_id }]
+          missing_answers_example_sets[unanswered_questions] = [{ id: sales_log.id, old_form_id: sales_log.old_form_id, owning_organisation_id: sales_log.owning_organisation_id }]
         end
       end
 
-      rep = CSV.generate do |report|
+      [unanswered_question_counts, missing_answers_example_sets]
+    end
+
+    def missing_answers_report(unanswered_question_counts)
+      CSV.generate do |report|
         headers = ["Missing answers", "Total number of affected logs"]
         report << headers
 
@@ -111,8 +134,10 @@ module Imports
           report << [missing_answers, count]
         end
       end
+    end
 
-      missing_answers_examples = CSV.generate do |report|
+    def missing_answers_examples(missing_answers_example_sets)
+      CSV.generate do |report|
         headers = ["Missing answers", "Organisation ID", "Log ID", "Old Form ID"]
         report << headers
 
@@ -122,14 +147,6 @@ module Imports
           end
         end
       end
-
-      report_name = "MissingAnswersReport_#{report_suffix}.csv"
-      @storage_service.write_file(report_name, BYTE_ORDER_MARK + rep)
-
-      examples_report_name = "MissingAnswersExamples_#{report_suffix}.csv"
-      @storage_service.write_file(examples_report_name, BYTE_ORDER_MARK + missing_answers_examples)
-
-      @logger.info("Missing answers report available in s3 import bucket at #{report_name}")
     end
   end
 end
