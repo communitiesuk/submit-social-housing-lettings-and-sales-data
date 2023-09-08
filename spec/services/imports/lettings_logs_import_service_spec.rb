@@ -819,7 +819,6 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
-
       context "and tshortfall is not positive" do
         let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
 
