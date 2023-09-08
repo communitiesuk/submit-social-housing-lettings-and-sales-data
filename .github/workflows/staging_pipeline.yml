@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - CLDC-2768-sidekiq
   pull_request:
     types:
       - opened
@@ -234,8 +233,8 @@ jobs:
 
   aws_deploy:
     name: AWS Deploy
-    if: github.ref == 'refs/heads/CLDC-2768-sidekiq'
-    #needs: [lint, test, feature_test, audit]
+    if: github.ref == 'refs/heads/main'
+    needs: [lint, test, feature_test, audit]
     uses: ./.github/workflows/aws_deploy.yml
     with:
       aws_account_id: 107155005276
