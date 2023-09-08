@@ -217,9 +217,6 @@ module Imports
 
         schemes = Scheme.where(old_visible_id: scheme_old_visible_id, owning_organisation_id: attributes["owning_organisation_id"])
         location = Location.find_by(old_visible_id: location_old_visible_id, scheme: schemes)
-        if location.nil? && [location_old_visible_id, scheme_old_visible_id].all?(&:present?) && previous_status != "saved"
-          raise "No matching location for scheme #{scheme_old_visible_id} and location #{location_old_visible_id} (visible IDs)"
-        end
 
         if location.present?
           # Set the scheme via location, because the scheme old visible ID can be duplicated at import

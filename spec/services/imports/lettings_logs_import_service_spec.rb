@@ -1248,6 +1248,25 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
+      context "and the scheme and location are not valid" do
+        let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+
+        before do
+          lettings_log_xml.at_xpath("//xmlns:_1cmangroupcode").content = "999"
+          lettings_log_xml.at_xpath("//xmlns:_1cschemecode").content = "999"
+        end
+
+        it "saves log without location and scheme" do
+          expect(logger).not_to receive(:warn)
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log.scheme_id).to be_nil
+          expect(lettings_log.location_id).to be_nil
+          expect(lettings_log.status).to eq("in_progress")
+        end
+      end
+
       context "and this is a supported housing log with a single location under a scheme" do
         let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
 
