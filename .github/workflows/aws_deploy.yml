@@ -117,7 +117,7 @@ jobs:
         env:
           ad_hoc_task_definition: ${{ inputs.aws_resource_prefix }}-ad-hoc
           cluster: ${{ inputs.aws_resource_prefix }}
-          service: ${{ inputs.aws_resource_prefix }}
+          service: ${{ inputs.aws_resource_prefix }}-app
         run: |
           network=$(aws ecs describe-services --cluster $cluster --services $service --query services[0].networkConfiguration)
           overrides='{ "containerOverrides" : [{ "name" : "app", "command" : ["bundle", "exec", "rake", "db:migrate"]}]}'
@@ -162,7 +162,7 @@ jobs:
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           cluster: ${{ inputs.aws_resource_prefix }}
-          service: ${{ inputs.aws_resource_prefix }}
+          service: ${{ inputs.aws_resource_prefix }}-app
           task-definition: ${{ steps.app-task-def.outputs.task-definition }}
           wait-for-service-stability: true
 
