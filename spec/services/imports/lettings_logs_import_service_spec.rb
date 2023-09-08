@@ -796,6 +796,30 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
+      context "and scharge is ever so slightly positive" do
+        let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q18aii").content = "1.66533E-16"
+        end
+
+        it "does not raise an error" do
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "sets scharge to 0" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.scharge).to eq(0)
+        end
+      end
+
+
       context "and tshortfall is not positive" do
         let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
 
