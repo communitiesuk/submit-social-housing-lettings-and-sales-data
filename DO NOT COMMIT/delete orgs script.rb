@@ -22,6 +22,7 @@ def delete_organisations(org_names)
     org.destroy!
     p "#{i} of #{org_names.count}: #{org_name} and associated objects deleted"
   end
+  #remember to delete logs that have been assigned to no orgs so they can reimport successfully
 end
 
 delete_organisations(org_names)
