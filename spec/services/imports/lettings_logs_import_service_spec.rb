@@ -325,7 +325,7 @@ RSpec.describe Imports::LettingsLogsImportService do
             .not_to raise_error
         end
 
-        it "clears out the invalid answers" do
+        it "clears out the invalid tenancy lenght" do
           allow(logger).to receive(:warn)
 
           lettings_log_service.send(:create_log, lettings_log_xml)
@@ -333,7 +333,7 @@ RSpec.describe Imports::LettingsLogsImportService do
 
           expect(lettings_log).not_to be_nil
           expect(lettings_log.tenancylength).to be_nil
-          expect(lettings_log.tenancy).to be_nil
+          expect(lettings_log.tenancy).to eq(4)
         end
       end
 

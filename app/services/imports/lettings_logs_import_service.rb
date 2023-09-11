@@ -318,7 +318,7 @@ module Imports
         %i[chcharge out_of_range] => %w[chcharge],
         %i[referral internal_transfer_non_social_housing] => %w[referral],
         %i[referral internal_transfer_fixed_or_lifetime] => %w[referral],
-        %i[tenancylength tenancylength_invalid] => %w[tenancylength tenancy],
+        %i[tenancylength tenancylength_invalid] => %w[tenancylength],
         %i[prevten over_25_foster_care] => %w[prevten age1],
         %i[prevten non_temp_accommodation] => %w[prevten rsnvac],
         %i[joint not_joint_tenancy] => %w[joint],
