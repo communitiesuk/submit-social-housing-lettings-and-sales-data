@@ -135,26 +135,12 @@ jobs:
         run: |
           aws ecs describe-task-definition --task-definition $app_task_definition --query taskDefinition > app-task-definition.json
 
-      - name: Download sidekiq service task definition
-        env:
-          app_task_definition: ${{ inputs.aws_resource_prefix }}-sidekiq
-        run: |
-          aws ecs describe-task-definition --task-definition $app_task_definition --query taskDefinition > sidekiq-task-definition.json
-
       - name: Update app image ID
         id: app-task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: app-task-definition.json
           container-name: app
-          image: ${{ env.image }}
-
-      - name: Update sidekiq image ID
-        id: sidekiq-task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: sidekiq-task-definition.json
-          container-name: sidekiq
           image: ${{ env.image }}
 
       - name: Deploy updated application
@@ -164,6 +150,20 @@ jobs:
           service: ${{ inputs.aws_resource_prefix }}-app
           task-definition: ${{ steps.app-task-def.outputs.task-definition }}
           wait-for-service-stability: true
+
+      - name: Download sidekiq service task definition
+        env:
+          sidekiq_task_definition: ${{ inputs.aws_resource_prefix }}-sidekiq
+        run: |
+          aws ecs describe-task-definition --task-definition $sidekiq_task_definition --query taskDefinition > sidekiq-task-definition.json
+
+      - name: Update sidekiq image ID
+        id: sidekiq-task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: sidekiq-task-definition.json
+          container-name: sidekiq
+          image: ${{ env.image }}
 
       - name: Deploy updated sidekiq
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
