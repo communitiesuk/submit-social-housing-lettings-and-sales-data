@@ -77,13 +77,15 @@ module Imports
       attributes["rent_type"] = rent_type(xml_doc, attributes["lar"], attributes["irproduct"])
       attributes["hhmemb"] = household_members(xml_doc, previous_status)
       (1..8).each do |index|
-        attributes["age#{index}"] = safe_string_as_integer(xml_doc, "P#{index}Age")
-        attributes["age#{index}_known"] = age_known(xml_doc, index, attributes["hhmemb"])
-        attributes["sex#{index}"] = sex(xml_doc, index)
-        attributes["ecstat#{index}"] = unsafe_string_as_integer(xml_doc, "P#{index}Eco")
+        person_index = people_with_details_ids(xml_doc)[index - 1] || index
+        attributes["age#{index}"] = safe_string_as_integer(xml_doc, "P#{person_index}Age")
+        attributes["age#{index}_known"] = age_known(xml_doc, index, person_index, attributes["hhmemb"])
+        attributes["sex#{index}"] = sex(xml_doc, person_index)
+        attributes["ecstat#{index}"] = unsafe_string_as_integer(xml_doc, "P#{person_index}Eco")
       end
       (2..8).each do |index|
-        attributes["relat#{index}"] = relat(xml_doc, index)
+        person_index = people_with_details_ids(xml_doc)[index - 1] || index
+        attributes["relat#{index}"] = relat(xml_doc, person_index)
         attributes["details_known_#{index}"] = details_known(index, attributes)
 
         # Trips validation
@@ -455,10 +457,10 @@ module Imports
       end
     end
 
-    def age_known(xml_doc, index, hhmemb)
+    def age_known(xml_doc, index, person_index, hhmemb)
       return nil if hhmemb.present? && index > hhmemb
 
-      age_refused = string_or_nil(xml_doc, "P#{index}AR")
+      age_refused = string_or_nil(xml_doc, "P#{person_index}AR")
       if age_refused.present?
         if age_refused.casecmp?("AGE_REFUSED") || age_refused.casecmp?("No")
           return 1 # No
@@ -581,6 +583,15 @@ module Imports
 
     def people_with_details(xml_doc)
       ((2..8).map { |x| string_or_nil(xml_doc, "P#{x}Rel") } + [string_or_nil(xml_doc, "P1Sex")]).compact
+    end
+
+    def people_with_details_ids(xml_doc)
+      [1] + (2..8).select do |x|
+        string_or_nil(xml_doc, "P#{x}Rel").present? ||
+          string_or_nil(xml_doc, "P#{x}Sex").present? ||
+          string_or_nil(xml_doc, "P#{x}Age").present? ||
+          string_or_nil(xml_doc, "P#{x}Eco").present?
+      end
     end
 
     def tshortfall_known?(xml_doc, attributes)

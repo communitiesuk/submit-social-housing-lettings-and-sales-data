@@ -1282,6 +1282,143 @@ RSpec.describe Imports::LettingsLogsImportService do
           expect(lettings_log.status).to eq("completed")
         end
       end
+
+      context "and there are several household members" do
+        context "and one person details are skipped" do
+          before do
+            lettings_log_xml.at_xpath("//xmlns:HHMEMB").content = 2
+            lettings_log_xml.at_xpath("//xmlns:P2AR").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Age").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Sex").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Rel").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Eco").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P3Age").content = 7
+            lettings_log_xml.at_xpath("//xmlns:P3Sex").content = "Male"
+            lettings_log_xml.at_xpath("//xmlns:P3Rel").content = "Child"
+            lettings_log_xml.at_xpath("//xmlns:P3Eco").content = "9) Child under 16"
+          end
+
+          it "correctly moves person details" do
+            lettings_log_service.send(:create_log, lettings_log_xml)
+
+            lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+            expect(lettings_log&.hhmemb).to eq(2)
+            expect(lettings_log&.details_known_2).to eq(0)
+            expect(lettings_log&.age2_known).to eq(0)
+            expect(lettings_log&.age2).to eq(7)
+            expect(lettings_log&.sex2).to eq("M")
+            expect(lettings_log&.relat2).to eq("C")
+          end
+        end
+
+        context "and several consecutive person details are skipped" do
+          before do
+            lettings_log_xml.at_xpath("//xmlns:HHMEMB").content = 4
+            lettings_log_xml.at_xpath("//xmlns:P2AR").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Age").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Sex").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Rel").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Eco").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P3AR").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P3Age").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P3Sex").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P3Rel").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P3Eco").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P4Age").content = 7
+            lettings_log_xml.at_xpath("//xmlns:P4Sex").content = "Male"
+            lettings_log_xml.at_xpath("//xmlns:P4Rel").content = "Child"
+            lettings_log_xml.at_xpath("//xmlns:P4Eco").content = "9) Child under 16"
+            lettings_log_xml.at_xpath("//xmlns:P5Age").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P5Sex").content = "Male"
+            lettings_log_xml.at_xpath("//xmlns:P5Rel").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P5Eco").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P6Age").content = 12
+            lettings_log_xml.at_xpath("//xmlns:P6Sex").content = "Female"
+            lettings_log_xml.at_xpath("//xmlns:P6Rel").content = "Child"
+            lettings_log_xml.at_xpath("//xmlns:P6Eco").content = "9) Child under 16"
+          end
+
+          it "correctly moves person details" do
+            lettings_log_service.send(:create_log, lettings_log_xml)
+
+            lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+            expect(lettings_log&.hhmemb).to eq(4)
+            expect(lettings_log&.details_known_2).to eq(0)
+            expect(lettings_log&.age2_known).to eq(0)
+            expect(lettings_log&.age2).to eq(7)
+            expect(lettings_log&.sex2).to eq("M")
+            expect(lettings_log&.relat2).to eq("C")
+
+            expect(lettings_log&.details_known_3).to eq(0)
+            expect(lettings_log&.age3_known).to eq(0)
+            expect(lettings_log&.age3).to eq(nil)
+            expect(lettings_log&.sex3).to eq("M")
+            expect(lettings_log&.relat3).to eq(nil)
+
+            expect(lettings_log&.details_known_4).to eq(0)
+            expect(lettings_log&.age4_known).to eq(0)
+            expect(lettings_log&.age4).to eq(12)
+            expect(lettings_log&.sex4).to eq("F")
+            expect(lettings_log&.relat4).to eq("C")
+          end
+        end
+
+        context "and several non consecutive person details are skipped" do
+          before do
+            lettings_log_xml.at_xpath("//xmlns:HHMEMB").content = 4
+            lettings_log_xml.at_xpath("//xmlns:P2AR").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Age").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Sex").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Rel").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Eco").content = nil
+
+            lettings_log_xml.at_xpath("//xmlns:P3Age").content = 7
+            lettings_log_xml.at_xpath("//xmlns:P3Sex").content = "Male"
+            lettings_log_xml.at_xpath("//xmlns:P3Rel").content = "Child"
+            lettings_log_xml.at_xpath("//xmlns:P3Eco").content = "9) Child under 16"
+
+            lettings_log_xml.at_xpath("//xmlns:P4AR").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P4Age").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P4Sex").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P4Rel").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P4Eco").content = nil
+
+            lettings_log_xml.at_xpath("//xmlns:P5Age").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P5Sex").content = "Male"
+            lettings_log_xml.at_xpath("//xmlns:P5Rel").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P5Eco").content = nil
+
+            lettings_log_xml.at_xpath("//xmlns:P6Age").content = 12
+            lettings_log_xml.at_xpath("//xmlns:P6Sex").content = "Female"
+            lettings_log_xml.at_xpath("//xmlns:P6Rel").content = "Child"
+            lettings_log_xml.at_xpath("//xmlns:P6Eco").content = "9) Child under 16"
+          end
+
+          it "correctly moves person details" do
+            lettings_log_service.send(:create_log, lettings_log_xml)
+
+            lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+            expect(lettings_log&.hhmemb).to eq(4)
+            expect(lettings_log&.details_known_2).to eq(0)
+            expect(lettings_log&.age2_known).to eq(0)
+            expect(lettings_log&.age2).to eq(7)
+            expect(lettings_log&.sex2).to eq("M")
+            expect(lettings_log&.relat2).to eq("C")
+
+            expect(lettings_log&.details_known_3).to eq(0)
+            expect(lettings_log&.age3_known).to eq(0)
+            expect(lettings_log&.age3).to eq(nil)
+            expect(lettings_log&.sex3).to eq("M")
+            expect(lettings_log&.relat3).to eq(nil)
+
+            expect(lettings_log&.details_known_4).to eq(0)
+            expect(lettings_log&.age4_known).to eq(0)
+            expect(lettings_log&.age4).to eq(12)
+            expect(lettings_log&.sex4).to eq("F")
+            expect(lettings_log&.relat4).to eq("C")
+          end
+        end
+      end
     end
   end
 
