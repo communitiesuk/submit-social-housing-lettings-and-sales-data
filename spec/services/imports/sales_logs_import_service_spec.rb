@@ -850,7 +850,7 @@ RSpec.describe Imports::SalesLogsImportService do
           .not_to raise_error
       end
 
-      it "clears out the referral answer" do
+      it "clears out the mortgage answer" do
         allow(logger).to receive(:warn)
 
         sales_log_service.send(:create_log, sales_log_xml)
@@ -858,6 +858,29 @@ RSpec.describe Imports::SalesLogsImportService do
 
         expect(sales_log).not_to be_nil
         expect(sales_log.mortgage).to be_nil
+      end
+    end
+
+    context "when proplen is out of range" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q16aProplen2").content = "2000"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the proplen answer" do
+        allow(logger).to receive(:warn)
+
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+
+        expect(sales_log).not_to be_nil
+        expect(sales_log.proplen).to be_nil
       end
     end
 

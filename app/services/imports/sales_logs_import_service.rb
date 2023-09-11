@@ -259,6 +259,7 @@ module Imports
         %i[mortgage cannot_be_0] => %w[mortgage],
         %i[frombeds outside_the_range] => %w[frombeds],
         %i[age1 outside_the_range] => %w[age1 age1_known],
+        %i[proplen outside_the_range] => %w[proplen],
       }
 
       errors.each do |(error, fields)|
