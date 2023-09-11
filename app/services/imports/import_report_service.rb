@@ -109,16 +109,16 @@ module Imports
       unanswered_question_counts = {}
       missing_answers_example_sets = {}
 
-      log_class.where.not(old_id: nil).where(status: "in_progress").each do |sales_log|
-        applicable_questions = sales_log.form.subsections.map { |s| s.applicable_questions(sales_log).select { |q| q.enabled?(sales_log) } }.flatten
-        unanswered_questions = (applicable_questions.filter { |q| q.unanswered?(sales_log) }.map(&:id) - sales_log.optional_fields).join(", ")
+      log_class.where.not(old_id: nil).where(status: "in_progress").each do |log|
+        applicable_questions = log.form.subsections.map { |s| s.applicable_questions(log).select { |q| q.enabled?(log) } }.flatten
+        unanswered_questions = (applicable_questions.filter { |q| q.unanswered?(log) }.map(&:id) - log.optional_fields).join(", ")
 
         if unanswered_question_counts[unanswered_questions].present?
           unanswered_question_counts[unanswered_questions] += 1
-          missing_answers_example_sets[unanswered_questions] << { id: sales_log.id, old_form_id: sales_log.old_form_id, owning_organisation_id: sales_log.owning_organisation_id } unless unanswered_question_counts[unanswered_questions] > 10
+          missing_answers_example_sets[unanswered_questions] << { id: log.id, old_form_id: log.old_form_id, owning_organisation_id: log.owning_organisation_id } unless unanswered_question_counts[unanswered_questions] > 10
         else
           unanswered_question_counts[unanswered_questions] = 1
-          missing_answers_example_sets[unanswered_questions] = [{ id: sales_log.id, old_form_id: sales_log.old_form_id, owning_organisation_id: sales_log.owning_organisation_id }]
+          missing_answers_example_sets[unanswered_questions] = [{ id: log.id, old_form_id: log.old_form_id, owning_organisation_id: log.owning_organisation_id }]
         end
       end
 
