@@ -107,18 +107,20 @@ RSpec.describe Imports::ImportReportService do
 
       before do
         create_list(:lettings_log, 11, :completed, age1_known: nil) do |log, i|
-          log.old_id = "age1_known_#{i}"
+          log.old_form_id = "100#{i}"
+          log.old_id = "old_id_age1_known_#{i}"
           log.save!
           expected__answers_examples_content.sub!("{id#{i}}", log.id.to_s)
           expected__answers_examples_content.sub!("{org_id#{i}}", log.owning_organisation_id.to_s)
         end
         create_list(:lettings_log, 4, :completed, beds: nil) do |log, i|
-          log.old_id = "beds_#{i}"
+          log.old_form_id = "200#{i}"
+          log.old_id = "old_id_beds_#{i}"
           expected__answers_examples_content.sub!("{id2_#{i}}", log.id.to_s)
           expected__answers_examples_content.sub!("{org_id2_#{i}}", log.owning_organisation_id.to_s)
           log.save!
         end
-        create(:lettings_log, :completed, age1_known: nil, beds: nil, old_id: "beds_and_age") do |log|
+        create(:lettings_log, :completed, age1_known: nil, beds: nil, old_form_id: "300", old_id: "123") do |log|
           expected__answers_examples_content.sub!("{id}", log.id.to_s)
           expected__answers_examples_content.sub!("{org_id}", log.owning_organisation_id.to_s)
         end
