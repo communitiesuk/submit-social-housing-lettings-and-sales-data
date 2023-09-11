@@ -228,6 +228,31 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
+    context "and the log startdate is only present in the CompletionDate field" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:DAY").content = nil
+        sales_log_xml.at_xpath("//xmlns:MONTH").content = nil
+        sales_log_xml.at_xpath("//xmlns:YEAR").content = nil
+        sales_log_xml.at_xpath("//xmlns:CompletionDate").content = "2022-10-9"
+        sales_log_xml.at_xpath("//xmlns:HODAY").content = 9
+        sales_log_xml.at_xpath("//xmlns:HOMONTH").content = 10
+        sales_log_xml.at_xpath("//xmlns:HOYEAR").content = 2022
+        sales_log_xml.at_xpath("//xmlns:EXDAY").content = 9
+        sales_log_xml.at_xpath("//xmlns:EXMONTH").content = 10
+        sales_log_xml.at_xpath("//xmlns:EXYEAR").content = 2022
+      end
+
+      it "creates the log with the correct saledate" do
+        expect(logger).not_to receive(:error)
+        expect(logger).not_to receive(:warn)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .to change(SalesLog, :count).by(1)
+        expect(SalesLog.last.saledate).to eq(Time.zone.local(2022, 10, 9))
+      end
+    end
+
     context "when the log is valid" do
       let(:sales_log_id) { "shared_ownership_sales_log" }
 

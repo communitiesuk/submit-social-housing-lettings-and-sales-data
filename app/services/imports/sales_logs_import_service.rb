@@ -15,7 +15,7 @@ module Imports
     def create_log(xml_doc)
       # only import sales logs from 22/23 collection period onwards
       return unless meta_field_value(xml_doc, "form-name").include?("Sales")
-      return unless compose_date(xml_doc, "DAY", "MONTH", "YEAR") >= Time.zone.local(2022, 4, 1)
+      return unless (compose_date(xml_doc, "DAY", "MONTH", "YEAR") || Time.zone.parse(field_value(xml_doc, "xmlns", "CompletionDate"))) >= Time.zone.local(2022, 4, 1)
 
       attributes = {}
 
@@ -24,7 +24,7 @@ module Imports
       # Required fields for status complete or logic to work
       # Note: order matters when we derive from previous values (attributes parameter)
 
-      attributes["saledate"] = compose_date(xml_doc, "DAY", "MONTH", "YEAR")
+      attributes["saledate"] = compose_date(xml_doc, "DAY", "MONTH", "YEAR") || Time.zone.parse(field_value(xml_doc, "xmlns", "CompletionDate"))
       attributes["owning_organisation_id"] = find_organisation_id(xml_doc, "OWNINGORGID")
       attributes["type"] = unsafe_string_as_integer(xml_doc, "DerSaleType")
       attributes["old_id"] = meta_field_value(xml_doc, "document-id")
