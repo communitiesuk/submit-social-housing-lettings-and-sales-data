@@ -135,7 +135,6 @@ jobs:
         run: |
           aws ecs describe-task-definition --task-definition $app_task_definition --query taskDefinition > app-task-definition.json
 
-
       - name: Download sidekiq service task definition
         env:
           app_task_definition: ${{ inputs.aws_resource_prefix }}-sidekiq
