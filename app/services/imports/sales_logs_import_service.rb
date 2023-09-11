@@ -152,6 +152,7 @@ module Imports
       attributes["discounted_sale_value_check"] = 0
       attributes["buyer_livein_value_check"] = 0
       attributes["percentage_discount_value_check"] = 0
+      attributes["hodate_check"] = 0
 
       # 2023/34 attributes
       attributes["address_line1"] = string_or_nil(xml_doc, "AddressLine1")
