@@ -92,14 +92,14 @@ module Imports
 
       LettingsLog.where.not(old_id: nil).where(status: "in_progress").each do |lettings_log|
         applicable_questions = lettings_log.form.subsections.map { |s| s.applicable_questions(lettings_log).select { |q| q.enabled?(lettings_log) } }.flatten
-        unanswered_questions = applicable_questions.filter { |q| q.unanswered?(lettings_log) }.map(&:id) - lettings_log.optional_fields
+        unanswered_questions = (applicable_questions.filter { |q| q.unanswered?(lettings_log) }.map(&:id) - lettings_log.optional_fields).join(", ")
 
-        if unanswered_question_counts[unanswered_questions.join(", ")].present?
-          unanswered_question_counts[unanswered_questions.join(", ")] += 1
-          missing_answers_example_sets[unanswered_questions.join(", ")] << { id: lettings_log.id, old_id: lettings_log.old_id, owning_organisation_id: lettings_log.owning_organisation_id } unless unanswered_question_counts[unanswered_questions.join(", ")] > 10
+        if unanswered_question_counts[unanswered_questions].present?
+          unanswered_question_counts[unanswered_questions] += 1
+          missing_answers_example_sets[unanswered_questions] << { id: lettings_log.id, old_id: lettings_log.old_id, owning_organisation_id: lettings_log.owning_organisation_id } unless unanswered_question_counts[unanswered_questions] > 10
         else
-          unanswered_question_counts[unanswered_questions.join(", ")] = 1
-          missing_answers_example_sets[unanswered_questions.join(", ")] = [{ id: lettings_log.id, old_id: lettings_log.old_id, owning_organisation_id: lettings_log.owning_organisation_id }]
+          unanswered_question_counts[unanswered_questions] = 1
+          missing_answers_example_sets[unanswered_questions] = [{ id: lettings_log.id, old_id: lettings_log.old_id, owning_organisation_id: lettings_log.owning_organisation_id }]
         end
       end
 
