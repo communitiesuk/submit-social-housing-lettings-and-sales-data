@@ -237,6 +237,7 @@ module Imports
       attributes["rent_value_check"] = 0
       attributes["net_income_value_check"] = 0
       attributes["carehome_charges_value_check"] = 0
+      attributes["referral_value_check"] = 0
 
       # Sets the log creator
       owner_id = meta_field_value(xml_doc, "owner-user-id").strip
@@ -396,7 +397,7 @@ module Imports
     end
 
     def fields_not_present_in_softwire_data
-      %w[majorrepairs illness_type_0 tshortfall_known pregnancy_value_check retirement_value_check rent_value_check net_income_value_check major_repairs_date_value_check void_date_value_check carehome_charges_value_check housingneeds_type housingneeds_other created_by uprn_known uprn_confirmed]
+      %w[majorrepairs illness_type_0 tshortfall_known pregnancy_value_check retirement_value_check rent_value_check net_income_value_check major_repairs_date_value_check void_date_value_check carehome_charges_value_check referral_value_check housingneeds_type housingneeds_other created_by uprn_known uprn_confirmed]
     end
 
     def check_status_completed(lettings_log, previous_status)

@@ -1808,5 +1808,24 @@ RSpec.describe Imports::LettingsLogsImportService do
         expect(lettings_log&.la).to eq("E06000047")
       end
     end
+
+    context "and the referral soft validation is triggered (referral_value_check)" do
+      let(:lettings_log_id) { "00d2343e-d5fa-4c89-8400-ec3854b0f2b4" }
+      let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id) }
+      let(:lettings_log_xml) { Nokogiri::XML(lettings_log_file) }
+
+      before do
+        lettings_log_xml.at_xpath("//xmlns:DAY").content = "2"
+        lettings_log_xml.at_xpath("//xmlns:MONTH").content = "10"
+        lettings_log_xml.at_xpath("//xmlns:YEAR").content = "2022"
+        lettings_log_xml.at_xpath("//xmlns:Q16").content = 4
+      end
+
+      it "completes the log" do
+        lettings_log_service.send(:create_log, lettings_log_xml)
+        lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+        expect(lettings_log.status).to eq("completed")
+      end
+    end
   end
 end
