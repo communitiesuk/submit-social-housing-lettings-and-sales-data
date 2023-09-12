@@ -98,4 +98,42 @@ RSpec.describe Imports::ImportReportService do
       end
     end
   end
+
+  describe "#generate_missing_answers_report" do
+    context "when there are in progress imported logs" do
+      let(:institutions_csv) { nil }
+      let(:expected_content) { File.read("spec/fixtures/files/imported_lettings_logs_missing_answers_report.csv") }
+      let(:expected__answers_examples_content) { File.read("spec/fixtures/files/imported_lettings_logs_missing_answers_examples.csv") }
+
+      before do
+        create_list(:lettings_log, 11, :completed, age1_known: nil) do |log, i|
+          log.old_form_id = "100#{i}"
+          log.old_id = "old_id_age1_known_#{i}"
+          log.save!
+          expected__answers_examples_content.sub!("{id#{i}}", log.id.to_s)
+          expected__answers_examples_content.sub!("{org_id#{i}}", log.owning_organisation_id.to_s)
+        end
+        create_list(:lettings_log, 4, :completed, beds: nil) do |log, i|
+          log.old_form_id = "200#{i}"
+          log.old_id = "old_id_beds_#{i}"
+          expected__answers_examples_content.sub!("{id2_#{i}}", log.id.to_s)
+          expected__answers_examples_content.sub!("{org_id2_#{i}}", log.owning_organisation_id.to_s)
+          log.save!
+        end
+        create(:lettings_log, :completed, age1_known: nil, beds: nil, old_form_id: "300", old_id: "123") do |log|
+          expected__answers_examples_content.sub!("{id}", log.id.to_s)
+          expected__answers_examples_content.sub!("{org_id}", log.owning_organisation_id.to_s)
+        end
+
+        create_list(:lettings_log, 2, :completed, age1_known: nil)
+      end
+
+      it "generates a csv with expected missing fields" do
+        expect(storage_service).to receive(:write_file).with("MissingAnswersReport_report_suffix.csv", "﻿#{expected_content}")
+        expect(storage_service).to receive(:write_file).with("MissingAnswersExamples_report_suffix.csv", "﻿#{expected__answers_examples_content}")
+
+        report_service.generate_missing_answers_report("report_suffix")
+      end
+    end
+  end
 end
