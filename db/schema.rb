@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_28_145454) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_12_115233) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -298,6 +298,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_28_145454) do
     t.datetime "discarded_at"
     t.integer "creation_method", default: 1
     t.datetime "values_updated_at"
+    t.integer "referral_value_check"
     t.index ["bulk_upload_id"], name: "index_lettings_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_lettings_logs_on_created_by_id"
     t.index ["location_id"], name: "index_lettings_logs_on_location_id"
