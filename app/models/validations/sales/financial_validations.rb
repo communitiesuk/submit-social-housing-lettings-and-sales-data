@@ -30,9 +30,9 @@ module Validations::Sales::FinancialValidations
     combined_income = record.income1 + record.income2
     relevant_fields = %i[income1 income2 ownershipsch uprn la postcode_full]
     if record.london_property? && combined_income > 90_000
-      relevant_fields.each { |field| record.errors.add field, I18n.t("validations.financial.income.combined_over_hard_max_for_london") }
+      relevant_fields.each { |field| record.errors.add field, :over_combined_hard_max_for_london, message: I18n.t("validations.financial.income.combined_over_hard_max_for_london") }
     elsif record.property_not_in_london? && combined_income > 80_000
-      relevant_fields.each { |field| record.errors.add field, I18n.t("validations.financial.income.combined_over_hard_max_for_outside_london") }
+      relevant_fields.each { |field| record.errors.add field, :over_combined_hard_max_for_outside_london, message: I18n.t("validations.financial.income.combined_over_hard_max_for_outside_london") }
     end
   end
 

@@ -250,15 +250,20 @@ module Imports
         %i[postcode_full postcodes_not_matching] => %w[ppcodenk ppostcode_full],
         %i[exdate over_a_year_from_saledate] => %w[exdate],
         %i[income1 over_hard_max_for_outside_london] => %w[income1],
+        %i[income1 over_combined_hard_max_for_outside_london] => %w[income1 income2],
         %i[income1 over_hard_max_for_london] => %w[income1],
+        %i[income1 over_combined_hard_max_for_london] => %w[income1 income2],
         %i[income2 over_hard_max_for_outside_london] => %w[income2],
+        %i[income2 over_combined_hard_max_for_outside_london] => %w[income1 income2],
         %i[income2 over_hard_max_for_london] => %w[income2],
+        %i[income2 over_combined_hard_max_for_london] => %w[income1 income2],
         %i[equity over_max] => %w[equity],
         %i[equity under_min] => %w[equity],
         %i[mscharge under_min] => %w[mscharge has_mscharge],
         %i[mortgage cannot_be_0] => %w[mortgage],
         %i[frombeds outside_the_range] => %w[frombeds],
         %i[age1 outside_the_range] => %w[age1 age1_known],
+        %i[proplen outside_the_range] => %w[proplen],
       }
 
       errors.each do |(error, fields)|
