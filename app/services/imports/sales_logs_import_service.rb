@@ -152,6 +152,10 @@ module Imports
       attributes["discounted_sale_value_check"] = 0
       attributes["buyer_livein_value_check"] = 0
       attributes["percentage_discount_value_check"] = 0
+      attributes["hodate_check"] = 0
+      attributes["saledate_check"] = 0
+      attributes["combined_income_value_check"] = 0
+      attributes["stairowned_value_check"] = 0
 
       # 2023/34 attributes
       attributes["address_line1"] = string_or_nil(xml_doc, "AddressLine1")
@@ -330,6 +334,8 @@ module Imports
          discounted_sale_value_check
          buyer_livein_value_check
          percentage_discount_value_check
+         combined_income_value_check
+         stairowned_value_check
          uprn_known
          uprn_confirmed]
     end

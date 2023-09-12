@@ -595,6 +595,56 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
+    context "and the hodate soft validation is triggered (hodate_value_check)" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:HODAY").content = "1"
+        sales_log_xml.at_xpath("//xmlns:HOMONTH").content = "1"
+        sales_log_xml.at_xpath("//xmlns:HOYEAR").content = "2018"
+      end
+
+      it "completes the log" do
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log.status).to eq("completed")
+      end
+    end
+
+    context "and the combined income soft validation is triggered (combined_income_value_check)" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+        sales_log_xml.at_xpath("//xmlns:Q2Person1Income").content = "45000"
+        sales_log_xml.at_xpath("//xmlns:P2IncKnown").content = "1 Yes"
+        sales_log_xml.at_xpath("//xmlns:Q2Person2Income").content = "45000"
+      end
+
+      it "completes the log" do
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log.status).to eq("completed")
+      end
+    end
+
+    context "and the stairowned soft validation is triggered (stairowned_value_check)" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:DerSaleType").content = "24"
+        sales_log_xml.at_xpath("//xmlns:PercentOwns").content = "77"
+        sales_log_xml.at_xpath("//xmlns:Q17aStaircase").content = "1"
+        sales_log_xml.at_xpath("//xmlns:PercentBought").content = "10"
+      end
+
+      it "completes the log" do
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log.status).to eq("completed")
+      end
+    end
+
     context "and it has an invalid record with invalid child age" do
       let(:sales_log_id) { "discounted_ownership_sales_log" }
 
