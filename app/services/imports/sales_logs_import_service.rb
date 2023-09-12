@@ -583,9 +583,8 @@ module Imports
 
     def set_soctenant_fields?(attributes)
       return false if attributes["ownershipsch"] != 1
-      return false if %w[socprevten frombeds fromprop].all? { |field| attributes[field].blank? } && collection_start_year_for_date(attributes["saledate"]) >= 2023
 
-      true
+      %w[socprevten frombeds fromprop].any? { |field| attributes[field].present? } || collection_start_year_for_date(attributes["saledate"]) < 2023
     end
 
     def set_default_values(attributes)
