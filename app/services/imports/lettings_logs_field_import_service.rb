@@ -194,7 +194,7 @@ module Imports
           if reason == 20 && reasonother.blank?
             @logger.info("lettings log #{record.id}'s reason is other but other reason is not provided, skipping update")
           else
-            record.update!(reason:, reasonother:)
+            record.update!(reason:, reasonother:, values_updated_at: Time.zone.now)
             @logger.info("lettings log #{record.id}'s reason value has been set to #{reason}")
             @logger.info("lettings log #{record.id}'s reasonother value has been set to #{reasonother}") if record.reasonother.present?
           end
