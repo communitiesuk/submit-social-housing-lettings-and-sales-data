@@ -76,15 +76,18 @@ module Imports
       attributes["irproduct_other"] = string_or_nil(xml_doc, "IRProductOther")
       attributes["rent_type"] = rent_type(xml_doc, attributes["lar"], attributes["irproduct"])
       attributes["hhmemb"] = household_members(xml_doc, previous_status)
+
+      people_indexes = people_with_details_ids(xml_doc)
+      available_people_indexes = people_indexes + (people_indexes.max + 1..8).to_a
       (1..8).each do |index|
-        person_index = people_with_details_ids(xml_doc)[index - 1] || index
+        person_index = available_people_indexes[index - 1]
         attributes["age#{index}"] = safe_string_as_integer(xml_doc, "P#{person_index}Age")
         attributes["age#{index}_known"] = age_known(xml_doc, index, person_index, attributes["hhmemb"])
         attributes["sex#{index}"] = sex(xml_doc, person_index)
         attributes["ecstat#{index}"] = unsafe_string_as_integer(xml_doc, "P#{person_index}Eco")
       end
       (2..8).each do |index|
-        person_index = people_with_details_ids(xml_doc)[index - 1] || index
+        person_index = available_people_indexes[index - 1]
         attributes["relat#{index}"] = relat(xml_doc, person_index)
         attributes["details_known_#{index}"] = details_known(index, attributes)
 

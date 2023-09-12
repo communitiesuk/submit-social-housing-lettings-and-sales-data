@@ -1286,7 +1286,7 @@ RSpec.describe Imports::LettingsLogsImportService do
       context "and there are several household members" do
         context "and one person details are skipped" do
           before do
-            lettings_log_xml.at_xpath("//xmlns:HHMEMB").content = 2
+            lettings_log_xml.at_xpath("//xmlns:HHMEMB").content = 3
             lettings_log_xml.at_xpath("//xmlns:P2AR").content = nil
             lettings_log_xml.at_xpath("//xmlns:P2Age").content = nil
             lettings_log_xml.at_xpath("//xmlns:P2Sex").content = nil
@@ -1302,14 +1302,20 @@ RSpec.describe Imports::LettingsLogsImportService do
             lettings_log_service.send(:create_log, lettings_log_xml)
 
             lettings_log = LettingsLog.where(old_id: lettings_log_id).first
-            expect(lettings_log&.hhmemb).to eq(2)
+            expect(lettings_log&.hhmemb).to eq(3)
             expect(lettings_log&.details_known_2).to eq(0)
             expect(lettings_log&.age2_known).to eq(0)
             expect(lettings_log&.age2).to eq(7)
             expect(lettings_log&.sex2).to eq("M")
             expect(lettings_log&.relat2).to eq("C")
 
-            [3, 4, 5].each do |i|
+            expect(lettings_log&.details_known_3).to eq(0)
+            expect(lettings_log&.age3_known).to eq(0)
+            expect(lettings_log&.age3).to eq(nil)
+            expect(lettings_log&.sex3).to eq(nil)
+            expect(lettings_log&.relat3).to eq(nil)
+
+            [4, 5].each do |i|
               expect(lettings_log&.send("details_known_#{i}")).to eq(nil)
               expect(lettings_log&.send("age#{i}_known")).to eq(nil)
               expect(lettings_log&.send("age#{i}")).to eq(nil)
