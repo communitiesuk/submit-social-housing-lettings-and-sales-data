@@ -14,6 +14,8 @@ module Imports
         import_from(folder, :update_creation_method)
       when "address"
         import_from(folder, :update_address)
+      when "reason"
+        import_from(folder, :update_reason)
       else
         raise "Updating #{field} is not supported by the field import service"
       end
@@ -174,6 +176,31 @@ module Imports
         record.la.nil? ? nil : 0 # Assumes we selected No in the form since the LA is present
       else
         1
+      end
+    end
+
+    def update_reason(xml_doc)
+      return if meta_field_value(xml_doc, "form-name").include?("Sales")
+
+      old_id = meta_field_value(xml_doc, "document-id")
+      record = LettingsLog.find_by(old_id:)
+
+      if record.present?
+        if record.reason.present?
+          @logger.info("lettings log #{record.id} has a value for reason, skipping update")
+        else
+          reason = unsafe_string_as_integer(xml_doc, "Q9a")
+          reasonother = string_or_nil(xml_doc, "Q9aa")
+          if reason == 20 && reasonother.blank?
+            @logger.info("lettings log #{record.id}'s reason is other but other reason is not provided, skipping update")
+          else
+            record.update!(reason:, reasonother:)
+            @logger.info("lettings log #{record.id}'s reason value has been set to #{reason}")
+            @logger.info("lettings log #{record.id}'s reasonother value has been set to #{reasonother}") if record.reasonother.present?
+          end
+        end
+      else
+        @logger.warn("lettings log with old id #{old_id} not found")
       end
     end
   end

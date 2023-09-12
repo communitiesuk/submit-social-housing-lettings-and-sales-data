@@ -471,4 +471,74 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
       end
     end
   end
+
+  context "when updating reason" do
+    let(:field) { "reason" }
+
+    context "when the lettings log has no reason value" do
+      let(:lettings_log) { LettingsLog.find_by(old_id: lettings_log_id) }
+
+      before do
+        Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+        lettings_log_file.rewind
+        lettings_log.update!(reason: nil)
+        lettings_log_xml.at_xpath("//xmlns:Q9a").content = "47"
+      end
+
+      it "updates the lettings_log reason value" do
+        expect(logger).to receive(:info).with(/lettings log \d+'s reason value has been set to 47/)
+        expect { import_service.send(:update_reason, lettings_log_xml) }
+          .to(change { lettings_log.reload.reason }.from(nil).to(47))
+      end
+    end
+
+    context "when the lettings log has a different reason value" do
+      let(:lettings_log) { LettingsLog.find_by(old_id: lettings_log_id) }
+
+      before do
+        Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+        lettings_log_file.rewind
+        lettings_log.update!(reason: 18)
+        lettings_log_xml.at_xpath("//xmlns:Q9a").content = "47"
+      end
+
+      it "does not update the lettings_log reason value" do
+        expect(logger).to receive(:info).with(/lettings log \d+ has a value for reason, skipping update/)
+        expect { import_service.send(:update_reason, lettings_log_xml) }
+          .not_to(change { lettings_log.reload.reason })
+      end
+    end
+
+    context "when the new value is 'other'" do
+      let(:lettings_log) { LettingsLog.find_by(old_id: lettings_log_id) }
+
+      before do
+        Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+        lettings_log_file.rewind
+        lettings_log.update!(reason: nil)
+        lettings_log_xml.at_xpath("//xmlns:Q9a").content = "20"
+      end
+
+      context "and other value is given" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q9aa").content = "other"
+        end
+
+        it "updates the lettings_log reason value" do
+          expect(logger).to receive(:info).with(/lettings log \d+'s reason value has been set to 20/)
+          expect(logger).to receive(:info).with(/lettings log \d+'s reasonother value has been set to other/)
+          expect { import_service.send(:update_reason, lettings_log_xml) }
+            .to(change { lettings_log.reload.reason }.from(nil).to(20))
+        end
+      end
+
+      context "and other value is not given" do
+        it "does not update the lettings_log reason value" do
+          expect(logger).to receive(:info).with(/lettings log \d+'s reason is other but other reason is not provided, skipping update/)
+          expect { import_service.send(:update_reason, lettings_log_xml) }
+            .not_to(change { lettings_log.reload.reason })
+        end
+      end
+    end
+  end
 end
