@@ -6,7 +6,10 @@ class Form::Lettings::Pages::ReferralValueCheck < ::Form::Page
     @title_text = {
       "translation" => "soft_validations.referral.title_text",
     }
-    @informative_text = ""
+    @informative_text = {
+      "translation" => "soft_validations.referral.hint_text",
+      "arguments" => [],
+    }
   end
 
   def questions
