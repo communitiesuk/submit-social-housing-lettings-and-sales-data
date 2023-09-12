@@ -384,6 +384,42 @@ RSpec.describe Imports::SalesLogsImportService do
           sales_log = SalesLog.find_by(old_id: sales_log_id)
           expect(sales_log.proplen_asked).to eq(1)
         end
+
+        context "when setting soctenant fields" do
+          it "does not set soctenant value if none of the soctenant questions are answered" do
+            sales_log_xml.at_xpath("//xmlns:Q20Bedrooms").content = nil
+            sales_log_xml.at_xpath("//xmlns:PrevRentType").content = nil
+            sales_log_xml.at_xpath("//xmlns:Q21PropertyType").content = nil
+
+            expect(logger).not_to receive(:error)
+            expect(logger).not_to receive(:warn)
+            expect(logger).not_to receive(:info)
+            expect { sales_log_service.send(:create_log, sales_log_xml) }
+            .to change(SalesLog, :count).by(1)
+            sales_log = SalesLog.find_by(old_id: sales_log_id)
+            expect(sales_log.soctenant).to eq(nil)
+            expect(sales_log.frombeds).to eq(nil)
+            expect(sales_log.fromprop).to eq(nil)
+            expect(sales_log.socprevten).to eq(nil)
+          end
+
+          it "sets soctenant to don't know if any of the soctenant questions are answered" do
+            sales_log_xml.at_xpath("//xmlns:Q20Bedrooms").content = "2"
+            sales_log_xml.at_xpath("//xmlns:PrevRentType").content = nil
+            sales_log_xml.at_xpath("//xmlns:Q21PropertyType").content = nil
+
+            expect(logger).not_to receive(:error)
+            expect(logger).not_to receive(:warn)
+            expect(logger).not_to receive(:info)
+            expect { sales_log_service.send(:create_log, sales_log_xml) }
+            .to change(SalesLog, :count).by(1)
+            sales_log = SalesLog.find_by(old_id: sales_log_id)
+            expect(sales_log.soctenant).to eq(0)
+            expect(sales_log.frombeds).to eq(2)
+            expect(sales_log.fromprop).to eq(0)
+            expect(sales_log.socprevten).to eq(10)
+          end
+        end
       end
 
       context "with discounted sale type" do
@@ -1987,6 +2023,7 @@ RSpec.describe Imports::SalesLogsImportService do
 
           sales_log = SalesLog.find_by(old_id: sales_log_id)
           expect(sales_log&.fromprop).to be(0)
+          expect(sales_log&.soctenant).to be(0)
         end
       end
 
@@ -2003,6 +2040,7 @@ RSpec.describe Imports::SalesLogsImportService do
 
           sales_log = SalesLog.find_by(old_id: sales_log_id)
           expect(sales_log&.socprevten).to be(10)
+          expect(sales_log&.soctenant).to be(0)
         end
       end
 

@@ -1,5 +1,7 @@
 module Imports
   class SalesLogsImportService < LogsImportService
+    include CollectionTimeHelper
+
     def initialize(storage_service, logger = Rails.logger, allow_updates: false)
       @logs_with_discrepancies = Set.new
       @logs_overridden = Set.new
@@ -124,7 +126,7 @@ module Imports
       attributes["mortgagelenderother"] = mortgage_lender_other(xml_doc, attributes)
       attributes["postcode_full"] = parse_postcode(string_or_nil(xml_doc, "Q14Postcode"))
       attributes["pcodenk"] = 0 if attributes["postcode_full"].present? # known if given
-      attributes["soctenant"] = 0 if attributes["ownershipsch"] == 1
+      attributes["soctenant"] = 0 if set_soctenant_fields?(attributes)
 
       attributes["previous_la_known"] = 1 if attributes["prevloc"].present?
       if attributes["la"].present?
@@ -579,6 +581,13 @@ module Imports
       end
     end
 
+    def set_soctenant_fields?(attributes)
+      return false if attributes["ownershipsch"] != 1
+      return false if %w[socprevten frombeds fromprop].all? { |field| attributes[field].blank? } && collection_start_year_for_date(attributes["saledate"]) >= 2023
+
+      true
+    end
+
     def set_default_values(attributes)
       attributes["armedforcesspouse"] ||= 7
       attributes["hhregres"] ||= 8
@@ -595,8 +604,8 @@ module Imports
       attributes["pcodenk"] ||= 1
       attributes["prevten"] ||= 0
       attributes["extrabor"] ||= 3 if attributes["mortgageused"] == 1
-      attributes["socprevten"] ||= 10 if attributes["ownershipsch"] == 1
-      attributes["fromprop"] ||= 0 if attributes["ownershipsch"] == 1
+      attributes["socprevten"] ||= 10 if set_soctenant_fields?(attributes)
+      attributes["fromprop"] ||= 0 if set_soctenant_fields?(attributes)
       attributes["mortgagelender"] ||= 0 if attributes["mortgageused"] == 1
 
       # buyer 1 characteristics
