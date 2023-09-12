@@ -24,6 +24,7 @@ class Form::Lettings::Questions::ReferralSupportedHousingPrp < ::Form::Question
     "12" => { "value" => "Police, probation or prison" },
     "7" => { "value" => "Voluntary agency" },
     "13" => { "value" => "Youth offending team" },
+    "17" => { "value" => "Children’s Social Care" },
     "16" => { "value" => "Other" },
   }.freeze
 end
