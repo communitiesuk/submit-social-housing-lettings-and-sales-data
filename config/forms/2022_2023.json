@@ -7057,6 +7057,9 @@
                     "3": {
                       "value": "Nominated by a local housing authority"
                     },
+                    "4" : { 
+                      "value" : "Referred by local authority housing department" 
+                    },
                     "8": {
                       "value": "Re-located through official housing mobility scheme"
                     },
@@ -7115,7 +7118,7 @@
                       "value": "Tenant applied directly (no referral)"
                     },
                     "3": {
-                      "value": "Referred by local authority housing department"
+                      "value": "Nominated by a local housing authority"
                     },
                     "8": {
                       "value": "Re-located through official housing mobility scheme"
