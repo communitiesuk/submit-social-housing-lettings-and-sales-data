@@ -97,6 +97,42 @@ module Validations::SoftValidations
     net_income_in_soft_max_range? ? "higher" : "lower"
   end
 
+  def scharge_over_soft_max?
+    return unless scharge && period && needstype
+    return if weekly_value(scharge).blank?
+
+    max = if needstype == 1
+            owning_organisation.provider_type == "LA" ? 25 : 35
+          else
+            owning_organisation.provider_type == "LA" ? 100 : 200
+          end
+    weekly_value(scharge) > max
+  end
+
+  def pscharge_over_soft_max?
+    return unless pscharge && period && needstype
+    return if weekly_value(pscharge).blank?
+
+    max = if needstype == 1
+            owning_organisation.provider_type == "LA" ? 25 : 35
+          else
+            owning_organisation.provider_type == "LA" ? 75 : 100
+          end
+    weekly_value(pscharge) > max
+  end
+
+  def supcharg_over_soft_max?
+    return unless supcharg && period && needstype
+    return if weekly_value(supcharg).blank?
+
+    max = if needstype == 1
+            owning_organisation.provider_type == "LA" ? 25 : 35
+          else
+            owning_organisation.provider_type == "LA" ? 75 : 85
+          end
+    weekly_value(supcharg) > max
+  end
+
 private
 
   def details_known_or_lead_tenant?(tenant_number)

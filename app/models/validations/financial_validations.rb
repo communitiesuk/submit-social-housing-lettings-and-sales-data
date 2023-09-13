@@ -149,32 +149,32 @@ private
   CHARGE_MAXIMUMS = {
     scharge: {
       private_registered_provider: {
-        general_needs: 155,
-        supported_housing: 480,
+        general_needs: 800,
+        supported_housing: 800,
       },
       local_authority: {
-        general_needs: 155,
-        supported_housing: 365,
+        general_needs: 500,
+        supported_housing: 500,
       },
     },
     pscharge: {
       private_registered_provider: {
-        general_needs: 30,
-        supported_housing: 200,
+        general_needs: 700,
+        supported_housing: 700,
       },
       local_authority: {
-        general_needs: 35,
-        supported_housing: 75,
+        general_needs: 200,
+        supported_housing: 200,
       },
     },
     supcharg: {
       private_registered_provider: {
-        general_needs: 40,
-        supported_housing: 465,
+        general_needs: 800,
+        supported_housing: 800,
       },
       local_authority: {
-        general_needs: 60,
-        supported_housing: 120,
+        general_needs: 200,
+        supported_housing: 200,
       },
     },
   }.freeze
