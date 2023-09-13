@@ -172,6 +172,46 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
+      context "and the user exists on a different organisation" do
+        before do
+          create(:legacy_user, old_user_id: "fake_id")
+          lettings_log_xml.at_xpath("//meta:owner-user-id").content = "fake_id"
+        end
+
+        it "creates a new unassigned user" do
+          expect(logger).to receive(:error).with("Lettings log '0ead17cb-1668-442d-898c-0d52879ff592' belongs to legacy user with owner-user-id: 'fake_id' which belongs to a different organisation. Assigning log to 'Unassigned' user.")
+          lettings_log_service.send(:create_log, lettings_log_xml)
+
+          lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+          expect(lettings_log&.created_by&.name).to eq("Unassigned")
+        end
+
+        it "only creates one unassigned user" do
+          expect(logger).to receive(:error).with("Lettings log '0ead17cb-1668-442d-898c-0d52879ff592' belongs to legacy user with owner-user-id: 'fake_id' which belongs to a different organisation. Assigning log to 'Unassigned' user.")
+          expect(logger).to receive(:error).with("Lettings log 'fake_id' belongs to legacy user with owner-user-id: 'fake_id' which belongs to a different organisation. Assigning log to 'Unassigned' user.")
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log_xml.at_xpath("//meta:document-id").content = "fake_id"
+          lettings_log_service.send(:create_log, lettings_log_xml)
+
+          lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+          second_lettings_log = LettingsLog.where(old_id: "fake_id").first
+          expect(lettings_log&.created_by).to eq(second_lettings_log&.created_by)
+        end
+
+        context "when unassigned user exist for a different organisation" do
+          let!(:other_unassigned_user) { create(:user, name: "Unassigned") }
+
+          it "creates a new unassigned user for current organisation" do
+            expect(logger).to receive(:error).with("Lettings log '0ead17cb-1668-442d-898c-0d52879ff592' belongs to legacy user with owner-user-id: 'fake_id' which belongs to a different organisation. Assigning log to 'Unassigned' user.")
+            lettings_log_service.send(:create_log, lettings_log_xml)
+
+            lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+            expect(lettings_log&.created_by&.name).to eq("Unassigned")
+            expect(lettings_log&.created_by).not_to eq(other_unassigned_user)
+          end
+        end
+      end
+
       it "correctly sets imported at date" do
         lettings_log_service.send(:create_log, lettings_log_xml)
 
@@ -285,7 +325,7 @@ RSpec.describe Imports::LettingsLogsImportService do
             .not_to raise_error
         end
 
-        it "clears out the invalid answers" do
+        it "clears out the invalid tenancy length" do
           allow(logger).to receive(:warn)
 
           lettings_log_service.send(:create_log, lettings_log_xml)
@@ -293,7 +333,7 @@ RSpec.describe Imports::LettingsLogsImportService do
 
           expect(lettings_log).not_to be_nil
           expect(lettings_log.tenancylength).to be_nil
-          expect(lettings_log.tenancy).to be_nil
+          expect(lettings_log.tenancy).to eq(4)
         end
       end
 
@@ -502,6 +542,48 @@ RSpec.describe Imports::LettingsLogsImportService do
 
           expect(lettings_log).not_to be_nil
           expect(lettings_log.offered).to equal(0)
+        end
+      end
+
+      context "and the number of times the property was relet is 0.01" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q20").content = "0.01"
+        end
+
+        it "intercepts the relevant validation error" do
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the number offered answer" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.offered).to be_nil
+        end
+      end
+
+      context "and the number of times the property was relet is a non nil string that is nil as a BigDecimal" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q20").content = "a"
+        end
+
+        it "doesn't throw an error" do
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the number offered answer" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.offered).to be_nil
         end
       end
 
@@ -732,6 +814,29 @@ RSpec.describe Imports::LettingsLogsImportService do
           expect(lettings_log.pscharge).to be_nil
           expect(lettings_log.supcharg).to be_nil
           expect(lettings_log.tcharge).to be_nil
+        end
+      end
+
+      context "and scharge is ever so slightly positive" do
+        let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q18aii").content = "1.66533E-16"
+        end
+
+        it "does not raise an error" do
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "sets scharge to 0" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.scharge).to eq(0)
         end
       end
 
@@ -1164,6 +1269,25 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
+      context "and the scheme and location are not valid" do
+        let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+
+        before do
+          lettings_log_xml.at_xpath("//xmlns:_1cmangroupcode").content = "999"
+          lettings_log_xml.at_xpath("//xmlns:_1cschemecode").content = "999"
+        end
+
+        it "saves log without location and scheme" do
+          expect(logger).not_to receive(:warn)
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log.scheme_id).to be_nil
+          expect(lettings_log.location_id).to be_nil
+          expect(lettings_log.status).to eq("in_progress")
+        end
+      end
+
       context "and this is a supported housing log with a single location under a scheme" do
         let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
 
@@ -1177,6 +1301,226 @@ RSpec.describe Imports::LettingsLogsImportService do
           expect(lettings_log.scheme_id).not_to be_nil
           expect(lettings_log.location_id).not_to be_nil
           expect(lettings_log.status).to eq("completed")
+        end
+      end
+
+      context "and there are several household members" do
+        context "and one person details are skipped" do
+          before do
+            lettings_log_xml.at_xpath("//xmlns:HHMEMB").content = 3
+            lettings_log_xml.at_xpath("//xmlns:P2AR").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Age").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Sex").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Rel").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Eco").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P3Age").content = 7
+            lettings_log_xml.at_xpath("//xmlns:P3Sex").content = "Male"
+            lettings_log_xml.at_xpath("//xmlns:P3Rel").content = "Child"
+            lettings_log_xml.at_xpath("//xmlns:P3Eco").content = "9) Child under 16"
+          end
+
+          it "correctly moves person details" do
+            lettings_log_service.send(:create_log, lettings_log_xml)
+
+            lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+            expect(lettings_log&.hhmemb).to eq(3)
+            expect(lettings_log&.details_known_2).to eq(0)
+            expect(lettings_log&.age2_known).to eq(0)
+            expect(lettings_log&.age2).to eq(7)
+            expect(lettings_log&.sex2).to eq("M")
+            expect(lettings_log&.relat2).to eq("C")
+
+            expect(lettings_log&.details_known_3).to eq(0)
+            expect(lettings_log&.age3_known).to eq(0)
+            expect(lettings_log&.age3).to eq(nil)
+            expect(lettings_log&.sex3).to eq(nil)
+            expect(lettings_log&.relat3).to eq(nil)
+
+            [4, 5].each do |i|
+              expect(lettings_log&.send("details_known_#{i}")).to eq(nil)
+              expect(lettings_log&.send("age#{i}_known")).to eq(nil)
+              expect(lettings_log&.send("age#{i}")).to eq(nil)
+              expect(lettings_log&.send("sex#{i}")).to eq(nil)
+              expect(lettings_log&.send("relat#{i}")).to eq(nil)
+              expect(lettings_log&.send("ecstat#{i}")).to eq(nil)
+            end
+          end
+        end
+
+        context "and several consecutive person details are skipped" do
+          before do
+            lettings_log_xml.at_xpath("//xmlns:HHMEMB").content = 4
+
+            lettings_log_xml.at_xpath("//xmlns:P2AR").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Age").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Sex").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Rel").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Eco").content = nil
+
+            lettings_log_xml.at_xpath("//xmlns:P3AR").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P3Age").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P3Sex").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P3Rel").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P3Eco").content = nil
+
+            lettings_log_xml.at_xpath("//xmlns:P4Age").content = 7
+            lettings_log_xml.at_xpath("//xmlns:P4Sex").content = "Male"
+            lettings_log_xml.at_xpath("//xmlns:P4Rel").content = "Child"
+            lettings_log_xml.at_xpath("//xmlns:P4Eco").content = "9) Child under 16"
+
+            lettings_log_xml.at_xpath("//xmlns:P5Age").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P5Sex").content = "Male"
+            lettings_log_xml.at_xpath("//xmlns:P5Rel").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P5Eco").content = nil
+
+            lettings_log_xml.at_xpath("//xmlns:P6Age").content = 12
+            lettings_log_xml.at_xpath("//xmlns:P6Sex").content = "Female"
+            lettings_log_xml.at_xpath("//xmlns:P6Rel").content = "Child"
+            lettings_log_xml.at_xpath("//xmlns:P6Eco").content = "9) Child under 16"
+          end
+
+          it "correctly moves person details" do
+            lettings_log_service.send(:create_log, lettings_log_xml)
+
+            lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+            expect(lettings_log&.hhmemb).to eq(4)
+            expect(lettings_log&.details_known_2).to eq(0)
+            expect(lettings_log&.age2_known).to eq(0)
+            expect(lettings_log&.age2).to eq(7)
+            expect(lettings_log&.sex2).to eq("M")
+            expect(lettings_log&.relat2).to eq("C")
+
+            expect(lettings_log&.details_known_3).to eq(0)
+            expect(lettings_log&.age3_known).to eq(0)
+            expect(lettings_log&.age3).to eq(nil)
+            expect(lettings_log&.sex3).to eq("M")
+            expect(lettings_log&.relat3).to eq(nil)
+
+            expect(lettings_log&.details_known_4).to eq(0)
+            expect(lettings_log&.age4_known).to eq(0)
+            expect(lettings_log&.age4).to eq(12)
+            expect(lettings_log&.sex4).to eq("F")
+            expect(lettings_log&.relat4).to eq("C")
+
+            [5, 6, 7, 8].each do |i|
+              expect(lettings_log&.send("details_known_#{i}")).to eq(nil)
+              expect(lettings_log&.send("age#{i}_known")).to eq(nil)
+              expect(lettings_log&.send("age#{i}")).to eq(nil)
+              expect(lettings_log&.send("sex#{i}")).to eq(nil)
+              expect(lettings_log&.send("relat#{i}")).to eq(nil)
+              expect(lettings_log&.send("ecstat#{i}")).to eq(nil)
+            end
+          end
+        end
+
+        context "and several non consecutive person details are skipped" do
+          before do
+            lettings_log_xml.at_xpath("//xmlns:HHMEMB").content = 4
+            lettings_log_xml.at_xpath("//xmlns:P2AR").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Age").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Sex").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Rel").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Eco").content = nil
+
+            lettings_log_xml.at_xpath("//xmlns:P3Age").content = 7
+            lettings_log_xml.at_xpath("//xmlns:P3Sex").content = "Male"
+            lettings_log_xml.at_xpath("//xmlns:P3Rel").content = "Child"
+            lettings_log_xml.at_xpath("//xmlns:P3Eco").content = "9) Child under 16"
+
+            lettings_log_xml.at_xpath("//xmlns:P4AR").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P4Age").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P4Sex").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P4Rel").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P4Eco").content = nil
+
+            lettings_log_xml.at_xpath("//xmlns:P5Age").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P5Sex").content = "Male"
+            lettings_log_xml.at_xpath("//xmlns:P5Rel").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P5Eco").content = nil
+
+            lettings_log_xml.at_xpath("//xmlns:P6Age").content = 12
+            lettings_log_xml.at_xpath("//xmlns:P6Sex").content = "Female"
+            lettings_log_xml.at_xpath("//xmlns:P6Rel").content = "Child"
+            lettings_log_xml.at_xpath("//xmlns:P6Eco").content = "9) Child under 16"
+          end
+
+          it "correctly moves person details" do
+            lettings_log_service.send(:create_log, lettings_log_xml)
+
+            lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+            expect(lettings_log&.hhmemb).to eq(4)
+            expect(lettings_log&.details_known_2).to eq(0)
+            expect(lettings_log&.age2_known).to eq(0)
+            expect(lettings_log&.age2).to eq(7)
+            expect(lettings_log&.sex2).to eq("M")
+            expect(lettings_log&.relat2).to eq("C")
+
+            expect(lettings_log&.details_known_3).to eq(0)
+            expect(lettings_log&.age3_known).to eq(0)
+            expect(lettings_log&.age3).to eq(nil)
+            expect(lettings_log&.sex3).to eq("M")
+            expect(lettings_log&.relat3).to eq(nil)
+
+            expect(lettings_log&.details_known_4).to eq(0)
+            expect(lettings_log&.age4_known).to eq(0)
+            expect(lettings_log&.age4).to eq(12)
+            expect(lettings_log&.sex4).to eq("F")
+            expect(lettings_log&.relat4).to eq("C")
+
+            [5, 6, 7, 8].each do |i|
+              expect(lettings_log&.send("details_known_#{i}")).to eq(nil)
+              expect(lettings_log&.send("age#{i}_known")).to eq(nil)
+              expect(lettings_log&.send("age#{i}")).to eq(nil)
+              expect(lettings_log&.send("sex#{i}")).to eq(nil)
+              expect(lettings_log&.send("relat#{i}")).to eq(nil)
+              expect(lettings_log&.send("ecstat#{i}")).to eq(nil)
+            end
+          end
+        end
+
+        context "with 3 houusehold members without any person data" do
+          before do
+            lettings_log_xml.at_xpath("//xmlns:HHMEMB").content = 3
+            lettings_log_xml.at_xpath("//xmlns:P2AR").content = "No"
+            lettings_log_xml.at_xpath("//xmlns:P2Age").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Sex").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Rel").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Eco").content = nil
+
+            lettings_log_xml.at_xpath("//xmlns:P3AR").content = "No"
+            lettings_log_xml.at_xpath("//xmlns:P3Age").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P3Sex").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P3Rel").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P3Eco").content = nil
+          end
+
+          it "correctly sets person details" do
+            lettings_log_service.send(:create_log, lettings_log_xml)
+
+            lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+            expect(lettings_log&.hhmemb).to eq(3)
+
+            expect(lettings_log&.details_known_2).to eq(0)
+            expect(lettings_log&.age2_known).to eq(1)
+            expect(lettings_log&.age2).to eq(nil)
+            expect(lettings_log&.sex2).to eq(nil)
+            expect(lettings_log&.relat2).to eq(nil)
+
+            expect(lettings_log&.details_known_3).to eq(0)
+            expect(lettings_log&.age3_known).to eq(1)
+            expect(lettings_log&.age3).to eq(nil)
+            expect(lettings_log&.sex3).to eq(nil)
+            expect(lettings_log&.relat3).to eq(nil)
+
+            [4, 5, 6, 7, 8].each do |i|
+              expect(lettings_log&.send("details_known_#{i}")).to eq(nil)
+              expect(lettings_log&.send("age#{i}_known")).to eq(nil)
+              expect(lettings_log&.send("age#{i}")).to eq(nil)
+              expect(lettings_log&.send("sex#{i}")).to eq(nil)
+              expect(lettings_log&.send("relat#{i}")).to eq(nil)
+              expect(lettings_log&.send("ecstat#{i}")).to eq(nil)
+            end
+          end
         end
       end
     end

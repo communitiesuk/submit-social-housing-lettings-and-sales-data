@@ -323,4 +323,226 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
       end
     end
   end
+
+  context "when updating address" do
+    let(:field) { "address" }
+
+    before do
+      WebMock.stub_request(:get, /api.postcodes.io\/postcodes\/B11BB/)
+      .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Westminster","codes":{"admin_district":"E08000035"}}}', headers: {})
+
+      stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=123")
+        .to_return(status: 500, body: "{}", headers: {})
+
+      Timecop.freeze(2023, 5, 5)
+      Singleton.__init__(FormHandler)
+      Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+      lettings_log_file.rewind
+    end
+
+    after do
+      Timecop.unfreeze
+      Singleton.__init__(FormHandler)
+    end
+
+    context "when the lettings log has no address values" do
+      let(:lettings_log_id) { "00d2343e-d5fa-4c89-8400-ec3854b0f2b4" }
+      let(:lettings_log) { LettingsLog.find_by(old_id: lettings_log_id) }
+
+      before do
+        lettings_log.update!(uprn_known: nil,
+                             startdate: Time.zone.local(2023, 5, 5),
+                             uprn: nil,
+                             uprn_confirmed: nil,
+                             address_line1: nil,
+                             address_line2: nil,
+                             town_or_city: nil,
+                             county: nil,
+                             postcode_known: nil,
+                             postcode_full: nil,
+                             la: nil,
+                             is_la_inferred: nil)
+      end
+
+      context "and new address values include address" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:UPRN").content = "123456781234"
+          lettings_log_xml.at_xpath("//xmlns:AddressLine1").content = "address 1"
+          lettings_log_xml.at_xpath("//xmlns:AddressLine2").content = "address 2"
+          lettings_log_xml.at_xpath("//xmlns:TownCity").content = "towncity"
+          lettings_log_xml.at_xpath("//xmlns:County").content = "county"
+          lettings_log_xml.at_xpath("//xmlns:POSTCODE").content = "B1"
+          lettings_log_xml.at_xpath("//xmlns:POSTCOD2").content = "1BB"
+          lettings_log_xml.at_xpath("//xmlns:Q28ONS").content = nil
+        end
+
+        it "updates the lettings_log prioritising address values" do
+          expect(logger).to receive(:info).with(/lettings log #{lettings_log.id} address_line1 value has been set to address 1/)
+          expect(logger).to receive(:info).with(/lettings log #{lettings_log.id} address_line2 value has been set to address 2/)
+          expect(logger).to receive(:info).with(/lettings log #{lettings_log.id} town_or_city value has been set to towncity/)
+          expect(logger).to receive(:info).with(/lettings log #{lettings_log.id} county value has been set to county/)
+          expect(logger).to receive(:info).with(/lettings log #{lettings_log.id} postcode_full value has been set to B1 1BB/)
+          import_service.send(:update_address, lettings_log_xml)
+          lettings_log.reload
+
+          expect(lettings_log.uprn_known).to eq(0)
+          expect(lettings_log.uprn).to eq(nil)
+          expect(lettings_log.uprn_confirmed).to eq(nil)
+          expect(lettings_log.address_line1).to eq("address 1")
+          expect(lettings_log.address_line2).to eq("address 2")
+          expect(lettings_log.town_or_city).to eq("towncity")
+          expect(lettings_log.county).to eq("county")
+          expect(lettings_log.postcode_known).to eq(1)
+          expect(lettings_log.postcode_full).to eq("B1 1BB")
+          expect(lettings_log.la).to eq("E08000035")
+          expect(lettings_log.is_la_inferred).to eq(true)
+        end
+      end
+
+      context "and new address values don't include address" do
+        it "skips the update" do
+          expect(logger).to receive(:info).with(/lettings log #{lettings_log.id} is missing either or both of address_line1 and town or city, skipping/)
+          import_service.send(:update_address, lettings_log_xml)
+        end
+      end
+    end
+
+    context "when the lettings log has address values" do
+      let(:lettings_log_id) { "00d2343e-d5fa-4c89-8400-ec3854b0f2b4" }
+      let(:lettings_log) { LettingsLog.find_by(old_id: lettings_log_id) }
+
+      before do
+        lettings_log_xml.at_xpath("//xmlns:UPRN").content = "123456781234"
+        lettings_log_xml.at_xpath("//xmlns:AddressLine1").content = "address 1"
+        lettings_log_xml.at_xpath("//xmlns:AddressLine2").content = "address 2"
+        lettings_log_xml.at_xpath("//xmlns:TownCity").content = "towncity"
+        lettings_log_xml.at_xpath("//xmlns:County").content = "county"
+        lettings_log_xml.at_xpath("//xmlns:POSTCODE").content = "B1"
+        lettings_log_xml.at_xpath("//xmlns:POSTCOD2").content = "1BC"
+        lettings_log_xml.at_xpath("//xmlns:Q28ONS").content = nil
+        lettings_log.update!(uprn_known: 1,
+                             startdate: Time.zone.local(2023, 5, 5),
+                             uprn: "123",
+                             uprn_confirmed: 0,
+                             address_line1: "wrong address line1",
+                             address_line2: "wrong address 2",
+                             town_or_city: "wrong town",
+                             county: "wrong city",
+                             postcode_known: 1,
+                             postcode_full: "A11AA",
+                             la: "E06000064",
+                             is_la_inferred: true)
+      end
+
+      it "replaces the lettings_log address values" do
+        expect(logger).to receive(:info).with(/lettings log #{lettings_log.id} address_line1 value has been set to address 1/)
+        expect(logger).to receive(:info).with(/lettings log #{lettings_log.id} address_line2 value has been set to address 2/)
+        expect(logger).to receive(:info).with(/lettings log #{lettings_log.id} town_or_city value has been set to towncity/)
+        expect(logger).to receive(:info).with(/lettings log #{lettings_log.id} county value has been set to county/)
+        expect(logger).to receive(:info).with(/lettings log #{lettings_log.id} postcode_full value has been set to B11BC/)
+        import_service.send(:update_address, lettings_log_xml)
+        lettings_log.reload
+
+        expect(lettings_log.uprn_known).to eq(0)
+        expect(lettings_log.uprn).to eq(nil)
+        expect(lettings_log.uprn_confirmed).to eq(nil)
+        expect(lettings_log.address_line1).to eq("address 1")
+        expect(lettings_log.address_line2).to eq("address 2")
+        expect(lettings_log.town_or_city).to eq("towncity")
+        expect(lettings_log.county).to eq("county")
+        expect(lettings_log.postcode_known).to eq(1)
+        expect(lettings_log.postcode_full).to eq("B11BC")
+        expect(lettings_log.la).to eq(nil)
+        expect(lettings_log.is_la_inferred).to eq(false)
+      end
+    end
+
+    context "when the lettings log is from before collection 23/24" do
+      let(:lettings_log_id) { "00d2343e-d5fa-4c89-8400-ec3854b0f2b4" }
+      let(:lettings_log) { LettingsLog.find_by(old_id: lettings_log_id) }
+
+      before do
+        lettings_log.update!(startdate: Time.zone.local(2022, 5, 5))
+      end
+
+      it "skips the update" do
+        expect(logger).to receive(:info).with(/lettings log #{lettings_log.id} is from previous collection year, skipping/)
+        import_service.send(:update_address, lettings_log_xml)
+      end
+    end
+  end
+
+  context "when updating reason" do
+    let(:field) { "reason" }
+
+    context "when the lettings log has no reason value" do
+      let(:lettings_log) { LettingsLog.find_by(old_id: lettings_log_id) }
+
+      before do
+        Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+        lettings_log_file.rewind
+        lettings_log.update!(reason: nil, values_updated_at: nil)
+        lettings_log_xml.at_xpath("//xmlns:Q9a").content = "47"
+      end
+
+      it "updates the lettings_log reason value" do
+        expect(logger).to receive(:info).with(/lettings log \d+'s reason value has been set to 47/)
+        expect { import_service.send(:update_reason, lettings_log_xml) }
+          .to(change { lettings_log.reload.reason }.from(nil).to(47))
+        expect(lettings_log.values_updated_at).not_to be_nil
+      end
+    end
+
+    context "when the lettings log has a different reason value" do
+      let(:lettings_log) { LettingsLog.find_by(old_id: lettings_log_id) }
+
+      before do
+        Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+        lettings_log_file.rewind
+        lettings_log.update!(reason: 18, values_updated_at: nil)
+        lettings_log_xml.at_xpath("//xmlns:Q9a").content = "47"
+      end
+
+      it "does not update the lettings_log reason value" do
+        expect(logger).to receive(:info).with(/lettings log \d+ has a value for reason, skipping update/)
+        expect { import_service.send(:update_reason, lettings_log_xml) }
+          .not_to(change { lettings_log.reload.reason })
+        expect(lettings_log.values_updated_at).to be_nil
+      end
+    end
+
+    context "when the new value is 'other'" do
+      let(:lettings_log) { LettingsLog.find_by(old_id: lettings_log_id) }
+
+      before do
+        Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+        lettings_log_file.rewind
+        lettings_log.update!(reason: nil, values_updated_at: nil)
+        lettings_log_xml.at_xpath("//xmlns:Q9a").content = "20"
+      end
+
+      context "and other value is given" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q9aa").content = "other"
+        end
+
+        it "updates the lettings_log reason value" do
+          expect(logger).to receive(:info).with(/lettings log \d+'s reason value has been set to 20/)
+          expect(logger).to receive(:info).with(/lettings log \d+'s reasonother value has been set to other/)
+          expect { import_service.send(:update_reason, lettings_log_xml) }
+            .to(change { lettings_log.reload.reason }.from(nil).to(20))
+          expect(lettings_log.values_updated_at).not_to be_nil
+        end
+      end
+
+      context "and other value is not given" do
+        it "does not update the lettings_log reason value" do
+          expect(logger).to receive(:info).with(/lettings log \d+'s reason is other but other reason is not provided, skipping update/)
+          expect { import_service.send(:update_reason, lettings_log_xml) }
+            .not_to(change { lettings_log.reload.reason })
+          expect(lettings_log.values_updated_at).to be_nil
+        end
+      end
+    end
+  end
 end

@@ -163,6 +163,48 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
+    context "and the user exists on a different organisation" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        create(:legacy_user, old_user_id: "fake_id")
+        sales_log_xml.at_xpath("//meta:owner-user-id").content = "fake_id"
+      end
+
+      it "creates a new unassigned user" do
+        expect(logger).to receive(:error).with("Sales log 'shared_ownership_sales_log' belongs to legacy user with owner-user-id: 'fake_id' which belongs to a different organisation. Assigning log to 'Unassigned' user.")
+        sales_log_service.send(:create_log, sales_log_xml)
+
+        sales_log = SalesLog.where(old_id: sales_log_id).first
+        expect(sales_log&.created_by&.name).to eq("Unassigned")
+      end
+
+      it "only creates one unassigned user" do
+        expect(logger).to receive(:error).with("Sales log 'shared_ownership_sales_log' belongs to legacy user with owner-user-id: 'fake_id' which belongs to a different organisation. Assigning log to 'Unassigned' user.")
+        expect(logger).to receive(:error).with("Sales log 'fake_id' belongs to legacy user with owner-user-id: 'fake_id' which belongs to a different organisation. Assigning log to 'Unassigned' user.")
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log_xml.at_xpath("//meta:document-id").content = "fake_id"
+        sales_log_service.send(:create_log, sales_log_xml)
+
+        sales_log = SalesLog.where(old_id: sales_log_id).first
+        second_sales_log = SalesLog.where(old_id: "fake_id").first
+        expect(sales_log&.created_by).to eq(second_sales_log&.created_by)
+      end
+
+      context "when unassigned user exist for a different organisation" do
+        let!(:other_unassigned_user) { create(:user, name: "Unassigned") }
+
+        it "creates a new unassigned user for current organisation" do
+          expect(logger).to receive(:error).with("Sales log 'shared_ownership_sales_log' belongs to legacy user with owner-user-id: 'fake_id' which belongs to a different organisation. Assigning log to 'Unassigned' user.")
+          sales_log_service.send(:create_log, sales_log_xml)
+
+          sales_log = SalesLog.where(old_id: sales_log_id).first
+          expect(sales_log&.created_by&.name).to eq("Unassigned")
+          expect(sales_log&.created_by).not_to eq(other_unassigned_user)
+        end
+      end
+    end
+
     context "and the log startdate is before 22/23 collection period" do
       let(:sales_log_id) { "shared_ownership_sales_log" }
 
@@ -183,6 +225,31 @@ RSpec.describe Imports::SalesLogsImportService do
         expect(logger).not_to receive(:warn)
         expect { sales_log_service.send(:create_log, sales_log_xml) }
         .to change(SalesLog, :count).by(0)
+      end
+    end
+
+    context "and the log startdate is only present in the CompletionDate field" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:DAY").content = nil
+        sales_log_xml.at_xpath("//xmlns:MONTH").content = nil
+        sales_log_xml.at_xpath("//xmlns:YEAR").content = nil
+        sales_log_xml.at_xpath("//xmlns:CompletionDate").content = "2022-10-9"
+        sales_log_xml.at_xpath("//xmlns:HODAY").content = 9
+        sales_log_xml.at_xpath("//xmlns:HOMONTH").content = 10
+        sales_log_xml.at_xpath("//xmlns:HOYEAR").content = 2022
+        sales_log_xml.at_xpath("//xmlns:EXDAY").content = 9
+        sales_log_xml.at_xpath("//xmlns:EXMONTH").content = 10
+        sales_log_xml.at_xpath("//xmlns:EXYEAR").content = 2022
+      end
+
+      it "creates the log with the correct saledate" do
+        expect(logger).not_to receive(:error)
+        expect(logger).not_to receive(:warn)
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .to change(SalesLog, :count).by(1)
+        expect(SalesLog.last.saledate).to eq(Time.zone.local(2022, 10, 9))
       end
     end
 
@@ -341,6 +408,42 @@ RSpec.describe Imports::SalesLogsImportService do
             .to change(SalesLog, :count).by(1)
           sales_log = SalesLog.find_by(old_id: sales_log_id)
           expect(sales_log.proplen_asked).to eq(1)
+        end
+
+        context "when setting soctenant fields" do
+          it "does not set soctenant value if none of the soctenant questions are answered" do
+            sales_log_xml.at_xpath("//xmlns:Q20Bedrooms").content = nil
+            sales_log_xml.at_xpath("//xmlns:PrevRentType").content = nil
+            sales_log_xml.at_xpath("//xmlns:Q21PropertyType").content = nil
+
+            expect(logger).not_to receive(:error)
+            expect(logger).not_to receive(:warn)
+            expect(logger).not_to receive(:info)
+            expect { sales_log_service.send(:create_log, sales_log_xml) }
+            .to change(SalesLog, :count).by(1)
+            sales_log = SalesLog.find_by(old_id: sales_log_id)
+            expect(sales_log.soctenant).to eq(nil)
+            expect(sales_log.frombeds).to eq(nil)
+            expect(sales_log.fromprop).to eq(nil)
+            expect(sales_log.socprevten).to eq(nil)
+          end
+
+          it "sets soctenant to don't know if any of the soctenant questions are answered" do
+            sales_log_xml.at_xpath("//xmlns:Q20Bedrooms").content = "2"
+            sales_log_xml.at_xpath("//xmlns:PrevRentType").content = nil
+            sales_log_xml.at_xpath("//xmlns:Q21PropertyType").content = nil
+
+            expect(logger).not_to receive(:error)
+            expect(logger).not_to receive(:warn)
+            expect(logger).not_to receive(:info)
+            expect { sales_log_service.send(:create_log, sales_log_xml) }
+            .to change(SalesLog, :count).by(1)
+            sales_log = SalesLog.find_by(old_id: sales_log_id)
+            expect(sales_log.soctenant).to eq(0)
+            expect(sales_log.frombeds).to eq(2)
+            expect(sales_log.fromprop).to eq(0)
+            expect(sales_log.socprevten).to eq(10)
+          end
         end
       end
 
@@ -550,6 +653,56 @@ RSpec.describe Imports::SalesLogsImportService do
         sales_log = SalesLog.find_by(old_id: sales_log_id)
         expect(sales_log.status).to eq("completed")
         expect(sales_log.discounted_sale_value_check).to eq(0)
+      end
+    end
+
+    context "and the hodate soft validation is triggered (hodate_value_check)" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:HODAY").content = "1"
+        sales_log_xml.at_xpath("//xmlns:HOMONTH").content = "1"
+        sales_log_xml.at_xpath("//xmlns:HOYEAR").content = "2018"
+      end
+
+      it "completes the log" do
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log.status).to eq("completed")
+      end
+    end
+
+    context "and the combined income soft validation is triggered (combined_income_value_check)" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+        sales_log_xml.at_xpath("//xmlns:Q2Person1Income").content = "45000"
+        sales_log_xml.at_xpath("//xmlns:P2IncKnown").content = "1 Yes"
+        sales_log_xml.at_xpath("//xmlns:Q2Person2Income").content = "45000"
+      end
+
+      it "completes the log" do
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log.status).to eq("completed")
+      end
+    end
+
+    context "and the stairowned soft validation is triggered (stairowned_value_check)" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:DerSaleType").content = "24"
+        sales_log_xml.at_xpath("//xmlns:PercentOwns").content = "77"
+        sales_log_xml.at_xpath("//xmlns:Q17aStaircase").content = "1"
+        sales_log_xml.at_xpath("//xmlns:PercentBought").content = "10"
+      end
+
+      it "completes the log" do
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log.status).to eq("completed")
       end
     end
 
@@ -808,7 +961,7 @@ RSpec.describe Imports::SalesLogsImportService do
           .not_to raise_error
       end
 
-      it "clears out the referral answer" do
+      it "clears out the mortgage answer" do
         allow(logger).to receive(:warn)
 
         sales_log_service.send(:create_log, sales_log_xml)
@@ -816,6 +969,29 @@ RSpec.describe Imports::SalesLogsImportService do
 
         expect(sales_log).not_to be_nil
         expect(sales_log.mortgage).to be_nil
+      end
+    end
+
+    context "when proplen is out of range" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:Q16aProplen2").content = "2000"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the proplen answer" do
+        allow(logger).to receive(:warn)
+
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+
+        expect(sales_log).not_to be_nil
+        expect(sales_log.proplen).to be_nil
       end
     end
 
@@ -869,6 +1045,34 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
+    context "and it has an invalid combined income outside london" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+        sales_log_xml.at_xpath("//xmlns:Q2Person1Income").content = "45000"
+        sales_log_xml.at_xpath("//xmlns:P2IncKnown").content = "1 Yes"
+        sales_log_xml.at_xpath("//xmlns:Q2Person2Income").content = "40000"
+        sales_log_xml.at_xpath("//xmlns:Q14ONSLACode").content = "E07000223"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers" do
+        allow(logger).to receive(:warn)
+
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+
+        expect(sales_log).not_to be_nil
+        expect(sales_log.income1).to be_nil
+        expect(sales_log.income2).to be_nil
+      end
+    end
+
     context "and it has an invalid income 1 for london" do
       let(:sales_log_id) { "shared_ownership_sales_log" }
 
@@ -915,6 +1119,34 @@ RSpec.describe Imports::SalesLogsImportService do
         sales_log = SalesLog.find_by(old_id: sales_log_id)
 
         expect(sales_log).not_to be_nil
+        expect(sales_log.income2).to be_nil
+      end
+    end
+
+    context "and it has an invalid combined income for london" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+        sales_log_xml.at_xpath("//xmlns:Q2Person1Income").content = "50000"
+        sales_log_xml.at_xpath("//xmlns:P2IncKnown").content = "1 Yes"
+        sales_log_xml.at_xpath("//xmlns:Q2Person2Income").content = "45000"
+        sales_log_xml.at_xpath("//xmlns:Q14ONSLACode").content = "E09000012"
+      end
+
+      it "intercepts the relevant validation error" do
+        expect { sales_log_service.send(:create_log, sales_log_xml) }
+          .not_to raise_error
+      end
+
+      it "clears out the invalid answers" do
+        allow(logger).to receive(:warn)
+
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+
+        expect(sales_log).not_to be_nil
+        expect(sales_log.income1).to be_nil
         expect(sales_log.income2).to be_nil
       end
     end
@@ -1895,6 +2127,7 @@ RSpec.describe Imports::SalesLogsImportService do
 
           sales_log = SalesLog.find_by(old_id: sales_log_id)
           expect(sales_log&.fromprop).to be(0)
+          expect(sales_log&.soctenant).to be(0)
         end
       end
 
@@ -1911,6 +2144,7 @@ RSpec.describe Imports::SalesLogsImportService do
 
           sales_log = SalesLog.find_by(old_id: sales_log_id)
           expect(sales_log&.socprevten).to be(10)
+          expect(sales_log&.soctenant).to be(0)
         end
       end
 

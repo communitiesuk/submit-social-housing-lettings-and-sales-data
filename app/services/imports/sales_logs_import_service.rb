@@ -1,5 +1,7 @@
 module Imports
   class SalesLogsImportService < LogsImportService
+    include CollectionTimeHelper
+
     def initialize(storage_service, logger = Rails.logger, allow_updates: false)
       @logs_with_discrepancies = Set.new
       @logs_overridden = Set.new
@@ -15,7 +17,7 @@ module Imports
     def create_log(xml_doc)
       # only import sales logs from 22/23 collection period onwards
       return unless meta_field_value(xml_doc, "form-name").include?("Sales")
-      return unless compose_date(xml_doc, "DAY", "MONTH", "YEAR") >= Time.zone.local(2022, 4, 1)
+      return unless (compose_date(xml_doc, "DAY", "MONTH", "YEAR") || Time.zone.parse(field_value(xml_doc, "xmlns", "CompletionDate"))) >= Time.zone.local(2022, 4, 1)
 
       attributes = {}
 
@@ -24,7 +26,7 @@ module Imports
       # Required fields for status complete or logic to work
       # Note: order matters when we derive from previous values (attributes parameter)
 
-      attributes["saledate"] = compose_date(xml_doc, "DAY", "MONTH", "YEAR")
+      attributes["saledate"] = compose_date(xml_doc, "DAY", "MONTH", "YEAR") || Time.zone.parse(field_value(xml_doc, "xmlns", "CompletionDate"))
       attributes["owning_organisation_id"] = find_organisation_id(xml_doc, "OWNINGORGID")
       attributes["type"] = unsafe_string_as_integer(xml_doc, "DerSaleType")
       attributes["old_id"] = meta_field_value(xml_doc, "document-id")
@@ -124,7 +126,7 @@ module Imports
       attributes["mortgagelenderother"] = mortgage_lender_other(xml_doc, attributes)
       attributes["postcode_full"] = parse_postcode(string_or_nil(xml_doc, "Q14Postcode"))
       attributes["pcodenk"] = 0 if attributes["postcode_full"].present? # known if given
-      attributes["soctenant"] = 0 if attributes["ownershipsch"] == 1
+      attributes["soctenant"] = 0 if set_soctenant_fields?(attributes)
 
       attributes["previous_la_known"] = 1 if attributes["prevloc"].present?
       if attributes["la"].present?
@@ -152,6 +154,10 @@ module Imports
       attributes["discounted_sale_value_check"] = 0
       attributes["buyer_livein_value_check"] = 0
       attributes["percentage_discount_value_check"] = 0
+      attributes["hodate_check"] = 0
+      attributes["saledate_check"] = 0
+      attributes["combined_income_value_check"] = 0
+      attributes["stairowned_value_check"] = 0
 
       # 2023/34 attributes
       attributes["address_line1"] = string_or_nil(xml_doc, "AddressLine1")
@@ -179,8 +185,12 @@ module Imports
       if owner_id.present?
         user = LegacyUser.find_by(old_user_id: owner_id)&.user
 
-        if user.blank?
-          @logger.error("Sales log '#{attributes['old_id']}' belongs to legacy user with owner-user-id: '#{owner_id}' which cannot be found. Assigning log to 'Unassigned' user.")
+        if user.blank? || user.organisation_id != attributes["owning_organisation_id"]
+          if user.blank?
+            @logger.error("Sales log '#{attributes['old_id']}' belongs to legacy user with owner-user-id: '#{owner_id}' which cannot be found. Assigning log to 'Unassigned' user.")
+          else
+            @logger.error("Sales log '#{attributes['old_id']}' belongs to legacy user with owner-user-id: '#{owner_id}' which belongs to a different organisation. Assigning log to 'Unassigned' user.")
+          end
           if User.find_by(name: "Unassigned", organisation_id: attributes["owning_organisation_id"])
             user = User.find_by(name: "Unassigned", organisation_id: attributes["owning_organisation_id"])
           else
@@ -242,15 +252,20 @@ module Imports
         %i[postcode_full postcodes_not_matching] => %w[ppcodenk ppostcode_full],
         %i[exdate over_a_year_from_saledate] => %w[exdate],
         %i[income1 over_hard_max_for_outside_london] => %w[income1],
+        %i[income1 over_combined_hard_max_for_outside_london] => %w[income1 income2],
         %i[income1 over_hard_max_for_london] => %w[income1],
+        %i[income1 over_combined_hard_max_for_london] => %w[income1 income2],
         %i[income2 over_hard_max_for_outside_london] => %w[income2],
+        %i[income2 over_combined_hard_max_for_outside_london] => %w[income1 income2],
         %i[income2 over_hard_max_for_london] => %w[income2],
+        %i[income2 over_combined_hard_max_for_london] => %w[income1 income2],
         %i[equity over_max] => %w[equity],
         %i[equity under_min] => %w[equity],
         %i[mscharge under_min] => %w[mscharge has_mscharge],
         %i[mortgage cannot_be_0] => %w[mortgage],
         %i[frombeds outside_the_range] => %w[frombeds],
         %i[age1 outside_the_range] => %w[age1 age1_known],
+        %i[proplen outside_the_range] => %w[proplen],
       }
 
       errors.each do |(error, fields)|
@@ -326,6 +341,8 @@ module Imports
          discounted_sale_value_check
          buyer_livein_value_check
          percentage_discount_value_check
+         combined_income_value_check
+         stairowned_value_check
          uprn_known
          uprn_confirmed]
     end
@@ -569,6 +586,12 @@ module Imports
       end
     end
 
+    def set_soctenant_fields?(attributes)
+      return false if attributes["ownershipsch"] != 1
+
+      %w[socprevten frombeds fromprop].any? { |field| attributes[field].present? } || collection_start_year_for_date(attributes["saledate"]) < 2023
+    end
+
     def set_default_values(attributes)
       attributes["armedforcesspouse"] ||= 7
       attributes["hhregres"] ||= 8
@@ -585,8 +608,8 @@ module Imports
       attributes["pcodenk"] ||= 1
       attributes["prevten"] ||= 0
       attributes["extrabor"] ||= 3 if attributes["mortgageused"] == 1
-      attributes["socprevten"] ||= 10 if attributes["ownershipsch"] == 1
-      attributes["fromprop"] ||= 0 if attributes["ownershipsch"] == 1
+      attributes["socprevten"] ||= 10 if set_soctenant_fields?(attributes)
+      attributes["fromprop"] ||= 0 if set_soctenant_fields?(attributes)
       attributes["mortgagelender"] ||= 0 if attributes["mortgageused"] == 1
 
       # buyer 1 characteristics

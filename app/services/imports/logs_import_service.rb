@@ -72,7 +72,7 @@ module Imports
       if str.nil?
         nil
       else
-        BigDecimal(str, exception: false)
+        BigDecimal(str, exception: false)&.round(2)
       end
     end
 
