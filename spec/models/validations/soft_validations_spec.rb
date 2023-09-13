@@ -803,4 +803,218 @@ RSpec.describe Validations::SoftValidations do
       end
     end
   end
+
+  describe "supcharg_over_soft_max?" do
+    context "and organisation is PRP" do
+      before do
+        record.owning_organisation.update(provider_type: "PRP")
+      end
+
+      it "returns false if supcharg is not given" do
+        record.supcharg = nil
+        record.needstype = 1
+        record.period = 1
+
+        expect(record).not_to be_supcharg_over_soft_max
+      end
+
+      it "returns false if period is not given" do
+        record.supcharg = 201
+        record.needstype = 1
+        record.period = nil
+
+        expect(record).not_to be_supcharg_over_soft_max
+      end
+
+      [{
+        period: { label: "weekly", value: 1 },
+        supcharg: 34,
+      },
+       {
+         period: { label: "monthly", value: 4 },
+         supcharg: 100,
+       },
+       {
+         period: { label: "every 2 weeks", value: 2 },
+         supcharg: 69,
+       }].each do |test_case|
+        it "returns false if supcharg is under soft max for general needs #{test_case[:period][:label]}(35)" do
+          record.supcharg = test_case[:supcharg]
+          record.needstype = 1
+          record.period = test_case[:period][:value]
+
+          expect(record).not_to be_supcharg_over_soft_max
+        end
+      end
+
+      [{
+        period: { label: "weekly", value: 1 },
+        supcharg: 84,
+      },
+       {
+         period: { label: "monthly", value: 4 },
+         supcharg: 320,
+       },
+       {
+         period: { label: "every 2 weeks", value: 2 },
+         supcharg: 169,
+       }].each do |test_case|
+        it "returns false if supcharg is under soft max for supported housing #{test_case[:period][:label]} (85)" do
+          record.supcharg = test_case[:supcharg]
+          record.needstype = 2
+          record.period = test_case[:period][:value]
+
+          expect(record).not_to be_supcharg_over_soft_max
+        end
+      end
+
+      [{
+        period: { label: "weekly", value: 1 },
+        supcharg: 36,
+      },
+       {
+         period: { label: "monthly", value: 4 },
+         supcharg: 180,
+       },
+       {
+         period: { label: "every 2 weeks", value: 2 },
+         supcharg: 71,
+       }].each do |test_case|
+        it "returns true if supcharg is over soft max for general needs #{test_case[:period][:label]} (35)" do
+          record.supcharg = test_case[:supcharg]
+          record.needstype = 1
+          record.period = test_case[:period][:value]
+
+          expect(record).to be_supcharg_over_soft_max
+        end
+      end
+
+      [{
+        period: { label: "weekly", value: 1 },
+        supcharg: 86,
+      },
+       {
+         period: { label: "monthly", value: 4 },
+         supcharg: 400,
+       },
+       {
+         period: { label: "every 2 weeks", value: 2 },
+         supcharg: 171,
+       }].each do |test_case|
+        it "returns true if supcharg is over soft max for supported housing #{test_case[:period][:label]} (85)" do
+          record.supcharg = test_case[:supcharg]
+          record.needstype = 2
+          record.period = test_case[:period][:value]
+
+          expect(record).to be_supcharg_over_soft_max
+        end
+      end
+    end
+
+    context "and organisation is LA" do
+      before do
+        record.owning_organisation.update(provider_type: "LA")
+      end
+
+      it "returns false if supcharg is not given" do
+        record.supcharg = nil
+        record.needstype = 1
+        record.period = 1
+
+        expect(record).not_to be_supcharg_over_soft_max
+      end
+
+      it "returns false if period is not given" do
+        record.supcharg = 201
+        record.needstype = 1
+        record.period = nil
+
+        expect(record).not_to be_supcharg_over_soft_max
+      end
+
+      [{
+        period: { label: "weekly", value: 1 },
+        supcharg: 24,
+      },
+       {
+         period: { label: "monthly", value: 4 },
+         supcharg: 88,
+       },
+       {
+         period: { label: "every 2 weeks", value: 2 },
+         supcharg: 49,
+       }].each do |test_case|
+        it "returns false if supcharg is under soft max for general needs #{test_case[:period][:label]}(25)" do
+          record.supcharg = test_case[:supcharg]
+          record.needstype = 1
+          record.period = test_case[:period][:value]
+
+          expect(record).not_to be_supcharg_over_soft_max
+        end
+      end
+
+      [{
+        period: { label: "weekly", value: 1 },
+        supcharg: 74,
+      },
+       {
+         period: { label: "monthly", value: 4 },
+         supcharg: 250,
+       },
+       {
+         period: { label: "every 2 weeks", value: 2 },
+         supcharg: 149,
+       }].each do |test_case|
+        it "returns false if supcharg is under soft max for supported housing #{test_case[:period][:label]} (75)" do
+          record.supcharg = test_case[:supcharg]
+          record.needstype = 2
+          record.period = test_case[:period][:value]
+
+          expect(record).not_to be_supcharg_over_soft_max
+        end
+      end
+
+      [{
+        period: { label: "weekly", value: 1 },
+        supcharg: 26,
+      },
+       {
+         period: { label: "monthly", value: 4 },
+         supcharg: 120,
+       },
+       {
+         period: { label: "every 2 weeks", value: 2 },
+         supcharg: 51,
+       }].each do |test_case|
+        it "returns true if supcharg is over soft max for general needs #{test_case[:period][:label]} (25)" do
+          record.supcharg = test_case[:supcharg]
+          record.needstype = 1
+          record.period = test_case[:period][:value]
+
+          expect(record).to be_supcharg_over_soft_max
+        end
+      end
+
+      [{
+        period: { label: "weekly", value: 1 },
+        supcharg: 76,
+      },
+       {
+         period: { label: "monthly", value: 4 },
+         supcharg: 350,
+       },
+       {
+         period: { label: "every 2 weeks", value: 2 },
+         supcharg: 151,
+       }].each do |test_case|
+        it "returns true if supcharg is over soft max for supported housing #{test_case[:period][:label]} (75)" do
+          record.supcharg = test_case[:supcharg]
+          record.needstype = 2
+          record.period = test_case[:period][:value]
+
+          expect(record).to be_supcharg_over_soft_max
+        end
+      end
+    end
+  end
 end
