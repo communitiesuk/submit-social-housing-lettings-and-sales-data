@@ -22,8 +22,8 @@ RSpec.describe Imports::LettingsLogsImportService do
     let(:real_2022_2023_form) { Form.new("config/forms/2022_2023.json") }
     let(:fixture_directory) { "spec/fixtures/imports/logs" }
 
-    let(:organisation) { FactoryBot.create(:organisation, old_visible_id: "1", provider_type: "PRP") }
-    let(:managing_organisation) { FactoryBot.create(:organisation, old_visible_id: "2", provider_type: "PRP") }
+    let(:organisation) { FactoryBot.create(:organisation, old_org_id: "7c5bd5fb549c09a2c55d7cb90d7ba84927e64618", provider_type: "PRP") }
+    let(:managing_organisation) { FactoryBot.create(:organisation, old_org_id: "7c5bd5fb549c09z2c55d9cb90d7ba84927e64618", provider_type: "PRP") }
     let(:scheme1) { FactoryBot.create(:scheme, old_visible_id: "0123", owning_organisation: organisation) }
     let(:scheme2) { FactoryBot.create(:scheme, old_visible_id: "456", owning_organisation: organisation) }
 
@@ -36,8 +36,8 @@ RSpec.describe Imports::LettingsLogsImportService do
              .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Westminster","codes":{"admin_district":"E08000035"}}}', headers: {})
 
       allow(Organisation).to receive(:find_by).and_return(nil)
-      allow(Organisation).to receive(:find_by).with(old_visible_id: organisation.old_visible_id).and_return(organisation)
-      allow(Organisation).to receive(:find_by).with(old_visible_id: managing_organisation.old_visible_id).and_return(managing_organisation)
+      allow(Organisation).to receive(:find_by).with(old_org_id: organisation.old_org_id).and_return(organisation)
+      allow(Organisation).to receive(:find_by).with(old_org_id: managing_organisation.old_org_id).and_return(managing_organisation)
 
       # Created by users
       FactoryBot.create(:user, old_user_id: "c3061a2e6ea0b702e6f6210d5c52d2a92612d2aa", organisation:)
@@ -231,11 +231,11 @@ RSpec.describe Imports::LettingsLogsImportService do
       end
 
       context "and the organisation legacy ID does not exist" do
-        before { lettings_log_xml.at_xpath("//xmlns:OWNINGORGID").content = 99_999 }
+        before { lettings_log_xml.at_xpath("//meta:owner-institution-id").content = 99_999 }
 
         it "raises an exception" do
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
-            .to raise_error(RuntimeError, "Organisation not found with legacy ID 99999")
+            .to raise_error(RuntimeError, "Organisation not found with old org ID 99999")
         end
       end
 
@@ -1547,8 +1547,8 @@ RSpec.describe Imports::LettingsLogsImportService do
     let(:real_2022_2023_form) { Form.new("config/forms/2022_2023.json") }
     let(:fixture_directory) { "spec/fixtures/imports/logs" }
 
-    let(:organisation) { FactoryBot.create(:organisation, old_visible_id: "1", provider_type: "PRP") }
-    let(:managing_organisation) { FactoryBot.create(:organisation, old_visible_id: "2", provider_type: "PRP") }
+    let(:organisation) { FactoryBot.create(:organisation, old_org_id: "7c5bd5fb549c09a2c55d7cb90d7ba84927e64618", provider_type: "PRP") }
+    let(:managing_organisation) { FactoryBot.create(:organisation, old_org_id: "7c5bd5fb549c09z2c55d9cb90d7ba84927e64618", provider_type: "PRP") }
     let(:scheme1) { FactoryBot.create(:scheme, old_visible_id: "0123", owning_organisation: organisation) }
     let(:scheme2) { FactoryBot.create(:scheme, old_visible_id: "456", owning_organisation: organisation) }
 
@@ -1561,8 +1561,8 @@ RSpec.describe Imports::LettingsLogsImportService do
              .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Westminster","codes":{"admin_district":"E08000035"}}}', headers: {})
 
       allow(Organisation).to receive(:find_by).and_return(nil)
-      allow(Organisation).to receive(:find_by).with(old_visible_id: organisation.old_visible_id).and_return(organisation)
-      allow(Organisation).to receive(:find_by).with(old_visible_id: managing_organisation.old_visible_id).and_return(managing_organisation)
+      allow(Organisation).to receive(:find_by).with(old_org_id: organisation.old_org_id).and_return(organisation)
+      allow(Organisation).to receive(:find_by).with(old_org_id: managing_organisation.old_org_id).and_return(managing_organisation)
 
       # Created by users
       FactoryBot.create(:user, old_user_id: "c3061a2e6ea0b702e6f6210d5c52d2a92612d2aa", organisation:)
@@ -1792,7 +1792,7 @@ RSpec.describe Imports::LettingsLogsImportService do
         .not_to raise_error
       end
 
-      it "clears out the referral answer" do
+      it "clears out the period answer" do
         allow(logger).to receive(:warn)
         lettings_log_service.send(:create_log, lettings_log_xml)
         lettings_log = LettingsLog.find_by(old_id: lettings_log_id)

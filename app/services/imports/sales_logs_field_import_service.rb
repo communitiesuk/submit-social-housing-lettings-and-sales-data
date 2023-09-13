@@ -45,7 +45,7 @@ module Imports
         if record.owning_organisation_id.present?
           @logger.info("sales log #{record.id} has a value for owning_organisation_id, skipping update")
         else
-          owning_organisation_id = find_organisation_id(xml_doc, "OWNINGORGID")
+          owning_organisation_id = find_organisation_id(xml_doc, "owner-institution-id")
           record.update!(owning_organisation_id:)
           @logger.info("sales log #{record.id}'s owning_organisation_id value has been set to #{owning_organisation_id}")
         end

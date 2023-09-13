@@ -9,7 +9,7 @@ RSpec.describe Imports::SalesLogsFieldImportService do
   let(:fixture_directory) { "spec/fixtures/imports/sales_logs" }
   let(:sales_log_filename) { "shared_ownership_sales_log" }
   let(:sales_log_file) { File.open("#{fixture_directory}/#{sales_log_filename}.xml") }
-  let(:organisation) { create(:organisation, old_visible_id: "1") }
+  let(:organisation) { create(:organisation, old_visible_id: "1", old_org_id: "7c5bd5fb549c09a2c55d7cb90d7ba84927e64618") }
   let(:old_user_id) { "c3061a2e6ea0b702e6f6210d5c52d2a92612d2aa" }
 
   let(:remote_folder) { "sales_logs" }

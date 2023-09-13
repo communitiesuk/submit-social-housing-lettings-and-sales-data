@@ -61,8 +61,8 @@ module Imports
       # Required fields for status complete or logic to work
       # Note: order matters when we derive from previous values (attributes parameter)
       attributes["startdate"] = compose_date(xml_doc, "DAY", "MONTH", "YEAR")
-      attributes["owning_organisation_id"] = find_organisation_id(xml_doc, "OWNINGORGID")
-      attributes["managing_organisation_id"] = find_organisation_id(xml_doc, "MANINGORGID")
+      attributes["owning_organisation_id"] = find_organisation_id(xml_doc, "owner-institution-id")
+      attributes["managing_organisation_id"] = find_organisation_id(xml_doc, "managing-institution-id")
       attributes["creation_method"] = creation_method(xml_doc)
       attributes["joint"] = unsafe_string_as_integer(xml_doc, "joint")
       attributes["startertenancy"] = unsafe_string_as_integer(xml_doc, "_2a")
