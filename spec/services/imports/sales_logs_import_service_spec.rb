@@ -2200,5 +2200,72 @@ RSpec.describe Imports::SalesLogsImportService do
         end
       end
     end
+
+    context "when setting income for in progress logs" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before do
+        sales_log_xml.at_xpath("//meta:status").content = "saved"
+      end
+
+      it "sets income to known if not answered but income is given for person 1" do
+        sales_log_xml.at_xpath("//xmlns:joint").content = "2 No"
+        sales_log_xml.at_xpath("//xmlns:P1IncKnown").content = ""
+        sales_log_xml.at_xpath("//xmlns:Q2Person1Income").content = "20000"
+        sales_log_xml.at_xpath("//xmlns:P2IncKnown").content = ""
+        sales_log_xml.at_xpath("//xmlns:Q2Person2Income").content = "30000"
+        sales_log_service.send(:create_log, sales_log_xml)
+
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log&.income1nk).to eq(0)
+        expect(sales_log&.income1).to eq(20_000)
+        expect(sales_log&.income2nk).to eq(nil)
+        expect(sales_log&.income2).to eq(nil)
+      end
+
+      it "sets income to known if not answered but income is given for person 2" do
+        sales_log_xml.at_xpath("//xmlns:joint").content = "1 Yes"
+        sales_log_xml.at_xpath("//xmlns:JointMore").content = "2 No"
+        sales_log_xml.at_xpath("//xmlns:P1IncKnown").content = ""
+        sales_log_xml.at_xpath("//xmlns:Q2Person1Income").content = "20000"
+        sales_log_xml.at_xpath("//xmlns:P2IncKnown").content = ""
+        sales_log_xml.at_xpath("//xmlns:Q2Person2Income").content = "30000"
+        sales_log_service.send(:create_log, sales_log_xml)
+
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log&.income1nk).to eq(0)
+        expect(sales_log&.income1).to eq(20_000)
+        expect(sales_log&.income2nk).to eq(0)
+        expect(sales_log&.income2).to eq(30_000)
+      end
+
+      it "sets savings to known if savings are given" do
+        sales_log_xml.at_xpath("//xmlns:Q3Savings").content = "10000"
+        sales_log_xml.at_xpath("//xmlns:savingsKnown").content = ""
+        sales_log_service.send(:create_log, sales_log_xml)
+
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log&.savingsnk).to eq(0)
+        expect(sales_log&.savings).to eq(10_000)
+      end
+
+      it "does not set savings or income fields when values aren't given" do
+        sales_log_xml.at_xpath("//xmlns:P1IncKnown").content = ""
+        sales_log_xml.at_xpath("//xmlns:Q2Person1Income").content = ""
+        sales_log_xml.at_xpath("//xmlns:P2IncKnown").content = ""
+        sales_log_xml.at_xpath("//xmlns:Q2Person2Income").content = ""
+        sales_log_xml.at_xpath("//xmlns:Q3Savings").content = ""
+        sales_log_xml.at_xpath("//xmlns:savingsKnown").content = ""
+        sales_log_service.send(:create_log, sales_log_xml)
+
+        sales_log = SalesLog.find_by(old_id: sales_log_id)
+        expect(sales_log&.income1nk).to eq(nil)
+        expect(sales_log&.income1).to eq(nil)
+        expect(sales_log&.income2nk).to eq(nil)
+        expect(sales_log&.income2).to eq(nil)
+        expect(sales_log&.savingsnk).to eq(nil)
+        expect(sales_log&.savings).to eq(nil)
+      end
+    end
   end
 end
