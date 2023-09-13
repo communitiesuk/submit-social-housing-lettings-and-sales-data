@@ -8,8 +8,8 @@ RSpec.describe Imports::SalesLogsImportService do
 
   let(:fixture_directory) { "spec/fixtures/imports/sales_logs" }
 
-  let(:organisation) { FactoryBot.create(:organisation, old_visible_id: "1", provider_type: "PRP") }
-  let(:managing_organisation) { FactoryBot.create(:organisation, old_visible_id: "2", provider_type: "PRP") }
+  let(:organisation) { FactoryBot.create(:organisation, old_org_id: "7c5bd5fb549c09a2c55d7cb90d7ba84927e64618", provider_type: "PRP") }
+  let(:managing_organisation) { FactoryBot.create(:organisation, old_org_id: "7c5bd5fb549c09z2c55d9cb90d7ba84927e64618", provider_type: "PRP") }
   let(:remote_folder) { "sales_logs" }
 
   def open_file(directory, filename)
@@ -27,8 +27,8 @@ RSpec.describe Imports::SalesLogsImportService do
 
   before do
     allow(Organisation).to receive(:find_by).and_return(nil)
-    allow(Organisation).to receive(:find_by).with(old_visible_id: organisation.old_visible_id).and_return(organisation)
-    allow(Organisation).to receive(:find_by).with(old_visible_id: managing_organisation.old_visible_id).and_return(managing_organisation)
+    allow(Organisation).to receive(:find_by).with(old_org_id: organisation.old_org_id).and_return(organisation)
+    allow(Organisation).to receive(:find_by).with(old_org_id: managing_organisation.old_org_id).and_return(managing_organisation)
 
     # Created by users
     FactoryBot.create(:user, old_user_id: "c3061a2e6ea0b702e6f6210d5c52d2a92612d2aa", organisation:)
@@ -116,11 +116,11 @@ RSpec.describe Imports::SalesLogsImportService do
     context "and the organisation legacy ID does not exist" do
       let(:sales_log_id) { "shared_ownership_sales_log" }
 
-      before { sales_log_xml.at_xpath("//xmlns:OWNINGORGID").content = 99_999 }
+      before { sales_log_xml.at_xpath("//meta:owner-institution-id").content = 99_999 }
 
       it "raises an exception" do
         expect { sales_log_service.send(:create_log, sales_log_xml) }
-          .to raise_error(RuntimeError, "Organisation not found with legacy ID 99999")
+          .to raise_error(RuntimeError, "Organisation not found with old org ID 99999")
       end
     end
 

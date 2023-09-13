@@ -54,7 +54,7 @@ module Imports
 
     def find_owning_organisation_id(old_org_id)
       organisation = Organisation.find_by(old_org_id:)
-      raise "Organisation not found with legacy ID #{old_org_id}" if organisation.nil?
+      raise "Organisation not found with old org ID #{old_org_id}" if organisation.nil?
 
       organisation.id
     end
