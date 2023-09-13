@@ -68,11 +68,14 @@ module Imports
       attributes["la"] = string_or_nil(xml_doc, "Q14ONSLACode")
       attributes["income1"] = safe_string_as_integer(xml_doc, "Q2Person1Income")
       attributes["income1nk"] = income_known(unsafe_string_as_integer(xml_doc, "P1IncKnown"))
+      attributes["income1nk"] ||= 0 if attributes["income1"].present?
       attributes["inc1mort"] = unsafe_string_as_integer(xml_doc, "Q2Person1Mortgage")
       attributes["income2"] = safe_string_as_integer(xml_doc, "Q2Person2Income")
       attributes["income2nk"] = income_known(unsafe_string_as_integer(xml_doc, "P2IncKnown"))
+      attributes["income2nk"] ||= 0 if attributes["income2"].present?
       attributes["savings"] = safe_string_as_integer(xml_doc, "Q3Savings")&.round(-1)
       attributes["savingsnk"] = savings_known(xml_doc)
+      attributes["savingsnk"] ||= 0 if attributes["savings"].present?
       attributes["prevown"] = unsafe_string_as_integer(xml_doc, "Q4PrevOwnedProperty")
       attributes["mortgage"] = safe_string_as_decimal(xml_doc, "CALCMORT")
       attributes["inc2mort"] = unsafe_string_as_integer(xml_doc, "Q2Person2MortApplication")
