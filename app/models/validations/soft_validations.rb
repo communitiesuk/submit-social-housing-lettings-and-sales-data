@@ -99,12 +99,14 @@ module Validations::SoftValidations
 
   def scharge_over_soft_max?
     return unless scharge && period && needstype
+    return if weekly_value(scharge).blank?
 
-    if needstype == 1
-      weekly_value(scharge).present? && weekly_value(scharge) > 35
-    else
-      weekly_value(scharge).present? && weekly_value(scharge) > 200
-    end
+    max = if needstype == 1
+            owning_organisation.provider_type == "LA" ? 25 : 35
+          else
+            owning_organisation.provider_type == "LA" ? 100 : 200
+          end
+    weekly_value(scharge) > max
   end
 
 private
