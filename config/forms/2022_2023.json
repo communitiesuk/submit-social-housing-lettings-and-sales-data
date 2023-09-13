@@ -7057,6 +7057,9 @@
                     "3": {
                       "value": "Nominated by a local housing authority"
                     },
+                    "4" : { 
+                      "value" : "Referred by local authority housing department" 
+                    },
                     "8": {
                       "value": "Re-located through official housing mobility scheme"
                     },
@@ -7115,7 +7118,7 @@
                       "value": "Tenant applied directly (no referral)"
                     },
                     "3": {
-                      "value": "Referred by local authority housing department"
+                      "value": "Nominated by a local housing authority"
                     },
                     "8": {
                       "value": "Re-located through official housing mobility scheme"
@@ -7220,6 +7223,46 @@
                   "renewal": 0
                 }
               ]
+            },
+            "referral_value_check": {
+              "depends_on": [
+                {
+                  "la_referral_for_general_needs?": true
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.referral.title_text"
+              },
+              "informative_text": {
+                "translation": "soft_validations.referral.hint_text",
+                "arguments": []
+              },
+              "questions": {
+                "referral_value_check": {
+                  "check_answer_label": "Referral confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "referral_value_check": 0
+                      },
+                      {
+                        "referral_value_check": 1
+                      }
+                    ]
+                  },
+                  "header": "Are you sure?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              },
+              "interruption_screen_question_ids": ["needstype", "referral"]
             }
           }
         }

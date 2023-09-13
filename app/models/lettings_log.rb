@@ -568,6 +568,10 @@ class LettingsLog < Log
     end
   end
 
+  def la_referral_for_general_needs?
+    is_general_needs? && referral == 4
+  end
+
 private
 
   def reset_invalid_unresolved_log_fields!

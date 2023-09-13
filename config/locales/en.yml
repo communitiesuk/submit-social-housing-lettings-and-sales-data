@@ -706,6 +706,9 @@ Make sure these answers are correct."
     mortgage:
       title_text: "You told us that the mortgage amount is %{mortgage}"
       hint_text: "This is more than 5 times the income, which is higher than we would expect."
+    referral:
+      title_text: "Are you sure?"
+      hint_text: "This is a general needs log, and this referral type is for supported housing."
 
   devise:
     email:

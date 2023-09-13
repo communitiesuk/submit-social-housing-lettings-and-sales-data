@@ -345,4 +345,34 @@ RSpec.describe Validations::SoftValidations do
       expect(record).to be_care_home_charge_expected_not_provided
     end
   end
+
+  describe "#la_referral_for_general_needs?" do
+    it "returns false if needstype is 'Supported Housing'" do
+      record.needstype = 2
+      record.referral = 4
+
+      expect(record).not_to be_la_referral_for_general_needs
+    end
+
+    it "returns false if needstype is not given" do
+      record.needstype = nil
+      record.referral = 4
+
+      expect(record).not_to be_la_referral_for_general_needs
+    end
+
+    it "returns false if referral is not given" do
+      record.needstype = 1
+      record.referral = nil
+
+      expect(record).not_to be_la_referral_for_general_needs
+    end
+
+    it "returns true if needstype is 'General needs' and referral is 4" do
+      record.needstype = 1
+      record.referral = 4
+
+      expect(record).to be_la_referral_for_general_needs
+    end
+  end
 end

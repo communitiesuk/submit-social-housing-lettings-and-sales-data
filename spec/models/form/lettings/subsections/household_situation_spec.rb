@@ -30,6 +30,7 @@ RSpec.describe Form::Lettings::Subsections::HouseholdSituation, type: :model do
         referral_prp
         referral_supported_housing
         referral_supported_housing_prp
+        referral_value_check
       ],
     )
   end
