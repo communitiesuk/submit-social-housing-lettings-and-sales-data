@@ -109,6 +109,18 @@ module Validations::SoftValidations
     weekly_value(scharge) > max
   end
 
+  def pscharge_over_soft_max?
+    return unless pscharge && period && needstype
+    return if weekly_value(pscharge).blank?
+
+    max = if needstype == 1
+            owning_organisation.provider_type == "LA" ? 25 : 35
+          else
+            owning_organisation.provider_type == "LA" ? 75 : 100
+          end
+    weekly_value(pscharge) > max
+  end
+
 private
 
   def details_known_or_lead_tenant?(tenant_number)
