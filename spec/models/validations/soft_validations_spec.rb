@@ -375,4 +375,112 @@ RSpec.describe Validations::SoftValidations do
       expect(record).to be_la_referral_for_general_needs
     end
   end
+  
+  describe "scharge_over_soft_max?" do
+    context "and organisation is PRP" do
+      before do
+        record.owning_organisation.update(provider_type: "PRP")
+      end
+
+      it "returns false if scharge is not given" do
+        record.scharge = nil
+        record.needstype = 1
+        record.period = 1
+
+        expect(record).not_to be_scharge_over_soft_max
+      end
+
+      it "returns false if period is not given" do
+        record.scharge = 201
+        record.needstype = 1
+        record.period = nil
+
+        expect(record).not_to be_scharge_over_soft_max
+      end
+
+      [{
+        period: { label: "weekly", value: 1 },
+        scharge: 34,
+      },
+       {
+         period: { label: "monthly", value: 4 },
+         scharge: 100,
+       },
+       {
+         period: { label: "every 2 weeks", value: 2 },
+         scharge: 69,
+       }].each do |test_case|
+        it "returns false if scharge is under soft max for general needs #{test_case[:period][:label]}(35)" do
+          record.scharge = test_case[:scharge]
+          record.needstype = 1
+          record.period = test_case[:period][:value]
+
+          expect(record).not_to be_scharge_over_soft_max
+        end
+      end
+
+      [{
+        period: { label: "weekly", value: 1 },
+        scharge: 199,
+      },
+       {
+         period: { label: "monthly", value: 4 },
+         scharge: 400,
+       },
+       {
+         period: { label: "every 2 weeks", value: 2 },
+         scharge: 399,
+       }].each do |test_case|
+        it "returns false if scharge is under soft max for supported housing #{test_case[:period][:label]} (200)" do
+          record.scharge = test_case[:scharge]
+          record.needstype = 2
+          record.period = test_case[:period][:value]
+
+          expect(record).not_to be_scharge_over_soft_max
+        end
+      end
+
+      [{
+        period: { label: "weekly", value: 1 },
+        scharge: 36,
+      },
+       {
+         period: { label: "monthly", value: 4 },
+         scharge: 180,
+       },
+       {
+         period: { label: "every 2 weeks", value: 2 },
+         scharge: 71,
+       }].each do |test_case|
+        it "returns true if scharge is over soft max for general needs #{test_case[:period][:label]} (35)" do
+          record.scharge = test_case[:scharge]
+          record.needstype = 1
+          record.period = test_case[:period][:value]
+
+          expect(record).to be_scharge_over_soft_max
+        end
+      end
+
+      [{
+        period: { label: "weekly", value: 1 },
+        scharge: 201,
+      },
+       {
+         period: { label: "monthly", value: 4 },
+         scharge: 1000,
+       },
+       {
+         period: { label: "every 2 weeks", value: 2 },
+         scharge: 401,
+       }].each do |test_case|
+        it "returns true if scharge is over soft max for supported housing #{test_case[:period][:label]} (200)" do
+          record.scharge = test_case[:scharge]
+          record.needstype = 2
+          record.period = test_case[:period][:value]
+
+          expect(record).to be_scharge_over_soft_max
+        end
+      end
+    end
+  end
 end

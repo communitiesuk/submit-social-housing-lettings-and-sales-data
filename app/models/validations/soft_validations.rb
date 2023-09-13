@@ -97,6 +97,16 @@ module Validations::SoftValidations
     net_income_in_soft_max_range? ? "higher" : "lower"
   end
 
+  def scharge_over_soft_max?
+    return unless scharge && period && needstype
+
+    if needstype == 1
+      weekly_value(scharge).present? && weekly_value(scharge) > 35
+    else
+      weekly_value(scharge).present? && weekly_value(scharge) > 200
+    end
+  end
+
 private
 
   def details_known_or_lead_tenant?(tenant_number)
