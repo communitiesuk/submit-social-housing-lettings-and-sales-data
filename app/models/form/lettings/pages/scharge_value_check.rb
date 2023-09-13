@@ -4,9 +4,14 @@ class Form::Lettings::Pages::SchargeValueCheck < ::Form::Page
     @id = "scharge_value_check"
     @depends_on = [{ "scharge_over_soft_max?" => true }]
     @title_text = {
-      "translation" => "soft_validations.scharge.title_text",
+      "translation" => "soft_validations.scharge.over_soft_max_title",
+      "arguments" => [{
+        "key" => "scharge",
+        "label" => true,
+        "i18n_template" => "scharge",
+      }],
     }
-    @informative_text = ""
+    @informative_text = I18n.t("soft_validations.charges.informative_text")
   end
 
   def questions

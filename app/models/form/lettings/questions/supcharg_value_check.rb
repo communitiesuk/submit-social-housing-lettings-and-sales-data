@@ -8,6 +8,7 @@ class Form::Lettings::Questions::SupchargValueCheck < ::Form::Question
     @check_answers_card_number = 0
     @answer_options = ANSWER_OPTIONS
     @hidden_in_check_answers = { "depends_on" => [{ "supcharg_value_check" => 0 }, { "supcharg_value_check" => 1 }] }
+    @hint_text = I18n.t("soft_validations.charges.hint_text")
   end
 
   ANSWER_OPTIONS = { "0" => { "value" => "Yes" }, "1" => { "value" => "No" } }.freeze

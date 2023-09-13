@@ -4,9 +4,14 @@ class Form::Lettings::Pages::SupchargValueCheck < ::Form::Page
     @id = "supcharg_value_check"
     @depends_on = [{ "supcharg_over_soft_max?" => true }]
     @title_text = {
-      "translation" => "soft_validations.supcharg.title_text",
+      "translation" => "soft_validations.supcharg.over_soft_max_title",
+      "arguments" => [{
+        "key" => "supcharg",
+        "label" => true,
+        "i18n_template" => "supcharg",
+      }],
     }
-    @informative_text = ""
+    @informative_text = I18n.t("soft_validations.charges.informative_text")
   end
 
   def questions

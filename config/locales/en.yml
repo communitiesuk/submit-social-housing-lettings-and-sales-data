@@ -369,7 +369,7 @@ en:
         less_than_shortfall: "Enter an amount that is more than the shortfall in basic rent"
         scharge:
           private_registered_provider:
-            general_needs: "Enter a value for the service charge between £0 and £88 per week if the landlord is a private registered provider and it is a general needs letting"
+            general_needs: "Enter a value for the service charge between £0 and £800 per week if the landlord is a private registered provider and it is a general needs letting"
             supported_housing: "Enter a value for the service charge between £0 and £800 per week if the landlord is a private registered provider and it is a supported housing letting"
           local_authority:
             general_needs: "Enter a value for the service charge between £0 and £500 per week if the landlord is a local authority and it is a general needs letting"
@@ -709,6 +709,16 @@ Make sure these answers are correct."
     referral:
       title_text: "Are you sure?"
       hint_text: "This is a general needs log, and this referral type is for supported housing."
+    scharge:
+      over_soft_max_title: "You told us the service charge is %{scharge}"
+    pscharge:
+      over_soft_max_title: "You told us the personal service charge is %{pscharge}"
+    supcharg:
+      over_soft_max_title: "You told us the support charge is %{supcharg}"
+    charges:
+      informative_text: "This is higher than we would expect."
+      hint_text: "Check the following:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the needs type</li></ul>"
+  
 
   devise:
     email:
