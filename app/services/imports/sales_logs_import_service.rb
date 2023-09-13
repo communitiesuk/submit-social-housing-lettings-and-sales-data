@@ -27,7 +27,7 @@ module Imports
       # Note: order matters when we derive from previous values (attributes parameter)
 
       attributes["saledate"] = compose_date(xml_doc, "DAY", "MONTH", "YEAR") || Time.zone.parse(field_value(xml_doc, "xmlns", "CompletionDate"))
-      attributes["owning_organisation_id"] = find_organisation_id(xml_doc, "OWNINGORGID")
+      attributes["owning_organisation_id"] = find_organisation_id(xml_doc, "owner-institution-id")
       attributes["type"] = unsafe_string_as_integer(xml_doc, "DerSaleType")
       attributes["old_id"] = meta_field_value(xml_doc, "document-id")
       attributes["old_form_id"] = safe_string_as_integer(xml_doc, "Form")

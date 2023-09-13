@@ -31,9 +31,9 @@ module Imports
     end
 
     def find_organisation_id(xml_doc, id_field)
-      old_visible_id = string_or_nil(xml_doc, id_field)
-      organisation = Organisation.find_by(old_visible_id:)
-      raise "Organisation not found with legacy ID #{old_visible_id}" if organisation.nil?
+      old_org_id = meta_field_value(xml_doc, id_field)&.strip.presence
+      organisation = Organisation.find_by(old_org_id:)
+      raise "Organisation not found with old org ID #{old_org_id}" if organisation.nil?
 
       organisation.id
     end
