@@ -891,7 +891,7 @@ RSpec.describe Imports::LettingsLogsImportService do
       context "and pscharge is out of range" do
         before do
           lettings_log_xml.at_xpath("//xmlns:Q17").content = "1"
-          lettings_log_xml.at_xpath("//xmlns:Q18aiii").content = "36"
+          lettings_log_xml.at_xpath("//xmlns:Q18aiii").content = "701"
         end
 
         it "intercepts the relevant validation error" do
@@ -914,7 +914,7 @@ RSpec.describe Imports::LettingsLogsImportService do
       context "and supcharg is out of range" do
         before do
           lettings_log_xml.at_xpath("//xmlns:Q17").content = "1"
-          lettings_log_xml.at_xpath("//xmlns:Q18aiv").content = "46"
+          lettings_log_xml.at_xpath("//xmlns:Q18aiv").content = "801"
         end
 
         it "intercepts the relevant validation error" do
@@ -937,7 +937,7 @@ RSpec.describe Imports::LettingsLogsImportService do
       context "and scharge is out of range" do
         before do
           lettings_log_xml.at_xpath("//xmlns:Q17").content = "1"
-          lettings_log_xml.at_xpath("//xmlns:Q18aii").content = "156"
+          lettings_log_xml.at_xpath("//xmlns:Q18aii").content = "801"
         end
 
         it "intercepts the relevant validation error" do
@@ -2060,6 +2060,41 @@ RSpec.describe Imports::LettingsLogsImportService do
         lettings_log_xml.at_xpath("//xmlns:MONTH").content = "10"
         lettings_log_xml.at_xpath("//xmlns:YEAR").content = "2022"
         lettings_log_xml.at_xpath("//xmlns:Q16").content = 4
+      end
+
+      it "completes the log" do
+        lettings_log_service.send(:create_log, lettings_log_xml)
+        lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+        expect(lettings_log.status).to eq("completed")
+      end
+    end
+
+    context "and the scharge/pscharge/supcharg soft validations are triggered" do
+      let(:lettings_log_id) { "00d2343e-d5fa-4c89-8400-ec3854b0f2b4" }
+      let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id) }
+      let(:lettings_log_xml) { Nokogiri::XML(lettings_log_file) }
+
+      around do |example|
+        Timecop.freeze(Time.zone.local(2023, 4, 1)) do
+          Singleton.__init__(FormHandler)
+          example.run
+        end
+        Timecop.return
+        Singleton.__init__(FormHandler)
+      end
+
+      before do
+        lettings_log_xml.at_xpath("//xmlns:AddressLine1").content = "address 1"
+        lettings_log_xml.at_xpath("//xmlns:TownCity").content = "towncity"
+        lettings_log_xml.at_xpath("//xmlns:DAY").content = "10"
+        lettings_log_xml.at_xpath("//xmlns:MONTH").content = "4"
+        lettings_log_xml.at_xpath("//xmlns:YEAR").content = "2023"
+        lettings_log_xml.at_xpath("//xmlns:P1Nat").content = "18"
+
+        lettings_log_xml.at_xpath("//xmlns:Q17").content = "1"
+        lettings_log_xml.at_xpath("//xmlns:Q18aii").content = "800"
+        lettings_log_xml.at_xpath("//xmlns:Q18aiii").content = "300"
+        lettings_log_xml.at_xpath("//xmlns:Q18aiv").content = "300"
       end
 
       it "completes the log" do

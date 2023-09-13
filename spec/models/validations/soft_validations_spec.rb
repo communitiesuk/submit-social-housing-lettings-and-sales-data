@@ -375,7 +375,7 @@ RSpec.describe Validations::SoftValidations do
       expect(record).to be_la_referral_for_general_needs
     end
   end
-  
+
   describe "scharge_over_soft_max?" do
     context "and organisation is PRP" do
       before do

@@ -8364,6 +8364,141 @@
               },
               "interruption_screen_question_ids": ["brent", "startdate", "la", "beds", "rent_type", "needstype"]
             },
+            "scharge_value_check": {
+              "depends_on": [
+                {
+                  "scharge_over_soft_max?": true
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.scharge.over_soft_max_title",
+                "arguments": [
+                  {
+                    "key": "scharge",
+                    "label": true,
+                    "i18n_template": "scharge"
+                  }
+                ]
+              },
+              "informative_text": {},
+              "questions": {
+                "scharge_value_check": {
+                  "check_answer_label": "Service charge confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "scharge_value_check": 0
+                      },
+                      {
+                        "scharge_value_check": 1
+                      }
+                    ]
+                  },
+                  "header": "Are you sure?",
+                  "hint_text": "This is higher than we would expect. Check:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the rent type is correct, for example affordable or social rent</li></ul>",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              },
+              "interruption_screen_question_ids": ["period", "needstype", "scharge"]
+            },
+            "pscharge_value_check": {
+              "depends_on": [
+                {
+                  "pscharge_over_soft_max?": true
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pscharge.over_soft_max_title",
+                "arguments": [
+                  {
+                    "key": "pscharge",
+                    "label": true,
+                    "i18n_template": "pscharge"
+                  }
+                ]
+              },
+              "informative_text": {},
+              "questions": {
+                "pscharge_value_check": {
+                  "check_answer_label": "Personal service charge confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "pscharge_value_check": 0
+                      },
+                      {
+                        "pscharge_value_check": 1
+                      }
+                    ]
+                  },
+                  "header": "Are you sure?",
+                  "hint_text": "This is higher than we would expect. Check:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the rent type is correct, for example affordable or social rent</li></ul>",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              },
+              "interruption_screen_question_ids": ["period", "needstype", "pscharge"]
+            },
+            "supcharg_value_check": {
+              "depends_on": [
+                {
+                  "supcharg_over_soft_max?": true
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.supcharg.over_soft_max_title",
+                "arguments": [
+                  {
+                    "key": "supcharg",
+                    "label": true,
+                    "i18n_template": "supcharg"
+                  }
+                ]
+              },
+              "informative_text": {},
+              "questions": {
+                "supcharg_value_check": {
+                  "check_answer_label": "Personal service charge confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "supcharg_value_check": 0
+                      },
+                      {
+                        "supcharg_value_check": 1
+                      }
+                    ]
+                  },
+                  "header": "Are you sure?",
+                  "hint_text": "This is higher than we would expect. Check:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the rent type is correct, for example affordable or social rent</li></ul>",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              },
+              "interruption_screen_question_ids": ["period", "needstype", "supcharg"]
+            },
             "outstanding": {
               "header": "",
               "description": "",
