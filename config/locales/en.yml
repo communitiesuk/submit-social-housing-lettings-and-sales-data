@@ -369,25 +369,25 @@ en:
         less_than_shortfall: "Enter an amount that is more than the shortfall in basic rent"
         scharge:
           private_registered_provider:
-            general_needs: "Enter a value for the service charge between £0 and £155 per week if the landlord is a private registered provider and it is a general needs letting"
-            supported_housing: "Enter a value for the service charge between £0 and £480 per week if the landlord is a private registered provider and it is a supported housing letting"
+            general_needs: "Enter a value for the service charge between £0 and £88 per week if the landlord is a private registered provider and it is a general needs letting"
+            supported_housing: "Enter a value for the service charge between £0 and £800 per week if the landlord is a private registered provider and it is a supported housing letting"
           local_authority:
-            general_needs: "Enter a value for the service charge between £0 and £155 per week if the landlord is a local authority and it is a general needs letting"
-            supported_housing: "Enter a value for the service charge between £0 and £365 per week if the landlord is a local authority and it is a supported housing letting"
+            general_needs: "Enter a value for the service charge between £0 and £500 per week if the landlord is a local authority and it is a general needs letting"
+            supported_housing: "Enter a value for the service charge between £0 and £500 per week if the landlord is a local authority and it is a supported housing letting"
         pscharge:
           private_registered_provider:
-            general_needs: "Enter a value for the personal service charge between £0 and £30 per week if the landlord is a private registered provider and it is a general needs letting"
-            supported_housing: "Enter a value for the personal service charge between £0 and £200 per week if the landlord is a private registered provider and it is a supported housing letting"
+            general_needs: "Enter a value for the personal service charge between £0 and £700 per week if the landlord is a private registered provider and it is a general needs letting"
+            supported_housing: "Enter a value for the personal service charge between £0 and £700 per week if the landlord is a private registered provider and it is a supported housing letting"
           local_authority:
-            general_needs: "Enter a value for the personal service charge between £0 and £35 per week if the landlord is a local authority and it is a general needs letting"
-            supported_housing: "Enter a value for the personal service charge between £0 and £75 per week if the landlord is a local authority and it is a supported housing letting"
+            general_needs: "Enter a value for the personal service charge between £0 and £200 per week if the landlord is a local authority and it is a general needs letting"
+            supported_housing: "Enter a value for the personal service charge between £0 and £200 per week if the landlord is a local authority and it is a supported housing letting"
         supcharg:
           private_registered_provider:
-            general_needs: "Enter a value for the support charge between £0 and £40 per week if the landlord is a private registered provider and it is a general needs letting"
-            supported_housing: "Enter a value for the support charge between £0 and £465 per week if the landlord is a private registered provider and it is a supported housing letting"
+            general_needs: "Enter a value for the support charge between £0 and £800 per week if the landlord is a private registered provider and it is a general needs letting"
+            supported_housing: "Enter a value for the support charge between £0 and £800 per week if the landlord is a private registered provider and it is a supported housing letting"
           local_authority:
-            general_needs: "Enter a value for the support charge between £0 and £60 per week if the landlord is a local authority and it is a general needs letting"
-            supported_housing: "Enter a value for the support charge between £0 and £120 per week if the landlord is a local authority and it is a supported housing letting"
+            general_needs: "Enter a value for the support charge between £0 and £200 per week if the landlord is a local authority and it is a general needs letting"
+            supported_housing: "Enter a value for the support charge between £0 and £200 per week if the landlord is a local authority and it is a supported housing letting"
       ecstat:
         over_hard_max: "Net income of %{hard_max} per week is too high given the tenant’s working situation"
       brent:
