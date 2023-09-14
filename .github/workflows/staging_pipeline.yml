@@ -298,7 +298,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: staging
     if: github.ref == 'refs/heads/main'
-    needs: [lint, test, feature_test, audit]
+    needs: [lint, test, feature_test, requests_tests, services_tests, audit]
 
     steps:
       - name: Checkout code
