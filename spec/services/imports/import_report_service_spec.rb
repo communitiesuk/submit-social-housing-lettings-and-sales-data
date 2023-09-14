@@ -120,7 +120,7 @@ RSpec.describe Imports::ImportReportService do
           expected_answers_examples_content.sub!("{org_id2_#{i}}", log.owning_organisation_id.to_s)
           log.save!
         end
-        create(:lettings_log, :completed, age1_known: nil, beds: nil, old_form_id: "300", old_id: "123") do |log|
+        create(:lettings_log, :completed, age1_known: nil, beds: nil, old_form_id: "300", old_id: "beds_and_age") do |log|
           expected_answers_examples_content.sub!("{id}", log.id.to_s)
           expected_answers_examples_content.sub!("{org_id}", log.owning_organisation_id.to_s)
         end
@@ -132,7 +132,7 @@ RSpec.describe Imports::ImportReportService do
         expect(storage_service).to receive(:write_file).with("MissingAnswersReportLettingsLog_report_suffix.csv", "﻿#{expected_content}")
         expect(storage_service).to receive(:write_file).with("MissingAnswersExamplesLettingsLog_report_suffix.csv", "﻿#{expected_answers_examples_content}")
         expect(storage_service).to receive(:write_file).with("MissingAnswersReportSalesLog_report_suffix.csv", "\uFEFFMissing answers,Total number of affected logs\n")
-        expect(storage_service).to receive(:write_file).with("MissingAnswersExamplesSalesLog_report_suffix.csv", "\uFEFFMissing answers,Organisation ID,Log ID,Old Form ID\n")
+        expect(storage_service).to receive(:write_file).with("MissingAnswersExamplesSalesLog_report_suffix.csv", "\uFEFFMissing answers,Organisation ID,Log ID,Old Form ID,Old Log ID\n")
 
         report_service.generate_missing_answers_report("report_suffix")
       end
@@ -145,14 +145,14 @@ RSpec.describe Imports::ImportReportService do
 
       before do
         create_list(:sales_log, 11, :completed, age1_known: nil) do |log, i|
-          log.old_id = "age1_known_#{i}"
+          log.old_id = "old_id_age1_known_#{i}"
           log.old_form_id = "100#{i}"
           log.save!
           expected_answers_examples_content.sub!("{id#{i}}", log.id.to_s)
           expected_answers_examples_content.sub!("{org_id#{i}}", log.owning_organisation_id.to_s)
         end
         create_list(:sales_log, 4, :completed, beds: nil) do |log, i|
-          log.old_id = "beds_#{i}"
+          log.old_id = "old_id_beds_#{i}"
           log.old_form_id = "200#{i}"
           expected_answers_examples_content.sub!("{id2_#{i}}", log.id.to_s)
           expected_answers_examples_content.sub!("{org_id2_#{i}}", log.owning_organisation_id.to_s)
@@ -168,7 +168,7 @@ RSpec.describe Imports::ImportReportService do
 
       it "generates a csv with expected missing fields" do
         expect(storage_service).to receive(:write_file).with("MissingAnswersReportLettingsLog_report_suffix.csv", "\uFEFFMissing answers,Total number of affected logs\n")
-        expect(storage_service).to receive(:write_file).with("MissingAnswersExamplesLettingsLog_report_suffix.csv", "\uFEFFMissing answers,Organisation ID,Log ID,Old Form ID\n")
+        expect(storage_service).to receive(:write_file).with("MissingAnswersExamplesLettingsLog_report_suffix.csv", "\uFEFFMissing answers,Organisation ID,Log ID,Old Form ID,Old Log ID\n")
         expect(storage_service).to receive(:write_file).with("MissingAnswersReportSalesLog_report_suffix.csv", "﻿#{expected_content}")
         expect(storage_service).to receive(:write_file).with("MissingAnswersExamplesSalesLog_report_suffix.csv", "﻿#{expected_answers_examples_content}")
 
