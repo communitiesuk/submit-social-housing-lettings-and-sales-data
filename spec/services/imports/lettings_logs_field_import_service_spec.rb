@@ -707,4 +707,76 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
       end
     end
   end
+
+  context "when updating created_by" do
+    let(:field) { "created_by" }
+    let(:lettings_log) { LettingsLog.find_by(old_id: lettings_log_id) }
+    let(:old_log_id) { lettings_log.id }
+
+    before do
+      Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+      old_log_id
+      lettings_log_file.rewind
+      lettings_log.update!(values_updated_at: nil)
+    end
+
+    context "when the lettings log has created_by value" do
+      it "skips the update" do
+        expect(logger).to receive(:info).with(/lettings log \d+ has created_by value, skipping update/)
+        import_service.send(:update_created_by, lettings_log_xml)
+
+        old_lettings_log = LettingsLog.find(old_log_id)
+        expect(old_lettings_log).not_to be_nil
+
+        new_lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+        expect(new_lettings_log).to eq(old_lettings_log)
+        expect(new_lettings_log.values_updated_at).to be_nil
+      end
+    end
+
+    context "when the lettings log has no created_by value" do
+      before do
+        lettings_log.update!(created_by: nil)
+      end
+
+      it "deletes the existing lettings log and creates a new log with correct created_by" do
+        expect(logger).to receive(:info).with(/lettings log \d+ has been deleted/)
+        expect(logger).to receive(:info).with(/lettings log "0ead17cb-1668-442d-898c-0d52879ff592" has been reimported with id \d+/)
+        import_service.send(:update_created_by, lettings_log_xml)
+
+        old_lettings_log = LettingsLog.find_by(id: old_log_id)
+        expect(old_lettings_log).to be_nil
+
+        new_lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+        expect(new_lettings_log).not_to eq(old_lettings_log)
+        expect(new_lettings_log.values_updated_at).not_to be_nil
+      end
+
+      it "deletes the existing lettings log and creates a new log with correct unassigned created_by" do
+        lettings_log_xml.at_xpath("//meta:owner-user-id").content = "fake_id"
+
+        expect(logger).to receive(:info).with(/lettings log \d+ has been deleted/)
+        expect(logger).to receive(:info).with(/lettings log "0ead17cb-1668-442d-898c-0d52879ff592" has been reimported with id \d+/)
+        expect(logger).to receive(:error).with(/Lettings log '0ead17cb-1668-442d-898c-0d52879ff592' belongs to legacy user with owner-user-id: 'fake_id' which cannot be found. Assigning log to 'Unassigned' user./)
+
+        import_service.send(:update_created_by, lettings_log_xml)
+
+        old_lettings_log = LettingsLog.find_by(id: old_log_id)
+        expect(old_lettings_log).to be_nil
+
+        new_lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+        expect(new_lettings_log).not_to eq(old_lettings_log)
+        expect(new_lettings_log.created_by.name).to eq("Unassigned")
+        expect(new_lettings_log.values_updated_at).not_to be_nil
+      end
+    end
+
+    context "and the log was not previously imported" do
+      it "logs a warning that the log has not been found in the db" do
+        lettings_log.destroy!
+        expect(logger).to receive(:warn).with("lettings log with old id #{lettings_log_id} not found")
+        expect { import_service.send(:update_created_by, lettings_log_xml) }.not_to change(LettingsLog, :count)
+      end
+    end
+  end
 end

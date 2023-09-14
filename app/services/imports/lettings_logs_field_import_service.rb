@@ -18,6 +18,8 @@ module Imports
         import_from(folder, :update_reason)
       when "homeless"
         import_from(folder, :update_homelessness)
+      when "created_by"
+        import_from(folder, :update_created_by)
       else
         raise "Updating #{field} is not supported by the field import service"
       end
@@ -229,6 +231,23 @@ module Imports
       else
         @logger.warn("Could not find record matching legacy ID #{old_id}")
       end
+    end
+
+    # deletes and recreates the entire record if created_by is missing
+    def update_created_by(xml_doc)
+      return if meta_field_value(xml_doc, "form-name").include?("Sales")
+
+      old_id = meta_field_value(xml_doc, "document-id")
+      record = LettingsLog.find_by(old_id:)
+
+      return @logger.warn("lettings log with old id #{old_id} not found") unless record
+      return @logger.info("lettings log #{record.id} has created_by value, skipping update") if record.created_by.present?
+
+      record.destroy!
+      @logger.info("lettings log #{record.id} has been deleted")
+      log_import_service = Imports::LettingsLogsImportService.new(nil, @logger)
+      log_import_service.send(:create_log, xml_doc)
+      @logger.info("lettings log \"#{record.old_id}\" has been reimported with id #{record.id}")
     end
   end
 end
