@@ -54,6 +54,32 @@ describe "full import", type: :task do
     end
   end
 
+  describe "import:generate_missing_answers_report" do
+    subject(:task) { Rake::Task["import:generate_missing_answers_report"] }
+
+    before do
+      Rake.application.rake_require("tasks/full_import")
+      Rake::Task.define_task(:environment)
+      task.reenable
+    end
+
+    context "when generating a missing answers report" do
+      let(:import_report_service) { instance_double(Imports::ImportReportService) }
+
+      before do
+        allow(Imports::ImportReportService).to receive(:new).and_return(import_report_service)
+        allow(ENV).to receive(:[]).with("VCAP_SERVICES").and_return("dummy")
+      end
+
+      it "creates a missing answers report" do
+        expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+        expect(Imports::ImportReportService).to receive(:new).with(storage_service, nil)
+        expect(import_report_service).to receive(:generate_missing_answers_report).with("some_name")
+        task.invoke("some_name")
+      end
+    end
+  end
+
   describe "import:initial" do
     subject(:task) { Rake::Task["import:initial"] }
 

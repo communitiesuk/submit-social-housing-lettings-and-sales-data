@@ -6228,8 +6228,30 @@
                     },
                     "42": {
                       "value": "End of fixed term tenancy (no fault)"
+                    },
+                    "20": {
+                      "value": "Other"
+                    },
+                    "47": {
+                      "value":"Tenant prefers not to say"
+                    },
+                    "divider": {
+                      "value": true
+                    },
+                    "28": {
+                      "value": "Don’t know"
                     }
+                  },
+                  "conditional_for": {
+                    "reasonother": [
+                      20
+                    ]
                   }
+                },
+                "reasonother": {
+                  "header": "What is the reason?",
+                  "hint_text": "",
+                  "type": "text"
                 }
               },
               "depends_on": [
@@ -7035,6 +7057,9 @@
                     "3": {
                       "value": "Nominated by a local housing authority"
                     },
+                    "4" : { 
+                      "value" : "Referred by local authority housing department" 
+                    },
                     "8": {
                       "value": "Re-located through official housing mobility scheme"
                     },
@@ -7058,6 +7083,9 @@
                     },
                     "13": {
                       "value": "Youth offending team"
+                    },
+                    "17": {
+                      "value": "Children’s Social Care"
                     },
                     "16": {
                       "value": "Other"
@@ -7090,7 +7118,7 @@
                       "value": "Tenant applied directly (no referral)"
                     },
                     "3": {
-                      "value": "Referred by local authority housing department"
+                      "value": "Nominated by a local housing authority"
                     },
                     "8": {
                       "value": "Re-located through official housing mobility scheme"
@@ -7115,6 +7143,9 @@
                     },
                     "13": {
                       "value": "Youth offending team"
+                    },
+                    "17": {
+                      "value": "Children’s Social Care"
                     },
                     "16": {
                       "value": "Other"
@@ -7176,6 +7207,9 @@
                     "13": {
                       "value": "Youth offending team"
                     },
+                    "17": {
+                      "value": "Children’s Social Care"
+                    },
                     "16": {
                       "value": "Other"
                     }
@@ -7189,6 +7223,46 @@
                   "renewal": 0
                 }
               ]
+            },
+            "referral_value_check": {
+              "depends_on": [
+                {
+                  "la_referral_for_general_needs?": true
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.referral.title_text"
+              },
+              "informative_text": {
+                "translation": "soft_validations.referral.hint_text",
+                "arguments": []
+              },
+              "questions": {
+                "referral_value_check": {
+                  "check_answer_label": "Referral confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "referral_value_check": 0
+                      },
+                      {
+                        "referral_value_check": 1
+                      }
+                    ]
+                  },
+                  "header": "Are you sure?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              },
+              "interruption_screen_question_ids": ["needstype", "referral"]
             }
           }
         }
@@ -8289,6 +8363,141 @@
                 }
               },
               "interruption_screen_question_ids": ["brent", "startdate", "la", "beds", "rent_type", "needstype"]
+            },
+            "scharge_value_check": {
+              "depends_on": [
+                {
+                  "scharge_over_soft_max?": true
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.scharge.over_soft_max_title",
+                "arguments": [
+                  {
+                    "key": "scharge",
+                    "label": true,
+                    "i18n_template": "scharge"
+                  }
+                ]
+              },
+              "informative_text": {},
+              "questions": {
+                "scharge_value_check": {
+                  "check_answer_label": "Service charge confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "scharge_value_check": 0
+                      },
+                      {
+                        "scharge_value_check": 1
+                      }
+                    ]
+                  },
+                  "header": "Are you sure?",
+                  "hint_text": "This is higher than we would expect. Check:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the needs type</li></ul>",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              },
+              "interruption_screen_question_ids": ["period", "needstype", "scharge"]
+            },
+            "pscharge_value_check": {
+              "depends_on": [
+                {
+                  "pscharge_over_soft_max?": true
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pscharge.over_soft_max_title",
+                "arguments": [
+                  {
+                    "key": "pscharge",
+                    "label": true,
+                    "i18n_template": "pscharge"
+                  }
+                ]
+              },
+              "informative_text": {},
+              "questions": {
+                "pscharge_value_check": {
+                  "check_answer_label": "Personal service charge confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "pscharge_value_check": 0
+                      },
+                      {
+                        "pscharge_value_check": 1
+                      }
+                    ]
+                  },
+                  "header": "Are you sure?",
+                  "hint_text": "This is higher than we would expect. Check:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the needs type</li></ul>",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              },
+              "interruption_screen_question_ids": ["period", "needstype", "pscharge"]
+            },
+            "supcharg_value_check": {
+              "depends_on": [
+                {
+                  "supcharg_over_soft_max?": true
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.supcharg.over_soft_max_title",
+                "arguments": [
+                  {
+                    "key": "supcharg",
+                    "label": true,
+                    "i18n_template": "supcharg"
+                  }
+                ]
+              },
+              "informative_text": {},
+              "questions": {
+                "supcharg_value_check": {
+                  "check_answer_label": "Personal service charge confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "supcharg_value_check": 0
+                      },
+                      {
+                        "supcharg_value_check": 1
+                      }
+                    ]
+                  },
+                  "header": "Are you sure?",
+                  "hint_text": "This is higher than we would expect. Check:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the needs type</li></ul>",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              },
+              "interruption_screen_question_ids": ["period", "needstype", "supcharg"]
             },
             "outstanding": {
               "header": "",

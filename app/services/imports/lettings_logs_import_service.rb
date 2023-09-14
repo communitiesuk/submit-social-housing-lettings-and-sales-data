@@ -61,8 +61,8 @@ module Imports
       # Required fields for status complete or logic to work
       # Note: order matters when we derive from previous values (attributes parameter)
       attributes["startdate"] = compose_date(xml_doc, "DAY", "MONTH", "YEAR")
-      attributes["owning_organisation_id"] = find_organisation_id(xml_doc, "OWNINGORGID")
-      attributes["managing_organisation_id"] = find_organisation_id(xml_doc, "MANINGORGID")
+      attributes["owning_organisation_id"] = find_organisation_id(xml_doc, "owner-institution-id")
+      attributes["managing_organisation_id"] = find_organisation_id(xml_doc, "managing-institution-id")
       attributes["creation_method"] = creation_method(xml_doc)
       attributes["joint"] = unsafe_string_as_integer(xml_doc, "joint")
       attributes["startertenancy"] = unsafe_string_as_integer(xml_doc, "_2a")
@@ -76,14 +76,19 @@ module Imports
       attributes["irproduct_other"] = string_or_nil(xml_doc, "IRProductOther")
       attributes["rent_type"] = rent_type(xml_doc, attributes["lar"], attributes["irproduct"])
       attributes["hhmemb"] = household_members(xml_doc, previous_status)
+
+      people_indexes = people_with_details_ids(xml_doc)
+      available_people_indexes = people_indexes + (people_indexes.max + 1..8).to_a
       (1..8).each do |index|
-        attributes["age#{index}"] = safe_string_as_integer(xml_doc, "P#{index}Age")
-        attributes["age#{index}_known"] = age_known(xml_doc, index, attributes["hhmemb"])
-        attributes["sex#{index}"] = sex(xml_doc, index)
-        attributes["ecstat#{index}"] = unsafe_string_as_integer(xml_doc, "P#{index}Eco")
+        person_index = available_people_indexes[index - 1]
+        attributes["age#{index}"] = safe_string_as_integer(xml_doc, "P#{person_index}Age")
+        attributes["age#{index}_known"] = age_known(xml_doc, index, person_index, attributes["hhmemb"])
+        attributes["sex#{index}"] = sex(xml_doc, person_index)
+        attributes["ecstat#{index}"] = unsafe_string_as_integer(xml_doc, "P#{person_index}Eco")
       end
       (2..8).each do |index|
-        attributes["relat#{index}"] = relat(xml_doc, index)
+        person_index = available_people_indexes[index - 1]
+        attributes["relat#{index}"] = relat(xml_doc, person_index)
         attributes["details_known_#{index}"] = details_known(index, attributes)
 
         # Trips validation
@@ -142,12 +147,6 @@ module Imports
       attributes["rp_hardship"] = unsafe_string_as_integer(xml_doc, "Q14b4").present? ? 1 : nil
       attributes["rp_dontknow"] = unsafe_string_as_integer(xml_doc, "Q14b5").present? ? 1 : nil
 
-      # Trips validation
-      if attributes["homeless"] == 1 && attributes["rp_homeless"] == 1
-        attributes["homeless"] = nil
-        attributes["rp_homeless"] = nil
-      end
-
       attributes["cbl"] = allocation_system(unsafe_string_as_integer(xml_doc, "Q15CBL"))
       attributes["chr"] = allocation_system(unsafe_string_as_integer(xml_doc, "Q15CHR"))
       attributes["cap"] = allocation_system(unsafe_string_as_integer(xml_doc, "Q15CAP"))
@@ -174,7 +173,7 @@ module Imports
                                      0
                                    end
 
-      attributes["offered"] = safe_string_as_integer(xml_doc, "Q20")
+      attributes["offered"] = safe_string_as_decimal(xml_doc, "Q20")
       attributes["propcode"] = string_or_nil(xml_doc, "Q21a")
       attributes["beds"] = safe_string_as_integer(xml_doc, "Q22")
       attributes["unittype_gn"] = unsafe_string_as_integer(xml_doc, "Q23")
@@ -217,9 +216,6 @@ module Imports
 
         schemes = Scheme.where(old_visible_id: scheme_old_visible_id, owning_organisation_id: attributes["owning_organisation_id"])
         location = Location.find_by(old_visible_id: location_old_visible_id, scheme: schemes)
-        if location.nil? && [location_old_visible_id, scheme_old_visible_id].all?(&:present?) && previous_status != "saved"
-          raise "No matching location for scheme #{scheme_old_visible_id} and location #{location_old_visible_id} (visible IDs)"
-        end
 
         if location.present?
           # Set the scheme via location, because the scheme old visible ID can be duplicated at import
@@ -246,14 +242,40 @@ module Imports
       attributes["rent_value_check"] = 0
       attributes["net_income_value_check"] = 0
       attributes["carehome_charges_value_check"] = 0
+      attributes["referral_value_check"] = 0
+      attributes["scharge_value_check"] = 0
+      attributes["pscharge_value_check"] = 0
+      attributes["supcharg_value_check"] = 0
 
       # Sets the log creator
       owner_id = meta_field_value(xml_doc, "owner-user-id").strip
       if owner_id.present?
         user = LegacyUser.find_by(old_user_id: owner_id)&.user
+        if user.blank? || (user.organisation_id != attributes["managing_organisation_id"] && user.organisation_id != attributes["owning_organisation_id"])
+          if user.blank?
+            @logger.error("Lettings log '#{attributes['old_id']}' belongs to legacy user with owner-user-id: '#{owner_id}' which cannot be found. Assigning log to 'Unassigned' user.")
+          else
+            @logger.error("Lettings log '#{attributes['old_id']}' belongs to legacy user with owner-user-id: '#{owner_id}' which belongs to a different organisation. Assigning log to 'Unassigned' user.")
+          end
+          if User.find_by(name: "Unassigned", organisation_id: attributes["managing_organisation_id"])
+            user = User.find_by(name: "Unassigned", organisation_id: attributes["managing_organisation_id"])
+          else
+            user = User.new(
+              name: "Unassigned",
+              organisation_id: attributes["managing_organisation_id"],
+              is_dpo: false,
+              encrypted_password: SecureRandom.hex(10),
+              email: SecureRandom.uuid,
+              confirmed_at: Time.zone.now,
+              active: false,
+            )
+            user.save!(validate: false)
+          end
+        end
 
         attributes["created_by"] = user
       end
+      attributes["values_updated_at"] = Time.zone.now
 
       apply_date_consistency!(attributes)
       apply_household_consistency!(attributes)
@@ -299,11 +321,12 @@ module Imports
         %i[chcharge out_of_range] => %w[chcharge],
         %i[referral internal_transfer_non_social_housing] => %w[referral],
         %i[referral internal_transfer_fixed_or_lifetime] => %w[referral],
-        %i[tenancylength tenancylength_invalid] => %w[tenancylength tenancy],
+        %i[tenancylength tenancylength_invalid] => %w[tenancylength],
         %i[prevten over_25_foster_care] => %w[prevten age1],
         %i[prevten non_temp_accommodation] => %w[prevten rsnvac],
         %i[joint not_joint_tenancy] => %w[joint],
         %i[offered outside_the_range] => %w[offered],
+        %i[offered not_integer] => %w[offered],
         %i[earnings over_hard_max] => %w[ecstat1],
         %i[tshortfall no_outstanding_charges] => %w[tshortfall hbrentshortfall],
         %i[beds outside_the_range] => %w[beds],
@@ -382,7 +405,7 @@ module Imports
     end
 
     def fields_not_present_in_softwire_data
-      %w[majorrepairs illness_type_0 tshortfall_known pregnancy_value_check retirement_value_check rent_value_check net_income_value_check major_repairs_date_value_check void_date_value_check carehome_charges_value_check housingneeds_type housingneeds_other created_by uprn_known uprn_confirmed]
+      %w[majorrepairs illness_type_0 tshortfall_known pregnancy_value_check retirement_value_check rent_value_check net_income_value_check major_repairs_date_value_check void_date_value_check carehome_charges_value_check referral_value_check scharge_value_check pscharge_value_check supcharg_value_check housingneeds_type housingneeds_other created_by uprn_known uprn_confirmed]
     end
 
     def check_status_completed(lettings_log, previous_status)
@@ -435,10 +458,10 @@ module Imports
       end
     end
 
-    def age_known(xml_doc, index, hhmemb)
+    def age_known(xml_doc, index, person_index, hhmemb)
       return nil if hhmemb.present? && index > hhmemb
 
-      age_refused = string_or_nil(xml_doc, "P#{index}AR")
+      age_refused = string_or_nil(xml_doc, "P#{person_index}AR")
       if age_refused.present?
         if age_refused.casecmp?("AGE_REFUSED") || age_refused.casecmp?("No")
           return 1 # No
@@ -561,6 +584,15 @@ module Imports
 
     def people_with_details(xml_doc)
       ((2..8).map { |x| string_or_nil(xml_doc, "P#{x}Rel") } + [string_or_nil(xml_doc, "P1Sex")]).compact
+    end
+
+    def people_with_details_ids(xml_doc)
+      [1] + (2..8).select do |x|
+        string_or_nil(xml_doc, "P#{x}Rel").present? ||
+          string_or_nil(xml_doc, "P#{x}Sex").present? ||
+          string_or_nil(xml_doc, "P#{x}Age").present? ||
+          string_or_nil(xml_doc, "P#{x}Eco").present?
+      end
     end
 
     def tshortfall_known?(xml_doc, attributes)

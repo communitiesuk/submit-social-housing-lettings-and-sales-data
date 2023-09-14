@@ -1,0 +1,6 @@
+lettings_log_id,address_line1,address_line2,town_or_city,postcode_full
+{id},address 1,address 2,town,B1 1BB
+{id2},address 3,address 4,city,B1 1BB
+{id3},,,,C1 1CC
+,address 5,address 6,city,D1 1DD
+fake_id,address 7,address 8,city,D1 1DD

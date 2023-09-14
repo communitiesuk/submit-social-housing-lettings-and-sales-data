@@ -22,8 +22,8 @@ RSpec.describe Imports::LettingsLogsImportService do
     let(:real_2022_2023_form) { Form.new("config/forms/2022_2023.json") }
     let(:fixture_directory) { "spec/fixtures/imports/logs" }
 
-    let(:organisation) { FactoryBot.create(:organisation, old_visible_id: "1", provider_type: "PRP") }
-    let(:managing_organisation) { FactoryBot.create(:organisation, old_visible_id: "2", provider_type: "PRP") }
+    let(:organisation) { FactoryBot.create(:organisation, old_org_id: "7c5bd5fb549c09a2c55d7cb90d7ba84927e64618", provider_type: "PRP") }
+    let(:managing_organisation) { FactoryBot.create(:organisation, old_org_id: "7c5bd5fb549c09z2c55d9cb90d7ba84927e64618", provider_type: "PRP") }
     let(:scheme1) { FactoryBot.create(:scheme, old_visible_id: "0123", owning_organisation: organisation) }
     let(:scheme2) { FactoryBot.create(:scheme, old_visible_id: "456", owning_organisation: organisation) }
 
@@ -36,8 +36,8 @@ RSpec.describe Imports::LettingsLogsImportService do
              .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Westminster","codes":{"admin_district":"E08000035"}}}', headers: {})
 
       allow(Organisation).to receive(:find_by).and_return(nil)
-      allow(Organisation).to receive(:find_by).with(old_visible_id: organisation.old_visible_id).and_return(organisation)
-      allow(Organisation).to receive(:find_by).with(old_visible_id: managing_organisation.old_visible_id).and_return(managing_organisation)
+      allow(Organisation).to receive(:find_by).with(old_org_id: organisation.old_org_id).and_return(organisation)
+      allow(Organisation).to receive(:find_by).with(old_org_id: managing_organisation.old_org_id).and_return(managing_organisation)
 
       # Created by users
       FactoryBot.create(:user, old_user_id: "c3061a2e6ea0b702e6f6210d5c52d2a92612d2aa", organisation:)
@@ -135,6 +135,90 @@ RSpec.describe Imports::LettingsLogsImportService do
       let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id) }
       let(:lettings_log_xml) { Nokogiri::XML(lettings_log_file) }
 
+      context "and the user does not exist" do
+        before { lettings_log_xml.at_xpath("//meta:owner-user-id").content = "fake_id" }
+
+        it "creates a new unassigned user" do
+          expect(logger).to receive(:error).with("Lettings log '0ead17cb-1668-442d-898c-0d52879ff592' belongs to legacy user with owner-user-id: 'fake_id' which cannot be found. Assigning log to 'Unassigned' user.")
+          lettings_log_service.send(:create_log, lettings_log_xml)
+
+          lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+          expect(lettings_log&.created_by&.name).to eq("Unassigned")
+        end
+
+        it "only creates one unassigned user" do
+          expect(logger).to receive(:error).with("Lettings log '0ead17cb-1668-442d-898c-0d52879ff592' belongs to legacy user with owner-user-id: 'fake_id' which cannot be found. Assigning log to 'Unassigned' user.")
+          expect(logger).to receive(:error).with("Lettings log 'fake_id' belongs to legacy user with owner-user-id: 'fake_id' which cannot be found. Assigning log to 'Unassigned' user.")
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log_xml.at_xpath("//meta:document-id").content = "fake_id"
+          lettings_log_service.send(:create_log, lettings_log_xml)
+
+          lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+          second_lettings_log = LettingsLog.where(old_id: "fake_id").first
+          expect(lettings_log&.created_by).to eq(second_lettings_log&.created_by)
+        end
+
+        context "when unassigned user exist for a different organisation" do
+          let!(:other_unassigned_user) { create(:user, name: "Unassigned") }
+
+          it "creates a new unassigned user for current organisation" do
+            expect(logger).to receive(:error).with("Lettings log '0ead17cb-1668-442d-898c-0d52879ff592' belongs to legacy user with owner-user-id: 'fake_id' which cannot be found. Assigning log to 'Unassigned' user.")
+            lettings_log_service.send(:create_log, lettings_log_xml)
+
+            lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+            expect(lettings_log&.created_by&.name).to eq("Unassigned")
+            expect(lettings_log&.created_by).not_to eq(other_unassigned_user)
+          end
+        end
+      end
+
+      context "and the user exists on a different organisation" do
+        before do
+          create(:legacy_user, old_user_id: "fake_id")
+          lettings_log_xml.at_xpath("//meta:owner-user-id").content = "fake_id"
+        end
+
+        it "creates a new unassigned user" do
+          expect(logger).to receive(:error).with("Lettings log '0ead17cb-1668-442d-898c-0d52879ff592' belongs to legacy user with owner-user-id: 'fake_id' which belongs to a different organisation. Assigning log to 'Unassigned' user.")
+          lettings_log_service.send(:create_log, lettings_log_xml)
+
+          lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+          expect(lettings_log&.created_by&.name).to eq("Unassigned")
+        end
+
+        it "only creates one unassigned user" do
+          expect(logger).to receive(:error).with("Lettings log '0ead17cb-1668-442d-898c-0d52879ff592' belongs to legacy user with owner-user-id: 'fake_id' which belongs to a different organisation. Assigning log to 'Unassigned' user.")
+          expect(logger).to receive(:error).with("Lettings log 'fake_id' belongs to legacy user with owner-user-id: 'fake_id' which belongs to a different organisation. Assigning log to 'Unassigned' user.")
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log_xml.at_xpath("//meta:document-id").content = "fake_id"
+          lettings_log_service.send(:create_log, lettings_log_xml)
+
+          lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+          second_lettings_log = LettingsLog.where(old_id: "fake_id").first
+          expect(lettings_log&.created_by).to eq(second_lettings_log&.created_by)
+        end
+
+        context "when unassigned user exist for a different organisation" do
+          let!(:other_unassigned_user) { create(:user, name: "Unassigned") }
+
+          it "creates a new unassigned user for current organisation" do
+            expect(logger).to receive(:error).with("Lettings log '0ead17cb-1668-442d-898c-0d52879ff592' belongs to legacy user with owner-user-id: 'fake_id' which belongs to a different organisation. Assigning log to 'Unassigned' user.")
+            lettings_log_service.send(:create_log, lettings_log_xml)
+
+            lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+            expect(lettings_log&.created_by&.name).to eq("Unassigned")
+            expect(lettings_log&.created_by).not_to eq(other_unassigned_user)
+          end
+        end
+      end
+
+      it "correctly sets imported at date" do
+        lettings_log_service.send(:create_log, lettings_log_xml)
+
+        lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+        expect(lettings_log&.values_updated_at).to eq(Time.zone.local(2022, 1, 1))
+      end
+
       context "and the void date is after the start date" do
         before { lettings_log_xml.at_xpath("//xmlns:VYEAR").content = 2023 }
 
@@ -147,11 +231,11 @@ RSpec.describe Imports::LettingsLogsImportService do
       end
 
       context "and the organisation legacy ID does not exist" do
-        before { lettings_log_xml.at_xpath("//xmlns:OWNINGORGID").content = 99_999 }
+        before { lettings_log_xml.at_xpath("//meta:owner-institution-id").content = 99_999 }
 
         it "raises an exception" do
           expect { lettings_log_service.send(:create_log, lettings_log_xml) }
-            .to raise_error(RuntimeError, "Organisation not found with legacy ID 99999")
+            .to raise_error(RuntimeError, "Organisation not found with old org ID 99999")
         end
       end
 
@@ -241,7 +325,7 @@ RSpec.describe Imports::LettingsLogsImportService do
             .not_to raise_error
         end
 
-        it "clears out the invalid answers" do
+        it "clears out the invalid tenancy length" do
           allow(logger).to receive(:warn)
 
           lettings_log_service.send(:create_log, lettings_log_xml)
@@ -249,7 +333,7 @@ RSpec.describe Imports::LettingsLogsImportService do
 
           expect(lettings_log).not_to be_nil
           expect(lettings_log.tenancylength).to be_nil
-          expect(lettings_log.tenancy).to be_nil
+          expect(lettings_log.tenancy).to eq(4)
         end
       end
 
@@ -439,6 +523,105 @@ RSpec.describe Imports::LettingsLogsImportService do
 
           expect(lettings_log).not_to be_nil
           expect(lettings_log.offered).to be_nil
+        end
+      end
+
+      context "and the number of times the property was relet is 0.00" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q20").content = "0.00"
+        end
+
+        it "does not raise an error" do
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "does not clear offered answer" do
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.offered).to equal(0)
+        end
+      end
+
+      context "and the number of times the property was relet is 0.01" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q20").content = "0.01"
+        end
+
+        it "intercepts the relevant validation error" do
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the number offered answer" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.offered).to be_nil
+        end
+      end
+
+      context "and the number of times the property was relet is a non nil string that is nil as a BigDecimal" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q20").content = "a"
+        end
+
+        it "doesn't throw an error" do
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the number offered answer" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.offered).to be_nil
+        end
+      end
+
+      context "and the gender identity is refused" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:P1Sex").content = "Person prefers not to say"
+        end
+
+        it "does not raise an error" do
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "saves the correct answer" do
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.sex1).to eq("R")
+        end
+      end
+
+      context "and the relationship is refused" do
+        before do
+          lettings_log_xml.at_xpath("//xmlns:P2Rel").content = "Person prefers not to say"
+        end
+
+        it "does not raise an error" do
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "saves the correct answer" do
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.relat2).to eq("R")
         end
       end
 
@@ -634,6 +817,29 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
+      context "and scharge is ever so slightly positive" do
+        let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+
+        before do
+          lettings_log_xml.at_xpath("//xmlns:Q18aii").content = "1.66533E-16"
+        end
+
+        it "does not raise an error" do
+          expect { lettings_log_service.send(:create_log, lettings_log_xml) }
+            .not_to raise_error
+        end
+
+        it "sets scharge to 0" do
+          allow(logger).to receive(:warn)
+
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log).not_to be_nil
+          expect(lettings_log.scharge).to eq(0)
+        end
+      end
+
       context "and tshortfall is not positive" do
         let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
 
@@ -685,7 +891,7 @@ RSpec.describe Imports::LettingsLogsImportService do
       context "and pscharge is out of range" do
         before do
           lettings_log_xml.at_xpath("//xmlns:Q17").content = "1"
-          lettings_log_xml.at_xpath("//xmlns:Q18aiii").content = "36"
+          lettings_log_xml.at_xpath("//xmlns:Q18aiii").content = "701"
         end
 
         it "intercepts the relevant validation error" do
@@ -708,7 +914,7 @@ RSpec.describe Imports::LettingsLogsImportService do
       context "and supcharg is out of range" do
         before do
           lettings_log_xml.at_xpath("//xmlns:Q17").content = "1"
-          lettings_log_xml.at_xpath("//xmlns:Q18aiv").content = "46"
+          lettings_log_xml.at_xpath("//xmlns:Q18aiv").content = "801"
         end
 
         it "intercepts the relevant validation error" do
@@ -731,7 +937,7 @@ RSpec.describe Imports::LettingsLogsImportService do
       context "and scharge is out of range" do
         before do
           lettings_log_xml.at_xpath("//xmlns:Q17").content = "1"
-          lettings_log_xml.at_xpath("//xmlns:Q18aii").content = "156"
+          lettings_log_xml.at_xpath("//xmlns:Q18aii").content = "801"
         end
 
         it "intercepts the relevant validation error" do
@@ -1063,6 +1269,25 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
+      context "and the scheme and location are not valid" do
+        let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+
+        before do
+          lettings_log_xml.at_xpath("//xmlns:_1cmangroupcode").content = "999"
+          lettings_log_xml.at_xpath("//xmlns:_1cschemecode").content = "999"
+        end
+
+        it "saves log without location and scheme" do
+          expect(logger).not_to receive(:warn)
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+
+          expect(lettings_log.scheme_id).to be_nil
+          expect(lettings_log.location_id).to be_nil
+          expect(lettings_log.status).to eq("in_progress")
+        end
+      end
+
       context "and this is a supported housing log with a single location under a scheme" do
         let(:lettings_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
 
@@ -1076,6 +1301,226 @@ RSpec.describe Imports::LettingsLogsImportService do
           expect(lettings_log.scheme_id).not_to be_nil
           expect(lettings_log.location_id).not_to be_nil
           expect(lettings_log.status).to eq("completed")
+        end
+      end
+
+      context "and there are several household members" do
+        context "and one person details are skipped" do
+          before do
+            lettings_log_xml.at_xpath("//xmlns:HHMEMB").content = 3
+            lettings_log_xml.at_xpath("//xmlns:P2AR").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Age").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Sex").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Rel").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Eco").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P3Age").content = 7
+            lettings_log_xml.at_xpath("//xmlns:P3Sex").content = "Male"
+            lettings_log_xml.at_xpath("//xmlns:P3Rel").content = "Child"
+            lettings_log_xml.at_xpath("//xmlns:P3Eco").content = "9) Child under 16"
+          end
+
+          it "correctly moves person details" do
+            lettings_log_service.send(:create_log, lettings_log_xml)
+
+            lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+            expect(lettings_log&.hhmemb).to eq(3)
+            expect(lettings_log&.details_known_2).to eq(0)
+            expect(lettings_log&.age2_known).to eq(0)
+            expect(lettings_log&.age2).to eq(7)
+            expect(lettings_log&.sex2).to eq("M")
+            expect(lettings_log&.relat2).to eq("C")
+
+            expect(lettings_log&.details_known_3).to eq(0)
+            expect(lettings_log&.age3_known).to eq(0)
+            expect(lettings_log&.age3).to eq(nil)
+            expect(lettings_log&.sex3).to eq(nil)
+            expect(lettings_log&.relat3).to eq(nil)
+
+            [4, 5].each do |i|
+              expect(lettings_log&.send("details_known_#{i}")).to eq(nil)
+              expect(lettings_log&.send("age#{i}_known")).to eq(nil)
+              expect(lettings_log&.send("age#{i}")).to eq(nil)
+              expect(lettings_log&.send("sex#{i}")).to eq(nil)
+              expect(lettings_log&.send("relat#{i}")).to eq(nil)
+              expect(lettings_log&.send("ecstat#{i}")).to eq(nil)
+            end
+          end
+        end
+
+        context "and several consecutive person details are skipped" do
+          before do
+            lettings_log_xml.at_xpath("//xmlns:HHMEMB").content = 4
+
+            lettings_log_xml.at_xpath("//xmlns:P2AR").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Age").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Sex").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Rel").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Eco").content = nil
+
+            lettings_log_xml.at_xpath("//xmlns:P3AR").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P3Age").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P3Sex").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P3Rel").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P3Eco").content = nil
+
+            lettings_log_xml.at_xpath("//xmlns:P4Age").content = 7
+            lettings_log_xml.at_xpath("//xmlns:P4Sex").content = "Male"
+            lettings_log_xml.at_xpath("//xmlns:P4Rel").content = "Child"
+            lettings_log_xml.at_xpath("//xmlns:P4Eco").content = "9) Child under 16"
+
+            lettings_log_xml.at_xpath("//xmlns:P5Age").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P5Sex").content = "Male"
+            lettings_log_xml.at_xpath("//xmlns:P5Rel").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P5Eco").content = nil
+
+            lettings_log_xml.at_xpath("//xmlns:P6Age").content = 12
+            lettings_log_xml.at_xpath("//xmlns:P6Sex").content = "Female"
+            lettings_log_xml.at_xpath("//xmlns:P6Rel").content = "Child"
+            lettings_log_xml.at_xpath("//xmlns:P6Eco").content = "9) Child under 16"
+          end
+
+          it "correctly moves person details" do
+            lettings_log_service.send(:create_log, lettings_log_xml)
+
+            lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+            expect(lettings_log&.hhmemb).to eq(4)
+            expect(lettings_log&.details_known_2).to eq(0)
+            expect(lettings_log&.age2_known).to eq(0)
+            expect(lettings_log&.age2).to eq(7)
+            expect(lettings_log&.sex2).to eq("M")
+            expect(lettings_log&.relat2).to eq("C")
+
+            expect(lettings_log&.details_known_3).to eq(0)
+            expect(lettings_log&.age3_known).to eq(0)
+            expect(lettings_log&.age3).to eq(nil)
+            expect(lettings_log&.sex3).to eq("M")
+            expect(lettings_log&.relat3).to eq(nil)
+
+            expect(lettings_log&.details_known_4).to eq(0)
+            expect(lettings_log&.age4_known).to eq(0)
+            expect(lettings_log&.age4).to eq(12)
+            expect(lettings_log&.sex4).to eq("F")
+            expect(lettings_log&.relat4).to eq("C")
+
+            [5, 6, 7, 8].each do |i|
+              expect(lettings_log&.send("details_known_#{i}")).to eq(nil)
+              expect(lettings_log&.send("age#{i}_known")).to eq(nil)
+              expect(lettings_log&.send("age#{i}")).to eq(nil)
+              expect(lettings_log&.send("sex#{i}")).to eq(nil)
+              expect(lettings_log&.send("relat#{i}")).to eq(nil)
+              expect(lettings_log&.send("ecstat#{i}")).to eq(nil)
+            end
+          end
+        end
+
+        context "and several non consecutive person details are skipped" do
+          before do
+            lettings_log_xml.at_xpath("//xmlns:HHMEMB").content = 4
+            lettings_log_xml.at_xpath("//xmlns:P2AR").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Age").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Sex").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Rel").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Eco").content = nil
+
+            lettings_log_xml.at_xpath("//xmlns:P3Age").content = 7
+            lettings_log_xml.at_xpath("//xmlns:P3Sex").content = "Male"
+            lettings_log_xml.at_xpath("//xmlns:P3Rel").content = "Child"
+            lettings_log_xml.at_xpath("//xmlns:P3Eco").content = "9) Child under 16"
+
+            lettings_log_xml.at_xpath("//xmlns:P4AR").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P4Age").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P4Sex").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P4Rel").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P4Eco").content = nil
+
+            lettings_log_xml.at_xpath("//xmlns:P5Age").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P5Sex").content = "Male"
+            lettings_log_xml.at_xpath("//xmlns:P5Rel").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P5Eco").content = nil
+
+            lettings_log_xml.at_xpath("//xmlns:P6Age").content = 12
+            lettings_log_xml.at_xpath("//xmlns:P6Sex").content = "Female"
+            lettings_log_xml.at_xpath("//xmlns:P6Rel").content = "Child"
+            lettings_log_xml.at_xpath("//xmlns:P6Eco").content = "9) Child under 16"
+          end
+
+          it "correctly moves person details" do
+            lettings_log_service.send(:create_log, lettings_log_xml)
+
+            lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+            expect(lettings_log&.hhmemb).to eq(4)
+            expect(lettings_log&.details_known_2).to eq(0)
+            expect(lettings_log&.age2_known).to eq(0)
+            expect(lettings_log&.age2).to eq(7)
+            expect(lettings_log&.sex2).to eq("M")
+            expect(lettings_log&.relat2).to eq("C")
+
+            expect(lettings_log&.details_known_3).to eq(0)
+            expect(lettings_log&.age3_known).to eq(0)
+            expect(lettings_log&.age3).to eq(nil)
+            expect(lettings_log&.sex3).to eq("M")
+            expect(lettings_log&.relat3).to eq(nil)
+
+            expect(lettings_log&.details_known_4).to eq(0)
+            expect(lettings_log&.age4_known).to eq(0)
+            expect(lettings_log&.age4).to eq(12)
+            expect(lettings_log&.sex4).to eq("F")
+            expect(lettings_log&.relat4).to eq("C")
+
+            [5, 6, 7, 8].each do |i|
+              expect(lettings_log&.send("details_known_#{i}")).to eq(nil)
+              expect(lettings_log&.send("age#{i}_known")).to eq(nil)
+              expect(lettings_log&.send("age#{i}")).to eq(nil)
+              expect(lettings_log&.send("sex#{i}")).to eq(nil)
+              expect(lettings_log&.send("relat#{i}")).to eq(nil)
+              expect(lettings_log&.send("ecstat#{i}")).to eq(nil)
+            end
+          end
+        end
+
+        context "with 3 houusehold members without any person data" do
+          before do
+            lettings_log_xml.at_xpath("//xmlns:HHMEMB").content = 3
+            lettings_log_xml.at_xpath("//xmlns:P2AR").content = "No"
+            lettings_log_xml.at_xpath("//xmlns:P2Age").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Sex").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Rel").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P2Eco").content = nil
+
+            lettings_log_xml.at_xpath("//xmlns:P3AR").content = "No"
+            lettings_log_xml.at_xpath("//xmlns:P3Age").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P3Sex").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P3Rel").content = nil
+            lettings_log_xml.at_xpath("//xmlns:P3Eco").content = nil
+          end
+
+          it "correctly sets person details" do
+            lettings_log_service.send(:create_log, lettings_log_xml)
+
+            lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+            expect(lettings_log&.hhmemb).to eq(3)
+
+            expect(lettings_log&.details_known_2).to eq(0)
+            expect(lettings_log&.age2_known).to eq(1)
+            expect(lettings_log&.age2).to eq(nil)
+            expect(lettings_log&.sex2).to eq(nil)
+            expect(lettings_log&.relat2).to eq(nil)
+
+            expect(lettings_log&.details_known_3).to eq(0)
+            expect(lettings_log&.age3_known).to eq(1)
+            expect(lettings_log&.age3).to eq(nil)
+            expect(lettings_log&.sex3).to eq(nil)
+            expect(lettings_log&.relat3).to eq(nil)
+
+            [4, 5, 6, 7, 8].each do |i|
+              expect(lettings_log&.send("details_known_#{i}")).to eq(nil)
+              expect(lettings_log&.send("age#{i}_known")).to eq(nil)
+              expect(lettings_log&.send("age#{i}")).to eq(nil)
+              expect(lettings_log&.send("sex#{i}")).to eq(nil)
+              expect(lettings_log&.send("relat#{i}")).to eq(nil)
+              expect(lettings_log&.send("ecstat#{i}")).to eq(nil)
+            end
+          end
         end
       end
     end
@@ -1102,10 +1547,8 @@ RSpec.describe Imports::LettingsLogsImportService do
     let(:real_2022_2023_form) { Form.new("config/forms/2022_2023.json") }
     let(:fixture_directory) { "spec/fixtures/imports/logs" }
 
-    let(:organisation) { FactoryBot.create(:organisation, old_visible_id: "1", provider_type: "PRP") }
-    let(:managing_organisation) { FactoryBot.create(:organisation, old_visible_id: "2", provider_type: "PRP") }
-    let(:local_authority_organisation) { FactoryBot.create(:organisation, old_visible_id: "79740", provider_type: "LA") }
-    let(:local_authority_organisation_managing_organisation) { FactoryBot.create(:organisation, old_visible_id: "79741", provider_type: "PRP") }
+    let(:organisation) { FactoryBot.create(:organisation, old_org_id: "7c5bd5fb549c09a2c55d7cb90d7ba84927e64618", provider_type: "PRP") }
+    let(:managing_organisation) { FactoryBot.create(:organisation, old_org_id: "7c5bd5fb549c09z2c55d9cb90d7ba84927e64618", provider_type: "PRP") }
     let(:scheme1) { FactoryBot.create(:scheme, old_visible_id: "0123", owning_organisation: organisation) }
     let(:scheme2) { FactoryBot.create(:scheme, old_visible_id: "456", owning_organisation: organisation) }
 
@@ -1118,9 +1561,8 @@ RSpec.describe Imports::LettingsLogsImportService do
              .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Westminster","codes":{"admin_district":"E08000035"}}}', headers: {})
 
       allow(Organisation).to receive(:find_by).and_return(nil)
-      allow(Organisation).to receive(:find_by).with(old_visible_id: organisation.old_visible_id).and_return(organisation)
-      allow(Organisation).to receive(:find_by).with(old_visible_id: managing_organisation.old_visible_id).and_return(managing_organisation)
-      allow(Organisation).to receive(:find_by).with(old_visible_id: local_authority_organisation.old_visible_id).and_return(local_authority_organisation)
+      allow(Organisation).to receive(:find_by).with(old_org_id: organisation.old_org_id).and_return(organisation)
+      allow(Organisation).to receive(:find_by).with(old_org_id: managing_organisation.old_org_id).and_return(managing_organisation)
 
       # Created by users
       FactoryBot.create(:user, old_user_id: "c3061a2e6ea0b702e6f6210d5c52d2a92612d2aa", organisation:)
@@ -1351,7 +1793,7 @@ RSpec.describe Imports::LettingsLogsImportService do
         .not_to raise_error
       end
 
-      it "clears out the referral answer" do
+      it "clears out the period answer" do
         allow(logger).to receive(:warn)
         lettings_log_service.send(:create_log, lettings_log_xml)
         lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
@@ -1627,6 +2069,60 @@ RSpec.describe Imports::LettingsLogsImportService do
         expect(lettings_log&.county).to eq("county")
         expect(lettings_log&.postcode_full).to eq("A1 1AA")
         expect(lettings_log&.la).to eq("E06000047")
+      end
+    end
+
+    context "and the referral soft validation is triggered (referral_value_check)" do
+      let(:lettings_log_id) { "00d2343e-d5fa-4c89-8400-ec3854b0f2b4" }
+      let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id) }
+      let(:lettings_log_xml) { Nokogiri::XML(lettings_log_file) }
+
+      before do
+        lettings_log_xml.at_xpath("//xmlns:DAY").content = "2"
+        lettings_log_xml.at_xpath("//xmlns:MONTH").content = "10"
+        lettings_log_xml.at_xpath("//xmlns:YEAR").content = "2022"
+        lettings_log_xml.at_xpath("//xmlns:Q16").content = 4
+      end
+
+      it "completes the log" do
+        lettings_log_service.send(:create_log, lettings_log_xml)
+        lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+        expect(lettings_log.status).to eq("completed")
+      end
+    end
+
+    context "and the scharge/pscharge/supcharg soft validations are triggered" do
+      let(:lettings_log_id) { "00d2343e-d5fa-4c89-8400-ec3854b0f2b4" }
+      let(:lettings_log_file) { open_file(fixture_directory, lettings_log_id) }
+      let(:lettings_log_xml) { Nokogiri::XML(lettings_log_file) }
+
+      around do |example|
+        Timecop.freeze(Time.zone.local(2023, 4, 1)) do
+          Singleton.__init__(FormHandler)
+          example.run
+        end
+        Timecop.return
+        Singleton.__init__(FormHandler)
+      end
+
+      before do
+        lettings_log_xml.at_xpath("//xmlns:AddressLine1").content = "address 1"
+        lettings_log_xml.at_xpath("//xmlns:TownCity").content = "towncity"
+        lettings_log_xml.at_xpath("//xmlns:DAY").content = "10"
+        lettings_log_xml.at_xpath("//xmlns:MONTH").content = "4"
+        lettings_log_xml.at_xpath("//xmlns:YEAR").content = "2023"
+        lettings_log_xml.at_xpath("//xmlns:P1Nat").content = "18"
+
+        lettings_log_xml.at_xpath("//xmlns:Q17").content = "1"
+        lettings_log_xml.at_xpath("//xmlns:Q18aii").content = "800"
+        lettings_log_xml.at_xpath("//xmlns:Q18aiii").content = "300"
+        lettings_log_xml.at_xpath("//xmlns:Q18aiv").content = "300"
+      end
+
+      it "completes the log" do
+        lettings_log_service.send(:create_log, lettings_log_xml)
+        lettings_log = LettingsLog.find_by(old_id: lettings_log_id)
+        expect(lettings_log.status).to eq("completed")
       end
     end
   end

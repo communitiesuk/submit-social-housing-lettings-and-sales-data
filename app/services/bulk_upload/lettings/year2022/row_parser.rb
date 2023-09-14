@@ -689,14 +689,10 @@ private
   end
 
   def validate_reasonable_preference_homeless
-    if field_69 == 1 && homeless == 1 && field_70 == 1
-      errors.add(:field_70, I18n.t("validations.household.reasonpref.not_homeless"))
-    else
-      reason_fields = %i[field_70 field_71 field_72 field_73 field_74]
-      if field_69 == 1 && reason_fields.all? { |field| attributes[field.to_s].blank? }
-        reason_fields.each do |field|
-          errors.add(field, I18n.t("validations.not_answered", question: "reason for reasonable preference"))
-        end
+    reason_fields = %i[field_70 field_71 field_72 field_73 field_74]
+    if field_69 == 1 && reason_fields.all? { |field| attributes[field.to_s].blank? }
+      reason_fields.each do |field|
+        errors.add(field, I18n.t("validations.not_answered", question: "reason for reasonable preference"))
       end
     end
   end
