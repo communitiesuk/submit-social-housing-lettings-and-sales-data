@@ -106,7 +106,7 @@ RSpec.describe Imports::ImportReportService do
       let(:expected_answers_examples_content) { File.read("spec/fixtures/files/imported_lettings_logs_missing_answers_examples.csv") }
 
       before do
-        create_list(:lettings_log, 11, :completed, age1_known: nil) do |log, i|
+        create_list(:lettings_log, 10, :completed, age1_known: nil) do |log, i|
           log.old_form_id = "100#{i}"
           log.old_id = "old_id_age1_known_#{i}"
           log.save!
@@ -144,7 +144,7 @@ RSpec.describe Imports::ImportReportService do
       let(:expected_answers_examples_content) { File.read("spec/fixtures/files/imported_lettings_logs_missing_answers_examples.csv") }
 
       before do
-        create_list(:sales_log, 11, :completed, age1_known: nil) do |log, i|
+        create_list(:sales_log, 10, :completed, age1_known: nil) do |log, i|
           log.old_id = "old_id_age1_known_#{i}"
           log.old_form_id = "100#{i}"
           log.save!
