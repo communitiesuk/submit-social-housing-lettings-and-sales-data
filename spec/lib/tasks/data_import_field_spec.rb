@@ -229,6 +229,27 @@ describe "data_import_field imports" do
         end
       end
 
+      context "and we update the created_by field" do
+        let(:field) { "created_by" }
+
+        it "updates the logs from the given XML file when the VCAP_SERVICES environment variable exists" do
+          expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+          expect(storage_service).to receive(:get_file_io).with("spec/fixtures/imports/sales_logs")
+          expect(Imports::SalesLogsFieldImportService).to receive(:new).with(archive_service)
+          expect(import_service).to receive(:update_field).with(field, "logs")
+          task.invoke(field, fixture_path)
+        end
+
+        it "updates the logs from the given XML file when the VCAP_SERVICES environment variable does not exist" do
+          allow(ENV).to receive(:[]).with("VCAP_SERVICES")
+          expect(Storage::S3Service).to receive(:new).with(env_config_service, instance_name)
+          expect(storage_service).to receive(:get_file_io).with("spec/fixtures/imports/sales_logs")
+          expect(Imports::SalesLogsFieldImportService).to receive(:new).with(archive_service)
+          expect(import_service).to receive(:update_field).with(field, "logs")
+          task.invoke(field, fixture_path)
+        end
+      end
+
       it "raises an exception if no parameters are provided" do
         expect { task.invoke }.to raise_error(/Usage/)
       end

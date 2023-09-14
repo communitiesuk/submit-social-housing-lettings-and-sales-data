@@ -8,6 +8,8 @@ module Imports
         import_from(folder, :update_owning_organisation_id)
       when "old_form_id"
         import_from(folder, :update_old_form_id)
+      when "created_by"
+        import_from(folder, :update_created_by)
       else
         raise "Updating #{field} is not supported by the field import service"
       end
@@ -71,6 +73,23 @@ module Imports
       else
         @logger.warn("sales log with old id #{old_id} not found")
       end
+    end
+
+    # deletes and recreates the entire record if created_by is missing
+    def update_created_by(xml_doc)
+      return unless meta_field_value(xml_doc, "form-name").include?("Sales")
+
+      old_id = meta_field_value(xml_doc, "document-id")
+      record = SalesLog.find_by(old_id:)
+
+      return @logger.warn("sales log with old id #{old_id} not found") unless record
+      return @logger.info("sales log #{record.id} has created_by value, skipping update") if record.created_by.present?
+
+      record.destroy!
+      @logger.info("sales log #{record.id} has been deleted")
+      log_import_service = Imports::SalesLogsImportService.new(nil, @logger)
+      log_import_service.send(:create_log, xml_doc)
+      @logger.info("sales log \"#{record.old_id}\" has been reimported with id #{record.id}")
     end
   end
 end
