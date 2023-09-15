@@ -259,23 +259,27 @@ module Imports
       record = LettingsLog.find_by(old_id:)
 
       return @logger.warn("lettings log with old id #{old_id} not found") unless record
-
-      return @logger.info("lettings log #{record.id} has values for sex2 and relat2, skipping update") if record.sex2 && record.relat2
       return @logger.info("lettings log #{record.id} has no hhmemb value, skipping update") if record.hhmemb.blank?
-      return @logger.info("lettings log #{record.id} has value 'no' for details_known2, skipping update") if record.details_known_2 == 1
 
-      if record.sex2.blank?
-        record.sex2 = sex(xml_doc, 2)
-        @logger.info("lettings log #{record.id}'s sex2 value has been set to #{record.sex2}")
+      (2..record.hhmemb).each do |i|
+        next @logger.info("lettings log #{record.id} has values for sex#{i} and relat#{i}, skipping update") if record["sex#{i}"] && record["relat#{i}"]
+        next @logger.info("lettings log #{record.id} has value 'no' for details_known_#{i}, skipping update") if record["details_known_#{i}"] == 1
+
+        if record["sex#{i}"].blank?
+          record["sex#{i}"] = sex(xml_doc, i)
+          @logger.info("lettings log #{record.id}'s sex#{i} value has been set to #{record["sex#{i}"]}")
+        end
+
+        if record["relat#{i}"].blank?
+          record["relat#{i}"] = relat(xml_doc, i)
+          @logger.info("lettings log #{record.id}'s relat#{i} value has been set to #{record["relat#{i}"]}")
+        end
       end
 
-      if record.relat2.blank?
-        record.relat2 = relat(xml_doc, 2)
-        @logger.info("lettings log #{record.id}'s relat2 value has been set to #{record.relat2}")
+      if record.changed?
+        record.values_updated_at = Time.zone.now
+        record.save!
       end
-
-      record.values_updated_at = Time.zone.now
-      record.save!
     end
   end
 end
