@@ -22,6 +22,8 @@ module Imports
         import_from(folder, :update_created_by)
       when "sex_and_relat"
         import_from(folder, :update_sex_and_relat)
+      when "general_needs_referral"
+        import_from(folder, :update_general_needs_referral)
       else
         raise "Updating #{field} is not supported by the field import service"
       end
@@ -280,6 +282,22 @@ module Imports
         record.values_updated_at = Time.zone.now
         record.save!
       end
+    end
+
+    def update_general_needs_referral(xml_doc)
+      return if meta_field_value(xml_doc, "form-name").include?("Sales")
+
+      old_id = meta_field_value(xml_doc, "document-id")
+      record = LettingsLog.find_by(old_id:)
+
+      return @logger.warn("lettings log with old id #{old_id} not found") unless record
+      return @logger.info("lettings log #{record.id} has a value for referral, skipping update") if record.referral.present?
+      return @logger.info("lettings log #{record.id} is a supported housing log, skipping update") if record.needstype == 2
+      return @logger.info("lettings log #{record.id}'s owning organisation's provider type is LA, skipping update") if record.owning_organisation.provider_type == "LA"
+      return @logger.info("lettings log #{record.id} reimport referral value is not 4, skipping update") if unsafe_string_as_integer(xml_doc, "Q16") != 4
+
+      record.update!(referral: 4, referral_value_check: 0, values_updated_at: Time.zone.now)
+      @logger.info("lettings log #{record.id}'s referral value has been set to 4")
     end
   end
 end
