@@ -24,6 +24,8 @@ module Imports
         import_from(folder, :update_sex_and_relat)
       when "general_needs_referral"
         import_from(folder, :update_general_needs_referral)
+      when "person_details"
+        import_from(folder, :update_person_details)
       else
         raise "Updating #{field} is not supported by the field import service"
       end
@@ -298,6 +300,47 @@ module Imports
 
       record.update!(referral: 4, referral_value_check: 0, values_updated_at: Time.zone.now)
       @logger.info("lettings log #{record.id}'s referral value has been set to 4")
+    end
+
+    def update_person_details(xml_doc)
+      return if meta_field_value(xml_doc, "form-name").include?("Sales")
+
+      old_id = meta_field_value(xml_doc, "document-id")
+      record = LettingsLog.find_by(old_id:)
+
+      return @logger.warn("lettings log with old id #{old_id} not found") unless record
+
+      return @logger.info("lettings log #{record.id} person 2 details are not known, skipping update") if record.details_known_2 == 1
+      return @logger.info("lettings log #{record.id} has details for person 2, skipping update") if record.has_any_person_details?(2)
+
+      record.age2_known = record.age3_known
+      record.age2 = record.age3
+      record.sex2 = record.sex3
+      record.ecstat2 = record.ecstat3
+      record.relat2 = record.relat3
+      @logger.info("lettings log #{record.id}'s person 3 details moved to person 2 details")
+
+      record.age3 = safe_string_as_integer(xml_doc, "P4Age")
+      record.age3_known = age_known(xml_doc, 4)
+      record.sex3 = sex(xml_doc, 4)
+      record.ecstat3 = unsafe_string_as_integer(xml_doc, "P4Eco")
+      record.relat3 = relat(xml_doc, 4)
+      @logger.info("lettings log #{record.id}, reimported person 3 details")
+
+      record.values_updated_at = Time.zone.now
+      record.save!
+    end
+
+    def age_known(xml_doc, person_index)
+      age_refused = string_or_nil(xml_doc, "P#{person_index}AR")
+      if age_refused.present?
+        if age_refused.casecmp?("AGE_REFUSED") || age_refused.casecmp?("No")
+          return 1 # No
+        else
+          return 0 # Yes
+        end
+      end
+      0
     end
   end
 end
