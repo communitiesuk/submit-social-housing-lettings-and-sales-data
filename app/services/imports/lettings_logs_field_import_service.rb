@@ -20,6 +20,8 @@ module Imports
         import_from(folder, :update_homelessness)
       when "created_by"
         import_from(folder, :update_created_by)
+      when "sex_and_relat"
+        import_from(folder, :update_sex_and_relat)
       else
         raise "Updating #{field} is not supported by the field import service"
       end
@@ -248,6 +250,32 @@ module Imports
       log_import_service = Imports::LettingsLogsImportService.new(nil, @logger)
       log_import_service.send(:create_log, xml_doc)
       @logger.info("lettings log \"#{record.old_id}\" has been reimported with id #{record.id}")
+    end
+
+    def update_sex_and_relat(xml_doc)
+      return if meta_field_value(xml_doc, "form-name").include?("Sales")
+
+      old_id = meta_field_value(xml_doc, "document-id")
+      record = LettingsLog.find_by(old_id:)
+
+      return @logger.warn("lettings log with old id #{old_id} not found") unless record
+
+      return @logger.info("lettings log #{record.id} has values for sex2 and relat2, skipping update") if record.sex2 && record.relat2
+      return @logger.info("lettings log #{record.id} has no hhmemb value, skipping update") if record.hhmemb.blank?
+      return @logger.info("lettings log #{record.id} has value 'no' for details_known2, skipping update") if record.details_known_2 == 1
+
+      if record.sex2.blank?
+        record.sex2 = sex(xml_doc, 2)
+        @logger.info("lettings log #{record.id}'s sex2 value has been set to #{record.sex2}")
+      end
+
+      if record.relat2.blank?
+        record.relat2 = relat(xml_doc, 2)
+        @logger.info("lettings log #{record.id}'s relat2 value has been set to #{record.relat2}")
+      end
+
+      record.values_updated_at = Time.zone.now
+      record.save!
     end
   end
 end
