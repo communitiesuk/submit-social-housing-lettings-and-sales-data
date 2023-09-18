@@ -619,17 +619,7 @@ RSpec.describe Validations::HouseholdValidations do
     end
 
     context "when the referral is internal transfer" do
-      it "cannot be 3" do
-        record.referral = 1
-        record.prevten = 3
-        household_validator.validate_previous_housing_situation(record)
-        expect(record.errors["prevten"])
-          .to include(match I18n.t("validations.household.prevten.internal_transfer", prevten: ""))
-        expect(record.errors["referral"])
-          .to include(match I18n.t("validations.household.referral.prevten_invalid", prevten: ""))
-      end
-
-      it "can be 9" do
+      it "prevten can be 9" do
         record.referral = 1
         record.prevten = 9
         household_validator.validate_previous_housing_situation(record)
@@ -639,7 +629,17 @@ RSpec.describe Validations::HouseholdValidations do
           .to be_empty
       end
 
-      it "cannot be 4, 10, 13, 19, 23, 24, 25, 26, 28, 29" do
+      it "prevten cannot be 3" do
+        record.referral = 1
+        record.prevten = 3
+        household_validator.validate_previous_housing_situation(record)
+        expect(record.errors["prevten"])
+          .to include(match I18n.t("validations.household.prevten.internal_transfer", prevten: ""))
+        expect(record.errors["referral"])
+          .to include(match I18n.t("validations.household.referral.prevten_invalid", prevten: ""))
+      end
+
+      it "prevten cannot be 4, 10, 13, 19, 23, 24, 25, 26, 28, 29" do
         record.referral = 1
         record.prevten = 4
         household_validator.validate_previous_housing_situation(record)
