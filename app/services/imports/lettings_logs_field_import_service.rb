@@ -16,6 +16,8 @@ module Imports
         import_from(folder, :update_address)
       when "reason"
         import_from(folder, :update_reason)
+      when "homeless"
+        import_from(folder, :update_homelessness)
       else
         raise "Updating #{field} is not supported by the field import service"
       end
@@ -201,6 +203,31 @@ module Imports
         end
       else
         @logger.warn("lettings log with old id #{old_id} not found")
+      end
+    end
+
+    def update_homelessness(xml_doc)
+      return if meta_field_value(xml_doc, "form-name").include?("Sales")
+
+      old_id = meta_field_value(xml_doc, "document-id")
+      record = LettingsLog.find_by(old_id:)
+      if record.present?
+        return @logger.info("lettings log #{record.id} has a value for homeless and rp_homeless, skipping update") if record.rp_homeless == 1 && record.homeless.present?
+        return @logger.info("lettings log #{record.id} has a value for homeless and reasonpref is not yes, skipping update") if record.reasonpref != 1 && record.homeless.present?
+        return @logger.info("lettings log #{record.id} reimport values are not homeless - 11 and rp_homeless - yes, skipping update") if unsafe_string_as_integer(xml_doc, "Q14b1").blank? || unsafe_string_as_integer(xml_doc, "Q13") != 11
+
+        if record.rp_homeless != 1 && record.reasonpref == 1
+          record.rp_homeless = 1
+          @logger.info("updating lettings log #{record.id}'s rp_homeless value to 1")
+        end
+        if record.homeless.blank?
+          record.homeless = 11
+          @logger.info("updating lettings log #{record.id}'s homeless value to 11")
+        end
+        record.values_updated_at = Time.zone.now
+        record.save!
+      else
+        @logger.warn("Could not find record matching legacy ID #{old_id}")
       end
     end
   end
