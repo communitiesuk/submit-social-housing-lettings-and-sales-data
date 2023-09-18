@@ -15,11 +15,14 @@ def print_org_data(org_names, fields, illness_fields)
     print ""
     print org_name
     print ">"
-    fields.each do |field|
-      print "#{org.lettings_logs.where(status: "in_progress").select{ |l| l.send(field).nil? }.count}>"
-    end
+
+    # fields.each do |field|
+    #   print "#{org.lettings_logs.where(status: "in_progress").select{ |l| l.send(field).nil? }.count}>"
+    # end
+    print "#{org.lettings_logs.where(status: "in_progress").select{ |l| l.referral.nil? && l.renewal == 0 }.count}>"
+    print "#{org.lettings_logs.where(status: "in_progress").select{ |l| l.tenancylength.nil? && [4, 6].include?(l.tenancy) }.count}>"
     print "#{org.lettings_logs.where(status: "in_progress").select{ |l| l.illness == 1 && illness_fields.all? { |illness_field| l.send(illness_field).zero?} }.count}>"
-    #
+
     # fields.each do |field|
     #   print "#{org.sales_logs.where(status: "in_progress").select{ |l| l.send(field).nil? }.count}>"
     # end
