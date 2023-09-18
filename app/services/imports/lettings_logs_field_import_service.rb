@@ -309,23 +309,39 @@ module Imports
       record = LettingsLog.find_by(old_id:)
 
       return @logger.warn("lettings log with old id #{old_id} not found") unless record
+      if (2..record.hhmemb).all? { |person_index| record.has_any_person_details?(person_index) || record["details_known_#{person_index}"] == 1 }
+        return @logger.info("lettings log #{record.id} has all household member details, skipping update")
+      end
 
-      return @logger.info("lettings log #{record.id} person 2 details are not known, skipping update") if record.details_known_2 == 1
-      return @logger.info("lettings log #{record.id} has details for person 2, skipping update") if record.has_any_person_details?(2)
+      (2..record.hhmemb - 1).each do |person_index|
+        if record.has_any_person_details?(person_index) || record["details_known_#{person_index}"] == 1
+          @logger.info("lettings log #{record.id} has details for person #{person_index}, skipping update")
+          next
+        end
 
-      record.age2_known = record.age3_known
-      record.age2 = record.age3
-      record.sex2 = record.sex3
-      record.ecstat2 = record.ecstat3
-      record.relat2 = record.relat3
-      @logger.info("lettings log #{record.id}'s person 3 details moved to person 2 details")
+        record["details_known_#{person_index}"] = record["details_known_#{person_index + 1}"]
+        record["age#{person_index}"] = record["age#{person_index + 1}"]
+        record["age#{person_index}_known"] = record["age#{person_index + 1}_known"]
+        record["sex#{person_index}"] = record["sex#{person_index + 1}"]
+        record["ecstat#{person_index}"] = record["ecstat#{person_index + 1}"]
+        record["relat#{person_index}"] = record["relat#{person_index + 1}"]
+        record["details_known_#{person_index + 1}"] = nil
+        record["age#{person_index + 1}"] = nil
+        record["age#{person_index + 1}_known"] = nil
+        record["sex#{person_index + 1}"] = nil
+        record["ecstat#{person_index + 1}"] = nil
+        record["relat#{person_index + 1}"] = nil
 
-      record.age3 = safe_string_as_integer(xml_doc, "P4Age")
-      record.age3_known = age_known(xml_doc, 4)
-      record.sex3 = sex(xml_doc, 4)
-      record.ecstat3 = unsafe_string_as_integer(xml_doc, "P4Eco")
-      record.relat3 = relat(xml_doc, 4)
-      @logger.info("lettings log #{record.id}, reimported person 3 details")
+        @logger.info("lettings log #{record.id}'s person #{person_index + 1} details moved to person #{person_index} details")
+      end
+
+      record["age#{record.hhmemb}"] = safe_string_as_integer(xml_doc, "P#{record.hhmemb + 1}Age")
+      record["age#{record.hhmemb}_known"] = age_known(xml_doc, record.hhmemb + 1)
+      record["sex#{record.hhmemb}"] = sex(xml_doc, record.hhmemb + 1)
+      record["ecstat#{record.hhmemb}"] = unsafe_string_as_integer(xml_doc, "P#{record.hhmemb + 1}Eco")
+      record["relat#{record.hhmemb}"] = relat(xml_doc, record.hhmemb + 1)
+      record["details_known_#{record.hhmemb}"] = record.has_any_person_details?(record.hhmemb) ? 0 : 1
+      @logger.info("lettings log #{record.id}, reimported person #{record.hhmemb} details")
 
       record.values_updated_at = Time.zone.now
       record.save!

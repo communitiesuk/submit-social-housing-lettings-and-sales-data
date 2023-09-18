@@ -1034,6 +1034,11 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
       lettings_log_xml.at_xpath("//xmlns:P4Sex").content = "Male"
       lettings_log_xml.at_xpath("//xmlns:P4Rel").content = "Child"
       lettings_log_xml.at_xpath("//xmlns:P4Eco").content = "9) Child under 16"
+
+      lettings_log_xml.at_xpath("//xmlns:P7Age").content = 7
+      lettings_log_xml.at_xpath("//xmlns:P7Sex").content = "Male"
+      lettings_log_xml.at_xpath("//xmlns:P7Rel").content = "Child"
+      lettings_log_xml.at_xpath("//xmlns:P7Eco").content = "9) Child under 16"
     end
 
     context "when the lettings log has no details for person 2" do
@@ -1052,11 +1057,122 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
         expect(lettings_log.sex2).to eq("F")
         expect(lettings_log.ecstat2).to eq(10)
         expect(lettings_log.relat2).to eq("X")
+
         expect(lettings_log.age3_known).to eq(0)
         expect(lettings_log.age3).to eq(7)
         expect(lettings_log.sex3).to eq("M")
         expect(lettings_log.ecstat3).to eq(9)
         expect(lettings_log.relat3).to eq("C")
+        expect(lettings_log.values_updated_at).not_to be_nil
+      end
+    end
+
+    context "when the lettings log has no details for person 2 and there are 6 household members" do
+      before do
+        lettings_log.update(details_known_2: 0, age2_known: nil, age2: nil, sex2: nil, ecstat2: nil, relat2: nil, hhmemb: 6,
+                            details_known_3: 0, age3_known: 0, age3: 19, sex3: "F", ecstat3: 10, relat3: "X",
+                            details_known_4: 1, age4_known: nil, age4: nil, sex4: nil, ecstat4: nil, relat4: nil,
+                            details_known_5: 0, age5_known: 0, age5: 21, sex5: "M", ecstat5: 1, relat5: "P",
+                            details_known_6: 0, age6_known: 0, age6: 22, sex6: "R", ecstat6: 10, relat6: "R")
+      end
+
+      it "moves the details of all the household members" do
+        expect(logger).to receive(:info).with(/lettings log \d+'s person 3 details moved to person 2 details/)
+        expect(logger).to receive(:info).with(/lettings log \d+'s person 4 details moved to person 3 details/)
+        expect(logger).to receive(:info).with(/lettings log \d+'s person 5 details moved to person 4 details/)
+        expect(logger).to receive(:info).with(/lettings log \d+'s person 6 details moved to person 5 details/)
+        expect(logger).to receive(:info).with(/lettings log \d+, reimported person 6 details/)
+        import_service.send(:update_person_details, lettings_log_xml)
+        lettings_log.reload
+        expect(lettings_log.age2_known).to eq(0)
+        expect(lettings_log.age2).to eq(19)
+        expect(lettings_log.sex2).to eq("F")
+        expect(lettings_log.ecstat2).to eq(10)
+        expect(lettings_log.relat2).to eq("X")
+
+        expect(lettings_log.details_known_3).to eq(1)
+        expect(lettings_log.age3_known).to eq(nil)
+        expect(lettings_log.age3).to eq(nil)
+        expect(lettings_log.sex3).to eq(nil)
+        expect(lettings_log.ecstat3).to eq(nil)
+        expect(lettings_log.relat3).to eq(nil)
+
+        expect(lettings_log.details_known_4).to eq(0)
+        expect(lettings_log.age4_known).to eq(0)
+        expect(lettings_log.age4).to eq(21)
+        expect(lettings_log.sex4).to eq("M")
+        expect(lettings_log.ecstat4).to eq(1)
+        expect(lettings_log.relat4).to eq("P")
+
+        expect(lettings_log.details_known_5).to eq(0)
+        expect(lettings_log.age5_known).to eq(0)
+        expect(lettings_log.age5).to eq(22)
+        expect(lettings_log.sex5).to eq("R")
+        expect(lettings_log.ecstat5).to eq(10)
+        expect(lettings_log.relat5).to eq("R")
+
+        expect(lettings_log.details_known_6).to eq(0)
+        expect(lettings_log.age6_known).to eq(0)
+        expect(lettings_log.age6).to eq(7)
+        expect(lettings_log.sex6).to eq("M")
+        expect(lettings_log.ecstat6).to eq(9)
+        expect(lettings_log.relat6).to eq("C")
+
+        expect(lettings_log.values_updated_at).not_to be_nil
+      end
+    end
+
+    context "when the lettings log has no details for person 4 and there are 6 household members" do
+      before do
+        lettings_log.update(details_known_2: 1, age2_known: nil, age2: nil, sex2: nil, ecstat2: nil, relat2: nil, hhmemb: 6,
+                            details_known_3: 0, age3_known: 0, age3: 19, sex3: "F", ecstat3: 10, relat3: "X",
+                            details_known_4: 0, age4_known: nil, age4: nil, sex4: nil, ecstat4: nil, relat4: nil,
+                            details_known_5: 0, age5_known: 0, age5: 21, sex5: "M", ecstat5: 1, relat5: "P",
+                            details_known_6: 0, age6_known: 0, age6: 22, sex6: "R", ecstat6: 10, relat6: "R")
+      end
+
+      it "moves the details of all the household members" do
+        expect(logger).to receive(:info).with(/lettings log \d+ has details for person 2, skipping update/)
+        expect(logger).to receive(:info).with(/lettings log \d+ has details for person 3, skipping update/)
+        expect(logger).to receive(:info).with(/lettings log \d+'s person 5 details moved to person 4 details/)
+        expect(logger).to receive(:info).with(/lettings log \d+'s person 6 details moved to person 5 details/)
+        expect(logger).to receive(:info).with(/lettings log \d+, reimported person 6 details/)
+        import_service.send(:update_person_details, lettings_log_xml)
+        lettings_log.reload
+        expect(lettings_log.details_known_2).to eq(1)
+        expect(lettings_log.age2_known).to eq(nil)
+        expect(lettings_log.age2).to eq(nil)
+        expect(lettings_log.sex2).to eq(nil)
+        expect(lettings_log.ecstat2).to eq(nil)
+        expect(lettings_log.relat2).to eq(nil)
+
+        expect(lettings_log.age3_known).to eq(0)
+        expect(lettings_log.age3).to eq(19)
+        expect(lettings_log.sex3).to eq("F")
+        expect(lettings_log.ecstat3).to eq(10)
+        expect(lettings_log.relat3).to eq("X")
+
+        expect(lettings_log.details_known_4).to eq(0)
+        expect(lettings_log.age4_known).to eq(0)
+        expect(lettings_log.age4).to eq(21)
+        expect(lettings_log.sex4).to eq("M")
+        expect(lettings_log.ecstat4).to eq(1)
+        expect(lettings_log.relat4).to eq("P")
+
+        expect(lettings_log.details_known_5).to eq(0)
+        expect(lettings_log.age5_known).to eq(0)
+        expect(lettings_log.age5).to eq(22)
+        expect(lettings_log.sex5).to eq("R")
+        expect(lettings_log.ecstat5).to eq(10)
+        expect(lettings_log.relat5).to eq("R")
+
+        expect(lettings_log.details_known_6).to eq(0)
+        expect(lettings_log.age6_known).to eq(0)
+        expect(lettings_log.age6).to eq(7)
+        expect(lettings_log.sex6).to eq("M")
+        expect(lettings_log.ecstat6).to eq(9)
+        expect(lettings_log.relat6).to eq("C")
+
         expect(lettings_log.values_updated_at).not_to be_nil
       end
     end
@@ -1069,7 +1185,7 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
       end
 
       it "does not update the lettings_log person details" do
-        expect(logger).to receive(:info).with(/lettings log \d+ has details for person 2, skipping update/)
+        expect(logger).to receive(:info).with(/lettings log \d+ has all household member details, skipping update/)
         import_service.send(:update_person_details, lettings_log_xml)
         lettings_log.reload
         expect(lettings_log.values_updated_at).to be_nil
@@ -1084,7 +1200,7 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
       end
 
       it "does not update the lettings_log person details" do
-        expect(logger).to receive(:info).with(/lettings log \d+ person 2 details are not known, skipping update/)
+        expect(logger).to receive(:info).with(/lettings log \d+ has all household member details, skipping update/)
         import_service.send(:update_person_details, lettings_log_xml)
         lettings_log.reload
         expect(lettings_log.values_updated_at).to be_nil
