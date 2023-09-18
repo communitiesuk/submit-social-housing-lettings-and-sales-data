@@ -432,9 +432,9 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
-      context "and this is an internal transfer from a non social housing" do
+      context "and this is an internal transfer from a non social housing (and not residential care home)" do
         before do
-          lettings_log_xml.at_xpath("//xmlns:Q11").content = "9 Residential care home"
+          lettings_log_xml.at_xpath("//xmlns:Q11").content = "4 Tied housing or rented with job"
           lettings_log_xml.at_xpath("//xmlns:Q16").content = "1 Internal Transfer"
         end
 
