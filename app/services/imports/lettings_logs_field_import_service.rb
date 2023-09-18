@@ -309,6 +309,8 @@ module Imports
       record = LettingsLog.find_by(old_id:)
 
       return @logger.warn("lettings log with old id #{old_id} not found") unless record
+      return @logger.info("lettings log #{record.id} has no hhmemb, skipping update") unless record.hhmemb
+
       if (2..record.hhmemb).all? { |person_index| record.has_any_person_details?(person_index) || record["details_known_#{person_index}"] == 1 }
         return @logger.info("lettings log #{record.id} has all household member details, skipping update")
       end

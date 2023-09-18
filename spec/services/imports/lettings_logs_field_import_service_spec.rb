@@ -1337,5 +1337,20 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
         expect(lettings_log.values_updated_at).to be_nil
       end
     end
+
+    context "when the record has no hhmemb" do
+      let(:lettings_log) { LettingsLog.find_by(old_id: lettings_log_id) }
+
+      before do
+        lettings_log.update!(hhmemb: nil)
+      end
+
+      it "does not update the lettings_log person details" do
+        expect(logger).to receive(:info).with(/lettings log \d+ has no hhmemb, skipping update/)
+        import_service.send(:update_person_details, lettings_log_xml)
+        lettings_log.reload
+        expect(lettings_log.values_updated_at).to be_nil
+      end
+    end
   end
 end
