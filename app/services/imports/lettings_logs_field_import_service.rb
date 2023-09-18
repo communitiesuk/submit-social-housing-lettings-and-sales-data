@@ -218,15 +218,15 @@ module Imports
       if record.present?
         return @logger.info("lettings log #{record.id} has a value for homeless and rp_homeless, skipping update") if record.rp_homeless == 1 && record.homeless.present?
         return @logger.info("lettings log #{record.id} has a value for homeless and reasonpref is not yes, skipping update") if record.reasonpref != 1 && record.homeless.present?
-        return @logger.info("lettings log #{record.id} reimport values are not homeless - 11 and rp_homeless - yes, skipping update") if unsafe_string_as_integer(xml_doc, "Q14b1").blank? || unsafe_string_as_integer(xml_doc, "Q13") != 11
+        return @logger.info("lettings log #{record.id} reimport values are not homeless - 1 (no) and rp_homeless - yes, skipping update") if unsafe_string_as_integer(xml_doc, "Q14b1").blank? || unsafe_string_as_integer(xml_doc, "Q13") != 1
 
         if record.rp_homeless != 1 && record.reasonpref == 1
           record.rp_homeless = 1
           @logger.info("updating lettings log #{record.id}'s rp_homeless value to 1")
         end
         if record.homeless.blank?
-          record.homeless = 11
-          @logger.info("updating lettings log #{record.id}'s homeless value to 11")
+          record.homeless = 1
+          @logger.info("updating lettings log #{record.id}'s homeless value to 1")
         end
         record.values_updated_at = Time.zone.now
         record.save!

@@ -553,7 +553,7 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
       Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
       lettings_log_file.rewind
       lettings_log_xml.at_xpath("//xmlns:Q14b1").content = "1"
-      lettings_log_xml.at_xpath("//xmlns:Q13").content = "11"
+      lettings_log_xml.at_xpath("//xmlns:Q13").content = "1"
       lettings_log.update!(values_updated_at: nil)
     end
 
@@ -641,12 +641,12 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
       end
 
       it "updates homeless and rp_homeless" do
-        expect(logger).to receive(:info).with(/updating lettings log \d+'s homeless value to 11/)
+        expect(logger).to receive(:info).with(/updating lettings log \d+'s homeless value to 1/)
         expect(logger).to receive(:info).with(/updating lettings log \d+'s rp_homeless value to 1/)
         import_service.send(:update_homelessness, lettings_log_xml)
 
         lettings_log.reload
-        expect(lettings_log.homeless).to eq(11)
+        expect(lettings_log.homeless).to eq(1)
         expect(lettings_log.reasonpref).to eq(1)
         expect(lettings_log.rp_homeless).to eq(1)
         expect(lettings_log.values_updated_at).not_to be_nil
@@ -661,11 +661,11 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
       end
 
       it "updates homeless" do
-        expect(logger).to receive(:info).with(/updating lettings log \d+'s homeless value to 11/)
+        expect(logger).to receive(:info).with(/updating lettings log \d+'s homeless value to 1/)
         import_service.send(:update_homelessness, lettings_log_xml)
 
         lettings_log.reload
-        expect(lettings_log.homeless).to eq(11)
+        expect(lettings_log.homeless).to eq(1)
         expect(lettings_log.reasonpref).to eq(1)
         expect(lettings_log.rp_homeless).to eq(1)
         expect(lettings_log.values_updated_at).not_to be_nil
@@ -680,11 +680,11 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
       end
 
       it "updates homeless" do
-        expect(logger).to receive(:info).with(/updating lettings log \d+'s homeless value to 11/)
+        expect(logger).to receive(:info).with(/updating lettings log \d+'s homeless value to 1/)
         import_service.send(:update_homelessness, lettings_log_xml)
 
         lettings_log.reload
-        expect(lettings_log.homeless).to eq(11)
+        expect(lettings_log.homeless).to eq(1)
         expect(lettings_log.reasonpref).to eq(2)
         expect(lettings_log.rp_homeless).to eq(nil)
         expect(lettings_log.values_updated_at).not_to be_nil
@@ -696,11 +696,11 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
 
       before do
         lettings_log_xml.at_xpath("//xmlns:Q14b1").content = ""
-        lettings_log_xml.at_xpath("//xmlns:Q13").content = "1"
+        lettings_log_xml.at_xpath("//xmlns:Q13").content = "11"
       end
 
       it "skips update for any fields" do
-        expect(logger).to receive(:info).with(/lettings log \d+ reimport values are not homeless - 11 and rp_homeless - yes, skipping update/)
+        expect(logger).to receive(:info).with(/lettings log \d+ reimport values are not homeless - 1 \(no\) and rp_homeless - yes, skipping update/)
         expect { import_service.send(:update_homelessness, lettings_log_xml) }
           .not_to(change { lettings_log.reload.homeless })
         expect(lettings_log.values_updated_at).to be_nil
