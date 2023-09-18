@@ -26,6 +26,8 @@ module Imports
         import_from(folder, :update_general_needs_referral)
       when "person_details"
         import_from(folder, :update_person_details)
+      when "childrens_care_referral"
+        import_from(folder, :update_childrens_care_referral)
       else
         raise "Updating #{field} is not supported by the field import service"
       end
@@ -408,6 +410,20 @@ module Imports
 
     def person_exists_on_the_log?(record, person_index)
       person_index <= record.hhmemb
+    end
+
+    def update_childrens_care_referral(xml_doc)
+      return if meta_field_value(xml_doc, "form-name").include?("Sales")
+
+      old_id = meta_field_value(xml_doc, "document-id")
+      record = LettingsLog.find_by(old_id:)
+
+      return @logger.warn("lettings log with old id #{old_id} not found") unless record
+      return @logger.info("lettings log #{record.id} has a value for referral, skipping update") if record.referral.present?
+      return @logger.info("lettings log #{record.id} reimport referral value is not 17, skipping update") if unsafe_string_as_integer(xml_doc, "Q16") != 17
+
+      record.update!(referral: 17, values_updated_at: Time.zone.now)
+      @logger.info("lettings log #{record.id}'s referral value has been set to 17")
     end
   end
 end
