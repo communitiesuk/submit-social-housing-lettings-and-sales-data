@@ -8473,7 +8473,7 @@
               "informative_text": {},
               "questions": {
                 "supcharg_value_check": {
-                  "check_answer_label": "Personal service charge confirmation",
+                  "check_answer_label": "Support charge confirmation",
                   "hidden_in_check_answers": {
                     "depends_on": [
                       {
