@@ -1134,8 +1134,8 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
       end
 
       it "moves the details of all the household members" do
-        expect(logger).to receive(:info).with(/lettings log \d+ has details for person 2, skipping update/)
-        expect(logger).to receive(:info).with(/lettings log \d+ has details for person 3, skipping update/)
+        expect(logger).to receive(:info).with(/lettings log \d+ has details for person 2, skipping person/)
+        expect(logger).to receive(:info).with(/lettings log \d+ has details for person 3, skipping person/)
         expect(logger).to receive(:info).with(/lettings log \d+'s person 5 details moved to person 4 details/)
         expect(logger).to receive(:info).with(/lettings log \d+'s person 6 details moved to person 5 details/)
         expect(logger).to receive(:info).with(/lettings log \d+, reimported person 6 details/)
@@ -1189,8 +1189,8 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
       end
 
       it "moves the details of all the relevant household members" do
-        expect(logger).to receive(:info).with(/lettings log \d+ has details for person 2, skipping update/)
-        expect(logger).to receive(:info).with(/lettings log \d+ has details for person 3, skipping update/)
+        expect(logger).to receive(:info).with(/lettings log \d+ has details for person 2, skipping person/)
+        expect(logger).to receive(:info).with(/lettings log \d+ has details for person 3, skipping person/)
         expect(logger).to receive(:info).with(/lettings log \d+'s person 6 details moved to person 4 details/)
         expect(logger).to receive(:info).with(/lettings log \d+, reimported person 5 details/)
         expect(logger).to receive(:info).with(/lettings log \d+, reimported person 6 details/)
