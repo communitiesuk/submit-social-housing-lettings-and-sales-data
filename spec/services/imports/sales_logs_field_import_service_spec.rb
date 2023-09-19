@@ -159,7 +159,7 @@ RSpec.describe Imports::SalesLogsFieldImportService do
       Imports::SalesLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
       old_log_id
       sales_log_file.rewind
-      sales_log.update!(values_updated_at: nil)
+      sales_log.update!(created_by: sales_log.owning_organisation.users.first, values_updated_at: nil)
     end
 
     context "when the sales log has created_by value" do
