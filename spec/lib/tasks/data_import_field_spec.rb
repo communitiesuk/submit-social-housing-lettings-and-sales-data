@@ -152,6 +152,18 @@ describe "data_import_field imports" do
         end
       end
 
+      context "and we update the referral (for general needs) field" do
+        let(:field) { "general_needs_referral" }
+
+        it "updates the 2023 logs from the given XML file" do
+          expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+          expect(storage_service).to receive(:get_file_io).with("spec/fixtures/imports/logs")
+          expect(Imports::LettingsLogsFieldImportService).to receive(:new).with(archive_service)
+          expect(import_service).to receive(:update_field).with(field, "logs")
+          task.invoke(field, fixture_path)
+        end
+      end
+
       it "raises an exception if no parameters are provided" do
         expect { task.invoke }.to raise_error(/Usage/)
       end

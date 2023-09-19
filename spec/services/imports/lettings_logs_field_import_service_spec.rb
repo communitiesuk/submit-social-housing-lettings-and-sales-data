@@ -937,4 +937,88 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
       end
     end
   end
+
+  context "when updating referral" do
+    let(:field) { "referral" }
+    let(:lettings_log) { LettingsLog.find_by(old_id: lettings_log_id) }
+
+    before do
+      Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+      lettings_log_file.rewind
+
+      lettings_log_xml.at_xpath("//xmlns:Q16").content = "4"
+      lettings_log.owning_organisation.update!(provider_type: "PRP")
+    end
+
+    context "when the lettings log has no referral value" do
+      before do
+        lettings_log.update!(renewal: 0, referral: nil, values_updated_at: nil)
+      end
+
+      it "updates the lettings_log referral value" do
+        expect(logger).to receive(:info).with(/lettings log \d+'s referral value has been set to 4/)
+        expect { import_service.send(:update_general_needs_referral, lettings_log_xml) }
+          .to(change { lettings_log.reload.referral }.from(nil).to(4))
+        expect(lettings_log.referral_value_check).to eq(0)
+        expect(lettings_log.values_updated_at).not_to be_nil
+      end
+    end
+
+    context "when the lettings log has a referral value" do
+      before do
+        lettings_log.update!(referral: 2, values_updated_at: nil)
+      end
+
+      it "does not update the lettings_log referral value" do
+        expect(logger).to receive(:info).with(/lettings log \d+ has a value for referral, skipping update/)
+        import_service.send(:update_general_needs_referral, lettings_log_xml)
+        lettings_log.reload
+        expect(lettings_log.referral).to eq(2)
+        expect(lettings_log.values_updated_at).to be_nil
+      end
+    end
+
+    context "when the lettings log is supported housing" do
+      before do
+        lettings_log.update!(referral: nil, needstype: 2, values_updated_at: nil)
+      end
+
+      it "does not update the lettings_log referral value" do
+        expect(logger).to receive(:info).with(/lettings log \d+ is a supported housing log, skipping update/)
+        expect { import_service.send(:update_general_needs_referral, lettings_log_xml) }
+          .not_to(change { lettings_log.reload.referral })
+        expect(lettings_log.values_updated_at).to be_nil
+      end
+    end
+
+    context "when the owning organisation is LA" do
+      before do
+        lettings_log.update!(referral: nil, values_updated_at: nil)
+        lettings_log.owning_organisation.update!(provider_type: "LA")
+      end
+
+      it "does not update the lettings_log referral value" do
+        expect(logger).to receive(:info).with(/lettings log \d+'s owning organisation's provider type is LA, skipping update/)
+        expect { import_service.send(:update_general_needs_referral, lettings_log_xml) }
+          .not_to(change { lettings_log.reload.referral })
+        expect(lettings_log.values_updated_at).to be_nil
+      end
+    end
+
+    context "and the new value does not set referral to 4" do
+      let(:lettings_log) { LettingsLog.find_by(old_id: lettings_log_id) }
+
+      before do
+        lettings_log.update!(referral: nil, values_updated_at: nil)
+        lettings_log_xml.at_xpath("//xmlns:Q16").content = "1"
+      end
+
+      it "skips update" do
+        expect(logger).to receive(:info).with(/lettings log \d+ reimport referral value is not 4, skipping update/)
+        expect { import_service.send(:update_general_needs_referral, lettings_log_xml) }
+          .not_to(change { lettings_log.reload.referral })
+        expect(lettings_log.values_updated_at).to be_nil
+      end
+    end
+  end
 end
