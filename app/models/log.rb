@@ -8,7 +8,7 @@ class Log < ApplicationRecord
   belongs_to :updated_by, class_name: "User", optional: true
   belongs_to :bulk_upload, optional: true
 
-  before_validation :update_status!
+  before_save :update_status!
 
   STATUS = {
     "not_started" => 0,
