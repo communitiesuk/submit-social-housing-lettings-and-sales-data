@@ -2036,10 +2036,10 @@ RSpec.describe LettingsLog do
       end
 
       describe "when changing a log's scheme and hence calling reset_scheme_location!" do
-        let!(:scheme) { FactoryBot.create(:scheme)}
-        let!(:invalid_location_1) { FactoryBot.create(:location, scheme:, startdate: Time.zone.today + 3.weeks)}
-        let!(:valid_location) { FactoryBot.create(:location, scheme:, startdate: Time.zone.yesterday)}
-        let!(:invalid_location_2) { FactoryBot.create(:location, scheme:, startdate: Time.zone.today + 3.weeks)}
+        let(:scheme) { FactoryBot.create(:scheme)}
+        let(:invalid_location_1) { FactoryBot.create(:location, scheme:, startdate: Time.zone.today + 3.weeks)}
+        let(:valid_location) { FactoryBot.create(:location, scheme:, startdate: Time.zone.yesterday)}
+        let(:invalid_location_2) { FactoryBot.create(:location, scheme:, startdate: Time.zone.today + 3.weeks)}
 
         context "when there is one valid location and many invalid locations in the new scheme" do
           let(:log) { create(:lettings_log, scheme: nil, location_id: nil, startdate: Time.zone.today) }
