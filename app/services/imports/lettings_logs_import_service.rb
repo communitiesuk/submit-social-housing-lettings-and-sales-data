@@ -249,32 +249,32 @@ module Imports
 
       # Sets the log creator
       owner_id = meta_field_value(xml_doc, "owner-user-id").strip
-      if owner_id.present?
-        user = LegacyUser.find_by(old_user_id: owner_id)&.user
-        if user.blank? || (user.organisation_id != attributes["managing_organisation_id"] && user.organisation_id != attributes["owning_organisation_id"])
-          if user.blank?
-            @logger.error("Lettings log '#{attributes['old_id']}' belongs to legacy user with owner-user-id: '#{owner_id}' which cannot be found. Assigning log to 'Unassigned' user.")
-          else
-            @logger.error("Lettings log '#{attributes['old_id']}' belongs to legacy user with owner-user-id: '#{owner_id}' which belongs to a different organisation. Assigning log to 'Unassigned' user.")
-          end
-          if User.find_by(name: "Unassigned", organisation_id: attributes["managing_organisation_id"])
-            user = User.find_by(name: "Unassigned", organisation_id: attributes["managing_organisation_id"])
-          else
-            user = User.new(
-              name: "Unassigned",
-              organisation_id: attributes["managing_organisation_id"],
-              is_dpo: false,
-              encrypted_password: SecureRandom.hex(10),
-              email: SecureRandom.uuid,
-              confirmed_at: Time.zone.now,
-              active: false,
-            )
-            user.save!(validate: false)
-          end
+      user = LegacyUser.find_by(old_user_id: owner_id)&.user
+      if owner_id.blank? || user.blank? || (user.organisation_id != attributes["managing_organisation_id"] && user.organisation_id != attributes["owning_organisation_id"])
+        if owner_id.blank?
+          @logger.error("Lettings log '#{attributes['old_id']}' does not have the owner id. Assigning log to 'Unassigned' user.")
+        elsif user.blank?
+          @logger.error("Lettings log '#{attributes['old_id']}' belongs to legacy user with owner-user-id: '#{owner_id}' which cannot be found. Assigning log to 'Unassigned' user.")
+        else
+          @logger.error("Lettings log '#{attributes['old_id']}' belongs to legacy user with owner-user-id: '#{owner_id}' which belongs to a different organisation. Assigning log to 'Unassigned' user.")
         end
-
-        attributes["created_by"] = user
+        if User.find_by(name: "Unassigned", organisation_id: attributes["managing_organisation_id"])
+          user = User.find_by(name: "Unassigned", organisation_id: attributes["managing_organisation_id"])
+        else
+          user = User.new(
+            name: "Unassigned",
+            organisation_id: attributes["managing_organisation_id"],
+            is_dpo: false,
+            encrypted_password: SecureRandom.hex(10),
+            email: SecureRandom.uuid,
+            confirmed_at: Time.zone.now,
+            active: false,
+          )
+          user.save!(validate: false)
+        end
       end
+
+      attributes["created_by"] = user
       attributes["values_updated_at"] = Time.zone.now
 
       apply_date_consistency!(attributes)
