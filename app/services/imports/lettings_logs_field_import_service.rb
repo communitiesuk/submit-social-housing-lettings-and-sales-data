@@ -24,6 +24,8 @@ module Imports
         import_from(folder, :update_sex_and_relat)
       when "general_needs_referral"
         import_from(folder, :update_general_needs_referral)
+      when "person_details"
+        import_from(folder, :update_person_details)
       else
         raise "Updating #{field} is not supported by the field import service"
       end
@@ -265,7 +267,7 @@ module Imports
 
       (2..record.hhmemb).each do |i|
         next @logger.info("lettings log #{record.id} has values for sex#{i} and relat#{i}, skipping update") if record["sex#{i}"] && record["relat#{i}"]
-        next @logger.info("lettings log #{record.id} has value 'no' for details_known_#{i}, skipping update") if record["details_known_#{i}"] == 1
+        next @logger.info("lettings log #{record.id} has value 'no' for details_known_#{i}, skipping update") if record.details_not_known_for_person?(i)
 
         if record["sex#{i}"].blank?
           record["sex#{i}"] = sex(xml_doc, i)
@@ -298,6 +300,114 @@ module Imports
 
       record.update!(referral: 4, referral_value_check: 0, values_updated_at: Time.zone.now)
       @logger.info("lettings log #{record.id}'s referral value has been set to 4")
+    end
+
+    def update_person_details(xml_doc)
+      return if meta_field_value(xml_doc, "form-name").include?("Sales")
+
+      old_id = meta_field_value(xml_doc, "document-id")
+      record = LettingsLog.find_by(old_id:)
+
+      return @logger.warn("lettings log with old id #{old_id} not found") unless record
+      return @logger.info("lettings log #{record.id} has no hhmemb, skipping update") unless record.hhmemb
+
+      if (2..record.hhmemb).all? { |person_index| record.has_any_person_details?(person_index) || record.details_not_known_for_person?(person_index) }
+        return @logger.info("lettings log #{record.id} has all household member details, skipping update")
+      end
+      if record.hhmemb == 8 || ((record.hhmemb + 1)..8).none? { |person_index| file_contains_person_details?(xml_doc, person_index) }
+        return @logger.info("lettings log #{record.id} has no additional household member details, skipping update")
+      end
+
+      person_index = 2
+      next_person_index = person_index + 1
+
+      while person_exists_on_the_log?(record, person_index)
+        if person_exists_on_the_log?(record, next_person_index)
+          if record.has_any_person_details?(person_index) || record.details_not_known_for_person?(person_index)
+            @logger.info("lettings log #{record.id} has details for person #{person_index}, skipping person")
+            person_index += 1
+            next_person_index += 1
+            next
+          end
+
+          if !record.has_any_person_details?(next_person_index) && !record.details_not_known_for_person?(next_person_index)
+            next_person_index += 1
+            next
+          end
+
+          move_person_details(record, person_index, next_person_index)
+        else
+          reimport_person_details(record, xml_doc, person_index, next_person_index)
+        end
+
+        person_index += 1
+        next_person_index += 1
+      end
+
+      record.values_updated_at = Time.zone.now
+      record.save!
+    end
+
+    def age_known(xml_doc, person_index)
+      age_refused = string_or_nil(xml_doc, "P#{person_index}AR")
+      if age_refused.present?
+        if age_refused.casecmp?("AGE_REFUSED") || age_refused.casecmp?("No")
+          return 1 # No
+        else
+          return 0 # Yes
+        end
+      end
+      0
+    end
+
+    def details_known(index, record)
+      if record["age#{index}_known"] == 1 &&
+          record["sex#{index}"] == "R" &&
+          record["relat#{index}"] == "R" &&
+          record["ecstat#{index}"] == 10
+        1 # No
+      else
+        0 # Yes
+      end
+    end
+
+    def file_contains_person_details?(xml_doc, person_index)
+      safe_string_as_integer(xml_doc, "P#{person_index}Age").present? ||
+        string_or_nil(xml_doc, "P#{person_index}Sex").present? ||
+        unsafe_string_as_integer(xml_doc, "P#{person_index}Eco").present? ||
+        string_or_nil(xml_doc, "P#{person_index}Rel").present?
+    end
+
+    def move_person_details(record, person_index, next_person_index)
+      record["details_known_#{person_index}"] = record["details_known_#{next_person_index}"]
+      record["age#{person_index}"] = record["age#{next_person_index}"]
+      record["age#{person_index}_known"] = record["age#{next_person_index}_known"]
+      record["sex#{person_index}"] = record["sex#{next_person_index}"]
+      record["ecstat#{person_index}"] = record["ecstat#{next_person_index}"]
+      record["relat#{person_index}"] = record["relat#{next_person_index}"]
+
+      record["details_known_#{next_person_index}"] = nil
+      record["age#{next_person_index}"] = nil
+      record["age#{next_person_index}_known"] = nil
+      record["sex#{next_person_index}"] = nil
+      record["ecstat#{next_person_index}"] = nil
+      record["relat#{next_person_index}"] = nil
+
+      @logger.info("lettings log #{record.id}'s person #{next_person_index} details moved to person #{person_index} details")
+    end
+
+    def reimport_person_details(record, xml_doc, person_index, next_person_index)
+      record["age#{person_index}"] = safe_string_as_integer(xml_doc, "P#{next_person_index}Age")
+      record["age#{person_index}_known"] = age_known(xml_doc, next_person_index)
+      record["sex#{person_index}"] = sex(xml_doc, next_person_index)
+      record["ecstat#{person_index}"] = unsafe_string_as_integer(xml_doc, "P#{next_person_index}Eco")
+      record["relat#{person_index}"] = relat(xml_doc, next_person_index)
+      record["details_known_#{person_index}"] = details_known(person_index, record)
+      @logger.info("lettings log #{record.id}, reimported person #{person_index} details")
+    end
+
+    def person_exists_on_the_log?(record, person_index)
+      person_index <= record.hhmemb
     end
   end
 end

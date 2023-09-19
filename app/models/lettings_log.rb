@@ -572,6 +572,14 @@ class LettingsLog < Log
     is_general_needs? && referral == 4
   end
 
+  def has_any_person_details?(person_index)
+    ["sex#{person_index}", "relat#{person_index}", "ecstat#{person_index}"].any? { |field| public_send(field).present? } || public_send("age#{person_index}_known") == 1
+  end
+
+  def details_not_known_for_person?(person_index)
+    public_send("details_known_#{person_index}") == 1
+  end
+
 private
 
   def reset_invalid_unresolved_log_fields!
