@@ -260,8 +260,8 @@ class LettingsLog < Log
   end
 
   def previous_postcode_known?
-    # 1: Yes
-    ppcodenk == 1
+    # 0: Yes
+    ppcodenk&.zero?
   end
 
   def previous_la_known?
@@ -568,6 +568,18 @@ class LettingsLog < Log
     end
   end
 
+  def la_referral_for_general_needs?
+    is_general_needs? && referral == 4
+  end
+
+  def has_any_person_details?(person_index)
+    ["sex#{person_index}", "relat#{person_index}", "ecstat#{person_index}"].any? { |field| public_send(field).present? } || public_send("age#{person_index}_known") == 1
+  end
+
+  def details_not_known_for_person?(person_index)
+    public_send("details_known_#{person_index}") == 1
+  end
+
 private
 
   def reset_invalid_unresolved_log_fields!
@@ -628,16 +640,22 @@ private
 
   def process_postcode_changes!
     self.postcode_full = upcase_and_remove_whitespace(postcode_full)
-    process_postcode(postcode_full, "postcode_known", "is_la_inferred", "la")
+    return if postcode_full.blank?
+
+    self.postcode_known = 1
+    inferred_la = get_inferred_la(postcode_full)
+    self.is_la_inferred = inferred_la.present?
+    self.la = inferred_la if inferred_la.present?
   end
 
-  def process_postcode(postcode, postcode_known_key, la_inferred_key, la_key)
-    return if postcode.blank?
+  def process_previous_postcode_changes!
+    self.ppostcode_full = upcase_and_remove_whitespace(ppostcode_full)
+    return if ppostcode_full.blank?
 
-    self[postcode_known_key] = 1
-    inferred_la = get_inferred_la(postcode)
-    self[la_inferred_key] = inferred_la.present?
-    self[la_key] = inferred_la if inferred_la.present?
+    self.ppcodenk = 0
+    inferred_la = get_inferred_la(ppostcode_full)
+    self.is_previous_la_inferred = inferred_la.present?
+    self.prevloc = inferred_la if inferred_la.present?
   end
 
   def get_has_benefits

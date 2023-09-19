@@ -2076,7 +2076,7 @@
                   "check_answer_label": "Person 2’s age",
                   "check_answers_card_number": 2,
                   "type": "numeric",
-                  "min": 0,
+                  "min": 1,
                   "max": 120,
                   "step": 1,
                   "width": 2,
@@ -2611,7 +2611,7 @@
                   "check_answer_label": "Person 3’s age",
                   "check_answers_card_number": 3,
                   "type": "numeric",
-                  "min": 0,
+                  "min": 1,
                   "max": 120,
                   "step": 1,
                   "width": 2,
@@ -3143,7 +3143,7 @@
                   "check_answer_label": "Person 4’s age",
                   "check_answers_card_number": 4,
                   "type": "numeric",
-                  "min": 0,
+                  "min": 1,
                   "max": 120,
                   "step": 1,
                   "width": 2,
@@ -3672,7 +3672,7 @@
                   "check_answer_label": "Person 5’s age",
                   "check_answers_card_number": 5,
                   "type": "numeric",
-                  "min": 0,
+                  "min": 1,
                   "max": 120,
                   "step": 1,
                   "width": 2,
@@ -4198,7 +4198,7 @@
                   "check_answer_label": "Person 6’s age",
                   "check_answers_card_number": 6,
                   "type": "numeric",
-                  "min": 0,
+                  "min": 1,
                   "max": 120,
                   "step": 1,
                   "width": 2,
@@ -4721,7 +4721,7 @@
                   "check_answer_label": "Person 7’s age",
                   "check_answers_card_number": 7,
                   "type": "numeric",
-                  "min": 0,
+                  "min": 1,
                   "max": 120,
                   "step": 1,
                   "width": 2,
@@ -5241,7 +5241,7 @@
                   "check_answer_label": "Person 8’s age",
                   "check_answers_card_number": 8,
                   "type": "numeric",
-                  "min": 0,
+                  "min": 1,
                   "max": 120,
                   "step": 1,
                   "width": 2,
@@ -6488,15 +6488,15 @@
                   "disable_clearing_if_not_routed_or_dynamic_answer_options": true,
                   "answer_options": {
                     "1": {
-                      "value": "Yes"
+                      "value": "No"
                     },
                     "0": {
-                      "value": "No"
+                      "value": "Yes"
                     }
                   },
                   "conditional_for": {
                     "ppostcode_full": [
-                      1
+                      0
                     ]
                   },
                   "hidden_in_check_answers": {
@@ -6524,7 +6524,7 @@
                   },
                   "inferred_check_answers_value": [{
                     "condition": {
-                      "ppcodenk": 0
+                      "ppcodenk": 1
                     },
                     "value": "Not known"
                   }]
@@ -7103,6 +7103,9 @@
                     "13": {
                       "value": "Youth offending team"
                     },
+                    "17": {
+                      "value": "Children’s Social Care"
+                    },
                     "16": {
                       "value": "Other"
                     }
@@ -7136,6 +7139,9 @@
                     "3": {
                       "value": "Nominated by a local housing authority"
                     },
+                    "4": {
+                      "value": "Referred by local authority housing department"
+                    },
                     "8": {
                       "value": "Re-located through official housing mobility scheme"
                     },
@@ -7159,6 +7165,9 @@
                     },
                     "13": {
                       "value": "Youth offending team"
+                    },
+                    "17": {
+                      "value": "Children’s Social Care"
                     },
                     "16": {
                       "value": "Other"
@@ -7216,6 +7225,9 @@
                     },
                     "13": {
                       "value": "Youth offending team"
+                    },
+                    "17": {
+                      "value": "Children’s Social Care"
                     },
                     "16": {
                       "value": "Other"
@@ -7276,6 +7288,9 @@
                     },
                     "13": {
                       "value": "Youth offending team"
+                    },
+                    "17": {
+                      "value": "Children’s Social Care"
                     },
                     "16": {
                       "value": "Other"

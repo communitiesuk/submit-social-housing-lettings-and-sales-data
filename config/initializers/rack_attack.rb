@@ -12,7 +12,7 @@ elsif Rails.env.review?
   redis_url = configuration_service.redis_uris.to_a[0][1]
   Rack::Attack.cache.store = ActiveSupport::Cache::RedisCacheStore.new(url: redis_url)
 else
-  redis_url = configuration_service.redis_uris[:"dluhc-core-#{Rails.env}-redis"]
+  redis_url = PlatformHelper.is_paas? ? configuration_service.redis_uris[:"dluhc-core-#{Rails.env}-redis"] : configuration_service.redis_uris.to_a[0][1]
   Rack::Attack.cache.store = ActiveSupport::Cache::RedisCacheStore.new(url: redis_url)
 end
 

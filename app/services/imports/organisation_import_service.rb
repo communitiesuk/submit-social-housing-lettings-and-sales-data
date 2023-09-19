@@ -46,6 +46,8 @@ module Imports
 
     def organisation_field_value(xml_document, field)
       field_value(xml_document, "institution", field)
+    rescue Nokogiri::SyntaxError
+      field_value(xml_document, nil, field)
     end
   end
 end

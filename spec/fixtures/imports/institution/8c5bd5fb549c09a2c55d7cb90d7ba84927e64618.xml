@@ -1,0 +1,23 @@
+<institution xmlns="dclg:institution">
+  <id>8c5bd5fb549c09z2c55d9cb90d7ba84927e64618</id>
+  <name>HA Ltd</name>
+  <institution-type>HOUSING-ASSOCIATION</institution-type>
+  <active>true</active>
+  <almsyn>false</almsyn>
+  <old-association-type>CHHA</old-association-type>
+  <telephone-number>xxxxxxxx</telephone-number>
+  <software-supplier-id>false</software-supplier-id>
+  <housing-management-system/>
+  <choice-based-letting>false</choice-based-letting>
+  <common-housing-register>false</common-housing-register>
+  <choice-allocation-policy>false</choice-allocation-policy>
+  <cbl-proportion-percentage/>
+  <enter-affordable-logs>true</enter-affordable-logs>
+  <owns-affordable-rent>true</owns-affordable-rent>
+  <housing-registration-no>LH9999</housing-registration-no>
+  <visible-id>1034</visible-id>
+  <holds-stock>true</holds-stock>
+  <general-needs-units>1104</general-needs-units>
+  <supported-housing-units>217</supported-housing-units>
+  <unspecified-units>0</unspecified-units>
+</institution>

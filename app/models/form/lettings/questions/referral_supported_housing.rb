@@ -45,6 +45,9 @@ class Form::Lettings::Questions::ReferralSupportedHousing < ::Form::Question
     "13" => {
       "value" => "Youth offending team",
     },
+    "17" => {
+      "value" => "Children’s Social Care",
+    },
     "16" => {
       "value" => "Other",
     },

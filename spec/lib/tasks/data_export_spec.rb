@@ -26,4 +26,24 @@ describe "rake core:data_export", type: task do
       expect { task.invoke }.to enqueue_job(DataExportXmlJob)
     end
   end
+
+  context "when running full export" do
+    let(:task) { Rake::Task["core:full_data_export_xml"] }
+
+    context "with all available years" do
+      it "calls the export service" do
+        expect(export_service).to receive(:export_xml_lettings_logs).with(full_update: true, collection_year: nil)
+
+        task.invoke
+      end
+    end
+
+    context "with a specific year" do
+      it "calls the export service" do
+        expect(export_service).to receive(:export_xml_lettings_logs).with(full_update: true, collection_year: 2022)
+
+        task.invoke("2022")
+      end
+    end
+  end
 end

@@ -92,6 +92,102 @@ describe "data_import_field imports" do
         end
       end
 
+      context "and we update the address fields" do
+        let(:field) { "address" }
+
+        it "updates the 2023 logs from the given XML file" do
+          expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+          expect(storage_service).to receive(:get_file_io).with("spec/fixtures/imports/logs")
+          expect(Imports::LettingsLogsFieldImportService).to receive(:new).with(archive_service)
+          expect(import_service).to receive(:update_field).with(field, "logs")
+          task.invoke(field, fixture_path)
+        end
+      end
+
+      context "and we update the reason field" do
+        let(:field) { "reason" }
+
+        it "updates the 2023 logs from the given XML file" do
+          expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+          expect(storage_service).to receive(:get_file_io).with("spec/fixtures/imports/logs")
+          expect(Imports::LettingsLogsFieldImportService).to receive(:new).with(archive_service)
+          expect(import_service).to receive(:update_field).with(field, "logs")
+          task.invoke(field, fixture_path)
+        end
+      end
+
+      context "and we update homeless fields" do
+        let(:field) { "homeless" }
+
+        it "updates the logs from the given XML file" do
+          expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+          expect(storage_service).to receive(:get_file_io).with("spec/fixtures/imports/logs")
+          expect(Imports::LettingsLogsFieldImportService).to receive(:new).with(archive_service)
+          expect(import_service).to receive(:update_field).with(field, "logs")
+          task.invoke(field, fixture_path)
+        end
+      end
+
+      context "and we update the created_by field" do
+        let(:field) { "created_by" }
+
+        it "updates the 2023 logs from the given XML file" do
+          expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+          expect(storage_service).to receive(:get_file_io).with("spec/fixtures/imports/logs")
+          expect(Imports::LettingsLogsFieldImportService).to receive(:new).with(archive_service)
+          expect(import_service).to receive(:update_field).with(field, "logs")
+          task.invoke(field, fixture_path)
+        end
+      end
+
+      context "and we update the sex_and_relat fields" do
+        let(:field) { "sex_and_relat" }
+
+        it "updates the 2023 logs from the given XML file" do
+          expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+          expect(storage_service).to receive(:get_file_io).with("spec/fixtures/imports/logs")
+          expect(Imports::LettingsLogsFieldImportService).to receive(:new).with(archive_service)
+          expect(import_service).to receive(:update_field).with(field, "logs")
+          task.invoke(field, fixture_path)
+        end
+      end
+
+      context "and we update the referral (for general needs) field" do
+        let(:field) { "general_needs_referral" }
+
+        it "updates the 2023 logs from the given XML file" do
+          expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+          expect(storage_service).to receive(:get_file_io).with("spec/fixtures/imports/logs")
+          expect(Imports::LettingsLogsFieldImportService).to receive(:new).with(archive_service)
+          expect(import_service).to receive(:update_field).with(field, "logs")
+          task.invoke(field, fixture_path)
+        end
+      end
+
+      context "and we update the person_details field" do
+        let(:field) { "person_details" }
+
+        it "updates the 2023 logs from the given XML file" do
+          expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+          expect(storage_service).to receive(:get_file_io).with("spec/fixtures/imports/logs")
+          expect(Imports::LettingsLogsFieldImportService).to receive(:new).with(archive_service)
+          expect(import_service).to receive(:update_field).with(field, "logs")
+          task.invoke(field, fixture_path)
+        end
+      end
+
+      context "and we update the childrens_care_referral field" do
+        let(:field) { "childrens_care_referral" }
+
+        it "updates the 2023 logs from the given XML file" do
+          expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+          expect(storage_service).to receive(:get_file_io).with("spec/fixtures/imports/logs")
+          expect(Imports::LettingsLogsFieldImportService).to receive(:new).with(archive_service)
+          expect(import_service).to receive(:update_field).with(field, "logs")
+          task.invoke(field, fixture_path)
+        end
+      end
+
       it "raises an exception if no parameters are provided" do
         expect { task.invoke }.to raise_error(/Usage/)
       end
@@ -141,6 +237,48 @@ describe "data_import_field imports" do
 
       context "and we update the owning_organisation_id field" do
         let(:field) { "owning_organisation_id" }
+
+        it "updates the logs from the given XML file when the VCAP_SERVICES environment variable exists" do
+          expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+          expect(storage_service).to receive(:get_file_io).with("spec/fixtures/imports/sales_logs")
+          expect(Imports::SalesLogsFieldImportService).to receive(:new).with(archive_service)
+          expect(import_service).to receive(:update_field).with(field, "logs")
+          task.invoke(field, fixture_path)
+        end
+
+        it "updates the logs from the given XML file when the VCAP_SERVICES environment variable does not exist" do
+          allow(ENV).to receive(:[]).with("VCAP_SERVICES")
+          expect(Storage::S3Service).to receive(:new).with(env_config_service, instance_name)
+          expect(storage_service).to receive(:get_file_io).with("spec/fixtures/imports/sales_logs")
+          expect(Imports::SalesLogsFieldImportService).to receive(:new).with(archive_service)
+          expect(import_service).to receive(:update_field).with(field, "logs")
+          task.invoke(field, fixture_path)
+        end
+      end
+
+      context "and we update the old_form_id field" do
+        let(:field) { "old_form_id" }
+
+        it "updates the logs from the given XML file when the VCAP_SERVICES environment variable exists" do
+          expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+          expect(storage_service).to receive(:get_file_io).with("spec/fixtures/imports/sales_logs")
+          expect(Imports::SalesLogsFieldImportService).to receive(:new).with(archive_service)
+          expect(import_service).to receive(:update_field).with(field, "logs")
+          task.invoke(field, fixture_path)
+        end
+
+        it "updates the logs from the given XML file when the VCAP_SERVICES environment variable does not exist" do
+          allow(ENV).to receive(:[]).with("VCAP_SERVICES")
+          expect(Storage::S3Service).to receive(:new).with(env_config_service, instance_name)
+          expect(storage_service).to receive(:get_file_io).with("spec/fixtures/imports/sales_logs")
+          expect(Imports::SalesLogsFieldImportService).to receive(:new).with(archive_service)
+          expect(import_service).to receive(:update_field).with(field, "logs")
+          task.invoke(field, fixture_path)
+        end
+      end
+
+      context "and we update the created_by field" do
+        let(:field) { "created_by" }
 
         it "updates the logs from the given XML file when the VCAP_SERVICES environment variable exists" do
           expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)

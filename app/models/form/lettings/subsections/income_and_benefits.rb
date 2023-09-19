@@ -26,6 +26,9 @@ class Form::Lettings::Subsections::IncomeAndBenefits < ::Form::Subsection
       Form::Lettings::Pages::RentMonthly.new(nil, nil, self),
       Form::Lettings::Pages::MinRentValueCheck.new("brent_min_rent_value_check", nil, self, check_answers_card_number: 0),
       Form::Lettings::Pages::MaxRentValueCheck.new("brent_max_rent_value_check", nil, self, check_answers_card_number: 0),
+      Form::Lettings::Pages::SchargeValueCheck.new(nil, nil, self),
+      Form::Lettings::Pages::PschargeValueCheck.new(nil, nil, self),
+      Form::Lettings::Pages::SupchargValueCheck.new(nil, nil, self),
       Form::Lettings::Pages::Outstanding.new(nil, nil, self),
       Form::Lettings::Pages::OutstandingAmount.new(nil, nil, self),
     ].compact

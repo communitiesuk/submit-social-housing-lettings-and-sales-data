@@ -24,6 +24,7 @@ class Form::Lettings::Subsections::HouseholdSituation < ::Form::Subsection
       Form::Lettings::Pages::ReferralPrp.new(nil, nil, self),
       Form::Lettings::Pages::ReferralSupportedHousing.new(nil, nil, self),
       Form::Lettings::Pages::ReferralSupportedHousingPrp.new(nil, nil, self),
+      Form::Lettings::Pages::ReferralValueCheck.new(nil, nil, self),
     ].compact
   end
 end

@@ -4,7 +4,7 @@ require "sidekiq/cron/web"
 configuration_service = PlatformHelper.is_paas? ? Configuration::PaasConfigurationService.new : Configuration::EnvConfigurationService.new
 
 if Rails.env.staging? || Rails.env.production?
-  redis_url = configuration_service.redis_uris[:"dluhc-core-#{Rails.env}-redis"]
+  redis_url = PlatformHelper.is_paas? ? configuration_service.redis_uris[:"dluhc-core-#{Rails.env}-redis"] : configuration_service.redis_uris.to_a[0][1]
 
   Sidekiq.configure_server do |config|
     config.redis = { url: redis_url }

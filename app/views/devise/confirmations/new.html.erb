@@ -6,7 +6,7 @@
       <%= content_for(:title) %>
     </h1>
     <%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
-      <p class="govuk-body">For security reasons, your link expired - get another one using the button below (valid for 24 hours).</p>
+      <p class="govuk-body">Your join link has expired. Select the button below to get a new one. The link will be valid for 24 hours.</p>
 
       <%= f.hidden_field :email, value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %>
 

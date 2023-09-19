@@ -12,36 +12,6 @@ RSpec.describe Validations::HouseholdValidations do
   end
 
   describe "reasonable preference validations" do
-    context "when reasonable preference is homeless" do
-      context "when the tenant was not previously homeless" do
-        it "adds an error" do
-          record.homeless = 1
-          record.rp_homeless = 1
-          household_validator.validate_reasonable_preference(record)
-          expect(record.errors["reasonable_preference_reason"])
-            .to include(match I18n.t("validations.household.reasonpref.not_homeless"))
-          expect(record.errors["homeless"])
-            .to include(match I18n.t("validations.household.homeless.reasonpref.not_homeless"))
-        end
-      end
-
-      context "when reasonable preference is given" do
-        context "when the tenant was previously homeless" do
-          it "does not add an error" do
-            record.homeless = 1
-            record.reasonpref = 1
-            household_validator.validate_reasonable_preference(record)
-            expect(record.errors["reasonpref"]).to be_empty
-            expect(record.errors["homeless"]).to be_empty
-            record.homeless = 0
-            household_validator.validate_reasonable_preference(record)
-            expect(record.errors["reasonpref"]).to be_empty
-            expect(record.errors["homeless"]).to be_empty
-          end
-        end
-      end
-    end
-
     context "when reasonable preference is not given" do
       it "validates that no reason is needed" do
         record.reasonpref = 1
@@ -649,7 +619,17 @@ RSpec.describe Validations::HouseholdValidations do
     end
 
     context "when the referral is internal transfer" do
-      it "cannot be 3" do
+      it "prevten can be 9" do
+        record.referral = 1
+        record.prevten = 9
+        household_validator.validate_previous_housing_situation(record)
+        expect(record.errors["prevten"])
+          .to be_empty
+        expect(record.errors["referral"])
+          .to be_empty
+      end
+
+      it "prevten cannot be 3" do
         record.referral = 1
         record.prevten = 3
         household_validator.validate_previous_housing_situation(record)
@@ -659,7 +639,7 @@ RSpec.describe Validations::HouseholdValidations do
           .to include(match I18n.t("validations.household.referral.prevten_invalid", prevten: ""))
       end
 
-      it "cannot be 4, 10, 13, 19, 23, 24, 25, 26, 28, 29" do
+      it "prevten cannot be 4, 10, 13, 19, 23, 24, 25, 26, 28, 29" do
         record.referral = 1
         record.prevten = 4
         household_validator.validate_previous_housing_situation(record)

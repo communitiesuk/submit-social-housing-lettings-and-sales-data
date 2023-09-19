@@ -232,11 +232,6 @@ private
 
   PIO = PostcodeService.new
 
-  def process_previous_postcode_changes!
-    self.ppostcode_full = upcase_and_remove_whitespace(ppostcode_full)
-    process_postcode(ppostcode_full, "ppcodenk", "is_previous_la_inferred", "prevloc")
-  end
-
   LA_CHANGES = {
     "E07000027" => "E06000064", # Barrow-in-Furness => Westmorland and Furness
     "E07000030" => "E06000064", # Eden => Westmorland and Furness

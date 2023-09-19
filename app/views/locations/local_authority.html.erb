@@ -3,7 +3,7 @@
 <% content_for :before_content do %>
   <%= govuk_back_link(
         href: case params[:referrer]
-              when "check_local_authority"
+              when "check_local_authority", "check_answers"
                 scheme_location_check_answers_path(@scheme, @location, route: params[:route])
               else
                 scheme_location_postcode_path(@scheme, @location, route: params[:route], referrer: params[:referrer])

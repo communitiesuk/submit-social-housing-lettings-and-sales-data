@@ -711,14 +711,6 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
     end
 
     describe "#field_68 - 74" do
-      context "when not homeless but reasonable preference for homelessness" do
-        let(:attributes) { { bulk_upload:, field_68: "1", field_69: "1", field_70: "1" } }
-
-        it "is not permitted" do
-          expect(parser.errors[:field_70]).to be_present
-        end
-      end
-
       context "when there is a reasonable preference but none is given" do
         let(:attributes) { { bulk_upload:, field_69: "1", field_70: nil, field_71: nil, field_72: nil, field_73: nil, field_74: nil } }
 
@@ -1562,7 +1554,7 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
       let(:attributes) { { bulk_upload:, field_65: "2" } }
 
       it "sets correct value from mapping" do
-        expect(parser.log.ppcodenk).to eq(0)
+        expect(parser.log.ppcodenk).to eq(1)
       end
     end
 

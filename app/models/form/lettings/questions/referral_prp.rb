@@ -21,6 +21,9 @@ class Form::Lettings::Questions::ReferralPrp < ::Form::Question
     "3" => {
       "value" => "Nominated by a local housing authority",
     },
+    "4" => {
+      "value" => "Referred by local authority housing department",
+    },
     "8" => {
       "value" => "Re-located through official housing mobility scheme",
     },
@@ -44,6 +47,9 @@ class Form::Lettings::Questions::ReferralPrp < ::Form::Question
     },
     "13" => {
       "value" => "Youth offending team",
+    },
+    "17" => {
+      "value" => "Children’s Social Care",
     },
     "16" => {
       "value" => "Other",

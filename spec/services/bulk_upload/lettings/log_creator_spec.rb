@@ -67,7 +67,7 @@ RSpec.describe BulkUpload::Lettings::LogCreator do
           waityear: 9,
           joint: 2,
           tenancy: 9,
-          ppcodenk: 0,
+          ppcodenk: 1,
         )
       end
 
@@ -153,7 +153,7 @@ RSpec.describe BulkUpload::Lettings::LogCreator do
           waityear: 9,
           joint: 2,
           tenancy: 9,
-          ppcodenk: 0,
+          ppcodenk: 1,
         )
       end
 

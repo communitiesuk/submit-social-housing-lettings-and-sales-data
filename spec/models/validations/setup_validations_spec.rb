@@ -641,6 +641,26 @@ RSpec.describe Validations::SetupValidations do
           .to include(match I18n.t("validations.setup.startdate.location.activating_soon.location_id", postcode: location.postcode, date: "15 September 2022"))
       end
     end
+
+    context "with an incomplete location" do
+      let(:scheme) { create(:scheme) }
+      let(:location) { create(:location, :incomplete, scheme:) }
+
+      it "produces error when location is incomplete" do
+        record.location = location
+        setup_validator.validate_location(record)
+        expect(record.errors["location_id"])
+          .to include("This location is incomplete. Select another location or update this one")
+      end
+
+      it "produces no error when location is completes" do
+        location.update!(units: 1)
+        location.reload
+        record.location = location
+        setup_validator.validate_location(record)
+        expect(record.errors["location_id"]).to be_empty
+      end
+    end
   end
 
   describe "#validate_organisation" do

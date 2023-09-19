@@ -278,15 +278,6 @@ class SalesLog < Log
     mortgage + deposit
   end
 
-  def process_postcode(postcode, postcode_known_key, la_inferred_key, la_key)
-    return if postcode.blank?
-
-    self[postcode_known_key] = 0
-    inferred_la = get_inferred_la(postcode)
-    self[la_inferred_key] = inferred_la.present?
-    self[la_key] = inferred_la if inferred_la.present?
-  end
-
   def outright_sale?
     ownershipsch == 3
   end
@@ -305,7 +296,22 @@ class SalesLog < Log
 
   def process_postcode_changes!
     self.postcode_full = upcase_and_remove_whitespace(postcode_full)
-    process_postcode(postcode_full, "pcodenk", "is_la_inferred", "la")
+    return if postcode_full.blank?
+
+    self.pcodenk = 0
+    inferred_la = get_inferred_la(postcode_full)
+    self.is_la_inferred = inferred_la.present?
+    self.la = inferred_la if inferred_la.present?
+  end
+
+  def process_previous_postcode_changes!
+    self.ppostcode_full = upcase_and_remove_whitespace(ppostcode_full)
+    return if ppostcode_full.blank?
+
+    self.ppcodenk = 0
+    inferred_la = get_inferred_la(ppostcode_full)
+    self.is_previous_la_inferred = inferred_la.present?
+    self.prevloc = inferred_la if inferred_la.present?
   end
 
   def reset_created_by!
