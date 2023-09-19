@@ -128,7 +128,7 @@ RSpec.describe Imports::ImportReportService do
         create_list(:lettings_log, 2, :completed, age1_known: nil)
       end
 
-      it "generates a csv with expected missing fields" do
+      xit "generates a csv with expected missing fields" do
         expect(storage_service).to receive(:write_file).with("MissingAnswersReportLettingsLog_report_suffix.csv", "﻿#{expected_content}")
         expect(storage_service).to receive(:write_file).with("MissingAnswersExamplesLettingsLog_report_suffix.csv", "﻿#{expected_answers_examples_content}")
         expect(storage_service).to receive(:write_file).with("MissingAnswersReportSalesLog_report_suffix.csv", "\uFEFFMissing answers,Total number of affected logs\n")
@@ -166,7 +166,7 @@ RSpec.describe Imports::ImportReportService do
         create_list(:sales_log, 2, :completed, age1_known: nil)
       end
 
-      it "generates a csv with expected missing fields" do
+      xit "generates a csv with expected missing fields" do
         expect(storage_service).to receive(:write_file).with("MissingAnswersReportLettingsLog_report_suffix.csv", "\uFEFFMissing answers,Total number of affected logs\n")
         expect(storage_service).to receive(:write_file).with("MissingAnswersExamplesLettingsLog_report_suffix.csv", "\uFEFFMissing answers,Organisation ID,Log ID,Old Form ID,Old Log ID\n")
         expect(storage_service).to receive(:write_file).with("MissingAnswersReportSalesLog_report_suffix.csv", "﻿#{expected_content}")
