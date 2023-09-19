@@ -8,7 +8,7 @@ class Log < ApplicationRecord
   belongs_to :updated_by, class_name: "User", optional: true
   belongs_to :bulk_upload, optional: true
 
-  before_save :update_status!
+  before_validation :update_status!
 
   STATUS = {
     "not_started" => 0,
@@ -188,6 +188,12 @@ class Log < ApplicationRecord
     form.edit_end_date < Time.zone.now || older_than_previous_collection_year?
   end
 
+  def update_status!
+    return if skip_update_status
+
+    self.status = calculate_status
+  end
+
 private
 
   # Handle logs that are older than previous collection start date
@@ -206,12 +212,6 @@ private
     elsif gender == "F"
       "females"
     end
-  end
-
-  def update_status!
-    return if skip_update_status
-
-    self.status = calculate_status
   end
 
   def all_subsections_completed?
