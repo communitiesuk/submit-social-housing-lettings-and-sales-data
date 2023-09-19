@@ -163,6 +163,32 @@ RSpec.describe Imports::SalesLogsImportService do
       end
     end
 
+    context "and the user is not given" do
+      let(:sales_log_id) { "shared_ownership_sales_log" }
+
+      before { sales_log_xml.at_xpath("//meta:owner-user-id").content = nil }
+
+      it "creates a new unassigned user" do
+        expect(logger).to receive(:error).with("Sales log 'shared_ownership_sales_log' does not have the owner id. Assigning log to 'Unassigned' user.")
+        sales_log_service.send(:create_log, sales_log_xml)
+
+        sales_log = SalesLog.where(old_id: sales_log_id).first
+        expect(sales_log&.created_by&.name).to eq("Unassigned")
+      end
+
+      it "only creates one unassigned user" do
+        expect(logger).to receive(:error).with("Sales log 'shared_ownership_sales_log' does not have the owner id. Assigning log to 'Unassigned' user.")
+        expect(logger).to receive(:error).with("Sales log 'fake_id' does not have the owner id. Assigning log to 'Unassigned' user.")
+        sales_log_service.send(:create_log, sales_log_xml)
+        sales_log_xml.at_xpath("//meta:document-id").content = "fake_id"
+        sales_log_service.send(:create_log, sales_log_xml)
+
+        sales_log = SalesLog.where(old_id: sales_log_id).first
+        second_sales_log = SalesLog.where(old_id: "fake_id").first
+        expect(sales_log&.created_by).to eq(second_sales_log&.created_by)
+      end
+    end
+
     context "and the user exists on a different organisation" do
       let(:sales_log_id) { "shared_ownership_sales_log" }
 

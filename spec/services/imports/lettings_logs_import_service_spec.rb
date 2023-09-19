@@ -172,6 +172,30 @@ RSpec.describe Imports::LettingsLogsImportService do
         end
       end
 
+      context "and the user is not provided" do
+        before { lettings_log_xml.at_xpath("//meta:owner-user-id").content = nil }
+
+        it "creates a new unassigned user" do
+          expect(logger).to receive(:error).with("Lettings log '0ead17cb-1668-442d-898c-0d52879ff592' does not have the owner id. Assigning log to 'Unassigned' user.")
+          lettings_log_service.send(:create_log, lettings_log_xml)
+
+          lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+          expect(lettings_log&.created_by&.name).to eq("Unassigned")
+        end
+
+        it "only creates one unassigned user" do
+          expect(logger).to receive(:error).with("Lettings log '0ead17cb-1668-442d-898c-0d52879ff592' does not have the owner id. Assigning log to 'Unassigned' user.")
+          expect(logger).to receive(:error).with("Lettings log 'fake_id' does not have the owner id. Assigning log to 'Unassigned' user.")
+          lettings_log_service.send(:create_log, lettings_log_xml)
+          lettings_log_xml.at_xpath("//meta:document-id").content = "fake_id"
+          lettings_log_service.send(:create_log, lettings_log_xml)
+
+          lettings_log = LettingsLog.where(old_id: lettings_log_id).first
+          second_lettings_log = LettingsLog.where(old_id: "fake_id").first
+          expect(lettings_log&.created_by).to eq(second_lettings_log&.created_by)
+        end
+      end
+
       context "and the user exists on a different organisation" do
         before do
           create(:legacy_user, old_user_id: "fake_id")
