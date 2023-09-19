@@ -267,7 +267,7 @@ module Imports
 
       (2..record.hhmemb).each do |i|
         next @logger.info("lettings log #{record.id} has values for sex#{i} and relat#{i}, skipping update") if record["sex#{i}"] && record["relat#{i}"]
-        next @logger.info("lettings log #{record.id} has value 'no' for details_known_#{i}, skipping update") if record["details_known_#{i}"] == 1
+        next @logger.info("lettings log #{record.id} has value 'no' for details_known_#{i}, skipping update") if record.details_not_known_for_person?(i)
 
         if record["sex#{i}"].blank?
           record["sex#{i}"] = sex(xml_doc, i)
@@ -311,7 +311,7 @@ module Imports
       return @logger.warn("lettings log with old id #{old_id} not found") unless record
       return @logger.info("lettings log #{record.id} has no hhmemb, skipping update") unless record.hhmemb
 
-      if (2..record.hhmemb).all? { |person_index| record.has_any_person_details?(person_index) || record["details_known_#{person_index}"] == 1 }
+      if (2..record.hhmemb).all? { |person_index| record.has_any_person_details?(person_index) || record.details_not_known_for_person?(person_index) }
         return @logger.info("lettings log #{record.id} has all household member details, skipping update")
       end
       if record.hhmemb == 8 || ((record.hhmemb + 1)..8).none? { |person_index| file_contains_person_details?(xml_doc, person_index) }
@@ -323,14 +323,14 @@ module Imports
 
       while person_exists_on_the_log?(record, person_index)
         if person_exists_on_the_log?(record, next_person_index)
-          if record.has_any_person_details?(person_index) || record["details_known_#{person_index}"] == 1
+          if record.has_any_person_details?(person_index) || record.details_not_known_for_person?(person_index)
             @logger.info("lettings log #{record.id} has details for person #{person_index}, skipping person")
             person_index += 1
             next_person_index += 1
             next
           end
 
-          if !record.has_any_person_details?(next_person_index) && record["details_known_#{next_person_index}"] != 1
+          if !record.has_any_person_details?(next_person_index) && !record.details_not_known_for_person?(next_person_index)
             next_person_index += 1
             next
           end
