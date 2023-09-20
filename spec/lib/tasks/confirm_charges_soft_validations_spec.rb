@@ -53,6 +53,16 @@ RSpec.describe "confirm_charges_soft_validations" do
         expect(lettings_log.values_updated_at).to be_nil
       end
 
+      it "does not confirm scharge value check for 2021 logs" do
+        lettings_log.scharge = 404
+        lettings_log.skip_update_status = true
+        lettings_log.startdate = Time.zone.local(2021, 4, 1)
+        lettings_log.save!(validate: false)
+        lettings_log.skip_update_status = nil
+        expect { task.invoke }.not_to change(lettings_log.reload, :scharge_value_check)
+        expect(lettings_log.values_updated_at).to be_nil
+      end
+
       it "confirms pscharge value check for lettings logs with pscharge over soft max" do
         lettings_log.pscharge = 204
         lettings_log.skip_update_status = true
@@ -92,6 +102,16 @@ RSpec.describe "confirm_charges_soft_validations" do
         expect(lettings_log.values_updated_at).to be_nil
       end
 
+      it "does not confirm pscharge value check for 2021 logs" do
+        lettings_log.pscharge = 204
+        lettings_log.skip_update_status = true
+        lettings_log.startdate = Time.zone.local(2021, 4, 1)
+        lettings_log.save!(validate: false)
+        lettings_log.skip_update_status = nil
+        expect { task.invoke }.not_to change(lettings_log.reload, :pscharge_value_check)
+        expect(lettings_log.values_updated_at).to be_nil
+      end
+
       it "confirms supcharg value check for lettings logs with supcharg over soft max" do
         lettings_log.supcharg = 204
         lettings_log.skip_update_status = true
@@ -127,6 +147,16 @@ RSpec.describe "confirm_charges_soft_validations" do
         lettings_log.update!(supcharg: 204, supcharg_value_check: 0)
         expect(lettings_log.reload.status).to eq("completed")
         task.invoke
+        expect { task.invoke }.not_to change(lettings_log.reload, :supcharg_value_check)
+        expect(lettings_log.values_updated_at).to be_nil
+      end
+
+      it "does not confirm supcharg value check for 2021 logs" do
+        lettings_log.supcharg = 204
+        lettings_log.skip_update_status = true
+        lettings_log.startdate = Time.zone.local(2021, 4, 1)
+        lettings_log.save!(validate: false)
+        lettings_log.skip_update_status = nil
         expect { task.invoke }.not_to change(lettings_log.reload, :supcharg_value_check)
         expect(lettings_log.values_updated_at).to be_nil
       end
