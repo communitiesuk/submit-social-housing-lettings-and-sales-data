@@ -787,29 +787,33 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
     before do
       Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
       lettings_log_file.rewind
+      lettings_log_xml.at_xpath("//xmlns:P1Sex").content = "Person prefers not to say"
       lettings_log_xml.at_xpath("//xmlns:P2Sex").content = "Person prefers not to say"
       lettings_log_xml.at_xpath("//xmlns:P2Rel").content = "Person prefers not to say"
     end
 
     context "when the lettings log has no sex or relat value" do
       before do
-        lettings_log.update!(sex2: nil, relat2: nil, details_known_2: 0, values_updated_at: nil)
+        lettings_log.update!(sex1: nil, sex2: nil, relat2: nil, details_known_2: 0, values_updated_at: nil)
       end
 
       it "updates the lettings_log sex and relat value if details for person are known" do
+        expect(logger).to receive(:info).with(/lettings log \d+'s sex1 value has been set to R/)
         expect(logger).to receive(:info).with(/lettings log \d+'s sex2 value has been set to R/)
         expect(logger).to receive(:info).with(/lettings log \d+'s relat2 value has been set to R/)
         import_service.send(:update_sex_and_relat, lettings_log_xml)
         lettings_log.reload
+        expect(lettings_log.sex1).to eq("R")
         expect(lettings_log.sex2).to eq("R")
         expect(lettings_log.relat2).to eq("R")
         expect(lettings_log.values_updated_at).not_to be_nil
       end
 
       it "does not update the lettings_log sex and relat value if details for person are not known" do
-        lettings_log.update!(details_known_2: 1)
+        lettings_log.update!(details_known_2: 1, sex1: "M")
 
-        expect(logger).to receive(:info).with(/lettings log \d+ has value 'no' for details_known_2, skipping update/)
+        expect(logger).to receive(:info).with(/lettings log \d+ has value for sex1, skipping person/)
+        expect(logger).to receive(:info).with(/lettings log \d+ has value 'no' for details_known_2, skipping person/)
         import_service.send(:update_sex_and_relat, lettings_log_xml)
         lettings_log.reload
         expect(lettings_log.sex2).to eq(nil)
@@ -824,7 +828,8 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
       end
 
       it "does not update the lettings_log sex and relat values" do
-        expect(logger).to receive(:info).with(/lettings log \d+ has values for sex2 and relat2, skipping update/)
+        expect(logger).to receive(:info).with(/lettings log \d+ has value for sex1, skipping person/)
+        expect(logger).to receive(:info).with(/lettings log \d+ has values for sex2 and relat2, skipping person/)
         import_service.send(:update_sex_and_relat, lettings_log_xml)
         lettings_log.reload
         expect(lettings_log.sex2).to eq("F")
@@ -839,6 +844,7 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
       end
 
       it "only updates relat value" do
+        expect(logger).to receive(:info).with(/lettings log \d+ has value for sex1, skipping person/)
         expect(logger).to receive(:info).with(/lettings log \d+'s relat2 value has been set to R/)
         import_service.send(:update_sex_and_relat, lettings_log_xml)
         lettings_log.reload
@@ -854,6 +860,7 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
       end
 
       it "only updates sex value" do
+        expect(logger).to receive(:info).with(/lettings log \d+ has value for sex1, skipping person/)
         expect(logger).to receive(:info).with(/lettings log \d+'s sex2 value has been set to R/)
         import_service.send(:update_sex_and_relat, lettings_log_xml)
         lettings_log.reload
@@ -894,12 +901,13 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
                              sex6: nil, relat6: nil, details_known_6: 1,
                              hhmemb: 6, values_updated_at: nil)
 
-        expect(logger).to receive(:info).with(/lettings log \d+ has values for sex2 and relat2, skipping update/)
+        expect(logger).to receive(:info).with(/lettings log \d+ has value for sex1, skipping person/)
+        expect(logger).to receive(:info).with(/lettings log \d+ has values for sex2 and relat2, skipping person/)
         expect(logger).to receive(:info).with(/lettings log \d+'s sex3 value has been set to R/)
         expect(logger).to receive(:info).with(/lettings log \d+'s relat3 value has been set to R/)
         expect(logger).to receive(:info).with(/lettings log \d+'s relat4 value has been set to R/)
         expect(logger).to receive(:info).with(/lettings log \d+'s sex5 value has been set to R/)
-        expect(logger).to receive(:info).with(/lettings log \d+ has value 'no' for details_known_6, skipping update/)
+        expect(logger).to receive(:info).with(/lettings log \d+ has value 'no' for details_known_6, skipping person/)
         import_service.send(:update_sex_and_relat, lettings_log_xml)
 
         lettings_log.reload
@@ -926,11 +934,11 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
                              sex4: "F", relat4: "X", details_known_4: 0,
                              sex5: nil, relat5: nil, details_known_5: 1,
                              hhmemb: 5, values_updated_at: nil)
-
-        expect(logger).to receive(:info).with(/lettings log \d+ has values for sex2 and relat2, skipping update/)
-        expect(logger).to receive(:info).with(/lettings log \d+ has value 'no' for details_known_3, skipping update/)
-        expect(logger).to receive(:info).with(/lettings log \d+ has values for sex4 and relat4, skipping update/)
-        expect(logger).to receive(:info).with(/lettings log \d+ has value 'no' for details_known_5, skipping update/)
+        expect(logger).to receive(:info).with(/lettings log \d+ has value for sex1, skipping person/)
+        expect(logger).to receive(:info).with(/lettings log \d+ has values for sex2 and relat2, skipping person/)
+        expect(logger).to receive(:info).with(/lettings log \d+ has value 'no' for details_known_3, skipping person/)
+        expect(logger).to receive(:info).with(/lettings log \d+ has values for sex4 and relat4, skipping person/)
+        expect(logger).to receive(:info).with(/lettings log \d+ has value 'no' for details_known_5, skipping person/)
 
         import_service.send(:update_sex_and_relat, lettings_log_xml)
         expect(lettings_log.values_updated_at).to be_nil
