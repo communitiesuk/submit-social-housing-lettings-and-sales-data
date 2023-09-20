@@ -267,9 +267,16 @@ module Imports
       return @logger.warn("lettings log with old id #{old_id} not found") unless record
       return @logger.info("lettings log #{record.id} has no hhmemb value, skipping update") if record.hhmemb.blank?
 
+      if record.sex1.present?
+        @logger.info("lettings log #{record.id} has value for sex1, skipping person")
+      else
+        record.sex1 = sex(xml_doc, 1)
+        @logger.info("lettings log #{record.id}'s sex1 value has been set to #{record.sex1}")
+      end
+
       (2..record.hhmemb).each do |i|
-        next @logger.info("lettings log #{record.id} has values for sex#{i} and relat#{i}, skipping update") if record["sex#{i}"] && record["relat#{i}"]
-        next @logger.info("lettings log #{record.id} has value 'no' for details_known_#{i}, skipping update") if record.details_not_known_for_person?(i)
+        next @logger.info("lettings log #{record.id} has values for sex#{i} and relat#{i}, skipping person") if record["sex#{i}"] && record["relat#{i}"]
+        next @logger.info("lettings log #{record.id} has value 'no' for details_known_#{i}, skipping person") if record.details_not_known_for_person?(i)
 
         if record["sex#{i}"].blank?
           record["sex#{i}"] = sex(xml_doc, i)
