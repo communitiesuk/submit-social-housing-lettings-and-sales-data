@@ -32,7 +32,7 @@
         params: { ids: @duplicate_logs.map(&:id), original_log_id: @original_log.id, remaining_log_id: @log.id } %>
       <%= govuk_button_link_to(
         "Cancel",
-        send("#{@log.class.name.underscore}_duplicate_logs_path", @log),
+        send("#{@log.class.name.underscore}_duplicate_logs_path", @original_log, original_log_id: @original_log.id),
         secondary: true,
       ) %>
     </div>
