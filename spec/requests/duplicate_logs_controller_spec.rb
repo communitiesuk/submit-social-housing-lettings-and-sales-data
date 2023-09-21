@@ -267,8 +267,8 @@ RSpec.describe DuplicateLogsController, type: :request do
         expect(page).to have_button(text: "Delete this log")
         expect(page).to have_link(text: "Log #{duplicate_log.id}", href: lettings_log_path(duplicate_log.id))
         expect(page).not_to have_link(text: "Log #{id}", href: lettings_log_path(id))
-        expect(page).to have_link(text: "Cancel", href: lettings_log_duplicate_logs_path(id))
-        expect(page).to have_link(text: "Back", href: lettings_log_duplicate_logs_path(id))
+        expect(page).to have_link(text: "Cancel", href: lettings_log_duplicate_logs_path(id, original_log_id: id))
+        expect(page).to have_link(text: "Back", href: lettings_log_duplicate_logs_path(id, original_log_id: id))
       end
     end
 
