@@ -210,6 +210,17 @@ module Exports
         add_location_fields!(lettings_log.location, attribute_hash) if lettings_log.location
         attribute_hash.delete("unittype_gn")
       end
+
+      # details unknown fields
+      (2..8).each do |index|
+        next unless lettings_log["details_known_#{index}"] == 1
+
+        attribute_hash["age#{index}"] = -9
+        attribute_hash["sex#{index}"] = "R"
+        attribute_hash["relat#{index}"] = "R"
+        attribute_hash["ecstat#{index}"] = 10
+      end
+
       attribute_hash
     end
 
