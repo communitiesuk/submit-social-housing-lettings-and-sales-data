@@ -75,15 +75,15 @@ module Exports
     def write_export_archive(export, collection, start_time, recent_export, full_update)
       archive = get_archive_name(collection, export.base_number, export.increment_number) # archive name would be the same for all logs because they're already filtered by year (?)
 
-      logs_count = retrieve_lettings_logs(start_time, recent_export, full_update).filter_by_year(collection).count
-      @logger.info("Creating #{archive} - #{logs_count} logs")
-      return {} if logs_count.zero?
+      initial_logs_count = retrieve_lettings_logs(start_time, recent_export, full_update).filter_by_year(collection).count
+      @logger.info("Creating #{archive} - #{initial_logs_count} logs")
+      return {} if initial_logs_count.zero?
 
       zip_file = Zip::File.open_buffer(StringIO.new)
 
       part_number = 1
       last_processed_marker = nil
-      total_logs = 0
+      logs_count_after_export = 0
 
       loop do
         lettings_logs_slice = if last_processed_marker.present?
@@ -104,11 +104,11 @@ module Exports
         zip_file.add("#{archive}_#{part_number_str}.xml", data_xml)
         part_number += 1
         last_processed_marker = lettings_logs_slice.last.created_at
-        total_logs += lettings_logs_slice.count
+        logs_count_after_export += lettings_logs_slice.count
         @logger.info("Added #{archive}_#{part_number_str}.xml")
       end
 
-      manifest_xml = build_manifest_xml(logs_count)
+      manifest_xml = build_manifest_xml(logs_count_after_export)
       zip_file.add("manifest.xml", manifest_xml)
 
       # Required by S3 to avoid Aws::S3::Errors::BadDigest
