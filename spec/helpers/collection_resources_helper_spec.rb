@@ -17,5 +17,4 @@ RSpec.describe CollectionResourcesHelper do
       end
     end
   end
-
 end
