@@ -64,13 +64,18 @@
 
       <div class="govuk-button-group">
         <% if !@page.interruption_screen? && if request.query_parameters["referrer"] != "check_answers" %>
-          <%= f.govuk_submit "Save and continue" %>
-          <%= govuk_link_to(
-            (@page.skip_text || "Skip for now"),
-            (@page.skip_href(@log) || send(@log.form.next_page_redirect_path(@page, @log, current_user), @log)),
-          ) %>
+          <% if request.query_parameters["referrer"] == "duplicate_logs" %>
+            <%= f.govuk_submit "Save changes" %>
+            <%= govuk_link_to("Cancel", lettings_log_duplicate_logs_path(request.query_parameters["original_log_id"], original_log_id: request.query_parameters["original_log_id"]))%>
           <% else %>
-          <%= f.govuk_submit "Save changes" %>
+            <%= f.govuk_submit "Save and continue" %>
+            <%= govuk_link_to(
+              (@page.skip_text || "Skip for now"),
+              (@page.skip_href(@log) || send(@log.form.next_page_redirect_path(@page, @log, current_user), @log)),
+            ) %>
+          <% end %>
+          <% else %>
+            <%= f.govuk_submit "Save changes" %>
             <%= govuk_link_to "Cancel", send(@log.form.cancel_path(@page, @log), @log) %>
           <% end %>
         <% end %>

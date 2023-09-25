@@ -34,7 +34,7 @@ RSpec.describe "Sales Log Features" do
         it "includes the purchaser code and sale completion date questions" do
           click_button "Create a new sales log"
           click_link "Set up this sales log"
-          fill_in("sales_log[saledate(1i)]", with: Time.zone.today.year)
+          fill_in("sales_log[saledate(i)]", with: Time.zone.today.year)
           fill_in("sales_log[saledate(2i)]", with: Time.zone.today.month)
           fill_in("sales_log[saledate(3i)]", with: Time.zone.today.day)
           click_button "Save and continue"
@@ -249,7 +249,7 @@ RSpec.describe "Sales Log Features" do
       expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
       click_link("Change", href: "/sales-logs/#{duplicate_log.id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
       fill_in("sales-log-purchid-field", with: "something else")
-      click_button("Save and continue")
+      click_button("Save changes")
       expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
       expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
       expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
@@ -260,7 +260,7 @@ RSpec.describe "Sales Log Features" do
     it "allows deduplicating logs by changing the answers on the original log" do
       click_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?first_remaining_duplicate_id=#{duplicate_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
       fill_in("sales-log-purchid-field", with: "something else")
-      click_button("Save and continue")
+      click_button("Save changes")
       expect(page).to have_current_path("/sales-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
       expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
       expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")

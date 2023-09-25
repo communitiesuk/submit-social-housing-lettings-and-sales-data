@@ -510,7 +510,7 @@ RSpec.describe "Lettings Log Features" do
         expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
         click_link("Change", href: "/lettings-logs/#{duplicate_log.id}/tenant-code?first_remaining_duplicate_id=#{lettings_log.id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
         fill_in("lettings-log-tenancycode-field", with: "something else")
-        click_button("Save and continue")
+        click_button("Save changes")
         expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
         expect(page).to have_link("Back to Log #{lettings_log.id}", href: "/lettings-logs/#{lettings_log.id}")
         expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
@@ -521,7 +521,7 @@ RSpec.describe "Lettings Log Features" do
       it "allows deduplicating logs by changing the answers on the original log" do
         click_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?first_remaining_duplicate_id=#{duplicate_log.id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
         fill_in("lettings-log-tenancycode-field", with: "something else")
-        click_button("Save and continue")
+        click_button("Save changes")
         expect(page).to have_current_path("/lettings-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
         expect(page).to have_link("Back to Log #{lettings_log.id}", href: "/lettings-logs/#{lettings_log.id}")
         expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
