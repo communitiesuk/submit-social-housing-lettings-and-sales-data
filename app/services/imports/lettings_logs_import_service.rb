@@ -289,16 +289,23 @@ module Imports
     def save_lettings_log(attributes, previous_status)
       lettings_log = LettingsLog.new(attributes)
       begin
-        lettings_log.save!
-        lettings_log
-      rescue ActiveRecord::RecordNotUnique
         legacy_id = attributes["old_id"]
         record = LettingsLog.find_by(old_id: legacy_id)
-        if allow_updates
-          attributes["updated_at"] = Time.zone.now
-          record.update!(attributes)
+        if record.present?
+          if allow_updates
+            attributes["updated_at"] = Time.zone.now
+            record.update!(attributes)
+          end
+          record
+        else
+          duplicate_logs = lettings_log.created_by.lettings_logs.duplicate_logs(lettings_log)
+          if duplicate_logs.count.positive?
+            @logger.info("Duplicate log with id #{duplicate_logs.map(&:id).join(', ')} found for log #{lettings_log.old_id}, skipping log")
+          else
+            lettings_log.save!
+          end
+          lettings_log
         end
-        record
       rescue ActiveRecord::RecordInvalid => e
         rescue_validation_or_raise(lettings_log, attributes, previous_status, e)
       end

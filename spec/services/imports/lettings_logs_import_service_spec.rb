@@ -103,6 +103,22 @@ RSpec.describe Imports::LettingsLogsImportService do
         expect(updated_logs).to eq(0)
       end
 
+      it "does not import the log if a duplicate log exists on the system" do
+        expect(logger).not_to receive(:error)
+        expect(logger).not_to receive(:warn)
+        expect(logger).not_to receive(:info).with(/Updating lettings log/)
+        expect(logger).to receive(:info).with(/Duplicate log with id \d+ found for log #{lettings_log_id}, skipping log/)
+        expect(logger).to receive(:info).with(/Duplicate log with id \d+ found for log #{lettings_log_id2}, skipping log/)
+        expect(logger).to receive(:info).with(/Duplicate log with id \d+ found for log #{lettings_log_id3}, skipping log/)
+
+        lettings_log_service.create_logs(remote_folder)
+        expect(LettingsLog.count).to eq(3)
+        LettingsLog.update_all(old_id: nil)
+
+        lettings_log_service.create_logs(remote_folder)
+        expect(LettingsLog.count).to eq(3)
+      end
+
       context "with updates allowed" do
         subject(:lettings_log_service) { described_class.new(storage_service, logger, allow_updates: true) }
 
@@ -151,6 +167,7 @@ RSpec.describe Imports::LettingsLogsImportService do
           expect(logger).to receive(:error).with("Lettings log 'fake_id' belongs to legacy user with owner-user-id: 'fake_id' which cannot be found. Assigning log to 'Unassigned' user.")
           lettings_log_service.send(:create_log, lettings_log_xml)
           lettings_log_xml.at_xpath("//meta:document-id").content = "fake_id"
+          lettings_log_xml.at_xpath("//xmlns:_2bTenCode").content = "fake_code"
           lettings_log_service.send(:create_log, lettings_log_xml)
 
           lettings_log = LettingsLog.where(old_id: lettings_log_id).first
@@ -188,6 +205,7 @@ RSpec.describe Imports::LettingsLogsImportService do
           expect(logger).to receive(:error).with("Lettings log 'fake_id' does not have the owner id. Assigning log to 'Unassigned' user.")
           lettings_log_service.send(:create_log, lettings_log_xml)
           lettings_log_xml.at_xpath("//meta:document-id").content = "fake_id"
+          lettings_log_xml.at_xpath("//xmlns:_2bTenCode").content = "fake_code"
           lettings_log_service.send(:create_log, lettings_log_xml)
 
           lettings_log = LettingsLog.where(old_id: lettings_log_id).first
@@ -215,6 +233,7 @@ RSpec.describe Imports::LettingsLogsImportService do
           expect(logger).to receive(:error).with("Lettings log 'fake_id' belongs to legacy user with owner-user-id: 'fake_id' which belongs to a different organisation. Assigning log to 'Unassigned' user.")
           lettings_log_service.send(:create_log, lettings_log_xml)
           lettings_log_xml.at_xpath("//meta:document-id").content = "fake_id"
+          lettings_log_xml.at_xpath("//xmlns:_2bTenCode").content = "fake_code"
           lettings_log_service.send(:create_log, lettings_log_xml)
 
           lettings_log = LettingsLog.where(old_id: lettings_log_id).first
