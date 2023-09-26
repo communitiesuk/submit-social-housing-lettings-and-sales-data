@@ -563,6 +563,7 @@ private
       field_4 != 2 ? "postcode_full" : nil,
       field_4 != 1 ? "location" : nil,
       "tenancycode",
+      log.chcharge.present? ? "chcharge" : nil,
     ].compact
   end
 
@@ -858,6 +859,8 @@ private
       errors.add(:field_47, error_message) # sex1
       errors.add(:field_50, error_message) # ecstat1
       errors.add(:field_132, error_message) # tcharge
+      errors.add(:field_127, error_message) if log.chcharge.present? # chcharge
+      errors.add(:field_125, error_message) if bulk_upload.needstype != 1 # household_charge
     end
   end
 
@@ -1170,6 +1173,7 @@ private
     attributes["supcharg"] = field_131
     attributes["tcharge"] = field_132
     attributes["chcharge"] = field_127
+    attributes["is_carehome"] = field_127.present? ? 1 : 0
     attributes["household_charge"] = field_125
     attributes["hbrentshortfall"] = field_133
     attributes["tshortfall_known"] = tshortfall_known

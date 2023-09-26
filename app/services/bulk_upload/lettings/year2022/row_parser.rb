@@ -526,6 +526,7 @@ private
       "tcharge",
       bulk_upload.needstype != 2 ? "postcode_full" : nil,
       bulk_upload.needstype != 1 ? "location" : nil,
+      log.chcharge.present? ? "chcharge" : nil,
     ].compact
   end
 
@@ -853,6 +854,8 @@ private
       errors.add(:field_20, error_message) # sex1
       errors.add(:field_35, error_message) # ecstat1
       errors.add(:field_84, error_message) # tcharge
+      errors.add(:field_85, error_message) if log.chcharge.present? # chcharge
+      errors.add(:field_86, error_message) if bulk_upload.needstype != 1 # household_charge
       errors.add(:field_96, error_message) # startdate
       errors.add(:field_97, error_message) # startdate
       errors.add(:field_98, error_message) # startdate
