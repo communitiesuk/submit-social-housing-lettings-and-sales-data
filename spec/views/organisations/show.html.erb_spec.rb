@@ -98,7 +98,7 @@ RSpec.describe "organisations/show.html.erb" do
       it "shows data sharing agreement accepted with date" do
         render
 
-        expect(fragment).to have_content("Accepted 10/01/2023")
+        expect(fragment).to have_content("Accepted 04/02/2022")
       end
 
       it "shows show name of who signed the agreement" do
