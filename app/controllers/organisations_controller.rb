@@ -21,9 +21,9 @@ class OrganisationsController < ApplicationController
   end
 
   def schemes
-    all_schemes = Scheme.where(owning_organisation: [@organisation] + @organisation.parent_organisations).order_by_completion.order_by_service_name
+    all_schemes = Scheme.where(owning_organisation: [@organisation] + @organisation.parent_organisations)
 
-    @pagy, @schemes = pagy(filter_manager.filtered_schemes(all_schemes, search_term, session_filters))
+    @pagy, @schemes = pagy(filter_manager.filtered_schemes(all_schemes, search_term, session_filters).order_by_completion.order_by_service_name)
     @searched = search_term.presence
     @total_count = all_schemes.size
     @filter_type = "schemes"
