@@ -223,17 +223,23 @@ module Imports
     def save_sales_log(attributes, previous_status)
       sales_log = SalesLog.new(attributes)
       begin
-        sales_log.save!
-        sales_log
-      rescue ActiveRecord::RecordNotUnique
         legacy_id = attributes["old_id"]
         record = SalesLog.find_by(old_id: legacy_id)
-
-        if allow_updates
-          attributes["updated_at"] = Time.zone.now
-          record.update!(attributes)
+        if record.present?
+          if allow_updates
+            attributes["updated_at"] = Time.zone.now
+            record.update!(attributes)
+          end
+          record
+        else
+          duplicate_logs = sales_log.owning_organisation.owned_sales_logs.duplicate_logs(sales_log)
+          if duplicate_logs.count.positive?
+            @logger.info("Duplicate log with id #{duplicate_logs.map(&:id).join(', ')} found for log #{sales_log.old_id}, skipping log")
+          else
+            sales_log.save!
+          end
+          sales_log
         end
-        record
       rescue ActiveRecord::RecordInvalid => e
         rescue_validation_or_raise(sales_log, attributes, previous_status, e)
       end
