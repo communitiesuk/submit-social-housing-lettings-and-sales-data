@@ -98,6 +98,19 @@ RSpec.describe Imports::SalesLogsImportService do
       expect(SalesLog.count).to eq(4)
     end
 
+    it "imports the log if a duplicate imported log exists on the system (with different legacy ID)" do
+      expect(logger).not_to receive(:error)
+      expect(logger).not_to receive(:warn)
+      expect(logger).not_to receive(:info).with(/Updating sales log/)
+
+      sales_log_service.create_logs(remote_folder)
+      expect(SalesLog.count).to eq(4)
+      SalesLog.all.each { |log| log.update(old_id: "old_id_#{rand(1..999_999)}") }
+
+      sales_log_service.create_logs(remote_folder)
+      expect(SalesLog.count).to eq(8)
+    end
+
     context "with updates allowed" do
       subject(:sales_log_service) { described_class.new(storage_service, logger, allow_updates: true) }
 
@@ -159,7 +172,6 @@ RSpec.describe Imports::SalesLogsImportService do
         expect(logger).to receive(:error).with("Sales log 'fake_id' belongs to legacy user with owner-user-id: 'fake_id' which cannot be found. Assigning log to 'Unassigned' user.")
         sales_log_service.send(:create_log, sales_log_xml)
         sales_log_xml.at_xpath("//meta:document-id").content = "fake_id"
-        sales_log_xml.at_xpath("//xmlns:PurchaserCode").content = "fake_code"
         sales_log_service.send(:create_log, sales_log_xml)
 
         sales_log = SalesLog.where(old_id: sales_log_id).first
@@ -199,7 +211,6 @@ RSpec.describe Imports::SalesLogsImportService do
         expect(logger).to receive(:error).with("Sales log 'fake_id' does not have the owner id. Assigning log to 'Unassigned' user.")
         sales_log_service.send(:create_log, sales_log_xml)
         sales_log_xml.at_xpath("//meta:document-id").content = "fake_id"
-        sales_log_xml.at_xpath("//xmlns:PurchaserCode").content = "fake_code"
         sales_log_service.send(:create_log, sales_log_xml)
 
         sales_log = SalesLog.where(old_id: sales_log_id).first
@@ -229,7 +240,6 @@ RSpec.describe Imports::SalesLogsImportService do
         expect(logger).to receive(:error).with("Sales log 'fake_id' belongs to legacy user with owner-user-id: 'fake_id' which belongs to a different organisation. Assigning log to 'Unassigned' user.")
         sales_log_service.send(:create_log, sales_log_xml)
         sales_log_xml.at_xpath("//meta:document-id").content = "fake_id"
-        sales_log_xml.at_xpath("//xmlns:PurchaserCode").content = "fake_code"
         sales_log_service.send(:create_log, sales_log_xml)
 
         sales_log = SalesLog.where(old_id: sales_log_id).first

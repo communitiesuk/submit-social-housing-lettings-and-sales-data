@@ -232,7 +232,7 @@ module Imports
           end
           record
         else
-          duplicate_logs = sales_log.owning_organisation.owned_sales_logs.duplicate_logs(sales_log)
+          duplicate_logs = sales_log.owning_organisation.owned_sales_logs.not_imported.duplicate_logs(sales_log)
           if duplicate_logs.count.positive?
             @logger.info("Duplicate log with id #{duplicate_logs.map(&:id).join(', ')} found for log #{sales_log.old_id}, skipping log")
           else

@@ -45,6 +45,7 @@ class Log < ApplicationRecord
   }
   scope :created_by, ->(user) { where(created_by: user) }
   scope :imported, -> { where.not(old_id: nil) }
+  scope :not_imported, -> { where(old_id: nil) }
 
   attr_accessor :skip_update_status, :skip_update_uprn_confirmed
 
