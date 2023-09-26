@@ -41,10 +41,10 @@ module Imports
           organisation = Organisation.find_by(name:)
           next unless organisation
 
-          completed_sales_logs = organisation.owned_sales_logs.where(status: "completed").count
-          in_progress_sales_logs = organisation.owned_sales_logs.where(status: "in_progress").count
-          completed_lettings_logs = organisation.owned_lettings_logs.where(status: "completed").count
-          in_progress_lettings_logs = organisation.owned_lettings_logs.where(status: "in_progress").count
+          completed_sales_logs = organisation.owned_sales_logs.imported.where(status: "completed").count
+          in_progress_sales_logs = organisation.owned_sales_logs.imported.where(status: "in_progress").count
+          completed_lettings_logs = organisation.owned_lettings_logs.imported.where(status: "completed").count
+          in_progress_lettings_logs = organisation.owned_lettings_logs.imported.where(status: "in_progress").count
           report << row.push(completed_lettings_logs, in_progress_lettings_logs, completed_sales_logs, in_progress_sales_logs)
         end
       end
@@ -70,10 +70,10 @@ module Imports
           unassigned_user = organisation.users.find_by(name: "Unassigned")
           next unless unassigned_user
 
-          organisation.owned_lettings_logs.where(created_by: unassigned_user).each do |lettings_log|
+          organisation.owned_lettings_logs.imported.where(created_by: unassigned_user).each do |lettings_log|
             report << [organisation.id, organisation.old_org_id, lettings_log.managing_organisation.id, lettings_log.managing_organisation.old_org_id, lettings_log.id, lettings_log.old_id, lettings_log.tenancycode, nil]
           end
-          organisation.owned_sales_logs.where(created_by: unassigned_user).each do |sales_log|
+          organisation.owned_sales_logs.imported.where(created_by: unassigned_user).each do |sales_log|
             report << [organisation.id, organisation.old_org_id, nil, nil, sales_log.id, sales_log.old_id, nil, sales_log.purchid]
           end
         end
