@@ -703,6 +703,10 @@ private
     [ecstat1, ecstat2, ecstat3, ecstat4, ecstat5, ecstat6, ecstat7, ecstat8].any?(10)
   end
 
+  def details_unknown?
+    [details_known_2, details_known_3, details_known_4, details_known_5, details_known_6, details_known_7, details_known_8].any?(1)
+  end
+
   def soft_value_for_period(value)
     num_of_weeks = NUM_OF_WEEKS_FROM_PERIOD[period]
     return "" unless value && num_of_weeks

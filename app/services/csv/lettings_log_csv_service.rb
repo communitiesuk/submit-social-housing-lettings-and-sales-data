@@ -117,6 +117,15 @@ module Csv
       },
     }.freeze
 
+    PERSON_DETAILS = {}.tap { |hash|
+      (2..8).each do |i|
+        hash["age#{i}_known"] = { "refused_code" => "1", "refused_label" => "No", "details_known_field" => "details_known_#{i}" }
+        hash["sex#{i}"] = { "refused_code" => "R", "refused_label" => "Prefers not to say", "details_known_field" => "details_known_#{i}" }
+        hash["relat#{i}"] = { "refused_code" => "R", "refused_label" => "Prefers not to say", "details_known_field" => "details_known_#{i}" }
+        hash["ecstat#{i}"] = { "refused_code" => "10", "refused_label" => "Prefers not to say", "details_known_field" => "details_known_#{i}" }
+      end
+    }.freeze
+
     FIELDS_ALWAYS_EXPORTED_AS_CODES = %w[
       la
       prevloc
@@ -148,6 +157,13 @@ module Csv
         get_label(value, attribute, log)
       elsif DATE_FIELDS.include? attribute
         log.public_send(attribute)&.iso8601
+      elsif PERSON_DETAILS.any? { |key, _value| key == attribute } && person_details_not_known?(log, attribute)
+        case @export_type
+        when "codes"
+          PERSON_DETAILS.find { |key, _value| key == attribute }[1]["refused_code"]
+        when "labels"
+          PERSON_DETAILS.find { |key, _value| key == attribute }[1]["refused_label"]
+        end
       else
         value = log.public_send(attribute)
         case @export_type
@@ -217,6 +233,11 @@ module Csv
       scheme_and_location_attributes = %w[scheme_code scheme_service_name scheme_sensitive SCHTYPE scheme_registered_under_care_act scheme_owning_organisation_name scheme_primary_client_group scheme_has_other_client_group scheme_secondary_client_group scheme_support_type scheme_intended_stay scheme_created_at location_code location_postcode location_name location_units location_type_of_unit location_mobility_type location_admin_district location_startdate]
       final_attributes = non_question_fields + attributes + scheme_and_location_attributes
       @user.support? ? final_attributes : final_attributes - SUPPORT_ONLY_ATTRIBUTES
+    end
+
+    def person_details_not_known?(log, attribute)
+      details_known_field = PERSON_DETAILS.find { |key, _value| key == attribute }[1]["details_known_field"]
+      log[details_known_field] == 1
     end
   end
 end

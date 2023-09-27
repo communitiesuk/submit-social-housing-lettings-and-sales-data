@@ -44,6 +44,7 @@ class Log < ApplicationRecord
       .where(bulk_upload: { id: bulk_upload_id, user: })
   }
   scope :created_by, ->(user) { where(created_by: user) }
+  scope :imported, -> { where.not(old_id: nil) }
 
   attr_accessor :skip_update_status, :skip_update_uprn_confirmed
 

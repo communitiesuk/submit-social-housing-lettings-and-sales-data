@@ -15,6 +15,6 @@ FactoryBot.define do
 
     created_at { Time.zone.now }
     updated_at { Time.zone.now }
-    signed_at { Time.zone.now }
+    signed_at { Time.zone.local(2022, 2, 4) }
   end
 end
