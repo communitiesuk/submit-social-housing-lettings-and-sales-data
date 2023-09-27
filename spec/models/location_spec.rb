@@ -958,7 +958,6 @@ RSpec.describe Location, type: :model do
         expect(described_class.filter_by_status(%w[incomplete]).count).to eq(2)
         expect(described_class.filter_by_status(%w[incomplete])).to include(incomplete_location)
         expect(described_class.filter_by_status(%w[incomplete])).to include(incomplete_location_with_nil_confirmed)
-
       end
     end
 
