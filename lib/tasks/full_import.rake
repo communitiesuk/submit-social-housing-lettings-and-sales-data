@@ -44,6 +44,47 @@ namespace :import do
     logger.info("Finished initial imports")
   end
 
+  desc "Specific subset of object imports for washup batch 2"
+  task :washup_imports, %i[institutions_csv_name] => :environment do |_task, args|
+    institutions_csv_name = args[:institutions_csv_name]
+    raise "Usage: rake import:washup_imports['institutions_csv_name']" if institutions_csv_name.blank?
+
+    s3_service = Storage::S3Service.new(PlatformHelper.is_paas? ? Configuration::PaasConfigurationService.new : Configuration::EnvConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
+    csv = CSV.parse(s3_service.get_file_io(institutions_csv_name), headers: true)
+    logs_string = StringIO.new
+    logger = MultiLogger.new(Logger.new(logs_string))
+    org_count = csv.length
+
+    initial_import_list = [
+      Import.new(Imports::OrganisationImportService, :create_organisations, "institution", logger),
+      Import.new(Imports::DataProtectionConfirmationImportService, :create_data_protection_confirmations, "dataprotect", logger),
+      Import.new(Imports::UserImportService, :update_users_who_signed_dpcs, "user", logger),
+      Import.new(Imports::OrganisationRentPeriodImportService, :create_organisation_rent_periods, "rent-period", logger),
+    ]
+
+    logger.info("Beginning imports for #{org_count} organisations")
+
+    csv.each do |row|
+      archive_path = row[1]
+      archive_io = s3_service.get_file_io(archive_path)
+      archive_service = Storage::ArchiveService.new(archive_io)
+      logger.info("Performing imports for organisation #{row[0]}")
+
+      initial_import_list.each do |step|
+        if archive_service.folder_present?(step.folder)
+          step.import_class.new(archive_service, step.logger).send(step.import_method, step.folder)
+        end
+      end
+
+      log_file = "#{File.basename(institutions_csv_name, File.extname(institutions_csv_name))}_#{File.basename(archive_path, File.extname(archive_path))}_initial.log"
+      s3_service.write_file(log_file, logs_string.string) if logs_string.string.present?
+      logs_string.rewind
+      logs_string.truncate(0)
+    end
+
+    logger.info("Finished washup imports")
+  end
+
   desc "Run logs import steps"
   task :logs, %i[institutions_csv_name] => :environment do |_task, args|
     institutions_csv_name = args[:institutions_csv_name]
