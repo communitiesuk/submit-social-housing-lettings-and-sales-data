@@ -12,6 +12,9 @@ def create_data_protection_confirmation(user)
     organisation: user.organisation,
     confirmed: true,
     data_protection_officer: user,
+    signed_at: Time.zone.local(2019, 1, 1),
+    data_protection_officer_email: user.email,
+    data_protection_officer_name: user.name,
   )
 end
 

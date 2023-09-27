@@ -75,7 +75,7 @@ private
     return "Not accepted" unless organisation.data_protection_confirmed?
 
     if user.support?
-      "Accepted #{organisation.data_protection_confirmation.created_at.strftime('%d/%m/%Y')}"
+      "Accepted #{organisation.data_protection_confirmation.signed_at.strftime('%d/%m/%Y')}"
     else
       "Accepted"
     end
