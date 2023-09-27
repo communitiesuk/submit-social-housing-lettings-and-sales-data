@@ -1810,22 +1810,41 @@ RSpec.describe LettingsLog do
     end
 
     context "when answering the household characteristics questions" do
-      let!(:lettings_log) do
-        described_class.create({
-          managing_organisation: owning_organisation,
-          owning_organisation:,
-          created_by: created_by_user,
-          age1_known: 1,
-          sex1: "R",
-          relat2: "R",
-          ecstat1: 10,
-        })
+      context "and some person details are refused" do
+        let!(:lettings_log) do
+          described_class.create({
+            managing_organisation: owning_organisation,
+            owning_organisation:,
+            created_by: created_by_user,
+            age1_known: 1,
+            sex1: "R",
+            relat2: "R",
+            ecstat1: 10,
+          })
+        end
+
+        it "correctly derives and saves refused" do
+          record_from_db = described_class.find(lettings_log.id)
+          expect(record_from_db["refused"]).to eq(1)
+          expect(lettings_log["refused"]).to eq(1)
+        end
       end
 
-      it "correctly derives and saves refused" do
-        record_from_db = described_class.find(lettings_log.id)
-        expect(record_from_db["refused"]).to eq(1)
-        expect(lettings_log["refused"]).to eq(1)
+      context "and some person details are not known" do
+        let!(:lettings_log) do
+          described_class.create({
+            managing_organisation: owning_organisation,
+            owning_organisation:,
+            created_by: created_by_user,
+            details_known_2: 1,
+          })
+        end
+
+        it "correctly derives and saves refused" do
+          record_from_db = described_class.find(lettings_log.id)
+          expect(record_from_db["refused"]).to eq(1)
+          expect(lettings_log["refused"]).to eq(1)
+        end
       end
     end
 

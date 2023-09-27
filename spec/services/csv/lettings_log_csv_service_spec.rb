@@ -19,6 +19,8 @@ RSpec.describe Csv::LettingsLogCsvService do
       ppostcode_full: "TN23 6LZ",
       created_by: user,
       managing_organisation: organisation,
+      hhmemb: 3,
+      details_known_3: 1,
     )
   end
   let(:user) { create(:user, :support, email: "s.port@jeemayle.com") }
