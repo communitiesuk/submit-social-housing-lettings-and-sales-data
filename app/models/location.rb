@@ -49,6 +49,7 @@ class Location < ApplicationRecord
 
   scope :incomplete, lambda {
     where.not(confirmed: true)
+      .or(where(confirmed: nil))
   }
 
   scope :deactivated, lambda {

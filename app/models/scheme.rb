@@ -42,6 +42,7 @@ class Scheme < ApplicationRecord
 
   scope :incomplete, lambda {
     where.not(confirmed: true)
+         .or(where(confirmed: nil))
     .or(where.not(id: Location.select(:scheme_id).where(confirmed: true).distinct))
     .where.not(id: joins(:scheme_deactivation_periods).reactivating_soon.pluck(:id))
     .where.not(id: joins(:scheme_deactivation_periods).deactivated.pluck(:id))

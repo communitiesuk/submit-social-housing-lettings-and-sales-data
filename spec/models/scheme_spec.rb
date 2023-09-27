@@ -112,6 +112,7 @@ RSpec.describe Scheme, type: :model do
       context "when filtering by status" do
         let!(:incomplete_scheme) { FactoryBot.create(:scheme, :incomplete, service_name: "name") }
         let!(:incomplete_scheme_2) { FactoryBot.create(:scheme, :incomplete, service_name: "name") }
+        let!(:incomplete_scheme_with_nil_confirmed) { FactoryBot.create(:scheme, :incomplete, service_name: "name", confirmed: nil) }
         let(:active_scheme) { FactoryBot.create(:scheme) }
         let(:active_scheme_2) { FactoryBot.create(:scheme) }
         let(:deactivating_soon_scheme) { FactoryBot.create(:scheme) }
@@ -143,17 +144,19 @@ RSpec.describe Scheme, type: :model do
 
         context "when filtering by incomplete status" do
           it "returns only incomplete schemes" do
-            expect(described_class.filter_by_status(%w[incomplete]).count).to eq(2)
+            expect(described_class.filter_by_status(%w[incomplete]).count).to eq(3)
             expect(described_class.filter_by_status(%w[incomplete])).to include(incomplete_scheme)
             expect(described_class.filter_by_status(%w[incomplete])).to include(incomplete_scheme_2)
+            expect(described_class.filter_by_status(%w[incomplete])).to include(incomplete_scheme_with_nil_confirmed)
           end
         end
 
         context "when filtering by incomplete status and searching" do
           it "returns only incomplete schemes" do
-            expect(described_class.search_by("name").filter_by_status(%w[incomplete]).count).to eq(2)
+            expect(described_class.search_by("name").filter_by_status(%w[incomplete]).count).to eq(3)
             expect(described_class.search_by("name").filter_by_status(%w[incomplete])).to include(incomplete_scheme)
             expect(described_class.search_by("name").filter_by_status(%w[incomplete])).to include(incomplete_scheme_2)
+            expect(described_class.search_by("name").filter_by_status(%w[incomplete])).to include(incomplete_scheme_with_nil_confirmed)
           end
         end
 

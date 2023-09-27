@@ -932,6 +932,7 @@ RSpec.describe Location, type: :model do
 
   describe "filter by status" do
     let!(:incomplete_location) { FactoryBot.create(:location, :incomplete, startdate: Time.zone.local(2022, 4, 1)) }
+    let!(:incomplete_location_with_nil_confirmed) { FactoryBot.create(:location, :incomplete, startdate: Time.zone.local(2022, 4, 1), confirmed: nil) }
     let!(:active_location) { FactoryBot.create(:location, startdate: Time.zone.local(2022, 4, 1)) }
     let(:deactivating_soon_location) { FactoryBot.create(:location, startdate: Time.zone.local(2022, 4, 1)) }
     let(:deactivated_location) { FactoryBot.create(:location, startdate: Time.zone.local(2022, 4, 1)) }
@@ -954,8 +955,9 @@ RSpec.describe Location, type: :model do
 
     context "when filtering by incomplete status" do
       it "returns only incomplete locations" do
-        expect(described_class.filter_by_status(%w[incomplete]).count).to eq(1)
-        expect(described_class.filter_by_status(%w[incomplete]).first).to eq(incomplete_location)
+        expect(described_class.filter_by_status(%w[incomplete]).count).to eq(2)
+        expect(described_class.filter_by_status(%w[incomplete])).to include(incomplete_location)
+        expect(described_class.filter_by_status(%w[incomplete])).to include(incomplete_location_with_nil_confirmed)
       end
     end
 
