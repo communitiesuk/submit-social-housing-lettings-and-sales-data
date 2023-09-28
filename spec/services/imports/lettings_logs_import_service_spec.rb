@@ -103,6 +103,35 @@ RSpec.describe Imports::LettingsLogsImportService do
         expect(updated_logs).to eq(0)
       end
 
+      it "does not import the log if a duplicate log exists on the system (that was not migrated from old CORE)" do
+        expect(logger).not_to receive(:error)
+        expect(logger).not_to receive(:warn)
+        expect(logger).not_to receive(:info).with(/Updating lettings log/)
+        expect(logger).to receive(:info).with(/Duplicate log with id \d+ found for log #{lettings_log_id}, skipping log/)
+        expect(logger).to receive(:info).with(/Duplicate log with id \d+ found for log #{lettings_log_id2}, skipping log/)
+        expect(logger).to receive(:info).with(/Duplicate log with id \d+ found for log #{lettings_log_id3}, skipping log/)
+
+        lettings_log_service.create_logs(remote_folder)
+        expect(LettingsLog.count).to eq(3)
+        LettingsLog.update_all(old_id: nil)
+
+        lettings_log_service.create_logs(remote_folder)
+        expect(LettingsLog.count).to eq(3)
+      end
+
+      it "imports the log if a duplicate imported log exists on the system (with different legacy ID)" do
+        expect(logger).not_to receive(:error)
+        expect(logger).not_to receive(:warn)
+        expect(logger).not_to receive(:info).with(/Updating lettings log/)
+
+        lettings_log_service.create_logs(remote_folder)
+        expect(LettingsLog.count).to eq(3)
+        LettingsLog.all.each { |log| log.update(old_id: "old_id_#{rand(1..999_999)}") }
+
+        lettings_log_service.create_logs(remote_folder)
+        expect(LettingsLog.count).to eq(6)
+      end
+
       context "with updates allowed" do
         subject(:lettings_log_service) { described_class.new(storage_service, logger, allow_updates: true) }
 
