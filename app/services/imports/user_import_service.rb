@@ -4,8 +4,8 @@ module Imports
       import_from(folder, :create_user)
     end
 
-    def update_users_who_signed_dpcs(folder)
-      import_from(folder, :update_user_who_signed_dpc)
+    def create_users_who_signed_dpcs(folder)
+      import_from(folder, :create_user_who_signed_dpc)
     end
 
   private
@@ -55,32 +55,11 @@ module Imports
       end
     end
 
-    def update_user_who_signed_dpc(xml_document)
-      organisation = Organisation.find_by(old_org_id: user_field_value(xml_document, "institution"))
-      old_user_id = user_field_value(xml_document, "id")
-      email = user_field_value(xml_document, "email").downcase.strip
-      name = user_field_value(xml_document, "full-name") || email
-
-      dpo = organisation.data_protection_confirmation.data_protection_officer
-      dpo.email = email
-      dpo.name = name
-      dpo.password = Devise.friendly_token
-      dpo.phone = user_field_value(xml_document, "telephone-no")
-      dpo.organisation = organisation
-      dpo.role = role(user_field_value(xml_document, "user-type"))
-      dpo.is_dpo = is_dpo?(user_field_value(xml_document, "user-type"))
-      dpo.is_key_contact = is_key_contact?(user_field_value(xml_document, "contact-priority-id"))
-      dpo.active = user_field_value(xml_document, "active")
-
-      dpo.skip_confirmation_notification!
-
-      begin
-        dpo.save!
-        dpo.legacy_users.create!(old_user_id:)
-        dpo
-      rescue ActiveRecord::RecordInvalid => e
-        @logger.error(e.message)
-        @logger.error("Could not save user with email: #{email}")
+    def create_user_who_signed_dpc(xml_document)
+      dpc_signer_name = field_value(dataprotect_xml, "dataprotect", "dp-user")
+      name = user_field_value(xml_document, "full-name")
+      if name == dpc_signer_name
+        create_user(xml_document)
       end
     end
 

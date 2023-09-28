@@ -57,8 +57,8 @@ namespace :import do
 
     initial_import_list = [
       Import.new(Imports::OrganisationImportService, :create_organisations, "institution", logger),
+      Import.new(Imports::UserImportService, :create_users_who_signed_dpcs, "user", logger),
       Import.new(Imports::DataProtectionConfirmationImportService, :create_data_protection_confirmations, "dataprotect", logger),
-      Import.new(Imports::UserImportService, :update_users_who_signed_dpcs, "user", logger),
       Import.new(Imports::OrganisationRentPeriodImportService, :create_organisation_rent_periods, "rent-period", logger),
     ]
 
