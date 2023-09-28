@@ -445,13 +445,23 @@ RSpec.describe User, type: :model do
     context "when updating to dpo" do
       let!(:user) { create(:user, is_dpo: false) }
 
-      it "sends the email" do
-        expect { user.update!(is_dpo: true) }.to enqueue_job(ActionMailer::MailDeliveryJob).with(
-          "DataProtectionConfirmationMailer",
-          "send_confirmation_email",
-          "deliver_now",
-          args: [user],
-        )
+      context "when data_protection_confirmed? is false" do
+        it "sends the email" do
+          allow(user.organisation).to receive(:data_protection_confirmed?).and_return(false)
+          expect { user.update!(is_dpo: true) }.to enqueue_job(ActionMailer::MailDeliveryJob).with(
+            "DataProtectionConfirmationMailer",
+            "send_confirmation_email",
+            "deliver_now",
+            args: [user],
+          )
+        end
+      end
+
+      context "when data_protection_confirmed? is true" do
+        it "does not send the email" do
+          allow(user.organisation).to receive(:data_protection_confirmed?).and_return(true)
+          expect { user.update!(is_dpo: true) }.not_to enqueue_job(ActionMailer::MailDeliveryJob)
+        end
       end
     end
 

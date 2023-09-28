@@ -231,6 +231,7 @@ private
   def send_data_protection_confirmation_reminder
     return unless persisted?
     return unless is_dpo?
+    return if organisation.data_protection_confirmed?
 
     DataProtectionConfirmationMailer.send_confirmation_email(self).deliver_later
   end
