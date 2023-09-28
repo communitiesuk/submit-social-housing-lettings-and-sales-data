@@ -17,6 +17,7 @@ RSpec.describe Csv::MissingAddressesCsvService do
              address_line1: nil,
              town_or_city: nil,
              old_id: "old_id",
+             old_form_id: "old_form_id",
              needstype: 1,
              uprn_known: 0)
     end
@@ -70,6 +71,7 @@ RSpec.describe Csv::MissingAddressesCsvService do
              address_line1: nil,
              town_or_city: nil,
              old_id: "old_id",
+             old_form_id: "old_form_id",
              uprn_known: 0)
     end
 

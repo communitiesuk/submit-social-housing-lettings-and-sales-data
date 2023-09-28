@@ -3,7 +3,7 @@ class EmailMissingAddressesCsvJob < ApplicationJob
 
   BYTE_ORDER_MARK = "\uFEFF".freeze # Required to ensure Excel always reads CSV as UTF-8
 
-  def perform(users, organisation, log_type)
+  def perform(user_ids, organisation, log_type)
     case log_type
     when "lettings"
       csv_string = Csv::MissingAddressesCsvService.new(organisation:).create_missing_lettings_addresses_csv
@@ -20,7 +20,10 @@ class EmailMissingAddressesCsvJob < ApplicationJob
 
     url = storage_service.get_presigned_url(filename, nil)
 
-    users.each do |user|
+    user_ids.each do |id|
+      user = User.find(id)
+      next if user.blank?
+
       CsvDownloadMailer.new.send(email_method, user, url)
     end
   end
