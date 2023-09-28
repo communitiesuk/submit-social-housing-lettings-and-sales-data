@@ -8,4 +8,8 @@ class CsvDownloadMailer < NotifyMailer
       { name: user.name, link:, duration: ActiveSupport::Duration.build(duration).inspect },
     )
   end
+
+  def send_missing_lettings_addresses_csv_download_mail(user, link); end
+
+  def send_missing_sales_addresses_csv_download_mail(user, link); end
 end
