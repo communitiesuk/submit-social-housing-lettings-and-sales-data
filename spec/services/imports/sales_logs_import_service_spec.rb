@@ -81,7 +81,7 @@ RSpec.describe Imports::SalesLogsImportService do
       expect(updated_logs).to eq(0)
     end
 
-    it "does not import the log if a duplicate log exists on the system" do
+    it "does not import the log if a duplicate log exists on the system (that was not migrated from old CORE)" do
       expect(logger).not_to receive(:error)
       expect(logger).not_to receive(:warn)
       expect(logger).not_to receive(:info).with(/Updating sales log/)
