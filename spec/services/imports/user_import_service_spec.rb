@@ -193,6 +193,7 @@ RSpec.describe Imports::UserImportService do
       end
 
       context "when the user was deactivated in the old system" do
+        let(:old_user_id) { "9ed81a262215a1634f0809effa683e38924d8bcb" }
 
         it "marks them as not active" do
           import_service.create_users("user_directory")
