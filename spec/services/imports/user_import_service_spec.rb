@@ -236,8 +236,20 @@ RSpec.describe Imports::UserImportService do
         end
       end
 
-      context "when the user is not to be imported" do
+      context "when the user has a different name to the dsa signer" do
         let(:old_user_id) { "80d9b73aa1c88b6e5c36ee49be9050b923b4a1bb" }
+
+        it "does not create a user" do
+          FactoryBot.create(:organisation, old_org_id:)
+          import_service.create_users_who_signed_dpcs("user_directory")
+
+          user = LegacyUser.find_by(old_user_id:)&.user
+          expect(user).to be_nil
+        end
+      end
+
+      context "when the user has the name of the dsa signer but is not a dpo" do
+        let(:old_user_id) { "9ed81a262215a1634f0809effa683e38924d8bcb" }
 
         it "does not create a user" do
           FactoryBot.create(:organisation, old_org_id:)

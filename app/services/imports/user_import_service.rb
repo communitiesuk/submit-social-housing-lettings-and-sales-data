@@ -58,7 +58,7 @@ module Imports
     def create_user_who_signed_dpc(xml_document)
       dpc_signer_name = field_value(dataprotect_xml, "dataprotect", "dp-user")
       name = user_field_value(xml_document, "full-name")
-      if name == dpc_signer_name
+      if name == dpc_signer_name && is_dpo?(user_field_value(xml_document, "user-type"))
         create_user(xml_document)
       end
     end
