@@ -1417,4 +1417,37 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
       end
     end
   end
+
+  context "when updating old_form_id" do
+    let(:field) { "old_form_id" }
+    let(:lettings_log) { LettingsLog.find_by(old_id: lettings_log_id) }
+
+    context "when the lettings log has no old_form_id value" do
+      before do
+        Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+        lettings_log_file.rewind
+        lettings_log.update!(old_form_id: nil)
+      end
+
+      it "updates the lettings_log old_form_id value" do
+        expect(logger).to receive(:info).with("lettings log #{lettings_log.id}'s old_form_id value has been set to 5786509")
+        expect { import_service.send(:update_field, field, remote_folder) }
+          .to(change { lettings_log.reload.old_form_id }.from(nil).to(5_786_509))
+      end
+    end
+
+    context "when the lettings log has a different old_form_id value" do
+      before do
+        Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+        lettings_log_file.rewind
+        lettings_log.update!(old_form_id: 123)
+      end
+
+      it "does not update the lettings_log old_form_id value" do
+        expect(logger).to receive(:info).with(/lettings log \d+ has a value for old_form_id, skipping update/)
+        expect { import_service.send(:update_field, field, remote_folder) }
+          .not_to(change { lettings_log.reload.old_form_id })
+      end
+    end
+  end
 end

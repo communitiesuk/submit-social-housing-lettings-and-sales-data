@@ -28,6 +28,8 @@ module Imports
         import_from(folder, :update_person_details)
       when "childrens_care_referral"
         import_from(folder, :update_childrens_care_referral)
+      when "old_form_id"
+        import_from(folder, :update_old_form_id)
       else
         raise "Updating #{field} is not supported by the field import service"
       end
@@ -431,6 +433,25 @@ module Imports
 
       record.update!(referral: 17, values_updated_at: Time.zone.now)
       @logger.info("lettings log #{record.id}'s referral value has been set to 17")
+    end
+
+    def update_old_form_id(xml_doc)
+      return if meta_field_value(xml_doc, "form-name").include?("Sales")
+
+      old_id = meta_field_value(xml_doc, "document-id")
+      record = LettingsLog.find_by(old_id:)
+
+      if record.present?
+        if record.old_form_id.present?
+          @logger.info("lettings log #{record.id} has a value for old_form_id, skipping update")
+        else
+          old_form_id = safe_string_as_integer(xml_doc, "FORM")
+          record.update!(old_form_id:)
+          @logger.info("lettings log #{record.id}'s old_form_id value has been set to #{old_form_id}")
+        end
+      else
+        @logger.warn("lettings log with old id #{old_id} not found")
+      end
     end
   end
 end
