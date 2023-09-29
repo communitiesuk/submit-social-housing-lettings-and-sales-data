@@ -4,6 +4,10 @@ module Imports
       import_from(folder, :create_user)
     end
 
+    def create_users_who_signed_dpcs(folder)
+      import_from(folder, :create_user_who_signed_dpc)
+    end
+
   private
 
     PROVIDER_TYPE = {
@@ -48,6 +52,14 @@ module Imports
           @logger.error(e.message)
           @logger.error("Could not save user with email: #{email}")
         end
+      end
+    end
+
+    def create_user_who_signed_dpc(xml_document)
+      dpc_signer_name = field_value(dataprotect_xml, "dataprotect", "dp-user")
+      name = user_field_value(xml_document, "full-name")
+      if name == dpc_signer_name && is_dpo?(user_field_value(xml_document, "user-type"))
+        create_user(xml_document)
       end
     end
 

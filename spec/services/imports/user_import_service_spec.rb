@@ -1,10 +1,10 @@
 require "rails_helper"
 
 RSpec.describe Imports::UserImportService do
-  let(:fixture_directory) { "spec/fixtures/imports/user" }
+  let(:fixture_directory) { "spec/fixtures/imports" }
   let(:old_user_id) { "fc7625a02b24ae16162aa63ae7cb33feeec0c373" }
   let(:old_org_id) { "7c5bd5fb549c09a2c55d7cb90d7ba84927e64618" }
-  let(:user_file) { File.open("#{fixture_directory}/#{old_user_id}.xml") }
+  let(:user_file) { File.open("#{fixture_directory}/user/#{old_user_id}.xml") }
   let(:storage_service) { instance_double(Storage::S3Service) }
   let(:logger) { instance_double(ActiveSupport::Logger) }
   let(:notify_client) { instance_double(Notifications::Client) }
@@ -21,6 +21,7 @@ RSpec.describe Imports::UserImportService do
 
     before do
       allow(storage_service).to receive(:list_files)
+                                  .with("user_directory")
                                   .and_return(["user_directory/#{old_user_id}.xml"])
       allow(storage_service).to receive(:get_file_io)
                                   .with("user_directory/#{old_user_id}.xml")
@@ -198,6 +199,64 @@ RSpec.describe Imports::UserImportService do
           import_service.create_users("user_directory")
           user = LegacyUser.find_by(old_user_id:)&.user
           expect(user.active).to be false
+        end
+      end
+    end
+
+    context "when only creating specific dsa signers" do
+      let(:old_dataprotect_id) { "7c5bd5fb549c09a2c55d7cb90d7ba84927e64618" }
+      let(:dataprotect_file) { File.open("#{fixture_directory}/dataprotect/#{old_dataprotect_id}.xml") }
+
+      before do
+        allow(storage_service).to receive(:list_files)
+                                    .with("dataprotect")
+                                    .and_return(["dataprotect_directory/#{old_dataprotect_id}.xml"])
+        allow(storage_service).to receive(:get_file_io)
+                                    .with("dataprotect_directory/#{old_dataprotect_id}.xml")
+                                    .and_return(dataprotect_file)
+        allow(logger).to receive(:info)
+      end
+
+      context "when the user is to be imported" do
+        let(:old_user_id) { "10c887710550844e2551b3e0fb88dc9b4a8a642b" }
+
+        it "creates a user with the correct details" do
+          FactoryBot.create(:organisation, old_org_id:)
+          import_service.create_users_who_signed_dpcs("user_directory")
+
+          user = LegacyUser.find_by(old_user_id:)&.user
+          expect(user.name).to eq("John Doe")
+          expect(user.email).to eq("john.doe@gov.uk")
+          expect(user.encrypted_password).not_to be_nil
+          expect(user.phone).to eq("02012345678")
+          expect(user.is_data_protection_officer?).to be true
+          expect(user.organisation.old_org_id).to eq(old_org_id)
+          expect(user.is_key_contact?).to be false
+          expect(user.active).to be true
+        end
+      end
+
+      context "when the user has a different name to the dsa signer" do
+        let(:old_user_id) { "80d9b73aa1c88b6e5c36ee49be9050b923b4a1bb" }
+
+        it "does not create a user" do
+          FactoryBot.create(:organisation, old_org_id:)
+          import_service.create_users_who_signed_dpcs("user_directory")
+
+          user = LegacyUser.find_by(old_user_id:)&.user
+          expect(user).to be_nil
+        end
+      end
+
+      context "when the user has the name of the dsa signer but is not a dpo" do
+        let(:old_user_id) { "9ed81a262215a1634f0809effa683e38924d8bcb" }
+
+        it "does not create a user" do
+          FactoryBot.create(:organisation, old_org_id:)
+          import_service.create_users_who_signed_dpcs("user_directory")
+
+          user = LegacyUser.find_by(old_user_id:)&.user
+          expect(user).to be_nil
         end
       end
     end

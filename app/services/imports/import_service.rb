@@ -22,6 +22,12 @@ module Imports
       end
     end
 
+    def dataprotect_xml
+      data_protect_filename = @storage_service.list_files("dataprotect").first
+      file_io = @storage_service.get_file_io(data_protect_filename)
+      Nokogiri::XML(file_io)
+    end
+
     def field_value(xml_document, namespace, field, *args)
       if namespace.present?
         xml_document.at_xpath("//#{namespace}:#{field}", *args)&.text
