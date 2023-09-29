@@ -29,5 +29,9 @@ module Csv
         end
       end
     end
+
+    def create_missing_lettings_town_or_city_csv; end
+
+    def create_missing_sales_town_or_city_csv; end
   end
 end
