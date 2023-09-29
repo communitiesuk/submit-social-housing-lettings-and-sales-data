@@ -224,7 +224,7 @@ One reason a review app deployment might fail is that it is attempting to run mi
     ```bash
     cf bind-service dluhc-core-staging dluhc-core-staging-csv-bucket
     cf bind-service dluhc-core-staging dluhc-core-staging-redis
-    cf bind-service dluhc-core-staging dluhc-core-staging-import-bucket -c '{"permissions": "read-only"}'
+    cf bind-service dluhc-core-staging dluhc-core-staging-import-bucket -c '{"permissions": "read-write"}'
     cf bind-service dluhc-core-staging dluhc-core-staging-export-bucket -c '{"permissions": "read-write"}'
     ```
 
@@ -271,7 +271,7 @@ One reason a review app deployment might fail is that it is attempting to run mi
     ```bash
     cf bind-service dluhc-core-production dluhc-core-production-csv-bucket
     cf bind-service dluhc-core-production dluhc-core-production-redis
-    cf bind-service dluhc-core-production dluhc-core-production-import-bucket -c '{"permissions": "read-only"}'
+    cf bind-service dluhc-core-production dluhc-core-production-import-bucket -c '{"permissions": "read-write"}'
     cf bind-service dluhc-core-production dluhc-core-production-export-bucket -c '{"permissions": "read-write"}'
     ```
 
