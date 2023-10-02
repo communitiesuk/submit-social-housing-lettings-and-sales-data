@@ -125,7 +125,7 @@ module Csv
 
     def sales_log_attributes
       ordered_questions = FormHandler.instance.ordered_sales_questions_for_all_years
-      ordered_questions.reject! { |q| q.id.match?(/((?<!la)_known)|(_check)|(_asked)/) }
+      ordered_questions.reject! { |q| q.id.match?(/((?<!la|age\d)_known)|(_check)|(_asked)/) }
       attributes = ordered_questions.flat_map do |question|
         if question.type == "checkbox"
           question.answer_options.keys
