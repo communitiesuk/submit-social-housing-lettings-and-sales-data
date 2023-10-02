@@ -6,30 +6,18 @@ module Csv
 
     def create_missing_lettings_addresses_csv
       logs_with_missing_addresses = @organisation.managed_lettings_logs.imported.filter_by_year(2023).where(needstype: 1, address_line1: nil, town_or_city: nil, uprn_known: [0, nil]).where.not(old_form_id: nil)
-      return if logs_with_missing_addresses.empty?
+      logs_with_missing_town_or_city = @organisation.managed_lettings_logs.imported.filter_by_year(2023).where(needstype: 1, town_or_city: nil, uprn_known: [0, nil]).where.not(old_form_id: nil).where.not(address_line1: nil)
+      return if logs_with_missing_addresses.empty? && logs_with_missing_town_or_city.empty?
 
-      generate_missing_lettings_addresses_csv(logs_with_missing_addresses)
+      generate_missing_lettings_addresses_csv(logs_with_missing_addresses + logs_with_missing_town_or_city)
     end
 
     def create_missing_sales_addresses_csv
       logs_with_missing_addresses = @organisation.sales_logs.imported.filter_by_year(2023).where(address_line1: nil, town_or_city: nil, uprn_known: [0, nil]).where.not(old_form_id: nil)
-      return if logs_with_missing_addresses.empty?
-
-      generate_missing_sales_addresses_csv(logs_with_missing_addresses)
-    end
-
-    def create_missing_lettings_town_or_city_csv
-      logs_with_missing_town_or_city = @organisation.managed_lettings_logs.imported.filter_by_year(2023).where(needstype: 1, town_or_city: nil, uprn_known: [0, nil]).where.not(old_form_id: nil).where.not(address_line1: nil)
-      return if logs_with_missing_town_or_city.empty?
-
-      generate_missing_lettings_addresses_csv(logs_with_missing_town_or_city)
-    end
-
-    def create_missing_sales_town_or_city_csv
       logs_with_missing_town_or_city = @organisation.sales_logs.imported.filter_by_year(2023).where(town_or_city: nil, uprn_known: [0, nil]).where.not(old_form_id: nil).where.not(address_line1: nil)
-      return if logs_with_missing_town_or_city.empty?
+      return if logs_with_missing_addresses.empty? && logs_with_missing_town_or_city.empty?
 
-      generate_missing_sales_addresses_csv(logs_with_missing_town_or_city)
+      generate_missing_sales_addresses_csv(logs_with_missing_addresses + logs_with_missing_town_or_city)
     end
 
   private

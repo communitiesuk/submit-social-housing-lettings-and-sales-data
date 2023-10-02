@@ -9,7 +9,7 @@ class CsvDownloadMailer < NotifyMailer
     )
   end
 
-  def send_missing_lettings_addresses_csv_download_mail(user, link, template_type); end
+  def send_missing_lettings_addresses_csv_download_mail(user, link); end
 
-  def send_missing_sales_addresses_csv_download_mail(user, link, template_type); end
+  def send_missing_sales_addresses_csv_download_mail(user, link); end
 end

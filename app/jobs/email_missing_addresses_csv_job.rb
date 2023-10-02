@@ -3,16 +3,16 @@ class EmailMissingAddressesCsvJob < ApplicationJob
 
   BYTE_ORDER_MARK = "\uFEFF".freeze # Required to ensure Excel always reads CSV as UTF-8
 
-  def perform(user_ids, organisation, log_type, template_type)
+  def perform(user_ids, organisation, log_type)
     csv_service = Csv::MissingAddressesCsvService.new(organisation:)
     case log_type
     when "lettings"
-      csv_string = template_type == "town-or-city" ? csv_service.create_missing_lettings_town_or_city_csv : csv_service.create_missing_lettings_addresses_csv
-      filename = "#{['missing-lettings-logs', template_type, organisation.name, Time.zone.now].compact.join('-')}.csv"
+      csv_string = csv_service.create_missing_lettings_addresses_csv
+      filename = "#{['missing-lettings-logs-addresses', organisation.name, Time.zone.now].compact.join('-')}.csv"
       email_method = :send_missing_lettings_addresses_csv_download_mail
     when "sales"
-      csv_string = template_type == "town-or-city" ? csv_service.create_missing_sales_town_or_city_csv : csv_service.create_missing_sales_addresses_csv
-      filename = "#{['missing-sales-logs', template_type, organisation.name, Time.zone.now].compact.join('-')}.csv"
+      csv_string = csv_service.create_missing_sales_addresses_csv
+      filename = "#{['missing-sales-logs-addresses', organisation.name, Time.zone.now].compact.join('-')}.csv"
       email_method = :send_missing_sales_addresses_csv_download_mail
     end
 
@@ -25,7 +25,7 @@ class EmailMissingAddressesCsvJob < ApplicationJob
       user = User.find(id)
       next if user.blank?
 
-      CsvDownloadMailer.new.send(email_method, user, url, template_type)
+      CsvDownloadMailer.new.send(email_method, user, url)
     end
   end
 end

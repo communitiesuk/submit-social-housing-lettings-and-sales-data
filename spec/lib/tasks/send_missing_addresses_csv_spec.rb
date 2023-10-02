@@ -29,7 +29,7 @@ RSpec.describe "correct_addresses" do
         end
 
         it "enqueues the job with correct organisations" do
-          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_coordinator.id, data_coordinator2.id), organisation, "lettings", "addresses")
+          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_coordinator.id, data_coordinator2.id), organisation, "lettings")
         end
 
         it "prints out the jobs enqueued" do
@@ -48,7 +48,7 @@ RSpec.describe "correct_addresses" do
         end
 
         it "enqueues the job with correct organisations" do
-          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_provider.id, data_provider2.id), organisation, "lettings", "addresses")
+          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_provider.id, data_provider2.id), organisation, "lettings")
         end
 
         it "prints out the jobs enqueued" do
@@ -68,25 +68,6 @@ RSpec.describe "correct_addresses" do
           expect { task.invoke }.not_to enqueue_job(EmailMissingAddressesCsvJob)
         end
       end
-    end
-  end
-
-  describe ":send_missing_town_or_city_csv", type: :task do
-    subject(:task) { Rake::Task["correct_addresses:send_missing_town_or_city_csv"] }
-
-    before do
-      organisation.users.destroy_all
-      Rake.application.rake_require("tasks/send_missing_addresses_csv")
-      Rake::Task.define_task(:environment)
-      task.reenable
-    end
-
-    context "when the rake task is run" do
-      let(:organisation) { create(:organisation, name: "test organisation") }
-
-      before do
-        stub_const("MISSING_ADDRESSES_THRESHOLD", 5)
-      end
 
       context "when org has more than 5 missing town_or_city and data coordinators" do
         let!(:data_coordinator) { create(:user, :data_coordinator, organisation:, email: "data_coordinator1@example.com") }
@@ -98,12 +79,12 @@ RSpec.describe "correct_addresses" do
         end
 
         it "enqueues the job with correct organisations" do
-          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_coordinator.id, data_coordinator2.id), organisation, "lettings", "town-or-city")
+          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_coordinator.id, data_coordinator2.id), organisation, "lettings")
         end
 
         it "prints out the jobs enqueued" do
           expect(Rails.logger).to receive(:info).with(nil)
-          expect(Rails.logger).to receive(:info).with("Sending missing town or city CSV for test organisation to data_coordinator1@example.com, data_coordinator2@example.com")
+          expect(Rails.logger).to receive(:info).with("Sending missing addresses CSV for test organisation to data_coordinator1@example.com, data_coordinator2@example.com")
           task.invoke
         end
       end
@@ -117,12 +98,12 @@ RSpec.describe "correct_addresses" do
         end
 
         it "enqueues the job with correct organisations" do
-          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_provider.id, data_provider2.id), organisation, "lettings", "town-or-city")
+          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_provider.id, data_provider2.id), organisation, "lettings")
         end
 
         it "prints out the jobs enqueued" do
           expect(Rails.logger).to receive(:info).with(nil)
-          expect(Rails.logger).to receive(:info).with("Sending missing town or city CSV for test organisation to data_provider3@example.com, data_provider4@example.com")
+          expect(Rails.logger).to receive(:info).with("Sending missing addresses CSV for test organisation to data_provider3@example.com, data_provider4@example.com")
           task.invoke
         end
       end
