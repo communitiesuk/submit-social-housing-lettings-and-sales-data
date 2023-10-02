@@ -36,10 +36,11 @@ module Csv
 
     def generate_missing_lettings_addresses_csv(logs)
       CSV.generate(headers: true) do |csv|
-        csv << ["Tenancy start date", "Tenant code", "Property code", "Log owner", "Owning organisation name", "Managing organisation name", "Address line 1", "Address line 2", "Town or City", "County", "Postcode", "Local authority"]
+        csv << ["Lettings log ID", "Tenancy start date", "Tenant code", "Property code", "Log owner", "Owning organisation name", "Managing organisation name", "Address line 1", "Address line 2", "Town or City", "County", "Postcode", "Local authority"]
 
         logs.each do |log|
-          csv << [log.startdate&.to_date,
+          csv << [log.id,
+                  log.startdate&.to_date,
                   log.tenancycode,
                   log.propcode,
                   log.created_by&.email,
@@ -57,10 +58,11 @@ module Csv
 
     def generate_missing_sales_addresses_csv(logs)
       CSV.generate(headers: true) do |csv|
-        csv << ["Sale completion date", "Purchaser code", "Log owner", "Owning organisation name", "Address line 1", "Address line 2", "Town or City", "County", "Postcode", "Local authority"]
+        csv << ["Sales log ID", "Sale completion date", "Purchaser code", "Log owner", "Owning organisation name", "Address line 1", "Address line 2", "Town or City", "County", "Postcode", "Local authority"]
 
         logs.each do |log|
-          csv << [log.saledate&.to_date,
+          csv << [log.id,
+                  log.saledate&.to_date,
                   log.purchid,
                   log.created_by&.email,
                   log.owning_organisation&.name,

@@ -5,6 +5,10 @@ RSpec.describe Csv::MissingAddressesCsvService do
   let(:user) { create(:user, organisation:, email: "testy@example.com") }
   let(:service) { described_class.new(organisation) }
 
+  def replace_entity_ids(lettings_log, export_template)
+    export_template.sub!(/\{id\}/, lettings_log.id.to_s)
+  end
+
   describe "#create_missing_lettings_addresses_csv" do
     let!(:lettings_log) do
       create(:lettings_log,
@@ -24,8 +28,8 @@ RSpec.describe Csv::MissingAddressesCsvService do
 
     context "when the organisation has logs with missing addresses" do
       it "returns a csv with relevant logs" do
-        expected_content = CSV.read("spec/fixtures/files/missing_lettings_logs_addresses.csv")
-        csv = CSV.parse(service.create_missing_lettings_addresses_csv)
+        expected_content = replace_entity_ids(lettings_log, File.open("spec/fixtures/files/missing_lettings_logs_addresses.csv").read)
+        csv = service.create_missing_lettings_addresses_csv
         expect(csv).to eq(expected_content)
       end
     end
@@ -77,8 +81,8 @@ RSpec.describe Csv::MissingAddressesCsvService do
 
     context "when the organisation has logs with missing addresses" do
       it "returns a csv with relevant logs" do
-        expected_content = CSV.read("spec/fixtures/files/missing_sales_logs_addresses.csv")
-        csv = CSV.parse(service.create_missing_sales_addresses_csv)
+        expected_content = replace_entity_ids(sales_log, File.open("spec/fixtures/files/missing_sales_logs_addresses.csv").read)
+        csv = service.create_missing_sales_addresses_csv
         expect(csv).to eq(expected_content)
       end
     end
@@ -123,8 +127,8 @@ RSpec.describe Csv::MissingAddressesCsvService do
 
     context "when the organisation has logs with missing town or city only" do
       it "returns a csv with relevant logs" do
-        expected_content = CSV.read("spec/fixtures/files/missing_lettings_logs_town_or_city.csv")
-        csv = CSV.parse(service.create_missing_lettings_town_or_city_csv)
+        expected_content = replace_entity_ids(lettings_log, File.open("spec/fixtures/files/missing_lettings_logs_town_or_city.csv").read)
+        csv = service.create_missing_lettings_town_or_city_csv
         expect(csv).to eq(expected_content)
       end
     end
@@ -176,8 +180,8 @@ RSpec.describe Csv::MissingAddressesCsvService do
 
     context "when the organisation has logs with missing town_or_city only" do
       it "returns a csv with relevant logs" do
-        expected_content = CSV.read("spec/fixtures/files/missing_sales_logs_town_or_city.csv")
-        csv = CSV.parse(service.create_missing_sales_town_or_city_csv)
+        expected_content = replace_entity_ids(sales_log, File.open("spec/fixtures/files/missing_sales_logs_town_or_city.csv").read)
+        csv = service.create_missing_sales_town_or_city_csv
         expect(csv).to eq(expected_content)
       end
     end
