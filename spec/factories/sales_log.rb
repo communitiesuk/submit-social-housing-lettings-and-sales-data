@@ -155,5 +155,8 @@ FactoryBot.define do
       status { 4 }
       discarded_at { Time.zone.now }
     end
+    trait :imported do
+      old_id { rand(1...99_999) }
+    end
   end
 end
