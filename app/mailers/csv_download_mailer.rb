@@ -1,5 +1,7 @@
 class CsvDownloadMailer < NotifyMailer
   CSV_DOWNLOAD_TEMPLATE_ID = "7890e3b9-8c0d-4d08-bafe-427fd7cd95bf".freeze
+  CSV_MISSING_LETTINGS_ADDRESSES_DOWNLOAD_TEMPLATE_ID = "xx".freeze
+  CSV_MISSING_SALES_ADDRESSES_DOWNLOAD_TEMPLATE_ID = "xx".freeze
 
   def send_csv_download_mail(user, link, duration)
     send_email(
@@ -9,7 +11,19 @@ class CsvDownloadMailer < NotifyMailer
     )
   end
 
-  def send_missing_lettings_addresses_csv_download_mail(user, link); end
+  def send_missing_lettings_addresses_csv_download_mail(user, link)
+    send_email(
+      user.email,
+      CSV_MISSING_LETTINGS_ADDRESSES_DOWNLOAD_TEMPLATE_ID,
+      { name: user.name, link: },
+    )
+  end
 
-  def send_missing_sales_addresses_csv_download_mail(user, link); end
+  def send_missing_sales_addresses_csv_download_mail(user, link)
+    send_email(
+      user.email,
+      CSV_MISSING_SALES_ADDRESSES_DOWNLOAD_TEMPLATE_ID,
+      { name: user.name, link: },
+    )
+  end
 end
