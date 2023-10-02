@@ -1,2 +1,2 @@
-Issue type,Lettings log ID,Tenancy start date,Tenant code,Property code,Log owner,Owning organisation name,Managing organisation name,Address line 1,Address line 2,Town or City,County,Postcode,Local authority
-Missing town or city,{id},2023-04-05,tenancycode,propcode,testy@example.com,Address test,Address test,existing address,,,,,
+Issue type,Lettings log ID,Tenancy start date,Tenant code,Property code,Log owner,Owning organisation name,Managing organisation name,UPRN,Address line 1,Address line 2,Town or City,County,Postcode,Local authority
+Missing town or city,{id},2023-04-05,tenancycode,propcode,testy@example.com,Address org,Address org,,existing address,,,,,

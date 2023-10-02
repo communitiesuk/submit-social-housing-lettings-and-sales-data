@@ -19,12 +19,21 @@ namespace :correct_addresses do
       .where.not(old_form_id: nil)
       .where.not(address_line1: nil).count
 
-      next unless logs_impacted_by_missing_address >= MISSING_ADDRESSES_THRESHOLD || logs_impacted_by_missing_town_or_city >= MISSING_ADDRESSES_THRESHOLD
+      logs_impacted_by_uprn_issue = organisation.managed_lettings_logs
+      .imported
+      .filter_by_year(2023)
+      .where(needstype: 1)
+      .where.not(uprn: nil)
+      .where("uprn = propcode OR uprn = tenancycode or town_or_city = 'Bristol'")
 
-      data_coordinators = organisation.users.where(role: 2).filter_by_active
-      users_to_contact = data_coordinators.any? ? data_coordinators : organisation.users.filter_by_active
-      EmailMissingAddressesCsvJob.perform_later(users_to_contact.map(&:id), organisation, "lettings")
-      Rails.logger.info("Sending missing addresses CSV for #{organisation.name} to #{users_to_contact.map(&:email).join(', ')}")
+      if logs_impacted_by_missing_address >= MISSING_ADDRESSES_THRESHOLD || logs_impacted_by_missing_town_or_city >= MISSING_ADDRESSES_THRESHOLD || logs_impacted_by_uprn_issue.any?
+        data_coordinators = organisation.users.where(role: 2).filter_by_active
+        users_to_contact = data_coordinators.any? ? data_coordinators : organisation.users.filter_by_active
+        EmailMissingAddressesCsvJob.perform_later(users_to_contact.map(&:id), organisation, "lettings")
+        Rails.logger.info("Sending missing addresses CSV for #{organisation.name} to #{users_to_contact.map(&:email).join(', ')}")
+      else
+        Rails.logger.info("Missing addresses below threshold for #{organisation.name}")
+      end
     end
   end
 end

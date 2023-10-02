@@ -1,2 +1,4 @@
 Issue type,Sales log ID,Sale completion date,Purchaser code,Log owner,Owning organisation name,UPRN,Address line 1,Address line 2,Town or City,County,Postcode,Local authority
 Full address required,{id},2023-04-05,purchaser code,testy@example.com,Address org,,,,,,,
+Missing town or city,{id},2023-04-05,purchaser code,testy@example.com,Address org,,existing address line 1,,,,,
+UPRN issues,{id},2023-04-05,purchaser code,testy@example.com,Address org,123,Some Place,,Bristol,,BS1 1AD,
