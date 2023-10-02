@@ -69,4 +69,4 @@ RUN chown nonroot db/schema.rb
 
 USER nonroot
 
-CMD echo "This is a dummy application command used to test how frequently containers will restart/fail." && exit 1
+CMD bundle exec rails s -e ${RAILS_ENV} -p ${PORT} --binding=0.0.0.0
