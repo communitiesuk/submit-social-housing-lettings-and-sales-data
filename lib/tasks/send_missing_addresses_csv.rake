@@ -19,13 +19,16 @@ namespace :correct_addresses do
       .where.not(old_form_id: nil)
       .where.not(address_line1: nil).count
 
-      logs_impacted_by_uprn_issue = organisation.managed_lettings_logs
-      .imported
-      .filter_by_year(2023)
-      .where(needstype: 1)
-      .where.not(uprn: nil)
-      .where("uprn = propcode OR uprn = tenancycode or town_or_city = 'Bristol'")
-
+      logs_impacted_by_uprn_issue = if JSON.parse(ENV["SKIP_UPRN_ISSUE_ORG_IDS"]).include?(organisation.id)
+                                      []
+                                    else
+                                      organisation.managed_lettings_logs
+                                      .imported
+                                      .filter_by_year(2023)
+                                      .where(needstype: 1)
+                                      .where.not(uprn: nil)
+                                      .where("uprn = propcode OR uprn = tenancycode or town_or_city = 'Bristol'")
+                                    end
       if logs_impacted_by_missing_address >= MISSING_ADDRESSES_THRESHOLD || logs_impacted_by_missing_town_or_city >= MISSING_ADDRESSES_THRESHOLD || logs_impacted_by_uprn_issue.any?
         data_coordinators = organisation.users.where(role: 2).filter_by_active
         users_to_contact = data_coordinators.any? ? data_coordinators : organisation.users.filter_by_active

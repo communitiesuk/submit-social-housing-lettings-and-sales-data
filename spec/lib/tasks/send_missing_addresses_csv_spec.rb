@@ -207,6 +207,17 @@ RSpec.describe "correct_addresses" do
           task.invoke
         end
       end
+
+      context "when org is included in SKIP_UPRN_ISSUE_ORG_IDS list" do
+        before do
+          create_list(:lettings_log, 5, :imported, startdate: Time.zone.local(2023, 9, 9), uprn: "12", propcode: "12", needstype: 1, owning_organisation: organisation, managing_organisation: organisation, created_by: organisation.users.first)
+          allow(ENV).to receive(:[]).with("SKIP_UPRN_ISSUE_ORG_IDS").and_return([organisation.id].to_json)
+        end
+
+        it "does not enqueue the job" do
+          expect { task.invoke }.not_to enqueue_job(EmailMissingAddressesCsvJob)
+        end
+      end
     end
   end
 end

@@ -136,6 +136,16 @@ RSpec.describe Csv::MissingAddressesCsvService do
         csv = service.create_missing_lettings_addresses_csv
         expect(csv).to eq(expected_content)
       end
+
+      context "and the organisation is in the SKIP_UPRN_ISSUE_ORG_IDS list" do
+        before do
+          allow(ENV).to receive(:[]).with("SKIP_UPRN_ISSUE_ORG_IDS").and_return([organisation.id].to_json)
+        end
+
+        it "returns nil" do
+          expect(service.create_missing_lettings_addresses_csv).to be_nil
+        end
+      end
     end
 
     context "when the organisation only has supported housing logs with missing addresses or town or city" do
@@ -264,6 +274,16 @@ RSpec.describe Csv::MissingAddressesCsvService do
         expected_content = replace_entity_ids(sales_log_wrong_uprn, File.open("spec/fixtures/files/missing_sales_logs_wrong_uprn.csv").read)
         csv = service.create_missing_sales_addresses_csv
         expect(csv).to eq(expected_content)
+      end
+
+      context "and the organisation is in the SKIP_UPRN_ISSUE_ORG_IDS list" do
+        before do
+          allow(ENV).to receive(:[]).with("SKIP_UPRN_ISSUE_ORG_IDS").and_return([organisation.id].to_json)
+        end
+
+        it "returns nil" do
+          expect(service.create_missing_sales_addresses_csv).to be_nil
+        end
       end
     end
 
